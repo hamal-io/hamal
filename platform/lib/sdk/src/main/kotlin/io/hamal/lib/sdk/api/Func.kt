@@ -35,8 +35,9 @@ data class ApiFuncCreateSubmitted(
 data class ApiFuncUpdateReq(
     override val name: FuncName? = null,
     override val inputs: FuncInputs? = null,
-    override val code: CodeValue? = null
+    override val code: CodeValue? = null,
 ) : UpdateFuncReq
+
 
 @Serializable
 data class ApiFuncUpdateSubmitted(
@@ -88,12 +89,14 @@ data class ApiFunc(
     data class Code(
         val id: CodeId,
         val version: CodeVersion,
-        val value: CodeValue
+        val value: CodeValue,
+        val deployedVersion: CodeVersion
     )
 }
 
 interface ApiFuncService {
     fun create(namespaceId: NamespaceId, createFuncReq: ApiFuncCreateReq): ApiFuncCreateSubmitted
+    fun deploy(id: FuncId, version: CodeVersion): ApiFuncUpdateSubmitted
     fun list(query: FuncQuery): List<ApiFuncList.Func>
     fun get(funcId: FuncId): ApiFunc
     fun invoke(funcId: FuncId, req: ApiFuncInvokeReq): ApiExecInvokeSubmitted
@@ -125,6 +128,13 @@ internal class ApiFuncServiceImpl(
             .body(createFuncReq)
             .execute()
             .fold(ApiFuncCreateSubmitted::class)
+
+    override fun deploy(id: FuncId, version: CodeVersion): ApiFuncUpdateSubmitted =
+        template.post("/v1/funcs/{funcId}/deploy/{version}")
+            .path("funcId", id)
+            .path("version", version.value.toString())
+            .execute()
+            .fold(ApiFuncUpdateSubmitted::class)
 
     override fun list(query: FuncQuery): List<ApiFuncList.Func> =
         template.get("/v1/funcs")

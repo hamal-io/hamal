@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 internal class FuncUpdateController(
     private val retry: Retry,
-    private val updateFunc: FuncUpdatePort
+    private val updateFunc: FuncUpdatePort,
 ) {
     @PatchMapping("/v1/funcs/{funcId}")
     fun updateFunc(

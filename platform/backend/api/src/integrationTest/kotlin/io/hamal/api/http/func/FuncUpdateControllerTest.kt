@@ -142,4 +142,44 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
             assertThat(code.value, equalTo(CodeValue("createdCode")))
         }
     }
+
+    // FIXME-53
+//    @Nested
+//    inner class FuncDeployedCodeTest {
+//        @Test
+//        fun `Updates deployed version`() {
+//            val func = awaitCompleted(
+//                createFunc(
+//                    ApiFuncCreateReq(
+//                        name = FuncName("Func-base"),
+//                        inputs = FuncInputs(),
+//                        code = CodeValue("40 + 2")
+//                    )
+//                )
+//            )
+//
+//            awaitCompleted(updateDeployedVersion(func.funcId, CodeVersion(123)))
+//
+//            with(funcQueryRepository.get(func.funcId)) {
+//                assertThat(code.deployedVersion, equalTo(CodeVersion(123)))
+//                assertThat(name, equalTo(FuncName("Func-base")))
+//                assertThat(code.version, equalTo(CodeVersion(1)))
+//            }
+//        }
+//
+//        @Test
+//        fun `Tries to update deployed version that does not exist`() {
+//            val res = httpTemplate.post("/v1/funcs/1234/deploy/25")
+//                .execute()
+//
+//
+//            assertThat(res.statusCode, equalTo(NotFound))
+//            require(res is HttpErrorResponse) { "request was successful" }
+//
+//            val error = res.error(ApiError::class)
+//            assertThat(error.message, equalTo("Func not found"))
+//        }
+//    }
+
+
 }

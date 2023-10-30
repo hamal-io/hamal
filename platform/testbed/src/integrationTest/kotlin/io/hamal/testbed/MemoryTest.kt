@@ -127,7 +127,7 @@ class ClearController {
         groupRepository.clear()
         hookRepository.clear()
         namespaceRepository.clear()
-        snippetRepository.clear()
+        blueprintRepository.clear()
         triggerRepository.clear()
 //        }
 
@@ -177,6 +177,9 @@ class ClearController {
     lateinit var platformEventBrokerRepository: BrokerRepository
 
     @Autowired
+    lateinit var blueprintRepository: BlueprintRepository
+
+    @Autowired
     lateinit var eventBrokerRepository: BrokerRepository
 
     @Autowired
@@ -209,8 +212,7 @@ class ClearController {
     @Autowired
     lateinit var reqRepository: ReqRepository
 
-    @Autowired
-    lateinit var snippetRepository: SnippetRepository
+
 
     @Autowired
     lateinit var triggerRepository: TriggerRepository

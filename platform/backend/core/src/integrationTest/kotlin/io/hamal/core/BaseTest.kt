@@ -95,10 +95,10 @@ internal abstract class BaseTest {
     lateinit var reqCmdRepository: ReqCmdRepository
 
     @Autowired
-    lateinit var snippetCmdRepository: SnippetCmdRepository
+    lateinit var blueprintCmdRepository: BlueprintCmdRepository
 
     @Autowired
-    lateinit var snippetQueryRepository: SnippetQueryRepository
+    lateinit var blueprintQueryRepository: BlueprintQueryRepository
 
     @Autowired
     lateinit var stateQueryRepository: StateQueryRepository

@@ -9,7 +9,7 @@ import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncCmdRepository.UpdateCmd
 import io.hamal.repository.api.FuncCode
 import io.hamal.repository.api.FuncRepository
-import io.hamal.repository.api.event.FuncCreatedEvent
+import io.hamal.repository.api.event.FuncUpdatedEvent
 import io.hamal.repository.api.submitted_req.FuncUpdateSubmitted
 import org.springframework.stereotype.Component
 
@@ -21,12 +21,16 @@ class UpdateFuncHandler(
 ) : ReqHandler<FuncUpdateSubmitted>(FuncUpdateSubmitted::class) {
 
     override fun invoke(req: FuncUpdateSubmitted) {
+        if (req.deployedVersion != null) {
+            deployedVersionUpdate(req).also { emitEvent(req.cmdId(), it) }
+        }
         updateFunc(req).also { emitEvent(req.cmdId(), it) }
     }
 }
 
 private fun UpdateFuncHandler.updateFunc(req: FuncUpdateSubmitted): Func {
     val func = funcRepository.get(req.id)
+
     val code = codeCmdRepository.update(
         func.code.id, CodeCmdRepository.UpdateCmd(
             id = req.cmdId(),
@@ -42,12 +46,32 @@ private fun UpdateFuncHandler.updateFunc(req: FuncUpdateSubmitted): Func {
             inputs = req.inputs,
             code = FuncCode(
                 id = code.id,
-                version = code.version
+                version = code.version,
+                deployedVersion = func.code.deployedVersion
             )
         )
     )
 }
 
+
+private fun UpdateFuncHandler.deployedVersionUpdate(req: FuncUpdateSubmitted): Func {
+    val func = funcRepository.get(req.id)
+    return funcRepository.update(
+        func.id,
+        UpdateCmd(
+            id = req.cmdId(),
+            name = null,
+            inputs = null,
+            code = FuncCode(
+                id = func.code.id,
+                version = func.code.version,
+                deployedVersion = req.deployedVersion!!
+            )
+        )
+    )
+}
+
+
 private fun UpdateFuncHandler.emitEvent(cmdId: CmdId, func: Func) {
-    eventEmitter.emit(cmdId, FuncCreatedEvent(func))
+    eventEmitter.emit(cmdId, FuncUpdatedEvent(func))
 }

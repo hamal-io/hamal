@@ -29,6 +29,7 @@ data class InvokeExecReq(
 
 @Component
 class SubmitRequest(
+    private val blueprintQueryRepository: BlueprintQueryRepository,
     private val encodePassword: EncodePassword,
     private val eventBrokerRepository: BrokerRepository,
     private val extensionQueryRepository: ExtensionQueryRepository,
@@ -39,7 +40,6 @@ class SubmitRequest(
     private val hookQueryRepository: HookQueryRepository,
     private val namespaceQueryRepository: NamespaceQueryRepository,
     private val reqCmdRepository: ReqCmdRepository,
-    private val snippetQueryRepository: SnippetQueryRepository,
     private val groupList: GroupListPort
 ) {
 
@@ -205,7 +205,23 @@ class SubmitRequest(
         name = req.name,
         inputs = req.inputs,
         code = req.code,
+        deployedVersion = null
     ).also(reqCmdRepository::queue)
+
+
+    operator fun invoke(funcId: FuncId, versionToDeploy: CodeVersion): FuncDeploySubmitted {
+        val func = funcQueryRepository.get(funcId)
+
+        // FIXME-53  make sure versionToDpeloy <= func.code.version --> throw IllegalArgument if not // perform same check in repository again
+        // FIXME add func deploy handler -- add FuncDeploymentRecord
+        return FuncDeploySubmitted(
+            reqId = generateDomainId(::ReqId),
+            status = Submitted,
+            groupId = func.groupId,
+            id = funcId,
+            versionToDeploy = versionToDeploy
+        ).also(reqCmdRepository::queue)
+    }
 
     operator fun invoke(groupId: GroupId, req: CreateExtensionReq) = ExtensionCreateSubmitted(
         reqId = generateDomainId(::ReqId),
@@ -227,22 +243,22 @@ class SubmitRequest(
         code = req.code
     ).also(reqCmdRepository::queue)
 
-    operator fun invoke(groupId: GroupId, accountId: AccountId, req: CreateSnippetReq) = SnippetCreateSubmitted(
+    operator fun invoke(groupId: GroupId, accountId: AccountId, req: CreateBlueprintReq) = BlueprintCreateSubmitted(
         reqId = generateDomainId(::ReqId),
         status = Submitted,
         groupId = groupId,
-        id = generateDomainId(::SnippetId),
+        id = generateDomainId(::BlueprintId),
         name = req.name,
         inputs = req.inputs,
         value = req.value,
         creatorId = accountId
     ).also(reqCmdRepository::queue)
 
-    operator fun invoke(snippetId: SnippetId, req: UpdateSnippetReq) = SnippetUpdateSubmitted(
+    operator fun invoke(bpId: BlueprintId, req: UpdateBlueprintReq) = BlueprintUpdateSubmitted(
         reqId = generateDomainId(::ReqId),
         status = Submitted,
-        groupId = snippetQueryRepository.get(snippetId).groupId,
-        id = snippetId,
+        groupId = blueprintQueryRepository.get(bpId).groupId,
+        id = bpId,
         name = req.name,
         inputs = req.inputs,
         value = req.value,

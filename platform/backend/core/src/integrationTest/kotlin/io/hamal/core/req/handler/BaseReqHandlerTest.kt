@@ -39,7 +39,9 @@ internal abstract class BaseReqHandlerTest : BaseTest() {
                 inputs = inputs,
                 code = FuncCode(
                     id = codeId,
-                    version = codeVersion
+                    version = codeVersion,
+                    deployedVersion = codeVersion
+
                 )
             )
         )

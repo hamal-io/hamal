@@ -1,7 +1,6 @@
 package io.hamal.core.req.handler.func
 
 import io.hamal.core.req.handler.BaseReqHandlerTest
-import io.hamal.lib.domain.vo.ReqId
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.MapType
@@ -27,11 +26,13 @@ internal class CreateFuncHandlerTest : BaseReqHandlerTest() {
                 assertThat(id, equalTo(FuncId(12345)))
                 assertThat(name, equalTo(FuncName("awesome-func")))
                 assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
+                assertThat(code.deployedVersion, equalTo(codeQueryRepository.get(CodeId(34567)).version))
                 assertThat(
                     code, equalTo(
                         FuncCode(
                             id = CodeId(34567),
-                            version = CodeVersion(1)
+                            version = CodeVersion(1),
+                            deployedVersion = CodeVersion(1)
                         )
                     )
                 )

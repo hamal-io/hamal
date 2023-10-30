@@ -27,5 +27,15 @@ data class FuncUpdateSubmitted(
     val id: FuncId,
     val name: FuncName?,
     val inputs: FuncInputs?,
-    val code: CodeValue?
+    val code: CodeValue?,
+    val deployedVersion: CodeVersion?
+) : Submitted
+
+@Serializable
+data class FuncDeploySubmitted(
+    override val reqId: ReqId,
+    override var status: ReqStatus,
+    val groupId: GroupId,
+    val id: FuncId,
+    val versionToDeploy: CodeVersion
 ) : Submitted

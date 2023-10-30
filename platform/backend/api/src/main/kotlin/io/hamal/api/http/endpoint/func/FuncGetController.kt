@@ -37,7 +37,8 @@ internal class FuncGetController(
                 code = Code(
                     id = code.id,
                     version = code.version,
-                    value = code.value
+                    value = code.value,
+                    deployedVersion = func.code.deployedVersion
                 )
             )
         )

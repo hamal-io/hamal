@@ -40,6 +40,15 @@ open class MemoryRepositoryConfig {
     open fun authCmdRepository() = authRepository()
 
     @Bean
+    open fun blueprintRepository() = MemoryBlueprintRepository()
+
+    @Bean
+    open fun blueprintCmdRepository(): BlueprintCmdRepository = blueprintRepository()
+
+    @Bean
+    open fun blueprintQueryRepository(): BlueprintQueryRepository = blueprintRepository()
+
+    @Bean
     open fun codeRepository() = MemoryCodeRepository()
 
     @Bean
@@ -119,15 +128,6 @@ open class MemoryRepositoryConfig {
 
     @Bean
     open fun reqQueryRepository(): ReqQueryRepository = reqRepository()
-
-    @Bean
-    open fun snippetRepository() = MemorySnippetRepository()
-
-    @Bean
-    open fun snippetCmdRepository(): SnippetCmdRepository = snippetRepository()
-
-    @Bean
-    open fun snippetQueryRepository(): SnippetQueryRepository = snippetRepository()
 
     @Bean
     open fun stateRepository(): StateRepository = MemoryStateRepository()
