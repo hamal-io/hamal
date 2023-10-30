@@ -21,16 +21,15 @@ class UpdateFuncHandler(
 ) : ReqHandler<FuncUpdateSubmitted>(FuncUpdateSubmitted::class) {
 
     override fun invoke(req: FuncUpdateSubmitted) {
+        if (req.deployedVersion != null) {
+            deployedVersionUpdate(req).also { emitEvent(req.cmdId(), it) }
+        }
         updateFunc(req).also { emitEvent(req.cmdId(), it) }
     }
 }
 
 private fun UpdateFuncHandler.updateFunc(req: FuncUpdateSubmitted): Func {
     val func = funcRepository.get(req.id)
-
-    if (req.deployedVersion != null) {
-        return deployedVersionUpdate(req, func)
-    }
 
     val code = codeCmdRepository.update(
         func.code.id, CodeCmdRepository.UpdateCmd(
@@ -55,7 +54,8 @@ private fun UpdateFuncHandler.updateFunc(req: FuncUpdateSubmitted): Func {
 }
 
 
-private fun UpdateFuncHandler.deployedVersionUpdate(req: FuncUpdateSubmitted, func: Func): Func {
+private fun UpdateFuncHandler.deployedVersionUpdate(req: FuncUpdateSubmitted): Func {
+    val func = funcRepository.get(req.id)
     return funcRepository.update(
         func.id,
         UpdateCmd(
