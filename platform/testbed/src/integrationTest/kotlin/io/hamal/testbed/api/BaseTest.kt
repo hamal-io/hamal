@@ -1,4 +1,4 @@
-package io.hamal.testbed
+package io.hamal.testbed.api
 
 import io.hamal.core.component.DelayRetry
 import io.hamal.core.component.DelayRetryFixedTime
@@ -19,7 +19,7 @@ import io.hamal.plugin.std.sys.SysPluginFactory
 import io.hamal.repository.api.*
 import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.runner.config.SandboxFactory
-import io.hamal.testbed.TestResult.*
+import io.hamal.testbed.api.TestResult.*
 import jakarta.annotation.PostConstruct
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.TestFactory
@@ -194,8 +194,6 @@ class ClearController {
 }
 
 
-
-
 sealed interface TestResult {
     object Success : TestResult
     data class Failed(val message: String) : TestResult
@@ -254,7 +252,8 @@ class TestConfig {
                     inputs = NamespaceInputs()
                 )
             )
-        }catch (t: Throwable){}
+        } catch (t: Throwable) {
+        }
     }
 
     @Autowired
@@ -271,7 +270,7 @@ class TestConfig {
 }
 
 
-abstract class BaseTest {
+abstract class BaseApiTest {
 
     abstract val apiHttpTemplate: HttpTemplate
 
@@ -352,6 +351,5 @@ abstract class BaseTest {
         .distinct()
         .sorted()
 
-    val testPath: Path = Paths.get("src", "integrationTest", "resources")
-
+    private val testPath: Path = Paths.get("src", "integrationTest", "resources", "api")
 }

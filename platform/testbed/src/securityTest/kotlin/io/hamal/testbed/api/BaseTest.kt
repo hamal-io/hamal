@@ -1,4 +1,4 @@
-package io.hamal.testbed
+package io.hamal.testbed.api
 
 import io.hamal.lib.common.Logger
 import io.hamal.lib.common.util.TimeUtils

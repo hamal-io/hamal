@@ -1,4 +1,4 @@
-package io.hamal.testbed
+package io.hamal.testbed.api
 
 import io.hamal.core.component.DelayRetry
 import io.hamal.core.component.DelayRetryFixedTime
@@ -11,7 +11,7 @@ import kotlin.time.Duration.Companion.milliseconds
 @TestConfiguration
 class ApiTestConfig {
     @Bean
-    fun backendBasePath() = BackendBasePath("/tmp/hamal/testbed/${UUID.randomUUID()}")
+    fun backendBasePath() = BackendBasePath("/tmp/hamal/test-sqlite/${UUID.randomUUID()}")
 
     @Bean
     fun delayRetry(): DelayRetry = DelayRetryFixedTime(1.milliseconds)

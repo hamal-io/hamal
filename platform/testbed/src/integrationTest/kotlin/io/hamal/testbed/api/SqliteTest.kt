@@ -1,4 +1,4 @@
-package io.hamal.testbed
+package io.hamal.testbed.api
 
 import io.hamal.api.ApiConfig
 import io.hamal.bridge.BridgeConfig
@@ -13,17 +13,17 @@ import org.springframework.boot.builder.SpringApplicationBuilder
 import java.util.*
 
 @TestInstance(PER_CLASS)
-internal object MemoryTest : BaseTest() {
+internal object SqliteApiTest : BaseApiTest() {
 
     init {
         val properties = Properties()
         properties["HTTP_POLL_EVERY_MS"] = 1
-        properties["API_HOST"] = "http://localhost:8040"
-        properties["BRIDGE_HOST"] = "http://localhost:7040"
+        properties["API_HOST"] = "http://localhost:8041"
+        properties["BRIDGE_HOST"] = "http://localhost:7041"
 
         val applicationBuilder = SpringApplicationBuilder()
             .parent(CoreConfig::class.java, TestConfig::class.java, TestRetryConfig::class.java)
-            .profiles("test", "admin", "memory")
+            .profiles("test", "admin", "sqlite")
             .properties(properties)
             .bannerMode(Banner.Mode.OFF)
             .web(WebApplicationType.NONE)
@@ -34,7 +34,7 @@ internal object MemoryTest : BaseTest() {
                 .child(ApiConfig::class.java)
                 .sources(ClearController::class.java)
                 .web(WebApplicationType.SERVLET)
-                .properties("server.port=8040")
+                .properties("server.port=8041")
                 .bannerMode(Banner.Mode.OFF)
                 .run()
 
@@ -42,7 +42,7 @@ internal object MemoryTest : BaseTest() {
                 .parent(it)
                 .child(BridgeConfig::class.java)
                 .web(WebApplicationType.SERVLET)
-                .properties("server.port=7040")
+                .properties("server.port=7041")
                 .bannerMode(Banner.Mode.OFF)
                 .run()
 
@@ -57,7 +57,7 @@ internal object MemoryTest : BaseTest() {
     }
 
     override val apiHttpTemplate = HttpTemplateImpl(
-        baseUrl = "http://localhost:8040",
+        baseUrl = "http://localhost:8041",
         headerFactory = {
             this["authorization"] = "Bearer root-token"
         }

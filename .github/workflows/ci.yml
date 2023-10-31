@@ -26,10 +26,12 @@ jobs:
         run: ./gradlew check
 
       - name: Generate report
+        if: github.ref == 'refs/heads/main'
         run: ./gradlew integrationTestCodeCoverageReport
 
       - name: Upload coverage report
         uses: actions/checkout@v3
+        if: github.ref == 'refs/heads/main'
         with:
           repository: hamal-io/code-cov
           token: ${{ secrets.SERVICE_TOKEN }}
