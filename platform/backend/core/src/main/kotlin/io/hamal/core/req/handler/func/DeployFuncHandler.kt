@@ -22,6 +22,7 @@ class DeployFuncHandler(
     }
 }
 
+//FIXME-53 - validation
 private fun DeployFuncHandler.deployVersion(req: FuncDeploySubmitted): Func {
     val func = funcRepository.get(req.funcId)
     return funcRepository.deploy(

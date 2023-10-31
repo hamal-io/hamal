@@ -208,6 +208,11 @@ class SubmitRequest(
     ).also(reqCmdRepository::queue)
 
     operator fun invoke(funcId: FuncId, versionToDeploy: CodeVersion): FuncDeploySubmitted {
+        // FIXME-53  make sure versionToDpeloy <= func.code.version --> throw IllegalArgument if not // perform same check in repository again
+//        if (versionToDeploy !in CodeVersion(1)..func.code.version) {
+//            throw IllegalArgumentException("${versionToDeploy} does not exist")
+//        }
+
         return FuncDeploySubmitted(
             id = generateDomainId(::ReqId),
             status = Submitted,
