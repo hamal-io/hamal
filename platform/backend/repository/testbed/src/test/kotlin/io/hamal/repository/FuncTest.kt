@@ -6,17 +6,22 @@ import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.StringType
+import io.hamal.repository.api.Func
+import io.hamal.repository.api.FuncCmdRepository
 import io.hamal.repository.api.FuncCmdRepository.CreateCmd
 import io.hamal.repository.api.FuncCmdRepository.UpdateCmd
 import io.hamal.repository.api.FuncCode
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
 import io.hamal.repository.api.FuncRepository
 import io.hamal.repository.fixture.AbstractUnitTest
+
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.TestFactory
 import org.junit.jupiter.api.assertThrows
+import java.util.concurrent.atomic.AtomicInteger
 import kotlin.math.abs
 import kotlin.random.Random
 
@@ -328,6 +333,111 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
     @Nested
     inner class DeployTest {
 
+        @TestFactory
+        fun `Deploys code version to func`() = runWith(FuncRepository::class) {
+            val func = createUpdatedFunc(
+                funcId = FuncId(123),
+                codeId = CodeId(5),
+                maxVersion = CodeVersion(100),
+            )
+
+            assertThat(func.code.deployedVersion, equalTo(CodeVersion(1)))
+
+            repeat(20) { iter ->
+                val deploy = deploy(
+                    FuncId(123), FuncCmdRepository.DeployCmd(
+                        id = CmdGen(),
+                        versionToDeploy = CodeVersion(iter + 1)
+                    )
+                )
+                assertThat(deploy.code.deployedVersion, equalTo(CodeVersion(iter + 1)))
+            }
+            assertThat(func.code.version, equalTo(CodeVersion(100)))
+        }
+
+        @TestFactory
+        fun `Deploys same code version`() = runWith(FuncRepository::class) {
+            createUpdatedFunc(
+                funcId = FuncId(123),
+                codeId = CodeId(5),
+                maxVersion = CodeVersion(100),
+            )
+
+            deploy(
+                FuncId(123), FuncCmdRepository.DeployCmd(
+                    id = CmdGen(),
+                    versionToDeploy = CodeVersion(5)
+                )
+            )
+
+            val res = deploy(
+                FuncId(123), FuncCmdRepository.DeployCmd(
+                    id = CmdGen(),
+                    versionToDeploy = CodeVersion(5)
+                )
+            )
+
+            assertThat(res.code.deployedVersion, equalTo(CodeVersion(5)))
+        }
+
+        @TestFactory
+        fun `Deploys lower code version`() = runWith(FuncRepository::class) {
+            createUpdatedFunc(
+                funcId = FuncId(123),
+                codeId = CodeId(5),
+                maxVersion = CodeVersion(100),
+            )
+
+            deploy(
+                FuncId(123), FuncCmdRepository.DeployCmd(
+                    id = CmdGen(),
+                    versionToDeploy = CodeVersion(100)
+                )
+            )
+
+            val res = deploy(
+                FuncId(123), FuncCmdRepository.DeployCmd(
+                    id = CmdGen(),
+                    versionToDeploy = CodeVersion(50)
+                )
+            )
+            assertThat(res.code.deployedVersion, equalTo(CodeVersion(50)))
+            assertThat(res.code.version, equalTo(CodeVersion(100)))
+        }
+
+        @Disabled
+        @TestFactory
+        fun `Tries to deploy code to func that does not exist`() = runWith(FuncRepository::class) {
+            val exception = assertThrows<NoSuchElementException> {
+                deploy(
+                    FuncId(1234567), FuncCmdRepository.DeployCmd(
+                        id = CmdGen(),
+                        versionToDeploy = CodeVersion(500)
+                    )
+                )
+            }
+            assertThat(exception.message, equalTo("Func not found"))
+        }
+
+        @TestFactory
+        fun `Tries to deploy version that does not exist`() = runWith(FuncRepository::class) {
+            createFunc(
+                funcId = FuncId(1),
+                namespaceId = NamespaceId(2),
+                groupId = GroupId(3),
+                name = FuncName("func")
+            )
+
+            val exception = assertThrows<NoSuchElementException> {
+                deploy(
+                    FuncId(1), FuncCmdRepository.DeployCmd(
+                        id = CmdGen(),
+                        versionToDeploy = CodeVersion(500)
+                    )
+                )
+            }
+            assertThat(exception.message, equalTo("CodeVersion(value=500) does not exist"))
+        }
     }
 
     @Nested
@@ -615,6 +725,44 @@ private fun FuncRepository.createFunc(
         )
     )
 }
+
+private fun FuncRepository.createUpdatedFunc(
+    funcId: FuncId,
+    codeId: CodeId,
+    maxVersion: CodeVersion,
+): Func {
+    create(
+        CreateCmd(
+            id = CmdGen(),
+            funcId = funcId,
+            groupId = GroupId(1),
+            namespaceId = NamespaceId(234),
+            name = FuncName("SomeFunc"),
+            inputs = FuncInputs(),
+            codeId = codeId,
+            codeVersion = CodeVersion(1)
+        )
+    )
+
+    return update(
+        funcId, UpdateCmd(
+            id = CmdGen(),
+            name = FuncName("Updated"),
+            inputs = null,
+            codeId = codeId,
+            codeVersion = maxVersion
+        )
+    )
+}
+
+object CmdGen {
+    private val atomicCounter = AtomicInteger(1)
+
+    operator fun invoke(): CmdId {
+        return CmdId(atomicCounter.incrementAndGet())
+    }
+}
+
 
 private fun FuncRepository.verifyCount(expected: Int) {
     verifyCount(expected) { }

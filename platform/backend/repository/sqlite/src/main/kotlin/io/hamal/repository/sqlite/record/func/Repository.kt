@@ -92,9 +92,9 @@ class SqliteFuncRepository(
                 }
                 store(
                     FuncDeploymentRecord(
+                        cmdId = cmdId,
                         entityId = funcId,
-                        cmdId = cmd.id,
-                        version = cmd.versionToDeploy
+                        deployment = cmd.versionToDeploy
                     )
                 )
                 currentVersion(funcId)

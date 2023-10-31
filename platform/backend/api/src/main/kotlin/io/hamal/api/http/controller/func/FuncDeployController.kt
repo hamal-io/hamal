@@ -23,13 +23,13 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 internal class FuncDeployController(
     private val retry: Retry,
-    private val deployCodeVersion: FuncDeployPort,
+    private val deploy: FuncDeployPort,
 ) {
     @PostMapping("/v1/funcs/{funcId}/deploy/{version}")
     fun deployCodeVersion(
         @PathVariable("funcId") funcId: FuncId,
         @PathVariable("version") codeVersion: CodeVersion,
     ): ResponseEntity<ApiSubmitted> = retry {
-        deployCodeVersion(funcId, codeVersion) { it.accepted() }
+        deploy(funcId, codeVersion) { it.accepted() }
     }
 }

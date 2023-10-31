@@ -2,7 +2,6 @@ package io.hamal.repository.record.func
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.*
-import io.hamal.repository.api.FuncCode
 import io.hamal.repository.record.Record
 import io.hamal.repository.record.RecordSequence
 import kotlinx.serialization.SerialName
@@ -42,8 +41,9 @@ data class FuncUpdatedRecord(
 
 
 @Serializable
+@SerialName("FDR")
 data class FuncDeploymentRecord(
     override val entityId: FuncId,
     override val cmdId: CmdId,
-    val version: CodeVersion
+    val deployment: CodeVersion
 ) : FuncRecord()

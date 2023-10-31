@@ -54,10 +54,12 @@ data class FuncEntity(
                 id = rec.entityId,
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
+                name = name,
+                inputs = inputs,
                 code = FuncCode(
                     id = code!!.id,
                     version = code!!.version,
-                    deployedVersion = rec.version
+                    deployedVersion = rec.deployment
                 )
             )
         }

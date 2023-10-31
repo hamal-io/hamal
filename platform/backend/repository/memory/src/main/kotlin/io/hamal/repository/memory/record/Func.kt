@@ -27,6 +27,12 @@ internal object CurrentFuncProjection {
         projection[func.id] = func
     }
 
+    fun deploy(func: Func) {
+        if (find(func.id)!!.code.deployedVersion != func.code.deployedVersion) {
+            projection[func.id] = func
+        }
+    }
+
     fun find(funcId: FuncId): Func? = projection[funcId]
 
     fun list(query: FuncQuery): List<Func> {
@@ -92,19 +98,23 @@ class MemoryFuncRepository : MemoryRecordRepository<FuncId, FuncRecord, Func>(
             if (commandAlreadyApplied(cmd.id, funcId)) {
                 versionOf(funcId, cmd.id)
             } else {
-                if (cmd.versionToDeploy !in CodeVersion(1)..currentVersion(funcId).code.version) {
+                val current = versionOf(funcId, cmd.id)
+
+                if (cmd.versionToDeploy !in CodeVersion(1)..current.code.version) {
                     throw NoSuchElementException("${cmd.versionToDeploy} does not exist")
                 }
 
                 store(
                     FuncDeploymentRecord(
-                        entityId = funcId,
                         cmdId = cmd.id,
-                        version = cmd.versionToDeploy
+                        entityId = funcId,
+                        deployment = cmd.versionToDeploy
                     )
                 )
 
-                (currentVersion(funcId)).also { CurrentFuncProjection::apply }
+                val temp = currentVersion(funcId)
+                CurrentFuncProjection.deploy(temp)
+                return temp
             }
         }
     }

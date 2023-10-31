@@ -16,3 +16,9 @@ data class FuncUpdatedEvent(
     val func: Func,
 ) : PlatformEvent()
 
+
+@Serializable
+@PlatformEventTopic("func::deployed")
+data class FuncDeployedEvent(
+    val func: Func,
+) : PlatformEvent()
