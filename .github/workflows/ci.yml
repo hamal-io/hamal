@@ -30,14 +30,14 @@ jobs:
         run: ./gradlew integrationTestCodeCoverageReport
 
       - name: Upload coverage report
-        uses: actions/checkout@v3
         if: github.ref == 'refs/heads/main'
+        uses: actions/checkout@v3
         with:
           repository: hamal-io/code-cov
           token: ${{ secrets.SERVICE_TOKEN }}
           fetch-depth: 0
           path: 'code-cov'
-      - run: |
+        run: |
           cd code-cov
           rm -rf *
           cp -r ${{github.workspace}}/app/hamal-mono/build/reports/jacoco/integrationTestCodeCoverageReport/html/* .
