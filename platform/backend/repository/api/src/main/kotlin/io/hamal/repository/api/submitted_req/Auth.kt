@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class AuthLoginSubmitted(
-    override val reqId: ReqId,
+    override val id: ReqId,
     override var status: ReqStatus,
     val authId: AuthId,
     val accountId: AccountId,

@@ -6,10 +6,10 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class BlueprintCreateSubmitted(
-    override val reqId: ReqId,
+    override val id: ReqId,
     override var status: ReqStatus,
     val groupId: GroupId,
-    val id: BlueprintId,
+    val blueprintId: BlueprintId,
     val creatorId: AccountId,
     val name: BlueprintName,
     val inputs: BlueprintInputs,
@@ -19,10 +19,10 @@ data class BlueprintCreateSubmitted(
 
 @Serializable
 data class BlueprintUpdateSubmitted(
-    override val reqId: ReqId,
+    override val id: ReqId,
     override var status: ReqStatus,
     val groupId: GroupId,
-    val id: BlueprintId,
+    val blueprintId: BlueprintId,
     val name: BlueprintName?,
     val inputs: BlueprintInputs?,
     val value: CodeValue?

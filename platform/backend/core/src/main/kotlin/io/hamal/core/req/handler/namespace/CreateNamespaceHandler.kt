@@ -58,7 +58,7 @@ private fun CreateNamespaceHandler.createNamespace(req: NamespaceCreateSubmitted
     return namespaceCmdRepository.create(
         CreateCmd(
             id = req.cmdId(),
-            namespaceId = req.id,
+            namespaceId = req.namespaceId,
             groupId = req.groupId,
             name = req.name,
             inputs = req.inputs

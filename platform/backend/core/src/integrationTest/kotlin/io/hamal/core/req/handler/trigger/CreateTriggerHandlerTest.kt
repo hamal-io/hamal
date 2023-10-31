@@ -171,10 +171,10 @@ internal class CreateTriggerHandlerTest : BaseReqHandlerTest() {
 
     private val submitCreateFixedRateTriggerReq by lazy {
         TriggerCreateSubmitted(
-            reqId = ReqId(1),
+            id = ReqId(1),
             status = Submitted,
             type = FixedRate,
-            id = TriggerId(1234),
+            triggerId = TriggerId(1234),
             namespaceId = testNamespace.id,
             groupId = testGroup.id,
             funcId = FuncId(2222),
@@ -188,10 +188,10 @@ internal class CreateTriggerHandlerTest : BaseReqHandlerTest() {
 
     private val submitCreateEventTriggerReq by lazy {
         TriggerCreateSubmitted(
-            reqId = ReqId(1),
+            id = ReqId(1),
             status = Submitted,
             type = Event,
-            id = TriggerId(1234),
+            triggerId = TriggerId(1234),
             namespaceId = testNamespace.id,
             groupId = testGroup.id,
             funcId = FuncId(2222),
@@ -205,10 +205,10 @@ internal class CreateTriggerHandlerTest : BaseReqHandlerTest() {
 
     private val submitCreateHookTriggerReq by lazy {
         TriggerCreateSubmitted(
-            reqId = ReqId(1),
+            id = ReqId(1),
             status = Submitted,
             type = Hook,
-            id = TriggerId(1234),
+            triggerId = TriggerId(1234),
             namespaceId = testNamespace.id,
             groupId = testGroup.id,
             funcId = FuncId(2222),

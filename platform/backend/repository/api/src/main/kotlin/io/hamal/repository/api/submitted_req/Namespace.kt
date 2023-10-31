@@ -7,10 +7,10 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class NamespaceCreateSubmitted(
-    override val reqId: ReqId,
+    override val id: ReqId,
     override var status: ReqStatus,
     val groupId: GroupId,
-    val id: NamespaceId,
+    val namespaceId: NamespaceId,
     val name: NamespaceName,
     val inputs: NamespaceInputs
 ) : Submitted
@@ -18,10 +18,10 @@ data class NamespaceCreateSubmitted(
 
 @Serializable
 data class NamespaceUpdateSubmitted(
-    override val reqId: ReqId,
+    override val id: ReqId,
     override var status: ReqStatus,
     val groupId: GroupId,
-    val id: NamespaceId,
+    val namespaceId: NamespaceId,
     val name: NamespaceName,
     val inputs: NamespaceInputs
 ) : Submitted

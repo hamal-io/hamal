@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class StateSetSubmitted(
-    override val reqId: ReqId,
+    override val id: ReqId,
     override var status: ReqStatus,
     val groupId: GroupId,
     val state: CorrelatedState

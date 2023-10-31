@@ -15,7 +15,7 @@ class CreateTopicHandler(
         eventBrokerRepository.create(
             req.cmdId(),
             TopicToCreate(
-                id = req.id,
+                id = req.topicId,
                 name = req.name,
                 namespaceId = req.namespaceId,
                 groupId = req.groupId

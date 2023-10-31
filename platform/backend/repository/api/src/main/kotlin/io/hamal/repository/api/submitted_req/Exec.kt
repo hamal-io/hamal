@@ -6,10 +6,10 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ExecInvokeSubmitted(
-    override val reqId: ReqId,
+    override val id: ReqId,
     override var status: ReqStatus,
     val groupId: GroupId,
-    val id: ExecId,
+    val execId: ExecId,
     val namespaceId: NamespaceId,
     val funcId: FuncId?,
     val correlationId: CorrelationId?,
@@ -20,17 +20,17 @@ data class ExecInvokeSubmitted(
 
 @Serializable
 data class ExecFailSubmitted(
-    override val reqId: ReqId,
+    override val id: ReqId,
     override var status: ReqStatus,
-    val id: ExecId,
+    val execId: ExecId,
     val result: ExecResult
 ) : Submitted
 
 @Serializable
 data class ExecCompleteSubmitted(
-    override val reqId: ReqId,
+    override val id: ReqId,
     override var status: ReqStatus,
-    val id: ExecId,
+    val execId: ExecId,
     val state: ExecState,
     val result: ExecResult,
     val events: List<EventToSubmit>

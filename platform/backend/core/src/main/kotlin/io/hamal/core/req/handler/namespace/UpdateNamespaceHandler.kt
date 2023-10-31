@@ -23,7 +23,7 @@ class UpdateNamespaceHandler(
 
 private fun UpdateNamespaceHandler.updateNamespace(req: NamespaceUpdateSubmitted): Namespace {
     return namespaceCmdRepository.update(
-        req.id,
+        req.namespaceId,
         NamespaceCmdRepository.UpdateCmd(
             id = req.cmdId(),
             name = req.name,

@@ -22,9 +22,9 @@ internal class SubmitBridgeRequest(
     operator fun invoke(execId: ExecId, req: BridgeExecCompleteReq): ExecCompleteSubmitted {
         val exec = execQueryRepository.get(execId)
         return ExecCompleteSubmitted(
-            reqId = generateDomainId(::ReqId),
+            id = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
-            id = exec.id,
+            execId = exec.id,
             result = req.result,
             state = req.state,
             events = req.events
@@ -34,9 +34,9 @@ internal class SubmitBridgeRequest(
     operator fun invoke(execId: ExecId, req: BridgeExecFailReq): ExecFailSubmitted {
         val exec = execQueryRepository.get(execId)
         return ExecFailSubmitted(
-            reqId = generateDomainId(::ReqId),
+            id = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
-            id = exec.id,
+            execId = exec.id,
             result = req.result
         ).also(reqCmdRepository::queue)
     }

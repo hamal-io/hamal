@@ -6,10 +6,10 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class TopicCreateSubmitted(
-    override val reqId: ReqId,
+    override val id: ReqId,
     override var status: ReqStatus,
     val groupId: GroupId,
-    val id: TopicId,
+    val topicId: TopicId,
     val namespaceId: NamespaceId,
     val name: TopicName
 ) : Submitted
@@ -17,9 +17,9 @@ data class TopicCreateSubmitted(
 
 @Serializable
 data class TopicAppendToSubmitted(
-    override val reqId: ReqId,
+    override val id: ReqId,
     override var status: ReqStatus,
-    val id: TopicId,
+    val topicId: TopicId,
     val groupId: GroupId,
     val payload: TopicEntryPayload
 ) : Submitted

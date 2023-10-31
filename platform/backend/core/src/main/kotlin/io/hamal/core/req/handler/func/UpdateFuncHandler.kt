@@ -29,7 +29,7 @@ class UpdateFuncHandler(
 }
 
 private fun UpdateFuncHandler.updateFunc(req: FuncUpdateSubmitted): Func {
-    val func = funcRepository.get(req.id)
+    val func = funcRepository.get(req.funcId)
 
     val code = codeCmdRepository.update(
         func.code.id, CodeCmdRepository.UpdateCmd(
@@ -39,7 +39,7 @@ private fun UpdateFuncHandler.updateFunc(req: FuncUpdateSubmitted): Func {
     )
 
     return funcRepository.update(
-        req.id,
+        req.funcId,
         UpdateCmd(
             id = req.cmdId(),
             name = req.name,
@@ -55,7 +55,7 @@ private fun UpdateFuncHandler.updateFunc(req: FuncUpdateSubmitted): Func {
 
 
 private fun UpdateFuncHandler.deployedVersionUpdate(req: FuncUpdateSubmitted): Func {
-    val func = funcRepository.get(req.id)
+    val func = funcRepository.get(req.funcId)
     return funcRepository.update(
         func.id,
         UpdateCmd(

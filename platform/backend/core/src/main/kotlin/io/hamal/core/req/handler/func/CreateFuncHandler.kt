@@ -35,7 +35,7 @@ private fun CreateFuncHandler.createFunc(req: FuncCreateSubmitted): Func {
     return funcCmdRepository.create(
         CreateCmd(
             id = req.cmdId(),
-            funcId = req.id,
+            funcId = req.funcId,
             groupId = req.groupId,
             namespaceId = req.namespaceId ?: namespaceQueryRepository.get(NamespaceName("hamal")).id,
             name = req.name,

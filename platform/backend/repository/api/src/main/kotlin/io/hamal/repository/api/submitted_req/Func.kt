@@ -7,10 +7,10 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class FuncCreateSubmitted(
-    override val reqId: ReqId,
+    override val id: ReqId,
     override var status: ReqStatus,
     val groupId: GroupId,
-    val id: FuncId,
+    val funcId: FuncId,
     val namespaceId: NamespaceId,
     val name: FuncName,
     val inputs: FuncInputs,
@@ -21,10 +21,10 @@ data class FuncCreateSubmitted(
 
 @Serializable
 data class FuncUpdateSubmitted(
-    override val reqId: ReqId,
+    override val id: ReqId,
     override var status: ReqStatus,
     val groupId: GroupId,
-    val id: FuncId,
+    val funcId: FuncId,
     val name: FuncName?,
     val inputs: FuncInputs?,
     val code: CodeValue?,
@@ -33,9 +33,9 @@ data class FuncUpdateSubmitted(
 
 @Serializable
 data class FuncDeploySubmitted(
-    override val reqId: ReqId,
+    override val id: ReqId,
     override var status: ReqStatus,
     val groupId: GroupId,
-    val id: FuncId,
+    val funcId: FuncId,
     val versionToDeploy: CodeVersion
 ) : Submitted

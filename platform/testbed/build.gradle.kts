@@ -15,7 +15,7 @@ tasks.named<BootJar>("bootJar") {
 tasks.withType<Test> {
     forkEvery = 1
     maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1).also {
-        println("Setting maxParallelForks to $it")
+        println("Testbed parallel fork to $it")
     }
 }
 

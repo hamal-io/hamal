@@ -21,9 +21,9 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
     fun `Invokes execution with code`() {
         testInstance(
             ExecInvokeSubmitted(
-                reqId = ReqId(1),
+                id = ReqId(1),
                 status = Submitted,
-                id = ExecId(3333),
+                execId = ExecId(3333),
                 namespaceId = testNamespace.id,
                 groupId = testGroup.id,
                 inputs = InvocationInputs(MapType(mutableMapOf("hamal" to StringType("justworks")))),
@@ -62,10 +62,10 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
         )
         testInstance(
             ExecInvokeSubmitted(
-                reqId = ReqId(1),
+                id = ReqId(1),
                 correlationId = CorrelationId("some-correlation"),
                 status = Submitted,
-                id = ExecId(3333),
+                execId = ExecId(3333),
                 namespaceId = testNamespace.id,
                 groupId = testGroup.id,
                 inputs = InvocationInputs(
@@ -133,10 +133,10 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
     //    @formatter:off
     private val submittedFixedRateInvocationReq by lazy {
         ExecInvokeSubmitted(
-            reqId = ReqId(1),
+            id = ReqId(1),
             correlationId = CorrelationId("some-correlation"),
             status = Submitted,
-            id = ExecId(3333),
+            execId = ExecId(3333),
             namespaceId = testNamespace.id,
             groupId = testGroup.id,
             inputs = InvocationInputs(MapType(mutableMapOf(

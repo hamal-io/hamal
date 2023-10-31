@@ -37,9 +37,9 @@ internal class CreateNamespaceHandlerTest : BaseReqHandlerTest() {
 
         testInstance(
             NamespaceCreateSubmitted(
-                reqId = ReqId(1),
+                id = ReqId(1),
                 status = Submitted,
-                id = NamespaceId(12345),
+                namespaceId = NamespaceId(12345),
                 groupId = testGroup.id,
                 name = NamespaceName("another-namespace"),
                 inputs = NamespaceInputs()
@@ -66,9 +66,9 @@ internal class CreateNamespaceHandlerTest : BaseReqHandlerTest() {
 
     private val submitCreateNamespaceReq by lazy {
         NamespaceCreateSubmitted(
-            reqId = ReqId(1),
+            id = ReqId(1),
             status = Submitted,
-            id = NamespaceId(12345),
+            namespaceId = NamespaceId(12345),
             groupId = testGroup.id,
             name = NamespaceName("awesome-namespace"),
             inputs = NamespaceInputs(

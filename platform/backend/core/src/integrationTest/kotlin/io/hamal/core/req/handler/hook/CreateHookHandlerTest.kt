@@ -34,9 +34,9 @@ internal class CreateHookHandlerTest : BaseReqHandlerTest() {
 
     private val submitCreateHookReq by lazy {
         HookCreateSubmitted(
-            reqId = ReqId(1),
+            id = ReqId(1),
             status = Submitted,
-            id = HookId(12345),
+            hookId = HookId(12345),
             groupId = testGroup.id,
             namespaceId = NamespaceId(23456),
             name = HookName("awesome-hook")

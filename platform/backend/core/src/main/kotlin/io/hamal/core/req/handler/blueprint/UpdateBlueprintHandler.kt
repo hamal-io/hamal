@@ -24,7 +24,7 @@ class UpdateBlueprintHandler(
 
 private fun UpdateBlueprintHandler.updateBlueprint(req: BlueprintUpdateSubmitted): Blueprint {
     return blueprintRepository.update(
-        req.id, UpdateCmd(
+        req.blueprintId, UpdateCmd(
             id = req.cmdId(),
             name = req.name,
             inputs = req.inputs,

@@ -57,10 +57,10 @@ internal class UpdateBlueprintHandlerTest : BaseReqHandlerTest() {
 
     private val submittedUpdateBlueprintReq by lazy {
         BlueprintUpdateSubmitted(
-            reqId = ReqId(2),
+            id = ReqId(2),
             status = ReqStatus.Submitted,
             groupId = testGroup.id,
-            id = BlueprintId(123),
+            blueprintId = BlueprintId(123),
             name = BlueprintName("UpdatedBlueprint"),
             inputs = BlueprintInputs(
                 MapType(

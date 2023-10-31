@@ -41,10 +41,10 @@ internal class UpdateFuncHandlerTest : BaseReqHandlerTest() {
 
     private val submittedFuncUpdateReq by lazy {
         FuncUpdateSubmitted(
-            reqId = ReqId(500),
+            id = ReqId(500),
             status = ReqStatus.Submitted,
             groupId = testGroup.id,
-            id = FuncId(1),
+            funcId = FuncId(1),
             name = FuncName("Func-update"),
             inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
             code = CodeValue("some code"),

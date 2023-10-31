@@ -28,9 +28,9 @@ internal class AppendToTopicHandlerTest : BaseReqHandlerTest() {
 
         testInstance(
             TopicAppendToSubmitted(
-                reqId = ReqId(SnowflakeId(123)),
+                id = ReqId(SnowflakeId(123)),
                 status = Submitted,
-                id = TopicId(4444),
+                topicId = TopicId(4444),
                 groupId = testGroup.id,
                 payload = TopicEntryPayload(MapType(mutableMapOf("hamal" to StringType("rockz"))))
             )
@@ -55,9 +55,9 @@ internal class AppendToTopicHandlerTest : BaseReqHandlerTest() {
         val exception = assertThrows<NoSuchElementException> {
             testInstance(
                 TopicAppendToSubmitted(
-                    reqId = ReqId(SnowflakeId(123)),
+                    id = ReqId(SnowflakeId(123)),
                     status = Submitted,
-                    id = TopicId(123),
+                    topicId = TopicId(123),
                     groupId = testGroup.id,
                     payload = TopicEntryPayload(MapType(mutableMapOf("hamal" to StringType("rockz"))))
                 )

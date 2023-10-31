@@ -34,7 +34,7 @@ private fun CreateAccountWithPasswordHandler.createAccount(req: AccountCreateSub
     return accountCmdRepository.create(
         AccountCmdRepository.CreateCmd(
             id = req.cmdId(),
-            accountId = req.id,
+            accountId = req.accountId,
             accountType = req.type,
             name = req.name,
             email = req.email,
@@ -49,7 +49,7 @@ private fun CreateAccountWithPasswordHandler.createGroup(req: AccountCreateSubmi
             id = req.cmdId(),
             groupId = req.groupId,
             name = GroupName("Group of ${req.name.value}"),
-            creatorId = req.id
+            creatorId = req.accountId
         )
     )
 }
@@ -70,7 +70,7 @@ private fun CreateAccountWithPasswordHandler.createNamespace(req: AccountCreateS
 private fun CreateAccountWithPasswordHandler.createPasswordAuth(req: AccountCreateSubmitted): Auth {
     return authCmdRepository.create(
         AuthCmdRepository.CreatePasswordAuthCmd(
-            id = req.cmdId(), authId = req.authenticationId, accountId = req.id, hash = req.hash
+            id = req.cmdId(), authId = req.authenticationId, accountId = req.accountId, hash = req.hash
         )
     )
 }
@@ -80,7 +80,7 @@ private fun CreateAccountWithPasswordHandler.createTokenAuth(req: AccountCreateS
         AuthCmdRepository.CreateTokenAuthCmd(
             id = req.cmdId(),
             authId = req.authenticationId,
-            accountId = req.id,
+            accountId = req.accountId,
             token = req.token,
             expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(30, ChronoUnit.DAYS))
         )

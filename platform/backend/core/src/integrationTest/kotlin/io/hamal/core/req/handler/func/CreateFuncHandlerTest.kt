@@ -45,10 +45,10 @@ internal class CreateFuncHandlerTest : BaseReqHandlerTest() {
 
     private val submitCreateFuncReq by lazy {
         FuncCreateSubmitted(
-            reqId = ReqId(1),
+            id = ReqId(1),
             status = Submitted,
             groupId = testGroup.id,
-            id = FuncId(12345),
+            funcId = FuncId(12345),
             namespaceId = NamespaceId(23456),
             name = FuncName("awesome-func"),
             inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),

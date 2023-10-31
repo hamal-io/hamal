@@ -30,7 +30,7 @@ class CompleteExecHandler(
     override fun invoke(req: ExecCompleteSubmitted) {
         val cmdId = req.cmdId()
 
-        val exec = execQueryRepository.get(req.id)
+        val exec = execQueryRepository.get(req.execId)
         require(exec is StartedExec) { "Exec not in status Started" }
 
         val namespaceId = exec.namespaceId
@@ -45,7 +45,7 @@ class CompleteExecHandler(
         execCmdRepository.complete(
             ExecCmdRepository.CompleteCmd(
                 req.cmdId(),
-                req.id,
+                req.execId,
                 req.result,
                 ExecState(req.state.value)
             )

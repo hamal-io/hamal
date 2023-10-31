@@ -6,10 +6,10 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class AccountCreateSubmitted(
-    override val reqId: ReqId,
+    override val id: ReqId,
     override var status: ReqStatus,
     val groupId: GroupId,
-    val id: AccountId,
+    val accountId: AccountId,
     val type: AccountType,
     val authenticationId: AuthId,
     val namespaceId: NamespaceId,

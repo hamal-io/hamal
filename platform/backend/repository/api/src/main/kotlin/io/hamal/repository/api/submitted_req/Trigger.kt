@@ -9,11 +9,11 @@ import kotlin.time.Duration
 
 @Serializable
 data class TriggerCreateSubmitted(
-    override val reqId: ReqId,
+    override val id: ReqId,
     override var status: ReqStatus,
     val groupId: GroupId,
     val type: TriggerType,
-    val id: TriggerId,
+    val triggerId: TriggerId,
     val name: TriggerName,
     val funcId: FuncId,
     val inputs: TriggerInputs,

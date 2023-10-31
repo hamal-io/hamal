@@ -45,9 +45,9 @@ internal class HookInvokeController(
         val hook = hookQueryRepository.get(id)
 
         val result = HookInvokeSubmitted(
-            reqId = generateDomainId(::ReqId),
+            id = generateDomainId(::ReqId),
             status = Submitted,
-            id = id,
+            hookId = id,
             groupId = hook.groupId,
             method = req.method(),
             headers = req.headers(),
@@ -82,6 +82,6 @@ internal class HookInvokeController(
         val status: ReqStatus,
         val id: HookId
     ) {
-        constructor(req: HookInvokeSubmitted) : this(req.reqId, req.status, req.id)
+        constructor(req: HookInvokeSubmitted) : this(req.id, req.status, req.hookId)
     }
 }

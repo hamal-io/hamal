@@ -6,6 +6,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class TestSubmitted(
-    override val reqId: ReqId,
+    override val id: ReqId,
     override var status: ReqStatus
 ) : Submitted

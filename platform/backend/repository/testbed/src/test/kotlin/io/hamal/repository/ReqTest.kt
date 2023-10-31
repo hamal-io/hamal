@@ -41,10 +41,10 @@ internal class ReqRepositoryTest : AbstractUnitTest() {
 
             val result = next(5)
             assertThat(result, hasSize(4))
-            assertThat(result[0].reqId, equalTo(ReqId(1)))
-            assertThat(result[1].reqId, equalTo(ReqId(2)))
-            assertThat(result[2].reqId, equalTo(ReqId(3)))
-            assertThat(result[3].reqId, equalTo(ReqId(4)))
+            assertThat(result[0].id, equalTo(ReqId(1)))
+            assertThat(result[1].id, equalTo(ReqId(2)))
+            assertThat(result[2].id, equalTo(ReqId(3)))
+            assertThat(result[3].id, equalTo(ReqId(4)))
         }
 
         @TestFactory
@@ -56,8 +56,8 @@ internal class ReqRepositoryTest : AbstractUnitTest() {
 
             val result = next(2)
             assertThat(result, hasSize(2))
-            assertThat(result[0].reqId, equalTo(ReqId(1)))
-            assertThat(result[1].reqId, equalTo(ReqId(2)))
+            assertThat(result[0].id, equalTo(ReqId(1)))
+            assertThat(result[1].id, equalTo(ReqId(2)))
         }
     }
 
@@ -232,7 +232,7 @@ internal class ReqRepositoryTest : AbstractUnitTest() {
             assertThat(result, hasSize(1))
 
             with(result[0]) {
-                assertThat(reqId, equalTo(ReqId(4)))
+                assertThat(id, equalTo(ReqId(4)))
             }
         }
 
@@ -251,7 +251,7 @@ private fun ReqRepository.createReq(
 ) {
     queue(
         TestSubmitted(
-            reqId = reqId,
+            id = reqId,
             status = status,
         )
     )

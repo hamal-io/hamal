@@ -17,8 +17,8 @@ class MemoryReqRepository : ReqRepository {
 
     override fun queue(req: Submitted) {
         return lock.withLock {
-            store[req.reqId] = ProtoBuf { }.encodeToByteArray(Submitted.serializer(), req)
-            queue.add(req.reqId)
+            store[req.id] = ProtoBuf { }.encodeToByteArray(Submitted.serializer(), req)
+            queue.add(req.id)
         }
     }
 
@@ -39,7 +39,7 @@ class MemoryReqRepository : ReqRepository {
         val req = get(reqId)
         check(req.status == ReqStatus.Submitted) { "Req not submitted" }
         lock.withLock {
-            store[req.reqId] =
+            store[req.id] =
                 ProtoBuf { }.encodeToByteArray(Submitted.serializer(), req.apply { status = ReqStatus.Completed })
         }
     }
@@ -48,7 +48,7 @@ class MemoryReqRepository : ReqRepository {
         val req = get(reqId)
         check(req.status == ReqStatus.Submitted) { "Req not submitted" }
         lock.withLock {
-            store[req.reqId] =
+            store[req.id] =
                 ProtoBuf { }.encodeToByteArray(Submitted.serializer(), req.apply { status = ReqStatus.Failed })
         }
     }

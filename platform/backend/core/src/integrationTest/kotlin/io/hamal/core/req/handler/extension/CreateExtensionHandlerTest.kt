@@ -30,10 +30,10 @@ internal class CreateExtensionHandlerTest : BaseReqHandlerTest() {
 
     private val submitCreateExtensionReq by lazy {
         ExtensionCreateSubmitted(
-            reqId = ReqId(1),
+            id = ReqId(1),
             status = ReqStatus.Submitted,
             groupId = testGroup.id,
-            id = ExtensionId(1234),
+            extensionId = ExtensionId(1234),
             name = ExtensionName("TestExtension"),
             codeId = CodeId(1),
             code = CodeValue("x='hamal'")

@@ -21,14 +21,14 @@ class FailExecHandler(
     override fun invoke(req: ExecFailSubmitted) {
         val cmdId = req.cmdId()
 
-        val exec = execQueryRepository.get(req.id)
+        val exec = execQueryRepository.get(req.execId)
         require(exec is StartedExec) { "Exec not in status Started" }
 
         failExec(req).also { emitFailedEvent(cmdId, it) }
     }
 
     private fun failExec(req: ExecFailSubmitted) =
-        execCmdRepository.fail(FailCmd(req.cmdId(), req.id, req.result))
+        execCmdRepository.fail(FailCmd(req.cmdId(), req.execId, req.result))
 
     private fun emitFailedEvent(cmdId: CmdId, exec: FailedExec) {
         eventEmitter.emit(cmdId, ExecutionFailedEvent(exec))

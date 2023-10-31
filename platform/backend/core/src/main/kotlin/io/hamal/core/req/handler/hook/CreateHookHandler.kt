@@ -28,7 +28,7 @@ private fun CreateHookHandler.createHook(req: HookCreateSubmitted): Hook {
     return hookCmdRepository.create(
         CreateCmd(
             id = req.cmdId(),
-            hookId = req.id,
+            hookId = req.hookId,
             groupId = req.groupId,
             namespaceId = req.namespaceId ?: namespaceQueryRepository.get(NamespaceName("hamal")).id,
             name = req.name

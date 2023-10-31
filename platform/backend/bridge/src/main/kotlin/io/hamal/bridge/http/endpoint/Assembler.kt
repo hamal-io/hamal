@@ -12,7 +12,7 @@ fun Submitted.accepted(): ResponseEntity<BridgeSubmitted> =
     ResponseEntity.accepted().body(toBridgeSubmitted())
 
 fun Submitted.toBridgeSubmitted(): BridgeSubmitted = when (this) {
-    is ExecCompleteSubmitted -> BridgeExecCompleteSubmitted(reqId, status, id)
-    is ExecFailSubmitted -> BridgeExecFailSubmitted(reqId, status, id)
+    is ExecCompleteSubmitted -> BridgeExecCompleteSubmitted(id, status, execId)
+    is ExecFailSubmitted -> BridgeExecFailSubmitted(id, status, execId)
     else -> throw NotImplementedError()
 }
