@@ -5,23 +5,33 @@ import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecResult
 import io.hamal.lib.domain.vo.ExecState
 import io.hamal.lib.sdk.BridgeSdk
+import java.net.SocketException
+import java.net.SocketTimeoutException
 
 class HttpConnector(
     private val sdk: BridgeSdk
 ) : Connector {
 
     override fun poll(): List<UnitOfWork> {
-        return sdk.exec.poll().work.map {
-            UnitOfWork(
-                id = it.id,
-                namespaceId = it.namespaceId,
-                groupId = it.groupId,
-                inputs = it.inputs,
-                state = it.state,
-                code = it.code,
-                correlation = it.correlation,
-                events = it.events
-            )
+        try {
+            return sdk.exec.poll().work.map {
+                UnitOfWork(
+                    id = it.id,
+                    namespaceId = it.namespaceId,
+                    groupId = it.groupId,
+                    inputs = it.inputs,
+                    state = it.state,
+                    code = it.code,
+                    correlation = it.correlation,
+                    events = it.events
+                )
+            }
+        } catch (e: java.net.ConnectException) {
+            return listOf()
+        } catch (e: SocketException) {
+            return listOf()
+        } catch (e: SocketTimeoutException) {
+            return listOf()
         }
     }
 

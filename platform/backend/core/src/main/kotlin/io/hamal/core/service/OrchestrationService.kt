@@ -4,11 +4,8 @@ import io.hamal.core.event.PlatformEventEmitter
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.ExecId
-import io.hamal.repository.api.CompletedExec
+import io.hamal.repository.api.*
 import io.hamal.repository.api.ExecCmdRepository.ScheduleCmd
-import io.hamal.repository.api.FailedExec
-import io.hamal.repository.api.PlannedExec
-import io.hamal.repository.api.ScheduledExec
 import io.hamal.repository.api.event.ExecScheduledEvent
 import org.springframework.stereotype.Service
 import java.util.concurrent.locks.ReentrantLock
@@ -16,7 +13,7 @@ import kotlin.concurrent.withLock
 
 @Service
 internal class OrchestrationService(
-    private val execCmdRepository: io.hamal.repository.api.ExecCmdRepository,
+    private val execCmdRepository: ExecCmdRepository,
     private val eventEmitter: PlatformEventEmitter
 ) {
 
@@ -24,7 +21,7 @@ internal class OrchestrationService(
     internal val backlog = mutableMapOf<Correlation, MutableList<PlannedExec>>()
 
     // all execs in state of scheduled or greater
-    internal val execs = mutableMapOf<ExecId, io.hamal.repository.api.Exec>()
+    internal val execs = mutableMapOf<ExecId, Exec>()
 
     // mapping of correlations being inflight
     internal val inflight = mutableMapOf<Correlation, ExecId>()

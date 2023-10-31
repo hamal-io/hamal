@@ -16,10 +16,12 @@ import io.hamal.repository.api.FixedRateTrigger
 import io.hamal.repository.api.FuncQueryRepository
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerQueryRepository
+import org.springframework.beans.factory.DisposableBean
 import org.springframework.context.ApplicationListener
 import org.springframework.context.event.ContextRefreshedEvent
 import org.springframework.stereotype.Service
 import java.time.Instant
+import java.util.concurrent.ScheduledFuture
 import kotlin.time.Duration.Companion.seconds
 
 @Service
@@ -30,7 +32,10 @@ internal class FixedRateTriggerService(
     internal val generateDomainId: GenerateDomainId,
     internal val funcQueryRepository: FuncQueryRepository,
     private val async: Async
-) : ApplicationListener<ContextRefreshedEvent> {
+) : ApplicationListener<ContextRefreshedEvent>, DisposableBean {
+
+    private val scheduledTasks = mutableListOf<ScheduledFuture<*>>()
+
 
     override fun onApplicationEvent(event: ContextRefreshedEvent) {
         triggerQueryRepository.list(
@@ -43,13 +48,15 @@ internal class FixedRateTriggerService(
             plannedInvocations[it] = now().plusMillis(it.duration.inWholeSeconds)
         }
 
-        async.atFixedRate(1.seconds) {
-            plannedInvocations.filter { now().isAfter(it.value) }.forEach { (trigger, _) ->
-                require(trigger is FixedRateTrigger)
-                plannedInvocations[trigger] = now().plusSeconds(trigger.duration.inWholeSeconds)
-                requestInvocation(trigger)
+        scheduledTasks.add(
+            async.atFixedRate(1.seconds) {
+                plannedInvocations.filter { now().isAfter(it.value) }.forEach { (trigger, _) ->
+                    require(trigger is FixedRateTrigger)
+                    plannedInvocations[trigger] = now().plusSeconds(trigger.duration.inWholeSeconds)
+                    requestInvocation(trigger)
+                }
             }
-        }
+        )
     }
 
     fun triggerAdded(fixedRateTrigger: FixedRateTrigger) {
@@ -60,6 +67,12 @@ internal class FixedRateTriggerService(
     }
 
     private val plannedInvocations = mutableMapOf<Trigger, Instant>()
+
+    override fun destroy() {
+        scheduledTasks.forEach {
+            it.cancel(false)
+        }
+    }
 
 }
 

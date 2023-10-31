@@ -6,11 +6,15 @@ import io.hamal.runner.config.SandboxFactory
 import io.hamal.runner.connector.HttpConnector
 import io.hamal.runner.connector.UnitOfWork
 import io.hamal.runner.run.CodeRunnerImpl
+import org.springframework.beans.factory.DisposableBean
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.ApplicationListener
+import org.springframework.context.event.ApplicationContextEvent
+import org.springframework.context.event.ContextClosedEvent
 import org.springframework.context.event.ContextRefreshedEvent
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
 import org.springframework.stereotype.Service
+import java.util.concurrent.ScheduledFuture
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.toJavaDuration
 
@@ -20,28 +24,48 @@ class HttpExecutorService(
     private val runnerExecutor: ThreadPoolTaskScheduler,
     private val sandboxFactory: SandboxFactory,
     @Value("\${io.hamal.runner.http.poll-every-ms}") private val pollEveryMs: Long
-) : ApplicationListener<ContextRefreshedEvent> {
+) : ApplicationListener<ApplicationContextEvent>, DisposableBean {
 
-    override fun onApplicationEvent(event: ContextRefreshedEvent) {
-        val sdk = BridgeSdkImpl(httpTemplate)
-        val connector = HttpConnector(sdk)
+    override fun onApplicationEvent(event: ApplicationContextEvent) {
+        if (event is ContextRefreshedEvent) {
+            val sdk = BridgeSdkImpl(httpTemplate)
+            val connector = HttpConnector(sdk)
 
-        runnerExecutor.scheduleAtFixedRate({
-            connector.poll().forEach { uow ->
-                CodeRunnerImpl(connector, sandboxFactory).run(
-                    UnitOfWork(
-                        id = uow.id,
-                        namespaceId = uow.namespaceId,
-                        groupId = uow.groupId,
-                        inputs = uow.inputs,
-                        state = uow.state,
-                        code = uow.code,
-                        correlation = uow.correlation,
-                        events = uow.events
-                    )
-                )
-            }
-        }, pollEveryMs.milliseconds.toJavaDuration())
+            scheduledTasks.add(
+                runnerExecutor.scheduleAtFixedRate({
+                    val unitsOfWork = connector.poll()
+                    // FIXME core-60 -- backoff if empty or if exception got thrown
+
+                    unitsOfWork.forEach { uow ->
+                        CodeRunnerImpl(connector, sandboxFactory).run(
+                            UnitOfWork(
+                                id = uow.id,
+                                namespaceId = uow.namespaceId,
+                                groupId = uow.groupId,
+                                inputs = uow.inputs,
+                                state = uow.state,
+                                code = uow.code,
+                                correlation = uow.correlation,
+                                events = uow.events
+                            )
+                        )
+                    }
+                }, pollEveryMs.milliseconds.toJavaDuration())
+            )
+        }
+
+        if (event is ContextClosedEvent) {
+            destroy()
+        }
     }
+
+    override fun destroy() {
+        scheduledTasks.forEach {
+            it.cancel(true)
+        }
+    }
+
+    private val scheduledTasks = mutableListOf<ScheduledFuture<*>>()
+
 }
 

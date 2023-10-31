@@ -34,8 +34,10 @@ import org.springframework.scheduling.annotation.EnableScheduling
     ]
 )
 open class CoreConfig {
+
     @Autowired
     private lateinit var submitRequest: SubmitRequest
+
 
     @Bean
     @Profile("!test")

@@ -5,7 +5,7 @@ import io.hamal.core.req.InvokeExecReq
 import io.hamal.core.req.SubmitRequest
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.domain.*
+import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.EventTrigger
@@ -17,6 +17,7 @@ import io.hamal.repository.api.log.ConsumerId
 import io.hamal.repository.api.log.ProtobufBatchConsumer
 import io.hamal.repository.api.log.TopicEntry
 import jakarta.annotation.PostConstruct
+import org.springframework.beans.factory.DisposableBean
 import org.springframework.stereotype.Service
 import java.util.concurrent.ScheduledFuture
 import kotlin.time.Duration.Companion.milliseconds
@@ -29,7 +30,7 @@ internal class EventTriggerService(
     internal val generateDomainId: GenerateDomainId,
     private val async: Async,
     private val funcQueryRepository: FuncQueryRepository
-) {
+) : DisposableBean {
 
     private val scheduledTasks = mutableListOf<ScheduledFuture<*>>()
 
@@ -87,5 +88,11 @@ internal class EventTriggerService(
                 }
             },
         )
+    }
+
+    override fun destroy() {
+        scheduledTasks.forEach {
+            it.cancel(false)
+        }
     }
 }

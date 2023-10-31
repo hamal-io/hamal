@@ -33,9 +33,10 @@ internal class PlatformEventService(
     override fun onApplicationEvent(event: ContextRefreshedEvent) {
         val instanceTopics = platformEventContainer.topicNames().map { topicName ->
             val topicId = generateDomainId(::TopicId)
-            platformEventBrokerRepository.findTopic(NamespaceId.root, topicName) ?: platformEventBrokerRepository.create(
-                CmdId(topicId), TopicToCreate(topicId, topicName, NamespaceId.root,GroupId.root)
-            )
+            platformEventBrokerRepository.findTopic(NamespaceId.root, topicName)
+                ?: platformEventBrokerRepository.create(
+                    CmdId(topicId), TopicToCreate(topicId, topicName, NamespaceId.root, GroupId.root)
+                )
         }
 
         instanceTopics.forEach { topic ->
