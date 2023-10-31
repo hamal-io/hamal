@@ -11,15 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
 
-
-// FIXME-53 implement & test this controller
-// - happy cases -- make sure that you create the func and update it a couple of times
-//   -- deploy same code version  - ok
-//   -- deploy prior code version - ok
-//   -- deploy higher code version - ok
-
-// - func does not exist -- exception
-// - func does exist but version does not -- exception
 @RestController
 internal class FuncDeployController(
     private val retry: Retry,

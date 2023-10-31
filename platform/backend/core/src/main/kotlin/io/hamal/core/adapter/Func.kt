@@ -112,6 +112,8 @@ class FuncAdapter(
         versionToDeploy: CodeVersion,
         responseHandler: (FuncDeploySubmitted) -> T
     ): T {
+        val func = funcQueryRepository.get(funcId)
+        codeQueryRepository.get(func.code.id, versionToDeploy)
         return responseHandler(submitRequest(funcId, versionToDeploy))
     }
 

@@ -9,7 +9,6 @@ import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncCmdRepository
 import io.hamal.repository.api.FuncRepository
 import io.hamal.repository.api.event.FuncDeployedEvent
-import io.hamal.repository.api.event.FuncUpdatedEvent
 import io.hamal.repository.api.submitted_req.FuncDeploySubmitted
 import org.springframework.stereotype.Component
 
@@ -26,9 +25,6 @@ class DeployFuncHandler(
 }
 
 private fun DeployFuncHandler.deployVersion(req: FuncDeploySubmitted): Func {
-    val func = funcRepository.get(req.funcId)
-    codeQueryRepository.get(func.code.id, req.versionToDeploy)
-
     return funcRepository.deploy(
         req.funcId,
         FuncCmdRepository.DeployCmd(

@@ -334,7 +334,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
     inner class DeployTest {
 
         @TestFactory
-        fun `Deploys code version to func`() = runWith(FuncRepository::class) {
+        fun `Deploys higher version`() = runWith(FuncRepository::class) {
             val func = createUpdatedFunc(
                 funcId = FuncId(123),
                 codeId = CodeId(5),
@@ -356,7 +356,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
         }
 
         @TestFactory
-        fun `Deploys same code version`() = runWith(FuncRepository::class) {
+        fun `Deploys same version`() = runWith(FuncRepository::class) {
             createUpdatedFunc(
                 funcId = FuncId(123),
                 codeId = CodeId(5),
@@ -381,7 +381,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
         }
 
         @TestFactory
-        fun `Deploys lower code version`() = runWith(FuncRepository::class) {
+        fun `Deploys lower version`() = runWith(FuncRepository::class) {
             createUpdatedFunc(
                 funcId = FuncId(123),
                 codeId = CodeId(5),
@@ -407,7 +407,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
 
         @Disabled
         @TestFactory
-        fun `Tries to deploy code to func that does not exist`() = runWith(FuncRepository::class) {
+        fun `Tries to deploy to func that does not exist`() = runWith(FuncRepository::class) {
             val exception = assertThrows<NoSuchElementException> {
                 deploy(
                     FuncId(1234567), FuncCmdRepository.DeployCmd(

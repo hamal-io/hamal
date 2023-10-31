@@ -8,7 +8,6 @@ import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.ApiSdk
 
@@ -30,7 +29,7 @@ class FuncDeployFunction(
                     "id" to StringType(res.id.value.value.toString(16)),
                     "status" to StringType(res.status.name),
                     "func_id" to StringType(res.funcId.value.value.toString(16))
-                    // FIXME-53 version
+                    // FIXME-53 version ???
                 )
             )
         } catch (t: Throwable) {

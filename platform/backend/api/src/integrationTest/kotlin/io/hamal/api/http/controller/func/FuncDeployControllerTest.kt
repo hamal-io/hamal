@@ -13,13 +13,12 @@ import io.hamal.lib.sdk.api.ApiFuncUpdateReq
 import io.hamal.repository.api.Func
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 internal class FuncDeployControllerTest : FuncBaseControllerTest() {
 
     @Test
-    fun `Deploy higher code version`() {
+    fun `Deploys higher version`() {
         val func = setup()
         repeat(20) { iter ->
             awaitCompleted(
@@ -37,7 +36,7 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
     }
 
     @Test
-    fun `Deploy same code version`() {
+    fun `Deploys same version`() {
         val func = setup()
 
         repeat(20) {
@@ -55,7 +54,7 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
     }
 
     @Test
-    fun `Deploy prior code version`() {
+    fun `Deploys prior version`() {
         val func = setup()
 
         repeat(20) { iter ->
@@ -83,9 +82,8 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
         assertThat(error.message, equalTo("Func not found"))
     }
 
-    @Disabled
     @Test
-    fun `Tries to deploy code version that does not exists`() {
+    fun `Tries to deploy version that does not exists`() {
         val f: ApiFuncCreateSubmitted = createFunc(
             ApiFuncCreateReq(
                 name = FuncName("Func-base"), inputs = FuncInputs(), code = CodeValue("40 + 2")
