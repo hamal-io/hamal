@@ -1,25 +1,23 @@
-import React, {useEffect, useState} from 'react'
-import {ApiExecSimple} from "../../../../../api/types";
-import {listExecs} from "../../../../../api";
+import React from 'react'
+import {ApiExecList} from "../../../../../api/types";
 import {Card} from "flowbite-react";
 import {useNavigate, useParams} from "react-router-dom";
+import {useApiGet} from "../../../../../hook";
 
 
 const NamespaceExecListPage: React.FC = () => {
     const {namespaceId} = useParams()
     const navigate = useNavigate()
-    const [loading, setLoading] = useState(false);
-    const [execs, setExecs] = useState<ApiExecSimple[]>([])
+    const [response, isLoading, error] = useApiGet<ApiExecList>(`v1/namespaces/${namespaceId}/execs`)
 
-    useEffect(() => {
-        setLoading(true)
-        listExecs({groupId: '1', limit: 10}).then(response => {
-            setExecs(response.execs)
-            setLoading(false)
-        })
-    }, []);
+    console.log(response)
+    console.log(isLoading)
+    console.log(error)
 
-    const content = execs.map(exec => (
+    if (isLoading) return "Loading..."
+
+
+    const content = response.execs.map(exec => (
         <Card
             key={exec.id}
             className="max-w-sm"

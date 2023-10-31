@@ -1,32 +1,8 @@
-import React, {FC, useEffect, useState} from 'react'
-import {useNavigate, useParams} from "react-router-dom";
-import Editor from "../../../../../component/editor";
-import {Button, Card} from "flowbite-react";
-import {ApiExecSimple, ApiFunc} from "../../../../../api/types";
-import {getFunction, invokeAdhoc, invokeFunc, listExecs, updateFunc} from "../../../../../api";
+import React from 'react'
+import {useParams} from "react-router-dom";
 
 const NmaespaceFuncDetailPage: React.FC = () => {
     const {funcId} = useParams()
-
-    const navigate = useNavigate()
-    const [func, setFunc] = useState<ApiFunc>({} as ApiFunc)
-
-    const [name, setName] = useState<string | undefined>()
-    const [code, setCode] = useState('')
-    const [loading, setLoading] = useState(false);
-
-
-    useEffect(() => {
-        if (funcId) {
-            setLoading(true)
-            getFunction(funcId).then(response => {
-                setFunc((response))
-                setCode(response.code.value)
-                setName(response.name)
-                setLoading(false)
-            })
-        }
-    }, [funcId]);
 
 
     return (
@@ -34,27 +10,7 @@ const NmaespaceFuncDetailPage: React.FC = () => {
 
             <div className="flex flex-col items-center justify-center">
                 <div className="w-full">
-                    <Editor
-                        code={code}
-                        onChange={code => setCode(code)}
-                    />
-                </div>
-
-                <div className="flex flex-row ">
-                    <Button onClick={() => {
-
-                        invokeAdhoc({code}).then(response => {
-                            console.log(response)
-                        })
-
-                    }}>Test</Button>
-
-                    <Button onClick={() => {
-                        updateFunc(funcId, {name: null, code: code}).then(response => {
-                            console.log(response)
-                        })
-                    }}> Save </Button>
-
+                    {funcId}
                 </div>
 
             </div>

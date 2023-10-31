@@ -2,13 +2,7 @@ import {useCallback, useEffect, useState} from "react";
 import useLocalStorageState from "use-local-storage-state";
 import {AUTH_STATE_KEY, AuthState} from "../state.ts";
 
-export interface UseApiProps {
-    method: string,
-    url: string,
-    body?: string
-}
-
-export const useApi = <T>({method, url, body}: UseApiProps) => {
+export const useApiGet = <T>(url: string): [T, boolean, Error] => {
     const [auth] = useAuth()
 
     const [data, setData] = useState<T | null>(null);
@@ -26,8 +20,7 @@ export const useApi = <T>({method, url, body}: UseApiProps) => {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${auth.token}`
                 },
-                method,
-                body
+                method: "GET"
             })
                 .then(response => {
 
@@ -56,20 +49,26 @@ export const useApi = <T>({method, url, body}: UseApiProps) => {
         }
     }, []);
 
-    return {data, isLoading, error}
+    return [data, isLoading, error]
 }
 
-export const useApiPost = <T>() => {
+type ApiPostAction = (url: string, data: object) => Promise<void>
+export const useApiPost = <T>(): [ApiPostAction, T, boolean, Error] => {
     const [auth] = useAuth()
 
     const [data, setData] = useState<T | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<Error>(null);
 
-    const post = useCallback(async (url, body) => {
+    const post = useCallback(async (url: string, body: object) => {
         if (auth.type === 'Unauthorized') {
+            console.log("Unauthorized")
             setError(Error("Unauthenticated"))
             setIsLoading(false)
+
+            localStorage.removeItem(AUTH_STATE_KEY)
+            window.location.href = '/'
+
         } else {
             fetch(`${import.meta.env.VITE_BASE_URL}/${url}`, {
                 method: "POST",
@@ -105,7 +104,7 @@ export const useApiPost = <T>() => {
         }
     }, [auth])
 
-    return {post, data, isLoading, error}
+    return [post, data, isLoading, error]
 }
 
 export const useAuth = () => {

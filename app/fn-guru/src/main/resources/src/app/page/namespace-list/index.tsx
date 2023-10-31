@@ -2,20 +2,14 @@ import React, {useEffect, useState} from 'react'
 import {useNavigate} from "react-router-dom";
 import {ApiNamespace, ApiNamespaceList} from "../../../api/types";
 import {Button, Card, Label, Modal, TextInput} from "flowbite-react";
-import {createNamespace} from "../../../api/namespace.ts";
-import {ApiGroupList, ApiGroupSimple} from "../../../api";
-import {useApi, useApiPost, useAuth} from "../../../hook";
+import {useApiGet, useApiPost, useAuth} from "../../../hook";
 
 const NamespaceListPage: React.FC = () => {
 
     const navigate = useNavigate()
     const [auth] = useAuth()
 
-    const {data, isLoading, error} = useApi<ApiNamespaceList>({
-            method: "GET",
-            url: `v1/groups/${auth.groupId}/namespaces`
-        }
-    )
+    const [data, isLoading, error] = useApiGet<ApiNamespaceList>(`v1/groups/${auth.groupId}/namespaces`)
 
 
     if (isLoading) return "Loading..."

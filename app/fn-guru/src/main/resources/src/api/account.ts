@@ -1,28 +1,9 @@
-import {unauthorizedDefaultHeaders} from "./shared.ts";
+const unauthorizedDefaultHeaders = () => ({
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+})
 
-interface ApiAccountCreateSubmitted {
-    id: string,
-    status: string,
-    accountId: string,
-    token: string
-}
-
-export async function createAnonymousAccount(): Promise<ApiAccountCreateSubmitted> {
-    //FIXME do not use admin endpoint - only for prototyping
-    const response = await fetch(`${import.meta.env.VITE_BASE_URL}/v1/anonymous-accounts`, {
-        headers: unauthorizedDefaultHeaders(),
-        method: "POST",
-    })
-
-    if (!response.ok) {
-        const message = `Request submission failed: ${response.status} - ${response.statusText}`;
-        throw new Error(message);
-    }
-    return await response.json();
-}
-
-
-interface ApiLoginSubmitted {
+export interface ApiLoginSubmitted {
     id: string,
     status: string,
     accountId: string,

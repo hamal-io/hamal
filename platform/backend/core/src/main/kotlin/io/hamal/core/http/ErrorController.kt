@@ -9,13 +9,15 @@ import kotlinx.serialization.MissingFieldException
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import org.springframework.core.Ordered.HIGHEST_PRECEDENCE
+import org.springframework.core.annotation.Order
 import org.springframework.http.converter.HttpMessageNotReadableException
-import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException
+import org.springframework.web.servlet.NoHandlerFoundException
 
-@Component
+@Order(HIGHEST_PRECEDENCE)
 @ControllerAdvice
 internal class ErrorController(
     private val json: Json
@@ -51,6 +53,25 @@ internal class ErrorController(
             res.writer.write(encoded)
         }
     }
+
+    @ExceptionHandler(value = [NoHandlerFoundException::class])
+    fun missingFields(req: HttpServletRequest, res: HttpServletResponse, t: NoHandlerFoundException) {
+        t.printStackTrace()
+        val encoded = json.encodeToString(ApiError("Request handler not found"))
+        res.status = 404
+        res.addHeader("Content-Type", "application/json")
+        res.writer.write(encoded)
+    }
+
+
+    @ExceptionHandler(value = [IllegalCallerException::class])
+    fun otherwise(req: HttpServletRequest, res: HttpServletResponse, t: IllegalCallerException) {
+        val encoded = json.encodeToString(ApiError.serializer(), ApiError("FORBIDDEN"))
+        res.status = HttpServletResponse.SC_FORBIDDEN
+        res.addHeader("Content-Type", "application/json")
+        res.writer.write(encoded)
+    }
+
 
     @ExceptionHandler(value = [Throwable::class])
     fun otherwise(req: HttpServletRequest, res: HttpServletResponse, t: Throwable) {

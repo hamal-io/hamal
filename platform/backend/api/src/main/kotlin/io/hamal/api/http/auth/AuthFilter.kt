@@ -45,7 +45,12 @@ class AuthApiFilter(
             ?.let(::AuthToken)
             ?: run {
                 log.warn("Unauthorized request on $path")
-                throw IllegalCallerException("Forbidden")
+//                throw IllegalCallerException("Forbidden")
+
+                response.status = 403
+                response.contentType = "application/json"
+                response.writer.write("""{"message":"FORBIDDEN"}""")
+                return
             }
 
         if (token == AuthToken("let_me_in")) {
@@ -64,11 +69,13 @@ class AuthApiFilter(
                     AuthContextHolder.clear()
                 }
             }
-            if (counter++ > 100) {
-                log.warn("Unauthorized request on $path")
-                throw IllegalCallerException("Forbidden")
+            if (counter++ > 10) {
+                response.status = 403
+                response.contentType = "application/json"
+                response.writer.write("""{"message":"FORBIDDEN"}""")
+                return
             }
-            Thread.sleep(10)
+            Thread.sleep(50)
         }
     }
 }

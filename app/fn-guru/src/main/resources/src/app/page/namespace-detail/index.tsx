@@ -3,6 +3,7 @@ import {useParams} from "react-router-dom";
 import {ApiNamespace} from "../../../api/types";
 import {getNamespace} from "../../../api/namespace.ts";
 import NamespaceSidebar from "./component/sidebar";
+import {useApiGet} from "../../../hook";
 
 
 interface NamespaceDetailPageProps {
@@ -13,20 +14,7 @@ interface NamespaceDetailPageProps {
 const NamespaceDetailPage: FC<NamespaceDetailPageProps> = (props: NamespaceDetailPageProps) => {
     const {namespaceId} = useParams()
 
-    const [loading, setLoading] = useState(false)
-    const [namespace, setNamespace] = useState<ApiNamespace>({} as ApiNamespace)
-
-    useEffect(() => {
-        if (namespaceId) {
-            setLoading(true)
-            getNamespace(namespaceId).then(response => {
-                setNamespace((response))
-                setLoading(false)
-            })
-
-        }
-    }, [namespaceId]);
-
+    const [namespace, isLoading, error] = useApiGet<ApiNamespace>(`v1/namespaces/${namespaceId}`)
 
     return (
         <main className="flex-1 w-full mx-auto text-lg h-full shadow-lg bg-gray-100">
@@ -35,6 +23,7 @@ const NamespaceDetailPage: FC<NamespaceDetailPageProps> = (props: NamespaceDetai
                     <NamespaceSidebar/>
                 </div>
                 <div className="flex flex-col items-center w-10/12">
+                    {JSON.stringify(isLoading)}
                     {JSON.stringify(namespace, null, 4)}
                     {props.children}
                 </div>

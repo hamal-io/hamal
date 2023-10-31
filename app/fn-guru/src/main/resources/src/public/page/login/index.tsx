@@ -1,4 +1,4 @@
-import {Button, Checkbox, Label, TextInput} from 'flowbite-react';
+import {Button, Label, TextInput} from 'flowbite-react';
 import {useNavigate} from "react-router-dom";
 import {useState} from "react";
 import {login} from "../../../api/account.ts";
