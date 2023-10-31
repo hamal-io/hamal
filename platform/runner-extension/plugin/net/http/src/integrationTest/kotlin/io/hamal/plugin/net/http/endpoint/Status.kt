@@ -1,4 +1,4 @@
-package io.hamal.plugin.net.http.web
+package io.hamal.plugin.net.http.endpoint
 
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

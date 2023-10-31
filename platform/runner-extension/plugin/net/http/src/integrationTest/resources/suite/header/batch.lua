@@ -8,7 +8,7 @@ req_headers['d'] = decimal.new('12.21')
 req_headers['n'] = 24
 req_headers['b'] = true
 
-response = fail_on_error(http.execute({
+res = fail_on_error(http.execute({
     http.requests.get('/v1/headers', { headers = req_headers }),
     http.requests.post('/v1/headers', { headers = req_headers }),
     http.requests.patch('/v1/headers', { headers = req_headers }),
@@ -17,11 +17,11 @@ response = fail_on_error(http.execute({
 }))
 
 assert(err == nil)
-assert(response ~= nil)
-assert(#response == 5)
+assert(res ~= nil)
+assert(#res == 5)
 
 for idx = 1, 5 do
-    headers = response[idx].headers
+    headers = res[idx].headers
 
     assert(headers['accept'] == 'application/json')
     assert(headers['auth-ori-zation'] == 'Bearer ey.SecretToken')

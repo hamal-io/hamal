@@ -37,13 +37,13 @@ jobs:
           token: ${{ secrets.SERVICE_TOKEN }}
           fetch-depth: 0
           path: 'code-cov'
-        run: |
-          cd code-cov
-          rm -rf *
-          cp -r ${{github.workspace}}/app/hamal-mono/build/reports/jacoco/integrationTestCodeCoverageReport/html/* .
-          git add -A
-          git config user.email "code-cov@hamal.io"
-          git config user.name "code cov"
-          git commit -m "${{ github.sha }}"
-          git push -f
+          run: |
+            cd code-cov
+            rm -rf *
+            cp -r ${{github.workspace}}/app/hamal-mono/build/reports/jacoco/integrationTestCodeCoverageReport/html/* .
+            git add -A
+            git config user.email "code-cov@hamal.io"
+            git config user.name "code cov"
+            git commit -m "${{ github.sha }}"
+            git push -f
           

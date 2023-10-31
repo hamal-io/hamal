@@ -28,9 +28,6 @@ class AuthApiFilter(
         filterChain: FilterChain
     ) {
         val path = request.servletPath
-
-
-
         if (request.method == "OPTIONS") {
             return filterChain.doFilter(request, response)
         }
@@ -51,26 +48,27 @@ class AuthApiFilter(
                 throw IllegalCallerException("Forbidden")
             }
 
-        if(token == AuthToken("let_me_in")){
-//            AuthContextHolder.set(AuthContext(auth, accountQueryRepository.get(AccountId(1)), token))
-            try {
-                return filterChain.doFilter(request, response)
-            } finally {
-//                AuthContextHolder.clear()
-            }
-        }
-
-        val auth = authRepository.find(token) ?: run {
-            log.warn("Unauthorized request on $path")
-            throw IllegalCallerException("Forbidden")
-        }
-
-        AuthContextHolder.set(AuthContext(auth, accountQueryRepository.get(auth.accountId), token))
-
-        try {
+        if (token == AuthToken("let_me_in")) {
             return filterChain.doFilter(request, response)
-        } finally {
-            AuthContextHolder.clear()
+        }
+
+        // FIXME token must contain creation timestamp is creation timestamp < 1s ago retry a couple of times - due to its async nature the token might not be in the database yet
+        var counter = 0
+        while (true) {
+            val auth = authRepository.find(token)
+            if (auth != null) {
+                try {
+                    AuthContextHolder.set(AuthContext(auth, accountQueryRepository.get(auth.accountId), token))
+                    return filterChain.doFilter(request, response)
+                } finally {
+                    AuthContextHolder.clear()
+                }
+            }
+            if (counter++ > 100) {
+                log.warn("Unauthorized request on $path")
+                throw IllegalCallerException("Forbidden")
+            }
+            Thread.sleep(10)
         }
     }
 }

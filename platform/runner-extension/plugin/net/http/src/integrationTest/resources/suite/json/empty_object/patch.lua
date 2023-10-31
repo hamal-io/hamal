@@ -1,11 +1,11 @@
 http = require('net.http')
 
-err, response = http.patch('/v1/json-empty-object')
+err, res = http.patch('/v1/json-empty-object')
 assert(err == nil)
-assert(response ~= nil)
+assert(res ~= nil)
 
-assert(response.status_code == 200)
-assert(response.content_type == 'application/json')
+assert(res.status_code == 200)
+assert(res.content_type == 'application/json')
 
-assert(response.content ~= nil)
-assert(table_length(response.content) == 0)
+assert(res.content ~= nil)
+assert(table_length(res.content) == 0)

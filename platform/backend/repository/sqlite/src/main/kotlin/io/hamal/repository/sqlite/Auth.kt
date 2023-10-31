@@ -109,7 +109,7 @@ class SqliteAuthRepository(
     }
 
     override fun find(authToken: AuthToken): Auth? {
-        return connection.executeQueryOne<Auth>(
+        return connection.executeQueryOne(
             """
             SELECT 
                 *

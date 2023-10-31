@@ -34,12 +34,12 @@ class Sandbox(
         load(String(classLoader.getResource("std.lua").readBytes()))
     }
 
-//    fun register(script: NativeExtension) = state.registerGlobalExtension(script)
+//    fun login(script: NativeExtension) = state.registerGlobalExtension(script)
 //
-//    fun register(vararg factories: ExtensionFactory<*>): Sandbox {
+//    fun login(vararg factories: ExtensionFactory<*>): Sandbox {
 //        factories.map { it.create(this) }.forEach { script ->
 //            check(script is Capability)
-//            this.register(script)
+//            this.login(script)
 //        }
 //        return this
 //    }

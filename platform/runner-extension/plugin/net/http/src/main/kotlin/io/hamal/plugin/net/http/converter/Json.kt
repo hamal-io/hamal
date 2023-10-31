@@ -1,7 +1,6 @@
 package io.hamal.plugin.net.http.converter
 
 import io.hamal.lib.kua.type.*
-import io.hamal.lib.kua.type.DecimalType.Companion.isNumber
 import kotlinx.serialization.json.*
 
 fun SerializableType.toJson(): JsonElement {
@@ -55,9 +54,6 @@ private fun JsonObject.convertToType(): MapType {
 
 private fun JsonPrimitive.convertToType(): SerializableType {
     if (isString) {
-        if (isNumber(content)) {
-            return DecimalType(content)
-        }
         return StringType(content)
     }
 

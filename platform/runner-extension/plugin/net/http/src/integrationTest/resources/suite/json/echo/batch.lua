@@ -29,7 +29,7 @@ for idx = 1, 3 do
 
     assert(table_length(content) == 5)
     assert(content.s == 'hamal')
-    assert(content.d == decimal.new('12.21'))
+    assert(content.d == '12.21')
     assert(content.n == 24)
     assert(content.b == true)
     assert(content.m.value == '0x123')

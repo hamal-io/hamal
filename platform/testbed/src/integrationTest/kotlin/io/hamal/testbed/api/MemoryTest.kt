@@ -23,7 +23,7 @@ internal object MemoryApiTest : BaseApiTest() {
 
         val applicationBuilder = SpringApplicationBuilder()
             .parent(CoreConfig::class.java, TestConfig::class.java, TestRetryConfig::class.java)
-            .profiles("test", "admin", "memory")
+            .profiles("test", "api", "memory")
             .properties(properties)
             .bannerMode(Banner.Mode.OFF)
             .web(WebApplicationType.NONE)

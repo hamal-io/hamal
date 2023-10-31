@@ -8,11 +8,11 @@ req_headers['d'] = decimal.new('12.21')
 req_headers['n'] = 24
 req_headers['b'] = true
 
-response = fail_on_error(http.get('/v1/headers', {
+res = fail_on_error(http.get('/v1/headers', {
     headers = req_headers
 }))
 
-headers = response.headers
+headers = res.headers
 assert(headers['accept'] == 'application/json')
 assert(headers['auth-ori-zation'] == 'Bearer ey.SecretToken')
 

@@ -23,6 +23,6 @@ for idx = 1, 5 do
     assert(table_length(content) == 4)
     assert(content[1] == 23)
     assert(content[2] == true)
-    assert(content[3] == decimal.new('24.23'))
+    assert(content[3] == '24.23')
     assert(content[4] == 'HamalRocks')
 end

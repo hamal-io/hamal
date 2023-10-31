@@ -1,15 +1,13 @@
 package io.hamal.plugin.net.http
 
 import AbstractExtensionTest
-import io.hamal.script.std.decimal.DecimalScriptFactory
-import io.hamal.plugin.net.http.web.TestHeaderController
-import io.hamal.plugin.net.http.web.TestJsonController
-import io.hamal.plugin.net.http.web.TestStatusController
 import io.hamal.lib.http.fixture.TestWebConfig
-import io.hamal.lib.kua.NativeLoader
-import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.extension.ExtensionConfig
 import io.hamal.lib.kua.type.StringType
+import io.hamal.plugin.net.http.endpoint.TestHeaderController
+import io.hamal.plugin.net.http.endpoint.TestJsonController
+import io.hamal.plugin.net.http.endpoint.TestStatusController
+import io.hamal.script.std.decimal.DecimalScriptFactory
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
@@ -34,7 +32,6 @@ class HttpTest(@LocalServerPort var localServerPort: Int) : AbstractExtensionTes
 
     @TestFactory
     fun run(): List<DynamicTest> {
-        NativeLoader.load(Resources)
         return collectFiles().map { testFile ->
             dynamicTest("${testFile.parent.parent.name}/${testFile.parent.name}/${testFile.name}") {
                 val config = ExtensionConfig(

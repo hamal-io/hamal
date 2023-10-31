@@ -1,4 +1,4 @@
-package io.hamal.plugin.net.http.web
+package io.hamal.plugin.net.http.endpoint
 
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement

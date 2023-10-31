@@ -23,7 +23,7 @@ internal object SqliteApiTest : BaseApiTest() {
 
         val applicationBuilder = SpringApplicationBuilder()
             .parent(CoreConfig::class.java, TestConfig::class.java, TestRetryConfig::class.java)
-            .profiles("test", "admin", "sqlite")
+            .profiles("test", "api", "sqlite")
             .properties(properties)
             .bannerMode(Banner.Mode.OFF)
             .web(WebApplicationType.NONE)

@@ -185,29 +185,6 @@ internal class ConvertToTypeTest {
         }
 
         @Test
-        fun `Decimal array`() {
-            val testInstance = JsonArray(
-                listOf(
-                    JsonPrimitive("42.24"),
-                    JsonPrimitive("1337")
-                )
-            )
-
-            val result = testInstance.convertToType()
-            assertThat(
-                result, equalTo(
-                    ArrayType(
-                        mutableMapOf(
-                            1 to DecimalType("42.24"),
-                            2 to DecimalType("1337")
-                        )
-                    )
-                )
-            )
-        }
-
-
-        @Test
         fun `Map array`() {
             val testInstance = JsonArray(
                 listOf(
@@ -362,29 +339,6 @@ internal class ConvertToTypeTest {
                 )
             )
         }
-
-        @Test
-        fun `Decimal map`() {
-            val testInstance = JsonObject(
-                mapOf(
-                    "v1" to JsonPrimitive("42.24"),
-                    "v2" to JsonPrimitive("1337")
-                )
-            )
-
-            val result = testInstance.convertToType()
-            assertThat(
-                result, equalTo(
-                    MapType(
-                        mutableMapOf(
-                            "v1" to DecimalType("42.24"),
-                            "v2" to DecimalType("1337")
-                        )
-                    )
-                )
-            )
-        }
-
 
         @Test
         fun `Map map`() {
