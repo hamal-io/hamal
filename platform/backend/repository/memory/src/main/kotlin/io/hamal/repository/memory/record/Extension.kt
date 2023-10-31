@@ -106,14 +106,16 @@ class MemoryExtensionRepository : MemoryRecordRepository<ExtensionId, ExtensionR
 
     override fun close() {}
 
-    override fun find(extId: ExtensionId): Extension? = CurrentExtensionProjection.find(extId)
+    override fun find(extId: ExtensionId): Extension? = lock.withLock { CurrentExtensionProjection.find(extId) }
 
-    override fun list(query: ExtensionQuery): List<Extension> = CurrentExtensionProjection.list(query)
+    override fun list(query: ExtensionQuery): List<Extension> = lock.withLock { CurrentExtensionProjection.list(query) }
 
-    override fun count(query: ExtensionQuery): ULong = CurrentExtensionProjection.count(query)
+    override fun count(query: ExtensionQuery): ULong = lock.withLock { CurrentExtensionProjection.count(query) }
 
     override fun clear() {
-        super.clear()
-        CurrentExtensionProjection.clear()
+        lock.withLock {
+            super.clear()
+            CurrentExtensionProjection.clear()
+        }
     }
 }

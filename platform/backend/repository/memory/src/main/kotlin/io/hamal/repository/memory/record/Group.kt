@@ -79,19 +79,17 @@ class MemoryGroupRepository : MemoryRecordRepository<GroupId, GroupRecord, Group
         }
     }
 
-    override fun find(groupId: GroupId): Group? = CurrentGroupProjection.find(groupId)
+    override fun find(groupId: GroupId): Group? = lock.withLock { CurrentGroupProjection.find(groupId) }
 
-    override fun list(query: GroupQuery): List<Group> {
-        return CurrentGroupProjection.list(query)
-    }
+    override fun list(query: GroupQuery): List<Group> = lock.withLock { return CurrentGroupProjection.list(query) }
 
-    override fun count(query: GroupQuery): ULong {
-        return CurrentGroupProjection.count(query)
-    }
+    override fun count(query: GroupQuery): ULong = lock.withLock { CurrentGroupProjection.count(query) }
 
     override fun clear() {
-        super.clear()
-        CurrentGroupProjection.clear()
+        lock.withLock {
+            super.clear()
+            CurrentGroupProjection.clear()
+        }
     }
 
     override fun close() {

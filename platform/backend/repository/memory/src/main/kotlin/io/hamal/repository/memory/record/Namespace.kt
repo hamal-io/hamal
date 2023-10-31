@@ -109,21 +109,21 @@ class MemoryNamespaceRepository :
         }
     }
 
-    override fun find(namespaceId: NamespaceId): Namespace? = CurrentNamespaceProjection.find(namespaceId)
+    override fun find(namespaceId: NamespaceId): Namespace? =
+        lock.withLock { CurrentNamespaceProjection.find(namespaceId) }
 
-    override fun find(namespaceName: NamespaceName): Namespace? = CurrentNamespaceProjection.find(namespaceName)
+    override fun find(namespaceName: NamespaceName): Namespace? =
+        lock.withLock { CurrentNamespaceProjection.find(namespaceName) }
 
-    override fun list(query: NamespaceQuery): List<Namespace> {
-        return CurrentNamespaceProjection.list(query)
-    }
+    override fun list(query: NamespaceQuery): List<Namespace> = lock.withLock { CurrentNamespaceProjection.list(query) }
 
-    override fun count(query: NamespaceQuery): ULong {
-        return CurrentNamespaceProjection.count(query)
-    }
+    override fun count(query: NamespaceQuery): ULong = lock.withLock { CurrentNamespaceProjection.count(query) }
 
     override fun clear() {
-        super.clear()
-        CurrentNamespaceProjection.clear()
+        lock.withLock {
+            super.clear()
+            CurrentNamespaceProjection.clear()
+        }
     }
 
     override fun close() {}

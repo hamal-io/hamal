@@ -104,19 +104,17 @@ class MemoryHookRepository : MemoryRecordRepository<HookId, HookRecord, Hook>(
         }
     }
 
-    override fun find(hookId: HookId): Hook? = CurrentHookProjection.find(hookId)
+    override fun find(hookId: HookId): Hook? = lock.withLock { CurrentHookProjection.find(hookId) }
 
-    override fun list(query: HookQuery): List<Hook> {
-        return CurrentHookProjection.list(query)
-    }
+    override fun list(query: HookQuery): List<Hook> = lock.withLock { CurrentHookProjection.list(query) }
 
-    override fun count(query: HookQuery): ULong {
-        return CurrentHookProjection.count(query)
-    }
+    override fun count(query: HookQuery): ULong = lock.withLock { CurrentHookProjection.count(query) }
 
     override fun clear() {
-        super.clear()
-        CurrentHookProjection.clear()
+        lock.withLock {
+            super.clear()
+            CurrentHookProjection.clear()
+        }
     }
 
     override fun close() {}

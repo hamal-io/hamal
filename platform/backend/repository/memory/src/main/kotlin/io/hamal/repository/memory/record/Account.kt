@@ -88,21 +88,19 @@ class MemoryAccountRepository : MemoryRecordRepository<AccountId, AccountRecord,
         }
     }
 
-    override fun find(accountId: AccountId): Account? = CurrentAccountProjection.find(accountId)
+    override fun find(accountId: AccountId): Account? = lock.withLock { CurrentAccountProjection.find(accountId) }
 
-    override fun find(accountName: AccountName): Account? = CurrentAccountProjection.find(accountName)
+    override fun find(accountName: AccountName): Account? = lock.withLock { CurrentAccountProjection.find(accountName) }
 
-    override fun list(query: AccountQuery): List<Account> {
-        return CurrentAccountProjection.list(query)
-    }
+    override fun list(query: AccountQuery): List<Account> = lock.withLock { CurrentAccountProjection.list(query) }
 
-    override fun count(query: AccountQuery): ULong {
-        return CurrentAccountProjection.count(query)
-    }
+    override fun count(query: AccountQuery): ULong = lock.withLock { CurrentAccountProjection.count(query) }
 
     override fun clear() {
-        super.clear()
-        CurrentAccountProjection.clear()
+        lock.withLock {
+            super.clear()
+            CurrentAccountProjection.clear()
+        }
     }
 
     override fun close() {

@@ -97,15 +97,18 @@ class MemoryBlueprintRepository : MemoryRecordRepository<BlueprintId, BlueprintR
         }
     }
 
-    override fun find(blueprintId: BlueprintId): Blueprint? = CurrentBlueprintProjection.find(blueprintId)
+    override fun find(blueprintId: BlueprintId): Blueprint? =
+        lock.withLock { CurrentBlueprintProjection.find(blueprintId) }
 
-    override fun list(query: BlueprintQuery): List<Blueprint> = CurrentBlueprintProjection.list(query)
+    override fun list(query: BlueprintQuery): List<Blueprint> = lock.withLock { CurrentBlueprintProjection.list(query) }
 
-    override fun count(query: BlueprintQuery): ULong = CurrentBlueprintProjection.count(query)
+    override fun count(query: BlueprintQuery): ULong = lock.withLock { CurrentBlueprintProjection.count(query) }
 
     override fun clear() {
-        super.clear()
-        CurrentBlueprintProjection.clear()
+        lock.withLock {
+            super.clear()
+            CurrentBlueprintProjection.clear()
+        }
     }
 
     override fun close() {}

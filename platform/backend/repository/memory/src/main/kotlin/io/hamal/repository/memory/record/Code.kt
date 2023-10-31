@@ -3,7 +3,8 @@ package io.hamal.repository.memory.record
 import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.repository.api.Code
-import io.hamal.repository.api.CodeCmdRepository.*
+import io.hamal.repository.api.CodeCmdRepository.CreateCmd
+import io.hamal.repository.api.CodeCmdRepository.UpdateCmd
 import io.hamal.repository.api.CodeQueryRepository.CodeQuery
 import io.hamal.repository.api.CodeRepository
 import io.hamal.repository.record.RecordSequence
@@ -100,20 +101,22 @@ class MemoryCodeRepository : MemoryRecordRepository<CodeId, CodeRecord, Code>(
     }
 
     override fun close() {
-
     }
 
-    override fun find(codeId: CodeId): Code? = CurrentCodeProjection.find(codeId)
+    override fun find(codeId: CodeId): Code? = lock.withLock { CurrentCodeProjection.find(codeId) }
 
-    override fun find(codeId: CodeId, codeVersion: CodeVersion): Code? =
+    override fun find(codeId: CodeId, codeVersion: CodeVersion): Code? = lock.withLock {
         versionOf(codeId, RecordSequence(codeVersion.value))
+    }
 
-    override fun list(query: CodeQuery): List<Code> = CurrentCodeProjection.list(query)
+    override fun list(query: CodeQuery): List<Code> = lock.withLock { CurrentCodeProjection.list(query) }
 
-    override fun count(query: CodeQuery): ULong = CurrentCodeProjection.count(query)
+    override fun count(query: CodeQuery): ULong = lock.withLock { CurrentCodeProjection.count(query) }
 
     override fun clear() {
-        super.clear()
-        CurrentCodeProjection.clear()
+        lock.withLock {
+            super.clear()
+            CurrentCodeProjection.clear()
+        }
     }
 }

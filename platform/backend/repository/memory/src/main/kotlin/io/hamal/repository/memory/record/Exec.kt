@@ -194,16 +194,10 @@ class MemoryExecRepository : MemoryRecordRepository<ExecId, ExecRecord, Exec>(
     }
 
 
-    override fun find(execId: ExecId): Exec? {
-        return CurrentExecProjection.find(execId)
-    }
+    override fun find(execId: ExecId): Exec? = lock.withLock { CurrentExecProjection.find(execId) }
 
-    override fun list(query: ExecQuery): List<Exec> {
-        return CurrentExecProjection.list(query)
-    }
+    override fun list(query: ExecQuery): List<Exec> = lock.withLock { return CurrentExecProjection.list(query) }
 
-    override fun count(query: ExecQuery): ULong {
-        return CurrentExecProjection.count(query)
-    }
+    override fun count(query: ExecQuery): ULong = lock.withLock { return CurrentExecProjection.count(query) }
 }
 

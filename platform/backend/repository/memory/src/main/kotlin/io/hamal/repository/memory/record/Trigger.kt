@@ -185,19 +185,17 @@ class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord,
         }
     }
 
-    override fun find(triggerId: TriggerId) = CurrentTriggerProjection.find(triggerId)
+    override fun find(triggerId: TriggerId) = lock.withLock { CurrentTriggerProjection.find(triggerId) }
 
-    override fun list(query: TriggerQuery): List<Trigger> {
-        return CurrentTriggerProjection.list(query)
-    }
+    override fun list(query: TriggerQuery): List<Trigger> = lock.withLock { CurrentTriggerProjection.list(query) }
 
-    override fun count(query: TriggerQuery): ULong {
-        return CurrentTriggerProjection.count(query)
-    }
+    override fun count(query: TriggerQuery): ULong = lock.withLock { CurrentTriggerProjection.count(query) }
 
     override fun clear() {
-        super.clear()
-        CurrentTriggerProjection.clear()
+        lock.withLock {
+            super.clear()
+            CurrentTriggerProjection.clear()
+        }
     }
 
     override fun close() {}

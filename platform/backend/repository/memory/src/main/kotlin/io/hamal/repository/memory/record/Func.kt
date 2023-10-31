@@ -109,19 +109,17 @@ class MemoryFuncRepository : MemoryRecordRepository<FuncId, FuncRecord, Func>(
         }
     }
 
-    override fun find(funcId: FuncId): Func? = CurrentFuncProjection.find(funcId)
+    override fun find(funcId: FuncId): Func? = lock.withLock { CurrentFuncProjection.find(funcId) }
 
-    override fun list(query: FuncQuery): List<Func> {
-        return CurrentFuncProjection.list(query)
-    }
+    override fun list(query: FuncQuery): List<Func> = lock.withLock {  CurrentFuncProjection.list(query)    }
 
-    override fun count(query: FuncQuery): ULong {
-        return CurrentFuncProjection.count(query)
-    }
+    override fun count(query: FuncQuery): ULong =  lock.withLock {  CurrentFuncProjection.count(query) }
 
     override fun clear() {
-        super.clear()
-        CurrentFuncProjection.clear()
+        lock.withLock {
+            super.clear()
+            CurrentFuncProjection.clear()
+        }
     }
 
     override fun close() {}
