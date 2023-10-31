@@ -4,6 +4,7 @@ import io.hamal.lib.domain.vo.EventToSubmit
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecResult
 import io.hamal.lib.domain.vo.ExecState
+import io.hamal.lib.http.HttpException
 import io.hamal.lib.sdk.BridgeSdk
 import java.net.SocketException
 import java.net.SocketTimeoutException
@@ -31,6 +32,8 @@ class HttpConnector(
         } catch (e: SocketException) {
             return listOf()
         } catch (e: SocketTimeoutException) {
+            return listOf()
+        } catch (e: HttpException) {
             return listOf()
         }
     }

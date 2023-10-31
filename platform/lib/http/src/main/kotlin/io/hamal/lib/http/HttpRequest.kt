@@ -188,8 +188,12 @@ class HttpRequestImpl(
             )
         }
 
-        requestFacade.execute()
-        return requestFacade.response()
+        try {
+            requestFacade.execute()
+            return requestFacade.response()
+        } catch (e: Exception) {
+            throw HttpException(e)
+        }
     }
 
     override fun <RESULT : Any> execute(clazz: KClass<RESULT>): RESULT {
