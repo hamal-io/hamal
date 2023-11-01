@@ -17,7 +17,7 @@ internal class FuncDeployController(
     private val deploy: FuncDeployPort,
 ) {
     @PostMapping("/v1/funcs/{funcId}/deploy/{version}")
-    fun deployCodeVersion(
+    fun deploy(
         @PathVariable("funcId") funcId: FuncId,
         @PathVariable("version") codeVersion: CodeVersion,
     ): ResponseEntity<ApiSubmitted> = retry {

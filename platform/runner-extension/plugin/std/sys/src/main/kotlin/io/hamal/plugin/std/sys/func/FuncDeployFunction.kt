@@ -8,6 +8,7 @@ import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
+import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.ApiSdk
 
@@ -20,7 +21,7 @@ class FuncDeployFunction(
     override fun invoke(ctx: FunctionContext, arg1: MapType): Pair<ErrorType?, MapType?> {
         return try {
             val res = sdk.func.deploy(
-                id = FuncId(arg1.getString("id")),
+                funcId = FuncId(arg1.getString("id")),
                 version = CodeVersion(arg1.getInt("version"))
             )
 
@@ -28,8 +29,8 @@ class FuncDeployFunction(
                 mutableMapOf(
                     "id" to StringType(res.id.value.value.toString(16)),
                     "status" to StringType(res.status.name),
-                    "func_id" to StringType(res.funcId.value.value.toString(16))
-                    // FIXME-53 version ???
+                    "func_id" to StringType(res.funcId.value.value.toString(16)),
+                    "version" to NumberType(res.version.value)
                 )
             )
         } catch (t: Throwable) {

@@ -1,9 +1,9 @@
-package io.hamal.plugin.std.sys.blueprint
+package io.hamal.plugin.std.sys.func
 
-import io.hamal.lib.domain.vo.BlueprintId
-import io.hamal.lib.domain.vo.BlueprintInputs
-import io.hamal.lib.domain.vo.BlueprintName
 import io.hamal.lib.domain.vo.CodeValue
+import io.hamal.lib.domain.vo.FuncId
+import io.hamal.lib.domain.vo.FuncInputs
+import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -12,33 +12,32 @@ import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.ApiSdk
-import io.hamal.lib.sdk.api.ApiBlueprintUpdateReq
+import io.hamal.lib.sdk.api.ApiFuncUpdateReq
 
-class BlueprintUpdateFunction(
+class FuncUpdateFunction(
     private val sdk: ApiSdk
 ) : Function1In2Out<MapType, ErrorType, MapType>(
     FunctionInput1Schema(MapType::class),
     FunctionOutput2Schema(ErrorType::class, MapType::class)
 ) {
-
     override fun invoke(ctx: FunctionContext, arg1: MapType): Pair<ErrorType?, MapType?> {
         return try {
-            val res = sdk.blueprint.update(
-                BlueprintId(arg1.getString("id")),
-                ApiBlueprintUpdateReq(
-                    name = BlueprintName(arg1.getString("name")),
-                    inputs = BlueprintInputs(),
-                    value = CodeValue(arg1.getString("value"))
+            val res = sdk.func.update(
+                FuncId(arg1.getString("id")),
+                ApiFuncUpdateReq(
+                    name = FuncName(arg1.getString("name")),
+                    inputs = FuncInputs(),
+                    code = CodeValue(arg1.getString("code"))
                 )
             )
-
             null to MapType(
                 mutableMapOf(
                     "id" to StringType(res.id.value.value.toString(16)),
                     "status" to StringType(res.status.name),
-                    "blueprint_id" to StringType(res.blueprintId.value.value.toString(16))
+                    "func_id" to StringType(res.funcId.value.value.toString(16))
                 )
             )
+
         } catch (t: Throwable) {
             ErrorType(t.message!!) to null
         }

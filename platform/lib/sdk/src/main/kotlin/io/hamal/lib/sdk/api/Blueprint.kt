@@ -35,7 +35,7 @@ data class ApiBlueprintCreateSubmitted(
 
 
 @Serializable
-data class ApiUpdateBlueprintReq(
+data class ApiBlueprintUpdateReq(
     override val name: BlueprintName? = null,
     override val inputs: BlueprintInputs? = null,
     override val value: CodeValue? = null
@@ -52,7 +52,7 @@ data class ApiBlueprintUpdateSubmitted(
 interface ApiBlueprintService {
     fun create(groupId: GroupId, req: ApiCreateBlueprintReq): ApiBlueprintCreateSubmitted
     fun get(bpId: BlueprintId): ApiBlueprint
-    fun update(bpId: BlueprintId, req: ApiUpdateBlueprintReq): ApiBlueprintUpdateSubmitted
+    fun update(bpId: BlueprintId, req: ApiBlueprintUpdateReq): ApiBlueprintUpdateSubmitted
 }
 
 internal class ApiBlueprintServiceImpl(
@@ -74,7 +74,7 @@ internal class ApiBlueprintServiceImpl(
             .fold(ApiBlueprint::class)
 
 
-    override fun update(bpId: BlueprintId, req: ApiUpdateBlueprintReq): ApiBlueprintUpdateSubmitted =
+    override fun update(bpId: BlueprintId, req: ApiBlueprintUpdateReq): ApiBlueprintUpdateSubmitted =
         template.patch("/v1/blueprints/{bpId}")
             .path("bpId", bpId)
             .body(req)

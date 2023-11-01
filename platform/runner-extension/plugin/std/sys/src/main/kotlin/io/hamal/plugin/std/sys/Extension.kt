@@ -28,59 +28,60 @@ import io.hamal.plugin.std.sys.trigger.TriggerListFunction
 
 
 class SysPluginFactory(
-    private val sdk: ApiSdkImpl
+        private val sdk: ApiSdkImpl
 ) : RunnerPluginExtensionFactory {
     override fun create(sandbox: Sandbox): RunnerPluginExtension {
         return RunnerPluginExtension(
-            name = "sys",
-            internals = mapOf(
-                "await" to AwaitFunction(sdk.template),
-                "await_completed" to AwaitCompletedFunction(sdk.template),
-                "await_failed" to AwaitFailedFunction(sdk.template),
+                name = "sys",
+                internals = mapOf(
+                        "await" to AwaitFunction(sdk.template),
+                        "await_completed" to AwaitCompletedFunction(sdk.template),
+                        "await_failed" to AwaitFailedFunction(sdk.template),
 
-                "adhoc" to AdhocFunction(sdk),
+                        "adhoc" to AdhocFunction(sdk),
 
-                "blueprint_create" to BlueprintCreateFunction(sdk),
-                "blueprint_get" to BlueprintGetFunction(sdk),
-                "blueprint_update" to BlueprintUpdateFunction(sdk),
+                        "blueprint_create" to BlueprintCreateFunction(sdk),
+                        "blueprint_get" to BlueprintGetFunction(sdk),
+                        "blueprint_update" to BlueprintUpdateFunction(sdk),
 
-                "code_get" to CodeGetFunction(sdk),
+                        "code_get" to CodeGetFunction(sdk),
 
-                "req_get" to ReqGetFunction(sdk.template),
+                        "req_get" to ReqGetFunction(sdk.template),
 
-                "exec_list" to ExecListFunction(sdk),
-                "exec_get" to ExecGetFunction(sdk),
+                        "exec_list" to ExecListFunction(sdk),
+                        "exec_get" to ExecGetFunction(sdk),
 
-                "extension_create" to ExtensionCreateFunction(sdk),
-                "extension_get" to ExtensionGetFunction(sdk),
-                "extension_list" to ExtensionListFunction(sdk),
-                "extension_update" to ExtensionUpdateFunction(sdk),
+                        "extension_create" to ExtensionCreateFunction(sdk),
+                        "extension_get" to ExtensionGetFunction(sdk),
+                        "extension_list" to ExtensionListFunction(sdk),
+                        "extension_update" to ExtensionUpdateFunction(sdk),
 
-                "func_create" to FuncCreateFunction(sdk),
-                "func_deploy" to FuncDeployFunction(sdk),
-                "func_get" to FuncGetFunction(sdk),
-                "func_list" to FuncListFunction(sdk),
-                "func_invoke" to FuncInvokeFunction(sdk),
+                        "func_create" to FuncCreateFunction(sdk),
+                        "func_deploy" to FuncDeployFunction(sdk),
+                        "func_get" to FuncGetFunction(sdk),
+                        "func_list" to FuncListFunction(sdk),
+                        "func_invoke" to FuncInvokeFunction(sdk),
+                        "func_update" to FuncUpdateFunction(sdk),
 
-                "hook_create" to HookCreateFunction(sdk),
-                "hook_get" to HookGetFunction(sdk),
-                "hook_list" to HookListFunction(sdk),
+                        "hook_create" to HookCreateFunction(sdk),
+                        "hook_get" to HookGetFunction(sdk),
+                        "hook_list" to HookListFunction(sdk),
 
-                "namespace_create" to NamespaceCreateFunction(sdk),
-                "namespace_get" to NamespaceGetFunction(sdk),
-                "namespace_list" to NamespaceListFunction(sdk),
+                        "namespace_create" to NamespaceCreateFunction(sdk),
+                        "namespace_get" to NamespaceGetFunction(sdk),
+                        "namespace_list" to NamespaceListFunction(sdk),
 
-                "topic_create" to TopicCreateFunction(sdk),
-                "topic_resolve" to TopicResolveFunction(sdk),
-                "topic_list" to TopicListFunction(sdk),
-                "topic_get" to TopicGetFunction(sdk),
-                "topic_entry_append" to TopicEntryAppendFunction(sdk),
-                "topic_entry_list" to TopicEntryListFunction(sdk),
+                        "topic_create" to TopicCreateFunction(sdk),
+                        "topic_resolve" to TopicResolveFunction(sdk),
+                        "topic_list" to TopicListFunction(sdk),
+                        "topic_get" to TopicGetFunction(sdk),
+                        "topic_entry_append" to TopicEntryAppendFunction(sdk),
+                        "topic_entry_list" to TopicEntryListFunction(sdk),
 
-                "trigger_create" to TriggerCreateFunction(sdk),
-                "trigger_get" to TriggerGetFunction(sdk),
-                "trigger_list" to TriggerListFunction(sdk)
-            )
+                        "trigger_create" to TriggerCreateFunction(sdk),
+                        "trigger_get" to TriggerGetFunction(sdk),
+                        "trigger_list" to TriggerListFunction(sdk)
+                )
         )
     }
 }
