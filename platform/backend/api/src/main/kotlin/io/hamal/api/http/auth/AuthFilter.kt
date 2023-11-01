@@ -68,7 +68,7 @@ class AuthApiFilter(
                     AuthContextHolder.clear()
                 }
             }
-            if (counter++ > 10) {
+            if (counter++ > 20) {
                 response.status = 403
                 response.contentType = "application/json"
                 response.writer.write("""{"message":"That's an error"}""")
