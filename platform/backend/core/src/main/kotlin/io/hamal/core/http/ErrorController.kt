@@ -11,6 +11,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.springframework.core.Ordered.HIGHEST_PRECEDENCE
 import org.springframework.core.annotation.Order
+import org.springframework.core.convert.ConversionFailedException
 import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -22,6 +23,44 @@ import org.springframework.web.servlet.NoHandlerFoundException
 internal class ErrorController(
     private val json: Json
 ) {
+
+    @Serializable
+    data class InvalidArgumentType(
+        val message: String,
+        val source: String,
+        val target: String
+    )
+
+    @OptIn(ExperimentalSerializationApi::class)
+    @ExceptionHandler(value = [MethodArgumentTypeMismatchException::class])
+    fun argumentTypeMismatch(
+        req: HttpServletRequest,
+        res: HttpServletResponse,
+        t: MethodArgumentTypeMismatchException
+    ) {
+        t.printStackTrace()
+
+        val cause = t.cause
+        if (cause is ConversionFailedException) {
+
+            val encoded = json.encodeToString(
+                InvalidArgumentType(
+                    message = "ArgumentTypeMismatch",
+                    source = cause.sourceType.toString(),
+                    target = cause.targetType.toString()
+                )
+            )
+            res.status = 400
+            res.addHeader("Content-Type", "application/json")
+            res.writer.write(encoded)
+        } else {
+            val encoded = json.encodeToString(ApiError("Bad request"))
+            res.status = 400
+            res.addHeader("Content-Type", "application/json")
+            res.writer.write(encoded)
+        }
+    }
+
 
     @Serializable
     data class MissingFieldsError(
