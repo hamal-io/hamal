@@ -45,11 +45,10 @@ class AuthApiFilter(
             ?.let(::AuthToken)
             ?: run {
                 log.warn("Unauthorized request on $path")
-//                throw IllegalCallerException("Forbidden")
 
                 response.status = 403
                 response.contentType = "application/json"
-                response.writer.write("""{"message":"FORBIDDEN"}""")
+                response.writer.write("""{"message":"That's an error"}""")
                 return
             }
 
@@ -72,7 +71,7 @@ class AuthApiFilter(
             if (counter++ > 10) {
                 response.status = 403
                 response.contentType = "application/json"
-                response.writer.write("""{"message":"FORBIDDEN"}""")
+                response.writer.write("""{"message":"That's an error"}""")
                 return
             }
             Thread.sleep(50)
