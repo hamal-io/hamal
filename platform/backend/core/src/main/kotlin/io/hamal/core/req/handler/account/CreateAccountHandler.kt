@@ -25,8 +25,11 @@ class CreateAccountWithPasswordHandler(
 ) : ReqHandler<AccountCreateSubmitted>(AccountCreateSubmitted::class) {
 
     override fun invoke(req: AccountCreateSubmitted) {
-        createAccount(req).also { emitEvent(req.cmdId(), it) }.also { createGroup(req) }.also { createNamespace(req) }
-            .also { createPasswordAuth(req) }.also { createTokenAuth(req) }
+        createAccount(req)
+            .also { emitEvent(req.cmdId(), it) }
+            .also { createGroup(req) }.also { createNamespace(req) }
+            .also { createPasswordAuth(req) }
+            .also { createTokenAuth(req) }
     }
 }
 
@@ -70,7 +73,10 @@ private fun CreateAccountWithPasswordHandler.createNamespace(req: AccountCreateS
 private fun CreateAccountWithPasswordHandler.createPasswordAuth(req: AccountCreateSubmitted): Auth {
     return authCmdRepository.create(
         AuthCmdRepository.CreatePasswordAuthCmd(
-            id = req.cmdId(), authId = req.authenticationId, accountId = req.accountId, hash = req.hash
+            id = req.cmdId(),
+            authId = req.passwordAuthId,
+            accountId = req.accountId,
+            hash = req.hash
         )
     )
 }
@@ -79,7 +85,7 @@ private fun CreateAccountWithPasswordHandler.createTokenAuth(req: AccountCreateS
     return authCmdRepository.create(
         AuthCmdRepository.CreateTokenAuthCmd(
             id = req.cmdId(),
-            authId = req.authenticationId,
+            authId = req.tokenAuthId,
             accountId = req.accountId,
             token = req.token,
             expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(30, ChronoUnit.DAYS))

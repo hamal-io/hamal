@@ -54,9 +54,11 @@ class SubmitRequest(
             namespaceId = NamespaceId.root,
             name = req.name,
             email = req.email,
-            authenticationId = generateDomainId(::AuthId),
+            passwordAuthId = generateDomainId(::AuthId),
+            tokenAuthId = generateDomainId(::AuthId),
             hash = encodePassword(
-                password = req.password, salt = salt
+                password = req.password,
+                salt = salt
             ),
             salt = salt,
             token = generateToken()
@@ -102,7 +104,8 @@ class SubmitRequest(
             namespaceId = generateDomainId(::NamespaceId),
             name = req.name,
             email = req.email,
-            authenticationId = generateDomainId(::AuthId),
+            passwordAuthId = generateDomainId(::AuthId),
+            tokenAuthId = generateDomainId(::AuthId),
             hash = encodePassword(
                 password = req.password ?: throw NoSuchElementException("Account not found"), salt = salt
             ),
@@ -122,7 +125,8 @@ class SubmitRequest(
             namespaceId = generateDomainId(::NamespaceId),
             name = req.name,
             email = null,
-            authenticationId = generateDomainId(::AuthId),
+            passwordAuthId = generateDomainId(::AuthId),
+            tokenAuthId = generateDomainId(::AuthId),
             hash = encodePassword(
                 password = Password(">>You-shall-not-know<<"),
                 salt = salt
