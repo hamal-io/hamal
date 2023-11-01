@@ -45,5 +45,9 @@ data class CodeValue(override val value: String) : ValueObject<String> {
 
 @Serializable(with = CodeVersion.Serializer::class)
 data class CodeVersion(override val value: Int) : IntValueObject() {
+    init {
+        require(value > 0) { "CodeVersion must be positive" }
+    }
+
     internal object Serializer : IntValueObjectSerializer<CodeVersion>(::CodeVersion)
 }

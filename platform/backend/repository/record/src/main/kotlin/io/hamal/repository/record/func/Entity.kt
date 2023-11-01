@@ -59,7 +59,7 @@ data class FuncEntity(
                 code = FuncCode(
                     id = code!!.id,
                     version = code!!.version,
-                    deployedVersion = rec.deployment
+                    deployedVersion = rec.deployedVersion
                 )
             )
         }

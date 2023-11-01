@@ -45,5 +45,5 @@ data class FuncUpdatedRecord(
 data class FuncDeploymentRecord(
     override val entityId: FuncId,
     override val cmdId: CmdId,
-    val deployment: CodeVersion
+    val deployedVersion: CodeVersion
 ) : FuncRecord()

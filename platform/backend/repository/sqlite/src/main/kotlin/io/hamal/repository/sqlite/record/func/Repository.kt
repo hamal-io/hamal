@@ -1,6 +1,5 @@
 package io.hamal.repository.sqlite.record.func
 
-import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Func
@@ -86,15 +85,13 @@ class SqliteFuncRepository(
             if (commandAlreadyApplied(cmdId, funcId)) {
                 versionOf(funcId, cmdId)
             } else {
-                val currentVersion = versionOf(funcId, cmdId)
-                if (cmd.versionToDeploy !in CodeVersion(1)..currentVersion.code.version) {
-                    throw NoSuchElementException("${cmd.versionToDeploy} does not exist")
-                }
+                val current = versionOf(funcId, cmdId)
+                require(cmd.versionToDeploy <= current.code.version) { "${cmd.versionToDeploy} can not be deployed" }
                 store(
                     FuncDeploymentRecord(
                         cmdId = cmdId,
                         entityId = funcId,
-                        deployment = cmd.versionToDeploy
+                        deployedVersion = cmd.versionToDeploy
                     )
                 )
                 currentVersion(funcId)

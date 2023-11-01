@@ -7,14 +7,11 @@ import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.Func
-import io.hamal.repository.api.FuncCmdRepository
-import io.hamal.repository.api.FuncCmdRepository.CreateCmd
-import io.hamal.repository.api.FuncCmdRepository.UpdateCmd
+import io.hamal.repository.api.FuncCmdRepository.*
 import io.hamal.repository.api.FuncCode
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
 import io.hamal.repository.api.FuncRepository
 import io.hamal.repository.fixture.AbstractUnitTest
-
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Disabled
@@ -345,7 +342,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
 
             repeat(20) { iter ->
                 val deploy = deploy(
-                    FuncId(123), FuncCmdRepository.DeployCmd(
+                    FuncId(123), DeployCmd(
                         id = CmdGen(),
                         versionToDeploy = CodeVersion(iter + 1)
                     )
@@ -364,14 +361,14 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
             )
 
             deploy(
-                FuncId(123), FuncCmdRepository.DeployCmd(
+                FuncId(123), DeployCmd(
                     id = CmdGen(),
                     versionToDeploy = CodeVersion(5)
                 )
             )
 
             val res = deploy(
-                FuncId(123), FuncCmdRepository.DeployCmd(
+                FuncId(123), DeployCmd(
                     id = CmdGen(),
                     versionToDeploy = CodeVersion(5)
                 )
@@ -389,14 +386,14 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
             )
 
             deploy(
-                FuncId(123), FuncCmdRepository.DeployCmd(
+                FuncId(123), DeployCmd(
                     id = CmdGen(),
                     versionToDeploy = CodeVersion(100)
                 )
             )
 
             val res = deploy(
-                FuncId(123), FuncCmdRepository.DeployCmd(
+                FuncId(123), DeployCmd(
                     id = CmdGen(),
                     versionToDeploy = CodeVersion(50)
                 )
@@ -410,7 +407,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
         fun `Tries to deploy to func that does not exist`() = runWith(FuncRepository::class) {
             val exception = assertThrows<NoSuchElementException> {
                 deploy(
-                    FuncId(1234567), FuncCmdRepository.DeployCmd(
+                    FuncId(1234567), DeployCmd(
                         id = CmdGen(),
                         versionToDeploy = CodeVersion(500)
                     )
@@ -428,15 +425,15 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                 name = FuncName("func")
             )
 
-            val exception = assertThrows<NoSuchElementException> {
+            val exception = assertThrows<IllegalArgumentException> {
                 deploy(
-                    FuncId(1), FuncCmdRepository.DeployCmd(
+                    FuncId(1), DeployCmd(
                         id = CmdGen(),
                         versionToDeploy = CodeVersion(500)
                     )
                 )
             }
-            assertThat(exception.message, equalTo("CodeVersion(value=500) does not exist"))
+            assertThat(exception.message, equalTo("CodeVersion(value=500) can not be deployed"))
         }
     }
 
@@ -755,14 +752,6 @@ private fun FuncRepository.createUpdatedFunc(
     )
 }
 
-object CmdGen {
-    private val atomicCounter = AtomicInteger(1)
-
-    operator fun invoke(): CmdId {
-        return CmdId(atomicCounter.incrementAndGet())
-    }
-}
-
 
 private fun FuncRepository.verifyCount(expected: Int) {
     verifyCount(expected) { }
@@ -771,4 +760,12 @@ private fun FuncRepository.verifyCount(expected: Int) {
 private fun FuncRepository.verifyCount(expected: Int, block: FuncQuery.() -> Unit) {
     val counted = count(FuncQuery(groupIds = listOf()).also(block))
     assertThat("number of functions expected", counted, equalTo(expected.toULong()))
+}
+
+private object CmdGen {
+    private val atomicCounter = AtomicInteger(1)
+
+    operator fun invoke(): CmdId {
+        return CmdId(atomicCounter.incrementAndGet())
+    }
 }

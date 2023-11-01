@@ -30,6 +30,7 @@ data class InvokeExecReq(
 @Component
 class SubmitRequest(
     private val blueprintQueryRepository: BlueprintQueryRepository,
+    private val codeQueryRepository: CodeQueryRepository,
     private val eventBrokerRepository: BrokerRepository,
     private val encodePassword: EncodePassword,
     private val extensionQueryRepository: ExtensionQueryRepository,
@@ -208,14 +209,17 @@ class SubmitRequest(
     ).also(reqCmdRepository::queue)
 
 
-    operator fun invoke(funcId: FuncId, versionToDeploy: CodeVersion): FuncDeploySubmitted =
-        FuncDeploySubmitted(
+    operator fun invoke(funcId: FuncId, versionToDeploy: CodeVersion): FuncDeploySubmitted {
+        val func = funcQueryRepository.get(funcId)
+        codeQueryRepository.get(func.code.id, versionToDeploy)
+        return FuncDeploySubmitted(
             id = generateDomainId(::ReqId),
             status = Submitted,
             groupId = funcQueryRepository.get(funcId).groupId,
             funcId = funcId,
             versionToDeploy = versionToDeploy
         ).also(reqCmdRepository::queue)
+    }
 
     operator fun invoke(groupId: GroupId, req: CreateExtensionReq) = ExtensionCreateSubmitted(
         id = generateDomainId(::ReqId),

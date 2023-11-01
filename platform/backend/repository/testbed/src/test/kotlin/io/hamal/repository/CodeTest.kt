@@ -224,12 +224,30 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
             )
 
             assertThat(
-                assertThrows<NoSuchElementException> { get(CodeId(1), CodeVersion(0)) }.message,
+                assertThrows<NoSuchElementException> { get(CodeId(1), CodeVersion(1000)) }.message,
                 equalTo("Code not found")
             )
             assertThat(
                 assertThrows<NoSuchElementException> { get(CodeId(1), CodeVersion(2)) }.message,
                 equalTo("Code not found")
+            )
+        }
+
+        @TestFactory
+        fun `Tries to get code with negative version`() = runWith(CodeRepository::class) {
+            createCode(
+                codeId = CodeId(1),
+                groupId = GroupId(3),
+                codeValue = CodeValue("1 + 1")
+            )
+            assertThat(
+                assertThrows<IllegalArgumentException> { get(CodeId(1), CodeVersion(-5)) }.message,
+                equalTo("CodeVersion must be positive")
+            )
+
+            assertThat(
+                assertThrows<IllegalArgumentException> { get(CodeId(1), CodeVersion(0)) }.message,
+                equalTo("CodeVersion must be positive")
             )
         }
     }
@@ -305,8 +323,26 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
                 codeValue = CodeValue("1 + 1")
             )
 
-            assertThat(find(CodeId(1), CodeVersion(0)), nullValue())
+            assertThat(find(CodeId(1), CodeVersion(1000)), nullValue())
             assertThat(find(CodeId(1), CodeVersion(2)), nullValue())
+        }
+
+        @TestFactory
+        fun `Tries to get code with negative version`() = runWith(CodeRepository::class) {
+            createCode(
+                codeId = CodeId(1),
+                groupId = GroupId(3),
+                codeValue = CodeValue("1 + 1")
+            )
+            assertThat(
+                assertThrows<IllegalArgumentException> { get(CodeId(1), CodeVersion(-5)) }.message,
+                equalTo("CodeVersion must be positive")
+            )
+
+            assertThat(
+                assertThrows<IllegalArgumentException> { get(CodeId(1), CodeVersion(0)) }.message,
+                equalTo("CodeVersion must be positive")
+            )
         }
     }
 

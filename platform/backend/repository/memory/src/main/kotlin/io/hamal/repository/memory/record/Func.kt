@@ -1,6 +1,5 @@
 package io.hamal.repository.memory.record
 
-import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncCmdRepository.*
@@ -25,12 +24,6 @@ internal object CurrentFuncProjection {
         }
 
         projection[func.id] = func
-    }
-
-    fun deploy(func: Func) {
-        if (find(func.id)!!.code.deployedVersion != func.code.deployedVersion) {
-            projection[func.id] = func
-        }
     }
 
     fun find(funcId: FuncId): Func? = projection[funcId]
@@ -99,22 +92,15 @@ class MemoryFuncRepository : MemoryRecordRepository<FuncId, FuncRecord, Func>(
                 versionOf(funcId, cmd.id)
             } else {
                 val current = versionOf(funcId, cmd.id)
-
-                if (cmd.versionToDeploy !in CodeVersion(1)..current.code.version) {
-                    throw NoSuchElementException("${cmd.versionToDeploy} does not exist")
-                }
-
+                require(cmd.versionToDeploy <= current.code.version) { "${cmd.versionToDeploy} can not be deployed" }
                 store(
                     FuncDeploymentRecord(
                         cmdId = cmd.id,
                         entityId = funcId,
-                        deployment = cmd.versionToDeploy
+                        deployedVersion = cmd.versionToDeploy
                     )
                 )
-
-                val temp = currentVersion(funcId)
-                CurrentFuncProjection.deploy(temp)
-                return temp
+                (currentVersion(funcId)).also(CurrentFuncProjection::apply)
             }
         }
     }
@@ -142,9 +128,9 @@ class MemoryFuncRepository : MemoryRecordRepository<FuncId, FuncRecord, Func>(
 
     override fun find(funcId: FuncId): Func? = lock.withLock { CurrentFuncProjection.find(funcId) }
 
-    override fun list(query: FuncQuery): List<Func> = lock.withLock {  CurrentFuncProjection.list(query)    }
+    override fun list(query: FuncQuery): List<Func> = lock.withLock { CurrentFuncProjection.list(query) }
 
-    override fun count(query: FuncQuery): ULong =  lock.withLock {  CurrentFuncProjection.count(query) }
+    override fun count(query: FuncQuery): ULong = lock.withLock { CurrentFuncProjection.count(query) }
 
     override fun clear() {
         lock.withLock {
