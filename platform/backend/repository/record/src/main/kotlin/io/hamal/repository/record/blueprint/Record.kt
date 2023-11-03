@@ -6,6 +6,7 @@ import io.hamal.repository.record.Record
 import io.hamal.repository.record.RecordSequence
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
 @Serializable
 sealed class BlueprintRecord(

@@ -1,16 +1,19 @@
 sys = require('sys')
 
 local create_req = fail_on_error(sys.func.create({
-    namespace_id = '1',
     name = 'test-func',
-    inputs = {},
+    inputs = { },
     code = [[4 + 2]]
 }))
+
 sys.await_completed(create_req)
 
-func = fail_on_error(sys.func.get(create_req.func_id))
-code = fail_on_error(sys.code.get(func.code.id, 1))
+update_req = fail_on_error(sys.func.update({
+    id = create_req.func_id
+}))
 
-assert(code.id == func.code.id)
-assert(code.code == [[4 + 2]])
-assert(code.version == 1)
+sys.await_completed(update_req)
+func = fail_on_error(sys.func.get(create_req.func_id))
+
+assert(func.name == 'test-func')
+assert(func.code.value == [[4 + 2]])

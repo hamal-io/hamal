@@ -47,8 +47,7 @@ internal class UpdateFuncHandlerTest : BaseReqHandlerTest() {
             funcId = FuncId(1),
             name = FuncName("Func-update"),
             inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
-            code = CodeValue("some code"),
-            deployedVersion = null
+            code = CodeValue("some code")
         )
     }
 
@@ -70,11 +69,8 @@ internal class UpdateFuncHandlerTest : BaseReqHandlerTest() {
                 namespaceId = testNamespace.id,
                 name = FuncName("Func-base"),
                 inputs = FuncInputs(),
-                code = FuncCode(
-                    id = codeId,
-                    version = CodeVersion(1),
-                    deployedVersion = CodeVersion(1)
-                )
+                codeId = codeId,
+                codeVersion = CodeVersion(1)
             )
         )
     }

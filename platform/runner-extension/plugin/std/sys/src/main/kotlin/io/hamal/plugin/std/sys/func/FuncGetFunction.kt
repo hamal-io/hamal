@@ -28,10 +28,14 @@ class FuncGetFunction(
                                 )
                             ),
                             "name" to StringType(func.name.value),
-                            "code" to CodeType(func.code.value.value),
-                            "code_id" to StringType(func.code.id.value.value.toString(16)),
-                            "code_version" to NumberType(func.code.version.value),
-                            "code_deployed" to NumberType(func.code.deployedVersion.value)
+                            "code" to MapType(
+                                mutableMapOf(
+                                    "value" to CodeType(func.code.value.value),
+                                    "id" to StringType(func.code.id.value.value.toString(16)),
+                                    "version" to NumberType(func.code.version.value),
+                                    "deployed_version" to NumberType(func.code.deployedVersion.value)
+                                )
+                            )
                         )
                     )
                 }

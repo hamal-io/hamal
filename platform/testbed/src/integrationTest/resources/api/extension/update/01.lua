@@ -10,18 +10,25 @@ sys.await_completed(create_req)
 local id = create_req.id
 assert(id ~= nil)
 
-local update_req = fail_on_error(sys.extension.update({
+update_req = fail_on_error(sys.extension.update({
     id = id,
     name = 'update-ext',
     code = [[hamal-updates]]
 }))
-
-assert(err == nil)
 sys.await_completed(update_req)
 
-local result = fail_on_error(sys.extension.get(id))
-assert(result ~= nil)
+result = fail_on_error(sys.extension.get(id))
 
-assert(result.id == id)
 assert(result.name == 'update-ext')
 assert(result.code.value == [[hamal-updates]])
+
+update_req = fail_on_error(sys.extension.update({
+    id = id,
+    code = [[hamal-updates-again]]
+}))
+sys.await_completed(update_req)
+
+result = fail_on_error(sys.extension.get(id))
+
+assert(result.name == 'update-ext')
+assert(result.code.value == [[hamal-updates-again]])

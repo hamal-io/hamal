@@ -1,10 +1,9 @@
 package io.hamal.api.http.controller.func
 
 import io.hamal.api.http.controller.BaseControllerTest
-import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.NamespaceId
-import io.hamal.lib.http.HttpStatusCode
+import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.HttpSuccessResponse
@@ -49,14 +48,25 @@ internal sealed class FuncBaseControllerTest : BaseControllerTest() {
         return getFuncResponse.result(ApiFunc::class)
     }
 
-    fun updateDeployedVersion(funcId: FuncId, codeVersion: CodeVersion): ApiFuncUpdateSubmitted {
-        val res = httpTemplate.post("/v1/funcs/{funcId}/deploy/{version}")
+    fun updateFunc(funcId: FuncId, updateReq: ApiFuncUpdateReq): ApiFuncUpdateSubmitted {
+        val updateResponse = httpTemplate.patch("/v1/funcs/{funcId}")
             .path("funcId", funcId)
-            .path("version", codeVersion.value.toString())
+            .body(updateReq)
             .execute()
 
-        assertThat(res.statusCode, equalTo(HttpStatusCode.Accepted))
-        require(res is HttpSuccessResponse) { "request was not successful" }
-        return res.result(ApiFuncUpdateSubmitted::class)
+        assertThat(updateResponse.statusCode, equalTo(Accepted))
+        require(updateResponse is HttpSuccessResponse) { "request was not successful" }
+        return updateResponse.result(ApiFuncUpdateSubmitted::class)
+    }
+
+    fun deployVersion(funcId: FuncId, version: CodeVersion): ApiFuncDeploySubmitted {
+        val deployResponse = httpTemplate.post("/v1/funcs/{funcId}/deploy/{version}")
+            .path("funcId", funcId)
+            .path("version", version.value.toString())
+            .execute()
+
+        assertThat(deployResponse.statusCode, equalTo(Accepted))
+        require(deployResponse is HttpSuccessResponse) { "request was not successful" }
+        return deployResponse.result(ApiFuncDeploySubmitted::class)
     }
 }

@@ -27,8 +27,7 @@ data class FuncUpdateSubmitted(
     val funcId: FuncId,
     val name: FuncName?,
     val inputs: FuncInputs?,
-    val code: CodeValue?,
-    val deployedVersion: CodeVersion?
+    val code: CodeValue?
 ) : Submitted
 
 @Serializable

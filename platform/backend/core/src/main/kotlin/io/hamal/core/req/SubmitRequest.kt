@@ -30,8 +30,9 @@ data class InvokeExecReq(
 @Component
 class SubmitRequest(
     private val blueprintQueryRepository: BlueprintQueryRepository,
-    private val encodePassword: EncodePassword,
+    private val codeQueryRepository: CodeQueryRepository,
     private val eventBrokerRepository: BrokerRepository,
+    private val encodePassword: EncodePassword,
     private val extensionQueryRepository: ExtensionQueryRepository,
     private val funcQueryRepository: FuncQueryRepository,
     private val generateDomainId: GenerateDomainId,
@@ -208,16 +209,13 @@ class SubmitRequest(
         funcId = funcId,
         name = req.name,
         inputs = req.inputs,
-        code = req.code,
-        deployedVersion = null
+        code = req.code
     ).also(reqCmdRepository::queue)
 
 
     operator fun invoke(funcId: FuncId, versionToDeploy: CodeVersion): FuncDeploySubmitted {
         val func = funcQueryRepository.get(funcId)
-
-        // FIXME-53  make sure versionToDpeloy <= func.code.version --> throw IllegalArgument if not // perform same check in repository again
-        // FIXME add func deploy handler -- add FuncDeploymentRecord
+        codeQueryRepository.get(func.code.id, versionToDeploy)
         return FuncDeploySubmitted(
             id = generateDomainId(::ReqId),
             status = Submitted,
@@ -358,4 +356,3 @@ class SubmitRequest(
         ).also(reqCmdRepository::queue)
     }
 }
-

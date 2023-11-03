@@ -30,7 +30,11 @@ data class FuncEntity(
                 namespaceId = rec.namespaceId,
                 name = rec.name,
                 inputs = rec.inputs,
-                code = rec.code
+                code = FuncCode(
+                    id = rec.codeId,
+                    version = rec.codeVersion,
+                    deployedVersion = rec.codeVersion
+                )
             )
 
             is FuncUpdatedRecord -> copy(
@@ -39,7 +43,24 @@ data class FuncEntity(
                 sequence = rec.sequence(),
                 name = rec.name,
                 inputs = rec.inputs,
-                code = rec.code
+                code = FuncCode(
+                    id = rec.codeId,
+                    version = rec.codeVersion,
+                    deployedVersion = code!!.deployedVersion
+                )
+            )
+
+            is FuncDeploymentRecord -> copy(
+                id = rec.entityId,
+                cmdId = rec.cmdId,
+                sequence = rec.sequence(),
+                name = name,
+                inputs = inputs,
+                code = FuncCode(
+                    id = code!!.id,
+                    version = code!!.version,
+                    deployedVersion = rec.deployedVersion
+                )
             )
         }
     }

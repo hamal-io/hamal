@@ -25,8 +25,8 @@ class ExtensionUpdateFunction(
             val res = sdk.extension.update(
                 ExtensionId(SnowflakeId(arg1.getString("id"))),
                 ApiExtensionUpdateReq(
-                    name = ExtensionName(arg1.getString("name")),
-                    code = CodeValue(arg1.getString("code"))
+                    name = arg1.findString("name")?.let { ExtensionName(it) },
+                    code = arg1.findString("code")?.let { CodeValue(it) }
                 )
             )
 

@@ -31,7 +31,7 @@ class CodeGetFunction(
                             "id" to StringType(code.id.value.value.toString(16)),
                             "code" to CodeType(code.value.value),
                             "version" to NumberType(code.version.value)
-                            // FIXME-53 deployed_version
+                            // FIXME-53 deployed_version ????
                         )
                     )
                 }

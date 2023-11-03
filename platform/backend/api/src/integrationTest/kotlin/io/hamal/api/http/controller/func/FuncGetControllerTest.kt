@@ -16,7 +16,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
-internal class FuncGetControllerTest : io.hamal.api.http.controller.func.FuncBaseControllerTest() {
+internal class FuncGetControllerTest : FuncBaseControllerTest() {
     @Test
     fun `Func does not exists`() {
         val getFuncResponse = httpTemplate.get("/v1/funcs/33333333").execute()

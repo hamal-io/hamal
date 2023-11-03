@@ -98,12 +98,21 @@ function extension()
         function export.func.list(query)
             query = query or {}
             query.namespace_ids = query.namespace_ids or {}
-
             return internal.func_list(query)
         end
 
         function export.func.invoke(func_id, body)
             return internal.func_invoke(func_id, body)
+        end
+
+        function export.func.update(body)
+            body = body or {}
+            return internal.func_update({
+                id = body.id,
+                name = body.name or nil,
+                inputs = body.inputs or {},
+                code = body.code or nil
+            })
         end
 
         function export.hook.create(cmd)

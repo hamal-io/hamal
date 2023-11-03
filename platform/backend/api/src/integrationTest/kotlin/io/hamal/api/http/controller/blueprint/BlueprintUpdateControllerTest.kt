@@ -9,10 +9,10 @@ import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.sdk.api.ApiBlueprintUpdateReq
 import io.hamal.lib.sdk.api.ApiBlueprintUpdateSubmitted
 import io.hamal.lib.sdk.api.ApiCreateBlueprintReq
 import io.hamal.lib.sdk.api.ApiError
-import io.hamal.lib.sdk.api.ApiUpdateBlueprintReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -34,7 +34,7 @@ internal class BlueprintUpdateControllerTest : BlueprintBaseControllerTest() {
         val updateResponse = httpTemplate.patch("/v1/blueprints/{bpId}")
             .path("bpId", bp.blueprintId)
             .body(
-                ApiUpdateBlueprintReq(
+                ApiBlueprintUpdateReq(
                     name = BlueprintName("Other"),
                     value = CodeValue("1 + 1"),
                     inputs = BlueprintInputs(MapType(mutableMapOf("hamal" to StringType("createdInputs"))))
@@ -72,7 +72,7 @@ internal class BlueprintUpdateControllerTest : BlueprintBaseControllerTest() {
         val updateResponse = httpTemplate.patch("/v1/blueprints/{bpId}")
             .path("bpId", bp.blueprintId)
             .body(
-                ApiUpdateBlueprintReq(
+                ApiBlueprintUpdateReq(
                     name = null,
                     value = null,
                     inputs = null
@@ -101,7 +101,7 @@ internal class BlueprintUpdateControllerTest : BlueprintBaseControllerTest() {
     fun `Tries to update blueprint that does not exist`() {
         val updateResponse = httpTemplate.patch("/v1/blueprints/333333")
             .body(
-                ApiUpdateBlueprintReq(
+                ApiBlueprintUpdateReq(
                     name = BlueprintName("TestBlueprint"),
                     value = CodeValue("40 + 2"),
                     inputs = BlueprintInputs()

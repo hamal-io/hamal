@@ -16,7 +16,7 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 
-internal class FuncCreateControllerTest : io.hamal.api.http.controller.func.FuncBaseControllerTest() {
+internal class FuncCreateControllerTest : FuncBaseControllerTest() {
 
     @TestFactory
     fun `Create func for default namespace id`() {
