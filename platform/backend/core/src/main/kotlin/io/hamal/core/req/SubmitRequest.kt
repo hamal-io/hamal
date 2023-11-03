@@ -215,7 +215,7 @@ class SubmitRequest(
         return FuncDeploySubmitted(
             id = generateDomainId(::ReqId),
             status = Submitted,
-            groupId = funcQueryRepository.get(funcId).groupId,
+            groupId = func.groupId,
             funcId = funcId,
             versionToDeploy = versionToDeploy
         ).also(reqCmdRepository::queue)

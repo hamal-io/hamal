@@ -26,9 +26,9 @@ class BlueprintUpdateFunction(
             val res = sdk.blueprint.update(
                 BlueprintId(arg1.getString("id")),
                 ApiBlueprintUpdateReq(
-                    name = BlueprintName(arg1.getString("name")),
+                    name = arg1.findString("name")?.let { BlueprintName(it) },
                     inputs = BlueprintInputs(),
-                    value = CodeValue(arg1.getString("value"))
+                    value = arg1.findString("value")?.let { CodeValue(it) }
                 )
             )
 

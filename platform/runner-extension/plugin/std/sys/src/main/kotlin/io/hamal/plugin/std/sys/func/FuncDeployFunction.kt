@@ -30,7 +30,7 @@ class FuncDeployFunction(
                     "id" to StringType(res.id.value.value.toString(16)),
                     "status" to StringType(res.status.name),
                     "func_id" to StringType(res.funcId.value.value.toString(16)),
-                    "version" to NumberType(res.version.value)
+                    "deployed_version" to NumberType(res.version.value)
                 )
             )
         } catch (t: Throwable) {

@@ -10,7 +10,6 @@ import io.hamal.lib.sdk.api.ApiError
 import io.hamal.repository.api.CodeCmdRepository
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -117,30 +116,6 @@ internal class CodeGetControllerTest : CodeBaseControllerTest() {
         val error = getCodeResponse.error(ApiError::class)
         assertThat(error.message, equalTo("Code not found"))
 
-    }
-
-    @Disabled
-    @Test
-    fun `Tries to get code with invalid version`() {
-        codeCmdRepository.create(
-            CodeCmdRepository.CreateCmd(
-                id = CmdGen(),
-                codeId = CodeId(4),
-                groupId = testGroup.id,
-                value = CodeValue("1 + 1")
-            )
-        )
-
-        val getCodeResponse = httpTemplate.get("/b1/code/{id}")
-            .path("id", CodeId(4))
-            .parameter("version", 0)
-            .execute()
-
-        assertThat(getCodeResponse.statusCode, equalTo(HttpStatusCode.BadRequest))
-        require(getCodeResponse is HttpErrorResponse) { "request was successful" }
-
-        val error = getCodeResponse.error(ApiError::class)
-        assertThat(error.message, equalTo("CodeVersion must be positive"))
     }
 
     @Test

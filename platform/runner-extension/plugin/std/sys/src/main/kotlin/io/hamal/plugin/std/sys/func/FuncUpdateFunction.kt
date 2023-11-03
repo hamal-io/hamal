@@ -25,9 +25,9 @@ class FuncUpdateFunction(
             val res = sdk.func.update(
                 FuncId(arg1.getString("id")),
                 ApiFuncUpdateReq(
-                    name = FuncName(arg1.getString("name")),
+                    name = arg1.findString("name")?.let { FuncName(it) },
                     inputs = FuncInputs(),
-                    code = CodeValue(arg1.getString("code"))
+                    code = arg1.findString("code")?.let { CodeValue(it) }
                 )
             )
             null to MapType(

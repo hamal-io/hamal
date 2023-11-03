@@ -106,7 +106,13 @@ function extension()
         end
 
         function export.func.update(body)
-            return internal.func_update(body)
+            body = body or {}
+            return internal.func_update({
+                id = body.id,
+                name = body.name or nil,
+                inputs = body.inputs or {},
+                code = body.code or nil
+            })
         end
 
         function export.hook.create(cmd)

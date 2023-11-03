@@ -1,6 +1,6 @@
 sys = require('sys')
 
-create_req = fail_on_error(sys.func.create({
+local create_req = fail_on_error(sys.func.create({
     name = 'test-func',
     inputs = { },
     code = [[4 + 2]]
@@ -19,23 +19,26 @@ for i = 1, 19 do
 end
 
 func = fail_on_error(sys.func.get(create_req.func_id))
-assert(func.mcode.version == 20)
-assert(func.mcode.deployed == 1)
+assert(func.code.version == 20)
+assert(func.code.deployed_version == 1)
 
 deploy_req = fail_on_error(sys.func.deploy({
     id = func.id,
-    version = 10
+    version = 20
 }))
 
 sys.await_completed(deploy_req)
-assert(deploy_req.version == 10)
+assert(deploy_req.deployed_version == 20)
 
 func = fail_on_error(sys.func.get(func.id))
-assert(func.mcode.deployed == 10)
+assert(func.code.deployed_version == 20)
 
+deploy_req = fail_on_error(sys.func.deploy({
+    id = func.id,
+    version = 5
+}))
 
+sys.await_completed(deploy_req)
 
-
-
-
-
+func = fail_on_error(sys.func.get(func.id))
+assert(func.code.deployed_version == 5)
