@@ -54,7 +54,6 @@ interface FuncCmdRepository : CmdRepository {
         val id: CmdId,
         val name: FuncName? = null,
         val inputs: FuncInputs? = null,
-        val codeId: CodeId? = null,
         val codeVersion: CodeVersion? = null
     )
 

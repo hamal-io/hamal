@@ -35,7 +35,6 @@ data class FuncUpdatedRecord(
     override val cmdId: CmdId,
     val name: FuncName,
     val inputs: FuncInputs,
-    val codeId: CodeId,
     val codeVersion: CodeVersion
 ) : FuncRecord()
 
