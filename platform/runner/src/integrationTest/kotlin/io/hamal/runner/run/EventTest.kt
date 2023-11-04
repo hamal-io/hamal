@@ -1,6 +1,6 @@
 package io.hamal.runner.run
 
-import io.hamal.lib.domain.*
+import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -37,9 +37,12 @@ internal class EventTest : AbstractExecuteTest() {
                     assert( context.exec.events[2].topic.id == '17' )
                     assert( context.exec.events[2].topic.name == 'Topic-Two' )
                     assert( context.exec.events[2].payload.block == 44 )
+                    
+                    assert(context.api.host == 'http://test-api')
                 """.trimIndent()
                 ),
                 events = events,
+                apiHost = ApiHost("http://test-api")
             )
         )
     }
@@ -58,6 +61,7 @@ internal class EventTest : AbstractExecuteTest() {
                 state = State(),
                 code = CodeValue("require('test').fn()"),
                 events = events,
+                apiHost = ApiHost("http://test-api")
             )
         )
         assertThat(testFn.result, equalTo(events))

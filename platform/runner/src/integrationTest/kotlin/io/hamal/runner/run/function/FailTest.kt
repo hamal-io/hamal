@@ -20,10 +20,14 @@ internal class FailTest : AbstractExecuteTest() {
         val runner = createTestRunner(
             connector = TestFailConnector()
         )
-        runner.run(unitOfWork("""
+        runner.run(
+            unitOfWork(
+                """
             context.fail()
             ctx.complete()
-        """.trimIndent()))
+        """.trimIndent()
+            )
+        )
     }
 
 
@@ -99,6 +103,7 @@ internal class FailTest : AbstractExecuteTest() {
         inputs = ExecInputs(),
         state = State(),
         code = CodeValue(code),
-        correlation = null
+        correlation = null,
+        apiHost = ApiHost("http://test-api")
     )
 }

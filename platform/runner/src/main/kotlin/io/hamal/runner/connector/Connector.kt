@@ -13,7 +13,8 @@ data class UnitOfWork(
     val code: CodeValue,
     val token: ExecToken = ExecToken("let_me_in"), // FIXME
     val correlation: Correlation? = null,
-    val events: List<Event> = listOf()
+    val events: List<Event> = listOf(),
+    val apiHost: ApiHost
 )
 
 // FIXME ConnectorState, ConnectorEvent, ConnectorError

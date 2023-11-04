@@ -1,5 +1,6 @@
 package io.hamal.runner.run
 
+import io.hamal.lib.domain.vo.ApiHost
 import io.hamal.lib.domain.vo.Event
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.kua.Sandbox
@@ -20,6 +21,9 @@ class RunnerContextFactory(
         return RunnerPluginExtension(
             name = "context",
             internals = mapOf(
+                "api" to MapType(
+                    "host" to StringType(executionCtx[ApiHost::class].value),
+                ),
                 "events" to sandbox.invocationEvents(executionCtx[RunnerInvocationEvents::class].events),
                 "exec_id" to StringType(executionCtx[ExecId::class].value.value.toString(16)),
                 "emit" to EmitFunction(executionCtx),

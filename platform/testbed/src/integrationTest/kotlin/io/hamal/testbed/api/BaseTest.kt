@@ -13,6 +13,7 @@ import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContext
 import io.hamal.lib.sdk.ApiSdkImpl
 import io.hamal.lib.sdk.api.ApiAdhocInvokeReq
+import io.hamal.plugin.net.http.HttpPluginFactory
 import io.hamal.plugin.std.debug.DebugPluginFactory
 import io.hamal.plugin.std.log.LogPluginFactory
 import io.hamal.plugin.std.sys.SysPluginFactory
@@ -64,6 +65,7 @@ class TestRunnerSandboxFactory(
                 LogPluginFactory(sdk.execLog),
                 DebugPluginFactory(),
                 SysPluginFactory(sdk),
+                HttpPluginFactory()
             )
     }
 }

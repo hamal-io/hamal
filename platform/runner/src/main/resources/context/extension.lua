@@ -1,12 +1,13 @@
 function extension()
-    local internal = _internal
+    internal = _internal
     return function()
         local export = {
+            api = internal.api,
             exec = {
-                id = _internal.exec_id,
-                events = _internal.events,
+                id = internal.exec_id,
+                events = internal.events,
             },
-            state = _internal.state
+            state = internal.state
         }
         function export.complete(result)
             if (type(result) == 'nil') then

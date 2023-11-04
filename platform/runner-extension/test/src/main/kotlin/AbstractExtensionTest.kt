@@ -71,6 +71,7 @@ abstract class AbstractExtensionTest {
         inputs = inputs,
         state = State(),
         code = CodeValue(code),
-        correlation = null
+        correlation = null,
+        apiHost = ApiHost("http://test-host")
     )
 }

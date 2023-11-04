@@ -40,6 +40,7 @@ class CodeRunnerImpl(
             runnerContext[NamespaceId::class] = unitOfWork.namespaceId
             runnerContext[GroupId::class] = unitOfWork.groupId
             runnerContext[ExecToken::class] = unitOfWork.token
+            runnerContext[ApiHost::class] = unitOfWork.apiHost
 
             sandboxFactory.create(runnerContext)
                 .use { sandbox ->
