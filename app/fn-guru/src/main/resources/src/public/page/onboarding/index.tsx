@@ -2,8 +2,10 @@ import React, {useEffect} from 'react'
 import {Progress, Timeline} from "flowbite-react";
 import {useCreateAnonymousAccount} from "../../../api/account.ts";
 import {useApiPost, useAuth} from "../../../hook";
+import {useNavigate} from "react-router-dom";
 
 const OnboardingPage: React.FC = () => {
+    const navigate = useNavigate()
     const [account, isLoading, error] = useCreateAnonymousAccount()
     const [submitNamespace, namespaceSubmitted,] = useApiPost<{namespaceId: string}>()
     const [auth] = useAuth()
@@ -31,12 +33,19 @@ const OnboardingPage: React.FC = () => {
                     inputs = {},
                     code = [[ print('hello world') ]]
                 })
-                `
+              
+                  `
             })
         }
 
-    }, [namespaceSubmitted]);
+    }, [namespaceSubmitted, submitBlueprint]);
 
+
+    useEffect(() => {
+        if(blueprintSubmitted != null){
+            navigate('/namespaces')
+        }
+    }, [blueprintSubmitted, navigate]);
 
     //     if (state.stage === 'NamespaceCreated') {
     //         submitFunc(`v1/namespaces/${state.namespaceId}/funcs`, {

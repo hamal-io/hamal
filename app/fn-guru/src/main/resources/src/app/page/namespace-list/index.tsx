@@ -16,7 +16,7 @@ const NamespaceListPage: React.FC = () => {
     if (error != null) return "Error -"
 
 
-    const list = data.namespaces.map(namespace => (
+    const list = data.namespaces.filter(namespace => namespace.name !== "__default__").map(namespace => (
         <Card
             key={namespace.id}
             className="max-w-sm"
