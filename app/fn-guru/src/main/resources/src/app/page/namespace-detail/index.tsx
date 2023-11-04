@@ -1,7 +1,6 @@
-import React, {FC, ReactNode, useEffect, useState} from 'react'
+import React, {FC, ReactNode} from 'react'
 import {useParams} from "react-router-dom";
 import {ApiNamespace} from "../../../api/types";
-import {getNamespace} from "../../../api/namespace.ts";
 import NamespaceSidebar from "./component/sidebar";
 import {useApiGet} from "../../../hook";
 

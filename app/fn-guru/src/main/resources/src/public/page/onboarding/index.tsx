@@ -3,7 +3,6 @@ import {Spinner} from "flowbite-react";
 import {useCreateAnonymousAccount} from "../../../api/account.ts";
 import {useApiPost, useAuth} from "../../../hook";
 import {useLocation, useNavigate} from "react-router-dom";
-import {NavigationScreenProp} from 'react-navigation';
 
 
 const OnboardingPage: FC = () => {
