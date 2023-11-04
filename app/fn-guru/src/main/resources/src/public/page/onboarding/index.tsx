@@ -5,22 +5,37 @@ import {useApiPost, useAuth} from "../../../hook";
 
 const OnboardingPage: React.FC = () => {
     const [account, isLoading, error] = useCreateAnonymousAccount()
-    const [submitNamespace, namespaceSubmitted,] = useApiPost<unknown>()
+    const [submitNamespace, namespaceSubmitted,] = useApiPost<{namespaceId: string}>()
     const [auth] = useAuth()
-    
+
+    const [submitBlueprint, blueprintSubmitted] = useApiPost()
+
     useEffect(() => {
-        if(account != null) {
-            if (namespaceSubmitted != null) {
-                // dispatch({type: 'namespace_created', namespaceId: namespaceSubmitted.namespaceId})
-                console.log("Namespace created")
-            } else {
-                submitNamespace(`v1/groups/${auth.groupId}/namespaces`, {
-                    name: "Test-Name-Space",
-                    inputs: {}
-                })
-            }
+        if (account != null) {
+            submitNamespace(`v1/groups/${auth.groupId}/namespaces`, {
+                name: "Test-Name-Space",
+                inputs: {}
+            })
         }
-    }, [account])
+    }, [account, auth, submitNamespace])
+
+    useEffect(() => {
+        if(namespaceSubmitted != null){
+            console.log(`execute blueprint ${namespaceSubmitted.namespaceId}`)
+            submitBlueprint(`v1/namespaces/${namespaceSubmitted.namespaceId}/adhoc`, {
+                inputs: {},
+                code: `
+                sys = require('sys')
+                sys.func.create({
+                    name = 'bot-func',
+                    inputs = {},
+                    code = [[ print('hello world') ]]
+                })
+                `
+            })
+        }
+
+    }, [namespaceSubmitted]);
 
 
     //     if (state.stage === 'NamespaceCreated') {
@@ -51,6 +66,9 @@ const OnboardingPage: React.FC = () => {
                     {JSON.stringify(account)}
                     {JSON.stringify(isLoading)}
                     {JSON.stringify(error)}
+                    <br/>
+                    <br/>
+                    {JSON.stringify(blueprintSubmitted)}
 
                     Your function will be deployed shortly
 

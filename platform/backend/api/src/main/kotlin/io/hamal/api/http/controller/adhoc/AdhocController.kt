@@ -2,6 +2,7 @@ package io.hamal.api.http.controller.adhoc
 
 import io.hamal.api.http.controller.accepted
 import io.hamal.core.adapter.AdhocInvokePort
+import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.sdk.api.ApiAdhocInvokeReq
 import io.hamal.lib.sdk.api.ApiSubmitted
@@ -13,10 +14,13 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class AdhocController(private val invokeAdhoc: AdhocInvokePort) {
+internal class AdhocController(
+    private val invokeAdhoc: AdhocInvokePort,
+    private val retry: Retry
+) {
     @PostMapping("/v1/namespaces/{namespaceId}/adhoc")
     fun invokeAdhoc(
         @PathVariable("namespaceId") namespaceId: NamespaceId,
         @RequestBody req: ApiAdhocInvokeReq
-    ): ResponseEntity<ApiSubmitted> = invokeAdhoc(namespaceId, req, ExecInvokeSubmitted::accepted)
+    ): ResponseEntity<ApiSubmitted> = retry { invokeAdhoc(namespaceId, req, ExecInvokeSubmitted::accepted) }
 }

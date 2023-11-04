@@ -60,7 +60,7 @@ export const useApiGet = <T>(url: string): [T, boolean, Error] => {
     return [data, isLoading, error]
 }
 
-type ApiPostAction = (url: string, data: object) => Promise<void>
+type ApiPostAction = (url: string, data: object) => void
 export const useApiPost = <T>(): [ApiPostAction, T, boolean, Error] => {
     const [auth] = useAuth()
 
