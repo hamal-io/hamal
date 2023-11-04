@@ -9,8 +9,10 @@ import {router} from "./router.tsx";
 
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-    <Flowbite theme={{theme: Theme}}>
-        <RouterProvider router={router}/>
-    </Flowbite>
+    <React.StrictMode>
+        <Flowbite theme={{theme: Theme}}>
+            <RouterProvider router={router}/>
+        </Flowbite>
+    </React.StrictMode>
 )
 

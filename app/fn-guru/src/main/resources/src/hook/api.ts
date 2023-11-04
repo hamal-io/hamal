@@ -10,6 +10,8 @@ export const useApiGet = <T>(url: string): [T, boolean, Error] => {
     const [error, setError] = useState<Error>(null);
 
     useEffect(() => {
+        const abortController = new AbortController();
+
         if (auth.type === 'Unauthorized') {
             setError(Error("Unauthenticated"))
             setIsLoading(false)
@@ -20,7 +22,8 @@ export const useApiGet = <T>(url: string): [T, boolean, Error] => {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${auth.token}`
                 },
-                method: "GET"
+                method: "GET",
+                signal: abortController.signal
             })
                 .then(response => {
 
@@ -42,11 +45,16 @@ export const useApiGet = <T>(url: string): [T, boolean, Error] => {
                     })
                 })
                 .catch(error => {
-                    // FIXME NETWORK ERROR
-                    setError(error)
-                    setIsLoading(false)
+                    if(error.name !== 'AbortError') {
+                        // FIXME NETWORK ERROR
+                        setError(error)
+                        setIsLoading(false)
+                    }
                 })
         }
+        return () => {
+            abortController.abort();
+        };
     }, []);
 
     return [data, isLoading, error]
@@ -86,7 +94,6 @@ export const useApiPost = <T>(): [ApiPostAction, T, boolean, Error] => {
                         localStorage.removeItem(AUTH_STATE_KEY)
                         window.location.href = '/'
                     }
-
 
                     if (!response.ok) {
                         setError(Error(`Request submission failed: ${response.status} - ${response.statusText}`))
