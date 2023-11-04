@@ -1,4 +1,6 @@
-import MonacoEditor from '@monaco-editor/react';
+import MonacoEditor ,{ loader} from '@monaco-editor/react';
+import monacoUrl from '/monaco/min/vs?url'
+loader.config({ paths: { vs: monacoUrl } });
 
 interface EditorProps {
     code: string;
@@ -9,7 +11,7 @@ interface EditorProps {
 //     acceptSuggestionOnCommitCharacter: true,
 //     acceptSuggestionOnEnter: 'on',
 //     accessibilitySupport: 'auto',
-//     autoIndent: true,
+//     autoIndent: true,Ï
 //     automaticLayout: true,
 //     codeLens: true,
 //     colorDecorators: true,
