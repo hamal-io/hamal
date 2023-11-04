@@ -7,7 +7,7 @@ interface EditorProps {
     onChange: (code: string | undefined) => void
 }
 
-// const EditorOptions = {
+const EditorOptions = {
 //     acceptSuggestionOnCommitCharacter: true,
 //     acceptSuggestionOnEnter: 'on',
 //     accessibilitySupport: 'auto',
@@ -15,7 +15,7 @@ interface EditorProps {
 //     automaticLayout: true,
 //     codeLens: true,
 //     colorDecorators: true,
-//     contextmenu: true,
+    contextmenu: true,
 //     cursorBlinking: 'blink',
 //     cursorSmoothCaretAnimation: false,
 //     cursorStyle: 'line',
@@ -31,9 +31,9 @@ interface EditorProps {
 //     hideCursorInOverviewRuler: false,
 //     highlightActiveIndentGuide: true,
 //     links: true,
-//     minimap: {
-//         enabled: false,
-//     },
+    minimap: {
+        enabled: false,
+    },
 //     mouseWheelZoom: false,
 //     multiCursorMergeOverlapping: true,
 //     multiCursorModifier: 'alt',
@@ -68,7 +68,7 @@ interface EditorProps {
 //     wordWrapColumn: 80,
 //     wordWrapMinified: true,
 //     wrappingIndent: 'none',
-// }
+}
 
 const Editor = (props: EditorProps) => {
     return (
@@ -78,7 +78,7 @@ const Editor = (props: EditorProps) => {
                 height="55vh"
                 value={props.code}
                 defaultLanguage={"lua"}
-                // options={EditorOptions}
+                options={EditorOptions}
                 onChange={props.onChange}
             />
         </div>

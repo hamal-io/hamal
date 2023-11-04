@@ -8,6 +8,7 @@ export const Navbar: FC = () => {
         <Delegate
             fluid
             rounded
+            className={"bg-gray-200"}
         >
             <Delegate.Brand>
             <span className="self-center whitespace-nowrap">
@@ -17,9 +18,6 @@ export const Navbar: FC = () => {
             <div className="flex md:order-2">
             </div>
             <Delegate.Collapse>
-                {/*<Delegate.Link onClick={() => navigate("/dashboard", {replace: true})}>*/}
-                {/*    Dashboard*/}
-                {/*</Delegate.Link>*/}
                 <Delegate.Link onClick={() => navigate("/play", {replace: true})}>
                     Play
                 </Delegate.Link>

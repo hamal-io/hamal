@@ -1,13 +1,18 @@
-import React, {useEffect} from 'react'
-import {Progress, Timeline} from "flowbite-react";
+import React, {FC, useEffect} from 'react'
+import {Spinner} from "flowbite-react";
 import {useCreateAnonymousAccount} from "../../../api/account.ts";
 import {useApiPost, useAuth} from "../../../hook";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
+import {NavigationScreenProp} from 'react-navigation';
 
-const OnboardingPage: React.FC = () => {
+
+const OnboardingPage: FC = () => {
+    const location = useLocation()
+    const {code} = location.state
+
     const navigate = useNavigate()
     const [account, isLoading, error] = useCreateAnonymousAccount()
-    const [submitNamespace, namespaceSubmitted,] = useApiPost<{namespaceId: string}>()
+    const [submitNamespace, namespaceSubmitted,] = useApiPost<{ namespaceId: string }>()
     const [auth] = useAuth()
 
     const [submitBlueprint, blueprintSubmitted] = useApiPost()
@@ -22,19 +27,15 @@ const OnboardingPage: React.FC = () => {
     }, [account, auth, submitNamespace])
 
     useEffect(() => {
-        if(namespaceSubmitted != null){
-            console.log(`execute blueprint ${namespaceSubmitted.namespaceId}`)
+        if (namespaceSubmitted != null) {
             submitBlueprint(`v1/namespaces/${namespaceSubmitted.namespaceId}/adhoc`, {
                 inputs: {},
-                code: `
-                sys = require('sys')
+                code: `sys = require('sys')
                 sys.func.create({
-                    name = 'bot-func',
+                    name = 'Hello-World',
                     inputs = {},
-                    code = [[ print('hello world') ]]
-                })
-              
-                  `
+                    code = [[ ${code} ]]
+                })`
             })
         }
 
@@ -42,90 +43,22 @@ const OnboardingPage: React.FC = () => {
 
 
     useEffect(() => {
-        if(blueprintSubmitted != null){
+        if (blueprintSubmitted != null) {
             navigate('/namespaces')
         }
     }, [blueprintSubmitted, navigate]);
 
-    //     if (state.stage === 'NamespaceCreated') {
-    //         submitFunc(`v1/namespaces/${state.namespaceId}/funcs`, {
-    //             name: "Test-Name-Space",
-    //             inputs: {},
-    //             code: ""
-    //         })
-    //
-    //         dispatch({type: 'function_created', funcId: 'test'})
-    //     }
-    //
-    //
-    //     useEffect(() => {
-    //     if(account != null){
-    //
-    //         console.log("Execute blueprint here")
-    //     }
-    // }, [account]);
-
     return (
-        <div className="flex flex-col h-screen justify-between">
-            <main className="flex-1 w-full mx-auto p-4 text-lg h-full shadow-lg bg-gray-100">
-                <Progress progress={45}/>
-                <div className="flex flex-col items-center justify-center">
-                    <h1>Onboarding - </h1>
-
-                    {JSON.stringify(account)}
-                    {JSON.stringify(isLoading)}
-                    {JSON.stringify(error)}
-                    <br/>
-                    <br/>
-                    {JSON.stringify(blueprintSubmitted)}
-
-                    Your function will be deployed shortly
-
-                    <Timeline>
-                        <Timeline.Item>
-                            <Timeline.Point/>
-                            <Timeline.Content>
-                                <Timeline.Title>
-                                    Anonymous Account setup
-                                </Timeline.Title>
-                                <Timeline.Body>
-                                    <p>
-                                        TBD: Describe Account
-                                    </p>
-                                </Timeline.Body>
-                            </Timeline.Content>
-                        </Timeline.Item>
-                        <Timeline.Item>
-                            <Timeline.Point/>
-                            <Timeline.Content>
-                                <Timeline.Title>
-                                    Namespace setup
-                                </Timeline.Title>
-                                <Timeline.Body>
-                                    <p>
-                                        TBD: Describe namespace
-                                    </p>
-                                </Timeline.Body>
-                            </Timeline.Content>
-                        </Timeline.Item>
-                        <Timeline.Item>
-                            <Timeline.Point/>
-                            <Timeline.Content>
-                                <Timeline.Title>
-                                    Function setup
-                                </Timeline.Title>
-                                <Timeline.Body>
-                                    <p>
-                                        TBD: Describe function
-                                    </p>
-                                </Timeline.Body>
-                            </Timeline.Content>
-                        </Timeline.Item>
-                    </Timeline>
-
+        <main className="flex-1 w-full pt-2 mx-auto text-lg h-screen shadow-lg bg-gray-200">
+            <section className="container p-4 mx-auto max-w-3xl">
+                <div className={"flex flex-row"}>
+                    <h1>Your personal namespace is deployed shortly.</h1>
+                    <div className={"pl-3"}>
+                        <Spinner color={"gray"}/>
+                    </div>
                 </div>
-            </main>
-        </div>
+            </section>
+        </main>
     );
 }
 

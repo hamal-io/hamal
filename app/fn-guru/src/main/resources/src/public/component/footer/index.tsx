@@ -2,7 +2,9 @@ import {Footer as Delegate} from "flowbite-react";
 import {FC} from "react";
 
 export const Footer: FC = () => (
-    <Delegate container>
+    <Delegate container
+              className="bg-gray-200"
+    >
         <Delegate.Copyright
             by="fn.guru"
             href="#"

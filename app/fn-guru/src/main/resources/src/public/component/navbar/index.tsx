@@ -2,9 +2,11 @@ import {Navbar as Delegate} from "flowbite-react";
 import {FC} from "react";
 
 export const Navbar: FC = () => (
-    <Delegate>
+    <Delegate
+        className="bg-gray-200"
+    >
         <Delegate.Brand href="https://fn.guru">
-            <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
+            <span className="self-center whitespace-nowrap">
                 fn(guru)
             </span>
         </Delegate.Brand>

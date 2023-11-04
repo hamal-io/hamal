@@ -3,6 +3,7 @@ import {useNavigate} from "react-router-dom";
 import {ApiNamespace, ApiNamespaceList} from "../../../api/types";
 import {Button, Card, Label, Modal, TextInput} from "flowbite-react";
 import {useApiGet, useApiPost, useAuth} from "../../../hook";
+import {HiPlus} from 'react-icons/hi';
 
 const NamespaceListPage: React.FC = () => {
 
@@ -11,53 +12,46 @@ const NamespaceListPage: React.FC = () => {
 
     const [data, isLoading, error] = useApiGet<ApiNamespaceList>(`v1/groups/${auth.groupId}/namespaces`)
 
-
     if (isLoading) return "Loading..."
     if (error != null) return "Error -"
-
 
     const list = data.namespaces.filter(namespace => namespace.name !== "__default__").map(namespace => (
         <Card
             key={namespace.id}
-            className="max-w-sm"
+            className="w-full my-1 text-gray-900 hover:bg-gray-900  hover:text-gray-50 shadow-gray-200"
             onClick={() => navigate(`/namespaces/${namespace.id}`)}
         >
-            <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+            <h2 className="text-lg tracking-tight">
                 <p>{namespace.name}</p>
-            </h5>
-            <p className="font-normal text-gray-700 dark:text-gray-400">
-                TBD: Here is some description
-            </p>
+            </h2>
         </Card>
     ))
 
     return (
-        <main className="flex-1 w-full mx-auto text-lg h-full shadow-lg bg-gray-100">
-            <div className="flex p-3 items-center justify-center bg-white">
-                <CreateNamespaceModalButton groupId={auth.groupId}/>
-            </div>
+        <main className="flex-1 w-full pt-2 mx-auto text-lg h-full shadow-lg bg-gray-200">
+            <section className="container p-4 mx-auto max-w-3xl">
+                <div className="sm:flex sm:items-center sm:justify-between ">
+                    <div>
+                        <div className="flex items-center gap-x-3">
+                            <h2 className="text-lg font-medium text-gray-800 dark:text-white">Namespaces</h2>
+                        </div>
+                        <p className="mt-1 text-sm text-gray-500 dark:text-gray-300">Organise your workflows</p>
+                    </div>
 
-            <div className="flex flex-col items-center justify-center">
-                {list}
-            </div>
+                    <div className="flex items-center mt-4 gap-x-3">
+                        <CreateNamespaceModalButton groupId={auth.groupId}/>
+                    </div>
+                </div>
+            </section>
+
+            <section className="container mx-auto max-w-3xl">
+                <div className="flex flex-col py-6 items-center justify-center">
+                    {list}
+                </div>
+            </section>
         </main>
     );
 }
-
-// const Submit = (groupId: string, name: string) => {
-//
-//     const {data, isLoading, error} = useApi<ApiGroupList>({
-//             method: "POST",
-//             url: `v1/groups/${groupId}/namespaces`,
-//             body: JSON.stringify({
-//                     name: name,
-//                     inputs: {},
-//                 }
-//             )
-//         }
-//     )
-//     return (null)
-// }
 
 const CreateNamespaceModalButton = ({groupId}: { groupId: string }) => {
     const navigate = useNavigate()
@@ -75,7 +69,7 @@ const CreateNamespaceModalButton = ({groupId}: { groupId: string }) => {
         return () => window.removeEventListener('keydown', close)
     }, [])
 
-    const {post, data, error} = useApiPost<ApiNamespace>()
+    const [post, data, isLoading, error] = useApiPost<ApiNamespace>()
     useEffect(() => {
         if (data != null) {
             navigate(`/namespaces/${data.id}`)
@@ -88,13 +82,18 @@ const CreateNamespaceModalButton = ({groupId}: { groupId: string }) => {
 
     }, [data, navigate, error]);
 
-    const submit = (post) => {
-        post(`v1/groups/${groupId}/namespaces`, {name, inputs: {}})
-    }
 
     return (
         <>
-            <Button onClick={() => props.setOpenModal('default')}>New Namespace</Button>
+            <Button
+                className={"bg-gray-400"}
+                color={"dark"}
+                outline
+                onClick={() => props.setOpenModal('default')}>
+                <HiPlus className="mr-2 h-5 w-5"/>
+                Add Namespace
+            </Button>
+
             <Modal show={props.openModal === 'default'} onClose={() => props.setOpenModal(undefined)}>
                 <Modal.Header>Create new namespace</Modal.Header>
                 <Modal.Body>
@@ -108,7 +107,9 @@ const CreateNamespaceModalButton = ({groupId}: { groupId: string }) => {
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button className={"w-full"} onClick={_ => submit(post)}>Create Namespace</Button>
+                    <Button className={"w-full"} onClick={() => {
+                        post(`v1/groups/${groupId}/namespaces`, {name, inputs: {}})
+                    }}>Create Namespace</Button>
                 </Modal.Footer>
             </Modal>
         </>
