@@ -114,7 +114,6 @@ class SqliteFuncRepository(
                         cmdId = cmdId,
                         name = cmd.name ?: currentVersion.name,
                         inputs = cmd.inputs ?: currentVersion.inputs,
-                        codeId = cmd.codeId ?: currentVersion.code.id,
                         codeVersion = cmd.codeVersion ?: currentVersion.code.version
                     )
                 )
