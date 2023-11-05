@@ -12,6 +12,9 @@ export interface ApiFunc {
     name: string;
     inputs: object;
     code: {
+        id: string;
+        version: number;
+        deployedVersion: number;
         value: string
     }
 }

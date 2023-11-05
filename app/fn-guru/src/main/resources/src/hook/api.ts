@@ -168,6 +168,61 @@ export const useApiPost = <T>(): [ApiPostAction, T, boolean, Error] => {
     return [post, data, isLoading, error]
 }
 
+type ApiPatchAction = (url: string, data: object, abortController?: AbortController) => void
+export const useApiPatch = <T>(): [ApiPatchAction, T, boolean, Error] => {
+    const [auth] = useAuth()
+
+    const [data, setData] = useState<T | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<Error>(null);
+
+    const patch = useCallback(async (url: string, body: object, abortController?: AbortController) => {
+        if (auth.type === 'Unauthorized') {
+            console.log("Unauthorized")
+            setError(Error("Unauthenticated"))
+            setIsLoading(false)
+
+            localStorage.removeItem(AUTH_STATE_KEY)
+            window.location.href = '/'
+
+        } else {
+            fetch(`${import.meta.env.VITE_BASE_URL}/${url}`, {
+                method: "PATCH",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${auth.token}`
+                },
+                body: JSON.stringify(body),
+                signal: abortController?.signal
+            })
+                .then(response => {
+
+                    if (response.status === 403) {
+                        console.log("forbidden")
+                        localStorage.removeItem(AUTH_STATE_KEY)
+                        window.location.href = '/'
+                    }
+
+                    if (!response.ok) {
+                        setError(Error(`Request submission failed: ${response.status} - ${response.statusText}`))
+                        setIsLoading(false)
+                    }
+                    response.json().then(data => {
+                        setData(data)
+                        setIsLoading(false)
+                    })
+                })
+                .catch(error => {
+                    setError(error)
+                    setIsLoading(false)
+                })
+        }
+    }, [auth])
+
+    return [patch, data, isLoading, error]
+}
+
 export const useAuth = () => {
     return useLocalStorageState<AuthState>(AUTH_STATE_KEY, {
         defaultValue: {
