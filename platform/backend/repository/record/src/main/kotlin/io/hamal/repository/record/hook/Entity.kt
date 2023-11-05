@@ -23,7 +23,7 @@ data class HookEntity(
 
     override fun apply(rec: HookRecord): HookEntity {
         return when (rec) {
-            is HookCreationRecord -> copy(
+            is HookCreatedRecord -> copy(
                 id = rec.entityId,
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
@@ -54,7 +54,7 @@ data class HookEntity(
 fun List<HookRecord>.createEntity(): HookEntity {
     check(isNotEmpty()) { "At least one record is required" }
     val firstRecord = first()
-    check(firstRecord is HookCreationRecord)
+    check(firstRecord is HookCreatedRecord)
 
     var result = HookEntity(
         id = firstRecord.entityId,

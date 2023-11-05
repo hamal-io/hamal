@@ -10,7 +10,7 @@ import io.hamal.repository.api.CodeQueryRepository.CodeQuery
 import io.hamal.repository.api.CodeRepository
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordSequence
-import io.hamal.repository.record.code.CodeCreationRecord
+import io.hamal.repository.record.code.CodeCreatedRecord
 import io.hamal.repository.record.code.CodeEntity
 import io.hamal.repository.record.code.CodeRecord
 import io.hamal.repository.record.code.CodeUpdatedRecord
@@ -22,7 +22,7 @@ internal object CreateCode : CreateDomainObject<CodeId, CodeRecord, Code> {
     override fun invoke(recs: List<CodeRecord>): Code {
         check(recs.isNotEmpty()) { "At least one record is required" }
         val firstRecord = recs.first()
-        check(firstRecord is CodeCreationRecord)
+        check(firstRecord is CodeCreatedRecord)
 
         var result = CodeEntity(
             cmdId = firstRecord.cmdId,
@@ -62,7 +62,7 @@ class SqliteCodeRepository(
                 versionOf(codeId, cmdId)
             } else {
                 store(
-                    CodeCreationRecord(
+                    CodeCreatedRecord(
                         cmdId = cmdId,
                         entityId = codeId,
                         groupId = cmd.groupId,

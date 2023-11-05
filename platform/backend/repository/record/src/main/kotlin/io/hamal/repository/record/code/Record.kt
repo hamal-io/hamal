@@ -18,8 +18,8 @@ sealed class CodeRecord(
 ) : Record<CodeId>()
 
 @Serializable
-@SerialName("CCR")
-data class CodeCreationRecord(
+@SerialName("CodeCreatedRecord")
+data class CodeCreatedRecord(
     override val entityId: CodeId,
     override val cmdId: CmdId,
     val groupId: GroupId,
@@ -28,7 +28,7 @@ data class CodeCreationRecord(
 ) : CodeRecord()
 
 @Serializable
-@SerialName("CUR")
+@SerialName("CodeUpdatedRecord")
 data class CodeUpdatedRecord(
     override val entityId: CodeId,
     override val cmdId: CmdId,

@@ -18,8 +18,8 @@ sealed class HookRecord(
 ) : Record<HookId>()
 
 @Serializable
-@SerialName("HCR")
-data class HookCreationRecord(
+@SerialName("HookCreatedRecord")
+data class HookCreatedRecord(
     override val entityId: HookId,
     override val cmdId: CmdId,
     val groupId: GroupId,
@@ -28,7 +28,7 @@ data class HookCreationRecord(
 ) : HookRecord()
 
 @Serializable
-@SerialName("HUR")
+@SerialName("HookUpdatedRecord")
 data class HookUpdatedRecord(
     override val entityId: HookId,
     override val cmdId: CmdId,

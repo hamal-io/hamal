@@ -8,7 +8,7 @@ import io.hamal.repository.api.AccountCmdRepository.CreateCmd
 import io.hamal.repository.api.AccountQueryRepository.AccountQuery
 import io.hamal.repository.api.AccountRepository
 import io.hamal.repository.record.account.AccountConvertedRecord
-import io.hamal.repository.record.account.AccountCreationRecord
+import io.hamal.repository.record.account.AccountCreatedRecord
 import io.hamal.repository.record.account.AccountRecord
 import io.hamal.repository.record.account.CreateAccountFromRecords
 import java.util.concurrent.locks.ReentrantLock
@@ -76,7 +76,7 @@ class MemoryAccountRepository : MemoryRecordRepository<AccountId, AccountRecord,
                 versionOf(accountId, cmd.id)
             } else {
                 store(
-                    AccountCreationRecord(
+                    AccountCreatedRecord(
                         cmdId = cmd.id,
                         entityId = accountId,
                         type = cmd.accountType,

@@ -21,7 +21,7 @@ data class BlueprintEntity(
 ) : RecordEntity<BlueprintId, BlueprintRecord, Blueprint> {
     override fun apply(rec: BlueprintRecord): BlueprintEntity {
         return when (rec) {
-            is BlueprintCreationRecord -> copy(
+            is BlueprintCreatedRecord -> copy(
                 cmdId = rec.cmdId,
                 id = rec.entityId,
                 creatorId = rec.creatorId,
@@ -58,7 +58,7 @@ data class BlueprintEntity(
 fun List<BlueprintRecord>.createEntity(): BlueprintEntity {
     check(isNotEmpty()) { "At least one record is required" }
     val firstRecord = first()
-    check(firstRecord is BlueprintCreationRecord)
+    check(firstRecord is BlueprintCreatedRecord)
 
     var result = BlueprintEntity(
         cmdId = firstRecord.cmdId,

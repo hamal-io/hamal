@@ -17,7 +17,7 @@ internal object CreateFunc : CreateDomainObject<FuncId, FuncRecord, Func> {
     override fun invoke(recs: List<FuncRecord>): Func {
         check(recs.isNotEmpty()) { "At least one record is required" }
         val firstRecord = recs.first()
-        check(firstRecord is FuncCreationRecord)
+        check(firstRecord is FuncCreatedRecord)
 
         var result = FuncEntity(
             cmdId = firstRecord.cmdId,
@@ -60,7 +60,7 @@ class SqliteFuncRepository(
                 versionOf(funcId, cmdId)
             } else {
                 store(
-                    FuncCreationRecord(
+                    FuncCreatedRecord(
                         cmdId = cmdId,
                         entityId = funcId,
                         groupId = cmd.groupId,
@@ -88,7 +88,7 @@ class SqliteFuncRepository(
                 val current = versionOf(funcId, cmdId)
                 require(cmd.versionToDeploy <= current.code.version) { "${cmd.versionToDeploy} can not be deployed" }
                 store(
-                    FuncDeploymentRecord(
+                    FuncDeployedRecord(
                         cmdId = cmdId,
                         entityId = funcId,
                         deployedVersion = cmd.versionToDeploy

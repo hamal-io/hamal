@@ -21,7 +21,7 @@ data class ExtensionEntity(
 ) : RecordEntity<ExtensionId, ExtensionRecord, Extension> {
     override fun apply(rec: ExtensionRecord): ExtensionEntity {
         return when (rec) {
-            is ExtensionCreationRecord -> copy(
+            is ExtensionCreatedRecord -> copy(
                 id = rec.entityId,
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
@@ -52,7 +52,7 @@ data class ExtensionEntity(
 fun List<ExtensionRecord>.createEntity(): ExtensionEntity {
     check(isNotEmpty()) { "At least one record is required" }
     val firstRecord = first()
-    check(firstRecord is ExtensionCreationRecord)
+    check(firstRecord is ExtensionCreatedRecord)
 
     var result = ExtensionEntity(
         id = firstRecord.entityId,

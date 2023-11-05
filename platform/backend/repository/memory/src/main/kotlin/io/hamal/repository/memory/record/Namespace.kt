@@ -8,7 +8,7 @@ import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
 import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
 import io.hamal.repository.api.NamespaceRepository
 import io.hamal.repository.record.namespace.CreateNamespaceFromRecords
-import io.hamal.repository.record.namespace.NamespaceCreationRecord
+import io.hamal.repository.record.namespace.NamespaceCreatedRecord
 import io.hamal.repository.record.namespace.NamespaceRecord
 import io.hamal.repository.record.namespace.NamespaceUpdatedRecord
 import java.util.concurrent.locks.ReentrantLock
@@ -77,7 +77,7 @@ class MemoryNamespaceRepository :
                 versionOf(namespaceId, cmd.id)
             } else {
                 store(
-                    NamespaceCreationRecord(
+                    NamespaceCreatedRecord(
                         cmdId = cmd.id,
                         entityId = namespaceId,
                         groupId = cmd.groupId,

@@ -6,7 +6,7 @@ import io.hamal.repository.api.HookCmdRepository
 import io.hamal.repository.api.HookQueryRepository.HookQuery
 import io.hamal.repository.api.HookRepository
 import io.hamal.repository.record.hook.CreateHookFromRecords
-import io.hamal.repository.record.hook.HookCreationRecord
+import io.hamal.repository.record.hook.HookCreatedRecord
 import io.hamal.repository.record.hook.HookRecord
 import io.hamal.repository.record.hook.HookUpdatedRecord
 import java.util.concurrent.locks.ReentrantLock
@@ -73,7 +73,7 @@ class MemoryHookRepository : MemoryRecordRepository<HookId, HookRecord, Hook>(
                 versionOf(hookId, cmd.id)
             } else {
                 store(
-                    HookCreationRecord(
+                    HookCreatedRecord(
                         cmdId = cmd.id,
                         entityId = hookId,
                         groupId = cmd.groupId,

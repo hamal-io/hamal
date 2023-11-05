@@ -16,7 +16,7 @@ sealed class ExecRecord(
 ) : Record<ExecId>()
 
 @Serializable
-@SerialName("EPR")
+@SerialName("ExecPlannedRecord")
 data class ExecPlannedRecord(
     override val cmdId: CmdId,
     override val entityId: ExecId,
@@ -29,14 +29,14 @@ data class ExecPlannedRecord(
 ) : ExecRecord()
 
 @Serializable
-@SerialName("ESCR")
+@SerialName("ExecScheduledRecord")
 data class ExecScheduledRecord(
     override val cmdId: CmdId,
     override val entityId: ExecId,
 ) : ExecRecord()
 
 @Serializable
-@SerialName("EQR")
+@SerialName("ExecQueuedRecord")
 data class ExecQueuedRecord(
     override val cmdId: CmdId,
     override val entityId: ExecId,
@@ -44,14 +44,14 @@ data class ExecQueuedRecord(
 
 
 @Serializable
-@SerialName("ESTR")
+@SerialName("ExecStartedRecord")
 data class ExecStartedRecord(
     override val cmdId: CmdId,
     override val entityId: ExecId,
 ) : ExecRecord()
 
 @Serializable
-@SerialName("ECR")
+@SerialName("ExecCompletedRecord")
 data class ExecCompletedRecord(
     override val cmdId: CmdId,
     override val entityId: ExecId,
@@ -60,7 +60,7 @@ data class ExecCompletedRecord(
 ) : ExecRecord()
 
 @Serializable
-@SerialName("EFR")
+@SerialName("ExecFailedRecord")
 data class ExecFailedRecord(
     override val cmdId: CmdId,
     override val entityId: ExecId,

@@ -6,7 +6,7 @@ import io.hamal.repository.api.BlueprintCmdRepository.CreateCmd
 import io.hamal.repository.api.BlueprintCmdRepository.UpdateCmd
 import io.hamal.repository.api.BlueprintQueryRepository.BlueprintQuery
 import io.hamal.repository.api.BlueprintRepository
-import io.hamal.repository.record.blueprint.BlueprintCreationRecord
+import io.hamal.repository.record.blueprint.BlueprintCreatedRecord
 import io.hamal.repository.record.blueprint.BlueprintRecord
 import io.hamal.repository.record.blueprint.BlueprintUpdatedRecord
 import io.hamal.repository.record.blueprint.CreateBlueprintFromRecords
@@ -62,7 +62,7 @@ class MemoryBlueprintRepository : MemoryRecordRepository<BlueprintId, BlueprintR
                 versionOf(bpId, cmd.id)
             } else {
                 store(
-                    BlueprintCreationRecord(
+                    BlueprintCreatedRecord(
                         cmdId = cmd.id,
                         entityId = bpId,
                         groupId = cmd.groupId,

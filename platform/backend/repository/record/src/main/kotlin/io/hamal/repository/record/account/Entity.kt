@@ -21,7 +21,7 @@ data class AccountEntity(
 
     override fun apply(rec: AccountRecord): AccountEntity {
         return when (rec) {
-            is AccountCreationRecord -> copy(
+            is AccountCreatedRecord -> copy(
                 id = rec.entityId,
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
@@ -55,7 +55,7 @@ data class AccountEntity(
 fun List<AccountRecord>.createEntity(): AccountEntity {
     check(isNotEmpty()) { "At least one record is required" }
     val firstRecord = first()
-    check(firstRecord is AccountCreationRecord)
+    check(firstRecord is AccountCreatedRecord)
 
     var result = AccountEntity(
         id = firstRecord.entityId,

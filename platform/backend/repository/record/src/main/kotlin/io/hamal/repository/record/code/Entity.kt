@@ -20,7 +20,7 @@ data class CodeEntity(
 
     override fun apply(rec: CodeRecord): CodeEntity {
         return when (rec) {
-            is CodeCreationRecord -> copy(
+            is CodeCreatedRecord -> copy(
                 id = rec.entityId,
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
@@ -54,7 +54,7 @@ data class CodeEntity(
 fun List<CodeRecord>.createEntity(): CodeEntity {
     check(isNotEmpty()) { "At least one record is required" }
     val firstRecord = first()
-    check(firstRecord is CodeCreationRecord)
+    check(firstRecord is CodeCreatedRecord)
 
     var result = CodeEntity(
         id = firstRecord.entityId,

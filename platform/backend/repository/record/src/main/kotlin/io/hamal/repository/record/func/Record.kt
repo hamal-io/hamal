@@ -16,8 +16,8 @@ sealed class FuncRecord(
 ) : Record<FuncId>()
 
 @Serializable
-@SerialName("FCR")
-data class FuncCreationRecord(
+@SerialName("FuncCreatedRecord")
+data class FuncCreatedRecord(
     override val entityId: FuncId,
     override val cmdId: CmdId,
     val groupId: GroupId,
@@ -29,7 +29,7 @@ data class FuncCreationRecord(
 ) : FuncRecord()
 
 @Serializable
-@SerialName("FUR")
+@SerialName("FuncUpdatedRecord")
 data class FuncUpdatedRecord(
     override val entityId: FuncId,
     override val cmdId: CmdId,
@@ -40,8 +40,8 @@ data class FuncUpdatedRecord(
 
 
 @Serializable
-@SerialName("FDR")
-data class FuncDeploymentRecord(
+@SerialName("FuncDeployedRecord")
+data class FuncDeployedRecord(
     override val entityId: FuncId,
     override val cmdId: CmdId,
     val deployedVersion: CodeVersion

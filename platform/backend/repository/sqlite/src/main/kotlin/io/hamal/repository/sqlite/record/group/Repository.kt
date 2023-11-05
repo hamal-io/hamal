@@ -7,7 +7,7 @@ import io.hamal.repository.api.GroupCmdRepository.CreateCmd
 import io.hamal.repository.api.GroupQueryRepository.GroupQuery
 import io.hamal.repository.api.GroupRepository
 import io.hamal.repository.record.CreateDomainObject
-import io.hamal.repository.record.group.GroupCreationRecord
+import io.hamal.repository.record.group.GroupCreatedRecord
 import io.hamal.repository.record.group.GroupEntity
 import io.hamal.repository.record.group.GroupRecord
 import io.hamal.repository.sqlite.record.SqliteRecordRepository
@@ -17,7 +17,7 @@ internal object CreateGroup : CreateDomainObject<GroupId, GroupRecord, Group> {
     override fun invoke(recs: List<GroupRecord>): Group {
         check(recs.isNotEmpty()) { "At least one record is required" }
         val firstRecord = recs.first()
-        check(firstRecord is GroupCreationRecord)
+        check(firstRecord is GroupCreatedRecord)
 
         var result = GroupEntity(
             id = firstRecord.entityId,
@@ -60,7 +60,7 @@ class SqliteGroupRepository(
                 versionOf(groupId, cmdId)
             } else {
                 store(
-                    GroupCreationRecord(
+                    GroupCreatedRecord(
                         entityId = groupId,
                         cmdId = cmd.id,
                         name = cmd.name,

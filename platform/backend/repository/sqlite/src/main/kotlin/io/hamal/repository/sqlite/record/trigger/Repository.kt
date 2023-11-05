@@ -15,7 +15,7 @@ internal object CreateTrigger : CreateDomainObject<TriggerId, TriggerRecord, Tri
         check(recs.isNotEmpty()) { "At least one record is required" }
         val firstRecord = recs.first()
 
-        check(firstRecord is FixedRateTriggerCreationRecord || firstRecord is EventTriggerCreationRecord || firstRecord is HookTriggerCreationRecord)
+        check(firstRecord is FixedRateTriggerCreatedRecord || firstRecord is EventTriggerCreatedRecord || firstRecord is HookTriggerCreatedRecord)
 
         var result = TriggerEntity(
             id = firstRecord.entityId,
@@ -54,7 +54,7 @@ class SqliteTriggerRepository(
                 versionOf(triggerId, cmdId) as FixedRateTrigger
             } else {
                 store(
-                    FixedRateTriggerCreationRecord(
+                    FixedRateTriggerCreatedRecord(
                         cmdId = cmdId,
                         entityId = triggerId,
                         groupId = cmd.groupId,
@@ -82,7 +82,7 @@ class SqliteTriggerRepository(
                 versionOf(triggerId, cmdId) as EventTrigger
             } else {
                 store(
-                    EventTriggerCreationRecord(
+                    EventTriggerCreatedRecord(
                         cmdId = cmdId,
                         entityId = triggerId,
                         groupId = cmd.groupId,
@@ -110,7 +110,7 @@ class SqliteTriggerRepository(
                 versionOf(triggerId, cmdId) as HookTrigger
             } else {
                 store(
-                    HookTriggerCreationRecord(
+                    HookTriggerCreatedRecord(
                         cmdId = cmdId,
                         entityId = triggerId,
                         groupId = cmd.groupId,

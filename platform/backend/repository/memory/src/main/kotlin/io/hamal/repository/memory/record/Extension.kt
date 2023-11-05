@@ -7,7 +7,7 @@ import io.hamal.repository.api.ExtensionCmdRepository.UpdateCmd
 import io.hamal.repository.api.ExtensionQueryRepository.ExtensionQuery
 import io.hamal.repository.api.ExtensionRepository
 import io.hamal.repository.record.extension.CreateExtensionFromRecords
-import io.hamal.repository.record.extension.ExtensionCreationRecord
+import io.hamal.repository.record.extension.ExtensionCreatedRecord
 import io.hamal.repository.record.extension.ExtensionRecord
 import io.hamal.repository.record.extension.ExtensionUpdatedRecord
 import java.util.concurrent.locks.ReentrantLock
@@ -72,7 +72,7 @@ class MemoryExtensionRepository : MemoryRecordRepository<ExtensionId, ExtensionR
                 versionOf(extId, cmd.id)
             } else {
                 store(
-                    ExtensionCreationRecord(
+                    ExtensionCreatedRecord(
                         cmdId = cmd.id,
                         entityId = extId,
                         groupId = cmd.groupId,

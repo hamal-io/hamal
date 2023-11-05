@@ -15,8 +15,8 @@ sealed class BlueprintRecord(
 ) : Record<BlueprintId>()
 
 @Serializable
-@SerialName("SCR")
-data class BlueprintCreationRecord(
+@SerialName("BlueprintCreatedRecord")
+data class BlueprintCreatedRecord(
     override val entityId: BlueprintId,
     override val cmdId: CmdId,
     val groupId: GroupId,
@@ -28,7 +28,7 @@ data class BlueprintCreationRecord(
 
 
 @Serializable
-@SerialName("SUR")
+@SerialName("BlueprintUpdatedRecord")
 data class BlueprintUpdatedRecord(
     override val entityId: BlueprintId,
     override val cmdId: CmdId,

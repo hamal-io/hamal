@@ -8,7 +8,7 @@ import io.hamal.repository.api.HookCmdRepository.UpdateCmd
 import io.hamal.repository.api.HookQueryRepository.HookQuery
 import io.hamal.repository.api.HookRepository
 import io.hamal.repository.record.CreateDomainObject
-import io.hamal.repository.record.hook.HookCreationRecord
+import io.hamal.repository.record.hook.HookCreatedRecord
 import io.hamal.repository.record.hook.HookEntity
 import io.hamal.repository.record.hook.HookRecord
 import io.hamal.repository.record.hook.HookUpdatedRecord
@@ -19,7 +19,7 @@ internal object CreateHook : CreateDomainObject<HookId, HookRecord, Hook> {
     override fun invoke(recs: List<HookRecord>): Hook {
         check(recs.isNotEmpty()) { "At least one record is required" }
         val firstRecord = recs.first()
-        check(firstRecord is HookCreationRecord)
+        check(firstRecord is HookCreatedRecord)
 
         var result = HookEntity(
             cmdId = firstRecord.cmdId,
@@ -62,7 +62,7 @@ class SqliteHookRepository(
                 versionOf(hookId, cmdId)
             } else {
                 store(
-                    HookCreationRecord(
+                    HookCreatedRecord(
                         cmdId = cmdId,
                         entityId = hookId,
                         groupId = cmd.groupId,

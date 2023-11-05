@@ -23,7 +23,7 @@ data class FuncEntity(
 
     override fun apply(rec: FuncRecord): FuncEntity {
         return when (rec) {
-            is FuncCreationRecord -> copy(
+            is FuncCreatedRecord -> copy(
                 id = rec.entityId,
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
@@ -50,7 +50,7 @@ data class FuncEntity(
                 )
             )
 
-            is FuncDeploymentRecord -> copy(
+            is FuncDeployedRecord -> copy(
                 id = rec.entityId,
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
@@ -81,7 +81,7 @@ data class FuncEntity(
 fun List<FuncRecord>.createEntity(): FuncEntity {
     check(isNotEmpty()) { "At least one record is required" }
     val firstRecord = first()
-    check(firstRecord is FuncCreationRecord)
+    check(firstRecord is FuncCreatedRecord)
 
     var result = FuncEntity(
         id = firstRecord.entityId,

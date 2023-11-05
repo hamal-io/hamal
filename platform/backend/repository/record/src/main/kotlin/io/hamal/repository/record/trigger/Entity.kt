@@ -39,7 +39,7 @@ data class TriggerEntity(
 
     override fun apply(rec: TriggerRecord): TriggerEntity {
         return when (rec) {
-            is FixedRateTriggerCreationRecord -> copy(
+            is FixedRateTriggerCreatedRecord -> copy(
                 cmdId = rec.cmdId,
                 id = rec.entityId,
                 groupId = rec.groupId,
@@ -53,7 +53,7 @@ data class TriggerEntity(
                 duration = rec.duration
             )
 
-            is EventTriggerCreationRecord -> copy(
+            is EventTriggerCreatedRecord -> copy(
                 cmdId = rec.cmdId,
                 id = rec.entityId,
                 groupId = rec.groupId,
@@ -67,7 +67,7 @@ data class TriggerEntity(
                 topicId = rec.topicId
             )
 
-            is HookTriggerCreationRecord -> copy(
+            is HookTriggerCreatedRecord -> copy(
                 cmdId = rec.cmdId,
                 id = rec.entityId,
                 groupId = rec.groupId,
@@ -130,7 +130,7 @@ fun List<TriggerRecord>.createEntity(): TriggerEntity {
     check(isNotEmpty()) { "At least one record is required" }
     val firstRecord = first()
 
-    check(firstRecord is FixedRateTriggerCreationRecord || firstRecord is EventTriggerCreationRecord || firstRecord is HookTriggerCreationRecord)
+    check(firstRecord is FixedRateTriggerCreatedRecord || firstRecord is EventTriggerCreatedRecord || firstRecord is HookTriggerCreatedRecord)
 
     var result = TriggerEntity(
         id = firstRecord.entityId,

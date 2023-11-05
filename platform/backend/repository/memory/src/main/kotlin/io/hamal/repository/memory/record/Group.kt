@@ -6,7 +6,7 @@ import io.hamal.repository.api.GroupCmdRepository
 import io.hamal.repository.api.GroupQueryRepository.GroupQuery
 import io.hamal.repository.api.GroupRepository
 import io.hamal.repository.record.group.CreateGroupFromRecords
-import io.hamal.repository.record.group.GroupCreationRecord
+import io.hamal.repository.record.group.GroupCreatedRecord
 import io.hamal.repository.record.group.GroupRecord
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
@@ -67,7 +67,7 @@ class MemoryGroupRepository : MemoryRecordRepository<GroupId, GroupRecord, Group
                 versionOf(groupId, cmd.id)
             } else {
                 store(
-                    GroupCreationRecord(
+                    GroupCreatedRecord(
                         entityId = groupId,
                         cmdId = cmd.id,
                         name = cmd.name,

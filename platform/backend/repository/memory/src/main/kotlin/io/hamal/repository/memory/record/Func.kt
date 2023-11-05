@@ -70,7 +70,7 @@ class MemoryFuncRepository : MemoryRecordRepository<FuncId, FuncRecord, Func>(
                 versionOf(funcId, cmd.id)
             } else {
                 store(
-                    FuncCreationRecord(
+                    FuncCreatedRecord(
                         cmdId = cmd.id,
                         entityId = funcId,
                         groupId = cmd.groupId,
@@ -94,7 +94,7 @@ class MemoryFuncRepository : MemoryRecordRepository<FuncId, FuncRecord, Func>(
                 val current = versionOf(funcId, cmd.id)
                 require(cmd.versionToDeploy <= current.code.version) { "${cmd.versionToDeploy} can not be deployed" }
                 store(
-                    FuncDeploymentRecord(
+                    FuncDeployedRecord(
                         cmdId = cmd.id,
                         entityId = funcId,
                         deployedVersion = cmd.versionToDeploy

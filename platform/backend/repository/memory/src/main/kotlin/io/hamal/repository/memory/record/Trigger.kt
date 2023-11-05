@@ -120,7 +120,7 @@ class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord,
                 versionOf(triggerId, cmd.id) as FixedRateTrigger
             }
             store(
-                FixedRateTriggerCreationRecord(
+                FixedRateTriggerCreatedRecord(
                     cmdId = cmd.id,
                     entityId = triggerId,
                     groupId = cmd.groupId,
@@ -143,7 +143,7 @@ class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord,
                 versionOf(triggerId, cmd.id) as EventTrigger
             } else {
                 store(
-                    EventTriggerCreationRecord(
+                    EventTriggerCreatedRecord(
                         cmdId = cmd.id,
                         entityId = triggerId,
                         groupId = cmd.groupId,
@@ -167,7 +167,7 @@ class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord,
                 versionOf(triggerId, cmd.id) as HookTrigger
             } else {
                 store(
-                    HookTriggerCreationRecord(
+                    HookTriggerCreatedRecord(
                         cmdId = cmd.id,
                         entityId = triggerId,
                         groupId = cmd.groupId,

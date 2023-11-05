@@ -15,8 +15,8 @@ sealed class AccountRecord(
 ) : Record<AccountId>()
 
 @Serializable
-@SerialName("ACR")
-data class AccountCreationRecord(
+@SerialName("AccountCreatedRecord")
+data class AccountCreatedRecord(
     override val entityId: AccountId,
     override val cmdId: CmdId,
     val name: AccountName,

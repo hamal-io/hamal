@@ -19,8 +19,8 @@ sealed class NamespaceRecord(
 ) : Record<NamespaceId>()
 
 @Serializable
-@SerialName("NSCR")
-data class NamespaceCreationRecord(
+@SerialName("NamespaceCreatedRecord")
+data class NamespaceCreatedRecord(
     override val entityId: NamespaceId,
     override val cmdId: CmdId,
     val groupId: GroupId,
@@ -29,7 +29,7 @@ data class NamespaceCreationRecord(
 ) : NamespaceRecord()
 
 @Serializable
-@SerialName("NSUR")
+@SerialName("NamespaceUpdatedRecord")
 data class NamespaceUpdatedRecord(
     override val entityId: NamespaceId,
     override val cmdId: CmdId,

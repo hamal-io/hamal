@@ -10,7 +10,6 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kotlin.time.Duration
 
-
 @Serializable
 sealed class TriggerRecord(
     @Transient
@@ -18,8 +17,8 @@ sealed class TriggerRecord(
 ) : Record<TriggerId>()
 
 @Serializable
-@SerialName("FRTCR")
-data class FixedRateTriggerCreationRecord(
+@SerialName("FixedRateTriggerCreatedRecord")
+data class FixedRateTriggerCreatedRecord(
     override val cmdId: CmdId,
     override val entityId: TriggerId,
     val groupId: GroupId,
@@ -32,8 +31,8 @@ data class FixedRateTriggerCreationRecord(
 ) : TriggerRecord()
 
 @Serializable
-@SerialName("ETCR")
-data class EventTriggerCreationRecord(
+@SerialName("EventTriggerCreatedRecord")
+data class EventTriggerCreatedRecord(
     override val cmdId: CmdId,
     override val entityId: TriggerId,
     val groupId: GroupId,
@@ -46,8 +45,8 @@ data class EventTriggerCreationRecord(
 ) : TriggerRecord()
 
 @Serializable
-@SerialName("HTCR")
-data class HookTriggerCreationRecord(
+@SerialName("HookTriggerCreatedRecord")
+data class HookTriggerCreatedRecord(
     override val cmdId: CmdId,
     override val entityId: TriggerId,
     val groupId: GroupId,

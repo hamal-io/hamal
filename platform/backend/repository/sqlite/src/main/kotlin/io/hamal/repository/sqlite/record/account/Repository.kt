@@ -10,7 +10,7 @@ import io.hamal.repository.api.AccountQueryRepository.AccountQuery
 import io.hamal.repository.api.AccountRepository
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.account.AccountConvertedRecord
-import io.hamal.repository.record.account.AccountCreationRecord
+import io.hamal.repository.record.account.AccountCreatedRecord
 import io.hamal.repository.record.account.AccountEntity
 import io.hamal.repository.record.account.AccountRecord
 import io.hamal.repository.sqlite.record.SqliteRecordRepository
@@ -20,7 +20,7 @@ internal object CreateAccount : CreateDomainObject<AccountId, AccountRecord, Acc
     override fun invoke(recs: List<AccountRecord>): Account {
         check(recs.isNotEmpty()) { "At least one record is required" }
         val firstRecord = recs.first()
-        check(firstRecord is AccountCreationRecord)
+        check(firstRecord is AccountCreatedRecord)
 
         var result = AccountEntity(
             cmdId = firstRecord.cmdId,
@@ -63,7 +63,7 @@ class SqliteAccountRepository(
                 versionOf(accountId, cmdId)
             } else {
                 store(
-                    AccountCreationRecord(
+                    AccountCreatedRecord(
                         cmdId = cmdId,
                         entityId = accountId,
                         type = cmd.accountType,
