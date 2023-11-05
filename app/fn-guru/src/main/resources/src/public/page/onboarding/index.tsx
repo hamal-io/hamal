@@ -1,19 +1,26 @@
-import React, {FC, useEffect} from 'react'
+import React, {FC, useEffect, useState} from 'react'
 import {Spinner} from "flowbite-react";
 import {useApiCreateAnonymousAccount, useApiPost, useAuth} from "../../../hook";
 import {useLocation, useNavigate} from "react-router-dom";
 
 
 const OnboardingPage: FC = () => {
-
     const location = useLocation()
-    const {code} = location.state
-
     const navigate = useNavigate()
     const [auth] = useAuth()
     const [createAnonymousAccount] = useApiCreateAnonymousAccount()
     const [submitNamespace, namespaceSubmitted,] = useApiPost<{ namespaceId: string }>()
     const [submitBlueprint, blueprintSubmitted] = useApiPost()
+    const [code, setCode] = useState<string>('')
+
+    useEffect(() => {
+        if (location.state == null) {
+            navigate('/', {replace: true})
+        } else {
+            setCode(location.state.code)
+        }
+    }, [location.state, navigate]);
+
 
     useEffect(() => {
         const abortController = new AbortController()
@@ -24,7 +31,6 @@ const OnboardingPage: FC = () => {
             abortController.abort()
         }
     }, []);
-
 
     useEffect(() => {
         const abortController = new AbortController()
