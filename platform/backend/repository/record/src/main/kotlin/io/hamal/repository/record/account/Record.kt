@@ -24,3 +24,12 @@ data class AccountCreationRecord(
     val salt: PasswordSalt,
     val type: AccountType
 ) : AccountRecord()
+
+@Serializable
+@SerialName("AccountConvertedRecord")
+data class AccountConvertedRecord(
+    override val entityId: AccountId,
+    override val cmdId: CmdId,
+    val name: AccountName,
+    val email: AccountEmail?,
+) : AccountRecord()

@@ -7,4 +7,5 @@ export interface AuthState {
     accountId: string;
     groupId: string;
     token: string;
+    name: string;
 }

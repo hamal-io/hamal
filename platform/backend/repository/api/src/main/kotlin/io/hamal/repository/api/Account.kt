@@ -1,9 +1,9 @@
 package io.hamal.repository.api
 
-import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.DomainObject
 import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable
 
@@ -23,6 +23,8 @@ interface AccountCmdRepository : CmdRepository {
 
     fun create(cmd: CreateCmd): Account
 
+    fun convert(cmd: ConvertCmd): Account
+
     data class CreateCmd(
         val id: CmdId,
         val accountId: AccountId,
@@ -30,6 +32,13 @@ interface AccountCmdRepository : CmdRepository {
         val name: AccountName,
         val email: AccountEmail?,
         val salt: PasswordSalt
+    )
+
+    data class ConvertCmd(
+        val id: CmdId,
+        val accountId: AccountId,
+        val name: AccountName?,
+        val email: AccountEmail?,
     )
 }
 

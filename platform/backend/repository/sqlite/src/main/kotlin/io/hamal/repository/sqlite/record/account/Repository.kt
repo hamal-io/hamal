@@ -4,10 +4,12 @@ import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.AccountName
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Account
+import io.hamal.repository.api.AccountCmdRepository
 import io.hamal.repository.api.AccountCmdRepository.CreateCmd
 import io.hamal.repository.api.AccountQueryRepository.AccountQuery
 import io.hamal.repository.api.AccountRepository
 import io.hamal.repository.record.CreateDomainObject
+import io.hamal.repository.record.account.AccountConvertedRecord
 import io.hamal.repository.record.account.AccountCreationRecord
 import io.hamal.repository.record.account.AccountEntity
 import io.hamal.repository.record.account.AccountRecord
@@ -71,6 +73,30 @@ class SqliteAccountRepository(
                     )
                 )
 
+                currentVersion(accountId)
+                    .also { ProjectionCurrent.upsert(this, it) }
+                    .also { ProjectionUniqueEmail.upsert(this, it) }
+                    .also { ProjectionUniqueName.upsert(this, it) }
+            }
+        }
+    }
+
+    override fun convert(cmd: AccountCmdRepository.ConvertCmd): Account {
+        val accountId = cmd.accountId
+        val cmdId = cmd.id
+        return tx {
+            if (commandAlreadyApplied(cmdId, accountId)) {
+                versionOf(accountId, cmdId)
+            } else {
+                val currentVersion = currentVersion(accountId)
+                store(
+                    AccountConvertedRecord(
+                        cmdId = cmdId,
+                        entityId = accountId,
+                        name = cmd.name ?: currentVersion.name,
+                        email = cmd.email,
+                    )
+                )
                 currentVersion(accountId)
                     .also { ProjectionCurrent.upsert(this, it) }
                     .also { ProjectionUniqueEmail.upsert(this, it) }

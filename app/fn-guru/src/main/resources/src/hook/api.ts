@@ -40,7 +40,8 @@ export const useApiCreateAnonymousAccount = (): [ApiCreateAnonymousAccountAction
                         type: 'Anonymous',
                         accountId: data.accountId,
                         groupId: data.groupIds[0],
-                        token: data.token
+                        token: data.token,
+                        name: data.name
                     })
                 })
             })
@@ -173,7 +174,8 @@ export const useAuth = () => {
             type: 'Unauthorized',
             accountId: '',
             groupId: '',
-            token: ''
+            token: '',
+            name: ''
         }
     })
 }

@@ -15,3 +15,9 @@ interface CreateAnonymousAccountReq {
     val id: AccountId
     val name: AccountName
 }
+
+interface ConvertAnonymousAccountReq {
+    val name: AccountName?
+    val password: Password
+    val email: AccountEmail?
+}

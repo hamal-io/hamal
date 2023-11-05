@@ -30,6 +30,13 @@ data class AccountEntity(
                 email = rec.email,
                 salt = rec.salt
             )
+
+            is AccountConvertedRecord -> copy(
+                cmdId = rec.cmdId,
+                name = rec.name,
+                email = rec.email,
+                type = AccountType.User
+            )
         }
     }
 

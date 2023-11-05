@@ -7,13 +7,22 @@ const unauthorizedDefaultHeaders = () => ({
 })
 
 export interface ApiLoginSubmitted {
-    id: string,
-    status: string,
-    accountId: string,
+    id: string;
+    status: string;
+    accountId: string;
     groupIds: string[];
-    token: string
+    token: string;
+    name: string;
 }
 
+
+export interface ApiAccountConversionSubmitted {
+    id: string;
+    status: string;
+    accountId: string;
+    token: string;
+    name: string;
+}
 
 export const useCreateAnonymousAccount = <T>(): [T, boolean, Error] => {
     const [, setAuth] = useAuth()
@@ -47,7 +56,8 @@ export const useCreateAnonymousAccount = <T>(): [T, boolean, Error] => {
                         type: 'Anonymous',
                         accountId: data.accountId,
                         groupId: data.groupIds[0],
-                        token: data.token
+                        token: data.token,
+                        name: data.name
                     })
                 })
             })
