@@ -401,6 +401,19 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
 
         @Disabled
         @TestFactory
+        fun `Deploys latest version`() = runWith(FuncRepository::class) {
+            createUpdatedFunc(
+                funcId = FuncId(123),
+                codeId = CodeId(5),
+                maxVersion = CodeVersion(100),
+            )
+
+            val res = deployLatest(FuncId(123), CmdGen())
+            assertThat(res.code.deployedVersion, equalTo(CodeVersion(100)))
+        }
+
+        @Disabled
+        @TestFactory
         fun `Tries to deploy to func that does not exist`() = runWith(FuncRepository::class) {
             val exception = assertThrows<NoSuchElementException> {
                 deploy(

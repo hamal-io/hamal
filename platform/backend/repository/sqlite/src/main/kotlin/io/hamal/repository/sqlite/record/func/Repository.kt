@@ -1,5 +1,6 @@
 package io.hamal.repository.sqlite.record.func
 
+import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Func
@@ -94,6 +95,20 @@ class SqliteFuncRepository(
                         deployedVersion = cmd.versionToDeploy
                     )
                 )
+                currentVersion(funcId)
+                    .also { ProjectionCurrent.upsert(this, it) }
+                    .also { ProjectionUniqueName.upsert(this, it) }
+            }
+        }
+    }
+
+    override fun deployLatest(funcId: FuncId, cmd: CmdId): Func {
+        return tx {
+            if (commandAlreadyApplied(cmd, funcId)) {
+                versionOf(funcId, cmd)
+            } else {
+
+                //TODO
                 currentVersion(funcId)
                     .also { ProjectionCurrent.upsert(this, it) }
                     .also { ProjectionUniqueName.upsert(this, it) }

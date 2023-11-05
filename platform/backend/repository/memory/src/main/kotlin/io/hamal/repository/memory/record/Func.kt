@@ -1,10 +1,12 @@
 package io.hamal.repository.memory.record
 
+import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncCmdRepository.*
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
 import io.hamal.repository.api.FuncRepository
+import io.hamal.repository.record.RecordSequence
 import io.hamal.repository.record.func.*
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
@@ -100,6 +102,17 @@ class MemoryFuncRepository : MemoryRecordRepository<FuncId, FuncRecord, Func>(
                         deployedVersion = cmd.versionToDeploy
                     )
                 )
+                (currentVersion(funcId)).also(CurrentFuncProjection::apply)
+            }
+        }
+    }
+
+    override fun deployLatest(funcId: FuncId, cmd: CmdId): Func {
+        return lock.withLock {
+            if (commandAlreadyApplied(cmd, funcId)) {
+                versionOf(funcId, cmd)
+            } else {
+                //TODO
                 (currentVersion(funcId)).also(CurrentFuncProjection::apply)
             }
         }
