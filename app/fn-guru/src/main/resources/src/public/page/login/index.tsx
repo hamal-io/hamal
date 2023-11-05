@@ -49,13 +49,14 @@ const LoginPage = () => {
 
                 const action = async () => {
                     try {
-                        const {accountId, groupIds, token} = await login(username, password)
+                        const {accountId, groupIds, token, name} = await login(username, password)
                         console.log(accountId, token)
                         setAuth({
                             type: 'User',
                             accountId,
                             groupId: groupIds[0],
-                            token
+                            token,
+                            name
                         })
 
                         navigate("/namespaces")
