@@ -22,7 +22,7 @@ dependencies {
         exclude("com.fasterxml.jackson.core", "jackson-annotations")
     }
 
-    api(project(":platform:runner-extension:plugin:std:log"))
+    api(project(":platform:runner-plugin:std:log"))
 }
 
 

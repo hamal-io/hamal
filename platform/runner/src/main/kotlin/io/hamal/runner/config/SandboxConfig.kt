@@ -12,8 +12,8 @@ import io.hamal.plugin.std.debug.DebugPluginFactory
 import io.hamal.plugin.std.log.LogPluginFactory
 import io.hamal.plugin.std.sys.SysPluginFactory
 import io.hamal.plugin.web3.evm.EthPluginFactory
-import io.hamal.script.std.decimal.DecimalScriptFactory
-import io.hamal.script.telegram.TelegramScriptFactory
+import io.hamal.extension.std.decimal.DecimalScriptFactory
+import io.hamal.extension.telegram.TelegramScriptFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

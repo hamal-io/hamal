@@ -13,14 +13,14 @@ dependencies {
     implementation(project(":platform:lib:web3"))
     implementation(project(":platform:lib:kua"))
 
-    implementation(project(":platform:runner-extension:script:std:decimal"))
-    implementation(project(":platform:runner-extension:script:telegram"))
+    implementation(project(":platform:runner-extension:std:decimal"))
+    implementation(project(":platform:runner-extension:telegram"))
 
-    implementation(project(":platform:runner-extension:plugin:net:http"))
-    implementation(project(":platform:runner-extension:plugin:std:debug"))
-    implementation(project(":platform:runner-extension:plugin:std:log"))
-    implementation(project(":platform:runner-extension:plugin:std:sys"))
-    implementation(project(":platform:runner-extension:plugin:web3"))
+    implementation(project(":platform:runner-plugin:net:http"))
+    implementation(project(":platform:runner-plugin:std:debug"))
+    implementation(project(":platform:runner-plugin:std:log"))
+    implementation(project(":platform:runner-plugin:std:sys"))
+    implementation(project(":platform:runner-plugin:web3"))
 
     implementation(external.spring.web) {
         exclude("org.springframework.boot", "spring-boot-starter-tomcat")
@@ -45,7 +45,7 @@ testing {
                     implementation(project(":platform:lib:sdk"))
                     implementation(project(":platform:lib:kua"))
                     implementation(project(":platform:runner"))
-                    implementation(project(":platform:runner-extension:test"))
+                    implementation(project(":platform:runner-test"))
 
                     implementation(external.junit)
                     implementation(external.hamcrest)
