@@ -22,7 +22,7 @@ export const Navbar: FC = () => {
                     Play
                 </Delegate.Link>
                 <Delegate.Link onClick={() => navigate("/namespaces", {replace: true})}>
-                    Namespace
+                    Namespaces
                 </Delegate.Link>
             </Delegate.Collapse>
         </Delegate>
