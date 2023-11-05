@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import {useParams} from "react-router-dom";
-import {useApiGet, useApiPatch, useApiPost} from "../../../../../hook";
+import {useApiDeployLatestCode, useApiGet, useApiPatch, useApiPost} from "../../../../../hook";
 import {ApiFunc} from "../../../../../api/types";
 import Editor from "../../../../../component/editor";
 import {Button, TextInput} from "flowbite-react";
@@ -26,7 +26,7 @@ const NamespaceFuncDetailPage: React.FC = () => {
     const [name, setName] = useState("")
 
     const [updateFunc] = useApiPatch<ApiFuncUpdateSubmitted>()
-    const [deployFunc] = useApiPost<ApiFuncDeploySubmitted>()
+    const [deployFunc] = useApiDeployLatestCode()
 
     useEffect(() => {
         if (func != null) {
@@ -75,7 +75,7 @@ const NamespaceFuncDetailPage: React.FC = () => {
                     }}> Save </Button>
 
                     <Button onClick={() => {
-                        deployFunc(`v1/funcs/${funcId}/deploy/${func.code.version}`, {})
+                        deployFunc(funcId)
                     }}> Deploy Func </Button>
                 </div>
 
