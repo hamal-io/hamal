@@ -58,6 +58,7 @@ class SysPluginFactory(
 
                         "func_create" to FuncCreateFunction(sdk),
                         "func_deploy" to FuncDeployFunction(sdk),
+                        "func_deploy_latest" to FuncDeployLatestFunction(sdk),
                         "func_get" to FuncGetFunction(sdk),
                         "func_list" to FuncListFunction(sdk),
                         "func_invoke" to FuncInvokeFunction(sdk),

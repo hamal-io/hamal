@@ -1,9 +1,12 @@
 package io.hamal.core.adapter
 
 import io.hamal.core.req.SubmitRequest
+import io.hamal.lib.domain.GenerateDomainId
+import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.ReqId
 import io.hamal.repository.api.*
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
 import io.hamal.repository.api.submitted_req.ExecInvokeSubmitted
@@ -45,7 +48,21 @@ interface FuncDeployPort {
         versionToDeploy: CodeVersion,
         responseHandler: (FuncDeploySubmitted) -> T
     ): T
+
+    operator fun <T : Any> invoke(
+        funcId: FuncId,
+        responseHandler: (FuncDeploySubmitted) -> T
+    ): T
 }
+
+/*
+interface FuncDeployLatestPort {
+    operator fun <T : Any> invoke(
+        funcId: FuncId,
+        responseHandler: (FuncDeploySubmitted) -> T
+    ): T
+}
+*/
 
 interface FuncUpdatePort {
     operator fun <T : Any> invoke(
@@ -63,8 +80,11 @@ class FuncAdapter(
     private val submitRequest: SubmitRequest,
     private val funcQueryRepository: FuncQueryRepository,
     private val codeQueryRepository: CodeQueryRepository,
-    private val namespaceQueryRepository: NamespaceQueryRepository
-) : FuncPort {
+    private val namespaceQueryRepository: NamespaceQueryRepository,
+    private val reqCmdRepository: ReqCmdRepository,
+    private val generateDomainId: GenerateDomainId,
+
+    ) : FuncPort {
     override fun <T : Any> invoke(
         namespaceId: NamespaceId,
         req: CreateFuncReq,
@@ -113,6 +133,19 @@ class FuncAdapter(
         responseHandler: (FuncDeploySubmitted) -> T
     ): T {
         return responseHandler(submitRequest(funcId, versionToDeploy))
+    }
+
+    override fun <T : Any> invoke(funcId: FuncId, responseHandler: (FuncDeploySubmitted) -> T): T {
+        val func = funcQueryRepository.get(funcId)
+        return responseHandler(
+            FuncDeploySubmitted(
+                id = generateDomainId(::ReqId),
+                status = ReqStatus.Submitted,
+                groupId = func.groupId,
+                funcId = funcId,
+                versionToDeploy = func.code.version
+            ).also(reqCmdRepository::queue)
+        )
     }
 
     private fun ensureFuncExists(funcId: FuncId) {

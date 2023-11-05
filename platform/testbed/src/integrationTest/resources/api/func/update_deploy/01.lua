@@ -42,3 +42,9 @@ sys.await_completed(deploy_req)
 
 func = fail_on_error(sys.func.get(func.id))
 assert(func.code.deployed_version == 5)
+
+deploy_latest_req = fail_on_error(sys.func.deploy_latest(func.id))
+sys.await_completed(deploy_latest_req)
+
+func = fail_on_error(sys.func.get(func.id))
+assert(func.code.deployed_version == 20)

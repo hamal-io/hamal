@@ -91,6 +91,10 @@ function extension()
             return internal.func_deploy(cmd)
         end
 
+        function export.func.deploy_latest(id)
+            return internal.func_deploy_latest(id)
+        end
+
         function export.func.get(func_id)
             return internal.func_get(func_id)
         end

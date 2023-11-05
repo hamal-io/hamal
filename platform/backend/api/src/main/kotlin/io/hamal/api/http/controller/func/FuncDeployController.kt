@@ -23,4 +23,12 @@ internal class FuncDeployController(
     ): ResponseEntity<ApiSubmitted> = retry {
         deploy(funcId, codeVersion) { it.accepted() }
     }
+
+    @PostMapping("/v1/funcs/{funcId}/deploy/latest")
+    fun deployLatest(
+        @PathVariable("funcId") funcId: FuncId
+    ): ResponseEntity<ApiSubmitted> = retry {
+        deploy(funcId) { it.accepted() }
+    }
+
 }
