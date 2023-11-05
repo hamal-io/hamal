@@ -1,61 +1,36 @@
 import React, {FC} from 'react'
-import {Sidebar} from 'flowbite-react';
+import {ListGroup} from 'flowbite-react';
 
-import {HiChartPie} from 'react-icons/hi';
 import {useNavigate, useParams} from "react-router-dom";
+
+const itemTheme = {
+    base: "",
+    link: {
+        base: "flex items-center w-full border-b border-gray-200 py-2 px-4 dark:border-gray-600",
+        active: {
+            off: "bg-gray-200 hover:bg-gray-900 hover:text-gray-100 focus:text-gray-700",
+            on: "bg-gray-200 text-white"
+        },
+        href: {
+            off: "",
+            on: ""
+        },
+        icon: "mr-2 h-4 w-4 fill-current"
+    }
+}
 
 const NamespaceSidebar: FC = () => {
     const {namespaceId} = useParams()
     const navigate = useNavigate()
     return (
-        <Sidebar aria-label="Namespace sidebar">
-            <Sidebar.Items>
-                <Sidebar.ItemGroup>
-                    <Sidebar.Item
-                        onClick={() => navigate(`/namespaces/${namespaceId}`)}
-                    >
-                        <p>
-                            Dashboard
-                        </p>
-                    </Sidebar.Item>
-                    <Sidebar.Item
-                        onClick={() => navigate(`/namespaces/${namespaceId}/executions`)}
-                    >
-                        <p>
-                            Execution
-                        </p>
-                    </Sidebar.Item>
-                    <Sidebar.Item
-                        href="#"
-                    >
-                        <p>
-                            Log
-                        </p>
-                    </Sidebar.Item>
-                    <Sidebar.Item
-                        onClick={() => navigate(`/namespaces/${namespaceId}/functions`)}
-                    >
-                        <p>
-                            Function
-                        </p>
-                    </Sidebar.Item>
-                    <Sidebar.Item
-                        href="#"
-                    >
-                        <p>
-                            Trigger
-                        </p>
-                    </Sidebar.Item>
-                    <Sidebar.Item
-                        href="#"
-                    >
-                        <p>
-                            Webhook
-                        </p>
-                    </Sidebar.Item>
-                </Sidebar.ItemGroup>
-            </Sidebar.Items>
-        </Sidebar>
+        <div className="flex justify-center">
+            <ListGroup
+                className="w-48"
+            >
+                <ListGroup.Item theme={itemTheme} onClick={() => navigate(`/namespaces/${namespaceId}/executions`)}>Execution</ListGroup.Item>
+                <ListGroup.Item theme={itemTheme} onClick={() => navigate(`/namespaces/${namespaceId}/functions`)}>Function</ListGroup.Item>
+            </ListGroup>
+        </div>
     );
 }
 
