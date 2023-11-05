@@ -31,4 +31,17 @@ internal class FuncDeployController(
         deploy(funcId) { it.accepted() }
     }
 
+    /* mapping conflict
+    @PostMapping("/v1/funcs/{funcId}/deploy/{version}")
+      fun deployRaw(
+          @PathVariable("funcId") funcId: FuncId,
+          @PathVariable("version") rawCodeVersion: String,
+      ): ResponseEntity<ApiSubmitted> = retry {
+          if (rawCodeVersion == "latest") {
+              deployLatest(funcId)
+          } else {
+              deploy(funcId, CodeVersion(rawCodeVersion.toInt())) { it.accepted() }
+          }
+      }*/
+
 }

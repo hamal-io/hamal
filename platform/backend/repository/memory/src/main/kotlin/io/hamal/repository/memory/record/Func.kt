@@ -6,7 +6,6 @@ import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncCmdRepository.*
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
 import io.hamal.repository.api.FuncRepository
-import io.hamal.repository.record.RecordSequence
 import io.hamal.repository.record.func.*
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
@@ -112,7 +111,14 @@ class MemoryFuncRepository : MemoryRecordRepository<FuncId, FuncRecord, Func>(
             if (commandAlreadyApplied(cmd, funcId)) {
                 versionOf(funcId, cmd)
             } else {
-                //TODO
+                val last = lastRecordOf(funcId)
+                store(
+                    FuncDeployedRecord(
+                        entityId = funcId,
+                        cmdId = cmd,
+                        deployedVersion = versionOf(funcId, last.sequence())!!.code.version
+                    )
+                )
                 (currentVersion(funcId)).also(CurrentFuncProjection::apply)
             }
         }

@@ -107,8 +107,14 @@ class SqliteFuncRepository(
             if (commandAlreadyApplied(cmd, funcId)) {
                 versionOf(funcId, cmd)
             } else {
-
-                //TODO
+                val last = lastRecordOf(funcId)
+                store(
+                    FuncDeployedRecord(
+                        entityId = funcId,
+                        cmdId = cmd,
+                        deployedVersion = versionOf(funcId, last.sequence())!!.code.version
+                    )
+                )
                 currentVersion(funcId)
                     .also { ProjectionCurrent.upsert(this, it) }
                     .also { ProjectionUniqueName.upsert(this, it) }
