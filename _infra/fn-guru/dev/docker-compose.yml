@@ -11,7 +11,7 @@ services:
     networks:
       - hamalnet
   fnguru:
-    image: hamalio/fnguru
+    image: hamalio/fn-guru
     restart:
       unless-stopped
     ports:
