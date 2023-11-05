@@ -1,9 +1,13 @@
-import {Button, Label, Modal, Navbar as Delegate, TextInput} from "flowbite-react";
+import {Avatar, Button, Dropdown, Label, Modal, Navbar as Delegate, TextInput} from "flowbite-react";
 import React, {FC, useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {useApiPost, useAuth} from "../../../hook";
 import {HiExclamation} from "react-icons/hi";
 import {ApiAccountConversionSubmitted} from "../../../api/account.ts";
+import {DropdownItem} from "flowbite-react/lib/esm/components/Dropdown/DropdownItem";
+import imgUrl from '../../../assets/img/hamal.png'
+import {AUTH_STATE_KEY} from "../../../state.ts";
+
 
 export const Navbar: FC = () => {
     const navigate = useNavigate()
@@ -20,6 +24,30 @@ export const Navbar: FC = () => {
             </Delegate.Brand>
             <div className="flex md:order-2">
                 {isAnonymous && <ConvertAccountModalButton/>}
+
+                {!isAnonymous && <div className="flex md:order-2">
+                    <Dropdown
+                        arrowIcon={false}
+                        inline
+                        label={<Avatar alt="User Icon" img={imgUrl} rounded/>}
+                    >
+                        <Dropdown.Header>
+                        <span className="block text-sm">
+                            Howdy, <span className="font-semibold">{auth.name} </span>
+                        </span>
+                        </Dropdown.Header>
+                        <DropdownItem onClick={() => {
+                            // FIXME core-72  - call logout endpoint to invalidate token
+                            localStorage.removeItem(AUTH_STATE_KEY)
+                            navigate("/")
+                        }}>
+                            Log out
+                        </DropdownItem>
+                    </Dropdown>
+                    <Delegate.Toggle/>
+                </div>
+                }
+
             </div>
             <Delegate.Collapse>
                 <Delegate.Link onClick={() => navigate("/play", {replace: true})}>
