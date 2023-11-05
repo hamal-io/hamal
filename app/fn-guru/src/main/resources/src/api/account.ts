@@ -15,27 +15,6 @@ export interface ApiLoginSubmitted {
 }
 
 
-export async function createAnonymousAccount(abortController: AbortController): Promise<ApiLoginSubmitted> {
-    //FIXME do not use admin endpoint - only for prototyping
-    try {
-        const response = await fetch(`${import.meta.env.VITE_BASE_URL}/v1/anonymous-accounts`, {
-            headers: unauthorizedDefaultHeaders(),
-            method: "POST",
-            signal: abortController.signal
-        })
-
-        if (!response.ok) {
-            const message = `Request submission failed: ${response.status} - ${response.statusText}`;
-            throw new Error(message);
-        }
-        return await response.json();
-    } catch (e) {
-        if (e.name !== 'AbortError') {
-            throw e
-        }
-    }
-}
-
 export const useCreateAnonymousAccount = <T>(): [T, boolean, Error] => {
     const [, setAuth] = useAuth()
 
