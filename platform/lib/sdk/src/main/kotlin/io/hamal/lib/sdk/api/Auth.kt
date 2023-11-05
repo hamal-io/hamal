@@ -18,9 +18,18 @@ data class ApiTokenSubmitted(
     override val status: ReqStatus,
     val accountId: AccountId,
     val groupIds: List<GroupId>,
-    val token: AuthToken
+    val token: AuthToken,
+    val name: AccountName
 ) : ApiSubmitted
 
+@Serializable
+data class ApiConvertAccountSubmitted(
+    override val id: ReqId,
+    override val status: ReqStatus,
+    val accountId: AccountId,
+    val token: AuthToken,
+    val name: AccountName
+) : ApiSubmitted
 
 interface AuthService
 

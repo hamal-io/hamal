@@ -216,7 +216,6 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                     id = CmdId(2),
                     name = FuncName("Updated"),
                     inputs = FuncInputs(MapType(mutableMapOf("answer" to NumberType(42)))),
-                    codeId = CodeId(5),
                     codeVersion = CodeVersion(3),
                 )
             )
@@ -230,7 +229,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                 assertThat(
                     code, equalTo(
                         FuncCode(
-                            id = CodeId(5),
+                            id = CodeId(7),
                             version = CodeVersion(3),
                             deployedVersion = CodeVersion(7)
                         )
@@ -257,9 +256,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                     id = CmdId(2),
                     name = null,
                     inputs = null,
-                    codeVersion = null,
-                    codeId = null
-
+                    codeVersion = null
                 )
             )
 
@@ -746,7 +743,6 @@ private fun FuncRepository.createUpdatedFunc(
             id = CmdGen(),
             name = FuncName("Updated"),
             inputs = null,
-            codeId = codeId,
             codeVersion = maxVersion
         )
     )

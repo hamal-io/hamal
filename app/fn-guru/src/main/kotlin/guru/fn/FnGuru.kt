@@ -7,16 +7,20 @@ import org.springframework.boot.builder.SpringApplicationBuilder
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.servlet.config.annotation.EnableWebMvc
 
+
 @EnableWebMvc
 @Configuration
 @SpringBootApplication
-open class FnGuru
+class FnGuru
 
 fun main(args: Array<String>) {
     SpringApplicationBuilder()
         .parent(FnGuru::class.java)
         .web(WebApplicationType.SERVLET)
-        .properties("server.port=6006")
+        .properties(
+            "server.port=6006",
+            "server.compression.enabled=true"
+        )
         .bannerMode(Banner.Mode.OFF)
         .run(*args)
 }

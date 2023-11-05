@@ -9,8 +9,7 @@ import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.domain.vo.AccountType.Anonymous
-import io.hamal.lib.domain.vo.AccountType.Root
+import io.hamal.lib.domain.vo.AccountType.*
 import io.hamal.repository.api.*
 import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.repository.api.submitted_req.*
@@ -29,6 +28,7 @@ data class InvokeExecReq(
 
 @Component
 class SubmitRequest(
+    private val accountQueryRepository: AccountQueryRepository,
     private val blueprintQueryRepository: BlueprintQueryRepository,
     private val codeQueryRepository: CodeQueryRepository,
     private val eventBrokerRepository: BrokerRepository,
@@ -90,7 +90,8 @@ class SubmitRequest(
             accountId = account.id,
             groupIds = groupList(account.id) { groups -> groups.map(Group::id) },
             hash = passwordHash,
-            token = generateToken()
+            token = generateToken(),
+            name = account.name
         ).also(reqCmdRepository::queue)
     }
 
@@ -100,7 +101,7 @@ class SubmitRequest(
             id = generateDomainId(::ReqId),
             status = Submitted,
             accountId = generateDomainId(::AccountId),
-            type = AccountType.User,
+            type = User,
             groupId = generateDomainId(::GroupId),
             namespaceId = generateDomainId(::NamespaceId),
             name = req.name,
@@ -133,6 +134,24 @@ class SubmitRequest(
                 salt = salt
             ),
             salt = salt,
+            token = generateToken()
+        ).also(reqCmdRepository::queue)
+    }
+
+    operator fun invoke(accountId: AccountId, req: ConvertAnonymousAccountReq): AccountConvertSubmitted {
+        val account = accountQueryRepository.get(accountId)
+        return AccountConvertSubmitted(
+            id = generateDomainId(::ReqId),
+            status = Submitted,
+            accountId = accountId,
+            name = req.name ?: account.name,
+            email = req.email,
+            passwordAuthId = generateDomainId(::AuthId),
+            tokenAuthId = generateDomainId(::AuthId),
+            hash = encodePassword(
+                password = req.password,
+                salt = account.salt
+            ),
             token = generateToken()
         ).also(reqCmdRepository::queue)
     }

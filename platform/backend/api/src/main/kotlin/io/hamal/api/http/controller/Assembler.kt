@@ -8,8 +8,9 @@ fun Submitted.accepted(): ResponseEntity<ApiSubmitted> =
     ResponseEntity.accepted().body(toApiSubmitted())
 
 fun Submitted.toApiSubmitted(): ApiSubmitted = when (this) {
-    is AccountCreateSubmitted -> ApiTokenSubmitted(id, status, accountId, listOf(groupId), token)
-    is AuthLoginSubmitted -> ApiTokenSubmitted(id, status, accountId, groupIds, token)
+    is AccountCreateSubmitted -> ApiTokenSubmitted(id, status, accountId, listOf(groupId), token, name)
+    is AccountConvertSubmitted -> ApiConvertAccountSubmitted(id, status, accountId, token, name)
+    is AuthLoginSubmitted -> ApiTokenSubmitted(id, status, accountId, groupIds, token, name)
     is BlueprintCreateSubmitted -> ApiBlueprintCreateSubmitted(id, status, blueprintId, groupId)
     is BlueprintUpdateSubmitted -> ApiBlueprintUpdateSubmitted(id, status, blueprintId)
     is ExecInvokeSubmitted -> ApiExecInvokeSubmitted(id, status, execId, groupId, namespaceId)
@@ -31,4 +32,5 @@ fun Submitted.toApiSubmitted(): ApiSubmitted = when (this) {
     is ExecFailSubmitted,
     is HookInvokeSubmitted,
     is ExecCompleteSubmitted -> throw NotImplementedError()
+
 }

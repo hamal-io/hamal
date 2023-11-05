@@ -7,33 +7,21 @@ const unauthorizedDefaultHeaders = () => ({
 })
 
 export interface ApiLoginSubmitted {
-    id: string,
-    status: string,
-    accountId: string,
+    id: string;
+    status: string;
+    accountId: string;
     groupIds: string[];
-    token: string
+    token: string;
+    name: string;
 }
 
 
-export async function createAnonymousAccount(abortController: AbortController): Promise<ApiLoginSubmitted> {
-    //FIXME do not use admin endpoint - only for prototyping
-    try {
-        const response = await fetch(`${import.meta.env.VITE_BASE_URL}/v1/anonymous-accounts`, {
-            headers: unauthorizedDefaultHeaders(),
-            method: "POST",
-            signal: abortController.signal
-        })
-
-        if (!response.ok) {
-            const message = `Request submission failed: ${response.status} - ${response.statusText}`;
-            throw new Error(message);
-        }
-        return await response.json();
-    } catch (e) {
-        if (e.name !== 'AbortError') {
-            throw e
-        }
-    }
+export interface ApiAccountConversionSubmitted {
+    id: string;
+    status: string;
+    accountId: string;
+    token: string;
+    name: string;
 }
 
 export const useCreateAnonymousAccount = <T>(): [T, boolean, Error] => {
@@ -68,7 +56,8 @@ export const useCreateAnonymousAccount = <T>(): [T, boolean, Error] => {
                         type: 'Anonymous',
                         accountId: data.accountId,
                         groupId: data.groupIds[0],
-                        token: data.token
+                        token: data.token,
+                        name: data.name
                     })
                 })
             })

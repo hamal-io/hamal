@@ -20,3 +20,17 @@ data class AccountCreateSubmitted(
     val hash: PasswordHash,
     val token: AuthToken
 ) : Submitted
+
+
+@Serializable
+data class AccountConvertSubmitted(
+    override val id: ReqId,
+    override var status: ReqStatus,
+    val accountId: AccountId,
+    val passwordAuthId: AuthId,
+    val tokenAuthId: AuthId,
+    val name: AccountName,
+    val email: AccountEmail?,
+    val hash: PasswordHash,
+    val token: AuthToken
+) : Submitted

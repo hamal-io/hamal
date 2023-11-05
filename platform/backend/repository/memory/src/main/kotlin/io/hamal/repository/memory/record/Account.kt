@@ -3,9 +3,11 @@ package io.hamal.repository.memory.record
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.AccountName
 import io.hamal.repository.api.Account
+import io.hamal.repository.api.AccountCmdRepository
 import io.hamal.repository.api.AccountCmdRepository.CreateCmd
 import io.hamal.repository.api.AccountQueryRepository.AccountQuery
 import io.hamal.repository.api.AccountRepository
+import io.hamal.repository.record.account.AccountConvertedRecord
 import io.hamal.repository.record.account.AccountCreationRecord
 import io.hamal.repository.record.account.AccountRecord
 import io.hamal.repository.record.account.CreateAccountFromRecords
@@ -81,6 +83,26 @@ class MemoryAccountRepository : MemoryRecordRepository<AccountId, AccountRecord,
                         name = cmd.name,
                         email = cmd.email,
                         salt = cmd.salt
+                    )
+                )
+                (currentVersion(accountId)).also(CurrentAccountProjection::apply)
+            }
+        }
+    }
+
+    override fun convert(cmd: AccountCmdRepository.ConvertCmd): Account {
+        return lock.withLock {
+            val accountId = cmd.accountId
+            if (commandAlreadyApplied(cmd.id, accountId)) {
+                versionOf(accountId, cmd.id)
+            } else {
+                val currentVersion = currentVersion(accountId)
+                store(
+                    AccountConvertedRecord(
+                        cmdId = cmd.id,
+                        entityId = accountId,
+                        name = cmd.name ?: currentVersion.name,
+                        email = cmd.email,
                     )
                 )
                 (currentVersion(accountId)).also(CurrentAccountProjection::apply)

@@ -44,7 +44,7 @@ data class FuncEntity(
                 name = rec.name,
                 inputs = rec.inputs,
                 code = FuncCode(
-                    id = rec.codeId,
+                    id = code!!.id,
                     version = rec.codeVersion,
                     deployedVersion = code!!.deployedVersion
                 )

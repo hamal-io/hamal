@@ -8,3 +8,10 @@ import kotlinx.serialization.Serializable
 data class AccountCreatedEvent(
     val account: Account,
 ) : PlatformEvent()
+
+
+@Serializable
+@PlatformEventTopic("account::converted")
+data class AccountConvertedEvent(
+    val account: Account,
+) : PlatformEvent()

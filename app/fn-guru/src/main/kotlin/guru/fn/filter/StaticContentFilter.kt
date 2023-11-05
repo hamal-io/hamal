@@ -1,20 +1,25 @@
 package guru.fn.filter
 
-import jakarta.servlet.Filter
 import jakarta.servlet.FilterChain
-import jakarta.servlet.ServletRequest
-import jakarta.servlet.ServletResponse
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import org.springframework.core.Ordered
+import org.springframework.core.annotation.Order
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
+import org.springframework.web.filter.OncePerRequestFilter
 
 // Based on: https://stackoverflow.com/a/72466110
 @Component
-class StaticContentFilter : Filter {
+@Order(Ordered.HIGHEST_PRECEDENCE)
+class StaticContentFilter : OncePerRequestFilter() {
 
-    override fun doFilter(request: ServletRequest, response: ServletResponse, chain: FilterChain) {
-        doFilter(request as HttpServletRequest, response as HttpServletResponse, chain)
+    override fun doFilterInternal(
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+        filterChain: FilterChain
+    ) {
+        doFilter(request, response, filterChain)
     }
 
     private fun doFilter(request: HttpServletRequest, response: HttpServletResponse, chain: FilterChain) {
@@ -46,7 +51,8 @@ class StaticContentFilter : Filter {
             response.contentType = "text/javascript"
         }
 
-        inputStream.transferTo(response.outputStream)
+        response.setHeader("Cache-Control", "private, max-age=604800")
+        response.outputStream.write(inputStream.readAllBytes())
     }
 
     private val fileExtensions: List<String> = mutableListOf(

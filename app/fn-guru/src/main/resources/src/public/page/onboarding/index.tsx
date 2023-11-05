@@ -1,31 +1,48 @@
 import React, {FC, useEffect} from 'react'
 import {Spinner} from "flowbite-react";
-import {useCreateAnonymousAccount} from "../../../api/account.ts";
-import {useApiPost, useAuth} from "../../../hook";
+import {useApiCreateAnonymousAccount, useApiPost, useAuth} from "../../../hook";
 import {useLocation, useNavigate} from "react-router-dom";
 
 
 const OnboardingPage: FC = () => {
+
     const location = useLocation()
     const {code} = location.state
 
     const navigate = useNavigate()
-    const [account, isLoading, error] = useCreateAnonymousAccount()
-    const [submitNamespace, namespaceSubmitted,] = useApiPost<{ namespaceId: string }>()
     const [auth] = useAuth()
-
+    const [createAnonymousAccount] = useApiCreateAnonymousAccount()
+    const [submitNamespace, namespaceSubmitted,] = useApiPost<{ namespaceId: string }>()
     const [submitBlueprint, blueprintSubmitted] = useApiPost()
 
     useEffect(() => {
-        if (account != null) {
-            submitNamespace(`v1/groups/${auth.groupId}/namespaces`, {
-                name: "Test-Name-Space",
-                inputs: {}
-            })
+        const abortController = new AbortController()
+        if (auth == null || auth.type === 'Unauthorized') {
+            createAnonymousAccount(abortController)
         }
-    }, [account, auth, submitNamespace])
+        return () => {
+            abortController.abort()
+        }
+    }, []);
+
 
     useEffect(() => {
+        const abortController = new AbortController()
+
+        if (auth != null && auth.type !== 'Unauthorized') {
+            submitNamespace(`v1/groups/${auth.groupId}/namespaces`, {
+                name: `Test-Name-Space-${generateId(10)}`,
+                inputs: {}
+            }, abortController)
+        }
+        return () => {
+            abortController.abort()
+        }
+    }, [auth, submitNamespace])
+
+    useEffect(() => {
+        const abortController = new AbortController()
+
         if (namespaceSubmitted != null) {
             submitBlueprint(`v1/namespaces/${namespaceSubmitted.namespaceId}/adhoc`, {
                 inputs: {},
@@ -35,7 +52,10 @@ const OnboardingPage: FC = () => {
                     inputs = {},
                     code = [[ ${code} ]]
                 })`
-            })
+            }, abortController)
+        }
+        return () => {
+            abortController.abort()
         }
 
     }, [namespaceSubmitted, submitBlueprint]);
@@ -43,7 +63,7 @@ const OnboardingPage: FC = () => {
 
     useEffect(() => {
         if (blueprintSubmitted != null) {
-            navigate('/namespaces')
+            navigate('/namespaces', {replace: true})
         }
     }, [blueprintSubmitted, navigate]);
 
@@ -59,6 +79,19 @@ const OnboardingPage: FC = () => {
             </section>
         </main>
     );
+}
+
+// dec2hex :: Integer -> String
+// i.e. 0-255 -> '00'-'ff'
+function dec2hex(dec) {
+    return dec.toString(16).padStart(2, "0")
+}
+
+// generateId :: Integer -> String
+function generateId(len) {
+    const arr = new Uint8Array((len || 40) / 2)
+    window.crypto.getRandomValues(arr)
+    return Array.from(arr, dec2hex).join('')
 }
 
 export default OnboardingPage

@@ -28,7 +28,7 @@ const NamespaceListPage: React.FC = () => {
     ))
 
     return (
-        <main className="flex-1 w-full pt-2 mx-auto text-lg h-full shadow-lg bg-gray-200">
+        <main className="flex-1 w-full pt-2 mx-auto text-lg  shadow-lg bg-gray-200">
             <section className="container p-4 mx-auto max-w-3xl">
                 <div className="sm:flex sm:items-center sm:justify-between ">
                     <div>
