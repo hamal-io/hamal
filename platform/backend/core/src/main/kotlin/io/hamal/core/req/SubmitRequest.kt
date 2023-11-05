@@ -221,15 +221,18 @@ class SubmitRequest(
         ).also(reqCmdRepository::queue)
     }
 
-    operator fun invoke(funcId: FuncId, req: UpdateFuncReq) = FuncUpdateSubmitted(
-        id = generateDomainId(::ReqId),
-        status = Submitted,
-        groupId = funcQueryRepository.get(funcId).groupId,
-        funcId = funcId,
-        name = req.name,
-        inputs = req.inputs,
-        code = req.code
-    ).also(reqCmdRepository::queue)
+    operator fun invoke(funcId: FuncId, req: UpdateFuncReq): FuncUpdateSubmitted {
+        val func = funcQueryRepository.get(funcId)
+        return FuncUpdateSubmitted(
+            id = generateDomainId(::ReqId),
+            status = Submitted,
+            groupId = func.groupId,
+            funcId = funcId,
+            name = req.name,
+            inputs = req.inputs,
+            code = req.code
+        ).also(reqCmdRepository::queue)
+    }
 
 
     operator fun invoke(funcId: FuncId, versionToDeploy: CodeVersion): FuncDeploySubmitted {
