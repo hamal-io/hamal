@@ -6,6 +6,7 @@ import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sdk.api.ApiSubmitted
+import io.hamal.repository.api.submitted_req.FuncDeployLatestSubmitted
 import io.hamal.repository.api.submitted_req.FuncDeploySubmitted
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
@@ -22,7 +23,7 @@ internal class FuncDeployController(
     fun deployLatest(
         @PathVariable("funcId") funcId: FuncId
     ): ResponseEntity<ApiSubmitted> = retry {
-        deploy(funcId, null, FuncDeploySubmitted::accepted)
+        deploy(funcId, FuncDeployLatestSubmitted::accepted)
     }
 
 

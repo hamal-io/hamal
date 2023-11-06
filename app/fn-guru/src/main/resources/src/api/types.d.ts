@@ -13,10 +13,14 @@ export interface ApiFunc {
     inputs: object;
     code: {
         id: string;
-        version: number;
-        deployedVersion: number;
-        value: string
+        current: VersionedCode;
+        deployed: VersionedCode;
     }
+}
+
+interface VersionedCode {
+    version: number;
+    value: string;
 }
 
 export interface ApiNamespaceList {

@@ -139,41 +139,6 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
                     )
                 }
             }
-
-            @Test
-            fun `Deploys latest version raw`() {
-                val func = awaitCompleted(
-                    createFunc(
-                        ApiFuncCreateReq(
-                            name = FuncName("test-func"), inputs = FuncInputs(), code = CodeValue("13 + 37")
-                        )
-                    )
-                )
-
-                repeat(20) {
-                    awaitCompleted(
-                        updateFunc(
-                            func.funcId, ApiFuncUpdateReq(
-                                name = null, inputs = null, code = CodeValue("code-${it}")
-                            )
-                        )
-                    )
-
-                    awaitCompleted(deployLatestVersion(func.funcId, "latest"))
-
-                    val funcCode = funcQueryRepository.get(func.funcId).code
-                    assertThat(funcCode.deployedVersion, equalTo(funcCode.version))
-                    println(it)
-                }
-
-                with(funcQueryRepository.get(func.funcId)) {
-                    assertThat(name, equalTo(FuncName("test-func")))
-                    assertThat(
-                        codeQueryRepository.get(code.id, code.deployedVersion).value, equalTo(CodeValue("code-19"))
-                    )
-                }
-            }
-
         }
 
         private fun setup(): Func {

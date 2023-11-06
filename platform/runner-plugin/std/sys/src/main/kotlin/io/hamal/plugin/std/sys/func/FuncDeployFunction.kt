@@ -47,7 +47,7 @@ class FuncDeployLatestFunction(
 ) {
     override fun invoke(ctx: FunctionContext, arg1: StringType): Pair<ErrorType?, MapType?> {
         return try {
-            val res = sdk.func.deploy(FuncId(arg1.value))
+            val res = sdk.func.deployLatest(FuncId(arg1.value))
             null to MapType(
                 mutableMapOf(
                     "id" to StringType(res.id.value.value.toString(16)),

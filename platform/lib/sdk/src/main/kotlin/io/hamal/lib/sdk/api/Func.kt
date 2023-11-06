@@ -118,7 +118,7 @@ data class ApiFunc(
 interface ApiFuncService {
     fun create(namespaceId: NamespaceId, createFuncReq: ApiFuncCreateReq): ApiFuncCreateSubmitted
     fun deploy(funcId: FuncId, version: CodeVersion): ApiFuncDeploySubmitted
-    fun deploy(funcId: FuncId): ApiFuncDeploySubmitted
+    fun deployLatest(funcId: FuncId): ApiFuncDeployLatestSubmitted
     fun list(query: FuncQuery): List<ApiFuncList.Func>
     fun get(funcId: FuncId): ApiFunc
     fun update(funcId: FuncId, req: ApiFuncUpdateReq): ApiFuncUpdateSubmitted
@@ -159,11 +159,11 @@ internal class ApiFuncServiceImpl(
             .execute()
             .fold(ApiFuncDeploySubmitted::class)
 
-    override fun deploy(funcId: FuncId): ApiFuncDeploySubmitted =
+    override fun deployLatest(funcId: FuncId): ApiFuncDeployLatestSubmitted =
         template.post("/v1/funcs/{funcId}/deploy/latest")
             .path("funcId", funcId)
             .execute()
-            .fold(ApiFuncDeploySubmitted::class)
+            .fold(ApiFuncDeployLatestSubmitted::class)
 
 
     override fun list(query: FuncQuery): List<ApiFuncList.Func> =

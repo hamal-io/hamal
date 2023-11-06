@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import {useParams} from "react-router-dom";
-import {useApiDeployLatestCode, useApiGet, useApiPatch, useApiPost} from "../../../../../hook";
+import {useApiDeployLatestCode, useApiGet, useApiPatch} from "../../../../../hook";
 import {ApiFunc} from "../../../../../api/types";
 import Editor from "../../../../../component/editor";
 import {Button, TextInput} from "flowbite-react";
@@ -11,15 +11,9 @@ interface ApiFuncUpdateSubmitted {
     funcId: string;
 }
 
-interface ApiFuncDeploySubmitted {
-    id: string;
-    status: string;
-    funcId: string;
-}
-
 
 const NamespaceFuncDetailPage: React.FC = () => {
-    const {namespaceId, funcId} = useParams()
+    const {funcId} = useParams()
 
     const [func, isLoading, error] = useApiGet<ApiFunc>(`v1/funcs/${funcId}`)
     const [code, setCode] = useState("")
@@ -31,7 +25,7 @@ const NamespaceFuncDetailPage: React.FC = () => {
     useEffect(() => {
         if (func != null) {
             setName(func.name)
-            setCode(func.code.value)
+            setCode(func.code.current.value)
         }
     }, [func]);
 
