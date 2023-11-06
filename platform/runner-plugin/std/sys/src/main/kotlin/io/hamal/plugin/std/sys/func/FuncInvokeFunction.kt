@@ -33,7 +33,8 @@ class FuncInvokeFunction(
                 FuncId(SnowflakeId(arg1.getString("id"))),
                 ApiFuncInvokeReq(
                     correlationId = correlationId,
-                    inputs = InvocationInputs()
+                    inputs = InvocationInputs(),
+                    events = listOf()
                 )
             )
 

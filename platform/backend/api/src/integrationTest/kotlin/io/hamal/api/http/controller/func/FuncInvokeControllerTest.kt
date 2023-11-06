@@ -34,7 +34,8 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
             .body(
                 ApiFuncInvokeReq(
                     correlationId = CorrelationId("some-correlation-id"),
-                    inputs = InvocationInputs()
+                    inputs = InvocationInputs(),
+                    events = listOf()
                 )
             ).execute()
 
@@ -73,7 +74,8 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
             .body(
                 ApiFuncInvokeReq(
                     inputs = InvocationInputs(),
-                    correlationId = null
+                    correlationId = null,
+                    events = listOf()
                 )
             ).execute()
 
@@ -101,7 +103,8 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
             .body(
                 ApiFuncInvokeReq(
                     correlationId = CorrelationId.default,
-                    inputs = InvocationInputs()
+                    inputs = InvocationInputs(),
+                    events = listOf()
                 )
             ).execute()
 

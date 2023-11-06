@@ -6,6 +6,7 @@ import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.TopicEntryPayload
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.sdk.api.ApiSubmitted
+import io.hamal.lib.sdk.api.ApiTopicAppendEntryReq
 import io.hamal.repository.api.submitted_req.TopicAppendToSubmitted
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
@@ -24,7 +25,7 @@ internal class EntryAppendController(
         @RequestBody topAppend: TopicEntryPayload
     ): ResponseEntity<ApiSubmitted> {
         return retry {
-            appendEntryToTopic(topicId, topAppend, TopicAppendToSubmitted::accepted)
+            appendEntryToTopic(ApiTopicAppendEntryReq(topicId, topAppend), TopicAppendToSubmitted::accepted)
         }
     }
 }

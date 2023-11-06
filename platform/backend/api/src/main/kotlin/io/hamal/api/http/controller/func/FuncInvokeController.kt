@@ -28,7 +28,8 @@ internal class FuncInvokeController(
         invokeFunc(
             funcId, ApiFuncInvokeReq(
                 correlationId = req?.correlationId ?: CorrelationId.default,
-                inputs = req?.inputs ?: InvocationInputs()
+                inputs = req?.inputs ?: InvocationInputs(),
+                events = listOf()
             ),
             ExecInvokeSubmitted::accepted
         )

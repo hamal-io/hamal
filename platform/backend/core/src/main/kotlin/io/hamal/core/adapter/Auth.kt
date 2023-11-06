@@ -1,10 +1,12 @@
 package io.hamal.core.adapter
 
 import io.hamal.core.component.EncodePassword
-import io.hamal.core.req.SubmitRequest
-import io.hamal.repository.api.AccountQueryRepository
-import io.hamal.repository.api.AuthRepository
-import io.hamal.repository.api.PasswordAuth
+import io.hamal.core.component.GenerateToken
+import io.hamal.lib.domain.GenerateDomainId
+import io.hamal.lib.domain._enum.ReqStatus
+import io.hamal.lib.domain.vo.AuthId
+import io.hamal.lib.domain.vo.ReqId
+import io.hamal.repository.api.*
 import io.hamal.repository.api.submitted_req.AuthLoginSubmitted
 import io.hamal.request.LogInReq
 import org.springframework.stereotype.Component
@@ -19,13 +21,15 @@ interface AuthLoginPort {
 
 interface AuthPort : AuthLoginPort
 
-
 @Component
 class AuthAdapter(
     private val accountQueryRepository: AccountQueryRepository,
     private val authRepository: AuthRepository,
     private val encodePassword: EncodePassword,
-    private val submitRequest: SubmitRequest
+    private val generateDomainId: GenerateDomainId,
+    private val generateToken: GenerateToken,
+    private val reqCmdRepository: ReqCmdRepository,
+    private val groupList: GroupListPort
 ) : AuthPort {
 
     override operator fun <T : Any> invoke(
@@ -38,6 +42,15 @@ class AuthAdapter(
         if (!match) {
             throw NoSuchElementException("Account not found")
         }
-        return responseHandler(submitRequest(account, encodedPassword))
+        return AuthLoginSubmitted(
+            id = generateDomainId(::ReqId),
+            status = ReqStatus.Submitted,
+            authId = generateDomainId(::AuthId),
+            accountId = account.id,
+            groupIds = groupList(account.id) { groups -> groups.map(Group::id) },
+            hash = encodedPassword,
+            token = generateToken(),
+            name = account.name
+        ).also(reqCmdRepository::queue).let(responseHandler)
     }
 }

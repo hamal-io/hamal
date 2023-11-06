@@ -56,8 +56,9 @@ data class ApiFuncUpdateSubmitted(
 
 @Serializable
 data class ApiFuncInvokeReq(
-    override val correlationId: CorrelationId? = null,
-    override val inputs: InvocationInputs? = null,
+    override val correlationId: CorrelationId?,
+    override val inputs: InvocationInputs,
+    override val events: List<Event>
 ) : InvokeFuncReq
 
 @Serializable

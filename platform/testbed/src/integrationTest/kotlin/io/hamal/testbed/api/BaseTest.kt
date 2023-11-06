@@ -83,10 +83,9 @@ class TestRetryConfig {
 
 @RestController
 class ClearController {
+
     @PostMapping("/v1/clear")
     fun clear() {
-//        repeat(10) {
-//        platformEventBrokerRepository.clear()
         eventBrokerRepository.clear()
         accountRepository.clear()
         authRepository.clear()
@@ -100,8 +99,6 @@ class ClearController {
         namespaceRepository.clear()
         blueprintRepository.clear()
         triggerRepository.clear()
-//        }
-
 
         testAccount = accountRepository.create(
             AccountCmdRepository.CreateCmd(
@@ -143,9 +140,6 @@ class ClearController {
             )
         )
     }
-
-    @Autowired
-    lateinit var platformEventBrokerRepository: BrokerRepository
 
     @Autowired
     lateinit var blueprintRepository: BlueprintRepository

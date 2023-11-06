@@ -1,21 +1,21 @@
 package io.hamal.core.service
 
+import io.hamal.core.adapter.FuncInvokePort
 import io.hamal.core.component.Async
 import io.hamal.core.event.PlatformEventEmitter
-import io.hamal.core.req.InvokeExecReq
-import io.hamal.core.req.SubmitRequest
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.util.TimeUtils.now
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.vo.CorrelationId
-import io.hamal.lib.domain.vo.ExecId
+import io.hamal.lib.domain.vo.Event
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.repository.api.FixedRateTrigger
 import io.hamal.repository.api.FuncQueryRepository
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerQueryRepository
+import io.hamal.request.InvokeFuncReq
 import org.springframework.beans.factory.DisposableBean
 import org.springframework.context.ApplicationListener
 import org.springframework.context.event.ContextRefreshedEvent
@@ -26,12 +26,12 @@ import kotlin.time.Duration.Companion.seconds
 
 @Service
 internal class FixedRateTriggerService(
-    internal val triggerQueryRepository: TriggerQueryRepository,
+    private val async: Async,
     internal val eventEmitter: PlatformEventEmitter,
-    internal val submitRequest: SubmitRequest,
-    internal val generateDomainId: GenerateDomainId,
     internal val funcQueryRepository: FuncQueryRepository,
-    private val async: Async
+    internal val generateDomainId: GenerateDomainId,
+    internal val invokeFunc: FuncInvokePort,
+    internal val triggerQueryRepository: TriggerQueryRepository,
 ) : ApplicationListener<ContextRefreshedEvent>, DisposableBean {
 
     private val scheduledTasks = mutableListOf<ScheduledFuture<*>>()
@@ -77,15 +77,12 @@ internal class FixedRateTriggerService(
 }
 
 internal fun FixedRateTriggerService.requestInvocation(trigger: FixedRateTrigger) {
-    val func = funcQueryRepository.get(trigger.funcId)
-    submitRequest(
-        InvokeExecReq(
-            execId = generateDomainId(::ExecId),
-            funcId = trigger.funcId,
-            correlationId = trigger.correlationId ?: CorrelationId.default,
-            inputs = InvocationInputs(),
-            code = func.code.toExecCode(),
-            events = listOf() // FIXME
-        )
-    )
+    invokeFunc(
+        trigger.funcId,
+        object : InvokeFuncReq {
+            override val correlationId = trigger.correlationId ?: CorrelationId.default
+            override val inputs = InvocationInputs()
+            override val events = listOf<Event>()
+        },
+    ) {}
 }

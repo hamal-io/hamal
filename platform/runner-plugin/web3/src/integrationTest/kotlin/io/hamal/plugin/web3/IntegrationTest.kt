@@ -1,6 +1,6 @@
 package io.hamal.plugin.web3
 
-import AbstractExtensionTest
+import AbstractRunnerTest
 import io.hamal.plugin.web3.evm.EthPluginFactory
 import io.hamal.lib.kua.NativeLoader
 import org.junit.jupiter.api.DynamicTest
@@ -11,7 +11,7 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import kotlin.io.path.name
 
-object IntegrationTest : AbstractExtensionTest() {
+object IntegrationTest : AbstractRunnerTest() {
     @TestFactory
     fun run(): List<DynamicTest> {
         NativeLoader.load(NativeLoader.Preference.Resources)
