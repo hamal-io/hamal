@@ -53,35 +53,6 @@ class SubmitRequest(
         ).also(reqCmdRepository::queue)
     }
 
-    operator fun invoke(account: Account, passwordHash: PasswordHash): AuthLoginSubmitted {
-        return AuthLoginSubmitted(
-            id = generateDomainId(::ReqId),
-            status = Submitted,
-            authId = generateDomainId(::AuthId),
-            accountId = account.id,
-            groupIds = groupList(account.id) { groups -> groups.map(Group::id) },
-            hash = passwordHash,
-            token = generateToken(),
-            name = account.name
-        ).also(reqCmdRepository::queue)
-    }
-
-    operator fun invoke(funcId: FuncId, req: InvokeFuncReq): ExecInvokeSubmitted {
-        val func = funcQueryRepository.get(funcId)
-        return ExecInvokeSubmitted(
-            id = generateDomainId(::ReqId),
-            status = Submitted,
-            execId = generateDomainId(::ExecId),
-            namespaceId = func.namespaceId,
-            groupId = func.groupId,
-            funcId = funcId,
-            correlationId = req.correlationId,
-            inputs = req.inputs ?: InvocationInputs(),
-            code = func.code.toExecCode(),
-            events = listOf()
-        ).also(reqCmdRepository::queue)
-    }
-
     operator fun invoke(execId: ExecId, req: CompleteExecReq) = ExecCompleteSubmitted(
         id = generateDomainId(::ReqId),
         status = Submitted,
@@ -98,87 +69,6 @@ class SubmitRequest(
         result = req.result
     ).also(reqCmdRepository::queue)
 
-    operator fun invoke(namespaceId: NamespaceId, req: CreateFuncReq): FuncCreateSubmitted {
-        val namespace = namespaceQueryRepository.get(namespaceId)
-        return FuncCreateSubmitted(
-            id = generateDomainId(::ReqId),
-            status = Submitted,
-            groupId = namespace.groupId,
-            funcId = generateDomainId(::FuncId),
-            namespaceId = namespaceId,
-            name = req.name,
-            inputs = req.inputs,
-            codeId = generateDomainId(::CodeId),
-            code = req.code
-        ).also(reqCmdRepository::queue)
-    }
-
-    operator fun invoke(funcId: FuncId, req: UpdateFuncReq): FuncUpdateSubmitted {
-        val func = funcQueryRepository.get(funcId)
-        return FuncUpdateSubmitted(
-            id = generateDomainId(::ReqId),
-            status = Submitted,
-            groupId = func.groupId,
-            funcId = funcId,
-            name = req.name,
-            inputs = req.inputs,
-            code = req.code
-        ).also(reqCmdRepository::queue)
-    }
-
-
-    operator fun invoke(funcId: FuncId, versionToDeploy: CodeVersion): FuncDeploySubmitted {
-        val func = funcQueryRepository.get(funcId)
-        codeQueryRepository.get(func.code.id, versionToDeploy)
-        return FuncDeploySubmitted(
-            id = generateDomainId(::ReqId),
-            status = Submitted,
-            groupId = func.groupId,
-            funcId = funcId,
-            versionToDeploy = versionToDeploy
-        ).also(reqCmdRepository::queue)
-    }
-
-    operator fun invoke(groupId: GroupId, req: CreateExtensionReq) = ExtensionCreateSubmitted(
-        id = generateDomainId(::ReqId),
-        status = Submitted,
-        groupId = groupId,
-        extensionId = generateDomainId(::ExtensionId),
-        name = req.name,
-        codeId = generateDomainId(::CodeId),
-        code = req.code
-
-    ).also(reqCmdRepository::queue)
-
-    operator fun invoke(extId: ExtensionId, req: UpdateExtensionReq) = ExtensionUpdateSubmitted(
-        id = generateDomainId(::ReqId),
-        status = Submitted,
-        groupId = extensionQueryRepository.get(extId).groupId,
-        extensionId = extId,
-        name = req.name,
-        code = req.code
-    ).also(reqCmdRepository::queue)
-
-    operator fun invoke(groupId: GroupId, accountId: AccountId, req: CreateBlueprintReq) = BlueprintCreateSubmitted(
-        id = generateDomainId(::ReqId),
-        status = Submitted,
-        groupId = groupId,
-        blueprintId = generateDomainId(::BlueprintId),
-        name = req.name,
-        inputs = req.inputs,
-        value = req.value,
-        creatorId = accountId
-    ).also(reqCmdRepository::queue)
-
-    operator fun invoke(bpId: BlueprintId, req: UpdateBlueprintReq) = BlueprintUpdateSubmitted(
-        id = generateDomainId(::ReqId),
-        status = Submitted,
-        groupId = blueprintQueryRepository.get(bpId).groupId,
-        blueprintId = bpId,
-        name = req.name,
-        inputs = req.inputs,
-        value = req.value,
-    ).also(reqCmdRepository::queue)
 
     operator fun invoke(namespaceId: NamespaceId, req: CreateHookReq): HookCreateSubmitted {
         val namespace = namespaceQueryRepository.get(namespaceId)

@@ -33,6 +33,5 @@ class CodeAdapter(
     private fun ensureVersionExists(codeId: CodeId, codeVersion: CodeVersion) {
         codeQueryRepository.get(codeId, codeVersion)
     }
-
 }
 

@@ -1,11 +1,14 @@
 package io.hamal.core.adapter
 
-import io.hamal.core.req.SubmitRequest
+import io.hamal.lib.domain.GenerateDomainId
+import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.BlueprintId
 import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.ReqId
 import io.hamal.repository.api.Blueprint
 import io.hamal.repository.api.BlueprintQueryRepository
+import io.hamal.repository.api.ReqCmdRepository
 import io.hamal.repository.api.submitted_req.BlueprintCreateSubmitted
 import io.hamal.repository.api.submitted_req.BlueprintUpdateSubmitted
 import io.hamal.request.CreateBlueprintReq
@@ -25,7 +28,6 @@ interface BlueprintGetPort {
     operator fun <T : Any> invoke(blueprintId: BlueprintId, responseHandler: (Blueprint) -> T): T
 }
 
-
 interface BlueprintUpdatePort {
     operator fun <T : Any> invoke(
         bpId: BlueprintId,
@@ -38,8 +40,9 @@ interface BlueprintPort : BlueprintCreatePort, BlueprintGetPort, BlueprintUpdate
 
 @Component
 class BlueprintAdapter(
-    private val submitRequest: SubmitRequest,
     private val blueprintQueryRepository: BlueprintQueryRepository,
+    private val generateDomainId: GenerateDomainId,
+    private val reqCmdRepository: ReqCmdRepository
 ) : BlueprintPort {
     override fun <T : Any> invoke(
         groupId: GroupId,
@@ -47,7 +50,16 @@ class BlueprintAdapter(
         req: CreateBlueprintReq,
         responseHandler: (BlueprintCreateSubmitted) -> T
     ): T {
-        return responseHandler(submitRequest(groupId, accountId, req))
+        return BlueprintCreateSubmitted(
+            id = generateDomainId(::ReqId),
+            status = Submitted,
+            groupId = groupId,
+            blueprintId = generateDomainId(::BlueprintId),
+            name = req.name,
+            inputs = req.inputs,
+            value = req.value,
+            creatorId = accountId
+        ).also(reqCmdRepository::queue).let(responseHandler)
     }
 
     override fun <T : Any> invoke(blueprintId: BlueprintId, responseHandler: (Blueprint) -> T): T {
@@ -60,7 +72,15 @@ class BlueprintAdapter(
         responseHandler: (BlueprintUpdateSubmitted) -> T
     ): T {
         ensureBlueprintExists(bpId)
-        return responseHandler(submitRequest(bpId, req))
+        return BlueprintUpdateSubmitted(
+            id = generateDomainId(::ReqId),
+            status = Submitted,
+            groupId = blueprintQueryRepository.get(bpId).groupId,
+            blueprintId = bpId,
+            name = req.name,
+            inputs = req.inputs,
+            value = req.value,
+        ).also(reqCmdRepository::queue).let(responseHandler)
     }
 
     private fun ensureBlueprintExists(blueprintId: BlueprintId) = blueprintQueryRepository.get(blueprintId)
