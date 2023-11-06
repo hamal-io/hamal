@@ -1,6 +1,6 @@
 package io.hamal.core
 
-import io.hamal.core.req.SubmitRequest
+import io.hamal.core.adapter.AccountAdapter
 import io.hamal.core.req.req.CreateRootAccountReq
 import io.hamal.lib.domain.vo.AccountEmail
 import io.hamal.lib.domain.vo.AccountName
@@ -36,19 +36,18 @@ import org.springframework.scheduling.annotation.EnableScheduling
 open class CoreConfig {
 
     @Autowired
-    private lateinit var submitRequest: SubmitRequest
-
+    private lateinit var accountAdapter: AccountAdapter
 
     @Bean
     @Profile("!test")
     open fun commandLineRunner() = CommandLineRunner {
-        submitRequest(
+        accountAdapter(
             CreateRootAccountReq(
                 AccountName("root"),
                 AccountEmail("root@hamal.io"),
                 Password("toor")
             )
-        )
+        ) {}
     }
 }
 

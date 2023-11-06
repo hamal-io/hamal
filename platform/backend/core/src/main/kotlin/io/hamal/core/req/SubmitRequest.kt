@@ -1,15 +1,11 @@
 package io.hamal.core.req
 
 import io.hamal.core.adapter.GroupListPort
-import io.hamal.core.component.EncodePassword
-import io.hamal.core.component.GenerateSalt
 import io.hamal.core.component.GenerateToken
-import io.hamal.core.req.req.CreateRootAccountReq
 import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.domain.vo.AccountType.*
 import io.hamal.repository.api.*
 import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.repository.api.submitted_req.*
@@ -28,43 +24,18 @@ data class InvokeExecReq(
 
 @Component
 class SubmitRequest(
-    private val accountQueryRepository: AccountQueryRepository,
     private val blueprintQueryRepository: BlueprintQueryRepository,
     private val codeQueryRepository: CodeQueryRepository,
     private val eventBrokerRepository: BrokerRepository,
-    private val encodePassword: EncodePassword,
     private val extensionQueryRepository: ExtensionQueryRepository,
     private val funcQueryRepository: FuncQueryRepository,
     private val generateDomainId: GenerateDomainId,
-    private val generateSalt: GenerateSalt,
     private val generateToken: GenerateToken,
     private val hookQueryRepository: HookQueryRepository,
     private val namespaceQueryRepository: NamespaceQueryRepository,
     private val reqCmdRepository: ReqCmdRepository,
     private val groupList: GroupListPort
 ) {
-
-    operator fun invoke(req: CreateRootAccountReq): AccountCreateSubmitted {
-        val salt = generateSalt()
-        return AccountCreateSubmitted(
-            id = generateDomainId(::ReqId),
-            status = Submitted,
-            accountId = AccountId.root,
-            type = Root,
-            groupId = GroupId.root,
-            namespaceId = NamespaceId.root,
-            name = req.name,
-            email = req.email,
-            passwordAuthId = generateDomainId(::AuthId),
-            tokenAuthId = generateDomainId(::AuthId),
-            hash = encodePassword(
-                password = req.password,
-                salt = salt
-            ),
-            salt = salt,
-            token = generateToken()
-        ).also(reqCmdRepository::queue)
-    }
 
     operator fun invoke(req: InvokeExecReq): ExecInvokeSubmitted {
         val func = funcQueryRepository.get(req.funcId)
@@ -94,85 +65,6 @@ class SubmitRequest(
             name = account.name
         ).also(reqCmdRepository::queue)
     }
-
-    operator fun invoke(req: CreateAccountReq): AccountCreateSubmitted {
-        val salt = generateSalt()
-        return AccountCreateSubmitted(
-            id = generateDomainId(::ReqId),
-            status = Submitted,
-            accountId = generateDomainId(::AccountId),
-            type = User,
-            groupId = generateDomainId(::GroupId),
-            namespaceId = generateDomainId(::NamespaceId),
-            name = req.name,
-            email = req.email,
-            passwordAuthId = generateDomainId(::AuthId),
-            tokenAuthId = generateDomainId(::AuthId),
-            hash = encodePassword(
-                password = req.password ?: throw NoSuchElementException("Account not found"), salt = salt
-            ),
-            salt = salt,
-            token = generateToken()
-        ).also(reqCmdRepository::queue)
-    }
-
-    operator fun invoke(req: CreateAnonymousAccountReq): AccountCreateSubmitted {
-        val salt = generateSalt()
-        return AccountCreateSubmitted(
-            id = generateDomainId(::ReqId),
-            status = Submitted,
-            accountId = req.id,
-            type = Anonymous,
-            groupId = generateDomainId(::GroupId),
-            namespaceId = generateDomainId(::NamespaceId),
-            name = req.name,
-            email = null,
-            passwordAuthId = generateDomainId(::AuthId),
-            tokenAuthId = generateDomainId(::AuthId),
-            hash = encodePassword(
-                password = Password(">>You-shall-not-know<<"),
-                salt = salt
-            ),
-            salt = salt,
-            token = generateToken()
-        ).also(reqCmdRepository::queue)
-    }
-
-    operator fun invoke(accountId: AccountId, req: ConvertAnonymousAccountReq): AccountConvertSubmitted {
-        val account = accountQueryRepository.get(accountId)
-        return AccountConvertSubmitted(
-            id = generateDomainId(::ReqId),
-            status = Submitted,
-            accountId = accountId,
-            name = req.name ?: account.name,
-            email = req.email,
-            passwordAuthId = generateDomainId(::AuthId),
-            tokenAuthId = generateDomainId(::AuthId),
-            hash = encodePassword(
-                password = req.password,
-                salt = account.salt
-            ),
-            token = generateToken()
-        ).also(reqCmdRepository::queue)
-    }
-
-
-    operator fun invoke(namespaceId: NamespaceId, req: InvokeAdhocReq): ExecInvokeSubmitted {
-        val namespace = namespaceQueryRepository.get(namespaceId)
-        return ExecInvokeSubmitted(
-            id = generateDomainId(::ReqId),
-            status = Submitted,
-            execId = generateDomainId(::ExecId),
-            namespaceId = namespace.id,
-            groupId = namespace.groupId,
-            inputs = req.inputs,
-            code = ExecCode(value = req.code),
-            funcId = null,
-            correlationId = null,
-            events = listOf()
-        ).also(reqCmdRepository::queue)
-    }
-
 
     operator fun invoke(funcId: FuncId, req: InvokeFuncReq): ExecInvokeSubmitted {
         val func = funcQueryRepository.get(funcId)
