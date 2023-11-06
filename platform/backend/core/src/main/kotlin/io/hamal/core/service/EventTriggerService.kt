@@ -15,10 +15,12 @@ import io.hamal.repository.api.log.ConsumerId
 import io.hamal.repository.api.log.ProtobufBatchConsumer
 import io.hamal.repository.api.log.TopicEntry
 import io.hamal.request.InvokeFuncReq
-import jakarta.annotation.PostConstruct
 import org.springframework.beans.factory.DisposableBean
+import org.springframework.context.ApplicationListener
+import org.springframework.context.event.ContextRefreshedEvent
 import org.springframework.stereotype.Service
 import java.util.concurrent.ScheduledFuture
+import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.time.Duration.Companion.milliseconds
 
 @Service
@@ -28,57 +30,55 @@ internal class EventTriggerService(
     internal val generateDomainId: GenerateDomainId,
     internal val invokeFunc: FuncInvokePort,
     internal val triggerQueryRepository: TriggerQueryRepository,
-) : DisposableBean {
+) : ApplicationListener<ContextRefreshedEvent>, DisposableBean {
 
-    private val scheduledTasks = mutableListOf<ScheduledFuture<*>>()
 
-    val triggerConsumers = mutableMapOf<TriggerId, ProtobufBatchConsumer<TopicEntry>>()
-
-    @PostConstruct
-    fun setup() {
+    override fun onApplicationEvent(event: ContextRefreshedEvent) {
         scheduledTasks.add(
             async.atFixedRate(1.milliseconds) {
-                triggerQueryRepository.list(
-                    TriggerQuery(
-                        afterId = TriggerId(SnowflakeId(Long.MAX_VALUE)),
-                        types = listOf(TriggerType.Event),
-                        limit = Limit(10),
-                        groupIds = listOf()
-                    )
-                ).forEach { trigger ->
-                    require(trigger is EventTrigger)
+                if (!shutdown.get()) {
+                    triggerQueryRepository.list(
+                        TriggerQuery(
+                            afterId = TriggerId(SnowflakeId(Long.MAX_VALUE)),
+                            types = listOf(TriggerType.Event),
+                            limit = Limit(10),
+                            groupIds = listOf()
+                        )
+                    ).forEach { trigger ->
+                        require(trigger is EventTrigger)
 
-                    val topic = eventBrokerRepository.getTopic(trigger.topicId)
-                    val consumer = ProtobufBatchConsumer(
-                        consumerId = ConsumerId(trigger.id.value.value.toString(16)),
-                        topic = topic,
-                        repository = eventBrokerRepository,
-                        valueClass = TopicEntry::class
-                    )
+                        val topic = eventBrokerRepository.getTopic(trigger.topicId)
+                        val consumer = ProtobufBatchConsumer(
+                            consumerId = ConsumerId(trigger.id.value.value.toString(16)),
+                            topic = topic,
+                            repository = eventBrokerRepository,
+                            valueClass = TopicEntry::class
+                        )
 
-                    triggerConsumers[trigger.id] = consumer
-                    try {
-                        consumer.consumeBatch(1) { entries ->
-                            invokeFunc(
-                                trigger.funcId,
-                                object : InvokeFuncReq {
-                                    override val correlationId = trigger.correlationId ?: CorrelationId.default
-                                    override val inputs = InvocationInputs()
-                                    override val events = entries.map {
-                                        Event(
-                                            topic = EventTopic(
-                                                id = topic.id,
-                                                name = topic.name
-                                            ),
-                                            id = EventId(it.id.value),
-                                            payload = EventPayload(it.payload.value)
-                                        )
+                        triggerConsumers[trigger.id] = consumer
+                        try {
+                            consumer.consumeBatch(1) { entries ->
+                                invokeFunc(
+                                    trigger.funcId,
+                                    object : InvokeFuncReq {
+                                        override val correlationId = trigger.correlationId ?: CorrelationId.default
+                                        override val inputs = InvocationInputs()
+                                        override val events = entries.map {
+                                            Event(
+                                                topic = EventTopic(
+                                                    id = topic.id,
+                                                    name = topic.name
+                                                ),
+                                                id = EventId(it.id.value),
+                                                payload = EventPayload(it.payload.value)
+                                            )
+                                        }
                                     }
-                                }
-                            ) {}
+                                ) {}
+                            }
+                        } catch (t: Throwable) {
+                            t.printStackTrace()
                         }
-                    } catch (t: Throwable) {
-                        t.printStackTrace()
                     }
                 }
             },
@@ -86,8 +86,13 @@ internal class EventTriggerService(
     }
 
     override fun destroy() {
+        shutdown.set(true)
         scheduledTasks.forEach {
             it.cancel(false)
         }
     }
+
+    private val shutdown = AtomicBoolean(false)
+    private val scheduledTasks = mutableListOf<ScheduledFuture<*>>()
+    private val triggerConsumers = mutableMapOf<TriggerId, ProtobufBatchConsumer<TopicEntry>>()
 }
