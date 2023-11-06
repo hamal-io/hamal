@@ -6,6 +6,7 @@ import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sdk.api.ApiSubmitted
+import io.hamal.repository.api.submitted_req.FuncDeploySubmitted
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -16,32 +17,21 @@ internal class FuncDeployController(
     private val retry: Retry,
     private val deploy: FuncDeployPort,
 ) {
-    @PostMapping("/v1/funcs/{funcId}/deploy/{version}")
-    fun deploy(
-        @PathVariable("funcId") funcId: FuncId,
-        @PathVariable("version") codeVersion: CodeVersion,
-    ): ResponseEntity<ApiSubmitted> = retry {
-        deploy(funcId, codeVersion) { it.accepted() }
-    }
 
     @PostMapping("/v1/funcs/{funcId}/deploy/latest")
     fun deployLatest(
         @PathVariable("funcId") funcId: FuncId
     ): ResponseEntity<ApiSubmitted> = retry {
-        deploy(funcId) { it.accepted() }
+        deploy(funcId, null, FuncDeploySubmitted::accepted)
     }
 
-    /* mapping conflict
+
     @PostMapping("/v1/funcs/{funcId}/deploy/{version}")
-      fun deployRaw(
-          @PathVariable("funcId") funcId: FuncId,
-          @PathVariable("version") rawCodeVersion: String,
-      ): ResponseEntity<ApiSubmitted> = retry {
-          if (rawCodeVersion == "latest") {
-              deployLatest(funcId)
-          } else {
-              deploy(funcId, CodeVersion(rawCodeVersion.toInt())) { it.accepted() }
-          }
-      }*/
+    fun deploy(
+        @PathVariable("funcId") funcId: FuncId,
+        @PathVariable("version") codeVersion: CodeVersion,
+    ): ResponseEntity<ApiSubmitted> = retry {
+        deploy(funcId, codeVersion, FuncDeploySubmitted::accepted)
+    }
 
 }

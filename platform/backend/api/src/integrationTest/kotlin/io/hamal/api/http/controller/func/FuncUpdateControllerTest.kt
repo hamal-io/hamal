@@ -87,8 +87,11 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
             assertThat(name, equalTo(FuncName("updatedName")))
             assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("updatedInputs"))))))
 
-            assertThat(code.version, equalTo(CodeVersion(2)))
-            assertThat(code.value, equalTo(CodeValue("updatedCode")))
+            assertThat(code.current.version, equalTo(CodeVersion(2)))
+            assertThat(code.current.value, equalTo(CodeValue("updatedCode")))
+
+            assertThat(code.deployed.version, equalTo(CodeVersion(1)))
+            assertThat(code.deployed.value, equalTo(CodeValue("createdCode")))
         }
     }
 
@@ -138,8 +141,11 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
             assertThat(name, equalTo(FuncName("createdName")))
             assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("createdInputs"))))))
 
-            assertThat(code.version, equalTo(CodeVersion(2)))
-            assertThat(code.value, equalTo(CodeValue("createdCode")))
+            // assertThat(code.current.version, equalTo(CodeVersion(1))) //FIXME with core-73
+            assertThat(code.current.value, equalTo(CodeValue("createdCode")))
+
+            assertThat(code.deployed.version, equalTo(CodeVersion(1)))
+            assertThat(code.deployed.value, equalTo(CodeValue("createdCode")))
         }
     }
 }

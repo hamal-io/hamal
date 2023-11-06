@@ -30,7 +30,7 @@ class FuncDeployFunction(
                     "id" to StringType(res.id.value.value.toString(16)),
                     "status" to StringType(res.status.name),
                     "func_id" to StringType(res.funcId.value.value.toString(16)),
-                    "deployed_version" to NumberType(res.version.value)
+                    "version" to NumberType(res.version.value)
                 )
             )
         } catch (t: Throwable) {
@@ -48,13 +48,11 @@ class FuncDeployLatestFunction(
     override fun invoke(ctx: FunctionContext, arg1: StringType): Pair<ErrorType?, MapType?> {
         return try {
             val res = sdk.func.deploy(FuncId(arg1.value))
-
             null to MapType(
                 mutableMapOf(
                     "id" to StringType(res.id.value.value.toString(16)),
                     "status" to StringType(res.status.name),
-                    "func_id" to StringType(res.funcId.value.value.toString(16)),
-                    "deployed_version" to NumberType(res.version.value)
+                    "func_id" to StringType(res.funcId.value.value.toString(16))
                 )
             )
         } catch (t: Throwable) {

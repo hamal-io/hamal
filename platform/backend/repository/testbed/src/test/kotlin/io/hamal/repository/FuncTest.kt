@@ -14,7 +14,6 @@ import io.hamal.repository.api.FuncRepository
 import io.hamal.repository.fixture.AbstractUnitTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.TestFactory
 import org.junit.jupiter.api.assertThrows
@@ -430,7 +429,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                     )
                 )
             }
-            assertThat(exception.message, equalTo("CodeVersion(value=500) can not be deployed"))
+            assertThat(exception.message, equalTo("CodeVersion(500) can not be deployed"))
         }
     }
 

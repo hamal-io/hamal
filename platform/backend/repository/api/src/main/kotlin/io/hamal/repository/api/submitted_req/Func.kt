@@ -38,3 +38,11 @@ data class FuncDeploySubmitted(
     val funcId: FuncId,
     val versionToDeploy: CodeVersion
 ) : Submitted
+
+@Serializable
+data class FuncDeployLatestSubmitted(
+    override val id: ReqId,
+    override var status: ReqStatus,
+    val groupId: GroupId,
+    val funcId: FuncId
+) : Submitted

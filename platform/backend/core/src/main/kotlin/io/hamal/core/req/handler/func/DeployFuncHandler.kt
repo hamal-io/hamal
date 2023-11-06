@@ -1,4 +1,3 @@
-
 package io.hamal.core.req.handler.func
 
 import io.hamal.core.event.PlatformEventEmitter
@@ -26,13 +25,9 @@ class DeployFuncHandler(
 }
 
 private fun DeployFuncHandler.deployVersion(req: FuncDeploySubmitted): Func {
-    return funcRepository.deploy(
-        req.funcId,
-        FuncCmdRepository.DeployCmd(
-            id = req.cmdId(),
-            versionToDeploy = req.versionToDeploy
-        )
-    )
+    return req.versionToDeploy
+        ?.let { funcRepository.deploy(req.funcId, FuncCmdRepository.DeployCmd(id = req.cmdId(), versionToDeploy = it)) }
+        ?: funcRepository.deployLatest(req.funcId, req.cmdId())
 }
 
 private fun DeployFuncHandler.emitEvent(cmdId: CmdId, func: Func) {

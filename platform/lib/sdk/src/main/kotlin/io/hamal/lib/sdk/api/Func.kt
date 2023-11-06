@@ -39,6 +39,13 @@ data class ApiFuncDeploySubmitted(
 ) : ApiSubmitted
 
 @Serializable
+data class ApiFuncDeployLatestSubmitted(
+    override val id: ReqId,
+    override val status: ReqStatus,
+    val funcId: FuncId
+) : ApiSubmitted
+
+@Serializable
 data class ApiFuncUpdateReq(
     override val name: FuncName? = null,
     override val inputs: FuncInputs? = null,
@@ -97,9 +104,14 @@ data class ApiFunc(
     @Serializable
     data class Code(
         val id: CodeId,
+        val current: VersionedCodeValue,
+        val deployed: VersionedCodeValue
+    )
+
+    @Serializable
+    data class VersionedCodeValue(
         val version: CodeVersion,
         val value: CodeValue,
-        val deployedVersion: CodeVersion
     )
 }
 
