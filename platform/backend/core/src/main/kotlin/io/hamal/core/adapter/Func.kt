@@ -5,10 +5,7 @@ import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.*
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
-import io.hamal.repository.api.submitted_req.ExecInvokeSubmitted
-import io.hamal.repository.api.submitted_req.FuncCreateSubmitted
-import io.hamal.repository.api.submitted_req.FuncDeploySubmitted
-import io.hamal.repository.api.submitted_req.FuncUpdateSubmitted
+import io.hamal.repository.api.submitted_req.*
 import io.hamal.request.CreateFuncReq
 import io.hamal.request.InvokeFuncReq
 import io.hamal.request.UpdateFuncReq
@@ -41,8 +38,13 @@ interface FuncListPort {
 interface FuncDeployPort {
     operator fun <T : Any> invoke(
         funcId: FuncId,
-        versionToDeploy: CodeVersion?,
+        versionToDeploy: CodeVersion,
         responseHandler: (FuncDeploySubmitted) -> T
+    ): T
+
+    operator fun <T : Any> invoke(
+        funcId: FuncId,
+        responseHandler: (FuncDeployLatestSubmitted) -> T
     ): T
 }
 
@@ -143,17 +145,27 @@ class FuncAdapter(
 
     override fun <T : Any> invoke(
         funcId: FuncId,
-        versionToDeploy: CodeVersion?,
+        versionToDeploy: CodeVersion,
         responseHandler: (FuncDeploySubmitted) -> T
     ): T {
         val func = funcQueryRepository.get(funcId)
-        val code = codeQueryRepository.get(func.code.id, versionToDeploy ?: func.code.version)
+        val code = codeQueryRepository.get(func.code.id, versionToDeploy)
         return FuncDeploySubmitted(
             id = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
             groupId = func.groupId,
             funcId = funcId,
             versionToDeploy = code.version
+        ).also(reqCmdRepository::queue).let(responseHandler)
+    }
+
+    override fun <T : Any> invoke(funcId: FuncId, responseHandler: (FuncDeployLatestSubmitted) -> T): T {
+        val func = funcQueryRepository.get(funcId)
+        return FuncDeployLatestSubmitted(
+            id = generateDomainId(::ReqId),
+            status = ReqStatus.Submitted,
+            groupId = func.groupId,
+            funcId = funcId,
         ).also(reqCmdRepository::queue).let(responseHandler)
     }
 
