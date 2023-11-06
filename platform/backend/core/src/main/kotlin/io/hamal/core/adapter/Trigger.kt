@@ -1,6 +1,7 @@
 package io.hamal.core.adapter
 
-import io.hamal.core.req.SubmitRequest
+import io.hamal.lib.domain.GenerateDomainId
+import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.*
@@ -45,12 +46,13 @@ interface TriggerPort : TriggerCreatePort, TriggerGetPort, TriggerListPort
 
 @Component
 class TriggerAdapter(
-    private val submitRequest: SubmitRequest,
-    private val triggerQueryRepository: TriggerQueryRepository,
-    private val namespaceQueryRepository: NamespaceQueryRepository,
-    private val funcQueryRepository: FuncQueryRepository,
     private val eventBrokerRepository: BrokerRepository,
-    private val hookQueryRepository: HookQueryRepository
+    private val funcQueryRepository: FuncQueryRepository,
+    private val generateDomainId: GenerateDomainId,
+    private val hookQueryRepository: HookQueryRepository,
+    private val namespaceQueryRepository: NamespaceQueryRepository,
+    private val reqCmdRepository: ReqCmdRepository,
+    private val triggerQueryRepository: TriggerQueryRepository,
 ) : TriggerPort {
     override fun <T : Any> invoke(
         namespaceId: NamespaceId,
@@ -61,7 +63,24 @@ class TriggerAdapter(
         ensureTopicExists(req)
         ensureHookExists(req)
 
-        return responseHandler(submitRequest(namespaceId, req))
+        val namespace = namespaceQueryRepository.get(namespaceId)
+        val func = funcQueryRepository.get(req.funcId)
+        return TriggerCreateSubmitted(
+            type = req.type,
+            id = generateDomainId(::ReqId),
+            status = ReqStatus.Submitted,
+            triggerId = generateDomainId(::TriggerId),
+            groupId = namespace.groupId,
+            name = req.name,
+            funcId = func.id,
+            namespaceId = namespaceId,
+            inputs = req.inputs,
+            correlationId = req.correlationId,
+            duration = req.duration,
+            topicId = req.topicId,
+            hookId = req.hookId
+        ).also(reqCmdRepository::queue).let(responseHandler)
+
     }
 
     override fun <T : Any> invoke(

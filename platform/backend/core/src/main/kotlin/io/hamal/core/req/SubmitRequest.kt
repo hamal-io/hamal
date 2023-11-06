@@ -1,15 +1,16 @@
 package io.hamal.core.req
 
 import io.hamal.core.adapter.GroupListPort
-import io.hamal.core.component.GenerateToken
-import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.vo.*
-import io.hamal.repository.api.*
-import io.hamal.repository.api.log.BrokerRepository
-import io.hamal.repository.api.submitted_req.*
-import io.hamal.request.*
+import io.hamal.repository.api.FuncQueryRepository
+import io.hamal.repository.api.ReqCmdRepository
+import io.hamal.repository.api.submitted_req.ExecCompleteSubmitted
+import io.hamal.repository.api.submitted_req.ExecFailSubmitted
+import io.hamal.repository.api.submitted_req.ExecInvokeSubmitted
+import io.hamal.request.CompleteExecReq
+import io.hamal.request.FailExecReq
 import org.springframework.stereotype.Component
 
 
@@ -24,15 +25,8 @@ data class InvokeExecReq(
 
 @Component
 class SubmitRequest(
-    private val blueprintQueryRepository: BlueprintQueryRepository,
-    private val codeQueryRepository: CodeQueryRepository,
-    private val eventBrokerRepository: BrokerRepository,
-    private val extensionQueryRepository: ExtensionQueryRepository,
     private val funcQueryRepository: FuncQueryRepository,
     private val generateDomainId: GenerateDomainId,
-    private val generateToken: GenerateToken,
-    private val hookQueryRepository: HookQueryRepository,
-    private val namespaceQueryRepository: NamespaceQueryRepository,
     private val reqCmdRepository: ReqCmdRepository,
     private val groupList: GroupListPort
 ) {
@@ -69,94 +63,4 @@ class SubmitRequest(
         result = req.result
     ).also(reqCmdRepository::queue)
 
-
-    operator fun invoke(namespaceId: NamespaceId, req: CreateHookReq): HookCreateSubmitted {
-        val namespace = namespaceQueryRepository.get(namespaceId)
-        return HookCreateSubmitted(
-            id = generateDomainId(::ReqId),
-            status = Submitted,
-            hookId = generateDomainId(::HookId),
-            groupId = namespace.groupId,
-            namespaceId = namespace.id,
-            name = req.name
-        ).also(reqCmdRepository::queue)
-    }
-
-    operator fun invoke(hookId: HookId, req: UpdateHookReq) = HookUpdateSubmitted(
-        id = generateDomainId(::ReqId),
-        status = Submitted,
-        groupId = hookQueryRepository.get(hookId).groupId,
-        hookId = hookId,
-        name = req.name,
-    ).also(reqCmdRepository::queue)
-
-    operator fun invoke(groupId: GroupId, req: CreateNamespaceReq) = NamespaceCreateSubmitted(
-        id = generateDomainId(::ReqId),
-        status = Submitted,
-        namespaceId = generateDomainId(::NamespaceId),
-        groupId = groupId,
-        name = req.name,
-        inputs = req.inputs
-    ).also(reqCmdRepository::queue)
-
-    operator fun invoke(namespaceId: NamespaceId, req: UpdateNamespaceReq) = NamespaceUpdateSubmitted(
-        id = generateDomainId(::ReqId),
-        status = Submitted,
-        groupId = namespaceQueryRepository.get(namespaceId).groupId,
-        namespaceId = namespaceId,
-        name = req.name,
-        inputs = req.inputs
-    ).also(reqCmdRepository::queue)
-
-    operator fun invoke(namespaceId: NamespaceId, req: CreateTriggerReq): TriggerCreateSubmitted {
-        val namespace = namespaceQueryRepository.get(namespaceId)
-        val func = funcQueryRepository.get(req.funcId)
-        return TriggerCreateSubmitted(
-            type = req.type,
-            id = generateDomainId(::ReqId),
-            status = Submitted,
-            triggerId = generateDomainId(::TriggerId),
-            groupId = namespace.groupId,
-            name = req.name,
-            funcId = func.id,
-            namespaceId = namespaceId,
-            inputs = req.inputs,
-            correlationId = req.correlationId,
-            duration = req.duration,
-            topicId = req.topicId,
-            hookId = req.hookId
-        ).also(reqCmdRepository::queue)
-    }
-
-    operator fun invoke(namespaceId: NamespaceId, req: CreateTopicReq): TopicCreateSubmitted {
-        val namespace = namespaceQueryRepository.get(namespaceId)
-        return TopicCreateSubmitted(
-            id = generateDomainId(::ReqId),
-            status = Submitted,
-            groupId = namespace.groupId,
-            topicId = generateDomainId(::TopicId),
-            namespaceId = namespace.id,
-            name = req.name
-        ).also(reqCmdRepository::queue)
-    }
-
-    operator fun invoke(req: AppendEntryReq): TopicAppendToSubmitted {
-        val topic = eventBrokerRepository.getTopic(req.topicId)
-        return TopicAppendToSubmitted(
-            id = generateDomainId(::ReqId),
-            status = Submitted,
-            groupId = topic.groupId,
-            topicId = req.topicId,
-            payload = req.payload
-        ).also(reqCmdRepository::queue)
-    }
-
-    operator fun invoke(req: SetStateReq): StateSetSubmitted {
-        val func = funcQueryRepository.get(req.correlation.funcId)
-        return StateSetSubmitted(
-            id = generateDomainId(::ReqId), status = Submitted, groupId = func.groupId, state = CorrelatedState(
-                correlation = req.correlation, value = req.value
-            )
-        ).also(reqCmdRepository::queue)
-    }
 }

@@ -1,12 +1,15 @@
 package io.hamal.core.adapter
 
-import io.hamal.core.req.SubmitRequest
 import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation
+import io.hamal.lib.domain.GenerateDomainId
+import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
+import io.hamal.lib.domain.vo.ReqId
 import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncQueryRepository
+import io.hamal.repository.api.ReqCmdRepository
 import io.hamal.repository.api.StateQueryRepository
 import io.hamal.repository.api.submitted_req.StateSetSubmitted
 import io.hamal.request.SetStateReq
@@ -29,7 +32,8 @@ interface StatePort : StateGetPort, StateSetPort
 @Component
 class StateAdapter(
     private val funcQueryRepository: FuncQueryRepository,
-    private val submitRequest: SubmitRequest,
+    private val generateDomainId: GenerateDomainId,
+    private val reqCmdRepository: ReqCmdRepository,
     private val stateQueryRepository: StateQueryRepository
 ) : StatePort {
 
@@ -50,7 +54,16 @@ class StateAdapter(
         responseHandler: (StateSetSubmitted) -> T
     ): T {
         ensureFuncExists(req.correlation.funcId)
-        return responseHandler(submitRequest(req))
+        val func = funcQueryRepository.get(req.correlation.funcId)
+        return StateSetSubmitted(
+            id = generateDomainId(::ReqId),
+            status = Submitted,
+            groupId = func.groupId,
+            state = CorrelatedState(
+                correlation = req.correlation,
+                value = req.value
+            )
+        ).also(reqCmdRepository::queue).let(responseHandler)
     }
 
     private fun ensureFuncExists(funcId: FuncId) {

@@ -1,10 +1,12 @@
 package io.hamal.core.adapter
 
-import io.hamal.core.req.SubmitRequest
+import io.hamal.lib.domain.GenerateDomainId
+import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.vo.NamespaceId
-import io.hamal.lib.domain.vo.TopicEntryPayload
+import io.hamal.lib.domain.vo.ReqId
 import io.hamal.lib.domain.vo.TopicId
-import io.hamal.lib.sdk.api.ApiTopicAppendEntryReq
+import io.hamal.repository.api.NamespaceQueryRepository
+import io.hamal.repository.api.ReqCmdRepository
 import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.repository.api.log.BrokerRepository.TopicEntryQuery
 import io.hamal.repository.api.log.BrokerTopicsRepository.TopicQuery
@@ -12,13 +14,13 @@ import io.hamal.repository.api.log.Topic
 import io.hamal.repository.api.log.TopicEntry
 import io.hamal.repository.api.submitted_req.TopicAppendToSubmitted
 import io.hamal.repository.api.submitted_req.TopicCreateSubmitted
+import io.hamal.request.AppendEntryReq
 import io.hamal.request.CreateTopicReq
 import org.springframework.stereotype.Component
 
 interface TopicAppendEntryPort {
     operator fun <T : Any> invoke(
-        topicId: TopicId,
-        topAppend: TopicEntryPayload,
+        req: AppendEntryReq,
         responseHandler: (TopicAppendToSubmitted) -> T
     ): T
 }
@@ -58,25 +60,41 @@ interface TopicPort : TopicAppendEntryPort, TopicCreatePort, TopicGetPort, Topic
 
 @Component
 class TopicAdapter(
-    private val submitRequest: SubmitRequest,
-    private val eventBrokerRepository: BrokerRepository
+    private val eventBrokerRepository: BrokerRepository,
+    private val generateDomainId: GenerateDomainId,
+    private val namespaceQueryRepository: NamespaceQueryRepository,
+    private val reqCmdRepository: ReqCmdRepository
 ) : TopicPort {
 
     override fun <T : Any> invoke(
-        topicId: TopicId,
-        topAppend: TopicEntryPayload,
+        req: AppendEntryReq,
         responseHandler: (TopicAppendToSubmitted) -> T
     ): T {
-        ensureTopicExists(topicId)
-        return responseHandler(submitRequest(ApiTopicAppendEntryReq(topicId, topAppend)))
+        val topic = eventBrokerRepository.getTopic(req.topicId)
+        return TopicAppendToSubmitted(
+            id = generateDomainId(::ReqId),
+            status = Submitted,
+            groupId = topic.groupId,
+            topicId = req.topicId,
+            payload = req.payload
+        ).also(reqCmdRepository::queue).let(responseHandler)
     }
 
     override fun <T : Any> invoke(
         namespaceId: NamespaceId,
         req: CreateTopicReq,
         responseHandler: (TopicCreateSubmitted) -> T
-    ): T =
-        responseHandler(submitRequest(namespaceId, req))
+    ): T {
+        val namespace = namespaceQueryRepository.get(namespaceId)
+        return TopicCreateSubmitted(
+            id = generateDomainId(::ReqId),
+            status = Submitted,
+            groupId = namespace.groupId,
+            topicId = generateDomainId(::TopicId),
+            namespaceId = namespace.id,
+            name = req.name
+        ).also(reqCmdRepository::queue).let(responseHandler)
+    }
 
     override fun <T : Any> invoke(topicId: TopicId, responseHandler: (Topic) -> T): T =
         responseHandler(eventBrokerRepository.getTopic(topicId))
@@ -92,6 +110,4 @@ class TopicAdapter(
         val topic = eventBrokerRepository.getTopic(topicId)
         return responseHandler(eventBrokerRepository.listEntries(topic, query), topic)
     }
-
-    private fun ensureTopicExists(topicId: TopicId) = eventBrokerRepository.getTopic(topicId)
 }

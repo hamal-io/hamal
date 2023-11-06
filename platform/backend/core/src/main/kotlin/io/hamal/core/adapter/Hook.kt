@@ -1,13 +1,12 @@
 package io.hamal.core.adapter
 
-import io.hamal.core.req.SubmitRequest
+import io.hamal.lib.domain.GenerateDomainId
+import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.vo.HookId
 import io.hamal.lib.domain.vo.NamespaceId
-import io.hamal.repository.api.Hook
-import io.hamal.repository.api.HookQueryRepository
+import io.hamal.lib.domain.vo.ReqId
+import io.hamal.repository.api.*
 import io.hamal.repository.api.HookQueryRepository.HookQuery
-import io.hamal.repository.api.Namespace
-import io.hamal.repository.api.NamespaceQueryRepository
 import io.hamal.repository.api.submitted_req.HookCreateSubmitted
 import io.hamal.repository.api.submitted_req.HookUpdateSubmitted
 import io.hamal.request.CreateHookReq
@@ -42,16 +41,25 @@ interface HookPort : HookCreatePort, HookGetPort, HookListPort, HookUpdatePort
 
 @Component
 class HookAdapter(
-    private val submitRequest: SubmitRequest,
+    private val generateDomainId: GenerateDomainId,
     private val hookQueryRepository: HookQueryRepository,
-    private val namespaceQueryRepository: NamespaceQueryRepository
+    private val namespaceQueryRepository: NamespaceQueryRepository,
+    private val reqCmdRepository: ReqCmdRepository
 ) : HookPort {
     override fun <T : Any> invoke(
         namespaceId: NamespaceId,
         req: CreateHookReq,
         responseHandler: (HookCreateSubmitted) -> T
     ): T {
-        return responseHandler(submitRequest(namespaceId, req))
+        val namespace = namespaceQueryRepository.get(namespaceId)
+        return HookCreateSubmitted(
+            id = generateDomainId(::ReqId),
+            status = Submitted,
+            hookId = generateDomainId(::HookId),
+            groupId = namespace.groupId,
+            namespaceId = namespace.id,
+            name = req.name
+        ).also(reqCmdRepository::queue).let(responseHandler)
     }
 
     override fun <T : Any> invoke(hookId: HookId, responseHandler: (Hook, Namespace) -> T): T {
@@ -77,7 +85,13 @@ class HookAdapter(
         responseHandler: (HookUpdateSubmitted) -> T
     ): T {
         ensureHookExists(hookId)
-        return responseHandler(submitRequest(hookId, req))
+        return HookUpdateSubmitted(
+            id = generateDomainId(::ReqId),
+            status = Submitted,
+            groupId = hookQueryRepository.get(hookId).groupId,
+            hookId = hookId,
+            name = req.name,
+        ).also(reqCmdRepository::queue).let(responseHandler)
     }
 
     private fun ensureHookExists(hookId: HookId) {
