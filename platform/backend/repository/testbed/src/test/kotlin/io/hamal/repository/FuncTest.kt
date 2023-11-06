@@ -14,7 +14,6 @@ import io.hamal.repository.api.FuncRepository
 import io.hamal.repository.fixture.AbstractUnitTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.TestFactory
 import org.junit.jupiter.api.assertThrows
@@ -399,19 +398,19 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
             assertThat(res.code.version, equalTo(CodeVersion(100)))
         }
 
-        @Disabled
+
         @TestFactory
-        fun `Tries to deploy to func that does not exist`() = runWith(FuncRepository::class) {
-            val exception = assertThrows<NoSuchElementException> {
-                deploy(
-                    FuncId(1234567), DeployCmd(
-                        id = CmdGen(),
-                        versionToDeploy = CodeVersion(500)
-                    )
-                )
-            }
-            assertThat(exception.message, equalTo("Func not found"))
+        fun `Deploys latest version`() = runWith(FuncRepository::class) {
+            createUpdatedFunc(
+                funcId = FuncId(123),
+                codeId = CodeId(5),
+                maxVersion = CodeVersion(100),
+            )
+
+            val res = deployLatest(FuncId(123), CmdGen())
+            assertThat(res.code.deployedVersion, equalTo(CodeVersion(100)))
         }
+
 
         @TestFactory
         fun `Tries to deploy version that does not exist`() = runWith(FuncRepository::class) {
@@ -430,7 +429,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                     )
                 )
             }
-            assertThat(exception.message, equalTo("CodeVersion(value=500) can not be deployed"))
+            assertThat(exception.message, equalTo("CodeVersion(500) can not be deployed"))
         }
     }
 

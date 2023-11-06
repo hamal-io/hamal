@@ -18,6 +18,7 @@ fun Submitted.toApiSubmitted(): ApiSubmitted = when (this) {
     is ExtensionUpdateSubmitted -> ApiExtensionUpdateSubmitted(id, status, extensionId)
     is FuncCreateSubmitted -> ApiFuncCreateSubmitted(id, status, funcId, groupId, namespaceId)
     is FuncDeploySubmitted -> ApiFuncDeploySubmitted(id, status, funcId, versionToDeploy)
+    is FuncDeployLatestSubmitted -> ApiFuncDeployLatestSubmitted(id, status, funcId)
     is FuncUpdateSubmitted -> ApiFuncUpdateSubmitted(id, status, funcId)
     is HookCreateSubmitted -> ApiHookCreateSubmitted(id, status, hookId, groupId, namespaceId)
     is HookUpdateSubmitted -> ApiHookUpdateSubmitted(id, status, hookId)

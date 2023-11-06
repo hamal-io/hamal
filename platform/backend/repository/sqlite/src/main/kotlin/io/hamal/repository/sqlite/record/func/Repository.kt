@@ -1,5 +1,6 @@
 package io.hamal.repository.sqlite.record.func
 
+import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Func
@@ -92,6 +93,26 @@ class SqliteFuncRepository(
                         cmdId = cmdId,
                         entityId = funcId,
                         deployedVersion = cmd.versionToDeploy
+                    )
+                )
+                currentVersion(funcId)
+                    .also { ProjectionCurrent.upsert(this, it) }
+                    .also { ProjectionUniqueName.upsert(this, it) }
+            }
+        }
+    }
+
+    override fun deployLatest(funcId: FuncId, cmd: CmdId): Func {
+        return tx {
+            if (commandAlreadyApplied(cmd, funcId)) {
+                versionOf(funcId, cmd)
+            } else {
+                val last = lastRecordOf(funcId)
+                store(
+                    FuncDeployedRecord(
+                        entityId = funcId,
+                        cmdId = cmd,
+                        deployedVersion = versionOf(funcId, last.sequence())!!.code.version
                     )
                 )
                 currentVersion(funcId)

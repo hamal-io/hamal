@@ -23,7 +23,7 @@ interface FuncCreatePort {
 }
 
 interface FuncGetPort {
-    operator fun <T : Any> invoke(funcId: FuncId, responseHandler: (Func, Code, Namespace) -> T): T
+    operator fun <T : Any> invoke(funcId: FuncId, responseHandler: (Func, Code, Code, Namespace) -> T): T
 }
 
 interface FuncInvokePort {
@@ -41,7 +41,7 @@ interface FuncListPort {
 interface FuncDeployPort {
     operator fun <T : Any> invoke(
         funcId: FuncId,
-        versionToDeploy: CodeVersion,
+        versionToDeploy: CodeVersion?,
         responseHandler: (FuncDeploySubmitted) -> T
     ): T
 }
@@ -85,11 +85,12 @@ class FuncAdapter(
         ).also(reqCmdRepository::queue).let(responseHandler)
     }
 
-    override fun <T : Any> invoke(funcId: FuncId, responseHandler: (Func, Code, Namespace) -> T): T {
+    override fun <T : Any> invoke(funcId: FuncId, responseHandler: (Func, Code, Code, Namespace) -> T): T {
         val func = funcQueryRepository.get(funcId)
-        val code = codeQueryRepository.get(func.code.id)
+        val current = codeQueryRepository.get(func.code.id, func.code.version)
+        val deployed = codeQueryRepository.get(func.code.id, func.code.deployedVersion)
         val namespaces = namespaceQueryRepository.get(func.namespaceId)
-        return responseHandler(func, code, namespaces)
+        return responseHandler(func, current, deployed, namespaces)
     }
 
     override fun <T : Any> invoke(
@@ -106,7 +107,7 @@ class FuncAdapter(
             groupId = func.groupId,
             funcId = funcId,
             correlationId = req.correlationId,
-            inputs = req.inputs ?: InvocationInputs(),
+            inputs = req.inputs,
             code = func.code.toExecCode(),
             events = listOf()
         ).also(reqCmdRepository::queue).let(responseHandler)
@@ -142,17 +143,17 @@ class FuncAdapter(
 
     override fun <T : Any> invoke(
         funcId: FuncId,
-        versionToDeploy: CodeVersion,
+        versionToDeploy: CodeVersion?,
         responseHandler: (FuncDeploySubmitted) -> T
     ): T {
         val func = funcQueryRepository.get(funcId)
-        codeQueryRepository.get(func.code.id, versionToDeploy)
+        val code = codeQueryRepository.get(func.code.id, versionToDeploy ?: func.code.version)
         return FuncDeploySubmitted(
             id = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
             groupId = func.groupId,
             funcId = funcId,
-            versionToDeploy = versionToDeploy
+            versionToDeploy = code.version
         ).also(reqCmdRepository::queue).let(responseHandler)
     }
 

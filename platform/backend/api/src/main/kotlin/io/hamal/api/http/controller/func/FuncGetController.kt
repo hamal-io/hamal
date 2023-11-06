@@ -24,7 +24,7 @@ internal class FuncGetController(
         getFunc(funcId, ::assemble)
     }
 
-    private fun assemble(func: Func, code: Code, namespace: Namespace) =
+    private fun assemble(func: Func, current: Code, deployed: Code, namespace: Namespace) =
         ResponseEntity.ok(
             ApiFunc(
                 id = func.id,
@@ -35,10 +35,15 @@ internal class FuncGetController(
                 name = func.name,
                 inputs = func.inputs,
                 code = Code(
-                    id = code.id,
-                    version = code.version,
-                    value = code.value,
-                    deployedVersion = func.code.deployedVersion
+                    id = func.code.id,
+                    current = VersionedCodeValue(
+                        version = current.version,
+                        value = current.value,
+                    ),
+                    deployed = VersionedCodeValue(
+                        version = deployed.version,
+                        value = deployed.value
+                    )
                 )
             )
         )

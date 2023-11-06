@@ -38,6 +38,7 @@ interface FuncCmdRepository : CmdRepository {
 
     fun update(funcId: FuncId, cmd: UpdateCmd): Func
     fun deploy(funcId: FuncId, cmd: DeployCmd): Func
+    fun deployLatest(funcId: FuncId, cmd: CmdId): Func
 
     data class CreateCmd(
         val id: CmdId,
