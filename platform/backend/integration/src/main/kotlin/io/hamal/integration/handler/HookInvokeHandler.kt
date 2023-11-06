@@ -1,26 +1,26 @@
 package io.hamal.integration.handler
 
-import io.hamal.core.req.InvokeExecReq
+import io.hamal.core.adapter.FuncInvokePort
 import io.hamal.core.req.ReqHandler
-import io.hamal.core.req.SubmitRequest
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.TriggerType.Hook
 import io.hamal.lib.domain.vo.CorrelationId
-import io.hamal.lib.domain.vo.ExecId
+import io.hamal.lib.domain.vo.Event
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.repository.api.*
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import io.hamal.repository.api.submitted_req.HookInvokeSubmitted
+import io.hamal.request.InvokeFuncReq
 import org.springframework.stereotype.Component
 
 @Component
 class HookInvokeHandler(
-    private val hookQueryRepository: HookQueryRepository,
-    private val triggerQueryRepository: TriggerQueryRepository,
     private val funcQueryRepository: FuncQueryRepository,
-    private val submitRequest: SubmitRequest,
-    private val generateDomainId: GenerateDomainId
+    private val generateDomainId: GenerateDomainId,
+    private val hookQueryRepository: HookQueryRepository,
+    private val invokeFunc: FuncInvokePort,
+    private val triggerQueryRepository: TriggerQueryRepository
 ) : ReqHandler<HookInvokeSubmitted>(HookInvokeSubmitted::class) {
 
     /**
@@ -48,18 +48,14 @@ class HookInvokeHandler(
         ).associateBy(Func::id)
 
         triggers.forEach { trigger ->
-            val func = funcs[trigger.funcId]!!
-
-            submitRequest(
-                InvokeExecReq(
-                    execId = generateDomainId(::ExecId),
-                    funcId = trigger.funcId,
-                    correlationId = trigger.correlationId ?: CorrelationId.default,
-                    inputs = InvocationInputs(),
-                    code = func.code.toExecCode(),
-                    events = listOf()
-                )
-            )
+            invokeFunc(
+                trigger.funcId,
+                object : InvokeFuncReq {
+                    override val correlationId = trigger.correlationId ?: CorrelationId.default
+                    override val inputs = InvocationInputs()
+                    override val events = listOf<Event>()
+                }
+            ) {}
         }
     }
 }

@@ -9,15 +9,14 @@ interface CreateFuncReq {
     val code: CodeValue
 }
 
-
 interface UpdateFuncReq {
     val name: FuncName?
     val inputs: FuncInputs?
     val code: CodeValue?
 }
 
-
 interface InvokeFuncReq {
     val correlationId: CorrelationId?
-    val inputs: InvocationInputs?
+    val inputs: InvocationInputs
+    val events: List<Event>
 }
