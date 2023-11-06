@@ -1,7 +1,7 @@
 package io.hamal.bridge.http.controller.exec
 
 import io.hamal.bridge.http.controller.accepted
-import io.hamal.bridge.req.SubmitBridgeRequest
+import io.hamal.core.adapter.ExecCompletePort
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.sdk.bridge.BridgeExecCompleteReq
 import io.hamal.lib.sdk.bridge.BridgeSubmitted
@@ -14,12 +14,11 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 internal class ExecCompleteController(
-    val request: SubmitBridgeRequest
+    val complete: ExecCompletePort
 ) {
     @PostMapping("/b1/execs/{execId}/complete")
     fun completeExec(
         @PathVariable("execId") execId: ExecId,
-        @RequestBody complete: BridgeExecCompleteReq
-    ): ResponseEntity<BridgeSubmitted> =
-        request(execId, complete).let(ExecCompleteSubmitted::accepted)
+        @RequestBody req: BridgeExecCompleteReq
+    ): ResponseEntity<BridgeSubmitted> = complete(execId, req, ExecCompleteSubmitted::accepted)
 }
