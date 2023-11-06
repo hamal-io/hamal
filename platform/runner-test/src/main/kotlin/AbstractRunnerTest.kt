@@ -45,7 +45,7 @@ class TestFailConnector(
 }
 
 
-abstract class AbstractExtensionTest {
+abstract class AbstractRunnerTest {
     fun createTestRunner(
         pluginFactories: List<RunnerPluginExtensionFactory> = listOf(),
         scriptFactories: List<RunnerScriptExtensionFactory> = listOf(),

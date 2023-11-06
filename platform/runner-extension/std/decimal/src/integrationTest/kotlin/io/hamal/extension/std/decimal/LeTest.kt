@@ -1,9 +1,9 @@
 package io.hamal.extension.std.decimal
 
-import AbstractExtensionTest
+import AbstractRunnerTest
 import org.junit.jupiter.api.Test
 
-internal class LeTest : AbstractExtensionTest() {
+internal class LeTest : AbstractRunnerTest() {
     @Test
     fun `decimal, number`() {
         val runner = createTestRunner(

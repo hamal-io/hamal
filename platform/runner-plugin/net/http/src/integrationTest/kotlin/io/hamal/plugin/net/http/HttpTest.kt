@@ -1,6 +1,6 @@
 package io.hamal.plugin.net.http
 
-import AbstractExtensionTest
+import AbstractRunnerTest
 import io.hamal.lib.http.fixture.TestWebConfig
 import io.hamal.lib.kua.extension.ExtensionConfig
 import io.hamal.lib.kua.type.StringType
@@ -28,7 +28,7 @@ import kotlin.io.path.name
         TestStatusController::class
     ], webEnvironment = RANDOM_PORT
 )
-class HttpTest(@LocalServerPort var localServerPort: Int) : AbstractExtensionTest() {
+class HttpTest(@LocalServerPort var localServerPort: Int) : AbstractRunnerTest() {
 
     @TestFactory
     fun run(): List<DynamicTest> {

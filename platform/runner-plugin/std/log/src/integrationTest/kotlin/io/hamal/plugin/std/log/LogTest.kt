@@ -1,6 +1,6 @@
 package io.hamal.plugin.std.log
 
-import AbstractExtensionTest
+import AbstractRunnerTest
 import io.hamal.lib.domain._enum.ExecLogLevel.*
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecLogMessage
@@ -10,7 +10,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
-internal class LogTest : AbstractExtensionTest() {
+internal class LogTest : AbstractRunnerTest() {
 
     @Test
     fun `Log Trace`() {

@@ -1,6 +1,5 @@
-package io.hamal.lib.domain.vo.vo
+package io.hamal.lib.domain.vo
 
-import io.hamal.lib.domain.vo.NamespaceName
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
