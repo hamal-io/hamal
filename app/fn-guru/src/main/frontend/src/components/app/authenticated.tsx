@@ -14,10 +14,10 @@ const Authenticated: React.FC<AuthenticatedProps> = (props) => {
         return null
     }
     return (
-        <div className="flex flex-col h-screen justify-between">
+        <main className="flex-col md:flex">
             <Header/>
             {props.children}
-        </div>
+        </main>
     );
 }
 

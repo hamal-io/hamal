@@ -4,8 +4,10 @@ import LoginInPage from "./pages/landing/login";
 import OnboardingPage from "./pages/landing/onboarding";
 
 // app
-import PlayPage from "./pages/app/playground.tsx";
+import PlayPage from "./pages/app/dashboard";
 import Authenticated from "@/components/app/authenticated";
+
+import Dashboard from "./pages/app/dashboard";
 
 import NamespaceListPage from "./pages/app/namespace-list.tsx";
 import NamespaceDetailPage from "./pages/app/namespace-detail";
@@ -25,7 +27,12 @@ export const router = createBrowserRouter([
     {
         path: "/onboarding", element: <OnboardingPage/>
     },
-
+    {
+        path: "/dashboard", element:
+            <Authenticated>
+                <Dashboard/>
+            </Authenticated>
+    },
     {
         path: "/namespaces", element:
             <Authenticated>
