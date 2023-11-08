@@ -89,7 +89,7 @@ class SqliteCodeRepository(
                         CodeUpdatedRecord(
                             cmdId = cmdId,
                             entityId = codeId,
-                            value = cmd.value ?: currentVersion.value
+                            value = cmd.value!!
                         )
                     )
                 }
