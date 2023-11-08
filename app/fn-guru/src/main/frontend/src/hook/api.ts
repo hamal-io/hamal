@@ -107,6 +107,54 @@ export const useApiCreateAnonymousAccount = (): [ApiCreateAnonymousAccountAction
 }
 
 
+type ApiLoginAccountAction = (username: string, password: string, controller?: AbortController) => void
+export const useApiLoginAccount = (): [ApiLoginAccountAction, ApiLoginSubmitted, boolean, Error] => {
+    const [auth, setAuth] = useAuth()
+
+    const [data, setData] = useState<ApiLoginSubmitted | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<Error>(null);
+
+    const create = useCallback((username: string, password: string,controller?: AbortController) => {
+        fetch(`${import.meta.env.VITE_BASE_URL}/v1/login`, {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            signal: controller?.signal,
+            body: JSON.stringify({
+                username,
+                password
+            })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    setError(Error(`Request submission failed: ${response.status} - ${response.statusText}`))
+                    setIsLoading(false)
+                }
+                response.json().then(data => {
+                    setData(data)
+                    setIsLoading(false)
+
+                    setAuth({
+                        type: 'User',
+                        accountId: data.accountId,
+                        groupId: data.groupIds[0],
+                        token: data.token,
+                        name: data.name
+                    })
+                })
+            })
+            .catch(error => {
+                setError(error)
+                setIsLoading(false)
+            })
+    }, [auth])
+
+    return [create, data, isLoading, error]
+}
+
 export const useApiGet = <T>(url: string): [T, boolean, Error] => {
     const [auth, setAuth] = useAuth()
 
@@ -186,7 +234,6 @@ export const useApiPost = <T>(): [ApiPostAction, T, boolean, Error] => {
             console.log("Unauthorized")
             setError(Error("Unauthenticated"))
             setIsLoading(false)
-
             setAuth(null)
             window.location.href = '/'
 

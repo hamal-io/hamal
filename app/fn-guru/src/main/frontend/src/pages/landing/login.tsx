@@ -1,5 +1,5 @@
 import {useNavigate} from "react-router-dom";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {Button} from "@/components/ui/button.tsx";
 import {useForm} from "react-hook-form"
 
@@ -11,6 +11,7 @@ import * as z from "zod"
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
 import {Input} from "@/components/ui/input.tsx";
+import {useApiLoginAccount} from "@/hook";
 
 
 const formSchema = z.object({
@@ -22,6 +23,15 @@ export default function LoginPage() {
     const navigate = useNavigate()
     const [isLoading, setLoading] = useState(false)
     const [auth, setAuth] = useAuth()
+
+    const [login, loginSubmitted] = useApiLoginAccount()
+
+    useEffect(() => {
+        if (loginSubmitted != null) {
+            navigate("/dashboard", {replace: true})
+            setLoading(false)
+        }
+    }, [loginSubmitted]);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -38,24 +48,11 @@ export default function LoginPage() {
         console.log(values)
 
         try {
-
-            const {accountId, groupIds, token, name} = await login(values.username, values.password)
-            console.log(accountId, token)
-            setAuth({
-                type: 'User',
-                accountId,
-                groupId: groupIds[0],
-                token,
-                name
-            })
-
-            navigate("/namespaces", {replace: true})
-
-            console.log(auth)
+            setLoading(true)
+            login(values.username, values.password)
         } catch (e) {
             console.log(`login failed - ${e}`)
         } finally {
-            setLoading(false)
         }
 
     }
@@ -95,29 +92,11 @@ export default function LoginPage() {
                         </FormItem>
                     )}
                 />
-                <Button type="submit">Submit</Button>
+                <Button type="submit">
+                    {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
+                    Login
+                </Button>
             </form>
         </Form>
     );
-}
-
-async function login(username: string, password: string): Promise<ApiLoginSubmitted> {
-    //FIXME do not use admin endpoint - only for prototyping
-    const response = await fetch(`http://localhost:8008/v1/login`, {
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        },
-        method: "POST",
-        body: JSON.stringify({
-            username,
-            password
-        })
-    })
-
-    if (!response.ok) {
-        const message = `Request submission failed: ${response.status} - ${response.statusText}`;
-        throw new Error(message);
-    }
-    return await response.json() as ApiLoginSubmitted;
 }

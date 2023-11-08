@@ -4,13 +4,12 @@ import LoginInPage from "./pages/landing/login";
 import OnboardingPage from "./pages/landing/onboarding";
 
 // app
-import PlayPage from "./pages/app/dashboard";
 import Authenticated from "@/components/app/authenticated";
 
 import Dashboard from "./pages/app/dashboard";
 
-import NamespaceListPage from "./pages/app/namespace-list.tsx";
-import NamespaceDetailPage from "./pages/app/namespace-detail";
+import NamespaceList from "./pages/app/namespace-list";
+import NamespaceDetail from "./pages/app/namespace-detail";
 
 import NamespaceDashboardPage from "@/pages/app/namespace-detail/page/dashboard";
 import NamespaceExecDetailPage from "@/pages/app/namespace-detail/page/exec-detail";
@@ -19,6 +18,7 @@ import NamespaceFuncDetail from "@/pages/app/namespace-detail/page/func-detail";
 import NamespaceFuncListPage from "@/pages/app/namespace-detail/page/func-list";
 
 import {createBrowserRouter} from "react-router-dom";
+import Playground from "@/pages/app/playground";
 
 export const router = createBrowserRouter([
     {path: "/", element: <HomePage/>},
@@ -36,58 +36,58 @@ export const router = createBrowserRouter([
     {
         path: "/namespaces", element:
             <Authenticated>
-                <NamespaceListPage/>
+                <NamespaceList/>
             </Authenticated>
     },
     {
         path: "/namespaces/:namespaceId", element:
             <Authenticated>
-                <NamespaceDetailPage>
+                <NamespaceDetail>
                     <NamespaceDashboardPage/>
-                </NamespaceDetailPage>
+                </NamespaceDetail>
             </Authenticated>
     },
 
     {
         path: "/namespaces/:namespaceId/executions", element:
             <Authenticated>
-                <NamespaceDetailPage>
+                <NamespaceDetail>
                     <NamespaceExecListPage/>
-                </NamespaceDetailPage>
+                </NamespaceDetail>
             </Authenticated>
     },
 
     {
         path: "/namespaces/:namespaceId/executions/:execId", element:
             <Authenticated>
-                <NamespaceDetailPage>
+                <NamespaceDetail>
                     <NamespaceExecDetailPage/>
-                </NamespaceDetailPage>
+                </NamespaceDetail>
             </Authenticated>
     },
 
     {
         path: "/namespaces/:namespaceId/functions", element:
             <Authenticated>
-                <NamespaceDetailPage>
+                <NamespaceDetail>
                     <NamespaceFuncListPage/>
-                </NamespaceDetailPage>
+                </NamespaceDetail>
             </Authenticated>
     },
 
     {
         path: "/namespaces/:namespaceId/functions/:funcId", element:
             <Authenticated>
-                <NamespaceDetailPage>
+                <NamespaceDetail>
                     <NamespaceFuncDetail/>
-                </NamespaceDetailPage>
+                </NamespaceDetail>
             </Authenticated>
     },
 
     {
-        path: "/play", element:
+        path: "/playground", element:
             <Authenticated>
-                <PlayPage/>
+                <Playground/>
             </Authenticated>
     }
 ]);
