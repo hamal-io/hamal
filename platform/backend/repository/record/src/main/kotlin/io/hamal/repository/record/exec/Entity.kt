@@ -15,9 +15,10 @@ import java.time.Instant
 data class ExecEntity(
     override val cmdId: CmdId,
     override val id: ExecId,
+    override val sequence: RecordSequence,
+    override val recordedAt: RecordedAt,
     val namespaceId: NamespaceId,
     val groupId: GroupId,
-    override val sequence: RecordSequence,
 
 
     var status: ExecStatus? = null,
@@ -133,7 +134,8 @@ fun List<ExecRecord>.createEntity(): ExecEntity {
         namespaceId = firstRecord.namespaceId,
         groupId = firstRecord.groupId,
         cmdId = firstRecord.cmdId,
-        sequence = firstRecord.sequence()
+        sequence = firstRecord.sequence(),
+        recordedAt = firstRecord.recordedAt
     )
 
     forEach { record ->

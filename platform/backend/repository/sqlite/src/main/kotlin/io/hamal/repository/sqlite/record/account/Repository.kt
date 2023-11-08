@@ -29,7 +29,8 @@ internal object CreateAccount : CreateDomainObject<AccountId, AccountRecord, Acc
             type = firstRecord.type,
             name = firstRecord.name,
             email = firstRecord.email,
-            salt = firstRecord.salt
+            salt = firstRecord.salt,
+            recordedAt = firstRecord.recordedAt
         )
 
         recs.forEach { record ->

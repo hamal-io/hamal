@@ -35,6 +35,7 @@ abstract class SqliteRecordRepository<ID : DomainId, RECORD : Record<ID>, OBJ : 
                  entity_id      INTEGER NOT NULL,
                  sequence       INTEGER NOT NULL DEFAULT 0,
                  data           BLOB NOT NULL,
+                 timestamp      DEFAULT CURRENT_TIMESTAMP NOT NULL,
                  PRIMARY KEY    (entity_id, sequence),
                  UNIQUE         (entity_id, cmd_id)
             );

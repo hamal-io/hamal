@@ -42,35 +42,35 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Creates code duplicate`() = runWith(CodeRepository::class) {
-                createCode(
-                    codeId = CodeId(1),
-                    groupId = GroupId(1),
-                    codeValue = CodeValue("40 + 2")
-                )
+            createCode(
+                codeId = CodeId(1),
+                groupId = GroupId(1),
+                codeValue = CodeValue("40 + 2")
+            )
 
-                createCode(
-                    codeId = CodeId(2),
-                    groupId = GroupId(1),
-                    codeValue = CodeValue("40 + 2")
-                )
+            createCode(
+                codeId = CodeId(2),
+                groupId = GroupId(1),
+                codeValue = CodeValue("40 + 2")
+            )
 
-                verifyCount(2)
+            verifyCount(2)
 
-                with(get(CodeId(1))) {
-                    assertThat(id, equalTo(CodeId(1)))
-                    assertThat(version, equalTo(CodeVersion(1)))
-                    assertThat(value, equalTo(CodeValue("40 + 2")))
-                    assertThat(type, equalTo(CodeType.Lua54))
+            with(get(CodeId(1))) {
+                assertThat(id, equalTo(CodeId(1)))
+                assertThat(version, equalTo(CodeVersion(1)))
+                assertThat(value, equalTo(CodeValue("40 + 2")))
+                assertThat(type, equalTo(CodeType.Lua54))
 
-                }
-
-                with(get(CodeId(2))) {
-                    assertThat(id, equalTo(CodeId(2)))
-                    assertThat(version, equalTo(CodeVersion(1)))
-                    assertThat(value, equalTo(CodeValue("40 + 2")))
-                    assertThat(type, equalTo(CodeType.Lua54))
-                }
             }
+
+            with(get(CodeId(2))) {
+                assertThat(id, equalTo(CodeId(2)))
+                assertThat(version, equalTo(CodeVersion(1)))
+                assertThat(value, equalTo(CodeValue("40 + 2")))
+                assertThat(type, equalTo(CodeType.Lua54))
+            }
+        }
     }
 
     @Nested

@@ -24,7 +24,8 @@ internal object CreateGroup : CreateDomainObject<GroupId, GroupRecord, Group> {
             cmdId = firstRecord.cmdId,
             sequence = firstRecord.sequence(),
             name = firstRecord.name,
-            creatorId = firstRecord.creatorId
+            creatorId = firstRecord.creatorId,
+            recordedAt = firstRecord.recordedAt
         )
 
         recs.forEach { record ->

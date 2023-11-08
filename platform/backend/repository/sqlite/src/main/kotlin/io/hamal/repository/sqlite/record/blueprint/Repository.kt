@@ -26,7 +26,8 @@ internal object CreateBlueprint : CreateDomainObject<BlueprintId, BlueprintRecor
             id = firstRecord.entityId,
             groupId = firstRecord.groupId,
             creatorId = firstRecord.creatorId,
-            sequence = firstRecord.sequence()
+            sequence = firstRecord.sequence(),
+            recordedAt = firstRecord.recordedAt
         )
 
         recs.forEach { record ->

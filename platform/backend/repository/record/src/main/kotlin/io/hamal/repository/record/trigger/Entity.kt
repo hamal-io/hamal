@@ -21,6 +21,7 @@ data class TriggerEntity(
     override val id: TriggerId,
     override val cmdId: CmdId,
     override val sequence: RecordSequence,
+    override val recordedAt: RecordedAt,
 
     var groupId: GroupId? = null,
     var funcId: FuncId? = null,
@@ -135,7 +136,8 @@ fun List<TriggerRecord>.createEntity(): TriggerEntity {
     var result = TriggerEntity(
         id = firstRecord.entityId,
         cmdId = firstRecord.cmdId,
-        sequence = firstRecord.sequence()
+        sequence = firstRecord.sequence(),
+        recordedAt = firstRecord.recordedAt
     )
 
     forEach { record ->

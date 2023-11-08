@@ -11,8 +11,9 @@ import kotlinx.serialization.Transient
 @Serializable
 sealed class AccountRecord(
     @Transient
-    override var sequence: RecordSequence? = null
-) : Record<AccountId>()
+    override var sequence: RecordSequence? = null,
+
+    ) : Record<AccountId>()
 
 @Serializable
 @SerialName("AccountCreatedRecord")

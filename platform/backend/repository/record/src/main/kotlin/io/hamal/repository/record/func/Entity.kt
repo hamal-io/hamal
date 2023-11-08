@@ -11,8 +11,9 @@ import io.hamal.repository.record.RecordSequence
 data class FuncEntity(
     override val cmdId: CmdId,
     override val id: FuncId,
-    val groupId: GroupId,
     override val sequence: RecordSequence,
+    override val recordedAt: RecordedAt,
+    val groupId: GroupId,
 
     var namespaceId: NamespaceId? = null,
     var name: FuncName? = null,
@@ -87,7 +88,9 @@ fun List<FuncRecord>.createEntity(): FuncEntity {
         id = firstRecord.entityId,
         groupId = firstRecord.groupId,
         cmdId = firstRecord.cmdId,
-        sequence = firstRecord.sequence()
+        sequence = firstRecord.sequence(),
+        recordedAt = firstRecord.recordedAt
+
     )
 
     forEach { record ->

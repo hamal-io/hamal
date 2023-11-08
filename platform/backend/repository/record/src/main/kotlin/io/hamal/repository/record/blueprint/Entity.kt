@@ -10,9 +10,10 @@ import io.hamal.repository.record.RecordSequence
 data class BlueprintEntity(
     override val cmdId: CmdId,
     override val id: BlueprintId,
+    override val sequence: RecordSequence,
+    override val recordedAt: RecordedAt,
     val groupId: GroupId,
     var creatorId: AccountId,
-    override val sequence: RecordSequence,
 
     var name: BlueprintName? = null,
     var inputs: BlueprintInputs? = null,
@@ -65,7 +66,8 @@ fun List<BlueprintRecord>.createEntity(): BlueprintEntity {
         id = firstRecord.entityId,
         groupId = firstRecord.groupId,
         creatorId = firstRecord.creatorId,
-        sequence = firstRecord.sequence()
+        sequence = firstRecord.sequence(),
+        recordedAt = firstRecord.recordedAt
     )
 
     forEach { record ->

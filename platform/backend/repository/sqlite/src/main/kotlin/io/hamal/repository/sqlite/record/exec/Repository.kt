@@ -22,7 +22,8 @@ internal object CreateExec : CreateDomainObject<ExecId, ExecRecord, Exec> {
             id = firstRecord.entityId,
             namespaceId = firstRecord.namespaceId,
             groupId = firstRecord.groupId,
-            sequence = firstRecord.sequence()
+            sequence = firstRecord.sequence(),
+            recordedAt = firstRecord.recordedAt
         )
 
         recs.forEach { record ->
