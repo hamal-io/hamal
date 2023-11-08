@@ -13,6 +13,7 @@ data class CodeEntity(
     override val id: CodeId,
     override val sequence: RecordSequence,
     override val recordedAt: RecordedAt,
+
     val groupId: GroupId,
     var value: CodeValue? = null,
     val type: CodeType? = null
@@ -46,8 +47,8 @@ data class CodeEntity(
             groupId = groupId,
             version = CodeVersion(sequence.value),
             value = value!!,
-            type = type!!
-
+            type = type!!,
+            timestamp = recordedAt
         )
     }
 }
@@ -63,7 +64,7 @@ fun List<CodeRecord>.createEntity(): CodeEntity {
         groupId = firstRecord.groupId,
         cmdId = firstRecord.cmdId,
         sequence = firstRecord.sequence(),
-        recordedAt = firstRecord.recordedAt
+        recordedAt = RecordedAt.now()
 
     )
 

@@ -14,7 +14,8 @@ data class Code(
     val cmdId: CmdId,
     val version: CodeVersion,
     val value: CodeValue,
-    var type: CodeType
+    var type: CodeType,
+    val timestamp: RecordedAt
 ) : DomainObject<CodeId>
 
 

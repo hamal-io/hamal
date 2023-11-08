@@ -1,6 +1,7 @@
 package io.hamal.repository.sqlite.record.blueprint
 
 import io.hamal.lib.domain.vo.BlueprintId
+import io.hamal.lib.domain.vo.RecordedAt
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Blueprint
 import io.hamal.repository.api.BlueprintCmdRepository.CreateCmd
@@ -27,7 +28,7 @@ internal object CreateBlueprint : CreateDomainObject<BlueprintId, BlueprintRecor
             groupId = firstRecord.groupId,
             creatorId = firstRecord.creatorId,
             sequence = firstRecord.sequence(),
-            recordedAt = firstRecord.recordedAt
+            recordedAt = RecordedAt.now()
         )
 
         recs.forEach { record ->

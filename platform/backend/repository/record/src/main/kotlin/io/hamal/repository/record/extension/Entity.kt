@@ -61,7 +61,7 @@ fun List<ExtensionRecord>.createEntity(): ExtensionEntity {
         groupId = firstRecord.groupId,
         cmdId = firstRecord.cmdId,
         sequence = firstRecord.sequence(),
-        recordedAt = firstRecord.recordedAt
+        recordedAt = RecordedAt.now()
     )
 
     forEach { record ->

@@ -11,7 +11,8 @@ import kotlinx.serialization.Transient
 @Serializable
 sealed class BlueprintRecord(
     @Transient
-    override var sequence: RecordSequence? = null
+    override var sequence: RecordSequence? = null,
+    override val recordedAt: RecordedAt? = null
 ) : Record<BlueprintId>()
 
 @Serializable

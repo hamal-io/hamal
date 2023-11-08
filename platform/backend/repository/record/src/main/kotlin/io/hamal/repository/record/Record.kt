@@ -40,10 +40,13 @@ abstract class Record<ID : DomainId> {
     abstract val cmdId: CmdId
     abstract val entityId: ID
     abstract var sequence: RecordSequence?
-    val recordedAt: RecordedAt = RecordedAt.now()
+    abstract val recordedAt: RecordedAt?
 
     fun sequence() =
         sequence ?: throw IllegalStateException("Records needs to be stored to db before it can be accessed")
+
+    fun recordedAt() =
+        recordedAt ?: throw IllegalStateException("Records needs to be stored to db before it can be accessed")
 }
 
 interface RecordEntity<ID : DomainId, RECORD : Record<ID>, OBJ : DomainObject<ID>> {

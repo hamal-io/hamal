@@ -2,6 +2,7 @@ package io.hamal.repository.sqlite.record.code
 
 import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.domain.vo.CodeVersion
+import io.hamal.lib.domain.vo.RecordedAt
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Code
 import io.hamal.repository.api.CodeCmdRepository.CreateCmd
@@ -29,7 +30,7 @@ internal object CreateCode : CreateDomainObject<CodeId, CodeRecord, Code> {
             id = firstRecord.entityId,
             groupId = firstRecord.groupId,
             sequence = firstRecord.sequence(),
-            recordedAt = firstRecord.recordedAt
+            recordedAt = RecordedAt.now()
         )
 
         recs.forEach { record ->

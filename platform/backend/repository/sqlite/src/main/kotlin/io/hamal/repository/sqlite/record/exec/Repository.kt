@@ -1,6 +1,7 @@
 package io.hamal.repository.sqlite.record.exec
 
 import io.hamal.lib.domain.vo.ExecId
+import io.hamal.lib.domain.vo.RecordedAt
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.*
 import io.hamal.repository.api.ExecCmdRepository.*
@@ -23,7 +24,7 @@ internal object CreateExec : CreateDomainObject<ExecId, ExecRecord, Exec> {
             namespaceId = firstRecord.namespaceId,
             groupId = firstRecord.groupId,
             sequence = firstRecord.sequence(),
-            recordedAt = firstRecord.recordedAt
+            recordedAt = RecordedAt.now()
         )
 
         recs.forEach { record ->

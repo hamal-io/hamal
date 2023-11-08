@@ -13,6 +13,7 @@ data class AccountEntity(
     override val sequence: RecordSequence,
     override val recordedAt: RecordedAt,
 
+
     var type: AccountType?,
     var name: AccountName?,
     var email: AccountEmail?,
@@ -41,6 +42,7 @@ data class AccountEntity(
         }
     }
 
+
     override fun toDomainObject(): Account {
         return Account(
             cmdId = cmdId,
@@ -66,7 +68,7 @@ fun List<AccountRecord>.createEntity(): AccountEntity {
         name = firstRecord.name,
         email = firstRecord.email,
         salt = firstRecord.salt,
-        recordedAt = firstRecord.recordedAt
+        recordedAt = RecordedAt.now()
     )
 
     forEach { record ->

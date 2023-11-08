@@ -89,7 +89,7 @@ fun List<FuncRecord>.createEntity(): FuncEntity {
         groupId = firstRecord.groupId,
         cmdId = firstRecord.cmdId,
         sequence = firstRecord.sequence(),
-        recordedAt = firstRecord.recordedAt
+        recordedAt = RecordedAt.now()
 
     )
 

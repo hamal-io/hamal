@@ -1,5 +1,6 @@
 package io.hamal.repository.sqlite.record.trigger
 
+import io.hamal.lib.domain.vo.RecordedAt
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.*
@@ -21,7 +22,7 @@ internal object CreateTrigger : CreateDomainObject<TriggerId, TriggerRecord, Tri
             id = firstRecord.entityId,
             cmdId = firstRecord.cmdId,
             sequence = firstRecord.sequence(),
-            recordedAt = firstRecord.recordedAt
+            recordedAt = RecordedAt.now()
         )
 
         recs.forEach { record ->

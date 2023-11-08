@@ -12,7 +12,8 @@ import kotlinx.serialization.Transient
 @Serializable
 sealed class ExecRecord(
     @Transient
-    override var sequence: RecordSequence? = null
+    override var sequence: RecordSequence? = null,
+    override val recordedAt: RecordedAt? = null
 ) : Record<ExecId>()
 
 @Serializable

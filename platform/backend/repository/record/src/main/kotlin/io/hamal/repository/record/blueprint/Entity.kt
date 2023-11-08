@@ -67,7 +67,7 @@ fun List<BlueprintRecord>.createEntity(): BlueprintEntity {
         groupId = firstRecord.groupId,
         creatorId = firstRecord.creatorId,
         sequence = firstRecord.sequence(),
-        recordedAt = firstRecord.recordedAt
+        recordedAt = RecordedAt.now()
     )
 
     forEach { record ->

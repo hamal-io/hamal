@@ -3,16 +3,19 @@ package io.hamal.repository
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.*
+import io.hamal.repository.api.Code
 import io.hamal.repository.api.CodeCmdRepository.CreateCmd
 import io.hamal.repository.api.CodeCmdRepository.UpdateCmd
 import io.hamal.repository.api.CodeQueryRepository.CodeQuery
 import io.hamal.repository.api.CodeRepository
 import io.hamal.repository.fixture.AbstractUnitTest
 import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.TestFactory
 import org.junit.jupiter.api.assertThrows
+import java.util.concurrent.atomic.AtomicInteger
 import kotlin.math.abs
 import kotlin.random.Random
 
@@ -450,29 +453,87 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
 
     }
 
-    private fun CodeRepository.createCode(
-        codeId: CodeId,
-        groupId: GroupId,
-        cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10),
-        codeValue: CodeValue
-    ) {
-        create(
-            CreateCmd(
-                id = cmdId,
-                codeId = codeId,
-                groupId = groupId,
-                value = codeValue
+    @Nested
+    inner class TimestampTest {
+
+        @TestFactory
+        fun `Initialization Test`() = runWith(CodeRepository::class) {
+            createCode(CodeId(1), GroupId(1), CmdGen(), CodeValue("1+1"))
+            Thread.sleep(1000)
+            update(
+                CodeId(1), UpdateCmd(
+                    id = CmdGen(),
+                    value = CodeValue("1 + 2")
+                )
             )
-        )
+
+            val t1 = get(CodeId(1), CodeVersion(1)).timestamp
+            val t2 = get(CodeId(1), CodeVersion(2)).timestamp
+            assertThat(t2, not(t1))
+        }
+
+        @TestFactory
+        fun `Ordering Test`() = runWith(CodeRepository::class) {
+            createCode(CodeId(1), GroupId(1), CmdGen(), CodeValue("1+1"))
+
+            val fn: (CodeVersion) -> RecordedAt = { get(CodeId(1), it).timestamp }
+
+
+            var last = fn(CodeVersion(1))
+            for (i in 1..10) {
+                Thread.sleep(10)
+                update(
+                    CodeId(1), UpdateCmd(
+                        id = CmdGen(),
+                        value = CodeValue("1 + ${i}")
+                    )
+                )
+                val next = fn(CodeVersion(i + 1))
+                assertThat(next, greaterThan(last))
+                last = next
+            }
+
+        }
+
+
     }
 
-    private fun CodeRepository.verifyCount(expected: Int) {
-        verifyCount(expected) { }
+
+    private object CmdGen {
+        private val atomicCounter = AtomicInteger(1)
+
+        operator fun invoke(): CmdId {
+            return CmdId(atomicCounter.incrementAndGet())
+        }
     }
 
-    private fun CodeRepository.verifyCount(expected: Int, block: CodeQuery.() -> Unit) {
-        val counted = count(CodeQuery(groupIds = listOf()).also(block))
-        assertThat("number of code expected", counted, equalTo(expected.toULong()))
-    }
 
 }
+
+
+private fun CodeRepository.createCode(
+    codeId: CodeId,
+    groupId: GroupId,
+    cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10),
+    codeValue: CodeValue
+): Code {
+    return create(
+        CreateCmd(
+            id = cmdId,
+            codeId = codeId,
+            groupId = groupId,
+            value = codeValue
+        )
+    )
+}
+
+private fun CodeRepository.verifyCount(expected: Int) {
+    verifyCount(expected) { }
+}
+
+private fun CodeRepository.verifyCount(expected: Int, block: CodeQuery.() -> Unit) {
+    val counted = count(CodeQuery(groupIds = listOf()).also(block))
+    assertThat("number of code expected", counted, equalTo(expected.toULong()))
+}
+
+

@@ -2,6 +2,7 @@ package io.hamal.repository.sqlite.record.namespace
 
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceName
+import io.hamal.lib.domain.vo.RecordedAt
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Namespace
 import io.hamal.repository.api.NamespaceCmdRepository
@@ -27,7 +28,7 @@ internal object CreateNamespace : CreateDomainObject<NamespaceId, NamespaceRecor
             id = firstRecord.entityId,
             groupId = firstRecord.groupId,
             sequence = firstRecord.sequence(),
-            recordedAt = firstRecord.recordedAt
+            recordedAt = RecordedAt.now()
         )
 
         recs.forEach { record ->

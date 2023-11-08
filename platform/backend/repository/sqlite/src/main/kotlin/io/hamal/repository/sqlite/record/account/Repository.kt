@@ -2,6 +2,7 @@ package io.hamal.repository.sqlite.record.account
 
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.AccountName
+import io.hamal.lib.domain.vo.RecordedAt
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Account
 import io.hamal.repository.api.AccountCmdRepository
@@ -20,6 +21,7 @@ internal object CreateAccount : CreateDomainObject<AccountId, AccountRecord, Acc
     override fun invoke(recs: List<AccountRecord>): Account {
         check(recs.isNotEmpty()) { "At least one record is required" }
         val firstRecord = recs.first()
+
         check(firstRecord is AccountCreatedRecord)
 
         var result = AccountEntity(
@@ -30,7 +32,7 @@ internal object CreateAccount : CreateDomainObject<AccountId, AccountRecord, Acc
             name = firstRecord.name,
             email = firstRecord.email,
             salt = firstRecord.salt,
-            recordedAt = firstRecord.recordedAt
+            recordedAt = RecordedAt.now()
         )
 
         recs.forEach { record ->

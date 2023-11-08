@@ -1,6 +1,7 @@
 package io.hamal.repository.sqlite.record.group
 
 import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.RecordedAt
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Group
 import io.hamal.repository.api.GroupCmdRepository.CreateCmd
@@ -25,7 +26,7 @@ internal object CreateGroup : CreateDomainObject<GroupId, GroupRecord, Group> {
             sequence = firstRecord.sequence(),
             name = firstRecord.name,
             creatorId = firstRecord.creatorId,
-            recordedAt = firstRecord.recordedAt
+            recordedAt = RecordedAt.now()
         )
 
         recs.forEach { record ->

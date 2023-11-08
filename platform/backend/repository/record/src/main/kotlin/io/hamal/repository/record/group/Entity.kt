@@ -54,7 +54,7 @@ fun List<GroupRecord>.createEntity(): GroupEntity {
         sequence = firstRecord.sequence(),
         name = firstRecord.name,
         creatorId = firstRecord.creatorId,
-        recordedAt = firstRecord.recordedAt
+        recordedAt = RecordedAt.now()
     )
 
     forEach { record ->

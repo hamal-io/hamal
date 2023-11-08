@@ -137,7 +137,7 @@ fun List<TriggerRecord>.createEntity(): TriggerEntity {
         id = firstRecord.entityId,
         cmdId = firstRecord.cmdId,
         sequence = firstRecord.sequence(),
-        recordedAt = firstRecord.recordedAt
+        recordedAt = RecordedAt.now()
     )
 
     forEach { record ->
