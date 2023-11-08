@@ -1,8 +1,8 @@
 import React, {FC, ReactNode} from 'react'
 import {useParams} from "react-router-dom";
-import {ApiNamespace} from "../../../api/types";
+import {ApiNamespace} from "@/api/types";
 import NamespaceSidebar from "./component/sidebar";
-import {useApiGet} from "../../../hook";
+import {useApiGet} from "@/hook";
 
 
 interface NamespaceDetailPageProps {

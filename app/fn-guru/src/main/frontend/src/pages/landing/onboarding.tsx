@@ -1,6 +1,6 @@
 import React, {FC, useEffect, useState} from 'react'
 import {Spinner} from "flowbite-react";
-import {useApiCreateAnonymousAccount, useApiPost} from "../../../hook";
+import {useApiCreateAnonymousAccount, useApiPost} from "../../hook";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useAuth} from "@/hook/auth.ts";
 

@@ -2,14 +2,13 @@ import {Avatar, Button, Dropdown, Label, Modal, Navbar as Delegate, TextInput} f
 import React, {FC, useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {HiExclamation} from "react-icons/hi";
-import {ApiAccountConversionSubmitted} from "../../../api/account.ts";
-import {DropdownItem} from "flowbite-react/lib/esm/components/Dropdown/DropdownItem";
-import imgUrl from '../../../assets/img/hamal.png'
+import {ApiAccountConversionSubmitted} from "@/api/account.ts";
+import imgUrl from '@/assets/img/hamal.png'
 import {useAuth} from "@/hook/auth.ts";
 import {useApiPost} from "@/hook";
 
 
-export const Navbar: FC = () => {
+const Header: FC = () => {
     const navigate = useNavigate()
     const [auth, setAuth] = useAuth()
     const isAnonymous = auth.type === 'Anonymous'
@@ -36,13 +35,13 @@ export const Navbar: FC = () => {
                             Howdy, <span className="font-semibold">{auth.name} </span>
                         </span>
                         </Dropdown.Header>
-                        <DropdownItem onClick={() => {
-                            // FIXME core-72  - call logout endpoint to invalidate token
-                            setAuth(null)
-                            navigate("/")
-                        }}>
-                            Log out
-                        </DropdownItem>
+                        {/*<DropdownItem onClick={() => {*/}
+                        {/*    // FIXME core-72  - call logout endpoint to invalidate token*/}
+                        {/*    setAuth(null)*/}
+                        {/*    navigate("/")*/}
+                        {/*}}>*/}
+                        {/*    Log out*/}
+                        {/*</DropdownItem>*/}
                     </Dropdown>
                     <Delegate.Toggle/>
                 </div>
@@ -159,3 +158,4 @@ const ConvertAccountModalButton = () => {
     )
 }
 
+export default Header;

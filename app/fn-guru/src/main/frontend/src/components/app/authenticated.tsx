@@ -1,6 +1,6 @@
 import React, {ReactNode} from 'react'
-import {Navbar} from "../index.ts";
 import {useAuth} from "@/hook/auth.ts";
+import Header from "@/components/app/header.tsx";
 
 interface AuthenticatedProps {
     children: ReactNode;
@@ -15,7 +15,7 @@ const Authenticated: React.FC<AuthenticatedProps> = (props) => {
     }
     return (
         <div className="flex flex-col h-screen justify-between">
-            <Navbar/>
+            <Header/>
             {props.children}
         </div>
     );

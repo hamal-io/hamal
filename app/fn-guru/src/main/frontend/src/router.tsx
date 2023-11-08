@@ -1,23 +1,22 @@
 // public
-import HomePage from "./public/page/home";
-import LoginInPage from "./public/page/login";
+import HomePage from "./pages/landing/home";
+import LoginInPage from "./pages/landing/login";
+import OnboardingPage from "./pages/landing/onboarding";
 
 // app
-import PlayPage from "./app/page/adhoc";
-import Authenticated from "./app/component/authenticated";
+import PlayPage from "./pages/app/adhoc";
+import Authenticated from "@/components/app/authenticated";
 
-import NamespaceListPage from "./app/page/namespace-list";
-import NamespaceDetailPage from "./app/page/namespace-detail";
+import NamespaceListPage from "./pages/app/namespace-list";
+import NamespaceDetailPage from "./pages/app/namespace-detail";
 
-import NamespaceDashboardPage from "./app/page/namespace-detail/page/dashboard";
-import NamespaceExecDetailPage from "./app/page/namespace-detail/page/exec-detail";
-import NamespaceExecListPage from "./app/page/namespace-detail/page/exec-list";
-import NamespaceFuncDetail from "./app/page/namespace-detail/page/func-detail";
-import NamespaceFuncListPage from "./app/page/namespace-detail/page/func-list";
+import NamespaceDashboardPage from "@/pages/app/namespace-detail/page/dashboard";
+import NamespaceExecDetailPage from "@/pages/app/namespace-detail/page/exec-detail";
+import NamespaceExecListPage from "@/pages/app/namespace-detail/page/exec-list";
+import NamespaceFuncDetail from "@/pages/app/namespace-detail/page/func-detail";
+import NamespaceFuncListPage from "@/pages/app/namespace-detail/page/func-list";
 
-import OnboardingPage from "./public/page/onboarding";
 import {createBrowserRouter} from "react-router-dom";
-
 
 export const router = createBrowserRouter([
     {path: "/", element: <HomePage/>},

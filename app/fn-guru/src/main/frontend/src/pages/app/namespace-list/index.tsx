@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react'
 import {useNavigate} from "react-router-dom";
-import {ApiNamespace, ApiNamespaceList} from "../../../api/types";
+import {ApiNamespace, ApiNamespaceList} from "@/api/types";
 import {Button, Card, Label, Modal, TextInput} from "flowbite-react";
-import {useApiGet, useApiPost, } from "../../../hook";
+import {useApiGet, useApiPost, } from "@/hook";
 import {HiPlus} from 'react-icons/hi';
 import {useAuth} from "@/hook/auth.ts";
 

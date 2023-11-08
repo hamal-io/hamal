@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import {Button} from "flowbite-react";
 import Editor from "../../../components/ui/editor.tsx";
-import {useApiPost} from "../../../hook";
+import {useApiPost} from "@/hook";
 
 const AdhocPage: React.FC = () => {
     const [post, data] = useApiPost()

@@ -37,8 +37,6 @@ const HomePage: React.FC = () => {
 
                     <div className="pt-3">
                         <Button
-                            className="bg-gray-400"
-                            color="dark"
                             onClick={() => {
                                 navigate("/onboarding", {replace: true, state: {type: "Function", code}})
                             }}>
