@@ -5,6 +5,7 @@ import io.hamal.core.req.ReqHandler
 import io.hamal.core.req.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.repository.api.CodeCmdRepository
+import io.hamal.repository.api.CodeRepository
 import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncCmdRepository.UpdateCmd
 import io.hamal.repository.api.FuncRepository
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class UpdateFuncHandler(
-    val codeCmdRepository: CodeCmdRepository,
+    val codeRepository: CodeRepository,
     val funcRepository: FuncRepository,
     val eventEmitter: PlatformEventEmitter
 ) : ReqHandler<FuncUpdateSubmitted>(FuncUpdateSubmitted::class) {
@@ -27,7 +28,7 @@ class UpdateFuncHandler(
 private fun UpdateFuncHandler.updateFunc(req: FuncUpdateSubmitted): Func {
     val func = funcRepository.get(req.funcId)
 
-    val code = codeCmdRepository.update(
+    val code = codeRepository.update(
         func.code.id, CodeCmdRepository.UpdateCmd(
             id = req.cmdId(),
             value = req.code

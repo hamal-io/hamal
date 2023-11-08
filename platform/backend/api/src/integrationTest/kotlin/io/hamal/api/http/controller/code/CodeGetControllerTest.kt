@@ -77,14 +77,14 @@ internal class CodeGetControllerTest : CodeBaseControllerTest() {
             )
         )
 
-        repeat(20) { iter ->
+        repeat(5) { iter ->
             codeCmdRepository.update(
                 CodeId(3), CodeCmdRepository.UpdateCmd(
                     CmdGen(),
                     CodeValue("40 + 2")
                 )
             )
-            assertThat(getCode(CodeId(3)).version, equalTo(CodeVersion(iter + 2)))
+            assertThat(getCode(CodeId(3)).version, equalTo(CodeVersion(2)))
         }
 
         with(getCode(CodeId(3))) {

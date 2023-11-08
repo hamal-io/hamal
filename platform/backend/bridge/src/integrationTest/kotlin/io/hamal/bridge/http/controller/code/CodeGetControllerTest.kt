@@ -81,7 +81,7 @@ internal class CodeGetControllerTest : CodeBaseControllerTest() {
             codeCmdRepository.update(
                 CodeId(3), CodeCmdRepository.UpdateCmd(
                     CmdGen(),
-                    CodeValue("40 + 2")
+                    CodeValue("40 + ${iter}")
                 )
             )
             assertThat(getCode(CodeId(3)).version, equalTo(CodeVersion(iter + 2)))
@@ -89,7 +89,7 @@ internal class CodeGetControllerTest : CodeBaseControllerTest() {
 
         with(getCode(CodeId(3))) {
             assertThat(id, equalTo(CodeId(3)))
-            assertThat(value, equalTo(CodeValue("40 + 2")))
+            assertThat(value, equalTo(CodeValue("40 + 19")))
         }
     }
 
