@@ -4,10 +4,10 @@ import LoginInPage from "./pages/landing/login";
 import OnboardingPage from "./pages/landing/onboarding";
 
 // app
-import PlayPage from "./pages/app/adhoc";
+import PlayPage from "./pages/app/playground.tsx";
 import Authenticated from "@/components/app/authenticated";
 
-import NamespaceListPage from "./pages/app/namespace-list";
+import NamespaceListPage from "./pages/app/namespace-list.tsx";
 import NamespaceDetailPage from "./pages/app/namespace-detail";
 
 import NamespaceDashboardPage from "@/pages/app/namespace-detail/page/dashboard";

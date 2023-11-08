@@ -132,10 +132,11 @@ export const useApiGet = <T>(url: string): [T, boolean, Error] => {
             })
                 .then(response => {
 
+                    console.log("response", JSON.stringify(response))
                     if (response.status === 403) {
                         console.log("forbidden")
                         setAuth(null)
-                        window.location.href = '/'
+                        window.location.href = '/login'
                     }
 
                     if (!response.ok) {
@@ -154,6 +155,13 @@ export const useApiGet = <T>(url: string): [T, boolean, Error] => {
                         // FIXME NETWORK ERROR
                         setError(error)
                         setIsLoading(false)
+                    }
+
+
+                    if(error.message === 'NetworkError when attempting to fetch resource.'){
+                        console.log("forbidden")
+                        setAuth(null)
+                        window.location.href = '/login'
                     }
                 })
         }

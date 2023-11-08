@@ -1,90 +1,123 @@
 import {useNavigate} from "react-router-dom";
 import {useState} from "react";
-import {login} from "@/api/account.ts";
-import {useAuth} from "@/hook/auth.ts";
 import {Button} from "@/components/ui/button.tsx";
-import {Label} from "@/components/ui/label.tsx";
-import {Input} from "@/components/ui/input.tsx";
-import {Icons} from "@/components/icon.tsx";
+import {useForm} from "react-hook-form"
 
-const LoginPage = () => {
+import {ApiLoginSubmitted} from "@/types/auth";
+import {Loader2} from "lucide-react";
+import {useAuth} from "@/hook/auth.ts";
+
+import * as z from "zod"
+import {zodResolver} from "@hookform/resolvers/zod";
+import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
+import {Input} from "@/components/ui/input.tsx";
+
+
+const formSchema = z.object({
+    username: z.string().min(2).max(50),
+    password: z.string().min(2).max(50)
+})
+
+export default function LoginPage() {
     const navigate = useNavigate()
     const [isLoading, setLoading] = useState(false)
-
-    const [username, setUsername] = useState<string>('')
-    const [password, setPassword] = useState<string>('')
-
     const [auth, setAuth] = useAuth()
+
+    const form = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            username: "",
+            password: "",
+        },
+    })
+
+    // 2. Define a submit handler.
+    async function onSubmit(values: z.infer<typeof formSchema>) {
+        // Do something with the form values.
+        // ✅ This will be type-safe and validated.
+        console.log(values)
+
+        try {
+
+            const {accountId, groupIds, token, name} = await login(values.username, values.password)
+            console.log(accountId, token)
+            setAuth({
+                type: 'User',
+                accountId,
+                groupId: groupIds[0],
+                token,
+                name
+            })
+
+            navigate("/namespaces", {replace: true})
+
+            console.log(auth)
+        } catch (e) {
+            console.log(`login failed - ${e}`)
+        } finally {
+            setLoading(false)
+        }
+
+    }
+
     return (
-        <form className="flex max-w-md flex-col gap-4">
-            <div>
-                <div className="mb-2 block">
-                    <Label
-                        htmlFor="password1"
-                    >
-                        Your username
-                    </Label>
-                </div>
-                <Input
-                    id="username"
-                    placeholder="username"
-                    required
-                    type="username"
-                    onChange={evt => setUsername(evt.target.value)}
+        <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                <FormField
+                    control={form.control}
+                    name="username"
+                    render={({field}) => (
+                        <FormItem>
+                            <FormLabel>Username</FormLabel>
+                            <FormControl>
+                                <Input placeholder="username" {...field} />
+                            </FormControl>
+                            <FormDescription>
+                                This is your public display name.
+                            </FormDescription>
+                            <FormMessage/>
+                        </FormItem>
+                    )}
                 />
-            </div>
-            <div>
-                <div className="mb-2 block">
-                    <Label
-                        htmlFor="password1"
-                    >
-                        Your password
-                    </Label>
-                </div>
-                <Input
-                    id="password1"
-                    required
-                    type="password"
-                    placeholder={"**********"}
-                    value={password}
-                    onChange={evt => setPassword(evt.target.value)}
+                <FormField
+                    control={form.control}
+                    name="password"
+                    render={({field}) => (
+                        <FormItem>
+                            <FormLabel>Password</FormLabel>
+                            <FormControl>
+                                <Input placeholder="***********" type="password" {...field} />
+                            </FormControl>
+                            <FormDescription>
+                                This is your password.
+                            </FormDescription>
+                            <FormMessage/>
+                        </FormItem>
+                    )}
                 />
-            </div>
-            <Button onClick={event => {
-                event.preventDefault();
-                setLoading(true);
-                console.log("perform login")
-                console.log("auth", auth)
-
-                const action = async () => {
-                    try {
-                        const {accountId, groupIds, token, name} = await login(username, password)
-                        console.log(accountId, token)
-                        setAuth({
-                            type: 'User',
-                            accountId,
-                            groupId: groupIds[0],
-                            token,
-                            name
-                        })
-
-                        navigate("/namespaces")
-
-                        console.log(auth)
-                    } catch (e) {
-                        console.log(`login failed - ${e}`)
-                    } finally {
-                        setLoading(false);
-                    }
-                }
-                action()
-
-            }}>
-                {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin"/>}
-                Sign in
-            </Button>
-        </form>
-    )
+                <Button type="submit">Submit</Button>
+            </form>
+        </Form>
+    );
 }
 
-export default LoginPage;
+async function login(username: string, password: string): Promise<ApiLoginSubmitted> {
+    //FIXME do not use admin endpoint - only for prototyping
+    const response = await fetch(`http://localhost:8008/v1/login`, {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        method: "POST",
+        body: JSON.stringify({
+            username,
+            password
+        })
+    })
+
+    if (!response.ok) {
+        const message = `Request submission failed: ${response.status} - ${response.statusText}`;
+        throw new Error(message);
+    }
+    return await response.json() as ApiLoginSubmitted;
+}

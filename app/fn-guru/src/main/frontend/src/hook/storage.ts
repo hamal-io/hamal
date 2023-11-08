@@ -15,10 +15,8 @@ export const useLocalStorage = <T>(key: string, defaultValue: T): [T | null, Rea
     });
 
     useEffect(() => {
-        if (value) {
+        if (value != null) {
             localStorage.setItem(key, JSON.stringify(value))
-        } else {
-            localStorage.removeItem(key)
         }
     }, [key, value])
 

@@ -8,7 +8,7 @@ import {Button} from "@/components/ui/button.tsx";
 const Header: FC = () => (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
         <div className="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
-            <LandingNav/>
+            <Nav/>
             <div className="flex flex-1 items-center justify-end space-x-4">
                 <nav className="flex items-center space-x-1">
                     <GoToApp/>
@@ -18,7 +18,7 @@ const Header: FC = () => (
     </header>
 );
 
-function LandingNav() {
+function Nav() {
     return (
         <div className="flex gap-6 md:gap-10">
             <a key='home' href="/" className="flex items-center space-x-2">
