@@ -11,10 +11,10 @@ import io.hamal.repository.api.CodeRepository
 import io.hamal.repository.fixture.AbstractUnitTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.TestFactory
 import org.junit.jupiter.api.assertThrows
-import java.util.concurrent.atomic.AtomicInteger
 import kotlin.math.abs
 import kotlin.random.Random
 
@@ -468,42 +468,9 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
 
             val t1 = get(CodeId(1), CodeVersion(1)).timestamp
             val t2 = get(CodeId(1), CodeVersion(2)).timestamp
-            assertThat(t2, not(t1))
-        }
-
-        @TestFactory
-        fun `Ordering Test`() = runWith(CodeRepository::class) {
-            createCode(CodeId(1), GroupId(1), CmdGen(), CodeValue("1+1"))
-
-            val fn: (CodeVersion) -> RecordedAt = { get(CodeId(1), it).timestamp }
-            var last = fn(CodeVersion(1))
-            for (i in 1..5) {
-                Thread.sleep(1000) //This takes a while 1s is min
-                update(
-                    CodeId(1), UpdateCmd(
-                        id = CmdGen(),
-                        value = CodeValue("1 + ${i}")
-                    )
-                )
-                val next = fn(CodeVersion(i + 1))
-                assertThat(next, greaterThan(last))
-                last = next
-            }
-        }
-
-
-    }
-
-
-    private object CmdGen {
-        private val atomicCounter = AtomicInteger(1)
-
-        operator fun invoke(): CmdId {
-            return CmdId(atomicCounter.incrementAndGet())
+            assertTrue(t2.value.isAfter(t1.value))
         }
     }
-
-
 }
 
 
