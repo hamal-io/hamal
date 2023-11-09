@@ -1,8 +1,8 @@
 import React from 'react'
 import {ApiExecList} from "../../../../../api/types";
-import {Card} from "flowbite-react";
 import {useNavigate, useParams} from "react-router-dom";
 import {useApiGet} from "../../../../../hook";
+import {Card} from "@/components/ui/card.tsx";
 
 
 const NamespaceExecListPage: React.FC = () => {

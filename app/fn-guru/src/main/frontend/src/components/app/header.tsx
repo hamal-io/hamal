@@ -23,11 +23,11 @@ const Header: FC = () => {
     const [auth] = useAuth()
     return (
         <div className="border-b">
-            <div className="flex h-16 items-center px-4">
-                {auth.type !== 'User' && <ConvertAccountModalButton/>}
-                <MainNav className="mx-6"/>
-                <div className="ml-auto flex items-center space-x-4">
-                    <UserNav/>
+            <div className="flex h-16 px-4">
+                <div className="w-full flex items-center justify-between space-x-4">
+                    {auth.type !== 'User' ? <Convert/> : (<div/>)}
+                    <Nav className="mx-6"/>
+                    <Profile/>
                 </div>
             </div>
         </div>
@@ -37,9 +37,9 @@ const Header: FC = () => {
 export default Header
 
 
-const UserNav = () => {
+const Profile = () => {
     const navigate = useNavigate()
-    const [auth, setAuth] = useAuth()
+    const [auth] = useAuth()
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -80,7 +80,7 @@ const UserNav = () => {
     )
 }
 
-export function MainNav({
+export function Nav({
                             className,
                             ...props
                         }: React.HTMLAttributes<HTMLElement>) {
@@ -126,7 +126,7 @@ const formSchema = z.object({
     email: z.string().min(2).max(50).optional()
 })
 
-const ConvertAccountModalButton = () => {
+const Convert = () => {
     const [auth, setAuth] = useAuth()
     const navigate = useNavigate()
     const [openDialog, setOpenDialog] = useState<boolean>(false)

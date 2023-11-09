@@ -1,5 +1,5 @@
 import React, {FC} from 'react'
-import {ListGroup} from 'flowbite-react';
+// import {ListGroup} from 'flowbite-react';
 
 import {useNavigate, useParams} from "react-router-dom";
 
@@ -24,12 +24,12 @@ const NamespaceSidebar: FC = () => {
     const navigate = useNavigate()
     return (
         <div className="flex justify-center">
-            <ListGroup
-                className="w-48"
-            >
-                <ListGroup.Item theme={itemTheme} onClick={() => navigate(`/namespaces/${namespaceId}/executions`)}>Execution</ListGroup.Item>
-                <ListGroup.Item theme={itemTheme} onClick={() => navigate(`/namespaces/${namespaceId}/functions`)}>Function</ListGroup.Item>
-            </ListGroup>
+            {/*<ListGroup*/}
+            {/*    className="w-48"*/}
+            {/*>*/}
+            {/*    <ListGroup.Item theme={itemTheme} onClick={() => navigate(`/namespaces/${namespaceId}/executions`)}>Execution</ListGroup.Item>*/}
+            {/*    <ListGroup.Item theme={itemTheme} onClick={() => navigate(`/namespaces/${namespaceId}/functions`)}>Function</ListGroup.Item>*/}
+            {/*</ListGroup>*/}
         </div>
     );
 }

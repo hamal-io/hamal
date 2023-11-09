@@ -3,7 +3,8 @@ import {useParams} from "react-router-dom";
 import {useApiDeployLatestCode, useApiGet, useApiPatch} from "../../../../../hook";
 import {ApiFunc} from "../../../../../api/types";
 import Editor from "../../../../../components/ui/editor.tsx";
-import {Button, TextInput} from "flowbite-react";
+import {Button} from "@/components/ui/button.tsx";
+import {Input} from "@/components/ui/input.tsx";
 
 interface ApiFuncUpdateSubmitted {
     id: string;
@@ -39,7 +40,7 @@ const NamespaceFuncDetailPage: React.FC = () => {
         <main className="flex-1 w-full mx-auto text-lg h-full bg-gray-200">
             <div className="w-3/4 space-y-6">
                 <div>
-                    <TextInput
+                    <Input
                         id="name"
                         placeholder="Useful function name..."
                         required

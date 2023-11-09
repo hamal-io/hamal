@@ -15,7 +15,7 @@ import NamespaceDashboardPage from "@/pages/app/namespace-detail/page/dashboard"
 import NamespaceExecDetailPage from "@/pages/app/namespace-detail/page/exec-detail";
 import NamespaceExecListPage from "@/pages/app/namespace-detail/page/exec-list";
 import NamespaceFuncDetail from "@/pages/app/namespace-detail/page/func-detail";
-import NamespaceFuncListPage from "@/pages/app/namespace-detail/page/func-list";
+// import NamespaceFuncListPage from "@/pages/app/namespace-detail/page/func-list";
 
 import {createBrowserRouter} from "react-router-dom";
 import Playground from "@/pages/app/playground";
@@ -66,14 +66,14 @@ export const router = createBrowserRouter([
             </Authenticated>
     },
 
-    {
-        path: "/namespaces/:namespaceId/functions", element:
-            <Authenticated>
-                <NamespaceDetail>
-                    <NamespaceFuncListPage/>
-                </NamespaceDetail>
-            </Authenticated>
-    },
+    // {
+    //     path: "/namespaces/:namespaceId/functions", element:
+    //         <Authenticated>
+    //             <NamespaceDetail>
+    //                 <NamespaceFuncListPage/>
+    //             </NamespaceDetail>
+    //         </Authenticated>
+    // },
 
     {
         path: "/namespaces/:namespaceId/functions/:funcId", element:

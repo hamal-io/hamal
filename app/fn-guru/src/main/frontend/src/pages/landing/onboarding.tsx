@@ -1,8 +1,8 @@
 import React, {FC, useEffect, useState} from 'react'
-import {Spinner} from "flowbite-react";
 import {useApiCreateAnonymousAccount, useApiPost} from "@/hook";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useAuth} from "@/hook/auth.ts";
+import {Loader2} from "lucide-react";
 
 
 const OnboardingPage: FC = () => {
@@ -80,7 +80,7 @@ const OnboardingPage: FC = () => {
                 <div className={"flex flex-row"}>
                     <h1>Your personal namespace is deployed shortly.</h1>
                     <div className={"pl-3"}>
-                        <Spinner color={"gray"}/>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin"/>
                     </div>
                 </div>
             </section>

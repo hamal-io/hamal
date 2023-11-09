@@ -107,6 +107,70 @@ export const useApiCreateAnonymousAccount = (): [ApiCreateAnonymousAccountAction
     return [create, data, isLoading, error]
 }
 
+interface ApiNamespaceCreateSubmitted {
+    id: string;
+    status: string;
+    namespaceId: string;
+    groupId: string;
+}
+
+type ApiNamespaceCreateAction = (groupId: string, name: string, controller?: AbortController) => void
+export const useApiNamespaceCreate = (): [ApiNamespaceCreateAction, ApiNamespaceCreateSubmitted, boolean, Error] => {
+    const [auth, setAuth] = useAuth()
+
+    const [data, setData] = useState<ApiNamespaceCreateSubmitted | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<Error>(null);
+
+    const post = useCallback(async (groupId: string, name: string, abortController?: AbortController) => {
+        if (auth.type === 'Unauthorized') {
+            console.log("Unauthorized")
+            setError(Error("Unauthenticated"))
+            setIsLoading(false)
+            setAuth(null)
+            window.location.href = '/'
+
+        } else {
+            fetch(`${import.meta.env.VITE_BASE_URL}/v1/groups/${groupId}/namespaces`, {
+                method: "POST",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${auth.token}`
+                },
+                body: JSON.stringify({
+                    name,
+                    inputs: {}
+                }),
+                signal: abortController?.signal
+            })
+                .then(response => {
+
+                    if (response.status === 403) {
+                        console.log("forbidden")
+                        setAuth(null)
+                        window.location.href = '/'
+                    }
+
+                    if (!response.ok) {
+                        setError(Error(`Request submission failed: ${response.status} - ${response.statusText}`))
+                        setIsLoading(false)
+                    }
+                    response.json().then(data => {
+                        setData(data)
+                        setIsLoading(false)
+                    })
+                })
+                .catch(error => {
+                    setError(error)
+                    setIsLoading(false)
+                })
+        }
+    }, [auth])
+
+    return [post, data, isLoading, error]
+}
+
 
 type ApiLoginAccountAction = (username: string, password: string, controller?: AbortController) => void
 export const useApiLoginAccount = (): [ApiLoginAccountAction, ApiLoginSubmitted, boolean, Error] => {
@@ -116,7 +180,7 @@ export const useApiLoginAccount = (): [ApiLoginAccountAction, ApiLoginSubmitted,
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<Error>(null);
 
-    const create = useCallback((username: string, password: string,controller?: AbortController) => {
+    const create = useCallback((username: string, password: string, controller?: AbortController) => {
         fetch(`${import.meta.env.VITE_BASE_URL}/v1/login`, {
             method: "POST",
             headers: {
@@ -208,7 +272,7 @@ export const useApiGet = <T>(url: string): [T, boolean, Error] => {
                     }
 
 
-                    if(error.message === 'NetworkError when attempting to fetch resource.'){
+                    if (error.message === 'NetworkError when attempting to fetch resource.') {
                         console.log("forbidden")
                         setAuth(null)
                         window.location.href = '/login'
