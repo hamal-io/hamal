@@ -42,7 +42,6 @@ interface NamespaceUpdatePort {
 
 interface NamespacePort : NamespaceCreatePort, NamespaceGetPort, NamespaceListPort, NamespaceUpdatePort
 
-
 @Component
 class NamespaceAdapter(
     private val generateDomainId: GenerateDomainId,
@@ -70,6 +69,7 @@ class NamespaceAdapter(
 
     override fun <T : Any> invoke(query: NamespaceQuery, responseHandler: (List<Namespace>) -> T): T =
         responseHandler(namespaceQueryRepository.list(query))
+
 
     override operator fun <T : Any> invoke(
         namespaceId: NamespaceId,
