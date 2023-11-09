@@ -19,14 +19,12 @@ internal object CurrentAccountProjection {
     fun apply(account: Account) {
 
         require(projection.values.asSequence()
-            .filter { it.id == account.id }
             .map { it.name }
             .none { it == account.name }
         ) { "${account.name} already exists" }
 
         if (account.email != null) {
             require(projection.values.asSequence()
-                .filter { it.id == account.id }
                 .map { it.email }
                 .none { it == account.email }
             ) { "${account.email} already exists" }
@@ -77,7 +75,7 @@ class MemoryAccountRepository : MemoryRecordRepository<AccountId, AccountRecord,
             if (commandAlreadyApplied(cmd.id, accountId)) {
                 versionOf(accountId, cmd.id)
             } else {
-                 store(
+                store(
                     AccountCreatedRecord(
                         cmdId = cmd.id,
                         entityId = accountId,
