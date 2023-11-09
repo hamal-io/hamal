@@ -1,12 +1,9 @@
-import React, {FC, useState} from "react";
+import React, {FC} from "react";
 import {Separator} from "@/components/ui/separator.tsx";
 import {EmptyPlaceholder} from "@/components/empty-placeholder.tsx";
-import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card.tsx";
-import {BookOpen, Link, Search} from "lucide-react";
+import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx";
 import {PageHeader} from "@/components/page-hader.tsx";
 import Create from "@/pages/app/namespace-list/components/create.tsx";
-import {Button} from "@/components/ui/button.tsx";
-
 import {useApiNamespaceList} from "@/hook/api/namespace.ts";
 import {ApiNamespaceSimple} from "@/api/types";
 import {GoToDocumentation} from "@/components/documentation.tsx";

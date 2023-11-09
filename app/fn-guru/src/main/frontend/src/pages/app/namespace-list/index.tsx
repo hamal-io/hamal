@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react'
 import {useNavigate} from "react-router-dom";
 import {ApiNamespace, ApiNamespaceList} from "@/api/types";
 import {useApiGet, useApiPost,} from "@/hook";
-import {HiPlus} from 'react-icons/hi';
 import {useAuth} from "@/hook/auth.ts";
 import {Separator} from "@/components/ui/separator.tsx";
 import List from "@/pages/app/namespace-list/components/list.tsx";
