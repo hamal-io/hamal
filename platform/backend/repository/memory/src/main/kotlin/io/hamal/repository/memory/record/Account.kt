@@ -77,7 +77,7 @@ class MemoryAccountRepository : MemoryRecordRepository<AccountId, AccountRecord,
             if (commandAlreadyApplied(cmd.id, accountId)) {
                 versionOf(accountId, cmd.id)
             } else {
-                store(
+                 store(
                     AccountCreatedRecord(
                         cmdId = cmd.id,
                         entityId = accountId,

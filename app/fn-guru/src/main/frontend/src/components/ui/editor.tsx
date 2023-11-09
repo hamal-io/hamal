@@ -1,8 +1,10 @@
-import MonacoEditor ,{ loader} from '@monaco-editor/react';
+import MonacoEditor, {loader} from '@monaco-editor/react';
 import monacoUrl from '/monaco/min/vs?url'
-loader.config({ paths: { vs: monacoUrl } });
+
+loader.config({paths: {vs: monacoUrl}});
 
 interface EditorProps {
+    className?: string;
     code: string;
     onChange: (code: string | undefined) => void
 }
@@ -74,6 +76,7 @@ const Editor = (props: EditorProps) => {
     return (
         <div>
             <MonacoEditor
+                className={props.className}
                 theme={"Github"}
                 height="55vh"
                 value={props.code}
