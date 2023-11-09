@@ -62,7 +62,7 @@ export default function LoginPage() {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                 <FormField
                     control={form.control}
-                    name="username"
+                    name="name"
                     render={({field}) => (
                         <FormItem>
                             <FormLabel>Username</FormLabel>

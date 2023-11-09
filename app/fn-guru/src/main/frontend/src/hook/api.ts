@@ -92,6 +92,7 @@ export const useApiCreateAnonymousAccount = (): [ApiCreateAnonymousAccountAction
                         type: 'Anonymous',
                         accountId: data.accountId,
                         groupId: data.groupIds[0],
+                        defaultNamespaceIds: data.defaultNamespaceIds,
                         token: data.token,
                         name: data.name
                     })
@@ -141,6 +142,7 @@ export const useApiLoginAccount = (): [ApiLoginAccountAction, ApiLoginSubmitted,
                         type: 'User',
                         accountId: data.accountId,
                         groupId: data.groupIds[0],
+                        defaultNamespaceIds: data.defaultNamespaceIds,
                         token: data.token,
                         name: data.name
                     })

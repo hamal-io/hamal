@@ -167,11 +167,11 @@ const ConvertAccountModalButton = () => {
     const [post, data] = useApiPost<ApiAccountConversionSubmitted>()
     useEffect(() => {
         if (data != null) {
-            console.log("data", JSON.stringify(data))
             setAuth({
                 type: 'User',
                 accountId: auth.accountId,
                 groupId: auth.groupId,
+                defaultNamespaceIds: auth.defaultNamespaceIds,
                 token: data.token,
                 name: data.name
             })

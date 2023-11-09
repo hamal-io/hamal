@@ -56,6 +56,7 @@ export const useCreateAnonymousAccount = <T>(): [T, boolean, Error] => {
                         type: 'Anonymous',
                         accountId: data.accountId,
                         groupId: data.groupIds[0],
+                        defaultNamespaceIds: data.defaultNamespaceIds,
                         token: data.token,
                         name: data.name
                     })

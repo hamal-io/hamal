@@ -5,8 +5,10 @@ import {Separator} from "@/components/ui/separator"
 import Editor from "@/components/ui/editor.tsx";
 import {useState} from "react";
 import {useApiPost} from "@/hook";
+import {useAuth} from "@/hook/auth.ts";
 
 export default function PlaygroundPage() {
+    const [auth] = useAuth()
     const [post, data] = useApiPost()
     const [code, setCode] = useState("log = require('log')\nlog.info('Let\\'s go..')")
     return (
@@ -24,11 +26,11 @@ export default function PlaygroundPage() {
                         />
                     </div>
                     <div className="flex items-center justify-center space-x-2">
-                        <Button onClick={()=>{
-                            post("v1/namespaces/1/adhoc", {
-                                    inputs: {},
-                                    code: code
-                                })
+                        <Button onClick={() => {
+                            post(`v1/namespaces/${auth.defaultNamespaceIds[auth.groupId]}/adhoc`, {
+                                inputs: {},
+                                code: code
+                            })
                         }}>Execute</Button>
                     </div>
                 </div>
