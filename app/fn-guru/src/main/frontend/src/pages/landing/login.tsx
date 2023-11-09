@@ -15,7 +15,7 @@ import {useApiLoginAccount} from "@/hook";
 
 
 const formSchema = z.object({
-    username: z.string().min(2).max(50),
+    name: z.string().min(2).max(50),
     password: z.string().min(2).max(50)
 })
 
@@ -36,7 +36,7 @@ export default function LoginPage() {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            username: "",
+            name: "",
             password: "",
         },
     })
@@ -49,7 +49,7 @@ export default function LoginPage() {
 
         try {
             setLoading(true)
-            login(values.username, values.password)
+            login(values.name, values.password)
         } catch (e) {
             console.log(`login failed - ${e}`)
         } finally {

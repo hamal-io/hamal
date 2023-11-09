@@ -19,12 +19,14 @@ internal object CurrentAccountProjection {
     fun apply(account: Account) {
 
         require(projection.values.asSequence()
+            .filter { it.id == account.id }
             .map { it.name }
             .none { it == account.name }
         ) { "${account.name} already exists" }
 
         if (account.email != null) {
             require(projection.values.asSequence()
+                .filter { it.id == account.id }
                 .map { it.email }
                 .none { it == account.email }
             ) { "${account.email} already exists" }

@@ -19,17 +19,20 @@ import {ApiAccountConversionSubmitted} from "@/api/account.ts";
 import {Dialog, DialogContent, DialogFooter, DialogHeader, DialogTrigger} from "@/components/ui/dialog.tsx";
 import {Input} from "@/components/ui/input.tsx";
 
-const Header: FC = () => (
-    <div className="border-b">
-        <div className="flex h-16 items-center px-4">
-            <ConvertAccountModalButton/>
-            <MainNav className="mx-6"/>
-            <div className="ml-auto flex items-center space-x-4">
-                <UserNav/>
+const Header: FC = () => {
+    const [auth] = useAuth()
+    return (
+        <div className="border-b">
+            <div className="flex h-16 items-center px-4">
+                {auth.type !== 'User' && <ConvertAccountModalButton/>}
+                <MainNav className="mx-6"/>
+                <div className="ml-auto flex items-center space-x-4">
+                    <UserNav/>
+                </div>
             </div>
         </div>
-    </div>
-)
+    )
+}
 
 export default Header
 
@@ -114,61 +117,52 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
 import {useForm} from "react-hook-form";
 import {AUTH_KEY} from "@/types/auth.ts";
+import {Loader2} from "lucide-react";
 
 
 const formSchema = z.object({
-    username: z.string().min(2).max(50),
+    name: z.string().min(2).max(50),
     password: z.string().min(2).max(50),
-    email: z.string().min(2).max(50)
+    email: z.string().min(2).max(50).optional()
 })
 
 const ConvertAccountModalButton = () => {
     const [auth, setAuth] = useAuth()
     const navigate = useNavigate()
-    const [name, setName] = useState<string>(auth.name)
-    const [password, setPassword] = useState<string>('')
-    const [email, setEmail] = useState<string>('')
-    const [openModal, setOpenModal] = useState<string | undefined>()
-    const props = {openModal, setOpenModal}
+    const [openDialog, setOpenDialog] = useState<boolean>(false)
+    const props = {openModal: openDialog, setOpenModal: setOpenDialog}
     const [isLoading, setLoading] = useState(false)
 
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            username: "",
+            name: "",
             password: "",
         },
     })
 
     // 2. Define a submit handler.
     async function onSubmit(values: z.infer<typeof formSchema>) {
+        setLoading(true)
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
         console.log(values)
 
         try {
-
-
+            post(`v1/anonymous-accounts/${auth.accountId}/convert`, {
+                name: values.name,
+                password: values.password,
+                email: values.email
+            })
             console.log(auth)
         } catch (e) {
             console.log(`login failed - ${e}`)
         } finally {
-            setLoading(false)
+            // setLoading(false)
         }
 
     }
-
-
-    useEffect(() => {
-        const close = (e) => {
-            if (e.keyCode === 27) {
-                props.setOpenModal(undefined)
-            }
-        }
-        window.addEventListener('keydown', close)
-        return () => window.removeEventListener('keydown', close)
-    }, [])
 
     const [post, data] = useApiPost<ApiAccountConversionSubmitted>()
     useEffect(() => {
@@ -181,15 +175,23 @@ const ConvertAccountModalButton = () => {
                 token: data.token,
                 name: data.name
             })
-            navigate(`/namespaces`)
-            setOpenModal(undefined)
         }
-    }, [data, navigate]);
+    }, [data]);
 
+
+    useEffect(() => {
+        console.log("AUTH", JSON.stringify(auth))
+        if (auth != null && auth.type === 'User') {
+            console.log("navigate")
+            navigate(`/namespaces`)
+            setOpenDialog(false)
+
+        }
+    }, [auth, navigate]);
 
     return (
         <>
-            <Dialog>
+            <Dialog open={openDialog} onOpenChange={setOpenDialog}>
                 <DialogTrigger asChild>
                     <Button className="bg-red-400">
                         Protect this account from automatic deletion
@@ -203,7 +205,7 @@ const ConvertAccountModalButton = () => {
                         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                             <FormField
                                 control={form.control}
-                                name="username"
+                                name="name"
                                 render={({field}) => (
                                     <FormItem>
                                         <FormLabel>Username</FormLabel>
@@ -249,15 +251,12 @@ const ConvertAccountModalButton = () => {
                                     </FormItem>
                                 )}
                             />
-                            <Button type="submit">Submit</Button>
+                            <Button type="submit">
+                                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
+                                Register
+                            </Button>
                         </form>
                     </Form>
-
-                    <DialogFooter>
-                        <Button className={"w-full"} onClick={() => {
-                            post(`v1/anonymous-accounts/${auth.accountId}/convert`, {name, password, email})
-                        }}>Register</Button>
-                    </DialogFooter>
                 </DialogContent>
             </Dialog>
         </>
