@@ -14,7 +14,6 @@ import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
-import java.util.concurrent.atomic.AtomicInteger
 
 internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
 
@@ -141,7 +140,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
         val updateFuncResponse = httpTemplate.patch("/v1/funcs/{funcId}")
             .path("funcId", funcId)
             .body(
-                ApiFuncUpdateReq(name = FuncName("updatedName"))
+                ApiFuncUpdateReq(name = FuncName("updatedName"), code = null)
             )
             .execute()
 
@@ -221,15 +220,6 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
                 )
             )
         )
-    }
-
-
-    private object CmdGen {
-        private val atomicCounter = AtomicInteger(1)
-
-        operator fun invoke(): CmdId {
-            return CmdId(atomicCounter.incrementAndGet())
-        }
     }
 }
 

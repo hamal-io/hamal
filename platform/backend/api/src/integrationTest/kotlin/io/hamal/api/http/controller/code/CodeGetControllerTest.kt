@@ -1,6 +1,5 @@
 package io.hamal.api.http.controller.code
 
-import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.CodeVersion
@@ -11,7 +10,6 @@ import io.hamal.repository.api.CodeCmdRepository
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
-import java.util.concurrent.atomic.AtomicInteger
 
 
 internal class CodeGetControllerTest : CodeBaseControllerTest() {
@@ -126,13 +124,5 @@ internal class CodeGetControllerTest : CodeBaseControllerTest() {
 
         val error = getCodeResponse.error(ApiError::class)
         assertThat(error.message, equalTo("Code not found"))
-    }
-
-    private object CmdGen {
-        private val atomicCounter = AtomicInteger(1)
-
-        operator fun invoke(): CmdId {
-            return CmdId(atomicCounter.incrementAndGet())
-        }
     }
 }

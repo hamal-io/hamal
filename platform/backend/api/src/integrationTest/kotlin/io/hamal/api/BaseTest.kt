@@ -23,6 +23,7 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDO
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.test.context.ActiveProfiles
 import java.time.temporal.ChronoUnit.DAYS
+import java.util.concurrent.atomic.AtomicInteger
 
 
 @SpringBootTest(
@@ -262,6 +263,14 @@ internal abstract class BaseTest {
             )
 
             else -> TODO()
+        }
+    }
+
+    protected object CmdGen {
+        private val atomicCounter = AtomicInteger(1)
+
+        operator fun invoke(): CmdId {
+            return CmdId(atomicCounter.incrementAndGet())
         }
     }
 }

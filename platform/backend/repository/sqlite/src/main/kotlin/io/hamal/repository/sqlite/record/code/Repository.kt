@@ -84,7 +84,7 @@ class SqliteCodeRepository(
                 versionOf(codeId, cmdId)
             } else {
                 val currentVersion = versionOf(codeId, cmdId)
-                if (cmd.value != currentVersion.value && cmd.value != null) {
+                if (cmd.value != null && cmd.value != currentVersion.value) {
                     store(
                         CodeUpdatedRecord(
                             cmdId = cmdId,
