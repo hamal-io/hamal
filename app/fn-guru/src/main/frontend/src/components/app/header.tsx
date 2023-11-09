@@ -11,13 +11,19 @@ import {
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu.tsx";
 
-import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar.tsx";
+import {Avatar, AvatarFallback} from "@/components/ui/avatar.tsx";
 import {cn} from "@/utils";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {useApiPost} from "@/hook";
 import {ApiAccountConversionSubmitted} from "@/api/account.ts";
-import {Dialog, DialogContent, DialogFooter, DialogHeader, DialogTrigger} from "@/components/ui/dialog.tsx";
+import {Dialog, DialogContent, DialogHeader, DialogTrigger} from "@/components/ui/dialog.tsx";
 import {Input} from "@/components/ui/input.tsx";
+import * as z from "zod"
+import {zodResolver} from "@hookform/resolvers/zod";
+import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
+import {useForm} from "react-hook-form";
+import {AUTH_KEY} from "@/types/auth.ts";
+import {Loader2} from "lucide-react";
 
 const Header: FC = () => {
     const [auth] = useAuth()
@@ -80,44 +86,24 @@ const Profile = () => {
     )
 }
 
-export function Nav({
-                            className,
-                            ...props
-                        }: React.HTMLAttributes<HTMLElement>) {
+export function Nav({className, ...props}: React.HTMLAttributes<HTMLElement>) {
     return (
         <nav
             className={cn("flex items-center space-x-4 lg:space-x-6", className)}
             {...props}
         >
-            <a
-                href="/dashboard"
-                className="text-sm font-medium transition-colors hover:text-primary"
-            >
+            <Link to="/dashboard" className="text-sm font-medium transition-colors hover:text-primary">
                 Dashboard
-            </a>
-            <a
-                href="/playground"
-                className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
-            >
+            </Link>
+            <Link to="/playground" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
                 Playground
-            </a>
-            <a
-                href="/namespaces"
-                className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
-            >
+            </Link>
+            <Link to="/namespaces" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
                 Namespaces
-            </a>
+            </Link>
         </nav>
     )
 }
-
-
-import * as z from "zod"
-import {zodResolver} from "@hookform/resolvers/zod";
-import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
-import {useForm} from "react-hook-form";
-import {AUTH_KEY} from "@/types/auth.ts";
-import {Loader2} from "lucide-react";
 
 
 const formSchema = z.object({

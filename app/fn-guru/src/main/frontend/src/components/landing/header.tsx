@@ -1,6 +1,5 @@
 import React, {FC} from "react";
 
-import {HiOutlineChip} from "react-icons/hi";
 import {useNavigate} from "react-router-dom";
 import {useAuth} from "@/hook/auth.ts";
 import {Button} from "@/components/ui/button.tsx";
@@ -45,7 +44,6 @@ const GoToApp = () => {
                 onClick={() => {
                     navigate("/namespaces", {replace: true})
                 }}>
-                <HiOutlineChip className="mr-2 h-5 w-5"/>
                 Let's automate
             </Button>
         )

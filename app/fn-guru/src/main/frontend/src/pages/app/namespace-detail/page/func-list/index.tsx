@@ -2,7 +2,6 @@
 // import {ApiFuncList} from "../../../../../api/types";
 // import {useNavigate, useParams} from "react-router-dom";
 // import {useApiGet, useApiPost} from "../../../../../hook";
-// import {HiPlus} from "react-icons/hi";
 //
 // export interface ApiFuncCreateSubmitted {
 //     id: string;

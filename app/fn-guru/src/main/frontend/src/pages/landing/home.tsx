@@ -6,7 +6,6 @@ import Header from '@/components/landing/header.tsx'
 
 
 import {useNavigate} from "react-router-dom";
-import {HiOutlineCloudUpload} from "react-icons/hi";
 import {Button} from "@/components/ui/button.tsx";
 import {Card} from "@/components/ui/card.tsx";
 
@@ -40,7 +39,6 @@ const HomePage: React.FC = () => {
                             onClick={() => {
                                 navigate("/onboarding", {replace: true, state: {type: "Function", code}})
                             }}>
-                            <HiOutlineCloudUpload className="mr-2 h-5 w-5"/>
                             Deploy now
                         </Button>
                     </div>

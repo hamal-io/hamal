@@ -1,14 +1,13 @@
 import * as React from "react";
 
 import {cn} from "@/utils";
-import {FC} from "react";
 
 type EmptyPlaceholderProps = {
     className: string;
     children?: React.ReactNode[];
-};
+}
 
-export const EmptyPlaceholder: FC<EmptyPlaceholderProps> = ({className, children}) => (
+export const EmptyPlaceholder = ({className, children}: EmptyPlaceholderProps) => (
     <div
         className={cn(
             "animate-in relative fade-in-50 flex min-h-[400px] flex-col items-center justify-center rounded-md border-2 border-dashed p-8 text-center",
@@ -27,15 +26,15 @@ EmptyPlaceholder.Icon = ({children}: { children: React.ReactNode }) => (
     </div>
 );
 
-EmptyPlaceholder.Title = ({className, ...props}: React.HTMLAttributes<HTMLHeadingElement>) => (
-    <h2 className={cn("mt-6 text-xl font-semibold", className)} {...props} />
+EmptyPlaceholder.Title = ({className, children}: React.HTMLAttributes<HTMLHeadingElement>) => (
+    <h2 className={cn("mt-6 text-xl font-semibold", className)}> {children} </h2>
 );
 
-EmptyPlaceholder.Description = ({className}: React.HTMLAttributes<HTMLParagraphElement>) => (
+EmptyPlaceholder.Description = ({className, children}: React.HTMLAttributes<HTMLParagraphElement>) => (
     <p
         className={cn(
             "text-content-subtle mb-8 mt-2 text-center text-sm font-normal leading-6",
             className,
         )}
-    />
+    >{children}</p>
 )
