@@ -9,29 +9,29 @@ import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import java.time.Duration
 import java.time.Instant
 
 
 interface DomainObject<ID : DomainId> {
     val id: ID
     val partition get() = id.partition()
-
+    val createdAt get() = DomainCreatedAt.init(id.elapsed())
 }
 
-interface DomainObjectWithUpdate<ID : DomainId> : DomainObject<ID> {
+interface DomainObjectWithUpdate {
     val updatedAt: DomainUpdatedAt
-    val createdAt get() = DomainCreatedAt(id.elapsed())
 }
 
 
 //Start Circular Dependence Fix
 @Serializable(with = DomainCreatedAt.Serializer::class)
 class DomainCreatedAt(override val value: Instant) : DomainAt() {
-    constructor(el: Elapsed) : this(
-        Instant.ofEpochMilli(1698451200000) //happy birthday
-            .plus(Duration.ofMillis(el.value))
-    )
+
+    companion object {
+        @JvmStatic
+        fun init(el: Elapsed): DomainCreatedAt = DomainCreatedAt(Instant.ofEpochMilli(el.value + offset))
+        private val offset = 1698451200000
+    }
 
     internal object Serializer : DomainAtSerializer<DomainCreatedAt>(::DomainCreatedAt)
 }
@@ -72,5 +72,4 @@ private object InstantSerializer : KSerializer<Instant> {
     override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("Instant", PrimitiveKind.LONG)
     override fun serialize(encoder: Encoder, value: Instant) = encoder.encodeLong(value.toEpochMilli())
     override fun deserialize(decoder: Decoder) = Instant.ofEpochMilli(decoder.decodeLong())
-}
-//End Circular Dependence Fix
+} //End Circular Dependence Fix

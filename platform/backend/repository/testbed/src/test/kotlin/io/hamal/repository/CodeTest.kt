@@ -2,6 +2,7 @@ package io.hamal.repository
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.Code
 import io.hamal.repository.api.CodeCmdRepository.CreateCmd
@@ -457,21 +458,26 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Initialization Test`() = runWith(CodeRepository::class) {
-            val code = createCode(CodeId(1), GroupId(1), CmdGen(), CodeValue("1+1"))
+            val snow = SnowflakeId(4696750753320960)
+            val epoch: Long = 1698451200000 // Happy birthday
+            val codeId = CodeId(snow)
 
-            //val el = Instant.now().toEpochMilli().milliseconds.minus(1698451200000.milliseconds).inWholeMilliseconds
-           // val created = code.createdAt //this is timezone fuck up
+            val code = createCode(codeId, GroupId(1), CmdGen(), CodeValue("1+1"))
+            val re3 = code.createdAt // BS
+
+
+            //under construction
+
 
             Thread.sleep(1000)
             update(
-                CodeId(1), UpdateCmd(
+                codeId, UpdateCmd(
                     id = CmdGen(),
                     value = CodeValue("1 + 2")
                 )
             )
-
-            val t1 = get(CodeId(1), CodeVersion(1)).updatedAt
-            val t2 = get(CodeId(1), CodeVersion(2)).updatedAt
+            val t1 = get(codeId, CodeVersion(1)).updatedAt
+            val t2 = get(codeId, CodeVersion(2)).updatedAt
             assertTrue(t2.value.isAfter(t1.value))
         }
     }

@@ -14,7 +14,7 @@ data class Code(
     val version: CodeVersion,
     val value: CodeValue,
     var type: CodeType,
-) : DomainObjectWithUpdate<CodeId>
+) : DomainObject<CodeId>, DomainObjectWithUpdate
 
 
 interface CodeRepository : CodeCmdRepository, CodeQueryRepository
