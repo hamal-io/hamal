@@ -2,6 +2,7 @@ package io.hamal.repository.api
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.DomainObject
+import io.hamal.lib.common.domain.DomainUpdatedAt
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.*
@@ -9,8 +10,9 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Blueprint(
-    val cmdId: CmdId,
     override val id: BlueprintId,
+    override val updatedAt: DomainUpdatedAt,
+    val cmdId: CmdId,
     val groupId: GroupId,
     val creatorId: AccountId,
     val name: BlueprintName,

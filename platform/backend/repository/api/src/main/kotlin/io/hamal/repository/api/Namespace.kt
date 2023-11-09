@@ -2,6 +2,7 @@ package io.hamal.repository.api
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.DomainObject
+import io.hamal.lib.common.domain.DomainUpdatedAt
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.GroupId
@@ -62,6 +63,7 @@ interface NamespaceQueryRepository {
 data class Namespace(
     val cmdId: CmdId,
     override val id: NamespaceId,
+    override val updatedAt: DomainUpdatedAt,
     val groupId: GroupId,
     val name: NamespaceName,
     val inputs: NamespaceInputs

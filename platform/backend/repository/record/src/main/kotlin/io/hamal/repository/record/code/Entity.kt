@@ -50,7 +50,7 @@ data class CodeEntity(
             version = CodeVersion(sequence.value),
             value = value!!,
             type = type!!,
-            timestamp = recordedAt
+
         )
     }
 }

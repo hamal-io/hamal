@@ -2,6 +2,7 @@ package io.hamal.repository.api
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.DomainObject
+import io.hamal.lib.common.domain.DomainUpdatedAt
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.Correlation
@@ -123,7 +124,8 @@ class PlannedExec(
     override val correlation: Correlation?,
     override val inputs: ExecInputs,
     override val code: ExecCode,
-    override val events: List<Event>
+    override val events: List<Event>,
+    override val updatedAt: DomainUpdatedAt
 // FIXME    val plannedAt: PlannedAt
 ) : Exec() {
     override val status = ExecStatus.Planned
@@ -139,7 +141,8 @@ class ScheduledExec(
     override val cmdId: CmdId,
     override val id: ExecId,
     val plannedExec: PlannedExec,
-    val scheduledAt: ScheduledAt
+    val scheduledAt: ScheduledAt,
+    override val updatedAt: DomainUpdatedAt
 ) : Exec() {
     override val status = ExecStatus.Scheduled
     override val namespaceId get() = plannedExec.namespaceId
@@ -159,7 +162,8 @@ class QueuedExec(
     override val cmdId: CmdId,
     override val id: ExecId,
     val scheduledExec: ScheduledExec,
-    val queuedAt: QueuedAt
+    val queuedAt: QueuedAt,
+    override val updatedAt: DomainUpdatedAt
 ) : Exec() {
     override val status = ExecStatus.Queued
     override val namespaceId get() = scheduledExec.namespaceId
@@ -178,6 +182,7 @@ class QueuedExec(
 class StartedExec(
     override val cmdId: CmdId,
     override val id: ExecId,
+    override val updatedAt: DomainUpdatedAt,
     val queuedExec: QueuedExec
 ) : Exec() {
     override val status = ExecStatus.Started
@@ -196,6 +201,7 @@ class StartedExec(
 class CompletedExec(
     override val cmdId: CmdId,
     override val id: ExecId,
+    override val updatedAt: DomainUpdatedAt,
     val startedExec: StartedExec,
     val completedAt: CompletedAt,
     val result: ExecResult,
@@ -218,6 +224,7 @@ class CompletedExec(
 class FailedExec(
     override val cmdId: CmdId,
     override val id: ExecId,
+    override val updatedAt: DomainUpdatedAt,
     val startedExec: StartedExec,
     //FIXME failedAt
     val failedAt: FailedAt,
