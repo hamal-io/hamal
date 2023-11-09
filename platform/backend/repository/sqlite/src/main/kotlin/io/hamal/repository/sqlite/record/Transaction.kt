@@ -4,6 +4,7 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.DomainId
 import io.hamal.lib.common.domain.DomainObject
 import io.hamal.lib.common.util.CollectionUtils.takeWhileInclusive
+import io.hamal.lib.domain.vo.RecordedAt
 import io.hamal.lib.sqlite.NamedPreparedStatementDelegate
 import io.hamal.lib.sqlite.NamedPreparedStatementResultSetDelegate
 import io.hamal.lib.sqlite.Transaction
@@ -44,7 +45,7 @@ class SqliteRecordTransaction<ID : DomainId, RECORD : Record<ID>, OBJ : DomainOb
     override fun recordsOf(id: ID): List<RECORD> {
         return executeQuery(
             """
-            SELECT data, sequence FROM records WHERE entity_id = :entityId ORDER BY sequence ASC
+            SELECT data, sequence, timestamp FROM records WHERE entity_id = :entityId ORDER BY sequence ASC
         """.trimIndent()
         ) {
             query {
@@ -53,6 +54,7 @@ class SqliteRecordTransaction<ID : DomainId, RECORD : Record<ID>, OBJ : DomainOb
             map {
                 protobuf.decodeFromByteArray(recordClass.serializer(), it.getBytes("data")).also { record ->
                     record.sequence = RecordSequence(it.getInt("sequence"))
+                    record.recordedAt = RecordedAt(it.getInstant("timestamp"))
                 }
             }
         }
@@ -61,7 +63,7 @@ class SqliteRecordTransaction<ID : DomainId, RECORD : Record<ID>, OBJ : DomainOb
     override fun lastRecordOf(id: ID): RECORD {
         return executeQuery(
             """
-            SELECT data, sequence FROM records WHERE entity_id = :entityId ORDER BY sequence DESC LIMIT 1
+            SELECT data, sequence, timestamp FROM records WHERE entity_id = :entityId ORDER BY sequence DESC LIMIT 1
         """.trimIndent()
         ) {
             query {
@@ -70,6 +72,7 @@ class SqliteRecordTransaction<ID : DomainId, RECORD : Record<ID>, OBJ : DomainOb
             map {
                 protobuf.decodeFromByteArray(recordClass.serializer(), it.getBytes("data")).also { record ->
                     record.sequence = RecordSequence(it.getInt("sequence"))
+                    record.recordedAt = RecordedAt(it.getInstant("timestamp"))
                 }
             }
         }.lastOrNull()
@@ -87,7 +90,7 @@ class SqliteRecordTransaction<ID : DomainId, RECORD : Record<ID>, OBJ : DomainOb
     override fun versionOf(id: ID, sequence: RecordSequence): OBJ? {
         return executeQuery(
             """
-            SELECT data, sequence FROM records WHERE 
+            SELECT data, sequence, timestamp FROM records WHERE 
             entity_id = :entityId AND sequence <= :sequence ORDER BY sequence ASC
         """.trimIndent()
         ) {
@@ -98,6 +101,7 @@ class SqliteRecordTransaction<ID : DomainId, RECORD : Record<ID>, OBJ : DomainOb
             map {
                 protobuf.decodeFromByteArray(recordClass.serializer(), it.getBytes("data")).also { record ->
                     record.sequence = RecordSequence(it.getInt("sequence"))
+                    record.recordedAt = RecordedAt(it.getInstant("timestamp"))
                 }
             }
         }.ifEmpty { null }

@@ -458,7 +458,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
         @TestFactory
         fun `Initialization Test`() = runWith(CodeRepository::class) {
             createCode(CodeId(1), GroupId(1), CmdGen(), CodeValue("1+1"))
-            Thread.sleep(100)
+            Thread.sleep(1000)
             update(
                 CodeId(1), UpdateCmd(
                     id = CmdGen(),
@@ -476,11 +476,9 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
             createCode(CodeId(1), GroupId(1), CmdGen(), CodeValue("1+1"))
 
             val fn: (CodeVersion) -> RecordedAt = { get(CodeId(1), it).timestamp }
-
-
             var last = fn(CodeVersion(1))
-            for (i in 1..10) {
-                Thread.sleep(10)
+            for (i in 1..5) {
+                Thread.sleep(1000) //This takes a while 1s is min
                 update(
                     CodeId(1), UpdateCmd(
                         id = CmdGen(),
@@ -491,7 +489,6 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
                 assertThat(next, greaterThan(last))
                 last = next
             }
-
         }
 
 
