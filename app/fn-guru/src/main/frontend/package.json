@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "VITE_BASE_URL=http://localhost:8008 vite",
-    "build": "tsc && VITE_BASE_URL=https://fn.guru  vite build",
+    "build": "tsc && VITE_BASE_URL=https://fn.guru vite build",
     "build:preview": "tsc && VITE_BASE_URL=http://localhost:8008 vite build",
-    "deploy": "vite build && cp -r ./dist ../resources/dist",
+    "deploy": "rm -rf ../resources/dist && npm run build && cp -r ./dist ../resources/dist",
+    "deploy:preview": "rm -rf ../resources/dist && npm run build:preview && cp -r ./dist ../resources/dist",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
