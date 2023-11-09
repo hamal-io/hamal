@@ -457,7 +457,11 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Initialization Test`() = runWith(CodeRepository::class) {
-            createCode(CodeId(1), GroupId(1), CmdGen(), CodeValue("1+1"))
+            val code = createCode(CodeId(1), GroupId(1), CmdGen(), CodeValue("1+1"))
+
+            //val el = Instant.now().toEpochMilli().milliseconds.minus(1698451200000.milliseconds).inWholeMilliseconds
+           // val created = code.createdAt //this is timezone fuck up
+
             Thread.sleep(1000)
             update(
                 CodeId(1), UpdateCmd(
@@ -466,8 +470,8 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
                 )
             )
 
-            val t1 = get(CodeId(1), CodeVersion(1)).timestamp
-            val t2 = get(CodeId(1), CodeVersion(2)).timestamp
+            val t1 = get(CodeId(1), CodeVersion(1)).updatedAt
+            val t2 = get(CodeId(1), CodeVersion(2)).updatedAt
             assertTrue(t2.value.isAfter(t1.value))
         }
     }

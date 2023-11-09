@@ -11,7 +11,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Func(
     override val id: FuncId,
-    override val updatedAt: DomainUpdatedAt,
     val groupId: GroupId,
     val cmdId: CmdId,
     val namespaceId: NamespaceId,

@@ -1,10 +1,7 @@
 package io.hamal.repository.api
 
+import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.domain.DomainObject
-import io.hamal.lib.common.domain.DomainUpdatedAt
-import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable
 
@@ -17,7 +14,7 @@ data class Code(
     val version: CodeVersion,
     val value: CodeValue,
     var type: CodeType,
-) : DomainObject<CodeId>
+) : DomainObjectWithUpdate<CodeId>
 
 
 interface CodeRepository : CodeCmdRepository, CodeQueryRepository

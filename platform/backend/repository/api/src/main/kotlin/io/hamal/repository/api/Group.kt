@@ -14,7 +14,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Group(
     override val id: GroupId,
-    override val updatedAt: DomainUpdatedAt,
     val cmdId: CmdId,
     val name: GroupName,
     val creatorId: AccountId

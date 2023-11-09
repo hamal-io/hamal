@@ -11,7 +11,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Extension(
     override val id: ExtensionId,
-    override val updatedAt: DomainUpdatedAt,
     val groupId: GroupId,
     val cmdId: CmdId,
     val name: ExtensionName,
