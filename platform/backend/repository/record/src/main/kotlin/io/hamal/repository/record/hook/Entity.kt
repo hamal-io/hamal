@@ -27,14 +27,16 @@ data class HookEntity(
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
                 namespaceId = rec.namespaceId,
-                name = rec.name
+                name = rec.name,
+                recordedAt = rec.recordedAt()
             )
 
             is HookUpdatedRecord -> copy(
                 id = rec.entityId,
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
-                name = rec.name
+                name = rec.name,
+                recordedAt = rec.recordedAt()
             )
         }
     }
@@ -60,7 +62,7 @@ fun List<HookRecord>.createEntity(): HookEntity {
         groupId = firstRecord.groupId,
         cmdId = firstRecord.cmdId,
         sequence = firstRecord.sequence(),
-        recordedAt = RecordedAt.now()
+        recordedAt = firstRecord.recordedAt()
     )
 
     forEach { record ->

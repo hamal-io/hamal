@@ -29,7 +29,8 @@ data class BlueprintEntity(
                 sequence = rec.sequence(),
                 name = rec.name,
                 inputs = rec.inputs,
-                codeValue = rec.value
+                codeValue = rec.value,
+                recordedAt = rec.recordedAt()
             )
 
             is BlueprintUpdatedRecord -> copy(
@@ -38,7 +39,8 @@ data class BlueprintEntity(
                 sequence = rec.sequence(),
                 name = rec.name,
                 inputs = rec.inputs,
-                codeValue = rec.value
+                codeValue = rec.value,
+                recordedAt = rec.recordedAt()
             )
         }
     }
@@ -67,7 +69,7 @@ fun List<BlueprintRecord>.createEntity(): BlueprintEntity {
         groupId = firstRecord.groupId,
         creatorId = firstRecord.creatorId,
         sequence = firstRecord.sequence(),
-        recordedAt = RecordedAt.now()
+        recordedAt = firstRecord.recordedAt()
     )
 
     forEach { record ->

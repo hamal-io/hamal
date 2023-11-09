@@ -2,7 +2,6 @@ package io.hamal.repository.sqlite.record.func
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.domain.vo.RecordedAt
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncCmdRepository
@@ -26,7 +25,7 @@ internal object CreateFunc : CreateDomainObject<FuncId, FuncRecord, Func> {
             id = firstRecord.entityId,
             groupId = firstRecord.groupId,
             sequence = firstRecord.sequence(),
-            recordedAt = RecordedAt.now()
+            recordedAt = firstRecord.recordedAt()
         )
 
         recs.forEach { record ->

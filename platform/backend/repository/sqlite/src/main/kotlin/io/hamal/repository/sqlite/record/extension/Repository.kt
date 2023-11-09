@@ -1,7 +1,6 @@
 package io.hamal.repository.sqlite.record.extension
 
 import io.hamal.lib.domain.vo.ExtensionId
-import io.hamal.lib.domain.vo.RecordedAt
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Extension
 import io.hamal.repository.api.ExtensionCmdRepository.CreateCmd
@@ -27,7 +26,7 @@ internal object CreateExtension : CreateDomainObject<ExtensionId, ExtensionRecor
             id = firstRecord.entityId,
             groupId = firstRecord.groupId,
             sequence = firstRecord.sequence(),
-            recordedAt = RecordedAt.now()
+            recordedAt = firstRecord.recordedAt()
         )
 
         recs.forEach { record ->

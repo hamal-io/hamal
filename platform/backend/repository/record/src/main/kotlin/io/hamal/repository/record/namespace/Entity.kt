@@ -27,6 +27,7 @@ data class NamespaceEntity(
                 sequence = rec.sequence(),
                 name = rec.name,
                 inputs = rec.inputs,
+                recordedAt = rec.recordedAt()
             )
 
             is NamespaceUpdatedRecord -> copy(
@@ -35,6 +36,7 @@ data class NamespaceEntity(
                 sequence = rec.sequence(),
                 name = rec.name,
                 inputs = rec.inputs,
+                recordedAt = rec.recordedAt()
             )
         }
     }
@@ -60,7 +62,7 @@ fun List<NamespaceRecord>.createEntity(): NamespaceEntity {
         groupId = firstRecord.groupId,
         cmdId = firstRecord.cmdId,
         sequence = firstRecord.sequence(),
-        recordedAt = RecordedAt.now()
+        recordedAt = firstRecord.recordedAt()
     )
 
     forEach { record ->

@@ -27,7 +27,8 @@ data class CodeEntity(
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
                 value = rec.value,
-                type = rec.type
+                type = rec.type,
+                recordedAt = rec.recordedAt()
 
             )
 
@@ -35,7 +36,8 @@ data class CodeEntity(
                 id = rec.entityId,
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
-                value = rec.value
+                value = rec.value,
+                recordedAt = rec.recordedAt()
             )
         }
     }
@@ -64,7 +66,7 @@ fun List<CodeRecord>.createEntity(): CodeEntity {
         groupId = firstRecord.groupId,
         cmdId = firstRecord.cmdId,
         sequence = firstRecord.sequence(),
-        recordedAt = RecordedAt.now()
+        recordedAt = firstRecord.recordedAt()
 
     )
 

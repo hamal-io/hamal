@@ -14,7 +14,7 @@ import kotlin.time.Duration
 sealed class TriggerRecord(
     @Transient
     override var sequence: RecordSequence? = null,
-    override val recordedAt: RecordedAt? = null
+    override var recordedAt: RecordedAt? = null
 ) : Record<TriggerId>()
 
 @Serializable

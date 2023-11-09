@@ -1,7 +1,6 @@
 package io.hamal.repository.sqlite.record.hook
 
 import io.hamal.lib.domain.vo.HookId
-import io.hamal.lib.domain.vo.RecordedAt
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Hook
 import io.hamal.repository.api.HookCmdRepository.CreateCmd
@@ -27,7 +26,7 @@ internal object CreateHook : CreateDomainObject<HookId, HookRecord, Hook> {
             id = firstRecord.entityId,
             groupId = firstRecord.groupId,
             sequence = firstRecord.sequence(),
-            recordedAt = RecordedAt.now()
+            recordedAt = firstRecord.recordedAt()
         )
 
         recs.forEach { record ->

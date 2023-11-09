@@ -2,7 +2,6 @@ package io.hamal.repository.api.record.exec
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.vo.Event
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.MapType
 import io.hamal.repository.api.*
@@ -47,13 +46,15 @@ data class ExecEntity(
                 code = rec.code,
                 events = rec.events,
                 plannedAt = Instant.now(), // FIXME
+                recordedAt = rec.recordedAt()
             )
 
             is ExecScheduledRecord -> copy(
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
                 status = ExecStatus.Scheduled,
-                scheduledAt = Instant.now() // FIXME
+                scheduledAt = Instant.now(), // FIXME
+                recordedAt = rec.recordedAt()
 
             )
 
@@ -61,13 +62,16 @@ data class ExecEntity(
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
                 status = ExecStatus.Queued,
+                recordedAt = rec.recordedAt()
 //                enqueuedAt = Instant.now() // FIXME
+
             )
 
             is ExecStartedRecord -> copy(
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
                 status = ExecStatus.Started,
+                recordedAt = rec.recordedAt()
 //                startedAt = Instant.now() // FIXME
                 //picked by :platform:runner id..
             )
@@ -78,6 +82,7 @@ data class ExecEntity(
                 status = ExecStatus.Completed,
 //                enqueuedAt = Instant.now() // FIXME
                 result = rec.result,
+                recordedAt = rec.recordedAt(),
                 state = rec.state
             )
 
@@ -85,7 +90,8 @@ data class ExecEntity(
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
                 status = ExecStatus.Failed,
-                result = rec.result
+                result = rec.result,
+                recordedAt = rec.recordedAt()
             )
 
             else -> TODO()
@@ -135,7 +141,7 @@ fun List<ExecRecord>.createEntity(): ExecEntity {
         groupId = firstRecord.groupId,
         cmdId = firstRecord.cmdId,
         sequence = firstRecord.sequence(),
-        recordedAt = RecordedAt.now()
+        recordedAt = firstRecord.recordedAt()
     )
 
     forEach { record ->

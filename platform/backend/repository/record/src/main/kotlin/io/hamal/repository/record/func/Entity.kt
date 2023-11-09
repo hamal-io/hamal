@@ -35,7 +35,8 @@ data class FuncEntity(
                     id = rec.codeId,
                     version = rec.codeVersion,
                     deployedVersion = rec.codeVersion
-                )
+                ),
+                recordedAt = rec.recordedAt()
             )
 
             is FuncUpdatedRecord -> copy(
@@ -48,7 +49,8 @@ data class FuncEntity(
                     id = code!!.id,
                     version = rec.codeVersion,
                     deployedVersion = code!!.deployedVersion
-                )
+                ),
+                recordedAt = rec.recordedAt()
             )
 
             is FuncDeployedRecord -> copy(
@@ -61,7 +63,8 @@ data class FuncEntity(
                     id = code!!.id,
                     version = code!!.version,
                     deployedVersion = rec.deployedVersion
-                )
+                ),
+                recordedAt = rec.recordedAt()
             )
         }
     }
@@ -89,7 +92,7 @@ fun List<FuncRecord>.createEntity(): FuncEntity {
         groupId = firstRecord.groupId,
         cmdId = firstRecord.cmdId,
         sequence = firstRecord.sequence(),
-        recordedAt = RecordedAt.now()
+        recordedAt = firstRecord.recordedAt()
 
     )
 

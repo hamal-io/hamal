@@ -28,7 +28,8 @@ data class GroupEntity(
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
                 name = rec.name,
-                creatorId = rec.creatorId
+                creatorId = rec.creatorId,
+                recordedAt = rec.recordedAt()
             )
         }
     }
@@ -54,7 +55,7 @@ fun List<GroupRecord>.createEntity(): GroupEntity {
         sequence = firstRecord.sequence(),
         name = firstRecord.name,
         creatorId = firstRecord.creatorId,
-        recordedAt = RecordedAt.now()
+        recordedAt = firstRecord.recordedAt()
     )
 
     forEach { record ->

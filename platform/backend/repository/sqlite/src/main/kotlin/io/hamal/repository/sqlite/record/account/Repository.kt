@@ -2,7 +2,6 @@ package io.hamal.repository.sqlite.record.account
 
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.AccountName
-import io.hamal.lib.domain.vo.RecordedAt
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Account
 import io.hamal.repository.api.AccountCmdRepository
@@ -32,7 +31,7 @@ internal object CreateAccount : CreateDomainObject<AccountId, AccountRecord, Acc
             name = firstRecord.name,
             email = firstRecord.email,
             salt = firstRecord.salt,
-            recordedAt = RecordedAt.now()
+            recordedAt = firstRecord.recordedAt()
         )
 
         recs.forEach { record ->

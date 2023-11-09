@@ -10,7 +10,6 @@ import io.hamal.repository.api.CodeQueryRepository.CodeQuery
 import io.hamal.repository.api.CodeRepository
 import io.hamal.repository.fixture.AbstractUnitTest
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.TestFactory
@@ -459,7 +458,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
         @TestFactory
         fun `Initialization Test`() = runWith(CodeRepository::class) {
             createCode(CodeId(1), GroupId(1), CmdGen(), CodeValue("1+1"))
-            Thread.sleep(1000)
+            Thread.sleep(100)
             update(
                 CodeId(1), UpdateCmd(
                     id = CmdGen(),

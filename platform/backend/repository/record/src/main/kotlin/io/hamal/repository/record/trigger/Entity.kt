@@ -51,7 +51,8 @@ data class TriggerEntity(
                 type = FixedRate,
                 inputs = rec.inputs,
                 correlationId = rec.correlationId,
-                duration = rec.duration
+                duration = rec.duration,
+                recordedAt = rec.recordedAt()
             )
 
             is EventTriggerCreatedRecord -> copy(
@@ -65,7 +66,8 @@ data class TriggerEntity(
                 type = Event,
                 inputs = rec.inputs,
                 correlationId = rec.correlationId,
-                topicId = rec.topicId
+                topicId = rec.topicId,
+                recordedAt = rec.recordedAt()
             )
 
             is HookTriggerCreatedRecord -> copy(
@@ -80,7 +82,8 @@ data class TriggerEntity(
                 inputs = rec.inputs,
                 correlationId = rec.correlationId,
                 hookId = rec.hookId,
-                hookMethods = rec.hookMethods
+                hookMethods = rec.hookMethods,
+                recordedAt = rec.recordedAt()
             )
         }
     }
@@ -137,7 +140,7 @@ fun List<TriggerRecord>.createEntity(): TriggerEntity {
         id = firstRecord.entityId,
         cmdId = firstRecord.cmdId,
         sequence = firstRecord.sequence(),
-        recordedAt = RecordedAt.now()
+        recordedAt = firstRecord.recordedAt()
     )
 
     forEach { record ->

@@ -40,7 +40,7 @@ abstract class Record<ID : DomainId> {
     abstract val cmdId: CmdId
     abstract val entityId: ID
     abstract var sequence: RecordSequence?
-    abstract val recordedAt: RecordedAt?
+    abstract var recordedAt: RecordedAt?
 
     fun sequence() =
         sequence ?: throw IllegalStateException("Records needs to be stored to db before it can be accessed")

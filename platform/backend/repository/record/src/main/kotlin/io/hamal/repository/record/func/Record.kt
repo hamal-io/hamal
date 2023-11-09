@@ -13,7 +13,7 @@ import kotlinx.serialization.Transient
 sealed class FuncRecord(
     @Transient
     override var sequence: RecordSequence? = null,
-    override val recordedAt: RecordedAt? = null
+    override var recordedAt: RecordedAt? = null
 ) : Record<FuncId>()
 
 @Serializable

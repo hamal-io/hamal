@@ -28,14 +28,16 @@ data class ExtensionEntity(
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
                 name = rec.name,
-                code = rec.code
+                code = rec.code,
+                recordedAt = rec.recordedAt()
             )
 
             is ExtensionUpdatedRecord -> copy(
                 id = rec.entityId,
                 cmdId = rec.cmdId,
                 name = rec.name,
-                code = rec.code
+                code = rec.code,
+                recordedAt = rec.recordedAt()
             )
         }
     }
@@ -61,7 +63,7 @@ fun List<ExtensionRecord>.createEntity(): ExtensionEntity {
         groupId = firstRecord.groupId,
         cmdId = firstRecord.cmdId,
         sequence = firstRecord.sequence(),
-        recordedAt = RecordedAt.now()
+        recordedAt = firstRecord.recordedAt()
     )
 
     forEach { record ->

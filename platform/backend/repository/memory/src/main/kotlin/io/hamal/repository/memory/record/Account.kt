@@ -29,8 +29,6 @@ internal object CurrentAccountProjection {
                 .none { it == account.email }
             ) { "${account.email} already exists" }
         }
-
-
         projection[account.id] = account
     }
 
@@ -82,7 +80,7 @@ class MemoryAccountRepository : MemoryRecordRepository<AccountId, AccountRecord,
                         type = cmd.accountType,
                         name = cmd.name,
                         email = cmd.email,
-                        salt = cmd.salt
+                        salt = cmd.salt,
                     )
                 )
                 (currentVersion(accountId)).also(CurrentAccountProjection::apply)

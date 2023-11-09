@@ -4,6 +4,7 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.DomainId
 import io.hamal.lib.common.domain.DomainObject
 import io.hamal.lib.common.util.CollectionUtils.takeWhileInclusive
+import io.hamal.lib.domain.vo.RecordedAt
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.Record
 import io.hamal.repository.record.RecordRepository
@@ -23,7 +24,10 @@ abstract class MemoryRecordRepository<ID : DomainId, RECORD : Record<ID>, OBJ : 
     override fun store(record: RECORD): RECORD {
         return lock.withLock {
             val records = store.getOrDefault(record.entityId, mutableListOf())
-            record.apply { sequence = RecordSequence(records.size + 1) }
+            record.apply {
+                sequence = RecordSequence(records.size + 1)
+                recordedAt = RecordedAt.now()
+            }
             store[record.entityId] = records.apply { add(record) }
             store[record.entityId]!!.last()
         }
