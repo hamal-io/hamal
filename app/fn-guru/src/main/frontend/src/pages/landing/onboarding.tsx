@@ -54,7 +54,7 @@ const OnboardingPage: FC = () => {
             submitBlueprint(`v1/flows/${flowsubmitted.flowId}/adhoc`, {
                 inputs: {},
                 code: `sys = require('sys')
-                sys.func.create({
+                sys.funcs.create({
                     name = 'Hello-World',
                     inputs = {},
                     code = [[ ${code} ]]

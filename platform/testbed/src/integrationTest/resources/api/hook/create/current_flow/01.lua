@@ -1,6 +1,6 @@
 sys = require('sys')
 
-create_hook_req = fail_on_error(sys.hook.create({
+create_hook_req = fail_on_error(sys.hooks.create({
     name = 'empty-test-hook',
 }))
 
@@ -12,6 +12,6 @@ assert(create_hook_req.hook_id ~= nil)
 assert(create_hook_req.group_id == '1')
 assert(create_hook_req.flow_id == '1')
 
-hook = fail_on_error(sys.hook.get(create_hook_req.hook_id))
+hook = fail_on_error(sys.hooks.get(create_hook_req.hook_id))
 assert(hook.id == create_hook_req.hook_id)
 assert(hook.name == 'empty-test-hook')

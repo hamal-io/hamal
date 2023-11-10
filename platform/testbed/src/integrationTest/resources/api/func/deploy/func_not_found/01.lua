@@ -1,6 +1,6 @@
 sys = require('sys')
 
-local create_req = fail_on_error(sys.func.create({
+local create_req = fail_on_error(sys.funcs.create({
     name = 'created-name',
     inputs = {},
     code = 'created-code'
@@ -8,7 +8,7 @@ local create_req = fail_on_error(sys.func.create({
 sys.await_completed(create_req)
 
 for i = 2, 20 do
-    update_req = fail_on_error(sys.func.update({
+    update_req = fail_on_error(sys.funcs.update({
         id = create_req.func_id,
         name = 'func-' .. i,
         inputs = { },
@@ -17,13 +17,13 @@ for i = 2, 20 do
 end
 sys.await_completed(update_req)
 
-err, res = sys.func.deploy({
+err, res = sys.funcs.deploy({
     id = '23',
     version = 1
 })
 assert(err.message == 'Func not found')
 assert(res == nil)
 
-err, res = sys.func.deploy_latest('23')
+err, res = sys.funcs.deploy_latest('23')
 assert(err.message == 'Func not found')
 assert(res == nil)

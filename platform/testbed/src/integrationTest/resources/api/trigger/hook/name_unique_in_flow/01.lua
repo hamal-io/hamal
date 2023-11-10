@@ -1,16 +1,16 @@
 sys = require('sys')
 
-flow = fail_on_error(sys.flow.create({ name = 'flow-1' }))
+flow = fail_on_error(sys.flows.create({ name = 'flow-1' }))
 sys.await_completed(flow)
 
-func = fail_on_error(sys.func.create({ flow_id = flow.id; name = 'test-func'; inputs = {}; code = [[4 + 2]] }))
+func = fail_on_error(sys.funcs.create({ flow_id = flow.id; name = 'test-func'; inputs = {}; code = [[4 + 2]] }))
 sys.await_completed(func)
 
-hook = fail_on_error(sys.hook.create({ flow_id = '1'; name = "some-amazing-hook" }))
+hook = fail_on_error(sys.hooks.create({ flow_id = '1'; name = "some-amazing-hook" }))
 sys.await(hook)
 
 -- trigger name is unique
-trigger = fail_on_error(sys.trigger.create_hook({
+trigger = fail_on_error(sys.triggers.create_hook({
     func_id = func.id,
     flow_id = '1',
     name = 'trigger-to-create',
@@ -19,7 +19,7 @@ trigger = fail_on_error(sys.trigger.create_hook({
 }))
 sys.await_completed(trigger)
 
-trigger = fail_on_error(sys.trigger.create_hook({
+trigger = fail_on_error(sys.triggers.create_hook({
     func_id = func.id,
     flow_id = '1',
     name = 'trigger-to-create',
@@ -28,11 +28,11 @@ trigger = fail_on_error(sys.trigger.create_hook({
 }))
 assert(sys.await_failed(trigger) == nil)
 
-_, triggers = sys.trigger.list()
+_, triggers = sys.triggers.list()
 assert(#triggers == 1)
 
 -- same name different flow
-err, trigger = sys.trigger.create_hook({
+err, trigger = sys.triggers.create_hook({
     func_id = func.id,
     flow_id = flow.id,
     name = 'trigger-to-create',
@@ -42,5 +42,5 @@ err, trigger = sys.trigger.create_hook({
 assert(err == nil)
 sys.await_completed(trigger)
 
-_, triggers = sys.trigger.list()
+_, triggers = sys.triggers.list()
 assert(#triggers == 2)

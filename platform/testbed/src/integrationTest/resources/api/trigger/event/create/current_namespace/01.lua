@@ -1,12 +1,12 @@
 sys = require('sys')
 
-func_req = fail_on_error(sys.func.create({ name = 'test-func'; inputs = {}; code = [[4 + 2]] }))
+func_req = fail_on_error(sys.funcs.create({ name = 'test-func'; inputs = {}; code = [[4 + 2]] }))
 sys.await_completed(func_req)
 
-topic_req = fail_on_error(sys.topic.create({ name = "some-amazing-topic" }))
+topic_req = fail_on_error(sys.topics.create({ name = "some-amazing-topic" }))
 sys.await(topic_req)
 
-trigger = fail_on_error(sys.trigger.create_event({
+trigger = fail_on_error(sys.triggers.create_event({
     func_id = func_req.func_id,
     name = 'trigger-to-create',
     inputs = { },
@@ -20,7 +20,7 @@ assert(trigger.trigger_id ~= nil)
 assert(trigger.group_id == '1')
 assert(trigger.flow_id == '1')
 
-trigger = fail_on_error(sys.trigger.get(trigger.id))
+trigger = fail_on_error(sys.triggers.get(trigger.id))
 
 assert(trigger.type == 'Event')
 assert(trigger.name == 'trigger-to-create')

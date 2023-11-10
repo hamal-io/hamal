@@ -1,6 +1,6 @@
 sys = require('sys')
 
-local req = fail_on_error(sys.extension.create({
+local req = fail_on_error(sys.extensions.create({
     name = 'test-ext',
     code = [[x='hamal']]
 }))

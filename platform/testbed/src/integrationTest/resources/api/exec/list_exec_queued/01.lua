@@ -7,7 +7,7 @@ sys.await_completed(req)
 
 -- Remember: Each test is an adhoc invoked exec
 while true do
-    err, execs = sys.exec.list()
+    err, execs = sys.execs.list()
     assert(err == nil)
     assert(#execs == 2)
 

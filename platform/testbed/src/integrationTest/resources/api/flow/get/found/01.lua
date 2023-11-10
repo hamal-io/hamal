@@ -1,6 +1,6 @@
 sys = require('sys')
 
-err, req = sys.flow.create({
+err, req = sys.flows.create({
     name = 'test-flow',
     inputs = {},
 })
@@ -13,7 +13,7 @@ assert(req.flow_id ~= nil)
 
 sys.await_completed(req)
 
-flow = fail_on_error(sys.flow.get(req.flow_id))
+flow = fail_on_error(sys.flows.get(req.flow_id))
 
 assert(flow.id == req.flow_id)
 assert(flow.name == 'test-flow')

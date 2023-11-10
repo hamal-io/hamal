@@ -1,6 +1,6 @@
 sys = require('sys')
 
-err, func = sys.func.create({
+err, func = sys.funcs.create({
     name = 'test-func',
     inputs = {},
     code = [[4 + 2]]
@@ -14,7 +14,7 @@ assert(func.func_id ~= nil)
 assert(func.group_id == '1')
 assert(func.flow_id == '1')
 
-err, func = sys.func.get(func.id)
+err, func = sys.funcs.get(func.id)
 assert(err == nil)
 
 assert(func.flow.id == '1')

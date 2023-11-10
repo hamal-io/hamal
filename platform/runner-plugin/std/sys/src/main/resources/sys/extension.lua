@@ -2,16 +2,16 @@ function extension()
     local internal = _internal
     return function()
         local export = {
-            blueprint = { },
-            code = { },
-            exec = { },
-            extension = { },
-            func = { },
-            hook = { },
-            flow = { },
-            req = { },
-            topic = { },
-            trigger = { }
+            blueprints = { },
+            codes = { },
+            execs = { },
+            extensions = { },
+            funcs = { },
+            hooks = { },
+            flows = { },
+            reqs = { },
+            topics = { },
+            triggers = { }
         }
 
         function export.adhoc(cmd)
@@ -42,42 +42,42 @@ function extension()
             return err, res
         end
 
-        function export.code.get(code_id, code_version)
+        function export.codes.get(code_id, code_version)
             return internal.code_get(code_id, code_version or -1)
         end
 
-        function export.exec.get(exec_id)
+        function export.execs.get(exec_id)
             return internal.exec_get(exec_id)
         end
 
-        function export.exec.list(query)
+        function export.execs.list(query)
             query = query or {}
             query.flow_ids = query.flow_ids or {}
 
             return internal.exec_list(query)
         end
 
-        function export.extension.create(cmd)
+        function export.extensions.create(cmd)
             return internal.extension_create({
                 name = cmd.name or nil,
                 code = cmd.code or ""
             })
         end
 
-        function export.extension.get(ext_id)
+        function export.extensions.get(ext_id)
             return internal.extension_get(ext_id)
         end
 
-        function export.extension.list()
+        function export.extensions.list()
             return internal.extension_list()
         end
 
-        function export.extension.update(cmd)
+        function export.extensions.update(cmd)
             cmd = cmd or {}
             return internal.extension_update(cmd)
         end
 
-        function export.func.create(cmd)
+        function export.funcs.create(cmd)
             cmd = cmd or {}
             return internal.func_create({
                 flow_id = cmd.flow_id,
@@ -87,29 +87,29 @@ function extension()
             })
         end
 
-        function export.func.deploy(cmd)
+        function export.funcs.deploy(cmd)
             return internal.func_deploy(cmd)
         end
 
-        function export.func.deploy_latest(id)
+        function export.funcs.deploy_latest(id)
             return internal.func_deploy_latest(id)
         end
 
-        function export.func.get(func_id)
+        function export.funcs.get(func_id)
             return internal.func_get(func_id)
         end
 
-        function export.func.list(query)
+        function export.funcs.list(query)
             query = query or {}
             query.flow_ids = query.flow_ids or {}
             return internal.func_list(query)
         end
 
-        function export.func.invoke(func_id, body)
+        function export.funcs.invoke(func_id, body)
             return internal.func_invoke(func_id, body)
         end
 
-        function export.func.update(body)
+        function export.funcs.update(body)
             body = body or {}
             return internal.func_update({
                 id = body.id,
@@ -119,7 +119,7 @@ function extension()
             })
         end
 
-        function export.hook.create(cmd)
+        function export.hooks.create(cmd)
             cmd = cmd or {}
             return internal.hook_create({
                 flow_id = cmd.flow_id or nil,
@@ -127,37 +127,37 @@ function extension()
             })
         end
 
-        function export.hook.get(hook_id)
+        function export.hooks.get(hook_id)
             return internal.hook_get(hook_id)
         end
 
-        function export.hook.list(query)
+        function export.hooks.list(query)
             query = query or {}
             query.flow_ids = query.flow_ids or {}
 
             return internal.hook_list(query)
         end
 
-        function export.flow.create(cmd)
+        function export.flows.create(cmd)
             return internal.flow_create({
                 name = cmd.name or "",
                 inputs = cmd.inputs or {}
             })
         end
 
-        function export.flow.get(flow_id)
+        function export.flows.get(flow_id)
             return internal.flow_get(flow_id)
         end
 
-        function export.flow.list()
+        function export.flows.list()
             return internal.flow_list()
         end
 
-        function export.req.get(req_id)
+        function export.reqs.get(req_id)
             return internal.req_get(req_id)
         end
 
-        function export.blueprint.create(cmd)
+        function export.blueprints.create(cmd)
             return internal.blueprint_create({
                 name = cmd.name or nil,
                 inputs = cmd.inputs or {},
@@ -165,23 +165,23 @@ function extension()
             })
         end
 
-        function export.blueprint.get(blueprint_id)
+        function export.blueprints.get(blueprint_id)
             return internal.blueprint_get(blueprint_id)
         end
 
-        function export.blueprint.update(cmd)
+        function export.blueprints.update(cmd)
             return internal.blueprint_update(cmd)
         end
 
-        function export.topic.resolve(topic_name)
+        function export.topics.resolve(topic_name)
             return internal.topic_resolve(topic_name)
         end
 
-        function export.topic.append(topic_id, payload)
+        function export.topics.append(topic_id, payload)
             return internal.topic_entry_append(topic_id, payload)
         end
 
-        function export.topic.create(cmd)
+        function export.topics.create(cmd)
             cmd = cmd or {}
             return internal.topic_create({
                 flow_id = cmd.flow_id,
@@ -189,22 +189,22 @@ function extension()
             })
         end
 
-        function export.topic.list(query)
+        function export.topics.list(query)
             query = query or {}
             query.flow_ids = query.flow_ids or {}
 
             return internal.topic_list(query)
         end
 
-        function export.topic.list_entries(topic_id)
+        function export.topics.list_entries(topic_id)
             return internal.topic_entry_list(topic_id)
         end
 
-        function export.topic.get(topic_id)
+        function export.topics.get(topic_id)
             return internal.topic_get(topic_id)
         end
 
-        function export.trigger.create_fixed_rate(cmd)
+        function export.triggers.create_fixed_rate(cmd)
             cmd = cmd or {}
             return internal.trigger_create({
                 type = "FixedRate",
@@ -216,7 +216,7 @@ function extension()
             })
         end
 
-        function export.trigger.create_event(cmd)
+        function export.triggers.create_event(cmd)
             cmd = cmd or {}
             return internal.trigger_create({
                 type = "Event",
@@ -228,7 +228,7 @@ function extension()
             })
         end
 
-        function export.trigger.create_hook(cmd)
+        function export.triggers.create_hook(cmd)
             cmd = cmd or {}
             return internal.trigger_create({
                 type = "Hook",
@@ -241,11 +241,11 @@ function extension()
             })
         end
 
-        function export.trigger.get(trigger_id)
+        function export.triggers.get(trigger_id)
             return internal.trigger_get(trigger_id)
         end
 
-        function export.trigger.list(query)
+        function export.triggers.list(query)
             query = query or {}
             query.flow_ids = query.flow_ids or {}
             return internal.trigger_list(query)

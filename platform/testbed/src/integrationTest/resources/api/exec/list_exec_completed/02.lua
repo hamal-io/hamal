@@ -2,7 +2,7 @@ sys = require('sys')
 
 while true do
     -- Remember: Each test is an adhoc invocation
-    err, execs = sys.exec.list()
+    err, execs = sys.execs.list()
     assert(err == nil)
     assert(#execs == 3)
 
