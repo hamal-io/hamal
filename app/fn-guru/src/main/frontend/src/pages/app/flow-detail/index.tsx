@@ -1,31 +1,30 @@
 import React, {FC, ReactNode} from 'react'
 import {useParams} from "react-router-dom";
 import {ApiFlow} from "@/api/types";
-import Flowsidebar from "./component/sidebar";
+import Sidebar from "@/pages/app/flow-detail/components/sidebar";
 import {useApiGet} from "@/hook";
+import Authenticated from "@/components/app/authenticated.tsx";
 
 
-interface FlowDetailPageProps {
+type Props = {
     children: ReactNode;
 }
 
 
-const FlowDetailPage: FC<FlowDetailPageProps> = (props: FlowDetailPageProps) => {
+const FlowDetailPage: FC<Props> = ({children}) => {
     const {flowId} = useParams()
     const [flow, isLoading, error] = useApiGet<ApiFlow>(`v1/flows/${flowId}`)
 
     return (
-        <main className="flex-1 w-full mx-auto text-lg h-full shadow-lg bg-gray-200">
-            <div className="flex flex-row">
-                <div className="flex flex-col items-start w-2/12">
-                    <Flowsidebar/>
-                </div>
-                <div className="flex flex-col items-center w-10/12">
-                    {props.children}
+        <Authenticated>
+            <div className="relative flex flex-row min-h-screen bg-gray-100">
+                <Sidebar/>
+                <div className="p-4 mt-4 mr-4 border-l bg-background border-border w-full lg:p-6 ml-64">
+                    Flow {flowId}
+                    {children}
                 </div>
             </div>
-        </main>
-
+        </Authenticated>
     );
 }
 

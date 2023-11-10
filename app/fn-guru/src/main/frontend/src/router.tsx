@@ -8,14 +8,12 @@ import Authenticated from "@/components/app/authenticated";
 
 import Dashboard from "./pages/app/dashboard";
 
-import FlowList from "./pages/app/flow-list";
-import FlowDetail from "./pages/app/flow-detail";
+import FlowListPage from "./pages/app/flow-list";
+import FlowDetailPage from "./pages/app/flow-detail";
 
-import FlowDashboardPage from "@/pages/app/flow-detail/page/dashboard";
-import FlowExecDetailPage from "@/pages/app/flow-detail/page/exec-detail";
-import FlowExecListPage from "@/pages/app/flow-detail/page/exec-list";
-import FlowFuncDetail from "@/pages/app/flow-detail/page/func-detail";
-// import FlowFuncListPage from "@/pages/app/flow-detail/page/func-list";
+import FlowOverviewPage from "@/pages/app/flow-detail/pages/overview";
+import FlowExecListPage from "@/pages/app/flow-detail/pages/exec-list";
+import FlowFuncListPage from "@/pages/app/flow-detail/pages/func-list";
 
 import {createBrowserRouter} from "react-router-dom";
 import Playground from "@/pages/app/playground";
@@ -36,53 +34,45 @@ export const router = createBrowserRouter([
     {
         path: "/flows", element:
             <Authenticated>
-                <FlowList/>
+                <FlowListPage/>
             </Authenticated>
     },
     {
         path: "/flows/:flowId", element:
-            <Authenticated>
-                <FlowDetail>
-                    <FlowDashboardPage/>
-                </FlowDetail>
-            </Authenticated>
+            <FlowDetailPage>
+                <FlowOverviewPage/>
+            </FlowDetailPage>
     },
 
     {
         path: "/flows/:flowId/executions", element:
-            <Authenticated>
-                <FlowDetail>
-                    <FlowExecListPage/>
-                </FlowDetail>
-            </Authenticated>
+            <FlowDetailPage>
+                <FlowExecListPage/>
+            </FlowDetailPage>
     },
-
-    {
-        path: "/flows/:flowId/executions/:execId", element:
-            <Authenticated>
-                <FlowDetail>
-                    <FlowExecDetailPage/>
-                </FlowDetail>
-            </Authenticated>
-    },
-
+    //
     // {
-    //     path: "/flows/:flowId/functions", element:
+    //     path: "/flows/:flowId/executions/:execId", element:
     //         <Authenticated>
-    //             <FlowDetail>
-    //                 <FlowFuncListPage/>
-    //             </FlowDetail>
+    //             <FlowDetailPage>
+    //                 <FlowExecDetailPage/>
+    //             </FlowDetailPage>
     //         </Authenticated>
     // },
-
     {
-        path: "/flows/:flowId/functions/:funcId", element:
-            <Authenticated>
-                <FlowDetail>
-                    <FlowFuncDetail/>
-                </FlowDetail>
-            </Authenticated>
+        path: "/flows/:flowId/functions", element:
+            <FlowDetailPage>
+                <FlowFuncListPage/>
+            </FlowDetailPage>
     },
+    // {
+    //     path: "/flows/:flowId/functions/:funcId", element:
+    //         <Authenticated>
+    //             <FlowDetailPage>
+    //                 <FlowFuncDetail/>
+    //             </FlowDetailPage>
+    //         </Authenticated>
+    // },
 
     {
         path: "/playground", element:
