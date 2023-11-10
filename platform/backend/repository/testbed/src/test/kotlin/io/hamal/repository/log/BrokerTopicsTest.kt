@@ -3,7 +3,7 @@ package io.hamal.repository.log
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.FlowId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.repository.api.log.BrokerTopicsRepository
@@ -21,12 +21,12 @@ internal class BrokerTopicsRepositoryTest : AbstractUnitTest() {
     fun `Creates a new topic`() = runWith(BrokerTopicsRepository::class) {
         val result = create(
             CmdId(1),
-            TopicToCreate(TopicId(1), TopicName("very-first-topic"), NamespaceId(23), GroupId(234))
+            TopicToCreate(TopicId(1), TopicName("very-first-topic"), FlowId(23), GroupId(234))
         )
 
         assertThat(result.id, equalTo(TopicId(1)))
         assertThat(result.name, equalTo(TopicName("very-first-topic")))
-        assertThat(result.namespaceId, equalTo(NamespaceId(23)))
+        assertThat(result.flowId, equalTo(FlowId(23)))
         assertThat(result.groupId, equalTo(GroupId(234)))
         assertThat(count(TopicQuery(groupIds = listOf())), equalTo(1UL))
     }
@@ -35,12 +35,12 @@ internal class BrokerTopicsRepositoryTest : AbstractUnitTest() {
     fun `Bug - able to create realistic topic name`() = runWith(BrokerTopicsRepository::class) {
         create(
             CmdId(1),
-            TopicToCreate(TopicId(1), TopicName("very-first-topic"), NamespaceId(23), GroupId(345))
+            TopicToCreate(TopicId(1), TopicName("very-first-topic"), FlowId(23), GroupId(345))
         )
 
         val result = create(
             CmdId(2),
-            TopicToCreate(TopicId(2), TopicName("func::created"), NamespaceId(23), GroupId(345))
+            TopicToCreate(TopicId(2), TopicName("func::created"), FlowId(23), GroupId(345))
         )
         assertThat(result.id, equalTo(TopicId(2)))
         assertThat(result.name, equalTo(TopicName("func::created")))
@@ -49,17 +49,17 @@ internal class BrokerTopicsRepositoryTest : AbstractUnitTest() {
     }
 
     @TestFactory
-    fun `Does not create a new entry if topic alread exists in namespace`() =
+    fun `Does not create a new entry if topic alread exists in flow`() =
         runWith(BrokerTopicsRepository::class) {
             create(
                 CmdId(1),
-                TopicToCreate(TopicId(1), TopicName("very-first-topic"), NamespaceId(23), GroupId(1))
+                TopicToCreate(TopicId(1), TopicName("very-first-topic"), FlowId(23), GroupId(1))
             )
 
             val throwable = assertThrows<IllegalArgumentException> {
                 create(
                     CmdId(2),
-                    TopicToCreate(TopicId(2), TopicName("very-first-topic"), NamespaceId(23), GroupId(1))
+                    TopicToCreate(TopicId(2), TopicName("very-first-topic"), FlowId(23), GroupId(1))
                 )
             }
             assertThat(throwable.message, equalTo("Topic already exists"))
@@ -67,34 +67,34 @@ internal class BrokerTopicsRepositoryTest : AbstractUnitTest() {
         }
 
     @TestFactory
-    fun `Create a new topic even topic name exists for different namespaces`() =
+    fun `Create a new topic even topic name exists for different flows`() =
         runWith(BrokerTopicsRepository::class) {
             create(
                 CmdId(1),
-                TopicToCreate(TopicId(1), TopicName("very-first-topic"), NamespaceId(22), GroupId(1))
+                TopicToCreate(TopicId(1), TopicName("very-first-topic"), FlowId(22), GroupId(1))
             )
 
             create(
                 CmdId(2),
-                TopicToCreate(TopicId(2), TopicName("very-first-topic"), NamespaceId(33), GroupId(1))
+                TopicToCreate(TopicId(2), TopicName("very-first-topic"), FlowId(33), GroupId(1))
             )
 
             create(
                 CmdId(3),
-                TopicToCreate(TopicId(3), TopicName("very-first-topic"), NamespaceId(44), GroupId(1))
+                TopicToCreate(TopicId(3), TopicName("very-first-topic"), FlowId(44), GroupId(1))
             )
         }
 
 
     @TestFactory
-    fun `Topic name only exists in different namespace`() = runWith(BrokerTopicsRepository::class) {
+    fun `Topic name only exists in different flow`() = runWith(BrokerTopicsRepository::class) {
         setupTopic()
 
         create(
             CmdId(123), TopicToCreate(
                 id = TopicId(2345),
                 name = TopicName("created-topic"),
-                namespaceId = NamespaceId(10000),
+                flowId = FlowId(10000),
                 groupId = GroupId(1)
             )
         )
@@ -102,7 +102,7 @@ internal class BrokerTopicsRepositoryTest : AbstractUnitTest() {
 
 
     @TestFactory
-    fun `Topic name already exists in namespace`() = runWith(BrokerTopicsRepository::class) {
+    fun `Topic name already exists in flow`() = runWith(BrokerTopicsRepository::class) {
         setupTopic()
 
         val exception = assertThrows<IllegalArgumentException> {
@@ -110,7 +110,7 @@ internal class BrokerTopicsRepositoryTest : AbstractUnitTest() {
                 CmdId(123), TopicToCreate(
                     id = TopicId(2345),
                     name = TopicName("created-topic"),
-                    namespaceId = NamespaceId(23),
+                    flowId = FlowId(23),
                     groupId = GroupId(1)
                 )
             )
@@ -141,16 +141,16 @@ internal class BrokerTopicsRepositoryTest : AbstractUnitTest() {
     fun `Topic not found by name`() = runWith(BrokerTopicsRepository::class) {
         setupTopic()
 
-        val result = find(NamespaceId(23), TopicName("this-topic-does-not-exist"))
+        val result = find(FlowId(23), TopicName("this-topic-does-not-exist"))
         assertThat(result, nullValue())
     }
 
     @TestFactory
-    fun `Topic not found by name - exist in different namespace only`() =
+    fun `Topic not found by name - exist in different flow only`() =
         runWith(BrokerTopicsRepository::class) {
             setupTopic()
 
-            val result = find(NamespaceId(22223333), TopicName("created-topic"))
+            val result = find(FlowId(22223333), TopicName("created-topic"))
             assertThat(result, nullValue())
         }
 
@@ -158,7 +158,7 @@ internal class BrokerTopicsRepositoryTest : AbstractUnitTest() {
     fun `Topic found by name`() = runWith(BrokerTopicsRepository::class) {
         setupTopic()
 
-        with(find(NamespaceId(23), TopicName("created-topic"))!!) {
+        with(find(FlowId(23), TopicName("created-topic"))!!) {
             assertThat(id, equalTo(TopicId(5432)))
             assertThat(name, equalTo(TopicName("created-topic")))
         }
@@ -264,21 +264,21 @@ internal class BrokerTopicsRepositoryTest : AbstractUnitTest() {
             CmdId(1), TopicToCreate(
                 id = TopicId(5432),
                 name = TopicName("created-topic"),
-                namespaceId = NamespaceId(23),
+                flowId = FlowId(23),
                 groupId = GroupId(1)
             )
         )
     }
 
     private fun BrokerTopicsRepository.setupTopics() {
-        create(CmdId(1), TopicToCreate(TopicId(1), TopicName("topic-one"), NamespaceId(1), GroupId(1)))
-        create(CmdId(2), TopicToCreate(TopicId(2), TopicName("topic-two"), NamespaceId(1), GroupId(1)))
-        create(CmdId(3), TopicToCreate(TopicId(3), TopicName("topic-three"), NamespaceId(1), GroupId(1)))
-        create(CmdId(4), TopicToCreate(TopicId(4), TopicName("topic-four"), NamespaceId(1), GroupId(1)))
-        create(CmdId(5), TopicToCreate(TopicId(5), TopicName("topic-five"), NamespaceId(1), GroupId(1)))
-        create(CmdId(6), TopicToCreate(TopicId(6), TopicName("topic-six"), NamespaceId(1), GroupId(1)))
-        create(CmdId(7), TopicToCreate(TopicId(7), TopicName("topic-seven"), NamespaceId(2), GroupId(2)))
-        create(CmdId(8), TopicToCreate(TopicId(8), TopicName("topic-eight"), NamespaceId(2), GroupId(2)))
-        create(CmdId(9), TopicToCreate(TopicId(9), TopicName("topic-nine"), NamespaceId(3), GroupId(3)))
+        create(CmdId(1), TopicToCreate(TopicId(1), TopicName("topic-one"), FlowId(1), GroupId(1)))
+        create(CmdId(2), TopicToCreate(TopicId(2), TopicName("topic-two"), FlowId(1), GroupId(1)))
+        create(CmdId(3), TopicToCreate(TopicId(3), TopicName("topic-three"), FlowId(1), GroupId(1)))
+        create(CmdId(4), TopicToCreate(TopicId(4), TopicName("topic-four"), FlowId(1), GroupId(1)))
+        create(CmdId(5), TopicToCreate(TopicId(5), TopicName("topic-five"), FlowId(1), GroupId(1)))
+        create(CmdId(6), TopicToCreate(TopicId(6), TopicName("topic-six"), FlowId(1), GroupId(1)))
+        create(CmdId(7), TopicToCreate(TopicId(7), TopicName("topic-seven"), FlowId(2), GroupId(2)))
+        create(CmdId(8), TopicToCreate(TopicId(8), TopicName("topic-eight"), FlowId(2), GroupId(2)))
+        create(CmdId(9), TopicToCreate(TopicId(9), TopicName("topic-nine"), FlowId(3), GroupId(3)))
     }
 }

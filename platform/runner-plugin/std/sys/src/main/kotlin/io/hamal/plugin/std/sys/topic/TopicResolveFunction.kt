@@ -1,6 +1,6 @@
 package io.hamal.plugin.std.sys.topic
 
-import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.FlowId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -20,7 +20,7 @@ class TopicResolveFunction(
     override fun invoke(ctx: FunctionContext, arg1: StringType): Pair<ErrorType?, StringType?> {
         return try {
             null to StringType(
-                sdk.topic.resolve(ctx[NamespaceId::class], TopicName(arg1.value))
+                sdk.topic.resolve(ctx[FlowId::class], TopicName(arg1.value))
                     .value
                     .value
                     .toString(16)

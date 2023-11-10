@@ -1,8 +1,8 @@
 sys = require('sys')
 
-_, req = sys.topic.create({ name = "topic-one" })
+_, req = sys.topics.create({ name = "topic-one" })
 sys.await(req)
 
-err, topic_id = sys.topic.resolve('topic-one')
+err, topic_id = sys.topics.resolve('topic-one')
 assert(err == nil)
 assert(topic_id ~= nil)

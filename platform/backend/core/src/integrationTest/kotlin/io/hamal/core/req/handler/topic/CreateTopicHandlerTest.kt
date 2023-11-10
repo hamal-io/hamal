@@ -32,7 +32,7 @@ internal class CreateTopicHandlerTest : BaseReqHandlerTest() {
                     id = ReqId(2),
                     status = Submitted,
                     topicId = TopicId(2345),
-                    namespaceId = testNamespace.id,
+                    flowId = testFlow.id,
                     groupId = testGroup.id,
                     name = TopicName("another-topic-name")
                 )
@@ -53,7 +53,7 @@ internal class CreateTopicHandlerTest : BaseReqHandlerTest() {
                     id = ReqId(2),
                     status = Submitted,
                     topicId = TopicId(3456),
-                    namespaceId = testNamespace.id,
+                    flowId = testFlow.id,
                     groupId = testGroup.id,
                     name = TopicName("some-topic-name")
                 )
@@ -82,7 +82,7 @@ internal class CreateTopicHandlerTest : BaseReqHandlerTest() {
             id = ReqId(1),
             status = Submitted,
             topicId = TopicId(2345),
-            namespaceId = testNamespace.id,
+            flowId = testFlow.id,
             groupId = testGroup.id,
             name = TopicName("some-topic-name")
         )

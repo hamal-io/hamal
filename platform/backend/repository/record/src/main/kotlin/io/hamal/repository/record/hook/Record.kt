@@ -21,7 +21,7 @@ data class HookCreatedRecord(
     override val entityId: HookId,
     override val cmdId: CmdId,
     val groupId: GroupId,
-    val namespaceId: NamespaceId,
+    val flowId: FlowId,
     val name: HookName
 ) : HookRecord()
 

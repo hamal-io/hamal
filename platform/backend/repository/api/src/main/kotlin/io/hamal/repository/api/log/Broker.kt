@@ -14,7 +14,7 @@ interface CreateTopic {
     data class TopicToCreate(
         val id: TopicId,
         val name: TopicName,
-        val namespaceId: NamespaceId,
+        val flowId: FlowId,
         val groupId: GroupId
     )
 }
@@ -38,11 +38,11 @@ interface FindTopic {
 
     fun findTopic(topicId: TopicId): Topic?
 
-    fun findTopic(namespaceId: NamespaceId, topicName: TopicName): Topic?
+    fun findTopic(flowId: FlowId, topicName: TopicName): Topic?
 }
 
 interface ResolveTopic {
-    fun resolveTopic(namespaceId: NamespaceId, name: TopicName): Topic?
+    fun resolveTopic(flowId: FlowId, name: TopicName): Topic?
 }
 
 interface BrokerRepository :

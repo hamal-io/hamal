@@ -66,7 +66,7 @@ abstract class AbstractRunnerTest {
         inputs: ExecInputs = ExecInputs()
     ) = UnitOfWork(
         id = ExecId(1234),
-        namespaceId = NamespaceId(98876),
+        flowId = FlowId(98876),
         groupId = GroupId(5432),
         inputs = inputs,
         state = State(),

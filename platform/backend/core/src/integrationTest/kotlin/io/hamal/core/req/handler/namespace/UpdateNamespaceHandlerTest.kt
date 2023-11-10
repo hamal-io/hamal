@@ -1,13 +1,13 @@
-package io.hamal.core.req.handler.namespace
+package io.hamal.core.req.handler.flow
 
 import io.hamal.core.req.handler.BaseReqHandlerTest
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
-internal class UpdateNamespaceHandlerTest : BaseReqHandlerTest() {
+internal class UpdateFlowHandlerTest : BaseReqHandlerTest() {
     @Test
     @Disabled
-    fun `Updates namespace`() {
+    fun `Updates flow`() {
         TODO()
     }
 }

@@ -10,7 +10,7 @@ const OnboardingPage: FC = () => {
     const navigate = useNavigate()
     const [auth] = useAuth()
     const [createAnonymousAccount] = useApiCreateAnonymousAccount()
-    const [submitNamespace, namespaceSubmitted,] = useApiPost<{ namespaceId: string }>()
+    const [submitFlow, flowsubmitted,] = useApiPost<{ flowId: string }>()
     const [submitBlueprint, blueprintSubmitted] = useApiPost()
     const [code, setCode] = useState<string>('')
 
@@ -37,7 +37,7 @@ const OnboardingPage: FC = () => {
         const abortController = new AbortController()
 
         if (auth != null && auth.type !== 'Unauthorized') {
-            submitNamespace(`v1/groups/${auth.groupId}/namespaces`, {
+            submitFlow(`v1/groups/${auth.groupId}/flows`, {
                 name: `Test-Name-Space-${generateId(10)}`,
                 inputs: {}
             }, abortController)
@@ -45,16 +45,16 @@ const OnboardingPage: FC = () => {
         return () => {
             abortController.abort()
         }
-    }, [auth, submitNamespace])
+    }, [auth, submitFlow])
 
     useEffect(() => {
         const abortController = new AbortController()
 
-        if (namespaceSubmitted != null) {
-            submitBlueprint(`v1/namespaces/${namespaceSubmitted.namespaceId}/adhoc`, {
+        if (flowsubmitted != null) {
+            submitBlueprint(`v1/flows/${flowsubmitted.flowId}/adhoc`, {
                 inputs: {},
                 code: `sys = require('sys')
-                sys.func.create({
+                sys.funcs.create({
                     name = 'Hello-World',
                     inputs = {},
                     code = [[ ${code} ]]
@@ -65,12 +65,12 @@ const OnboardingPage: FC = () => {
             abortController.abort()
         }
 
-    }, [namespaceSubmitted, submitBlueprint]);
+    }, [flowsubmitted, submitBlueprint]);
 
 
     useEffect(() => {
         if (blueprintSubmitted != null) {
-            navigate('/namespaces', {replace: true})
+            navigate('/flows', {replace: true})
         }
     }, [blueprintSubmitted, navigate]);
 
@@ -78,7 +78,7 @@ const OnboardingPage: FC = () => {
         <main className="flex-1 w-full pt-2 mx-auto text-lg h-screen shadow-lg bg-gray-200">
             <section className="container p-4 mx-auto max-w-3xl">
                 <div className={"flex flex-row"}>
-                    <h1>Your personal namespace is deployed shortly.</h1>
+                    <h1>Your personal flow is deployed shortly.</h1>
                     <div className={"pl-3"}>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin"/>
                     </div>

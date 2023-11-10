@@ -16,13 +16,13 @@ internal class TopicListControllerTest : TopicBaseControllerTest() {
 
     @Test
     fun `Single topic`() {
-        awaitCompleted(createTopic(TopicName("namespace::topics_one")))
+        awaitCompleted(createTopic(TopicName("flow::topics_one")))
 
         with(listTopics()) {
             assertThat(topics, hasSize(1))
 
             with(topics.first()) {
-                assertThat(name, equalTo(TopicName("namespace::topics_one")))
+                assertThat(name, equalTo(TopicName("flow::topics_one")))
             }
         }
     }
@@ -30,22 +30,22 @@ internal class TopicListControllerTest : TopicBaseControllerTest() {
     @Test
     fun `Multiple topics`() {
         awaitCompleted(
-            createTopic(TopicName("namespace::topics_one")),
-            createTopic(TopicName("namespace::topics_two")),
-            createTopic(TopicName("namespace::topics_three"))
+            createTopic(TopicName("flow::topics_one")),
+            createTopic(TopicName("flow::topics_two")),
+            createTopic(TopicName("flow::topics_three"))
         )
 
         with(listTopics()) {
             assertThat(topics, hasSize(3))
 
             val topicOne = topics[0]
-            assertThat(topicOne.name, equalTo(TopicName("namespace::topics_three")))
+            assertThat(topicOne.name, equalTo(TopicName("flow::topics_three")))
 
             val topicTwo = topics[1]
-            assertThat(topicTwo.name, equalTo(TopicName("namespace::topics_two")))
+            assertThat(topicTwo.name, equalTo(TopicName("flow::topics_two")))
 
             val topicThree = topics[2]
-            assertThat(topicThree.name, equalTo(TopicName("namespace::topics_one")))
+            assertThat(topicThree.name, equalTo(TopicName("flow::topics_one")))
         }
     }
 

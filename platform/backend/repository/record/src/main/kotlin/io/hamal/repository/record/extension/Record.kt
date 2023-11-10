@@ -16,6 +16,7 @@ import kotlinx.serialization.Transient
 sealed class ExtensionRecord(
     @Transient
     override var sequence: RecordSequence? = null,
+    @Transient
     override var recordedAt: RecordedAt? = null
 ) : Record<ExtensionId>()
 

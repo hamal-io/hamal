@@ -1,5 +1,5 @@
 -- As an unauthenticated user it must be possible to acquire a token
--- With the acquired token api requests are possible - like fetching namespaces
+-- With the acquired token api requests are possible - like fetching flows
 
 http = require 'net.http'
 
@@ -16,7 +16,7 @@ assert(content.token ~= nil)
 assert(#content.groupIds == 1)
 
 for i = 1, 10 do
-    err, res = http.get('/v1/groups/' .. content.groupIds[1] .. '/namespaces', { headers = {
+    err, res = http.get('/v1/groups/' .. content.groupIds[1] .. '/flows', { headers = {
         ['authorization'] = 'Bearer ' .. content.token
     } })
     if err == nil then
@@ -28,4 +28,4 @@ assert(res.err == nil)
 assert(res.status_code == 200)
 
 content = res.content
-assert(#content.namespaces == 1)
+assert(#content.flows == 1)

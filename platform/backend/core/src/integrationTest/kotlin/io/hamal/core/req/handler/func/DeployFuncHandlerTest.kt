@@ -52,7 +52,7 @@ internal class DeployFuncHandlerTest : BaseReqHandlerTest() {
                 id = NextCommandId(),
                 funcId = FuncId(1),
                 groupId = testGroup.id,
-                namespaceId = testNamespace.id,
+                flowId = testFlow.id,
                 name = FuncName("Func-base"),
                 inputs = FuncInputs(),
                 codeId = codeId,

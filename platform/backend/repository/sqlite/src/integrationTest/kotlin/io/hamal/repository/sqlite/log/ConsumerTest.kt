@@ -2,7 +2,7 @@ package io.hamal.repository.sqlite.log
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.FlowId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.repository.api.log.ConsumerId
@@ -23,7 +23,7 @@ class ConsumerTest {
             .use { brokerRepository ->
                 val topic = brokerRepository.create(
                     CmdId(1),
-                    TopicToCreate(TopicId(123), TopicName("topic"), NamespaceId(1), GroupId.root)
+                    TopicToCreate(TopicId(123), TopicName("topic"), FlowId(1), GroupId.root)
                 )
                 val appender = ProtobufAppender(String::class, brokerRepository)
                 IntRange(1, 10).forEach { appender.append(CmdId(it), topic, "$it") }
@@ -31,7 +31,7 @@ class ConsumerTest {
 
         SqliteBrokerRepository(SqliteBroker(path))
             .use { brokerRepository ->
-                val topic = brokerRepository.findTopic(NamespaceId(1), TopicName("topic"))!!
+                val topic = brokerRepository.findTopic(FlowId(1), TopicName("topic"))!!
                 val testInstance =
                     ProtobufLogConsumer(ConsumerId("consumer-01"), topic, brokerRepository, String::class)
                 testInstance.consumeIndexed(10) { index, _, value ->

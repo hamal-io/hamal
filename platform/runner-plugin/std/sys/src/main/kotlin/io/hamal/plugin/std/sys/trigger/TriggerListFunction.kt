@@ -1,6 +1,6 @@
 package io.hamal.plugin.std.sys.trigger
 
-import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.FlowId
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -23,8 +23,8 @@ class TriggerListFunction(
         return try {
             null to ArrayType(
                 sdk.trigger.list(TriggerQuery(
-                    namespaceIds = arg1.getArrayType("namespace_ids")
-                        .map { NamespaceId((it.value as StringType).value) }
+                    flowIds = arg1.getArrayType("flow_ids")
+                        .map { FlowId((it.value as StringType).value) }
                 )).mapIndexed { index, trigger ->
                     index to when (trigger) {
                         is ApiTriggerList.FixedRateTrigger -> {
@@ -33,10 +33,10 @@ class TriggerListFunction(
                                     "id" to StringType(trigger.id.value.value.toString(16)),
                                     "type" to StringType("FixedRate"),
                                     "name" to StringType(trigger.name.value),
-                                    "namespace" to MapType(
+                                    "flow" to MapType(
                                         mutableMapOf(
-                                            "id" to StringType(trigger.namespace.id.value.value.toString(16)),
-                                            "name" to StringType(trigger.namespace.name.value)
+                                            "id" to StringType(trigger.flow.id.value.value.toString(16)),
+                                            "name" to StringType(trigger.flow.name.value)
                                         )
                                     ),
                                     "func" to MapType(
@@ -56,10 +56,10 @@ class TriggerListFunction(
                                     "id" to StringType(trigger.id.value.value.toString(16)),
                                     "type" to StringType("Event"),
                                     "name" to StringType(trigger.name.value),
-                                    "namespace" to MapType(
+                                    "flow" to MapType(
                                         mutableMapOf(
-                                            "id" to StringType(trigger.namespace.id.value.value.toString(16)),
-                                            "name" to StringType(trigger.namespace.name.value)
+                                            "id" to StringType(trigger.flow.id.value.value.toString(16)),
+                                            "name" to StringType(trigger.flow.name.value)
                                         )
                                     ),
                                     "func" to MapType(
@@ -84,10 +84,10 @@ class TriggerListFunction(
                                     "id" to StringType(trigger.id.value.value.toString(16)),
                                     "type" to StringType("Hook"),
                                     "name" to StringType(trigger.name.value),
-                                    "namespace" to MapType(
+                                    "flow" to MapType(
                                         mutableMapOf(
-                                            "id" to StringType(trigger.namespace.id.value.value.toString(16)),
-                                            "name" to StringType(trigger.namespace.name.value)
+                                            "id" to StringType(trigger.flow.id.value.value.toString(16)),
+                                            "name" to StringType(trigger.flow.name.value)
                                         )
                                     ),
                                     "func" to MapType(

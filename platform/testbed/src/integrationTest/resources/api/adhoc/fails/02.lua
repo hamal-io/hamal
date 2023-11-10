@@ -1,7 +1,7 @@
 sys = require('sys')
 
 -- Remember: Each test is an adhoc invocation
-execs = fail_on_error(sys.exec.list())
+execs = fail_on_error(sys.execs.list())
 assert(err == nil)
 assert(#execs == 3)
 

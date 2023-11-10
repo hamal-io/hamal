@@ -49,7 +49,7 @@ internal sealed class TopicBaseControllerTest : BaseControllerTest() {
 
 
     fun createTopic(topicName: TopicName): ApiTopicCreateSubmitted {
-        val createTopicResponse = httpTemplate.post("/v1/namespaces/1/topics")
+        val createTopicResponse = httpTemplate.post("/v1/flows/1/topics")
             .body(ApiTopicCreateReq(topicName))
             .execute()
 

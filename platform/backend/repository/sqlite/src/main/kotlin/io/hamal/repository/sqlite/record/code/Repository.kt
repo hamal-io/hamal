@@ -85,16 +85,20 @@ class SqliteCodeRepository(
                 versionOf(codeId, cmdId)
             } else {
                 val currentVersion = versionOf(codeId, cmdId)
-                store(
-                    CodeUpdatedRecord(
-                        cmdId = cmdId,
-                        entityId = codeId,
-                        value = cmd.value ?: currentVersion.value
+                val codeValue = cmd.value
+                if (codeValue == null || codeValue == currentVersion.value) {
+                    currentVersion
+                } else {
+                    store(
+                        CodeUpdatedRecord(
+                            cmdId = cmdId,
+                            entityId = codeId,
+                            value = codeValue
+                        )
                     )
-                )
-                currentVersion(codeId)
-                    .also { ProjectionCurrent.upsert(this, it) }
-
+                    currentVersion(codeId)
+                        .also { ProjectionCurrent.upsert(this, it) }
+                }
             }
         }
     }

@@ -3,7 +3,7 @@ package io.hamal.repository.sqlite.log
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.FileUtils
 import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.FlowId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.repository.api.log.CreateTopic.TopicToCreate
@@ -46,7 +46,7 @@ class SqliteBrokerRepositoryTest {
 
             val result = testInstance.create(
                 CmdId(123),
-                TopicToCreate(TopicId(234), TopicName("scheduler::flow_enqueued"), NamespaceId(1), GroupId(1))
+                TopicToCreate(TopicId(234), TopicName("scheduler::flow_enqueued"), FlowId(1), GroupId(1))
             )
 
             assertThat(result.id, equalTo(TopicId(234)))

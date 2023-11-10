@@ -1,14 +1,14 @@
 sys = require('sys')
 
-req = fail_on_error(sys.func.create({
-    namespace_id = '1',
+req = fail_on_error(sys.funcs.create({
+    flow_id = '1',
     name = 'test-func',
     inputs = {},
     code = [[print('invoked')]]
 }))
 sys.await_completed(req)
 
-invocation_req = fail_on_error(sys.func.invoke({
+invocation_req = fail_on_error(sys.funcs.invoke({
     id = req.func_id,
     correlation_id = nil,
     inputs = { }

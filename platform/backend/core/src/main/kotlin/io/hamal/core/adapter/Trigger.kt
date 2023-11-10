@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component
 
 interface TriggerCreatePort {
     operator fun <T : Any> invoke(
-        namespaceId: NamespaceId,
+        flowId: FlowId,
         req: CreateTriggerReq,
         responseHandler: (TriggerCreateSubmitted) -> T
     ): T
@@ -24,7 +24,7 @@ interface TriggerCreatePort {
 interface TriggerGetPort {
     operator fun <T : Any> invoke(
         triggerId: TriggerId,
-        responseHandler: (Trigger, Func, Namespace, Topic?, Hook?) -> T
+        responseHandler: (Trigger, Func, Flow, Topic?, Hook?) -> T
     ): T
 }
 
@@ -35,7 +35,7 @@ interface TriggerListPort {
         responseHandler: (
             triggers: List<Trigger>,
             funcs: Map<FuncId, Func>,
-            namespaces: Map<NamespaceId, Namespace>,
+            flows: Map<FlowId, Flow>,
             topics: Map<TopicId, Topic>,
             hooks: Map<HookId, Hook>
         ) -> T
@@ -50,12 +50,12 @@ class TriggerAdapter(
     private val funcQueryRepository: FuncQueryRepository,
     private val generateDomainId: GenerateDomainId,
     private val hookQueryRepository: HookQueryRepository,
-    private val namespaceQueryRepository: NamespaceQueryRepository,
+    private val flowQueryRepository: FlowQueryRepository,
     private val reqCmdRepository: ReqCmdRepository,
     private val triggerQueryRepository: TriggerQueryRepository,
 ) : TriggerPort {
     override fun <T : Any> invoke(
-        namespaceId: NamespaceId,
+        flowId: FlowId,
         req: CreateTriggerReq,
         responseHandler: (TriggerCreateSubmitted) -> T
     ): T {
@@ -63,17 +63,17 @@ class TriggerAdapter(
         ensureTopicExists(req)
         ensureHookExists(req)
 
-        val namespace = namespaceQueryRepository.get(namespaceId)
+        val flow = flowQueryRepository.get(flowId)
         val func = funcQueryRepository.get(req.funcId)
         return TriggerCreateSubmitted(
             type = req.type,
             id = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
             triggerId = generateDomainId(::TriggerId),
-            groupId = namespace.groupId,
+            groupId = flow.groupId,
             name = req.name,
             funcId = func.id,
-            namespaceId = namespaceId,
+            flowId = flowId,
             inputs = req.inputs,
             correlationId = req.correlationId,
             duration = req.duration,
@@ -85,11 +85,11 @@ class TriggerAdapter(
 
     override fun <T : Any> invoke(
         triggerId: TriggerId,
-        responseHandler: (Trigger, Func, Namespace, Topic?, Hook?) -> T
+        responseHandler: (Trigger, Func, Flow, Topic?, Hook?) -> T
     ): T {
         val trigger = triggerQueryRepository.get(triggerId)
         val func = funcQueryRepository.get(trigger.funcId)
-        val namespace = namespaceQueryRepository.get(trigger.namespaceId)
+        val flow = flowQueryRepository.get(trigger.flowId)
         val topic = if (trigger is EventTrigger) {
             eventBrokerRepository.getTopic(trigger.topicId)
         } else {
@@ -102,7 +102,7 @@ class TriggerAdapter(
             null
         }
 
-        return responseHandler(trigger, func, namespace, topic, hook)
+        return responseHandler(trigger, func, flow, topic, hook)
     }
 
     override operator fun <T : Any> invoke(
@@ -110,7 +110,7 @@ class TriggerAdapter(
         responseHandler: (
             triggers: List<Trigger>,
             funcs: Map<FuncId, Func>,
-            namespaces: Map<NamespaceId, Namespace>,
+            flows: Map<FlowId, Flow>,
             topics: Map<TopicId, Topic>,
             hooks: Map<HookId, Hook>
         ) -> T
@@ -118,7 +118,7 @@ class TriggerAdapter(
 
         val triggers = triggerQueryRepository.list(query)
 
-        val namespaces = namespaceQueryRepository.list(triggers.map { it.namespaceId })
+        val flows = flowQueryRepository.list(triggers.map { it.flowId })
             .associateBy { it.id }
 
         val funcs = funcQueryRepository.list(triggers.map { it.funcId })
@@ -130,7 +130,7 @@ class TriggerAdapter(
         val hooks = hookQueryRepository.list(triggers.filterIsInstance<HookTrigger>().map { it.hookId })
             .associateBy { it.id }
 
-        return responseHandler(triggers, funcs, namespaces, topics, hooks)
+        return responseHandler(triggers, funcs, flows, topics, hooks)
     }
 
     private fun ensureFuncExists(createTrigger: CreateTriggerReq) {

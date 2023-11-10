@@ -98,8 +98,8 @@ export function Nav({className, ...props}: React.HTMLAttributes<HTMLElement>) {
             <Link to="/playground" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
                 Playground
             </Link>
-            <Link to="/namespaces" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
-                Namespaces
+            <Link to="/flows" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
+                Flows
             </Link>
         </nav>
     )
@@ -157,7 +157,7 @@ const Convert = () => {
                 type: 'User',
                 accountId: auth.accountId,
                 groupId: auth.groupId,
-                defaultNamespaceIds: auth.defaultNamespaceIds,
+                defaultFlowIds: auth.defaultFlowIds,
                 token: data.token,
                 name: data.name
             })
@@ -169,7 +169,7 @@ const Convert = () => {
         console.log("AUTH", JSON.stringify(auth))
         if (auth != null && auth.type === 'User') {
             console.log("navigate")
-            navigate(`/namespaces`)
+            navigate(`/flows`)
             setOpenDialog(false)
 
         }

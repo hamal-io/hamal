@@ -6,7 +6,7 @@ export interface Auth {
     type: AuthType,
     accountId: string;
     groupId: string;
-    defaultNamespaceIds: Map<string, string>;
+    defaultFlowIds: Map<string, string>;
     token: string;
     name: string;
 }
@@ -17,7 +17,7 @@ export interface ApiLoginSubmitted {
     status: string;
     accountId: string;
     groupIds: string[];
-    defaultNamespaceIds: Map<string, string>;
+    defaultFlowIds: Map<string, string>;
     token: string;
     name: string;
 }

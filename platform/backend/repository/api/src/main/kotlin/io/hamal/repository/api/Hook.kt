@@ -7,7 +7,7 @@ import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.HookId
 import io.hamal.lib.domain.vo.HookName
-import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.FlowId
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -15,7 +15,7 @@ data class Hook(
     override val id: HookId,
     val groupId: GroupId,
     val cmdId: CmdId,
-    val namespaceId: NamespaceId,
+    val flowId: FlowId,
     val name: HookName,
 ) : DomainObject<HookId>
 
@@ -30,7 +30,7 @@ interface HookCmdRepository : CmdRepository {
         val id: CmdId,
         val hookId: HookId,
         val groupId: GroupId,
-        val namespaceId: NamespaceId,
+        val flowId: FlowId,
         val name: HookName
     )
 
@@ -58,7 +58,7 @@ interface HookQueryRepository {
         var afterId: HookId = HookId(SnowflakeId(Long.MAX_VALUE)),
         var limit: Limit = Limit(1),
         var hookIds: List<HookId> = listOf(),
-        var namespaceIds: List<NamespaceId> = listOf(),
+        var flowIds: List<FlowId> = listOf(),
         var groupIds: List<GroupId> = listOf()
     )
 }

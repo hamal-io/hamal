@@ -2,6 +2,7 @@ package io.hamal.repository.record.hook
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.*
+
 import io.hamal.repository.api.Hook
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordEntity
@@ -14,8 +15,7 @@ data class HookEntity(
     override val recordedAt: RecordedAt,
     val groupId: GroupId,
 
-
-    var namespaceId: NamespaceId? = null,
+    var flowId: FlowId? = null,
     var name: HookName? = null
 
 ) : RecordEntity<HookId, HookRecord, Hook> {
@@ -26,9 +26,10 @@ data class HookEntity(
                 id = rec.entityId,
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
-                namespaceId = rec.namespaceId,
+                flowId = rec.flowId,
                 name = rec.name,
                 recordedAt = rec.recordedAt()
+
             )
 
             is HookUpdatedRecord -> copy(
@@ -46,7 +47,7 @@ data class HookEntity(
             cmdId = cmdId,
             id = id,
             groupId = groupId,
-            namespaceId = namespaceId!!,
+            flowId = flowId!!,
             name = name!!
         )
     }

@@ -12,6 +12,7 @@ import kotlinx.serialization.Transient
 sealed class CodeRecord(
     @Transient
     override var sequence: RecordSequence? = null,
+    @Transient
     override var recordedAt: RecordedAt? = null
 ) : Record<CodeId>()
 

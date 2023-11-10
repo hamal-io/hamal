@@ -3,7 +3,7 @@ package io.hamal.api.http.controller.trigger
 import io.hamal.api.http.controller.accepted
 import io.hamal.core.adapter.TriggerCreatePort
 import io.hamal.core.component.Retry
-import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.FlowId
 import io.hamal.lib.sdk.api.ApiSubmitted
 import io.hamal.lib.sdk.api.ApiTriggerCreateReq
 import io.hamal.repository.api.submitted_req.TriggerCreateSubmitted
@@ -18,13 +18,13 @@ internal class TriggerCreateController(
     private val retry: Retry,
     private val createTrigger: TriggerCreatePort
 ) {
-    @PostMapping("/v1/namespaces/{namespaceId}/triggers")
+    @PostMapping("/v1/flows/{flowId}/triggers")
     fun createTrigger(
-        @PathVariable namespaceId: NamespaceId,
+        @PathVariable flowId: FlowId,
         @RequestBody req: ApiTriggerCreateReq
     ): ResponseEntity<ApiSubmitted> {
         return retry {
-            createTrigger(namespaceId, req, TriggerCreateSubmitted::accepted)
+            createTrigger(flowId, req, TriggerCreateSubmitted::accepted)
         }
     }
 }

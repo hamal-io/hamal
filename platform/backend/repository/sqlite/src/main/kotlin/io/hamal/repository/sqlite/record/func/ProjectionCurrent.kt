@@ -46,7 +46,7 @@ internal object ProjectionCurrent : SqliteProjection<FuncId, FuncRecord, Func> {
                 id < :afterId
                 ${query.ids()}
                 ${query.groupIds()}
-                ${query.namespaceIds()}
+                ${query.flowIds()}
             ORDER BY id DESC
             LIMIT :limit
         """.trimIndent()
@@ -72,7 +72,7 @@ internal object ProjectionCurrent : SqliteProjection<FuncId, FuncRecord, Func> {
                 id < :afterId
                 ${query.ids()}
                 ${query.groupIds()}
-                ${query.namespaceIds()}
+                ${query.flowIds()}
         """.trimIndent()
         ) {
             query {
@@ -88,14 +88,14 @@ internal object ProjectionCurrent : SqliteProjection<FuncId, FuncRecord, Func> {
         tx.execute(
             """
                 INSERT OR REPLACE INTO current
-                    (id, group_id, namespace_id, data) 
+                    (id, group_id, flow_id, data) 
                 VALUES
-                    (:id, :groupId, :namespaceId, :data)
+                    (:id, :groupId, :flowId, :data)
             """.trimIndent()
         ) {
             set("id", obj.id)
             set("groupId", obj.groupId)
-            set("namespaceId", obj.namespaceId)
+            set("flowId", obj.flowId)
             set("data", protobuf.encodeToByteArray(Func.serializer(), obj))
         }
     }
@@ -106,7 +106,7 @@ internal object ProjectionCurrent : SqliteProjection<FuncId, FuncRecord, Func> {
             CREATE TABLE IF NOT EXISTS current (
                  id             INTEGER NOT NULL,
                  group_id       INTEGER NOT NULL,
-                 namespace_id   INTEGER NOT NULL,
+                 flow_id   INTEGER NOT NULL,
                  data           BLOB NOT NULL,
                  PRIMARY KEY    (id)
             );
@@ -134,11 +134,11 @@ internal object ProjectionCurrent : SqliteProjection<FuncId, FuncRecord, Func> {
         }
     }
 
-    private fun FuncQuery.namespaceIds(): String {
-        return if (namespaceIds.isEmpty()) {
+    private fun FuncQuery.flowIds(): String {
+        return if (flowIds.isEmpty()) {
             ""
         } else {
-            "AND namespace_id IN (${namespaceIds.joinToString(",") { "${it.value.value}" }})"
+            "AND flow_id IN (${flowIds.joinToString(",") { "${it.value.value}" }})"
         }
     }
 }

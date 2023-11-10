@@ -10,7 +10,7 @@ data class ExecInvokeSubmitted(
     override var status: ReqStatus,
     val groupId: GroupId,
     val execId: ExecId,
-    val namespaceId: NamespaceId,
+    val flowId: FlowId,
     val funcId: FuncId?,
     val correlationId: CorrelationId?,
     val inputs: InvocationInputs,

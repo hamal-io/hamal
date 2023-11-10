@@ -3,7 +3,7 @@ package io.hamal.api.http.controller.func
 import io.hamal.api.http.controller.accepted
 import io.hamal.core.adapter.FuncCreatePort
 import io.hamal.core.component.Retry
-import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.FlowId
 import io.hamal.lib.sdk.api.ApiFuncCreateReq
 import io.hamal.lib.sdk.api.ApiSubmitted
 import io.hamal.repository.api.submitted_req.FuncCreateSubmitted
@@ -18,11 +18,11 @@ internal class FuncCreateController(
     private val retry: Retry,
     private val createFunc: FuncCreatePort
 ) {
-    @PostMapping("/v1/namespaces/{namespaceId}/funcs")
+    @PostMapping("/v1/flows/{flowId}/funcs")
     fun createFunc(
-        @PathVariable("namespaceId") namespaceId: NamespaceId,
+        @PathVariable("flowId") flowId: FlowId,
         @RequestBody req: ApiFuncCreateReq
     ): ResponseEntity<ApiSubmitted> = retry {
-        createFunc(namespaceId, req, FuncCreateSubmitted::accepted)
+        createFunc(flowId, req, FuncCreateSubmitted::accepted)
     }
 }

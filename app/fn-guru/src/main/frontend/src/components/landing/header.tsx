@@ -42,7 +42,7 @@ const GoToApp = () => {
                 className="bg-gray-500"
                 color="dark"
                 onClick={() => {
-                    navigate("/namespaces", {replace: true})
+                    navigate("/flows", {replace: true})
                 }}>
                 Let's automate
             </Button>

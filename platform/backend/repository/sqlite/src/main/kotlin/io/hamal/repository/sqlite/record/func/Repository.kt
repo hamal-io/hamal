@@ -66,7 +66,7 @@ class SqliteFuncRepository(
                         cmdId = cmdId,
                         entityId = funcId,
                         groupId = cmd.groupId,
-                        namespaceId = cmd.namespaceId,
+                        flowId = cmd.flowId,
                         name = cmd.name,
                         inputs = cmd.inputs,
                         codeId = cmd.codeId,

@@ -49,7 +49,7 @@ internal class CreateFuncHandlerTest : BaseReqHandlerTest() {
             status = Submitted,
             groupId = testGroup.id,
             funcId = FuncId(12345),
-            namespaceId = NamespaceId(23456),
+            flowId = FlowId(23456),
             name = FuncName("awesome-func"),
             inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
             codeId = CodeId(34567),

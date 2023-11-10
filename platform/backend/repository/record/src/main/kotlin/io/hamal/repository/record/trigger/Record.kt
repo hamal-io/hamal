@@ -14,6 +14,7 @@ import kotlin.time.Duration
 sealed class TriggerRecord(
     @Transient
     override var sequence: RecordSequence? = null,
+    @Transient
     override var recordedAt: RecordedAt? = null
 ) : Record<TriggerId>()
 
@@ -24,7 +25,7 @@ data class FixedRateTriggerCreatedRecord(
     override val entityId: TriggerId,
     val groupId: GroupId,
     val funcId: FuncId,
-    val namespaceId: NamespaceId,
+    val flowId: FlowId,
     val name: TriggerName,
     val inputs: TriggerInputs,
     val duration: Duration,
@@ -38,7 +39,7 @@ data class EventTriggerCreatedRecord(
     override val entityId: TriggerId,
     val groupId: GroupId,
     val funcId: FuncId,
-    val namespaceId: NamespaceId,
+    val flowId: FlowId,
     val name: TriggerName,
     val inputs: TriggerInputs,
     val topicId: TopicId,
@@ -52,7 +53,7 @@ data class HookTriggerCreatedRecord(
     override val entityId: TriggerId,
     val groupId: GroupId,
     val funcId: FuncId,
-    val namespaceId: NamespaceId,
+    val flowId: FlowId,
     val name: TriggerName,
     val inputs: TriggerInputs,
     val hookId: HookId,

@@ -13,6 +13,7 @@ import kotlinx.serialization.Transient
 sealed class ExecRecord(
     @Transient
     override var sequence: RecordSequence? = null,
+    @Transient
     override var recordedAt: RecordedAt? = null
 ) : Record<ExecId>()
 
@@ -21,7 +22,7 @@ sealed class ExecRecord(
 data class ExecPlannedRecord(
     override val cmdId: CmdId,
     override val entityId: ExecId,
-    val namespaceId: NamespaceId,
+    val flowId: FlowId,
     val groupId: GroupId,
     val correlation: Correlation?,
     val inputs: ExecInputs,

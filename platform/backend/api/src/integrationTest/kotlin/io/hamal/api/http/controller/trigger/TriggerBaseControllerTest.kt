@@ -15,7 +15,7 @@ import kotlin.time.Duration.Companion.seconds
 internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
 
     fun createFunc(name: FuncName): ApiFuncCreateSubmitted {
-        val createTopicResponse = httpTemplate.post("/v1/namespaces/1/funcs")
+        val createTopicResponse = httpTemplate.post("/v1/flows/1/funcs")
             .body(
                 ApiFuncCreateReq(
                     name = name,
@@ -32,8 +32,8 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
     }
 
     fun createTopic(topicName: TopicName): ApiTopicCreateSubmitted {
-        val createTopicResponse = httpTemplate.post("/v1/namespaces/{namespaceId}/topics")
-            .path("namespaceId", testNamespace.id)
+        val createTopicResponse = httpTemplate.post("/v1/flows/{flowId}/topics")
+            .path("flowId", testFlow.id)
             .body(ApiTopicCreateReq(topicName))
             .execute()
 
@@ -44,7 +44,7 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
     }
 
     fun createHook(hookName: HookName): ApiHookCreateSubmitted {
-        val createHookResponse = httpTemplate.post("/v1/namespaces/1/hooks")
+        val createHookResponse = httpTemplate.post("/v1/flows/1/hooks")
             .path("groupId", testGroup.id)
             .body(ApiHookCreateReq(hookName))
             .execute()
@@ -58,7 +58,7 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
     fun createFixedRateTrigger(name: TriggerName): ApiTriggerCreateSubmitted {
         val funcId = awaitCompleted(createFunc(FuncName(name.value))).funcId
 
-        val creationResponse = httpTemplate.post("/v1/namespaces/1/triggers")
+        val creationResponse = httpTemplate.post("/v1/flows/1/triggers")
             .body(
                 ApiTriggerCreateReq(
                     type = TriggerType.FixedRate,
@@ -77,7 +77,7 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
     }
 
     fun createTrigger(req: ApiTriggerCreateReq): ApiTriggerCreateSubmitted {
-        val creationResponse = httpTemplate.post("/v1/namespaces/1/triggers")
+        val creationResponse = httpTemplate.post("/v1/flows/1/triggers")
             .body(req)
             .execute()
 

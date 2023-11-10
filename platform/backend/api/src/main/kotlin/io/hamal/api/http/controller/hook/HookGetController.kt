@@ -6,7 +6,7 @@ import io.hamal.lib.domain.vo.HookId
 import io.hamal.lib.sdk.api.ApiHook
 import io.hamal.lib.sdk.api.ApiHook.*
 import io.hamal.repository.api.Hook
-import io.hamal.repository.api.Namespace
+import io.hamal.repository.api.Flow
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -23,13 +23,13 @@ internal class HookGetController(
         getHook(hookId, ::assemble)
     }
 
-    private fun assemble(hook: Hook, namespace: Namespace) =
+    private fun assemble(hook: Hook, flow: Flow) =
         ResponseEntity.ok(
             ApiHook(
                 id = hook.id,
-                namespace = Namespace(
-                    id = namespace.id,
-                    name = namespace.name
+                flow = Flow(
+                    id = flow.id,
+                    name = flow.name
                 ),
                 name = hook.name
             )

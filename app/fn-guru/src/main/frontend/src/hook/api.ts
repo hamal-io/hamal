@@ -92,7 +92,7 @@ export const useApiCreateAnonymousAccount = (): [ApiCreateAnonymousAccountAction
                         type: 'Anonymous',
                         accountId: data.accountId,
                         groupId: data.groupIds[0],
-                        defaultNamespaceIds: data.defaultNamespaceIds,
+                        defaultFlowIds: data.defaultFlowIds,
                         token: data.token,
                         name: data.name
                     })
@@ -107,18 +107,18 @@ export const useApiCreateAnonymousAccount = (): [ApiCreateAnonymousAccountAction
     return [create, data, isLoading, error]
 }
 
-interface ApiNamespaceCreateSubmitted {
+interface ApiFlowCreateSubmitted {
     id: string;
     status: string;
-    namespaceId: string;
+    flowId: string;
     groupId: string;
 }
 
-type ApiNamespaceCreateAction = (groupId: string, name: string, controller?: AbortController) => void
-export const useApiNamespaceCreate = (): [ApiNamespaceCreateAction, ApiNamespaceCreateSubmitted, boolean, Error] => {
+type ApiFlowCreateAction = (groupId: string, name: string, controller?: AbortController) => void
+export const useApiFlowCreate = (): [ApiFlowCreateAction, ApiFlowCreateSubmitted, boolean, Error] => {
     const [auth, setAuth] = useAuth()
 
-    const [data, setData] = useState<ApiNamespaceCreateSubmitted | null>(null);
+    const [data, setData] = useState<ApiFlowCreateSubmitted | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<Error>(null);
 
@@ -131,7 +131,7 @@ export const useApiNamespaceCreate = (): [ApiNamespaceCreateAction, ApiNamespace
             window.location.href = '/'
 
         } else {
-            fetch(`${import.meta.env.VITE_BASE_URL}/v1/groups/${groupId}/namespaces`, {
+            fetch(`${import.meta.env.VITE_BASE_URL}/v1/groups/${groupId}/flows`, {
                 method: "POST",
                 headers: {
                     'Accept': 'application/json',
@@ -206,7 +206,7 @@ export const useApiLoginAccount = (): [ApiLoginAccountAction, ApiLoginSubmitted,
                         type: 'User',
                         accountId: data.accountId,
                         groupId: data.groupIds[0],
-                        defaultNamespaceIds: data.defaultNamespaceIds,
+                        defaultFlowIds: data.defaultFlowIds,
                         token: data.token,
                         name: data.name
                     })

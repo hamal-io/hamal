@@ -13,7 +13,7 @@ data class ApiExecInvokeSubmitted(
     override val status: ReqStatus,
     val execId: ExecId,
     val groupId: GroupId,
-    val namespaceId: NamespaceId
+    val flowId: FlowId
 ) : ApiSubmitted
 
 @Serializable
