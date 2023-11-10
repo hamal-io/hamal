@@ -15,8 +15,8 @@ data class ApiLoginReq(
 
 @Serializable
 data class ApiLogoutReq(
-    override val username: AccountName
-    //TODO
+    override val id: AccountId,
+    override val token: AuthToken
 ) : LogOutReq
 
 @Serializable
@@ -37,6 +37,13 @@ data class ApiConvertAccountSubmitted(
     val accountId: AccountId,
     val token: AuthToken,
     val name: AccountName
+) : ApiSubmitted
+
+@Serializable
+data class ApiLogoutSubmitted(
+    override val id: ReqId,
+    override val status: ReqStatus,
+    val accountId: AccountId
 ) : ApiSubmitted
 
 interface AuthService

@@ -11,6 +11,7 @@ fun Submitted.toApiSubmitted(): ApiSubmitted = when (this) {
     is AccountCreateSubmitted -> ApiTokenSubmitted(id, status, accountId, listOf(groupId), mapOf(groupId to flowId), token, name)
     is AccountConvertSubmitted -> ApiConvertAccountSubmitted(id, status, accountId, token, name)
     is AuthLoginSubmitted -> ApiTokenSubmitted(id, status, accountId, groupIds, defaultFlowIds, token, name)
+    is AuthLogoutSubmitted -> ApiLogoutSubmitted(id, status, accountId)
     is BlueprintCreateSubmitted -> ApiBlueprintCreateSubmitted(id, status, blueprintId, groupId)
     is BlueprintUpdateSubmitted -> ApiBlueprintUpdateSubmitted(id, status, blueprintId)
     is ExecInvokeSubmitted -> ApiExecInvokeSubmitted(id, status, execId, groupId, flowId)

@@ -1,8 +1,8 @@
 package io.hamal.repository.api
 
-import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.*
 
 sealed interface Auth {
@@ -32,11 +32,27 @@ interface AuthCmdRepository : CmdRepository {
 
     fun create(cmd: CreateCmd): Auth
 
+    //fun update(cmd: UpdateCmd): Auth
+
     sealed interface CreateCmd {
         val id: CmdId
         val authId: AuthId
         val accountId: AccountId
     }
+
+    sealed interface UpdateCmd {
+        val id: CmdId
+        val authId: AuthId
+        val accountId: AccountId
+        val token: AuthToken?
+    }
+
+    data class UpdateAuthCmd(
+        override val id: CmdId,
+        override val authId: AuthId,
+        override val accountId: AccountId,
+        override val token: AuthToken?
+    ) : UpdateCmd
 
     data class CreatePasswordAuthCmd(
         override val id: CmdId,
