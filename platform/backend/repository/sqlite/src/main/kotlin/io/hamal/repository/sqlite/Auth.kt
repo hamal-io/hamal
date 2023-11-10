@@ -85,8 +85,14 @@ class SqliteAuthRepository(
         }
     }
 
-    override fun revokeAuth(cmd: UpdateCmd) {
-        TODO("Not yet implemented")
+    override fun revokeAuth(cmd: RevokeAuthCmd) {
+        connection.executeQuery<Auth>(
+            "DELETE FROM auth WHERE id = :id".trimIndent()
+        ) {
+            query {
+                set("id", cmd.accountId)
+            }
+        }
     }
 
     override fun list(query: AuthQuery): List<Auth> {
