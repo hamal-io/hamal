@@ -2,7 +2,7 @@ package io.hamal.repository.memory.log
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.FlowId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.repository.api.log.ConsumerId
@@ -19,7 +19,7 @@ class ConsumerTest {
         MemoryBrokerRepository().use { brokerRepository ->
             val topic = brokerRepository.create(
                 CmdId(123),
-                TopicToCreate(TopicId(123), TopicName("topic"), NamespaceId(23), GroupId(1))
+                TopicToCreate(TopicId(123), TopicName("topic"), FlowId(23), GroupId(1))
             )
 
             val appender = ProtobufAppender(String::class, brokerRepository)
@@ -29,7 +29,7 @@ class ConsumerTest {
         MemoryBrokerRepository().use { brokerRepository ->
             val topic = brokerRepository.create(
                 CmdId(123),
-                TopicToCreate(TopicId(123), TopicName("topic"), NamespaceId(23), GroupId(1))
+                TopicToCreate(TopicId(123), TopicName("topic"), FlowId(23), GroupId(1))
             )
 
             val testInstance = ProtobufLogConsumer(ConsumerId("consumer-01"), topic, brokerRepository, String::class)

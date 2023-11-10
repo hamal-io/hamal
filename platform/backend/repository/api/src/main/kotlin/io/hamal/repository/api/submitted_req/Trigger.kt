@@ -17,7 +17,7 @@ data class TriggerCreateSubmitted(
     val name: TriggerName,
     val funcId: FuncId,
     val inputs: TriggerInputs,
-    var namespaceId: NamespaceId,
+    var flowId: FlowId,
     val correlationId: CorrelationId? = null,
     val duration: Duration? = null,
     val topicId: TopicId? = null,

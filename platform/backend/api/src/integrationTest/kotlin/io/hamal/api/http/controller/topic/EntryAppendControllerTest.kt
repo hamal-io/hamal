@@ -18,7 +18,7 @@ internal class EntryAppendControllerTest : TopicBaseControllerTest() {
 
     @Test
     fun `Append entry`() {
-        val topicId = awaitCompleted(createTopic(TopicName("namespace::topics_one"))).topicId
+        val topicId = awaitCompleted(createTopic(TopicName("flow::topics_one"))).topicId
 
         awaitCompleted(
             appendToTopic(
@@ -41,7 +41,7 @@ internal class EntryAppendControllerTest : TopicBaseControllerTest() {
 
     @Test
     fun `Append entry multiple times`() {
-        val topicId = awaitCompleted(createTopic(TopicName("namespace::topics_one"))).topicId
+        val topicId = awaitCompleted(createTopic(TopicName("flow::topics_one"))).topicId
 
         awaitCompleted(
             IntRange(1, 10).map {

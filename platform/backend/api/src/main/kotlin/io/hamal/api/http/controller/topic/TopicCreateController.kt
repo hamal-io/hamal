@@ -3,7 +3,7 @@ package io.hamal.api.http.controller.topic
 import io.hamal.api.http.controller.accepted
 import io.hamal.core.adapter.TopicCreatePort
 import io.hamal.core.component.Retry
-import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.FlowId
 import io.hamal.lib.sdk.api.ApiSubmitted
 import io.hamal.lib.sdk.api.ApiTopicCreateReq
 import io.hamal.repository.api.submitted_req.TopicCreateSubmitted
@@ -18,11 +18,11 @@ class TopicCreateController(
     private val retry: Retry,
     private val createTopic: TopicCreatePort
 ) {
-    @PostMapping("/v1/namespaces/{namespaceId}/topics")
+    @PostMapping("/v1/flows/{flowId}/topics")
     fun createTopic(
-        @PathVariable("namespaceId") namespaceId: NamespaceId,
+        @PathVariable("flowId") flowId: FlowId,
         @RequestBody req: ApiTopicCreateReq
     ): ResponseEntity<ApiSubmitted> = retry {
-        createTopic(namespaceId, req, TopicCreateSubmitted::accepted)
+        createTopic(flowId, req, TopicCreateSubmitted::accepted)
     }
 }

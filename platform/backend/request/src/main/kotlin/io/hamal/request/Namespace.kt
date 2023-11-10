@@ -1,14 +1,14 @@
 package io.hamal.request
 
-import io.hamal.lib.domain.vo.NamespaceInputs
-import io.hamal.lib.domain.vo.NamespaceName
+import io.hamal.lib.domain.vo.FlowInputs
+import io.hamal.lib.domain.vo.FlowName
 
-interface CreateNamespaceReq {
-    val name: NamespaceName
-    val inputs: NamespaceInputs
+interface CreateFlowReq {
+    val name: FlowName
+    val inputs: FlowInputs
 }
 
-interface UpdateNamespaceReq {
-    val name: NamespaceName
-    val inputs: NamespaceInputs
+interface UpdateFlowReq {
+    val name: FlowName
+    val inputs: FlowInputs
 }

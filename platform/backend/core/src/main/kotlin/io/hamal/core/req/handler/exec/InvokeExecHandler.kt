@@ -41,7 +41,7 @@ class InvokeExecHandler(
             PlanCmd(
                 id = req.cmdId(),
                 execId = req.execId,
-                namespaceId = req.namespaceId,
+                flowId = req.flowId,
                 groupId = req.groupId,
                 correlation = correlation,
                 inputs = merge(func?.inputs ?: FuncInputs(), req.inputs),

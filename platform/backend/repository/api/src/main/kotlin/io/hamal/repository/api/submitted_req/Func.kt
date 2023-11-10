@@ -11,7 +11,7 @@ data class FuncCreateSubmitted(
     override var status: ReqStatus,
     val groupId: GroupId,
     val funcId: FuncId,
-    val namespaceId: NamespaceId,
+    val flowId: FlowId,
     val name: FuncName,
     val inputs: FuncInputs,
     val codeId: CodeId,

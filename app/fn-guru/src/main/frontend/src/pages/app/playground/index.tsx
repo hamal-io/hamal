@@ -27,7 +27,7 @@ export default function PlaygroundPage() {
                     </div>
                     <div className="flex items-center justify-center space-x-2">
                         <Button onClick={() => {
-                            post(`v1/namespaces/${auth.defaultNamespaceIds[auth.groupId]}/adhoc`, {
+                            post(`v1/flows/${auth.defaultFlowIds[auth.groupId]}/adhoc`, {
                                 inputs: {},
                                 code: code
                             })

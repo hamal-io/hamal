@@ -5,7 +5,7 @@ import io.hamal.lib.domain.vo.ReqId
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.vo.HookId
 import io.hamal.lib.domain.vo.HookName
-import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.FlowId
 import io.hamal.repository.api.HookQueryRepository.HookQuery
 import io.hamal.repository.api.submitted_req.HookCreateSubmitted
 import org.hamcrest.MatcherAssert.assertThat
@@ -38,7 +38,7 @@ internal class CreateHookHandlerTest : BaseReqHandlerTest() {
             status = Submitted,
             hookId = HookId(12345),
             groupId = testGroup.id,
-            namespaceId = NamespaceId(23456),
+            flowId = FlowId(23456),
             name = HookName("awesome-hook")
         )
     }

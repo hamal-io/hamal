@@ -18,13 +18,13 @@ assert(trigger.id ~= nil)
 assert(trigger.status == 'Submitted')
 assert(trigger.trigger_id ~= nil)
 assert(trigger.group_id == '1')
-assert(trigger.namespace_id == '1')
+assert(trigger.flow_id == '1')
 
 trigger = fail_on_error(sys.trigger.get(trigger.id))
 
 assert(trigger.type == 'Event')
 assert(trigger.name == 'trigger-to-create')
 assert(trigger.func.name == "test-func")
-assert(trigger.namespace.name == "root-namespace")
+assert(trigger.flow.name == "root-flow")
 assert(trigger.topic.name == "some-amazing-topic")
 

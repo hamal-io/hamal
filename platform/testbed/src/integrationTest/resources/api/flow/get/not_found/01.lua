@@ -1,0 +1,5 @@
+sys = require('sys')
+err, ns = sys.flow.get('123123123')
+assert(err.message == 'Flow not found')
+assert(err['message'] == 'Flow not found')
+assert(ns == nil)

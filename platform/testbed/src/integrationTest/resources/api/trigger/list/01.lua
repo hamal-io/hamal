@@ -1,6 +1,6 @@
 sys = require('sys')
 
-func = fail_on_error(sys.func.create({ namespace_id = '1', name = 'test-func'; inputs = {}; code = [[4 + 2]] }))
+func = fail_on_error(sys.func.create({ flow_id = '1', name = 'test-func'; inputs = {}; code = [[4 + 2]] }))
 sys.await_completed(func)
 
 topic_req = fail_on_error(sys.topic.create({ name = "some-amazing-topic" }))
@@ -11,7 +11,7 @@ assert(#triggers == 0)
 
 trigger = fail_on_error(sys.trigger.create_event({
     func_id = func.id,
-    namespace_id = '1',
+    flow_id = '1',
     name = 'trigger-1',
     inputs = { },
     topic_id = topic_req.id
@@ -29,7 +29,7 @@ assert(triggers[1].name == 'trigger-1')
 
 trigger_two = fail_on_error(sys.trigger.create_fixed_rate({
     func_id = func.id,
-    namespace_id = '1',
+    flow_id = '1',
     name = 'trigger-to-create',
     inputs = { },
     duration = 'PT5S'

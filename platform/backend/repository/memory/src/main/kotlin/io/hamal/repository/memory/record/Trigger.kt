@@ -16,12 +16,12 @@ internal object CurrentTriggerProjection {
         val currentTrigger = projection[trigger.id]
         projection.remove(trigger.id)
 
-        val triggersInNamespace = projection.values.filter { it.namespaceId == trigger.namespaceId }
-        if (triggersInNamespace.any { it.name == trigger.name }) {
+        val triggersInFlow = projection.values.filter { it.flowId == trigger.flowId }
+        if (triggersInFlow.any { it.name == trigger.name }) {
             if (currentTrigger != null) {
                 projection[currentTrigger.id] = currentTrigger
             }
-            throw IllegalArgumentException("${trigger.name} already exists in namespace ${trigger.namespaceId}")
+            throw IllegalArgumentException("${trigger.name} already exists in flow ${trigger.flowId}")
         }
 
         projection[trigger.id] = trigger
@@ -37,7 +37,7 @@ internal object CurrentTriggerProjection {
             .filter { if (query.types.isEmpty()) true else query.types.contains(it.type) }
             .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
             .filter { if (query.funcIds.isEmpty()) true else query.funcIds.contains(it.funcId) }
-            .filter { if (query.namespaceIds.isEmpty()) true else query.namespaceIds.contains(it.namespaceId) }
+            .filter { if (query.flowIds.isEmpty()) true else query.flowIds.contains(it.flowId) }
             .filter {
                 if (query.topicIds.isEmpty()) {
                     true
@@ -73,7 +73,7 @@ internal object CurrentTriggerProjection {
             .filter { if (query.types.isEmpty()) true else query.types.contains(it.type) }
             .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
             .filter { if (query.funcIds.isEmpty()) true else query.funcIds.contains(it.funcId) }
-            .filter { if (query.namespaceIds.isEmpty()) true else query.namespaceIds.contains(it.namespaceId) }
+            .filter { if (query.flowIds.isEmpty()) true else query.flowIds.contains(it.flowId) }
             .filter {
                 if (query.topicIds.isEmpty()) {
                     true
@@ -125,7 +125,7 @@ class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord,
                     entityId = triggerId,
                     groupId = cmd.groupId,
                     funcId = cmd.funcId,
-                    namespaceId = cmd.namespaceId,
+                    flowId = cmd.flowId,
                     name = cmd.name,
                     inputs = cmd.inputs,
                     duration = cmd.duration,
@@ -148,7 +148,7 @@ class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord,
                         entityId = triggerId,
                         groupId = cmd.groupId,
                         funcId = cmd.funcId,
-                        namespaceId = cmd.namespaceId,
+                        flowId = cmd.flowId,
                         name = cmd.name,
                         inputs = cmd.inputs,
                         topicId = cmd.topicId,
@@ -172,7 +172,7 @@ class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord,
                         entityId = triggerId,
                         groupId = cmd.groupId,
                         funcId = cmd.funcId,
-                        namespaceId = cmd.namespaceId,
+                        flowId = cmd.flowId,
                         name = cmd.name,
                         inputs = cmd.inputs,
                         hookId = cmd.hookId,

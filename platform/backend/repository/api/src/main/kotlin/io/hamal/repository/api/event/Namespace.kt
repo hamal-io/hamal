@@ -1,18 +1,18 @@
 package io.hamal.repository.api.event
 
-import io.hamal.repository.api.Namespace
+import io.hamal.repository.api.Flow
 import kotlinx.serialization.Serializable
 
 @Serializable
-@PlatformEventTopic("namespace::created")
-data class NamespaceCreatedEvent(
-    val namespace: Namespace,
+@PlatformEventTopic("flow::created")
+data class FlowCreatedEvent(
+    val flow: Flow,
 ) : PlatformEvent()
 
 
 @Serializable
-@PlatformEventTopic("namespace::updated")
-data class NamespaceUpdatedEvent(
-    val namespace: Namespace,
+@PlatformEventTopic("flow::updated")
+data class FlowUpdatedEvent(
+    val flow: Flow,
 ) : PlatformEvent()
 

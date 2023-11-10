@@ -19,7 +19,7 @@ internal class EventTest : AbstractExecuteTest() {
         testExecutor.run(
             UnitOfWork(
                 id = ExecId(1234),
-                namespaceId = NamespaceId(9876),
+                flowId = FlowId(9876),
                 groupId = GroupId(5432),
                 inputs = ExecInputs(),
                 state = State(),
@@ -55,7 +55,7 @@ internal class EventTest : AbstractExecuteTest() {
         testExecutor.run(
             UnitOfWork(
                 id = ExecId(1234),
-                namespaceId = NamespaceId(9876),
+                flowId = FlowId(9876),
                 groupId = GroupId(5432),
                 inputs = ExecInputs(),
                 state = State(),

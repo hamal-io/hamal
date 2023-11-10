@@ -4,7 +4,7 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.HookId
 import io.hamal.lib.domain.vo.HookName
-import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.FlowId
 import io.hamal.repository.record.Record
 import io.hamal.repository.record.RecordSequence
 import kotlinx.serialization.SerialName
@@ -23,7 +23,7 @@ data class HookCreatedRecord(
     override val entityId: HookId,
     override val cmdId: CmdId,
     val groupId: GroupId,
-    val namespaceId: NamespaceId,
+    val flowId: FlowId,
     val name: HookName
 ) : HookRecord()
 

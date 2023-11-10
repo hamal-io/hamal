@@ -13,7 +13,7 @@ import io.hamal.lib.sdk.api.ApiError
 import io.hamal.lib.sdk.api.ApiFuncCreateReq
 import io.hamal.lib.sdk.api.ApiFuncUpdateReq
 import io.hamal.lib.sdk.api.ApiFuncUpdateSubmitted
-import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
+import io.hamal.repository.api.FlowCmdRepository.CreateCmd
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -41,19 +41,19 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
 
     @Test
     fun `Updates func`() {
-        val createdNamespace = namespaceCmdRepository.create(
+        val createdFlow = flowCmdRepository.create(
             CreateCmd(
                 id = CmdId(2),
-                namespaceId = NamespaceId(2),
+                flowId = FlowId(2),
                 groupId = testGroup.id,
-                name = NamespaceName("createdNamespace"),
-                inputs = NamespaceInputs()
+                name = FlowName("createdFlow"),
+                inputs = FlowInputs()
             )
         )
 
         val func = awaitCompleted(
             createFunc(
-                namespaceId = createdNamespace.id,
+                flowId = createdFlow.id,
                 req = ApiFuncCreateReq(
                     name = FuncName("createdName"),
                     inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("createdInputs")))),
@@ -83,7 +83,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
 
         with(getFunc(funcId)) {
             assertThat(id, equalTo(funcId))
-            assertThat(namespace.name, equalTo(NamespaceName("createdNamespace")))
+            assertThat(flow.name, equalTo(FlowName("createdFlow")))
             assertThat(name, equalTo(FuncName("updatedName")))
             assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("updatedInputs"))))))
 
@@ -97,19 +97,19 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
 
     @Test
     fun `Updates func without updating values`() {
-        val createdNamespace = namespaceCmdRepository.create(
+        val createdFlow = flowCmdRepository.create(
             CreateCmd(
                 id = CmdId(2),
-                namespaceId = NamespaceId(2),
+                flowId = FlowId(2),
                 groupId = testGroup.id,
-                name = NamespaceName("createdNamespace"),
-                inputs = NamespaceInputs()
+                name = FlowName("createdFlow"),
+                inputs = FlowInputs()
             )
         )
 
         val func = awaitCompleted(
             createFunc(
-                namespaceId = createdNamespace.id,
+                flowId = createdFlow.id,
                 req = ApiFuncCreateReq(
                     name = FuncName("createdName"),
                     inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("createdInputs")))),
@@ -137,7 +137,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
 
         with(getFunc(funcId)) {
             assertThat(id, equalTo(funcId))
-            assertThat(namespace.name, equalTo(NamespaceName("createdNamespace")))
+            assertThat(flow.name, equalTo(FlowName("createdFlow")))
             assertThat(name, equalTo(FuncName("createdName")))
             assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("createdInputs"))))))
 

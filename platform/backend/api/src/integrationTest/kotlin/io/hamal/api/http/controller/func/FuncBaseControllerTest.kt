@@ -3,7 +3,7 @@ package io.hamal.api.http.controller.func
 import io.hamal.api.http.controller.BaseControllerTest
 import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.FlowId
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.HttpSuccessResponse
@@ -16,10 +16,10 @@ internal sealed class FuncBaseControllerTest : BaseControllerTest() {
 
     fun createFunc(
         req: ApiFuncCreateReq,
-        namespaceId: NamespaceId = NamespaceId(1)
+        flowId: FlowId = FlowId(1)
     ): ApiFuncCreateSubmitted {
-        val response = httpTemplate.post("/v1/namespaces/{namespaceId}/funcs")
-            .path("namespaceId", namespaceId)
+        val response = httpTemplate.post("/v1/flows/{flowId}/funcs")
+            .path("flowId", flowId)
             .body(req)
             .execute()
 

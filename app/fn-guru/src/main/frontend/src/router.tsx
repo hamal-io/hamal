@@ -8,14 +8,14 @@ import Authenticated from "@/components/app/authenticated";
 
 import Dashboard from "./pages/app/dashboard";
 
-import NamespaceList from "./pages/app/namespace-list";
-import NamespaceDetail from "./pages/app/namespace-detail";
+import FlowList from "./pages/app/flow-list";
+import FlowDetail from "./pages/app/flow-detail";
 
-import NamespaceDashboardPage from "@/pages/app/namespace-detail/page/dashboard";
-import NamespaceExecDetailPage from "@/pages/app/namespace-detail/page/exec-detail";
-import NamespaceExecListPage from "@/pages/app/namespace-detail/page/exec-list";
-import NamespaceFuncDetail from "@/pages/app/namespace-detail/page/func-detail";
-// import NamespaceFuncListPage from "@/pages/app/namespace-detail/page/func-list";
+import FlowDashboardPage from "@/pages/app/flow-detail/page/dashboard";
+import FlowExecDetailPage from "@/pages/app/flow-detail/page/exec-detail";
+import FlowExecListPage from "@/pages/app/flow-detail/page/exec-list";
+import FlowFuncDetail from "@/pages/app/flow-detail/page/func-detail";
+// import FlowFuncListPage from "@/pages/app/flow-detail/page/func-list";
 
 import {createBrowserRouter} from "react-router-dom";
 import Playground from "@/pages/app/playground";
@@ -34,53 +34,53 @@ export const router = createBrowserRouter([
             </Authenticated>
     },
     {
-        path: "/namespaces", element:
+        path: "/flows", element:
             <Authenticated>
-                <NamespaceList/>
+                <FlowList/>
             </Authenticated>
     },
     {
-        path: "/namespaces/:namespaceId", element:
+        path: "/flows/:flowId", element:
             <Authenticated>
-                <NamespaceDetail>
-                    <NamespaceDashboardPage/>
-                </NamespaceDetail>
-            </Authenticated>
-    },
-
-    {
-        path: "/namespaces/:namespaceId/executions", element:
-            <Authenticated>
-                <NamespaceDetail>
-                    <NamespaceExecListPage/>
-                </NamespaceDetail>
+                <FlowDetail>
+                    <FlowDashboardPage/>
+                </FlowDetail>
             </Authenticated>
     },
 
     {
-        path: "/namespaces/:namespaceId/executions/:execId", element:
+        path: "/flows/:flowId/executions", element:
             <Authenticated>
-                <NamespaceDetail>
-                    <NamespaceExecDetailPage/>
-                </NamespaceDetail>
+                <FlowDetail>
+                    <FlowExecListPage/>
+                </FlowDetail>
+            </Authenticated>
+    },
+
+    {
+        path: "/flows/:flowId/executions/:execId", element:
+            <Authenticated>
+                <FlowDetail>
+                    <FlowExecDetailPage/>
+                </FlowDetail>
             </Authenticated>
     },
 
     // {
-    //     path: "/namespaces/:namespaceId/functions", element:
+    //     path: "/flows/:flowId/functions", element:
     //         <Authenticated>
-    //             <NamespaceDetail>
-    //                 <NamespaceFuncListPage/>
-    //             </NamespaceDetail>
+    //             <FlowDetail>
+    //                 <FlowFuncListPage/>
+    //             </FlowDetail>
     //         </Authenticated>
     // },
 
     {
-        path: "/namespaces/:namespaceId/functions/:funcId", element:
+        path: "/flows/:flowId/functions/:funcId", element:
             <Authenticated>
-                <NamespaceDetail>
-                    <NamespaceFuncDetail/>
-                </NamespaceDetail>
+                <FlowDetail>
+                    <FlowFuncDetail/>
+                </FlowDetail>
             </Authenticated>
     },
 

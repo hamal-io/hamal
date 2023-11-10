@@ -14,11 +14,11 @@ internal class TopicGetControllerTest : TopicBaseControllerTest() {
 
     @Test
     fun `Single topic`() {
-        val topicId = awaitCompleted(createTopic(TopicName("namespace::topics_one"))).topicId
+        val topicId = awaitCompleted(createTopic(TopicName("flow::topics_one"))).topicId
 
         with(getTopic(topicId)) {
             assertThat(id, equalTo(topicId))
-            assertThat(name, equalTo(TopicName("namespace::topics_one")))
+            assertThat(name, equalTo(TopicName("flow::topics_one")))
         }
     }
 

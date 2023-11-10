@@ -80,10 +80,10 @@ internal abstract class BaseTest {
     lateinit var hookRepository: HookRepository
 
     @Autowired
-    lateinit var namespaceQueryRepository: NamespaceQueryRepository
+    lateinit var flowQueryRepository: FlowQueryRepository
 
     @Autowired
-    lateinit var namespaceCmdRepository: NamespaceCmdRepository
+    lateinit var flowCmdRepository: FlowCmdRepository
 
     @Autowired
     lateinit var platformEventBrokerRepository: BrokerRepository
@@ -118,7 +118,7 @@ internal abstract class BaseTest {
     lateinit var testAccount: Account
     lateinit var testAuthToken: AuthToken
     lateinit var testGroup: Group
-    lateinit var testNamespace: Namespace
+    lateinit var testFlow: Flow
 
     @BeforeEach
     fun before() {
@@ -131,7 +131,7 @@ internal abstract class BaseTest {
         extensionCmdRepository.clear()
         funcCmdRepository.clear()
         groupCmdRepository.clear()
-        namespaceCmdRepository.clear()
+        flowCmdRepository.clear()
         platformEventBrokerRepository.clear()
         reqCmdRepository.clear()
         stateCmdRepository.clear()
@@ -168,13 +168,13 @@ internal abstract class BaseTest {
             )
         )
 
-        testNamespace = namespaceCmdRepository.create(
-            NamespaceCmdRepository.CreateCmd(
+        testFlow = flowCmdRepository.create(
+            FlowCmdRepository.CreateCmd(
                 id = CmdId(1),
-                namespaceId = generateDomainId(::NamespaceId),
+                flowId = generateDomainId(::FlowId),
                 groupId = testGroup.id,
-                name = NamespaceName("hamal"),
-                inputs = NamespaceInputs()
+                name = FlowName("hamal"),
+                inputs = FlowInputs()
             )
         )
 
@@ -196,7 +196,7 @@ internal abstract class BaseTest {
                 id = CmdId(1),
                 execId = execId,
                 groupId = testGroup.id,
-                namespaceId = testNamespace.id,
+                flowId = testFlow.id,
                 correlation = correlation,
                 inputs = ExecInputs(),
                 code = ExecCode(

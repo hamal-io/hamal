@@ -3,7 +3,7 @@ package io.hamal.core.adapter
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.vo.HookId
-import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.FlowId
 import io.hamal.lib.domain.vo.ReqId
 import io.hamal.repository.api.*
 import io.hamal.repository.api.HookQueryRepository.HookQuery
@@ -15,18 +15,18 @@ import org.springframework.stereotype.Component
 
 interface HookCreatePort {
     operator fun <T : Any> invoke(
-        namespaceId: NamespaceId,
+        flowId: FlowId,
         req: CreateHookReq,
         responseHandler: (HookCreateSubmitted) -> T
     ): T
 }
 
 interface HookGetPort {
-    operator fun <T : Any> invoke(hookId: HookId, responseHandler: (Hook, Namespace) -> T): T
+    operator fun <T : Any> invoke(hookId: HookId, responseHandler: (Hook, Flow) -> T): T
 }
 
 interface HookListPort {
-    operator fun <T : Any> invoke(query: HookQuery, responseHandler: (List<Hook>, Map<NamespaceId, Namespace>) -> T): T
+    operator fun <T : Any> invoke(query: HookQuery, responseHandler: (List<Hook>, Map<FlowId, Flow>) -> T): T
 }
 
 interface HookUpdatePort {
@@ -43,40 +43,40 @@ interface HookPort : HookCreatePort, HookGetPort, HookListPort, HookUpdatePort
 class HookAdapter(
     private val generateDomainId: GenerateDomainId,
     private val hookQueryRepository: HookQueryRepository,
-    private val namespaceQueryRepository: NamespaceQueryRepository,
+    private val flowQueryRepository: FlowQueryRepository,
     private val reqCmdRepository: ReqCmdRepository
 ) : HookPort {
     override fun <T : Any> invoke(
-        namespaceId: NamespaceId,
+        flowId: FlowId,
         req: CreateHookReq,
         responseHandler: (HookCreateSubmitted) -> T
     ): T {
-        val namespace = namespaceQueryRepository.get(namespaceId)
+        val flow = flowQueryRepository.get(flowId)
         return HookCreateSubmitted(
             id = generateDomainId(::ReqId),
             status = Submitted,
             hookId = generateDomainId(::HookId),
-            groupId = namespace.groupId,
-            namespaceId = namespace.id,
+            groupId = flow.groupId,
+            flowId = flow.id,
             name = req.name
         ).also(reqCmdRepository::queue).let(responseHandler)
     }
 
-    override fun <T : Any> invoke(hookId: HookId, responseHandler: (Hook, Namespace) -> T): T {
+    override fun <T : Any> invoke(hookId: HookId, responseHandler: (Hook, Flow) -> T): T {
         val hook = hookQueryRepository.get(hookId)
-        val namespaces = namespaceQueryRepository.get(hook.namespaceId)
-        return responseHandler(hook, namespaces)
+        val flows = flowQueryRepository.get(hook.flowId)
+        return responseHandler(hook, flows)
     }
 
 
     override fun <T : Any> invoke(
         query: HookQuery,
-        responseHandler: (List<Hook>, Map<NamespaceId, Namespace>) -> T
+        responseHandler: (List<Hook>, Map<FlowId, Flow>) -> T
     ): T {
         val hooks = hookQueryRepository.list(query)
-        val namespaces = namespaceQueryRepository.list(hooks.map(Hook::namespaceId))
-            .associateBy(Namespace::id)
-        return responseHandler(hooks, namespaces)
+        val flows = flowQueryRepository.list(hooks.map(Hook::flowId))
+            .associateBy(Flow::id)
+        return responseHandler(hooks, flows)
     }
 
     override fun <T : Any> invoke(

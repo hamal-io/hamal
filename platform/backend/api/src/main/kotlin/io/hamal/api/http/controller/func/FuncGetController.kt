@@ -7,7 +7,7 @@ import io.hamal.lib.sdk.api.ApiFunc
 import io.hamal.lib.sdk.api.ApiFunc.*
 import io.hamal.repository.api.Code
 import io.hamal.repository.api.Func
-import io.hamal.repository.api.Namespace
+import io.hamal.repository.api.Flow
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -24,13 +24,13 @@ internal class FuncGetController(
         getFunc(funcId, ::assemble)
     }
 
-    private fun assemble(func: Func, current: Code, deployed: Code, namespace: Namespace) =
+    private fun assemble(func: Func, current: Code, deployed: Code, flow: Flow) =
         ResponseEntity.ok(
             ApiFunc(
                 id = func.id,
-                namespace = Namespace(
-                    id = namespace.id,
-                    name = namespace.name
+                flow = Flow(
+                    id = flow.id,
+                    name = flow.name
                 ),
                 name = func.name,
                 inputs = func.inputs,

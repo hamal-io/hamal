@@ -8,7 +8,7 @@ export const useAuth = () => {
             type: 'Unauthorized',
             accountId: '',
             groupId: '',
-            defaultNamespaceIds: new Map<string, string>(),
+            defaultFlowIds: new Map<string, string>(),
             token: '',
             name: ''
         }

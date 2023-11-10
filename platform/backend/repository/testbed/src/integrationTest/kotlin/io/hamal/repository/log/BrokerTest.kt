@@ -3,7 +3,7 @@ package io.hamal.repository.log
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.HashUtils
 import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.FlowId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.repository.api.log.BrokerRepository
@@ -22,7 +22,7 @@ class BrokerTest : AbstractIntegrationTest() {
     fun `Concurrent safe - 10 threads add to the same topic`() = runWith(BrokerRepository::class) { testInstance ->
         val topic = testInstance.create(
             CmdId(1), TopicToCreate(
-                TopicId(123), TopicName("topic"), NamespaceId(23), GroupId(1)
+                TopicId(123), TopicName("topic"), FlowId(23), GroupId(1)
             )
         )
 
@@ -52,7 +52,7 @@ class BrokerTest : AbstractIntegrationTest() {
                 runAsync {
                     val topic = testInstance.create(
                         CmdId(1),
-                        TopicToCreate(TopicId(thread), TopicName("topic-$thread"), NamespaceId(23), GroupId(1))
+                        TopicToCreate(TopicId(thread), TopicName("topic-$thread"), FlowId(23), GroupId(1))
                     )
 
                     IntRange(1, 100).forEach {
@@ -69,7 +69,7 @@ class BrokerTest : AbstractIntegrationTest() {
             IntRange(1, 100).forEach { thread ->
                 val result = testInstance.consume(
                     ConsumerId("consumer-id"),
-                    testInstance.findTopic(NamespaceId(23), TopicName("topic-$thread"))!!,
+                    testInstance.findTopic(FlowId(23), TopicName("topic-$thread"))!!,
                     1_000_000
                 )
                 assertThat(result, hasSize(100))

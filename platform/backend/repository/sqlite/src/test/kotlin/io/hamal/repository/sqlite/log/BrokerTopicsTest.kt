@@ -43,7 +43,7 @@ class SqliteBrokerTopicsRepositoryTest {
         @Test
         fun `Does not create topics table if already exists`() {
             SqliteBrokerTopicsRepository(testBrokerTopics()).use {
-                it.connection.execute("""INSERT INTO topics (namespace_id, group_id, name,instant) VALUES (1, 1,'some-topic',unixepoch());""")
+                it.connection.execute("""INSERT INTO topics (flow_id, group_id, name,instant) VALUES (1, 1,'some-topic',unixepoch());""")
             }
 
             SqliteBrokerTopicsRepository(testBrokerTopics()).use { }

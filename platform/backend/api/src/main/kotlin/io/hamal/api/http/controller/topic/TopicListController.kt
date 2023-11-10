@@ -3,7 +3,7 @@ package io.hamal.api.http.controller.topic
 import io.hamal.core.adapter.TopicListPort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.FlowId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.sdk.api.ApiTopicList
@@ -22,7 +22,7 @@ internal class TopicListController(private val listTopics: TopicListPort) {
         @RequestParam(required = false, name = "names", defaultValue = "") topicNames: List<TopicName>,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit,
         @RequestParam(required = false, name = "group_ids", defaultValue = "") groupIds: List<GroupId> = listOf(),
-        @RequestParam(required = false, name = "namespace_ids", defaultValue = "") namespaceIds: List<NamespaceId> = listOf()
+        @RequestParam(required = false, name = "flow_ids", defaultValue = "") flowIds: List<FlowId> = listOf()
     ): ResponseEntity<ApiTopicList> {
         return listTopics(
             TopicQuery(
@@ -30,7 +30,7 @@ internal class TopicListController(private val listTopics: TopicListPort) {
                 names = topicNames,
                 limit = limit,
                 groupIds = groupIds,
-                namespaceIds = namespaceIds
+                flowIds = flowIds
             )
         ) { topics ->
             ResponseEntity.ok(

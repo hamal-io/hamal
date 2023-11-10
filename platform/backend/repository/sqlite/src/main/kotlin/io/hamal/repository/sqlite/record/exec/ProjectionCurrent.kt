@@ -47,7 +47,7 @@ internal object ProjectionCurrent : SqliteProjection<ExecId, ExecRecord, Exec> {
                 ${query.ids()}
                 ${query.groupIds()}
                 ${query.funcIds()}
-                ${query.namespaceIds()}
+                ${query.flowIds()}
             ORDER BY id DESC
             LIMIT :limit
         """.trimIndent()
@@ -74,7 +74,7 @@ internal object ProjectionCurrent : SqliteProjection<ExecId, ExecRecord, Exec> {
                 ${query.ids()}
                 ${query.groupIds()}
                 ${query.funcIds()}
-                ${query.namespaceIds()}
+                ${query.flowIds()}
         """.trimIndent()
         ) {
             query {
@@ -93,14 +93,14 @@ internal object ProjectionCurrent : SqliteProjection<ExecId, ExecRecord, Exec> {
         tx.execute(
             """
                 INSERT OR REPLACE INTO current
-                    ( id, status, namespace_id, group_id, func_id, data) 
+                    ( id, status, flow_id, group_id, func_id, data) 
                 VALUES
-                    ( :id, :status, :namespaceId, :groupId, :funcId, :data)
+                    ( :id, :status, :flowId, :groupId, :funcId, :data)
             """.trimIndent()
         ) {
             set("id", obj.id)
             set("status", obj.status.value)
-            set("namespaceId", obj.namespaceId)
+            set("flowId", obj.flowId)
             set("groupId", obj.groupId)
             set("funcId", obj.correlation?.funcId ?: FuncId(0))
             set("data", protobuf.encodeToByteArray(Exec.serializer(), obj))
@@ -115,7 +115,7 @@ internal object ProjectionCurrent : SqliteProjection<ExecId, ExecRecord, Exec> {
                  status         INTEGER NOT NULL,
                  group_id       INTEGER NOT NULL,
                  func_id        INTEGER NOT NULL,
-                 namespace_id   INTEGER NOT NULL,
+                 flow_id   INTEGER NOT NULL,
                  data           BLOB NOT NULL,
                  PRIMARY KEY    (id)
             );
@@ -151,11 +151,11 @@ internal object ProjectionCurrent : SqliteProjection<ExecId, ExecRecord, Exec> {
         }
     }
 
-    private fun ExecQuery.namespaceIds(): String {
-        return if (namespaceIds.isEmpty()) {
+    private fun ExecQuery.flowIds(): String {
+        return if (flowIds.isEmpty()) {
             ""
         } else {
-            "AND namespace_id IN (${namespaceIds.joinToString(",") { "${it.value.value}" }})"
+            "AND flow_id IN (${flowIds.joinToString(",") { "${it.value.value}" }})"
         }
     }
 }

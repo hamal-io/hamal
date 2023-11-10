@@ -1,7 +1,7 @@
 sys = require('sys')
 
 local create_req = fail_on_error(sys.func.create({
-    namespace_id = '1',
+    flow_id = '1',
     name = 'test-func',
     inputs = {},
     code = [[4 + 2]]

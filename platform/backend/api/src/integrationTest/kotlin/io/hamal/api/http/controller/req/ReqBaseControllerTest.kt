@@ -23,8 +23,8 @@ internal sealed class ReqBaseControllerTest : BaseControllerTest() {
     }
 
     fun adhoc(code: CodeValue = CodeValue("")): ApiExecInvokeSubmitted {
-        return httpTemplate.post("/v1/namespaces/{namespaceId}/adhoc")
-            .path("namespaceId", testNamespace.id)
+        return httpTemplate.post("/v1/flows/{flowId}/adhoc")
+            .path("flowId", testFlow.id)
             .body(
                 ApiAdhocInvokeReq(
                     inputs = InvocationInputs(),

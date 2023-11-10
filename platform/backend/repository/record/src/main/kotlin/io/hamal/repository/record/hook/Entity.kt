@@ -4,7 +4,7 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.HookId
 import io.hamal.lib.domain.vo.HookName
-import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.FlowId
 import io.hamal.repository.api.Hook
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordEntity
@@ -16,7 +16,7 @@ data class HookEntity(
     val groupId: GroupId,
     override val sequence: RecordSequence,
 
-    var namespaceId: NamespaceId? = null,
+    var flowId: FlowId? = null,
     var name: HookName? = null
 
 ) : RecordEntity<HookId, HookRecord, Hook> {
@@ -27,7 +27,7 @@ data class HookEntity(
                 id = rec.entityId,
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
-                namespaceId = rec.namespaceId,
+                flowId = rec.flowId,
                 name = rec.name
             )
 
@@ -45,7 +45,7 @@ data class HookEntity(
             cmdId = cmdId,
             id = id,
             groupId = groupId,
-            namespaceId = namespaceId!!,
+            flowId = flowId!!,
             name = name!!
         )
     }

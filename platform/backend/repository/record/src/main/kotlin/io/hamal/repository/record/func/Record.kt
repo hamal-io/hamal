@@ -21,7 +21,7 @@ data class FuncCreatedRecord(
     override val entityId: FuncId,
     override val cmdId: CmdId,
     val groupId: GroupId,
-    val namespaceId: NamespaceId,
+    val flowId: FlowId,
     val name: FuncName,
     val inputs: FuncInputs,
     val codeId: CodeId,

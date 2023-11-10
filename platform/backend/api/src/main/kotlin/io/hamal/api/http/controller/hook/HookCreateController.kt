@@ -3,7 +3,7 @@ package io.hamal.api.http.controller.hook
 import io.hamal.api.http.controller.accepted
 import io.hamal.core.adapter.HookCreatePort
 import io.hamal.core.component.Retry
-import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.FlowId
 import io.hamal.lib.sdk.api.ApiHookCreateReq
 import io.hamal.lib.sdk.api.ApiSubmitted
 import io.hamal.repository.api.submitted_req.HookCreateSubmitted
@@ -18,11 +18,11 @@ internal class HookCreateController(
     private val retry: Retry,
     private val createHook: HookCreatePort
 ) {
-    @PostMapping("/v1/namespaces/{namespaceId}/hooks")
+    @PostMapping("/v1/flows/{flowId}/hooks")
     fun createHook(
-        @PathVariable("namespaceId") namespaceId: NamespaceId,
+        @PathVariable("flowId") flowId: FlowId,
         @RequestBody req: ApiHookCreateReq
     ): ResponseEntity<ApiSubmitted> = retry {
-        createHook(namespaceId, req, HookCreateSubmitted::accepted)
+        createHook(flowId, req, HookCreateSubmitted::accepted)
     }
 }

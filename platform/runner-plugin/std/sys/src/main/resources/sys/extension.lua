@@ -8,7 +8,7 @@ function extension()
             extension = { },
             func = { },
             hook = { },
-            namespace = { },
+            flow = { },
             req = { },
             topic = { },
             trigger = { }
@@ -17,7 +17,7 @@ function extension()
         function export.adhoc(cmd)
             cmd = cmd or {}
             local err, res = internal.adhoc({
-                namespace_id = cmd.namespace_id,
+                flow_id = cmd.flow_id,
                 inputs = cmd.inputs or {},
                 code = cmd.code or ""
             })
@@ -52,7 +52,7 @@ function extension()
 
         function export.exec.list(query)
             query = query or {}
-            query.namespace_ids = query.namespace_ids or {}
+            query.flow_ids = query.flow_ids or {}
 
             return internal.exec_list(query)
         end
@@ -80,7 +80,7 @@ function extension()
         function export.func.create(cmd)
             cmd = cmd or {}
             return internal.func_create({
-                namespace_id = cmd.namespace_id,
+                flow_id = cmd.flow_id,
                 name = cmd.name or nil,
                 inputs = cmd.inputs or {},
                 code = cmd.code or ""
@@ -101,7 +101,7 @@ function extension()
 
         function export.func.list(query)
             query = query or {}
-            query.namespace_ids = query.namespace_ids or {}
+            query.flow_ids = query.flow_ids or {}
             return internal.func_list(query)
         end
 
@@ -122,7 +122,7 @@ function extension()
         function export.hook.create(cmd)
             cmd = cmd or {}
             return internal.hook_create({
-                namespace_id = cmd.namespace_id or nil,
+                flow_id = cmd.flow_id or nil,
                 name = cmd.name or nil
             })
         end
@@ -133,24 +133,24 @@ function extension()
 
         function export.hook.list(query)
             query = query or {}
-            query.namespace_ids = query.namespace_ids or {}
+            query.flow_ids = query.flow_ids or {}
 
             return internal.hook_list(query)
         end
 
-        function export.namespace.create(cmd)
-            return internal.namespace_create({
+        function export.flow.create(cmd)
+            return internal.flow_create({
                 name = cmd.name or "",
                 inputs = cmd.inputs or {}
             })
         end
 
-        function export.namespace.get(namespace_id)
-            return internal.namespace_get(namespace_id)
+        function export.flow.get(flow_id)
+            return internal.flow_get(flow_id)
         end
 
-        function export.namespace.list()
-            return internal.namespace_list()
+        function export.flow.list()
+            return internal.flow_list()
         end
 
         function export.req.get(req_id)
@@ -184,14 +184,14 @@ function extension()
         function export.topic.create(cmd)
             cmd = cmd or {}
             return internal.topic_create({
-                namespace_id = cmd.namespace_id,
+                flow_id = cmd.flow_id,
                 name = cmd.name
             })
         end
 
         function export.topic.list(query)
             query = query or {}
-            query.namespace_ids = query.namespace_ids or {}
+            query.flow_ids = query.flow_ids or {}
 
             return internal.topic_list(query)
         end
@@ -208,7 +208,7 @@ function extension()
             cmd = cmd or {}
             return internal.trigger_create({
                 type = "FixedRate",
-                namespace_id = cmd.namespace_id,
+                flow_id = cmd.flow_id,
                 name = cmd.name,
                 func_id = cmd.func_id,
                 inputs = cmd.inputs or {},
@@ -220,7 +220,7 @@ function extension()
             cmd = cmd or {}
             return internal.trigger_create({
                 type = "Event",
-                namespace_id = cmd.namespace_id,
+                flow_id = cmd.flow_id,
                 name = cmd.name,
                 func_id = cmd.func_id,
                 inputs = cmd.inputs or {},
@@ -232,7 +232,7 @@ function extension()
             cmd = cmd or {}
             return internal.trigger_create({
                 type = "Hook",
-                namespace_id = cmd.namespace_id,
+                flow_id = cmd.flow_id,
                 name = cmd.name,
                 func_id = cmd.func_id,
                 inputs = cmd.inputs or {},
@@ -247,7 +247,7 @@ function extension()
 
         function export.trigger.list(query)
             query = query or {}
-            query.namespace_ids = query.namespace_ids or {}
+            query.flow_ids = query.flow_ids or {}
             return internal.trigger_list(query)
         end
 

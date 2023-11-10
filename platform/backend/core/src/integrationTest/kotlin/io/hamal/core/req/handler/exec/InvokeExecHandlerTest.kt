@@ -24,7 +24,7 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
                 id = ReqId(1),
                 status = Submitted,
                 execId = ExecId(3333),
-                namespaceId = testNamespace.id,
+                flowId = testFlow.id,
                 groupId = testGroup.id,
                 inputs = InvocationInputs(MapType(mutableMapOf("hamal" to StringType("justworks")))),
                 code = ExecCode(value = CodeValue("code")),
@@ -66,7 +66,7 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
                 correlationId = CorrelationId("some-correlation"),
                 status = Submitted,
                 execId = ExecId(3333),
-                namespaceId = testNamespace.id,
+                flowId = testFlow.id,
                 groupId = testGroup.id,
                 inputs = InvocationInputs(
                     MapType(
@@ -137,7 +137,7 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
             correlationId = CorrelationId("some-correlation"),
             status = Submitted,
             execId = ExecId(3333),
-            namespaceId = testNamespace.id,
+            flowId = testFlow.id,
             groupId = testGroup.id,
             inputs = InvocationInputs(MapType(mutableMapOf(
                     "override" to StringType("true"),

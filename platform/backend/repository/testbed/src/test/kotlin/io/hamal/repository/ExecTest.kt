@@ -31,7 +31,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                 PlanCmd(
                     id = CmdId(1),
                     execId = ExecId(2),
-                    namespaceId = NamespaceId(5),
+                    flowId = FlowId(5),
                     groupId = GroupId(3),
                     correlation = Correlation(
                         correlationId = CorrelationId("some-correlation-id"), funcId = FuncId(23)
@@ -57,7 +57,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
         @TestFactory
         fun `Tires to plan but cmd with exec id was already applied`() = runWith(ExecRepository::class) {
             planExec(
-                cmdId = CmdId(23456), execId = ExecId(2), groupId = GroupId(3), namespaceId = NamespaceId(4)
+                cmdId = CmdId(23456), execId = ExecId(2), groupId = GroupId(3), flowId = FlowId(4)
             )
 
 
@@ -65,14 +65,14 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                 cmdId = CmdId(23456),
                 execId = ExecId(2),
                 groupId = GroupId(4),
-                namespaceId = NamespaceId(5),
+                flowId = FlowId(5),
             )
 
             with(result) {
                 assertThat(id, equalTo(ExecId(2)))
                 assertThat(status, equalTo(Planned))
                 assertThat(groupId, equalTo(GroupId(3)))
-                assertThat(namespaceId, equalTo(NamespaceId(4)))
+                assertThat(flowId, equalTo(FlowId(4)))
             }
 
             verifyCount(1)
@@ -85,7 +85,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
         @TestFactory
         fun `Schedule planned exec`() = runWith(ExecRepository::class) {
             planExec(
-                cmdId = CmdId(1), execId = ExecId(2), groupId = GroupId(3), namespaceId = NamespaceId(4)
+                cmdId = CmdId(1), execId = ExecId(2), groupId = GroupId(3), flowId = FlowId(4)
             )
 
             val result = schedule(ScheduleCmd(CmdId(4), ExecId(2)))
@@ -113,7 +113,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Tries to schedule exec which does not exists`() = runWith(ExecRepository::class) {
-            planExec(ExecId(32), NamespaceId(34), GroupId(33))
+            planExec(ExecId(32), FlowId(34), GroupId(33))
 
             val exception = assertThrows<NoSuchElementException> {
                 schedule(ScheduleCmd(CmdId(4), ExecId(23)))
@@ -130,7 +130,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
         @TestFactory
         fun `Queue scheduled exec`() = runWith(ExecRepository::class) {
             planExec(
-                cmdId = CmdId(1), execId = ExecId(2), groupId = GroupId(3), namespaceId = NamespaceId(4)
+                cmdId = CmdId(1), execId = ExecId(2), groupId = GroupId(3), flowId = FlowId(4)
             )
 
             schedule(ScheduleCmd(CmdId(2), ExecId(2)))
@@ -160,7 +160,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Tries to queue exec which does not exists`() = runWith(ExecRepository::class) {
-            planExec(ExecId(2), NamespaceId(44), GroupId(33))
+            planExec(ExecId(2), FlowId(44), GroupId(33))
             schedule(ScheduleCmd(CmdId(2), ExecId(2)))
 
             val exception = assertThrows<NoSuchElementException> {
@@ -177,7 +177,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
         @TestFactory
         fun `Start queued exec`() = runWith(ExecRepository::class) {
             planExec(
-                cmdId = CmdId(1), execId = ExecId(2), groupId = GroupId(3), namespaceId = NamespaceId(4)
+                cmdId = CmdId(1), execId = ExecId(2), groupId = GroupId(3), flowId = FlowId(4)
             )
 
             schedule(ScheduleCmd(CmdId(2), ExecId(2)))
@@ -213,7 +213,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
         @TestFactory
         fun `Complete started exec`() = runWith(ExecRepository::class) {
             planExec(
-                cmdId = CmdId(1), execId = ExecId(2), groupId = GroupId(3), namespaceId = NamespaceId(4)
+                cmdId = CmdId(1), execId = ExecId(2), groupId = GroupId(3), flowId = FlowId(4)
             )
 
             schedule(ScheduleCmd(CmdId(2), ExecId(2)))
@@ -255,7 +255,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Tries to complete exec which does not exists`() = runWith(ExecRepository::class) {
-            planExec(ExecId(2), NamespaceId(44), GroupId(33))
+            planExec(ExecId(2), FlowId(44), GroupId(33))
             schedule(ScheduleCmd(CmdId(2), ExecId(2)))
             queue(QueueCmd(CmdId(3), ExecId(2)))
             start(StartCmd(CmdId(4)))
@@ -275,7 +275,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
         @TestFactory
         fun `Fail started exec`() = runWith(ExecRepository::class) {
             planExec(
-                cmdId = CmdId(1), execId = ExecId(2), groupId = GroupId(3), namespaceId = NamespaceId(4)
+                cmdId = CmdId(1), execId = ExecId(2), groupId = GroupId(3), flowId = FlowId(4)
             )
 
             schedule(ScheduleCmd(CmdId(2), ExecId(2)))
@@ -307,7 +307,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Tries to fail exec which does not exists`() = runWith(ExecRepository::class) {
-            planExec(ExecId(2), NamespaceId(44), GroupId(33))
+            planExec(ExecId(2), FlowId(44), GroupId(33))
             schedule(ScheduleCmd(CmdId(2), ExecId(2)))
             queue(QueueCmd(CmdId(3), ExecId(2)))
             start(StartCmd(CmdId(4)))
@@ -563,12 +563,12 @@ private fun assertBaseExec(exec: Exec) {
 }
 
 private fun ExecRepository.planExec(
-    execId: ExecId, namespaceId: NamespaceId, groupId: GroupId, cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
+    execId: ExecId, flowId: FlowId, groupId: GroupId, cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
 ) = plan(
     PlanCmd(
         id = cmdId,
         execId = execId,
-        namespaceId = namespaceId,
+        flowId = flowId,
         groupId = groupId,
         correlation = Correlation(
             correlationId = CorrelationId("some-correlation-id"), funcId = FuncId(23)
@@ -597,7 +597,7 @@ private fun ExecRepository.verifyCount(expected: Int, block: ExecQuery.() -> Uni
 fun ExecRepository.createExec(
     execId: ExecId,
     status: ExecStatus,
-    namespaceId: NamespaceId = NamespaceId(444),
+    flowId: FlowId = FlowId(444),
     groupId: GroupId = GroupId(333),
     correlation: Correlation? = null
 ): Exec {
@@ -606,7 +606,7 @@ fun ExecRepository.createExec(
         PlanCmd(
             id = CmdId(100),
             execId = execId,
-            namespaceId = namespaceId,
+            flowId = flowId,
             groupId = groupId,
             correlation = correlation,
             inputs = ExecInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),

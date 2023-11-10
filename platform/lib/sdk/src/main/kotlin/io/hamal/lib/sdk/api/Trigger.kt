@@ -34,7 +34,7 @@ data class ApiTriggerCreateSubmitted(
     override val status: ReqStatus,
     val triggerId: TriggerId,
     val groupId: GroupId,
-    val namespaceId: NamespaceId
+    val flowId: FlowId
 ) : ApiSubmitted
 
 
@@ -47,7 +47,7 @@ data class ApiTriggerList(
         val id: TriggerId
         val name: TriggerName
         val func: Func
-        val namespace: Namespace
+        val flow: Flow
 
         @Serializable
         data class Func(
@@ -56,9 +56,9 @@ data class ApiTriggerList(
         )
 
         @Serializable
-        data class Namespace(
-            val id: NamespaceId,
-            val name: NamespaceName
+        data class Flow(
+            val id: FlowId,
+            val name: FlowName
         )
     }
 
@@ -67,7 +67,7 @@ data class ApiTriggerList(
         override val id: TriggerId,
         override val name: TriggerName,
         override val func: Trigger.Func,
-        override val namespace: Trigger.Namespace,
+        override val flow: Trigger.Flow,
         val duration: Duration
     ) : Trigger
 
@@ -76,7 +76,7 @@ data class ApiTriggerList(
         override val id: TriggerId,
         override val name: TriggerName,
         override val func: Trigger.Func,
-        override val namespace: Trigger.Namespace,
+        override val flow: Trigger.Flow,
         val topic: Topic
     ) : Trigger {
         @Serializable
@@ -91,7 +91,7 @@ data class ApiTriggerList(
         override val id: TriggerId,
         override val name: TriggerName,
         override val func: Trigger.Func,
-        override val namespace: Trigger.Namespace,
+        override val flow: Trigger.Flow,
         val hook: Hook
     ) : Trigger {
         @Serializable
@@ -108,7 +108,7 @@ sealed interface ApiTrigger {
     val id: TriggerId
     val name: TriggerName
     val func: Func
-    val namespace: Namespace
+    val flow: Flow
     val inputs: TriggerInputs
     val correlationId: CorrelationId?
 
@@ -119,9 +119,9 @@ sealed interface ApiTrigger {
     )
 
     @Serializable
-    data class Namespace(
-        val id: NamespaceId,
-        val name: NamespaceName
+    data class Flow(
+        val id: FlowId,
+        val name: FlowName
     )
 }
 
@@ -130,7 +130,7 @@ class ApiFixedRateTrigger(
     override val id: TriggerId,
     override val name: TriggerName,
     override val func: ApiTrigger.Func,
-    override val namespace: ApiTrigger.Namespace,
+    override val flow: ApiTrigger.Flow,
     override val inputs: TriggerInputs,
     override val correlationId: CorrelationId? = null,
     val duration: Duration
@@ -141,7 +141,7 @@ class ApiEventTrigger(
     override val id: TriggerId,
     override val name: TriggerName,
     override val func: ApiTrigger.Func,
-    override val namespace: ApiTrigger.Namespace,
+    override val flow: ApiTrigger.Flow,
     override val inputs: TriggerInputs,
     override val correlationId: CorrelationId? = null,
     val topic: Topic
@@ -158,7 +158,7 @@ class ApiHookTrigger(
     override val id: TriggerId,
     override val name: TriggerName,
     override val func: ApiTrigger.Func,
-    override val namespace: ApiTrigger.Namespace,
+    override val flow: ApiTrigger.Flow,
     override val inputs: TriggerInputs,
     override val correlationId: CorrelationId? = null,
     val hook: Hook
@@ -173,7 +173,7 @@ class ApiHookTrigger(
 
 
 interface ApiTriggerService {
-    fun create(namespaceId: NamespaceId, req: ApiTriggerCreateReq): ApiTriggerCreateSubmitted
+    fun create(flowId: FlowId, req: ApiTriggerCreateReq): ApiTriggerCreateSubmitted
     fun list(query: TriggerQuery): List<ApiTriggerList.Trigger>
     fun get(triggerId: TriggerId): ApiTrigger
 
@@ -181,14 +181,14 @@ interface ApiTriggerService {
         var afterId: FuncId = FuncId(SnowflakeId(Long.MAX_VALUE)),
         var limit: Limit = Limit(25),
         var funcIds: List<FuncId> = listOf(),
-        var namespaceIds: List<NamespaceId> = listOf(),
+        var flowIds: List<FlowId> = listOf(),
         var groupIds: List<GroupId> = listOf()
     ) {
         fun setRequestParameters(req: HttpRequest) {
             req.parameter("after_id", afterId)
             req.parameter("limit", limit)
             if (funcIds.isNotEmpty()) req.parameter("func_ids", funcIds)
-            if (namespaceIds.isNotEmpty()) req.parameter("namespace_ids", namespaceIds)
+            if (flowIds.isNotEmpty()) req.parameter("flow_ids", flowIds)
             if (groupIds.isNotEmpty()) req.parameter("group_ids", groupIds)
         }
     }
@@ -198,9 +198,9 @@ interface ApiTriggerService {
 internal class ApiTriggerServiceImpl(
     private val template: HttpTemplate
 ) : ApiTriggerService {
-    override fun create(namespaceId: NamespaceId, req: ApiTriggerCreateReq): ApiTriggerCreateSubmitted =
-        template.post("/v1/namespaces/{namespaceId}/triggers")
-            .path("namespaceId", namespaceId)
+    override fun create(flowId: FlowId, req: ApiTriggerCreateReq): ApiTriggerCreateSubmitted =
+        template.post("/v1/flows/{flowId}/triggers")
+            .path("flowId", flowId)
             .body(req)
             .execute()
             .fold(ApiTriggerCreateSubmitted::class)

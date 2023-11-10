@@ -24,7 +24,7 @@ data class ApiHookCreateSubmitted(
     override val status: ReqStatus,
     val hookId: HookId,
     val groupId: GroupId,
-    val namespaceId: NamespaceId
+    val flowId: FlowId
 ) : ApiSubmitted
 
 
@@ -47,13 +47,13 @@ data class ApiHookList(
     @Serializable
     data class Hook(
         val id: HookId,
-        val namespace: Namespace,
+        val flow: Flow,
         val name: HookName
     ) {
         @Serializable
-        data class Namespace(
-            val id: NamespaceId,
-            val name: NamespaceName
+        data class Flow(
+            val id: FlowId,
+            val name: FlowName
         )
     }
 }
@@ -62,13 +62,13 @@ data class ApiHookList(
 @Serializable
 data class ApiHook(
     val id: HookId,
-    val namespace: Namespace,
+    val flow: Flow,
     val name: HookName,
 ) {
     @Serializable
-    data class Namespace(
-        val id: NamespaceId,
-        val name: NamespaceName
+    data class Flow(
+        val id: FlowId,
+        val name: FlowName
     )
 
     @Serializable
@@ -80,7 +80,7 @@ data class ApiHook(
 }
 
 interface ApiHookService {
-    fun create(namespaceId: NamespaceId, createHookReq: ApiHookCreateReq): ApiHookCreateSubmitted
+    fun create(flowId: FlowId, createHookReq: ApiHookCreateReq): ApiHookCreateSubmitted
     fun list(query: HookQuery): List<ApiHookList.Hook>
     fun get(hookId: HookId): ApiHook
 
@@ -88,14 +88,14 @@ interface ApiHookService {
         var afterId: HookId = HookId(SnowflakeId(Long.MAX_VALUE)),
         var limit: Limit = Limit(25),
         var hookIds: List<HookId> = listOf(),
-        var namespaceIds: List<NamespaceId> = listOf(),
+        var flowIds: List<FlowId> = listOf(),
         var groupIds: List<GroupId> = listOf()
     ) {
         fun setRequestParameters(req: HttpRequest) {
             req.parameter("after_id", afterId)
             req.parameter("limit", limit)
             if (hookIds.isNotEmpty()) req.parameter("hook_ids", hookIds)
-            if (namespaceIds.isNotEmpty()) req.parameter("namespace_ids", namespaceIds)
+            if (flowIds.isNotEmpty()) req.parameter("flow_ids", flowIds)
             if (groupIds.isNotEmpty()) req.parameter("group_ids", groupIds)
         }
     }
@@ -105,9 +105,9 @@ internal class ApiHookServiceImpl(
     private val template: HttpTemplate
 ) : ApiHookService {
 
-    override fun create(namespaceId: NamespaceId, createHookReq: ApiHookCreateReq) =
-        template.post("/v1/namespaces/{namespaceId}/hooks")
-            .path("namespaceId", namespaceId)
+    override fun create(flowId: FlowId, createHookReq: ApiHookCreateReq) =
+        template.post("/v1/flows/{flowId}/hooks")
+            .path("flowId", flowId)
             .body(createHookReq)
             .execute(ApiHookCreateSubmitted::class)
 

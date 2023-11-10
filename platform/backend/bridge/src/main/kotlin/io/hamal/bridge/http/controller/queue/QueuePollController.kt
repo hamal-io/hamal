@@ -39,7 +39,7 @@ internal class QueuePollController(
 
                     UnitOfWork(
                         id = exec.id,
-                        namespaceId = exec.namespaceId,
+                        flowId = exec.flowId,
                         groupId = exec.groupId,
                         correlation = exec.correlation,
                         inputs = exec.inputs,

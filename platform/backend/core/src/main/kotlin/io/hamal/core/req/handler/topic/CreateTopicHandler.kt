@@ -17,7 +17,7 @@ class CreateTopicHandler(
             TopicToCreate(
                 id = req.topicId,
                 name = req.name,
-                namespaceId = req.namespaceId,
+                flowId = req.flowId,
                 groupId = req.groupId
             )
         )

@@ -3,7 +3,7 @@ package io.hamal.repository.sqlite.log
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.FlowId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.sqlite.Connection
@@ -42,9 +42,9 @@ class SqliteBrokerTopicsRepository(
             id              INTEGER PRIMARY KEY,
             name            TEXT NOT NULL ,
             group_id        INTEGER NOT NULL,
-            namespace_id    INTEGER NOT NULL,
+            flow_id    INTEGER NOT NULL,
             instant         DATETIME NOT NULL,
-            UNIQUE(namespace_id, name)
+            UNIQUE(flow_id, name)
         );
         """
             )
@@ -53,11 +53,11 @@ class SqliteBrokerTopicsRepository(
 
     override fun create(cmdId: CmdId, toCreate: TopicToCreate): Topic {
         try {
-            return connection.execute<Topic>("INSERT INTO topics(id, name,namespace_id, group_id, instant) VALUES (:id, :name,:namespaceId, :groupId, :now) RETURNING id, name, namespace_id, group_id") {
+            return connection.execute<Topic>("INSERT INTO topics(id, name,flow_id, group_id, instant) VALUES (:id, :name,:flowId, :groupId, :now) RETURNING id, name, flow_id, group_id") {
                 query {
                     set("id", toCreate.id)
                     set("name", toCreate.name)
-                    set("namespaceId", toCreate.namespaceId)
+                    set("flowId", toCreate.flowId)
                     set("groupId", toCreate.groupId)
                     set("now", TimeUtils.now())
                 }
@@ -65,38 +65,38 @@ class SqliteBrokerTopicsRepository(
                     Topic(
                         id = rs.getDomainId("id", ::TopicId),
                         name = TopicName(rs.getString("name")),
-                        namespaceId = rs.getDomainId("namespace_id", ::NamespaceId),
+                        flowId = rs.getDomainId("flow_id", ::FlowId),
                         groupId = rs.getDomainId("group_id", ::GroupId)
                     )
                 }
             }!!
         } catch (t: Throwable) {
-            if (t.message!!.contains("(UNIQUE constraint failed: topics.namespace_id, topics.name)")) {
+            if (t.message!!.contains("(UNIQUE constraint failed: topics.flow_id, topics.name)")) {
                 throw IllegalArgumentException("Topic already exists")
             }
             throw t
         }
     }
 
-    override fun find(namespaceId: NamespaceId, name: TopicName): Topic? =
+    override fun find(flowId: FlowId, name: TopicName): Topic? =
         topicMapping[name]
-            ?: connection.executeQueryOne("SELECT id, name, namespace_id, group_id FROM topics WHERE name = :name AND namespace_id = :namespaceId") {
+            ?: connection.executeQueryOne("SELECT id, name, flow_id, group_id FROM topics WHERE name = :name AND flow_id = :flowId") {
                 query {
                     set("name", name.value)
-                    set("namespaceId", namespaceId.value)
+                    set("flowId", flowId.value)
                 }
                 map { rs ->
                     Topic(
                         id = rs.getDomainId("id", ::TopicId),
                         name = TopicName(rs.getString("name")),
-                        namespaceId = rs.getDomainId("namespace_id", ::NamespaceId),
+                        flowId = rs.getDomainId("flow_id", ::FlowId),
                         groupId = rs.getDomainId("group_id", ::GroupId)
                     )
                 }
             }?.also { topicMapping[it.name] = it }
 
     override fun find(id: TopicId): Topic? = topicMapping.values.find { it.id == id }
-        ?: connection.executeQueryOne("SELECT id, name, namespace_id, group_id FROM topics WHERE id = :id") {
+        ?: connection.executeQueryOne("SELECT id, name, flow_id, group_id FROM topics WHERE id = :id") {
             query {
                 set("id", id)
             }
@@ -104,7 +104,7 @@ class SqliteBrokerTopicsRepository(
                 Topic(
                     id = rs.getDomainId("id", ::TopicId),
                     name = TopicName(rs.getString("name")),
-                    namespaceId = rs.getDomainId("namespace_id", ::NamespaceId),
+                    flowId = rs.getDomainId("flow_id", ::FlowId),
                     groupId = rs.getDomainId("group_id", ::GroupId)
                 )
             }
@@ -114,14 +114,14 @@ class SqliteBrokerTopicsRepository(
         return connection.executeQuery<Topic>(
             """
                 SELECT
-                    id, name, namespace_id, group_id
+                    id, name, flow_id, group_id
                 FROM 
                     topics
                 WHERE
                     id < :afterId
                     ${query.names()}
                     ${query.groupIds()}
-                    ${query.namespaceIds()}
+                    ${query.flowIds()}
                 ORDER BY id DESC
                 LIMIT :limit
             """.trimIndent()
@@ -134,7 +134,7 @@ class SqliteBrokerTopicsRepository(
                 Topic(
                     id = rs.getDomainId("id", ::TopicId),
                     name = TopicName(rs.getString("name")),
-                    namespaceId = rs.getDomainId("namespace_id", ::NamespaceId),
+                    flowId = rs.getDomainId("flow_id", ::FlowId),
                     groupId = rs.getDomainId("group_id", ::GroupId)
                 )
             }
@@ -152,7 +152,7 @@ class SqliteBrokerTopicsRepository(
                 id < :afterId
                 ${query.names()}
                 ${query.groupIds()}
-                ${query.namespaceIds()}
+                ${query.flowIds()}
         """.trimIndent()
         ) {
             query {
@@ -191,11 +191,11 @@ class SqliteBrokerTopicsRepository(
         }
     }
 
-    private fun TopicQuery.namespaceIds(): String {
-        return if (namespaceIds.isEmpty()) {
+    private fun TopicQuery.flowIds(): String {
+        return if (flowIds.isEmpty()) {
             ""
         } else {
-            "AND namespace_id IN (${namespaceIds.joinToString(",") { "${it.value.value}" }})"
+            "AND flow_id IN (${flowIds.joinToString(",") { "${it.value.value}" }})"
         }
     }
 }

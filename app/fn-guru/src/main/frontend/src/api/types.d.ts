@@ -23,16 +23,16 @@ interface VersionedCode {
     value: string;
 }
 
-export interface ApiNamespaceList {
-    namespaces: Array<ApiNamespaceSimple>;
+export interface ApiFlowList {
+    flows: Array<ApiFlowsimple>;
 }
 
-export interface ApiNamespaceSimple {
+export interface ApiFlowsimple {
     id: string;
     name: string;
 }
 
-export interface ApiNamespace {
+export interface ApiFlow {
     id: string;
     name: string;
 }
