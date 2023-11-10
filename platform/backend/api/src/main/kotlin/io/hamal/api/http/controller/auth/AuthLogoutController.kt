@@ -16,7 +16,7 @@ internal class AuthLogoutController(
 ) {
     @PostMapping("/v1/logout")
     fun logout(@RequestBody req: ApiLogoutReq): ResponseEntity<ApiSubmitted> {
-        //if (logout) return ResponseEntity<Forbidden> 403
+        //TODO-72 if (logout) return ResponseEntity<Forbidden> 403
         return logout(req, AuthLogoutSubmitted::accepted)
     }
 }
