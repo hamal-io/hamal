@@ -44,6 +44,23 @@ class MemoryAuthRepository : AuthRepository {
         }
     }
 
+    override fun revokeAuth(cmd: UpdateCmd) {
+        return lock.write {
+            when (cmd) {
+                is UpdateTokenAuthCmd -> {
+                    projection[cmd.accountId]?.removeAll { it is TokenAuth }
+                        .let { throw RuntimeException("That should not happen") }
+                    //projection[cmd.accountId]?.removeAll { it.id == cmd.authId }
+                }
+
+                is UpdatePasswdAuthCmd -> {
+                    projection[cmd.accountId]?.removeAll { it is PasswordAuth }
+                    //projection[cmd.accountId]?.removeAll { it.id == cmd.authId }
+                }
+            }
+        }
+    }
+
     override fun list(query: AuthQuery): List<Auth> {
         return projection.filter { query.accountIds.isEmpty() || it.key in query.accountIds }
             .flatMap { it.value }

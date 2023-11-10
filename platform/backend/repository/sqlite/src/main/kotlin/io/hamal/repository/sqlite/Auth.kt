@@ -85,6 +85,10 @@ class SqliteAuthRepository(
         }
     }
 
+    override fun revokeAuth(cmd: UpdateCmd) {
+        TODO("Not yet implemented")
+    }
+
     override fun list(query: AuthQuery): List<Auth> {
         return connection.executeQuery<Auth>(
             """

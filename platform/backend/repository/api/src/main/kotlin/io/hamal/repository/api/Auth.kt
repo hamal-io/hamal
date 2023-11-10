@@ -33,6 +33,7 @@ interface AuthCmdRepository : CmdRepository {
     fun create(cmd: CreateCmd): Auth
 
     //fun update(cmd: UpdateCmd): Auth
+    fun revokeAuth(cmd: UpdateCmd)
 
     sealed interface CreateCmd {
         val id: CmdId
@@ -44,14 +45,21 @@ interface AuthCmdRepository : CmdRepository {
         val id: CmdId
         val authId: AuthId
         val accountId: AccountId
-        val token: AuthToken?
     }
 
-    data class UpdateAuthCmd(
+    data class UpdateTokenAuthCmd(
         override val id: CmdId,
         override val authId: AuthId,
         override val accountId: AccountId,
-        override val token: AuthToken?
+        val token: AuthToken?,
+        val expiresAt: AuthTokenExpiresAt?
+    ) : UpdateCmd
+
+    data class UpdatePasswdAuthCmd(
+        override val id: CmdId,
+        override val authId: AuthId,
+        override val accountId: AccountId,
+        val hash: PasswordHash?
     ) : UpdateCmd
 
     data class CreatePasswordAuthCmd(

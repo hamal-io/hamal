@@ -8,6 +8,6 @@ class LogoutHandler(
     private val authRepository: AuthRepository
 ) : ReqHandler<AuthLogoutSubmitted>(AuthLogoutSubmitted::class) {
     override fun invoke(req: AuthLogoutSubmitted) {
-        TODO()
+
     }
 }
