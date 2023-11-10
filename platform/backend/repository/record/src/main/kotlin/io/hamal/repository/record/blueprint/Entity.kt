@@ -49,6 +49,7 @@ data class BlueprintEntity(
         return Blueprint(
             cmdId = cmdId,
             id = id,
+            updatedAt = recordedAt.toUpdatedAt(),
             groupId = groupId,
             creatorId = creatorId,
             name = name!!,

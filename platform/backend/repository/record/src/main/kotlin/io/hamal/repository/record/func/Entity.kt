@@ -73,6 +73,7 @@ data class FuncEntity(
         return Func(
             cmdId = cmdId,
             id = id,
+            updatedAt = recordedAt.toUpdatedAt(),
             groupId = groupId,
             flowId = flowId!!,
             name = name!!,

@@ -1,6 +1,5 @@
 package io.hamal.lib.common.domain
 
-import io.hamal.lib.common.snowflake.Elapsed
 import io.hamal.lib.common.util.TimeUtils
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
@@ -15,35 +14,28 @@ import java.time.Instant
 interface DomainObject<ID : DomainId> {
     val id: ID
     val partition get() = id.partition()
-    val createdAt get() = DomainCreatedAt.init(id.elapsed())
+    val createdAt get() = CreatedAt(Instant.ofEpochMilli(id.value.elapsed().value + 1698451200000L))
+    val updatedAt: UpdatedAt
 }
 
-interface DomainObjectWithUpdate {
-    val updatedAt: DomainUpdatedAt
-}
-
-
-//Start Circular Dependence Fix
-@Serializable(with = DomainCreatedAt.Serializer::class)
-class DomainCreatedAt(override val value: Instant) : DomainAt() {
-
+@Serializable(with = CreatedAt.Serializer::class)
+class CreatedAt(override val value: Instant) : DomainAt() {
     companion object {
         @JvmStatic
-        fun init(el: Elapsed): DomainCreatedAt = DomainCreatedAt(Instant.ofEpochMilli(el.value + offset))
-        private val offset = 1698451200000
+        fun now(): CreatedAt = CreatedAt(TimeUtils.now())
     }
 
-    internal object Serializer : DomainAtSerializer<DomainCreatedAt>(::DomainCreatedAt)
+    internal object Serializer : DomainAtSerializer<CreatedAt>(::CreatedAt)
 }
 
-@Serializable(with = DomainUpdatedAt.Serializer::class)
-class DomainUpdatedAt(override val value: Instant) : DomainAt() {
+@Serializable(with = UpdatedAt.Serializer::class)
+class UpdatedAt(override val value: Instant) : DomainAt() {
     companion object {
         @JvmStatic
-        fun now(): DomainUpdatedAt = DomainUpdatedAt(TimeUtils.now())
+        fun now(): UpdatedAt = UpdatedAt(TimeUtils.now())
     }
 
-    internal object Serializer : DomainAtSerializer<DomainUpdatedAt>(::DomainUpdatedAt)
+    internal object Serializer : DomainAtSerializer<UpdatedAt>(::UpdatedAt)
 }
 
 abstract class DomainAt : ValueObject.ComparableImpl<Instant>() {

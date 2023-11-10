@@ -102,6 +102,7 @@ data class ExecEntity(
         val plannedExec = PlannedExec(
             cmdId = cmdId,
             id = id,
+            updatedAt = recordedAt.toUpdatedAt(),
             flowId = flowId,
             groupId = groupId,
             correlation = correlation,
@@ -112,18 +113,18 @@ data class ExecEntity(
 
         if (status == ExecStatus.Planned) return plannedExec
 
-        val scheduledExec = ScheduledExec(cmdId, id, plannedExec, ScheduledAt.now())
+        val scheduledExec = ScheduledExec(cmdId, id, recordedAt.toUpdatedAt(), plannedExec, ScheduledAt.now())
         if (status == ExecStatus.Scheduled) return scheduledExec
 
-        val queuedExec = QueuedExec(cmdId, id, scheduledExec, QueuedAt.now())
+        val queuedExec = QueuedExec(cmdId, id, recordedAt.toUpdatedAt(), scheduledExec, QueuedAt.now())
         if (status == ExecStatus.Queued) return queuedExec
 
-        val startedExec = StartedExec(cmdId, id, queuedExec)
+        val startedExec = StartedExec(cmdId, id, recordedAt.toUpdatedAt(), queuedExec)
         if (status == ExecStatus.Started) return startedExec
 
         return when (status) {
-            ExecStatus.Completed -> CompletedExec(cmdId, id, startedExec, CompletedAt.now(), result!!, state!!)
-            ExecStatus.Failed -> FailedExec(cmdId, id, startedExec, FailedAt.now(), result!!)
+            ExecStatus.Completed -> CompletedExec(cmdId, id, recordedAt .toUpdatedAt(),startedExec, CompletedAt.now(), result!!, state!!)
+            ExecStatus.Failed -> FailedExec(cmdId, id, recordedAt.toUpdatedAt(), startedExec, FailedAt.now(), result!!)
             else -> TODO()
         }
     }

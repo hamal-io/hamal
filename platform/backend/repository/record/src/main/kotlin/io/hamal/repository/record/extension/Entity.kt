@@ -46,6 +46,7 @@ data class ExtensionEntity(
         return Extension(
             cmdId = cmdId,
             id = id,
+            updatedAt = recordedAt.toUpdatedAt(),
             groupId = groupId,
             name = name!!,
             code = code!!

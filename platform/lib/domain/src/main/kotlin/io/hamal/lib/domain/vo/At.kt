@@ -1,5 +1,6 @@
 package io.hamal.lib.domain.vo
 
+import io.hamal.lib.common.domain.UpdatedAt
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.vo.base.DomainAt
 import io.hamal.lib.domain.vo.base.DomainAtSerializer
@@ -65,5 +66,7 @@ class RecordedAt(override val value: Instant) : DomainAt() {
     }
 
     internal object Serializer : DomainAtSerializer<RecordedAt>(::RecordedAt)
+
+    fun toUpdatedAt() = UpdatedAt(value)
 }
 

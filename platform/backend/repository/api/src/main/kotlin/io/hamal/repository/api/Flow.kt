@@ -2,6 +2,7 @@ package io.hamal.repository.api
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.DomainObject
+import io.hamal.lib.common.domain.UpdatedAt
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.FlowId
@@ -62,6 +63,7 @@ interface FlowQueryRepository {
 data class Flow(
     val cmdId: CmdId,
     override val id: FlowId,
+    override val updatedAt: UpdatedAt,
     val groupId: GroupId,
     val name: FlowName,
     val inputs: FlowInputs

@@ -38,6 +38,7 @@ data class GroupEntity(
         return Group(
             cmdId = cmdId,
             id = id,
+            updatedAt = recordedAt.toUpdatedAt(),
             name = name!!,
             creatorId = creatorId!!
         )

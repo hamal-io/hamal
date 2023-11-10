@@ -48,6 +48,7 @@ data class AccountEntity(
         return Account(
             cmdId = cmdId,
             id = id,
+            updatedAt = recordedAt.toUpdatedAt(),
             type = type!!,
             name = name!!,
             email = email,

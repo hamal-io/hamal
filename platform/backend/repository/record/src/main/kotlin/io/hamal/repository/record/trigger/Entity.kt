@@ -93,6 +93,7 @@ data class TriggerEntity(
             FixedRate -> FixedRateTrigger(
                 cmdId = cmdId,
                 id = id,
+                updatedAt = recordedAt.toUpdatedAt(),
                 groupId = groupId!!,
                 funcId = funcId!!,
                 flowId = flowId!!,
@@ -105,6 +106,7 @@ data class TriggerEntity(
             Event -> EventTrigger(
                 cmdId = cmdId,
                 id = id,
+                updatedAt = recordedAt.toUpdatedAt(),
                 groupId = groupId!!,
                 funcId = funcId!!,
                 flowId = flowId!!,
@@ -117,6 +119,7 @@ data class TriggerEntity(
             Hook -> HookTrigger(
                 cmdId = cmdId,
                 id = id,
+                updatedAt = recordedAt.toUpdatedAt(),
                 groupId = groupId!!,
                 funcId = funcId!!,
                 flowId = flowId!!,

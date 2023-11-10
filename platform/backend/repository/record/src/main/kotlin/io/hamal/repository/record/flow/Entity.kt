@@ -45,6 +45,7 @@ data class FlowEntity(
         return Flow(
             cmdId = cmdId,
             id = id,
+            updatedAt = recordedAt.toUpdatedAt(),
             groupId = groupId,
             name = name!!,
             inputs = inputs!!,
