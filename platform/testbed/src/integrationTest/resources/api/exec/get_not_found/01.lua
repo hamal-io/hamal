@@ -1,6 +1,6 @@
 sys = require('sys')
 
-err, exec = sys.exec.get('AB12')
+err, exec = sys.execs.get('AB12')
 
 assert(err ~= nil)
 assert(err.message == 'Exec not found')

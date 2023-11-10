@@ -3,7 +3,7 @@ package io.hamal.api.http.controller.func
 import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName
-import io.hamal.lib.domain.vo.NamespaceName
+import io.hamal.lib.domain.vo.FlowName
 import io.hamal.lib.sdk.api.ApiFuncCreateReq
 import io.hamal.lib.sdk.api.ApiFuncList
 import org.hamcrest.MatcherAssert.assertThat
@@ -88,7 +88,7 @@ internal class FuncListControllerTest : FuncBaseControllerTest() {
         assertThat(listResponse.funcs, hasSize(1))
 
         val func = listResponse.funcs.first()
-        assertThat(func.namespace.name, equalTo(NamespaceName("hamal")))
+        assertThat(func.flow.name, equalTo(FlowName("hamal")))
         assertThat(func.name, equalTo(FuncName("func-48")))
     }
 }

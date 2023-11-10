@@ -43,13 +43,13 @@
 //            )
 //        )
 //
-//        testNamespace = namespaceRepository.create(
-//            NamespaceCmdRepository.CreateCmd(
+//        testFlow = flowRepository.create(
+//            FlowCmdRepository.CreateCmd(
 //                id = CmdId(5),
-//                namespaceId = NamespaceId.root,
+//                flowId = FlowId.root,
 //                groupId = testGroup.id,
-//                name = NamespaceName("root-namespace"),
-//                inputs = NamespaceInputs()
+//                name = FlowName("root-flow"),
+//                inputs = FlowInputs()
 //            )
 //        )
 //    }

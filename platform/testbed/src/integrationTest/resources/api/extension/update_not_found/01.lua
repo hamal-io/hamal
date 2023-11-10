@@ -1,6 +1,6 @@
 sys = require('sys')
 --
-err, ext = sys.extension.update({
+err, ext = sys.extensions.update({
         id = '12345',
         name = 'update-ext',
         code = [[1 +1]]

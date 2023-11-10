@@ -27,7 +27,7 @@ data class ApiFuncCreateSubmitted(
     override val status: ReqStatus,
     val funcId: FuncId,
     val groupId: GroupId,
-    val namespaceId: NamespaceId
+    val flowId: FlowId
 ) : ApiSubmitted
 
 @Serializable
@@ -75,13 +75,13 @@ data class ApiFuncList(
     @Serializable
     data class Func(
         val id: FuncId,
-        val namespace: Namespace,
+        val flow: Flow,
         val name: FuncName
     ) {
         @Serializable
-        data class Namespace(
-            val id: NamespaceId,
-            val name: NamespaceName
+        data class Flow(
+            val id: FlowId,
+            val name: FlowName
         )
     }
 }
@@ -90,15 +90,15 @@ data class ApiFuncList(
 @Serializable
 data class ApiFunc(
     val id: FuncId,
-    val namespace: Namespace,
+    val flow: Flow,
     val name: FuncName,
     val inputs: FuncInputs,
     val code: Code
 ) {
     @Serializable
-    data class Namespace(
-        val id: NamespaceId,
-        val name: NamespaceName
+    data class Flow(
+        val id: FlowId,
+        val name: FlowName
     )
 
     @Serializable
@@ -116,7 +116,7 @@ data class ApiFunc(
 }
 
 interface ApiFuncService {
-    fun create(namespaceId: NamespaceId, createFuncReq: ApiFuncCreateReq): ApiFuncCreateSubmitted
+    fun create(flowId: FlowId, createFuncReq: ApiFuncCreateReq): ApiFuncCreateSubmitted
     fun deploy(funcId: FuncId, version: CodeVersion): ApiFuncDeploySubmitted
     fun deployLatest(funcId: FuncId): ApiFuncDeployLatestSubmitted
     fun list(query: FuncQuery): List<ApiFuncList.Func>
@@ -128,14 +128,14 @@ interface ApiFuncService {
         var afterId: FuncId = FuncId(SnowflakeId(Long.MAX_VALUE)),
         var limit: Limit = Limit(25),
         var funcIds: List<FuncId> = listOf(),
-        var namespaceIds: List<NamespaceId> = listOf(),
+        var flowIds: List<FlowId> = listOf(),
         var groupIds: List<GroupId> = listOf()
     ) {
         fun setRequestParameters(req: HttpRequest) {
             req.parameter("after_id", afterId)
             req.parameter("limit", limit)
             if (funcIds.isNotEmpty()) req.parameter("func_ids", funcIds)
-            if (namespaceIds.isNotEmpty()) req.parameter("namespace_ids", namespaceIds)
+            if (flowIds.isNotEmpty()) req.parameter("flow_ids", flowIds)
             if (groupIds.isNotEmpty()) req.parameter("group_ids", groupIds)
         }
     }
@@ -145,9 +145,9 @@ internal class ApiFuncServiceImpl(
     private val template: HttpTemplate
 ) : ApiFuncService {
 
-    override fun create(namespaceId: NamespaceId, createFuncReq: ApiFuncCreateReq) =
-        template.post("/v1/namespaces/{namespaceId}/funcs")
-            .path("namespaceId", namespaceId)
+    override fun create(flowId: FlowId, createFuncReq: ApiFuncCreateReq) =
+        template.post("/v1/flows/{flowId}/funcs")
+            .path("flowId", flowId)
             .body(createFuncReq)
             .execute()
             .fold(ApiFuncCreateSubmitted::class)

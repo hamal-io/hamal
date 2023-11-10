@@ -5,65 +5,65 @@ import io.hamal.lib.common.domain.DomainObject
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.domain.vo.NamespaceId
-import io.hamal.lib.domain.vo.NamespaceInputs
-import io.hamal.lib.domain.vo.NamespaceName
+import io.hamal.lib.domain.vo.FlowId
+import io.hamal.lib.domain.vo.FlowInputs
+import io.hamal.lib.domain.vo.FlowName
 import kotlinx.serialization.Serializable
 
-interface NamespaceRepository : NamespaceCmdRepository, NamespaceQueryRepository
+interface FlowRepository : FlowCmdRepository, FlowQueryRepository
 
-interface NamespaceCmdRepository : CmdRepository {
-    fun create(cmd: CreateCmd): Namespace
+interface FlowCmdRepository : CmdRepository {
+    fun create(cmd: CreateCmd): Flow
 
-    fun update(namespaceId: NamespaceId, cmd: UpdateCmd): Namespace
+    fun update(flowId: FlowId, cmd: UpdateCmd): Flow
 
     data class CreateCmd(
         val id: CmdId,
-        val namespaceId: NamespaceId,
+        val flowId: FlowId,
         val groupId: GroupId,
-        val name: NamespaceName,
-        val inputs: NamespaceInputs
+        val name: FlowName,
+        val inputs: FlowInputs
     )
 
     data class UpdateCmd(
         val id: CmdId,
-        val name: NamespaceName? = null,
-        val inputs: NamespaceInputs? = null
+        val name: FlowName? = null,
+        val inputs: FlowInputs? = null
     )
 }
 
-interface NamespaceQueryRepository {
-    fun get(namespaceId: NamespaceId) = find(namespaceId) ?: throw NoSuchElementException("Namespace not found")
-    fun get(namespaceName: NamespaceName) = find(namespaceName) ?: throw NoSuchElementException("Namespace not found")
+interface FlowQueryRepository {
+    fun get(flowId: FlowId) = find(flowId) ?: throw NoSuchElementException("Flow not found")
+    fun get(flowName: FlowName) = find(flowName) ?: throw NoSuchElementException("Flow not found")
 
-    fun find(namespaceId: NamespaceId): Namespace?
-    fun find(namespaceName: NamespaceName): Namespace?
+    fun find(flowId: FlowId): Flow?
+    fun find(flowName: FlowName): Flow?
 
-    fun list(query: NamespaceQuery): List<Namespace>
-    fun list(namespaceIds: List<NamespaceId>) = list(
-        NamespaceQuery(
+    fun list(query: FlowQuery): List<Flow>
+    fun list(flowIds: List<FlowId>) = list(
+        FlowQuery(
             limit = Limit.all,
             groupIds = listOf(),
-            namespaceIds = namespaceIds,
+            flowIds = flowIds,
         )
     )
 
-    fun count(query: NamespaceQuery): ULong
+    fun count(query: FlowQuery): ULong
 
-    data class NamespaceQuery(
-        var afterId: NamespaceId = NamespaceId(SnowflakeId(Long.MAX_VALUE)),
+    data class FlowQuery(
+        var afterId: FlowId = FlowId(SnowflakeId(Long.MAX_VALUE)),
         var limit: Limit = Limit(1),
-        var namespaceIds: List<NamespaceId> = listOf(),
+        var flowIds: List<FlowId> = listOf(),
         var groupIds: List<GroupId> = listOf()
     )
 }
 
 @Serializable
-data class Namespace(
+data class Flow(
     val cmdId: CmdId,
-    override val id: NamespaceId,
+    override val id: FlowId,
     val groupId: GroupId,
-    val name: NamespaceName,
-    val inputs: NamespaceInputs
-) : DomainObject<NamespaceId>
+    val name: FlowName,
+    val inputs: FlowInputs
+) : DomainObject<FlowId>
 

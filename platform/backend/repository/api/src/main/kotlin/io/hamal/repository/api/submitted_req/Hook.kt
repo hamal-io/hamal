@@ -10,7 +10,7 @@ data class HookCreateSubmitted(
     override val id: ReqId,
     override var status: ReqStatus,
     val hookId: HookId,
-    val namespaceId: NamespaceId,
+    val flowId: FlowId,
     val groupId: GroupId,
     val name: HookName,
 ) : Submitted

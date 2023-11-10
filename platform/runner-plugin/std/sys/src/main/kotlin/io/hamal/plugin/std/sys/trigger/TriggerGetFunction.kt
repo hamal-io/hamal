@@ -31,10 +31,10 @@ class TriggerGetFunction(
                                     "id" to StringType(trigger.id.value.value.toString(16)),
                                     "type" to StringType("FixedRate"),
                                     "name" to StringType(trigger.name.value),
-                                    "namespace" to MapType(
+                                    "flow" to MapType(
                                         mutableMapOf(
-                                            "id" to StringType(trigger.namespace.id.value.value.toString(16)),
-                                            "name" to StringType(trigger.namespace.name.value)
+                                            "id" to StringType(trigger.flow.id.value.value.toString(16)),
+                                            "name" to StringType(trigger.flow.name.value)
                                         )
                                     ),
                                     "func" to MapType(
@@ -53,10 +53,10 @@ class TriggerGetFunction(
                                     "id" to StringType(trigger.id.value.value.toString(16)),
                                     "type" to StringType("Event"),
                                     "name" to StringType(trigger.name.value),
-                                    "namespace" to MapType(
+                                    "flow" to MapType(
                                         mutableMapOf(
-                                            "id" to StringType(trigger.namespace.id.value.value.toString(16)),
-                                            "name" to StringType(trigger.namespace.name.value)
+                                            "id" to StringType(trigger.flow.id.value.value.toString(16)),
+                                            "name" to StringType(trigger.flow.name.value)
                                         )
                                     ),
                                     "func" to MapType(
@@ -81,10 +81,10 @@ class TriggerGetFunction(
                                     "id" to StringType(trigger.id.value.value.toString(16)),
                                     "type" to StringType("Hook"),
                                     "name" to StringType(trigger.name.value),
-                                    "namespace" to MapType(
+                                    "flow" to MapType(
                                         mutableMapOf(
-                                            "id" to StringType(trigger.namespace.id.value.value.toString(16)),
-                                            "name" to StringType(trigger.namespace.name.value)
+                                            "id" to StringType(trigger.flow.id.value.value.toString(16)),
+                                            "name" to StringType(trigger.flow.name.value)
                                         )
                                     ),
                                     "func" to MapType(

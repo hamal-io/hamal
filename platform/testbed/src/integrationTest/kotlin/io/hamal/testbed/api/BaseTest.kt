@@ -96,7 +96,7 @@ class ClearController {
         funcRepository.clear()
         groupRepository.clear()
         hookRepository.clear()
-        namespaceRepository.clear()
+        flowRepository.clear()
         blueprintRepository.clear()
         triggerRepository.clear()
 
@@ -130,13 +130,13 @@ class ClearController {
             )
         )
 
-        testNamespace = namespaceRepository.create(
-            NamespaceCmdRepository.CreateCmd(
+        testFlow = flowRepository.create(
+            FlowCmdRepository.CreateCmd(
                 id = CmdId(5),
-                namespaceId = NamespaceId.root,
+                flowId = FlowId.root,
                 groupId = testGroup.id,
-                name = NamespaceName("root-namespace"),
-                inputs = NamespaceInputs()
+                name = FlowName("root-flow"),
+                inputs = FlowInputs()
             )
         )
     }
@@ -172,7 +172,7 @@ class ClearController {
     lateinit var hookRepository: HookRepository
 
     @Autowired
-    lateinit var namespaceRepository: NamespaceRepository
+    lateinit var flowRepository: FlowRepository
 
     @Autowired
     lateinit var reqRepository: ReqRepository
@@ -186,7 +186,7 @@ class ClearController {
     private lateinit var testAccount: Account
     private lateinit var testAccountAuthToken: AuthToken
     private lateinit var testGroup: Group
-    private lateinit var testNamespace: Namespace
+    private lateinit var testFlow: Flow
 }
 
 
@@ -203,7 +203,7 @@ class TestConfig {
     private lateinit var testAccount: Account
     private lateinit var testAccountAuthToken: AuthToken
     private lateinit var testGroup: Group
-    private lateinit var testNamespace: Namespace
+    private lateinit var testFlow: Flow
 
     @PostConstruct
     fun setup() {
@@ -239,13 +239,13 @@ class TestConfig {
                 )
             )
 
-            testNamespace = namespaceRepository.create(
-                NamespaceCmdRepository.CreateCmd(
+            testFlow = flowRepository.create(
+                FlowCmdRepository.CreateCmd(
                     id = CmdId(5),
-                    namespaceId = NamespaceId.root,
+                    flowId = FlowId.root,
                     groupId = testGroup.id,
-                    name = NamespaceName("root-namespace"),
-                    inputs = NamespaceInputs()
+                    name = FlowName("root-flow"),
+                    inputs = FlowInputs()
                 )
             )
         } catch (t: Throwable) {
@@ -262,7 +262,7 @@ class TestConfig {
     lateinit var groupRepository: GroupRepository
 
     @Autowired
-    lateinit var namespaceRepository: NamespaceRepository
+    lateinit var flowRepository: FlowRepository
 }
 
 
@@ -311,7 +311,7 @@ abstract class BaseApiTest {
             val sdk = ApiSdkImpl(apiHttpTemplate)
 
             val execReq = sdk.adhoc.invoke(
-                NamespaceId(1),
+                FlowId(1),
                 ApiAdhocInvokeReq(InvocationInputs(), CodeValue(String(Files.readAllBytes(file))))
             )
 

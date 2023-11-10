@@ -4,10 +4,10 @@ import io.hamal.core.adapter.HookListPort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.HookId
-import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.FlowId
 import io.hamal.lib.sdk.api.ApiHookList
 import io.hamal.lib.sdk.api.ApiHookList.Hook
-import io.hamal.lib.sdk.api.ApiHookList.Hook.Namespace
+import io.hamal.lib.sdk.api.ApiHookList.Hook.Flow
 import io.hamal.repository.api.HookQueryRepository.HookQuery
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -22,26 +22,26 @@ internal class HookListController(private val listHook: HookListPort) {
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: HookId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit,
         @RequestParam(required = false, name = "group_ids", defaultValue = "") groupIds: List<GroupId>,
-        @RequestParam(required = false, name = "namespace_ids", defaultValue = "") namespaceIds: List<NamespaceId>
+        @RequestParam(required = false, name = "flow_ids", defaultValue = "") flowIds: List<FlowId>
     ): ResponseEntity<ApiHookList> {
         return listHook(
             HookQuery(
                 afterId = afterId,
                 limit = limit,
                 groupIds = groupIds,
-                namespaceIds = namespaceIds
+                flowIds = flowIds
             ),
             // assembler
-        ) { hooks, namespaces ->
+        ) { hooks, flows ->
 
             ResponseEntity.ok(ApiHookList(
                 hooks.map { hook ->
-                    val namespace = namespaces[hook.namespaceId]!!
+                    val flow = flows[hook.flowId]!!
                     Hook(
                         id = hook.id,
-                        namespace = Namespace(
-                            id = namespace.id,
-                            name = namespace.name
+                        flow = Flow(
+                            id = flow.id,
+                            name = flow.name
                         ),
                         name = hook.name
                     )

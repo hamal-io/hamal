@@ -1,13 +1,13 @@
 sys = require('sys')
 
-local create_req = fail_on_error(sys.func.create({
+local create_req = fail_on_error(sys.funcs.create({
     name = 'test-func',
     inputs = {},
     code = [[4 + 2]]
 }))
 sys.await_completed(create_req)
 
-update_req = fail_on_error(sys.func.update({
+update_req = fail_on_error(sys.funcs.update({
     id = create_req.func_id,
     name = 'func-2',
     inputs = { },
@@ -15,7 +15,7 @@ update_req = fail_on_error(sys.func.update({
 }))
 sys.await_completed(update_req)
 
-err, res = sys.func.deploy({
+err, res = sys.funcs.deploy({
     id = create_req.func_id,
     version = 24
 })

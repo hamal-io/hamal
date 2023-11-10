@@ -1,7 +1,7 @@
 package io.hamal.repository.fixture
 
 import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.FlowId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.repository.api.*
@@ -17,7 +17,7 @@ import io.hamal.repository.sqlite.record.extension.SqliteExtensionRepository
 import io.hamal.repository.sqlite.record.func.SqliteFuncRepository
 import io.hamal.repository.sqlite.record.group.SqliteGroupRepository
 import io.hamal.repository.sqlite.record.hook.SqliteHookRepository
-import io.hamal.repository.sqlite.record.namespace.SqliteNamespaceRepository
+import io.hamal.repository.sqlite.record.flow.SqliteFlowRepository
 import io.hamal.repository.sqlite.record.trigger.SqliteTriggerRepository
 import java.nio.file.Files.createTempDirectory
 import kotlin.reflect.KClass
@@ -74,8 +74,8 @@ object SqliteFixture : BaseTestFixture {
             SqliteHookRepository.Config(createTempDirectory("sqlite_hook_test"))
         ) as REPO
 
-        NamespaceRepository::class -> SqliteNamespaceRepository(
-            SqliteNamespaceRepository.Config(createTempDirectory("sqlite_namespace_test"))
+        FlowRepository::class -> SqliteFlowRepository(
+            SqliteFlowRepository.Config(createTempDirectory("sqlite_flow_test"))
         ) as REPO
 
         SegmentRepository::class -> SqliteSegmentRepository(
@@ -91,7 +91,7 @@ object SqliteFixture : BaseTestFixture {
         ) as REPO
 
         TopicRepository::class -> SqliteTopicRepository(
-            Topic(TopicId(23), NamespaceId(23), GroupId(1), TopicName("test-topic")),
+            Topic(TopicId(23), FlowId(23), GroupId(1), TopicName("test-topic")),
             createTempDirectory("sqlite_topic_test")
         ) as REPO
 

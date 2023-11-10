@@ -21,10 +21,10 @@ class FuncGetFunction(
                     MapType(
                         mutableMapOf(
                             "id" to StringType(func.id.value.value.toString(16)),
-                            "namespace" to MapType(
+                            "flow" to MapType(
                                 mutableMapOf(
-                                    "id" to StringType(func.namespace.id.value.value.toString(16)),
-                                    "name" to StringType(func.namespace.name.value)
+                                    "id" to StringType(func.flow.id.value.value.toString(16)),
+                                    "name" to StringType(func.flow.name.value)
                                 )
                             ),
                             "name" to StringType(func.name.value),

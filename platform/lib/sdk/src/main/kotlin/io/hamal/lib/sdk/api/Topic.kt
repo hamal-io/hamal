@@ -25,7 +25,7 @@ data class ApiTopicCreateSubmitted(
     override val status: ReqStatus,
     val topicId: TopicId,
     val groupId: GroupId,
-    val namespaceId: NamespaceId
+    val flowId: FlowId
 ) : ApiSubmitted
 
 
@@ -75,24 +75,24 @@ data class ApiTopicList(
 
 interface ApiTopicService {
     fun append(topicId: TopicId, payload: TopicEntryPayload): ApiTopicAppendSubmitted
-    fun create(namespaceId: NamespaceId, req: ApiTopicCreateReq): ApiTopicCreateSubmitted
+    fun create(flowId: FlowId, req: ApiTopicCreateReq): ApiTopicCreateSubmitted
     fun list(query: TopicQuery): List<ApiTopicList.Topic>
     fun entries(topicId: TopicId): List<ApiTopicEntryList.Entry>
     fun get(topicId: TopicId): ApiTopic
-    fun resolve(namespaceId: NamespaceId, topicName: TopicName): TopicId
+    fun resolve(flowId: FlowId, topicName: TopicName): TopicId
 
     data class TopicQuery(
         var afterId: TopicId = TopicId(SnowflakeId(Long.MAX_VALUE)),
         var limit: Limit = Limit(25),
         var topicIds: List<TopicId> = listOf(),
-        var namespaceIds: List<NamespaceId> = listOf(),
+        var flowIds: List<FlowId> = listOf(),
         var groupIds: List<GroupId> = listOf()
     ) {
         fun setRequestParameters(req: HttpRequest) {
             req.parameter("after_id", afterId)
             req.parameter("limit", limit)
             if (topicIds.isNotEmpty()) req.parameter("topic_ids", topicIds)
-            if (namespaceIds.isNotEmpty()) req.parameter("namespace_ids", namespaceIds)
+            if (flowIds.isNotEmpty()) req.parameter("flow_ids", flowIds)
             if (groupIds.isNotEmpty()) req.parameter("group_ids", groupIds)
         }
     }
@@ -109,9 +109,9 @@ internal class ApiTopicServiceImpl(
             .execute()
             .fold(ApiTopicAppendSubmitted::class)
 
-    override fun create(namespaceId: NamespaceId, req: ApiTopicCreateReq): ApiTopicCreateSubmitted =
-        template.post("/v1/namespaces/{namespaceId}/topics")
-            .path("namespaceId", namespaceId)
+    override fun create(flowId: FlowId, req: ApiTopicCreateReq): ApiTopicCreateSubmitted =
+        template.post("/v1/flows/{flowId}/topics")
+            .path("flowId", flowId)
             .body(req)
             .execute()
             .fold(ApiTopicCreateSubmitted::class)
@@ -137,10 +137,10 @@ internal class ApiTopicServiceImpl(
             .execute()
             .fold(ApiTopic::class)
 
-    override fun resolve(namespaceId: NamespaceId, topicName: TopicName): TopicId {
+    override fun resolve(flowId: FlowId, topicName: TopicName): TopicId {
         return topicNameCache(topicName) {
             template.get("/v1/topics")
-                .parameter("namespace_ids", namespaceId)
+                .parameter("flow_ids", flowId)
                 .parameter("names", topicName.value)
                 .execute()
                 .fold(ApiTopicList::class)

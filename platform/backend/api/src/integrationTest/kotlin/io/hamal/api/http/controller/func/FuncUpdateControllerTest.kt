@@ -10,7 +10,11 @@ import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.api.*
-import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
+import io.hamal.lib.sdk.api.ApiError
+import io.hamal.lib.sdk.api.ApiFuncCreateReq
+import io.hamal.lib.sdk.api.ApiFuncUpdateReq
+import io.hamal.lib.sdk.api.ApiFuncUpdateSubmitted
+import io.hamal.repository.api.FlowCmdRepository.CreateCmd
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -38,19 +42,19 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
 
     @Test
     fun `Updates func`() {
-        val createdNamespace = namespaceCmdRepository.create(
+        val createdFlow = flowCmdRepository.create(
             CreateCmd(
                 id = CmdId(2),
-                namespaceId = NamespaceId(2),
+                flowId = FlowId(2),
                 groupId = testGroup.id,
-                name = NamespaceName("createdNamespace"),
-                inputs = NamespaceInputs()
+                name = FlowName("createdFlow"),
+                inputs = FlowInputs()
             )
         )
 
         val func = awaitCompleted(
             createFunc(
-                namespaceId = createdNamespace.id,
+                flowId = createdFlow.id,
                 req = ApiFuncCreateReq(
                     name = FuncName("createdName"),
                     inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("createdInputs")))),
@@ -80,7 +84,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
 
         with(getFunc(funcId)) {
             assertThat(id, equalTo(funcId))
-            assertThat(namespace.name, equalTo(NamespaceName("createdNamespace")))
+            assertThat(flow.name, equalTo(FlowName("createdFlow")))
             assertThat(name, equalTo(FuncName("updatedName")))
             assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("updatedInputs"))))))
 
@@ -94,7 +98,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
 
     @Test
     fun `Updates func without updating values`() {
-        val funcId = createFuncInNamespace(
+        val funcId = createFuncInFlow(
             FuncName("createdName"),
             CodeValue("createdCode")
         ).funcId
@@ -118,7 +122,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
 
         with(getFunc(funcId)) {
             assertThat(id, equalTo(funcId))
-            assertThat(namespace.name, equalTo(NamespaceName("createdNamespace")))
+            assertThat(flow.name, equalTo(FlowName("createdFlow")))
             assertThat(name, equalTo(FuncName("createdName")))
             assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("createdInputs"))))))
 
@@ -132,7 +136,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
 
     @Test
     fun `Does not increment code version if req code is null`() {
-        val funcId = createFuncInNamespace(
+        val funcId = createFuncInFlow(
             FuncName("createdName"),
             CodeValue("createdCode")
         ).funcId
@@ -152,7 +156,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
 
         with(getFunc(funcId)) {
             assertThat(name, equalTo(FuncName("updatedName")))
-            assertThat(namespace.name, equalTo(NamespaceName("createdNamespace")))
+            assertThat(flow.name, equalTo(FlowName("createdFlow")))
 
             assertThat(code.current.version, equalTo(CodeVersion(1)))
             assertThat(code.deployed.version, equalTo(CodeVersion(1)))
@@ -164,7 +168,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
 
     @Test
     fun `Does not increment code version if req code is equal to existing`() {
-        val funcId = createFuncInNamespace(
+        val funcId = createFuncInFlow(
             FuncName("func-1"),
             CodeValue("createdCode")
         ).funcId
@@ -187,7 +191,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
         awaitCompleted(submittedReq)
 
         with(getFunc(funcId)) {
-            assertThat(namespace.name, equalTo(NamespaceName("createdNamespace")))
+            assertThat(flow.name, equalTo(FlowName("createdFlow")))
             assertThat(name, equalTo(FuncName("updatedName")))
             assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("updatedInputs"))))))
 
@@ -199,20 +203,20 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
         }
     }
 
-    private fun createFuncInNamespace(name: FuncName, code: CodeValue): ApiFuncCreateSubmitted {
-        val createdNamespace = namespaceCmdRepository.create(
+    private fun createFuncInFlow(name: FuncName, code: CodeValue): ApiFuncCreateSubmitted {
+        val createdFlow = flowCmdRepository.create(
             CreateCmd(
                 id = CmdGen(),
-                namespaceId = NamespaceId(2),
+                flowId = FlowId(2),
                 groupId = testGroup.id,
-                name = NamespaceName("createdNamespace"),
-                inputs = NamespaceInputs()
+                name = FlowName("createdFlow"),
+                inputs = FlowInputs()
             )
         )
 
         return awaitCompleted(
             createFunc(
-                namespaceId = createdNamespace.id,
+                flowId = createdFlow.id,
                 req = ApiFuncCreateReq(
                     name = name,
                     inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("createdInputs")))),

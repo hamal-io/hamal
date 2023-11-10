@@ -37,7 +37,7 @@ class CodeRunnerImpl(
                 RunnerInvocationEvents(unitOfWork.events)
             )
             runnerContext[ExecId::class] = unitOfWork.id
-            runnerContext[NamespaceId::class] = unitOfWork.namespaceId
+            runnerContext[FlowId::class] = unitOfWork.flowId
             runnerContext[GroupId::class] = unitOfWork.groupId
             runnerContext[ExecToken::class] = unitOfWork.token
             runnerContext[ApiHost::class] = unitOfWork.apiHost

@@ -6,7 +6,7 @@ import io.hamal.lib.domain.vo.*
 
 data class UnitOfWork(
     val id: ExecId,
-    val namespaceId: NamespaceId,
+    val flowId: FlowId,
     val groupId: GroupId,
     val inputs: ExecInputs,
     val state: State,

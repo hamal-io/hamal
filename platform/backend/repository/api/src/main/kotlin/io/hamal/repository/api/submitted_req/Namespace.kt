@@ -6,22 +6,22 @@ import kotlinx.serialization.Serializable
 
 
 @Serializable
-data class NamespaceCreateSubmitted(
+data class FlowCreateSubmitted(
     override val id: ReqId,
     override var status: ReqStatus,
     val groupId: GroupId,
-    val namespaceId: NamespaceId,
-    val name: NamespaceName,
-    val inputs: NamespaceInputs
+    val flowId: FlowId,
+    val name: FlowName,
+    val inputs: FlowInputs
 ) : Submitted
 
 
 @Serializable
-data class NamespaceUpdateSubmitted(
+data class FlowUpdateSubmitted(
     override val id: ReqId,
     override var status: ReqStatus,
     val groupId: GroupId,
-    val namespaceId: NamespaceId,
-    val name: NamespaceName,
-    val inputs: NamespaceInputs
+    val flowId: FlowId,
+    val name: FlowName,
+    val inputs: FlowInputs
 ) : Submitted

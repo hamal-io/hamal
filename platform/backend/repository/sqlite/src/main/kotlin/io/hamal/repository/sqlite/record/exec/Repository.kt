@@ -20,7 +20,7 @@ internal object CreateExec : CreateDomainObject<ExecId, ExecRecord, Exec> {
         var result = ExecEntity(
             cmdId = firstRecord.cmdId,
             id = firstRecord.entityId,
-            namespaceId = firstRecord.namespaceId,
+            flowId = firstRecord.flowId,
             groupId = firstRecord.groupId,
             sequence = firstRecord.sequence()
         )
@@ -62,7 +62,7 @@ class SqliteExecRepository(
                     ExecPlannedRecord(
                         cmdId = cmdId,
                         entityId = execId,
-                        namespaceId = cmd.namespaceId,
+                        flowId = cmd.flowId,
                         groupId = cmd.groupId,
                         correlation = cmd.correlation,
                         inputs = cmd.inputs,

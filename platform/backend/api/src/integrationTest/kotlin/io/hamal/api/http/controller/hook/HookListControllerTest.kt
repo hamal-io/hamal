@@ -1,7 +1,7 @@
 package io.hamal.api.http.controller.hook
 
 import io.hamal.lib.domain.vo.HookName
-import io.hamal.lib.domain.vo.NamespaceName
+import io.hamal.lib.domain.vo.FlowName
 import io.hamal.lib.sdk.api.ApiHookCreateReq
 import io.hamal.lib.sdk.api.ApiHookList
 import org.hamcrest.MatcherAssert.assertThat
@@ -68,7 +68,7 @@ internal class HookListControllerTest : HookBaseControllerTest() {
         assertThat(listResponse.hooks, hasSize(1))
 
         val hook = listResponse.hooks.first()
-        assertThat(hook.namespace.name, equalTo(NamespaceName("hamal")))
+        assertThat(hook.flow.name, equalTo(FlowName("hamal")))
         assertThat(hook.name, equalTo(HookName("hook-48")))
     }
 }

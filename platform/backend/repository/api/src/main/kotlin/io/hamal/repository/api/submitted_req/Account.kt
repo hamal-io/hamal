@@ -13,7 +13,7 @@ data class AccountCreateSubmitted(
     val type: AccountType,
     val passwordAuthId: AuthId,
     val tokenAuthId: AuthId,
-    val namespaceId: NamespaceId,
+    val flowId: FlowId,
     val name: AccountName,
     val email: AccountEmail?,
     val salt: PasswordSalt,

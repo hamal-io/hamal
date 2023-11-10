@@ -2,10 +2,10 @@ package io.hamal.core.adapter
 
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
-import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.FlowId
 import io.hamal.lib.domain.vo.ReqId
 import io.hamal.lib.domain.vo.TopicId
-import io.hamal.repository.api.NamespaceQueryRepository
+import io.hamal.repository.api.FlowQueryRepository
 import io.hamal.repository.api.ReqCmdRepository
 import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.repository.api.log.BrokerRepository.TopicEntryQuery
@@ -27,7 +27,7 @@ interface TopicAppendEntryPort {
 
 interface TopicCreatePort {
     operator fun <T : Any> invoke(
-        namespaceId: NamespaceId,
+        flowId: FlowId,
         req: CreateTopicReq,
         responseHandler: (TopicCreateSubmitted) -> T
     ): T
@@ -62,7 +62,7 @@ interface TopicPort : TopicAppendEntryPort, TopicCreatePort, TopicGetPort, Topic
 class TopicAdapter(
     private val eventBrokerRepository: BrokerRepository,
     private val generateDomainId: GenerateDomainId,
-    private val namespaceQueryRepository: NamespaceQueryRepository,
+    private val flowQueryRepository: FlowQueryRepository,
     private val reqCmdRepository: ReqCmdRepository
 ) : TopicPort {
 
@@ -81,17 +81,17 @@ class TopicAdapter(
     }
 
     override fun <T : Any> invoke(
-        namespaceId: NamespaceId,
+        flowId: FlowId,
         req: CreateTopicReq,
         responseHandler: (TopicCreateSubmitted) -> T
     ): T {
-        val namespace = namespaceQueryRepository.get(namespaceId)
+        val flow = flowQueryRepository.get(flowId)
         return TopicCreateSubmitted(
             id = generateDomainId(::ReqId),
             status = Submitted,
-            groupId = namespace.groupId,
+            groupId = flow.groupId,
             topicId = generateDomainId(::TopicId),
-            namespaceId = namespace.id,
+            flowId = flow.id,
             name = req.name
         ).also(reqCmdRepository::queue).let(responseHandler)
     }

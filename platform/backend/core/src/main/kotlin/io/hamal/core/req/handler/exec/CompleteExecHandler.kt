@@ -24,7 +24,7 @@ class CompleteExecHandler(
     private val stateCmdRepository: StateCmdRepository,
     private val eventBrokerRepository: BrokerRepository,
     private val generateDomainId: GenerateDomainId,
-    private val namespaceQueryRepository: NamespaceQueryRepository
+    private val flowQueryRepository: FlowQueryRepository
 ) : ReqHandler<ExecCompleteSubmitted>(ExecCompleteSubmitted::class) {
 
     override fun invoke(req: ExecCompleteSubmitted) {
@@ -33,12 +33,12 @@ class CompleteExecHandler(
         val exec = execQueryRepository.get(req.execId)
         require(exec is StartedExec) { "Exec not in status Started" }
 
-        val namespaceId = exec.namespaceId
+        val flowId = exec.flowId
 
         completeExec(req)
             .also { emitCompletionEvent(cmdId, it) }
             .also { setState(cmdId, it) }
-            .also { appendEvents(cmdId, namespaceId, req.events) }
+            .also { appendEvents(cmdId, flowId, req.events) }
     }
 
     private fun completeExec(req: ExecCompleteSubmitted) =
@@ -67,17 +67,17 @@ class CompleteExecHandler(
         }
     }
 
-    private fun appendEvents(cmdId: CmdId, namespaceId: NamespaceId, events: List<EventToSubmit>) {
+    private fun appendEvents(cmdId: CmdId, flowId: FlowId, events: List<EventToSubmit>) {
         events.forEach { evt ->
             //FIXME create topic if not exists
             val topicName = evt.topicName
-            val namespace = namespaceQueryRepository.get(namespaceId)
-            val topic = eventBrokerRepository.findTopic(namespaceId, topicName) ?: eventBrokerRepository.create(
+            val flow = flowQueryRepository.get(flowId)
+            val topic = eventBrokerRepository.findTopic(flowId, topicName) ?: eventBrokerRepository.create(
                 cmdId, TopicToCreate(
                     id = generateDomainId(::TopicId),
                     name = topicName,
-                    namespaceId = namespaceId,
-                    groupId = namespace.groupId
+                    flowId = flowId,
+                    groupId = flow.groupId
                 )
             )
             appender.append(cmdId, topic, TopicEntryPayload(evt.payload.value))

@@ -12,7 +12,7 @@ data class Func(
     override val id: FuncId,
     val groupId: GroupId,
     val cmdId: CmdId,
-    val namespaceId: NamespaceId,
+    val flowId: FlowId,
     val name: FuncName,
     val inputs: FuncInputs,
     val code: FuncCode,
@@ -44,7 +44,7 @@ interface FuncCmdRepository : CmdRepository {
         val id: CmdId,
         val funcId: FuncId,
         val groupId: GroupId,
-        val namespaceId: NamespaceId,
+        val flowId: FlowId,
         val name: FuncName,
         val inputs: FuncInputs,
         val codeId: CodeId,
@@ -82,7 +82,7 @@ interface FuncQueryRepository {
         var afterId: FuncId = FuncId(SnowflakeId(Long.MAX_VALUE)),
         var limit: Limit = Limit(1),
         var funcIds: List<FuncId> = listOf(),
-        var namespaceIds: List<NamespaceId> = listOf(),
+        var flowIds: List<FlowId> = listOf(),
         var groupIds: List<GroupId> = listOf()
     )
 }

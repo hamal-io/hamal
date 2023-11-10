@@ -23,7 +23,7 @@ class TriggerCreateFunction(
     override fun invoke(ctx: FunctionContext, arg1: MapType): Pair<ErrorType?, MapType?> {
         return try {
             val res = sdk.trigger.create(
-                arg1.findString("namespace_id")?.let { NamespaceId(SnowflakeId(it)) } ?: ctx[NamespaceId::class],
+                arg1.findString("flow_id")?.let { FlowId(SnowflakeId(it)) } ?: ctx[FlowId::class],
                 ApiTriggerCreateReq(
                     type = TriggerType.valueOf(arg1.getString("type")),
                     funcId = FuncId(SnowflakeId(arg1.getString("func_id"))),
@@ -53,7 +53,7 @@ class TriggerCreateFunction(
                     "status" to StringType(res.status.name),
                     "trigger_id" to StringType(res.triggerId.value.value.toString(16)),
                     "group_id" to StringType(res.groupId.value.value.toString(16)),
-                    "namespace_id" to StringType(res.namespaceId.value.value.toString(16))
+                    "flow_id" to StringType(res.flowId.value.value.toString(16))
                 )
             )
 

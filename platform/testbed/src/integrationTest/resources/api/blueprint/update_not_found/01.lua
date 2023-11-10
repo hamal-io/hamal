@@ -1,6 +1,6 @@
 sys = require('sys')
 --
-err, update_req = sys.blueprint.update({
+err, update_req = sys.blueprints.update({
     id = '123456',
     name = 'update-blueprint',
     inputs = {},

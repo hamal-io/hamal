@@ -1,15 +1,15 @@
-package io.hamal.core.req.handler.namespace
+package io.hamal.core.req.handler.flow
 
 import io.hamal.core.req.handler.BaseReqHandlerTest
 import io.hamal.lib.domain.vo.ReqId
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
-import io.hamal.lib.domain.vo.NamespaceId
-import io.hamal.lib.domain.vo.NamespaceInputs
-import io.hamal.lib.domain.vo.NamespaceName
+import io.hamal.lib.domain.vo.FlowId
+import io.hamal.lib.domain.vo.FlowInputs
+import io.hamal.lib.domain.vo.FlowName
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
-import io.hamal.repository.api.submitted_req.NamespaceCreateSubmitted
+import io.hamal.repository.api.FlowQueryRepository.FlowQuery
+import io.hamal.repository.api.submitted_req.FlowCreateSubmitted
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
@@ -17,61 +17,61 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
-internal class CreateNamespaceHandlerTest : BaseReqHandlerTest() {
+internal class CreateFlowHandlerTest : BaseReqHandlerTest() {
 
     @BeforeEach
     fun beforeEach() {
-        namespaceCmdRepository.clear()
+        flowCmdRepository.clear()
     }
 
     @Test
-    fun `Creates namespace`() {
-        testInstance(submitCreateNamespaceReq)
+    fun `Creates flow`() {
+        testInstance(submitCreateFlowReq)
 
-        verifySingleNamespaceExists()
+        verifySingleFlowExists()
     }
 
     @Test
-    fun `Namespace with id already exists`() {
-        testInstance(submitCreateNamespaceReq)
+    fun `Flow with id already exists`() {
+        testInstance(submitCreateFlowReq)
 
         testInstance(
-            NamespaceCreateSubmitted(
+            FlowCreateSubmitted(
                 id = ReqId(1),
                 status = Submitted,
-                namespaceId = NamespaceId(12345),
+                flowId = FlowId(12345),
                 groupId = testGroup.id,
-                name = NamespaceName("another-namespace"),
-                inputs = NamespaceInputs()
+                name = FlowName("another-flow"),
+                inputs = FlowInputs()
             )
         )
 
-        verifySingleNamespaceExists()
+        verifySingleFlowExists()
     }
 
 
-    private fun verifySingleNamespaceExists() {
-        namespaceQueryRepository.list(NamespaceQuery(groupIds = listOf())).also { namespaces ->
-            assertThat(namespaces, hasSize(1))
-            with(namespaces.first()) {
-                assertThat(id, equalTo(NamespaceId(12345)))
-                assertThat(name, equalTo(NamespaceName("awesome-namespace")))
-                assertThat(inputs, equalTo(NamespaceInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
+    private fun verifySingleFlowExists() {
+        flowQueryRepository.list(FlowQuery(groupIds = listOf())).also { flows ->
+            assertThat(flows, hasSize(1))
+            with(flows.first()) {
+                assertThat(id, equalTo(FlowId(12345)))
+                assertThat(name, equalTo(FlowName("awesome-flow")))
+                assertThat(inputs, equalTo(FlowInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
             }
         }
     }
 
     @Autowired
-    private lateinit var testInstance: CreateNamespaceHandler
+    private lateinit var testInstance: CreateFlowHandler
 
-    private val submitCreateNamespaceReq by lazy {
-        NamespaceCreateSubmitted(
+    private val submitCreateFlowReq by lazy {
+        FlowCreateSubmitted(
             id = ReqId(1),
             status = Submitted,
-            namespaceId = NamespaceId(12345),
+            flowId = FlowId(12345),
             groupId = testGroup.id,
-            name = NamespaceName("awesome-namespace"),
-            inputs = NamespaceInputs(
+            name = FlowName("awesome-flow"),
+            inputs = FlowInputs(
                 MapType(mutableMapOf("hamal" to StringType("rocks")))
             )
         )

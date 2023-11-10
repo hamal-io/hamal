@@ -5,7 +5,7 @@ import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.HookId
 import io.hamal.lib.domain.vo.HookName
-import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.FlowId
 import io.hamal.repository.api.HookCmdRepository.CreateCmd
 import io.hamal.repository.api.HookCmdRepository.UpdateCmd
 import io.hamal.repository.api.HookQueryRepository.HookQuery
@@ -30,7 +30,7 @@ internal class HookRepositoryTest : AbstractUnitTest() {
                     id = CmdId(1),
                     hookId = HookId(123),
                     groupId = GroupId(1),
-                    namespaceId = NamespaceId(234),
+                    flowId = FlowId(234),
                     name = HookName("SomeHook")
                 )
             )
@@ -38,7 +38,7 @@ internal class HookRepositoryTest : AbstractUnitTest() {
             with(result) {
                 assertThat(id, equalTo(HookId(123)))
                 assertThat(groupId, equalTo(GroupId(1)))
-                assertThat(namespaceId, equalTo(NamespaceId(234)))
+                assertThat(flowId, equalTo(FlowId(234)))
                 assertThat(name, equalTo(HookName("SomeHook")))
             }
 
@@ -46,12 +46,12 @@ internal class HookRepositoryTest : AbstractUnitTest() {
         }
 
         @TestFactory
-        fun `Tries to create but same name already exists in namespace`() =
+        fun `Tries to create but same name already exists in flow`() =
             runWith(HookRepository::class) {
 
                 createHook(
                     hookId = HookId(1),
-                    namespaceId = NamespaceId(2),
+                    flowId = FlowId(2),
                     groupId = GroupId(3),
                     name = HookName("first-hook-name")
                 )
@@ -62,7 +62,7 @@ internal class HookRepositoryTest : AbstractUnitTest() {
                             id = CmdId(2),
                             hookId = HookId(4),
                             groupId = GroupId(3),
-                            namespaceId = NamespaceId(2),
+                            flowId = FlowId(2),
                             name = HookName("first-hook-name")
                         )
                     )
@@ -70,19 +70,19 @@ internal class HookRepositoryTest : AbstractUnitTest() {
 
                 assertThat(
                     exception.message,
-                    equalTo("HookName(first-hook-name) already exists in namespace NamespaceId(2)")
+                    equalTo("HookName(first-hook-name) already exists in flow FlowId(2)")
                 )
 
                 verifyCount(1)
             }
 
         @TestFactory
-        fun `Creates with same name but different namespace`() =
+        fun `Creates with same name but different flow`() =
             runWith(HookRepository::class) {
 
                 createHook(
                     hookId = HookId(1),
-                    namespaceId = NamespaceId(2),
+                    flowId = FlowId(2),
                     groupId = GroupId(3),
                     name = HookName("hook-name")
                 )
@@ -92,7 +92,7 @@ internal class HookRepositoryTest : AbstractUnitTest() {
                         id = CmdId(2),
                         hookId = HookId(4),
                         groupId = GroupId(3),
-                        namespaceId = NamespaceId(22),
+                        flowId = FlowId(22),
                         name = HookName("hook-name")
                     )
                 )
@@ -100,7 +100,7 @@ internal class HookRepositoryTest : AbstractUnitTest() {
                 with(result) {
                     assertThat(id, equalTo(HookId(4)))
                     assertThat(groupId, equalTo(GroupId(3)))
-                    assertThat(namespaceId, equalTo(NamespaceId(22)))
+                    assertThat(flowId, equalTo(FlowId(22)))
                     assertThat(name, equalTo(HookName("hook-name")))
                 }
 
@@ -114,7 +114,7 @@ internal class HookRepositoryTest : AbstractUnitTest() {
                 createHook(
                     cmdId = CmdId(23456),
                     hookId = HookId(5),
-                    namespaceId = NamespaceId(2),
+                    flowId = FlowId(2),
                     groupId = GroupId(3),
                     name = HookName("first-hook-name")
                 )
@@ -125,7 +125,7 @@ internal class HookRepositoryTest : AbstractUnitTest() {
                         id = CmdId(23456),
                         hookId = HookId(5),
                         groupId = GroupId(333),
-                        namespaceId = NamespaceId(2222),
+                        flowId = FlowId(2222),
                         name = HookName("second-hook-name")
                     )
                 )
@@ -133,7 +133,7 @@ internal class HookRepositoryTest : AbstractUnitTest() {
                 with(result) {
                     assertThat(id, equalTo(HookId(5)))
                     assertThat(groupId, equalTo(GroupId(3)))
-                    assertThat(namespaceId, equalTo(NamespaceId(2)))
+                    assertThat(flowId, equalTo(FlowId(2)))
                     assertThat(name, equalTo(HookName("first-hook-name")))
                 }
 
@@ -148,7 +148,7 @@ internal class HookRepositoryTest : AbstractUnitTest() {
         fun `Updates hook`() = runWith(HookRepository::class) {
             createHook(
                 hookId = HookId(1),
-                namespaceId = NamespaceId(2),
+                flowId = FlowId(2),
                 groupId = GroupId(3),
                 name = HookName("hook-name")
             )
@@ -163,7 +163,7 @@ internal class HookRepositoryTest : AbstractUnitTest() {
             with(result) {
                 assertThat(id, equalTo(HookId(1)))
                 assertThat(groupId, equalTo(GroupId(3)))
-                assertThat(namespaceId, equalTo(NamespaceId(2)))
+                assertThat(flowId, equalTo(FlowId(2)))
                 assertThat(name, equalTo(HookName("Updated")))
             }
 
@@ -174,7 +174,7 @@ internal class HookRepositoryTest : AbstractUnitTest() {
         fun `Updates hook without updating it`() = runWith(HookRepository::class) {
             createHook(
                 hookId = HookId(1),
-                namespaceId = NamespaceId(2),
+                flowId = FlowId(2),
                 groupId = GroupId(3),
                 name = HookName("hook-name")
             )
@@ -189,7 +189,7 @@ internal class HookRepositoryTest : AbstractUnitTest() {
             with(result) {
                 assertThat(id, equalTo(HookId(1)))
                 assertThat(groupId, equalTo(GroupId(3)))
-                assertThat(namespaceId, equalTo(NamespaceId(2)))
+                assertThat(flowId, equalTo(FlowId(2)))
                 assertThat(name, equalTo(HookName("hook-name")))
             }
 
@@ -197,19 +197,19 @@ internal class HookRepositoryTest : AbstractUnitTest() {
         }
 
         @TestFactory
-        fun `Tries to update but same name already exists in namespace`() =
+        fun `Tries to update but same name already exists in flow`() =
             runWith(HookRepository::class) {
 
                 createHook(
                     hookId = HookId(1),
-                    namespaceId = NamespaceId(2),
+                    flowId = FlowId(2),
                     groupId = GroupId(3),
                     name = HookName("already-exists")
                 )
 
                 createHook(
                     hookId = HookId(2),
-                    namespaceId = NamespaceId(2),
+                    flowId = FlowId(2),
                     groupId = GroupId(3),
                     name = HookName("to-update")
                 )
@@ -225,12 +225,12 @@ internal class HookRepositoryTest : AbstractUnitTest() {
 
                 assertThat(
                     exception.message,
-                    equalTo("HookName(already-exists) already exists in namespace NamespaceId(2)")
+                    equalTo("HookName(already-exists) already exists in flow FlowId(2)")
                 )
 
                 with(get(HookId(2))) {
                     assertThat(id, equalTo(HookId(2)))
-                    assertThat(namespaceId, equalTo(NamespaceId(2)))
+                    assertThat(flowId, equalTo(FlowId(2)))
                     assertThat(groupId, equalTo(GroupId(3)))
                     assertThat(name, equalTo(HookName("to-update")))
                 }
@@ -254,14 +254,14 @@ internal class HookRepositoryTest : AbstractUnitTest() {
 
             createHook(
                 hookId = HookId(1),
-                namespaceId = NamespaceId(2),
+                flowId = FlowId(2),
                 groupId = GroupId(3),
                 name = HookName("already-exists")
             )
 
             createHook(
                 hookId = HookId(2),
-                namespaceId = NamespaceId(2),
+                flowId = FlowId(2),
                 groupId = GroupId(3),
                 name = HookName("to-update")
             )
@@ -278,7 +278,7 @@ internal class HookRepositoryTest : AbstractUnitTest() {
         fun `Get hook by id`() = runWith(HookRepository::class) {
             createHook(
                 hookId = HookId(1),
-                namespaceId = NamespaceId(2),
+                flowId = FlowId(2),
                 groupId = GroupId(3),
                 name = HookName("SomeHook")
             )
@@ -286,7 +286,7 @@ internal class HookRepositoryTest : AbstractUnitTest() {
             with(get(HookId(1))) {
                 assertThat(id, equalTo(HookId(1)))
                 assertThat(groupId, equalTo(GroupId(3)))
-                assertThat(namespaceId, equalTo(NamespaceId(2)))
+                assertThat(flowId, equalTo(FlowId(2)))
                 assertThat(name, equalTo(HookName("SomeHook")))
             }
         }
@@ -295,7 +295,7 @@ internal class HookRepositoryTest : AbstractUnitTest() {
         fun `Tries to get hook by id but does not exist`() = runWith(HookRepository::class) {
             createHook(
                 hookId = HookId(1),
-                namespaceId = NamespaceId(2),
+                flowId = FlowId(2),
                 groupId = GroupId(3),
                 name = HookName("SomeHook")
             )
@@ -313,7 +313,7 @@ internal class HookRepositoryTest : AbstractUnitTest() {
         fun `Find hook by id`() = runWith(HookRepository::class) {
             createHook(
                 hookId = HookId(1),
-                namespaceId = NamespaceId(2),
+                flowId = FlowId(2),
                 groupId = GroupId(3),
                 name = HookName("SomeHook")
             )
@@ -321,7 +321,7 @@ internal class HookRepositoryTest : AbstractUnitTest() {
             with(find(HookId(1))!!) {
                 assertThat(id, equalTo(HookId(1)))
                 assertThat(groupId, equalTo(GroupId(3)))
-                assertThat(namespaceId, equalTo(NamespaceId(2)))
+                assertThat(flowId, equalTo(FlowId(2)))
                 assertThat(name, equalTo(HookName("SomeHook")))
             }
         }
@@ -330,7 +330,7 @@ internal class HookRepositoryTest : AbstractUnitTest() {
         fun `Tries to find hook by id but does not exist`() = runWith(HookRepository::class) {
             createHook(
                 hookId = HookId(1),
-                namespaceId = NamespaceId(2),
+                flowId = FlowId(2),
                 groupId = GroupId(3),
                 name = HookName("SomeHook")
             )
@@ -352,7 +352,7 @@ internal class HookRepositoryTest : AbstractUnitTest() {
 
             with(result[0]) {
                 assertThat(id, equalTo(HookId(3)))
-                assertThat(namespaceId, equalTo(NamespaceId(4)))
+                assertThat(flowId, equalTo(FlowId(4)))
                 assertThat(groupId, equalTo(GroupId(4)))
                 assertThat(name, equalTo(HookName("Hook")))
             }
@@ -373,25 +373,25 @@ internal class HookRepositoryTest : AbstractUnitTest() {
 
             with(result[0]) {
                 assertThat(id, equalTo(HookId(4)))
-                assertThat(namespaceId, equalTo(NamespaceId(10)))
+                assertThat(flowId, equalTo(FlowId(10)))
                 assertThat(groupId, equalTo(GroupId(5)))
                 assertThat(name, equalTo(HookName("Hook")))
             }
 
             with(result[1]) {
                 assertThat(id, equalTo(HookId(3)))
-                assertThat(namespaceId, equalTo(NamespaceId(4)))
+                assertThat(flowId, equalTo(FlowId(4)))
                 assertThat(groupId, equalTo(GroupId(4)))
                 assertThat(name, equalTo(HookName("Hook")))
             }
         }
 
         @TestFactory
-        fun `With namespace ids`() = runWith(HookRepository::class) {
+        fun `With flow ids`() = runWith(HookRepository::class) {
             setup()
 
             val query = HookQuery(
-                namespaceIds = listOf(NamespaceId(10), NamespaceId(23)),
+                flowIds = listOf(FlowId(10), FlowId(23)),
                 limit = Limit(10)
             )
 
@@ -401,7 +401,7 @@ internal class HookRepositoryTest : AbstractUnitTest() {
 
             with(result[0]) {
                 assertThat(id, equalTo(HookId(4)))
-                assertThat(namespaceId, equalTo(NamespaceId(10)))
+                assertThat(flowId, equalTo(FlowId(10)))
                 assertThat(groupId, equalTo(GroupId(5)))
                 assertThat(name, equalTo(HookName("Hook")))
             }
@@ -444,28 +444,28 @@ internal class HookRepositoryTest : AbstractUnitTest() {
         private fun HookRepository.setup() {
             createHook(
                 hookId = HookId(1),
-                namespaceId = NamespaceId(2),
+                flowId = FlowId(2),
                 groupId = GroupId(3),
                 name = HookName("Hook")
             )
 
             createHook(
                 hookId = HookId(2),
-                namespaceId = NamespaceId(3),
+                flowId = FlowId(3),
                 groupId = GroupId(3),
                 name = HookName("Hook")
             )
 
             createHook(
                 hookId = HookId(3),
-                namespaceId = NamespaceId(4),
+                flowId = FlowId(4),
                 groupId = GroupId(4),
                 name = HookName("Hook")
             )
 
             createHook(
                 hookId = HookId(4),
-                namespaceId = NamespaceId(10),
+                flowId = FlowId(10),
                 groupId = GroupId(5),
                 name = HookName("Hook")
             )
@@ -475,7 +475,7 @@ internal class HookRepositoryTest : AbstractUnitTest() {
 
 private fun HookRepository.createHook(
     hookId: HookId,
-    namespaceId: NamespaceId,
+    flowId: FlowId,
     name: HookName,
     groupId: GroupId,
     cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
@@ -485,7 +485,7 @@ private fun HookRepository.createHook(
             id = cmdId,
             hookId = hookId,
             groupId = groupId,
-            namespaceId = namespaceId,
+            flowId = flowId,
             name = name
         )
     )

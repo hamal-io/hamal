@@ -9,7 +9,7 @@ import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.api.ApiError
 import io.hamal.lib.sdk.api.ApiFuncCreateReq
-import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
+import io.hamal.repository.api.FlowCmdRepository.CreateCmd
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.empty
 import org.hamcrest.Matchers.equalTo
@@ -19,7 +19,7 @@ import org.junit.jupiter.api.TestFactory
 internal class FuncCreateControllerTest : FuncBaseControllerTest() {
 
     @TestFactory
-    fun `Create func for default namespace id`() {
+    fun `Create func for default flow id`() {
         val result = createFunc(
             ApiFuncCreateReq(
                 name = FuncName("test-func"),
@@ -34,8 +34,8 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
             assertThat(name, equalTo(FuncName("test-func")))
             assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
 
-            val namespace = namespaceQueryRepository.get(namespaceId)
-            assertThat(namespace.name, equalTo(NamespaceName("hamal")))
+            val flow = flowQueryRepository.get(flowId)
+            assertThat(flow.name, equalTo(FlowName("hamal")))
         }
 
         with(codeQueryRepository.get(func.code.id)) {
@@ -46,19 +46,19 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
     }
 
     @Test
-    fun `Create func with namespace id`() {
-        val namespace = namespaceCmdRepository.create(
+    fun `Create func with flow id`() {
+        val flow = flowCmdRepository.create(
             CreateCmd(
                 id = CmdId(1),
-                namespaceId = NamespaceId(2345),
+                flowId = FlowId(2345),
                 groupId = testGroup.id,
-                name = NamespaceName("hamal::name::space"),
-                inputs = NamespaceInputs()
+                name = FlowName("hamal::name::space"),
+                inputs = FlowInputs()
             )
         )
 
         val result = createFunc(
-            namespaceId = namespace.id,
+            flowId = flow.id,
             req = ApiFuncCreateReq(
                 name = FuncName("test-func"),
                 inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
@@ -73,9 +73,9 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
             assertThat(name, equalTo(FuncName("test-func")))
             assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
 
-            namespaceQueryRepository.get(namespaceId).let {
-                assertThat(it.id, equalTo(namespace.id))
-                assertThat(it.name, equalTo(NamespaceName("hamal::name::space")))
+            flowQueryRepository.get(flowId).let {
+                assertThat(it.id, equalTo(flow.id))
+                assertThat(it.name, equalTo(FlowName("hamal::name::space")))
             }
         }
 
@@ -86,9 +86,9 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
     }
 
     @Test
-    fun `Tries to create func with namespace which does not exist`() {
+    fun `Tries to create func with flow which does not exist`() {
 
-        val response = httpTemplate.post("/v1/namespaces/12345/funcs")
+        val response = httpTemplate.post("/v1/flows/12345/funcs")
             .body(
                 ApiFuncCreateReq(
                     name = FuncName("test-func"),
@@ -102,7 +102,7 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
         require(response is HttpErrorResponse) { "request was successful" }
 
         val error = response.error(ApiError::class)
-        assertThat(error.message, equalTo("Namespace not found"))
+        assertThat(error.message, equalTo("Flow not found"))
 
         assertThat(listFuncs().funcs, empty())
     }

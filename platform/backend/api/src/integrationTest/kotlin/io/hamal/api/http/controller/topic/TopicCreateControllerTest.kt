@@ -11,29 +11,29 @@ import org.junit.jupiter.api.Test
 internal class TopicCreateControllerTest : TopicBaseControllerTest() {
     @Test
     fun `Create topic`() {
-        val topicId = awaitCompleted(createTopic(TopicName("namespace::topics_one"))).topicId
+        val topicId = awaitCompleted(createTopic(TopicName("flow::topics_one"))).topicId
 
         verifyTopicCreated(topicId)
 
         with(listTopics()) {
             assertThat(topics, hasSize(1))
             val topic = topics.first()
-            assertThat(topic.name, equalTo(TopicName("namespace::topics_one")))
+            assertThat(topic.name, equalTo(TopicName("flow::topics_one")))
         }
     }
 
     @Test
     fun `Tries to create topic but name already exists`() {
-        awaitCompleted(createTopic(TopicName("namespace::topics_one")))
+        awaitCompleted(createTopic(TopicName("flow::topics_one")))
 
-        with(createTopic(TopicName("namespace::topics_one"))) {
+        with(createTopic(TopicName("flow::topics_one"))) {
             awaitFailed(id)
         }
 
         with(listTopics()) {
             assertThat(topics, hasSize(1))
             val topic = topics.first()
-            assertThat(topic.name, equalTo(TopicName("namespace::topics_one")))
+            assertThat(topic.name, equalTo(TopicName("flow::topics_one")))
         }
     }
 }
@@ -41,6 +41,6 @@ internal class TopicCreateControllerTest : TopicBaseControllerTest() {
 private fun TopicCreateControllerTest.verifyTopicCreated(topicId: TopicId) {
     with(eventBrokerRepository.findTopic(topicId)!!) {
         assertThat(id, equalTo(topicId))
-        assertThat(name, equalTo(TopicName("namespace::topics_one")))
+        assertThat(name, equalTo(TopicName("flow::topics_one")))
     }
 }

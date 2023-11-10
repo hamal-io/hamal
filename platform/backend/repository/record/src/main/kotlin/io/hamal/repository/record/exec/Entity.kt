@@ -15,7 +15,7 @@ import java.time.Instant
 data class ExecEntity(
     override val cmdId: CmdId,
     override val id: ExecId,
-    val namespaceId: NamespaceId,
+    val flowId: FlowId,
     val groupId: GroupId,
     override val sequence: RecordSequence,
 
@@ -37,7 +37,7 @@ data class ExecEntity(
             is ExecPlannedRecord -> copy(
                 cmdId = rec.cmdId,
                 id = rec.entityId,
-                namespaceId = rec.namespaceId,
+                flowId = rec.flowId,
                 groupId = rec.groupId,
                 sequence = rec.sequence(),
                 status = ExecStatus.Planned,
@@ -96,7 +96,7 @@ data class ExecEntity(
         val plannedExec = PlannedExec(
             cmdId = cmdId,
             id = id,
-            namespaceId = namespaceId,
+            flowId = flowId,
             groupId = groupId,
             correlation = correlation,
             inputs = inputs ?: ExecInputs(MapType()),
@@ -130,7 +130,7 @@ fun List<ExecRecord>.createEntity(): ExecEntity {
 
     var result = ExecEntity(
         id = firstRecord.entityId,
-        namespaceId = firstRecord.namespaceId,
+        flowId = firstRecord.flowId,
         groupId = firstRecord.groupId,
         cmdId = firstRecord.cmdId,
         sequence = firstRecord.sequence()

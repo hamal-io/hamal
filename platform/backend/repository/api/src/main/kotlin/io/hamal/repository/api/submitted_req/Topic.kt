@@ -10,7 +10,7 @@ data class TopicCreateSubmitted(
     override var status: ReqStatus,
     val groupId: GroupId,
     val topicId: TopicId,
-    val namespaceId: NamespaceId,
+    val flowId: FlowId,
     val name: TopicName
 ) : Submitted
 

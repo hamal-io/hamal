@@ -11,6 +11,7 @@ data class AuthLoginSubmitted(
     val authId: AuthId,
     val accountId: AccountId,
     val groupIds: List<GroupId>,
+    val defaultFlowIds: Map<GroupId, FlowId>,
     val name: AccountName,
     val hash: PasswordHash,
     val token: AuthToken,
