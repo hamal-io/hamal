@@ -10,9 +10,10 @@ import io.hamal.repository.record.RecordSequence
 data class BlueprintEntity(
     override val cmdId: CmdId,
     override val id: BlueprintId,
+    override val sequence: RecordSequence,
+    override val recordedAt: RecordedAt,
     val groupId: GroupId,
     var creatorId: AccountId,
-    override val sequence: RecordSequence,
 
     var name: BlueprintName? = null,
     var inputs: BlueprintInputs? = null,
@@ -28,7 +29,8 @@ data class BlueprintEntity(
                 sequence = rec.sequence(),
                 name = rec.name,
                 inputs = rec.inputs,
-                codeValue = rec.value
+                codeValue = rec.value,
+                recordedAt = rec.recordedAt()
             )
 
             is BlueprintUpdatedRecord -> copy(
@@ -37,7 +39,8 @@ data class BlueprintEntity(
                 sequence = rec.sequence(),
                 name = rec.name,
                 inputs = rec.inputs,
-                codeValue = rec.value
+                codeValue = rec.value,
+                recordedAt = rec.recordedAt()
             )
         }
     }
@@ -46,6 +49,7 @@ data class BlueprintEntity(
         return Blueprint(
             cmdId = cmdId,
             id = id,
+            updatedAt = recordedAt.toUpdatedAt(),
             groupId = groupId,
             creatorId = creatorId,
             name = name!!,
@@ -65,7 +69,8 @@ fun List<BlueprintRecord>.createEntity(): BlueprintEntity {
         id = firstRecord.entityId,
         groupId = firstRecord.groupId,
         creatorId = firstRecord.creatorId,
-        sequence = firstRecord.sequence()
+        sequence = firstRecord.sequence(),
+        recordedAt = firstRecord.recordedAt()
     )
 
     forEach { record ->

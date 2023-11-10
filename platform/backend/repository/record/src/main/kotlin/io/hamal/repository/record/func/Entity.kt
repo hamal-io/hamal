@@ -11,8 +11,9 @@ import io.hamal.repository.record.RecordSequence
 data class FuncEntity(
     override val cmdId: CmdId,
     override val id: FuncId,
-    val groupId: GroupId,
     override val sequence: RecordSequence,
+    override val recordedAt: RecordedAt,
+    val groupId: GroupId,
 
     var flowId: FlowId? = null,
     var name: FuncName? = null,
@@ -34,7 +35,8 @@ data class FuncEntity(
                     id = rec.codeId,
                     version = rec.codeVersion,
                     deployedVersion = rec.codeVersion
-                )
+                ),
+                recordedAt = rec.recordedAt()
             )
 
             is FuncUpdatedRecord -> copy(
@@ -47,7 +49,8 @@ data class FuncEntity(
                     id = code!!.id,
                     version = rec.codeVersion,
                     deployedVersion = code!!.deployedVersion
-                )
+                ),
+                recordedAt = rec.recordedAt()
             )
 
             is FuncDeployedRecord -> copy(
@@ -60,7 +63,8 @@ data class FuncEntity(
                     id = code!!.id,
                     version = code!!.version,
                     deployedVersion = rec.deployedVersion
-                )
+                ),
+                recordedAt = rec.recordedAt()
             )
         }
     }
@@ -69,6 +73,7 @@ data class FuncEntity(
         return Func(
             cmdId = cmdId,
             id = id,
+            updatedAt = recordedAt.toUpdatedAt(),
             groupId = groupId,
             flowId = flowId!!,
             name = name!!,
@@ -87,7 +92,9 @@ fun List<FuncRecord>.createEntity(): FuncEntity {
         id = firstRecord.entityId,
         groupId = firstRecord.groupId,
         cmdId = firstRecord.cmdId,
-        sequence = firstRecord.sequence()
+        sequence = firstRecord.sequence(),
+        recordedAt = firstRecord.recordedAt()
+
     )
 
     forEach { record ->

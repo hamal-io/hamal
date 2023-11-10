@@ -20,7 +20,8 @@ internal object CreateTrigger : CreateDomainObject<TriggerId, TriggerRecord, Tri
         var result = TriggerEntity(
             id = firstRecord.entityId,
             cmdId = firstRecord.cmdId,
-            sequence = firstRecord.sequence()
+            sequence = firstRecord.sequence(),
+            recordedAt = firstRecord.recordedAt()
         )
 
         recs.forEach { record ->

@@ -1,10 +1,7 @@
 package io.hamal.repository.record.code
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.vo.CodeId
-import io.hamal.lib.domain.vo.CodeType
-import io.hamal.lib.domain.vo.CodeValue
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.*
 import io.hamal.repository.record.Record
 import io.hamal.repository.record.RecordSequence
 import kotlinx.serialization.SerialName
@@ -14,7 +11,9 @@ import kotlinx.serialization.Transient
 @Serializable
 sealed class CodeRecord(
     @Transient
-    override var sequence: RecordSequence? = null
+    override var sequence: RecordSequence? = null,
+    @Transient
+    override var recordedAt: RecordedAt? = null
 ) : Record<CodeId>()
 
 @Serializable

@@ -2,6 +2,7 @@ package io.hamal.repository.api
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.DomainObject
+import io.hamal.lib.common.domain.UpdatedAt
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.Correlation
@@ -118,12 +119,13 @@ sealed class Exec : DomainObject<ExecId> {
 class PlannedExec(
     override val cmdId: CmdId,
     override val id: ExecId,
+    override val updatedAt: UpdatedAt,
     override val flowId: FlowId,
     override val groupId: GroupId,
     override val correlation: Correlation?,
     override val inputs: ExecInputs,
     override val code: ExecCode,
-    override val events: List<Event>
+    override val events: List<Event>,
 // FIXME    val plannedAt: PlannedAt
 ) : Exec() {
     override val status = ExecStatus.Planned
@@ -138,8 +140,9 @@ class PlannedExec(
 class ScheduledExec(
     override val cmdId: CmdId,
     override val id: ExecId,
+    override val updatedAt: UpdatedAt,
     val plannedExec: PlannedExec,
-    val scheduledAt: ScheduledAt
+    val scheduledAt: ScheduledAt,
 ) : Exec() {
     override val status = ExecStatus.Scheduled
     override val flowId get() = plannedExec.flowId
@@ -158,8 +161,9 @@ class ScheduledExec(
 class QueuedExec(
     override val cmdId: CmdId,
     override val id: ExecId,
+    override val updatedAt: UpdatedAt,
     val scheduledExec: ScheduledExec,
-    val queuedAt: QueuedAt
+    val queuedAt: QueuedAt,
 ) : Exec() {
     override val status = ExecStatus.Queued
     override val flowId get() = scheduledExec.flowId
@@ -178,6 +182,7 @@ class QueuedExec(
 class StartedExec(
     override val cmdId: CmdId,
     override val id: ExecId,
+    override val updatedAt: UpdatedAt,
     val queuedExec: QueuedExec
 ) : Exec() {
     override val status = ExecStatus.Started
@@ -196,6 +201,7 @@ class StartedExec(
 class CompletedExec(
     override val cmdId: CmdId,
     override val id: ExecId,
+    override val updatedAt: UpdatedAt,
     val startedExec: StartedExec,
     val completedAt: CompletedAt,
     val result: ExecResult,
@@ -218,6 +224,7 @@ class CompletedExec(
 class FailedExec(
     override val cmdId: CmdId,
     override val id: ExecId,
+    override val updatedAt: UpdatedAt,
     val startedExec: StartedExec,
     //FIXME failedAt
     val failedAt: FailedAt,

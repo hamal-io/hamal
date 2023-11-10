@@ -2,12 +2,13 @@ package io.hamal.repository.api
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.DomainObject
+import io.hamal.lib.common.domain.UpdatedAt
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.FlowId
 import io.hamal.lib.domain.vo.FlowInputs
 import io.hamal.lib.domain.vo.FlowName
+import io.hamal.lib.domain.vo.GroupId
 import kotlinx.serialization.Serializable
 
 interface FlowRepository : FlowCmdRepository, FlowQueryRepository
@@ -62,6 +63,7 @@ interface FlowQueryRepository {
 data class Flow(
     val cmdId: CmdId,
     override val id: FlowId,
+    override val updatedAt: UpdatedAt,
     val groupId: GroupId,
     val name: FlowName,
     val inputs: FlowInputs

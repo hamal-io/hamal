@@ -4,6 +4,7 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.ExtensionId
 import io.hamal.lib.domain.vo.ExtensionName
 import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.RecordedAt
 import io.hamal.repository.api.Extension
 import io.hamal.repository.api.ExtensionCode
 import io.hamal.repository.record.CreateDomainObject
@@ -13,8 +14,9 @@ import io.hamal.repository.record.RecordSequence
 data class ExtensionEntity(
     override val cmdId: CmdId,
     override val id: ExtensionId,
-    val groupId: GroupId,
     override val sequence: RecordSequence,
+    override val recordedAt: RecordedAt,
+    val groupId: GroupId,
 
     var name: ExtensionName? = null,
     var code: ExtensionCode? = null
@@ -26,14 +28,16 @@ data class ExtensionEntity(
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
                 name = rec.name,
-                code = rec.code
+                code = rec.code,
+                recordedAt = rec.recordedAt()
             )
 
             is ExtensionUpdatedRecord -> copy(
                 id = rec.entityId,
                 cmdId = rec.cmdId,
                 name = rec.name,
-                code = rec.code
+                code = rec.code,
+                recordedAt = rec.recordedAt()
             )
         }
     }
@@ -42,6 +46,7 @@ data class ExtensionEntity(
         return Extension(
             cmdId = cmdId,
             id = id,
+            updatedAt = recordedAt.toUpdatedAt(),
             groupId = groupId,
             name = name!!,
             code = code!!
@@ -58,7 +63,8 @@ fun List<ExtensionRecord>.createEntity(): ExtensionEntity {
         id = firstRecord.entityId,
         groupId = firstRecord.groupId,
         cmdId = firstRecord.cmdId,
-        sequence = firstRecord.sequence()
+        sequence = firstRecord.sequence(),
+        recordedAt = firstRecord.recordedAt()
     )
 
     forEach { record ->

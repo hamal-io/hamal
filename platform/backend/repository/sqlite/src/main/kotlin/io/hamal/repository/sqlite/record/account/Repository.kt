@@ -20,6 +20,7 @@ internal object CreateAccount : CreateDomainObject<AccountId, AccountRecord, Acc
     override fun invoke(recs: List<AccountRecord>): Account {
         check(recs.isNotEmpty()) { "At least one record is required" }
         val firstRecord = recs.first()
+
         check(firstRecord is AccountCreatedRecord)
 
         var result = AccountEntity(
@@ -29,7 +30,8 @@ internal object CreateAccount : CreateDomainObject<AccountId, AccountRecord, Acc
             type = firstRecord.type,
             name = firstRecord.name,
             email = firstRecord.email,
-            salt = firstRecord.salt
+            salt = firstRecord.salt,
+            recordedAt = firstRecord.recordedAt()
         )
 
         recs.forEach { record ->

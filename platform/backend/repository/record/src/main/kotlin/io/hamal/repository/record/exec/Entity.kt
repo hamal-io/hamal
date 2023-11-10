@@ -2,7 +2,6 @@ package io.hamal.repository.api.record.exec
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.vo.Event
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.MapType
 import io.hamal.repository.api.*
@@ -15,10 +14,10 @@ import java.time.Instant
 data class ExecEntity(
     override val cmdId: CmdId,
     override val id: ExecId,
+    override val sequence: RecordSequence,
+    override val recordedAt: RecordedAt,
     val flowId: FlowId,
     val groupId: GroupId,
-    override val sequence: RecordSequence,
-
 
     var status: ExecStatus? = null,
     var correlation: Correlation? = null,
@@ -46,13 +45,15 @@ data class ExecEntity(
                 code = rec.code,
                 events = rec.events,
                 plannedAt = Instant.now(), // FIXME
+                recordedAt = rec.recordedAt()
             )
 
             is ExecScheduledRecord -> copy(
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
                 status = ExecStatus.Scheduled,
-                scheduledAt = Instant.now() // FIXME
+                scheduledAt = Instant.now(), // FIXME
+                recordedAt = rec.recordedAt()
 
             )
 
@@ -60,13 +61,16 @@ data class ExecEntity(
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
                 status = ExecStatus.Queued,
+                recordedAt = rec.recordedAt()
 //                enqueuedAt = Instant.now() // FIXME
+
             )
 
             is ExecStartedRecord -> copy(
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
                 status = ExecStatus.Started,
+                recordedAt = rec.recordedAt()
 //                startedAt = Instant.now() // FIXME
                 //picked by :platform:runner id..
             )
@@ -77,6 +81,7 @@ data class ExecEntity(
                 status = ExecStatus.Completed,
 //                enqueuedAt = Instant.now() // FIXME
                 result = rec.result,
+                recordedAt = rec.recordedAt(),
                 state = rec.state
             )
 
@@ -84,7 +89,8 @@ data class ExecEntity(
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
                 status = ExecStatus.Failed,
-                result = rec.result
+                result = rec.result,
+                recordedAt = rec.recordedAt()
             )
 
             else -> TODO()
@@ -96,6 +102,7 @@ data class ExecEntity(
         val plannedExec = PlannedExec(
             cmdId = cmdId,
             id = id,
+            updatedAt = recordedAt.toUpdatedAt(),
             flowId = flowId,
             groupId = groupId,
             correlation = correlation,
@@ -106,18 +113,18 @@ data class ExecEntity(
 
         if (status == ExecStatus.Planned) return plannedExec
 
-        val scheduledExec = ScheduledExec(cmdId, id, plannedExec, ScheduledAt.now())
+        val scheduledExec = ScheduledExec(cmdId, id, recordedAt.toUpdatedAt(), plannedExec, ScheduledAt.now())
         if (status == ExecStatus.Scheduled) return scheduledExec
 
-        val queuedExec = QueuedExec(cmdId, id, scheduledExec, QueuedAt.now())
+        val queuedExec = QueuedExec(cmdId, id, recordedAt.toUpdatedAt(), scheduledExec, QueuedAt.now())
         if (status == ExecStatus.Queued) return queuedExec
 
-        val startedExec = StartedExec(cmdId, id, queuedExec)
+        val startedExec = StartedExec(cmdId, id, recordedAt.toUpdatedAt(), queuedExec)
         if (status == ExecStatus.Started) return startedExec
 
         return when (status) {
-            ExecStatus.Completed -> CompletedExec(cmdId, id, startedExec, CompletedAt.now(), result!!, state!!)
-            ExecStatus.Failed -> FailedExec(cmdId, id, startedExec, FailedAt.now(), result!!)
+            ExecStatus.Completed -> CompletedExec(cmdId, id, recordedAt .toUpdatedAt(),startedExec, CompletedAt.now(), result!!, state!!)
+            ExecStatus.Failed -> FailedExec(cmdId, id, recordedAt.toUpdatedAt(), startedExec, FailedAt.now(), result!!)
             else -> TODO()
         }
     }
@@ -133,7 +140,8 @@ fun List<ExecRecord>.createEntity(): ExecEntity {
         flowId = firstRecord.flowId,
         groupId = firstRecord.groupId,
         cmdId = firstRecord.cmdId,
-        sequence = firstRecord.sequence()
+        sequence = firstRecord.sequence(),
+        recordedAt = firstRecord.recordedAt()
     )
 
     forEach { record ->

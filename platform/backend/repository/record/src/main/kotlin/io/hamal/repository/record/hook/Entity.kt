@@ -1,10 +1,8 @@
 package io.hamal.repository.record.hook
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.domain.vo.HookId
-import io.hamal.lib.domain.vo.HookName
-import io.hamal.lib.domain.vo.FlowId
+import io.hamal.lib.domain.vo.*
+
 import io.hamal.repository.api.Hook
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordEntity
@@ -13,8 +11,9 @@ import io.hamal.repository.record.RecordSequence
 data class HookEntity(
     override val cmdId: CmdId,
     override val id: HookId,
-    val groupId: GroupId,
     override val sequence: RecordSequence,
+    override val recordedAt: RecordedAt,
+    val groupId: GroupId,
 
     var flowId: FlowId? = null,
     var name: HookName? = null
@@ -28,14 +27,17 @@ data class HookEntity(
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
                 flowId = rec.flowId,
-                name = rec.name
+                name = rec.name,
+                recordedAt = rec.recordedAt()
+
             )
 
             is HookUpdatedRecord -> copy(
                 id = rec.entityId,
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
-                name = rec.name
+                name = rec.name,
+                recordedAt = rec.recordedAt()
             )
         }
     }
@@ -44,6 +46,7 @@ data class HookEntity(
         return Hook(
             cmdId = cmdId,
             id = id,
+            updatedAt = recordedAt.toUpdatedAt(),
             groupId = groupId,
             flowId = flowId!!,
             name = name!!
@@ -60,7 +63,8 @@ fun List<HookRecord>.createEntity(): HookEntity {
         id = firstRecord.entityId,
         groupId = firstRecord.groupId,
         cmdId = firstRecord.cmdId,
-        sequence = firstRecord.sequence()
+        sequence = firstRecord.sequence(),
+        recordedAt = firstRecord.recordedAt()
     )
 
     forEach { record ->

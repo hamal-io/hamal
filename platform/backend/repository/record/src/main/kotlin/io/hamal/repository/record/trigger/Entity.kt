@@ -21,6 +21,7 @@ data class TriggerEntity(
     override val id: TriggerId,
     override val cmdId: CmdId,
     override val sequence: RecordSequence,
+    override val recordedAt: RecordedAt,
 
     var groupId: GroupId? = null,
     var funcId: FuncId? = null,
@@ -50,7 +51,8 @@ data class TriggerEntity(
                 type = FixedRate,
                 inputs = rec.inputs,
                 correlationId = rec.correlationId,
-                duration = rec.duration
+                duration = rec.duration,
+                recordedAt = rec.recordedAt()
             )
 
             is EventTriggerCreatedRecord -> copy(
@@ -64,7 +66,8 @@ data class TriggerEntity(
                 type = Event,
                 inputs = rec.inputs,
                 correlationId = rec.correlationId,
-                topicId = rec.topicId
+                topicId = rec.topicId,
+                recordedAt = rec.recordedAt()
             )
 
             is HookTriggerCreatedRecord -> copy(
@@ -79,7 +82,8 @@ data class TriggerEntity(
                 inputs = rec.inputs,
                 correlationId = rec.correlationId,
                 hookId = rec.hookId,
-                hookMethods = rec.hookMethods
+                hookMethods = rec.hookMethods,
+                recordedAt = rec.recordedAt()
             )
         }
     }
@@ -89,6 +93,7 @@ data class TriggerEntity(
             FixedRate -> FixedRateTrigger(
                 cmdId = cmdId,
                 id = id,
+                updatedAt = recordedAt.toUpdatedAt(),
                 groupId = groupId!!,
                 funcId = funcId!!,
                 flowId = flowId!!,
@@ -101,6 +106,7 @@ data class TriggerEntity(
             Event -> EventTrigger(
                 cmdId = cmdId,
                 id = id,
+                updatedAt = recordedAt.toUpdatedAt(),
                 groupId = groupId!!,
                 funcId = funcId!!,
                 flowId = flowId!!,
@@ -113,6 +119,7 @@ data class TriggerEntity(
             Hook -> HookTrigger(
                 cmdId = cmdId,
                 id = id,
+                updatedAt = recordedAt.toUpdatedAt(),
                 groupId = groupId!!,
                 funcId = funcId!!,
                 flowId = flowId!!,
@@ -135,7 +142,8 @@ fun List<TriggerRecord>.createEntity(): TriggerEntity {
     var result = TriggerEntity(
         id = firstRecord.entityId,
         cmdId = firstRecord.cmdId,
-        sequence = firstRecord.sequence()
+        sequence = firstRecord.sequence(),
+        recordedAt = firstRecord.recordedAt()
     )
 
     forEach { record ->

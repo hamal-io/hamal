@@ -1,9 +1,11 @@
 package io.hamal.repository.fixture
 
+import io.hamal.lib.common.domain.CmdId
 import io.hamal.repository.api.*
 import io.hamal.repository.api.log.*
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
+import java.util.concurrent.atomic.AtomicInteger
 import kotlin.reflect.KClass
 
 abstract class AbstractUnitTest {
@@ -103,6 +105,13 @@ abstract class AbstractUnitTest {
             MemoryFixture,
             SqliteFixture
         )
-
     )
+
+    protected object CmdGen {
+        private val atomicCounter = AtomicInteger(1)
+
+        operator fun invoke(): CmdId {
+            return CmdId(atomicCounter.incrementAndGet())
+        }
+    }
 }

@@ -28,7 +28,8 @@ internal object CreateCode : CreateDomainObject<CodeId, CodeRecord, Code> {
             cmdId = firstRecord.cmdId,
             id = firstRecord.entityId,
             groupId = firstRecord.groupId,
-            sequence = firstRecord.sequence()
+            sequence = firstRecord.sequence(),
+            recordedAt = firstRecord.recordedAt()
         )
 
         recs.forEach { record ->

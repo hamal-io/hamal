@@ -2,7 +2,9 @@ package io.hamal.repository
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.*
+import io.hamal.repository.api.Code
 import io.hamal.repository.api.CodeCmdRepository.CreateCmd
 import io.hamal.repository.api.CodeCmdRepository.UpdateCmd
 import io.hamal.repository.api.CodeQueryRepository.CodeQuery
@@ -10,6 +12,7 @@ import io.hamal.repository.api.CodeRepository
 import io.hamal.repository.fixture.AbstractUnitTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.TestFactory
 import org.junit.jupiter.api.assertThrows
@@ -42,35 +45,35 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Creates code duplicate`() = runWith(CodeRepository::class) {
-                createCode(
-                    codeId = CodeId(1),
-                    groupId = GroupId(1),
-                    codeValue = CodeValue("40 + 2")
-                )
+            createCode(
+                codeId = CodeId(1),
+                groupId = GroupId(1),
+                codeValue = CodeValue("40 + 2")
+            )
 
-                createCode(
-                    codeId = CodeId(2),
-                    groupId = GroupId(1),
-                    codeValue = CodeValue("40 + 2")
-                )
+            createCode(
+                codeId = CodeId(2),
+                groupId = GroupId(1),
+                codeValue = CodeValue("40 + 2")
+            )
 
-                verifyCount(2)
+            verifyCount(2)
 
-                with(get(CodeId(1))) {
-                    assertThat(id, equalTo(CodeId(1)))
-                    assertThat(version, equalTo(CodeVersion(1)))
-                    assertThat(value, equalTo(CodeValue("40 + 2")))
-                    assertThat(type, equalTo(CodeType.Lua54))
+            with(get(CodeId(1))) {
+                assertThat(id, equalTo(CodeId(1)))
+                assertThat(version, equalTo(CodeVersion(1)))
+                assertThat(value, equalTo(CodeValue("40 + 2")))
+                assertThat(type, equalTo(CodeType.Lua54))
 
-                }
-
-                with(get(CodeId(2))) {
-                    assertThat(id, equalTo(CodeId(2)))
-                    assertThat(version, equalTo(CodeVersion(1)))
-                    assertThat(value, equalTo(CodeValue("40 + 2")))
-                    assertThat(type, equalTo(CodeType.Lua54))
-                }
             }
+
+            with(get(CodeId(2))) {
+                assertThat(id, equalTo(CodeId(2)))
+                assertThat(version, equalTo(CodeVersion(1)))
+                assertThat(value, equalTo(CodeValue("40 + 2")))
+                assertThat(type, equalTo(CodeType.Lua54))
+            }
+        }
     }
 
     @Nested
@@ -450,29 +453,60 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
 
     }
 
-    private fun CodeRepository.createCode(
-        codeId: CodeId,
-        groupId: GroupId,
-        cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10),
-        codeValue: CodeValue
-    ) {
-        create(
-            CreateCmd(
-                id = cmdId,
-                codeId = codeId,
-                groupId = groupId,
-                value = codeValue
+    @Nested
+    inner class TimestampTest {
+
+        @TestFactory
+        fun `Initialization Test`() = runWith(CodeRepository::class) {
+            val snow = SnowflakeId(4696750753320960)
+            val epoch: Long = 1698451200000 // Happy birthday
+            val codeId = CodeId(snow)
+
+            val code = createCode(codeId, GroupId(1), CmdGen(), CodeValue("1+1"))
+            val re3 = code.createdAt // BS
+
+
+            //under construction
+
+
+            Thread.sleep(1000)
+            update(
+                codeId, UpdateCmd(
+                    id = CmdGen(),
+                    value = CodeValue("1 + 2")
+                )
             )
-        )
+            val t1 = get(codeId, CodeVersion(1)).updatedAt
+            val t2 = get(codeId, CodeVersion(2)).updatedAt
+            assertTrue(t2.value.isAfter(t1.value))
+        }
     }
-
-    private fun CodeRepository.verifyCount(expected: Int) {
-        verifyCount(expected) { }
-    }
-
-    private fun CodeRepository.verifyCount(expected: Int, block: CodeQuery.() -> Unit) {
-        val counted = count(CodeQuery(groupIds = listOf()).also(block))
-        assertThat("number of code expected", counted, equalTo(expected.toULong()))
-    }
-
 }
+
+
+private fun CodeRepository.createCode(
+    codeId: CodeId,
+    groupId: GroupId,
+    cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10),
+    codeValue: CodeValue
+): Code {
+    return create(
+        CreateCmd(
+            id = cmdId,
+            codeId = codeId,
+            groupId = groupId,
+            value = codeValue
+        )
+    )
+}
+
+private fun CodeRepository.verifyCount(expected: Int) {
+    verifyCount(expected) { }
+}
+
+private fun CodeRepository.verifyCount(expected: Int, block: CodeQuery.() -> Unit) {
+    val counted = count(CodeQuery(groupIds = listOf()).also(block))
+    assertThat("number of code expected", counted, equalTo(expected.toULong()))
+}
+
+

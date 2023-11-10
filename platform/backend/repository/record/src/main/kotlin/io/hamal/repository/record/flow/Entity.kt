@@ -1,10 +1,7 @@
 package io.hamal.repository.record.flow
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.domain.vo.FlowId
-import io.hamal.lib.domain.vo.FlowInputs
-import io.hamal.lib.domain.vo.FlowName
+import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.Flow
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordEntity
@@ -13,6 +10,7 @@ import io.hamal.repository.record.RecordSequence
 data class FlowEntity(
     override val cmdId: CmdId,
     override val id: FlowId,
+    override val recordedAt: RecordedAt,
     val groupId: GroupId,
     override val sequence: RecordSequence,
 
@@ -29,6 +27,7 @@ data class FlowEntity(
                 sequence = rec.sequence(),
                 name = rec.name,
                 inputs = rec.inputs,
+                recordedAt = rec.recordedAt()
             )
 
             is FlowUpdatedRecord -> copy(
@@ -37,6 +36,7 @@ data class FlowEntity(
                 sequence = rec.sequence(),
                 name = rec.name,
                 inputs = rec.inputs,
+                recordedAt = rec.recordedAt()
             )
         }
     }
@@ -45,6 +45,7 @@ data class FlowEntity(
         return Flow(
             cmdId = cmdId,
             id = id,
+            updatedAt = recordedAt.toUpdatedAt(),
             groupId = groupId,
             name = name!!,
             inputs = inputs!!,
@@ -61,7 +62,8 @@ fun List<FlowRecord>.createEntity(): FlowEntity {
         id = firstRecord.entityId,
         groupId = firstRecord.groupId,
         cmdId = firstRecord.cmdId,
-        sequence = firstRecord.sequence()
+        sequence = firstRecord.sequence(),
+        recordedAt = firstRecord.recordedAt()
     )
 
     forEach { record ->
