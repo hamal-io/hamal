@@ -9,6 +9,7 @@ import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.sdk.api.*
 import io.hamal.lib.sdk.api.ApiError
 import io.hamal.lib.sdk.api.ApiFuncCreateReq
 import io.hamal.lib.sdk.api.ApiFuncUpdateReq
@@ -97,29 +98,13 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
 
     @Test
     fun `Updates func without updating values`() {
-        val createdFlow = flowCmdRepository.create(
-            CreateCmd(
-                id = CmdId(2),
-                flowId = FlowId(2),
-                groupId = testGroup.id,
-                name = FlowName("createdFlow"),
-                inputs = FlowInputs()
-            )
-        )
-
-        val func = awaitCompleted(
-            createFunc(
-                flowId = createdFlow.id,
-                req = ApiFuncCreateReq(
-                    name = FuncName("createdName"),
-                    inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("createdInputs")))),
-                    code = CodeValue("createdCode")
-                )
-            )
-        )
+        val funcId = createFuncInFlow(
+            FuncName("createdName"),
+            CodeValue("createdCode")
+        ).funcId
 
         val updateFuncResponse = httpTemplate.patch("/v1/funcs/{funcId}")
-            .path("funcId", func.funcId)
+            .path("funcId", funcId)
             .body(
                 ApiFuncUpdateReq(
                     name = null,
@@ -128,12 +113,12 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
                 )
             )
             .execute()
+
         assertThat(updateFuncResponse.statusCode, equalTo(Accepted))
         require(updateFuncResponse is HttpSuccessResponse) { "request was not successful" }
 
         val req = updateFuncResponse.result(ApiFuncUpdateSubmitted::class)
         awaitCompleted(req)
-        val funcId = req.funcId
 
         with(getFunc(funcId)) {
             assertThat(id, equalTo(funcId))
@@ -141,11 +126,104 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
             assertThat(name, equalTo(FuncName("createdName")))
             assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("createdInputs"))))))
 
-            // assertThat(code.current.version, equalTo(CodeVersion(1))) //FIXME with core-73
+            assertThat(code.current.version, equalTo(CodeVersion(1)))
             assertThat(code.current.value, equalTo(CodeValue("createdCode")))
 
             assertThat(code.deployed.version, equalTo(CodeVersion(1)))
             assertThat(code.deployed.value, equalTo(CodeValue("createdCode")))
         }
     }
+
+    @Test
+    fun `Does not increment code version if req code is null`() {
+        val funcId = createFuncInFlow(
+            FuncName("createdName"),
+            CodeValue("createdCode")
+        ).funcId
+
+        val updateFuncResponse = httpTemplate.patch("/v1/funcs/{funcId}")
+            .path("funcId", funcId)
+            .body(
+                ApiFuncUpdateReq(name = FuncName("updatedName"), code = null)
+            )
+            .execute()
+
+        assertThat(updateFuncResponse.statusCode, equalTo(Accepted))
+        require(updateFuncResponse is HttpSuccessResponse) { "request was not successful" }
+
+        val submittedReq = updateFuncResponse.result(ApiFuncUpdateSubmitted::class)
+        awaitCompleted(submittedReq)
+
+        with(getFunc(funcId)) {
+            assertThat(name, equalTo(FuncName("updatedName")))
+            assertThat(flow.name, equalTo(FlowName("createdFlow")))
+
+            assertThat(code.current.version, equalTo(CodeVersion(1)))
+            assertThat(code.deployed.version, equalTo(CodeVersion(1)))
+
+            assertThat(code.current.value, equalTo(CodeValue("createdCode")))
+            assertThat(code.deployed.value, equalTo(CodeValue("createdCode")))
+        }
+    }
+
+    @Test
+    fun `Does not increment code version if req code is equal to existing`() {
+        val funcId = createFuncInFlow(
+            FuncName("func-1"),
+            CodeValue("createdCode")
+        ).funcId
+
+        val updateFuncResponse = httpTemplate.patch("/v1/funcs/{funcId}")
+            .path("funcId", funcId)
+            .body(
+                ApiFuncUpdateReq(
+                    name = FuncName("updatedName"),
+                    inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("updatedInputs")))),
+                    code = CodeValue("createdCode")
+                )
+            )
+            .execute()
+
+        assertThat(updateFuncResponse.statusCode, equalTo(Accepted))
+        require(updateFuncResponse is HttpSuccessResponse) { "request was not successful" }
+
+        val submittedReq = updateFuncResponse.result(ApiFuncUpdateSubmitted::class)
+        awaitCompleted(submittedReq)
+
+        with(getFunc(funcId)) {
+            assertThat(flow.name, equalTo(FlowName("createdFlow")))
+            assertThat(name, equalTo(FuncName("updatedName")))
+            assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("updatedInputs"))))))
+
+            assertThat(code.current.version, equalTo(CodeVersion(1)))
+            assertThat(code.deployed.version, equalTo(CodeVersion(1)))
+
+            assertThat(code.current.value, equalTo(CodeValue("createdCode")))
+            assertThat(code.deployed.value, equalTo(CodeValue("createdCode")))
+        }
+    }
+
+    private fun createFuncInFlow(name: FuncName, code: CodeValue): ApiFuncCreateSubmitted {
+        val createdFlow = flowCmdRepository.create(
+            CreateCmd(
+                id = CmdGen(),
+                flowId = FlowId(2),
+                groupId = testGroup.id,
+                name = FlowName("createdFlow"),
+                inputs = FlowInputs()
+            )
+        )
+
+        return awaitCompleted(
+            createFunc(
+                flowId = createdFlow.id,
+                req = ApiFuncCreateReq(
+                    name = name,
+                    inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("createdInputs")))),
+                    code = code
+                )
+            )
+        )
+    }
 }
+

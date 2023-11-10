@@ -88,14 +88,19 @@ class MemoryCodeRepository : MemoryRecordRepository<CodeId, CodeRecord, Code>(
                 versionOf(codeId, cmd.id)
             } else {
                 val currentVersion = versionOf(codeId, cmd.id)
-                store(
-                    CodeUpdatedRecord(
-                        entityId = codeId,
-                        cmdId = cmd.id,
-                        value = cmd.value ?: currentVersion.value
+                val codeValue = cmd.value
+                return if (codeValue == null || codeValue == currentVersion.value) {
+                    currentVersion
+                } else {
+                    store(
+                        CodeUpdatedRecord(
+                            entityId = codeId,
+                            cmdId = cmd.id,
+                            value = codeValue
+                        )
                     )
-                )
-                (currentVersion(codeId)).also(CurrentCodeProjection::apply)
+                    (currentVersion(codeId)).also(CurrentCodeProjection::apply)
+                }
             }
         }
     }
