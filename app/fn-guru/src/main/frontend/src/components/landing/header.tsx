@@ -44,7 +44,7 @@ const GoToApp = () => {
                 onClick={() => {
                     navigate("/flows", {replace: true})
                 }}>
-                Let's automate
+                Get it done
             </Button>
         )
     }

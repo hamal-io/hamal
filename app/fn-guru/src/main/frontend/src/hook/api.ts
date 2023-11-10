@@ -173,7 +173,7 @@ export const useApiFlowCreate = (): [ApiFlowCreateAction, ApiFlowCreateSubmitted
 
 
 type ApiLoginAccountAction = (username: string, password: string, controller?: AbortController) => void
-export const useApiLoginAccount = (): [ApiLoginAccountAction, ApiLoginSubmitted, boolean, Error] => {
+export const useApiAccountLogin = (): [ApiLoginAccountAction, ApiLoginSubmitted, boolean, Error] => {
     const [auth, setAuth] = useAuth()
 
     const [data, setData] = useState<ApiLoginSubmitted | null>(null);

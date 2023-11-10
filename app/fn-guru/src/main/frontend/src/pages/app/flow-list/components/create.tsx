@@ -1,6 +1,6 @@
 import {useNavigate} from "react-router-dom";
 import React, {useEffect, useState} from "react";
-import {useApiLoginAccount, useApiFlowCreate, useApiPost} from "@/hook";
+import {useApiAccountLogin, useApiFlowCreate, useApiPost} from "@/hook";
 
 import * as z from "zod"
 import {zodResolver} from "@hookform/resolvers/zod";
@@ -81,7 +81,7 @@ const Create = () => {
                                     <FormItem>
                                         <FormLabel>Name</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="Namspace-One" {...field} />
+                                            <Input placeholder="Workflow-One" {...field} />
                                         </FormControl>
                                         <FormDescription>
                                             This is the name of your flow.
