@@ -13,7 +13,7 @@ import {
 
 import {Avatar, AvatarFallback} from "@/components/ui/avatar.tsx";
 import {cn} from "@/utils";
-import {Link, useNavigate} from "react-router-dom";
+import {Link, useLocation, useNavigate, useParams} from "react-router-dom";
 import {useApiPost} from "@/hook";
 import {ApiAccountConversionSubmitted} from "@/api/account.ts";
 import {Dialog, DialogContent, DialogHeader, DialogTrigger} from "@/components/ui/dialog.tsx";
@@ -23,7 +23,8 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
 import {useForm} from "react-hook-form";
 import {AUTH_KEY} from "@/types/auth.ts";
-import {Loader2} from "lucide-react";
+import {BookOpen, Braces, Command, Loader2, LucideIcon, Play} from "lucide-react";
+import FlowSelector from "@/components/app/flow-selector.tsx";
 
 const Header: FC = () => {
     const [auth] = useAuth()
@@ -42,7 +43,6 @@ const Header: FC = () => {
 
 export default Header
 
-
 const Profile = () => {
     const navigate = useNavigate()
     const [auth] = useAuth()
@@ -51,7 +51,6 @@ const Profile = () => {
             <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                     <Avatar className="h-8 w-8">
-                        {/*<AvatarImage src="/avatars/01.png" alt="@shadcn"/>*/}
                         <AvatarFallback>{auth.name[0].toUpperCase()}</AvatarFallback>
                     </Avatar>
                 </Button>
@@ -86,24 +85,54 @@ const Profile = () => {
     )
 }
 
-export function Nav({className, ...props}: React.HTMLAttributes<HTMLElement>) {
+const Nav = ({className, ...props}: React.HTMLAttributes<HTMLElement>) => {
+    const location = useLocation()
+    const currentPath = location.pathname
+
+    const navigation: NavItem[] = [
+        {
+            href: `/dashboard`,
+            label: "Dashboard",
+            active: currentPath === '/dashboard'
+        },
+        {
+            href: `/playground`,
+            label: "Playground",
+            active: currentPath === '/playground'
+        },
+        {
+            href: `/flows`,
+            label: "Flows",
+            active: currentPath.startsWith('/flows')
+        },
+    ];
+
     return (
-        <nav
-            className={cn("flex items-center space-x-4 lg:space-x-6", className)}
-            {...props}
-        >
-            <Link to="/dashboard" className="text-sm font-medium transition-colors hover:text-primary">
-                Dashboard
-            </Link>
-            <Link to="/playground" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
-                Playground
-            </Link>
-            <Link to="/flows" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
-                Flows
-            </Link>
+        <nav className="flex items-center space-x-4 lg:space-x-6">
+            {navigation.map((item) => (<NavLink key={item.label} item={item}/>))}
         </nav>
     )
 }
+
+type NavItem = {
+    href: string;
+    external?: boolean;
+    label: string;
+    active?: boolean;
+};
+
+const NavLink: FC<{ item: NavItem }> = ({item}) => {
+    return (
+        <Link
+            to={item.href}
+            target={item.external ? "_blank" : undefined}
+            className={cn("text-sm font-medium text-muted-foreground transition-colors hover:text-primary", {
+                "text-primary": item.active
+            })}>
+            {item.label}
+        </Link>
+    );
+};
 
 
 const formSchema = z.object({

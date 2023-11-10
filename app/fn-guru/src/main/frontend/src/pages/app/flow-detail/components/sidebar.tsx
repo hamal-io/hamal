@@ -1,7 +1,7 @@
 import {cn} from "@/utils";
 import {BookOpen, Braces, CalendarClock, Command, LucideIcon, Play} from "lucide-react";
 import React, {FC} from "react";
-import {Link, useParams} from "react-router-dom";
+import {Link, useLocation, useParams} from "react-router-dom";
 import FlowSelector from "@/components/app/flow-selector.tsx";
 
 type Props = {
@@ -16,33 +16,35 @@ type NavItem = {
     active?: boolean;
 };
 const Sidebar: React.FC<Props> = ({className}) => {
+    const location = useLocation()
     const {flowId} = useParams()
 
+    const currentPath = location.pathname
     const navigation: NavItem[] = [
         {
             icon: Command,
             href: `/flows/${flowId}`,
             label: "Overview",
-            active: false
+            active: currentPath === `/flows/${flowId}`
         },
         {
             icon: Play,
             href: `/flows/${flowId}/executions`,
             label: "Executions",
-            active: false
+            active: currentPath === `/flows/${flowId}/executions`
         },
         {
             icon: Braces,
             href: `/flows/${flowId}/functions`,
             label: "Functions",
-            active: false
+            active: currentPath === `/flows/${flowId}/functions`
         },
-        {
-            icon: CalendarClock,
-            href: `/flows/${flowId}/schedules`,
-            label: "Schedules",
-            active: false
-        },
+        // {
+        //     icon: CalendarClock,
+        //     href: `/flows/${flowId}/schedules`,
+        //     label: "Schedules",
+        //     active: currentPath === `/flows/${flowId}/schedules`
+        // },
         {
             icon: BookOpen,
             href: "https://docs.fn.guru",
