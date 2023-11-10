@@ -7,3 +7,9 @@ interface LogInReq {
     val username: AccountName
     val password: Password
 }
+
+interface LogOutReq {
+    val username: AccountName
+
+    //TODO
+}

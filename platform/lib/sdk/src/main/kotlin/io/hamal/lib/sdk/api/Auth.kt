@@ -4,6 +4,7 @@ import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.request.LogInReq
+import io.hamal.request.LogOutReq
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -11,6 +12,12 @@ data class ApiLoginReq(
     override val username: AccountName,
     override val password: Password
 ) : LogInReq
+
+@Serializable
+data class ApiLogoutReq(
+    override val username: AccountName
+    //TODO
+) : LogOutReq
 
 @Serializable
 data class ApiTokenSubmitted(

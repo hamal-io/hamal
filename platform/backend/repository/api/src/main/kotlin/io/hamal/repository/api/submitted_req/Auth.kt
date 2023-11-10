@@ -16,3 +16,9 @@ data class AuthLoginSubmitted(
     val hash: PasswordHash,
     val token: AuthToken,
 ) : Submitted
+
+@Serializable
+data class AuthLogoutSubmitted(
+    override val id: ReqId,
+    override var status: ReqStatus
+) : Submitted
