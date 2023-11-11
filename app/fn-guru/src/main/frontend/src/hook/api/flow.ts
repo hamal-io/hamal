@@ -1,12 +1,12 @@
 import {useAuth} from "@/hook/auth.ts";
 import {useEffect, useState} from "react";
-import {ApiFlowList, ApiFlowsimple} from "@/api/types";
+import {ApiFlowList, ApiFlowSimple} from "@/api/types";
 
 
-export const useApiFlowList = (groupId: string): [ApiFlowsimple[], boolean, Error] => {
+export const useApiFlowList = (groupId: string): [ApiFlowSimple[], boolean, Error] => {
     const [auth, setAuth] = useAuth()
 
-    const [flows, setFlows] = useState<ApiFlowsimple[]>([]);
+    const [flows, setFlows] = useState<ApiFlowSimple[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<Error>(null);
 

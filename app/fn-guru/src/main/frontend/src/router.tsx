@@ -14,6 +14,7 @@ import FlowDetailPage from "./pages/app/flow-detail";
 import FlowOverviewPage from "@/pages/app/flow-detail/pages/overview";
 import FlowExecListPage from "@/pages/app/flow-detail/pages/exec-list";
 import FlowFuncListPage from "@/pages/app/flow-detail/pages/func-list";
+import FlowFuncDetailPage from "@/pages/app/flow-detail/pages/func-detail/";
 
 import {createBrowserRouter} from "react-router-dom";
 import Playground from "@/pages/app/playground";
@@ -63,6 +64,12 @@ export const router = createBrowserRouter([
         path: "/flows/:flowId/functions", element:
             <FlowDetailPage>
                 <FlowFuncListPage/>
+            </FlowDetailPage>
+    },
+    {
+        path: "/flows/:flowId/functions/:funcId", element:
+            <FlowDetailPage>
+                <FlowFuncDetailPage/>
             </FlowDetailPage>
     },
     // {

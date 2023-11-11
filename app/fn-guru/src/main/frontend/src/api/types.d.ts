@@ -24,10 +24,10 @@ interface VersionedCode {
 }
 
 export interface ApiFlowList {
-    flows: Array<ApiFlowsimple>;
+    flows: Array<ApiFlowSimple>;
 }
 
-export interface ApiFlowsimple {
+export interface ApiFlowSimple {
     id: string;
     name: string;
 }

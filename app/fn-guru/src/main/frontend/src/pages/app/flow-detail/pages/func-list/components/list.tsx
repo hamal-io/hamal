@@ -3,52 +3,57 @@ import {Separator} from "@/components/ui/separator.tsx";
 import {EmptyPlaceholder} from "@/components/empty-placeholder.tsx";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx";
 import {PageHeader} from "@/components/page-hader.tsx";
-import Create from "@/pages/app/flow-list/components/create.tsx";
-import {useApiFlowList} from "@/hook/api/flow.ts";
-import {ApiFlowSimple} from "@/api/types";
+import Create from "@/pages/app/flow-detail/pages/func-list/components/create.tsx";
+import {useApiFuncList} from "@/hook/api/func.ts";
+import {ApiFlowSimple, ApiFuncSimple} from "@/api/types";
 import {GoToDocumentation} from "@/components/documentation.tsx";
 import {useNavigate} from "react-router-dom";
 
 type ListProps = {
-    groupId: string
+    flow: ApiFlowSimple
 }
 
-const List: FC<ListProps> = (props: ListProps) => {
-    const [flows, isLoading, error] = useApiFlowList(props.groupId)
+const List: FC<ListProps> = ({flow}) => {
+    const [funcs, isLoading, error] = useApiFuncList(flow.id)
 
     if (isLoading) return "Loading..."
     if (error != null) return "Error -"
 
     return (
-        <div className="pt-8 px-8">
-            <PageHeader title="Workflows" description="Organise your workflows" actions={[<Create/>]}/>
+        <div className="pt-2 px-2">
+            <PageHeader
+                title="Functions"
+                description={`Functions of your flow ${flow.name}`}
+                actions={[<Create flow={flow}/>]}
+            />
             <Separator className="my-6"/>
             {
-                flows.length ? (<Content flows={flows}/>) : (<NoContent/>)
+                funcs.length ? (<Content flowId={flow.id} funcs={funcs}/>) : (<NoContent/>)
             }
         </div>
     );
 }
 
 type ContentProps = {
-    flows: ApiFlowSimple[]
+    flowId: string;
+    funcs: ApiFuncSimple[]
 }
 
-const Content: FC<ContentProps> = ({flows}) => {
+const Content: FC<ContentProps> = ({flowId, funcs}) => {
     const navigate = useNavigate()
     return (
-        <ul className="grid grid-cols-1 gap-x-6 gap-y-8">
-            {flows.map((flow) => (
+        <ul className="grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-1 xl:grid-cols-3">
+            {funcs.map((func) => (
                 <Card
-                    key={flow.id}
-                    className="relative overflow-hidden duration-500 hover:border-primary/50 group"
+                    key={func.id}
+                    className="relative overfunc-hidden duration-500 hover:border-primary/50 group"
                     onClick={() => {
-                        navigate(`/flows/${flow.id}`)
+                        navigate(`/flows/${flowId}/functions/${func.id}`)
                     }}
                 >
                     <CardHeader>
                         <div className="flex items-center justify-between ">
-                            <CardTitle>{flow.name}</CardTitle>
+                            <CardTitle>{func.name}</CardTitle>
                         </div>
                     </CardHeader>
                     <CardContent>
@@ -68,13 +73,13 @@ const NoContent: FC = () => (
         <EmptyPlaceholder.Icon>
             {/*<Code />*/}
         </EmptyPlaceholder.Icon>
-        <EmptyPlaceholder.Title>No Flows found</EmptyPlaceholder.Title>
+        <EmptyPlaceholder.Title>No Funcs found</EmptyPlaceholder.Title>
         <EmptyPlaceholder.Description>
-            You haven&apos;t created any Flows yet.
+            You haven&apos;t created any Funcs yet.
         </EmptyPlaceholder.Description>
         <div className="flex flex-col items-center justify-center gap-2 md:flex-row">
             <Create/>
-            <GoToDocumentation link={"/flows"}/>
+            <GoToDocumentation link={"/funcs"}/>
         </div>
     </EmptyPlaceholder>
 )

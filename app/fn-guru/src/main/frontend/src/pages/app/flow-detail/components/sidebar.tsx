@@ -31,13 +31,13 @@ const Sidebar: React.FC<Props> = ({className}) => {
             icon: Play,
             href: `/flows/${flowId}/executions`,
             label: "Executions",
-            active: currentPath === `/flows/${flowId}/executions`
+            active: currentPath.startsWith(`/flows/${flowId}/executions`)
         },
         {
             icon: Braces,
             href: `/flows/${flowId}/functions`,
             label: "Functions",
-            active: currentPath === `/flows/${flowId}/functions`
+            active: currentPath.startsWith(`/flows/${flowId}/functions`)
         },
         // {
         //     icon: CalendarClock,
