@@ -233,6 +233,7 @@ export interface ApiLogoutSubmitted {
 type ApiLogoutAccountAction = () => void
 export const useApiAccountLogout = (): [ApiLogoutAccountAction, ApiLogoutSubmitted, boolean, Error] => {
     const [auth, setAuth] = useAuth()
+    const [data, setData] = useState<ApiLogoutSubmitted | null>(null);
     const [error, setError] = useState<Error>(null);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -257,15 +258,24 @@ export const useApiAccountLogout = (): [ApiLogoutAccountAction, ApiLogoutSubmitt
                     const message = `Request submission failed: ${response.status} - ${response.statusText}`;
                     throw new Error(message);
                 }
+
+                response.json().then(data => {
+                    setData(data)
+                    setIsLoading(false)
+                    setAuth(null)
+                })
+
+
                 localStorage.removeItem(AUTH_KEY)
                 window.location.href = '/'
             }).catch(error => {
-                console.log(error)
+                setError(error)
+                setIsLoading(false)
             })
         }
     }, [auth])
 
-    return [post, null, null, null]
+    return [post, data, isLoading, error]
 
 }
 
