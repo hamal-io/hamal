@@ -46,7 +46,7 @@ class MemoryAuthRepository : AuthRepository {
 
     override fun revokeAuth(cmd: RevokeAuthCmd) {
         return lock.write {
-            projection.remove(cmd.accountId)
+            projection[cmd.accountId]?.removeAll { it is TokenAuth }
         }
     }
 
