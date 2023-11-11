@@ -10,5 +10,5 @@ interface LogInReq {
 }
 
 interface LogOutReq {
-    val id: AccountId
+    val accountId: AccountId
 }

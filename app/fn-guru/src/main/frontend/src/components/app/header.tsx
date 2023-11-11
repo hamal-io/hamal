@@ -101,19 +101,22 @@ const LogoutMenuItem = () => {
     const endpoint = `v1/logout`
     const data = {accountId: auth.accountId}
 
-    const [logout, logoutSubmitted] = useApiPost<ApiLogoutSubmitted>()
+    const [logout, logoutSubmitted, isLoading, logoutError] = useApiPost<ApiLogoutSubmitted>()
 
-    const handleLogout = () => {
-        try {
-            logout(endpoint, data)
+
+    useEffect(() => {
+        if (logoutSubmitted) {
             setAuth(null)
             localStorage.removeItem(AUTH_KEY)
-            // window.location.href = '/'
-        } catch (e) {
-            console.log(`logout failed - ${e}`)
+            console.log(logoutSubmitted)
         }
 
-    };
+        if (logoutError) {
+            console.log(`Logout failed: ${logoutError}`);
+        }
+    }, [logoutSubmitted, logoutError]);
+
+    const handleLogout = async () => logout(endpoint, data)
 
     return (
         <DropdownMenuItem onClick={handleLogout}>

@@ -5,12 +5,14 @@ import io.hamal.core.req.handler.cmdId
 import io.hamal.repository.api.AuthCmdRepository
 import io.hamal.repository.api.AuthRepository
 import io.hamal.repository.api.submitted_req.AuthLogoutSubmitted
+import org.springframework.stereotype.Component
 
+@Component
 class LogoutHandler(
     private val authRepository: AuthRepository
 ) : ReqHandler<AuthLogoutSubmitted>(AuthLogoutSubmitted::class) {
     override fun invoke(req: AuthLogoutSubmitted) {
-        authRepository.list(req.accountId).firstOrNull() { it.accountId == req.accountId }?.let {//Token?
+        authRepository.list(req.accountId).firstOrNull() { it.accountId == req.accountId }?.let {
             authRepository.revokeAuth(
                 AuthCmdRepository.RevokeAuthCmd(
                     id = req.cmdId(),
