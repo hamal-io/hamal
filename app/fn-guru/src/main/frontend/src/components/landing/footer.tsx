@@ -9,7 +9,7 @@ const Footer: FC = () => (
             </div>
             <div className="order-1 flex flex-col gap-3 text-sm md:order-2">
                 <p className="text-foreground font-semibold">Community</p>
-                <FooterLink href="https://github.com/hamal-io/hamal" label="GitHub" external/>
+                <FooterLink href="https://github.com/hamal-io/hamal" label="GitHub"/>
             </div>
             <div className="order-2 flex flex-col gap-3 text-sm md:order-3">
                 <p className="text-foreground font-semibold">Resources</p>
