@@ -17,6 +17,7 @@ target/
 .gradle/
 .run/
 **/out/
+git_commit.txt
 
 **/cmake-build-debug/
 

@@ -5,6 +5,8 @@ set -e
 SCRIPT=$(readlink -f "$0")
 BASEDIR=$(dirname "$SCRIPT")
 
+/bin/bash $BASEDIR/_infra/set-git-hash.sh
+
 ./gradlew clean build
 
 cd $BASEDIR/platform/admin/src/main/resources
