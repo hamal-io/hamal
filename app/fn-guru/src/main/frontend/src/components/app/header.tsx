@@ -14,8 +14,6 @@ import {
 import {Avatar, AvatarFallback} from "@/components/ui/avatar.tsx";
 import {cn} from "@/utils";
 import {Link, useLocation, useNavigate} from "react-router-dom";
-import {useApiPost} from "@/hook";
-import {ApiAccountConversionSubmitted, logout} from "@/api/account.ts";
 import {Dialog, DialogContent, DialogHeader, DialogTrigger} from "@/components/ui/dialog.tsx";
 import {Input} from "@/components/ui/input.tsx";
 import * as z from "zod"
@@ -30,8 +28,9 @@ import {
     FormMessage
 } from "@/components/ui/form.tsx";
 import {useForm} from "react-hook-form";
-import {AUTH_KEY} from "@/types/auth.ts";
 import {Loader2} from "lucide-react";
+import {useApiAccountLogout, useApiPost} from "@/hook/api";
+import {ApiAccountConversionSubmitted} from "@/api/account.ts";
 
 const Header: FC = () => {
     const [auth] = useAuth()
@@ -81,17 +80,19 @@ const Profile = () => {
                     </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator/>
-                <DropdownMenuItem onClick={() => {
-
-                    logout(auth.accountId)
-
-                    localStorage.removeItem(AUTH_KEY)
-                    //navigate("/", {replace: true})
-                }}>
-                    Log out
-                </DropdownMenuItem>
+                <LogoutMenuItem/>
             </DropdownMenuContent>
         </DropdownMenu>
+    )
+}
+
+
+const LogoutMenuItem = () => {
+    const [logout, logoutSubmitted] = useApiAccountLogout();
+    return (
+        <DropdownMenuItem onClick={logout}>
+            Log out
+        </DropdownMenuItem>
     )
 }
 
