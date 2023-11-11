@@ -51,7 +51,8 @@ class StaticContentFilter : OncePerRequestFilter() {
             response.contentType = "text/javascript"
         }
 
-        response.setHeader("Cache-Control", "private, max-age=604800")
+        response.setHeader("etag", "abc1234")
+        response.setHeader("cache-control", "private, max-age=604800")
         response.outputStream.write(inputStream.readAllBytes())
     }
 
