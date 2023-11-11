@@ -264,8 +264,6 @@ export const useApiAccountLogout = (): [ApiLogoutAccountAction, ApiLogoutSubmitt
                     setIsLoading(false)
                     setAuth(null)
                 })
-
-
                 localStorage.removeItem(AUTH_KEY)
                 window.location.href = '/'
             }).catch(error => {
@@ -274,9 +272,7 @@ export const useApiAccountLogout = (): [ApiLogoutAccountAction, ApiLogoutSubmitt
             })
         }
     }, [auth])
-
     return [post, data, isLoading, error]
-
 }
 
 export const useApiGet = <T>(url: string): [T, boolean, Error] => {

@@ -15,10 +15,6 @@ export interface ApiLoginSubmitted {
     name: string;
 }
 
-export interface ApiLogoutSubmitted {
-    accountId: string;
-}
-
 export interface ApiAccountConversionSubmitted {
     id: string;
     status: string;

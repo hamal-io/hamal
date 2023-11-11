@@ -29,8 +29,8 @@ import {
 } from "@/components/ui/form.tsx";
 import {useForm} from "react-hook-form";
 import {Loader2} from "lucide-react";
-import {useApiAccountLogout, useApiPost} from "@/hook/api";
 import {ApiAccountConversionSubmitted} from "@/api/account.ts";
+import {useApiAccountLogout, useApiPost} from "@/hook";
 
 const Header: FC = () => {
     const [auth] = useAuth()
