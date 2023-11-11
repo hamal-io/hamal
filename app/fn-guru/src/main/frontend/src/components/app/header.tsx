@@ -29,7 +29,7 @@ import FlowSelector from "@/components/app/flow-selector.tsx";
 const Header: FC = () => {
     const [auth] = useAuth()
     return (
-        <div className="border-b">
+        <div className="border-b bg-white">
             <div className="flex h-16 px-4">
                 <div className="w-full flex items-center justify-between space-x-4">
                     {auth.type !== 'User' ? <Convert/> : (<div/>)}

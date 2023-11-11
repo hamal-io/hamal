@@ -2,7 +2,7 @@ import {CounterClockwiseClockIcon} from "@radix-ui/react-icons"
 
 import {Button} from "@/components/ui/button"
 import {Separator} from "@/components/ui/separator"
-import Editor from "@/components/ui/editor.tsx";
+import Editor from "@/components/editor.tsx";
 import {useState} from "react";
 import {useApiPost} from "@/hook";
 import {useAuth} from "@/hook/auth.ts";

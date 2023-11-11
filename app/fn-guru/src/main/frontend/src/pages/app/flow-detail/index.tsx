@@ -19,9 +19,9 @@ const FlowDetailPage: FC<Props> = ({children}) => {
 
     return (
         <Authenticated>
-            <div className="relative flex flex-row min-h-screen bg-gray-100">
+            <div className="relative flex flex-row min-h-screen ">
                 <Sidebar/>
-                <div className="p-4 border-l bg-background border-border w-full  ml-64">
+                <div className="p-4 border-l border-border w-full  ml-64">
                     <FlowContext.Provider value={flow}>
                         {children}
                     </FlowContext.Provider>

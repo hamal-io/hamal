@@ -4,8 +4,6 @@ import * as React from "react"
 import {
     ColumnDef,
     ColumnFiltersState,
-    SortingState,
-    VisibilityState,
     flexRender,
     getCoreRowModel,
     getFacetedRowModel,
@@ -13,20 +11,16 @@ import {
     getFilteredRowModel,
     getPaginationRowModel,
     getSortedRowModel,
+    SortingState,
     useReactTable,
+    VisibilityState,
 } from "@tanstack/react-table"
 
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table"
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow,} from "@/components/ui/table"
 
 import Pagination from "./pagination.tsx"
 import Toolbar from "./toolbar.tsx"
+import {Card, CardContent, CardFooter, CardHeader} from "@/components/ui/card.tsx";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -65,9 +59,11 @@ export default function <TData, TValue>({columns, data,}: DataTableProps<TData, 
     })
 
     return (
-        <div className="space-y-4">
-            <Toolbar table={table}/>
-            <div className="rounded-md border">
+        <Card>
+            <CardHeader>
+                <Toolbar table={table}/>
+            </CardHeader>
+            <CardContent>
                 <Table>
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
@@ -116,8 +112,10 @@ export default function <TData, TValue>({columns, data,}: DataTableProps<TData, 
                         )}
                     </TableBody>
                 </Table>
-            </div>
-            <Pagination table={table}/>
-        </div>
+                <CardFooter>
+                    <Pagination table={table}/>
+                </CardFooter>
+            </CardContent>
+        </Card>
     )
 }

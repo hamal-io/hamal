@@ -54,8 +54,8 @@ const Sidebar: React.FC<Props> = ({className}) => {
     ];
 
     return (
-        <aside className={cn("fixed h-screen inset-y-0 flex w-64 flex-col px-6 gap-y-5", className)}>
-            <nav className="flex flex-col flex-1 flex-grow mt-16">
+        <aside className={cn("fixed h-screen inset-y-0 flex w-64 flex-col px-6 gap-y-5 bg-gray-100", className)}>
+            <nav className="flex flex-col flex-1 flex-grow">
                 <FlowSelector flowId={flowId}/>
                 <ul className="flex flex-col flex-1 gap-y-7 pt-4">
                     <li>

@@ -1,35 +1,30 @@
 import React, {FC} from "react";
 
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {useAuth} from "@/hook/auth.ts";
 import {Button} from "@/components/ui/button.tsx";
 
 const Header: FC = () => (
-    <header className="sticky top-0 z-40 w-full border-b bg-background">
-        <div className="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
-            <Nav/>
-            <div className="flex flex-1 items-center justify-end space-x-4">
-                <nav className="flex items-center space-x-1">
-                    <GoToApp/>
-                </nav>
-            </div>
+    <header
+        className={"grid w-full grid-cols-2 gap-2 sm:grid-cols-5 mx-auto w-full max-w-4xl"}
+    >
+        <div className="flex items-center sm:col-span-1">
+            <Link to="/" className="font-cal text-muted-foreground hover:text-foreground">
+                fn(guru)
+            </Link>
+        </div>
+        <div className="hidden items-center justify-center sm:col-span-3 sm:flex sm:gap-3">
+            <Button variant="link" asChild>
+                <Link to="https://docs.fn.guru" target="_blank">
+                    Documentation
+                </Link>
+            </Button>
+        </div>
+        <div className="flex items-center justify-end gap-3 sm:col-span-1">
+            <GoToApp/>
         </div>
     </header>
 );
-
-function Nav() {
-    return (
-        <div className="flex gap-6 md:gap-10">
-            <a key='home' href="/" className="flex items-center space-x-2">
-                <span className="inline-block font-bold">fn(guru)</span>
-            </a>
-            <nav className="flex gap-6">
-            </nav>
-        </div>
-    )
-}
-
-
 export default Header;
 
 const GoToApp = () => {
@@ -39,18 +34,18 @@ const GoToApp = () => {
     if (auth != null && auth.type !== "Unauthorized") {
         return (
             <Button
-                className="bg-gray-500"
-                color="dark"
                 onClick={() => {
                     navigate("/flows", {replace: true})
                 }}>
-                Get it done
+                Back to work
             </Button>
         )
     }
 
     return (
         <Button
+            color="dark"
+            variant={"secondary"}
             onClick={() => {
                 navigate("/login", {replace: true})
             }}>

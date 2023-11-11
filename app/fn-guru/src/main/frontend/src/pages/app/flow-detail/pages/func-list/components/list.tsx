@@ -2,7 +2,7 @@ import React, {FC} from "react";
 import {Separator} from "@/components/ui/separator.tsx";
 import {EmptyPlaceholder} from "@/components/empty-placeholder.tsx";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx";
-import {PageHeader} from "@/components/page-hader.tsx";
+import {PageHeader} from "@/components/page-header.tsx";
 import Create from "@/pages/app/flow-detail/pages/func-list/components/create.tsx";
 import {useApiFuncList} from "@/hook/api/func.ts";
 import {ApiFlowSimple, ApiFuncSimple} from "@/api/types";
