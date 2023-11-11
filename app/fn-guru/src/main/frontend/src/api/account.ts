@@ -15,6 +15,9 @@ export interface ApiLoginSubmitted {
     name: string;
 }
 
+export interface ApiLogoutSubmitted {
+    accountId: string;
+}
 
 export interface ApiAccountConversionSubmitted {
     id: string;
@@ -88,6 +91,28 @@ export async function login(username: string, password: string): Promise<ApiLogi
             username,
             password
         })
+    })
+
+    if (!response.ok) {
+        const message = `Request submission failed: ${response.status} - ${response.statusText}`;
+        throw new Error(message);
+    }
+    return await response.json() as ApiLoginSubmitted;
+}
+
+
+export async function logout(accountId: string, token: string): Promise<ApiLogoutSubmitted> {
+    //useAuth()
+    const headers = new Headers();
+    headers.append('Authorization', `Bearer ${token}`);
+    headers.append('Content-Type', 'application/json');
+    headers.append('Accept', 'application/json')
+
+
+    const response = await fetch(`${import.meta.env.VITE_BASE_URL}/v1/logout`, {
+        headers: headers,
+        method: "POST",
+        body: JSON.stringify({accountId})
     })
 
     if (!response.ok) {

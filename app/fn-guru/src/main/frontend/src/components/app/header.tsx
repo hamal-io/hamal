@@ -13,18 +13,25 @@ import {
 
 import {Avatar, AvatarFallback} from "@/components/ui/avatar.tsx";
 import {cn} from "@/utils";
-import {Link, useLocation, useNavigate, useParams} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import {useApiPost} from "@/hook";
-import {ApiAccountConversionSubmitted} from "@/api/account.ts";
+import {ApiAccountConversionSubmitted, logout} from "@/api/account.ts";
 import {Dialog, DialogContent, DialogHeader, DialogTrigger} from "@/components/ui/dialog.tsx";
 import {Input} from "@/components/ui/input.tsx";
 import * as z from "zod"
 import {zodResolver} from "@hookform/resolvers/zod";
-import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
+import {
+    Form,
+    FormControl,
+    FormDescription,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage
+} from "@/components/ui/form.tsx";
 import {useForm} from "react-hook-form";
 import {AUTH_KEY} from "@/types/auth.ts";
-import {BookOpen, Braces, Command, Loader2, LucideIcon, Play} from "lucide-react";
-import FlowSelector from "@/components/app/flow-selector.tsx";
+import {Loader2} from "lucide-react";
 
 const Header: FC = () => {
     const [auth] = useAuth()
@@ -77,6 +84,8 @@ const Profile = () => {
                 <DropdownMenuItem onClick={() => {
                     localStorage.removeItem(AUTH_KEY)
                     navigate("/", {replace: true})
+                    logout(auth.accountId, AUTH_KEY).then(console.log) //TODO-72
+
                 }}>
                     Log out
                 </DropdownMenuItem>
@@ -84,6 +93,7 @@ const Profile = () => {
         </DropdownMenu>
     )
 }
+
 
 const Nav = ({className, ...props}: React.HTMLAttributes<HTMLElement>) => {
     const location = useLocation()
