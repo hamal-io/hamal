@@ -46,6 +46,7 @@ internal class GroupRepositoryTest : AbstractUnitTest() {
             runWith(GroupRepository::class) {
 
                 createGroup(
+                    cmdId = CmdId(1),
                     groupId = GroupId(123),
                     name = GroupName("SomeGroup"),
                     creatorId = AccountId(234)
