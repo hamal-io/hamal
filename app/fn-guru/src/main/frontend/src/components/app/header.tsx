@@ -30,7 +30,9 @@ import {
 import {useForm} from "react-hook-form";
 import {Loader2} from "lucide-react";
 import {ApiAccountConversionSubmitted} from "@/api/account.ts";
-import {useApiAccountLogout, useApiPost} from "@/hook";
+import {useApiPost} from "@/hook";
+import {AUTH_KEY} from "@/types/auth.ts";
+
 
 const Header: FC = () => {
     const [auth] = useAuth()
@@ -86,11 +88,35 @@ const Profile = () => {
     )
 }
 
+export interface ApiLogoutSubmitted {
+    id: string;
+    status: string;
+    accountId: string;
+}
+
 
 const LogoutMenuItem = () => {
-    const [logout, logoutSubmitted] = useApiAccountLogout();
+    const [auth, setAuth] = useAuth()
+
+    const endpoint = `v1/logout`
+    const data = {accountId: auth.accountId}
+
+    const [logout, logoutSubmitted] = useApiPost<ApiLogoutSubmitted>()
+
+    const handleLogout = () => {
+        try {
+            logout(endpoint, data)
+            setAuth(null)
+            localStorage.removeItem(AUTH_KEY)
+            // window.location.href = '/'
+        } catch (e) {
+            console.log(`logout failed - ${e}`)
+        }
+
+    };
+
     return (
-        <DropdownMenuItem onClick={logout}>
+        <DropdownMenuItem onClick={handleLogout}>
             Log out
         </DropdownMenuItem>
     )

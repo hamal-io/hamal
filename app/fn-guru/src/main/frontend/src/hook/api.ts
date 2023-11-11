@@ -1,7 +1,6 @@
 import {useCallback, useEffect, useState} from "react";
 import {ApiLoginSubmitted} from "../api/account.ts";
 import {useAuth} from "@/hook/auth.ts";
-import {AUTH_KEY} from "@/types/auth.ts";
 
 type ApiDeployLatestCodeAction = (funcId: string, abortController?: AbortController) => void
 export const useApiDeployLatestCode = <T>(): [ApiDeployLatestCodeAction, T, boolean, Error] => {
@@ -223,57 +222,8 @@ export const useApiAccountLogin = (): [ApiLoginAccountAction, ApiLoginSubmitted,
 }
 
 
-export interface ApiLogoutSubmitted {
-    id: string;
-    status: string;
-    accountId: string;
-}
 
 
-type ApiLogoutAccountAction = () => void
-export const useApiAccountLogout = (): [ApiLogoutAccountAction, ApiLogoutSubmitted, boolean, Error] => {
-    const [auth, setAuth] = useAuth()
-    const [data, setData] = useState<ApiLogoutSubmitted | null>(null);
-    const [error, setError] = useState<Error>(null);
-    const [isLoading, setIsLoading] = useState(true);
-
-    const post = useCallback(async () => {
-        if (auth.type === 'Unauthorized') {
-            console.log("Unauthorized")
-            setError(Error("Unauthenticated"))
-            setIsLoading(false)
-            setAuth(null)
-            window.location.href = '/'
-        } else {
-            fetch(`${import.meta.env.VITE_BASE_URL}/v1/logout`, {
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${auth.token}`
-                },
-                method: "POST",
-                body: JSON.stringify(auth.accountId)
-            }).then(response => {
-                if (!response.ok) {
-                    const message = `Request submission failed: ${response.status} - ${response.statusText}`;
-                    throw new Error(message);
-                }
-
-                response.json().then(data => {
-                    setData(data)
-                    setIsLoading(false)
-                    setAuth(null)
-                })
-                localStorage.removeItem(AUTH_KEY)
-                window.location.href = '/'
-            }).catch(error => {
-                setError(error)
-                setIsLoading(false)
-            })
-        }
-    }, [auth])
-    return [post, data, isLoading, error]
-}
 
 export const useApiGet = <T>(url: string): [T, boolean, Error] => {
     const [auth, setAuth] = useAuth()
