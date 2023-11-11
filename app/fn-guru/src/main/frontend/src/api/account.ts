@@ -101,21 +101,24 @@ export async function login(username: string, password: string): Promise<ApiLogi
 }
 
 
-export async function logout(accountId: string, token: string): Promise<ApiLogoutSubmitted> {
+export async function logout(accountId: string)/* :Promise<ApiLogoutSubmitted>*/ {
+    const [auth] = useAuth()
     const headers = new Headers();
     headers.append('Accept', 'application/json')
-    headers.append('Authorization', `Bearer ${token}`);
+    headers.append('Authorization', `Bearer ${auth.token}`);
     headers.append('Content-Type', 'application/json');
 
     const response = await fetch(`${import.meta.env.VITE_BASE_URL}/v1/logout`, {
         headers: headers,
         method: "POST",
         body: JSON.stringify({accountId})
+    }).catch(error => {
+        console.log(error)
     })
 
-    if (!response.ok) {
-        const message = `Request submission failed: ${response.status} - ${response.statusText}`;
-        throw new Error(message);
-    }
-    return await response.json() as ApiLoginSubmitted;
+    /*    if (!response.ok) {
+            const message = `Request submission failed: ${response.status} - ${response.statusText}`;
+            throw new Error(message);
+        }
+        return await response.json() as ApiLogoutSubmitted;*/
 }

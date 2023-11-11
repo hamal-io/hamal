@@ -15,7 +15,7 @@ import {Avatar, AvatarFallback} from "@/components/ui/avatar.tsx";
 import {cn} from "@/utils";
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import {useApiPost} from "@/hook";
-import {ApiAccountConversionSubmitted} from "@/api/account.ts";
+import {ApiAccountConversionSubmitted, logout} from "@/api/account.ts";
 import {Dialog, DialogContent, DialogHeader, DialogTrigger} from "@/components/ui/dialog.tsx";
 import {Input} from "@/components/ui/input.tsx";
 import * as z from "zod"
@@ -83,10 +83,10 @@ const Profile = () => {
                 <DropdownMenuSeparator/>
                 <DropdownMenuItem onClick={() => {
 
-                    //TODO-72  logout(auth.accountId, useAuth().token)
+                    logout(auth.accountId)
 
                     localStorage.removeItem(AUTH_KEY)
-                    navigate("/", {replace: true})
+                    //navigate("/", {replace: true})
                 }}>
                     Log out
                 </DropdownMenuItem>
