@@ -102,12 +102,10 @@ export async function login(username: string, password: string): Promise<ApiLogi
 
 
 export async function logout(accountId: string, token: string): Promise<ApiLogoutSubmitted> {
-    //useAuth()
     const headers = new Headers();
+    headers.append('Accept', 'application/json')
     headers.append('Authorization', `Bearer ${token}`);
     headers.append('Content-Type', 'application/json');
-    headers.append('Accept', 'application/json')
-
 
     const response = await fetch(`${import.meta.env.VITE_BASE_URL}/v1/logout`, {
         headers: headers,

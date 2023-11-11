@@ -15,8 +15,7 @@ data class ApiLoginReq(
 
 @Serializable
 data class ApiLogoutReq(
-    override val id: AccountId,
-    override val token: AuthToken
+    override val id: AccountId
 ) : LogOutReq
 
 @Serializable

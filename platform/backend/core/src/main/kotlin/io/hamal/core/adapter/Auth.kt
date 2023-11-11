@@ -77,12 +77,11 @@ class AuthAdapter(
     }
 
     override fun <T : Any> invoke(req: LogOutReq, responseHandler: (AuthLogoutSubmitted) -> T): T {
-        val account = accountQueryRepository.find(req.id)
+        accountQueryRepository.get(req.id)
         return AuthLogoutSubmitted(
             id = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
             accountId = req.id,
-            token = req.token
         ).also(reqCmdRepository::queue).let(responseHandler)
     }
 }

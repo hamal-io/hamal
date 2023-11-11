@@ -21,6 +21,5 @@ data class AuthLoginSubmitted(
 data class AuthLogoutSubmitted(
     override val id: ReqId,
     override var status: ReqStatus,
-    val accountId: AccountId,
-    val token: AuthToken
+    val accountId: AccountId
 ) : Submitted
