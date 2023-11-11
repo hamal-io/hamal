@@ -28,7 +28,7 @@ const List: FC<ListProps> = ({flow}) => {
             />
             <Separator className="my-6"/>
             {
-                funcs.length ? (<Content flowId={flow.id} funcs={funcs}/>) : (<NoContent/>)
+                funcs.length ? (<Content flowId={flow.id} funcs={funcs}/>) : (<NoContent flow={flow}/>)
             }
         </div>
     );
@@ -68,7 +68,10 @@ const Content: FC<ContentProps> = ({flowId, funcs}) => {
     )
 }
 
-const NoContent: FC = () => (
+type NoContentProps = {
+    flow: ApiFlowSimple;
+}
+const NoContent: FC<NoContentProps> = ({flow}) => (
     <EmptyPlaceholder className="my-4 ">
         <EmptyPlaceholder.Icon>
             {/*<Code />*/}
@@ -78,7 +81,7 @@ const NoContent: FC = () => (
             You haven&apos;t created any Funcs yet.
         </EmptyPlaceholder.Description>
         <div className="flex flex-col items-center justify-center gap-2 md:flex-row">
-            <Create/>
+            <Create flow={flow}/>
             <GoToDocumentation link={"/funcs"}/>
         </div>
     </EmptyPlaceholder>

@@ -19,12 +19,6 @@ export default function PlaygroundPage() {
                 </div>
                 <Separator/>
                 <div className="flex h-full flex-col space-y-4">
-                    <div>
-                        <Editor
-                            className="min-h-[100px] flex-1 p-4 md:min-h-[700px] lg:min-h-[700px]"
-                            code={code} onChange={(code) => setCode(code)}
-                        />
-                    </div>
                     <div className="flex items-center justify-center space-x-2">
                         <Button onClick={() => {
                             post(`v1/flows/${auth.defaultFlowIds[auth.groupId]}/adhoc`, {
@@ -33,6 +27,13 @@ export default function PlaygroundPage() {
                             })
                         }}>Execute</Button>
                     </div>
+                    <div>
+                        <Editor
+                            className="min-h-[100px] flex-1 p-4 md:min-h-[700px] lg:min-h-[700px]"
+                            code={code} onChange={(code) => setCode(code)}
+                        />
+                    </div>
+
                 </div>
             </div>
         </>
