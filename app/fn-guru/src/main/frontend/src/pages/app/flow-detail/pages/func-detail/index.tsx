@@ -1,11 +1,11 @@
 import React, {FC, useEffect, useState} from "react";
 import Save from "@/pages/app/flow-detail/pages/func-detail/components/save.tsx";
-import Deploy from "@/pages/app/flow-detail/pages/func-detail/components/deploy.tsx";
 import History from "@/pages/app/flow-detail/pages/func-detail/components/history.tsx";
 import FuncSelector from "@/components/app/func-selector.tsx";
 import Editor from "@/components/editor.tsx";
 import {useFuncGet} from "@/hook/api/func.ts";
 import {useParams} from "react-router-dom";
+import Actions from "@/pages/app/flow-detail/pages/func-detail/components/actions.tsx";
 
 type Props = {}
 const FuncDetailPage: FC<Props> = ({}) => {
@@ -33,7 +33,7 @@ const FuncDetailPage: FC<Props> = ({}) => {
                 <div className="flex w-full space-x-2 justify-end">
                     <Save funcId={funcId} code={code} name={name}/>
                     <History/>
-                    <Deploy funcId={funcId}/>
+                    <Actions funcId={funcId}/>
                 </div>
             </div>
 
