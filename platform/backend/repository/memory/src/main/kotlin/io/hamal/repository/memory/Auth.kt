@@ -47,10 +47,11 @@ class MemoryAuthRepository : AuthRepository {
     override fun revokeAuth(cmd: RevokeAuthCmd) {
         return lock.write {
             projection.values.forEach {
-                it.removeAll { it.id == cmd.authId }
+                it.removeIf { it.id == cmd.authId }
             }
         }
     }
+
 
     override fun list(query: AuthQuery): List<Auth> {
         return projection.filter { query.accountIds.isEmpty() || it.key in query.accountIds }

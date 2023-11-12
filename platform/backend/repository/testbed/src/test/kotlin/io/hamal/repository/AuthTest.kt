@@ -75,33 +75,64 @@ internal class AuthRepositoryTest : AbstractUnitTest() {
             }
         }
 
-
-        @TestFactory
-        fun `Revoke token auth with password`() = runWith(AuthRepository::class) {
-            createTokenAuth(
-                cmdId = CmdGen(),
-                authId = AuthId(5),
-                accountId = AccountId(3),
-                token = AuthToken("supersecret")
-            )
-
-            createPasswordAuth(
-                authId = AuthId(1),
-                accountId = AccountId(3)
-            )
-
-            revokeAuth(
-                AuthCmdRepository.RevokeAuthCmd(
-                    id = CmdGen(),
-                    authId = AuthId(5)
+        @Nested
+        inner class RevokeTest {
+            @TestFactory
+            fun `Revoke token auth with password`() = runWith(AuthRepository::class) {
+                createTokenAuth(
+                    cmdId = CmdGen(),
+                    authId = AuthId(5),
+                    accountId = AccountId(3),
+                    token = AuthToken("supersecret")
                 )
-            )
 
-            with(list(AccountId(3))) {
-                assertThat(find(AuthToken("supersecret")), nullValue())
-                assertThat(get(0).accountId, equalTo(AccountId(3)))
-                assertTrue(any { it.id == AuthId(1) })
-                assertFalse(any { it.id == AuthId(5) })
+                createPasswordAuth(
+                    authId = AuthId(1),
+                    accountId = AccountId(3)
+                )
+
+                revokeAuth(
+                    AuthCmdRepository.RevokeAuthCmd(
+                        id = CmdGen(),
+                        authId = AuthId(5)
+                    )
+                )
+
+                with(list(AccountId(3))) {
+                    assertThat(find(AuthToken("supersecret")), nullValue())
+                    assertThat(get(0).accountId, equalTo(AccountId(3)))
+                    assertTrue(any { it.id == AuthId(1) })
+                    assertFalse(any { it.id == AuthId(5) })
+                }
+            }
+
+            @TestFactory
+            fun `Tries to revoke non existing token`() = runWith(AuthRepository::class) {
+                createTokenAuth(
+                    cmdId = CmdGen(),
+                    authId = AuthId(5),
+                    accountId = AccountId(3),
+                    token = AuthToken("supersecret")
+                )
+
+                revokeAuth(
+                    AuthCmdRepository.RevokeAuthCmd(
+                        id = CmdGen(),
+                        authId = AuthId(5)
+                    )
+                )
+
+                revokeAuth(
+                    AuthCmdRepository.RevokeAuthCmd(
+                        id = CmdGen(),
+                        authId = AuthId(5)
+                    )
+                )
+
+                with(list(AccountId(3))) {
+                    assertThat(find(AuthToken("supersecret")), nullValue())
+                    assertFalse(any { it.id == AuthId(5) })
+                }
             }
         }
     }
