@@ -87,7 +87,7 @@ class SqliteAuthRepository(
 
     override fun revokeAuth(cmd: RevokeAuthCmd) {
         connection.execute("DELETE FROM auth WHERE id = :id") {
-            set("id", cmd.accountId)
+            set("id", cmd.authId)
         }
     }
 

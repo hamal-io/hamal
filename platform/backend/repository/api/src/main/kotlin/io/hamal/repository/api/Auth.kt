@@ -42,7 +42,7 @@ interface AuthCmdRepository : CmdRepository {
 
     data class RevokeAuthCmd(
         val id: CmdId,
-        val accountId: AccountId
+        val authId: AuthId
     )
 
     data class CreatePasswordAuthCmd(

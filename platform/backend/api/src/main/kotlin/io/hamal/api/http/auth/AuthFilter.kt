@@ -3,7 +3,7 @@ package io.hamal.api.http.auth
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.AuthToken
 import io.hamal.repository.api.AccountQueryRepository
-import io.hamal.repository.api.AuthCmdRepository
+import io.hamal.repository.api.AuthCmdRepository.RevokeAuthCmd
 import io.hamal.repository.api.AuthRepository
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
@@ -68,7 +68,7 @@ class AuthApiFilter(
                 try {
 
                     if (path == "/v1/logout") {
-                        authRepository.revokeAuth(AuthCmdRepository.RevokeAuthCmd(CmdId.random(), auth.accountId))
+                        authRepository.revokeAuth(RevokeAuthCmd(CmdId.random(), auth.id))
                         response.status = 204
                         return
                     }
