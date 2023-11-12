@@ -1,41 +1,50 @@
-import {CounterClockwiseClockIcon} from "@radix-ui/react-icons"
-
 import {Button} from "@/components/ui/button"
-import {Separator} from "@/components/ui/separator"
 import Editor from "@/components/editor.tsx";
-import {useState} from "react";
+import React, {useState} from "react";
 import {useApiPost} from "@/hook";
 import {useAuth} from "@/hook/auth.ts";
+import {Card, CardContent, CardFooter} from "@/components/ui/card.tsx";
+import {PageHeader} from "@/components/page-header.tsx";
+import {Separator} from "@/components/ui/separator.tsx";
 
 export default function PlaygroundPage() {
     const [auth] = useAuth()
     const [post, data] = useApiPost()
     const [code, setCode] = useState("log = require('log')\nlog.info('Let\\'s go..')")
+
+
+    const Run = () => (
+        <Button onClick={() => {
+            post(`v1/flows/${auth.defaultFlowIds[auth.groupId]}/adhoc`, {
+                inputs: {},
+                code: code
+            })
+        }}>Run</Button>
+    )
+
     return (
-        <>
-            <div className="hidden h-full flex-col md:flex">
-                <div className="container flex flex-col items-start justify-between space-y-2 py-4 sm:flex-row sm:items-center sm:space-y-0 md:h-16">
-                    <h2 className="text-lg font-semibold">Playground</h2>
-                </div>
-                <Separator/>
-                <div className="flex h-full flex-col space-y-4">
-                    <div className="flex items-center justify-center space-x-2">
-                        <Button onClick={() => {
-                            post(`v1/flows/${auth.defaultFlowIds[auth.groupId]}/adhoc`, {
-                                inputs: {},
-                                code: code
-                            })
-                        }}>Execute</Button>
-                    </div>
-                    <div>
+        <div className="flex flex-col justify-center items-center">
+            <div className="pt-8 px-8">
+                <PageHeader title="Playground" description="" actions={[]}/>
+            </div>
+            <Card className="mx-auto flex w-full max-w-4xl flex-1 flex-col items-start justify-center">
+                <CardContent className="w-full p-4 bg-gray-200 ">
+                    <div className="bg-white p-4 rounded-sm">
                         <Editor
-                            className="min-h-[100px] flex-1 p-4 md:min-h-[700px] lg:min-h-[700px]"
-                            code={code} onChange={(code) => setCode(code)}
+                            code={code}
+                            onChange={code => {
+                                setCode(code || "")
+                            }}
                         />
                     </div>
-
-                </div>
-            </div>
-        </>
+                </CardContent>
+                <CardFooter className="w-full justify-center items-center pt-4">
+                    <div className="flex flex-col ">
+                        <Run/>
+                    </div>
+                </CardFooter>
+            </Card>
+        </div>
     )
 }
+
