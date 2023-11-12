@@ -20,14 +20,13 @@ internal object ProjectionCurrent : SqliteProjection<GroupId, GroupRecord, Group
         try {
             tx.execute(
                 """
-                INSERT INTO current 
-                    (id, name, data) 
-                VALUES 
-                    (:id, :name, :data) 
+                INSERT OR REPLACE INTO current
+                    (id, data) 
+                VALUES
+                    (:id, :data)
             """.trimIndent()
             ) {
                 set("id", obj.id)
-                set("name", obj.name)
                 set("data", protobuf.encodeToByteArray(Group.serializer(), obj))
             }
         } catch (e: SQLiteException) {
@@ -64,10 +63,8 @@ internal object ProjectionCurrent : SqliteProjection<GroupId, GroupRecord, Group
             """
             CREATE TABLE IF NOT EXISTS current (
                  id             INTEGER NOT NULL,
-                 name           VARCHAR(255) NOT NULL,
                  data           BLOB NOT NULL,
-                 PRIMARY KEY    (id),
-                 UNIQUE (name)
+                 PRIMARY KEY    (id)
             );
         """.trimIndent()
         )

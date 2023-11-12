@@ -1,61 +1,80 @@
 import React, {useState} from 'react'
-import Editor from "@/components/ui/editor.tsx";
+import Editor from "@/components/editor.tsx";
 
 import Footer from '@/components/landing/footer.tsx'
 import Header from '@/components/landing/header.tsx'
 
 
 import {useNavigate} from "react-router-dom";
+import {useAuth} from "@/hook/auth.ts";
 import {Button} from "@/components/ui/button.tsx";
-import {Card} from "@/components/ui/card.tsx";
 
 const HomePage: React.FC = () => {
+    const [auth] = useAuth()
     const navigate = useNavigate()
     const [code, setCode] = useState(`log = require 'log'\nlog.info("That wasn't hard, was it?")`)
     return (
-        <div className="flex flex-col h-screen justify-between bg-gray-200">
+        <main className="flex flex-col min-h-screen w-full items-center justify-start p-8 ">
             <Header/>
-            <main className="flex-1 w-full mx-auto p-4 h-full shadow-lg ">
-                <div className="flex flex-col items-center justify-center">
-                    <h1 className="text-2xl font-bold">Simplest way to automate your workflows through cloud functions</h1>
-                    {/*<h2 className="text-lg font-bold">No installation, no command-line tools, no yaml.</h2>*/}
-                    <h2 className="text-lg text-gray-600">(Served as hot as your coffee)</h2>
+            {/*<Card className="mx-auto flex w-full max-w-4xl flex-1 flex-col items-start justify-center">*/}
+            {/*    <CardHeader className="w-full">*/}
+            {/*        <div className="flex w-full flex-col items-center justify-center">*/}
+            {/*            <h1 className="text-2xl font-bold">Simplest way to automate your workflows through cloud functions</h1>*/}
+            {/*        </div>*/}
+            {/*    </CardHeader>*/}
+            {/*    <CardContent className="w-full p-8 bg-gray-200 ">*/}
+            {/*        <div className="bg-white p-4 rounded-sm">*/}
+            {/*            <Editor*/}
+            {/*                code={code}*/}
+            {/*                onChange={code => {*/}
+            {/*                    setCode(code || "")*/}
+            {/*                }}*/}
+            {/*            />*/}
+            {/*        </div>*/}
+            {/*    </CardContent>*/}
+            {/*    <CardFooter className="w-full justify-center items-center pt-4">*/}
+            {/*        <div className="flex flex-col ">*/}
+            {/*            <Button*/}
+            {/*                onClick={() => {*/}
+            {/*                    navigate("/onboarding", {replace: true, state: {type: "Function", code}})*/}
+            {/*                }}>*/}
+            {/*                Deploy now*/}
+            {/*            </Button>*/}
+
+            {/*            <div className="flex flex-col items-center justify-center pt-2">*/}
+            {/*                <h4 className="text-lg font-semibold text-gray-500">No credit card / registration required</h4>*/}
+            {/*                <h5 className="text-md text-gray-400">No installation, no command-line tools, no yaml.</h5>*/}
+            {/*            </div>*/}
+            {/*        </div>*/}
+
+            {/*    </CardFooter>*/}
+            {/*</Card>*/}
+
+            <div className="flex w-full flex-col pt-16 items-center justify-center">
+                <h1 className="text-2xl font-bold">Simplest way to automate your workflows through cloud functions</h1>
+            </div>
+
+            <div className="container h-full py-6 max-w-4xl">
+                <div className="bg-white p-4 rounded-sm border-2">
+                    <Editor code={code} onChange={setCode}/>
                 </div>
+            </div>
 
-                <div className="flex flex-col items-center justify-center pt-4">
-                    <div className="w-3/4 my-1 text-gray-900 ">
-                        <Card>
-                            <Editor
-                                code={code}
-                                onChange={code => {
-                                    setCode(code || "")
-                                }}
-                            />
-                        </Card>
-                    </div>
+            <div className="flex flex-col ">
+                <Button
+                    onClick={() => {
+                        navigate("/onboarding", {replace: true, state: {type: "Function", code}})
+                    }}>
+                    Deploy now
+                </Button>
 
-                    <div className="pt-3">
-                        <Button
-                            onClick={() => {
-                                navigate("/onboarding", {replace: true, state: {type: "Function", code}})
-                            }}>
-                            Deploy now
-                        </Button>
-                    </div>
-
-                    <div className="flex flex-col items-center justify-center pt-2">
-                        <h2 className="text-lg font-bold">No credit card / registration required</h2>
-                        <h2 className="text-md">No installation, no command-line tools, no yaml.</h2>
-                    </div>
-
-                    <div className="pt-1.5">
-                        <h3 className="text-gray-900"></h3>
-                    </div>
+                <div className="flex flex-col items-center justify-center pt-2 pb-16">
+                    <h4 className="text-md font-semibold text-gray-800">No credit card / registration required</h4>
+                    <h5 className="text-sm text-gray-400">No installation, no command-line tools, no YAML.</h5>
                 </div>
-            </main>
-
+            </div>
             <Footer/>
-        </div>
+        </main>
     );
 }
 

@@ -12,8 +12,10 @@ import FlowListPage from "./pages/app/flow-list";
 import FlowDetailPage from "./pages/app/flow-detail";
 
 import FlowOverviewPage from "@/pages/app/flow-detail/pages/overview";
+import FlowExecDetailPage from "@/pages/app/flow-detail/pages/exec-detail";
 import FlowExecListPage from "@/pages/app/flow-detail/pages/exec-list";
 import FlowFuncListPage from "@/pages/app/flow-detail/pages/func-list";
+import FlowFuncDetailPage from "@/pages/app/flow-detail/pages/func-detail/";
 
 import {createBrowserRouter} from "react-router-dom";
 import Playground from "@/pages/app/playground";
@@ -50,30 +52,25 @@ export const router = createBrowserRouter([
                 <FlowExecListPage/>
             </FlowDetailPage>
     },
-    //
-    // {
-    //     path: "/flows/:flowId/executions/:execId", element:
-    //         <Authenticated>
-    //             <FlowDetailPage>
-    //                 <FlowExecDetailPage/>
-    //             </FlowDetailPage>
-    //         </Authenticated>
-    // },
+
+    {
+        path: "/flows/:flowId/executions/:execId", element:
+            <FlowDetailPage>
+                <FlowExecDetailPage/>
+            </FlowDetailPage>
+    },
     {
         path: "/flows/:flowId/functions", element:
             <FlowDetailPage>
                 <FlowFuncListPage/>
             </FlowDetailPage>
     },
-    // {
-    //     path: "/flows/:flowId/functions/:funcId", element:
-    //         <Authenticated>
-    //             <FlowDetailPage>
-    //                 <FlowFuncDetail/>
-    //             </FlowDetailPage>
-    //         </Authenticated>
-    // },
-
+    {
+        path: "/flows/:flowId/functions/:funcId", element:
+            <FlowDetailPage>
+                <FlowFuncDetailPage/>
+            </FlowDetailPage>
+    },
     {
         path: "/playground", element:
             <Authenticated>

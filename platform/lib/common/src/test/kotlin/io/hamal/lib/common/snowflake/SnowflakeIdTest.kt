@@ -8,8 +8,20 @@ import kotlinx.serialization.protobuf.ProtoBuf
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
+import java.time.Instant
 
 class SnowflakeIdTest {
+    @Test
+    fun `Max id`() {
+        val result = SnowflakeId(Long.MAX_VALUE)
+        assertThat(result.elapsed(), equalTo(Elapsed(2199023255551)))
+        assertThat(result.partition(), equalTo(Partition(1023)))
+        assertThat(result.sequence(), equalTo(Sequence(4095)))
+
+        val maxInstant = Instant.ofEpochMilli(result.elapsed().value + 1698451200000L)
+        assertThat(maxInstant, equalTo(Instant.parse("2093-07-03T15:47:35.551Z")))
+    }
+
     @Test
     fun `partition = 0 - sequence = 0 - elapsed = 0`() {
         val testInstance = SnowflakeGenerator(

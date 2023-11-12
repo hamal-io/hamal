@@ -18,8 +18,7 @@ fun main(args: Array<String>) {
         .parent(FnGuru::class.java)
         .web(WebApplicationType.SERVLET)
         .properties(
-            "server.port=6006",
-            "server.compression.enabled=true"
+            "server.port=6006"
         )
         .bannerMode(Banner.Mode.OFF)
         .run(*args)

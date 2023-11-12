@@ -43,6 +43,7 @@ class SqliteGroupRepository(
     createDomainObject = CreateGroup,
     recordClass = GroupRecord::class,
     projections = listOf(
+        ProjectionUniqueName,
         ProjectionCurrent
     )
 ), GroupRepository {
@@ -70,6 +71,7 @@ class SqliteGroupRepository(
                 )
 
                 currentVersion(groupId)
+                    .also { ProjectionUniqueName.upsert(this, it) }
                     .also { ProjectionCurrent.upsert(this, it) }
             }
         }

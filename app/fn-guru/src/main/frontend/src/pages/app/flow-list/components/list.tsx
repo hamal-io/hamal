@@ -2,10 +2,10 @@ import React, {FC} from "react";
 import {Separator} from "@/components/ui/separator.tsx";
 import {EmptyPlaceholder} from "@/components/empty-placeholder.tsx";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx";
-import {PageHeader} from "@/components/page-hader.tsx";
+import {PageHeader} from "@/components/page-header.tsx";
 import Create from "@/pages/app/flow-list/components/create.tsx";
 import {useApiFlowList} from "@/hook/api/flow.ts";
-import {ApiFlowsimple} from "@/api/types";
+import {ApiFlowSimple} from "@/api/types";
 import {GoToDocumentation} from "@/components/documentation.tsx";
 import {useNavigate} from "react-router-dom";
 
@@ -31,13 +31,13 @@ const List: FC<ListProps> = (props: ListProps) => {
 }
 
 type ContentProps = {
-    flows: ApiFlowsimple[]
+    flows: ApiFlowSimple[]
 }
 
 const Content: FC<ContentProps> = ({flows}) => {
     const navigate = useNavigate()
     return (
-        <ul className="grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-2 xl:grid-cols-3">
+        <ul className="grid grid-cols-1 gap-x-6 gap-y-8">
             {flows.map((flow) => (
                 <Card
                     key={flow.id}

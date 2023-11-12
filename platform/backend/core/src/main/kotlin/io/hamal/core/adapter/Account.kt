@@ -25,7 +25,7 @@ interface AccountCreatePort {
 }
 
 interface AccountCreateRootPort {
-    operator fun <T : Any> invoke(req: CreateRootAccountReq, responseHandler: (AccountCreateSubmitted) -> T): T
+    operator fun invoke(req: CreateRootAccountReq)
 }
 
 interface AccountCreateAnonymousPort {
@@ -109,26 +109,30 @@ class AccountAdapter(
         ).also(reqCmdRepository::queue).let(responseHandler)
     }
 
-    override fun <T : Any> invoke(req: CreateRootAccountReq, responseHandler: (AccountCreateSubmitted) -> T): T {
+    override fun invoke(req: CreateRootAccountReq) {
         val salt = generateSalt()
-        return AccountCreateSubmitted(
-            id = generateDomainId(::ReqId),
-            status = Submitted,
-            accountId = AccountId.root,
-            type = AccountType.Root,
-            groupId = GroupId.root,
-            flowId = FlowId.root,
-            name = req.name,
-            email = req.email,
-            passwordAuthId = generateDomainId(::AuthId),
-            tokenAuthId = generateDomainId(::AuthId),
-            hash = encodePassword(
-                password = req.password,
-                salt = salt
-            ),
-            salt = salt,
-            token = generateToken()
-        ).also(reqCmdRepository::queue).let(responseHandler)
+
+        accountQueryRepository.find(AccountId.root)
+            ?: run {
+                AccountCreateSubmitted(
+                    id = generateDomainId(::ReqId),
+                    status = Submitted,
+                    accountId = AccountId.root,
+                    type = AccountType.Root,
+                    groupId = GroupId.root,
+                    flowId = FlowId.root,
+                    name = req.name,
+                    email = req.email,
+                    passwordAuthId = generateDomainId(::AuthId),
+                    tokenAuthId = generateDomainId(::AuthId),
+                    hash = encodePassword(
+                        password = req.password,
+                        salt = salt
+                    ),
+                    salt = salt,
+                    token = generateToken()
+                ).also(reqCmdRepository::queue)
+            }
     }
 
     override fun <T : Any> invoke(

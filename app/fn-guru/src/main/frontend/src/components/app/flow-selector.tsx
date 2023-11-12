@@ -11,7 +11,7 @@ type Props = {
 const FlowSelector: FC<Props> = ({className, flowId}) => {
     return (
         <Select value={flowId}>
-            <SelectTrigger className={cn(className || "h-8 mt-4")}>
+            <SelectTrigger className={cn("h-8 bg-white", className)}>
                 <SelectValue/>
             </SelectTrigger>
             <SelectContent>
