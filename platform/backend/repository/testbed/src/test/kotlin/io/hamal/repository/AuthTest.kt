@@ -5,10 +5,13 @@ import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.common.util.TimeUtils.withEpochMilli
 import io.hamal.lib.domain.vo.*
-import io.hamal.repository.api.*
+import io.hamal.repository.api.AuthCmdRepository
 import io.hamal.repository.api.AuthCmdRepository.CreatePasswordAuthCmd
 import io.hamal.repository.api.AuthCmdRepository.CreateTokenAuthCmd
 import io.hamal.repository.api.AuthQueryRepository.AuthQuery
+import io.hamal.repository.api.AuthRepository
+import io.hamal.repository.api.PasswordAuth
+import io.hamal.repository.api.TokenAuth
 import io.hamal.repository.fixture.AbstractUnitTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
@@ -72,24 +75,6 @@ internal class AuthRepositoryTest : AbstractUnitTest() {
             }
         }
 
-        @TestFactory
-        fun `Revoke token auth`() = runWith(AuthRepository::class) {
-            createTokenAuth(
-                cmdId = CmdGen(),
-                authId = AuthId(5),
-                accountId = AccountId(2),
-                token = AuthToken("supersecret")
-            )
-
-            revokeAuth(
-                AuthCmdRepository.RevokeAuthCmd(
-                    id = CmdGen(),
-                    authId = AuthId(5)
-                )
-            )
-
-            assertThat(find(AuthToken("supersecret")), nullValue())
-        }
 
         @TestFactory
         fun `Revoke token auth with password`() = runWith(AuthRepository::class) {
@@ -112,10 +97,12 @@ internal class AuthRepositoryTest : AbstractUnitTest() {
                 )
             )
 
-            val li: List<Auth> = list(AccountId(3))
-            assertTrue(li.size == 1)
-            assertTrue(li.any { it.id == AuthId(1) })
-            assertFalse(li.any { it.id == AuthId(5) })
+            with(list(AccountId(3))) {
+                assertThat(find(AuthToken("supersecret")), nullValue())
+                assertThat(get(0).accountId, equalTo(AccountId(3)))
+                assertTrue(any { it.id == AuthId(1) })
+                assertFalse(any { it.id == AuthId(5) })
+            }
         }
     }
 
