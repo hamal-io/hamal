@@ -115,24 +115,24 @@ internal class AuthRepositoryTest : AbstractUnitTest() {
                     token = AuthToken("supersecret")
                 )
 
-                revokeAuth(
-                    AuthCmdRepository.RevokeAuthCmd(
-                        id = CmdGen(),
-                        authId = AuthId(5)
+                repeat(2) {
+                    revokeAuth(
+                        AuthCmdRepository.RevokeAuthCmd(
+                            id = CmdGen(),
+                            authId = AuthId(5)
+                        )
                     )
-                )
-
-                revokeAuth(
-                    AuthCmdRepository.RevokeAuthCmd(
-                        id = CmdGen(),
-                        authId = AuthId(5)
-                    )
-                )
+                }
 
                 with(list(AccountId(3))) {
                     assertThat(find(AuthToken("supersecret")), nullValue())
                     assertFalse(any { it.id == AuthId(5) })
                 }
+
+                val exception = assertThrows<NoSuchElementException> {
+                    get(AuthToken("supersecret"))
+                }
+                assertThat(exception.message, equalTo("Auth not found"))
             }
         }
     }
