@@ -287,6 +287,60 @@ export const useApiGet = <T>(url: string): [T, boolean, Error] => {
     return [data, isLoading, error]
 }
 
+
+type ApiGetAction = (url: string, abortController?: AbortController) => void
+export const useApiGetAction = <T>(): [ApiGetAction, T, boolean, Error] => {
+    const [auth, setAuth] = useAuth()
+
+    const [data, setData] = useState<T | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<Error>(null);
+
+    const get = useCallback(async (url: string, abortController?: AbortController) => {
+        if (auth.type === 'Unauthorized') {
+            console.log("Unauthorized")
+            setError(Error("Unauthenticated"))
+            setIsLoading(false)
+            setAuth(null)
+            window.location.href = '/'
+
+        } else {
+            fetch(`${import.meta.env.VITE_BASE_URL}/${url}`, {
+                method: "GET",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${auth.token}`
+                },
+                signal: abortController?.signal
+            })
+                .then(response => {
+
+                    if (response.status === 403) {
+                        console.log("forbidden")
+                        setAuth(null)
+                        window.location.href = '/'
+                    }
+
+                    if (!response.ok) {
+                        setError(Error(`Request submission failed: ${response.status} - ${response.statusText}`))
+                        setIsLoading(false)
+                    }
+                    response.json().then(data => {
+                        setData(data)
+                        setIsLoading(false)
+                    })
+                })
+                .catch(error => {
+                    setError(error)
+                    setIsLoading(false)
+                })
+        }
+    }, [auth])
+
+    return [get, data, isLoading, error]
+}
+
 type ApiPostAction = (url: string, data: object, abortController?: AbortController) => void
 export const useApiPost = <T>(): [ApiPostAction, T, boolean, Error] => {
     const [auth, setAuth] = useAuth()
