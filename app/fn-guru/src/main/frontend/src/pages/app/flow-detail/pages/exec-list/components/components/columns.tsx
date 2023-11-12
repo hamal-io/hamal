@@ -12,7 +12,7 @@ export const columns: ColumnDef<ApiExecSimple>[] = [
         header: ({column}) => (
             <ColumnHeader column={column} title="Id"/>
         ),
-        cell: ({row}) => <div className="w-[1px]">{row.getValue("id")}</div>,
+        cell: ({row}) => <div className="">{row.getValue("id")}</div>,
         enableSorting: false,
         enableHiding: false,
     },
@@ -31,7 +31,7 @@ export const columns: ColumnDef<ApiExecSimple>[] = [
             }
 
             return (
-                <div className="flex w-[100px] items-center">
+                <div className="flex  items-center">
                     {status.icon && (
                         <status.icon className="mr-2 h-4 w-4 text-muted-foreground"/>
                     )}

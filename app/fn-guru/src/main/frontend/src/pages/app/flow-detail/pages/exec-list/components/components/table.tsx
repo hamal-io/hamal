@@ -112,7 +112,7 @@ export default function <TData, TValue>({columns, data,}: DataTableProps<TData, 
                         )}
                     </TableBody>
                 </Table>
-                <CardFooter>
+                <CardFooter className="pt-4">
                     <Pagination table={table}/>
                 </CardFooter>
             </CardContent>
