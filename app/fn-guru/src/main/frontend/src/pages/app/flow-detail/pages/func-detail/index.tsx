@@ -1,27 +1,39 @@
-import React, {FC, useState} from "react";
+import React, {FC, useEffect, useState} from "react";
 import Save from "@/pages/app/flow-detail/pages/func-detail/components/save.tsx";
 import Deploy from "@/pages/app/flow-detail/pages/func-detail/components/deploy.tsx";
 import History from "@/pages/app/flow-detail/pages/func-detail/components/history.tsx";
 import FuncSelector from "@/components/app/func-selector.tsx";
 import Editor from "@/components/editor.tsx";
+import {useFuncGet} from "@/hook/api/func.ts";
+import {useParams} from "react-router-dom";
 
-type Props = {
-    id: string
-    name: string
-}
-const FuncDetailPage: FC<Props> = ({id}) => {
-    const [code, setCode] = useState(`log = require 'log'\nlog.info("That wasn't hard, was it?")`)
+type Props = {}
+const FuncDetailPage: FC<Props> = ({}) => {
+    const {funcId} = useParams()
+    const [func, funcLoading, funcError] = useFuncGet(funcId)
+
+    const [name, setName] = useState('')
+    const [code, setCode] = useState('')
+
+    useEffect(() => {
+        if (func != null) {
+            setName(func.name)
+            setCode(func.code.current.value)
+        }
+    }, [func]);
+
+    if (funcLoading) return "Loading..."
     return (
         <div className="h-full ">
             <div className="container flex flex-row justify-between items-center ">
                 <FuncSelector
                     className="max-w-[300px]"
-                    funcId={id}
+                    funcId={funcId}
                 />
                 <div className="flex w-full space-x-2 justify-end">
-                    <Save/>
-                    <Deploy/>
+                    <Save funcId={funcId} code={code} name={name}/>
                     <History/>
+                    <Deploy funcId={funcId}/>
                 </div>
             </div>
 

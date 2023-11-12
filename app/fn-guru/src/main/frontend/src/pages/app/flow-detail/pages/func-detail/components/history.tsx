@@ -7,7 +7,7 @@ const Deploy = () => {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant="secondary">
+                <Button variant="secondary"  disabled>
                     <span className="sr-only">Show history</span>
                     <CounterClockwiseClockIcon className="h-4 w-4" />
                 </Button>
