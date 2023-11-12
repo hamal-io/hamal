@@ -1,4 +1,5 @@
 import * as React from "react"
+import {useContext} from "react"
 import {
     ColumnDef,
     ColumnFiltersState,
@@ -19,6 +20,8 @@ import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow,} from "@/
 import Pagination from "./pagination.tsx"
 import Toolbar from "./toolbar.tsx"
 import {Card, CardContent, CardFooter, CardHeader} from "@/components/ui/card.tsx";
+import {useNavigate} from "react-router-dom";
+import {FlowContext} from "@/pages/app/flow-detail";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -56,6 +59,9 @@ export default function <TData, TValue>({columns, data,}: DataTableProps<TData, 
         getFacetedUniqueValues: getFacetedUniqueValues(),
     })
 
+    const navigate = useNavigate()
+    const flow = useContext(FlowContext)
+
     return (
         <Card>
             <CardHeader>
@@ -87,6 +93,9 @@ export default function <TData, TValue>({columns, data,}: DataTableProps<TData, 
                                 <TableRow
                                     key={row.id}
                                     data-state={row.getIsSelected() && "selected"}
+                                    onClick={() => {
+                                        navigate(`/flows/${flow.id}/executions/${row.original['id']}`)
+                                    }}
                                 >
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell key={cell.id}>

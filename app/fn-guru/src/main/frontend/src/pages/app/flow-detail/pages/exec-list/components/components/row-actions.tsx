@@ -2,19 +2,20 @@ import {DotsHorizontalIcon} from "@radix-ui/react-icons"
 import {Row} from "@tanstack/react-table"
 
 import {Button} from "@/components/ui/button"
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,} from "@/components/ui/dropdown-menu"
 import {ApiExecSimple} from "@/api/types";
+import {useNavigate} from "react-router-dom";
+import {useContext} from "react";
+import {FlowContext} from "@/pages/app/flow-detail";
 
 interface Props {
     row: Row<ApiExecSimple>
 }
 
 export default function ({row}: Props) {
+    const flow = useContext(FlowContext)
+    const navigate = useNavigate()
+
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -27,7 +28,10 @@ export default function ({row}: Props) {
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-[160px]">
-                <DropdownMenuItem>View</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => {
+                    console.log(JSON.stringify(row))
+                    navigate(`/flows/${flow.id}/executions/${row.original.id}`)
+                }}>View</DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
     )
