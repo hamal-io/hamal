@@ -9,9 +9,7 @@ import io.hamal.lib.domain.vo.ReqId
 import io.hamal.repository.api.*
 import io.hamal.repository.api.FlowQueryRepository.FlowQuery
 import io.hamal.repository.api.submitted_req.AuthLoginSubmitted
-import io.hamal.repository.api.submitted_req.AuthLogoutSubmitted
 import io.hamal.request.LogInReq
-import io.hamal.request.LogOutReq
 import org.springframework.stereotype.Component
 
 
@@ -22,14 +20,7 @@ interface AuthLoginPort {
     ): T
 }
 
-interface AuthLogoutPort {
-    operator fun <T : Any> invoke(
-        req: LogOutReq,
-        responseHandler: (AuthLogoutSubmitted) -> T
-    ): T
-}
-
-interface AuthPort : AuthLoginPort, AuthLogoutPort
+interface AuthPort : AuthLoginPort
 
 @Component
 class AuthAdapter(
@@ -73,15 +64,6 @@ class AuthAdapter(
             hash = encodedPassword,
             token = generateToken(),
             name = account.name
-        ).also(reqCmdRepository::queue).let(responseHandler)
-    }
-
-    override fun <T : Any> invoke(req: LogOutReq, responseHandler: (AuthLogoutSubmitted) -> T): T {
-        accountQueryRepository.get(req.accountId)
-        return AuthLogoutSubmitted(
-            id = generateDomainId(::ReqId),
-            status = ReqStatus.Submitted,
-            accountId = req.accountId,
         ).also(reqCmdRepository::queue).let(responseHandler)
     }
 }

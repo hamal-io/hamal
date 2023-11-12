@@ -1,5 +1,5 @@
 import React, {FC, useEffect, useState} from "react";
-import {useAuth} from "@/hook/auth.ts";
+import {unauthorized, useAuth} from "@/hook/auth.ts";
 import {Button} from "@/components/ui/button.tsx";
 import {
     DropdownMenu,
@@ -18,15 +18,7 @@ import {Dialog, DialogContent, DialogHeader, DialogTrigger} from "@/components/u
 import {Input} from "@/components/ui/input.tsx";
 import * as z from "zod"
 import {zodResolver} from "@hookform/resolvers/zod";
-import {
-    Form,
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage
-} from "@/components/ui/form.tsx";
+import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
 import {useForm} from "react-hook-form";
 import {Loader2} from "lucide-react";
 import {ApiAccountConversionSubmitted} from "@/api/account.ts";
@@ -96,30 +88,16 @@ export interface ApiLogoutSubmitted {
 
 
 const LogoutMenuItem = () => {
-    const [auth, setAuth] = useAuth()
-
-    const endpoint = `v1/logout`
-    const data = {accountId: auth.accountId}
-
-    const [logout, logoutSubmitted, isLoading, logoutError] = useApiPost<ApiLogoutSubmitted>()
-
-
-    useEffect(() => {
-        if (logoutSubmitted) {
-            setAuth(null)
-            localStorage.removeItem(AUTH_KEY)
-            console.log(logoutSubmitted)
-        }
-
-        if (logoutError) {
-            console.log(`Logout failed: ${logoutError}`);
-        }
-    }, [logoutSubmitted, logoutError]);
-
-    const handleLogout = async () => logout(endpoint, data)
+    const navigate = useNavigate()
+    const [, setAuth] = useAuth()
+    const [logout] = useApiPost<ApiLogoutSubmitted>()
 
     return (
-        <DropdownMenuItem onClick={handleLogout}>
+        <DropdownMenuItem onClick={() => {
+            logout('v1/logout', {})
+            setAuth({...unauthorized})
+            navigate("/")
+        }}>
             Log out
         </DropdownMenuItem>
     )

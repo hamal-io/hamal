@@ -10,7 +10,6 @@ type Props = {
     children: ReactNode;
 }
 
-
 const FlowDetailPage: FC<Props> = ({children}) => {
     const {flowId} = useParams()
     const [flow, isLoading, error] = useApiGet<ApiFlow>(`v1/flows/${flowId}`)

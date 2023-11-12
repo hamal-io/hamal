@@ -1,7 +1,7 @@
 package io.hamal.request
 
-import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.AccountName
+import io.hamal.lib.domain.vo.AuthToken
 import io.hamal.lib.domain.vo.Password
 
 interface LogInReq {
@@ -10,5 +10,5 @@ interface LogInReq {
 }
 
 interface LogOutReq {
-    val accountId: AccountId
+    val token: AuthToken
 }
