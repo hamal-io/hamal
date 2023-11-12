@@ -1,8 +1,8 @@
-import React, {createContext, FC, ReactNode, useEffect, useState} from 'react'
+import React, {createContext, FC, ReactNode, useEffect} from 'react'
 import {useParams} from "react-router-dom";
-import {ApiFlow, ApiFuncList, ApiFuncSimple} from "@/api/types";
+import {ApiFlow} from "@/api/types";
 import Sidebar from "@/pages/app/flow-detail/components/sidebar";
-import {useApiGet, useApiGetAction} from "@/hook";
+import {useApiGet} from "@/hook";
 import Authenticated from "@/components/app/authenticated.tsx";
 import {useApiFuncList} from "@/hook/api/func.ts";
 
@@ -13,25 +13,9 @@ type Props = {
 
 export const FlowContext = createContext<ApiFlow | null>(null)
 
-const useFlowDetail = () => {
-    const {flowId} = useParams()
-    const [loading, setLoading] = useState(true)
-
-    const [flow, isLoading, error] = useApiGet<ApiFlow>(`v1/flows/${flowId}`)
-    const [getFuncs, funcs] = useApiGetAction<ApiFuncList>()
-
-    useEffect(() => {
-        if (flow !== null) {
-            getFuncs(`v1/flows/${flowId}/funcs`)
-        }
-    }, [flow]);
-
-    return [loading, flow, funcs,]
-}
-
 const FlowDetailPage: FC<Props> = ({children}) => {
-    const [loading, flow, funcs] = useFlowDetail()
-
+    const {flowId} = useParams()
+    const [flow, isLoading, error] = useApiGet<ApiFlow>(`v1/flows/${flowId}`)
     return (
         <Authenticated>
             <div className="relative flex flex-row min-h-screen ">

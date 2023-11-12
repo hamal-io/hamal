@@ -1,5 +1,3 @@
-"use client"
-
 import * as React from "react"
 import {FC} from "react"
 import {DotsHorizontalIcon} from "@radix-ui/react-icons"
@@ -7,16 +5,26 @@ import {DotsHorizontalIcon} from "@radix-ui/react-icons"
 import {AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,} from "@/components/ui/alert-dialog"
 import {Button} from "@/components/ui/button"
 import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger,} from "@/components/ui/dropdown-menu"
-import {useApiDeployLatestCode} from "@/hook";
+import {useApiDeployLatestCode, useApiPatch} from "@/hook";
+import {useApiFuncInvoke} from "@/hook/api/func.ts";
 
 type Props = {
+    funcId: string;
+    code: string;
+}
+
+interface ApiFuncUpdateSubmitted {
+    id: string;
+    status: string;
     funcId: string;
 }
 
 
-const Actions: FC<Props> = ({funcId}) => {
+const Actions: FC<Props> = ({funcId, code}) => {
     const [showDeleteDialog, setShowDeployDialog] = React.useState(false)
+    const [updateFunc] = useApiPatch<ApiFuncUpdateSubmitted>()
     const [deployFunc] = useApiDeployLatestCode()
+    const [invokeFunc] = useApiFuncInvoke()
 
     return (
         <>
@@ -29,6 +37,14 @@ const Actions: FC<Props> = ({funcId}) => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                     <DropdownMenuSeparator/>
+                    <DropdownMenuItem
+                        onSelect={() => {
+                            updateFunc(`v1/funcs/${funcId}`, {code})
+                            invokeFunc(funcId)
+                        }}
+                    >
+                        Run
+                    </DropdownMenuItem>
                     <DropdownMenuItem
                         onSelect={() => setShowDeployDialog(true)}
                         className="text-red-600"
