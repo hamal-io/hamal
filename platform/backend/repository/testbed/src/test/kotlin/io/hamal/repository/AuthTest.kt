@@ -5,15 +5,15 @@ import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.common.util.TimeUtils.withEpochMilli
 import io.hamal.lib.domain.vo.*
+import io.hamal.repository.api.*
 import io.hamal.repository.api.AuthCmdRepository.CreatePasswordAuthCmd
 import io.hamal.repository.api.AuthCmdRepository.CreateTokenAuthCmd
 import io.hamal.repository.api.AuthQueryRepository.AuthQuery
-import io.hamal.repository.api.AuthRepository
-import io.hamal.repository.api.PasswordAuth
-import io.hamal.repository.api.TokenAuth
 import io.hamal.repository.fixture.AbstractUnitTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.TestFactory
 import org.junit.jupiter.api.assertThrows
@@ -71,7 +71,54 @@ internal class AuthRepositoryTest : AbstractUnitTest() {
                 verifyCount(1)
             }
         }
+
+        @TestFactory
+        fun `Revoke token auth`() = runWith(AuthRepository::class) {
+            createTokenAuth(
+                cmdId = CmdGen(),
+                authId = AuthId(5),
+                accountId = AccountId(2),
+                token = AuthToken("supersecret")
+            )
+
+            revokeAuth(
+                AuthCmdRepository.RevokeAuthCmd(
+                    id = CmdGen(),
+                    authId = AuthId(5)
+                )
+            )
+
+            assertThat(find(AuthToken("supersecret")), nullValue())
+        }
+
+        @TestFactory
+        fun `Revoke token auth with password`() = runWith(AuthRepository::class) {
+            createTokenAuth(
+                cmdId = CmdGen(),
+                authId = AuthId(5),
+                accountId = AccountId(3),
+                token = AuthToken("supersecret")
+            )
+
+            createPasswordAuth(
+                authId = AuthId(1),
+                accountId = AccountId(3)
+            )
+
+            revokeAuth(
+                AuthCmdRepository.RevokeAuthCmd(
+                    id = CmdGen(),
+                    authId = AuthId(5)
+                )
+            )
+
+            val li: List<Auth> = list(AccountId(3))
+            assertTrue(li.size == 1)
+            assertTrue(li.any { it.id == AuthId(1) })
+            assertFalse(li.any { it.id == AuthId(5) })
+        }
     }
+
 
     @Nested
     inner class ClearTest {
@@ -247,6 +294,7 @@ internal class AuthRepositoryTest : AbstractUnitTest() {
                 token = AuthToken("token-four")
             )
         }
+
     }
 }
 
