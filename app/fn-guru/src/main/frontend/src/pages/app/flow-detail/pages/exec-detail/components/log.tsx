@@ -10,7 +10,8 @@ const Log: FC<Props> = ({execId}) => {
     console.log(logs)
     return (
         <div className="w-full">
-            <div className="coding inverse-toggle px-5 pt-4 text-gray-100 text-sm font-mono subpixel-antialiased bg-gray-50  pb-6  rounded-lg leading-normal overflow-hidden">
+            <div
+                className="coding inverse-toggle px-5 pt-4 text-gray-100 text-sm font-mono subpixel-antialiased bg-gray-50  pb-6  rounded-lg leading-normal overflow-hidden">
                 {logs.map(log => {
                     return (
                         <div key={log.id} className="flex">
@@ -34,7 +35,7 @@ const LogLevel = ({level}: { level: string }) => {
         case 'Info':
             return <span className="text-blue-400">Info</span>
         case 'Warn':
-            return <span className="text-yellow-400">Yellow</span>
+            return <span className="text-yellow-400">Warn</span>
         case 'Error':
             return <span className="text-red-400">Error</span>
         case 'Fatal':
