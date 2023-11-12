@@ -7,14 +7,14 @@ import {
 import { Column } from "@tanstack/react-table"
 
 import { cn } from "@/utils"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button.tsx"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu.tsx"
 import React, {HTMLAttributes} from "react";
 
 interface Props<TData, TValue> extends HTMLAttributes<HTMLDivElement> {

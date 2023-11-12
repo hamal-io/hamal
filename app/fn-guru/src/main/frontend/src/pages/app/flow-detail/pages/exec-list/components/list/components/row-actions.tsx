@@ -1,8 +1,8 @@
 import {DotsHorizontalIcon} from "@radix-ui/react-icons"
 import {Row} from "@tanstack/react-table"
 
-import {Button} from "@/components/ui/button"
-import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,} from "@/components/ui/dropdown-menu"
+import {Button} from "@/components/ui/button.tsx"
+import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,} from "@/components/ui/dropdown-menu.tsx"
 import {ApiExecSimple} from "@/api/types";
 import {useNavigate} from "react-router-dom";
 import {useContext} from "react";

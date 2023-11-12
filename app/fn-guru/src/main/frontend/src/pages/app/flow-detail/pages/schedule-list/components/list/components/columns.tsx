@@ -1,12 +1,12 @@
 import {ColumnDef} from "@tanstack/react-table"
 
-import {statuses} from "../data/data"
+import {types} from "../data/data.tsx"
 import {ColumnHeader} from "./column-header.tsx"
-import {ApiExecSimple} from "@/api/types";
 import React from "react";
-import RowActions from "@/pages/app/flow-detail/pages/exec-list/components/components/row-actions.tsx";
+import RowActions from "@/pages/app/flow-detail/pages/schedule-list/components/list/components/row-actions.tsx";
+import {TriggerListItem} from "@/hook/api/schedule.tsx";
 
-export const columns: ColumnDef<ApiExecSimple>[] = [
+export const columns: ColumnDef<TriggerListItem>[] = [
     {
         accessorKey: "id",
         header: ({column}) => (
@@ -17,25 +17,25 @@ export const columns: ColumnDef<ApiExecSimple>[] = [
         enableHiding: false,
     },
     {
-        accessorKey: "status",
+        accessorKey: "type",
         header: ({column}) => (
-            <ColumnHeader column={column} title="Status"/>
+            <ColumnHeader column={column} title="type"/>
         ),
         cell: ({row}) => {
-            const status = statuses.find(
-                (status) => status.value === row.getValue("status")
+            const type = types.find(
+                (type) => type.value === row.getValue("type")
             )
 
-            if (!status) {
+            if (!type) {
                 return null
             }
 
             return (
                 <div className="flex  items-center">
-                    {status.icon && (
-                        <status.icon className="mr-2 h-4 w-4 text-muted-foreground"/>
+                    {type.icon && (
+                        <type.icon className="mr-2 h-4 w-4 text-muted-foreground"/>
                     )}
-                    <span>{status.label}</span>
+                    <span>{type.label}</span>
                 </div>
             )
         },

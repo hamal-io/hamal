@@ -1,10 +1,10 @@
 import React, {FC, useContext} from "react";
 import {FlowContext} from "@/pages/app/flow-detail";
-import List from "@/pages/app/flow-detail/pages/exec-list/components/list";
+import List from "@/pages/app/flow-detail/pages/schedule-list/components/list";
 
 type Props = {}
 
-const ExecListPage: FC<Props> = () => {
+const ScheduleListPage: FC<Props> = () => {
     const flow = useContext(FlowContext)
 
     if (flow == null) {
@@ -16,4 +16,4 @@ const ExecListPage: FC<Props> = () => {
     );
 }
 
-export default ExecListPage
+export default ScheduleListPage

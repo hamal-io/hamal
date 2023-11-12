@@ -15,7 +15,7 @@ import {
     VisibilityState,
 } from "@tanstack/react-table"
 
-import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow,} from "@/components/ui/table"
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow,} from "@/components/ui/table.tsx"
 
 import Pagination from "./pagination.tsx"
 import Toolbar from "./toolbar.tsx"
