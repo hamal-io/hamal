@@ -18,7 +18,7 @@ for i = 2, 10 do
     sys.await_completed(update_req)
 end
 func = fail_on_error(sys.funcs.get(req.func_id))
-assert(func.code.current.version == 20)
+assert(func.code.current.version == 10)
 
 invocation_req = fail_on_error(sys.funcs.invoke({
     id = req.func_id,

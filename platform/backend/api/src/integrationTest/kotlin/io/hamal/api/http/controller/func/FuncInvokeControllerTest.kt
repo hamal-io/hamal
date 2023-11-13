@@ -10,7 +10,6 @@ import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
-import org.hamcrest.Matchers.notNullValue
 import org.junit.jupiter.api.Test
 
 internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
@@ -138,7 +137,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
 
         with(execQueryRepository.get(result.execId)) {
             //assertThat(code.value, equalTo(CodeValue("code-6")))
-            assertThat(code.value, notNullValue())
+            assertThat(code.version, equalTo(CodeVersion(5)))
         }
     }
 
@@ -183,8 +182,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
 
         with(execQueryRepository.get(result.execId)) {
             //assertThat(code.value, equalTo(CodeValue("code-11")))
-            assertThat(code.value, notNullValue())
-
+            assertThat(code.version, equalTo(CodeVersion(11)))
         }
     }
 
