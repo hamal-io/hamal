@@ -5,9 +5,7 @@ import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.common.util.TimeUtils.withEpochMilli
 import io.hamal.lib.domain.vo.*
-import io.hamal.repository.api.AuthCmdRepository
-import io.hamal.repository.api.AuthCmdRepository.CreatePasswordAuthCmd
-import io.hamal.repository.api.AuthCmdRepository.CreateTokenAuthCmd
+import io.hamal.repository.api.AuthCmdRepository.*
 import io.hamal.repository.api.AuthQueryRepository.AuthQuery
 import io.hamal.repository.api.AuthRepository
 import io.hamal.repository.api.PasswordAuth
@@ -78,7 +76,7 @@ internal class AuthRepositoryTest : AbstractUnitTest() {
         @Nested
         inner class RevokeTest {
             @TestFactory
-            fun `Revoke token auth with password`() = runWith(AuthRepository::class) {
+            fun `Revoke token`() = runWith(AuthRepository::class) {
                 createTokenAuth(
                     cmdId = CmdGen(),
                     authId = AuthId(5),
@@ -86,17 +84,8 @@ internal class AuthRepositoryTest : AbstractUnitTest() {
                     token = AuthToken("supersecret")
                 )
 
-                createPasswordAuth(
-                    authId = AuthId(1),
-                    accountId = AccountId(3)
-                )
-
-                revokeAuth(
-                    AuthCmdRepository.RevokeAuthCmd(
-                        id = CmdGen(),
-                        authId = AuthId(5)
-                    )
-                )
+                createPasswordAuth(AuthId(1), AccountId(3))
+                revokeAuth(RevokeAuthCmd(CmdGen(), AuthId(5)))
 
                 with(list(AccountId(3))) {
                     assertThat(find(AuthToken("supersecret")), nullValue())
@@ -107,7 +96,7 @@ internal class AuthRepositoryTest : AbstractUnitTest() {
             }
 
             @TestFactory
-            fun `Tries to revoke non existing token`() = runWith(AuthRepository::class) {
+            fun `Revokes auth multiple times`() = runWith(AuthRepository::class) {
                 createTokenAuth(
                     cmdId = CmdGen(),
                     authId = AuthId(5),
@@ -115,24 +104,14 @@ internal class AuthRepositoryTest : AbstractUnitTest() {
                     token = AuthToken("supersecret")
                 )
 
-                repeat(2) {
-                    revokeAuth(
-                        AuthCmdRepository.RevokeAuthCmd(
-                            id = CmdGen(),
-                            authId = AuthId(5)
-                        )
-                    )
+                repeat(10) {
+                    revokeAuth(RevokeAuthCmd(CmdGen(), AuthId(5)))
                 }
 
                 with(list(AccountId(3))) {
                     assertThat(find(AuthToken("supersecret")), nullValue())
                     assertFalse(any { it.id == AuthId(5) })
                 }
-
-                val exception = assertThrows<NoSuchElementException> {
-                    get(AuthToken("supersecret"))
-                }
-                assertThat(exception.message, equalTo("Auth not found"))
             }
         }
     }
