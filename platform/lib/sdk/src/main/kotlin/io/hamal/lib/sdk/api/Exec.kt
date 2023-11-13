@@ -46,6 +46,7 @@ data class ApiExec(
 
 interface ApiExecService {
     fun list(groupId: GroupId): List<ApiExecList.Exec>
+    fun list(flowId: FlowId): List<ApiExecList.Exec>
     fun get(execId: ExecId): ApiExec
 }
 
@@ -55,6 +56,14 @@ internal class ApiExecServiceImpl(
 
     override fun list(groupId: GroupId) =
         template.get("/v1/execs").parameter("group_ids", groupId).execute().fold(ApiExecList::class).execs
+
+    override fun list(flowId: FlowId): List<ApiExecList.Exec> =
+        template.get("/v1/flows/{flowId}/execs")
+            .path("flowId", flowId)
+            //.parameter("after_id", afterId)
+            //.parameter("limit", limit)
+            .execute()
+            .fold(ApiExecList::class).execs
 
     override fun get(execId: ExecId) =
         template.get("/v1/execs/{execId}").path("execId", execId).execute().fold(ApiExec::class)
