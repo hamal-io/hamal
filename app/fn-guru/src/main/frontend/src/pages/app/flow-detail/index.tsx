@@ -1,10 +1,9 @@
-import React, {createContext, FC, ReactNode, useEffect} from 'react'
+import React, {createContext, FC, ReactNode} from 'react'
 import {useParams} from "react-router-dom";
 import {ApiFlow} from "@/api/types";
 import Sidebar from "@/pages/app/flow-detail/components/sidebar";
 import {useApiGet} from "@/hook";
 import Authenticated from "@/components/app/authenticated.tsx";
-import {useApiFuncList} from "@/hook/api/func.ts";
 
 
 type Props = {

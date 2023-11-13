@@ -14,7 +14,7 @@ sys.await_completed(update_req)
 
 func = fail_on_error(sys.funcs.get(create_req.func_id))
 assert(func.name == 'created-name')
---assert(func.code.current.version == 1) -- FIXME will be fixed core-73
+assert(func.code.current.version == 1)
 assert(func.code.current.value == 'created-code')
 assert(func.code.deployed.version == 1)
 assert(func.code.deployed.value == 'created-code')

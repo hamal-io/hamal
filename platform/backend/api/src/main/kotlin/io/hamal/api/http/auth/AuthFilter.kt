@@ -1,7 +1,9 @@
 package io.hamal.api.http.auth
 
+import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.AuthToken
 import io.hamal.repository.api.AccountQueryRepository
+import io.hamal.repository.api.AuthCmdRepository.RevokeAuthCmd
 import io.hamal.repository.api.AuthRepository
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
@@ -52,6 +54,8 @@ class AuthApiFilter(
                 return
             }
 
+
+
         if (token == AuthToken("let_me_in")) {
             return filterChain.doFilter(request, response)
         }
@@ -62,6 +66,13 @@ class AuthApiFilter(
             val auth = authRepository.find(token)
             if (auth != null) {
                 try {
+
+                    if (path == "/v1/logout") {
+                        authRepository.revokeAuth(RevokeAuthCmd(CmdId.random(), auth.id))
+                        response.status = 204
+                        return
+                    }
+
                     AuthContextHolder.set(AuthContext(auth, accountQueryRepository.get(auth.accountId), token))
                     return filterChain.doFilter(request, response)
                 } finally {
