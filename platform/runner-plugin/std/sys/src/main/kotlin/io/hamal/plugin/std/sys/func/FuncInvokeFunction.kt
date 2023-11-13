@@ -11,6 +11,7 @@ import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
+import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiFuncInvokeReq
@@ -30,13 +31,20 @@ class FuncInvokeFunction(
                 CorrelationId.default
             }
 
+            val version = if (arg1.type("version") == NumberType::class) {
+                CodeVersion(arg1.getInt("version"))
+            } else {
+                null
+            }
+
+
             val res = sdk.func.invoke(
                 FuncId(SnowflakeId(arg1.getString("id"))),
                 ApiFuncInvokeReq(
                     correlationId = correlationId,
                     inputs = InvocationInputs(),
                     events = listOf(),
-                    version = CodeVersion(arg1.getInt("version"))
+                    version = version
                 )
             )
 
