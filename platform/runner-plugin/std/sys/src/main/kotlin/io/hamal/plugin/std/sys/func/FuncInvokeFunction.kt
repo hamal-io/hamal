@@ -37,7 +37,6 @@ class FuncInvokeFunction(
                 null
             }
 
-
             val res = sdk.func.invoke(
                 FuncId(SnowflakeId(arg1.getString("id"))),
                 ApiFuncInvokeReq(
