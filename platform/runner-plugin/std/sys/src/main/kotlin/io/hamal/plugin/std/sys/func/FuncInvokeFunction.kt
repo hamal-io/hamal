@@ -1,6 +1,7 @@
 package io.hamal.plugin.std.sys.func
 
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.InvocationInputs
@@ -34,7 +35,8 @@ class FuncInvokeFunction(
                 ApiFuncInvokeReq(
                     correlationId = correlationId,
                     inputs = InvocationInputs(),
-                    events = listOf()
+                    events = listOf(),
+                    version = CodeVersion(arg1.getInt("version"))
                 )
             )
 

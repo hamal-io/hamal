@@ -54,6 +54,7 @@ class HookInvokeHandler(
                     override val correlationId = trigger.correlationId ?: CorrelationId.default
                     override val inputs = InvocationInputs()
                     override val events = listOf<Event>()
+                    override val version = null
                 }
             ) {}
         }

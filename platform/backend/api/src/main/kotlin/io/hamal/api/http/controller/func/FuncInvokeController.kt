@@ -26,10 +26,12 @@ internal class FuncInvokeController(
         @RequestBody req: ApiFuncInvokeReq? = null
     ): ResponseEntity<ApiSubmitted> = retry {
         invokeFunc(
-            funcId, ApiFuncInvokeReq(
+            funcId,
+            ApiFuncInvokeReq(
                 correlationId = req?.correlationId ?: CorrelationId.default,
                 inputs = req?.inputs ?: InvocationInputs(),
-                events = listOf()
+                events = listOf(),
+                version = req?.version,
             ),
             ExecInvokeSubmitted::accepted
         )

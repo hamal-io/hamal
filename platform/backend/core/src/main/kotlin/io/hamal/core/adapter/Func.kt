@@ -101,6 +101,10 @@ class FuncAdapter(
         responseHandler: (ExecInvokeSubmitted) -> T
     ): T {
         val func = funcQueryRepository.get(funcId)
+        val codeVersion = req.version?.let {
+            codeQueryRepository.get(func.code.id, it).version
+        } ?: func.code.version
+
         return ExecInvokeSubmitted(
             id = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
@@ -110,7 +114,12 @@ class FuncAdapter(
             funcId = funcId,
             correlationId = req.correlationId,
             inputs = req.inputs,
-            code = func.code.toExecCode(),
+            //code = func.code.toExecCode(),
+            code = ExecCode(
+                id = func.code.id,
+                version = codeVersion,
+                value = null
+            ),
             events = listOf()
         ).also(reqCmdRepository::queue).let(responseHandler)
     }
