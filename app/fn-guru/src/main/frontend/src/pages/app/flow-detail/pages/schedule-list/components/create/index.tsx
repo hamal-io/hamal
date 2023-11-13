@@ -1,18 +1,16 @@
 import {useNavigate} from "react-router-dom";
-import React, {FC, useContext, useEffect, useState} from "react";
-import {useApiAccountLogin, useApiFlowCreate, useApiPost} from "@/hook";
+import React, {FC, useEffect, useState} from "react";
 
 import * as z from "zod"
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
 import {useForm} from "react-hook-form";
-import {BookOpen, Loader2, Plus, PlusCircle} from "lucide-react";
+import {Loader2, Plus} from "lucide-react";
 import {useAuth} from "@/hook/auth.ts";
 import {Dialog, DialogContent, DialogHeader, DialogTrigger} from "@/components/ui/dialog.tsx";
 import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {useApiFuncCreate} from "@/hook/api/func.ts";
-import {FlowContext} from "@/pages/app/flow-detail";
 import {ApiFlowSimple} from "@/api/types";
 
 type Prop = {
@@ -87,7 +85,7 @@ const Create: FC<Prop> = ({flow}) => {
                                     <FormItem>
                                         <FormLabel>Name</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="Function-One" {...field} />
+                                            <Input placeholder="Schedule - One" {...field} />
                                         </FormControl>
                                         <FormDescription>
                                             This is the name of your flow.
@@ -109,4 +107,4 @@ const Create: FC<Prop> = ({flow}) => {
 }
 
 
-export default Index;
+export default Create;

@@ -21,7 +21,9 @@ const List: FC<ListProps> = ({flow}) => {
             <PageHeader
                 title="Schedules"
                 description={`Periodically call your functions of flow ${flow.name}`}
-                actions={[]}
+                actions={[
+                    <Create flow={flow}/>
+                ]}
             />
             <Table data={schedules} columns={columns}/>
         </div>
