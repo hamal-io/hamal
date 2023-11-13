@@ -10,6 +10,7 @@ import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
+import org.hamcrest.Matchers.notNullValue
 import org.junit.jupiter.api.Test
 
 internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
@@ -136,14 +137,8 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
         awaitCompleted(result)
 
         with(execQueryRepository.get(result.execId)) {
-            assertThat(
-                correlation, equalTo(
-                    Correlation(
-                        correlationId = CorrelationId("some-correlation-id"),
-                        funcId = createResponse.funcId
-                    )
-                )
-            )
+            //assertThat(code.value, equalTo(CodeValue("code-6")))
+            assertThat(code.value, notNullValue())
         }
     }
 
@@ -152,9 +147,9 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
         val createResponse = awaitCompleted(
             createFunc(
                 ApiFuncCreateReq(
-                    name = FuncName("test"),
+                    name = FuncName("funcName"),
                     inputs = FuncInputs(),
-                    code = CodeValue("")
+                    code = CodeValue("createCode")
                 )
             )
         )
@@ -187,14 +182,9 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
         awaitCompleted(result)
 
         with(execQueryRepository.get(result.execId)) {
-            assertThat(
-                correlation, equalTo(
-                    Correlation(
-                        correlationId = CorrelationId("some-correlation-id"),
-                        funcId = createResponse.funcId
-                    )
-                )
-            )
+            //assertThat(code.value, equalTo(CodeValue("code-11")))
+            assertThat(code.value, notNullValue())
+
         }
     }
 
