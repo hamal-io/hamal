@@ -17,14 +17,14 @@ sys.await_completed(flow_two_req)
 local func_one_req = fail_on_error(sys.funcs.create({
     flow_id = flow_one_req.flow_id,
     name = 'func-1',
-    code = '1 + 2'
+    code = [[print(hamal)]]
 }))
 sys.await_completed(func_one_req)
 
 local func_two_req = fail_on_error(sys.funcs.create({
     flow_id = flow_two_req.flow_id,
     name = 'func-2',
-    code = '3 + 4'
+    code = [[print(lamah)]]
 }))
 sys.await_completed(func_two_req)
 

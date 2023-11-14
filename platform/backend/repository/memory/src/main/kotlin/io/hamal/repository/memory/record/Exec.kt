@@ -18,7 +18,8 @@ internal object CurrentExecProjection {
     fun find(execId: ExecId): Exec? = projection[execId]
 
     fun list(query: ExecQuery): List<Exec> {
-        return projection.filter { query.execIds.isEmpty() || it.key in query.execIds }
+
+        val res = projection.filter { query.execIds.isEmpty() || it.key in query.execIds }
             .map { it.value }
             .reversed()
             .asSequence()
@@ -28,6 +29,8 @@ internal object CurrentExecProjection {
             .dropWhile { it.id >= query.afterId }
             .take(query.limit.value)
             .toList()
+
+        return res
     }
 
     fun count(query: ExecQuery): ULong {

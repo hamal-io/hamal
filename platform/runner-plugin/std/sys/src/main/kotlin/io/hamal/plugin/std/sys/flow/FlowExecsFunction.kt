@@ -16,9 +16,9 @@ class FlowExecsFunction(
 ) {
     override fun invoke(ctx: FunctionContext, arg1: StringType): Pair<ErrorType?, ArrayType?> {
         return try {
-            val execs = sdk.exec.list(FlowId(arg1.value))
             null to ArrayType(
-                execs.mapIndexed { index, exec ->
+                sdk.exec.list(FlowId(arg1.value))
+                    .mapIndexed { index, exec ->
                     index to MapType(
                         mutableMapOf(
                             "id" to StringType(exec.id.value.value.toString(16)),
