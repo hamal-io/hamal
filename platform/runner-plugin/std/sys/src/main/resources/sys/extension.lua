@@ -153,6 +153,10 @@ function extension()
             return internal.flow_list()
         end
 
+        function export.flows.execs(flow_id)
+            return internal.flow_execs(flow_id)
+        end
+
         function export.reqs.get(req_id)
             return internal.req_get(req_id)
         end
