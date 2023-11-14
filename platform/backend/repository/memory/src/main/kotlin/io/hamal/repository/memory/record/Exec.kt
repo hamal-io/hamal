@@ -24,6 +24,7 @@ internal object CurrentExecProjection {
             .asSequence()
             .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
             .filter { if (query.funcIds.isEmpty()) true else (it.correlation != null && query.funcIds.contains(it.correlation!!.funcId)) }
+            .filter { if (query.flowIds.isEmpty()) true else query.flowIds.contains(it.flowId) } //TODO-64
             .dropWhile { it.id >= query.afterId }
             .take(query.limit.value)
             .toList()
