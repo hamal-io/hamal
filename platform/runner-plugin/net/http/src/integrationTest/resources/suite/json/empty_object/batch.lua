@@ -1,11 +1,11 @@
 local http = require('net.http')
 
 local err, response = http.execute({
-    http.requests.get('/v1/json-empty-object'),
-    http.requests.post('/v1/json-empty-object'),
-    http.requests.patch('/v1/json-empty-object'),
-    http.requests.put('/v1/json-empty-object'),
-    http.requests.delete('/v1/json-empty-object'),
+    http.requests.get({ url = '/v1/json-empty-object' }),
+    http.requests.post({ url = '/v1/json-empty-object' }),
+    http.requests.patch({ url = '/v1/json-empty-object' }),
+    http.requests.put({ url = '/v1/json-empty-object' }),
+    http.requests.delete({ url = '/v1/json-empty-object' }),
 })
 
 assert(err == nil)

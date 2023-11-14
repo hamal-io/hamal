@@ -4,11 +4,11 @@ local status_codes = { 200, 201, 400, 404, 500 }
 
 for _, status_code in ipairs(status_codes) do
     local err, response = http.execute({
-        http.requests.get("/v1/status?code=" .. status_code),
-        http.requests.post("/v1/status?code=" .. status_code),
-        http.requests.patch("/v1/status?code=" .. status_code),
-        http.requests.put("/v1/status?code=" .. status_code),
-        http.requests.delete("/v1/status?code=" .. status_code),
+        http.requests.get({ url = "/v1/status?code=" .. status_code }),
+        http.requests.post({ url = "/v1/status?code=" .. status_code }),
+        http.requests.patch({ url = "/v1/status?code=" .. status_code }),
+        http.requests.put({ url = "/v1/status?code=" .. status_code }),
+        http.requests.delete({ url = "/v1/status?code=" .. status_code }),
     })
 
     assert(err == nil)

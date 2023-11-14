@@ -2,9 +2,9 @@ http = require 'net.http'
 
 host = context.api.host
 
-res = fail_on_error(http.post(host .. '/v1/anonymous-accounts', { json = { } }))
+res = fail_on_error(http.post({ url = host .. '/v1/anonymous-accounts', json = { } }))
 
-err, res = http.get(host .. '/v1/does/not/exists', { headers = {
+err, res = http.get({ url = host .. '/v1/does/not/exists', headers = {
     ['authorization'] = 'Bearer ' .. res.content.token
 } })
 

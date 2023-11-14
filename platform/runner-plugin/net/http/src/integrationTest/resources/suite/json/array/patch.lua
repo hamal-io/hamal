@@ -1,11 +1,17 @@
 http = require('net.http')
 
-err, res = http.patch('/v1/json-empty-array')
+err, res = http.patch({ url = '/v1/json-array' })
 assert(err == nil)
 assert(res ~= nil)
 
 assert(res.status_code == 200)
 assert(res.content_type == 'application/json')
 
-assert(res.content ~= nil)
-assert(table_length(res.content) == 0)
+content = res.content
+assert(content ~= nil)
+
+assert(table_length(content) == 4)
+assert(content[1] == 23)
+assert(content[2] == true)
+assert(content[3] == '24.23')
+assert(content[4] == 'HamalRocks')

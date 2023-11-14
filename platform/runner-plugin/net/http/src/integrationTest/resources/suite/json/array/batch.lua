@@ -1,12 +1,11 @@
 local http = require('net.http')
-local decimal = require('decimal')
 
 local err, response = http.execute({
-    http.requests.get('/v1/json-array'),
-    http.requests.post('/v1/json-array'),
-    http.requests.patch('/v1/json-array'),
-    http.requests.put('/v1/json-array'),
-    http.requests.delete('/v1/json-array'),
+    http.requests.get({ url = '/v1/json-array' }),
+    http.requests.post({ url = '/v1/json-array' }),
+    http.requests.patch({ url = '/v1/json-array' }),
+    http.requests.put({ url = '/v1/json-array' }),
+    http.requests.delete({ url = '/v1/json-array' }),
 })
 
 assert(err == nil)

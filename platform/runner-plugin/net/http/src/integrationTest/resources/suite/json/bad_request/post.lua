@@ -1,6 +1,6 @@
 http = require('net.http')
 
-err, res = http.post('/v1/json-error')
+err, res = http.post({ url = '/v1/json-error' })
 assert(err == nil)
 assert(res ~= nil)
 

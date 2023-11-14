@@ -8,7 +8,8 @@ req_headers['d'] = decimal.new('12.21')
 req_headers['n'] = 24
 req_headers['b'] = true
 
-res = fail_on_error(http.delete('/v1/headers', {
+res = fail_on_error(http.delete({
+    url = '/v1/headers',
     headers = req_headers
 }))
 

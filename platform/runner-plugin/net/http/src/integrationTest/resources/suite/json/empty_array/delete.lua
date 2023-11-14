@@ -1,6 +1,6 @@
 http = require('net.http')
 
-err, res = http.delete('/v1/json-empty-array')
+err, res = http.delete({ url = '/v1/json-empty-array' })
 assert(err == nil)
 assert(res ~= nil)
 

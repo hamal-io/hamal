@@ -1,7 +1,6 @@
 http = require('net.http')
-decimal = require('decimal')
 
-err, res = http.post('/v1/json-array')
+err, res = http.post({ url = '/v1/json-array' })
 assert(err == nil)
 assert(res ~= nil)
 

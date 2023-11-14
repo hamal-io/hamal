@@ -2,7 +2,10 @@
 
 http = require 'net.http'
 
-err, res = http.post('/v1/anonymous-accounts', { json = { } })
+err, res = http.post({
+    url = '/v1/anonymous-accounts',
+    json = { }
+})
 assert(err == nil)
 
 assert(res.status_code == 202)
@@ -16,23 +19,32 @@ assert(#content.groupIds == 1)
 
 token = content.token
 
-err, res = http.get('/v1/groups/' .. content.groupIds[1] .. '/flows', { headers = {
-    ['authorization'] = 'Bearer ' .. token
-} })
+err, res = http.get({
+    url = '/v1/groups/' .. content.groupIds[1] .. '/flows',
+    headers = {
+        ['authorization'] = 'Bearer ' .. token
+    }
+})
 
 assert(res.err == nil)
 assert(res.status_code == 200)
 
-err, res = http.post('/v1/logout', { headers = {
-    ['authorization'] = 'Bearer ' .. token
-} })
+err, res = http.post({
+    url = '/v1/logout',
+    headers = {
+        ['authorization'] = 'Bearer ' .. token
+    }
+})
 
 assert(res.err == nil)
 assert(res.status_code == 204)
 
-err, res = http.get('/v1/groups/' .. content.groupIds[1] .. '/flows', { headers = {
-    ['authorization'] = 'Bearer ' .. token
-} })
+err, res = http.get({
+    url = '/v1/groups/' .. content.groupIds[1] .. '/flows',
+    headers = {
+        ['authorization'] = 'Bearer ' .. token
+    }
+})
 
 assert(res.err == nil)
 assert(res.status_code == 403)

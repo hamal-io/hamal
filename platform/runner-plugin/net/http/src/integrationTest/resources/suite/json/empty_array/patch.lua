@@ -1,6 +1,6 @@
 http = require('net.http')
 
-err, res = http.patch('/v1/json-empty-array')
+err, res = http.patch({ url = '/v1/json-empty-array' })
 assert(err == nil)
 assert(res ~= nil)
 

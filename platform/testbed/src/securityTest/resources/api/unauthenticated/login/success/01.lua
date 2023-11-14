@@ -3,7 +3,7 @@
 
 http = require 'net.http'
 
-err, res = http.post('/v1/anonymous-accounts', { json = { } })
+err, res = http.post({ url = '/v1/anonymous-accounts', json = { } })
 assert(err == nil)
 
 assert(res.status_code == 202)
@@ -16,9 +16,11 @@ assert(content.token ~= nil)
 assert(#content.groupIds == 1)
 
 for i = 1, 10 do
-    err, res = http.get('/v1/groups/' .. content.groupIds[1] .. '/flows', { headers = {
-        ['authorization'] = 'Bearer ' .. content.token
-    } })
+    err, res = http.get({
+        url = '/v1/groups/' .. content.groupIds[1] .. '/flows',
+        headers = {
+            ['authorization'] = 'Bearer ' .. content.token
+        } })
     if err == nil then
         break
     end

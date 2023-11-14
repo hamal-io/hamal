@@ -9,11 +9,11 @@ req_headers['n'] = 24
 req_headers['b'] = true
 
 res = fail_on_error(http.execute({
-    http.requests.get('/v1/headers', { headers = req_headers }),
-    http.requests.post('/v1/headers', { headers = req_headers }),
-    http.requests.patch('/v1/headers', { headers = req_headers }),
-    http.requests.put('/v1/headers', { headers = req_headers }),
-    http.requests.delete('/v1/headers', { headers = req_headers })
+    http.requests.get({ url = '/v1/headers', headers = req_headers }),
+    http.requests.post({ url = '/v1/headers', headers = req_headers }),
+    http.requests.patch({ url = '/v1/headers', headers = req_headers }),
+    http.requests.put({ url = '/v1/headers', headers = req_headers }),
+    http.requests.delete({ url = '/v1/headers', headers = req_headers })
 }))
 
 assert(err == nil)

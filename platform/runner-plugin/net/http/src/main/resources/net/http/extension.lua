@@ -10,82 +10,72 @@ function extension()
             return internal.execute(requests)
         end
 
-        function export.requests.get(url, options)
+        function export.requests.get(req)
             local config = export.config.get()
-            local base_url = config.base_url or ""
-            options = options or {}
             return {
                 method = "GET",
-                url = base_url .. url,
-                headers = options.headers
+                url = (config.base_url or "") .. (req.url or ""),
+                headers = req.headers or {}
             }
         end
 
-        function export.get(url, options)
-            return single_request(export.requests.get(url, options))
+        function export.get(req)
+            return single_request(export.requests.get(req))
         end
 
-        function export.requests.post(url, options)
+        function export.requests.post(req)
             local config = export.config.get()
-            local base_url = config.base_url or ""
-            options = options or {}
             return {
                 method = "POST",
-                url = base_url .. url,
-                headers = options.headers,
-                json = options.json
+                url = (config.base_url or "") .. (req.url or ""),
+                headers = req.headers or {},
+                json = req.json
             }
         end
 
-        function export.post(url, options)
-            return single_request(export.requests.post(url, options or {}))
+        function export.post(req)
+            return single_request(export.requests.post(req))
         end
 
-        function export.requests.patch(url, options)
+        function export.requests.patch(req)
             local config = export.config.get()
-            local base_url = config.base_url or ""
-            options = options or {}
             return {
                 method = "PATCH",
-                url = base_url .. url,
-                headers = options.headers,
-                json = options.json
+                url = (config.base_url or "") .. (req.url or ""),
+                headers = req.headers or {},
+                json = req.json
             }
         end
 
-        function export.patch(url, options)
-            return single_request(export.requests.patch(url, options))
+        function export.patch(req)
+            return single_request(export.requests.patch(req))
         end
 
-        function export.requests.put(url, options)
+        function export.requests.put(req)
             local config = export.config.get()
-            local base_url = config.base_url or ""
-            options = options or {}
             return {
                 method = "PUT",
-                url = base_url .. url,
-                headers = options.headers,
-                json = options.json
+                url = (config.base_url or "") .. (req.url or ""),
+                headers = req.headers or {},
+                json = req.json
             }
         end
 
-        function export.put(url, options)
-            return single_request(export.requests.put(url, options))
+        function export.put(req)
+            return single_request(export.requests.put(req))
         end
 
-        function export.requests.delete(url, options)
+        function export.requests.delete(req)
             local config = export.config.get()
-            local base_url = config.base_url or ""
-            options = options or {}
             return {
                 method = "DELETE",
-                url = base_url .. url,
-                headers = options.headers
+                url = (config.base_url or "") .. (req.url or ""),
+                headers = req.headers or {}
             }
         end
 
-        function export.delete(url, options)
-            return single_request(export.requests.delete(url, options))
+        function export.delete(req)
+            return single_request(export.requests.delete(req))
         end
 
         function single_request(request)
