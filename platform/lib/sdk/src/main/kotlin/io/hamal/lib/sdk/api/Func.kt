@@ -11,6 +11,7 @@ import io.hamal.lib.sdk.api.ApiFuncService.FuncQuery
 import io.hamal.lib.sdk.fold
 import io.hamal.request.CreateFuncReq
 import io.hamal.request.InvokeFuncReq
+import io.hamal.request.InvokeFuncVersionReq
 import io.hamal.request.UpdateFuncReq
 import kotlinx.serialization.Serializable
 
@@ -66,8 +67,15 @@ data class ApiFuncInvokeReq(
     override val correlationId: CorrelationId?,
     override val inputs: InvocationInputs,
     override val events: List<Event>,
-    override val version: CodeVersion?
 ) : InvokeFuncReq
+
+@Serializable
+data class ApiInvokeFuncVersionReq(
+    override val correlationId: CorrelationId?,
+    override val inputs: InvocationInputs,
+    override val events: List<Event>,
+    override val version: CodeVersion?
+) : InvokeFuncVersionReq
 
 @Serializable
 data class ApiFuncList(
@@ -123,7 +131,9 @@ interface ApiFuncService {
     fun list(query: FuncQuery): List<ApiFuncList.Func>
     fun get(funcId: FuncId): ApiFunc
     fun update(funcId: FuncId, req: ApiFuncUpdateReq): ApiFuncUpdateSubmitted
-    fun invoke(funcId: FuncId, req: ApiFuncInvokeReq): ApiExecInvokeSubmitted
+
+    //fun invoke(funcId: FuncId, req: ApiFuncInvokeReq): ApiExecInvokeSubmitted
+    fun invoke(funcId: FuncId, req: ApiInvokeFuncVersionReq): ApiExecInvokeSubmitted
 
     data class FuncQuery(
         var afterId: FuncId = FuncId(SnowflakeId(Long.MAX_VALUE)),
@@ -180,7 +190,7 @@ internal class ApiFuncServiceImpl(
             .execute()
             .fold(ApiFunc::class)
 
-    override fun invoke(funcId: FuncId, req: ApiFuncInvokeReq) =
+    override fun invoke(funcId: FuncId, req: ApiInvokeFuncVersionReq) =
         template.post("/v1/funcs/{funcId}/invoke")
             .path("funcId", funcId)
             .body(req)

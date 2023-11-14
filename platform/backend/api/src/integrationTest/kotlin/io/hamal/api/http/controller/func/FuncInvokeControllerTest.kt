@@ -8,6 +8,7 @@ import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.*
+import io.hamal.repository.api.submitted_req.ExecInvokeSubmitted
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -32,8 +33,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
                 ApiFuncInvokeReq(
                     correlationId = CorrelationId("some-correlation-id"),
                     inputs = InvocationInputs(),
-                    events = listOf(),
-                    version = null
+                    events = listOf()
                 )
             ).execute()
 
@@ -74,7 +74,6 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
                     inputs = InvocationInputs(),
                     correlationId = null,
                     events = listOf(),
-                    version = null
                 )
             ).execute()
 
@@ -97,7 +96,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
     }
 
     @Test
-    fun `Invokes func with verion`() {
+    fun `Invokes func with version`() {
         val createResponse = awaitCompleted(
             createFunc(
                 ApiFuncCreateReq(
@@ -121,7 +120,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
         val invocationResponse = httpTemplate.post("/v1/funcs/{funcId}/invoke")
             .path("funcId", createResponse.funcId)
             .body(
-                ApiFuncInvokeReq(
+                ApiInvokeFuncVersionReq(
                     correlationId = CorrelationId("some-correlation-id"),
                     inputs = InvocationInputs(),
                     events = listOf(),
@@ -166,7 +165,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
         val invocationResponse = httpTemplate.post("/v1/funcs/{funcId}/invoke")
             .path("funcId", createResponse.funcId)
             .body(
-                ApiFuncInvokeReq(
+                ApiInvokeFuncVersionReq(
                     correlationId = CorrelationId("some-correlation-id"),
                     inputs = InvocationInputs(),
                     events = listOf(),
@@ -201,7 +200,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
         val invocationResponse = httpTemplate.post("/v1/funcs/{funcId}/invoke")
             .path("funcId", createResponse.funcId)
             .body(
-                ApiFuncInvokeReq(
+                ApiInvokeFuncVersionReq(
                     correlationId = CorrelationId("some-correlation-id"),
                     inputs = InvocationInputs(),
                     events = listOf(),
@@ -215,7 +214,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
         val error = invocationResponse.error(ApiError::class)
         assertThat(error.message, equalTo("Code not found"))
 
-        //TODO-84 verifyNoRequests()
+        verifyNoRequests(ExecInvokeSubmitted::class)
     }
 
     @Test
@@ -226,7 +225,6 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
                     correlationId = CorrelationId.default,
                     inputs = InvocationInputs(),
                     events = listOf(),
-                    version = null
                 )
             ).execute()
 
