@@ -60,8 +60,6 @@ internal class ApiExecServiceImpl(
     override fun list(flowId: FlowId): List<ApiExecList.Exec> =
         template.get("/v1/flows/{flowId}/execs")
             .path("flowId", flowId)
-            //.parameter("after_id", afterId)
-            //.parameter("limit", limit)
             .execute()
             .fold(ApiExecList::class).execs
 
