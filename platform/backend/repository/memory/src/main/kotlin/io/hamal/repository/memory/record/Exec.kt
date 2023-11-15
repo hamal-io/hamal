@@ -18,19 +18,16 @@ internal object CurrentExecProjection {
     fun find(execId: ExecId): Exec? = projection[execId]
 
     fun list(query: ExecQuery): List<Exec> {
-
-        val res = projection.filter { query.execIds.isEmpty() || it.key in query.execIds }
+        return projection.filter { query.execIds.isEmpty() || it.key in query.execIds }
             .map { it.value }
             .reversed()
             .asSequence()
             .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
             .filter { if (query.funcIds.isEmpty()) true else (it.correlation != null && query.funcIds.contains(it.correlation!!.funcId)) }
-            .filter { if (query.flowIds.isEmpty()) true else query.flowIds.contains(it.flowId) } //TODO-64
+            .filter { if (query.flowIds.isEmpty()) true else query.flowIds.contains(it.flowId) }
             .dropWhile { it.id >= query.afterId }
             .take(query.limit.value)
             .toList()
-
-        return res
     }
 
     fun count(query: ExecQuery): ULong {
