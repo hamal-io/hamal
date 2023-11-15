@@ -8,6 +8,7 @@ import io.hamal.repository.api.FuncQueryRepository.FuncQuery
 import io.hamal.repository.api.submitted_req.*
 import io.hamal.request.CreateFuncReq
 import io.hamal.request.InvokeFuncReq
+import io.hamal.request.InvokeFuncVersionReq
 import io.hamal.request.UpdateFuncReq
 import org.springframework.stereotype.Component
 
@@ -27,6 +28,12 @@ interface FuncInvokePort {
     operator fun <T : Any> invoke(
         funcId: FuncId,
         req: InvokeFuncReq,
+        responseHandler: (ExecInvokeSubmitted) -> T
+    ): T
+
+    operator fun <T : Any> invoke(
+        funcId: FuncId,
+        req: InvokeFuncVersionReq,
         responseHandler: (ExecInvokeSubmitted) -> T
     ): T
 }
@@ -101,6 +108,7 @@ class FuncAdapter(
         responseHandler: (ExecInvokeSubmitted) -> T
     ): T {
         val func = funcQueryRepository.get(funcId)
+
         return ExecInvokeSubmitted(
             id = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
@@ -111,6 +119,35 @@ class FuncAdapter(
             correlationId = req.correlationId,
             inputs = req.inputs,
             code = func.code.toExecCode(),
+            events = listOf()
+        ).also(reqCmdRepository::queue).let(responseHandler)
+    }
+
+    override fun <T : Any> invoke(
+        funcId: FuncId,
+        req: InvokeFuncVersionReq,
+        responseHandler: (ExecInvokeSubmitted) -> T
+    ): T {
+        val func = funcQueryRepository.get(funcId)
+
+        val version = req.version?.also {
+            codeQueryRepository.get(func.code.id, it)
+        } ?: func.code.version
+
+        return ExecInvokeSubmitted(
+            id = generateDomainId(::ReqId),
+            status = ReqStatus.Submitted,
+            execId = generateDomainId(::ExecId),
+            flowId = func.flowId,
+            groupId = func.groupId,
+            funcId = funcId,
+            correlationId = req.correlationId,
+            inputs = req.inputs,
+            code = ExecCode(
+                id = func.code.id,
+                version = version,
+                value = null
+            ),
             events = listOf()
         ).also(reqCmdRepository::queue).let(responseHandler)
     }

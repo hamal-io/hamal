@@ -20,3 +20,10 @@ interface InvokeFuncReq {
     val inputs: InvocationInputs
     val events: List<Event>
 }
+
+interface InvokeFuncVersionReq {
+    val correlationId: CorrelationId?
+    val inputs: InvocationInputs
+    val events: List<Event>
+    val version: CodeVersion?
+}

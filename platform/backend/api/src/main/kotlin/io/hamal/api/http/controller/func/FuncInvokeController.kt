@@ -6,7 +6,7 @@ import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.InvocationInputs
-import io.hamal.lib.sdk.api.ApiFuncInvokeReq
+import io.hamal.lib.sdk.api.ApiInvokeFuncVersionReq
 import io.hamal.lib.sdk.api.ApiSubmitted
 import io.hamal.repository.api.submitted_req.ExecInvokeSubmitted
 import org.springframework.http.ResponseEntity
@@ -18,18 +18,21 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 internal class FuncInvokeController(
     private val retry: Retry,
-    private val invokeFunc: FuncInvokePort
+    private val invokeFunc: FuncInvokePort,
 ) {
     @PostMapping("/v1/funcs/{funcId}/invoke")
     fun execFunc(
         @PathVariable("funcId") funcId: FuncId,
-        @RequestBody req: ApiFuncInvokeReq? = null
+        @RequestBody req: ApiInvokeFuncVersionReq? = null
     ): ResponseEntity<ApiSubmitted> = retry {
+
         invokeFunc(
-            funcId, ApiFuncInvokeReq(
+            funcId,
+            ApiInvokeFuncVersionReq(
                 correlationId = req?.correlationId ?: CorrelationId.default,
                 inputs = req?.inputs ?: InvocationInputs(),
-                events = listOf()
+                events = listOf(),
+                version = req?.version
             ),
             ExecInvokeSubmitted::accepted
         )

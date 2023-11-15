@@ -1,6 +1,7 @@
 package io.hamal.plugin.std.sys.func
 
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.InvocationInputs
@@ -10,9 +11,10 @@ import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
+import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.ApiSdk
-import io.hamal.lib.sdk.api.ApiFuncInvokeReq
+import io.hamal.lib.sdk.api.ApiInvokeFuncVersionReq
 
 class FuncInvokeFunction(
     private val sdk: ApiSdk
@@ -29,12 +31,19 @@ class FuncInvokeFunction(
                 CorrelationId.default
             }
 
+            val version = if (arg1.type("version") == NumberType::class) {
+                CodeVersion(arg1.getInt("version"))
+            } else {
+                null
+            }
+
             val res = sdk.func.invoke(
                 FuncId(SnowflakeId(arg1.getString("id"))),
-                ApiFuncInvokeReq(
+                ApiInvokeFuncVersionReq(
                     correlationId = correlationId,
                     inputs = InvocationInputs(),
-                    events = listOf()
+                    events = listOf(),
+                    version = version
                 )
             )
 
