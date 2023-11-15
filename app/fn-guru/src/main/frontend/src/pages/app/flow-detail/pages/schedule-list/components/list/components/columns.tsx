@@ -19,7 +19,7 @@ export const columns: ColumnDef<TriggerListItem>[] = [
     {
         accessorKey: "type",
         header: ({column}) => (
-            <ColumnHeader column={column} title="type"/>
+            <ColumnHeader column={column} title="Type"/>
         ),
         cell: ({row}) => {
             const type = types.find(
@@ -36,6 +36,22 @@ export const columns: ColumnDef<TriggerListItem>[] = [
                         <type.icon className="mr-2 h-4 w-4 text-muted-foreground"/>
                     )}
                     <span>{type.label}</span>
+                </div>
+            )
+        },
+        filterFn: (row, id, value) => {
+            return value.includes(row.getValue(id))
+        },
+    },
+    {
+        accessorKey: "name",
+        header: ({column}) => (
+            <ColumnHeader column={column} title="Name"/>
+        ),
+        cell: ({row}) => {
+            return (
+                <div className="flex  items-center">
+                    <span>{row.getValue("name")}</span>
                 </div>
             )
         },

@@ -4,7 +4,8 @@ import {PageHeader} from "@/components/page-header.tsx";
 import {useListScheduleTriggers} from "@/hook/api/schedule.tsx";
 import Table from "@/pages/app/flow-detail/pages/schedule-list/components/list/components/table.tsx";
 import {columns} from "@/pages/app/flow-detail/pages/schedule-list/components/list/components/columns.tsx";
-import Create from "@/pages/app/flow-detail/pages/schedule-list/components/create";
+import CreateFixedRate from "@/pages/app/flow-detail/pages/schedule-list/components/create/fixed-rate.tsx";
+import CreateEvery from "@/pages/app/flow-detail/pages/schedule-list/components/create/every.tsx";
 
 type ListProps = {
     flow: ApiFlowSimple
@@ -22,7 +23,8 @@ const List: FC<ListProps> = ({flow}) => {
                 title="Schedules"
                 description={`Periodically call your functions of flow ${flow.name}`}
                 actions={[
-                    <Create flow={flow}/>
+                    // <CreateEvery flow={flow}/>,
+                    <CreateFixedRate flow={flow}/>
                 ]}
             />
             <Table data={schedules} columns={columns}/>

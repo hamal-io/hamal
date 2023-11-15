@@ -21,7 +21,7 @@ const formSchema = z.object({
     name: z.string().min(2).max(50),
 })
 
-const Create: FC<Prop> = ({flow}) => {
+const CreateEvery: FC<Prop> = ({flow}) => {
     const [auth, setAuth] = useAuth()
     const navigate = useNavigate()
     const [openDialog, setOpenDialog] = useState<boolean>(false)
@@ -69,7 +69,7 @@ const Create: FC<Prop> = ({flow}) => {
                 <DialogTrigger asChild>
                     <Button>
                         <Plus className="w-4 h-4 mr-1"/>
-                        New Schedule
+                        New Every
                     </Button>
                 </DialogTrigger>
 
@@ -107,4 +107,4 @@ const Create: FC<Prop> = ({flow}) => {
 }
 
 
-export default Create;
+export default CreateEvery;

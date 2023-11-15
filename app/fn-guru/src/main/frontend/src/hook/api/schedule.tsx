@@ -1,5 +1,5 @@
 import {useAuth} from "@/hook/auth.ts";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 
 export interface TriggerListItem {
     id: string;
@@ -71,4 +71,74 @@ export const useListScheduleTriggers = (flowId: string): [TriggerListItem[], boo
     }, []);
 
     return [triggers, isLoading, error]
+}
+
+interface ApiTriggerCreateSubmitted {
+    id: string;
+    status: string;
+    triggerId: string;
+    funcId: string;
+    flowId: string;
+    groupId: string;
+}
+
+type TriggerFixedRateCreateAction = (flowId: string, funcId: string, name: string, duration: string, controller?: AbortController) => void
+
+export const useTriggerFixedRateCreate = (): [TriggerFixedRateCreateAction, ApiTriggerCreateSubmitted, boolean, Error] => {
+    const [auth, setAuth] = useAuth()
+
+    const [data, setData] = useState<ApiTriggerCreateSubmitted | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<Error>(null);
+
+    const post = useCallback(async (flowId: string, funcId: string, name: string, duration: string, abortController?: AbortController) => {
+        if (auth.type === 'Unauthorized') {
+            console.log("Unauthorized")
+            setError(Error("Unauthenticated"))
+            setIsLoading(false)
+            setAuth(null)
+            window.location.href = '/'
+
+        } else {
+            fetch(`${import.meta.env.VITE_BASE_URL}/v1/flows/${flowId}/triggers`, {
+                method: "POST",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${auth.token}`
+                },
+                body: JSON.stringify({
+                    type: "FixedRate",
+                    name,
+                    inputs: {},
+                    funcId,
+                    duration
+                }),
+                signal: abortController?.signal
+            })
+                .then(response => {
+
+                    if (response.status === 403) {
+                        console.log("forbidden")
+                        setAuth(null)
+                        window.location.href = '/'
+                    }
+
+                    if (!response.ok) {
+                        setError(Error(`Request submission failed: ${response.status} - ${response.statusText}`))
+                        setIsLoading(false)
+                    }
+                    response.json().then(data => {
+                        setData(data)
+                        setIsLoading(false)
+                    })
+                })
+                .catch(error => {
+                    setError(error)
+                    setIsLoading(false)
+                })
+        }
+    }, [auth])
+
+    return [post, data, isLoading, error]
 }

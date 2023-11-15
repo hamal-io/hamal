@@ -1,6 +1,6 @@
 import {Table} from "@tanstack/react-table"
 import FacetedFilter from "./faceted-filter.tsx"
-import {statuses} from "@/pages/app/flow-detail/pages/exec-list/components/list/data/data.tsx";
+import {types} from "@/pages/app/flow-detail/pages/schedule-list/components/list/data/data.tsx";
 
 interface Props<TData> {
     table: Table<TData>
@@ -10,11 +10,11 @@ export default function <TData>({table}: Props<TData>) {
     return (
         <div className="flex items-center justify-between">
             <div className="flex flex-1 items-center space-x-2">
-                {table.getColumn("status") && (
+                {table.getColumn("type") && (
                     <FacetedFilter
-                        column={table.getColumn("status")}
-                        title="Status"
-                        options={statuses}
+                        column={table.getColumn("type")}
+                        title="Type"
+                        options={types}
                     />
                 )}
             </div>
