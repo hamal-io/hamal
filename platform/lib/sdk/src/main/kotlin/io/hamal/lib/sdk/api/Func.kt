@@ -132,7 +132,6 @@ interface ApiFuncService {
     fun get(funcId: FuncId): ApiFunc
     fun update(funcId: FuncId, req: ApiFuncUpdateReq): ApiFuncUpdateSubmitted
 
-    //fun invoke(funcId: FuncId, req: ApiFuncInvokeReq): ApiExecInvokeSubmitted
     fun invoke(funcId: FuncId, req: ApiInvokeFuncVersionReq): ApiExecInvokeSubmitted
 
     data class FuncQuery(
