@@ -15,11 +15,12 @@ import io.hamal.plugin.std.sys.extension.ExtensionCreateFunction
 import io.hamal.plugin.std.sys.extension.ExtensionGetFunction
 import io.hamal.plugin.std.sys.extension.ExtensionListFunction
 import io.hamal.plugin.std.sys.extension.ExtensionUpdateFunction
-import io.hamal.plugin.std.sys.func.*
-import io.hamal.plugin.std.sys.hook.HookCreateFunction
 import io.hamal.plugin.std.sys.flow.FlowCreateFunction
+import io.hamal.plugin.std.sys.flow.FlowExecsFunction
 import io.hamal.plugin.std.sys.flow.FlowGetFunction
 import io.hamal.plugin.std.sys.flow.FlowListFunction
+import io.hamal.plugin.std.sys.func.*
+import io.hamal.plugin.std.sys.hook.HookCreateFunction
 import io.hamal.plugin.std.sys.req.ReqGetFunction
 import io.hamal.plugin.std.sys.topic.*
 import io.hamal.plugin.std.sys.trigger.TriggerCreateFunction
@@ -71,6 +72,7 @@ class SysPluginFactory(
                         "flow_create" to FlowCreateFunction(sdk),
                         "flow_get" to FlowGetFunction(sdk),
                         "flow_list" to FlowListFunction(sdk),
+                        "flow_execs" to FlowExecsFunction(sdk),
 
                         "topic_create" to TopicCreateFunction(sdk),
                         "topic_resolve" to TopicResolveFunction(sdk),

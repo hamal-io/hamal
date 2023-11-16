@@ -483,6 +483,28 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
         }
 
         @TestFactory
+        fun `With flow ids`() = runWith(ExecRepository::class) {
+            setup()
+
+            val query = ExecQuery(
+                flowIds = listOf(FlowId(234), FlowId(123)), groupIds = listOf(), limit = Limit(10)
+            )
+
+            assertThat(count(query), equalTo(2UL))
+            val result = list(query)
+            assertThat(result, hasSize(2))
+
+            with(result[0]) {
+                assertThat(id, equalTo(ExecId(2)))
+            }
+
+            with(result[1]) {
+                assertThat(id, equalTo(ExecId(1)))
+            }
+
+        }
+
+        @TestFactory
         fun `Limit`() = runWith(ExecRepository::class) {
             setup()
 
@@ -516,24 +538,28 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
             createExec(
                 execId = ExecId(1), groupId = GroupId(3), status = Completed, correlation = Correlation(
                     correlationId = CorrelationId("CID-1"), funcId = FuncId(234)
-                )
+                ),
+                flowId = FlowId(234)
             )
 
             createExec(
                 execId = ExecId(2), groupId = GroupId(3), status = Failed, correlation = Correlation(
                     correlationId = CorrelationId("CID-2"), funcId = FuncId(234)
-                )
+                ),
+                flowId = FlowId(234)
             )
 
             createExec(
                 execId = ExecId(3), groupId = GroupId(4), status = Started, correlation = Correlation(
                     correlationId = CorrelationId("CID-1"), funcId = FuncId(444)
-                )
+                ),
+                flowId = FlowId(444)
             )
 
             createExec(
                 execId = ExecId(4), groupId = GroupId(5), status = Queued, correlation = null
             )
+
         }
     }
 }
