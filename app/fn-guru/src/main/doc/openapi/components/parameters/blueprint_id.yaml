@@ -1,0 +1,7 @@
+name: bpId
+in: path
+required: true
+schema:
+  $ref: ../schemas/Blueprint_id.yaml
+style: simple
+example: da6ea0a001000

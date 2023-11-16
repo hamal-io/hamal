@@ -1,0 +1,40 @@
+post:
+  description: Create a blueprint
+  summary: Create a blueprint
+  tags:
+    - Blueprint
+  operationId: blueprint/create
+  parameters:
+    - $ref: ../components/parameters/group_id.yaml
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../components/requestBodies/blueprint_create_req.yaml
+    required: true
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: ../components/responses/blueprint_create_res.yaml
+    '400':
+      description: Bad Request
+  x-codeSamples:
+    - lang: 'cUrl'
+      label: curl
+      source: |
+        curl --request POST \
+         --url 'https://hamal.io/v1/groups/1/blueprints' \
+         --header 'content-type: application/octet-stream: ' \
+         --data '{
+          "name" : "MyBlueprint",
+          "inputs" : {},
+          "value" : "print('hamal')"
+         }'
+    - lang: 'Lua'
+      label: hamal
+      source:
+        $ref: ../code_samples/blueprint_create.lua
+
