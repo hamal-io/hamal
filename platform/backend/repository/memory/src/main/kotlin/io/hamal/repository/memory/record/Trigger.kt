@@ -185,6 +185,30 @@ class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord,
         }
     }
 
+    override fun create(cmd: CreateCronCmd): CronTrigger {
+        return lock.withLock {
+            val triggerId = cmd.triggerId
+            if (commandAlreadyApplied(cmd.id, triggerId)) {
+                versionOf(triggerId, cmd.id) as CronTrigger
+            } else {
+                store(
+                    CronTriggerCreatedRecord(
+                        cmdId = cmd.id,
+                        entityId = triggerId,
+                        groupId = cmd.groupId,
+                        funcId = cmd.funcId,
+                        flowId = cmd.flowId,
+                        name = cmd.name,
+                        inputs = cmd.inputs,
+                        cron = cmd.cron,
+                        correlationId = cmd.correlationId
+                    )
+                )
+                (currentVersion(triggerId) as CronTrigger).also(CurrentTriggerProjection::apply)
+            }
+        }
+    }
+
     override fun find(triggerId: TriggerId) = lock.withLock { CurrentTriggerProjection.find(triggerId) }
 
     override fun list(query: TriggerQuery): List<Trigger> = lock.withLock { CurrentTriggerProjection.list(query) }

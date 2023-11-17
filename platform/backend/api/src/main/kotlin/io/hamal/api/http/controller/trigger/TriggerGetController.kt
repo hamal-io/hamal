@@ -7,6 +7,7 @@ import io.hamal.lib.sdk.api.ApiEventTrigger
 import io.hamal.lib.sdk.api.ApiFixedRateTrigger
 import io.hamal.lib.sdk.api.ApiHookTrigger
 import io.hamal.lib.sdk.api.ApiTrigger
+import io.hamal.repository.api.CronTrigger
 import io.hamal.repository.api.EventTrigger
 import io.hamal.repository.api.FixedRateTrigger
 import io.hamal.repository.api.HookTrigger
@@ -79,6 +80,8 @@ internal class TriggerGetController(
                                 methods = trigger.hookMethods
                             )
                         )
+
+                        is CronTrigger -> TODO("92")
                     }
                 )
             }

@@ -5,12 +5,9 @@ import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain._enum.TriggerType.*
 import io.hamal.lib.domain._enum.TriggerType.Event
+import io.hamal.lib.domain._enum.TriggerType.Hook
 import io.hamal.lib.domain.vo.*
-import io.hamal.repository.api.EventTrigger
-import io.hamal.repository.api.FixedRateTrigger
-import io.hamal.repository.api.HookTrigger
-import io.hamal.repository.api.Trigger
-
+import io.hamal.repository.api.*
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordEntity
 import io.hamal.repository.record.RecordSequence
@@ -34,7 +31,9 @@ data class TriggerEntity(
     var topicId: TopicId? = null,
     var duration: Duration? = null,
     var hookId: HookId? = null,
-    var hookMethods: Set<HookMethod>? = null
+    var hookMethods: Set<HookMethod>? = null,
+
+    var cron: CronPattern? = null
 
 ) : RecordEntity<TriggerId, TriggerRecord, Trigger> {
 
@@ -85,6 +84,21 @@ data class TriggerEntity(
                 hookMethods = rec.hookMethods,
                 recordedAt = rec.recordedAt()
             )
+
+            is CronTriggerCreatedRecord -> copy(
+                cmdId = rec.cmdId,
+                id = rec.entityId,
+                groupId = rec.groupId,
+                sequence = rec.sequence(),
+                name = rec.name,
+                funcId = rec.funcId,
+                flowId = rec.flowId,
+                type = Cron,
+                inputs = rec.inputs,
+                correlationId = rec.correlationId,
+                cron = rec.cron,
+                recordedAt = rec.recordedAt()
+            )
         }
     }
 
@@ -129,6 +143,19 @@ data class TriggerEntity(
                 hookId = hookId!!,
                 hookMethods = hookMethods!!
             )
+
+            Cron -> CronTrigger(
+                cmdId = cmdId,
+                id = id,
+                updatedAt = recordedAt.toUpdatedAt(),
+                groupId = groupId!!,
+                funcId = funcId!!,
+                flowId = flowId!!,
+                correlationId = correlationId,
+                name = name!!,
+                inputs = inputs!!,
+                cron = cron!!
+            )
         }
     }
 }
@@ -137,7 +164,12 @@ fun List<TriggerRecord>.createEntity(): TriggerEntity {
     check(isNotEmpty()) { "At least one record is required" }
     val firstRecord = first()
 
-    check(firstRecord is FixedRateTriggerCreatedRecord || firstRecord is EventTriggerCreatedRecord || firstRecord is HookTriggerCreatedRecord)
+    check(
+        firstRecord is FixedRateTriggerCreatedRecord ||
+                firstRecord is EventTriggerCreatedRecord ||
+                firstRecord is HookTriggerCreatedRecord ||
+                firstRecord is CronTriggerCreatedRecord
+    )
 
     var result = TriggerEntity(
         id = firstRecord.entityId,

@@ -78,6 +78,8 @@ class CreateTriggerHandler(
                     )
                 )
             }
+
+            Cron -> TODO("92")
         }
 
         emitEvent(req.cmdId(), trigger)

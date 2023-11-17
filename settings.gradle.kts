@@ -19,6 +19,8 @@ dependencyResolutionManagement {
             library("spring-web", "org.springframework.boot", "spring-boot-starter-web").version("3.0.5")
             library("spring-test", "org.springframework.boot", "spring-boot-starter-test").version("3.0.5")
             library("spring-logging", "org.springframework.boot", "spring-boot-starter-logging").version("3.0.5")
+            library("spring-schedule", "org.springframework", "spring-context").version("6.0.7")
+
             library("sqlite", "org.xerial", "sqlite-jdbc").version("3.41.2.1")
 
             library("kotlin-protobuf", "org.jetbrains.kotlinx", "kotlinx-serialization-protobuf").version("1.5.0")

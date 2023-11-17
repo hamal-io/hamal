@@ -6,6 +6,7 @@ plugins {
 dependencies {
     api(project(":platform:lib:common"))
     api(project(":platform:lib:kua"))
+    api(external.spring.schedule)
     testImplementation(external.junit)
     testImplementation(external.hamcrest)
 }
