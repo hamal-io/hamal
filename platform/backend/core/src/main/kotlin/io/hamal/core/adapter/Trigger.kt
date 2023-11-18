@@ -78,7 +78,8 @@ class TriggerAdapter(
             correlationId = req.correlationId,
             duration = req.duration,
             topicId = req.topicId,
-            hookId = req.hookId
+            hookId = req.hookId,
+            cron = req.cron
         ).also(reqCmdRepository::queue).let(responseHandler)
 
     }

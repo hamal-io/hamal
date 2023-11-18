@@ -10,6 +10,7 @@ import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.ApiSdk
+import io.hamal.lib.sdk.api.ApiCronTrigger
 import io.hamal.lib.sdk.api.ApiEventTrigger
 import io.hamal.lib.sdk.api.ApiFixedRateTrigger
 import io.hamal.lib.sdk.api.ApiHookTrigger
@@ -105,6 +106,8 @@ class TriggerGetFunction(
                                 )
                             )
                         }
+
+                        is ApiCronTrigger -> TODO("92")
                     }
                 }
         } catch (t: Throwable) {

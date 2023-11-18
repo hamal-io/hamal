@@ -79,7 +79,20 @@ class CreateTriggerHandler(
                 )
             }
 
-            Cron -> TODO("92")
+            Cron -> triggerCmdRepository.create(
+                TriggerCmdRepository.CreateCronCmd(
+                    id = req.cmdId(),
+                    triggerId = req.triggerId,
+                    groupId = func.groupId,
+                    name = req.name,
+                    correlationId = req.correlationId,
+                    funcId = req.funcId,
+                    flowId = req.flowId ?: flowQueryRepository.get(FlowName("hamal")).id,
+                    inputs = req.inputs,
+                    cron = requireNotNull(req.cron) { "cron expression must not be null" }
+                )
+            )
+
         }
 
         emitEvent(req.cmdId(), trigger)

@@ -64,8 +64,8 @@ interface TriggerCmdRepository : CmdRepository {
         val funcId: FuncId,
         val flowId: FlowId,
         val inputs: TriggerInputs,
-        val correlationId: CorrelationId? = null,
-        val cron: CronPattern
+        val cron: CronPattern,
+        val correlationId: CorrelationId? = null
     )
 }
 
