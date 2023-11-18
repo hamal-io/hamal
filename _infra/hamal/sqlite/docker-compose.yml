@@ -9,7 +9,7 @@ services:
     volumes:
       - "/tmp/hamal/backend:/tmp/hamal/backend"
     networks:
-      - hamalnet
+      - hamal_net
 
   runner:
     image: hamalio/hamal-runner
@@ -19,10 +19,10 @@ services:
       - BRIDGE_HOST=http://backend:7007
       - HTTP_POLL_EVERY_MS=100
     networks:
-      - hamalnet
+      - hamal_net
     depends_on:
       backend:
         condition: service_started
 
 networks:
-  hamalnet:
+  hamal_net:

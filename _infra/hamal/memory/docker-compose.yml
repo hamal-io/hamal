@@ -7,7 +7,7 @@ services:
     environment:
       - ACTIVE_PROFILES=default,memory,dev
     networks:
-      - hamalnet
+      - hamal_net
 
   runner:
     image: hamalio/hamal-runner
@@ -16,10 +16,10 @@ services:
       - API_HOST=http://backend:8008
       - BRIDGE_HOST=http://backend:7007
     networks:
-      - hamalnet
+      - hamal_net
     depends_on:
       backend:
         condition: service_started
 
 networks:
-  hamalnet:
+  hamal_net:

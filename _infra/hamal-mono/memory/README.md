@@ -1,4 +1,4 @@
 # Hamal-Mono
 
 ## Setup
-docker network create -d bridge hamalnet --subnet=10.42.0.0/16
+docker network create -d bridge hamal_net --subnet=10.42.0.0/16

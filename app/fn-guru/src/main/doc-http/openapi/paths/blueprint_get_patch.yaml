@@ -1,0 +1,57 @@
+get:
+  description: Get a blueprint
+  summary: Get a blueprint
+  tags:
+    - Blueprint
+  operationId: blueprint/get
+  parameters:
+    - $ref: ../components/parameters/blueprint_id.yaml
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: ../components/responses/blueprint_get_res.yaml
+    '404':
+      description: Blueprint not found
+  x-codeSamples:
+    - lang: 'cURL'
+      label: curl
+      source: curl --update
+    - lang: 'Lua'
+      label: hamal
+      source:
+        $ref: ../code_samples/blueprint_get.lua
+
+patch:
+  description: Update a blueprint
+  summary: Update an blueprint
+  tags:
+    - Blueprint
+  operationId: blueprint/update
+  parameters:
+    - $ref: ../components/parameters/blueprint_id.yaml
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../components/requestBodies/blueprint_update_req.yaml
+    required: true
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: ../components/responses/blueprint_update_res.yaml
+    '404':
+      description: Blueprint not found
+  x-codeSamples:
+    - lang: 'cURL'
+      label: curl
+      source: curl --update
+    - lang: 'Lua'
+      label: hamal
+      source:
+        $ref: ../code_samples/blueprint_update.lua
