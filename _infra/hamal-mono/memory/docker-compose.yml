@@ -9,7 +9,7 @@ services:
     environment:
       - ACTIVE_PROFILES=default,memory
     networks:
-      - hamalnet
+      - hamal_net
 
 networks:
-  hamalnet:
+  hamal_net:

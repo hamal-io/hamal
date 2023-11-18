@@ -9,8 +9,8 @@ services:
     environment:
       - ACTIVE_PROFILES=default,memory
     networks:
-      - hamalnet
-  fnguru:
+      - hamal_net
+  fn-guru:
     image: hamalio/fn-guru
     restart:
       unless-stopped
@@ -20,7 +20,7 @@ services:
       - ACTIVE_PROFILES=default
       - HUB_HOST=http://hamal:8008
     networks:
-      - fnguru_net
+      - hamal_net
 
 networks:
-  hamalnet:
+  hamal_net:

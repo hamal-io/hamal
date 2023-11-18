@@ -19,7 +19,8 @@ cd app/fn-guru/src/main/frontend
 npm install
 npm run deploy
 
-cd app/fn-guru/src/main/doc
+cd $BASEDIR
+cd app/fn-guru/src/main/doc-http
 npm install
 npm run deploy
 
