@@ -12,6 +12,7 @@ import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiTriggerService.TriggerQuery
 import io.hamal.lib.sdk.fold
 import io.hamal.request.CreateTriggerReq
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlin.time.Duration
 
@@ -63,6 +64,7 @@ data class ApiTriggerList(
     }
 
     @Serializable
+    @SerialName("FixedRate")
     class FixedRateTrigger(
         override val id: TriggerId,
         override val name: TriggerName,
@@ -72,6 +74,7 @@ data class ApiTriggerList(
     ) : Trigger
 
     @Serializable
+    @SerialName("Event")
     class EventTrigger(
         override val id: TriggerId,
         override val name: TriggerName,
@@ -87,6 +90,7 @@ data class ApiTriggerList(
     }
 
     @Serializable
+    @SerialName("Hook")
     class HookTrigger(
         override val id: TriggerId,
         override val name: TriggerName,
@@ -126,6 +130,7 @@ sealed interface ApiTrigger {
 }
 
 @Serializable
+@SerialName("FixedRate")
 class ApiFixedRateTrigger(
     override val id: TriggerId,
     override val name: TriggerName,
@@ -137,6 +142,7 @@ class ApiFixedRateTrigger(
 ) : ApiTrigger
 
 @Serializable
+@SerialName("Event")
 class ApiEventTrigger(
     override val id: TriggerId,
     override val name: TriggerName,
@@ -154,6 +160,7 @@ class ApiEventTrigger(
 }
 
 @Serializable
+@SerialName("Hook")
 class ApiHookTrigger(
     override val id: TriggerId,
     override val name: TriggerName,
