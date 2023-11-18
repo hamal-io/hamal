@@ -1,0 +1,31 @@
+openapi: 3.1.0
+info:
+  version: 1.0.0
+  title: fn(guru)
+  description: Http API documentation of fn(guru)
+  termsOfService: https://fn.guru/terms
+  license:
+    name: Creative Commons Zero v1.0 Universal
+    url: https://creativecommons.org/publicdomain/zero/1.0/deed.en
+servers:
+  - url: https://fn.guru
+tags:
+  - name: Blueprint
+    description: TBD.
+  - name: Func
+    description: TBD
+paths:
+  /v1/groups/{groupId}/blueprints:
+    $ref: paths/blueprint_create.yaml
+  /v1/blueprints/{blueprint_id}:
+    $ref: paths/blueprint_get_patch.yaml
+
+security:
+  - JWT: [ ]
+
+components:
+  securitySchemes:
+    JWT:
+      $ref: components/securitySchemes/JWT.yaml
+
+    

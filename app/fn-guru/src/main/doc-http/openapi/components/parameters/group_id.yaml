@@ -1,0 +1,7 @@
+name: groupId
+in: path
+required: true
+schema:
+  $ref: ../schemas/group_id.yaml
+style: simple
+example: da6ea0a001000

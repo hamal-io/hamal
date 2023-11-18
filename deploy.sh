@@ -20,6 +20,11 @@ npm install
 npm run deploy
 
 cd $BASEDIR
+cd app/fn-guru/src/main/doc-http
+npm install
+npm run deploy
+
+cd $BASEDIR
 pwd
 
 ./gradlew dockerBuildImage
