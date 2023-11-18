@@ -44,9 +44,10 @@ internal class FixedRateTriggerService(
                 limit = Limit(10),
                 groupIds = listOf()
             )
-        ).filterIsInstance<FixedRateTrigger>().forEach {
-            plannedInvocations[it] = now().plusMillis(it.duration.inWholeSeconds)
-        }
+        ).filterIsInstance<FixedRateTrigger>()
+            .forEach {
+                plannedInvocations[it] = now().plusMillis(it.duration.inWholeSeconds)
+            }
 
         scheduledTasks.add(
             async.atFixedRate(1.seconds) {
