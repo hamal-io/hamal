@@ -19,6 +19,10 @@ cd app/fn-guru/src/main/frontend
 npm install
 npm run deploy
 
+cd app/fn-guru/src/main/doc
+npm install
+npm run deploy
+
 cd $BASEDIR
 pwd
 

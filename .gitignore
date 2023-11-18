@@ -45,6 +45,7 @@ build/
 **/node_modules
 **/build
 **/dist
+**/dist-doc
 
 ### Mac OS ###
 .DS_Store

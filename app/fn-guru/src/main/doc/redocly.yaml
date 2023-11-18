@@ -8,7 +8,7 @@ rules:
   no-unused-components: error
 theme:
   openapi:
-    htmlTemplate: ./docs/template.html
+    htmlTemplate: ./public/template.html
     theme:
       colors:
         primary:

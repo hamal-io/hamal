@@ -8,7 +8,8 @@
   "scripts": {
     "start": "redocly preview-docs",
     "bundle": "redocly bundle openapi/openapi.yaml --output dist/openapi.yaml",
-    "build-docs": "redocly build-docs dist/openapi.yaml --output=docs/index.html",
+    "build": "npm run bundle && redocly build-docs dist/openapi.yaml --output=dist/index.html",
+    "deploy": "rm -rf ../resources/dist-doc && npm run build && cp -r ./dist ../resources/dist-doc",
     "test": "redocly lint"
   }
 }
