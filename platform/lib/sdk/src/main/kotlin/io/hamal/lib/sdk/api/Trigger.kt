@@ -106,6 +106,16 @@ data class ApiTriggerList(
             val methods: Set<HookMethod>
         )
     }
+
+    @Serializable
+    @SerialName("Cron")
+    class CronTrigger(
+        override val id: TriggerId,
+        override val name: TriggerName,
+        override val func: Trigger.Func,
+        override val flow: Trigger.Flow,
+        val cron: CronPattern
+    ) : Trigger
 }
 
 @Serializable

@@ -43,7 +43,13 @@ class TriggerCreateFunction(
                         HookId(SnowflakeId(arg1.getString("hook_id")))
                     } else {
                         null
+                    },
+                    cron = if (arg1.type("cron") == StringType::class) {
+                        CronPattern(arg1.getString("cron"))
+                    } else {
+                        null
                     }
+
                 )
             )
 

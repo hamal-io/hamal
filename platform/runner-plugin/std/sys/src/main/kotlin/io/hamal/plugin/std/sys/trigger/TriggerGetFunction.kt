@@ -107,7 +107,26 @@ class TriggerGetFunction(
                             )
                         }
 
-                        is ApiCronTrigger -> TODO("92")
+                        is ApiCronTrigger -> MapType(
+                            mutableMapOf(
+                                "id" to StringType(trigger.id.value.value.toString(16)),
+                                "type" to StringType("Cron"),
+                                "name" to StringType(trigger.name.value),
+                                "flow" to MapType(
+                                    mutableMapOf(
+                                        "id" to StringType(trigger.flow.id.value.value.toString(16)),
+                                        "name" to StringType(trigger.flow.name.value)
+                                    )
+                                ),
+                                "func" to MapType(
+                                    mutableMapOf(
+                                        "id" to StringType(trigger.func.id.value.value.toString(16)),
+                                        "name" to StringType(trigger.func.name.value)
+                                    )
+                                ),
+                                "cron" to StringType(trigger.cron.value)
+                            )
+                        )
                     }
                 }
         } catch (t: Throwable) {

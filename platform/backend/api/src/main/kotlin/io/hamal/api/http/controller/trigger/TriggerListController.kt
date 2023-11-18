@@ -12,6 +12,7 @@ import io.hamal.lib.sdk.api.ApiTriggerList.EventTrigger.Topic
 import io.hamal.lib.sdk.api.ApiTriggerList.HookTrigger.Hook
 import io.hamal.lib.sdk.api.ApiTriggerList.Trigger.Flow
 import io.hamal.lib.sdk.api.ApiTriggerList.Trigger.Func
+import io.hamal.repository.api.CronTrigger
 import io.hamal.repository.api.EventTrigger
 import io.hamal.repository.api.FixedRateTrigger
 import io.hamal.repository.api.HookTrigger
@@ -98,6 +99,22 @@ class TriggerListController(private val listTriggers: TriggerListPort) {
                                         name = hooks[trigger.hookId]!!.name,
                                         methods = trigger.hookMethods
                                     )
+                                )
+                            }
+
+                            is CronTrigger -> {
+                                ApiTriggerList.CronTrigger(
+                                    id = trigger.id,
+                                    name = trigger.name,
+                                    func = Func(
+                                        id = trigger.funcId,
+                                        name = funcs[trigger.funcId]!!.name
+                                    ),
+                                    flow = Flow(
+                                        id = trigger.flowId,
+                                        name = flows[trigger.flowId]!!.name
+                                    ),
+                                    cron = trigger.cron
                                 )
                             }
 

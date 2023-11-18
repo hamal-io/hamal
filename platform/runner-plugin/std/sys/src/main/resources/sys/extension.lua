@@ -245,6 +245,18 @@ function extension()
             })
         end
 
+        function export.triggers.create_cron(cmd)
+            cmd = cmd or {}
+            return internal.trigger_create({
+                type = "Cron",
+                flow_id = cmd.flow_id,
+                name = cmd.name,
+                func_id = cmd.func_id,
+                inputs = cmd.inputs or {},
+                cron = cmd.cron
+            })
+        end
+
         function export.triggers.get(trigger_id)
             return internal.trigger_get(trigger_id)
         end

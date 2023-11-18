@@ -108,6 +108,27 @@ class TriggerListFunction(
                                 )
                             )
                         }
+
+                        is ApiTriggerList.CronTrigger -> MapType(
+                            mutableMapOf(
+                                "id" to StringType(trigger.id.value.value.toString(16)),
+                                "type" to StringType("FixedRate"),
+                                "name" to StringType(trigger.name.value),
+                                "flow" to MapType(
+                                    mutableMapOf(
+                                        "id" to StringType(trigger.flow.id.value.value.toString(16)),
+                                        "name" to StringType(trigger.flow.name.value)
+                                    )
+                                ),
+                                "func" to MapType(
+                                    mutableMapOf(
+                                        "id" to StringType(trigger.func.id.value.value.toString(16)),
+                                        "name" to StringType(trigger.func.name.value)
+                                    )
+                                ),
+                                "duration" to StringType(trigger.cron.value)
+                            )
+                        )
                     }
                 }.toMap().toMutableMap()
             )
