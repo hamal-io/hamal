@@ -1,23 +1,23 @@
 openapi: 3.1.0
 info:
   version: 1.0.0
-  title: Hamal Api Title
-  description: Hamal API description
-  termsOfService: https://hamal.io/terms/
+  title: fn(guru)
+  description: Http API documentation of fn(guru)
+  termsOfService: https://fn.guru/terms
   license:
-    name: Apache 2.0
-    url: https://www.apache.org/licenses/LICENSE-2.0.html
+    name: Creative Commons Zero v1.0 Universal
+    url: https://creativecommons.org/publicdomain/zero/1.0/deed.en
 servers:
-  - url: https://hamal.io
+  - url: https://fn.guru
 tags:
   - name: Blueprint
-    description: Endpoints to manage Blueprint Actions using the REST API.
+    description: TBD.
   - name: Func
-    description: To come
+    description: TBD
 paths:
   /v1/groups/{groupId}/blueprints:
     $ref: paths/blueprint_create.yaml
-  /v1/blueprints/{bpId}:
+  /v1/blueprints/{blueprint_id}:
     $ref: paths/blueprint_get_patch.yaml
 
 security:

@@ -1,2 +1,2 @@
 sys = require('sys')
-sys.blueprint.get(create_req.id)
+sys.blueprints.get(create_req.id)

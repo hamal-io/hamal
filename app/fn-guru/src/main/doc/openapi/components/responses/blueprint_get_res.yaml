@@ -1,10 +1,10 @@
 type: object
 properties:
   id:
-    $ref: ../schemas/Blueprint_id.yaml
+    $ref: ../schemas/blueprint_id.yaml
   name:
-    $ref: ../schemas/Custom_name.yaml
+    $ref: ../schemas/custom_name.yaml
   inputs:
-    $ref: ../schemas/Blueprint_inputs.yaml
+    $ref: ../schemas/blueprint_inputs.yaml
   value:
-    $ref: ../schemas/Code_value.yaml
+    $ref: ../schemas/code_value.yaml

@@ -4,11 +4,11 @@ properties:
     type: string
     example: io.hamal.lib.sdk.api.ApiBlueprintCreateSubmitted
   id:
-    $ref: ../schemas/Req_id.yaml
+    $ref: ../schemas/req_id.yaml
   status:
     type: string
     example: Submitted
   blueprintId:
-    $ref: ../schemas/Blueprint_id.yaml
+    $ref: ../schemas/blueprint_id.yaml
   groupId:
-    $ref: ../schemas/Group_id.yaml
+    $ref: ../schemas/group_id.yaml

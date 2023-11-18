@@ -1,9 +1,9 @@
 type: object
 properties:
   name:
-    $ref: ../schemas/Custom_name.yaml
+    $ref: ../schemas/custom_name.yaml
   inputs:
-    $ref: ../schemas/Blueprint_inputs.yaml
+    $ref: ../schemas/blueprint_inputs.yaml
   value:
-    $ref: ../schemas/Code_value.yaml
+    $ref: ../schemas/code_value.yaml
 description: Response to a create blueprint request.

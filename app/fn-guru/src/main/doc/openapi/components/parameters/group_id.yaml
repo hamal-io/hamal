@@ -2,6 +2,6 @@ name: groupId
 in: path
 required: true
 schema:
-  $ref: ../schemas/Group_id.yaml
+  $ref: ../schemas/group_id.yaml
 style: simple
-example: 1
+example: da6ea0a001000
