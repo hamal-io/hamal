@@ -250,7 +250,6 @@ export const useApiGet = <T>(url: string): [T, boolean, Error] => {
             })
                 .then(response => {
 
-                    console.log("response", JSON.stringify(response))
                     if (response.status === 403) {
                         console.log("forbidden")
                         setAuth(null)

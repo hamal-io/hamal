@@ -32,7 +32,6 @@ export const useListScheduleTriggers = (flowId: string): [TriggerListItem[], boo
             })
                 .then(response => {
 
-                    console.log("response", JSON.stringify(response))
                     if (response.status === 403) {
                         console.log("forbidden")
                         setAuth(null)

@@ -1,8 +1,6 @@
-import {useCallback, useState} from "react";
+import {useCallback} from "react";
 import {useGet, usePost} from "@/hook/http.ts";
-import {Func, FuncCreateSubmitted, FuncDeployLatestSubmitted, FuncInvokeSubmitted, FuncList} from "@/types/func.ts";
-import {useAuth} from "@/hook/auth.ts";
-import {AUTH_KEY} from "@/types/auth.ts";
+import {Func, FuncCreateSubmitted, FuncDeployLatestSubmitted, FuncInvokeSubmitted, FuncList} from "@/types";
 
 type FuncGetAction = (funcId: string, abortController?: AbortController) => void
 export const useFuncGet = (): [FuncGetAction, Func, boolean, Error] => {
@@ -13,9 +11,9 @@ export const useFuncGet = (): [FuncGetAction, Func, boolean, Error] => {
 
 type FuncListAction = (flowId: string, abortController?: AbortController) => void
 export const useFuncList = (): [FuncListAction, FuncList, boolean, Error] => {
-    const [get, func, loading, error] = useGet<FuncList>()
+    const [get, funcList, loading, error] = useGet<FuncList>()
     const fn = useCallback(async (flowId: string, abortController?: AbortController) => get(`/v1/flows/${flowId}/funcs`, abortController), [])
-    return [fn, func, loading, error]
+    return [fn, funcList, loading, error]
 }
 
 type FuncCreateAction = (flowId: string, name: string, controller?: AbortController) => void
