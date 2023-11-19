@@ -27,9 +27,7 @@ const List: FC<ListProps> = ({groupId}) => {
     if (isLoading) return "Loading..."
     if (error != null) return "Error -"
 
-    // const filteredFlows = flowList.flows.filter(flow => flow.name !== '__default__')
-    const filteredFlows = flowList.flows
-
+    const filteredFlows = flowList.flows.filter(flow => flow.name !== '__default__')
     return (
         <div className="pt-8 px-8">
             <PageHeader title="Workflows" description="Organise your workflows" actions={[<Create/>]}/>
