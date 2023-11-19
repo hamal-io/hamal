@@ -1,5 +1,5 @@
 import React, {FC, useEffect, useState} from "react";
-import {unauthorized, useAuth, useLogout} from "@/hook/auth.ts";
+import {useAuth, useLogout} from "@/hook/auth.ts";
 import {Button} from "@/components/ui/button.tsx";
 import {
     DropdownMenu,
@@ -185,6 +185,7 @@ const Convert = () => {
         }
 
     }
+
     useEffect(() => {
         if (auth != null && auth.type === 'User') {
             navigate(`/flows`)
