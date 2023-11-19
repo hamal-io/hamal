@@ -39,8 +39,7 @@ const Detail: FC<Prop> = ({item}) => {
             <CardContent>
                 <div className="flex flex-col text-sm leading-6 divide-y divide-gray-100 ">
                     <div className="flex justify-between py-3 gap-x-4">
-                        {import.meta.env.VITE_BASE_URL}/v1/webhooks/{item.hook.id}
-
+                        https://hooks.fn.guru/{item.hook.id}
                     </div>
                     <div className="flex flex-col items-start justify-between ">
                         {item.trigger.map(trigger => {
