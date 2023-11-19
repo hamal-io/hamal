@@ -1,5 +1,5 @@
 import React, {FC, useEffect, useState} from "react";
-import {unauthorized, useAuth} from "@/hook/auth.ts";
+import {unauthorized, useAuth, useLogout} from "@/hook/auth.ts";
 import {Button} from "@/components/ui/button.tsx";
 import {
     DropdownMenu,
@@ -21,9 +21,7 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
 import {useForm} from "react-hook-form";
 import {Loader2} from "lucide-react";
-import {ApiAccountConversionSubmitted} from "@/api/account.ts";
-import {useAccountConvert, useApiPost} from "@/hook";
-import {AUTH_KEY} from "@/types/auth.ts";
+import {useAccountConvert} from "@/hook";
 
 
 const Header: FC = () => {
@@ -89,13 +87,11 @@ export interface ApiLogoutSubmitted {
 
 const LogoutMenuItem = () => {
     const navigate = useNavigate()
-    const [, setAuth] = useAuth()
-    const [logout] = useApiPost<ApiLogoutSubmitted>()
+    const [logout,] = useLogout()
 
     return (
         <DropdownMenuItem onClick={() => {
-            logout('v1/logout', {})
-            setAuth({...unauthorized})
+            logout()
             navigate("/")
         }}>
             Log out

@@ -9,9 +9,6 @@ export const useGet = <T>(): [GetAction, T, boolean, Error] => {
     const [error, setError] = useState<Error | null>(null);
 
     const fn = useCallback(async (url: string, abortController?: AbortController) => {
-        setLoading(true);
-        setError(null);
-
         if (auth.type === 'Unauthorized') {
             setError(Error("Unauthenticated"))
             setLoading(false)
@@ -67,11 +64,12 @@ export const usePost = <T>(): [PostAction, T, boolean, Error] => {
     const [auth, setAuth] = useAuth()
     const [data, setData] = useState<T | null>(null);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<Error>(null);
+    const [error, setError] = useState<Error | null>(null);
 
     const fn = useCallback(async (url: string, body: object, abortController?: AbortController) => {
+        console.log("auth", auth)
+
         if (auth.type === 'Unauthorized') {
-            console.log("Unauthorized")
             setError(Error("Unauthenticated"))
             setLoading(false)
             setAuth(null)
@@ -132,7 +130,7 @@ export const usePatch = <T>(): [PatchAction, T, boolean, Error] => {
     const [auth, setAuth] = useAuth()
     const [data, setData] = useState<T | null>(null);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<Error>(null);
+    const [error, setError] = useState<Error | null>(null);
 
     const fn = useCallback(async (url: string, body: object, abortController?: AbortController) => {
         if (auth.type === 'Unauthorized') {

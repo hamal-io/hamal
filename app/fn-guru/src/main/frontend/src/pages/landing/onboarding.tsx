@@ -1,5 +1,5 @@
 import React, {FC, useEffect, useState} from 'react'
-import {useAccountCreateAnonymous, useApiPost} from "@/hook";
+import {useAccountCreateAnonymous, useAdhoc, useFlowCreate} from "@/hook";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useAuth} from "@/hook/auth.ts";
 import {Loader2} from "lucide-react";
@@ -10,8 +10,8 @@ const OnboardingPage: FC = () => {
     const navigate = useNavigate()
     const [auth] = useAuth()
     const [createAnonymousAccount] = useAccountCreateAnonymous()
-    const [submitFlow, flowsubmitted,] = useApiPost<{ flowId: string }>()
-    const [submitBlueprint, blueprintSubmitted] = useApiPost()
+    const [createFlow, flow,] = useFlowCreate()
+    const [adhoc, adhocSubmitted] = useAdhoc()
     const [code, setCode] = useState<string>('')
 
     useEffect(() => {
@@ -35,44 +35,41 @@ const OnboardingPage: FC = () => {
 
     useEffect(() => {
         const abortController = new AbortController()
+        if (auth != null) {
+            console.log("create flow hook", JSON.stringify(auth))
+        }
 
         if (auth != null && auth.type !== 'Unauthorized') {
-            submitFlow(`v1/groups/${auth.groupId}/flows`, {
-                name: `Test-Name-Space-${generateId(10)}`,
-                inputs: {}
-            }, abortController)
+            console.log("creating flow")
+            createFlow(auth.groupId, `Flow-${generateId(10)}`, abortController)
         }
         return () => {
             abortController.abort()
         }
-    }, [auth, submitFlow])
+    }, [auth, createFlow])
 
     useEffect(() => {
         const abortController = new AbortController()
-
-        if (flowsubmitted != null) {
-            submitBlueprint(`v1/flows/${flowsubmitted.flowId}/adhoc`, {
-                inputs: {},
-                code: `sys = require('sys')
+        if (flow != null) {
+            adhoc(`sys = require('sys')
                 sys.funcs.create({
                     name = 'Hello-World',
                     inputs = {},
                     code = [[ ${code} ]]
-                })`
-            }, abortController)
+                })`, abortController)
         }
         return () => {
             abortController.abort()
         }
 
-    }, [flowsubmitted, submitBlueprint]);
+    }, [flow, adhoc]);
 
 
     useEffect(() => {
-        if (blueprintSubmitted != null) {
+        if (adhocSubmitted != null) {
             navigate('/flows', {replace: true})
         }
-    }, [blueprintSubmitted, navigate]);
+    }, [adhocSubmitted, navigate]);
 
     return (
         <main className="flex-1 w-full pt-2 mx-auto text-lg h-screen shadow-lg bg-gray-200">

@@ -1,14 +1,13 @@
 import {useAuth} from "@/hook/auth.ts";
 import {useCallback, useState} from "react";
 import {AccountConvertSubmitted, FuncCreateSubmitted, LoginSubmitted} from "@/types";
-import {usePost} from "@/hook/http.ts";
 
 type AccountCreateAnonymousAction = (abortController?: AbortController) => void
 export const useAccountCreateAnonymous = (): [AccountCreateAnonymousAction, LoginSubmitted, boolean, Error] => {
     const [auth, setAuth] = useAuth()
 
     const [data, setData] = useState<LoginSubmitted | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState<Error | null>(null);
 
     const create = useCallback(async (abortController?: AbortController) => {
@@ -29,11 +28,11 @@ export const useAccountCreateAnonymous = (): [AccountCreateAnonymousAction, Logi
 
                 if (!response.ok) {
                     setError(Error(`Request submission failed: ${response.status} - ${response.statusText}`))
-                    setIsLoading(false)
+                    setLoading(false)
                 }
                 response.json().then(data => {
                     setData(data)
-                    setIsLoading(false)
+                    setLoading(false)
 
                     setAuth({
                         type: 'Anonymous',
@@ -46,12 +45,21 @@ export const useAccountCreateAnonymous = (): [AccountCreateAnonymousAction, Logi
                 })
             })
             .catch(error => {
-                setError(error)
-                setIsLoading(false)
-            })
-    }, [auth])
+                if (error.name !== 'AbortError') {
+                    // FIXME NETWORK ERROR
+                    setError(error)
+                    setLoading(false)
+                }
 
-    return [create, data, isLoading, error]
+                if (error.message === 'NetworkError when attempting to fetch resource.') {
+                    console.log("forbidden")
+                    setAuth(null)
+                    window.location.href = '/login'
+                }
+            })
+    }, [])
+
+    return [create, data, loading, error]
 }
 
 type AccountLoginAction = (name: string, password: string, controller?: AbortController) => void
@@ -59,7 +67,7 @@ export const useAccountLogin = (): [AccountLoginAction, LoginSubmitted, boolean,
     const [auth, setAuth] = useAuth()
 
     const [data, setData] = useState<LoginSubmitted | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState<Error>(null);
 
     const create = useCallback((name: string, password: string, controller?: AbortController) => {
@@ -78,11 +86,11 @@ export const useAccountLogin = (): [AccountLoginAction, LoginSubmitted, boolean,
             .then(response => {
                 if (!response.ok) {
                     setError(Error(`Request submission failed: ${response.status} - ${response.statusText}`))
-                    setIsLoading(false)
+                    setLoading(false)
                 }
                 response.json().then(data => {
                     setData(data)
-                    setIsLoading(false)
+                    setLoading(false)
 
                     setAuth({
                         type: 'User',
@@ -95,12 +103,21 @@ export const useAccountLogin = (): [AccountLoginAction, LoginSubmitted, boolean,
                 })
             })
             .catch(error => {
-                setError(error)
-                setIsLoading(false)
-            })
-    }, [auth])
+                if (error.name !== 'AbortError') {
+                    // FIXME NETWORK ERROR
+                    setError(error)
+                    setLoading(false)
+                }
 
-    return [create, data, isLoading, error]
+                if (error.message === 'NetworkError when attempting to fetch resource.') {
+                    console.log("forbidden")
+                    setAuth(null)
+                    window.location.href = '/login'
+                }
+            })
+    }, [])
+
+    return [create, data, loading, error]
 }
 
 
@@ -109,7 +126,7 @@ export const useAccountConvert = (): [AccountConvertAction, AccountConvertSubmit
     const [auth, setAuth] = useAuth()
 
     const [data, setData] = useState<AccountConvertSubmitted | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState<Error>(null);
 
     const create = useCallback((name: string, password: string, email?: string, abortController?: AbortController) => {
@@ -130,11 +147,11 @@ export const useAccountConvert = (): [AccountConvertAction, AccountConvertSubmit
             .then(response => {
                 if (!response.ok) {
                     setError(Error(`Request submission failed: ${response.status} - ${response.statusText}`))
-                    setIsLoading(false)
+                    setLoading(false)
                 }
                 response.json().then(data => {
                     setData(data)
-                    setIsLoading(false)
+                    setLoading(false)
 
                     setAuth({
                         type: 'User',
@@ -147,10 +164,19 @@ export const useAccountConvert = (): [AccountConvertAction, AccountConvertSubmit
                 })
             })
             .catch(error => {
-                setError(error)
-                setIsLoading(false)
+                if (error.name !== 'AbortError') {
+                    // FIXME NETWORK ERROR
+                    setError(error)
+                    setLoading(false)
+                }
+
+                if (error.message === 'NetworkError when attempting to fetch resource.') {
+                    console.log("forbidden")
+                    setAuth(null)
+                    window.location.href = '/login'
+                }
             })
     }, [auth])
 
-    return [create, data, isLoading, error]
+    return [create, data, loading, error]
 }
