@@ -20,7 +20,7 @@ type Prop = {
 
 const formSchema = z.object({
     name: z.string().min(2).max(50),
-    funcId: z.string().min(1, "Function required"),
+    // funcId: z.string().min(1, "Function required"),
 })
 
 const Create: FC<Prop> = ({flow}) => {
@@ -32,23 +32,22 @@ const Create: FC<Prop> = ({flow}) => {
 
     const [createHook, submittedHook] = useHookCreate()
 
-    const [triggerName, setTriggerName] = useState('')
-    const [triggerFuncId, setTriggerFuncId] = useState('')
-    const [createTrigger, submittedTrigger] = useTriggerHookCreate()
+    // const [triggerName, setTriggerName] = useState('')
+    // const [triggerFuncId, setTriggerFuncId] = useState('')
+    // const [createTrigger, submittedTrigger] = useTriggerHookCreate()
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: "",
-            funcId: ""
+            name: ""
         },
     })
-
-    useEffect(() => {
-        if (submittedHook != null) {
-            createTrigger(submittedHook.flowId, triggerFuncId, triggerName, submittedHook.hookId)
-        }
-    }, [submittedHook]);
+    //
+    // useEffect(() => {
+    //     if (submittedHook != null) {
+    //         createTrigger(submittedHook.flowId, triggerFuncId, triggerName, submittedHook.hookId)
+    //     }
+    // }, [submittedHook]);
 
     // 2. Define a submit handler.
     async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -57,8 +56,8 @@ const Create: FC<Prop> = ({flow}) => {
         // ✅ This will be type-safe and validated.
 
         try {
-            setTriggerName(values.name)
-            setTriggerFuncId(values.funcId)
+            // setTriggerName(values.name)
+            // setTriggerFuncId(values.funcId)
             createHook(flow.id, values.name)
 
 
@@ -109,7 +108,7 @@ const Create: FC<Prop> = ({flow}) => {
                                 )}
                             />
 
-                            <FormFuncSelect flowId={flow.id} form={form}/>
+                            {/*<FormFuncSelect flowId={flow.id} form={form}/>*/}
 
                             <Button type="submit">
                                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}

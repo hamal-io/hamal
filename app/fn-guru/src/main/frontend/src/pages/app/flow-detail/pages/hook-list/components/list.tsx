@@ -1,13 +1,11 @@
 import React, {FC, useEffect} from "react";
 import {Separator} from "@/components/ui/separator.tsx";
 import {EmptyPlaceholder} from "@/components/empty-placeholder.tsx";
-import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx";
 import {PageHeader} from "@/components/page-header.tsx";
 import Create from "@/pages/app/flow-detail/pages/hook-list/components/create.tsx";
 import {GoToDocumentation} from "@/components/documentation.tsx";
 import {useNavigate} from "react-router-dom";
 import {useHookList} from "@/hook/hook.ts";
-import {HookListItem, TriggerListItem} from "@/types";
 import Detail from "@/pages/app/flow-detail/pages/hook-list/components/detail.tsx";
 import {useTriggerListHook} from "@/hook";
 import {HookWithTriggers} from "@/pages/app/flow-detail/pages/hook-list/type.tsx";
@@ -47,8 +45,8 @@ const List: FC<ListProps> = ({flow}) => {
     return (
         <div className="pt-2 px-2">
             <PageHeader
-                title="Hooks"
-                description={`Hooks of ${flow.name}`}
+                title="Webhooks"
+                description={`Webhooks of ${flow.name}`}
                 actions={[<Create flow={flow}/>]}
             />
             <Separator className="my-6"/>
@@ -83,9 +81,9 @@ const NoContent: FC<NoContentProps> = ({flow}) => (
         <EmptyPlaceholder.Icon>
             {/*<Code />*/}
         </EmptyPlaceholder.Icon>
-        <EmptyPlaceholder.Title>No Hooks found</EmptyPlaceholder.Title>
+        <EmptyPlaceholder.Title>No Webhooks found</EmptyPlaceholder.Title>
         <EmptyPlaceholder.Description>
-            You haven&apos;t created any Hooks yet.
+            You haven&apos;t created any Webhook yet.
         </EmptyPlaceholder.Description>
         <div className="flex flex-col items-center justify-center gap-2 md:flex-row">
             <Create flow={flow}/>
