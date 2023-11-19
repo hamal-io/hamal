@@ -35,12 +35,8 @@ const OnboardingPage: FC = () => {
 
     useEffect(() => {
         const abortController = new AbortController()
-        if (auth != null) {
-            console.log("create flow hook", JSON.stringify(auth))
-        }
 
         if (auth != null && auth.type !== 'Unauthorized') {
-            console.log("creating flow")
             createFlow(auth.groupId, `Flow-${generateId(10)}`, abortController)
         }
         return () => {
@@ -51,7 +47,7 @@ const OnboardingPage: FC = () => {
     useEffect(() => {
         const abortController = new AbortController()
         if (flow != null) {
-            adhoc(`sys = require('sys')
+            adhoc(flow.flowId, `sys = require('sys')
                 sys.funcs.create({
                     name = 'Hello-World',
                     inputs = {},

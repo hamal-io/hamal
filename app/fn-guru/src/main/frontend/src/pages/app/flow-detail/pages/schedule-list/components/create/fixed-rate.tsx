@@ -109,7 +109,6 @@ const CreateFixedRate: FC<Prop> = ({flow}) => {
     // 2. Define a submit handler.
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setLoading(true)
-        console.log(values)
 
         let timeUnit = 'S'
 
@@ -129,7 +128,6 @@ const CreateFixedRate: FC<Prop> = ({flow}) => {
         }
 
         try {
-            console.log(auth)
             createTrigger(
                 flow.id,
                 values.funcId,
@@ -137,7 +135,7 @@ const CreateFixedRate: FC<Prop> = ({flow}) => {
                 "PT" + values.rate + timeUnit
             )
         } catch (e) {
-            console.log(`login failed - ${e}`)
+            console.error(e)
         } finally {
             // setLoading(false)
         }

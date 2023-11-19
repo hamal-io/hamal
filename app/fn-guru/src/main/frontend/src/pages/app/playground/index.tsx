@@ -3,14 +3,16 @@ import Editor from "@/components/editor.tsx";
 import React, {useState} from "react";
 import {useAdhoc} from "@/hook";
 import {PageHeader} from "@/components/page-header.tsx";
+import {useAuth} from "@/hook/auth.ts";
 
 export default function PlaygroundPage() {
+    const [auth] = useAuth()
     const [adhoc, data] = useAdhoc()
     const [code, setCode] = useState("log = require('log')\nlog.info('Let\\'s go..')")
 
     const Run = () => (
         <Button onClick={() => {
-            adhoc(code)
+            adhoc(auth.defaultFlowIds[auth.groupId], code)
         }}>Play</Button>
     )
     return (

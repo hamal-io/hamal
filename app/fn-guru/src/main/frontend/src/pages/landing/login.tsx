@@ -96,7 +96,7 @@ const LoginForm = () => {
             setLoading(true)
             login(values.name, values.password)
         } catch (e) {
-            console.log(`login failed - ${e}`)
+            console.error(e)
         } finally {
         }
     }

@@ -38,13 +38,11 @@ const Create = () => {
         setLoading(true)
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
-        console.log(values)
 
         try {
             createFlow(auth.groupId, values.name)
-            console.log(auth)
         } catch (e) {
-            console.log(`login failed - ${e}`)
+            console.error(e)
         } finally {
             // setLoading(false)
         }

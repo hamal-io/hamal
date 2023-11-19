@@ -86,13 +86,11 @@ export interface ApiLogoutSubmitted {
 
 
 const LogoutMenuItem = () => {
-    const navigate = useNavigate()
     const [logout,] = useLogout()
 
     return (
         <DropdownMenuItem onClick={() => {
             logout()
-            navigate("/")
         }}>
             Log out
         </DropdownMenuItem>
@@ -178,40 +176,19 @@ const Convert = () => {
         setLoading(true)
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
-        console.log(values)
         try {
             convert(values.name, values.password, values.email)
-            console.log(auth)
         } catch (e) {
-            console.log(`login failed - ${e}`)
+            console.error(e)
         } finally {
             // setLoading(false)
         }
 
     }
-
-    // const [post, data] = useApiPost<ApiAccountConversionSubmitted>()
-    // useEffect(() => {
-    //     if (data != null) {
-    //         setAuth({
-    //             type: 'User',
-    //             accountId: auth.accountId,
-    //             groupId: auth.groupId,
-    //             defaultFlowIds: auth.defaultFlowIds,
-    //             token: data.token,
-    //             name: data.name
-    //         })
-    //     }
-    // }, [data]);
-
-
     useEffect(() => {
-        console.log("AUTH", JSON.stringify(auth))
         if (auth != null && auth.type === 'User') {
-            console.log("navigate")
             navigate(`/flows`)
             setOpenDialog(false)
-
         }
     }, [auth, navigate]);
 

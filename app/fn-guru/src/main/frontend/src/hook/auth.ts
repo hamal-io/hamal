@@ -1,10 +1,10 @@
 import {Auth, AUTH_KEY} from "@/types/auth.ts";
 import useLocalStorageState from "use-local-storage-state";
 import {usePost} from "@/hook/http.ts";
-import {FuncCreateSubmitted} from "@/types";
-import {useCallback} from "react";
+import {useCallback, useEffect, useState} from "react";
+import {useNavigate} from "react-router-dom";
 
-export const unauthorized: Auth = {
+const unauthorized: Auth = {
     type: 'Unauthorized',
     accountId: '',
     groupId: '',
@@ -19,26 +19,43 @@ export const useAuth = () => {
     })
 }
 
-type FuncCreateAction = (flowId: string, name: string, abortController?: AbortController) => void
-export const useFuncCreate = (): [FuncCreateAction, FuncCreateSubmitted, boolean, Error] => {
-    const [post, submission, loading, error] = usePost<FuncCreateSubmitted>()
-    const fn = useCallback(async (flowId: string, name: string, abortController?: AbortController) =>
-        post(`/v1/flows/${flowId}/funcs`, {
-            name,
-            inputs: {},
-            code: ""
-        }, abortController), []
-    )
-    return [fn, submission, loading, error]
-}
-
 type LogoutAction = (abortController?: AbortController) => void
-export const useLogout = (): [LogoutAction, never, boolean, Error] => {
-    const [, setAuth] = useAuth()
-    const [post, submission, loading, error] = usePost<never>()
-    const fn = useCallback(async (abortController?: AbortController) => {
-        post('/v1/logout', {}, abortController)
-        setAuth({...unauthorized})
-    }, [])
-    return [fn, submission, loading, error]
+export const useLogout = (): [LogoutAction, boolean, Error] => {
+    const navigate = useNavigate()
+    const [auth, setAuth] = useAuth()
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<Error | null>(null);
+
+    const fn = useCallback((abortController?: AbortController) => {
+        fetch(`${import.meta.env.VITE_BASE_URL}/v1/logout`, {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${auth.token}`
+            },
+            signal: abortController?.signal,
+        })
+            .then(response => {
+
+                setLoading(false)
+                setAuth({...unauthorized})
+                navigate("/", {replace: true})
+            })
+            .catch(error => {
+                if (error.name !== 'AbortError') {
+                    // FIXME NETWORK ERROR
+                    setError(error)
+                    setLoading(false)
+                }
+
+                if (error.message === 'NetworkError when attempting to fetch resource.') {
+                    setAuth(null)
+                    window.location.href = '/login'
+                }
+            })
+    }, [auth])
+
+
+    return [fn, loading, error]
 }

@@ -10,7 +10,7 @@ export const useAccountCreateAnonymous = (): [AccountCreateAnonymousAction, Logi
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<Error | null>(null);
 
-    const create = useCallback(async (abortController?: AbortController) => {
+    const fn = useCallback(async (abortController?: AbortController) => {
         fetch(`${import.meta.env.VITE_BASE_URL}/v1/anonymous-accounts`, {
             method: "POST",
             headers: {
@@ -21,7 +21,6 @@ export const useAccountCreateAnonymous = (): [AccountCreateAnonymousAction, Logi
         })
             .then(response => {
                 if (response.status === 403) {
-                    console.log("forbidden")
                     setAuth(null)
                     window.location.href = '/'
                 }
@@ -52,14 +51,13 @@ export const useAccountCreateAnonymous = (): [AccountCreateAnonymousAction, Logi
                 }
 
                 if (error.message === 'NetworkError when attempting to fetch resource.') {
-                    console.log("forbidden")
                     setAuth(null)
                     window.location.href = '/login'
                 }
             })
     }, [])
 
-    return [create, data, loading, error]
+    return [fn, data, loading, error]
 }
 
 type AccountLoginAction = (name: string, password: string, controller?: AbortController) => void
@@ -70,7 +68,7 @@ export const useAccountLogin = (): [AccountLoginAction, LoginSubmitted, boolean,
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<Error>(null);
 
-    const create = useCallback((name: string, password: string, controller?: AbortController) => {
+    const fn = useCallback((name: string, password: string, controller?: AbortController) => {
         fetch(`${import.meta.env.VITE_BASE_URL}/v1/login`, {
             method: "POST",
             headers: {
@@ -110,14 +108,13 @@ export const useAccountLogin = (): [AccountLoginAction, LoginSubmitted, boolean,
                 }
 
                 if (error.message === 'NetworkError when attempting to fetch resource.') {
-                    console.log("forbidden")
                     setAuth(null)
                     window.location.href = '/login'
                 }
             })
     }, [])
 
-    return [create, data, loading, error]
+    return [fn, data, loading, error]
 }
 
 
@@ -129,7 +126,7 @@ export const useAccountConvert = (): [AccountConvertAction, AccountConvertSubmit
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<Error>(null);
 
-    const create = useCallback((name: string, password: string, email?: string, abortController?: AbortController) => {
+    const fn = useCallback((name: string, password: string, email?: string, abortController?: AbortController) => {
         fetch(`${import.meta.env.VITE_BASE_URL}/v1/anonymous-accounts/convert`, {
             method: "POST",
             headers: {
@@ -171,12 +168,11 @@ export const useAccountConvert = (): [AccountConvertAction, AccountConvertSubmit
                 }
 
                 if (error.message === 'NetworkError when attempting to fetch resource.') {
-                    console.log("forbidden")
                     setAuth(null)
                     window.location.href = '/login'
                 }
             })
     }, [auth])
 
-    return [create, data, loading, error]
+    return [fn, data, loading, error]
 }

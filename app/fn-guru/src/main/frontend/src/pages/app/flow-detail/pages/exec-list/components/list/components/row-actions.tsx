@@ -29,7 +29,6 @@ export default function ({row}: Props) {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-[160px]">
                 <DropdownMenuItem onClick={() => {
-                    console.log(JSON.stringify(row))
                     navigate(`/flows/${flow.id}/executions/${row.original.id}`)
                 }}>View</DropdownMenuItem>
             </DropdownMenuContent>

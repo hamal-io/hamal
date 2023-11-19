@@ -26,7 +26,6 @@ export const useGet = <T>(): [GetAction, T, boolean, Error] => {
             })
                 .then(response => {
                     if (response.status === 403) {
-                        console.log("forbidden")
                         setAuth(null)
                         window.location.href = '/'
                     }
@@ -48,7 +47,6 @@ export const useGet = <T>(): [GetAction, T, boolean, Error] => {
                     }
 
                     if (error.message === 'NetworkError when attempting to fetch resource.') {
-                        console.log("forbidden")
                         setAuth(null)
                         window.location.href = '/login'
                     }
@@ -67,8 +65,6 @@ export const usePost = <T>(): [PostAction, T, boolean, Error] => {
     const [error, setError] = useState<Error | null>(null);
 
     const fn = useCallback(async (url: string, body: object, abortController?: AbortController) => {
-        console.log("auth", auth)
-
         if (auth.type === 'Unauthorized') {
             setError(Error("Unauthenticated"))
             setLoading(false)
@@ -89,7 +85,6 @@ export const usePost = <T>(): [PostAction, T, boolean, Error] => {
                 .then(response => {
 
                     if (response.status === 403) {
-                        console.log("forbidden")
                         setAuth(null)
                         window.location.href = '/'
                     }
@@ -112,7 +107,6 @@ export const usePost = <T>(): [PostAction, T, boolean, Error] => {
                     }
 
                     if (error.message === 'NetworkError when attempting to fetch resource.') {
-                        console.log("forbidden")
                         setAuth(null)
                         window.location.href = '/login'
                     }
@@ -134,7 +128,6 @@ export const usePatch = <T>(): [PatchAction, T, boolean, Error] => {
 
     const fn = useCallback(async (url: string, body: object, abortController?: AbortController) => {
         if (auth.type === 'Unauthorized') {
-            console.log("Unauthorized")
             setError(Error("Unauthenticated"))
             setLoading(false)
             setAuth(null)
@@ -154,7 +147,6 @@ export const usePatch = <T>(): [PatchAction, T, boolean, Error] => {
                 .then(response => {
 
                     if (response.status === 403) {
-                        console.log("forbidden")
                         setAuth(null)
                         window.location.href = '/'
                     }
@@ -177,7 +169,6 @@ export const usePatch = <T>(): [PatchAction, T, boolean, Error] => {
                     }
 
                     if (error.message === 'NetworkError when attempting to fetch resource.') {
-                        console.log("forbidden")
                         setAuth(null)
                         window.location.href = '/login'
                     }
