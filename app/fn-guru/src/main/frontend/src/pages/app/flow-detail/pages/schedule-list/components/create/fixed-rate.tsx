@@ -10,12 +10,12 @@ import {useAuth} from "@/hook/auth.ts";
 import {Dialog, DialogContent, DialogHeader, DialogTrigger} from "@/components/ui/dialog.tsx";
 import {Input} from "@/components/ui/input.tsx";
 import {Button, buttonVariants} from "@/components/ui/button.tsx";
-import {useApiFuncList} from "@/hook/api/func.ts";
 import {ApiFlowSimple} from "@/api/types";
 import {cn} from "@/utils";
 import {Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select.tsx";
 import {useTriggerFixedRateCreate} from "@/hook/api/schedule.tsx";
 import * as timers from "timers";
+import {useFuncList} from "@/hook/func.ts";
 
 type Prop = {
     flow: ApiFlowSimple
@@ -29,7 +29,16 @@ const formSchema = z.object({
 })
 
 const FormFuncSelect = ({flowId, form}) => {
-    const [funcs, loading] = useApiFuncList(flowId)
+    const [listFuncs, funcList, loading] = useFuncList()
+
+    // const [funcs, loading] = useApiFuncList(flowId)
+
+
+    useEffect(() => {
+        if (flowId) {
+            listFuncs(flowId)
+        }
+    }, [flowId]);
 
     if (loading || !form) {
         return "Loading..."
@@ -54,7 +63,7 @@ const FormFuncSelect = ({flowId, form}) => {
                             </FormControl>
                             <SelectContent>
                                 <SelectGroup>
-                                    {funcs.map(func =>
+                                    {funcList.funcs.map(func =>
                                         <SelectItem key={func.id} value={func.id}> {func.name} </SelectItem>
                                     )}
                                 </SelectGroup>

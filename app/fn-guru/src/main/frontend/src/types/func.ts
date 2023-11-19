@@ -1,3 +1,11 @@
+export interface FuncCreateSubmitted {
+    id: string;
+    status: string;
+    funcId: string;
+    flowId: string;
+    groupId: string;
+}
+
 export interface Func {
     id: string;
     name: string;
