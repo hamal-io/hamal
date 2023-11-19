@@ -7,20 +7,20 @@ import {useApiFuncGetAction, useFuncGet} from "@/hook/api/func.ts";
 import {useParams} from "react-router-dom";
 import Actions from "@/pages/app/flow-detail/pages/func-detail/components/actions.tsx";
 import {FlowContext} from "@/pages/app/flow-detail";
+import {useFuncGetAction} from "@/hook/func.ts";
 
 type Props = {}
 const FuncDetailPage: FC<Props> = ({}) => {
     const flow = useContext(FlowContext)
     const {funcId} = useParams()
     // const [func, funcLoading, funcError] = useFuncGet(funcId)
-    const [loadFunc, func, funcLoading, funcError] = useApiFuncGetAction()
+    const [getFunc, func, funcLoading, funcError] = useFuncGetAction()
 
     const [name, setName] = useState('')
     const [code, setCode] = useState('')
 
     useEffect(() => {
-        console.log("reload")
-        loadFunc(funcId)
+        getFunc(funcId)
     }, [funcId]);
 
     useEffect(() => {
