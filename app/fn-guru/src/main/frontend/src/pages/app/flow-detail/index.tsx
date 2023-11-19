@@ -1,9 +1,9 @@
-import React, {createContext, FC, ReactNode} from 'react'
+import React, {createContext, FC, ReactNode, useEffect} from 'react'
 import {useParams} from "react-router-dom";
 import {ApiFlow} from "@/api/types";
 import Sidebar from "@/pages/app/flow-detail/components/sidebar";
-import {useApiGet} from "@/hook";
 import Authenticated from "@/components/app/authenticated.tsx";
+import {useFlowGet} from "@/hook";
 
 
 type Props = {
@@ -14,7 +14,12 @@ export const FlowContext = createContext<ApiFlow | null>(null)
 
 const FlowDetailPage: FC<Props> = ({children}) => {
     const {flowId} = useParams()
-    const [flow, isLoading, error] = useApiGet<ApiFlow>(`v1/flows/${flowId}`)
+
+    const [getFlow, flow, loading, error] = useFlowGet()
+    useEffect(() => {
+        getFlow(flowId)
+    }, [flowId]);
+
     return (
         <Authenticated>
             <div className="relative flex flex-row min-h-screen ">

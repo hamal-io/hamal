@@ -1,12 +1,6 @@
 import {Button} from "@/components/ui/button"
-import {useApiPatch} from "@/hook";
+import {useFuncUpdate} from "@/hook";
 import {FC} from "react";
-
-interface ApiFuncUpdateSubmitted {
-    id: string;
-    status: string;
-    funcId: string;
-}
 
 type Props = {
     funcId: string;
@@ -15,13 +9,10 @@ type Props = {
 }
 
 const Save: FC<Props> = ({funcId, code, name}) => {
-    const [updateFunc] = useApiPatch<ApiFuncUpdateSubmitted>()
+    const [updateFunc] = useFuncUpdate()
     return (
         <Button onClick={() => {
-            updateFunc(`v1/funcs/${funcId}`, {
-                name,
-                code
-            })
+            updateFunc(funcId, name, code)
         }}> Save </Button>
     )
 }

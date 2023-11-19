@@ -1,3 +1,5 @@
+import {VersionedCode} from "@/api/types";
+
 export interface FuncCreateSubmitted {
     id: string;
     status: string;
@@ -5,6 +7,13 @@ export interface FuncCreateSubmitted {
     flowId: string;
     groupId: string;
 }
+
+export interface FuncUpdateSubmitted {
+    id: string;
+    status: string;
+    funcId: string;
+}
+
 
 export interface FuncInvokeSubmitted {
     id: string;

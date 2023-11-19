@@ -1,5 +1,5 @@
 import React, {FC, useEffect, useState} from 'react'
-import {useApiCreateAnonymousAccount, useApiPost} from "@/hook";
+import {useAccountCreateAnonymous, useApiPost} from "@/hook";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useAuth} from "@/hook/auth.ts";
 import {Loader2} from "lucide-react";
@@ -9,7 +9,7 @@ const OnboardingPage: FC = () => {
     const location = useLocation()
     const navigate = useNavigate()
     const [auth] = useAuth()
-    const [createAnonymousAccount] = useApiCreateAnonymousAccount()
+    const [createAnonymousAccount] = useAccountCreateAnonymous()
     const [submitFlow, flowsubmitted,] = useApiPost<{ flowId: string }>()
     const [submitBlueprint, blueprintSubmitted] = useApiPost()
     const [code, setCode] = useState<string>('')

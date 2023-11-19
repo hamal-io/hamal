@@ -22,7 +22,7 @@ import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, Form
 import {useForm} from "react-hook-form";
 import {Loader2} from "lucide-react";
 import {ApiAccountConversionSubmitted} from "@/api/account.ts";
-import {useApiPost} from "@/hook";
+import {useAccountConvert, useApiPost} from "@/hook";
 import {AUTH_KEY} from "@/types/auth.ts";
 
 
@@ -166,6 +166,7 @@ const Convert = () => {
     const [openDialog, setOpenDialog] = useState<boolean>(false)
     const props = {openModal: openDialog, setOpenModal: setOpenDialog}
     const [isLoading, setLoading] = useState(false)
+    const [convert] = useAccountConvert()
 
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -182,13 +183,8 @@ const Convert = () => {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
         console.log(values)
-
         try {
-            post(`v1/anonymous-accounts/${auth.accountId}/convert`, {
-                name: values.name,
-                password: values.password,
-                email: values.email
-            })
+            convert(values.name, values.password, values.email)
             console.log(auth)
         } catch (e) {
             console.log(`login failed - ${e}`)
@@ -198,19 +194,19 @@ const Convert = () => {
 
     }
 
-    const [post, data] = useApiPost<ApiAccountConversionSubmitted>()
-    useEffect(() => {
-        if (data != null) {
-            setAuth({
-                type: 'User',
-                accountId: auth.accountId,
-                groupId: auth.groupId,
-                defaultFlowIds: auth.defaultFlowIds,
-                token: data.token,
-                name: data.name
-            })
-        }
-    }, [data]);
+    // const [post, data] = useApiPost<ApiAccountConversionSubmitted>()
+    // useEffect(() => {
+    //     if (data != null) {
+    //         setAuth({
+    //             type: 'User',
+    //             accountId: auth.accountId,
+    //             groupId: auth.groupId,
+    //             defaultFlowIds: auth.defaultFlowIds,
+    //             token: data.token,
+    //             name: data.name
+    //         })
+    //     }
+    // }, [data]);
 
 
     useEffect(() => {

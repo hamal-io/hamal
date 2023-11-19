@@ -1,6 +1,6 @@
 import {useNavigate} from "react-router-dom";
 import React, {useEffect, useState} from "react";
-import {useApiAccountLogin, useApiFlowCreate, useApiPost} from "@/hook";
+import {useApiAccountLogin, useFlowCreate, useApiPost} from "@/hook";
 
 import * as z from "zod"
 import {zodResolver} from "@hookform/resolvers/zod";
@@ -24,7 +24,7 @@ const Create = () => {
     const props = {openModal: openDialog, setOpenModal: setOpenDialog}
     const [isLoading, setLoading] = useState(false)
 
-    const [createFlow, submittedFlow] = useApiFlowCreate()
+    const [createFlow, submittedFlow] = useFlowCreate()
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),

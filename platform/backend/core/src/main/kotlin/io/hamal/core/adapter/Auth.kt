@@ -38,7 +38,7 @@ class AuthAdapter(
         req: LogInReq,
         responseHandler: (AuthLoginSubmitted) -> T
     ): T {
-        val account = accountQueryRepository.find(req.username) ?: throw NoSuchElementException("Account not found")
+        val account = accountQueryRepository.find(req.name) ?: throw NoSuchElementException("Account not found")
         val encodedPassword = encodePassword(req.password, account.salt)
         val match = authRepository.list(account.id).filterIsInstance<PasswordAuth>().any { it.hash == encodedPassword }
         if (!match) {

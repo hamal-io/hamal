@@ -6,7 +6,7 @@ import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger
 import {useNavigate} from "react-router-dom";
 import {useContext} from "react";
 import {FlowContext} from "@/pages/app/flow-detail";
-import {TriggerListItem} from "@/hook/api/schedule.tsx";
+import {TriggerListItem} from "@/types";
 
 interface Props {
     row: Row<TriggerListItem>
