@@ -3,8 +3,8 @@ import {SelectValue} from "@radix-ui/react-select";
 import React, {FC, useEffect, useState} from "react";
 
 import {cn} from "@/utils"
-import {useApiFuncList} from "@/hook/api/func.ts";
 import {useNavigate} from "react-router-dom";
+import {useFuncList} from "@/hook/func.ts";
 
 type Props = {
     className?: string;
@@ -13,8 +13,14 @@ type Props = {
 }
 const FuncSelector: FC<Props> = ({className, flowId, funcId}) => {
     const navigate = useNavigate()
-    const [funcs, loading] = useApiFuncList(flowId)
+    const [listFuncs, funcList, loading] = useFuncList()
     const [selected, setSelected] = useState(funcId)
+
+    useEffect(() => {
+        if (flowId) {
+            listFuncs(flowId)
+        }
+    }, [flowId]);
 
     if (loading) {
         return "Loading..."
@@ -33,7 +39,7 @@ const FuncSelector: FC<Props> = ({className, flowId, funcId}) => {
             <SelectContent>
                 <SelectGroup>
                     <SelectLabel>Functions</SelectLabel>
-                    {funcs.map(func =>
+                    {funcList.funcs.map(func =>
                         <SelectItem key={func.id} value={func.id}>{func.name}</SelectItem>
                     )}
                 </SelectGroup>

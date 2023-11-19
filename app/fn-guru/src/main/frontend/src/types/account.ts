@@ -1,4 +1,4 @@
-export interface ApiAccountConversionSubmitted {
+export interface AccountConvertSubmitted {
     id: string;
     status: string;
     accountId: string;

@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ApiLoginReq(
-    override val username: AccountName,
+    override val name: AccountName,
     override val password: Password
 ) : LogInReq
 

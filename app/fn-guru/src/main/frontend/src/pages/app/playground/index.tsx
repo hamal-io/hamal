@@ -1,24 +1,20 @@
 import {Button} from "@/components/ui/button"
 import Editor from "@/components/editor.tsx";
 import React, {useState} from "react";
-import {useApiPost} from "@/hook";
-import {useAuth} from "@/hook/auth.ts";
+import {useAdhoc} from "@/hook";
 import {PageHeader} from "@/components/page-header.tsx";
+import {useAuth} from "@/hook/auth.ts";
 
 export default function PlaygroundPage() {
     const [auth] = useAuth()
-    const [post, data] = useApiPost()
+    const [adhoc, data] = useAdhoc()
     const [code, setCode] = useState("log = require('log')\nlog.info('Let\\'s go..')")
 
     const Run = () => (
         <Button onClick={() => {
-            post(`v1/flows/${auth.defaultFlowIds[auth.groupId]}/adhoc`, {
-                inputs: {},
-                code: code
-            })
+            adhoc(auth.defaultFlowIds[auth.groupId], code)
         }}>Play</Button>
     )
-
     return (
         <div className="h-full pt-4">
             <div className="container flex flex-row justify-between items-center ">

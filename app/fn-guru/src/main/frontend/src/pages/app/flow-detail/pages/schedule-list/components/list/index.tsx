@@ -1,20 +1,31 @@
-import React, {FC} from "react";
-import {ApiFlowSimple} from "@/api/types";
+import React, {FC, useEffect} from "react";
 import {PageHeader} from "@/components/page-header.tsx";
-import {useListScheduleTriggers} from "@/hook/api/schedule.tsx";
 import Table from "@/pages/app/flow-detail/pages/schedule-list/components/list/components/table.tsx";
 import {columns} from "@/pages/app/flow-detail/pages/schedule-list/components/list/components/columns.tsx";
 import CreateFixedRate from "@/pages/app/flow-detail/pages/schedule-list/components/create/fixed-rate.tsx";
-import CreateEvery from "@/pages/app/flow-detail/pages/schedule-list/components/create/every.tsx";
+import {useTriggerListSchedule} from "@/hook";
+
+type FlowProps = {
+    id: string;
+    name: string;
+}
 
 type ListProps = {
-    flow: ApiFlowSimple
+    flow: FlowProps
 }
 
 const List: FC<ListProps> = ({flow}) => {
-    const [schedules, isLoading, error] = useListScheduleTriggers(flow.id)
+    const [listSchedules, scheduleList, loading, error] = useTriggerListSchedule()
 
-    if (isLoading) return "Loading..."
+    useEffect(() => {
+        const abortController = new AbortController()
+        listSchedules(flow.id, abortController)
+        return () => {
+            abortController.abort()
+        }
+    }, [flow.id]);
+
+    if (loading) return "Loading..."
     if (error != null) return "Error -"
 
     return (
@@ -27,7 +38,7 @@ const List: FC<ListProps> = ({flow}) => {
                     <CreateFixedRate flow={flow}/>
                 ]}
             />
-            <Table data={schedules} columns={columns}/>
+            <Table data={scheduleList.triggers} columns={columns}/>
         </div>
     );
 }

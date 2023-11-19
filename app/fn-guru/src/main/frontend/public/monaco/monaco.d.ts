@@ -115,7 +115,7 @@ declare namespace monaco {
     }
     /**
      * Uniform Resource Identifier (Uri) http://tools.ietf.org/html/rfc3986.
-     * This class is a simple parser which creates the basic components parts
+     * This class is a simple parser which creates the basic component parts
      * (http://tools.ietf.org/html/rfc3986#section-3) with minimal validation
      * and encoding.
      *
@@ -7427,19 +7427,19 @@ declare namespace monaco.languages {
      */
     export interface IColor {
         /**
-         * The red components in the range [0-1].
+         * The red component in the range [0-1].
          */
         readonly red: number;
         /**
-         * The green components in the range [0-1].
+         * The green component in the range [0-1].
          */
         readonly green: number;
         /**
-         * The blue components in the range [0-1].
+         * The blue component in the range [0-1].
          */
         readonly blue: number;
         /**
-         * The alpha components in the range [0-1].
+         * The alpha component in the range [0-1].
          */
         readonly alpha: number;
     }

@@ -6,9 +6,9 @@ import {Input} from "@/components/ui/input.tsx";
 import React, {useEffect, useState} from "react";
 import {z} from "zod";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {useApiAccountLogin} from "@/hook";
 import {Form, FormControl, FormField, FormItem, FormMessage} from "@/components/ui/form.tsx";
 import {useForm} from "react-hook-form";
+import {useAccountLogin} from "@/hook";
 
 export const LoginPage = () => {
     return (
@@ -74,7 +74,7 @@ export default LoginPage
 
 const LoginForm = () => {
     const navigate = useNavigate()
-    const [login, loginSubmitted] = useApiAccountLogin()
+    const [login, loginSubmitted] = useAccountLogin()
     const [isLoading, setLoading] = useState<boolean>(false)
 
     const formSchema = z.object({
@@ -96,7 +96,7 @@ const LoginForm = () => {
             setLoading(true)
             login(values.name, values.password)
         } catch (e) {
-            console.log(`login failed - ${e}`)
+            console.error(e)
         } finally {
         }
     }
@@ -122,7 +122,7 @@ const LoginForm = () => {
                                         <Input
                                             id="username"
                                             placeholder="username or email@fn.guru"
-                                            type="username"
+                                            type="name"
                                             autoCapitalize="none"
                                             autoCorrect="off"
                                             disabled={isLoading}

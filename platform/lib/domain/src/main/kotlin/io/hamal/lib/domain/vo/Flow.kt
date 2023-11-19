@@ -23,8 +23,13 @@ class FlowId(override val value: SnowflakeId) : SerializableDomainId() {
 
 @Serializable(with = FlowName.Serializer::class)
 class FlowName(override val value: String) : DomainName() {
+    companion object {
+        val default = FlowName("__default__")
+    }
+
     internal object Serializer : DomainNameSerializer<FlowName>(::FlowName)
 }
+
 @Serializable(with = FlowInputs.Serializer::class)
 class FlowInputs(override val value: MapType = MapType()) : Map() {
     internal object Serializer : InputsSerializer<FlowInputs>(::FlowInputs)

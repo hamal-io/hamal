@@ -5,26 +5,19 @@ import {DotsHorizontalIcon} from "@radix-ui/react-icons"
 import {AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,} from "@/components/ui/alert-dialog"
 import {Button} from "@/components/ui/button"
 import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger,} from "@/components/ui/dropdown-menu"
-import {useApiDeployLatestCode, useApiPatch} from "@/hook";
-import {useApiFuncInvoke} from "@/hook/api/func.ts";
+import {useFuncUpdate} from "@/hook";
+import {useFuncDeployLatestCode, useFuncInvoke} from "@/hook/func.ts";
 
 type Props = {
     funcId: string;
     code: string;
 }
 
-interface ApiFuncUpdateSubmitted {
-    id: string;
-    status: string;
-    funcId: string;
-}
-
-
 const Actions: FC<Props> = ({funcId, code}) => {
     const [showDeleteDialog, setShowDeployDialog] = React.useState(false)
-    const [updateFunc] = useApiPatch<ApiFuncUpdateSubmitted>()
-    const [deployFunc] = useApiDeployLatestCode()
-    const [invokeFunc] = useApiFuncInvoke()
+    const [updateFunc] = useFuncUpdate()
+    const [deployFunc] = useFuncDeployLatestCode()
+    const [invokeFunc] = useFuncInvoke()
 
     return (
         <>
@@ -39,8 +32,10 @@ const Actions: FC<Props> = ({funcId, code}) => {
                     <DropdownMenuSeparator/>
                     <DropdownMenuItem
                         onSelect={() => {
-                            updateFunc(`v1/funcs/${funcId}`, {code})
-                            invokeFunc(funcId)
+                            updateFunc(funcId, null, code)
+                            setTimeout(() => {
+                                invokeFunc(funcId)
+                            }, 500)
                         }}
                     >
                         Test

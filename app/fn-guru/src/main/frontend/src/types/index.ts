@@ -1,5 +1,6 @@
 export * from './account.ts'
-export * from './adhoc.ts'
+export * from './auth.ts'
+export * from './code.ts'
 export * from './exec.ts'
 export * from './exec-log.ts'
 export * from './flow.ts'

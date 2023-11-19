@@ -1,23 +1,36 @@
-import React, {FC} from "react";
+import React, {FC, useEffect} from "react";
 import {Separator} from "@/components/ui/separator.tsx";
 import {EmptyPlaceholder} from "@/components/empty-placeholder.tsx";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx";
 import {PageHeader} from "@/components/page-header.tsx";
 import Create from "@/pages/app/flow-detail/pages/func-list/components/create.tsx";
-import {useApiFuncList} from "@/hook/api/func.ts";
-import {ApiFlowSimple, ApiFuncSimple} from "@/api/types";
+import {ApiFuncSimple} from "@/api/types";
 import {GoToDocumentation} from "@/components/documentation.tsx";
 import {useNavigate} from "react-router-dom";
+import {useFuncList} from "@/hook/func.ts";
+
+type FlowProps = {
+    id: string;
+    name: string;
+}
 
 type ListProps = {
-    flow: ApiFlowSimple
+    flow: FlowProps
 }
 
 const List: FC<ListProps> = ({flow}) => {
-    const [funcs, isLoading, error] = useApiFuncList(flow.id)
+    const [listFuncs, funcList, loading, error] = useFuncList()
 
-    if (isLoading) return "Loading..."
-    if (error != null) return "Error -"
+    useEffect(() => {
+        const abortController = new AbortController();
+        listFuncs(flow.id, abortController)
+        return () => {
+            abortController.abort();
+        };
+    }, [flow]);
+
+    if (error) return `Error`
+    if (funcList == null || loading) return "Loading..."
 
     return (
         <div className="pt-2 px-2">
@@ -28,7 +41,7 @@ const List: FC<ListProps> = ({flow}) => {
             />
             <Separator className="my-6"/>
             {
-                funcs.length ? (<Content flowId={flow.id} funcs={funcs}/>) : (<NoContent flow={flow}/>)
+                funcList.funcs.length ? (<Content flowId={flow.id} funcs={funcList.funcs}/>) : (<NoContent flow={flow}/>)
             }
         </div>
     );
@@ -69,7 +82,7 @@ const Content: FC<ContentProps> = ({flowId, funcs}) => {
 }
 
 type NoContentProps = {
-    flow: ApiFlowSimple;
+    flow: FlowProps;
 }
 const NoContent: FC<NoContentProps> = ({flow}) => (
     <EmptyPlaceholder className="my-4 ">

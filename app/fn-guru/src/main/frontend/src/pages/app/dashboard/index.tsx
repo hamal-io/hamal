@@ -1,13 +1,8 @@
-import React, {useState} from 'react'
-import {useApiPost} from "@/hook";
-import {useAuth} from "@/hook/auth.ts";
+import React from 'react'
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card.tsx';
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs.tsx";
 
-const AdhocPage: React.FC = () => {
-    const [auth] = useAuth()
-    const [post, data] = useApiPost()
-    const [code, setCode] = useState("log = require('log')\nlog.info('Let\\'s go..')")
+const DashboardPage: React.FC = () => {
     return (
         <>
             <div className="flex-col md:flex">
@@ -158,5 +153,5 @@ const AdhocPage: React.FC = () => {
     );
 }
 
-export default AdhocPage
+export default DashboardPage
 

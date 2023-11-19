@@ -1,6 +1,5 @@
 import {useNavigate} from "react-router-dom";
-import React, {FC, useContext, useEffect, useState} from "react";
-import {useApiAccountLogin, useApiFlowCreate, useApiPost} from "@/hook";
+import React, {FC, useEffect, useState} from "react";
 
 import * as z from "zod"
 import {zodResolver} from "@hookform/resolvers/zod";
@@ -11,9 +10,8 @@ import {useAuth} from "@/hook/auth.ts";
 import {Dialog, DialogContent, DialogHeader, DialogTrigger} from "@/components/ui/dialog.tsx";
 import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
-import {useApiFuncCreate} from "@/hook/api/func.ts";
-import {FlowContext} from "@/pages/app/flow-detail";
 import {ApiFlowSimple} from "@/api/types";
+import {useFuncCreate} from "@/hook/func.ts";
 
 type Prop = {
     flow: ApiFlowSimple
@@ -30,7 +28,7 @@ const Create: FC<Prop> = ({flow}) => {
     const props = {openModal: openDialog, setOpenModal: setOpenDialog}
     const [isLoading, setLoading] = useState(false)
 
-    const [createFunc, submittedFunc] = useApiFuncCreate()
+    const [createFunc, submittedFunc] = useFuncCreate()
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -44,13 +42,11 @@ const Create: FC<Prop> = ({flow}) => {
         setLoading(true)
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
-        console.log(values)
 
         try {
             createFunc(flow.id, values.name)
-            console.log(auth)
         } catch (e) {
-            console.log(`login failed - ${e}`)
+            console.error(e)
         } finally {
             // setLoading(false)
         }
