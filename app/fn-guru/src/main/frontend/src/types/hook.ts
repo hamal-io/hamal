@@ -3,7 +3,6 @@ export interface HookCreateSubmitted {
     hookId: string;
     flowId: string;
     groupId: string;
-    name: string;
 }
 
 export interface HookList {

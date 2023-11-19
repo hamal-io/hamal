@@ -11,7 +11,8 @@ import {Dialog, DialogContent, DialogHeader, DialogTrigger} from "@/components/u
 import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {FlowListItem} from "@/types";
-import {useHookCreate} from "@/hook";
+import {useHookCreate, useTriggerHookCreate} from "@/hook";
+import FormFuncSelect from "@/pages/app/flow-detail/components/form-func-select.tsx";
 
 type Prop = {
     flow: FlowListItem
@@ -19,6 +20,7 @@ type Prop = {
 
 const formSchema = z.object({
     name: z.string().min(2).max(50),
+    funcId: z.string().min(1, "Function required"),
 })
 
 const Create: FC<Prop> = ({flow}) => {
@@ -30,12 +32,23 @@ const Create: FC<Prop> = ({flow}) => {
 
     const [createHook, submittedHook] = useHookCreate()
 
+    const [triggerName, setTriggerName] = useState('')
+    const [triggerFuncId, setTriggerFuncId] = useState('')
+    const [createTrigger, submittedTrigger] = useTriggerHookCreate()
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: ""
+            name: "",
+            funcId: ""
         },
     })
+
+    useEffect(() => {
+        if (submittedHook != null) {
+            createTrigger(submittedHook.flowId, triggerFuncId, triggerName, submittedHook.hookId)
+        }
+    }, [submittedHook]);
 
     // 2. Define a submit handler.
     async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -44,7 +57,11 @@ const Create: FC<Prop> = ({flow}) => {
         // ✅ This will be type-safe and validated.
 
         try {
+            setTriggerName(values.name)
+            setTriggerFuncId(values.funcId)
             createHook(flow.id, values.name)
+
+
         } catch (e) {
             console.error(e)
         } finally {
@@ -55,7 +72,6 @@ const Create: FC<Prop> = ({flow}) => {
 
     useEffect(() => {
         if (submittedHook !== null) {
-            navigate(`/flows/${flow.id}/hooks`, {replace: true})
             setOpenDialog(false)
 
         }
@@ -92,6 +108,9 @@ const Create: FC<Prop> = ({flow}) => {
                                     </FormItem>
                                 )}
                             />
+
+                            <FormFuncSelect flowId={flow.id} form={form}/>
+
                             <Button type="submit">
                                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
                                 Create

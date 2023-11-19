@@ -7,7 +7,10 @@ import Create from "@/pages/app/flow-detail/pages/hook-list/components/create.ts
 import {GoToDocumentation} from "@/components/documentation.tsx";
 import {useNavigate} from "react-router-dom";
 import {useHookList} from "@/hook/hook.ts";
-import {HookListItem} from "@/types";
+import {HookListItem, TriggerListItem} from "@/types";
+import Detail from "@/pages/app/flow-detail/pages/hook-list/components/detail.tsx";
+import {useTriggerListHook} from "@/hook";
+import {HookWithTriggers} from "@/pages/app/flow-detail/pages/hook-list/type.tsx";
 
 type FlowProps = {
     id: string;
@@ -19,18 +22,27 @@ type ListProps = {
 }
 
 const List: FC<ListProps> = ({flow}) => {
-    const [listHooks, hookList, loading, error] = useHookList()
+    const [listHooks, hookList, hooksLoading, hooksError] = useHookList()
+    const [listTriggers, triggerList, triggerLoading, triggerError] = useTriggerListHook()
 
     useEffect(() => {
         const abortController = new AbortController();
         listHooks(flow.id, abortController)
+        listTriggers(flow.id, abortController)
         return () => {
             abortController.abort();
         };
     }, [flow]);
 
-    if (error) return `Error`
-    if (hookList == null || loading) return "Loading..."
+    if (hooksError || triggerError) return `Error`
+    if (hooksLoading || triggerLoading) return "Loading..."
+
+    const hooksWithTrigger = hookList.hooks.map<HookWithTriggers>(hook => {
+        return {
+            hook: hook,
+            trigger: triggerList.triggers.filter(trigger => trigger.hook?.id === hook.id)
+        }
+    })
 
     return (
         <div className="pt-2 px-2">
@@ -41,7 +53,7 @@ const List: FC<ListProps> = ({flow}) => {
             />
             <Separator className="my-6"/>
             {
-                hookList.hooks.length ? (<Content flowId={flow.id} hooks={hookList.hooks}/>) : (<NoContent flow={flow}/>)
+                hookList.hooks.length ? (<Content flowId={flow.id} items={hooksWithTrigger}/>) : (<NoContent flow={flow}/>)
             }
         </div>
     );
@@ -49,31 +61,15 @@ const List: FC<ListProps> = ({flow}) => {
 
 type ContentProps = {
     flowId: string;
-    hooks: HookListItem[]
+    items: HookWithTriggers[]
 }
 
-const Content: FC<ContentProps> = ({flowId, hooks}) => {
+const Content: FC<ContentProps> = ({flowId, items}) => {
     const navigate = useNavigate()
     return (
         <ul className="grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-1 xl:grid-cols-3">
-            {hooks.map((hook) => (
-                <Card
-                    key={hook.id}
-                    className="relative overhook-hidden duration-500 hover:border-primary/50 group"
-                >
-                    <CardHeader>
-                        <div className="flex items-center justify-between ">
-                            <CardTitle>{hook.name}</CardTitle>
-                        </div>
-                    </CardHeader>
-                    <CardContent>
-                        <dl className="text-sm leading-6 divide-y divide-gray-100 ">
-                            <div className="flex justify-between py-3 gap-x-4">
-                                http://localhost:5173/v1/webhooks/{hook.id}
-                            </div>
-                        </dl>
-                    </CardContent>
-                </Card>
+            {items.map((item) => (
+                <Detail key={item.hook.id} item={item}/>
             ))}
         </ul>
     )

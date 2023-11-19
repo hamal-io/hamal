@@ -14,6 +14,7 @@ import {cn} from "@/utils";
 import {Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select.tsx";
 import {useTriggerFixedRateCreate} from "@/hook";
 import {useFuncList} from "@/hook/func.ts";
+import FormFuncSelect from "@/pages/app/flow-detail/components/form-func-select.tsx";
 
 type FlowProps = {
     id: string;
@@ -31,59 +32,6 @@ const formSchema = z.object({
     rate: z.number().min(1),
     timeunit: z.string().min(2).max(50),
 })
-
-const FormFuncSelect = ({flowId, form}) => {
-    const [listFuncs, funcList, loading] = useFuncList()
-
-    // const [funcs, loading] = useApiFuncList(flowId)
-
-
-    useEffect(() => {
-        if (flowId) {
-            listFuncs(flowId)
-        }
-    }, [flowId]);
-
-    if (loading || !form) {
-        return "Loading..."
-    }
-
-    return (
-
-        <FormField
-            control={form.control}
-            name="funcId"
-            render={({field}) => (
-                <FormItem>
-                    <FormLabel>Function</FormLabel>
-                    <div className="relative w-max">
-                        <Select
-                            onValueChange={field.onChange}
-                        >
-                            <FormControl>
-                                <SelectTrigger className="w-[280px]">
-                                    <SelectValue placeholder="Select a function"/>
-                                </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                                <SelectGroup>
-                                    {funcList.funcs.map(func =>
-                                        <SelectItem key={func.id} value={func.id}> {func.name} </SelectItem>
-                                    )}
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
-                    </div>
-                    <FormDescription>
-                        The function will be invoked by your trigger
-                    </FormDescription>
-                    <FormMessage/>
-                </FormItem>
-            )}
-        />
-    )
-}
-
 
 const CreateFixedRate: FC<Prop> = ({flow}) => {
     const [auth, setAuth] = useAuth()
