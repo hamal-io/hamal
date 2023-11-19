@@ -1,4 +1,4 @@
-package io.hamal.integration.handler
+package io.hamal.core.req.handler.hook
 
 import io.hamal.core.adapter.FuncInvokePort
 import io.hamal.core.req.ReqHandler

@@ -3,11 +3,11 @@ import {Separator} from "@/components/ui/separator.tsx";
 import {EmptyPlaceholder} from "@/components/empty-placeholder.tsx";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx";
 import {PageHeader} from "@/components/page-header.tsx";
-import Create from "@/pages/app/flow-detail/pages/func-list/components/create.tsx";
+import Create from "@/pages/app/flow-detail/pages/hook-list/components/create.tsx";
 import {GoToDocumentation} from "@/components/documentation.tsx";
 import {useNavigate} from "react-router-dom";
-import {useFuncList} from "@/hook/func.ts";
-import {FuncListItem} from "@/types";
+import {useHookList} from "@/hook/hook.ts";
+import {HookListItem} from "@/types";
 
 type FlowProps = {
     id: string;
@@ -19,29 +19,29 @@ type ListProps = {
 }
 
 const List: FC<ListProps> = ({flow}) => {
-    const [listFuncs, funcList, loading, error] = useFuncList()
+    const [listHooks, hookList, loading, error] = useHookList()
 
     useEffect(() => {
         const abortController = new AbortController();
-        listFuncs(flow.id, abortController)
+        listHooks(flow.id, abortController)
         return () => {
             abortController.abort();
         };
     }, [flow]);
 
     if (error) return `Error`
-    if (funcList == null || loading) return "Loading..."
+    if (hookList == null || loading) return "Loading..."
 
     return (
         <div className="pt-2 px-2">
             <PageHeader
-                title="Functions"
-                description={`Functions of your flow ${flow.name}`}
+                title="Hooks"
+                description={`Hooks of ${flow.name}`}
                 actions={[<Create flow={flow}/>]}
             />
             <Separator className="my-6"/>
             {
-                funcList.funcs.length ? (<Content flowId={flow.id} funcs={funcList.funcs}/>) : (<NoContent flow={flow}/>)
+                hookList.hooks.length ? (<Content flowId={flow.id} hooks={hookList.hooks}/>) : (<NoContent flow={flow}/>)
             }
         </div>
     );
@@ -49,29 +49,27 @@ const List: FC<ListProps> = ({flow}) => {
 
 type ContentProps = {
     flowId: string;
-    funcs: FuncListItem[]
+    hooks: HookListItem[]
 }
 
-const Content: FC<ContentProps> = ({flowId, funcs}) => {
+const Content: FC<ContentProps> = ({flowId, hooks}) => {
     const navigate = useNavigate()
     return (
         <ul className="grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-1 xl:grid-cols-3">
-            {funcs.map((func) => (
+            {hooks.map((hook) => (
                 <Card
-                    key={func.id}
-                    className="relative overfunc-hidden duration-500 hover:border-primary/50 group"
-                    onClick={() => {
-                        navigate(`/flows/${flowId}/functions/${func.id}`)
-                    }}
+                    key={hook.id}
+                    className="relative overhook-hidden duration-500 hover:border-primary/50 group"
                 >
                     <CardHeader>
                         <div className="flex items-center justify-between ">
-                            <CardTitle>{func.name}</CardTitle>
+                            <CardTitle>{hook.name}</CardTitle>
                         </div>
                     </CardHeader>
                     <CardContent>
                         <dl className="text-sm leading-6 divide-y divide-gray-100 ">
                             <div className="flex justify-between py-3 gap-x-4">
+                                http://localhost:5173/v1/webhooks/{hook.id}
                             </div>
                         </dl>
                     </CardContent>
@@ -89,13 +87,13 @@ const NoContent: FC<NoContentProps> = ({flow}) => (
         <EmptyPlaceholder.Icon>
             {/*<Code />*/}
         </EmptyPlaceholder.Icon>
-        <EmptyPlaceholder.Title>No Funcs found</EmptyPlaceholder.Title>
+        <EmptyPlaceholder.Title>No Hooks found</EmptyPlaceholder.Title>
         <EmptyPlaceholder.Description>
-            You haven&apos;t created any Funcs yet.
+            You haven&apos;t created any Hooks yet.
         </EmptyPlaceholder.Description>
         <div className="flex flex-col items-center justify-center gap-2 md:flex-row">
             <Create flow={flow}/>
-            <GoToDocumentation link={"/funcs"}/>
+            <GoToDocumentation link={"/hooks"}/>
         </div>
     </EmptyPlaceholder>
 )

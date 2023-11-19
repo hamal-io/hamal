@@ -4,10 +4,10 @@ import {EmptyPlaceholder} from "@/components/empty-placeholder.tsx";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx";
 import {PageHeader} from "@/components/page-header.tsx";
 import Create from "@/pages/app/flow-list/components/create.tsx";
-import {ApiFlowSimple} from "@/api/types";
 import {GoToDocumentation} from "@/components/documentation.tsx";
 import {useNavigate} from "react-router-dom";
 import {useFlowList} from "@/hook/flow.ts";
+import {FlowListItem} from "@/types";
 
 type ListProps = {
     groupId: string
@@ -40,7 +40,7 @@ const List: FC<ListProps> = ({groupId}) => {
 }
 
 type ContentProps = {
-    flows: ApiFlowSimple[]
+    flows: FlowListItem[]
 }
 
 const Content: FC<ContentProps> = ({flows}) => {

@@ -10,11 +10,9 @@ import {useAuth} from "@/hook/auth.ts";
 import {Dialog, DialogContent, DialogHeader, DialogTrigger} from "@/components/ui/dialog.tsx";
 import {Input} from "@/components/ui/input.tsx";
 import {Button, buttonVariants} from "@/components/ui/button.tsx";
-import {ApiFlowSimple} from "@/api/types";
 import {cn} from "@/utils";
 import {Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select.tsx";
 import {useTriggerFixedRateCreate} from "@/hook";
-import * as timers from "timers";
 import {useFuncList} from "@/hook/func.ts";
 
 type FlowProps = {

@@ -103,7 +103,7 @@ const LoginForm = () => {
 
     useEffect(() => {
         if (loginSubmitted != null) {
-            navigate("/dashboard", {replace: true})
+            navigate("/flows", {replace: true})
             setLoading(false)
         }
     }, [loginSubmitted]);
