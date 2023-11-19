@@ -6,6 +6,18 @@ export interface FuncCreateSubmitted {
     groupId: string;
 }
 
+export interface FuncInvokeSubmitted {
+    id: string;
+    status: string;
+    funcId: string;
+}
+
+export interface FuncDeployLatestSubmitted {
+    id: string;
+    status: string;
+    funcId: string;
+}
+
 export interface Func {
     id: string;
     name: string;

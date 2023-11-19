@@ -6,7 +6,7 @@ import {AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescripti
 import {Button} from "@/components/ui/button"
 import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger,} from "@/components/ui/dropdown-menu"
 import {useApiDeployLatestCode, useApiPatch} from "@/hook";
-import {useApiFuncInvoke} from "@/hook/api/func.ts";
+import {useFuncDeployLatestCode, useFuncInvoke} from "@/hook/func.ts";
 
 type Props = {
     funcId: string;
@@ -23,8 +23,8 @@ interface ApiFuncUpdateSubmitted {
 const Actions: FC<Props> = ({funcId, code}) => {
     const [showDeleteDialog, setShowDeployDialog] = React.useState(false)
     const [updateFunc] = useApiPatch<ApiFuncUpdateSubmitted>()
-    const [deployFunc] = useApiDeployLatestCode()
-    const [invokeFunc] = useApiFuncInvoke()
+    const [deployFunc] = useFuncDeployLatestCode()
+    const [invokeFunc] = useFuncInvoke()
 
     return (
         <>
@@ -40,7 +40,9 @@ const Actions: FC<Props> = ({funcId, code}) => {
                     <DropdownMenuItem
                         onSelect={() => {
                             updateFunc(`v1/funcs/${funcId}`, {code})
-                            invokeFunc(funcId)
+                            setTimeout(() => {
+                                invokeFunc(funcId)
+                            }, 500)
                         }}
                     >
                         Test

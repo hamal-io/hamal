@@ -11,9 +11,8 @@ import {useAuth} from "@/hook/auth.ts";
 import {Dialog, DialogContent, DialogHeader, DialogTrigger} from "@/components/ui/dialog.tsx";
 import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
-import {useApiFuncCreate} from "@/hook/api/func.ts";
-import {FlowContext} from "@/pages/app/flow-detail";
 import {ApiFlowSimple} from "@/api/types";
+import {useFuncCreate} from "@/hook/func.ts";
 
 type Prop = {
     flow: ApiFlowSimple
@@ -30,7 +29,7 @@ const Create: FC<Prop> = ({flow}) => {
     const props = {openModal: openDialog, setOpenModal: setOpenDialog}
     const [isLoading, setLoading] = useState(false)
 
-    const [createFunc, submittedFunc] = useApiFuncCreate()
+    const [createFunc, submittedFunc] = useFuncCreate()
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
