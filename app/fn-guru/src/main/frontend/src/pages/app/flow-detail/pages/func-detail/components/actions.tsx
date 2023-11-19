@@ -43,7 +43,7 @@ const Actions: FC<Props> = ({funcId, code}) => {
                             invokeFunc(funcId)
                         }}
                     >
-                        Run
+                        Test
                     </DropdownMenuItem>
                     <DropdownMenuItem
                         onSelect={() => setShowDeployDialog(true)}
