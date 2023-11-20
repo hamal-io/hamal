@@ -103,7 +103,7 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
         tx.execute(
             """
                 INSERT OR REPLACE INTO current
-                    (id, group_id, func_id, topic_id, hook_id,flow_id, type, data) 
+                    (id, group_id, func_id, topic_id, hook_id, flow_id, type, data) 
                 VALUES
                     (:id, :groupId, :funcId, :topicId, :hookId, :flowId, :type, :data)
             """.trimIndent()
@@ -138,7 +138,7 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
                  type           INTEGER NOT NULL,
                  topic_id       INTEGER NOT NULL,
                  hook_id        INTEGER NOT NULL,
-                 flow_id   INTEGER NOT NULL,
+                 flow_id        INTEGER NOT NULL,
                  data           BLOB NOT NULL,
                  PRIMARY KEY    (id)
             );

@@ -1,6 +1,7 @@
 package io.hamal.repository.record.code
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.record.Record
 import io.hamal.repository.record.RecordSequence

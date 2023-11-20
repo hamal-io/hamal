@@ -26,7 +26,8 @@ data class ApiTriggerCreateReq(
     override val duration: Duration? = null,
     override val topicId: TopicId? = null,
     override val hookId: HookId? = null,
-    override val hookMethods: Set<HookMethod>? = null
+    override val hookMethods: Set<HookMethod>? = null,
+    override val cron: CronPattern? = null
 ) : CreateTriggerReq
 
 @Serializable
@@ -105,6 +106,16 @@ data class ApiTriggerList(
             val methods: Set<HookMethod>
         )
     }
+
+    @Serializable
+    @SerialName("Cron")
+    class CronTrigger(
+        override val id: TriggerId,
+        override val name: TriggerName,
+        override val func: Trigger.Func,
+        override val flow: Trigger.Flow,
+        val cron: CronPattern
+    ) : Trigger
 }
 
 @Serializable
@@ -178,6 +189,18 @@ class ApiHookTrigger(
     )
 }
 
+
+@Serializable
+@SerialName("Cron")
+class ApiCronTrigger(
+    override val id: TriggerId,
+    override val name: TriggerName,
+    override val func: ApiTrigger.Func,
+    override val flow: ApiTrigger.Flow,
+    override val inputs: TriggerInputs,
+    override val correlationId: CorrelationId? = null,
+    val cron: CronPattern
+) : ApiTrigger
 
 interface ApiTriggerService {
     fun create(flowId: FlowId, req: ApiTriggerCreateReq): ApiTriggerCreateSubmitted

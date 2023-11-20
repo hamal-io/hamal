@@ -60,3 +60,17 @@ data class HookTriggerCreatedRecord(
     val hookMethods: Set<HookMethod>,
     val correlationId: CorrelationId? = null
 ) : TriggerRecord()
+
+@Serializable
+@SerialName("CronTriggerCreatedRecord")
+data class CronTriggerCreatedRecord(
+    override val cmdId: CmdId,
+    override val entityId: TriggerId,
+    val groupId: GroupId,
+    val funcId: FuncId,
+    val flowId: FlowId,
+    val name: TriggerName,
+    val inputs: TriggerInputs,
+    val correlationId: CorrelationId? = null,
+    val cron: CronPattern
+) : TriggerRecord()

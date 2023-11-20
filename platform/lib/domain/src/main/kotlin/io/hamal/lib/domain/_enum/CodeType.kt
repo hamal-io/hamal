@@ -1,4 +1,4 @@
-package io.hamal.lib.domain.vo
+package io.hamal.lib.domain._enum
 
 enum class CodeType(val value: Int) {
     None(0),

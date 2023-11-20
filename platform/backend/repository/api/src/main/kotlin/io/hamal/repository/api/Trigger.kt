@@ -2,8 +2,8 @@ package io.hamal.repository.api
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.DomainObject
-import io.hamal.lib.common.domain.UpdatedAt
 import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.domain.UpdatedAt
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain._enum.TriggerType
@@ -17,6 +17,7 @@ interface TriggerCmdRepository : CmdRepository {
     fun create(cmd: CreateFixedRateCmd): FixedRateTrigger
     fun create(cmd: CreateEventCmd): EventTrigger
     fun create(cmd: CreateHookCmd): HookTrigger
+    fun create(cmd: CreateCronCmd): CronTrigger
 
     data class CreateFixedRateCmd(
         val id: CmdId,
@@ -52,6 +53,18 @@ interface TriggerCmdRepository : CmdRepository {
         val inputs: TriggerInputs,
         val hookId: HookId,
         val hookMethods: Set<HookMethod>,
+        val correlationId: CorrelationId? = null
+    )
+
+    data class CreateCronCmd(
+        val id: CmdId,
+        val triggerId: TriggerId,
+        val groupId: GroupId,
+        val name: TriggerName,
+        val funcId: FuncId,
+        val flowId: FlowId,
+        val inputs: TriggerInputs,
+        val cron: CronPattern,
         val correlationId: CorrelationId? = null
     )
 }
@@ -137,4 +150,20 @@ class HookTrigger(
     val hookMethods: Set<HookMethod>
 ) : Trigger {
     override val type = TriggerType.Hook
+}
+
+@Serializable
+class CronTrigger(
+    override val cmdId: CmdId,
+    override val id: TriggerId,
+    override val updatedAt: UpdatedAt,
+    override val groupId: GroupId,
+    override val name: TriggerName,
+    override val funcId: FuncId,
+    override val flowId: FlowId,
+    override val inputs: TriggerInputs,
+    override val correlationId: CorrelationId? = null,
+    val cron: CronPattern
+) : Trigger {
+    override val type = TriggerType.Cron
 }

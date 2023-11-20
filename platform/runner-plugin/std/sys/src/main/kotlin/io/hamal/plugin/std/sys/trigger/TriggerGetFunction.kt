@@ -10,6 +10,7 @@ import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.ApiSdk
+import io.hamal.lib.sdk.api.ApiCronTrigger
 import io.hamal.lib.sdk.api.ApiEventTrigger
 import io.hamal.lib.sdk.api.ApiFixedRateTrigger
 import io.hamal.lib.sdk.api.ApiHookTrigger
@@ -105,6 +106,27 @@ class TriggerGetFunction(
                                 )
                             )
                         }
+
+                        is ApiCronTrigger -> MapType(
+                            mutableMapOf(
+                                "id" to StringType(trigger.id.value.value.toString(16)),
+                                "type" to StringType("Cron"),
+                                "name" to StringType(trigger.name.value),
+                                "flow" to MapType(
+                                    mutableMapOf(
+                                        "id" to StringType(trigger.flow.id.value.value.toString(16)),
+                                        "name" to StringType(trigger.flow.name.value)
+                                    )
+                                ),
+                                "func" to MapType(
+                                    mutableMapOf(
+                                        "id" to StringType(trigger.func.id.value.value.toString(16)),
+                                        "name" to StringType(trigger.func.name.value)
+                                    )
+                                ),
+                                "cron" to StringType(trigger.cron.value)
+                            )
+                        )
                     }
                 }
         } catch (t: Throwable) {

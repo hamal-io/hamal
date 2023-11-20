@@ -5,6 +5,7 @@ import io.hamal.lib.common.domain.DomainObject
 import io.hamal.lib.common.domain.UpdatedAt
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable
 

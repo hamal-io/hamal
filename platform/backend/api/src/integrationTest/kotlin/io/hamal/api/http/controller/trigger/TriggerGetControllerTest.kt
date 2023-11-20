@@ -124,4 +124,37 @@ internal class TriggerGetControllerTest : TriggerBaseControllerTest() {
             assertThat(hook.name, equalTo(HookName("some-hook")))
         }
     }
+
+    @Test
+    fun `Get cron trigger`() {
+        val funcId = awaitCompleted(createFunc(FuncName("some-func-to-trigger"))).funcId
+
+        val triggerId = awaitCompleted(
+            createTrigger(
+                ApiTriggerCreateReq(
+                    type = Cron,
+                    name = TriggerName("cron-trigger"),
+                    funcId = funcId,
+                    inputs = TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rockz")))),
+                    cron = CronPattern("0 0 9-17 * * MON-FRI")
+                )
+            )
+        ).triggerId
+
+        val getTriggerResponse = httpTemplate.get("/v1/triggers/{triggerId}").path("triggerId", triggerId).execute()
+
+        assertThat(getTriggerResponse.statusCode, equalTo(Ok))
+        require(getTriggerResponse is HttpSuccessResponse) { "request was not successful" }
+
+        with(getTriggerResponse.result(ApiCronTrigger::class)) {
+            assertThat(id, equalTo(triggerId))
+            assertThat(name, equalTo(TriggerName("cron-trigger")))
+            assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
+            assertThat(func.id, equalTo(funcId))
+            assertThat(func.name, equalTo(FuncName("some-func-to-trigger")))
+            assertThat(cron, equalTo(CronPattern("0 0 9-17 * * MON-FRI")))
+        }
+
+
+    }
 }

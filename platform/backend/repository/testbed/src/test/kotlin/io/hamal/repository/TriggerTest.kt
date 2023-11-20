@@ -469,6 +469,117 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
     }
 
     @Nested
+    inner class CreateCron {
+
+        @TestFactory
+        fun `Creates cron trigger`() = runWith(TriggerRepository::class) {
+            val res = create(
+                CreateCronCmd(
+                    id = CmdGen(),
+                    triggerId = TriggerId(2),
+                    funcId = FuncId(3),
+                    groupId = GroupId(4),
+                    flowId = FlowId(5),
+                    name = TriggerName("trigger-name"),
+                    inputs = TriggerInputs(
+                        MapType(
+                            mutableMapOf(
+                                "hamal" to StringType("rocks")
+                            )
+                        )
+                    ),
+                    cron = CronPattern("0 0 * * * *")
+                )
+            )
+
+            with(res) {
+                assertThat(id, equalTo(TriggerId(2)))
+                assertThat(funcId, equalTo(FuncId(3)))
+                assertThat(flowId, equalTo(FlowId(5)))
+                assertThat(name, equalTo(TriggerName("trigger-name")))
+                assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
+                assertThat(cron, equalTo(CronPattern("0 0 * * * *")))
+            }
+
+            verifyCount(1)
+        }
+
+        @TestFactory
+        fun `Creates with same name but different flow`() = runWith(TriggerRepository::class) {
+            createCronTrigger(
+                triggerId = TriggerId(1),
+                flowId = FlowId(2),
+                groupId = GroupId(3),
+                name = TriggerName("trigger-name"),
+                cron = CronPattern("0 0 * * * *")
+            )
+
+            val result = create(
+                CreateCronCmd(
+                    id = CmdGen(),
+                    triggerId = TriggerId(1111),
+                    funcId = FuncId(4),
+                    groupId = GroupId(3),
+                    flowId = FlowId(22),
+                    name = TriggerName("trigger-name"),
+                    inputs = TriggerInputs(),
+                    cron = CronPattern("0 0 * * * *")
+                )
+            )
+
+            with(result) {
+                assertThat(id, equalTo(TriggerId(1111)))
+                assertThat(funcId, equalTo(FuncId(4)))
+                assertThat(groupId, equalTo(GroupId(3)))
+                assertThat(flowId, equalTo(FlowId(22)))
+                assertThat(name, equalTo(TriggerName("trigger-name")))
+                assertThat(inputs, equalTo(TriggerInputs()))
+                assertThat(cron, equalTo(CronPattern("0 0 * * * *")))
+            }
+
+            verifyCount(2)
+        }
+
+        @TestFactory
+        fun `Tries to create but cmd with func id was already applied`() =
+            runWith(TriggerRepository::class) {
+                createCronTrigger(
+                    cmdId = CmdId(23456),
+                    triggerId = TriggerId(5),
+                    flowId = FlowId(2),
+                    groupId = GroupId(3),
+                    name = TriggerName("first-trigger-name")
+                )
+
+
+                val result = create(
+                    CreateCronCmd(
+                        id = CmdId(23456),
+                        triggerId = TriggerId(5),
+                        funcId = FuncId(8),
+                        groupId = GroupId(333),
+                        flowId = FlowId(2222),
+                        name = TriggerName("second-trigger-name"),
+                        inputs = TriggerInputs(),
+                        cron = CronPattern("0 0 * * * *")
+                    )
+                )
+
+                with(result) {
+                    assertThat(id, equalTo(TriggerId(5)))
+                    assertThat(funcId, equalTo(FuncId(4)))
+                    assertThat(groupId, equalTo(GroupId(3)))
+                    assertThat(flowId, equalTo(FlowId(2)))
+                    assertThat(name, equalTo(TriggerName("first-trigger-name")))
+                    assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
+                    assertThat(cron, equalTo(CronPattern("0 0 * * * *")))
+                }
+
+                verifyCount(1)
+            }
+    }
+
+    @Nested
     inner class ClearTest {
 
         @TestFactory
@@ -816,100 +927,130 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
             )
         }
     }
-}
 
-private fun TriggerRepository.createFixedRateTrigger(
-    triggerId: TriggerId,
-    flowId: FlowId,
-    name: TriggerName,
-    groupId: GroupId,
-    funcId: FuncId = FuncId(4),
-    cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
-) {
-    create(
-        CreateFixedRateCmd(
-            id = cmdId,
-            triggerId = triggerId,
-            groupId = groupId,
-            flowId = flowId,
-            name = name,
-            inputs = TriggerInputs(
-                MapType(
-                    mutableMapOf(
-                        "hamal" to StringType("rockz")
+
+    private fun TriggerRepository.createFixedRateTrigger(
+        triggerId: TriggerId,
+        flowId: FlowId,
+        name: TriggerName,
+        groupId: GroupId,
+        funcId: FuncId = FuncId(4),
+        cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
+    ) {
+        create(
+            CreateFixedRateCmd(
+                id = cmdId,
+                triggerId = triggerId,
+                groupId = groupId,
+                flowId = flowId,
+                name = name,
+                inputs = TriggerInputs(
+                    MapType(
+                        mutableMapOf(
+                            "hamal" to StringType("rockz")
+                        )
                     )
-                )
-            ),
-            funcId = funcId,
-            duration = 10.seconds
+                ),
+                funcId = funcId,
+                duration = 10.seconds
+            )
         )
-    )
-}
+    }
 
-private fun TriggerRepository.createEventTrigger(
-    triggerId: TriggerId,
-    flowId: FlowId,
-    name: TriggerName,
-    groupId: GroupId,
-    funcId: FuncId = FuncId(4),
-    topicId: TopicId = TopicId(9),
-    cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
-) {
-    create(
-        CreateEventCmd(
-            id = cmdId,
-            triggerId = triggerId,
-            groupId = groupId,
-            flowId = flowId,
-            name = name,
-            inputs = TriggerInputs(
-                MapType(
-                    mutableMapOf(
-                        "hamal" to StringType("rockz")
+    private fun TriggerRepository.createEventTrigger(
+        triggerId: TriggerId,
+        flowId: FlowId,
+        name: TriggerName,
+        groupId: GroupId,
+        funcId: FuncId = FuncId(4),
+        topicId: TopicId = TopicId(9),
+        cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
+    ) {
+        create(
+            CreateEventCmd(
+                id = cmdId,
+                triggerId = triggerId,
+                groupId = groupId,
+                flowId = flowId,
+                name = name,
+                inputs = TriggerInputs(
+                    MapType(
+                        mutableMapOf(
+                            "hamal" to StringType("rockz")
+                        )
                     )
-                )
-            ),
-            funcId = funcId,
-            topicId = topicId
+                ),
+                funcId = funcId,
+                topicId = topicId
+            )
         )
-    )
-}
+    }
 
-private fun TriggerRepository.createHookTrigger(
-    triggerId: TriggerId,
-    flowId: FlowId,
-    name: TriggerName,
-    groupId: GroupId,
-    funcId: FuncId = FuncId(4),
-    hookId: HookId = HookId(9),
-    cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
-) {
-    create(
-        CreateHookCmd(
-            id = cmdId,
-            triggerId = triggerId,
-            groupId = groupId,
-            flowId = flowId,
-            name = name,
-            inputs = TriggerInputs(
-                MapType(
-                    mutableMapOf(
-                        "hamal" to StringType("rockz")
+    private fun TriggerRepository.createHookTrigger(
+        triggerId: TriggerId,
+        flowId: FlowId,
+        name: TriggerName,
+        groupId: GroupId,
+        funcId: FuncId = FuncId(4),
+        hookId: HookId = HookId(9),
+        cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
+    ) {
+        create(
+            CreateHookCmd(
+                id = cmdId,
+                triggerId = triggerId,
+                groupId = groupId,
+                flowId = flowId,
+                name = name,
+                inputs = TriggerInputs(
+                    MapType(
+                        mutableMapOf(
+                            "hamal" to StringType("rockz")
+                        )
                     )
-                )
-            ),
-            funcId = funcId,
-            hookId = hookId,
-            hookMethods = setOf(Post)
+                ),
+                funcId = funcId,
+                hookId = hookId,
+                hookMethods = setOf(Post)
+            )
         )
-    )
-}
+    }
 
-private fun TriggerRepository.verifyCount(expected: Int) {
-    verifyCount(expected) { }
-}
+    private fun TriggerRepository.createCronTrigger(
+        triggerId: TriggerId,
+        flowId: FlowId,
+        name: TriggerName,
+        groupId: GroupId,
+        cron: CronPattern = CronPattern("0 0 * * * *"),
+        funcId: FuncId = FuncId(4),
+        cmdId: CmdId = CmdGen()
+    ) {
+        create(
+            CreateCronCmd(
+                id = cmdId,
+                triggerId = triggerId,
+                groupId = groupId,
+                flowId = flowId,
+                name = name,
+                inputs = TriggerInputs(
+                    MapType(
+                        mutableMapOf(
+                            "hamal" to StringType("rockz")
+                        )
+                    )
+                ),
+                funcId = funcId,
+                cron = cron
+            )
+        )
+    }
 
-private fun TriggerRepository.verifyCount(expected: Int, block: TriggerQuery.() -> Unit) {
-    val counted = count(TriggerQuery(groupIds = listOf()).also(block))
-    assertThat("number of trigger expected", counted, equalTo(expected.toULong()))
+    private fun TriggerRepository.verifyCount(expected: Int) {
+        verifyCount(expected) { }
+    }
+
+    private fun TriggerRepository.verifyCount(expected: Int, block: TriggerQuery.() -> Unit) {
+        val counted = count(TriggerQuery(groupIds = listOf()).also(block))
+        assertThat("number of trigger expected", counted, equalTo(expected.toULong()))
+    }
 }

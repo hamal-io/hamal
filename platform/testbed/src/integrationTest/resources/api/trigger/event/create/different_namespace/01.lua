@@ -1,6 +1,6 @@
 sys = require('sys')
 
-flow_req = fail_on_error(sys.flows.create({ name = "hamal::name:space::rocks" }))
+flow_req = fail_on_error(sys.flows.create({ name = "hamal::flow::rocks" }))
 sys.await_completed(flow_req)
 
 func_req = fail_on_error(sys.funcs.create({ flow_id = flow_req.flow_id, name = 'test-func'; inputs = {}; code = [[4 + 2]] }))
@@ -28,6 +28,6 @@ trigger = fail_on_error(sys.triggers.get(trigger_req.trigger_id))
 assert(trigger.type == 'Event')
 assert(trigger.name == 'trigger-to-create')
 assert(trigger.func.name == "test-func")
-assert(trigger.flow.name == "hamal::name:space::rocks")
+assert(trigger.flow.name == "hamal::flow::rocks")
 assert(trigger.topic.name == "some-amazing-topic")
 

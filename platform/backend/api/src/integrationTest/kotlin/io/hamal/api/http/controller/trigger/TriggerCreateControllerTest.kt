@@ -2,6 +2,7 @@ package io.hamal.api.http.controller.trigger
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain._enum.TriggerType
+import io.hamal.lib.domain._enum.TriggerType.Cron
 import io.hamal.lib.domain._enum.TriggerType.FixedRate
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpErrorResponse
@@ -11,10 +12,7 @@ import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiError
 import io.hamal.lib.sdk.api.ApiTriggerCreateReq
 import io.hamal.lib.sdk.api.ApiTriggerCreateSubmitted
-import io.hamal.repository.api.EventTrigger
-import io.hamal.repository.api.FixedRateTrigger
-import io.hamal.repository.api.HookTrigger
-import io.hamal.repository.api.FlowCmdRepository
+import io.hamal.repository.api.*
 import io.hamal.repository.api.submitted_req.TriggerCreateSubmitted
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.empty
@@ -226,7 +224,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
         }
 
         @Test
-        fun `Tries to create trigger but topic does not exists`() {
+        fun `Tries to create trigger but topic does not exist`() {
             val funcId = awaitCompleted(createFunc(FuncName("event-trigger-func"))).funcId
 
             val creationResponse = httpTemplate.post("/v1/flows/1/triggers").body(
@@ -326,7 +324,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
         }
 
         @Test
-        fun `Tries to create trigger but hook does not exists`() {
+        fun `Tries to create trigger but hook does not exist`() {
             val funcId = awaitCompleted(createFunc(FuncName("hook-trigger-func"))).funcId
 
             val creationResponse = httpTemplate.post("/v1/flows/1/triggers").body(
@@ -367,6 +365,57 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
             val result = creationResponse.error(ApiError::class)
             assertThat(result.message, equalTo("Func not found"))
             verifyNoRequests(TriggerCreateSubmitted::class)
+        }
+    }
+
+    @Nested
+    inner class CronTriggerTest {
+        @Test
+        fun `Creates Trigger`() {
+            val funcId = awaitCompleted(createFunc(FuncName("cron-trigger-func"))).funcId
+
+            val creationResponse = httpTemplate.post("/v1/flows/1/triggers").body(
+                ApiTriggerCreateReq(
+                    type = Cron,
+                    name = TriggerName("cron-trigger"),
+                    funcId = funcId,
+                    inputs = TriggerInputs(),
+                    cron = CronPattern("0 0 9-17 * * MON-FRI")
+                )
+            ).execute()
+
+            assertThat(creationResponse.statusCode, equalTo(Accepted))
+            require(creationResponse is HttpSuccessResponse) { "request was not successful" }
+
+            val result = creationResponse.result(ApiTriggerCreateSubmitted::class)
+            awaitCompleted(result)
+
+            with(triggerQueryRepository.get(result.triggerId)) {
+                assertThat(id, equalTo(result.triggerId))
+                assertThat(name, equalTo(TriggerName("cron-trigger")))
+                assertThat(inputs, equalTo(TriggerInputs()))
+                assertThat(this.funcId, equalTo(funcId))
+                require(this is CronTrigger) { "not cron trigger" }
+                assertThat(cron, equalTo(CronPattern("0 0 9-17 * * MON-FRI")))
+            }
+        }
+
+        @Test
+        fun `Tries to create trigger but cron expression is invalid`() {
+            val funcId = awaitCompleted(createFunc(FuncName("cron-trigger-func"))).funcId
+            val response = httpTemplate.post("/v1/flows/1/triggers").body(
+                """{
+                |"type":"Cron",
+                |"name": "cron-trigger",
+                |"funcId": "${funcId.value.value.toString(16)}",
+                |"inputs": {},
+                |"cron": "Invalid cron pattern"
+                |}""".trimMargin()
+            ).execute()
+
+            require(response is HttpErrorResponse)
+            assertThat(response.statusCode, equalTo(BadRequest))
+            assertThat(response.error(ApiError::class), equalTo(ApiError("Invalid Cron Expression")))
         }
     }
 }
