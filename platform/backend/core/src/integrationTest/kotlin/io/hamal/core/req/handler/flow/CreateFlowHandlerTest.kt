@@ -57,7 +57,7 @@ internal class CreateFlowHandlerTest : BaseReqHandlerTest() {
                 groupId = testGroup.id,
                 name = FlowName("awesome-flow"),
                 inputs = FlowInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
-                type = FlowType("SpecialFlowType")
+                type = FlowType("VerySpecialFlowType")
             )
         )
 
@@ -65,7 +65,7 @@ internal class CreateFlowHandlerTest : BaseReqHandlerTest() {
             assertThat(id, equalTo(FlowId(12345)))
             assertThat(name, equalTo(FlowName("awesome-flow")))
             assertThat(inputs, equalTo(FlowInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
-            assertThat(type, equalTo(FlowType("SpecialFlowType")))
+            assertThat(type, equalTo(FlowType("VerySpecialFlowType")))
         }
 
         assertThat(flowQueryRepository.list(FlowQuery(groupIds = listOf())), hasSize(1))

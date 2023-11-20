@@ -33,7 +33,8 @@ internal class FlowGetControllerTest : FlowBaseControllerTest() {
             createFlow(
                 ApiFlowCreateReq(
                     name = FlowName("flow-one"),
-                    inputs = FlowInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))
+                    inputs = FlowInputs(MapType(mutableMapOf("hamal" to StringType("rockz")))),
+                    type = null
                 )
             )
         ).flowId

@@ -13,12 +13,10 @@ data class FlowEntity(
     override val recordedAt: RecordedAt,
     override val sequence: RecordSequence,
     val groupId: GroupId,
-    val type: FlowType,
-
 
     var name: FlowName? = null,
     var inputs: FlowInputs? = null,
-
+    val type: FlowType,
     ) : RecordEntity<FlowId, FlowRecord, Flow> {
 
     override fun apply(rec: FlowRecord): FlowEntity {

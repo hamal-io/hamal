@@ -23,9 +23,9 @@ data class FlowCreatedRecord(
     override val entityId: FlowId,
     override val cmdId: CmdId,
     val groupId: GroupId,
-    val type: FlowType,
     val name: FlowName,
     val inputs: FlowInputs,
+    val type: FlowType,
 ) : FlowRecord()
 
 @Serializable

@@ -13,7 +13,7 @@ import kotlinx.serialization.Serializable
 data class ApiFlowCreateReq(
     override val name: FlowName,
     override val inputs: FlowInputs,
-    override val type: FlowType? = FlowType.default
+    override val type: FlowType? = null
 ) : CreateFlowReq
 
 @Serializable

@@ -13,7 +13,7 @@ data class FlowCreateSubmitted(
     val flowId: FlowId,
     val name: FlowName,
     val inputs: FlowInputs,
-    val type: FlowType?
+    val type: FlowType
 ) : Submitted
 
 

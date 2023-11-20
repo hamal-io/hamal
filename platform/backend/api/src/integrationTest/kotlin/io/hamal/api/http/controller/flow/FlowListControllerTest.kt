@@ -29,6 +29,8 @@ internal class FlowListControllerTest : FlowBaseControllerTest() {
                 ApiFlowCreateReq(
                     name = FlowName("flow-one"),
                     inputs = FlowInputs(),
+                    type = FlowType.default
+
                 )
             )
         ).flowId
@@ -50,7 +52,8 @@ internal class FlowListControllerTest : FlowBaseControllerTest() {
                 createFlow(
                     ApiFlowCreateReq(
                         name = FlowName("flow-$it"),
-                        inputs = FlowInputs()
+                        inputs = FlowInputs(),
+                        type = FlowType.default
                     )
                 )
             }
@@ -74,7 +77,8 @@ internal class FlowListControllerTest : FlowBaseControllerTest() {
             createFlow(
                 ApiFlowCreateReq(
                     name = FlowName("flow-$it"),
-                    inputs = FlowInputs()
+                    inputs = FlowInputs(),
+                    type = FlowType.default
                 )
             )
         }
