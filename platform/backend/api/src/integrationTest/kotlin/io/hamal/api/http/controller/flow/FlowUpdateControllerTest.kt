@@ -2,6 +2,7 @@ package io.hamal.api.http.controller.flow
 
 import io.hamal.lib.domain.vo.FlowInputs
 import io.hamal.lib.domain.vo.FlowName
+import io.hamal.lib.domain.vo.FlowType
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.NotFound
@@ -43,7 +44,8 @@ internal class FlowUpdateControllerTest : FlowBaseControllerTest() {
             createFlow(
                 ApiFlowCreateReq(
                     name = FlowName("createdName"),
-                    inputs = FlowInputs(MapType((mutableMapOf("hamal" to StringType("createdInputs")))))
+                    inputs = FlowInputs(MapType((mutableMapOf("hamal" to StringType("createdInputs"))))),
+                    type = FlowType.default
                 )
             )
         )

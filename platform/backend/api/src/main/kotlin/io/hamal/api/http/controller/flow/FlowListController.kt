@@ -2,8 +2,8 @@ package io.hamal.api.http.controller.flow
 
 import io.hamal.core.adapter.FlowListPort
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.FlowId
+import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.sdk.api.ApiFlowList
 import io.hamal.repository.api.FlowQueryRepository.FlowQuery
 import org.springframework.http.ResponseEntity
@@ -31,7 +31,8 @@ internal class FlowListController(private val listFlow: FlowListPort) {
                 flows.map {
                     ApiFlowList.Flow(
                         id = it.id,
-                        name = it.name
+                        name = it.name,
+                        type = it.type
                     )
                 }
             ))

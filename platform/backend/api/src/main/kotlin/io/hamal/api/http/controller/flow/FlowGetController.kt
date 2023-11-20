@@ -21,7 +21,8 @@ internal class FlowGetController(
                 ApiFlow(
                     id = flow.id,
                     name = flow.name,
-                    inputs = flow.inputs
+                    inputs = flow.inputs,
+                    type = flow.type
                 )
             )
         }

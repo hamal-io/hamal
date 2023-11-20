@@ -23,7 +23,8 @@ class FlowGetFunction(
                     MapType(
                         mutableMapOf(
                             "id" to StringType(flow.id.value.value.toString(16)),
-                            "name" to StringType(flow.name.value)
+                            "name" to StringType(flow.name.value),
+                            "type" to StringType(flow.type.value)
                         )
                     )
                 }

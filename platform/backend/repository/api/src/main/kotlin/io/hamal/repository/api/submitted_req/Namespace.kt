@@ -11,6 +11,7 @@ data class FlowCreateSubmitted(
     override var status: ReqStatus,
     val groupId: GroupId,
     val flowId: FlowId,
+    val type: FlowType?,
     val name: FlowName,
     val inputs: FlowInputs
 ) : Submitted

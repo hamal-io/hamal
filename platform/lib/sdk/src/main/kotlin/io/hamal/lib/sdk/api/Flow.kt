@@ -12,7 +12,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ApiFlowCreateReq(
     override val name: FlowName,
-    override val inputs: FlowInputs
+    override val inputs: FlowInputs,
+    override val type: FlowType?
 ) : CreateFlowReq
 
 @Serializable
@@ -42,6 +43,7 @@ data class ApiFlowList(
 ) {
     @Serializable
     data class Flow(
+        val type: FlowType,
         val id: FlowId,
         val name: FlowName
     )
@@ -50,6 +52,7 @@ data class ApiFlowList(
 @Serializable
 data class ApiFlow(
     val id: FlowId,
+    val type: FlowType,
     val name: FlowName,
     val inputs: FlowInputs
 )

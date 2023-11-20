@@ -81,6 +81,7 @@ class MemoryFlowRepository :
                         cmdId = cmd.id,
                         entityId = flowId,
                         groupId = cmd.groupId,
+                        type = cmd.type,
                         name = cmd.name,
                         inputs = cmd.inputs,
                     )

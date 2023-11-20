@@ -2,10 +2,7 @@ package io.hamal.repository
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.domain.vo.FlowId
-import io.hamal.lib.domain.vo.FlowInputs
-import io.hamal.lib.domain.vo.FlowName
+import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.StringType
@@ -43,12 +40,45 @@ internal class FlowRepositoryTest : AbstractUnitTest() {
                             )
                         )
                     ),
+
+                    )
+            )
+
+            with(result) {
+                assertThat(id, equalTo(FlowId(234)))
+                assertThat(groupId, equalTo(GroupId(1)))
+                assertThat(type, equalTo(FlowType.default))
+                assertThat(name, equalTo(FlowName("SomeFlow")))
+                assertThat(inputs, equalTo(FlowInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
+            }
+
+            verifyCount(1)
+        }
+
+        @TestFactory
+        fun `Creates Flow with type`() = runWith(FlowRepository::class) {
+            val result = create(
+                CreateCmd(
+                    id = CmdId(1),
+                    flowId = FlowId(234),
+                    groupId = GroupId(1),
+                    name = FlowName("SomeFlow"),
+                    inputs = FlowInputs(
+                        MapType(
+                            mutableMapOf(
+                                "hamal" to StringType("rockz")
+                            )
+                        )
+                    ),
+                    type = FlowType("SpecialFlowType")
+
                 )
             )
 
             with(result) {
                 assertThat(id, equalTo(FlowId(234)))
                 assertThat(groupId, equalTo(GroupId(1)))
+                assertThat(type, equalTo(FlowType("SpecialFlowType")))
                 assertThat(name, equalTo(FlowName("SomeFlow")))
                 assertThat(inputs, equalTo(FlowInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
             }

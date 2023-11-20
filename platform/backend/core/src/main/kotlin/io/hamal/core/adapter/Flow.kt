@@ -2,8 +2,8 @@ package io.hamal.core.adapter
 
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.ReqStatus
-import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.FlowId
+import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.ReqId
 import io.hamal.repository.api.Flow
 import io.hamal.repository.api.FlowQueryRepository
@@ -54,11 +54,17 @@ class FlowAdapter(
         req: CreateFlowReq,
         responseHandler: (FlowCreateSubmitted) -> T
     ): T {
+        val type = if (req.type != null) {
+            req.type
+        } else {
+            null
+        }
         return FlowCreateSubmitted(
             id = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
             flowId = generateDomainId(::FlowId),
             groupId = groupId,
+            type = type,
             name = req.name,
             inputs = req.inputs
         ).also(reqCmdRepository::queue).let(responseHandler)

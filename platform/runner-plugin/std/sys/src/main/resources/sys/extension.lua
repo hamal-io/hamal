@@ -141,7 +141,8 @@ function extension()
         function export.flows.create(cmd)
             return internal.flow_create({
                 name = cmd.name or "",
-                inputs = cmd.inputs or {}
+                inputs = cmd.inputs or {},
+                type = cmd.type or nil
             })
         end
 

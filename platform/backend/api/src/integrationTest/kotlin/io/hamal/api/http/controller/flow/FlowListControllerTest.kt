@@ -2,6 +2,7 @@ package io.hamal.api.http.controller.flow
 
 import io.hamal.lib.domain.vo.FlowInputs
 import io.hamal.lib.domain.vo.FlowName
+import io.hamal.lib.domain.vo.FlowType
 import io.hamal.lib.sdk.api.ApiFlowCreateReq
 import io.hamal.lib.sdk.api.ApiFlowList
 import org.hamcrest.MatcherAssert.assertThat
@@ -26,7 +27,8 @@ internal class FlowListControllerTest : FlowBaseControllerTest() {
             createFlow(
                 ApiFlowCreateReq(
                     name = FlowName("flow-one"),
-                    inputs = FlowInputs()
+                    inputs = FlowInputs(),
+                    type = FlowType.default
                 )
             )
         ).flowId
@@ -47,7 +49,8 @@ internal class FlowListControllerTest : FlowBaseControllerTest() {
                 createFlow(
                     ApiFlowCreateReq(
                         name = FlowName("flow-$it"),
-                        inputs = FlowInputs()
+                        inputs = FlowInputs(),
+                        type = FlowType.default
                     )
                 )
             }
@@ -71,7 +74,8 @@ internal class FlowListControllerTest : FlowBaseControllerTest() {
             createFlow(
                 ApiFlowCreateReq(
                     name = FlowName("flow-$it"),
-                    inputs = FlowInputs()
+                    inputs = FlowInputs(),
+                    type = FlowType.default
                 )
             )
         }
