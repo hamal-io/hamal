@@ -5,16 +5,16 @@ import * as z from "zod"
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
 import {useForm} from "react-hook-form";
-import {BookOpen, Loader2, Plus, PlusCircle} from "lucide-react";
+import {BookOpen, Loader2, Plus,} from "lucide-react";
 import {useAuth} from "@/hook/auth.ts";
 import {Dialog, DialogContent, DialogHeader, DialogTrigger} from "@/components/ui/dialog.tsx";
 import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
-import {ApiFlowSimple} from "@/api/types";
 import {useFuncCreate} from "@/hook/func.ts";
+import {FlowListItem} from "@/types";
 
 type Prop = {
-    flow: ApiFlowSimple
+    flow: FlowListItem
 }
 
 const formSchema = z.object({

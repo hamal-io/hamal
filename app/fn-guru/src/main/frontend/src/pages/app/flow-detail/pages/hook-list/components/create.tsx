@@ -5,75 +5,56 @@ import * as z from "zod"
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
 import {useForm} from "react-hook-form";
-import {ChevronDownIcon, Loader2, Plus} from "lucide-react";
+import {BookOpen, Loader2, Plus,} from "lucide-react";
 import {useAuth} from "@/hook/auth.ts";
 import {Dialog, DialogContent, DialogHeader, DialogTrigger} from "@/components/ui/dialog.tsx";
 import {Input} from "@/components/ui/input.tsx";
-import {Button, buttonVariants} from "@/components/ui/button.tsx";
-import {useTriggerFixedRateCreate} from "@/hook";
+import {Button} from "@/components/ui/button.tsx";
+import {FlowListItem} from "@/types";
+import {useHookCreate, useTriggerHookCreate} from "@/hook";
 import FormFuncSelect from "@/components/form/func-select.tsx";
 
-type FlowProps = {
-    id: string;
-    name: string;
-}
-
-
 type Prop = {
-    flow: FlowProps
+    flow: FlowListItem
 }
 
 const formSchema = z.object({
     name: z.string().min(2).max(50),
-    funcId: z.string().min(1, "Function required"),
-    rate: z.number().min(1)
+    // funcId: z.string().min(1, "Function required"),
 })
 
-const CreateFixedRate: FC<Prop> = ({flow}) => {
+const Create: FC<Prop> = ({flow}) => {
     const [auth, setAuth] = useAuth()
     const navigate = useNavigate()
     const [openDialog, setOpenDialog] = useState<boolean>(false)
     const props = {openModal: openDialog, setOpenModal: setOpenDialog}
     const [isLoading, setLoading] = useState(false)
 
-    const [createTrigger, submittedTrigger] = useTriggerFixedRateCreate()
+    const [createHook, submittedHook] = useHookCreate()
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: "",
-            rate: 300,
+            name: ""
         },
     })
 
-    // 2. Define a submit handler.
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setLoading(true)
         try {
-            createTrigger(
-                flow.id,
-                values.funcId,
-                values.name,
-                "PT" + values.rate + 'S'
-            )
+            createHook(flow.id, values.name)
         } catch (e) {
             console.error(e)
         } finally {
-            // setLoading(false)
         }
+
     }
 
     useEffect(() => {
-        if (openDialog === false) {
-            form.control._reset()
-        }
-    }, [openDialog]);
-
-    useEffect(() => {
-        if (submittedTrigger !== null) {
+        if (submittedHook !== null) {
             setOpenDialog(false)
             window.location.reload()
         }
-    }, [submittedTrigger, navigate]);
+    }, [submittedHook, navigate]);
 
     return (
         <>
@@ -81,12 +62,12 @@ const CreateFixedRate: FC<Prop> = ({flow}) => {
                 <DialogTrigger asChild>
                     <Button>
                         <Plus className="w-4 h-4 mr-1"/>
-                        New Fixed Rate
+                        New Webhook
                     </Button>
                 </DialogTrigger>
 
                 <DialogContent>
-                    <DialogHeader>Create Fixed Rate</DialogHeader>
+                    <DialogHeader>Create a new webhook</DialogHeader>
 
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -97,38 +78,16 @@ const CreateFixedRate: FC<Prop> = ({flow}) => {
                                     <FormItem>
                                         <FormLabel>Name</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="Fixed Rate - One" {...field} />
+                                            <Input placeholder="Webhook-one" {...field} />
                                         </FormControl>
                                         <FormDescription>
-                                            This is the name of your trigger.
+                                            This is the name of your webhook.
                                         </FormDescription>
                                         <FormMessage/>
                                     </FormItem>
                                 )}
                             />
 
-                            <FormFuncSelect name='funcId' flowId={flow.id} form={form}/>
-
-                            <FormField
-                                control={form.control}
-                                name="rate"
-                                render={({field}) => (
-                                    <FormItem>
-                                        <FormLabel>Rate in seconds</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                placeholder="300" type="number" {...field}
-                                                onChange={event => field.onChange(+event.target.value)}
-                                            />
-                                        </FormControl>
-                                        <FormDescription>
-                                            Amount of seconds until function gets invoked again
-                                        </FormDescription>
-                                        <FormMessage/>
-                                    </FormItem>
-                                )}
-                            />
-                            <FormMessage/>
                             <Button type="submit">
                                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
                                 Create
@@ -142,4 +101,4 @@ const CreateFixedRate: FC<Prop> = ({flow}) => {
 }
 
 
-export default CreateFixedRate;
+export default Create;

@@ -10,7 +10,8 @@ function extension()
         function export.message.send(message)
             local cfg = export.config.get()
 
-            local err, resp = http.post(cfg.base_url .. '/bot' .. cfg.bot_token .. '/sendMessage', {
+            local err, resp = http.post({
+                url = cfg.base_url .. '/bot' .. cfg.bot_token .. '/sendMessage',
                 json = {
                     ['chat_id'] = message.chat_id,
                     ['text'] = message.text,
@@ -32,7 +33,9 @@ function extension()
 
         function export.webhook.info()
             local cfg = export.config.get()
-            local err, resp = http.post(cfg.base_url .. '/bot' .. cfg.bot_token .. '/getWebhookInfo', {})
+            local err, resp = http.post({
+                url = cfg.base_url .. '/bot' .. cfg.bot_token .. '/getWebhookInfo'
+            })
 
             print(err)
             print(res)

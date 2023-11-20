@@ -1,5 +1,5 @@
 import {cn} from "@/utils";
-import {BookOpen, Braces, CalendarIcon, Command, LucideIcon, Play, TimerIcon} from "lucide-react";
+import {BookOpen, Braces, CalendarIcon, Command, LucideIcon, Play, TimerIcon, WebhookIcon} from "lucide-react";
 import React, {FC} from "react";
 import {Link, useLocation, useParams} from "react-router-dom";
 import FlowSelector from "@/components/app/flow-selector.tsx";
@@ -44,6 +44,12 @@ const Sidebar: React.FC<Props> = ({className}) => {
             href: `/flows/${flowId}/schedules`,
             label: "Schedules",
             active: currentPath === `/flows/${flowId}/schedules`
+        },
+        {
+            icon: WebhookIcon,
+            href: `/flows/${flowId}/hooks`,
+            label: "Webhooks",
+            active: currentPath === `/flows/${flowId}/hooks`
         },
         {
             icon: BookOpen,

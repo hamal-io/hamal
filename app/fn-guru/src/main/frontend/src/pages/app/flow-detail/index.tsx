@@ -1,16 +1,16 @@
 import React, {createContext, FC, ReactNode, useEffect} from 'react'
 import {useParams} from "react-router-dom";
-import {ApiFlow} from "@/api/types";
 import Sidebar from "@/pages/app/flow-detail/components/sidebar";
 import Authenticated from "@/components/app/authenticated.tsx";
 import {useFlowGet} from "@/hook";
+import {Flow} from "@/types";
 
 
 type Props = {
     children: ReactNode;
 }
 
-export const FlowContext = createContext<ApiFlow | null>(null)
+export const FlowContext = createContext<Flow | null>(null)
 
 const FlowDetailPage: FC<Props> = ({children}) => {
     const {flowId} = useParams()

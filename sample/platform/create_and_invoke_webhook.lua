@@ -9,7 +9,7 @@ _, r = sys.funcs.create({
     name = 'test-func',
     flow_id = flow_id,
     code = [[
-        print('invoked by webhook')
+        print('invoked by integration')
     ]]
 })
 

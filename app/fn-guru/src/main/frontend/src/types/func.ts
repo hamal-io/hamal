@@ -1,4 +1,4 @@
-import {VersionedCode} from "@/api/types";
+import {VersionedCode} from "@/types";
 
 export interface FuncCreateSubmitted {
     id: string;

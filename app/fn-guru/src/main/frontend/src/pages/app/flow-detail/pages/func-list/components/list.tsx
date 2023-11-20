@@ -4,10 +4,10 @@ import {EmptyPlaceholder} from "@/components/empty-placeholder.tsx";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx";
 import {PageHeader} from "@/components/page-header.tsx";
 import Create from "@/pages/app/flow-detail/pages/func-list/components/create.tsx";
-import {ApiFuncSimple} from "@/api/types";
 import {GoToDocumentation} from "@/components/documentation.tsx";
 import {useNavigate} from "react-router-dom";
 import {useFuncList} from "@/hook/func.ts";
+import {FuncListItem} from "@/types";
 
 type FlowProps = {
     id: string;
@@ -49,7 +49,7 @@ const List: FC<ListProps> = ({flow}) => {
 
 type ContentProps = {
     flowId: string;
-    funcs: ApiFuncSimple[]
+    funcs: FuncListItem[]
 }
 
 const Content: FC<ContentProps> = ({flowId, funcs}) => {

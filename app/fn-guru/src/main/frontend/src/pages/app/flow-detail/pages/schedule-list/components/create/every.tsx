@@ -10,10 +10,10 @@ import {useAuth} from "@/hook/auth.ts";
 import {Dialog, DialogContent, DialogHeader, DialogTrigger} from "@/components/ui/dialog.tsx";
 import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
-import {ApiFlowSimple} from "@/api/types";
+import {FlowListItem} from "@/types";
 
 type Prop = {
-    flow: ApiFlowSimple
+    flow: FlowListItem
 }
 
 const formSchema = z.object({

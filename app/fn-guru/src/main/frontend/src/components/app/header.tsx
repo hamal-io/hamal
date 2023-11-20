@@ -103,11 +103,11 @@ const Nav = ({className, ...props}: React.HTMLAttributes<HTMLElement>) => {
     const currentPath = location.pathname
 
     const navigation: NavItem[] = [
-        {
-            href: `/dashboard`,
-            label: "Dashboard",
-            active: currentPath === '/dashboard'
-        },
+        // {
+        //     href: `/dashboard`,
+        //     label: "Dashboard",
+        //     active: currentPath === '/dashboard'
+        // },
         {
             href: `/playground`,
             label: "Playground",

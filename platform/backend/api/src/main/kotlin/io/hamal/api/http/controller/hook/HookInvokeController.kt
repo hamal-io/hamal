@@ -1,7 +1,6 @@
-package io.hamal.integration.http.endpoint
+package io.hamal.api.http.controller.hook
 
 import io.hamal.lib.domain.GenerateDomainId
-import io.hamal.lib.domain.vo.ReqId
 import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain._enum.HookMethod.*
 import io.hamal.lib.domain._enum.ReqStatus
@@ -9,6 +8,7 @@ import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.vo.HookHeaders
 import io.hamal.lib.domain.vo.HookId
 import io.hamal.lib.domain.vo.HookParameters
+import io.hamal.lib.domain.vo.ReqId
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.HookQueryRepository
