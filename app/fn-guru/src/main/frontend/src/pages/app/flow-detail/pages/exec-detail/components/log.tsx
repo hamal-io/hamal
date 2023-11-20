@@ -1,18 +1,23 @@
-import {FC} from "react";
-import {useApiExecLogList} from "@/hook/api/exec-log.ts";
+import {FC, useEffect} from "react";
+import {useExecLogList} from "@/hook";
 
 type Props = {
     execId: string;
 }
 
 const Log: FC<Props> = ({execId}) => {
-    const [logs] = useApiExecLogList(execId)
-    console.log(logs)
+    const [listExecLogs, execLogsList, loading] = useExecLogList()
+
+    useEffect(() => {
+        listExecLogs(execId)
+    }, [execId]);
+
+    if (loading) return "Loading..."
     return (
         <div className="w-full">
             <div
                 className="coding inverse-toggle px-5 pt-4 text-gray-100 text-sm font-mono subpixel-antialiased bg-gray-50  pb-6  rounded-lg leading-normal overflow-hidden">
-                {logs.map(log => {
+                {execLogsList.logs.map(log => {
                     return (
                         <div key={log.id} className="flex">
                             <span className="text-gray-500 mr-2">{new Date(log.remoteAt).toISOString()}</span>

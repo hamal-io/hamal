@@ -16,6 +16,7 @@ import FlowExecDetailPage from "@/pages/app/flow-detail/pages/exec-detail";
 import FlowExecListPage from "@/pages/app/flow-detail/pages/exec-list";
 import FlowFuncListPage from "@/pages/app/flow-detail/pages/func-list";
 import FlowFuncDetailPage from "@/pages/app/flow-detail/pages/func-detail";
+import FlowHookListPage from "@/pages/app/flow-detail/pages/hook-list";
 import FlowScheduleListPage from "@/pages/app/flow-detail/pages/schedule-list";
 
 import {createBrowserRouter} from "react-router-dom";
@@ -68,6 +69,12 @@ export const router = createBrowserRouter([
         path: "/flows/:flowId/functions/:funcId", element:
             <FlowDetailPage>
                 <FlowFuncDetailPage/>
+            </FlowDetailPage>
+    },
+    {
+        path: "/flows/:flowId/hooks", element:
+            <FlowDetailPage>
+                <FlowHookListPage/>
             </FlowDetailPage>
     },
     {

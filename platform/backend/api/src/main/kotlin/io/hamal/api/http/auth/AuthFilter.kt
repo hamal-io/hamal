@@ -34,6 +34,10 @@ class AuthApiFilter(
             return filterChain.doFilter(request, response)
         }
 
+        if (path.startsWith("/v1/webhooks")) {
+            return filterChain.doFilter(request, response)
+        }
+
         if (path == "/v1/login" && request.method == "POST") {
             return filterChain.doFilter(request, response)
         }

@@ -3,13 +3,13 @@ import {Row} from "@tanstack/react-table"
 
 import {Button} from "@/components/ui/button.tsx"
 import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,} from "@/components/ui/dropdown-menu.tsx"
-import {ApiExecSimple} from "@/api/types";
 import {useNavigate} from "react-router-dom";
 import {useContext} from "react";
 import {FlowContext} from "@/pages/app/flow-detail";
+import {ExecListItem} from "@/types";
 
 interface Props {
-    row: Row<ApiExecSimple>
+    row: Row<ExecListItem>
 }
 
 export default function ({row}: Props) {
@@ -29,7 +29,6 @@ export default function ({row}: Props) {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-[160px]">
                 <DropdownMenuItem onClick={() => {
-                    console.log(JSON.stringify(row))
                     navigate(`/flows/${flow.id}/executions/${row.original.id}`)
                 }}>View</DropdownMenuItem>
             </DropdownMenuContent>

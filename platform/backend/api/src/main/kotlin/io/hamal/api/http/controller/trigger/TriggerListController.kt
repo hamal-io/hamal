@@ -33,11 +33,12 @@ class TriggerListController(private val listTriggers: TriggerListPort) {
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") triggerId: TriggerId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit,
         @RequestParam(required = false, name = "func_ids", defaultValue = "") funcIds: List<FuncId> = listOf(),
+        @RequestParam(required = false, name = "types", defaultValue = "") types: List<TriggerType> = listOf(),
     ): ResponseEntity<ApiTriggerList> {
         return listTriggers(
             TriggerQuery(
                 afterId = triggerId,
-                types = TriggerType.values().toList(),
+                types = types,
                 limit = limit,
                 funcIds = funcIds,
                 flowIds = listOf(flowId)
@@ -132,12 +133,13 @@ class TriggerListController(private val listTriggers: TriggerListPort) {
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit,
         @RequestParam(required = false, name = "func_ids", defaultValue = "") funcIds: List<FuncId> = listOf(),
         @RequestParam(required = false, name = "group_ids", defaultValue = "") groupIds: List<GroupId> = listOf(),
-        @RequestParam(required = false, name = "flow_ids", defaultValue = "") flowIds: List<FlowId> = listOf()
+        @RequestParam(required = false, name = "flow_ids", defaultValue = "") flowIds: List<FlowId> = listOf(),
+        @RequestParam(required = false, name = "types", defaultValue = "") types: List<TriggerType> = listOf()
     ): ResponseEntity<ApiTriggerList> {
         return listTriggers(
             TriggerQuery(
                 afterId = triggerId,
-                types = TriggerType.values().toList(),
+                types = types,
                 limit = limit,
                 groupIds = groupIds,
                 funcIds = funcIds,

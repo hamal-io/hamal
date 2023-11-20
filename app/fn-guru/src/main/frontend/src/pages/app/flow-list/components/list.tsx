@@ -1,37 +1,46 @@
-import React, {FC} from "react";
+import React, {FC, useEffect} from "react";
 import {Separator} from "@/components/ui/separator.tsx";
 import {EmptyPlaceholder} from "@/components/empty-placeholder.tsx";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx";
 import {PageHeader} from "@/components/page-header.tsx";
 import Create from "@/pages/app/flow-list/components/create.tsx";
-import {useApiFlowList} from "@/hook/api/flow.ts";
-import {ApiFlowSimple} from "@/api/types";
 import {GoToDocumentation} from "@/components/documentation.tsx";
 import {useNavigate} from "react-router-dom";
+import {useFlowList} from "@/hook/flow.ts";
+import {FlowListItem} from "@/types";
 
 type ListProps = {
     groupId: string
 }
 
-const List: FC<ListProps> = (props: ListProps) => {
-    const [flows, isLoading, error] = useApiFlowList(props.groupId)
+const List: FC<ListProps> = ({groupId}) => {
+    const [listFlows, flowList, isLoading, error] = useFlowList()
+
+    useEffect(() => {
+        const abortController = new AbortController()
+        listFlows(groupId, abortController)
+        return () => {
+            abortController.abort()
+        }
+    }, [groupId]);
 
     if (isLoading) return "Loading..."
     if (error != null) return "Error -"
 
+    const filteredFlows = flowList.flows.filter(flow => flow.name !== '__default__')
     return (
         <div className="pt-8 px-8">
             <PageHeader title="Workflows" description="Organise your workflows" actions={[<Create/>]}/>
             <Separator className="my-6"/>
             {
-                flows.length ? (<Content flows={flows}/>) : (<NoContent/>)
+                filteredFlows.length ? (<Content flows={filteredFlows}/>) : (<NoContent/>)
             }
         </div>
     );
 }
 
 type ContentProps = {
-    flows: ApiFlowSimple[]
+    flows: FlowListItem[]
 }
 
 const Content: FC<ContentProps> = ({flows}) => {

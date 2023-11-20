@@ -12,7 +12,7 @@ export interface Auth {
 }
 
 
-export interface ApiLoginSubmitted {
+export interface LoginSubmitted {
     id: string;
     status: string;
     accountId: string;

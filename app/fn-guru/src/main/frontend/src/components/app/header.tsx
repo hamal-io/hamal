@@ -1,5 +1,5 @@
 import React, {FC, useEffect, useState} from "react";
-import {unauthorized, useAuth} from "@/hook/auth.ts";
+import {useAuth, useLogout} from "@/hook/auth.ts";
 import {Button} from "@/components/ui/button.tsx";
 import {
     DropdownMenu,
@@ -21,9 +21,7 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
 import {useForm} from "react-hook-form";
 import {Loader2} from "lucide-react";
-import {ApiAccountConversionSubmitted} from "@/api/account.ts";
-import {useApiPost} from "@/hook";
-import {AUTH_KEY} from "@/types/auth.ts";
+import {useAccountConvert} from "@/hook";
 
 
 const Header: FC = () => {
@@ -88,15 +86,11 @@ export interface ApiLogoutSubmitted {
 
 
 const LogoutMenuItem = () => {
-    const navigate = useNavigate()
-    const [, setAuth] = useAuth()
-    const [logout] = useApiPost<ApiLogoutSubmitted>()
+    const [logout,] = useLogout()
 
     return (
         <DropdownMenuItem onClick={() => {
-            logout('v1/logout', {})
-            setAuth({...unauthorized})
-            navigate("/")
+            logout()
         }}>
             Log out
         </DropdownMenuItem>
@@ -109,11 +103,11 @@ const Nav = ({className, ...props}: React.HTMLAttributes<HTMLElement>) => {
     const currentPath = location.pathname
 
     const navigation: NavItem[] = [
-        {
-            href: `/dashboard`,
-            label: "Dashboard",
-            active: currentPath === '/dashboard'
-        },
+        // {
+        //     href: `/dashboard`,
+        //     label: "Dashboard",
+        //     active: currentPath === '/dashboard'
+        // },
         {
             href: `/playground`,
             label: "Playground",
@@ -166,6 +160,7 @@ const Convert = () => {
     const [openDialog, setOpenDialog] = useState<boolean>(false)
     const props = {openModal: openDialog, setOpenModal: setOpenDialog}
     const [isLoading, setLoading] = useState(false)
+    const [convert] = useAccountConvert()
 
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -181,45 +176,20 @@ const Convert = () => {
         setLoading(true)
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
-        console.log(values)
-
         try {
-            post(`v1/anonymous-accounts/${auth.accountId}/convert`, {
-                name: values.name,
-                password: values.password,
-                email: values.email
-            })
-            console.log(auth)
+            convert(values.name, values.password, values.email)
         } catch (e) {
-            console.log(`login failed - ${e}`)
+            console.error(e)
         } finally {
             // setLoading(false)
         }
 
     }
 
-    const [post, data] = useApiPost<ApiAccountConversionSubmitted>()
     useEffect(() => {
-        if (data != null) {
-            setAuth({
-                type: 'User',
-                accountId: auth.accountId,
-                groupId: auth.groupId,
-                defaultFlowIds: auth.defaultFlowIds,
-                token: data.token,
-                name: data.name
-            })
-        }
-    }, [data]);
-
-
-    useEffect(() => {
-        console.log("AUTH", JSON.stringify(auth))
         if (auth != null && auth.type === 'User') {
-            console.log("navigate")
             navigate(`/flows`)
             setOpenDialog(false)
-
         }
     }, [auth, navigate]);
 

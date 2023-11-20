@@ -5,7 +5,7 @@ import io.hamal.lib.domain.vo.AuthToken
 import io.hamal.lib.domain.vo.Password
 
 interface LogInReq {
-    val username: AccountName
+    val name: AccountName
     val password: Password
 }
 

@@ -10,11 +10,10 @@ import {useAuth} from "@/hook/auth.ts";
 import {Dialog, DialogContent, DialogHeader, DialogTrigger} from "@/components/ui/dialog.tsx";
 import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
-import {useApiFuncCreate} from "@/hook/api/func.ts";
-import {ApiFlowSimple} from "@/api/types";
+import {FlowListItem} from "@/types";
 
 type Prop = {
-    flow: ApiFlowSimple
+    flow: FlowListItem
 }
 
 const formSchema = z.object({
@@ -28,7 +27,6 @@ const CreateEvery: FC<Prop> = ({flow}) => {
     const props = {openModal: openDialog, setOpenModal: setOpenDialog}
     const [isLoading, setLoading] = useState(false)
 
-    const [createFunc, submittedFunc] = useApiFuncCreate()
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -45,7 +43,7 @@ const CreateEvery: FC<Prop> = ({flow}) => {
         console.log(values)
 
         try {
-            createFunc(flow.id, values.name)
+            // createFunc(flow.id, values.name)
             console.log(auth)
         } catch (e) {
             console.log(`login failed - ${e}`)
@@ -55,13 +53,14 @@ const CreateEvery: FC<Prop> = ({flow}) => {
 
     }
 
-    useEffect(() => {
-        if (submittedFunc !== null) {
-            navigate(`/flows/${flow.id}/functions/${submittedFunc.funcId}`)
-            setOpenDialog(false)
-
-        }
-    }, [submittedFunc, navigate]);
+    //
+    // useEffect(() => {
+    //     if (submittedFunc !== null) {
+    //         navigate(`/flows/${flow.id}/functions/${submittedFunc.funcId}`)
+    //         setOpenDialog(false)
+    //
+    //     }
+    // }, [submittedFunc, navigate]);
 
     return (
         <>

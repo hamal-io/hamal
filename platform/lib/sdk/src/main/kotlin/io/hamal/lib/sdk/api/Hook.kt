@@ -70,13 +70,6 @@ data class ApiHook(
         val id: FlowId,
         val name: FlowName
     )
-
-    @Serializable
-    data class Code(
-        val id: CodeId,
-        val version: CodeVersion,
-        val value: CodeValue
-    )
 }
 
 interface ApiHookService {

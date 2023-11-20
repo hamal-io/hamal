@@ -1,6 +1,6 @@
 import {useNavigate} from "react-router-dom";
 import React, {useEffect, useState} from "react";
-import {useApiAccountLogin, useApiFlowCreate, useApiPost} from "@/hook";
+import {useFlowCreate} from "@/hook";
 
 import * as z from "zod"
 import {zodResolver} from "@hookform/resolvers/zod";
@@ -24,7 +24,7 @@ const Create = () => {
     const props = {openModal: openDialog, setOpenModal: setOpenDialog}
     const [isLoading, setLoading] = useState(false)
 
-    const [createFlow, submittedFlow] = useApiFlowCreate()
+    const [createFlow, submittedFlow] = useFlowCreate()
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -38,13 +38,11 @@ const Create = () => {
         setLoading(true)
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
-        console.log(values)
 
         try {
             createFlow(auth.groupId, values.name)
-            console.log(auth)
         } catch (e) {
-            console.log(`login failed - ${e}`)
+            console.error(e)
         } finally {
             // setLoading(false)
         }
