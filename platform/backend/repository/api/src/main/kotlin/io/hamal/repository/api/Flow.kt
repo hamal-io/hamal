@@ -31,7 +31,7 @@ interface FlowCmdRepository : CmdRepository {
         val id: CmdId,
         val flowId: FlowId,
         val groupId: GroupId,
-        val type: FlowType = FlowType.default,
+        val type: FlowType? = FlowType.default,
         val name: FlowName,
         val inputs: FlowInputs
     )

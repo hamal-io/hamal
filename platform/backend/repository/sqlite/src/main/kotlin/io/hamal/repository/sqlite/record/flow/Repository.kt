@@ -66,7 +66,7 @@ class SqliteFlowRepository(
                         cmdId = cmdId,
                         entityId = flowId,
                         groupId = cmd.groupId,
-                        type = cmd.type,
+                        type = cmd.type!!,
                         name = cmd.name,
                         inputs = cmd.inputs,
                     )

@@ -17,8 +17,7 @@ internal class FlowCreateControllerTest : FlowBaseControllerTest() {
             createFlow(
                 ApiFlowCreateReq(
                     name = FlowName("test-flow"),
-                    inputs = FlowInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
-                    type = null
+                    inputs = FlowInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))
                 )
             )
         ).flowId

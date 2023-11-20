@@ -69,6 +69,7 @@ internal class FlowUpdateControllerTest : FlowBaseControllerTest() {
             assertThat(id, equalTo(flowId))
             assertThat(name, equalTo(FlowName("updatedName")))
             assertThat(inputs, equalTo(FlowInputs(MapType(mutableMapOf("hamal" to StringType("updatedInputs"))))))
+            assertThat(type, equalTo(FlowType.default))
         }
     }
 }

@@ -54,17 +54,12 @@ class FlowAdapter(
         req: CreateFlowReq,
         responseHandler: (FlowCreateSubmitted) -> T
     ): T {
-        val type = if (req.type != null) {
-            req.type
-        } else {
-            null
-        }
         return FlowCreateSubmitted(
             id = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
             flowId = generateDomainId(::FlowId),
             groupId = groupId,
-            type = type,
+            type = req.type,
             name = req.name,
             inputs = req.inputs
         ).also(reqCmdRepository::queue).let(responseHandler)

@@ -5,7 +5,6 @@ import io.hamal.core.req.ReqHandler
 import io.hamal.core.req.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.GenerateDomainId
-import io.hamal.lib.domain.vo.FlowType
 import io.hamal.repository.api.Flow
 import io.hamal.repository.api.FlowCmdRepository
 import io.hamal.repository.api.FlowCmdRepository.CreateCmd
@@ -36,7 +35,7 @@ private fun CreateFlowHandler.createFlow(req: FlowCreateSubmitted): Flow {
             id = req.cmdId(),
             flowId = req.flowId,
             groupId = req.groupId,
-            type = req.type ?: FlowType.default,
+            type = req.type,
             name = req.name,
             inputs = req.inputs
         )
