@@ -1,6 +1,6 @@
 sys = require("sys")
 
-req = fail_on_error(sys.flows.create({ name = "hamal::name:space::rocks" }))
+req = fail_on_error(sys.flows.create({ name = "hamal::flow::rocks" }))
 sys.await_completed(req)
 
 topic_req = fail_on_error(sys.topics.create({

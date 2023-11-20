@@ -577,31 +577,6 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
 
                 verifyCount(1)
             }
-
-        @TestFactory
-        fun `Tries to create with invalid cron expression`() = runWith(TriggerRepository::class) {
-            val exception = assertThrows<IllegalArgumentException> {
-                create(
-                    CreateCronCmd(
-                        id = CmdId(2),
-                        triggerId = TriggerId(5),
-                        funcId = FuncId(4),
-                        groupId = GroupId(3),
-                        flowId = FlowId(2),
-                        name = TriggerName("first-trigger-name"),
-                        inputs = TriggerInputs(),
-                        cron = CronPattern("I N V A L I D")
-                    )
-                )
-            }
-
-            assertThat(
-                exception.message,
-                equalTo("Invalid Cron Expression")
-            )
-
-            verifyCount(0)
-        }
     }
 
     @Nested

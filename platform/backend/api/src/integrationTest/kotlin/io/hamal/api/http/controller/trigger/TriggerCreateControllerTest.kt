@@ -395,25 +395,27 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
                 assertThat(name, equalTo(TriggerName("cron-trigger")))
                 assertThat(inputs, equalTo(TriggerInputs()))
                 assertThat(this.funcId, equalTo(funcId))
-                require(this is CronTrigger) { "not FixedRateTrigger" }
+                require(this is CronTrigger) { "not cron trigger" }
                 assertThat(cron, equalTo(CronPattern("0 0 9-17 * * MON-FRI")))
             }
         }
 
         @Test
         fun `Tries to create trigger but cron expression is invalid`() {
-            /*val funcId = awaitCompleted(createFunc(FuncName("cron-trigger-func"))).funcId
+            val funcId = awaitCompleted(createFunc(FuncName("cron-trigger-func"))).funcId
+            val response = httpTemplate.post("/v1/flows/1/triggers").body(
+                """{
+                |"type":"Cron",
+                |"name": "cron-trigger",
+                |"funcId": "${funcId.value.value.toString(16)}",
+                |"inputs": {},
+                |"cron": "Invalid cron pattern"
+                |}""".trimMargin()
+            ).execute()
 
-            val creationResponse = httpTemplate.post("/v1/flows/1/triggers").body(
-                ApiTriggerCreateReq(
-                    type = Cron,
-                    name = TriggerName("cron-trigger"),
-                    funcId = funcId,
-                    inputs = TriggerInputs(),
-                    cron = CronPattern("0 0")
-                )
-            ).execute()*/
-
+            require(response is HttpErrorResponse)
+            assertThat(response.statusCode, equalTo(BadRequest))
+            assertThat(response.error(ApiError::class), equalTo(ApiError("Invalid Cron Expression")))
         }
     }
 }

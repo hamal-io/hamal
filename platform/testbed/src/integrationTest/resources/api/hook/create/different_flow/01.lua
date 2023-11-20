@@ -1,6 +1,6 @@
 sys = require('sys')
 --
-flow = fail_on_error(sys.flows.create({ name = "hamal::name:space::rocks" }))
+flow = fail_on_error(sys.flows.create({ name = "hamal::flow::rocks" }))
 sys.await_completed(flow)
 
 hook_req = fail_on_error(sys.hooks.create({
@@ -15,7 +15,7 @@ assert(hook_req.flow_id == flow.id)
 
 _, hook = sys.hooks.get(hook_req.id)
 assert(hook.flow.id == flow.id)
-assert(hook.flow.name == "hamal::name:space::rocks")
+assert(hook.flow.name == "hamal::flow::rocks")
 
 err, hooks = sys.hooks.list()
 assert(#hooks == 1)

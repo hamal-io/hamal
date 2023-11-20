@@ -1,6 +1,6 @@
 sys = require('sys')
 
-flow_req = fail_on_error(sys.flows.create({ name = "hamal::name:space::rocks" }))
+flow_req = fail_on_error(sys.flows.create({ name = "hamal::flow::rocks" }))
 sys.await_completed(flow_req)
 
 func_req = fail_on_error(sys.funcs.create({ flow_id = flow_req.id, name = 'test-func'; inputs = {}; code = [[4 + 2]] }))
@@ -29,6 +29,6 @@ assert(trigger.type == 'Hook')
 assert(trigger.name == 'hook-trigger')
 assert(trigger.func.name == "test-func")
 assert(trigger.flow.id == flow_req.id)
-assert(trigger.flow.name == "hamal::name:space::rocks")
+assert(trigger.flow.name == "hamal::flow::rocks")
 assert(trigger.hook.name == "some-amazing-hook")
 

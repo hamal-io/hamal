@@ -10,6 +10,5 @@ class CronPattern(override val value: String) : StringValueObject() {
     init {
         if (!CronExpression.isValidExpression(value)) throw IllegalArgumentException("Invalid Cron Expression")
     }
-
     internal object Serializer : StringValueObjectSerializer<CronPattern>(::CronPattern)
 }

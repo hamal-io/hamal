@@ -205,6 +205,22 @@ class TriggerListController(private val listTriggers: TriggerListPort) {
                                 )
                             }
 
+                            is CronTrigger -> {
+                                ApiTriggerList.CronTrigger(
+                                    id = trigger.id,
+                                    name = trigger.name,
+                                    func = Func(
+                                        id = trigger.funcId,
+                                        name = funcs[trigger.funcId]!!.name
+                                    ),
+                                    flow = Flow(
+                                        id = trigger.flowId,
+                                        name = flows[trigger.flowId]!!.name
+                                    ),
+                                    cron = trigger.cron
+                                )
+                            }
+
                             else -> TODO()
                         }
                     }

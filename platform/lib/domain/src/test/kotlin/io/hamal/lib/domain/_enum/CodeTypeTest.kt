@@ -1,6 +1,5 @@
 package io.hamal.lib.domain._enum
 
-import io.hamal.lib.domain.vo.CodeType
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test

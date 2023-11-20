@@ -7,7 +7,6 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain._enum.HookMethod.Post
 import io.hamal.lib.domain._enum.TriggerType.*
 import io.hamal.lib.domain._enum.TriggerType.Hook
-import io.hamal.lib.domain.vo.FlowName
 import io.hamal.repository.api.*
 import io.hamal.repository.api.event.TriggerCreatedEvent
 import io.hamal.repository.api.log.BrokerRepository
@@ -36,7 +35,7 @@ class CreateTriggerHandler(
                     name = req.name,
                     correlationId = req.correlationId,
                     funcId = req.funcId,
-                    flowId = req.flowId ?: flowQueryRepository.get(FlowName("hamal")).id,
+                    flowId = req.flowId,
                     inputs = req.inputs,
                     duration = requireNotNull(req.duration) { "duration must not be null" }
                 )
@@ -53,7 +52,7 @@ class CreateTriggerHandler(
                         name = req.name,
                         correlationId = req.correlationId,
                         funcId = req.funcId,
-                        flowId = req.flowId ?: flowQueryRepository.get(FlowName("hamal")).id,
+                        flowId = req.flowId,
                         inputs = req.inputs,
                         topicId = topic.id,
                     )
@@ -71,7 +70,7 @@ class CreateTriggerHandler(
                         name = req.name,
                         correlationId = req.correlationId,
                         funcId = req.funcId,
-                        flowId = req.flowId ?: flowQueryRepository.get(FlowName("hamal")).id,
+                        flowId = req.flowId,
                         inputs = req.inputs,
                         hookId = hook.id,
                         hookMethods = req.hookMethods ?: setOf(Post)
@@ -87,7 +86,7 @@ class CreateTriggerHandler(
                     name = req.name,
                     correlationId = req.correlationId,
                     funcId = req.funcId,
-                    flowId = req.flowId ?: flowQueryRepository.get(FlowName("hamal")).id,
+                    flowId = req.flowId,
                     inputs = req.inputs,
                     cron = requireNotNull(req.cron) { "cron expression must not be null" }
                 )
