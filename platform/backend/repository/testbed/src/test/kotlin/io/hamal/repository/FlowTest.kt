@@ -315,6 +315,7 @@ internal class FlowRepositoryTest : AbstractUnitTest() {
                 assertThat(id, equalTo(FlowId(3)))
                 assertThat(groupId, equalTo(GroupId(4)))
                 assertThat(name, equalTo(FlowName("Flow-Three")))
+                assertThat(type, equalTo(FlowType.default))
             }
         }
 
@@ -335,12 +336,14 @@ internal class FlowRepositoryTest : AbstractUnitTest() {
                 assertThat(id, equalTo(FlowId(4)))
                 assertThat(groupId, equalTo(GroupId(5)))
                 assertThat(name, equalTo(FlowName("Flow-Four")))
+                assertThat(type, equalTo(FlowType.default))
             }
 
             with(result[1]) {
                 assertThat(id, equalTo(FlowId(3)))
                 assertThat(groupId, equalTo(GroupId(4)))
                 assertThat(name, equalTo(FlowName("Flow-Three")))
+                assertThat(type, equalTo(FlowType.default))
             }
         }
 

@@ -18,6 +18,7 @@ internal class FlowListControllerTest : FlowBaseControllerTest() {
 
         with(result.flows.first()) {
             assertThat(name, equalTo(FlowName("hamal")))
+            assertThat(type, equalTo(FlowType.default))
         }
     }
 
@@ -38,6 +39,7 @@ internal class FlowListControllerTest : FlowBaseControllerTest() {
             with(flows.first()) {
                 assertThat(id, equalTo(flowId))
                 assertThat(name, equalTo(FlowName("flow-one")))
+                assertThat(type, equalTo(FlowType.default))
             }
         }
     }

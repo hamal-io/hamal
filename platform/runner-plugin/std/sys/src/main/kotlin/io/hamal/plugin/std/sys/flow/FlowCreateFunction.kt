@@ -21,13 +21,20 @@ class FlowCreateFunction(
     FunctionOutput2Schema(ErrorType::class, MapType::class)
 ) {
     override fun invoke(ctx: FunctionContext, arg1: MapType): Pair<ErrorType?, MapType?> {
+
+        val type = if (arg1.findString("type") != null) {
+            FlowType(arg1.getString("type"))
+        } else {
+            null
+        }
+
         return try {
             val res = sdk.flow.create(
                 ctx[GroupId::class],
                 ApiFlowCreateReq(
                     name = FlowName(arg1.getString("name")),
                     inputs = FlowInputs(),
-                    type = FlowType("type") ?: null
+                    type = type
                 )
             )
 
