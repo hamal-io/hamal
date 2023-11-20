@@ -10,11 +10,8 @@ import {useAuth} from "@/hook/auth.ts";
 import {Dialog, DialogContent, DialogHeader, DialogTrigger} from "@/components/ui/dialog.tsx";
 import {Input} from "@/components/ui/input.tsx";
 import {Button, buttonVariants} from "@/components/ui/button.tsx";
-import {cn} from "@/utils";
-import {Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select.tsx";
 import {useTriggerFixedRateCreate} from "@/hook";
-import {useFuncList} from "@/hook/func.ts";
-import FormFuncSelect from "@/pages/app/flow-detail/components/form-func-select.tsx";
+import FormFuncSelect from "@/components/form/func-select.tsx";
 
 type FlowProps = {
     id: string;
@@ -29,8 +26,7 @@ type Prop = {
 const formSchema = z.object({
     name: z.string().min(2).max(50),
     funcId: z.string().min(1, "Function required"),
-    rate: z.number().min(1),
-    timeunit: z.string().min(2).max(50),
+    rate: z.number().min(1)
 })
 
 const CreateFixedRate: FC<Prop> = ({flow}) => {
@@ -41,44 +37,23 @@ const CreateFixedRate: FC<Prop> = ({flow}) => {
     const [isLoading, setLoading] = useState(false)
 
     const [createTrigger, submittedTrigger] = useTriggerFixedRateCreate()
-
-
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: "",
-            rate: 1,
-            timeunit: "Minute"
+            rate: 300,
         },
     })
 
     // 2. Define a submit handler.
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setLoading(true)
-
-        let timeUnit = 'S'
-
-        switch (values.timeunit) {
-            case "Second" : {
-                timeUnit = "S";
-                break
-            }
-            case "Minute" : {
-                timeUnit = "M";
-                break
-            }
-            case "Hour" : {
-                timeUnit = "H";
-                break
-            }
-        }
-
         try {
             createTrigger(
                 flow.id,
                 values.funcId,
                 values.name,
-                "PT" + values.rate + timeUnit
+                "PT" + values.rate + 'S'
             )
         } catch (e) {
             console.error(e)
@@ -96,6 +71,7 @@ const CreateFixedRate: FC<Prop> = ({flow}) => {
     useEffect(() => {
         if (submittedTrigger !== null) {
             setOpenDialog(false)
+            window.location.reload()
         }
     }, [submittedTrigger, navigate]);
 
@@ -131,48 +107,28 @@ const CreateFixedRate: FC<Prop> = ({flow}) => {
                                 )}
                             />
 
-                            <FormFuncSelect flowId={flow.id} form={form}/>
+                            <FormFuncSelect name='funcId' flowId={flow.id} form={form}/>
 
-                            <div className="flex flex-row">
-                                <FormField
-                                    control={form.control}
-                                    name="rate"
-                                    render={({field}) => (
-                                        <FormItem>
-                                            <FormControl>
-                                                <Input placeholder={"rate"} {...field} />
-                                            </FormControl>
-
-                                        </FormItem>
-                                    )}
-                                />
-
-                                <FormField
-                                    control={form.control}
-                                    name="timeunit"
-                                    render={({field}) => (
-                                        <FormItem>
-                                            <div className="relative w-max">
-                                                <FormControl>
-                                                    <select
-                                                        className={cn(
-                                                            buttonVariants({variant: "outline"}),
-                                                            "w-[200px] appearance-none bg-transparent font-normal"
-                                                        )}
-                                                        {...field}
-                                                    >
-                                                        <option value="Second">Seconds</option>
-                                                        <option value="Minute">Minutes</option>
-                                                        <option value="Hours">Hours</option>
-                                                    </select>
-                                                </FormControl>
-                                                <ChevronDownIcon className="absolute right-3 top-2.5 h-4 w-4 opacity-50"/>
-                                            </div>
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormMessage/>
-                            </div>
+                            <FormField
+                                control={form.control}
+                                name="rate"
+                                render={({field}) => (
+                                    <FormItem>
+                                        <FormLabel>Rate in seconds</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                placeholder="300" type="number" {...field}
+                                                onChange={event => field.onChange(+event.target.value)}
+                                            />
+                                        </FormControl>
+                                        <FormDescription>
+                                            Amount of seconds until function gets invoked again
+                                        </FormDescription>
+                                        <FormMessage/>
+                                    </FormItem>
+                                )}
+                            />
+                            <FormMessage/>
                             <Button type="submit">
                                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
                                 Create

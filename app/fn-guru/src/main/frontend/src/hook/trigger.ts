@@ -39,18 +39,27 @@ export const useTriggerFixedRateCreate = (): [TriggerFixedRateCreateAction, Trig
     return [fn, submission, loading, error]
 }
 
-type TriggerHookCreateAction = (flowId: string, funcId: string, name: string, hookId: string, abortController?: AbortController) => void
+type TriggerHookCreateProps = {
+    flowId: string;
+    hookId: string;
+    funcId: string;
+    name: string;
+    hookMethod: string;
+    abortController?: AbortController;
+}
+
+type TriggerHookCreateAction = (props: TriggerHookCreateProps) => void
 export const useTriggerHookCreate = (): [TriggerHookCreateAction, TriggerCreateSubmitted, boolean, Error] => {
     const [auth] = useAuth()
     const [post, submission, loading, error] = usePost<TriggerCreateSubmitted>()
-    const fn = useCallback(async (flowId: string, funcId: string, name: string, hookId: string, abortController?: AbortController) =>
+    const fn = useCallback(async ({flowId, funcId, name, hookId, hookMethod, abortController}: TriggerHookCreateProps) =>
         post(`/v1/flows/${flowId}/triggers`, {
             type: "Hook",
             name,
             funcId,
             inputs: {},
             hookId,
-            hookMethods: ["Post"]
+            hookMethods: [hookMethod]
         }, abortController), [auth]
     )
     return [fn, submission, loading, error]

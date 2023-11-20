@@ -12,7 +12,7 @@ import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {FlowListItem} from "@/types";
 import {useHookCreate, useTriggerHookCreate} from "@/hook";
-import FormFuncSelect from "@/pages/app/flow-detail/components/form-func-select.tsx";
+import FormFuncSelect from "@/components/form/func-select.tsx";
 
 type Prop = {
     flow: FlowListItem
@@ -31,40 +31,20 @@ const Create: FC<Prop> = ({flow}) => {
     const [isLoading, setLoading] = useState(false)
 
     const [createHook, submittedHook] = useHookCreate()
-
-    // const [triggerName, setTriggerName] = useState('')
-    // const [triggerFuncId, setTriggerFuncId] = useState('')
-    // const [createTrigger, submittedTrigger] = useTriggerHookCreate()
-
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: ""
         },
     })
-    //
-    // useEffect(() => {
-    //     if (submittedHook != null) {
-    //         createTrigger(submittedHook.flowId, triggerFuncId, triggerName, submittedHook.hookId)
-    //     }
-    // }, [submittedHook]);
 
-    // 2. Define a submit handler.
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setLoading(true)
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-
         try {
-            // setTriggerName(values.name)
-            // setTriggerFuncId(values.funcId)
             createHook(flow.id, values.name)
-
-
         } catch (e) {
             console.error(e)
         } finally {
-            // setLoading(false)
         }
 
     }
@@ -72,7 +52,7 @@ const Create: FC<Prop> = ({flow}) => {
     useEffect(() => {
         if (submittedHook !== null) {
             setOpenDialog(false)
-
+            window.location.reload()
         }
     }, [submittedHook, navigate]);
 
@@ -87,7 +67,7 @@ const Create: FC<Prop> = ({flow}) => {
                 </DialogTrigger>
 
                 <DialogContent>
-                    <DialogHeader>Create webhook</DialogHeader>
+                    <DialogHeader>Create a new webhook</DialogHeader>
 
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -107,8 +87,6 @@ const Create: FC<Prop> = ({flow}) => {
                                     </FormItem>
                                 )}
                             />
-
-                            {/*<FormFuncSelect flowId={flow.id} form={form}/>*/}
 
                             <Button type="submit">
                                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}

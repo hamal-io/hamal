@@ -6,21 +6,26 @@ import {HookWithTriggers} from "@/pages/app/flow-detail/pages/hook-list/type.tsx
 import * as z from "zod";
 import {useAuth} from "@/hook/auth.ts";
 import {useNavigate} from "react-router-dom";
-import {useHookCreate, useTriggerHookCreate} from "@/hook";
+import {useTriggerHookCreate, useTriggerListHook} from "@/hook";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Button} from "@/components/ui/button.tsx";
 import {Loader2, Plus} from "lucide-react";
-import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
-import {Input} from "@/components/ui/input.tsx";
-import FormFuncSelect from "@/pages/app/flow-detail/components/form-func-select.tsx";
+import {Form} from "@/components/ui/form.tsx";
+import {TriggerListItem} from "@/types";
+import FormFuncSelect from "@/components/form/func-select.tsx";
+import FormHttpMethodSelect from "@/components/form/http-method-select.tsx";
 
 type Prop = {
     item: HookWithTriggers
 }
 
+type HookTrigger = {}
+
 const Detail: FC<Prop> = ({item}) => {
     const [openDialog, setOpenDialog] = useState<boolean>(false)
+    const [triggerList, setTriggerList] = useState(item.trigger)
+
     return (
         <Card
             key={item.hook.id}
@@ -34,6 +39,10 @@ const Detail: FC<Prop> = ({item}) => {
                     flowId={item.hook.flow.id}
                     hookId={item.hook.id}
                     hookName={item.hook.name}
+                    trigger={triggerList}
+                    afterAdd={(item) => {
+                        window.location.reload()
+                    }}
                 />
             </CardHeader>
             <CardContent>
@@ -42,11 +51,11 @@ const Detail: FC<Prop> = ({item}) => {
                         https://hooks.fn.guru/{item.hook.id}
                     </div>
                     <div className="flex flex-col items-start justify-between ">
-                        {item.trigger.map(trigger => {
+                        {triggerList.map(trigger => {
                             return (
-                                <div className="flex" key={trigger.id}>
-                                    {trigger.name} - {trigger.func.name} - {trigger.hook.methods.join(',')}
-                                </div>
+                                <span className="flex justify-between w-full" key={trigger.id}>
+                                    <b>{trigger.hook.methods.join(',')} </b> {trigger.func.name}
+                                </span>
                             )
                         })}
                     </div>
@@ -64,50 +73,52 @@ type AddTriggerProps = {
     flowId: string,
     hookId: string;
     hookName: string;
+    trigger: Array<TriggerListItem>;
+    afterAdd: (triggerId: string) => void
 }
 
-const AddTrigger: FC<AddTriggerProps> = ({flowId, hookId, hookName}) => {
-    const [auth, setAuth] = useAuth()
+const AddTrigger: FC<AddTriggerProps> = ({flowId, hookId, hookName, trigger, afterAdd}) => {
     const navigate = useNavigate()
     const [openDialog, setOpenDialog] = useState<boolean>(false)
-    const props = {openModal: openDialog, setOpenModal: setOpenDialog}
-    const [isLoading, setLoading] = useState(false)
-
+    const [loading, setLoading] = useState<boolean>(false)
     const [createTrigger, submittedTrigger] = useTriggerHookCreate()
 
     const formSchema = z.object({
-        name: z.string().min(2).max(50),
         funcId: z.string().min(1, "Function required"),
+        httpMethod: z.string().min(1, "Http method required"),
     })
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: "",
             funcId: "",
+            httpMethod: ""
         },
     })
 
-    // 2. Define a submit handler.
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setLoading(true)
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-
         try {
-            createTrigger(flowId, values.funcId, `${hookName}-${values.name}`, hookId)
+            createTrigger({
+                flowId: flowId,
+                funcId: values.funcId,
+                name: `${hookName}-${trigger.length + 1}`,
+                hookId: hookId,
+                hookMethod: values.httpMethod
+            })
+
         } catch (e) {
             console.error(e)
         } finally {
             // setLoading(false)
         }
-
     }
 
     useEffect(() => {
         if (submittedTrigger !== null) {
+            afterAdd(submittedTrigger.triggerId)
             setOpenDialog(false)
-
+            form.control._reset()
         }
     }, [submittedTrigger, navigate]);
 
@@ -122,31 +133,14 @@ const AddTrigger: FC<AddTriggerProps> = ({flowId, hookId, hookName}) => {
                 </DialogTrigger>
 
                 <DialogContent>
-                    <DialogHeader>Create webhook</DialogHeader>
+                    <DialogHeader>Add trigger</DialogHeader>
 
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                            <FormField
-                                control={form.control}
-                                name="name"
-                                render={({field}) => (
-                                    <FormItem>
-                                        <FormLabel>Name</FormLabel>
-                                        <FormControl>
-                                            <Input placeholder="Webhook-one" {...field} />
-                                        </FormControl>
-                                        <FormDescription>
-                                            This is the name of your trigger.
-                                        </FormDescription>
-                                        <FormMessage/>
-                                    </FormItem>
-                                )}
-                            />
-
-                            <FormFuncSelect flowId={flowId} form={form}/>
-
+                            <FormFuncSelect name='funcId' flowId={flowId} form={form}/>
+                            <FormHttpMethodSelect name='httpMethod' form={form}/>
                             <Button type="submit">
-                                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
+                                {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
                                 Add
                             </Button>
                         </form>
