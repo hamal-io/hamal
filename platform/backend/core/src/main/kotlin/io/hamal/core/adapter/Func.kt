@@ -119,7 +119,7 @@ class FuncAdapter(
             correlationId = req.correlationId,
             inputs = req.inputs,
             code = func.code.toExecCode(),
-            events = listOf()
+            invocation = EmptyInvocation
         ).also(reqCmdRepository::queue).let(responseHandler)
     }
 
@@ -148,7 +148,7 @@ class FuncAdapter(
                 version = version,
                 value = null
             ),
-            events = listOf()
+            invocation = EmptyInvocation
         ).also(reqCmdRepository::queue).let(responseHandler)
     }
 

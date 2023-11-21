@@ -63,7 +63,7 @@ internal class EventTriggerService(
                                     object : InvokeFuncReq {
                                         override val correlationId = trigger.correlationId ?: CorrelationId.default
                                         override val inputs = InvocationInputs()
-                                        override val events = entries.map {
+                                        override val invocation = EventInvocation(entries.map {
                                             Event(
                                                 topic = EventTopic(
                                                     id = topic.id,
@@ -72,7 +72,7 @@ internal class EventTriggerService(
                                                 id = EventId(it.id.value),
                                                 payload = EventPayload(it.payload.value)
                                             )
-                                        }
+                                        })
                                     }
                                 ) {}
                             }

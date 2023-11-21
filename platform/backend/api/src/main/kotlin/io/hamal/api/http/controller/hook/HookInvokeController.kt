@@ -5,10 +5,7 @@ import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain._enum.HookMethod.*
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
-import io.hamal.lib.domain.vo.HookHeaders
-import io.hamal.lib.domain.vo.HookId
-import io.hamal.lib.domain.vo.HookParameters
-import io.hamal.lib.domain.vo.ReqId
+import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.HookQueryRepository
@@ -49,9 +46,11 @@ internal class HookInvokeController(
             status = Submitted,
             hookId = id,
             groupId = hook.groupId,
-            method = req.method(),
-            headers = req.headers(),
-            parameters = req.parameters()
+            invocation = HookInvocation(
+                method = req.method(),
+                headers = req.headers(),
+                parameters = req.parameters()
+            ),
         ).also(reqCmdRepository::queue)
         return ResponseEntity(Response(result), ACCEPTED)
     }

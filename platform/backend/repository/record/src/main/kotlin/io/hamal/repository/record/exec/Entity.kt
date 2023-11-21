@@ -25,7 +25,7 @@ data class ExecEntity(
     var code: ExecCode? = null,
     var plannedAt: Instant? = null,
     var scheduledAt: Instant? = null,
-    var events: List<Event>? = null,
+    var invocation: Invocation? = null,
     var result: ExecResult? = null,
     var state: ExecState? = null
 
@@ -43,7 +43,7 @@ data class ExecEntity(
                 correlation = rec.correlation,
                 inputs = rec.inputs,
                 code = rec.code,
-                events = rec.events,
+                invocation = rec.invocation,
                 plannedAt = Instant.now(), // FIXME
                 recordedAt = rec.recordedAt()
             )
@@ -108,7 +108,7 @@ data class ExecEntity(
             correlation = correlation,
             inputs = inputs ?: ExecInputs(MapType()),
             code = code ?: ExecCode(),
-            events = events ?: listOf()
+            invocation = invocation!!
         )
 
         if (status == ExecStatus.Planned) return plannedExec
@@ -123,7 +123,16 @@ data class ExecEntity(
         if (status == ExecStatus.Started) return startedExec
 
         return when (status) {
-            ExecStatus.Completed -> CompletedExec(cmdId, id, recordedAt .toUpdatedAt(),startedExec, CompletedAt.now(), result!!, state!!)
+            ExecStatus.Completed -> CompletedExec(
+                cmdId,
+                id,
+                recordedAt.toUpdatedAt(),
+                startedExec,
+                CompletedAt.now(),
+                result!!,
+                state!!
+            )
+
             ExecStatus.Failed -> FailedExec(cmdId, id, recordedAt.toUpdatedAt(), startedExec, FailedAt.now(), result!!)
             else -> TODO()
         }

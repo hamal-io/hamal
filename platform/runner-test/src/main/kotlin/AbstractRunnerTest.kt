@@ -63,7 +63,8 @@ abstract class AbstractRunnerTest {
 
     fun unitOfWork(
         code: String,
-        inputs: ExecInputs = ExecInputs()
+        inputs: ExecInputs = ExecInputs(),
+        invocation: Invocation = EmptyInvocation
     ) = UnitOfWork(
         id = ExecId(1234),
         flowId = FlowId(98876),
@@ -72,6 +73,7 @@ abstract class AbstractRunnerTest {
         state = State(),
         code = CodeValue(code),
         correlation = null,
+        invocation = invocation,
         apiHost = ApiHost("http://test-host")
     )
 }

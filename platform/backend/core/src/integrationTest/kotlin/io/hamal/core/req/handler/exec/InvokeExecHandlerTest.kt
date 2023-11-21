@@ -2,7 +2,6 @@ package io.hamal.core.req.handler.exec
 
 import io.hamal.core.req.handler.BaseReqHandlerTest
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.vo.ReqId
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.MapType
@@ -30,7 +29,7 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
                 code = ExecCode(value = CodeValue("code")),
                 funcId = null,
                 correlationId = null,
-                events = listOf()
+                invocation = EventInvocation(listOf())
             )
         )
 
@@ -80,7 +79,7 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
                     id = CodeId(4455),
                     version = CodeVersion(5544),
                 ),
-                events = listOf()
+                invocation = EventInvocation(listOf())
             )
         )
 
@@ -148,7 +147,7 @@ internal class InvokeExecHandlerTest : BaseReqHandlerTest() {
                 id = CodeId(5555),
                 version = CodeVersion(6666),
             ),
-            events = listOf()
+            invocation = EventInvocation(listOf())
         )
     }
     //@formatter:on

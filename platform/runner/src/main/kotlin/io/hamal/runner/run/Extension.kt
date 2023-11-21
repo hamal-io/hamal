@@ -1,8 +1,6 @@
 package io.hamal.runner.run
 
-import io.hamal.lib.domain.vo.ApiHost
-import io.hamal.lib.domain.vo.Event
-import io.hamal.lib.domain.vo.ExecId
+import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extension.plugin.RunnerPluginExtension
 import io.hamal.lib.kua.extension.plugin.RunnerPluginExtensionFactory
@@ -18,13 +16,20 @@ class RunnerContextFactory(
     private val executionCtx: RunnerContext
 ) : RunnerPluginExtensionFactory {
     override fun create(sandbox: Sandbox): RunnerPluginExtension {
+        val invocation = executionCtx[Invocation::class]
+        val events = if (invocation is EventInvocation) {
+            invocation.events
+        } else {
+            listOf()
+        }
+
         return RunnerPluginExtension(
             name = "context",
             internals = mapOf(
                 "api" to MapType(
                     "host" to StringType(executionCtx[ApiHost::class].value),
                 ),
-                "events" to sandbox.invocationEvents(executionCtx[RunnerInvocationEvents::class].events),
+                "events" to sandbox.invocationEvents(events),
                 "exec_id" to StringType(executionCtx[ExecId::class].value.value.toString(16)),
                 "emit" to EmitFunction(executionCtx),
                 "fail" to FailRunFunction,

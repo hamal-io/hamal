@@ -8,7 +8,7 @@ import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.util.TimeUtils.now
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.vo.CorrelationId
-import io.hamal.lib.domain.vo.Event
+import io.hamal.lib.domain.vo.EmptyInvocation
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.repository.api.FixedRateTrigger
@@ -83,7 +83,7 @@ internal fun FixedRateTriggerService.requestInvocation(trigger: FixedRateTrigger
         object : InvokeFuncReq {
             override val correlationId = trigger.correlationId ?: CorrelationId.default
             override val inputs = InvocationInputs()
-            override val events = listOf<Event>()
+            override val invocation = EmptyInvocation
         },
     ) {}
 }

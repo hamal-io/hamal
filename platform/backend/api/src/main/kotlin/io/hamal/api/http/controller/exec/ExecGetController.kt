@@ -26,7 +26,7 @@ internal class ExecGetController(
                         status = exec.status,
                         correlation = exec.correlation,
                         inputs = exec.inputs,
-                        events = exec.events,
+                        invocation = exec.invocation,
                         result = if (exec is CompletedExec) {
                             exec.result
                         } else if (exec is FailedExec) {

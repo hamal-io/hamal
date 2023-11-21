@@ -59,3 +59,4 @@ class ExecResult(override val value: MapType = MapType()) : Map() {
 class ExecState(override val value: MapType = MapType()) : Map() {
     internal object Serializer : InputsSerializer<ExecState>(::ExecState)
 }
+

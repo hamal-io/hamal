@@ -41,7 +41,7 @@ internal class EventTest : AbstractExecuteTest() {
                     assert(context.api.host == 'http://test-api')
                 """.trimIndent()
                 ),
-                events = events,
+                invocation = EventInvocation(events),
                 apiHost = ApiHost("http://test-api")
             )
         )
@@ -60,7 +60,7 @@ internal class EventTest : AbstractExecuteTest() {
                 inputs = ExecInputs(),
                 state = State(),
                 code = CodeValue("require('test').fn()"),
-                events = events,
+                invocation = EventInvocation(events),
                 apiHost = ApiHost("http://test-api")
             )
         )
@@ -69,8 +69,9 @@ internal class EventTest : AbstractExecuteTest() {
 
     class TestFunction(var result: List<Event>? = null) : Function0In0Out() {
         override fun invoke(ctx: FunctionContext) {
-            val invocationEvents = ctx[RunnerInvocationEvents::class]
-            result = invocationEvents.events
+            val invocation = ctx[Invocation::class]
+            check(invocation is EventInvocation)
+            result = invocation.events
         }
     }
 

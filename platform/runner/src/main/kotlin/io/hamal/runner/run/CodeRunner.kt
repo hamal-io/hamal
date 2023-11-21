@@ -34,7 +34,7 @@ class CodeRunnerImpl(
 
             runnerContext = RunnerContext(
                 unitOfWork.state,
-                RunnerInvocationEvents(unitOfWork.events)
+                unitOfWork.invocation
             )
             runnerContext[ExecId::class] = unitOfWork.id
             runnerContext[FlowId::class] = unitOfWork.flowId

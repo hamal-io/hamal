@@ -27,7 +27,7 @@ data class ExecPlannedRecord(
     val correlation: Correlation?,
     val inputs: ExecInputs,
     val code: ExecCode,
-    val events: List<Event>
+    val invocation: Invocation
 ) : ExecRecord()
 
 @Serializable

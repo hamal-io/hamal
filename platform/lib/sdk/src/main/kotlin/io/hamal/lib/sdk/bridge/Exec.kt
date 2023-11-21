@@ -51,7 +51,7 @@ data class BridgeUnitOfWorkList(
         val state: State,
         val code: CodeValue,
         val correlation: Correlation? = null,
-        val events: List<Event>
+        val invocation: Invocation
     )
 }
 

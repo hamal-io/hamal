@@ -1,6 +1,5 @@
 package io.hamal.repository.api.submitted_req
 
-import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable
@@ -31,7 +30,5 @@ data class HookInvokeSubmitted(
     override var status: ReqStatus,
     val hookId: HookId,
     val groupId: GroupId,
-    val method: HookMethod,
-    val headers: HookHeaders,
-    val parameters: HookParameters
+    val invocation: HookInvocation
 ) : Submitted

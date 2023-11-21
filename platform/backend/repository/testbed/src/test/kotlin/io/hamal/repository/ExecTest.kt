@@ -38,11 +38,13 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                     ),
                     inputs = ExecInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
                     code = ExecCode(value = CodeValue("40 + 2")),
-                    events = listOf(
-                        Event(
-                            topic = EventTopic(id = TopicId(90), name = TopicName("test-topic")),
-                            id = EventId(95),
-                            payload = EventPayload(MapType(mutableMapOf("answer" to NumberType(42))))
+                    invocation = EventInvocation(
+                        listOf(
+                            Event(
+                                topic = EventTopic(id = TopicId(90), name = TopicName("test-topic")),
+                                id = EventId(95),
+                                payload = EventPayload(MapType(mutableMapOf("answer" to NumberType(42))))
+                            )
                         )
                     )
                 )
@@ -359,12 +361,14 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                 assertThat(inputs, equalTo(ExecInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
                 assertThat(code, equalTo(ExecCode(value = CodeValue("'13'..'37'"))))
                 assertThat(
-                    events, equalTo(
-                        listOf(
-                            Event(
-                                topic = EventTopic(id = TopicId(90), name = TopicName("test-topic")),
-                                id = EventId(95),
-                                payload = EventPayload(MapType(mutableMapOf("answer" to NumberType(42))))
+                    invocation, equalTo(
+                        EventInvocation(
+                            listOf(
+                                Event(
+                                    topic = EventTopic(id = TopicId(90), name = TopicName("test-topic")),
+                                    id = EventId(95),
+                                    payload = EventPayload(MapType(mutableMapOf("answer" to NumberType(42))))
+                                )
                             )
                         )
                     )
@@ -401,12 +405,14 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                 assertThat(inputs, equalTo(ExecInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
                 assertThat(code, equalTo(ExecCode(value = CodeValue("'13'..'37'"))))
                 assertThat(
-                    events, equalTo(
-                        listOf(
-                            Event(
-                                topic = EventTopic(id = TopicId(90), name = TopicName("test-topic")),
-                                id = EventId(95),
-                                payload = EventPayload(MapType(mutableMapOf("answer" to NumberType(42))))
+                    invocation, equalTo(
+                        EventInvocation(
+                            listOf(
+                                Event(
+                                    topic = EventTopic(id = TopicId(90), name = TopicName("test-topic")),
+                                    id = EventId(95),
+                                    payload = EventPayload(MapType(mutableMapOf("answer" to NumberType(42))))
+                                )
                             )
                         )
                     )
@@ -576,12 +582,14 @@ private fun assertBaseExec(exec: Exec) {
     )
     assertThat(exec.code, equalTo(ExecCode(value = CodeValue("40 + 2"))))
     assertThat(
-        exec.events, equalTo(
-            listOf(
-                Event(
-                    topic = EventTopic(id = TopicId(90), name = TopicName("test-topic")),
-                    id = EventId(95),
-                    payload = EventPayload(MapType(mutableMapOf("answer" to NumberType(42))))
+        exec.invocation, equalTo(
+            EventInvocation(
+                listOf(
+                    Event(
+                        topic = EventTopic(id = TopicId(90), name = TopicName("test-topic")),
+                        id = EventId(95),
+                        payload = EventPayload(MapType(mutableMapOf("answer" to NumberType(42))))
+                    )
                 )
             )
         )
@@ -601,11 +609,13 @@ private fun ExecRepository.planExec(
         ),
         inputs = ExecInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
         code = ExecCode(value = CodeValue("40 + 2")),
-        events = listOf(
-            Event(
-                topic = EventTopic(id = TopicId(90), name = TopicName("test-topic")),
-                id = EventId(95),
-                payload = EventPayload(MapType(mutableMapOf("answer" to NumberType(42))))
+        invocation = EventInvocation(
+            listOf(
+                Event(
+                    topic = EventTopic(id = TopicId(90), name = TopicName("test-topic")),
+                    id = EventId(95),
+                    payload = EventPayload(MapType(mutableMapOf("answer" to NumberType(42))))
+                )
             )
         )
     )
@@ -637,11 +647,13 @@ fun ExecRepository.createExec(
             correlation = correlation,
             inputs = ExecInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
             code = ExecCode(value = CodeValue("'13'..'37'")),
-            events = listOf(
-                Event(
-                    topic = EventTopic(id = TopicId(90), name = TopicName("test-topic")),
-                    id = EventId(95),
-                    payload = EventPayload(MapType(mutableMapOf("answer" to NumberType(42))))
+            invocation = EventInvocation(
+                listOf(
+                    Event(
+                        topic = EventTopic(id = TopicId(90), name = TopicName("test-topic")),
+                        id = EventId(95),
+                        payload = EventPayload(MapType(mutableMapOf("answer" to NumberType(42))))
+                    )
                 )
             )
         )
