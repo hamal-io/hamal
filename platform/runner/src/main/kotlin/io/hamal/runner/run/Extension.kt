@@ -6,6 +6,7 @@ import io.hamal.lib.kua.extension.plugin.RunnerPluginExtension
 import io.hamal.lib.kua.extension.plugin.RunnerPluginExtensionFactory
 import io.hamal.lib.kua.table.TableProxyArray
 import io.hamal.lib.kua.type.MapType
+import io.hamal.lib.kua.type.NilType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.kua.type.toProxyMap
 import io.hamal.runner.run.function.CompleteRunFunction
@@ -17,10 +18,21 @@ class RunnerContextFactory(
 ) : RunnerPluginExtensionFactory {
     override fun create(sandbox: Sandbox): RunnerPluginExtension {
         val invocation = executionCtx[Invocation::class]
+
         val events = if (invocation is EventInvocation) {
-            invocation.events
+            sandbox.invocationEvents(invocation.events)
         } else {
-            listOf()
+            NilType
+        }
+
+        val hook = if (invocation is HookInvocation) {
+            MapType(
+                "method" to StringType(invocation.method.toString()),
+                "headers" to invocation.headers.value,
+                "parameters" to invocation.parameters.value
+            )
+        } else {
+            NilType
         }
 
         return RunnerPluginExtension(
@@ -29,7 +41,8 @@ class RunnerContextFactory(
                 "api" to MapType(
                     "host" to StringType(executionCtx[ApiHost::class].value),
                 ),
-                "events" to sandbox.invocationEvents(events),
+                "events" to events,
+                "hook" to hook,
                 "exec_id" to StringType(executionCtx[ExecId::class].value.value.toString(16)),
                 "emit" to EmitFunction(executionCtx),
                 "fail" to FailRunFunction,
