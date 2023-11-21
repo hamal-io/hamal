@@ -1,5 +1,6 @@
 package io.hamal.repository.memory.record
 
+import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.repository.api.*
 import io.hamal.repository.api.TriggerCmdRepository.*
@@ -129,7 +130,8 @@ class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord,
                     name = cmd.name,
                     inputs = cmd.inputs,
                     duration = cmd.duration,
-                    correlationId = cmd.correlationId
+                    correlationId = cmd.correlationId,
+                    status = cmd.status
                 )
             )
             (currentVersion(triggerId) as FixedRateTrigger).also(CurrentTriggerProjection::apply)
@@ -152,7 +154,8 @@ class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord,
                         name = cmd.name,
                         inputs = cmd.inputs,
                         topicId = cmd.topicId,
-                        correlationId = cmd.correlationId
+                        correlationId = cmd.correlationId,
+                        status = cmd.status
                     )
                 )
                 (currentVersion(triggerId) as EventTrigger).also(CurrentTriggerProjection::apply)
@@ -177,7 +180,8 @@ class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord,
                         inputs = cmd.inputs,
                         hookId = cmd.hookId,
                         hookMethods = cmd.hookMethods,
-                        correlationId = cmd.correlationId
+                        correlationId = cmd.correlationId,
+                        status = cmd.status
                     )
                 )
                 (currentVersion(triggerId) as HookTrigger).also(CurrentTriggerProjection::apply)
@@ -201,10 +205,40 @@ class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord,
                         name = cmd.name,
                         inputs = cmd.inputs,
                         cron = cmd.cron,
-                        correlationId = cmd.correlationId
+                        correlationId = cmd.correlationId,
+                        status = cmd.status
                     )
                 )
                 (currentVersion(triggerId) as CronTrigger).also(CurrentTriggerProjection::apply)
+            }
+        }
+    }
+
+    override fun set(triggerId: TriggerId, cmd: SetTriggerCmd): Trigger {
+        return lock.withLock {
+            if (commandAlreadyApplied(cmd.id, triggerId)) {
+                versionOf(triggerId, cmd.id)
+            } else {
+                val rec: TriggerRecord = if (cmd.status == TriggerStatus.Active) {
+                    ActiveTriggerRecord(
+                        cmdId = cmd.id,
+                        entityId = triggerId,
+                        correlationId = cmd.correlationId
+                    )
+                } else {
+                    InactiveTriggerRecord(
+                        cmdId = cmd.id,
+                        entityId = triggerId,
+                        correlationId = cmd.correlationId
+                    )
+                }
+
+
+
+                store(
+                    rec
+                )
+                (currentVersion(triggerId)).also(CurrentTriggerProjection::apply)
             }
         }
     }
@@ -223,8 +257,4 @@ class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord,
     }
 
     override fun close() {}
-
-    override fun set(id: TriggerId, cmd: SetTriggerCmd): Trigger {
-        TODO("93")
-    }
 }

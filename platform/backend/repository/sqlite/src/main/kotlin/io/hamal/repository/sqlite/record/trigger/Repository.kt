@@ -1,5 +1,6 @@
 package io.hamal.repository.sqlite.record.trigger
 
+import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.*
@@ -69,6 +70,7 @@ class SqliteTriggerRepository(
                         name = cmd.name,
                         inputs = cmd.inputs,
                         duration = cmd.duration,
+                        status = cmd.status,
                         correlationId = cmd.correlationId
                     )
                 )
@@ -97,6 +99,7 @@ class SqliteTriggerRepository(
                         name = cmd.name,
                         inputs = cmd.inputs,
                         topicId = cmd.topicId,
+                        status = cmd.status,
                         correlationId = cmd.correlationId
                     )
                 )
@@ -126,6 +129,7 @@ class SqliteTriggerRepository(
                         inputs = cmd.inputs,
                         hookId = cmd.hookId,
                         hookMethods = cmd.hookMethods,
+                        status = cmd.status,
                         correlationId = cmd.correlationId
                     )
                 )
@@ -154,6 +158,7 @@ class SqliteTriggerRepository(
                         name = cmd.name,
                         inputs = cmd.inputs,
                         cron = cmd.cron,
+                        status = cmd.status,
                         correlationId = cmd.correlationId
                     )
                 )
@@ -164,6 +169,36 @@ class SqliteTriggerRepository(
             }
         }
     }
+
+    override fun set(triggerId: TriggerId, cmd: SetTriggerCmd): Trigger {
+        return tx {
+            if (commandAlreadyApplied(cmd.id, triggerId)) {
+                versionOf(triggerId, cmd.id)
+            } else {
+                val rec: TriggerRecord = if (cmd.status == TriggerStatus.Active) {
+                    ActiveTriggerRecord(
+                        cmdId = cmd.id,
+                        entityId = triggerId,
+                        correlationId = cmd.correlationId
+                    )
+                } else {
+                    InactiveTriggerRecord(
+                        cmdId = cmd.id,
+                        entityId = triggerId,
+                        correlationId = cmd.correlationId
+                    )
+                }
+
+                store(
+                    rec
+                )
+                (currentVersion(triggerId))
+                    .also { ProjectionCurrent.upsert(this, it) }
+                    .also { ProjectionUniqueName.upsert(this, it) }
+            }
+        }
+    }
+
 
     override fun find(triggerId: TriggerId): Trigger? {
         return ProjectionCurrent.find(connection, triggerId)
@@ -177,7 +212,5 @@ class SqliteTriggerRepository(
         return ProjectionCurrent.count(connection, query)
     }
 
-    override fun set(id: TriggerId, cmd: SetTriggerCmd): Trigger {
-        TODO("93")
-    }
+
 }

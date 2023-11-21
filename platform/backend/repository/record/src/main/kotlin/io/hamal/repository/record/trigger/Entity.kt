@@ -54,7 +54,8 @@ data class TriggerEntity(
                 inputs = rec.inputs,
                 correlationId = rec.correlationId,
                 duration = rec.duration,
-                recordedAt = rec.recordedAt()
+                recordedAt = rec.recordedAt(),
+                status = rec.status
             )
 
             is EventTriggerCreatedRecord -> copy(
@@ -69,7 +70,8 @@ data class TriggerEntity(
                 inputs = rec.inputs,
                 correlationId = rec.correlationId,
                 topicId = rec.topicId,
-                recordedAt = rec.recordedAt()
+                recordedAt = rec.recordedAt(),
+                status = rec.status
             )
 
             is HookTriggerCreatedRecord -> copy(
@@ -85,7 +87,8 @@ data class TriggerEntity(
                 correlationId = rec.correlationId,
                 hookId = rec.hookId,
                 hookMethods = rec.hookMethods,
-                recordedAt = rec.recordedAt()
+                recordedAt = rec.recordedAt(),
+                status = rec.status
             )
 
             is CronTriggerCreatedRecord -> copy(
@@ -100,8 +103,19 @@ data class TriggerEntity(
                 inputs = rec.inputs,
                 correlationId = rec.correlationId,
                 cron = rec.cron,
-                recordedAt = rec.recordedAt()
+                recordedAt = rec.recordedAt(),
+                status = rec.status
             )
+
+            /*
+              TODO("93")
+            is ActiveTriggerRecord -> copy / apply ??(
+                  status -> active
+              )
+
+              is InactiveTriggerRecord -> copy(
+                  status -> inactive
+              )*/
         }
     }
 
@@ -169,7 +183,7 @@ data class TriggerEntity(
 
 fun List<TriggerRecord>.createEntity(): TriggerEntity {
     check(isNotEmpty()) { "At least one record is required" }
-    val firstRecord = first()
+    val firstRecord: TriggerRecord = first()
 
     check(
         firstRecord is FixedRateTriggerCreatedRecord ||

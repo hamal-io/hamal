@@ -19,7 +19,7 @@ interface TriggerCmdRepository : CmdRepository {
     fun create(cmd: CreateEventCmd): EventTrigger
     fun create(cmd: CreateHookCmd): HookTrigger
     fun create(cmd: CreateCronCmd): CronTrigger
-    fun set(id: TriggerId, cmd: SetTriggerCmd): Trigger
+    fun set(triggerId: TriggerId, cmd: SetTriggerCmd): Trigger
 
     data class CreateFixedRateCmd(
         val id: CmdId,
@@ -30,7 +30,8 @@ interface TriggerCmdRepository : CmdRepository {
         val flowId: FlowId,
         val inputs: TriggerInputs,
         val duration: Duration,
-        val correlationId: CorrelationId? = null
+        val correlationId: CorrelationId? = null,
+        val status: TriggerStatus = TriggerStatus.Active
     )
 
     data class CreateEventCmd(
@@ -42,7 +43,8 @@ interface TriggerCmdRepository : CmdRepository {
         val flowId: FlowId,
         val inputs: TriggerInputs,
         val topicId: TopicId,
-        val correlationId: CorrelationId? = null
+        val correlationId: CorrelationId? = null,
+        val status: TriggerStatus = TriggerStatus.Active
     )
 
     data class CreateHookCmd(
@@ -55,7 +57,8 @@ interface TriggerCmdRepository : CmdRepository {
         val inputs: TriggerInputs,
         val hookId: HookId,
         val hookMethods: Set<HookMethod>,
-        val correlationId: CorrelationId? = null
+        val correlationId: CorrelationId? = null,
+        val status: TriggerStatus = TriggerStatus.Active
     )
 
     data class CreateCronCmd(
@@ -67,13 +70,14 @@ interface TriggerCmdRepository : CmdRepository {
         val flowId: FlowId,
         val inputs: TriggerInputs,
         val cron: CronPattern,
-        val correlationId: CorrelationId? = null
+        val correlationId: CorrelationId? = null,
+        val status: TriggerStatus = TriggerStatus.Active
     )
 
     data class SetTriggerCmd(
         val id: CmdId,
         val status: TriggerStatus,
-        //TODO-93 val correlationId: CorrelationId? = null
+        val correlationId: CorrelationId? = null
     )
 }
 
@@ -96,7 +100,6 @@ interface TriggerQueryRepository {
         var flowIds: List<FlowId> = listOf()
     )
 }
-
 
 @Serializable
 sealed interface Trigger : DomainObject<TriggerId> {
