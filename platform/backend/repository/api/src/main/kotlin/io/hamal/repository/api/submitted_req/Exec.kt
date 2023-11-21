@@ -15,7 +15,7 @@ data class ExecInvokeSubmitted(
     val correlationId: CorrelationId?,
     val inputs: InvocationInputs,
     val code: ExecCode,
-    val events: List<Event>
+    val invocation: Invocation
 ) : Submitted
 
 @Serializable

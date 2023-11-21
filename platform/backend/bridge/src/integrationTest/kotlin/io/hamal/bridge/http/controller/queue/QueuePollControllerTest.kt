@@ -21,7 +21,8 @@ internal class QueuePollControllerTest : BaseQueueControllerTest() {
         createExec(
             execId = generateDomainId(::ExecId),
             status = Queued,
-            code = CodeValue("40 + 2")
+            code = CodeValue("40 + 2"),
+            invocation = EmptyInvocation
         )
         with(dequeue()) {
             assertThat(work, hasSize(1))
@@ -47,7 +48,8 @@ internal class QueuePollControllerTest : BaseQueueControllerTest() {
                 funcId = FuncId(123),
                 correlationId = CorrelationId("_some_chosen_correlation_@")
             ),
-            code = CodeValue("40 + 2")
+            code = CodeValue("40 + 2"),
+            invocation = EmptyInvocation
         )
         with(dequeue()) {
             assertThat(work, hasSize(1))

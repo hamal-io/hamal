@@ -1,16 +1,15 @@
 package io.hamal.runner.run
 
-import io.hamal.lib.domain.vo.Event
-import io.hamal.lib.domain.vo.EventToSubmit
 import io.hamal.lib.domain.State
+import io.hamal.lib.domain.vo.EventToSubmit
+import io.hamal.lib.domain.vo.Invocation
 import io.hamal.lib.kua.SandboxContext
 import kotlin.reflect.KClass
 
-data class RunnerInvocationEvents(val events: List<Event>)
 
 class RunnerContext(
     val state: State,
-    invocationEvents: RunnerInvocationEvents
+    val invocation: Invocation
 ) : SandboxContext {
 
 
@@ -32,7 +31,7 @@ class RunnerContext(
 
 
     init {
-        this[RunnerInvocationEvents::class] = invocationEvents
+        this[Invocation::class] = invocation
     }
 
 }

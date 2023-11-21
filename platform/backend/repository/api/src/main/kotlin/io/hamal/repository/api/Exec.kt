@@ -2,8 +2,8 @@ package io.hamal.repository.api
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.DomainObject
-import io.hamal.lib.common.domain.UpdatedAt
 import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.domain.UpdatedAt
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.*
@@ -29,7 +29,7 @@ interface ExecCmdRepository : CmdRepository {
         val correlation: Correlation?,
         val inputs: ExecInputs,
         val code: ExecCode,
-        val events: List<Event>
+        val invocation: Invocation
     )
 
     data class ScheduleCmd(
@@ -94,7 +94,7 @@ sealed class Exec : DomainObject<ExecId> {
     abstract val correlation: Correlation?
     abstract val inputs: ExecInputs
     abstract val code: ExecCode
-    abstract val events: List<Event>
+    abstract val invocation: Invocation
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -125,7 +125,7 @@ class PlannedExec(
     override val correlation: Correlation?,
     override val inputs: ExecInputs,
     override val code: ExecCode,
-    override val events: List<Event>,
+    override val invocation: Invocation,
 // FIXME    val plannedAt: PlannedAt
 ) : Exec() {
     override val status = ExecStatus.Planned
@@ -150,7 +150,7 @@ class ScheduledExec(
     override val correlation get() = plannedExec.correlation
     override val inputs get() = plannedExec.inputs
     override val code get() = plannedExec.code
-    override val events get() = plannedExec.events
+    override val invocation get() = plannedExec.invocation
     override fun toString(): String {
         return "ScheduledExec($id)"
     }
@@ -171,7 +171,7 @@ class QueuedExec(
     override val correlation get() = scheduledExec.correlation
     override val inputs get() = scheduledExec.inputs
     override val code get() = scheduledExec.code
-    override val events get() = scheduledExec.events
+    override val invocation get() = scheduledExec.invocation
     override fun toString(): String {
         return "QueuedExec($id)"
     }
@@ -191,7 +191,7 @@ class StartedExec(
     override val correlation get() = queuedExec.correlation
     override val inputs get() = queuedExec.inputs
     override val code get() = queuedExec.code
-    override val events get() = queuedExec.events
+    override val invocation get() = queuedExec.invocation
     override fun toString(): String {
         return "StartedExec($id)"
     }
@@ -213,7 +213,7 @@ class CompletedExec(
     override val correlation get() = startedExec.correlation
     override val inputs get() = startedExec.inputs
     override val code get() = startedExec.code
-    override val events get() = startedExec.events
+    override val invocation get() = startedExec.invocation
 
     override fun toString(): String {
         return "CompletedExec($id)"
@@ -236,7 +236,7 @@ class FailedExec(
     override val correlation get() = startedExec.correlation
     override val inputs get() = startedExec.inputs
     override val code get() = startedExec.code
-    override val events get() = startedExec.events
+    override val invocation get() = startedExec.invocation
     override fun toString(): String {
         return "FailedExec($id)"
     }

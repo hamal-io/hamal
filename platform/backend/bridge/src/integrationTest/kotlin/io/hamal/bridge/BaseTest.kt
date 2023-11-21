@@ -168,7 +168,7 @@ internal abstract class BaseTest {
         codeId: CodeId? = null,
         codeVersion: CodeVersion? = null,
         code: CodeValue? = CodeValue(""),
-        events: List<Event> = listOf()
+        invocation: Invocation
     ): Exec {
 
         val planedExec = execCmdRepository.plan(
@@ -184,7 +184,7 @@ internal abstract class BaseTest {
                     version = codeVersion,
                     value = code
                 ),
-                events = events
+                invocation = invocation
             )
         )
 

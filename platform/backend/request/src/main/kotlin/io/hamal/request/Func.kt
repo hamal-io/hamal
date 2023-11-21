@@ -18,12 +18,12 @@ interface UpdateFuncReq {
 interface InvokeFuncReq {
     val correlationId: CorrelationId?
     val inputs: InvocationInputs
-    val events: List<Event>
+    val invocation: Invocation
 }
 
 interface InvokeFuncVersionReq {
     val correlationId: CorrelationId?
     val inputs: InvocationInputs
-    val events: List<Event>
+    val invocation: Invocation
     val version: CodeVersion?
 }

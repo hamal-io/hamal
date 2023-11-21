@@ -22,7 +22,7 @@ class HttpConnector(
                     state = it.state,
                     code = it.code,
                     correlation = it.correlation,
-                    events = it.events,
+                    invocation = it.invocation,
                     apiHost = apiHost
                 )
             }

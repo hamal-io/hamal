@@ -46,7 +46,7 @@ class InvokeExecHandler(
                 correlation = correlation,
                 inputs = merge(func?.inputs ?: FuncInputs(), req.inputs),
                 code = req.code,
-                events = req.events,
+                invocation = req.invocation
             )
         )
     }

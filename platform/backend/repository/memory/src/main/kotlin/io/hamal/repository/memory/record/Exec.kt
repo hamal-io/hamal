@@ -92,7 +92,7 @@ class MemoryExecRepository : MemoryRecordRepository<ExecId, ExecRecord, Exec>(
                         correlation = cmd.correlation,
                         inputs = cmd.inputs,
                         code = cmd.code,
-                        events = cmd.events
+                        invocation = cmd.invocation
                     )
                 )
                 (currentVersion(execId) as PlannedExec).also(CurrentExecProjection::apply)

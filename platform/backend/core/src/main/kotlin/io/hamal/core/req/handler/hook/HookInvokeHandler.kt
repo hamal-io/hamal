@@ -6,7 +6,7 @@ import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.TriggerType.Hook
 import io.hamal.lib.domain.vo.CorrelationId
-import io.hamal.lib.domain.vo.Event
+import io.hamal.lib.domain.vo.Invocation
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.repository.api.*
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
@@ -38,7 +38,7 @@ class HookInvokeHandler(
             )
         )
             .filterIsInstance<HookTrigger>()
-            .filter { it.hookMethods.contains(req.method) }
+            .filter { it.hookMethods.contains(req.invocation.method) }
 
         val funcs = funcQueryRepository.list(
             FuncQueryRepository.FuncQuery(
@@ -53,7 +53,7 @@ class HookInvokeHandler(
                 object : InvokeFuncReq {
                     override val correlationId = trigger.correlationId ?: CorrelationId.default
                     override val inputs = InvocationInputs()
-                    override val events = listOf<Event>()
+                    override val invocation: Invocation = req.invocation
                 }
             ) {}
         }

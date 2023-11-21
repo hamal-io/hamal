@@ -33,7 +33,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
                 ApiFuncInvokeReq(
                     correlationId = CorrelationId("some-correlation-id"),
                     inputs = InvocationInputs(),
-                    events = listOf()
+                    invocation = EmptyInvocation
                 )
             ).execute()
 
@@ -73,7 +73,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
                 ApiFuncInvokeReq(
                     inputs = InvocationInputs(),
                     correlationId = null,
-                    events = listOf(),
+                    invocation = EmptyInvocation,
                 )
             ).execute()
 
@@ -123,7 +123,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
                 ApiInvokeFuncVersionReq(
                     correlationId = CorrelationId("some-correlation-id"),
                     inputs = InvocationInputs(),
-                    events = listOf(),
+                    invocation = EmptyInvocation,
                     version = CodeVersion(5)
                 )
             ).execute()
@@ -168,7 +168,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
                 ApiInvokeFuncVersionReq(
                     correlationId = CorrelationId("some-correlation-id"),
                     inputs = InvocationInputs(),
-                    events = listOf(),
+                    invocation = EmptyInvocation,
                     version = null
                 )
             ).execute()
@@ -203,7 +203,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
                 ApiInvokeFuncVersionReq(
                     correlationId = CorrelationId("some-correlation-id"),
                     inputs = InvocationInputs(),
-                    events = listOf(),
+                    invocation = EmptyInvocation,
                     version = CodeVersion(10)
                 )
             ).execute()
@@ -224,7 +224,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
                 ApiFuncInvokeReq(
                     correlationId = CorrelationId.default,
                     inputs = InvocationInputs(),
-                    events = listOf(),
+                    invocation = EmptyInvocation,
                 )
             ).execute()
 

@@ -9,7 +9,6 @@ import io.hamal.lib.kua.function.FunctionType
 import io.hamal.lib.kua.table.TableProxyArray
 import io.hamal.lib.kua.table.TableProxyMap
 import io.hamal.lib.kua.type.*
-import io.hamal.lib.kua.type.CodeType
 import io.hamal.runner.config.SandboxFactory
 import io.hamal.runner.connector.Connector
 import io.hamal.runner.connector.UnitOfWork
@@ -34,7 +33,7 @@ class CodeRunnerImpl(
 
             runnerContext = RunnerContext(
                 unitOfWork.state,
-                RunnerInvocationEvents(unitOfWork.events)
+                unitOfWork.invocation
             )
             runnerContext[ExecId::class] = unitOfWork.id
             runnerContext[FlowId::class] = unitOfWork.flowId
@@ -51,6 +50,7 @@ class CodeRunnerImpl(
                         val internalTable = sandbox.state.tableCreateMap(contextExtension.internals.size)
                         contextExtension.internals.forEach { entry ->
                             when (val value = entry.value) {
+                                is NilType -> {}
                                 is StringType -> internalTable[entry.key] = value
                                 is NumberType -> internalTable[entry.key] = value
                                 is FunctionType<*, *, *, *> -> internalTable[entry.key] = value

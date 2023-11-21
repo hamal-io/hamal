@@ -4,6 +4,7 @@ import io.hamal.api.http.controller.accepted
 import io.hamal.core.adapter.FuncInvokePort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.CorrelationId
+import io.hamal.lib.domain.vo.EmptyInvocation
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.sdk.api.ApiInvokeFuncVersionReq
@@ -31,7 +32,7 @@ internal class FuncInvokeController(
             ApiInvokeFuncVersionReq(
                 correlationId = req?.correlationId ?: CorrelationId.default,
                 inputs = req?.inputs ?: InvocationInputs(),
-                events = listOf(),
+                invocation = EmptyInvocation,
                 version = req?.version
             ),
             ExecInvokeSubmitted::accepted

@@ -13,7 +13,7 @@ data class UnitOfWork(
     val code: CodeValue,
     val token: ExecToken = ExecToken("let_me_in"), // FIXME
     val correlation: Correlation? = null,
-    val events: List<Event> = listOf(),
+    val invocation: Invocation,
     val apiHost: ApiHost
 )
 

@@ -40,7 +40,8 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
                     correlation = Correlation(
                         funcId = generateDomainId(::FuncId),
                         correlationId = CorrelationId("__correlation__")
-                    )
+                    ),
+                    invocation = EmptyInvocation
                 )
 
                 val completionResponse = requestCompletion(exec.id)
@@ -63,7 +64,8 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
             correlation = Correlation(
                 funcId = generateDomainId(::FuncId),
                 correlationId = CorrelationId("__correlation__")
-            )
+            ),
+            invocation = EmptyInvocation
         ) as StartedExec
 
         val completionResponse = requestCompletion(startedExec.id)

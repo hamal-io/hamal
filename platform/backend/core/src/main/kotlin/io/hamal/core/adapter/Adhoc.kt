@@ -2,10 +2,7 @@ package io.hamal.core.adapter
 
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
-import io.hamal.lib.domain.vo.ExecCode
-import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.domain.vo.FlowId
-import io.hamal.lib.domain.vo.ReqId
+import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.FlowQueryRepository
 import io.hamal.repository.api.ReqCmdRepository
 import io.hamal.repository.api.submitted_req.ExecInvokeSubmitted
@@ -45,7 +42,7 @@ class AdhocAdapter(
             code = ExecCode(value = req.code),
             funcId = null,
             correlationId = null,
-            events = listOf()
+            invocation = EmptyInvocation
         ).also(reqCmdRepository::queue).let(responseHandler)
     }
 }
