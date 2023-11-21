@@ -176,4 +176,8 @@ class SqliteTriggerRepository(
     override fun count(query: TriggerQuery): ULong {
         return ProjectionCurrent.count(connection, query)
     }
+
+    override fun set(id: TriggerId, cmd: SetTriggerCmd): Trigger {
+        TODO("93")
+    }
 }

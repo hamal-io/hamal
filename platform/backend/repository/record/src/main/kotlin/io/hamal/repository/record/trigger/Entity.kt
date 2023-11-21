@@ -2,6 +2,7 @@ package io.hamal.repository.record.trigger
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain._enum.HookMethod
+import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain._enum.TriggerType.*
 import io.hamal.lib.domain._enum.TriggerType.Event
@@ -33,7 +34,9 @@ data class TriggerEntity(
     var hookId: HookId? = null,
     var hookMethods: Set<HookMethod>? = null,
 
-    var cron: CronPattern? = null
+    var cron: CronPattern? = null,
+
+    var status: TriggerStatus? = null
 
 ) : RecordEntity<TriggerId, TriggerRecord, Trigger> {
 
@@ -114,7 +117,8 @@ data class TriggerEntity(
                 correlationId = correlationId,
                 name = name!!,
                 inputs = inputs!!,
-                duration = duration!!
+                duration = duration!!,
+                status = status!!
             )
 
             Event -> EventTrigger(
@@ -127,7 +131,8 @@ data class TriggerEntity(
                 correlationId = correlationId,
                 name = name!!,
                 inputs = inputs!!,
-                topicId = topicId!!
+                topicId = topicId!!,
+                status = status!!
             )
 
             Hook -> HookTrigger(
@@ -141,7 +146,8 @@ data class TriggerEntity(
                 name = name!!,
                 inputs = inputs!!,
                 hookId = hookId!!,
-                hookMethods = hookMethods!!
+                hookMethods = hookMethods!!,
+                status = status!!
             )
 
             Cron -> CronTrigger(
@@ -154,7 +160,8 @@ data class TriggerEntity(
                 correlationId = correlationId,
                 name = name!!,
                 inputs = inputs!!,
-                cron = cron!!
+                cron = cron!!,
+                status = status!!
             )
         }
     }

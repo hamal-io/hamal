@@ -223,4 +223,8 @@ class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord,
     }
 
     override fun close() {}
+
+    override fun set(id: TriggerId, cmd: SetTriggerCmd): Trigger {
+        TODO("93")
+    }
 }

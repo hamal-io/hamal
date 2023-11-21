@@ -2,6 +2,7 @@ package io.hamal.repository.api.submitted_req
 
 import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain._enum.ReqStatus
+import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable
@@ -26,4 +27,11 @@ data class TriggerCreateSubmitted(
     val cron: CronPattern? = null
 ) : Submitted
 
+@Serializable
+data class TriggerStatusSubmitted(
+    override val id: ReqId,
+    override var status: ReqStatus,
+    val triggerId: TriggerId,
+    val triggerStatus: TriggerStatus
+) : Submitted
 

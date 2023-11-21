@@ -6,6 +6,7 @@ import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.domain.UpdatedAt
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.HookMethod
+import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable
@@ -18,6 +19,7 @@ interface TriggerCmdRepository : CmdRepository {
     fun create(cmd: CreateEventCmd): EventTrigger
     fun create(cmd: CreateHookCmd): HookTrigger
     fun create(cmd: CreateCronCmd): CronTrigger
+    fun set(id: TriggerId, cmd: SetTriggerCmd): Trigger
 
     data class CreateFixedRateCmd(
         val id: CmdId,
@@ -67,6 +69,12 @@ interface TriggerCmdRepository : CmdRepository {
         val cron: CronPattern,
         val correlationId: CorrelationId? = null
     )
+
+    data class SetTriggerCmd(
+        val id: CmdId,
+        val status: TriggerStatus,
+        //TODO-93 val correlationId: CorrelationId? = null
+    )
 }
 
 interface TriggerQueryRepository {
@@ -100,6 +108,7 @@ sealed interface Trigger : DomainObject<TriggerId> {
     val correlationId: CorrelationId?
     val inputs: TriggerInputs
     val type: TriggerType
+    val status: TriggerStatus
 }
 
 @Serializable
@@ -112,6 +121,7 @@ class FixedRateTrigger(
     override val funcId: FuncId,
     override val flowId: FlowId,
     override val inputs: TriggerInputs,
+    override val status: TriggerStatus,
     val duration: Duration,
     override val correlationId: CorrelationId? = null
 ) : Trigger {
@@ -128,6 +138,7 @@ class EventTrigger(
     override val funcId: FuncId,
     override val flowId: FlowId,
     override val inputs: TriggerInputs,
+    override val status: TriggerStatus,
     val topicId: TopicId,
     override val correlationId: CorrelationId? = null
 ) : Trigger {
@@ -145,6 +156,7 @@ class HookTrigger(
     override val funcId: FuncId,
     override val flowId: FlowId,
     override val inputs: TriggerInputs,
+    override val status: TriggerStatus,
     override val correlationId: CorrelationId? = null,
     val hookId: HookId,
     val hookMethods: Set<HookMethod>
@@ -162,6 +174,7 @@ class CronTrigger(
     override val funcId: FuncId,
     override val flowId: FlowId,
     override val inputs: TriggerInputs,
+    override val status: TriggerStatus,
     override val correlationId: CorrelationId? = null,
     val cron: CronPattern
 ) : Trigger {

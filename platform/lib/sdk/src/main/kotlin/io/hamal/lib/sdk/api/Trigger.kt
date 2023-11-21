@@ -4,6 +4,7 @@ import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain._enum.ReqStatus
+import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpRequest
@@ -39,6 +40,14 @@ data class ApiTriggerCreateSubmitted(
     val flowId: FlowId
 ) : ApiSubmitted
 
+
+@Serializable
+data class ApiTriggerStatusSubmitted(
+    override val id: ReqId,
+    override val status: ReqStatus,
+    val triggerId: TriggerId,
+    val triggerStatus: TriggerStatus
+) : ApiSubmitted
 
 @Serializable
 data class ApiTriggerList(
@@ -201,6 +210,7 @@ class ApiCronTrigger(
     override val correlationId: CorrelationId? = null,
     val cron: CronPattern
 ) : ApiTrigger
+
 
 interface ApiTriggerService {
     fun create(flowId: FlowId, req: ApiTriggerCreateReq): ApiTriggerCreateSubmitted

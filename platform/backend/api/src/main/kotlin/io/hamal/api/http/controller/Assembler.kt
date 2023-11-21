@@ -37,6 +37,7 @@ fun Submitted.toApiSubmitted(): ApiSubmitted = when (this) {
     is TopicAppendToSubmitted -> ApiTopicAppendSubmitted(id, status, topicId)
     is TopicCreateSubmitted -> ApiTopicCreateSubmitted(id, status, topicId, groupId, flowId)
     is TriggerCreateSubmitted -> ApiTriggerCreateSubmitted(id, status, triggerId, groupId, flowId)
+    is TriggerStatusSubmitted -> ApiTriggerStatusSubmitted(id, status, triggerId, triggerStatus)
 
     is AuthLogoutSubmitted,
     is TestSubmitted,
