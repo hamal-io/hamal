@@ -27,6 +27,7 @@ internal object CreateFlow : CreateDomainObject<FlowId, FlowRecord, Flow> {
             id = firstRecord.entityId,
             groupId = firstRecord.groupId,
             sequence = firstRecord.sequence(),
+            type = firstRecord.type,
             recordedAt = firstRecord.recordedAt()
         )
 
@@ -65,6 +66,7 @@ class SqliteFlowRepository(
                         cmdId = cmdId,
                         entityId = flowId,
                         groupId = cmd.groupId,
+                        type = cmd.type!!,
                         name = cmd.name,
                         inputs = cmd.inputs,
                     )

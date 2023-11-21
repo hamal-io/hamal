@@ -12,7 +12,8 @@ data class FlowCreateSubmitted(
     val groupId: GroupId,
     val flowId: FlowId,
     val name: FlowName,
-    val inputs: FlowInputs
+    val inputs: FlowInputs,
+    val type: FlowType
 ) : Submitted
 
 

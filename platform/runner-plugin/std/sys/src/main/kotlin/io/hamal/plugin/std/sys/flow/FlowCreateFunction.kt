@@ -2,6 +2,7 @@ package io.hamal.plugin.std.sys.flow
 
 import io.hamal.lib.domain.vo.FlowInputs
 import io.hamal.lib.domain.vo.FlowName
+import io.hamal.lib.domain.vo.FlowType
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -20,12 +21,20 @@ class FlowCreateFunction(
     FunctionOutput2Schema(ErrorType::class, MapType::class)
 ) {
     override fun invoke(ctx: FunctionContext, arg1: MapType): Pair<ErrorType?, MapType?> {
+
+        val type = if (arg1.findString("type") != null) {
+            FlowType(arg1.getString("type"))
+        } else {
+            null
+        }
+
         return try {
             val res = sdk.flow.create(
                 ctx[GroupId::class],
                 ApiFlowCreateReq(
                     name = FlowName(arg1.getString("name")),
                     inputs = FlowInputs(),
+                    type = type
                 )
             )
 

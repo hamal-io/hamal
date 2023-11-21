@@ -35,6 +35,7 @@ private fun CreateFlowHandler.createFlow(req: FlowCreateSubmitted): Flow {
             id = req.cmdId(),
             flowId = req.flowId,
             groupId = req.groupId,
+            type = req.type,
             name = req.name,
             inputs = req.inputs
         )

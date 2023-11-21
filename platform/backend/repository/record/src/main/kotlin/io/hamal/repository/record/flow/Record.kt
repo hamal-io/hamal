@@ -25,6 +25,7 @@ data class FlowCreatedRecord(
     val groupId: GroupId,
     val name: FlowName,
     val inputs: FlowInputs,
+    val type: FlowType,
 ) : FlowRecord()
 
 @Serializable

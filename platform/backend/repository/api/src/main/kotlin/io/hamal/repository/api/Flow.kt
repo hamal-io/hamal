@@ -2,14 +2,23 @@ package io.hamal.repository.api
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.DomainObject
-import io.hamal.lib.common.domain.UpdatedAt
 import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.domain.UpdatedAt
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.domain.vo.FlowId
-import io.hamal.lib.domain.vo.FlowInputs
-import io.hamal.lib.domain.vo.FlowName
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable
+
+@Serializable
+data class Flow(
+    val cmdId: CmdId,
+    override val id: FlowId,
+    override val updatedAt: UpdatedAt,
+    val groupId: GroupId,
+    val type: FlowType,
+    val name: FlowName,
+    val inputs: FlowInputs
+) : DomainObject<FlowId>
+
 
 interface FlowRepository : FlowCmdRepository, FlowQueryRepository
 
@@ -22,6 +31,7 @@ interface FlowCmdRepository : CmdRepository {
         val id: CmdId,
         val flowId: FlowId,
         val groupId: GroupId,
+        val type: FlowType? = FlowType.default,
         val name: FlowName,
         val inputs: FlowInputs
     )
@@ -58,14 +68,3 @@ interface FlowQueryRepository {
         var groupIds: List<GroupId> = listOf()
     )
 }
-
-@Serializable
-data class Flow(
-    val cmdId: CmdId,
-    override val id: FlowId,
-    override val updatedAt: UpdatedAt,
-    val groupId: GroupId,
-    val name: FlowName,
-    val inputs: FlowInputs
-) : DomainObject<FlowId>
-

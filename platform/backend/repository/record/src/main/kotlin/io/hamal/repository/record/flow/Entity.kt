@@ -11,12 +11,12 @@ data class FlowEntity(
     override val cmdId: CmdId,
     override val id: FlowId,
     override val recordedAt: RecordedAt,
-    val groupId: GroupId,
     override val sequence: RecordSequence,
+    val groupId: GroupId,
 
     var name: FlowName? = null,
     var inputs: FlowInputs? = null,
-
+    val type: FlowType,
     ) : RecordEntity<FlowId, FlowRecord, Flow> {
 
     override fun apply(rec: FlowRecord): FlowEntity {
@@ -25,6 +25,7 @@ data class FlowEntity(
                 id = rec.entityId,
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
+                type = rec.type,
                 name = rec.name,
                 inputs = rec.inputs,
                 recordedAt = rec.recordedAt()
@@ -47,6 +48,7 @@ data class FlowEntity(
             id = id,
             updatedAt = recordedAt.toUpdatedAt(),
             groupId = groupId,
+            type = type,
             name = name!!,
             inputs = inputs!!,
         )
@@ -62,6 +64,7 @@ fun List<FlowRecord>.createEntity(): FlowEntity {
         id = firstRecord.entityId,
         groupId = firstRecord.groupId,
         cmdId = firstRecord.cmdId,
+        type = firstRecord.type,
         sequence = firstRecord.sequence(),
         recordedAt = firstRecord.recordedAt()
     )

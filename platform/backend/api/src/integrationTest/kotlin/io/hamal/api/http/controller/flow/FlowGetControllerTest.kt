@@ -2,6 +2,7 @@ package io.hamal.api.http.controller.flow
 
 import io.hamal.lib.domain.vo.FlowInputs
 import io.hamal.lib.domain.vo.FlowName
+import io.hamal.lib.domain.vo.FlowType
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.HttpStatusCode.Ok
@@ -32,7 +33,8 @@ internal class FlowGetControllerTest : FlowBaseControllerTest() {
             createFlow(
                 ApiFlowCreateReq(
                     name = FlowName("flow-one"),
-                    inputs = FlowInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))
+                    inputs = FlowInputs(MapType(mutableMapOf("hamal" to StringType("rockz")))),
+                    type = null
                 )
             )
         ).flowId
@@ -46,6 +48,7 @@ internal class FlowGetControllerTest : FlowBaseControllerTest() {
 
         with(getFlowResponse.result(ApiFlow::class)) {
             assertThat(id, equalTo(flowId))
+            assertThat(type, equalTo(FlowType.default))
             assertThat(name, equalTo(FlowName("flow-one")))
             assertThat(inputs, equalTo(FlowInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
         }

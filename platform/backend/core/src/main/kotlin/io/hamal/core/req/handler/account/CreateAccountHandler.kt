@@ -5,10 +5,7 @@ import io.hamal.core.req.ReqHandler
 import io.hamal.core.req.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
-import io.hamal.lib.domain.vo.AuthTokenExpiresAt
-import io.hamal.lib.domain.vo.FlowInputs
-import io.hamal.lib.domain.vo.FlowName
-import io.hamal.lib.domain.vo.GroupName
+import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.*
 import io.hamal.repository.api.event.AccountCreatedEvent
 import io.hamal.repository.api.submitted_req.AccountCreateSubmitted
@@ -64,6 +61,7 @@ private fun CreateAccountWithPasswordHandler.createFlow(req: AccountCreateSubmit
             id = req.cmdId(),
             flowId = req.flowId,
             groupId = req.groupId,
+            type = FlowType("__default__"),
             name = FlowName("__default__"),
             inputs = FlowInputs()
         )
