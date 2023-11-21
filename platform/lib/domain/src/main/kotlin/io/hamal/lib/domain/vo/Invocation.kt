@@ -24,7 +24,8 @@ data class EventInvocation(val events: List<Event>) : Invocation
 data class HookInvocation(
     val method: HookMethod,
     val headers: HookHeaders,
-    val parameters: HookParameters
+    val parameters: HookParameters,
+    val content: HookContent
 ) : Invocation
 
 @Serializable

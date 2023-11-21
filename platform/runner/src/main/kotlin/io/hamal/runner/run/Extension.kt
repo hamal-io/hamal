@@ -29,7 +29,8 @@ class RunnerContextFactory(
             MapType(
                 "method" to StringType(invocation.method.toString()),
                 "headers" to invocation.headers.value,
-                "parameters" to invocation.parameters.value
+                "parameters" to invocation.parameters.value,
+                "content" to invocation.content.value
             )
         } else {
             NilType

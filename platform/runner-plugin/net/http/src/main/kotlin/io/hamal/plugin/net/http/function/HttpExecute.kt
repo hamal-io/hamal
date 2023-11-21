@@ -1,7 +1,7 @@
 package io.hamal.plugin.net.http.function
 
-import io.hamal.plugin.net.http.converter.convertToType
-import io.hamal.plugin.net.http.converter.toJson
+import io.hamal.lib.kua.converter.convertToType
+import io.hamal.lib.kua.converter.toJson
 import io.hamal.lib.http.*
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext

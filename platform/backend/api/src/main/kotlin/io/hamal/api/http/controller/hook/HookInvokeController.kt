@@ -6,6 +6,7 @@ import io.hamal.lib.domain._enum.HookMethod.*
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.kua.converter.convertToType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.HookQueryRepository
@@ -13,6 +14,10 @@ import io.hamal.repository.api.ReqCmdRepository
 import io.hamal.repository.api.submitted_req.HookInvokeSubmitted
 import jakarta.servlet.http.HttpServletRequest
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
 import org.springframework.http.HttpStatus.ACCEPTED
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -21,7 +26,8 @@ import org.springframework.web.bind.annotation.*
 internal class HookInvokeController(
     private val generateDomainId: GenerateDomainId,
     private val reqCmdRepository: ReqCmdRepository,
-    private val hookQueryRepository: HookQueryRepository
+    private val hookQueryRepository: HookQueryRepository,
+    private val json: Json
 ) {
     @GetMapping("/v1/webhooks/{id}")
     fun webhookGet(@PathVariable("id") id: HookId, req: HttpServletRequest) = handle(id, req)
@@ -49,7 +55,8 @@ internal class HookInvokeController(
             invocation = HookInvocation(
                 method = req.method(),
                 headers = req.headers(),
-                parameters = req.parameters()
+                parameters = req.parameters(),
+                content = req.content()
             ),
         ).also(reqCmdRepository::queue)
         return ResponseEntity(Response(result), ACCEPTED)
@@ -65,6 +72,14 @@ internal class HookInvokeController(
     private fun HttpServletRequest.parameters() = HookParameters(
         MapType(parameterMap.map { (key, value) -> key to StringType(value.joinToString(",")) }.toMap().toMutableMap())
     )
+
+    private fun HttpServletRequest.content(): HookContent {
+        require(contentType.startsWith("application/json")) { "Only application/json supported yet" }
+        val content = reader.lines().reduce("", String::plus)
+        val el = json.decodeFromString<JsonElement>(content)
+        require(el is JsonObject)
+        return HookContent(el.convertToType())
+    }
 
     private fun HttpServletRequest.method(): HookMethod = when (method.lowercase()) {
         "delete" -> Delete

@@ -82,19 +82,12 @@ internal object EventInvocationTest : AbstractExecuteTest() {
     private val events = listOf(
         Event(
             topic = EventTopic(
-                id = TopicId(1),
-                name = TopicName("Topic-One")
-            ),
-            id = EventId(1234),
-            payload = EventPayload(MapType(mutableMapOf("block" to NumberType(43))))
-        ),
-        Event(
+                id = TopicId(1), name = TopicName("Topic-One")
+            ), id = EventId(1234), payload = EventPayload(MapType(mutableMapOf("block" to NumberType(43))))
+        ), Event(
             topic = EventTopic(
-                id = TopicId(23),
-                name = TopicName("Topic-Two")
-            ),
-            id = EventId(4321),
-            payload = EventPayload(MapType(mutableMapOf("block" to NumberType(44))))
+                id = TopicId(23), name = TopicName("Topic-Two")
+            ), id = EventId(4321), payload = EventPayload(MapType(mutableMapOf("block" to NumberType(44))))
         )
     )
 }
@@ -125,13 +118,17 @@ internal object HookInvocationTest : AbstractExecuteTest() {
                     
                     assert( table_length(hook.parameters) == 1 )
                     assert( hook.parameters['answer'] == 42 )
+                    
+                    assert( table_length(hook.content) == 1 )
+                    assert( hook.content['hamal'] == 'rocks' )
 
                 """.trimIndent()
                 ),
                 invocation = HookInvocation(
                     method = HookMethod.Delete,
                     headers = HookHeaders(MapType(mutableMapOf("content-type" to StringType("application/json")))),
-                    parameters = HookParameters(MapType(mutableMapOf("answer" to NumberType(42))))
+                    parameters = HookParameters(MapType(mutableMapOf("answer" to NumberType(42)))),
+                    content = HookContent(MapType(mutableMapOf("hamal" to StringType("rocks"))))
                 ),
                 apiHost = ApiHost("http://test-api")
             )
@@ -154,7 +151,8 @@ internal object HookInvocationTest : AbstractExecuteTest() {
                 invocation = HookInvocation(
                     method = HookMethod.Delete,
                     headers = HookHeaders(MapType(mutableMapOf("content-type" to StringType("application/json")))),
-                    parameters = HookParameters(MapType(mutableMapOf("answer" to NumberType(42))))
+                    parameters = HookParameters(MapType(mutableMapOf("answer" to NumberType(42)))),
+                    content = HookContent(MapType(mutableMapOf("hamal" to StringType("rocks"))))
                 ),
                 apiHost = ApiHost("http://test-api")
             )
@@ -165,12 +163,14 @@ internal object HookInvocationTest : AbstractExecuteTest() {
             equalTo(HookHeaders(MapType(mutableMapOf("content-type" to StringType("application/json")))))
         )
         assertThat(testFn.parameters, equalTo(HookParameters(MapType(mutableMapOf("answer" to NumberType(42))))))
+        assertThat(testFn.content, equalTo(HookContent(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
     }
 
     class TestFunction(
         var method: HookMethod? = null,
         var headers: HookHeaders? = null,
-        var parameters: HookParameters? = null
+        var parameters: HookParameters? = null,
+        var content: HookContent? = null
     ) : Function0In0Out() {
         override fun invoke(ctx: FunctionContext) {
             val invocation = ctx[Invocation::class]
@@ -178,6 +178,7 @@ internal object HookInvocationTest : AbstractExecuteTest() {
             method = invocation.method
             headers = invocation.headers
             parameters = invocation.parameters
+            content = invocation.content
         }
     }
 

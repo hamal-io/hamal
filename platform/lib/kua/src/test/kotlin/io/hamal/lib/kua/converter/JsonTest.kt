@@ -1,4 +1,4 @@
-package io.hamal.plugin.net.http.converter
+package io.hamal.lib.kua.converter
 
 import io.hamal.lib.kua.type.*
 import kotlinx.serialization.json.JsonArray

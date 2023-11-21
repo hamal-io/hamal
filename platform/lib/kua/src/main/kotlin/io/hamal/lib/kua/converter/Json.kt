@@ -1,4 +1,4 @@
-package io.hamal.plugin.net.http.converter
+package io.hamal.lib.kua.converter
 
 import io.hamal.lib.kua.type.*
 import kotlinx.serialization.json.*
@@ -38,21 +38,21 @@ fun JsonElement.convertToType(): SerializableType {
     }
 }
 
-private fun JsonArray.convertToType(): ArrayType {
+fun JsonArray.convertToType(): ArrayType {
     val arr = this
     return ArrayType(
         arr.mapIndexed { index, item -> (index + 1) to item.convertToType() }.toMap().toMutableMap()
     )
 }
 
-private fun JsonObject.convertToType(): MapType {
+fun JsonObject.convertToType(): MapType {
     val arr = this
     return MapType(
         arr.map { (key, item) -> key to item.convertToType() }.toMap().toMutableMap()
     )
 }
 
-private fun JsonPrimitive.convertToType(): SerializableType {
+fun JsonPrimitive.convertToType(): SerializableType {
     if (isString) {
         return StringType(content)
     }
