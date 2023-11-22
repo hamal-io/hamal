@@ -135,6 +135,7 @@ sealed interface ApiTrigger {
     val flow: Flow
     val inputs: TriggerInputs
     val correlationId: CorrelationId?
+    val status: TriggerStatus
 
     @Serializable
     data class Func(
@@ -157,6 +158,7 @@ class ApiFixedRateTrigger(
     override val func: ApiTrigger.Func,
     override val flow: ApiTrigger.Flow,
     override val inputs: TriggerInputs,
+    override val status: TriggerStatus,
     override val correlationId: CorrelationId? = null,
     val duration: Duration
 ) : ApiTrigger
@@ -169,6 +171,7 @@ class ApiEventTrigger(
     override val func: ApiTrigger.Func,
     override val flow: ApiTrigger.Flow,
     override val inputs: TriggerInputs,
+    override val status: TriggerStatus,
     override val correlationId: CorrelationId? = null,
     val topic: Topic
 ) : ApiTrigger {
@@ -187,6 +190,7 @@ class ApiHookTrigger(
     override val func: ApiTrigger.Func,
     override val flow: ApiTrigger.Flow,
     override val inputs: TriggerInputs,
+    override val status: TriggerStatus,
     override val correlationId: CorrelationId? = null,
     val hook: Hook
 ) : ApiTrigger {
@@ -207,6 +211,7 @@ class ApiCronTrigger(
     override val func: ApiTrigger.Func,
     override val flow: ApiTrigger.Flow,
     override val inputs: TriggerInputs,
+    override val status: TriggerStatus,
     override val correlationId: CorrelationId? = null,
     val cron: CronPattern
 ) : ApiTrigger

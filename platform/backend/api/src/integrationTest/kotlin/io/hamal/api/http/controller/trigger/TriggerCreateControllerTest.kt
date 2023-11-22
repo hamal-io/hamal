@@ -1,6 +1,7 @@
 package io.hamal.api.http.controller.trigger
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain._enum.TriggerType.Cron
 import io.hamal.lib.domain._enum.TriggerType.FixedRate
@@ -47,6 +48,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
             assertThat(id, equalTo(result.triggerId))
             assertThat(name, equalTo(TriggerName("trigger")))
             assertThat(flow.name, equalTo(FlowName("hamal")))
+            assertThat(status, equalTo(TriggerStatus.Active))
         }
     }
 
@@ -87,6 +89,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
             assertThat(name, equalTo(TriggerName("trigger")))
             assertThat(flow.id, equalTo(flow.id))
             assertThat(flow.name, equalTo(FlowName("hamal::name::space")))
+            assertThat(status, equalTo(TriggerStatus.Active))
         }
     }
 

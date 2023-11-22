@@ -63,43 +63,6 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
         }
 
         @TestFactory
-        fun `Deactivates fixed rate trigger`() = runWith(TriggerRepository::class) {
-            create(
-                CreateFixedRateCmd(
-                    id = CmdGen(),
-                    triggerId = TriggerId(2),
-                    funcId = FuncId(3),
-                    groupId = GroupId(4),
-                    flowId = FlowId(5),
-                    name = TriggerName("trigger-name"),
-                    inputs = TriggerInputs(
-                        MapType(
-                            mutableMapOf(
-                                "hamal" to StringType("rocks")
-                            )
-                        )
-                    ),
-                    duration = 10.seconds
-                )
-            )
-
-            set(TriggerId(2), SetTriggerCmd(CmdGen(), TriggerStatus.Inactive))
-
-            with(get(TriggerId(2)) as FixedRateTrigger) {
-                assertThat(id, equalTo(TriggerId(2)))
-                assertThat(funcId, equalTo(FuncId(3)))
-                assertThat(flowId, equalTo(FlowId(5)))
-                assertThat(name, equalTo(TriggerName("trigger-name")))
-                assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
-                assertThat(duration, equalTo(10.seconds))
-                assertThat(status, equalTo(TriggerStatus.Inactive))
-            }
-
-            verifyCount(1)
-
-        }
-
-        @TestFactory
         fun `Tries to create but same name already exists in flow`() =
             runWith(TriggerRepository::class) {
 
@@ -658,6 +621,84 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
             verifyCount(0)
         }
 
+    }
+
+    @Nested
+    inner class StatusTest {
+
+        @TestFactory
+        fun `Deactivates fixed rate trigger`() = runWith(TriggerRepository::class) {
+            create(
+                CreateFixedRateCmd(
+                    id = CmdGen(),
+                    triggerId = TriggerId(2),
+                    funcId = FuncId(3),
+                    groupId = GroupId(4),
+                    flowId = FlowId(5),
+                    name = TriggerName("trigger-name"),
+                    inputs = TriggerInputs(
+                        MapType(
+                            mutableMapOf(
+                                "hamal" to StringType("rocks")
+                            )
+                        )
+                    ),
+                    duration = 10.seconds
+                )
+            )
+
+            set(TriggerId(2), SetTriggerCmd(CmdGen(), TriggerStatus.Inactive))
+
+            with(get(TriggerId(2)) as FixedRateTrigger) {
+                assertThat(id, equalTo(TriggerId(2)))
+                assertThat(funcId, equalTo(FuncId(3)))
+                assertThat(flowId, equalTo(FlowId(5)))
+                assertThat(name, equalTo(TriggerName("trigger-name")))
+                assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
+                assertThat(duration, equalTo(10.seconds))
+                assertThat(status, equalTo(TriggerStatus.Inactive))
+            }
+
+            verifyCount(1)
+        }
+
+        @TestFactory
+        fun `Activates fixed rate trigger twice`() = runWith(TriggerRepository::class) {
+            create(
+                CreateFixedRateCmd(
+                    id = CmdGen(),
+                    triggerId = TriggerId(2),
+                    funcId = FuncId(3),
+                    groupId = GroupId(4),
+                    flowId = FlowId(5),
+                    name = TriggerName("trigger-name"),
+                    inputs = TriggerInputs(
+                        MapType(
+                            mutableMapOf(
+                                "hamal" to StringType("rocks")
+                            )
+                        )
+                    ),
+                    duration = 10.seconds
+                )
+            )
+
+            repeat(5) {
+                set(TriggerId(2), SetTriggerCmd(CmdGen(), TriggerStatus.Active))
+            }
+
+            with(get(TriggerId(2)) as FixedRateTrigger) {
+                assertThat(id, equalTo(TriggerId(2)))
+                assertThat(funcId, equalTo(FuncId(3)))
+                assertThat(flowId, equalTo(FlowId(5)))
+                assertThat(name, equalTo(TriggerName("trigger-name")))
+                assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
+                assertThat(duration, equalTo(10.seconds))
+                assertThat(status, equalTo(TriggerStatus.Active))
+            }
+
+            verifyCount(1)
+        }
     }
 
     @Nested
