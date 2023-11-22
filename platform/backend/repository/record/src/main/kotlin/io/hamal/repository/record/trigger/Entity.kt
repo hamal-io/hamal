@@ -107,15 +107,17 @@ data class TriggerEntity(
                 status = rec.status
             )
 
-            /*
-              TODO("93")
-            is ActiveTriggerRecord -> copy / apply ??(
-                  status -> active
-              )
+            is ActiveTriggerRecord -> copy(
+                cmdId = rec.cmdId,
+                id = rec.entityId,
+                status = TriggerStatus.Active
+            )
 
-              is InactiveTriggerRecord -> copy(
-                  status -> inactive
-              )*/
+            is InactiveTriggerRecord -> copy(
+                cmdId = rec.cmdId,
+                id = rec.entityId,
+                status = TriggerStatus.Inactive
+            )
         }
     }
 

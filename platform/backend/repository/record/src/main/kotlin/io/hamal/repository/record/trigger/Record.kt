@@ -85,8 +85,7 @@ data class CronTriggerCreatedRecord(
 data class ActiveTriggerRecord(
     override val cmdId: CmdId,
     override val entityId: TriggerId,
-    val correlationId: CorrelationId? = null,
-    val status: TriggerStatus
+    val correlationId: CorrelationId? = null
 ) : TriggerRecord()
 
 
@@ -95,6 +94,5 @@ data class ActiveTriggerRecord(
 data class InactiveTriggerRecord(
     override val cmdId: CmdId,
     override val entityId: TriggerId,
-    val correlationId: CorrelationId? = null,
-    val status: TriggerStatus
+    val correlationId: CorrelationId? = null
 ) : TriggerRecord()

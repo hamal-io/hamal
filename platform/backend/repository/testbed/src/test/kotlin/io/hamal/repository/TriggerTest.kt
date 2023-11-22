@@ -64,7 +64,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Deactivates fixed rate trigger`() = runWith(TriggerRepository::class) {
-            val result = create(
+            create(
                 CreateFixedRateCmd(
                     id = CmdGen(),
                     triggerId = TriggerId(2),
@@ -85,7 +85,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
 
             set(TriggerId(2), SetTriggerCmd(CmdGen(), TriggerStatus.Inactive))
 
-            with(result) {
+            with(get(TriggerId(2)) as FixedRateTrigger) {
                 assertThat(id, equalTo(TriggerId(2)))
                 assertThat(funcId, equalTo(FuncId(3)))
                 assertThat(flowId, equalTo(FlowId(5)))

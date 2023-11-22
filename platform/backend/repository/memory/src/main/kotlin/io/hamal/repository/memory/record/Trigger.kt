@@ -232,13 +232,8 @@ class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord,
                         correlationId = cmd.correlationId
                     )
                 }
-
-
-
-                store(
-                    rec
-                )
-                (currentVersion(triggerId)).also(CurrentTriggerProjection::apply)
+                store(rec)
+                currentVersion(triggerId).also(CurrentTriggerProjection::apply)
             }
         }
     }
