@@ -1,6 +1,5 @@
 package io.hamal.repository.memory
 
-import io.hamal.lib.domain.vo.RemoteAt
 import io.hamal.repository.api.ExecLog
 import io.hamal.repository.api.ExecLogCmdRepository.AppendCmd
 import io.hamal.repository.api.ExecLogQueryRepository.ExecLogQuery
@@ -21,8 +20,7 @@ class MemoryExecLogRepository : ExecLogRepository {
                 groupId = cmd.groupId,
                 level = cmd.level,
                 message = cmd.message,
-                localAt = cmd.localAt,
-                remoteAt = RemoteAt.now()
+                timestamp = cmd.timestamp,
             ).also { store.add(it) }
         }
     }

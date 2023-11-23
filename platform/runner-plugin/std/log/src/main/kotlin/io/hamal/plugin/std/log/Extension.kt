@@ -4,7 +4,7 @@ import io.hamal.lib.common.logger
 import io.hamal.lib.domain._enum.ExecLogLevel
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecLogMessage
-import io.hamal.lib.domain.vo.LocalAt
+import io.hamal.lib.domain.vo.ExecLogTimestamp
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extension.plugin.RunnerPluginExtension
 import io.hamal.lib.kua.extension.plugin.RunnerPluginExtensionFactory
@@ -57,7 +57,7 @@ class LogFunction(
             ApiAppendExecLogCmd(
                 level = level,
                 message = message,
-                localAt = LocalAt.now()
+                timestamp = ExecLogTimestamp.now()
             )
         )
 

@@ -29,7 +29,7 @@ internal class ExecLogRepositoryTest : AbstractUnitTest() {
                         level = ExecLogLevel.Info,
                         message = ExecLogMessage("Some Message"),
                         groupId = GroupId(4),
-                        localAt = LocalAt(Instant.ofEpochMilli(12345678))
+                        timestamp = ExecLogTimestamp(Instant.ofEpochMilli(12345678))
                     )
                 )
 
@@ -39,7 +39,7 @@ internal class ExecLogRepositoryTest : AbstractUnitTest() {
                     assertThat(groupId, equalTo(GroupId(4)))
                     assertThat(level, equalTo(ExecLogLevel.Info))
                     assertThat(message, equalTo(ExecLogMessage("Some Message")))
-                    assertThat(localAt, equalTo(LocalAt(Instant.ofEpochMilli(12345678))))
+                    assertThat(timestamp, equalTo(ExecLogTimestamp(Instant.ofEpochMilli(12345678))))
                     assertThat(remoteAt, equalTo(RemoteAt(Instant.ofEpochMilli(23456))))
                 }
 
@@ -59,7 +59,7 @@ internal class ExecLogRepositoryTest : AbstractUnitTest() {
                         level = ExecLogLevel.Info,
                         message = ExecLogMessage("Second Message"),
                         groupId = GroupId(4),
-                        localAt = LocalAt(Instant.ofEpochMilli(12345678))
+                        timestamp = ExecLogTimestamp(Instant.ofEpochMilli(12345678))
                     )
                 )
 
@@ -69,7 +69,7 @@ internal class ExecLogRepositoryTest : AbstractUnitTest() {
                     assertThat(groupId, equalTo(GroupId(4)))
                     assertThat(level, equalTo(ExecLogLevel.Info))
                     assertThat(message, equalTo(ExecLogMessage("Second Message")))
-                    assertThat(localAt, equalTo(LocalAt(Instant.ofEpochMilli(12345678))))
+                    assertThat(timestamp, equalTo(ExecLogTimestamp(Instant.ofEpochMilli(12345678))))
                     assertThat(remoteAt, equalTo(RemoteAt(Instant.ofEpochMilli(23456))))
                 }
 
@@ -207,7 +207,7 @@ private fun ExecLogRepository.appendExecLog(
             groupId = groupId,
             message = message,
             level = level,
-            localAt = LocalAt.now()
+            timestamp = ExecLogTimestamp.now()
         )
     )
 }

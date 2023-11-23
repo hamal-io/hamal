@@ -11,7 +11,7 @@ import kotlinx.serialization.Serializable
 data class ApiAppendExecLogCmd(
     override val level: ExecLogLevel,
     override val message: ExecLogMessage,
-    override val localAt: LocalAt
+    override val timestamp: ExecLogTimestamp
 ) : AppendExecLogReq
 
 @Serializable
@@ -25,8 +25,7 @@ data class ApiExecLog(
     val execId: ExecId,
     val level: ExecLogLevel,
     val message: ExecLogMessage,
-    val localAt: LocalAt,
-    val remoteAt: RemoteAt
+    val timestamp: ExecLogTimestamp,
 )
 
 interface ApiExecLogService {
