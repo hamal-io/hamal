@@ -28,7 +28,7 @@ class StaticContentFilter : OncePerRequestFilter() {
         when {
             path.startsWith("/v1") -> chain.doFilter(request, response)
             request.getHeader("if-none-match") == gitHash -> notModified(response)
-            path.startsWith("/http-docs") -> resourceToResponse("dist-doc-http/index.html", response)
+            path.startsWith("/openapi") -> resourceToResponse("dist-openapi/index.html", response)
             fileExtensions.stream().anyMatch { path.contains(it) } -> resourceToResponse("dist$path", response)
             else -> resourceToResponse("dist/index.html", response)
         }
