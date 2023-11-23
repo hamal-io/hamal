@@ -1,5 +1,6 @@
 package io.hamal.lib.domain.vo
 
+import io.hamal.lib.domain._enum.EndpointMethod
 import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain.vo.base.InputsSerializer
 import io.hamal.lib.domain.vo.base.Map
@@ -28,6 +29,17 @@ data class HookInvocation(
     val content: HookContent
 ) : Invocation
 
+
+@Serializable
+@SerialName("EndpointInvocation")
+data class EndpointInvocation(
+    val method: EndpointMethod,
+    val headers: EndpointHeaders,
+    val parameters: EndpointParameters,
+    val content: EndpointContent
+) : Invocation
+
 @Serializable
 @SerialName("EmptyInvocation")
 object EmptyInvocation : Invocation
+

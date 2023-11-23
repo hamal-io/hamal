@@ -323,12 +323,14 @@ abstract class BaseApiTest {
 
             while (wait) {
                 with(sdk.exec.get(execReq.execId)) {
-                    if (status == io.hamal.lib.domain.vo.ExecStatus.Completed) {
+                    if (status == ExecStatus.Completed) {
                         wait = false
-                    } else if (status == io.hamal.lib.domain.vo.ExecStatus.Failed) {
-                        return Failed(message = "Execution failed: ${this.result!!.value["message"]}")
-                    } else if (startedAt.plusSeconds(5).isBefore(TimeUtils.now())) {
-                        return Timeout
+                    } else {
+                        if (status == ExecStatus.Failed) {
+                            return Failed(message = "Execution failed: ${this.result!!.value["message"]}")
+                        } else if (startedAt.plusSeconds(5).isBefore(TimeUtils.now())) {
+                            return Timeout
+                        }
                     }
                 }
             }
