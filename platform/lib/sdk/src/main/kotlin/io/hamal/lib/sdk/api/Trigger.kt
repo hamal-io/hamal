@@ -221,6 +221,8 @@ interface ApiTriggerService {
     fun create(flowId: FlowId, req: ApiTriggerCreateReq): ApiTriggerCreateSubmitted
     fun list(query: TriggerQuery): List<ApiTriggerList.Trigger>
     fun get(triggerId: TriggerId): ApiTrigger
+    fun activate(triggerId: TriggerId): ApiTriggerStatusSubmitted
+    fun deactivate(triggerId: TriggerId): ApiTriggerStatusSubmitted
 
     data class TriggerQuery(
         var afterId: FuncId = FuncId(SnowflakeId(Long.MAX_VALUE)),
@@ -262,4 +264,17 @@ internal class ApiTriggerServiceImpl(
             .path("triggerId", triggerId)
             .execute()
             .fold(ApiTrigger::class)
+
+    override fun activate(triggerId: TriggerId): ApiTriggerStatusSubmitted =
+        template.post("/v1/trigger/{triggerId}/activate")
+            .path("triggerId", triggerId)
+            .execute()
+            .fold(ApiTriggerStatusSubmitted::class)
+
+
+    override fun deactivate(triggerId: TriggerId): ApiTriggerStatusSubmitted =
+        template.post("/v1/trigger/{triggerId}/deactivate")
+            .path("triggerId", triggerId)
+            .execute()
+            .fold(ApiTriggerStatusSubmitted::class)
 }

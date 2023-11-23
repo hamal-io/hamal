@@ -23,9 +23,7 @@ import io.hamal.plugin.std.sys.func.*
 import io.hamal.plugin.std.sys.hook.HookCreateFunction
 import io.hamal.plugin.std.sys.req.ReqGetFunction
 import io.hamal.plugin.std.sys.topic.*
-import io.hamal.plugin.std.sys.trigger.TriggerCreateFunction
-import io.hamal.plugin.std.sys.trigger.TriggerGetFunction
-import io.hamal.plugin.std.sys.trigger.TriggerListFunction
+import io.hamal.plugin.std.sys.trigger.*
 
 
 class SysPluginFactory(
@@ -83,7 +81,9 @@ class SysPluginFactory(
 
                         "trigger_create" to TriggerCreateFunction(sdk),
                         "trigger_get" to TriggerGetFunction(sdk),
-                        "trigger_list" to TriggerListFunction(sdk)
+                        "trigger_list" to TriggerListFunction(sdk),
+                        "trigger_activate" to TriggerActivateFunction(sdk),
+                        "trigger_deactivate" to TriggerDeactivateFunction(sdk),
                 )
         )
     }

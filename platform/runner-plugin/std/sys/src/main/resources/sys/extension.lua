@@ -268,6 +268,16 @@ function extension()
             return internal.trigger_list(query)
         end
 
+        function export.triggers.activate(cmd)
+            cmd = cmd or {}
+            return internal.trigger_activate(cmd)
+        end
+
+        function export.triggers.deactivate(cmd)
+            cmd = cmd or {}
+            return internal.trigger_deactivate(cmd)
+        end
+
         return export
     end
 end
