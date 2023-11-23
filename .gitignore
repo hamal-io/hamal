@@ -45,7 +45,7 @@ build/
 **/node_modules
 **/build
 **/dist
-**/dist-doc-http
+**/dist-openapi
 
 ### Mac OS ###
 .DS_Store
