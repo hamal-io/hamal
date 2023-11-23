@@ -270,12 +270,16 @@ function extension()
 
         function export.triggers.activate(cmd)
             cmd = cmd or {}
-            return internal.trigger_activate(cmd)
+            return internal.trigger_activate({
+                trigger_id = cmd.id
+            })
         end
 
         function export.triggers.deactivate(cmd)
             cmd = cmd or {}
-            return internal.trigger_deactivate(cmd)
+            return internal.trigger_deactivate({
+                trigger_id = cmd.id
+            })
         end
 
         return export

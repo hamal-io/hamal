@@ -1,6 +1,5 @@
 package io.hamal.plugin.std.sys.trigger
 
-import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -20,7 +19,7 @@ class TriggerActivateFunction(
     override fun invoke(ctx: FunctionContext, arg1: MapType): Pair<ErrorType?, MapType?> {
         return try {
             val res = sdk.trigger.activate(
-                arg1.findString("flow_id")?.let { TriggerId(SnowflakeId(it)) } ?: ctx[TriggerId::class]
+                TriggerId(arg1.getString("trigger_id"))
             )
 
             null to MapType(
@@ -45,7 +44,7 @@ class TriggerDeactivateFunction(
     override fun invoke(ctx: FunctionContext, arg1: MapType): Pair<ErrorType?, MapType?> {
         return try {
             val res = sdk.trigger.deactivate(
-                arg1.findString("flow_id")?.let { TriggerId(SnowflakeId(it)) } ?: ctx[TriggerId::class]
+                TriggerId(arg1.getString("trigger_id"))
             )
 
             null to MapType(
