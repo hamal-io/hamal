@@ -123,7 +123,6 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
                 ApiInvokeFuncVersionReq(
                     correlationId = CorrelationId("some-correlation-id"),
                     inputs = InvocationInputs(),
-                    invocation = EmptyInvocation,
                     version = CodeVersion(5)
                 )
             ).execute()
@@ -168,7 +167,6 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
                 ApiInvokeFuncVersionReq(
                     correlationId = CorrelationId("some-correlation-id"),
                     inputs = InvocationInputs(),
-                    invocation = EmptyInvocation,
                     version = null
                 )
             ).execute()
@@ -203,7 +201,6 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
                 ApiInvokeFuncVersionReq(
                     correlationId = CorrelationId("some-correlation-id"),
                     inputs = InvocationInputs(),
-                    invocation = EmptyInvocation,
                     version = CodeVersion(10)
                 )
             ).execute()

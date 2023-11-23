@@ -7,6 +7,5 @@ export interface ExecLogListItem {
     execId: string;
     level: string,
     message: string,
-    localAt: number,
-    remoteAt: number
+    timestamp: number,
 }

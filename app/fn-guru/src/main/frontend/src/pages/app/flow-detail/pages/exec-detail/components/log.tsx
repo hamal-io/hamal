@@ -20,7 +20,7 @@ const Log: FC<Props> = ({execId}) => {
                 {execLogsList.logs.map(log => {
                     return (
                         <div key={log.id} className="flex">
-                            <span className="text-gray-500 mr-2">{new Date(log.remoteAt).toISOString()}</span>
+                            <span className="text-gray-500 mr-2">{new Date(log.timestamp).toISOString()}</span>
                             <LogLevel level={log.level}/>
                             <span className="text-gray-500 ml-2">{log.message}</span>
                         </div>

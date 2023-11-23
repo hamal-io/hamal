@@ -40,8 +40,7 @@ internal class ExecLogListController(
                         execId = it.execId,
                         level = it.level,
                         message = it.message,
-                        localAt = it.localAt,
-                        remoteAt = it.remoteAt
+                        timestamp = it.timestamp
                     )
                 })
             )
@@ -69,8 +68,7 @@ internal class ExecLogListController(
                             execId = it.execId,
                             level = it.level,
                             message = it.message,
-                            localAt = it.localAt,
-                            remoteAt = it.remoteAt
+                            timestamp = it.timestamp
                         )
                     }
                 )
