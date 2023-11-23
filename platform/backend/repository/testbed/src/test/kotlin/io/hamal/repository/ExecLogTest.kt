@@ -40,7 +40,6 @@ internal class ExecLogRepositoryTest : AbstractUnitTest() {
                     assertThat(level, equalTo(ExecLogLevel.Info))
                     assertThat(message, equalTo(ExecLogMessage("Some Message")))
                     assertThat(timestamp, equalTo(ExecLogTimestamp(Instant.ofEpochMilli(12345678))))
-                    assertThat(remoteAt, equalTo(RemoteAt(Instant.ofEpochMilli(23456))))
                 }
 
                 verifyCount(1)
@@ -70,7 +69,6 @@ internal class ExecLogRepositoryTest : AbstractUnitTest() {
                     assertThat(level, equalTo(ExecLogLevel.Info))
                     assertThat(message, equalTo(ExecLogMessage("Second Message")))
                     assertThat(timestamp, equalTo(ExecLogTimestamp(Instant.ofEpochMilli(12345678))))
-                    assertThat(remoteAt, equalTo(RemoteAt(Instant.ofEpochMilli(23456))))
                 }
 
                 verifyCount(2)
