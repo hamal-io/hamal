@@ -1,7 +1,7 @@
 package io.hamal.repository.api
 
-import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.ExecLogLevel
 import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable
@@ -16,7 +16,7 @@ interface ExecLogCmdRepository : CmdRepository {
         val execId: ExecId,
         val groupId: GroupId,
         val message: ExecLogMessage,
-        val localAt: LocalAt
+        val timestamp: ExecLogTimestamp
     )
 }
 
@@ -40,6 +40,5 @@ data class ExecLog(
     val groupId: GroupId,
     val level: ExecLogLevel,
     val message: ExecLogMessage,
-    val localAt: LocalAt,
-    val remoteAt: RemoteAt
+    val timestamp: ExecLogTimestamp,
 )

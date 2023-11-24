@@ -20,7 +20,7 @@ npm install
 npm run deploy
 
 cd $BASEDIR
-cd app/fn-guru/src/main/doc-http
+cd app/fn-guru/src/main/openapi
 npm install
 npm run deploy
 

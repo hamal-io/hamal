@@ -32,22 +32,12 @@ data class ExecLogMessage(val value: String) {
     }
 }
 
-@Serializable(with = LocalAt.Serializer::class)
-class LocalAt(override val value: Instant) : DomainAt() {
+@Serializable(with = ExecLogTimestamp.Serializer::class)
+class ExecLogTimestamp(override val value: Instant) : DomainAt() {
     companion object {
         @JvmStatic
-        fun now(): LocalAt = LocalAt(TimeUtils.now())
+        fun now(): ExecLogTimestamp = ExecLogTimestamp(TimeUtils.now())
     }
 
-    internal object Serializer : DomainAtSerializer<LocalAt>(::LocalAt)
-}
-
-@Serializable(with = RemoteAt.Serializer::class)
-class RemoteAt(override val value: Instant) : DomainAt() {
-    companion object {
-        @JvmStatic
-        fun now(): RemoteAt = RemoteAt(TimeUtils.now())
-    }
-
-    internal object Serializer : DomainAtSerializer<RemoteAt>(::RemoteAt)
+    internal object Serializer : DomainAtSerializer<ExecLogTimestamp>(::ExecLogTimestamp)
 }

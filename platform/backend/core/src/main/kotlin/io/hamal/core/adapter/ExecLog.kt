@@ -39,7 +39,7 @@ class ExecLogAdapter(
                     groupId = execQueryRepository.get(execId).groupId,
                     level = req.level,
                     message = req.message,
-                    localAt = req.localAt
+                    timestamp = req.timestamp
                 )
             )
         )

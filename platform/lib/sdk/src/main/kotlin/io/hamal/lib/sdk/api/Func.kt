@@ -73,7 +73,6 @@ data class ApiFuncInvokeReq(
 data class ApiInvokeFuncVersionReq(
     override val correlationId: CorrelationId?,
     override val inputs: InvocationInputs,
-    override val invocation: Invocation,
     override val version: CodeVersion?
 ) : InvokeFuncVersionReq
 

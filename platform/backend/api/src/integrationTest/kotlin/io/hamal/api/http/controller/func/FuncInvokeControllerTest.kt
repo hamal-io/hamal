@@ -20,22 +20,19 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
         val createResponse = awaitCompleted(
             createFunc(
                 req = ApiFuncCreateReq(
-                    name = FuncName("test"),
-                    inputs = FuncInputs(),
-                    code = CodeValue("x = 10")
+                    name = FuncName("test"), inputs = FuncInputs(), code = CodeValue("x = 10")
                 )
             )
         )
 
-        val invocationResponse = httpTemplate.post("/v1/funcs/{funcId}/invoke")
-            .path("funcId", createResponse.funcId)
-            .body(
-                ApiFuncInvokeReq(
-                    correlationId = CorrelationId("some-correlation-id"),
-                    inputs = InvocationInputs(),
-                    invocation = EmptyInvocation
-                )
-            ).execute()
+        val invocationResponse =
+            httpTemplate.post("/v1/funcs/{funcId}/invoke").path("funcId", createResponse.funcId).body(
+                    ApiFuncInvokeReq(
+                        correlationId = CorrelationId("some-correlation-id"),
+                        inputs = InvocationInputs(),
+                        invocation = EmptyInvocation
+                    )
+                ).execute()
 
         assertThat(invocationResponse.statusCode, equalTo(Accepted))
         require(invocationResponse is HttpSuccessResponse) { "request was not successful" }
@@ -47,8 +44,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
             assertThat(
                 correlation, equalTo(
                     Correlation(
-                        correlationId = CorrelationId("some-correlation-id"),
-                        funcId = createResponse.funcId
+                        correlationId = CorrelationId("some-correlation-id"), funcId = createResponse.funcId
                     )
                 )
             )
@@ -60,22 +56,19 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
         val createResponse = awaitCompleted(
             createFunc(
                 ApiFuncCreateReq(
-                    name = FuncName("test"),
-                    inputs = FuncInputs(),
-                    code = CodeValue("")
+                    name = FuncName("test"), inputs = FuncInputs(), code = CodeValue("")
                 )
             )
         )
 
-        val invocationResponse = httpTemplate.post("/v1/funcs/{funcId}/invoke")
-            .path("funcId", createResponse.funcId)
-            .body(
-                ApiFuncInvokeReq(
-                    inputs = InvocationInputs(),
-                    correlationId = null,
-                    invocation = EmptyInvocation,
-                )
-            ).execute()
+        val invocationResponse =
+            httpTemplate.post("/v1/funcs/{funcId}/invoke").path("funcId", createResponse.funcId).body(
+                    ApiFuncInvokeReq(
+                        inputs = InvocationInputs(),
+                        correlationId = null,
+                        invocation = EmptyInvocation,
+                    )
+                ).execute()
 
         assertThat(invocationResponse.statusCode, equalTo(Accepted))
         require(invocationResponse is HttpSuccessResponse) { "request was not successful" }
@@ -87,8 +80,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
             assertThat(
                 correlation, equalTo(
                     Correlation(
-                        correlationId = CorrelationId.default,
-                        funcId = createResponse.funcId
+                        correlationId = CorrelationId.default, funcId = createResponse.funcId
                     )
                 )
             )
@@ -100,9 +92,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
         val createResponse = awaitCompleted(
             createFunc(
                 ApiFuncCreateReq(
-                    name = FuncName("test"),
-                    inputs = FuncInputs(),
-                    code = CodeValue("")
+                    name = FuncName("test"), inputs = FuncInputs(), code = CodeValue("")
                 )
             )
         )
@@ -110,23 +100,20 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
         repeat(10) {
             updateFunc(
                 createResponse.funcId, ApiFuncUpdateReq(
-                    name = FuncName("test-update"),
-                    code = CodeValue("code-${it}")
+                    name = FuncName("test-update"), code = CodeValue("code-${it}")
                 )
             )
         }
 
 
-        val invocationResponse = httpTemplate.post("/v1/funcs/{funcId}/invoke")
-            .path("funcId", createResponse.funcId)
-            .body(
-                ApiInvokeFuncVersionReq(
-                    correlationId = CorrelationId("some-correlation-id"),
-                    inputs = InvocationInputs(),
-                    invocation = EmptyInvocation,
-                    version = CodeVersion(5)
-                )
-            ).execute()
+        val invocationResponse =
+            httpTemplate.post("/v1/funcs/{funcId}/invoke").path("funcId", createResponse.funcId).body(
+                    ApiInvokeFuncVersionReq(
+                        correlationId = CorrelationId("some-correlation-id"),
+                        inputs = InvocationInputs(),
+                        version = CodeVersion(5)
+                    )
+                ).execute()
 
         assertThat(invocationResponse.statusCode, equalTo(Accepted))
         require(invocationResponse is HttpSuccessResponse) { "request was not successful" }
@@ -145,9 +132,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
         val createResponse = awaitCompleted(
             createFunc(
                 ApiFuncCreateReq(
-                    name = FuncName("funcName"),
-                    inputs = FuncInputs(),
-                    code = CodeValue("createCode")
+                    name = FuncName("funcName"), inputs = FuncInputs(), code = CodeValue("createCode")
                 )
             )
         )
@@ -155,23 +140,20 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
         repeat(10) {
             updateFunc(
                 createResponse.funcId, ApiFuncUpdateReq(
-                    name = FuncName("test-update"),
-                    code = CodeValue("code-${it}")
+                    name = FuncName("test-update"), code = CodeValue("code-${it}")
                 )
             )
         }
 
 
-        val invocationResponse = httpTemplate.post("/v1/funcs/{funcId}/invoke")
-            .path("funcId", createResponse.funcId)
-            .body(
-                ApiInvokeFuncVersionReq(
-                    correlationId = CorrelationId("some-correlation-id"),
-                    inputs = InvocationInputs(),
-                    invocation = EmptyInvocation,
-                    version = null
-                )
-            ).execute()
+        val invocationResponse =
+            httpTemplate.post("/v1/funcs/{funcId}/invoke").path("funcId", createResponse.funcId).body(
+                    ApiInvokeFuncVersionReq(
+                        correlationId = CorrelationId("some-correlation-id"),
+                        inputs = InvocationInputs(),
+                        version = null
+                    )
+                ).execute()
 
         assertThat(invocationResponse.statusCode, equalTo(Accepted))
         require(invocationResponse is HttpSuccessResponse) { "request was not successful" }
@@ -190,23 +172,19 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
         val createResponse = awaitCompleted(
             createFunc(
                 ApiFuncCreateReq(
-                    name = FuncName("test"),
-                    inputs = FuncInputs(),
-                    code = CodeValue("")
+                    name = FuncName("test"), inputs = FuncInputs(), code = CodeValue("")
                 )
             )
         )
 
-        val invocationResponse = httpTemplate.post("/v1/funcs/{funcId}/invoke")
-            .path("funcId", createResponse.funcId)
-            .body(
-                ApiInvokeFuncVersionReq(
-                    correlationId = CorrelationId("some-correlation-id"),
-                    inputs = InvocationInputs(),
-                    invocation = EmptyInvocation,
-                    version = CodeVersion(10)
-                )
-            ).execute()
+        val invocationResponse =
+            httpTemplate.post("/v1/funcs/{funcId}/invoke").path("funcId", createResponse.funcId).body(
+                    ApiInvokeFuncVersionReq(
+                        correlationId = CorrelationId("some-correlation-id"),
+                        inputs = InvocationInputs(),
+                        version = CodeVersion(10)
+                    )
+                ).execute()
 
         assertThat(invocationResponse.statusCode, equalTo(NotFound))
         require(invocationResponse is HttpErrorResponse) { "request was successful" }
@@ -219,8 +197,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
 
     @Test
     fun `Tries to invoke func which does not exist`() {
-        val invocationResponse = httpTemplate.post("/v1/funcs/1234/invoke")
-            .body(
+        val invocationResponse = httpTemplate.post("/v1/funcs/1234/invoke").body(
                 ApiFuncInvokeReq(
                     correlationId = CorrelationId.default,
                     inputs = InvocationInputs(),

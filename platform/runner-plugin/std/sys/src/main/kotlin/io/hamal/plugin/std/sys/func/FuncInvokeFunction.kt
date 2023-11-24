@@ -39,7 +39,6 @@ class FuncInvokeFunction(
                 ApiInvokeFuncVersionReq(
                     correlationId = correlationId,
                     inputs = InvocationInputs(),
-                    invocation = EmptyInvocation,
                     version = version
                 )
             )

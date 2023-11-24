@@ -24,6 +24,5 @@ interface InvokeFuncReq {
 interface InvokeFuncVersionReq {
     val correlationId: CorrelationId?
     val inputs: InvocationInputs
-    val invocation: Invocation
     val version: CodeVersion?
 }

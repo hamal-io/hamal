@@ -6,7 +6,6 @@ import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.EmptyInvocation
 import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.sdk.api.ApiInvokeFuncVersionReq
 import io.hamal.lib.sdk.api.ApiSubmitted
 import io.hamal.repository.api.submitted_req.ExecInvokeSubmitted
@@ -24,16 +23,15 @@ internal class FuncInvokeController(
     @PostMapping("/v1/funcs/{funcId}/invoke")
     fun execFunc(
         @PathVariable("funcId") funcId: FuncId,
-        @RequestBody req: ApiInvokeFuncVersionReq? = null
+        @RequestBody req: ApiInvokeFuncVersionReq
     ): ResponseEntity<ApiSubmitted> = retry {
 
         invokeFunc(
             funcId,
             ApiInvokeFuncVersionReq(
-                correlationId = req?.correlationId ?: CorrelationId.default,
-                inputs = req?.inputs ?: InvocationInputs(),
-                invocation = EmptyInvocation,
-                version = req?.version
+                correlationId = req.correlationId ?: CorrelationId.default,
+                inputs = req.inputs,
+                version = req.version
             ),
             ExecInvokeSubmitted::accepted
         )
