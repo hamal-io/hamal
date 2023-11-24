@@ -397,7 +397,8 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     triggerId = TriggerId(1),
                     flowId = FlowId(2),
                     groupId = GroupId(3),
-                    name = TriggerName("trigger-name")
+                    name = TriggerName("trigger-name"),
+                    hookMethod = Get
                 )
 
                 val result = create(

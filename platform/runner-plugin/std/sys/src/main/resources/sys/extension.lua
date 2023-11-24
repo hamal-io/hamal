@@ -242,7 +242,7 @@ function extension()
                 func_id = cmd.func_id,
                 inputs = cmd.inputs or {},
                 hook_id = cmd.hook_id,
-                hook_methods = cmd.hook_methods or {}
+                hook_method = cmd.hook_method or {}
             })
         end
 

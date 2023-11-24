@@ -1,6 +1,7 @@
 package io.hamal.plugin.std.sys.trigger
 
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.domain._enum.HookMethod.*
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.function.Function1In2Out
@@ -41,6 +42,18 @@ class TriggerCreateFunction(
                     },
                     hookId = if (arg1.type("hook_id") == StringType::class) {
                         HookId(SnowflakeId(arg1.getString("hook_id")))
+                    } else {
+                        null
+                    },
+                    hookMethod = if (arg1.type("hook_method") == StringType::class) {
+                        when (arg1.getString("hook_method")) {
+                            "DELETE" -> Delete
+                            "GET" -> Get
+                            "PATCH" -> Patch
+                            "POST" -> Post
+                            "PUT" -> Put
+                            else -> null
+                        }
                     } else {
                         null
                     },
