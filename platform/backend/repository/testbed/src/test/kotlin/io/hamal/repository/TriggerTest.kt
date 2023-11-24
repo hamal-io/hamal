@@ -487,16 +487,17 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
 
             val exception = assertThrows<IllegalArgumentException> {
                 createHookTrigger(
-                    triggerId = TriggerId(1),
+                    triggerId = TriggerId(2),
                     flowId = FlowId(2),
                     groupId = GroupId(1),
-                    name = TriggerName("trigger-name-1"),
+                    name = TriggerName("other-trigger"),
                     funcId = FuncId(1),
                     hookId = HookId(1),
                     hookMethod = Get
                 )
             }
             assertThat(exception.message, equalTo("Trigger already exists"))
+            verifyCount(1)
         }
 
         @TestFactory
