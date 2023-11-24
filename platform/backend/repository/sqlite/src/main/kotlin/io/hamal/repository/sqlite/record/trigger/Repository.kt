@@ -170,7 +170,7 @@ class SqliteTriggerRepository(
         }
     }
 
-    override fun setStatus(triggerId: TriggerId, cmd: SetTriggerStatusCmd): Trigger {
+    override fun set(triggerId: TriggerId, cmd: SetTriggerStatusCmd): Trigger {
         return tx {
             if (commandAlreadyApplied(cmd.id, triggerId)) {
                 versionOf(triggerId, cmd.id)
