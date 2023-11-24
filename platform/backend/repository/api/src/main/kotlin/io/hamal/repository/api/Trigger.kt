@@ -19,7 +19,7 @@ interface TriggerCmdRepository : CmdRepository {
     fun create(cmd: CreateEventCmd): EventTrigger
     fun create(cmd: CreateHookCmd): HookTrigger
     fun create(cmd: CreateCronCmd): CronTrigger
-    fun set(triggerId: TriggerId, cmd: SetTriggerCmd): Trigger
+    fun set(triggerId: TriggerId, cmd: SetTriggerStatusCmd): Trigger
 
     data class CreateFixedRateCmd(
         val id: CmdId,
@@ -74,10 +74,9 @@ interface TriggerCmdRepository : CmdRepository {
         val status: TriggerStatus = TriggerStatus.Active
     )
 
-    data class SetTriggerCmd(
+    data class SetTriggerStatusCmd(
         val id: CmdId,
-        val status: TriggerStatus,
-        val correlationId: CorrelationId? = null
+        val status: TriggerStatus
     )
 }
 

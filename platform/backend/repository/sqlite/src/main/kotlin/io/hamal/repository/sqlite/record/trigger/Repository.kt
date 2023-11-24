@@ -170,28 +170,26 @@ class SqliteTriggerRepository(
         }
     }
 
-    override fun set(triggerId: TriggerId, cmd: SetTriggerCmd): Trigger {
+    override fun set(triggerId: TriggerId, cmd: SetTriggerStatusCmd): Trigger {
         return tx {
             if (commandAlreadyApplied(cmd.id, triggerId)) {
                 versionOf(triggerId, cmd.id)
             } else {
-                val rec: TriggerRecord = if (cmd.status == TriggerStatus.Active) {
-                    ActiveTriggerRecord(
-                        cmdId = cmd.id,
-                        entityId = triggerId,
-                        correlationId = cmd.correlationId
+                if (cmd.status == TriggerStatus.Active) {
+                    store(
+                        TriggerSetActiveRecord(
+                            cmdId = cmd.id,
+                            entityId = triggerId
+                        )
                     )
                 } else {
-                    InactiveTriggerRecord(
-                        cmdId = cmd.id,
-                        entityId = triggerId,
-                        correlationId = cmd.correlationId
+                    store(
+                        TriggerSetInactiveRecord(
+                            cmdId = cmd.id,
+                            entityId = triggerId
+                        )
                     )
                 }
-
-                store(
-                    rec
-                )
                 (currentVersion(triggerId))
                     .also { ProjectionCurrent.upsert(this, it) }
                     .also { ProjectionUniqueName.upsert(this, it) }

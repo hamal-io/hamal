@@ -82,7 +82,7 @@ data class CronTriggerCreatedRecord(
 
 @Serializable
 @SerialName("ActiveTriggerRecord")
-data class ActiveTriggerRecord(
+data class TriggerSetActiveRecord(
     override val cmdId: CmdId,
     override val entityId: TriggerId,
     val correlationId: CorrelationId? = null
@@ -91,7 +91,7 @@ data class ActiveTriggerRecord(
 
 @Serializable
 @SerialName("InactiveTriggerRecord")
-data class InactiveTriggerRecord(
+data class TriggerSetInactiveRecord(
     override val cmdId: CmdId,
     override val entityId: TriggerId,
     val correlationId: CorrelationId? = null

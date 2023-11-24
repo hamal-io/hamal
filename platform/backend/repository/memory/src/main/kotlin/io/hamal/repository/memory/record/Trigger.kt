@@ -214,22 +214,20 @@ class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord,
         }
     }
 
-    override fun set(triggerId: TriggerId, cmd: SetTriggerCmd): Trigger {
+    override fun set(triggerId: TriggerId, cmd: SetTriggerStatusCmd): Trigger {
         return lock.withLock {
             if (commandAlreadyApplied(cmd.id, triggerId)) {
                 versionOf(triggerId, cmd.id)
             } else {
                 val rec: TriggerRecord = if (cmd.status == TriggerStatus.Active) {
-                    ActiveTriggerRecord(
+                    TriggerSetActiveRecord(
                         cmdId = cmd.id,
-                        entityId = triggerId,
-                        correlationId = cmd.correlationId
+                        entityId = triggerId
                     )
                 } else {
-                    InactiveTriggerRecord(
+                    TriggerSetInactiveRecord(
                         cmdId = cmd.id,
-                        entityId = triggerId,
-                        correlationId = cmd.correlationId
+                        entityId = triggerId
                     )
                 }
                 store(rec)

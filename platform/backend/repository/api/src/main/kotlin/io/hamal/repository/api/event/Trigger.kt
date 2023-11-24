@@ -11,6 +11,12 @@ data class TriggerCreatedEvent(
 
 @Serializable
 @PlatformEventTopic("trigger::status")
-data class TriggerStatusEvent(
+data class TriggerActivatedEvent(
+    val trigger: Trigger
+) : PlatformEvent()
+
+@Serializable
+@PlatformEventTopic("trigger::status")
+data class TriggerDeactivatedEvent(
     val trigger: Trigger
 ) : PlatformEvent()

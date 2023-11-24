@@ -150,7 +150,7 @@ class TriggerAdapter(
         triggerStatus: TriggerStatus,
         responseHandler: (TriggerStatusSubmitted) -> T
     ): T {
-        triggerQueryRepository.get(triggerId)  //ensure trigger exists
+        ensureTriggerExists(triggerId)
         return TriggerStatusSubmitted(
             id = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
@@ -175,5 +175,9 @@ class TriggerAdapter(
             requireNotNull(createTrigger.hookId) { "hookId is missing" }
             hookQueryRepository.get(createTrigger.hookId!!)
         }
+    }
+
+    private fun ensureTriggerExists(triggerId: TriggerId) {
+        triggerQueryRepository.get(triggerId)
     }
 }

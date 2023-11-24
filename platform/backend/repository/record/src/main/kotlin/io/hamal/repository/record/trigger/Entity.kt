@@ -107,13 +107,13 @@ data class TriggerEntity(
                 status = rec.status
             )
 
-            is ActiveTriggerRecord -> copy(
+            is TriggerSetActiveRecord -> copy(
                 cmdId = rec.cmdId,
                 id = rec.entityId,
                 status = TriggerStatus.Active
             )
 
-            is InactiveTriggerRecord -> copy(
+            is TriggerSetInactiveRecord -> copy(
                 cmdId = rec.cmdId,
                 id = rec.entityId,
                 status = TriggerStatus.Inactive
