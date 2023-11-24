@@ -73,7 +73,7 @@ class CreateTriggerHandler(
                         flowId = req.flowId,
                         inputs = req.inputs,
                         hookId = hook.id,
-                        hookMethods = req.hookMethods ?: setOf(Post)
+                        hookMethod = req.hookMethod ?: Post
                     )
                 )
             }

@@ -57,7 +57,7 @@ data class HookTriggerCreatedRecord(
     val name: TriggerName,
     val inputs: TriggerInputs,
     val hookId: HookId,
-    val hookMethods: Set<HookMethod>,
+    val hookMethod: HookMethod,
     val correlationId: CorrelationId? = null
 ) : TriggerRecord()
 

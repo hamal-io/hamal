@@ -125,7 +125,7 @@ class SqliteTriggerRepository(
                         name = cmd.name,
                         inputs = cmd.inputs,
                         hookId = cmd.hookId,
-                        hookMethods = cmd.hookMethods,
+                        hookMethod = cmd.hookMethod,
                         correlationId = cmd.correlationId
                     )
                 )

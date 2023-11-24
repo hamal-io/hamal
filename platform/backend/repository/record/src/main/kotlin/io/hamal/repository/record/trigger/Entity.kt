@@ -31,7 +31,7 @@ data class TriggerEntity(
     var topicId: TopicId? = null,
     var duration: Duration? = null,
     var hookId: HookId? = null,
-    var hookMethods: Set<HookMethod>? = null,
+    var hookMethod: HookMethod? = null,
 
     var cron: CronPattern? = null
 
@@ -81,7 +81,7 @@ data class TriggerEntity(
                 inputs = rec.inputs,
                 correlationId = rec.correlationId,
                 hookId = rec.hookId,
-                hookMethods = rec.hookMethods,
+                hookMethod = rec.hookMethod,
                 recordedAt = rec.recordedAt()
             )
 
@@ -141,7 +141,7 @@ data class TriggerEntity(
                 name = name!!,
                 inputs = inputs!!,
                 hookId = hookId!!,
-                hookMethods = hookMethods!!
+                hookMethod = hookMethod!!
             )
 
             Cron -> CronTrigger(

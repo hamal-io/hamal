@@ -52,7 +52,7 @@ interface TriggerCmdRepository : CmdRepository {
         val flowId: FlowId,
         val inputs: TriggerInputs,
         val hookId: HookId,
-        val hookMethods: Set<HookMethod>,
+        val hookMethod: HookMethod,
         val correlationId: CorrelationId? = null
     )
 
@@ -147,7 +147,7 @@ class HookTrigger(
     override val inputs: TriggerInputs,
     override val correlationId: CorrelationId? = null,
     val hookId: HookId,
-    val hookMethods: Set<HookMethod>
+    val hookMethod: HookMethod
 ) : Trigger {
     override val type = TriggerType.Hook
 }

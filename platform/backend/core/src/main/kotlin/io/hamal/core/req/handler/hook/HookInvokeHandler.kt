@@ -38,7 +38,6 @@ class HookInvokeHandler(
             )
         )
             .filterIsInstance<HookTrigger>()
-            .filter { it.hookMethods.contains(req.invocation.method) }
 
         val funcs = funcQueryRepository.list(
             FuncQueryRepository.FuncQuery(
