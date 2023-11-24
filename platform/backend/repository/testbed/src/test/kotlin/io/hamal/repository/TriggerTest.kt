@@ -2,6 +2,7 @@ package io.hamal.repository
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain._enum.HookMethod.*
 import io.hamal.lib.domain._enum.TriggerType.Event
 import io.hamal.lib.domain.vo.*
@@ -426,6 +427,11 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
 
                 verifyCount(2)
             }
+
+        @TestFactory
+        fun `100`() {
+            TODO()
+        }
 
         @TestFactory
         fun `Tries to create but cmd with func id was already applied`() =
@@ -987,13 +993,14 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
     }
 
     private fun TriggerRepository.createHookTrigger(
+        cmdId: CmdId = CmdGen(),
         triggerId: TriggerId,
         flowId: FlowId,
         name: TriggerName,
         groupId: GroupId,
         funcId: FuncId = FuncId(4),
         hookId: HookId = HookId(9),
-        cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
+        hookMethod: HookMethod = Post
     ) {
         create(
             CreateHookCmd(
@@ -1011,7 +1018,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 ),
                 funcId = funcId,
                 hookId = hookId,
-                hookMethod = Post
+                hookMethod = hookMethod
             )
         )
     }
