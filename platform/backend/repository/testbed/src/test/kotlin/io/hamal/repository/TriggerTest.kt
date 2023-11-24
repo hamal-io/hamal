@@ -429,8 +429,74 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
             }
 
         @TestFactory
-        fun `100`() {
-            TODO()
+        fun `Registers valid triggers`() = runWith(TriggerRepository::class) {
+            createHookTrigger(
+                triggerId = TriggerId(1),
+                flowId = FlowId(2),
+                groupId = GroupId(1),
+                name = TriggerName("trigger-name-1"),
+                funcId = FuncId(1),
+                hookId = HookId(1),
+                hookMethod = Get
+            )
+
+            createHookTrigger(
+                triggerId = TriggerId(2),
+                flowId = FlowId(2),
+                groupId = GroupId(1),
+                name = TriggerName("trigger-name-2"),
+                funcId = FuncId(1),
+                hookId = HookId(1),
+                hookMethod = Post
+            )
+
+            createHookTrigger(
+                triggerId = TriggerId(3),
+                flowId = FlowId(2),
+                groupId = GroupId(1),
+                name = TriggerName("trigger-name-3"),
+                funcId = FuncId(1),
+                hookId = HookId(2),
+                hookMethod = Get
+            )
+
+            createHookTrigger(
+                triggerId = TriggerId(4),
+                flowId = FlowId(2),
+                groupId = GroupId(1),
+                name = TriggerName("trigger-name-4"),
+                funcId = FuncId(2),
+                hookId = HookId(1),
+                hookMethod = Get
+            )
+
+            verifyCount(4)
+        }
+
+        @TestFactory
+        fun `Tries to register invalid hook triggers`() = runWith(TriggerRepository::class) {
+            createHookTrigger(
+                triggerId = TriggerId(1),
+                flowId = FlowId(2),
+                groupId = GroupId(1),
+                name = TriggerName("trigger-name-1"),
+                funcId = FuncId(1),
+                hookId = HookId(1),
+                hookMethod = Get
+            )
+
+            val exception = assertThrows<IllegalArgumentException> {
+                createHookTrigger(
+                    triggerId = TriggerId(1),
+                    flowId = FlowId(2),
+                    groupId = GroupId(1),
+                    name = TriggerName("trigger-name-1"),
+                    funcId = FuncId(1),
+                    hookId = HookId(1),
+                    hookMethod = Get
+                )
+            }
+            assertThat(exception.message, equalTo("Trigger already exists"))
         }
 
         @TestFactory
