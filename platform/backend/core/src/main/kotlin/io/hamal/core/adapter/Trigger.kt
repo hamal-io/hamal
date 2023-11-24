@@ -2,6 +2,7 @@ package io.hamal.core.adapter
 
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.ReqStatus
+import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.*
@@ -9,6 +10,7 @@ import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.repository.api.log.Topic
 import io.hamal.repository.api.submitted_req.TriggerCreateSubmitted
+import io.hamal.repository.api.submitted_req.TriggerStatusSubmitted
 import io.hamal.request.CreateTriggerReq
 import org.springframework.stereotype.Component
 
@@ -42,7 +44,15 @@ interface TriggerListPort {
     ): T
 }
 
-interface TriggerPort : TriggerCreatePort, TriggerGetPort, TriggerListPort
+interface TriggerStatusPort {
+    operator fun <T : Any> invoke(
+        triggerId: TriggerId,
+        triggerStatus: TriggerStatus,
+        responseHandler: (TriggerStatusSubmitted) -> T
+    ): T
+}
+
+interface TriggerPort : TriggerCreatePort, TriggerGetPort, TriggerListPort, TriggerStatusPort
 
 @Component
 class TriggerAdapter(
@@ -135,6 +145,20 @@ class TriggerAdapter(
         return responseHandler(triggers, funcs, flows, topics, hooks)
     }
 
+    override fun <T : Any> invoke(
+        triggerId: TriggerId,
+        triggerStatus: TriggerStatus,
+        responseHandler: (TriggerStatusSubmitted) -> T
+    ): T {
+        ensureTriggerExists(triggerId)
+        return TriggerStatusSubmitted(
+            id = generateDomainId(::ReqId),
+            status = ReqStatus.Submitted,
+            triggerId = triggerId,
+            triggerStatus = triggerStatus
+        ).also(reqCmdRepository::queue).let(responseHandler)
+    }
+
     private fun ensureFuncExists(createTrigger: CreateTriggerReq) {
         funcQueryRepository.get(createTrigger.funcId)
     }
@@ -151,5 +175,9 @@ class TriggerAdapter(
             requireNotNull(createTrigger.hookId) { "hookId is missing" }
             hookQueryRepository.get(createTrigger.hookId!!)
         }
+    }
+
+    private fun ensureTriggerExists(triggerId: TriggerId) {
+        triggerQueryRepository.get(triggerId)
     }
 }
