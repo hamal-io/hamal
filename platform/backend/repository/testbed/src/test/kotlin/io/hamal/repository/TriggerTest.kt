@@ -337,7 +337,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                         )
                     ),
                     hookId = HookId(9),
-                    hookMethods = setOf(Patch, Delete)
+                    hookMethod = Patch
                 )
             )
 
@@ -348,7 +348,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 assertThat(name, equalTo(TriggerName("trigger-name")))
                 assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
                 assertThat(hookId, equalTo(HookId(9)))
-                assertThat(hookMethods, equalTo(setOf(Patch, Delete)))
+                assertThat(hookMethod, equalTo(Patch))
             }
 
             verifyCount(1)
@@ -409,7 +409,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                         name = TriggerName("trigger-name"),
                         inputs = TriggerInputs(),
                         hookId = HookId(9),
-                        hookMethods = setOf(Post, Put)
+                        hookMethod = Post
                     )
                 )
 
@@ -421,7 +421,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     assertThat(name, equalTo(TriggerName("trigger-name")))
                     assertThat(inputs, equalTo(TriggerInputs()))
                     assertThat(hookId, equalTo(HookId(9)))
-                    assertThat(hookMethods, equalTo(setOf(Post, Put)))
+                    assertThat(hookMethod, equalTo(Post))
                 }
 
                 verifyCount(2)
@@ -450,7 +450,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                         name = TriggerName("second-trigger-name"),
                         inputs = TriggerInputs(),
                         hookId = HookId(999),
-                        hookMethods = setOf(Get)
+                        hookMethod = Get
                     )
                 )
 
@@ -1011,7 +1011,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 ),
                 funcId = funcId,
                 hookId = hookId,
-                hookMethods = setOf(Post)
+                hookMethod = Post
             )
         )
     }
