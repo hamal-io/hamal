@@ -188,6 +188,18 @@ class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord,
             if (commandAlreadyApplied(cmd.id, triggerId)) {
                 versionOf(triggerId, cmd.id) as HookTrigger
             } else {
+
+                CurrentTriggerProjection.list(
+                    TriggerQuery(
+                        hookIds = listOf(cmd.hookId)
+                    )
+                ).firstOrNull()?.let { trigger ->
+                    trigger as HookTrigger
+                    if (trigger.funcId == cmd.funcId && trigger.hookMethod == cmd.hookMethod) {
+                        throw IllegalArgumentException("Trigger already exists")
+                    }
+                }
+
                 store(
                     HookTriggerCreatedRecord(
                         cmdId = cmd.id,
