@@ -12,6 +12,7 @@ import FlowListPage from "./pages/app/flow-list";
 import FlowDetailPage from "./pages/app/flow-detail";
 
 import FlowOverviewPage from "@/pages/app/flow-detail/pages/overview";
+import FlowEndpointListPage from "@/pages/app/flow-detail/pages/endpoint-list";
 import FlowExecDetailPage from "@/pages/app/flow-detail/pages/exec-detail";
 import FlowExecListPage from "@/pages/app/flow-detail/pages/exec-list";
 import FlowFuncListPage from "@/pages/app/flow-detail/pages/func-list";
@@ -75,6 +76,12 @@ export const router = createBrowserRouter([
         path: "/flows/:flowId/hooks", element:
             <FlowDetailPage>
                 <FlowHookListPage/>
+            </FlowDetailPage>
+    },
+    {
+        path: "/flows/:flowId/endpoints", element:
+            <FlowDetailPage>
+                <FlowEndpointListPage/>
             </FlowDetailPage>
     },
     {

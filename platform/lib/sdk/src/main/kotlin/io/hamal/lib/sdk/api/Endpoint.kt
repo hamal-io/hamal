@@ -51,13 +51,13 @@ data class ApiEndpointList(
     @Serializable
     data class Endpoint(
         val id: EndpointId,
-        val flow: Flow,
+        val func: Func,
         val name: EndpointName
     ) {
         @Serializable
-        data class Flow(
-            val id: FlowId,
-            val name: FlowName
+        data class Func(
+            val id: FuncId,
+            val name: FuncName
         )
     }
 }
@@ -66,13 +66,13 @@ data class ApiEndpointList(
 @Serializable
 data class ApiEndpoint(
     val id: EndpointId,
-    val flow: Flow,
+    val func: Func,
     val name: EndpointName,
 ) {
     @Serializable
-    data class Flow(
-        val id: FlowId,
-        val name: FlowName
+    data class Func(
+        val id: FuncId,
+        val name: FuncName
     )
 }
 

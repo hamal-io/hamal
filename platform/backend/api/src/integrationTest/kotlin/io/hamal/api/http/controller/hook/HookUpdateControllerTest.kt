@@ -19,7 +19,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
-internal class HookUpdateControllerTest : HookBaseControllerTest() {
+internal class HookUpdateControllerTest : EndpointBaseControllerTest() {
 
     @Test
     fun `Tries to update hook which does not exists`() {

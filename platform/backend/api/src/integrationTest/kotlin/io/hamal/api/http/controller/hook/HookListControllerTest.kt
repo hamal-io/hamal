@@ -8,7 +8,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
 
-internal class HookListControllerTest : HookBaseControllerTest() {
+internal class HookListControllerTest : EndpointBaseControllerTest() {
     @Test
     fun `No hooks`() {
         val result = listHooks()

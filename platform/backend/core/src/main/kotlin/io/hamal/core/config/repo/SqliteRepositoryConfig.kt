@@ -11,12 +11,13 @@ import io.hamal.repository.sqlite.log.SqliteBrokerRepository
 import io.hamal.repository.sqlite.record.account.SqliteAccountRepository
 import io.hamal.repository.sqlite.record.blueprint.SqliteBlueprintRepository
 import io.hamal.repository.sqlite.record.code.SqliteCodeRepository
+import io.hamal.repository.sqlite.record.endpoint.SqliteEndpointRepository
 import io.hamal.repository.sqlite.record.exec.SqliteExecRepository
 import io.hamal.repository.sqlite.record.extension.SqliteExtensionRepository
+import io.hamal.repository.sqlite.record.flow.SqliteFlowRepository
 import io.hamal.repository.sqlite.record.func.SqliteFuncRepository
 import io.hamal.repository.sqlite.record.group.SqliteGroupRepository
 import io.hamal.repository.sqlite.record.hook.SqliteHookRepository
-import io.hamal.repository.sqlite.record.flow.SqliteFlowRepository
 import io.hamal.repository.sqlite.record.trigger.SqliteTriggerRepository
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -69,6 +70,15 @@ open class SqliteRepositoryConfig(backendBasePath: BackendBasePath) {
 
     @Bean
     open fun codeQueryRepository() = codeRepository()
+
+    @Bean
+    open fun endpointRepository() = SqliteEndpointRepository(SqliteEndpointRepository.Config(path))
+
+    @Bean
+    open fun endpointCmdRepository() = endpointRepository()
+
+    @Bean
+    open fun endpointQueryRepository() = endpointRepository()
 
     @Bean
     open fun extensionRepository() = SqliteExtensionRepository(SqliteExtensionRepository.Config(path))

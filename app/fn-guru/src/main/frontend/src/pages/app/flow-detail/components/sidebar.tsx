@@ -52,6 +52,12 @@ const Sidebar: React.FC<Props> = ({className}) => {
             active: currentPath === `/flows/${flowId}/hooks`
         },
         {
+            icon: WebhookIcon,
+            href: `/flows/${flowId}/endpoints`,
+            label: "Endpoints",
+            active: currentPath === `/flows/${flowId}/endpoints`
+        },
+        {
             icon: BookOpen,
             href: "https://docs.fn.guru",
             external: true,

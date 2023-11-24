@@ -1,7 +1,6 @@
 package io.hamal.api.http.controller.endpoint
 
 import io.hamal.api.http.controller.endpoint.EndpointInvokeController.InvocationResult.*
-import io.hamal.core.component.Async
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.EndpointMethod
@@ -12,6 +11,7 @@ import io.hamal.lib.sdk.api.ApiExec
 import io.hamal.repository.api.*
 import io.hamal.repository.api.submitted_req.ExecInvokeSubmitted
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
@@ -20,13 +20,13 @@ import java.util.concurrent.CompletableFuture
 @RestController
 internal class EndpointInvokeController(
     private val generateDomainId: GenerateDomainId,
-    private val async: Async,
     private val reqCmdRepository: ReqCmdRepository,
     private val execRepository: ExecRepository
 ) {
 
-    @PostMapping("/v1/endpoints")
+    @PostMapping("/v1/endpoints/{endpointId}/invoke")
     fun invokeEndpoint(
+        @PathVariable("endpointId") endpointId: EndpointId,
         @RequestBody req: ApiAdhocInvokeReq
     ): CompletableFuture<ResponseEntity<ApiExec>> {
         return CompletableFuture.supplyAsync {

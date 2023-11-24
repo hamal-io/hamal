@@ -1,7 +1,7 @@
-package io.hamal.api.http.controller.hook
+package io.hamal.api.http.controller.endpoint
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.vo.HookName
+import io.hamal.lib.domain.vo.EndpointName
 import io.hamal.lib.domain.vo.FlowId
 import io.hamal.lib.domain.vo.FlowInputs
 import io.hamal.lib.domain.vo.FlowName
@@ -9,28 +9,28 @@ import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiError
-import io.hamal.lib.sdk.api.ApiHookCreateReq
+import io.hamal.lib.sdk.api.ApiEndpointCreateReq
 import io.hamal.repository.api.FlowCmdRepository.CreateCmd
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.empty
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
-internal class HookCreateControllerTest : EndpointBaseControllerTest() {
+internal class EndpointCreateControllerTest : EndpointBaseControllerTest() {
 
     @Test
-    fun `Create hook with default flow id`() {
-        val result = createHook(
-            req = ApiHookCreateReq(
-                name = HookName("test-hook"),
+    fun `Create endpoint with default flow id`() {
+        val result = createEndpoint(
+            req = ApiEndpointCreateReq(
+                name = EndpointName("test-endpoint"),
             ),
             flowId = FlowId(1)
         )
         awaitCompleted(result)
 
-        val hook = hookQueryRepository.get(result.hookId)
-        with(hook) {
-            assertThat(name, equalTo(HookName("test-hook")))
+        val endpoint = endpointQueryRepository.get(result.endpointId)
+        with(endpoint) {
+            assertThat(name, equalTo(EndpointName("test-endpoint")))
 
             val flow = flowQueryRepository.get(flowId)
             assertThat(flow.name, equalTo(FlowName("hamal")))
@@ -40,7 +40,7 @@ internal class HookCreateControllerTest : EndpointBaseControllerTest() {
 
 
     @Test
-    fun `Create hook with flow id`() {
+    fun `Create endpoint with flow id`() {
         val flow = flowCmdRepository.create(
             CreateCmd(
                 id = CmdId(1),
@@ -51,14 +51,14 @@ internal class HookCreateControllerTest : EndpointBaseControllerTest() {
             )
         )
 
-        val result = createHook(
-            req = ApiHookCreateReq(HookName("test-hook")),
+        val result = createEndpoint(
+            req = ApiEndpointCreateReq(EndpointName("test-endpoint")),
             flowId = flow.id
         )
         awaitCompleted(result)
 
-        with(hookQueryRepository.get(result.hookId)) {
-            assertThat(name, equalTo(HookName("test-hook")))
+        with(endpointQueryRepository.get(result.endpointId)) {
+            assertThat(name, equalTo(EndpointName("test-endpoint")))
 
             flowQueryRepository.get(flowId).let {
                 assertThat(it.id, equalTo(flow.id))
@@ -68,11 +68,11 @@ internal class HookCreateControllerTest : EndpointBaseControllerTest() {
     }
 
     @Test
-    fun `Tries to create hook with flow which does not exist`() {
+    fun `Tries to create endpoint with flow which does not exist`() {
 
-        val response = httpTemplate.post("/v1/flows/12345/hooks")
+        val response = httpTemplate.post("/v1/flows/12345/endpoints")
             .path("groupId", testGroup.id)
-            .body(ApiHookCreateReq(HookName("test-hook")))
+            .body(ApiEndpointCreateReq(EndpointName("test-endpoint")))
             .execute()
 
         assertThat(response.statusCode, equalTo(NotFound))
@@ -81,6 +81,6 @@ internal class HookCreateControllerTest : EndpointBaseControllerTest() {
         val error = response.error(ApiError::class)
         assertThat(error.message, equalTo("Flow not found"))
 
-        assertThat(listHooks().hooks, empty())
+        assertThat(listEndpoints().endpoints, empty())
     }
 }
