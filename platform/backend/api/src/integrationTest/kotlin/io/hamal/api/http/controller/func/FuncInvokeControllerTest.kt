@@ -98,11 +98,11 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
         )
 
         repeat(10) {
-            updateFunc(
+            awaitCompleted(updateFunc(
                 createResponse.funcId, ApiFuncUpdateReq(
                     name = FuncName("test-update"), code = CodeValue("code-${it}")
                 )
-            )
+            ))
         }
 
 
@@ -162,7 +162,6 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
         awaitCompleted(result)
 
         with(execQueryRepository.get(result.execId)) {
-            //assertThat(code.value, equalTo(CodeValue("code-11")))
             assertThat(code.version, equalTo(CodeVersion(11)))
         }
     }

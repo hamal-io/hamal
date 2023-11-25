@@ -53,6 +53,9 @@ internal abstract class BaseTest {
     lateinit var codeQueryRepository: CodeQueryRepository
 
     @Autowired
+    lateinit var endpointRepository: EndpointRepository
+
+    @Autowired
     lateinit var eventBrokerRepository: BrokerRepository
 
     @Autowired

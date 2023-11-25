@@ -56,7 +56,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
             createFunc(
                 flowId = createdFlow.id,
                 req = ApiFuncCreateReq(
-                    name = FuncName("createdName"),
+                    name = FuncName("created-name"),
                     inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("createdInputs")))),
                     code = CodeValue("createdCode")
                 )
@@ -67,7 +67,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
             .path("funcId", func.funcId)
             .body(
                 ApiFuncUpdateReq(
-                    name = FuncName("updatedName"),
+                    name = FuncName("updated-name"),
                     inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("updatedInputs")))),
                     code = CodeValue("updatedCode")
                 )
@@ -85,7 +85,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
         with(getFunc(funcId)) {
             assertThat(id, equalTo(funcId))
             assertThat(flow.name, equalTo(FlowName("createdFlow")))
-            assertThat(name, equalTo(FuncName("updatedName")))
+            assertThat(name, equalTo(FuncName("updated-name")))
             assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("updatedInputs"))))))
 
             assertThat(code.current.version, equalTo(CodeVersion(2)))
@@ -99,7 +99,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
     @Test
     fun `Updates func without updating values`() {
         val funcId = createFuncInFlow(
-            FuncName("createdName"),
+            FuncName("created-name"),
             CodeValue("createdCode")
         ).funcId
 
@@ -123,7 +123,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
         with(getFunc(funcId)) {
             assertThat(id, equalTo(funcId))
             assertThat(flow.name, equalTo(FlowName("createdFlow")))
-            assertThat(name, equalTo(FuncName("createdName")))
+            assertThat(name, equalTo(FuncName("created-name")))
             assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("createdInputs"))))))
 
             assertThat(code.current.version, equalTo(CodeVersion(1)))
@@ -137,14 +137,14 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
     @Test
     fun `Does not increment code version if req code is null`() {
         val funcId = createFuncInFlow(
-            FuncName("createdName"),
+            FuncName("created-name"),
             CodeValue("createdCode")
         ).funcId
 
         val updateFuncResponse = httpTemplate.patch("/v1/funcs/{funcId}")
             .path("funcId", funcId)
             .body(
-                ApiFuncUpdateReq(name = FuncName("updatedName"), code = null)
+                ApiFuncUpdateReq(name = FuncName("updated-name"), code = null)
             )
             .execute()
 
@@ -155,7 +155,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
         awaitCompleted(submittedReq)
 
         with(getFunc(funcId)) {
-            assertThat(name, equalTo(FuncName("updatedName")))
+            assertThat(name, equalTo(FuncName("updated-name")))
             assertThat(flow.name, equalTo(FlowName("createdFlow")))
 
             assertThat(code.current.version, equalTo(CodeVersion(1)))
@@ -177,7 +177,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
             .path("funcId", funcId)
             .body(
                 ApiFuncUpdateReq(
-                    name = FuncName("updatedName"),
+                    name = FuncName("updated-name"),
                     inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("updatedInputs")))),
                     code = CodeValue("createdCode")
                 )
@@ -192,7 +192,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
 
         with(getFunc(funcId)) {
             assertThat(flow.name, equalTo(FlowName("createdFlow")))
-            assertThat(name, equalTo(FuncName("updatedName")))
+            assertThat(name, equalTo(FuncName("updated-name")))
             assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("updatedInputs"))))))
 
             assertThat(code.current.version, equalTo(CodeVersion(1)))

@@ -1,10 +1,10 @@
 package io.hamal.api.http.controller.hook
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.vo.HookName
 import io.hamal.lib.domain.vo.FlowId
 import io.hamal.lib.domain.vo.FlowInputs
 import io.hamal.lib.domain.vo.FlowName
+import io.hamal.lib.domain.vo.HookName
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.NotFound
@@ -48,14 +48,14 @@ internal class HookUpdateControllerTest : HookBaseControllerTest() {
 
         val hook = awaitCompleted(
             createHook(
-                req = ApiHookCreateReq(HookName("createdName")),
+                req = ApiHookCreateReq(HookName("created-name")),
                 flowId = createdFlow.id
             )
         )
 
         val updateHookResponse = httpTemplate.patch("/v1/hooks/{hookId}")
             .path("hookId", hook.hookId)
-            .body(ApiUpdateHookReq(name = HookName("updatedName")))
+            .body(ApiUpdateHookReq(name = HookName("updated-name")))
             .execute()
 
         assertThat(updateHookResponse.statusCode, equalTo(Accepted))
@@ -66,7 +66,7 @@ internal class HookUpdateControllerTest : HookBaseControllerTest() {
         with(getHook(submittedReq.hookId)) {
             assertThat(id, equalTo(submittedReq.hookId))
             assertThat(flow.name, equalTo(FlowName("createdFlow")))
-            assertThat(name, equalTo(HookName("updatedName")))
+            assertThat(name, equalTo(HookName("updated-name")))
         }
     }
 
@@ -84,7 +84,7 @@ internal class HookUpdateControllerTest : HookBaseControllerTest() {
 
         val hook = awaitCompleted(
             createHook(
-                req = ApiHookCreateReq(HookName("createdName")),
+                req = ApiHookCreateReq(HookName("created-name")),
                 flowId = createdFlow.id
             )
         )
@@ -102,7 +102,7 @@ internal class HookUpdateControllerTest : HookBaseControllerTest() {
         with(getHook(req.hookId)) {
             assertThat(id, equalTo(req.hookId))
             assertThat(flow.name, equalTo(FlowName("createdFlow")))
-            assertThat(name, equalTo(HookName("createdName")))
+            assertThat(name, equalTo(HookName("created-name")))
         }
     }
 }

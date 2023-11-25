@@ -12,6 +12,7 @@ import io.hamal.repository.sqlite.log.*
 import io.hamal.repository.sqlite.record.account.SqliteAccountRepository
 import io.hamal.repository.sqlite.record.blueprint.SqliteBlueprintRepository
 import io.hamal.repository.sqlite.record.code.SqliteCodeRepository
+import io.hamal.repository.sqlite.record.endpoint.SqliteEndpointRepository
 import io.hamal.repository.sqlite.record.exec.SqliteExecRepository
 import io.hamal.repository.sqlite.record.extension.SqliteExtensionRepository
 import io.hamal.repository.sqlite.record.flow.SqliteFlowRepository
@@ -52,6 +53,10 @@ object SqliteFixture : BaseTestFixture {
 
         CodeRepository::class -> SqliteCodeRepository(
             SqliteCodeRepository.Config(createTempDirectory("sqlite_code_test"))
+        ) as REPO
+
+        EndpointRepository::class -> SqliteEndpointRepository(
+            SqliteEndpointRepository.Config(createTempDirectory("sqlite_endpoint_test"))
         ) as REPO
 
         ExecRepository::class -> SqliteExecRepository(

@@ -22,6 +22,8 @@ fun Submitted.toApiSubmitted(): ApiSubmitted = when (this) {
     is AuthLoginSubmitted -> ApiTokenSubmitted(id, status, accountId, groupIds, defaultFlowIds, token, name)
     is BlueprintCreateSubmitted -> ApiBlueprintCreateSubmitted(id, status, blueprintId, groupId)
     is BlueprintUpdateSubmitted -> ApiBlueprintUpdateSubmitted(id, status, blueprintId)
+    is EndpointCreateSubmitted -> ApiEndpointCreateSubmitted(id, status, endpointId, groupId, funcId)
+    is EndpointUpdateSubmitted -> ApiEndpointUpdateSubmitted(id, status, endpointId)
     is ExecInvokeSubmitted -> ApiExecInvokeSubmitted(id, status, execId, groupId, flowId)
     is ExtensionCreateSubmitted -> ApiExtensionCreateSubmitted(id, status, extensionId, groupId)
     is ExtensionUpdateSubmitted -> ApiExtensionUpdateSubmitted(id, status, extensionId)
