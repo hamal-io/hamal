@@ -11,6 +11,7 @@ interface CreateEndpointReq {
 }
 
 interface UpdateEndpointReq {
+    val funcId: FuncId?
     val name: EndpointName?
     val method: EndpointMethod?
 }

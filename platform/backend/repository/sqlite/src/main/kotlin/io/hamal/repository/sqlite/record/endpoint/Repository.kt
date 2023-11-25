@@ -68,7 +68,9 @@ class SqliteEndpointRepository(
                         entityId = endpointId,
                         groupId = cmd.groupId,
                         flowId = cmd.flowId,
-                        name = cmd.name
+                        name = cmd.name,
+                        funcId = cmd.funcId,
+                        method = cmd.method
                     )
                 )
 
@@ -90,7 +92,9 @@ class SqliteEndpointRepository(
                     EndpointUpdatedRecord(
                         entityId = endpointId,
                         cmdId = cmdId,
-                        name = cmd.name ?: currentVersion.name
+                        name = cmd.name ?: currentVersion.name,
+                        funcId = cmd.funcId ?: currentVersion.funcId,
+                        method = cmd.method ?: currentVersion.method
                     )
                 )
                 currentVersion(endpointId)

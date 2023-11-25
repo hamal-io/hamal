@@ -1,10 +1,10 @@
 package io.hamal.api.http.controller.hook
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.vo.HookName
 import io.hamal.lib.domain.vo.FlowId
 import io.hamal.lib.domain.vo.FlowInputs
 import io.hamal.lib.domain.vo.FlowName
+import io.hamal.lib.domain.vo.HookName
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.body
@@ -16,7 +16,7 @@ import org.hamcrest.Matchers.empty
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
-internal class HookCreateControllerTest : EndpointBaseControllerTest() {
+internal class HookCreateControllerTest : HookBaseControllerTest() {
 
     @Test
     fun `Create hook with default flow id`() {
@@ -46,7 +46,7 @@ internal class HookCreateControllerTest : EndpointBaseControllerTest() {
                 id = CmdId(1),
                 flowId = FlowId(2345),
                 groupId = testGroup.id,
-                name = FlowName("hamal::name::space"),
+                name = FlowName("hamal::flow"),
                 inputs = FlowInputs()
             )
         )
@@ -62,7 +62,7 @@ internal class HookCreateControllerTest : EndpointBaseControllerTest() {
 
             flowQueryRepository.get(flowId).let {
                 assertThat(it.id, equalTo(flow.id))
-                assertThat(it.name, equalTo(FlowName("hamal::name::space")))
+                assertThat(it.name, equalTo(FlowName("hamal::flow")))
             }
         }
     }

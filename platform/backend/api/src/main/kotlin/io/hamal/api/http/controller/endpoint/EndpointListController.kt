@@ -43,7 +43,8 @@ internal class EndpointListController(private val listEndpoint: EndpointListPort
                             id = func.id,
                             name = func.name
                         ),
-                        name = endpoint.name
+                        name = endpoint.name,
+                        method = endpoint.method
                     )
                 }
             ))
@@ -77,7 +78,8 @@ internal class EndpointListController(private val listEndpoint: EndpointListPort
                             id = funcs.id,
                             name = funcs.name
                         ),
-                        name = endpoint.name
+                        name = endpoint.name,
+                        method = endpoint.method
                     )
                 }
             ))

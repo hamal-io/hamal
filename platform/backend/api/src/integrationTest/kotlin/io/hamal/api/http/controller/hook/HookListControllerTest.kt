@@ -1,14 +1,14 @@
 package io.hamal.api.http.controller.hook
 
-import io.hamal.lib.domain.vo.HookName
 import io.hamal.lib.domain.vo.FlowName
+import io.hamal.lib.domain.vo.HookName
 import io.hamal.lib.sdk.api.ApiHookCreateReq
 import io.hamal.lib.sdk.api.ApiHookList
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
 
-internal class HookListControllerTest : EndpointBaseControllerTest() {
+internal class HookListControllerTest : HookBaseControllerTest() {
     @Test
     fun `No hooks`() {
         val result = listHooks()

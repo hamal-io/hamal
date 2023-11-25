@@ -11,7 +11,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
-internal class HookGetControllerTest : EndpointBaseControllerTest() {
+internal class HookGetControllerTest : HookBaseControllerTest() {
     @Test
     fun `Hook does not exists`() {
         val getHookResponse = httpTemplate.get("/v1/hooks/33333333").execute()

@@ -38,9 +38,9 @@ internal object ProjectionUniqueName : SqliteProjection<EndpointId, EndpointReco
             CREATE TABLE IF NOT EXISTS unique_name (
                  id             INTEGER NOT NULL,
                  name           VARCHAR(255) NOT NULL,
-                 flow_id   INTEGER NOT NULL,
+                 flow_id        INTEGER NOT NULL,
                  PRIMARY KEY    (id),
-                 UNIQUE (name, flow_id)
+                 UNIQUE         (name, flow_id)
             );
         """.trimIndent()
         )

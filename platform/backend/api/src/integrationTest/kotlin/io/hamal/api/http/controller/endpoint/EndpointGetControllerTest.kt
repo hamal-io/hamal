@@ -1,12 +1,14 @@
 package io.hamal.api.http.controller.endpoint
 
+import io.hamal.lib.domain._enum.EndpointMethod
 import io.hamal.lib.domain.vo.EndpointName
+import io.hamal.lib.domain.vo.FlowName
+import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.HttpSuccessResponse
-import io.hamal.lib.sdk.api.ApiError
 import io.hamal.lib.sdk.api.ApiEndpoint
-import io.hamal.lib.sdk.api.ApiEndpointCreateReq
+import io.hamal.lib.sdk.api.ApiError
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -24,9 +26,31 @@ internal class EndpointGetControllerTest : EndpointBaseControllerTest() {
 
     @Test
     fun `Get endpoint`() {
-        val endpointId = awaitCompleted(createEndpoint(ApiEndpointCreateReq(EndpointName("endpoint-one")))).endpointId
+        val flowId = awaitCompleted(
+            createFlow(
+                name = FlowName("flow"),
+                groupId = testGroup.id
+            )
+        ).flowId
 
-        val getEndpointResponse = httpTemplate.get("/v1/endpoints/{endpointId}").path("endpointId", endpointId).execute()
+        val funcId = awaitCompleted(
+            createFunc(
+                flowId = flowId,
+                name = FuncName("func")
+            )
+        ).funcId
+
+        val endpointId = awaitCompleted(
+            createEndpoint(
+                flowId = flowId,
+                name = EndpointName("endpoint-one"),
+                funcId = funcId,
+                method = EndpointMethod.Post
+            )
+        ).endpointId
+
+        val getEndpointResponse =
+            httpTemplate.get("/v1/endpoints/{endpointId}").path("endpointId", endpointId).execute()
         assertThat(getEndpointResponse.statusCode, equalTo(HttpStatusCode.Ok))
         require(getEndpointResponse is HttpSuccessResponse) { "request was not successful" }
 

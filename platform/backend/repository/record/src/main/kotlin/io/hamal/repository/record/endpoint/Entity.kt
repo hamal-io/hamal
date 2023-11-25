@@ -31,6 +31,8 @@ data class EndpointEntity(
                 sequence = rec.sequence(),
                 flowId = rec.flowId,
                 name = rec.name,
+                funcId = rec.funcId,
+                method = rec.method,
                 recordedAt = rec.recordedAt()
 
             )
@@ -40,6 +42,8 @@ data class EndpointEntity(
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
                 name = rec.name,
+                funcId = rec.funcId,
+                method = rec.method,
                 recordedAt = rec.recordedAt()
             )
         }

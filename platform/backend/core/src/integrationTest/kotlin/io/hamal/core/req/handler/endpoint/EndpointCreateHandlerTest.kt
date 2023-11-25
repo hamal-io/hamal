@@ -1,13 +1,12 @@
 package io.hamal.core.req.handler.endpoint
 
 import io.hamal.core.req.handler.BaseReqHandlerTest
-import io.hamal.lib.domain._enum.EndpointMethod
+import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.domain._enum.EndpointMethod.Post
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
-import io.hamal.lib.domain.vo.EndpointId
-import io.hamal.lib.domain.vo.EndpointName
-import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.domain.vo.ReqId
+import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.EndpointQueryRepository.EndpointQuery
+import io.hamal.repository.api.FuncCmdRepository.CreateCmd
 import io.hamal.repository.api.submitted_req.EndpointCreateSubmitted
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -19,6 +18,19 @@ internal class EndpointCreateHandlerTest : BaseReqHandlerTest() {
 
     @Test
     fun `Creates endpoint`() {
+        funcCmdRepository.create(
+            CreateCmd(
+                id = CmdId(1),
+                funcId = FuncId(23456),
+                groupId = testGroup.id,
+                flowId = testFlow.id,
+                name = FuncName("func"),
+                inputs = FuncInputs(),
+                codeId = CodeId(1),
+                codeVersion = CodeVersion(1)
+            )
+        )
+
         testInstance(submitCreateEndpointReq)
 
         endpointRepository.list(EndpointQuery(groupIds = listOf())).also { endpoints ->
@@ -28,7 +40,7 @@ internal class EndpointCreateHandlerTest : BaseReqHandlerTest() {
                 assertThat(name, equalTo(EndpointName("awesome-endpoint")))
                 assertThat(groupId, equalTo(testGroup.id))
                 assertThat(funcId, equalTo(FuncId(23456)))
-                assertThat(method, equalTo(EndpointMethod.Post))
+                assertThat(method, equalTo(Post))
             }
         }
     }
@@ -44,7 +56,7 @@ internal class EndpointCreateHandlerTest : BaseReqHandlerTest() {
             groupId = testGroup.id,
             funcId = FuncId(23456),
             name = EndpointName("awesome-endpoint"),
-            method = EndpointMethod.Post
+            method = Post
         )
     }
 }

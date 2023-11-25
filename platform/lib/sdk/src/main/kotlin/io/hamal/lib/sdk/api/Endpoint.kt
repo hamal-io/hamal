@@ -33,6 +33,7 @@ data class ApiEndpointCreateSubmitted(
 
 @Serializable
 data class ApiUpdateEndpointReq(
+    override val funcId: FuncId? = null,
     override val name: EndpointName? = null,
     override val method: EndpointMethod? = null
 ) : UpdateEndpointReq
@@ -52,7 +53,8 @@ data class ApiEndpointList(
     data class Endpoint(
         val id: EndpointId,
         val func: Func,
-        val name: EndpointName
+        val name: EndpointName,
+        val method: EndpointMethod
     ) {
         @Serializable
         data class Func(
@@ -68,6 +70,7 @@ data class ApiEndpoint(
     val id: EndpointId,
     val func: Func,
     val name: EndpointName,
+    val method: EndpointMethod
 ) {
     @Serializable
     data class Func(

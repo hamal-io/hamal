@@ -31,7 +31,8 @@ internal class EndpointGetController(
                     id = func.id,
                     name = func.name
                 ),
-                name = endpoint.name
+                name = endpoint.name,
+                method = endpoint.method
             )
         )
 }

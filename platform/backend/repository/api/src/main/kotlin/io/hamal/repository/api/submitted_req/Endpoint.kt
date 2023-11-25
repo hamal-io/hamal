@@ -22,6 +22,7 @@ data class EndpointUpdateSubmitted(
     override var status: ReqStatus,
     val endpointId: EndpointId,
     val groupId: GroupId,
+    val funcId: FuncId,
     val name: EndpointName?,
     val method: EndpointMethod?
 ) : Submitted

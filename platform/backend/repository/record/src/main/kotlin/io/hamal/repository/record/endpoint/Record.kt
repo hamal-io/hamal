@@ -1,6 +1,7 @@
 package io.hamal.repository.record.endpoint
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.domain._enum.EndpointMethod
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.record.Record
 import io.hamal.repository.record.RecordSequence
@@ -22,7 +23,9 @@ data class EndpointCreatedRecord(
     override val cmdId: CmdId,
     val groupId: GroupId,
     val flowId: FlowId,
-    val name: EndpointName
+    val funcId: FuncId,
+    val name: EndpointName,
+    val method: EndpointMethod
 ) : EndpointRecord()
 
 @Serializable
@@ -30,5 +33,7 @@ data class EndpointCreatedRecord(
 data class EndpointUpdatedRecord(
     override val entityId: EndpointId,
     override val cmdId: CmdId,
-    val name: EndpointName
+    val funcId: FuncId,
+    val name: EndpointName,
+    val method: EndpointMethod
 ) : EndpointRecord()

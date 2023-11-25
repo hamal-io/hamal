@@ -41,6 +41,7 @@ interface EndpointCmdRepository : CmdRepository {
     data class UpdateCmd(
         val id: CmdId,
         val name: EndpointName? = null,
+        val funcId: FuncId? = null,
         val method: EndpointMethod? = null
     )
 }

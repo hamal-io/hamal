@@ -87,11 +87,18 @@ class EndpointAdapter(
         responseHandler: (EndpointUpdateSubmitted) -> T
     ): T {
         val endpoint = endpointQueryRepository.get(endpointId)
+
+        req.funcId?.let { funcId ->
+            val func = funcQueryRepository.get(funcId)
+            require(endpoint.flowId == func.flowId) { "Endpoint and Func must share the same Flow" }
+        }
+
         return EndpointUpdateSubmitted(
             id = generateDomainId(::ReqId),
             status = Submitted,
             groupId = endpoint.groupId,
             endpointId = endpointId,
+            funcId = req.funcId ?: endpoint.funcId,
             name = req.name,
             method = req.method
         ).also(reqCmdRepository::queue).let(responseHandler)
