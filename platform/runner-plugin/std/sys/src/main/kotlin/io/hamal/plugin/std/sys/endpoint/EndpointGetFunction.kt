@@ -29,8 +29,7 @@ class EndpointGetFunction(
                                     "id" to StringType(endpoint.func.id.value.value.toString(16)),
                                     "name" to StringType(endpoint.func.name.value)
                                 )
-                            ),
-                            "method" to StringType(endpoint.method.name)
+                            )
                         )
                     )
                 }

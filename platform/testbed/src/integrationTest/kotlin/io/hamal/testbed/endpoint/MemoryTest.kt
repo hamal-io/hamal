@@ -18,12 +18,12 @@ internal object MemoryEndpointTest : BaseEndpointTest() {
     init {
         val properties = Properties()
         properties["HTTP_POLL_EVERY_MS"] = 1
-        properties["API_HOST"] = "http://localhost:8040"
-        properties["BRIDGE_HOST"] = "http://localhost:7040"
+        properties["API_HOST"] = "http://localhost:8047"
+        properties["BRIDGE_HOST"] = "http://localhost:7047"
 
         val applicationBuilder = SpringApplicationBuilder()
             .parent(CoreConfig::class.java, TestConfig::class.java, TestRetryConfig::class.java)
-            .profiles("test", "api", "memory")
+            .profiles("test", "endpoint", "memory")
             .properties(properties)
             .bannerMode(Banner.Mode.OFF)
             .web(WebApplicationType.NONE)
@@ -34,7 +34,7 @@ internal object MemoryEndpointTest : BaseEndpointTest() {
                 .child(ApiConfig::class.java)
                 .sources(ClearController::class.java)
                 .web(WebApplicationType.SERVLET)
-                .properties("server.port=8040")
+                .properties("server.port=8047")
                 .bannerMode(Banner.Mode.OFF)
                 .run()
 
@@ -42,7 +42,7 @@ internal object MemoryEndpointTest : BaseEndpointTest() {
                 .parent(it)
                 .child(BridgeConfig::class.java)
                 .web(WebApplicationType.SERVLET)
-                .properties("server.port=7040")
+                .properties("server.port=7047")
                 .bannerMode(Banner.Mode.OFF)
                 .run()
 
@@ -57,7 +57,7 @@ internal object MemoryEndpointTest : BaseEndpointTest() {
     }
 
     override val apiHttpTemplate = HttpTemplateImpl(
-        baseUrl = "http://localhost:8040",
+        baseUrl = "http://localhost:8047",
         headerFactory = {
             this["authorization"] = "Bearer root-token"
         }

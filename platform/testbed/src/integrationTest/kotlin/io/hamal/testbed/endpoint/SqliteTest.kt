@@ -20,12 +20,12 @@ internal object SqliteEndpointTest : BaseEndpointTest() {
     init {
         val properties = Properties()
         properties["HTTP_POLL_EVERY_MS"] = 1
-        properties["API_HOST"] = "http://localhost:8041"
-        properties["BRIDGE_HOST"] = "http://localhost:7041"
+        properties["API_HOST"] = "http://localhost:8046"
+        properties["BRIDGE_HOST"] = "http://localhost:7046"
 
         val applicationBuilder = SpringApplicationBuilder()
             .parent(CoreConfig::class.java, TestConfig::class.java, TestRetryConfig::class.java)
-            .profiles("test", "api", "sqlite")
+            .profiles("test", "endpoint", "sqlite")
             .properties(properties)
             .bannerMode(OFF)
             .web(NONE)
@@ -36,7 +36,7 @@ internal object SqliteEndpointTest : BaseEndpointTest() {
                 .child(ApiConfig::class.java)
                 .sources(ClearController::class.java)
                 .web(SERVLET)
-                .properties("server.port=8041")
+                .properties("server.port=8046")
                 .bannerMode(OFF)
                 .run()
 
@@ -44,7 +44,7 @@ internal object SqliteEndpointTest : BaseEndpointTest() {
                 .parent(it)
                 .child(BridgeConfig::class.java)
                 .web(SERVLET)
-                .properties("server.port=7041")
+                .properties("server.port=7046")
                 .bannerMode(OFF)
                 .run()
 
@@ -59,7 +59,7 @@ internal object SqliteEndpointTest : BaseEndpointTest() {
     }
 
     override val apiHttpTemplate = HttpTemplateImpl(
-        baseUrl = "http://localhost:8041",
+        baseUrl = "http://localhost:8046",
         headerFactory = {
             this["authorization"] = "Bearer root-token"
         }

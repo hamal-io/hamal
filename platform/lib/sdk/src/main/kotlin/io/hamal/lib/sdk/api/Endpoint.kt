@@ -53,8 +53,7 @@ data class ApiEndpointList(
     data class Endpoint(
         val id: EndpointId,
         val func: Func,
-        val name: EndpointName,
-        val method: EndpointMethod
+        val name: EndpointName
     ) {
         @Serializable
         data class Func(
@@ -68,8 +67,7 @@ data class ApiEndpointList(
 data class ApiEndpoint(
     val id: EndpointId,
     val func: Func,
-    val name: EndpointName,
-    val method: EndpointMethod
+    val name: EndpointName
 ) {
     @Serializable
     data class Func(

@@ -49,7 +49,6 @@ internal class EndpointListControllerTest : EndpointBaseControllerTest() {
                 assertThat(id, equalTo(endpointId))
                 assertThat(name, equalTo(EndpointName("endpoint-one")))
                 assertThat(func.name, equalTo(FuncName("func")))
-                assertThat(method, equalTo(Post))
             }
         }
     }
@@ -91,7 +90,6 @@ internal class EndpointListControllerTest : EndpointBaseControllerTest() {
         listResponse.endpoints.forEachIndexed { idx, endpoint ->
             assertThat(endpoint.name, equalTo(EndpointName("endpoint-${(20 - idx)}")))
             assertThat(endpoint.func.name, equalTo(FuncName("func-${(20 - idx)}")))
-            assertThat(endpoint.method, equalTo(Put))
         }
     }
 

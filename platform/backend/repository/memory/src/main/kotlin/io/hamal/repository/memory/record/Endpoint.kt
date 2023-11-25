@@ -79,8 +79,7 @@ class MemoryEndpointRepository : MemoryRecordRepository<EndpointId, EndpointReco
                         groupId = cmd.groupId,
                         flowId = cmd.flowId,
                         funcId = cmd.funcId,
-                        name = cmd.name,
-                        method = cmd.method
+                        name = cmd.name
                     )
                 )
                 (currentVersion(endpointId)).also(CurrentEndpointProjection::apply)
@@ -99,8 +98,7 @@ class MemoryEndpointRepository : MemoryRecordRepository<EndpointId, EndpointReco
                         entityId = endpointId,
                         cmdId = cmd.id,
                         name = cmd.name ?: currentVersion.name,
-                        funcId = cmd.funcId ?: currentVersion.funcId,
-                        method = cmd.method ?: currentVersion.method
+                        funcId = cmd.funcId ?: currentVersion.funcId
                     )
                 )
                 (currentVersion(endpointId)).also(CurrentEndpointProjection::apply)

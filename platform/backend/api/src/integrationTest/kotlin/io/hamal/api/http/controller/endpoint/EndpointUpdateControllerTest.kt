@@ -70,7 +70,6 @@ internal class EndpointUpdateControllerTest : EndpointBaseControllerTest() {
             assertThat(id, equalTo(submittedReq.endpointId))
             assertThat(func.name, equalTo(FuncName("another-func")))
             assertThat(name, equalTo(EndpointName("updated-name")))
-            assertThat(method, equalTo(Put))
         }
     }
 
@@ -118,8 +117,6 @@ internal class EndpointUpdateControllerTest : EndpointBaseControllerTest() {
         with(getEndpoint(submittedReq.endpointId)) {
             assertThat(id, equalTo(submittedReq.endpointId))
             assertThat(func.name, equalTo(FuncName("func")))
-            assertThat(name, equalTo(EndpointName("created-name")))
-            assertThat(method, equalTo(Delete))
         }
     }
 
@@ -181,7 +178,6 @@ internal class EndpointUpdateControllerTest : EndpointBaseControllerTest() {
             assertThat(id, equalTo(endpoint.endpointId))
             assertThat(name, equalTo(EndpointName("created-name")))
             assertThat(func.name, equalTo(FuncName("func")))
-            assertThat(method, equalTo(Delete))
         }
     }
 }

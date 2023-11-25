@@ -2,8 +2,6 @@ package io.hamal.repository
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.domain._enum.EndpointMethod
-import io.hamal.lib.domain._enum.EndpointMethod.*
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.EndpointCmdRepository.CreateCmd
 import io.hamal.repository.api.EndpointCmdRepository.UpdateCmd
@@ -32,7 +30,6 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
                     flowId = FlowId(234),
                     name = EndpointName("SomeEndpoint"),
                     funcId = FuncId(345),
-                    method = Get
                 )
             )
 
@@ -42,7 +39,6 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
                 assertThat(flowId, equalTo(FlowId(234)))
                 assertThat(name, equalTo(EndpointName("SomeEndpoint")))
                 assertThat(funcId, equalTo(FuncId(345)))
-                assertThat(method, equalTo(Get))
             }
 
             verifyCount(1)
@@ -57,8 +53,7 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
                     flowId = FlowId(2),
                     groupId = GroupId(3),
                     name = EndpointName("first-endpoint-name"),
-                    funcId = FuncId(4),
-                    method = Post
+                    funcId = FuncId(4)
                 )
 
                 val exception = assertThrows<IllegalArgumentException> {
@@ -69,8 +64,7 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
                             groupId = GroupId(3),
                             flowId = FlowId(2),
                             name = EndpointName("first-endpoint-name"),
-                            funcId = FuncId(345),
-                            method = Get
+                            funcId = FuncId(345)
                         )
                     )
                 }
@@ -92,8 +86,7 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
                     flowId = FlowId(2),
                     groupId = GroupId(3),
                     name = EndpointName("endpoint-name"),
-                    funcId = FuncId(4),
-                    method = Post
+                    funcId = FuncId(4)
                 )
 
                 val result = create(
@@ -103,8 +96,7 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
                         groupId = GroupId(3),
                         flowId = FlowId(22),
                         name = EndpointName("endpoint-name"),
-                        funcId = FuncId(345),
-                        method = Delete
+                        funcId = FuncId(345)
                     )
                 )
 
@@ -114,7 +106,6 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
                     assertThat(flowId, equalTo(FlowId(22)))
                     assertThat(name, equalTo(EndpointName("endpoint-name")))
                     assertThat(funcId, equalTo(FuncId(345)))
-                    assertThat(method, equalTo(Delete))
                 }
 
                 verifyCount(2)
@@ -130,10 +121,8 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
                     flowId = FlowId(2),
                     groupId = GroupId(3),
                     name = EndpointName("first-endpoint-name"),
-                    funcId = FuncId(4),
-                    method = Delete
+                    funcId = FuncId(4)
                 )
-
 
                 val result = create(
                     CreateCmd(
@@ -142,8 +131,7 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
                         groupId = GroupId(333),
                         flowId = FlowId(2222),
                         name = EndpointName("second-endpoint-name"),
-                        funcId = FuncId(444),
-                        method = Patch
+                        funcId = FuncId(444)
                     )
                 )
 
@@ -153,7 +141,6 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
                     assertThat(flowId, equalTo(FlowId(2)))
                     assertThat(name, equalTo(EndpointName("first-endpoint-name")))
                     assertThat(funcId, equalTo(FuncId(4)))
-                    assertThat(method, equalTo(Delete))
                 }
 
                 verifyCount(1)
@@ -170,16 +157,14 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
                 flowId = FlowId(2),
                 groupId = GroupId(3),
                 name = EndpointName("endpoint-name"),
-                funcId = FuncId(4),
-                method = Delete
+                funcId = FuncId(4)
             )
 
             val result = update(
                 EndpointId(1), UpdateCmd(
                     id = CmdId(2),
                     name = EndpointName("Updated"),
-                    funcId = FuncId(4444),
-                    method = Post
+                    funcId = FuncId(4444)
                 )
             )
 
@@ -189,7 +174,6 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
                 assertThat(flowId, equalTo(FlowId(2)))
                 assertThat(name, equalTo(EndpointName("Updated")))
                 assertThat(funcId, equalTo(FuncId(4444)))
-                assertThat(method, equalTo(Post))
             }
 
             verifyCount(1)
@@ -202,16 +186,14 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
                 flowId = FlowId(2),
                 groupId = GroupId(3),
                 name = EndpointName("endpoint-name"),
-                funcId = FuncId(4),
-                method = Post
+                funcId = FuncId(4)
             )
 
             val result = update(
                 EndpointId(1), UpdateCmd(
                     id = CmdId(2),
                     name = null,
-                    funcId = null,
-                    method = null
+                    funcId = null
                 )
             )
 
@@ -221,7 +203,6 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
                 assertThat(flowId, equalTo(FlowId(2)))
                 assertThat(name, equalTo(EndpointName("endpoint-name")))
                 assertThat(funcId, equalTo(FuncId(4)))
-                assertThat(method, equalTo(Post))
             }
 
             verifyCount(1)
@@ -236,8 +217,7 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
                     flowId = FlowId(2),
                     groupId = GroupId(3),
                     name = EndpointName("already-exists"),
-                    funcId = FuncId(4),
-                    method = Post
+                    funcId = FuncId(4)
                 )
 
                 createEndpoint(
@@ -245,8 +225,7 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
                     flowId = FlowId(2),
                     groupId = GroupId(21),
                     name = EndpointName("to-update"),
-                    funcId = FuncId(22),
-                    method = Delete
+                    funcId = FuncId(22)
                 )
 
                 val exception = assertThrows<IllegalArgumentException> {
@@ -254,8 +233,7 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
                         EndpointId(2), UpdateCmd(
                             id = CmdId(2),
                             name = EndpointName("already-exists"),
-                            funcId = FuncId(1111),
-                            method = Patch
+                            funcId = FuncId(1111)
                         )
                     )
                 }
@@ -271,7 +249,6 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
                     assertThat(groupId, equalTo(GroupId(21)))
                     assertThat(name, equalTo(EndpointName("to-update")))
                     assertThat(funcId, equalTo(FuncId(22)))
-                    assertThat(method, equalTo(Delete))
                 }
 
                 verifyCount(2)
@@ -296,8 +273,7 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
                 flowId = FlowId(2),
                 groupId = GroupId(3),
                 name = EndpointName("already-exists"),
-                funcId = FuncId(4),
-                method = Get
+                funcId = FuncId(4)
             )
 
             createEndpoint(
@@ -305,8 +281,7 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
                 flowId = FlowId(2),
                 groupId = GroupId(3),
                 name = EndpointName("to-update"),
-                funcId = FuncId(5),
-                method = Post
+                funcId = FuncId(5)
             )
 
             clear()
@@ -324,8 +299,7 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
                 flowId = FlowId(2),
                 groupId = GroupId(3),
                 name = EndpointName("SomeEndpoint"),
-                funcId = FuncId(4),
-                method = Delete
+                funcId = FuncId(4)
             )
 
             with(get(EndpointId(1))) {
@@ -334,7 +308,6 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
                 assertThat(flowId, equalTo(FlowId(2)))
                 assertThat(name, equalTo(EndpointName("SomeEndpoint")))
                 assertThat(funcId, equalTo(FuncId(4)))
-                assertThat(method, equalTo(Delete))
             }
         }
 
@@ -345,8 +318,7 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
                 flowId = FlowId(2),
                 groupId = GroupId(3),
                 name = EndpointName("SomeEndpoint"),
-                funcId = FuncId(4),
-                method = Delete
+                funcId = FuncId(4)
             )
 
             val exception = assertThrows<NoSuchElementException> {
@@ -365,8 +337,7 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
                 flowId = FlowId(2),
                 groupId = GroupId(3),
                 name = EndpointName("SomeEndpoint"),
-                funcId = FuncId(4),
-                method = Delete
+                funcId = FuncId(4)
             )
 
             with(find(EndpointId(1))!!) {
@@ -385,8 +356,7 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
                 flowId = FlowId(2),
                 groupId = GroupId(3),
                 name = EndpointName("SomeEndpoint"),
-                funcId = FuncId(4),
-                method = Delete
+                funcId = FuncId(4)
             )
 
             val result = find(EndpointId(111111))
@@ -501,8 +471,7 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
                 flowId = FlowId(2),
                 groupId = GroupId(3),
                 name = EndpointName("Endpoint"),
-                funcId = FuncId(4),
-                method = Delete
+                funcId = FuncId(4)
             )
 
             createEndpoint(
@@ -510,8 +479,7 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
                 flowId = FlowId(3),
                 groupId = GroupId(3),
                 name = EndpointName("Endpoint"),
-                funcId = FuncId(4),
-                method = Post
+                funcId = FuncId(4)
             )
 
             createEndpoint(
@@ -519,8 +487,7 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
                 flowId = FlowId(4),
                 groupId = GroupId(4),
                 name = EndpointName("Endpoint"),
-                funcId = FuncId(6),
-                method = Get
+                funcId = FuncId(6)
             )
 
             createEndpoint(
@@ -528,8 +495,7 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
                 flowId = FlowId(10),
                 groupId = GroupId(5),
                 name = EndpointName("Endpoint"),
-                funcId = FuncId(7),
-                method = Put
+                funcId = FuncId(7)
             )
         }
     }
@@ -541,7 +507,6 @@ private fun EndpointRepository.createEndpoint(
     name: EndpointName,
     groupId: GroupId,
     funcId: FuncId,
-    method: EndpointMethod = Patch,
     cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
 ) {
     create(
@@ -551,8 +516,7 @@ private fun EndpointRepository.createEndpoint(
             groupId = groupId,
             flowId = flowId,
             name = name,
-            funcId = funcId,
-            method = method
+            funcId = funcId
         )
     )
 }
@@ -563,5 +527,5 @@ private fun EndpointRepository.verifyCount(expected: Int) {
 
 private fun EndpointRepository.verifyCount(expected: Int, block: EndpointQuery.() -> Unit) {
     val counted = count(EndpointQuery(groupIds = listOf()).also(block))
-    assertThat("number of endpointtions expected", counted, equalTo(expected.toULong()))
+    assertThat("number of endpoints expected", counted, equalTo(expected.toULong()))
 }

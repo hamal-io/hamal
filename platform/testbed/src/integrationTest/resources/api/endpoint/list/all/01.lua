@@ -27,7 +27,6 @@ assert(#endpoints == 1)
 
 assert(endpoint_one_req.id == endpoints[1].id)
 assert(endpoints[1].name == 'endpoint-1')
-assert(endpoints[1].method == 'Post')
 
 endpoint_two = fail_on_error(sys.endpoints.create({ name = 'endpoint-2'; func_id = func_two.func_id }))
 sys.await_completed(endpoint_two)

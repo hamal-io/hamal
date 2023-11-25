@@ -26,8 +26,7 @@ private fun EndpointUpdateHandler.updateEndpoint(req: EndpointUpdateSubmitted): 
         req.endpointId, UpdateCmd(
             id = req.cmdId(),
             funcId = req.funcId,
-            name = req.name,
-            method = req.method
+            name = req.name
         )
     )
 }

@@ -5,7 +5,6 @@ import io.hamal.lib.common.domain.DomainObject
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.domain.UpdatedAt
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.domain._enum.EndpointMethod
 import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable
 
@@ -17,8 +16,7 @@ data class Endpoint(
     val cmdId: CmdId,
     val flowId: FlowId,
     val funcId: FuncId,
-    val name: EndpointName,
-    val method: EndpointMethod
+    val name: EndpointName
 ) : DomainObject<EndpointId>
 
 interface EndpointRepository : EndpointCmdRepository, EndpointQueryRepository
@@ -34,15 +32,13 @@ interface EndpointCmdRepository : CmdRepository {
         val groupId: GroupId,
         val flowId: FlowId,
         val funcId: FuncId,
-        val name: EndpointName,
-        val method: EndpointMethod
+        val name: EndpointName
     )
 
     data class UpdateCmd(
         val id: CmdId,
         val name: EndpointName? = null,
-        val funcId: FuncId? = null,
-        val method: EndpointMethod? = null
+        val funcId: FuncId? = null
     )
 }
 

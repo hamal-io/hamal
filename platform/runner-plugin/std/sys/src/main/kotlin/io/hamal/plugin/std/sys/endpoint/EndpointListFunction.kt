@@ -30,8 +30,7 @@ class EndpointListFunction(
                                     "name" to StringType(endpoint.func.name.value)
                                 )
                             ),
-                            "name" to StringType(endpoint.name.value),
-                            "method" to StringType(endpoint.method.name)
+                            "name" to StringType(endpoint.name.value)
                         )
                     )
                 }.toMap().toMutableMap()

@@ -1,9 +1,7 @@
 package io.hamal.repository.record.endpoint
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain._enum.EndpointMethod
 import io.hamal.lib.domain.vo.*
-
 import io.hamal.repository.api.Endpoint
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordEntity
@@ -19,9 +17,8 @@ data class EndpointEntity(
     var flowId: FlowId? = null,
     var funcId: FuncId? = null,
     var name: EndpointName? = null,
-    var method: EndpointMethod? = null
 
-) : RecordEntity<EndpointId, EndpointRecord, Endpoint> {
+    ) : RecordEntity<EndpointId, EndpointRecord, Endpoint> {
 
     override fun apply(rec: EndpointRecord): EndpointEntity {
         return when (rec) {
@@ -32,7 +29,6 @@ data class EndpointEntity(
                 flowId = rec.flowId,
                 name = rec.name,
                 funcId = rec.funcId,
-                method = rec.method,
                 recordedAt = rec.recordedAt()
 
             )
@@ -43,7 +39,6 @@ data class EndpointEntity(
                 sequence = rec.sequence(),
                 name = rec.name,
                 funcId = rec.funcId,
-                method = rec.method,
                 recordedAt = rec.recordedAt()
             )
         }
@@ -57,8 +52,7 @@ data class EndpointEntity(
             groupId = groupId,
             flowId = flowId!!,
             funcId = funcId!!,
-            name = name!!,
-            method = method!!
+            name = name!!
         )
     }
 }

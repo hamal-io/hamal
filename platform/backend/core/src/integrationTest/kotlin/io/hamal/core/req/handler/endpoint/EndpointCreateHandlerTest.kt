@@ -40,7 +40,6 @@ internal class EndpointCreateHandlerTest : BaseReqHandlerTest() {
                 assertThat(name, equalTo(EndpointName("awesome-endpoint")))
                 assertThat(groupId, equalTo(testGroup.id))
                 assertThat(funcId, equalTo(FuncId(23456)))
-                assertThat(method, equalTo(Post))
             }
         }
     }

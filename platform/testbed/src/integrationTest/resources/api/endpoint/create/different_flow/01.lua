@@ -14,8 +14,7 @@ sys.await_completed(func_one)
 endpoint = fail_on_error(sys.endpoints.create({
     flow_id = flow.id,
     func_id = func_one.func_id,
-    name = 'test-endpoint',
-    method = 'Delete'
+    name = 'test-endpoint'
 }))
 sys.await_completed(endpoint)
 

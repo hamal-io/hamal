@@ -32,8 +32,7 @@ private fun EndpointCreateHandler.createEndpoint(req: EndpointCreateSubmitted): 
             groupId = req.groupId,
             funcId = func.id,
             flowId = func.flowId,
-            name = req.name,
-            method = req.method,
+            name = req.name
         )
     )
 }
