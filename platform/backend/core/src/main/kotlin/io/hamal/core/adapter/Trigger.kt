@@ -196,3 +196,4 @@ class TriggerAdapter(
         triggerQueryRepository.get(triggerId)
     }
 }
+
