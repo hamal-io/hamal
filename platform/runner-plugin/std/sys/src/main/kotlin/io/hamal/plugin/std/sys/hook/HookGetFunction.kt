@@ -1,4 +1,4 @@
-package io.hamal.plugin.std.sys.func
+package io.hamal.plugin.std.sys.hook
 
 import io.hamal.lib.domain.vo.HookId
 import io.hamal.lib.kua.function.Function1In2Out
@@ -19,17 +19,17 @@ class HookGetFunction(
     override fun invoke(ctx: FunctionContext, arg1: StringType): Pair<ErrorType?, MapType?> {
         return try {
             null to sdk.hook.get(HookId(arg1.value))
-                .let { func ->
+                .let { hook ->
                     MapType(
                         mutableMapOf(
-                            "id" to StringType(func.id.value.value.toString(16)),
+                            "id" to StringType(hook.id.value.value.toString(16)),
                             "flow" to MapType(
                                 mutableMapOf(
-                                    "id" to StringType(func.flow.id.value.value.toString(16)),
-                                    "name" to StringType(func.flow.name.value)
+                                    "id" to StringType(hook.flow.id.value.value.toString(16)),
+                                    "name" to StringType(hook.flow.name.value)
                                 )
                             ),
-                            "name" to StringType(func.name.value),
+                            "name" to StringType(hook.name.value),
                         )
                     )
                 }

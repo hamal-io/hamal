@@ -9,6 +9,9 @@ import io.hamal.plugin.std.sys.blueprint.BlueprintCreateFunction
 import io.hamal.plugin.std.sys.blueprint.BlueprintGetFunction
 import io.hamal.plugin.std.sys.blueprint.BlueprintUpdateFunction
 import io.hamal.plugin.std.sys.code.CodeGetFunction
+import io.hamal.plugin.std.sys.endpoint.EndpointCreateFunction
+import io.hamal.plugin.std.sys.endpoint.EndpointGetFunction
+import io.hamal.plugin.std.sys.endpoint.EndpointListFunction
 import io.hamal.plugin.std.sys.exec.ExecGetFunction
 import io.hamal.plugin.std.sys.exec.ExecListFunction
 import io.hamal.plugin.std.sys.extension.ExtensionCreateFunction
@@ -21,11 +24,13 @@ import io.hamal.plugin.std.sys.flow.FlowGetFunction
 import io.hamal.plugin.std.sys.flow.FlowListFunction
 import io.hamal.plugin.std.sys.func.*
 import io.hamal.plugin.std.sys.hook.HookCreateFunction
+import io.hamal.plugin.std.sys.hook.HookGetFunction
+import io.hamal.plugin.std.sys.hook.HookListFunction
 import io.hamal.plugin.std.sys.req.ReqGetFunction
 import io.hamal.plugin.std.sys.topic.*
-import io.hamal.plugin.std.sys.trigger.TriggerCreateFunction
-import io.hamal.plugin.std.sys.trigger.TriggerGetFunction
-import io.hamal.plugin.std.sys.trigger.TriggerListFunction
+import io.hamal.plugin.std.sys.topic.trigger.TriggerCreateFunction
+import io.hamal.plugin.std.sys.topic.trigger.TriggerGetFunction
+import io.hamal.plugin.std.sys.topic.trigger.TriggerListFunction
 
 
 class SysPluginFactory(
@@ -48,6 +53,10 @@ class SysPluginFactory(
                         "code_get" to CodeGetFunction(sdk),
 
                         "req_get" to ReqGetFunction(sdk.template),
+
+                        "endpoint_create" to EndpointCreateFunction(sdk),
+                        "endpoint_get" to EndpointGetFunction(sdk),
+                        "endpoint_list" to EndpointListFunction(sdk),
 
                         "exec_list" to ExecListFunction(sdk),
                         "exec_get" to ExecGetFunction(sdk),

@@ -64,7 +64,6 @@ data class ApiEndpointList(
     }
 }
 
-
 @Serializable
 data class ApiEndpoint(
     val id: EndpointId,

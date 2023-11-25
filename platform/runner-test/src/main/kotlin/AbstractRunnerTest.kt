@@ -46,6 +46,7 @@ class TestFailConnector(
 
 
 abstract class AbstractRunnerTest {
+
     fun createTestRunner(
         pluginFactories: List<RunnerPluginExtensionFactory> = listOf(),
         scriptFactories: List<RunnerScriptExtensionFactory> = listOf(),
@@ -63,6 +64,7 @@ abstract class AbstractRunnerTest {
 
     fun unitOfWork(
         code: String,
+        apiHost: String = "http://test-host",
         inputs: ExecInputs = ExecInputs(),
         invocation: Invocation = EmptyInvocation
     ) = UnitOfWork(
@@ -74,6 +76,6 @@ abstract class AbstractRunnerTest {
         code = CodeValue(code),
         correlation = null,
         invocation = invocation,
-        apiHost = ApiHost("http://test-host")
+        apiHost = ApiHost(apiHost)
     )
 }

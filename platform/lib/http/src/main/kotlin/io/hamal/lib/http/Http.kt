@@ -10,10 +10,12 @@ interface HttpTemplate {
     fun patch(url: String): HttpRequestWithBody
     fun post(url: String): HttpRequestWithBody
     fun put(url: String): HttpRequestWithBody
+
+    val baseUrl: String
 }
 
 class HttpTemplateImpl(
-    private var baseUrl: String = "",
+    override var baseUrl: String = "",
     private val headerFactory: HttpMutableHeaders.() -> Unit = {},
     private var serdeFactory: HttpSerdeFactory.() -> Unit = {},
     private var httpClientFactory: HttpClientBuilder.() -> Unit = {}

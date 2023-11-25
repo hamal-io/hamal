@@ -90,6 +90,7 @@ class ClearController {
         accountRepository.clear()
         authRepository.clear()
         codeRepository.clear()
+        endpointRepository.clear()
         extensionRepository.clear()
         reqRepository.clear()
         execRepository.clear()
@@ -155,6 +156,9 @@ class ClearController {
 
     @Autowired
     lateinit var codeRepository: CodeRepository
+
+    @Autowired
+    lateinit var endpointRepository: EndpointRepository
 
     @Autowired
     lateinit var execRepository: ExecRepository

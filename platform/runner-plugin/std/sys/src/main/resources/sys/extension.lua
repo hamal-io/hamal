@@ -4,6 +4,7 @@ function extension()
         local export = {
             blueprints = { },
             codes = { },
+            endpoints = { },
             execs = { },
             extensions = { },
             funcs = { },
@@ -44,6 +45,25 @@ function extension()
 
         function export.codes.get(code_id, code_version)
             return internal.code_get(code_id, code_version or -1)
+        end
+
+        function export.endpoints.create(cmd)
+            cmd = cmd or {}
+            return internal.endpoint_create({
+                flow_id = cmd.flow_id or nil,
+                func_id = cmd.func_id or nil,
+                name = cmd.name or nil,
+                method = cmd.method or 'Post'
+            })
+        end
+
+        function export.endpoints.get(endpoint_id)
+            return internal.endpoint_get(endpoint_id)
+        end
+
+        function export.endpoints.list(query)
+            query = query or {}
+            return internal.endpoint_list(query)
         end
 
         function export.execs.get(exec_id)

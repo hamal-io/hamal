@@ -1,5 +1,5 @@
 sys = require('sys')
 --
-err, func = sys.funcs.get('123123123')
+err, func_one = sys.funcs.get('123123123')
 assert(err.message == 'Func not found')
-assert(func == nil)
+assert(func_one == nil)

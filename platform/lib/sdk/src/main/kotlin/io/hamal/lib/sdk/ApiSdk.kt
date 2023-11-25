@@ -11,6 +11,7 @@ interface ApiSdk {
     val adhoc: ApiAdhocService
     val await: ApiAwaitService
     val code: ApiCodeService
+    val endpoint: ApiEndpointService
     val exec: ApiExecService
     val execLog: ApiExecLogService
     val extension: ApiExtensionService
@@ -68,6 +69,10 @@ class ApiSdkImpl : ApiSdk {
 
     override val code: ApiCodeService by lazy {
         ApiCodeServiceImpl(template)
+    }
+
+    override val endpoint: ApiEndpointService by lazy {
+        ApiEndpointServiceImpl(template)
     }
 
     override val exec: ApiExecService by lazy {

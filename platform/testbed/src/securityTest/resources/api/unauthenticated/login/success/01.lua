@@ -1,4 +1,4 @@
--- As an unauthenticated user it must be possible to acquire a token
+-- As an unauthenticated user it must be possible to acquire a token by creating an anonymous account
 -- With the acquired token api requests are possible - like fetching flows
 
 http = require 'net.http'
@@ -15,7 +15,7 @@ assert(content.accountId ~= nil)
 assert(content.token ~= nil)
 assert(#content.groupIds == 1)
 
-for i = 1, 10 do
+for _ = 1, 10 do
     err, res = http.get({
         url = '/v1/groups/' .. content.groupIds[1] .. '/flows',
         headers = {
