@@ -1,12 +1,15 @@
 package io.hamal.core.req.handler.trigger
 
 import io.hamal.core.req.handler.BaseReqHandlerTest
+import io.hamal.lib.domain._enum.HookMethod
+import io.hamal.lib.domain._enum.HookMethod.*
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain._enum.TriggerType.*
 import io.hamal.lib.domain._enum.TriggerType.Event
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
+import io.hamal.repository.api.CronTrigger
 import io.hamal.repository.api.EventTrigger
 import io.hamal.repository.api.FixedRateTrigger
 import io.hamal.repository.api.HookTrigger
@@ -92,7 +95,37 @@ internal class CreateTriggerHandlerTest : BaseReqHandlerTest() {
         }
 
         @Test
-        fun `Tries to create trigger, but func does not exists`() {
+        fun `Tries to create an invalid trigger`() {
+            createHook(HookId(1111))
+            createFunc(FuncId(2222), FuncName("SomeFunc"))
+            testInstance(submitCreateHookTriggerReq)
+
+            val exception = assertThrows<IllegalArgumentException> {
+                testInstance(
+                    TriggerCreateSubmitted(
+                        id = ReqId(12345),
+                        status = Submitted,
+                        type = Hook,
+                        triggerId = TriggerId(2),
+                        flowId = testFlow.id,
+                        groupId = testGroup.id,
+                        funcId = FuncId(2222),
+                        hookId = HookId(1111),
+                        name = TriggerName("HookTriggerInvalid"),
+                        inputs = TriggerInputs(
+                            MapType(mutableMapOf("hamal" to StringType("rocks"))),
+                        ),
+                        hookMethod = Get
+                    )
+                )
+            }
+            assertThat(exception.message, equalTo("Trigger already exists"))
+
+            verifySingleHookTriggerExists()
+        }
+
+        @Test
+        fun `Tries to create trigger, but func does not exist`() {
             val exception = assertThrows<NoSuchElementException> {
                 testInstance(submitCreateHookTriggerReq)
             }
@@ -102,13 +135,33 @@ internal class CreateTriggerHandlerTest : BaseReqHandlerTest() {
         }
 
         @Test
-        fun `Tries to create trigger, but hook does not exists`() {
+        fun `Tries to create trigger, but hook does not exist`() {
             createFunc(FuncId(2222), FuncName("SomeFunc"))
 
             val exception = assertThrows<NoSuchElementException> {
                 testInstance(submitCreateHookTriggerReq)
             }
             assertThat(exception.message, equalTo("Hook not found"))
+
+            verifyNoTriggerExists()
+        }
+    }
+
+    @Nested
+    inner class CronTriggerTest {
+        @Test
+        fun `Creates trigger`() {
+            createFunc(FuncId(2222), FuncName("SomeFunc"))
+            testInstance(submitCreateCronTriggerReq)
+            verifySingleCronTriggerExists()
+        }
+
+        @Test
+        fun `Tries to create trigger, but func does not exists`() {
+            val exception = assertThrows<NoSuchElementException> {
+                testInstance(submitCreateCronTriggerReq)
+            }
+            assertThat(exception.message, equalTo("Func not found"))
 
             verifyNoTriggerExists()
         }
@@ -159,6 +212,22 @@ internal class CreateTriggerHandlerTest : BaseReqHandlerTest() {
             }
         }
     }
+
+    private fun verifySingleCronTriggerExists() {
+        triggerQueryRepository.list(TriggerQuery(types = listOf(Cron), groupIds = listOf())).also { triggers ->
+            assertThat(triggers, hasSize(1))
+
+            with(triggers.first()) {
+                require(this is CronTrigger)
+                assertThat(id, equalTo(TriggerId(1234)))
+                assertThat(name, equalTo(TriggerName("CronTrigger")))
+                assertThat(funcId, equalTo(FuncId(2222)))
+                assertThat(cron, equalTo(CronPattern("0 0 * * * *")))
+                assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
+            }
+        }
+    }
+
 
     private fun verifyNoTriggerExists() {
         triggerQueryRepository.list(TriggerQuery(groupIds = listOf())).also { triggers ->
@@ -216,7 +285,25 @@ internal class CreateTriggerHandlerTest : BaseReqHandlerTest() {
             name = TriggerName("HookTrigger"),
             inputs = TriggerInputs(
                 MapType(mutableMapOf("hamal" to StringType("rocks"))),
-            )
+            ),
+            hookMethod = Get
+        )
+    }
+
+    private val submitCreateCronTriggerReq by lazy {
+        TriggerCreateSubmitted(
+            id = ReqId(1),
+            status = Submitted,
+            type = Cron,
+            triggerId = TriggerId(1234),
+            flowId = testFlow.id,
+            groupId = testGroup.id,
+            funcId = FuncId(2222),
+            name = TriggerName("CronTrigger"),
+            cron = CronPattern("0 0 * * * *"),
+            inputs = TriggerInputs(
+                MapType(mutableMapOf("hamal" to StringType("rocks")))
+            ),
         )
     }
 }

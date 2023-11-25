@@ -383,7 +383,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
             verifyNoRequests(TriggerCreateSubmitted::class)
         }
 
-        @Disabled
+
         @Test
         fun `Tries to create invalid trigger`() {
             val hook_one = awaitCompleted(createHook(HookName("hook-name-one"))).hookId

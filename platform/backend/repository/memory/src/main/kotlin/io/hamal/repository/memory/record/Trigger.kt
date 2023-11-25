@@ -167,7 +167,7 @@ class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord,
                 versionOf(triggerId, cmd.id) as HookTrigger
             } else {
 
-                CurrentTriggerProjection.list(
+                list(
                     TriggerQuery(
                         hookIds = listOf(cmd.hookId)
                     )

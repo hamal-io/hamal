@@ -61,7 +61,7 @@ class TriggerAdapter(
     ): T {
         ensureFuncExists(req)
         ensureTopicExists(req)
-        ensureHookValid(req)
+        ensureHookIsValid(req)
 
         val flow = flowQueryRepository.get(flowId)
         val func = funcQueryRepository.get(req.funcId)
@@ -146,13 +146,22 @@ class TriggerAdapter(
         }
     }
 
-    private fun ensureHookValid(createTrigger: CreateTriggerReq) {
+    private fun ensureHookIsValid(createTrigger: CreateTriggerReq) {
         if (createTrigger.type == TriggerType.Hook) {
             requireNotNull(createTrigger.hookId) { "hookId is missing" }
             requireNotNull(createTrigger.hookMethod) { "hookMethod is missing" }
-
-
             hookQueryRepository.get(createTrigger.hookId!!)
+
+            triggerQueryRepository.list(
+                TriggerQuery(
+                    hookIds = listOf(createTrigger.hookId!!)
+                )
+            ).firstOrNull()?.let { trigger ->
+                trigger as HookTrigger
+                if (trigger.funcId == createTrigger.funcId && trigger.hookMethod == createTrigger.hookMethod) {
+                    throw IllegalArgumentException("Trigger already exists")
+                }
+            }
         }
     }
 
