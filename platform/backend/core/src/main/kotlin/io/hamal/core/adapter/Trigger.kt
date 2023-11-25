@@ -61,7 +61,7 @@ class TriggerAdapter(
     ): T {
         ensureFuncExists(req)
         ensureTopicExists(req)
-        ensureHookExists(req)
+        ensureHookValid(req)
 
         val flow = flowQueryRepository.get(flowId)
         val func = funcQueryRepository.get(req.funcId)
@@ -146,13 +146,16 @@ class TriggerAdapter(
         }
     }
 
-    private fun ensureHookExists(createTrigger: CreateTriggerReq) {
+    private fun ensureHookValid(createTrigger: CreateTriggerReq) {
         if (createTrigger.type == TriggerType.Hook) {
             requireNotNull(createTrigger.hookId) { "hookId is missing" }
             requireNotNull(createTrigger.hookMethod) { "hookMethod is missing" }
+
+
             hookQueryRepository.get(createTrigger.hookId!!)
         }
     }
 
 
 }
+
