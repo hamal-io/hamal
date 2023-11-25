@@ -84,6 +84,7 @@ internal class CreateTriggerHandlerTest : BaseReqHandlerTest() {
 
     @Nested
     inner class HookTriggerTest {
+
         @Test
         fun `Creates trigger`() {
             createHook(HookId(1111))
