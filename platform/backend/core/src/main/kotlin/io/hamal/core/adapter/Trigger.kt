@@ -149,7 +149,10 @@ class TriggerAdapter(
     private fun ensureHookExists(createTrigger: CreateTriggerReq) {
         if (createTrigger.type == TriggerType.Hook) {
             requireNotNull(createTrigger.hookId) { "hookId is missing" }
+            requireNotNull(createTrigger.hookMethod) { "hookMethod is missing" }
             hookQueryRepository.get(createTrigger.hookId!!)
         }
     }
+
+
 }

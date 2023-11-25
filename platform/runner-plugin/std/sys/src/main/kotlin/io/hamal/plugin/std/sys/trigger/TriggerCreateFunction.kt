@@ -62,7 +62,6 @@ class TriggerCreateFunction(
                     } else {
                         null
                     }
-
                 )
             )
 
