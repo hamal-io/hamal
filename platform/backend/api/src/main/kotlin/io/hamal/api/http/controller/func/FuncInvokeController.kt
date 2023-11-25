@@ -4,6 +4,7 @@ import io.hamal.api.http.controller.accepted
 import io.hamal.core.adapter.FuncInvokePort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.CorrelationId
+import io.hamal.lib.domain.vo.EmptyInvocation
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sdk.api.ApiInvokeFuncVersionReq
 import io.hamal.lib.sdk.api.ApiSubmitted

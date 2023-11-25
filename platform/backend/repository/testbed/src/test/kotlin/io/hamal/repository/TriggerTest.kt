@@ -3,6 +3,8 @@ package io.hamal.repository
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.HookMethod.*
+import io.hamal.lib.domain._enum.TriggerStatus.Active
+import io.hamal.lib.domain._enum.TriggerStatus.Inactive
 import io.hamal.lib.domain._enum.TriggerType.Event
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.MapType
@@ -55,6 +57,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 assertThat(name, equalTo(TriggerName("trigger-name")))
                 assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
                 assertThat(duration, equalTo(10.seconds))
+                assertThat(status, equalTo(Active))
             }
 
             verifyCount(1)
@@ -126,6 +129,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     assertThat(name, equalTo(TriggerName("trigger-name")))
                     assertThat(inputs, equalTo(TriggerInputs()))
                     assertThat(duration, equalTo(10.hours))
+                    assertThat(status, equalTo(Active))
                 }
 
                 verifyCount(2)
@@ -165,6 +169,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     assertThat(name, equalTo(TriggerName("first-trigger-name")))
                     assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
                     assertThat(duration, equalTo(10.seconds))
+                    assertThat(status, equalTo(Active))
                 }
 
                 verifyCount(1)
@@ -201,6 +206,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 assertThat(name, equalTo(TriggerName("trigger-name")))
                 assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
                 assertThat(topicId, equalTo(TopicId(9)))
+                assertThat(status, equalTo(Active))
             }
 
             verifyCount(1)
@@ -272,6 +278,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     assertThat(name, equalTo(TriggerName("trigger-name")))
                     assertThat(inputs, equalTo(TriggerInputs()))
                     assertThat(topicId, equalTo(TopicId(9)))
+                    assertThat(status, equalTo(Active))
                 }
 
                 verifyCount(2)
@@ -349,6 +356,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
                 assertThat(hookId, equalTo(HookId(9)))
                 assertThat(hookMethods, equalTo(setOf(Patch, Delete)))
+                assertThat(status, equalTo(Active))
             }
 
             verifyCount(1)
@@ -422,6 +430,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     assertThat(inputs, equalTo(TriggerInputs()))
                     assertThat(hookId, equalTo(HookId(9)))
                     assertThat(hookMethods, equalTo(setOf(Post, Put)))
+                    assertThat(status, equalTo(Active))
                 }
 
                 verifyCount(2)
@@ -462,6 +471,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     assertThat(name, equalTo(TriggerName("first-trigger-name")))
                     assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
                     assertThat(hookId, equalTo(HookId(9)))
+                    assertThat(status, equalTo(Active))
                 }
 
                 verifyCount(1)
@@ -499,6 +509,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 assertThat(name, equalTo(TriggerName("trigger-name")))
                 assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
                 assertThat(cron, equalTo(CronPattern("0 0 * * * *")))
+                assertThat(status, equalTo(Active))
             }
 
             verifyCount(1)
@@ -535,6 +546,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 assertThat(name, equalTo(TriggerName("trigger-name")))
                 assertThat(inputs, equalTo(TriggerInputs()))
                 assertThat(cron, equalTo(CronPattern("0 0 * * * *")))
+                assertThat(status, equalTo(Active))
             }
 
             verifyCount(2)
@@ -573,6 +585,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     assertThat(name, equalTo(TriggerName("first-trigger-name")))
                     assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
                     assertThat(cron, equalTo(CronPattern("0 0 * * * *")))
+                    assertThat(status, equalTo(Active))
                 }
 
                 verifyCount(1)
@@ -612,6 +625,84 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
     }
 
     @Nested
+    inner class StatusTest {
+
+        @TestFactory
+        fun `Deactivates fixed rate trigger`() = runWith(TriggerRepository::class) {
+            create(
+                CreateFixedRateCmd(
+                    id = CmdGen(),
+                    triggerId = TriggerId(2),
+                    funcId = FuncId(3),
+                    groupId = GroupId(4),
+                    flowId = FlowId(5),
+                    name = TriggerName("trigger-name"),
+                    inputs = TriggerInputs(
+                        MapType(
+                            mutableMapOf(
+                                "hamal" to StringType("rocks")
+                            )
+                        )
+                    ),
+                    duration = 10.seconds
+                )
+            )
+
+            set(TriggerId(2), SetTriggerStatusCmd(CmdGen(), Inactive))
+
+            with(get(TriggerId(2)) as FixedRateTrigger) {
+                assertThat(id, equalTo(TriggerId(2)))
+                assertThat(funcId, equalTo(FuncId(3)))
+                assertThat(flowId, equalTo(FlowId(5)))
+                assertThat(name, equalTo(TriggerName("trigger-name")))
+                assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
+                assertThat(duration, equalTo(10.seconds))
+                assertThat(status, equalTo(Inactive))
+            }
+
+            verifyCount(1)
+        }
+
+        @TestFactory
+        fun `Activates fixed rate trigger twice`() = runWith(TriggerRepository::class) {
+            create(
+                CreateFixedRateCmd(
+                    id = CmdGen(),
+                    triggerId = TriggerId(2),
+                    funcId = FuncId(3),
+                    groupId = GroupId(4),
+                    flowId = FlowId(5),
+                    name = TriggerName("trigger-name"),
+                    inputs = TriggerInputs(
+                        MapType(
+                            mutableMapOf(
+                                "hamal" to StringType("rocks")
+                            )
+                        )
+                    ),
+                    duration = 10.seconds
+                )
+            )
+
+            repeat(5) {
+                set(TriggerId(2), SetTriggerStatusCmd(CmdGen(), Active))
+            }
+
+            with(get(TriggerId(2)) as FixedRateTrigger) {
+                assertThat(id, equalTo(TriggerId(2)))
+                assertThat(funcId, equalTo(FuncId(3)))
+                assertThat(flowId, equalTo(FlowId(5)))
+                assertThat(name, equalTo(TriggerName("trigger-name")))
+                assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
+                assertThat(duration, equalTo(10.seconds))
+                assertThat(status, equalTo(Active))
+            }
+
+            verifyCount(1)
+        }
+    }
+
+    @Nested
     inner class GetTest {
         @TestFactory
         fun `Get func by id`() = runWith(TriggerRepository::class) {
@@ -632,6 +723,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 assertThat(name, equalTo(TriggerName("SomeTrigger")))
                 assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
                 assertThat(duration, equalTo(10.seconds))
+                assertThat(status, equalTo(Active))
             }
         }
 
@@ -672,6 +764,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 assertThat(name, equalTo(TriggerName("SomeTrigger")))
                 assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
                 assertThat(duration, equalTo(10.seconds))
+                assertThat(status, equalTo(Active))
             }
         }
 

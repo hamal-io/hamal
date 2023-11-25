@@ -44,7 +44,8 @@ class TriggerGetFunction(
                                             "name" to StringType(trigger.func.name.value)
                                         )
                                     ),
-                                    "duration" to StringType(trigger.duration.toIsoString())
+                                    "duration" to StringType(trigger.duration.toIsoString()),
+                                    "status" to StringType(trigger.status.name),
                                 )
                             )
 
@@ -72,6 +73,7 @@ class TriggerGetFunction(
                                             "name" to StringType(trigger.topic.name.value)
                                         )
                                     ),
+                                    "status" to StringType(trigger.status.name),
                                 )
                             )
                         }
@@ -103,6 +105,7 @@ class TriggerGetFunction(
                                             }.toMap().toMutableMap())
                                         )
                                     ),
+                                    "status" to StringType(trigger.status.name),
                                 )
                             )
                         }
@@ -124,7 +127,8 @@ class TriggerGetFunction(
                                         "name" to StringType(trigger.func.name.value)
                                     )
                                 ),
-                                "cron" to StringType(trigger.cron.value)
+                                "cron" to StringType(trigger.cron.value),
+                                "status" to StringType(trigger.status.name)
                             )
                         )
                     }
