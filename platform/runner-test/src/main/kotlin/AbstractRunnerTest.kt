@@ -1,11 +1,12 @@
+
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContext
-import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
 import io.hamal.lib.kua.extend.extension.RunnerExtensionFactory
+import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
 import io.hamal.runner.config.SandboxFactory
 import io.hamal.runner.connector.Connector
 import io.hamal.runner.connector.UnitOfWork
@@ -49,14 +50,14 @@ abstract class AbstractRunnerTest {
 
     fun createTestRunner(
         pluginFactories: List<RunnerPluginFactory> = listOf(),
-        scriptFactories: List<RunnerExtensionFactory> = listOf(),
+        extensionFactories: List<RunnerExtensionFactory> = listOf(),
         connector: Connector = TestConnector()
     ) = CodeRunnerImpl(
         connector, object : SandboxFactory {
             override fun create(ctx: SandboxContext): Sandbox {
                 NativeLoader.load(Resources)
                 return Sandbox(ctx)
-                    .register(*scriptFactories.toTypedArray())
+                    .register(*extensionFactories.toTypedArray())
                     .register(*pluginFactories.toTypedArray())
             }
         }

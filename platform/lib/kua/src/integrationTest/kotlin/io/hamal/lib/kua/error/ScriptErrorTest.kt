@@ -43,7 +43,7 @@ class ScriptErrorTest {
                 RunnerPlugin(
                     name = "test",
                     factoryCode = """
-                            function extension()
+                            function plugin()
                                 local internal = _internal
                                 return function()
                                     local export = {

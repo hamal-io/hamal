@@ -43,7 +43,7 @@ internal class TableEntryIteratorTest {
             RunnerPlugin(
                 name = "test",
                 factoryCode = """
-                    function extension()
+                    function plugin()
                         local internal = _internal
                         return function()
                             local export = { 
@@ -94,7 +94,7 @@ internal class TableEntryIteratorTest {
             RunnerPlugin(
                 name = "test",
                 factoryCode = """
-                    function extension()
+                    function plugin()
                         local internal = _internal
                         return function()
                             local export = { 
@@ -142,7 +142,7 @@ internal class TableEntryIteratorTest {
             RunnerPlugin(
                 name = "test",
                 factoryCode = """
-                    function extension()
+                    function plugin()
                         local internal = _internal
                         return function()
                             local export = { 
@@ -202,7 +202,7 @@ internal class TableEntryIteratorTest {
             RunnerPlugin(
                 name = "test",
                 factoryCode = """
-                    function extension()
+                    function plugin()
                         local internal = _internal
                         return function()
                             local export = { 
@@ -253,7 +253,7 @@ internal class TableEntryIteratorTest {
             RunnerPlugin(
                 name = "test",
                 factoryCode = """
-                    function extension()
+                    function plugin()
                         local internal = _internal
                         return function()
                             local export = { 
@@ -282,7 +282,7 @@ internal class TableEntryIteratorTest {
                 RunnerPlugin(
                     name = "test",
                     factoryCode = """
-                    function extension()
+                    function plugin()
                         local internal = _internal
                         return function()
                             local export = { 

@@ -35,7 +35,7 @@ internal class FunctionTest {
             RunnerPlugin(
                 name = "test",
                 factoryCode = """
-                    function extension()
+                    function plugin()
                         local internal = _internal
                         return function()
                             local export = { 
@@ -86,7 +86,7 @@ internal class FunctionTest {
             RunnerPlugin(
                 name = "test",
                 factoryCode = """
-                    function extension()
+                    function plugin()
                         local internal = _internal
                         return function()
                             local export = { 
@@ -130,7 +130,7 @@ internal class FunctionTest {
             RunnerPlugin(
                 name = "test",
                 factoryCode = """
-                    function extension()
+                    function plugin()
                         local internal = _internal
                         return function()
                             local export = { 
@@ -173,7 +173,7 @@ internal class FunctionTest {
             RunnerPlugin(
                 name = "test",
                 factoryCode = """
-                    function extension()
+                    function plugin()
                         local internal = _internal
                         return function()
                             local export = { 
@@ -216,7 +216,7 @@ internal class FunctionTest {
             RunnerPlugin(
                 name = "test",
                 factoryCode = """
-                    function extension()
+                    function plugin()
                         local internal = _internal
                         return function()
                             local export = { 
@@ -264,7 +264,7 @@ internal class FunctionTest {
             RunnerPlugin(
                 name = "test",
                 factoryCode = """
-                    function extension()
+                    function plugin()
                         local internal = _internal
                         return function()
                             local export = { 
@@ -305,7 +305,7 @@ internal class FunctionTest {
             RunnerPlugin(
                 name = "test",
                 factoryCode = """
-                    function extension()
+                    function plugin()
                         local internal = _internal
                         return function()
                             local export = { 

@@ -43,7 +43,7 @@ class RunnerRegistry(val sb: Sandbox) {
         sb.setGlobal("_internal", internalTable)
 
         state.load(plugins[name]!!.factoryCode)
-        state.load("_factory = extension()")
+        state.load("_factory = plugin()")
 
         sb.unsetGlobal("_internal")
 
@@ -51,7 +51,7 @@ class RunnerRegistry(val sb: Sandbox) {
         val factory = state.getGlobalTableMap("_factory")
         factories[name] = factory
 
-        state.unsetGlobal("extension")
+        state.unsetGlobal("plugin")
         return factory
     }
 

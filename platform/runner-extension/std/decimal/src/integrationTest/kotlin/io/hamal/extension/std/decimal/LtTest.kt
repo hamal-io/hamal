@@ -7,7 +7,7 @@ internal class LtTest : AbstractRunnerTest() {
     @Test
     fun `decimal, number`() {
         val runner = createTestRunner(
-            scriptFactories = listOf(DecimalScriptFactory)
+            extensionFactories = listOf(DecimalExtensionFactory)
         )
         runner.run(
             unitOfWork(
@@ -30,7 +30,7 @@ internal class LtTest : AbstractRunnerTest() {
     @Test
     fun `decimal, decimal`() {
         val runner = createTestRunner(
-            scriptFactories = listOf(DecimalScriptFactory)
+            extensionFactories = listOf(DecimalExtensionFactory)
         )
         runner.run(
             unitOfWork(
@@ -52,7 +52,7 @@ internal class LtTest : AbstractRunnerTest() {
     @Test
     fun `number, decimal`() {
         val runner = createTestRunner(
-            scriptFactories = listOf(DecimalScriptFactory)
+            extensionFactories = listOf(DecimalExtensionFactory)
         )
         runner.run(
             unitOfWork(

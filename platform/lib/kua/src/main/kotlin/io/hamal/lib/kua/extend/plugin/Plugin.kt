@@ -20,7 +20,7 @@ class RunnerPlugin(
     companion object {
         @JvmStatic
         private fun loadFactoryCodeFromResources(extensionName: String): String { // FIXME extend name VO
-            val path = "${extensionName.replace(".", "/")}/extension.lua"
+            val path = "${extensionName.replace(".", "/")}/plugin.lua"
             val classLoader = this::class.java.classLoader
             val resource = classLoader.getResource(path)
             checkNotNull(resource) { "Unable to load: $path" }

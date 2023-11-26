@@ -23,7 +23,7 @@ internal abstract class AbstractExecuteTest {
                         RunnerPlugin(
                             name = "test",
                             factoryCode = """
-                            function extension()
+                            function plugin()
                                 local internal = _internal
                                 return function()
                                     local export = {

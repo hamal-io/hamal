@@ -58,7 +58,7 @@ internal class RegisterPluginTest : BaseSandboxTest() {
             RunnerPlugin(
                 name = "some_plugin",
                 factoryCode = """
-                    function extension()
+                    function plugin()
                         local internal = _internal
                         return function()
                             local export = { 

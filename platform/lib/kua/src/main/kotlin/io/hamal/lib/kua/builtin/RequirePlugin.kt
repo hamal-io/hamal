@@ -27,7 +27,7 @@ class RequirePlugin(
 
         ctx.unsetGlobal("_factory")
         ctx.unsetGlobal("_instance")
-        ctx.unsetGlobal("extension")
+        ctx.unsetGlobal("plugin")
 
         return result
     }

@@ -16,6 +16,7 @@ import io.hamal.runner.run.function.FailRunFunction
 class RunnerContextFactory(
     private val executionCtx: RunnerContext
 ) : RunnerPluginFactory {
+
     override fun create(sandbox: Sandbox): RunnerPlugin {
         val invocation = executionCtx[Invocation::class]
 

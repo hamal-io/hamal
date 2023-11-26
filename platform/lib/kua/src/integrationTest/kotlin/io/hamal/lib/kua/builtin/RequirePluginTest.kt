@@ -31,7 +31,7 @@ internal object PluginTest {
                 RunnerPlugin(
                     name = "test",
                     factoryCode = """
-                            function extension()
+                            function plugin()
                                 local internal = _internal
                                 return function()
                                     local export = { some_number = 42 }

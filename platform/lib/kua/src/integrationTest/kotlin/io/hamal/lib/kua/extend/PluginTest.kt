@@ -11,7 +11,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
-internal class ExtensionTest {
+internal class PluginTest {
 
     @Test
     fun `Invokes function of test capability`() {
@@ -44,7 +44,7 @@ internal class ExtensionTest {
                 RunnerPlugin(
                     name = "test",
                     factoryCode = """
-                            function extension()
+                            function plugin()
                                 local internal = _internal
                                 return function()
                                     local export = {

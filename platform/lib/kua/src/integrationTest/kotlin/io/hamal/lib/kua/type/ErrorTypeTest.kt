@@ -22,7 +22,7 @@ internal class ErrorTypeTest {
             RunnerPlugin(
                 name = "test",
                 factoryCode = """
-                    function extension()
+                    function plugin()
                         local internal = _internal
                         return function()
                             local export = { 
@@ -65,7 +65,7 @@ internal class ErrorTypeTest {
             RunnerPlugin(
                 name = "test",
                 factoryCode = """
-                    function extension()
+                    function plugin()
                         local internal = _internal
                         return function()
                             local export = { 
