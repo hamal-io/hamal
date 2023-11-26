@@ -5,7 +5,7 @@ import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContext
-import io.hamal.lib.kua.extension.plugin.RunnerPluginExtension
+import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.type.Type
 import io.hamal.runner.config.SandboxFactory
 import io.hamal.runner.connector.Connector
@@ -20,7 +20,7 @@ internal abstract class AbstractExecuteTest {
                 NativeLoader.load(Resources)
                 return Sandbox(ctx).also {
                     it.register(
-                        RunnerPluginExtension(
+                        RunnerPlugin(
                             name = "test",
                             factoryCode = """
                             function extension()

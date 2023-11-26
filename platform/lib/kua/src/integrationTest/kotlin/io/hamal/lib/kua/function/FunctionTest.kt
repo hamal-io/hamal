@@ -5,7 +5,7 @@ import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.NopSandboxContext
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.extension.plugin.RunnerPluginExtension
+import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.StringType
 import org.hamcrest.CoreMatchers.equalTo
@@ -32,7 +32,7 @@ internal class FunctionTest {
             }
         }
         sandbox.register(
-            RunnerPluginExtension(
+            RunnerPlugin(
                 name = "test",
                 factoryCode = """
                     function extension()
@@ -83,7 +83,7 @@ internal class FunctionTest {
             }
         }
         sandbox.register(
-            RunnerPluginExtension(
+            RunnerPlugin(
                 name = "test",
                 factoryCode = """
                     function extension()
@@ -127,7 +127,7 @@ internal class FunctionTest {
             }
         }
         sandbox.register(
-            RunnerPluginExtension(
+            RunnerPlugin(
                 name = "test",
                 factoryCode = """
                     function extension()
@@ -170,7 +170,7 @@ internal class FunctionTest {
         }
 
         sandbox.register(
-            RunnerPluginExtension(
+            RunnerPlugin(
                 name = "test",
                 factoryCode = """
                     function extension()
@@ -213,7 +213,7 @@ internal class FunctionTest {
         }
 
         sandbox.register(
-            RunnerPluginExtension(
+            RunnerPlugin(
                 name = "test",
                 factoryCode = """
                     function extension()
@@ -261,7 +261,7 @@ internal class FunctionTest {
         }
 
         sandbox.register(
-            RunnerPluginExtension(
+            RunnerPlugin(
                 name = "test",
                 factoryCode = """
                     function extension()
@@ -302,7 +302,7 @@ internal class FunctionTest {
         }
 
         sandbox.register(
-            RunnerPluginExtension(
+            RunnerPlugin(
                 name = "test",
                 factoryCode = """
                     function extension()

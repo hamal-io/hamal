@@ -1,7 +1,7 @@
 package io.hamal.lib.kua
 
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
-import io.hamal.lib.kua.extension.plugin.RunnerPluginExtension
+import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.type.CodeType
@@ -24,7 +24,7 @@ internal class RegisterExtensionTest : BaseSandboxTest() {
 
         val func = TestFunction()
         testInstance.register(
-            RunnerPluginExtension(
+            RunnerPlugin(
                 name = "secret_ext",
                 factoryCode = """
                     function extension()

@@ -4,8 +4,8 @@ import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContext
-import io.hamal.lib.kua.extension.plugin.RunnerPluginExtensionFactory
-import io.hamal.lib.kua.extension.script.RunnerScriptExtensionFactory
+import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
+import io.hamal.lib.kua.extend.extension.RunnerExtensionFactory
 import io.hamal.runner.config.SandboxFactory
 import io.hamal.runner.connector.Connector
 import io.hamal.runner.connector.UnitOfWork
@@ -48,8 +48,8 @@ class TestFailConnector(
 abstract class AbstractRunnerTest {
 
     fun createTestRunner(
-        pluginFactories: List<RunnerPluginExtensionFactory> = listOf(),
-        scriptFactories: List<RunnerScriptExtensionFactory> = listOf(),
+        pluginFactories: List<RunnerPluginFactory> = listOf(),
+        scriptFactories: List<RunnerExtensionFactory> = listOf(),
         connector: Connector = TestConnector()
     ) = CodeRunnerImpl(
         connector, object : SandboxFactory {

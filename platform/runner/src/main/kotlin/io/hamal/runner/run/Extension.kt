@@ -2,8 +2,8 @@ package io.hamal.runner.run
 
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.extension.plugin.RunnerPluginExtension
-import io.hamal.lib.kua.extension.plugin.RunnerPluginExtensionFactory
+import io.hamal.lib.kua.extend.plugin.RunnerPlugin
+import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
 import io.hamal.lib.kua.table.TableProxyArray
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.NilType
@@ -15,8 +15,8 @@ import io.hamal.runner.run.function.FailRunFunction
 
 class RunnerContextFactory(
     private val executionCtx: RunnerContext
-) : RunnerPluginExtensionFactory {
-    override fun create(sandbox: Sandbox): RunnerPluginExtension {
+) : RunnerPluginFactory {
+    override fun create(sandbox: Sandbox): RunnerPlugin {
         val invocation = executionCtx[Invocation::class]
 
         val events = if (invocation is EventInvocation) {
@@ -47,7 +47,7 @@ class RunnerContextFactory(
             NilType
         }
 
-        return RunnerPluginExtension(
+        return RunnerPlugin(
             name = "context",
             internals = mapOf(
                 "api" to MapType(

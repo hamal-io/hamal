@@ -2,7 +2,7 @@ package io.hamal.plugin.net.http
 
 import AbstractRunnerTest
 import io.hamal.lib.http.fixture.TestWebConfig
-import io.hamal.lib.kua.extension.ExtensionConfig
+import io.hamal.lib.kua.extend.ExtensionConfig
 import io.hamal.lib.kua.type.StringType
 import io.hamal.plugin.net.http.endpoint.TestHeaderController
 import io.hamal.plugin.net.http.endpoint.TestJsonController

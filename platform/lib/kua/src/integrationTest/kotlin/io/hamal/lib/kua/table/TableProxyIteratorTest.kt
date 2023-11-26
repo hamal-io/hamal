@@ -3,7 +3,7 @@ package io.hamal.lib.kua.table
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NopSandboxContext
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.extension.plugin.RunnerPluginExtension
+import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.error.ScriptErrorTest
 import io.hamal.lib.kua.function.Function1In0Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -40,7 +40,7 @@ internal class TableEntryIteratorTest {
         }
 
         sandbox.register(
-            RunnerPluginExtension(
+            RunnerPlugin(
                 name = "test",
                 factoryCode = """
                     function extension()
@@ -91,7 +91,7 @@ internal class TableEntryIteratorTest {
         }
 
         sandbox.register(
-            RunnerPluginExtension(
+            RunnerPlugin(
                 name = "test",
                 factoryCode = """
                     function extension()
@@ -139,7 +139,7 @@ internal class TableEntryIteratorTest {
         }
 
         sandbox.register(
-            RunnerPluginExtension(
+            RunnerPlugin(
                 name = "test",
                 factoryCode = """
                     function extension()
@@ -199,7 +199,7 @@ internal class TableEntryIteratorTest {
         }
 
         sandbox.register(
-            RunnerPluginExtension(
+            RunnerPlugin(
                 name = "test",
                 factoryCode = """
                     function extension()
@@ -250,7 +250,7 @@ internal class TableEntryIteratorTest {
         }
 
         sandbox.register(
-            RunnerPluginExtension(
+            RunnerPlugin(
                 name = "test",
                 factoryCode = """
                     function extension()
@@ -279,7 +279,7 @@ internal class TableEntryIteratorTest {
         NativeLoader.load(NativeLoader.Preference.Resources)
         Sandbox(NopSandboxContext()).also {
             it.register(
-                RunnerPluginExtension(
+                RunnerPlugin(
                     name = "test",
                     factoryCode = """
                     function extension()

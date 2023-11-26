@@ -3,8 +3,8 @@ package io.hamal.lib.kua.builtin
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NopSandboxContext
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.extension.plugin.RunnerPluginExtension
-import io.hamal.lib.kua.extension.script.RunnerScriptExtension
+import io.hamal.lib.kua.extend.plugin.RunnerPlugin
+import io.hamal.lib.kua.extend.extension.RunnerExtension
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -33,7 +33,7 @@ internal class ExtensionTest {
             NativeLoader.load(NativeLoader.Preference.Resources)
             Sandbox(NopSandboxContext()).also { sb ->
                 sb.register(
-                    RunnerScriptExtension(
+                    RunnerExtension(
                         name = "test",
                         factoryCode = """
                             function extension()
@@ -71,7 +71,7 @@ internal class ExtensionTest {
             NativeLoader.load(NativeLoader.Preference.Resources)
             Sandbox(NopSandboxContext()).also { sb ->
                 sb.register(
-                    RunnerPluginExtension(
+                    RunnerPlugin(
                         name = "test",
                         factoryCode = """
                             function extension()

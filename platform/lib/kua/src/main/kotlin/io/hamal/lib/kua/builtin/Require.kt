@@ -1,6 +1,6 @@
 package io.hamal.lib.kua.builtin
 
-import io.hamal.lib.kua.extension.RunnerExtensionRegistry
+import io.hamal.lib.kua.extend.RunnerRegistry
 import io.hamal.lib.kua.function.Function1In1Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -9,7 +9,7 @@ import io.hamal.lib.kua.table.TableProxyMap
 import io.hamal.lib.kua.type.StringType
 
 class Require(
-    private val registry: RunnerExtensionRegistry
+    private val registry: RunnerRegistry
 ) : Function1In1Out<StringType, TableProxyMap>(
     FunctionInput1Schema(StringType::class),
     FunctionOutput1Schema(TableProxyMap::class)
@@ -23,8 +23,8 @@ class Require(
             val result = ctx.getGlobalTableMap("_instance")
 
             val config = ctx.tableCreateMap(2)
-            config["get"] = registry.scriptExtensions[arg1.value]!!.configGetFunction()
-            config["update"] = registry.scriptExtensions[arg1.value]!!.configUpdateFunction()
+            config["get"] = registry.extensions[arg1.value]!!.configGetFunction()
+            config["update"] = registry.extensions[arg1.value]!!.configUpdateFunction()
             result["config"] = config
 
             ctx.unsetGlobal("_factory")
@@ -41,8 +41,8 @@ class Require(
             val result = ctx.getGlobalTableMap("_instance")
 
             val config = ctx.tableCreateMap(2)
-            config["get"] = registry.pluginExtensions[arg1.value]!!.configGetFunction()
-            config["update"] = registry.pluginExtensions[arg1.value]!!.configUpdateFunction()
+            config["get"] = registry.plugins[arg1.value]!!.configGetFunction()
+            config["update"] = registry.plugins[arg1.value]!!.configUpdateFunction()
             result["config"] = config
 
             ctx.unsetGlobal("_factory")

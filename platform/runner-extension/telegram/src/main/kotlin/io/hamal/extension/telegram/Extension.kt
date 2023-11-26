@@ -1,15 +1,15 @@
 package io.hamal.extension.telegram
 
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.extension.ExtensionConfig
-import io.hamal.lib.kua.extension.script.RunnerScriptExtension
-import io.hamal.lib.kua.extension.script.RunnerScriptExtensionFactory
+import io.hamal.lib.kua.extend.ExtensionConfig
+import io.hamal.lib.kua.extend.extension.RunnerExtension
+import io.hamal.lib.kua.extend.extension.RunnerExtensionFactory
 import io.hamal.lib.kua.type.StringType
 
 
-object TelegramScriptFactory : RunnerScriptExtensionFactory {
-    override fun create(sandbox: Sandbox): RunnerScriptExtension {
-        return RunnerScriptExtension(
+object TelegramScriptFactory : RunnerExtensionFactory {
+    override fun create(sandbox: Sandbox): RunnerExtension {
+        return RunnerExtension(
             name = "telegram",
             config = ExtensionConfig(
                 mutableMapOf(
