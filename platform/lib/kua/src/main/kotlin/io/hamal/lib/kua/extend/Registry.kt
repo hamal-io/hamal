@@ -20,16 +20,16 @@ class RunnerRegistry(val sb: Sandbox) {
     fun register(plugin: RunnerPlugin) {
         plugins[plugin.name] = plugin
         // FIXME load the factory
-        loadPluginExtensionFactory(plugin.name)
+        loadPluginFactory(plugin.name)
     }
 
     fun register(extension: RunnerExtension) {
         extensions[extension.name] = extension
         // FIXME load the factory
-        loadScriptExtensionFactory(extension.name)
+        loadExtensionFactory(extension.name)
     }
 
-    fun loadPluginExtensionFactory(name: String): TableProxyMap {
+    fun loadPluginFactory(name: String): TableProxyMap {
         val extension = plugins[name]!!
         val internals = extension.internals
         val internalTable = state.tableCreateMap(internals.size)
@@ -55,7 +55,7 @@ class RunnerRegistry(val sb: Sandbox) {
         return factory
     }
 
-    fun loadScriptExtensionFactory(name: String): TableProxyMap {
+    fun loadExtensionFactory(name: String): TableProxyMap {
         val extension = extensions[name]!!
 
         state.load(extension.factoryCode)

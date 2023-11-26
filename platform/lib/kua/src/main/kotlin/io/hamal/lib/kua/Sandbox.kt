@@ -1,14 +1,15 @@
 package io.hamal.lib.kua
 
 import io.hamal.lib.kua.builtin.Require
-import io.hamal.lib.kua.extend.ExtensionConfigUpdateFunction
+import io.hamal.lib.kua.builtin.RequirePlugin
 import io.hamal.lib.kua.extend.ExtensionConfig
 import io.hamal.lib.kua.extend.ExtensionConfigGetFunction
+import io.hamal.lib.kua.extend.ExtensionConfigUpdateFunction
 import io.hamal.lib.kua.extend.RunnerRegistry
-import io.hamal.lib.kua.extend.plugin.RunnerPlugin
-import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
 import io.hamal.lib.kua.extend.extension.RunnerExtension
 import io.hamal.lib.kua.extend.extension.RunnerExtensionFactory
+import io.hamal.lib.kua.extend.plugin.RunnerPlugin
+import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
 import io.hamal.lib.kua.function.FunctionType
 import io.hamal.lib.kua.table.TableProxyArray
 import io.hamal.lib.kua.table.TableProxyMap
@@ -29,6 +30,7 @@ class Sandbox(
 
     init {
         registerGlobalFunction("require", Require(registry))
+        registerGlobalFunction("require_plugin", RequirePlugin(registry))
 
         val classLoader = Sandbox::class.java.classLoader
         load(String(classLoader.getResource("std.lua").readBytes()))

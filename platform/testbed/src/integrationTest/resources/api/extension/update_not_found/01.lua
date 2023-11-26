@@ -1,4 +1,4 @@
-sys = require('sys')
+sys = require_plugin('sys')
 --
 err, ext = sys.extensions.update({
         id = '12345',

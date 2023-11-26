@@ -1,4 +1,4 @@
-package io.hamal.lib.kua.capability
+package io.hamal.lib.kua.extend
 
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
@@ -17,7 +17,7 @@ internal class ExtensionTest {
     fun `Invokes function of test capability`() {
         sandbox.load(
             """
-            local test = require('test')
+            local test = require_plugin('test')
             for x=1,10 do
                 test.call()
             end
@@ -30,7 +30,7 @@ internal class ExtensionTest {
     fun `Able to access fields of capability`() {
         sandbox.load(
             """
-            local test = require('test')
+            local test = require_plugin('test')
             assert( test.some_number == 42 )
             assert( test.some_boolean == true)
         """.trimIndent()

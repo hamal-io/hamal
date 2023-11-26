@@ -44,7 +44,7 @@ internal class ErrorTypeTest {
 
         sandbox.load(
             """
-            test = require('test')
+            test = require_plugin('test')
             local err = test.error()
             test.message_captor(err.message)
                

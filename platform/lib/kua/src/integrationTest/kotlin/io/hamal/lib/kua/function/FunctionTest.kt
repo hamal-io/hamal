@@ -56,7 +56,7 @@ internal class FunctionTest {
         val exception = assertThrows<ExtensionError> {
             sandbox.load(
                 """
-                test = require('test')
+                test = require_plugin('test')
                 test.throw_exception()
                 test.never_called()
             """
@@ -107,7 +107,7 @@ internal class FunctionTest {
         val error = assertThrows<Error> {
             sandbox.load(
                 """
-                test = require('test')
+                test = require_plugin('test')
                 test.throw_error()
                 test.never_called()
             """
@@ -150,7 +150,7 @@ internal class FunctionTest {
 
         sandbox.load(
             """
-            test = require('test')
+            test = require_plugin('test')
             test.capture(test.emit())
         """.trimIndent()
         )
@@ -193,7 +193,7 @@ internal class FunctionTest {
 
         sandbox.load(
             """
-            test = require('test')
+            test = require_plugin('test')
             test.capture(test.transform('some message'))
         """
         )
@@ -236,7 +236,7 @@ internal class FunctionTest {
 
         sandbox.load(
             """
-            test = require('test')
+            test = require_plugin('test')
             local x,y = test.transform('hamal')
             test.capture(x,y)
         """
@@ -284,7 +284,7 @@ internal class FunctionTest {
 
         sandbox.load(
             """
-            test = require('test')
+            test = require_plugin('test')
             test.capture(test.transform('lazy', 42))
         """
         )
@@ -325,7 +325,7 @@ internal class FunctionTest {
 
         sandbox.load(
             """
-            test = require('test')
+            test = require_plugin('test')
             test.capture(test.emit())
         """
         )

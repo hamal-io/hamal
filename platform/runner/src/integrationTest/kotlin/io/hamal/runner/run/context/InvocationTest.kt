@@ -64,7 +64,7 @@ internal object EventInvocationTest : AbstractExecuteTest() {
                 groupId = GroupId(5432),
                 inputs = ExecInputs(),
                 state = State(),
-                code = CodeValue("require('test').fn()"),
+                code = CodeValue("require_plugin('test').fn()"),
                 invocation = EventInvocation(events),
                 apiHost = ApiHost("http://test-api")
             )
@@ -148,7 +148,7 @@ internal object HookInvocationTest : AbstractExecuteTest() {
                 groupId = GroupId(5432),
                 inputs = ExecInputs(),
                 state = State(),
-                code = CodeValue("require('test').fn()"),
+                code = CodeValue("require_plugin('test').fn()"),
                 invocation = HookInvocation(
                     method = HookMethod.Delete,
                     headers = HookHeaders(MapType(mutableMapOf("content-type" to StringType("application/json")))),
@@ -240,7 +240,7 @@ internal object EndpointInvocationTest : AbstractExecuteTest() {
                 groupId = GroupId(5432),
                 inputs = ExecInputs(),
                 state = State(),
-                code = CodeValue("require('test').fn()"),
+                code = CodeValue("require_plugin('test').fn()"),
                 invocation = EndpointInvocation(
                     method = EndpointMethod.Delete,
                     headers = EndpointHeaders(MapType(mutableMapOf("content-type" to StringType("application/json")))),

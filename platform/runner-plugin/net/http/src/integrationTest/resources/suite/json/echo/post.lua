@@ -1,4 +1,4 @@
-http = require('net.http')
+http = require_plugin('net.http')
 decimal = require('decimal')
 
 res = fail_on_error(http.post({ url = '/v1/json-echo', json = {} }))

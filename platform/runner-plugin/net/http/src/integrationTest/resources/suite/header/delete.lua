@@ -1,4 +1,4 @@
-http = require('net.http')
+http = require_plugin('net.http')
 decimal = require('decimal')
 
 req_headers = {}

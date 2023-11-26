@@ -1,4 +1,4 @@
-sys = require('sys')
+sys = require_plugin('sys')
 
 -- Remember: Each test is an adhoc invocation
 execs = fail_on_error(sys.execs.list())

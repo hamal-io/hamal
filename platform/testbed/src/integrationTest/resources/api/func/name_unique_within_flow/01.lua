@@ -1,4 +1,4 @@
-sys = require('sys')
+sys = require_plugin('sys')
 
 flow = fail_on_error(sys.flows.create({ name = 'flow-1' }))
 

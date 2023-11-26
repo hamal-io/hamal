@@ -1,5 +1,5 @@
-http = require 'net.http'
-debug = require 'debug'
+http = require_plugin 'net.http'
+debug = require_plugin 'debug'
 
 host = context.api.host
 

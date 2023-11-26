@@ -1,4 +1,4 @@
-sys = require('sys')
+sys = require_plugin('sys')
 
 create_hook_req = fail_on_error(sys.hooks.create({
     name = 'empty-test-hook',

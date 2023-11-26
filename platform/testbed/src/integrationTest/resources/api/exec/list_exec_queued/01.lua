@@ -1,4 +1,4 @@
-sys = require('sys')
+sys = require_plugin('sys')
 --
 
 err, req = sys.adhoc({ inputs = {}, code = [[ answer = 42 -- but what was the question ?]] })

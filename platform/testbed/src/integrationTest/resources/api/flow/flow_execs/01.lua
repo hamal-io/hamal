@@ -1,6 +1,6 @@
 --hamal-64
 
-sys = require("sys")
+sys = require_plugin('sys')
 
 -- CREATE FLOWS
 local flow_one_req = fail_on_error(sys.flows.create({

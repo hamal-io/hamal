@@ -1,4 +1,4 @@
-sys = require("sys")
+sys = require_plugin('sys')
 
 topics = fail_on_error(sys.topics.list())
 assert(#topics == 0)

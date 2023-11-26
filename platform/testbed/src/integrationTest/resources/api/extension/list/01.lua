@@ -1,14 +1,14 @@
-sys = require('sys')
-log = require('log')
+sys = require_plugin('sys')
+log = require_plugin('log')
 
 local list = fail_on_error(sys.extensions.list())
 assert(#list == 0)
 
-for i=1, 10  do
+for i = 1, 10 do
     local exec = fail_on_error(sys.extensions.create({
         name = 'ex-' .. tostring(i),
         code = [[code]]
-    }))    
+    }))
     sys.await_completed(exec)
 end
 

@@ -1,4 +1,4 @@
-sys = require('sys')
+sys = require_plugin('sys')
 --
 err, blueprint = sys.blueprints.get('123123123')
 assert(err.message == 'Blueprint not found')
