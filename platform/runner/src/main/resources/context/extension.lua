@@ -6,6 +6,7 @@ function extension()
             exec = {
                 id = internal.exec_id,
                 hook = internal.hook,
+                endpoint = internal.endpoint,
                 events = internal.events,
             },
             state = internal.state

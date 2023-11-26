@@ -1,6 +1,7 @@
 package io.hamal.runner.run.context
 
 import io.hamal.lib.domain.State
+import io.hamal.lib.domain._enum.EndpointMethod
 import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.function.Function0In0Out
@@ -175,6 +176,98 @@ internal object HookInvocationTest : AbstractExecuteTest() {
         override fun invoke(ctx: FunctionContext) {
             val invocation = ctx[Invocation::class]
             check(invocation is HookInvocation)
+            method = invocation.method
+            headers = invocation.headers
+            parameters = invocation.parameters
+            content = invocation.content
+        }
+    }
+
+}
+
+internal object EndpointInvocationTest : AbstractExecuteTest() {
+
+    @Test
+    fun `Endpoint available in code`() {
+        val testExecutor = createTestRunner()
+        testExecutor.run(
+            UnitOfWork(
+                id = ExecId(1234),
+                flowId = FlowId(9876),
+                groupId = GroupId(5432),
+                inputs = ExecInputs(),
+                state = State(),
+                code = CodeValue(
+                    """
+                    assert( context.exec.events == nil )
+                    assert( context.exec.endpoint ~= nil )
+                    
+                    endpoint = context.exec.endpoint
+                    
+                    assert( endpoint.method == 'Delete')
+                    
+                    assert( table_length(endpoint.headers) == 1 )
+                    assert( endpoint.headers['content-type'] == 'application/json')
+                    
+                    assert( table_length(endpoint.parameters) == 1 )
+                    assert( endpoint.parameters['answer'] == 42 )
+                    
+                    assert( table_length(endpoint.content) == 1 )
+                    assert( endpoint.content['hamal'] == 'rocks' )
+
+                """.trimIndent()
+                ),
+                invocation = EndpointInvocation(
+                    method = EndpointMethod.Delete,
+                    headers = EndpointHeaders(MapType(mutableMapOf("content-type" to StringType("application/json")))),
+                    parameters = EndpointParameters(MapType(mutableMapOf("answer" to NumberType(42)))),
+                    content = EndpointContent(MapType(mutableMapOf("hamal" to StringType("rocks"))))
+                ),
+                apiHost = ApiHost("http://test-api")
+            )
+        )
+    }
+
+    @Test
+    fun `Endpoint available in function`() {
+        val testFn = TestFunction()
+
+        val testExecutor = createTestRunner("fn" to testFn)
+        testExecutor.run(
+            UnitOfWork(
+                id = ExecId(1234),
+                flowId = FlowId(9876),
+                groupId = GroupId(5432),
+                inputs = ExecInputs(),
+                state = State(),
+                code = CodeValue("require('test').fn()"),
+                invocation = EndpointInvocation(
+                    method = EndpointMethod.Delete,
+                    headers = EndpointHeaders(MapType(mutableMapOf("content-type" to StringType("application/json")))),
+                    parameters = EndpointParameters(MapType(mutableMapOf("answer" to NumberType(42)))),
+                    content = EndpointContent(MapType(mutableMapOf("hamal" to StringType("rocks"))))
+                ),
+                apiHost = ApiHost("http://test-api")
+            )
+        )
+        assertThat(testFn.method, equalTo(EndpointMethod.Delete))
+        assertThat(
+            testFn.headers,
+            equalTo(EndpointHeaders(MapType(mutableMapOf("content-type" to StringType("application/json")))))
+        )
+        assertThat(testFn.parameters, equalTo(EndpointParameters(MapType(mutableMapOf("answer" to NumberType(42))))))
+        assertThat(testFn.content, equalTo(EndpointContent(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
+    }
+
+    class TestFunction(
+        var method: EndpointMethod? = null,
+        var headers: EndpointHeaders? = null,
+        var parameters: EndpointParameters? = null,
+        var content: EndpointContent? = null
+    ) : Function0In0Out() {
+        override fun invoke(ctx: FunctionContext) {
+            val invocation = ctx[Invocation::class]
+            check(invocation is EndpointInvocation)
             method = invocation.method
             headers = invocation.headers
             parameters = invocation.parameters
