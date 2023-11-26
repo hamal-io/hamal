@@ -2,6 +2,7 @@ package io.hamal.repository.record.trigger
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain._enum.HookMethod
+import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain._enum.TriggerType.*
 import io.hamal.lib.domain._enum.TriggerType.Event
@@ -33,7 +34,9 @@ data class TriggerEntity(
     var hookId: HookId? = null,
     var hookMethod: HookMethod? = null,
 
-    var cron: CronPattern? = null
+    var cron: CronPattern? = null,
+
+    var status: TriggerStatus? = null
 
 ) : RecordEntity<TriggerId, TriggerRecord, Trigger> {
 
@@ -51,7 +54,8 @@ data class TriggerEntity(
                 inputs = rec.inputs,
                 correlationId = rec.correlationId,
                 duration = rec.duration,
-                recordedAt = rec.recordedAt()
+                recordedAt = rec.recordedAt(),
+                status = rec.status
             )
 
             is EventTriggerCreatedRecord -> copy(
@@ -66,7 +70,8 @@ data class TriggerEntity(
                 inputs = rec.inputs,
                 correlationId = rec.correlationId,
                 topicId = rec.topicId,
-                recordedAt = rec.recordedAt()
+                recordedAt = rec.recordedAt(),
+                status = rec.status
             )
 
             is HookTriggerCreatedRecord -> copy(
@@ -82,7 +87,8 @@ data class TriggerEntity(
                 correlationId = rec.correlationId,
                 hookId = rec.hookId,
                 hookMethod = rec.hookMethod,
-                recordedAt = rec.recordedAt()
+                recordedAt = rec.recordedAt(),
+                status = rec.status
             )
 
             is CronTriggerCreatedRecord -> copy(
@@ -97,7 +103,20 @@ data class TriggerEntity(
                 inputs = rec.inputs,
                 correlationId = rec.correlationId,
                 cron = rec.cron,
-                recordedAt = rec.recordedAt()
+                recordedAt = rec.recordedAt(),
+                status = rec.status
+            )
+
+            is TriggerSetActiveRecord -> copy(
+                cmdId = rec.cmdId,
+                id = rec.entityId,
+                status = TriggerStatus.Active
+            )
+
+            is TriggerSetInactiveRecord -> copy(
+                cmdId = rec.cmdId,
+                id = rec.entityId,
+                status = TriggerStatus.Inactive
             )
         }
     }
@@ -114,7 +133,8 @@ data class TriggerEntity(
                 correlationId = correlationId,
                 name = name!!,
                 inputs = inputs!!,
-                duration = duration!!
+                duration = duration!!,
+                status = status!!
             )
 
             Event -> EventTrigger(
@@ -127,7 +147,8 @@ data class TriggerEntity(
                 correlationId = correlationId,
                 name = name!!,
                 inputs = inputs!!,
-                topicId = topicId!!
+                topicId = topicId!!,
+                status = status!!
             )
 
             Hook -> HookTrigger(
@@ -141,7 +162,8 @@ data class TriggerEntity(
                 name = name!!,
                 inputs = inputs!!,
                 hookId = hookId!!,
-                hookMethod = hookMethod!!
+                hookMethod = hookMethod!!,
+                status = status!!
             )
 
             Cron -> CronTrigger(
@@ -154,7 +176,8 @@ data class TriggerEntity(
                 correlationId = correlationId,
                 name = name!!,
                 inputs = inputs!!,
-                cron = cron!!
+                cron = cron!!,
+                status = status!!
             )
         }
     }
@@ -162,7 +185,7 @@ data class TriggerEntity(
 
 fun List<TriggerRecord>.createEntity(): TriggerEntity {
     check(isNotEmpty()) { "At least one record is required" }
-    val firstRecord = first()
+    val firstRecord: TriggerRecord = first()
 
     check(
         firstRecord is FixedRateTriggerCreatedRecord ||

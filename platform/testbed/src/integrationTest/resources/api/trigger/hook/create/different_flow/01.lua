@@ -6,16 +6,16 @@ sys.await_completed(flow_req)
 func_req = fail_on_error(sys.funcs.create({ flow_id = flow_req.id, name = 'test-func'; inputs = {}; code = [[4 + 2]] }))
 sys.await_completed(func_req)
 
-hook_req = fail_on_error(sys.hooks.create({ flow_id = flow_req.id, name = "some-amazing-hook" }))
-sys.await(hook_req)
+hook = fail_on_error(sys.hooks.create({ flow_id = flow_req.id, name = "some-amazing-hook" }))
+sys.await(hook)
 
 trigger_req = fail_on_error(sys.triggers.create_hook({
     flow_id = flow_req.id,
     func_id = func_req.id,
     name = 'hook-trigger',
     inputs = { },
-    hook_id = hook_req.id,
-    hook_method = 'GET'
+    hook_method = 'GET',
+    hook_id = hook.id
 }))
 sys.await_completed(trigger_req)
 

@@ -90,6 +90,7 @@ class ClearController {
         accountRepository.clear()
         authRepository.clear()
         codeRepository.clear()
+        endpointRepository.clear()
         extensionRepository.clear()
         reqRepository.clear()
         execRepository.clear()
@@ -155,6 +156,9 @@ class ClearController {
 
     @Autowired
     lateinit var codeRepository: CodeRepository
+
+    @Autowired
+    lateinit var endpointRepository: EndpointRepository
 
     @Autowired
     lateinit var execRepository: ExecRepository
@@ -323,12 +327,14 @@ abstract class BaseApiTest {
 
             while (wait) {
                 with(sdk.exec.get(execReq.execId)) {
-                    if (status == io.hamal.lib.domain.vo.ExecStatus.Completed) {
+                    if (status == ExecStatus.Completed) {
                         wait = false
-                    } else if (status == io.hamal.lib.domain.vo.ExecStatus.Failed) {
-                        return Failed(message = "Execution failed: ${this.result!!.value["message"]}")
-                    } else if (startedAt.plusSeconds(5).isBefore(TimeUtils.now())) {
-                        return Timeout
+                    } else {
+                        if (status == ExecStatus.Failed) {
+                            return Failed(message = "Execution failed: ${this.result!!.value["message"]}")
+                        } else if (startedAt.plusSeconds(5).isBefore(TimeUtils.now())) {
+                            return Timeout
+                        }
                     }
                 }
             }

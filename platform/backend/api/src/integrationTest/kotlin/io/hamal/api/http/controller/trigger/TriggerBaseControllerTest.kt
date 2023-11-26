@@ -105,4 +105,24 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
         require(listTriggersResponse is HttpSuccessResponse) { "request was not successful" }
         return listTriggersResponse.result(ApiTrigger::class)
     }
+
+    fun activateTrigger(triggerId: TriggerId): ApiTriggerStatusSubmitted {
+        val res = httpTemplate.post("/v1/trigger/{triggerId}/activate")
+            .path("triggerId", triggerId)
+            .execute()
+
+        assertThat(res.statusCode, equalTo(Accepted))
+        require(res is HttpSuccessResponse) { "request was not successful" }
+        return res.result(ApiTriggerStatusSubmitted::class)
+    }
+
+    fun deactivateTrigger(triggerId: TriggerId): ApiTriggerStatusSubmitted {
+        val res = httpTemplate.post("/v1/trigger/{triggerId}/deactivate")
+            .path("triggerId", triggerId)
+            .execute()
+
+        assertThat(res.statusCode, equalTo(Accepted))
+        require(res is HttpSuccessResponse) { "request was not successful" }
+        return res.result(ApiTriggerStatusSubmitted::class)
+    }
 }

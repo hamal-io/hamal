@@ -1,4 +1,4 @@
-package io.hamal.plugin.std.sys.func
+package io.hamal.plugin.std.sys.hook
 
 import io.hamal.lib.domain.vo.FlowId
 import io.hamal.lib.kua.function.Function1In2Out
@@ -24,17 +24,17 @@ class HookListFunction(
                 sdk.hook.list(HookQuery(
                     flowIds = arg1.getArrayType("flow_ids")
                         .map { FlowId((it.value as StringType).value) }
-                )).mapIndexed { index, func ->
+                )).mapIndexed { index, hook ->
                     index to MapType(
                         mutableMapOf(
-                            "id" to StringType(func.id.value.value.toString(16)),
+                            "id" to StringType(hook.id.value.value.toString(16)),
                             "flow" to MapType(
                                 mutableMapOf(
-                                    "id" to StringType(func.flow.id.value.value.toString(16)),
-                                    "name" to StringType(func.flow.name.value)
+                                    "id" to StringType(hook.flow.id.value.value.toString(16)),
+                                    "name" to StringType(hook.flow.name.value)
                                 )
                             ),
-                            "name" to StringType(func.name.value),
+                            "name" to StringType(hook.name.value),
                         )
                     )
                 }.toMap().toMutableMap()

@@ -52,7 +52,7 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
                 id = CmdId(1),
                 flowId = FlowId(2345),
                 groupId = testGroup.id,
-                name = FlowName("hamal::name::space"),
+                name = FlowName("hamal::flow"),
                 inputs = FlowInputs()
             )
         )
@@ -75,7 +75,7 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
 
             flowQueryRepository.get(flowId).let {
                 assertThat(it.id, equalTo(flow.id))
-                assertThat(it.name, equalTo(FlowName("hamal::name::space")))
+                assertThat(it.name, equalTo(FlowName("hamal::flow")))
             }
         }
 

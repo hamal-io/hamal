@@ -7,10 +7,7 @@ import kotlin.time.Duration
 import kotlin.time.toJavaDuration
 
 @Component
-class Async(
-    private val executor: ThreadPoolTaskScheduler,
-) {
-
+class Async(private val executor: ThreadPoolTaskScheduler) {
     fun atFixedRate(period: Duration, task: Runnable): ScheduledFuture<*> {
         return executor.scheduleAtFixedRate(task, period.toJavaDuration())
     }

@@ -5,6 +5,7 @@ import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain._enum.HookMethod.Get
 import io.hamal.lib.domain._enum.HookMethod.Post
+import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain._enum.TriggerType.Cron
 import io.hamal.lib.domain._enum.TriggerType.FixedRate
@@ -20,7 +21,6 @@ import io.hamal.repository.api.*
 import io.hamal.repository.api.submitted_req.TriggerCreateSubmitted
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import kotlin.time.Duration.Companion.seconds
@@ -51,6 +51,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
             assertThat(id, equalTo(result.triggerId))
             assertThat(name, equalTo(TriggerName("trigger")))
             assertThat(flow.name, equalTo(FlowName("hamal")))
+            assertThat(status, equalTo(TriggerStatus.Active))
         }
     }
 
@@ -62,7 +63,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
                 id = CmdId(1),
                 flowId = FlowId(2345),
                 groupId = testGroup.id,
-                name = FlowName("hamal::name::space"),
+                name = FlowName("hamal::flow"),
                 inputs = FlowInputs()
             )
         )
@@ -88,9 +89,10 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
 
         with(getTrigger(result.triggerId)) {
             assertThat(id, equalTo(result.triggerId))
+            assertThat(status, equalTo(TriggerStatus.Active))
             assertThat(name, equalTo(TriggerName("trigger")))
             assertThat(flow.id, equalTo(flow.id))
-            assertThat(flow.name, equalTo(FlowName("hamal::name::space")))
+            assertThat(flow.name, equalTo(FlowName("hamal::flow")))
         }
     }
 

@@ -5,10 +5,10 @@ import io.hamal.lib.kua.extension.ExtensioConfignUpdateFunction
 import io.hamal.lib.kua.extension.ExtensionConfig
 import io.hamal.lib.kua.extension.ExtensionConfigGetFunction
 import io.hamal.lib.kua.extension.RunnerExtensionRegistry
-import io.hamal.lib.kua.extension.script.RunnerScriptExtension
-import io.hamal.lib.kua.extension.script.RunnerScriptExtensionFactory
 import io.hamal.lib.kua.extension.plugin.RunnerPluginExtension
 import io.hamal.lib.kua.extension.plugin.RunnerPluginExtensionFactory
+import io.hamal.lib.kua.extension.script.RunnerScriptExtension
+import io.hamal.lib.kua.extension.script.RunnerScriptExtensionFactory
 import io.hamal.lib.kua.function.FunctionType
 import io.hamal.lib.kua.table.TableProxyArray
 import io.hamal.lib.kua.table.TableProxyMap
@@ -33,16 +33,6 @@ class Sandbox(
         val classLoader = Sandbox::class.java.classLoader
         load(String(classLoader.getResource("std.lua").readBytes()))
     }
-
-//    fun login(script: NativeExtension) = state.registerGlobalExtension(script)
-//
-//    fun login(vararg factories: ExtensionFactory<*>): Sandbox {
-//        factories.map { it.create(this) }.forEach { script ->
-//            check(script is Capability)
-//            this.login(script)
-//        }
-//        return this
-//    }
 
     fun load(code: CodeType) = load(code.value)
 
@@ -129,27 +119,6 @@ internal fun Native.load(code: String) {
     call(0, 0)
 }
 
-//internal fun State.registerGlobalExtension(script: NativeExtension) {
-//    val result = registerExtension(script)
-//    setGlobal(script.name, result)
-//}
-//
-//fun State.registerExtension(script: NativeExtension): TableProxyMap {
-//
-//    val r = tableCreateMap(1)
-//    script.values
-//        .filter { entry -> entry.value is FunctionType<*, *, *, *> }
-//        .forEach { (name, value) ->
-//            require(value is FunctionType<*, *, *, *>)
-//            native.pushFunction(value)
-//            native.tabletSetField(r.index, name)
-//        }
-//
-//    createConfig(script.config)
-//    native.tabletSetField(r.index, "__config")
-//
-//    return r
-//}
 
 fun State.createConfig(config: ExtensionConfig): TableProxyMap {
 

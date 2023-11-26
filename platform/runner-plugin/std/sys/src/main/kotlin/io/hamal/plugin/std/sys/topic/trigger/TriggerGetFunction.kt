@@ -1,4 +1,4 @@
-package io.hamal.plugin.std.sys.trigger
+package io.hamal.plugin.std.sys.topic.trigger
 
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.kua.function.Function1In2Out
@@ -43,7 +43,8 @@ class TriggerGetFunction(
                                             "name" to StringType(trigger.func.name.value)
                                         )
                                     ),
-                                    "duration" to StringType(trigger.duration.toIsoString())
+                                    "duration" to StringType(trigger.duration.toIsoString()),
+                                    "status" to StringType(trigger.status.name),
                                 )
                             )
 
@@ -71,6 +72,7 @@ class TriggerGetFunction(
                                             "name" to StringType(trigger.topic.name.value)
                                         )
                                     ),
+                                    "status" to StringType(trigger.status.name),
                                 )
                             )
                         }
@@ -100,6 +102,7 @@ class TriggerGetFunction(
                                             "method" to StringType(trigger.hook.method.name)
                                         )
                                     ),
+                                    "status" to StringType(trigger.status.name),
                                 )
                             )
                         }
@@ -121,7 +124,8 @@ class TriggerGetFunction(
                                         "name" to StringType(trigger.func.name.value)
                                     )
                                 ),
-                                "cron" to StringType(trigger.cron.value)
+                                "cron" to StringType(trigger.cron.value),
+                                "status" to StringType(trigger.status.name)
                             )
                         )
                     }

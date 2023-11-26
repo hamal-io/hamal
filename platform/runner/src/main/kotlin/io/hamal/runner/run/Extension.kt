@@ -36,6 +36,17 @@ class RunnerContextFactory(
             NilType
         }
 
+        val endpoint = if (invocation is EndpointInvocation) {
+            MapType(
+                "method" to StringType(invocation.method.toString()),
+                "headers" to invocation.headers.value,
+                "parameters" to invocation.parameters.value,
+                "content" to invocation.content.value
+            )
+        } else {
+            NilType
+        }
+
         return RunnerPluginExtension(
             name = "context",
             internals = mapOf(
@@ -44,6 +55,7 @@ class RunnerContextFactory(
                 ),
                 "events" to events,
                 "hook" to hook,
+                "endpoint" to endpoint,
                 "exec_id" to StringType(executionCtx[ExecId::class].value.value.toString(16)),
                 "emit" to EmitFunction(executionCtx),
                 "fail" to FailRunFunction,

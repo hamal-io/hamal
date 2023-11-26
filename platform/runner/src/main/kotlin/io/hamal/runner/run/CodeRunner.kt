@@ -61,7 +61,6 @@ class CodeRunnerImpl(
                             }
                         }
 
-
                         sandbox.setGlobal("_internal", internalTable)
                         sandbox.state.load(contextExtension.factoryCode)
 

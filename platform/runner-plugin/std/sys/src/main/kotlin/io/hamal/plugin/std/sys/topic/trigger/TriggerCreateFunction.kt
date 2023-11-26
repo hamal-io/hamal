@@ -1,4 +1,4 @@
-package io.hamal.plugin.std.sys.trigger
+package io.hamal.plugin.std.sys.topic.trigger
 
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.HookMethod.*

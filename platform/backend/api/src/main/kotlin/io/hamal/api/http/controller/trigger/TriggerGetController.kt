@@ -38,7 +38,8 @@ internal class TriggerGetController(
                                 name = flow.name
                             ),
                             inputs = trigger.inputs,
-                            duration = trigger.duration
+                            duration = trigger.duration,
+                            status = trigger.status
                         )
 
                         is EventTrigger -> ApiEventTrigger(
@@ -56,7 +57,8 @@ internal class TriggerGetController(
                             topic = ApiEventTrigger.Topic(
                                 id = topic!!.id,
                                 name = topic.name
-                            )
+                            ),
+                            status = trigger.status
                         )
 
                         is HookTrigger -> ApiHookTrigger(
@@ -75,7 +77,8 @@ internal class TriggerGetController(
                                 id = hook!!.id,
                                 name = hook.name,
                                 method = trigger.hookMethod
-                            )
+                            ),
+                            status = trigger.status
                         )
 
                         is CronTrigger -> ApiCronTrigger(
@@ -90,7 +93,8 @@ internal class TriggerGetController(
                                 name = flow.name
                             ),
                             inputs = trigger.inputs,
-                            cron = trigger.cron
+                            cron = trigger.cron,
+                            status = trigger.status
                         )
                     }
                 )

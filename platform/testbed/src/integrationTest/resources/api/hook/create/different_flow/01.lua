@@ -3,17 +3,17 @@ sys = require('sys')
 flow = fail_on_error(sys.flows.create({ name = "hamal::flow::rocks" }))
 sys.await_completed(flow)
 
-hook_req = fail_on_error(sys.hooks.create({
+hook = fail_on_error(sys.hooks.create({
     flow_id = flow.id,
     name = 'hook-1'
 }))
-sys.await_completed(hook_req)
+sys.await_completed(hook)
 
-assert(hook_req ~= nil)
-assert(hook_req.group_id == '1')
-assert(hook_req.flow_id == flow.id)
+assert(hook ~= nil)
+assert(hook.group_id == '1')
+assert(hook.flow_id == flow.id)
 
-_, hook = sys.hooks.get(hook_req.id)
+_, hook = sys.hooks.get(hook.id)
 assert(hook.flow.id == flow.id)
 assert(hook.flow.name == "hamal::flow::rocks")
 

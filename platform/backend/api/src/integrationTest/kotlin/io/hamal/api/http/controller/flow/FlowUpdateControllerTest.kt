@@ -43,7 +43,7 @@ internal class FlowUpdateControllerTest : FlowBaseControllerTest() {
         val flow = awaitCompleted(
             createFlow(
                 ApiFlowCreateReq(
-                    name = FlowName("createdName"),
+                    name = FlowName("created-name"),
                     inputs = FlowInputs(MapType((mutableMapOf("hamal" to StringType("createdInputs"))))),
                     type = FlowType.default
                 )
@@ -54,7 +54,7 @@ internal class FlowUpdateControllerTest : FlowBaseControllerTest() {
             .path("flowId", flow.flowId)
             .body(
                 ApiFlowUpdateReq(
-                    name = FlowName("updatedName"),
+                    name = FlowName("updated-name"),
                     inputs = FlowInputs(MapType(mutableMapOf("hamal" to StringType("updatedInputs"))))
                 )
             )
@@ -67,7 +67,7 @@ internal class FlowUpdateControllerTest : FlowBaseControllerTest() {
 
         with(getFlow(flowId)) {
             assertThat(id, equalTo(flowId))
-            assertThat(name, equalTo(FlowName("updatedName")))
+            assertThat(name, equalTo(FlowName("updated-name")))
             assertThat(inputs, equalTo(FlowInputs(MapType(mutableMapOf("hamal" to StringType("updatedInputs"))))))
             assertThat(type, equalTo(FlowType.default))
         }

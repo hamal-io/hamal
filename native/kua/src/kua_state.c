@@ -137,17 +137,17 @@ static void unload_jni_ref(JNIEnv *env) {
 void
 close_connection(lua_State *L) {
     // FIXME should become a separate function
-    JNIEnv *env = current_env();
-    // removes state reference
-    lua_getfield(L, LUA_REGISTRYINDEX, "__KState");
-    jobject obj = *(jobject *) lua_touserdata(L, -1);
-    if (obj) {
-        (*env)->DeleteWeakGlobalRef(env, obj);
-    }
-
-    unload_jni_ref(env);
-
-    // FIXME remove/ unload loaded jni references
-    lua_close(L);
-    memory_arena_free();
+//    JNIEnv *env = current_env();
+//    // removes state reference
+//    lua_getfield(L, LUA_REGISTRYINDEX, "__KState");
+//    jobject obj = *(jobject *) lua_touserdata(L, -1);
+//    if (obj) {
+//        (*env)->DeleteWeakGlobalRef(env, obj);
+//    }
+//
+////    unload_jni_ref(env);
+//
+//    // FIXME remove/ unload loaded jni references
+//    lua_close(L);
+////    memory_arena_free();
 }
