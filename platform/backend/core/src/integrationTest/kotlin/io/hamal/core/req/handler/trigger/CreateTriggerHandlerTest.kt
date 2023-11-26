@@ -1,8 +1,7 @@
 package io.hamal.core.req.handler.trigger
 
 import io.hamal.core.req.handler.BaseReqHandlerTest
-import io.hamal.lib.domain._enum.HookMethod
-import io.hamal.lib.domain._enum.HookMethod.*
+import io.hamal.lib.domain._enum.HookMethod.Get
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain._enum.TriggerType.*
 import io.hamal.lib.domain._enum.TriggerType.Event
@@ -96,7 +95,7 @@ internal class CreateTriggerHandlerTest : BaseReqHandlerTest() {
         }
 
         @Test
-        fun `Tries to create an invalid trigger`() {
+        fun `Tries to create a trigger when hookId, funcId, hookMethod already exist`() {
             createHook(HookId(1111))
             createFunc(FuncId(2222), FuncName("SomeFunc"))
             testInstance(submitCreateHookTriggerReq)

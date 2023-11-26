@@ -311,7 +311,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
 
 
         @Test
-        fun `Creates valid triggers`() {
+        fun `Creates multiple triggers`() {
             val hook_one = awaitCompleted(createHook(HookName("hook-name-one"))).hookId
             val hook_two = awaitCompleted(createHook(HookName("hook-name-two"))).hookId
             val func_one = awaitCompleted(createFunc(FuncName("hook-trigger-func-one"))).funcId
@@ -387,7 +387,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
 
 
         @Test
-        fun `Tries to create invalid trigger`() {
+        fun `Tries to create a trigger when hookId, funcId, hookMethod already exist`() {
             val hook_one = awaitCompleted(createHook(HookName("hook-name-one"))).hookId
             val func_one = awaitCompleted(createFunc(FuncName("hook-trigger-func-one"))).funcId
 

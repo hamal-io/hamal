@@ -12,7 +12,7 @@ trigger_req = fail_on_error(sys.triggers.create_hook({
     name = 'trigger-one',
     inputs = { },
     hook_id = hook_req.hook_id,
-    hook_method = 'GET'
+    hook_method = 'Get'
 }))
 sys.await_completed(trigger_req)
 
@@ -22,7 +22,7 @@ err, trigger = sys.triggers.create_hook({
     name = 'trigger-two',
     inputs = { },
     hook_id = hook_req.hook_id,
-    hook_method = 'GET'
+    hook_method = 'Get'
 })
 assert(err.message == 'Trigger already exists')
 assert(trigger == nil)

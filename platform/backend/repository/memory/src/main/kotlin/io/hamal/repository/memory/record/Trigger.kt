@@ -1,6 +1,7 @@
 package io.hamal.repository.memory.record
 
 import io.hamal.lib.domain._enum.TriggerStatus
+import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.repository.api.*
 import io.hamal.repository.api.TriggerCmdRepository.*
@@ -13,9 +14,24 @@ internal object CurrentTriggerProjection {
 
     private val projection = mutableMapOf<TriggerId, Trigger>()
 
+
     fun apply(trigger: Trigger) {
         val currentTrigger = projection[trigger.id]
         projection.remove(trigger.id)
+
+        if (trigger.type == TriggerType.Hook) {
+            trigger as HookTrigger
+            if (list(
+                    TriggerQuery(
+                        hookIds = listOf(trigger.hookId),
+                        funcIds = listOf(trigger.funcId),
+                        hookMethods = listOf(trigger.hookMethod)
+                    )
+                ).isNotEmpty()
+            ) {
+                throw IllegalArgumentException("Trigger already exists")
+            }
+        }
 
         val triggersInFlow = projection.values.filter { it.flowId == trigger.flowId }
         if (triggersInFlow.any { it.name == trigger.name }) {
@@ -56,6 +72,7 @@ internal object CurrentTriggerProjection {
                 } else {
                     if (it is HookTrigger) {
                         query.hookIds.contains(it.hookId)
+                        query.hookMethods.contains(it.hookMethod)
                     } else {
                         false
                     }
@@ -169,18 +186,6 @@ class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord,
             if (commandAlreadyApplied(cmd.id, triggerId)) {
                 versionOf(triggerId, cmd.id) as HookTrigger
             } else {
-
-                list(
-                    TriggerQuery(
-                        hookIds = listOf(cmd.hookId),
-                        funcIds = listOf(cmd.funcId)
-                    )
-                ).firstOrNull()?.let { trigger ->
-                    trigger as HookTrigger
-                    if (trigger.hookMethod == cmd.hookMethod) {
-                        throw IllegalArgumentException("Trigger already exists")
-                    }
-                }
 
                 store(
                     HookTriggerCreatedRecord(

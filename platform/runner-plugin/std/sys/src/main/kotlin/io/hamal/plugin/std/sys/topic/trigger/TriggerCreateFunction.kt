@@ -47,11 +47,11 @@ class TriggerCreateFunction(
                     },
                     hookMethod = if (arg1.type("hook_method") == StringType::class) {
                         when (arg1.getString("hook_method")) {
-                            "DELETE" -> Delete
-                            "GET" -> Get
-                            "PATCH" -> Patch
-                            "POST" -> Post
-                            "PUT" -> Put
+                            "Delete" -> Delete
+                            "Get" -> Get
+                            "Patch" -> Patch
+                            "Post" -> Post
+                            "Put" -> Put
                             else -> null
                         }
                     } else {

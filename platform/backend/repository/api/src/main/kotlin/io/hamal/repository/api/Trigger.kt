@@ -96,7 +96,8 @@ interface TriggerQueryRepository {
         var topicIds: List<TopicId> = listOf(),
         var hookIds: List<HookId> = listOf(),
         var groupIds: List<GroupId> = listOf(),
-        var flowIds: List<FlowId> = listOf()
+        var flowIds: List<FlowId> = listOf(),
+        var hookMethods: List<HookMethod> = listOf()
     )
 }
 

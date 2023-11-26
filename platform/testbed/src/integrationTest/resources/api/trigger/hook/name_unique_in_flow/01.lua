@@ -16,7 +16,7 @@ trigger = fail_on_error(sys.triggers.create_hook({
     name = 'trigger-to-create',
     inputs = { },
     hook_id = hook.id,
-    hook_method = 'GET'
+    hook_method = 'Get'
 
 }))
 sys.await_completed(trigger)
@@ -27,7 +27,7 @@ trigger = fail_on_error(sys.triggers.create_hook({
     name = 'trigger-to-create',
     inputs = { },
     hook_id = hook.id,
-    hook_method = 'POST'
+    hook_method = 'Post'
 }))
 assert(sys.await_failed(trigger) == nil)
 
@@ -41,7 +41,7 @@ err, trigger = sys.triggers.create_hook({
     name = 'trigger-to-create',
     inputs = { },
     hook_id = hook.id,
-    hook_method = 'PATCH'
+    hook_method = 'Patch'
 })
 assert(err == nil)
 sys.await_completed(trigger)

@@ -118,19 +118,6 @@ class SqliteTriggerRepository(
             if (commandAlreadyApplied(cmdId, triggerId)) {
                 versionOf(triggerId, cmdId) as HookTrigger
             } else {
-
-                list(
-                    TriggerQuery(
-                        hookIds = listOf(cmd.hookId),
-                        funcIds = listOf(cmd.funcId)
-                    )
-                ).firstOrNull()?.let { trigger ->
-                    trigger as HookTrigger
-                    if (trigger.hookMethod == cmd.hookMethod) {
-                        throw IllegalArgumentException("Trigger already exists")
-                    }
-                }
-
                 store(
                     HookTriggerCreatedRecord(
                         cmdId = cmdId,

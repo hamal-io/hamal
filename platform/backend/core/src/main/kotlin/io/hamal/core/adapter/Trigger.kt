@@ -177,16 +177,15 @@ class TriggerAdapter(
             requireNotNull(createTrigger.hookMethod) { "hookMethod is missing" }
             hookQueryRepository.get(createTrigger.hookId!!)
 
-            triggerQueryRepository.list(
-                TriggerQuery(
-                    hookIds = listOf(createTrigger.hookId!!),
-                    funcIds = listOf(createTrigger.funcId)
-                )
-            ).firstOrNull()?.let { trigger ->
-                trigger as HookTrigger
-                if (trigger.hookMethod == createTrigger.hookMethod) {
-                    throw IllegalArgumentException("Trigger already exists")
-                }
+            if (triggerQueryRepository.list(
+                    TriggerQuery(
+                        hookIds = listOf(createTrigger.hookId!!),
+                        funcIds = listOf(createTrigger.funcId),
+                        hookMethods = listOf(createTrigger.hookMethod!!)
+                    )
+                ).isNotEmpty()
+            ) {
+                throw IllegalArgumentException("Trigger already exists")
             }
         }
     }

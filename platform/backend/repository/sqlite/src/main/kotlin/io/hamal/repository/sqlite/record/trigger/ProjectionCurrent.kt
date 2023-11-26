@@ -12,6 +12,7 @@ import io.hamal.repository.sqlite.record.SqliteProjection
 import io.hamal.repository.sqlite.record.SqliteRecordTransaction
 import io.hamal.repository.sqlite.record.protobuf
 import kotlinx.serialization.ExperimentalSerializationApi
+import org.sqlite.SQLiteException
 
 
 @OptIn(ExperimentalSerializationApi::class)
@@ -23,8 +24,7 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
                 data
              FROM
                 current
-            WHERE
-                id  = :id
+            WHERE id  = :id
         """.trimIndent()
         ) {
             query {
@@ -88,6 +88,7 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
                 ${query.topicIds()}
                 ${query.hookIds()}
                 ${query.flowIds()}
+                ${query.hookMethods()}
         """.trimIndent()
         ) {
             query {
@@ -100,31 +101,39 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
     }
 
     override fun upsert(tx: SqliteRecordTransaction<TriggerId, TriggerRecord, Trigger>, obj: Trigger) {
-        tx.execute(
-            """
+        try {
+            tx.execute(
+                """
                 INSERT OR REPLACE INTO current
-                    (id, group_id, func_id, topic_id, hook_id, flow_id, type, data) 
+                    (id, group_id, func_id, topic_id, hook_id, flow_id, type, hook_method, data) 
                 VALUES
-                    (:id, :groupId, :funcId, :topicId, :hookId, :flowId, :type, :data)
+                    (:id, :groupId, :funcId, :topicId, :hookId, :flowId, :type, :hookMethod ,:data)
             """.trimIndent()
-        ) {
-            set("id", obj.id)
-            set("groupId", obj.groupId)
-            set("funcId", obj.funcId)
-            if (obj is EventTrigger) {
-                set("topicId", obj.topicId)
-            } else {
-                set("topicId", 0)
-            }
+            ) {
+                set("id", obj.id)
+                set("groupId", obj.groupId)
+                set("funcId", obj.funcId)
+                if (obj is EventTrigger) {
+                    set("topicId", obj.topicId)
+                } else {
+                    set("topicId", 0)
+                }
 
-            if (obj is HookTrigger) {
-                set("hookId", obj.hookId)
-            } else {
-                set("hookId", 0)
+                if (obj is HookTrigger) {
+                    set("hookId", obj.hookId)
+                    set("hookMethod", obj.hookMethod.value)
+                } else {
+                    set("hookId", 0)
+                }
+                set("flowId", obj.flowId)
+                set("type", obj.type.value)
+                set("data", protobuf.encodeToByteArray(Trigger.serializer(), obj))
             }
-            set("flowId", obj.flowId)
-            set("type", obj.type.value)
-            set("data", protobuf.encodeToByteArray(Trigger.serializer(), obj))
+        } catch (e: SQLiteException) {
+            if (e.message!!.contains("(UNIQUE constraint failed: unique_name.func_id, unique_name.hook_id, unique_name.hook_method)")) {
+                throw IllegalArgumentException("${obj.name} already exists")
+            }
+            throw e
         }
     }
 
@@ -139,8 +148,10 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
                  topic_id       INTEGER NOT NULL,
                  hook_id        INTEGER NOT NULL,
                  flow_id        INTEGER NOT NULL,
+                 hook_method    INTEGER NOT NULL,
                  data           BLOB NOT NULL,
-                 PRIMARY KEY    (id)
+                 PRIMARY KEY    (id),
+                 UNIQUE (func_id, hook_id, hook_method)
             );
         """.trimIndent()
         )
@@ -203,6 +214,14 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
             ""
         } else {
             "AND flow_id IN (${flowIds.joinToString(",") { "${it.value.value}" }})"
+        }
+    }
+
+    private fun TriggerQuery.hookMethods(): String {
+        return if (hookMethods.isEmpty()) {
+            ""
+        } else {
+            "AND flow_id IN (${hookMethods.joinToString(",") { "${it.value}" }})"
         }
     }
 }

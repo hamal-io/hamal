@@ -439,7 +439,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
             }
 
         @TestFactory
-        fun `Registers valid triggers`() = runWith(TriggerRepository::class) {
+        fun `Creates multiple triggers`() = runWith(TriggerRepository::class) {
             createHookTrigger(
                 triggerId = TriggerId(1),
                 flowId = FlowId(2),
@@ -484,7 +484,8 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
         }
 
         @TestFactory
-        fun `Tries to register invalid hook triggers`() = runWith(TriggerRepository::class) {
+        fun `Tries to create a trigger when hookId, funcId, hookMethod already exist`() =
+            runWith(TriggerRepository::class) {
             createHookTrigger(
                 triggerId = TriggerId(1),
                 flowId = FlowId(2),
