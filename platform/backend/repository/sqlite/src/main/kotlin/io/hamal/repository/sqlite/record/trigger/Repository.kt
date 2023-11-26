@@ -4,6 +4,7 @@ import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.*
+import io.hamal.repository.api.HookTrigger.HookTriggerIndex
 import io.hamal.repository.api.TriggerCmdRepository.*
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import io.hamal.repository.record.CreateDomainObject
@@ -210,5 +211,7 @@ class SqliteTriggerRepository(
         return ProjectionCurrent.count(connection, query)
     }
 
-
+    override fun checkHookTriggerIdx(query: HookTriggerIndex): Boolean {
+        return ProjectionCurrent.checkHookTriggerIdx(connection, query)
+    }
 }

@@ -9,6 +9,7 @@ import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
+import io.hamal.repository.api.HookTrigger.*
 import kotlinx.serialization.Serializable
 import kotlin.time.Duration
 
@@ -83,9 +84,9 @@ interface TriggerCmdRepository : CmdRepository {
 interface TriggerQueryRepository {
     fun get(triggerId: TriggerId) = find(triggerId) ?: throw NoSuchElementException("Trigger not found")
     fun find(triggerId: TriggerId): Trigger?
-
     fun list(query: TriggerQuery): List<Trigger>
     fun count(query: TriggerQuery): ULong
+    fun checkHookTriggerIdx(query: HookTriggerIndex): Boolean
 
     data class TriggerQuery(
         var afterId: TriggerId = TriggerId(SnowflakeId(Long.MAX_VALUE)),
@@ -96,8 +97,7 @@ interface TriggerQueryRepository {
         var topicIds: List<TopicId> = listOf(),
         var hookIds: List<HookId> = listOf(),
         var groupIds: List<GroupId> = listOf(),
-        var flowIds: List<FlowId> = listOf(),
-        var hookMethods: List<HookMethod> = listOf()
+        var flowIds: List<FlowId> = listOf()
     )
 }
 
@@ -165,6 +165,13 @@ class HookTrigger(
     val hookMethod: HookMethod
 ) : Trigger {
     override val type = TriggerType.Hook
+
+    @Serializable
+    data class HookTriggerIndex(
+        val funcId: FuncId,
+        val hookId: HookId,
+        val hookMethod: HookMethod
+    )
 }
 
 @Serializable

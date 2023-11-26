@@ -4,34 +4,27 @@ import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.repository.api.*
+import io.hamal.repository.api.HookTrigger.HookTriggerIndex
 import io.hamal.repository.api.TriggerCmdRepository.*
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import io.hamal.repository.record.trigger.*
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
+
 internal object CurrentTriggerProjection {
 
     private val projection = mutableMapOf<TriggerId, Trigger>()
-
+    private val uniqueHookTriggerIdx = mutableSetOf<HookTriggerIndex>()
 
     fun apply(trigger: Trigger) {
-        val currentTrigger = projection[trigger.id]
-        projection.remove(trigger.id)
 
         if (trigger.type == TriggerType.Hook) {
-            trigger as HookTrigger
-            if (list(
-                    TriggerQuery(
-                        hookIds = listOf(trigger.hookId),
-                        funcIds = listOf(trigger.funcId),
-                        hookMethods = listOf(trigger.hookMethod)
-                    )
-                ).isNotEmpty()
-            ) {
-                throw IllegalArgumentException("Trigger already exists")
-            }
+            handleHookTrigger(trigger as HookTrigger)
         }
+
+        val currentTrigger = projection[trigger.id]
+        projection.remove(trigger.id)
 
         val triggersInFlow = projection.values.filter { it.flowId == trigger.flowId }
         if (triggersInFlow.any { it.name == trigger.name }) {
@@ -72,7 +65,6 @@ internal object CurrentTriggerProjection {
                 } else {
                     if (it is HookTrigger) {
                         query.hookIds.contains(it.hookId)
-                        query.hookMethods.contains(it.hookMethod)
                     } else {
                         false
                     }
@@ -121,7 +113,24 @@ internal object CurrentTriggerProjection {
 
     fun clear() {
         projection.clear()
+        uniqueHookTriggerIdx.clear()
     }
+
+    private fun handleHookTrigger(trigger: HookTrigger) {
+        val toCheck = HookTriggerIndex(
+            trigger.funcId,
+            trigger.hookId,
+            trigger.hookMethod
+        )
+
+        if (checkHookTrigger(toCheck)) {
+            throw IllegalArgumentException("Trigger already exists")
+        } else {
+            uniqueHookTriggerIdx.add(toCheck)
+        }
+    }
+
+    fun checkHookTrigger(toCheck: HookTriggerIndex): Boolean = uniqueHookTriggerIdx.contains(toCheck)
 }
 
 
@@ -186,7 +195,6 @@ class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord,
             if (commandAlreadyApplied(cmd.id, triggerId)) {
                 versionOf(triggerId, cmd.id) as HookTrigger
             } else {
-
                 store(
                     HookTriggerCreatedRecord(
                         cmdId = cmd.id,
@@ -268,4 +276,8 @@ class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord,
     }
 
     override fun close() {}
+
+    override fun checkHookTriggerIdx(query: HookTriggerIndex): Boolean {
+        return CurrentTriggerProjection.checkHookTrigger(query)
+    }
 }

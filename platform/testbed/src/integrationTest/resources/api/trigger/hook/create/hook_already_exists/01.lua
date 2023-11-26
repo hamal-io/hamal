@@ -24,6 +24,7 @@ err, trigger = sys.triggers.create_hook({
     hook_id = hook_req.hook_id,
     hook_method = 'Get'
 })
+
 assert(err.message == 'Trigger already exists')
 assert(trigger == nil)
 

@@ -5,6 +5,7 @@ import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.EventTrigger
 import io.hamal.repository.api.HookTrigger
+import io.hamal.repository.api.HookTrigger.HookTriggerIndex
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import io.hamal.repository.record.trigger.TriggerRecord
@@ -88,7 +89,6 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
                 ${query.topicIds()}
                 ${query.hookIds()}
                 ${query.flowIds()}
-                ${query.hookMethods()}
         """.trimIndent()
         ) {
             query {
@@ -107,7 +107,7 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
                 INSERT OR REPLACE INTO current
                     (id, group_id, func_id, topic_id, hook_id, flow_id, type, hook_method, data) 
                 VALUES
-                    (:id, :groupId, :funcId, :topicId, :hookId, :flowId, :type, :hookMethod ,:data)
+                    (:id, :groupId, :funcId, :topicId, :hookId, :flowId, :type, :hookMethod , :data)
             """.trimIndent()
             ) {
                 set("id", obj.id)
@@ -124,6 +124,7 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
                     set("hookMethod", obj.hookMethod.value)
                 } else {
                     set("hookId", 0)
+                    set("hookMethod", 0)
                 }
                 set("flowId", obj.flowId)
                 set("type", obj.type.value)
@@ -131,7 +132,7 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
             }
         } catch (e: SQLiteException) {
             if (e.message!!.contains("(UNIQUE constraint failed: unique_name.func_id, unique_name.hook_id, unique_name.hook_method)")) {
-                throw IllegalArgumentException("${obj.name} already exists")
+                throw IllegalArgumentException("Trigger already exists")
             }
             throw e
         }
@@ -150,9 +151,19 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
                  flow_id        INTEGER NOT NULL,
                  hook_method    INTEGER NOT NULL,
                  data           BLOB NOT NULL,
-                 PRIMARY KEY    (id),
-                 UNIQUE (func_id, hook_id, hook_method)
-            );
+                 PRIMARY KEY    (id)
+        );
+        """.trimIndent()
+        )
+        connection.execute(
+            """
+            CREATE UNIQUE INDEX 
+                idx_func_hook_method 
+            ON 
+                current(func_id, hook_id, hook_method)
+            WHERE 
+                hook_id != 0;
+
         """.trimIndent()
         )
     }
@@ -160,6 +171,34 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
     override fun clear(tx: Transaction) {
         tx.execute("""DELETE FROM current""")
     }
+
+
+    fun checkHookTriggerIdx(connection: Connection, query: HookTriggerIndex): Boolean {
+        TODO("100")
+        return false
+        /*
+        return connection.executeQuery<Boolean>(
+            """
+                SELECT COUNT(*) as count FROM 
+                    current
+                 WHERE
+                    func_id = :func_id AND
+                    hook_id = :hook_id AND
+                    hook_method = :hook_method
+                );
+        """.trimIndent()
+        ) {
+            query {
+                set("func_id", query.funcId)
+                set("hook_id", query.hookId)
+                set("hook_method", query.hookMethod)
+            }
+
+        }
+*/
+    }
+
+
 
     private fun TriggerQuery.types(): String {
         return if (types.isEmpty()) {
@@ -214,14 +253,6 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
             ""
         } else {
             "AND flow_id IN (${flowIds.joinToString(",") { "${it.value.value}" }})"
-        }
-    }
-
-    private fun TriggerQuery.hookMethods(): String {
-        return if (hookMethods.isEmpty()) {
-            ""
-        } else {
-            "AND flow_id IN (${hookMethods.joinToString(",") { "${it.value}" }})"
         }
     }
 }
