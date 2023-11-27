@@ -1,4 +1,4 @@
-sys = require('sys')
+sys = require_plugin('sys')
 
 err, hooks = sys.funcs.list()
 assert(err == nil)

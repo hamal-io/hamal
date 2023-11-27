@@ -1,13 +1,13 @@
 package io.hamal.plugin.std.debug
 
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.extension.plugin.RunnerPluginExtension
-import io.hamal.lib.kua.extension.plugin.RunnerPluginExtensionFactory
+import io.hamal.lib.kua.extend.plugin.RunnerPlugin
+import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
 
 
-class DebugPluginFactory : RunnerPluginExtensionFactory {
-    override fun create(sandbox: Sandbox): RunnerPluginExtension {
-        return RunnerPluginExtension(
+class DebugPluginFactory : RunnerPluginFactory {
+    override fun create(sandbox: Sandbox): RunnerPlugin {
+        return RunnerPlugin(
             name = "debug",
             internals = mapOf(
                 "sleep" to SleepFunction,

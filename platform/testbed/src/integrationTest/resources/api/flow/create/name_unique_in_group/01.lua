@@ -1,4 +1,4 @@
-sys = require('sys')
+sys = require_plugin('sys')
 
 err, flows = sys.flows.list()
 assert(err == nil)

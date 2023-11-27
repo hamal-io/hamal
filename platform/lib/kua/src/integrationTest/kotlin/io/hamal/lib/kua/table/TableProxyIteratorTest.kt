@@ -3,8 +3,8 @@ package io.hamal.lib.kua.table
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NopSandboxContext
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.extension.plugin.RunnerPluginExtension
 import io.hamal.lib.kua.error.ScriptErrorTest
+import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.function.Function1In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -40,10 +40,10 @@ internal class TableEntryIteratorTest {
         }
 
         sandbox.register(
-            RunnerPluginExtension(
+            RunnerPlugin(
                 name = "test",
                 factoryCode = """
-                    function extension()
+                    function plugin()
                         local internal = _internal
                         return function()
                             local export = { 
@@ -58,7 +58,7 @@ internal class TableEntryIteratorTest {
         )
         sandbox.load(
             """
-            test = require('test')
+            test = require_plugin('test')
             local table = {
                 key = 'value',
                 answer = 42,
@@ -91,10 +91,10 @@ internal class TableEntryIteratorTest {
         }
 
         sandbox.register(
-            RunnerPluginExtension(
+            RunnerPlugin(
                 name = "test",
                 factoryCode = """
-                    function extension()
+                    function plugin()
                         local internal = _internal
                         return function()
                             local export = { 
@@ -109,7 +109,7 @@ internal class TableEntryIteratorTest {
         )
         sandbox.load(
             """
-            test = require('test')
+            test = require_plugin('test')
             local table = { }
             
             test.invoke(table)
@@ -139,10 +139,10 @@ internal class TableEntryIteratorTest {
         }
 
         sandbox.register(
-            RunnerPluginExtension(
+            RunnerPlugin(
                 name = "test",
                 factoryCode = """
-                    function extension()
+                    function plugin()
                         local internal = _internal
                         return function()
                             local export = { 
@@ -157,7 +157,7 @@ internal class TableEntryIteratorTest {
         )
         sandbox.load(
             """
-            test = require('test')
+            test = require_plugin('test')
             
             local table = {
                 [1] = 'value',
@@ -199,10 +199,10 @@ internal class TableEntryIteratorTest {
         }
 
         sandbox.register(
-            RunnerPluginExtension(
+            RunnerPlugin(
                 name = "test",
                 factoryCode = """
-                    function extension()
+                    function plugin()
                         local internal = _internal
                         return function()
                             local export = { 
@@ -217,7 +217,7 @@ internal class TableEntryIteratorTest {
         )
         sandbox.load(
             """
-            test = require('test')
+            test = require_plugin('test')
                 
             local table = {
                 { type = 'call' },
@@ -250,10 +250,10 @@ internal class TableEntryIteratorTest {
         }
 
         sandbox.register(
-            RunnerPluginExtension(
+            RunnerPlugin(
                 name = "test",
                 factoryCode = """
-                    function extension()
+                    function plugin()
                         local internal = _internal
                         return function()
                             local export = { 
@@ -268,7 +268,7 @@ internal class TableEntryIteratorTest {
         )
         sandbox.load(
             """
-            test = require('test')
+            test = require_plugin('test')
             local table = {}
             test.invoke(table)
         """.trimIndent()
@@ -279,10 +279,10 @@ internal class TableEntryIteratorTest {
         NativeLoader.load(NativeLoader.Preference.Resources)
         Sandbox(NopSandboxContext()).also {
             it.register(
-                RunnerPluginExtension(
+                RunnerPlugin(
                     name = "test",
                     factoryCode = """
-                    function extension()
+                    function plugin()
                         local internal = _internal
                         return function()
                             local export = { 

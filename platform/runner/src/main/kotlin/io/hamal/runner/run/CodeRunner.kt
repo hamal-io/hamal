@@ -64,7 +64,7 @@ class CodeRunnerImpl(
                         sandbox.setGlobal("_internal", internalTable)
                         sandbox.state.load(contextExtension.factoryCode)
 
-                        sandbox.state.load("${contextExtension.name} = extension()()")
+                        sandbox.state.load("${contextExtension.name} = plugin()()")
                         sandbox.unsetGlobal("_internal")
 
                         sandbox.load(CodeType(unitOfWork.code.value))

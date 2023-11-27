@@ -1,4 +1,4 @@
-sys = require('sys')
+sys = require_plugin('sys')
 
 endpoints = fail_on_error(sys.endpoints.list())
 assert(#endpoints == 0)

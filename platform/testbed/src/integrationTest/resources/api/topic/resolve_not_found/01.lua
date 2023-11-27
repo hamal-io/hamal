@@ -1,4 +1,4 @@
-sys = require('sys')
+sys = require_plugin('sys')
 --
 err, topic_id = sys.topics.resolve('123123123')
 assert(err.message == 'Topic not found')

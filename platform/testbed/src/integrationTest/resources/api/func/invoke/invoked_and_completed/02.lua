@@ -1,4 +1,4 @@
-sys = require('sys')
+sys = require_plugin('sys')
 
 err, execs = sys.execs.list()
 assert(err == nil)

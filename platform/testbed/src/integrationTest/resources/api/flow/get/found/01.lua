@@ -1,4 +1,4 @@
-sys = require('sys')
+sys = require_plugin('sys')
 
 create_req = fail_on_error(sys.flows.create({
     name = 'test-flow',

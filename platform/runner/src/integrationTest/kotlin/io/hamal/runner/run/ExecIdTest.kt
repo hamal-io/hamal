@@ -40,7 +40,7 @@ internal class ExecIdTest : AbstractExecuteTest() {
                 groupId = GroupId(5432),
                 inputs = ExecInputs(),
                 state = State(),
-                code = CodeValue("require('test').fn()"),
+                code = CodeValue("require_plugin('test').fn()"),
                 correlation = null,
                 invocation = EmptyInvocation,
                 apiHost = ApiHost("http://test-api")

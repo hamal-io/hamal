@@ -1,23 +1,23 @@
-package io.hamal.lib.kua.capability
+package io.hamal.lib.kua.extend
 
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.NopSandboxContext
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.extension.plugin.RunnerPluginExtension
+import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
-internal class ExtensionTest {
+internal class PluginTest {
 
     @Test
     fun `Invokes function of test capability`() {
         sandbox.load(
             """
-            local test = require('test')
+            local test = require_plugin('test')
             for x=1,10 do
                 test.call()
             end
@@ -30,7 +30,7 @@ internal class ExtensionTest {
     fun `Able to access fields of capability`() {
         sandbox.load(
             """
-            local test = require('test')
+            local test = require_plugin('test')
             assert( test.some_number == 42 )
             assert( test.some_boolean == true)
         """.trimIndent()
@@ -41,10 +41,10 @@ internal class ExtensionTest {
         NativeLoader.load(Resources)
         Sandbox(NopSandboxContext()).also { sb ->
             sb.register(
-                RunnerPluginExtension(
+                RunnerPlugin(
                     name = "test",
                     factoryCode = """
-                            function extension()
+                            function plugin()
                                 local internal = _internal
                                 return function()
                                     local export = {

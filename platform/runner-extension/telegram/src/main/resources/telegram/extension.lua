@@ -1,5 +1,5 @@
 function extension()
-    local http = require('net.http')
+    local http = require_plugin('net.http')
 
     return function()
         local export = {

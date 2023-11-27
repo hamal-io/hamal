@@ -8,7 +8,7 @@ internal class MulTest : AbstractRunnerTest() {
     @Test
     fun `decimal, number`() {
         val runner = createTestRunner(
-            scriptFactories = listOf(DecimalScriptFactory)
+            extensionFactories = listOf(DecimalExtensionFactory)
         )
         runner.run(
             unitOfWork(
@@ -28,7 +28,7 @@ internal class MulTest : AbstractRunnerTest() {
     @Test
     fun `decimal, decimal`() {
         val runner = createTestRunner(
-            scriptFactories = listOf(DecimalScriptFactory)
+            extensionFactories = listOf(DecimalExtensionFactory)
         )
         runner.run(
             unitOfWork(
@@ -48,7 +48,7 @@ internal class MulTest : AbstractRunnerTest() {
     @Test
     fun `number, decimal`() {
         val runner = createTestRunner(
-            scriptFactories = listOf(DecimalScriptFactory)
+            extensionFactories = listOf(DecimalExtensionFactory)
         )
         runner.run(
             unitOfWork(

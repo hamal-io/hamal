@@ -1,13 +1,13 @@
 package io.hamal.extension.std.decimal
 
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.extension.script.RunnerScriptExtension
-import io.hamal.lib.kua.extension.script.RunnerScriptExtensionFactory
+import io.hamal.lib.kua.extend.extension.RunnerExtension
+import io.hamal.lib.kua.extend.extension.RunnerExtensionFactory
 
 
-object DecimalScriptFactory : RunnerScriptExtensionFactory {
-    override fun create(sandbox: Sandbox): RunnerScriptExtension {
-        return RunnerScriptExtension(name = "decimal")
+object DecimalExtensionFactory : RunnerExtensionFactory {
+    override fun create(sandbox: Sandbox): RunnerExtension {
+        return RunnerExtension(name = "decimal")
     }
 }
 

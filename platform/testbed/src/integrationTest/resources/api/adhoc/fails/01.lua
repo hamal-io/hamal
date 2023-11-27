@@ -1,4 +1,4 @@
-sys = require('sys')
+sys = require_plugin('sys')
 
 res = fail_on_error(sys.adhoc({
     inputs = {},

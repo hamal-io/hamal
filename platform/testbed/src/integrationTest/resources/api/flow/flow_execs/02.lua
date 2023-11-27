@@ -1,4 +1,4 @@
-sys = require("sys")
+sys = require_plugin('sys')
 
 function findInList(list, key, matchValue)
     for index, value in ipairs(list) do

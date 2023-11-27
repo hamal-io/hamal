@@ -2,7 +2,7 @@ package io.hamal.plugin.web3.evm
 
 import io.hamal.lib.common.logger
 import io.hamal.lib.http.HttpTemplateImpl
-import io.hamal.lib.kua.extension.ExtensionConfig
+import io.hamal.lib.kua.extend.ExtensionConfig
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema

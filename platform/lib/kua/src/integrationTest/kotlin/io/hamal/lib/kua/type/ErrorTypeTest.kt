@@ -4,7 +4,7 @@ import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.NopSandboxContext
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.extension.plugin.RunnerPluginExtension
+import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.function.*
 import io.hamal.lib.kua.table.TableProxyMap
 import org.hamcrest.MatcherAssert.assertThat
@@ -19,10 +19,10 @@ internal class ErrorTypeTest {
         val messageCaptor = Captor()
 
         sandbox.register(
-            RunnerPluginExtension(
+            RunnerPlugin(
                 name = "test",
                 factoryCode = """
-                    function extension()
+                    function plugin()
                         local internal = _internal
                         return function()
                             local export = { 
@@ -44,7 +44,7 @@ internal class ErrorTypeTest {
 
         sandbox.load(
             """
-            test = require('test')
+            test = require_plugin('test')
             local err = test.error()
             test.message_captor(err.message)
                
@@ -62,10 +62,10 @@ internal class ErrorTypeTest {
         val errorCaptor = Captor()
 
         sandbox.register(
-            RunnerPluginExtension(
+            RunnerPlugin(
                 name = "test",
                 factoryCode = """
-                    function extension()
+                    function plugin()
                         local internal = _internal
                         return function()
                             local export = { 

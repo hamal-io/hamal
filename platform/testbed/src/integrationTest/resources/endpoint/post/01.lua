@@ -1,5 +1,5 @@
-sys = require 'sys'
-http = require 'net.http'
+sys = require_plugin 'sys'
+http = require_plugin 'net.http'
 
 flow = fail_on_error(sys.flows.create({ name = 'io::hamal' }))
 sys.await_completed(flow)

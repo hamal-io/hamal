@@ -1,14 +1,15 @@
 package io.hamal.lib.kua
 
 import io.hamal.lib.kua.builtin.Require
-import io.hamal.lib.kua.extension.ExtensioConfignUpdateFunction
-import io.hamal.lib.kua.extension.ExtensionConfig
-import io.hamal.lib.kua.extension.ExtensionConfigGetFunction
-import io.hamal.lib.kua.extension.RunnerExtensionRegistry
-import io.hamal.lib.kua.extension.plugin.RunnerPluginExtension
-import io.hamal.lib.kua.extension.plugin.RunnerPluginExtensionFactory
-import io.hamal.lib.kua.extension.script.RunnerScriptExtension
-import io.hamal.lib.kua.extension.script.RunnerScriptExtensionFactory
+import io.hamal.lib.kua.builtin.RequirePlugin
+import io.hamal.lib.kua.extend.ExtensionConfig
+import io.hamal.lib.kua.extend.ExtensionConfigGetFunction
+import io.hamal.lib.kua.extend.ExtensionConfigUpdateFunction
+import io.hamal.lib.kua.extend.RunnerRegistry
+import io.hamal.lib.kua.extend.extension.RunnerExtension
+import io.hamal.lib.kua.extend.extension.RunnerExtensionFactory
+import io.hamal.lib.kua.extend.plugin.RunnerPlugin
+import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
 import io.hamal.lib.kua.function.FunctionType
 import io.hamal.lib.kua.table.TableProxyArray
 import io.hamal.lib.kua.table.TableProxyMap
@@ -25,10 +26,11 @@ class Sandbox(
     override fun pop(len: Int) = state.pop(len)
 
     val state = ClosableState(native)
-    val registry: RunnerExtensionRegistry = RunnerExtensionRegistry(this)
+    val registry: RunnerRegistry = RunnerRegistry(this)
 
     init {
         registerGlobalFunction("require", Require(registry))
+        registerGlobalFunction("require_plugin", RequirePlugin(registry))
 
         val classLoader = Sandbox::class.java.classLoader
         load(String(classLoader.getResource("std.lua").readBytes()))
@@ -42,25 +44,25 @@ class Sandbox(
         fn(state)
     }
 
-    fun register(extension: RunnerPluginExtension) {
+    fun register(extension: RunnerPlugin) {
         registry.register(extension)
     }
 
-    fun register(vararg factories: RunnerPluginExtensionFactory): Sandbox {
+    fun register(vararg factories: RunnerPluginFactory): Sandbox {
         factories.map { it.create(this) }.forEach { cap ->
             this.register(cap)
         }
         return this
     }
 
-    fun register(vararg factories: RunnerScriptExtensionFactory): Sandbox {
+    fun register(vararg factories: RunnerExtensionFactory): Sandbox {
         factories.map { it.create(this) }.forEach { cap ->
             this.register(cap)
         }
         return this
     }
 
-    fun register(extension: RunnerScriptExtension) {
+    fun register(extension: RunnerExtension) {
         registry.register(extension)
     }
 
@@ -126,7 +128,7 @@ fun State.createConfig(config: ExtensionConfig): TableProxyMap {
 
     val fns = mapOf(
         "get" to ExtensionConfigGetFunction(config),
-        "update" to ExtensioConfignUpdateFunction(config)
+        "update" to ExtensionConfigUpdateFunction(config)
     )
 
     fns.forEach { (name, value) ->

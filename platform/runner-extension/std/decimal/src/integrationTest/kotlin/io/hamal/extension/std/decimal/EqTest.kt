@@ -7,7 +7,7 @@ internal class EqTest : AbstractRunnerTest() {
     @Test
     fun `decimal, number`() {
         val runner = createTestRunner(
-            scriptFactories = listOf(DecimalScriptFactory)
+            extensionFactories = listOf(DecimalExtensionFactory)
         )
 
         runner.run(
@@ -29,7 +29,7 @@ internal class EqTest : AbstractRunnerTest() {
     @Test
     fun `decimal, decimal`() {
         val runner = createTestRunner(
-            scriptFactories = listOf(DecimalScriptFactory)
+            extensionFactories = listOf(DecimalExtensionFactory)
         )
 
         runner.run(
@@ -50,7 +50,7 @@ internal class EqTest : AbstractRunnerTest() {
     @Test
     fun `number, decimal`() {
         val runner = createTestRunner(
-            scriptFactories = listOf(DecimalScriptFactory)
+            extensionFactories = listOf(DecimalExtensionFactory)
         )
 
         runner.run(

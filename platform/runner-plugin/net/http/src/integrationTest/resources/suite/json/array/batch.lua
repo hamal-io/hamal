@@ -1,4 +1,4 @@
-local http = require('net.http')
+local http = require_plugin('net.http')
 
 local err, response = http.execute({
     http.requests.get({ url = '/v1/json-array' }),

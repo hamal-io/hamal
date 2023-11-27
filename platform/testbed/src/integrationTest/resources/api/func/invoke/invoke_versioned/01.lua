@@ -1,4 +1,4 @@
-sys = require('sys')
+sys = require_plugin('sys')
 
 req = fail_on_error(sys.funcs.create({
     flow_id = '1',

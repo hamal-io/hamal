@@ -1,4 +1,4 @@
-sys = require('sys')
+sys = require_plugin('sys')
 err, ns = sys.flows.get('123123123')
 assert(err.message == 'Flow not found')
 assert(err['message'] == 'Flow not found')

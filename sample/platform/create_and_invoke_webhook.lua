@@ -1,4 +1,4 @@
-sys = require('sys')
+sys = require_plugin('sys')
 
 _, r = sys.flows.create({ name = '007' })
 flow_id = r.id

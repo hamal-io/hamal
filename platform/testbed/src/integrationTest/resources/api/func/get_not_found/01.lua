@@ -1,4 +1,4 @@
-sys = require('sys')
+sys = require_plugin('sys')
 --
 err, func_one = sys.funcs.get('123123123')
 assert(err.message == 'Func not found')
