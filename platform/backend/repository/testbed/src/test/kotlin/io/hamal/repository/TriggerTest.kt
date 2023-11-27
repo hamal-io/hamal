@@ -726,7 +726,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 )
             )
 
-            setStatus(TriggerId(2), SetTriggerStatusCmd(CmdGen(), Inactive))
+            set(TriggerId(2), SetTriggerStatusCmd(CmdGen(), Inactive))
 
             with(get(TriggerId(2)) as FixedRateTrigger) {
                 assertThat(id, equalTo(TriggerId(2)))
@@ -763,7 +763,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
             )
 
             repeat(5) {
-                setStatus(TriggerId(2), SetTriggerStatusCmd(CmdGen(), Active))
+                set(TriggerId(2), SetTriggerStatusCmd(CmdGen(), Active))
             }
 
             with(get(TriggerId(2)) as FixedRateTrigger) {

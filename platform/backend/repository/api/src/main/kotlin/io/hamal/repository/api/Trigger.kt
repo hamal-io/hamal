@@ -19,7 +19,7 @@ interface TriggerCmdRepository : CmdRepository {
     fun create(cmd: CreateEventCmd): EventTrigger
     fun create(cmd: CreateHookCmd): HookTrigger
     fun create(cmd: CreateCronCmd): CronTrigger
-    fun setStatus(triggerId: TriggerId, cmd: SetTriggerStatusCmd): Trigger
+    fun set(triggerId: TriggerId, cmd: SetTriggerStatusCmd): Trigger
 
     data class CreateFixedRateCmd(
         val id: CmdId,

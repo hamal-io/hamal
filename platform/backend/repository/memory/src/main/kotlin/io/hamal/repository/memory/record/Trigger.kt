@@ -245,7 +245,7 @@ class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord,
         }
     }
 
-    override fun setStatus(triggerId: TriggerId, cmd: SetTriggerStatusCmd): Trigger {
+    override fun set(triggerId: TriggerId, cmd: SetTriggerStatusCmd): Trigger {
         return lock.withLock {
             if (commandAlreadyApplied(cmd.id, triggerId)) {
                 versionOf(triggerId, cmd.id)

@@ -23,7 +23,7 @@ class SetTriggerStatusHandler(
 }
 
 private fun SetTriggerStatusHandler.setStatus(req: TriggerStatusSubmitted): Trigger {
-    return triggerCmdRepository.setStatus(
+    return triggerCmdRepository.set(
         req.triggerId, TriggerCmdRepository.SetTriggerStatusCmd(
             id = req.cmdId(),
             status = req.triggerStatus
