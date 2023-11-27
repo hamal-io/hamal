@@ -122,12 +122,7 @@ internal object CurrentTriggerProjection {
             trigger.hookId,
             trigger.hookMethod
         )
-
-        if (uniqueHookTriggerIdx.contains(toCheck)) {
-            throw IllegalArgumentException("Trigger already exists")
-        } else {
-            uniqueHookTriggerIdx.add(toCheck)
-        }
+        require(uniqueHookTriggerIdx.add(toCheck)) { "Trigger already exists" }
     }
 }
 

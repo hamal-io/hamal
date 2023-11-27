@@ -439,7 +439,8 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
             }
 
         @TestFactory
-        fun `Creates multiple triggers`() = runWith(TriggerRepository::class) {
+        fun `Creates triggers with different hookId, funcId, hookMethod combinations`() =
+            runWith(TriggerRepository::class) {
             createHookTrigger(
                 triggerId = TriggerId(1),
                 flowId = FlowId(2),
@@ -768,6 +769,8 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
             with(get(TriggerId(2)) as FixedRateTrigger) {
                 assertThat(id, equalTo(TriggerId(2)))
                 assertThat(funcId, equalTo(FuncId(3)))
+
+
                 assertThat(flowId, equalTo(FlowId(5)))
                 assertThat(name, equalTo(TriggerName("trigger-name")))
                 assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))

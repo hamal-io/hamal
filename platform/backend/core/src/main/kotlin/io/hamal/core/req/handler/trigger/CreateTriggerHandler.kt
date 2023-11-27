@@ -61,7 +61,6 @@ class CreateTriggerHandler(
 
             Hook -> {
                 val hook = hookQueryRepository.get(req.hookId!!)
-
                 triggerCmdRepository.create(
                     TriggerCmdRepository.CreateHookCmd(
                         id = req.cmdId(),
@@ -76,6 +75,8 @@ class CreateTriggerHandler(
                         hookMethod = req.hookMethod ?: Post
                     )
                 )
+
+
             }
 
             Cron -> triggerCmdRepository.create(

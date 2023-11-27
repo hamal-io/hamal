@@ -311,7 +311,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
 
 
         @Test
-        fun `Creates multiple triggers`() {
+        fun `Creates triggers with different hookId, funcId, hookMethod combinations`() {
             val hook_one = awaitCompleted(createHook(HookName("hook-name-one"))).hookId
             val hook_two = awaitCompleted(createHook(HookName("hook-name-two"))).hookId
             val func_one = awaitCompleted(createFunc(FuncName("hook-trigger-func-one"))).funcId

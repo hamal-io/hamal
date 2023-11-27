@@ -1,33 +1,31 @@
-sys = require('sys')
+sys = require_plugin('sys')
 
-func_req = fail_on_error(sys.funcs.create({ name = 'test-func'; inputs = {}; code = [[4 + 2]] }))
-sys.await_completed(func_req)
+func = fail_on_error(sys.funcs.create({ name = 'test-func-t'; inputs = {}; code = [[4 + 2]] }))
+sys.await_completed(func)
 
-hook_req = fail_on_error(sys.hooks.create({ name = "some-amazing-hook" }))
-sys.await_completed(hook_req)
+hook = fail_on_error(sys.hooks.create({ name = "some-amazing-hook-t" }))
+sys.await(hook)
 
 trigger_req = fail_on_error(sys.triggers.create_hook({
-    func_id = func_req.func_id,
-    flow_id = '1',
+    func_id = func.func_id,
     name = 'trigger-one',
     inputs = { },
-    hook_id = hook_req.hook_id,
+    hook_id = hook.hook_id,
     hook_method = 'Get'
 }))
 sys.await_completed(trigger_req)
 
+
 err, trigger = sys.triggers.create_hook({
-    func_id = func_req.func_id,
-    flow_id = '1',
+    func_id = func.func_id,
     name = 'trigger-two',
     inputs = { },
-    hook_id = hook_req.hook_id,
+    hook_id = hook.hook_id,
     hook_method = 'Get'
 })
 
 assert(err.message == 'Trigger already exists')
 assert(trigger == nil)
 
-_, triggers = sys.triggers.list()
+triggers = fail_on_error(sys.triggers.list())
 assert(#triggers == 1)
-
