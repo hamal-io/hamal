@@ -104,10 +104,10 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
         try {
             tx.execute(
                 """
-                INSERT OR REPLACE INTO current
+                INSERT OR FAIL INTO current
                     (id, group_id, func_id, topic_id, hook_id, flow_id, type, hook_method, data) 
                 VALUES
-                    (:id, :groupId, :funcId, :topicId, :hookId, :flowId, :type, :hookMethod , :data)
+                    (:id, :groupId, :funcId, :topicId, :hookId, :flowId, :type, :hookMethod , :data);
             """.trimIndent()
             ) {
                 set("id", obj.id)
@@ -131,7 +131,7 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
                 set("data", protobuf.encodeToByteArray(Trigger.serializer(), obj))
             }
         } catch (e: SQLiteException) {
-            if (e.message!!.contains("(UNIQUE constraint failed: unique_name.func_id, unique_name.hook_id, unique_name.hook_method)")) {
+            if (e.message!!.contains("UNIQUE constraint failed: current.func_id, current.hook_id, current.hook_method")) {
                 throw IllegalArgumentException("Trigger already exists")
             }
             throw e
@@ -152,53 +152,25 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
                  hook_method    INTEGER NOT NULL,
                  data           BLOB NOT NULL,
                  PRIMARY KEY    (id)
+                 
         );
         """.trimIndent()
         )
         connection.execute(
             """
-            CREATE UNIQUE INDEX 
-                idx_func_hook_method 
-            ON 
-                current(func_id, hook_id, hook_method)
-            WHERE 
-                hook_id != 0;
-
-        """.trimIndent()
+                CREATE UNIQUE INDEX
+                    idx_func_hook_method
+                ON
+                    current(func_id, hook_id, hook_method)
+                WHERE
+                   type = 3;
+            """.trimIndent()
         )
     }
 
     override fun clear(tx: Transaction) {
         tx.execute("""DELETE FROM current""")
     }
-
-
-    fun checkHookTriggerIdx(connection: Connection, query: HookTriggerIndex): Boolean {
-        TODO("100")
-        return false
-        /*
-        return connection.executeQuery<Boolean>(
-            """
-                SELECT COUNT(*) as count FROM 
-                    current
-                 WHERE
-                    func_id = :func_id AND
-                    hook_id = :hook_id AND
-                    hook_method = :hook_method
-                );
-        """.trimIndent()
-        ) {
-            query {
-                set("func_id", query.funcId)
-                set("hook_id", query.hookId)
-                set("hook_method", query.hookMethod)
-            }
-
-        }
-*/
-    }
-
-
 
     private fun TriggerQuery.types(): String {
         return if (types.isEmpty()) {

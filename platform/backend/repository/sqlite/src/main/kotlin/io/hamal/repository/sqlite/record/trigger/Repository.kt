@@ -171,7 +171,7 @@ class SqliteTriggerRepository(
         }
     }
 
-    override fun set(triggerId: TriggerId, cmd: SetTriggerStatusCmd): Trigger {
+    override fun setStatus(triggerId: TriggerId, cmd: SetTriggerStatusCmd): Trigger {
         return tx {
             if (commandAlreadyApplied(cmd.id, triggerId)) {
                 versionOf(triggerId, cmd.id)
@@ -209,9 +209,5 @@ class SqliteTriggerRepository(
 
     override fun count(query: TriggerQuery): ULong {
         return ProjectionCurrent.count(connection, query)
-    }
-
-    override fun checkHookTriggerIdx(query: HookTriggerIndex): Boolean {
-        return ProjectionCurrent.checkHookTriggerIdx(connection, query)
     }
 }

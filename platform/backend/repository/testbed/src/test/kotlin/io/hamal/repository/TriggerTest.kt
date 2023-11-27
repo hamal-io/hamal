@@ -483,33 +483,35 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
             verifyCount(4)
         }
 
+
         @TestFactory
         fun `Tries to create a trigger when hookId, funcId, hookMethod already exist`() =
             runWith(TriggerRepository::class) {
-            createHookTrigger(
-                triggerId = TriggerId(1),
-                flowId = FlowId(2),
-                groupId = GroupId(1),
-                name = TriggerName("trigger-name-1"),
-                funcId = FuncId(1),
-                hookId = HookId(1),
-                hookMethod = Get
-            )
-
-            val exception = assertThrows<IllegalArgumentException> {
                 createHookTrigger(
-                    triggerId = TriggerId(2),
+                    triggerId = TriggerId(1),
                     flowId = FlowId(2),
                     groupId = GroupId(1),
-                    name = TriggerName("other-trigger"),
+                    name = TriggerName("trigger-name-1"),
                     funcId = FuncId(1),
                     hookId = HookId(1),
                     hookMethod = Get
                 )
+
+                val exception = assertThrows<IllegalArgumentException> {
+                    createHookTrigger(
+                        triggerId = TriggerId(2),
+                        flowId = FlowId(2),
+                        groupId = GroupId(1),
+                        name = TriggerName("other-trigger"),
+                        funcId = FuncId(1),
+                        hookId = HookId(1),
+                        hookMethod = Get
+                    )
+                }
+                assertThat(exception.message, equalTo("Trigger already exists"))
+                assertThat(find(TriggerId(1)), notNullValue())
+                verifyCount(1)
             }
-            assertThat(exception.message, equalTo("Trigger already exists"))
-            verifyCount(1)
-        }
 
         @TestFactory
         fun `Tries to create but cmd with func id was already applied`() =
@@ -723,7 +725,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 )
             )
 
-            set(TriggerId(2), SetTriggerStatusCmd(CmdGen(), Inactive))
+            setStatus(TriggerId(2), SetTriggerStatusCmd(CmdGen(), Inactive))
 
             with(get(TriggerId(2)) as FixedRateTrigger) {
                 assertThat(id, equalTo(TriggerId(2)))
@@ -760,7 +762,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
             )
 
             repeat(5) {
-                set(TriggerId(2), SetTriggerStatusCmd(CmdGen(), Active))
+                setStatus(TriggerId(2), SetTriggerStatusCmd(CmdGen(), Active))
             }
 
             with(get(TriggerId(2)) as FixedRateTrigger) {

@@ -9,7 +9,6 @@ import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
-import io.hamal.repository.api.HookTrigger.*
 import kotlinx.serialization.Serializable
 import kotlin.time.Duration
 
@@ -20,7 +19,7 @@ interface TriggerCmdRepository : CmdRepository {
     fun create(cmd: CreateEventCmd): EventTrigger
     fun create(cmd: CreateHookCmd): HookTrigger
     fun create(cmd: CreateCronCmd): CronTrigger
-    fun set(triggerId: TriggerId, cmd: SetTriggerStatusCmd): Trigger
+    fun setStatus(triggerId: TriggerId, cmd: SetTriggerStatusCmd): Trigger
 
     data class CreateFixedRateCmd(
         val id: CmdId,
@@ -86,7 +85,6 @@ interface TriggerQueryRepository {
     fun find(triggerId: TriggerId): Trigger?
     fun list(query: TriggerQuery): List<Trigger>
     fun count(query: TriggerQuery): ULong
-    fun checkHookTriggerIdx(query: HookTriggerIndex): Boolean
 
     data class TriggerQuery(
         var afterId: TriggerId = TriggerId(SnowflakeId(Long.MAX_VALUE)),

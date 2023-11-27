@@ -123,14 +123,12 @@ internal object CurrentTriggerProjection {
             trigger.hookMethod
         )
 
-        if (checkHookTrigger(toCheck)) {
+        if (uniqueHookTriggerIdx.contains(toCheck)) {
             throw IllegalArgumentException("Trigger already exists")
         } else {
             uniqueHookTriggerIdx.add(toCheck)
         }
     }
-
-    fun checkHookTrigger(toCheck: HookTriggerIndex): Boolean = uniqueHookTriggerIdx.contains(toCheck)
 }
 
 
@@ -240,7 +238,7 @@ class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord,
         }
     }
 
-    override fun set(triggerId: TriggerId, cmd: SetTriggerStatusCmd): Trigger {
+    override fun setStatus(triggerId: TriggerId, cmd: SetTriggerStatusCmd): Trigger {
         return lock.withLock {
             if (commandAlreadyApplied(cmd.id, triggerId)) {
                 versionOf(triggerId, cmd.id)
@@ -276,8 +274,4 @@ class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord,
     }
 
     override fun close() {}
-
-    override fun checkHookTriggerIdx(query: HookTriggerIndex): Boolean {
-        return CurrentTriggerProjection.checkHookTrigger(query)
-    }
 }

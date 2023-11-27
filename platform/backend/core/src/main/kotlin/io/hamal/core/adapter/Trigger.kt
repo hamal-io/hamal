@@ -176,7 +176,6 @@ class TriggerAdapter(
             requireNotNull(createTrigger.hookId) { "hookId is missing" }
             requireNotNull(createTrigger.hookMethod) { "hookMethod is missing" }
             hookQueryRepository.get(createTrigger.hookId!!)
-
         }
     }
 
