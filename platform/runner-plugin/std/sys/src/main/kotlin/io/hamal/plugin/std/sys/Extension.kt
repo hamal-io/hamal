@@ -1,8 +1,8 @@
 package io.hamal.plugin.std.sys
 
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.extension.plugin.RunnerPluginExtension
-import io.hamal.lib.kua.extension.plugin.RunnerPluginExtensionFactory
+import io.hamal.lib.kua.extend.plugin.RunnerPlugin
+import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
 import io.hamal.lib.sdk.ApiSdkImpl
 import io.hamal.plugin.std.sys.adhoc.AdhocFunction
 import io.hamal.plugin.std.sys.blueprint.BlueprintCreateFunction
@@ -33,9 +33,9 @@ import io.hamal.plugin.std.sys.topic.trigger.*
 
 class SysPluginFactory(
     private val sdk: ApiSdkImpl
-) : RunnerPluginExtensionFactory {
-    override fun create(sandbox: Sandbox): RunnerPluginExtension {
-        return RunnerPluginExtension(
+) : RunnerPluginFactory {
+    override fun create(sandbox: Sandbox): RunnerPlugin {
+        return RunnerPlugin(
             name = "sys",
             internals = mapOf(
                 "await" to AwaitFunction(sdk.template),

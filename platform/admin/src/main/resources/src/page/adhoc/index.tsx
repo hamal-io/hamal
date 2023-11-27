@@ -4,7 +4,7 @@ import {Editor} from '../../component'
 import {invokeAdhoc} from "../../api/adhoc.ts";
 
 const AdhocPage: React.FC = () => {
-    const [code, setCode] = useState(`log = require('log')\nlog.info("That wasn't hard, was it?")`)
+    const [code, setCode] = useState(`log = require_plugin('log')\nlog.info("That wasn't hard, was it?")`)
 
     return (
         <div className="flex flex-col items-center justify-center">

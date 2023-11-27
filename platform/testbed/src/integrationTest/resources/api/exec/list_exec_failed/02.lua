@@ -1,4 +1,4 @@
-sys = require('sys')
+sys = require_plugin('sys')
 
 while true do
     -- Remember: Each test is an adhoc invocation

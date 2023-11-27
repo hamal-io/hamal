@@ -1,4 +1,4 @@
-http = require('net.http')
+http = require_plugin('net.http')
 
 err, res = http.patch({ url = '/v1/json-error' })
 assert(err == nil)

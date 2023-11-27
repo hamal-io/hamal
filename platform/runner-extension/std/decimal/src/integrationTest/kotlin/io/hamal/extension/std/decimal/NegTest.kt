@@ -7,7 +7,7 @@ internal class NegTest : AbstractRunnerTest() {
     @Test
     fun `decimal, decimal`() {
         val runner = createTestRunner(
-            scriptFactories = listOf(DecimalScriptFactory)
+            extensionFactories = listOf(DecimalExtensionFactory)
         )
         runner.run(
             unitOfWork(

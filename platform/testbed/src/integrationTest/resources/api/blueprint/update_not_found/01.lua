@@ -1,4 +1,4 @@
-sys = require('sys')
+sys = require_plugin('sys')
 --
 err, update_req = sys.blueprints.update({
     id = '123456',

@@ -1,7 +1,7 @@
 -- As an unauthenticated user it must be possible to acquire a token by creating an anonymous account
 -- With the acquired token api requests are possible - like fetching flows
 
-http = require 'net.http'
+http = require_plugin 'net.http'
 
 err, res = http.post({ url = '/v1/anonymous-accounts', json = { } })
 assert(err == nil)

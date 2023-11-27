@@ -1,4 +1,4 @@
-sys = require('sys')
+sys = require_plugin('sys')
 
 --hook name is unique
 hook = fail_on_error(sys.hooks.create({ flow_id = '1'; name = 'hook-name' }))

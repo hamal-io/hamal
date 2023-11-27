@@ -1,4 +1,4 @@
-sys = require('sys')
+sys = require_plugin('sys')
 
 local req = fail_on_error(sys.extensions.create({
     name = 'test-ext',

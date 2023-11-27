@@ -1,4 +1,4 @@
-sys = require('sys')
+sys = require_plugin('sys')
 
 one_req = fail_on_error(sys.flows.create({ name = 'flow-one' }))
 sys.await_completed(one_req)

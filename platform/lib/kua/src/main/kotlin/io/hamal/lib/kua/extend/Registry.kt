@@ -1,36 +1,36 @@
-package io.hamal.lib.kua.extension
+package io.hamal.lib.kua.extend
 
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.extension.plugin.RunnerPluginExtension
-import io.hamal.lib.kua.extension.script.RunnerScriptExtension
+import io.hamal.lib.kua.extend.extension.RunnerExtension
+import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.function.FunctionType
 import io.hamal.lib.kua.table.TableProxyMap
 
-class RunnerExtensionRegistry(val sb: Sandbox) {
+class RunnerRegistry(val sb: Sandbox) {
 
     val state = sb.state
-    val pluginExtensions = mutableMapOf<String, RunnerPluginExtension>()
-    val scriptExtensions = mutableMapOf<String, RunnerScriptExtension>()
+    val plugins = mutableMapOf<String, RunnerPlugin>()
+    val extensions = mutableMapOf<String, RunnerExtension>()
     val factories = mutableMapOf<String, TableProxyMap>()
 
-    fun isScript(name: String) = scriptExtensions.keys.contains(name)
+    fun isScript(name: String) = extensions.keys.contains(name)
 
-    fun isPlugin(name: String) = pluginExtensions.keys.contains(name)
+    fun isPlugin(name: String) = plugins.keys.contains(name)
 
-    fun register(extension: RunnerPluginExtension) {
-        pluginExtensions[extension.name] = extension
+    fun register(plugin: RunnerPlugin) {
+        plugins[plugin.name] = plugin
         // FIXME load the factory
-        loadPluginExtensionFactory(extension.name)
+        loadPluginFactory(plugin.name)
     }
 
-    fun register(extension: RunnerScriptExtension) {
-        scriptExtensions[extension.name] = extension
+    fun register(extension: RunnerExtension) {
+        extensions[extension.name] = extension
         // FIXME load the factory
-        loadScriptExtensionFactory(extension.name)
+        loadExtensionFactory(extension.name)
     }
 
-    fun loadPluginExtensionFactory(name: String): TableProxyMap {
-        val extension = pluginExtensions[name]!!
+    fun loadPluginFactory(name: String): TableProxyMap {
+        val extension = plugins[name]!!
         val internals = extension.internals
         val internalTable = state.tableCreateMap(internals.size)
 
@@ -42,8 +42,8 @@ class RunnerExtensionRegistry(val sb: Sandbox) {
 
         sb.setGlobal("_internal", internalTable)
 
-        state.load(pluginExtensions[name]!!.factoryCode)
-        state.load("_factory = extension()")
+        state.load(plugins[name]!!.factoryCode)
+        state.load("_factory = plugin()")
 
         sb.unsetGlobal("_internal")
 
@@ -51,12 +51,12 @@ class RunnerExtensionRegistry(val sb: Sandbox) {
         val factory = state.getGlobalTableMap("_factory")
         factories[name] = factory
 
-        state.unsetGlobal("extension")
+        state.unsetGlobal("plugin")
         return factory
     }
 
-    fun loadScriptExtensionFactory(name: String): TableProxyMap {
-        val extension = scriptExtensions[name]!!
+    fun loadExtensionFactory(name: String): TableProxyMap {
+        val extension = extensions[name]!!
 
         state.load(extension.factoryCode)
         state.load("_factory = extension()")

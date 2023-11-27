@@ -2,17 +2,17 @@ package io.hamal.plugin.net.http
 
 import io.hamal.plugin.net.http.function.HttpExecuteFunction
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.extension.ExtensionConfig
-import io.hamal.lib.kua.extension.plugin.RunnerPluginExtension
-import io.hamal.lib.kua.extension.plugin.RunnerPluginExtensionFactory
+import io.hamal.lib.kua.extend.ExtensionConfig
+import io.hamal.lib.kua.extend.plugin.RunnerPlugin
+import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
 
 class HttpPluginFactory(
     val config: ExtensionConfig = ExtensionConfig(mutableMapOf())
-) : RunnerPluginExtensionFactory {
+) : RunnerPluginFactory {
 
 
-    override fun create(sandbox: Sandbox): RunnerPluginExtension {
-        return RunnerPluginExtension(
+    override fun create(sandbox: Sandbox): RunnerPlugin {
+        return RunnerPlugin(
             name = "net.http",
             internals = mapOf(
                 "execute" to HttpExecuteFunction()

@@ -1,14 +1,16 @@
-package io.hamal.lib.kua.extension
+package io.hamal.lib.kua.extend
 
 import io.hamal.lib.kua.function.*
 import io.hamal.lib.kua.table.TableProxyMap
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.kua.type.Type
 
+@Deprecated("Remove in 85")
 class ExtensionConfig(
     val value: MutableMap<String, Type> = mutableMapOf()
 )
 
+@Deprecated("Remove in 85")
 class ExtensionConfigGetFunction(
     val config: ExtensionConfig
 ) : Function0In1Out<TableProxyMap>(
@@ -25,7 +27,8 @@ class ExtensionConfigGetFunction(
     }
 }
 
-class ExtensioConfignUpdateFunction(
+@Deprecated("Remove in 85")
+class ExtensionConfigUpdateFunction(
     val config: ExtensionConfig
 ) : Function1In0Out<TableProxyMap>(
     FunctionInput1Schema(TableProxyMap::class)

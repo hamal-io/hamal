@@ -1,7 +1,7 @@
 package io.hamal.testbed.api
 
 import AbstractRunnerTest
-import io.hamal.lib.kua.extension.ExtensionConfig
+import io.hamal.lib.kua.extend.ExtensionConfig
 import io.hamal.lib.kua.type.StringType
 import io.hamal.plugin.net.http.HttpPluginFactory
 import io.hamal.testbed.api.BaseTest.TestResult.Failure

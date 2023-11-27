@@ -1,3 +1,3 @@
-local types = require('web3.eth').abi.types
+local types = require_plugin('web3.eth').abi.types
 
 assert(table_length(types) == 2)

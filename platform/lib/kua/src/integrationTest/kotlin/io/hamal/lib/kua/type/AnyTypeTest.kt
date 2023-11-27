@@ -4,7 +4,7 @@ import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.NopSandboxContext
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.extension.plugin.RunnerPluginExtension
+import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.function.*
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
@@ -17,10 +17,12 @@ internal class AnyTypeTest {
         val captor = AnyValueResultCaptor()
         sandbox.register(capability(captor))
 
-        sandbox.load("""
-            test = require('test')
+        sandbox.load(
+            """
+            test = require_plugin('test')
             test.captor(test.pass_through(true))
-        """)
+        """
+        )
         assertThat(captor.result, equalTo(AnyType(True)))
     }
 
@@ -29,10 +31,12 @@ internal class AnyTypeTest {
         val captor = AnyValueResultCaptor()
         sandbox.register(capability(captor))
 
-        sandbox.load("""
-            test = require('test')
+        sandbox.load(
+            """
+            test = require_plugin('test')
             test.captor(test.pass_through(23))
-        """)
+        """
+        )
 
         assertThat(captor.result, equalTo(AnyType(NumberType(23))))
     }
@@ -42,10 +46,12 @@ internal class AnyTypeTest {
         val captor = AnyValueResultCaptor()
         sandbox.register(capability(captor))
 
-        sandbox.load("""
-            test = require('test')
+        sandbox.load(
+            """
+            test = require_plugin('test')
             test.captor(test.pass_through('hamal.io'))
-        """.trimIndent())
+        """.trimIndent()
+        )
 
         assertThat(captor.result, equalTo(AnyType(StringType("hamal.io"))))
     }
@@ -59,10 +65,12 @@ internal class AnyTypeTest {
         val captor = AnyValueResultCaptor()
         sandbox.register(capability(captor))
 
-        sandbox.load("""
-            test = require('test')
+        sandbox.load(
+            """
+            test = require_plugin('test')
             test.captor(test.pass_through(test_map))
-        """)
+        """
+        )
 
         val underlying = (captor.result as AnyType).value
         require(underlying is MapType) { "Not a MapType" }
@@ -83,7 +91,7 @@ internal class AnyTypeTest {
 
         sandbox.load(
             """
-            test = require('test')
+            test = require_plugin('test')
             test.captor(test.pass_through(test_array))
         """
         )
@@ -115,11 +123,11 @@ internal class AnyTypeTest {
         var result: Type = NilType
     }
 
-    private fun capability(captor: FunctionType<*,*,*,*>) =
-        RunnerPluginExtension(
+    private fun capability(captor: FunctionType<*, *, *, *>) =
+        RunnerPlugin(
             name = "test",
             factoryCode = """
-                    function extension()
+                    function plugin()
                         local internal = _internal
                         return function()
                             local export = { 

@@ -1,4 +1,4 @@
-sys = require('sys')
+sys = require_plugin('sys')
 
 
 sys.triggers.create_fixed_rate({

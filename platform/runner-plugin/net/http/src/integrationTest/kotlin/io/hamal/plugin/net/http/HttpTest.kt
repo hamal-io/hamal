@@ -2,12 +2,12 @@ package io.hamal.plugin.net.http
 
 import AbstractRunnerTest
 import io.hamal.lib.http.fixture.TestWebConfig
-import io.hamal.lib.kua.extension.ExtensionConfig
+import io.hamal.lib.kua.extend.ExtensionConfig
 import io.hamal.lib.kua.type.StringType
 import io.hamal.plugin.net.http.endpoint.TestHeaderController
 import io.hamal.plugin.net.http.endpoint.TestJsonController
 import io.hamal.plugin.net.http.endpoint.TestStatusController
-import io.hamal.extension.std.decimal.DecimalScriptFactory
+import io.hamal.extension.std.decimal.DecimalExtensionFactory
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
@@ -41,7 +41,7 @@ class HttpTest(@LocalServerPort var localServerPort: Int) : AbstractRunnerTest()
                 )
                 val runner = createTestRunner(
                     pluginFactories = listOf(HttpPluginFactory(config)),
-                    scriptFactories = listOf(DecimalScriptFactory)
+                    extensionFactories = listOf(DecimalExtensionFactory)
                 )
                 runner.run(unitOfWork(String(Files.readAllBytes(testFile))))
             }

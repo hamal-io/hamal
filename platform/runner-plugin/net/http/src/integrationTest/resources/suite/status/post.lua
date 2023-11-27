@@ -1,4 +1,4 @@
-local http = require('net.http')
+local http = require_plugin('net.http')
 
 local status_codes = { 200, 201, 400, 404, 500 }
 

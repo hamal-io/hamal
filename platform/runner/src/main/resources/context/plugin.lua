@@ -1,4 +1,4 @@
-function extension()
+function plugin()
     internal = _internal
     return function()
         local export = {

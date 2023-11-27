@@ -1,4 +1,4 @@
-sys = require('sys')
+sys = require_plugin('sys')
 
 err, req = sys.adhoc({ code = [[answer=42]] })
 assert(err == nil)
