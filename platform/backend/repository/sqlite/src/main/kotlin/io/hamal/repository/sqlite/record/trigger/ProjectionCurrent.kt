@@ -104,10 +104,18 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
         try {
             tx.execute(
                 """
-                INSERT OR FAIL INTO current
+                INSERT INTO current
                     (id, group_id, func_id, topic_id, hook_id, flow_id, type, hook_method, data) 
                 VALUES
-                    (:id, :groupId, :funcId, :topicId, :hookId, :flowId, :type, :hookMethod , :data);
+                    (:id, :groupId, :funcId, :topicId, :hookId, :flowId, :type, :hookMethod , :data)
+                ON CONFLICT (id) DO UPDATE SET
+                    id = :id,
+                    group_id = :groupId,
+                    topic_id = :topicId, 
+                    flow_id = :flowId, 
+                    type = :type, 
+                    hook_method = :hookMethod, 
+                    data = :data;
             """.trimIndent()
             ) {
                 set("id", obj.id)
