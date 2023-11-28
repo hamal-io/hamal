@@ -4,6 +4,7 @@ import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.HookTrigger
+import io.hamal.repository.api.HookTrigger.UniqueHookTrigger
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.record.trigger.TriggerRecord
 import io.hamal.repository.sqlite.record.SqliteProjection
@@ -19,13 +20,13 @@ internal object ProjectionUniqueHook : SqliteProjection<TriggerId, TriggerRecord
                 INSERT OR FAIL INTO unique_hook 
                     (id, func_id, hook_id, hook_method)  
                 VALUES
-                    (:id, :func_id, :hook_id, :hook_method);
+                    (:id, :funcId, :hookId, :hookMethod);
             """.trimIndent()
             ) {
                 set("id", obj.id)
-                set("func_id", obj.funcId)
-                set("hook_id", obj.hookId)
-                set("hook_method", obj.hookMethod.value)
+                set("funcId", obj.funcId)
+                set("hookId", obj.hookId)
+                set("hookMethod", obj.hookMethod.value)
             }
         } catch (e: SQLiteException) {
             if (e.message!!.contains("UNIQUE constraint failed: unique_hook.func_id, unique_hook.hook_id, unique_hook.hook_method")) {
@@ -53,5 +54,25 @@ internal object ProjectionUniqueHook : SqliteProjection<TriggerId, TriggerRecord
 
     override fun clear(tx: Transaction) {
         tx.execute("""DELETE FROM unique_hook""")
+    }
+
+    fun ensureHookUnique(connection: Connection, trigger: UniqueHookTrigger): Boolean {
+        return connection.executeQueryOne(
+            """
+            SELECT * FROM unique_hook WHERE 
+                func_id = :funcId AND 
+                hook_id = :hookId AND 
+                hook_method = :hookMethod;
+            """.trimIndent()
+        ) {
+            query {
+                set("funcId", trigger.funcId)
+                set("hookId", trigger.hookId)
+                set("hookMethod", trigger.hookMethod.value)
+            }
+            map {
+                true
+            }
+        } ?: false
     }
 }
