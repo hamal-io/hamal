@@ -317,7 +317,6 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
             val func_one = awaitCompleted(createFunc(FuncName("hook-trigger-func-one"))).funcId
             val func_two = awaitCompleted(createFunc(FuncName("hook-trigger-func-two"))).funcId
 
-
             awaitCompleted(
                 createHookTrigger(
                     name = TriggerName("trigger1"),

@@ -5,7 +5,6 @@ import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.EventTrigger
 import io.hamal.repository.api.HookTrigger
-import io.hamal.repository.api.HookTrigger.HookTriggerIndex
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import io.hamal.repository.record.trigger.TriggerRecord
@@ -113,8 +112,7 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
                     group_id = :groupId,
                     topic_id = :topicId, 
                     flow_id = :flowId, 
-                    type = :type, 
-                    hook_method = :hookMethod, 
+                    type = :type,
                     data = :data;
             """.trimIndent()
             ) {
@@ -172,7 +170,7 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
                     current(func_id, hook_id, hook_method)
                 WHERE
                    type = 3;
-            """.trimIndent()
+        """.trimIndent()
         )
     }
 
