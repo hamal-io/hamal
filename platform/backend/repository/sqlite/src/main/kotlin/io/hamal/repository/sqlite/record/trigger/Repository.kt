@@ -44,7 +44,7 @@ class SqliteTriggerRepository(
     config = config,
     createDomainObject = CreateTrigger,
     recordClass = TriggerRecord::class,
-    projections = listOf(ProjectionCurrent, ProjectionUniqueName)
+    projections = listOf(ProjectionCurrent, ProjectionUniqueName, ProjectionUniqueHook)
 ), TriggerRepository {
 
     data class Config(
@@ -138,6 +138,7 @@ class SqliteTriggerRepository(
                 (currentVersion(triggerId) as HookTrigger)
                     .also { ProjectionCurrent.upsert(this, it) }
                     .also { ProjectionUniqueName.upsert(this, it) }
+                    .also { ProjectionUniqueHook.upsert(this, it) }
             }
         }
     }
