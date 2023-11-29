@@ -4,6 +4,7 @@ import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.*
+import io.hamal.repository.api.HookTrigger.UniqueHookTrigger
 import io.hamal.repository.api.TriggerCmdRepository.*
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import io.hamal.repository.record.CreateDomainObject
@@ -44,7 +45,7 @@ class SqliteTriggerRepository(
     config = config,
     createDomainObject = CreateTrigger,
     recordClass = TriggerRecord::class,
-    projections = listOf(ProjectionCurrent, ProjectionUniqueName)
+    projections = listOf(ProjectionCurrent, ProjectionUniqueName, ProjectionUniqueHook)
 ), TriggerRepository {
 
     data class Config(
@@ -119,17 +120,6 @@ class SqliteTriggerRepository(
                 versionOf(triggerId, cmdId) as HookTrigger
             } else {
 
-                list(
-                    TriggerQuery(
-                        hookIds = listOf(cmd.hookId)
-                    )
-                ).firstOrNull()?.let { trigger ->
-                    trigger as HookTrigger
-                    if (trigger.funcId == cmd.funcId && trigger.hookMethod == cmd.hookMethod) {
-                        throw IllegalArgumentException("Trigger already exists")
-                    }
-                }
-
                 store(
                     HookTriggerCreatedRecord(
                         cmdId = cmdId,
@@ -149,6 +139,7 @@ class SqliteTriggerRepository(
                 (currentVersion(triggerId) as HookTrigger)
                     .also { ProjectionCurrent.upsert(this, it) }
                     .also { ProjectionUniqueName.upsert(this, it) }
+                    .also { ProjectionUniqueHook.upsert(this, it) }
             }
         }
     }
@@ -209,6 +200,16 @@ class SqliteTriggerRepository(
         }
     }
 
+    override fun ensureHookUnique(query: UniqueHookTrigger): Boolean {
+        return ProjectionUniqueHook.ensureHookUnique(
+            connection,
+            UniqueHookTrigger(
+                funcId = query.funcId,
+                hookId = query.hookId,
+                hookMethod = query.hookMethod
+            )
+        )
+    }
 
     override fun find(triggerId: TriggerId): Trigger? {
         return ProjectionCurrent.find(connection, triggerId)

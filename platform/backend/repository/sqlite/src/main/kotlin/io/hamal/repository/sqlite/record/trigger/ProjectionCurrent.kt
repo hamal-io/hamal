@@ -100,47 +100,31 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
     }
 
     override fun upsert(tx: SqliteRecordTransaction<TriggerId, TriggerRecord, Trigger>, obj: Trigger) {
-        try {
-            tx.execute(
-                """
-                INSERT INTO current
-                    (id, group_id, func_id, topic_id, hook_id, flow_id, type, hook_method, data) 
+        tx.execute(
+            """
+                INSERT OR REPLACE INTO current
+                    (id, group_id, func_id, topic_id, hook_id, flow_id, type, data) 
                 VALUES
-                    (:id, :groupId, :funcId, :topicId, :hookId, :flowId, :type, :hookMethod , :data)
-                ON CONFLICT (id) DO UPDATE SET
-                    id = :id,
-                    group_id = :groupId,
-                    topic_id = :topicId, 
-                    flow_id = :flowId, 
-                    type = :type,
-                    data = :data;
+                    (:id, :groupId, :funcId, :topicId, :hookId, :flowId, :type, :data)
             """.trimIndent()
-            ) {
-                set("id", obj.id)
-                set("groupId", obj.groupId)
-                set("funcId", obj.funcId)
-                if (obj is EventTrigger) {
-                    set("topicId", obj.topicId)
-                } else {
-                    set("topicId", 0)
-                }
+        ) {
+            set("id", obj.id)
+            set("groupId", obj.groupId)
+            set("funcId", obj.funcId)
+            if (obj is EventTrigger) {
+                set("topicId", obj.topicId)
+            } else {
+                set("topicId", 0)
+            }
 
-                if (obj is HookTrigger) {
-                    set("hookId", obj.hookId)
-                    set("hookMethod", obj.hookMethod.value)
-                } else {
-                    set("hookId", 0)
-                    set("hookMethod", 0)
-                }
-                set("flowId", obj.flowId)
-                set("type", obj.type.value)
-                set("data", protobuf.encodeToByteArray(Trigger.serializer(), obj))
+            if (obj is HookTrigger) {
+                set("hookId", obj.hookId)
+            } else {
+                set("hookId", 0)
             }
-        } catch (e: SQLiteException) {
-            if (e.message!!.contains("UNIQUE constraint failed: current.func_id, current.hook_id, current.hook_method")) {
-                throw IllegalArgumentException("Trigger already exists")
-            }
-            throw e
+            set("flowId", obj.flowId)
+            set("type", obj.type.value)
+            set("data", protobuf.encodeToByteArray(Trigger.serializer(), obj))
         }
     }
 
@@ -155,21 +139,9 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
                  topic_id       INTEGER NOT NULL,
                  hook_id        INTEGER NOT NULL,
                  flow_id        INTEGER NOT NULL,
-                 hook_method    INTEGER NOT NULL,
                  data           BLOB NOT NULL,
                  PRIMARY KEY    (id)
-                 
         );
-        """.trimIndent()
-        )
-        connection.execute(
-            """
-                CREATE UNIQUE INDEX
-                    idx_func_hook_method
-                ON
-                    current(func_id, hook_id, hook_method)
-                WHERE
-                   type = 3;
         """.trimIndent()
         )
     }

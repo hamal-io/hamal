@@ -4,7 +4,7 @@ import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.repository.api.*
-import io.hamal.repository.api.HookTrigger.HookTriggerIndex
+import io.hamal.repository.api.HookTrigger.UniqueHookTrigger
 import io.hamal.repository.api.TriggerCmdRepository.*
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import io.hamal.repository.record.trigger.*
@@ -15,7 +15,7 @@ import kotlin.concurrent.withLock
 internal object CurrentTriggerProjection {
 
     private val projection = mutableMapOf<TriggerId, Trigger>()
-    private val uniqueHookTriggerIdx = mutableSetOf<HookTriggerIndex>()
+    private val uniqueHookTriggers = mutableSetOf<UniqueHookTrigger>()
 
     fun apply(trigger: Trigger) {
 
@@ -113,16 +113,20 @@ internal object CurrentTriggerProjection {
 
     fun clear() {
         projection.clear()
-        uniqueHookTriggerIdx.clear()
+        uniqueHookTriggers.clear()
     }
 
     private fun handleHookTrigger(trigger: HookTrigger) {
-        val toCheck = HookTriggerIndex(
+        val toCheck = UniqueHookTrigger(
             trigger.funcId,
             trigger.hookId,
             trigger.hookMethod
         )
-        require(uniqueHookTriggerIdx.add(toCheck)) { "Trigger already exists" }
+        require(uniqueHookTriggers.add(toCheck)) { "Trigger already exists" }
+    }
+
+    fun ensureHookUnique(trigger: UniqueHookTrigger): Boolean {
+        return uniqueHookTriggers.contains(trigger)
     }
 }
 
@@ -183,11 +187,13 @@ class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord,
     }
 
     override fun create(cmd: CreateHookCmd): HookTrigger {
+
         return lock.withLock {
             val triggerId = cmd.triggerId
             if (commandAlreadyApplied(cmd.id, triggerId)) {
                 versionOf(triggerId, cmd.id) as HookTrigger
             } else {
+
 
                 CurrentTriggerProjection.list(
                     TriggerQuery(
@@ -264,6 +270,18 @@ class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord,
                 store(rec)
                 currentVersion(triggerId).also(CurrentTriggerProjection::apply)
             }
+        }
+    }
+
+    override fun ensureHookUnique(query: UniqueHookTrigger): Boolean {
+        return lock.withLock {
+            CurrentTriggerProjection.ensureHookUnique(
+                UniqueHookTrigger(
+                    funcId = query.funcId,
+                    hookId = query.hookId,
+                    hookMethod = query.hookMethod
+                )
+            )
         }
     }
 
