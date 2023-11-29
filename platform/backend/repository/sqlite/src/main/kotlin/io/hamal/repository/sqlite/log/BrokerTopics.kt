@@ -2,8 +2,8 @@ package io.hamal.repository.sqlite.log
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
-import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.FlowId
+import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.sqlite.Connection
@@ -15,12 +15,12 @@ import io.hamal.repository.api.log.Topic
 import java.nio.file.Path
 import java.util.concurrent.ConcurrentHashMap
 
-data class SqliteBrokerTopics(
+data class BrokerTopicsSqlite(
     val path: Path
 )
 
-class SqliteBrokerTopicsRepository(
-    internal val brokerTopics: SqliteBrokerTopics,
+class BrokerTopicsSqliteRepository(
+    internal val brokerTopics: BrokerTopicsSqlite,
 ) : SqliteBaseRepository(object : Config {
     override val path: Path get() = brokerTopics.path
     override val filename: String get() = "topics.db"

@@ -12,7 +12,7 @@ import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
 
-internal object CurrentTriggerProjection {
+private object TriggerCurrentProjection {
 
     private val projection = mutableMapOf<TriggerId, Trigger>()
     private val uniqueHookTriggers = mutableSetOf<UniqueHookTrigger>()
@@ -131,7 +131,7 @@ internal object CurrentTriggerProjection {
 }
 
 
-class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord, Trigger>(
+class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord, Trigger>(
     createDomainObject = CreateTriggerFromRecords,
     recordClass = TriggerRecord::class
 ), TriggerRepository {
@@ -157,7 +157,7 @@ class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord,
                     status = cmd.status
                 )
             )
-            (currentVersion(triggerId) as FixedRateTrigger).also(CurrentTriggerProjection::apply)
+            (currentVersion(triggerId) as FixedRateTrigger).also(TriggerCurrentProjection::apply)
         }
     }
 
@@ -181,7 +181,7 @@ class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord,
                         status = cmd.status
                     )
                 )
-                (currentVersion(triggerId) as EventTrigger).also(CurrentTriggerProjection::apply)
+                (currentVersion(triggerId) as EventTrigger).also(TriggerCurrentProjection::apply)
             }
         }
     }
@@ -195,7 +195,7 @@ class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord,
             } else {
 
 
-                CurrentTriggerProjection.list(
+                TriggerCurrentProjection.list(
                     TriggerQuery(
                         hookIds = listOf(cmd.hookId)
                     )
@@ -221,7 +221,7 @@ class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord,
                         status = cmd.status
                     )
                 )
-                (currentVersion(triggerId) as HookTrigger).also(CurrentTriggerProjection::apply)
+                (currentVersion(triggerId) as HookTrigger).also(TriggerCurrentProjection::apply)
             }
         }
     }
@@ -246,7 +246,7 @@ class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord,
                         status = cmd.status
                     )
                 )
-                (currentVersion(triggerId) as CronTrigger).also(CurrentTriggerProjection::apply)
+                (currentVersion(triggerId) as CronTrigger).also(TriggerCurrentProjection::apply)
             }
         }
     }
@@ -268,14 +268,14 @@ class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord,
                     )
                 }
                 store(rec)
-                currentVersion(triggerId).also(CurrentTriggerProjection::apply)
+                currentVersion(triggerId).also(TriggerCurrentProjection::apply)
             }
         }
     }
 
     override fun ensureHookUnique(query: UniqueHookTrigger): Boolean {
         return lock.withLock {
-            CurrentTriggerProjection.ensureHookUnique(
+            TriggerCurrentProjection.ensureHookUnique(
                 UniqueHookTrigger(
                     funcId = query.funcId,
                     hookId = query.hookId,
@@ -285,16 +285,16 @@ class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord,
         }
     }
 
-    override fun find(triggerId: TriggerId) = lock.withLock { CurrentTriggerProjection.find(triggerId) }
+    override fun find(triggerId: TriggerId) = lock.withLock { TriggerCurrentProjection.find(triggerId) }
 
-    override fun list(query: TriggerQuery): List<Trigger> = lock.withLock { CurrentTriggerProjection.list(query) }
+    override fun list(query: TriggerQuery): List<Trigger> = lock.withLock { TriggerCurrentProjection.list(query) }
 
-    override fun count(query: TriggerQuery): ULong = lock.withLock { CurrentTriggerProjection.count(query) }
+    override fun count(query: TriggerQuery): ULong = lock.withLock { TriggerCurrentProjection.count(query) }
 
     override fun clear() {
         lock.withLock {
             super.clear()
-            CurrentTriggerProjection.clear()
+            TriggerCurrentProjection.clear()
         }
     }
 

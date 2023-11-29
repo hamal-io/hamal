@@ -12,7 +12,7 @@ import io.hamal.repository.record.endpoint.EndpointUpdatedRecord
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
-internal object CurrentEndpointProjection {
+private object EndpointCurrentProjection {
     private val projection = mutableMapOf<EndpointId, Endpoint>()
     fun apply(endpoint: Endpoint) {
         val currentEndpoint = projection[endpoint.id]
@@ -60,7 +60,7 @@ internal object CurrentEndpointProjection {
     }
 }
 
-class MemoryEndpointRepository : MemoryRecordRepository<EndpointId, EndpointRecord, Endpoint>(
+class EndpointMemoryRepository : RecordMemoryRepository<EndpointId, EndpointRecord, Endpoint>(
     createDomainObject = CreateEndpointFromRecords,
     recordClass = EndpointRecord::class
 ), EndpointRepository {
@@ -82,7 +82,7 @@ class MemoryEndpointRepository : MemoryRecordRepository<EndpointId, EndpointReco
                         name = cmd.name
                     )
                 )
-                (currentVersion(endpointId)).also(CurrentEndpointProjection::apply)
+                (currentVersion(endpointId)).also(EndpointCurrentProjection::apply)
             }
         }
     }
@@ -101,21 +101,21 @@ class MemoryEndpointRepository : MemoryRecordRepository<EndpointId, EndpointReco
                         funcId = cmd.funcId ?: currentVersion.funcId
                     )
                 )
-                (currentVersion(endpointId)).also(CurrentEndpointProjection::apply)
+                (currentVersion(endpointId)).also(EndpointCurrentProjection::apply)
             }
         }
     }
 
-    override fun find(endpointId: EndpointId): Endpoint? = lock.withLock { CurrentEndpointProjection.find(endpointId) }
+    override fun find(endpointId: EndpointId): Endpoint? = lock.withLock { EndpointCurrentProjection.find(endpointId) }
 
-    override fun list(query: EndpointQuery): List<Endpoint> = lock.withLock { CurrentEndpointProjection.list(query) }
+    override fun list(query: EndpointQuery): List<Endpoint> = lock.withLock { EndpointCurrentProjection.list(query) }
 
-    override fun count(query: EndpointQuery): ULong = lock.withLock { CurrentEndpointProjection.count(query) }
+    override fun count(query: EndpointQuery): ULong = lock.withLock { EndpointCurrentProjection.count(query) }
 
     override fun clear() {
         lock.withLock {
             super.clear()
-            CurrentEndpointProjection.clear()
+            EndpointCurrentProjection.clear()
         }
     }
 

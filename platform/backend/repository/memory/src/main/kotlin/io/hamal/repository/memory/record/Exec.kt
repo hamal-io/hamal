@@ -9,7 +9,7 @@ import io.hamal.repository.record.exec.*
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
-internal object CurrentExecProjection {
+private object ExecCurrentProjection {
     private val projection = mutableMapOf<ExecId, Exec>()
     fun apply(exec: Exec) {
         projection[exec.id] = exec
@@ -71,7 +71,7 @@ internal object QueueProjection {
     }
 }
 
-class MemoryExecRepository : MemoryRecordRepository<ExecId, ExecRecord, Exec>(
+class ExecMemoryRepository : RecordMemoryRepository<ExecId, ExecRecord, Exec>(
     createDomainObject = CreateExecFromRecords,
     recordClass = ExecRecord::class
 ), ExecRepository {
@@ -95,7 +95,7 @@ class MemoryExecRepository : MemoryRecordRepository<ExecId, ExecRecord, Exec>(
                         invocation = cmd.invocation
                     )
                 )
-                (currentVersion(execId) as PlannedExec).also(CurrentExecProjection::apply)
+                (currentVersion(execId) as PlannedExec).also(ExecCurrentProjection::apply)
             }
         }
     }
@@ -112,7 +112,7 @@ class MemoryExecRepository : MemoryRecordRepository<ExecId, ExecRecord, Exec>(
 
                 store(ExecScheduledRecord(cmdId, execId))
 
-                (currentVersion(execId) as ScheduledExec).also(CurrentExecProjection::apply)
+                (currentVersion(execId) as ScheduledExec).also(ExecCurrentProjection::apply)
             }
         }
     }
@@ -130,7 +130,7 @@ class MemoryExecRepository : MemoryRecordRepository<ExecId, ExecRecord, Exec>(
                 store(ExecQueuedRecord(cmdId, execId))
 
                 (currentVersion(execId) as QueuedExec)
-                    .also(CurrentExecProjection::apply)
+                    .also(ExecCurrentProjection::apply)
                     .also(QueueProjection::add)
             }
         }
@@ -145,7 +145,7 @@ class MemoryExecRepository : MemoryRecordRepository<ExecId, ExecRecord, Exec>(
 
                 store(ExecStartedRecord(cmd.id, execId))
 
-                result.add((currentVersion(execId) as StartedExec).also(CurrentExecProjection::apply))
+                result.add((currentVersion(execId) as StartedExec).also(ExecCurrentProjection::apply))
             }
             result
         }
@@ -153,7 +153,7 @@ class MemoryExecRepository : MemoryRecordRepository<ExecId, ExecRecord, Exec>(
 
     override fun clear() {
         super.clear()
-        CurrentExecProjection.clear()
+        ExecCurrentProjection.clear()
         QueueProjection.clear()
     }
 
@@ -173,7 +173,7 @@ class MemoryExecRepository : MemoryRecordRepository<ExecId, ExecRecord, Exec>(
 
                 store(ExecCompletedRecord(cmdId, execId, cmd.result, cmd.state))
 
-                (versionOf(execId, cmdId) as CompletedExec).also(CurrentExecProjection::apply)
+                (versionOf(execId, cmdId) as CompletedExec).also(ExecCurrentProjection::apply)
             }
         }
     }
@@ -190,16 +190,16 @@ class MemoryExecRepository : MemoryRecordRepository<ExecId, ExecRecord, Exec>(
 
                 store(ExecFailedRecord(cmdId, execId, cmd.result))
 
-                (versionOf(execId, cmdId) as FailedExec).also(CurrentExecProjection::apply)
+                (versionOf(execId, cmdId) as FailedExec).also(ExecCurrentProjection::apply)
             }
         }
     }
 
 
-    override fun find(execId: ExecId): Exec? = lock.withLock { CurrentExecProjection.find(execId) }
+    override fun find(execId: ExecId): Exec? = lock.withLock { ExecCurrentProjection.find(execId) }
 
-    override fun list(query: ExecQuery): List<Exec> = lock.withLock { return CurrentExecProjection.list(query) }
+    override fun list(query: ExecQuery): List<Exec> = lock.withLock { return ExecCurrentProjection.list(query) }
 
-    override fun count(query: ExecQuery): ULong = lock.withLock { return CurrentExecProjection.count(query) }
+    override fun count(query: ExecQuery): ULong = lock.withLock { return ExecCurrentProjection.count(query) }
 }
 

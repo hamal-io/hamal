@@ -40,7 +40,7 @@ internal object CreateCode : CreateDomainObject<CodeId, CodeRecord, Code> {
     }
 }
 
-class SqliteCodeRepository(
+class CodeSqliteRepository(
     config: Config
 ) : SqliteRecordRepository<CodeId, CodeRecord, Code>(
     config = config,

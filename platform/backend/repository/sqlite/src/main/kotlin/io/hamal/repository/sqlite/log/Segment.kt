@@ -11,15 +11,15 @@ import io.hamal.repository.api.log.Segment
 import io.hamal.repository.api.log.SegmentRepository
 import java.nio.file.Path
 
-data class SqliteSegment(
+data class SegmentSqlite(
     override val id: Segment.Id,
     override val topicId: TopicId,
     val path: Path
 ) : Segment
 
 
-class SqliteSegmentRepository(
-    internal val segment: SqliteSegment,
+class SegmentSqliteRepository(
+    internal val segment: SegmentSqlite,
 ) : SqliteBaseRepository(object : Config {
     override val path: Path get() = segment.path
     override val filename: String get() = String.format("%020d.db", segment.id.value.toLong())

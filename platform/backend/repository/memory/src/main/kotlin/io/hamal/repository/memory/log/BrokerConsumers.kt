@@ -7,7 +7,7 @@ import io.hamal.repository.api.log.ConsumerId
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
-class MemoryBrokerConsumersRepository : BrokerConsumersRepository {
+class BrokerConsumersMemoryRepository : BrokerConsumersRepository {
 
     internal val lock = ReentrantLock()
     internal val store = mutableMapOf<Pair<ConsumerId, TopicId>, ChunkId>()
@@ -34,6 +34,6 @@ class MemoryBrokerConsumersRepository : BrokerConsumersRepository {
     }
 }
 
-fun MemoryBrokerConsumersRepository.clear() {
+fun BrokerConsumersMemoryRepository.clear() {
     lock.withLock { store.clear() }
 }

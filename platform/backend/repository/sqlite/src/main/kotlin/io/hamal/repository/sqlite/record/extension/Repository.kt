@@ -37,7 +37,7 @@ internal object CreateExtension : CreateDomainObject<ExtensionId, ExtensionRecor
     }
 }
 
-class SqliteExtensionRepository(
+class ExtensionSqliteRepository(
     config: Config
 ) : SqliteRecordRepository<ExtensionId, ExtensionRecord, Extension>(
     config = config,

@@ -39,7 +39,7 @@ internal object CreateTrigger : CreateDomainObject<TriggerId, TriggerRecord, Tri
     }
 }
 
-class SqliteTriggerRepository(
+class TriggerSqliteRepository(
     config: Config
 ) : SqliteRecordRepository<TriggerId, TriggerRecord, Trigger>(
     config = config,

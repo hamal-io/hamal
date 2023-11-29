@@ -6,14 +6,14 @@ import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
 import io.hamal.repository.record.func.FuncRecord
-import io.hamal.repository.sqlite.record.SqliteProjection
-import io.hamal.repository.sqlite.record.SqliteRecordTransaction
+import io.hamal.repository.sqlite.record.ProjectionSqlite
+import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 import io.hamal.repository.sqlite.record.protobuf
 import kotlinx.serialization.ExperimentalSerializationApi
 
 
 @OptIn(ExperimentalSerializationApi::class)
-internal object ProjectionCurrent : SqliteProjection<FuncId, FuncRecord, Func> {
+internal object ProjectionCurrent : ProjectionSqlite<FuncId, FuncRecord, Func> {
 
     fun find(connection: Connection, funcId: FuncId): Func? {
         return connection.executeQueryOne(
@@ -84,7 +84,7 @@ internal object ProjectionCurrent : SqliteProjection<FuncId, FuncRecord, Func> {
         } ?: 0UL
     }
 
-    override fun upsert(tx: SqliteRecordTransaction<FuncId, FuncRecord, Func>, obj: Func) {
+    override fun upsert(tx: RecordTransactionSqlite<FuncId, FuncRecord, Func>, obj: Func) {
         tx.execute(
             """
                 INSERT OR REPLACE INTO current

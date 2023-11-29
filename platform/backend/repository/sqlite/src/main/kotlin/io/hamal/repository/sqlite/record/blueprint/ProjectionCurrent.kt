@@ -6,16 +6,16 @@ import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Blueprint
 import io.hamal.repository.api.BlueprintQueryRepository.BlueprintQuery
 import io.hamal.repository.record.blueprint.BlueprintRecord
-import io.hamal.repository.sqlite.record.SqliteProjection
-import io.hamal.repository.sqlite.record.SqliteRecordTransaction
+import io.hamal.repository.sqlite.record.ProjectionSqlite
+import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 import io.hamal.repository.sqlite.record.protobuf
 import kotlinx.serialization.ExperimentalSerializationApi
 
 @OptIn(ExperimentalSerializationApi::class)
-object ProjectionCurrent : SqliteProjection<BlueprintId, BlueprintRecord, Blueprint> {
+object ProjectionCurrent : ProjectionSqlite<BlueprintId, BlueprintRecord, Blueprint> {
 
 
-    override fun upsert(tx: SqliteRecordTransaction<BlueprintId, BlueprintRecord, Blueprint>, obj: Blueprint) {
+    override fun upsert(tx: RecordTransactionSqlite<BlueprintId, BlueprintRecord, Blueprint>, obj: Blueprint) {
         tx.execute(
             """
                 INSERT OR REPLACE INTO current

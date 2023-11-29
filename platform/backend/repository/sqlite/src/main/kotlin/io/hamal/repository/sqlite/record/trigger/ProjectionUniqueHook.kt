@@ -7,12 +7,12 @@ import io.hamal.repository.api.HookTrigger
 import io.hamal.repository.api.HookTrigger.UniqueHookTrigger
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.record.trigger.TriggerRecord
-import io.hamal.repository.sqlite.record.SqliteProjection
-import io.hamal.repository.sqlite.record.SqliteRecordTransaction
+import io.hamal.repository.sqlite.record.ProjectionSqlite
+import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 import org.sqlite.SQLiteException
 
-internal object ProjectionUniqueHook : SqliteProjection<TriggerId, TriggerRecord, Trigger> {
-    override fun upsert(tx: SqliteRecordTransaction<TriggerId, TriggerRecord, Trigger>, obj: Trigger) {
+internal object ProjectionUniqueHook : ProjectionSqlite<TriggerId, TriggerRecord, Trigger> {
+    override fun upsert(tx: RecordTransactionSqlite<TriggerId, TriggerRecord, Trigger>, obj: Trigger) {
         obj as HookTrigger
         try {
             tx.execute(

@@ -6,7 +6,7 @@ import io.hamal.lib.domain.Correlation
 import io.hamal.repository.api.StateRepository
 import java.util.concurrent.ConcurrentHashMap
 
-class MemoryStateRepository : StateRepository {
+class StateMemoryRepository : StateRepository {
     private val states = ConcurrentHashMap<Correlation, CorrelatedState>()
 
     override fun set(cmdId: CmdId, correlatedState: CorrelatedState) {

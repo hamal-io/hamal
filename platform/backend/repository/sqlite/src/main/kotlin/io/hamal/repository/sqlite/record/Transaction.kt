@@ -19,7 +19,7 @@ import kotlin.reflect.KClass
 
 
 @OptIn(ExperimentalSerializationApi::class, InternalSerializationApi::class)
-class SqliteRecordTransaction<ID : DomainId, RECORD : Record<ID>, OBJ : DomainObject<ID>>(
+class RecordTransactionSqlite<ID : DomainId, RECORD : Record<ID>, OBJ : DomainObject<ID>>(
     private val createDomainObject: CreateDomainObject<ID, RECORD, OBJ>,
     private val recordClass: KClass<RECORD>,
     private val delegate: Transaction,

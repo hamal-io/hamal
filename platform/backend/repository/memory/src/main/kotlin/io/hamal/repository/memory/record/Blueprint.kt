@@ -13,7 +13,7 @@ import io.hamal.repository.record.blueprint.CreateBlueprintFromRecords
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
-internal object CurrentBlueprintProjection {
+private object BlueprintCurrentProjection {
     private val projection = mutableMapOf<BlueprintId, Blueprint>()
     fun apply(blueprint: Blueprint) {
         projection[blueprint.id] = blueprint
@@ -48,7 +48,7 @@ internal object CurrentBlueprintProjection {
     }
 }
 
-class MemoryBlueprintRepository : MemoryRecordRepository<BlueprintId, BlueprintRecord, Blueprint>(
+class BlueprintMemoryRepository : RecordMemoryRepository<BlueprintId, BlueprintRecord, Blueprint>(
     createDomainObject = CreateBlueprintFromRecords,
     recordClass = BlueprintRecord::class
 ), BlueprintRepository {
@@ -72,7 +72,7 @@ class MemoryBlueprintRepository : MemoryRecordRepository<BlueprintId, BlueprintR
                         creatorId = cmd.creatorId
                     )
                 )
-                (currentVersion(bpId)).also(CurrentBlueprintProjection::apply)
+                (currentVersion(bpId)).also(BlueprintCurrentProjection::apply)
             }
         }
     }
@@ -92,22 +92,22 @@ class MemoryBlueprintRepository : MemoryRecordRepository<BlueprintId, BlueprintR
                         value = cmd.value ?: currentVersion.value
                     )
                 )
-                (currentVersion(blueprintId)).also(CurrentBlueprintProjection::apply)
+                (currentVersion(blueprintId)).also(BlueprintCurrentProjection::apply)
             }
         }
     }
 
     override fun find(blueprintId: BlueprintId): Blueprint? =
-        lock.withLock { CurrentBlueprintProjection.find(blueprintId) }
+        lock.withLock { BlueprintCurrentProjection.find(blueprintId) }
 
-    override fun list(query: BlueprintQuery): List<Blueprint> = lock.withLock { CurrentBlueprintProjection.list(query) }
+    override fun list(query: BlueprintQuery): List<Blueprint> = lock.withLock { BlueprintCurrentProjection.list(query) }
 
-    override fun count(query: BlueprintQuery): ULong = lock.withLock { CurrentBlueprintProjection.count(query) }
+    override fun count(query: BlueprintQuery): ULong = lock.withLock { BlueprintCurrentProjection.count(query) }
 
     override fun clear() {
         lock.withLock {
             super.clear()
-            CurrentBlueprintProjection.clear()
+            BlueprintCurrentProjection.clear()
         }
     }
 

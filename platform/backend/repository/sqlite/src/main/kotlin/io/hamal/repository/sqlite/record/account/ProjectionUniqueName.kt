@@ -6,11 +6,11 @@ import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Account
 import io.hamal.repository.record.account.AccountRecord
-import io.hamal.repository.sqlite.record.SqliteProjection
-import io.hamal.repository.sqlite.record.SqliteRecordTransaction
+import io.hamal.repository.sqlite.record.ProjectionSqlite
+import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 import org.sqlite.SQLiteException
 
-internal object ProjectionUniqueName : SqliteProjection<AccountId, AccountRecord, Account> {
+internal object ProjectionUniqueName : ProjectionSqlite<AccountId, AccountRecord, Account> {
 
     fun find(connection: Connection, accountName: AccountName): AccountId? {
         return connection.executeQueryOne(
@@ -30,7 +30,7 @@ internal object ProjectionUniqueName : SqliteProjection<AccountId, AccountRecord
         }
     }
 
-    override fun upsert(tx: SqliteRecordTransaction<AccountId, AccountRecord, Account>, obj: Account) {
+    override fun upsert(tx: RecordTransactionSqlite<AccountId, AccountRecord, Account>, obj: Account) {
         try {
             tx.execute(
                 """
