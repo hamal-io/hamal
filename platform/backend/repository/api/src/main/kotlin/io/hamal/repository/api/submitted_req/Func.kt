@@ -44,5 +44,6 @@ data class FuncDeployLatestSubmitted(
     override val id: ReqId,
     override var status: ReqStatus,
     val groupId: GroupId,
-    val funcId: FuncId
+    val funcId: FuncId,
+    val deployMessage: DeployMessage?
 ) : Submitted

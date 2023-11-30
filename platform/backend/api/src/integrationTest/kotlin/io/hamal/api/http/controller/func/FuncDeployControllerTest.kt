@@ -1,9 +1,6 @@
 package io.hamal.api.http.controller.func
 
-import io.hamal.lib.domain.vo.CodeValue
-import io.hamal.lib.domain.vo.CodeVersion
-import io.hamal.lib.domain.vo.FuncInputs
-import io.hamal.lib.domain.vo.FuncName
+import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.sdk.api.ApiError
@@ -108,35 +105,32 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
 
             @Test
             fun `Deploys latest version`() {
-                val func = awaitCompleted(
-                    createFunc(
-                        ApiFuncCreateReq(
-                            name = FuncName("test-func"), inputs = FuncInputs(), code = CodeValue("13 + 37")
-                        )
-                    )
-                )
+                val funcId = setup().id
+                awaitCompleted(deployLatestVersion(funcId))
 
-                repeat(20) {
-                    awaitCompleted(
-                        updateFunc(
-                            func.funcId, ApiFuncUpdateReq(
-                                name = null, inputs = null, code = CodeValue("code-${it}")
-                            )
-                        )
-                    )
-
-                    awaitCompleted(deployLatestVersion(func.funcId))
-
-                    val funcCode = funcQueryRepository.get(func.funcId).code
-                    assertThat(funcCode.deployedVersion, equalTo(funcCode.version))
-                    println(it)
-                }
-
-                with(funcQueryRepository.get(func.funcId)) {
+                with(funcQueryRepository.get(funcId))
+                {
                     assertThat(name, equalTo(FuncName("test-func")))
                     assertThat(
                         codeQueryRepository.get(code.id, code.deployedVersion).value, equalTo(CodeValue("code-19"))
                     )
+                    assertThat(code.deployedVersion, equalTo(code.version))
+                }
+            }
+
+            @Test
+            fun `Deploys latest version with message`() {
+                val funcId = setup().id
+                awaitCompleted(
+                    deployLatestVersionWithMessage(funcId, DeployMessage("SuperFunc"))
+                )
+                with(funcQueryRepository.get(funcId))
+                {
+                    assertThat(name, equalTo(FuncName("test-func")))
+                    assertThat(
+                        codeQueryRepository.get(code.id, code.deployedVersion).value, equalTo(CodeValue("code-19"))
+                    )
+                    assertThat(deployMessage, equalTo(DeployMessage("SuperFunc")))
                 }
             }
         }

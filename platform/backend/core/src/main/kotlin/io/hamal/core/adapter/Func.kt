@@ -51,6 +51,7 @@ interface FuncDeployPort {
 
     operator fun <T : Any> invoke(
         funcId: FuncId,
+        deployMessage: DeployMessage?,
         responseHandler: (FuncDeployLatestSubmitted) -> T
     ): T
 }
@@ -196,13 +197,18 @@ class FuncAdapter(
         ).also(reqCmdRepository::queue).let(responseHandler)
     }
 
-    override fun <T : Any> invoke(funcId: FuncId, responseHandler: (FuncDeployLatestSubmitted) -> T): T {
+    override fun <T : Any> invoke(
+        funcId: FuncId,
+        deployMessage: DeployMessage?,
+        responseHandler: (FuncDeployLatestSubmitted) -> T
+    ): T {
         val func = funcQueryRepository.get(funcId)
         return FuncDeployLatestSubmitted(
             id = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
             groupId = func.groupId,
             funcId = funcId,
+            deployMessage = func.deployMessage
         ).also(reqCmdRepository::queue).let(responseHandler)
     }
 

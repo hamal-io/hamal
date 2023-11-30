@@ -24,7 +24,7 @@ class DeployLatestFuncHandler(
 }
 
 private fun DeployLatestFuncHandler.deployLatestVersion(req: FuncDeployLatestSubmitted): Func {
-    return funcRepository.deployLatest(req.funcId, req.cmdId())
+    return funcRepository.deployLatest(req.funcId, req.cmdId(), req.deployMessage)
 }
 
 private fun DeployLatestFuncHandler.emitEvent(cmdId: CmdId, func: Func) {

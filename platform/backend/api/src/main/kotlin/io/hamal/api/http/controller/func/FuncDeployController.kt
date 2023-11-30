@@ -4,6 +4,7 @@ import io.hamal.api.http.controller.accepted
 import io.hamal.core.adapter.FuncDeployPort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.CodeVersion
+import io.hamal.lib.domain.vo.DeployMessage
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sdk.api.ApiSubmitted
 import io.hamal.repository.api.submitted_req.FuncDeployLatestSubmitted
@@ -11,6 +12,7 @@ import io.hamal.repository.api.submitted_req.FuncDeploySubmitted
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
@@ -21,9 +23,10 @@ internal class FuncDeployController(
 
     @PostMapping("/v1/funcs/{funcId}/deploy/latest")
     fun deployLatest(
-        @PathVariable("funcId") funcId: FuncId
+        @PathVariable("funcId") funcId: FuncId,
+        @RequestParam(required = false, name = "message") deployMessage: DeployMessage?
     ): ResponseEntity<ApiSubmitted> = retry {
-        deploy(funcId, FuncDeployLatestSubmitted::accepted)
+        deploy(funcId, deployMessage, FuncDeployLatestSubmitted::accepted)
     }
 
 
