@@ -2,8 +2,8 @@ package io.hamal.repository.api
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.DomainObject
-import io.hamal.lib.common.domain.UpdatedAt
 import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.domain.UpdatedAt
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable
@@ -18,13 +18,14 @@ data class Func(
     val name: FuncName,
     val inputs: FuncInputs,
     val code: FuncCode,
+    val deployMessage: DeployMessage?
 ) : DomainObject<FuncId>
 
 @Serializable
 data class FuncCode(
     val id: CodeId,
     val version: CodeVersion,
-    val deployedVersion: CodeVersion
+    val deployedVersion: CodeVersion,
 ) {
     fun toExecCode() = ExecCode(
         id = id,
@@ -40,7 +41,7 @@ interface FuncCmdRepository : CmdRepository {
 
     fun update(funcId: FuncId, cmd: UpdateCmd): Func
     fun deploy(funcId: FuncId, cmd: DeployCmd): Func
-    fun deployLatest(funcId: FuncId, cmd: CmdId): Func
+    fun deployLatest(funcId: FuncId, cmd: CmdId, deployMessage: DeployMessage? = null): Func
 
     data class CreateCmd(
         val id: CmdId,
@@ -62,7 +63,8 @@ interface FuncCmdRepository : CmdRepository {
 
     data class DeployCmd(
         val id: CmdId,
-        val versionToDeploy: CodeVersion
+        val versionToDeploy: CodeVersion,
+        val deployMessage: DeployMessage? = null
     )
 }
 

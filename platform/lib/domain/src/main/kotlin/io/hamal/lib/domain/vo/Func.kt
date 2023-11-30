@@ -2,9 +2,11 @@ package io.hamal.lib.domain.vo
 
 import io.hamal.lib.common.domain.DomainName
 import io.hamal.lib.common.domain.DomainNameSerializer
+import io.hamal.lib.common.domain.StringValueObject
+import io.hamal.lib.common.domain.StringValueObjectSerializer
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.domain.vo.base.Map
 import io.hamal.lib.domain.vo.base.InputsSerializer
+import io.hamal.lib.domain.vo.base.Map
 import io.hamal.lib.kua.type.MapType
 import kotlinx.serialization.Serializable
 
@@ -25,4 +27,13 @@ class FuncName(override val value: String) : DomainName() {
 @Serializable(with = FuncInputs.Serializer::class)
 class FuncInputs(override val value: MapType = MapType()) : Map() {
     internal object Serializer : InputsSerializer<FuncInputs>(::FuncInputs)
+}
+
+@Serializable(with = DeployMessage.Serializer::class)
+class DeployMessage(override val value: String) : StringValueObject() {
+    internal object Serializer : StringValueObjectSerializer<DeployMessage>(::DeployMessage)
+
+    companion object {
+        val default = DeployMessage("")
+    }
 }

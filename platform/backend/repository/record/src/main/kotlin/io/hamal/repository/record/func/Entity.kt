@@ -19,6 +19,7 @@ data class FuncEntity(
     var name: FuncName? = null,
     var inputs: FuncInputs? = null,
     var code: FuncCode? = null,
+    var deployMessage: DeployMessage? = null
 
     ) : RecordEntity<FuncId, FuncRecord, Func> {
 
@@ -36,7 +37,8 @@ data class FuncEntity(
                     version = rec.codeVersion,
                     deployedVersion = rec.codeVersion
                 ),
-                recordedAt = rec.recordedAt()
+                recordedAt = rec.recordedAt(),
+                deployMessage = deployMessage
             )
 
             is FuncUpdatedRecord -> copy(
@@ -50,7 +52,8 @@ data class FuncEntity(
                     version = rec.codeVersion,
                     deployedVersion = code!!.deployedVersion
                 ),
-                recordedAt = rec.recordedAt()
+                recordedAt = rec.recordedAt(),
+                deployMessage = deployMessage
             )
 
             is FuncDeployedRecord -> copy(
@@ -64,7 +67,8 @@ data class FuncEntity(
                     version = code!!.version,
                     deployedVersion = rec.deployedVersion
                 ),
-                recordedAt = rec.recordedAt()
+                recordedAt = rec.recordedAt(),
+                deployMessage = rec.deployMessage
             )
         }
     }
@@ -79,6 +83,7 @@ data class FuncEntity(
             name = name!!,
             inputs = inputs!!,
             code = code!!,
+            deployMessage = deployMessage
         )
     }
 }

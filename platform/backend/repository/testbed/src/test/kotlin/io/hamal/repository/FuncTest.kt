@@ -345,6 +345,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                 assertThat(deploy.code.deployedVersion, equalTo(CodeVersion(iter + 1)))
             }
             assertThat(func.code.version, equalTo(CodeVersion(100)))
+            assertThat(func.deployMessage, nullValue())
         }
 
         @TestFactory
@@ -408,6 +409,19 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
 
             val res = deployLatest(FuncId(123), CmdGen())
             assertThat(res.code.deployedVersion, equalTo(CodeVersion(100)))
+        }
+
+        @TestFactory
+        fun `Deploys latest version with deploy message`() = runWith(FuncRepository::class) {
+            createUpdatedFunc(
+                funcId = FuncId(123),
+                codeId = CodeId(5),
+                maxVersion = CodeVersion(100),
+            )
+
+            val res = deployLatest(FuncId(123), CmdGen(), DeployMessage.default)
+            assertThat(res.code.deployedVersion, equalTo(CodeVersion(100)))
+            assertThat(res.deployMessage, equalTo(DeployMessage.default))
         }
 
 

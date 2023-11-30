@@ -1,6 +1,7 @@
 package io.hamal.repository.memory.record
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.domain.vo.DeployMessage
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncCmdRepository.*
@@ -98,7 +99,8 @@ class MemoryFuncRepository : MemoryRecordRepository<FuncId, FuncRecord, Func>(
                     FuncDeployedRecord(
                         cmdId = cmd.id,
                         entityId = funcId,
-                        deployedVersion = cmd.versionToDeploy
+                        deployedVersion = cmd.versionToDeploy,
+                        deployMessage = cmd.deployMessage
                     )
                 )
                 (currentVersion(funcId)).also(CurrentFuncProjection::apply)
@@ -106,7 +108,7 @@ class MemoryFuncRepository : MemoryRecordRepository<FuncId, FuncRecord, Func>(
         }
     }
 
-    override fun deployLatest(funcId: FuncId, cmd: CmdId): Func {
+    override fun deployLatest(funcId: FuncId, cmd: CmdId, deployMessage: DeployMessage?): Func {
         return lock.withLock {
             if (commandAlreadyApplied(cmd, funcId)) {
                 versionOf(funcId, cmd)
@@ -116,7 +118,8 @@ class MemoryFuncRepository : MemoryRecordRepository<FuncId, FuncRecord, Func>(
                     FuncDeployedRecord(
                         entityId = funcId,
                         cmdId = cmd,
-                        deployedVersion = versionOf(funcId, last.sequence())!!.code.version
+                        deployedVersion = versionOf(funcId, last.sequence())!!.code.version,
+                        deployMessage = deployMessage
                     )
                 )
                 (currentVersion(funcId)).also(CurrentFuncProjection::apply)
