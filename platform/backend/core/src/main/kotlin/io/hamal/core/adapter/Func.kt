@@ -208,7 +208,7 @@ class FuncAdapter(
             status = ReqStatus.Submitted,
             groupId = func.groupId,
             funcId = funcId,
-            deployMessage = func.deployMessage
+            deployMessage = deployMessage
         ).also(reqCmdRepository::queue).let(responseHandler)
     }
 
