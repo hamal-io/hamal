@@ -6,7 +6,7 @@ import io.hamal.core.req.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.repository.api.CodeQueryRepository
 import io.hamal.repository.api.Func
-import io.hamal.repository.api.FuncCmdRepository
+import io.hamal.repository.api.FuncCmdRepository.DeployCmd
 import io.hamal.repository.api.FuncRepository
 import io.hamal.repository.api.event.FuncDeployedEvent
 import io.hamal.repository.api.submitted_req.FuncDeploySubmitted
@@ -25,10 +25,9 @@ class DeployFuncHandler(
 }
 
 private fun DeployFuncHandler.deployVersion(req: FuncDeploySubmitted): Func {
-    return req.versionToDeploy
-        ?.let { funcRepository.deploy(req.funcId, FuncCmdRepository.DeployCmd(id = req.cmdId(), versionToDeploy = it)) }
-        ?: funcRepository.deployLatest(req.funcId, req.cmdId())
+    return funcRepository.deploy(req.funcId, DeployCmd(req.cmdId(), req.versionToDeploy))
 }
+
 
 private fun DeployFuncHandler.emitEvent(cmdId: CmdId, func: Func) {
     eventEmitter.emit(cmdId, FuncDeployedEvent(func))

@@ -17,7 +17,6 @@ import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.TestFactory
 import org.junit.jupiter.api.assertThrows
-import java.util.concurrent.atomic.AtomicInteger
 import kotlin.math.abs
 import kotlin.random.Random
 
@@ -688,65 +687,65 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
             )
         }
     }
-}
 
-private fun FuncRepository.createFunc(
-    funcId: FuncId,
-    flowId: FlowId,
-    name: FuncName,
-    groupId: GroupId,
-    codeId: CodeId = CodeId(5),
-    codeVersion: CodeVersion = CodeVersion(6),
-    cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
-) {
-    create(
-        CreateCmd(
-            id = cmdId,
-            funcId = funcId,
-            groupId = groupId,
-            flowId = flowId,
-            name = name,
-            inputs = FuncInputs(
-                MapType(
-                    mutableMapOf(
-                        "hamal" to StringType("rockz")
+
+    private fun FuncRepository.createFunc(
+        funcId: FuncId,
+        flowId: FlowId,
+        name: FuncName,
+        groupId: GroupId,
+        codeId: CodeId = CodeId(5),
+        codeVersion: CodeVersion = CodeVersion(6),
+        cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
+    ) {
+        create(
+            CreateCmd(
+                id = cmdId,
+                funcId = funcId,
+                groupId = groupId,
+                flowId = flowId,
+                name = name,
+                inputs = FuncInputs(
+                    MapType(
+                        mutableMapOf(
+                            "hamal" to StringType("rockz")
+                        )
                     )
-                )
-            ),
-            codeId = codeId,
-            codeVersion = codeVersion
+                ),
+                codeId = codeId,
+                codeVersion = codeVersion
+            )
         )
-    )
+    }
+
+    private fun FuncRepository.createUpdatedFunc(
+        funcId: FuncId,
+        codeId: CodeId,
+        maxVersion: CodeVersion,
+    ): Func {
+        create(
+            CreateCmd(
+                id = CmdGen(),
+                funcId = funcId,
+                groupId = GroupId(1),
+                flowId = FlowId(234),
+                name = FuncName("SomeFunc"),
+                inputs = FuncInputs(),
+                codeId = codeId,
+                codeVersion = CodeVersion(1)
+            )
+        )
+
+        return update(
+            funcId, UpdateCmd(
+                id = CmdGen(),
+                name = FuncName("Updated"),
+                inputs = null,
+                codeVersion = maxVersion
+            )
+        )
+    }
 }
-
-private fun FuncRepository.createUpdatedFunc(
-    funcId: FuncId,
-    codeId: CodeId,
-    maxVersion: CodeVersion,
-): Func {
-    create(
-        CreateCmd(
-            id = CmdGen(),
-            funcId = funcId,
-            groupId = GroupId(1),
-            flowId = FlowId(234),
-            name = FuncName("SomeFunc"),
-            inputs = FuncInputs(),
-            codeId = codeId,
-            codeVersion = CodeVersion(1)
-        )
-    )
-
-    return update(
-        funcId, UpdateCmd(
-            id = CmdGen(),
-            name = FuncName("Updated"),
-            inputs = null,
-            codeVersion = maxVersion
-        )
-    )
-}
-
 
 private fun FuncRepository.verifyCount(expected: Int) {
     verifyCount(expected) { }
@@ -755,12 +754,4 @@ private fun FuncRepository.verifyCount(expected: Int) {
 private fun FuncRepository.verifyCount(expected: Int, block: FuncQuery.() -> Unit) {
     val counted = count(FuncQuery(groupIds = listOf()).also(block))
     assertThat("number of functions expected", counted, equalTo(expected.toULong()))
-}
-
-private object CmdGen {
-    private val atomicCounter = AtomicInteger(1)
-
-    operator fun invoke(): CmdId {
-        return CmdId(atomicCounter.incrementAndGet())
-    }
 }
