@@ -6,7 +6,6 @@ import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.*
-import io.hamal.repository.api.HookTrigger.UniqueHookTrigger
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.repository.api.log.Topic
@@ -72,11 +71,11 @@ class TriggerAdapter(
     ): T {
         ensureFuncExists(req)
         ensureTopicExists(req)
-        validateHookTriggerReq(req)
-
+        ensureHookExists(req)
 
         val flow = flowQueryRepository.get(flowId)
         val func = funcQueryRepository.get(req.funcId)
+
         return TriggerCreateSubmitted(
             type = req.type,
             id = generateDomainId(::ReqId),
@@ -172,21 +171,10 @@ class TriggerAdapter(
         }
     }
 
-    private fun validateHookTriggerReq(createTrigger: CreateTriggerReq) {
+    private fun ensureHookExists(createTrigger: CreateTriggerReq) {
         if (createTrigger.type == TriggerType.Hook) {
             requireNotNull(createTrigger.hookId) { "hookId is missing" }
-            requireNotNull(createTrigger.hookMethod) { "hookMethod is missing" }
             hookQueryRepository.get(createTrigger.hookId!!)
-
-            require(
-                !triggerQueryRepository.ensureHookUnique(
-                    UniqueHookTrigger(
-                        createTrigger.funcId,
-                        createTrigger.hookId!!,
-                        createTrigger.hookMethod!!
-                )
-                )
-            ) { "Trigger already exists" }
         }
     }
 

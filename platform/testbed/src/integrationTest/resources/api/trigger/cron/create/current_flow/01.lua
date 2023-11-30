@@ -3,24 +3,24 @@ sys = require_plugin('sys')
 func_req = fail_on_error(sys.funcs.create({ name = 'test-func'; inputs = {}; code = [[4 + 2]] }))
 sys.await_completed(func_req)
 
-trigger_req = fail_on_error(sys.triggers.create_cron({
+req_one = fail_on_error(sys.triggers.create_cron({
     func_id = func_req.func_id,
     name = 'trigger-to-create',
     inputs = { },
     cron = '0 0 8-10 * * *'
 }))
-sys.await_completed(trigger_req)
+sys.await_completed(req_one)
 
-assert(trigger_req.id ~= nil)
-assert(trigger_req.status == 'Submitted')
-assert(trigger_req.trigger_id ~= nil)
-assert(trigger_req.group_id == '1')
-assert(trigger_req.flow_id == '1')
+assert(req_one.id ~= nil)
+assert(req_one.status == 'Submitted')
+assert(req_one.trigger_id ~= nil)
+assert(req_one.group_id == '1')
+assert(req_one.flow_id == '1')
 
-trigger = fail_on_error(sys.triggers.get(trigger_req.trigger_id))
-assert(trigger.type == 'Cron')
-assert(trigger.name == 'trigger-to-create')
-assert(trigger.func.name == "test-func")
-assert(trigger.flow.id == '1')
-assert(trigger.flow.name == "root-flow")
-assert(trigger.cron == '0 0 8-10 * * *')
+req_two = fail_on_error(sys.triggers.get(req_one.trigger_id))
+assert(req_two.type == 'Cron')
+assert(req_two.name == 'trigger-to-create')
+assert(req_two.func.name == "test-func")
+assert(req_two.flow.id == '1')
+assert(req_two.flow.name == "root-flow")
+assert(req_two.cron == '0 0 8-10 * * *')

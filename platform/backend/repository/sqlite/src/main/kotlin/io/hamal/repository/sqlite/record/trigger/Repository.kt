@@ -4,7 +4,6 @@ import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.*
-import io.hamal.repository.api.HookTrigger.UniqueHookTrigger
 import io.hamal.repository.api.TriggerCmdRepository.*
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import io.hamal.repository.record.CreateDomainObject
@@ -198,17 +197,6 @@ class SqliteTriggerRepository(
                     .also { ProjectionUniqueName.upsert(this, it) }
             }
         }
-    }
-
-    override fun ensureHookUnique(query: UniqueHookTrigger): Boolean {
-        return ProjectionUniqueHook.ensureHookUnique(
-            connection,
-            UniqueHookTrigger(
-                funcId = query.funcId,
-                hookId = query.hookId,
-                hookMethod = query.hookMethod
-            )
-        )
     }
 
     override fun find(triggerId: TriggerId): Trigger? {

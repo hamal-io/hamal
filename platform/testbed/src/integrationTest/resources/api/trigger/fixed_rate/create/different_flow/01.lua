@@ -6,26 +6,26 @@ sys.await_completed(flow_req)
 func_req = fail_on_error(sys.funcs.create({ flow_id = flow_req.id, name = 'test-func'; inputs = {}; code = [[4 + 2]] }))
 sys.await_completed(func_req)
 
-trigger_req = fail_on_error(sys.triggers.create_fixed_rate({
+req_one = fail_on_error(sys.triggers.create_fixed_rate({
     flow_id = flow_req.flow_id,
     func_id = func_req.func_id,
     name = 'trigger-to-create',
     inputs = { },
     duration = 'PT5S'
 }))
-sys.await_completed(trigger_req)
+sys.await_completed(req_one)
 
-assert(trigger_req.id ~= nil)
-assert(trigger_req.status == 'Submitted')
-assert(trigger_req.trigger_id ~= nil)
-assert(trigger_req.group_id == '1')
-assert(trigger_req.flow_id == flow_req.flow_id)
+assert(req_one.id ~= nil)
+assert(req_one.status == 'Submitted')
+assert(req_one.trigger_id ~= nil)
+assert(req_one.group_id == '1')
+assert(req_one.flow_id == flow_req.flow_id)
 
-trigger = fail_on_error(sys.triggers.get(trigger_req.trigger_id))
+req_two = fail_on_error(sys.triggers.get(req_one.trigger_id))
 
-assert(trigger.type == 'FixedRate')
-assert(trigger.name == 'trigger-to-create')
-assert(trigger.func.name == 'test-func')
-assert(trigger.flow.name == "hamal::flow::rocks")
-assert(trigger.duration == "PT5S")
+assert(req_two.type == 'FixedRate')
+assert(req_two.name == 'trigger-to-create')
+assert(req_two.func.name == 'test-func')
+assert(req_two.flow.name == "hamal::flow::rocks")
+assert(req_two.duration == "PT5S")
 

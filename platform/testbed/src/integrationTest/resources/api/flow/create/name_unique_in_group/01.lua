@@ -20,7 +20,7 @@ err, flow = sys.flows.create({
     name = 'io::hamal::web3::eth'
 })
 assert(err == nil)
-sys.await_completed(flow)
+sys.await_failed(flow)
 
 -- nothing has changed
 err, flows = sys.flows.list()

@@ -6,26 +6,26 @@ sys.await_completed(func_req)
 hook = fail_on_error(sys.hooks.create({ name = "some-amazing-hook" }))
 sys.await(hook)
 
-trigger_req = fail_on_error(sys.triggers.create_hook({
+req_one = fail_on_error(sys.triggers.create_hook({
     func_id = func_req.func_id,
     name = 'hook-trigger',
     inputs = { },
     hook_method = 'Get',
     hook_id = hook.hook_id
 }))
-sys.await_completed(trigger_req)
+sys.await_completed(req_one)
 
-assert(trigger_req.id ~= nil)
-assert(trigger_req.status == 'Submitted')
-assert(trigger_req.trigger_id ~= nil)
-assert(trigger_req.group_id == '1')
-assert(trigger_req.flow_id == '1')
+assert(req_one.id ~= nil)
+assert(req_one.status == 'Submitted')
+assert(req_one.trigger_id ~= nil)
+assert(req_one.group_id == '1')
+assert(req_one.flow_id == '1')
 
-trigger = fail_on_error(sys.triggers.get(trigger_req.trigger_id))
-assert(trigger.type == 'Hook')
-assert(trigger.name == 'hook-trigger')
-assert(trigger.func.name == "test-func")
-assert(trigger.flow.id == '1')
-assert(trigger.flow.name == "root-flow")
-assert(trigger.hook.name == "some-amazing-hook")
+req_two = fail_on_error(sys.triggers.get(req_one.trigger_id))
+assert(req_two.type == 'Hook')
+assert(req_two.name == 'hook-trigger')
+assert(req_two.func.name == "test-func")
+assert(req_two.flow.id == '1')
+assert(req_two.flow.name == "root-flow")
+assert(req_two.hook.name == "some-amazing-hook")
 

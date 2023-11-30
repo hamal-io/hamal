@@ -3,21 +3,21 @@ sys = require_plugin('sys')
 func_req = fail_on_error(sys.funcs.create({ name = 'test-func'; inputs = {}; code = [[4 + 2]] }))
 sys.await_completed(func_req)
 
-trigger_req = fail_on_error(sys.triggers.create_cron({
+req_one = fail_on_error(sys.triggers.create_cron({
     func_id = func_req.func_id,
     name = 'trigger-to-create',
     inputs = { },
     cron = '0 0 8-10 * * *'
 }))
-sys.await_completed(trigger_req)
+sys.await_completed(req_one)
 
 triggers = fail_on_error(sys.triggers.list())
 assert(#triggers == 1)
 
-trigger = triggers[1]
-assert(trigger.type == 'Cron')
-assert(trigger.name == 'trigger-to-create')
-assert(trigger.func.name == "test-func")
-assert(trigger.flow.id == '1')
-assert(trigger.flow.name == "root-flow")
-assert(trigger.cron == '0 0 8-10 * * *')
+req_two = triggers[1]
+assert(req_two.type == 'Cron')
+assert(req_two.name == 'trigger-to-create')
+assert(req_two.func.name == "test-func")
+assert(req_two.flow.id == '1')
+assert(req_two.flow.name == "root-flow")
+assert(req_two.cron == '0 0 8-10 * * *')

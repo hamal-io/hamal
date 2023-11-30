@@ -6,21 +6,21 @@ sys.await_completed(func_req)
 topic_req = fail_on_error(sys.topics.create({ name = "some-amazing-topic" }))
 sys.await(topic_req)
 
-trigger_req = fail_on_error(sys.triggers.create_event({
+req_one = fail_on_error(sys.triggers.create_event({
     func_id = func_req.func_id,
     name = 'trigger-to-create',
     inputs = { },
     topic_id = topic_req.topic_id
 }))
-sys.await_completed(trigger_req)
+sys.await_completed(req_one)
 
 triggers = fail_on_error(sys.triggers.list())
 assert(#triggers == 1)
 
-trigger = triggers[1]
-assert(trigger.type == 'Event')
-assert(trigger.name == 'trigger-to-create')
-assert(trigger.func.name == "test-func")
-assert(trigger.flow.id == '1')
-assert(trigger.flow.name == "root-flow")
-assert(trigger.topic.name == "some-amazing-topic")
+req_two = triggers[1]
+assert(req_two.type == 'Event')
+assert(req_two.name == 'trigger-to-create')
+assert(req_two.func.name == "test-func")
+assert(req_two.flow.id == '1')
+assert(req_two.flow.name == "root-flow")
+assert(req_two.topic.name == "some-amazing-topic")

@@ -75,8 +75,6 @@ class CreateTriggerHandler(
                         hookMethod = req.hookMethod ?: Post
                     )
                 )
-
-
             }
 
             Cron -> triggerCmdRepository.create(
