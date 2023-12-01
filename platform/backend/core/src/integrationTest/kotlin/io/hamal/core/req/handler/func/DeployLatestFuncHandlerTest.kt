@@ -32,6 +32,7 @@ internal class DeployLatestFuncHandlerTest : BaseReqHandlerTest() {
             status = Submitted,
             groupId = testGroup.id,
             FuncId(1),
+            deployMessage = null
         )
     }
 
