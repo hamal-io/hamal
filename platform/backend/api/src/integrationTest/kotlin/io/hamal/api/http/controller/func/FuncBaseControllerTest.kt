@@ -74,6 +74,7 @@ internal sealed class FuncBaseControllerTest : BaseControllerTest() {
     fun deployLatestVersion(funcId: FuncId): ApiFuncDeployLatestSubmitted {
         val deployResponse = httpTemplate.post("/v1/funcs/{funcId}/deploy/latest")
             .path("funcId", funcId)
+            .body(ApiFuncDeployReq(null))
             .execute()
 
         assertThat(deployResponse.statusCode, equalTo(Accepted))
@@ -84,7 +85,7 @@ internal sealed class FuncBaseControllerTest : BaseControllerTest() {
     fun deployLatestVersionWithMessage(funcId: FuncId, deployMessage: DeployMessage): ApiFuncDeployLatestSubmitted {
         val deployResponse = httpTemplate.post("/v1/funcs/{funcId}/deploy/latest")
             .path("funcId", funcId)
-            .body(deployMessage)
+            .body(ApiFuncDeployReq(deployMessage))
             .execute()
 
         assertThat(deployResponse.statusCode, equalTo(Accepted))

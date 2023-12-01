@@ -6,6 +6,7 @@ import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.lib.domain.vo.DeployMessage
 import io.hamal.lib.domain.vo.FuncId
+import io.hamal.lib.sdk.api.ApiFuncDeployReq
 import io.hamal.lib.sdk.api.ApiSubmitted
 import io.hamal.repository.api.submitted_req.FuncDeployLatestSubmitted
 import io.hamal.repository.api.submitted_req.FuncDeploySubmitted
@@ -25,9 +26,9 @@ internal class FuncDeployController(
     @PostMapping("/v1/funcs/{funcId}/deploy/latest")
     fun deployLatest(
         @PathVariable("funcId") funcId: FuncId,
-        @RequestBody deployMessage: DeployMessage?
+        @RequestBody req: ApiFuncDeployReq
     ): ResponseEntity<ApiSubmitted> = retry {
-        deploy(funcId, deployMessage, FuncDeployLatestSubmitted::accepted)
+        deploy(funcId, req, FuncDeployLatestSubmitted::accepted)
     }
 
 

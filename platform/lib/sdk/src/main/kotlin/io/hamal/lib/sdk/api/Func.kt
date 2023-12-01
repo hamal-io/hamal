@@ -9,10 +9,7 @@ import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiFuncService.FuncQuery
 import io.hamal.lib.sdk.fold
-import io.hamal.request.CreateFuncReq
-import io.hamal.request.InvokeFuncReq
-import io.hamal.request.InvokeFuncVersionReq
-import io.hamal.request.UpdateFuncReq
+import io.hamal.request.*
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -30,6 +27,11 @@ data class ApiFuncCreateSubmitted(
     val groupId: GroupId,
     val flowId: FlowId
 ) : ApiSubmitted
+
+@Serializable
+data class ApiFuncDeployReq(
+    override val deployMessage: DeployMessage?
+) : FuncDeployReq
 
 @Serializable
 data class ApiFuncDeploySubmitted(
@@ -128,6 +130,7 @@ interface ApiFuncService {
     fun create(flowId: FlowId, createFuncReq: ApiFuncCreateReq): ApiFuncCreateSubmitted
     fun deploy(funcId: FuncId, version: CodeVersion): ApiFuncDeploySubmitted
     fun deployLatest(funcId: FuncId): ApiFuncDeployLatestSubmitted
+    fun deployLatest(funcId: FuncId, req: ApiFuncDeployReq): ApiFuncDeployLatestSubmitted
     fun list(query: FuncQuery): List<ApiFuncList.Func>
     fun get(funcId: FuncId): ApiFunc
     fun update(funcId: FuncId, req: ApiFuncUpdateReq): ApiFuncUpdateSubmitted
@@ -169,9 +172,16 @@ internal class ApiFuncServiceImpl(
             .execute()
             .fold(ApiFuncDeploySubmitted::class)
 
-    override fun deployLatest(funcId: FuncId): ApiFuncDeployLatestSubmitted =
+    override fun deployLatest(funcId: FuncId) =
         template.post("/v1/funcs/{funcId}/deploy/latest")
             .path("funcId", funcId)
+            .execute()
+            .fold(ApiFuncDeployLatestSubmitted::class)
+
+    override fun deployLatest(funcId: FuncId, req: ApiFuncDeployReq) =
+        template.post("/v1/funcs/{funcId}/deploy/latest")
+            .path("funcId", funcId)
+            .body(req)
             .execute()
             .fold(ApiFuncDeployLatestSubmitted::class)
 

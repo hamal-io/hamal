@@ -111,10 +111,16 @@ function plugin()
             return internal.func_deploy(cmd)
         end
 
-        function export.funcs.deploy_latest(id, message)
-            --TODO-114
-            message = message or nil
-            return internal.func_deploy_latest(id, message)
+        function export.funcs.deploy_latest(func_id)
+
+            return internal.func_deploy_latest(func_id)
+        end
+
+        function export.funcs.deploy_latest(func_id, message)
+            return internal.func_deploy_latest({
+                func_id = func_id,
+                message = message or nil
+            })
         end
 
         function export.funcs.get(func_id)

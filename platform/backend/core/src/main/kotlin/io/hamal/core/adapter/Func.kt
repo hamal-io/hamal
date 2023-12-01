@@ -6,10 +6,7 @@ import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.*
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
 import io.hamal.repository.api.submitted_req.*
-import io.hamal.request.CreateFuncReq
-import io.hamal.request.InvokeFuncReq
-import io.hamal.request.InvokeFuncVersionReq
-import io.hamal.request.UpdateFuncReq
+import io.hamal.request.*
 import org.springframework.stereotype.Component
 
 interface FuncCreatePort {
@@ -51,7 +48,7 @@ interface FuncDeployPort {
 
     operator fun <T : Any> invoke(
         funcId: FuncId,
-        deployMessage: DeployMessage?,
+        req: FuncDeployReq,
         responseHandler: (FuncDeployLatestSubmitted) -> T
     ): T
 }
@@ -199,7 +196,7 @@ class FuncAdapter(
 
     override fun <T : Any> invoke(
         funcId: FuncId,
-        deployMessage: DeployMessage?,
+        req: FuncDeployReq,
         responseHandler: (FuncDeployLatestSubmitted) -> T
     ): T {
         val func = funcQueryRepository.get(funcId)
@@ -208,7 +205,7 @@ class FuncAdapter(
             status = ReqStatus.Submitted,
             groupId = func.groupId,
             funcId = funcId,
-            deployMessage = deployMessage
+            deployMessage = req.deployMessage
         ).also(reqCmdRepository::queue).let(responseHandler)
     }
 

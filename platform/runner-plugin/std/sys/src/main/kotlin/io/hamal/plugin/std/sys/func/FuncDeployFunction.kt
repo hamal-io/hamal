@@ -1,16 +1,16 @@
 package io.hamal.plugin.std.sys.func
 
 import io.hamal.lib.domain.vo.CodeVersion
+import io.hamal.lib.domain.vo.CorrelationId
+import io.hamal.lib.domain.vo.DeployMessage
 import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.kua.function.Function1In2Out
-import io.hamal.lib.kua.function.FunctionContext
-import io.hamal.lib.kua.function.FunctionInput1Schema
-import io.hamal.lib.kua.function.FunctionOutput2Schema
+import io.hamal.lib.kua.function.*
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.ApiSdk
+import io.hamal.lib.sdk.api.ApiFuncDeployReq
 
 class FuncDeployFunction(
     private val sdk: ApiSdk
@@ -41,13 +41,22 @@ class FuncDeployFunction(
 
 class FuncDeployLatestFunction(
     private val sdk: ApiSdk
-) : Function1In2Out<StringType, ErrorType, MapType>(
-    FunctionInput1Schema(StringType::class),
+) : Function1In2Out<MapType, ErrorType, MapType>(
+    FunctionInput1Schema(MapType::class),
     FunctionOutput2Schema(ErrorType::class, MapType::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: StringType): Pair<ErrorType?, MapType?> {
+    override fun invoke(ctx: FunctionContext, arg1: MapType): Pair<ErrorType?, MapType?> {
         return try {
-            val res = sdk.func.deployLatest(FuncId(arg1.value))
+
+            val message = if (arg1.type("message") == StringType::class) {
+                ApiFuncDeployReq(DeployMessage(arg1.getString("message")))
+            } else {
+                ApiFuncDeployReq(null)
+            }
+
+            val res = sdk.func.deployLatest(FuncId(arg1.getString("func_id")), message)
+
+
             null to MapType(
                 mutableMapOf(
                     "id" to StringType(res.id.value.value.toString(16)),
