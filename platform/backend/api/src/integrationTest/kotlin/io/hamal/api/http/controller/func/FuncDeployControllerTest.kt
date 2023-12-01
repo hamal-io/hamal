@@ -10,6 +10,7 @@ import io.hamal.lib.sdk.api.ApiFuncUpdateReq
 import io.hamal.repository.api.Func
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
+import org.hamcrest.Matchers.nullValue
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -115,6 +116,7 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
                         codeQueryRepository.get(code.id, code.deployedVersion).value, equalTo(CodeValue("code-19"))
                     )
                     assertThat(code.deployedVersion, equalTo(code.version))
+                    assertThat(deployMessage, nullValue())
                 }
             }
 

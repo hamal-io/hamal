@@ -111,11 +111,6 @@ function plugin()
             return internal.func_deploy(cmd)
         end
 
-        function export.funcs.deploy_latest(func_id)
-
-            return internal.func_deploy_latest(func_id)
-        end
-
         function export.funcs.deploy_latest(func_id, message)
             return internal.func_deploy_latest({
                 func_id = func_id,
