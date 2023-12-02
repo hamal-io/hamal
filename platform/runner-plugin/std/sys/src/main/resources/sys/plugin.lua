@@ -108,16 +108,24 @@ function plugin()
         end
 
         function export.funcs.deploy(cmd)
-            return internal.func_deploy(cmd)
-        end
-
-        function export.funcs.deploy_latest(func_id, message)
-            return internal.func_deploy_latest({
-                func_id = func_id,
-                message = message or nil
+            return internal.func_deploy({
+                id = cmd.id,
+                version = cmd.version or nil,
+                message = cmd.message or nil
             })
         end
 
+        --[[     function export.funcs.deploy(cmd)
+                 return internal.func_deploy(cmd)
+             end
+
+             function export.funcs.deploy_latest(func_id, message)
+                 return internal.func_deploy_latest({
+                     func_id = func_id,
+                     message = message or nil
+                 })
+             end
+     ]]
         function export.funcs.get(func_id)
             return internal.func_get(func_id)
         end
