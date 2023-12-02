@@ -1,7 +1,5 @@
 package io.hamal.repository.memory.record
 
-import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.vo.DeployMessage
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncCmdRepository.*
@@ -94,38 +92,50 @@ class MemoryFuncRepository : MemoryRecordRepository<FuncId, FuncRecord, Func>(
                 versionOf(funcId, cmd.id)
             } else {
                 val current = versionOf(funcId, cmd.id)
-                require(cmd.versionToDeploy <= current.code.version) { "${cmd.versionToDeploy} can not be deployed" }
-                store(
-                    FuncDeployedRecord(
-                        cmdId = cmd.id,
-                        entityId = funcId,
-                        deployedVersion = cmd.versionToDeploy,
-                        deployMessage = cmd.deployMessage
+                if (cmd.versionToDeploy != null) {
+                    require(cmd.versionToDeploy!! <= current.code.version) { "${cmd.versionToDeploy} can not be deployed" }
+                    store(
+                        FuncDeployedRecord(
+                            cmdId = cmd.id,
+                            entityId = funcId,
+                            deployedVersion = cmd.versionToDeploy!!,
+                            deployMessage = cmd.deployMessage
+                        )
                     )
-                )
+                } else {
+                    val last = lastRecordOf(funcId)
+                    store(
+                        FuncDeployedRecord(
+                            entityId = funcId,
+                            cmdId = cmd.id,
+                            deployedVersion = versionOf(funcId, last.sequence())!!.code.version,
+                            deployMessage = cmd.deployMessage
+                        )
+                    )
+                }
                 (currentVersion(funcId)).also(CurrentFuncProjection::apply)
             }
         }
     }
 
-    override fun deployLatest(funcId: FuncId, cmd: CmdId, deployMessage: DeployMessage?): Func {
-        return lock.withLock {
-            if (commandAlreadyApplied(cmd, funcId)) {
-                versionOf(funcId, cmd)
-            } else {
-                val last = lastRecordOf(funcId)
-                store(
-                    FuncDeployedRecord(
-                        entityId = funcId,
-                        cmdId = cmd,
-                        deployedVersion = versionOf(funcId, last.sequence())!!.code.version,
-                        deployMessage = deployMessage
-                    )
-                )
-                (currentVersion(funcId)).also(CurrentFuncProjection::apply)
-            }
-        }
-    }
+    /* override fun deployLatest(funcId: FuncId, cmd: DeployCmd): Func {
+         return lock.withLock {
+             if (commandAlreadyApplied(cmd, funcId)) {
+                 versionOf(funcId, cmd)
+             } else {
+                 val last = lastRecordOf(funcId)
+                 store(
+                     FuncDeployedRecord(
+                         entityId = funcId,
+                         cmdId = cmd,
+                         deployedVersion = versionOf(funcId, last.sequence())!!.code.version,
+                         deployMessage = deployMessage
+                     )
+                 )
+                 (currentVersion(funcId)).also(CurrentFuncProjection::apply)
+             }
+         }
+     }*/
 
     override fun update(funcId: FuncId, cmd: UpdateCmd): Func {
         return lock.withLock {

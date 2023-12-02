@@ -1,8 +1,6 @@
 package io.hamal.api.http.controller.func
 
 import io.hamal.api.http.controller.BaseControllerTest
-import io.hamal.lib.domain.vo.CodeVersion
-import io.hamal.lib.domain.vo.DeployMessage
 import io.hamal.lib.domain.vo.FlowId
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.http.HttpStatusCode.Accepted
@@ -60,10 +58,10 @@ internal sealed class FuncBaseControllerTest : BaseControllerTest() {
         return updateResponse.result(ApiFuncUpdateSubmitted::class)
     }
 
-    fun deployVersion(funcId: FuncId, version: CodeVersion): ApiFuncDeploySubmitted {
-        val deployResponse = httpTemplate.post("/v1/funcs/{funcId}/deploy/{version}")
+    fun deployVersion(funcId: FuncId, req: ApiFuncDeployReq): ApiFuncDeploySubmitted {
+        val deployResponse = httpTemplate.post("/v1/funcs/{funcId}/deploy/")
             .path("funcId", funcId)
-            .path("version", version.value.toString())
+            .body(req)
             .execute()
 
         assertThat(deployResponse.statusCode, equalTo(Accepted))
@@ -71,25 +69,25 @@ internal sealed class FuncBaseControllerTest : BaseControllerTest() {
         return deployResponse.result(ApiFuncDeploySubmitted::class)
     }
 
-    fun deployLatestVersion(funcId: FuncId): ApiFuncDeployLatestSubmitted {
-        val deployResponse = httpTemplate.post("/v1/funcs/{funcId}/deploy/latest")
-            .path("funcId", funcId)
-            .body(ApiFuncDeployReq(null))
-            .execute()
+    /* fun deployLatestVersion(funcId: FuncId): ApiFuncDeployLatestSubmitted {
+         val deployResponse = httpTemplate.post("/v1/funcs/{funcId}/deploy/latest")
+             .path("funcId", funcId)
+             .body(ApiFuncDeployReq(null))
+             .execute()
 
-        assertThat(deployResponse.statusCode, equalTo(Accepted))
-        require(deployResponse is HttpSuccessResponse) { "request was not successful" }
-        return deployResponse.result(ApiFuncDeployLatestSubmitted::class)
-    }
+         assertThat(deployResponse.statusCode, equalTo(Accepted))
+         require(deployResponse is HttpSuccessResponse) { "request was not successful" }
+         return deployResponse.result(ApiFuncDeployLatestSubmitted::class)
+     }
 
-    fun deployLatestVersionWithMessage(funcId: FuncId, deployMessage: DeployMessage): ApiFuncDeployLatestSubmitted {
-        val deployResponse = httpTemplate.post("/v1/funcs/{funcId}/deploy/latest")
-            .path("funcId", funcId)
-            .body(ApiFuncDeployReq(deployMessage))
-            .execute()
+     fun deployLatestVersionWithMessage(funcId: FuncId, deployMessage: DeployMessage): ApiFuncDeployLatestSubmitted {
+         val deployResponse = httpTemplate.post("/v1/funcs/{funcId}/deploy/latest")
+             .path("funcId", funcId)
+             .body(ApiFuncDeployReq(deployMessage))
+             .execute()
 
-        assertThat(deployResponse.statusCode, equalTo(Accepted))
-        require(deployResponse is HttpSuccessResponse) { "request was not successful" }
-        return deployResponse.result(ApiFuncDeployLatestSubmitted::class)
-    }
+         assertThat(deployResponse.statusCode, equalTo(Accepted))
+         require(deployResponse is HttpSuccessResponse) { "request was not successful" }
+         return deployResponse.result(ApiFuncDeployLatestSubmitted::class)
+     }*/
 }

@@ -25,7 +25,14 @@ class DeployFuncHandler(
 }
 
 private fun DeployFuncHandler.deployVersion(req: FuncDeploySubmitted): Func {
-    return funcRepository.deploy(req.funcId, DeployCmd(req.cmdId(), req.versionToDeploy))
+    return funcRepository.deploy(
+        req.funcId,
+        DeployCmd(
+            id = req.cmdId(),
+            versionToDeploy = req.versionToDeploy,
+            deployMessage = req.deployMessage
+        )
+    )
 }
 
 

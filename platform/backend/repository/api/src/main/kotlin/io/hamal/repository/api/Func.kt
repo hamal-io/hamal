@@ -41,7 +41,7 @@ interface FuncCmdRepository : CmdRepository {
 
     fun update(funcId: FuncId, cmd: UpdateCmd): Func
     fun deploy(funcId: FuncId, cmd: DeployCmd): Func
-    fun deployLatest(funcId: FuncId, cmd: CmdId, deployMessage: DeployMessage? = null): Func
+    // fun deployLatest(funcId: FuncId, cmd: CmdId, deployMessage: DeployMessage? = null): Func
 
     data class CreateCmd(
         val id: CmdId,
@@ -63,7 +63,7 @@ interface FuncCmdRepository : CmdRepository {
 
     data class DeployCmd(
         val id: CmdId,
-        val versionToDeploy: CodeVersion,
+        val versionToDeploy: CodeVersion? = null,
         val deployMessage: DeployMessage? = null
     )
 }

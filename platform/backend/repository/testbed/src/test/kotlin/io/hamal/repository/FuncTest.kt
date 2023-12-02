@@ -407,7 +407,11 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                 maxVersion = CodeVersion(100),
             )
 
-            val res = deployLatest(FuncId(123), CmdGen())
+            val res = deploy(
+                FuncId(123), DeployCmd(
+                    id = CmdGen()
+                )
+            )
             assertThat(res.code.deployedVersion, equalTo(CodeVersion(100)))
         }
 
@@ -419,7 +423,13 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                 maxVersion = CodeVersion(100),
             )
 
-            val res = deployLatest(FuncId(123), CmdGen(), DeployMessage.default)
+            val res = deploy(
+                FuncId(123),
+                DeployCmd(
+                    id = CmdGen(),
+                    deployMessage = DeployMessage.default
+                )
+            )
             assertThat(res.code.deployedVersion, equalTo(CodeVersion(100)))
             assertThat(res.deployMessage, equalTo(DeployMessage.default))
         }

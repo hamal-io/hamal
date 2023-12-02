@@ -3,10 +3,8 @@ package io.hamal.api.http.controller.func
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode
-import io.hamal.lib.sdk.api.ApiError
-import io.hamal.lib.sdk.api.ApiFuncCreateReq
-import io.hamal.lib.sdk.api.ApiFuncCreateSubmitted
-import io.hamal.lib.sdk.api.ApiFuncUpdateReq
+import io.hamal.lib.http.body
+import io.hamal.lib.sdk.api.*
 import io.hamal.repository.api.Func
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -24,7 +22,13 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
             val func = setup()
             repeat(20) { iter ->
                 awaitCompleted(
-                    deployVersion(func.id, CodeVersion(iter + 1))
+                    deployVersion(
+                        funcId = func.id,
+                        req = ApiFuncDeployReq(
+                            codeVersion = CodeVersion(iter + 1),
+                            null
+                        )
+                    )
                 )
                 assertThat(funcQueryRepository.get(func.id).code.deployedVersion, equalTo(CodeVersion(iter + 1)))
             }
@@ -43,7 +47,13 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
 
             repeat(20) {
                 awaitCompleted(
-                    deployVersion(func.id, CodeVersion(10))
+                    deployVersion(
+                        funcId = func.id,
+                        req = ApiFuncDeployReq(
+                            codeVersion = CodeVersion(10),
+                            null
+                        )
+                    )
                 )
                 assertThat(funcQueryRepository.get(func.id).code.deployedVersion, equalTo(CodeVersion(10)))
             }
@@ -61,7 +71,13 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
 
             repeat(20) { iter ->
                 awaitCompleted(
-                    deployVersion(func.id, CodeVersion(20 - iter))
+                    deployVersion(
+                        funcId = func.id,
+                        req = ApiFuncDeployReq(
+                            codeVersion = CodeVersion(20 - iter),
+                            null
+                        )
+                    )
                 )
                 assertThat(funcQueryRepository.get(func.id).code.deployedVersion, equalTo(CodeVersion(20 - iter)))
             }
@@ -75,29 +91,35 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
 
         @Test
         fun `Tries to deploy to func that does not exist`() {
-            val res = httpTemplate.post("/v1/funcs/1234/deploy/25").execute()
+            val deployResponse = httpTemplate.post("/v1/funcs/{funcId}/deploy/")
+                .path("funcId", FuncId(23))
+                .body(ApiFuncDeployReq(CodeVersion(1), null))
+                .execute()
 
-            assertThat(res.statusCode, equalTo(HttpStatusCode.NotFound))
-            require(res is HttpErrorResponse) { "request was successful" }
+            assertThat(deployResponse.statusCode, equalTo(HttpStatusCode.NotFound))
+            require(deployResponse is HttpErrorResponse) { "request was successful" }
 
-            val error = res.error(ApiError::class)
+            val error = deployResponse.error(ApiError::class)
             assertThat(error.message, equalTo("Func not found"))
         }
 
         @Test
         fun `Tries to deploy version that does not exists`() {
-            val f: ApiFuncCreateSubmitted = createFunc(
+            val func: ApiFuncCreateSubmitted = createFunc(
                 ApiFuncCreateReq(
                     name = FuncName("Func-base"), inputs = FuncInputs(), code = CodeValue("40 + 2")
                 )
             )
 
-            val res = httpTemplate.post("/v1/funcs/{funcId}/deploy/25").path("funcId", f.funcId).execute()
+            val deployResponse = httpTemplate.post("/v1/funcs/{funcId}/deploy/")
+                .path("funcId", func.funcId)
+                .body(ApiFuncDeployReq(CodeVersion(23), null))
+                .execute()
 
-            assertThat(res.statusCode, equalTo(HttpStatusCode.NotFound))
-            require(res is HttpErrorResponse) { "request was successful" }
+            assertThat(deployResponse.statusCode, equalTo(HttpStatusCode.NotFound))
+            require(deployResponse is HttpErrorResponse) { "request was successful" }
 
-            val error = res.error(ApiError::class)
+            val error = deployResponse.error(ApiError::class)
             assertThat(error.message, equalTo("Code not found"))
         }
 
@@ -107,7 +129,15 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
             @Test
             fun `Deploys latest version`() {
                 val funcId = setup().id
-                awaitCompleted(deployLatestVersion(funcId))
+                awaitCompleted(
+                    deployVersion(
+                        funcId = funcId,
+                        req = ApiFuncDeployReq(
+                            null,
+                            null
+                        )
+                    )
+                )
 
                 with(funcQueryRepository.get(funcId))
                 {
@@ -123,9 +153,18 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
             @Test
             fun `Deploys latest version with message`() {
                 val funcId = setup().id
+
                 awaitCompleted(
-                    deployLatestVersionWithMessage(funcId, DeployMessage("SuperFunc"))
+                    deployVersion(
+                        funcId = funcId,
+                        req = ApiFuncDeployReq(
+                            codeVersion = null,
+                            DeployMessage("SuperFunc")
+                        )
+                    )
                 )
+
+
                 with(funcQueryRepository.get(funcId))
                 {
                     assertThat(name, equalTo(FuncName("test-func")))

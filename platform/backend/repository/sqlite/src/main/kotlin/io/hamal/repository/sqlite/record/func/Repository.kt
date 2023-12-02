@@ -1,7 +1,5 @@
 package io.hamal.repository.sqlite.record.func
 
-import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.vo.DeployMessage
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Func
@@ -87,15 +85,27 @@ class SqliteFuncRepository(
                 versionOf(funcId, cmdId)
             } else {
                 val current = versionOf(funcId, cmdId)
-                require(cmd.versionToDeploy <= current.code.version) { "${cmd.versionToDeploy} can not be deployed" }
-                store(
-                    FuncDeployedRecord(
-                        cmdId = cmdId,
-                        entityId = funcId,
-                        deployedVersion = cmd.versionToDeploy,
-                        deployMessage = cmd.deployMessage
+                if (cmd.versionToDeploy != null) {
+                    require(cmd.versionToDeploy!! <= current.code.version) { "${cmd.versionToDeploy} can not be deployed" }
+                    store(
+                        FuncDeployedRecord(
+                            cmdId = cmd.id,
+                            entityId = funcId,
+                            deployedVersion = cmd.versionToDeploy!!,
+                            deployMessage = cmd.deployMessage
+                        )
                     )
-                )
+                } else {
+                    val last = lastRecordOf(funcId)
+                    store(
+                        FuncDeployedRecord(
+                            entityId = funcId,
+                            cmdId = cmd.id,
+                            deployedVersion = versionOf(funcId, last.sequence())!!.code.version,
+                            deployMessage = cmd.deployMessage
+                        )
+                    )
+                }
                 currentVersion(funcId)
                     .also { ProjectionCurrent.upsert(this, it) }
                     .also { ProjectionUniqueName.upsert(this, it) }
@@ -103,26 +113,26 @@ class SqliteFuncRepository(
         }
     }
 
-    override fun deployLatest(funcId: FuncId, cmd: CmdId, deployMessage: DeployMessage?): Func {
-        return tx {
-            if (commandAlreadyApplied(cmd, funcId)) {
-                versionOf(funcId, cmd)
-            } else {
-                val last = lastRecordOf(funcId)
-                store(
-                    FuncDeployedRecord(
-                        entityId = funcId,
-                        cmdId = cmd,
-                        deployedVersion = versionOf(funcId, last.sequence())!!.code.version,
-                        deployMessage = deployMessage
-                    )
-                )
-                currentVersion(funcId)
-                    .also { ProjectionCurrent.upsert(this, it) }
-                    .also { ProjectionUniqueName.upsert(this, it) }
-            }
-        }
-    }
+    /*  override fun deployLatest(funcId: FuncId, cmd: CmdId, deployMessage: DeployMessage?): Func {
+          return tx {
+              if (commandAlreadyApplied(cmd, funcId)) {
+                  versionOf(funcId, cmd)
+              } else {
+                  val last = lastRecordOf(funcId)
+                  store(
+                      FuncDeployedRecord(
+                          entityId = funcId,
+                          cmdId = cmd,
+                          deployedVersion = versionOf(funcId, last.sequence())!!.code.version,
+                          deployMessage = deployMessage
+                      )
+                  )
+                  currentVersion(funcId)
+                      .also { ProjectionCurrent.upsert(this, it) }
+                      .also { ProjectionUniqueName.upsert(this, it) }
+              }
+          }
+      }*/
 
     override fun update(funcId: FuncId, cmd: UpdateCmd): Func {
         val cmdId = cmd.id
