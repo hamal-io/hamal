@@ -12,6 +12,7 @@ import io.hamal.repository.sqlite.record.SqliteProjection
 import io.hamal.repository.sqlite.record.SqliteRecordTransaction
 import io.hamal.repository.sqlite.record.protobuf
 import kotlinx.serialization.ExperimentalSerializationApi
+import org.sqlite.SQLiteException
 
 
 @OptIn(ExperimentalSerializationApi::class)
@@ -23,8 +24,7 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
                 data
              FROM
                 current
-            WHERE
-                id  = :id
+            WHERE id  = :id
         """.trimIndent()
         ) {
             query {
@@ -141,7 +141,7 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
                  flow_id        INTEGER NOT NULL,
                  data           BLOB NOT NULL,
                  PRIMARY KEY    (id)
-            );
+        );
         """.trimIndent()
         )
     }

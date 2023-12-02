@@ -61,7 +61,6 @@ class CreateTriggerHandler(
 
             Hook -> {
                 val hook = hookQueryRepository.get(req.hookId!!)
-
                 triggerCmdRepository.create(
                     TriggerCmdRepository.CreateHookCmd(
                         id = req.cmdId(),
@@ -73,7 +72,7 @@ class CreateTriggerHandler(
                         flowId = req.flowId,
                         inputs = req.inputs,
                         hookId = hook.id,
-                        hookMethods = req.hookMethods ?: setOf(Post)
+                        hookMethod = req.hookMethod ?: Post
                     )
                 )
             }

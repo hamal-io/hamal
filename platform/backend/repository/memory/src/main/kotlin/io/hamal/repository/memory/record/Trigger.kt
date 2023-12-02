@@ -1,6 +1,7 @@
 package io.hamal.repository.memory.record
 
 import io.hamal.lib.domain._enum.TriggerStatus
+import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.repository.api.*
 import io.hamal.repository.api.TriggerCmdRepository.*
@@ -9,11 +10,18 @@ import io.hamal.repository.record.trigger.*
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
+
 internal object CurrentTriggerProjection {
 
     private val projection = mutableMapOf<TriggerId, Trigger>()
+    private val uniqueHookTriggers = mutableSetOf<HookTriggerUnique>()
 
     fun apply(trigger: Trigger) {
+
+        if (trigger.type == TriggerType.Hook) {
+            handleHookTrigger(trigger as HookTrigger)
+        }
+
         val currentTrigger = projection[trigger.id]
         projection.remove(trigger.id)
 
@@ -104,6 +112,20 @@ internal object CurrentTriggerProjection {
 
     fun clear() {
         projection.clear()
+        uniqueHookTriggers.clear()
+    }
+
+    private fun handleHookTrigger(trigger: HookTrigger) {
+        val toCheck = HookTriggerUnique(
+            trigger.funcId,
+            trigger.hookId,
+            trigger.hookMethod
+        )
+        require(uniqueHookTriggers.add(toCheck)) { "Trigger already exists" }
+    }
+
+    fun ensureHookUnique(trigger: HookTriggerUnique): Boolean {
+        return uniqueHookTriggers.contains(trigger)
     }
 }
 
@@ -164,11 +186,25 @@ class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord,
     }
 
     override fun create(cmd: CreateHookCmd): HookTrigger {
+
         return lock.withLock {
             val triggerId = cmd.triggerId
             if (commandAlreadyApplied(cmd.id, triggerId)) {
                 versionOf(triggerId, cmd.id) as HookTrigger
             } else {
+
+
+                CurrentTriggerProjection.list(
+                    TriggerQuery(
+                        hookIds = listOf(cmd.hookId)
+                    )
+                ).firstOrNull()?.let { trigger ->
+                    trigger as HookTrigger
+                    if (trigger.funcId == cmd.funcId && trigger.hookMethod == cmd.hookMethod) {
+                        throw IllegalArgumentException("Trigger already exists")
+                    }
+                }
+
                 store(
                     HookTriggerCreatedRecord(
                         cmdId = cmd.id,
@@ -179,7 +215,7 @@ class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord,
                         name = cmd.name,
                         inputs = cmd.inputs,
                         hookId = cmd.hookId,
-                        hookMethods = cmd.hookMethods,
+                        hookMethod = cmd.hookMethod,
                         correlationId = cmd.correlationId,
                         status = cmd.status
                     )

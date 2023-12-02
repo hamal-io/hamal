@@ -75,6 +75,7 @@ class TriggerAdapter(
 
         val flow = flowQueryRepository.get(flowId)
         val func = funcQueryRepository.get(req.funcId)
+
         return TriggerCreateSubmitted(
             type = req.type,
             id = generateDomainId(::ReqId),
@@ -89,7 +90,7 @@ class TriggerAdapter(
             duration = req.duration,
             topicId = req.topicId,
             hookId = req.hookId,
-            hookMethods = req.hookMethods,
+            hookMethod = req.hookMethod,
             cron = req.cron
         ).also(reqCmdRepository::queue).let(responseHandler)
 
@@ -181,3 +182,4 @@ class TriggerAdapter(
         triggerQueryRepository.get(triggerId)
     }
 }
+

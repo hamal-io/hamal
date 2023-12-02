@@ -98,7 +98,7 @@ class TriggerListController(private val listTriggers: TriggerListPort) {
                                     hook = Hook(
                                         id = trigger.hookId,
                                         name = hooks[trigger.hookId]!!.name,
-                                        methods = trigger.hookMethods
+                                        method = trigger.hookMethod
                                     )
                                 )
                             }
@@ -200,7 +200,7 @@ class TriggerListController(private val listTriggers: TriggerListPort) {
                                     hook = Hook(
                                         id = trigger.hookId,
                                         name = hooks[trigger.hookId]!!.name,
-                                        methods = trigger.hookMethods
+                                        method = trigger.hookMethod
                                     )
                                 )
                             }

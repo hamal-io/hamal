@@ -23,7 +23,7 @@ data class TriggerCreateSubmitted(
     val duration: Duration? = null,
     val topicId: TopicId? = null,
     val hookId: HookId? = null,
-    val hookMethods: Set<HookMethod>? = null,
+    val hookMethod: HookMethod? = null,
     val cron: CronPattern? = null
 ) : Submitted
 

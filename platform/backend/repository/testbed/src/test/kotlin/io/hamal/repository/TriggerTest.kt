@@ -2,6 +2,7 @@ package io.hamal.repository
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain._enum.HookMethod.*
 import io.hamal.lib.domain._enum.TriggerStatus.Active
 import io.hamal.lib.domain._enum.TriggerStatus.Inactive
@@ -344,7 +345,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                         )
                     ),
                     hookId = HookId(9),
-                    hookMethods = setOf(Patch, Delete)
+                    hookMethod = Patch
                 )
             )
 
@@ -355,7 +356,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 assertThat(name, equalTo(TriggerName("trigger-name")))
                 assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
                 assertThat(hookId, equalTo(HookId(9)))
-                assertThat(hookMethods, equalTo(setOf(Patch, Delete)))
+                assertThat(hookMethod, equalTo(Patch))
                 assertThat(status, equalTo(Active))
             }
 
@@ -404,7 +405,8 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     triggerId = TriggerId(1),
                     flowId = FlowId(2),
                     groupId = GroupId(3),
-                    name = TriggerName("trigger-name")
+                    name = TriggerName("trigger-name"),
+                    hookMethod = Get
                 )
 
                 val result = create(
@@ -417,7 +419,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                         name = TriggerName("trigger-name"),
                         inputs = TriggerInputs(),
                         hookId = HookId(9),
-                        hookMethods = setOf(Post, Put)
+                        hookMethod = Post
                     )
                 )
 
@@ -429,11 +431,87 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     assertThat(name, equalTo(TriggerName("trigger-name")))
                     assertThat(inputs, equalTo(TriggerInputs()))
                     assertThat(hookId, equalTo(HookId(9)))
-                    assertThat(hookMethods, equalTo(setOf(Post, Put)))
+                    assertThat(hookMethod, equalTo(Post))
                     assertThat(status, equalTo(Active))
                 }
 
                 verifyCount(2)
+            }
+
+        @TestFactory
+        fun `Creates triggers with different hookId, funcId, hookMethod combinations`() =
+            runWith(TriggerRepository::class) {
+            createHookTrigger(
+                triggerId = TriggerId(1),
+                flowId = FlowId(2),
+                groupId = GroupId(1),
+                name = TriggerName("trigger-name-1"),
+                funcId = FuncId(1),
+                hookId = HookId(1),
+                hookMethod = Get
+            )
+
+            createHookTrigger(
+                triggerId = TriggerId(2),
+                flowId = FlowId(2),
+                groupId = GroupId(1),
+                name = TriggerName("trigger-name-2"),
+                funcId = FuncId(1),
+                hookId = HookId(1),
+                hookMethod = Post
+            )
+
+            createHookTrigger(
+                triggerId = TriggerId(3),
+                flowId = FlowId(2),
+                groupId = GroupId(1),
+                name = TriggerName("trigger-name-3"),
+                funcId = FuncId(1),
+                hookId = HookId(2),
+                hookMethod = Get
+            )
+
+            createHookTrigger(
+                triggerId = TriggerId(4),
+                flowId = FlowId(2),
+                groupId = GroupId(1),
+                name = TriggerName("trigger-name-4"),
+                funcId = FuncId(2),
+                hookId = HookId(1),
+                hookMethod = Get
+            )
+
+            verifyCount(4)
+        }
+
+
+        @TestFactory
+        fun `Tries to create a trigger when hookId, funcId, hookMethod already exist`() =
+            runWith(TriggerRepository::class) {
+                createHookTrigger(
+                    triggerId = TriggerId(1),
+                    flowId = FlowId(2),
+                    groupId = GroupId(1),
+                    name = TriggerName("trigger-name-1"),
+                    funcId = FuncId(1),
+                    hookId = HookId(1),
+                    hookMethod = Get
+                )
+
+                val exception = assertThrows<IllegalArgumentException> {
+                    createHookTrigger(
+                        triggerId = TriggerId(2),
+                        flowId = FlowId(2),
+                        groupId = GroupId(1),
+                        name = TriggerName("other-trigger"),
+                        funcId = FuncId(1),
+                        hookId = HookId(1),
+                        hookMethod = Get
+                    )
+                }
+                assertThat(exception.message, equalTo("Trigger already exists"))
+                assertThat(find(TriggerId(1)), notNullValue())
+                verifyCount(1)
             }
 
         @TestFactory
@@ -459,7 +537,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                         name = TriggerName("second-trigger-name"),
                         inputs = TriggerInputs(),
                         hookId = HookId(999),
-                        hookMethods = setOf(Get)
+                        hookMethod = Get
                     )
                 )
 
@@ -691,6 +769,8 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
             with(get(TriggerId(2)) as FixedRateTrigger) {
                 assertThat(id, equalTo(TriggerId(2)))
                 assertThat(funcId, equalTo(FuncId(3)))
+
+
                 assertThat(flowId, equalTo(FlowId(5)))
                 assertThat(name, equalTo(TriggerName("trigger-name")))
                 assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
@@ -1080,13 +1160,14 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
     }
 
     private fun TriggerRepository.createHookTrigger(
+        cmdId: CmdId = CmdGen(),
         triggerId: TriggerId,
         flowId: FlowId,
         name: TriggerName,
         groupId: GroupId,
         funcId: FuncId = FuncId(4),
         hookId: HookId = HookId(9),
-        cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
+        hookMethod: HookMethod = Post
     ) {
         create(
             CreateHookCmd(
@@ -1104,7 +1185,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 ),
                 funcId = funcId,
                 hookId = hookId,
-                hookMethods = setOf(Post)
+                hookMethod = hookMethod
             )
         )
     }

@@ -15,6 +15,6 @@ interface CreateTriggerReq {
     val duration: Duration?
     val topicId: TopicId?
     val hookId: HookId?
-    val hookMethods: Set<HookMethod>?
+    val hookMethod: HookMethod?
     val cron: CronPattern?
 }
