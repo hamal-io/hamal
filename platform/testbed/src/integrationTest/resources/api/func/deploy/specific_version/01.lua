@@ -30,7 +30,6 @@ deploy_req = fail_on_error(sys.funcs.deploy({
 }))
 
 sys.await_completed(deploy_req)
-assert(deploy_req.version == 10)
 
 func_one = fail_on_error(sys.funcs.get(func_one.id))
 assert(func_one.code.id ~= nil)

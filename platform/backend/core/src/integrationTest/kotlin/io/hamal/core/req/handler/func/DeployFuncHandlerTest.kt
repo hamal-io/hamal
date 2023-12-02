@@ -18,7 +18,16 @@ internal class DeployFuncHandlerTest : BaseReqHandlerTest() {
     fun `Deploys version`() {
         setup(CodeId(5))
 
-        testInstance(submittedFuncDeployReq)
+        testInstance(
+            FuncDeploySubmitted(
+                id = ReqId(500),
+                status = Submitted,
+                groupId = testGroup.id,
+                FuncId(1),
+                versionToDeploy = CodeVersion(10),
+                deployMessage = null
+            )
+        )
 
         with(funcQueryRepository.get(FuncId(1))) {
             assertThat(code.version, equalTo(CodeVersion(20)))
@@ -26,16 +35,27 @@ internal class DeployFuncHandlerTest : BaseReqHandlerTest() {
         }
     }
 
-    private val submittedFuncDeployReq by lazy {
-        FuncDeploySubmitted(
-            id = ReqId(500),
-            status = Submitted,
-            groupId = testGroup.id,
-            FuncId(1),
-            versionToDeploy = CodeVersion(10)
-        )
-    }
 
+    @Test
+    fun `Deploys latest version`() {
+        setup(CodeId(5))
+
+        testInstance(
+            FuncDeploySubmitted(
+                id = ReqId(500),
+                status = Submitted,
+                groupId = testGroup.id,
+                funcId = FuncId(1),
+                versionToDeploy = null,
+                deployMessage = null
+            )
+        )
+
+        with(funcQueryRepository.get(FuncId(1))) {
+            assertThat(code.version, equalTo(CodeVersion(20)))
+            assertThat(code.deployedVersion, equalTo(CodeVersion(20)))
+        }
+    }
 
     private fun setup(codeId: CodeId) {
         codeCmdRepository.create(

@@ -19,23 +19,6 @@ internal class FuncDeployController(
     private val deploy: FuncDeployPort,
 ) {
 
-    /*    @PostMapping("/v1/funcs/{funcId}/deploy/latest")
-        fun deployLatest(
-            @PathVariable("funcId") funcId: FuncId,
-            @RequestBody req: ApiFuncDeployReq
-        ): ResponseEntity<ApiSubmitted> = retry {
-            deploy(funcId, req, FuncDeployLatestSubmitted::accepted)
-        }
-
-
-        @PostMapping("/v1/funcs/{funcId}/deploy/{version}")
-        fun deploy(
-            @PathVariable("funcId") funcId: FuncId,
-            @PathVariable("version") codeVersion: CodeVersion,
-        ): ResponseEntity<ApiSubmitted> = retry {
-            deploy(funcId, codeVersion, FuncDeploySubmitted::accepted)
-        }*/
-
     @PostMapping("/v1/funcs/{funcId}/deploy/")
     fun deploy(
         @PathVariable("funcId") funcId: FuncId,
@@ -43,6 +26,4 @@ internal class FuncDeployController(
     ): ResponseEntity<ApiSubmitted> = retry {
         deploy(funcId, req, FuncDeploySubmitted::accepted)
     }
-
-
 }

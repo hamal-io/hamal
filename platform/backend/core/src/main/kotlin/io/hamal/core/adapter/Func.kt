@@ -43,12 +43,6 @@ interface FuncListPort {
 }
 
 interface FuncDeployPort {
-    /* operator fun <T : Any> invoke(
-         funcId: FuncId,
-         versionToDeploy: CodeVersion,
-         responseHandler: (FuncDeploySubmitted) -> T
-     ): T*/
-
     operator fun <T : Any> invoke(
         funcId: FuncId,
         req: FuncDeployReq,
@@ -180,22 +174,6 @@ class FuncAdapter(
             code = req.code
         ).also(reqCmdRepository::queue).let(responseHandler)
     }
-
-    /* override fun <T : Any> invoke(
-         funcId: FuncId,
-         versionToDeploy: CodeVersion,
-         responseHandler: (FuncDeploySubmitted) -> T
-     ): T {
-         val func = funcQueryRepository.get(funcId)
-         val code = codeQueryRepository.get(func.code.id, versionToDeploy)
-         return FuncDeploySubmitted(
-             id = generateDomainId(::ReqId),
-             status = ReqStatus.Submitted,
-             groupId = func.groupId,
-             funcId = funcId,
-             versionToDeploy = code.version
-         ).also(reqCmdRepository::queue).let(responseHandler)
-     }*/
 
     override fun <T : Any> invoke(
         funcId: FuncId,

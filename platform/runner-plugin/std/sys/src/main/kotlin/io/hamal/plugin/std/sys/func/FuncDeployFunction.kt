@@ -57,7 +57,7 @@ class FuncDeployFunction(
     }
 }
 /*
-
+wip
 private inline fun <reified T : SerializableType> isPresent(map: MapType, key: String, trf: (String) -> T) : Any?{
     return if (map.type(key) == T::class){
         trf(key)
@@ -66,35 +66,3 @@ private inline fun <reified T : SerializableType> isPresent(map: MapType, key: S
     }
 }
 */
-
-/*
-class FuncDeployLatestFunction(
-    private val sdk: ApiSdk
-) : Function1In2Out<MapType, ErrorType, MapType>(
-    FunctionInput1Schema(MapType::class),
-    FunctionOutput2Schema(ErrorType::class, MapType::class)
-) {
-    override fun invoke(ctx: FunctionContext, arg1: MapType): Pair<ErrorType?, MapType?> {
-        return try {
-
-            val message = if (arg1.type("message") == StringType::class) {
-                ApiFuncDeployReq(DeployMessage(arg1.getString("message")))
-            } else {
-                ApiFuncDeployReq(null)
-            }
-
-            val res = sdk.func.deployLatest(FuncId(arg1.getString("func_id")), message)
-
-
-            null to MapType(
-                mutableMapOf(
-                    "id" to StringType(res.id.value.value.toString(16)),
-                    "status" to StringType(res.status.name),
-                    "func_id" to StringType(res.funcId.value.value.toString(16))
-                )
-            )
-        } catch (t: Throwable) {
-            ErrorType(t.message!!) to null
-        }
-    }
-}*/

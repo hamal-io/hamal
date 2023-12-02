@@ -35,7 +35,6 @@ private fun DeployFuncHandler.deployVersion(req: FuncDeploySubmitted): Func {
     )
 }
 
-
 private fun DeployFuncHandler.emitEvent(cmdId: CmdId, func: Func) {
     eventEmitter.emit(cmdId, FuncDeployedEvent(func))
 }
