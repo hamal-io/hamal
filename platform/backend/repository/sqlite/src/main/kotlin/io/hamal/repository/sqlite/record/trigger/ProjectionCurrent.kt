@@ -12,6 +12,7 @@ import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 import io.hamal.repository.sqlite.record.protobuf
 import kotlinx.serialization.ExperimentalSerializationApi
+import org.sqlite.SQLiteException
 
 
 @OptIn(ExperimentalSerializationApi::class)

@@ -47,7 +47,7 @@ const OnboardingPage: FC = () => {
     useEffect(() => {
         const abortController = new AbortController()
         if (flow != null) {
-            adhoc(flow.flowId, `sys = require_plugin('sys')
+            adhoc(flow.flowId, `sys = require('sys')
                 sys.funcs.create({
                     name = 'Hello-World',
                     inputs = {},
