@@ -118,25 +118,6 @@ class MemoryFuncRepository : MemoryRecordRepository<FuncId, FuncRecord, Func>(
         }
     }
 
-    /* override fun deployLatest(funcId: FuncId, cmd: DeployCmd): Func {
-         return lock.withLock {
-             if (commandAlreadyApplied(cmd, funcId)) {
-                 versionOf(funcId, cmd)
-             } else {
-                 val last = lastRecordOf(funcId)
-                 store(
-                     FuncDeployedRecord(
-                         entityId = funcId,
-                         cmdId = cmd,
-                         deployedVersion = versionOf(funcId, last.sequence())!!.code.version,
-                         deployMessage = deployMessage
-                     )
-                 )
-                 (currentVersion(funcId)).also(CurrentFuncProjection::apply)
-             }
-         }
-     }*/
-
     override fun update(funcId: FuncId, cmd: UpdateCmd): Func {
         return lock.withLock {
             if (commandAlreadyApplied(cmd.id, funcId)) {

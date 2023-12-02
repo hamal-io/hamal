@@ -113,27 +113,6 @@ class SqliteFuncRepository(
         }
     }
 
-    /*  override fun deployLatest(funcId: FuncId, cmd: CmdId, deployMessage: DeployMessage?): Func {
-          return tx {
-              if (commandAlreadyApplied(cmd, funcId)) {
-                  versionOf(funcId, cmd)
-              } else {
-                  val last = lastRecordOf(funcId)
-                  store(
-                      FuncDeployedRecord(
-                          entityId = funcId,
-                          cmdId = cmd,
-                          deployedVersion = versionOf(funcId, last.sequence())!!.code.version,
-                          deployMessage = deployMessage
-                      )
-                  )
-                  currentVersion(funcId)
-                      .also { ProjectionCurrent.upsert(this, it) }
-                      .also { ProjectionUniqueName.upsert(this, it) }
-              }
-          }
-      }*/
-
     override fun update(funcId: FuncId, cmd: UpdateCmd): Func {
         val cmdId = cmd.id
         return tx {
