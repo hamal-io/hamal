@@ -113,7 +113,7 @@ class FuncMemoryRepository : RecordMemoryRepository<FuncId, FuncRecord, Func>(
                         )
                     )
                 }
-                (currentVersion(funcId)).also(CurrentFuncProjection::apply)
+                (currentVersion(funcId)).also(FuncCurrentProjection::apply)
             }
         }
     }
