@@ -100,9 +100,7 @@ class TriggerListFunction(
                                         mutableMapOf(
                                             "id" to StringType(trigger.hook.id.value.value.toString(16)),
                                             "name" to StringType(trigger.hook.name.value),
-                                            "methods" to ArrayType(trigger.hook.methods.mapIndexed { methodIndex, hookMethod ->
-                                                methodIndex + 1 to StringType(hookMethod.name)
-                                            }.toMap().toMutableMap())
+                                            "methods" to StringType(trigger.hook.method.name)
                                         )
                                     ),
                                 )

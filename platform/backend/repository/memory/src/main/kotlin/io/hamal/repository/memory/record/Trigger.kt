@@ -1,6 +1,7 @@
 package io.hamal.repository.memory.record
 
 import io.hamal.lib.domain._enum.TriggerStatus
+import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.repository.api.*
 import io.hamal.repository.api.TriggerCmdRepository.*
@@ -9,11 +10,18 @@ import io.hamal.repository.record.trigger.*
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
-internal object CurrentTriggerProjection {
+
+private object TriggerCurrentProjection {
 
     private val projection = mutableMapOf<TriggerId, Trigger>()
+    private val uniqueHookTriggers = mutableSetOf<HookTriggerUnique>()
 
     fun apply(trigger: Trigger) {
+
+        if (trigger.type == TriggerType.Hook) {
+            handleHookTrigger(trigger as HookTrigger)
+        }
+
         val currentTrigger = projection[trigger.id]
         projection.remove(trigger.id)
 
@@ -104,11 +112,21 @@ internal object CurrentTriggerProjection {
 
     fun clear() {
         projection.clear()
+        uniqueHookTriggers.clear()
+    }
+
+    private fun handleHookTrigger(trigger: HookTrigger) {
+        val toCheck = HookTriggerUnique(
+            trigger.funcId,
+            trigger.hookId,
+            trigger.hookMethod
+        )
+        require(uniqueHookTriggers.add(toCheck)) { "Trigger already exists" }
     }
 }
 
 
-class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord, Trigger>(
+class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord, Trigger>(
     createDomainObject = CreateTriggerFromRecords,
     recordClass = TriggerRecord::class
 ), TriggerRepository {
@@ -134,7 +152,7 @@ class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord,
                     status = cmd.status
                 )
             )
-            (currentVersion(triggerId) as FixedRateTrigger).also(CurrentTriggerProjection::apply)
+            (currentVersion(triggerId) as FixedRateTrigger).also(TriggerCurrentProjection::apply)
         }
     }
 
@@ -158,17 +176,30 @@ class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord,
                         status = cmd.status
                     )
                 )
-                (currentVersion(triggerId) as EventTrigger).also(CurrentTriggerProjection::apply)
+                (currentVersion(triggerId) as EventTrigger).also(TriggerCurrentProjection::apply)
             }
         }
     }
 
     override fun create(cmd: CreateHookCmd): HookTrigger {
+
         return lock.withLock {
             val triggerId = cmd.triggerId
             if (commandAlreadyApplied(cmd.id, triggerId)) {
                 versionOf(triggerId, cmd.id) as HookTrigger
             } else {
+
+                TriggerCurrentProjection.list(
+                    TriggerQuery(
+                        hookIds = listOf(cmd.hookId)
+                    )
+                ).firstOrNull()?.let { trigger ->
+                    trigger as HookTrigger
+                    if (trigger.funcId == cmd.funcId && trigger.hookMethod == cmd.hookMethod) {
+                        throw IllegalArgumentException("Trigger already exists")
+                    }
+                }
+
                 store(
                     HookTriggerCreatedRecord(
                         cmdId = cmd.id,
@@ -179,12 +210,12 @@ class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord,
                         name = cmd.name,
                         inputs = cmd.inputs,
                         hookId = cmd.hookId,
-                        hookMethods = cmd.hookMethods,
+                        hookMethod = cmd.hookMethod,
                         correlationId = cmd.correlationId,
                         status = cmd.status
                     )
                 )
-                (currentVersion(triggerId) as HookTrigger).also(CurrentTriggerProjection::apply)
+                (currentVersion(triggerId) as HookTrigger).also(TriggerCurrentProjection::apply)
             }
         }
     }
@@ -209,7 +240,7 @@ class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord,
                         status = cmd.status
                     )
                 )
-                (currentVersion(triggerId) as CronTrigger).also(CurrentTriggerProjection::apply)
+                (currentVersion(triggerId) as CronTrigger).also(TriggerCurrentProjection::apply)
             }
         }
     }
@@ -231,21 +262,21 @@ class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord,
                     )
                 }
                 store(rec)
-                currentVersion(triggerId).also(CurrentTriggerProjection::apply)
+                currentVersion(triggerId).also(TriggerCurrentProjection::apply)
             }
         }
     }
 
-    override fun find(triggerId: TriggerId) = lock.withLock { CurrentTriggerProjection.find(triggerId) }
+    override fun find(triggerId: TriggerId) = lock.withLock { TriggerCurrentProjection.find(triggerId) }
 
-    override fun list(query: TriggerQuery): List<Trigger> = lock.withLock { CurrentTriggerProjection.list(query) }
+    override fun list(query: TriggerQuery): List<Trigger> = lock.withLock { TriggerCurrentProjection.list(query) }
 
-    override fun count(query: TriggerQuery): ULong = lock.withLock { CurrentTriggerProjection.count(query) }
+    override fun count(query: TriggerQuery): ULong = lock.withLock { TriggerCurrentProjection.count(query) }
 
     override fun clear() {
         lock.withLock {
             super.clear()
-            CurrentTriggerProjection.clear()
+            TriggerCurrentProjection.clear()
         }
     }
 

@@ -8,14 +8,14 @@ import io.hamal.repository.api.HookTrigger
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import io.hamal.repository.record.trigger.TriggerRecord
-import io.hamal.repository.sqlite.record.SqliteProjection
-import io.hamal.repository.sqlite.record.SqliteRecordTransaction
+import io.hamal.repository.sqlite.record.ProjectionSqlite
+import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 import io.hamal.repository.sqlite.record.protobuf
 import kotlinx.serialization.ExperimentalSerializationApi
 
 
 @OptIn(ExperimentalSerializationApi::class)
-internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, Trigger> {
+internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, Trigger> {
     fun find(connection: Connection, triggerId: TriggerId): Trigger? {
         return connection.executeQueryOne(
             """
@@ -23,8 +23,7 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
                 data
              FROM
                 current
-            WHERE
-                id  = :id
+            WHERE id  = :id
         """.trimIndent()
         ) {
             query {
@@ -99,7 +98,7 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
         } ?: 0UL
     }
 
-    override fun upsert(tx: SqliteRecordTransaction<TriggerId, TriggerRecord, Trigger>, obj: Trigger) {
+    override fun upsert(tx: RecordTransactionSqlite<TriggerId, TriggerRecord, Trigger>, obj: Trigger) {
         tx.execute(
             """
                 INSERT OR REPLACE INTO current
@@ -141,7 +140,7 @@ internal object ProjectionCurrent : SqliteProjection<TriggerId, TriggerRecord, T
                  flow_id        INTEGER NOT NULL,
                  data           BLOB NOT NULL,
                  PRIMARY KEY    (id)
-            );
+        );
         """.trimIndent()
         )
     }

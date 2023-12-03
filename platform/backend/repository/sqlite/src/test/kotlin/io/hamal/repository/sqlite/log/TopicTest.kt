@@ -1,8 +1,8 @@
 package io.hamal.repository.sqlite.log
 
 import io.hamal.lib.common.util.FileUtils
-import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.FlowId
+import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.repository.api.log.Topic
@@ -14,7 +14,7 @@ import kotlin.io.path.Path
 import kotlin.io.path.pathString
 
 
-class SqliteTopicRepositoryTest {
+class TopicSqliteRepositoryTest {
     @Nested
     inner class ConstructorTest {
         @BeforeEach
@@ -27,7 +27,7 @@ class SqliteTopicRepositoryTest {
         fun `Creates a directory if path does not exists yet and populates with a partition`() {
             val targetDir = Path(testDir, "another-path", "more-nesting")
 
-            SqliteTopicRepository(
+            TopicSqliteRepository(
                 Topic(
                     id = TopicId(23),
                     name = TopicName("test-topic"),

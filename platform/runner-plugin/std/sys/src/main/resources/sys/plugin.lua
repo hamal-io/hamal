@@ -27,20 +27,25 @@ function plugin()
 
         function export.await(cmd)
             -- FIXME if cmd is string use it directly
-            local err, res = internal.await(cmd.id)
-            return err, res
+            internal.await(cmd.id)
         end
 
         function export.await_completed(cmd)
             -- FIXME if cmd is string use it directly
-            local err, res = internal.await_completed(cmd.id)
-            return err, res
+            local err = internal.await_completed(cmd.id)
+            if (err ~= nil) then
+                error(err.message)
+            end
+            return err
         end
 
         function export.await_failed(cmd)
             -- FIXME if cmd is string use it directly
-            local err, res = internal.await_failed(cmd.id)
-            return err, res
+            local err = internal.await_failed(cmd.id)
+            if (err ~= nil) then
+                error(err.message)
+            end
+            return err
         end
 
         function export.codes.get(code_id, code_version)
@@ -271,7 +276,7 @@ function plugin()
                 func_id = cmd.func_id,
                 inputs = cmd.inputs or {},
                 hook_id = cmd.hook_id,
-                hook_methods = cmd.hook_methods or {}
+                hook_method = cmd.hook_method
             })
         end
 

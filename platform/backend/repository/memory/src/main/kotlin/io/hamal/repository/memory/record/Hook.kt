@@ -12,7 +12,7 @@ import io.hamal.repository.record.hook.HookUpdatedRecord
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
-internal object CurrentHookProjection {
+private object HookCurrentProjection {
     private val projection = mutableMapOf<HookId, Hook>()
     fun apply(hook: Hook) {
         val currentHook = projection[hook.id]
@@ -60,7 +60,7 @@ internal object CurrentHookProjection {
     }
 }
 
-class MemoryHookRepository : MemoryRecordRepository<HookId, HookRecord, Hook>(
+class HookMemoryRepository : RecordMemoryRepository<HookId, HookRecord, Hook>(
     createDomainObject = CreateHookFromRecords,
     recordClass = HookRecord::class
 ), HookRepository {
@@ -81,7 +81,7 @@ class MemoryHookRepository : MemoryRecordRepository<HookId, HookRecord, Hook>(
                         name = cmd.name
                     )
                 )
-                (currentVersion(hookId)).also(CurrentHookProjection::apply)
+                (currentVersion(hookId)).also(HookCurrentProjection::apply)
             }
         }
     }
@@ -99,21 +99,21 @@ class MemoryHookRepository : MemoryRecordRepository<HookId, HookRecord, Hook>(
                         name = cmd.name ?: currentVersion.name
                     )
                 )
-                (currentVersion(hookId)).also(CurrentHookProjection::apply)
+                (currentVersion(hookId)).also(HookCurrentProjection::apply)
             }
         }
     }
 
-    override fun find(hookId: HookId): Hook? = lock.withLock { CurrentHookProjection.find(hookId) }
+    override fun find(hookId: HookId): Hook? = lock.withLock { HookCurrentProjection.find(hookId) }
 
-    override fun list(query: HookQuery): List<Hook> = lock.withLock { CurrentHookProjection.list(query) }
+    override fun list(query: HookQuery): List<Hook> = lock.withLock { HookCurrentProjection.list(query) }
 
-    override fun count(query: HookQuery): ULong = lock.withLock { CurrentHookProjection.count(query) }
+    override fun count(query: HookQuery): ULong = lock.withLock { HookCurrentProjection.count(query) }
 
     override fun clear() {
         lock.withLock {
             super.clear()
-            CurrentHookProjection.clear()
+            HookCurrentProjection.clear()
         }
     }
 

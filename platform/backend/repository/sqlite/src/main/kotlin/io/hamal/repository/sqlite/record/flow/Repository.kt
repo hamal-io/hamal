@@ -39,7 +39,7 @@ internal object CreateFlow : CreateDomainObject<FlowId, FlowRecord, Flow> {
     }
 }
 
-class SqliteFlowRepository(
+class FlowSqliteRepository(
     config: Config
 ) : SqliteRecordRepository<FlowId, FlowRecord, Flow>(
     config = config,

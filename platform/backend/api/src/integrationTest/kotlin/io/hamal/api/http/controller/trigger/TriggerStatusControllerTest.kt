@@ -18,8 +18,10 @@ internal class TriggerStatusControllerTest : TriggerBaseControllerTest() {
 
     @Test
     fun `Default status is active`() {
-        val triggerId = createFixedRateTrigger(
-            name = TriggerName("trigger")
+        val triggerId = awaitCompleted(
+            createFixedRateTrigger(
+                name = TriggerName("trigger")
+            )
         ).triggerId
         with(getTrigger(triggerId)) {
             assertThat(id, equalTo(triggerId))
@@ -31,9 +33,12 @@ internal class TriggerStatusControllerTest : TriggerBaseControllerTest() {
 
     @Test
     fun `Deactivates a trigger`() {
-        val triggerId = createFixedRateTrigger(
-            name = TriggerName("trigger")
+        val triggerId = awaitCompleted(
+            createFixedRateTrigger(
+                name = TriggerName("trigger")
+            )
         ).triggerId
+
         awaitCompleted(deactivateTrigger(triggerId))
 
         with(getTrigger(triggerId)) {
@@ -55,9 +60,12 @@ internal class TriggerStatusControllerTest : TriggerBaseControllerTest() {
 
     @Test
     fun `Activates an active trigger`() {
-        val triggerId = createFixedRateTrigger(
-            name = TriggerName("trigger")
+        val triggerId = awaitCompleted(
+            createFixedRateTrigger(
+                name = TriggerName("trigger")
+            )
         ).triggerId
+
         awaitCompleted(activateTrigger(triggerId))
 
         with(getTrigger(triggerId)) {

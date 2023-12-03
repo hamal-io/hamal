@@ -56,7 +56,7 @@ interface TriggerCmdRepository : CmdRepository {
         val flowId: FlowId,
         val inputs: TriggerInputs,
         val hookId: HookId,
-        val hookMethods: Set<HookMethod>,
+        val hookMethod: HookMethod,
         val correlationId: CorrelationId? = null,
         val status: TriggerStatus = TriggerStatus.Active
     )
@@ -83,7 +83,6 @@ interface TriggerCmdRepository : CmdRepository {
 interface TriggerQueryRepository {
     fun get(triggerId: TriggerId) = find(triggerId) ?: throw NoSuchElementException("Trigger not found")
     fun find(triggerId: TriggerId): Trigger?
-
     fun list(query: TriggerQuery): List<Trigger>
     fun count(query: TriggerQuery): ULong
 
@@ -161,10 +160,16 @@ class HookTrigger(
     override val status: TriggerStatus,
     override val correlationId: CorrelationId? = null,
     val hookId: HookId,
-    val hookMethods: Set<HookMethod>
+    val hookMethod: HookMethod
 ) : Trigger {
     override val type = TriggerType.Hook
 }
+
+data class HookTriggerUnique(
+    val funcId: FuncId,
+    val hookId: HookId,
+    val hookMethod: HookMethod
+)
 
 @Serializable
 class CronTrigger(

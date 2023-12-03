@@ -33,7 +33,7 @@ internal object CreateFunc : CreateDomainObject<FuncId, FuncRecord, Func> {
     }
 }
 
-class SqliteFuncRepository(
+class FuncSqliteRepository(
     config: Config
 ) : SqliteRecordRepository<FuncId, FuncRecord, Func>(
     config = config,

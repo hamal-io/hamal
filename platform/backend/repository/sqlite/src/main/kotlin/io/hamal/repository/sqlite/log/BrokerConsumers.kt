@@ -8,12 +8,12 @@ import io.hamal.repository.api.log.ChunkId
 import io.hamal.repository.api.log.ConsumerId
 import java.nio.file.Path
 
-data class SqliteBrokerConsumers(
+data class BrokerConsumersSqlite(
     val path: Path
 )
 
-class SqliteBrokerConsumersRepository(
-    internal val brokerConsumers: SqliteBrokerConsumers,
+class BrokerConsumersSqliteRepository(
+    internal val brokerConsumers: BrokerConsumersSqlite,
 ) : SqliteBaseRepository(
     object : Config {
         override val path: Path get() = brokerConsumers.path

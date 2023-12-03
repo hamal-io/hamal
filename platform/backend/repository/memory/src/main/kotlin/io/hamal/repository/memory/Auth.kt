@@ -12,7 +12,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock
 import kotlin.concurrent.read
 import kotlin.concurrent.write
 
-class MemoryAuthRepository : AuthRepository {
+class AuthMemoryRepository : AuthRepository {
     private val lock = ReentrantReadWriteLock()
 
     private val projection = mutableMapOf<AccountId, MutableList<Auth>>()

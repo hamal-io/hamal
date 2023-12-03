@@ -9,7 +9,7 @@ import kotlinx.serialization.protobuf.ProtoBuf
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
-class MemoryReqRepository : ReqRepository {
+class ReqMemoryRepository : ReqRepository {
 
     val queue = mutableListOf<ReqId>()
     val store = mutableMapOf<ReqId, ByteArray>()

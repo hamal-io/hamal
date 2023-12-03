@@ -7,16 +7,16 @@ import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Group
 import io.hamal.repository.api.GroupQueryRepository.GroupQuery
 import io.hamal.repository.record.group.GroupRecord
-import io.hamal.repository.sqlite.record.SqliteProjection
-import io.hamal.repository.sqlite.record.SqliteRecordTransaction
+import io.hamal.repository.sqlite.record.ProjectionSqlite
+import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 import io.hamal.repository.sqlite.record.protobuf
 import kotlinx.serialization.ExperimentalSerializationApi
 import org.sqlite.SQLiteException
 
 
 @OptIn(ExperimentalSerializationApi::class)
-internal object ProjectionCurrent : SqliteProjection<GroupId, GroupRecord, Group> {
-    override fun upsert(tx: SqliteRecordTransaction<GroupId, GroupRecord, Group>, obj: Group) {
+internal object ProjectionCurrent : ProjectionSqlite<GroupId, GroupRecord, Group> {
+    override fun upsert(tx: RecordTransactionSqlite<GroupId, GroupRecord, Group>, obj: Group) {
         try {
             tx.execute(
                 """
@@ -37,7 +37,7 @@ internal object ProjectionCurrent : SqliteProjection<GroupId, GroupRecord, Group
         }
     }
 
-    private fun find(tx: SqliteRecordTransaction<GroupId, GroupRecord, Group>, groupName: GroupName): Group? {
+    private fun find(tx: RecordTransactionSqlite<GroupId, GroupRecord, Group>, groupName: GroupName): Group? {
         return tx.executeQueryOne(
             """
                 SELECT 

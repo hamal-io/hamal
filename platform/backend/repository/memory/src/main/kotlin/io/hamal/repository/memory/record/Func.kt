@@ -9,7 +9,7 @@ import io.hamal.repository.record.func.*
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
-internal object CurrentFuncProjection {
+private object FuncCurrentProjection {
     private val projection = mutableMapOf<FuncId, Func>()
     fun apply(func: Func) {
         val currentFunc = projection[func.id]
@@ -57,7 +57,7 @@ internal object CurrentFuncProjection {
     }
 }
 
-class MemoryFuncRepository : MemoryRecordRepository<FuncId, FuncRecord, Func>(
+class FuncMemoryRepository : RecordMemoryRepository<FuncId, FuncRecord, Func>(
     createDomainObject = CreateFuncFromRecords,
     recordClass = FuncRecord::class
 ), FuncRepository {
@@ -81,7 +81,7 @@ class MemoryFuncRepository : MemoryRecordRepository<FuncId, FuncRecord, Func>(
                         codeVersion = cmd.codeVersion
                     )
                 )
-                (currentVersion(funcId)).also(CurrentFuncProjection::apply)
+                (currentVersion(funcId)).also(FuncCurrentProjection::apply)
             }
         }
     }
@@ -133,21 +133,21 @@ class MemoryFuncRepository : MemoryRecordRepository<FuncId, FuncRecord, Func>(
                         codeVersion = cmd.codeVersion ?: currentVersion.code.version
                     )
                 )
-                (currentVersion(funcId)).also(CurrentFuncProjection::apply)
+                (currentVersion(funcId)).also(FuncCurrentProjection::apply)
             }
         }
     }
 
-    override fun find(funcId: FuncId): Func? = lock.withLock { CurrentFuncProjection.find(funcId) }
+    override fun find(funcId: FuncId): Func? = lock.withLock { FuncCurrentProjection.find(funcId) }
 
-    override fun list(query: FuncQuery): List<Func> = lock.withLock { CurrentFuncProjection.list(query) }
+    override fun list(query: FuncQuery): List<Func> = lock.withLock { FuncCurrentProjection.list(query) }
 
-    override fun count(query: FuncQuery): ULong = lock.withLock { CurrentFuncProjection.count(query) }
+    override fun count(query: FuncQuery): ULong = lock.withLock { FuncCurrentProjection.count(query) }
 
     override fun clear() {
         lock.withLock {
             super.clear()
-            CurrentFuncProjection.clear()
+            FuncCurrentProjection.clear()
         }
     }
 

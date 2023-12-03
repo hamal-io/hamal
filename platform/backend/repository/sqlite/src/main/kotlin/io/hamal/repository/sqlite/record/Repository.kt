@@ -13,7 +13,7 @@ abstract class SqliteRecordRepository<ID : DomainId, RECORD : Record<ID>, OBJ : 
     config: Config,
     private val createDomainObject: CreateDomainObject<ID, RECORD, OBJ>,
     private val recordClass: KClass<RECORD>,
-    private val projections: List<SqliteProjection<ID, RECORD, OBJ>>
+    private val projections: List<ProjectionSqlite<ID, RECORD, OBJ>>
 
 ) : SqliteBaseRepository(object : Config {
     override val path = config.path
@@ -65,10 +65,10 @@ abstract class SqliteRecordRepository<ID : DomainId, RECORD : Record<ID>, OBJ : 
         }
     }
 
-    fun <T> tx(block: SqliteRecordTransaction<ID, RECORD, OBJ>.() -> T): T {
+    fun <T> tx(block: RecordTransactionSqlite<ID, RECORD, OBJ>.() -> T): T {
         return connection.tx {
             block(
-                SqliteRecordTransaction(
+                RecordTransactionSqlite(
                     createDomainObject,
                     recordClass,
                     this,

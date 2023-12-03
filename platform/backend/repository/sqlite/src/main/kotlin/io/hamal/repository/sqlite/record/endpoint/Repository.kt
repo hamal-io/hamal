@@ -37,7 +37,7 @@ internal object CreateEndpoint : CreateDomainObject<EndpointId, EndpointRecord, 
     }
 }
 
-class SqliteEndpointRepository(
+class EndpointSqliteRepository(
     config: Config
 ) : SqliteRecordRepository<EndpointId, EndpointRecord, Endpoint>(
     config = config,

@@ -38,13 +38,13 @@ internal object CreateTrigger : CreateDomainObject<TriggerId, TriggerRecord, Tri
     }
 }
 
-class SqliteTriggerRepository(
+class TriggerSqliteRepository(
     config: Config
 ) : SqliteRecordRepository<TriggerId, TriggerRecord, Trigger>(
     config = config,
     createDomainObject = CreateTrigger,
     recordClass = TriggerRecord::class,
-    projections = listOf(ProjectionCurrent, ProjectionUniqueName)
+    projections = listOf(ProjectionCurrent, ProjectionUniqueName, ProjectionUniqueHook)
 ), TriggerRepository {
 
     data class Config(
@@ -118,6 +118,7 @@ class SqliteTriggerRepository(
             if (commandAlreadyApplied(cmdId, triggerId)) {
                 versionOf(triggerId, cmdId) as HookTrigger
             } else {
+
                 store(
                     HookTriggerCreatedRecord(
                         cmdId = cmdId,
@@ -128,7 +129,7 @@ class SqliteTriggerRepository(
                         name = cmd.name,
                         inputs = cmd.inputs,
                         hookId = cmd.hookId,
-                        hookMethods = cmd.hookMethods,
+                        hookMethod = cmd.hookMethod,
                         status = cmd.status,
                         correlationId = cmd.correlationId
                     )
@@ -137,6 +138,7 @@ class SqliteTriggerRepository(
                 (currentVersion(triggerId) as HookTrigger)
                     .also { ProjectionCurrent.upsert(this, it) }
                     .also { ProjectionUniqueName.upsert(this, it) }
+                    .also { ProjectionUniqueHook.upsert(this, it) }
             }
         }
     }
@@ -197,7 +199,6 @@ class SqliteTriggerRepository(
         }
     }
 
-
     override fun find(triggerId: TriggerId): Trigger? {
         return ProjectionCurrent.find(connection, triggerId)
     }
@@ -209,6 +210,4 @@ class SqliteTriggerRepository(
     override fun count(query: TriggerQuery): ULong {
         return ProjectionCurrent.count(connection, query)
     }
-
-
 }

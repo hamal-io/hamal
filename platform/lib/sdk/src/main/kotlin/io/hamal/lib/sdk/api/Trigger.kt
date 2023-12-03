@@ -27,7 +27,7 @@ data class ApiTriggerCreateReq(
     override val duration: Duration? = null,
     override val topicId: TopicId? = null,
     override val hookId: HookId? = null,
-    override val hookMethods: Set<HookMethod>? = null,
+    override val hookMethod: HookMethod? = null,
     override val cron: CronPattern? = null
 ) : CreateTriggerReq
 
@@ -112,7 +112,7 @@ data class ApiTriggerList(
         data class Hook(
             val id: HookId,
             val name: HookName,
-            val methods: Set<HookMethod>
+            val method: HookMethod
         )
     }
 
@@ -198,7 +198,7 @@ class ApiHookTrigger(
     data class Hook(
         val id: HookId,
         val name: HookName,
-        val methods: Set<HookMethod>
+        val method: HookMethod
     )
 }
 

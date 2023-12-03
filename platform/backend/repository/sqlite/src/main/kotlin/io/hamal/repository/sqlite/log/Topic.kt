@@ -1,8 +1,8 @@
 package io.hamal.repository.sqlite.log
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.lib.sqlite.Connection
+import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.log.*
 import java.nio.file.Path
 
@@ -14,7 +14,7 @@ import java.nio.file.Path
 // FIXME just a pass through for now - replace with proper implementation,
 // like supporting multiple segments, roll over etc
 
-class SqliteTopicRepository(
+class TopicSqliteRepository(
     internal val topic: Topic,
     internal val path: Path
 ) : SqliteBaseRepository(
@@ -25,16 +25,16 @@ class SqliteTopicRepository(
     }
 ), TopicRepository {
 
-    private var activeSegment: SqliteSegment
-    private var activeSegmentRepository: SqliteSegmentRepository
+    private var activeSegment: SegmentSqlite
+    private var activeSegmentRepository: SegmentSqliteRepository
 
     init {
-        activeSegment = SqliteSegment(
+        activeSegment = SegmentSqlite(
             Segment.Id(0),
             path = path.resolve(config.filename),
             topicId = topic.id
         )
-        activeSegmentRepository = SqliteSegmentRepository(activeSegment)
+        activeSegmentRepository = SegmentSqliteRepository(activeSegment)
     }
 
     override fun append(cmdId: CmdId, bytes: ByteArray) {

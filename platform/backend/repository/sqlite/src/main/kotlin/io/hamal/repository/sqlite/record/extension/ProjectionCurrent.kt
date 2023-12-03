@@ -6,15 +6,15 @@ import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Extension
 import io.hamal.repository.api.ExtensionQueryRepository.ExtensionQuery
 import io.hamal.repository.record.extension.ExtensionRecord
-import io.hamal.repository.sqlite.record.SqliteProjection
-import io.hamal.repository.sqlite.record.SqliteRecordTransaction
+import io.hamal.repository.sqlite.record.ProjectionSqlite
+import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 import io.hamal.repository.sqlite.record.protobuf
 import kotlinx.serialization.ExperimentalSerializationApi
 import org.sqlite.SQLiteException
 
 @OptIn(ExperimentalSerializationApi::class)
-internal object ProjectionCurrent : SqliteProjection<ExtensionId, ExtensionRecord, Extension> {
-    override fun upsert(tx: SqliteRecordTransaction<ExtensionId, ExtensionRecord, Extension>, obj: Extension) {
+internal object ProjectionCurrent : ProjectionSqlite<ExtensionId, ExtensionRecord, Extension> {
+    override fun upsert(tx: RecordTransactionSqlite<ExtensionId, ExtensionRecord, Extension>, obj: Extension) {
         try {
             tx.execute(
                 """
