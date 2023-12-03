@@ -13,7 +13,7 @@ import io.hamal.plugin.std.log.LogPluginFactory
 import io.hamal.plugin.std.sys.SysPluginFactory
 import io.hamal.plugin.web3.evm.EthPluginFactory
 import io.hamal.extension.std.decimal.DecimalExtensionFactory
-import io.hamal.extension.telegram.TelegramScriptFactory
+import io.hamal.extension.telegram.TelegramExtensionFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -52,7 +52,7 @@ class RunnerSandboxFactory(
             )
             .register(
                 DecimalExtensionFactory,
-                TelegramScriptFactory
+                TelegramExtensionFactory
             )
     }
 }

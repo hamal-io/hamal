@@ -20,11 +20,6 @@ class Require(
 
         val result = ctx.getGlobalTableMap("_instance")
 
-        val config = ctx.tableCreateMap(2)
-        config["get"] = registry.extensions[arg1.value]!!.configGetFunction()
-        config["update"] = registry.extensions[arg1.value]!!.configUpdateFunction()
-        result["config"] = config
-
         ctx.unsetGlobal("_factory")
         ctx.unsetGlobal("_instance")
         ctx.unsetGlobal("extension")
