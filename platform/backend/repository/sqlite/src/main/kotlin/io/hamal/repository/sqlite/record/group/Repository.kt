@@ -36,7 +36,7 @@ internal object CreateGroup : CreateDomainObject<GroupId, GroupRecord, Group> {
     }
 }
 
-class SqliteGroupRepository(
+class GroupSqliteRepository(
     config: Config
 ) : SqliteRecordRepository<GroupId, GroupRecord, Group>(
     config = config,

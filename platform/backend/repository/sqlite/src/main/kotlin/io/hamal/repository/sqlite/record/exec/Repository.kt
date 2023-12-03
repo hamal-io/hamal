@@ -34,7 +34,7 @@ internal object CreateExec : CreateDomainObject<ExecId, ExecRecord, Exec> {
     }
 }
 
-class SqliteExecRepository(
+class ExecSqliteRepository(
     config: Config
 ) : SqliteRecordRepository<ExecId, ExecRecord, Exec>(
     config = config,

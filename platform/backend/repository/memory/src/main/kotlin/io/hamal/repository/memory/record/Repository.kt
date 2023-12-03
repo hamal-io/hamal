@@ -13,7 +13,7 @@ import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 import kotlin.reflect.KClass
 
-abstract class MemoryRecordRepository<ID : DomainId, RECORD : Record<ID>, OBJ : DomainObject<ID>>(
+abstract class RecordMemoryRepository<ID : DomainId, RECORD : Record<ID>, OBJ : DomainObject<ID>>(
     private val createDomainObject: CreateDomainObject<ID, RECORD, OBJ>,
     private val recordClass: KClass<RECORD>,
 ) : RecordRepository<ID, RECORD, OBJ> {

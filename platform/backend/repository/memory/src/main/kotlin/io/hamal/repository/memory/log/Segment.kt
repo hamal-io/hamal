@@ -10,14 +10,14 @@ import io.hamal.repository.api.log.SegmentRepository
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
-data class MemorySegment(
+data class SegmentMemory(
     override val id: Segment.Id,
     override val topicId: TopicId,
 ) : Segment
 
 
-class MemorySegmentRepository(
-    private val segment: MemorySegment
+class SegmentMemoryRepository(
+    private val segment: SegmentMemory
 ) : SegmentRepository {
 
     private val store = mutableListOf<Chunk>()

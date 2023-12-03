@@ -17,7 +17,6 @@ req_two = fail_on_error(sys.triggers.create_hook({
     inputs = { },
     hook_id = hook.id,
     hook_method = 'Get'
-
 }))
 sys.await_completed(req_two)
 

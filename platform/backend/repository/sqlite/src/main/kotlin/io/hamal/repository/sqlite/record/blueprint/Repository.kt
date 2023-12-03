@@ -38,7 +38,7 @@ internal object CreateBlueprint : CreateDomainObject<BlueprintId, BlueprintRecor
     }
 }
 
-class SqliteBlueprintRepository(
+class BlueprintSqliteRepository(
     config: Config
 ) : SqliteRecordRepository<BlueprintId, BlueprintRecord, Blueprint>(
     config = config,

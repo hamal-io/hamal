@@ -37,7 +37,7 @@ internal object CreateHook : CreateDomainObject<HookId, HookRecord, Hook> {
     }
 }
 
-class SqliteHookRepository(
+class HookSqliteRepository(
     config: Config
 ) : SqliteRecordRepository<HookId, HookRecord, Hook>(
     config = config,

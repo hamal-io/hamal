@@ -19,7 +19,7 @@ class ConsumerTest {
     fun `Best effort to consume chunk once`() {
         val path = Files.createTempDirectory("broker_it")
 
-        SqliteBrokerRepository(SqliteBroker(path))
+        BrokerSqliteRepository(BrokerSqlite(path))
             .use { brokerRepository ->
                 val topic = brokerRepository.create(
                     CmdId(1),
@@ -29,7 +29,7 @@ class ConsumerTest {
                 IntRange(1, 10).forEach { appender.append(CmdId(it), topic, "$it") }
             }
 
-        SqliteBrokerRepository(SqliteBroker(path))
+        BrokerSqliteRepository(BrokerSqlite(path))
             .use { brokerRepository ->
                 val topic = brokerRepository.findTopic(FlowId(1), TopicName("topic"))!!
                 val testInstance =

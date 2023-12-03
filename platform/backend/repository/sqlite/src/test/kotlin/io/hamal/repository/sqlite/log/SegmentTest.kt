@@ -14,7 +14,7 @@ import kotlin.io.path.Path
 import kotlin.io.path.pathString
 
 
-class SqliteSegmentRepositoryTest {
+class SegmentSqliteRepositoryTest {
 
     @Nested
     inner class ConstructorTest {
@@ -28,7 +28,7 @@ class SqliteSegmentRepositoryTest {
         @Test
         fun `Creates a directory if path does not exists yet`() {
             val targetDir = Path(testDir, "partition-001", "another-path")
-            SqliteSegmentRepository(testSegment(targetDir)).use { }
+            SegmentSqliteRepository(testSegment(targetDir)).use { }
 
             assertTrue(FileUtils.exists(targetDir))
             assertTrue(FileUtils.exists(Path(targetDir.pathString, "00000000000000002810.db")))
@@ -36,7 +36,7 @@ class SqliteSegmentRepositoryTest {
 
         @Test
         fun `Creates chunks table`() {
-            SqliteSegmentRepository(testSegment()).connection
+            SegmentSqliteRepository(testSegment()).connection
                 .executeQuery("SELECT COUNT(*) as count FROM sqlite_master WHERE name = 'chunks' AND type = 'table'") { resultSet ->
                     assertThat(resultSet.getInt("count"), equalTo(1))
                 }
@@ -44,17 +44,17 @@ class SqliteSegmentRepositoryTest {
 
         @Test
         fun `Does not create chunks table if already exists`() {
-            SqliteSegmentRepository(testSegment()).use {
+            SegmentSqliteRepository(testSegment()).use {
                 it.connection.execute("""INSERT INTO chunks (cmd_id, bytes,instant) VALUES (1,'some-bytes',unixepoch());""")
             }
 
 
-            SqliteSegmentRepository(testSegment()).use { }
-            SqliteSegmentRepository(testSegment()).use {}
-            SqliteSegmentRepository(testSegment()).use {}
-            SqliteSegmentRepository(testSegment()).use {}
+            SegmentSqliteRepository(testSegment()).use { }
+            SegmentSqliteRepository(testSegment()).use {}
+            SegmentSqliteRepository(testSegment()).use {}
+            SegmentSqliteRepository(testSegment()).use {}
 
-            SqliteSegmentRepository(testSegment()).use {
+            SegmentSqliteRepository(testSegment()).use {
                 it.connection.executeQuery("SELECT COUNT(*) as count FROM chunks") { resultSet ->
                     assertThat(resultSet.getInt("count"), equalTo(1))
                 }
@@ -63,7 +63,7 @@ class SqliteSegmentRepositoryTest {
 
         @Test
         fun `Sets journal_mode to wal`() {
-            SqliteSegmentRepository(testSegment()).use {
+            SegmentSqliteRepository(testSegment()).use {
                 it.connection.executeQuery("""SELECT journal_mode FROM pragma_journal_mode""") { resultSet ->
                     assertThat(resultSet.getString("journal_mode"), equalTo("wal"))
                 }
@@ -72,7 +72,7 @@ class SqliteSegmentRepositoryTest {
 
         @Test
         fun `Sets locking_mode to exclusive`() {
-            SqliteSegmentRepository(testSegment()).use {
+            SegmentSqliteRepository(testSegment()).use {
                 it.connection.executeQuery("""SELECT locking_mode FROM pragma_locking_mode""") { resultSet ->
                     assertThat(resultSet.getString("locking_mode"), equalTo("exclusive"))
                 }
@@ -81,7 +81,7 @@ class SqliteSegmentRepositoryTest {
 
         @Test
         fun `Sets temp_store to memory`() {
-            SqliteSegmentRepository(testSegment()).use {
+            SegmentSqliteRepository(testSegment()).use {
                 it.connection.executeQuery("""SELECT temp_store FROM pragma_temp_store""") { resultSet ->
                     assertThat(resultSet.getString("temp_store"), equalTo("2"))
                 }
@@ -90,14 +90,14 @@ class SqliteSegmentRepositoryTest {
 
         @Test
         fun `Sets synchronous to off`() {
-            SqliteSegmentRepository(testSegment()).use {
+            SegmentSqliteRepository(testSegment()).use {
                 it.connection.executeQuery("""SELECT synchronous FROM pragma_synchronous""") { resultSet ->
                     assertThat(resultSet.getString("synchronous"), equalTo("0"))
                 }
             }
         }
 
-        private fun testSegment(path: Path = Path(testDir)) = SqliteSegment(
+        private fun testSegment(path: Path = Path(testDir)) = SegmentSqlite(
             id = Segment.Id(2810),
             topicId = TopicId(1506),
             path = path
