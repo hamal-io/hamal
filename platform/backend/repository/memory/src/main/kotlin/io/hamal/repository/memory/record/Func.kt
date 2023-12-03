@@ -93,26 +93,14 @@ class FuncMemoryRepository : RecordMemoryRepository<FuncId, FuncRecord, Func>(
             } else {
                 val current = versionOf(funcId, cmd.id)
                 require(cmd.version <= current.code.version) { "${cmd.version} can not be deployed" }
-                if (cmd.version < current.code.version) {
-                    store(
-                        FuncDeployedRecord(
-                            cmdId = cmd.id,
-                            entityId = funcId,
-                            version = cmd.version,
-                            message = cmd.message
-                        )
+                store(
+                    FuncDeployedRecord(
+                        cmdId = cmd.id,
+                        entityId = funcId,
+                        version = cmd.version,
+                        message = cmd.message
                     )
-                } else {
-                    val last = lastRecordOf(funcId)
-                    store(
-                        FuncDeployedRecord(
-                            entityId = funcId,
-                            cmdId = cmd.id,
-                            version = versionOf(funcId, last.sequence())!!.code.version,
-                            message = cmd.message
-                        )
-                    )
-                }
+                )
                 (currentVersion(funcId)).also(FuncCurrentProjection::apply)
             }
         }

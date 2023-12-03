@@ -86,26 +86,14 @@ class FuncSqliteRepository(
             } else {
                 val current = versionOf(funcId, cmdId)
                 require(cmd.version <= current.code.version) { "${cmd.version} can not be deployed" }
-                if (cmd.version < current.code.version) {
-                    store(
-                        FuncDeployedRecord(
-                            cmdId = cmd.id,
-                            entityId = funcId,
-                            version = cmd.version,
-                            message = cmd.message
-                        )
+                store(
+                    FuncDeployedRecord(
+                        cmdId = cmd.id,
+                        entityId = funcId,
+                        version = cmd.version,
+                        message = cmd.message
                     )
-                } else {
-                    val last = lastRecordOf(funcId)
-                    store(
-                        FuncDeployedRecord(
-                            entityId = funcId,
-                            cmdId = cmd.id,
-                            version = versionOf(funcId, last.sequence())!!.code.version,
-                            message = cmd.message
-                        )
-                    )
-                }
+                )
                 currentVersion(funcId)
                     .also { ProjectionCurrent.upsert(this, it) }
                     .also { ProjectionUniqueName.upsert(this, it) }
