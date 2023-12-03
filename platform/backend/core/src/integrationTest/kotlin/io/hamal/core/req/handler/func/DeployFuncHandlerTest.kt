@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired
 internal class DeployFuncHandlerTest : BaseReqHandlerTest() {
 
     @Test
-    fun `Deploys version`() {
+    fun `Deploys version without message`() {
         setup(CodeId(5))
 
         testInstance(
@@ -31,10 +31,32 @@ internal class DeployFuncHandlerTest : BaseReqHandlerTest() {
 
         with(funcQueryRepository.get(FuncId(1))) {
             assertThat(code.version, equalTo(CodeVersion(20)))
-            assertThat(code.deployedVersion, equalTo(CodeVersion(10)))
+            assertThat(deployment.version, equalTo(CodeVersion(10)))
+            assertThat(deployment.message, equalTo(DeployMessage.empty))
         }
     }
 
+    @Test
+    fun `Deploys version`() {
+        setup(CodeId(5))
+
+        testInstance(
+            FuncDeploySubmitted(
+                id = ReqId(500),
+                status = Submitted,
+                groupId = testGroup.id,
+                FuncId(1),
+                versionToDeploy = CodeVersion(10),
+                deployMessage = DeployMessage("This function and hamal rocks")
+            )
+        )
+
+        with(funcQueryRepository.get(FuncId(1))) {
+            assertThat(code.version, equalTo(CodeVersion(20)))
+            assertThat(deployment.version, equalTo(CodeVersion(10)))
+            assertThat(deployment.message, equalTo(DeployMessage("This function and hamal rocks")))
+        }
+    }
 
     @Test
     fun `Deploys latest version`() {
@@ -53,7 +75,9 @@ internal class DeployFuncHandlerTest : BaseReqHandlerTest() {
 
         with(funcQueryRepository.get(FuncId(1))) {
             assertThat(code.version, equalTo(CodeVersion(20)))
-            assertThat(code.deployedVersion, equalTo(CodeVersion(20)))
+
+            assertThat(deployment.version, equalTo(CodeVersion(20)))
+            assertThat(deployment.message, equalTo(DeployMessage.empty))
         }
     }
 

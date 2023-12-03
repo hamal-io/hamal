@@ -91,7 +91,7 @@ internal class EndpointInvokeController(
                 inputs = InvocationInputs(),
                 code = ExecCode(
                     id = func.code.id,
-                    version = func.code.deployedVersion
+                    version = func.deployment.version
                 ),
                 funcId = func.id,
                 correlationId = null,
@@ -140,7 +140,7 @@ internal class EndpointInvokeController(
 
     private fun HttpServletRequest.content(): EndpointContent {
         val content = reader.lines().reduce("", String::plus)
-        if(content.isEmpty()) return EndpointContent()
+        if (content.isEmpty()) return EndpointContent()
 
         require(contentType.startsWith("application/json")) { "Only application/json supported yet" }
         val el = json.decodeFromString<JsonElement>(content)

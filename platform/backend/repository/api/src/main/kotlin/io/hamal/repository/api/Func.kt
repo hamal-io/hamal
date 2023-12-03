@@ -18,18 +18,24 @@ data class Func(
     val name: FuncName,
     val inputs: FuncInputs,
     val code: FuncCode,
-    val deployMessage: DeployMessage?
+    val deployment: FuncDeployment
 ) : DomainObject<FuncId>
 
 @Serializable
 data class FuncCode(
     val id: CodeId,
+    val version: CodeVersion
+)
+
+@Serializable
+data class FuncDeployment(
+    val id: CodeId,
     val version: CodeVersion,
-    val deployedVersion: CodeVersion,
+    val message: DeployMessage
 ) {
     fun toExecCode() = ExecCode(
         id = id,
-        version = deployedVersion,
+        version = version,
         value = null
     )
 }
@@ -62,8 +68,8 @@ interface FuncCmdRepository : CmdRepository {
 
     data class DeployCmd(
         val id: CmdId,
-        val versionToDeploy: CodeVersion? = null,
-        val deployMessage: DeployMessage? = null
+        val version: CodeVersion,
+        val message: DeployMessage
     )
 }
 

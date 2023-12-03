@@ -48,10 +48,11 @@ internal class FuncGetControllerTest : FuncBaseControllerTest() {
             assertThat(name, equalTo(FuncName("func-one")))
             assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
 
-            assertThat(code.current.version, equalTo(CodeVersion(1)))
-            assertThat(code.current.value, equalTo(CodeValue("1+1")))
-            assertThat(code.deployed.version, equalTo(CodeVersion(1)))
-            assertThat(code.deployed.value, equalTo(CodeValue("1+1")))
+            assertThat(code.version, equalTo(CodeVersion(1)))
+            assertThat(code.value, equalTo(CodeValue("1+1")))
+
+            assertThat(deployment.version, equalTo(CodeVersion(1)))
+            assertThat(deployment.value, equalTo(CodeValue("1+1")))
         }
     }
 }

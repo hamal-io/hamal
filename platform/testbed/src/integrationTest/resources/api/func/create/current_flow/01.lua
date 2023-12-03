@@ -22,7 +22,8 @@ assert(func_one.flow.name == 'root-flow')
 assert(func_one.name == 'test-func')
 
 assert(func_one.code.id ~= nil)
-assert(func_one.code.current.version == 1)
-assert(func_one.code.current.value == [[4 + 2]])
-assert(func_one.code.deployed.version == 1)
-assert(func_one.code.deployed.value == [[4 + 2]])
+assert(func_one.code.version == 1)
+assert(func_one.code.value == [[4 + 2]])
+
+assert(func_one.deployment.version == 1)
+assert(func_one.deployment.value == [[4 + 2]])

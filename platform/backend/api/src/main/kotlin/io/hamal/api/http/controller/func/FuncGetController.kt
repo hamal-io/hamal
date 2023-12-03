@@ -6,8 +6,8 @@ import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sdk.api.ApiFunc
 import io.hamal.lib.sdk.api.ApiFunc.*
 import io.hamal.repository.api.Code
-import io.hamal.repository.api.Func
 import io.hamal.repository.api.Flow
+import io.hamal.repository.api.Func
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -36,14 +36,14 @@ internal class FuncGetController(
                 inputs = func.inputs,
                 code = Code(
                     id = func.code.id,
-                    current = VersionedCodeValue(
-                        version = current.version,
-                        value = current.value,
-                    ),
-                    deployed = VersionedCodeValue(
-                        version = deployed.version,
-                        value = deployed.value
-                    )
+                    version = current.version,
+                    value = current.value,
+                ),
+                deployment = Deployment(
+                    id = func.deployment.id,
+                    version = deployed.version,
+                    value = deployed.value,
+                    message = func.deployment.message
                 )
             )
         )

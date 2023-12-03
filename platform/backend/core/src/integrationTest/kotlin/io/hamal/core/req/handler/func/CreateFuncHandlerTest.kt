@@ -6,6 +6,7 @@ import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.FuncCode
+import io.hamal.repository.api.FuncDeployment
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
 import io.hamal.repository.api.submitted_req.FuncCreateSubmitted
 import org.hamcrest.MatcherAssert.assertThat
@@ -26,13 +27,23 @@ internal class CreateFuncHandlerTest : BaseReqHandlerTest() {
                 assertThat(id, equalTo(FuncId(12345)))
                 assertThat(name, equalTo(FuncName("awesome-func")))
                 assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
-                assertThat(code.deployedVersion, equalTo(codeQueryRepository.get(CodeId(34567)).version))
+                assertThat(deployment.version, equalTo(codeQueryRepository.get(CodeId(34567)).version))
+
                 assertThat(
                     code, equalTo(
                         FuncCode(
                             id = CodeId(34567),
+                            version = CodeVersion(1)
+                        )
+                    )
+                )
+
+                assertThat(
+                    deployment, equalTo(
+                        FuncDeployment(
+                            id = CodeId(34567),
                             version = CodeVersion(1),
-                            deployedVersion = CodeVersion(1)
+                            message = DeployMessage("Initial version")
                         )
                     )
                 )
