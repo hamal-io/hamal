@@ -15,7 +15,7 @@ import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 
 
-internal object ExecInvokeHandlerTest : BaseReqHandlerTest() {
+internal class ExecInvokeHandlerTest : BaseReqHandlerTest() {
 
     @Test
     fun `Invokes execution with code`() {

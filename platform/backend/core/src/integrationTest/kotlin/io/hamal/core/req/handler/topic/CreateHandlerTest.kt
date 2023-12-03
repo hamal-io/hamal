@@ -15,7 +15,7 @@ import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 
 
-internal object TopicCreateHandlerTest : BaseReqHandlerTest() {
+internal class TopicCreateHandlerTest : BaseReqHandlerTest() {
     @Test
     fun `Creates topic with id and name`() {
         testInstance(submittedCreateTopicReq)

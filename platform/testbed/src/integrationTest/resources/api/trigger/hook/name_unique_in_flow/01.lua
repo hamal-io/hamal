@@ -10,18 +10,17 @@ hook = fail_on_error(sys.hooks.create({ flow_id = '1'; name = "some-amazing-hook
 sys.await(hook)
 
 -- trigger name is unique
-trigger = fail_on_error(sys.triggers.create_hook({
+req_two = fail_on_error(sys.triggers.create_hook({
     func_id = func_one.id,
     flow_id = '1',
     name = 'trigger-to-create',
     inputs = { },
     hook_id = hook.id,
     hook_method = 'Get'
-
 }))
-sys.await_completed(trigger)
+sys.await_completed(req_two)
 
-trigger = fail_on_error(sys.triggers.create_hook({
+req_two = fail_on_error(sys.triggers.create_hook({
     func_id = func_one.id,
     flow_id = '1',
     name = 'trigger-to-create',
@@ -29,13 +28,13 @@ trigger = fail_on_error(sys.triggers.create_hook({
     hook_id = hook.id,
     hook_method = 'Post'
 }))
-assert(sys.await_failed(trigger) == nil)
+assert(sys.await_failed(req_two) == nil)
 
 _, triggers = sys.triggers.list()
 assert(#triggers == 1)
 
 -- same name different flow
-err, trigger = sys.triggers.create_hook({
+err, req_two = sys.triggers.create_hook({
     func_id = func_one.id,
     flow_id = flow.id,
     name = 'trigger-to-create',
@@ -44,7 +43,7 @@ err, trigger = sys.triggers.create_hook({
     hook_method = 'Patch'
 })
 assert(err == nil)
-sys.await_completed(trigger)
+sys.await_completed(req_two)
 
 _, triggers = sys.triggers.list()
 assert(#triggers == 2)

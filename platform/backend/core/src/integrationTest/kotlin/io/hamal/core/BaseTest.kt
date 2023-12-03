@@ -22,16 +22,11 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.test.context.ActiveProfiles
-import org.springframework.test.context.ContextConfiguration
 import java.time.temporal.ChronoUnit.DAYS
 
-@ContextConfiguration(
-    classes = [
-        CoreConfig::class,
-    ]
-)
 @SpringBootTest(
-    webEnvironment = RANDOM_PORT
+    webEnvironment = RANDOM_PORT,
+    classes = [CoreConfig::class]
 )
 @ActiveProfiles("memory")
 @TestMethodOrder(MethodOrderer.Random::class)

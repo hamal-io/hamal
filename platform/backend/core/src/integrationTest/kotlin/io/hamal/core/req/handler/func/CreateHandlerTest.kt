@@ -14,7 +14,7 @@ import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
-internal object FuncCreateHandlerTest : BaseReqHandlerTest() {
+internal class FuncCreateHandlerTest : BaseReqHandlerTest() {
 
     @Test
     fun `Creates func`() {

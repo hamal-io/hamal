@@ -11,7 +11,7 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
-internal object BlueprintCreateHandlerTest : BaseReqHandlerTest() {
+internal class BlueprintCreateHandlerTest : BaseReqHandlerTest() {
 
     @Test
     fun `Creates blueprint`() {

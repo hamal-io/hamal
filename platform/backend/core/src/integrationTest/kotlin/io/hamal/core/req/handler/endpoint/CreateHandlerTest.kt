@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
 
-internal object EndpointCreateHandlerTest : BaseReqHandlerTest() {
+internal class EndpointCreateHandlerTest : BaseReqHandlerTest() {
 
     @Test
     fun `Creates endpoint`() {

@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
 
-internal object ExtensionCreateHandlerTest : BaseReqHandlerTest() {
+internal class ExtensionCreateHandlerTest : BaseReqHandlerTest() {
     @Test
     fun `Creates Extension`() {
         testInstance(submitCreateExtensionReq)

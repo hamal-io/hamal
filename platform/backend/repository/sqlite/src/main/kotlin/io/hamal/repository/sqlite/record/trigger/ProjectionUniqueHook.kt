@@ -4,7 +4,6 @@ import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.HookTrigger
-import io.hamal.repository.api.HookTrigger.UniqueHookTrigger
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.record.trigger.TriggerRecord
 import io.hamal.repository.sqlite.record.ProjectionSqlite
@@ -54,25 +53,5 @@ internal object ProjectionUniqueHook : ProjectionSqlite<TriggerId, TriggerRecord
 
     override fun clear(tx: Transaction) {
         tx.execute("""DELETE FROM unique_hook""")
-    }
-
-    fun ensureHookUnique(connection: Connection, trigger: UniqueHookTrigger): Boolean {
-        return connection.executeQueryOne(
-            """
-            SELECT * FROM unique_hook WHERE 
-                func_id = :funcId AND 
-                hook_id = :hookId AND 
-                hook_method = :hookMethod;
-            """.trimIndent()
-        ) {
-            query {
-                set("funcId", trigger.funcId)
-                set("hookId", trigger.hookId)
-                set("hookMethod", trigger.hookMethod.value)
-            }
-            map {
-                true
-            }
-        } ?: false
     }
 }

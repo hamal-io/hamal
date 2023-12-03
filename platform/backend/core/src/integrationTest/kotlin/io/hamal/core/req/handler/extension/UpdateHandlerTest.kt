@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
 
-internal object ExtensionUpdateHandlerTest : BaseReqHandlerTest() {
+internal class ExtensionUpdateHandlerTest : BaseReqHandlerTest() {
 
     @Test
     fun `Updates extension`() {

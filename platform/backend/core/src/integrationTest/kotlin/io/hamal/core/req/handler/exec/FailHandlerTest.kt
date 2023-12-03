@@ -21,7 +21,7 @@ import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 
 
-internal object ExecFailHandlerTest : BaseReqHandlerTest() {
+internal class ExecFailHandlerTest : BaseReqHandlerTest() {
 
     @Test
     fun `Fail exec`() {

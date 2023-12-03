@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
 
-internal object BlueprintUpdateHandlerTest : BaseReqHandlerTest() {
+internal class BlueprintUpdateHandlerTest : BaseReqHandlerTest() {
 
     @Test
     fun `Updates blueprint`() {

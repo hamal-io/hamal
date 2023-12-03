@@ -18,7 +18,7 @@ import org.junit.jupiter.api.TestFactory
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 
-internal object ExecCompleteHandlerTest : BaseReqHandlerTest() {
+internal class ExecCompleteHandlerTest : BaseReqHandlerTest() {
 
     @Test
     fun `Completes exec`() {

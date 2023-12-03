@@ -10,36 +10,36 @@ _, topic_req = sys.topics.create({ name = "some-amazing-topic" })
 sys.await(topic_req)
 
 -- trigger name is unique
-trigger = fail_on_error(sys.triggers.create_event({
+req_two = fail_on_error(sys.triggers.create_event({
     func_id = func_one.id,
     flow_id = '1',
     name = 'trigger-to-create',
     inputs = { },
     topic_id = topic_req.id
 }))
-sys.await_completed(trigger)
+sys.await_completed(req_two)
 
-trigger = fail_on_error(sys.triggers.create_event({
+req_two = fail_on_error(sys.triggers.create_event({
     func_id = func_one.id,
     flow_id = '1',
     name = 'trigger-to-create',
     inputs = { },
     topic_id = topic_req.id
 }))
-assert(sys.await_failed(trigger) == nil)
+assert(sys.await_failed(req_two) == nil)
 
 _, triggers = sys.triggers.list()
 assert(#triggers == 1)
 
 -- same name different flow
-trigger = fail_on_error(sys.triggers.create_event({
+req_two = fail_on_error(sys.triggers.create_event({
     func_id = func_one.id,
     flow_id = flow.id,
     name = 'trigger-to-create',
     inputs = { },
     topic_id = topic_req.id
 }))
-sys.await_completed(trigger)
+sys.await_completed(req_two)
 
 _, triggers = sys.triggers.list()
 assert(#triggers == 2)

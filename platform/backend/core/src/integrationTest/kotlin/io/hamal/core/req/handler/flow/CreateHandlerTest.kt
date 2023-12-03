@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
 
-internal object FlowCreateHandlerTest : BaseReqHandlerTest() {
+internal class FlowCreateHandlerTest : BaseReqHandlerTest() {
 
     @BeforeEach
     fun beforeEach() {

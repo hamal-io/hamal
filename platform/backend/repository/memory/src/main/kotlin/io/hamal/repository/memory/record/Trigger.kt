@@ -4,7 +4,6 @@ import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.repository.api.*
-import io.hamal.repository.api.HookTrigger.UniqueHookTrigger
 import io.hamal.repository.api.TriggerCmdRepository.*
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import io.hamal.repository.record.trigger.*
@@ -15,7 +14,7 @@ import kotlin.concurrent.withLock
 private object TriggerCurrentProjection {
 
     private val projection = mutableMapOf<TriggerId, Trigger>()
-    private val uniqueHookTriggers = mutableSetOf<UniqueHookTrigger>()
+    private val uniqueHookTriggers = mutableSetOf<HookTriggerUnique>()
 
     fun apply(trigger: Trigger) {
 
@@ -117,16 +116,12 @@ private object TriggerCurrentProjection {
     }
 
     private fun handleHookTrigger(trigger: HookTrigger) {
-        val toCheck = UniqueHookTrigger(
+        val toCheck = HookTriggerUnique(
             trigger.funcId,
             trigger.hookId,
             trigger.hookMethod
         )
         require(uniqueHookTriggers.add(toCheck)) { "Trigger already exists" }
-    }
-
-    fun ensureHookUnique(trigger: UniqueHookTrigger): Boolean {
-        return uniqueHookTriggers.contains(trigger)
     }
 }
 
@@ -193,7 +188,6 @@ class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord,
             if (commandAlreadyApplied(cmd.id, triggerId)) {
                 versionOf(triggerId, cmd.id) as HookTrigger
             } else {
-
 
                 TriggerCurrentProjection.list(
                     TriggerQuery(
@@ -270,18 +264,6 @@ class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord,
                 store(rec)
                 currentVersion(triggerId).also(TriggerCurrentProjection::apply)
             }
-        }
-    }
-
-    override fun ensureHookUnique(query: UniqueHookTrigger): Boolean {
-        return lock.withLock {
-            TriggerCurrentProjection.ensureHookUnique(
-                UniqueHookTrigger(
-                    funcId = query.funcId,
-                    hookId = query.hookId,
-                    hookMethod = query.hookMethod
-                )
-            )
         }
     }
 

@@ -9,7 +9,6 @@ import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
-import io.hamal.repository.api.HookTrigger.UniqueHookTrigger
 import kotlinx.serialization.Serializable
 import kotlin.time.Duration
 
@@ -86,7 +85,6 @@ interface TriggerQueryRepository {
     fun find(triggerId: TriggerId): Trigger?
     fun list(query: TriggerQuery): List<Trigger>
     fun count(query: TriggerQuery): ULong
-    fun ensureHookUnique(query: UniqueHookTrigger): Boolean
 
     data class TriggerQuery(
         var afterId: TriggerId = TriggerId(SnowflakeId(Long.MAX_VALUE)),
@@ -165,14 +163,13 @@ class HookTrigger(
     val hookMethod: HookMethod
 ) : Trigger {
     override val type = TriggerType.Hook
-
-    @Serializable
-    data class UniqueHookTrigger(
-        val funcId: FuncId,
-        val hookId: HookId,
-        val hookMethod: HookMethod
-    )
 }
+
+data class HookTriggerUnique(
+    val funcId: FuncId,
+    val hookId: HookId,
+    val hookMethod: HookMethod
+)
 
 @Serializable
 class CronTrigger(

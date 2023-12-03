@@ -12,7 +12,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
-internal object FuncDeployHandlerTest : BaseReqHandlerTest() {
+internal class FuncDeployHandlerTest : BaseReqHandlerTest() {
 
     @Test
     fun `Deploys version`() {

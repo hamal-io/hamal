@@ -15,7 +15,7 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
-internal object FuncUpdateHandlerTest : BaseReqHandlerTest() {
+internal class FuncUpdateHandlerTest : BaseReqHandlerTest() {
 
     @Test
     fun `Updates func`() {
