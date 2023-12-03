@@ -85,13 +85,13 @@ class FuncSqliteRepository(
                 versionOf(funcId, cmdId)
             } else {
                 val current = versionOf(funcId, cmdId)
-                if (cmd.version != null) {
-                    require(cmd.version!! <= current.code.version) { "${cmd.version} can not be deployed" }
+                require(cmd.version <= current.code.version) { "${cmd.version} can not be deployed" }
+                if (cmd.version < current.code.version) {
                     store(
                         FuncDeployedRecord(
                             cmdId = cmd.id,
                             entityId = funcId,
-                            version = cmd.version!!,
+                            version = cmd.version,
                             message = cmd.message
                         )
                     )
