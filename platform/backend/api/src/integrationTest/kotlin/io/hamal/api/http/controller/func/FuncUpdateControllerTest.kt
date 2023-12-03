@@ -10,10 +10,6 @@ import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.api.*
-import io.hamal.lib.sdk.api.ApiError
-import io.hamal.lib.sdk.api.ApiFuncCreateReq
-import io.hamal.lib.sdk.api.ApiFuncUpdateReq
-import io.hamal.lib.sdk.api.ApiFuncUpdateSubmitted
 import io.hamal.repository.api.FlowCmdRepository.CreateCmd
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -88,11 +84,11 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
             assertThat(name, equalTo(FuncName("updated-name")))
             assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("updatedInputs"))))))
 
-            assertThat(code.current.version, equalTo(CodeVersion(2)))
-            assertThat(code.current.value, equalTo(CodeValue("updatedCode")))
+            assertThat(code.version, equalTo(CodeVersion(2)))
+            assertThat(code.value, equalTo(CodeValue("updatedCode")))
 
-            assertThat(code.deployed.version, equalTo(CodeVersion(1)))
-            assertThat(code.deployed.value, equalTo(CodeValue("createdCode")))
+            assertThat(deployment.version, equalTo(CodeVersion(1)))
+            assertThat(deployment.value, equalTo(CodeValue("createdCode")))
         }
     }
 
@@ -126,11 +122,11 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
             assertThat(name, equalTo(FuncName("created-name")))
             assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("createdInputs"))))))
 
-            assertThat(code.current.version, equalTo(CodeVersion(1)))
-            assertThat(code.current.value, equalTo(CodeValue("createdCode")))
+            assertThat(code.version, equalTo(CodeVersion(1)))
+            assertThat(code.value, equalTo(CodeValue("createdCode")))
 
-            assertThat(code.deployed.version, equalTo(CodeVersion(1)))
-            assertThat(code.deployed.value, equalTo(CodeValue("createdCode")))
+            assertThat(deployment.version, equalTo(CodeVersion(1)))
+            assertThat(deployment.value, equalTo(CodeValue("createdCode")))
         }
     }
 
@@ -158,11 +154,11 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
             assertThat(name, equalTo(FuncName("updated-name")))
             assertThat(flow.name, equalTo(FlowName("createdFlow")))
 
-            assertThat(code.current.version, equalTo(CodeVersion(1)))
-            assertThat(code.deployed.version, equalTo(CodeVersion(1)))
+            assertThat(code.version, equalTo(CodeVersion(1)))
+            assertThat(code.value, equalTo(CodeValue("createdCode")))
 
-            assertThat(code.current.value, equalTo(CodeValue("createdCode")))
-            assertThat(code.deployed.value, equalTo(CodeValue("createdCode")))
+            assertThat(deployment.version, equalTo(CodeVersion(1)))
+            assertThat(deployment.value, equalTo(CodeValue("createdCode")))
         }
     }
 
@@ -195,11 +191,11 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
             assertThat(name, equalTo(FuncName("updated-name")))
             assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("updatedInputs"))))))
 
-            assertThat(code.current.version, equalTo(CodeVersion(1)))
-            assertThat(code.deployed.version, equalTo(CodeVersion(1)))
+            assertThat(code.version, equalTo(CodeVersion(1)))
+            assertThat(code.value, equalTo(CodeValue("createdCode")))
 
-            assertThat(code.current.value, equalTo(CodeValue("createdCode")))
-            assertThat(code.deployed.value, equalTo(CodeValue("createdCode")))
+            assertThat(deployment.version, equalTo(CodeVersion(1)))
+            assertThat(deployment.value, equalTo(CodeValue("createdCode")))
         }
     }
 

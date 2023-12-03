@@ -31,15 +31,17 @@ class FuncGetFunction(
                             "code" to MapType(
                                 mutableMapOf(
                                     "id" to StringType(func.code.id.value.value.toString(16)),
-                                    "current" to MapType(
-                                        "version" to NumberType(func.code.current.version.value),
-                                        "value" to CodeType(func.code.current.value.value),
-                                    ),
-                                    "deployed" to MapType(
-                                        "version" to NumberType(func.code.deployed.version.value),
-                                        "value" to CodeType(func.code.deployed.value.value),
-                                    ),
+                                    "version" to NumberType(func.code.version.value),
+                                    "value" to CodeType(func.code.value.value)
                                 )
+                            ),
+                            "deployment" to MapType(
+                                mutableMapOf(
+                                    "id" to StringType(func.deployment.id.value.value.toString(16)),
+                                    "version" to NumberType(func.deployment.version.value),
+                                    "value" to CodeType(func.deployment.value.value),
+                                    "message" to StringType(func.deployment.message.value)
+                                ),
                             )
                         )
                     )

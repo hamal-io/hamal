@@ -8,7 +8,6 @@ import io.hamal.lib.sdk.api.*
 import io.hamal.repository.api.Func
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
-import org.hamcrest.Matchers.nullValue
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -30,13 +29,13 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
                         )
                     )
                 )
-                assertThat(funcQueryRepository.get(func.id).code.deployedVersion, equalTo(CodeVersion(iter + 1)))
+                assertThat(funcQueryRepository.get(func.id).deployment.version, equalTo(CodeVersion(iter + 1)))
             }
 
             with(funcQueryRepository.get(func.id)) {
                 assertThat(name, equalTo(FuncName("test-func")))
                 assertThat(code.version, equalTo(CodeVersion(20)))
-                assertThat(codeQueryRepository.get(code.id, code.deployedVersion).value, equalTo(CodeValue("code-19")))
+                assertThat(codeQueryRepository.get(code.id, deployment.version).value, equalTo(CodeValue("code-19")))
             }
 
         }
@@ -55,13 +54,13 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
                         )
                     )
                 )
-                assertThat(funcQueryRepository.get(func.id).code.deployedVersion, equalTo(CodeVersion(10)))
+                assertThat(funcQueryRepository.get(func.id).deployment.version, equalTo(CodeVersion(10)))
             }
 
             with(funcQueryRepository.get(func.id)) {
                 assertThat(name, equalTo(FuncName("test-func")))
                 assertThat(code.version, equalTo(CodeVersion(20)))
-                assertThat(codeQueryRepository.get(code.id, code.deployedVersion).value, equalTo(CodeValue("code-9")))
+                assertThat(codeQueryRepository.get(code.id, deployment.version).value, equalTo(CodeValue("code-9")))
             }
         }
 
@@ -79,13 +78,13 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
                         )
                     )
                 )
-                assertThat(funcQueryRepository.get(func.id).code.deployedVersion, equalTo(CodeVersion(20 - iter)))
+                assertThat(funcQueryRepository.get(func.id).deployment.version, equalTo(CodeVersion(20 - iter)))
             }
 
             with(funcQueryRepository.get(func.id)) {
                 assertThat(name, equalTo(FuncName("test-func")))
                 assertThat(code.version, equalTo(CodeVersion(20)))
-                assertThat(codeQueryRepository.get(code.id, code.deployedVersion).value, equalTo(CodeValue("13 + 37")))
+                assertThat(codeQueryRepository.get(code.id, deployment.version).value, equalTo(CodeValue("13 + 37")))
             }
         }
 
@@ -143,10 +142,10 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
                 {
                     assertThat(name, equalTo(FuncName("test-func")))
                     assertThat(
-                        codeQueryRepository.get(code.id, code.deployedVersion).value, equalTo(CodeValue("code-19"))
+                        codeQueryRepository.get(code.id, deployment.version).value, equalTo(CodeValue("code-19"))
                     )
-                    assertThat(code.deployedVersion, equalTo(code.version))
-                    assertThat(deployMessage, nullValue())
+                    assertThat(deployment.version, equalTo(code.version))
+                    assertThat(deployment.message, equalTo(DeployMessage.empty))
                 }
             }
 
@@ -165,13 +164,12 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
                 )
 
 
-                with(funcQueryRepository.get(funcId))
-                {
+                with(funcQueryRepository.get(funcId)) {
                     assertThat(name, equalTo(FuncName("test-func")))
                     assertThat(
-                        codeQueryRepository.get(code.id, code.deployedVersion).value, equalTo(CodeValue("code-19"))
+                        codeQueryRepository.get(code.id, deployment.version).value, equalTo(CodeValue("code-19"))
                     )
-                    assertThat(deployMessage, equalTo(DeployMessage("SuperFunc")))
+                    assertThat(deployment.message, equalTo(DeployMessage("SuperFunc")))
                 }
             }
         }

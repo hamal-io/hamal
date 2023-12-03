@@ -96,7 +96,8 @@ data class ApiFunc(
     val flow: Flow,
     val name: FuncName,
     val inputs: FuncInputs,
-    val code: Code
+    val code: Code,
+    val deployment: Deployment
 ) {
     @Serializable
     data class Flow(
@@ -107,14 +108,16 @@ data class ApiFunc(
     @Serializable
     data class Code(
         val id: CodeId,
-        val current: VersionedCodeValue,
-        val deployed: VersionedCodeValue
+        val version: CodeVersion,
+        val value: CodeValue
     )
 
     @Serializable
-    data class VersionedCodeValue(
+    data class Deployment(
+        val id: CodeId,
         val version: CodeVersion,
         val value: CodeValue,
+        val message: DeployMessage
     )
 }
 

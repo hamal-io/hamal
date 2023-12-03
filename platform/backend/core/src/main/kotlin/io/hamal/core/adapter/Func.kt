@@ -92,7 +92,7 @@ class FuncAdapter(
     override fun <T : Any> invoke(funcId: FuncId, responseHandler: (Func, Code, Code, Flow) -> T): T {
         val func = funcQueryRepository.get(funcId)
         val current = codeQueryRepository.get(func.code.id, func.code.version)
-        val deployed = codeQueryRepository.get(func.code.id, func.code.deployedVersion)
+        val deployed = codeQueryRepository.get(func.code.id, func.deployment.version)
         val flows = flowQueryRepository.get(func.flowId)
         return responseHandler(func, current, deployed, flows)
     }
@@ -113,7 +113,7 @@ class FuncAdapter(
             funcId = funcId,
             correlationId = req.correlationId,
             inputs = req.inputs,
-            code = func.code.toExecCode(),
+            code = func.deployment.toExecCode(),
             invocation = req.invocation
         ).also(reqCmdRepository::queue).let(responseHandler)
     }
