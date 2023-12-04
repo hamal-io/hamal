@@ -21,7 +21,7 @@ export interface FuncInvokeSubmitted {
     funcId: string;
 }
 
-export interface FuncDeployLatestSubmitted {
+export interface FuncDeploySubmitted {
     id: string;
     status: string;
     funcId: string;
@@ -33,8 +33,14 @@ export interface Func {
     inputs: object;
     code: {
         id: string;
-        current: VersionedCode;
-        deployed: VersionedCode;
+        version: VersionedCode;
+        value: VersionedCode;
+    },
+    deployment: {
+        id: string,
+        version: VersionedCode,
+        value: VersionedCode,
+        message: string
     }
 }
 
