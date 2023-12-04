@@ -39,13 +39,3 @@ data class FuncDeploySubmitted(
     val versionToDeploy: CodeVersion?,
     val deployMessage: DeployMessage?
 ) : Submitted
-
-/*
-@Serializable
-data class FuncDeployLatestSubmitted(
-    override val id: ReqId,
-    override var status: ReqStatus,
-    val groupId: GroupId,
-    val funcId: FuncId,
-    val deployMessage: DeployMessage?
-) : Submitted*/

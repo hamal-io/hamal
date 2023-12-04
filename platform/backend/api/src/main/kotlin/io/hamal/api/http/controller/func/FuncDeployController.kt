@@ -28,7 +28,7 @@ internal class FuncDeployController(
     }
 
     @PostMapping("/v1/funcs/{funcId}/deploy/latest")
-    fun deploy(
+    fun deployLatest(
         @PathVariable("funcId") funcId: FuncId
     ): ResponseEntity<ApiSubmitted> = retry {
         deploy(funcId, ApiFuncDeployReq(null, null), FuncDeploySubmitted::accepted)
