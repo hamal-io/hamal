@@ -133,7 +133,7 @@ class FuncMemoryRepository : RecordMemoryRepository<FuncId, FuncRecord, Func>(
 
     override fun list(funcId: FuncId): List<FuncDeploymentsRes> {
         lock.withLock {
-            val recs = recordsOf(funcId)
+            val recs = recordsOf(funcId)//.reversed().take()
             return recs.map { rec ->
                 val dep = versionOf(funcId, rec.sequence())!!.deployment
                 FuncDeploymentsRes(

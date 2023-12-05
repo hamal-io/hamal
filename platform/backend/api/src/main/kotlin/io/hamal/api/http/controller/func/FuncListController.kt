@@ -87,7 +87,8 @@ internal class FuncListController(private val listFunc: FuncListPort) {
 
     @GetMapping("/v1/funcs/{funcId}/deployments")
     fun listFuncDeployments(
-        @PathVariable("funcId") funcId: FuncId
+        @PathVariable("funcId") funcId: FuncId,
+        @RequestParam(required = false, name = "limit") limit: Limit
     ): ResponseEntity<ApiFuncDeploymentList> {
         return listFunc(funcId) { li ->
             ResponseEntity.ok(ApiFuncDeploymentList(

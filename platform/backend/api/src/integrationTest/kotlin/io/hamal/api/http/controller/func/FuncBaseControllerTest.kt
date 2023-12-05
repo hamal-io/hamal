@@ -58,7 +58,7 @@ internal sealed class FuncBaseControllerTest : BaseControllerTest() {
         return updateResponse.result(ApiFuncUpdateSubmitted::class)
     }
 
-    fun deployVersion(funcId: FuncId, req: ApiFuncDeployReq): ApiFuncDeploySubmitted {
+    fun deployFunc(funcId: FuncId, req: ApiFuncDeployReq): ApiFuncDeploySubmitted {
         val deployResponse = httpTemplate.post("/v1/funcs/{funcId}/deploy")
             .path("funcId", funcId)
             .body(req)
@@ -67,5 +67,15 @@ internal sealed class FuncBaseControllerTest : BaseControllerTest() {
         assertThat(deployResponse.statusCode, equalTo(Accepted))
         require(deployResponse is HttpSuccessResponse) { "request was not successful" }
         return deployResponse.result(ApiFuncDeploySubmitted::class)
+    }
+
+    fun listDeployments(funcId: FuncId): ApiFuncDeploymentList {
+        val listDeployRes = httpTemplate.get("/v1/funcs/{funcId}/deployments")
+            .path("funcId", funcId)
+            .execute()
+
+        assertThat(listDeployRes.statusCode, equalTo(Ok))
+        require(listDeployRes is HttpSuccessResponse) { "request was not successful" }
+        return listDeployRes.result(ApiFuncDeploymentList::class)
     }
 }

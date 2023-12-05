@@ -1,10 +1,8 @@
 package io.hamal.api.http.controller.func
 
-import io.hamal.lib.domain.vo.CodeValue
-import io.hamal.lib.domain.vo.FuncInputs
-import io.hamal.lib.domain.vo.FuncName
-import io.hamal.lib.domain.vo.FlowName
+import io.hamal.lib.domain.vo.*
 import io.hamal.lib.sdk.api.ApiFuncCreateReq
+import io.hamal.lib.sdk.api.ApiFuncDeployReq
 import io.hamal.lib.sdk.api.ApiFuncList
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
@@ -91,4 +89,27 @@ internal class FuncListControllerTest : FuncBaseControllerTest() {
         assertThat(func.flow.name, equalTo(FlowName("hamal")))
         assertThat(func.name, equalTo(FuncName("func-48")))
     }
+
+    @Test
+    fun `Get a list of deployments`() {
+        val funcId = awaitCompleted(
+            createFunc(
+                ApiFuncCreateReq(
+                    name = FuncName("func-1"),
+                    inputs = FuncInputs(),
+                    code = CodeValue("")
+                )
+            )
+        ).funcId
+
+        repeat(20) {
+            awaitCompleted(deployFunc(funcId, ApiFuncDeployReq(null, DeployMessage("deployed-${it}"))))
+        }
+
+        val deployments = listDeployments(funcId).deployments
+        assertThat(deployments, hasSize(21))
+        assertThat(deployments[10].message, equalTo(DeployMessage("deployed-9")))
+        assertThat(deployments[10].version, equalTo(CodeVersion(1)))
+    }
+
 }
