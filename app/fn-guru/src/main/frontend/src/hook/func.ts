@@ -68,12 +68,16 @@ export const useFuncInvoke = (): [FuncInvokeAction, FuncInvokeSubmitted, boolean
     return [fn, submission, loading, error]
 }
 
-type FuncDeployLatestCodeAction = (funcId: string, abortController?: AbortController) => void
+type FuncDeployLatestCodeAction = (funcId: string, message?: string, abortController?: AbortController) => void
 export const useFuncDeployLatestCode = (): [FuncDeployLatestCodeAction, FuncDeploySubmitted, boolean, Error] => {
     const [auth] = useAuth()
     const [post, submission, loading, error] = usePost<FuncDeploySubmitted>()
-    const fn = useCallback(async (funcId: string, abortController?: AbortController) =>
-        post(`/v1/funcs/${funcId}/deploy`, {}, abortController), [auth]
+    const fn = useCallback(async (funcId: string, message?: string, abortController?: AbortController) => {
+            if (!message) message = ""; //for testing
+            post(`/v1/funcs/${funcId}/deploy`, {
+                message: message
+            }, abortController)
+        }, [auth]
     )
     return [fn, submission, loading, error]
 }

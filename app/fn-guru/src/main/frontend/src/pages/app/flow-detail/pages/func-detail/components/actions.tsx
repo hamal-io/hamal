@@ -2,18 +2,33 @@ import * as React from "react"
 import {FC} from "react"
 import {DotsHorizontalIcon} from "@radix-ui/react-icons"
 
-import {AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,} from "@/components/ui/alert-dialog"
+import {
+    AlertDialog,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 import {Button} from "@/components/ui/button"
-import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger,} from "@/components/ui/dropdown-menu"
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import {useFuncUpdate} from "@/hook";
 import {useFuncDeployLatestCode, useFuncInvoke} from "@/hook/func.ts";
 
 type Props = {
     funcId: string;
     code: string;
+    message: string;
 }
 
-const Actions: FC<Props> = ({funcId, code}) => {
+const Actions: FC<Props> = ({funcId, code, message}) => {
     const [showDeleteDialog, setShowDeployDialog] = React.useState(false)
     const [updateFunc] = useFuncUpdate()
     const [deployFunc] = useFuncDeployLatestCode()
@@ -56,12 +71,14 @@ const Actions: FC<Props> = ({funcId, code}) => {
                             The latest code version will be deployed. This might take a couple of seconds.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
+
+
                     <AlertDialogFooter>
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
                         <Button
                             variant="destructive"
                             onClick={() => {
-                                deployFunc(funcId)
+                                deployFunc(funcId, message /*TODO-115 message*/)
                                 setShowDeployDialog(false)
                             }}
                         >
