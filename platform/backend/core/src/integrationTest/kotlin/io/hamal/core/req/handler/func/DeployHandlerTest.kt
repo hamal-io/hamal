@@ -15,27 +15,71 @@ import org.springframework.beans.factory.annotation.Autowired
 internal class FuncDeployHandlerTest : BaseReqHandlerTest() {
 
     @Test
-    fun `Deploys version`() {
+    fun `Deploys version without message`() {
         setup(CodeId(5))
 
-        testInstance(submittedFuncDeployReq)
+        testInstance(
+            FuncDeploySubmitted(
+                id = ReqId(500),
+                status = Submitted,
+                groupId = testGroup.id,
+                FuncId(1),
+                version = CodeVersion(10),
+                message = null
+            )
+        )
 
         with(funcQueryRepository.get(FuncId(1))) {
             assertThat(code.version, equalTo(CodeVersion(20)))
-            assertThat(code.deployedVersion, equalTo(CodeVersion(10)))
+            assertThat(deployment.version, equalTo(CodeVersion(10)))
+            assertThat(deployment.message, equalTo(DeployMessage.empty))
         }
     }
 
-    private val submittedFuncDeployReq by lazy {
-        FuncDeploySubmitted(
-            id = ReqId(500),
-            status = Submitted,
-            groupId = testGroup.id,
-            FuncId(1),
-            versionToDeploy = CodeVersion(10)
+    @Test
+    fun `Deploys version`() {
+        setup(CodeId(5))
+
+        testInstance(
+            FuncDeploySubmitted(
+                id = ReqId(500),
+                status = Submitted,
+                groupId = testGroup.id,
+                FuncId(1),
+                version = CodeVersion(10),
+                message = DeployMessage("This function and hamal rocks")
+            )
         )
+
+        with(funcQueryRepository.get(FuncId(1))) {
+            assertThat(code.version, equalTo(CodeVersion(20)))
+            assertThat(deployment.version, equalTo(CodeVersion(10)))
+            assertThat(deployment.message, equalTo(DeployMessage("This function and hamal rocks")))
+        }
     }
 
+    @Test
+    fun `Deploys latest version`() {
+        setup(CodeId(5))
+
+        testInstance(
+            FuncDeploySubmitted(
+                id = ReqId(500),
+                status = Submitted,
+                groupId = testGroup.id,
+                funcId = FuncId(1),
+                version = null,
+                message = null
+            )
+        )
+
+        with(funcQueryRepository.get(FuncId(1))) {
+            assertThat(code.version, equalTo(CodeVersion(20)))
+
+            assertThat(deployment.version, equalTo(CodeVersion(20)))
+            assertThat(deployment.message, equalTo(DeployMessage.empty))
+        }
+    }
 
     private fun setup(codeId: CodeId) {
         codeCmdRepository.create(

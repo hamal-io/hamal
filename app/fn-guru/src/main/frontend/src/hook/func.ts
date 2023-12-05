@@ -1,6 +1,13 @@
 import {useCallback} from "react";
 import {useGet, usePatch, usePost} from "@/hook/http.ts";
-import {Func, FuncCreateSubmitted, FuncDeployLatestSubmitted, FuncInvokeSubmitted, FuncList, FuncUpdateSubmitted} from "@/types";
+import {
+    Func,
+    FuncCreateSubmitted,
+    FuncDeploySubmitted,
+    FuncInvokeSubmitted,
+    FuncList,
+    FuncUpdateSubmitted
+} from "@/types";
 import {useAuth} from "@/hook/auth.ts";
 
 type FuncGetAction = (funcId: string, abortController?: AbortController) => void
@@ -62,11 +69,11 @@ export const useFuncInvoke = (): [FuncInvokeAction, FuncInvokeSubmitted, boolean
 }
 
 type FuncDeployLatestCodeAction = (funcId: string, abortController?: AbortController) => void
-export const useFuncDeployLatestCode = (): [FuncDeployLatestCodeAction, FuncDeployLatestSubmitted, boolean, Error] => {
+export const useFuncDeployLatestCode = (): [FuncDeployLatestCodeAction, FuncDeploySubmitted, boolean, Error] => {
     const [auth] = useAuth()
-    const [post, submission, loading, error] = usePost<FuncDeployLatestSubmitted>()
+    const [post, submission, loading, error] = usePost<FuncDeploySubmitted>()
     const fn = useCallback(async (funcId: string, abortController?: AbortController) =>
-        post(`/v1/funcs/${funcId}/deploy/latest`, {}, abortController), [auth]
+        post(`/v1/funcs/${funcId}/deploy`, {}, abortController), [auth]
     )
     return [fn, submission, loading, error]
 }

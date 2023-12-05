@@ -1,12 +1,9 @@
 package io.hamal.repository.sqlite.record.func
 
-import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Func
-import io.hamal.repository.api.FuncCmdRepository
-import io.hamal.repository.api.FuncCmdRepository.CreateCmd
-import io.hamal.repository.api.FuncCmdRepository.UpdateCmd
+import io.hamal.repository.api.FuncCmdRepository.*
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
 import io.hamal.repository.api.FuncRepository
 import io.hamal.repository.record.CreateDomainObject
@@ -81,39 +78,20 @@ class FuncSqliteRepository(
         }
     }
 
-    override fun deploy(funcId: FuncId, cmd: FuncCmdRepository.DeployCmd): Func {
+    override fun deploy(funcId: FuncId, cmd: DeployCmd): Func {
         val cmdId = cmd.id
         return tx {
             if (commandAlreadyApplied(cmdId, funcId)) {
                 versionOf(funcId, cmdId)
             } else {
                 val current = versionOf(funcId, cmdId)
-                require(cmd.versionToDeploy <= current.code.version) { "${cmd.versionToDeploy} can not be deployed" }
+                require(cmd.version <= current.code.version) { "${cmd.version} can not be deployed" }
                 store(
                     FuncDeployedRecord(
-                        cmdId = cmdId,
+                        cmdId = cmd.id,
                         entityId = funcId,
-                        deployedVersion = cmd.versionToDeploy
-                    )
-                )
-                currentVersion(funcId)
-                    .also { ProjectionCurrent.upsert(this, it) }
-                    .also { ProjectionUniqueName.upsert(this, it) }
-            }
-        }
-    }
-
-    override fun deployLatest(funcId: FuncId, cmd: CmdId): Func {
-        return tx {
-            if (commandAlreadyApplied(cmd, funcId)) {
-                versionOf(funcId, cmd)
-            } else {
-                val last = lastRecordOf(funcId)
-                store(
-                    FuncDeployedRecord(
-                        entityId = funcId,
-                        cmdId = cmd,
-                        deployedVersion = versionOf(funcId, last.sequence())!!.code.version
+                        version = cmd.version,
+                        message = cmd.message
                     )
                 )
                 currentVersion(funcId)

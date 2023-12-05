@@ -9,6 +9,7 @@ import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncCmdRepository.*
 import io.hamal.repository.api.FuncCode
+import io.hamal.repository.api.FuncDeployment
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
 import io.hamal.repository.api.FuncRepository
 import io.hamal.repository.fixture.AbstractUnitTest
@@ -17,7 +18,6 @@ import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.TestFactory
 import org.junit.jupiter.api.assertThrows
-import java.util.concurrent.atomic.AtomicInteger
 import kotlin.math.abs
 import kotlin.random.Random
 
@@ -56,12 +56,20 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                     code, equalTo(
                         FuncCode(
                             id = CodeId(5),
-                            version = CodeVersion(1),
-                            deployedVersion = CodeVersion(1)
+                            version = CodeVersion(1)
                         )
                     )
                 )
 
+                assertThat(
+                    deployment, equalTo(
+                        FuncDeployment(
+                            id = CodeId(5),
+                            version = CodeVersion(1),
+                            message = DeployMessage("Initial version")
+                        )
+                    )
+                )
             }
 
             verifyCount(1)
@@ -135,8 +143,17 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                         code, equalTo(
                             FuncCode(
                                 id = CodeId(5),
+                                version = CodeVersion(3)
+                            )
+                        )
+                    )
+
+                    assertThat(
+                        deployment, equalTo(
+                            FuncDeployment(
+                                id = CodeId(5),
                                 version = CodeVersion(3),
-                                deployedVersion = CodeVersion(3)
+                                message = DeployMessage("Initial version")
                             )
                         )
                     )
@@ -184,8 +201,17 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                         code, equalTo(
                             FuncCode(
                                 id = CodeId(7),
+                                version = CodeVersion(7)
+                            )
+                        )
+                    )
+
+                    assertThat(
+                        deployment, equalTo(
+                            FuncDeployment(
+                                id = CodeId(7),
                                 version = CodeVersion(7),
-                                deployedVersion = CodeVersion(7)
+                                message = DeployMessage("Initial version")
                             )
                         )
                     )
@@ -229,8 +255,17 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                     code, equalTo(
                         FuncCode(
                             id = CodeId(7),
-                            version = CodeVersion(3),
-                            deployedVersion = CodeVersion(7)
+                            version = CodeVersion(3)
+                        )
+                    )
+                )
+
+                assertThat(
+                    deployment, equalTo(
+                        FuncDeployment(
+                            id = CodeId(7),
+                            version = CodeVersion(7),
+                            message = DeployMessage("Initial version")
                         )
                     )
                 )
@@ -269,8 +304,17 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                     code, equalTo(
                         FuncCode(
                             id = CodeId(9),
+                            version = CodeVersion(9)
+                        )
+                    )
+                )
+
+                assertThat(
+                    deployment, equalTo(
+                        FuncDeployment(
+                            id = CodeId(9),
                             version = CodeVersion(9),
-                            deployedVersion = CodeVersion(9)
+                            message = DeployMessage("Initial version")
                         )
                     )
                 )
@@ -334,16 +378,19 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                 maxVersion = CodeVersion(100),
             )
 
-            assertThat(func.code.deployedVersion, equalTo(CodeVersion(1)))
+            assertThat(func.deployment.version, equalTo(CodeVersion(1)))
+            assertThat(func.deployment.message, equalTo(DeployMessage("Initial version")))
 
             repeat(20) { iter ->
                 val deploy = deploy(
                     FuncId(123), DeployCmd(
                         id = CmdGen(),
-                        versionToDeploy = CodeVersion(iter + 1)
+                        version = CodeVersion(iter + 1),
+                        message = DeployMessage("Some deployment message ${iter + 1}")
                     )
                 )
-                assertThat(deploy.code.deployedVersion, equalTo(CodeVersion(iter + 1)))
+                assertThat(deploy.deployment.version, equalTo(CodeVersion(iter + 1)))
+                assertThat(deploy.deployment.message, equalTo(DeployMessage("Some deployment message ${iter + 1}")))
             }
             assertThat(func.code.version, equalTo(CodeVersion(100)))
         }
@@ -359,18 +406,21 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
             deploy(
                 FuncId(123), DeployCmd(
                     id = CmdGen(),
-                    versionToDeploy = CodeVersion(5)
+                    version = CodeVersion(5),
+                    message = DeployMessage("Some Message")
                 )
             )
 
-            val res = deploy(
+            val result = deploy(
                 FuncId(123), DeployCmd(
                     id = CmdGen(),
-                    versionToDeploy = CodeVersion(5)
+                    version = CodeVersion(5),
+                    message = DeployMessage("Deployed Twice")
                 )
             )
 
-            assertThat(res.code.deployedVersion, equalTo(CodeVersion(5)))
+            assertThat(result.deployment.version, equalTo(CodeVersion(5)))
+            assertThat(result.deployment.message, equalTo(DeployMessage("Deployed Twice")))
         }
 
         @TestFactory
@@ -384,33 +434,22 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
             deploy(
                 FuncId(123), DeployCmd(
                     id = CmdGen(),
-                    versionToDeploy = CodeVersion(100)
+                    version = CodeVersion(100),
+                    message = DeployMessage("100")
                 )
             )
 
-            val res = deploy(
+            val result = deploy(
                 FuncId(123), DeployCmd(
                     id = CmdGen(),
-                    versionToDeploy = CodeVersion(50)
+                    version = CodeVersion(50),
+                    message = DeployMessage("50")
                 )
             )
-            assertThat(res.code.deployedVersion, equalTo(CodeVersion(50)))
-            assertThat(res.code.version, equalTo(CodeVersion(100)))
+            assertThat(result.code.version, equalTo(CodeVersion(100)))
+            assertThat(result.deployment.version, equalTo(CodeVersion(50)))
+            assertThat(result.deployment.message, equalTo(DeployMessage("50")))
         }
-
-
-        @TestFactory
-        fun `Deploys latest version`() = runWith(FuncRepository::class) {
-            createUpdatedFunc(
-                funcId = FuncId(123),
-                codeId = CodeId(5),
-                maxVersion = CodeVersion(100),
-            )
-
-            val res = deployLatest(FuncId(123), CmdGen())
-            assertThat(res.code.deployedVersion, equalTo(CodeVersion(100)))
-        }
-
 
         @TestFactory
         fun `Tries to deploy version that does not exist`() = runWith(FuncRepository::class) {
@@ -425,7 +464,8 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                 deploy(
                     FuncId(1), DeployCmd(
                         id = CmdGen(),
-                        versionToDeploy = CodeVersion(500)
+                        version = CodeVersion(500),
+                        message = DeployMessage("It's an honest attempt - doomed to fail")
                     )
                 )
             }
@@ -488,8 +528,16 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                     code, equalTo(
                         FuncCode(
                             id = CodeId(4),
+                            version = CodeVersion(5)
+                        )
+                    )
+                )
+                assertThat(
+                    deployment, equalTo(
+                        FuncDeployment(
+                            id = CodeId(4),
                             version = CodeVersion(5),
-                            deployedVersion = CodeVersion(5)
+                            message = DeployMessage("Initial version")
                         )
                     )
                 )
@@ -535,8 +583,16 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                     code, equalTo(
                         FuncCode(
                             id = CodeId(4),
+                            version = CodeVersion(5)
+                        )
+                    )
+                )
+                assertThat(
+                    deployment, equalTo(
+                        FuncDeployment(
+                            id = CodeId(4),
                             version = CodeVersion(5),
-                            deployedVersion = CodeVersion(5)
+                            message = DeployMessage("Initial version")
                         )
                     )
                 )
@@ -688,65 +744,65 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
             )
         }
     }
-}
 
-private fun FuncRepository.createFunc(
-    funcId: FuncId,
-    flowId: FlowId,
-    name: FuncName,
-    groupId: GroupId,
-    codeId: CodeId = CodeId(5),
-    codeVersion: CodeVersion = CodeVersion(6),
-    cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
-) {
-    create(
-        CreateCmd(
-            id = cmdId,
-            funcId = funcId,
-            groupId = groupId,
-            flowId = flowId,
-            name = name,
-            inputs = FuncInputs(
-                MapType(
-                    mutableMapOf(
-                        "hamal" to StringType("rockz")
+
+    private fun FuncRepository.createFunc(
+        funcId: FuncId,
+        flowId: FlowId,
+        name: FuncName,
+        groupId: GroupId,
+        codeId: CodeId = CodeId(5),
+        codeVersion: CodeVersion = CodeVersion(6),
+        cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
+    ) {
+        create(
+            CreateCmd(
+                id = cmdId,
+                funcId = funcId,
+                groupId = groupId,
+                flowId = flowId,
+                name = name,
+                inputs = FuncInputs(
+                    MapType(
+                        mutableMapOf(
+                            "hamal" to StringType("rockz")
+                        )
                     )
-                )
-            ),
-            codeId = codeId,
-            codeVersion = codeVersion
+                ),
+                codeId = codeId,
+                codeVersion = codeVersion
+            )
         )
-    )
+    }
+
+    private fun FuncRepository.createUpdatedFunc(
+        funcId: FuncId,
+        codeId: CodeId,
+        maxVersion: CodeVersion,
+    ): Func {
+        create(
+            CreateCmd(
+                id = CmdGen(),
+                funcId = funcId,
+                groupId = GroupId(1),
+                flowId = FlowId(234),
+                name = FuncName("SomeFunc"),
+                inputs = FuncInputs(),
+                codeId = codeId,
+                codeVersion = CodeVersion(1)
+            )
+        )
+
+        return update(
+            funcId, UpdateCmd(
+                id = CmdGen(),
+                name = FuncName("Updated"),
+                inputs = null,
+                codeVersion = maxVersion
+            )
+        )
+    }
 }
-
-private fun FuncRepository.createUpdatedFunc(
-    funcId: FuncId,
-    codeId: CodeId,
-    maxVersion: CodeVersion,
-): Func {
-    create(
-        CreateCmd(
-            id = CmdGen(),
-            funcId = funcId,
-            groupId = GroupId(1),
-            flowId = FlowId(234),
-            name = FuncName("SomeFunc"),
-            inputs = FuncInputs(),
-            codeId = codeId,
-            codeVersion = CodeVersion(1)
-        )
-    )
-
-    return update(
-        funcId, UpdateCmd(
-            id = CmdGen(),
-            name = FuncName("Updated"),
-            inputs = null,
-            codeVersion = maxVersion
-        )
-    )
-}
-
 
 private fun FuncRepository.verifyCount(expected: Int) {
     verifyCount(expected) { }
@@ -755,12 +811,4 @@ private fun FuncRepository.verifyCount(expected: Int) {
 private fun FuncRepository.verifyCount(expected: Int, block: FuncQuery.() -> Unit) {
     val counted = count(FuncQuery(groupIds = listOf()).also(block))
     assertThat("number of functions expected", counted, equalTo(expected.toULong()))
-}
-
-private object CmdGen {
-    private val atomicCounter = AtomicInteger(1)
-
-    operator fun invoke(): CmdId {
-        return CmdId(atomicCounter.incrementAndGet())
-    }
 }

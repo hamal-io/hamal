@@ -5,11 +5,11 @@ import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.*
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
-import io.hamal.repository.api.submitted_req.*
-import io.hamal.request.CreateFuncReq
-import io.hamal.request.InvokeFuncReq
-import io.hamal.request.InvokeFuncVersionReq
-import io.hamal.request.UpdateFuncReq
+import io.hamal.repository.api.submitted_req.ExecInvokeSubmitted
+import io.hamal.repository.api.submitted_req.FuncCreateSubmitted
+import io.hamal.repository.api.submitted_req.FuncDeploySubmitted
+import io.hamal.repository.api.submitted_req.FuncUpdateSubmitted
+import io.hamal.request.*
 import org.springframework.stereotype.Component
 
 interface FuncCreatePort {
@@ -45,13 +45,8 @@ interface FuncListPort {
 interface FuncDeployPort {
     operator fun <T : Any> invoke(
         funcId: FuncId,
-        versionToDeploy: CodeVersion,
+        req: FuncDeployReq,
         responseHandler: (FuncDeploySubmitted) -> T
-    ): T
-
-    operator fun <T : Any> invoke(
-        funcId: FuncId,
-        responseHandler: (FuncDeployLatestSubmitted) -> T
     ): T
 }
 
@@ -97,7 +92,7 @@ class FuncAdapter(
     override fun <T : Any> invoke(funcId: FuncId, responseHandler: (Func, Code, Code, Flow) -> T): T {
         val func = funcQueryRepository.get(funcId)
         val current = codeQueryRepository.get(func.code.id, func.code.version)
-        val deployed = codeQueryRepository.get(func.code.id, func.code.deployedVersion)
+        val deployed = codeQueryRepository.get(func.code.id, func.deployment.version)
         val flows = flowQueryRepository.get(func.flowId)
         return responseHandler(func, current, deployed, flows)
     }
@@ -118,7 +113,7 @@ class FuncAdapter(
             funcId = funcId,
             correlationId = req.correlationId,
             inputs = req.inputs,
-            code = func.code.toExecCode(),
+            code = func.deployment.toExecCode(),
             invocation = req.invocation
         ).also(reqCmdRepository::queue).let(responseHandler)
     }
@@ -182,31 +177,28 @@ class FuncAdapter(
 
     override fun <T : Any> invoke(
         funcId: FuncId,
-        versionToDeploy: CodeVersion,
+        req: FuncDeployReq,
         responseHandler: (FuncDeploySubmitted) -> T
     ): T {
         val func = funcQueryRepository.get(funcId)
-        val code = codeQueryRepository.get(func.code.id, versionToDeploy)
+        req.version?.let {
+            ensureCodeExists(func.code.id, req.version!!)
+        }
         return FuncDeploySubmitted(
             id = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
             groupId = func.groupId,
             funcId = funcId,
-            versionToDeploy = code.version
+            version = req.version,
+            message = req.message
         ).also(reqCmdRepository::queue).let(responseHandler)
     }
 
-    override fun <T : Any> invoke(funcId: FuncId, responseHandler: (FuncDeployLatestSubmitted) -> T): T {
-        val func = funcQueryRepository.get(funcId)
-        return FuncDeployLatestSubmitted(
-            id = generateDomainId(::ReqId),
-            status = ReqStatus.Submitted,
-            groupId = func.groupId,
-            funcId = funcId,
-        ).also(reqCmdRepository::queue).let(responseHandler)
+    private fun ensureFuncExists(funcId: FuncId): Func {
+        return funcQueryRepository.get(funcId)
     }
 
-    private fun ensureFuncExists(funcId: FuncId) {
-        funcQueryRepository.get(funcId)
+    private fun ensureCodeExists(codeId: CodeId, codeVersion: CodeVersion) {
+        codeQueryRepository.get(codeId, codeVersion)
     }
 }

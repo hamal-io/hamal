@@ -9,10 +9,7 @@ import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiFuncService.FuncQuery
 import io.hamal.lib.sdk.fold
-import io.hamal.request.CreateFuncReq
-import io.hamal.request.InvokeFuncReq
-import io.hamal.request.InvokeFuncVersionReq
-import io.hamal.request.UpdateFuncReq
+import io.hamal.request.*
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -32,15 +29,13 @@ data class ApiFuncCreateSubmitted(
 ) : ApiSubmitted
 
 @Serializable
-data class ApiFuncDeploySubmitted(
-    override val id: ReqId,
-    override val status: ReqStatus,
-    val funcId: FuncId,
-    val version: CodeVersion
-) : ApiSubmitted
+data class ApiFuncDeployReq(
+    override val version: CodeVersion?,
+    override val message: DeployMessage? = null
+) : FuncDeployReq
 
 @Serializable
-data class ApiFuncDeployLatestSubmitted(
+data class ApiFuncDeploySubmitted(
     override val id: ReqId,
     override val status: ReqStatus,
     val funcId: FuncId
@@ -101,7 +96,8 @@ data class ApiFunc(
     val flow: Flow,
     val name: FuncName,
     val inputs: FuncInputs,
-    val code: Code
+    val code: Code,
+    val deployment: Deployment
 ) {
     @Serializable
     data class Flow(
@@ -112,21 +108,22 @@ data class ApiFunc(
     @Serializable
     data class Code(
         val id: CodeId,
-        val current: VersionedCodeValue,
-        val deployed: VersionedCodeValue
+        val version: CodeVersion,
+        val value: CodeValue
     )
 
     @Serializable
-    data class VersionedCodeValue(
+    data class Deployment(
+        val id: CodeId,
         val version: CodeVersion,
         val value: CodeValue,
+        val message: DeployMessage
     )
 }
 
 interface ApiFuncService {
     fun create(flowId: FlowId, createFuncReq: ApiFuncCreateReq): ApiFuncCreateSubmitted
-    fun deploy(funcId: FuncId, version: CodeVersion): ApiFuncDeploySubmitted
-    fun deployLatest(funcId: FuncId): ApiFuncDeployLatestSubmitted
+    fun deploy(funcId: FuncId, req: ApiFuncDeployReq): ApiFuncDeploySubmitted
     fun list(query: FuncQuery): List<ApiFuncList.Func>
     fun get(funcId: FuncId): ApiFunc
     fun update(funcId: FuncId, req: ApiFuncUpdateReq): ApiFuncUpdateSubmitted
@@ -161,19 +158,12 @@ internal class ApiFuncServiceImpl(
             .execute()
             .fold(ApiFuncCreateSubmitted::class)
 
-    override fun deploy(funcId: FuncId, version: CodeVersion) =
-        template.post("/v1/funcs/{funcId}/deploy/{version}")
+    override fun deploy(funcId: FuncId, req: ApiFuncDeployReq) =
+        template.post("/v1/funcs/{funcId}/deploy")
             .path("funcId", funcId)
-            .path("version", version.value.toString())
+            .body(req)
             .execute()
             .fold(ApiFuncDeploySubmitted::class)
-
-    override fun deployLatest(funcId: FuncId): ApiFuncDeployLatestSubmitted =
-        template.post("/v1/funcs/{funcId}/deploy/latest")
-            .path("funcId", funcId)
-            .execute()
-            .fold(ApiFuncDeployLatestSubmitted::class)
-
 
     override fun list(query: FuncQuery): List<ApiFuncList.Func> =
         template.get("/v1/funcs")

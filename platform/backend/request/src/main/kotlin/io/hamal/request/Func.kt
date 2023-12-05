@@ -26,3 +26,8 @@ interface InvokeFuncVersionReq {
     val inputs: InvocationInputs
     val version: CodeVersion?
 }
+
+interface FuncDeployReq {
+    val version: CodeVersion?
+    val message: DeployMessage?
+}
