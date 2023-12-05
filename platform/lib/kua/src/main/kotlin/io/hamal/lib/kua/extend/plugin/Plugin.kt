@@ -1,9 +1,6 @@
 package io.hamal.lib.kua.extend.plugin
 
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.extend.ExtensionConfig
-import io.hamal.lib.kua.extend.ExtensionConfigGetFunction
-import io.hamal.lib.kua.extend.ExtensionConfigUpdateFunction
 import io.hamal.lib.kua.type.Type
 
 interface RunnerPluginFactory {
@@ -13,8 +10,7 @@ interface RunnerPluginFactory {
 class RunnerPlugin(
     val name: String,
     val factoryCode: String = loadFactoryCodeFromResources(name),
-    val internals: Map<String, Type> = mapOf(),
-    val config: ExtensionConfig = ExtensionConfig(mutableMapOf()),
+    val internals: Map<String, Type> = mapOf()
 ) {
 
     companion object {
@@ -27,10 +23,6 @@ class RunnerPlugin(
             return String(resource.readBytes())
         }
     }
-
-    fun configGetFunction() = ExtensionConfigGetFunction(config)
-
-    fun configUpdateFunction() = ExtensionConfigUpdateFunction(config)
 }
 
 

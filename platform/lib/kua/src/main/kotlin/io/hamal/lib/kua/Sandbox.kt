@@ -2,9 +2,6 @@ package io.hamal.lib.kua
 
 import io.hamal.lib.kua.builtin.Require
 import io.hamal.lib.kua.builtin.RequirePlugin
-import io.hamal.lib.kua.extend.ExtensionConfig
-import io.hamal.lib.kua.extend.ExtensionConfigGetFunction
-import io.hamal.lib.kua.extend.ExtensionConfigUpdateFunction
 import io.hamal.lib.kua.extend.RunnerRegistry
 import io.hamal.lib.kua.extend.extension.RunnerExtension
 import io.hamal.lib.kua.extend.extension.RunnerExtensionFactory
@@ -119,22 +116,4 @@ class Sandbox(
 internal fun Native.load(code: String) {
     loadString(code)
     call(0, 0)
-}
-
-
-fun State.createConfig(config: ExtensionConfig): TableProxyMap {
-
-    val result = tableCreateMap(1)
-
-    val fns = mapOf(
-        "get" to ExtensionConfigGetFunction(config),
-        "update" to ExtensionConfigUpdateFunction(config)
-    )
-
-    fns.forEach { (name, value) ->
-        native.pushFunction(value)
-        native.tabletSetField(result.index, name)
-    }
-
-    return result
 }

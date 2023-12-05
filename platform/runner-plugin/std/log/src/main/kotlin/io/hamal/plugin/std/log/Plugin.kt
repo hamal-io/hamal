@@ -2,6 +2,7 @@ package io.hamal.plugin.std.log
 
 import io.hamal.lib.common.logger
 import io.hamal.lib.domain._enum.ExecLogLevel
+import io.hamal.lib.domain._enum.ExecLogLevel.*
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecLogMessage
 import io.hamal.lib.domain.vo.ExecLogTimestamp
@@ -44,12 +45,12 @@ class LogFunction(
         val level = ExecLogLevel.valueOf(arg1.value)
         val message = ExecLogMessage(arg2.value)
 
-        if (level == ExecLogLevel.Info) {
-            log.info(message.value)
-        } else if (level == ExecLogLevel.Warn) {
-            log.warn(message.value)
-        } else if (level == ExecLogLevel.Error) {
-            log.error(message.value)
+        when (level) {
+            Trace -> log.trace(message.value)
+            Debug -> log.debug(message.value)
+            Info -> log.info(message.value)
+            Warn -> log.warn(message.value)
+            Error -> log.error(message.value)
         }
 
         execLogService.append(

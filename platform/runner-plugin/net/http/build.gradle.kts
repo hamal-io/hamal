@@ -4,7 +4,7 @@ plugins {
 
 
 tasks.jar {
-    archiveFileName.set("cap-net-http.jar")
+    archiveFileName.set("plugin-net-http.jar")
 }
 
 distributions {
