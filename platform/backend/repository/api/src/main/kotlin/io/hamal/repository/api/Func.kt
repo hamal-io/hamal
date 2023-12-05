@@ -40,6 +40,13 @@ data class FuncDeployment(
     )
 }
 
+@Serializable
+data class FuncDeploymentsRes(
+    val version: CodeVersion,
+    val message: DeployMessage,
+    val deployedAt: RecordedAt
+)
+
 interface FuncRepository : FuncCmdRepository, FuncQueryRepository
 
 interface FuncCmdRepository : CmdRepository {
@@ -85,6 +92,8 @@ interface FuncQueryRepository {
         )
     )
 
+    fun list(funcId: FuncId): List<FuncDeploymentsRes>
+
     fun count(query: FuncQuery): ULong
 
     data class FuncQuery(
@@ -94,4 +103,6 @@ interface FuncQueryRepository {
         var flowIds: List<FlowId> = listOf(),
         var groupIds: List<GroupId> = listOf()
     )
+
+
 }

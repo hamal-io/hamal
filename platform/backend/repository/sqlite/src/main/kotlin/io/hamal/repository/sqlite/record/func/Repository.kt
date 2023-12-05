@@ -4,6 +4,7 @@ import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncCmdRepository.*
+import io.hamal.repository.api.FuncDeploymentsRes
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
 import io.hamal.repository.api.FuncRepository
 import io.hamal.repository.record.CreateDomainObject
@@ -130,6 +131,10 @@ class FuncSqliteRepository(
 
     override fun list(query: FuncQuery): List<Func> {
         return ProjectionCurrent.list(connection, query)
+    }
+
+    override fun list(funcId: FuncId): List<FuncDeploymentsRes> {
+        TODO("Not yet implemented")
     }
 
     override fun count(query: FuncQuery): ULong {
