@@ -24,7 +24,7 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
                     deployVersion(
                         funcId = func.id,
                         req = ApiFuncDeployReq(
-                            codeVersion = CodeVersion(iter + 1),
+                            version = CodeVersion(iter + 1),
                             null
                         )
                     )
@@ -49,7 +49,7 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
                     deployVersion(
                         funcId = func.id,
                         req = ApiFuncDeployReq(
-                            codeVersion = CodeVersion(10),
+                            version = CodeVersion(10),
                             null
                         )
                     )
@@ -73,7 +73,7 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
                     deployVersion(
                         funcId = func.id,
                         req = ApiFuncDeployReq(
-                            codeVersion = CodeVersion(20 - iter),
+                            version = CodeVersion(20 - iter),
                             null
                         )
                     )
@@ -90,7 +90,7 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
 
         @Test
         fun `Tries to deploy to func that does not exist`() {
-            val deployResponse = httpTemplate.post("/v1/funcs/{funcId}/deploy/")
+            val deployResponse = httpTemplate.post("/v1/funcs/deploy/{funcId}")
                 .path("funcId", FuncId(23))
                 .body(ApiFuncDeployReq(CodeVersion(1), null))
                 .execute()
@@ -110,7 +110,7 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
                 )
             )
 
-            val deployResponse = httpTemplate.post("/v1/funcs/{funcId}/deploy/")
+            val deployResponse = httpTemplate.post("/v1/funcs/deploy/{funcId}")
                 .path("funcId", func.funcId)
                 .body(ApiFuncDeployReq(CodeVersion(23), null))
                 .execute()
@@ -157,7 +157,7 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
                     deployVersion(
                         funcId = funcId,
                         req = ApiFuncDeployReq(
-                            codeVersion = null,
+                            version = null,
                             DeployMessage("SuperFunc")
                         )
                     )

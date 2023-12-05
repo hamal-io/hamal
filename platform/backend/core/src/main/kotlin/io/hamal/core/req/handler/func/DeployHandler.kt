@@ -32,8 +32,8 @@ private fun FuncDeployHandler.deployVersion(req: FuncDeploySubmitted): Func {
         req.funcId,
         DeployCmd(
             id = req.cmdId(),
-            version = req.versionToDeploy ?: func.code.version,
-            message = req.deployMessage ?: DeployMessage.empty
+            version = req.version ?: func.code.version,
+            message = req.message ?: DeployMessage.empty
         )
     )
 }

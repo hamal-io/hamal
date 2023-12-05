@@ -30,8 +30,8 @@ data class ApiFuncCreateSubmitted(
 
 @Serializable
 data class ApiFuncDeployReq(
-    override val codeVersion: CodeVersion?,
-    override val deployMessage: DeployMessage? = null
+    override val version: CodeVersion?,
+    override val message: DeployMessage? = null
 ) : FuncDeployReq
 
 @Serializable
@@ -159,7 +159,7 @@ internal class ApiFuncServiceImpl(
             .fold(ApiFuncCreateSubmitted::class)
 
     override fun deploy(funcId: FuncId, req: ApiFuncDeployReq) =
-        template.post("/v1/funcs/{funcId}/deploy/")
+        template.post("/v1/funcs/deploy/{funcId}")
             .path("funcId", funcId)
             .body(req)
             .execute()

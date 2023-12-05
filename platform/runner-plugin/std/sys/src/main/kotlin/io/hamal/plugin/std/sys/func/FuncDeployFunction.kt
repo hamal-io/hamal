@@ -38,8 +38,8 @@ class FuncDeployFunction(
             val res = sdk.func.deploy(
                 funcId = funcId,
                 req = ApiFuncDeployReq(
-                    codeVersion = version,
-                    deployMessage = message
+                    version = version,
+                    message = message
                 )
             )
 
@@ -55,13 +55,3 @@ class FuncDeployFunction(
         }
     }
 }
-/*
-wip
-private inline fun <reified T : SerializableType> isPresent(map: MapType, key: String, trf: (String) -> T) : Any?{
-    return if (map.type(key) == T::class){
-        trf(key)
-    } else {
-        null
-    }
-}
-*/

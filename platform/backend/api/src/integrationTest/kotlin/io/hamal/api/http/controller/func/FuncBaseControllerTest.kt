@@ -59,7 +59,7 @@ internal sealed class FuncBaseControllerTest : BaseControllerTest() {
     }
 
     fun deployVersion(funcId: FuncId, req: ApiFuncDeployReq): ApiFuncDeploySubmitted {
-        val deployResponse = httpTemplate.post("/v1/funcs/{funcId}/deploy/")
+        val deployResponse = httpTemplate.post("/v1/funcs/deploy/{funcId}")
             .path("funcId", funcId)
             .body(req)
             .execute()

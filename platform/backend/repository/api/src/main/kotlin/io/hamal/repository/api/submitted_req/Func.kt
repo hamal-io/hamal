@@ -36,6 +36,6 @@ data class FuncDeploySubmitted(
     override var status: ReqStatus,
     val groupId: GroupId,
     val funcId: FuncId,
-    val versionToDeploy: CodeVersion?,
-    val deployMessage: DeployMessage?
+    val version: CodeVersion?,
+    val message: DeployMessage?
 ) : Submitted

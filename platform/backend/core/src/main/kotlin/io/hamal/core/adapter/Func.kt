@@ -181,16 +181,16 @@ class FuncAdapter(
         responseHandler: (FuncDeploySubmitted) -> T
     ): T {
         val func = funcQueryRepository.get(funcId)
-        req.codeVersion?.let {
-            ensureCodeExists(func.code.id, req.codeVersion!!)
+        req.version?.let {
+            ensureCodeExists(func.code.id, req.version!!)
         }
         return FuncDeploySubmitted(
             id = generateDomainId(::ReqId),
             status = ReqStatus.Submitted,
             groupId = func.groupId,
             funcId = funcId,
-            versionToDeploy = req.codeVersion,
-            deployMessage = req.deployMessage
+            version = req.version,
+            message = req.message
         ).also(reqCmdRepository::queue).let(responseHandler)
     }
 

@@ -24,8 +24,8 @@ internal class FuncDeployHandlerTest : BaseReqHandlerTest() {
                 status = Submitted,
                 groupId = testGroup.id,
                 FuncId(1),
-                versionToDeploy = CodeVersion(10),
-                deployMessage = null
+                version = CodeVersion(10),
+                message = null
             )
         )
 
@@ -46,8 +46,8 @@ internal class FuncDeployHandlerTest : BaseReqHandlerTest() {
                 status = Submitted,
                 groupId = testGroup.id,
                 FuncId(1),
-                versionToDeploy = CodeVersion(10),
-                deployMessage = DeployMessage("This function and hamal rocks")
+                version = CodeVersion(10),
+                message = DeployMessage("This function and hamal rocks")
             )
         )
 
@@ -68,8 +68,8 @@ internal class FuncDeployHandlerTest : BaseReqHandlerTest() {
                 status = Submitted,
                 groupId = testGroup.id,
                 funcId = FuncId(1),
-                versionToDeploy = null,
-                deployMessage = null
+                version = null,
+                message = null
             )
         )
 
