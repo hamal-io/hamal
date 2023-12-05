@@ -7,19 +7,19 @@ import io.hamal.repository.api.log.*
 // FIXME just a pass through for now - replace with proper implementation,
 // like supporting multiple partitions, partitioning by key
 // keeping track of consumer group ids
-class MemoryTopicRepository(
+class TopicMemoryRepository(
     internal val topic: Topic
 ) : TopicRepository {
 
-    private var activeSegment: MemorySegment
-    private var activeSegmentRepository: MemorySegmentRepository
+    private var activeSegment: SegmentMemory
+    private var activeSegmentRepository: SegmentMemoryRepository
 
     init {
-        activeSegment = MemorySegment(
+        activeSegment = SegmentMemory(
             id = Segment.Id(0),
             topicId = topic.id
         )
-        activeSegmentRepository = MemorySegmentRepository(activeSegment)
+        activeSegmentRepository = SegmentMemoryRepository(activeSegment)
     }
 
     override fun append(cmdId: CmdId, bytes: ByteArray) {

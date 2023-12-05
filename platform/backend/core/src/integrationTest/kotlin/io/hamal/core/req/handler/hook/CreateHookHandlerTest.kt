@@ -30,7 +30,7 @@ internal class CreateHookHandlerTest : BaseReqHandlerTest() {
     }
 
     @Autowired
-    private lateinit var testInstance: CreateHookHandler
+    private lateinit var testInstance: HookCreateHandler
 
     private val submitCreateHookReq by lazy {
         HookCreateSubmitted(

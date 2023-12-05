@@ -12,7 +12,7 @@ import io.hamal.repository.api.PasswordAuth
 import io.hamal.repository.api.TokenAuth
 import java.nio.file.Path
 
-class SqliteAuthRepository(
+class AuthSqliteRepository(
     config: Config
 ) : SqliteBaseRepository(config), AuthRepository {
     data class Config(

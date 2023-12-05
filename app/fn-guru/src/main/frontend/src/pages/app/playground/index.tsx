@@ -8,7 +8,7 @@ import {useAuth} from "@/hook/auth.ts";
 export default function PlaygroundPage() {
     const [auth] = useAuth()
     const [adhoc, data] = useAdhoc()
-    const [code, setCode] = useState("log = require_plugin('log')\nlog.info('Let\\'s go..')")
+    const [code, setCode] = useState("log = require('log')\nlog.info('Let\\'s go..')")
 
     const Run = () => (
         <Button onClick={() => {

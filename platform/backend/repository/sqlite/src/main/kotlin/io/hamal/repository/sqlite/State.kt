@@ -12,7 +12,7 @@ import io.hamal.repository.api.StateRepository
 import kotlinx.serialization.protobuf.ProtoBuf
 import java.nio.file.Path
 
-class SqliteStateRepository(
+class StateSqliteRepository(
     config: Config
 ) : SqliteBaseRepository(config), StateRepository {
 

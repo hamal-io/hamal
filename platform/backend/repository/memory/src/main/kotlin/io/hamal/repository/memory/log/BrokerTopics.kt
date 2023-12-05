@@ -12,7 +12,7 @@ import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
 
-class MemoryBrokerTopicsRepository : BrokerTopicsRepository {
+class BrokerTopicsMemoryRepository : BrokerTopicsRepository {
 
     private val lock = ReentrantLock()
     private val topics = mutableMapOf<FlowId, MutableMap<TopicId, Topic>>()

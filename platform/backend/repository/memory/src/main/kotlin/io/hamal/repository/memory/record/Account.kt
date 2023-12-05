@@ -14,7 +14,7 @@ import io.hamal.repository.record.account.CreateAccountFromRecords
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
-internal object CurrentAccountProjection {
+private object AccountCurrentProjection {
     private val projection = mutableMapOf<AccountId, Account>()
     fun apply(account: Account) {
 
@@ -61,7 +61,7 @@ internal object CurrentAccountProjection {
     }
 }
 
-class MemoryAccountRepository : MemoryRecordRepository<AccountId, AccountRecord, Account>(
+class AccountMemoryRepository : RecordMemoryRepository<AccountId, AccountRecord, Account>(
     createDomainObject = CreateAccountFromRecords,
     recordClass = AccountRecord::class
 ), AccountRepository {
@@ -83,7 +83,7 @@ class MemoryAccountRepository : MemoryRecordRepository<AccountId, AccountRecord,
                         salt = cmd.salt,
                     )
                 )
-                (currentVersion(accountId)).also(CurrentAccountProjection::apply)
+                (currentVersion(accountId)).also(AccountCurrentProjection::apply)
             }
         }
     }
@@ -103,23 +103,23 @@ class MemoryAccountRepository : MemoryRecordRepository<AccountId, AccountRecord,
                         email = cmd.email,
                     )
                 )
-                (currentVersion(accountId)).also(CurrentAccountProjection::apply)
+                (currentVersion(accountId)).also(AccountCurrentProjection::apply)
             }
         }
     }
 
-    override fun find(accountId: AccountId): Account? = lock.withLock { CurrentAccountProjection.find(accountId) }
+    override fun find(accountId: AccountId): Account? = lock.withLock { AccountCurrentProjection.find(accountId) }
 
-    override fun find(accountName: AccountName): Account? = lock.withLock { CurrentAccountProjection.find(accountName) }
+    override fun find(accountName: AccountName): Account? = lock.withLock { AccountCurrentProjection.find(accountName) }
 
-    override fun list(query: AccountQuery): List<Account> = lock.withLock { CurrentAccountProjection.list(query) }
+    override fun list(query: AccountQuery): List<Account> = lock.withLock { AccountCurrentProjection.list(query) }
 
-    override fun count(query: AccountQuery): ULong = lock.withLock { CurrentAccountProjection.count(query) }
+    override fun count(query: AccountQuery): ULong = lock.withLock { AccountCurrentProjection.count(query) }
 
     override fun clear() {
         lock.withLock {
             super.clear()
-            CurrentAccountProjection.clear()
+            AccountCurrentProjection.clear()
         }
     }
 

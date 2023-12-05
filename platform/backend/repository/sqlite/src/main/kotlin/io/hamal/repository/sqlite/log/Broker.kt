@@ -10,25 +10,25 @@ import io.hamal.repository.api.log.BrokerTopicsRepository.TopicQuery
 import io.hamal.repository.api.log.BrokerTopicsRepository.TopicToCreate
 import java.nio.file.Path
 
-data class SqliteBroker(
+data class BrokerSqlite(
     val path: Path
 )
 
-class SqliteBrokerRepository(
-    private val broker: SqliteBroker
+class BrokerSqliteRepository(
+    private val broker: BrokerSqlite
 ) : BrokerRepository {
 
-    private val consumersRepository: SqliteBrokerConsumersRepository
-    private val topicsRepository: SqliteBrokerTopicsRepository
+    private val consumersRepository: BrokerConsumersSqliteRepository
+    private val topicsRepository: BrokerTopicsSqliteRepository
 
     init {
-        topicsRepository = SqliteBrokerTopicsRepository(
-            SqliteBrokerTopics(
+        topicsRepository = BrokerTopicsSqliteRepository(
+            BrokerTopicsSqlite(
                 path = broker.path
             )
         )
-        consumersRepository = SqliteBrokerConsumersRepository(
-            SqliteBrokerConsumers(
+        consumersRepository = BrokerConsumersSqliteRepository(
+            BrokerConsumersSqlite(
                 path = broker.path
             )
         )
@@ -93,6 +93,6 @@ class SqliteBrokerRepository(
     }
 
     private fun resolveRepository(topic: Topic) = topicRepositoryMapping(topic) {
-        SqliteTopicRepository(topic, path = broker.path)
+        TopicSqliteRepository(topic, path = broker.path)
     }
 }

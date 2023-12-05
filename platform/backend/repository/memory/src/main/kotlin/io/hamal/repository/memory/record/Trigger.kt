@@ -11,7 +11,7 @@ import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
 
-internal object CurrentTriggerProjection {
+private object TriggerCurrentProjection {
 
     private val projection = mutableMapOf<TriggerId, Trigger>()
     private val uniqueHookTriggers = mutableSetOf<HookTriggerUnique>()
@@ -123,14 +123,10 @@ internal object CurrentTriggerProjection {
         )
         require(uniqueHookTriggers.add(toCheck)) { "Trigger already exists" }
     }
-
-    fun ensureHookUnique(trigger: HookTriggerUnique): Boolean {
-        return uniqueHookTriggers.contains(trigger)
-    }
 }
 
 
-class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord, Trigger>(
+class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord, Trigger>(
     createDomainObject = CreateTriggerFromRecords,
     recordClass = TriggerRecord::class
 ), TriggerRepository {
@@ -156,7 +152,7 @@ class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord,
                     status = cmd.status
                 )
             )
-            (currentVersion(triggerId) as FixedRateTrigger).also(CurrentTriggerProjection::apply)
+            (currentVersion(triggerId) as FixedRateTrigger).also(TriggerCurrentProjection::apply)
         }
     }
 
@@ -180,7 +176,7 @@ class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord,
                         status = cmd.status
                     )
                 )
-                (currentVersion(triggerId) as EventTrigger).also(CurrentTriggerProjection::apply)
+                (currentVersion(triggerId) as EventTrigger).also(TriggerCurrentProjection::apply)
             }
         }
     }
@@ -193,8 +189,7 @@ class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord,
                 versionOf(triggerId, cmd.id) as HookTrigger
             } else {
 
-
-                CurrentTriggerProjection.list(
+                TriggerCurrentProjection.list(
                     TriggerQuery(
                         hookIds = listOf(cmd.hookId)
                     )
@@ -220,7 +215,7 @@ class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord,
                         status = cmd.status
                     )
                 )
-                (currentVersion(triggerId) as HookTrigger).also(CurrentTriggerProjection::apply)
+                (currentVersion(triggerId) as HookTrigger).also(TriggerCurrentProjection::apply)
             }
         }
     }
@@ -245,7 +240,7 @@ class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord,
                         status = cmd.status
                     )
                 )
-                (currentVersion(triggerId) as CronTrigger).also(CurrentTriggerProjection::apply)
+                (currentVersion(triggerId) as CronTrigger).also(TriggerCurrentProjection::apply)
             }
         }
     }
@@ -267,21 +262,21 @@ class MemoryTriggerRepository : MemoryRecordRepository<TriggerId, TriggerRecord,
                     )
                 }
                 store(rec)
-                currentVersion(triggerId).also(CurrentTriggerProjection::apply)
+                currentVersion(triggerId).also(TriggerCurrentProjection::apply)
             }
         }
     }
 
-    override fun find(triggerId: TriggerId) = lock.withLock { CurrentTriggerProjection.find(triggerId) }
+    override fun find(triggerId: TriggerId) = lock.withLock { TriggerCurrentProjection.find(triggerId) }
 
-    override fun list(query: TriggerQuery): List<Trigger> = lock.withLock { CurrentTriggerProjection.list(query) }
+    override fun list(query: TriggerQuery): List<Trigger> = lock.withLock { TriggerCurrentProjection.list(query) }
 
-    override fun count(query: TriggerQuery): ULong = lock.withLock { CurrentTriggerProjection.count(query) }
+    override fun count(query: TriggerQuery): ULong = lock.withLock { TriggerCurrentProjection.count(query) }
 
     override fun clear() {
         lock.withLock {
             super.clear()
-            CurrentTriggerProjection.clear()
+            TriggerCurrentProjection.clear()
         }
     }
 

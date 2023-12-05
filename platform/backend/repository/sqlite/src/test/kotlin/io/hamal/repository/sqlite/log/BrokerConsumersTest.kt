@@ -12,7 +12,7 @@ import kotlin.io.path.Path
 import kotlin.io.path.pathString
 
 
-class SqliteBrokerConsumersRepositoryTest {
+class BrokerConsumersSqliteRepositoryTest {
     @Nested
     inner class ConstructorTest {
 
@@ -25,7 +25,7 @@ class SqliteBrokerConsumersRepositoryTest {
         @Test
         fun `Creates a directory if path does not exists yet`() {
             val targetDir = Path(testDir, "some-path", "another-path")
-            SqliteBrokerConsumersRepository(testBrokerConsumers(targetDir)).use { }
+            BrokerConsumersSqliteRepository(testBrokerConsumers(targetDir)).use { }
 
             assertTrue(FileUtils.exists(targetDir))
             assertTrue(FileUtils.exists(Path(targetDir.pathString, "consumers.db")))
@@ -33,7 +33,7 @@ class SqliteBrokerConsumersRepositoryTest {
 
         @Test
         fun `Creates consumers table`() {
-            SqliteBrokerConsumersRepository(testBrokerConsumers()).use {
+            BrokerConsumersSqliteRepository(testBrokerConsumers()).use {
                 it.connection.executeQuery("SELECT COUNT(*) as count FROM sqlite_master WHERE name = 'consumers' AND type = 'table'") { resultSet ->
                     assertThat(resultSet.getInt("count"), equalTo(1))
                 }
@@ -42,18 +42,18 @@ class SqliteBrokerConsumersRepositoryTest {
 
         @Test
         fun `Does not create consumers table if already exists`() {
-            SqliteBrokerConsumersRepository(testBrokerConsumers()).use {
+            BrokerConsumersSqliteRepository(testBrokerConsumers()).use {
                 it.connection.execute(
                     """INSERT INTO consumers (group_id,topic_id,next_chunk_id) VALUES ('some-consumer-id',1234,4321);"""
                 )
             }
 
-            SqliteBrokerConsumersRepository(testBrokerConsumers()).use { }
-            SqliteBrokerConsumersRepository(testBrokerConsumers()).use { }
-            SqliteBrokerConsumersRepository(testBrokerConsumers()).use { }
-            SqliteBrokerConsumersRepository(testBrokerConsumers()).use { }
+            BrokerConsumersSqliteRepository(testBrokerConsumers()).use { }
+            BrokerConsumersSqliteRepository(testBrokerConsumers()).use { }
+            BrokerConsumersSqliteRepository(testBrokerConsumers()).use { }
+            BrokerConsumersSqliteRepository(testBrokerConsumers()).use { }
 
-            SqliteBrokerConsumersRepository(testBrokerConsumers()).use {
+            BrokerConsumersSqliteRepository(testBrokerConsumers()).use {
                 it.connection.executeQuery("SELECT COUNT(*) as count FROM consumers") { resultSet ->
                     assertThat(resultSet.getInt("count"), equalTo(1))
                 }
@@ -62,7 +62,7 @@ class SqliteBrokerConsumersRepositoryTest {
 
         @Test
         fun `Sets journal_mode to wal`() {
-            SqliteBrokerConsumersRepository(testBrokerConsumers()).use {
+            BrokerConsumersSqliteRepository(testBrokerConsumers()).use {
                 it.connection.executeQuery("""SELECT * FROM pragma_journal_mode""") { resultSet ->
                     assertThat(resultSet.getString("journal_mode"), equalTo("wal"))
                 }
@@ -71,7 +71,7 @@ class SqliteBrokerConsumersRepositoryTest {
 
         @Test
         fun `Sets locking_mode to exclusive`() {
-            SqliteBrokerConsumersRepository(testBrokerConsumers()).use {
+            BrokerConsumersSqliteRepository(testBrokerConsumers()).use {
                 it.connection.executeQuery("""SELECT * FROM pragma_locking_mode""") { resultSet ->
                     assertThat(resultSet.getString("locking_mode"), equalTo("exclusive"))
                 }
@@ -80,7 +80,7 @@ class SqliteBrokerConsumersRepositoryTest {
 
         @Test
         fun `Sets temp_store to memory`() {
-            SqliteBrokerConsumersRepository(testBrokerConsumers()).use {
+            BrokerConsumersSqliteRepository(testBrokerConsumers()).use {
                 it.connection.executeQuery("""SELECT * FROM pragma_temp_store""") { resultSet ->
                     assertThat(resultSet.getString("temp_store"), equalTo("2"))
                 }
@@ -89,14 +89,14 @@ class SqliteBrokerConsumersRepositoryTest {
 
         @Test
         fun `Sets synchronous to off`() {
-            SqliteBrokerConsumersRepository(testBrokerConsumers()).use {
+            BrokerConsumersSqliteRepository(testBrokerConsumers()).use {
                 it.connection.executeQuery("""SELECT * FROM pragma_synchronous""") { resultSet ->
                     assertThat(resultSet.getString("synchronous"), equalTo("0"))
                 }
             }
         }
 
-        private fun testBrokerConsumers(path: Path = Path(testDir)) = SqliteBrokerConsumers(path)
+        private fun testBrokerConsumers(path: Path = Path(testDir)) = BrokerConsumersSqlite(path)
     }
 
     private val testDir = "/tmp/hamal/test/broker-consumers"

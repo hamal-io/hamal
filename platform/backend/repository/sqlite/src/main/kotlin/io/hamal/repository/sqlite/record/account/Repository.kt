@@ -42,7 +42,7 @@ internal object CreateAccount : CreateDomainObject<AccountId, AccountRecord, Acc
     }
 }
 
-class SqliteAccountRepository(
+class AccountSqliteRepository(
     config: Config
 ) : SqliteRecordRepository<AccountId, AccountRecord, Account>(
     config = config,

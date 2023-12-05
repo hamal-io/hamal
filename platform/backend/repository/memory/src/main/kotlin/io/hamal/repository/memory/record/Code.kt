@@ -16,7 +16,7 @@ import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
 
-internal object CurrentCodeProjection {
+private object CodeCurrentProjection {
     private val projection = mutableMapOf<CodeId, Code>()
     fun apply(code: Code) {
         projection[code.id] = code
@@ -54,7 +54,7 @@ internal object CurrentCodeProjection {
 }
 
 
-class MemoryCodeRepository : MemoryRecordRepository<CodeId, CodeRecord, Code>(
+class CodeMemoryRepository : RecordMemoryRepository<CodeId, CodeRecord, Code>(
     createDomainObject = CreateCodeFromRecords,
     recordClass = CodeRecord::class
 ), CodeRepository {
@@ -77,7 +77,7 @@ class MemoryCodeRepository : MemoryRecordRepository<CodeId, CodeRecord, Code>(
                     )
                 )
                 (currentVersion(codeId))
-                    .also(CurrentCodeProjection::apply)
+                    .also(CodeCurrentProjection::apply)
             }
         }
     }
@@ -99,7 +99,7 @@ class MemoryCodeRepository : MemoryRecordRepository<CodeId, CodeRecord, Code>(
                             value = codeValue
                         )
                     )
-                    (currentVersion(codeId)).also(CurrentCodeProjection::apply)
+                    (currentVersion(codeId)).also(CodeCurrentProjection::apply)
                 }
             }
         }
@@ -108,20 +108,20 @@ class MemoryCodeRepository : MemoryRecordRepository<CodeId, CodeRecord, Code>(
     override fun close() {
     }
 
-    override fun find(codeId: CodeId): Code? = lock.withLock { CurrentCodeProjection.find(codeId) }
+    override fun find(codeId: CodeId): Code? = lock.withLock { CodeCurrentProjection.find(codeId) }
 
     override fun find(codeId: CodeId, codeVersion: CodeVersion): Code? = lock.withLock {
         versionOf(codeId, RecordSequence(codeVersion.value))
     }
 
-    override fun list(query: CodeQuery): List<Code> = lock.withLock { CurrentCodeProjection.list(query) }
+    override fun list(query: CodeQuery): List<Code> = lock.withLock { CodeCurrentProjection.list(query) }
 
-    override fun count(query: CodeQuery): ULong = lock.withLock { CurrentCodeProjection.count(query) }
+    override fun count(query: CodeQuery): ULong = lock.withLock { CodeCurrentProjection.count(query) }
 
     override fun clear() {
         lock.withLock {
             super.clear()
-            CurrentCodeProjection.clear()
+            CodeCurrentProjection.clear()
         }
     }
 }

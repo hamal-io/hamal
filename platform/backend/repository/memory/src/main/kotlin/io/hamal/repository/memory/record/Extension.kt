@@ -13,7 +13,7 @@ import io.hamal.repository.record.extension.ExtensionUpdatedRecord
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
-internal object CurrentExtensionProjection {
+private object ExtensionCurrentProjection {
     private val projection = mutableMapOf<ExtensionId, Extension>()
     fun apply(ext: Extension) {
         val currentExt = projection[ext.id]
@@ -59,7 +59,7 @@ internal object CurrentExtensionProjection {
     }
 }
 
-class MemoryExtensionRepository : MemoryRecordRepository<ExtensionId, ExtensionRecord, Extension>(
+class ExtensionMemoryRepository : RecordMemoryRepository<ExtensionId, ExtensionRecord, Extension>(
     createDomainObject = CreateExtensionFromRecords,
     recordClass = ExtensionRecord::class
 ), ExtensionRepository {
@@ -80,7 +80,7 @@ class MemoryExtensionRepository : MemoryRecordRepository<ExtensionId, ExtensionR
                         code = cmd.code
                     )
                 )
-                (currentVersion(extId)).also(CurrentExtensionProjection::apply)
+                (currentVersion(extId)).also(ExtensionCurrentProjection::apply)
             }
         }
     }
@@ -99,23 +99,23 @@ class MemoryExtensionRepository : MemoryRecordRepository<ExtensionId, ExtensionR
                         code = cmd.code ?: currentVersion.code
                     )
                 )
-                (currentVersion(extId)).also(CurrentExtensionProjection::apply)
+                (currentVersion(extId)).also(ExtensionCurrentProjection::apply)
             }
         }
     }
 
     override fun close() {}
 
-    override fun find(extId: ExtensionId): Extension? = lock.withLock { CurrentExtensionProjection.find(extId) }
+    override fun find(extId: ExtensionId): Extension? = lock.withLock { ExtensionCurrentProjection.find(extId) }
 
-    override fun list(query: ExtensionQuery): List<Extension> = lock.withLock { CurrentExtensionProjection.list(query) }
+    override fun list(query: ExtensionQuery): List<Extension> = lock.withLock { ExtensionCurrentProjection.list(query) }
 
-    override fun count(query: ExtensionQuery): ULong = lock.withLock { CurrentExtensionProjection.count(query) }
+    override fun count(query: ExtensionQuery): ULong = lock.withLock { ExtensionCurrentProjection.count(query) }
 
     override fun clear() {
         lock.withLock {
             super.clear()
-            CurrentExtensionProjection.clear()
+            ExtensionCurrentProjection.clear()
         }
     }
 }

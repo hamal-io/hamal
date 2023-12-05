@@ -5,13 +5,13 @@ import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Account
 import io.hamal.repository.record.account.AccountRecord
-import io.hamal.repository.sqlite.record.SqliteProjection
-import io.hamal.repository.sqlite.record.SqliteRecordTransaction
+import io.hamal.repository.sqlite.record.ProjectionSqlite
+import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 import org.sqlite.SQLiteException
 
-internal object ProjectionUniqueEmail : SqliteProjection<AccountId, AccountRecord, Account> {
+internal object ProjectionUniqueEmail : ProjectionSqlite<AccountId, AccountRecord, Account> {
 
-    override fun upsert(tx: SqliteRecordTransaction<AccountId, AccountRecord, Account>, obj: Account) {
+    override fun upsert(tx: RecordTransactionSqlite<AccountId, AccountRecord, Account>, obj: Account) {
         val email = obj.email
         if (email != null) {
             try {

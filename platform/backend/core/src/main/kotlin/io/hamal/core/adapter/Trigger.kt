@@ -70,8 +70,8 @@ class TriggerAdapter(
         responseHandler: (TriggerCreateSubmitted) -> T
     ): T {
         ensureFuncExists(req)
-        ensureTopicExists(req)
-        ensureHookExists(req)
+        ensureEvent(req)
+        ensureHook(req)
 
         val flow = flowQueryRepository.get(flowId)
         val func = funcQueryRepository.get(req.funcId)
@@ -164,16 +164,17 @@ class TriggerAdapter(
         funcQueryRepository.get(createTrigger.funcId)
     }
 
-    private fun ensureTopicExists(createTrigger: CreateTriggerReq) {
+    private fun ensureEvent(createTrigger: CreateTriggerReq) {
         if (createTrigger.type == TriggerType.Event) {
             requireNotNull(createTrigger.topicId) { "topicId is missing" }
             eventBrokerRepository.getTopic(createTrigger.topicId!!)
         }
     }
 
-    private fun ensureHookExists(createTrigger: CreateTriggerReq) {
+    private fun ensureHook(createTrigger: CreateTriggerReq) {
         if (createTrigger.type == TriggerType.Hook) {
             requireNotNull(createTrigger.hookId) { "hookId is missing" }
+            requireNotNull(createTrigger.hookMethod) { "hookMethod is missing" }
             hookQueryRepository.get(createTrigger.hookId!!)
         }
     }

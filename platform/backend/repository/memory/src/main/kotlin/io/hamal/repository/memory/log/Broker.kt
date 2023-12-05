@@ -10,10 +10,10 @@ import io.hamal.repository.api.log.BrokerTopicsRepository.TopicQuery
 import io.hamal.repository.api.log.BrokerTopicsRepository.TopicToCreate
 
 
-class MemoryBrokerRepository : BrokerRepository {
+class BrokerMemoryRepository : BrokerRepository {
 
-    private val consumersRepository: MemoryBrokerConsumersRepository = MemoryBrokerConsumersRepository()
-    private val topicsRepository: MemoryBrokerTopicsRepository = MemoryBrokerTopicsRepository()
+    private val consumersRepository: BrokerConsumersMemoryRepository = BrokerConsumersMemoryRepository()
+    private val topicsRepository: BrokerTopicsMemoryRepository = BrokerTopicsMemoryRepository()
 
     private val repositoryMapping = KeyedOnce.default<Topic, TopicRepository>()
 
@@ -72,6 +72,6 @@ class MemoryBrokerRepository : BrokerRepository {
     }
 
     private fun resolveRepository(topic: Topic) = repositoryMapping(topic) {
-        MemoryTopicRepository(topic)
+        TopicMemoryRepository(topic)
     }
 }

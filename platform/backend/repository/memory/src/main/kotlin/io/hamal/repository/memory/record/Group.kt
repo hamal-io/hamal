@@ -11,7 +11,7 @@ import io.hamal.repository.record.group.GroupRecord
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
-internal object CurrentGroupProjection {
+private object GroupCurrentProjection {
     private val projection = mutableMapOf<GroupId, Group>()
 
     fun apply(group: Group) {
@@ -55,7 +55,7 @@ internal object CurrentGroupProjection {
     }
 }
 
-class MemoryGroupRepository : MemoryRecordRepository<GroupId, GroupRecord, Group>(
+class MemoryGroupRepository : RecordMemoryRepository<GroupId, GroupRecord, Group>(
     createDomainObject = CreateGroupFromRecords,
     recordClass = GroupRecord::class
 ), GroupRepository {
@@ -74,21 +74,21 @@ class MemoryGroupRepository : MemoryRecordRepository<GroupId, GroupRecord, Group
                         creatorId = cmd.creatorId
                     )
                 )
-                (currentVersion(groupId)).also(CurrentGroupProjection::apply)
+                (currentVersion(groupId)).also(GroupCurrentProjection::apply)
             }
         }
     }
 
-    override fun find(groupId: GroupId): Group? = lock.withLock { CurrentGroupProjection.find(groupId) }
+    override fun find(groupId: GroupId): Group? = lock.withLock { GroupCurrentProjection.find(groupId) }
 
-    override fun list(query: GroupQuery): List<Group> = lock.withLock { return CurrentGroupProjection.list(query) }
+    override fun list(query: GroupQuery): List<Group> = lock.withLock { return GroupCurrentProjection.list(query) }
 
-    override fun count(query: GroupQuery): ULong = lock.withLock { CurrentGroupProjection.count(query) }
+    override fun count(query: GroupQuery): ULong = lock.withLock { GroupCurrentProjection.count(query) }
 
     override fun clear() {
         lock.withLock {
             super.clear()
-            CurrentGroupProjection.clear()
+            GroupCurrentProjection.clear()
         }
     }
 

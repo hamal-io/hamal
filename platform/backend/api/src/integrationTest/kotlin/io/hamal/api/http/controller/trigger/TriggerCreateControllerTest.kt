@@ -385,6 +385,30 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
         }
 
         @Test
+        fun `Tries to create trigger but does not specify hook method`() {
+            val hookId = awaitCompleted(createHook(HookName("hook-name"))).hookId
+            val funcId = awaitCompleted(createFunc(FuncName("hook-trigger-func"))).funcId
+
+            val creationResponse = httpTemplate.post("/v1/flows/1/triggers").body(
+                ApiTriggerCreateReq(
+                    type = TriggerType.Hook,
+                    name = TriggerName("hook-trigger"),
+                    funcId = funcId,
+                    inputs = TriggerInputs(),
+                    hookId = hookId,
+                    hookMethod = null
+                )
+            ).execute()
+
+            assertThat(creationResponse.statusCode, equalTo(BadRequest))
+            require(creationResponse is HttpErrorResponse) { "request was successful" }
+
+            val result = creationResponse.error(ApiError::class)
+            assertThat(result.message, equalTo("hookMethod is missing"))
+            verifyNoRequests(TriggerCreateSubmitted::class)
+        }
+
+        @Test
         fun `Tries to create trigger but hook does not exist`() {
             val funcId = awaitCompleted(createFunc(FuncName("hook-trigger-func"))).funcId
 

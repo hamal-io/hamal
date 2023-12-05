@@ -1,9 +1,8 @@
 package io.hamal.api.http.controller.func
 
 import io.hamal.api.http.controller.BaseControllerTest
-import io.hamal.lib.domain.vo.CodeVersion
-import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.FlowId
+import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.HttpSuccessResponse
@@ -59,24 +58,14 @@ internal sealed class FuncBaseControllerTest : BaseControllerTest() {
         return updateResponse.result(ApiFuncUpdateSubmitted::class)
     }
 
-    fun deployVersion(funcId: FuncId, version: CodeVersion): ApiFuncDeploySubmitted {
-        val deployResponse = httpTemplate.post("/v1/funcs/{funcId}/deploy/{version}")
+    fun deployVersion(funcId: FuncId, req: ApiFuncDeployReq): ApiFuncDeploySubmitted {
+        val deployResponse = httpTemplate.post("/v1/funcs/{funcId}/deploy")
             .path("funcId", funcId)
-            .path("version", version.value.toString())
+            .body(req)
             .execute()
 
         assertThat(deployResponse.statusCode, equalTo(Accepted))
         require(deployResponse is HttpSuccessResponse) { "request was not successful" }
         return deployResponse.result(ApiFuncDeploySubmitted::class)
-    }
-
-    fun deployLatestVersion(funcId: FuncId): ApiFuncDeployLatestSubmitted {
-        val deployResponse = httpTemplate.post("/v1/funcs/{funcId}/deploy/latest")
-            .path("funcId", funcId)
-            .execute()
-
-        assertThat(deployResponse.statusCode, equalTo(Accepted))
-        require(deployResponse is HttpSuccessResponse) { "request was not successful" }
-        return deployResponse.result(ApiFuncDeployLatestSubmitted::class)
     }
 }

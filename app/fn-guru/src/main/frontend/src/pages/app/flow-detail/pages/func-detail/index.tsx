@@ -29,7 +29,7 @@ const FuncDetailPage: FC<Props> = ({}) => {
     useEffect(() => {
         if (func != null) {
             setName(func.name)
-            setCode(func.code.current.value)
+            setCode(func.code.value)
         }
     }, [func]);
 

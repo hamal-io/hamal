@@ -5,17 +5,17 @@ import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Exec
 import io.hamal.repository.record.exec.ExecRecord
-import io.hamal.repository.sqlite.record.SqliteProjection
-import io.hamal.repository.sqlite.record.SqliteRecordTransaction
+import io.hamal.repository.sqlite.record.ProjectionSqlite
+import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 import io.hamal.repository.sqlite.record.protobuf
 import kotlinx.serialization.ExperimentalSerializationApi
 
 
 @OptIn(ExperimentalSerializationApi::class)
-internal object ProjectionQueue : SqliteProjection<ExecId, ExecRecord, Exec> {
+internal object ProjectionQueue : ProjectionSqlite<ExecId, ExecRecord, Exec> {
 
     fun pop(
-        tx: SqliteRecordTransaction<ExecId, ExecRecord, Exec>,
+        tx: RecordTransactionSqlite<ExecId, ExecRecord, Exec>,
         limit: Int
     ): List<Exec> {
         return tx.executeQuery(
@@ -35,7 +35,7 @@ internal object ProjectionQueue : SqliteProjection<ExecId, ExecRecord, Exec> {
     }
 
     override fun upsert(
-        tx: SqliteRecordTransaction<ExecId, ExecRecord, Exec>,
+        tx: RecordTransactionSqlite<ExecId, ExecRecord, Exec>,
         obj: Exec
     ) {
         require(obj is io.hamal.repository.api.QueuedExec) { "exec not in status queued" }
