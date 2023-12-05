@@ -90,7 +90,7 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
 
         @Test
         fun `Tries to deploy to func that does not exist`() {
-            val deployResponse = httpTemplate.post("/v1/funcs/deploy/{funcId}")
+            val deployResponse = httpTemplate.post("/v1/funcs/{funcId}/deploy")
                 .path("funcId", FuncId(23))
                 .body(ApiFuncDeployReq(CodeVersion(1), null))
                 .execute()
@@ -110,7 +110,7 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
                 )
             )
 
-            val deployResponse = httpTemplate.post("/v1/funcs/deploy/{funcId}")
+            val deployResponse = httpTemplate.post("/v1/funcs/{funcId}/deploy")
                 .path("funcId", func.funcId)
                 .body(ApiFuncDeployReq(CodeVersion(23), null))
                 .execute()

@@ -1,5 +1,3 @@
-import {VersionedCode} from "@/types";
-
 export interface FuncCreateSubmitted {
     id: string;
     status: string;
@@ -33,14 +31,14 @@ export interface Func {
     inputs: object;
     code: {
         id: string;
-        version: VersionedCode;
-        value: VersionedCode;
+        version: number;
+        value: string;
     },
     deployment: {
-        id: string,
-        version: VersionedCode,
-        value: VersionedCode,
-        message: string
+        id: string;
+        version: number;
+        value: string;
+        message: string;
     }
 }
 

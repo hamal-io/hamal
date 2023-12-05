@@ -159,7 +159,7 @@ internal class ApiFuncServiceImpl(
             .fold(ApiFuncCreateSubmitted::class)
 
     override fun deploy(funcId: FuncId, req: ApiFuncDeployReq) =
-        template.post("/v1/funcs/deploy/{funcId}")
+        template.post("/v1/funcs/{funcId}/deploy")
             .path("funcId", funcId)
             .body(req)
             .execute()
