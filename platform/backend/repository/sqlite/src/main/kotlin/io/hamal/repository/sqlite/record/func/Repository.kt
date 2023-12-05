@@ -134,7 +134,17 @@ class FuncSqliteRepository(
     }
 
     override fun list(funcId: FuncId): List<FuncDeploymentsRes> {
-        TODO("Not yet implemented")
+        return tx {
+            val recs = recordsOf(funcId)
+            recs.map { rec ->
+                val dep = versionOf(funcId, rec.sequence())!!.deployment
+                FuncDeploymentsRes(
+                    message = dep.message,
+                    version = dep.version,
+                    deployedAt = rec.recordedAt()
+                )
+            }
+        }
     }
 
     override fun count(query: FuncQuery): ULong {

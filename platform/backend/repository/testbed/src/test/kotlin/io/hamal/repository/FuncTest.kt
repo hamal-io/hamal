@@ -451,6 +451,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
             assertThat(result.deployment.message, equalTo(DeployMessage("50")))
         }
 
+
         @TestFactory
         fun `Tries to deploy version that does not exist`() = runWith(FuncRepository::class) {
             createFunc(
@@ -679,6 +680,28 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                 assertThat(groupId, equalTo(GroupId(5)))
                 assertThat(name, equalTo(FuncName("Func")))
             }
+        }
+
+        @TestFactory
+        fun `Get a list of deployments`() = runWith(FuncRepository::class) {
+            createFunc(
+                funcId = FuncId(1),
+                flowId = FlowId(2),
+                groupId = GroupId(3),
+                name = FuncName("Func"),
+                codeVersion = CodeVersion(1)
+            )
+
+            repeat(9) { iter ->
+                deploy(
+                    FuncId(1), DeployCmd(
+                        id = CmdGen(),
+                        version = CodeVersion(1),
+                        message = DeployMessage("Some deployment message ${iter + 1}")
+                    )
+                )
+            }
+            assertThat(list(FuncId(1)), hasSize(10))
         }
 
         @TestFactory
