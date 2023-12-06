@@ -1,5 +1,5 @@
 local http = require('net.http').create({
-    base_url = context.api.host
+    base_url = context.env.test_url
 })
 
 local status_codes = { 200, 201, 400, 404, 500 }

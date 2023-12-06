@@ -50,7 +50,8 @@ abstract class AbstractRunnerTest {
     fun createTestRunner(
         pluginFactories: List<RunnerPluginFactory> = listOf(),
         extensionFactories: List<RunnerExtensionFactory> = listOf(),
-        connector: Connector = TestConnector()
+        connector: Connector = TestConnector(),
+        env: RunnerEnv = RunnerEnv()
     ) = CodeRunnerImpl(
         connector, object : SandboxFactory {
             override fun create(ctx: SandboxContext): Sandbox {
@@ -60,7 +61,7 @@ abstract class AbstractRunnerTest {
                     .registerExtensions(*extensionFactories.toTypedArray())
             }
         }
-    )
+    ) { env }
 
     fun unitOfWork(
         code: String,

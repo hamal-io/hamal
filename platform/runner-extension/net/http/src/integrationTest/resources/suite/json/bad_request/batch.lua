@@ -1,4 +1,6 @@
-local http = require('net.http')
+http = require('net.http').create({
+    base_url = context.env.test_url
+})
 
 local err, response = http.execute({
     http.requests.get({ url = '/v1/json-error' }),

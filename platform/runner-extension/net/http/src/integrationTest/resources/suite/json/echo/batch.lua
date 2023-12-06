@@ -1,5 +1,8 @@
-local http = require('net.http')
-local decimal = require('decimal')
+http = require('net.http').create({
+    base_url = context.env.test_url
+})
+
+decimal = require('decimal')
 
 local json = {
     s = 'hamal',

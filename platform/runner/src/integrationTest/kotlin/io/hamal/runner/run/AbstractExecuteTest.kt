@@ -1,6 +1,7 @@
 package io.hamal.runner.run
 
 import TestConnector
+import io.hamal.lib.domain.vo.RunnerEnv
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.Sandbox
@@ -12,7 +13,7 @@ import io.hamal.runner.connector.Connector
 
 internal abstract class AbstractExecuteTest {
     fun createTestRunner(
-        vararg testCapabilities: Pair<String, Type>,
+        vararg testPlugins: Pair<String, Type>,
         connector: Connector = TestConnector()
     ) = CodeRunnerImpl(
         connector, object : SandboxFactory {
@@ -27,17 +28,17 @@ internal abstract class AbstractExecuteTest {
                                 local internal = _internal
                                 return function()
                                     local export = {
-                                        ${testCapabilities.joinToString(",") { cap -> "${cap.first} = internal.${cap.first}" }}
+                                        ${testPlugins.joinToString(",") { plugin -> "${plugin.first} = internal.${plugin.first}" }}
                                      }
                                     return export
                                 end
                             end
                             """.trimIndent(),
-                            internals = testCapabilities.toMap()
+                            internals = testPlugins.toMap()
                         )
                     )
                 }
             }
         }
-    )
+    ) { RunnerEnv() }
 }

@@ -6,7 +6,10 @@ import io.hamal.extension.net.http.endpoint.TestHeaderController
 import io.hamal.extension.net.http.endpoint.TestJsonController
 import io.hamal.extension.net.http.endpoint.TestStatusController
 import io.hamal.extension.std.decimal.DecimalExtensionFactory
+import io.hamal.lib.domain.vo.RunnerEnv
 import io.hamal.lib.http.fixture.TestWebConfig
+import io.hamal.lib.kua.type.MapType
+import io.hamal.lib.kua.type.StringType
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
@@ -38,14 +41,16 @@ class HttpTest(@LocalServerPort var localServerPort: Int) : AbstractRunnerTest()
                     extensionFactories = listOf(
                         DecimalExtensionFactory,
                         HttpExtensionFactory
+                    ),
+                    env = RunnerEnv(
+                        MapType(
+                            mutableMapOf(
+                                "test_url" to StringType("http://localhost:$localServerPort")
+                            )
+                        )
                     )
                 )
-                runner.run(
-                    unitOfWork(
-                        code = String(Files.readAllBytes(testFile)),
-                        apiHost = "http://localhost:$localServerPort"
-                    )
-                )
+                runner.run(unitOfWork(String(Files.readAllBytes(testFile))))
             }
         }.toList()
     }

@@ -1,4 +1,7 @@
-http = require('net.http')
+http = require('net.http').create({
+    base_url = context.env.test_url
+})
+
 decimal = require('decimal')
 
 res = fail_on_error(http.patch({ url = '/v1/json-echo', json = {} }))

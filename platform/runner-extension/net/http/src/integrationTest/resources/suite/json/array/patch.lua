@@ -1,4 +1,6 @@
-http = require('net.http')
+http = require('net.http').create({
+    base_url = context.env.test_url
+})
 
 err, res = http.patch({ url = '/v1/json-array' })
 assert(err == nil)

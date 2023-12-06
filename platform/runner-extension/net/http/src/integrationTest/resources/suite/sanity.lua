@@ -1,3 +1,2 @@
-local http = require 'net.http'
-local config = http.config.get()
-assert(config.base_url ~= nil)
+local http = require('net.http').create()
+assert(http ~= nil)

@@ -1,4 +1,7 @@
-local http = require('net.http')
+http = require('net.http').create({
+    base_url = context.env.test_url
+})
+
 decimal = require('decimal')
 
 req_headers = {}
