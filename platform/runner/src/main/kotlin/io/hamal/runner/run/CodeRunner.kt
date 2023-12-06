@@ -19,7 +19,8 @@ interface CodeRunner {
 
 class CodeRunnerImpl(
     private val connector: Connector,
-    private val sandboxFactory: SandboxFactory
+    private val sandboxFactory: SandboxFactory,
+    private val supplyEnv: () -> RunnerEnv
 ) : CodeRunner {
 
     private lateinit var runnerContext: RunnerContext
@@ -40,6 +41,7 @@ class CodeRunnerImpl(
             runnerContext[GroupId::class] = unitOfWork.groupId
             runnerContext[ExecToken::class] = unitOfWork.token
             runnerContext[ApiHost::class] = unitOfWork.apiHost
+            runnerContext[RunnerEnv::class] = supplyEnv()
 
             sandboxFactory.create(runnerContext)
                 .use { sandbox ->

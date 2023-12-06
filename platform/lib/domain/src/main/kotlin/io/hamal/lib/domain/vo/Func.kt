@@ -6,7 +6,7 @@ import io.hamal.lib.common.domain.StringValueObject
 import io.hamal.lib.common.domain.StringValueObjectSerializer
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.base.InputsSerializer
-import io.hamal.lib.domain.vo.base.Map
+import io.hamal.lib.domain.vo.base.MapValueObject
 import io.hamal.lib.kua.type.MapType
 import kotlinx.serialization.Serializable
 
@@ -25,7 +25,7 @@ class FuncName(override val value: String) : DomainName() {
 }
 
 @Serializable(with = FuncInputs.Serializer::class)
-class FuncInputs(override val value: MapType = MapType()) : Map() {
+class FuncInputs(override val value: MapType = MapType()) : MapValueObject() {
     internal object Serializer : InputsSerializer<FuncInputs>(::FuncInputs)
 }
 

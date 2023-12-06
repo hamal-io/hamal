@@ -1,7 +1,9 @@
 package io.hamal.testbed.api
 
 import AbstractRunnerTest
-import io.hamal.lib.kua.extend.ExtensionConfig
+import io.hamal.extension.net.http.HttpExtensionFactory
+import io.hamal.lib.domain.vo.RunnerEnv
+import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.plugin.net.http.HttpPluginFactory
 import io.hamal.testbed.api.BaseTest.TestResult.Failure
@@ -17,14 +19,18 @@ abstract class BaseTest(val apiUrl: String) : AbstractRunnerTest() {
     }
 
     protected fun runTest(testFile: Path): TestResult {
-        val config = ExtensionConfig(
-            mutableMapOf(
-                "base_url" to StringType(apiUrl)
-            )
-        )
         return try {
-            createTestRunner(pluginFactories = listOf(HttpPluginFactory(config)))
-                .run(unitOfWork(String(Files.readAllBytes(testFile))))
+            createTestRunner(
+                pluginFactories = listOf(HttpPluginFactory()),
+                extensionFactories = listOf(HttpExtensionFactory),
+                env = RunnerEnv(
+                    MapType(
+                        mutableMapOf(
+                            "test_api" to StringType(apiUrl)
+                        )
+                    )
+                )
+            ).run(unitOfWork(String(Files.readAllBytes(testFile))))
             Success
         } catch (t: Throwable) {
             Failure(t.message ?: "Unknown error")

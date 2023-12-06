@@ -1,11 +1,13 @@
 local http = require_plugin('net.http')
 
+local url = context.env.test_url .. '/v1/json-empty-object'
+
 local err, response = http.execute({
-    http.requests.get({ url = '/v1/json-empty-object' }),
-    http.requests.post({ url = '/v1/json-empty-object' }),
-    http.requests.patch({ url = '/v1/json-empty-object' }),
-    http.requests.put({ url = '/v1/json-empty-object' }),
-    http.requests.delete({ url = '/v1/json-empty-object' }),
+    http.requests.get({ url = url }),
+    http.requests.post({ url = url }),
+    http.requests.patch({ url = url }),
+    http.requests.put({ url = url }),
+    http.requests.delete({ url = url }),
 })
 
 assert(err == nil)

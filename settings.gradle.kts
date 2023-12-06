@@ -57,7 +57,9 @@ include(":platform:lib:web3")
 
 include(":platform:runner")
 
+include(":platform:runner-extension:net:http")
 include(":platform:runner-extension:std:decimal")
+include(":platform:runner-extension:std:log")
 include(":platform:runner-extension:telegram")
 
 include(":platform:runner-plugin:net:http")

@@ -3,40 +3,8 @@ function plugin()
     return function()
         local export = { }
 
-        function export.trace(message)
-            -- FIXME message is string
-            local err = internal.log('Trace', message)
-            return err
-        end
-
-        function export.debug(message)
-            -- FIXME message is string
-            local err = internal.log('Debug', message)
-            return err
-        end
-
-        function export.info(message)
-            -- FIXME message is string
-            local err = internal.log('Info', message)
-            return err
-        end
-
-        function export.warn(message)
-            -- FIXME message is string
-            local err = internal.log('Warn', message)
-            return err
-        end
-
-        function export.error(message)
-            -- FIXME message is string
-            local err = internal.log('Error', message)
-            return err
-        end
-
-        function export.fatal(message)
-            -- FIXME message is string
-            local err = internal.log('Fatal', message)
-            return err
+        function export.log(level, message)
+            return internal.log(level, message)
         end
 
         return export

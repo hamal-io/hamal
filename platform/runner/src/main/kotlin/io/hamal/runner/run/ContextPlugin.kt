@@ -61,7 +61,8 @@ class RunnerContextFactory(
                 "emit" to EmitFunction(executionCtx),
                 "fail" to FailRunFunction,
                 "complete" to CompleteRunFunction,
-                "state" to executionCtx.state.value
+                "state" to executionCtx.state.value,
+                "env" to executionCtx[RunnerEnv::class].value
             )
         )
     }

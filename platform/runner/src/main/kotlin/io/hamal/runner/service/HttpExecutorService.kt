@@ -1,6 +1,7 @@
 package io.hamal.runner.service
 
 import io.hamal.lib.domain.vo.ApiHost
+import io.hamal.lib.domain.vo.RunnerEnv
 import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.sdk.BridgeSdkImpl
 import io.hamal.runner.config.SandboxFactory
@@ -37,7 +38,7 @@ class HttpExecutorService(
                     val unitsOfWork = connector.poll()
                     // FIXME core-60 -- backoff if empty or if exception got thrown
                     unitsOfWork.forEach { uow ->
-                        CodeRunnerImpl(connector, sandboxFactory)
+                        CodeRunnerImpl(connector, sandboxFactory) { RunnerEnv() }
                             .run(uow)
                     }
                 }, pollEveryMs.milliseconds.toJavaDuration())

@@ -3,6 +3,7 @@ function plugin()
     return function()
         local export = {
             api = internal.api,
+            env = internal.env,
             exec = {
                 id = internal.exec_id,
                 hook = internal.hook,

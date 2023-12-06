@@ -4,7 +4,7 @@ plugins {
 
 
 tasks.jar {
-    archiveFileName.set("cap-std-log.jar")
+    archiveFileName.set("plugin-std-log.jar")
 }
 
 distributions {

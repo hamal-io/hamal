@@ -2,13 +2,15 @@ local http = require_plugin('net.http')
 
 local status_codes = { 200, 201, 400, 404, 500 }
 
+local url = context.env.test_url .. '/v1/status'
+
 for _, status_code in ipairs(status_codes) do
     local err, response = http.execute({
-        http.requests.get({ url = "/v1/status?code=" .. status_code }),
-        http.requests.post({ url = "/v1/status?code=" .. status_code }),
-        http.requests.patch({ url = "/v1/status?code=" .. status_code }),
-        http.requests.put({ url = "/v1/status?code=" .. status_code }),
-        http.requests.delete({ url = "/v1/status?code=" .. status_code }),
+        http.requests.get({ url = url .. "?code=" .. status_code }),
+        http.requests.post({ url = url .. "?code=" .. status_code }),
+        http.requests.patch({ url = url .. "?code=" .. status_code }),
+        http.requests.put({ url = url .. "?code=" .. status_code }),
+        http.requests.delete({ url = url .. "?code=" .. status_code }),
     })
 
     assert(err == nil)
