@@ -164,7 +164,7 @@ class FuncAdapter(
         responseHandler: (List<FuncDeploymentsRes>) -> T
     ): T {
         ensureFuncExists(funcId)
-        return responseHandler(funcQueryRepository.list(funcId))
+        return responseHandler(funcQueryRepository.listDeployments(funcId))
     }
 
     override fun <T : Any> invoke(

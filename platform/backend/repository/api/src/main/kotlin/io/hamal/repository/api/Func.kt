@@ -92,7 +92,7 @@ interface FuncQueryRepository {
         )
     )
 
-    fun list(funcId: FuncId): List<FuncDeploymentsRes>
+    fun listDeployments(funcId: FuncId): List<FuncDeploymentsRes>
 
     fun count(query: FuncQuery): ULong
 

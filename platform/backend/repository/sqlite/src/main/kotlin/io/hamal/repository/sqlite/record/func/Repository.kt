@@ -133,7 +133,7 @@ class FuncSqliteRepository(
         return ProjectionCurrent.list(connection, query)
     }
 
-    override fun list(funcId: FuncId): List<FuncDeploymentsRes> {
+    override fun listDeployments(funcId: FuncId): List<FuncDeploymentsRes> {
         return tx {
             val recs = recordsOf(funcId)
             recs.map { rec ->

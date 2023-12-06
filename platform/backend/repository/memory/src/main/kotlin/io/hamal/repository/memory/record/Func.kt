@@ -131,7 +131,7 @@ class FuncMemoryRepository : RecordMemoryRepository<FuncId, FuncRecord, Func>(
 
     override fun list(query: FuncQuery): List<Func> = lock.withLock { FuncCurrentProjection.list(query) }
 
-    override fun list(funcId: FuncId): List<FuncDeploymentsRes> {
+    override fun listDeployments(funcId: FuncId): List<FuncDeploymentsRes> {
         lock.withLock {
             val recs = recordsOf(funcId)//.reversed().take()
             return recs.map { rec ->
