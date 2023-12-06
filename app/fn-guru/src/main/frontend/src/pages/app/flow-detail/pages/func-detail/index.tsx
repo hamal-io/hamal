@@ -5,7 +5,6 @@ import FuncSelector from "@/pages/app/flow-detail/pages/func-detail/components/f
 import Editor from "@/components/editor.tsx";
 import {useParams} from "react-router-dom";
 import Actions from "@/pages/app/flow-detail/pages/func-detail/components/actions.tsx";
-import Deploy from "@/pages/app/flow-detail/pages/func-detail/components/deploy.tsx";
 import {FlowContext} from "@/pages/app/flow-detail";
 import {useFuncGet} from "@/hook/func.ts";
 
@@ -47,7 +46,6 @@ const FuncDetailPage: FC<Props> = ({}) => {
                     <Save funcId={funcId} code={code} name={name}/>
                     <History/>
                     <Actions funcId={funcId} code={code}/>
-                    <Deploy funcId={funcId}/>
                 </div>
             </div>
 
