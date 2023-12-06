@@ -2,7 +2,10 @@ package io.hamal.plugin.net.http
 
 import AbstractRunnerTest
 import io.hamal.extension.std.decimal.DecimalExtensionFactory
+import io.hamal.lib.domain.vo.RunnerEnv
 import io.hamal.lib.http.fixture.TestWebConfig
+import io.hamal.lib.kua.type.MapType
+import io.hamal.lib.kua.type.StringType
 import io.hamal.plugin.net.http.endpoint.TestHeaderController
 import io.hamal.plugin.net.http.endpoint.TestJsonController
 import io.hamal.plugin.net.http.endpoint.TestStatusController
@@ -34,7 +37,14 @@ class HttpTest(@LocalServerPort var localServerPort: Int) : AbstractRunnerTest()
             dynamicTest("${testFile.parent.parent.name}/${testFile.parent.name}/${testFile.name}") {
                 val runner = createTestRunner(
                     pluginFactories = listOf(HttpPluginFactory()),
-                    extensionFactories = listOf(DecimalExtensionFactory)
+                    extensionFactories = listOf(DecimalExtensionFactory),
+                    env = RunnerEnv(
+                        MapType(
+                            mutableMapOf(
+                                "test_url" to StringType("http://localhost:$localServerPort")
+                            )
+                        )
+                    )
                 )
                 runner.run(unitOfWork(String(Files.readAllBytes(testFile))))
             }
