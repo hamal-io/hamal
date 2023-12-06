@@ -65,18 +65,19 @@ const Deploy: FC<Props> = ({funcId}) => {
                                         <Input {...field} />
                                     </FormControl>
                                     <FormDescription>
-                                        This takes a second.
+                                        This may take a second.
                                     </FormDescription>
                                     <FormMessage/>
                                 </FormItem>
                             )}
                         />
-                    </form>
 
+                        <Button type="submit" variant="destructive">
+                            Confirm
+                        </Button>
+                    </form>
                 </Form>
-                <Button type="submit" variant="destructive">
-                    Confirm
-                </Button>
+
                 <PopoverClose/>
             </PopoverContent>
         </Popover>

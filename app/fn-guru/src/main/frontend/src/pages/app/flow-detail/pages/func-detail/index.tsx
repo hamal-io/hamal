@@ -47,7 +47,7 @@ const FuncDetailPage: FC<Props> = ({}) => {
                     <Save funcId={funcId} code={code} name={name}/>
                     <History/>
                     <Actions funcId={funcId} code={code}/>
-                    <Deploy/>
+                    <Deploy funcId={funcId}/>
                 </div>
             </div>
 
