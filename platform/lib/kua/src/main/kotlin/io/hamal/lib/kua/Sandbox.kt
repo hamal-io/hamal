@@ -45,16 +45,16 @@ class Sandbox(
         registry.register(extension)
     }
 
-    fun register(vararg factories: RunnerPluginFactory): Sandbox {
-        factories.map { it.create(this) }.forEach { cap ->
-            this.register(cap)
+    fun registerPlugins(vararg factories: RunnerPluginFactory): Sandbox {
+        factories.map { it.create(this) }.forEach { plugin ->
+            this.register(plugin)
         }
         return this
     }
 
-    fun register(vararg factories: RunnerExtensionFactory): Sandbox {
-        factories.map { it.create(this) }.forEach { cap ->
-            this.register(cap)
+    fun registerExtensions(vararg factories: RunnerExtensionFactory): Sandbox {
+        factories.map { it.create(this) }.forEach { extension ->
+            this.register(extension)
         }
         return this
     }

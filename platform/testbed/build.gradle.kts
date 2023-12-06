@@ -40,11 +40,13 @@ testing {
 
                     implementation(project(":platform:backend:repository:api"))
                     implementation(project(":platform:runner-test"))
-                    implementation(project(":platform:runner-plugin:net:http"))
+                    implementation(project(":platform:runner-extension:net:http"))
+                    implementation(project(":platform:runner-extension:std:log"))
 
+                    implementation(project(":platform:runner-plugin:net:http"))
                     implementation(project(":platform:runner-plugin:std:debug"))
-                    implementation(project(":platform:runner-plugin:std:sys"))
                     implementation(project(":platform:runner-plugin:std:log"))
+                    implementation(project(":platform:runner-plugin:std:sys"))
 
                     implementation(external.junit)
                     implementation(external.hamcrest)

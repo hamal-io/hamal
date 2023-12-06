@@ -8,13 +8,13 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
 @Serializable
-abstract class Map : ValueObject.BaseImpl<MapType>() {
+abstract class MapValueObject : ValueObject.BaseImpl<MapType>() {
     override fun toString(): String {
         return "${this::class.simpleName}(${value})"
     }
 }
 
-abstract class InputsSerializer<INPUT : Map>(
+abstract class InputsSerializer<INPUT : MapValueObject>(
     val fn: (MapType) -> INPUT
 ) : KSerializer<INPUT> {
     private val delegate = MapType.serializer()

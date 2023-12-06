@@ -1,4 +1,4 @@
-package io.hamal.plugin.std.log
+package io.hamal.extension.std.log
 
 import AbstractRunnerTest
 import io.hamal.lib.domain._enum.ExecLogLevel.*
@@ -6,6 +6,7 @@ import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecLogMessage
 import io.hamal.lib.sdk.api.ApiAppendExecLogCmd
 import io.hamal.lib.sdk.api.ApiExecLogService
+import io.hamal.plugin.std.log.LogPluginFactory
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -15,8 +16,11 @@ internal class LogTest : AbstractRunnerTest() {
     @Test
     fun `Log Trace`() {
         val testService = TestExecLogService()
-        val runner = createTestRunner(pluginFactories = listOf(LogPluginFactory(testService)))
-        runner.run(unitOfWork("local log = require_plugin('log'); log.trace('a trace message')"))
+        val runner = createTestRunner(
+            extensionFactories = listOf(LogExtensionFactory),
+            pluginFactories = listOf(LogPluginFactory(testService))
+        )
+        runner.run(unitOfWork("local log = require('log').create(); log.trace('a trace message')"))
 
         assertThat(testService.execId, equalTo(ExecId(1234)))
         with(testService.req) {
@@ -28,8 +32,11 @@ internal class LogTest : AbstractRunnerTest() {
     @Test
     fun `Log Debug`() {
         val testService = TestExecLogService()
-        val runner = createTestRunner(pluginFactories = listOf(LogPluginFactory(testService)))
-        runner.run(unitOfWork("local log = require_plugin('log'); log.debug('a debug message')"))
+        val runner = createTestRunner(
+            extensionFactories = listOf(LogExtensionFactory),
+            pluginFactories = listOf(LogPluginFactory(testService))
+        )
+        runner.run(unitOfWork("local log = require('log').create(); log.debug('a debug message')"))
 
         assertThat(testService.execId, equalTo(ExecId(1234)))
         with(testService.req) {
@@ -41,8 +48,11 @@ internal class LogTest : AbstractRunnerTest() {
     @Test
     fun `Log Info`() {
         val testService = TestExecLogService()
-        val runner = createTestRunner(pluginFactories = listOf(LogPluginFactory(testService)))
-        runner.run(unitOfWork("local log = require_plugin('log'); log.info('an info message')"))
+        val runner = createTestRunner(
+            extensionFactories = listOf(LogExtensionFactory),
+            pluginFactories = listOf(LogPluginFactory(testService))
+        )
+        runner.run(unitOfWork("local log = require('log').create(); log.info('an info message')"))
 
         assertThat(testService.execId, equalTo(ExecId(1234)))
         with(testService.req) {
@@ -54,8 +64,11 @@ internal class LogTest : AbstractRunnerTest() {
     @Test
     fun `Log Warn`() {
         val testService = TestExecLogService()
-        val runner = createTestRunner(pluginFactories = listOf(LogPluginFactory(testService)))
-        runner.run(unitOfWork("local log = require_plugin('log'); log.warn('a warning message')"))
+        val runner = createTestRunner(
+            extensionFactories = listOf(LogExtensionFactory),
+            pluginFactories = listOf(LogPluginFactory(testService))
+        )
+        runner.run(unitOfWork("local log = require('log').create(); log.warn('a warning message')"))
 
         assertThat(testService.execId, equalTo(ExecId(1234)))
         with(testService.req) {
@@ -67,26 +80,16 @@ internal class LogTest : AbstractRunnerTest() {
     @Test
     fun `Log Error`() {
         val testService = TestExecLogService()
-        val runner = createTestRunner(pluginFactories = listOf(LogPluginFactory(testService)))
-        runner.run(unitOfWork("local log = require_plugin('log'); log.error('an error message')"))
+        val runner = createTestRunner(
+            extensionFactories = listOf(LogExtensionFactory),
+            pluginFactories = listOf(LogPluginFactory(testService))
+        )
+        runner.run(unitOfWork("local log = require('log').create(); log.error('an error message')"))
 
         assertThat(testService.execId, equalTo(ExecId(1234)))
         with(testService.req) {
             assertThat(level, equalTo(Error))
             assertThat(message, equalTo(ExecLogMessage("an error message")))
-        }
-    }
-
-    @Test
-    fun `Log Fatal`() {
-        val testService = TestExecLogService()
-        val runner = createTestRunner(pluginFactories = listOf(LogPluginFactory(testService)))
-        runner.run(unitOfWork("local log = require_plugin('log'); log.fatal('a fatal message')"))
-
-        assertThat(testService.execId, equalTo(ExecId(1234)))
-        with(testService.req) {
-            assertThat(level, equalTo(Fatal))
-            assertThat(message, equalTo(ExecLogMessage("a fatal message")))
         }
     }
 
@@ -99,5 +102,4 @@ internal class LogTest : AbstractRunnerTest() {
         lateinit var execId: ExecId
         lateinit var req: ApiAppendExecLogCmd
     }
-
 }

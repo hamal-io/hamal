@@ -1,4 +1,4 @@
-local http = require_plugin('net.http')
+local http = require('net.http')
 local decimal = require('decimal')
 
 local json = {

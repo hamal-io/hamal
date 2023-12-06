@@ -1,4 +1,4 @@
-local http = require_plugin('net.http')
+local http = require('net.http')
 
 local err, response = http.post({ url = "/v1/status?code=204" })
 assert(err == nil)

@@ -4,7 +4,7 @@ import io.hamal.lib.common.domain.DomainName
 import io.hamal.lib.common.domain.DomainNameSerializer
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.base.InputsSerializer
-import io.hamal.lib.domain.vo.base.Map
+import io.hamal.lib.domain.vo.base.MapValueObject
 import io.hamal.lib.kua.type.MapType
 import kotlinx.serialization.Serializable
 
@@ -22,16 +22,16 @@ class EndpointName(override val value: String) : DomainName() {
 }
 
 @Serializable(with = EndpointHeaders.Serializer::class)
-class EndpointHeaders(override val value: MapType = MapType()) : Map() {
+class EndpointHeaders(override val value: MapType = MapType()) : MapValueObject() {
     internal object Serializer : InputsSerializer<EndpointHeaders>(::EndpointHeaders)
 }
 
 @Serializable(with = EndpointParameters.Serializer::class)
-class EndpointParameters(override val value: MapType = MapType()) : Map() {
+class EndpointParameters(override val value: MapType = MapType()) : MapValueObject() {
     internal object Serializer : InputsSerializer<EndpointParameters>(::EndpointParameters)
 }
 
 @Serializable(with = EndpointContent.Serializer::class)
-class EndpointContent(override val value: MapType = MapType()) : Map() {
+class EndpointContent(override val value: MapType = MapType()) : MapValueObject() {
     internal object Serializer : InputsSerializer<EndpointContent>(::EndpointContent)
 }

@@ -61,7 +61,7 @@ class TestRunnerSandboxFactory(
         )
 
         return Sandbox(ctx)
-            .register(
+            .registerPlugins(
                 LogPluginFactory(sdk.execLog),
                 DebugPluginFactory(),
                 SysPluginFactory(sdk),

@@ -1,4 +1,4 @@
-http = require_plugin('net.http')
+http = require('net.http')
 
 err, res = http.post({ url = '/v1/json-array' })
 assert(err == nil)

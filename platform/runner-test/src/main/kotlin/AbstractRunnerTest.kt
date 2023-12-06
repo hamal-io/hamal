@@ -1,4 +1,3 @@
-
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.NativeLoader
@@ -57,8 +56,8 @@ abstract class AbstractRunnerTest {
             override fun create(ctx: SandboxContext): Sandbox {
                 NativeLoader.load(Resources)
                 return Sandbox(ctx)
-                    .register(*extensionFactories.toTypedArray())
-                    .register(*pluginFactories.toTypedArray())
+                    .registerPlugins(*pluginFactories.toTypedArray())
+                    .registerExtensions(*extensionFactories.toTypedArray())
             }
         }
     )

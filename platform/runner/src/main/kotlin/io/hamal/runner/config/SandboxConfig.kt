@@ -45,14 +45,14 @@ class RunnerSandboxFactory(
         )
 
         return Sandbox(ctx)
-            .register(
+            .registerPlugins(
                 HttpPluginFactory(),
                 LogPluginFactory(sdk.execLog),
                 DebugPluginFactory(),
                 SysPluginFactory(sdk),
                 EthPluginFactory()
             )
-            .register(
+            .registerExtensions(
                 DecimalExtensionFactory,
                 HttpExtensionFactory,
                 LogExtensionFactory,

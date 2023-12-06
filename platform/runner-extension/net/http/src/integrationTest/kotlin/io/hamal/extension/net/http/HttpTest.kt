@@ -1,12 +1,12 @@
 package io.hamal.plugin.net.http
 
 import AbstractRunnerTest
-import io.hamal.lib.http.fixture.TestWebConfig
-import io.hamal.lib.kua.type.StringType
-import io.hamal.plugin.net.http.endpoint.TestHeaderController
-import io.hamal.plugin.net.http.endpoint.TestJsonController
-import io.hamal.plugin.net.http.endpoint.TestStatusController
+import io.hamal.extension.net.http.HttpExtensionFactory
+import io.hamal.extension.net.http.endpoint.TestHeaderController
+import io.hamal.extension.net.http.endpoint.TestJsonController
+import io.hamal.extension.net.http.endpoint.TestStatusController
 import io.hamal.extension.std.decimal.DecimalExtensionFactory
+import io.hamal.lib.http.fixture.TestWebConfig
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
@@ -33,16 +33,19 @@ class HttpTest(@LocalServerPort var localServerPort: Int) : AbstractRunnerTest()
     fun run(): List<DynamicTest> {
         return collectFiles().map { testFile ->
             dynamicTest("${testFile.parent.parent.name}/${testFile.parent.name}/${testFile.name}") {
-                val config = ExtensionConfig(
-                    mutableMapOf(
-                        "base_url" to StringType("http://localhost:$localServerPort")
-                    )
-                )
                 val runner = createTestRunner(
                     pluginFactories = listOf(HttpPluginFactory()),
-                    extensionFactories = listOf(DecimalExtensionFactory)
+                    extensionFactories = listOf(
+                        DecimalExtensionFactory,
+                        HttpExtensionFactory
+                    )
                 )
-                runner.run(unitOfWork(String(Files.readAllBytes(testFile))))
+                runner.run(
+                    unitOfWork(
+                        code = String(Files.readAllBytes(testFile)),
+                        apiHost = "http://localhost:$localServerPort"
+                    )
+                )
             }
         }.toList()
     }

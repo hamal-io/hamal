@@ -38,6 +38,7 @@ testing {
                 dependencies {
                     implementation(project(":platform:runner-test"))
                     implementation(project(":platform:runner-extension:std:log"))
+                    implementation(project(":platform:runner-plugin:std:log"))
                 }
             }
         }
