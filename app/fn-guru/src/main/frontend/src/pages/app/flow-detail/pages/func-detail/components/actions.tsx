@@ -1,5 +1,5 @@
 import * as React from "react"
-import {FC} from "react"
+import {FC, useState} from "react"
 import {DotsHorizontalIcon} from "@radix-ui/react-icons"
 
 import {
@@ -19,16 +19,16 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+
 import {useFuncUpdate} from "@/hook";
 import {useFuncDeployLatestCode, useFuncInvoke} from "@/hook/func.ts";
 
 type Props = {
     funcId: string;
     code: string;
-    message: string;
 }
 
-const Actions: FC<Props> = ({funcId, code, message}) => {
+const Actions: FC<Props> = ({funcId, code}) => {
     const [showDeleteDialog, setShowDeployDialog] = React.useState(false)
     const [updateFunc] = useFuncUpdate()
     const [deployFunc] = useFuncDeployLatestCode()
@@ -66,19 +66,17 @@ const Actions: FC<Props> = ({funcId, code, message}) => {
             <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeployDialog}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>Are you sure absolutely sure?</AlertDialogTitle>
+                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                         <AlertDialogDescription>
                             The latest code version will be deployed. This might take a couple of seconds.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
-
-
                     <AlertDialogFooter>
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
                         <Button
                             variant="destructive"
                             onClick={() => {
-                                deployFunc(funcId, message /*TODO-115 message*/)
+                                deployFunc(funcId)
                                 setShowDeployDialog(false)
                             }}
                         >

@@ -72,8 +72,7 @@ type FuncDeployLatestCodeAction = (funcId: string, message?: string, abortContro
 export const useFuncDeployLatestCode = (): [FuncDeployLatestCodeAction, FuncDeploySubmitted, boolean, Error] => {
     const [auth] = useAuth()
     const [post, submission, loading, error] = usePost<FuncDeploySubmitted>()
-    const fn = useCallback(async (funcId: string, message?: string, abortController?: AbortController) => {
-            if (!message) message = ""; //for testing
+    const fn = useCallback(async (funcId: string, message: string, abortController?: AbortController) => {
             post(`/v1/funcs/${funcId}/deploy`, {
                 message: message
             }, abortController)
