@@ -1,4 +1,4 @@
-http = require_plugin 'net.http'
+http = require('net.http').create()
 debug = require_plugin 'debug'
 
 host = context.api.host

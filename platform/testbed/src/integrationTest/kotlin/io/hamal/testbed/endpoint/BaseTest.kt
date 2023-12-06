@@ -4,6 +4,7 @@ import AbstractRunnerTest
 import io.hamal.core.component.DelayRetry
 import io.hamal.core.component.DelayRetryFixedTime
 import io.hamal.core.config.BackendBasePath
+import io.hamal.extension.net.http.HttpExtensionFactory
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.GenerateDomainId
@@ -279,6 +280,9 @@ abstract class BaseEndpointTest : AbstractRunnerTest() {
                         pluginFactories = listOf(
                             SysPluginFactory(ApiSdkImpl(apiHttpTemplate)),
                             HttpPluginFactory()
+                        ),
+                        extensionFactories = listOf(
+                            HttpExtensionFactory
                         )
                     ).run(
                         unitOfWork(
