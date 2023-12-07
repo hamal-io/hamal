@@ -702,7 +702,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                 )
 
             }
-            val x = listDeployments(FuncId(1))
+
             assertThat(listDeployments(FuncId(1)), hasSize(9))
         }
 
