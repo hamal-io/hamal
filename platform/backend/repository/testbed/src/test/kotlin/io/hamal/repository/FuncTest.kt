@@ -701,7 +701,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                     )
                 )
             }
-            assertThat(listDeployments(FuncId(1)), hasSize(10))
+            assertThat(listDeployments(FuncId(1)), hasSize(9))
         }
 
         @TestFactory

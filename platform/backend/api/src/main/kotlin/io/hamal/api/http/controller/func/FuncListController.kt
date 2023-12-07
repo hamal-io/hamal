@@ -1,5 +1,6 @@
 package io.hamal.api.http.controller.func
 
+import io.hamal.core.adapter.FuncDeploymentListPort
 import io.hamal.core.adapter.FuncListPort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.FlowId
@@ -17,7 +18,10 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class FuncListController(private val listFunc: FuncListPort) {
+internal class FuncListController(
+    private val listFunc: FuncListPort,
+    private val listDeployments: FuncDeploymentListPort
+) {
 
     @GetMapping("/v1/flows/{flowId}/funcs")
     fun listFlowFuncs(
@@ -89,7 +93,7 @@ internal class FuncListController(private val listFunc: FuncListPort) {
     fun listFuncDeployments(
         @PathVariable("funcId") funcId: FuncId
     ): ResponseEntity<ApiFuncDeploymentList> {
-        return listFunc(funcId) { li ->
+        return listDeployments(funcId) { li ->
             ResponseEntity.ok(ApiFuncDeploymentList(
                 deployments = li.map { res ->
                     ApiFuncDeploymentList.Deployment(

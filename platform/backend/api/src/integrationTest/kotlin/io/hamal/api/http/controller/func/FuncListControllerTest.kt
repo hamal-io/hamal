@@ -107,7 +107,7 @@ internal class FuncListControllerTest : FuncBaseControllerTest() {
         }
 
         val deployments = listDeployments(funcId).deployments
-        assertThat(deployments, hasSize(21))
+        assertThat(deployments, hasSize(20))
         assertThat(deployments[10].message, equalTo(DeployMessage("deployed-9")))
         assertThat(deployments[10].version, equalTo(CodeVersion(1)))
     }

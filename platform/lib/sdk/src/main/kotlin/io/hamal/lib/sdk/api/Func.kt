@@ -97,7 +97,7 @@ data class ApiFuncDeploymentList(
     data class Deployment(
         val version: CodeVersion,
         val message: DeployMessage,
-        val deployedAt: RecordedAt
+        val deployedAt: DeployedAt
     )
 }
 

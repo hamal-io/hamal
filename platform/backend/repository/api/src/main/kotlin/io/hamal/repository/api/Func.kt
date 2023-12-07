@@ -31,7 +31,8 @@ data class FuncCode(
 data class FuncDeployment(
     val id: CodeId,
     val version: CodeVersion,
-    val message: DeployMessage
+    val message: DeployMessage,
+    var deployedAt: DeployedAt = DeployedAt.default
 ) {
     fun toExecCode() = ExecCode(
         id = id,
@@ -39,13 +40,6 @@ data class FuncDeployment(
         value = null
     )
 }
-
-@Serializable
-data class FuncDeploymentsRes(
-    val version: CodeVersion,
-    val message: DeployMessage,
-    val deployedAt: RecordedAt
-)
 
 interface FuncRepository : FuncCmdRepository, FuncQueryRepository
 
@@ -92,7 +86,7 @@ interface FuncQueryRepository {
         )
     )
 
-    fun listDeployments(funcId: FuncId): List<FuncDeploymentsRes>
+    fun listDeployments(funcId: FuncId): List<FuncDeployment>
 
     fun count(query: FuncQuery): ULong
 
