@@ -54,7 +54,6 @@ data class ExecEntity(
                 status = ExecStatus.Scheduled,
                 scheduledAt = Instant.now(), // FIXME
                 recordedAt = rec.recordedAt()
-
             )
 
             is ExecQueuedRecord -> copy(
@@ -92,8 +91,6 @@ data class ExecEntity(
                 result = rec.result,
                 recordedAt = rec.recordedAt()
             )
-
-            else -> TODO()
         }
     }
 

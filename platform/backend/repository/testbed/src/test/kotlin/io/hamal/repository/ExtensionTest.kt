@@ -149,7 +149,7 @@ internal class ExtensionRepositoryTest : AbstractUnitTest() {
                 name = ExtensionName("TestExt")
             )
 
-            val res = update(
+            update(
                 ExtensionId(999), UpdateCmd(
                     id = CmdId(2),
                     name = ExtensionName("UpdateExt"),
@@ -195,7 +195,7 @@ internal class ExtensionRepositoryTest : AbstractUnitTest() {
                 )
             )
 
-            with(get(ExtensionId(1))!!) {
+            with(get(ExtensionId(1))) {
                 assertThat(id, equalTo(ExtensionId(1)))
                 assertThat(groupId, equalTo(GroupId(1)))
                 assertThat(name, equalTo(ExtensionName("TestExt")))
