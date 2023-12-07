@@ -53,7 +53,7 @@ const Actions: FC<Props> = ({funcId, code}) => {
                     <AlertDialogHeader>
                         <AlertDialogTitle>Are you sure absolutely sure?</AlertDialogTitle>
                         <AlertDialogDescription>
-                            The latest code version will be deployed. This might take a couple of seconds.
+                            The latest code version will be deployednpm . This might take a couple of seconds.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
@@ -61,7 +61,7 @@ const Actions: FC<Props> = ({funcId, code}) => {
                         <Button
                             variant="destructive"
                             onClick={() => {
-                                deployFunc(funcId)
+                                deployFunc(funcId, "Not implemented")
                                 setShowDeployDialog(false)
                             }}
                         >

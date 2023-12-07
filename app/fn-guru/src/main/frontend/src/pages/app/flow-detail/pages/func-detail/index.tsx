@@ -7,6 +7,7 @@ import {useParams} from "react-router-dom";
 import Actions from "@/pages/app/flow-detail/pages/func-detail/components/actions.tsx";
 import {FlowContext} from "@/pages/app/flow-detail";
 import {useFuncGet} from "@/hook/func.ts";
+import Deploy from "@/pages/app/flow-detail/pages/func-detail/components/deploy.tsx";
 
 type Props = {}
 const FuncDetailPage: FC<Props> = ({}) => {
@@ -43,6 +44,7 @@ const FuncDetailPage: FC<Props> = ({}) => {
                     flowId={flow.id}
                 />
                 <div className="flex w-full space-x-2 justify-end">
+                    <Deploy funcId={funcId}/>
                     <Save funcId={funcId} code={code} name={name}/>
                     <History/>
                     <Actions funcId={funcId} code={code}/>
