@@ -31,6 +31,7 @@ internal class RetryTest {
     @Test
     fun `Tries to use retry with maxAttempts being negative`() {
         val exception = assertThrows<IllegalArgumentException> {
+            @Suppress("UNUSED_EXPRESSION")
             testInstance(-1) { 74656 }
         }
         assertThat(exception.message, equalTo("maxAttempts must not be negative"))

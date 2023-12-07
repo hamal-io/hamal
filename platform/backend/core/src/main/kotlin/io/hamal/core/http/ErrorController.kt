@@ -81,6 +81,7 @@ internal class ErrorController(private val json: Json) {
 
     @ExceptionHandler(value = [NoHandlerFoundException::class])
     fun missingFields(res: HttpServletResponse) {
+        res.status = SC_NOT_FOUND
         res.addHeader("Content-Type", "application/json")
         res.writer.write(json.encodeToString(ApiError("Request handler not found")))
     }

@@ -3,6 +3,7 @@ package io.hamal.core.config
 import io.hamal.core.component.*
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.protobuf.ProtoBuf
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.format.FormatterRegistry
@@ -12,15 +13,18 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
 
 @Configuration
+@OptIn(ExperimentalSerializationApi::class)
 open class WebConfig : WebMvcConfigurer {
 
     @Bean
-    @OptIn(ExperimentalSerializationApi::class)
     open fun json(): Json = Json {
         explicitNulls = false
         ignoreUnknownKeys = true
         encodeDefaults = true
     }
+
+    @Bean
+    open fun protobuf(): ProtoBuf = ProtoBuf { }
 
     override fun configureMessageConverters(converters: MutableList<HttpMessageConverter<*>>) {
         converters.add(KotlinSerializationJsonHttpMessageConverter(json()))
