@@ -15,7 +15,9 @@ class TableProxyMap(
     val length get() = state.native.tableGetLength(index)
 
     fun unset(key: StringType) = unset(key.value)
+    @Suppress("UNUSED_PARAMETER")
     operator fun set(key: String, value: NilType) = unset(key)
+    @Suppress("UNUSED_PARAMETER")
     operator fun set(key: StringType, value: NilType) = unset(key.value)
     fun unset(key: String): Int {
         state.pushString(key)

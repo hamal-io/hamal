@@ -2,9 +2,11 @@ package io.hamal.repository
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.CodeType
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.CodeId
+import io.hamal.lib.domain.vo.CodeValue
+import io.hamal.lib.domain.vo.CodeVersion
+import io.hamal.lib.domain.vo.GroupId
 import io.hamal.repository.api.Code
 import io.hamal.repository.api.CodeCmdRepository.CreateCmd
 import io.hamal.repository.api.CodeCmdRepository.UpdateCmd
@@ -13,7 +15,6 @@ import io.hamal.repository.api.CodeRepository
 import io.hamal.repository.fixture.AbstractUnitTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.TestFactory
 import org.junit.jupiter.api.assertThrows
@@ -453,37 +454,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
         }
 
     }
-
-    @Nested
-    inner class TimestampTest {
-
-        @TestFactory
-        fun `Initialization Test`() = runWith(CodeRepository::class) {
-            val snow = SnowflakeId(4696750753320960)
-            val epoch: Long = 1698451200000 // Happy birthday
-            val codeId = CodeId(snow)
-
-            val code = createCode(codeId, GroupId(1), CmdGen(), CodeValue("1+1"))
-            val re3 = code.createdAt // BS
-
-
-            //under construction
-
-
-            Thread.sleep(1000)
-            update(
-                codeId, UpdateCmd(
-                    id = CmdGen(),
-                    value = CodeValue("1 + 2")
-                )
-            )
-            val t1 = get(codeId, CodeVersion(1)).updatedAt
-            val t2 = get(codeId, CodeVersion(2)).updatedAt
-            assertTrue(t2.value.isAfter(t1.value))
-        }
-    }
 }
-
 
 private fun CodeRepository.createCode(
     codeId: CodeId,

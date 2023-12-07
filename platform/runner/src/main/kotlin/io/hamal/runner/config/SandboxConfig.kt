@@ -27,18 +27,21 @@ import org.springframework.context.annotation.Profile
 open class SandboxConfig {
     @Bean
     open fun sandboxFactory(@Value("\${io.hamal.runner.api.host}") apiHost: String): SandboxFactory =
-        RunnerSandboxFactory(apiHost)
+        SandboxFactoryDefaultImpl(apiHost)
+
+    @Bean
+    open fun envFactory(): EnvFactory = RunnerEnvFactoryDefaultImpl()
 }
 
 interface SandboxFactory {
     fun create(ctx: SandboxContext): Sandbox
 }
 
-interface RunnerEnvFactory {
+interface EnvFactory {
     fun create(): RunnerEnv
 }
 
-class RunnerSandboxFactory(
+class SandboxFactoryDefaultImpl(
     private val apiHost: String,
 ) : SandboxFactory {
     override fun create(ctx: SandboxContext): Sandbox {
@@ -63,5 +66,12 @@ class RunnerSandboxFactory(
                 LogExtensionFactory,
                 TelegramExtensionFactory
             )
+    }
+}
+
+
+class RunnerEnvFactoryDefaultImpl : EnvFactory {
+    override fun create(): RunnerEnv {
+        return RunnerEnv()
     }
 }

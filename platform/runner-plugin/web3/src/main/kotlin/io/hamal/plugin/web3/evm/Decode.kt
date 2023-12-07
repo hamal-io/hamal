@@ -16,29 +16,29 @@ object EthDecodeParameterFunction : Function2In2Out<StringType, StringType, Erro
     FunctionInput2Schema(StringType::class, StringType::class),
     FunctionOutput2Schema(ErrorType::class, AnyType::class)
 ) {
-    override fun invoke(ctx: FunctionContext, type: StringType, value: StringType): Pair<ErrorType?, AnyType?> {
+    override fun invoke(ctx: FunctionContext, arg1: StringType, arg2: StringType): Pair<ErrorType?, AnyType?> {
 //        EthTypeDecoder.Uint256.decode(arg1.value.)
 
-        if (type.value == "string") {
+        if (arg1.value == "string") {
             return null to AnyType(
                 //FIXME must be decimal value
                 StringType(
                     EthTypeDecoder.String.decode(
                         ByteWindow.Companion.of(
-                            EthPrefixedHexString(value.value)
+                            EthPrefixedHexString(arg2.value)
                         )
                     ).value
                 )
             )
         }
 
-        if (type.value == "uint256") {
+        if (arg1.value == "uint256") {
             return null to AnyType(
                 //FIXME must be decimal value
                 NumberType(
                     EthTypeDecoder.Uint256.decode(
                         ByteWindow.Companion.of(
-                            EthPrefixedHexString(value.value)
+                            EthPrefixedHexString(arg2.value)
                         )
                     ).value.toDouble()
                 )
