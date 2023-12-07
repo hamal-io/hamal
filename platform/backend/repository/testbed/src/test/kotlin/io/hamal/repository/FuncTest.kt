@@ -700,7 +700,9 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                         message = DeployMessage("Some deployment message ${iter + 1}")
                     )
                 )
+
             }
+            val x = listDeployments(FuncId(1))
             assertThat(listDeployments(FuncId(1)), hasSize(9))
         }
 
