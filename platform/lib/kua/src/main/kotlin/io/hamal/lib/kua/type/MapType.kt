@@ -13,17 +13,19 @@ import kotlin.reflect.KClass
 @Serializable
 @SerialName("MapType")
 data class MapType(
-    @Serializable(with = Serializer::class)
-    val value: MutableMap<String, SerializableType> = mutableMapOf(),
+    @Serializable(with = Serializer::class) val value: MutableMap<String, SerializableType> = mutableMapOf(),
 ) : TableType(), Map<String, SerializableType> {
 
     constructor(vararg pairs: Pair<String, SerializableType>) : this(mutableMapOf(*pairs))
 
     override val size get() = value.size
+
     @Transient
     override val entries: Set<Map.Entry<String, SerializableType>> = value.entries
+
     @Transient
     override val keys: Set<String> = value.keys
+
     @Transient
     override val values: Collection<SerializableType> = value.values
     override fun containsKey(key: String): Boolean = this.value.containsKey(key)
@@ -40,7 +42,11 @@ data class MapType(
     operator fun set(key: String, value: AnySerializableType) = set(key, value.value)
 
     fun unset(key: StringType) = unset(key.value)
+
+    @Suppress("UNUSED_PARAMETER")
     operator fun set(key: String, value: NilType) = unset(key)
+
+    @Suppress("UNUSED_PARAMETER")
     operator fun set(key: StringType, value: NilType) = unset(key.value)
     fun unset(key: String): Int {
         value.remove(key)

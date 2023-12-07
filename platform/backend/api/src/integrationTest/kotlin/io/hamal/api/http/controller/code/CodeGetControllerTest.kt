@@ -22,13 +22,13 @@ internal class CodeGetControllerTest : CodeBaseControllerTest() {
                     id = CmdGen(),
                     codeId = CodeId(iter + 5),
                     groupId = testGroup.id,
-                    value = CodeValue("1 + ${iter}")
+                    value = CodeValue("1 + $iter")
                 )
             )
 
             with(getCode(createCode.id)) {
                 assertThat(id, equalTo(CodeId(iter + 5)))
-                assertThat(value, equalTo(CodeValue("1 + ${iter}")))
+                assertThat(value, equalTo(CodeValue("1 + $iter")))
                 assertThat(version, equalTo(CodeVersion(1)))
             }
         }
@@ -75,7 +75,7 @@ internal class CodeGetControllerTest : CodeBaseControllerTest() {
             )
         )
 
-        repeat(5) { iter ->
+        repeat(5) {
             codeCmdRepository.update(
                 CodeId(3), CodeCmdRepository.UpdateCmd(
                     CmdGen(),

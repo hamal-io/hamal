@@ -4,7 +4,6 @@ import io.hamal.core.event.PlatformEventEmitter
 import io.hamal.core.req.ReqHandler
 import io.hamal.core.req.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.vo.FlowName
 import io.hamal.repository.api.FlowQueryRepository
 import io.hamal.repository.api.Hook
 import io.hamal.repository.api.HookCmdRepository
@@ -32,7 +31,7 @@ private fun HookCreateHandler.createHook(req: HookCreateSubmitted): Hook {
             id = req.cmdId(),
             hookId = req.hookId,
             groupId = req.groupId,
-            flowId = req.flowId ?: flowQueryRepository.get(FlowName("hamal")).id,
+            flowId = req.flowId,
             name = req.name
         )
     )

@@ -7,7 +7,9 @@ import io.hamal.lib.domain._enum.TriggerType.Hook
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.Invocation
 import io.hamal.lib.domain.vo.InvocationInputs
-import io.hamal.repository.api.*
+import io.hamal.repository.api.HookQueryRepository
+import io.hamal.repository.api.HookTrigger
+import io.hamal.repository.api.TriggerQueryRepository
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import io.hamal.repository.api.submitted_req.HookInvokeSubmitted
 import io.hamal.request.InvokeFuncReq
@@ -16,7 +18,6 @@ import org.springframework.stereotype.Component
 
 @Component
 class HookInvokeHandler(
-    private val funcQueryRepository: FuncQueryRepository,
     private val hookQueryRepository: HookQueryRepository,
     private val invokeFunc: FuncInvokePort,
     private val triggerQueryRepository: TriggerQueryRepository
@@ -35,15 +36,7 @@ class HookInvokeHandler(
                 groupIds = listOf(hook.groupId),
                 hookIds = listOf(hook.id)
             )
-        )
-            .filterIsInstance<HookTrigger>()
-
-        val funcs = funcQueryRepository.list(
-            FuncQueryRepository.FuncQuery(
-                groupIds = listOf(hook.groupId),
-                funcIds = triggers.map { it.funcId }
-            )
-        ).associateBy(Func::id)
+        ).filterIsInstance<HookTrigger>()
 
         triggers.forEach { trigger ->
             invokeFunc(

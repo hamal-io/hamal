@@ -2,8 +2,8 @@ package io.hamal.core.http
 
 import io.hamal.lib.sdk.api.ApiError
 import jakarta.servlet.ServletException
-import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import jakarta.servlet.http.HttpServletResponse.*
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.MissingFieldException
 import kotlinx.serialization.Serializable
@@ -20,9 +20,7 @@ import org.springframework.web.servlet.NoHandlerFoundException
 
 @Order(HIGHEST_PRECEDENCE)
 @ControllerAdvice
-internal class ErrorController(
-    private val json: Json
-) {
+internal class ErrorController(private val json: Json) {
 
     @Serializable
     data class InvalidArgumentType(
@@ -31,33 +29,24 @@ internal class ErrorController(
         val target: String
     )
 
-    @OptIn(ExperimentalSerializationApi::class)
     @ExceptionHandler(value = [MethodArgumentTypeMismatchException::class])
-    fun argumentTypeMismatch(
-        req: HttpServletRequest,
-        res: HttpServletResponse,
-        t: MethodArgumentTypeMismatchException
-    ) {
-        t.printStackTrace()
-
+    fun argumentTypeMismatch(res: HttpServletResponse, t: MethodArgumentTypeMismatchException) {
         val cause = t.cause
         if (cause is ConversionFailedException) {
-
-            val encoded = json.encodeToString(
-                InvalidArgumentType(
-                    message = "ArgumentTypeMismatch",
-                    source = cause.sourceType.toString(),
-                    target = cause.targetType.toString()
+            res.status = 400
+            res.addHeader("Content-Type", "application/json")
+            res.writer.write(
+                json.encodeToString(
+                    InvalidArgumentType(
+                        message = "ArgumentTypeMismatch",
+                        source = cause.sourceType?.toString() ?: "Unknown source type",
+                        target = cause.targetType.toString()
+                    )
                 )
             )
-            res.status = 400
-            res.addHeader("Content-Type", "application/json")
-            res.writer.write(encoded)
         } else {
-            val encoded = json.encodeToString(ApiError("Bad request"))
-            res.status = 400
             res.addHeader("Content-Type", "application/json")
-            res.writer.write(encoded)
+            res.writer.write(json.encodeToString(ApiError("Bad request")))
         }
     }
 
@@ -70,69 +59,58 @@ internal class ErrorController(
 
     @OptIn(ExperimentalSerializationApi::class)
     @ExceptionHandler(value = [HttpMessageNotReadableException::class])
-    fun missingFields(req: HttpServletRequest, res: HttpServletResponse, t: HttpMessageNotReadableException) {
-        t.printStackTrace()
-
+    fun missingFields(res: HttpServletResponse, t: HttpMessageNotReadableException) {
         val cause = t.cause
         if (cause is MissingFieldException) {
-
-            val encoded = json.encodeToString(
-                MissingFieldsError(
-                    message = "Fields are missing",
-                    fields = cause.missingFields
+            res.status = 400
+            res.addHeader("Content-Type", "application/json")
+            res.writer.write(
+                json.encodeToString(
+                    MissingFieldsError(
+                        message = "Fields are missing",
+                        fields = cause.missingFields
+                    )
                 )
             )
-            res.status = 400
-            res.addHeader("Content-Type", "application/json")
-            res.writer.write(encoded)
         } else {
-            val encoded = json.encodeToString(ApiError("Bad request"))
             res.status = 400
             res.addHeader("Content-Type", "application/json")
-            res.writer.write(encoded)
+            res.writer.write(json.encodeToString(ApiError("Bad request")))
         }
     }
 
     @ExceptionHandler(value = [NoHandlerFoundException::class])
-    fun missingFields(req: HttpServletRequest, res: HttpServletResponse, t: NoHandlerFoundException) {
-        t.printStackTrace()
-        val encoded = json.encodeToString(ApiError("Request handler not found"))
-        res.status = 404
+    fun missingFields(res: HttpServletResponse) {
+        res.status = SC_NOT_FOUND
         res.addHeader("Content-Type", "application/json")
-        res.writer.write(encoded)
+        res.writer.write(json.encodeToString(ApiError("Request handler not found")))
     }
 
 
     @ExceptionHandler(value = [IllegalCallerException::class])
-    fun otherwise(req: HttpServletRequest, res: HttpServletResponse, t: IllegalCallerException) {
-        val encoded = json.encodeToString(ApiError.serializer(), ApiError("FORBIDDEN"))
-        res.status = HttpServletResponse.SC_FORBIDDEN
+    fun otherwise(res: HttpServletResponse) {
+        res.status = SC_FORBIDDEN
         res.addHeader("Content-Type", "application/json")
-        res.writer.write(encoded)
+        res.writer.write(json.encodeToString(ApiError.serializer(), ApiError("FORBIDDEN")))
     }
 
-
     @ExceptionHandler(value = [Throwable::class])
-    fun otherwise(req: HttpServletRequest, res: HttpServletResponse, t: Throwable) {
-        t.printStackTrace()
-
+    fun otherwise(res: HttpServletResponse, t: Throwable) {
         val toHandle = when (t) {
             is ServletException -> t.cause
             else -> t
         }
 
         val statusCode = when (toHandle) {
-            is IllegalArgumentException, is MethodArgumentTypeMismatchException -> HttpServletResponse.SC_BAD_REQUEST
-            is NoSuchElementException -> HttpServletResponse.SC_NOT_FOUND
-            is IllegalCallerException -> HttpServletResponse.SC_FORBIDDEN
-            else -> HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+            is IllegalArgumentException, is MethodArgumentTypeMismatchException -> SC_BAD_REQUEST
+            is NoSuchElementException -> SC_NOT_FOUND
+            is IllegalCallerException -> SC_FORBIDDEN
+            else -> SC_INTERNAL_SERVER_ERROR
         }
 
-        val encoded = json.encodeToString(ApiError.serializer(), ApiError(toHandle?.message ?: "Unknown error"))
         res.status = statusCode
         res.addHeader("Content-Type", "application/json")
-        res.writer.write(encoded)
+        res.writer.write(json.encodeToString(ApiError.serializer(), ApiError(toHandle?.message ?: "Unknown error")))
     }
-
 
 }
