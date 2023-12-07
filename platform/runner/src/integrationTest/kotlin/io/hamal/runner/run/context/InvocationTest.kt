@@ -43,11 +43,9 @@ internal object EventInvocationTest : AbstractExecuteTest() {
                     assert( context.exec.events[2].topic.name == 'Topic-Two' )
                     assert( context.exec.events[2].payload.block == 44 )
                     
-                    assert(context.api.host == 'http://test-api')
                 """.trimIndent()
                 ),
-                invocation = EventInvocation(events),
-                apiHost = ApiHost("http://test-api")
+                invocation = EventInvocation(events)
             )
         )
     }
@@ -65,8 +63,7 @@ internal object EventInvocationTest : AbstractExecuteTest() {
                 inputs = ExecInputs(),
                 state = State(),
                 code = CodeValue("require_plugin('test').fn()"),
-                invocation = EventInvocation(events),
-                apiHost = ApiHost("http://test-api")
+                invocation = EventInvocation(events)
             )
         )
         assertThat(testFn.result, equalTo(events))
@@ -130,8 +127,7 @@ internal object HookInvocationTest : AbstractExecuteTest() {
                     headers = HookHeaders(MapType(mutableMapOf("content-type" to StringType("application/json")))),
                     parameters = HookParameters(MapType(mutableMapOf("answer" to NumberType(42)))),
                     content = HookContent(MapType(mutableMapOf("hamal" to StringType("rocks"))))
-                ),
-                apiHost = ApiHost("http://test-api")
+                )
             )
         )
     }
@@ -154,8 +150,7 @@ internal object HookInvocationTest : AbstractExecuteTest() {
                     headers = HookHeaders(MapType(mutableMapOf("content-type" to StringType("application/json")))),
                     parameters = HookParameters(MapType(mutableMapOf("answer" to NumberType(42)))),
                     content = HookContent(MapType(mutableMapOf("hamal" to StringType("rocks"))))
-                ),
-                apiHost = ApiHost("http://test-api")
+                )
             )
         )
         assertThat(testFn.method, equalTo(HookMethod.Delete))
@@ -222,8 +217,7 @@ internal object EndpointInvocationTest : AbstractExecuteTest() {
                     headers = EndpointHeaders(MapType(mutableMapOf("content-type" to StringType("application/json")))),
                     parameters = EndpointParameters(MapType(mutableMapOf("answer" to NumberType(42)))),
                     content = EndpointContent(MapType(mutableMapOf("hamal" to StringType("rocks"))))
-                ),
-                apiHost = ApiHost("http://test-api")
+                )
             )
         )
     }
@@ -246,8 +240,7 @@ internal object EndpointInvocationTest : AbstractExecuteTest() {
                     headers = EndpointHeaders(MapType(mutableMapOf("content-type" to StringType("application/json")))),
                     parameters = EndpointParameters(MapType(mutableMapOf("answer" to NumberType(42)))),
                     content = EndpointContent(MapType(mutableMapOf("hamal" to StringType("rocks"))))
-                ),
-                apiHost = ApiHost("http://test-api")
+                )
             )
         )
         assertThat(testFn.method, equalTo(EndpointMethod.Delete))

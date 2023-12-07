@@ -6,6 +6,7 @@ import io.hamal.extension.std.log.LogExtensionFactory
 import io.hamal.extension.telegram.TelegramExtensionFactory
 import io.hamal.lib.domain.vo.AuthToken
 import io.hamal.lib.domain.vo.ExecToken
+import io.hamal.lib.domain.vo.RunnerEnv
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Jar
 import io.hamal.lib.kua.Sandbox
@@ -31,6 +32,10 @@ open class SandboxConfig {
 
 interface SandboxFactory {
     fun create(ctx: SandboxContext): Sandbox
+}
+
+interface RunnerEnvFactory {
+    fun create(): RunnerEnv
 }
 
 class RunnerSandboxFactory(

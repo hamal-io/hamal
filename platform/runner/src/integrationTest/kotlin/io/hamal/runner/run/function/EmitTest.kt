@@ -177,7 +177,6 @@ internal class EmitTest : AbstractExecuteTest() {
         state = State(),
         code = CodeValue(code),
         correlation = null,
-        invocation = EmptyInvocation,
-        apiHost = ApiHost("http://test-api")
+        invocation = EmptyInvocation
     )
 }

@@ -12,6 +12,8 @@ import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContext
+import io.hamal.lib.kua.type.MapType
+import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.ApiSdkImpl
 import io.hamal.lib.sdk.api.ApiAdhocInvokeReq
 import io.hamal.plugin.net.http.HttpPluginFactory
@@ -20,10 +22,12 @@ import io.hamal.plugin.std.log.LogPluginFactory
 import io.hamal.plugin.std.sys.SysPluginFactory
 import io.hamal.repository.api.*
 import io.hamal.repository.api.log.BrokerRepository
+import io.hamal.runner.config.RunnerEnvFactory
 import io.hamal.runner.config.SandboxFactory
 import io.hamal.testbed.api.TestResult.*
 import jakarta.annotation.PostConstruct
 import org.junit.jupiter.api.DynamicTest
+import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
 import org.junit.jupiter.api.fail
 import org.springframework.beans.factory.annotation.Autowired
@@ -47,6 +51,18 @@ class TestSandboxConfig {
     @Bean
     fun sandboxFactory(@Value("\${io.hamal.runner.api.host}") apiHost: String): SandboxFactory =
         TestRunnerSandboxFactory(apiHost)
+
+    @Bean
+    fun envFactory(@Value("\${io.hamal.runner.api.host}") apiHost: String): RunnerEnvFactory =
+        object : RunnerEnvFactory {
+            override fun create() = RunnerEnv(
+                MapType(
+                    mutableMapOf(
+                        "api_host" to StringType(apiHost)
+                    )
+                )
+            )
+        }
 }
 
 
@@ -284,7 +300,7 @@ abstract class BaseApiTest {
             .sorted()
             .map { testPath ->
                 val testName = generateTestName(testPath)
-                DynamicTest.dynamicTest(testName) {
+                dynamicTest(testName) {
 
                     apiHttpTemplate.post("/v1/clear").execute()
 
