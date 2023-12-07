@@ -73,9 +73,7 @@ export const useFuncDeployLatestCode = (): [FuncDeployLatestCodeAction, FuncDepl
     const [auth] = useAuth()
     const [post, submission, loading, error] = usePost<FuncDeploySubmitted>()
     const fn = useCallback(async (funcId: string, message: string, abortController?: AbortController) => {
-            post(`/v1/funcs/${funcId}/deploy`, {
-                message: message
-            }, abortController)
+        post(`/v1/funcs/${funcId}/deploy`, {}, abortController)
         }, [auth]
     )
     return [fn, submission, loading, error]
