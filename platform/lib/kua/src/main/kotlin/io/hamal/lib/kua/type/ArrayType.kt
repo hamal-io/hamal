@@ -18,10 +18,13 @@ data class ArrayType(
 ) : TableType(), Map<Int, SerializableType> {
 
     override val size get() = value.size
+
     @Transient
     override val entries: Set<Map.Entry<Int, SerializableType>> = value.entries
+
     @Transient
     override val keys: Set<Int> = value.keys
+
     @Transient
     override val values: Collection<SerializableType> = value.values
     override fun isEmpty(): Boolean = value.isEmpty()
@@ -40,8 +43,8 @@ data class ArrayType(
 
     fun append(value: AnySerializableType) = append(value.value)
 
-    override operator fun get(idx: Int): SerializableType {
-        return value[idx]!!
+    override operator fun get(key: Int): SerializableType {
+        return value[key]!!
     }
 
     fun getBoolean(idx: Int) = getBooleanValue(idx) == True

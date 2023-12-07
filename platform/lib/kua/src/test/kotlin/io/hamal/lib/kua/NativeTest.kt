@@ -1183,7 +1183,7 @@ internal class TableNextTest : NativeTest() {
         val keys = mutableSetOf<String>()
         val values = mutableSetOf<String>()
         testInstance.pushNil()
-        repeat(1000) { idx ->
+        repeat(1000) {
             val result = testInstance.tableNext(1)
             assertThat(result, equalTo(true))
             keys.add(testInstance.toString(-2))

@@ -2,7 +2,7 @@ package io.hamal.runner.service
 
 import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.sdk.BridgeSdkImpl
-import io.hamal.runner.config.RunnerEnvFactory
+import io.hamal.runner.config.EnvFactory
 import io.hamal.runner.config.SandboxFactory
 import io.hamal.runner.connector.HttpConnector
 import io.hamal.runner.run.CodeRunnerImpl
@@ -23,7 +23,7 @@ class HttpExecutorService(
     private val httpTemplate: HttpTemplateImpl,
     private val runnerExecutor: ThreadPoolTaskScheduler,
     private val sandboxFactory: SandboxFactory,
-    private val runnerEnvFactory: RunnerEnvFactory,
+    private val runnerEnvFactory: EnvFactory,
     @Value("\${io.hamal.runner.http.poll-every-ms}") private val pollEveryMs: Long
 ) : ApplicationListener<ApplicationContextEvent>, DisposableBean {
 

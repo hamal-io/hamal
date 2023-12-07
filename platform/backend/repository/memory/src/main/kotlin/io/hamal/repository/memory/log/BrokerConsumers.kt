@@ -8,7 +8,6 @@ import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
 class BrokerConsumersMemoryRepository : BrokerConsumersRepository {
-
     internal val lock = ReentrantLock()
     internal val store = mutableMapOf<Pair<ConsumerId, TopicId>, ChunkId>()
     override fun nextChunkId(consumerId: ConsumerId, topicId: TopicId): ChunkId {
@@ -32,8 +31,4 @@ class BrokerConsumersMemoryRepository : BrokerConsumersRepository {
             store.clear()
         }
     }
-}
-
-fun BrokerConsumersMemoryRepository.clear() {
-    lock.withLock { store.clear() }
 }
