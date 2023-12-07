@@ -11,10 +11,12 @@ local json = {
     },
 }
 
+local url = context.env.test_url .. '/v1/json-echo'
+
 local err, response = http.execute({
-    http.requests.post({ url = '/v1/json-echo', json = json }),
-    http.requests.patch({ url = '/v1/json-echo', json = json }),
-    http.requests.put({ url = '/v1/json-echo', json = json }),
+    http.requests.post({ url = url, json = json }),
+    http.requests.patch({ url = url, json = json }),
+    http.requests.put({ url = url, json = json }),
 })
 
 assert(err == nil)

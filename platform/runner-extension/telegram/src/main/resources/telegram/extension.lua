@@ -1,50 +1,40 @@
 function extension()
     local http = require_plugin('net.http')
-
     return function()
-        local export = {
-            message = { },
-            webhook = { }
-        }
+        local export = { }
 
-        function export.message.send(message)
-            local cfg = export.config.get()
+        function export.create(cfg)
+            local instance = {
+                message = { },
+                webhook = { }
+            }
 
-            local err, resp = http.post({
-                url = cfg.base_url .. '/bot' .. cfg.bot_token .. '/sendMessage',
-                json = {
-                    ['chat_id'] = message.chat_id,
-                    ['text'] = message.text,
-                    ['disable_notification'] = true,
-                    ['disable_web_page_preview'] = true,
-                    ['protect_content'] = true
-                }
-            })
+            local base_url = cfg.base_url or 'https://api.telegram.org'
+            local bot_token = cfg.bot_token or error('bot_token has to be set')
 
-            print(err)
-            print(resp)
+            function instance.message.send(message)
+                local err, resp = http.post({
+                    url = base_url .. '/bot' .. cfg.bot_token .. '/sendMessage',
+                    json = {
+                        ['chat_id'] = message.chat_id,
+                        ['text'] = message.text,
+                        ['disable_notification'] = true,
+                        ['disable_web_page_preview'] = true,
+                        ['protect_content'] = true
+                    }
+                })
 
-            for k, v in pairs(resp.content) do
-                print(k, v)
+                return err, resp.content
             end
 
-            return err, resp.content
-        end
-
-        function export.webhook.info()
-            local cfg = export.config.get()
-            local err, resp = http.post({
-                url = cfg.base_url .. '/bot' .. cfg.bot_token .. '/getWebhookInfo'
-            })
-
-            print(err)
-            print(res)
-
-            for k, v in pairs(resp.content) do
-                print(k, v)
+            function instance.webhook.info()
+                local err, resp = http.post({
+                    url = base_url .. '/bot' .. bot_token .. '/getWebhookInfo'
+                })
+                return err, resp.content
             end
 
-            return err, resp.content
+            return instance
         end
 
         return export

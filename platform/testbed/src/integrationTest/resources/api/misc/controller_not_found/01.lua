@@ -1,13 +1,11 @@
-http = require_plugin 'net.http'
+http = require('net.http').create({})
 debug = require_plugin 'debug'
 
-host = context.api.host
-
-res = fail_on_error(http.post({ url = host .. '/v1/anonymous-accounts', json = { } }))
+res = fail_on_error(http.post({ url = context.env.api_host .. '/v1/anonymous-accounts', json = { } }))
 
 debug.sleep(100)
 
-err, res = http.get({ url = host .. '/v1/does/not/exists', headers = {
+err, res = http.get({ url = context.env.api_host .. '/v1/does/not/exists', headers = {
     ['authorization'] = 'Bearer ' .. res.content.token
 } })
 

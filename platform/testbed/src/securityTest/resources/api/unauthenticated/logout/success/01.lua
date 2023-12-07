@@ -1,6 +1,8 @@
 -- Logging out invalidates a token
 
-http = require_plugin 'net.http'
+http = require('net.http').create({
+    base_url = context.env.test_api
+})
 
 err, res = http.post({
     url = '/v1/anonymous-accounts',

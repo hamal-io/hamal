@@ -1,8 +1,8 @@
 package io.hamal.runner.service
 
-import io.hamal.lib.domain.vo.ApiHost
 import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.sdk.BridgeSdkImpl
+import io.hamal.runner.config.RunnerEnvFactory
 import io.hamal.runner.config.SandboxFactory
 import io.hamal.runner.connector.HttpConnector
 import io.hamal.runner.run.CodeRunnerImpl
@@ -23,21 +23,21 @@ class HttpExecutorService(
     private val httpTemplate: HttpTemplateImpl,
     private val runnerExecutor: ThreadPoolTaskScheduler,
     private val sandboxFactory: SandboxFactory,
-    @Value("\${io.hamal.runner.http.poll-every-ms}") private val pollEveryMs: Long,
-    @Value("\${io.hamal.runner.api.host}") private val apiHost: String
+    private val runnerEnvFactory: RunnerEnvFactory,
+    @Value("\${io.hamal.runner.http.poll-every-ms}") private val pollEveryMs: Long
 ) : ApplicationListener<ApplicationContextEvent>, DisposableBean {
 
     override fun onApplicationEvent(event: ApplicationContextEvent) {
         if (event is ContextRefreshedEvent) {
             val sdk = BridgeSdkImpl(httpTemplate)
-            val connector = HttpConnector(sdk, ApiHost(apiHost))
+            val connector = HttpConnector(sdk)
 
             scheduledTasks.add(
                 runnerExecutor.scheduleAtFixedRate({
                     val unitsOfWork = connector.poll()
                     // FIXME core-60 -- backoff if empty or if exception got thrown
                     unitsOfWork.forEach { uow ->
-                        CodeRunnerImpl(connector, sandboxFactory)
+                        CodeRunnerImpl(connector, sandboxFactory, runnerEnvFactory)
                             .run(uow)
                     }
                 }, pollEveryMs.milliseconds.toJavaDuration())

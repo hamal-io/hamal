@@ -22,8 +22,7 @@ internal class ExecIdTest : AbstractExecuteTest() {
                 state = State(),
                 code = CodeValue("assert(context.exec.id == '4d2')"),
                 correlation = null,
-                invocation = EmptyInvocation,
-                apiHost = ApiHost("http://test-api")
+                invocation = EmptyInvocation
             )
         )
     }
@@ -42,8 +41,7 @@ internal class ExecIdTest : AbstractExecuteTest() {
                 state = State(),
                 code = CodeValue("require_plugin('test').fn()"),
                 correlation = null,
-                invocation = EmptyInvocation,
-                apiHost = ApiHost("http://test-api")
+                invocation = EmptyInvocation
             )
         )
         assertThat(testFn.result, equalTo("4d2"))

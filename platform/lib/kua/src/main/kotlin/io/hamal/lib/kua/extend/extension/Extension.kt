@@ -1,9 +1,6 @@
 package io.hamal.lib.kua.extend.extension
 
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.extend.ExtensionConfig
-import io.hamal.lib.kua.extend.ExtensionConfigGetFunction
-import io.hamal.lib.kua.extend.ExtensionConfigUpdateFunction
 
 
 interface RunnerExtensionFactory {
@@ -12,10 +9,8 @@ interface RunnerExtensionFactory {
 
 class RunnerExtension(
     val name: String,
-    val factoryCode: String = loadFactoryCodeFromResources(name),
-    val config: ExtensionConfig = ExtensionConfig(mutableMapOf()),
+    val factoryCode: String = loadFactoryCodeFromResources(name)
 ) {
-
     companion object {
         @JvmStatic
         private fun loadFactoryCodeFromResources(extensionName: String): String { // FIXME extend name VO
@@ -26,10 +21,6 @@ class RunnerExtension(
             return String(resource.readBytes())
         }
     }
-
-    fun configGetFunction() = ExtensionConfigGetFunction(config)
-
-    fun configUpdateFunction() = ExtensionConfigUpdateFunction(config)
 }
 
 

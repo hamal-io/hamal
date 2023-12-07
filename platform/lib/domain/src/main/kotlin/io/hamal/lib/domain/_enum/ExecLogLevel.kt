@@ -5,6 +5,5 @@ enum class ExecLogLevel {
     Debug,
     Info,
     Warn,
-    Error,
-    Fatal
+    Error
 }

@@ -1,14 +1,16 @@
 package io.hamal.runner.connector
 
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.EventToSubmit
+import io.hamal.lib.domain.vo.ExecId
+import io.hamal.lib.domain.vo.ExecResult
+import io.hamal.lib.domain.vo.ExecState
 import io.hamal.lib.http.HttpException
 import io.hamal.lib.sdk.BridgeSdk
 import java.net.SocketException
 import java.net.SocketTimeoutException
 
 class HttpConnector(
-    private val sdk: BridgeSdk,
-    private val apiHost: ApiHost
+    private val sdk: BridgeSdk
 ) : Connector {
 
     override fun poll(): List<UnitOfWork> {
@@ -23,7 +25,6 @@ class HttpConnector(
                     code = it.code,
                     correlation = it.correlation,
                     invocation = it.invocation,
-                    apiHost = apiHost
                 )
             }
         } catch (e: java.net.ConnectException) {

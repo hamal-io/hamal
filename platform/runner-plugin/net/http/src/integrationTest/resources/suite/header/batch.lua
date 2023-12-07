@@ -8,12 +8,14 @@ req_headers['d'] = decimal.new('12.21')
 req_headers['n'] = 24
 req_headers['b'] = true
 
+local url = context.env.test_url .. '/v1/headers'
+
 res = fail_on_error(http.execute({
-    http.requests.get({ url = '/v1/headers', headers = req_headers }),
-    http.requests.post({ url = '/v1/headers', headers = req_headers }),
-    http.requests.patch({ url = '/v1/headers', headers = req_headers }),
-    http.requests.put({ url = '/v1/headers', headers = req_headers }),
-    http.requests.delete({ url = '/v1/headers', headers = req_headers })
+    http.requests.get({ url = url, headers = req_headers }),
+    http.requests.post({ url = url, headers = req_headers }),
+    http.requests.patch({ url = url, headers = req_headers }),
+    http.requests.put({ url = url, headers = req_headers }),
+    http.requests.delete({ url = url, headers = req_headers })
 }))
 
 assert(err == nil)

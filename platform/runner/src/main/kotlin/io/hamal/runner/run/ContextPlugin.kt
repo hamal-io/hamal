@@ -51,9 +51,6 @@ class RunnerContextFactory(
         return RunnerPlugin(
             name = "context",
             internals = mapOf(
-                "api" to MapType(
-                    "host" to StringType(executionCtx[ApiHost::class].value),
-                ),
                 "events" to events,
                 "hook" to hook,
                 "endpoint" to endpoint,
@@ -61,7 +58,8 @@ class RunnerContextFactory(
                 "emit" to EmitFunction(executionCtx),
                 "fail" to FailRunFunction,
                 "complete" to CompleteRunFunction,
-                "state" to executionCtx.state.value
+                "state" to executionCtx.state.value,
+                "env" to executionCtx[RunnerEnv::class].value
             )
         )
     }

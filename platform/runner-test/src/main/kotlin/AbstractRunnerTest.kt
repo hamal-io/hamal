@@ -1,4 +1,3 @@
-
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.NativeLoader
@@ -7,6 +6,7 @@ import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContext
 import io.hamal.lib.kua.extend.extension.RunnerExtensionFactory
 import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
+import io.hamal.runner.config.RunnerEnvFactory
 import io.hamal.runner.config.SandboxFactory
 import io.hamal.runner.connector.Connector
 import io.hamal.runner.connector.UnitOfWork
@@ -51,21 +51,25 @@ abstract class AbstractRunnerTest {
     fun createTestRunner(
         pluginFactories: List<RunnerPluginFactory> = listOf(),
         extensionFactories: List<RunnerExtensionFactory> = listOf(),
-        connector: Connector = TestConnector()
+        connector: Connector = TestConnector(),
+        env: RunnerEnv = RunnerEnv()
     ) = CodeRunnerImpl(
-        connector, object : SandboxFactory {
+        connector,
+        object : SandboxFactory {
             override fun create(ctx: SandboxContext): Sandbox {
                 NativeLoader.load(Resources)
                 return Sandbox(ctx)
-                    .register(*extensionFactories.toTypedArray())
-                    .register(*pluginFactories.toTypedArray())
+                    .registerPlugins(*pluginFactories.toTypedArray())
+                    .registerExtensions(*extensionFactories.toTypedArray())
             }
+        },
+        object : RunnerEnvFactory {
+            override fun create() = env
         }
     )
 
     fun unitOfWork(
         code: String,
-        apiHost: String = "http://test-host",
         inputs: ExecInputs = ExecInputs(),
         invocation: Invocation = EmptyInvocation
     ) = UnitOfWork(
@@ -76,7 +80,6 @@ abstract class AbstractRunnerTest {
         state = State(),
         code = CodeValue(code),
         correlation = null,
-        invocation = invocation,
-        apiHost = ApiHost(apiHost)
+        invocation = invocation
     )
 }

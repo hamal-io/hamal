@@ -13,7 +13,9 @@ dependencies {
     implementation(project(":platform:lib:web3"))
     implementation(project(":platform:lib:kua"))
 
+    implementation(project(":platform:runner-extension:net:http"))
     implementation(project(":platform:runner-extension:std:decimal"))
+    implementation(project(":platform:runner-extension:std:log"))
     implementation(project(":platform:runner-extension:telegram"))
 
     implementation(project(":platform:runner-plugin:net:http"))
