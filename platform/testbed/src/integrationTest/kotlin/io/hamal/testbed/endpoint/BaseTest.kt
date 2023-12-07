@@ -13,6 +13,8 @@ import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContext
+import io.hamal.lib.kua.type.MapType
+import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.ApiSdkImpl
 import io.hamal.plugin.net.http.HttpPluginFactory
 import io.hamal.plugin.std.debug.DebugPluginFactory
@@ -20,6 +22,7 @@ import io.hamal.plugin.std.log.LogPluginFactory
 import io.hamal.plugin.std.sys.SysPluginFactory
 import io.hamal.repository.api.*
 import io.hamal.repository.api.log.BrokerRepository
+import io.hamal.runner.config.RunnerEnvFactory
 import io.hamal.runner.config.SandboxFactory
 import jakarta.annotation.PostConstruct
 import org.junit.jupiter.api.DynamicTest
@@ -46,6 +49,18 @@ class TestSandboxConfig {
     @Bean
     fun sandboxFactory(@Value("\${io.hamal.runner.api.host}") apiHost: String): SandboxFactory =
         TestRunnerSandboxFactory(apiHost)
+
+    @Bean
+    fun envFactory(@Value("\${io.hamal.runner.api.host}") apiHost: String): RunnerEnvFactory =
+        object : RunnerEnvFactory {
+            override fun create() = RunnerEnv(
+                MapType(
+                    mutableMapOf(
+                        "api_host" to StringType(apiHost)
+                    )
+                )
+            )
+        }
 }
 
 
@@ -283,11 +298,17 @@ abstract class BaseEndpointTest : AbstractRunnerTest() {
                         ),
                         extensionFactories = listOf(
                             HttpExtensionFactory
+                        ),
+                        env = RunnerEnv(
+                            MapType(
+                                mutableMapOf(
+                                    "api_host" to StringType(apiHttpTemplate.baseUrl)
+                                )
+                            )
                         )
                     ).run(
                         unitOfWork(
-                            apiHost = apiHttpTemplate.baseUrl,
-                            code = String(Files.readAllBytes(testPath))
+                            code = String(Files.readAllBytes(testPath)),
                         )
                     )
 

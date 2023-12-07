@@ -23,7 +23,7 @@ submitted_endpoint = fail_on_error(sys.endpoints.create({
 sys.await_completed(submitted_endpoint)
 
 err, res = http.post({
-    url = context.api.host .. '/v1/endpoints/' .. submitted_endpoint.endpoint_id .. '/invoke',
+    url = context.env.api_host .. '/v1/endpoints/' .. submitted_endpoint.endpoint_id .. '/invoke',
     headers = {
         ['authorization'] = 'Bearer root-token'
     }

@@ -9,6 +9,7 @@ import io.hamal.lib.kua.function.FunctionType
 import io.hamal.lib.kua.table.TableProxyArray
 import io.hamal.lib.kua.table.TableProxyMap
 import io.hamal.lib.kua.type.*
+import io.hamal.runner.config.RunnerEnvFactory
 import io.hamal.runner.config.SandboxFactory
 import io.hamal.runner.connector.Connector
 import io.hamal.runner.connector.UnitOfWork
@@ -20,7 +21,7 @@ interface CodeRunner {
 class CodeRunnerImpl(
     private val connector: Connector,
     private val sandboxFactory: SandboxFactory,
-    private val supplyEnv: () -> RunnerEnv
+    private val envFactory: RunnerEnvFactory
 ) : CodeRunner {
 
     private lateinit var runnerContext: RunnerContext
@@ -40,8 +41,7 @@ class CodeRunnerImpl(
             runnerContext[FlowId::class] = unitOfWork.flowId
             runnerContext[GroupId::class] = unitOfWork.groupId
             runnerContext[ExecToken::class] = unitOfWork.token
-            runnerContext[ApiHost::class] = unitOfWork.apiHost
-            runnerContext[RunnerEnv::class] = supplyEnv()
+            runnerContext[RunnerEnv::class] = envFactory.create()
 
             sandboxFactory.create(runnerContext)
                 .use { sandbox ->

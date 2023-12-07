@@ -8,6 +8,7 @@ import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContext
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.type.Type
+import io.hamal.runner.config.RunnerEnvFactory
 import io.hamal.runner.config.SandboxFactory
 import io.hamal.runner.connector.Connector
 
@@ -16,7 +17,8 @@ internal abstract class AbstractExecuteTest {
         vararg testPlugins: Pair<String, Type>,
         connector: Connector = TestConnector()
     ) = CodeRunnerImpl(
-        connector, object : SandboxFactory {
+        connector,
+        object : SandboxFactory {
             override fun create(ctx: SandboxContext): Sandbox {
                 NativeLoader.load(Resources)
                 return Sandbox(ctx).also {
@@ -39,6 +41,9 @@ internal abstract class AbstractExecuteTest {
                     )
                 }
             }
+        },
+        object : RunnerEnvFactory {
+            override fun create() = RunnerEnv()
         }
-    ) { RunnerEnv() }
+    )
 }
