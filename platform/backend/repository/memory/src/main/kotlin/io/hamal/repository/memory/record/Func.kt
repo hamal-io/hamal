@@ -1,8 +1,11 @@
 package io.hamal.repository.memory.record
 
+import io.hamal.lib.domain.vo.CodeId
+import io.hamal.lib.domain.vo.DeployedAt
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncCmdRepository.*
+import io.hamal.repository.api.FuncDeployment
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
 import io.hamal.repository.api.FuncRepository
 import io.hamal.repository.record.func.*
@@ -129,6 +132,21 @@ class FuncMemoryRepository : RecordMemoryRepository<FuncId, FuncRecord, Func>(
     override fun find(funcId: FuncId): Func? = lock.withLock { FuncCurrentProjection.find(funcId) }
 
     override fun list(query: FuncQuery): List<Func> = lock.withLock { FuncCurrentProjection.list(query) }
+
+    override fun listDeployments(funcId: FuncId): List<FuncDeployment> {
+        lock.withLock {
+            val recs = recordsOf(funcId)
+            return recs.filterIsInstance<FuncDeployedRecord>().map { rec ->
+                FuncDeployment(
+                    id = CodeId(rec.entityId.value),
+                    message = rec.message,
+                    version = rec.version,
+                    deployedAt = DeployedAt(rec.recordedAt!!.value)
+                )
+            }
+        }
+    }
+
 
     override fun count(query: FuncQuery): ULong = lock.withLock { FuncCurrentProjection.count(query) }
 

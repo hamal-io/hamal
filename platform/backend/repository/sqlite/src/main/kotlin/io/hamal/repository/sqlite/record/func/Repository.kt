@@ -1,9 +1,12 @@
 package io.hamal.repository.sqlite.record.func
 
+import io.hamal.lib.domain.vo.CodeId
+import io.hamal.lib.domain.vo.DeployedAt
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncCmdRepository.*
+import io.hamal.repository.api.FuncDeployment
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
 import io.hamal.repository.api.FuncRepository
 import io.hamal.repository.record.CreateDomainObject
@@ -130,6 +133,20 @@ class FuncSqliteRepository(
 
     override fun list(query: FuncQuery): List<Func> {
         return ProjectionCurrent.list(connection, query)
+    }
+
+    override fun listDeployments(funcId: FuncId): List<FuncDeployment> {
+        return tx {
+            val recs = recordsOf(funcId)
+            recs.filterIsInstance<FuncDeployedRecord>().map { rec ->
+                FuncDeployment(
+                    id = CodeId(rec.entityId.value),
+                    message = rec.message,
+                    version = rec.version,
+                    deployedAt = DeployedAt(rec.recordedAt!!.value)
+                )
+            }
+        }
     }
 
     override fun count(query: FuncQuery): ULong {

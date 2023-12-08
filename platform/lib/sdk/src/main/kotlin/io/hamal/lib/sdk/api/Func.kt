@@ -89,6 +89,18 @@ data class ApiFuncList(
     }
 }
 
+@Serializable
+data class ApiFuncDeploymentList(
+    val deployments: List<Deployment>
+) {
+    @Serializable
+    data class Deployment(
+        val version: CodeVersion,
+        val message: DeployMessage,
+        val deployedAt: DeployedAt
+    )
+}
+
 
 @Serializable
 data class ApiFunc(

@@ -1,14 +1,13 @@
 package io.hamal.lib.domain.vo
 
-import io.hamal.lib.common.domain.DomainName
-import io.hamal.lib.common.domain.DomainNameSerializer
-import io.hamal.lib.common.domain.StringValueObject
-import io.hamal.lib.common.domain.StringValueObjectSerializer
+import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.vo.base.InputsSerializer
 import io.hamal.lib.domain.vo.base.MapValueObject
 import io.hamal.lib.kua.type.MapType
 import kotlinx.serialization.Serializable
+import java.time.Instant
 
 @Serializable(with = FuncId.Serializer::class)
 class FuncId(override val value: SnowflakeId) : SerializableDomainId() {
@@ -36,4 +35,14 @@ data class DeployMessage(override val value: String) : StringValueObject() {
     companion object {
         val empty = DeployMessage("")
     }
+}
+
+@Serializable(with = DeployedAt.Serializer::class)
+class DeployedAt(override val value: Instant) : DomainAt() {
+    companion object {
+        @JvmStatic
+        fun now(): DeployedAt = DeployedAt(TimeUtils.now())
+    }
+
+    internal object Serializer : DomainAtSerializer<DeployedAt>(::DeployedAt)
 }

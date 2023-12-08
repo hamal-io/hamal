@@ -42,6 +42,10 @@ interface FuncListPort {
     operator fun <T : Any> invoke(query: FuncQuery, responseHandler: (List<Func>, Map<FlowId, Flow>) -> T): T
 }
 
+interface FuncDeploymentListPort {
+    operator fun <T : Any> invoke(funcId: FuncId, responseHandler: (List<FuncDeployment>) -> T): T
+}
+
 interface FuncDeployPort {
     operator fun <T : Any> invoke(
         funcId: FuncId,
@@ -59,7 +63,8 @@ interface FuncUpdatePort {
 
 }
 
-interface FuncPort : FuncCreatePort, FuncDeployPort, FuncGetPort, FuncInvokePort, FuncListPort, FuncUpdatePort
+interface FuncPort : FuncCreatePort, FuncDeployPort, FuncGetPort, FuncInvokePort, FuncListPort, FuncUpdatePort,
+    FuncDeploymentListPort
 
 @Component
 class FuncAdapter(
@@ -155,6 +160,15 @@ class FuncAdapter(
         val flows = flowQueryRepository.list(funcs.map(Func::flowId))
             .associateBy(Flow::id)
         return responseHandler(funcs, flows)
+    }
+
+
+    override fun <T : Any> invoke(
+        funcId: FuncId,
+        responseHandler: (List<FuncDeployment>) -> T
+    ): T {
+        ensureFuncExists(funcId)
+        return responseHandler(funcQueryRepository.listDeployments(funcId))
     }
 
     override fun <T : Any> invoke(
