@@ -89,7 +89,7 @@ const Deploy: FC<Props> = ({flow, func, code, name}) => {
                                             <Input placeholder="What effects do your changes have?" {...field} />
                                         </FormControl>
                                         <FormDescription>
-                                            This might take a second.
+                                            This might take a second. You can return to an earlier version at any time.
                                         </FormDescription>
                                         <FormMessage/>
                                     </FormItem>
@@ -97,7 +97,7 @@ const Deploy: FC<Props> = ({flow, func, code, name}) => {
                             />
                             <Button type="submit" variant="destructive">
                                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
-                                Deploy & Save
+                                Save & Deploy
                             </Button>
                         </form>
                     </Form>
