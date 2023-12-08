@@ -44,7 +44,7 @@ const FuncDetailPage: FC<Props> = ({}) => {
                     flowId={flow.id}
                 />
                 <div className="flex w-full space-x-2 justify-end">
-                    <Deploy funcId={funcId}/>
+                    <Deploy flow={flow} func={func} code={code} name={name}/>
                     <Save funcId={funcId} code={code} name={name}/>
                     <History/>
                     <Actions funcId={funcId} code={code}/>
