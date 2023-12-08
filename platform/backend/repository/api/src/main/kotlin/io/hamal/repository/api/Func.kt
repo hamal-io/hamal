@@ -32,7 +32,7 @@ data class FuncDeployment(
     val id: CodeId,
     val version: CodeVersion,
     val message: DeployMessage,
-    val deployedAt: DeployedAt = DeployedAt.default
+    val deployedAt: DeployedAt = DeployedAt.now()
 ) {
     fun toExecCode() = ExecCode(
         id = id,

@@ -2,6 +2,7 @@ package io.hamal.lib.domain.vo
 
 import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.vo.base.InputsSerializer
 import io.hamal.lib.domain.vo.base.MapValueObject
 import io.hamal.lib.kua.type.MapType
@@ -39,7 +40,8 @@ data class DeployMessage(override val value: String) : StringValueObject() {
 @Serializable(with = DeployedAt.Serializer::class)
 class DeployedAt(override val value: Instant) : DomainAt() {
     companion object {
-        val default = DeployedAt(Instant.ofEpochMilli(1698451200000 /*Happy birthday*/))
+        @JvmStatic
+        fun now(): DeployedAt = DeployedAt(TimeUtils.now())
     }
 
     internal object Serializer : DomainAtSerializer<DeployedAt>(::DeployedAt)
