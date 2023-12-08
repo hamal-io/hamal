@@ -19,7 +19,6 @@ import {Input} from "@/components/ui/input.tsx";
 import {Dialog, DialogContent, DialogHeader, DialogTrigger} from "@/components/ui/dialog.tsx";
 import {Loader2} from "lucide-react";
 import {useFuncUpdate} from "@/hook";
-import {FlowListItem, FuncListItem} from "@/types";
 
 
 const formSchema = z.object({
@@ -27,13 +26,12 @@ const formSchema = z.object({
 })
 
 type Props = {
-    flow: FlowListItem
-    func: FuncListItem
+    funcId: string
     code: string;
     name: string;
 }
 
-const Deploy: FC<Props> = ({flow, func, code, name}) => {
+const Deploy: FC<Props> = ({funcId, code, name}) => {
     const navigate = useNavigate()
     const [openDialog, setOpenDialog] = useState<boolean>(false)
     const props = {openModal: openDialog, setOpenModal: setOpenDialog}
@@ -50,20 +48,24 @@ const Deploy: FC<Props> = ({flow, func, code, name}) => {
     })
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
+        setLoading(true)
         try {
-            updateFunc(func.id, name, code)
-            deployFunc(func.id, values.message)
+            updateFunc(funcId, name, code)
+            //await submittedUpdate !== null ?
+            deployFunc(funcId, values.message)
         } catch (e) {
             console.error(e)
         }
     }
 
     useEffect(() => {
-        if (submittedUpdate !== null && submittedDeploy !== null) { //update might be null
-            navigate(`/flows/${flow.id}/functions/${submittedDeploy.funcId}`)
+        if (submittedDeploy !== null) {
             setOpenDialog(false)
+            form.reset({
+                message: "Deploy message goes here.."
+            })
         }
-    }, [flow.id, submittedDeploy, navigate]);
+    }, [submittedUpdate, submittedDeploy, navigate]);
 
     return (
         <>
@@ -86,7 +88,7 @@ const Deploy: FC<Props> = ({flow, func, code, name}) => {
                                     <FormItem>
                                         <FormLabel></FormLabel>
                                         <FormControl>
-                                            <Input placeholder="What effects do your changes have?" {...field} />
+                                            <Input placeholder="Deploy message goes here.." {...field} />
                                         </FormControl>
                                         <FormDescription>
                                             This might take a second. You can return to an earlier version at any time.
