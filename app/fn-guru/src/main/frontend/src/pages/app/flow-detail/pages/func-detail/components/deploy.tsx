@@ -51,7 +51,6 @@ const Deploy: FC<Props> = ({funcId, code, name}) => {
         setLoading(true)
         try {
             updateFunc(funcId, name, code)
-            //await submittedUpdate !== null ?
             deployFunc(funcId, values.message)
         } catch (e) {
             console.error(e)
