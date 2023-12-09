@@ -9,7 +9,6 @@ import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncCmdRepository.*
 import io.hamal.repository.api.FuncCode
-import io.hamal.repository.api.FuncDeployment
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
 import io.hamal.repository.api.FuncRepository
 import io.hamal.repository.fixture.AbstractUnitTest
@@ -61,15 +60,9 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                     )
                 )
 
-                assertThat(
-                    deployment, equalTo(
-                        FuncDeployment(
-                            id = CodeId(5),
-                            version = CodeVersion(1),
-                            message = DeployMessage("Initial version")
-                        )
-                    )
-                )
+                assertThat(deployment.id, equalTo(CodeId(5)))
+                assertThat(deployment.version, equalTo(CodeVersion(1)))
+                assertThat(deployment.message, equalTo(DeployMessage("Initial version")))
             }
 
             verifyCount(1)
@@ -148,15 +141,9 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                         )
                     )
 
-                    assertThat(
-                        deployment, equalTo(
-                            FuncDeployment(
-                                id = CodeId(5),
-                                version = CodeVersion(3),
-                                message = DeployMessage("Initial version")
-                            )
-                        )
-                    )
+                    assertThat(deployment.id, equalTo(CodeId(5)))
+                    assertThat(deployment.version, equalTo(CodeVersion(3)))
+                    assertThat(deployment.message, equalTo(DeployMessage("Initial version")))
                 }
 
                 verifyCount(2)
@@ -206,15 +193,8 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                         )
                     )
 
-                    assertThat(
-                        deployment, equalTo(
-                            FuncDeployment(
-                                id = CodeId(7),
-                                version = CodeVersion(7),
-                                message = DeployMessage("Initial version")
-                            )
-                        )
-                    )
+                    assertThat(deployment.id, equalTo(CodeId(7)))
+                    assertThat(deployment.version, equalTo(CodeVersion(7)))
                 }
 
                 verifyCount(1)
@@ -260,15 +240,8 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                     )
                 )
 
-                assertThat(
-                    deployment, equalTo(
-                        FuncDeployment(
-                            id = CodeId(7),
-                            version = CodeVersion(7),
-                            message = DeployMessage("Initial version")
-                        )
-                    )
-                )
+                assertThat(deployment.id, equalTo(CodeId(7)))
+                assertThat(deployment.version, equalTo(CodeVersion(7)))
             }
 
             verifyCount(1)
@@ -309,15 +282,9 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                     )
                 )
 
-                assertThat(
-                    deployment, equalTo(
-                        FuncDeployment(
-                            id = CodeId(9),
-                            version = CodeVersion(9),
-                            message = DeployMessage("Initial version")
-                        )
-                    )
-                )
+
+                assertThat(deployment.id, equalTo(CodeId(9)))
+                assertThat(deployment.version, equalTo(CodeVersion(9)))
             }
 
             verifyCount(1)
@@ -533,15 +500,8 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                         )
                     )
                 )
-                assertThat(
-                    deployment, equalTo(
-                        FuncDeployment(
-                            id = CodeId(4),
-                            version = CodeVersion(5),
-                            message = DeployMessage("Initial version")
-                        )
-                    )
-                )
+                assertThat(deployment.id, equalTo(CodeId(4)))
+                assertThat(deployment.version, equalTo(CodeVersion(5)))
             }
         }
 
@@ -588,15 +548,8 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                         )
                     )
                 )
-                assertThat(
-                    deployment, equalTo(
-                        FuncDeployment(
-                            id = CodeId(4),
-                            version = CodeVersion(5),
-                            message = DeployMessage("Initial version")
-                        )
-                    )
-                )
+                assertThat(deployment.id, equalTo(CodeId(4)))
+                assertThat(deployment.version, equalTo(CodeVersion(5)))
             }
         }
 

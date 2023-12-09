@@ -1,6 +1,7 @@
 package io.hamal.core.req.handler.func
 
 import io.hamal.core.req.handler.BaseReqHandlerTest
+import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.MapType
@@ -14,39 +15,44 @@ import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import java.time.Instant
 
 internal class FuncCreateHandlerTest : BaseReqHandlerTest() {
 
     @Test
     fun `Creates func`() {
-        testInstance(submitCreateFuncReq)
 
-        funcQueryRepository.list(FuncQuery(groupIds = listOf())).also { funcs ->
-            assertThat(funcs, hasSize(1))
-            with(funcs.first()) {
-                assertThat(id, equalTo(FuncId(12345)))
-                assertThat(name, equalTo(FuncName("awesome-func")))
-                assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
-                assertThat(deployment.version, equalTo(codeQueryRepository.get(CodeId(34567)).version))
+        TimeUtils.withEpochMilli(123456789) {
+            testInstance(submitCreateFuncReq)
 
-                assertThat(
-                    code, equalTo(
-                        FuncCode(
-                            id = CodeId(34567),
-                            version = CodeVersion(1)
+            funcQueryRepository.list(FuncQuery(groupIds = listOf())).also { funcs ->
+                assertThat(funcs, hasSize(1))
+                with(funcs.first()) {
+                    assertThat(id, equalTo(FuncId(12345)))
+                    assertThat(name, equalTo(FuncName("awesome-func")))
+                    assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
+                    assertThat(deployment.version, equalTo(codeQueryRepository.get(CodeId(34567)).version))
+
+                    assertThat(
+                        code, equalTo(
+                            FuncCode(
+                                id = CodeId(34567),
+                                version = CodeVersion(1)
+                            )
                         )
                     )
-                )
 
-                assertThat(
-                    deployment, equalTo(
-                        FuncDeployment(
-                            id = CodeId(34567),
-                            version = CodeVersion(1),
-                            message = DeployMessage("Initial version")
+                    assertThat(
+                        deployment, equalTo(
+                            FuncDeployment(
+                                id = CodeId(34567),
+                                version = CodeVersion(1),
+                                message = DeployMessage("Initial version"),
+                                deployedAt = DeployedAt(Instant.ofEpochMilli(123456789))
+                            )
                         )
                     )
-                )
+                }
             }
         }
     }
