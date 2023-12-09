@@ -9,7 +9,6 @@ import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.CodeCmdRepository
 import io.hamal.repository.api.FuncCmdRepository
 import io.hamal.repository.api.FuncCode
-import io.hamal.repository.api.FuncDeployment
 import io.hamal.repository.api.submitted_req.FuncUpdateSubmitted
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -35,15 +34,10 @@ internal class FuncUpdateHandlerTest : BaseReqHandlerTest() {
                     )
                 )
             )
-            assertThat(
-                deployment, equalTo(
-                    FuncDeployment(
-                        id = CodeId(123),
-                        version = CodeVersion(1),
-                        message = DeployMessage("Initial version")
-                    )
-                )
-            )
+
+            assertThat(deployment.id, equalTo(CodeId(123)))
+            assertThat(deployment.version, equalTo(CodeVersion(1)))
+
             assertThat(codeQueryRepository.get(CodeId(123)).value, equalTo(CodeValue("some code")))
         }
     }

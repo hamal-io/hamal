@@ -31,7 +31,8 @@ data class FuncCode(
 data class FuncDeployment(
     val id: CodeId,
     val version: CodeVersion,
-    val message: DeployMessage
+    val message: DeployMessage,
+    val deployedAt: DeployedAt = DeployedAt.now()
 ) {
     fun toExecCode() = ExecCode(
         id = id,
@@ -85,6 +86,8 @@ interface FuncQueryRepository {
         )
     )
 
+    fun listDeployments(funcId: FuncId): List<FuncDeployment>
+
     fun count(query: FuncQuery): ULong
 
     data class FuncQuery(
@@ -94,4 +97,6 @@ interface FuncQueryRepository {
         var flowIds: List<FlowId> = listOf(),
         var groupIds: List<GroupId> = listOf()
     )
+
+
 }

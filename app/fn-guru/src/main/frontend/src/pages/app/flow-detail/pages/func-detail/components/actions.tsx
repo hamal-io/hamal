@@ -2,9 +2,24 @@ import * as React from "react"
 import {FC} from "react"
 import {DotsHorizontalIcon} from "@radix-ui/react-icons"
 
-import {AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,} from "@/components/ui/alert-dialog"
+import {
+    AlertDialog,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 import {Button} from "@/components/ui/button"
-import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger,} from "@/components/ui/dropdown-menu"
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
 import {useFuncUpdate} from "@/hook";
 import {useFuncDeployLatestCode, useFuncInvoke} from "@/hook/func.ts";
 
@@ -51,7 +66,7 @@ const Actions: FC<Props> = ({funcId, code}) => {
             <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeployDialog}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>Are you sure absolutely sure?</AlertDialogTitle>
+                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                         <AlertDialogDescription>
                             The latest code version will be deployednpm . This might take a couple of seconds.
                         </AlertDialogDescription>
