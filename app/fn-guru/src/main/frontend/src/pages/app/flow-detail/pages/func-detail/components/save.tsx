@@ -11,7 +11,9 @@ type Props = {
 const Save: FC<Props> = ({funcId, code, name}) => {
     const [updateFunc] = useFuncUpdate()
     return (
-        <Button onClick={() => {
+        <Button
+            variant="secondary"
+            onClick={() => {
             updateFunc(funcId, name, code)
         }}> Save </Button>
     )

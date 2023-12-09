@@ -3,9 +3,17 @@ import React, {FC, useEffect, useState} from "react";
 
 import * as z from "zod"
 import {zodResolver} from "@hookform/resolvers/zod";
-import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
+import {
+    Form,
+    FormControl,
+    FormDescription,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage
+} from "@/components/ui/form.tsx";
 import {useForm} from "react-hook-form";
-import {BookOpen, Loader2, Plus,} from "lucide-react";
+import {Loader2, Plus,} from "lucide-react";
 import {useAuth} from "@/hook/auth.ts";
 import {Dialog, DialogContent, DialogHeader, DialogTrigger} from "@/components/ui/dialog.tsx";
 import {Input} from "@/components/ui/input.tsx";
@@ -86,7 +94,7 @@ const Create: FC<Prop> = ({flow}) => {
                                             <Input placeholder="Function-One" {...field} />
                                         </FormControl>
                                         <FormDescription>
-                                            This is the name of your flow.
+                                            This is the name of your function.
                                         </FormDescription>
                                         <FormMessage/>
                                     </FormItem>
