@@ -6,7 +6,7 @@ import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContext
 import io.hamal.lib.kua.extend.extension.RunnerExtensionFactory
 import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
-import io.hamal.runner.config.RunnerEnvFactory
+import io.hamal.runner.config.EnvFactory
 import io.hamal.runner.config.SandboxFactory
 import io.hamal.runner.connector.Connector
 import io.hamal.runner.connector.UnitOfWork
@@ -63,7 +63,7 @@ abstract class AbstractRunnerTest {
                     .registerExtensions(*extensionFactories.toTypedArray())
             }
         },
-        object : RunnerEnvFactory {
+        object : EnvFactory {
             override fun create() = env
         }
     )

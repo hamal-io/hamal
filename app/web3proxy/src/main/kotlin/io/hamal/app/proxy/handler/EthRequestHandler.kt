@@ -5,13 +5,15 @@ import io.hamal.app.proxy.domain.EthCall
 import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.web3.eth.EthBatchService
 import io.hamal.lib.web3.eth.abi.type.EthAddress
-import io.hamal.lib.web3.eth.abi.type.EthBool
 import io.hamal.lib.web3.eth.abi.type.EthPrefixedHexString
 import io.hamal.lib.web3.eth.abi.type.EthUint64
 import io.hamal.lib.web3.eth.domain.*
 import io.hamal.lib.web3.eth.http.EthHttpBatchService
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.*
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.jsonPrimitive
 
 interface EthRequestHandler {
     fun handle(requests: List<Request>): List<EthResponse>
@@ -71,7 +73,7 @@ class EthRequestHandlerImpl(
                 EthMethod.GetBlockByNumber -> {
                     if (!resultMapping.containsKey(request.id)) {
                         val blockId = json.decodeFromJsonElement(EthUint64.serializer(), request.params[0])
-                        val fullBlock = EthBool((request.params[1] as JsonPrimitive).boolean)
+//                        val fullBlock = EthBool((request.params[1] as JsonPrimitive).boolean)
                         batchService.getBlock(blockId)
                     }
                 }

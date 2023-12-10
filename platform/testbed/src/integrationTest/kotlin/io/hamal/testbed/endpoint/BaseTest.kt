@@ -22,7 +22,7 @@ import io.hamal.plugin.std.log.LogPluginFactory
 import io.hamal.plugin.std.sys.SysPluginFactory
 import io.hamal.repository.api.*
 import io.hamal.repository.api.log.BrokerRepository
-import io.hamal.runner.config.RunnerEnvFactory
+import io.hamal.runner.config.EnvFactory
 import io.hamal.runner.config.SandboxFactory
 import jakarta.annotation.PostConstruct
 import org.junit.jupiter.api.DynamicTest
@@ -51,8 +51,8 @@ class TestSandboxConfig {
         TestRunnerSandboxFactory(apiHost)
 
     @Bean
-    fun envFactory(@Value("\${io.hamal.runner.api.host}") apiHost: String): RunnerEnvFactory =
-        object : RunnerEnvFactory {
+    fun envFactory(@Value("\${io.hamal.runner.api.host}") apiHost: String): EnvFactory =
+        object : EnvFactory {
             override fun create() = RunnerEnv(
                 MapType(
                     mutableMapOf(

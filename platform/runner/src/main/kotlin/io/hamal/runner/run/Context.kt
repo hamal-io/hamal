@@ -12,13 +12,13 @@ class RunnerContext(
     val invocation: Invocation
 ) : SandboxContext {
 
-
     operator fun <OBJ : Any> set(clazz: KClass<OBJ>, obj: OBJ) {
         store[clazz] = obj
     }
 
+    @Suppress("UNCHECKED_CAST")
     override operator fun <OBJ : Any> get(clazz: KClass<OBJ>): OBJ {
-        return store[clazz] as OBJ
+        return checkNotNull(store[clazz]) as OBJ
     }
 
     fun emit(evt: EventToSubmit) {

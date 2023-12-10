@@ -21,7 +21,7 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
             val func = setup()
             repeat(20) { iter ->
                 awaitCompleted(
-                    deployVersion(
+                    deployFunc(
                         funcId = func.id,
                         req = ApiFuncDeployReq(
                             version = CodeVersion(iter + 1),
@@ -46,7 +46,7 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
 
             repeat(20) {
                 awaitCompleted(
-                    deployVersion(
+                    deployFunc(
                         funcId = func.id,
                         req = ApiFuncDeployReq(
                             version = CodeVersion(10),
@@ -70,7 +70,7 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
 
             repeat(20) { iter ->
                 awaitCompleted(
-                    deployVersion(
+                    deployFunc(
                         funcId = func.id,
                         req = ApiFuncDeployReq(
                             version = CodeVersion(20 - iter),
@@ -129,7 +129,7 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
             fun `Deploys latest version`() {
                 val funcId = setup().id
                 awaitCompleted(
-                    deployVersion(
+                    deployFunc(
                         funcId = funcId,
                         req = ApiFuncDeployReq(
                             null,
@@ -154,7 +154,7 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
                 val funcId = setup().id
 
                 awaitCompleted(
-                    deployVersion(
+                    deployFunc(
                         funcId = funcId,
                         req = ApiFuncDeployReq(
                             version = null,

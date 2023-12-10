@@ -17,7 +17,7 @@ internal class CodeGetController(private val getCode: CodeGetPort) {
     fun getCode(
         @PathVariable("id") codeId: CodeId,
         @RequestParam(required = false, name = "version") codeVersion: CodeVersion?
-    ) = getCode(codeId, codeVersion, ::assemble)
+    ): ResponseEntity<ApiCode> = getCode(codeId, codeVersion, ::assemble)
 
     private fun assemble(code: Code) =
         ResponseEntity.ok(
