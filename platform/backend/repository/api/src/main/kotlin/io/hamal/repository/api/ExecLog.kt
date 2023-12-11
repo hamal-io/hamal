@@ -16,7 +16,7 @@ interface ExecLogCmdRepository : CmdRepository {
         val execId: ExecId,
         val groupId: GroupId,
         val message: ExecLogMessage,
-        val timestamp: ExecLogTimestamp
+        val timestamp: ExecLogTimestamp = ExecLogTimestamp.now()
     )
 }
 

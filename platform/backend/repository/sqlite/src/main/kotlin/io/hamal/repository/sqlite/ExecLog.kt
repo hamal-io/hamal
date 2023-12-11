@@ -29,10 +29,9 @@ class ExecLogSqliteRepository(
                     exec_id INTEGER NOT NULL,
                     group_id INTEGER NOT NULL,
                     level INTEGER NOT NULL,
-                    message TEXT NOT NULL,
-                    timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
-                    PRIMARY KEY (id)
-               )
+                    message VARCHAR(255) NOT NULL,
+                    timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL
+                );
             """.trimIndent()
             )
         }
@@ -41,7 +40,7 @@ class ExecLogSqliteRepository(
     override fun append(cmd: ExecLogCmdRepository.AppendCmd): ExecLog {
         return connection.execute<ExecLog>(
             """
-            INSERT INTO exec_log 
+            INSERT OR REPLACE INTO exec_log 
                 (id, exec_id, group_id, message, level)
             VALUES
                 (:id, :exec_id, :group_id, :message, :level) 

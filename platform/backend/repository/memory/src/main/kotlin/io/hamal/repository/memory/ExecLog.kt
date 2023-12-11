@@ -20,7 +20,7 @@ class ExecLogMemoryRepository : ExecLogRepository {
                 groupId = cmd.groupId,
                 level = cmd.level,
                 message = cmd.message,
-                timestamp = cmd.timestamp,
+                timestamp = cmd.timestamp
             ).also { store.add(it) }
         }
     }
