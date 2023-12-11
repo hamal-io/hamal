@@ -5,12 +5,17 @@ import io.hamal.lib.domain.vo.*
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.NamedResultSet
 import io.hamal.lib.sqlite.SqliteBaseRepository
+import io.hamal.repository.api.Exec
 import io.hamal.repository.api.ExecLog
 import io.hamal.repository.api.ExecLogCmdRepository
+import io.hamal.repository.api.ExecLogCmdRepository.*
 import io.hamal.repository.api.ExecLogQueryRepository.ExecLogQuery
 import io.hamal.repository.api.ExecLogRepository
+import io.hamal.repository.sqlite.record.protobuf
+import kotlinx.serialization.ExperimentalSerializationApi
 import java.nio.file.Path
 
+@OptIn(ExperimentalSerializationApi::class)
 class ExecLogSqliteRepository(
     config: Config
 ) : SqliteBaseRepository(config), ExecLogRepository {
@@ -25,25 +30,39 @@ class ExecLogSqliteRepository(
             execute(
                 """
                 CREATE TABLE IF NOT EXISTS exec_log (
-                    id INTEGER NOT NULL,
-                    exec_id INTEGER NOT NULL,
-                    group_id INTEGER NOT NULL,
-                    level INTEGER NOT NULL,
-                    message VARCHAR(255) NOT NULL,
-                    timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL
-                );
+                    idx         INTEGER PRIMARY KEY AUTOINCREMENT,
+                    id          INTEGER NOT NULL,
+                    exec_id     INTEGER NOT NULL,
+                    group_id    INTEGER NOT NULL,
+                    data        BLOB NOT NULL
+                   
+                   
+            );
             """.trimIndent()
             )
         }
     }
 
-    override fun append(cmd: ExecLogCmdRepository.AppendCmd): ExecLog {
+    /*PRIMARY KEY (id)*/
+    private fun NamedResultSet.toExecLog(): ExecLog {
+        return ExecLog(
+            id = getDomainId("id", ::ExecLogId),
+            execId = getDomainId("exec_id", ::ExecId),
+            groupId = getDomainId("group_id", ::GroupId),
+            level = ExecLogLevel.of(getInt("level")),
+            message = ExecLogMessage(getString("message")),
+            timestamp = ExecLogTimestamp(getInstant("timestamp")),
+        )
+    }
+
+
+    override fun append(cmd: AppendCmd): ExecLog {
         return connection.execute<ExecLog>(
             """
             INSERT OR REPLACE INTO exec_log 
-                (id, exec_id, group_id, message, level)
+                (id, exec_id, group_id, data)
             VALUES
-                (:id, :exec_id, :group_id, :message, :level) 
+                (:id, :exec_id, :group_id, :data) 
             RETURNING *;
         """.trimIndent()
         ) {
@@ -51,10 +70,22 @@ class ExecLogSqliteRepository(
                 set("id", cmd.execLogId)
                 set("exec_id", cmd.execId)
                 set("group_id", cmd.groupId)
-                set("message", cmd.message.value)
-                set("level", cmd.level.value)
+                set(
+                    "data", protobuf.encodeToByteArray(
+                        ExecLog.serializer(), ExecLog(
+                            id = cmd.execLogId,
+                            execId = cmd.execId,
+                            groupId = cmd.groupId,
+                            level = cmd.level,
+                            message = cmd.message,
+                            timestamp = cmd.timestamp
+                        )
+                    )
+                )
             }
-            map(NamedResultSet::toExecLog)
+            map {
+                protobuf.decodeFromByteArray(ExecLog.serializer(), it.getBytes("data"))
+            }
         }!!
     }
 
@@ -79,7 +110,9 @@ class ExecLogSqliteRepository(
                 set("afterId", query.afterId)
                 set("limit", query.limit)
             }
-            map(NamedResultSet::toExecLog)
+            map {
+                protobuf.decodeFromByteArray(ExecLog.serializer(), it.getBytes("data"))
+            }
         }
     }
 
@@ -147,15 +180,3 @@ private fun ExecLogQuery.execIds(): String {
         "AND exec_id IN (${execIds.joinToString(",") { "${it.value.value}" }})"
     }
 }
-
-private fun NamedResultSet.toExecLog(): ExecLog {
-    return ExecLog(
-        id = getDomainId("id", ::ExecLogId),
-        execId = getDomainId("exec_id", ::ExecId),
-        groupId = getDomainId("group_id", ::GroupId),
-        level = ExecLogLevel.of(getInt("level")),
-        message = ExecLogMessage(getString("message")),
-        timestamp = ExecLogTimestamp(getInstant("timestamp")),
-    )
-}
-
