@@ -115,7 +115,7 @@ internal object ProjectionCurrent : ProjectionSqlite<ExecId, ExecRecord, Exec> {
                  status         INTEGER NOT NULL,
                  group_id       INTEGER NOT NULL,
                  func_id        INTEGER NOT NULL,
-                 flow_id   INTEGER NOT NULL,
+                 flow_id        INTEGER NOT NULL,
                  data           BLOB NOT NULL,
                  PRIMARY KEY    (id)
             );
