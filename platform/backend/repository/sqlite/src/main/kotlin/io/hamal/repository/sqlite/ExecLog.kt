@@ -1,14 +1,9 @@
 package io.hamal.repository.sqlite
 
-import io.hamal.lib.domain._enum.ExecLogLevel
-import io.hamal.lib.domain.vo.*
 import io.hamal.lib.sqlite.Connection
-import io.hamal.lib.sqlite.NamedResultSet
 import io.hamal.lib.sqlite.SqliteBaseRepository
-import io.hamal.repository.api.Exec
 import io.hamal.repository.api.ExecLog
-import io.hamal.repository.api.ExecLogCmdRepository
-import io.hamal.repository.api.ExecLogCmdRepository.*
+import io.hamal.repository.api.ExecLogCmdRepository.AppendCmd
 import io.hamal.repository.api.ExecLogQueryRepository.ExecLogQuery
 import io.hamal.repository.api.ExecLogRepository
 import io.hamal.repository.sqlite.record.protobuf
@@ -35,26 +30,11 @@ class ExecLogSqliteRepository(
                     exec_id     INTEGER NOT NULL,
                     group_id    INTEGER NOT NULL,
                     data        BLOB NOT NULL
-                   
-                   
             );
             """.trimIndent()
             )
         }
     }
-
-    /*PRIMARY KEY (id)*/
-    private fun NamedResultSet.toExecLog(): ExecLog {
-        return ExecLog(
-            id = getDomainId("id", ::ExecLogId),
-            execId = getDomainId("exec_id", ::ExecId),
-            groupId = getDomainId("group_id", ::GroupId),
-            level = ExecLogLevel.of(getInt("level")),
-            message = ExecLogMessage(getString("message")),
-            timestamp = ExecLogTimestamp(getInstant("timestamp")),
-        )
-    }
-
 
     override fun append(cmd: AppendCmd): ExecLog {
         return connection.execute<ExecLog>(
