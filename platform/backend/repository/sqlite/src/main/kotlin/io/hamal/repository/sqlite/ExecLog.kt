@@ -30,7 +30,7 @@ class ExecLogSqliteRepository(
                     group_id INTEGER NOT NULL,
                     level INTEGER NOT NULL,
                     message VARCHAR(255) NOT NULL,
-                    timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL
+                    timestamp VARCHAR(255) NOT NULL
                 );
             """.trimIndent()
             )
