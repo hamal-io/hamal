@@ -1,16 +1,16 @@
 package io.hamal.repository.sqlite
 
+import io.hamal.lib.domain._enum.ExecLogLevel
+import io.hamal.lib.domain.vo.*
 import io.hamal.lib.sqlite.Connection
+import io.hamal.lib.sqlite.NamedResultSet
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.ExecLog
 import io.hamal.repository.api.ExecLogCmdRepository.AppendCmd
 import io.hamal.repository.api.ExecLogQueryRepository.ExecLogQuery
 import io.hamal.repository.api.ExecLogRepository
-import io.hamal.repository.sqlite.record.protobuf
-import kotlinx.serialization.ExperimentalSerializationApi
 import java.nio.file.Path
 
-@OptIn(ExperimentalSerializationApi::class)
 class ExecLogSqliteRepository(
     config: Config
 ) : SqliteBaseRepository(config), ExecLogRepository {
@@ -25,12 +25,13 @@ class ExecLogSqliteRepository(
             execute(
                 """
                 CREATE TABLE IF NOT EXISTS exec_log (
-                    idx         INTEGER PRIMARY KEY AUTOINCREMENT,
-                    id          INTEGER NOT NULL,
-                    exec_id     INTEGER NOT NULL,
-                    group_id    INTEGER NOT NULL,
-                    data        BLOB NOT NULL
-            );
+                    id INTEGER NOT NULL,
+                    exec_id INTEGER NOT NULL,
+                    group_id INTEGER NOT NULL,
+                    level INTEGER NOT NULL,
+                    message VARCHAR(255) NOT NULL,
+                    timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL
+                );
             """.trimIndent()
             )
         }
@@ -40,9 +41,9 @@ class ExecLogSqliteRepository(
         return connection.execute<ExecLog>(
             """
             INSERT OR REPLACE INTO exec_log 
-                (id, exec_id, group_id, data)
+                (id, exec_id, group_id, message, level)
             VALUES
-                (:id, :exec_id, :group_id, :data) 
+                (:id, :exec_id, :group_id, :message, :level) 
             RETURNING *;
         """.trimIndent()
         ) {
@@ -50,22 +51,10 @@ class ExecLogSqliteRepository(
                 set("id", cmd.execLogId)
                 set("exec_id", cmd.execId)
                 set("group_id", cmd.groupId)
-                set(
-                    "data", protobuf.encodeToByteArray(
-                        ExecLog.serializer(), ExecLog(
-                            id = cmd.execLogId,
-                            execId = cmd.execId,
-                            groupId = cmd.groupId,
-                            level = cmd.level,
-                            message = cmd.message,
-                            timestamp = cmd.timestamp
-                        )
-                    )
-                )
+                set("message", cmd.message.value)
+                set("level", cmd.level.value)
             }
-            map {
-                protobuf.decodeFromByteArray(ExecLog.serializer(), it.getBytes("data"))
-            }
+            map(NamedResultSet::toExecLog)
         }!!
     }
 
@@ -90,9 +79,7 @@ class ExecLogSqliteRepository(
                 set("afterId", query.afterId)
                 set("limit", query.limit)
             }
-            map {
-                protobuf.decodeFromByteArray(ExecLog.serializer(), it.getBytes("data"))
-            }
+            map(NamedResultSet::toExecLog)
         }
     }
 
@@ -160,3 +147,15 @@ private fun ExecLogQuery.execIds(): String {
         "AND exec_id IN (${execIds.joinToString(",") { "${it.value.value}" }})"
     }
 }
+
+private fun NamedResultSet.toExecLog(): ExecLog {
+    return ExecLog(
+        id = getDomainId("id", ::ExecLogId),
+        execId = getDomainId("exec_id", ::ExecId),
+        groupId = getDomainId("group_id", ::GroupId),
+        level = ExecLogLevel.of(getInt("level")),
+        message = ExecLogMessage(getString("message")),
+        timestamp = ExecLogTimestamp(getInstant("timestamp")),
+    )
+}
+
