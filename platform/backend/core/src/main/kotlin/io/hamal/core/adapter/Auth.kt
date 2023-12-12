@@ -5,15 +5,13 @@ import io.hamal.core.component.GenerateToken
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.ReqStatus
-import io.hamal.lib.domain.vo.AuthId
-import io.hamal.lib.domain.vo.FlowName
-import io.hamal.lib.domain.vo.ReqId
-import io.hamal.lib.domain.vo.Web3Challenge
+import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.*
 import io.hamal.repository.api.FlowQueryRepository.FlowQuery
 import io.hamal.repository.api.submitted_req.AuthLoginEmailSubmitted
 import io.hamal.repository.api.submitted_req.AuthLoginMetaMaskSubmitted
 import io.hamal.request.ChallengeMetaMaskReq
+import io.hamal.request.CreateMetaMaskAccountReq
 import io.hamal.request.LogInEmailReq
 import io.hamal.request.LogInMetaMaskReq
 import org.springframework.stereotype.Component
@@ -53,58 +51,48 @@ class AuthAdapter(
 ) : AuthPort {
 
     override fun invoke(req: ChallengeMetaMaskReq): Web3Challenge {
+        // FIXME 138 - create challenge based on address
         return Web3Challenge("challenge123")
     }
 
     override fun <T : Any> invoke(req: LogInMetaMaskReq, responseHandler: (AuthLoginMetaMaskSubmitted) -> T): T {
-        TODO()
-//        val accountName = AccountName(req.address.value)
-//        val account = accountQueryRepository.find(accountName)
-//
-//        if (account == null) {
-//            val submitted = createAccount(object : CreateMetaMaskAccountReq {
-//                override val id: AccountId = generateDomainId(::AccountId)
-//                override val name: AccountName = accountName
-//                override val address: Web3Address = req.address
-//            }) { it }
-//
-//            val groupIds = groupList(submitted.accountId) { groups -> groups.map(Group::id) }
-//
-//            val flows = flowList(FlowQuery(groupIds = groupIds, limit = Limit.all)) { it }
-//            val defaultFlowIds = flows.filter { it.name == FlowName.default }.associate { it.groupId to it.id }
-//
-//            return AuthLoginMetaMaskSubmitted(
-//                id = generateDomainId(::ReqId),
-//                status = ReqStatus.Submitted,
-//                authId = generateDomainId(::AuthId),
-//                accountId = submitted.accountId,
-//                groupIds = groupIds,
-//                defaultFlowIds = defaultFlowIds,
-//                token = generateToken(),
-//                name = accountName,
-//                address = req.address,
-//                signature = req.signature
-//            ).also(reqCmdRepository::queue).let(responseHandler)
-//
-//        } else {
-//            val groupIds = groupList(account.id) { groups -> groups.map(Group::id) }
-//
-//            val flows = flowList(FlowQuery(groupIds = groupIds, limit = Limit.all)) { it }
-//            val defaultFlowIds = flows.filter { it.name == FlowName.default }.associate { it.groupId to it.id }
-//
-//            return AuthLoginMetaMaskSubmitted(
-//                id = generateDomainId(::ReqId),
-//                status = ReqStatus.Submitted,
-//                authId = generateDomainId(::AuthId),
-//                accountId = account.id,
-//                groupIds = groupList(account.id) { groups -> groups.map(Group::id) },
-//                defaultFlowIds = defaultFlowIds,
-//                token = generateToken(),
-//                name = accountName,
-//                address = req.address,
-//                signature = req.signature
-//            ).also(reqCmdRepository::queue).let(responseHandler)
-//        }
+        // FIXME 138 - verify signature
+        val auth = authRepository.find(req.address)
+        if (auth == null) {
+            val submitted = createAccount(object : CreateMetaMaskAccountReq {
+                override val id: AccountId = generateDomainId(::AccountId)
+                override val address: Web3Address = req.address
+            }) { it }
+
+            return AuthLoginMetaMaskSubmitted(
+                id = generateDomainId(::ReqId),
+                status = ReqStatus.Submitted,
+                authId = generateDomainId(::AuthId),
+                accountId = submitted.accountId,
+                groupIds = listOf(submitted.groupId),
+                defaultFlowIds = mapOf(submitted.groupId to submitted.flowId),
+                token = generateToken(),
+                address = req.address,
+                signature = req.signature
+            ).also(reqCmdRepository::queue).let(responseHandler)
+
+        } else {
+            val groupIds = groupList(auth.accountId) { groups -> groups.map(Group::id) }
+            val flows = flowList(FlowQuery(groupIds = groupIds, limit = Limit.all)) { it }
+            val defaultFlowIds = flows.filter { it.name == FlowName.default }.associate { it.groupId to it.id }
+
+            return AuthLoginMetaMaskSubmitted(
+                id = generateDomainId(::ReqId),
+                status = ReqStatus.Submitted,
+                authId = generateDomainId(::AuthId),
+                accountId = auth.accountId,
+                groupIds = groupIds,
+                defaultFlowIds = defaultFlowIds,
+                token = generateToken(),
+                address = req.address,
+                signature = req.signature
+            ).also(reqCmdRepository::queue).let(responseHandler)
+        }
     }
 
     override operator fun <T : Any> invoke(

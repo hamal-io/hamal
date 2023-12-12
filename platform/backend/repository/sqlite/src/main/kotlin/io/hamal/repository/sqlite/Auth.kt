@@ -170,6 +170,25 @@ class AuthSqliteRepository(
         }
     }
 
+    override fun find(address: Web3Address): Auth? {
+        return connection.executeQueryOne(
+            """
+            SELECT 
+                *
+             FROM
+                auth
+            WHERE
+                type = 3 AND 
+                address = :address
+        """.trimIndent()
+        ) {
+            query {
+                set("address", address.value)
+            }
+            map(NamedResultSet::toAuth)
+        }
+    }
+
     override fun count(query: AuthQuery): ULong {
         return connection.executeQueryOne(
             """

@@ -3,6 +3,7 @@ package io.hamal.repository.memory
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.AuthToken
 import io.hamal.lib.domain.vo.Email
+import io.hamal.lib.domain.vo.Web3Address
 import io.hamal.repository.api.*
 import io.hamal.repository.api.AuthCmdRepository.*
 import io.hamal.repository.api.AuthQueryRepository.AuthQuery
@@ -107,6 +108,15 @@ class AuthMemoryRepository : AuthRepository {
                 .asSequence()
                 .filterIsInstance<EmailAuth>()
                 .find { it.email == email }
+        }
+    }
+
+    override fun find(address: Web3Address): Auth? {
+        return lock.read {
+            projection.flatMap { it.value }
+                .asSequence()
+                .filterIsInstance<MetaMaskAuth>()
+                .find { it.address == address }
         }
     }
 }

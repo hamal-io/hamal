@@ -83,6 +83,8 @@ interface AuthQueryRepository {
     fun find(authToken: AuthToken): Auth?
     fun get(email: Email) = find(email) ?: throw NoSuchElementException("Auth not found")
     fun find(email: Email): Auth?
+    fun get(address: Web3Address) = find(address) ?: throw NoSuchElementException("Auth not found")
+    fun find(address: Web3Address): Auth?
 
     fun list(accountId: AccountId) = list(
         AuthQuery(
