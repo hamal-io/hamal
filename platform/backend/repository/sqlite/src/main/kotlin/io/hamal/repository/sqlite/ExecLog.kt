@@ -10,6 +10,7 @@ import io.hamal.repository.api.ExecLogCmdRepository.AppendCmd
 import io.hamal.repository.api.ExecLogQueryRepository.ExecLogQuery
 import io.hamal.repository.api.ExecLogRepository
 import java.nio.file.Path
+import java.time.Instant
 
 class ExecLogSqliteRepository(
     config: Config
@@ -30,7 +31,9 @@ class ExecLogSqliteRepository(
                     group_id INTEGER NOT NULL,
                     level INTEGER NOT NULL,
                     message VARCHAR(255) NOT NULL,
-                    timestamp VARCHAR(255) NOT NULL
+                    timestamp INTEGER NOT NULL,
+                    PRIMARY KEY (id)
+                    
                 );
             """.trimIndent()
             )
@@ -41,9 +44,9 @@ class ExecLogSqliteRepository(
         return connection.execute<ExecLog>(
             """
             INSERT OR REPLACE INTO exec_log 
-                (id, exec_id, group_id, message, level)
+                (id, exec_id, group_id, message, level, timestamp)
             VALUES
-                (:id, :exec_id, :group_id, :message, :level) 
+                (:id, :exec_id, :group_id, :message, :level, :timestamp) 
             RETURNING *;
         """.trimIndent()
         ) {
@@ -53,6 +56,7 @@ class ExecLogSqliteRepository(
                 set("group_id", cmd.groupId)
                 set("message", cmd.message.value)
                 set("level", cmd.level.value)
+                set("timestamp", cmd.timestamp.value.toEpochMilli())
             }
             map(NamedResultSet::toExecLog)
         }!!
@@ -155,7 +159,7 @@ private fun NamedResultSet.toExecLog(): ExecLog {
         groupId = getDomainId("group_id", ::GroupId),
         level = ExecLogLevel.of(getInt("level")),
         message = ExecLogMessage(getString("message")),
-        timestamp = ExecLogTimestamp(getInstant("timestamp")),
+        timestamp = ExecLogTimestamp(Instant.ofEpochMilli(getLong("timestamp")))
     )
 }
 

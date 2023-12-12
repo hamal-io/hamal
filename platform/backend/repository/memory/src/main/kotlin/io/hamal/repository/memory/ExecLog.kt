@@ -14,6 +14,7 @@ class ExecLogMemoryRepository : ExecLogRepository {
 
     override fun append(cmd: AppendCmd): ExecLog {
         return lock.write {
+            store.removeIf { it.id == cmd.execLogId }
             ExecLog(
                 id = cmd.execLogId,
                 execId = cmd.execId,
