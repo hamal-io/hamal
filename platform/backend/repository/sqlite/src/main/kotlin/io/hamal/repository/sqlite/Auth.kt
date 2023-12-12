@@ -4,12 +4,9 @@ import io.hamal.lib.domain.vo.*
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.NamedResultSet
 import io.hamal.lib.sqlite.SqliteBaseRepository
-import io.hamal.repository.api.Auth
+import io.hamal.repository.api.*
 import io.hamal.repository.api.AuthCmdRepository.*
 import io.hamal.repository.api.AuthQueryRepository.AuthQuery
-import io.hamal.repository.api.AuthRepository
-import io.hamal.repository.api.PasswordAuth
-import io.hamal.repository.api.TokenAuth
 import java.nio.file.Path
 
 class AuthSqliteRepository(
@@ -60,6 +57,23 @@ class AuthSqliteRepository(
                         set("id", cmd.authId)
                         set("accountId", cmd.accountId)
                         set("hash", cmd.hash.value)
+                    }
+                    map(NamedResultSet::toAuth)
+                }!!
+            }
+
+            is CreateMetaMaskAuthCmd -> {
+                connection.execute<Auth>(
+                    """
+            INSERT OR REPLACE INTO auth (cmd_id, id, type, account_id, data)
+                VALUES(:cmdId, :id, 3, :accountId, :address) RETURNING *
+        """.trimIndent()
+                ) {
+                    query {
+                        set("cmdId", cmd.id)
+                        set("id", cmd.authId)
+                        set("accountId", cmd.accountId)
+                        set("address", cmd.address.value)
                     }
                     map(NamedResultSet::toAuth)
                 }!!
@@ -184,6 +198,15 @@ private fun NamedResultSet.toAuth(): Auth {
                 accountId = getDomainId("account_id", ::AccountId),
                 token = AuthToken(getString("data")),
                 expiresAt = AuthTokenExpiresAt(getInstant("expires_at"))
+            )
+        }
+
+        3 -> {
+            MetaMaskAuth(
+                cmdId = getCommandId("cmd_id"),
+                id = getDomainId("id", ::AuthId),
+                accountId = getDomainId("account_id", ::AccountId),
+                address = Web3Address(getString("data"))
             )
         }
 

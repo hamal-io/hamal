@@ -7,17 +7,16 @@ import io.hamal.lib.domain.vo.AuthTokenExpiresAt
 import io.hamal.repository.api.AuthCmdRepository
 import io.hamal.repository.api.AuthRepository
 import io.hamal.repository.api.PasswordAuth
-import io.hamal.repository.api.TokenAuth
-import io.hamal.repository.api.submitted_req.AuthLoginSubmitted
+import io.hamal.repository.api.submitted_req.AuthLoginPasswordSubmitted
 import org.springframework.stereotype.Component
 import java.time.temporal.ChronoUnit.DAYS
 
 @Component
-class LoginHandler(
+class LoginPasswordHandler(
     private val authRepository: AuthRepository
-) : ReqHandler<AuthLoginSubmitted>(AuthLoginSubmitted::class) {
+) : ReqHandler<AuthLoginPasswordSubmitted>(AuthLoginPasswordSubmitted::class) {
 
-    override fun invoke(req: AuthLoginSubmitted) {
+    override fun invoke(req: AuthLoginPasswordSubmitted) {
         authRepository.list(req.accountId).filterIsInstance<PasswordAuth>().find { it.hash == req.hash }?.let { auth ->
             authRepository.create(
                 AuthCmdRepository.CreateTokenAuthCmd(
@@ -27,8 +26,7 @@ class LoginHandler(
                     token = req.token,
                     expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(30, DAYS))
                 )
-            ) as TokenAuth
+            )
         } ?: throw NoSuchElementException("Account not found")
     }
-
 }

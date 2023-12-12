@@ -1,14 +1,20 @@
 package io.hamal.request
 
 import io.hamal.lib.domain.vo.AccountName
-import io.hamal.lib.domain.vo.AuthToken
 import io.hamal.lib.domain.vo.Password
+import io.hamal.lib.domain.vo.Web3Address
+import io.hamal.lib.domain.vo.Web3Signature
 
-interface LogInReq {
+interface LogInPasswordReq {
     val name: AccountName
     val password: Password
 }
 
-interface LogOutReq {
-    val token: AuthToken
+interface ChallengeMetaMaskReq {
+    val address: Web3Address
+}
+
+interface LogInMetaMaskReq {
+    val address: Web3Address
+    val signature: Web3Signature
 }

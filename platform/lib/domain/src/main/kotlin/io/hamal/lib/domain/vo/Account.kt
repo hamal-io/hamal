@@ -29,6 +29,21 @@ class AccountEmail(override val value: String) : StringValueObject() {
     internal object Serializer : StringValueObjectSerializer<AccountEmail>(::AccountEmail)
 }
 
+@Serializable(with = Web3Address.Serializer::class)
+class Web3Address(override val value: String) : StringValueObject() {
+    internal object Serializer : StringValueObjectSerializer<Web3Address>(::Web3Address)
+}
+
+@Serializable(with = Web3Challenge.Serializer::class)
+class Web3Challenge(override val value: String) : StringValueObject() {
+    internal object Serializer : StringValueObjectSerializer<Web3Challenge>(::Web3Challenge)
+}
+
+@Serializable(with = Web3Signature.Serializer::class)
+class Web3Signature(override val value: String) : StringValueObject() {
+    internal object Serializer : StringValueObjectSerializer<Web3Signature>(::Web3Signature)
+}
+
 enum class AccountType {
     Anonymous,
     Root,

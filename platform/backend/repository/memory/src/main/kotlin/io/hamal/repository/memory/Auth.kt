@@ -2,12 +2,9 @@ package io.hamal.repository.memory
 
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.AuthToken
-import io.hamal.repository.api.Auth
+import io.hamal.repository.api.*
 import io.hamal.repository.api.AuthCmdRepository.*
 import io.hamal.repository.api.AuthQueryRepository.AuthQuery
-import io.hamal.repository.api.AuthRepository
-import io.hamal.repository.api.PasswordAuth
-import io.hamal.repository.api.TokenAuth
 import java.util.concurrent.locks.ReentrantReadWriteLock
 import kotlin.concurrent.read
 import kotlin.concurrent.write
@@ -25,6 +22,16 @@ class AuthMemoryRepository : AuthRepository {
                     id = cmd.authId,
                     accountId = cmd.accountId,
                     hash = cmd.hash,
+                ).also {
+                    projection.putIfAbsent(it.accountId, mutableListOf())
+                    projection[it.accountId]!!.add(it)
+                }
+
+                is CreateMetaMaskAuthCmd -> MetaMaskAuth(
+                    cmdId = cmd.id,
+                    id = cmd.authId,
+                    accountId = cmd.accountId,
+                    address = cmd.address
                 ).also {
                     projection.putIfAbsent(it.accountId, mutableListOf())
                     projection[it.accountId]!!.add(it)

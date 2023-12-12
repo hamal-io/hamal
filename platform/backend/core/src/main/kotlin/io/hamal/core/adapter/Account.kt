@@ -15,13 +15,22 @@ import io.hamal.repository.api.AccountQueryRepository.AccountQuery
 import io.hamal.repository.api.ReqCmdRepository
 import io.hamal.repository.api.submitted_req.AccountConvertSubmitted
 import io.hamal.repository.api.submitted_req.AccountCreateSubmitted
+import io.hamal.repository.api.submitted_req.AccountMetaMaskCreateSubmitted
 import io.hamal.request.ConvertAnonymousAccountReq
 import io.hamal.request.CreateAccountReq
 import io.hamal.request.CreateAnonymousAccountReq
+import io.hamal.request.CreateMetaMaskAccountReq
 import org.springframework.stereotype.Component
 
 interface AccountCreatePort {
     operator fun <T : Any> invoke(req: CreateAccountReq, responseHandler: (AccountCreateSubmitted) -> T): T
+}
+
+interface AccountCreateMetaMaskPort {
+    operator fun <T : Any> invoke(
+        req: CreateMetaMaskAccountReq,
+        responseHandler: (AccountMetaMaskCreateSubmitted) -> T
+    ): T
 }
 
 interface AccountCreateRootPort {
@@ -50,6 +59,7 @@ interface AccountListPort {
 
 interface AccountPort : AccountCreatePort,
     AccountCreateAnonymousPort,
+    AccountCreateMetaMaskPort,
     AccountCreateRootPort,
     AccountConvertAnonymousPort,
     AccountGetPort,
@@ -105,6 +115,26 @@ class AccountAdapter(
                 salt = salt
             ),
             salt = salt,
+            token = generateToken()
+        ).also(reqCmdRepository::queue).let(responseHandler)
+    }
+
+    override fun <T : Any> invoke(
+        req: CreateMetaMaskAccountReq,
+        responseHandler: (AccountMetaMaskCreateSubmitted) -> T
+    ): T {
+        return AccountMetaMaskCreateSubmitted(
+            id = generateDomainId(::ReqId),
+            status = Submitted,
+            accountId = req.id,
+            type = User,
+            groupId = generateDomainId(::GroupId),
+            flowId = generateDomainId(::FlowId),
+            name = req.name,
+            salt = generateSalt(),
+            address = req.address,
+            metamaskAuthId = generateDomainId(::AuthId),
+            tokenAuthId = generateDomainId(::AuthId),
             token = generateToken()
         ).also(reqCmdRepository::queue).let(responseHandler)
     }

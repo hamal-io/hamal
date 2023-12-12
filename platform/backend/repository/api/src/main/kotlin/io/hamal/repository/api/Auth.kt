@@ -17,6 +17,13 @@ data class PasswordAuth(
     val hash: PasswordHash
 ) : Auth
 
+data class MetaMaskAuth(
+    override val id: AuthId,
+    val cmdId: CmdId,
+    override val accountId: AccountId,
+    val address: Web3Address
+) : Auth
+
 data class TokenAuth(
     override val id: AuthId,
     val cmdId: CmdId,
@@ -50,6 +57,13 @@ interface AuthCmdRepository : CmdRepository {
         override val authId: AuthId,
         override val accountId: AccountId,
         val hash: PasswordHash
+    ) : CreateCmd
+
+    data class CreateMetaMaskAuthCmd(
+        override val id: CmdId,
+        override val authId: AuthId,
+        override val accountId: AccountId,
+        val address: Web3Address
     ) : CreateCmd
 
     data class CreateTokenAuthCmd(

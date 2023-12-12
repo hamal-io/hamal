@@ -3,12 +3,15 @@ import {Button, buttonVariants} from "@/components/ui/button.tsx";
 import {cn} from "@/utils";
 import {Icons} from "@/components/icon.tsx";
 import {Input} from "@/components/ui/input.tsx";
-import React, {useEffect, useState} from "react";
+import React, {FC, useEffect, useState} from "react";
 import {z} from "zod";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Form, FormControl, FormField, FormItem, FormMessage} from "@/components/ui/form.tsx";
 import {useForm} from "react-hook-form";
 import {useAccountLogin} from "@/hook";
+import {Buffer} from "buffer";
+import {useSDK} from '@metamask/sdk-react';
+import {useMetaMaskChallenge, useMetaMaskToken} from "@/hook/auth.ts";
 
 export const LoginPage = () => {
     return (
@@ -71,6 +74,68 @@ export const LoginPage = () => {
 
 export default LoginPage
 
+type MetaMaskButtonProps = {
+    loading: boolean;
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+
+const MetaMaskButton: FC<MetaMaskButtonProps> = ({loading, setLoading}) => {
+    const navigate = useNavigate()
+    const {sdk} = useSDK();
+    const [address, setAddress] = useState<string | null>(null)
+    const [requestChallenge, challenge] = useMetaMaskChallenge()
+    const [requestToken, token] = useMetaMaskToken()
+
+    useEffect(() => {
+        if (challenge != null) {
+            console.log("init challenge", challenge)
+            const msg = `0x${Buffer.from("test", 'utf8').toString('hex')}`;
+            const invoke = async () => {
+                const signature = await ethereum.request({
+                    method: 'personal_sign',
+                    params: [challenge, address],
+                });
+                console.log("signature", signature)
+
+                requestToken(address, signature)
+                // TODO send address + signature to backend
+            }
+
+            invoke()
+        }
+    }, [challenge]);
+
+    useEffect(() => {
+        if (token != null) {
+            navigate("/flows", {replace: true})
+        }
+    }, [token]);
+
+    const connect = async () => {
+        try {
+            setLoading(true)
+            const address = (await sdk?.connect())?.[0];
+            setAddress(address)
+            requestChallenge(address)
+        } catch (err) {
+            console.error(`failed to connect..`, err);
+        } finally {
+            setLoading(false)
+        }
+    };
+
+    return (
+        <Button variant="outline" type="button" disabled={loading} onClick={connect}>
+            {loading ? (
+                <Icons.spinner className="mr-2 h-4 w-4 animate-spin"/>
+            ) : (
+                <Icons.metamask className="mr-2 h-4 w-4"/>
+            )}
+            <span className="pl-2">Metamask</span>
+        </Button>
+    )
+}
 
 const LoginForm = () => {
     const navigate = useNavigate()
@@ -174,14 +239,10 @@ const LoginForm = () => {
                     </span>
                 </div>
             </div>
-            <Button variant="outline" type="button" disabled={isLoading}>
-                {isLoading ? (
-                    <Icons.spinner className="mr-2 h-4 w-4 animate-spin"/>
-                ) : (
-                    <Icons.metamask className="mr-2 h-4 w-4"/>
-                )}
-                <span className="pl-2">Metamask</span>
-            </Button>
+            <MetaMaskButton
+                loading={isLoading}
+                setLoading={setLoading}
+            />
         </div>
     )
 }

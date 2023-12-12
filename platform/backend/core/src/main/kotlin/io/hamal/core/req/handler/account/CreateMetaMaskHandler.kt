@@ -8,43 +8,43 @@ import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.*
 import io.hamal.repository.api.event.AccountCreatedEvent
-import io.hamal.repository.api.submitted_req.AccountCreateSubmitted
+import io.hamal.repository.api.submitted_req.AccountMetaMaskCreateSubmitted
 import org.springframework.stereotype.Component
 import java.time.temporal.ChronoUnit
 
 @Component
-class AccountCreateWithPasswordHandler(
+class AccountCreateMetaMaskHandler(
     val accountCmdRepository: AccountCmdRepository,
     val authCmdRepository: AuthCmdRepository,
     val groupCmdRepository: GroupCmdRepository,
     val flowCmdRepository: FlowCmdRepository,
-    val eventEmitter: PlatformEventEmitter,
-) : ReqHandler<AccountCreateSubmitted>(AccountCreateSubmitted::class) {
+    val eventEmitter: PlatformEventEmitter
+) : ReqHandler<AccountMetaMaskCreateSubmitted>(AccountMetaMaskCreateSubmitted::class) {
 
-    override fun invoke(req: AccountCreateSubmitted) {
+    override fun invoke(req: AccountMetaMaskCreateSubmitted) {
         createAccount(req)
             .also { emitEvent(req.cmdId(), it) }
             .also { createGroup(req) }
             .also { createFlow(req) }
-            .also { createPasswordAuth(req) }
+            .also { createMetaMaskAuth(req) }
             .also { createTokenAuth(req) }
     }
 }
 
-private fun AccountCreateWithPasswordHandler.createAccount(req: AccountCreateSubmitted): Account {
+private fun AccountCreateMetaMaskHandler.createAccount(req: AccountMetaMaskCreateSubmitted): Account {
     return accountCmdRepository.create(
         AccountCmdRepository.CreateCmd(
             id = req.cmdId(),
             accountId = req.accountId,
             accountType = req.type,
             name = req.name,
-            email = req.email,
+            email = null,
             salt = req.salt
         )
     )
 }
 
-private fun AccountCreateWithPasswordHandler.createGroup(req: AccountCreateSubmitted): Group {
+private fun AccountCreateMetaMaskHandler.createGroup(req: AccountMetaMaskCreateSubmitted): Group {
     return groupCmdRepository.create(
         GroupCmdRepository.CreateCmd(
             id = req.cmdId(),
@@ -55,32 +55,32 @@ private fun AccountCreateWithPasswordHandler.createGroup(req: AccountCreateSubmi
     )
 }
 
-private fun AccountCreateWithPasswordHandler.createFlow(req: AccountCreateSubmitted): Flow {
+private fun AccountCreateMetaMaskHandler.createFlow(req: AccountMetaMaskCreateSubmitted): Flow {
     return flowCmdRepository.create(
         FlowCmdRepository.CreateCmd(
             id = req.cmdId(),
             flowId = req.flowId,
             groupId = req.groupId,
-            type = FlowType("__default__"),
-            name = FlowName("__default__"),
+            type = FlowType.default,
+            name = FlowName.default,
             inputs = FlowInputs()
         )
     )
 }
 
 
-private fun AccountCreateWithPasswordHandler.createPasswordAuth(req: AccountCreateSubmitted): Auth {
+private fun AccountCreateMetaMaskHandler.createMetaMaskAuth(req: AccountMetaMaskCreateSubmitted): Auth {
     return authCmdRepository.create(
-        AuthCmdRepository.CreatePasswordAuthCmd(
+        AuthCmdRepository.CreateMetaMaskAuthCmd(
             id = req.cmdId(),
-            authId = req.passwordAuthId,
+            authId = req.metamaskAuthId,
             accountId = req.accountId,
-            hash = req.hash
+            address = req.address
         )
     )
 }
 
-private fun AccountCreateWithPasswordHandler.createTokenAuth(req: AccountCreateSubmitted): Auth {
+private fun AccountCreateMetaMaskHandler.createTokenAuth(req: AccountMetaMaskCreateSubmitted): Auth {
     return authCmdRepository.create(
         AuthCmdRepository.CreateTokenAuthCmd(
             id = req.cmdId(),
@@ -92,6 +92,6 @@ private fun AccountCreateWithPasswordHandler.createTokenAuth(req: AccountCreateS
     )
 }
 
-private fun AccountCreateWithPasswordHandler.emitEvent(cmdId: CmdId, account: Account) {
+private fun AccountCreateMetaMaskHandler.emitEvent(cmdId: CmdId, account: Account) {
     eventEmitter.emit(cmdId, AccountCreatedEvent(account))
 }

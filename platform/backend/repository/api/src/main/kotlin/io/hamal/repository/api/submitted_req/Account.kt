@@ -21,6 +21,22 @@ data class AccountCreateSubmitted(
     val token: AuthToken
 ) : Submitted
 
+@Serializable
+data class AccountMetaMaskCreateSubmitted(
+    override val id: ReqId,
+    override var status: ReqStatus,
+    val groupId: GroupId,
+    val accountId: AccountId,
+    val type: AccountType,
+    val metamaskAuthId: AuthId,
+    val tokenAuthId: AuthId,
+    val flowId: FlowId,
+    val name: AccountName,
+    val salt: PasswordSalt,
+    val address: Web3Address,
+    val token: AuthToken
+) : Submitted
+
 
 @Serializable
 data class AccountConvertSubmitted(

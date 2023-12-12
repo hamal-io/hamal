@@ -1,9 +1,6 @@
 package io.hamal.request
 
-import io.hamal.lib.domain.vo.AccountEmail
-import io.hamal.lib.domain.vo.AccountId
-import io.hamal.lib.domain.vo.AccountName
-import io.hamal.lib.domain.vo.Password
+import io.hamal.lib.domain.vo.*
 
 interface CreateAccountReq {
     val name: AccountName
@@ -14,6 +11,12 @@ interface CreateAccountReq {
 interface CreateAnonymousAccountReq {
     val id: AccountId
     val name: AccountName
+}
+
+interface CreateMetaMaskAccountReq {
+    val id: AccountId
+    val name: AccountName
+    val address: Web3Address
 }
 
 interface ConvertAnonymousAccountReq {
