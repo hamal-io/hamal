@@ -34,7 +34,10 @@ class AuthSqliteRepository(
                     id INTEGER NOT NULL,
                     type INTEGER NOT NULL,
                     account_id INTEGER NOT NULL,
-                    data VARCHAR(255) NOT NULL,
+                    token VARCHAR(255),
+                    email VARCHAR(255),
+                    password VARCHAR(255),
+                    address VARCHAR(255),
                     expires_at INTEGER,
                     PRIMARY KEY (id)
                )
@@ -45,18 +48,19 @@ class AuthSqliteRepository(
 
     override fun create(cmd: CreateCmd): Auth {
         return when (cmd) {
-            is CreatePasswordAuthCmd -> {
+            is CreateEmailAuthCmd -> {
                 connection.execute<Auth>(
                     """
-            INSERT OR REPLACE INTO auth (cmd_id, id, type, account_id, data)
-                VALUES(:cmdId, :id, 1, :accountId, :hash) RETURNING *
+            INSERT OR REPLACE INTO auth (cmd_id, id, type, account_id, email,  password)
+                VALUES(:cmdId, :id, 1, :accountId, :email, :password) RETURNING *
         """.trimIndent()
                 ) {
                     query {
                         set("cmdId", cmd.id)
                         set("id", cmd.authId)
                         set("accountId", cmd.accountId)
-                        set("hash", cmd.hash.value)
+                        set("email", cmd.email.value)
+                        set("password", cmd.hash.value)
                     }
                     map(NamedResultSet::toAuth)
                 }!!
@@ -65,7 +69,7 @@ class AuthSqliteRepository(
             is CreateMetaMaskAuthCmd -> {
                 connection.execute<Auth>(
                     """
-            INSERT OR REPLACE INTO auth (cmd_id, id, type, account_id, data)
+            INSERT OR REPLACE INTO auth (cmd_id, id, type, account_id, address)
                 VALUES(:cmdId, :id, 3, :accountId, :address) RETURNING *
         """.trimIndent()
                 ) {
@@ -82,7 +86,7 @@ class AuthSqliteRepository(
             is CreateTokenAuthCmd -> {
                 connection.execute<Auth>(
                     """
-            INSERT OR REPLACE INTO auth (cmd_id, id, type, account_id, data, expires_at)
+            INSERT OR REPLACE INTO auth (cmd_id, id, type, account_id, token, expires_at)
                 VALUES(:cmdId, :id, 2, :accountId, :token, :expiresAt) RETURNING *
         """.trimIndent()
                 ) {
@@ -137,11 +141,30 @@ class AuthSqliteRepository(
                 auth
             WHERE
                 type = 2 AND 
-                data = :token
+                token = :token
         """.trimIndent()
         ) {
             query {
                 set("token", authToken.value)
+            }
+            map(NamedResultSet::toAuth)
+        }
+    }
+
+    override fun find(email: Email): Auth? {
+        return connection.executeQueryOne(
+            """
+            SELECT 
+                *
+             FROM
+                auth
+            WHERE
+                type = 1 AND 
+                email = :email
+        """.trimIndent()
+        ) {
+            query {
+                set("email", email.value)
             }
             map(NamedResultSet::toAuth)
         }
@@ -183,11 +206,12 @@ class AuthSqliteRepository(
 private fun NamedResultSet.toAuth(): Auth {
     return when (getInt("type")) {
         1 -> {
-            PasswordAuth(
+            EmailAuth(
                 cmdId = getCommandId("cmd_id"),
                 id = getDomainId("id", ::AuthId),
                 accountId = getDomainId("account_id", ::AccountId),
-                hash = PasswordHash(getString("data")),
+                email = Email(getString("email")),
+                hash = PasswordHash(getString("password")),
             )
         }
 
@@ -196,7 +220,7 @@ private fun NamedResultSet.toAuth(): Auth {
                 cmdId = getCommandId("cmd_id"),
                 id = getDomainId("id", ::AuthId),
                 accountId = getDomainId("account_id", ::AccountId),
-                token = AuthToken(getString("data")),
+                token = AuthToken(getString("token")),
                 expiresAt = AuthTokenExpiresAt(getInstant("expires_at"))
             )
         }
@@ -206,7 +230,7 @@ private fun NamedResultSet.toAuth(): Auth {
                 cmdId = getCommandId("cmd_id"),
                 id = getDomainId("id", ::AuthId),
                 accountId = getDomainId("account_id", ::AccountId),
-                address = Web3Address(getString("data"))
+                address = Web3Address(getString("address"))
             )
         }
 

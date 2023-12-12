@@ -4,22 +4,22 @@ import io.hamal.core.req.ReqHandler
 import io.hamal.core.req.handler.cmdId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.vo.AuthTokenExpiresAt
-import io.hamal.repository.api.AuthCmdRepository
+import io.hamal.repository.api.AuthCmdRepository.CreateTokenAuthCmd
 import io.hamal.repository.api.AuthRepository
-import io.hamal.repository.api.PasswordAuth
-import io.hamal.repository.api.submitted_req.AuthLoginPasswordSubmitted
+import io.hamal.repository.api.EmailAuth
+import io.hamal.repository.api.submitted_req.AuthLoginEmailSubmitted
 import org.springframework.stereotype.Component
 import java.time.temporal.ChronoUnit.DAYS
 
 @Component
-class LoginPasswordHandler(
+class LoginEmailHandler(
     private val authRepository: AuthRepository
-) : ReqHandler<AuthLoginPasswordSubmitted>(AuthLoginPasswordSubmitted::class) {
+) : ReqHandler<AuthLoginEmailSubmitted>(AuthLoginEmailSubmitted::class) {
 
-    override fun invoke(req: AuthLoginPasswordSubmitted) {
-        authRepository.list(req.accountId).filterIsInstance<PasswordAuth>().find { it.hash == req.hash }?.let { auth ->
+    override fun invoke(req: AuthLoginEmailSubmitted) {
+        authRepository.list(req.accountId).filterIsInstance<EmailAuth>().find { it.hash == req.hash }?.let { auth ->
             authRepository.create(
-                AuthCmdRepository.CreateTokenAuthCmd(
+                CreateTokenAuthCmd(
                     id = req.cmdId(),
                     authId = req.authId,
                     accountId = auth.accountId,

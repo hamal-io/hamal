@@ -8,30 +8,29 @@ import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.*
 import io.hamal.repository.api.event.AccountCreatedEvent
-import io.hamal.repository.api.submitted_req.AccountCreateMetaMaskSubmitted
+import io.hamal.repository.api.submitted_req.AccountCreateAnonymousSubmitted
 import org.springframework.stereotype.Component
 import java.time.temporal.ChronoUnit
 
 @Component
-class AccountCreateMetaMaskHandler(
+class AccountCreateAnonymousHandler(
     val accountCmdRepository: AccountCmdRepository,
     val authCmdRepository: AuthCmdRepository,
     val groupCmdRepository: GroupCmdRepository,
     val flowCmdRepository: FlowCmdRepository,
     val eventEmitter: PlatformEventEmitter
-) : ReqHandler<AccountCreateMetaMaskSubmitted>(AccountCreateMetaMaskSubmitted::class) {
+) : ReqHandler<AccountCreateAnonymousSubmitted>(AccountCreateAnonymousSubmitted::class) {
 
-    override fun invoke(req: AccountCreateMetaMaskSubmitted) {
+    override fun invoke(req: AccountCreateAnonymousSubmitted) {
         createAccount(req)
             .also { emitEvent(req.cmdId(), it) }
             .also { createGroup(req) }
             .also { createFlow(req) }
-            .also { createMetaMaskAuth(req) }
             .also { createTokenAuth(req) }
     }
 }
 
-private fun AccountCreateMetaMaskHandler.createAccount(req: AccountCreateMetaMaskSubmitted): Account {
+private fun AccountCreateAnonymousHandler.createAccount(req: AccountCreateAnonymousSubmitted): Account {
     return accountCmdRepository.create(
         AccountCmdRepository.CreateCmd(
             id = req.cmdId(),
@@ -42,7 +41,7 @@ private fun AccountCreateMetaMaskHandler.createAccount(req: AccountCreateMetaMas
     )
 }
 
-private fun AccountCreateMetaMaskHandler.createGroup(req: AccountCreateMetaMaskSubmitted): Group {
+private fun AccountCreateAnonymousHandler.createGroup(req: AccountCreateAnonymousSubmitted): Group {
     return groupCmdRepository.create(
         GroupCmdRepository.CreateCmd(
             id = req.cmdId(),
@@ -53,7 +52,7 @@ private fun AccountCreateMetaMaskHandler.createGroup(req: AccountCreateMetaMaskS
     )
 }
 
-private fun AccountCreateMetaMaskHandler.createFlow(req: AccountCreateMetaMaskSubmitted): Flow {
+private fun AccountCreateAnonymousHandler.createFlow(req: AccountCreateAnonymousSubmitted): Flow {
     return flowCmdRepository.create(
         FlowCmdRepository.CreateCmd(
             id = req.cmdId(),
@@ -66,19 +65,7 @@ private fun AccountCreateMetaMaskHandler.createFlow(req: AccountCreateMetaMaskSu
     )
 }
 
-
-private fun AccountCreateMetaMaskHandler.createMetaMaskAuth(req: AccountCreateMetaMaskSubmitted): Auth {
-    return authCmdRepository.create(
-        AuthCmdRepository.CreateMetaMaskAuthCmd(
-            id = req.cmdId(),
-            authId = req.metamaskAuthId,
-            accountId = req.accountId,
-            address = req.address
-        )
-    )
-}
-
-private fun AccountCreateMetaMaskHandler.createTokenAuth(req: AccountCreateMetaMaskSubmitted): Auth {
+private fun AccountCreateAnonymousHandler.createTokenAuth(req: AccountCreateAnonymousSubmitted): Auth {
     return authCmdRepository.create(
         AuthCmdRepository.CreateTokenAuthCmd(
             id = req.cmdId(),
@@ -90,6 +77,6 @@ private fun AccountCreateMetaMaskHandler.createTokenAuth(req: AccountCreateMetaM
     )
 }
 
-private fun AccountCreateMetaMaskHandler.emitEvent(cmdId: CmdId, account: Account) {
+private fun AccountCreateAnonymousHandler.emitEvent(cmdId: CmdId, account: Account) {
     eventEmitter.emit(cmdId, AccountCreatedEvent(account))
 }

@@ -143,7 +143,7 @@ const LoginForm = () => {
     const [isLoading, setLoading] = useState<boolean>(false)
 
     const formSchema = z.object({
-        name: z.string().min(1, 'Username or email can not be empty'),
+        email: z.string().min(1, 'Email can not be empty'),
         password: z.string()
             .min(1, 'Password can not be empty')
     })
@@ -151,7 +151,7 @@ const LoginForm = () => {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: "",
+            email: "",
             password: "",
         },
     })
@@ -159,7 +159,7 @@ const LoginForm = () => {
     async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
             setLoading(true)
-            login(values.name, values.password)
+            login(values.email, values.password)
         } catch (e) {
             console.error(e)
         } finally {
@@ -180,14 +180,14 @@ const LoginForm = () => {
                     <div className="grid gap-2">
                         <FormField
                             control={form.control}
-                            name="name"
+                            name="email"
                             render={({field}) => (
                                 <FormItem>
                                     <FormControl>
                                         <Input
-                                            id="username"
-                                            placeholder="username or email@fn.guru"
-                                            type="name"
+                                            id="email"
+                                            placeholder="email@fn.guru"
+                                            type="email"
                                             autoCapitalize="none"
                                             autoCorrect="off"
                                             disabled={isLoading}

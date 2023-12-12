@@ -4,8 +4,8 @@ import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.request.ChallengeMetaMaskReq
+import io.hamal.request.LogInEmailReq
 import io.hamal.request.LogInMetaMaskReq
-import io.hamal.request.LogInPasswordReq
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -26,10 +26,10 @@ data class ApiLoginMetaMaskReq(
 ) : LogInMetaMaskReq
 
 @Serializable
-data class ApiLoginPasswordReq(
-    override val name: AccountName,
+data class ApiLoginEmailReq(
+    override val email: Email,
     override val password: Password
-) : LogInPasswordReq
+) : LogInEmailReq
 
 @Serializable
 data class ApiTokenSubmitted(
@@ -38,8 +38,7 @@ data class ApiTokenSubmitted(
     val accountId: AccountId,
     val groupIds: List<GroupId>,
     val defaultFlowIds: Map<GroupId, FlowId>,
-    val token: AuthToken,
-    val name: AccountName
+    val token: AuthToken
 ) : ApiSubmitted
 
 @Serializable
@@ -47,8 +46,7 @@ data class ApiConvertAccountSubmitted(
     override val id: ReqId,
     override val status: ReqStatus,
     val accountId: AccountId,
-    val token: AuthToken,
-    val name: AccountName
+    val token: AuthToken
 ) : ApiSubmitted
 
 interface AuthService

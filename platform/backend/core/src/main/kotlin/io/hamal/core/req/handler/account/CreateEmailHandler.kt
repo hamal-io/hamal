@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component
 import java.time.temporal.ChronoUnit
 
 @Component
-class AccountCreateWithPasswordHandler(
+class AccountCreateEmailHandler(
     val accountCmdRepository: AccountCmdRepository,
     val authCmdRepository: AuthCmdRepository,
     val groupCmdRepository: GroupCmdRepository,
@@ -26,36 +26,34 @@ class AccountCreateWithPasswordHandler(
             .also { emitEvent(req.cmdId(), it) }
             .also { createGroup(req) }
             .also { createFlow(req) }
-            .also { createPasswordAuth(req) }
+            .also { createEmailAuth(req) }
             .also { createTokenAuth(req) }
     }
 }
 
-private fun AccountCreateWithPasswordHandler.createAccount(req: AccountCreateSubmitted): Account {
+private fun AccountCreateEmailHandler.createAccount(req: AccountCreateSubmitted): Account {
     return accountCmdRepository.create(
         AccountCmdRepository.CreateCmd(
             id = req.cmdId(),
             accountId = req.accountId,
             accountType = req.type,
-            name = req.name,
-            email = req.email,
             salt = req.salt
         )
     )
 }
 
-private fun AccountCreateWithPasswordHandler.createGroup(req: AccountCreateSubmitted): Group {
+private fun AccountCreateEmailHandler.createGroup(req: AccountCreateSubmitted): Group {
     return groupCmdRepository.create(
         GroupCmdRepository.CreateCmd(
             id = req.cmdId(),
             groupId = req.groupId,
-            name = GroupName("Group of ${req.name.value}"),
+            name = GroupName("Group ${req.groupId}"),
             creatorId = req.accountId
         )
     )
 }
 
-private fun AccountCreateWithPasswordHandler.createFlow(req: AccountCreateSubmitted): Flow {
+private fun AccountCreateEmailHandler.createFlow(req: AccountCreateSubmitted): Flow {
     return flowCmdRepository.create(
         FlowCmdRepository.CreateCmd(
             id = req.cmdId(),
@@ -69,18 +67,19 @@ private fun AccountCreateWithPasswordHandler.createFlow(req: AccountCreateSubmit
 }
 
 
-private fun AccountCreateWithPasswordHandler.createPasswordAuth(req: AccountCreateSubmitted): Auth {
+private fun AccountCreateEmailHandler.createEmailAuth(req: AccountCreateSubmitted): Auth {
     return authCmdRepository.create(
-        AuthCmdRepository.CreatePasswordAuthCmd(
+        AuthCmdRepository.CreateEmailAuthCmd(
             id = req.cmdId(),
             authId = req.passwordAuthId,
             accountId = req.accountId,
+            email = req.email,
             hash = req.hash
         )
     )
 }
 
-private fun AccountCreateWithPasswordHandler.createTokenAuth(req: AccountCreateSubmitted): Auth {
+private fun AccountCreateEmailHandler.createTokenAuth(req: AccountCreateSubmitted): Auth {
     return authCmdRepository.create(
         AuthCmdRepository.CreateTokenAuthCmd(
             id = req.cmdId(),
@@ -92,6 +91,6 @@ private fun AccountCreateWithPasswordHandler.createTokenAuth(req: AccountCreateS
     )
 }
 
-private fun AccountCreateWithPasswordHandler.emitEvent(cmdId: CmdId, account: Account) {
+private fun AccountCreateEmailHandler.emitEvent(cmdId: CmdId, account: Account) {
     eventEmitter.emit(cmdId, AccountCreatedEvent(account))
 }

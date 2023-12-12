@@ -5,7 +5,10 @@ import io.hamal.lib.common.domain.DomainObject
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.domain.UpdatedAt
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.AccountId
+import io.hamal.lib.domain.vo.AccountType
+import io.hamal.lib.domain.vo.Email
+import io.hamal.lib.domain.vo.PasswordSalt
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -14,8 +17,6 @@ data class Account(
     override val updatedAt: UpdatedAt,
     val cmdId: CmdId,
     val type: AccountType,
-    val name: AccountName,
-    val email: AccountEmail?,
     val salt: PasswordSalt
 ) : DomainObject<AccountId>
 
@@ -31,24 +32,19 @@ interface AccountCmdRepository : CmdRepository {
         val id: CmdId,
         val accountId: AccountId,
         val accountType: AccountType,
-        val name: AccountName,
-        val email: AccountEmail?,
         val salt: PasswordSalt
     )
 
     data class ConvertCmd(
         val id: CmdId,
         val accountId: AccountId,
-        val name: AccountName?,
-        val email: AccountEmail?,
+        val email: Email
     )
 }
 
 interface AccountQueryRepository {
     fun get(accountId: AccountId) = find(accountId) ?: throw NoSuchElementException("Account not found")
     fun find(accountId: AccountId): Account?
-    fun get(accountName: AccountName) = find(accountName) ?: throw NoSuchElementException("Account not found")
-    fun find(accountName: AccountName): Account?
     fun list(query: AccountQuery): List<Account>
     fun list(accountIds: List<AccountId>): List<Account> = list(
         AccountQuery(

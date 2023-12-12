@@ -3,7 +3,7 @@ export interface AccountConvertSubmitted {
     status: string;
     accountId: string;
     token: string;
-    name: string;
+    email: string;
 }
 
 

@@ -121,8 +121,6 @@ class ClearController {
                 id = CmdId(2),
                 accountId = AccountId.root,
                 accountType = AccountType.Root,
-                name = AccountName("root"),
-                email = AccountEmail("root@hamal.io"),
                 salt = PasswordSalt("root-salt")
             )
         )
@@ -226,8 +224,6 @@ class TestConfig {
                     id = CmdId(2),
                     accountId = AccountId.root,
                     accountType = AccountType.Root,
-                    name = AccountName("root"),
-                    email = AccountEmail("root@hamal.io"),
                     salt = PasswordSalt("root-salt")
                 )
             )

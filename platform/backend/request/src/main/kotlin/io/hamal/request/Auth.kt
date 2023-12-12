@@ -1,12 +1,12 @@
 package io.hamal.request
 
-import io.hamal.lib.domain.vo.AccountName
+import io.hamal.lib.domain.vo.Email
 import io.hamal.lib.domain.vo.Password
 import io.hamal.lib.domain.vo.Web3Address
 import io.hamal.lib.domain.vo.Web3Signature
 
-interface LogInPasswordReq {
-    val name: AccountName
+interface LogInEmailReq {
+    val email: Email
     val password: Password
 }
 

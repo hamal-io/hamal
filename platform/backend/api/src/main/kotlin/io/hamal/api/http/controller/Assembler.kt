@@ -9,10 +9,11 @@ fun Submitted.accepted(): ResponseEntity<ApiSubmitted> =
 
 // @formatter:off
 fun Submitted.toApiSubmitted(): ApiSubmitted = when (this) {
-    is AccountCreateSubmitted -> ApiTokenSubmitted(id, status, accountId, listOf(groupId), mapOf(groupId to flowId), token, name)
-    is AccountConvertSubmitted -> ApiConvertAccountSubmitted(id, status, accountId, token, name)
-    is AuthLoginMetaMaskSubmitted -> ApiTokenSubmitted(id, status, accountId, groupIds, defaultFlowIds, token, name)
-    is AuthLoginPasswordSubmitted -> ApiTokenSubmitted(id, status, accountId, groupIds, defaultFlowIds, token, name)
+    is AccountCreateSubmitted -> ApiTokenSubmitted(id, status, accountId, listOf(groupId), mapOf(groupId to flowId), token)
+    is AccountCreateAnonymousSubmitted -> ApiTokenSubmitted(id, status, accountId, listOf(groupId), mapOf(groupId to flowId), token)
+    is AccountConvertSubmitted -> ApiConvertAccountSubmitted(id, status, accountId, token)
+    is AuthLoginMetaMaskSubmitted -> ApiTokenSubmitted(id, status, accountId, groupIds, defaultFlowIds, token)
+    is AuthLoginEmailSubmitted -> ApiTokenSubmitted(id, status, accountId, groupIds, defaultFlowIds, token)
     is BlueprintCreateSubmitted -> ApiBlueprintCreateSubmitted(id, status, blueprintId, groupId)
     is BlueprintUpdateSubmitted -> ApiBlueprintUpdateSubmitted(id, status, blueprintId)
     is EndpointCreateSubmitted -> ApiEndpointCreateSubmitted(id, status, endpointId, groupId, funcId)
@@ -34,11 +35,10 @@ fun Submitted.toApiSubmitted(): ApiSubmitted = when (this) {
     is TriggerStatusSubmitted -> ApiTriggerStatusSubmitted(id, status, triggerId, triggerStatus)
 
     is AuthLogoutSubmitted,
-    is AccountMetaMaskCreateSubmitted,
+    is AccountCreateMetaMaskSubmitted,
     is TestSubmitted,
     is ExecFailSubmitted,
     is HookInvokeSubmitted,
     is ExecCompleteSubmitted -> throw NotImplementedError()
-
 }
 // @formatter:on

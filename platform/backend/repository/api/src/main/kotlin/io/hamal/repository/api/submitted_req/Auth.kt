@@ -5,14 +5,13 @@ import io.hamal.lib.domain.vo.*
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class AuthLoginPasswordSubmitted(
+data class AuthLoginEmailSubmitted(
     override val id: ReqId,
     override var status: ReqStatus,
     val authId: AuthId,
     val accountId: AccountId,
     val groupIds: List<GroupId>,
     val defaultFlowIds: Map<GroupId, FlowId>,
-    val name: AccountName,
     val hash: PasswordHash,
     val token: AuthToken,
 ) : Submitted
@@ -25,7 +24,6 @@ data class AuthLoginMetaMaskSubmitted(
     val accountId: AccountId,
     val groupIds: List<GroupId>,
     val defaultFlowIds: Map<GroupId, FlowId>,
-    val name: AccountName,
     val token: AuthToken,
     val address: Web3Address,
     val signature: Web3Signature

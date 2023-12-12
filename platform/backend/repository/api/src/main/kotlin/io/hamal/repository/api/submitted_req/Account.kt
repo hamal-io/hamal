@@ -14,15 +14,29 @@ data class AccountCreateSubmitted(
     val passwordAuthId: AuthId,
     val tokenAuthId: AuthId,
     val flowId: FlowId,
-    val name: AccountName,
-    val email: AccountEmail?,
+    val email: Email,
     val salt: PasswordSalt,
     val hash: PasswordHash,
     val token: AuthToken
 ) : Submitted
 
 @Serializable
-data class AccountMetaMaskCreateSubmitted(
+data class AccountCreateAnonymousSubmitted(
+    override val id: ReqId,
+    override var status: ReqStatus,
+    val groupId: GroupId,
+    val accountId: AccountId,
+    val type: AccountType,
+    val passwordAuthId: AuthId,
+    val tokenAuthId: AuthId,
+    val flowId: FlowId,
+    val salt: PasswordSalt,
+    val hash: PasswordHash,
+    val token: AuthToken
+) : Submitted
+
+@Serializable
+data class AccountCreateMetaMaskSubmitted(
     override val id: ReqId,
     override var status: ReqStatus,
     val groupId: GroupId,
@@ -31,7 +45,6 @@ data class AccountMetaMaskCreateSubmitted(
     val metamaskAuthId: AuthId,
     val tokenAuthId: AuthId,
     val flowId: FlowId,
-    val name: AccountName,
     val salt: PasswordSalt,
     val address: Web3Address,
     val token: AuthToken
@@ -45,8 +58,7 @@ data class AccountConvertSubmitted(
     val accountId: AccountId,
     val passwordAuthId: AuthId,
     val tokenAuthId: AuthId,
-    val name: AccountName,
-    val email: AccountEmail?,
+    val email: Email,
     val hash: PasswordHash,
     val token: AuthToken
 ) : Submitted

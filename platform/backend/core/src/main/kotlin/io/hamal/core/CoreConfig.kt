@@ -2,8 +2,7 @@ package io.hamal.core
 
 import io.hamal.core.adapter.AccountCreateRootPort
 import io.hamal.core.req.req.CreateRootAccountReq
-import io.hamal.lib.domain.vo.AccountEmail
-import io.hamal.lib.domain.vo.AccountName
+import io.hamal.lib.domain.vo.Email
 import io.hamal.lib.domain.vo.Password
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.CommandLineRunner
@@ -43,9 +42,8 @@ open class CoreConfig {
     open fun commandLineRunner() = CommandLineRunner {
         createRoot(
             CreateRootAccountReq(
-                name = AccountName("root"),
-                password = Password("toor"),
-                email = AccountEmail("root@hamal.io"),
+                email = Email("root@hamal.io"),
+                password = Password("toor")
             )
         )
     }

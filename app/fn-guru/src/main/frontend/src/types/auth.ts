@@ -8,7 +8,6 @@ export interface Auth {
     groupId: string;
     defaultFlowIds: Map<string, string>;
     token: string;
-    name: string;
 }
 
 
@@ -19,5 +18,5 @@ export interface LoginSubmitted {
     groupIds: string[];
     defaultFlowIds: Map<string, string>;
     token: string;
-    name: string;
+    email: string;
 }
