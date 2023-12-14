@@ -106,7 +106,7 @@ internal object ProjectionCurrent : ProjectionSqlite<FuncId, FuncRecord, Func> {
             CREATE TABLE IF NOT EXISTS current (
                  id             INTEGER NOT NULL,
                  group_id       INTEGER NOT NULL,
-                 flow_id   INTEGER NOT NULL,
+                 flow_id        INTEGER NOT NULL,
                  data           BLOB NOT NULL,
                  PRIMARY KEY    (id)
             );

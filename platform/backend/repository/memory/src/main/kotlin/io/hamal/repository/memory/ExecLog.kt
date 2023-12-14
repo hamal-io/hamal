@@ -14,13 +14,14 @@ class ExecLogMemoryRepository : ExecLogRepository {
 
     override fun append(cmd: AppendCmd): ExecLog {
         return lock.write {
+            store.removeIf { it.id == cmd.execLogId }
             ExecLog(
                 id = cmd.execLogId,
                 execId = cmd.execId,
                 groupId = cmd.groupId,
                 level = cmd.level,
                 message = cmd.message,
-                timestamp = cmd.timestamp,
+                timestamp = cmd.timestamp
             ).also { store.add(it) }
         }
     }
