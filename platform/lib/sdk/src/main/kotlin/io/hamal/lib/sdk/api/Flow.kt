@@ -5,8 +5,8 @@ import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.fold
-import io.hamal.request.CreateFlowReq
-import io.hamal.request.UpdateFlowReq
+import io.hamal.request.FlowCreateReq
+import io.hamal.request.FlowUpdateReq
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -14,7 +14,7 @@ data class ApiFlowCreateReq(
     override val name: FlowName,
     override val inputs: FlowInputs,
     override val type: FlowType? = null
-) : CreateFlowReq
+) : FlowCreateReq
 
 @Serializable
 data class ApiFlowCreateSubmitted(
@@ -28,7 +28,7 @@ data class ApiFlowCreateSubmitted(
 data class ApiFlowUpdateReq(
     override val name: FlowName,
     override val inputs: FlowInputs,
-) : UpdateFlowReq
+) : FlowUpdateReq
 
 @Serializable
 data class ApiFlowUpdateSubmitted(

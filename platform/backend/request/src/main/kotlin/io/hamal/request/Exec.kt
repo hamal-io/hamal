@@ -4,11 +4,11 @@ import io.hamal.lib.domain.vo.EventToSubmit
 import io.hamal.lib.domain.vo.ExecResult
 import io.hamal.lib.domain.vo.ExecState
 
-interface FailExecReq {
+interface ExecFailReq {
     val result: ExecResult
 }
 
-interface CompleteExecReq {
+interface ExecCompleteReq {
     val result: ExecResult
     val state: ExecState
     val events: List<EventToSubmit>

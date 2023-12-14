@@ -6,21 +6,21 @@ import io.hamal.lib.domain.vo.Password
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.fold
-import io.hamal.request.ConvertAnonymousAccountReq
-import io.hamal.request.CreateAccountReq
+import io.hamal.request.AccountConvertAnonymousReq
+import io.hamal.request.AccountCreateReq
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class ApiAccountCreateReq(
     override val email: Email,
     override val password: Password
-) : CreateAccountReq
+) : AccountCreateReq
 
 @Serializable
-data class ApiAnonymousAccountConvertReq(
+data class ApiAccountConvertAnonymousReq(
     override val email: Email,
     override val password: Password
-) : ConvertAnonymousAccountReq
+) : AccountConvertAnonymousReq
 
 
 @Serializable

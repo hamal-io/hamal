@@ -10,7 +10,7 @@ import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.api.ApiBlueprint
-import io.hamal.lib.sdk.api.ApiCreateBlueprintReq
+import io.hamal.lib.sdk.api.ApiBlueprintCreateReq
 import io.hamal.lib.sdk.api.ApiError
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -22,7 +22,7 @@ internal class BlueprintGetControllerTest : BlueprintBaseControllerTest() {
     fun `Get blueprint`() {
         val bpId = awaitCompleted(
             createBlueprint(
-                ApiCreateBlueprintReq(
+                ApiBlueprintCreateReq(
                     name = BlueprintName("TestBlueprint"),
                     inputs = BlueprintInputs(MapType(mutableMapOf("hamal" to StringType("rockz")))),
                     value = CodeValue("1 + 1")

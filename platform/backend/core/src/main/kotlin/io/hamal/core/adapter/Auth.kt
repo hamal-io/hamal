@@ -10,29 +10,29 @@ import io.hamal.repository.api.*
 import io.hamal.repository.api.FlowQueryRepository.FlowQuery
 import io.hamal.repository.api.submitted_req.AuthLoginEmailSubmitted
 import io.hamal.repository.api.submitted_req.AuthLoginMetaMaskSubmitted
-import io.hamal.request.ChallengeMetaMaskReq
-import io.hamal.request.CreateMetaMaskAccountReq
-import io.hamal.request.LogInEmailReq
-import io.hamal.request.LogInMetaMaskReq
+import io.hamal.request.AuthChallengeMetaMaskReq
+import io.hamal.request.AccountCreateMetaMaskReq
+import io.hamal.request.AuthLogInEmailReq
+import io.hamal.request.AuthLogInMetaMaskReq
 import org.springframework.stereotype.Component
 
 
 interface AuthLoginEmailPort {
     operator fun <T : Any> invoke(
-        req: LogInEmailReq,
+        req: AuthLogInEmailReq,
         responseHandler: (AuthLoginEmailSubmitted) -> T
     ): T
 }
 
 interface AuthLoginMetaMaskPort {
     operator fun <T : Any> invoke(
-        req: LogInMetaMaskReq,
+        req: AuthLogInMetaMaskReq,
         responseHandler: (AuthLoginMetaMaskSubmitted) -> T
     ): T
 }
 
 interface AuthChallengeMetaMaskPort {
-    operator fun invoke(req: ChallengeMetaMaskReq): Web3Challenge
+    operator fun invoke(req: AuthChallengeMetaMaskReq): Web3Challenge
 }
 
 interface AuthPort : AuthChallengeMetaMaskPort, AuthLoginMetaMaskPort, AuthLoginEmailPort
@@ -50,16 +50,16 @@ class AuthAdapter(
     private val flowList: FlowListPort,
 ) : AuthPort {
 
-    override fun invoke(req: ChallengeMetaMaskReq): Web3Challenge {
+    override fun invoke(req: AuthChallengeMetaMaskReq): Web3Challenge {
         // FIXME 138 - create challenge based on address
         return Web3Challenge("challenge123")
     }
 
-    override fun <T : Any> invoke(req: LogInMetaMaskReq, responseHandler: (AuthLoginMetaMaskSubmitted) -> T): T {
+    override fun <T : Any> invoke(req: AuthLogInMetaMaskReq, responseHandler: (AuthLoginMetaMaskSubmitted) -> T): T {
         // FIXME 138 - verify signature
         val auth = authRepository.find(req.address)
         if (auth == null) {
-            val submitted = createAccount(object : CreateMetaMaskAccountReq {
+            val submitted = createAccount(object : AccountCreateMetaMaskReq {
                 override val id: AccountId = generateDomainId(::AccountId)
                 override val address: Web3Address = req.address
             }) { it }
@@ -96,7 +96,7 @@ class AuthAdapter(
     }
 
     override operator fun <T : Any> invoke(
-        req: LogInEmailReq,
+        req: AuthLogInEmailReq,
         responseHandler: (AuthLoginEmailSubmitted) -> T
     ): T {
         val auth = authRepository.find(req.email) ?: throw NoSuchElementException("Account not found")

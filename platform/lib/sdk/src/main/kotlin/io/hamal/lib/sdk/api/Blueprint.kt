@@ -5,8 +5,8 @@ import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.fold
-import io.hamal.request.CreateBlueprintReq
-import io.hamal.request.UpdateBlueprintReq
+import io.hamal.request.BlueprintCreateReq
+import io.hamal.request.BlueprintUpdateReq
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -19,11 +19,11 @@ data class ApiBlueprint(
 
 
 @Serializable
-data class ApiCreateBlueprintReq(
+data class ApiBlueprintCreateReq(
     override val name: BlueprintName,
     override val inputs: BlueprintInputs,
     override val value: CodeValue
-) : CreateBlueprintReq
+) : BlueprintCreateReq
 
 @Serializable
 data class ApiBlueprintCreateSubmitted(
@@ -39,7 +39,7 @@ data class ApiBlueprintUpdateReq(
     override val name: BlueprintName? = null,
     override val inputs: BlueprintInputs? = null,
     override val value: CodeValue? = null
-) : UpdateBlueprintReq
+) : BlueprintUpdateReq
 
 @Serializable
 data class ApiBlueprintUpdateSubmitted(
@@ -50,7 +50,7 @@ data class ApiBlueprintUpdateSubmitted(
 
 
 interface ApiBlueprintService {
-    fun create(groupId: GroupId, req: ApiCreateBlueprintReq): ApiBlueprintCreateSubmitted
+    fun create(groupId: GroupId, req: ApiBlueprintCreateReq): ApiBlueprintCreateSubmitted
     fun get(bpId: BlueprintId): ApiBlueprint
     fun update(bpId: BlueprintId, req: ApiBlueprintUpdateReq): ApiBlueprintUpdateSubmitted
 }
@@ -59,7 +59,7 @@ internal class ApiBlueprintServiceImpl(
     private val template: HttpTemplate
 ) : ApiBlueprintService {
 
-    override fun create(groupId: GroupId, req: ApiCreateBlueprintReq): ApiBlueprintCreateSubmitted =
+    override fun create(groupId: GroupId, req: ApiBlueprintCreateReq): ApiBlueprintCreateSubmitted =
         template.post("/v1/groups/{groupId}/blueprints")
             .path("groupId", groupId)
             .body(req)

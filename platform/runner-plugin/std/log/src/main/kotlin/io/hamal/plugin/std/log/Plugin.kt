@@ -15,7 +15,7 @@ import io.hamal.lib.kua.function.FunctionInput2Schema
 import io.hamal.lib.kua.function.FunctionOutput1Schema
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.api.ApiAppendExecLogCmd
+import io.hamal.lib.sdk.api.ApiExecLogAppendCmd
 import io.hamal.lib.sdk.api.ApiExecLogService
 
 
@@ -55,7 +55,7 @@ class LogFunction(
 
         execLogService.append(
             ctx[ExecId::class],
-            ApiAppendExecLogCmd(
+            ApiExecLogAppendCmd(
                 level = level,
                 message = message,
                 timestamp = ExecLogTimestamp.now()

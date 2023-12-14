@@ -11,7 +11,7 @@ import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.api.ApiBlueprintUpdateReq
 import io.hamal.lib.sdk.api.ApiBlueprintUpdateSubmitted
-import io.hamal.lib.sdk.api.ApiCreateBlueprintReq
+import io.hamal.lib.sdk.api.ApiBlueprintCreateReq
 import io.hamal.lib.sdk.api.ApiError
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -23,7 +23,7 @@ internal class BlueprintUpdateControllerTest : BlueprintBaseControllerTest() {
     fun `Updates blueprint`() {
         val bp = awaitCompleted(
             createBlueprint(
-                ApiCreateBlueprintReq(
+                ApiBlueprintCreateReq(
                     name = BlueprintName("TestBlueprint"),
                     value = CodeValue("40 + 2"),
                     inputs = BlueprintInputs()
@@ -61,7 +61,7 @@ internal class BlueprintUpdateControllerTest : BlueprintBaseControllerTest() {
     fun `Updates blueprint without updating values`() {
         val bp = awaitCompleted(
             createBlueprint(
-                ApiCreateBlueprintReq(
+                ApiBlueprintCreateReq(
                     name = BlueprintName("TestBlueprint"),
                     value = CodeValue("40 + 2"),
                     inputs = BlueprintInputs(MapType(mutableMapOf("hamal" to StringType("createdInputs"))))

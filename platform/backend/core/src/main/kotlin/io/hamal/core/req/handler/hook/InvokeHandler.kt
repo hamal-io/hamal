@@ -12,7 +12,7 @@ import io.hamal.repository.api.HookTrigger
 import io.hamal.repository.api.TriggerQueryRepository
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import io.hamal.repository.api.submitted_req.HookInvokeSubmitted
-import io.hamal.request.InvokeFuncReq
+import io.hamal.request.FuncInvokeReq
 import org.springframework.stereotype.Component
 
 
@@ -41,7 +41,7 @@ class HookInvokeHandler(
         triggers.forEach { trigger ->
             invokeFunc(
                 trigger.funcId,
-                object : InvokeFuncReq {
+                object : FuncInvokeReq {
                     override val correlationId = trigger.correlationId ?: CorrelationId.default
                     override val inputs = InvocationInputs()
                     override val invocation: Invocation = req.invocation

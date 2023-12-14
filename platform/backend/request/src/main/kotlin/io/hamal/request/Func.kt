@@ -3,25 +3,25 @@ package io.hamal.request
 import io.hamal.lib.domain.vo.*
 
 
-interface CreateFuncReq {
+interface FuncCreateReq {
     val name: FuncName
     val inputs: FuncInputs
     val code: CodeValue
 }
 
-interface UpdateFuncReq {
+interface FuncUpdateReq {
     val name: FuncName?
     val inputs: FuncInputs?
     val code: CodeValue?
 }
 
-interface InvokeFuncReq {
+interface FuncInvokeReq {
     val correlationId: CorrelationId?
     val inputs: InvocationInputs
     val invocation: Invocation
 }
 
-interface InvokeFuncVersionReq {
+interface FuncInvokeVersionReq {
     val correlationId: CorrelationId?
     val inputs: InvocationInputs
     val version: CodeVersion?

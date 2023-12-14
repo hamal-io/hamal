@@ -10,14 +10,14 @@ import io.hamal.repository.api.*
 import io.hamal.repository.api.EndpointQueryRepository.EndpointQuery
 import io.hamal.repository.api.submitted_req.EndpointCreateSubmitted
 import io.hamal.repository.api.submitted_req.EndpointUpdateSubmitted
-import io.hamal.request.CreateEndpointReq
-import io.hamal.request.UpdateEndpointReq
+import io.hamal.request.EndpointCreateReq
+import io.hamal.request.EndpointUpdateReq
 import org.springframework.stereotype.Component
 
 interface EndpointCreatePort {
     operator fun <T : Any> invoke(
         flowId: FlowId,
-        req: CreateEndpointReq,
+        req: EndpointCreateReq,
         responseHandler: (EndpointCreateSubmitted) -> T
     ): T
 }
@@ -33,7 +33,7 @@ interface EndpointListPort {
 interface EndpointUpdatePort {
     operator fun <T : Any> invoke(
         endpointId: EndpointId,
-        req: UpdateEndpointReq,
+        req: EndpointUpdateReq,
         responseHandler: (EndpointUpdateSubmitted) -> T
     ): T
 }
@@ -49,7 +49,7 @@ class EndpointAdapter(
 ) : EndpointPort {
     override fun <T : Any> invoke(
         flowId: FlowId,
-        req: CreateEndpointReq,
+        req: EndpointCreateReq,
         responseHandler: (EndpointCreateSubmitted) -> T
     ): T {
         val func = funcQueryRepository.get(req.funcId)
@@ -83,7 +83,7 @@ class EndpointAdapter(
 
     override fun <T : Any> invoke(
         endpointId: EndpointId,
-        req: UpdateEndpointReq,
+        req: EndpointUpdateReq,
         responseHandler: (EndpointUpdateSubmitted) -> T
     ): T {
         val endpoint = endpointQueryRepository.get(endpointId)

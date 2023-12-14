@@ -12,7 +12,7 @@ import io.hamal.repository.api.FuncQueryRepository
 import io.hamal.repository.api.ReqCmdRepository
 import io.hamal.repository.api.StateQueryRepository
 import io.hamal.repository.api.submitted_req.StateSetSubmitted
-import io.hamal.request.SetStateReq
+import io.hamal.request.StateSetReq
 import org.springframework.stereotype.Component
 
 interface StateGetPort {
@@ -24,7 +24,7 @@ interface StateGetPort {
 }
 
 interface StateSetPort {
-    operator fun <T : Any> invoke(req: SetStateReq, responseHandler: (StateSetSubmitted) -> T): T
+    operator fun <T : Any> invoke(req: StateSetReq, responseHandler: (StateSetSubmitted) -> T): T
 }
 
 interface StatePort : StateGetPort, StateSetPort
@@ -50,7 +50,7 @@ class StateAdapter(
     }
 
     override operator fun <T : Any> invoke(
-        req: SetStateReq,
+        req: StateSetReq,
         responseHandler: (StateSetSubmitted) -> T
     ): T {
         ensureFuncExists(req.correlation.funcId)

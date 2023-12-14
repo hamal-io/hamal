@@ -17,7 +17,7 @@ data class ApiFuncCreateReq(
     override val name: FuncName,
     override val inputs: FuncInputs,
     override val code: CodeValue
-) : CreateFuncReq
+) : FuncCreateReq
 
 @Serializable
 data class ApiFuncCreateSubmitted(
@@ -46,7 +46,7 @@ data class ApiFuncUpdateReq(
     override val name: FuncName? = null,
     override val inputs: FuncInputs? = null,
     override val code: CodeValue? = null,
-) : UpdateFuncReq
+) : FuncUpdateReq
 
 
 @Serializable
@@ -62,14 +62,14 @@ data class ApiFuncInvokeReq(
     override val correlationId: CorrelationId?,
     override val inputs: InvocationInputs,
     override val invocation: Invocation,
-) : InvokeFuncReq
+) : FuncInvokeReq
 
 @Serializable
-data class ApiInvokeFuncVersionReq(
+data class ApiFuncInvokeVersionReq(
     override val correlationId: CorrelationId?,
     override val inputs: InvocationInputs,
     override val version: CodeVersion?
-) : InvokeFuncVersionReq
+) : FuncInvokeVersionReq
 
 @Serializable
 data class ApiFuncList(
@@ -140,7 +140,7 @@ interface ApiFuncService {
     fun get(funcId: FuncId): ApiFunc
     fun update(funcId: FuncId, req: ApiFuncUpdateReq): ApiFuncUpdateSubmitted
 
-    fun invoke(funcId: FuncId, req: ApiInvokeFuncVersionReq): ApiExecInvokeSubmitted
+    fun invoke(funcId: FuncId, req: ApiFuncInvokeVersionReq): ApiExecInvokeSubmitted
 
     data class FuncQuery(
         var afterId: FuncId = FuncId(SnowflakeId(Long.MAX_VALUE)),
@@ -190,7 +190,7 @@ internal class ApiFuncServiceImpl(
             .execute()
             .fold(ApiFunc::class)
 
-    override fun invoke(funcId: FuncId, req: ApiInvokeFuncVersionReq) =
+    override fun invoke(funcId: FuncId, req: ApiFuncInvokeVersionReq) =
         template.post("/v1/funcs/{funcId}/invoke")
             .path("funcId", funcId)
             .body(req)

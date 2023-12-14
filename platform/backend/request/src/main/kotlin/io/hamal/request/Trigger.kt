@@ -6,7 +6,7 @@ import io.hamal.lib.domain.vo.*
 import kotlin.time.Duration
 
 
-interface CreateTriggerReq {
+interface TriggerCreateReq {
     val type: TriggerType
     val name: TriggerName
     val funcId: FuncId
