@@ -137,6 +137,7 @@ interface ApiFuncService {
     fun create(flowId: FlowId, createFuncReq: ApiFuncCreateReq): ApiFuncCreateSubmitted
     fun deploy(funcId: FuncId, req: ApiFuncDeployReq): ApiFuncDeploySubmitted
     fun list(query: FuncQuery): List<ApiFuncList.Func>
+    fun listDeployments(funcId: FuncId): List<ApiFuncDeploymentList.Deployment>
     fun get(funcId: FuncId): ApiFunc
     fun update(funcId: FuncId, req: ApiFuncUpdateReq): ApiFuncUpdateSubmitted
 
@@ -183,6 +184,14 @@ internal class ApiFuncServiceImpl(
             .execute()
             .fold(ApiFuncList::class)
             .funcs
+
+    override fun listDeployments(funcId: FuncId): List<ApiFuncDeploymentList.Deployment> =
+        template.get("/v1/funcs/{funcId}/deployments")
+            .path("funcId", funcId)
+            .execute()
+            .fold(ApiFuncDeploymentList::class)
+            .deployments
+
 
     override fun get(funcId: FuncId) =
         template.get("/v1/funcs/{funcId}")

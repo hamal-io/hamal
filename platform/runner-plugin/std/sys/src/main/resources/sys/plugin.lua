@@ -129,6 +129,13 @@ function plugin()
             })
         end
 
+        function export.funcs.deployments(cmd)
+            cmd = cmd or {}
+            return internal.func_deployments(
+                    cmd.id or nil
+            )
+        end
+
         function export.funcs.get(func_id)
             return internal.func_get(func_id)
         end
