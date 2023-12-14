@@ -49,16 +49,11 @@ const Profile = () => {
             <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                     <Avatar className="h-8 w-8">
-                        <AvatarFallback>{auth.name[0].toUpperCase()}</AvatarFallback>
+                        <AvatarFallback>You</AvatarFallback>
                     </Avatar>
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-32" align="end" forceMount>
-                <DropdownMenuLabel className="font-normal">
-                    <div className="flex flex-col space-y-1">
-                        <p className="text-sm font-medium leading-none">{auth.name}</p>
-                    </div>
-                </DropdownMenuLabel>
                 <DropdownMenuSeparator/>
                 <DropdownMenuGroup>
                     <DropdownMenuItem>
@@ -134,7 +129,9 @@ type NavItem = {
     active?: boolean;
 };
 
-const NavLink: FC<{ item: NavItem }> = ({item}) => {
+const NavLink: FC<{
+    item: NavItem
+}> = ({item}) => {
     return (
         <Link
             to={item.href}
@@ -149,9 +146,8 @@ const NavLink: FC<{ item: NavItem }> = ({item}) => {
 
 
 const formSchema = z.object({
-    name: z.string().min(2).max(50),
-    password: z.string().min(2).max(50),
-    email: z.string().min(2).max(50).optional()
+    email: z.string().min(2).max(256),
+    password: z.string().min(2).max(50)
 })
 
 const Convert = () => {
@@ -166,7 +162,7 @@ const Convert = () => {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: "",
+            email: "",
             password: "",
         },
     })
@@ -177,7 +173,7 @@ const Convert = () => {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
         try {
-            convert(values.name, values.password, values.email)
+            convert(values.email, values.password)
         } catch (e) {
             console.error(e)
         } finally {
@@ -209,16 +205,13 @@ const Convert = () => {
                         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                             <FormField
                                 control={form.control}
-                                name="name"
+                                name="email"
                                 render={({field}) => (
                                     <FormItem>
-                                        <FormLabel>Username</FormLabel>
+                                        <FormLabel>Email</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="username" {...field} />
+                                            <Input placeholder="your@email.guru" {...field} />
                                         </FormControl>
-                                        <FormDescription>
-                                            This is your public display name.
-                                        </FormDescription>
                                         <FormMessage/>
                                     </FormItem>
                                 )}
@@ -232,25 +225,6 @@ const Convert = () => {
                                         <FormControl>
                                             <Input placeholder="***********" type="password" {...field} />
                                         </FormControl>
-                                        <FormDescription>
-                                            This is your password.
-                                        </FormDescription>
-                                        <FormMessage/>
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name="email"
-                                render={({field}) => (
-                                    <FormItem>
-                                        <FormLabel>Email</FormLabel>
-                                        <FormControl>
-                                            <Input placeholder="your@email.io" type="email" {...field} />
-                                        </FormControl>
-                                        <FormDescription>
-                                            This is your email(optional).
-                                        </FormDescription>
                                         <FormMessage/>
                                     </FormItem>
                                 )}

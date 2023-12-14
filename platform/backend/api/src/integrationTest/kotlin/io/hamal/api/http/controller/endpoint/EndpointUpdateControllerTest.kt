@@ -11,7 +11,7 @@ import io.hamal.lib.http.HttpStatusCode.BadRequest
 import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiEndpointUpdateSubmitted
-import io.hamal.lib.sdk.api.ApiUpdateEndpointReq
+import io.hamal.lib.sdk.api.ApiEndpointUpdateReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -53,7 +53,7 @@ internal class EndpointUpdateControllerTest : EndpointBaseControllerTest() {
         val updateEndpointResponse = httpTemplate.patch("/v1/endpoints/{endpointId}")
             .path("endpointId", endpoint.endpointId)
             .body(
-                ApiUpdateEndpointReq(
+                ApiEndpointUpdateReq(
                     funcId = anotherFuncId,
                     name = EndpointName("updated-name"),
                     method = Put
@@ -101,7 +101,7 @@ internal class EndpointUpdateControllerTest : EndpointBaseControllerTest() {
         val updateEndpointResponse = httpTemplate.patch("/v1/endpoints/{endpointId}")
             .path("endpointId", endpoint.endpointId)
             .body(
-                ApiUpdateEndpointReq(
+                ApiEndpointUpdateReq(
                     funcId = null,
                     name = null,
                     method = null
@@ -163,7 +163,7 @@ internal class EndpointUpdateControllerTest : EndpointBaseControllerTest() {
         val updateEndpointResponse = httpTemplate.patch("/v1/endpoints/{endpointId}")
             .path("endpointId", endpoint.endpointId)
             .body(
-                ApiUpdateEndpointReq(
+                ApiEndpointUpdateReq(
                     funcId = anotherFuncId,
                     name = EndpointName("updated-name"),
                     method = Put

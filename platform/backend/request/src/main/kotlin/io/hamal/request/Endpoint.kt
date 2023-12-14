@@ -4,13 +4,13 @@ import io.hamal.lib.domain._enum.EndpointMethod
 import io.hamal.lib.domain.vo.EndpointName
 import io.hamal.lib.domain.vo.FuncId
 
-interface CreateEndpointReq {
+interface EndpointCreateReq {
     val funcId: FuncId
     val name: EndpointName
     val method: EndpointMethod
 }
 
-interface UpdateEndpointReq {
+interface EndpointUpdateReq {
     val funcId: FuncId?
     val name: EndpointName?
     val method: EndpointMethod?

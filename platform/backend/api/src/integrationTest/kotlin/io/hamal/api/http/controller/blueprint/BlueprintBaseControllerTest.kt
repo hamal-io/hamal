@@ -8,12 +8,12 @@ import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiBlueprint
 import io.hamal.lib.sdk.api.ApiBlueprintCreateSubmitted
-import io.hamal.lib.sdk.api.ApiCreateBlueprintReq
+import io.hamal.lib.sdk.api.ApiBlueprintCreateReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 
 internal sealed class BlueprintBaseControllerTest : BaseControllerTest() {
-    fun createBlueprint(req: ApiCreateBlueprintReq): ApiBlueprintCreateSubmitted {
+    fun createBlueprint(req: ApiBlueprintCreateReq): ApiBlueprintCreateSubmitted {
         val createBlueprintResponse = httpTemplate.post("/v1/groups/{groupId}/blueprints")
             .path("groupId", testGroup.id)
             .body(req)

@@ -26,8 +26,7 @@ internal class AccountListController(private val listAccount: AccountListPort) {
             ResponseEntity.ok(ApiAccountList(
                 accounts.map { account ->
                     ApiAccountList.Account(
-                        id = account.id,
-                        name = account.name
+                        id = account.id
                     )
                 }
             ))

@@ -157,8 +157,6 @@ internal abstract class BaseTest {
                 id = CmdId(2),
                 accountId = AccountId.root,
                 accountType = Root,
-                name = AccountName("test-account"),
-                email = AccountEmail("test@hamal.io"),
                 salt = PasswordSalt("test-salt")
             )
         )

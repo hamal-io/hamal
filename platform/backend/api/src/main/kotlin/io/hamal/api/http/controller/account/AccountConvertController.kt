@@ -5,7 +5,7 @@ import io.hamal.api.http.auth.AuthContextHolder
 import io.hamal.api.http.controller.accepted
 import io.hamal.core.adapter.AccountConvertAnonymousPort
 import io.hamal.core.component.Retry
-import io.hamal.lib.sdk.api.ApiAnonymousAccountConvertReq
+import io.hamal.lib.sdk.api.ApiAccountConvertAnonymousReq
 import io.hamal.lib.sdk.api.ApiSubmitted
 import io.hamal.repository.api.submitted_req.Submitted
 import org.springframework.http.ResponseEntity
@@ -20,7 +20,7 @@ internal class AccountConvertController(
 ) {
     @PostMapping("/v1/anonymous-accounts/convert")
     fun convert(
-        @RequestBody req: ApiAnonymousAccountConvertReq
+        @RequestBody req: ApiAccountConvertAnonymousReq
     ): ResponseEntity<ApiSubmitted> = retry {
         convert(AuthContextHolder.get().accountId, req, Submitted::accepted)
     }

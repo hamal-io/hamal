@@ -13,7 +13,7 @@ import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiError
 import io.hamal.lib.sdk.api.ApiHookCreateReq
 import io.hamal.lib.sdk.api.ApiHookUpdateSubmitted
-import io.hamal.lib.sdk.api.ApiUpdateHookReq
+import io.hamal.lib.sdk.api.ApiHookUpdateReq
 import io.hamal.repository.api.FlowCmdRepository.CreateCmd
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -24,7 +24,7 @@ internal class HookUpdateControllerTest : HookBaseControllerTest() {
     @Test
     fun `Tries to update hook which does not exists`() {
         val getHookResponse = httpTemplate.patch("/v1/hooks/33333333")
-            .body(ApiUpdateHookReq(name = HookName("update")))
+            .body(ApiHookUpdateReq(name = HookName("update")))
             .execute()
 
         assertThat(getHookResponse.statusCode, equalTo(NotFound))
@@ -55,7 +55,7 @@ internal class HookUpdateControllerTest : HookBaseControllerTest() {
 
         val updateHookResponse = httpTemplate.patch("/v1/hooks/{hookId}")
             .path("hookId", hook.hookId)
-            .body(ApiUpdateHookReq(name = HookName("updated-name")))
+            .body(ApiHookUpdateReq(name = HookName("updated-name")))
             .execute()
 
         assertThat(updateHookResponse.statusCode, equalTo(Accepted))
@@ -91,7 +91,7 @@ internal class HookUpdateControllerTest : HookBaseControllerTest() {
 
         val updateHookResponse = httpTemplate.patch("/v1/hooks/{hookId}")
             .path("hookId", hook.hookId)
-            .body(ApiUpdateHookReq(name = null))
+            .body(ApiHookUpdateReq(name = null))
             .execute()
         assertThat(updateHookResponse.statusCode, equalTo(Accepted))
         require(updateHookResponse is HttpSuccessResponse) { "request was not successful" }

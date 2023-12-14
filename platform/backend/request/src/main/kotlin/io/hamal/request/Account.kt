@@ -1,23 +1,25 @@
 package io.hamal.request
 
-import io.hamal.lib.domain.vo.AccountEmail
 import io.hamal.lib.domain.vo.AccountId
-import io.hamal.lib.domain.vo.AccountName
+import io.hamal.lib.domain.vo.Email
 import io.hamal.lib.domain.vo.Password
+import io.hamal.lib.domain.vo.Web3Address
 
-interface CreateAccountReq {
-    val name: AccountName
-    val email: AccountEmail?
-    val password: Password?
-}
-
-interface CreateAnonymousAccountReq {
-    val id: AccountId
-    val name: AccountName
-}
-
-interface ConvertAnonymousAccountReq {
-    val name: AccountName?
+interface AccountCreateReq {
+    val email: Email
     val password: Password
-    val email: AccountEmail?
+}
+
+interface AccountCreateAnonymousReq {
+    val id: AccountId
+}
+
+interface AccountCreateMetaMaskReq {
+    val id: AccountId
+    val address: Web3Address
+}
+
+interface AccountConvertAnonymousReq {
+    val email: Email
+    val password: Password
 }

@@ -12,7 +12,7 @@ import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiTriggerService.TriggerQuery
 import io.hamal.lib.sdk.fold
-import io.hamal.request.CreateTriggerReq
+import io.hamal.request.TriggerCreateReq
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlin.time.Duration
@@ -29,7 +29,7 @@ data class ApiTriggerCreateReq(
     override val hookId: HookId? = null,
     override val hookMethod: HookMethod? = null,
     override val cron: CronPattern? = null
-) : CreateTriggerReq
+) : TriggerCreateReq
 
 @Serializable
 data class ApiTriggerCreateSubmitted(

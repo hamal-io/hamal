@@ -3,12 +3,12 @@ package io.hamal.request
 import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.ExtensionName
 
-interface CreateExtensionReq {
+interface ExtensionCreateReq {
     val name: ExtensionName
     val code: CodeValue
 }
 
-interface UpdateExtensionReq {
+interface ExtensionUpdateReq {
     val name: ExtensionName?
     val code: CodeValue?
 }

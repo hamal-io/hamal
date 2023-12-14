@@ -2,9 +2,7 @@ package io.hamal.repository
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.domain.vo.AccountEmail
 import io.hamal.lib.domain.vo.AccountId
-import io.hamal.lib.domain.vo.AccountName
 import io.hamal.lib.domain.vo.AccountType.Root
 import io.hamal.lib.domain.vo.AccountType.User
 import io.hamal.lib.domain.vo.PasswordSalt
@@ -30,8 +28,6 @@ internal class AccountRepositoryTest : AbstractUnitTest() {
                     id = CmdId(1),
                     accountId = AccountId(123),
                     accountType = Root,
-                    name = AccountName("SomeAccount"),
-                    email = AccountEmail("contact@fn.guru"),
                     salt = PasswordSalt("SALT")
                 )
             )
@@ -39,8 +35,6 @@ internal class AccountRepositoryTest : AbstractUnitTest() {
             with(result) {
                 assertThat(id, equalTo(AccountId(123)))
                 assertThat(type, equalTo(Root))
-                assertThat(name, equalTo(AccountName("SomeAccount")))
-                assertThat(email, equalTo(AccountEmail("contact@fn.guru")))
                 assertThat(salt, equalTo(PasswordSalt("SALT")))
             }
 
@@ -54,8 +48,6 @@ internal class AccountRepositoryTest : AbstractUnitTest() {
                     id = CmdId(1),
                     accountId = AccountId(123),
                     accountType = Root,
-                    name = AccountName("SomeAccount"),
-                    email = null,
                     salt = PasswordSalt("SALT")
                 )
             )
@@ -63,77 +55,11 @@ internal class AccountRepositoryTest : AbstractUnitTest() {
             with(result) {
                 assertThat(id, equalTo(AccountId(123)))
                 assertThat(type, equalTo(Root))
-                assertThat(name, equalTo(AccountName("SomeAccount")))
-                assertThat(email, nullValue())
                 assertThat(salt, equalTo(PasswordSalt("SALT")))
             }
 
             verifyCount(1)
         }
-
-        @TestFactory
-        fun `Tries to create but same name already exist`() =
-            runWith(AccountRepository::class) {
-
-                createAccount(
-                    accountId = AccountId(1),
-                    name = AccountName("first-account-name"),
-                    email = AccountEmail("mail@fn.guru"),
-                    salt = PasswordSalt("salt")
-                )
-
-                val exception = assertThrows<IllegalArgumentException> {
-                    create(
-                        CreateCmd(
-                            id = CmdId(2),
-                            accountId = AccountId(2),
-                            accountType = User,
-                            name = AccountName("first-account-name"),
-                            email = AccountEmail("another@hamal.io"),
-                            salt = PasswordSalt("salt"),
-                        )
-                    )
-                }
-
-                assertThat(
-                    exception.message,
-                    equalTo("AccountName(first-account-name) already exists")
-                )
-
-                verifyCount(1)
-            }
-
-        @TestFactory
-        fun `Tries to create but same email already exist`() =
-            runWith(AccountRepository::class) {
-
-                createAccount(
-                    accountId = AccountId(1),
-                    name = AccountName("first-account-name"),
-                    email = AccountEmail("mail@fn.guru"),
-                    salt = PasswordSalt("salt")
-                )
-
-                val exception = assertThrows<IllegalArgumentException> {
-                    create(
-                        CreateCmd(
-                            id = CmdId(2),
-                            accountId = AccountId(2),
-                            accountType = User,
-                            name = AccountName("second-account-name"),
-                            email = AccountEmail("mail@fn.guru"),
-                            salt = PasswordSalt("salt"),
-                        )
-                    )
-                }
-
-                assertThat(
-                    exception.message,
-                    equalTo("AccountEmail(mail@fn.guru) already exists")
-                )
-
-                verifyCount(1)
-            }
     }
 
     @Nested
@@ -149,15 +75,11 @@ internal class AccountRepositoryTest : AbstractUnitTest() {
         fun `Clear table`() = runWith(AccountRepository::class) {
             createAccount(
                 accountId = AccountId(1),
-                name = AccountName("account-name"),
-                email = AccountEmail("mail@fn.guru"),
                 salt = PasswordSalt("salt")
             )
 
             createAccount(
                 accountId = AccountId(2),
-                name = AccountName("another-account-name"),
-                email = AccountEmail("another-email@fn.guru"),
                 salt = PasswordSalt("salt")
             )
 
@@ -173,15 +95,11 @@ internal class AccountRepositoryTest : AbstractUnitTest() {
         fun `Get account by id`() = runWith(AccountRepository::class) {
             createAccount(
                 accountId = AccountId(1),
-                name = AccountName("SomeAccount"),
-                email = AccountEmail("mail@fn.guru"),
                 salt = PasswordSalt("salt")
             )
 
             with(get(AccountId(1))) {
                 assertThat(id, equalTo(AccountId(1)))
-                assertThat(name, equalTo(AccountName("SomeAccount")))
-                assertThat(email, equalTo(AccountEmail("mail@fn.guru")))
                 assertThat(salt, equalTo(PasswordSalt("salt")))
             }
         }
@@ -190,8 +108,6 @@ internal class AccountRepositoryTest : AbstractUnitTest() {
         fun `Tries to get account by id but does not exist`() = runWith(AccountRepository::class) {
             createAccount(
                 accountId = AccountId(1),
-                name = AccountName("SomeAccount"),
-                email = AccountEmail("mail@fn.guru"),
                 salt = PasswordSalt("salt")
             )
 
@@ -206,48 +122,14 @@ internal class AccountRepositoryTest : AbstractUnitTest() {
     inner class FindTest {
 
         @TestFactory
-        fun `Find account by name`() = runWith(AccountRepository::class) {
-            createAccount(
-                accountId = AccountId(1),
-                name = AccountName("SomeAccount"),
-                email = AccountEmail("mail@fn.guru"),
-                salt = PasswordSalt("salt")
-            )
-
-            with(find(AccountName("SomeAccount"))!!) {
-                assertThat(id, equalTo(AccountId(1)))
-                assertThat(name, equalTo(AccountName("SomeAccount")))
-                assertThat(email, equalTo(AccountEmail("mail@fn.guru")))
-                assertThat(salt, equalTo(PasswordSalt("salt")))
-            }
-        }
-
-        @TestFactory
-        fun `Tries to find account by name but does not exist`() = runWith(AccountRepository::class) {
-            createAccount(
-                accountId = AccountId(1),
-                name = AccountName("account-name"),
-                email = AccountEmail("mail@fn.guru"),
-                salt = PasswordSalt("salt")
-            )
-
-            val result = find(AccountName("account-name-does-not-exists"))
-            assertThat(result, nullValue())
-        }
-
-        @TestFactory
         fun `Find account by id`() = runWith(AccountRepository::class) {
             createAccount(
                 accountId = AccountId(1),
-                name = AccountName("SomeAccount"),
-                email = AccountEmail("mail@fn.guru"),
                 salt = PasswordSalt("salt")
             )
 
             with(find(AccountId(1))!!) {
                 assertThat(id, equalTo(AccountId(1)))
-                assertThat(name, equalTo(AccountName("SomeAccount")))
-                assertThat(email, equalTo(AccountEmail("mail@fn.guru")))
                 assertThat(salt, equalTo(PasswordSalt("salt")))
             }
         }
@@ -256,8 +138,6 @@ internal class AccountRepositoryTest : AbstractUnitTest() {
         fun `Tries to find account by id but does not exist`() = runWith(AccountRepository::class) {
             createAccount(
                 accountId = AccountId(1),
-                name = AccountName("account-name"),
-                email = AccountEmail("mail@fn.guru"),
                 salt = PasswordSalt("salt")
             )
 
@@ -278,8 +158,6 @@ internal class AccountRepositoryTest : AbstractUnitTest() {
 
             with(result[0]) {
                 assertThat(id, equalTo(AccountId(3)))
-                assertThat(name, equalTo(AccountName("Account-Three")))
-                assertThat(email, equalTo(AccountEmail("account@three.com")))
             }
         }
 
@@ -318,29 +196,21 @@ internal class AccountRepositoryTest : AbstractUnitTest() {
         private fun AccountRepository.setup() {
             createAccount(
                 accountId = AccountId(1),
-                name = AccountName("Account-One"),
-                email = AccountEmail("account@one.com"),
                 salt = PasswordSalt("salt")
             )
 
             createAccount(
                 accountId = AccountId(2),
-                name = AccountName("Account-Two"),
-                email = AccountEmail("account@two.com"),
                 salt = PasswordSalt("salt")
             )
 
             createAccount(
                 accountId = AccountId(3),
-                name = AccountName("Account-Three"),
-                email = AccountEmail("account@three.com"),
                 salt = PasswordSalt("salt")
             )
 
             createAccount(
                 accountId = AccountId(4),
-                name = AccountName("Account-Four"),
-                email = AccountEmail("account@four.com"),
                 salt = PasswordSalt("salt")
             )
         }
@@ -349,8 +219,6 @@ internal class AccountRepositoryTest : AbstractUnitTest() {
 
 private fun AccountRepository.createAccount(
     accountId: AccountId,
-    name: AccountName,
-    email: AccountEmail,
     salt: PasswordSalt,
     cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
 ) {
@@ -359,8 +227,6 @@ private fun AccountRepository.createAccount(
             id = cmdId,
             accountId = accountId,
             accountType = User,
-            name = name,
-            email = email,
             salt = salt
         )
     )

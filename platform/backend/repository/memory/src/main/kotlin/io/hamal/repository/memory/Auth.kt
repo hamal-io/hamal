@@ -2,12 +2,11 @@ package io.hamal.repository.memory
 
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.AuthToken
-import io.hamal.repository.api.Auth
+import io.hamal.lib.domain.vo.Email
+import io.hamal.lib.domain.vo.Web3Address
+import io.hamal.repository.api.*
 import io.hamal.repository.api.AuthCmdRepository.*
 import io.hamal.repository.api.AuthQueryRepository.AuthQuery
-import io.hamal.repository.api.AuthRepository
-import io.hamal.repository.api.PasswordAuth
-import io.hamal.repository.api.TokenAuth
 import java.util.concurrent.locks.ReentrantReadWriteLock
 import kotlin.concurrent.read
 import kotlin.concurrent.write
@@ -20,11 +19,22 @@ class AuthMemoryRepository : AuthRepository {
     override fun create(cmd: CreateCmd): Auth {
         return lock.write {
             when (cmd) {
-                is CreatePasswordAuthCmd -> PasswordAuth(
+                is CreateEmailAuthCmd -> EmailAuth(
                     cmdId = cmd.id,
                     id = cmd.authId,
                     accountId = cmd.accountId,
+                    email = cmd.email,
                     hash = cmd.hash,
+                ).also {
+                    projection.putIfAbsent(it.accountId, mutableListOf())
+                    projection[it.accountId]!!.add(it)
+                }
+
+                is CreateMetaMaskAuthCmd -> MetaMaskAuth(
+                    cmdId = cmd.id,
+                    id = cmd.authId,
+                    accountId = cmd.accountId,
+                    address = cmd.address
                 ).also {
                     projection.putIfAbsent(it.accountId, mutableListOf())
                     projection[it.accountId]!!.add(it)
@@ -89,6 +99,24 @@ class AuthMemoryRepository : AuthRepository {
                 .asSequence()
                 .filterIsInstance<TokenAuth>()
                 .find { it.token == authToken }
+        }
+    }
+
+    override fun find(email: Email): Auth? {
+        return lock.read {
+            projection.flatMap { it.value }
+                .asSequence()
+                .filterIsInstance<EmailAuth>()
+                .find { it.email == email }
+        }
+    }
+
+    override fun find(address: Web3Address): Auth? {
+        return lock.read {
+            projection.flatMap { it.value }
+                .asSequence()
+                .filterIsInstance<MetaMaskAuth>()
+                .find { it.address == address }
         }
     }
 }

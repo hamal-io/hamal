@@ -10,14 +10,14 @@ import io.hamal.lib.domain.vo.ReqId
 import io.hamal.lib.domain.vo.base.MapValueObject
 import io.hamal.lib.domain.vo.base.InputsSerializer
 import io.hamal.lib.kua.type.MapType
-import io.hamal.request.SetStateReq
+import io.hamal.request.StateSetReq
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class ApiStateSetReq(
     override val correlation: Correlation,
     override val value: State
-) : SetStateReq
+) : StateSetReq
 
 @Serializable
 data class ApiStateSetSubmitted(

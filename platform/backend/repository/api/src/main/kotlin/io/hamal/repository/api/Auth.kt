@@ -10,11 +10,19 @@ sealed interface Auth {
     val accountId: AccountId
 }
 
-data class PasswordAuth(
+data class EmailAuth(
     override val id: AuthId,
     val cmdId: CmdId,
     override val accountId: AccountId,
+    val email: Email,
     val hash: PasswordHash
+) : Auth
+
+data class MetaMaskAuth(
+    override val id: AuthId,
+    val cmdId: CmdId,
+    override val accountId: AccountId,
+    val address: Web3Address
 ) : Auth
 
 data class TokenAuth(
@@ -45,11 +53,19 @@ interface AuthCmdRepository : CmdRepository {
         val authId: AuthId
     )
 
-    data class CreatePasswordAuthCmd(
+    data class CreateEmailAuthCmd(
         override val id: CmdId,
         override val authId: AuthId,
         override val accountId: AccountId,
+        val email: Email,
         val hash: PasswordHash
+    ) : CreateCmd
+
+    data class CreateMetaMaskAuthCmd(
+        override val id: CmdId,
+        override val authId: AuthId,
+        override val accountId: AccountId,
+        val address: Web3Address
     ) : CreateCmd
 
     data class CreateTokenAuthCmd(
@@ -65,6 +81,11 @@ interface AuthCmdRepository : CmdRepository {
 interface AuthQueryRepository {
     fun get(authToken: AuthToken) = find(authToken) ?: throw NoSuchElementException("Auth not found")
     fun find(authToken: AuthToken): Auth?
+    fun get(email: Email) = find(email) ?: throw NoSuchElementException("Auth not found")
+    fun find(email: Email): Auth?
+    fun get(address: Web3Address) = find(address) ?: throw NoSuchElementException("Auth not found")
+    fun find(address: Web3Address): Auth?
+
     fun list(accountId: AccountId) = list(
         AuthQuery(
             limit = Limit.all,

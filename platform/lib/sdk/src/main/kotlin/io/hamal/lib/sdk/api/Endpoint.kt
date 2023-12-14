@@ -10,8 +10,8 @@ import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiEndpointService.EndpointQuery
 import io.hamal.lib.sdk.fold
-import io.hamal.request.CreateEndpointReq
-import io.hamal.request.UpdateEndpointReq
+import io.hamal.request.EndpointCreateReq
+import io.hamal.request.EndpointUpdateReq
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -19,7 +19,7 @@ data class ApiEndpointCreateReq(
     override val funcId: FuncId,
     override val name: EndpointName,
     override val method: EndpointMethod
-) : CreateEndpointReq
+) : EndpointCreateReq
 
 @Serializable
 data class ApiEndpointCreateSubmitted(
@@ -32,11 +32,11 @@ data class ApiEndpointCreateSubmitted(
 
 
 @Serializable
-data class ApiUpdateEndpointReq(
+data class ApiEndpointUpdateReq(
     override val funcId: FuncId? = null,
     override val name: EndpointName? = null,
     override val method: EndpointMethod? = null
-) : UpdateEndpointReq
+) : EndpointUpdateReq
 
 @Serializable
 data class ApiEndpointUpdateSubmitted(
