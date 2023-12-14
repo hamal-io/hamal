@@ -26,7 +26,7 @@ class AccountConvertAnonymousHandler(
     override fun invoke(req: AccountConvertSubmitted) {
         convertAccount(req)
             .also { emitEvent(req.cmdId(), it) }
-            .also { createPasswordAuth(req) }
+            .also { createEmailAuth(req) }
             .also { createTokenAuth(req) }
     }
 }
@@ -36,19 +36,19 @@ private fun AccountConvertAnonymousHandler.convertAccount(req: AccountConvertSub
         AccountCmdRepository.ConvertCmd(
             id = req.cmdId(),
             accountId = req.accountId,
-            name = req.name,
-            email = req.email,
+            email = req.email
         )
     )
 }
 
 
-private fun AccountConvertAnonymousHandler.createPasswordAuth(req: AccountConvertSubmitted): Auth {
+private fun AccountConvertAnonymousHandler.createEmailAuth(req: AccountConvertSubmitted): Auth {
     return authCmdRepository.create(
-        AuthCmdRepository.CreatePasswordAuthCmd(
+        AuthCmdRepository.CreateEmailAuthCmd(
             id = req.cmdId(),
             authId = req.passwordAuthId,
             accountId = req.accountId,
+            email = req.email,
             hash = req.hash
         )
     )

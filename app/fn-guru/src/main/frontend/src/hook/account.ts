@@ -39,7 +39,6 @@ export const useAccountCreateAnonymous = (): [AccountCreateAnonymousAction, Logi
                         groupId: data.groupIds[0],
                         defaultFlowIds: data.defaultFlowIds,
                         token: data.token,
-                        name: data.name
                     })
                 })
             })
@@ -60,7 +59,7 @@ export const useAccountCreateAnonymous = (): [AccountCreateAnonymousAction, Logi
     return [fn, data, loading, error]
 }
 
-type AccountLoginAction = (name: string, password: string, controller?: AbortController) => void
+type AccountLoginAction = (email: string, password: string, controller?: AbortController) => void
 export const useAccountLogin = (): [AccountLoginAction, LoginSubmitted, boolean, Error] => {
     const [auth, setAuth] = useAuth()
 
@@ -68,7 +67,7 @@ export const useAccountLogin = (): [AccountLoginAction, LoginSubmitted, boolean,
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<Error>(null);
 
-    const fn = useCallback((name: string, password: string, controller?: AbortController) => {
+    const fn = useCallback((email: string, password: string, controller?: AbortController) => {
         fetch(`${import.meta.env.VITE_BASE_URL}/v1/login`, {
             method: "POST",
             headers: {
@@ -77,7 +76,7 @@ export const useAccountLogin = (): [AccountLoginAction, LoginSubmitted, boolean,
             },
             signal: controller?.signal,
             body: JSON.stringify({
-                name,
+                email,
                 password
             })
         })
@@ -96,7 +95,6 @@ export const useAccountLogin = (): [AccountLoginAction, LoginSubmitted, boolean,
                         groupId: data.groupIds[0],
                         defaultFlowIds: data.defaultFlowIds,
                         token: data.token,
-                        name: data.name
                     })
                 })
             })
@@ -118,7 +116,7 @@ export const useAccountLogin = (): [AccountLoginAction, LoginSubmitted, boolean,
 }
 
 
-type AccountConvertAction = (name: string, password: string, email?: string, abortController?: AbortController) => void
+type AccountConvertAction = (email: string, password: string, abortController?: AbortController) => void
 export const useAccountConvert = (): [AccountConvertAction, AccountConvertSubmitted, boolean, Error] => {
     const [auth, setAuth] = useAuth()
 
@@ -126,7 +124,7 @@ export const useAccountConvert = (): [AccountConvertAction, AccountConvertSubmit
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<Error>(null);
 
-    const fn = useCallback((name: string, password: string, email?: string, abortController?: AbortController) => {
+    const fn = useCallback((email: string, password: string, abortController?: AbortController) => {
         fetch(`${import.meta.env.VITE_BASE_URL}/v1/anonymous-accounts/convert`, {
             method: "POST",
             headers: {
@@ -136,9 +134,8 @@ export const useAccountConvert = (): [AccountConvertAction, AccountConvertSubmit
             },
             signal: abortController?.signal,
             body: JSON.stringify({
-                name,
-                password,
-                email
+                email,
+                password
             })
         })
             .then(response => {
@@ -156,7 +153,6 @@ export const useAccountConvert = (): [AccountConvertAction, AccountConvertSubmit
                         groupId: auth.groupId,
                         defaultFlowIds: auth.defaultFlowIds,
                         token: data.token,
-                        name: data.name
                     })
                 })
             })

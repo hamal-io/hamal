@@ -1,7 +1,6 @@
 package io.hamal.repository.memory.record
 
 import io.hamal.lib.domain.vo.AccountId
-import io.hamal.lib.domain.vo.AccountName
 import io.hamal.repository.api.Account
 import io.hamal.repository.api.AccountCmdRepository
 import io.hamal.repository.api.AccountCmdRepository.CreateCmd
@@ -17,24 +16,10 @@ import kotlin.concurrent.withLock
 private object AccountCurrentProjection {
     private val projection = mutableMapOf<AccountId, Account>()
     fun apply(account: Account) {
-
-        require(projection.values.asSequence()
-            .map { it.name }
-            .none { it == account.name }
-        ) { "${account.name} already exists" }
-
-        if (account.email != null) {
-            require(projection.values.asSequence()
-                .map { it.email }
-                .none { it == account.email }
-            ) { "${account.email} already exists" }
-        }
         projection[account.id] = account
     }
 
     fun find(accountId: AccountId): Account? = projection[accountId]
-
-    fun find(accountName: AccountName): Account? = projection.values.find { it.name == accountName }
 
     fun list(query: AccountQuery): List<Account> {
         return projection.filter { query.accountIds.isEmpty() || it.key in query.accountIds }
@@ -78,9 +63,7 @@ class AccountMemoryRepository : RecordMemoryRepository<AccountId, AccountRecord,
                         cmdId = cmd.id,
                         entityId = accountId,
                         type = cmd.accountType,
-                        name = cmd.name,
-                        email = cmd.email,
-                        salt = cmd.salt,
+                        salt = cmd.salt
                     )
                 )
                 (currentVersion(accountId)).also(AccountCurrentProjection::apply)
@@ -98,9 +81,7 @@ class AccountMemoryRepository : RecordMemoryRepository<AccountId, AccountRecord,
                 store(
                     AccountConvertedRecord(
                         cmdId = cmd.id,
-                        entityId = accountId,
-                        name = cmd.name ?: currentVersion.name,
-                        email = cmd.email,
+                        entityId = accountId
                     )
                 )
                 (currentVersion(accountId)).also(AccountCurrentProjection::apply)
@@ -109,8 +90,6 @@ class AccountMemoryRepository : RecordMemoryRepository<AccountId, AccountRecord,
     }
 
     override fun find(accountId: AccountId): Account? = lock.withLock { AccountCurrentProjection.find(accountId) }
-
-    override fun find(accountName: AccountName): Account? = lock.withLock { AccountCurrentProjection.find(accountName) }
 
     override fun list(query: AccountQuery): List<Account> = lock.withLock { AccountCurrentProjection.list(query) }
 

@@ -14,14 +14,24 @@ import io.hamal.repository.api.AccountQueryRepository
 import io.hamal.repository.api.AccountQueryRepository.AccountQuery
 import io.hamal.repository.api.ReqCmdRepository
 import io.hamal.repository.api.submitted_req.AccountConvertSubmitted
+import io.hamal.repository.api.submitted_req.AccountCreateAnonymousSubmitted
+import io.hamal.repository.api.submitted_req.AccountCreateMetaMaskSubmitted
 import io.hamal.repository.api.submitted_req.AccountCreateSubmitted
 import io.hamal.request.ConvertAnonymousAccountReq
 import io.hamal.request.CreateAccountReq
 import io.hamal.request.CreateAnonymousAccountReq
+import io.hamal.request.CreateMetaMaskAccountReq
 import org.springframework.stereotype.Component
 
 interface AccountCreatePort {
     operator fun <T : Any> invoke(req: CreateAccountReq, responseHandler: (AccountCreateSubmitted) -> T): T
+}
+
+interface AccountCreateMetaMaskPort {
+    operator fun <T : Any> invoke(
+        req: CreateMetaMaskAccountReq,
+        responseHandler: (AccountCreateMetaMaskSubmitted) -> T
+    ): T
 }
 
 interface AccountCreateRootPort {
@@ -29,7 +39,7 @@ interface AccountCreateRootPort {
 }
 
 interface AccountCreateAnonymousPort {
-    operator fun <T : Any> invoke(req: CreateAnonymousAccountReq, responseHandler: (AccountCreateSubmitted) -> T): T
+    operator fun <T : Any> invoke(req: CreateAnonymousAccountReq, responseHandler: (AccountCreateAnonymousSubmitted) -> T): T
 }
 
 interface AccountConvertAnonymousPort {
@@ -50,6 +60,7 @@ interface AccountListPort {
 
 interface AccountPort : AccountCreatePort,
     AccountCreateAnonymousPort,
+    AccountCreateMetaMaskPort,
     AccountCreateRootPort,
     AccountConvertAnonymousPort,
     AccountGetPort,
@@ -74,12 +85,11 @@ class AccountAdapter(
             type = User,
             groupId = generateDomainId(::GroupId),
             flowId = generateDomainId(::FlowId),
-            name = req.name,
             email = req.email,
             passwordAuthId = generateDomainId(::AuthId),
             tokenAuthId = generateDomainId(::AuthId),
             hash = encodePassword(
-                password = req.password ?: throw IllegalArgumentException("Password must not be null"),
+                password = req.password,
                 salt = salt
             ),
             salt = salt,
@@ -87,17 +97,15 @@ class AccountAdapter(
         ).also(reqCmdRepository::queue).let(responseHandler)
     }
 
-    override fun <T : Any> invoke(req: CreateAnonymousAccountReq, responseHandler: (AccountCreateSubmitted) -> T): T {
+    override fun <T : Any> invoke(req: CreateAnonymousAccountReq, responseHandler: (AccountCreateAnonymousSubmitted) -> T): T {
         val salt = generateSalt()
-        return AccountCreateSubmitted(
+        return AccountCreateAnonymousSubmitted(
             id = generateDomainId(::ReqId),
             status = Submitted,
             accountId = req.id,
             type = Anonymous,
             groupId = generateDomainId(::GroupId),
             flowId = generateDomainId(::FlowId),
-            name = req.name,
-            email = null,
             passwordAuthId = generateDomainId(::AuthId),
             tokenAuthId = generateDomainId(::AuthId),
             hash = encodePassword(
@@ -105,6 +113,25 @@ class AccountAdapter(
                 salt = salt
             ),
             salt = salt,
+            token = generateToken()
+        ).also(reqCmdRepository::queue).let(responseHandler)
+    }
+
+    override fun <T : Any> invoke(
+        req: CreateMetaMaskAccountReq,
+        responseHandler: (AccountCreateMetaMaskSubmitted) -> T
+    ): T {
+        return AccountCreateMetaMaskSubmitted(
+            id = generateDomainId(::ReqId),
+            status = Submitted,
+            accountId = req.id,
+            type = User,
+            groupId = generateDomainId(::GroupId),
+            flowId = generateDomainId(::FlowId),
+            salt = generateSalt(),
+            address = req.address,
+            metamaskAuthId = generateDomainId(::AuthId),
+            tokenAuthId = generateDomainId(::AuthId),
             token = generateToken()
         ).also(reqCmdRepository::queue).let(responseHandler)
     }
@@ -121,7 +148,6 @@ class AccountAdapter(
                     type = AccountType.Root,
                     groupId = GroupId.root,
                     flowId = FlowId.root,
-                    name = req.name,
                     email = req.email,
                     passwordAuthId = generateDomainId(::AuthId),
                     tokenAuthId = generateDomainId(::AuthId),
@@ -145,7 +171,6 @@ class AccountAdapter(
             id = generateDomainId(::ReqId),
             status = Submitted,
             accountId = accountId,
-            name = req.name ?: account.name,
             email = req.email,
             passwordAuthId = generateDomainId(::AuthId),
             tokenAuthId = generateDomainId(::AuthId),

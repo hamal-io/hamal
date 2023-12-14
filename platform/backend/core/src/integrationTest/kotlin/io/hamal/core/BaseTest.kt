@@ -142,8 +142,6 @@ internal abstract class BaseTest {
                 id = CmdId(2),
                 accountId = generateDomainId(::AccountId),
                 accountType = Root,
-                name = AccountName("test-root"),
-                email = AccountEmail("test@hamal.io"),
                 salt = PasswordSalt("test-salt")
             )
         )

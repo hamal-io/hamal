@@ -8,7 +8,7 @@ import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.AuthCmdRepository.*
 import io.hamal.repository.api.AuthQueryRepository.AuthQuery
 import io.hamal.repository.api.AuthRepository
-import io.hamal.repository.api.PasswordAuth
+import io.hamal.repository.api.EmailAuth
 import io.hamal.repository.api.TokenAuth
 import io.hamal.repository.fixture.AbstractUnitTest
 import org.hamcrest.MatcherAssert.assertThat
@@ -30,18 +30,20 @@ internal class AuthRepositoryTest : AbstractUnitTest() {
         @TestFactory
         fun `Creates password auth`() = runWith(AuthRepository::class) {
             val result = create(
-                CreatePasswordAuthCmd(
+                CreateEmailAuthCmd(
                     id = CmdId(1),
                     authId = AuthId(2),
                     accountId = AccountId(3),
+                    email = Email("email@fn.guru"),
                     hash = PasswordHash("secretPasswordHash")
                 )
             )
 
             with(result) {
-                require(this is PasswordAuth)
+                require(this is EmailAuth)
                 assertThat(id, equalTo(AuthId(2)))
                 assertThat(accountId, equalTo(AccountId(3)))
+                assertThat(email, equalTo(Email("email@fn.guru")))
                 assertThat(hash, equalTo(PasswordHash("secretPasswordHash")))
             }
 
@@ -84,7 +86,7 @@ internal class AuthRepositoryTest : AbstractUnitTest() {
                     token = AuthToken("supersecret")
                 )
 
-                createPasswordAuth(AuthId(1), AccountId(3))
+                createEmailAuth(AuthId(1), AccountId(3))
                 revokeAuth(RevokeAuthCmd(CmdGen(), AuthId(5)))
 
                 with(list(AccountId(3))) {
@@ -128,7 +130,7 @@ internal class AuthRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Clear table`() = runWith(AuthRepository::class) {
-            createPasswordAuth(AuthId(1), AccountId(2))
+            createEmailAuth(AuthId(1), AccountId(2))
             createTokenAuth(AuthId(2), AccountId(3), AuthToken("testtoken"))
 
             clear()
@@ -219,7 +221,7 @@ internal class AuthRepositoryTest : AbstractUnitTest() {
             assertThat(result, hasSize(2))
 
             with(result[1]) {
-                require(this is PasswordAuth)
+                require(this is EmailAuth)
                 assertThat(id, equalTo(AuthId(1)))
                 assertThat(accountId, equalTo(AccountId(3)))
             }
@@ -268,7 +270,7 @@ internal class AuthRepositoryTest : AbstractUnitTest() {
         }
 
         private fun AuthRepository.setup() {
-            createPasswordAuth(
+            createEmailAuth(
                 authId = AuthId(1),
                 accountId = AccountId(3)
             )
@@ -295,16 +297,17 @@ internal class AuthRepositoryTest : AbstractUnitTest() {
     }
 }
 
-private fun AuthRepository.createPasswordAuth(
+private fun AuthRepository.createEmailAuth(
     authId: AuthId,
     accountId: AccountId,
     cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
 ) {
     create(
-        CreatePasswordAuthCmd(
+        CreateEmailAuthCmd(
             id = cmdId,
             authId = authId,
             accountId = accountId,
+            email = Email("some@email.com"),
             hash = PasswordHash("SomeHash")
         )
     )

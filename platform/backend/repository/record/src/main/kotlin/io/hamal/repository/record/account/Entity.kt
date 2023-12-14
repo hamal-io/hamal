@@ -1,7 +1,10 @@
 package io.hamal.repository.record.account
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.AccountId
+import io.hamal.lib.domain.vo.AccountType
+import io.hamal.lib.domain.vo.PasswordSalt
+import io.hamal.lib.domain.vo.RecordedAt
 import io.hamal.repository.api.Account
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordEntity
@@ -14,8 +17,6 @@ data class AccountEntity(
     override val recordedAt: RecordedAt,
 
     var type: AccountType?,
-    var name: AccountName?,
-    var email: AccountEmail?,
     var salt: PasswordSalt?
 
 ) : RecordEntity<AccountId, AccountRecord, Account> {
@@ -27,16 +28,12 @@ data class AccountEntity(
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
                 type = rec.type,
-                name = rec.name,
-                email = rec.email,
                 salt = rec.salt,
                 recordedAt = rec.recordedAt()
             )
 
             is AccountConvertedRecord -> copy(
                 cmdId = rec.cmdId,
-                name = rec.name,
-                email = rec.email,
                 type = AccountType.User,
                 recordedAt = rec.recordedAt()
             )
@@ -50,8 +47,6 @@ data class AccountEntity(
             id = id,
             updatedAt = recordedAt.toUpdatedAt(),
             type = type!!,
-            name = name!!,
-            email = email,
             salt = salt!!
         )
     }
@@ -67,8 +62,6 @@ fun List<AccountRecord>.createEntity(): AccountEntity {
         cmdId = firstRecord.cmdId,
         sequence = firstRecord.sequence(),
         type = firstRecord.type,
-        name = firstRecord.name,
-        email = firstRecord.email,
         salt = firstRecord.salt,
         recordedAt = firstRecord.recordedAt()
     )

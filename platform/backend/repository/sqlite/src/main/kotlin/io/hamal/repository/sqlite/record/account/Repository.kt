@@ -1,7 +1,6 @@
 package io.hamal.repository.sqlite.record.account
 
 import io.hamal.lib.domain.vo.AccountId
-import io.hamal.lib.domain.vo.AccountName
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Account
 import io.hamal.repository.api.AccountCmdRepository
@@ -28,8 +27,6 @@ internal object CreateAccount : CreateDomainObject<AccountId, AccountRecord, Acc
             id = firstRecord.entityId,
             sequence = firstRecord.sequence(),
             type = firstRecord.type,
-            name = firstRecord.name,
-            email = firstRecord.email,
             salt = firstRecord.salt,
             recordedAt = firstRecord.recordedAt()
         )
@@ -48,7 +45,7 @@ class AccountSqliteRepository(
     config = config,
     createDomainObject = CreateAccount,
     recordClass = AccountRecord::class,
-    projections = listOf(ProjectionCurrent, ProjectionUniqueEmail, ProjectionUniqueName)
+    projections = listOf(ProjectionCurrent)
 ), AccountRepository {
 
     data class Config(
@@ -69,16 +66,12 @@ class AccountSqliteRepository(
                         cmdId = cmdId,
                         entityId = accountId,
                         type = cmd.accountType,
-                        name = cmd.name,
-                        email = cmd.email,
                         salt = cmd.salt,
                     )
                 )
 
                 currentVersion(accountId)
                     .also { ProjectionCurrent.upsert(this, it) }
-                    .also { ProjectionUniqueEmail.upsert(this, it) }
-                    .also { ProjectionUniqueName.upsert(this, it) }
             }
         }
     }
@@ -94,27 +87,17 @@ class AccountSqliteRepository(
                 store(
                     AccountConvertedRecord(
                         cmdId = cmdId,
-                        entityId = accountId,
-                        name = cmd.name ?: currentVersion.name,
-                        email = cmd.email,
+                        entityId = accountId
                     )
                 )
                 currentVersion(accountId)
                     .also { ProjectionCurrent.upsert(this, it) }
-                    .also { ProjectionUniqueEmail.upsert(this, it) }
-                    .also { ProjectionUniqueName.upsert(this, it) }
             }
         }
     }
 
     override fun find(accountId: AccountId): Account? {
         return ProjectionCurrent.find(connection, accountId)
-    }
-
-    override fun find(accountName: AccountName): Account? {
-        return ProjectionUniqueName.find(connection, accountName)?.let {
-            return ProjectionCurrent.find(connection, it)
-        }
     }
 
     override fun list(query: AccountQuery): List<Account> {

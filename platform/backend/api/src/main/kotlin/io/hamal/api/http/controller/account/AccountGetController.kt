@@ -22,8 +22,7 @@ internal class AccountGetController(
             getAccount(accountId) { account ->
                 ResponseEntity.ok(
                     ApiAccount(
-                        id = account.id,
-                        name = account.name,
+                        id = account.id
                     )
                 )
             }

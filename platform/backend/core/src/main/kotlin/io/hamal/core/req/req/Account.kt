@@ -1,13 +1,11 @@
 package io.hamal.core.req.req
 
-import io.hamal.lib.domain.vo.AccountEmail
-import io.hamal.lib.domain.vo.AccountName
+import io.hamal.lib.domain.vo.Email
 import io.hamal.lib.domain.vo.Password
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class CreateRootAccountReq(
-    val name: AccountName,
-    val email: AccountEmail,
+    val email: Email,
     val password: Password
 )
