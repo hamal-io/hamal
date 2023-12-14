@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component
 interface FuncCreatePort {
     operator fun <T : Any> invoke(
         flowId: FlowId,
-        req: CreateFuncReq,
+        req: FuncCreateReq,
         responseHandler: (FuncCreateSubmitted) -> T
     ): T
 }
@@ -27,13 +27,13 @@ interface FuncGetPort {
 interface FuncInvokePort {
     operator fun <T : Any> invoke(
         funcId: FuncId,
-        req: InvokeFuncReq,
+        req: FuncInvokeReq,
         responseHandler: (ExecInvokeSubmitted) -> T
     ): T
 
     operator fun <T : Any> invoke(
         funcId: FuncId,
-        req: InvokeFuncVersionReq,
+        req: FuncInvokeVersionReq,
         responseHandler: (ExecInvokeSubmitted) -> T
     ): T
 }
@@ -57,7 +57,7 @@ interface FuncDeployPort {
 interface FuncUpdatePort {
     operator fun <T : Any> invoke(
         funcId: FuncId,
-        req: UpdateFuncReq,
+        req: FuncUpdateReq,
         responseHandler: (FuncUpdateSubmitted) -> T
     ): T
 
@@ -77,7 +77,7 @@ class FuncAdapter(
 
     override fun <T : Any> invoke(
         flowId: FlowId,
-        req: CreateFuncReq,
+        req: FuncCreateReq,
         responseHandler: (FuncCreateSubmitted) -> T
     ): T {
         val flow = flowQueryRepository.get(flowId)
@@ -104,7 +104,7 @@ class FuncAdapter(
 
     override fun <T : Any> invoke(
         funcId: FuncId,
-        req: InvokeFuncReq,
+        req: FuncInvokeReq,
         responseHandler: (ExecInvokeSubmitted) -> T
     ): T {
         val func = funcQueryRepository.get(funcId)
@@ -125,7 +125,7 @@ class FuncAdapter(
 
     override fun <T : Any> invoke(
         funcId: FuncId,
-        req: InvokeFuncVersionReq,
+        req: FuncInvokeVersionReq,
         responseHandler: (ExecInvokeSubmitted) -> T
     ): T {
         val func = funcQueryRepository.get(funcId)
@@ -173,7 +173,7 @@ class FuncAdapter(
 
     override fun <T : Any> invoke(
         funcId: FuncId,
-        req: UpdateFuncReq,
+        req: FuncUpdateReq,
         responseHandler: (FuncUpdateSubmitted) -> T
     ): T {
         ensureFuncExists(funcId)

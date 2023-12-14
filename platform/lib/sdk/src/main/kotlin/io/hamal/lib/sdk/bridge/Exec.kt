@@ -7,8 +7,8 @@ import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.fold
-import io.hamal.request.CompleteExecReq
-import io.hamal.request.FailExecReq
+import io.hamal.request.ExecCompleteReq
+import io.hamal.request.ExecFailReq
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -16,7 +16,7 @@ data class BridgeExecCompleteReq(
     override val result: ExecResult,
     override val state: ExecState,
     override val events: List<EventToSubmit>
-) : CompleteExecReq
+) : ExecCompleteReq
 
 @Serializable
 data class BridgeExecCompleteSubmitted(
@@ -28,7 +28,7 @@ data class BridgeExecCompleteSubmitted(
 @Serializable
 data class BridgeExecFailReq(
     override val result: ExecResult
-) : FailExecReq
+) : ExecFailReq
 
 
 @Serializable

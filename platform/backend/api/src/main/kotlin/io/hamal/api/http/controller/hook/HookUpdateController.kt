@@ -5,7 +5,7 @@ import io.hamal.core.adapter.HookUpdatePort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.HookId
 import io.hamal.lib.sdk.api.ApiSubmitted
-import io.hamal.lib.sdk.api.ApiUpdateHookReq
+import io.hamal.lib.sdk.api.ApiHookUpdateReq
 import io.hamal.repository.api.submitted_req.HookUpdateSubmitted
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PatchMapping
@@ -21,7 +21,7 @@ internal class HookUpdateController(
     @PatchMapping("/v1/hooks/{hookId}")
     fun createHook(
         @PathVariable("hookId") hookId: HookId,
-        @RequestBody req: ApiUpdateHookReq
+        @RequestBody req: ApiHookUpdateReq
     ): ResponseEntity<ApiSubmitted> = retry {
         updateHook(hookId, req, HookUpdateSubmitted::accepted)
     }

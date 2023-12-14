@@ -10,8 +10,8 @@ import io.hamal.repository.api.ExecQueryRepository.ExecQuery
 import io.hamal.repository.api.ReqCmdRepository
 import io.hamal.repository.api.submitted_req.ExecCompleteSubmitted
 import io.hamal.repository.api.submitted_req.ExecFailSubmitted
-import io.hamal.request.CompleteExecReq
-import io.hamal.request.FailExecReq
+import io.hamal.request.ExecCompleteReq
+import io.hamal.request.ExecFailReq
 import org.springframework.stereotype.Component
 
 interface ExecGetPort {
@@ -25,7 +25,7 @@ interface ExecListPort {
 interface ExecCompletePort {
     operator fun <T : Any> invoke(
         execId: ExecId,
-        req: CompleteExecReq,
+        req: ExecCompleteReq,
         responseHandler: (ExecCompleteSubmitted) -> T
     ): T
 }
@@ -33,7 +33,7 @@ interface ExecCompletePort {
 interface ExecFailPort {
     operator fun <T : Any> invoke(
         execId: ExecId,
-        req: FailExecReq,
+        req: ExecFailReq,
         responseHandler: (ExecFailSubmitted) -> T
     ): T
 }
@@ -55,7 +55,7 @@ class ExecAdapter(
 
     override fun <T : Any> invoke(
         execId: ExecId,
-        req: CompleteExecReq,
+        req: ExecCompleteReq,
         responseHandler: (ExecCompleteSubmitted) -> T
     ): T {
         val exec = execQueryRepository.get(execId)
@@ -69,7 +69,7 @@ class ExecAdapter(
         ).also(reqCmdRepository::queue).let(responseHandler)
     }
 
-    override fun <T : Any> invoke(execId: ExecId, req: FailExecReq, responseHandler: (ExecFailSubmitted) -> T): T {
+    override fun <T : Any> invoke(execId: ExecId, req: ExecFailReq, responseHandler: (ExecFailSubmitted) -> T): T {
         val exec = execQueryRepository.get(execId)
         return ExecFailSubmitted(
             id = generateDomainId(::ReqId),

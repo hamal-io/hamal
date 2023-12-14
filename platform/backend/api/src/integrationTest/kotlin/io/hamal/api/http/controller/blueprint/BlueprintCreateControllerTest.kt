@@ -5,7 +5,7 @@ import io.hamal.lib.domain.vo.BlueprintName
 import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.api.ApiCreateBlueprintReq
+import io.hamal.lib.sdk.api.ApiBlueprintCreateReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -15,7 +15,7 @@ internal class BlueprintCreateControllerTest : BlueprintBaseControllerTest() {
     @Test
     fun `Creates blueprint`() {
         val res = createBlueprint(
-            ApiCreateBlueprintReq(
+            ApiBlueprintCreateReq(
                 name = BlueprintName("TestBlueprint"),
                 inputs = BlueprintInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
                 value = CodeValue("13 + 37")

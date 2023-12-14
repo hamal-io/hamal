@@ -11,7 +11,7 @@ fun Submitted.accepted(): ResponseEntity<ApiSubmitted> =
 fun Submitted.toApiSubmitted(): ApiSubmitted = when (this) {
     is AccountCreateSubmitted -> ApiTokenSubmitted(id, status, accountId, listOf(groupId), mapOf(groupId to flowId), token)
     is AccountCreateAnonymousSubmitted -> ApiTokenSubmitted(id, status, accountId, listOf(groupId), mapOf(groupId to flowId), token)
-    is AccountConvertSubmitted -> ApiConvertAccountSubmitted(id, status, accountId, token)
+    is AccountConvertSubmitted -> ApiAccountConvertSubmitted(id, status, accountId, token)
     is AuthLoginMetaMaskSubmitted -> ApiTokenSubmitted(id, status, accountId, groupIds, defaultFlowIds, token)
     is AuthLoginEmailSubmitted -> ApiTokenSubmitted(id, status, accountId, groupIds, defaultFlowIds, token)
     is BlueprintCreateSubmitted -> ApiBlueprintCreateSubmitted(id, status, blueprintId, groupId)

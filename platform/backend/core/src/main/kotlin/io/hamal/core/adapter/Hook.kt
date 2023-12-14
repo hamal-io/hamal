@@ -9,14 +9,14 @@ import io.hamal.repository.api.*
 import io.hamal.repository.api.HookQueryRepository.HookQuery
 import io.hamal.repository.api.submitted_req.HookCreateSubmitted
 import io.hamal.repository.api.submitted_req.HookUpdateSubmitted
-import io.hamal.request.CreateHookReq
-import io.hamal.request.UpdateHookReq
+import io.hamal.request.HookCreateReq
+import io.hamal.request.HookUpdateReq
 import org.springframework.stereotype.Component
 
 interface HookCreatePort {
     operator fun <T : Any> invoke(
         flowId: FlowId,
-        req: CreateHookReq,
+        req: HookCreateReq,
         responseHandler: (HookCreateSubmitted) -> T
     ): T
 }
@@ -32,7 +32,7 @@ interface HookListPort {
 interface HookUpdatePort {
     operator fun <T : Any> invoke(
         hookId: HookId,
-        req: UpdateHookReq,
+        req: HookUpdateReq,
         responseHandler: (HookUpdateSubmitted) -> T
     ): T
 }
@@ -48,7 +48,7 @@ class HookAdapter(
 ) : HookPort {
     override fun <T : Any> invoke(
         flowId: FlowId,
-        req: CreateHookReq,
+        req: HookCreateReq,
         responseHandler: (HookCreateSubmitted) -> T
     ): T {
         val flow = flowQueryRepository.get(flowId)
@@ -81,7 +81,7 @@ class HookAdapter(
 
     override fun <T : Any> invoke(
         hookId: HookId,
-        req: UpdateHookReq,
+        req: HookUpdateReq,
         responseHandler: (HookUpdateSubmitted) -> T
     ): T {
         ensureHookExists(hookId)

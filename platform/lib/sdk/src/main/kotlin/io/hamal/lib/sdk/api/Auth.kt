@@ -3,15 +3,15 @@ package io.hamal.lib.sdk.api
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpTemplate
-import io.hamal.request.ChallengeMetaMaskReq
-import io.hamal.request.LogInEmailReq
-import io.hamal.request.LogInMetaMaskReq
+import io.hamal.request.AuthChallengeMetaMaskReq
+import io.hamal.request.AuthLogInEmailReq
+import io.hamal.request.AuthLogInMetaMaskReq
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ApiChallengeMetaMaskReq(
+data class ApiAuthChallengeMetaMaskReq(
     override val address: Web3Address,
-) : ChallengeMetaMaskReq
+) : AuthChallengeMetaMaskReq
 
 
 @Serializable
@@ -20,16 +20,16 @@ data class ApiChallengeMetaMask(
 )
 
 @Serializable
-data class ApiLoginMetaMaskReq(
+data class ApiAuthLoginMetaMaskReq(
     override val address: Web3Address,
     override val signature: Web3Signature
-) : LogInMetaMaskReq
+) : AuthLogInMetaMaskReq
 
 @Serializable
-data class ApiLoginEmailReq(
+data class ApiAuthLoginEmailReq(
     override val email: Email,
     override val password: Password
-) : LogInEmailReq
+) : AuthLogInEmailReq
 
 @Serializable
 data class ApiTokenSubmitted(
@@ -42,7 +42,7 @@ data class ApiTokenSubmitted(
 ) : ApiSubmitted
 
 @Serializable
-data class ApiConvertAccountSubmitted(
+data class ApiAccountConvertSubmitted(
     override val id: ReqId,
     override val status: ReqStatus,
     val accountId: AccountId,

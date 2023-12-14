@@ -11,14 +11,14 @@ import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.repository.api.log.Topic
 import io.hamal.repository.api.submitted_req.TriggerCreateSubmitted
 import io.hamal.repository.api.submitted_req.TriggerStatusSubmitted
-import io.hamal.request.CreateTriggerReq
+import io.hamal.request.TriggerCreateReq
 import org.springframework.stereotype.Component
 
 
 interface TriggerCreatePort {
     operator fun <T : Any> invoke(
         flowId: FlowId,
-        req: CreateTriggerReq,
+        req: TriggerCreateReq,
         responseHandler: (TriggerCreateSubmitted) -> T
     ): T
 }
@@ -66,7 +66,7 @@ class TriggerAdapter(
 ) : TriggerPort {
     override fun <T : Any> invoke(
         flowId: FlowId,
-        req: CreateTriggerReq,
+        req: TriggerCreateReq,
         responseHandler: (TriggerCreateSubmitted) -> T
     ): T {
         ensureFuncExists(req)
@@ -160,18 +160,18 @@ class TriggerAdapter(
         ).also(reqCmdRepository::queue).let(responseHandler)
     }
 
-    private fun ensureFuncExists(createTrigger: CreateTriggerReq) {
+    private fun ensureFuncExists(createTrigger: TriggerCreateReq) {
         funcQueryRepository.get(createTrigger.funcId)
     }
 
-    private fun ensureEvent(createTrigger: CreateTriggerReq) {
+    private fun ensureEvent(createTrigger: TriggerCreateReq) {
         if (createTrigger.type == TriggerType.Event) {
             requireNotNull(createTrigger.topicId) { "topicId is missing" }
             eventBrokerRepository.getTopic(createTrigger.topicId!!)
         }
     }
 
-    private fun ensureHook(createTrigger: CreateTriggerReq) {
+    private fun ensureHook(createTrigger: TriggerCreateReq) {
         if (createTrigger.type == TriggerType.Hook) {
             requireNotNull(createTrigger.hookId) { "hookId is missing" }
             requireNotNull(createTrigger.hookMethod) { "hookMethod is missing" }

@@ -5,7 +5,7 @@ import io.hamal.core.adapter.EndpointUpdatePort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.EndpointId
 import io.hamal.lib.sdk.api.ApiSubmitted
-import io.hamal.lib.sdk.api.ApiUpdateEndpointReq
+import io.hamal.lib.sdk.api.ApiEndpointUpdateReq
 import io.hamal.repository.api.submitted_req.EndpointUpdateSubmitted
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PatchMapping
@@ -21,7 +21,7 @@ internal class EndpointUpdateController(
     @PatchMapping("/v1/endpoints/{endpointId}")
     fun createEndpoint(
         @PathVariable("endpointId") endpointId: EndpointId,
-        @RequestBody req: ApiUpdateEndpointReq
+        @RequestBody req: ApiEndpointUpdateReq
     ): ResponseEntity<ApiSubmitted> = retry {
         updateEndpoint(endpointId, req, EndpointUpdateSubmitted::accepted)
     }

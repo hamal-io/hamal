@@ -2,7 +2,7 @@ package io.hamal.api.http.controller.auth
 
 import io.hamal.api.http.controller.accepted
 import io.hamal.core.adapter.AuthLoginEmailPort
-import io.hamal.lib.sdk.api.ApiLoginEmailReq
+import io.hamal.lib.sdk.api.ApiAuthLoginEmailReq
 import io.hamal.lib.sdk.api.ApiSubmitted
 import io.hamal.repository.api.submitted_req.AuthLoginEmailSubmitted
 import org.springframework.http.ResponseEntity
@@ -15,7 +15,7 @@ internal class AuthLoginEmailController(
     private val login: AuthLoginEmailPort
 ) {
     @PostMapping("/v1/login")
-    fun login(@RequestBody req: ApiLoginEmailReq): ResponseEntity<ApiSubmitted> {
+    fun login(@RequestBody req: ApiAuthLoginEmailReq): ResponseEntity<ApiSubmitted> {
         return login(req, AuthLoginEmailSubmitted::accepted)
     }
 }

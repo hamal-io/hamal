@@ -11,15 +11,15 @@ import io.hamal.repository.api.BlueprintQueryRepository
 import io.hamal.repository.api.ReqCmdRepository
 import io.hamal.repository.api.submitted_req.BlueprintCreateSubmitted
 import io.hamal.repository.api.submitted_req.BlueprintUpdateSubmitted
-import io.hamal.request.CreateBlueprintReq
-import io.hamal.request.UpdateBlueprintReq
+import io.hamal.request.BlueprintCreateReq
+import io.hamal.request.BlueprintUpdateReq
 import org.springframework.stereotype.Component
 
 interface BlueprintCreatePort {
     operator fun <T : Any> invoke(
         groupId: GroupId,
         accountId: AccountId,
-        req: CreateBlueprintReq,
+        req: BlueprintCreateReq,
         responseHandler: (BlueprintCreateSubmitted) -> T
     ): T
 }
@@ -31,7 +31,7 @@ interface BlueprintGetPort {
 interface BlueprintUpdatePort {
     operator fun <T : Any> invoke(
         bpId: BlueprintId,
-        req: UpdateBlueprintReq,
+        req: BlueprintUpdateReq,
         responseHandler: (BlueprintUpdateSubmitted) -> T
     ): T
 }
@@ -47,7 +47,7 @@ class BlueprintAdapter(
     override fun <T : Any> invoke(
         groupId: GroupId,
         accountId: AccountId,
-        req: CreateBlueprintReq,
+        req: BlueprintCreateReq,
         responseHandler: (BlueprintCreateSubmitted) -> T
     ): T {
         return BlueprintCreateSubmitted(
@@ -68,7 +68,7 @@ class BlueprintAdapter(
 
     override fun <T : Any> invoke(
         bpId: BlueprintId,
-        req: UpdateBlueprintReq,
+        req: BlueprintUpdateReq,
         responseHandler: (BlueprintUpdateSubmitted) -> T
     ): T {
         ensureBlueprintExists(bpId)

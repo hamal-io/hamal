@@ -5,11 +5,11 @@ import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 
 
-interface CreateTopicReq {
+interface TopicCreateReq {
     val name: TopicName
 }
 
-interface AppendEntryReq {
+interface TopicAppendEntryReq {
     val topicId: TopicId
     val payload: TopicEntryPayload
 }

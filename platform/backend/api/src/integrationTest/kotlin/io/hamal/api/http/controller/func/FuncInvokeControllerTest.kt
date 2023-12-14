@@ -108,7 +108,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
 
         val invocationResponse =
             httpTemplate.post("/v1/funcs/{funcId}/invoke").path("funcId", createResponse.funcId).body(
-                    ApiInvokeFuncVersionReq(
+                    ApiFuncInvokeVersionReq(
                         correlationId = CorrelationId("some-correlation-id"),
                         inputs = InvocationInputs(),
                         version = CodeVersion(5)
@@ -148,7 +148,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
 
         val invocationResponse =
             httpTemplate.post("/v1/funcs/{funcId}/invoke").path("funcId", createResponse.funcId).body(
-                    ApiInvokeFuncVersionReq(
+                    ApiFuncInvokeVersionReq(
                         correlationId = CorrelationId("some-correlation-id"),
                         inputs = InvocationInputs(),
                         version = null
@@ -178,7 +178,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
 
         val invocationResponse =
             httpTemplate.post("/v1/funcs/{funcId}/invoke").path("funcId", createResponse.funcId).body(
-                    ApiInvokeFuncVersionReq(
+                    ApiFuncInvokeVersionReq(
                         correlationId = CorrelationId("some-correlation-id"),
                         inputs = InvocationInputs(),
                         version = CodeVersion(10)

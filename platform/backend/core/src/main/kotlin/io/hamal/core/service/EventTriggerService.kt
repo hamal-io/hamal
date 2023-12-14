@@ -14,7 +14,7 @@ import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.repository.api.log.ConsumerId
 import io.hamal.repository.api.log.ProtobufBatchConsumer
 import io.hamal.repository.api.log.TopicEntry
-import io.hamal.request.InvokeFuncReq
+import io.hamal.request.FuncInvokeReq
 import org.springframework.beans.factory.DisposableBean
 import org.springframework.context.ApplicationListener
 import org.springframework.context.event.ContextRefreshedEvent
@@ -60,7 +60,7 @@ internal class EventTriggerService(
                             consumer.consumeBatch(1) { entries ->
                                 invokeFunc(
                                     trigger.funcId,
-                                    object : InvokeFuncReq {
+                                    object : FuncInvokeReq {
                                         override val correlationId = trigger.correlationId ?: CorrelationId.default
                                         override val inputs = InvocationInputs()
                                         override val invocation = EventInvocation(entries.map {

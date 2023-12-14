@@ -6,14 +6,14 @@ import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.FlowQueryRepository
 import io.hamal.repository.api.ReqCmdRepository
 import io.hamal.repository.api.submitted_req.ExecInvokeSubmitted
-import io.hamal.request.InvokeAdhocReq
+import io.hamal.request.AdhocInvokeReq
 import org.springframework.stereotype.Component
 
 
 interface AdhocInvokePort {
     operator fun <T : Any> invoke(
         flowId: FlowId,
-        req: InvokeAdhocReq,
+        req: AdhocInvokeReq,
         responseHandler: (ExecInvokeSubmitted) -> T
     ): T
 }
@@ -28,7 +28,7 @@ class AdhocAdapter(
 ) : AdhocPort {
     override operator fun <T : Any> invoke(
         flowId: FlowId,
-        req: InvokeAdhocReq,
+        req: AdhocInvokeReq,
         responseHandler: (ExecInvokeSubmitted) -> T
     ): T {
         val flow = flowQueryRepository.get(flowId)
