@@ -1,5 +1,6 @@
 package io.hamal.runner.config
 
+import io.hamal.extension.net.smtp.SmtpExtensionFactory
 import io.hamal.extension.net.http.HttpExtensionFactory
 import io.hamal.extension.std.decimal.DecimalExtensionFactory
 import io.hamal.extension.std.log.LogExtensionFactory
@@ -12,6 +13,7 @@ import io.hamal.lib.kua.NativeLoader.Preference.Jar
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContext
 import io.hamal.lib.sdk.ApiSdkImpl
+import io.hamal.plugin.net.smtp.SmtpPluginFactory
 import io.hamal.plugin.net.http.HttpPluginFactory
 import io.hamal.plugin.std.debug.DebugPluginFactory
 import io.hamal.plugin.std.log.LogPluginFactory
@@ -54,6 +56,7 @@ class SandboxFactoryDefaultImpl(
 
         return Sandbox(ctx)
             .registerPlugins(
+                SmtpPluginFactory(),
                 HttpPluginFactory(),
                 LogPluginFactory(sdk.execLog),
                 DebugPluginFactory(),
@@ -62,6 +65,7 @@ class SandboxFactoryDefaultImpl(
             )
             .registerExtensions(
                 DecimalExtensionFactory,
+                SmtpExtensionFactory,
                 HttpExtensionFactory,
                 LogExtensionFactory,
                 TelegramExtensionFactory

@@ -3,7 +3,6 @@
 #include <jni.h>
 
 #include "kua_check.h"
-#include "kua_builtin_error.h"
 #include "kua_jni.h"
 #include "kua_builtin.h"
 #include "kua_state.h"
