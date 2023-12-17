@@ -10,14 +10,14 @@ import io.hamal.repository.api.*
 import io.hamal.repository.api.ExtensionQueryRepository.ExtensionQuery
 import io.hamal.repository.api.submitted_req.ExtensionCreateSubmitted
 import io.hamal.repository.api.submitted_req.ExtensionUpdateSubmitted
-import io.hamal.request.CreateExtensionReq
-import io.hamal.request.UpdateExtensionReq
+import io.hamal.request.ExtensionCreateReq
+import io.hamal.request.ExtensionUpdateReq
 import org.springframework.stereotype.Component
 
 interface ExtensionExtensionPort {
     operator fun <T : Any> invoke(
         groupId: GroupId,
-        req: CreateExtensionReq,
+        req: ExtensionCreateReq,
         responseHandler: (ExtensionCreateSubmitted) -> T
     ): T
 }
@@ -36,7 +36,7 @@ interface ExtensionListPort {
 interface ExtensionUpdatePort {
     operator fun <T : Any> invoke(
         extId: ExtensionId,
-        req: UpdateExtensionReq,
+        req: ExtensionUpdateReq,
         responseHandler: (ExtensionUpdateSubmitted) -> T
     ): T
 }
@@ -52,7 +52,7 @@ class ExtensionAdapter(
 ) : ExtensionPort {
     override fun <T : Any> invoke(
         groupId: GroupId,
-        req: CreateExtensionReq,
+        req: ExtensionCreateReq,
         responseHandler: (ExtensionCreateSubmitted) -> T
     ): T {
         return ExtensionCreateSubmitted(
@@ -75,7 +75,7 @@ class ExtensionAdapter(
 
     override fun <T : Any> invoke(
         extId: ExtensionId,
-        req: UpdateExtensionReq,
+        req: ExtensionUpdateReq,
         responseHandler: (ExtensionUpdateSubmitted) -> T
     ): T {
         ensureExtensionExists(extId)

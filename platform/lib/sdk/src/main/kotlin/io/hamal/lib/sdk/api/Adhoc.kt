@@ -5,14 +5,14 @@ import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.domain.vo.FlowId
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
-import io.hamal.request.InvokeAdhocReq
+import io.hamal.request.AdhocInvokeReq
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class ApiAdhocInvokeReq(
     override val inputs: InvocationInputs,
     override val code: CodeValue
-) : InvokeAdhocReq
+) : AdhocInvokeReq
 
 
 interface ApiAdhocService {

@@ -5,16 +5,16 @@ import io.hamal.lib.domain.vo.Password
 import io.hamal.lib.domain.vo.Web3Address
 import io.hamal.lib.domain.vo.Web3Signature
 
-interface LogInEmailReq {
+interface AuthLogInEmailReq {
     val email: Email
     val password: Password
 }
 
-interface ChallengeMetaMaskReq {
+interface AuthChallengeMetaMaskReq {
     val address: Web3Address
 }
 
-interface LogInMetaMaskReq {
+interface AuthLogInMetaMaskReq {
     val address: Web3Address
     val signature: Web3Signature
 }

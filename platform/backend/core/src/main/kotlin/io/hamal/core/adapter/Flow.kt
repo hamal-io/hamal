@@ -12,14 +12,14 @@ import io.hamal.repository.api.FlowQueryRepository.FlowQuery
 import io.hamal.repository.api.ReqCmdRepository
 import io.hamal.repository.api.submitted_req.FlowCreateSubmitted
 import io.hamal.repository.api.submitted_req.FlowUpdateSubmitted
-import io.hamal.request.CreateFlowReq
-import io.hamal.request.UpdateFlowReq
+import io.hamal.request.FlowCreateReq
+import io.hamal.request.FlowUpdateReq
 import org.springframework.stereotype.Component
 
 interface FlowCreatePort {
     operator fun <T : Any> invoke(
         groupId: GroupId,
-        req: CreateFlowReq,
+        req: FlowCreateReq,
         responseHandler: (FlowCreateSubmitted) -> T
     ): T
 }
@@ -36,7 +36,7 @@ interface FlowListPort {
 interface FlowUpdatePort {
     operator fun <T : Any> invoke(
         flowId: FlowId,
-        req: UpdateFlowReq,
+        req: FlowUpdateReq,
         responseHandler: (FlowUpdateSubmitted) -> T
     ): T
 }
@@ -52,7 +52,7 @@ class FlowAdapter(
 
     override fun <T : Any> invoke(
         groupId: GroupId,
-        req: CreateFlowReq,
+        req: FlowCreateReq,
         responseHandler: (FlowCreateSubmitted) -> T
     ): T {
         return FlowCreateSubmitted(
@@ -75,7 +75,7 @@ class FlowAdapter(
 
     override operator fun <T : Any> invoke(
         flowId: FlowId,
-        req: UpdateFlowReq,
+        req: FlowUpdateReq,
         responseHandler: (FlowUpdateSubmitted) -> T
     ): T {
         ensureFlowExists(flowId)

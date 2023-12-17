@@ -5,21 +5,21 @@ import io.hamal.lib.domain.vo.Email
 import io.hamal.lib.domain.vo.Password
 import io.hamal.lib.domain.vo.Web3Address
 
-interface CreateAccountReq {
+interface AccountCreateReq {
     val email: Email
     val password: Password
 }
 
-interface CreateAnonymousAccountReq {
+interface AccountCreateAnonymousReq {
     val id: AccountId
 }
 
-interface CreateMetaMaskAccountReq {
+interface AccountCreateMetaMaskReq {
     val id: AccountId
     val address: Web3Address
 }
 
-interface ConvertAnonymousAccountReq {
+interface AccountConvertAnonymousReq {
     val email: Email
     val password: Password
 }

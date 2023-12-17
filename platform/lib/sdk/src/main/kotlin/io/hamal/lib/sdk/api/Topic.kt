@@ -10,14 +10,14 @@ import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiTopicService.TopicQuery
 import io.hamal.lib.sdk.fold
-import io.hamal.request.AppendEntryReq
-import io.hamal.request.CreateTopicReq
+import io.hamal.request.TopicAppendEntryReq
+import io.hamal.request.TopicCreateReq
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class ApiTopicCreateReq(
     override val name: TopicName
-) : CreateTopicReq
+) : TopicCreateReq
 
 @Serializable
 data class ApiTopicCreateSubmitted(
@@ -33,7 +33,7 @@ data class ApiTopicCreateSubmitted(
 data class ApiTopicAppendEntryReq(
     override val topicId: TopicId,
     override val payload: TopicEntryPayload
-) : AppendEntryReq
+) : TopicAppendEntryReq
 
 @Serializable
 data class ApiTopicAppendSubmitted(

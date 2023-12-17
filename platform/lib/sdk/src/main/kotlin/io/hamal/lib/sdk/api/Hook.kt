@@ -9,14 +9,14 @@ import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiHookService.HookQuery
 import io.hamal.lib.sdk.fold
-import io.hamal.request.CreateHookReq
-import io.hamal.request.UpdateHookReq
+import io.hamal.request.HookCreateReq
+import io.hamal.request.HookUpdateReq
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class ApiHookCreateReq(
     override val name: HookName
-) : CreateHookReq
+) : HookCreateReq
 
 @Serializable
 data class ApiHookCreateSubmitted(
@@ -29,9 +29,9 @@ data class ApiHookCreateSubmitted(
 
 
 @Serializable
-data class ApiUpdateHookReq(
+data class ApiHookUpdateReq(
     override val name: HookName? = null
-) : UpdateHookReq
+) : HookUpdateReq
 
 @Serializable
 data class ApiHookUpdateSubmitted(

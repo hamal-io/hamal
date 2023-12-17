@@ -11,7 +11,7 @@ import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.ApiSdk
-import io.hamal.lib.sdk.api.ApiInvokeFuncVersionReq
+import io.hamal.lib.sdk.api.ApiFuncInvokeVersionReq
 
 class FuncInvokeFunction(
     private val sdk: ApiSdk
@@ -36,7 +36,7 @@ class FuncInvokeFunction(
 
             val res = sdk.func.invoke(
                 FuncId(SnowflakeId(arg1.getString("id"))),
-                ApiInvokeFuncVersionReq(
+                ApiFuncInvokeVersionReq(
                     correlationId = correlationId,
                     inputs = InvocationInputs(),
                     version = version

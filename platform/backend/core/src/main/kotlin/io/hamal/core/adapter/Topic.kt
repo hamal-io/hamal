@@ -14,13 +14,13 @@ import io.hamal.repository.api.log.Topic
 import io.hamal.repository.api.log.TopicEntry
 import io.hamal.repository.api.submitted_req.TopicAppendToSubmitted
 import io.hamal.repository.api.submitted_req.TopicCreateSubmitted
-import io.hamal.request.AppendEntryReq
-import io.hamal.request.CreateTopicReq
+import io.hamal.request.TopicAppendEntryReq
+import io.hamal.request.TopicCreateReq
 import org.springframework.stereotype.Component
 
 interface TopicAppendEntryPort {
     operator fun <T : Any> invoke(
-        req: AppendEntryReq,
+        req: TopicAppendEntryReq,
         responseHandler: (TopicAppendToSubmitted) -> T
     ): T
 }
@@ -28,7 +28,7 @@ interface TopicAppendEntryPort {
 interface TopicCreatePort {
     operator fun <T : Any> invoke(
         flowId: FlowId,
-        req: CreateTopicReq,
+        req: TopicCreateReq,
         responseHandler: (TopicCreateSubmitted) -> T
     ): T
 }
@@ -67,7 +67,7 @@ class TopicAdapter(
 ) : TopicPort {
 
     override fun <T : Any> invoke(
-        req: AppendEntryReq,
+        req: TopicAppendEntryReq,
         responseHandler: (TopicAppendToSubmitted) -> T
     ): T {
         val topic = eventBrokerRepository.getTopic(req.topicId)
@@ -82,7 +82,7 @@ class TopicAdapter(
 
     override fun <T : Any> invoke(
         flowId: FlowId,
-        req: CreateTopicReq,
+        req: TopicCreateReq,
         responseHandler: (TopicCreateSubmitted) -> T
     ): T {
         val flow = flowQueryRepository.get(flowId)
