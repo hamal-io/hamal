@@ -3,7 +3,8 @@ package io.hamal.plugin.net.smtp
 import AbstractRunnerTest
 import TestFailConnector
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.*
+import org.hamcrest.Matchers.containsString
+import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
 
@@ -71,30 +72,45 @@ internal object PluginSmtpTest : AbstractRunnerTest() {
     }
 
     @Test
-    fun `UTF-8 as default encoding`() {
+    fun `default_encoding is required`() {
         val fakeSender = FakeSender()
 
-        createTestRunner(pluginFactories = listOf(PluginSmtpFactory(fakeSender))).run(
+        createTestRunner(
+            pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
+            connector = TestFailConnector { _, result ->
+                assertThat(result.value.getString("message"), containsString("default_encoding not set"))
+            }
+        ).run(
             unitOfWork(
                 """
             test_instance = require_plugin('net.smtp')
             
             test_instance.send({
                 default_encoding = nil,
-                
                 host =  'host',
+                port =  123,
+                username =  'username',
+                password =  'password',
+                protocol =  'protocol',
+                debug =  true,
+                enable_starttls =  true,
+                test_connection =  true,
+
                 from =  'from',
                 to =  'to',
                 subject =  'subject',
                 content =  'content',
+                content_type =  'content_type',
+                priority =  42,
+
+                connection_timeout =   1000,
+                timeout =  2000,
+                write_timeout =  3000
             })
 
         """.trimIndent()
             )
         )
-
-        val config = fakeSender.config
-        assertThat(config.defaultEncoding, equalTo("UTF-8"))
     }
 
     @Test
@@ -112,11 +128,26 @@ internal object PluginSmtpTest : AbstractRunnerTest() {
             test_instance = require_plugin('net.smtp')
             
             test_instance.send({
-                host = nil,
+               default_encoding = 'default_encoding',
+                host =  nil,
+                port =  123,
+                username =  'username',
+                password =  'password',
+                protocol =  'protocol',
+                debug =  true,
+                enable_starttls =  true,
+                test_connection =  true,
+
                 from =  'from',
                 to =  'to',
                 subject =  'subject',
                 content =  'content',
+                content_type =  'content_type',
+                priority =  42,
+
+                connection_timeout =   1000,
+                timeout =  2000,
+                write_timeout =  3000
             })
 
         """.trimIndent()
@@ -125,28 +156,45 @@ internal object PluginSmtpTest : AbstractRunnerTest() {
     }
 
     @Test
-    fun `default port is 25`() {
+    fun `port is required`() {
         val fakeSender = FakeSender()
 
-        createTestRunner(pluginFactories = listOf(PluginSmtpFactory(fakeSender))).run(
+        createTestRunner(
+            pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
+            connector = TestFailConnector { _, result ->
+                assertThat(result.value.getString("message"), containsString("port not set"))
+            }
+        ).run(
             unitOfWork(
                 """
             test_instance = require_plugin('net.smtp')
             
             test_instance.send({
+                default_encoding = 'default_encoding',
                 host =  'host',
+                port =  nil,
+                username =  'username',
+                password =  'password',
+                protocol =  'protocol',
+                debug =  true,
+                enable_starttls =  true,
+                test_connection =  true,
+
                 from =  'from',
                 to =  'to',
                 subject =  'subject',
                 content =  'content',
+                content_type =  'content_type',
+                priority =  42,
+
+                connection_timeout =   1000,
+                timeout =  2000,
+                write_timeout =  3000
             })
 
         """.trimIndent()
             )
         )
-
-        val config = fakeSender.config
-        assertThat(config.port, equalTo(25))
     }
 
     @Test
@@ -159,21 +207,31 @@ internal object PluginSmtpTest : AbstractRunnerTest() {
             test_instance = require_plugin('net.smtp')
             
             test_instance.send({
-                username = nil,
-                
+               default_encoding = 'default_encoding',
                 host =  'host',
+                port =  123,
+                username =  nil,
+                password =  'password',
+                protocol =  'protocol',
+                debug =  true,
+                enable_starttls =  true,
+                test_connection =  true,
+
                 from =  'from',
                 to =  'to',
                 subject =  'subject',
                 content =  'content',
+                content_type =  'content_type',
+                priority =  42,
+
+                connection_timeout =   1000,
+                timeout =  2000,
+                write_timeout =  3000
             })
 
         """.trimIndent()
             )
         )
-
-        val config = fakeSender.config
-        assertThat(config.username, nullValue())
     }
 
     @Test
@@ -186,129 +244,198 @@ internal object PluginSmtpTest : AbstractRunnerTest() {
             test_instance = require_plugin('net.smtp')
             
             test_instance.send({
-                password = nil,
-                
+                default_encoding = 'default_encoding',
                 host =  'host',
+                port =  123,
+                username =  'username',
+                password =  nil,
+                protocol =  'protocol',
+                debug =  true,
+                enable_starttls =  true,
+                test_connection =  true,
+
                 from =  'from',
                 to =  'to',
                 subject =  'subject',
                 content =  'content',
+                content_type =  'content_type',
+                priority =  42,
+
+                connection_timeout =   1000,
+                timeout =  2000,
+                write_timeout =  3000
             })
 
         """.trimIndent()
             )
         )
-
-        val config = fakeSender.config
-        assertThat(config.password, nullValue())
     }
 
     @Test
-    fun `default protocol is smtp`() {
+    fun `protocol is required`() {
         val fakeSender = FakeSender()
 
-        createTestRunner(pluginFactories = listOf(PluginSmtpFactory(fakeSender))).run(
+        createTestRunner(
+            pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
+            connector = TestFailConnector { _, result ->
+                assertThat(result.value.getString("message"), containsString("protocol not set"))
+            }
+        ).run(
             unitOfWork(
                 """
             test_instance = require_plugin('net.smtp')
             
             test_instance.send({
-                protocol = nil,
-                
+                default_encoding = 'default_encoding',
                 host =  'host',
+                port =  123,
+                username =  'username',
+                password =  'password',
+                protocol =  nil,
+                debug =  true,
+                enable_starttls =  true,
+                test_connection =  true,
+
                 from =  'from',
                 to =  'to',
                 subject =  'subject',
                 content =  'content',
+                content_type =  'content_type',
+                priority =  42,
+
+                connection_timeout =   1000,
+                timeout =  2000,
+                write_timeout =  3000
             })
 
         """.trimIndent()
             )
         )
-
-        val config = fakeSender.config
-        assertThat(config.protocol, equalTo("smtp"))
     }
 
     @Test
-    fun `default debug is false`() {
+    fun `debug is required`() {
         val fakeSender = FakeSender()
 
-        createTestRunner(pluginFactories = listOf(PluginSmtpFactory(fakeSender))).run(
+        createTestRunner(
+            pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
+            connector = TestFailConnector { _, result ->
+                assertThat(result.value.getString("message"), containsString("debug not set"))
+            }
+        ).run(
             unitOfWork(
                 """
             test_instance = require_plugin('net.smtp')
             
             test_instance.send({
-                debug = nil,
-                
+                default_encoding = 'default_encoding',
                 host =  'host',
+                port =  123,
+                username =  'username',
+                password =  'password',
+                protocol =  'protocol',
+                debug =  nil,
+                enable_starttls =  true,
+                test_connection =  true,
+
                 from =  'from',
                 to =  'to',
                 subject =  'subject',
                 content =  'content',
+                content_type =  'content_type',
+                priority =  42,
+
+                connection_timeout =   1000,
+                timeout =  2000,
+                write_timeout =  3000
             })
 
         """.trimIndent()
             )
         )
-
-        val config = fakeSender.config
-        assertThat(config.debug, equalTo(false))
     }
 
     @Test
-    fun `default enable_starttls is false`() {
+    fun `enable_starttls is required`() {
         val fakeSender = FakeSender()
 
-        createTestRunner(pluginFactories = listOf(PluginSmtpFactory(fakeSender))).run(
+        createTestRunner(
+            pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
+            connector = TestFailConnector { _, result ->
+                assertThat(result.value.getString("message"), containsString("enable_starttls not set"))
+            }
+        ).run(
             unitOfWork(
                 """
             test_instance = require_plugin('net.smtp')
             
             test_instance.send({
-                enable_starttls = nil,
-                
+                default_encoding = 'default_encoding',
                 host =  'host',
+                port =  123,
+                username =  'username',
+                password =  'password',
+                protocol =  'protocol',
+                debug =  true,
+                enable_starttls =  nil,
+                test_connection =  true,
+
                 from =  'from',
                 to =  'to',
                 subject =  'subject',
                 content =  'content',
+                content_type =  'content_type',
+                priority =  42,
+
+                connection_timeout =   1000,
+                timeout =  2000,
+                write_timeout =  3000
             })
 
         """.trimIndent()
             )
         )
-
-        val config = fakeSender.config
-        assertThat(config.enableStarttls, equalTo(false))
     }
 
     @Test
-    fun `default test connection is false`() {
+    fun `test_connection is required`() {
         val fakeSender = FakeSender()
 
-        createTestRunner(pluginFactories = listOf(PluginSmtpFactory(fakeSender))).run(
+        createTestRunner(
+            pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
+            connector = TestFailConnector { _, result ->
+                assertThat(result.value.getString("message"), containsString("test_connection not set"))
+            }).run(
             unitOfWork(
                 """
             test_instance = require_plugin('net.smtp')
             
             test_instance.send({
-                test_connection = nil,
-                
+                default_encoding = 'default_encoding',
                 host =  'host',
+                port =  123,
+                username =  'username',
+                password =  'password',
+                protocol =  'protocol',
+                debug =  true,
+                enable_starttls =  true,
+                test_connection =  nil,
+
                 from =  'from',
                 to =  'to',
                 subject =  'subject',
                 content =  'content',
+                content_type =  'content_type',
+                priority =  42,
+
+                connection_timeout =   1000,
+                timeout =  2000,
+                write_timeout =  3000
             })
 
         """.trimIndent()
             )
         )
-
-        val config = fakeSender.config
-        assertThat(config.testConnection, equalTo(false))
     }
 
     @Test
@@ -326,12 +453,26 @@ internal object PluginSmtpTest : AbstractRunnerTest() {
             test_instance = require_plugin('net.smtp')
             
             test_instance.send({
+                default_encoding = 'default_encoding',
+                host =  'host',
+                port =  123,
+                username =  'username',
+                password =  'password',
+                protocol =  'protocol',
+                debug =  true,
+                enable_starttls =  true,
+                test_connection =  true,
+
                 from =  nil,
-            
-                host = 'host',
                 to =  'to',
                 subject =  'subject',
                 content =  'content',
+                content_type =  'content_type',
+                priority =  42,
+
+                connection_timeout =   1000,
+                timeout =  2000,
+                write_timeout =  3000
             })
 
         """.trimIndent()
@@ -354,12 +495,26 @@ internal object PluginSmtpTest : AbstractRunnerTest() {
             test_instance = require_plugin('net.smtp')
             
             test_instance.send({
-                to = nil,
-                
-                host = 'host',
+                default_encoding = 'default_encoding',
+                host =  'host',
+                port =  123,
+                username =  'username',
+                password =  'password',
+                protocol =  'protocol',
+                debug =  true,
+                enable_starttls =  true,
+                test_connection =  true,
+
                 from =  'from',
+                to =  nil,
                 subject =  'subject',
                 content =  'content',
+                content_type =  'content_type',
+                priority =  42,
+
+                connection_timeout =   1000,
+                timeout =  2000,
+                write_timeout =  3000
             })
 
         """.trimIndent()
@@ -382,12 +537,26 @@ internal object PluginSmtpTest : AbstractRunnerTest() {
             test_instance = require_plugin('net.smtp')
             
             test_instance.send({
-                subject = nil,
-                
-                host = 'host',
+                default_encoding = 'default_encoding',
+                host =  'host',
+                port =  123,
+                username =  'username',
+                password =  'password',
+                protocol =  'protocol',
+                debug =  true,
+                enable_starttls =  true,
+                test_connection =  true,
+
                 from =  'from',
                 to =  'to',
+                subject =  nil,
                 content =  'content',
+                content_type =  'content_type',
+                priority =  42,
+
+                connection_timeout =   1000,
+                timeout =  2000,
+                write_timeout =  3000
             })
 
         """.trimIndent()
@@ -410,12 +579,26 @@ internal object PluginSmtpTest : AbstractRunnerTest() {
             test_instance = require_plugin('net.smtp')
             
             test_instance.send({
-                content = nil,
-                
-                host = 'host',
+                default_encoding = 'default_encoding',
+                host =  'host',
+                port =  123,
+                username =  'username',
+                password =  'password',
+                protocol =  'protocol',
+                debug =  true,
+                enable_starttls =  true,
+                test_connection =  true,
+
                 from =  'from',
                 to =  'to',
-                subject =  'subject'
+                subject =  'subject',
+                content =  nil,
+                content_type =  'content_type',
+                priority =  42,
+
+                connection_timeout =   1000,
+                timeout =  2000,
+                write_timeout =  3000
             })
 
         """.trimIndent()
@@ -424,138 +607,213 @@ internal object PluginSmtpTest : AbstractRunnerTest() {
     }
 
     @Test
-    fun `default content_type is text_plain`() {
+    fun `content_type is required`() {
         val fakeSender = FakeSender()
 
-        createTestRunner(pluginFactories = listOf(PluginSmtpFactory(fakeSender))).run(
+        createTestRunner(
+            pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
+            connector = TestFailConnector { _, result ->
+                assertThat(result.value.getString("message"), containsString("content_type not set"))
+            }
+        ).run(
             unitOfWork(
                 """
             test_instance = require_plugin('net.smtp')
             
             test_instance.send({
-                content_type = nil,
-                
+                default_encoding = 'default_encoding',
                 host =  'host',
+                port =  123,
+                username =  'username',
+                password =  'password',
+                protocol =  'protocol',
+                debug =  true,
+                enable_starttls =  true,
+                test_connection =  true,
+
                 from =  'from',
                 to =  'to',
                 subject =  'subject',
                 content =  'content',
+                content_type =  nil,
+                priority =  42,
+
+                connection_timeout =   1000,
+                timeout =  2000,
+                write_timeout =  3000
             })
 
         """.trimIndent()
             )
         )
-
-        val message = fakeSender.message
-        assertThat(message.contentType, equalTo("text/plain"))
     }
 
     @Test
-    fun `default priority is 1`() {
+    fun `priority is required`() {
         val fakeSender = FakeSender()
 
-        createTestRunner(pluginFactories = listOf(PluginSmtpFactory(fakeSender))).run(
+        createTestRunner(
+            pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
+            connector = TestFailConnector { _, result ->
+                assertThat(result.value.getString("message"), containsString("priority not set"))
+            }
+        ).run(
             unitOfWork(
                 """
             test_instance = require_plugin('net.smtp')
             
             test_instance.send({
-                priority = nil,
-                
+                default_encoding = 'default_encoding',
                 host =  'host',
+                port =  123,
+                username =  'username',
+                password =  'password',
+                protocol =  'protocol',
+                debug =  true,
+                enable_starttls =  true,
+                test_connection =  true,
+
                 from =  'from',
                 to =  'to',
                 subject =  'subject',
                 content =  'content',
+                content_type =  'content_type',
+                priority =  nil,
+
+                connection_timeout =   1000,
+                timeout =  2000,
+                write_timeout =  3000
             })
 
         """.trimIndent()
             )
         )
-
-        val message = fakeSender.message
-        assertThat(message.priority, equalTo(1))
     }
 
     @Test
-    fun `default connection_timeout is 5000`() {
+    fun `connection_timeout is required`() {
         val fakeSender = FakeSender()
 
-        createTestRunner(pluginFactories = listOf(PluginSmtpFactory(fakeSender))).run(
+        createTestRunner(
+            pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
+            connector = TestFailConnector { _, result ->
+                assertThat(result.value.getString("message"), containsString("connection_timeout not set"))
+            }
+        ).run(
             unitOfWork(
                 """
             test_instance = require_plugin('net.smtp')
             
             test_instance.send({
-                connection_timeout = nil,
-                
+                default_encoding = 'default_encoding',
                 host =  'host',
+                port =  123,
+                username =  'username',
+                password =  'password',
+                protocol =  'protocol',
+                debug =  true,
+                enable_starttls =  true,
+                test_connection =  true,
+
                 from =  'from',
                 to =  'to',
                 subject =  'subject',
                 content =  'content',
+                content_type =  'content_type',
+                priority =  42,
+
+                connection_timeout =   nil,
+                timeout =  2000,
+                write_timeout =  3000
             })
 
         """.trimIndent()
             )
         )
-
-        val config = fakeSender.config
-        assertThat(config.connectionTimeout, equalTo(5000))
     }
 
     @Test
-    fun `default timeout is 5000`() {
+    fun `timeout is required`() {
         val fakeSender = FakeSender()
 
-        createTestRunner(pluginFactories = listOf(PluginSmtpFactory(fakeSender))).run(
+        createTestRunner(
+            pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
+            connector = TestFailConnector { _, result ->
+                assertThat(result.value.getString("message"), containsString("timeout not set"))
+            }
+        ).run(
             unitOfWork(
                 """
             test_instance = require_plugin('net.smtp')
             
             test_instance.send({
-                timeout = nil,
-                
+                default_encoding = 'default_encoding',
                 host =  'host',
+                port =  123,
+                username =  'username',
+                password =  'password',
+                protocol =  'protocol',
+                debug =  true,
+                enable_starttls =  true,
+                test_connection =  true,
+
                 from =  'from',
                 to =  'to',
                 subject =  'subject',
                 content =  'content',
+                content_type =  'content_type',
+                priority =  42,
+
+                connection_timeout =   1000,
+                timeout =  nil,
+                write_timeout =  3000
             })
 
         """.trimIndent()
             )
         )
-
-        val config = fakeSender.config
-        assertThat(config.timeout, equalTo(5000))
     }
 
     @Test
-    fun `default write_timeout is 3000`() {
+    fun `write_timeout is required`() {
         val fakeSender = FakeSender()
 
-        createTestRunner(pluginFactories = listOf(PluginSmtpFactory(fakeSender))).run(
+        createTestRunner(
+            pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
+            connector = TestFailConnector { _, result ->
+                assertThat(result.value.getString("message"), containsString("write_timeout not set"))
+            }
+        ).run(
             unitOfWork(
                 """
             test_instance = require_plugin('net.smtp')
             
             test_instance.send({
-                write_timeout = nil,
-                
+                default_encoding = 'default_encoding',
                 host =  'host',
+                port =  123,
+                username =  'username',
+                password =  'password',
+                protocol =  'protocol',
+                debug =  true,
+                enable_starttls =  true,
+                test_connection =  true,
+
                 from =  'from',
                 to =  'to',
                 subject =  'subject',
                 content =  'content',
+                content_type =  'content_type',
+                priority =  42,
+
+                connection_timeout =   1000,
+                timeout =  2000,
+                write_timeout =  nil
             })
 
         """.trimIndent()
             )
         )
-
-        val config = fakeSender.config
-        assertThat(config.writeTimeout, equalTo(3000))
     }
 }
 
