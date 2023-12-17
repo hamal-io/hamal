@@ -50,3 +50,13 @@ export interface FuncListItem {
     id: string;
     name: string;
 }
+
+export interface FuncHistory {
+    versions: Array<FuncHistoryItem>
+}
+
+export interface FuncHistoryItem {
+    version: string,
+    message: string,
+    deployedAt: string
+}

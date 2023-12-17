@@ -46,7 +46,7 @@ const FuncDetailPage: FC<Props> = ({}) => {
                 <div className="flex w-full space-x-2 justify-end">
                     <Deploy funcId={funcId} code={code} name={name}/>
                     <Save funcId={funcId} code={code} name={name}/>
-                    <History/>
+                    <History funcId={funcId}/>
                     <Actions funcId={funcId} code={code}/>
                 </div>
             </div>
