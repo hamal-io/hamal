@@ -7,13 +7,13 @@ import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
 
 
-internal object Test : AbstractRunnerTest() {
+internal object PluginSmtpTest : AbstractRunnerTest() {
 
     @Test
     fun `Invokes sender`() {
         val fakeSender = FakeSender()
 
-        createTestRunner(pluginFactories = listOf(SmtpPluginFactory(fakeSender))).run(
+        createTestRunner(pluginFactories = listOf(PluginSmtpFactory(fakeSender))).run(
             unitOfWork(
                 """
             test_instance = require_plugin('net.smtp')
@@ -74,7 +74,7 @@ internal object Test : AbstractRunnerTest() {
     fun `UTF-8 as default encoding`() {
         val fakeSender = FakeSender()
 
-        createTestRunner(pluginFactories = listOf(SmtpPluginFactory(fakeSender))).run(
+        createTestRunner(pluginFactories = listOf(PluginSmtpFactory(fakeSender))).run(
             unitOfWork(
                 """
             test_instance = require_plugin('net.smtp')
@@ -102,7 +102,7 @@ internal object Test : AbstractRunnerTest() {
         val fakeSender = FakeSender()
 
         createTestRunner(
-            pluginFactories = listOf(SmtpPluginFactory(fakeSender)),
+            pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
             connector = TestFailConnector { _, result ->
                 assertThat(result.value.getString("message"), containsString("host not set"))
             }
@@ -128,7 +128,7 @@ internal object Test : AbstractRunnerTest() {
     fun `default port is 25`() {
         val fakeSender = FakeSender()
 
-        createTestRunner(pluginFactories = listOf(SmtpPluginFactory(fakeSender))).run(
+        createTestRunner(pluginFactories = listOf(PluginSmtpFactory(fakeSender))).run(
             unitOfWork(
                 """
             test_instance = require_plugin('net.smtp')
@@ -153,7 +153,7 @@ internal object Test : AbstractRunnerTest() {
     fun `username is optional`() {
         val fakeSender = FakeSender()
 
-        createTestRunner(pluginFactories = listOf(SmtpPluginFactory(fakeSender))).run(
+        createTestRunner(pluginFactories = listOf(PluginSmtpFactory(fakeSender))).run(
             unitOfWork(
                 """
             test_instance = require_plugin('net.smtp')
@@ -180,7 +180,7 @@ internal object Test : AbstractRunnerTest() {
     fun `password is optional`() {
         val fakeSender = FakeSender()
 
-        createTestRunner(pluginFactories = listOf(SmtpPluginFactory(fakeSender))).run(
+        createTestRunner(pluginFactories = listOf(PluginSmtpFactory(fakeSender))).run(
             unitOfWork(
                 """
             test_instance = require_plugin('net.smtp')
@@ -207,7 +207,7 @@ internal object Test : AbstractRunnerTest() {
     fun `default protocol is smtp`() {
         val fakeSender = FakeSender()
 
-        createTestRunner(pluginFactories = listOf(SmtpPluginFactory(fakeSender))).run(
+        createTestRunner(pluginFactories = listOf(PluginSmtpFactory(fakeSender))).run(
             unitOfWork(
                 """
             test_instance = require_plugin('net.smtp')
@@ -234,7 +234,7 @@ internal object Test : AbstractRunnerTest() {
     fun `default debug is false`() {
         val fakeSender = FakeSender()
 
-        createTestRunner(pluginFactories = listOf(SmtpPluginFactory(fakeSender))).run(
+        createTestRunner(pluginFactories = listOf(PluginSmtpFactory(fakeSender))).run(
             unitOfWork(
                 """
             test_instance = require_plugin('net.smtp')
@@ -261,7 +261,7 @@ internal object Test : AbstractRunnerTest() {
     fun `default enable_starttls is false`() {
         val fakeSender = FakeSender()
 
-        createTestRunner(pluginFactories = listOf(SmtpPluginFactory(fakeSender))).run(
+        createTestRunner(pluginFactories = listOf(PluginSmtpFactory(fakeSender))).run(
             unitOfWork(
                 """
             test_instance = require_plugin('net.smtp')
@@ -288,7 +288,7 @@ internal object Test : AbstractRunnerTest() {
     fun `default test connection is false`() {
         val fakeSender = FakeSender()
 
-        createTestRunner(pluginFactories = listOf(SmtpPluginFactory(fakeSender))).run(
+        createTestRunner(pluginFactories = listOf(PluginSmtpFactory(fakeSender))).run(
             unitOfWork(
                 """
             test_instance = require_plugin('net.smtp')
@@ -316,7 +316,7 @@ internal object Test : AbstractRunnerTest() {
         val fakeSender = FakeSender()
 
         createTestRunner(
-            pluginFactories = listOf(SmtpPluginFactory(fakeSender)),
+            pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
             connector = TestFailConnector { _, result ->
                 assertThat(result.value.getString("message"), containsString("from not set"))
             }
@@ -344,7 +344,7 @@ internal object Test : AbstractRunnerTest() {
         val fakeSender = FakeSender()
 
         createTestRunner(
-            pluginFactories = listOf(SmtpPluginFactory(fakeSender)),
+            pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
             connector = TestFailConnector { _, result ->
                 assertThat(result.value.getString("message"), containsString("to not set"))
             }
@@ -372,7 +372,7 @@ internal object Test : AbstractRunnerTest() {
         val fakeSender = FakeSender()
 
         createTestRunner(
-            pluginFactories = listOf(SmtpPluginFactory(fakeSender)),
+            pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
             connector = TestFailConnector { _, result ->
                 assertThat(result.value.getString("message"), containsString("subject not set"))
             }
@@ -400,7 +400,7 @@ internal object Test : AbstractRunnerTest() {
         val fakeSender = FakeSender()
 
         createTestRunner(
-            pluginFactories = listOf(SmtpPluginFactory(fakeSender)),
+            pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
             connector = TestFailConnector { _, result ->
                 assertThat(result.value.getString("message"), containsString("content not set"))
             }
@@ -427,7 +427,7 @@ internal object Test : AbstractRunnerTest() {
     fun `default content_type is text_plain`() {
         val fakeSender = FakeSender()
 
-        createTestRunner(pluginFactories = listOf(SmtpPluginFactory(fakeSender))).run(
+        createTestRunner(pluginFactories = listOf(PluginSmtpFactory(fakeSender))).run(
             unitOfWork(
                 """
             test_instance = require_plugin('net.smtp')
@@ -454,7 +454,7 @@ internal object Test : AbstractRunnerTest() {
     fun `default priority is 1`() {
         val fakeSender = FakeSender()
 
-        createTestRunner(pluginFactories = listOf(SmtpPluginFactory(fakeSender))).run(
+        createTestRunner(pluginFactories = listOf(PluginSmtpFactory(fakeSender))).run(
             unitOfWork(
                 """
             test_instance = require_plugin('net.smtp')
@@ -481,7 +481,7 @@ internal object Test : AbstractRunnerTest() {
     fun `default connection_timeout is 5000`() {
         val fakeSender = FakeSender()
 
-        createTestRunner(pluginFactories = listOf(SmtpPluginFactory(fakeSender))).run(
+        createTestRunner(pluginFactories = listOf(PluginSmtpFactory(fakeSender))).run(
             unitOfWork(
                 """
             test_instance = require_plugin('net.smtp')
@@ -508,7 +508,7 @@ internal object Test : AbstractRunnerTest() {
     fun `default timeout is 5000`() {
         val fakeSender = FakeSender()
 
-        createTestRunner(pluginFactories = listOf(SmtpPluginFactory(fakeSender))).run(
+        createTestRunner(pluginFactories = listOf(PluginSmtpFactory(fakeSender))).run(
             unitOfWork(
                 """
             test_instance = require_plugin('net.smtp')
@@ -535,7 +535,7 @@ internal object Test : AbstractRunnerTest() {
     fun `default write_timeout is 3000`() {
         val fakeSender = FakeSender()
 
-        createTestRunner(pluginFactories = listOf(SmtpPluginFactory(fakeSender))).run(
+        createTestRunner(pluginFactories = listOf(PluginSmtpFactory(fakeSender))).run(
             unitOfWork(
                 """
             test_instance = require_plugin('net.smtp')

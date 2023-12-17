@@ -7,7 +7,7 @@ internal class MaxTest : AbstractRunnerTest() {
     @Test
     fun `decimal, number`() {
         val runner = createTestRunner(
-            extensionFactories = listOf(DecimalExtensionFactory)
+            extensionFactories = listOf(ExtensionDecimalFactory)
         )
         runner.run(
             unitOfWork(
@@ -27,7 +27,7 @@ internal class MaxTest : AbstractRunnerTest() {
     @Test
     fun `decimal, decimal`() {
         val runner = createTestRunner(
-            extensionFactories = listOf(DecimalExtensionFactory)
+            extensionFactories = listOf(ExtensionDecimalFactory)
         )
         runner.run(
             unitOfWork(
@@ -46,7 +46,7 @@ internal class MaxTest : AbstractRunnerTest() {
     @Test
     fun `number, decimal`() {
         val runner = createTestRunner(
-            extensionFactories = listOf(DecimalExtensionFactory)
+            extensionFactories = listOf(ExtensionDecimalFactory)
         )
         runner.run(
             unitOfWork(

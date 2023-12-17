@@ -7,7 +7,7 @@ internal class SqrtTest : AbstractRunnerTest() {
     @Test
     fun `decimal, decimal`() {
         val runner = createTestRunner(
-            extensionFactories = listOf(DecimalExtensionFactory)
+            extensionFactories = listOf(ExtensionDecimalFactory)
         )
         runner.run(
             unitOfWork(

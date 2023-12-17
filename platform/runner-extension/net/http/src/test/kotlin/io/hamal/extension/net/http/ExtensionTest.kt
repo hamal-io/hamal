@@ -1,11 +1,11 @@
 package io.hamal.plugin.net.http
 
 import AbstractRunnerTest
-import io.hamal.extension.net.http.HttpExtensionFactory
+import io.hamal.extension.net.http.ExtensionHttpFactory
 import io.hamal.extension.net.http.endpoint.TestHeaderController
 import io.hamal.extension.net.http.endpoint.TestJsonController
 import io.hamal.extension.net.http.endpoint.TestStatusController
-import io.hamal.extension.std.decimal.DecimalExtensionFactory
+import io.hamal.extension.std.decimal.ExtensionDecimalFactory
 import io.hamal.lib.domain.vo.RunnerEnv
 import io.hamal.lib.http.fixture.TestWebConfig
 import io.hamal.lib.kua.type.MapType
@@ -30,17 +30,17 @@ import kotlin.io.path.name
         TestStatusController::class
     ], webEnvironment = RANDOM_PORT
 )
-class HttpTest(@LocalServerPort var localServerPort: Int) : AbstractRunnerTest() {
+class ExtensionHttpTest(@LocalServerPort var localServerPort: Int) : AbstractRunnerTest() {
 
     @TestFactory
     fun run(): List<DynamicTest> {
         return collectFiles().map { testFile ->
             dynamicTest("${testFile.parent.parent.name}/${testFile.parent.name}/${testFile.name}") {
                 val runner = createTestRunner(
-                    pluginFactories = listOf(HttpPluginFactory()),
+                    pluginFactories = listOf(PluginHttpFactory()),
                     extensionFactories = listOf(
-                        DecimalExtensionFactory,
-                        HttpExtensionFactory
+                        ExtensionDecimalFactory,
+                        ExtensionHttpFactory
                     ),
                     env = RunnerEnv(
                         MapType(

@@ -8,7 +8,7 @@ internal class DecimalTest : AbstractRunnerTest() {
     @Test
     fun `Can import decimal`() {
         val runner = createTestRunner(
-            extensionFactories = listOf(DecimalExtensionFactory)
+            extensionFactories = listOf(ExtensionDecimalFactory)
         )
 
         runner.run(
@@ -24,7 +24,7 @@ internal class DecimalTest : AbstractRunnerTest() {
     @Test
     fun `Creating decimal and iterating over _G does not crash`() {
         val runner = createTestRunner(
-            extensionFactories = listOf(DecimalExtensionFactory)
+            extensionFactories = listOf(ExtensionDecimalFactory)
         )
 
         runner.run(
@@ -42,7 +42,7 @@ internal class DecimalTest : AbstractRunnerTest() {
     @Test
     fun `Can create new decimal instance by number`() {
         val runner = createTestRunner(
-            extensionFactories = listOf(DecimalExtensionFactory)
+            extensionFactories = listOf(ExtensionDecimalFactory)
         )
 
         runner.run(
@@ -59,7 +59,7 @@ internal class DecimalTest : AbstractRunnerTest() {
     @Test
     fun `Can create new decimal instance by string`() {
         val runner = createTestRunner(
-            extensionFactories = listOf(DecimalExtensionFactory)
+            extensionFactories = listOf(ExtensionDecimalFactory)
         )
 
         runner.run(

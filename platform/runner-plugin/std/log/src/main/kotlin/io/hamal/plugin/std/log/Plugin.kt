@@ -21,7 +21,7 @@ import io.hamal.lib.sdk.api.ApiExecLogService
 
 val log = logger(LogFunction::class)
 
-class LogPluginFactory(
+class PluginLogFactory(
     private val execLogService: ApiExecLogService
 ) : RunnerPluginFactory {
     override fun create(sandbox: Sandbox): RunnerPlugin {

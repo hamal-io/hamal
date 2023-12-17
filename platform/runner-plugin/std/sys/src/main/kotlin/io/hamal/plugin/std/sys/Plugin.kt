@@ -31,7 +31,7 @@ import io.hamal.plugin.std.sys.topic.*
 import io.hamal.plugin.std.sys.topic.trigger.*
 
 
-class SysPluginFactory(
+class PluginSysFactory(
     private val sdk: ApiSdkImpl
 ) : RunnerPluginFactory {
     override fun create(sandbox: Sandbox): RunnerPlugin {

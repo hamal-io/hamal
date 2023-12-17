@@ -1,16 +1,16 @@
-package io.hamal.plugin.web3.evm
+package io.hamal.plugin.std.debug
 
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
 
-class EthPluginFactory : RunnerPluginFactory {
+
+class PluginDebugFactory : RunnerPluginFactory {
     override fun create(sandbox: Sandbox): RunnerPlugin {
         return RunnerPlugin(
-            name = "web3.eth",
+            name = "debug",
             internals = mapOf(
-                "execute" to EthExecuteFunction(),
-                "decode_parameter" to EthDecodeParameterFunction
+                "sleep" to SleepFunction,
             )
         )
     }

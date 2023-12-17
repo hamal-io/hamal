@@ -1,10 +1,10 @@
 package io.hamal.runner.config
 
-import io.hamal.extension.net.smtp.SmtpExtensionFactory
-import io.hamal.extension.net.http.HttpExtensionFactory
-import io.hamal.extension.std.decimal.DecimalExtensionFactory
+import io.hamal.extension.net.smtp.ExtensionSmtpFactory
+import io.hamal.extension.net.http.ExtensionHttpFactory
+import io.hamal.extension.std.decimal.ExtensionDecimalFactory
 import io.hamal.extension.std.log.LogExtensionFactory
-import io.hamal.extension.telegram.TelegramExtensionFactory
+import io.hamal.extension.telegram.ExtensionTelegramFactory
 import io.hamal.lib.domain.vo.AuthToken
 import io.hamal.lib.domain.vo.ExecToken
 import io.hamal.lib.domain.vo.RunnerEnv
@@ -13,12 +13,12 @@ import io.hamal.lib.kua.NativeLoader.Preference.Jar
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContext
 import io.hamal.lib.sdk.ApiSdkImpl
-import io.hamal.plugin.net.smtp.SmtpPluginFactory
-import io.hamal.plugin.net.http.HttpPluginFactory
-import io.hamal.plugin.std.debug.DebugPluginFactory
-import io.hamal.plugin.std.log.LogPluginFactory
-import io.hamal.plugin.std.sys.SysPluginFactory
-import io.hamal.plugin.web3.evm.EthPluginFactory
+import io.hamal.plugin.net.smtp.PluginSmtpFactory
+import io.hamal.plugin.net.http.PluginHttpFactory
+import io.hamal.plugin.std.debug.PluginDebugFactory
+import io.hamal.plugin.std.log.PluginLogFactory
+import io.hamal.plugin.std.sys.PluginSysFactory
+import io.hamal.plugin.web3.evm.PluginWeb3EthFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -56,19 +56,19 @@ class SandboxFactoryDefaultImpl(
 
         return Sandbox(ctx)
             .registerPlugins(
-                SmtpPluginFactory(),
-                HttpPluginFactory(),
-                LogPluginFactory(sdk.execLog),
-                DebugPluginFactory(),
-                SysPluginFactory(sdk),
-                EthPluginFactory()
+                PluginSmtpFactory(),
+                PluginHttpFactory(),
+                PluginLogFactory(sdk.execLog),
+                PluginDebugFactory(),
+                PluginSysFactory(sdk),
+                PluginWeb3EthFactory()
             )
             .registerExtensions(
-                DecimalExtensionFactory,
-                SmtpExtensionFactory,
-                HttpExtensionFactory,
+                ExtensionDecimalFactory,
+                ExtensionSmtpFactory,
+                ExtensionHttpFactory,
                 LogExtensionFactory,
-                TelegramExtensionFactory
+                ExtensionTelegramFactory
             )
     }
 }

@@ -4,7 +4,7 @@ import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
 
-class SmtpPluginFactory(
+class PluginSmtpFactory(
     private val sender: Sender = SenderDefaultImpl
 ) : RunnerPluginFactory {
     override fun create(sandbox: Sandbox): RunnerPlugin {
