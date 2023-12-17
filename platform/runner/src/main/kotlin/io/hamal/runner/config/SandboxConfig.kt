@@ -3,7 +3,7 @@ package io.hamal.runner.config
 import io.hamal.extension.net.smtp.ExtensionSmtpFactory
 import io.hamal.extension.net.http.ExtensionHttpFactory
 import io.hamal.extension.std.decimal.ExtensionDecimalFactory
-import io.hamal.extension.std.log.LogExtensionFactory
+import io.hamal.extension.std.log.ExtensionLogFactory
 import io.hamal.extension.telegram.ExtensionTelegramFactory
 import io.hamal.lib.domain.vo.AuthToken
 import io.hamal.lib.domain.vo.ExecToken
@@ -67,7 +67,7 @@ class SandboxFactoryDefaultImpl(
                 ExtensionDecimalFactory,
                 ExtensionSmtpFactory,
                 ExtensionHttpFactory,
-                LogExtensionFactory,
+                ExtensionLogFactory,
                 ExtensionTelegramFactory
             )
     }
