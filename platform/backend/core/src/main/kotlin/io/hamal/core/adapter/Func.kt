@@ -24,11 +24,6 @@ interface FuncGetPort {
     operator fun <T : Any> invoke(funcId: FuncId, responseHandler: (Func, Code, Code, Flow) -> T): T
 }
 
-interface FuncGetVersionPort {
-    operator fun <T : Any> invoke(funcId: FuncId, codeVersion: CodeVersion, responseHandler: (Func, Code) -> T): T
-
-}
-
 interface FuncInvokePort {
     operator fun <T : Any> invoke(
         funcId: FuncId,
@@ -68,17 +63,17 @@ interface FuncUpdatePort {
 
 }
 
-interface FuncPort : FuncCreatePort, FuncDeployPort, FuncGetPort, FuncInvokePort, FuncListPort, FuncUpdatePort,
-    FuncDeploymentListPort, FuncGetVersionPort
+interface FuncCodePort : FuncCreatePort, FuncDeployPort, FuncGetPort, FuncInvokePort, FuncListPort, FuncUpdatePort,
+    FuncDeploymentListPort
 
 @Component
-class FuncAdapter(
+class FuncAdapterCode(
     private val codeQueryRepository: CodeQueryRepository,
     private val funcQueryRepository: FuncQueryRepository,
     private val generateDomainId: GenerateDomainId,
     private val flowQueryRepository: FlowQueryRepository,
     private val reqCmdRepository: ReqCmdRepository
-) : FuncPort {
+) : FuncCodePort {
 
     override fun <T : Any> invoke(
         flowId: FlowId,
@@ -105,12 +100,6 @@ class FuncAdapter(
         val deployed = codeQueryRepository.get(func.code.id, func.deployment.version)
         val flows = flowQueryRepository.get(func.flowId)
         return responseHandler(func, current, deployed, flows)
-    }
-
-    override fun <T : Any> invoke(funcId: FuncId, codeVersion: CodeVersion, responseHandler: (Func, Code) -> T): T {
-        val func = funcQueryRepository.get(funcId);
-        val code = codeQueryRepository.get(func.code.id, codeVersion)
-        return responseHandler(func, code) //func maybe not needed
     }
 
     override fun <T : Any> invoke(
