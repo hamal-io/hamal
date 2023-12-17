@@ -1,8 +1,8 @@
 package io.hamal.plugin.web3
 
 import AbstractRunnerTest
-import io.hamal.plugin.web3.evm.EthPluginFactory
 import io.hamal.lib.kua.NativeLoader
+import io.hamal.plugin.web3.evm.EthPluginFactory
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
@@ -11,7 +11,7 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import kotlin.io.path.name
 
-object IntegrationTest : AbstractRunnerTest() {
+object Web3Test : AbstractRunnerTest() {
     @TestFactory
     fun run(): List<DynamicTest> {
         NativeLoader.load(NativeLoader.Preference.Resources)
@@ -24,5 +24,5 @@ object IntegrationTest : AbstractRunnerTest() {
     }
 }
 
-private val testPath = Paths.get("src", "integrationTest", "resources", "suite")
+private val testPath = Paths.get("src", "test", "resources", "suite")
 private fun collectFiles() = Files.walk(testPath).filter { f: Path -> f.name.endsWith(".lua") }

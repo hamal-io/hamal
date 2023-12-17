@@ -56,5 +56,5 @@ class HttpTest(@LocalServerPort var localServerPort: Int) : AbstractRunnerTest()
     }
 }
 
-private val testPath = Paths.get("src", "integrationTest", "resources", "suite")
+private val testPath = Paths.get("src", "test", "resources", "suite")
 private fun collectFiles() = Files.walk(testPath).filter { f: Path -> f.name.endsWith(".lua") }
