@@ -55,8 +55,6 @@ function plugin()
         function export.send(_mail)
             local mail = _mail or {}
 
-            print(mail['content_type'])
-
             internal.send({
                 default_encoding = require_string(mail, 'default_encoding', 'UTF-8'),
                 host = require_string(mail, 'host', nil),
