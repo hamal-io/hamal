@@ -23,7 +23,6 @@ interface DataTableProps<TData, TValue> {
 export default function <TData, TValue>({columns, data,}: DataTableProps<TData, TValue>) {
     const [rowSelection, setRowSelection] = React.useState({})
 
-
     const table = useReactTable({
         data,
         columns,
@@ -72,10 +71,6 @@ export default function <TData, TValue>({columns, data,}: DataTableProps<TData, 
                         <TableRow
                             key={row.id}
                             data-state={row.getIsSelected() && "selected"}
-                            /*onClick={() => {
-                                navigate(`/funcs/${funcId}`)
-
-                            }}*/
                         >
                             {row.getVisibleCells().map((cell) => (
                                 <TableCell key={cell.id}>
@@ -93,7 +88,7 @@ export default function <TData, TValue>({columns, data,}: DataTableProps<TData, 
                             colSpan={columns.length}
                             className="h-24 text-center"
                         >
-                            If you deploy a function it will appear in this list.
+                            If you deploy functions, they will appear in this list.
                         </TableCell>
                     </TableRow>
                 )}

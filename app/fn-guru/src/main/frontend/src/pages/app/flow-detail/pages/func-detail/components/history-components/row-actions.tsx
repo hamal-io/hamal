@@ -10,14 +10,15 @@ import {
 } from "@/components/ui/dropdown-menu.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {DotsHorizontalIcon} from "@radix-ui/react-icons";
+import {CodeCallback} from "@/hook/code.ts";
 
 
 interface Props {
     row: Row<Deployment>
-
+    codeCallback: CodeCallback;
 }
 
-export default function ({row}: Props) {
+export default function ({row, codeCallback}: Props) {
     const navigate = useNavigate()
 
     return (
@@ -33,7 +34,8 @@ export default function ({row}: Props) {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-[160px]">
                 <DropdownMenuItem onClick={() => {
-
+                    console.log(`selected row: ${row.getValue("version")}`)
+                    codeCallback(row.getValue("version"))
                 }}>Checkout</DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
