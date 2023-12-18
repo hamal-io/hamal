@@ -3,8 +3,8 @@ import {useGet, usePatch, usePost} from "@/hook/http.ts";
 import {
     Func,
     FuncCreateSubmitted,
+    FuncDeploymentList,
     FuncDeploySubmitted,
-    FuncHistory,
     FuncInvokeSubmitted,
     FuncList,
     FuncUpdateSubmitted
@@ -81,13 +81,13 @@ export const useFuncDeployLatestCode = (): [FuncDeployLatestCodeAction, FuncDepl
     return [fn, submission, loading, error]
 }
 
-type FuncHistoryAction = (funcId: string, abortController?: AbortController) => void
-export const useFuncHistory = (): [FuncHistoryAction, FuncHistory, boolean, Error] => {
+type FuncDeploymentsListAction = (funcId: string, abortController?: AbortController) => void
+export const useFuncHistory = (): [FuncDeploymentsListAction, FuncDeploymentList, boolean, Error] => {
     const [auth] = useAuth()
-    const [get, funcHistory, loading, error] = useGet<FuncHistory>()
+    const [get, funcDeploymentsList, loading, error] = useGet<FuncDeploymentList>()
     const fn = useCallback(async (funcId: string, abortController?: AbortController) =>
         get(`/v1/funcs/{funcId}/deployments`, abortController), [auth])
-    return [fn, funcHistory, loading, error]
+    return [fn, funcDeploymentsList, loading, error]
 
 
 }

@@ -19,6 +19,7 @@ const FuncDetailPage: FC<Props> = ({}) => {
     const [name, setName] = useState('')
     const [code, setCode] = useState('')
 
+
     useEffect(() => {
         const abortController = new AbortController()
         getFunc(funcId, abortController)

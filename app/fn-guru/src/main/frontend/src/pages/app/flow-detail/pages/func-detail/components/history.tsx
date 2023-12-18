@@ -4,7 +4,9 @@ import {Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTr
 import {CounterClockwiseClockIcon} from "@radix-ui/react-icons";
 import {useFuncHistory} from "@/hook";
 import {useNavigate} from "react-router-dom";
-import {Table} from "@/components/ui/table.tsx";
+import Table from "@/pages/app/flow-detail/pages/func-detail/components/history-components/table.tsx";
+import {columns} from "@/pages/app/flow-detail/pages/func-detail/components/history-components/columns.tsx";
+
 
 type Props = {
     funcId: string;
@@ -13,13 +15,18 @@ const History: FC<Props> = ({funcId}) => {
     const navigate = useNavigate()
 
     const [openDialog, setOpenDialog] = useState<boolean>(false)
-    const [getHistory, funcHistory, loading] = useFuncHistory()
+    const [getHistory, funcHistory, loading, error] = useFuncHistory()
+
+
+    const handleClick = () => {
+        getHistory(funcId)
+    }
 
 
     return (
         <Dialog open={openDialog} onOpenChange={setOpenDialog}>
             <DialogTrigger asChild>
-                <Button variant="secondary">
+                <Button variant="secondary" onClick={handleClick}>
                     <span className="sr-only">Show history</span>
                     <CounterClockwiseClockIcon className="h-4 w-4"/>
                 </Button>
@@ -28,9 +35,7 @@ const History: FC<Props> = ({funcId}) => {
                 <DialogHeader>
                     <DialogTitle>Deployed Versions:</DialogTitle>
                 </DialogHeader>
-                <Table>
-                    TODO-134
-                </Table>
+                <Table data={funcHistory.deployments} columns={columns}/>
                 <DialogFooter/>
             </DialogContent>
         </Dialog>

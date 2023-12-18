@@ -51,11 +51,11 @@ export interface FuncListItem {
     name: string;
 }
 
-export interface FuncHistory {
-    versions: Array<FuncHistoryItem>
+export interface FuncDeploymentList {
+    deployments: Array<Deployment>
 }
 
-export interface FuncHistoryItem {
+export interface Deployment {
     version: string,
     message: string,
     deployedAt: string
