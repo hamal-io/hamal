@@ -13,13 +13,18 @@ type Props = {
 }
 const History: FC<Props> = ({funcId}) => {
     const navigate = useNavigate()
-
     const [openDialog, setOpenDialog] = useState<boolean>(false)
     const [getHistory, funcHistory, loading, error] = useFuncHistory()
 
 
+
     const handleClick = () => {
+        console.log("handle click")
         getHistory(funcId)
+        if (funcHistory != null) {
+            console.log("fetchd")
+        }
+
     }
 
 

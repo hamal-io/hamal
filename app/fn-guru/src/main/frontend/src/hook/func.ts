@@ -86,8 +86,6 @@ export const useFuncHistory = (): [FuncDeploymentsListAction, FuncDeploymentList
     const [auth] = useAuth()
     const [get, funcDeploymentsList, loading, error] = useGet<FuncDeploymentList>()
     const fn = useCallback(async (funcId: string, abortController?: AbortController) =>
-        get(`/v1/funcs/{funcId}/deployments`, abortController), [auth])
+        get(`/v1/funcs/${funcId}/deployments`, abortController), [auth])
     return [fn, funcDeploymentsList, loading, error]
-
-
 }
