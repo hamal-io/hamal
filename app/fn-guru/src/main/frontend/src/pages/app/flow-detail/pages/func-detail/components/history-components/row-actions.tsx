@@ -1,7 +1,6 @@
-import React, {useContext} from "react";
+import React from "react";
 import {Row} from "@tanstack/react-table";
 import {Deployment} from "@/types";
-import {FlowContext} from "@/pages/app/flow-detail";
 import {useNavigate} from "react-router-dom";
 import {
     DropdownMenu,
@@ -15,10 +14,10 @@ import {DotsHorizontalIcon} from "@radix-ui/react-icons";
 
 interface Props {
     row: Row<Deployment>
+
 }
 
 export default function ({row}: Props) {
-    const flow = useContext(FlowContext)
     const navigate = useNavigate()
 
     return (
@@ -34,8 +33,8 @@ export default function ({row}: Props) {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-[160px]">
                 <DropdownMenuItem onClick={() => {
-                    //navigate(`/funcs/executions/${row.original.id}`)
-                }}>View</DropdownMenuItem>
+
+                }}>Checkout</DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
     )

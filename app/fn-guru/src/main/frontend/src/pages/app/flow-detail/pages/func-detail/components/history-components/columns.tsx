@@ -8,7 +8,7 @@ export const columns: ColumnDef<Deployment>[] = [
     {
         accessorKey: "version",
         header: ({column}) => (
-            <ColumnHeader column={column} title="Version"/>
+            <ColumnHeader column={column} title="Version:"/>
         ),
         cell: ({row}) => <div className="">{row.getValue("version")}</div>,
         enableSorting: false,
@@ -17,7 +17,7 @@ export const columns: ColumnDef<Deployment>[] = [
     {
         accessorKey: "message",
         header: ({column}) => (
-            <ColumnHeader column={column} title="Message"/>
+            <ColumnHeader column={column} title="Message:"/>
         ),
         cell: ({row}) => <div className="">{row.getValue("message")}</div>,
         enableSorting: false,
@@ -26,7 +26,7 @@ export const columns: ColumnDef<Deployment>[] = [
     {
         accessorKey: "deployedAt",
         header: ({column}) => (
-            <ColumnHeader column={column} title="Time"/>
+            <ColumnHeader column={column} title="Time:"/>
         ),
         cell: ({row}) => <div className="">{row.getValue("deployedAt")}</div>,
         enableSorting: false,

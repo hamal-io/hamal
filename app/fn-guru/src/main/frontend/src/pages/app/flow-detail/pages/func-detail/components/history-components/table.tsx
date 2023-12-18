@@ -1,8 +1,7 @@
 import * as React from "react"
-import {useContext} from "react"
+import {useEffect} from "react"
 import {
     ColumnDef,
-    ColumnFiltersState,
     flexRender,
     getCoreRowModel,
     getFacetedRowModel,
@@ -10,15 +9,11 @@ import {
     getFilteredRowModel,
     getPaginationRowModel,
     getSortedRowModel,
-    SortingState,
     useReactTable,
-    VisibilityState,
 } from "@tanstack/react-table"
 
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow,} from "@/components/ui/table.tsx"
-import {Card, CardContent, CardFooter, CardHeader} from "@/components/ui/card.tsx";
 import {useNavigate} from "react-router-dom";
-import {FlowContext} from "@/pages/app/flow-detail";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -27,27 +22,16 @@ interface DataTableProps<TData, TValue> {
 
 export default function <TData, TValue>({columns, data,}: DataTableProps<TData, TValue>) {
     const [rowSelection, setRowSelection] = React.useState({})
-    const [columnVisibility, setColumnVisibility] =
-        React.useState<VisibilityState>({})
-    const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-        []
-    )
-    const [sorting, setSorting] = React.useState<SortingState>([])
+
 
     const table = useReactTable({
         data,
         columns,
         state: {
-            sorting,
-            columnVisibility,
-            rowSelection,
-            columnFilters,
+            rowSelection
         },
         enableRowSelection: true,
         onRowSelectionChange: setRowSelection,
-        onSortingChange: setSorting,
-        onColumnFiltersChange: setColumnFilters,
-        onColumnVisibilityChange: setColumnVisibility,
         getCoreRowModel: getCoreRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
@@ -57,69 +41,63 @@ export default function <TData, TValue>({columns, data,}: DataTableProps<TData, 
     })
 
     const navigate = useNavigate()
-    const flow = useContext(FlowContext)
+
+    useEffect(() => {
+
+    }, [rowSelection]);
 
     return (
-        <Card>
-            <CardHeader>
-                {/*<Toolbar table={table}/>*/}
-            </CardHeader>
-            <CardContent>
-                <Table>
-                    <TableHeader>
-                        {table.getHeaderGroups().map((headerGroup) => (
-                            <TableRow key={headerGroup.id}>
-                                {headerGroup.headers.map((header) => {
-                                    return (
-                                        <TableHead key={header.id}>
-                                            {header.isPlaceholder
-                                                ? null
-                                                : flexRender(
-                                                    header.column.columnDef.header,
-                                                    header.getContext()
-                                                )}
-                                        </TableHead>
-                                    )
-                                })}
-                            </TableRow>
-                        ))}
-                    </TableHeader>
-                    <TableBody>
-                        {table.getRowModel().rows?.length ? (
-                            table.getRowModel().rows.map((row) => (
-                                <TableRow
-                                    key={row.id}
-                                    data-state={row.getIsSelected() && "selected"}
-                                    onClick={() => {
-                                        navigate(`/flows/${flow.id}/schedules/${row.original['id']}`)
-                                    }}
-                                >
-                                    {row.getVisibleCells().map((cell) => (
-                                        <TableCell key={cell.id}>
-                                            {flexRender(
-                                                cell.column.columnDef.cell,
-                                                cell.getContext()
-                                            )}
-                                        </TableCell>
-                                    ))}
-                                </TableRow>
-                            ))
-                        ) : (
-                            <TableRow>
-                                <TableCell
-                                    colSpan={columns.length}
-                                    className="h-24 text-center"
-                                >
-                                    No results.
+        <Table>
+            <TableHeader>
+                {table.getHeaderGroups().map((headerGroup) => (
+                    <TableRow key={headerGroup.id}>
+                        {headerGroup.headers.map((header) => {
+                            return (
+                                <TableHead key={header.id}>
+                                    {header.isPlaceholder
+                                        ? null
+                                        : flexRender(
+                                            header.column.columnDef.header,
+                                            header.getContext()
+                                        )}
+                                </TableHead>
+                            )
+                        })}
+                    </TableRow>
+                ))}
+            </TableHeader>
+            <TableBody>
+                {table.getRowModel().rows?.length ? (
+                    table.getRowModel().rows.map((row) => (
+                        <TableRow
+                            key={row.id}
+                            data-state={row.getIsSelected() && "selected"}
+                            /*onClick={() => {
+                                navigate(`/funcs/${funcId}`)
+
+                            }}*/
+                        >
+                            {row.getVisibleCells().map((cell) => (
+                                <TableCell key={cell.id}>
+                                    {flexRender(
+                                        cell.column.columnDef.cell,
+                                        cell.getContext()
+                                    )}
                                 </TableCell>
-                            </TableRow>
-                        )}
-                    </TableBody>
-                </Table>
-                <CardFooter className="pt-4">
-                    {/* <Pagination table={table}/>*/}
-                </CardFooter>
-            </CardContent>
-        </Card>
+                            ))}
+                        </TableRow>
+                    ))
+                ) : (
+                    <TableRow>
+                        <TableCell
+                            colSpan={columns.length}
+                            className="h-24 text-center"
+                        >
+                            If you deploy a function it will appear in this list.
+                        </TableCell>
+                    </TableRow>
+                )}
+            </TableBody>
+        </Table>
     )
 }
