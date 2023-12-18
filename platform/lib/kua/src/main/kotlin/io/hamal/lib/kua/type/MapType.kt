@@ -63,7 +63,10 @@ data class MapType(
     fun getBoolean(key: String): Boolean = getBooleanValue(key).value
     fun getBoolean(key: StringType): Boolean = getBoolean(key.value)
     fun getBooleanValue(key: String): BooleanType {
-        checkExpectedType(key, BooleanType::class)
+        val type = type(key)
+        check(type == True::class || type == False::class) {
+            "Expected type to be boolean but was $type"
+        }
         return value[key]!! as BooleanType
     }
 

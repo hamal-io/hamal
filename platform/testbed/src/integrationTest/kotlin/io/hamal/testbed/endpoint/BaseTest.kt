@@ -4,7 +4,7 @@ import AbstractRunnerTest
 import io.hamal.core.component.DelayRetry
 import io.hamal.core.component.DelayRetryFixedTime
 import io.hamal.core.config.BackendBasePath
-import io.hamal.extension.net.http.HttpExtensionFactory
+import io.hamal.extension.net.http.ExtensionHttpFactory
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.GenerateDomainId
@@ -16,10 +16,10 @@ import io.hamal.lib.kua.SandboxContext
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.ApiSdkImpl
-import io.hamal.plugin.net.http.HttpPluginFactory
-import io.hamal.plugin.std.debug.DebugPluginFactory
-import io.hamal.plugin.std.log.LogPluginFactory
-import io.hamal.plugin.std.sys.SysPluginFactory
+import io.hamal.plugin.net.http.PluginHttpFactory
+import io.hamal.plugin.std.debug.PluginDebugFactory
+import io.hamal.plugin.std.log.PluginLogFactory
+import io.hamal.plugin.std.sys.PluginSysFactory
 import io.hamal.repository.api.*
 import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.runner.config.EnvFactory
@@ -77,10 +77,10 @@ class TestRunnerSandboxFactory(
 
         return Sandbox(ctx)
             .registerPlugins(
-                LogPluginFactory(sdk.execLog),
-                DebugPluginFactory(),
-                SysPluginFactory(sdk),
-                HttpPluginFactory()
+                PluginLogFactory(sdk.execLog),
+                PluginDebugFactory(),
+                PluginSysFactory(sdk),
+                PluginHttpFactory()
             )
     }
 }
@@ -289,11 +289,11 @@ abstract class BaseEndpointTest : AbstractRunnerTest() {
 
                     createTestRunner(
                         pluginFactories = listOf(
-                            SysPluginFactory(ApiSdkImpl(apiHttpTemplate)),
-                            HttpPluginFactory()
+                            PluginSysFactory(ApiSdkImpl(apiHttpTemplate)),
+                            PluginHttpFactory()
                         ),
                         extensionFactories = listOf(
-                            HttpExtensionFactory
+                            ExtensionHttpFactory
                         ),
                         env = RunnerEnv(
                             MapType(

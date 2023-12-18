@@ -17,6 +17,7 @@ dependencyResolutionManagement {
             library("hamcrest", "org.hamcrest:hamcrest:2.2")
 
             library("spring-web", "org.springframework.boot", "spring-boot-starter-web").version("3.0.5")
+            library("spring-mail", "org.springframework.boot", "spring-boot-starter-mail").version("3.0.5")
             library("spring-test", "org.springframework.boot", "spring-boot-starter-test").version("3.0.5")
             library("spring-logging", "org.springframework.boot", "spring-boot-starter-logging").version("3.0.5")
             library("spring-schedule", "org.springframework", "spring-context").version("6.0.7")
@@ -57,11 +58,13 @@ include(":platform:lib:web3")
 
 include(":platform:runner")
 
+include(":platform:runner-extension:net:smtp")
 include(":platform:runner-extension:net:http")
 include(":platform:runner-extension:std:decimal")
 include(":platform:runner-extension:std:log")
 include(":platform:runner-extension:telegram")
 
+include(":platform:runner-plugin:net:smtp")
 include(":platform:runner-plugin:net:http")
 include(":platform:runner-plugin:std:debug")
 include(":platform:runner-plugin:std:log")
