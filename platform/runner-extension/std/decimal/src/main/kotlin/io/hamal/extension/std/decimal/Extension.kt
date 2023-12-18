@@ -5,7 +5,7 @@ import io.hamal.lib.kua.extend.extension.RunnerExtension
 import io.hamal.lib.kua.extend.extension.RunnerExtensionFactory
 
 
-object DecimalExtensionFactory : RunnerExtensionFactory {
+object ExtensionDecimalFactory : RunnerExtensionFactory {
     override fun create(sandbox: Sandbox): RunnerExtension {
         return RunnerExtension(name = "decimal")
     }

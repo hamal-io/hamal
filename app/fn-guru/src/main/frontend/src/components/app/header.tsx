@@ -42,8 +42,6 @@ const Header: FC = () => {
 export default Header
 
 const Profile = () => {
-    const navigate = useNavigate()
-    const [auth] = useAuth()
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -54,19 +52,6 @@ const Profile = () => {
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-32" align="end" forceMount>
-                <DropdownMenuSeparator/>
-                <DropdownMenuGroup>
-                    <DropdownMenuItem>
-                        Profile
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                        Billing
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                        Settings
-                    </DropdownMenuItem>
-                </DropdownMenuGroup>
-                <DropdownMenuSeparator/>
                 <LogoutMenuItem/>
             </DropdownMenuContent>
         </DropdownMenu>
