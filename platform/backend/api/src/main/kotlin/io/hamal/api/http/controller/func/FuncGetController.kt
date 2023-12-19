@@ -24,6 +24,7 @@ internal class FuncGetController(
         getFunc(funcId, ::assemble)
     }
 
+
     private fun assemble(func: Func, current: Code, deployed: Code, flow: Flow) =
         ResponseEntity.ok(
             ApiFunc(
