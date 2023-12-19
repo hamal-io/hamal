@@ -3,11 +3,8 @@ import {
     ColumnDef,
     flexRender,
     getCoreRowModel,
-    getFacetedRowModel,
-    getFacetedUniqueValues,
-    getFilteredRowModel,
-    getPaginationRowModel,
     getSortedRowModel,
+    SortingState,
     useReactTable,
 } from "@tanstack/react-table"
 
@@ -20,21 +17,26 @@ interface DataTableProps<TData, TValue> {
 
 export default function <TData, TValue>({columns, data,}: DataTableProps<TData, TValue>) {
     const [rowSelection, setRowSelection] = React.useState({})
+    const [sorting, setSorting] = React.useState<SortingState>([
+        {
+            id: "version",
+            desc: true,
+        }
+    ])
 
     const table = useReactTable({
         data,
         columns,
         state: {
-            rowSelection
+            rowSelection,
+            sorting
         },
         enableRowSelection: true,
         onRowSelectionChange: setRowSelection,
         getCoreRowModel: getCoreRowModel(),
-        getFilteredRowModel: getFilteredRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
         getSortedRowModel: getSortedRowModel(),
-        getFacetedRowModel: getFacetedRowModel(),
-        getFacetedUniqueValues: getFacetedUniqueValues(),
+
+
     })
 
     return (

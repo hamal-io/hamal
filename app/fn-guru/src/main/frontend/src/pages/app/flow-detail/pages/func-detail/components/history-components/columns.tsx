@@ -14,7 +14,7 @@ export const columns = (codeCallback: CodeCallback): ColumnDef<Deployment>[] => 
                 <ColumnHeader column={column} title="Version:"/>
             ),
             cell: ({row}) => <div className="">{row.getValue("version")}</div>,
-            enableSorting: false,
+            enableSorting: true,
             enableHiding: false,
         },
         {
@@ -31,7 +31,7 @@ export const columns = (codeCallback: CodeCallback): ColumnDef<Deployment>[] => 
             header: ({column}) => (
                 <ColumnHeader column={column} title="Time:"/>
             ),
-            cell: ({row}) => <div className="">{row.getValue("deployedAt")}</div>,
+            cell: ({row}) => <div className="">{toUTC(row.getValue("deployedAt"))}</div>,
             enableSorting: false,
             enableHiding: false,
         },
@@ -40,4 +40,9 @@ export const columns = (codeCallback: CodeCallback): ColumnDef<Deployment>[] => 
             cell: ({row}) => <RowAction row={row} codeCallback={codeCallback}/>
         },
     ]
+}
+
+const toUTC = (epoch: number): string => {
+    const date = new Date(epoch)
+    return date.toUTCString()
 }
