@@ -1,7 +1,7 @@
-import {Code} from "@/types";
 import {useAuth} from "@/hook/auth.ts";
 import {useCallback} from "react";
 import {useGet} from "@/hook/http.ts";
+import {Code} from "@/types/code.ts";
 
 
 type CodeGetAction = (codeId: string, version: number, abortController?: AbortController) => void

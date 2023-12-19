@@ -1,18 +1,12 @@
 import {ColumnDef} from "@tanstack/react-table";
 import {Deployment} from "@/types";
 import {ColumnHeader} from "@/pages/app/flow-detail/pages/func-detail/components/history-components/column-header.tsx";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu.tsx";
-import {Button} from "@/components/ui/button.tsx";
-import {DotsHorizontalIcon} from "@radix-ui/react-icons";
+import RowAction from "@/pages/app/flow-detail/pages/func-detail/components/history-components/row-actions.tsx";
 import React from "react";
 import {CodeCallback} from "@/hook/code.ts";
 
-export const myColumns = (codeCallback: CodeCallback): ColumnDef<Deployment>[] => {
+
+export const columns = (codeCallback: CodeCallback): ColumnDef<Deployment>[] => {
     return [
         {
             accessorKey: "version",
@@ -41,27 +35,11 @@ export const myColumns = (codeCallback: CodeCallback): ColumnDef<Deployment>[] =
             enableSorting: false,
             enableHiding: false,
         },
-
         {
             id: "actions",
-            cell: ({row}) =>
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button
-                            variant="ghost"
-                            className="flex h-8 w-8 p-0 data-[state=open]:bg-muted float-right"
-                        >
-                            <DotsHorizontalIcon className="h-4 w-4"/>
-                            <span className="sr-only">Open menu</span>
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-[160px]">
-                        <DropdownMenuItem onClick={() => {
-                            console.log(`selected row: ${row.getValue("version")}`)
-                            codeCallback(row.getValue("version"))
-                        }}>Checkout</DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
+            cell: ({row}) => <RowAction row={row} codeCallback={codeCallback}/>,
+
+
         },
     ]
 }
