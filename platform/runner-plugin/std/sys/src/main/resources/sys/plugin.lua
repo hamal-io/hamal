@@ -129,6 +129,13 @@ function plugin()
             })
         end
 
+        function export.funcs.list_deployments(query)
+            query = query or {}
+            return internal.func_deployment_list(
+                    query.id or nil
+            )
+        end
+
         function export.funcs.get(func_id)
             return internal.func_get(func_id)
         end
