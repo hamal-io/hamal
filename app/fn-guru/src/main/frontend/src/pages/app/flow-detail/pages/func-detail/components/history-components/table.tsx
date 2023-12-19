@@ -1,5 +1,4 @@
 import * as React from "react"
-import {useEffect} from "react"
 import {
     ColumnDef,
     flexRender,
@@ -13,7 +12,6 @@ import {
 } from "@tanstack/react-table"
 
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow,} from "@/components/ui/table.tsx"
-import {useNavigate} from "react-router-dom";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -38,12 +36,6 @@ export default function <TData, TValue>({columns, data,}: DataTableProps<TData, 
         getFacetedRowModel: getFacetedRowModel(),
         getFacetedUniqueValues: getFacetedUniqueValues(),
     })
-
-    const navigate = useNavigate()
-
-    useEffect(() => {
-
-    }, [rowSelection]);
 
     return (
         <Table>

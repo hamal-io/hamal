@@ -5,8 +5,8 @@ import {CounterClockwiseClockIcon} from "@radix-ui/react-icons";
 import {useFuncHistory} from "@/hook";
 import {useNavigate} from "react-router-dom";
 import Table from "@/pages/app/flow-detail/pages/func-detail/components/history-components/table.tsx";
-import {columns} from "@/pages/app/flow-detail/pages/func-detail/components/history-components/columns.tsx";
 import {CodeCallback} from "@/hook/code.ts";
+import {myColumns} from "@/pages/app/flow-detail/pages/func-detail/components/history-components/columns.tsx";
 
 type Props = {
     funcId: string;
@@ -47,7 +47,7 @@ const History: FC<Props> = ({funcId, codeCallback}, setCode) => {
                     <DialogTitle>Deployed Versions:</DialogTitle>
                 </DialogHeader>
                 {funcHistory && (
-                    <Table data={funcHistory.deployments} columns={columns}/>
+                    <Table data={funcHistory.deployments} columns={myColumns(codeCallback)}/>
                 )}
                 <DialogFooter/>
             </DialogContent>
