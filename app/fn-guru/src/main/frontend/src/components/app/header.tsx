@@ -20,7 +20,7 @@ import * as z from "zod"
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
 import {useForm} from "react-hook-form";
-import {Loader2} from "lucide-react";
+import {BookOpen, Loader2} from "lucide-react";
 import {useAccountConvert} from "@/hook";
 
 
@@ -83,11 +83,6 @@ const Nav = ({className, ...props}: React.HTMLAttributes<HTMLElement>) => {
     const currentPath = location.pathname
 
     const navigation: NavItem[] = [
-        // {
-        //     href: `/dashboard`,
-        //     label: "Dashboard",
-        //     active: currentPath === '/dashboard'
-        // },
         {
             href: `/playground`,
             label: "Playground",
@@ -97,6 +92,11 @@ const Nav = ({className, ...props}: React.HTMLAttributes<HTMLElement>) => {
             href: `/flows`,
             label: "Flows",
             active: currentPath.startsWith('/flows')
+        },
+        {
+            href: "https://docs.fn.guru",
+            external: true,
+            label: "Documentation",
         },
     ];
 
