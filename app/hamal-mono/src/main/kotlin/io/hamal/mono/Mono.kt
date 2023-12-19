@@ -40,14 +40,6 @@ fun main(args: Array<String>) {
 
     val parent: ConfigurableApplicationContext = applicationBuilder.run(*args)
 
-//    applicationBuilder
-//        .parent(parent)
-//        .child(AdminConfig::class.java)
-//        .web(SERVLET)
-//        .properties("server.port=9009")
-//        .bannerMode(OFF)
-//        .run(*args)
-
     applicationBuilder
         .parent(parent)
         .child(ApiConfig::class.java)

@@ -35,7 +35,6 @@ dependencyResolutionManagement {
     }
 }
 
-include(":platform:admin")
 include(":platform:backend")
 include(":platform:backend:api")
 include(":platform:backend:bridge")
