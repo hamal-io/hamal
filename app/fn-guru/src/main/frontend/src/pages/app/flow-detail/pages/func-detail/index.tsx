@@ -8,8 +8,6 @@ import Actions from "@/pages/app/flow-detail/pages/func-detail/components/action
 import {FlowContext} from "@/pages/app/flow-detail";
 import {useFuncGet} from "@/hook/func.ts";
 import Deploy from "@/pages/app/flow-detail/pages/func-detail/components/deploy.tsx";
-import {CodeCallback, useCodeGet} from "@/hook/code.ts";
-
 
 type Props = {}
 const FuncDetailPage: FC<Props> = ({}) => {
@@ -17,17 +15,9 @@ const FuncDetailPage: FC<Props> = ({}) => {
     const {funcId} = useParams()
     // const [func, funcLoading, funcError] = useFuncGet(funcId)
     const [getFunc, func, funcLoading, funcError] = useFuncGet()
-    const [getCode, code_, codeLoading, codeError] = useCodeGet()
 
     const [name, setName] = useState('')
     const [code, setCode] = useState('')
-
-    const codeCallback: CodeCallback = (version) => {
-        getCode(funcId, version);
-        if (code_ != null) {
-            setCode(code_.value)
-        }
-    }
 
     useEffect(() => {
         const abortController = new AbortController()
@@ -56,7 +46,7 @@ const FuncDetailPage: FC<Props> = ({}) => {
                 <div className="flex w-full space-x-2 justify-end">
                     <Deploy funcId={funcId} code={code} name={name}/>
                     <Save funcId={funcId} code={code} name={name}/>
-                    <History funcId={funcId} codeCallback={codeCallback}/>
+                    <History/>
                     <Actions funcId={funcId} code={code}/>
                 </div>
             </div>
