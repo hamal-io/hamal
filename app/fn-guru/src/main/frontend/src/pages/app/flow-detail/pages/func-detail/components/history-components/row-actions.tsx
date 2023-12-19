@@ -33,6 +33,7 @@ const RowAction: React.FC<Props> = ({row, codeCallback}) => {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-[160px]">
                 <DropdownMenuItem onClick={() => {
+                    //"all unsaved changes will be lost"
                     codeCallback(row.getValue("version"))
                 }}>Checkout</DropdownMenuItem>
             </DropdownMenuContent>

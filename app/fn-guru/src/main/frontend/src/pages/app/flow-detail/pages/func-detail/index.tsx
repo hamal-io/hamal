@@ -15,8 +15,6 @@ const FuncDetailPage: FC<Props> = ({}) => {
     const {funcId} = useParams()
     // const [func, funcLoading, funcError] = useFuncGet(funcId)
     const [getFunc, func, funcLoading, funcError] = useFuncGet()
-
-
     const [name, setName] = useState('')
     const [code, setCode] = useState('')
 
