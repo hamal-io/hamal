@@ -129,10 +129,10 @@ function plugin()
             })
         end
 
-        function export.funcs.deployments(cmd)
-            cmd = cmd or {}
-            return internal.func_deployments(
-                    cmd.id or nil
+        function export.funcs.list_deployments(query)
+            query = query or {}
+            return internal.func_deployment_list(
+                    query.id or nil
             )
         end
 

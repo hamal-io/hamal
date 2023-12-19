@@ -63,17 +63,17 @@ interface FuncUpdatePort {
 
 }
 
-interface FuncCodePort : FuncCreatePort, FuncDeployPort, FuncGetPort, FuncInvokePort, FuncListPort, FuncUpdatePort,
+interface FuncPort : FuncCreatePort, FuncDeployPort, FuncGetPort, FuncInvokePort, FuncListPort, FuncUpdatePort,
     FuncDeploymentListPort
 
 @Component
-class FuncAdapterCode(
+class FuncAdapter(
     private val codeQueryRepository: CodeQueryRepository,
     private val funcQueryRepository: FuncQueryRepository,
     private val generateDomainId: GenerateDomainId,
     private val flowQueryRepository: FlowQueryRepository,
     private val reqCmdRepository: ReqCmdRepository
-) : FuncCodePort {
+) : FuncPort {
 
     override fun <T : Any> invoke(
         flowId: FlowId,

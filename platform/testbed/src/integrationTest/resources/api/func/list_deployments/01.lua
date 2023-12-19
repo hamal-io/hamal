@@ -22,7 +22,7 @@ for i = 2, 20 do
 end
 
 func_one = fail_on_error(sys.funcs.get(create_req.func_id))
-deployments = fail_on_error(sys.funcs.deployments(func_one))
+deployments = fail_on_error(sys.funcs.list_deployments(func_one))
 assert(#deployments == 19) --first is missing
 assert(deployments[10].message == 'message-11')
 assert(deployments[10].version == 11)
