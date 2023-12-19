@@ -94,7 +94,7 @@ const Create: FC<Prop> = ({flow}) => {
                                             <Input placeholder="Function-One" {...field} />
                                         </FormControl>
                                         <FormDescription>
-                                            This is the name of your function.
+                                            Name of your function
                                         </FormDescription>
                                         <FormMessage/>
                                     </FormItem>
