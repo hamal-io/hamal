@@ -5,19 +5,34 @@ import {CounterClockwiseClockIcon} from "@radix-ui/react-icons";
 import {useFuncHistory} from "@/hook";
 import {useNavigate} from "react-router-dom";
 import Table from "@/pages/app/flow-detail/pages/func-detail/components/history-components/table.tsx";
-import {CodeCallback} from "@/hook/code.ts";
 import {columns} from "@/pages/app/flow-detail/pages/func-detail/components/history-components/columns.tsx";
+import {useCodeGet} from "@/hook/code.ts";
+import {CodeCallback} from "@/types/code.ts";
 
 type Props = {
     funcId: string;
-    codeCallback: CodeCallback;
+    setCode: (str: string) => void;
 }
-const History: FC<Props> = ({funcId, codeCallback}, setCode) => {
+
+const History: FC<Props> = ({funcId, setCode}) => {
     const navigate = useNavigate()
     const [isLoading, setLoading] = useState(false)
     const [openDialog, setOpenDialog] = useState<boolean>(false)
     const [getHistory, funcHistory, loading, error] = useFuncHistory()
+    const [getCode, code, codeLoading, codeError] = useCodeGet()
 
+    const codeCallback: CodeCallback = (version) => {
+        setLoading(true)
+        try {
+            getCode(funcId, version)
+            setCode(code.value)
+        } catch (e) {
+            console.error(e)
+        } finally {
+            setLoading(false)
+            setOpenDialog(false)
+        }
+    }
 
     const handleClick = () => {
         setLoading(true)

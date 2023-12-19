@@ -3,7 +3,7 @@ import {Deployment} from "@/types";
 import {ColumnHeader} from "@/pages/app/flow-detail/pages/func-detail/components/history-components/column-header.tsx";
 import RowAction from "@/pages/app/flow-detail/pages/func-detail/components/history-components/row-actions.tsx";
 import React from "react";
-import {CodeCallback} from "@/hook/code.ts";
+import {CodeCallback} from "@/types/code.ts";
 
 
 export const columns = (codeCallback: CodeCallback): ColumnDef<Deployment>[] => {
@@ -37,9 +37,7 @@ export const columns = (codeCallback: CodeCallback): ColumnDef<Deployment>[] => 
         },
         {
             id: "actions",
-            cell: ({row}) => <RowAction row={row} codeCallback={codeCallback}/>,
-
-
+            cell: ({row}) => <RowAction row={row} codeCallback={codeCallback}/>
         },
     ]
 }

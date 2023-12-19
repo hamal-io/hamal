@@ -1,7 +1,6 @@
 import {Row} from "@tanstack/react-table";
 import {Deployment} from "@/types";
 import React from "react";
-import {useNavigate} from "react-router-dom";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -10,15 +9,16 @@ import {
 } from "@/components/ui/dropdown-menu.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {DotsHorizontalIcon} from "@radix-ui/react-icons";
-import {CodeCallback} from "@/hook/code.ts";
+import {CodeCallback} from "@/types/code.ts";
+
 
 interface Props {
     row: Row<Deployment>
-    codeCallback: CodeCallback
+    codeCallback: CodeCallback;
 }
 
 const RowAction: React.FC<Props> = ({row, codeCallback}) => {
-    const navigate = useNavigate()
+
 
     return (
         <DropdownMenu>

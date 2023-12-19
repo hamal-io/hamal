@@ -12,5 +12,3 @@ export const useCodeGet = (): [CodeGetAction, Code, boolean, Error] => {
         get(`/v1/code/${codeId}?version=${version}`, abortController), [auth])
     return [fn, code, loading, error]
 }
-
-export type CodeCallback = (version: number) => void
