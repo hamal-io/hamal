@@ -100,7 +100,7 @@ const CreateFixedRate: FC<Prop> = ({flow}) => {
                                             <Input placeholder="Fixed Rate - One" {...field} />
                                         </FormControl>
                                         <FormDescription>
-                                            This is the name of your trigger.
+                                            Name of your trigger
                                         </FormDescription>
                                         <FormMessage/>
                                     </FormItem>

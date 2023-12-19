@@ -82,7 +82,7 @@ const Create = () => {
                                             <Input placeholder="Workflow-One" {...field} />
                                         </FormControl>
                                         <FormDescription>
-                                            This is the name of your flow.
+                                            Name of your flow
                                         </FormDescription>
                                         <FormMessage/>
                                     </FormItem>

@@ -87,7 +87,7 @@ const CreateEvery: FC<Prop> = ({flow}) => {
                                             <Input placeholder="Schedule - One" {...field} />
                                         </FormControl>
                                         <FormDescription>
-                                            This is the name of your flow.
+                                            Name of your flow
                                         </FormDescription>
                                         <FormMessage/>
                                     </FormItem>
