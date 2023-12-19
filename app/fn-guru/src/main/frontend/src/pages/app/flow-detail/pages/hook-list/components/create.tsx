@@ -81,7 +81,7 @@ const Create: FC<Prop> = ({flow}) => {
                                             <Input placeholder="Webhook-one" {...field} />
                                         </FormControl>
                                         <FormDescription>
-                                            This is the name of your webhook.
+                                            Name of your webhook
                                         </FormDescription>
                                         <FormMessage/>
                                     </FormItem>
