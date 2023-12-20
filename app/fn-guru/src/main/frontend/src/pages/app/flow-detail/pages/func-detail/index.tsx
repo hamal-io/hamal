@@ -15,7 +15,6 @@ const FuncDetailPage: FC<Props> = ({}) => {
     const {funcId} = useParams()
     // const [func, funcLoading, funcError] = useFuncGet(funcId)
     const [getFunc, func, funcLoading, funcError] = useFuncGet()
-
     const [name, setName] = useState('')
     const [code, setCode] = useState('')
 
@@ -44,13 +43,12 @@ const FuncDetailPage: FC<Props> = ({}) => {
                     flowId={flow.id}
                 />
                 <div className="flex w-full space-x-2 justify-end">
-                    <Deploy funcId={funcId} code={code} name={name}/>
+                    <Deploy funcId={funcId} code={code}/>
                     <Save funcId={funcId} code={code} name={name}/>
-                    <History/>
+                    <History funcId={funcId}/>
                     <Actions funcId={funcId} code={code}/>
                 </div>
             </div>
-
 
             <div className="container h-full py-6">
                 <div className="bg-white p-4 rounded-sm border-2">

@@ -50,3 +50,14 @@ export interface FuncListItem {
     id: string;
     name: string;
 }
+
+export interface FuncDeploymentList {
+    deployments: Array<Deployment>
+}
+
+export interface Deployment {
+    version: string,
+    message: string,
+    deployedAt: string
+}
+
