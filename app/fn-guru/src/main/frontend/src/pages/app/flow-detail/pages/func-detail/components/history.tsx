@@ -3,36 +3,17 @@ import {Button} from "@/components/ui/button"
 import {Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger,} from "@/components/ui/dialog"
 import {CounterClockwiseClockIcon} from "@radix-ui/react-icons";
 import {useFuncHistory} from "@/hook";
-import {useNavigate} from "react-router-dom";
 import Table from "@/pages/app/flow-detail/pages/func-detail/components/history-components/table.tsx";
 import {columns} from "@/pages/app/flow-detail/pages/func-detail/components/history-components/columns.tsx";
-import {useCodeGet} from "@/hook/code.ts";
-import {CodeCallback} from "@/types/code.ts";
 
 type Props = {
     funcId: string;
-    setCode: (str: string) => void;
 }
 
-const History: FC<Props> = ({funcId, setCode}) => {
-    const navigate = useNavigate()
+const History: FC<Props> = ({funcId}) => {
     const [isLoading, setLoading] = useState(false)
     const [openDialog, setOpenDialog] = useState<boolean>(false)
     const [getHistory, funcHistory, loading, error] = useFuncHistory()
-    const [getCode, code, codeLoading, codeError] = useCodeGet()
-
-    const codeCallback: CodeCallback = (version) => {
-        setLoading(true)
-        try {
-            getCode(funcId, version)
-            setCode(code.value)
-        } catch (e) {
-            console.error(e)
-        } finally {
-            setLoading(false)
-            setOpenDialog(false)
-        }
-    }
 
     const handleClick = () => {
         setLoading(true)
@@ -62,7 +43,7 @@ const History: FC<Props> = ({funcId, setCode}) => {
                     <DialogTitle>Deployed Versions:</DialogTitle>
                 </DialogHeader>
                 {funcHistory && (
-                    <Table data={funcHistory.deployments} columns={columns(codeCallback)}/>
+                    <Table data={funcHistory.deployments} columns={columns}/>
                 )}
                 <DialogFooter/>
             </DialogContent>

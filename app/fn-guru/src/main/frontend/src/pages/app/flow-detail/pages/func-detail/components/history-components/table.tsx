@@ -82,7 +82,7 @@ export default function <TData, TValue>({columns, data,}: DataTableProps<TData, 
                             colSpan={columns.length}
                             className="h-24 text-center"
                         >
-                            If you deploy functions, they will appear in this list.
+                            Your deployed versions will appear here.
                         </TableCell>
                     </TableRow>
                 )}

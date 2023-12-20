@@ -3,5 +3,3 @@ export interface Code {
     value: string;
     version: number;
 }
-
-export type CodeCallback = (version: number) => void

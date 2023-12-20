@@ -1,25 +1,16 @@
 import {Row} from "@tanstack/react-table";
 import {Deployment} from "@/types";
 import React from "react";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu.tsx";
+import {DropdownMenu, DropdownMenuContent, DropdownMenuTrigger} from "@/components/ui/dropdown-menu.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {DotsHorizontalIcon} from "@radix-ui/react-icons";
-import {CodeCallback} from "@/types/code.ts";
 
 
 interface Props {
     row: Row<Deployment>
-    codeCallback: CodeCallback;
 }
 
-const RowAction: React.FC<Props> = ({row, codeCallback}) => {
-
-
+export default function ({row}: Props) {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -32,13 +23,10 @@ const RowAction: React.FC<Props> = ({row, codeCallback}) => {
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-[160px]">
-                <DropdownMenuItem onClick={() => {
-                    //"all unsaved changes will be lost"
-                    codeCallback(row.getValue("version"))
-                }}>Checkout</DropdownMenuItem>
+                {/* <DropdownMenuItem onClick={() => {
+
+                }}>Checkout</DropdownMenuItem>*/}
             </DropdownMenuContent>
         </DropdownMenu>
     )
 }
-
-export default RowAction;
