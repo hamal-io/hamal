@@ -6,7 +6,10 @@ import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.domain.UpdatedAt
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.FeedbackMood
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.AccountId
+import io.hamal.lib.domain.vo.Email
+import io.hamal.lib.domain.vo.FeedbackId
+import io.hamal.lib.domain.vo.FeedbackMessage
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -23,7 +26,7 @@ data class Feedback(
 interface FeedbackRepository : FeedbackCmdRepository, FeedbackQueryRepository
 
 interface FeedbackCmdRepository : CmdRepository {
-    fun create(cmd: CreateCmd)
+    fun create(cmd: CreateCmd): Feedback
 
     data class CreateCmd(
         val id: CmdId,
@@ -44,7 +47,7 @@ interface FeedbackQueryRepository {
     fun count(query: FeedbackQuery): ULong
 
     data class FeedbackQuery(
-        var afterId: CodeId = CodeId(SnowflakeId(Long.MAX_VALUE)),
+        var afterId: FeedbackId = FeedbackId(SnowflakeId(Long.MAX_VALUE)),
         var limit: Limit = Limit(1),
         var feedbackIds: List<FeedbackId> = listOf()
     )

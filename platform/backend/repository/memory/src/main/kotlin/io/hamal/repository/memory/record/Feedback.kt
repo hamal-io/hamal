@@ -36,8 +36,6 @@ private object FeedbackCurrentProjection {
             .reversed()
             .asSequence()
             .dropWhile { it.id >= query.afterId }
-            .take(query.limit.value)
-            .toList()
             .count()
             .toULong()
     }
@@ -53,7 +51,7 @@ class FeedbackMemoryRepository : RecordMemoryRepository<FeedbackId, FeedbackReco
 ), FeedbackRepository {
     private val lock = ReentrantLock()
 
-    override fun create(cmd: CreateCmd) {
+    override fun create(cmd: CreateCmd): Feedback {
         return lock.withLock {
             val feedbackId = cmd.feedbackId
             val cmdId = cmd.id
@@ -80,6 +78,8 @@ class FeedbackMemoryRepository : RecordMemoryRepository<FeedbackId, FeedbackReco
     override fun list(query: FeedbackQuery): List<Feedback> = lock.withLock { FeedbackCurrentProjection.list(query) }
 
     override fun count(query: FeedbackQuery): ULong = lock.withLock { FeedbackCurrentProjection.count(query) }
+
+    override fun clear() = FeedbackCurrentProjection.clear()
 
     override fun close() {}
 }
