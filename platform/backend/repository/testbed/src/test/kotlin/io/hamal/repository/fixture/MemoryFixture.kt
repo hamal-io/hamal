@@ -31,6 +31,7 @@ object MemoryFixture : BaseTestFixture {
         ExecLogRepository::class -> ExecLogMemoryRepository() as REPO
         ExecRepository::class -> ExecMemoryRepository() as REPO
         ExtensionRepository::class -> ExtensionMemoryRepository() as REPO
+        FeedbackRepository::class -> FeedbackMemoryRepository() as REPO
         FuncRepository::class -> FuncMemoryRepository() as REPO
         GroupRepository::class -> MemoryGroupRepository() as REPO
         HookRepository::class -> HookMemoryRepository() as REPO

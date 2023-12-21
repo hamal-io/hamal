@@ -72,6 +72,8 @@ object SqliteFixture : BaseTestFixture {
             ExtensionSqliteRepository.Config(createTempDirectory("sqlite_extension_test"))
         ) as REPO
 
+        //TODO-142 FeedbackRepository:: class ->
+
         FuncRepository::class -> FuncSqliteRepository(
             FuncSqliteRepository.Config(createTempDirectory("sqlite_func_test"))
         ) as REPO
