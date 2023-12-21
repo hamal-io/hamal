@@ -13,6 +13,7 @@ import kotlinx.serialization.Serializable
 data class Feedback(
     override val id: FeedbackId,
     override val updatedAt: UpdatedAt,
+    val cmdId: CmdId,
     val mood: FeedbackMood,
     val message: FeedbackMessage,
     val email: Email,
