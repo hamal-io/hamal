@@ -84,7 +84,7 @@ abstract class AbstractUnitTest {
 
         FeedbackRepository::class to listOf(
             MemoryFixture,
-            //SqliteFixture
+            SqliteFixture
         ),
 
         FlowRepository::class to listOf(
