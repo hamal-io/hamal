@@ -33,7 +33,7 @@ interface FeedbackCmdRepository : CmdRepository {
         val feedbackId: FeedbackId,
         val mood: FeedbackMood,
         val message: FeedbackMessage,
-        val email: Email = Email(""),
+        val email: Email,
         val accountId: AccountId
     )
 }

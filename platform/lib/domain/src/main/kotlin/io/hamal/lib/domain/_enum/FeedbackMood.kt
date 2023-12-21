@@ -2,8 +2,9 @@ package io.hamal.lib.domain._enum
 
 enum class FeedbackMood {
     Happy,
+    Excited,
     Normal,
-    Angry,
+    Overwhelmed,
     Disappointed,
-    Frustrated
+    Angry
 }
