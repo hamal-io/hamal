@@ -5,9 +5,11 @@ class HotBoolean(val value: Boolean) : HotTerminal {
 
     override fun asBoolean(): HotBoolean = this
 
-    override val booleanValue get() :Boolean = super.booleanValue
+    override fun asString(): HotString = HotString(stringValue)
 
-    override fun asString(): String = toString()
+    override val booleanValue get() : Boolean = value
+
+    override val stringValue get() : String = value.toString()
 
     override fun toString(): String = value.toString()
 
