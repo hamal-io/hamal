@@ -23,8 +23,8 @@ data class FeedbackEntity(
     override fun apply(rec: FeedbackRecord): FeedbackEntity {
         return when (rec) {
             is FeedbackCreatedRecord -> copy(
-                id = rec.entityId,
                 cmdId = rec.cmdId,
+                id = rec.entityId,
                 sequence = rec.sequence(),
                 mood = rec.mood,
                 message = rec.message,

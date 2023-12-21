@@ -27,6 +27,7 @@ interface FeedbackCmdRepository : CmdRepository {
 
     data class CreateCmd(
         val id: CmdId,
+        val feedbackId: FeedbackId,
         val mood: FeedbackMood,
         val message: FeedbackMessage,
         val email: Email = Email(""),
@@ -40,7 +41,7 @@ interface FeedbackQueryRepository {
 
     fun find(feedbackId: FeedbackId): Feedback?
     fun list(query: FeedbackQuery): List<Feedback>
-    fun count(query: FeedbackQuery)
+    fun count(query: FeedbackQuery): ULong
 
     data class FeedbackQuery(
         var afterId: CodeId = CodeId(SnowflakeId(Long.MAX_VALUE)),
