@@ -31,7 +31,7 @@ sealed interface HotNode {
     fun asObject(): HotObject = throw IllegalStateException("Not HotObject")
 
     val isString get(): Boolean = false
-    fun asString(): HotString = throw IllegalStateException("Not HotText")
+    fun asString(): HotString = throw IllegalStateException("Not HotString")
     val stringValue get(): String = throw IllegalStateException("Not string")
 
     val isTerminal get(): Boolean = false
