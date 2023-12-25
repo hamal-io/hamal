@@ -62,7 +62,6 @@ internal object HotNullTest {
         Tuple3("floatValue", HotNull::floatValue, "Not float"),
         Tuple3("intValue", HotNull::intValue, "Not int"),
         Tuple3("longValue", HotNull::longValue, "Not long"),
-        Tuple3("numberValue", HotNull::numberValue, "Not number"),
         Tuple3("shortValue", HotNull::shortValue, "Not short"),
         Tuple3("stringValue", HotNull::stringValue, "Not string")
     ).map { (testName, func, expectedMessage) ->
