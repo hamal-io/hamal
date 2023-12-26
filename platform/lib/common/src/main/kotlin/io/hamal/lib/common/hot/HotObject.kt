@@ -9,7 +9,7 @@ class HotObject(
 
     override val isObject get()  : Boolean = true
 
-    val size get() : Int = TODO()
+    val size get() : Int = nodes.size
 
     fun containsKey(key: String): Boolean = nodes.containsKey(key)
 
@@ -18,39 +18,72 @@ class HotObject(
     fun get(key: String): HotNode = find(key) ?: throw NoSuchElementException("$key not found")
 
     fun isArray(key: String): Boolean = find(key)?.isArray ?: false
-    fun asArray(key: String): HotArray = throw IllegalStateException("Not HotArray")
+    fun asArray(key: String): HotArray = find(key)
+        ?.let { if (it.isArray) it as HotArray else null }
+        ?: throw IllegalStateException("Not HotArray")
 
     fun isBoolean(key: String): Boolean = find(key)?.isBoolean ?: false
-    fun asBoolean(key: String): HotBoolean = throw IllegalStateException("Not HotBoolean")
-    fun booleanValue(key: String): Boolean = throw IllegalStateException("Not boolean")
+    fun asBoolean(key: String): HotBoolean = find(key)
+        ?.let { if (it.isBoolean) it as HotBoolean else null }
+        ?: throw IllegalStateException("Not HotBoolean")
+
+    fun booleanValue(key: String): Boolean = asBoolean(key).value
 
     fun isNumber(key: String): Boolean = find(key)?.isNumber ?: false
-    fun asNumber(key: String): HotNumber = throw IllegalStateException("Not HotNumber")
-    fun bigDecimalValue(key: String): BigDecimal = throw IllegalStateException("Not BigDecimal")
-    fun bigIntegerValue(key: String): BigInteger = throw IllegalStateException("Not BigInteger")
-    fun byteValue(key: String): Byte = throw IllegalStateException("Not byte")
-    fun doubleValue(key: String): Double = throw IllegalStateException("Not double")
-    fun floatValue(key: String): Float = throw IllegalStateException("Not float")
-    fun intValue(key: String): Int = throw IllegalStateException("Not int")
-    fun longValue(key: String): Long = throw IllegalStateException("Not long")
-    fun numberValue(key: String): Number = throw IllegalStateException("Not number")
-    fun shortValue(key: String): Short = throw IllegalStateException("Not short")
+    fun asNumber(key: String): HotNumber = find(key)
+        ?.let { if (it.isNumber) it as HotNumber else null }
+        ?: throw IllegalStateException("Not HotNumber")
+
+    fun bigDecimalValue(key: String): BigDecimal = asNumber(key).bigDecimalValue
+    fun bigIntegerValue(key: String): BigInteger = asNumber(key).bigIntegerValue
+    fun byteValue(key: String): Byte = asNumber(key).byteValue
+    fun doubleValue(key: String): Double = asNumber(key).doubleValue
+    fun floatValue(key: String): Float = asNumber(key).floatValue
+    fun intValue(key: String): Int = asNumber(key).intValue
+    fun longValue(key: String): Long = asNumber(key).longValue
+    fun shortValue(key: String): Short = asNumber(key).shortValue
 
     fun isNull(key: String): Boolean = find(key)?.isNull ?: true
-    fun asNull(key: String): HotNull = throw IllegalStateException("Not HotNull")
+    fun asNull(key: String): HotNull = find(key)
+        ?.let { if (it.isNull) it as HotNull else throw IllegalStateException("Not HotNull") }
+        ?: HotNull
 
     fun isObject(key: String): Boolean = find(key)?.isObject ?: false
-    fun asObject(key: String): HotObject = throw IllegalStateException("Not HotObject")
+    fun asObject(key: String): HotObject = find(key)
+        ?.let { if (it.isObject) it as HotObject else null }
+        ?: throw IllegalStateException("Not HotObject")
 
     fun isString(key: String): Boolean = find(key)?.isString ?: false
-    fun asString(key: String): HotString = throw IllegalStateException("Not HotString")
-    fun stringValue(key: String): String = throw IllegalStateException("Not string")
+    fun asString(key: String): HotString = find(key)
+        ?.let { if (it.isString) it as HotString else null }
+        ?: throw IllegalStateException("Not HotString")
+
+    fun stringValue(key: String): String = asString(key).stringValue
 
     fun isTerminal(key: String): Boolean = find(key)?.isTerminal ?: false
-    fun asTerminal(key: String): HotTerminal = throw IllegalStateException("Not HotTerminal")
+    fun asTerminal(key: String): HotTerminal = find(key)
+        ?.let { if (it.isTerminal) it as HotTerminal else null }
+        ?: throw IllegalStateException("Not HotTerminal")
 
     override fun deepCopy(): HotNode {
-        TODO("Not yet implemented")
+        val builder = builder()
+        nodes.forEach { (key, value) ->
+            builder.set(key, value.deepCopy())
+        }
+        return builder.build()
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as HotObject
+
+        return nodes == other.nodes
+    }
+
+    override fun hashCode(): Int {
+        return nodes.hashCode()
     }
 
     companion object {
@@ -58,6 +91,8 @@ class HotObject(
 
         fun builder() = HotObjectBuilder()
     }
+
+
 }
 
 class HotObjectBuilder {

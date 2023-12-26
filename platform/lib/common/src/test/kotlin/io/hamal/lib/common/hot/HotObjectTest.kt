@@ -1,6 +1,7 @@
 package io.hamal.lib.common.hot
 
 import io.hamal.lib.common.Tuple3
+import io.hamal.lib.common.Tuple4
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.nullValue
 import org.hamcrest.MatcherAssert.assertThat
@@ -11,6 +12,8 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 import org.junit.jupiter.api.assertThrows
+import java.math.BigDecimal
+import java.math.BigInteger
 
 internal class HotObjectTest {
 
@@ -29,29 +32,13 @@ internal class HotObjectTest {
         }
     }
 
-//    @TestFactory
-//    fun `is with key`() = listOf(
-////        Tuple3("isArray", HotObject.empty.isArray, false),
-//        Tuple3("isBoolean", HotObject.builder().set("key", true).build(), true),
-//        Tuple3("isBoolean - not boolean", HotObject.builder().set("key", 123).build(), false),
-//        Tuple3("isBoolean - not found", HotObject.builder().set("key", 123).build(), false),
-////        Tuple3("isNumber", HotObject.empty.isNumber, false),
-////        Tuple3("isNull", HotObject.empty.isNull, false),
-////        Tuple3("isObject", HotObject.empty.isObject, true),
-////        Tuple3("isString", HotObject.empty.isString, false),
-////        Tuple3("isTerminal", HotObject.empty.isTerminal, false)
-//    ).map { (testName, testInstance, expected) ->
-//        dynamicTest(testName) {
-//            assertThat(testInstance., equalTo(expected))
-//        }
-//    }
-
-    internal class IsTest {
+    @Nested
+    inner class IsTest {
 
         @TestFactory
         fun isArray() = listOf(
             Tuple3("isArray", testInstance.isArray("array"), true),
-            Tuple3("isArray - not string", testInstance.isArray("boolean"), false),
+            Tuple3("isArray - not array", testInstance.isArray("boolean"), false),
             Tuple3("isArray - not found", testInstance.isArray("doesNotExists"), false),
         ).map { (testName, result, expected) ->
             dynamicTest(testName) {
@@ -135,6 +122,147 @@ internal class HotObjectTest {
             .build()
     }
 
+    @Nested
+    inner class AsTest {
+
+        @TestFactory
+        fun `as`() = listOf(
+            Tuple3("asArray", testInstance.asArray("array"), HotArray.builder().add(42).build()),
+            Tuple3("asBoolean", testInstance.asBoolean("boolean"), HotBoolean(true)),
+            Tuple3("asNumber", testInstance.asNumber("number"), HotNumber(123)),
+            Tuple3("asNull", testInstance.asNull("null"), HotNull),
+            Tuple3("asNull - does not found", testInstance.asNull("doesNotExist"), HotNull),
+            Tuple3("asObject", testInstance.asObject("object"), HotObject.builder().set("hamal", "rocks").build()),
+            Tuple3("asString", testInstance.asString("string"), HotString("SomeString")),
+            Tuple3("asTerminal", testInstance.asTerminal("string"), HotString("SomeString")),
+        ).map { (testName, result, expected) ->
+            dynamicTest(testName) {
+                assertThat(result, equalTo(expected))
+            }
+        }
+
+        @TestFactory
+        fun `as - not found`() = listOf<Tuple3<String, (String) -> Any, String>>(
+            Tuple3("asArray", testInstance::asArray, "Not HotArray"),
+            Tuple3("asBoolean", testInstance::asBoolean, "Not HotBoolean"),
+            Tuple3("asNumber", testInstance::asNumber, "Not HotNumber"),
+            Tuple3("asObject", testInstance::asObject, "Not HotObject"),
+            Tuple3("asString", testInstance::asString, "Not HotString"),
+            Tuple3("asTerminal", testInstance::asTerminal, "Not HotTerminal"),
+        ).map { (testName, fn, expectedErrorMessage) ->
+            dynamicTest(testName) {
+                assertThrows<IllegalStateException> {
+                    fn("doesNotExists")
+                }.let { exception ->
+                    assertThat(exception.message, equalTo(expectedErrorMessage))
+                }
+            }
+        }
+
+        @TestFactory
+        fun `as - wrong type`() = listOf<Tuple4<String, String, (String) -> Any, String>>(
+            Tuple4("asArray", "object", testInstance::asArray, "Not HotArray"),
+            Tuple4("asBoolean", "string", testInstance::asBoolean, "Not HotBoolean"),
+            Tuple4("asNumber", "boolean", testInstance::asNumber, "Not HotNumber"),
+            Tuple4("asObject", "array", testInstance::asObject, "Not HotObject"),
+            Tuple4("asString", "number", testInstance::asString, "Not HotString"),
+            Tuple4("asTerminal", "array", testInstance::asTerminal, "Not HotTerminal"),
+        ).map { (testName, key, fn, expectedErrorMessage) ->
+            dynamicTest(testName) {
+                assertThrows<IllegalStateException> {
+                    fn(key)
+                }.let { exception ->
+                    assertThat(exception.message, equalTo(expectedErrorMessage))
+                }
+            }
+        }
+
+        private val testInstance = HotObject.builder()
+            .set("array", HotArray.builder().add(42).build())
+            .set("boolean", true)
+            .set("number", 123)
+            .set("string", "SomeString")
+            .set("object", HotObject.builder().set("hamal", "rocks").build())
+            .setNull("null")
+            .build()
+    }
+
+    @Nested
+    inner class ValueTest {
+
+        @TestFactory
+        fun `value`() = listOf(
+            Tuple3("booleanValue", testInstance.booleanValue("boolean"), true),
+            Tuple3("bigDecimalValue", testInstance.bigDecimalValue("number"), BigDecimal(123)),
+            Tuple3("bigIntegerValue", testInstance.bigIntegerValue("number"), BigInteger.valueOf(123)),
+            Tuple3("byteValue", testInstance.byteValue("number"), (123).toByte()),
+            Tuple3("doubleValue", testInstance.doubleValue("number"), 123.0),
+            Tuple3("floatValue", testInstance.floatValue("number"), 123.0f),
+            Tuple3("intValue", testInstance.intValue("number"), 123),
+            Tuple3("longValue", testInstance.longValue("number"), 123L),
+            Tuple3("shortValue", testInstance.shortValue("number"), (123).toShort()),
+            Tuple3("stringValue", testInstance.stringValue("string"), "SomeString")
+        ).map { (testName, result, expected) ->
+            dynamicTest(testName) {
+                assertThat(result, equalTo(expected))
+            }
+        }
+
+        @TestFactory
+        fun `value - not found`() = listOf<Tuple3<String, (String) -> Any, String>>(
+            Tuple3("booleanValue", testInstance::booleanValue, "Not HotBoolean"),
+            Tuple3("bigDecimalValue", testInstance::bigDecimalValue, "Not HotNumber"),
+            Tuple3("bigIntegerValue", testInstance::bigIntegerValue, "Not HotNumber"),
+            Tuple3("byteValue", testInstance::byteValue, "Not HotNumber"),
+            Tuple3("doubleValue", testInstance::doubleValue, "Not HotNumber"),
+            Tuple3("floatValue", testInstance::floatValue, "Not HotNumber"),
+            Tuple3("intValue", testInstance::intValue, "Not HotNumber"),
+            Tuple3("longValue", testInstance::longValue, "Not HotNumber"),
+            Tuple3("shortValue", testInstance::shortValue, "Not HotNumber"),
+            Tuple3("stringValue", testInstance::stringValue, "Not HotString")
+        ).map { (testName, fn, expectedErrorMessage) ->
+            dynamicTest(testName) {
+                assertThrows<IllegalStateException> {
+                    fn("doesNotExists")
+                }.let { exception ->
+                    assertThat(exception.message, equalTo(expectedErrorMessage))
+                }
+            }
+        }
+
+        @TestFactory
+        fun `value - wrong type`() = listOf<Tuple4<String, String, (String) -> Any, String>>(
+            Tuple4("booleanValue", "string", testInstance::booleanValue, "Not HotBoolean"),
+            Tuple4("bigDecimalValue", "boolean", testInstance::bigDecimalValue, "Not HotNumber"),
+            Tuple4("bigIntegerValue", "boolean", testInstance::bigIntegerValue, "Not HotNumber"),
+            Tuple4("byteValue", "boolean", testInstance::byteValue, "Not HotNumber"),
+            Tuple4("doubleValue", "boolean", testInstance::doubleValue, "Not HotNumber"),
+            Tuple4("floatValue", "boolean", testInstance::floatValue, "Not HotNumber"),
+            Tuple4("intValue", "boolean", testInstance::intValue, "Not HotNumber"),
+            Tuple4("longValue", "boolean", testInstance::longValue, "Not HotNumber"),
+            Tuple4("shortValue", "boolean", testInstance::shortValue, "Not HotNumber"),
+            Tuple4("stringValue", "number", testInstance::stringValue, "Not HotString")
+        ).map { (testName, key, fn, expectedErrorMessage) ->
+            dynamicTest(testName) {
+                assertThrows<IllegalStateException> {
+                    fn(key)
+                }.let { exception ->
+                    assertThat(exception.message, equalTo(expectedErrorMessage))
+                }
+            }
+        }
+
+        private val testInstance = HotObject.builder()
+            .set("array", HotArray.builder().add(42).build())
+            .set("boolean", true)
+            .set("number", 123)
+            .set("string", "SomeString")
+            .set("object", HotObject.builder().set("hamal", "rocks").build())
+            .setNull("null")
+            .build()
+    }
+
+
     @Test
     fun empty() {
         val testInstance = HotObject.empty
@@ -178,6 +306,7 @@ internal class HotObjectTest {
 
     @Nested
     inner class GetTest {
+
         @Test
         fun `Gets key`() {
             val result = testInstance.get("A")
@@ -194,5 +323,43 @@ internal class HotObjectTest {
         }
 
         private val testInstance: HotObject = HotObject.builder().set("A", "b").build()
+    }
+
+    @Nested
+    inner class DeepCopyTest {
+
+        @Test
+        fun empty() {
+            val testInstance = HotObject.empty
+            val result = testInstance.deepCopy()
+
+            assertFalse(testInstance === result)
+            require(result is HotObject)
+            assertThat(result.size, equalTo(0))
+        }
+
+        @Test
+        fun `Copy object`() {
+            val testInstance = HotObject.builder()
+                .set("array", HotArray.builder().add(42).build())
+                .set("boolean", true)
+                .set("number", 123)
+                .set("string", "SomeString")
+                .set("object", HotObject.builder().set("hamal", "rocks").build())
+                .setNull("null")
+                .build()
+
+            val result = testInstance.deepCopy()
+            assertFalse(testInstance === result)
+            require(result is HotObject)
+            assertThat(result.size, equalTo(6))
+
+            assertThat(result.asArray("array"), equalTo(HotArray.builder().add(42).build()))
+            assertThat(result.asBoolean("boolean"), equalTo(HotBoolean(true)))
+            assertThat(result.asNumber("number"), equalTo(HotNumber(123)))
+            assertThat(result.asString("string"), equalTo(HotString("SomeString")))
+            assertThat(result.asObject("object"), equalTo(HotObject.builder().set("hamal", "rocks").build()))
+            assertThat(result.asNull("null"), equalTo(HotNull))
+        }
     }
 }

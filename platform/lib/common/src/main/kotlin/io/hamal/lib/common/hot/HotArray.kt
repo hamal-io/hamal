@@ -11,7 +11,22 @@ class HotArray(
     override val isArray get(): Boolean = true
 
     override fun deepCopy(): HotNode {
-        TODO("Not yet implemented")
+        val builder = builder()
+        nodes.forEach { node: HotNode -> builder.add(node.deepCopy()) }
+        return builder.build()
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as HotArray
+
+        return nodes == other.nodes
+    }
+
+    override fun hashCode(): Int {
+        return nodes.hashCode()
     }
 
     companion object {
@@ -19,6 +34,7 @@ class HotArray(
 
         fun builder() = HotArrayBuilder()
     }
+
 }
 
 class HotArrayBuilder {
