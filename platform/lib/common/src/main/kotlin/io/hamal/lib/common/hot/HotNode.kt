@@ -1,12 +1,11 @@
 package io.hamal.lib.common.hot
 
-import kotlinx.serialization.json.JsonArray
 import java.math.BigDecimal
 import java.math.BigInteger
 
 sealed interface HotNode {
     val isArray get(): Boolean = false
-    fun asArray(): JsonArray = throw IllegalStateException("Not HotArray")
+    fun asArray(): HotArray = throw IllegalStateException("Not HotArray")
 
     val isBoolean get(): Boolean = false
     fun asBoolean(): HotBoolean = throw IllegalStateException("Not HotBoolean")
