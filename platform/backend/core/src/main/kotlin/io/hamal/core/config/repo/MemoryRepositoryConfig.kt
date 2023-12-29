@@ -79,6 +79,15 @@ open class MemoryRepositoryConfig {
     open fun extensionQueryRepository() = extensionRepository()
 
     @Bean
+    open fun feedbackRepository(): FeedbackRepository = FeedbackMemoryRepository()
+
+    @Bean
+    open fun feedbackCmdRepository(): FeedbackCmdRepository = feedbackRepository()
+
+    @Bean
+    open fun feedbackQueryRepository(): FeedbackQueryRepository = feedbackRepository()
+
+    @Bean
     open fun funcRepository(): FuncRepository = FuncMemoryRepository()
 
     @Bean
