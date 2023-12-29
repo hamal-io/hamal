@@ -7,7 +7,6 @@ import io.hamal.lib.common.domain.UpdatedAt
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.FeedbackMood
 import io.hamal.lib.domain.vo.AccountId
-import io.hamal.lib.domain.vo.Email
 import io.hamal.lib.domain.vo.FeedbackId
 import io.hamal.lib.domain.vo.FeedbackMessage
 import kotlinx.serialization.Serializable
@@ -19,8 +18,7 @@ data class Feedback(
     val cmdId: CmdId,
     val mood: FeedbackMood,
     val message: FeedbackMessage,
-    val email: Email,
-    val accountId: AccountId
+    val accountId: AccountId?
 ) : DomainObject<FeedbackId>
 
 interface FeedbackRepository : FeedbackCmdRepository, FeedbackQueryRepository
@@ -33,8 +31,7 @@ interface FeedbackCmdRepository : CmdRepository {
         val feedbackId: FeedbackId,
         val mood: FeedbackMood,
         val message: FeedbackMessage,
-        val email: Email,
-        val accountId: AccountId
+        val accountId: AccountId? = null
     )
 }
 

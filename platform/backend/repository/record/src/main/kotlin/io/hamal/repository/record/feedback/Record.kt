@@ -2,7 +2,10 @@ package io.hamal.repository.record.feedback
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain._enum.FeedbackMood
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.AccountId
+import io.hamal.lib.domain.vo.FeedbackId
+import io.hamal.lib.domain.vo.FeedbackMessage
+import io.hamal.lib.domain.vo.RecordedAt
 import io.hamal.repository.record.Record
 import io.hamal.repository.record.RecordSequence
 import kotlinx.serialization.SerialName
@@ -24,6 +27,5 @@ data class FeedbackCreatedRecord(
     override val cmdId: CmdId,
     val mood: FeedbackMood,
     val message: FeedbackMessage,
-    val email: Email,
-    val accountId: AccountId
+    val accountId: AccountId?
 ) : FeedbackRecord()

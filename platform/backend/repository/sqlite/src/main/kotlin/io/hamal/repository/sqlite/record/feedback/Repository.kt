@@ -64,7 +64,6 @@ class FeedbackSqliteRepository(
                         cmdId = cmdId,
                         mood = cmd.mood,
                         message = cmd.message,
-                        email = cmd.email,
                         accountId = cmd.accountId
                     )
                 )

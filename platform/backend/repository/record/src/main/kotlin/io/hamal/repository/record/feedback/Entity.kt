@@ -2,7 +2,10 @@ package io.hamal.repository.record.feedback
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain._enum.FeedbackMood
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.AccountId
+import io.hamal.lib.domain.vo.FeedbackId
+import io.hamal.lib.domain.vo.FeedbackMessage
+import io.hamal.lib.domain.vo.RecordedAt
 import io.hamal.repository.api.Feedback
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordEntity
@@ -16,7 +19,6 @@ data class FeedbackEntity(
 
     var mood: FeedbackMood? = null,
     var message: FeedbackMessage? = null,
-    var email: Email? = null,
     var accountId: AccountId? = null
 
 ) : RecordEntity<FeedbackId, FeedbackRecord, Feedback> {
@@ -28,7 +30,6 @@ data class FeedbackEntity(
                 sequence = rec.sequence(),
                 mood = rec.mood,
                 message = rec.message,
-                email = rec.email,
                 accountId = rec.accountId,
                 recordedAt = rec.recordedAt()
             )
@@ -42,8 +43,7 @@ data class FeedbackEntity(
             updatedAt = recordedAt.toUpdatedAt(),
             mood = mood!!,
             message = message!!,
-            email = email!!,
-            accountId = accountId!!
+            accountId = accountId
         )
     }
 }

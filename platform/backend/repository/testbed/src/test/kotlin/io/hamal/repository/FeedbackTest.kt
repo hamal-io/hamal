@@ -3,7 +3,6 @@ package io.hamal.repository
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.FeedbackMood
 import io.hamal.lib.domain.vo.AccountId
-import io.hamal.lib.domain.vo.Email
 import io.hamal.lib.domain.vo.FeedbackId
 import io.hamal.lib.domain.vo.FeedbackMessage
 import io.hamal.repository.api.Feedback
@@ -31,7 +30,6 @@ internal class FeedbackTest : AbstractUnitTest() {
                     feedbackId = FeedbackId(1),
                     mood = FeedbackMood.Angry,
                     message = FeedbackMessage("Please let me pay for this"),
-                    email = Email("user@hamal.io"),
                     accountId = AccountId(2)
                 )
             )
@@ -40,7 +38,6 @@ internal class FeedbackTest : AbstractUnitTest() {
                 assertThat(id, equalTo(FeedbackId(1)))
                 assertThat(mood, equalTo(FeedbackMood.Angry))
                 assertThat(message, equalTo(FeedbackMessage("Please let me pay for this")))
-                assertThat(email, equalTo(Email("user@hamal.io")))
                 assertThat(accountId, equalTo(AccountId(2)))
             }
             verifyCount(1)
@@ -161,7 +158,6 @@ internal class FeedbackTest : AbstractUnitTest() {
                 feedbackId = feedbackId,
                 mood = FeedbackMood.Angry,
                 message = FeedbackMessage("feedback-message"),
-                email = Email("user@hamal.io"),
                 accountId = AccountId(2)
             )
         )
@@ -172,7 +168,6 @@ internal class FeedbackTest : AbstractUnitTest() {
         with(feedback) {
             assertThat(mood, equalTo(FeedbackMood.Angry))
             assertThat(message, equalTo(FeedbackMessage("feedback-message")))
-            assertThat(email, equalTo(Email("user@hamal.io")))
             assertThat(accountId, equalTo(AccountId(2)))
         }
     }
