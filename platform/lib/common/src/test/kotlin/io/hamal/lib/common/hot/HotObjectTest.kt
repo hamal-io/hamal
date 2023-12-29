@@ -111,15 +111,6 @@ internal class HotObjectTest {
                 assertThat(result, equalTo(expected))
             }
         }
-
-        private val testInstance = HotObject.builder()
-            .set("array", HotArray.builder().add(42).build())
-            .set("boolean", true)
-            .set("number", 123)
-            .set("string", "SomeString")
-            .set("object", HotObject.builder().set("hamal", "rocks").build())
-            .setNull("null")
-            .build()
     }
 
     @Nested
@@ -177,14 +168,6 @@ internal class HotObjectTest {
             }
         }
 
-        private val testInstance = HotObject.builder()
-            .set("array", HotArray.builder().add(42).build())
-            .set("boolean", true)
-            .set("number", 123)
-            .set("string", "SomeString")
-            .set("object", HotObject.builder().set("hamal", "rocks").build())
-            .setNull("null")
-            .build()
     }
 
     @Nested
@@ -251,15 +234,6 @@ internal class HotObjectTest {
                 }
             }
         }
-
-        private val testInstance = HotObject.builder()
-            .set("array", HotArray.builder().add(42).build())
-            .set("boolean", true)
-            .set("number", 123)
-            .set("string", "SomeString")
-            .set("object", HotObject.builder().set("hamal", "rocks").build())
-            .setNull("null")
-            .build()
     }
 
 
@@ -296,7 +270,7 @@ internal class HotObjectTest {
         }
 
         @Test
-        fun `Contains not key`() {
+        fun `Does not find key`() {
             val result = testInstance.find("b")
             assertThat(result, nullValue())
         }
@@ -340,15 +314,6 @@ internal class HotObjectTest {
 
         @Test
         fun `Copy object`() {
-            val testInstance = HotObject.builder()
-                .set("array", HotArray.builder().add(42).build())
-                .set("boolean", true)
-                .set("number", 123)
-                .set("string", "SomeString")
-                .set("object", HotObject.builder().set("hamal", "rocks").build())
-                .setNull("null")
-                .build()
-
             val result = testInstance.deepCopy()
             assertFalse(testInstance === result)
             require(result is HotObject)
@@ -363,3 +328,12 @@ internal class HotObjectTest {
         }
     }
 }
+
+private val testInstance = HotObject.builder()
+    .set("array", HotArray.builder().add(42).build())
+    .set("boolean", true)
+    .set("number", 123)
+    .set("string", "SomeString")
+    .set("object", HotObject.builder().set("hamal", "rocks").build())
+    .setNull("null")
+    .build()
