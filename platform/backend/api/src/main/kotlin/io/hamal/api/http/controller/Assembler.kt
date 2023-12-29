@@ -38,6 +38,7 @@ fun Submitted.toApiSubmitted(): ApiSubmitted = when (this) {
     is AccountCreateMetaMaskSubmitted,
     is TestSubmitted,
     is ExecFailSubmitted,
+    is FeedbackCreateSubmitted,
     is HookInvokeSubmitted,
     is ExecCompleteSubmitted -> throw NotImplementedError()
 }
