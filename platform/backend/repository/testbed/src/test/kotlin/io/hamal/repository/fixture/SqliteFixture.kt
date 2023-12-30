@@ -16,6 +16,7 @@ import io.hamal.repository.sqlite.record.code.CodeSqliteRepository
 import io.hamal.repository.sqlite.record.endpoint.EndpointSqliteRepository
 import io.hamal.repository.sqlite.record.exec.ExecSqliteRepository
 import io.hamal.repository.sqlite.record.extension.ExtensionSqliteRepository
+import io.hamal.repository.sqlite.record.feedback.FeedbackSqliteRepository
 import io.hamal.repository.sqlite.record.flow.FlowSqliteRepository
 import io.hamal.repository.sqlite.record.func.FuncSqliteRepository
 import io.hamal.repository.sqlite.record.group.GroupSqliteRepository
@@ -70,6 +71,10 @@ object SqliteFixture : BaseTestFixture {
 
         ExtensionRepository::class -> ExtensionSqliteRepository(
             ExtensionSqliteRepository.Config(createTempDirectory("sqlite_extension_test"))
+        ) as REPO
+
+        FeedbackRepository::class -> FeedbackSqliteRepository(
+            FeedbackSqliteRepository.Config(createTempDirectory("sqlite_feedback_test"))
         ) as REPO
 
         FuncRepository::class -> FuncSqliteRepository(
