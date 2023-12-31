@@ -8,6 +8,7 @@ dependencies {
     api(external.kotlin.protobuf)
     api(external.kotlin.json)
     api(external.spring.logging)
+    api(external.gson)
     testImplementation(external.junit)
     testImplementation(external.hamcrest)
 }

@@ -20,6 +20,7 @@ class HotArray(
     fun get(idx: Int): HotNode = find(idx) ?: throw NoSuchElementException("Element at index $idx not found")
 
     fun isArray(idx: Int): Boolean = find(idx)?.isArray ?: false
+    override fun asArray(): HotArray = this
     fun asArray(idx: Int): HotArray = find(idx)
         ?.let { if (it.isArray) it as HotArray else null }
         ?: throw IllegalStateException("Not HotArray")
@@ -76,9 +77,7 @@ class HotArray(
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
-
         other as HotArray
-
         return nodes == other.nodes
     }
 

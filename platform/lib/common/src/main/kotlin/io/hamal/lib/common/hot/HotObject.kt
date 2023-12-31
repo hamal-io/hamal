@@ -49,6 +49,7 @@ class HotObject(
         ?: HotNull
 
     fun isObject(key: String): Boolean = find(key)?.isObject ?: false
+    override fun asObject(): HotObject = this
     fun asObject(key: String): HotObject = find(key)
         ?.let { if (it.isObject) it as HotObject else null }
         ?: throw IllegalStateException("Not HotObject")
