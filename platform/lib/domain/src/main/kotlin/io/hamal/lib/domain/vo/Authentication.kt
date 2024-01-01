@@ -1,7 +1,7 @@
 package io.hamal.lib.domain.vo
 
-import io.hamal.lib.common.domain.StringValueObject
 import io.hamal.lib.common.domain.StringValueObjectSerializer
+import io.hamal.lib.common.domain.ValueObjectString
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.base.DomainAt
 import io.hamal.lib.domain.vo.base.DomainAtSerializer
@@ -16,7 +16,7 @@ class AuthId(override val value: SnowflakeId) : SerializableDomainId() {
 }
 
 @Serializable(with = AuthToken.Serializer::class)
-class AuthToken(override val value: String) : StringValueObject() {
+class AuthToken(override val value: String) : ValueObjectString() {
     internal object Serializer : StringValueObjectSerializer<AuthToken>(::AuthToken)
 }
 
@@ -26,16 +26,16 @@ class AuthTokenExpiresAt(override val value: Instant) : DomainAt() {
 }
 
 @Serializable(with = Password.Serializer::class)
-class Password(override val value: String) : StringValueObject() {
+class Password(override val value: String) : ValueObjectString() {
     internal object Serializer : StringValueObjectSerializer<Password>(::Password)
 }
 
 @Serializable(with = PasswordHash.Serializer::class)
-class PasswordHash(override val value: String) : StringValueObject() {
+class PasswordHash(override val value: String) : ValueObjectString() {
     internal object Serializer : StringValueObjectSerializer<PasswordHash>(::PasswordHash)
 }
 
 @Serializable(with = PasswordSalt.Serializer::class)
-class PasswordSalt(override val value: String) : StringValueObject() {
+class PasswordSalt(override val value: String) : ValueObjectString() {
     internal object Serializer : StringValueObjectSerializer<PasswordSalt>(::PasswordSalt)
 }

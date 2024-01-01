@@ -2,6 +2,7 @@ package io.hamal.lib.common.serialization
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import io.hamal.lib.common.domain.ValueObjectString
 import io.hamal.lib.common.hot.HotArray
 import io.hamal.lib.common.hot.HotObject
 import org.hamcrest.CoreMatchers.equalTo
@@ -63,4 +64,29 @@ internal object InstantAdapterTest {
 
     private val testDelegate: Gson = GsonBuilder().registerTypeAdapter(Instant::class.java, InstantAdapter).create()
 
+}
+
+internal object ValueObjectStringAdapterTest {
+
+    @Test
+    fun serialize() {
+        val result = testDelegate.toJson(TestStringValueObject("Hamal Rocks"))
+        assertThat(result, equalTo("\"Hamal Rocks\""))
+    }
+
+    @Test
+    fun deserialize() {
+        val expected = TestStringValueObject("Hamal Rocks")
+        val result = testDelegate.fromJson("\"Hamal Rocks\"", TestStringValueObject::class.java)
+        assertThat(result, equalTo(expected))
+    }
+
+    private val testDelegate: Gson = GsonBuilder().registerTypeAdapter(
+        TestStringValueObject::class.java,
+        ValueObjectStringAdapter(::TestStringValueObject)
+    ).create()
+
+    private class TestStringValueObject(
+        override val value: String
+    ) : ValueObjectString()
 }

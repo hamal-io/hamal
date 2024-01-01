@@ -1,6 +1,7 @@
 package io.hamal.lib.common.serialization
 
 import com.google.gson.*
+import io.hamal.lib.common.domain.ValueObjectString
 import io.hamal.lib.common.hot.HotArray
 import io.hamal.lib.common.hot.HotObject
 import java.lang.reflect.Type
@@ -36,11 +37,25 @@ internal object InstantAdapter : GsonSerde<Instant> {
         return Instant.from(formatter.parse(json.asString))
     }
 
-    override fun serialize(src: Instant?, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
+    override fun serialize(src: Instant, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
         return JsonPrimitive(formatter.format(src))
     }
 
 
     private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'").withZone(ZoneOffset.UTC)
+}
+
+
+class ValueObjectStringAdapter<TYPE : ValueObjectString>(
+    val ctor: (String) -> TYPE
+) : GsonSerde<TYPE> {
+
+    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): TYPE {
+        return ctor(json.asString)
+    }
+
+    override fun serialize(src: TYPE, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
+        return JsonPrimitive(src.value)
+    }
 }
 

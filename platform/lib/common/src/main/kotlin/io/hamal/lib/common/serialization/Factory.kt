@@ -2,12 +2,12 @@ package io.hamal.lib.common.serialization
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.google.gson.TypeAdapterFactory
 import io.hamal.lib.common.hot.HotArray
 import io.hamal.lib.common.hot.HotObject
 import java.time.Instant
 
 object GsonFactory {
+
     private val builder = GsonBuilder()
 
     init {
@@ -18,11 +18,6 @@ object GsonFactory {
 
     fun <TYPE, SERDE : GsonSerde<TYPE>> registerTypeAdapter(clazz: Class<TYPE>, serde: SERDE): GsonFactory {
         builder.registerTypeAdapter(clazz, serde)
-        return this
-    }
-
-    fun registerTypeAdapterFactory(factory: TypeAdapterFactory): GsonFactory {
-        builder.registerTypeAdapterFactory(factory)
         return this
     }
 

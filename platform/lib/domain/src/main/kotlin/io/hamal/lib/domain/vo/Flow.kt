@@ -2,8 +2,8 @@ package io.hamal.lib.domain.vo
 
 import io.hamal.lib.common.domain.DomainName
 import io.hamal.lib.common.domain.DomainNameSerializer
-import io.hamal.lib.common.domain.StringValueObject
 import io.hamal.lib.common.domain.StringValueObjectSerializer
+import io.hamal.lib.common.domain.ValueObjectString
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.base.InputsSerializer
 import io.hamal.lib.domain.vo.base.MapValueObject
@@ -38,7 +38,7 @@ class FlowInputs(override val value: MapType = MapType()) : MapValueObject() {
 }
 
 @Serializable(with = FlowType.Serializer::class)
-class FlowType(override val value: String) : StringValueObject() {
+class FlowType(override val value: String) : ValueObjectString() {
     companion object {
         val default = FlowType("__default__")
     }

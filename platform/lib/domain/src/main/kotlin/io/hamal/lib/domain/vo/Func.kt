@@ -29,7 +29,7 @@ class FuncInputs(override val value: MapType = MapType()) : MapValueObject() {
 }
 
 @Serializable(with = DeployMessage.Serializer::class)
-data class DeployMessage(override val value: String) : StringValueObject() {
+data class DeployMessage(override val value: String) : ValueObjectString() {
     internal object Serializer : StringValueObjectSerializer<DeployMessage>(::DeployMessage)
 
     companion object {

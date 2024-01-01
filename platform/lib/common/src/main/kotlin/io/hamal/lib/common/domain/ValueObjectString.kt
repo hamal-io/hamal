@@ -8,13 +8,13 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
 @Serializable
-abstract class StringValueObject : ValueObject.ComparableImpl<String>() {
+abstract class ValueObjectString : ValueObject.ComparableImpl<String>() {
     override fun toString(): String {
         return "${this::class.simpleName}(${value})"
     }
 }
 
-abstract class StringValueObjectSerializer<STRING : StringValueObject>(
+abstract class StringValueObjectSerializer<STRING : ValueObjectString>(
     val fn: (String) -> STRING
 ) : KSerializer<STRING> {
     override val descriptor = PrimitiveSerialDescriptor("StringVO", PrimitiveKind.STRING)

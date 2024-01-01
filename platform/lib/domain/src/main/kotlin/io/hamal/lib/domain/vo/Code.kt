@@ -2,8 +2,8 @@ package io.hamal.lib.domain.vo
 
 import io.hamal.lib.common.domain.IntValueObject
 import io.hamal.lib.common.domain.IntValueObjectSerializer
-import io.hamal.lib.common.domain.StringValueObject
 import io.hamal.lib.common.domain.StringValueObjectSerializer
+import io.hamal.lib.common.domain.ValueObjectString
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.kua.type.StringType
 import kotlinx.serialization.SerialName
@@ -20,7 +20,7 @@ class CodeId(override val value: SnowflakeId) : SerializableDomainId() {
 
 @SerialName("CodeValue")
 @Serializable(with = CodeValue.Serializer::class)
-class CodeValue(override val value: String) : StringValueObject() {
+class CodeValue(override val value: String) : ValueObjectString() {
     constructor(str: StringType) : this(str.value)
 
     internal object Serializer : StringValueObjectSerializer<CodeValue>(::CodeValue)

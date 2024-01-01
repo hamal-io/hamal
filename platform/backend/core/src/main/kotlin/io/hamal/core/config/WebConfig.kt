@@ -1,12 +1,10 @@
 package io.hamal.core.config
 
 import com.google.gson.Gson
-import com.google.gson.JsonDeserializationContext
-import com.google.gson.JsonElement
-import com.google.gson.JsonSerializationContext
 import io.hamal.core.component.*
 import io.hamal.lib.common.serialization.GsonFactory
-import io.hamal.lib.common.serialization.GsonSerde
+import io.hamal.lib.common.serialization.ValueObjectStringAdapter
+import io.hamal.lib.domain.vo.AuthToken
 import io.hamal.lib.domain.vo.Email
 import io.hamal.lib.domain.vo.Password
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -22,7 +20,6 @@ import org.springframework.http.converter.StringHttpMessageConverter
 import org.springframework.http.converter.json.GsonHttpMessageConverter
 import org.springframework.http.converter.xml.SourceHttpMessageConverter
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
-import java.lang.reflect.Type
 import java.nio.charset.StandardCharsets
 import java.util.*
 import javax.xml.transform.Source
@@ -41,35 +38,12 @@ open class WebConfig : WebMvcConfigurer {
 
     @Bean
     open fun protobuf(): ProtoBuf = ProtoBuf { }
-
-//    override fun configureMessageConverters(converters: MutableList<HttpMessageConverter<*>>) {
-//        converters.add(KotlinSerializationJsonHttpMessageConverter(json()))
-//        super.configureMessageConverters(converters)
-//    }
-
+    
     @Bean
     open fun gson(): Gson = GsonFactory
-        .registerTypeAdapter(Email::class.java, object : GsonSerde<Email> {
-            override fun serialize(value: Email, type: Type, context: JsonSerializationContext): JsonElement {
-                TODO("Not yet implemented")
-            }
-
-            override fun deserialize(element: JsonElement, type: Type, context: JsonDeserializationContext): Email {
-//                TODO("Not yet implemented")
-                return Email(element.asString)
-            }
-
-        })
-        .registerTypeAdapter(Password::class.java, object : GsonSerde<Password> {
-            override fun serialize(value: Password, type: Type, context: JsonSerializationContext): JsonElement {
-                TODO("Not yet implemented")
-            }
-
-            override fun deserialize(element: JsonElement, type: Type, context: JsonDeserializationContext): Password {
-//                TODO("Not yet implemented")
-                return Password(element.asString)
-            }
-        })
+        .registerTypeAdapter(AuthToken::class.java, ValueObjectStringAdapter(::AuthToken))
+        .registerTypeAdapter(Email::class.java, ValueObjectStringAdapter(::Email))
+        .registerTypeAdapter(Password::class.java, ValueObjectStringAdapter(::Password))
         .create()
 
     @Bean
