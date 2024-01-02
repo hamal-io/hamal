@@ -1,7 +1,8 @@
 package io.hamal.api.http.controller
 
+import io.hamal.lib.domain.submitted.*
+import io.hamal.lib.domain.vo.GroupDefaultFlowId
 import io.hamal.lib.sdk.api.*
-import io.hamal.repository.api.submitted_req.*
 import org.springframework.http.ResponseEntity
 
 fun Submitted.accepted(): ResponseEntity<ApiSubmitted> =
@@ -9,8 +10,8 @@ fun Submitted.accepted(): ResponseEntity<ApiSubmitted> =
 
 // @formatter:off
 fun Submitted.toApiSubmitted(): ApiSubmitted = when (this) {
-    is AccountCreateSubmitted -> ApiTokenSubmitted(id, status, accountId, listOf(groupId), mapOf(groupId to flowId), token)
-    is AccountCreateAnonymousSubmitted -> ApiTokenSubmitted(id, status, accountId, listOf(groupId), mapOf(groupId to flowId), token)
+    is AccountCreateSubmitted -> ApiTokenSubmitted(id, status, accountId, listOf(groupId), listOf(GroupDefaultFlowId(groupId , flowId)), token)
+    is AccountCreateAnonymousSubmitted -> ApiTokenSubmitted(id, status, accountId, listOf(groupId), listOf(GroupDefaultFlowId(groupId , flowId)), token)
     is AccountConvertSubmitted -> ApiAccountConvertSubmitted(id, status, accountId, token)
     is AuthLoginMetaMaskSubmitted -> ApiTokenSubmitted(id, status, accountId, groupIds, defaultFlowIds, token)
     is AuthLoginEmailSubmitted -> ApiTokenSubmitted(id, status, accountId, groupIds, defaultFlowIds, token)

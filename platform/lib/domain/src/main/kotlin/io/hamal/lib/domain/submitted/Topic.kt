@@ -1,4 +1,4 @@
-package io.hamal.repository.api.submitted_req
+package io.hamal.lib.domain.submitted
 
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.*
@@ -10,7 +10,7 @@ data class TopicCreateSubmitted(
     val topicId: TopicId,
     val flowId: FlowId,
     val name: TopicName
-) : Submitted
+) : Submitted()
 
 
 data class TopicAppendToSubmitted(
@@ -19,4 +19,4 @@ data class TopicAppendToSubmitted(
     val topicId: TopicId,
     val groupId: GroupId,
     val payload: TopicEntryPayload
-) : Submitted
+) : Submitted()

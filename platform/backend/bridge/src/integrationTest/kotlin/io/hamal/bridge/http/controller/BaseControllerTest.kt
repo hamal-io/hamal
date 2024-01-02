@@ -6,7 +6,7 @@ import io.hamal.lib.domain.vo.ReqId
 import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.sdk.api.ApiSubmitted
 import io.hamal.repository.api.ReqQueryRepository.ReqQuery
-import io.hamal.repository.api.submitted_req.Submitted
+import io.hamal.lib.domain.submitted.Submitted
 import org.hamcrest.MatcherAssert
 import org.hamcrest.Matchers
 import kotlin.reflect.KClass

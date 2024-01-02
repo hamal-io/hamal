@@ -5,7 +5,7 @@ import io.hamal.core.req.handler.cmdId
 import io.hamal.lib.domain.vo.TopicEntryPayload
 import io.hamal.repository.api.log.AppenderImpl
 import io.hamal.repository.api.log.BrokerRepository
-import io.hamal.repository.api.submitted_req.TopicAppendToSubmitted
+import io.hamal.lib.domain.submitted.TopicAppendToSubmitted
 import org.springframework.stereotype.Component
 
 @Component

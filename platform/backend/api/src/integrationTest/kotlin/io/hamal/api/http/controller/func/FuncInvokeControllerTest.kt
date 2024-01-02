@@ -8,7 +8,7 @@ import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.*
-import io.hamal.repository.api.submitted_req.ExecInvokeSubmitted
+import io.hamal.lib.domain.submitted.ExecInvokeSubmitted
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test

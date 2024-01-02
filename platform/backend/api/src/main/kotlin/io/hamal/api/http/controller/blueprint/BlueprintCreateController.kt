@@ -7,7 +7,7 @@ import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.sdk.api.ApiBlueprintCreateReq
 import io.hamal.lib.sdk.api.ApiSubmitted
-import io.hamal.repository.api.submitted_req.BlueprintCreateSubmitted
+import io.hamal.lib.domain.submitted.BlueprintCreateSubmitted
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping

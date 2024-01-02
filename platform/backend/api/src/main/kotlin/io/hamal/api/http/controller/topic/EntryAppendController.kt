@@ -7,7 +7,7 @@ import io.hamal.lib.domain.vo.TopicEntryPayload
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.sdk.api.ApiSubmitted
 import io.hamal.lib.sdk.api.ApiTopicAppendEntryReq
-import io.hamal.repository.api.submitted_req.TopicAppendToSubmitted
+import io.hamal.lib.domain.submitted.TopicAppendToSubmitted
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping

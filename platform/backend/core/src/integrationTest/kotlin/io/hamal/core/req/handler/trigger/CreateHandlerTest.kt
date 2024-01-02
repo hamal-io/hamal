@@ -5,6 +5,7 @@ import io.hamal.lib.domain._enum.HookMethod.Get
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain._enum.TriggerType.*
 import io.hamal.lib.domain._enum.TriggerType.Event
+import io.hamal.lib.domain.submitted.TriggerCreateSubmitted
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
@@ -13,7 +14,6 @@ import io.hamal.repository.api.EventTrigger
 import io.hamal.repository.api.FixedRateTrigger
 import io.hamal.repository.api.HookTrigger
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
-import io.hamal.repository.api.submitted_req.TriggerCreateSubmitted
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Nested
@@ -184,17 +184,17 @@ internal class TriggerCreateHandlerTest : BaseReqHandlerTest() {
 
     private fun verifySingleEventTriggerExists() {
         triggerQueryRepository.list(TriggerQuery(types = listOf(Event), groupIds = listOf())).also { triggers ->
-                assertThat(triggers, hasSize(1))
+            assertThat(triggers, hasSize(1))
 
-                with(triggers.first()) {
-                    require(this is EventTrigger)
-                    assertThat(id, equalTo(TriggerId(1234)))
-                    assertThat(name, equalTo(TriggerName("EventTrigger")))
-                    assertThat(funcId, equalTo(FuncId(2222)))
-                    assertThat(topicId, equalTo(TopicId(1111)))
-                    assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
-                }
+            with(triggers.first()) {
+                require(this is EventTrigger)
+                assertThat(id, equalTo(TriggerId(1234)))
+                assertThat(name, equalTo(TriggerName("EventTrigger")))
+                assertThat(funcId, equalTo(FuncId(2222)))
+                assertThat(topicId, equalTo(TopicId(1111)))
+                assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
             }
+        }
     }
 
     private fun verifySingleHookTriggerExists() {

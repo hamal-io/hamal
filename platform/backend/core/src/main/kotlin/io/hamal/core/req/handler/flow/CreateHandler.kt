@@ -5,12 +5,12 @@ import io.hamal.core.req.ReqHandler
 import io.hamal.core.req.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.GenerateId
+import io.hamal.lib.domain.submitted.FlowCreateSubmitted
 import io.hamal.repository.api.Flow
 import io.hamal.repository.api.FlowCmdRepository
 import io.hamal.repository.api.FlowCmdRepository.CreateCmd
 import io.hamal.repository.api.FlowQueryRepository
 import io.hamal.repository.api.event.FlowCreatedEvent
-import io.hamal.repository.api.submitted_req.FlowCreateSubmitted
 import org.springframework.stereotype.Component
 
 

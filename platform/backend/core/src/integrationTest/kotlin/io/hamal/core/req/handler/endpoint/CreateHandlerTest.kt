@@ -7,7 +7,7 @@ import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.EndpointQueryRepository.EndpointQuery
 import io.hamal.repository.api.FuncCmdRepository.CreateCmd
-import io.hamal.repository.api.submitted_req.EndpointCreateSubmitted
+import io.hamal.lib.domain.submitted.EndpointCreateSubmitted
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize

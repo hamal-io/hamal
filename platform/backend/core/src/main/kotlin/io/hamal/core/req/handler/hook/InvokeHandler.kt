@@ -11,7 +11,7 @@ import io.hamal.repository.api.HookQueryRepository
 import io.hamal.repository.api.HookTrigger
 import io.hamal.repository.api.TriggerQueryRepository
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
-import io.hamal.repository.api.submitted_req.HookInvokeSubmitted
+import io.hamal.lib.domain.submitted.HookInvokeSubmitted
 import io.hamal.request.FuncInvokeReq
 import org.springframework.stereotype.Component
 

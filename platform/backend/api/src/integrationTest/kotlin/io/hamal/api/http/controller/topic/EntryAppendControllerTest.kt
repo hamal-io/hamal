@@ -8,7 +8,7 @@ import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.api.ApiError
-import io.hamal.repository.api.submitted_req.TriggerCreateSubmitted
+import io.hamal.lib.domain.submitted.TriggerCreateSubmitted
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize

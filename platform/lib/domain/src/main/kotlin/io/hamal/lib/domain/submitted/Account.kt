@@ -1,4 +1,4 @@
-package io.hamal.repository.api.submitted_req
+package io.hamal.lib.domain.submitted
 
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.*
@@ -16,7 +16,7 @@ data class AccountCreateSubmitted(
     val salt: PasswordSalt,
     val hash: PasswordHash,
     val token: AuthToken
-) : Submitted
+) : Submitted()
 
 data class AccountCreateAnonymousSubmitted(
     override val id: ReqId,
@@ -30,7 +30,7 @@ data class AccountCreateAnonymousSubmitted(
     val salt: PasswordSalt,
     val hash: PasswordHash,
     val token: AuthToken
-) : Submitted
+) : Submitted()
 
 data class AccountCreateMetaMaskSubmitted(
     override val id: ReqId,
@@ -44,7 +44,7 @@ data class AccountCreateMetaMaskSubmitted(
     val salt: PasswordSalt,
     val address: Web3Address,
     val token: AuthToken
-) : Submitted
+) : Submitted()
 
 data class AccountConvertSubmitted(
     override val id: ReqId,
@@ -55,4 +55,4 @@ data class AccountConvertSubmitted(
     val email: Email,
     val hash: PasswordHash,
     val token: AuthToken
-) : Submitted
+) : Submitted()

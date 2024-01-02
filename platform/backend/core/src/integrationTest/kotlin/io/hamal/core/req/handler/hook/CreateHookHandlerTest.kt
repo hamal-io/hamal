@@ -7,7 +7,7 @@ import io.hamal.lib.domain.vo.HookId
 import io.hamal.lib.domain.vo.HookName
 import io.hamal.lib.domain.vo.FlowId
 import io.hamal.repository.api.HookQueryRepository.HookQuery
-import io.hamal.repository.api.submitted_req.HookCreateSubmitted
+import io.hamal.lib.domain.submitted.HookCreateSubmitted
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize

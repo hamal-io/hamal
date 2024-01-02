@@ -6,7 +6,7 @@ import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain._enum.ReqStatus.*
 import io.hamal.repository.api.ReqQueryRepository.ReqQuery
 import io.hamal.repository.api.ReqRepository
-import io.hamal.repository.api.submitted_req.TestSubmitted
+import io.hamal.lib.domain.submitted.TestSubmitted
 import io.hamal.repository.fixture.AbstractUnitTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*

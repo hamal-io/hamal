@@ -5,7 +5,7 @@ import io.hamal.core.adapter.ExecFailPort
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.sdk.bridge.BridgeExecFailReq
 import io.hamal.lib.sdk.bridge.BridgeSubmitted
-import io.hamal.repository.api.submitted_req.ExecFailSubmitted
+import io.hamal.lib.domain.submitted.ExecFailSubmitted
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping

@@ -4,7 +4,7 @@ import io.hamal.core.req.ReqHandler
 import io.hamal.core.req.handler.cmdId
 import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.repository.api.log.CreateTopic.TopicToCreate
-import io.hamal.repository.api.submitted_req.TopicCreateSubmitted
+import io.hamal.lib.domain.submitted.TopicCreateSubmitted
 import org.springframework.stereotype.Component
 
 @Component

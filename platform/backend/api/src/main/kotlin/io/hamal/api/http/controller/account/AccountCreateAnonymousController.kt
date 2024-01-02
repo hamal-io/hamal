@@ -7,7 +7,7 @@ import io.hamal.core.component.Retry
 import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.sdk.api.ApiSubmitted
-import io.hamal.repository.api.submitted_req.Submitted
+import io.hamal.lib.domain.submitted.Submitted
 import io.hamal.request.AccountCreateAnonymousReq
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping

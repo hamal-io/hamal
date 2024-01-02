@@ -8,8 +8,8 @@ import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.ReqId
 import io.hamal.repository.api.*
 import io.hamal.repository.api.EndpointQueryRepository.EndpointQuery
-import io.hamal.repository.api.submitted_req.EndpointCreateSubmitted
-import io.hamal.repository.api.submitted_req.EndpointUpdateSubmitted
+import io.hamal.lib.domain.submitted.EndpointCreateSubmitted
+import io.hamal.lib.domain.submitted.EndpointUpdateSubmitted
 import io.hamal.request.EndpointCreateReq
 import io.hamal.request.EndpointUpdateReq
 import org.springframework.stereotype.Component

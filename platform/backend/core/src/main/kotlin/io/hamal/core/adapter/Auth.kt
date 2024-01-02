@@ -5,11 +5,11 @@ import io.hamal.core.component.GenerateToken
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain._enum.ReqStatus
+import io.hamal.lib.domain.submitted.AuthLoginEmailSubmitted
+import io.hamal.lib.domain.submitted.AuthLoginMetaMaskSubmitted
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.*
 import io.hamal.repository.api.FlowQueryRepository.FlowQuery
-import io.hamal.repository.api.submitted_req.AuthLoginEmailSubmitted
-import io.hamal.repository.api.submitted_req.AuthLoginMetaMaskSubmitted
 import io.hamal.request.AccountCreateMetaMaskReq
 import io.hamal.request.AuthChallengeMetaMaskReq
 import io.hamal.request.AuthLogInEmailReq
@@ -70,7 +70,7 @@ class AuthAdapter(
                 authId = generateDomainId(::AuthId),
                 accountId = submitted.accountId,
                 groupIds = listOf(submitted.groupId),
-                defaultFlowIds = mapOf(submitted.groupId to submitted.flowId),
+                defaultFlowIds = listOf(io.hamal.lib.domain.vo.GroupDefaultFlowId(submitted.groupId, submitted.flowId)),
                 token = generateToken(),
                 address = req.address,
                 signature = req.signature
@@ -79,7 +79,10 @@ class AuthAdapter(
         } else {
             val groupIds = groupList(auth.accountId) { groups -> groups.map(Group::id) }
             val flows = flowList(FlowQuery(groupIds = groupIds, limit = Limit.all)) { it }
-            val defaultFlowIds = flows.filter { it.name == FlowName.default }.associate { it.groupId to it.id }
+            val defaultFlowIds = flows.filter { it.name == FlowName.default }
+                .map {
+                    io.hamal.lib.domain.vo.GroupDefaultFlowId(it.groupId, it.id)
+                }
 
             return AuthLoginMetaMaskSubmitted(
                 id = generateDomainId(::ReqId),
@@ -111,7 +114,8 @@ class AuthAdapter(
         val groupIds = groupList(account.id) { groups -> groups.map(Group::id) }
 
         val flows = flowList(FlowQuery(groupIds = groupIds, limit = Limit.all)) { it }
-        val defaultFlowIds = flows.filter { it.name == FlowName.default }.associate { it.groupId to it.id }
+        val defaultFlowIds = flows.filter { it.name == FlowName.default }
+            .map { io.hamal.lib.domain.vo.GroupDefaultFlowId(it.groupId, it.id) }
 
         return AuthLoginEmailSubmitted(
             id = generateDomainId(::ReqId),

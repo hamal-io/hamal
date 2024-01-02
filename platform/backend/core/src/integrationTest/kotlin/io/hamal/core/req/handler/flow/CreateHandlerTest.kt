@@ -6,7 +6,7 @@ import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.FlowQueryRepository.FlowQuery
-import io.hamal.repository.api.submitted_req.FlowCreateSubmitted
+import io.hamal.lib.domain.submitted.FlowCreateSubmitted
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize

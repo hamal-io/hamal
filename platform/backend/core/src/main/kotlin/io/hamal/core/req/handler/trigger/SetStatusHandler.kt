@@ -5,11 +5,11 @@ import io.hamal.core.req.ReqHandler
 import io.hamal.core.req.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain._enum.TriggerStatus
+import io.hamal.lib.domain.submitted.TriggerStatusSubmitted
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerCmdRepository
 import io.hamal.repository.api.event.TriggerActivatedEvent
 import io.hamal.repository.api.event.TriggerDeactivatedEvent
-import io.hamal.repository.api.submitted_req.TriggerStatusSubmitted
 import org.springframework.stereotype.Component
 
 @Component

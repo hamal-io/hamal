@@ -5,10 +5,10 @@ import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.*
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
-import io.hamal.repository.api.submitted_req.ExecInvokeSubmitted
-import io.hamal.repository.api.submitted_req.FuncCreateSubmitted
-import io.hamal.repository.api.submitted_req.FuncDeploySubmitted
-import io.hamal.repository.api.submitted_req.FuncUpdateSubmitted
+import io.hamal.lib.domain.submitted.ExecInvokeSubmitted
+import io.hamal.lib.domain.submitted.FuncCreateSubmitted
+import io.hamal.lib.domain.submitted.FuncDeploySubmitted
+import io.hamal.lib.domain.submitted.FuncUpdateSubmitted
 import io.hamal.request.*
 import org.springframework.stereotype.Component
 

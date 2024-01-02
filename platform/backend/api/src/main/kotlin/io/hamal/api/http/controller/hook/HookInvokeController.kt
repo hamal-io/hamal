@@ -10,7 +10,7 @@ import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.HookQueryRepository
 import io.hamal.repository.api.ReqCmdRepository
-import io.hamal.repository.api.submitted_req.HookInvokeSubmitted
+import io.hamal.lib.domain.submitted.HookInvokeSubmitted
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.HttpStatus.ACCEPTED
 import org.springframework.http.ResponseEntity

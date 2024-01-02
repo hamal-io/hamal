@@ -10,8 +10,8 @@ import io.hamal.repository.api.Flow
 import io.hamal.repository.api.FlowQueryRepository
 import io.hamal.repository.api.FlowQueryRepository.FlowQuery
 import io.hamal.repository.api.ReqCmdRepository
-import io.hamal.repository.api.submitted_req.FlowCreateSubmitted
-import io.hamal.repository.api.submitted_req.FlowUpdateSubmitted
+import io.hamal.lib.domain.submitted.FlowCreateSubmitted
+import io.hamal.lib.domain.submitted.FlowUpdateSubmitted
 import io.hamal.request.FlowCreateReq
 import io.hamal.request.FlowUpdateReq
 import org.springframework.stereotype.Component

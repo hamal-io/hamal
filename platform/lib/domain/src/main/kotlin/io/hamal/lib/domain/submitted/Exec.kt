@@ -1,4 +1,4 @@
-package io.hamal.repository.api.submitted_req
+package io.hamal.lib.domain.submitted
 
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.*
@@ -14,14 +14,14 @@ data class ExecInvokeSubmitted(
     val inputs: InvocationInputs,
     val code: ExecCode,
     val invocation: Invocation
-) : Submitted
+) : Submitted()
 
 data class ExecFailSubmitted(
     override val id: ReqId,
     override var status: ReqStatus,
     val execId: ExecId,
     val result: ExecResult
-) : Submitted
+) : Submitted()
 
 data class ExecCompleteSubmitted(
     override val id: ReqId,
@@ -30,5 +30,5 @@ data class ExecCompleteSubmitted(
     val state: ExecState,
     val result: ExecResult,
     val events: List<EventToSubmit>
-) : Submitted
+) : Submitted()
 

@@ -2,7 +2,7 @@ package io.hamal.core.adapter
 
 import io.hamal.lib.domain.vo.ReqId
 import io.hamal.repository.api.ReqQueryRepository
-import io.hamal.repository.api.submitted_req.Submitted
+import io.hamal.lib.domain.submitted.Submitted
 import org.springframework.stereotype.Component
 
 

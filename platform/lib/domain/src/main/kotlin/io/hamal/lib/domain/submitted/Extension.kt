@@ -1,4 +1,4 @@
-package io.hamal.repository.api.submitted_req
+package io.hamal.lib.domain.submitted
 
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.*
@@ -11,7 +11,7 @@ data class ExtensionCreateSubmitted(
     val name: ExtensionName,
     val codeId: CodeId,
     val code: CodeValue
-) : Submitted
+) : Submitted()
 
 data class ExtensionUpdateSubmitted(
     override val id: ReqId,
@@ -20,5 +20,5 @@ data class ExtensionUpdateSubmitted(
     val extensionId: ExtensionId,
     val name: ExtensionName?,
     val code: CodeValue?
-) : Submitted
+) : Submitted()
 

@@ -1,7 +1,7 @@
 package io.hamal.core.req
 
 import io.hamal.lib.common.KeyedOnce
-import io.hamal.repository.api.submitted_req.Submitted
+import io.hamal.lib.domain.submitted.Submitted
 import org.springframework.context.ApplicationListener
 import org.springframework.context.event.ContextRefreshedEvent
 import org.springframework.stereotype.Component

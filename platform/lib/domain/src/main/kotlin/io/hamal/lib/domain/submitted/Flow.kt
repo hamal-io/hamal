@@ -1,4 +1,4 @@
-package io.hamal.repository.api.submitted_req
+package io.hamal.lib.domain.submitted
 
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.*
@@ -11,7 +11,7 @@ data class FlowCreateSubmitted(
     val name: FlowName,
     val inputs: FlowInputs,
     val type: FlowType
-) : Submitted
+) : Submitted()
 
 data class FlowUpdateSubmitted(
     override val id: ReqId,
@@ -20,4 +20,4 @@ data class FlowUpdateSubmitted(
     val flowId: FlowId,
     val name: FlowName,
     val inputs: FlowInputs
-) : Submitted
+) : Submitted()

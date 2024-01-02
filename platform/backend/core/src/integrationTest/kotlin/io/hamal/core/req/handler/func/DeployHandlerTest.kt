@@ -6,7 +6,7 @@ import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.CodeCmdRepository
 import io.hamal.repository.api.FuncCmdRepository
-import io.hamal.repository.api.submitted_req.FuncDeploySubmitted
+import io.hamal.lib.domain.submitted.FuncDeploySubmitted
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test

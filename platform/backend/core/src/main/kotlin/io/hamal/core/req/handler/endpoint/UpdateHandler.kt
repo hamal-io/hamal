@@ -4,11 +4,11 @@ import io.hamal.core.event.PlatformEventEmitter
 import io.hamal.core.req.ReqHandler
 import io.hamal.core.req.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.domain.submitted.EndpointUpdateSubmitted
 import io.hamal.repository.api.Endpoint
 import io.hamal.repository.api.EndpointCmdRepository.UpdateCmd
 import io.hamal.repository.api.EndpointRepository
 import io.hamal.repository.api.event.EndpointCreatedEvent
-import io.hamal.repository.api.submitted_req.EndpointUpdateSubmitted
 import org.springframework.stereotype.Component
 
 

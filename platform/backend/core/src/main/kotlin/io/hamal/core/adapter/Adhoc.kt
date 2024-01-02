@@ -5,7 +5,7 @@ import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.FlowQueryRepository
 import io.hamal.repository.api.ReqCmdRepository
-import io.hamal.repository.api.submitted_req.ExecInvokeSubmitted
+import io.hamal.lib.domain.submitted.ExecInvokeSubmitted
 import io.hamal.request.AdhocInvokeReq
 import org.springframework.stereotype.Component
 

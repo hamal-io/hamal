@@ -18,7 +18,7 @@ import io.hamal.lib.sdk.api.ApiError
 import io.hamal.lib.sdk.api.ApiTriggerCreateReq
 import io.hamal.lib.sdk.api.ApiTriggerCreateSubmitted
 import io.hamal.repository.api.*
-import io.hamal.repository.api.submitted_req.TriggerCreateSubmitted
+import io.hamal.lib.domain.submitted.TriggerCreateSubmitted
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Nested

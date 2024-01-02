@@ -4,7 +4,7 @@ import io.hamal.api.http.controller.accepted
 import io.hamal.core.adapter.ReqGetPort
 import io.hamal.lib.domain.vo.ReqId
 import io.hamal.lib.sdk.api.ApiSubmitted
-import io.hamal.repository.api.submitted_req.Submitted
+import io.hamal.lib.domain.submitted.Submitted
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable

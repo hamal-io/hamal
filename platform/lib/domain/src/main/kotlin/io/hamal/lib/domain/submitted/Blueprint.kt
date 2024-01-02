@@ -1,4 +1,4 @@
-package io.hamal.repository.api.submitted_req
+package io.hamal.lib.domain.submitted
 
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.*
@@ -12,7 +12,7 @@ data class BlueprintCreateSubmitted(
     val name: BlueprintName,
     val inputs: BlueprintInputs,
     val value: CodeValue
-) : Submitted
+) : Submitted()
 
 
 data class BlueprintUpdateSubmitted(
@@ -23,4 +23,4 @@ data class BlueprintUpdateSubmitted(
     val name: BlueprintName?,
     val inputs: BlueprintInputs?,
     val value: CodeValue?
-) : Submitted
+) : Submitted()

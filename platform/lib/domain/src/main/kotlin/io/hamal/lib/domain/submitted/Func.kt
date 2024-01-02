@@ -1,4 +1,4 @@
-package io.hamal.repository.api.submitted_req
+package io.hamal.lib.domain.submitted
 
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.*
@@ -14,7 +14,7 @@ data class FuncCreateSubmitted(
     val inputs: FuncInputs,
     val codeId: CodeId,
     val code: CodeValue
-) : Submitted
+) : Submitted()
 
 data class FuncUpdateSubmitted(
     override val id: ReqId,
@@ -24,7 +24,7 @@ data class FuncUpdateSubmitted(
     val name: FuncName?,
     val inputs: FuncInputs?,
     val code: CodeValue?
-) : Submitted
+) : Submitted()
 
 data class FuncDeploySubmitted(
     override val id: ReqId,
@@ -33,4 +33,4 @@ data class FuncDeploySubmitted(
     val funcId: FuncId,
     val version: CodeVersion?,
     val message: DeployMessage?
-) : Submitted
+) : Submitted()

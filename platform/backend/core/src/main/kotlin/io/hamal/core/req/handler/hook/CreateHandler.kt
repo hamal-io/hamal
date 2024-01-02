@@ -4,12 +4,12 @@ import io.hamal.core.event.PlatformEventEmitter
 import io.hamal.core.req.ReqHandler
 import io.hamal.core.req.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.domain.submitted.HookCreateSubmitted
 import io.hamal.repository.api.FlowQueryRepository
 import io.hamal.repository.api.Hook
 import io.hamal.repository.api.HookCmdRepository
 import io.hamal.repository.api.HookCmdRepository.CreateCmd
 import io.hamal.repository.api.event.HookCreatedEvent
-import io.hamal.repository.api.submitted_req.HookCreateSubmitted
 import org.springframework.stereotype.Component
 
 object Keep

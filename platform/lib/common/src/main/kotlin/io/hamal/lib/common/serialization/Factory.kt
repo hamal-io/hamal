@@ -6,7 +6,7 @@ import io.hamal.lib.common.hot.HotArray
 import io.hamal.lib.common.hot.HotObject
 import java.time.Instant
 
-object GsonFactory {
+object GsonFactoryBuilder {
 
     private val builder = GsonBuilder()
 
@@ -16,10 +16,10 @@ object GsonFactory {
         registerTypeAdapter(Instant::class.java, InstantAdapter)
     }
 
-    fun <TYPE, SERDE : GsonSerde<TYPE>> registerTypeAdapter(clazz: Class<TYPE>, serde: SERDE): GsonFactory {
+    fun <TYPE, SERDE : GsonSerde<TYPE>> registerTypeAdapter(clazz: Class<TYPE>, serde: SERDE): GsonFactoryBuilder {
         builder.registerTypeAdapter(clazz, serde)
         return this
     }
 
-    fun create(): Gson = builder.create()
+    fun build(): Gson = builder.create()
 }

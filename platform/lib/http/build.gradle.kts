@@ -4,7 +4,7 @@ plugins {
 }
 
 dependencies {
-    api(project(":platform:lib:common"))
+    api(project(":platform:lib:domain"))
     implementation(external.apache.http.client)
     implementation(external.apache.http.mime)
     implementation(external.apache.commons.logging)
@@ -20,7 +20,7 @@ testing {
         configureEach {
             if (this is JvmTestSuite) {
                 dependencies {
-                    implementation(project(":platform:lib:common"))
+                    implementation(project(":platform:lib:domain"))
                     implementation(external.apache.http.client)
                     implementation(external.apache.http.mime)
                     implementation(external.apache.commons.logging)

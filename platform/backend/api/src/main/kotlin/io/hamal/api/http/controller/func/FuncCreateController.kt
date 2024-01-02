@@ -6,7 +6,7 @@ import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.FlowId
 import io.hamal.lib.sdk.api.ApiFuncCreateReq
 import io.hamal.lib.sdk.api.ApiSubmitted
-import io.hamal.repository.api.submitted_req.FuncCreateSubmitted
+import io.hamal.lib.domain.submitted.FuncCreateSubmitted
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping

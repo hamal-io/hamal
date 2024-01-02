@@ -7,7 +7,7 @@ import io.hamal.lib.domain.vo.AuthTokenExpiresAt
 import io.hamal.repository.api.AuthCmdRepository.CreateTokenAuthCmd
 import io.hamal.repository.api.AuthRepository
 import io.hamal.repository.api.MetaMaskAuth
-import io.hamal.repository.api.submitted_req.AuthLoginMetaMaskSubmitted
+import io.hamal.lib.domain.submitted.AuthLoginMetaMaskSubmitted
 import org.springframework.stereotype.Component
 import java.time.temporal.ChronoUnit
 

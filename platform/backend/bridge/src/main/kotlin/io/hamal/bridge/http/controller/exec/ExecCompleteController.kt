@@ -5,7 +5,7 @@ import io.hamal.core.adapter.ExecCompletePort
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.sdk.bridge.BridgeExecCompleteReq
 import io.hamal.lib.sdk.bridge.BridgeSubmitted
-import io.hamal.repository.api.submitted_req.ExecCompleteSubmitted
+import io.hamal.lib.domain.submitted.ExecCompleteSubmitted
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping

@@ -1,4 +1,4 @@
-package io.hamal.repository.api.submitted_req
+package io.hamal.lib.domain.submitted
 
 import io.hamal.lib.domain._enum.EndpointMethod
 import io.hamal.lib.domain._enum.ReqStatus
@@ -12,7 +12,7 @@ data class EndpointCreateSubmitted(
     val groupId: GroupId,
     val name: EndpointName,
     val method: EndpointMethod
-) : Submitted
+) : Submitted()
 
 data class EndpointUpdateSubmitted(
     override val id: ReqId,
@@ -22,4 +22,4 @@ data class EndpointUpdateSubmitted(
     val funcId: FuncId,
     val name: EndpointName?,
     val method: EndpointMethod?
-) : Submitted
+) : Submitted()

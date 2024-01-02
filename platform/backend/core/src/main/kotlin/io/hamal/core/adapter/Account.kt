@@ -13,10 +13,10 @@ import io.hamal.repository.api.Account
 import io.hamal.repository.api.AccountQueryRepository
 import io.hamal.repository.api.AccountQueryRepository.AccountQuery
 import io.hamal.repository.api.ReqCmdRepository
-import io.hamal.repository.api.submitted_req.AccountConvertSubmitted
-import io.hamal.repository.api.submitted_req.AccountCreateAnonymousSubmitted
-import io.hamal.repository.api.submitted_req.AccountCreateMetaMaskSubmitted
-import io.hamal.repository.api.submitted_req.AccountCreateSubmitted
+import io.hamal.lib.domain.submitted.AccountConvertSubmitted
+import io.hamal.lib.domain.submitted.AccountCreateAnonymousSubmitted
+import io.hamal.lib.domain.submitted.AccountCreateMetaMaskSubmitted
+import io.hamal.lib.domain.submitted.AccountCreateSubmitted
 import io.hamal.request.AccountConvertAnonymousReq
 import io.hamal.request.AccountCreateAnonymousReq
 import io.hamal.request.AccountCreateMetaMaskReq

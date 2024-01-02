@@ -1,5 +1,6 @@
 package io.hamal.lib.http
 
+import io.hamal.lib.domain.Serde
 import java.io.InputStream
 import kotlin.reflect.KClass
 
@@ -33,8 +34,7 @@ interface HttpContentDeserializer {
 
 object GsonHttpContentDeserializer : HttpContentDeserializer {
     override fun <VALUE : Any> deserialize(inputStream: InputStream, clazz: KClass<VALUE>): VALUE {
-//        return jsonDelegate.decodeFromStream(clazz.serializer(), inputStream)
-        TODO()
+        return Serde.deserialize(inputStream, clazz)
     }
 
     override fun <VALUE : Any> deserializeList(inputStream: InputStream, clazz: KClass<VALUE>): List<VALUE> {
@@ -49,7 +49,6 @@ interface HttpContentSerializer {
 
 object GsonHttpContentSerializer : HttpContentSerializer {
     override fun <VALUE : Any> serialize(value: VALUE, clazz: KClass<VALUE>): String {
-//        return jsonDelegate.encodeToString(clazz.serializer(), value)
-        TODO()
+        return Serde.serialize(value)
     }
 }

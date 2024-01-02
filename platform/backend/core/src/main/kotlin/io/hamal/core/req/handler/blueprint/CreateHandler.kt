@@ -4,10 +4,10 @@ import io.hamal.core.event.PlatformEventEmitter
 import io.hamal.core.req.ReqHandler
 import io.hamal.core.req.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.domain.submitted.BlueprintCreateSubmitted
 import io.hamal.repository.api.Blueprint
 import io.hamal.repository.api.BlueprintCmdRepository
 import io.hamal.repository.api.event.BlueprintCreatedEvent
-import io.hamal.repository.api.submitted_req.BlueprintCreateSubmitted
 import org.springframework.stereotype.Component
 
 @Component

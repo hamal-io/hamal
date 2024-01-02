@@ -1,4 +1,4 @@
-package io.hamal.repository.api.submitted_req
+package io.hamal.lib.domain.submitted
 
 import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain._enum.ReqStatus
@@ -10,4 +10,4 @@ data class StateSetSubmitted(
     override var status: ReqStatus,
     val groupId: GroupId,
     val state: CorrelatedState
-) : Submitted
+) : Submitted()

@@ -2,11 +2,7 @@ package io.hamal.core.config
 
 import com.google.gson.Gson
 import io.hamal.core.component.*
-import io.hamal.lib.common.serialization.GsonFactory
-import io.hamal.lib.common.serialization.ValueObjectStringAdapter
-import io.hamal.lib.domain.vo.AuthToken
-import io.hamal.lib.domain.vo.Email
-import io.hamal.lib.domain.vo.Password
+import io.hamal.lib.domain.gsonInstance
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.format.FormatterRegistry
@@ -26,11 +22,7 @@ import javax.xml.transform.Source
 open class WebConfig : WebMvcConfigurer {
 
     @Bean
-    open fun gson(): Gson = GsonFactory
-        .registerTypeAdapter(AuthToken::class.java, ValueObjectStringAdapter(::AuthToken))
-        .registerTypeAdapter(Email::class.java, ValueObjectStringAdapter(::Email))
-        .registerTypeAdapter(Password::class.java, ValueObjectStringAdapter(::Password))
-        .create()
+    open fun gson(): Gson = gsonInstance
 
     @Bean
     open fun gsonHttpMessageConverter(gson: Gson): GsonHttpMessageConverter {

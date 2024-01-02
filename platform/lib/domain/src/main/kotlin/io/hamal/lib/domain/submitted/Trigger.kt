@@ -1,4 +1,4 @@
-package io.hamal.repository.api.submitted_req
+package io.hamal.lib.domain.submitted
 
 import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain._enum.ReqStatus
@@ -23,12 +23,12 @@ data class TriggerCreateSubmitted(
     val hookId: HookId? = null,
     val hookMethod: HookMethod? = null,
     val cron: CronPattern? = null
-) : Submitted
+) : Submitted()
 
 data class TriggerStatusSubmitted(
     override val id: ReqId,
     override var status: ReqStatus,
     val triggerId: TriggerId,
     val triggerStatus: TriggerStatus
-) : Submitted
+) : Submitted()
 

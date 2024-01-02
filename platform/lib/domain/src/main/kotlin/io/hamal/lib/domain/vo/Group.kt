@@ -13,3 +13,9 @@ class GroupId(override val value: SnowflakeId) : ValueObjectId() {
 }
 
 class GroupName(override val value: String) : DomainName()
+
+
+data class GroupDefaultFlowId(
+    val groupId: GroupId,
+    val flowId: FlowId
+)

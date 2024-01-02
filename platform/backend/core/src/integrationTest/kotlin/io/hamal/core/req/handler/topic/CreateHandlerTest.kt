@@ -6,7 +6,7 @@ import io.hamal.lib.domain.vo.ReqId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.repository.api.log.BrokerTopicsRepository.TopicQuery
-import io.hamal.repository.api.submitted_req.TopicCreateSubmitted
+import io.hamal.lib.domain.submitted.TopicCreateSubmitted
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize

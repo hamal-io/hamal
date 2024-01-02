@@ -11,7 +11,7 @@ import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncQueryRepository
 import io.hamal.repository.api.ReqCmdRepository
 import io.hamal.repository.api.StateQueryRepository
-import io.hamal.repository.api.submitted_req.StateSetSubmitted
+import io.hamal.lib.domain.submitted.StateSetSubmitted
 import io.hamal.request.StateSetReq
 import org.springframework.stereotype.Component
 

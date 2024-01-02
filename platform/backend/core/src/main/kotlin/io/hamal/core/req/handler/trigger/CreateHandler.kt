@@ -6,13 +6,13 @@ import io.hamal.core.req.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain._enum.HookMethod.Post
 import io.hamal.lib.domain._enum.TriggerType.*
+import io.hamal.lib.domain.submitted.TriggerCreateSubmitted
 import io.hamal.repository.api.FuncQueryRepository
 import io.hamal.repository.api.HookQueryRepository
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerCmdRepository
 import io.hamal.repository.api.event.TriggerCreatedEvent
 import io.hamal.repository.api.log.BrokerRepository
-import io.hamal.repository.api.submitted_req.TriggerCreateSubmitted
 import org.springframework.stereotype.Component
 
 @Component

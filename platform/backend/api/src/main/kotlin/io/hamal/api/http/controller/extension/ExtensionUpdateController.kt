@@ -6,7 +6,7 @@ import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.ExtensionId
 import io.hamal.lib.sdk.api.ApiExtensionUpdateReq
 import io.hamal.lib.sdk.api.ApiSubmitted
-import io.hamal.repository.api.submitted_req.ExtensionUpdateSubmitted
+import io.hamal.lib.domain.submitted.ExtensionUpdateSubmitted
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable

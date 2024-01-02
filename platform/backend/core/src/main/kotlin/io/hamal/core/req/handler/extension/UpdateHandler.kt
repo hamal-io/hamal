@@ -4,13 +4,13 @@ import io.hamal.core.event.PlatformEventEmitter
 import io.hamal.core.req.ReqHandler
 import io.hamal.core.req.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.domain.submitted.ExtensionUpdateSubmitted
 import io.hamal.repository.api.CodeCmdRepository
 import io.hamal.repository.api.Extension
 import io.hamal.repository.api.ExtensionCmdRepository.UpdateCmd
 import io.hamal.repository.api.ExtensionCode
 import io.hamal.repository.api.ExtensionRepository
 import io.hamal.repository.api.event.ExtensionUpdatedEvent
-import io.hamal.repository.api.submitted_req.ExtensionUpdateSubmitted
 import org.springframework.stereotype.Component
 
 @Component

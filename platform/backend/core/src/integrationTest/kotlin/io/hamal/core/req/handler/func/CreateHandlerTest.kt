@@ -9,7 +9,7 @@ import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.FuncCode
 import io.hamal.repository.api.FuncDeployment
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
-import io.hamal.repository.api.submitted_req.FuncCreateSubmitted
+import io.hamal.lib.domain.submitted.FuncCreateSubmitted
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize

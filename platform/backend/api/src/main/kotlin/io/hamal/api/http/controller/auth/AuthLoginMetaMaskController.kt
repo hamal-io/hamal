@@ -7,7 +7,7 @@ import io.hamal.lib.sdk.api.ApiChallengeMetaMask
 import io.hamal.lib.sdk.api.ApiAuthChallengeMetaMaskReq
 import io.hamal.lib.sdk.api.ApiAuthLoginMetaMaskReq
 import io.hamal.lib.sdk.api.ApiSubmitted
-import io.hamal.repository.api.submitted_req.AuthLoginMetaMaskSubmitted
+import io.hamal.lib.domain.submitted.AuthLoginMetaMaskSubmitted
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody

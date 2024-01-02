@@ -8,8 +8,8 @@ import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.ReqId
 import io.hamal.repository.api.*
 import io.hamal.repository.api.ExtensionQueryRepository.ExtensionQuery
-import io.hamal.repository.api.submitted_req.ExtensionCreateSubmitted
-import io.hamal.repository.api.submitted_req.ExtensionUpdateSubmitted
+import io.hamal.lib.domain.submitted.ExtensionCreateSubmitted
+import io.hamal.lib.domain.submitted.ExtensionUpdateSubmitted
 import io.hamal.request.ExtensionCreateReq
 import io.hamal.request.ExtensionUpdateReq
 import org.springframework.stereotype.Component

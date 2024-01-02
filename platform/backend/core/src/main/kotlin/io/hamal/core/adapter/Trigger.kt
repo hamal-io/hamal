@@ -4,13 +4,13 @@ import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain._enum.TriggerType
+import io.hamal.lib.domain.submitted.TriggerCreateSubmitted
+import io.hamal.lib.domain.submitted.TriggerStatusSubmitted
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.*
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.repository.api.log.Topic
-import io.hamal.repository.api.submitted_req.TriggerCreateSubmitted
-import io.hamal.repository.api.submitted_req.TriggerStatusSubmitted
 import io.hamal.request.TriggerCreateReq
 import org.springframework.stereotype.Component
 

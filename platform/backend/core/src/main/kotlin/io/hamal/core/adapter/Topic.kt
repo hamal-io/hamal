@@ -12,8 +12,8 @@ import io.hamal.repository.api.log.BrokerRepository.TopicEntryQuery
 import io.hamal.repository.api.log.BrokerTopicsRepository.TopicQuery
 import io.hamal.repository.api.log.Topic
 import io.hamal.repository.api.log.TopicEntry
-import io.hamal.repository.api.submitted_req.TopicAppendToSubmitted
-import io.hamal.repository.api.submitted_req.TopicCreateSubmitted
+import io.hamal.lib.domain.submitted.TopicAppendToSubmitted
+import io.hamal.lib.domain.submitted.TopicCreateSubmitted
 import io.hamal.request.TopicAppendEntryReq
 import io.hamal.request.TopicCreateReq
 import org.springframework.stereotype.Component

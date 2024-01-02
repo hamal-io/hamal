@@ -6,7 +6,7 @@ import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.ReqId
 import io.hamal.lib.sdk.api.ApiReqList
 import io.hamal.repository.api.ReqQueryRepository
-import io.hamal.repository.api.submitted_req.Submitted
+import io.hamal.lib.domain.submitted.Submitted
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam

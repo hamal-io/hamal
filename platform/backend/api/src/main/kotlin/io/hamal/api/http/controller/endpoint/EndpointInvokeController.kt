@@ -9,7 +9,7 @@ import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.api.ApiExec
 import io.hamal.repository.api.*
-import io.hamal.repository.api.submitted_req.ExecInvokeSubmitted
+import io.hamal.lib.domain.submitted.ExecInvokeSubmitted
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*

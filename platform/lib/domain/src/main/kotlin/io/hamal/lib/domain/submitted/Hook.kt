@@ -1,4 +1,4 @@
-package io.hamal.repository.api.submitted_req
+package io.hamal.lib.domain.submitted
 
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.*
@@ -10,7 +10,7 @@ data class HookCreateSubmitted(
     val flowId: FlowId,
     val groupId: GroupId,
     val name: HookName,
-) : Submitted
+) : Submitted()
 
 
 data class HookUpdateSubmitted(
@@ -19,7 +19,7 @@ data class HookUpdateSubmitted(
     val hookId: HookId,
     val groupId: GroupId,
     val name: HookName?,
-) : Submitted
+) : Submitted()
 
 data class HookInvokeSubmitted(
     override val id: ReqId,
@@ -27,4 +27,4 @@ data class HookInvokeSubmitted(
     val hookId: HookId,
     val groupId: GroupId,
     val invocation: HookInvocation
-) : Submitted
+) : Submitted()

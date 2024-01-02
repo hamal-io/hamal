@@ -75,3 +75,4 @@ class ValueObjectStringAdapter<TYPE : ValueObjectString>(
     }
 }
 
+

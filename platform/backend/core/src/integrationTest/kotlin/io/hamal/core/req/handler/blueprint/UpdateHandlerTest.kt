@@ -7,7 +7,7 @@ import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.BlueprintCmdRepository
-import io.hamal.repository.api.submitted_req.BlueprintUpdateSubmitted
+import io.hamal.lib.domain.submitted.BlueprintUpdateSubmitted
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test

@@ -2,7 +2,7 @@ package io.hamal.repository.api
 
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.ReqId
-import io.hamal.repository.api.submitted_req.Submitted
+import io.hamal.lib.domain.submitted.Submitted
 
 interface ReqRepository : ReqCmdRepository, ReqQueryRepository
 

@@ -11,7 +11,7 @@ import io.hamal.lib.domain.vo.ReqId
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.ExecQueryRepository.ExecQuery
-import io.hamal.repository.api.submitted_req.ExecFailSubmitted
+import io.hamal.lib.domain.submitted.ExecFailSubmitted
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.DynamicTest.dynamicTest

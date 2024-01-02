@@ -7,7 +7,7 @@ import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sdk.api.ApiFuncInvokeVersionReq
 import io.hamal.lib.sdk.api.ApiSubmitted
-import io.hamal.repository.api.submitted_req.ExecInvokeSubmitted
+import io.hamal.lib.domain.submitted.ExecInvokeSubmitted
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping

@@ -9,7 +9,7 @@ import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sdk.api.ApiState
 import io.hamal.lib.sdk.api.ApiStateSetReq
 import io.hamal.lib.sdk.api.ApiSubmitted
-import io.hamal.repository.api.submitted_req.StateSetSubmitted
+import io.hamal.lib.domain.submitted.StateSetSubmitted
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PutMapping

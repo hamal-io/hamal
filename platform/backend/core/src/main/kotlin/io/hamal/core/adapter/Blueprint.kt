@@ -9,8 +9,8 @@ import io.hamal.lib.domain.vo.ReqId
 import io.hamal.repository.api.Blueprint
 import io.hamal.repository.api.BlueprintQueryRepository
 import io.hamal.repository.api.ReqCmdRepository
-import io.hamal.repository.api.submitted_req.BlueprintCreateSubmitted
-import io.hamal.repository.api.submitted_req.BlueprintUpdateSubmitted
+import io.hamal.lib.domain.submitted.BlueprintCreateSubmitted
+import io.hamal.lib.domain.submitted.BlueprintUpdateSubmitted
 import io.hamal.request.BlueprintCreateReq
 import io.hamal.request.BlueprintUpdateReq
 import org.springframework.stereotype.Component

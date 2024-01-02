@@ -30,7 +30,7 @@ data class ApiTokenSubmitted(
     override val status: ReqStatus,
     val accountId: AccountId,
     val groupIds: List<GroupId>,
-    val defaultFlowIds: Map<GroupId, FlowId>,
+    val defaultFlowIds: List<GroupDefaultFlowId>,
     val token: AuthToken
 ) : ApiSubmitted
 

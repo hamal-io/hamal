@@ -7,8 +7,8 @@ import io.hamal.lib.domain.vo.HookId
 import io.hamal.lib.domain.vo.ReqId
 import io.hamal.repository.api.*
 import io.hamal.repository.api.HookQueryRepository.HookQuery
-import io.hamal.repository.api.submitted_req.HookCreateSubmitted
-import io.hamal.repository.api.submitted_req.HookUpdateSubmitted
+import io.hamal.lib.domain.submitted.HookCreateSubmitted
+import io.hamal.lib.domain.submitted.HookUpdateSubmitted
 import io.hamal.request.HookCreateReq
 import io.hamal.request.HookUpdateReq
 import org.springframework.stereotype.Component

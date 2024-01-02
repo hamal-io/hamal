@@ -11,7 +11,7 @@ import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.log.ChunkId
 import io.hamal.repository.api.log.Segment
-import io.hamal.repository.api.submitted_req.TopicAppendToSubmitted
+import io.hamal.lib.domain.submitted.TopicAppendToSubmitted
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize

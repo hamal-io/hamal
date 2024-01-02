@@ -6,7 +6,7 @@ import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.EndpointId
 import io.hamal.lib.sdk.api.ApiSubmitted
 import io.hamal.lib.sdk.api.ApiEndpointUpdateReq
-import io.hamal.repository.api.submitted_req.EndpointUpdateSubmitted
+import io.hamal.lib.domain.submitted.EndpointUpdateSubmitted
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable

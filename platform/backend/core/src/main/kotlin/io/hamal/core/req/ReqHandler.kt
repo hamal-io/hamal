@@ -1,6 +1,6 @@
 package io.hamal.core.req
 
-import io.hamal.repository.api.submitted_req.Submitted
+import io.hamal.lib.domain.submitted.Submitted
 import kotlin.reflect.KClass
 
 abstract class ReqHandler<REQUEST : Submitted>(

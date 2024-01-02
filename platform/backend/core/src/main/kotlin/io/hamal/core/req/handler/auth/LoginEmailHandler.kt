@@ -7,7 +7,7 @@ import io.hamal.lib.domain.vo.AuthTokenExpiresAt
 import io.hamal.repository.api.AuthCmdRepository.CreateTokenAuthCmd
 import io.hamal.repository.api.AuthRepository
 import io.hamal.repository.api.EmailAuth
-import io.hamal.repository.api.submitted_req.AuthLoginEmailSubmitted
+import io.hamal.lib.domain.submitted.AuthLoginEmailSubmitted
 import org.springframework.stereotype.Component
 import java.time.temporal.ChronoUnit.DAYS
 

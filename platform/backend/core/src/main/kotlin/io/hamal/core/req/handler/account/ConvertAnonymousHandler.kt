@@ -5,13 +5,13 @@ import io.hamal.core.req.ReqHandler
 import io.hamal.core.req.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
+import io.hamal.lib.domain.submitted.AccountConvertSubmitted
 import io.hamal.lib.domain.vo.AuthTokenExpiresAt
 import io.hamal.repository.api.Account
 import io.hamal.repository.api.AccountCmdRepository
 import io.hamal.repository.api.Auth
 import io.hamal.repository.api.AuthCmdRepository
 import io.hamal.repository.api.event.AccountConvertedEvent
-import io.hamal.repository.api.submitted_req.AccountConvertSubmitted
 import org.springframework.stereotype.Component
 import java.time.temporal.ChronoUnit
 

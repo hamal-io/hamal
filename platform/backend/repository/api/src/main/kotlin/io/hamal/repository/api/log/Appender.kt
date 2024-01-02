@@ -1,6 +1,7 @@
 package io.hamal.repository.api.log
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.domain.Serde
 import kotlin.reflect.KClass
 
 interface Appender<VALUE : Any> {
@@ -13,8 +14,7 @@ class AppenderImpl<VALUE : Any>(
 ) : Appender<VALUE> {
 
     override fun append(cmdId: CmdId, topic: Topic, value: VALUE) {
-//        val encoded = ProtoBuf.encodeToByteArray(valueClass.serializer(), value)
-//        repository.append(cmdId + encoded.contentHashCode(), topic, encoded)
-        TODO()
+        val encoded = Serde.serialize(value).toByteArray()
+        repository.append(cmdId + encoded.contentHashCode(), topic, encoded)
     }
 }
