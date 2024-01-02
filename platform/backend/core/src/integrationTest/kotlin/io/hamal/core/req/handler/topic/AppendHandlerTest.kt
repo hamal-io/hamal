@@ -12,8 +12,6 @@ import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.log.ChunkId
 import io.hamal.repository.api.log.Segment
 import io.hamal.repository.api.submitted_req.TopicAppendToSubmitted
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.protobuf.ProtoBuf
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
@@ -39,13 +37,14 @@ internal class TopicAppendHandlerTest : BaseReqHandlerTest() {
         eventBrokerRepository.read(ChunkId(0), topic, 1).also { payloads ->
             assertThat(payloads, hasSize(1))
 
-            @OptIn(ExperimentalSerializationApi::class) with(payloads.first()) {
+            with(payloads.first()) {
                 assertThat(segmentId, equalTo(Segment.Id(0)))
                 assertThat(id, equalTo(ChunkId(1)))
                 assertThat(topicId, equalTo(TopicId(4444)))
 
-                val payload = ProtoBuf { }.decodeFromByteArray(TopicEntryPayload.serializer(), bytes)
-                assertThat(payload.value, equalTo(MapType(mutableMapOf("hamal" to StringType("rockz")))))
+                TODO()
+//                val payload = ProtoBuf { }.decodeFromByteArray(TopicEntryPayload.serializer(), bytes)
+//                assertThat(payload.value, equalTo(MapType(mutableMapOf("hamal" to StringType("rockz")))))
             }
         }
     }

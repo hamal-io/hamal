@@ -3,15 +3,15 @@ package io.hamal.core.adapter
 import io.hamal.core.component.EncodePassword
 import io.hamal.core.component.GenerateToken
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.domain.GenerateDomainId
+import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.*
 import io.hamal.repository.api.FlowQueryRepository.FlowQuery
 import io.hamal.repository.api.submitted_req.AuthLoginEmailSubmitted
 import io.hamal.repository.api.submitted_req.AuthLoginMetaMaskSubmitted
-import io.hamal.request.AuthChallengeMetaMaskReq
 import io.hamal.request.AccountCreateMetaMaskReq
+import io.hamal.request.AuthChallengeMetaMaskReq
 import io.hamal.request.AuthLogInEmailReq
 import io.hamal.request.AuthLogInMetaMaskReq
 import org.springframework.stereotype.Component
@@ -43,7 +43,7 @@ class AuthAdapter(
     private val accountQueryRepository: AccountQueryRepository,
     private val authRepository: AuthRepository,
     private val encodePassword: EncodePassword,
-    private val generateDomainId: GenerateDomainId,
+    private val generateDomainId: GenerateId,
     private val generateToken: GenerateToken,
     private val reqCmdRepository: ReqCmdRepository,
     private val groupList: GroupListPort,

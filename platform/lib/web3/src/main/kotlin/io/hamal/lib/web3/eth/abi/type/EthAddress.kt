@@ -4,7 +4,6 @@ import io.hamal.lib.web3.util.ByteWindow
 import io.hamal.lib.web3.util.Web3Formatter
 import io.hamal.lib.web3.util.Web3HashUtils
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
@@ -14,7 +13,6 @@ import java.lang.Character.isUpperCase
 import java.math.BigInteger
 import java.util.*
 
-@Serializable(with = EthAddress.Serializer::class)
 data class EthAddress(
     override val value: EthUint160
 ) : EthType<EthUint160> {

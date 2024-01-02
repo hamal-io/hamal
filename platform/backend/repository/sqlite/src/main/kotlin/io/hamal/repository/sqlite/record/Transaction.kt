@@ -1,8 +1,8 @@
 package io.hamal.repository.sqlite.record
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.domain.DomainId
 import io.hamal.lib.common.domain.DomainObject
+import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.util.CollectionUtils.takeWhileInclusive
 import io.hamal.lib.domain.vo.RecordedAt
 import io.hamal.lib.sqlite.NamedPreparedStatementDelegate
@@ -19,7 +19,7 @@ import kotlin.reflect.KClass
 
 
 @OptIn(ExperimentalSerializationApi::class, InternalSerializationApi::class)
-class RecordTransactionSqlite<ID : DomainId, RECORD : Record<ID>, OBJ : DomainObject<ID>>(
+class RecordTransactionSqlite<ID : ValueObjectId, RECORD : Record<ID>, OBJ : DomainObject<ID>>(
     private val createDomainObject: CreateDomainObject<ID, RECORD, OBJ>,
     private val recordClass: KClass<RECORD>,
     private val delegate: Transaction,

@@ -2,16 +2,14 @@ package io.hamal.repository.api
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.DomainObject
-import io.hamal.lib.common.domain.UpdatedAt
 import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.domain.UpdatedAt
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.GroupName
-import kotlinx.serialization.Serializable
 
 
-@Serializable
 data class Group(
     override val id: GroupId,
     override val updatedAt: UpdatedAt,

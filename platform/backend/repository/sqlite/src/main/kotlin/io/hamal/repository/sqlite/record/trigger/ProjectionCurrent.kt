@@ -10,9 +10,7 @@ import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import io.hamal.repository.record.trigger.TriggerRecord
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
-import io.hamal.repository.sqlite.record.protobuf
 import kotlinx.serialization.ExperimentalSerializationApi
-import org.sqlite.SQLiteException
 
 
 @OptIn(ExperimentalSerializationApi::class)
@@ -31,7 +29,8 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
                 set("id", triggerId)
             }
             map { rs ->
-                protobuf.decodeFromByteArray(Trigger.serializer(), rs.getBytes("data"))
+//                protobuf.decodeFromByteArray(Trigger.serializer(), rs.getBytes("data"))
+                TODO()
             }
         }
     }
@@ -64,7 +63,8 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
                 set("limit", query.limit)
             }
             map { rs ->
-                protobuf.decodeFromByteArray(Trigger.serializer(), rs.getBytes("data"))
+//                protobuf.decodeFromByteArray(Trigger.serializer(), rs.getBytes("data"))
+                TODO()
             }
         }
     }
@@ -124,7 +124,8 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
             }
             set("flowId", obj.flowId)
             set("type", obj.type.value)
-            set("data", protobuf.encodeToByteArray(Trigger.serializer(), obj))
+//            set("data", protobuf.encodeToByteArray(Trigger.serializer(), obj))
+            TODO()
         }
     }
 

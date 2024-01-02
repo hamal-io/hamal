@@ -2,9 +2,7 @@ package io.hamal.repository.api.submitted_req
 
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.*
-import kotlinx.serialization.Serializable
 
-@Serializable
 data class TopicCreateSubmitted(
     override val id: ReqId,
     override var status: ReqStatus,
@@ -15,7 +13,6 @@ data class TopicCreateSubmitted(
 ) : Submitted
 
 
-@Serializable
 data class TopicAppendToSubmitted(
     override val id: ReqId,
     override var status: ReqStatus,

@@ -1,11 +1,11 @@
 package io.hamal.lib.sqlite
 
-import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.domain.DomainId
 import io.hamal.lib.common.domain.DomainName
 import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.logger
+import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.sqlite.DefaultNamedPreparedStatement.Companion.prepare
 import io.hamal.lib.sqlite.Transaction.AbortException
 import java.math.BigInteger
@@ -90,7 +90,7 @@ class NamedPreparedStatementDelegate(
     }
 
     operator fun set(
-        param: String, value: DomainId
+        param: String, value: ValueObjectId
     ): NamedPreparedStatementDelegate {
         delegate[param] = value
         return this

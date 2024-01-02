@@ -12,14 +12,11 @@ import io.hamal.lib.sdk.api.ApiTopicService.TopicQuery
 import io.hamal.lib.sdk.fold
 import io.hamal.request.TopicAppendEntryReq
 import io.hamal.request.TopicCreateReq
-import kotlinx.serialization.Serializable
 
-@Serializable
 data class ApiTopicCreateReq(
     override val name: TopicName
 ) : TopicCreateReq
 
-@Serializable
 data class ApiTopicCreateSubmitted(
     override val id: ReqId,
     override val status: ReqStatus,
@@ -28,45 +25,36 @@ data class ApiTopicCreateSubmitted(
     val flowId: FlowId
 ) : ApiSubmitted
 
-
-@Serializable
 data class ApiTopicAppendEntryReq(
     override val topicId: TopicId,
     override val payload: TopicEntryPayload
 ) : TopicAppendEntryReq
 
-@Serializable
 data class ApiTopicAppendSubmitted(
     override val id: ReqId,
     override val status: ReqStatus,
     val topicId: TopicId
 ) : ApiSubmitted
 
-
-@Serializable
 data class ApiTopicEntryList(
     val topicId: TopicId,
     val topicName: TopicName,
     val entries: List<Entry>
 ) {
-    @Serializable
     data class Entry(
         val id: TopicEntryId,
         val payload: TopicEntryPayload
     )
 }
 
-@Serializable
 data class ApiTopic(
     val id: TopicId,
     val name: TopicName
 )
 
-@Serializable
 data class ApiTopicList(
     val topics: List<Topic>
 ) {
-    @Serializable
     data class Topic(
         val id: TopicId,
         val name: TopicName

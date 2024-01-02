@@ -6,7 +6,7 @@ import io.hamal.core.event.handler.exec.*
 import io.hamal.core.event.handler.trigger.TriggerCreatedHandler
 import io.hamal.core.service.FixedRateTriggerService
 import io.hamal.core.service.OrchestrationService
-import io.hamal.lib.domain.GenerateDomainId
+import io.hamal.lib.domain.GenerateId
 import io.hamal.repository.api.ExecCmdRepository
 import io.hamal.repository.api.ExecQueryRepository
 import io.hamal.repository.api.event.*
@@ -19,7 +19,7 @@ internal open class PlatformEventConfig {
     @Bean
     open fun platformEventEmitter(
         platformEventBrokerRepository: BrokerRepository,
-        generateDomainId: GenerateDomainId
+        generateDomainId: GenerateId
     ): PlatformEventEmitter = PlatformEventEmitter(generateDomainId, platformEventBrokerRepository)
 
     @Bean

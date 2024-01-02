@@ -2,9 +2,7 @@ package io.hamal.repository.api.submitted_req
 
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.*
-import kotlinx.serialization.Serializable
 
-@Serializable
 data class ExecInvokeSubmitted(
     override val id: ReqId,
     override var status: ReqStatus,
@@ -18,7 +16,6 @@ data class ExecInvokeSubmitted(
     val invocation: Invocation
 ) : Submitted
 
-@Serializable
 data class ExecFailSubmitted(
     override val id: ReqId,
     override var status: ReqStatus,
@@ -26,7 +23,6 @@ data class ExecFailSubmitted(
     val result: ExecResult
 ) : Submitted
 
-@Serializable
 data class ExecCompleteSubmitted(
     override val id: ReqId,
     override var status: ReqStatus,

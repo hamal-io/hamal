@@ -4,7 +4,6 @@ import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.ExecLogLevel
 import io.hamal.lib.domain.vo.*
-import kotlinx.serialization.Serializable
 
 interface ExecLogRepository : ExecLogCmdRepository, ExecLogQueryRepository
 
@@ -33,7 +32,6 @@ interface ExecLogQueryRepository {
     )
 }
 
-@Serializable
 data class ExecLog(
     val id: ExecLogId,
     val execId: ExecId,

@@ -9,7 +9,6 @@ import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
-import kotlinx.serialization.Serializable
 import kotlin.time.Duration
 
 interface TriggerRepository : TriggerCmdRepository, TriggerQueryRepository
@@ -99,7 +98,6 @@ interface TriggerQueryRepository {
     )
 }
 
-@Serializable
 sealed interface Trigger : DomainObject<TriggerId> {
     val cmdId: CmdId
     val groupId: GroupId
@@ -112,7 +110,6 @@ sealed interface Trigger : DomainObject<TriggerId> {
     val status: TriggerStatus
 }
 
-@Serializable
 class FixedRateTrigger(
     override val cmdId: CmdId,
     override val id: TriggerId,
@@ -129,7 +126,6 @@ class FixedRateTrigger(
     override val type = TriggerType.FixedRate
 }
 
-@Serializable
 class EventTrigger(
     override val cmdId: CmdId,
     override val id: TriggerId,
@@ -146,8 +142,6 @@ class EventTrigger(
     override val type = TriggerType.Event
 }
 
-
-@Serializable
 class HookTrigger(
     override val cmdId: CmdId,
     override val id: TriggerId,
@@ -171,7 +165,6 @@ data class HookTriggerUnique(
     val hookMethod: HookMethod
 )
 
-@Serializable
 class CronTrigger(
     override val cmdId: CmdId,
     override val id: TriggerId,

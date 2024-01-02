@@ -1,6 +1,6 @@
 package io.hamal.core.adapter
 
-import io.hamal.lib.domain.GenerateDomainId
+import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.domain.vo.ExtensionId
@@ -47,7 +47,7 @@ interface ExtensionPort : ExtensionExtensionPort, ExtensionGetPort, ExtensionLis
 class ExtensionAdapter(
     private val codeQueryRepository: CodeQueryRepository,
     private val extensionQueryRepository: ExtensionQueryRepository,
-    private val generateDomainId: GenerateDomainId,
+    private val generateDomainId: GenerateId,
     private val reqCmdRepository: ReqCmdRepository
 ) : ExtensionPort {
     override fun <T : Any> invoke(

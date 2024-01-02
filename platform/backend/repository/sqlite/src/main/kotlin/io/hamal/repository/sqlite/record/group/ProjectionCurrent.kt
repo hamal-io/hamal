@@ -9,7 +9,6 @@ import io.hamal.repository.api.GroupQueryRepository.GroupQuery
 import io.hamal.repository.record.group.GroupRecord
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
-import io.hamal.repository.sqlite.record.protobuf
 import kotlinx.serialization.ExperimentalSerializationApi
 import org.sqlite.SQLiteException
 
@@ -27,7 +26,8 @@ internal object ProjectionCurrent : ProjectionSqlite<GroupId, GroupRecord, Group
             """.trimIndent()
             ) {
                 set("id", obj.id)
-                set("data", protobuf.encodeToByteArray(Group.serializer(), obj))
+//                set("data", protobuf.encodeToByteArray(Group.serializer(), obj))
+                TODO()
             }
         } catch (e: SQLiteException) {
             if (e.message!!.contains("UNIQUE constraint failed: current.name)")) {
@@ -52,7 +52,8 @@ internal object ProjectionCurrent : ProjectionSqlite<GroupId, GroupRecord, Group
                 set("name", groupName.value)
             }
             map { rs ->
-                protobuf.decodeFromByteArray(Group.serializer(), rs.getBytes("data"))
+//                protobuf.decodeFromByteArray(Group.serializer(), rs.getBytes("data"))
+                TODO()
             }
         }
     }
@@ -89,7 +90,8 @@ internal object ProjectionCurrent : ProjectionSqlite<GroupId, GroupRecord, Group
                 set("id", groupId)
             }
             map { rs ->
-                protobuf.decodeFromByteArray(Group.serializer(), rs.getBytes("data"))
+//                protobuf.decodeFromByteArray(Group.serializer(), rs.getBytes("data"))
+                TODO()
             }
         }
     }
@@ -113,7 +115,8 @@ internal object ProjectionCurrent : ProjectionSqlite<GroupId, GroupRecord, Group
                 set("limit", query.limit)
             }
             map { rs ->
-                protobuf.decodeFromByteArray(Group.serializer(), rs.getBytes("data"))
+//                protobuf.decodeFromByteArray(Group.serializer(), rs.getBytes("data"))
+                TODO()
             }
         }
     }

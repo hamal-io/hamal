@@ -1,28 +1,17 @@
 package io.hamal.lib.domain.vo
 
 import io.hamal.lib.common.domain.DomainName
-import io.hamal.lib.common.domain.DomainNameSerializer
+import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.base.MapValueObject
-import io.hamal.lib.domain.vo.base.InputsSerializer
 import io.hamal.lib.kua.type.MapType
-import kotlinx.serialization.Serializable
 
 
-@Serializable(with = TriggerId.Serializer::class)
-class TriggerId(override val value: SnowflakeId) : SerializableDomainId() {
+class TriggerId(override val value: SnowflakeId) : ValueObjectId() {
     constructor(value: Int) : this(SnowflakeId(value.toLong()))
     constructor(value: String) : this(SnowflakeId(value.toLong(16)))
-
-    internal object Serializer : SerializableDomainIdSerializer<TriggerId>(::TriggerId)
 }
 
-@Serializable(with = TriggerName.Serializer::class)
-class TriggerName(override val value: String) : DomainName() {
-    internal object Serializer : DomainNameSerializer<TriggerName>(::TriggerName)
-}
+class TriggerName(override val value: String) : DomainName()
 
-@Serializable(with = TriggerInputs.Serializer::class)
-class TriggerInputs(override val value: MapType = MapType()) : MapValueObject() {
-    internal object Serializer : InputsSerializer<TriggerInputs>(::TriggerInputs)
-}
+class TriggerInputs(override val value: MapType = MapType()) : MapValueObject()

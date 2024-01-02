@@ -7,15 +7,12 @@ import io.hamal.lib.http.body
 import io.hamal.lib.sdk.fold
 import io.hamal.request.ExtensionCreateReq
 import io.hamal.request.ExtensionUpdateReq
-import kotlinx.serialization.Serializable
 
-@Serializable
 data class ApiExtension(
     val id: ExtensionId,
     val name: ExtensionName,
     val code: Code
 ) {
-    @Serializable
     data class Code(
         val id: CodeId,
         val version: CodeVersion,
@@ -23,24 +20,20 @@ data class ApiExtension(
     )
 }
 
-@Serializable
 data class ApiExtensionList(
     val extensions: List<Extension>
 ) {
-    @Serializable
     data class Extension(
         val id: ExtensionId,
         val name: ExtensionName,
     )
 }
 
-@Serializable
 data class ApiExtensionCreateReq(
     override val name: ExtensionName,
     override val code: CodeValue
 ) : ExtensionCreateReq
 
-@Serializable
 data class ApiExtensionCreateSubmitted(
     override val id: ReqId,
     override val status: ReqStatus,
@@ -48,13 +41,11 @@ data class ApiExtensionCreateSubmitted(
     val groupId: GroupId
 ) : ApiSubmitted
 
-@Serializable
 data class ApiExtensionUpdateReq(
     override val name: ExtensionName? = null,
     override val code: CodeValue? = null
 ) : ExtensionUpdateReq
 
-@Serializable
 data class ApiExtensionUpdateSubmitted(
     override val id: ReqId,
     override val status: ReqStatus,

@@ -1,6 +1,6 @@
 package io.hamal.core.adapter
 
-import io.hamal.lib.domain.GenerateDomainId
+import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.BlueprintId
@@ -41,7 +41,7 @@ interface BlueprintPort : BlueprintCreatePort, BlueprintGetPort, BlueprintUpdate
 @Component
 class BlueprintAdapter(
     private val blueprintQueryRepository: BlueprintQueryRepository,
-    private val generateDomainId: GenerateDomainId,
+    private val generateDomainId: GenerateId,
     private val reqCmdRepository: ReqCmdRepository
 ) : BlueprintPort {
     override fun <T : Any> invoke(

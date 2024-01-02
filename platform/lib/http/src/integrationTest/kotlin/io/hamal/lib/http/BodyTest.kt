@@ -4,7 +4,6 @@ import io.hamal.lib.http.HttpRequest.HttpMethod
 import io.hamal.lib.http.HttpRequest.HttpMethod.*
 import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.fixture.TestWebConfig
-import kotlinx.serialization.Serializable
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.DynamicTest
@@ -19,16 +18,12 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
-@Serializable
 sealed interface BodyResponse
 
-@Serializable
 data class NoBodyResponse(val result: String = "NoContent") : BodyResponse
 
-@Serializable
 data class SomeRequestBodyResponse(val value: Int) : BodyResponse
 
-@Serializable
 data class SomeRequestBody(val value: Int)
 
 @RestController

@@ -2,14 +2,15 @@ package io.hamal.repository.api
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.DomainObject
-import io.hamal.lib.common.domain.UpdatedAt
 import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.domain.UpdatedAt
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.CodeType
-import io.hamal.lib.domain.vo.*
-import kotlinx.serialization.Serializable
+import io.hamal.lib.domain.vo.CodeId
+import io.hamal.lib.domain.vo.CodeValue
+import io.hamal.lib.domain.vo.CodeVersion
+import io.hamal.lib.domain.vo.GroupId
 
-@Serializable
 data class Code(
     override val id: CodeId,
     override val updatedAt: UpdatedAt,

@@ -4,9 +4,9 @@ import io.hamal.core.component.Async
 import io.hamal.core.event.PlatformEventContainer
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.HashUtils.md5
-import io.hamal.lib.domain.GenerateDomainId
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain.vo.FlowId
+import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.repository.api.event.PlatformEvent
 import io.hamal.repository.api.log.BrokerRepository
@@ -23,7 +23,7 @@ import kotlin.time.Duration.Companion.milliseconds
 @Service
 internal class PlatformEventService(
     private val async: Async,
-    private val generateDomainId: GenerateDomainId,
+    private val generateDomainId: GenerateId,
     private val platformEventContainer: PlatformEventContainer,
     private val platformEventBrokerRepository: BrokerRepository
 ) : DisposableBean, ApplicationListener<ContextRefreshedEvent> {

@@ -4,7 +4,7 @@ import io.hamal.core.event.PlatformEventEmitter
 import io.hamal.core.req.ReqHandler
 import io.hamal.core.req.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.GenerateDomainId
+import io.hamal.lib.domain.GenerateId
 import io.hamal.repository.api.Flow
 import io.hamal.repository.api.FlowCmdRepository
 import io.hamal.repository.api.FlowCmdRepository.CreateCmd
@@ -19,7 +19,7 @@ class FlowCreateHandler(
     val flowCmdRepository: FlowCmdRepository,
     val flowQueryRepository: FlowQueryRepository,
     val eventEmitter: PlatformEventEmitter,
-    val generateDomainId: GenerateDomainId
+    val generateDomainId: GenerateId
 ) : ReqHandler<FlowCreateSubmitted>(FlowCreateSubmitted::class) {
 
     /**

@@ -6,7 +6,6 @@ import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.CmdRepository
 import io.hamal.repository.api.log.BrokerTopicsRepository.TopicQuery
 import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.protobuf.ProtoBuf
 
 interface CreateTopic {
     fun create(cmdId: CmdId, topicToCreate: TopicToCreate): Topic
@@ -62,11 +61,12 @@ interface BrokerRepository :
         val firstId = ChunkId(query.afterId.value.value.toInt() + 1)
         return read(firstId, topic, query.limit.value)
             .map { chunk ->
-                val payload = ProtoBuf.decodeFromByteArray(TopicEntryPayload.serializer(), chunk.bytes)
-                TopicEntry(
-                    id = TopicEntryId(chunk.id.value.toInt()),
-                    payload = payload
-                )
+//                val payload = ProtoBuf.decodeFromByteArray(TopicEntryPayload.serializer(), chunk.bytes)
+//                TopicEntry(
+//                    id = TopicEntryId(chunk.id.value.toInt()),
+//                    payload = payload
+//                )
+                TODO()
             }
     }
 

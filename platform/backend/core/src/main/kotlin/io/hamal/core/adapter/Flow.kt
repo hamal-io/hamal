@@ -1,6 +1,6 @@
 package io.hamal.core.adapter
 
-import io.hamal.lib.domain.GenerateDomainId
+import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.FlowId
 import io.hamal.lib.domain.vo.FlowType
@@ -45,7 +45,7 @@ interface FlowPort : FlowCreatePort, FlowGetPort, FlowListPort, FlowUpdatePort
 
 @Component
 class FlowAdapter(
-    private val generateDomainId: GenerateDomainId,
+    private val generateDomainId: GenerateId,
     private val flowQueryRepository: FlowQueryRepository,
     private val reqCmdRepository: ReqCmdRepository
 ) : FlowPort {

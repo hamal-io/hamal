@@ -2,14 +2,11 @@ package io.hamal.lib.web3.eth.domain
 
 import io.hamal.lib.web3.eth.abi.type.EthPrefixedHexString
 import io.hamal.lib.web3.eth.abi.type.EthUint64
-import kotlinx.serialization.Serializable
 
-@Serializable
 sealed interface EthResponse {
     val id: EthRequestId
 }
 
-@Serializable
 data class EthGetBlockResponse(
     override val id: EthRequestId,
     val result: EthBlock
@@ -19,7 +16,6 @@ data class EthGetBlockResponse(
     }
 }
 
-@Serializable
 data class EthGetLiteBlockResponse(
     override val id: EthRequestId,
     val result: EthLiteBlock
@@ -29,7 +25,6 @@ data class EthGetLiteBlockResponse(
     }
 }
 
-@Serializable
 class EthGetBlockNumberResponse(
     override val id: EthRequestId,
     val result: EthUint64
@@ -40,7 +35,6 @@ class EthGetBlockNumberResponse(
 }
 
 
-@Serializable
 data class EthCallResponse(
     override val id: EthRequestId,
     val result: EthPrefixedHexString

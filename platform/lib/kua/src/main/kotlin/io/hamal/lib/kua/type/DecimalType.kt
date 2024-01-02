@@ -2,8 +2,6 @@ package io.hamal.lib.kua.type
 
 import io.hamal.lib.common.snowflake.SnowflakeId
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
@@ -12,10 +10,7 @@ import java.math.BigDecimal
 import java.math.MathContext
 import java.math.RoundingMode
 
-@Serializable
-@SerialName("DecimalType")
 data class DecimalType(
-    @Serializable(with = BigDecimalSerializer::class)
     val value: BigDecimal,
 ) : SerializableType(), Comparable<DecimalType> {
 

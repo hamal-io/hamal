@@ -2,7 +2,7 @@ package io.hamal.core.adapter
 
 import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.GenerateDomainId
+import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
@@ -32,7 +32,7 @@ interface StatePort : StateGetPort, StateSetPort
 @Component
 class StateAdapter(
     private val funcQueryRepository: FuncQueryRepository,
-    private val generateDomainId: GenerateDomainId,
+    private val generateDomainId: GenerateId,
     private val reqCmdRepository: ReqCmdRepository,
     private val stateQueryRepository: StateQueryRepository
 ) : StatePort {

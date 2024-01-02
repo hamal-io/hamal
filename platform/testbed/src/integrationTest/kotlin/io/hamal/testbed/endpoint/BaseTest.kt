@@ -7,7 +7,7 @@ import io.hamal.core.config.BackendBasePath
 import io.hamal.extension.net.http.ExtensionHttpFactory
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
-import io.hamal.lib.domain.GenerateDomainId
+import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.kua.NativeLoader
@@ -198,7 +198,7 @@ class ClearController {
     lateinit var triggerRepository: TriggerRepository
 
     @Autowired
-    lateinit var generateDomainId: GenerateDomainId
+    lateinit var generateDomainId: GenerateId
 
     private lateinit var testAccount: Account
     private lateinit var testAccountAuthToken: AuthToken

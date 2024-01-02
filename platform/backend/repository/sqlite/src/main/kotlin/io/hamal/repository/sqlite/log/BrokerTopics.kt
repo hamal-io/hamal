@@ -63,10 +63,10 @@ class BrokerTopicsSqliteRepository(
                 }
                 map { rs ->
                     Topic(
-                        id = rs.getDomainId("id", ::TopicId),
+                        id = rs.getId("id", ::TopicId),
                         name = TopicName(rs.getString("name")),
-                        flowId = rs.getDomainId("flow_id", ::FlowId),
-                        groupId = rs.getDomainId("group_id", ::GroupId)
+                        flowId = rs.getId("flow_id", ::FlowId),
+                        groupId = rs.getId("group_id", ::GroupId)
                     )
                 }
             }!!
@@ -87,10 +87,10 @@ class BrokerTopicsSqliteRepository(
                 }
                 map { rs ->
                     Topic(
-                        id = rs.getDomainId("id", ::TopicId),
+                        id = rs.getId("id", ::TopicId),
                         name = TopicName(rs.getString("name")),
-                        flowId = rs.getDomainId("flow_id", ::FlowId),
-                        groupId = rs.getDomainId("group_id", ::GroupId)
+                        flowId = rs.getId("flow_id", ::FlowId),
+                        groupId = rs.getId("group_id", ::GroupId)
                     )
                 }
             }?.also { topicMapping[it.name] = it }
@@ -102,10 +102,10 @@ class BrokerTopicsSqliteRepository(
             }
             map { rs ->
                 Topic(
-                    id = rs.getDomainId("id", ::TopicId),
+                    id = rs.getId("id", ::TopicId),
                     name = TopicName(rs.getString("name")),
-                    flowId = rs.getDomainId("flow_id", ::FlowId),
-                    groupId = rs.getDomainId("group_id", ::GroupId)
+                    flowId = rs.getId("flow_id", ::FlowId),
+                    groupId = rs.getId("group_id", ::GroupId)
                 )
             }
         }?.also { topicMapping[it.name] = it }
@@ -132,10 +132,10 @@ class BrokerTopicsSqliteRepository(
             }
             map { rs ->
                 Topic(
-                    id = rs.getDomainId("id", ::TopicId),
+                    id = rs.getId("id", ::TopicId),
                     name = TopicName(rs.getString("name")),
-                    flowId = rs.getDomainId("flow_id", ::FlowId),
-                    groupId = rs.getDomainId("group_id", ::GroupId)
+                    flowId = rs.getId("flow_id", ::FlowId),
+                    groupId = rs.getId("group_id", ::GroupId)
                 )
             }
         }

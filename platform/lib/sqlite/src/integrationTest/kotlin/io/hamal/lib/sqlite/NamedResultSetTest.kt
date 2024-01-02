@@ -1,10 +1,7 @@
 package io.hamal.lib.sqlite
 
-import io.hamal.lib.common.Partition
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.domain.DomainId
-import io.hamal.lib.common.snowflake.Elapsed
-import io.hamal.lib.common.snowflake.Sequence
+import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.snowflake.SnowflakeId
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
@@ -111,7 +108,7 @@ class DefaultNamedResultSetIT {
         val testInstance = testInstance(
             "SELECT domain_id_value FROM some_table WHERE domain_id_value is not null"
         )
-        assertThat(testInstance.getDomainId("domain_id_value", ::TestDomainId), equalTo(TestDomainId(54321)))
+        assertThat(testInstance.getId("domain_id_value", ::TestDomainId), equalTo(TestDomainId(54321)))
     }
 
     @Test
@@ -128,19 +125,7 @@ class DefaultNamedResultSetIT {
     }
 
 
-    private data class TestDomainId(override val value: SnowflakeId) : DomainId() {
+    private data class TestDomainId(override val value: SnowflakeId) : ValueObjectId() {
         constructor(value: Int) : this(SnowflakeId(value.toLong()))
-
-        override fun partition(): Partition {
-            TODO("Not yet implemented")
-        }
-
-        override fun sequence(): Sequence {
-            TODO("Not yet implemented")
-        }
-
-        override fun elapsed(): Elapsed {
-            TODO("Not yet implemented")
-        }
     }
 }

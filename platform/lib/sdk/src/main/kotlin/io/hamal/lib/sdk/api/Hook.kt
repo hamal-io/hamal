@@ -11,14 +11,11 @@ import io.hamal.lib.sdk.api.ApiHookService.HookQuery
 import io.hamal.lib.sdk.fold
 import io.hamal.request.HookCreateReq
 import io.hamal.request.HookUpdateReq
-import kotlinx.serialization.Serializable
 
-@Serializable
 data class ApiHookCreateReq(
     override val name: HookName
 ) : HookCreateReq
 
-@Serializable
 data class ApiHookCreateSubmitted(
     override val id: ReqId,
     override val status: ReqStatus,
@@ -27,30 +24,24 @@ data class ApiHookCreateSubmitted(
     val flowId: FlowId
 ) : ApiSubmitted
 
-
-@Serializable
 data class ApiHookUpdateReq(
     override val name: HookName? = null
 ) : HookUpdateReq
 
-@Serializable
 data class ApiHookUpdateSubmitted(
     override val id: ReqId,
     override val status: ReqStatus,
     val hookId: HookId,
 ) : ApiSubmitted
 
-@Serializable
 data class ApiHookList(
     val hooks: List<Hook>
 ) {
-    @Serializable
     data class Hook(
         val id: HookId,
         val flow: Flow,
         val name: HookName
     ) {
-        @Serializable
         data class Flow(
             val id: FlowId,
             val name: FlowName
@@ -58,14 +49,11 @@ data class ApiHookList(
     }
 }
 
-
-@Serializable
 data class ApiHook(
     val id: HookId,
     val flow: Flow,
     val name: HookName,
 ) {
-    @Serializable
     data class Flow(
         val id: FlowId,
         val name: FlowName

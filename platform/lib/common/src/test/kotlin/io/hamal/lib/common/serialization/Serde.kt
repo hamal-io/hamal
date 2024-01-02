@@ -2,9 +2,11 @@ package io.hamal.lib.common.serialization
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.domain.ValueObjectString
 import io.hamal.lib.common.hot.HotArray
 import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.snowflake.SnowflakeId
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
@@ -65,6 +67,32 @@ internal object InstantAdapterTest {
     private val testDelegate: Gson = GsonBuilder().registerTypeAdapter(Instant::class.java, InstantAdapter).create()
 
 }
+
+internal object ValueObjectIdAdapterTest {
+
+    @Test
+    fun serialize() {
+        val result = testDelegate.toJson(TestIdValueObject(SnowflakeId(42)))
+        assertThat(result, equalTo("\"2a\""))
+    }
+
+    @Test
+    fun deserialize() {
+        val expected = TestIdValueObject(SnowflakeId(42))
+        val result = testDelegate.fromJson("\"2a\"", TestIdValueObject::class.java)
+        assertThat(result, equalTo(expected))
+    }
+
+    private val testDelegate: Gson = GsonBuilder().registerTypeAdapter(
+        TestIdValueObject::class.java,
+        ValueObjectIdAdapter(::TestIdValueObject)
+    ).create()
+
+    private class TestIdValueObject(
+        override val value: SnowflakeId
+    ) : ValueObjectId()
+}
+
 
 internal object ValueObjectStringAdapterTest {
 

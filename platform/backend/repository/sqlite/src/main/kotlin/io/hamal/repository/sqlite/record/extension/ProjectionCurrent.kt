@@ -8,7 +8,6 @@ import io.hamal.repository.api.ExtensionQueryRepository.ExtensionQuery
 import io.hamal.repository.record.extension.ExtensionRecord
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
-import io.hamal.repository.sqlite.record.protobuf
 import kotlinx.serialization.ExperimentalSerializationApi
 import org.sqlite.SQLiteException
 
@@ -29,7 +28,8 @@ internal object ProjectionCurrent : ProjectionSqlite<ExtensionId, ExtensionRecor
                 set("id", obj.id)
                 set("groupId", obj.groupId)
                 set("name", obj.name)
-                set("data", protobuf.encodeToByteArray(Extension.serializer(), obj))
+//                set("data", protobuf.encodeToByteArray(Extension.serializer(), obj))
+                TODO()
             }
         } catch (e: SQLiteException) {
             if (e.message!!.contains("(UNIQUE constraint failed: current.group_id, current.name)")) {
@@ -73,7 +73,8 @@ internal object ProjectionCurrent : ProjectionSqlite<ExtensionId, ExtensionRecor
                 set("id", extId)
             }
             map { rs ->
-                protobuf.decodeFromByteArray(Extension.serializer(), rs.getBytes("data"))
+//                protobuf.decodeFromByteArray(Extension.serializer(), rs.getBytes("data"))
+                TODO()
             }
         }
     }
@@ -98,7 +99,8 @@ internal object ProjectionCurrent : ProjectionSqlite<ExtensionId, ExtensionRecor
                 set("limit", query.limit)
             }
             map { rs ->
-                protobuf.decodeFromByteArray(Extension.serializer(), rs.getBytes("data"))
+//                protobuf.decodeFromByteArray(Extension.serializer(), rs.getBytes("data"))
+                TODO()
             }
         }
     }

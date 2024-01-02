@@ -10,16 +10,13 @@ import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiFuncService.FuncQuery
 import io.hamal.lib.sdk.fold
 import io.hamal.request.*
-import kotlinx.serialization.Serializable
 
-@Serializable
 data class ApiFuncCreateReq(
     override val name: FuncName,
     override val inputs: FuncInputs,
     override val code: CodeValue
 ) : FuncCreateReq
 
-@Serializable
 data class ApiFuncCreateSubmitted(
     override val id: ReqId,
     override val status: ReqStatus,
@@ -28,20 +25,17 @@ data class ApiFuncCreateSubmitted(
     val flowId: FlowId
 ) : ApiSubmitted
 
-@Serializable
 data class ApiFuncDeployReq(
     override val version: CodeVersion?,
     override val message: DeployMessage? = null
 ) : FuncDeployReq
 
-@Serializable
 data class ApiFuncDeploySubmitted(
     override val id: ReqId,
     override val status: ReqStatus,
     val funcId: FuncId
 ) : ApiSubmitted
 
-@Serializable
 data class ApiFuncUpdateReq(
     override val name: FuncName? = null,
     override val inputs: FuncInputs? = null,
@@ -49,7 +43,6 @@ data class ApiFuncUpdateReq(
 ) : FuncUpdateReq
 
 
-@Serializable
 data class ApiFuncUpdateSubmitted(
     override val id: ReqId,
     override val status: ReqStatus,
@@ -57,31 +50,26 @@ data class ApiFuncUpdateSubmitted(
 ) : ApiSubmitted
 
 
-@Serializable
 data class ApiFuncInvokeReq(
     override val correlationId: CorrelationId?,
     override val inputs: InvocationInputs,
     override val invocation: Invocation,
 ) : FuncInvokeReq
 
-@Serializable
 data class ApiFuncInvokeVersionReq(
     override val correlationId: CorrelationId?,
     override val inputs: InvocationInputs,
     override val version: CodeVersion?
 ) : FuncInvokeVersionReq
 
-@Serializable
 data class ApiFuncList(
     val funcs: List<Func>
 ) {
-    @Serializable
     data class Func(
         val id: FuncId,
         val flow: Flow,
         val name: FuncName
     ) {
-        @Serializable
         data class Flow(
             val id: FlowId,
             val name: FlowName
@@ -89,11 +77,9 @@ data class ApiFuncList(
     }
 }
 
-@Serializable
 data class ApiFuncDeploymentList(
     val deployments: List<Deployment>
 ) {
-    @Serializable
     data class Deployment(
         val version: CodeVersion,
         val message: DeployMessage,
@@ -102,7 +88,6 @@ data class ApiFuncDeploymentList(
 }
 
 
-@Serializable
 data class ApiFunc(
     val id: FuncId,
     val flow: Flow,
@@ -111,20 +96,17 @@ data class ApiFunc(
     val code: Code,
     val deployment: Deployment
 ) {
-    @Serializable
     data class Flow(
         val id: FlowId,
         val name: FlowName
     )
 
-    @Serializable
     data class Code(
         val id: CodeId,
         val version: CodeVersion,
         val value: CodeValue
     )
 
-    @Serializable
     data class Deployment(
         val id: CodeId,
         val version: CodeVersion,

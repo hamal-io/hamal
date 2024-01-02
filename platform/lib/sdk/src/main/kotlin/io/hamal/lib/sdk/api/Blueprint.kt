@@ -7,9 +7,7 @@ import io.hamal.lib.http.body
 import io.hamal.lib.sdk.fold
 import io.hamal.request.BlueprintCreateReq
 import io.hamal.request.BlueprintUpdateReq
-import kotlinx.serialization.Serializable
 
-@Serializable
 data class ApiBlueprint(
     val id: BlueprintId,
     val name: BlueprintName,
@@ -17,15 +15,12 @@ data class ApiBlueprint(
     val value: CodeValue
 )
 
-
-@Serializable
 data class ApiBlueprintCreateReq(
     override val name: BlueprintName,
     override val inputs: BlueprintInputs,
     override val value: CodeValue
 ) : BlueprintCreateReq
 
-@Serializable
 data class ApiBlueprintCreateSubmitted(
     override val id: ReqId,
     override val status: ReqStatus,
@@ -33,15 +28,12 @@ data class ApiBlueprintCreateSubmitted(
     val groupId: GroupId,
 ) : ApiSubmitted
 
-
-@Serializable
 data class ApiBlueprintUpdateReq(
     override val name: BlueprintName? = null,
     override val inputs: BlueprintInputs? = null,
     override val value: CodeValue? = null
 ) : BlueprintUpdateReq
 
-@Serializable
 data class ApiBlueprintUpdateSubmitted(
     override val id: ReqId,
     override val status: ReqStatus,
@@ -80,8 +72,6 @@ internal class ApiBlueprintServiceImpl(
             .body(req)
             .execute()
             .fold(ApiBlueprintUpdateSubmitted::class)
-
-
 }
 
 

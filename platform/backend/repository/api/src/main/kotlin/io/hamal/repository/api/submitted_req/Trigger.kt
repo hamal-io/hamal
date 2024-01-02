@@ -5,10 +5,8 @@ import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
-import kotlinx.serialization.Serializable
 import kotlin.time.Duration
 
-@Serializable
 data class TriggerCreateSubmitted(
     override val id: ReqId,
     override var status: ReqStatus,
@@ -27,7 +25,6 @@ data class TriggerCreateSubmitted(
     val cron: CronPattern? = null
 ) : Submitted
 
-@Serializable
 data class TriggerStatusSubmitted(
     override val id: ReqId,
     override var status: ReqStatus,

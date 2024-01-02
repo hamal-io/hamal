@@ -9,40 +9,33 @@ import io.hamal.lib.http.body
 import io.hamal.lib.sdk.fold
 import io.hamal.request.ExecCompleteReq
 import io.hamal.request.ExecFailReq
-import kotlinx.serialization.Serializable
 
-@Serializable
 data class BridgeExecCompleteReq(
     override val result: ExecResult,
     override val state: ExecState,
     override val events: List<EventToSubmit>
 ) : ExecCompleteReq
 
-@Serializable
 data class BridgeExecCompleteSubmitted(
     override val id: ReqId,
     override val status: ReqStatus,
     val execId: ExecId,
 ) : BridgeSubmitted
 
-@Serializable
 data class BridgeExecFailReq(
     override val result: ExecResult
 ) : ExecFailReq
 
 
-@Serializable
 data class BridgeExecFailSubmitted(
     override val id: ReqId,
     override val status: ReqStatus,
     val execId: ExecId,
 ) : BridgeSubmitted
 
-@Serializable
 data class BridgeUnitOfWorkList(
     val work: List<UnitOfWork>
 ) {
-    @Serializable
     data class UnitOfWork(
         val id: ExecId,
         val flowId: FlowId,

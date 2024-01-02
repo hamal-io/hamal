@@ -7,7 +7,6 @@ import io.hamal.lib.common.domain.UpdatedAt
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.*
-import kotlinx.serialization.Serializable
 
 interface ExecRepository : ExecCmdRepository, ExecQueryRepository
 
@@ -83,7 +82,6 @@ interface ExecQueryRepository {
     )
 }
 
-@Serializable
 sealed class Exec : DomainObject<ExecId> {
     abstract val cmdId: CmdId
     abstract override val id: ExecId
@@ -115,7 +113,6 @@ sealed class Exec : DomainObject<ExecId> {
     }
 }
 
-@Serializable
 class PlannedExec(
     override val cmdId: CmdId,
     override val id: ExecId,
@@ -136,7 +133,6 @@ class PlannedExec(
 
 }
 
-@Serializable
 class ScheduledExec(
     override val cmdId: CmdId,
     override val id: ExecId,
@@ -157,7 +153,6 @@ class ScheduledExec(
 
 }
 
-@Serializable
 class QueuedExec(
     override val cmdId: CmdId,
     override val id: ExecId,
@@ -178,7 +173,6 @@ class QueuedExec(
 }
 
 
-@Serializable
 class StartedExec(
     override val cmdId: CmdId,
     override val id: ExecId,
@@ -197,7 +191,6 @@ class StartedExec(
     }
 }
 
-@Serializable
 class CompletedExec(
     override val cmdId: CmdId,
     override val id: ExecId,
@@ -220,7 +213,6 @@ class CompletedExec(
     }
 }
 
-@Serializable
 class FailedExec(
     override val cmdId: CmdId,
     override val id: ExecId,

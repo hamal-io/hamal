@@ -7,16 +7,13 @@ import io.hamal.lib.http.body
 import io.hamal.lib.sdk.fold
 import io.hamal.request.FlowCreateReq
 import io.hamal.request.FlowUpdateReq
-import kotlinx.serialization.Serializable
 
-@Serializable
 data class ApiFlowCreateReq(
     override val name: FlowName,
     override val inputs: FlowInputs,
     override val type: FlowType? = null
 ) : FlowCreateReq
 
-@Serializable
 data class ApiFlowCreateSubmitted(
     override val id: ReqId,
     override val status: ReqStatus,
@@ -24,24 +21,20 @@ data class ApiFlowCreateSubmitted(
     val groupId: GroupId,
 ) : ApiSubmitted
 
-@Serializable
 data class ApiFlowUpdateReq(
     override val name: FlowName,
     override val inputs: FlowInputs,
 ) : FlowUpdateReq
 
-@Serializable
 data class ApiFlowUpdateSubmitted(
     override val id: ReqId,
     override val status: ReqStatus,
     val flowId: FlowId,
 ) : ApiSubmitted
 
-@Serializable
 data class ApiFlowList(
     val flows: List<Flow>
 ) {
-    @Serializable
     data class Flow(
         val type: FlowType,
         val id: FlowId,
@@ -49,7 +42,6 @@ data class ApiFlowList(
     )
 }
 
-@Serializable
 data class ApiFlow(
     val id: FlowId,
     val type: FlowType,

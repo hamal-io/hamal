@@ -1,6 +1,6 @@
 package io.hamal.lib.kua.table
 
-import io.hamal.lib.common.domain.DomainId
+import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.kua.State
 import io.hamal.lib.kua.function.FunctionType
@@ -15,8 +15,10 @@ class TableProxyMap(
     val length get() = state.native.tableGetLength(index)
 
     fun unset(key: StringType) = unset(key.value)
+
     @Suppress("UNUSED_PARAMETER")
     operator fun set(key: String, value: NilType) = unset(key)
+
     @Suppress("UNUSED_PARAMETER")
     operator fun set(key: StringType, value: NilType) = unset(key.value)
     fun unset(key: String): Int {
@@ -54,8 +56,8 @@ class TableProxyMap(
         return state.tableSetRaw(index)
     }
 
-    operator fun set(key: String, value: DomainId) = set(key, value.value.value.toString(16))
-    operator fun set(key: StringType, value: DomainId) = set(key.value, value.value.value.toString(16))
+    operator fun set(key: String, value: ValueObjectId) = set(key, value.value.value.toString(16))
+    operator fun set(key: StringType, value: ValueObjectId) = set(key.value, value.value.value.toString(16))
     operator fun set(key: String, value: SnowflakeId) = set(key, value.value.toString(16))
     operator fun set(key: StringType, value: SnowflakeId) = set(key.value, value.value.toString(16))
 

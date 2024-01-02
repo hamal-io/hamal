@@ -1,41 +1,21 @@
 package io.hamal.lib.domain.vo
 
-import io.hamal.lib.common.domain.StringValueObjectSerializer
+import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.domain.ValueObjectString
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.base.DomainAt
-import io.hamal.lib.domain.vo.base.DomainAtSerializer
-import kotlinx.serialization.Serializable
 import java.time.Instant
 
-@Serializable(with = AuthId.Serializer::class)
-class AuthId(override val value: SnowflakeId) : SerializableDomainId() {
+class AuthId(override val value: SnowflakeId) : ValueObjectId() {
     constructor(value: Int) : this(SnowflakeId(value.toLong()))
-
-    internal object Serializer : SerializableDomainIdSerializer<AuthId>(::AuthId)
 }
 
-@Serializable(with = AuthToken.Serializer::class)
-class AuthToken(override val value: String) : ValueObjectString() {
-    internal object Serializer : StringValueObjectSerializer<AuthToken>(::AuthToken)
-}
+class AuthToken(override val value: String) : ValueObjectString()
 
-@Serializable(with = AuthTokenExpiresAt.Serializer::class)
-class AuthTokenExpiresAt(override val value: Instant) : DomainAt() {
-    internal object Serializer : DomainAtSerializer<AuthTokenExpiresAt>(::AuthTokenExpiresAt)
-}
+class AuthTokenExpiresAt(override val value: Instant) : DomainAt()
 
-@Serializable(with = Password.Serializer::class)
-class Password(override val value: String) : ValueObjectString() {
-    internal object Serializer : StringValueObjectSerializer<Password>(::Password)
-}
+class Password(override val value: String) : ValueObjectString()
 
-@Serializable(with = PasswordHash.Serializer::class)
-class PasswordHash(override val value: String) : ValueObjectString() {
-    internal object Serializer : StringValueObjectSerializer<PasswordHash>(::PasswordHash)
-}
+class PasswordHash(override val value: String) : ValueObjectString()
 
-@Serializable(with = PasswordSalt.Serializer::class)
-class PasswordSalt(override val value: String) : ValueObjectString() {
-    internal object Serializer : StringValueObjectSerializer<PasswordSalt>(::PasswordSalt)
-}
+class PasswordSalt(override val value: String) : ValueObjectString()

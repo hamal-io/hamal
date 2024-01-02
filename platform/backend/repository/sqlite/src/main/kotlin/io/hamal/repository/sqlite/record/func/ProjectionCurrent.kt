@@ -8,7 +8,6 @@ import io.hamal.repository.api.FuncQueryRepository.FuncQuery
 import io.hamal.repository.record.func.FuncRecord
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
-import io.hamal.repository.sqlite.record.protobuf
 import kotlinx.serialization.ExperimentalSerializationApi
 
 
@@ -30,7 +29,8 @@ internal object ProjectionCurrent : ProjectionSqlite<FuncId, FuncRecord, Func> {
                 set("id", funcId)
             }
             map { rs ->
-                protobuf.decodeFromByteArray(Func.serializer(), rs.getBytes("data"))
+//                protobuf.decodeFromByteArray(Func.serializer(), rs.getBytes("data"))
+                TODO()
             }
         }
     }
@@ -56,7 +56,8 @@ internal object ProjectionCurrent : ProjectionSqlite<FuncId, FuncRecord, Func> {
                 set("limit", query.limit)
             }
             map { rs ->
-                protobuf.decodeFromByteArray(Func.serializer(), rs.getBytes("data"))
+//                protobuf.decodeFromByteArray(Func.serializer(), rs.getBytes("data"))
+                TODO()
             }
         }
     }
@@ -96,7 +97,8 @@ internal object ProjectionCurrent : ProjectionSqlite<FuncId, FuncRecord, Func> {
             set("id", obj.id)
             set("groupId", obj.groupId)
             set("flowId", obj.flowId)
-            set("data", protobuf.encodeToByteArray(Func.serializer(), obj))
+//            set("data", protobuf.encodeToByteArray(Func.serializer(), obj))
+            TODO()
         }
     }
 

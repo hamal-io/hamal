@@ -1,7 +1,7 @@
 package io.hamal.api.http.controller.endpoint
 
 import io.hamal.lib.common.util.TimeUtils
-import io.hamal.lib.domain.GenerateDomainId
+import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain._enum.EndpointMethod
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.vo.*
@@ -22,7 +22,7 @@ import java.util.concurrent.CompletableFuture
 
 @RestController
 internal class EndpointInvokeController(
-    private val generateDomainId: GenerateDomainId,
+    private val generateDomainId: GenerateId,
     private val reqCmdRepository: ReqCmdRepository,
     private val execRepository: ExecRepository,
     private val endpointQueryRepository: EndpointQueryRepository,

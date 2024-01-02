@@ -2,14 +2,12 @@ package io.hamal.lib.domain.vo
 
 import io.hamal.lib.common.domain.ValueObject
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
-@Serializable(with = CorrelationId.Serializer::class)
 class CorrelationId(
     override val value: String
 ) : ValueObject.ComparableImpl<String>() {

@@ -8,7 +8,6 @@ import io.hamal.repository.api.AccountQueryRepository.AccountQuery
 import io.hamal.repository.record.account.AccountRecord
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
-import io.hamal.repository.sqlite.record.protobuf
 import kotlinx.serialization.ExperimentalSerializationApi
 
 
@@ -30,7 +29,8 @@ internal object ProjectionCurrent : ProjectionSqlite<AccountId, AccountRecord, A
                 set("id", accountId)
             }
             map { rs ->
-                protobuf.decodeFromByteArray(Account.serializer(), rs.getBytes("data"))
+//                protobuf.decodeFromByteArray(Account.serializer(), rs.getBytes("data"))
+                TODO()
             }
         }
     }
@@ -54,7 +54,8 @@ internal object ProjectionCurrent : ProjectionSqlite<AccountId, AccountRecord, A
                 set("limit", query.limit)
             }
             map { rs ->
-                protobuf.decodeFromByteArray(Account.serializer(), rs.getBytes("data"))
+//                protobuf.decodeFromByteArray(Account.serializer(), rs.getBytes("data"))
+                TODO()
             }
         }
     }
@@ -90,7 +91,8 @@ internal object ProjectionCurrent : ProjectionSqlite<AccountId, AccountRecord, A
             """.trimIndent()
         ) {
             set("id", obj.id)
-            set("data", protobuf.encodeToByteArray(Account.serializer(), obj))
+//            set("data", protobuf.encodeToByteArray(Account.serializer(), obj))
+            TODO()
         }
     }
 

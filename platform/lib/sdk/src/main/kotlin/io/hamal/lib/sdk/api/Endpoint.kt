@@ -12,16 +12,13 @@ import io.hamal.lib.sdk.api.ApiEndpointService.EndpointQuery
 import io.hamal.lib.sdk.fold
 import io.hamal.request.EndpointCreateReq
 import io.hamal.request.EndpointUpdateReq
-import kotlinx.serialization.Serializable
 
-@Serializable
 data class ApiEndpointCreateReq(
     override val funcId: FuncId,
     override val name: EndpointName,
     override val method: EndpointMethod
 ) : EndpointCreateReq
 
-@Serializable
 data class ApiEndpointCreateSubmitted(
     override val id: ReqId,
     override val status: ReqStatus,
@@ -31,31 +28,26 @@ data class ApiEndpointCreateSubmitted(
 ) : ApiSubmitted
 
 
-@Serializable
 data class ApiEndpointUpdateReq(
     override val funcId: FuncId? = null,
     override val name: EndpointName? = null,
     override val method: EndpointMethod? = null
 ) : EndpointUpdateReq
 
-@Serializable
 data class ApiEndpointUpdateSubmitted(
     override val id: ReqId,
     override val status: ReqStatus,
     val endpointId: EndpointId,
 ) : ApiSubmitted
 
-@Serializable
 data class ApiEndpointList(
     val endpoints: List<Endpoint>
 ) {
-    @Serializable
     data class Endpoint(
         val id: EndpointId,
         val func: Func,
         val name: EndpointName
     ) {
-        @Serializable
         data class Func(
             val id: FuncId,
             val name: FuncName
@@ -63,13 +55,11 @@ data class ApiEndpointList(
     }
 }
 
-@Serializable
 data class ApiEndpoint(
     val id: EndpointId,
     val func: Func,
     val name: EndpointName
 ) {
-    @Serializable
     data class Func(
         val id: FuncId,
         val name: FuncName

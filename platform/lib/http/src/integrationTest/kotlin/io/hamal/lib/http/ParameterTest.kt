@@ -4,7 +4,6 @@ import io.hamal.lib.http.HttpRequest.HttpMethod
 import io.hamal.lib.http.HttpRequest.HttpMethod.*
 import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.fixture.TestWebConfig
-import kotlinx.serialization.Serializable
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.DynamicTest
@@ -20,13 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
-@Serializable
 sealed interface ParameterResponse
 
-@Serializable
 data class NoParameterResponse(val result: String = "noContent") : ParameterResponse
 
-@Serializable
 data class MultiParameterResponse(val str: String, val num: Int, val boo: Boolean) : ParameterResponse
 
 @RestController

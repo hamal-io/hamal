@@ -8,21 +8,17 @@ import io.hamal.lib.domain.vo.ExecLogTimestamp
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.request.ExecLogAppendReq
-import kotlinx.serialization.Serializable
 
-@Serializable
 data class ApiExecLogAppendCmd(
     override val level: ExecLogLevel,
     override val message: ExecLogMessage,
     override val timestamp: ExecLogTimestamp
 ) : ExecLogAppendReq
 
-@Serializable
 data class ApiExcLogList(
     val logs: List<ApiExecLog>
 )
 
-@Serializable
 data class ApiExecLog(
     val id: ExecLogId,
     val execId: ExecId,

@@ -3,14 +3,12 @@ package io.hamal.lib.web3.eth.abi.type
 import io.hamal.lib.web3.util.ByteWindow
 import io.hamal.lib.web3.util.Web3Parser
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import java.nio.charset.Charset
 
-@Serializable
 sealed interface EthBaseString : EthType<String> {
     operator fun get(idx: Int): Char = value[idx]
 
@@ -25,7 +23,6 @@ sealed interface EthBaseString : EthType<String> {
     }
 }
 
-@Serializable
 data class EthString(
     override val value: String
 ) : EthBaseString {
@@ -34,7 +31,6 @@ data class EthString(
     override fun toString(): String = value
 }
 
-@Serializable
 data class EthHexString(
     override val value: String
 ) : EthBaseString {
@@ -48,7 +44,6 @@ data class EthHexString(
     override fun toString(): String = value
 }
 
-@Serializable(with = EthPrefixedHexString.Serializer::class)
 data class EthPrefixedHexString(
     override val value: String
 ) : EthBaseString {

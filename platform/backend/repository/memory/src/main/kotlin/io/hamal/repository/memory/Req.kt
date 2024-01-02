@@ -5,14 +5,12 @@ import io.hamal.lib.domain.vo.ReqId
 import io.hamal.repository.api.ReqQueryRepository
 import io.hamal.repository.api.ReqRepository
 import io.hamal.repository.api.submitted_req.Submitted
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.protobuf.ProtoBuf
 import org.springframework.stereotype.Repository
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
 @Repository
-@OptIn(ExperimentalSerializationApi::class)
 class ReqMemoryRepository(
     val protobuf: ProtoBuf
 ) : ReqRepository {
@@ -23,8 +21,9 @@ class ReqMemoryRepository(
 
     override fun queue(req: Submitted) {
         return lock.withLock {
-            store[req.id] = protobuf.encodeToByteArray(Submitted.serializer(), req)
-            queue.add(req.id)
+            TODO()
+//            store[req.id] = protobuf.encodeToByteArray(Submitted.serializer(), req)
+//            queue.add(req.id)
         }
     }
 
@@ -45,8 +44,9 @@ class ReqMemoryRepository(
         val req = get(reqId)
         check(req.status == ReqStatus.Submitted) { "Req not submitted" }
         lock.withLock {
-            store[req.id] =
-                protobuf.encodeToByteArray(Submitted.serializer(), req.apply { status = ReqStatus.Completed })
+            TODO()
+//            store[req.id] =
+//                protobuf.encodeToByteArray(Submitted.serializer(), req.apply { status = ReqStatus.Completed })
         }
     }
 
@@ -54,8 +54,9 @@ class ReqMemoryRepository(
         val req = get(reqId)
         check(req.status == ReqStatus.Submitted) { "Req not submitted" }
         lock.withLock {
-            store[req.id] =
-                protobuf.encodeToByteArray(Submitted.serializer(), req.apply { status = ReqStatus.Failed })
+            TODO()
+//            store[req.id] =
+//                protobuf.encodeToByteArray(Submitted.serializer(), req.apply { status = ReqStatus.Failed })
         }
     }
 
@@ -69,7 +70,8 @@ class ReqMemoryRepository(
 
     override fun find(reqId: ReqId): Submitted? {
         val result = lock.withLock { store[reqId] } ?: return null
-        return protobuf.decodeFromByteArray(Submitted.serializer(), result)
+//        return protobuf.decodeFromByteArray(Submitted.serializer(), result)
+        TODO()
     }
 
     override fun list(query: ReqQueryRepository.ReqQuery): List<Submitted> {

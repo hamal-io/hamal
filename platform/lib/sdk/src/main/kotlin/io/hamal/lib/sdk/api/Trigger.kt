@@ -13,11 +13,8 @@ import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiTriggerService.TriggerQuery
 import io.hamal.lib.sdk.fold
 import io.hamal.request.TriggerCreateReq
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
 import kotlin.time.Duration
 
-@Serializable
 data class ApiTriggerCreateReq(
     override val type: TriggerType,
     override val name: TriggerName,
@@ -31,7 +28,6 @@ data class ApiTriggerCreateReq(
     override val cron: CronPattern? = null
 ) : TriggerCreateReq
 
-@Serializable
 data class ApiTriggerCreateSubmitted(
     override val id: ReqId,
     override val status: ReqStatus,
@@ -41,7 +37,6 @@ data class ApiTriggerCreateSubmitted(
 ) : ApiSubmitted
 
 
-@Serializable
 data class ApiTriggerStatusSubmitted(
     override val id: ReqId,
     override val status: ReqStatus,
@@ -49,32 +44,26 @@ data class ApiTriggerStatusSubmitted(
     val triggerStatus: TriggerStatus
 ) : ApiSubmitted
 
-@Serializable
 data class ApiTriggerList(
     val triggers: List<Trigger>
 ) {
-    @Serializable
     sealed interface Trigger {
         val id: TriggerId
         val name: TriggerName
         val func: Func
         val flow: Flow
 
-        @Serializable
         data class Func(
             val id: FuncId,
             val name: FuncName
         )
 
-        @Serializable
         data class Flow(
             val id: FlowId,
             val name: FlowName
         )
     }
 
-    @Serializable
-    @SerialName("FixedRate")
     class FixedRateTrigger(
         override val id: TriggerId,
         override val name: TriggerName,
@@ -83,8 +72,6 @@ data class ApiTriggerList(
         val duration: Duration
     ) : Trigger
 
-    @Serializable
-    @SerialName("Event")
     class EventTrigger(
         override val id: TriggerId,
         override val name: TriggerName,
@@ -92,15 +79,12 @@ data class ApiTriggerList(
         override val flow: Trigger.Flow,
         val topic: Topic
     ) : Trigger {
-        @Serializable
         data class Topic(
             val id: TopicId,
             val name: TopicName
         )
     }
 
-    @Serializable
-    @SerialName("Hook")
     class HookTrigger(
         override val id: TriggerId,
         override val name: TriggerName,
@@ -108,7 +92,6 @@ data class ApiTriggerList(
         override val flow: Trigger.Flow,
         val hook: Hook
     ) : Trigger {
-        @Serializable
         data class Hook(
             val id: HookId,
             val name: HookName,
@@ -116,8 +99,6 @@ data class ApiTriggerList(
         )
     }
 
-    @Serializable
-    @SerialName("Cron")
     class CronTrigger(
         override val id: TriggerId,
         override val name: TriggerName,
@@ -127,7 +108,6 @@ data class ApiTriggerList(
     ) : Trigger
 }
 
-@Serializable
 sealed interface ApiTrigger {
     val id: TriggerId
     val name: TriggerName
@@ -137,21 +117,17 @@ sealed interface ApiTrigger {
     val correlationId: CorrelationId?
     val status: TriggerStatus
 
-    @Serializable
     data class Func(
         val id: FuncId,
         val name: FuncName
     )
 
-    @Serializable
     data class Flow(
         val id: FlowId,
         val name: FlowName
     )
 }
 
-@Serializable
-@SerialName("FixedRate")
 class ApiFixedRateTrigger(
     override val id: TriggerId,
     override val name: TriggerName,
@@ -163,8 +139,6 @@ class ApiFixedRateTrigger(
     val duration: Duration
 ) : ApiTrigger
 
-@Serializable
-@SerialName("Event")
 class ApiEventTrigger(
     override val id: TriggerId,
     override val name: TriggerName,
@@ -175,15 +149,12 @@ class ApiEventTrigger(
     override val correlationId: CorrelationId? = null,
     val topic: Topic
 ) : ApiTrigger {
-    @Serializable
     data class Topic(
         val id: TopicId,
         val name: TopicName
     )
 }
 
-@Serializable
-@SerialName("Hook")
 class ApiHookTrigger(
     override val id: TriggerId,
     override val name: TriggerName,
@@ -194,7 +165,6 @@ class ApiHookTrigger(
     override val correlationId: CorrelationId? = null,
     val hook: Hook
 ) : ApiTrigger {
-    @Serializable
     data class Hook(
         val id: HookId,
         val name: HookName,
@@ -203,8 +173,6 @@ class ApiHookTrigger(
 }
 
 
-@Serializable
-@SerialName("Cron")
 class ApiCronTrigger(
     override val id: TriggerId,
     override val name: TriggerName,

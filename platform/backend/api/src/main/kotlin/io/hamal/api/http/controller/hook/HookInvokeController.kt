@@ -1,6 +1,6 @@
 package io.hamal.api.http.controller.hook
 
-import io.hamal.lib.domain.GenerateDomainId
+import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain._enum.HookMethod.*
 import io.hamal.lib.domain._enum.ReqStatus
@@ -13,7 +13,6 @@ import io.hamal.repository.api.HookQueryRepository
 import io.hamal.repository.api.ReqCmdRepository
 import io.hamal.repository.api.submitted_req.HookInvokeSubmitted
 import jakarta.servlet.http.HttpServletRequest
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
@@ -24,7 +23,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 internal class HookInvokeController(
-    private val generateDomainId: GenerateDomainId,
+    private val generateDomainId: GenerateId,
     private val reqCmdRepository: ReqCmdRepository,
     private val hookQueryRepository: HookQueryRepository,
     private val json: Json
@@ -90,7 +89,6 @@ internal class HookInvokeController(
         else -> throw IllegalArgumentException("${method.lowercase()} not supported")
     }
 
-    @Serializable
     data class Response(
         val reqId: ReqId,
         val status: ReqStatus,

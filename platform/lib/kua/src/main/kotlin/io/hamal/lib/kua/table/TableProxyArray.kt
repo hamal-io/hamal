@@ -1,6 +1,6 @@
 package io.hamal.lib.kua.table
 
-import io.hamal.lib.common.domain.DomainId
+import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.kua.State
 import io.hamal.lib.kua.type.*
@@ -51,7 +51,7 @@ class TableProxyArray(
         return state.tableAppend(index)
     }
 
-    fun append(value: DomainId) = append(value.value.value)
+    fun append(value: ValueObjectId) = append(value.value.value)
     fun append(value: SnowflakeId) = append(value.value.toString(16))
 
     fun getString(idx: Int) = getStringType(idx).value

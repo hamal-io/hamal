@@ -102,12 +102,10 @@
 //)
 //
 //
-//@Serializable
 //internal data class PersistedEthReceipt(
 //    val hash: ByteArray,
 //    val logs: List<Log>
 //) {
-//    @Serializable
 //    data class Log(
 //        val address: ByteArray,
 //        val data: ByteArray,

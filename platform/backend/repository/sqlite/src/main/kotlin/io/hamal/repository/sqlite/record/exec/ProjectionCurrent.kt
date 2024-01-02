@@ -9,7 +9,6 @@ import io.hamal.repository.api.ExecQueryRepository.ExecQuery
 import io.hamal.repository.record.exec.ExecRecord
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
-import io.hamal.repository.sqlite.record.protobuf
 import kotlinx.serialization.ExperimentalSerializationApi
 
 
@@ -30,7 +29,8 @@ internal object ProjectionCurrent : ProjectionSqlite<ExecId, ExecRecord, Exec> {
                 set("id", execId)
             }
             map { rs ->
-                protobuf.decodeFromByteArray(Exec.serializer(), rs.getBytes("data"))
+//                protobuf.decodeFromByteArray(Exec.serializer(), rs.getBytes("data"))
+                TODO()
             }
         }
     }
@@ -57,7 +57,8 @@ internal object ProjectionCurrent : ProjectionSqlite<ExecId, ExecRecord, Exec> {
                 set("limit", query.limit)
             }
             map { rs ->
-                protobuf.decodeFromByteArray(Exec.serializer(), rs.getBytes("data"))
+//                protobuf.decodeFromByteArray(Exec.serializer(), rs.getBytes("data"))
+                TODO()
             }
         }
     }
@@ -103,7 +104,8 @@ internal object ProjectionCurrent : ProjectionSqlite<ExecId, ExecRecord, Exec> {
             set("flowId", obj.flowId)
             set("groupId", obj.groupId)
             set("funcId", obj.correlation?.funcId ?: FuncId(0))
-            set("data", protobuf.encodeToByteArray(Exec.serializer(), obj))
+//            set("data", protobuf.encodeToByteArray(Exec.serializer(), obj))
+            TODO()
         }
     }
 

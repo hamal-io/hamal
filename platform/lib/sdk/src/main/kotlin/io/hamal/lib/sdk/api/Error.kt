@@ -1,8 +1,5 @@
 package io.hamal.lib.sdk.api
 
-import kotlinx.serialization.Serializable
-
-@Serializable
 data class ApiError(
     val message: String?
 )

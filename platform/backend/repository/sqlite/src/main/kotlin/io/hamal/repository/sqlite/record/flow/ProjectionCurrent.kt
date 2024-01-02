@@ -8,7 +8,6 @@ import io.hamal.repository.api.FlowQueryRepository.FlowQuery
 import io.hamal.repository.record.flow.FlowRecord
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
-import io.hamal.repository.sqlite.record.protobuf
 import kotlinx.serialization.ExperimentalSerializationApi
 
 
@@ -30,7 +29,8 @@ internal object ProjectionCurrent : ProjectionSqlite<FlowId, FlowRecord, Flow> {
                 set("id", flowId)
             }
             map { rs ->
-                protobuf.decodeFromByteArray(Flow.serializer(), rs.getBytes("data"))
+//                protobuf.decodeFromByteArray(Flow.serializer(), rs.getBytes("data"))
+                TODO()
             }
         }
     }
@@ -55,7 +55,8 @@ internal object ProjectionCurrent : ProjectionSqlite<FlowId, FlowRecord, Flow> {
                 set("limit", query.limit)
             }
             map { rs ->
-                protobuf.decodeFromByteArray(Flow.serializer(), rs.getBytes("data"))
+//                protobuf.decodeFromByteArray(Flow.serializer(), rs.getBytes("data"))
+                TODO()
             }
         }
     }
@@ -93,7 +94,8 @@ internal object ProjectionCurrent : ProjectionSqlite<FlowId, FlowRecord, Flow> {
         ) {
             set("id", obj.id)
             set("groupId", obj.groupId)
-            set("data", protobuf.encodeToByteArray(Flow.serializer(), obj))
+//            set("data", protobuf.encodeToByteArray(Flow.serializer(), obj))
+            TODO()
         }
     }
 
@@ -113,7 +115,7 @@ internal object ProjectionCurrent : ProjectionSqlite<FlowId, FlowRecord, Flow> {
     override fun clear(tx: Transaction) {
         tx.execute("""DELETE FROM current""")
     }
-    
+
     private fun FlowQuery.groupIds(): String {
         return if (groupIds.isEmpty()) {
             ""

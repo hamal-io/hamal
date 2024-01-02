@@ -4,9 +4,7 @@ import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.ReqId
-import kotlinx.serialization.Serializable
 
-@Serializable
 data class StateSetSubmitted(
     override val id: ReqId,
     override var status: ReqStatus,

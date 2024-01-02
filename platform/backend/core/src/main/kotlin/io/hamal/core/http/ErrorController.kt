@@ -6,7 +6,6 @@ import jakarta.servlet.http.HttpServletResponse
 import jakarta.servlet.http.HttpServletResponse.*
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.MissingFieldException
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.springframework.core.Ordered.HIGHEST_PRECEDENCE
@@ -22,7 +21,6 @@ import org.springframework.web.servlet.NoHandlerFoundException
 @ControllerAdvice
 internal class ErrorController(private val json: Json) {
 
-    @Serializable
     data class InvalidArgumentType(
         val message: String,
         val source: String,
@@ -51,7 +49,6 @@ internal class ErrorController(private val json: Json) {
     }
 
 
-    @Serializable
     data class MissingFieldsError(
         val message: String,
         val fields: List<String>
@@ -91,7 +88,8 @@ internal class ErrorController(private val json: Json) {
     fun otherwise(res: HttpServletResponse) {
         res.status = SC_FORBIDDEN
         res.addHeader("Content-Type", "application/json")
-        res.writer.write(json.encodeToString(ApiError.serializer(), ApiError("FORBIDDEN")))
+//        res.writer.write(json.encodeToString(ApiError.serializer(), ApiError("FORBIDDEN")))
+        TODO()
     }
 
     @ExceptionHandler(value = [Throwable::class])
@@ -110,7 +108,8 @@ internal class ErrorController(private val json: Json) {
 
         res.status = statusCode
         res.addHeader("Content-Type", "application/json")
-        res.writer.write(json.encodeToString(ApiError.serializer(), ApiError(toHandle?.message ?: "Unknown error")))
+//        res.writer.write(json.encodeToString(ApiError.serializer(), ApiError(toHandle?.message ?: "Unknown error")))
+        TODO()
     }
 
 }

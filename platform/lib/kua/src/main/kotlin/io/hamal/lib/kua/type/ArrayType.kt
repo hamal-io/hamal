@@ -1,19 +1,12 @@
 package io.hamal.lib.kua.type
 
-import io.hamal.lib.common.domain.DomainId
+import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.snowflake.SnowflakeId
-import kotlinx.serialization.*
-import kotlinx.serialization.builtins.MapSerializer
-import kotlinx.serialization.builtins.serializer
-import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
+import kotlinx.serialization.Transient
 import kotlin.reflect.KClass
 
-@Serializable
-@SerialName("ArrayType")
+
 data class ArrayType(
-    @Serializable(with = Serializer::class)
     val value: MutableMap<Int, SerializableType> = mutableMapOf(),
 ) : TableType(), Map<Int, SerializableType> {
 
@@ -91,7 +84,7 @@ data class ArrayType(
 
 
     fun append(value: SnowflakeId) = append(value.value.toString(16))
-    fun append(value: DomainId) = append(value.value.value)
+    fun append(value: ValueObjectId) = append(value.value.value)
 
     fun append(value: MapType): Int {
         this.value[this.value.size + 1] = value
@@ -124,21 +117,6 @@ data class ArrayType(
 
     fun type(idx: Int): KClass<out Type> {
         return value[idx]?.let { it::class } ?: NilType::class
-    }
-
-    object Serializer : KSerializer<MutableMap<Int, SerializableType>> {
-        private val delegate = MapSerializer(Int.serializer(), SerializableType.serializer())
-
-        @OptIn(ExperimentalSerializationApi::class)
-        override val descriptor = SerialDescriptor("ArrayType", delegate.descriptor)
-
-        override fun deserialize(decoder: Decoder): MutableMap<Int, SerializableType> {
-            return delegate.deserialize(decoder).toMutableMap()
-        }
-
-        override fun serialize(encoder: Encoder, value: MutableMap<Int, SerializableType>) {
-            return delegate.serialize(encoder, value)
-        }
     }
 }
 

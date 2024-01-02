@@ -1,6 +1,6 @@
 package io.hamal.core.adapter
 
-import io.hamal.lib.domain.GenerateDomainId
+import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.vo.EndpointId
 import io.hamal.lib.domain.vo.FlowId
@@ -42,7 +42,7 @@ interface EndpointPort : EndpointCreatePort, EndpointGetPort, EndpointListPort, 
 
 @Component
 class EndpointAdapter(
-    private val generateDomainId: GenerateDomainId,
+    private val generateDomainId: GenerateId,
     private val endpointQueryRepository: EndpointQueryRepository,
     private val funcQueryRepository: FuncQueryRepository,
     private val reqCmdRepository: ReqCmdRepository

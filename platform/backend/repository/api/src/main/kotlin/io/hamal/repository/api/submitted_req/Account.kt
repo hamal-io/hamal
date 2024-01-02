@@ -2,9 +2,7 @@ package io.hamal.repository.api.submitted_req
 
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.*
-import kotlinx.serialization.Serializable
 
-@Serializable
 data class AccountCreateSubmitted(
     override val id: ReqId,
     override var status: ReqStatus,
@@ -20,7 +18,6 @@ data class AccountCreateSubmitted(
     val token: AuthToken
 ) : Submitted
 
-@Serializable
 data class AccountCreateAnonymousSubmitted(
     override val id: ReqId,
     override var status: ReqStatus,
@@ -35,7 +32,6 @@ data class AccountCreateAnonymousSubmitted(
     val token: AuthToken
 ) : Submitted
 
-@Serializable
 data class AccountCreateMetaMaskSubmitted(
     override val id: ReqId,
     override var status: ReqStatus,
@@ -50,8 +46,6 @@ data class AccountCreateMetaMaskSubmitted(
     val token: AuthToken
 ) : Submitted
 
-
-@Serializable
 data class AccountConvertSubmitted(
     override val id: ReqId,
     override var status: ReqStatus,

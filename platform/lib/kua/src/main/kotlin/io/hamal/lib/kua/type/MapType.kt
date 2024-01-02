@@ -1,19 +1,12 @@
 package io.hamal.lib.kua.type
 
-import io.hamal.lib.common.domain.DomainId
+import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.snowflake.SnowflakeId
-import kotlinx.serialization.*
-import kotlinx.serialization.builtins.MapSerializer
-import kotlinx.serialization.builtins.serializer
-import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
+import kotlinx.serialization.Transient
 import kotlin.reflect.KClass
 
-@Serializable
-@SerialName("MapType")
 data class MapType(
-    @Serializable(with = Serializer::class) val value: MutableMap<String, SerializableType> = mutableMapOf(),
+    val value: MutableMap<String, SerializableType> = mutableMapOf(),
 ) : TableType(), Map<String, SerializableType> {
 
     constructor(vararg pairs: Pair<String, SerializableType>) : this(mutableMapOf(*pairs))
@@ -86,8 +79,8 @@ data class MapType(
         return size
     }
 
-    operator fun set(key: String, value: DomainId) = set(key, value.value.value.toString(16))
-    operator fun set(key: StringType, value: DomainId) = set(key.value, value.value.value.toString(16))
+    operator fun set(key: String, value: ValueObjectId) = set(key, value.value.value.toString(16))
+    operator fun set(key: StringType, value: ValueObjectId) = set(key.value, value.value.value.toString(16))
     operator fun set(key: String, value: SnowflakeId) = set(key, value.value.toString(16))
     operator fun set(key: StringType, value: SnowflakeId) = set(key.value, value.value.toString(16))
 
@@ -150,21 +143,6 @@ data class MapType(
 
     fun type(key: String): KClass<out Type> {
         return value[key]?.let { it::class } ?: NilType::class
-    }
-
-    object Serializer : KSerializer<MutableMap<String, SerializableType>> {
-        private val delegate = MapSerializer(String.serializer(), SerializableType.serializer())
-
-        @OptIn(ExperimentalSerializationApi::class)
-        override val descriptor = SerialDescriptor("MapType", delegate.descriptor)
-
-        override fun deserialize(decoder: Decoder): MutableMap<String, SerializableType> {
-            return delegate.deserialize(decoder).toMutableMap()
-        }
-
-        override fun serialize(encoder: Encoder, value: MutableMap<String, SerializableType>) {
-            return delegate.serialize(encoder, value)
-        }
     }
 }
 

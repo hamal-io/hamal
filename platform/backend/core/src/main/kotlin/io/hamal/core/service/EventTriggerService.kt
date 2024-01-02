@@ -4,7 +4,7 @@ import io.hamal.core.adapter.FuncInvokePort
 import io.hamal.core.component.Async
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.domain.GenerateDomainId
+import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.EventTrigger
@@ -27,7 +27,7 @@ import kotlin.time.Duration.Companion.milliseconds
 internal class EventTriggerService(
     private val async: Async,
     internal val eventBrokerRepository: BrokerRepository,
-    internal val generateDomainId: GenerateDomainId,
+    internal val generateDomainId: GenerateId,
     internal val invokeFunc: FuncInvokePort,
     internal val triggerQueryRepository: TriggerQueryRepository,
 ) : ApplicationListener<ContextRefreshedEvent>, DisposableBean {

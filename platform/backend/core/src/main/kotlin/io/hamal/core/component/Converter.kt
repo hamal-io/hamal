@@ -1,10 +1,10 @@
 package io.hamal.core.component
 
-import io.hamal.lib.common.domain.DomainId
 import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.domain.vo.ReqId
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.ReqId
 import org.springframework.core.convert.converter.Converter
 import kotlin.reflect.KClass
 
@@ -38,7 +38,7 @@ object TopicIdConverter : DomainIdConverter<TopicId>(TopicId::class, ::TopicId)
 object TopicEntryIdConverter : DomainIdConverter<TopicEntryId>(TopicEntryId::class, ::TopicEntryId)
 object TriggerIdConverter : DomainIdConverter<TriggerId>(TriggerId::class, ::TriggerId)
 
-sealed class DomainIdConverter<ID : DomainId>(
+sealed class DomainIdConverter<ID : ValueObjectId>(
     val clazz: KClass<ID>,
     val ctor: (SnowflakeId) -> ID,
 ) : Converter<String, ID> {

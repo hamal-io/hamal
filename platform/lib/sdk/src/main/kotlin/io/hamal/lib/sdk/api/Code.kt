@@ -5,9 +5,7 @@ import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.sdk.fold
-import kotlinx.serialization.Serializable
 
-@Serializable
 data class ApiCode(
     val id: CodeId,
     val value: CodeValue,

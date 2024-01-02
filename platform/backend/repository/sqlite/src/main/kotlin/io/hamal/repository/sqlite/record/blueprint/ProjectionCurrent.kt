@@ -8,7 +8,6 @@ import io.hamal.repository.api.BlueprintQueryRepository.BlueprintQuery
 import io.hamal.repository.record.blueprint.BlueprintRecord
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
-import io.hamal.repository.sqlite.record.protobuf
 import kotlinx.serialization.ExperimentalSerializationApi
 
 @OptIn(ExperimentalSerializationApi::class)
@@ -26,7 +25,8 @@ object ProjectionCurrent : ProjectionSqlite<BlueprintId, BlueprintRecord, Bluepr
         ) {
             set("id", obj.id)
             set("groupId", obj.groupId)
-            set("data", protobuf.encodeToByteArray(Blueprint.serializer(), obj))
+            TODO()
+//            set("data", protobuf.encodeToByteArray(Blueprint.serializer(), obj))
         }
     }
 
@@ -62,7 +62,8 @@ object ProjectionCurrent : ProjectionSqlite<BlueprintId, BlueprintRecord, Bluepr
                 set("id", blueprintId)
             }
             map { rs ->
-                protobuf.decodeFromByteArray(Blueprint.serializer(), rs.getBytes("data"))
+                TODO()
+//                protobuf.decodeFromByteArray(Blueprint.serializer(), rs.getBytes("data"))
             }
         }
     }
@@ -87,7 +88,8 @@ object ProjectionCurrent : ProjectionSqlite<BlueprintId, BlueprintRecord, Bluepr
                 set("limit", query.limit)
             }
             map { rs ->
-                protobuf.decodeFromByteArray(Blueprint.serializer(), rs.getBytes("data"))
+                TODO()
+//                protobuf.decodeFromByteArray(Blueprint.serializer(), rs.getBytes("data"))
             }
         }
     }

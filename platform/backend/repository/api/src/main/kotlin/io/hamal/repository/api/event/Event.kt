@@ -1,10 +1,8 @@
 package io.hamal.repository.api.event
 
 import io.hamal.lib.domain.vo.TopicName
-import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
 
-@Serializable
 sealed class PlatformEvent {
     val topicName get() = this::class.topicName()
 }

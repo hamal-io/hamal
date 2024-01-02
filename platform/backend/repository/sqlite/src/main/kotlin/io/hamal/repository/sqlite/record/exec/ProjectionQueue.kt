@@ -7,7 +7,6 @@ import io.hamal.repository.api.Exec
 import io.hamal.repository.record.exec.ExecRecord
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
-import io.hamal.repository.sqlite.record.protobuf
 import kotlinx.serialization.ExperimentalSerializationApi
 
 
@@ -29,7 +28,8 @@ internal object ProjectionQueue : ProjectionSqlite<ExecId, ExecRecord, Exec> {
                 set("limit", limit)
             }
             map { rs ->
-                protobuf.decodeFromByteArray(Exec.serializer(), rs.getBytes("data"))
+//                protobuf.decodeFromByteArray(Exec.serializer(), rs.getBytes("data"))
+                TODO()
             }
         }
     }
@@ -48,7 +48,8 @@ internal object ProjectionQueue : ProjectionSqlite<ExecId, ExecRecord, Exec> {
             """.trimIndent()
         ) {
             set("id", obj.id)
-            set("data", protobuf.encodeToByteArray(Exec.serializer(), obj))
+//            set("data", protobuf.encodeToByteArray(Exec.serializer(), obj))
+            TODO()
         }
     }
 

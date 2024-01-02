@@ -5,7 +5,7 @@ import io.hamal.core.req.ReqHandler
 import io.hamal.core.req.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.CorrelatedState
-import io.hamal.lib.domain.GenerateDomainId
+import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.*
@@ -24,7 +24,7 @@ class ExecCompleteHandler(
     private val eventEmitter: PlatformEventEmitter,
     private val stateCmdRepository: StateCmdRepository,
     private val eventBrokerRepository: BrokerRepository,
-    private val generateDomainId: GenerateDomainId,
+    private val generateDomainId: GenerateId,
     private val flowQueryRepository: FlowQueryRepository
 ) : ReqHandler<ExecCompleteSubmitted>(ExecCompleteSubmitted::class) {
 

@@ -1,6 +1,6 @@
 package io.hamal.core.adapter
 
-import io.hamal.lib.domain.GenerateDomainId
+import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain._enum.ReqStatus
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.*
@@ -70,7 +70,7 @@ interface FuncPort : FuncCreatePort, FuncDeployPort, FuncGetPort, FuncInvokePort
 class FuncAdapter(
     private val codeQueryRepository: CodeQueryRepository,
     private val funcQueryRepository: FuncQueryRepository,
-    private val generateDomainId: GenerateDomainId,
+    private val generateDomainId: GenerateId,
     private val flowQueryRepository: FlowQueryRepository,
     private val reqCmdRepository: ReqCmdRepository
 ) : FuncPort {

@@ -5,7 +5,7 @@ import io.hamal.core.CoreConfig
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.GenerateDomainId
+import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.AccountType.Root
 import io.hamal.lib.kua.type.MapType
@@ -124,7 +124,7 @@ internal abstract class BaseTest {
     lateinit var triggerQueryRepository: TriggerQueryRepository
 
     @Autowired
-    lateinit var generateDomainId: GenerateDomainId
+    lateinit var generateDomainId: GenerateId
 
     lateinit var testAccount: Account
     lateinit var testAuthToken: AuthToken

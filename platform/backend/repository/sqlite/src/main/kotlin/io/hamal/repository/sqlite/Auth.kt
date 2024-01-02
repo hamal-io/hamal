@@ -227,8 +227,8 @@ private fun NamedResultSet.toAuth(): Auth {
         1 -> {
             EmailAuth(
                 cmdId = getCommandId("cmd_id"),
-                id = getDomainId("id", ::AuthId),
-                accountId = getDomainId("account_id", ::AccountId),
+                id = getId("id", ::AuthId),
+                accountId = getId("account_id", ::AccountId),
                 email = Email(getString("email")),
                 hash = PasswordHash(getString("password")),
             )
@@ -237,8 +237,8 @@ private fun NamedResultSet.toAuth(): Auth {
         2 -> {
             TokenAuth(
                 cmdId = getCommandId("cmd_id"),
-                id = getDomainId("id", ::AuthId),
-                accountId = getDomainId("account_id", ::AccountId),
+                id = getId("id", ::AuthId),
+                accountId = getId("account_id", ::AccountId),
                 token = AuthToken(getString("token")),
                 expiresAt = AuthTokenExpiresAt(getInstant("expires_at"))
             )
@@ -247,8 +247,8 @@ private fun NamedResultSet.toAuth(): Auth {
         3 -> {
             MetaMaskAuth(
                 cmdId = getCommandId("cmd_id"),
-                id = getDomainId("id", ::AuthId),
-                accountId = getDomainId("account_id", ::AccountId),
+                id = getId("id", ::AuthId),
+                accountId = getId("account_id", ::AccountId),
                 address = Web3Address(getString("address"))
             )
         }

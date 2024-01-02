@@ -4,7 +4,7 @@ import io.hamal.core.component.EncodePassword
 import io.hamal.core.component.GenerateSalt
 import io.hamal.core.component.GenerateToken
 import io.hamal.core.req.req.CreateRootAccountReq
-import io.hamal.lib.domain.GenerateDomainId
+import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain._enum.ReqStatus.Submitted
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.AccountType.Anonymous
@@ -18,9 +18,9 @@ import io.hamal.repository.api.submitted_req.AccountCreateAnonymousSubmitted
 import io.hamal.repository.api.submitted_req.AccountCreateMetaMaskSubmitted
 import io.hamal.repository.api.submitted_req.AccountCreateSubmitted
 import io.hamal.request.AccountConvertAnonymousReq
-import io.hamal.request.AccountCreateReq
 import io.hamal.request.AccountCreateAnonymousReq
 import io.hamal.request.AccountCreateMetaMaskReq
+import io.hamal.request.AccountCreateReq
 import org.springframework.stereotype.Component
 
 interface AccountCreatePort {
@@ -39,7 +39,10 @@ interface AccountCreateRootPort {
 }
 
 interface AccountCreateAnonymousPort {
-    operator fun <T : Any> invoke(req: AccountCreateAnonymousReq, responseHandler: (AccountCreateAnonymousSubmitted) -> T): T
+    operator fun <T : Any> invoke(
+        req: AccountCreateAnonymousReq,
+        responseHandler: (AccountCreateAnonymousSubmitted) -> T
+    ): T
 }
 
 interface AccountConvertAnonymousPort {
@@ -70,7 +73,7 @@ interface AccountPort : AccountCreatePort,
 class AccountAdapter(
     private val accountQueryRepository: AccountQueryRepository,
     private val encodePassword: EncodePassword,
-    private val generateDomainId: GenerateDomainId,
+    private val generateDomainId: GenerateId,
     private val generateSalt: GenerateSalt,
     private val generateToken: GenerateToken,
     private val reqCmdRepository: ReqCmdRepository
@@ -97,7 +100,10 @@ class AccountAdapter(
         ).also(reqCmdRepository::queue).let(responseHandler)
     }
 
-    override fun <T : Any> invoke(req: AccountCreateAnonymousReq, responseHandler: (AccountCreateAnonymousSubmitted) -> T): T {
+    override fun <T : Any> invoke(
+        req: AccountCreateAnonymousReq,
+        responseHandler: (AccountCreateAnonymousSubmitted) -> T
+    ): T {
         val salt = generateSalt()
         return AccountCreateAnonymousSubmitted(
             id = generateDomainId(::ReqId),
