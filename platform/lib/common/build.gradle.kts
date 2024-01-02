@@ -5,8 +5,6 @@ plugins {
 
 dependencies {
     api(external.kotlin.reflect)
-    api(external.kotlin.protobuf)
-    api(external.kotlin.json)
     api(external.spring.logging)
     api(external.gson)
     testImplementation(external.junit)
@@ -25,8 +23,6 @@ testing {
             if (this is JvmTestSuite) {
                 dependencies {
                     implementation(external.kotlin.reflect)
-                    implementation(external.kotlin.protobuf)
-                    implementation(external.kotlin.json)
                     implementation(external.spring.logging)
 
                     implementation(project(":platform:lib:common"))

@@ -8,9 +8,7 @@ import io.hamal.repository.api.BlueprintQueryRepository.BlueprintQuery
 import io.hamal.repository.record.blueprint.BlueprintRecord
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
-import kotlinx.serialization.ExperimentalSerializationApi
 
-@OptIn(ExperimentalSerializationApi::class)
 object ProjectionCurrent : ProjectionSqlite<BlueprintId, BlueprintRecord, Blueprint> {
 
 

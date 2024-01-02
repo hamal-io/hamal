@@ -10,9 +10,9 @@ import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.*
 import io.hamal.repository.api.event.ExecutionCompletedEvent
+import io.hamal.repository.api.log.AppenderImpl
 import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.repository.api.log.CreateTopic.TopicToCreate
-import io.hamal.repository.api.log.ProtobufAppender
 import io.hamal.repository.api.submitted_req.ExecCompleteSubmitted
 import org.springframework.stereotype.Component
 
@@ -85,6 +85,6 @@ class ExecCompleteHandler(
         }
     }
 
-    private val appender = ProtobufAppender(TopicEntryPayload::class, eventBrokerRepository)
+    private val appender = AppenderImpl(TopicEntryPayload::class, eventBrokerRepository)
 
 }

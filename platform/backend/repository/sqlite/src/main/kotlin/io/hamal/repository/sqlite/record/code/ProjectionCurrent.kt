@@ -8,9 +8,7 @@ import io.hamal.repository.api.CodeQueryRepository.CodeQuery
 import io.hamal.repository.record.code.CodeRecord
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
-import kotlinx.serialization.ExperimentalSerializationApi
 
-@OptIn(ExperimentalSerializationApi::class)
 internal object ProjectionCurrent : ProjectionSqlite<CodeId, CodeRecord, Code> {
 
     fun find(connection: Connection, codeId: CodeId): Code? {

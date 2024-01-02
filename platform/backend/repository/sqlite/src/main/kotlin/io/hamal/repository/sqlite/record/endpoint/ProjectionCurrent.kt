@@ -8,10 +8,7 @@ import io.hamal.repository.api.EndpointQueryRepository.EndpointQuery
 import io.hamal.repository.record.endpoint.EndpointRecord
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
-import kotlinx.serialization.ExperimentalSerializationApi
 
-
-@OptIn(ExperimentalSerializationApi::class)
 internal object ProjectionCurrent : ProjectionSqlite<EndpointId, EndpointRecord, Endpoint> {
 
     fun find(connection: Connection, endpointId: EndpointId): Endpoint? {

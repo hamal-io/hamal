@@ -3,7 +3,6 @@ package io.hamal.bridge.http.controller.exec
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.domain.vo.EventPayload
 import io.hamal.lib.domain.vo.ExecStatus.Started
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.Accepted
@@ -18,8 +17,8 @@ import io.hamal.lib.sdk.bridge.BridgeExecCompleteReq
 import io.hamal.lib.sdk.bridge.BridgeExecCompleteSubmitted
 import io.hamal.repository.api.CompletedExec
 import io.hamal.repository.api.StartedExec
+import io.hamal.repository.api.log.BatchConsumerImpl
 import io.hamal.repository.api.log.ConsumerId
-import io.hamal.repository.api.log.ProtobufBatchConsumer
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
@@ -127,7 +126,7 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
     private fun verifyEventAppended() {
         val topic = eventBrokerRepository.resolveTopic(testFlow.id, TopicName("test-completion"))!!
 
-        ProtobufBatchConsumer(
+        BatchConsumerImpl(
             consumerId = ConsumerId("a"),
             repository = eventBrokerRepository,
             topic = topic,

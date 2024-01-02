@@ -1,11 +1,6 @@
 package io.hamal.lib.kua.type
 
 import io.hamal.lib.common.snowflake.SnowflakeId
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.descriptors.PrimitiveKind
-import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
 import java.math.BigDecimal
 import java.math.MathContext
 import java.math.RoundingMode
@@ -138,16 +133,4 @@ data class DecimalType(
     fun toDouble() = value.toDouble()
 
     fun toBigDecimal() = value
-
-    object BigDecimalSerializer : KSerializer<BigDecimal> {
-        override fun deserialize(decoder: Decoder): BigDecimal {
-            return decoder.decodeString().toBigDecimal()
-        }
-
-        override fun serialize(encoder: Encoder, value: BigDecimal) {
-            encoder.encodeString(value.toEngineeringString())
-        }
-
-        override val descriptor = PrimitiveSerialDescriptor("BigDecimal", PrimitiveKind.STRING)
-    }
 }

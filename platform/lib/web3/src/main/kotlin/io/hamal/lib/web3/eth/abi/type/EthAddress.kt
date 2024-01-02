@@ -3,11 +3,6 @@ package io.hamal.lib.web3.eth.abi.type
 import io.hamal.lib.web3.util.ByteWindow
 import io.hamal.lib.web3.util.Web3Formatter
 import io.hamal.lib.web3.util.Web3HashUtils
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.descriptors.PrimitiveKind
-import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
 import java.lang.Character.isLowerCase
 import java.lang.Character.isUpperCase
 import java.math.BigInteger
@@ -52,18 +47,6 @@ data class EthAddress(
     override fun toByteWindow(): ByteWindow = toPrefixedHexString().toByteWindow()
 
     override fun toString() = toPrefixedHexString().toString()
-
-    object Serializer : KSerializer<EthAddress> {
-        override val descriptor = PrimitiveSerialDescriptor("EthAddress", PrimitiveKind.STRING)
-
-        override fun deserialize(decoder: Decoder): EthAddress {
-            return EthAddress(EthPrefixedHexString(decoder.decodeString()))
-        }
-
-        override fun serialize(encoder: Encoder, value: EthAddress) {
-            encoder.encodeString(value.toPrefixedHexString().value)
-        }
-    }
 }
 
 internal object ValidateAddress {

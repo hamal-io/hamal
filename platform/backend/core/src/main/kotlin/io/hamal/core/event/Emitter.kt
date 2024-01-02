@@ -6,9 +6,9 @@ import io.hamal.lib.domain.vo.FlowId
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.repository.api.event.PlatformEvent
+import io.hamal.repository.api.log.AppenderImpl
 import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.repository.api.log.CreateTopic.TopicToCreate
-import io.hamal.repository.api.log.ProtobufAppender
 
 class PlatformEventEmitter(
     private val generateDomainId: GenerateId,
@@ -22,5 +22,5 @@ class PlatformEventEmitter(
         appender.append(cmdId, topic, evt)
     }
 
-    private val appender = ProtobufAppender(PlatformEvent::class, brokerRepository)
+    private val appender = AppenderImpl(PlatformEvent::class, brokerRepository)
 }

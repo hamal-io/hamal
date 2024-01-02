@@ -10,10 +10,7 @@ import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import io.hamal.repository.record.trigger.TriggerRecord
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
-import kotlinx.serialization.ExperimentalSerializationApi
 
-
-@OptIn(ExperimentalSerializationApi::class)
 internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, Trigger> {
     fun find(connection: Connection, triggerId: TriggerId): Trigger? {
         return connection.executeQueryOne(

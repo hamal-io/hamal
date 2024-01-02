@@ -1,13 +1,11 @@
 package io.hamal.app.proxy.config
 
 import io.hamal.app.proxy.repository.*
-import kotlinx.serialization.ExperimentalSerializationApi
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import kotlin.io.path.Path
 
 @Configuration
-@OptIn(ExperimentalSerializationApi::class)
 class RepositoryConfig {
 
     @Bean

@@ -7,10 +7,7 @@ import io.hamal.repository.api.Exec
 import io.hamal.repository.record.exec.ExecRecord
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
-import kotlinx.serialization.ExperimentalSerializationApi
 
-
-@OptIn(ExperimentalSerializationApi::class)
 internal object ProjectionQueue : ProjectionSqlite<ExecId, ExecRecord, Exec> {
 
     fun pop(

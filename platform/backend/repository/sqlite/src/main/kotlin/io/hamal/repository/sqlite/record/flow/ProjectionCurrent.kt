@@ -8,10 +8,7 @@ import io.hamal.repository.api.FlowQueryRepository.FlowQuery
 import io.hamal.repository.record.flow.FlowRecord
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
-import kotlinx.serialization.ExperimentalSerializationApi
 
-
-@OptIn(ExperimentalSerializationApi::class)
 internal object ProjectionCurrent : ProjectionSqlite<FlowId, FlowRecord, Flow> {
 
     fun find(connection: Connection, flowId: FlowId): Flow? {

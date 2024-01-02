@@ -5,15 +5,12 @@ import io.hamal.lib.domain.vo.ReqId
 import io.hamal.repository.api.ReqQueryRepository
 import io.hamal.repository.api.ReqRepository
 import io.hamal.repository.api.submitted_req.Submitted
-import kotlinx.serialization.protobuf.ProtoBuf
 import org.springframework.stereotype.Repository
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
 @Repository
-class ReqMemoryRepository(
-    val protobuf: ProtoBuf
-) : ReqRepository {
+class ReqMemoryRepository : ReqRepository {
 
     val queue = mutableListOf<ReqId>()
     val store = mutableMapOf<ReqId, ByteArray>()

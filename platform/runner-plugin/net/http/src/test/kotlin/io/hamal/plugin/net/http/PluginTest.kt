@@ -3,12 +3,12 @@ package io.hamal.plugin.net.http
 import AbstractRunnerTest
 import io.hamal.extension.std.decimal.ExtensionDecimalFactory
 import io.hamal.lib.domain.vo.RunnerEnv
-import io.hamal.lib.http.fixture.TestWebConfig
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.plugin.net.http.endpoint.TestHeaderController
 import io.hamal.plugin.net.http.endpoint.TestJsonController
 import io.hamal.plugin.net.http.endpoint.TestStatusController
+import io.hamal.plugin.net.http.fixture.TestWebConfig
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory

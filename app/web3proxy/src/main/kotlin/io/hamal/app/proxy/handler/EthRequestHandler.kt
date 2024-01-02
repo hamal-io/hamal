@@ -1,12 +1,11 @@
 package io.hamal.app.proxy.handler
 
+import com.google.gson.JsonArray
 import io.hamal.app.proxy.cache.EthCache
 import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.web3.eth.domain.EthMethod
 import io.hamal.lib.web3.eth.domain.EthRequestId
 import io.hamal.lib.web3.eth.domain.EthResponse
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonArray
 
 interface EthRequestHandler {
     fun handle(requests: List<Request>): List<EthResponse>
@@ -19,7 +18,6 @@ interface EthRequestHandler {
 }
 
 class EthRequestHandlerImpl(
-    private val json: Json,
     private val ethCache: EthCache,
     private val httpTemplate: HttpTemplateImpl
 ) : EthRequestHandler {

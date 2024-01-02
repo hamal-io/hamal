@@ -8,7 +8,6 @@ import io.hamal.lib.domain.vo.RecordedAt
 import io.hamal.repository.api.ExtensionCode
 import io.hamal.repository.record.Record
 import io.hamal.repository.record.RecordSequence
-import kotlinx.serialization.Transient
 
 sealed class ExtensionRecord(
     @Transient

@@ -2,7 +2,6 @@ package io.hamal.lib.kua.type
 
 import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.snowflake.SnowflakeId
-import kotlinx.serialization.Transient
 import kotlin.reflect.KClass
 
 

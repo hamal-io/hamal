@@ -12,11 +12,8 @@ import io.hamal.repository.memory.ReqMemoryRepository
 import io.hamal.repository.memory.StateMemoryRepository
 import io.hamal.repository.memory.log.*
 import io.hamal.repository.memory.record.*
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.protobuf.ProtoBuf
 import kotlin.reflect.KClass
 
-@OptIn(ExperimentalSerializationApi::class)
 object MemoryFixture : BaseTestFixture {
     @Suppress("UNCHECKED_CAST")
     override fun <REPO : Any> provideImplementation(interfaceClass: KClass<out REPO>): REPO = when (interfaceClass) {
@@ -35,7 +32,7 @@ object MemoryFixture : BaseTestFixture {
         GroupRepository::class -> MemoryGroupRepository() as REPO
         HookRepository::class -> HookMemoryRepository() as REPO
         FlowRepository::class -> FlowMemoryRepository() as REPO
-        ReqRepository::class -> ReqMemoryRepository(ProtoBuf {}) as REPO
+        ReqRepository::class -> ReqMemoryRepository() as REPO
         SegmentRepository::class -> SegmentMemoryRepository(SegmentMemory(Segment.Id(2810), TopicId(1506))) as REPO
         StateRepository::class -> StateMemoryRepository() as REPO
         TopicRepository::class -> TopicMemoryRepository(

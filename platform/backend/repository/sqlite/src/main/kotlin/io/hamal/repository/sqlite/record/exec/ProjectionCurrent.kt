@@ -9,10 +9,7 @@ import io.hamal.repository.api.ExecQueryRepository.ExecQuery
 import io.hamal.repository.record.exec.ExecRecord
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
-import kotlinx.serialization.ExperimentalSerializationApi
 
-
-@OptIn(ExperimentalSerializationApi::class)
 internal object ProjectionCurrent : ProjectionSqlite<ExecId, ExecRecord, Exec> {
     fun find(connection: Connection, execId: ExecId): Exec? {
         return connection.executeQueryOne(

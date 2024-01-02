@@ -8,10 +8,8 @@ import io.hamal.repository.api.AccountQueryRepository.AccountQuery
 import io.hamal.repository.record.account.AccountRecord
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
-import kotlinx.serialization.ExperimentalSerializationApi
 
 
-@OptIn(ExperimentalSerializationApi::class)
 internal object ProjectionCurrent : ProjectionSqlite<AccountId, AccountRecord, Account> {
 
     fun find(connection: Connection, accountId: AccountId): Account? {

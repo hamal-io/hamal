@@ -9,11 +9,9 @@ import io.hamal.repository.api.GroupQueryRepository.GroupQuery
 import io.hamal.repository.record.group.GroupRecord
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
-import kotlinx.serialization.ExperimentalSerializationApi
 import org.sqlite.SQLiteException
 
 
-@OptIn(ExperimentalSerializationApi::class)
 internal object ProjectionCurrent : ProjectionSqlite<GroupId, GroupRecord, Group> {
     override fun upsert(tx: RecordTransactionSqlite<GroupId, GroupRecord, Group>, obj: Group) {
         try {

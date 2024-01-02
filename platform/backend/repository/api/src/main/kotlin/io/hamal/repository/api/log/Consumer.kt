@@ -1,9 +1,5 @@
 package io.hamal.repository.api.log
 
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.InternalSerializationApi
-import kotlinx.serialization.protobuf.ProtoBuf
-import kotlinx.serialization.serializer
 import kotlin.reflect.KClass
 
 interface LogConsumer<VALUE : Any> {
@@ -28,8 +24,7 @@ interface BatchConsumer<VALUE : Any> {
 
 }
 
-@OptIn(ExperimentalSerializationApi::class, InternalSerializationApi::class)
-class ProtobufLogConsumer<Value : Any>(
+class LogConsumerImpl<Value : Any>(
     override val consumerId: ConsumerId,
     private val topic: Topic,
     private val repository: BrokerRepository,
@@ -43,7 +38,8 @@ class ProtobufLogConsumer<Value : Any>(
             fn(
                 index,
                 chunk.id,
-                ProtoBuf.decodeFromByteArray(valueClass.serializer(), chunk.bytes)
+//                ProtoBuf.decodeFromByteArray(valueClass.serializer(), chunk.bytes)
+                TODO()
             )
             chunk.id
         }.maxByOrNull { it }?.let { repository.commit(consumerId, topic, it) }
@@ -51,8 +47,7 @@ class ProtobufLogConsumer<Value : Any>(
     }
 }
 
-@OptIn(ExperimentalSerializationApi::class, InternalSerializationApi::class)
-class ProtobufBatchConsumer<Value : Any>(
+class BatchConsumerImpl<Value : Any>(
     override val consumerId: ConsumerId,
     private val topic: Topic,
     private val repository: BrokerRepository,
@@ -66,7 +61,10 @@ class ProtobufBatchConsumer<Value : Any>(
             return 0
         }
 
-        val batch = chunksToConsume.map { chunk -> ProtoBuf.decodeFromByteArray(valueClass.serializer(), chunk.bytes) }
+        val batch = chunksToConsume.map { chunk ->
+//            ProtoBuf.decodeFromByteArray(valueClass.serializer(), chunk.bytes)
+            TODO()
+        }
 
         block(batch)
         chunksToConsume.maxByOrNull { chunk -> chunk.id }?.let { repository.commit(consumerId, topic, it.id) }

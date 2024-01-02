@@ -1,14 +1,15 @@
 package io.hamal.plugin.net.http.function
 
-import io.hamal.lib.kua.converter.convertToType
-import io.hamal.lib.kua.converter.toJson
-import io.hamal.lib.http.*
+import com.google.gson.JsonElement
+import io.hamal.lib.http.HttpErrorResponse
+import io.hamal.lib.http.HttpResponse
+import io.hamal.lib.http.HttpSuccessResponse
+import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.*
-import kotlinx.serialization.json.JsonElement
 
 
 class HttpExecuteFunction : Function1In2Out<ArrayType, ErrorType, TableType>(
@@ -64,7 +65,8 @@ class HttpExecuteFunction : Function1In2Out<ArrayType, ErrorType, TableType>(
 
                 // FIXME
                 if (json !is NilType) {
-                    template.body(json.toJson())
+                    TODO()
+//                    template.body(json.toJson())
                 }
 
                 if (headers is MapType) {
@@ -103,8 +105,8 @@ class HttpExecuteFunction : Function1In2Out<ArrayType, ErrorType, TableType>(
 
                 // FIXME
                 if (json !is NilType) {
-
-                    template.body(json.toJson())
+                    TODO()
+//                    template.body(json.toJson())
                 }
 
                 if (headers is MapType) {
@@ -163,8 +165,8 @@ class HttpExecuteFunction : Function1In2Out<ArrayType, ErrorType, TableType>(
 
                 // FIXME
                 if (json !is NilType) {
-
-                    template.body(json.toJson())
+                    TODO()
+//                    template.body(json.toJson())
                 }
 
                 val response = template.execute()
@@ -218,7 +220,8 @@ private fun HttpResponse.content() = when (this) {
     is HttpSuccessResponse -> {
         if (isNotEmpty) {
             val el = result(JsonElement::class)
-            el.convertToType()
+//            el.convertToType()
+            TODO()
         } else {
             MapType()
         }
@@ -227,7 +230,8 @@ private fun HttpResponse.content() = when (this) {
     is HttpErrorResponse -> {
         if (isNotEmpty) {
             val el = error(JsonElement::class)
-            el.convertToType()
+//            el.convertToType()
+            TODO()
         } else {
             MapType()
         }

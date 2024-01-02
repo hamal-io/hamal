@@ -8,10 +8,7 @@ import io.hamal.repository.api.FuncQueryRepository.FuncQuery
 import io.hamal.repository.record.func.FuncRecord
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
-import kotlinx.serialization.ExperimentalSerializationApi
 
-
-@OptIn(ExperimentalSerializationApi::class)
 internal object ProjectionCurrent : ProjectionSqlite<FuncId, FuncRecord, Func> {
 
     fun find(connection: Connection, funcId: FuncId): Func? {

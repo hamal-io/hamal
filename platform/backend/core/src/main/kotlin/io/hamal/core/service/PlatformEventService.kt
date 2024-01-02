@@ -12,7 +12,7 @@ import io.hamal.repository.api.event.PlatformEvent
 import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.repository.api.log.ConsumerId
 import io.hamal.repository.api.log.CreateTopic.TopicToCreate
-import io.hamal.repository.api.log.ProtobufLogConsumer
+import io.hamal.repository.api.log.LogConsumerImpl
 import org.springframework.beans.factory.DisposableBean
 import org.springframework.context.ApplicationListener
 import org.springframework.context.event.ContextRefreshedEvent
@@ -40,7 +40,7 @@ internal class PlatformEventService(
         }
 
         instanceTopics.forEach { topic ->
-            val consumer = ProtobufLogConsumer(
+            val consumer = LogConsumerImpl(
                 ConsumerId("core-event-service"), topic, platformEventBrokerRepository, PlatformEvent::class
             )
 

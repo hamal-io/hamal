@@ -8,10 +8,7 @@ import io.hamal.repository.api.HookQueryRepository.HookQuery
 import io.hamal.repository.record.hook.HookRecord
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
-import kotlinx.serialization.ExperimentalSerializationApi
 
-
-@OptIn(ExperimentalSerializationApi::class)
 internal object ProjectionCurrent : ProjectionSqlite<HookId, HookRecord, Hook> {
 
     fun find(connection: Connection, hookId: HookId): Hook? {

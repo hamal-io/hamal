@@ -7,7 +7,6 @@ import io.hamal.lib.domain.vo.PasswordSalt
 import io.hamal.lib.domain.vo.RecordedAt
 import io.hamal.repository.record.Record
 import io.hamal.repository.record.RecordSequence
-import kotlinx.serialization.Transient
 
 sealed class AccountRecord(
     @Transient

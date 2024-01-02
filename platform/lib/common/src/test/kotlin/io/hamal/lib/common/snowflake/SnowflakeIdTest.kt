@@ -1,10 +1,6 @@
 package io.hamal.lib.common.snowflake
 
 import io.hamal.lib.common.Partition
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.decodeFromByteArray
-import kotlinx.serialization.encodeToByteArray
-import kotlinx.serialization.protobuf.ProtoBuf
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
@@ -131,14 +127,14 @@ class SnowflakeIdTest {
         assertThat(result.elapsed(), equalTo(Elapsed(2199023255550)))
     }
 
-    @OptIn(ExperimentalSerializationApi::class)
     @Test
     fun `Is Serializable`() {
-        val testInstance = SnowflakeId(12345678)
-        val encoded = ProtoBuf.encodeToByteArray(testInstance)
-        assertThat(encoded.size, equalTo(7))
-        val decoded = ProtoBuf.decodeFromByteArray<SnowflakeId>(encoded)
-        assertThat(decoded, equalTo(SnowflakeId(12345678)))
+//        val testInstance = SnowflakeId(12345678)
+//        val encoded = ProtoBuf.encodeToByteArray(testInstance)
+//        assertThat(encoded.size, equalTo(7))
+//        val decoded = ProtoBuf.decodeFromByteArray<SnowflakeId>(encoded)
+//        assertThat(decoded, equalTo(SnowflakeId(12345678)))
+        TODO()
     }
 }
 

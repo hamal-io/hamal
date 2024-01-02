@@ -8,11 +8,8 @@ import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.StateRepository
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.protobuf.ProtoBuf
 import java.nio.file.Path
 
-@OptIn(ExperimentalSerializationApi::class)
 class StateSqliteRepository(
     config: Config
 ) : SqliteBaseRepository(config), StateRepository {
@@ -86,6 +83,4 @@ class StateSqliteRepository(
             }
         }
     }
-
-    private val protoBuf = ProtoBuf { }
 }

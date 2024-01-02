@@ -1,36 +1,14 @@
 package io.hamal.lib.domain.vo
 
-import io.hamal.lib.common.domain.ValueObject
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.descriptors.PrimitiveKind
-import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
-import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
+import io.hamal.lib.common.domain.ValueObjectString
 
-class CorrelationId(
-    override val value: String
-) : ValueObject.ComparableImpl<String>() {
-
+class CorrelationId(override val value: String) : ValueObjectString() {
     companion object {
         val default = CorrelationId("__default__")
     }
 
     init {
         CorrelationIdValidator.validate(value)
-    }
-
-    object Serializer : KSerializer<CorrelationId> {
-        override val descriptor: SerialDescriptor
-            get() = PrimitiveSerialDescriptor("CorrelationId", PrimitiveKind.STRING)
-
-        override fun deserialize(decoder: Decoder): CorrelationId {
-            return CorrelationId(decoder.decodeString())
-        }
-
-        override fun serialize(encoder: Encoder, value: CorrelationId) {
-            encoder.encodeString(value.value)
-        }
     }
 
     override fun toString(): String {

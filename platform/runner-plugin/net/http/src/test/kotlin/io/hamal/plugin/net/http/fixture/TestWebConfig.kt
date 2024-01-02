@@ -1,7 +1,5 @@
-package io.hamal.lib.http.fixture
+package io.hamal.plugin.net.http.fixture
 
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.json.Json
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
@@ -16,12 +14,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 @EnableAutoConfiguration
 open class TestWebConfig : WebMvcConfigurer {
     @Bean
-    @OptIn(ExperimentalSerializationApi::class)
     open fun messageConverter(): KotlinSerializationJsonHttpMessageConverter {
-        return KotlinSerializationJsonHttpMessageConverter(Json {
-            explicitNulls = false
-            ignoreUnknownKeys = true
-            encodeDefaults = true
-        })
+        TODO()
+//        return KotlinSerializationJsonHttpMessageConverter(Json {
+//            explicitNulls = false
+//            ignoreUnknownKeys = true
+//            encodeDefaults = true
+//        })
     }
 }

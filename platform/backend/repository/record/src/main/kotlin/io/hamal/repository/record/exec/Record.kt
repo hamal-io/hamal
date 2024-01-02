@@ -5,7 +5,6 @@ import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.record.Record
 import io.hamal.repository.record.RecordSequence
-import kotlinx.serialization.Transient
 
 sealed class ExecRecord(
     @Transient

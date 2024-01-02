@@ -1,10 +1,9 @@
 package io.hamal.app.proxy.web
 
+import com.google.gson.JsonArray
+import com.google.gson.JsonElement
+import com.google.gson.JsonObject
 import io.hamal.app.proxy.handler.EthRequestHandler
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonArray
-import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.JsonObject
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -12,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class EthRequestController(
-    private val json: Json,
+//    private val json: Json,
     private val ethRequestHandler: EthRequestHandler
 ) {
     @PostMapping("/")

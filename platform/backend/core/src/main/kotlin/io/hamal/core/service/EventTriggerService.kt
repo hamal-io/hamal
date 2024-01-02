@@ -10,9 +10,9 @@ import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.EventTrigger
 import io.hamal.repository.api.TriggerQueryRepository
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
+import io.hamal.repository.api.log.BatchConsumerImpl
 import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.repository.api.log.ConsumerId
-import io.hamal.repository.api.log.ProtobufBatchConsumer
 import io.hamal.repository.api.log.TopicEntry
 import io.hamal.request.FuncInvokeReq
 import org.springframework.beans.factory.DisposableBean
@@ -48,7 +48,7 @@ internal class EventTriggerService(
                         require(trigger is EventTrigger)
 
                         val topic = eventBrokerRepository.getTopic(trigger.topicId)
-                        val consumer = ProtobufBatchConsumer(
+                        val consumer = BatchConsumerImpl(
                             consumerId = ConsumerId(trigger.id.value.value.toString(16)),
                             topic = topic,
                             repository = eventBrokerRepository,
@@ -94,5 +94,5 @@ internal class EventTriggerService(
 
     private val shutdown = AtomicBoolean(false)
     private val scheduledTasks = mutableListOf<ScheduledFuture<*>>()
-    private val triggerConsumers = mutableMapOf<TriggerId, ProtobufBatchConsumer<TopicEntry>>()
+    private val triggerConsumers = mutableMapOf<TriggerId, BatchConsumerImpl<TopicEntry>>()
 }

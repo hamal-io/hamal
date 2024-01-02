@@ -7,9 +7,6 @@ import io.hamal.lib.common.serialization.ValueObjectStringAdapter
 import io.hamal.lib.domain.vo.AuthToken
 import io.hamal.lib.domain.vo.Email
 import io.hamal.lib.domain.vo.Password
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.protobuf.ProtoBuf
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.format.FormatterRegistry
@@ -26,19 +23,8 @@ import javax.xml.transform.Source
 
 
 @Configuration
-@OptIn(ExperimentalSerializationApi::class)
 open class WebConfig : WebMvcConfigurer {
 
-    @Bean
-    open fun json(): Json = Json {
-        explicitNulls = false
-        ignoreUnknownKeys = true
-        encodeDefaults = true
-    }
-
-    @Bean
-    open fun protobuf(): ProtoBuf = ProtoBuf { }
-    
     @Bean
     open fun gson(): Gson = GsonFactory
         .registerTypeAdapter(AuthToken::class.java, ValueObjectStringAdapter(::AuthToken))

@@ -1,13 +1,8 @@
 package io.hamal.core.http
 
-import io.hamal.lib.sdk.api.ApiError
 import jakarta.servlet.ServletException
 import jakarta.servlet.http.HttpServletResponse
 import jakarta.servlet.http.HttpServletResponse.*
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.MissingFieldException
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import org.springframework.core.Ordered.HIGHEST_PRECEDENCE
 import org.springframework.core.annotation.Order
 import org.springframework.core.convert.ConversionFailedException
@@ -19,7 +14,7 @@ import org.springframework.web.servlet.NoHandlerFoundException
 
 @Order(HIGHEST_PRECEDENCE)
 @ControllerAdvice
-internal class ErrorController(private val json: Json) {
+internal class ErrorController {
 
     data class InvalidArgumentType(
         val message: String,
@@ -33,18 +28,19 @@ internal class ErrorController(private val json: Json) {
         if (cause is ConversionFailedException) {
             res.status = 400
             res.addHeader("Content-Type", "application/json")
-            res.writer.write(
-                json.encodeToString(
-                    InvalidArgumentType(
-                        message = "ArgumentTypeMismatch",
-                        source = cause.sourceType?.toString() ?: "Unknown source type",
-                        target = cause.targetType.toString()
-                    )
-                )
-            )
+//            res.writer.write(
+//                json.encodeToString(
+//                    InvalidArgumentType(
+//                        message = "ArgumentTypeMismatch",
+//                        source = cause.sourceType?.toString() ?: "Unknown source type",
+//                        target = cause.targetType.toString()
+//                    )
+//                ))
+            TODO()
         } else {
             res.addHeader("Content-Type", "application/json")
-            res.writer.write(json.encodeToString(ApiError("Bad request")))
+//            res.writer.write(json.encodeToString(ApiError("Bad request")))
+            TODO()
         }
     }
 
@@ -54,33 +50,34 @@ internal class ErrorController(private val json: Json) {
         val fields: List<String>
     )
 
-    @OptIn(ExperimentalSerializationApi::class)
     @ExceptionHandler(value = [HttpMessageNotReadableException::class])
     fun missingFields(res: HttpServletResponse, t: HttpMessageNotReadableException) {
         val cause = t.cause
-        if (cause is MissingFieldException) {
-            res.status = 400
-            res.addHeader("Content-Type", "application/json")
-            res.writer.write(
-                json.encodeToString(
-                    MissingFieldsError(
-                        message = "Fields are missing",
-                        fields = cause.missingFields
-                    )
-                )
-            )
-        } else {
-            res.status = 400
-            res.addHeader("Content-Type", "application/json")
-            res.writer.write(json.encodeToString(ApiError("Bad request")))
-        }
+//        if (cause is MissingFieldException) {
+//            res.status = 400
+//            res.addHeader("Content-Type", "application/json")
+//            res.writer.write(
+//                json.encodeToString(
+//                    MissingFieldsError(
+//                        message = "Fields are missing",
+//                        fields = cause.missingFields
+//                    )
+//                )
+//            )
+//        } else {
+        res.status = 400
+        res.addHeader("Content-Type", "application/json")
+//            res.writer.write(json.encodeToString(ApiError("Bad request")))
+        TODO()
+//        }
     }
 
     @ExceptionHandler(value = [NoHandlerFoundException::class])
     fun missingFields(res: HttpServletResponse) {
         res.status = SC_NOT_FOUND
         res.addHeader("Content-Type", "application/json")
-        res.writer.write(json.encodeToString(ApiError("Request handler not found")))
+//        res.writer.write(json.encodeToString(ApiError("Request handler not found")))
+        TODO()
     }
 
 

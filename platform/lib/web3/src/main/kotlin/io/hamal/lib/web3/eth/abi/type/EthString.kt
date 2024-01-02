@@ -2,11 +2,6 @@ package io.hamal.lib.web3.eth.abi.type
 
 import io.hamal.lib.web3.util.ByteWindow
 import io.hamal.lib.web3.util.Web3Parser
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.descriptors.PrimitiveKind
-import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
 import java.nio.charset.Charset
 
 sealed interface EthBaseString : EthType<String> {
@@ -58,14 +53,6 @@ data class EthPrefixedHexString(
     override fun toByteArray(): ByteArray = toHexString().toByteArray()
     override fun toByteWindow() = ByteWindow.of(this)
     override fun toString(): String = value
-
-    object Serializer : KSerializer<EthPrefixedHexString> {
-        override val descriptor = PrimitiveSerialDescriptor("EthPrefixedHexString", PrimitiveKind.STRING)
-        override fun deserialize(decoder: Decoder) = EthPrefixedHexString(decoder.decodeString())
-        override fun serialize(encoder: Encoder, value: EthPrefixedHexString) {
-            encoder.encodeString(value.value)
-        }
-    }
 }
 
 
