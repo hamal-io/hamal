@@ -16,7 +16,7 @@ import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.True
 import io.hamal.lib.sdk.api.ApiError
 import io.hamal.lib.sdk.api.ApiState
-import io.hamal.lib.sdk.api.ApiStateSetSubmitted
+import io.hamal.lib.sdk.api.ApiStateSetRequested
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -34,7 +34,7 @@ internal class StateSetControllerTest : StateBaseControllerTest() {
         assertThat(response.statusCode, equalTo(Accepted))
         require(response is HttpSuccessResponse) { "request was not successful" }
 
-        awaitCompleted(response.result(ApiStateSetSubmitted::class))
+        awaitCompleted(response.result(ApiStateSetRequested::class))
 
         val correlatedState = getState(funcId, CorrelationId("__CORRELATION__"))
         assertThat(correlatedState["answer"], equalTo(NumberType(42)))

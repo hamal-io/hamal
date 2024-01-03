@@ -18,7 +18,7 @@ import io.hamal.lib.sdk.api.ApiError
 import io.hamal.lib.sdk.api.ApiTriggerCreateReq
 import io.hamal.lib.sdk.api.ApiTriggerCreateSubmitted
 import io.hamal.repository.api.*
-import io.hamal.lib.domain.submitted.TriggerCreateSubmitted
+import io.hamal.lib.domain.request.TriggerCreateRequested
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Nested
@@ -226,7 +226,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
 
             val result = creationResponse.error(ApiError::class)
             assertThat(result.message, equalTo("topicId is missing"))
-            verifyNoRequests(TriggerCreateSubmitted::class)
+            verifyNoRequests(TriggerCreateRequested::class)
         }
 
         @Test
@@ -248,7 +248,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
 
             val result = creationResponse.error(ApiError::class)
             assertThat(result.message, equalTo("Topic not found"))
-            verifyNoRequests(TriggerCreateSubmitted::class)
+            verifyNoRequests(TriggerCreateRequested::class)
         }
 
         @Test
@@ -270,7 +270,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
 
             val result = creationResponse.error(ApiError::class)
             assertThat(result.message, equalTo("Func not found"))
-            verifyNoRequests(TriggerCreateSubmitted::class)
+            verifyNoRequests(TriggerCreateRequested::class)
         }
     }
 
@@ -381,7 +381,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
 
             val result = creationResponse.error(ApiError::class)
             assertThat(result.message, equalTo("hookId is missing"))
-            verifyNoRequests(TriggerCreateSubmitted::class)
+            verifyNoRequests(TriggerCreateRequested::class)
         }
 
         @Test
@@ -405,7 +405,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
 
             val result = creationResponse.error(ApiError::class)
             assertThat(result.message, equalTo("hookMethod is missing"))
-            verifyNoRequests(TriggerCreateSubmitted::class)
+            verifyNoRequests(TriggerCreateRequested::class)
         }
 
         @Test
@@ -428,7 +428,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
 
             val result = creationResponse.error(ApiError::class)
             assertThat(result.message, equalTo("Hook not found"))
-            verifyNoRequests(TriggerCreateSubmitted::class)
+            verifyNoRequests(TriggerCreateRequested::class)
         }
 
         @Test
@@ -450,7 +450,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
 
             val result = creationResponse.error(ApiError::class)
             assertThat(result.message, equalTo("Func not found"))
-            verifyNoRequests(TriggerCreateSubmitted::class)
+            verifyNoRequests(TriggerCreateRequested::class)
         }
     }
 

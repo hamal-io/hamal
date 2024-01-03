@@ -7,15 +7,15 @@ import io.hamal.lib.domain.vo.AuthTokenExpiresAt
 import io.hamal.repository.api.AuthCmdRepository.CreateTokenAuthCmd
 import io.hamal.repository.api.AuthRepository
 import io.hamal.repository.api.MetaMaskAuth
-import io.hamal.lib.domain.submitted.AuthLoginMetaMaskSubmitted
+import io.hamal.lib.domain.request.AuthLoginMetaMaskRequested
 import org.springframework.stereotype.Component
 import java.time.temporal.ChronoUnit
 
 @Component
 class LoginMetaMaskHandler(
     private val authRepository: AuthRepository
-) : ReqHandler<AuthLoginMetaMaskSubmitted>(AuthLoginMetaMaskSubmitted::class) {
-    override fun invoke(req: AuthLoginMetaMaskSubmitted) {
+) : ReqHandler<AuthLoginMetaMaskRequested>(AuthLoginMetaMaskRequested::class) {
+    override fun invoke(req: AuthLoginMetaMaskRequested) {
         authRepository.list(req.accountId).filterIsInstance<MetaMaskAuth>().find { it.address == req.address }
             ?.let { auth ->
                 authRepository.create(

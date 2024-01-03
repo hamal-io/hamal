@@ -3,38 +3,38 @@ package io.hamal.lib.sdk.api
 import io.hamal.lib.common.KeyedOnce
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.domain._enum.ReqStatus
+import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpRequest
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiTopicService.TopicQuery
 import io.hamal.lib.sdk.fold
-import io.hamal.request.TopicAppendEntryReq
-import io.hamal.request.TopicCreateReq
+import io.hamal.lib.domain.request.TopicAppendEntryRequest
+import io.hamal.lib.domain.request.TopicCreateRequest
 
-data class ApiTopicCreateReq(
+data class ApiTopicCreateRequest(
     override val name: TopicName
-) : TopicCreateReq
+) : TopicCreateRequest
 
-data class ApiTopicCreateSubmitted(
-    override val id: ReqId,
-    override val status: ReqStatus,
+data class ApiTopicCreateRequested(
+    override val id: RequestId,
+    override val status: RequestStatus,
     val topicId: TopicId,
     val groupId: GroupId,
     val flowId: FlowId
-) : ApiSubmitted
+) : ApiRequested
 
-data class ApiTopicAppendEntryReq(
+data class ApiTopicAppendEntryRequest(
     override val topicId: TopicId,
     override val payload: TopicEntryPayload
-) : TopicAppendEntryReq
+) : TopicAppendEntryRequest
 
-data class ApiTopicAppendSubmitted(
-    override val id: ReqId,
-    override val status: ReqStatus,
+data class ApiTopicAppendRequested(
+    override val id: RequestId,
+    override val status: RequestStatus,
     val topicId: TopicId
-) : ApiSubmitted
+) : ApiRequested
 
 data class ApiTopicEntryList(
     val topicId: TopicId,
@@ -62,8 +62,8 @@ data class ApiTopicList(
 }
 
 interface ApiTopicService {
-    fun append(topicId: TopicId, payload: TopicEntryPayload): ApiTopicAppendSubmitted
-    fun create(flowId: FlowId, req: ApiTopicCreateReq): ApiTopicCreateSubmitted
+    fun append(topicId: TopicId, payload: TopicEntryPayload): ApiTopicAppendRequested
+    fun create(flowId: FlowId, req: ApiTopicCreateRequest): ApiTopicCreateRequested
     fun list(query: TopicQuery): List<ApiTopicList.Topic>
     fun entries(topicId: TopicId): List<ApiTopicEntryList.Entry>
     fun get(topicId: TopicId): ApiTopic
@@ -90,19 +90,19 @@ internal class ApiTopicServiceImpl(
     private val template: HttpTemplate
 ) : ApiTopicService {
 
-    override fun append(topicId: TopicId, payload: TopicEntryPayload): ApiTopicAppendSubmitted =
+    override fun append(topicId: TopicId, payload: TopicEntryPayload): ApiTopicAppendRequested =
         template.post("/v1/topics/{topicId}/entries")
             .path("topicId", topicId)
             .body(payload)
             .execute()
-            .fold(ApiTopicAppendSubmitted::class)
+            .fold(ApiTopicAppendRequested::class)
 
-    override fun create(flowId: FlowId, req: ApiTopicCreateReq): ApiTopicCreateSubmitted =
+    override fun create(flowId: FlowId, req: ApiTopicCreateRequest): ApiTopicCreateRequested =
         template.post("/v1/flows/{flowId}/topics")
             .path("flowId", flowId)
             .body(req)
             .execute()
-            .fold(ApiTopicCreateSubmitted::class)
+            .fold(ApiTopicCreateRequested::class)
 
     override fun list(query: TopicQuery) =
         template.get("/v1/topics")

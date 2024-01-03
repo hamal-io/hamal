@@ -11,7 +11,7 @@ import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.api.ApiError
 import io.hamal.lib.sdk.api.ApiFunc
-import io.hamal.lib.sdk.api.ApiFuncCreateReq
+import io.hamal.lib.sdk.api.ApiFuncCreateRequest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -31,7 +31,7 @@ internal class FuncGetControllerTest : FuncBaseControllerTest() {
     fun `Get func`() {
         val funcId = awaitCompleted(
             createFunc(
-                ApiFuncCreateReq(
+                ApiFuncCreateRequest(
                     name = FuncName("func-one"),
                     inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("rockz")))),
                     code = CodeValue("1+1")

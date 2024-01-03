@@ -9,11 +9,11 @@ import io.hamal.repository.api.ExecLogCmdRepository.AppendCmd
 import io.hamal.repository.api.ExecLogQueryRepository
 import io.hamal.repository.api.ExecLogQueryRepository.ExecLogQuery
 import io.hamal.repository.api.ExecQueryRepository
-import io.hamal.request.ExecLogAppendReq
+import io.hamal.lib.domain.request.ExecLogAppendRequest
 import org.springframework.stereotype.Component
 
 interface ExecLogAppendPort {
-    operator fun <T : Any> invoke(execId: ExecId, req: ExecLogAppendReq, responseHandler: (ExecLog) -> T): T
+    operator fun <T : Any> invoke(execId: ExecId, req: ExecLogAppendRequest, responseHandler: (ExecLog) -> T): T
 }
 
 interface ExecLogListPort {
@@ -30,7 +30,7 @@ class ExecLogAdapter(
     private val execQueryRepository: ExecQueryRepository
 ) : ExecLogPort {
 
-    override operator fun <T : Any> invoke(execId: ExecId, req: ExecLogAppendReq, responseHandler: (ExecLog) -> T): T =
+    override operator fun <T : Any> invoke(execId: ExecId, req: ExecLogAppendRequest, responseHandler: (ExecLog) -> T): T =
         responseHandler(
             execLogCmdRepository.append(
                 AppendCmd(

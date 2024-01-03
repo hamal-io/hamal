@@ -43,7 +43,6 @@ include(":platform:backend:repository:memory")
 include(":platform:backend:repository:record")
 include(":platform:backend:repository:sqlite")
 include(":platform:backend:repository:testbed")
-include(":platform:backend:request")
 
 include(":platform:lib")
 include(":platform:lib:common")

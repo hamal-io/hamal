@@ -2,65 +2,65 @@ package io.hamal.lib.sdk.api
 
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.domain._enum.ReqStatus
+import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain.request.*
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpRequest
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiFuncService.FuncQuery
 import io.hamal.lib.sdk.fold
-import io.hamal.request.*
 
-data class ApiFuncCreateReq(
+data class ApiFuncCreateRequest(
     override val name: FuncName,
     override val inputs: FuncInputs,
     override val code: CodeValue
-) : FuncCreateReq
+) : FuncCreateRequest
 
-data class ApiFuncCreateSubmitted(
-    override val id: ReqId,
-    override val status: ReqStatus,
+data class ApiFuncCreateRequested(
+    override val id: RequestId,
+    override val status: RequestStatus,
     val funcId: FuncId,
     val groupId: GroupId,
     val flowId: FlowId
-) : ApiSubmitted
+) : ApiRequested
 
-data class ApiFuncDeployReq(
+data class ApiFuncDeployRequest(
     override val version: CodeVersion?,
     override val message: DeployMessage? = null
-) : FuncDeployReq
+) : FuncDeployRequest
 
-data class ApiFuncDeploySubmitted(
-    override val id: ReqId,
-    override val status: ReqStatus,
+data class ApiFuncDeployRequested(
+    override val id: RequestId,
+    override val status: RequestStatus,
     val funcId: FuncId
-) : ApiSubmitted
+) : ApiRequested
 
-data class ApiFuncUpdateReq(
+data class ApiFuncUpdateRequest(
     override val name: FuncName? = null,
     override val inputs: FuncInputs? = null,
     override val code: CodeValue? = null,
-) : FuncUpdateReq
+) : FuncUpdateRequest
 
 
-data class ApiFuncUpdateSubmitted(
-    override val id: ReqId,
-    override val status: ReqStatus,
+data class ApiFuncUpdateRequested(
+    override val id: RequestId,
+    override val status: RequestStatus,
     val funcId: FuncId
-) : ApiSubmitted
+) : ApiRequested
 
 
-data class ApiFuncInvokeReq(
+data class ApiFuncInvokeRequest(
     override val correlationId: CorrelationId?,
     override val inputs: InvocationInputs,
     override val invocation: Invocation,
-) : FuncInvokeReq
+) : FuncInvokeRequest
 
-data class ApiFuncInvokeVersionReq(
+data class ApiFuncInvokeVersionRequest(
     override val correlationId: CorrelationId?,
     override val inputs: InvocationInputs,
     override val version: CodeVersion?
-) : FuncInvokeVersionReq
+) : FuncInvokeVersionRequest
 
 data class ApiFuncList(
     val funcs: List<Func>
@@ -116,14 +116,14 @@ data class ApiFunc(
 }
 
 interface ApiFuncService {
-    fun create(flowId: FlowId, createFuncReq: ApiFuncCreateReq): ApiFuncCreateSubmitted
-    fun deploy(funcId: FuncId, req: ApiFuncDeployReq): ApiFuncDeploySubmitted
+    fun create(flowId: FlowId, createFuncReq: ApiFuncCreateRequest): ApiFuncCreateRequested
+    fun deploy(funcId: FuncId, req: ApiFuncDeployRequest): ApiFuncDeployRequested
     fun list(query: FuncQuery): List<ApiFuncList.Func>
     fun listDeployments(funcId: FuncId): List<ApiFuncDeploymentList.Deployment>
     fun get(funcId: FuncId): ApiFunc
-    fun update(funcId: FuncId, req: ApiFuncUpdateReq): ApiFuncUpdateSubmitted
+    fun update(funcId: FuncId, req: ApiFuncUpdateRequest): ApiFuncUpdateRequested
 
-    fun invoke(funcId: FuncId, req: ApiFuncInvokeVersionReq): ApiExecInvokeSubmitted
+    fun invoke(funcId: FuncId, req: ApiFuncInvokeVersionRequest): ApiExecInvokeRequested
 
     data class FuncQuery(
         var afterId: FuncId = FuncId(SnowflakeId(Long.MAX_VALUE)),
@@ -146,19 +146,19 @@ internal class ApiFuncServiceImpl(
     private val template: HttpTemplate
 ) : ApiFuncService {
 
-    override fun create(flowId: FlowId, createFuncReq: ApiFuncCreateReq) =
+    override fun create(flowId: FlowId, createFuncReq: ApiFuncCreateRequest) =
         template.post("/v1/flows/{flowId}/funcs")
             .path("flowId", flowId)
             .body(createFuncReq)
             .execute()
-            .fold(ApiFuncCreateSubmitted::class)
+            .fold(ApiFuncCreateRequested::class)
 
-    override fun deploy(funcId: FuncId, req: ApiFuncDeployReq) =
+    override fun deploy(funcId: FuncId, req: ApiFuncDeployRequest) =
         template.post("/v1/funcs/{funcId}/deploy")
             .path("funcId", funcId)
             .body(req)
             .execute()
-            .fold(ApiFuncDeploySubmitted::class)
+            .fold(ApiFuncDeployRequested::class)
 
     override fun list(query: FuncQuery): List<ApiFuncList.Func> =
         template.get("/v1/funcs")
@@ -181,17 +181,17 @@ internal class ApiFuncServiceImpl(
             .execute()
             .fold(ApiFunc::class)
 
-    override fun invoke(funcId: FuncId, req: ApiFuncInvokeVersionReq) =
+    override fun invoke(funcId: FuncId, req: ApiFuncInvokeVersionRequest) =
         template.post("/v1/funcs/{funcId}/invoke")
             .path("funcId", funcId)
             .body(req)
             .execute()
-            .fold(ApiExecInvokeSubmitted::class)
+            .fold(ApiExecInvokeRequested::class)
 
-    override fun update(funcId: FuncId, req: ApiFuncUpdateReq) =
+    override fun update(funcId: FuncId, req: ApiFuncUpdateRequest) =
         template.patch("/v1/funcs/{funcId}")
             .path("funcId", funcId)
             .body(req)
             .execute()
-            .fold(ApiFuncUpdateSubmitted::class)
+            .fold(ApiFuncUpdateRequested::class)
 }

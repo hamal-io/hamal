@@ -12,7 +12,7 @@ import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.ApiSdk
-import io.hamal.lib.sdk.api.ApiFlowCreateReq
+import io.hamal.lib.sdk.api.ApiFlowCreateRequest
 
 class FlowCreateFunction(
     private val sdk: ApiSdk
@@ -31,7 +31,7 @@ class FlowCreateFunction(
         return try {
             val res = sdk.flow.create(
                 ctx[GroupId::class],
-                ApiFlowCreateReq(
+                ApiFlowCreateRequest(
                     name = FlowName(arg1.getString("name")),
                     inputs = FlowInputs(),
                     type = type

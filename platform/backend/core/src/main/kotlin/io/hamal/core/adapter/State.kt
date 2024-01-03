@@ -3,16 +3,16 @@ package io.hamal.core.adapter
 import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.GenerateId
-import io.hamal.lib.domain._enum.ReqStatus.Submitted
+import io.hamal.lib.domain._enum.RequestStatus.Submitted
+import io.hamal.lib.domain.request.StateSetRequest
+import io.hamal.lib.domain.request.StateSetRequested
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.domain.vo.ReqId
+import io.hamal.lib.domain.vo.RequestId
 import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncQueryRepository
-import io.hamal.repository.api.ReqCmdRepository
+import io.hamal.repository.api.RequestCmdRepository
 import io.hamal.repository.api.StateQueryRepository
-import io.hamal.lib.domain.submitted.StateSetSubmitted
-import io.hamal.request.StateSetReq
 import org.springframework.stereotype.Component
 
 interface StateGetPort {
@@ -24,7 +24,7 @@ interface StateGetPort {
 }
 
 interface StateSetPort {
-    operator fun <T : Any> invoke(req: StateSetReq, responseHandler: (StateSetSubmitted) -> T): T
+    operator fun <T : Any> invoke(req: StateSetRequest, responseHandler: (StateSetRequested) -> T): T
 }
 
 interface StatePort : StateGetPort, StateSetPort
@@ -33,7 +33,7 @@ interface StatePort : StateGetPort, StateSetPort
 class StateAdapter(
     private val funcQueryRepository: FuncQueryRepository,
     private val generateDomainId: GenerateId,
-    private val reqCmdRepository: ReqCmdRepository,
+    private val reqCmdRepository: RequestCmdRepository,
     private val stateQueryRepository: StateQueryRepository
 ) : StatePort {
 
@@ -50,13 +50,13 @@ class StateAdapter(
     }
 
     override operator fun <T : Any> invoke(
-        req: StateSetReq,
-        responseHandler: (StateSetSubmitted) -> T
+        req: StateSetRequest,
+        responseHandler: (StateSetRequested) -> T
     ): T {
         ensureFuncExists(req.correlation.funcId)
         val func = funcQueryRepository.get(req.correlation.funcId)
-        return StateSetSubmitted(
-            id = generateDomainId(::ReqId),
+        return StateSetRequested(
+            id = generateDomainId(::RequestId),
             status = Submitted,
             groupId = func.groupId,
             state = CorrelatedState(

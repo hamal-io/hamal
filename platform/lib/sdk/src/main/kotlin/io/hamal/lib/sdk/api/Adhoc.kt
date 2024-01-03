@@ -5,26 +5,26 @@ import io.hamal.lib.domain.vo.FlowId
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
-import io.hamal.request.AdhocInvokeReq
+import io.hamal.lib.domain.request.AdhocInvokeRequest
 
-data class ApiAdhocInvokeReq(
+data class ApiAdhocInvokeRequest(
     override val inputs: InvocationInputs,
     override val code: CodeValue
-) : AdhocInvokeReq
+) : AdhocInvokeRequest
 
 
 interface ApiAdhocService {
-    operator fun invoke(flowId: FlowId, req: ApiAdhocInvokeReq): ApiExecInvokeSubmitted
+    operator fun invoke(flowId: FlowId, req: ApiAdhocInvokeRequest): ApiExecInvokeRequested
 }
 
 internal class ApiAdhocServiceImpl(
     private val template: HttpTemplate
 ) : ApiAdhocService {
-    override fun invoke(flowId: FlowId, req: ApiAdhocInvokeReq): ApiExecInvokeSubmitted {
+    override fun invoke(flowId: FlowId, req: ApiAdhocInvokeRequest): ApiExecInvokeRequested {
         return template
             .post("/v1/flows/{flowId}/adhoc")
             .path("flowId", flowId)
             .body(req)
-            .execute(ApiExecInvokeSubmitted::class)
+            .execute(ApiExecInvokeRequested::class)
     }
 }

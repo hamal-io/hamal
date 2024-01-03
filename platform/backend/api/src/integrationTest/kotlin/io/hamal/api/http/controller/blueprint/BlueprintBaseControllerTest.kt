@@ -7,13 +7,13 @@ import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiBlueprint
-import io.hamal.lib.sdk.api.ApiBlueprintCreateSubmitted
-import io.hamal.lib.sdk.api.ApiBlueprintCreateReq
+import io.hamal.lib.sdk.api.ApiBlueprintCreateRequested
+import io.hamal.lib.sdk.api.ApiBlueprintCreateRequest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 
 internal sealed class BlueprintBaseControllerTest : BaseControllerTest() {
-    fun createBlueprint(req: ApiBlueprintCreateReq): ApiBlueprintCreateSubmitted {
+    fun createBlueprint(req: ApiBlueprintCreateRequest): ApiBlueprintCreateRequested {
         val createBlueprintResponse = httpTemplate.post("/v1/groups/{groupId}/blueprints")
             .path("groupId", testGroup.id)
             .body(req)
@@ -21,7 +21,7 @@ internal sealed class BlueprintBaseControllerTest : BaseControllerTest() {
 
         assertThat(createBlueprintResponse.statusCode, equalTo(Accepted))
         require(createBlueprintResponse is HttpSuccessResponse) { "request was not successful" }
-        return createBlueprintResponse.result(ApiBlueprintCreateSubmitted::class)
+        return createBlueprintResponse.result(ApiBlueprintCreateRequested::class)
 
     }
 

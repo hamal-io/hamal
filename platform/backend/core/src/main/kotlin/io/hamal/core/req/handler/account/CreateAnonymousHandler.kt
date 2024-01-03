@@ -5,7 +5,7 @@ import io.hamal.core.req.ReqHandler
 import io.hamal.core.req.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
-import io.hamal.lib.domain.submitted.AccountCreateAnonymousSubmitted
+import io.hamal.lib.domain.request.AccountCreateAnonymousRequested
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.*
 import io.hamal.repository.api.event.AccountCreatedEvent
@@ -19,9 +19,9 @@ class AccountCreateAnonymousHandler(
     val groupCmdRepository: GroupCmdRepository,
     val flowCmdRepository: FlowCmdRepository,
     val eventEmitter: PlatformEventEmitter
-) : ReqHandler<AccountCreateAnonymousSubmitted>(AccountCreateAnonymousSubmitted::class) {
+) : ReqHandler<AccountCreateAnonymousRequested>(AccountCreateAnonymousRequested::class) {
 
-    override fun invoke(req: AccountCreateAnonymousSubmitted) {
+    override fun invoke(req: AccountCreateAnonymousRequested) {
         createAccount(req)
             .also { emitEvent(req.cmdId(), it) }
             .also { createGroup(req) }
@@ -30,18 +30,18 @@ class AccountCreateAnonymousHandler(
     }
 }
 
-private fun AccountCreateAnonymousHandler.createAccount(req: AccountCreateAnonymousSubmitted): Account {
+private fun AccountCreateAnonymousHandler.createAccount(req: AccountCreateAnonymousRequested): Account {
     return accountCmdRepository.create(
         AccountCmdRepository.CreateCmd(
             id = req.cmdId(),
             accountId = req.accountId,
-            accountType = req.type,
+            accountType = req.accountType,
             salt = req.salt
         )
     )
 }
 
-private fun AccountCreateAnonymousHandler.createGroup(req: AccountCreateAnonymousSubmitted): Group {
+private fun AccountCreateAnonymousHandler.createGroup(req: AccountCreateAnonymousRequested): Group {
     return groupCmdRepository.create(
         GroupCmdRepository.CreateCmd(
             id = req.cmdId(),
@@ -52,7 +52,7 @@ private fun AccountCreateAnonymousHandler.createGroup(req: AccountCreateAnonymou
     )
 }
 
-private fun AccountCreateAnonymousHandler.createFlow(req: AccountCreateAnonymousSubmitted): Flow {
+private fun AccountCreateAnonymousHandler.createFlow(req: AccountCreateAnonymousRequested): Flow {
     return flowCmdRepository.create(
         FlowCmdRepository.CreateCmd(
             id = req.cmdId(),
@@ -65,7 +65,7 @@ private fun AccountCreateAnonymousHandler.createFlow(req: AccountCreateAnonymous
     )
 }
 
-private fun AccountCreateAnonymousHandler.createTokenAuth(req: AccountCreateAnonymousSubmitted): Auth {
+private fun AccountCreateAnonymousHandler.createTokenAuth(req: AccountCreateAnonymousRequested): Auth {
     return authCmdRepository.create(
         AuthCmdRepository.CreateTokenAuthCmd(
             id = req.cmdId(),

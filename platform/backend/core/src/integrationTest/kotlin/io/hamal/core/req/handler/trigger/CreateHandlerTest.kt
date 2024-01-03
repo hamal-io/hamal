@@ -2,10 +2,10 @@ package io.hamal.core.req.handler.trigger
 
 import io.hamal.core.req.handler.BaseReqHandlerTest
 import io.hamal.lib.domain._enum.HookMethod.Get
-import io.hamal.lib.domain._enum.ReqStatus.Submitted
+import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain._enum.TriggerType.*
 import io.hamal.lib.domain._enum.TriggerType.Event
-import io.hamal.lib.domain.submitted.TriggerCreateSubmitted
+import io.hamal.lib.domain.request.TriggerCreateRequested
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
@@ -102,10 +102,10 @@ internal class TriggerCreateHandlerTest : BaseReqHandlerTest() {
 
             val exception = assertThrows<IllegalArgumentException> {
                 testInstance(
-                    TriggerCreateSubmitted(
-                        id = ReqId(12345),
+                    TriggerCreateRequested(
+                        id = RequestId(12345),
                         status = Submitted,
-                        type = Hook,
+                        triggerType = Hook,
                         triggerId = TriggerId(2),
                         flowId = testFlow.id,
                         groupId = testGroup.id,
@@ -238,10 +238,10 @@ internal class TriggerCreateHandlerTest : BaseReqHandlerTest() {
     private lateinit var testInstance: TriggerCreateHandler
 
     private val submitCreateFixedRateTriggerReq by lazy {
-        TriggerCreateSubmitted(
-            id = ReqId(1),
+        TriggerCreateRequested(
+            id = RequestId(1),
             status = Submitted,
-            type = FixedRate,
+            triggerType = FixedRate,
             triggerId = TriggerId(1234),
             flowId = testFlow.id,
             groupId = testGroup.id,
@@ -255,10 +255,10 @@ internal class TriggerCreateHandlerTest : BaseReqHandlerTest() {
     }
 
     private val submitCreateEventTriggerReq by lazy {
-        TriggerCreateSubmitted(
-            id = ReqId(1),
+        TriggerCreateRequested(
+            id = RequestId(1),
             status = Submitted,
-            type = Event,
+            triggerType = Event,
             triggerId = TriggerId(1234),
             flowId = testFlow.id,
             groupId = testGroup.id,
@@ -272,10 +272,10 @@ internal class TriggerCreateHandlerTest : BaseReqHandlerTest() {
     }
 
     private val submitCreateHookTriggerReq by lazy {
-        TriggerCreateSubmitted(
-            id = ReqId(1),
+        TriggerCreateRequested(
+            id = RequestId(1),
             status = Submitted,
-            type = Hook,
+            triggerType = Hook,
             triggerId = TriggerId(1234),
             flowId = testFlow.id,
             groupId = testGroup.id,
@@ -290,10 +290,10 @@ internal class TriggerCreateHandlerTest : BaseReqHandlerTest() {
     }
 
     private val submitCreateCronTriggerReq by lazy {
-        TriggerCreateSubmitted(
-            id = ReqId(1),
+        TriggerCreateRequested(
+            id = RequestId(1),
             status = Submitted,
-            type = Cron,
+            triggerType = Cron,
             triggerId = TriggerId(1234),
             flowId = testFlow.id,
             groupId = testGroup.id,

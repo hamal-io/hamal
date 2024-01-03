@@ -6,18 +6,18 @@ import io.hamal.lib.domain.vo.Password
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.fold
-import io.hamal.request.AccountConvertAnonymousReq
-import io.hamal.request.AccountCreateReq
+import io.hamal.lib.domain.request.AccountConvertAnonymousRequest
+import io.hamal.lib.domain.request.AccountCreateRequest
 
-data class ApiAccountCreateReq(
+data class ApiAccountCreateRequest(
     override val email: Email,
     override val password: Password
-) : AccountCreateReq
+) : AccountCreateRequest
 
-data class ApiAccountConvertAnonymousReq(
+data class ApiAccountConvertAnonymousRequest(
     override val email: Email,
     override val password: Password
-) : AccountConvertAnonymousReq
+) : AccountConvertAnonymousRequest
 
 data class ApiAccountList(
     val accounts: List<Account>
@@ -32,17 +32,17 @@ data class ApiAccount(
 )
 
 interface ApiAccountService {
-    fun create(createAccountReq: ApiAccountCreateReq): ApiTokenSubmitted
+    fun create(createAccountReq: ApiAccountCreateRequest): ApiTokenRequested
 }
 
 internal class ApiAccountServiceImpl(
     private val template: HttpTemplate
 ) : ApiAccountService {
 
-    override fun create(createAccountReq: ApiAccountCreateReq) =
+    override fun create(createAccountReq: ApiAccountCreateRequest) =
         template.post("/v1/accounts")
             .body(createAccountReq)
             .execute()
-            .fold(ApiTokenSubmitted::class)
+            .fold(ApiTokenRequested::class)
 
 }

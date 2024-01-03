@@ -4,7 +4,7 @@ import io.hamal.core.event.PlatformEventEmitter
 import io.hamal.core.req.ReqHandler
 import io.hamal.core.req.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.submitted.BlueprintUpdateSubmitted
+import io.hamal.lib.domain.request.BlueprintUpdateRequested
 import io.hamal.repository.api.Blueprint
 import io.hamal.repository.api.BlueprintCmdRepository.UpdateCmd
 import io.hamal.repository.api.BlueprintRepository
@@ -15,14 +15,14 @@ import org.springframework.stereotype.Component
 class BlueprintUpdateHandler(
     val blueprintRepository: BlueprintRepository,
     val eventEmitter: PlatformEventEmitter
-) : ReqHandler<BlueprintUpdateSubmitted>(BlueprintUpdateSubmitted::class) {
+) : ReqHandler<BlueprintUpdateRequested>(BlueprintUpdateRequested::class) {
 
-    override fun invoke(req: BlueprintUpdateSubmitted) {
+    override fun invoke(req: BlueprintUpdateRequested) {
         updateBlueprint(req).also { emitEvent(req.cmdId(), it) }
     }
 }
 
-private fun BlueprintUpdateHandler.updateBlueprint(req: BlueprintUpdateSubmitted): Blueprint {
+private fun BlueprintUpdateHandler.updateBlueprint(req: BlueprintUpdateRequested): Blueprint {
     return blueprintRepository.update(
         req.blueprintId, UpdateCmd(
             id = req.cmdId(),

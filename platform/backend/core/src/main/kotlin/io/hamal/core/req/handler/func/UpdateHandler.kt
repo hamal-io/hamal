@@ -4,7 +4,7 @@ import io.hamal.core.event.PlatformEventEmitter
 import io.hamal.core.req.ReqHandler
 import io.hamal.core.req.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.submitted.FuncUpdateSubmitted
+import io.hamal.lib.domain.request.FuncUpdateRequested
 import io.hamal.repository.api.CodeCmdRepository
 import io.hamal.repository.api.CodeRepository
 import io.hamal.repository.api.Func
@@ -19,14 +19,14 @@ class FuncUpdateHandler(
     val codeRepository: CodeRepository,
     val funcRepository: FuncRepository,
     val eventEmitter: PlatformEventEmitter
-) : ReqHandler<FuncUpdateSubmitted>(FuncUpdateSubmitted::class) {
+) : ReqHandler<FuncUpdateRequested>(FuncUpdateRequested::class) {
 
-    override fun invoke(req: FuncUpdateSubmitted) {
+    override fun invoke(req: FuncUpdateRequested) {
         updateFunc(req).also { emitEvent(req.cmdId(), it) }
     }
 }
 
-private fun FuncUpdateHandler.updateFunc(req: FuncUpdateSubmitted): Func {
+private fun FuncUpdateHandler.updateFunc(req: FuncUpdateRequested): Func {
     val func = funcRepository.get(req.funcId)
 
     val code = codeRepository.update(

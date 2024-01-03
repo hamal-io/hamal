@@ -12,7 +12,7 @@ import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.ApiSdk
-import io.hamal.lib.sdk.api.ApiExtensionUpdateReq
+import io.hamal.lib.sdk.api.ApiExtensionUpdateRequest
 
 class ExtensionUpdateFunction(
     private val sdk: ApiSdk
@@ -24,7 +24,7 @@ class ExtensionUpdateFunction(
         return try {
             val res = sdk.extension.update(
                 ExtensionId(SnowflakeId(arg1.getString("id"))),
-                ApiExtensionUpdateReq(
+                ApiExtensionUpdateRequest(
                     name = arg1.findString("name")?.let { ExtensionName(it) },
                     code = arg1.findString("code")?.let { CodeValue(it) }
                 )

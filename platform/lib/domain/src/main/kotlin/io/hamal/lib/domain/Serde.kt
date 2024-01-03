@@ -3,8 +3,8 @@ package io.hamal.lib.domain
 import io.hamal.lib.common.serialization.GsonFactoryBuilder
 import io.hamal.lib.common.serialization.ValueObjectIdAdapter
 import io.hamal.lib.common.serialization.ValueObjectStringAdapter
-import io.hamal.lib.domain.submitted.Submitted
-import io.hamal.lib.domain.submitted.SubmittedTypeAdapter
+import io.hamal.lib.domain.request.Requested
+import io.hamal.lib.domain.request.TypeAdapter
 import io.hamal.lib.domain.vo.*
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -15,11 +15,11 @@ val gsonInstance = GsonFactoryBuilder
     .registerTypeAdapter(AuthToken::class.java, ValueObjectStringAdapter(::AuthToken))
     .registerTypeAdapter(Email::class.java, ValueObjectStringAdapter(::Email))
     .registerTypeAdapter(Password::class.java, ValueObjectStringAdapter(::Password))
-    .registerTypeAdapter(Submitted::class.java, SubmittedTypeAdapter())
+    .registerTypeAdapter(Requested::class.java, TypeAdapter())
     .registerTypeAdapter(GroupId::class.java, ValueObjectIdAdapter(::GroupId))
     .registerTypeAdapter(FlowId::class.java, ValueObjectIdAdapter(::FlowId))
 
-    .registerTypeAdapter(ReqId::class.java, ValueObjectIdAdapter(::ReqId))
+    .registerTypeAdapter(RequestId::class.java, ValueObjectIdAdapter(::RequestId))
     .build()
 
 

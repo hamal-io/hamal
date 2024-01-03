@@ -5,32 +5,25 @@ import io.hamal.core.component.GenerateSalt
 import io.hamal.core.component.GenerateToken
 import io.hamal.core.req.req.CreateRootAccountReq
 import io.hamal.lib.domain.GenerateId
-import io.hamal.lib.domain._enum.ReqStatus.Submitted
+import io.hamal.lib.domain._enum.RequestStatus.Submitted
+import io.hamal.lib.domain.request.*
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.AccountType.Anonymous
 import io.hamal.lib.domain.vo.AccountType.User
 import io.hamal.repository.api.Account
 import io.hamal.repository.api.AccountQueryRepository
 import io.hamal.repository.api.AccountQueryRepository.AccountQuery
-import io.hamal.repository.api.ReqCmdRepository
-import io.hamal.lib.domain.submitted.AccountConvertSubmitted
-import io.hamal.lib.domain.submitted.AccountCreateAnonymousSubmitted
-import io.hamal.lib.domain.submitted.AccountCreateMetaMaskSubmitted
-import io.hamal.lib.domain.submitted.AccountCreateSubmitted
-import io.hamal.request.AccountConvertAnonymousReq
-import io.hamal.request.AccountCreateAnonymousReq
-import io.hamal.request.AccountCreateMetaMaskReq
-import io.hamal.request.AccountCreateReq
+import io.hamal.repository.api.RequestCmdRepository
 import org.springframework.stereotype.Component
 
 interface AccountCreatePort {
-    operator fun <T : Any> invoke(req: AccountCreateReq, responseHandler: (AccountCreateSubmitted) -> T): T
+    operator fun <T : Any> invoke(req: AccountCreateRequest, responseHandler: (AccountCreateRequested) -> T): T
 }
 
 interface AccountCreateMetaMaskPort {
     operator fun <T : Any> invoke(
-        req: AccountCreateMetaMaskReq,
-        responseHandler: (AccountCreateMetaMaskSubmitted) -> T
+        req: AccountCreateMetaMaskRequest,
+        responseHandler: (AccountCreateMetaMaskRequested) -> T
     ): T
 }
 
@@ -40,16 +33,16 @@ interface AccountCreateRootPort {
 
 interface AccountCreateAnonymousPort {
     operator fun <T : Any> invoke(
-        req: AccountCreateAnonymousReq,
-        responseHandler: (AccountCreateAnonymousSubmitted) -> T
+        req: AccountCreateAnonymousRequest,
+        responseHandler: (AccountCreateAnonymousRequested) -> T
     ): T
 }
 
 interface AccountConvertAnonymousPort {
     operator fun <T : Any> invoke(
         accountId: AccountId,
-        req: AccountConvertAnonymousReq,
-        responseHandler: (AccountConvertSubmitted) -> T
+        req: AccountConvertAnonymousRequest,
+        responseHandler: (AccountConvertRequested) -> T
     ): T
 }
 
@@ -76,16 +69,16 @@ class AccountAdapter(
     private val generateDomainId: GenerateId,
     private val generateSalt: GenerateSalt,
     private val generateToken: GenerateToken,
-    private val reqCmdRepository: ReqCmdRepository
+    private val reqCmdRepository: RequestCmdRepository
 ) : AccountPort {
 
-    override fun <T : Any> invoke(req: AccountCreateReq, responseHandler: (AccountCreateSubmitted) -> T): T {
+    override fun <T : Any> invoke(req: AccountCreateRequest, responseHandler: (AccountCreateRequested) -> T): T {
         val salt = generateSalt()
-        return AccountCreateSubmitted(
-            id = generateDomainId(::ReqId),
+        return AccountCreateRequested(
+            id = generateDomainId(::RequestId),
             status = Submitted,
             accountId = generateDomainId(::AccountId),
-            type = User,
+            accountType = User,
             groupId = generateDomainId(::GroupId),
             flowId = generateDomainId(::FlowId),
             email = req.email,
@@ -101,15 +94,15 @@ class AccountAdapter(
     }
 
     override fun <T : Any> invoke(
-        req: AccountCreateAnonymousReq,
-        responseHandler: (AccountCreateAnonymousSubmitted) -> T
+        req: AccountCreateAnonymousRequest,
+        responseHandler: (AccountCreateAnonymousRequested) -> T
     ): T {
         val salt = generateSalt()
-        return AccountCreateAnonymousSubmitted(
-            id = generateDomainId(::ReqId),
+        return AccountCreateAnonymousRequested(
+            id = generateDomainId(::RequestId),
             status = Submitted,
             accountId = req.id,
-            type = Anonymous,
+            accountType = Anonymous,
             groupId = generateDomainId(::GroupId),
             flowId = generateDomainId(::FlowId),
             passwordAuthId = generateDomainId(::AuthId),
@@ -124,14 +117,14 @@ class AccountAdapter(
     }
 
     override fun <T : Any> invoke(
-        req: AccountCreateMetaMaskReq,
-        responseHandler: (AccountCreateMetaMaskSubmitted) -> T
+        req: AccountCreateMetaMaskRequest,
+        responseHandler: (AccountCreateMetaMaskRequested) -> T
     ): T {
-        return AccountCreateMetaMaskSubmitted(
-            id = generateDomainId(::ReqId),
+        return AccountCreateMetaMaskRequested(
+            id = generateDomainId(::RequestId),
             status = Submitted,
             accountId = req.id,
-            type = User,
+            accountType = User,
             groupId = generateDomainId(::GroupId),
             flowId = generateDomainId(::FlowId),
             salt = generateSalt(),
@@ -147,11 +140,11 @@ class AccountAdapter(
 
         accountQueryRepository.find(AccountId.root)
             ?: run {
-                AccountCreateSubmitted(
-                    id = generateDomainId(::ReqId),
+                AccountCreateRequested(
+                    id = generateDomainId(::RequestId),
                     status = Submitted,
                     accountId = AccountId.root,
-                    type = AccountType.Root,
+                    accountType = AccountType.Root,
                     groupId = GroupId.root,
                     flowId = FlowId.root,
                     email = req.email,
@@ -169,12 +162,12 @@ class AccountAdapter(
 
     override fun <T : Any> invoke(
         accountId: AccountId,
-        req: AccountConvertAnonymousReq,
-        responseHandler: (AccountConvertSubmitted) -> T
+        req: AccountConvertAnonymousRequest,
+        responseHandler: (AccountConvertRequested) -> T
     ): T {
         val account = accountQueryRepository.get(accountId)
-        return AccountConvertSubmitted(
-            id = generateDomainId(::ReqId),
+        return AccountConvertRequested(
+            id = generateDomainId(::RequestId),
             status = Submitted,
             accountId = accountId,
             email = req.email,

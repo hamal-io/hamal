@@ -106,10 +106,10 @@ internal abstract class BaseTest {
     lateinit var flowCmdRepository: FlowCmdRepository
 
     @Autowired
-    lateinit var reqQueryRepository: ReqQueryRepository
+    lateinit var reqQueryRepository: RequestQueryRepository
 
     @Autowired
-    lateinit var reqCmdRepository: ReqCmdRepository
+    lateinit var reqCmdRepository: RequestCmdRepository
 
     @Autowired
     lateinit var stateQueryRepository: StateQueryRepository

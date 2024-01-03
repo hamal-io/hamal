@@ -10,8 +10,8 @@ import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.api.ApiError
-import io.hamal.lib.sdk.bridge.BridgeExecFailReq
-import io.hamal.lib.sdk.bridge.BridgeExecFailSubmitted
+import io.hamal.lib.sdk.bridge.BridgeExecFailRequest
+import io.hamal.lib.sdk.bridge.BridgeExecFailRequested
 import io.hamal.repository.api.StartedExec
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -40,7 +40,7 @@ internal class ExecFailControllerTest : BaseExecControllerTest() {
                 assertThat(failureResponse.statusCode, equalTo(Accepted))
                 require(failureResponse is HttpSuccessResponse) { "request was not successful" }
 
-                val result = failureResponse.result(BridgeExecFailSubmitted::class)
+                val result = failureResponse.result(BridgeExecFailRequested::class)
                 awaitFailed(result.id)
             }
         }
@@ -61,7 +61,7 @@ internal class ExecFailControllerTest : BaseExecControllerTest() {
         assertThat(failureResponse.statusCode, equalTo(Accepted))
         require(failureResponse is HttpSuccessResponse) { "request was not successful" }
 
-        val result = failureResponse.result(BridgeExecFailSubmitted::class)
+        val result = failureResponse.result(BridgeExecFailRequested::class)
         awaitCompleted(result.id)
 
         verifyExecFailed(result.execId)
@@ -72,7 +72,7 @@ internal class ExecFailControllerTest : BaseExecControllerTest() {
     @Test
     fun `Tries to fail exec which does not exist`() {
         val response = httpTemplate.post("/b1/execs/123456765432/fail")
-            .body(BridgeExecFailReq(ExecResult(MapType("message" to StringType("SomeErrorValue")))))
+            .body(BridgeExecFailRequest(ExecResult(MapType("message" to StringType("SomeErrorValue")))))
             .execute()
 
         assertThat(response.statusCode, equalTo(NotFound))
@@ -93,7 +93,7 @@ internal class ExecFailControllerTest : BaseExecControllerTest() {
     private fun requestFailure(execId: ExecId) =
         httpTemplate.post("/b1/execs/{execId}/fail")
             .path("execId", execId)
-            .body(BridgeExecFailReq(ExecResult(MapType("message" to StringType("SomeErrorCause")))))
+            .body(BridgeExecFailRequest(ExecResult(MapType("message" to StringType("SomeErrorCause")))))
             .execute()
 
 }

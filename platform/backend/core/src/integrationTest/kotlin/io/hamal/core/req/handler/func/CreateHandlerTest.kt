@@ -2,14 +2,14 @@ package io.hamal.core.req.handler.func
 
 import io.hamal.core.req.handler.BaseReqHandlerTest
 import io.hamal.lib.common.util.TimeUtils
-import io.hamal.lib.domain._enum.ReqStatus.Submitted
+import io.hamal.lib.domain._enum.RequestStatus.Submitted
+import io.hamal.lib.domain.request.FuncCreateRequested
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.FuncCode
 import io.hamal.repository.api.FuncDeployment
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
-import io.hamal.lib.domain.submitted.FuncCreateSubmitted
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
@@ -61,8 +61,8 @@ internal class FuncCreateHandlerTest : BaseReqHandlerTest() {
     private lateinit var testInstance: FuncCreateHandler
 
     private val submitCreateFuncReq by lazy {
-        FuncCreateSubmitted(
-            id = ReqId(1),
+        FuncCreateRequested(
+            id = RequestId(1),
             status = Submitted,
             groupId = testGroup.id,
             funcId = FuncId(12345),

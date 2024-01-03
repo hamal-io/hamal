@@ -4,7 +4,7 @@ import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.domain.vo.ReqId
+import io.hamal.lib.domain.vo.RequestId
 import org.springframework.core.convert.converter.Converter
 import kotlin.reflect.KClass
 
@@ -33,7 +33,7 @@ object ExecLogIdConverter : DomainIdConverter<ExecLogId>(ExecLogId::class, ::Exe
 object FuncIdConverter : DomainIdConverter<FuncId>(FuncId::class, ::FuncId)
 object GroupIdConverter : DomainIdConverter<GroupId>(GroupId::class, ::GroupId)
 object FlowIdConverter : DomainIdConverter<FlowId>(FlowId::class, ::FlowId)
-object ReqIdConverter : DomainIdConverter<ReqId>(ReqId::class, ::ReqId)
+object ReqIdConverter : DomainIdConverter<RequestId>(RequestId::class, ::RequestId)
 object TopicIdConverter : DomainIdConverter<TopicId>(TopicId::class, ::TopicId)
 object TopicEntryIdConverter : DomainIdConverter<TopicEntryId>(TopicEntryId::class, ::TopicEntryId)
 object TriggerIdConverter : DomainIdConverter<TriggerId>(TriggerId::class, ::TriggerId)

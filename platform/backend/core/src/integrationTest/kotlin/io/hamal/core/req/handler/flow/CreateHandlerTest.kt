@@ -1,12 +1,12 @@
 package io.hamal.core.req.handler.flow
 
 import io.hamal.core.req.handler.BaseReqHandlerTest
-import io.hamal.lib.domain._enum.ReqStatus.Submitted
+import io.hamal.lib.domain._enum.RequestStatus.Submitted
+import io.hamal.lib.domain.request.FlowCreateRequested
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.FlowQueryRepository.FlowQuery
-import io.hamal.lib.domain.submitted.FlowCreateSubmitted
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
@@ -34,14 +34,14 @@ internal class FlowCreateHandlerTest : BaseReqHandlerTest() {
         testInstance(submitCreateFlowReq)
 
         testInstance(
-            FlowCreateSubmitted(
-                id = ReqId(1),
+            FlowCreateRequested(
+                id = RequestId(1),
                 status = Submitted,
                 flowId = FlowId(12345),
                 groupId = testGroup.id,
                 name = FlowName("another-flow"),
                 inputs = FlowInputs(),
-                type = FlowType.default
+                flowType = FlowType.default
             )
         )
 
@@ -51,14 +51,14 @@ internal class FlowCreateHandlerTest : BaseReqHandlerTest() {
     @Test
     fun `Creates flow with type`() {
         testInstance(
-            FlowCreateSubmitted(
-                id = ReqId(1),
+            FlowCreateRequested(
+                id = RequestId(1),
                 status = Submitted,
                 flowId = FlowId(12345),
                 groupId = testGroup.id,
                 name = FlowName("awesome-flow"),
                 inputs = FlowInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
-                type = FlowType("VerySpecialFlowType")
+                flowType = FlowType("VerySpecialFlowType")
             )
         )
 
@@ -90,8 +90,8 @@ internal class FlowCreateHandlerTest : BaseReqHandlerTest() {
     private lateinit var testInstance: FlowCreateHandler
 
     private val submitCreateFlowReq by lazy {
-        FlowCreateSubmitted(
-            id = ReqId(1),
+        FlowCreateRequested(
+            id = RequestId(1),
             status = Submitted,
             flowId = FlowId(12345),
             groupId = testGroup.id,
@@ -99,7 +99,7 @@ internal class FlowCreateHandlerTest : BaseReqHandlerTest() {
             inputs = FlowInputs(
                 MapType(mutableMapOf("hamal" to StringType("rocks")))
             ),
-            type = FlowType.default
+            flowType = FlowType.default
         )
     }
 }

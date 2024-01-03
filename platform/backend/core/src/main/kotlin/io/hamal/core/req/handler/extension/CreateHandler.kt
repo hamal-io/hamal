@@ -4,7 +4,7 @@ import io.hamal.core.event.PlatformEventEmitter
 import io.hamal.core.req.ReqHandler
 import io.hamal.core.req.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.submitted.ExtensionCreateSubmitted
+import io.hamal.lib.domain.request.ExtensionCreateRequested
 import io.hamal.repository.api.CodeCmdRepository
 import io.hamal.repository.api.Extension
 import io.hamal.repository.api.ExtensionCmdRepository
@@ -19,13 +19,13 @@ class ExtensionCreateHandler(
     val extensionCmdRepository: ExtensionCmdRepository,
     val codeCmdRepository: CodeCmdRepository,
     val eventEmitter: PlatformEventEmitter,
-) : ReqHandler<ExtensionCreateSubmitted>(ExtensionCreateSubmitted::class) {
-    override fun invoke(req: ExtensionCreateSubmitted) {
+) : ReqHandler<ExtensionCreateRequested>(ExtensionCreateRequested::class) {
+    override fun invoke(req: ExtensionCreateRequested) {
         createExtension(req).also { emitEvent(req.cmdId(), it) }
     }
 }
 
-private fun ExtensionCreateHandler.createExtension(req: ExtensionCreateSubmitted): Extension {
+private fun ExtensionCreateHandler.createExtension(req: ExtensionCreateRequested): Extension {
     val code = codeCmdRepository.create(
         CodeCmdRepository.CreateCmd(
             id = req.cmdId(),

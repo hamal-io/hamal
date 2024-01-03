@@ -11,7 +11,7 @@ import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.ApiSdk
-import io.hamal.lib.sdk.api.ApiTopicCreateReq
+import io.hamal.lib.sdk.api.ApiTopicCreateRequest
 
 class TopicCreateFunction(
     private val sdk: ApiSdk
@@ -23,7 +23,7 @@ class TopicCreateFunction(
         return try {
             val res = sdk.topic.create(
                 arg1.findString("flow_id")?.let { FlowId(SnowflakeId(it)) } ?: ctx[FlowId::class],
-                ApiTopicCreateReq(
+                ApiTopicCreateRequest(
                     name = TopicName(arg1.getString("name")),
                 )
             )

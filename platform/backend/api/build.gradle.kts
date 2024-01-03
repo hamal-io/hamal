@@ -10,7 +10,6 @@ archivesName.set("platform-api")
 dependencies {
     implementation(project(":platform:lib:sdk"))
     implementation(project(":platform:backend:core"))
-    implementation(project(":platform:backend:request"))
 }
 
 

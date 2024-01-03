@@ -7,14 +7,14 @@ import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiFlow
-import io.hamal.lib.sdk.api.ApiFlowCreateReq
-import io.hamal.lib.sdk.api.ApiFlowCreateSubmitted
+import io.hamal.lib.sdk.api.ApiFlowCreateRequest
+import io.hamal.lib.sdk.api.ApiFlowCreateRequested
 import io.hamal.lib.sdk.api.ApiFlowList
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 
 internal sealed class FlowBaseControllerTest : BaseControllerTest() {
-    fun createFlow(req: ApiFlowCreateReq): ApiFlowCreateSubmitted {
+    fun createFlow(req: ApiFlowCreateRequest): ApiFlowCreateRequested {
         val response = httpTemplate.post("/v1/groups/{groupId}/flows")
             .path("groupId", testGroup.id)
             .body(req)
@@ -22,7 +22,7 @@ internal sealed class FlowBaseControllerTest : BaseControllerTest() {
 
         assertThat(response.statusCode, equalTo(Accepted))
         require(response is HttpSuccessResponse) { "request was not successful" }
-        return response.result(ApiFlowCreateSubmitted::class)
+        return response.result(ApiFlowCreateRequested::class)
     }
 
     fun listFlows(): ApiFlowList {

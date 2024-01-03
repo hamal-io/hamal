@@ -13,8 +13,8 @@ import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.api.ApiError
-import io.hamal.lib.sdk.bridge.BridgeExecCompleteReq
-import io.hamal.lib.sdk.bridge.BridgeExecCompleteSubmitted
+import io.hamal.lib.sdk.bridge.BridgeExecCompleteRequest
+import io.hamal.lib.sdk.bridge.BridgeExecCompleteRequested
 import io.hamal.repository.api.CompletedExec
 import io.hamal.repository.api.StartedExec
 import io.hamal.repository.api.log.BatchConsumerImpl
@@ -47,7 +47,7 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
                 assertThat(completionResponse.statusCode, equalTo(Accepted))
                 require(completionResponse is HttpSuccessResponse) { "request was not successful" }
 
-                val result = completionResponse.result(BridgeExecCompleteSubmitted::class)
+                val result = completionResponse.result(BridgeExecCompleteRequested::class)
 
                 awaitFailed(result.id)
                 verifyNoStateSet(result.execId)
@@ -71,7 +71,7 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
         assertThat(completionResponse.statusCode, equalTo(Accepted))
         require(completionResponse is HttpSuccessResponse) { "request was not successful" }
 
-        val result = completionResponse.result(BridgeExecCompleteSubmitted::class)
+        val result = completionResponse.result(BridgeExecCompleteRequested::class)
         awaitCompleted(result.id)
 
         verifyExecCompleted(result.execId)
@@ -84,7 +84,7 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
     fun `Tries to complete exec which does not exist`() {
         val response = httpTemplate.post("/b1/execs/123456765432/complete")
             .body(
-                BridgeExecCompleteReq(
+                BridgeExecCompleteRequest(
                     state = ExecState(),
                     result = ExecResult(),
                     events = listOf()
@@ -143,7 +143,7 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
         httpTemplate.post("/b1/execs/{execId}/complete")
             .path("execId", execId)
             .body(
-                BridgeExecCompleteReq(
+                BridgeExecCompleteRequest(
                     state = ExecState(MapType(mutableMapOf("value" to NumberType(13.37)))),
                     result = ExecResult(MapType("hamal" to StringType("rocks"))),
                     events = listOf(

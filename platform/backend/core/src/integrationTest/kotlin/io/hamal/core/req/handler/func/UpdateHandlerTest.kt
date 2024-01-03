@@ -2,14 +2,14 @@ package io.hamal.core.req.handler.func
 
 import io.hamal.core.req.handler.BaseReqHandlerTest
 import io.hamal.core.req.handler.NextCommandId
-import io.hamal.lib.domain._enum.ReqStatus
+import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.CodeCmdRepository
 import io.hamal.repository.api.FuncCmdRepository
 import io.hamal.repository.api.FuncCode
-import io.hamal.lib.domain.submitted.FuncUpdateSubmitted
+import io.hamal.lib.domain.request.FuncUpdateRequested
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -43,9 +43,9 @@ internal class FuncUpdateHandlerTest : BaseReqHandlerTest() {
     }
 
     private val submittedFuncUpdateReq by lazy {
-        FuncUpdateSubmitted(
-            id = ReqId(500),
-            status = ReqStatus.Submitted,
+        FuncUpdateRequested(
+            id = RequestId(500),
+            status = RequestStatus.Submitted,
             groupId = testGroup.id,
             funcId = FuncId(1),
             name = FuncName("Func-update"),

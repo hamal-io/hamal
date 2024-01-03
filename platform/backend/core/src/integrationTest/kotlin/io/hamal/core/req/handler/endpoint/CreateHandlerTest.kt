@@ -3,11 +3,11 @@ package io.hamal.core.req.handler.endpoint
 import io.hamal.core.req.handler.BaseReqHandlerTest
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain._enum.EndpointMethod.Post
-import io.hamal.lib.domain._enum.ReqStatus.Submitted
+import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.EndpointQueryRepository.EndpointQuery
 import io.hamal.repository.api.FuncCmdRepository.CreateCmd
-import io.hamal.lib.domain.submitted.EndpointCreateSubmitted
+import io.hamal.lib.domain.request.EndpointCreateRequested
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
@@ -49,8 +49,8 @@ internal class EndpointCreateHandlerTest : BaseReqHandlerTest() {
     private lateinit var testInstance: EndpointCreateHandler
 
     private val submitCreateEndpointReq by lazy {
-        EndpointCreateSubmitted(
-            id = ReqId(1),
+        EndpointCreateRequested(
+            id = RequestId(1),
             status = Submitted,
             endpointId = EndpointId(12345),
             groupId = testGroup.id,

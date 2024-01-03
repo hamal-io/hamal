@@ -6,8 +6,8 @@ import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiError
-import io.hamal.lib.sdk.api.ApiExtensionCreateReq
-import io.hamal.lib.sdk.api.ApiExtensionUpdateReq
+import io.hamal.lib.sdk.api.ApiExtensionCreateRequest
+import io.hamal.lib.sdk.api.ApiExtensionUpdateRequest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -18,7 +18,7 @@ internal class ExtensionUpdateControllerTest : ExtensionBaseControllerTest() {
     fun `Updates extension`() {
         val extId = awaitCompleted(
             createExtension(
-                ApiExtensionCreateReq(
+                ApiExtensionCreateRequest(
                     name = ExtensionName("TestExtension"),
                     code = CodeValue("x='hamal")
                 )
@@ -28,7 +28,7 @@ internal class ExtensionUpdateControllerTest : ExtensionBaseControllerTest() {
         awaitCompleted(
             updateExtension(
                 extId,
-                ApiExtensionUpdateReq(
+                ApiExtensionUpdateRequest(
                     name = ExtensionName("UpdateExtension"),
                     code = CodeValue("x='hamal")
                 )
@@ -45,7 +45,7 @@ internal class ExtensionUpdateControllerTest : ExtensionBaseControllerTest() {
     fun `Updates extension without updating values`() {
         val extId = awaitCompleted(
             createExtension(
-                ApiExtensionCreateReq(
+                ApiExtensionCreateRequest(
                     name = ExtensionName("TestExtension"),
                     code = CodeValue("x='hamal")
                 )
@@ -55,7 +55,7 @@ internal class ExtensionUpdateControllerTest : ExtensionBaseControllerTest() {
         awaitCompleted(
             updateExtension(
                 extId,
-                ApiExtensionUpdateReq(
+                ApiExtensionUpdateRequest(
                     name = null,
                     code = null
                 )
@@ -70,7 +70,7 @@ internal class ExtensionUpdateControllerTest : ExtensionBaseControllerTest() {
     fun `Tries to update extension that does not exist`() {
         val updateResponse = httpTemplate.patch("/v1/extensions/123456")
             .body(
-                ApiExtensionUpdateReq(
+                ApiExtensionUpdateRequest(
                     name = ExtensionName("UpdateExtension"),
                     code = CodeValue("x='hamal")
                 )

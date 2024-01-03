@@ -5,7 +5,7 @@ import io.hamal.core.req.ReqHandler
 import io.hamal.core.req.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.submitted.ExecInvokeSubmitted
+import io.hamal.lib.domain.request.ExecInvokeRequested
 import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.InvocationInputs
@@ -21,13 +21,13 @@ class ExecInvokeHandler(
     private val execCmdRepository: ExecCmdRepository,
     private val eventEmitter: PlatformEventEmitter,
     private val funcQueryRepository: FuncQueryRepository
-) : ReqHandler<ExecInvokeSubmitted>(ExecInvokeSubmitted::class) {
+) : ReqHandler<ExecInvokeRequested>(ExecInvokeRequested::class) {
 
-    override fun invoke(req: ExecInvokeSubmitted) {
+    override fun invoke(req: ExecInvokeRequested) {
         planExec(req).also { emitEvent(req.cmdId(), it) }
     }
 
-    private fun planExec(req: ExecInvokeSubmitted): PlannedExec {
+    private fun planExec(req: ExecInvokeRequested): PlannedExec {
         val correlationId = req.correlationId
         val func = req.funcId?.let { funcQueryRepository.get(it) }
 

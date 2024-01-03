@@ -1,12 +1,12 @@
 package io.hamal.bridge.http.controller
 
 import io.hamal.bridge.BaseTest
-import io.hamal.lib.domain._enum.ReqStatus
-import io.hamal.lib.domain.vo.ReqId
+import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain.request.Requested
+import io.hamal.lib.domain.vo.RequestId
 import io.hamal.lib.http.HttpTemplateImpl
-import io.hamal.lib.sdk.api.ApiSubmitted
-import io.hamal.repository.api.ReqQueryRepository.ReqQuery
-import io.hamal.lib.domain.submitted.Submitted
+import io.hamal.lib.sdk.api.ApiRequested
+import io.hamal.repository.api.RequestQueryRepository.ReqQuery
 import org.hamcrest.MatcherAssert
 import org.hamcrest.Matchers
 import kotlin.reflect.KClass
@@ -22,34 +22,34 @@ internal abstract class BaseControllerTest : BaseTest() {
         )
     }
 
-    fun verifyReqCompleted(id: ReqId) {
+    fun verifyReqCompleted(id: RequestId) {
         with(reqQueryRepository.find(id)!!) {
             MatcherAssert.assertThat(id, Matchers.equalTo(id))
             MatcherAssert.assertThat(
                 status,
-                Matchers.equalTo(ReqStatus.Completed)
+                Matchers.equalTo(RequestStatus.Completed)
             )
         }
     }
 
-    fun verifyReqFailed(id: ReqId) {
+    fun verifyReqFailed(id: RequestId) {
         with(reqQueryRepository.find(id)!!) {
             MatcherAssert.assertThat(id, Matchers.equalTo(id))
             MatcherAssert.assertThat(
                 status,
-                Matchers.equalTo(ReqStatus.Failed)
+                Matchers.equalTo(RequestStatus.Failed)
             )
         }
     }
 
 
-    fun awaitCompleted(id: ReqId) {
+    fun awaitCompleted(id: RequestId) {
         while (true) {
             reqQueryRepository.find(id)?.let {
-                if (it.status == ReqStatus.Completed) {
+                if (it.status == RequestStatus.Completed) {
                     return
                 }
-                if (it.status == ReqStatus.Failed) {
+                if (it.status == RequestStatus.Failed) {
                     throw IllegalStateException("expected $id to complete but failed")
                 }
             }
@@ -57,27 +57,27 @@ internal abstract class BaseControllerTest : BaseTest() {
         }
     }
 
-    fun <SUBMITTED : ApiSubmitted> awaitCompleted(submitted: SUBMITTED): SUBMITTED {
+    fun <SUBMITTED : ApiRequested> awaitCompleted(submitted: SUBMITTED): SUBMITTED {
         awaitCompleted(submitted.id)
         return submitted
     }
 
-    fun <SUBMITTED : ApiSubmitted> awaitCompleted(vararg reqs: SUBMITTED): Iterable<SUBMITTED> {
+    fun <SUBMITTED : ApiRequested> awaitCompleted(vararg reqs: SUBMITTED): Iterable<SUBMITTED> {
         return reqs.toList().onEach { awaitCompleted(it.id) }
     }
 
-    fun <SUBMITTED : ApiSubmitted> awaitCompleted(reqs: Iterable<SUBMITTED>): Iterable<SUBMITTED> {
+    fun <SUBMITTED : ApiRequested> awaitCompleted(reqs: Iterable<SUBMITTED>): Iterable<SUBMITTED> {
         return reqs.onEach { awaitCompleted(it.id) }
     }
 
-    fun awaitFailed(id: ReqId) {
+    fun awaitFailed(id: RequestId) {
         while (true) {
             reqQueryRepository.find(id)?.let {
-                if (it.status == ReqStatus.Failed) {
+                if (it.status == RequestStatus.Failed) {
                     return
                 }
 
-                if (it.status == ReqStatus.Completed) {
+                if (it.status == RequestStatus.Completed) {
                     throw IllegalStateException("expected $id to fail but completed")
                 }
             }
@@ -85,12 +85,12 @@ internal abstract class BaseControllerTest : BaseTest() {
         }
     }
 
-    fun <SUBMITTED : ApiSubmitted> awaitFailed(req: SUBMITTED): SUBMITTED {
+    fun <SUBMITTED : ApiRequested> awaitFailed(req: SUBMITTED): SUBMITTED {
         awaitFailed(req.id)
         return req
     }
 
-    fun <SUBMITTED : ApiSubmitted> awaitFailed(reqs: Iterable<SUBMITTED>): Iterable<SUBMITTED> {
+    fun <SUBMITTED : ApiRequested> awaitFailed(reqs: Iterable<SUBMITTED>): Iterable<SUBMITTED> {
         return reqs.onEach { awaitFailed(it.id) }
     }
 
@@ -100,7 +100,7 @@ internal abstract class BaseControllerTest : BaseTest() {
         MatcherAssert.assertThat(requests, Matchers.empty())
     }
 
-    fun <SUBMITTED_REQ : Submitted> verifyNoRequests(clazz: KClass<SUBMITTED_REQ>) {
+    fun <SUBMITTED_REQ : Requested> verifyNoRequests(clazz: KClass<SUBMITTED_REQ>) {
         val requests = reqQueryRepository.list(ReqQuery()).filterIsInstance(clazz.java)
         MatcherAssert.assertThat(requests, Matchers.empty())
     }

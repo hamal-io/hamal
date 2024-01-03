@@ -1,9 +1,9 @@
 package io.hamal.core.req.handler.extension
 
 import io.hamal.core.req.handler.BaseReqHandlerTest
-import io.hamal.lib.domain._enum.ReqStatus
+import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain.request.ExtensionCreateRequested
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.domain.submitted.ExtensionCreateSubmitted
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -26,9 +26,9 @@ internal class ExtensionCreateHandlerTest : BaseReqHandlerTest() {
     }
 
     private val submitCreateExtensionReq by lazy {
-        ExtensionCreateSubmitted(
-            id = ReqId(1),
-            status = ReqStatus.Submitted,
+        ExtensionCreateRequested(
+            id = RequestId(1),
+            status = RequestStatus.Submitted,
             groupId = testGroup.id,
             extensionId = ExtensionId(1234),
             name = ExtensionName("TestExtension"),

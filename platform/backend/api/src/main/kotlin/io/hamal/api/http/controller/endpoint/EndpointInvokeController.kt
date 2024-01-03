@@ -3,13 +3,13 @@ package io.hamal.api.http.controller.endpoint
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain._enum.EndpointMethod
-import io.hamal.lib.domain._enum.ReqStatus.Submitted
+import io.hamal.lib.domain._enum.RequestStatus.Submitted
+import io.hamal.lib.domain.request.ExecInvokeRequested
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.api.ApiExec
 import io.hamal.repository.api.*
-import io.hamal.lib.domain.submitted.ExecInvokeSubmitted
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -18,7 +18,7 @@ import java.util.concurrent.CompletableFuture
 @RestController
 internal class EndpointInvokeController(
     private val generateDomainId: GenerateId,
-    private val reqCmdRepository: ReqCmdRepository,
+    private val reqCmdRepository: RequestCmdRepository,
     private val execRepository: ExecRepository,
     private val endpointQueryRepository: EndpointQueryRepository,
     private val funcQueryRepository: FuncQueryRepository
@@ -76,8 +76,8 @@ internal class EndpointInvokeController(
     private fun invoke(func: Func, invocation: EndpointInvocation): Exec {
         val execId = generateDomainId(::ExecId)
         reqCmdRepository.queue(
-            ExecInvokeSubmitted(
-                id = generateDomainId(::ReqId),
+            ExecInvokeRequested(
+                id = generateDomainId(::RequestId),
                 status = Submitted,
                 execId = execId,
                 flowId = func.flowId,

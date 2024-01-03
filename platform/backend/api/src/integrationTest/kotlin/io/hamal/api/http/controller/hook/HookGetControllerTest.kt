@@ -6,7 +6,7 @@ import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.sdk.api.ApiError
 import io.hamal.lib.sdk.api.ApiHook
-import io.hamal.lib.sdk.api.ApiHookCreateReq
+import io.hamal.lib.sdk.api.ApiHookCreateRequest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -24,7 +24,7 @@ internal class HookGetControllerTest : HookBaseControllerTest() {
 
     @Test
     fun `Get hook`() {
-        val hookId = awaitCompleted(createHook(ApiHookCreateReq(HookName("hook-one")))).hookId
+        val hookId = awaitCompleted(createHook(ApiHookCreateRequest(HookName("hook-one")))).hookId
 
         val getHookResponse = httpTemplate.get("/v1/hooks/{hookId}").path("hookId", hookId).execute()
         assertThat(getHookResponse.statusCode, equalTo(HttpStatusCode.Ok))

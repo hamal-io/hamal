@@ -4,7 +4,7 @@ import io.hamal.core.event.PlatformEventEmitter
 import io.hamal.core.req.ReqHandler
 import io.hamal.core.req.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.submitted.BlueprintCreateSubmitted
+import io.hamal.lib.domain.request.BlueprintCreateRequested
 import io.hamal.repository.api.Blueprint
 import io.hamal.repository.api.BlueprintCmdRepository
 import io.hamal.repository.api.event.BlueprintCreatedEvent
@@ -14,13 +14,13 @@ import org.springframework.stereotype.Component
 class BlueprintCreateHandler(
     val blueprintCmdRepository: BlueprintCmdRepository,
     val eventEmitter: PlatformEventEmitter,
-) : ReqHandler<BlueprintCreateSubmitted>(BlueprintCreateSubmitted::class) {
-    override fun invoke(req: BlueprintCreateSubmitted) {
+) : ReqHandler<BlueprintCreateRequested>(BlueprintCreateRequested::class) {
+    override fun invoke(req: BlueprintCreateRequested) {
         createBlueprint(req).also { emitEvent(req.cmdId(), it) }
     }
 }
 
-private fun BlueprintCreateHandler.createBlueprint(req: BlueprintCreateSubmitted): Blueprint {
+private fun BlueprintCreateHandler.createBlueprint(req: BlueprintCreateRequested): Blueprint {
     return blueprintCmdRepository.create(
         BlueprintCmdRepository.CreateCmd(
             id = req.cmdId(),

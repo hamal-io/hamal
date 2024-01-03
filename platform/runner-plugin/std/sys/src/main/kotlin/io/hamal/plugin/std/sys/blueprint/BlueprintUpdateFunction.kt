@@ -12,7 +12,7 @@ import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.ApiSdk
-import io.hamal.lib.sdk.api.ApiBlueprintUpdateReq
+import io.hamal.lib.sdk.api.ApiBlueprintUpdateRequest
 
 class BlueprintUpdateFunction(
     private val sdk: ApiSdk
@@ -25,7 +25,7 @@ class BlueprintUpdateFunction(
         return try {
             val res = sdk.blueprint.update(
                 BlueprintId(arg1.getString("id")),
-                ApiBlueprintUpdateReq(
+                ApiBlueprintUpdateRequest(
                     name = arg1.findString("name")?.let { BlueprintName(it) },
                     inputs = BlueprintInputs(),
                     value = arg1.findString("value")?.let { CodeValue(it) }

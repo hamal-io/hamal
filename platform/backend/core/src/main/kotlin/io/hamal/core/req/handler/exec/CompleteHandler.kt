@@ -7,7 +7,7 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain.State
-import io.hamal.lib.domain.submitted.ExecCompleteSubmitted
+import io.hamal.lib.domain.request.ExecCompleteRequested
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.*
 import io.hamal.repository.api.event.ExecutionCompletedEvent
@@ -26,9 +26,9 @@ class ExecCompleteHandler(
     private val eventBrokerRepository: BrokerRepository,
     private val generateDomainId: GenerateId,
     private val flowQueryRepository: FlowQueryRepository
-) : ReqHandler<ExecCompleteSubmitted>(ExecCompleteSubmitted::class) {
+) : ReqHandler<ExecCompleteRequested>(ExecCompleteRequested::class) {
 
-    override fun invoke(req: ExecCompleteSubmitted) {
+    override fun invoke(req: ExecCompleteRequested) {
         val cmdId = req.cmdId()
 
         val exec = execQueryRepository.get(req.execId)
@@ -42,7 +42,7 @@ class ExecCompleteHandler(
             .also { appendEvents(cmdId, flowId, req.events) }
     }
 
-    private fun completeExec(req: ExecCompleteSubmitted) =
+    private fun completeExec(req: ExecCompleteRequested) =
         execCmdRepository.complete(
             ExecCmdRepository.CompleteCmd(
                 req.cmdId(),

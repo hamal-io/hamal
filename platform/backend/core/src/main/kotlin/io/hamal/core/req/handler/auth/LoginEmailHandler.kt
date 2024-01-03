@@ -7,16 +7,16 @@ import io.hamal.lib.domain.vo.AuthTokenExpiresAt
 import io.hamal.repository.api.AuthCmdRepository.CreateTokenAuthCmd
 import io.hamal.repository.api.AuthRepository
 import io.hamal.repository.api.EmailAuth
-import io.hamal.lib.domain.submitted.AuthLoginEmailSubmitted
+import io.hamal.lib.domain.request.AuthLoginEmailRequested
 import org.springframework.stereotype.Component
 import java.time.temporal.ChronoUnit.DAYS
 
 @Component
 class LoginEmailHandler(
     private val authRepository: AuthRepository
-) : ReqHandler<AuthLoginEmailSubmitted>(AuthLoginEmailSubmitted::class) {
+) : ReqHandler<AuthLoginEmailRequested>(AuthLoginEmailRequested::class) {
 
-    override fun invoke(req: AuthLoginEmailSubmitted) {
+    override fun invoke(req: AuthLoginEmailRequested) {
         authRepository.list(req.accountId).filterIsInstance<EmailAuth>().find { it.hash == req.hash }?.let { auth ->
             authRepository.create(
                 CreateTokenAuthCmd(

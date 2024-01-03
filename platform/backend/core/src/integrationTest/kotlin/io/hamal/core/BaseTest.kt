@@ -87,10 +87,10 @@ internal abstract class BaseTest {
     lateinit var platformEventBrokerRepository: BrokerRepository
 
     @Autowired
-    lateinit var reqQueryRepository: ReqQueryRepository
+    lateinit var reqQueryRepository: RequestQueryRepository
 
     @Autowired
-    lateinit var reqCmdRepository: ReqCmdRepository
+    lateinit var reqCmdRepository: RequestCmdRepository
 
     @Autowired
     lateinit var blueprintCmdRepository: BlueprintCmdRepository

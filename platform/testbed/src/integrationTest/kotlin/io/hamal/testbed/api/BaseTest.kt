@@ -15,7 +15,7 @@ import io.hamal.lib.kua.SandboxContext
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.ApiSdkImpl
-import io.hamal.lib.sdk.api.ApiAdhocInvokeReq
+import io.hamal.lib.sdk.api.ApiAdhocInvokeRequest
 import io.hamal.plugin.net.http.PluginHttpFactory
 import io.hamal.plugin.std.debug.PluginDebugFactory
 import io.hamal.plugin.std.log.PluginLogFactory
@@ -197,7 +197,7 @@ class ClearController {
     lateinit var flowRepository: FlowRepository
 
     @Autowired
-    lateinit var reqRepository: ReqRepository
+    lateinit var reqRepository: RequestRepository
 
     @Autowired
     lateinit var triggerRepository: TriggerRepository
@@ -332,7 +332,7 @@ abstract class BaseApiTest {
 
             val execReq = sdk.adhoc.invoke(
                 FlowId(1),
-                ApiAdhocInvokeReq(InvocationInputs(), CodeValue(String(Files.readAllBytes(file))))
+                ApiAdhocInvokeRequest(InvocationInputs(), CodeValue(String(Files.readAllBytes(file))))
             )
 
             sdk.await(execReq)

@@ -5,9 +5,9 @@ import io.hamal.core.adapter.BlueprintCreatePort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.sdk.api.ApiBlueprintCreateReq
-import io.hamal.lib.sdk.api.ApiSubmitted
-import io.hamal.lib.domain.submitted.BlueprintCreateSubmitted
+import io.hamal.lib.sdk.api.ApiBlueprintCreateRequest
+import io.hamal.lib.sdk.api.ApiRequested
+import io.hamal.lib.domain.request.BlueprintCreateRequested
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -22,8 +22,8 @@ class BlueprintCreateController(
     @PostMapping("/v1/groups/{groupId}/blueprints")
     fun createBlueprint(
         @PathVariable("groupId") groupId: GroupId,
-        @RequestBody req: ApiBlueprintCreateReq
-    ): ResponseEntity<ApiSubmitted> = retry {
-        createBlueprint(groupId, AccountId(1), req, BlueprintCreateSubmitted::accepted)
+        @RequestBody req: ApiBlueprintCreateRequest
+    ): ResponseEntity<ApiRequested> = retry {
+        createBlueprint(groupId, AccountId(1), req, BlueprintCreateRequested::accepted)
     }
 }

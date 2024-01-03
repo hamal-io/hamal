@@ -11,7 +11,7 @@ import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.api.ApiError
 import io.hamal.lib.sdk.api.ApiFlow
-import io.hamal.lib.sdk.api.ApiFlowCreateReq
+import io.hamal.lib.sdk.api.ApiFlowCreateRequest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -31,7 +31,7 @@ internal class FlowGetControllerTest : FlowBaseControllerTest() {
     fun `Get flow`() {
         val flowId = awaitCompleted(
             createFlow(
-                ApiFlowCreateReq(
+                ApiFlowCreateRequest(
                     name = FlowName("flow-one"),
                     inputs = FlowInputs(MapType(mutableMapOf("hamal" to StringType("rockz")))),
                     type = null

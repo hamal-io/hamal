@@ -8,7 +8,7 @@ import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.api.ApiError
-import io.hamal.lib.sdk.api.ApiFuncCreateReq
+import io.hamal.lib.sdk.api.ApiFuncCreateRequest
 import io.hamal.repository.api.FlowCmdRepository.CreateCmd
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.empty
@@ -21,7 +21,7 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
     @TestFactory
     fun `Create func for default flow id`() {
         val result = createFunc(
-            ApiFuncCreateReq(
+            ApiFuncCreateRequest(
                 name = FuncName("test-func"),
                 inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
                 code = CodeValue("13 + 37")
@@ -59,7 +59,7 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
 
         val result = createFunc(
             flowId = flow.id,
-            req = ApiFuncCreateReq(
+            req = ApiFuncCreateRequest(
                 name = FuncName("test-func"),
                 inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
                 code = CodeValue("13 + 37")
@@ -90,7 +90,7 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
 
         val response = httpTemplate.post("/v1/flows/12345/funcs")
             .body(
-                ApiFuncCreateReq(
+                ApiFuncCreateRequest(
                     name = FuncName("test-func"),
                     inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
                     code = CodeValue("13 + 37")

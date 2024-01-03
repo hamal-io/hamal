@@ -192,7 +192,7 @@ class ClearController {
     lateinit var flowRepository: FlowRepository
 
     @Autowired
-    lateinit var reqRepository: ReqRepository
+    lateinit var reqRepository: RequestRepository
 
     @Autowired
     lateinit var triggerRepository: TriggerRepository

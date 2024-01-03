@@ -130,13 +130,13 @@ open class MemoryRepositoryConfig {
     open fun execLogQueryRepository(): ExecLogQueryRepository = execLogRepository()
 
     @Bean
-    open fun reqRepository(): ReqRepository = ReqMemoryRepository()
+    open fun reqRepository(): RequestRepository = ReqMemoryRepository()
 
     @Bean
-    open fun reqCmdRepository(): ReqCmdRepository = reqRepository()
+    open fun reqCmdRepository(): RequestCmdRepository = reqRepository()
 
     @Bean
-    open fun reqQueryRepository(): ReqQueryRepository = reqRepository()
+    open fun reqQueryRepository(): RequestQueryRepository = reqRepository()
 
     @Bean
     open fun stateRepository(): StateRepository = StateMemoryRepository()

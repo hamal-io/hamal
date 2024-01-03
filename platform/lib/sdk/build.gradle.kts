@@ -7,7 +7,6 @@ plugins {
 dependencies {
     api(project(":platform:lib:http"))
     api(project(":platform:lib:domain"))
-    api(project(":platform:backend:request"))
     testImplementation(external.junit)
     testImplementation(external.hamcrest)
 }

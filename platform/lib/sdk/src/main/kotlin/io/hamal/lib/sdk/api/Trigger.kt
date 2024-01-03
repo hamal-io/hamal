@@ -3,16 +3,16 @@ package io.hamal.lib.sdk.api
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.HookMethod
-import io.hamal.lib.domain._enum.ReqStatus
+import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain._enum.TriggerType
+import io.hamal.lib.domain.request.TriggerCreateRequest
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpRequest
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiTriggerService.TriggerQuery
 import io.hamal.lib.sdk.fold
-import io.hamal.request.TriggerCreateReq
 import kotlin.time.Duration
 
 data class ApiTriggerCreateReq(
@@ -26,23 +26,23 @@ data class ApiTriggerCreateReq(
     override val hookId: HookId? = null,
     override val hookMethod: HookMethod? = null,
     override val cron: CronPattern? = null
-) : TriggerCreateReq
+) : TriggerCreateRequest
 
 data class ApiTriggerCreateSubmitted(
-    override val id: ReqId,
-    override val status: ReqStatus,
+    override val id: RequestId,
+    override val status: RequestStatus,
     val triggerId: TriggerId,
     val groupId: GroupId,
     val flowId: FlowId
-) : ApiSubmitted
+) : ApiRequested
 
 
 data class ApiTriggerStatusSubmitted(
-    override val id: ReqId,
-    override val status: ReqStatus,
+    override val id: RequestId,
+    override val status: RequestStatus,
     val triggerId: TriggerId,
     val triggerStatus: TriggerStatus
-) : ApiSubmitted
+) : ApiRequested
 
 data class ApiTriggerList(
     val triggers: List<Trigger>

@@ -14,9 +14,9 @@ import org.hamcrest.Matchers.equalTo
 internal sealed class FuncBaseControllerTest : BaseControllerTest() {
 
     fun createFunc(
-        req: ApiFuncCreateReq,
+        req: ApiFuncCreateRequest,
         flowId: FlowId = FlowId(1)
-    ): ApiFuncCreateSubmitted {
+    ): ApiFuncCreateRequested {
         val response = httpTemplate.post("/v1/flows/{flowId}/funcs")
             .path("flowId", flowId)
             .body(req)
@@ -24,7 +24,7 @@ internal sealed class FuncBaseControllerTest : BaseControllerTest() {
 
         assertThat(response.statusCode, equalTo(Accepted))
         require(response is HttpSuccessResponse) { "request was not successful" }
-        return response.result(ApiFuncCreateSubmitted::class)
+        return response.result(ApiFuncCreateRequested::class)
     }
 
     fun listFuncs(): ApiFuncList {
@@ -47,7 +47,7 @@ internal sealed class FuncBaseControllerTest : BaseControllerTest() {
         return getFuncResponse.result(ApiFunc::class)
     }
 
-    fun updateFunc(funcId: FuncId, updateReq: ApiFuncUpdateReq): ApiFuncUpdateSubmitted {
+    fun updateFunc(funcId: FuncId, updateReq: ApiFuncUpdateRequest): ApiFuncUpdateRequested {
         val updateResponse = httpTemplate.patch("/v1/funcs/{funcId}")
             .path("funcId", funcId)
             .body(updateReq)
@@ -55,10 +55,10 @@ internal sealed class FuncBaseControllerTest : BaseControllerTest() {
 
         assertThat(updateResponse.statusCode, equalTo(Accepted))
         require(updateResponse is HttpSuccessResponse) { "request was not successful" }
-        return updateResponse.result(ApiFuncUpdateSubmitted::class)
+        return updateResponse.result(ApiFuncUpdateRequested::class)
     }
 
-    fun deployFunc(funcId: FuncId, req: ApiFuncDeployReq): ApiFuncDeploySubmitted {
+    fun deployFunc(funcId: FuncId, req: ApiFuncDeployRequest): ApiFuncDeployRequested {
         val deployResponse = httpTemplate.post("/v1/funcs/{funcId}/deploy")
             .path("funcId", funcId)
             .body(req)
@@ -66,7 +66,7 @@ internal sealed class FuncBaseControllerTest : BaseControllerTest() {
 
         assertThat(deployResponse.statusCode, equalTo(Accepted))
         require(deployResponse is HttpSuccessResponse) { "request was not successful" }
-        return deployResponse.result(ApiFuncDeploySubmitted::class)
+        return deployResponse.result(ApiFuncDeployRequested::class)
     }
 
     fun listDeployments(funcId: FuncId): ApiFuncDeploymentList {

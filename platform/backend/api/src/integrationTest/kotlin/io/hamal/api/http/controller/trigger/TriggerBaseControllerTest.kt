@@ -14,10 +14,10 @@ import kotlin.time.Duration.Companion.seconds
 
 internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
 
-    fun createFunc(name: FuncName): ApiFuncCreateSubmitted {
+    fun createFunc(name: FuncName): ApiFuncCreateRequested {
         val createTopicResponse = httpTemplate.post("/v1/flows/1/funcs")
             .body(
-                ApiFuncCreateReq(
+                ApiFuncCreateRequest(
                     name = name,
                     inputs = FuncInputs(),
                     code = CodeValue("")
@@ -28,31 +28,31 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
         assertThat(createTopicResponse.statusCode, equalTo(Accepted))
         require(createTopicResponse is HttpSuccessResponse) { "request was not successful" }
 
-        return createTopicResponse.result(ApiFuncCreateSubmitted::class)
+        return createTopicResponse.result(ApiFuncCreateRequested::class)
     }
 
-    fun createTopic(topicName: TopicName): ApiTopicCreateSubmitted {
+    fun createTopic(topicName: TopicName): ApiTopicCreateRequested {
         val createTopicResponse = httpTemplate.post("/v1/flows/{flowId}/topics")
             .path("flowId", testFlow.id)
-            .body(ApiTopicCreateReq(topicName))
+            .body(ApiTopicCreateRequest(topicName))
             .execute()
 
         assertThat(createTopicResponse.statusCode, equalTo(Accepted))
         require(createTopicResponse is HttpSuccessResponse) { "request was not successful" }
 
-        return createTopicResponse.result(ApiTopicCreateSubmitted::class)
+        return createTopicResponse.result(ApiTopicCreateRequested::class)
     }
 
-    fun createHook(hookName: HookName): ApiHookCreateSubmitted {
+    fun createHook(hookName: HookName): ApiHookCreateRequested {
         val createHookResponse = httpTemplate.post("/v1/flows/1/hooks")
             .path("groupId", testGroup.id)
-            .body(ApiHookCreateReq(hookName))
+            .body(ApiHookCreateRequest(hookName))
             .execute()
 
         assertThat(createHookResponse.statusCode, equalTo(Accepted))
         require(createHookResponse is HttpSuccessResponse) { "request was not successful" }
 
-        return createHookResponse.result(ApiHookCreateSubmitted::class)
+        return createHookResponse.result(ApiHookCreateRequested::class)
     }
 
     fun createFixedRateTrigger(name: TriggerName): ApiTriggerCreateSubmitted {

@@ -3,14 +3,14 @@ package io.hamal.api.http.controller.hook
 import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain._enum.HookMethod.*
-import io.hamal.lib.domain._enum.ReqStatus
-import io.hamal.lib.domain._enum.ReqStatus.Submitted
+import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain._enum.RequestStatus.Submitted
+import io.hamal.lib.domain.request.HookInvokeRequested
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.HookQueryRepository
-import io.hamal.repository.api.ReqCmdRepository
-import io.hamal.lib.domain.submitted.HookInvokeSubmitted
+import io.hamal.repository.api.RequestCmdRepository
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.HttpStatus.ACCEPTED
 import org.springframework.http.ResponseEntity
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*
 @RestController
 internal class HookInvokeController(
     private val generateDomainId: GenerateId,
-    private val reqCmdRepository: ReqCmdRepository,
+    private val reqCmdRepository: RequestCmdRepository,
     private val hookQueryRepository: HookQueryRepository
 ) {
     @GetMapping("/v1/webhooks/{id}")
@@ -40,8 +40,8 @@ internal class HookInvokeController(
     private fun handle(id: HookId, req: HttpServletRequest): ResponseEntity<Response> {
         val hook = hookQueryRepository.get(id)
 
-        val result = HookInvokeSubmitted(
-            id = generateDomainId(::ReqId),
+        val result = HookInvokeRequested(
+            id = generateDomainId(::RequestId),
             status = Submitted,
             hookId = id,
             groupId = hook.groupId,
@@ -85,10 +85,10 @@ internal class HookInvokeController(
     }
 
     data class Response(
-        val reqId: ReqId,
-        val status: ReqStatus,
+        val reqId: RequestId,
+        val status: RequestStatus,
         val id: HookId
     ) {
-        constructor(req: HookInvokeSubmitted) : this(req.id, req.status, req.hookId)
+        constructor(req: HookInvokeRequested) : this(req.id, req.status, req.hookId)
     }
 }

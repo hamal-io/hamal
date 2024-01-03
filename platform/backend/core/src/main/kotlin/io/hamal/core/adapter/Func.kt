@@ -1,22 +1,18 @@
 package io.hamal.core.adapter
 
 import io.hamal.lib.domain.GenerateId
-import io.hamal.lib.domain._enum.ReqStatus
+import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain.request.*
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.*
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
-import io.hamal.lib.domain.submitted.ExecInvokeSubmitted
-import io.hamal.lib.domain.submitted.FuncCreateSubmitted
-import io.hamal.lib.domain.submitted.FuncDeploySubmitted
-import io.hamal.lib.domain.submitted.FuncUpdateSubmitted
-import io.hamal.request.*
 import org.springframework.stereotype.Component
 
 interface FuncCreatePort {
     operator fun <T : Any> invoke(
         flowId: FlowId,
-        req: FuncCreateReq,
-        responseHandler: (FuncCreateSubmitted) -> T
+        req: FuncCreateRequest,
+        responseHandler: (FuncCreateRequested) -> T
     ): T
 }
 
@@ -27,14 +23,14 @@ interface FuncGetPort {
 interface FuncInvokePort {
     operator fun <T : Any> invoke(
         funcId: FuncId,
-        req: FuncInvokeReq,
-        responseHandler: (ExecInvokeSubmitted) -> T
+        req: FuncInvokeRequest,
+        responseHandler: (ExecInvokeRequested) -> T
     ): T
 
     operator fun <T : Any> invoke(
         funcId: FuncId,
-        req: FuncInvokeVersionReq,
-        responseHandler: (ExecInvokeSubmitted) -> T
+        req: FuncInvokeVersionRequest,
+        responseHandler: (ExecInvokeRequested) -> T
     ): T
 }
 
@@ -49,16 +45,16 @@ interface FuncDeploymentListPort {
 interface FuncDeployPort {
     operator fun <T : Any> invoke(
         funcId: FuncId,
-        req: FuncDeployReq,
-        responseHandler: (FuncDeploySubmitted) -> T
+        req: FuncDeployRequest,
+        responseHandler: (FuncDeployRequested) -> T
     ): T
 }
 
 interface FuncUpdatePort {
     operator fun <T : Any> invoke(
         funcId: FuncId,
-        req: FuncUpdateReq,
-        responseHandler: (FuncUpdateSubmitted) -> T
+        req: FuncUpdateRequest,
+        responseHandler: (FuncUpdateRequested) -> T
     ): T
 
 }
@@ -72,18 +68,18 @@ class FuncAdapter(
     private val funcQueryRepository: FuncQueryRepository,
     private val generateDomainId: GenerateId,
     private val flowQueryRepository: FlowQueryRepository,
-    private val reqCmdRepository: ReqCmdRepository
+    private val reqCmdRepository: RequestCmdRepository
 ) : FuncPort {
 
     override fun <T : Any> invoke(
         flowId: FlowId,
-        req: FuncCreateReq,
-        responseHandler: (FuncCreateSubmitted) -> T
+        req: FuncCreateRequest,
+        responseHandler: (FuncCreateRequested) -> T
     ): T {
         val flow = flowQueryRepository.get(flowId)
-        return FuncCreateSubmitted(
-            id = generateDomainId(::ReqId),
-            status = ReqStatus.Submitted,
+        return FuncCreateRequested(
+            id = generateDomainId(::RequestId),
+            status = RequestStatus.Submitted,
             groupId = flow.groupId,
             funcId = generateDomainId(::FuncId),
             flowId = flowId,
@@ -104,14 +100,14 @@ class FuncAdapter(
 
     override fun <T : Any> invoke(
         funcId: FuncId,
-        req: FuncInvokeReq,
-        responseHandler: (ExecInvokeSubmitted) -> T
+        req: FuncInvokeRequest,
+        responseHandler: (ExecInvokeRequested) -> T
     ): T {
         val func = funcQueryRepository.get(funcId)
 
-        return ExecInvokeSubmitted(
-            id = generateDomainId(::ReqId),
-            status = ReqStatus.Submitted,
+        return ExecInvokeRequested(
+            id = generateDomainId(::RequestId),
+            status = RequestStatus.Submitted,
             execId = generateDomainId(::ExecId),
             flowId = func.flowId,
             groupId = func.groupId,
@@ -125,8 +121,8 @@ class FuncAdapter(
 
     override fun <T : Any> invoke(
         funcId: FuncId,
-        req: FuncInvokeVersionReq,
-        responseHandler: (ExecInvokeSubmitted) -> T
+        req: FuncInvokeVersionRequest,
+        responseHandler: (ExecInvokeRequested) -> T
     ): T {
         val func = funcQueryRepository.get(funcId)
 
@@ -134,9 +130,9 @@ class FuncAdapter(
             codeQueryRepository.get(func.code.id, it)
         } ?: func.code.version
 
-        return ExecInvokeSubmitted(
-            id = generateDomainId(::ReqId),
-            status = ReqStatus.Submitted,
+        return ExecInvokeRequested(
+            id = generateDomainId(::RequestId),
+            status = RequestStatus.Submitted,
             execId = generateDomainId(::ExecId),
             flowId = func.flowId,
             groupId = func.groupId,
@@ -173,14 +169,14 @@ class FuncAdapter(
 
     override fun <T : Any> invoke(
         funcId: FuncId,
-        req: FuncUpdateReq,
-        responseHandler: (FuncUpdateSubmitted) -> T
+        req: FuncUpdateRequest,
+        responseHandler: (FuncUpdateRequested) -> T
     ): T {
         ensureFuncExists(funcId)
         val func = funcQueryRepository.get(funcId)
-        return FuncUpdateSubmitted(
-            id = generateDomainId(::ReqId),
-            status = ReqStatus.Submitted,
+        return FuncUpdateRequested(
+            id = generateDomainId(::RequestId),
+            status = RequestStatus.Submitted,
             groupId = func.groupId,
             funcId = funcId,
             name = req.name,
@@ -191,16 +187,16 @@ class FuncAdapter(
 
     override fun <T : Any> invoke(
         funcId: FuncId,
-        req: FuncDeployReq,
-        responseHandler: (FuncDeploySubmitted) -> T
+        req: FuncDeployRequest,
+        responseHandler: (FuncDeployRequested) -> T
     ): T {
         val func = funcQueryRepository.get(funcId)
         req.version?.let {
             ensureCodeExists(func.code.id, req.version!!)
         }
-        return FuncDeploySubmitted(
-            id = generateDomainId(::ReqId),
-            status = ReqStatus.Submitted,
+        return FuncDeployRequested(
+            id = generateDomainId(::RequestId),
+            status = RequestStatus.Submitted,
             groupId = func.groupId,
             funcId = funcId,
             version = req.version,

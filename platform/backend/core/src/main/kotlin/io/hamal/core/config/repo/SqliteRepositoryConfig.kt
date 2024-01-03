@@ -162,13 +162,13 @@ open class SqliteRepositoryConfig(backendBasePath: BackendBasePath) {
     open fun stateQueryRepository(): StateQueryRepository = stateRepository()
 
     @Bean
-    open fun reqRepository(): ReqRepository = ReqMemoryRepository()
+    open fun reqRepository(): RequestRepository = ReqMemoryRepository()
 
     @Bean
-    open fun reqCmdRepository(): ReqCmdRepository = reqRepository()
+    open fun reqCmdRepository(): RequestCmdRepository = reqRepository()
 
     @Bean
-    open fun reqQueryRepository(): ReqQueryRepository = reqRepository()
+    open fun reqQueryRepository(): RequestQueryRepository = reqRepository()
 
     private val path = Path(backendBasePath.value)
 }

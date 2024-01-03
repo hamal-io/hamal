@@ -11,7 +11,7 @@ import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.ApiSdk
-import io.hamal.lib.sdk.api.ApiExtensionCreateReq
+import io.hamal.lib.sdk.api.ApiExtensionCreateRequest
 
 class ExtensionCreateFunction(
     private val sdk: ApiSdk
@@ -23,7 +23,7 @@ class ExtensionCreateFunction(
         return try {
             val res = sdk.extension.create(
                 ctx[GroupId::class],
-                ApiExtensionCreateReq(
+                ApiExtensionCreateRequest(
                     name = ExtensionName(arg1.getString("name")),
                     code = CodeValue(arg1.getString("code"))
                 )

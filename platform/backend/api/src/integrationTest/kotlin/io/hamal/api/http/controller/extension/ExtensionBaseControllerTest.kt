@@ -10,7 +10,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 
 internal sealed class ExtensionBaseControllerTest : BaseControllerTest() {
-    fun createExtension(req: ApiExtensionCreateReq): ApiExtensionCreateSubmitted {
+    fun createExtension(req: ApiExtensionCreateRequest): ApiExtensionCreateRequested {
         val createResponse = httpTemplate.post("/v1/groups/{groupId}/extensions")
             .path("groupId", testGroup.id)
             .body(req)
@@ -18,7 +18,7 @@ internal sealed class ExtensionBaseControllerTest : BaseControllerTest() {
 
         assertThat(createResponse.statusCode, equalTo(HttpStatusCode.Accepted))
         require(createResponse is HttpSuccessResponse) { "request was successful" }
-        return createResponse.result(ApiExtensionCreateSubmitted::class)
+        return createResponse.result(ApiExtensionCreateRequested::class)
     }
 
     fun getExtension(extId: ExtensionId): ApiExtension {
@@ -42,7 +42,7 @@ internal sealed class ExtensionBaseControllerTest : BaseControllerTest() {
 
     }
 
-    fun updateExtension(extId: ExtensionId, req: ApiExtensionUpdateReq): ApiExtensionUpdateSubmitted {
+    fun updateExtension(extId: ExtensionId, req: ApiExtensionUpdateRequest): ApiExtensionUpdateRequested {
         val updateResponse = httpTemplate.patch("/v1/extensions/{extId}")
             .path("extId", extId)
             .body(req)
@@ -50,7 +50,7 @@ internal sealed class ExtensionBaseControllerTest : BaseControllerTest() {
 
         assertThat(updateResponse.statusCode, equalTo(HttpStatusCode.Accepted))
         require(updateResponse is HttpSuccessResponse) { "request was successful" }
-        return updateResponse.result(ApiExtensionUpdateSubmitted::class)
+        return updateResponse.result(ApiExtensionUpdateRequested::class)
     }
 
 }

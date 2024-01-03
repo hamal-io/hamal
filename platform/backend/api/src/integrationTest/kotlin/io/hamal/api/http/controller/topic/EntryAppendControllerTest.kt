@@ -8,7 +8,7 @@ import io.hamal.lib.http.body
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.api.ApiError
-import io.hamal.lib.domain.submitted.TriggerCreateSubmitted
+import io.hamal.lib.domain.request.TriggerCreateRequested
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
@@ -75,6 +75,6 @@ internal class EntryAppendControllerTest : TopicBaseControllerTest() {
         val error = topicResponse.error(ApiError::class)
         assertThat(error.message, equalTo("Topic not found"))
 
-        verifyNoRequests(TriggerCreateSubmitted::class)
+        verifyNoRequests(TriggerCreateRequested::class)
     }
 }

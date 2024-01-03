@@ -6,7 +6,7 @@ import io.hamal.core.req.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain._enum.HookMethod.Post
 import io.hamal.lib.domain._enum.TriggerType.*
-import io.hamal.lib.domain.submitted.TriggerCreateSubmitted
+import io.hamal.lib.domain.request.TriggerCreateRequested
 import io.hamal.repository.api.FuncQueryRepository
 import io.hamal.repository.api.HookQueryRepository
 import io.hamal.repository.api.Trigger
@@ -22,12 +22,12 @@ class TriggerCreateHandler(
     private val funcQueryRepository: FuncQueryRepository,
     private val eventBrokerRepository: BrokerRepository,
     private val hookQueryRepository: HookQueryRepository
-) : ReqHandler<TriggerCreateSubmitted>(TriggerCreateSubmitted::class) {
+) : ReqHandler<TriggerCreateRequested>(TriggerCreateRequested::class) {
 
-    override fun invoke(req: TriggerCreateSubmitted) {
+    override fun invoke(req: TriggerCreateRequested) {
         val func = funcQueryRepository.get(req.funcId)
 
-        val trigger = when (req.type) {
+        val trigger = when (req.triggerType) {
             FixedRate -> triggerCmdRepository.create(
                 TriggerCmdRepository.CreateFixedRateCmd(
                     id = req.cmdId(),

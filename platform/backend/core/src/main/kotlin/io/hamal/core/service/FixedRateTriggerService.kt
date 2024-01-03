@@ -15,7 +15,7 @@ import io.hamal.repository.api.FixedRateTrigger
 import io.hamal.repository.api.FuncQueryRepository
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerQueryRepository
-import io.hamal.request.FuncInvokeReq
+import io.hamal.lib.domain.request.FuncInvokeRequest
 import org.springframework.beans.factory.DisposableBean
 import org.springframework.context.ApplicationListener
 import org.springframework.context.event.ContextRefreshedEvent
@@ -80,7 +80,7 @@ internal class FixedRateTriggerService(
 internal fun FixedRateTriggerService.requestInvocation(trigger: FixedRateTrigger) {
     invokeFunc(
         trigger.funcId,
-        object : FuncInvokeReq {
+        object : FuncInvokeRequest {
             override val correlationId = trigger.correlationId ?: CorrelationId.default
             override val inputs = InvocationInputs()
             override val invocation = EmptyInvocation

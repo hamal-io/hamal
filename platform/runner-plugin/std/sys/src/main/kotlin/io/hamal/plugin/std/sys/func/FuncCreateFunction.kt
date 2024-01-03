@@ -13,7 +13,7 @@ import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.ApiSdk
-import io.hamal.lib.sdk.api.ApiFuncCreateReq
+import io.hamal.lib.sdk.api.ApiFuncCreateRequest
 
 class FuncCreateFunction(
     private val sdk: ApiSdk
@@ -25,7 +25,7 @@ class FuncCreateFunction(
         return try {
             val res = sdk.func.create(
                 arg1.findString("flow_id")?.let { FlowId(SnowflakeId(it)) } ?: ctx[FlowId::class],
-                ApiFuncCreateReq(
+                ApiFuncCreateRequest(
                     name = FuncName(arg1.getString("name")),
                     inputs = FuncInputs(),
                     code = CodeValue(arg1.getString("code"))

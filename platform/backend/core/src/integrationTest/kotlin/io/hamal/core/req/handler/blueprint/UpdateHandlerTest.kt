@@ -2,12 +2,12 @@ package io.hamal.core.req.handler.blueprint
 
 import io.hamal.core.req.handler.BaseReqHandlerTest
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain._enum.ReqStatus
+import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.BlueprintCmdRepository
-import io.hamal.lib.domain.submitted.BlueprintUpdateSubmitted
+import io.hamal.lib.domain.request.BlueprintUpdateRequested
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -57,9 +57,9 @@ internal class BlueprintUpdateHandlerTest : BaseReqHandlerTest() {
     }
 
     private val submittedUpdateBlueprintReq by lazy {
-        BlueprintUpdateSubmitted(
-            id = ReqId(2),
-            status = ReqStatus.Submitted,
+        BlueprintUpdateRequested(
+            id = RequestId(2),
+            status = RequestStatus.Submitted,
             groupId = testGroup.id,
             blueprintId = BlueprintId(123),
             name = BlueprintName("UpdatedBlueprint"),

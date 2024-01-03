@@ -12,7 +12,7 @@ import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.ApiSdk
-import io.hamal.lib.sdk.api.ApiBlueprintCreateReq
+import io.hamal.lib.sdk.api.ApiBlueprintCreateRequest
 
 class BlueprintCreateFunction(
     private val sdk: ApiSdk
@@ -24,7 +24,7 @@ class BlueprintCreateFunction(
         return try {
             val res = sdk.blueprint.create(
                 ctx[GroupId::class],
-                ApiBlueprintCreateReq(
+                ApiBlueprintCreateRequest(
                     name = BlueprintName(arg1.getString("name")),
                     inputs = BlueprintInputs(),
                     value = CodeValue(arg1.getString("value"))

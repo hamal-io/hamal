@@ -5,7 +5,7 @@ import io.hamal.core.req.ReqHandler
 import io.hamal.core.req.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
-import io.hamal.lib.domain.submitted.AccountConvertSubmitted
+import io.hamal.lib.domain.request.AccountConvertRequested
 import io.hamal.lib.domain.vo.AuthTokenExpiresAt
 import io.hamal.repository.api.Account
 import io.hamal.repository.api.AccountCmdRepository
@@ -21,9 +21,9 @@ class AccountConvertAnonymousHandler(
     val accountCmdRepository: AccountCmdRepository,
     val authCmdRepository: AuthCmdRepository,
     val eventEmitter: PlatformEventEmitter,
-) : ReqHandler<AccountConvertSubmitted>(AccountConvertSubmitted::class) {
+) : ReqHandler<AccountConvertRequested>(AccountConvertRequested::class) {
 
-    override fun invoke(req: AccountConvertSubmitted) {
+    override fun invoke(req: AccountConvertRequested) {
         convertAccount(req)
             .also { emitEvent(req.cmdId(), it) }
             .also { createEmailAuth(req) }
@@ -31,7 +31,7 @@ class AccountConvertAnonymousHandler(
     }
 }
 
-private fun AccountConvertAnonymousHandler.convertAccount(req: AccountConvertSubmitted): Account {
+private fun AccountConvertAnonymousHandler.convertAccount(req: AccountConvertRequested): Account {
     return accountCmdRepository.convert(
         AccountCmdRepository.ConvertCmd(
             id = req.cmdId(),
@@ -42,7 +42,7 @@ private fun AccountConvertAnonymousHandler.convertAccount(req: AccountConvertSub
 }
 
 
-private fun AccountConvertAnonymousHandler.createEmailAuth(req: AccountConvertSubmitted): Auth {
+private fun AccountConvertAnonymousHandler.createEmailAuth(req: AccountConvertRequested): Auth {
     return authCmdRepository.create(
         AuthCmdRepository.CreateEmailAuthCmd(
             id = req.cmdId(),
@@ -54,7 +54,7 @@ private fun AccountConvertAnonymousHandler.createEmailAuth(req: AccountConvertSu
     )
 }
 
-private fun AccountConvertAnonymousHandler.createTokenAuth(req: AccountConvertSubmitted): Auth {
+private fun AccountConvertAnonymousHandler.createTokenAuth(req: AccountConvertRequested): Auth {
     return authCmdRepository.create(
         AuthCmdRepository.CreateTokenAuthCmd(
             id = req.cmdId(),

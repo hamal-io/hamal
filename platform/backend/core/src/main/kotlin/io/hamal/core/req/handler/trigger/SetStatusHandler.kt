@@ -5,7 +5,7 @@ import io.hamal.core.req.ReqHandler
 import io.hamal.core.req.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain._enum.TriggerStatus
-import io.hamal.lib.domain.submitted.TriggerStatusSubmitted
+import io.hamal.lib.domain.request.TriggerStatusRequested
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerCmdRepository
 import io.hamal.repository.api.event.TriggerActivatedEvent
@@ -16,13 +16,13 @@ import org.springframework.stereotype.Component
 class TriggerSetStatusHandler(
     val triggerCmdRepository: TriggerCmdRepository,
     val eventEmitter: PlatformEventEmitter
-) : ReqHandler<TriggerStatusSubmitted>(TriggerStatusSubmitted::class) {
-    override fun invoke(req: TriggerStatusSubmitted) {
+) : ReqHandler<TriggerStatusRequested>(TriggerStatusRequested::class) {
+    override fun invoke(req: TriggerStatusRequested) {
         setStatus(req).also { emitEvent(req.cmdId(), it) }
     }
 }
 
-private fun TriggerSetStatusHandler.setStatus(req: TriggerStatusSubmitted): Trigger {
+private fun TriggerSetStatusHandler.setStatus(req: TriggerStatusRequested): Trigger {
     return triggerCmdRepository.set(
         req.triggerId, TriggerCmdRepository.SetTriggerStatusCmd(
             id = req.cmdId(),

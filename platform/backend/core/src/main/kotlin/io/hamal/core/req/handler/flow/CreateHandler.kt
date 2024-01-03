@@ -5,7 +5,7 @@ import io.hamal.core.req.ReqHandler
 import io.hamal.core.req.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.GenerateId
-import io.hamal.lib.domain.submitted.FlowCreateSubmitted
+import io.hamal.lib.domain.request.FlowCreateRequested
 import io.hamal.repository.api.Flow
 import io.hamal.repository.api.FlowCmdRepository
 import io.hamal.repository.api.FlowCmdRepository.CreateCmd
@@ -20,23 +20,23 @@ class FlowCreateHandler(
     val flowQueryRepository: FlowQueryRepository,
     val eventEmitter: PlatformEventEmitter,
     val generateDomainId: GenerateId
-) : ReqHandler<FlowCreateSubmitted>(FlowCreateSubmitted::class) {
+) : ReqHandler<FlowCreateRequested>(FlowCreateRequested::class) {
 
     /**
      * Creates new flows on a best-effort basis. Might throw an exception if used concurrently
      */
-    override fun invoke(req: FlowCreateSubmitted) {
+    override fun invoke(req: FlowCreateRequested) {
         createFlow(req).also { emitEvent(req.cmdId(), it) }
     }
 }
 
-private fun FlowCreateHandler.createFlow(req: FlowCreateSubmitted): Flow {
+private fun FlowCreateHandler.createFlow(req: FlowCreateRequested): Flow {
     return flowCmdRepository.create(
         CreateCmd(
             id = req.cmdId(),
             flowId = req.flowId,
             groupId = req.groupId,
-            type = req.type,
+            type = req.flowType,
             name = req.name,
             inputs = req.inputs
         )

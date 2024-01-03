@@ -1,26 +1,26 @@
 package io.hamal.core.adapter
 
 import io.hamal.lib.domain.GenerateId
-import io.hamal.lib.domain._enum.ReqStatus.Submitted
+import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.BlueprintId
 import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.domain.vo.ReqId
+import io.hamal.lib.domain.vo.RequestId
 import io.hamal.repository.api.Blueprint
 import io.hamal.repository.api.BlueprintQueryRepository
-import io.hamal.repository.api.ReqCmdRepository
-import io.hamal.lib.domain.submitted.BlueprintCreateSubmitted
-import io.hamal.lib.domain.submitted.BlueprintUpdateSubmitted
-import io.hamal.request.BlueprintCreateReq
-import io.hamal.request.BlueprintUpdateReq
+import io.hamal.repository.api.RequestCmdRepository
+import io.hamal.lib.domain.request.BlueprintCreateRequested
+import io.hamal.lib.domain.request.BlueprintUpdateRequested
+import io.hamal.lib.domain.request.BlueprintCreateRequest
+import io.hamal.lib.domain.request.BlueprintUpdateRequest
 import org.springframework.stereotype.Component
 
 interface BlueprintCreatePort {
     operator fun <T : Any> invoke(
         groupId: GroupId,
         accountId: AccountId,
-        req: BlueprintCreateReq,
-        responseHandler: (BlueprintCreateSubmitted) -> T
+        req: BlueprintCreateRequest,
+        responseHandler: (BlueprintCreateRequested) -> T
     ): T
 }
 
@@ -31,8 +31,8 @@ interface BlueprintGetPort {
 interface BlueprintUpdatePort {
     operator fun <T : Any> invoke(
         bpId: BlueprintId,
-        req: BlueprintUpdateReq,
-        responseHandler: (BlueprintUpdateSubmitted) -> T
+        req: BlueprintUpdateRequest,
+        responseHandler: (BlueprintUpdateRequested) -> T
     ): T
 }
 
@@ -42,16 +42,16 @@ interface BlueprintPort : BlueprintCreatePort, BlueprintGetPort, BlueprintUpdate
 class BlueprintAdapter(
     private val blueprintQueryRepository: BlueprintQueryRepository,
     private val generateDomainId: GenerateId,
-    private val reqCmdRepository: ReqCmdRepository
+    private val reqCmdRepository: RequestCmdRepository
 ) : BlueprintPort {
     override fun <T : Any> invoke(
         groupId: GroupId,
         accountId: AccountId,
-        req: BlueprintCreateReq,
-        responseHandler: (BlueprintCreateSubmitted) -> T
+        req: BlueprintCreateRequest,
+        responseHandler: (BlueprintCreateRequested) -> T
     ): T {
-        return BlueprintCreateSubmitted(
-            id = generateDomainId(::ReqId),
+        return BlueprintCreateRequested(
+            id = generateDomainId(::RequestId),
             status = Submitted,
             groupId = groupId,
             blueprintId = generateDomainId(::BlueprintId),
@@ -68,12 +68,12 @@ class BlueprintAdapter(
 
     override fun <T : Any> invoke(
         bpId: BlueprintId,
-        req: BlueprintUpdateReq,
-        responseHandler: (BlueprintUpdateSubmitted) -> T
+        req: BlueprintUpdateRequest,
+        responseHandler: (BlueprintUpdateRequested) -> T
     ): T {
         ensureBlueprintExists(bpId)
-        return BlueprintUpdateSubmitted(
-            id = generateDomainId(::ReqId),
+        return BlueprintUpdateRequested(
+            id = generateDomainId(::RequestId),
             status = Submitted,
             groupId = blueprintQueryRepository.get(bpId).groupId,
             blueprintId = bpId,

@@ -2,8 +2,8 @@ package io.hamal.core.req.handler.topic
 
 import io.hamal.core.req.handler.BaseReqHandlerTest
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.domain._enum.ReqStatus.Submitted
-import io.hamal.lib.domain.vo.ReqId
+import io.hamal.lib.domain._enum.RequestStatus.Submitted
+import io.hamal.lib.domain.vo.RequestId
 import io.hamal.lib.domain.vo.TopicEntryPayload
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
@@ -11,7 +11,7 @@ import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.log.ChunkId
 import io.hamal.repository.api.log.Segment
-import io.hamal.lib.domain.submitted.TopicAppendToSubmitted
+import io.hamal.lib.domain.request.TopicAppendToRequested
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
@@ -25,8 +25,8 @@ internal class TopicAppendHandlerTest : BaseReqHandlerTest() {
         val topic = createTopic(TopicId(4444), TopicName("topic"))
 
         testInstance(
-            TopicAppendToSubmitted(
-                id = ReqId(SnowflakeId(123)),
+            TopicAppendToRequested(
+                id = RequestId(SnowflakeId(123)),
                 status = Submitted,
                 topicId = TopicId(4444),
                 groupId = testGroup.id,
@@ -53,8 +53,8 @@ internal class TopicAppendHandlerTest : BaseReqHandlerTest() {
     fun `Tries to append entry to topic which does not exists`() {
         val exception = assertThrows<NoSuchElementException> {
             testInstance(
-                TopicAppendToSubmitted(
-                    id = ReqId(SnowflakeId(123)),
+                TopicAppendToRequested(
+                    id = RequestId(SnowflakeId(123)),
                     status = Submitted,
                     topicId = TopicId(123),
                     groupId = testGroup.id,

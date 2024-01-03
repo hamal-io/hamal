@@ -1,6 +1,6 @@
 package io.hamal.plugin.std.sys
 
-import io.hamal.lib.domain._enum.ReqStatus
+import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.kua.function.Function1In1Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -8,7 +8,7 @@ import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput1Schema
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.api.ApiSubmitted
+import io.hamal.lib.sdk.api.ApiRequested
 
 class AwaitFunction(
     private val httpTemplate: HttpTemplate
@@ -20,11 +20,11 @@ class AwaitFunction(
         while (true) {
             httpTemplate.get("/v1/reqs/{reqId}")
                 .path("reqId", arg1.value)
-                .execute(ApiSubmitted::class)
+                .execute(ApiRequested::class)
                 .let {
                     when (it.status) {
-                        ReqStatus.Completed,
-                        ReqStatus.Failed -> {
+                        RequestStatus.Completed,
+                        RequestStatus.Failed -> {
                             return null
                         }
 
@@ -48,14 +48,14 @@ class AwaitCompletedFunction(
         while (true) {
             httpTemplate.get("/v1/reqs/{reqId}")
                 .path("reqId", arg1.value)
-                .execute(ApiSubmitted::class)
+                .execute(ApiRequested::class)
                 .let {
                     when (it.status) {
-                        ReqStatus.Completed -> {
+                        RequestStatus.Completed -> {
                             return null
                         }
 
-                        ReqStatus.Failed -> {
+                        RequestStatus.Failed -> {
                             return ErrorType("expected $arg1 to complete but failed")
                         }
 
@@ -78,14 +78,14 @@ class AwaitFailedFunction(
         while (true) {
             httpTemplate.get("/v1/reqs/{reqId}")
                 .path("reqId", arg1.value)
-                .execute(ApiSubmitted::class)
+                .execute(ApiRequested::class)
                 .let {
                     when (it.status) {
-                        ReqStatus.Completed -> {
+                        RequestStatus.Completed -> {
                             return ErrorType("expected $arg1 to fail but completed")
                         }
 
-                        ReqStatus.Failed -> {
+                        RequestStatus.Failed -> {
                             return null
                         }
 

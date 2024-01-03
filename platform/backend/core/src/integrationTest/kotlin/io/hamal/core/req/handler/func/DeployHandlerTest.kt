@@ -2,11 +2,11 @@ package io.hamal.core.req.handler.func
 
 import io.hamal.core.req.handler.BaseReqHandlerTest
 import io.hamal.core.req.handler.NextCommandId
-import io.hamal.lib.domain._enum.ReqStatus.Submitted
+import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.CodeCmdRepository
 import io.hamal.repository.api.FuncCmdRepository
-import io.hamal.lib.domain.submitted.FuncDeploySubmitted
+import io.hamal.lib.domain.request.FuncDeployRequested
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
@@ -19,8 +19,8 @@ internal class FuncDeployHandlerTest : BaseReqHandlerTest() {
         setup(CodeId(5))
 
         testInstance(
-            FuncDeploySubmitted(
-                id = ReqId(500),
+            FuncDeployRequested(
+                id = RequestId(500),
                 status = Submitted,
                 groupId = testGroup.id,
                 FuncId(1),
@@ -41,8 +41,8 @@ internal class FuncDeployHandlerTest : BaseReqHandlerTest() {
         setup(CodeId(5))
 
         testInstance(
-            FuncDeploySubmitted(
-                id = ReqId(500),
+            FuncDeployRequested(
+                id = RequestId(500),
                 status = Submitted,
                 groupId = testGroup.id,
                 FuncId(1),
@@ -63,8 +63,8 @@ internal class FuncDeployHandlerTest : BaseReqHandlerTest() {
         setup(CodeId(5))
 
         testInstance(
-            FuncDeploySubmitted(
-                id = ReqId(500),
+            FuncDeployRequested(
+                id = RequestId(500),
                 status = Submitted,
                 groupId = testGroup.id,
                 funcId = FuncId(1),

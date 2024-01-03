@@ -12,7 +12,7 @@ import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.NumberType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.ApiSdk
-import io.hamal.lib.sdk.api.ApiFuncDeployReq
+import io.hamal.lib.sdk.api.ApiFuncDeployRequest
 
 class FuncDeployFunction(
     private val sdk: ApiSdk
@@ -37,7 +37,7 @@ class FuncDeployFunction(
 
             val res = sdk.func.deploy(
                 funcId = funcId,
-                req = ApiFuncDeployReq(
+                req = ApiFuncDeployRequest(
                     version = version,
                     message = message
                 )

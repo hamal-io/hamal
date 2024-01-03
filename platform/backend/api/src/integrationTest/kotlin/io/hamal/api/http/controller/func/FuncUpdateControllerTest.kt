@@ -21,7 +21,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
     fun `Tries to update func which does not exists`() {
         val getFuncResponse = httpTemplate.patch("/v1/funcs/33333333")
             .body(
-                ApiFuncUpdateReq(
+                ApiFuncUpdateRequest(
                     name = FuncName("update"),
                     inputs = FuncInputs(),
                     code = CodeValue("")
@@ -51,7 +51,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
         val func = awaitCompleted(
             createFunc(
                 flowId = createdFlow.id,
-                req = ApiFuncCreateReq(
+                req = ApiFuncCreateRequest(
                     name = FuncName("created-name"),
                     inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("createdInputs")))),
                     code = CodeValue("createdCode")
@@ -62,7 +62,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
         val updateFuncResponse = httpTemplate.patch("/v1/funcs/{funcId}")
             .path("funcId", func.funcId)
             .body(
-                ApiFuncUpdateReq(
+                ApiFuncUpdateRequest(
                     name = FuncName("updated-name"),
                     inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("updatedInputs")))),
                     code = CodeValue("updatedCode")
@@ -73,7 +73,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
         assertThat(updateFuncResponse.statusCode, equalTo(Accepted))
         require(updateFuncResponse is HttpSuccessResponse) { "request was not successful" }
 
-        val submittedReq = updateFuncResponse.result(ApiFuncUpdateSubmitted::class)
+        val submittedReq = updateFuncResponse.result(ApiFuncUpdateRequested::class)
         awaitCompleted(submittedReq)
 
         val funcId = submittedReq.funcId
@@ -102,7 +102,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
         val updateFuncResponse = httpTemplate.patch("/v1/funcs/{funcId}")
             .path("funcId", funcId)
             .body(
-                ApiFuncUpdateReq(
+                ApiFuncUpdateRequest(
                     name = null,
                     inputs = null,
                     code = null
@@ -113,7 +113,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
         assertThat(updateFuncResponse.statusCode, equalTo(Accepted))
         require(updateFuncResponse is HttpSuccessResponse) { "request was not successful" }
 
-        val req = updateFuncResponse.result(ApiFuncUpdateSubmitted::class)
+        val req = updateFuncResponse.result(ApiFuncUpdateRequested::class)
         awaitCompleted(req)
 
         with(getFunc(funcId)) {
@@ -140,14 +140,14 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
         val updateFuncResponse = httpTemplate.patch("/v1/funcs/{funcId}")
             .path("funcId", funcId)
             .body(
-                ApiFuncUpdateReq(name = FuncName("updated-name"), code = null)
+                ApiFuncUpdateRequest(name = FuncName("updated-name"), code = null)
             )
             .execute()
 
         assertThat(updateFuncResponse.statusCode, equalTo(Accepted))
         require(updateFuncResponse is HttpSuccessResponse) { "request was not successful" }
 
-        val submittedReq = updateFuncResponse.result(ApiFuncUpdateSubmitted::class)
+        val submittedReq = updateFuncResponse.result(ApiFuncUpdateRequested::class)
         awaitCompleted(submittedReq)
 
         with(getFunc(funcId)) {
@@ -172,7 +172,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
         val updateFuncResponse = httpTemplate.patch("/v1/funcs/{funcId}")
             .path("funcId", funcId)
             .body(
-                ApiFuncUpdateReq(
+                ApiFuncUpdateRequest(
                     name = FuncName("updated-name"),
                     inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("updatedInputs")))),
                     code = CodeValue("createdCode")
@@ -183,7 +183,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
         assertThat(updateFuncResponse.statusCode, equalTo(Accepted))
         require(updateFuncResponse is HttpSuccessResponse) { "request was not successful" }
 
-        val submittedReq = updateFuncResponse.result(ApiFuncUpdateSubmitted::class)
+        val submittedReq = updateFuncResponse.result(ApiFuncUpdateRequested::class)
         awaitCompleted(submittedReq)
 
         with(getFunc(funcId)) {
@@ -199,7 +199,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
         }
     }
 
-    private fun createFuncInFlow(name: FuncName, code: CodeValue): ApiFuncCreateSubmitted {
+    private fun createFuncInFlow(name: FuncName, code: CodeValue): ApiFuncCreateRequested {
         val createdFlow = flowCmdRepository.create(
             CreateCmd(
                 id = CmdGen(),
@@ -213,7 +213,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
         return awaitCompleted(
             createFunc(
                 flowId = createdFlow.id,
-                req = ApiFuncCreateReq(
+                req = ApiFuncCreateRequest(
                     name = name,
                     inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("createdInputs")))),
                     code = code

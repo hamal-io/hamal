@@ -4,7 +4,7 @@ import io.hamal.core.event.PlatformEventEmitter
 import io.hamal.core.req.ReqHandler
 import io.hamal.core.req.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.submitted.EndpointUpdateSubmitted
+import io.hamal.lib.domain.request.EndpointUpdateRequested
 import io.hamal.repository.api.Endpoint
 import io.hamal.repository.api.EndpointCmdRepository.UpdateCmd
 import io.hamal.repository.api.EndpointRepository
@@ -15,14 +15,14 @@ import org.springframework.stereotype.Component
 @Component
 class EndpointUpdateHandler(
     val endpointRepository: EndpointRepository, val eventEmitter: PlatformEventEmitter
-) : ReqHandler<EndpointUpdateSubmitted>(EndpointUpdateSubmitted::class) {
+) : ReqHandler<EndpointUpdateRequested>(EndpointUpdateRequested::class) {
 
-    override fun invoke(req: EndpointUpdateSubmitted) {
+    override fun invoke(req: EndpointUpdateRequested) {
         updateEndpoint(req).also { emitEvent(req.cmdId(), it) }
     }
 }
 
-private fun EndpointUpdateHandler.updateEndpoint(req: EndpointUpdateSubmitted): Endpoint {
+private fun EndpointUpdateHandler.updateEndpoint(req: EndpointUpdateRequested): Endpoint {
     return endpointRepository.update(
         req.endpointId, UpdateCmd(
             id = req.cmdId(),

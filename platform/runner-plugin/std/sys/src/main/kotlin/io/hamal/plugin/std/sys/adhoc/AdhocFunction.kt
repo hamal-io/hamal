@@ -12,7 +12,7 @@ import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.ApiSdk
-import io.hamal.lib.sdk.api.ApiAdhocInvokeReq
+import io.hamal.lib.sdk.api.ApiAdhocInvokeRequest
 
 class AdhocFunction(
     private val sdk: ApiSdk
@@ -24,7 +24,7 @@ class AdhocFunction(
         return try {
             val res = sdk.adhoc(
                 arg1.findString("flow_id")?.let { FlowId(SnowflakeId(it)) } ?: ctx[FlowId::class],
-                ApiAdhocInvokeReq(
+                ApiAdhocInvokeRequest(
                     inputs = InvocationInputs(),
                     code = CodeValue(arg1.getString("code"))
                 )

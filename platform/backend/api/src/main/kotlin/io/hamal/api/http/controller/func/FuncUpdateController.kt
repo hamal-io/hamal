@@ -4,8 +4,8 @@ import io.hamal.api.http.controller.accepted
 import io.hamal.core.adapter.FuncUpdatePort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.sdk.api.ApiFuncUpdateReq
-import io.hamal.lib.sdk.api.ApiSubmitted
+import io.hamal.lib.sdk.api.ApiFuncUpdateRequest
+import io.hamal.lib.sdk.api.ApiRequested
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -20,8 +20,8 @@ internal class FuncUpdateController(
     @PatchMapping("/v1/funcs/{funcId}")
     fun updateFunc(
         @PathVariable("funcId") funcId: FuncId,
-        @RequestBody req: ApiFuncUpdateReq
-    ): ResponseEntity<ApiSubmitted> = retry {
+        @RequestBody req: ApiFuncUpdateRequest
+    ): ResponseEntity<ApiRequested> = retry {
         updateFunc(funcId, req) { it.accepted() }
     }
 }

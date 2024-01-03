@@ -32,7 +32,7 @@ object MemoryFixture : BaseTestFixture {
         GroupRepository::class -> MemoryGroupRepository() as REPO
         HookRepository::class -> HookMemoryRepository() as REPO
         FlowRepository::class -> FlowMemoryRepository() as REPO
-        ReqRepository::class -> ReqMemoryRepository() as REPO
+        RequestRepository::class -> ReqMemoryRepository() as REPO
         SegmentRepository::class -> SegmentMemoryRepository(SegmentMemory(Segment.Id(2810), TopicId(1506))) as REPO
         StateRepository::class -> StateMemoryRepository() as REPO
         TopicRepository::class -> TopicMemoryRepository(

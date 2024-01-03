@@ -7,13 +7,13 @@ import io.hamal.lib.domain.vo.ExecLogMessage
 import io.hamal.lib.domain.vo.ExecLogTimestamp
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
-import io.hamal.request.ExecLogAppendReq
+import io.hamal.lib.domain.request.ExecLogAppendRequest
 
-data class ApiExecLogAppendCmd(
+data class ApiExecLogAppendRequest(
     override val level: ExecLogLevel,
     override val message: ExecLogMessage,
     override val timestamp: ExecLogTimestamp
-) : ExecLogAppendReq
+) : ExecLogAppendRequest
 
 data class ApiExcLogList(
     val logs: List<ApiExecLog>
@@ -28,13 +28,13 @@ data class ApiExecLog(
 )
 
 interface ApiExecLogService {
-    fun append(execId: ExecId, req: ApiExecLogAppendCmd)
+    fun append(execId: ExecId, req: ApiExecLogAppendRequest)
 }
 
 internal class ApiExecLogServiceImpl(
     private val template: HttpTemplate
 ) : ApiExecLogService {
-    override fun append(execId: ExecId, req: ApiExecLogAppendCmd) {
+    override fun append(execId: ExecId, req: ApiExecLogAppendRequest) {
         template
             .post("/v1/execs/{execId}/logs")
             .path("execId", execId)

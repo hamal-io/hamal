@@ -10,8 +10,8 @@ import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.BadRequest
 import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
-import io.hamal.lib.sdk.api.ApiEndpointUpdateSubmitted
-import io.hamal.lib.sdk.api.ApiEndpointUpdateReq
+import io.hamal.lib.sdk.api.ApiEndpointUpdateRequested
+import io.hamal.lib.sdk.api.ApiEndpointUpdateRequest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -53,7 +53,7 @@ internal class EndpointUpdateControllerTest : EndpointBaseControllerTest() {
         val updateEndpointResponse = httpTemplate.patch("/v1/endpoints/{endpointId}")
             .path("endpointId", endpoint.endpointId)
             .body(
-                ApiEndpointUpdateReq(
+                ApiEndpointUpdateRequest(
                     funcId = anotherFuncId,
                     name = EndpointName("updated-name"),
                     method = Put
@@ -64,7 +64,7 @@ internal class EndpointUpdateControllerTest : EndpointBaseControllerTest() {
         assertThat(updateEndpointResponse.statusCode, equalTo(Accepted))
         require(updateEndpointResponse is HttpSuccessResponse) { "request was not successful" }
 
-        val submittedReq = updateEndpointResponse.result(ApiEndpointUpdateSubmitted::class)
+        val submittedReq = updateEndpointResponse.result(ApiEndpointUpdateRequested::class)
         awaitCompleted(submittedReq)
         with(getEndpoint(submittedReq.endpointId)) {
             assertThat(id, equalTo(submittedReq.endpointId))
@@ -101,7 +101,7 @@ internal class EndpointUpdateControllerTest : EndpointBaseControllerTest() {
         val updateEndpointResponse = httpTemplate.patch("/v1/endpoints/{endpointId}")
             .path("endpointId", endpoint.endpointId)
             .body(
-                ApiEndpointUpdateReq(
+                ApiEndpointUpdateRequest(
                     funcId = null,
                     name = null,
                     method = null
@@ -112,7 +112,7 @@ internal class EndpointUpdateControllerTest : EndpointBaseControllerTest() {
         assertThat(updateEndpointResponse.statusCode, equalTo(Accepted))
         require(updateEndpointResponse is HttpSuccessResponse) { "request was not successful" }
 
-        val submittedReq = updateEndpointResponse.result(ApiEndpointUpdateSubmitted::class)
+        val submittedReq = updateEndpointResponse.result(ApiEndpointUpdateRequested::class)
         awaitCompleted(submittedReq)
         with(getEndpoint(submittedReq.endpointId)) {
             assertThat(id, equalTo(submittedReq.endpointId))
@@ -163,7 +163,7 @@ internal class EndpointUpdateControllerTest : EndpointBaseControllerTest() {
         val updateEndpointResponse = httpTemplate.patch("/v1/endpoints/{endpointId}")
             .path("endpointId", endpoint.endpointId)
             .body(
-                ApiEndpointUpdateReq(
+                ApiEndpointUpdateRequest(
                     funcId = anotherFuncId,
                     name = EndpointName("updated-name"),
                     method = Put

@@ -1,18 +1,18 @@
 package io.hamal.lib.sdk.api
 
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain._enum.ReqStatus
+import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.sdk.fold
 
-data class ApiExecInvokeSubmitted(
-    override val id: ReqId,
-    override val status: ReqStatus,
+data class ApiExecInvokeRequested(
+    override val id: RequestId,
+    override val status: RequestStatus,
     val execId: ExecId,
     val groupId: GroupId,
     val flowId: FlowId
-) : ApiSubmitted
+) : ApiRequested
 
 data class ApiExecList(
     val execs: List<Exec>

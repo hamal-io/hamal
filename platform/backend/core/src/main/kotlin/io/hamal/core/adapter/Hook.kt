@@ -1,23 +1,23 @@
 package io.hamal.core.adapter
 
 import io.hamal.lib.domain.GenerateId
-import io.hamal.lib.domain._enum.ReqStatus.Submitted
+import io.hamal.lib.domain._enum.RequestStatus.Submitted
+import io.hamal.lib.domain.request.HookCreateRequested
+import io.hamal.lib.domain.request.HookUpdateRequested
 import io.hamal.lib.domain.vo.FlowId
 import io.hamal.lib.domain.vo.HookId
-import io.hamal.lib.domain.vo.ReqId
+import io.hamal.lib.domain.vo.RequestId
 import io.hamal.repository.api.*
 import io.hamal.repository.api.HookQueryRepository.HookQuery
-import io.hamal.lib.domain.submitted.HookCreateSubmitted
-import io.hamal.lib.domain.submitted.HookUpdateSubmitted
-import io.hamal.request.HookCreateReq
-import io.hamal.request.HookUpdateReq
+import io.hamal.lib.domain.request.HookCreateRequest
+import io.hamal.lib.domain.request.HookUpdateRequest
 import org.springframework.stereotype.Component
 
 interface HookCreatePort {
     operator fun <T : Any> invoke(
         flowId: FlowId,
-        req: HookCreateReq,
-        responseHandler: (HookCreateSubmitted) -> T
+        req: HookCreateRequest,
+        responseHandler: (HookCreateRequested) -> T
     ): T
 }
 
@@ -32,8 +32,8 @@ interface HookListPort {
 interface HookUpdatePort {
     operator fun <T : Any> invoke(
         hookId: HookId,
-        req: HookUpdateReq,
-        responseHandler: (HookUpdateSubmitted) -> T
+        req: HookUpdateRequest,
+        responseHandler: (HookUpdateRequested) -> T
     ): T
 }
 
@@ -44,16 +44,16 @@ class HookAdapter(
     private val generateDomainId: GenerateId,
     private val hookQueryRepository: HookQueryRepository,
     private val flowQueryRepository: FlowQueryRepository,
-    private val reqCmdRepository: ReqCmdRepository
+    private val reqCmdRepository: RequestCmdRepository
 ) : HookPort {
     override fun <T : Any> invoke(
         flowId: FlowId,
-        req: HookCreateReq,
-        responseHandler: (HookCreateSubmitted) -> T
+        req: HookCreateRequest,
+        responseHandler: (HookCreateRequested) -> T
     ): T {
         val flow = flowQueryRepository.get(flowId)
-        return HookCreateSubmitted(
-            id = generateDomainId(::ReqId),
+        return HookCreateRequested(
+            id = generateDomainId(::RequestId),
             status = Submitted,
             hookId = generateDomainId(::HookId),
             groupId = flow.groupId,
@@ -81,12 +81,12 @@ class HookAdapter(
 
     override fun <T : Any> invoke(
         hookId: HookId,
-        req: HookUpdateReq,
-        responseHandler: (HookUpdateSubmitted) -> T
+        req: HookUpdateRequest,
+        responseHandler: (HookUpdateRequested) -> T
     ): T {
         ensureHookExists(hookId)
-        return HookUpdateSubmitted(
-            id = generateDomainId(::ReqId),
+        return HookUpdateRequested(
+            id = generateDomainId(::RequestId),
             status = Submitted,
             groupId = hookQueryRepository.get(hookId).groupId,
             hookId = hookId,

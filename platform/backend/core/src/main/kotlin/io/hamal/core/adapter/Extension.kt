@@ -1,24 +1,24 @@
 package io.hamal.core.adapter
 
 import io.hamal.lib.domain.GenerateId
-import io.hamal.lib.domain._enum.ReqStatus.Submitted
+import io.hamal.lib.domain._enum.RequestStatus.Submitted
+import io.hamal.lib.domain.request.ExtensionCreateRequest
+import io.hamal.lib.domain.request.ExtensionUpdateRequest
+import io.hamal.lib.domain.request.ExtensionCreateRequested
+import io.hamal.lib.domain.request.ExtensionUpdateRequested
 import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.domain.vo.ExtensionId
 import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.domain.vo.ReqId
+import io.hamal.lib.domain.vo.RequestId
 import io.hamal.repository.api.*
 import io.hamal.repository.api.ExtensionQueryRepository.ExtensionQuery
-import io.hamal.lib.domain.submitted.ExtensionCreateSubmitted
-import io.hamal.lib.domain.submitted.ExtensionUpdateSubmitted
-import io.hamal.request.ExtensionCreateReq
-import io.hamal.request.ExtensionUpdateReq
 import org.springframework.stereotype.Component
 
 interface ExtensionExtensionPort {
     operator fun <T : Any> invoke(
         groupId: GroupId,
-        req: ExtensionCreateReq,
-        responseHandler: (ExtensionCreateSubmitted) -> T
+        req: ExtensionCreateRequest,
+        responseHandler: (ExtensionCreateRequested) -> T
     ): T
 }
 
@@ -36,8 +36,8 @@ interface ExtensionListPort {
 interface ExtensionUpdatePort {
     operator fun <T : Any> invoke(
         extId: ExtensionId,
-        req: ExtensionUpdateReq,
-        responseHandler: (ExtensionUpdateSubmitted) -> T
+        req: ExtensionUpdateRequest,
+        responseHandler: (ExtensionUpdateRequested) -> T
     ): T
 }
 
@@ -48,15 +48,15 @@ class ExtensionAdapter(
     private val codeQueryRepository: CodeQueryRepository,
     private val extensionQueryRepository: ExtensionQueryRepository,
     private val generateDomainId: GenerateId,
-    private val reqCmdRepository: ReqCmdRepository
+    private val reqCmdRepository: RequestCmdRepository
 ) : ExtensionPort {
     override fun <T : Any> invoke(
         groupId: GroupId,
-        req: ExtensionCreateReq,
-        responseHandler: (ExtensionCreateSubmitted) -> T
+        req: ExtensionCreateRequest,
+        responseHandler: (ExtensionCreateRequested) -> T
     ): T {
-        return ExtensionCreateSubmitted(
-            id = generateDomainId(::ReqId),
+        return ExtensionCreateRequested(
+            id = generateDomainId(::RequestId),
             status = Submitted,
             groupId = groupId,
             extensionId = generateDomainId(::ExtensionId),
@@ -75,12 +75,12 @@ class ExtensionAdapter(
 
     override fun <T : Any> invoke(
         extId: ExtensionId,
-        req: ExtensionUpdateReq,
-        responseHandler: (ExtensionUpdateSubmitted) -> T
+        req: ExtensionUpdateRequest,
+        responseHandler: (ExtensionUpdateRequested) -> T
     ): T {
         ensureExtensionExists(extId)
-        return ExtensionUpdateSubmitted(
-            id = generateDomainId(::ReqId),
+        return ExtensionUpdateRequested(
+            id = generateDomainId(::RequestId),
             status = Submitted,
             groupId = extensionQueryRepository.get(extId).groupId,
             extensionId = extId,

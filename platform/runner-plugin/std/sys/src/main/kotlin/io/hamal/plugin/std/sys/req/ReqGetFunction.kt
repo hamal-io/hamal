@@ -10,7 +10,7 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.api.ApiSubmitted
+import io.hamal.lib.sdk.api.ApiRequested
 
 class ReqGetFunction(
     private val httpTemplate: HttpTemplate
@@ -24,7 +24,7 @@ class ReqGetFunction(
             .execute()
 
         if (response is HttpSuccessResponse) {
-            return null to response.result(ApiSubmitted::class)
+            return null to response.result(ApiRequested::class)
                 .let { exec ->
                     MapType(
                         mutableMapOf(

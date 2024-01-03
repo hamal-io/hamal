@@ -5,7 +5,7 @@ import io.hamal.core.req.ReqHandler
 import io.hamal.core.req.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
-import io.hamal.lib.domain.submitted.AccountCreateSubmitted
+import io.hamal.lib.domain.request.AccountCreateRequested
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.*
 import io.hamal.repository.api.event.AccountCreatedEvent
@@ -19,9 +19,9 @@ class AccountCreateEmailHandler(
     val groupCmdRepository: GroupCmdRepository,
     val flowCmdRepository: FlowCmdRepository,
     val eventEmitter: PlatformEventEmitter
-) : ReqHandler<AccountCreateSubmitted>(AccountCreateSubmitted::class) {
+) : ReqHandler<AccountCreateRequested>(AccountCreateRequested::class) {
 
-    override fun invoke(req: AccountCreateSubmitted) {
+    override fun invoke(req: AccountCreateRequested) {
         createAccount(req)
             .also { emitEvent(req.cmdId(), it) }
             .also { createGroup(req) }
@@ -31,18 +31,18 @@ class AccountCreateEmailHandler(
     }
 }
 
-private fun AccountCreateEmailHandler.createAccount(req: AccountCreateSubmitted): Account {
+private fun AccountCreateEmailHandler.createAccount(req: AccountCreateRequested): Account {
     return accountCmdRepository.create(
         AccountCmdRepository.CreateCmd(
             id = req.cmdId(),
             accountId = req.accountId,
-            accountType = req.type,
+            accountType = req.accountType,
             salt = req.salt
         )
     )
 }
 
-private fun AccountCreateEmailHandler.createGroup(req: AccountCreateSubmitted): Group {
+private fun AccountCreateEmailHandler.createGroup(req: AccountCreateRequested): Group {
     return groupCmdRepository.create(
         GroupCmdRepository.CreateCmd(
             id = req.cmdId(),
@@ -53,7 +53,7 @@ private fun AccountCreateEmailHandler.createGroup(req: AccountCreateSubmitted): 
     )
 }
 
-private fun AccountCreateEmailHandler.createFlow(req: AccountCreateSubmitted): Flow {
+private fun AccountCreateEmailHandler.createFlow(req: AccountCreateRequested): Flow {
     return flowCmdRepository.create(
         FlowCmdRepository.CreateCmd(
             id = req.cmdId(),
@@ -67,7 +67,7 @@ private fun AccountCreateEmailHandler.createFlow(req: AccountCreateSubmitted): F
 }
 
 
-private fun AccountCreateEmailHandler.createEmailAuth(req: AccountCreateSubmitted): Auth {
+private fun AccountCreateEmailHandler.createEmailAuth(req: AccountCreateRequested): Auth {
     return authCmdRepository.create(
         AuthCmdRepository.CreateEmailAuthCmd(
             id = req.cmdId(),
@@ -79,7 +79,7 @@ private fun AccountCreateEmailHandler.createEmailAuth(req: AccountCreateSubmitte
     )
 }
 
-private fun AccountCreateEmailHandler.createTokenAuth(req: AccountCreateSubmitted): Auth {
+private fun AccountCreateEmailHandler.createTokenAuth(req: AccountCreateRequested): Auth {
     return authCmdRepository.create(
         AuthCmdRepository.CreateTokenAuthCmd(
             id = req.cmdId(),

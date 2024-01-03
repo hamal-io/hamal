@@ -12,7 +12,7 @@ import io.hamal.lib.kua.type.ErrorType
 import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.ApiSdk
-import io.hamal.lib.sdk.api.ApiFuncUpdateReq
+import io.hamal.lib.sdk.api.ApiFuncUpdateRequest
 
 class FuncUpdateFunction(
     private val sdk: ApiSdk
@@ -24,7 +24,7 @@ class FuncUpdateFunction(
         return try {
             val res = sdk.func.update(
                 FuncId(arg1.getString("id")),
-                ApiFuncUpdateReq(
+                ApiFuncUpdateRequest(
                     name = arg1.findString("name")?.let { FuncName(it) },
                     inputs = FuncInputs(),
                     code = arg1.findString("code")?.let { CodeValue(it) }

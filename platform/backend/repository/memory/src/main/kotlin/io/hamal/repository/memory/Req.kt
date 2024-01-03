@@ -1,32 +1,32 @@
 package io.hamal.repository.memory
 
 import io.hamal.lib.domain.Serde
-import io.hamal.lib.domain._enum.ReqStatus
-import io.hamal.lib.domain.vo.ReqId
-import io.hamal.repository.api.ReqQueryRepository
-import io.hamal.repository.api.ReqRepository
-import io.hamal.lib.domain.submitted.Submitted
+import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain.request.Requested
+import io.hamal.lib.domain.vo.RequestId
+import io.hamal.repository.api.RequestQueryRepository
+import io.hamal.repository.api.RequestRepository
 import org.springframework.stereotype.Repository
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
 @Repository
-class ReqMemoryRepository : ReqRepository {
+class ReqMemoryRepository : RequestRepository {
 
-    val queue = mutableListOf<ReqId>()
-    val store = mutableMapOf<ReqId, String>()
+    val queue = mutableListOf<RequestId>()
+    val store = mutableMapOf<RequestId, String>()
     val lock = ReentrantLock()
 
-    override fun queue(req: Submitted) {
+    override fun queue(req: Requested) {
         return lock.withLock {
             store[req.id] = Serde.serialize(req)
             queue.add(req.id)
         }
     }
 
-    override fun next(limit: Int): List<Submitted> {
+    override fun next(limit: Int): List<Requested> {
         return lock.withLock {
-            val result = mutableListOf<Submitted>()
+            val result = mutableListOf<Requested>()
 
             repeat(limit) {
                 val reqId = queue.removeFirstOrNull() ?: return result
@@ -37,19 +37,19 @@ class ReqMemoryRepository : ReqRepository {
         }
     }
 
-    override fun complete(reqId: ReqId) {
+    override fun complete(reqId: RequestId) {
         val req = get(reqId)
-        check(req.status == ReqStatus.Submitted) { "Req not submitted" }
+        check(req.status == RequestStatus.Submitted) { "Req not submitted" }
         lock.withLock {
-            store[req.id] = Serde.serialize(req.apply { status = ReqStatus.Completed })
+            store[req.id] = Serde.serialize(req.apply { status = RequestStatus.Completed })
         }
     }
 
-    override fun fail(reqId: ReqId) {
+    override fun fail(reqId: RequestId) {
         val req = get(reqId)
-        check(req.status == ReqStatus.Submitted) { "Req not submitted" }
+        check(req.status == RequestStatus.Submitted) { "Req not submitted" }
         lock.withLock {
-            store[req.id] = Serde.serialize(req.apply { status = ReqStatus.Failed })
+            store[req.id] = Serde.serialize(req.apply { status = RequestStatus.Failed })
         }
     }
 
@@ -61,13 +61,13 @@ class ReqMemoryRepository : ReqRepository {
     }
 
 
-    override fun find(reqId: ReqId): Submitted? {
+    override fun find(reqId: RequestId): Requested? {
         val result = lock.withLock { store[reqId] } ?: return null
-        return Serde.deserialize(result, Submitted::class)
+        return Serde.deserialize(result, Requested::class)
 
     }
 
-    override fun list(query: ReqQueryRepository.ReqQuery): List<Submitted> {
+    override fun list(query: RequestQueryRepository.ReqQuery): List<Requested> {
 
         return lock.withLock {
 
@@ -79,7 +79,7 @@ class ReqMemoryRepository : ReqRepository {
         }
     }
 
-    override fun count(query: ReqQueryRepository.ReqQuery): ULong {
+    override fun count(query: RequestQueryRepository.ReqQuery): ULong {
         return lock.withLock {
             store.keys.sorted()
                 .dropWhile { it <= query.afterId }
