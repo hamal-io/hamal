@@ -19,7 +19,7 @@ internal class ReqGetControllerTest : ReqBaseControllerTest() {
             adhoc()
         )
 
-        val response = httpTemplate.get("/v1/reqs/{reqId}").path("reqId", request.id).execute()
+        val response = httpTemplate.get("/v1/requests/{reqId}").path("reqId", request.id).execute()
         assertThat(response.statusCode, equalTo(Accepted))
         require(response is HttpSuccessResponse) { "request was not successful" }
 
@@ -29,7 +29,7 @@ internal class ReqGetControllerTest : ReqBaseControllerTest() {
 
     @Test
     fun `Tries to get req which does not exist`() {
-        val response = httpTemplate.get("/v1/reqs/123456765432").execute()
+        val response = httpTemplate.get("/v1/requests/123456765432").execute()
         assertThat(response.statusCode, equalTo(NotFound))
         require(response is HttpErrorResponse) { "request was successful" }
 

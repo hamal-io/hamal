@@ -19,7 +19,7 @@ class ReqGetFunction(
     FunctionOutput2Schema(ErrorType::class, MapType::class)
 ) {
     override fun invoke(ctx: FunctionContext, arg1: StringType): Pair<ErrorType?, MapType?> {
-        val response = httpTemplate.get("/v1/reqs/{reqId}")
+        val response = httpTemplate.get("/v1/requests/{reqId}")
             .path("reqId", arg1.value)
             .execute()
 

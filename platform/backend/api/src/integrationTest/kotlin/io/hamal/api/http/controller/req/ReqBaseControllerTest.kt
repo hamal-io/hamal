@@ -15,7 +15,7 @@ import org.hamcrest.Matchers.equalTo
 internal sealed class ReqBaseControllerTest : BaseControllerTest() {
 
     fun list(): ApiRequestList {
-        val listResponse = httpTemplate.get("/v1/reqs").execute()
+        val listResponse = httpTemplate.get("/v1/requests").execute()
         assertThat(listResponse.statusCode, equalTo(HttpStatusCode.Ok))
 
         require(listResponse is HttpSuccessResponse) { "request was not successful" }

@@ -36,7 +36,7 @@ internal class ReqListControllerTest : ReqBaseControllerTest() {
     fun `Limit reqs`() {
         awaitCompleted(IntRange(0, 25).map { adhoc(CodeValue("$it")) })
 
-        val listResponse = httpTemplate.get("/v1/reqs")
+        val listResponse = httpTemplate.get("/v1/requests")
             .parameter("limit", 23)
             .execute(ApiRequestList::class)
 
@@ -57,7 +57,7 @@ internal class ReqListControllerTest : ReqBaseControllerTest() {
 
         val request70 = requests[70]
 
-        val listResponse = httpTemplate.get("/v1/reqs")
+        val listResponse = httpTemplate.get("/v1/requests")
             .parameter("after_id", request70.execId)
             .parameter("limit", 1)
             .execute(ApiRequestList::class)

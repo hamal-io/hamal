@@ -1,6 +1,6 @@
-package io.hamal.core.req.handler.blueprint
+package io.hamal.core.request.handler.blueprint
 
-import io.hamal.core.req.handler.BaseReqHandlerTest
+import io.hamal.core.request.handler.BaseReqHandlerTest
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.vo.*

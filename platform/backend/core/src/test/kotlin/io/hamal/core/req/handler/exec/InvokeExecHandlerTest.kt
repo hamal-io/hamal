@@ -1,4 +1,4 @@
-package io.hamal.core.req.handler.exec
+package io.hamal.core.request.handler.exec
 
 import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.FuncInputs

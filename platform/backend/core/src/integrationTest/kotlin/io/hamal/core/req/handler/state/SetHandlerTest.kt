@@ -1,6 +1,6 @@
-package io.hamal.core.req.handler.state
+package io.hamal.core.request.handler.state
 
-import io.hamal.core.req.handler.BaseReqHandlerTest
+import io.hamal.core.request.handler.BaseReqHandlerTest
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 

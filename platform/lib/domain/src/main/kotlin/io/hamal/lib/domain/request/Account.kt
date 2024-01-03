@@ -75,3 +75,8 @@ data class AccountConvertRequested(
     val hash: PasswordHash,
     val token: AuthToken
 ) : Requested()
+
+data class AccountCreateRootRequest(
+    val email: Email,
+    val password: Password
+)

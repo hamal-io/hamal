@@ -1,7 +1,7 @@
-package io.hamal.core.req.handler.func
+package io.hamal.core.request.handler.func
 
-import io.hamal.core.req.handler.BaseReqHandlerTest
-import io.hamal.core.req.handler.NextCommandId
+import io.hamal.core.request.handler.BaseReqHandlerTest
+import io.hamal.core.request.handler.NextCommandId
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.type.MapType

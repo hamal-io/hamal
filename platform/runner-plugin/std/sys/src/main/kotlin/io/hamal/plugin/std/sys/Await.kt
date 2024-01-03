@@ -18,7 +18,7 @@ class AwaitFunction(
 ) {
     override fun invoke(ctx: FunctionContext, arg1: StringType): ErrorType? {
         while (true) {
-            httpTemplate.get("/v1/reqs/{reqId}")
+            httpTemplate.get("/v1/requests/{reqId}")
                 .path("reqId", arg1.value)
                 .execute(ApiRequested::class)
                 .let {
@@ -46,7 +46,7 @@ class AwaitCompletedFunction(
 ) {
     override fun invoke(ctx: FunctionContext, arg1: StringType): ErrorType? {
         while (true) {
-            httpTemplate.get("/v1/reqs/{reqId}")
+            httpTemplate.get("/v1/requests/{reqId}")
                 .path("reqId", arg1.value)
                 .execute(ApiRequested::class)
                 .let {
@@ -76,7 +76,7 @@ class AwaitFailedFunction(
 ) {
     override fun invoke(ctx: FunctionContext, arg1: StringType): ErrorType? {
         while (true) {
-            httpTemplate.get("/v1/reqs/{reqId}")
+            httpTemplate.get("/v1/requests/{reqId}")
                 .path("reqId", arg1.value)
                 .execute(ApiRequested::class)
                 .let {

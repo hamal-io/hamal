@@ -14,7 +14,7 @@ internal class ApiAwaitServiceImpl(
 ) : ApiAwaitService {
     override fun await(req: ApiRequested) {
         while (true) {
-            template.get("/v1/reqs/{reqId}")
+            template.get("/v1/requests/{reqId}")
                 .path("reqId", req.id)
                 .execute(ApiRequested::class)
                 .let {

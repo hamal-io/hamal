@@ -3,7 +3,6 @@ package io.hamal.core.adapter
 import io.hamal.core.component.EncodePassword
 import io.hamal.core.component.GenerateSalt
 import io.hamal.core.component.GenerateToken
-import io.hamal.core.req.req.CreateRootAccountReq
 import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain.request.*
@@ -28,7 +27,7 @@ interface AccountCreateMetaMaskPort {
 }
 
 interface AccountCreateRootPort {
-    operator fun invoke(req: CreateRootAccountReq)
+    operator fun invoke(req: AccountCreateRootRequest)
 }
 
 interface AccountCreateAnonymousPort {
@@ -135,7 +134,7 @@ class AccountAdapter(
         ).also(reqCmdRepository::queue).let(responseHandler)
     }
 
-    override fun invoke(req: CreateRootAccountReq) {
+    override fun invoke(req: AccountCreateRootRequest) {
         val salt = generateSalt()
 
         accountQueryRepository.find(AccountId.root)

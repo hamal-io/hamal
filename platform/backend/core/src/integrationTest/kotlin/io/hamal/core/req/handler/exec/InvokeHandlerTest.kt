@@ -1,6 +1,6 @@
-package io.hamal.core.req.handler.exec
+package io.hamal.core.request.handler.exec
 
-import io.hamal.core.req.handler.BaseReqHandlerTest
+import io.hamal.core.request.handler.BaseReqHandlerTest
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain.vo.*

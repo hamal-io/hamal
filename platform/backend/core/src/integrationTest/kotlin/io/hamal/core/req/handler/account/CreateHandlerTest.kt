@@ -1,4 +1,4 @@
-package io.hamal.core.req.handler.account
+package io.hamal.core.request.handler.account
 
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
