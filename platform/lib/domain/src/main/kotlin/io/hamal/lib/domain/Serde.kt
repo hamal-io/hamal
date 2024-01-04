@@ -44,6 +44,9 @@ val gsonInstance = GsonFactoryBuilder
     .registerTypeAdapter(ExtensionId::class.java, ValueObjectIdAdapter(::ExtensionId))
     .registerTypeAdapter(ExtensionName::class.java, ValueObjectStringAdapter(::ExtensionName))
 
+    .registerTypeAdapter(FeedbackId::class.java, ValueObjectIdAdapter(::FeedbackId))
+    .registerTypeAdapter(FeedbackMessage::class.java, ValueObjectStringAdapter(::FeedbackMessage))
+
     .registerTypeAdapter(FlowId::class.java, ValueObjectIdAdapter(::FlowId))
     .registerTypeAdapter(FlowName::class.java, ValueObjectStringAdapter(::FlowName))
     .registerTypeAdapter(FlowType::class.java, ValueObjectStringAdapter(::FlowType))

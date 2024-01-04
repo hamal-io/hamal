@@ -11,7 +11,6 @@ class HotNumber(val value: BigDecimal) : HotTerminal {
     constructor(value: Float) : this(value.toBigDecimal())
     constructor(value: Double) : this(value.toBigDecimal())
     constructor(value: Number) : this(BigDecimal.valueOf(value.toDouble()))
-
     constructor(value: BigInteger) : this(value.toBigDecimal())
 
     override val isNumber get() : Boolean = true

@@ -38,6 +38,7 @@ fun Requested.toApiSubmitted(): ApiRequested = when (this) {
     is AuthLogoutRequested,
     is AccountCreateMetaMaskRequested,
     is ExecFailRequested,
+    is FeedbackCreateRequested,
     is HookInvokeRequested,
     is TestRequested,
     is ExecCompleteRequested -> throw NotImplementedError()
