@@ -77,6 +77,7 @@ val gsonInstance = GsonFactoryBuilder
 
 
 object Serde {
+
     fun <TYPE : Any> serialize(src: TYPE): String {
         return gsonInstance.toJson(src)
     }

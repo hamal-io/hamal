@@ -1,6 +1,5 @@
 plugins {
     id("hamal.common")
-    id("org.jetbrains.kotlin.plugin.serialization")
 }
 
 dependencies {
