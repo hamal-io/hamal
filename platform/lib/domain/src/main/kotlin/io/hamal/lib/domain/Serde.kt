@@ -1,5 +1,6 @@
 package io.hamal.lib.domain
 
+import com.google.gson.reflect.TypeToken
 import io.hamal.lib.common.serialization.GsonFactoryBuilder
 import io.hamal.lib.common.serialization.ValueObjectIdAdapter
 import io.hamal.lib.common.serialization.ValueObjectStringAdapter
@@ -34,5 +35,9 @@ object Serde {
 
     fun <TYPE : Any> deserialize(stream: InputStream, src: KClass<TYPE>): TYPE {
         return gsonInstance.fromJson(InputStreamReader(stream), src.java)
+    }
+
+    fun <TYPE : Any> deserialize(stream: InputStream, src: TypeToken<TYPE>): TYPE {
+        return gsonInstance.fromJson(InputStreamReader(stream), src)
     }
 }

@@ -20,7 +20,17 @@ import org.springframework.web.bind.annotation.RestController
 
 sealed interface BodyResponse
 
-data class NoBodyResponse(val result: String = "NoContent") : BodyResponse
+class NoBodyResponse : BodyResponse {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return javaClass.hashCode()
+    }
+}
 
 data class SomeRequestBodyResponse(val value: Int) : BodyResponse
 
@@ -47,50 +57,44 @@ open class TestBodyController {
 @SpringBootTest(classes = [TestWebConfig::class, TestBodyController::class], webEnvironment = RANDOM_PORT)
 class BodyTest(@LocalServerPort var localServerPort: Int) {
     @TestFactory
-    fun `Request without body`(): List<DynamicTest> =
-        HttpMethod.values()
-            .map { method ->
-                dynamicTest("$method request") {
-                    val testInstance = HttpTemplateImpl("http://localhost:$localServerPort")
+    fun `Request without body`(): List<DynamicTest> = HttpMethod.values().map { method ->
+        dynamicTest("$method request") {
+            val testInstance = HttpTemplateImpl("http://localhost:$localServerPort")
 
-                    val request = when (method) {
-                        Delete -> testInstance.delete("/v1/body-no-body")
-                        Get -> testInstance.get("/v1/body-no-body")
-                        Patch -> testInstance.patch("/v1/body-no-body")
-                        Post -> testInstance.post("/v1/body-no-body")
-                        Put -> testInstance.put("/v1/body-no-body")
-                    }
-
-                    val response = request.execute()
-                    require(response is HttpSuccessResponse)
-                    assertThat(response.statusCode, equalTo(Ok))
-                    assertThat(response.result(NoBodyResponse::class), equalTo(NoBodyResponse("NoContent")))
-                }
+            val request = when (method) {
+                Delete -> testInstance.delete("/v1/body-no-body")
+                Get -> testInstance.get("/v1/body-no-body")
+                Patch -> testInstance.patch("/v1/body-no-body")
+                Post -> testInstance.post("/v1/body-no-body")
+                Put -> testInstance.put("/v1/body-no-body")
             }
-            .toList()
+
+            val response = request.execute()
+            require(response is HttpSuccessResponse)
+            assertThat(response.statusCode, equalTo(Ok))
+            assertThat(response.result(NoBodyResponse::class), equalTo(NoBodyResponse()))
+        }
+    }.toList()
 
     @TestFactory
-    fun `Request with object and JSON serializer`(): List<DynamicTest> =
-        listOf(Patch, Post, Put)
-            .map { method ->
-                dynamicTest("$method request") {
-                    val testInstance = HttpTemplateImpl("http://localhost:$localServerPort")
+    fun `Request with body`(): List<DynamicTest> = listOf(Patch, Post, Put).map { method ->
+        dynamicTest("$method request") {
+            val testInstance = HttpTemplateImpl("http://localhost:$localServerPort")
 
-                    val request = when (method) {
-                        Patch -> testInstance.patch("/v1/body-single")
-                        Post -> testInstance.post("/v1/body-single")
-                        Put -> testInstance.put("/v1/body-single")
-                        else -> throw IllegalStateException("Only patch post and put are supported")
-                    }
-
-                    val response = request
-                        .body(SomeRequestBody(value = 1337))
-                        .execute()
-
-                    require(response is HttpSuccessResponse)
-                    assertThat(response.statusCode, equalTo(Ok))
-                    assertThat(response.result(NoBodyResponse::class), equalTo(NoBodyResponse("NoContent")))
-                }
+            val request = when (method) {
+                Patch -> testInstance.patch("/v1/body-single")
+                Post -> testInstance.post("/v1/body-single")
+                Put -> testInstance.put("/v1/body-single")
+                else -> throw IllegalStateException("Only patch post and put are supported")
             }
-            .toList()
+
+            val response = request.body(SomeRequestBody(value = 1337)).execute()
+
+            require(response is HttpSuccessResponse)
+            assertThat(response.statusCode, equalTo(Ok))
+            assertThat(
+                response.result(SomeRequestBodyResponse::class), equalTo(SomeRequestBodyResponse(value = 1337))
+            )
+        }
+    }.toList()
 }
