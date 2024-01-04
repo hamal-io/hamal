@@ -1,5 +1,8 @@
 package io.hamal.lib.common.domain
 
+import io.hamal.lib.common.snowflake.SnowflakeId
+import java.time.Instant
+
 
 interface ValueObject<VALUE_TYPE : Any> {
 
@@ -26,5 +29,32 @@ interface ValueObject<VALUE_TYPE : Any> {
         override fun compareTo(other: ValueObject<VALUE_TYPE>): Int {
             return value.compareTo(other.value)
         }
+    }
+}
+
+abstract class ValueObjectId : ValueObject.ComparableImpl<SnowflakeId>() {
+    fun partition() = value.partition()
+    fun sequence() = value.sequence()
+    fun elapsed() = value.elapsed()
+    override fun toString(): String {
+        return "${this::class.simpleName}(${value.value})"
+    }
+}
+
+abstract class ValueObjectString : ValueObject.ComparableImpl<String>() {
+    override fun toString(): String {
+        return "${this::class.simpleName}(${value})"
+    }
+}
+
+abstract class ValueObjectInt : ValueObject.ComparableImpl<Int>() {
+    override fun toString(): String {
+        return "${this::class.simpleName}(${value})"
+    }
+}
+
+abstract class ValueObjectInstant : ValueObject.ComparableImpl<Instant>() {
+    override fun toString(): String {
+        return "${this::class.simpleName}(${value})"
     }
 }

@@ -3,14 +3,14 @@ package io.hamal.lib.sdk.api
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain.request.HookCreateRequest
+import io.hamal.lib.domain.request.HookUpdateRequest
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpRequest
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiHookService.HookQuery
 import io.hamal.lib.sdk.fold
-import io.hamal.lib.domain.request.HookCreateRequest
-import io.hamal.lib.domain.request.HookUpdateRequest
 
 data class ApiHookCreateRequest(
     override val name: HookName
@@ -22,7 +22,7 @@ data class ApiHookCreateRequested(
     val hookId: HookId,
     val groupId: GroupId,
     val flowId: FlowId
-) : ApiRequested
+) : ApiRequested()
 
 data class ApiHookUpdateRequest(
     override val name: HookName? = null
@@ -32,7 +32,7 @@ data class ApiHookUpdateRequested(
     override val id: RequestId,
     override val status: RequestStatus,
     val hookId: HookId,
-) : ApiRequested
+) : ApiRequested()
 
 data class ApiHookList(
     val hooks: List<Hook>

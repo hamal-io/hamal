@@ -3,13 +3,13 @@ package io.hamal.lib.sdk.api
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain.request.StateSetRequest
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.domain.vo.RequestId
 import io.hamal.lib.domain.vo.base.MapValueObject
 import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.domain.request.StateSetRequest
 
 data class ApiStateSetRequest(
     override val correlation: Correlation,
@@ -19,7 +19,7 @@ data class ApiStateSetRequest(
 data class ApiStateSetRequested(
     override val id: RequestId,
     override val status: RequestStatus
-) : ApiRequested
+) : ApiRequested()
 
 
 class ApiState(override val value: MapType = MapType()) : MapValueObject()

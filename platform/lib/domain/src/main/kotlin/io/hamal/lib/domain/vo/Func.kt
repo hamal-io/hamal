@@ -1,8 +1,7 @@
 package io.hamal.lib.domain.vo
 
-import io.hamal.lib.common.domain.DomainAt
-import io.hamal.lib.common.domain.DomainName
 import io.hamal.lib.common.domain.ValueObjectId
+import io.hamal.lib.common.domain.ValueObjectInstant
 import io.hamal.lib.common.domain.ValueObjectString
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.util.TimeUtils
@@ -16,17 +15,17 @@ class FuncId(override val value: SnowflakeId) : ValueObjectId() {
 }
 
 
-class FuncName(override val value: String) : DomainName()
+class FuncName(override val value: String) : ValueObjectString()
 
 class FuncInputs(override val value: MapType = MapType()) : MapValueObject()
 
-data class DeployMessage(override val value: String) : ValueObjectString() {
+class DeployMessage(override val value: String) : ValueObjectString() {
     companion object {
         val empty = DeployMessage("")
     }
 }
 
-class DeployedAt(override val value: Instant) : DomainAt() {
+class DeployedAt(override val value: Instant) : ValueObjectInstant() {
     companion object {
         @JvmStatic
         fun now(): DeployedAt = DeployedAt(TimeUtils.now())

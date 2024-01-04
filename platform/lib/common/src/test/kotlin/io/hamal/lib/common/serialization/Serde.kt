@@ -3,6 +3,8 @@ package io.hamal.lib.common.serialization
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import io.hamal.lib.common.domain.ValueObjectId
+import io.hamal.lib.common.domain.ValueObjectInstant
+import io.hamal.lib.common.domain.ValueObjectInt
 import io.hamal.lib.common.domain.ValueObjectString
 import io.hamal.lib.common.hot.HotArray
 import io.hamal.lib.common.hot.HotObject
@@ -84,8 +86,7 @@ internal object ValueObjectIdAdapterTest {
     }
 
     private val testDelegate: Gson = GsonBuilder().registerTypeAdapter(
-        TestIdValueObject::class.java,
-        ValueObjectIdAdapter(::TestIdValueObject)
+        TestIdValueObject::class.java, ValueObjectIdAdapter(::TestIdValueObject)
     ).create()
 
     private class TestIdValueObject(
@@ -110,11 +111,60 @@ internal object ValueObjectStringAdapterTest {
     }
 
     private val testDelegate: Gson = GsonBuilder().registerTypeAdapter(
-        TestStringValueObject::class.java,
-        ValueObjectStringAdapter(::TestStringValueObject)
+        TestStringValueObject::class.java, ValueObjectStringAdapter(::TestStringValueObject)
     ).create()
 
     private class TestStringValueObject(
         override val value: String
     ) : ValueObjectString()
+}
+
+
+internal object ValueObjectIntAdapterTest {
+
+    @Test
+    fun serialize() {
+        val result = testDelegate.toJson(TestIntValueObject(1337))
+        assertThat(result, equalTo("1337"))
+    }
+
+    @Test
+    fun deserialize() {
+        val expected = TestIntValueObject(1337)
+        val result = testDelegate.fromJson("1337", TestIntValueObject::class.java)
+        assertThat(result, equalTo(expected))
+    }
+
+    private val testDelegate: Gson = GsonBuilder().registerTypeAdapter(
+        TestIntValueObject::class.java, ValueObjectIntAdapter(::TestIntValueObject)
+    ).create()
+
+    private class TestIntValueObject(
+        override val value: Int
+    ) : ValueObjectInt()
+}
+
+internal object ValueObjectInstantAdapterTest {
+
+    @Test
+    fun serialize() {
+        val result = testDelegate.toJson(TestInstantValueObject(Instant.ofEpochMilli(112233445000)))
+        assertThat(result, equalTo("\"1973-07-22T23:57:25Z\""))
+    }
+
+    @Test
+    fun deserialize() {
+        val expected = TestInstantValueObject(Instant.ofEpochMilli(112233445000))
+        val result = testDelegate.fromJson("\"1973-07-22T23:57:25Z\"", TestInstantValueObject::class.java)
+        assertThat(result, equalTo(expected))
+    }
+
+    private val testDelegate: Gson =
+        GsonBuilder().registerTypeAdapter(Instant::class.java, InstantAdapter).registerTypeAdapter(
+            TestInstantValueObject::class.java, ValueObjectInstantAdapter(::TestInstantValueObject)
+        ).create()
+
+    private class TestInstantValueObject(
+        override val value: Instant
+    ) : ValueObjectInstant()
 }

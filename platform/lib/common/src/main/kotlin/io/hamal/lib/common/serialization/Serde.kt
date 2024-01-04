@@ -2,6 +2,8 @@ package io.hamal.lib.common.serialization
 
 import com.google.gson.*
 import io.hamal.lib.common.domain.ValueObjectId
+import io.hamal.lib.common.domain.ValueObjectInstant
+import io.hamal.lib.common.domain.ValueObjectInt
 import io.hamal.lib.common.domain.ValueObjectString
 import io.hamal.lib.common.hot.HotArray
 import io.hamal.lib.common.hot.HotObject
@@ -75,4 +77,31 @@ class ValueObjectStringAdapter<TYPE : ValueObjectString>(
     }
 }
 
+
+class ValueObjectIntAdapter<TYPE : ValueObjectInt>(
+    val ctor: (Int) -> TYPE
+) : GsonSerde<TYPE> {
+
+    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): TYPE {
+        return ctor(json.asInt)
+    }
+
+    override fun serialize(src: TYPE, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
+        return JsonPrimitive(src.value)
+    }
+}
+
+
+class ValueObjectInstantAdapter<TYPE : ValueObjectInstant>(
+    val ctor: (Instant) -> TYPE
+) : GsonSerde<TYPE> {
+
+    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): TYPE {
+        return ctor(context.deserialize(json, Instant::class.java))
+    }
+
+    override fun serialize(src: TYPE, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
+        return context.serialize(src.value, Instant::class.java)
+    }
+}
 

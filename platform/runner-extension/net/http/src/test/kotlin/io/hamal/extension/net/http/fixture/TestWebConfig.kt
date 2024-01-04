@@ -1,4 +1,4 @@
-package io.hamal.lib.http.fixture
+package io.hamal.extension.net.http.fixture
 
 import com.google.gson.Gson
 import io.hamal.lib.domain.gsonInstance

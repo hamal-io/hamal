@@ -5,14 +5,6 @@ import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.vo.base.DomainAt
 import java.time.Instant
 
-
-class InvokedAt(override val value: Instant) : DomainAt() {
-    companion object {
-        @JvmStatic
-        fun now(): InvokedAt = InvokedAt(TimeUtils.now())
-    }
-}
-
 class ScheduledAt(override val value: Instant) : DomainAt() {
     companion object {
         @JvmStatic

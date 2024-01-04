@@ -23,7 +23,7 @@ data class ApiFuncCreateRequested(
     val funcId: FuncId,
     val groupId: GroupId,
     val flowId: FlowId
-) : ApiRequested
+) : ApiRequested()
 
 data class ApiFuncDeployRequest(
     override val version: CodeVersion?,
@@ -34,7 +34,7 @@ data class ApiFuncDeployRequested(
     override val id: RequestId,
     override val status: RequestStatus,
     val funcId: FuncId
-) : ApiRequested
+) : ApiRequested()
 
 data class ApiFuncUpdateRequest(
     override val name: FuncName? = null,
@@ -47,7 +47,7 @@ data class ApiFuncUpdateRequested(
     override val id: RequestId,
     override val status: RequestStatus,
     val funcId: FuncId
-) : ApiRequested
+) : ApiRequested()
 
 
 data class ApiFuncInvokeRequest(

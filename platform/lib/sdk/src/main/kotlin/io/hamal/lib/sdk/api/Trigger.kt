@@ -34,7 +34,7 @@ data class ApiTriggerCreateSubmitted(
     val triggerId: TriggerId,
     val groupId: GroupId,
     val flowId: FlowId
-) : ApiRequested
+) : ApiRequested()
 
 
 data class ApiTriggerStatusSubmitted(
@@ -42,7 +42,7 @@ data class ApiTriggerStatusSubmitted(
     override val status: RequestStatus,
     val triggerId: TriggerId,
     val triggerStatus: TriggerStatus
-) : ApiRequested
+) : ApiRequested()
 
 data class ApiTriggerList(
     val triggers: List<Trigger>

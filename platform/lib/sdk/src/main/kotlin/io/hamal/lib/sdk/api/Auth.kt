@@ -1,11 +1,11 @@
 package io.hamal.lib.sdk.api
 
 import io.hamal.lib.domain._enum.RequestStatus
-import io.hamal.lib.domain.vo.*
-import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.domain.request.AuthChallengeMetaMaskRequest
 import io.hamal.lib.domain.request.AuthLogInEmailRequest
 import io.hamal.lib.domain.request.AuthLogInMetaMaskRequest
+import io.hamal.lib.domain.vo.*
+import io.hamal.lib.http.HttpTemplate
 
 data class ApiAuthChallengeMetaMaskRequest(
     override val address: Web3Address,
@@ -32,14 +32,14 @@ data class ApiTokenRequested(
     val groupIds: List<GroupId>,
     val defaultFlowIds: List<GroupDefaultFlowId>,
     val token: AuthToken
-) : ApiRequested
+) : ApiRequested()
 
 data class ApiAccountConvertRequested(
     override val id: RequestId,
     override val status: RequestStatus,
     val accountId: AccountId,
     val token: AuthToken
-) : ApiRequested
+) : ApiRequested()
 
 interface AuthService
 

@@ -4,14 +4,14 @@ import io.hamal.lib.common.KeyedOnce
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain.request.TopicAppendEntryRequest
+import io.hamal.lib.domain.request.TopicCreateRequest
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpRequest
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiTopicService.TopicQuery
 import io.hamal.lib.sdk.fold
-import io.hamal.lib.domain.request.TopicAppendEntryRequest
-import io.hamal.lib.domain.request.TopicCreateRequest
 
 data class ApiTopicCreateRequest(
     override val name: TopicName
@@ -23,7 +23,7 @@ data class ApiTopicCreateRequested(
     val topicId: TopicId,
     val groupId: GroupId,
     val flowId: FlowId
-) : ApiRequested
+) : ApiRequested()
 
 data class ApiTopicAppendEntryRequest(
     override val topicId: TopicId,
@@ -34,7 +34,7 @@ data class ApiTopicAppendRequested(
     override val id: RequestId,
     override val status: RequestStatus,
     val topicId: TopicId
-) : ApiRequested
+) : ApiRequested()
 
 data class ApiTopicEntryList(
     val topicId: TopicId,

@@ -126,16 +126,6 @@ class SnowflakeIdTest {
         assertThat(result.sequence(), equalTo(Sequence(0)))
         assertThat(result.elapsed(), equalTo(Elapsed(2199023255550)))
     }
-
-    @Test
-    fun `Is Serializable`() {
-//        val testInstance = SnowflakeId(12345678)
-//        val encoded = ProtoBuf.encodeToByteArray(testInstance)
-//        assertThat(encoded.size, equalTo(7))
-//        val decoded = ProtoBuf.decodeFromByteArray<SnowflakeId>(encoded)
-//        assertThat(decoded, equalTo(SnowflakeId(12345678)))
-        TODO()
-    }
 }
 
 

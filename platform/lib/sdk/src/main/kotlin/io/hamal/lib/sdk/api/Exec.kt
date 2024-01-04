@@ -12,7 +12,7 @@ data class ApiExecInvokeRequested(
     val execId: ExecId,
     val groupId: GroupId,
     val flowId: FlowId
-) : ApiRequested
+) : ApiRequested()
 
 data class ApiExecList(
     val execs: List<Exec>

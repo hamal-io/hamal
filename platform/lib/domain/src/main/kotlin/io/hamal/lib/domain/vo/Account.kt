@@ -13,6 +13,8 @@ class AccountId(override val value: SnowflakeId) : ValueObjectId() {
     }
 }
 
+class Email(override val value: String) : ValueObjectString()
+
 class Web3Address(override val value: String) : ValueObjectString()
 
 class Web3Challenge(override val value: String) : ValueObjectString()

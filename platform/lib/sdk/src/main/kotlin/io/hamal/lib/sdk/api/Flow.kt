@@ -1,12 +1,12 @@
 package io.hamal.lib.sdk.api
 
 import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain.request.FlowCreateRequest
+import io.hamal.lib.domain.request.FlowUpdateRequest
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.fold
-import io.hamal.lib.domain.request.FlowCreateRequest
-import io.hamal.lib.domain.request.FlowUpdateRequest
 
 data class ApiFlowCreateRequest(
     override val name: FlowName,
@@ -19,7 +19,7 @@ data class ApiFlowCreateRequested(
     override val status: RequestStatus,
     val flowId: FlowId,
     val groupId: GroupId,
-) : ApiRequested
+) : ApiRequested()
 
 data class ApiFlowUpdateRequest(
     override val name: FlowName,
@@ -30,7 +30,7 @@ data class ApiFlowUpdateRequested(
     override val id: RequestId,
     override val status: RequestStatus,
     val flowId: FlowId,
-) : ApiRequested
+) : ApiRequested()
 
 data class ApiFlowList(
     val flows: List<Flow>

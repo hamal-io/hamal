@@ -19,6 +19,6 @@ class CorrelationId(override val value: String) : ValueObjectString() {
 internal object CorrelationIdValidator {
     private val regex = Regex("^([A-Za-z0-9-_@:.]{1,255})$")
     fun validate(value: String) {
-        require(regex.matches(value)) { IllegalArgumentException("DomainName('$value') is illegal") }
+        require(regex.matches(value)) { IllegalArgumentException("CorrelationId('$value') is illegal") }
     }
 }

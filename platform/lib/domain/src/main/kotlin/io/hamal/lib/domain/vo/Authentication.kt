@@ -1,9 +1,9 @@
 package io.hamal.lib.domain.vo
 
 import io.hamal.lib.common.domain.ValueObjectId
+import io.hamal.lib.common.domain.ValueObjectInstant
 import io.hamal.lib.common.domain.ValueObjectString
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.domain.vo.base.DomainAt
 import java.time.Instant
 
 class AuthId(override val value: SnowflakeId) : ValueObjectId() {
@@ -12,7 +12,7 @@ class AuthId(override val value: SnowflakeId) : ValueObjectId() {
 
 class AuthToken(override val value: String) : ValueObjectString()
 
-class AuthTokenExpiresAt(override val value: Instant) : DomainAt()
+class AuthTokenExpiresAt(override val value: Instant) : ValueObjectInstant()
 
 class Password(override val value: String) : ValueObjectString()
 

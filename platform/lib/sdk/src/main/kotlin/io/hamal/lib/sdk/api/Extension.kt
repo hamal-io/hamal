@@ -1,12 +1,12 @@
 package io.hamal.lib.sdk.api
 
 import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain.request.ExtensionCreateRequest
+import io.hamal.lib.domain.request.ExtensionUpdateRequest
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.fold
-import io.hamal.lib.domain.request.ExtensionCreateRequest
-import io.hamal.lib.domain.request.ExtensionUpdateRequest
 
 data class ApiExtension(
     val id: ExtensionId,
@@ -39,7 +39,7 @@ data class ApiExtensionCreateRequested(
     override val status: RequestStatus,
     val extensionId: ExtensionId,
     val groupId: GroupId
-) : ApiRequested
+) : ApiRequested()
 
 data class ApiExtensionUpdateRequest(
     override val name: ExtensionName? = null,
@@ -50,7 +50,7 @@ data class ApiExtensionUpdateRequested(
     override val id: RequestId,
     override val status: RequestStatus,
     val extensionId: ExtensionId
-) : ApiRequested
+) : ApiRequested()
 
 
 interface ApiExtensionService {

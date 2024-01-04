@@ -2,12 +2,14 @@ package io.hamal.lib.sdk.api
 
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.vo.RequestId
+import io.hamal.lib.domain.vo.RequestType
 
 data class ApiRequestList(
-    val reqs: List<ApiRequested>
+    val requests: List<ApiRequested>
 )
 
-sealed interface ApiRequested {
-    val id: RequestId
-    val status: RequestStatus
+sealed class ApiRequested {
+    abstract val id: RequestId
+    abstract val status: RequestStatus
+    val type: RequestType = RequestType(this::class.java.simpleName)
 }
