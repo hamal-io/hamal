@@ -82,15 +82,25 @@ object Serde {
         return gsonInstance.toJson(src)
     }
 
-    fun <TYPE : Any> deserialize(content: String, src: KClass<TYPE>): TYPE {
-        return gsonInstance.fromJson(content, src.java)
+    fun <TYPE : Any> serializeAndCompress(src: TYPE): ByteArray {
+        val json = serialize(src)
+        return json.toByteArray()
     }
 
-    fun <TYPE : Any> deserialize(stream: InputStream, src: KClass<TYPE>): TYPE {
-        return gsonInstance.fromJson(InputStreamReader(stream), src.java)
+    fun <TYPE : Any> deserialize(clazz: KClass<TYPE>, content: String): TYPE {
+        return gsonInstance.fromJson(content, clazz.java)
     }
 
-    fun <TYPE : Any> deserialize(stream: InputStream, src: TypeToken<TYPE>): TYPE {
-        return gsonInstance.fromJson(InputStreamReader(stream), src)
+    fun <TYPE : Any> deserialize(clazz: KClass<TYPE>, stream: InputStream): TYPE {
+        return gsonInstance.fromJson(InputStreamReader(stream), clazz.java)
     }
+
+    fun <TYPE : Any> deserialize(typeToken: TypeToken<TYPE>, stream: InputStream): TYPE {
+        return gsonInstance.fromJson(InputStreamReader(stream), typeToken)
+    }
+
+    fun <TYPE : Any> decompressAndDeserialize(clazz: KClass<TYPE>, bytes: ByteArray): TYPE {
+        return gsonInstance.fromJson(String(bytes), clazz.java)
+    }
+
 }

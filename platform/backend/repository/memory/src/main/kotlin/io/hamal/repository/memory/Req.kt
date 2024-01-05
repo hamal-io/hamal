@@ -63,7 +63,7 @@ class ReqMemoryRepository : RequestRepository {
 
     override fun find(reqId: RequestId): Requested? {
         val result = lock.withLock { store[reqId] } ?: return null
-        return Serde.deserialize(result, Requested::class)
+        return Serde.deserialize(Requested::class, result)
 
     }
 

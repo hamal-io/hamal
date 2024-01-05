@@ -1,5 +1,6 @@
 package io.hamal.repository.sqlite.record.trigger
 
+import io.hamal.lib.domain.Serde
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
@@ -26,8 +27,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
                 set("id", triggerId)
             }
             map { rs ->
-//                protobuf.decodeFromByteArray(Trigger.serializer(), rs.getBytes("data"))
-                TODO()
+                Serde.decompressAndDeserialize(Trigger::class, rs.getBytes("data"))
             }
         }
     }
@@ -60,8 +60,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
                 set("limit", query.limit)
             }
             map { rs ->
-//                protobuf.decodeFromByteArray(Trigger.serializer(), rs.getBytes("data"))
-                TODO()
+                Serde.decompressAndDeserialize(Trigger::class, rs.getBytes("data"))
             }
         }
     }
@@ -121,8 +120,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
             }
             set("flowId", obj.flowId)
             set("type", obj.type.value)
-//            set("data", protobuf.encodeToByteArray(Trigger.serializer(), obj))
-            TODO()
+            set("data", Serde.serializeAndCompress(obj))
         }
     }
 

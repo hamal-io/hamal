@@ -1,5 +1,6 @@
 package io.hamal.repository.sqlite.record.extension
 
+import io.hamal.lib.domain.Serde
 import io.hamal.lib.domain.vo.ExtensionId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
@@ -26,8 +27,7 @@ internal object ProjectionCurrent : ProjectionSqlite<ExtensionId, ExtensionRecor
                 set("id", obj.id)
                 set("groupId", obj.groupId)
                 set("name", obj.name)
-//                set("data", protobuf.encodeToByteArray(Extension.serializer(), obj))
-                TODO()
+                set("data", Serde.serializeAndCompress(obj))
             }
         } catch (e: SQLiteException) {
             if (e.message!!.contains("(UNIQUE constraint failed: current.group_id, current.name)")) {
@@ -71,8 +71,7 @@ internal object ProjectionCurrent : ProjectionSqlite<ExtensionId, ExtensionRecor
                 set("id", extId)
             }
             map { rs ->
-//                protobuf.decodeFromByteArray(Extension.serializer(), rs.getBytes("data"))
-                TODO()
+                Serde.decompressAndDeserialize(Extension::class, rs.getBytes("data"))
             }
         }
     }
@@ -97,8 +96,7 @@ internal object ProjectionCurrent : ProjectionSqlite<ExtensionId, ExtensionRecor
                 set("limit", query.limit)
             }
             map { rs ->
-//                protobuf.decodeFromByteArray(Extension.serializer(), rs.getBytes("data"))
-                TODO()
+                Serde.decompressAndDeserialize(Extension::class, rs.getBytes("data"))
             }
         }
     }

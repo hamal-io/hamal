@@ -4,6 +4,8 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.DomainObject
 import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.util.CollectionUtils.takeWhileInclusive
+import io.hamal.lib.domain.Serde
+import io.hamal.lib.domain.vo.RecordedAt
 import io.hamal.lib.sqlite.NamedPreparedStatementDelegate
 import io.hamal.lib.sqlite.NamedPreparedStatementResultSetDelegate
 import io.hamal.lib.sqlite.Transaction
@@ -31,8 +33,7 @@ class RecordTransactionSqlite<ID : ValueObjectId, RECORD : Record<ID>, OBJ : Dom
         ) {
             set("cmdId", record.cmdId)
             set("entityId", record.entityId)
-//            set("data", protobuf.encodeToByteArray(recordClass.serializer(), record))
-            TODO()
+            set("data", Serde.serializeAndCompress(record))
         }
 
         return record
@@ -48,11 +49,10 @@ class RecordTransactionSqlite<ID : ValueObjectId, RECORD : Record<ID>, OBJ : Dom
                 set("entityId", id)
             }
             map {
-//                protobuf.decodeFromByteArray(recordClass.serializer(), it.getBytes("data")).also { record ->
-//                    record.sequence = RecordSequence(it.getInt("sequence"))
-//                    record.recordedAt = RecordedAt(it.getInstant("timestamp"))
-//                }
-                TODO()
+                Serde.decompressAndDeserialize(recordClass, it.getBytes("data")).also { record ->
+                    record.sequence = RecordSequence(it.getInt("sequence"))
+                    record.recordedAt = RecordedAt(it.getInstant("timestamp"))
+                }
             }
         }
     }
@@ -67,11 +67,10 @@ class RecordTransactionSqlite<ID : ValueObjectId, RECORD : Record<ID>, OBJ : Dom
                 set("entityId", id)
             }
             map {
-//                protobuf.decodeFromByteArray(recordClass.serializer(), it.getBytes("data")).also { record ->
-//                    record.sequence = RecordSequence(it.getInt("sequence"))
-//                    record.recordedAt = RecordedAt(it.getInstant("timestamp"))
-//                }
-                TODO()
+                Serde.decompressAndDeserialize(recordClass, it.getBytes("data")).also { record ->
+                    record.sequence = RecordSequence(it.getInt("sequence"))
+                    record.recordedAt = RecordedAt(it.getInstant("timestamp"))
+                }
             }
         }.lastOrNull()
             ?: throw NoSuchElementException("${recordClass.simpleName!!.replace("Record", "")} not found")
@@ -97,20 +96,18 @@ class RecordTransactionSqlite<ID : ValueObjectId, RECORD : Record<ID>, OBJ : Dom
                 set("sequence", sequence.value)
             }
             map {
-//                protobuf.decodeFromByteArray(recordClass.serializer(), it.getBytes("data")).also { record ->
-//                    record.sequence = RecordSequence(it.getInt("sequence"))
-//                    record.recordedAt = RecordedAt(it.getInstant("timestamp"))
-//                }
-                TODO()
+                Serde.decompressAndDeserialize(recordClass, it.getBytes("data")).also { record ->
+                    record.sequence = RecordSequence(it.getInt("sequence"))
+                    record.recordedAt = RecordedAt(it.getInstant("timestamp"))
+                }
             }
         }.ifEmpty { null }
             ?.let { records ->
-//                if (records.none { it.sequence == sequence }) {
-//                    null
-//                } else {
-//                    createDomainObject(records)
-//                }
-                TODO()
+                if (records.none { it.sequence == sequence }) {
+                    null
+                } else {
+                    createDomainObject(records)
+                }
             }
     }
 

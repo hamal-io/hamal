@@ -1,5 +1,6 @@
 package io.hamal.repository.sqlite.record.code
 
+import io.hamal.lib.domain.Serde
 import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
@@ -26,8 +27,7 @@ internal object ProjectionCurrent : ProjectionSqlite<CodeId, CodeRecord, Code> {
                 set("id", codeId)
             }
             map { rs ->
-//                protobuf.decodeFromByteArray(Code.serializer(), rs.getBytes("data"))
-                TODO()
+                Serde.decompressAndDeserialize(Code::class, rs.getBytes("data"))
             }
         }
     }
@@ -53,8 +53,7 @@ internal object ProjectionCurrent : ProjectionSqlite<CodeId, CodeRecord, Code> {
                 set("limit", query.limit)
             }
             map { rs ->
-//                protobuf.decodeFromByteArray(Code.serializer(), rs.getBytes("data"))
-                TODO()
+                Serde.decompressAndDeserialize(Code::class, rs.getBytes("data"))
             }
         }
     }
@@ -92,8 +91,7 @@ internal object ProjectionCurrent : ProjectionSqlite<CodeId, CodeRecord, Code> {
         ) {
             set("id", obj.id)
             set("groupId", obj.groupId)
-//            set("data", protobuf.encodeToByteArray(Code.serializer(), obj))
-            TODO()
+            set("data", Serde.serializeAndCompress(obj))
         }
     }
 

@@ -2,6 +2,7 @@ package io.hamal.repository.api.log
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.domain.Serde
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.CmdRepository
 import io.hamal.repository.api.log.BrokerTopicsRepository.TopicQuery
@@ -59,12 +60,11 @@ interface BrokerRepository :
         val firstId = ChunkId(query.afterId.value.value.toInt() + 1)
         return read(firstId, topic, query.limit.value)
             .map { chunk ->
-//                val payload = ProtoBuf.decodeFromByteArray(TopicEntryPayload.serializer(), chunk.bytes)
-//                TopicEntry(
-//                    id = TopicEntryId(chunk.id.value.toInt()),
-//                    payload = payload
-//                )
-                TODO()
+                val payload = Serde.decompressAndDeserialize(TopicEntryPayload::class, chunk.bytes)
+                TopicEntry(
+                    id = TopicEntryId(chunk.id.value.toInt()),
+                    payload = payload
+                )
             }
     }
 

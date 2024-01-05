@@ -1,5 +1,6 @@
 package io.hamal.repository.api.log
 
+import io.hamal.lib.domain.Serde
 import kotlin.reflect.KClass
 
 interface LogConsumer<VALUE : Any> {
@@ -38,8 +39,7 @@ class LogConsumerImpl<Value : Any>(
             fn(
                 index,
                 chunk.id,
-//                ProtoBuf.decodeFromByteArray(valueClass.serializer(), chunk.bytes)
-                TODO()
+                Serde.decompressAndDeserialize(valueClass, chunk.bytes)
             )
             chunk.id
         }.maxByOrNull { it }?.let { repository.commit(consumerId, topic, it) }
@@ -62,8 +62,7 @@ class BatchConsumerImpl<Value : Any>(
         }
 
         val batch = chunksToConsume.map { chunk ->
-//            ProtoBuf.decodeFromByteArray(valueClass.serializer(), chunk.bytes)
-            TODO()
+            Serde.decompressAndDeserialize(valueClass, chunk.bytes)
         }
 
         block(batch)

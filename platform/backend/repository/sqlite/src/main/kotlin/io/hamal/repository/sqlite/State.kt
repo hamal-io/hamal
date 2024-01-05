@@ -3,6 +3,8 @@ package io.hamal.repository.sqlite
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation
+import io.hamal.lib.domain.Serde
+import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sqlite.Connection
@@ -55,8 +57,7 @@ class StateSqliteRepository(
             query {
                 set("funcId", correlatedState.correlation.funcId)
                 set("correlationId", correlatedState.correlation.correlationId.value)
-                TODO()
-//                set("value", protoBuf.encodeToByteArray(State.serializer(), correlatedState.value))
+                set("value", Serde.serializeAndCompress(correlatedState.value))
             }
         }
     }
@@ -77,8 +78,7 @@ class StateSqliteRepository(
                         funcId = rs.getId("func_id", ::FuncId),
                         correlationId = CorrelationId(rs.getString("correlation_id"))
                     ),
-//                    value = protoBuf.decodeFromByteArray(State.serializer(), rs.getBytes("value"))
-                    value = TODO()
+                    value = Serde.decompressAndDeserialize(State::class, rs.getBytes("value"))
                 )
             }
         }

@@ -1,5 +1,6 @@
 package io.hamal.repository.sqlite.record.feedback
 
+import io.hamal.lib.domain.Serde
 import io.hamal.lib.domain.vo.FeedbackId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
@@ -20,8 +21,7 @@ internal object ProjectionCurrent : ProjectionSqlite<FeedbackId, FeedbackRecord,
             """.trimIndent()
         ) {
             set("id", obj.id)
-//            set("data", protobuf.encodeToByteArray(Feedback.serializer(), obj))
-            TODO()
+            set("data", Serde.serializeAndCompress(obj))
         }
     }
 
@@ -56,8 +56,7 @@ internal object ProjectionCurrent : ProjectionSqlite<FeedbackId, FeedbackRecord,
                 set("id", feedbackId)
             }
             map { rs ->
-//                protobuf.decodeFromByteArray(Feedback.serializer(), rs.getBytes("data"))
-                TODO()
+                Serde.decompressAndDeserialize(Feedback::class, rs.getBytes("data"))
             }
         }
     }
@@ -81,8 +80,7 @@ internal object ProjectionCurrent : ProjectionSqlite<FeedbackId, FeedbackRecord,
                 set("limit", query.limit)
             }
             map { rs ->
-//                protobuf.decodeFromByteArray(Feedback.serializer(), rs.getBytes("data"))
-                TODO()
+                Serde.decompressAndDeserialize(Feedback::class, rs.getBytes("data"))
             }
         }
     }

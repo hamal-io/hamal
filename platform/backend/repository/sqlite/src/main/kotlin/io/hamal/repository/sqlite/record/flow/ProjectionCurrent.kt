@@ -1,5 +1,6 @@
 package io.hamal.repository.sqlite.record.flow
 
+import io.hamal.lib.domain.Serde
 import io.hamal.lib.domain.vo.FlowId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
@@ -26,8 +27,7 @@ internal object ProjectionCurrent : ProjectionSqlite<FlowId, FlowRecord, Flow> {
                 set("id", flowId)
             }
             map { rs ->
-//                protobuf.decodeFromByteArray(Flow.serializer(), rs.getBytes("data"))
-                TODO()
+                Serde.decompressAndDeserialize(Flow::class, rs.getBytes("data"))
             }
         }
     }
@@ -52,8 +52,7 @@ internal object ProjectionCurrent : ProjectionSqlite<FlowId, FlowRecord, Flow> {
                 set("limit", query.limit)
             }
             map { rs ->
-//                protobuf.decodeFromByteArray(Flow.serializer(), rs.getBytes("data"))
-                TODO()
+                Serde.decompressAndDeserialize(Flow::class, rs.getBytes("data"))
             }
         }
     }
@@ -91,8 +90,7 @@ internal object ProjectionCurrent : ProjectionSqlite<FlowId, FlowRecord, Flow> {
         ) {
             set("id", obj.id)
             set("groupId", obj.groupId)
-//            set("data", protobuf.encodeToByteArray(Flow.serializer(), obj))
-            TODO()
+            set("data", Serde.serializeAndCompress(obj))
         }
     }
 

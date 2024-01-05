@@ -23,7 +23,7 @@ interface HttpErrorDeserializer {
 
 object GsonErrorDeserializer : HttpErrorDeserializer {
     override fun <ERROR : Any> deserialize(inputStream: InputStream, clazz: KClass<ERROR>): ERROR {
-        return Serde.deserialize(inputStream, clazz)
+        return Serde.deserialize(clazz, inputStream)
     }
 }
 
@@ -34,11 +34,11 @@ interface HttpContentDeserializer {
 
 object GsonHttpContentDeserializer : HttpContentDeserializer {
     override fun <VALUE : Any> deserialize(inputStream: InputStream, clazz: KClass<VALUE>): VALUE {
-        return Serde.deserialize(inputStream, clazz)
+        return Serde.deserialize(clazz, inputStream)
     }
 
     override fun <VALUE : Any> deserializeList(inputStream: InputStream, clazz: KClass<VALUE>): List<VALUE> {
-        return Serde.deserialize(inputStream, object : TypeToken<List<VALUE>>() {})
+        return Serde.deserialize(object : TypeToken<List<VALUE>>() {}, inputStream)
     }
 }
 

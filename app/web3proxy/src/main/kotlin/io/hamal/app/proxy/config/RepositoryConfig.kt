@@ -20,11 +20,6 @@ class RepositoryConfig {
     @Bean
     fun transactionRepository(): TransactionRepository = SqliteTransactionRepository(path)
 
-//    @Bean
-//    fun receiptRepository(
-//        protoBuf: ProtoBuf
-//    ): ReceiptRepository = SqliteReceiptRepository(path, protoBuf)
-
     @Bean
     fun proxyRepository(
         addressRepository: AddressRepository,

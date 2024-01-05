@@ -1,5 +1,6 @@
 package io.hamal.repository.sqlite.record.func
 
+import io.hamal.lib.domain.Serde
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
@@ -26,8 +27,7 @@ internal object ProjectionCurrent : ProjectionSqlite<FuncId, FuncRecord, Func> {
                 set("id", funcId)
             }
             map { rs ->
-//                protobuf.decodeFromByteArray(Func.serializer(), rs.getBytes("data"))
-                TODO()
+                Serde.decompressAndDeserialize(Func::class, rs.getBytes("data"))
             }
         }
     }
@@ -53,8 +53,7 @@ internal object ProjectionCurrent : ProjectionSqlite<FuncId, FuncRecord, Func> {
                 set("limit", query.limit)
             }
             map { rs ->
-//                protobuf.decodeFromByteArray(Func.serializer(), rs.getBytes("data"))
-                TODO()
+                Serde.decompressAndDeserialize(Func::class, rs.getBytes("data"))
             }
         }
     }
@@ -94,8 +93,7 @@ internal object ProjectionCurrent : ProjectionSqlite<FuncId, FuncRecord, Func> {
             set("id", obj.id)
             set("groupId", obj.groupId)
             set("flowId", obj.flowId)
-//            set("data", protobuf.encodeToByteArray(Func.serializer(), obj))
-            TODO()
+            set("data", Serde.serializeAndCompress(obj))
         }
     }
 

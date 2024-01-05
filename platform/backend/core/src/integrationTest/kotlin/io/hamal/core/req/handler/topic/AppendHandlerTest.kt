@@ -2,7 +2,9 @@ package io.hamal.core.request.handler.topic
 
 import io.hamal.core.request.handler.BaseReqHandlerTest
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.domain.Serde
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
+import io.hamal.lib.domain.request.TopicAppendToRequested
 import io.hamal.lib.domain.vo.RequestId
 import io.hamal.lib.domain.vo.TopicEntryPayload
 import io.hamal.lib.domain.vo.TopicId
@@ -11,7 +13,6 @@ import io.hamal.lib.kua.type.MapType
 import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.log.ChunkId
 import io.hamal.repository.api.log.Segment
-import io.hamal.lib.domain.request.TopicAppendToRequested
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
@@ -41,10 +42,9 @@ internal class TopicAppendHandlerTest : BaseReqHandlerTest() {
                 assertThat(segmentId, equalTo(Segment.Id(0)))
                 assertThat(id, equalTo(ChunkId(1)))
                 assertThat(topicId, equalTo(TopicId(4444)))
-
-                TODO()
-//                val payload = ProtoBuf { }.decodeFromByteArray(TopicEntryPayload.serializer(), bytes)
-//                assertThat(payload.value, equalTo(MapType(mutableMapOf("hamal" to StringType("rockz")))))
+                
+                val payload = Serde.decompressAndDeserialize(TopicEntryPayload::class, bytes)
+                assertThat(payload.value, equalTo(MapType(mutableMapOf("hamal" to StringType("rockz")))))
             }
         }
     }
