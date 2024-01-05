@@ -42,11 +42,11 @@ class FeedbackAdapter(
     private val reqCmdRepository: RequestCmdRepository
 
 ) : FeedbackPort {
+
     override fun <T : Any> invoke(
         req: FeedbackCreateRequest,
         responseHandler: (FeedbackCreateRequested) -> T
-    )
-            : T {
+    ): T {
         return FeedbackCreateRequested(
             id = generateDomainId(::RequestId),
             status = Submitted,
@@ -60,10 +60,8 @@ class FeedbackAdapter(
         return responseHandler(feedbackQueryRepository.get(feedbackId))
     }
 
-    override fun <T : Any> invoke(
-        query: FeedbackQuery,
-        responseHandler: (List<Feedback>) -> T
-    ): T {
-        TODO("142")
+    override fun <T : Any> invoke(query: FeedbackQuery, responseHandler: (List<Feedback>) -> T): T {
+        return responseHandler(feedbackQueryRepository.list(query))
     }
+
 }

@@ -43,6 +43,7 @@ class RequestedTypeAdapter : GsonSerde<Requested> {
         ExecInvokeRequested::class,
         ExtensionCreateRequested::class,
         ExtensionUpdateRequested::class,
+        FeedbackCreateRequested::class,
         FuncCreateRequested::class,
         FuncDeployRequested::class,
         FuncUpdateRequested::class,
