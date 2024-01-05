@@ -85,6 +85,12 @@ internal abstract class BaseTest {
     lateinit var extensionCmdRepository: ExtensionCmdRepository
 
     @Autowired
+    lateinit var feedbackQueryRepository: FeedbackQueryRepository
+
+    @Autowired
+    lateinit var feedbackCmdRepository: FeedbackCmdRepository
+
+    @Autowired
     lateinit var funcQueryRepository: FuncQueryRepository
 
     @Autowired

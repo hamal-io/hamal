@@ -7,8 +7,8 @@ import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiBlueprint
-import io.hamal.lib.sdk.api.ApiBlueprintCreateRequested
 import io.hamal.lib.sdk.api.ApiBlueprintCreateRequest
+import io.hamal.lib.sdk.api.ApiBlueprintCreateRequested
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 

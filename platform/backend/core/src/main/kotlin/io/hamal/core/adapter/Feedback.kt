@@ -50,6 +50,7 @@ class FeedbackAdapter(
         return FeedbackCreateRequested(
             id = generateDomainId(::RequestId),
             status = Submitted,
+            feedbackId = generateDomainId(::FeedbackId),
             mood = req.mood,
             message = req.message,
             accountId = req.accountId

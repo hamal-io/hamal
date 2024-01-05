@@ -4,7 +4,7 @@ import io.hamal.api.http.controller.BaseControllerTest
 import io.hamal.lib.domain.request.FeedbackCreateRequest
 import io.hamal.lib.domain.request.FeedbackCreateRequested
 import io.hamal.lib.domain.vo.FeedbackId
-import io.hamal.lib.http.HttpStatusCode
+import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
 import io.hamal.repository.api.Feedback
@@ -18,7 +18,7 @@ internal sealed class FeedbackBaseControllerTest : BaseControllerTest() {
             .body(req)
             .execute()
 
-        assertThat(createResponse.statusCode, equalTo(HttpStatusCode.Accepted))
+        assertThat(createResponse.statusCode, equalTo(Ok))
         require(createResponse is HttpSuccessResponse) { "request was not successful" }
         return createResponse.result(FeedbackCreateRequested::class)
     }
@@ -28,8 +28,8 @@ internal sealed class FeedbackBaseControllerTest : BaseControllerTest() {
             .path("fbId", feedbackId)
             .execute()
 
-        assertThat(getResponse.statusCode, equalTo(HttpStatusCode.Ok))
-        require(getResponse is HttpSuccessResponse) { "request was successful" }
+        assertThat(getResponse.statusCode, equalTo(Ok))
+        require(getResponse is HttpSuccessResponse) { "request was not successful" }
         return getResponse.result(Feedback::class)
     }
 }
