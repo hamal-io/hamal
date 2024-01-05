@@ -18,7 +18,9 @@ internal class FeedbackCreateController(
     fun createFeedback(
         @RequestBody req: FeedbackCreateRequest
     ): ResponseEntity<FeedbackCreateRequested> = retry {
-        createFeedback(req)
+        createFeedback(req) {
+            ResponseEntity.ok(it)
+        }
     }
 }
 
