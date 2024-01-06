@@ -6,8 +6,8 @@ import io.hamal.lib.domain._enum.EndpointMethod
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain.request.ExecInvokeRequested
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.KuaMap
+import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.sdk.api.ApiExec
 import io.hamal.repository.api.*
 import jakarta.servlet.http.HttpServletRequest
@@ -122,14 +122,14 @@ internal class EndpointInvokeController(
     }
 
     private fun HttpServletRequest.headers() = EndpointHeaders(
-        MapType(headerNames.asSequence()
-            .map { headerName -> headerName to StringType(getHeader(headerName)) }
+        KuaMap(headerNames.asSequence()
+            .map { headerName -> headerName to KuaString(getHeader(headerName)) }
             .toMap()
             .toMutableMap()
         ))
 
     private fun HttpServletRequest.parameters() = EndpointParameters(
-        MapType(parameterMap.map { (key, value) -> key to StringType(value.joinToString(",")) }.toMap().toMutableMap())
+        KuaMap(parameterMap.map { (key, value) -> key to KuaString(value.joinToString(",")) }.toMap().toMutableMap())
     )
 
     private fun HttpServletRequest.content(): EndpointContent {

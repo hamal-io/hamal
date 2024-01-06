@@ -8,8 +8,8 @@ import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.AccountType.Root
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.KuaMap
+import io.hamal.lib.kua.type.KuaString
 import io.hamal.repository.api.*
 import io.hamal.repository.api.AuthCmdRepository.CreateTokenAuthCmd
 import io.hamal.repository.api.ExecCmdRepository.StartCmd
@@ -260,8 +260,8 @@ internal abstract class BaseTest {
                 ExecCmdRepository.CompleteCmd(
                     id = CmdId(5),
                     execId = startedExec.id,
-                    result = ExecResult(MapType("hamal" to StringType("rocks"))),
-                    state = ExecState(MapType("state" to StringType("ful")))
+                    result = ExecResult(KuaMap("hamal" to KuaString("rocks"))),
+                    state = ExecState(KuaMap("state" to KuaString("ful")))
                 )
             )
 
@@ -269,7 +269,7 @@ internal abstract class BaseTest {
                 ExecCmdRepository.FailCmd(
                     id = CmdId(5),
                     execId = startedExec.id,
-                    result = ExecResult(MapType("message" to StringType("BaseTest.kt")))
+                    result = ExecResult(KuaMap("message" to KuaString("BaseTest.kt")))
                 )
             )
 

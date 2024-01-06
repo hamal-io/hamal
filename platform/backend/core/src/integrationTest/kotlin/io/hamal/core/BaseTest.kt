@@ -6,9 +6,9 @@ import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.AccountType.Root
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.NumberType
-import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.KuaMap
+import io.hamal.lib.kua.type.KuaNumber
+import io.hamal.lib.kua.type.KuaString
 import io.hamal.repository.api.*
 import io.hamal.repository.api.AuthCmdRepository.CreateTokenAuthCmd
 import io.hamal.repository.api.ExecCmdRepository.PlanCmd
@@ -240,8 +240,8 @@ internal abstract class BaseTest {
                 ExecCmdRepository.CompleteCmd(
                     id = CmdId(5),
                     execId = startedExec.id,
-                    result = ExecResult(MapType("hamal" to StringType("rocks"))),
-                    state = ExecState(MapType("state" to NumberType(23.23)))
+                    result = ExecResult(KuaMap("hamal" to KuaString("rocks"))),
+                    state = ExecState(KuaMap("state" to KuaNumber(23.23)))
                 )
             )
 
@@ -250,7 +250,7 @@ internal abstract class BaseTest {
                     id = CmdId(5),
                     execId = startedExec.id,
                     result = ExecResult(
-                        MapType("message" to StringType("BaseTest.kt"))
+                        KuaMap("message" to KuaString("BaseTest.kt"))
                     )
                 )
             )

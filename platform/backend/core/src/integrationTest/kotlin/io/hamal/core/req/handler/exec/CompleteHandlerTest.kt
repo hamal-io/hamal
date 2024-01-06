@@ -6,9 +6,9 @@ import io.hamal.lib.domain.request.ExecCompleteRequested
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.ExecStatus.Completed
 import io.hamal.lib.domain.vo.ExecStatus.Started
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.NumberType
-import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.KuaMap
+import io.hamal.lib.kua.type.KuaNumber
+import io.hamal.lib.kua.type.KuaString
 import io.hamal.repository.api.ExecQueryRepository.ExecQuery
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
@@ -60,12 +60,12 @@ internal class ExecCompleteHandlerTest : BaseReqHandlerTest() {
             id = RequestId(10),
             status = RequestStatus.Submitted,
             execId = ExecId(1234),
-            result = ExecResult(MapType("hamal" to StringType("rocks"))),
-            state = ExecState(MapType("counter" to NumberType(1))),
+            result = ExecResult(KuaMap("hamal" to KuaString("rocks"))),
+            state = ExecState(KuaMap("counter" to KuaNumber(1))),
             events = listOf(
                 EventToSubmit(
                     topicName = TopicName("test-completion"),
-                    payload = EventPayload(MapType(mutableMapOf("ich" to StringType("habFertsch"))))
+                    payload = EventPayload(KuaMap(mutableMapOf("ich" to KuaString("habFertsch"))))
                 )
             ),
         )
@@ -78,7 +78,7 @@ internal class ExecCompleteHandlerTest : BaseReqHandlerTest() {
                 require(this is io.hamal.repository.api.CompletedExec)
                 assertThat(id, equalTo(ExecId(1234)))
                 assertThat(status, equalTo(Completed))
-                assertThat(result, equalTo(ExecResult(MapType("hamal" to StringType("rocks")))))
+                assertThat(result, equalTo(ExecResult(KuaMap("hamal" to KuaString("rocks")))))
             }
         }
     }

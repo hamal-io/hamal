@@ -4,14 +4,14 @@ import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.domain.ValueObjectString
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.base.MapValueObject
-import io.hamal.lib.kua.type.MapType
+import io.hamal.lib.kua.type.KuaMap
 
 class ExecId(override val value: SnowflakeId) : ValueObjectId() {
     constructor(value: Int) : this(SnowflakeId(value.toLong()))
     constructor(value: String) : this(SnowflakeId(value.toLong(16)))
 }
 
-class ExecInputs(override val value: MapType = MapType()) : MapValueObject()
+class ExecInputs(override val value: KuaMap = KuaMap()) : MapValueObject()
 
 data class ExecCode(
     val id: CodeId? = null,
@@ -38,7 +38,7 @@ enum class ExecStatus(val value: Int) {
 
 class ExecToken(override val value: String) : ValueObjectString()
 
-class ExecResult(override val value: MapType = MapType()) : MapValueObject()
+class ExecResult(override val value: KuaMap = KuaMap()) : MapValueObject()
 
-class ExecState(override val value: MapType = MapType()) : MapValueObject()
+class ExecState(override val value: KuaMap = KuaMap()) : MapValueObject()
 

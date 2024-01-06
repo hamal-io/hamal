@@ -4,8 +4,8 @@ import io.hamal.core.request.handler.BaseReqHandlerTest
 import io.hamal.core.request.handler.NextCommandId
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.KuaMap
+import io.hamal.lib.kua.type.KuaString
 import io.hamal.repository.api.CodeCmdRepository
 import io.hamal.repository.api.FuncCmdRepository
 import io.hamal.repository.api.FuncCode
@@ -25,7 +25,7 @@ internal class FuncUpdateHandlerTest : BaseReqHandlerTest() {
 
         with(funcQueryRepository.get(FuncId(1))) {
             assertThat(name, equalTo(FuncName("Func-update")))
-            assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
+            assertThat(inputs, equalTo(FuncInputs(KuaMap(mutableMapOf("hamal" to KuaString("rocks"))))))
             assertThat(
                 code, equalTo(
                     FuncCode(
@@ -49,7 +49,7 @@ internal class FuncUpdateHandlerTest : BaseReqHandlerTest() {
             groupId = testGroup.id,
             funcId = FuncId(1),
             name = FuncName("Func-update"),
-            inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
+            inputs = FuncInputs(KuaMap(mutableMapOf("hamal" to KuaString("rocks")))),
             code = CodeValue("some code")
         )
     }

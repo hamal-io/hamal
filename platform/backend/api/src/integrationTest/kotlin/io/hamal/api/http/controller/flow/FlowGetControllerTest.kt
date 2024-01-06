@@ -7,8 +7,8 @@ import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.HttpSuccessResponse
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.KuaMap
+import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.sdk.api.ApiError
 import io.hamal.lib.sdk.api.ApiFlow
 import io.hamal.lib.sdk.api.ApiFlowCreateRequest
@@ -33,7 +33,7 @@ internal class FlowGetControllerTest : FlowBaseControllerTest() {
             createFlow(
                 ApiFlowCreateRequest(
                     name = FlowName("flow-one"),
-                    inputs = FlowInputs(MapType(mutableMapOf("hamal" to StringType("rockz")))),
+                    inputs = FlowInputs(KuaMap(mutableMapOf("hamal" to KuaString("rockz")))),
                     type = null
                 )
             )
@@ -50,7 +50,7 @@ internal class FlowGetControllerTest : FlowBaseControllerTest() {
             assertThat(id, equalTo(flowId))
             assertThat(type, equalTo(FlowType.default))
             assertThat(name, equalTo(FlowName("flow-one")))
-            assertThat(inputs, equalTo(FlowInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
+            assertThat(inputs, equalTo(FlowInputs(KuaMap(mutableMapOf("hamal" to KuaString("rockz"))))))
         }
     }
 }

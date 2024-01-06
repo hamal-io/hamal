@@ -13,8 +13,8 @@ internal class NilTypeTest {
     fun `Single result it nil`() {
         sandbox.use { sandbox ->
             sandbox.registerGlobalFunction("func",
-                object : Function0In1Out<NumberType>(FunctionOutput1Schema(NumberType::class)) {
-                    override fun invoke(ctx: FunctionContext): NumberType? {
+                object : Function0In1Out<KuaNumber>(FunctionOutput1Schema(KuaNumber::class)) {
+                    override fun invoke(ctx: FunctionContext): KuaNumber? {
                         return null
                     }
                 }
@@ -33,9 +33,14 @@ internal class NilTypeTest {
     fun `First result is nil`() {
         sandbox.use { sandbox ->
             sandbox.registerGlobalFunction("func",
-                object : Function0In2Out<ArrayType, MapType>(FunctionOutput2Schema(ArrayType::class, MapType::class)) {
-                    override fun invoke(ctx: FunctionContext): Pair<ArrayType?, MapType?> {
-                        return null to MapType()
+                object : Function0In2Out<KuaArray, KuaMap>(
+                    FunctionOutput2Schema(
+                        KuaArray::class,
+                        KuaMap::class
+                    )
+                ) {
+                    override fun invoke(ctx: FunctionContext): Pair<KuaArray?, KuaMap?> {
+                        return null to KuaMap()
                     }
                 }
             )
@@ -55,9 +60,14 @@ internal class NilTypeTest {
         sandbox.use { sandbox ->
             sandbox.registerGlobalFunction("func",
                 object :
-                    Function0In2Out<ArrayType, MapType>(FunctionOutput2Schema(ArrayType::class, MapType::class)) {
-                    override fun invoke(ctx: FunctionContext): Pair<ArrayType?, MapType?> {
-                        return ArrayType() to null
+                    Function0In2Out<KuaArray, KuaMap>(
+                        FunctionOutput2Schema(
+                            KuaArray::class,
+                            KuaMap::class
+                        )
+                    ) {
+                    override fun invoke(ctx: FunctionContext): Pair<KuaArray?, KuaMap?> {
+                        return KuaArray() to null
                     }
                 })
 
@@ -74,8 +84,13 @@ internal class NilTypeTest {
     @Test
     fun `Both results are nil`() {
         val func =
-            object : Function0In2Out<ErrorType, MapType>(FunctionOutput2Schema(ErrorType::class, MapType::class)) {
-                override fun invoke(ctx: FunctionContext): Pair<ErrorType?, MapType?> {
+            object : Function0In2Out<KuaError, KuaMap>(
+                FunctionOutput2Schema(
+                    KuaError::class,
+                    KuaMap::class
+                )
+            ) {
+                override fun invoke(ctx: FunctionContext): Pair<KuaError?, KuaMap?> {
                     return null to null
                 }
             }

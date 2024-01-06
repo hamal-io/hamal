@@ -3,8 +3,8 @@ package io.hamal.core.request.handler.blueprint
 import io.hamal.core.request.handler.BaseReqHandlerTest
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.KuaMap
+import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.domain.request.BlueprintCreateRequested
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -32,7 +32,7 @@ internal class BlueprintCreateHandlerTest : BaseReqHandlerTest() {
             groupId = testGroup.id,
             blueprintId = BlueprintId(123),
             name = BlueprintName("TestBlueprint"),
-            inputs = BlueprintInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
+            inputs = BlueprintInputs(KuaMap(mutableMapOf("hamal" to KuaString("rocks")))),
             value = CodeValue("1 + 1"),
             creatorId = testAccount.id
         )

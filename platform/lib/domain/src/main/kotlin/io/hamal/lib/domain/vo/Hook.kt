@@ -4,7 +4,7 @@ import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.domain.ValueObjectString
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.base.MapValueObject
-import io.hamal.lib.kua.type.MapType
+import io.hamal.lib.kua.type.KuaMap
 
 class HookId(override val value: SnowflakeId) : ValueObjectId() {
     constructor(value: Int) : this(SnowflakeId(value.toLong()))
@@ -13,8 +13,8 @@ class HookId(override val value: SnowflakeId) : ValueObjectId() {
 
 class HookName(override val value: String) : ValueObjectString()
 
-class HookHeaders(override val value: MapType = MapType()) : MapValueObject()
+class HookHeaders(override val value: KuaMap = KuaMap()) : MapValueObject()
 
-class HookParameters(override val value: MapType = MapType()) : MapValueObject()
+class HookParameters(override val value: KuaMap = KuaMap()) : MapValueObject()
 
-class HookContent(override val value: MapType = MapType()) : MapValueObject()
+class HookContent(override val value: KuaMap = KuaMap()) : MapValueObject()

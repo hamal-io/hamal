@@ -1,7 +1,27 @@
 package io.hamal.lib.kua.type
 
-interface Type
+import io.hamal.lib.kua.type.KuaType.Type
 
-sealed class SerializableType : Type
+sealed interface KuaType {
+    enum class Type {
+        Any,
+        Array,
+        Boolean,
+        Code,
+        Decimal,
+        Error,
+        Function,
+        Map,
+        Nil,
+        Number,
+        String
+    }
 
-sealed class TableType : SerializableType()
+    val type: Type
+}
+
+interface KuaTableType : KuaType
+
+data class KuaAny(val value: KuaType) : KuaType {
+    override val type: Type = Type.Any
+}

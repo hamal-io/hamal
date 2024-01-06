@@ -9,7 +9,7 @@ import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.domain.vo.RequestId
 import io.hamal.lib.domain.vo.base.MapValueObject
-import io.hamal.lib.kua.type.MapType
+import io.hamal.lib.kua.type.KuaMap
 
 data class ApiStateSetRequest(
     override val correlation: Correlation,
@@ -22,7 +22,7 @@ data class ApiStateSetRequested(
 ) : ApiRequested()
 
 
-class ApiState(override val value: MapType = MapType()) : MapValueObject()
+class ApiState(override val value: KuaMap = KuaMap()) : MapValueObject()
 
 data class ApiCorrelation(
     val correlationId: CorrelationId,

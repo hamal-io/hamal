@@ -3,9 +3,9 @@ package io.hamal.lib.domain.vo
 import io.hamal.lib.domain._enum.EndpointMethod
 import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain.vo.base.MapValueObject
-import io.hamal.lib.kua.type.MapType
+import io.hamal.lib.kua.type.KuaMap
 
-class InvocationInputs(override val value: MapType = MapType()) : MapValueObject()
+class InvocationInputs(override val value: KuaMap = KuaMap()) : MapValueObject()
 
 sealed interface Invocation
 

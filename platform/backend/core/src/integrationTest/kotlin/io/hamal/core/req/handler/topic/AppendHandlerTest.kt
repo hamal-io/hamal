@@ -9,8 +9,8 @@ import io.hamal.lib.domain.vo.RequestId
 import io.hamal.lib.domain.vo.TopicEntryPayload
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.KuaMap
+import io.hamal.lib.kua.type.KuaString
 import io.hamal.repository.api.log.ChunkId
 import io.hamal.repository.api.log.Segment
 import org.hamcrest.MatcherAssert.assertThat
@@ -31,7 +31,7 @@ internal class TopicAppendHandlerTest : BaseReqHandlerTest() {
                 status = Submitted,
                 topicId = TopicId(4444),
                 groupId = testGroup.id,
-                payload = TopicEntryPayload(MapType(mutableMapOf("hamal" to StringType("rockz"))))
+                payload = TopicEntryPayload(KuaMap(mutableMapOf("hamal" to KuaString("rockz"))))
             )
         )
 
@@ -44,7 +44,7 @@ internal class TopicAppendHandlerTest : BaseReqHandlerTest() {
                 assertThat(topicId, equalTo(TopicId(4444)))
                 
                 val payload = Serde.decompressAndDeserialize(TopicEntryPayload::class, bytes)
-                assertThat(payload.value, equalTo(MapType(mutableMapOf("hamal" to StringType("rockz")))))
+                assertThat(payload.value, equalTo(KuaMap(mutableMapOf("hamal" to KuaString("rockz")))))
             }
         }
     }
@@ -58,7 +58,7 @@ internal class TopicAppendHandlerTest : BaseReqHandlerTest() {
                     status = Submitted,
                     topicId = TopicId(123),
                     groupId = testGroup.id,
-                    payload = TopicEntryPayload(MapType(mutableMapOf("hamal" to StringType("rockz"))))
+                    payload = TopicEntryPayload(KuaMap(mutableMapOf("hamal" to KuaString("rockz"))))
                 )
             )
         }

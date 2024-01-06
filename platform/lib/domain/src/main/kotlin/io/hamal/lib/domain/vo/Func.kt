@@ -6,7 +6,7 @@ import io.hamal.lib.common.domain.ValueObjectString
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.vo.base.MapValueObject
-import io.hamal.lib.kua.type.MapType
+import io.hamal.lib.kua.type.KuaMap
 import java.time.Instant
 
 class FuncId(override val value: SnowflakeId) : ValueObjectId() {
@@ -17,7 +17,7 @@ class FuncId(override val value: SnowflakeId) : ValueObjectId() {
 
 class FuncName(override val value: String) : ValueObjectString()
 
-class FuncInputs(override val value: MapType = MapType()) : MapValueObject()
+class FuncInputs(override val value: KuaMap = KuaMap()) : MapValueObject()
 
 class DeployMessage(override val value: String) : ValueObjectString() {
     companion object {

@@ -6,27 +6,27 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.type.ErrorType
-import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.KuaError
+import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.sdk.ApiSdk
 
 class TopicResolveFunction(
     private val sdk: ApiSdk
-) : Function1In2Out<StringType, ErrorType, StringType>(
-    FunctionInput1Schema(StringType::class),
-    FunctionOutput2Schema(ErrorType::class, StringType::class)
+) : Function1In2Out<KuaString, KuaError, KuaString>(
+    FunctionInput1Schema(KuaString::class),
+    FunctionOutput2Schema(KuaError::class, KuaString::class)
 ) {
 
-    override fun invoke(ctx: FunctionContext, arg1: StringType): Pair<ErrorType?, StringType?> {
+    override fun invoke(ctx: FunctionContext, arg1: KuaString): Pair<KuaError?, KuaString?> {
         return try {
-            null to StringType(
+            null to KuaString(
                 sdk.topic.resolve(ctx[FlowId::class], TopicName(arg1.value))
                     .value
                     .value
                     .toString(16)
             )
         } catch (t: Throwable) {
-            ErrorType(t.message ?: "Unknown Error") to null
+            KuaError(t.message ?: "Unknown Error") to null
         }
     }
 }

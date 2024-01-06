@@ -3,9 +3,9 @@ package io.hamal.lib.domain
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.base.MapValueObject
-import io.hamal.lib.kua.type.MapType
+import io.hamal.lib.kua.type.KuaMap
 
-class State(override val value: MapType = MapType()) : MapValueObject()
+class State(override val value: KuaMap = KuaMap()) : MapValueObject()
 
 data class Correlation(
     val correlationId: CorrelationId,

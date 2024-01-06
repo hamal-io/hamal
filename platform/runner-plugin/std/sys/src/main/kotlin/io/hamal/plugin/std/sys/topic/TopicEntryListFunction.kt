@@ -5,24 +5,24 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.type.ArrayType
-import io.hamal.lib.kua.type.ErrorType
-import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.KuaArray
+import io.hamal.lib.kua.type.KuaError
+import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.sdk.ApiSdk
 
 class TopicEntryListFunction(
     private val sdk: ApiSdk
-) : Function1In2Out<StringType, ErrorType, ArrayType>(
-    FunctionInput1Schema(StringType::class),
-    FunctionOutput2Schema(ErrorType::class, ArrayType::class)
+) : Function1In2Out<KuaString, KuaError, KuaArray>(
+    FunctionInput1Schema(KuaString::class),
+    FunctionOutput2Schema(KuaError::class, KuaArray::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: StringType): Pair<ErrorType?, ArrayType?> {
+    override fun invoke(ctx: FunctionContext, arg1: KuaString): Pair<KuaError?, KuaArray?> {
         return try {
-            null to ArrayType(sdk.topic.entries(TopicId(arg1.value)).mapIndexed { index, entry ->
+            null to KuaArray(sdk.topic.entries(TopicId(arg1.value)).mapIndexed { index, entry ->
                 index to entry.payload.value
             }.toMap().toMutableMap())
         } catch (t: Throwable) {
-            ErrorType(t.message!!) to null
+            KuaError(t.message!!) to null
         }
     }
 }

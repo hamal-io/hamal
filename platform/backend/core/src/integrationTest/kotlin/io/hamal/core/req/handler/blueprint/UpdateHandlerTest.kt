@@ -4,8 +4,8 @@ import io.hamal.core.request.handler.BaseReqHandlerTest
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.KuaMap
+import io.hamal.lib.kua.type.KuaString
 import io.hamal.repository.api.BlueprintCmdRepository
 import io.hamal.lib.domain.request.BlueprintUpdateRequested
 import org.hamcrest.MatcherAssert.assertThat
@@ -25,9 +25,9 @@ internal class BlueprintUpdateHandlerTest : BaseReqHandlerTest() {
                 groupId = testGroup.id,
                 name = BlueprintName("TestBlueprint"),
                 inputs = BlueprintInputs(
-                    MapType(
+                    KuaMap(
                         mutableMapOf(
-                            "hamal" to StringType("rockz")
+                            "hamal" to KuaString("rockz")
                         )
                     )
                 ),
@@ -45,9 +45,9 @@ internal class BlueprintUpdateHandlerTest : BaseReqHandlerTest() {
             assertThat(
                 inputs, equalTo(
                     BlueprintInputs(
-                        MapType(
+                        KuaMap(
                             mutableMapOf(
-                                "hamal" to StringType("updates")
+                                "hamal" to KuaString("updates")
                             )
                         )
                     )
@@ -64,9 +64,9 @@ internal class BlueprintUpdateHandlerTest : BaseReqHandlerTest() {
             blueprintId = BlueprintId(123),
             name = BlueprintName("UpdatedBlueprint"),
             inputs = BlueprintInputs(
-                MapType(
+                KuaMap(
                     mutableMapOf(
-                        "hamal" to StringType("updates")
+                        "hamal" to KuaString("updates")
                     )
                 )
             ),

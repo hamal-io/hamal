@@ -3,9 +3,9 @@ package io.hamal.repository
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.NumberType
-import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.KuaMap
+import io.hamal.lib.kua.type.KuaNumber
+import io.hamal.lib.kua.type.KuaString
 import io.hamal.repository.api.FlowCmdRepository.CreateCmd
 import io.hamal.repository.api.FlowCmdRepository.UpdateCmd
 import io.hamal.repository.api.FlowQueryRepository.FlowQuery
@@ -34,9 +34,9 @@ internal class FlowRepositoryTest : AbstractUnitTest() {
                     groupId = GroupId(1),
                     name = FlowName("SomeFlow"),
                     inputs = FlowInputs(
-                        MapType(
+                        KuaMap(
                             mutableMapOf(
-                                "hamal" to StringType("rockz")
+                                "hamal" to KuaString("rockz")
                             )
                         )
                     ),
@@ -49,7 +49,7 @@ internal class FlowRepositoryTest : AbstractUnitTest() {
                 assertThat(groupId, equalTo(GroupId(1)))
                 assertThat(type, equalTo(FlowType.default))
                 assertThat(name, equalTo(FlowName("SomeFlow")))
-                assertThat(inputs, equalTo(FlowInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
+                assertThat(inputs, equalTo(FlowInputs(KuaMap(mutableMapOf("hamal" to KuaString("rockz"))))))
             }
 
             verifyCount(1)
@@ -64,9 +64,9 @@ internal class FlowRepositoryTest : AbstractUnitTest() {
                     groupId = GroupId(1),
                     name = FlowName("SomeFlow"),
                     inputs = FlowInputs(
-                        MapType(
+                        KuaMap(
                             mutableMapOf(
-                                "hamal" to StringType("rockz")
+                                "hamal" to KuaString("rockz")
                             )
                         )
                     ),
@@ -80,7 +80,7 @@ internal class FlowRepositoryTest : AbstractUnitTest() {
                 assertThat(groupId, equalTo(GroupId(1)))
                 assertThat(type, equalTo(FlowType("SpecialFlowType")))
                 assertThat(name, equalTo(FlowName("SomeFlow")))
-                assertThat(inputs, equalTo(FlowInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
+                assertThat(inputs, equalTo(FlowInputs(KuaMap(mutableMapOf("hamal" to KuaString("rockz"))))))
             }
 
             verifyCount(1)
@@ -143,7 +143,7 @@ internal class FlowRepositoryTest : AbstractUnitTest() {
                     assertThat(id, equalTo(FlowId(5)))
                     assertThat(groupId, equalTo(GroupId(3)))
                     assertThat(name, equalTo(FlowName("first-flow-name")))
-                    assertThat(inputs, equalTo(FlowInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
+                    assertThat(inputs, equalTo(FlowInputs(KuaMap(mutableMapOf("hamal" to KuaString("rockz"))))))
                 }
 
                 verifyCount(1)
@@ -165,7 +165,7 @@ internal class FlowRepositoryTest : AbstractUnitTest() {
                 FlowId(1), UpdateCmd(
                     id = CmdId(2),
                     name = FlowName("Updated"),
-                    inputs = FlowInputs(MapType(mutableMapOf("answer" to NumberType(42)))),
+                    inputs = FlowInputs(KuaMap(mutableMapOf("answer" to KuaNumber(42)))),
                 )
             )
 
@@ -173,7 +173,7 @@ internal class FlowRepositoryTest : AbstractUnitTest() {
                 assertThat(id, equalTo(FlowId(1)))
                 assertThat(groupId, equalTo(GroupId(3)))
                 assertThat(name, equalTo(FlowName("Updated")))
-                assertThat(inputs, equalTo(FlowInputs(MapType(mutableMapOf("answer" to NumberType(42))))))
+                assertThat(inputs, equalTo(FlowInputs(KuaMap(mutableMapOf("answer" to KuaNumber(42))))))
             }
 
             verifyCount(1)
@@ -199,7 +199,7 @@ internal class FlowRepositoryTest : AbstractUnitTest() {
                 assertThat(id, equalTo(FlowId(1)))
                 assertThat(groupId, equalTo(GroupId(3)))
                 assertThat(name, equalTo(FlowName("flow-name")))
-                assertThat(inputs, equalTo(FlowInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
+                assertThat(inputs, equalTo(FlowInputs(KuaMap(mutableMapOf("hamal" to KuaString("rockz"))))))
             }
 
             verifyCount(1)
@@ -251,7 +251,7 @@ internal class FlowRepositoryTest : AbstractUnitTest() {
                 assertThat(id, equalTo(FlowId(1)))
                 assertThat(groupId, equalTo(GroupId(3)))
                 assertThat(name, equalTo(FlowName("SomeFlow")))
-                assertThat(inputs, equalTo(FlowInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
+                assertThat(inputs, equalTo(FlowInputs(KuaMap(mutableMapOf("hamal" to KuaString("rockz"))))))
             }
         }
 
@@ -284,7 +284,7 @@ internal class FlowRepositoryTest : AbstractUnitTest() {
                 assertThat(id, equalTo(FlowId(1)))
                 assertThat(groupId, equalTo(GroupId(3)))
                 assertThat(name, equalTo(FlowName("SomeFlow")))
-                assertThat(inputs, equalTo(FlowInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
+                assertThat(inputs, equalTo(FlowInputs(KuaMap(mutableMapOf("hamal" to KuaString("rockz"))))))
             }
         }
 
@@ -422,9 +422,9 @@ private fun FlowRepository.createFlow(
             groupId = groupId,
             name = name,
             inputs = FlowInputs(
-                MapType(
+                KuaMap(
                     mutableMapOf(
-                        "hamal" to StringType("rockz")
+                        "hamal" to KuaString("rockz")
                     )
                 )
             )

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.DynamicTest.dynamicTest
 internal object TypeSerializationFixture {
 
     fun generateTestCases(
-        testInstance: SerializableType,
+        testInstance: KuaType,
         expectedJson: String
     ): List<DynamicTest> {
         return listOf(
@@ -20,7 +20,7 @@ internal object TypeSerializationFixture {
     }
 
     fun generateTestCases(
-        testInstance: AnySerializableType,
+        testInstance: KuaAny,
         expectedJson: String
     ): List<DynamicTest> {
         return listOf(

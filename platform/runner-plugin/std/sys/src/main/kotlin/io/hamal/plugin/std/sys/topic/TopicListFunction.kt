@@ -4,37 +4,37 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.type.ArrayType
-import io.hamal.lib.kua.type.ErrorType
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.KuaArray
+import io.hamal.lib.kua.type.KuaError
+import io.hamal.lib.kua.type.KuaMap
+import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiTopicService
 
 class TopicListFunction(
     private val sdk: ApiSdk
-) : Function1In2Out<MapType, ErrorType, ArrayType>(
-    FunctionInput1Schema(MapType::class),
-    FunctionOutput2Schema(ErrorType::class, ArrayType::class)
+) : Function1In2Out<KuaMap, KuaError, KuaArray>(
+    FunctionInput1Schema(KuaMap::class),
+    FunctionOutput2Schema(KuaError::class, KuaArray::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: MapType): Pair<ErrorType?, ArrayType?> {
+    override fun invoke(ctx: FunctionContext, arg1: KuaMap): Pair<KuaError?, KuaArray?> {
         return try {
-            null to ArrayType(
+            null to KuaArray(
                 sdk.topic.list(
                     ApiTopicService.TopicQuery(
 
                     )
                 ).mapIndexed { index, topic ->
-                    index to MapType(
+                    index to KuaMap(
                         mutableMapOf(
-                            "id" to StringType(topic.id.value.value.toString(16)),
-                            "name" to StringType(topic.name.value),
+                            "id" to KuaString(topic.id.value.value.toString(16)),
+                            "name" to KuaString(topic.name.value),
                         )
                     )
                 }.toMap().toMutableMap()
             )
         } catch (t: Throwable) {
-            ErrorType(t.message!!) to null
+            KuaError(t.message!!) to null
         }
     }
 }

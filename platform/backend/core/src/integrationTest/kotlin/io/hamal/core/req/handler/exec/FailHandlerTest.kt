@@ -9,8 +9,8 @@ import io.hamal.lib.domain.vo.ExecStatus
 import io.hamal.lib.domain.vo.ExecStatus.Failed
 import io.hamal.lib.domain.vo.ExecStatus.Started
 import io.hamal.lib.domain.vo.RequestId
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.KuaMap
+import io.hamal.lib.kua.type.KuaString
 import io.hamal.repository.api.ExecQueryRepository.ExecQuery
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
@@ -63,7 +63,7 @@ internal class ExecFailHandlerTest : BaseReqHandlerTest() {
             id = RequestId(10),
             status = Submitted,
             execId = ExecId(1234),
-            result = ExecResult(MapType("message" to StringType("You have not tried hard enough")))
+            result = ExecResult(KuaMap("message" to KuaString("You have not tried hard enough")))
         )
     }
 
@@ -76,7 +76,7 @@ internal class ExecFailHandlerTest : BaseReqHandlerTest() {
                 assertThat(status, equalTo(Failed))
                 assertThat(
                     result,
-                    equalTo(ExecResult(MapType("message" to StringType("You have not tried hard enough"))))
+                    equalTo(ExecResult(KuaMap("message" to KuaString("You have not tried hard enough"))))
                 )
             }
         }

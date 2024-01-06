@@ -6,8 +6,8 @@ import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.NumberType
+import io.hamal.lib.kua.type.KuaMap
+import io.hamal.lib.kua.type.KuaNumber
 import io.hamal.lib.sdk.api.ApiError
 import io.hamal.lib.sdk.api.ApiTopicEntryList
 import org.hamcrest.MatcherAssert.assertThat
@@ -28,7 +28,7 @@ internal class EntryListControllerTest : TopicBaseControllerTest() {
         val topicId = awaitCompleted(createTopic(TopicName("test-topic"))).topicId
 
         awaitCompleted(
-            appendToTopic(topicId, TopicEntryPayload(MapType(mutableMapOf("counter" to NumberType(1)))))
+            appendToTopic(topicId, TopicEntryPayload(KuaMap(mutableMapOf("counter" to KuaNumber(1)))))
         )
 
         with(listTopicEntries(topicId)) {
@@ -37,7 +37,7 @@ internal class EntryListControllerTest : TopicBaseControllerTest() {
 
             with(entries.first()) {
                 assertThat(id, equalTo(TopicEntryId(1)))
-                assertThat(payload, equalTo(TopicEntryPayload(MapType(mutableMapOf("counter" to NumberType(1))))))
+                assertThat(payload, equalTo(TopicEntryPayload(KuaMap(mutableMapOf("counter" to KuaNumber(1))))))
             }
         }
     }
@@ -48,7 +48,7 @@ internal class EntryListControllerTest : TopicBaseControllerTest() {
 
         awaitCompleted(
             IntRange(1, 100).map {
-                appendToTopic(topicId, TopicEntryPayload(MapType(mutableMapOf("counter" to NumberType(it)))))
+                appendToTopic(topicId, TopicEntryPayload(KuaMap(mutableMapOf("counter" to KuaNumber(it)))))
             }
         )
 
@@ -62,7 +62,7 @@ internal class EntryListControllerTest : TopicBaseControllerTest() {
         listResponse.entries.forEachIndexed { idx, event ->
             assertThat(
                 event.payload, equalTo(
-                    TopicEntryPayload(MapType(mutableMapOf("counter" to NumberType(idx + 1))))
+                    TopicEntryPayload(KuaMap(mutableMapOf("counter" to KuaNumber(idx + 1))))
                 )
             )
         }
@@ -74,7 +74,7 @@ internal class EntryListControllerTest : TopicBaseControllerTest() {
 
         awaitCompleted(
             IntRange(1, 100).map {
-                appendToTopic(topicId, TopicEntryPayload(MapType(mutableMapOf("counter" to NumberType(it)))))
+                appendToTopic(topicId, TopicEntryPayload(KuaMap(mutableMapOf("counter" to KuaNumber(it)))))
             }
         )
 
@@ -88,7 +88,7 @@ internal class EntryListControllerTest : TopicBaseControllerTest() {
 
         val event = listResponse.entries.first()
         assertThat(event.id, equalTo(TopicEntryId(96)))
-        assertThat(event.payload, equalTo(TopicEntryPayload(MapType(mutableMapOf("counter" to NumberType(96))))))
+        assertThat(event.payload, equalTo(TopicEntryPayload(KuaMap(mutableMapOf("counter" to KuaNumber(96))))))
     }
 
     @Test
@@ -97,7 +97,7 @@ internal class EntryListControllerTest : TopicBaseControllerTest() {
         val anotherTopicId = awaitCompleted(createTopic(TopicName("another-test-topic"))).topicId
 
         awaitCompleted(
-            appendToTopic(topicId, TopicEntryPayload(MapType(mutableMapOf("counter" to NumberType(1)))))
+            appendToTopic(topicId, TopicEntryPayload(KuaMap(mutableMapOf("counter" to KuaNumber(1)))))
         )
 
         with(listTopicEntries(anotherTopicId)) {

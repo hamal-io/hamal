@@ -96,7 +96,7 @@ internal class EmitTest : AbstractExecuteTest() {
 
         with(eventsToEmit.first()) {
             assertThat(topicName, equalTo(TopicName("test-topic")))
-            assertThat(payload, equalTo(EventPayload(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
+            assertThat(payload, equalTo(EventPayload(KuaMap(mutableMapOf("hamal" to KuaString("rocks"))))))
         }
     }
 
@@ -110,7 +110,7 @@ internal class EmitTest : AbstractExecuteTest() {
 
         with(eventsToEmit.first()) {
             assertThat(topicName, equalTo(TopicName("test-topic")))
-            assertThat(payload, equalTo(EventPayload(MapType(mutableMapOf("answer" to NumberType(42))))))
+            assertThat(payload, equalTo(EventPayload(KuaMap(mutableMapOf("answer" to KuaNumber(42))))))
         }
     }
 
@@ -127,10 +127,10 @@ internal class EmitTest : AbstractExecuteTest() {
             assertThat(
                 payload, equalTo(
                     EventPayload(
-                        MapType(
+                        KuaMap(
                             mutableMapOf(
-                                "true_value" to True,
-                                "false_value" to False
+                                "true_value" to KuaTrue,
+                                "false_value" to KuaFalse
                             )
                         )
                     )
@@ -153,11 +153,11 @@ internal class EmitTest : AbstractExecuteTest() {
             assertThat(
                 payload, equalTo(
                     EventPayload(
-                        MapType(
+                        KuaMap(
                             mutableMapOf(
-                                "nested_table" to MapType(
+                                "nested_table" to KuaMap(
                                     mutableMapOf(
-                                        "value" to NumberType(23)
+                                        "value" to KuaNumber(23)
                                     ),
                                 )
                             )

@@ -4,7 +4,7 @@ import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.domain.ValueObjectInt
 import io.hamal.lib.common.domain.ValueObjectString
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.KuaString
 
 class CodeId(override val value: SnowflakeId) : ValueObjectId() {
     constructor(value: Int) : this(SnowflakeId(value.toLong()))
@@ -12,7 +12,7 @@ class CodeId(override val value: SnowflakeId) : ValueObjectId() {
 }
 
 class CodeValue(override val value: String) : ValueObjectString() {
-    constructor(str: StringType) : this(str.value)
+    constructor(str: KuaString) : this(str.value)
 }
 
 

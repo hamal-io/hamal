@@ -8,51 +8,51 @@ class AnySerializableTypeTest {
     @TestFactory
     fun serialization() = listOf(
         generateTestCases(
-            testInstance = AnySerializableType(
-                ArrayType(
+            testInstance = KuaAny(
+                KuaArray(
                     mutableMapOf(
-                        1234 to StringType("value")
+                        1234 to KuaString("value")
                     )
                 )
             ),
             expectedJson = """{"type":"ArrayType","value":{"1234":{"type":"StringType","value":"value"}}}"""
         ),
         generateTestCases(
-            testInstance = AnySerializableType(DecimalType("123456789.987654321")),
+            testInstance = KuaAny(KuaDecimal("123456789.987654321")),
             expectedJson = """{"type":"DecimalType","value":"123456789.987654321"}"""
         ),
         generateTestCases(
-            testInstance = AnySerializableType(ErrorType("SomeErrorMessage")),
+            testInstance = KuaAny(KuaError("SomeErrorMessage")),
             expectedJson = """{"type":"ErrorType","value":"SomeErrorMessage"}"""
         ),
         generateTestCases(
-            testInstance = AnySerializableType(False),
+            testInstance = KuaAny(KuaFalse),
             expectedJson = """{"type":"FalseType"}"""
         ),
         generateTestCases(
-            testInstance = AnySerializableType(
-                MapType(
+            testInstance = KuaAny(
+                KuaMap(
                     mutableMapOf(
-                        "value" to StringType("hamal")
+                        "value" to KuaString("hamal")
                     )
                 )
             ),
             expectedJson = """{"type":"MapType","value":{"value":{"type":"StringType","value":"hamal"}}}"""
         ),
         generateTestCases(
-            testInstance = AnySerializableType(NilType),
+            testInstance = KuaAny(KuaNil),
             expectedJson = """{"type":"NilType"}"""
         ),
         generateTestCases(
-            testInstance = AnySerializableType(NumberType(42.10)),
+            testInstance = KuaAny(KuaNumber(42.10)),
             expectedJson = """{"type":"NumberType","value":"42.1"}"""
         ),
         generateTestCases(
-            testInstance = AnySerializableType(StringType("hamal")),
+            testInstance = KuaAny(KuaString("hamal")),
             expectedJson = """{"type":"StringType","value":"hamal"}"""
         ),
         generateTestCases(
-            testInstance = AnySerializableType(True),
+            testInstance = KuaAny(KuaTrue),
             expectedJson = """{"type":"TrueType"}"""
         )
     ).flatten()

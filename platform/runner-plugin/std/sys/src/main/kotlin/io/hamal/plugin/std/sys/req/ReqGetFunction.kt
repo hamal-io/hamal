@@ -7,18 +7,18 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.type.ErrorType
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.KuaError
+import io.hamal.lib.kua.type.KuaMap
+import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.sdk.api.ApiRequested
 
 class ReqGetFunction(
     private val httpTemplate: HttpTemplate
-) : Function1In2Out<StringType, ErrorType, MapType>(
-    FunctionInput1Schema(StringType::class),
-    FunctionOutput2Schema(ErrorType::class, MapType::class)
+) : Function1In2Out<KuaString, KuaError, KuaMap>(
+    FunctionInput1Schema(KuaString::class),
+    FunctionOutput2Schema(KuaError::class, KuaMap::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: StringType): Pair<ErrorType?, MapType?> {
+    override fun invoke(ctx: FunctionContext, arg1: KuaString): Pair<KuaError?, KuaMap?> {
         val response = httpTemplate.get("/v1/requests/{reqId}")
             .path("reqId", arg1.value)
             .execute()
@@ -26,10 +26,10 @@ class ReqGetFunction(
         if (response is HttpSuccessResponse) {
             return null to response.result(ApiRequested::class)
                 .let { exec ->
-                    MapType(
+                    KuaMap(
                         mutableMapOf(
-                            "reqId" to StringType(exec.id.value.value.toString(16)),
-                            "status" to StringType(exec.status.name)
+                            "reqId" to KuaString(exec.id.value.value.toString(16)),
+                            "status" to KuaString(exec.status.name)
                         )
                     )
                 }

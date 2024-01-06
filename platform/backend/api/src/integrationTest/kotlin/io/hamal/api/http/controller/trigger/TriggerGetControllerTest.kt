@@ -1,6 +1,5 @@
 package io.hamal.api.http.controller.trigger
 
-import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain._enum.HookMethod.*
 import io.hamal.lib.domain._enum.TriggerType.*
 import io.hamal.lib.domain._enum.TriggerType.Event
@@ -9,8 +8,8 @@ import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.HttpSuccessResponse
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.KuaMap
+import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.sdk.api.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -37,7 +36,7 @@ internal class TriggerGetControllerTest : TriggerBaseControllerTest() {
                     type = FixedRate,
                     correlationId = null,
                     name = TriggerName("trigger-one"),
-                    inputs = TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rockz")))),
+                    inputs = TriggerInputs(KuaMap(mutableMapOf("hamal" to KuaString("rockz")))),
                     funcId = someFuncId,
                     duration = 10.seconds
                 )
@@ -52,7 +51,7 @@ internal class TriggerGetControllerTest : TriggerBaseControllerTest() {
         with(getTriggerResponse.result(ApiFixedRateTrigger::class)) {
             assertThat(id, equalTo(triggerId))
             assertThat(name, equalTo(TriggerName("trigger-one")))
-            assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
+            assertThat(inputs, equalTo(TriggerInputs(KuaMap(mutableMapOf("hamal" to KuaString("rockz"))))))
             assertThat(duration, equalTo(10.seconds))
             assertThat(func.id, equalTo(someFuncId))
             assertThat(func.name, equalTo(FuncName("some-func-to-trigger")))
@@ -70,7 +69,7 @@ internal class TriggerGetControllerTest : TriggerBaseControllerTest() {
                     type = Event,
                     correlationId = null,
                     name = TriggerName("trigger-one"),
-                    inputs = TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rockz")))),
+                    inputs = TriggerInputs(KuaMap(mutableMapOf("hamal" to KuaString("rockz")))),
                     funcId = someFuncId,
                     topicId = someTopicId
                 )
@@ -85,7 +84,7 @@ internal class TriggerGetControllerTest : TriggerBaseControllerTest() {
         with(getTriggerResponse.result(ApiEventTrigger::class)) {
             assertThat(id, equalTo(triggerId))
             assertThat(name, equalTo(TriggerName("trigger-one")))
-            assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
+            assertThat(inputs, equalTo(TriggerInputs(KuaMap(mutableMapOf("hamal" to KuaString("rockz"))))))
             assertThat(func.id, equalTo(someFuncId))
             assertThat(func.name, equalTo(FuncName("some-func-to-trigger")))
             assertThat(topic.id, equalTo(someTopicId))
@@ -104,7 +103,7 @@ internal class TriggerGetControllerTest : TriggerBaseControllerTest() {
                     type = Hook,
                     correlationId = null,
                     name = TriggerName("trigger-one"),
-                    inputs = TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rockz")))),
+                    inputs = TriggerInputs(KuaMap(mutableMapOf("hamal" to KuaString("rockz")))),
                     funcId = funcId,
                     hookId = hookId,
                     hookMethod = Get
@@ -121,7 +120,7 @@ internal class TriggerGetControllerTest : TriggerBaseControllerTest() {
         with(getTriggerResponse.result(ApiHookTrigger::class)) {
             assertThat(id, equalTo(triggerId))
             assertThat(name, equalTo(TriggerName("trigger-one")))
-            assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
+            assertThat(inputs, equalTo(TriggerInputs(KuaMap(mutableMapOf("hamal" to KuaString("rockz"))))))
             assertThat(func.id, equalTo(funcId))
             assertThat(func.name, equalTo(FuncName("some-func-to-trigger")))
             assertThat(hook.id, equalTo(hookId))
@@ -140,7 +139,7 @@ internal class TriggerGetControllerTest : TriggerBaseControllerTest() {
                     type = Cron,
                     name = TriggerName("cron-trigger"),
                     funcId = funcId,
-                    inputs = TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rockz")))),
+                    inputs = TriggerInputs(KuaMap(mutableMapOf("hamal" to KuaString("rockz")))),
                     cron = CronPattern("0 0 9-17 * * MON-FRI")
                 )
             )
@@ -154,7 +153,7 @@ internal class TriggerGetControllerTest : TriggerBaseControllerTest() {
         with(getTriggerResponse.result(ApiCronTrigger::class)) {
             assertThat(id, equalTo(triggerId))
             assertThat(name, equalTo(TriggerName("cron-trigger")))
-            assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
+            assertThat(inputs, equalTo(TriggerInputs(KuaMap(mutableMapOf("hamal" to KuaString("rockz"))))))
             assertThat(func.id, equalTo(funcId))
             assertThat(func.name, equalTo(FuncName("some-func-to-trigger")))
             assertThat(cron, equalTo(CronPattern("0 0 9-17 * * MON-FRI")))

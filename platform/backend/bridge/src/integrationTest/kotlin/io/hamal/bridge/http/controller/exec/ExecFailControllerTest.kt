@@ -7,8 +7,8 @@ import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.KuaMap
+import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.sdk.api.ApiError
 import io.hamal.lib.sdk.bridge.BridgeExecFailRequest
 import io.hamal.lib.sdk.bridge.BridgeExecFailRequested
@@ -72,7 +72,7 @@ internal class ExecFailControllerTest : BaseExecControllerTest() {
     @Test
     fun `Tries to fail exec which does not exist`() {
         val response = httpTemplate.post("/b1/execs/123456765432/fail")
-            .body(BridgeExecFailRequest(ExecResult(MapType("message" to StringType("SomeErrorValue")))))
+            .body(BridgeExecFailRequest(ExecResult(KuaMap("message" to KuaString("SomeErrorValue")))))
             .execute()
 
         assertThat(response.statusCode, equalTo(NotFound))
@@ -86,14 +86,14 @@ internal class ExecFailControllerTest : BaseExecControllerTest() {
         with(execQueryRepository.get(execId) as io.hamal.repository.api.FailedExec) {
             assertThat(id, equalTo(execId))
             assertThat(status, equalTo(ExecStatus.Failed))
-            assertThat(result, equalTo(ExecResult(MapType("message" to StringType("SomeErrorCause")))))
+            assertThat(result, equalTo(ExecResult(KuaMap("message" to KuaString("SomeErrorCause")))))
         }
     }
 
     private fun requestFailure(execId: ExecId) =
         httpTemplate.post("/b1/execs/{execId}/fail")
             .path("execId", execId)
-            .body(BridgeExecFailRequest(ExecResult(MapType("message" to StringType("SomeErrorCause")))))
+            .body(BridgeExecFailRequest(ExecResult(KuaMap("message" to KuaString("SomeErrorCause")))))
             .execute()
 
 }

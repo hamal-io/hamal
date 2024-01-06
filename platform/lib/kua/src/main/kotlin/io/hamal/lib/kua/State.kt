@@ -1,10 +1,10 @@
 package io.hamal.lib.kua
 
-import io.hamal.lib.kua.function.FunctionType
 import io.hamal.lib.kua.table.TableProxyArray
 import io.hamal.lib.kua.table.TableProxyMap
 import io.hamal.lib.kua.table.tableKeyType
 import io.hamal.lib.kua.type.*
+import io.hamal.lib.kua.type.KuaError
 import kotlin.reflect.KClass
 
 @JvmInline
@@ -23,38 +23,38 @@ interface State {
     fun absIndex(idx: Int): Int
     fun pushTop(idx: Int): StackTop
 
-    fun type(idx: Int): KClass<out Type>
+    fun type(idx: Int): KClass<out KuaType>
     fun pushNil(): StackTop
-    fun pushAny(value: AnyType): StackTop
-    fun getAny(idx: Int): AnyType
+    fun pushAny(value: KuaAny): StackTop
+    fun getAny(idx: Int): KuaAny
 
-    fun getArrayType(idx: Int): ArrayType
+    fun getArrayType(idx: Int): KuaArray
 
     fun pushBoolean(value: Boolean): StackTop
-    fun pushBoolean(value: BooleanType) = pushBoolean(value.value)
+    fun pushBoolean(value: KuaBoolean) = pushBoolean(value.value)
     fun getBoolean(idx: Int): Boolean
     fun getBooleanValue(idx: Int) = booleanOf(getBoolean(idx))
-    fun pushError(value: ErrorType): StackTop
-    fun pushFunction(value: FunctionType<*, *, *, *>): StackTop
+    fun pushError(value: KuaError): StackTop
+    fun pushFunction(value: KuaFunction<*, *, *, *>): StackTop
 
     fun getNumber(idx: Int): Double
-    fun getNumberType(idx: Int) = NumberType(getNumber(idx))
+    fun getNumberType(idx: Int) = KuaNumber(getNumber(idx))
     fun pushNumber(value: Double): StackTop
-    fun pushNumber(value: NumberType) = pushNumber(value.value)
+    fun pushNumber(value: KuaNumber) = pushNumber(value.value)
 
     fun getString(idx: Int): String
-    fun getStringType(idx: Int) = StringType(getString(idx))
+    fun getStringType(idx: Int) = KuaString(getString(idx))
     fun pushString(value: String): StackTop
-    fun pushString(value: StringType) = pushString(value.value)
+    fun pushString(value: KuaString) = pushString(value.value)
 
     fun pushTable(proxy: TableProxyMap): StackTop
     fun pushTable(proxy: TableProxyArray): StackTop
     fun getTableMapProxy(idx: Int): TableProxyMap
     fun getTableArrayProxy(idx: Int): TableProxyArray
 
-    fun getMapType(idx: Int): MapType
+    fun getMapType(idx: Int): KuaMap
 
-    fun setGlobal(name: String, value: FunctionType<*, *, *, *>)
+    fun setGlobal(name: String, value: KuaFunction<*, *, *, *>)
     fun setGlobal(name: String, value: TableProxyMap)
     fun setGlobal(name: String, value: TableProxyArray)
     fun getGlobalTableMap(name: String): TableProxyMap
@@ -65,8 +65,8 @@ interface State {
     fun tableAppend(idx: Int): Int
     fun tableSetRaw(idx: Int): Int
     fun tableSetRawIdx(stackIdx: Int, tableIdx: Int): Int
-    fun tableGetRaw(idx: Int): KClass<out Type>
-    fun tableGetRawIdx(stackIdx: Int, tableIdx: Int): KClass<out Type>
+    fun tableGetRaw(idx: Int): KClass<out KuaType>
+    fun tableGetRawIdx(stackIdx: Int, tableIdx: Int): KClass<out KuaType>
 
     fun load(code: String) // FIXME add return value
 }
@@ -88,47 +88,47 @@ class ClosableState(
 
     override fun pushNil() = StackTop(native.pushNil())
 
-    override fun pushAny(value: AnyType): StackTop {
+    override fun pushAny(value: KuaAny): StackTop {
         return when (val underlying = value.value) {
-            is ArrayType -> pushTable(toProxyArray(underlying))
-            is BooleanType -> pushBoolean(underlying)
-            is MapType -> pushTable(toProxyMap(underlying))
-            is NumberType -> pushNumber(underlying)
-            is StringType -> pushString(underlying)
+            is KuaArray -> pushTable(toProxyArray(underlying))
+            is KuaBoolean -> pushBoolean(underlying)
+            is KuaMap -> pushTable(toProxyMap(underlying))
+            is KuaNumber -> pushNumber(underlying)
+            is KuaString -> pushString(underlying)
             else -> TODO("${underlying.javaClass} not supported yet")
         }
     }
 
-    override fun getAny(idx: Int): AnyType {
+    override fun getAny(idx: Int): KuaAny {
         return when (val type = type(idx)) {
-            BooleanType::class -> AnyType(getBooleanValue(idx))
-            DecimalType::class -> AnyType(native.toDecimal(idx))
-            NumberType::class -> AnyType(getNumberType(idx))
-            StringType::class -> AnyType(getStringType(idx))
-            TableType::class -> {
+            KuaBoolean::class -> KuaAny(getBooleanValue(idx))
+            KuaDecimal::class -> KuaAny(native.toDecimal(idx))
+            KuaNumber::class -> KuaAny(getNumberType(idx))
+            KuaString::class -> KuaAny(getStringType(idx))
+            KuaTableType::class -> {
                 if (native.tableGetLength(idx) > 0) {
                     when (tableKeyType(idx)) {
-                        StringType::class -> AnyType(getMapType(idx))
-                        NumberType::class -> AnyType(getArrayType(idx))
+                        KuaString::class -> KuaAny(getMapType(idx))
+                        KuaNumber::class -> KuaAny(getArrayType(idx))
                         else -> throw IllegalStateException("Must either be number or string")
                     }
                 } else {
-                    AnyType(ArrayType())
+                    KuaAny(KuaArray())
                 }
             } // FIXME what about table and array ?
             else -> TODO("$type not supported yet")
         }
     }
 
-    override fun getArrayType(idx: Int): ArrayType {
+    override fun getArrayType(idx: Int): KuaArray {
         val ref = TableProxyArray(absIndex(idx), this)
         return toArrayType(ref)
     }
 
     override fun pushBoolean(value: Boolean): StackTop = StackTop(native.pushBoolean(value))
     override fun getBoolean(idx: Int): Boolean = native.toBoolean(idx)
-    override fun pushError(value: ErrorType) = StackTop(native.pushError(value.value))
-    override fun pushFunction(value: FunctionType<*, *, *, *>) = StackTop(native.pushFunction(value))
+    override fun pushError(value: KuaError) = StackTop(native.pushError(value.value))
+    override fun pushFunction(value: KuaFunction<*, *, *, *>) = StackTop(native.pushFunction(value))
 
     override fun getNumber(idx: Int) = native.toNumber(idx)
     override fun pushNumber(value: Double) = StackTop(native.pushNumber(value))
@@ -144,12 +144,12 @@ class ClosableState(
     //FIXME type check
     override fun getTableArrayProxy(idx: Int): TableProxyArray = TableProxyArray(absIndex(idx), this)
 
-    override fun getMapType(idx: Int): MapType {
+    override fun getMapType(idx: Int): KuaMap {
         val ref = TableProxyMap(absIndex(idx), this)
         return toMapType(ref)
     }
 
-    override fun setGlobal(name: String, value: FunctionType<*, *, *, *>) {
+    override fun setGlobal(name: String, value: KuaFunction<*, *, *, *>) {
         native.pushFunction(value)
         native.setGlobal(name)
     }
@@ -204,11 +204,11 @@ class ClosableState(
 }
 
 private fun luaToType(value: Int) = when (value) {
-    0 -> NilType::class
-    1 -> BooleanType::class
-    3 -> NumberType::class
-    4 -> StringType::class
-    5 -> TableType::class
-    11 -> DecimalType::class
+    0 -> KuaNil::class
+    1 -> KuaBoolean::class
+    3 -> KuaNumber::class
+    4 -> KuaString::class
+    5 -> KuaTableType::class
+    11 -> KuaDecimal::class
     else -> TODO("$value not implemented yet")
 }

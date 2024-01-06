@@ -16,38 +16,38 @@ class DecimalTypeTest {
 
         @Test
         fun `Byte input`() {
-            val result = DecimalType(28.toByte())
+            val result = KuaDecimal(28.toByte())
             assertThat(result, equalTo(expected))
         }
 
         @Test
         fun `Short input`() {
-            val result = DecimalType(28.toShort())
+            val result = KuaDecimal(28.toShort())
             assertThat(result, equalTo(expected))
         }
 
         @Test
         fun `Int input`() {
-            val resul = DecimalType(28)
+            val resul = KuaDecimal(28)
             assertThat(resul, equalTo(expected))
         }
 
         @Test
         fun `Long input`() {
-            val result = DecimalType(28)
+            val result = KuaDecimal(28)
             assertThat(result, equalTo(expected))
         }
 
         @Test
         fun `Float input`() {
-            val result = DecimalType(28)
+            val result = KuaDecimal(28)
             assertThat(result, equalTo(expected))
         }
 
         @Test
         fun `Float nan input`() {
             val exception = assertThrows<IllegalArgumentException> {
-                DecimalType(Float.NaN)
+                KuaDecimal(Float.NaN)
             }
             assertThat(exception.message, containsString("NaN"))
         }
@@ -55,7 +55,7 @@ class DecimalTypeTest {
         @Test
         fun `Float positive infinity input`() {
             val exception = assertThrows<IllegalArgumentException> {
-                DecimalType(Float.POSITIVE_INFINITY)
+                KuaDecimal(Float.POSITIVE_INFINITY)
             }
             assertThat(exception.message, containsString("Infinity"))
         }
@@ -63,21 +63,21 @@ class DecimalTypeTest {
         @Test
         fun `Float negative infinity input`() {
             val exception = assertThrows<IllegalArgumentException> {
-                DecimalType(Float.NEGATIVE_INFINITY)
+                KuaDecimal(Float.NEGATIVE_INFINITY)
             }
             assertThat(exception.message, containsString("Infinity"))
         }
 
         @Test
         fun `Double input`() {
-            val result = DecimalType(28)
+            val result = KuaDecimal(28)
             assertThat(result, equalTo(expected))
         }
 
         @Test
         fun `Double nan input`() {
             val exception = assertThrows<IllegalArgumentException> {
-                DecimalType(Double.NaN)
+                KuaDecimal(Double.NaN)
             }
             assertThat(exception.message, containsString("NaN"))
         }
@@ -85,7 +85,7 @@ class DecimalTypeTest {
         @Test
         fun `Double positive infinity input`() {
             val exception = assertThrows<IllegalArgumentException> {
-                DecimalType(Double.POSITIVE_INFINITY)
+                KuaDecimal(Double.POSITIVE_INFINITY)
             }
             assertThat(exception.message, containsString("Infinity"))
         }
@@ -93,21 +93,21 @@ class DecimalTypeTest {
         @Test
         fun `Double negative infinity input`() {
             val exception = assertThrows<IllegalArgumentException> {
-                DecimalType(Double.NEGATIVE_INFINITY)
+                KuaDecimal(Double.NEGATIVE_INFINITY)
             }
             assertThat(exception.message, containsString("Infinity"))
         }
 
         @Test
         fun `String input`() {
-            val result = DecimalType("28")
+            val result = KuaDecimal("28")
             assertThat(result, equalTo(expected))
         }
 
         @Test
         fun `String nan input`() {
             val exception = assertThrows<IllegalArgumentException> {
-                DecimalType("NaN")
+                KuaDecimal("NaN")
             }
             assertThat(exception.message, containsString("NaN"))
         }
@@ -115,7 +115,7 @@ class DecimalTypeTest {
         @Test
         fun `String empty input`() {
             val exception = assertThrows<IllegalArgumentException> {
-                DecimalType("")
+                KuaDecimal("")
             }
             assertThat(exception.message, containsString("NaN"))
         }
@@ -123,26 +123,26 @@ class DecimalTypeTest {
         @Test
         fun `String whitespaces input`() {
             val exception = assertThrows<IllegalArgumentException> {
-                DecimalType("    ")
+                KuaDecimal("    ")
             }
             assertThat(exception.message, containsString("NaN"))
         }
 
-        private val expected = DecimalType(28)
+        private val expected = KuaDecimal(28)
     }
 
     @Nested
     inner class PlusTest {
         @Test
         fun ok() {
-            val testInstance = DecimalType(28)
-            val otherInstance = DecimalType(10)
+            val testInstance = KuaDecimal(28)
+            val otherInstance = KuaDecimal(10)
 
             val result = testInstance.plus(otherInstance)
-            assertThat(result, equalTo(DecimalType(38)))
+            assertThat(result, equalTo(KuaDecimal(38)))
 
-            assertThat(testInstance, equalTo(DecimalType(28)))
-            assertThat(otherInstance, equalTo(DecimalType(10)))
+            assertThat(testInstance, equalTo(KuaDecimal(28)))
+            assertThat(otherInstance, equalTo(KuaDecimal(10)))
         }
     }
 
@@ -150,14 +150,14 @@ class DecimalTypeTest {
     inner class MinusTest {
         @Test
         fun ok() {
-            val testInstance = DecimalType(28)
-            val otherInstance = DecimalType(10)
+            val testInstance = KuaDecimal(28)
+            val otherInstance = KuaDecimal(10)
 
             val result = testInstance.minus(otherInstance)
-            assertThat(result, equalTo(DecimalType(18)))
+            assertThat(result, equalTo(KuaDecimal(18)))
 
-            assertThat(testInstance, equalTo(DecimalType(28)))
-            assertThat(otherInstance, equalTo(DecimalType(10)))
+            assertThat(testInstance, equalTo(KuaDecimal(28)))
+            assertThat(otherInstance, equalTo(KuaDecimal(10)))
         }
     }
 
@@ -165,14 +165,14 @@ class DecimalTypeTest {
     inner class MultiplyTest {
         @Test
         fun ok() {
-            val testInstance = DecimalType(28)
-            val otherInstance = DecimalType(10)
+            val testInstance = KuaDecimal(28)
+            val otherInstance = KuaDecimal(10)
 
             val result = testInstance.multiply(otherInstance)
-            assertThat(result, equalTo(DecimalType(280)))
+            assertThat(result, equalTo(KuaDecimal(280)))
 
-            assertThat(testInstance, equalTo(DecimalType(28)))
-            assertThat(otherInstance, equalTo(DecimalType(10)))
+            assertThat(testInstance, equalTo(KuaDecimal(28)))
+            assertThat(otherInstance, equalTo(KuaDecimal(10)))
         }
     }
 
@@ -180,14 +180,14 @@ class DecimalTypeTest {
     inner class DivideTest {
         @Test
         fun ok() {
-            val testInstance = DecimalType(280)
-            val otherInstance = DecimalType(10)
+            val testInstance = KuaDecimal(280)
+            val otherInstance = KuaDecimal(10)
 
             val result = testInstance.divide(otherInstance)
-            assertThat(result, equalTo(DecimalType(28)))
+            assertThat(result, equalTo(KuaDecimal(28)))
 
-            assertThat(testInstance, equalTo(DecimalType(280)))
-            assertThat(otherInstance, equalTo(DecimalType(10)))
+            assertThat(testInstance, equalTo(KuaDecimal(280)))
+            assertThat(otherInstance, equalTo(KuaDecimal(10)))
         }
     }
 
@@ -195,14 +195,14 @@ class DecimalTypeTest {
     inner class RemainderTest {
         @Test
         fun ok() {
-            val testInstance = DecimalType("42.0021224")
-            val divisor = DecimalType("3.14152")
+            val testInstance = KuaDecimal("42.0021224")
+            val divisor = KuaDecimal("3.14152")
             val result = testInstance.remainder(divisor)
 
-            assertThat(result, equalTo(DecimalType("1.1623624")))
+            assertThat(result, equalTo(KuaDecimal("1.1623624")))
 
-            assertThat(testInstance, equalTo(DecimalType("42.0021224")))
-            assertThat(divisor, equalTo(DecimalType("3.14152")))
+            assertThat(testInstance, equalTo(KuaDecimal("42.0021224")))
+            assertThat(divisor, equalTo(KuaDecimal("3.14152")))
         }
     }
 
@@ -210,14 +210,14 @@ class DecimalTypeTest {
     inner class PowTest {
         @Test
         fun ok() {
-            val testInstance = DecimalType("10")
-            val exponent = DecimalType("2")
+            val testInstance = KuaDecimal("10")
+            val exponent = KuaDecimal("2")
             val result = testInstance.pow(exponent)
 
-            assertThat(result, equalTo(DecimalType("100")))
+            assertThat(result, equalTo(KuaDecimal("100")))
 
-            assertThat(testInstance, equalTo(DecimalType("10")))
-            assertThat(exponent, equalTo(DecimalType("2")))
+            assertThat(testInstance, equalTo(KuaDecimal("10")))
+            assertThat(exponent, equalTo(KuaDecimal("2")))
         }
     }
 
@@ -225,22 +225,22 @@ class DecimalTypeTest {
     inner class NegateTest {
         @Test
         fun `Negative value`() {
-            val testInstance = DecimalType(-28)
+            val testInstance = KuaDecimal(-28)
 
             val result = testInstance.negate()
-            assertThat(result, equalTo(DecimalType(28)))
+            assertThat(result, equalTo(KuaDecimal(28)))
 
-            assertThat(testInstance, equalTo(DecimalType(-28)))
+            assertThat(testInstance, equalTo(KuaDecimal(-28)))
         }
 
         @Test
         fun `Positive value`() {
-            val testInstance = DecimalType(28)
+            val testInstance = KuaDecimal(28)
 
             val result = testInstance.negate()
-            assertThat(result, equalTo(DecimalType(-28)))
+            assertThat(result, equalTo(KuaDecimal(-28)))
 
-            assertThat(testInstance, equalTo(DecimalType(28)))
+            assertThat(testInstance, equalTo(KuaDecimal(28)))
         }
     }
 
@@ -248,30 +248,30 @@ class DecimalTypeTest {
     inner class AbsTest {
         @Test
         fun `Negative value`() {
-            val testInstance = DecimalType(-28)
+            val testInstance = KuaDecimal(-28)
 
             val result = testInstance.abs()
-            assertThat(result, equalTo(DecimalType(28)))
+            assertThat(result, equalTo(KuaDecimal(28)))
 
-            assertThat(testInstance, equalTo(DecimalType(-28)))
+            assertThat(testInstance, equalTo(KuaDecimal(-28)))
         }
 
         @Test
         fun `Positive value`() {
-            val testInstance = DecimalType(28)
+            val testInstance = KuaDecimal(28)
 
             val result = testInstance.abs()
-            assertThat(result, equalTo(DecimalType(28)))
+            assertThat(result, equalTo(KuaDecimal(28)))
 
-            assertThat(testInstance, equalTo(DecimalType(28)))
+            assertThat(testInstance, equalTo(KuaDecimal(28)))
         }
     }
 
     @TestFactory
     fun floor() = listOf(
-        DecimalType(0) to DecimalType("0"),
-        DecimalType("3.14152") to DecimalType("3"),
-        DecimalType("42.999999999") to DecimalType("42")
+        KuaDecimal(0) to KuaDecimal("0"),
+        KuaDecimal("3.14152") to KuaDecimal("3"),
+        KuaDecimal("42.999999999") to KuaDecimal("42")
     ).map { (testInstance, expected) ->
         dynamicTest("floor of $testInstance") {
             val result = testInstance.floor()
@@ -281,9 +281,9 @@ class DecimalTypeTest {
 
     @TestFactory
     fun ceil() = listOf(
-        DecimalType(0) to DecimalType("0"),
-        DecimalType("3.14152") to DecimalType("4"),
-        DecimalType("42.999999999") to DecimalType("43")
+        KuaDecimal(0) to KuaDecimal("0"),
+        KuaDecimal("3.14152") to KuaDecimal("4"),
+        KuaDecimal("42.999999999") to KuaDecimal("43")
     ).map { (testInstance, expected) ->
         dynamicTest("ceil of $testInstance") {
             val result = testInstance.ceil()
@@ -295,7 +295,7 @@ class DecimalTypeTest {
     inner class LnTest {
         @Test
         fun `Value is negative`() {
-            val testInstance = DecimalType(-42)
+            val testInstance = KuaDecimal(-42)
             val exception = assertThrows<IllegalArgumentException> {
                 testInstance.ln()
             }
@@ -304,7 +304,7 @@ class DecimalTypeTest {
 
         @Test
         fun `Value is 0`() {
-            val testInstance = DecimalType(0)
+            val testInstance = KuaDecimal(0)
             val exception = assertThrows<IllegalArgumentException> {
                 testInstance.ln()
             }
@@ -314,23 +314,23 @@ class DecimalTypeTest {
         @Test
 
         fun `Value is 1`() {
-            val testInstance = DecimalType(1)
+            val testInstance = KuaDecimal(1)
 
             val result = testInstance.ln()
-            assertThat(result, equalTo(DecimalType(0)))
+            assertThat(result, equalTo(KuaDecimal(0)))
 
-            assertThat(testInstance, equalTo(DecimalType(1)))
+            assertThat(testInstance, equalTo(KuaDecimal(1)))
         }
 
         @TestFactory
         fun test() = listOf(
-            DecimalType(2) to DecimalType("0.6931471805599453094172321214581766"),
-            DecimalType("1234") to DecimalType("7.118016204465333123414803800068370"),
-            DecimalType("1234.09901234123") to DecimalType("7.118096438151897579984386821678212"),
-            DecimalType("987654") to DecimalType("13.80308771296566413828433949825021"),
-            DecimalType("9876543") to DecimalType("16.10567236153744431962426738978479"),
-            DecimalType("100000") to DecimalType("11.51292546497022842008995727342182"),
-            DecimalType("1000000") to DecimalType("13.81551055796427410410675612270492")
+            KuaDecimal(2) to KuaDecimal("0.6931471805599453094172321214581766"),
+            KuaDecimal("1234") to KuaDecimal("7.118016204465333123414803800068370"),
+            KuaDecimal("1234.09901234123") to KuaDecimal("7.118096438151897579984386821678212"),
+            KuaDecimal("987654") to KuaDecimal("13.80308771296566413828433949825021"),
+            KuaDecimal("9876543") to KuaDecimal("16.10567236153744431962426738978479"),
+            KuaDecimal("100000") to KuaDecimal("11.51292546497022842008995727342182"),
+            KuaDecimal("1000000") to KuaDecimal("13.81551055796427410410675612270492")
         ).map { (testInstance, expected) ->
             dynamicTest("ln of $testInstance") {
                 val result = testInstance.ln()
@@ -346,7 +346,7 @@ class DecimalTypeTest {
 
         @Test
         fun `Value is negative`() {
-            val testInstance = DecimalType(-42)
+            val testInstance = KuaDecimal(-42)
             val exception = assertThrows<IllegalStateException> {
                 testInstance.sqrt()
             }
@@ -355,14 +355,14 @@ class DecimalTypeTest {
 
         @TestFactory
         fun sqrt() = listOf(
-            DecimalType(0) to DecimalType("0"),
-            DecimalType(1) to DecimalType("1"),
-            DecimalType(2) to DecimalType("1.414213562373095048801688724209698"),
-            DecimalType("1234.09901234123") to DecimalType("35.12974540672377261172508927243486"),
-            DecimalType("987654") to DecimalType("993.8078285060950353793489213512089"),
-            DecimalType("9876543") to DecimalType("3142.696771882390819470725583679575"),
-            DecimalType("100000") to DecimalType("316.2277660168379331998893544432719"),
-            DecimalType("1000000") to DecimalType("1000")
+            KuaDecimal(0) to KuaDecimal("0"),
+            KuaDecimal(1) to KuaDecimal("1"),
+            KuaDecimal(2) to KuaDecimal("1.414213562373095048801688724209698"),
+            KuaDecimal("1234.09901234123") to KuaDecimal("35.12974540672377261172508927243486"),
+            KuaDecimal("987654") to KuaDecimal("993.8078285060950353793489213512089"),
+            KuaDecimal("9876543") to KuaDecimal("3142.696771882390819470725583679575"),
+            KuaDecimal("100000") to KuaDecimal("316.2277660168379331998893544432719"),
+            KuaDecimal("1000000") to KuaDecimal("1000")
         ).map { (testInstance, expected) ->
             dynamicTest("sqrt of $testInstance") {
                 val result = testInstance.sqrt()
@@ -375,22 +375,22 @@ class DecimalTypeTest {
     inner class IsLessThanTest {
         @Test
         fun `Less Than`() {
-            val testInstance = DecimalType(5)
-            val otherInstance = DecimalType(10)
+            val testInstance = KuaDecimal(5)
+            val otherInstance = KuaDecimal(10)
             assertTrue(testInstance.isLessThan(otherInstance))
         }
 
         @Test
         fun `Equal to`() {
-            val testInstance = DecimalType(5)
-            val otherInstance = DecimalType(5)
+            val testInstance = KuaDecimal(5)
+            val otherInstance = KuaDecimal(5)
             assertFalse(testInstance.isLessThan(otherInstance))
         }
 
         @Test
         fun `Greater Than`() {
-            val testInstance = DecimalType(10)
-            val otherInstance = DecimalType(5)
+            val testInstance = KuaDecimal(10)
+            val otherInstance = KuaDecimal(5)
             assertFalse(testInstance.isLessThan(otherInstance))
         }
     }
@@ -399,22 +399,22 @@ class DecimalTypeTest {
     inner class IsLessThanEqualTest {
         @Test
         fun `Less Than`() {
-            val testInstance = DecimalType(5)
-            val otherInstance = DecimalType(10)
+            val testInstance = KuaDecimal(5)
+            val otherInstance = KuaDecimal(10)
             assertTrue(testInstance.isLessThanEqual(otherInstance))
         }
 
         @Test
         fun `Equal to`() {
-            val testInstance = DecimalType(5)
-            val otherInstance = DecimalType(5)
+            val testInstance = KuaDecimal(5)
+            val otherInstance = KuaDecimal(5)
             assertTrue(testInstance.isLessThanEqual(otherInstance))
         }
 
         @Test
         fun `Greater Than`() {
-            val testInstance = DecimalType(10)
-            val otherInstance = DecimalType(5)
+            val testInstance = KuaDecimal(10)
+            val otherInstance = KuaDecimal(5)
             assertFalse(testInstance.isLessThanEqual(otherInstance))
         }
     }
@@ -423,22 +423,22 @@ class DecimalTypeTest {
     inner class IsGreaterThanTest {
         @Test
         fun `Less Than`() {
-            val testInstance = DecimalType(5)
-            val otherInstance = DecimalType(10)
+            val testInstance = KuaDecimal(5)
+            val otherInstance = KuaDecimal(10)
             assertFalse(testInstance.isGreaterThan(otherInstance))
         }
 
         @Test
         fun `Equal to`() {
-            val testInstance = DecimalType(5)
-            val otherInstance = DecimalType(5)
+            val testInstance = KuaDecimal(5)
+            val otherInstance = KuaDecimal(5)
             assertFalse(testInstance.isGreaterThan(otherInstance))
         }
 
         @Test
         fun `Greater Than`() {
-            val testInstance = DecimalType(10)
-            val otherInstance = DecimalType(5)
+            val testInstance = KuaDecimal(10)
+            val otherInstance = KuaDecimal(5)
             assertTrue(testInstance.isGreaterThan(otherInstance))
         }
     }
@@ -447,22 +447,22 @@ class DecimalTypeTest {
     inner class IsGreaterThanEqualTest {
         @Test
         fun `Less Than`() {
-            val testInstance = DecimalType(5)
-            val otherInstance = DecimalType(10)
+            val testInstance = KuaDecimal(5)
+            val otherInstance = KuaDecimal(10)
             assertFalse(testInstance.isGreaterThanEqual(otherInstance))
         }
 
         @Test
         fun `Equal to`() {
-            val testInstance = DecimalType(5)
-            val otherInstance = DecimalType(5)
+            val testInstance = KuaDecimal(5)
+            val otherInstance = KuaDecimal(5)
             assertTrue(testInstance.isGreaterThanEqual(otherInstance))
         }
 
         @Test
         fun `Greater Than`() {
-            val testInstance = DecimalType(10)
-            val otherInstance = DecimalType(5)
+            val testInstance = KuaDecimal(10)
+            val otherInstance = KuaDecimal(5)
             assertTrue(testInstance.isGreaterThanEqual(otherInstance))
         }
     }
@@ -471,19 +471,19 @@ class DecimalTypeTest {
     inner class IsNegativeTest {
         @Test
         fun `Negative number`() {
-            val testInstance = DecimalType(-10)
+            val testInstance = KuaDecimal(-10)
             assertTrue(testInstance.isNegative())
         }
 
         @Test
         fun `Zero`() {
-            val testInstance = DecimalType.Zero
+            val testInstance = KuaDecimal.Zero
             assertFalse(testInstance.isNegative())
         }
 
         @Test
         fun `Positive number`() {
-            val testInstance = DecimalType(10)
+            val testInstance = KuaDecimal(10)
             assertFalse(testInstance.isNegative())
         }
     }
@@ -492,19 +492,19 @@ class DecimalTypeTest {
     inner class IsPositiveTest {
         @Test
         fun `Negative number`() {
-            val testInstance = DecimalType(-10)
+            val testInstance = KuaDecimal(-10)
             assertFalse(testInstance.isPositive())
         }
 
         @Test
         fun `Zero`() {
-            val testInstance = DecimalType.Zero
+            val testInstance = KuaDecimal.Zero
             assertFalse(testInstance.isPositive())
         }
 
         @Test
         fun `Positive number`() {
-            val testInstance = DecimalType(10)
+            val testInstance = KuaDecimal(10)
             assertTrue(testInstance.isPositive())
         }
     }
@@ -513,19 +513,19 @@ class DecimalTypeTest {
     inner class IsZeroTest {
         @Test
         fun `Negative number`() {
-            val testInstance = DecimalType(-10)
+            val testInstance = KuaDecimal(-10)
             assertFalse(testInstance.isZero())
         }
 
         @Test
         fun `Zero`() {
-            val testInstance = DecimalType.Zero
+            val testInstance = KuaDecimal.Zero
             assertTrue(testInstance.isZero())
         }
 
         @Test
         fun `Positive number`() {
-            val testInstance = DecimalType(10)
+            val testInstance = KuaDecimal(10)
             assertFalse(testInstance.isZero())
         }
     }
@@ -534,7 +534,7 @@ class DecimalTypeTest {
     inner class ToByteTest {
         @Test
         fun ok() {
-            val testInstance = DecimalType(28)
+            val testInstance = KuaDecimal(28)
             assertThat(testInstance.toByte(), equalTo(28))
         }
     }
@@ -543,7 +543,7 @@ class DecimalTypeTest {
     inner class ToShortTest {
         @Test
         fun ok() {
-            val testInstance = DecimalType(28)
+            val testInstance = KuaDecimal(28)
             assertThat(testInstance.toShort(), equalTo(28))
         }
     }
@@ -552,7 +552,7 @@ class DecimalTypeTest {
     inner class ToIntTest {
         @Test
         fun ok() {
-            val testInstance = DecimalType(28)
+            val testInstance = KuaDecimal(28)
             assertThat(testInstance.toInt(), equalTo(28))
         }
     }
@@ -561,7 +561,7 @@ class DecimalTypeTest {
     inner class ToLongTest {
         @Test
         fun ok() {
-            val testInstance = DecimalType(28)
+            val testInstance = KuaDecimal(28)
             assertThat(testInstance.toLong(), equalTo(28))
         }
     }
@@ -570,7 +570,7 @@ class DecimalTypeTest {
     inner class ToFloatTest {
         @Test
         fun ok() {
-            val testInstance = DecimalType(28.10)
+            val testInstance = KuaDecimal(28.10)
             assertThat(testInstance.toFloat(), equalTo(28.10f))
         }
     }
@@ -579,7 +579,7 @@ class DecimalTypeTest {
     inner class ToDoubleTest {
         @Test
         fun ok() {
-            val testInstance = DecimalType(28.10)
+            val testInstance = KuaDecimal(28.10)
             assertThat(testInstance.toDouble(), equalTo(28.10))
         }
     }
@@ -587,15 +587,15 @@ class DecimalTypeTest {
     @TestFactory
     fun serialization() = listOf(
         generateTestCases(
-            testInstance = DecimalType.Zero,
+            testInstance = KuaDecimal.Zero,
             expectedJson = """{"type":"DecimalType","value":"0"}"""
         ),
         generateTestCases(
-            testInstance = DecimalType(-12.324),
+            testInstance = KuaDecimal(-12.324),
             expectedJson = """{"type":"DecimalType","value":"-12.324"}"""
         ),
         generateTestCases(
-            testInstance = DecimalType("123456789.987654321"),
+            testInstance = KuaDecimal("123456789.987654321"),
             expectedJson = """{"type":"DecimalType","value":"123456789.987654321"}"""
         )
     ).flatten()

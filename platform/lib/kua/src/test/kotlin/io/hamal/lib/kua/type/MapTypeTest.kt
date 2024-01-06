@@ -7,21 +7,21 @@ class MapTypeTest {
     @TestFactory
     fun serialization() = listOf(
         generateTestCases(
-            testInstance = MapType(),
+            testInstance = KuaMap(),
             expectedJson = """{"type":"MapType"}"""
         ),
         generateTestCases(
-            testInstance = MapType(
+            testInstance = KuaMap(
                 mutableMapOf(
-                    "key" to StringType("value")
+                    "key" to KuaString("value")
                 )
             ),
             expectedJson = """{"type":"MapType","value":{"key":{"type":"StringType","value":"value"}}}""".trimIndent()
         ),
         generateTestCases(
-            testInstance = MapType(
+            testInstance = KuaMap(
                 mutableMapOf(
-                    "23" to NumberType(34)
+                    "23" to KuaNumber(34)
                 )
             ),
             expectedJson = """{"type":"MapType","value":{"23":{"type":"NumberType","value":"34"}}}"""

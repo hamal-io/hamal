@@ -10,7 +10,7 @@ import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
 
-internal class AnyTypeTest {
+internal class KuaAnyTest {
 
     @Test
     fun `AnyValue can be used with BooleanType`() {
@@ -23,7 +23,7 @@ internal class AnyTypeTest {
             test.captor(test.pass_through(true))
         """
         )
-        assertThat(captor.result, equalTo(AnyType(True)))
+        assertThat(captor.result, equalTo(KuaAny(KuaTrue)))
     }
 
     @Test
@@ -38,7 +38,7 @@ internal class AnyTypeTest {
         """
         )
 
-        assertThat(captor.result, equalTo(AnyType(NumberType(23))))
+        assertThat(captor.result, equalTo(KuaAny(KuaNumber(23))))
     }
 
     @Test
@@ -53,7 +53,7 @@ internal class AnyTypeTest {
         """.trimIndent()
         )
 
-        assertThat(captor.result, equalTo(AnyType(StringType("hamal.io"))))
+        assertThat(captor.result, equalTo(KuaAny(KuaString("hamal.io"))))
     }
 
     @Test
@@ -72,8 +72,8 @@ internal class AnyTypeTest {
         """
         )
 
-        val underlying = (captor.result as AnyType).value
-        require(underlying is MapType) { "Not a MapType" }
+        val underlying = (captor.result as KuaAny).value
+        require(underlying is KuaMap) { "Not a MapType" }
         assertThat(underlying.size, equalTo(1))
         assertThat(underlying.getString("key"), equalTo("value"))
     }
@@ -96,34 +96,34 @@ internal class AnyTypeTest {
         """
         )
 
-        val underlying = (captor.result as AnyType).value
-        require(underlying is ArrayType) { "Not a ArrayType" }
+        val underlying = (captor.result as KuaAny).value
+        require(underlying is KuaArray) { "Not a ArrayType" }
         assertThat(underlying.size, equalTo(2))
 
         assertThat(underlying.getInt(1), equalTo(23))
         assertThat(underlying.getString(2), equalTo("hamal.io"))
     }
 
-    private class AnyValuePassThrough : Function1In1Out<AnyType, AnyType>(
-        FunctionInput1Schema(AnyType::class),
-        FunctionOutput1Schema(AnyType::class)
+    private class AnyValuePassThrough : Function1In1Out<KuaAny, KuaAny>(
+        FunctionInput1Schema(KuaAny::class),
+        FunctionOutput1Schema(KuaAny::class)
     ) {
-        override fun invoke(ctx: FunctionContext, arg1: AnyType): AnyType {
+        override fun invoke(ctx: FunctionContext, arg1: KuaAny): KuaAny {
             return arg1
         }
     }
 
-    private class AnyValueResultCaptor : Function1In0Out<AnyType>(
-        FunctionInput1Schema(AnyType::class)
+    private class AnyValueResultCaptor : Function1In0Out<KuaAny>(
+        FunctionInput1Schema(KuaAny::class)
     ) {
-        override fun invoke(ctx: FunctionContext, arg1: AnyType) {
+        override fun invoke(ctx: FunctionContext, arg1: KuaAny) {
             result = arg1
         }
 
-        var result: Type = NilType
+        var result: KuaType = KuaNil
     }
 
-    private fun capability(captor: FunctionType<*, *, *, *>) =
+    private fun capability(captor: KuaFunction<*, *, *, *>) =
         RunnerPlugin(
             name = "test",
             factoryCode = """

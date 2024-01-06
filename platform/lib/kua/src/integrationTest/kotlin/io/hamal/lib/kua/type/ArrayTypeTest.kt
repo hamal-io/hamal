@@ -16,9 +16,9 @@ internal class ArrayTypeTest {
         sandbox.use { sandbox ->
             sandbox.registerGlobalFunction("func",
                 object :
-                    Function0In2Out<ErrorType, ArrayType>(FunctionOutput2Schema(ErrorType::class, ArrayType::class)) {
-                    override fun invoke(ctx: FunctionContext): Pair<ErrorType?, ArrayType?> {
-                        return null to ArrayType(mutableMapOf(1 to StringType("A")))
+                    Function0In2Out<KuaError, KuaArray>(FunctionOutput2Schema(KuaError::class, KuaArray::class)) {
+                    override fun invoke(ctx: FunctionContext): Pair<KuaError?, KuaArray?> {
+                        return null to KuaArray(mutableMapOf(1 to KuaString("A")))
                     }
                 }
             )
@@ -38,12 +38,12 @@ internal class ArrayTypeTest {
         sandbox.use { sandbox ->
             sandbox.registerGlobalFunction("func",
                 object :
-                    Function0In2Out<ErrorType, ArrayType>(FunctionOutput2Schema(ErrorType::class, ArrayType::class)) {
-                    override fun invoke(ctx: FunctionContext): Pair<ErrorType?, ArrayType?> {
-                        return null to ArrayType(
+                    Function0In2Out<KuaError, KuaArray>(FunctionOutput2Schema(KuaError::class, KuaArray::class)) {
+                    override fun invoke(ctx: FunctionContext): Pair<KuaError?, KuaArray?> {
+                        return null to KuaArray(
                             mutableMapOf(
-                                1 to StringType("A"),
-                                2 to ArrayType(mutableMapOf(1 to NumberType(42)))
+                                1 to KuaString("A"),
+                                2 to KuaArray(mutableMapOf(1 to KuaNumber(42)))
                             )
                         )
                     }

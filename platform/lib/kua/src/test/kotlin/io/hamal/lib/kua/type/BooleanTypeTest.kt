@@ -7,7 +7,7 @@ class TrueTypeTest {
     @TestFactory
     fun serialization() = listOf(
         generateTestCases(
-            testInstance = True,
+            testInstance = KuaTrue,
             expectedJson = """{"type":"TrueType"}"""
         ),
     ).flatten()
@@ -17,7 +17,7 @@ class FalseTypeTest {
     @TestFactory
     fun serialization() = listOf(
         generateTestCases(
-            testInstance = False,
+            testInstance = KuaFalse,
             expectedJson = """{"type":"FalseType"}"""
         ),
     ).flatten()

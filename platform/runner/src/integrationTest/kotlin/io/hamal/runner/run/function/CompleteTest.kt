@@ -3,10 +3,10 @@ package io.hamal.runner.run.function
 import TestConnector
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.type.False
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.NumberType
-import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.KuaFalse
+import io.hamal.lib.kua.type.KuaMap
+import io.hamal.lib.kua.type.KuaNumber
+import io.hamal.lib.kua.type.KuaString
 import io.hamal.runner.connector.UnitOfWork
 import io.hamal.runner.run.AbstractExecuteTest
 import org.hamcrest.MatcherAssert.assertThat
@@ -36,7 +36,7 @@ internal class CompleteTest : AbstractExecuteTest() {
         val runner = createTestRunner(
             connector = TestConnector { execId, execResult, state, events ->
                 assertThat(execId, equalTo(ExecId(1234)))
-                assertThat(execResult, equalTo(ExecResult(MapType())))
+                assertThat(execResult, equalTo(ExecResult(KuaMap())))
                 assertThat(state, equalTo(ExecState()))
                 assertThat(events, hasSize(0))
             }
@@ -50,7 +50,7 @@ internal class CompleteTest : AbstractExecuteTest() {
         val runner = createTestRunner(
             connector = TestConnector { execId, execResult, state, events ->
                 assertThat(execId, equalTo(ExecId(1234)))
-                assertThat(execResult, equalTo(ExecResult(MapType("value" to StringType("test")))))
+                assertThat(execResult, equalTo(ExecResult(KuaMap("value" to KuaString("test")))))
                 assertThat(state, equalTo(ExecState()))
                 assertThat(events, hasSize(0))
             }
@@ -63,7 +63,7 @@ internal class CompleteTest : AbstractExecuteTest() {
         val runner = createTestRunner(
             connector = TestConnector { execId, execResult, state, events ->
                 assertThat(execId, equalTo(ExecId(1234)))
-                assertThat(execResult, equalTo(ExecResult(MapType("value" to NumberType(1337)))))
+                assertThat(execResult, equalTo(ExecResult(KuaMap("value" to KuaNumber(1337)))))
                 assertThat(state, equalTo(ExecState()))
                 assertThat(events, hasSize(0))
             }
@@ -76,7 +76,7 @@ internal class CompleteTest : AbstractExecuteTest() {
         val runner = createTestRunner(
             connector = TestConnector { execId, execResult, state, events ->
                 assertThat(execId, equalTo(ExecId(1234)))
-                assertThat(execResult, equalTo(ExecResult(MapType("value" to False))))
+                assertThat(execResult, equalTo(ExecResult(KuaMap("value" to KuaFalse))))
                 assertThat(state, equalTo(ExecState()))
                 assertThat(events, hasSize(0))
             }
@@ -92,9 +92,9 @@ internal class CompleteTest : AbstractExecuteTest() {
                 assertThat(
                     execResult, equalTo(
                         ExecResult(
-                            MapType(
-                                "reason" to StringType("undisclosed"),
-                                "answer" to NumberType(42)
+                            KuaMap(
+                                "reason" to KuaString("undisclosed"),
+                                "answer" to KuaNumber(42)
                             )
                         )
                     )

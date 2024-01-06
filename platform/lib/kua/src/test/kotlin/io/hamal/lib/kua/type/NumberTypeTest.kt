@@ -8,11 +8,11 @@ class NumberTypeTest {
     @TestFactory
     fun serialization() = listOf(
         generateTestCases(
-            testInstance = NumberType(42),
+            testInstance = KuaNumber(42),
             expectedJson = """{"type":"NumberType","value":"42"}"""
         ),
         generateTestCases(
-            testInstance = NumberType(42.24),
+            testInstance = KuaNumber(42.24),
             expectedJson = """{"type":"NumberType","value":"42.24"}"""
         ),
     ).flatten()

@@ -53,7 +53,7 @@ internal class ErrorTypeTest {
         """.trimIndent()
         )
 
-        assertThat(messageCaptor.result, equalTo(AnyType(StringType("Sometimes an error can be a good thing"))))
+        assertThat(messageCaptor.result, equalTo(KuaAny(KuaString("Sometimes an error can be a good thing"))))
     }
 
     @Test
@@ -92,7 +92,7 @@ internal class ErrorTypeTest {
         """.trimIndent()
         )
 
-        assertThat(errorCaptor.result, equalTo(AnyType(ErrorType("Sometimes an error can be a good thing"))))
+        assertThat(errorCaptor.result, equalTo(KuaAny(KuaError("Sometimes an error can be a good thing"))))
     }
 
 
@@ -105,31 +105,31 @@ internal class ErrorTypeTest {
         }
     }
 
-    private class FunctionReturnsError : Function0In1Out<ErrorType>(
-        FunctionOutput1Schema(ErrorType::class)
+    private class FunctionReturnsError : Function0In1Out<KuaError>(
+        FunctionOutput1Schema(KuaError::class)
     ) {
-        override fun invoke(ctx: FunctionContext): ErrorType {
-            return ErrorType("Sometimes an error can be a good thing")
+        override fun invoke(ctx: FunctionContext): KuaError {
+            return KuaError("Sometimes an error can be a good thing")
         }
     }
 
 
-    private class FunctionNeverInvoked : Function1In0Out<NumberType>(
-        FunctionInput1Schema(NumberType::class)
+    private class FunctionNeverInvoked : Function1In0Out<KuaNumber>(
+        FunctionInput1Schema(KuaNumber::class)
     ) {
-        override fun invoke(ctx: FunctionContext, arg1: NumberType) {
+        override fun invoke(ctx: FunctionContext, arg1: KuaNumber) {
             TODO("Not yet implemented")
         }
     }
 
-    private class Captor : Function1In0Out<AnyType>(
-        FunctionInput1Schema(AnyType::class)
+    private class Captor : Function1In0Out<KuaAny>(
+        FunctionInput1Schema(KuaAny::class)
     ) {
-        override fun invoke(ctx: FunctionContext, arg1: AnyType) {
+        override fun invoke(ctx: FunctionContext, arg1: KuaAny) {
             result = arg1
         }
 
-        var result: AnyType? = null
+        var result: KuaAny? = null
     }
 
     private val sandbox = run {

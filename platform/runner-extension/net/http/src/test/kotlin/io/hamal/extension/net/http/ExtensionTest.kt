@@ -7,8 +7,8 @@ import io.hamal.extension.net.http.endpoint.TestStatusController
 import io.hamal.extension.net.http.fixture.TestWebConfig
 import io.hamal.extension.std.decimal.ExtensionDecimalFactory
 import io.hamal.lib.domain.vo.RunnerEnv
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.KuaMap
+import io.hamal.lib.kua.type.KuaString
 import io.hamal.plugin.net.http.PluginHttpFactory
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
@@ -43,9 +43,9 @@ class ExtensionHttpTest(@LocalServerPort var localServerPort: Int) : AbstractRun
                         ExtensionHttpFactory
                     ),
                     env = RunnerEnv(
-                        MapType(
+                        KuaMap(
                             mutableMapOf(
-                                "test_url" to StringType("http://localhost:$localServerPort")
+                                "test_url" to KuaString("http://localhost:$localServerPort")
                             )
                         )
                     )

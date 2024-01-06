@@ -6,8 +6,8 @@ import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.KuaMap
+import io.hamal.lib.kua.type.KuaString
 import io.hamal.repository.api.StateRepository
 import io.hamal.repository.fixture.AbstractUnitTest
 import org.hamcrest.MatcherAssert.assertThat
@@ -29,14 +29,14 @@ internal class StateRepositoryTest : AbstractUnitTest() {
                         correlationId = CorrelationId("SomeCorrelationId"),
                         funcId = FuncId(2)
                     ),
-                    value = State(MapType(mutableMapOf("hamal" to StringType("rocks"))))
+                    value = State(KuaMap(mutableMapOf("hamal" to KuaString("rocks"))))
                 )
             )
 
             with(get(Correlation(CorrelationId("SomeCorrelationId"), FuncId(2)))) {
                 assertThat(correlation.correlationId, equalTo(CorrelationId("SomeCorrelationId")))
                 assertThat(correlation.funcId, equalTo(FuncId(2)))
-                assertThat(value, equalTo(State(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
+                assertThat(value, equalTo(State(KuaMap(mutableMapOf("hamal" to KuaString("rocks"))))))
             }
         }
 
@@ -48,7 +48,7 @@ internal class StateRepositoryTest : AbstractUnitTest() {
                         correlationId = CorrelationId("SomeCorrelationId"),
                         funcId = FuncId(2)
                     ),
-                    value = State(MapType(mutableMapOf("hamal" to StringType("rocks"))))
+                    value = State(KuaMap(mutableMapOf("hamal" to KuaString("rocks"))))
                 )
             )
 
@@ -56,7 +56,7 @@ internal class StateRepositoryTest : AbstractUnitTest() {
             with(result) {
                 assertThat(correlation.funcId, equalTo(FuncId(22222)))
                 assertThat(correlation.correlationId, equalTo(CorrelationId("SomeCorrelationId")))
-                assertThat(value, equalTo(State(MapType())))
+                assertThat(value, equalTo(State(KuaMap())))
             }
         }
 
@@ -68,7 +68,7 @@ internal class StateRepositoryTest : AbstractUnitTest() {
                         correlationId = CorrelationId("SomeCorrelationId"),
                         funcId = FuncId(2)
                     ),
-                    value = State(MapType(mutableMapOf("hamal" to StringType("rocks"))))
+                    value = State(KuaMap(mutableMapOf("hamal" to KuaString("rocks"))))
                 )
             )
 
@@ -76,7 +76,7 @@ internal class StateRepositoryTest : AbstractUnitTest() {
             with(result) {
                 assertThat(correlation.funcId, equalTo(FuncId(2)))
                 assertThat(correlation.correlationId, equalTo(CorrelationId("AnotherCorrelation")))
-                assertThat(value, equalTo(State(MapType())))
+                assertThat(value, equalTo(State(KuaMap())))
             }
         }
     }
@@ -92,14 +92,14 @@ internal class StateRepositoryTest : AbstractUnitTest() {
                         correlationId = CorrelationId("SomeCorrelationId"),
                         funcId = FuncId(2)
                     ),
-                    value = State(MapType(mutableMapOf("hamal" to StringType("rocks"))))
+                    value = State(KuaMap(mutableMapOf("hamal" to KuaString("rocks"))))
                 )
             )
 
             with(find(Correlation(CorrelationId("SomeCorrelationId"), FuncId(2)))!!) {
                 assertThat(correlation.correlationId, equalTo(CorrelationId("SomeCorrelationId")))
                 assertThat(correlation.funcId, equalTo(FuncId(2)))
-                assertThat(value, equalTo(State(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
+                assertThat(value, equalTo(State(KuaMap(mutableMapOf("hamal" to KuaString("rocks"))))))
             }
         }
 
@@ -111,7 +111,7 @@ internal class StateRepositoryTest : AbstractUnitTest() {
                         correlationId = CorrelationId("SomeCorrelationId"),
                         funcId = FuncId(2)
                     ),
-                    value = State(MapType(mutableMapOf("hamal" to StringType("rocks"))))
+                    value = State(KuaMap(mutableMapOf("hamal" to KuaString("rocks"))))
                 )
             )
 
@@ -127,7 +127,7 @@ internal class StateRepositoryTest : AbstractUnitTest() {
                         correlationId = CorrelationId("SomeCorrelationId"),
                         funcId = FuncId(2)
                     ),
-                    value = State(MapType(mutableMapOf("hamal" to StringType("rocks"))))
+                    value = State(KuaMap(mutableMapOf("hamal" to KuaString("rocks"))))
                 )
             )
 

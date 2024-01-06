@@ -8,8 +8,8 @@ import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.KuaMap
+import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.sdk.api.ApiError
 import io.hamal.lib.sdk.api.ApiFlowCreateRequest
 import io.hamal.lib.sdk.api.ApiFlowUpdateRequest
@@ -44,7 +44,7 @@ internal class FlowUpdateControllerTest : FlowBaseControllerTest() {
             createFlow(
                 ApiFlowCreateRequest(
                     name = FlowName("created-name"),
-                    inputs = FlowInputs(MapType((mutableMapOf("hamal" to StringType("createdInputs"))))),
+                    inputs = FlowInputs(KuaMap((mutableMapOf("hamal" to KuaString("createdInputs"))))),
                     type = FlowType.default
                 )
             )
@@ -55,7 +55,7 @@ internal class FlowUpdateControllerTest : FlowBaseControllerTest() {
             .body(
                 ApiFlowUpdateRequest(
                     name = FlowName("updated-name"),
-                    inputs = FlowInputs(MapType(mutableMapOf("hamal" to StringType("updatedInputs"))))
+                    inputs = FlowInputs(KuaMap(mutableMapOf("hamal" to KuaString("updatedInputs"))))
                 )
             )
             .execute()
@@ -68,7 +68,7 @@ internal class FlowUpdateControllerTest : FlowBaseControllerTest() {
         with(getFlow(flowId)) {
             assertThat(id, equalTo(flowId))
             assertThat(name, equalTo(FlowName("updated-name")))
-            assertThat(inputs, equalTo(FlowInputs(MapType(mutableMapOf("hamal" to StringType("updatedInputs"))))))
+            assertThat(inputs, equalTo(FlowInputs(KuaMap(mutableMapOf("hamal" to KuaString("updatedInputs"))))))
             assertThat(type, equalTo(FlowType.default))
         }
     }

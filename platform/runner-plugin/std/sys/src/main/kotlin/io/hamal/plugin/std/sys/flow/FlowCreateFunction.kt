@@ -8,19 +8,19 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.type.ErrorType
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.KuaError
+import io.hamal.lib.kua.type.KuaMap
+import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiFlowCreateRequest
 
 class FlowCreateFunction(
     private val sdk: ApiSdk
-) : Function1In2Out<MapType, ErrorType, MapType>(
-    FunctionInput1Schema(MapType::class),
-    FunctionOutput2Schema(ErrorType::class, MapType::class)
+) : Function1In2Out<KuaMap, KuaError, KuaMap>(
+    FunctionInput1Schema(KuaMap::class),
+    FunctionOutput2Schema(KuaError::class, KuaMap::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: MapType): Pair<ErrorType?, MapType?> {
+    override fun invoke(ctx: FunctionContext, arg1: KuaMap): Pair<KuaError?, KuaMap?> {
 
         val type = if (arg1.findString("type") != null) {
             FlowType(arg1.getString("type"))
@@ -38,16 +38,16 @@ class FlowCreateFunction(
                 )
             )
 
-            null to MapType(
+            null to KuaMap(
                 mutableMapOf(
-                    "id" to StringType(res.id.value.value.toString(16)),
-                    "status" to StringType(res.status.name),
-                    "flow_id" to StringType(res.flowId.value.value.toString(16))
+                    "id" to KuaString(res.id.value.value.toString(16)),
+                    "status" to KuaString(res.status.name),
+                    "flow_id" to KuaString(res.flowId.value.value.toString(16))
                 )
             )
 
         } catch (t: Throwable) {
-            ErrorType(t.message!!) to null
+            KuaError(t.message!!) to null
         }
     }
 }

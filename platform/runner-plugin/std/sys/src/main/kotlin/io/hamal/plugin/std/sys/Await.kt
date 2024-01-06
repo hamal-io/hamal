@@ -6,17 +6,17 @@ import io.hamal.lib.kua.function.Function1In1Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput1Schema
-import io.hamal.lib.kua.type.ErrorType
-import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.KuaError
+import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.sdk.api.ApiRequested
 
 class AwaitFunction(
     private val httpTemplate: HttpTemplate
-) : Function1In1Out<StringType, ErrorType>(
-    FunctionInput1Schema(StringType::class),
-    FunctionOutput1Schema(ErrorType::class)
+) : Function1In1Out<KuaString, KuaError>(
+    FunctionInput1Schema(KuaString::class),
+    FunctionOutput1Schema(KuaError::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: StringType): ErrorType? {
+    override fun invoke(ctx: FunctionContext, arg1: KuaString): KuaError? {
         while (true) {
             httpTemplate.get("/v1/requests/{reqId}")
                 .path("reqId", arg1.value)
@@ -40,11 +40,11 @@ class AwaitFunction(
 
 class AwaitCompletedFunction(
     private val httpTemplate: HttpTemplate
-) : Function1In1Out<StringType, ErrorType>(
-    FunctionInput1Schema(StringType::class),
-    FunctionOutput1Schema(ErrorType::class)
+) : Function1In1Out<KuaString, KuaError>(
+    FunctionInput1Schema(KuaString::class),
+    FunctionOutput1Schema(KuaError::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: StringType): ErrorType? {
+    override fun invoke(ctx: FunctionContext, arg1: KuaString): KuaError? {
         while (true) {
             httpTemplate.get("/v1/requests/{reqId}")
                 .path("reqId", arg1.value)
@@ -56,7 +56,7 @@ class AwaitCompletedFunction(
                         }
 
                         RequestStatus.Failed -> {
-                            return ErrorType("expected $arg1 to complete but failed")
+                            return KuaError("expected $arg1 to complete but failed")
                         }
 
                         else -> {
@@ -70,11 +70,11 @@ class AwaitCompletedFunction(
 
 class AwaitFailedFunction(
     private val httpTemplate: HttpTemplate
-) : Function1In1Out<StringType, ErrorType>(
-    FunctionInput1Schema(StringType::class),
-    FunctionOutput1Schema(ErrorType::class)
+) : Function1In1Out<KuaString, KuaError>(
+    FunctionInput1Schema(KuaString::class),
+    FunctionOutput1Schema(KuaError::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: StringType): ErrorType? {
+    override fun invoke(ctx: FunctionContext, arg1: KuaString): KuaError? {
         while (true) {
             httpTemplate.get("/v1/requests/{reqId}")
                 .path("reqId", arg1.value)
@@ -82,7 +82,7 @@ class AwaitFailedFunction(
                 .let {
                     when (it.status) {
                         RequestStatus.Completed -> {
-                            return ErrorType("expected $arg1 to fail but completed")
+                            return KuaError("expected $arg1 to fail but completed")
                         }
 
                         RequestStatus.Failed -> {

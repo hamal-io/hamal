@@ -7,21 +7,21 @@ class ArrayTypeTest {
     @TestFactory
     fun serialization() = listOf(
         generateTestCases(
-            testInstance = ArrayType(),
+            testInstance = KuaArray(),
             expectedJson = """{"type":"ArrayType"}"""
         ),
         generateTestCases(
-            testInstance = ArrayType(
+            testInstance = KuaArray(
                 mutableMapOf(
-                    1234 to StringType("value")
+                    1234 to KuaString("value")
                 )
             ),
             expectedJson = """{"type":"ArrayType","value":{"1234":{"type":"StringType","value":"value"}}}"""
         ),
         generateTestCases(
-            testInstance = ArrayType(
+            testInstance = KuaArray(
                 mutableMapOf(
-                    23 to NumberType(34)
+                    23 to KuaNumber(34)
                 )
             ),
             expectedJson = """{"type":"ArrayType","value":{"23":{"type":"NumberType","value":"34"}}}"""

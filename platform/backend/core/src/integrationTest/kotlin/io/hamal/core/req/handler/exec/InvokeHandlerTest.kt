@@ -4,8 +4,8 @@ import io.hamal.core.request.handler.BaseReqHandlerTest
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.KuaMap
+import io.hamal.lib.kua.type.KuaString
 import io.hamal.repository.api.ExecQueryRepository.ExecQuery
 import io.hamal.lib.domain.request.ExecInvokeRequested
 import org.hamcrest.MatcherAssert.assertThat
@@ -26,7 +26,7 @@ internal class ExecInvokeHandlerTest : BaseReqHandlerTest() {
                 execId = ExecId(3333),
                 flowId = testFlow.id,
                 groupId = testGroup.id,
-                inputs = InvocationInputs(MapType(mutableMapOf("hamal" to StringType("justworks")))),
+                inputs = InvocationInputs(KuaMap(mutableMapOf("hamal" to KuaString("justworks")))),
                 code = ExecCode(value = CodeValue("code")),
                 funcId = null,
                 correlationId = null,
@@ -40,7 +40,7 @@ internal class ExecInvokeHandlerTest : BaseReqHandlerTest() {
             with(it.first()) {
                 assertThat(id, equalTo(ExecId(3333)))
                 assertThat(correlation, nullValue())
-                assertThat(inputs, equalTo(ExecInputs(MapType(mutableMapOf("hamal" to StringType("justworks"))))))
+                assertThat(inputs, equalTo(ExecInputs(KuaMap(mutableMapOf("hamal" to KuaString("justworks"))))))
                 assertThat(code, equalTo(ExecCode(value = CodeValue("code"))))
             }
         }
@@ -53,9 +53,9 @@ internal class ExecInvokeHandlerTest : BaseReqHandlerTest() {
             codeId = CodeId(4455),
             codeVersion = CodeVersion(5544),
             inputs = FuncInputs(
-                MapType(
+                KuaMap(
                     mutableMapOf(
-                        "override" to StringType("false"), "func" to StringType("func")
+                        "override" to KuaString("false"), "func" to KuaString("func")
                     )
                 )
             )
@@ -69,9 +69,9 @@ internal class ExecInvokeHandlerTest : BaseReqHandlerTest() {
                 flowId = testFlow.id,
                 groupId = testGroup.id,
                 inputs = InvocationInputs(
-                    MapType(
+                    KuaMap(
                         mutableMapOf(
-                            "override" to StringType("true"), "invocation" to StringType("invocation")
+                            "override" to KuaString("true"), "invocation" to KuaString("invocation")
                         )
                     )
                 ),
@@ -96,11 +96,11 @@ internal class ExecInvokeHandlerTest : BaseReqHandlerTest() {
                 assertThat(
                     inputs, equalTo(
                         ExecInputs(
-                            MapType(
+                            KuaMap(
                                 mutableMapOf(
-                                    "func" to StringType("func"),
-                                    "invocation" to StringType("invocation"),
-                                    "override" to StringType("true"),
+                                    "func" to KuaString("func"),
+                                    "invocation" to KuaString("invocation"),
+                                    "override" to KuaString("true"),
                                 )
                             )
                         )
@@ -139,9 +139,9 @@ internal class ExecInvokeHandlerTest : BaseReqHandlerTest() {
             execId = ExecId(3333),
             flowId = testFlow.id,
             groupId = testGroup.id,
-            inputs = InvocationInputs(MapType(mutableMapOf(
-                    "override" to StringType("true"),
-                    "invocation" to StringType("invocation")
+            inputs = InvocationInputs(KuaMap(mutableMapOf(
+                    "override" to KuaString("true"),
+                    "invocation" to KuaString("invocation")
                     ))),
             funcId = FuncId(4444),
             code = ExecCode(

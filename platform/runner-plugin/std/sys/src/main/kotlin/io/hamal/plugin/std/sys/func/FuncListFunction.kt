@@ -5,44 +5,44 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.type.ArrayType
-import io.hamal.lib.kua.type.ErrorType
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.KuaArray
+import io.hamal.lib.kua.type.KuaError
+import io.hamal.lib.kua.type.KuaMap
+import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiFuncService.FuncQuery
 
 class FuncListFunction(
     private val sdk: ApiSdk
-) : Function1In2Out<MapType, ErrorType, ArrayType>(
-    FunctionInput1Schema(MapType::class),
-    FunctionOutput2Schema(ErrorType::class, ArrayType::class)
+) : Function1In2Out<KuaMap, KuaError, KuaArray>(
+    FunctionInput1Schema(KuaMap::class),
+    FunctionOutput2Schema(KuaError::class, KuaArray::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: MapType): Pair<ErrorType?, ArrayType?> {
+    override fun invoke(ctx: FunctionContext, arg1: KuaMap): Pair<KuaError?, KuaArray?> {
         return try {
-            null to ArrayType(
+            null to KuaArray(
                 sdk.func.list(
                     FuncQuery(
                         flowIds = arg1.getArrayType("flow_ids")
-                            .map { FlowId((it.value as StringType).value) }
+                            .map { FlowId((it.value as KuaString).value) }
                     )
                 ).mapIndexed { index, func ->
-                    index to MapType(
+                    index to KuaMap(
                         mutableMapOf(
-                            "id" to StringType(func.id.value.value.toString(16)),
-                            "flow" to MapType(
+                            "id" to KuaString(func.id.value.value.toString(16)),
+                            "flow" to KuaMap(
                                 mutableMapOf(
-                                    "id" to StringType(func.flow.id.value.value.toString(16)),
-                                    "name" to StringType(func.flow.name.value)
+                                    "id" to KuaString(func.flow.id.value.value.toString(16)),
+                                    "name" to KuaString(func.flow.name.value)
                                 )
                             ),
-                            "name" to StringType(func.name.value),
+                            "name" to KuaString(func.name.value),
                         )
                     )
                 }.toMap().toMutableMap()
             )
         } catch (t: Throwable) {
-            ErrorType(t.message!!) to null
+            KuaError(t.message!!) to null
         }
     }
 }

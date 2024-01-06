@@ -8,8 +8,8 @@ import io.hamal.lib.domain._enum.TriggerStatus.Active
 import io.hamal.lib.domain._enum.TriggerStatus.Inactive
 import io.hamal.lib.domain._enum.TriggerType.Event
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.KuaMap
+import io.hamal.lib.kua.type.KuaString
 import io.hamal.repository.api.EventTrigger
 import io.hamal.repository.api.FixedRateTrigger
 import io.hamal.repository.api.TriggerCmdRepository.*
@@ -41,9 +41,9 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     flowId = FlowId(5),
                     name = TriggerName("trigger-name"),
                     inputs = TriggerInputs(
-                        MapType(
+                        KuaMap(
                             mutableMapOf(
-                                "hamal" to StringType("rocks")
+                                "hamal" to KuaString("rocks")
                             )
                         )
                     ),
@@ -56,7 +56,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 assertThat(funcId, equalTo(FuncId(3)))
                 assertThat(flowId, equalTo(FlowId(5)))
                 assertThat(name, equalTo(TriggerName("trigger-name")))
-                assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
+                assertThat(inputs, equalTo(TriggerInputs(KuaMap(mutableMapOf("hamal" to KuaString("rocks"))))))
                 assertThat(duration, equalTo(10.seconds))
                 assertThat(status, equalTo(Active))
             }
@@ -168,7 +168,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     assertThat(groupId, equalTo(GroupId(3)))
                     assertThat(flowId, equalTo(FlowId(2)))
                     assertThat(name, equalTo(TriggerName("first-trigger-name")))
-                    assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
+                    assertThat(inputs, equalTo(TriggerInputs(KuaMap(mutableMapOf("hamal" to KuaString("rockz"))))))
                     assertThat(duration, equalTo(10.seconds))
                     assertThat(status, equalTo(Active))
                 }
@@ -190,9 +190,9 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     flowId = FlowId(5),
                     name = TriggerName("trigger-name"),
                     inputs = TriggerInputs(
-                        MapType(
+                        KuaMap(
                             mutableMapOf(
-                                "hamal" to StringType("rocks")
+                                "hamal" to KuaString("rocks")
                             )
                         )
                     ),
@@ -205,7 +205,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 assertThat(funcId, equalTo(FuncId(3)))
                 assertThat(flowId, equalTo(FlowId(5)))
                 assertThat(name, equalTo(TriggerName("trigger-name")))
-                assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
+                assertThat(inputs, equalTo(TriggerInputs(KuaMap(mutableMapOf("hamal" to KuaString("rocks"))))))
                 assertThat(topicId, equalTo(TopicId(9)))
                 assertThat(status, equalTo(Active))
             }
@@ -317,7 +317,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     assertThat(groupId, equalTo(GroupId(3)))
                     assertThat(flowId, equalTo(FlowId(2)))
                     assertThat(name, equalTo(TriggerName("first-trigger-name")))
-                    assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
+                    assertThat(inputs, equalTo(TriggerInputs(KuaMap(mutableMapOf("hamal" to KuaString("rockz"))))))
                     assertThat(topicId, equalTo(TopicId(9)))
                 }
 
@@ -338,9 +338,9 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     flowId = FlowId(5),
                     name = TriggerName("trigger-name"),
                     inputs = TriggerInputs(
-                        MapType(
+                        KuaMap(
                             mutableMapOf(
-                                "hamal" to StringType("rocks")
+                                "hamal" to KuaString("rocks")
                             )
                         )
                     ),
@@ -354,7 +354,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 assertThat(funcId, equalTo(FuncId(3)))
                 assertThat(flowId, equalTo(FlowId(5)))
                 assertThat(name, equalTo(TriggerName("trigger-name")))
-                assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
+                assertThat(inputs, equalTo(TriggerInputs(KuaMap(mutableMapOf("hamal" to KuaString("rocks"))))))
                 assertThat(hookId, equalTo(HookId(9)))
                 assertThat(hookMethod, equalTo(Patch))
                 assertThat(status, equalTo(Active))
@@ -547,7 +547,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     assertThat(groupId, equalTo(GroupId(3)))
                     assertThat(flowId, equalTo(FlowId(2)))
                     assertThat(name, equalTo(TriggerName("first-trigger-name")))
-                    assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
+                    assertThat(inputs, equalTo(TriggerInputs(KuaMap(mutableMapOf("hamal" to KuaString("rockz"))))))
                     assertThat(hookId, equalTo(HookId(9)))
                     assertThat(status, equalTo(Active))
                 }
@@ -570,9 +570,9 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     flowId = FlowId(5),
                     name = TriggerName("trigger-name"),
                     inputs = TriggerInputs(
-                        MapType(
+                        KuaMap(
                             mutableMapOf(
-                                "hamal" to StringType("rocks")
+                                "hamal" to KuaString("rocks")
                             )
                         )
                     ),
@@ -585,7 +585,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 assertThat(funcId, equalTo(FuncId(3)))
                 assertThat(flowId, equalTo(FlowId(5)))
                 assertThat(name, equalTo(TriggerName("trigger-name")))
-                assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
+                assertThat(inputs, equalTo(TriggerInputs(KuaMap(mutableMapOf("hamal" to KuaString("rocks"))))))
                 assertThat(cron, equalTo(CronPattern("0 0 * * * *")))
                 assertThat(status, equalTo(Active))
             }
@@ -661,7 +661,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     assertThat(groupId, equalTo(GroupId(3)))
                     assertThat(flowId, equalTo(FlowId(2)))
                     assertThat(name, equalTo(TriggerName("first-trigger-name")))
-                    assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
+                    assertThat(inputs, equalTo(TriggerInputs(KuaMap(mutableMapOf("hamal" to KuaString("rockz"))))))
                     assertThat(cron, equalTo(CronPattern("0 0 * * * *")))
                     assertThat(status, equalTo(Active))
                 }
@@ -716,9 +716,9 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     flowId = FlowId(5),
                     name = TriggerName("trigger-name"),
                     inputs = TriggerInputs(
-                        MapType(
+                        KuaMap(
                             mutableMapOf(
-                                "hamal" to StringType("rocks")
+                                "hamal" to KuaString("rocks")
                             )
                         )
                     ),
@@ -733,7 +733,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 assertThat(funcId, equalTo(FuncId(3)))
                 assertThat(flowId, equalTo(FlowId(5)))
                 assertThat(name, equalTo(TriggerName("trigger-name")))
-                assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
+                assertThat(inputs, equalTo(TriggerInputs(KuaMap(mutableMapOf("hamal" to KuaString("rocks"))))))
                 assertThat(duration, equalTo(10.seconds))
                 assertThat(status, equalTo(Inactive))
             }
@@ -752,9 +752,9 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     flowId = FlowId(5),
                     name = TriggerName("trigger-name"),
                     inputs = TriggerInputs(
-                        MapType(
+                        KuaMap(
                             mutableMapOf(
-                                "hamal" to StringType("rocks")
+                                "hamal" to KuaString("rocks")
                             )
                         )
                     ),
@@ -773,7 +773,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
 
                 assertThat(flowId, equalTo(FlowId(5)))
                 assertThat(name, equalTo(TriggerName("trigger-name")))
-                assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
+                assertThat(inputs, equalTo(TriggerInputs(KuaMap(mutableMapOf("hamal" to KuaString("rocks"))))))
                 assertThat(duration, equalTo(10.seconds))
                 assertThat(status, equalTo(Active))
             }
@@ -801,7 +801,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 assertThat(groupId, equalTo(GroupId(3)))
                 assertThat(flowId, equalTo(FlowId(2)))
                 assertThat(name, equalTo(TriggerName("SomeTrigger")))
-                assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
+                assertThat(inputs, equalTo(TriggerInputs(KuaMap(mutableMapOf("hamal" to KuaString("rockz"))))))
                 assertThat(duration, equalTo(10.seconds))
                 assertThat(status, equalTo(Active))
             }
@@ -842,7 +842,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 assertThat(groupId, equalTo(GroupId(3)))
                 assertThat(flowId, equalTo(FlowId(2)))
                 assertThat(name, equalTo(TriggerName("SomeTrigger")))
-                assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
+                assertThat(inputs, equalTo(TriggerInputs(KuaMap(mutableMapOf("hamal" to KuaString("rockz"))))))
                 assertThat(duration, equalTo(10.seconds))
                 assertThat(status, equalTo(Active))
             }
@@ -1118,9 +1118,9 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 flowId = flowId,
                 name = name,
                 inputs = TriggerInputs(
-                    MapType(
+                    KuaMap(
                         mutableMapOf(
-                            "hamal" to StringType("rockz")
+                            "hamal" to KuaString("rockz")
                         )
                     )
                 ),
@@ -1147,9 +1147,9 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 flowId = flowId,
                 name = name,
                 inputs = TriggerInputs(
-                    MapType(
+                    KuaMap(
                         mutableMapOf(
-                            "hamal" to StringType("rockz")
+                            "hamal" to KuaString("rockz")
                         )
                     )
                 ),
@@ -1177,9 +1177,9 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 flowId = flowId,
                 name = name,
                 inputs = TriggerInputs(
-                    MapType(
+                    KuaMap(
                         mutableMapOf(
-                            "hamal" to StringType("rockz")
+                            "hamal" to KuaString("rockz")
                         )
                     )
                 ),
@@ -1207,9 +1207,9 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 flowId = flowId,
                 name = name,
                 inputs = TriggerInputs(
-                    MapType(
+                    KuaMap(
                         mutableMapOf(
-                            "hamal" to StringType("rockz")
+                            "hamal" to KuaString("rockz")
                         )
                     )
                 ),

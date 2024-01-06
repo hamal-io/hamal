@@ -3,10 +3,10 @@ package io.hamal.runner.run.function
 import TestFailConnector
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.type.False
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.NumberType
-import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.KuaFalse
+import io.hamal.lib.kua.type.KuaMap
+import io.hamal.lib.kua.type.KuaNumber
+import io.hamal.lib.kua.type.KuaString
 import io.hamal.runner.connector.UnitOfWork
 import io.hamal.runner.run.AbstractExecuteTest
 import org.hamcrest.MatcherAssert.assertThat
@@ -36,7 +36,7 @@ internal class FailTest : AbstractExecuteTest() {
         val runner = createTestRunner(
             connector = TestFailConnector { execId, execResult ->
                 assertThat(execId, equalTo(ExecId(1234)))
-                assertThat(execResult, equalTo(ExecResult(MapType())))
+                assertThat(execResult, equalTo(ExecResult(KuaMap())))
             }
         )
         runner.run(unitOfWork("context.fail()"))
@@ -48,7 +48,7 @@ internal class FailTest : AbstractExecuteTest() {
         val runner = createTestRunner(
             connector = TestFailConnector { execId, execResult ->
                 assertThat(execId, equalTo(ExecId(1234)))
-                assertThat(execResult, equalTo(ExecResult(MapType("message" to StringType("test")))))
+                assertThat(execResult, equalTo(ExecResult(KuaMap("message" to KuaString("test")))))
             }
         )
         runner.run(unitOfWork("context.fail('test')"))
@@ -59,7 +59,7 @@ internal class FailTest : AbstractExecuteTest() {
         val runner = createTestRunner(
             connector = TestFailConnector { execId, execResult ->
                 assertThat(execId, equalTo(ExecId(1234)))
-                assertThat(execResult, equalTo(ExecResult(MapType("value" to NumberType(1337)))))
+                assertThat(execResult, equalTo(ExecResult(KuaMap("value" to KuaNumber(1337)))))
             }
         )
         runner.run(unitOfWork("context.fail(1337)"))
@@ -70,7 +70,7 @@ internal class FailTest : AbstractExecuteTest() {
         val runner = createTestRunner(
             connector = TestFailConnector { execId, execResult ->
                 assertThat(execId, equalTo(ExecId(1234)))
-                assertThat(execResult, equalTo(ExecResult(MapType("value" to False))))
+                assertThat(execResult, equalTo(ExecResult(KuaMap("value" to KuaFalse))))
             }
         )
         runner.run(unitOfWork("context.fail(false)"))
@@ -84,9 +84,9 @@ internal class FailTest : AbstractExecuteTest() {
                 assertThat(
                     execResult, equalTo(
                         ExecResult(
-                            MapType(
-                                "reason" to StringType("undisclosed"),
-                                "answer" to NumberType(42)
+                            KuaMap(
+                                "reason" to KuaString("undisclosed"),
+                                "answer" to KuaNumber(42)
                             )
                         )
                     )

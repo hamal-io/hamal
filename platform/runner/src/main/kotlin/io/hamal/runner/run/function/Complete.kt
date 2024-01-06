@@ -4,11 +4,11 @@ import io.hamal.lib.kua.ExitError
 import io.hamal.lib.kua.function.Function1In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.NumberType
+import io.hamal.lib.kua.type.KuaMap
+import io.hamal.lib.kua.type.KuaNumber
 
-internal object CompleteRunFunction : Function1In0Out<MapType>(FunctionInput1Schema(MapType::class)) {
-    override fun invoke(ctx: FunctionContext, arg1: MapType) {
-        throw ExitError(NumberType(0), arg1)
+internal object CompleteRunFunction : Function1In0Out<KuaMap>(FunctionInput1Schema(KuaMap::class)) {
+    override fun invoke(ctx: FunctionContext, arg1: KuaMap) {
+        throw ExitError(KuaNumber(0), arg1)
     }
 }

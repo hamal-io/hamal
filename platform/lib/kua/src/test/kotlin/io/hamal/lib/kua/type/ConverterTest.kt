@@ -37,7 +37,7 @@ internal class ToMapTypeTest {
         val table = testState.tableCreateMap(1).also { it["number"] = 41 }
         val result = testState.toMapType(table)
         assertThat(result.size, equalTo(1))
-        assertThat(result["number"], equalTo(NumberType(41)))
+        assertThat(result["number"], equalTo(KuaNumber(41)))
     }
 
     @Test
@@ -45,7 +45,7 @@ internal class ToMapTypeTest {
         val table = testState.tableCreateMap(1).also { it["string"] = "HamalRocks" }
         val result = testState.toMapType(table)
         assertThat(result.size, equalTo(1))
-        assertThat(result["string"], equalTo(StringType("HamalRocks")))
+        assertThat(result["string"], equalTo(KuaString("HamalRocks")))
     }
 
     @Test
@@ -55,9 +55,9 @@ internal class ToMapTypeTest {
         val result = testState.toMapType(table)
         assertThat(result.size, equalTo(1))
 
-        val inner = result["inner"] as MapType
+        val inner = result["inner"] as KuaMap
         assertThat(inner.size, equalTo(1))
-        assertThat(inner["inner-key"], equalTo(StringType("inner-value")))
+        assertThat(inner["inner-key"], equalTo(KuaString("inner-value")))
     }
 
     @Test
@@ -67,9 +67,9 @@ internal class ToMapTypeTest {
         val result = testState.toMapType(table)
         assertThat(result.size, equalTo(1))
 
-        val inner = result["inner"] as ArrayType
+        val inner = result["inner"] as KuaArray
         assertThat(inner.size, equalTo(1))
-        assertThat(inner.getNumberType(1), equalTo(NumberType(1337)))
+        assertThat(inner.getNumberType(1), equalTo(KuaNumber(1337)))
     }
 
     private val testSandbox by lazy {
@@ -85,56 +85,56 @@ internal class ToProxyArrayTest {
 
     @Test
     fun `Empty array`() {
-        val testArray = ArrayType()
+        val testArray = KuaArray()
         val result = testState.toProxyArray(testArray)
         assertThat(result.length, equalTo(0))
     }
 
     @Test
     fun `Array with boolean type`() {
-        val testArray = ArrayType(mutableMapOf(1 to True, 2 to False))
+        val testArray = KuaArray(mutableMapOf(1 to KuaTrue, 2 to KuaFalse))
         val result = testState.toProxyArray(testArray)
         assertThat(result.length, equalTo(2))
-        assertThat(result.getBooleanType(1), equalTo(True))
-        assertThat(result.getBooleanType(2), equalTo(False))
+        assertThat(result.getBooleanType(1), equalTo(KuaTrue))
+        assertThat(result.getBooleanType(2), equalTo(KuaFalse))
     }
 
     @Test
     fun `Array with number type`() {
-        val testArray = ArrayType(mutableMapOf(1 to NumberType(23.42)))
+        val testArray = KuaArray(mutableMapOf(1 to KuaNumber(23.42)))
         val result = testState.toProxyArray(testArray)
         assertThat(result.length, equalTo(1))
-        assertThat(result.getNumberType(1), equalTo(NumberType(23.42)))
+        assertThat(result.getNumberType(1), equalTo(KuaNumber(23.42)))
     }
 
     @Test
     fun `Array with string type`() {
-        val testArray = ArrayType(mutableMapOf(1 to StringType("HamalRocks")))
+        val testArray = KuaArray(mutableMapOf(1 to KuaString("HamalRocks")))
         val result = testState.toProxyArray(testArray)
         assertThat(result.length, equalTo(1))
-        assertThat(result.getStringType(1), equalTo(StringType("HamalRocks")))
+        assertThat(result.getStringType(1), equalTo(KuaString("HamalRocks")))
     }
 
     @Test
     fun `Array with map type`() {
-        val testArray = ArrayType(mutableMapOf(1 to MapType(mutableMapOf("number" to NumberType(13.37)))))
+        val testArray = KuaArray(mutableMapOf(1 to KuaMap(mutableMapOf("number" to KuaNumber(13.37)))))
         val result = testState.toProxyArray(testArray)
         assertThat(result.length, equalTo(1))
 
         val nested = testArray.getMap(1)
         assertThat(nested.size, equalTo(1))
-        assertThat(nested.getNumberValue("number"), equalTo(NumberType(13.37)))
+        assertThat(nested.getNumberValue("number"), equalTo(KuaNumber(13.37)))
     }
 
     @Test
     fun `Array with array type`() {
-        val testArray = ArrayType(mutableMapOf(1 to ArrayType(mutableMapOf(1 to NumberType(22.33)))))
+        val testArray = KuaArray(mutableMapOf(1 to KuaArray(mutableMapOf(1 to KuaNumber(22.33)))))
         val result = testState.toProxyArray(testArray)
         assertThat(result.length, equalTo(1))
 
         val nested = testArray.getArray(1)
         assertThat(nested.size, equalTo(1))
-        assertThat(nested.getNumberType(1), equalTo(NumberType(22.33)))
+        assertThat(nested.getNumberType(1), equalTo(KuaNumber(22.33)))
     }
 
     private val testSandbox by lazy {
@@ -160,8 +160,8 @@ internal class ToArrayTypeTest {
         val table = testState.tableCreateArray(1).also { it.append(true); it.append(false) }
         val result = testState.toArrayType(table)
         assertThat(result.size, equalTo(2))
-        assertThat(result[1], equalTo(True))
-        assertThat(result[2], equalTo(False))
+        assertThat(result[1], equalTo(KuaTrue))
+        assertThat(result[2], equalTo(KuaFalse))
     }
 
     @Test
@@ -169,7 +169,7 @@ internal class ToArrayTypeTest {
         val table = testState.tableCreateArray(1).also { it.append(1337) }
         val result = testState.toArrayType(table)
         assertThat(result.size, equalTo(1))
-        assertThat(result[1], equalTo(NumberType(1337)))
+        assertThat(result[1], equalTo(KuaNumber(1337)))
     }
 
     @Test
@@ -177,7 +177,7 @@ internal class ToArrayTypeTest {
         val table = testState.tableCreateArray(1).also { it.append("HamalRocks") }
         val result = testState.toArrayType(table)
         assertThat(result.size, equalTo(1))
-        assertThat(result[1], equalTo(StringType("HamalRocks")))
+        assertThat(result[1], equalTo(KuaString("HamalRocks")))
     }
 
     @Test
@@ -187,9 +187,9 @@ internal class ToArrayTypeTest {
         val result = testState.toArrayType(table)
         assertThat(result.size, equalTo(1))
 
-        val inner = result[1] as MapType
+        val inner = result[1] as KuaMap
         assertThat(inner.size, equalTo(1))
-        assertThat(inner["inner-key"], equalTo(StringType("inner-value")))
+        assertThat(inner["inner-key"], equalTo(KuaString("inner-value")))
     }
 
     @Test
@@ -199,9 +199,9 @@ internal class ToArrayTypeTest {
         val result = testState.toArrayType(table)
         assertThat(result.size, equalTo(1))
 
-        val inner = result[1] as ArrayType
+        val inner = result[1] as KuaArray
         assertThat(inner.size, equalTo(1))
-        assertThat(inner[1], equalTo(NumberType(1337)))
+        assertThat(inner[1], equalTo(KuaNumber(1337)))
     }
 
     private val testSandbox by lazy {
@@ -217,56 +217,56 @@ internal class ToProxyMapTest {
 
     @Test
     fun `Empty map`() {
-        val testMap = MapType()
+        val testMap = KuaMap()
         val result = testState.toProxyMap(testMap)
         assertThat(result.length, equalTo(0))
     }
 
     @Test
     fun `Map with boolean type`() {
-        val testMap = MapType(mutableMapOf("true_value" to True, "false_value" to False))
+        val testMap = KuaMap(mutableMapOf("true_value" to KuaTrue, "false_value" to KuaFalse))
         val result = testState.toProxyMap(testMap)
         assertThat(result.length, equalTo(2))
-        assertThat(result.getBooleanType("true_value"), equalTo(True))
-        assertThat(result.getBooleanType("false_value"), equalTo(False))
+        assertThat(result.getBooleanType("true_value"), equalTo(KuaTrue))
+        assertThat(result.getBooleanType("false_value"), equalTo(KuaFalse))
     }
 
     @Test
     fun `Map with number type`() {
-        val testMap = MapType(mutableMapOf("number" to NumberType(1337)))
+        val testMap = KuaMap(mutableMapOf("number" to KuaNumber(1337)))
         val result = testState.toProxyMap(testMap)
         assertThat(result.length, equalTo(1))
-        assertThat(result.getNumberType("number"), equalTo(NumberType(1337)))
+        assertThat(result.getNumberType("number"), equalTo(KuaNumber(1337)))
     }
 
     @Test
     fun `Map with string type`() {
-        val testMap = MapType(mutableMapOf("some_string" to StringType("HamalRocks")))
+        val testMap = KuaMap(mutableMapOf("some_string" to KuaString("HamalRocks")))
         val result = testState.toProxyMap(testMap)
         assertThat(result.length, equalTo(1))
-        assertThat(result.getStringType("some_string"), equalTo(StringType("HamalRocks")))
+        assertThat(result.getStringType("some_string"), equalTo(KuaString("HamalRocks")))
     }
 
     @Test
     fun `Map with nested map`() {
-        val testMap = MapType(mutableMapOf("nested" to MapType(mutableMapOf("value" to StringType("HamalRocks")))))
+        val testMap = KuaMap(mutableMapOf("nested" to KuaMap(mutableMapOf("value" to KuaString("HamalRocks")))))
         val result = testState.toProxyMap(testMap)
         assertThat(result.length, equalTo(1))
 
         val nested = result.getTableMap("nested")
         assertThat(nested.length, equalTo(1))
-        assertThat(nested.getStringType("value"), equalTo(StringType("HamalRocks")))
+        assertThat(nested.getStringType("value"), equalTo(KuaString("HamalRocks")))
     }
 
     @Test
     fun `Map with nested array`() {
-        val testMap = MapType(mutableMapOf("nested" to ArrayType(mutableMapOf(3 to NumberType(13)))))
+        val testMap = KuaMap(mutableMapOf("nested" to KuaArray(mutableMapOf(3 to KuaNumber(13)))))
         val result = testState.toProxyMap(testMap)
         assertThat(result.length, equalTo(1))
 
         val nested = result.getTableArray("nested")
         assertThat(nested.length, equalTo(1))
-        assertThat(nested.getNumberType(1), equalTo(NumberType(13)))
+        assertThat(nested.getNumberType(1), equalTo(KuaNumber(13)))
     }
 
     private val testSandbox by lazy {

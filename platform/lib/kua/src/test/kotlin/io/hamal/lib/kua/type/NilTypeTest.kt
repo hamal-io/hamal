@@ -7,7 +7,7 @@ class NilTypeTest {
     @TestFactory
     fun serialization() = listOf(
         generateTestCases(
-            testInstance = NilType,
+            testInstance = KuaNil,
             expectedJson = """{"type":"NilType"}"""
         ),
     ).flatten()

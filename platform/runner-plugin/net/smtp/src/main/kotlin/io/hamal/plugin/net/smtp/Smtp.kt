@@ -4,17 +4,17 @@ import io.hamal.lib.kua.function.Function1In1Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput1Schema
-import io.hamal.lib.kua.type.ErrorType
-import io.hamal.lib.kua.type.MapType
+import io.hamal.lib.kua.type.KuaError
+import io.hamal.lib.kua.type.KuaMap
 
 class SmtpSendFunction(
     private val sender: Sender
-) : Function1In1Out<MapType, ErrorType>(
-    FunctionInput1Schema(MapType::class),
-    FunctionOutput1Schema(ErrorType::class)
+) : Function1In1Out<KuaMap, KuaError>(
+    FunctionInput1Schema(KuaMap::class),
+    FunctionOutput1Schema(KuaError::class)
 ) {
 
-    override fun invoke(ctx: FunctionContext, arg1: MapType): ErrorType? {
+    override fun invoke(ctx: FunctionContext, arg1: KuaMap): KuaError? {
 
         sender.send(
             SenderConfig(

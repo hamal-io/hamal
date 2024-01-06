@@ -7,12 +7,12 @@ import io.hamal.lib.kua.extend.extension.RunnerExtension
 import io.hamal.lib.kua.extend.extension.RunnerExtensionFactory
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
-import io.hamal.lib.kua.function.FunctionType
 import io.hamal.lib.kua.table.TableProxyArray
 import io.hamal.lib.kua.table.TableProxyMap
-import io.hamal.lib.kua.type.AnyType
-import io.hamal.lib.kua.type.CodeType
-import io.hamal.lib.kua.type.ErrorType
+import io.hamal.lib.kua.type.KuaAny
+import io.hamal.lib.kua.type.KuaCode
+import io.hamal.lib.kua.type.KuaError
+import io.hamal.lib.kua.type.KuaFunction
 
 class Sandbox(
     val ctx: SandboxContext
@@ -33,7 +33,7 @@ class Sandbox(
         load(String(classLoader.getResource("std.lua").readBytes()))
     }
 
-    fun load(code: CodeType) = load(code.value)
+    fun load(code: KuaCode) = load(code.value)
 
     override fun load(code: String) = native.load(code)
 
@@ -77,14 +77,14 @@ class Sandbox(
 
     override fun type(idx: Int) = state.type(idx)
     override fun pushNil() = state.pushNil()
-    override fun pushAny(value: AnyType) = state.pushAny(value)
+    override fun pushAny(value: KuaAny) = state.pushAny(value)
     override fun getAny(idx: Int) = state.getAny(idx)
     override fun getArrayType(idx: Int) = state.getArrayType(idx)
 
     override fun pushBoolean(value: Boolean) = state.pushBoolean(value)
     override fun getBoolean(idx: Int) = state.getBoolean(idx)
-    override fun pushError(value: ErrorType) = state.pushError(value)
-    override fun pushFunction(value: FunctionType<*, *, *, *>) = state.pushFunction(value)
+    override fun pushError(value: KuaError) = state.pushError(value)
+    override fun pushFunction(value: KuaFunction<*, *, *, *>) = state.pushFunction(value)
 
     override fun getNumber(idx: Int) = state.getNumber(idx)
     override fun pushNumber(value: Double) = state.pushNumber(value)
@@ -97,7 +97,7 @@ class Sandbox(
     override fun getTableArrayProxy(idx: Int) = state.getTableArrayProxy(idx)
     override fun getMapType(idx: Int) = state.getMapType(idx)
 
-    override fun setGlobal(name: String, value: FunctionType<*, *, *, *>) = state.setGlobal(name, value)
+    override fun setGlobal(name: String, value: KuaFunction<*, *, *, *>) = state.setGlobal(name, value)
     override fun setGlobal(name: String, value: TableProxyMap) = state.setGlobal(name, value)
     override fun setGlobal(name: String, value: TableProxyArray) = state.setGlobal(name, value)
     override fun getGlobalTableMap(name: String): TableProxyMap = state.getGlobalTableMap(name)

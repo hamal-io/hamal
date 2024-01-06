@@ -12,13 +12,17 @@ import io.hamal.lib.sdk.ApiSdk
 
 class CodeGetFunction(
     private val sdk: ApiSdk
-) : Function2In2Out<StringType, NumberType, ErrorType, MapType>(
-    FunctionInput2Schema(StringType::class, NumberType::class),
-    FunctionOutput2Schema(ErrorType::class, MapType::class)
+) : Function2In2Out<KuaString, KuaNumber, KuaError, KuaMap>(
+    FunctionInput2Schema(KuaString::class, KuaNumber::class),
+    FunctionOutput2Schema(KuaError::class, KuaMap::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: StringType, arg2: NumberType): Pair<ErrorType?, MapType?> {
+    override fun invoke(
+        ctx: FunctionContext,
+        arg1: KuaString,
+        arg2: KuaNumber
+    ): Pair<KuaError?, KuaMap?> {
         return try {
-            val response = if (arg2 == NumberType(-1)) {
+            val response = if (arg2 == KuaNumber(-1)) {
                 sdk.code.get(CodeId(arg1.value))
             } else {
                 sdk.code.get(CodeId(arg1.value), CodeVersion(arg2.value.toInt()))
@@ -26,17 +30,17 @@ class CodeGetFunction(
 
             null to response
                 .let { code ->
-                    MapType(
+                    KuaMap(
                         mutableMapOf(
-                            "id" to StringType(code.id.value.value.toString(16)),
-                            "code" to CodeType(code.value.value),
-                            "version" to NumberType(code.version.value)
+                            "id" to KuaString(code.id.value.value.toString(16)),
+                            "code" to KuaCode(code.value.value),
+                            "version" to KuaNumber(code.version.value)
                             // FIXME-53 deployed_version ????
                         )
                     )
                 }
         } catch (t: Throwable) {
-            ErrorType(t.message!!) to null
+            KuaError(t.message!!) to null
         }
     }
 }

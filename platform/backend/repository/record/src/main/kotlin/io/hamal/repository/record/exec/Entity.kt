@@ -3,7 +3,7 @@ package io.hamal.repository.api.record.exec
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.type.MapType
+import io.hamal.lib.kua.type.KuaMap
 import io.hamal.repository.api.*
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordEntity
@@ -103,7 +103,7 @@ data class ExecEntity(
             flowId = flowId,
             groupId = groupId,
             correlation = correlation,
-            inputs = inputs ?: ExecInputs(MapType()),
+            inputs = inputs ?: ExecInputs(KuaMap()),
             code = code ?: ExecCode(),
             invocation = invocation!!
         )

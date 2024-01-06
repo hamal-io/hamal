@@ -5,9 +5,9 @@ import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
 import io.hamal.lib.kua.table.TableProxyArray
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.NilType
-import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.KuaNil
+import io.hamal.lib.kua.type.KuaString
+import io.hamal.lib.kua.type.KuaMap
 import io.hamal.lib.kua.type.toProxyMap
 import io.hamal.runner.run.function.CompleteRunFunction
 import io.hamal.runner.run.function.EmitFunction
@@ -23,29 +23,29 @@ class RunnerContextFactory(
         val events = if (invocation is EventInvocation) {
             sandbox.invocationEvents(invocation.events)
         } else {
-            NilType
+            KuaNil
         }
 
         val hook = if (invocation is HookInvocation) {
-            MapType(
-                "method" to StringType(invocation.method.toString()),
+            KuaMap(
+                "method" to KuaString(invocation.method.toString()),
                 "headers" to invocation.headers.value,
                 "parameters" to invocation.parameters.value,
                 "content" to invocation.content.value
             )
         } else {
-            NilType
+            KuaNil
         }
 
         val endpoint = if (invocation is EndpointInvocation) {
-            MapType(
-                "method" to StringType(invocation.method.toString()),
+            KuaMap(
+                "method" to KuaString(invocation.method.toString()),
                 "headers" to invocation.headers.value,
                 "parameters" to invocation.parameters.value,
                 "content" to invocation.content.value
             )
         } else {
-            NilType
+            KuaNil
         }
 
         return RunnerPlugin(
@@ -54,7 +54,7 @@ class RunnerContextFactory(
                 "events" to events,
                 "hook" to hook,
                 "endpoint" to endpoint,
-                "exec_id" to StringType(executionCtx[ExecId::class].value.value.toString(16)),
+                "exec_id" to KuaString(executionCtx[ExecId::class].value.value.toString(16)),
                 "emit" to EmitFunction(executionCtx),
                 "fail" to FailRunFunction,
                 "complete" to CompleteRunFunction,
@@ -69,13 +69,13 @@ private fun Sandbox.invocationEvents(events: List<Event>): TableProxyArray =
     tableCreateArray(events.size).let { result ->
         events.map {
             toProxyMap(
-                MapType(
+                KuaMap(
                     mutableMapOf(
-                        "id" to StringType(it.id.value.value.toString(16)),
-                        "topic" to MapType(
+                        "id" to KuaString(it.id.value.value.toString(16)),
+                        "topic" to KuaMap(
                             mutableMapOf(
-                                "id" to StringType(it.topic.id.value.value.toString(16)),
-                                "name" to StringType(it.topic.name.value)
+                                "id" to KuaString(it.topic.id.value.value.toString(16)),
+                                "name" to KuaString(it.topic.name.value)
                             )
                         ),
                         "payload" to it.payload.value

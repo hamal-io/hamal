@@ -10,27 +10,27 @@ import io.hamal.lib.sdk.ApiSdk
 
 class FuncDeploymentsFunction(
     private val sdk: ApiSdk
-) : Function1In2Out<StringType, ErrorType, ArrayType>(
-    FunctionInput1Schema(StringType::class),
-    FunctionOutput2Schema(ErrorType::class, ArrayType::class)
+) : Function1In2Out<KuaString, KuaError, KuaArray>(
+    FunctionInput1Schema(KuaString::class),
+    FunctionOutput2Schema(KuaError::class, KuaArray::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: StringType): Pair<ErrorType?, ArrayType?> {
+    override fun invoke(ctx: FunctionContext, arg1: KuaString): Pair<KuaError?, KuaArray?> {
         return try {
-            null to ArrayType(
+            null to KuaArray(
                 sdk.func.listDeployments(
                     FuncId(arg1.value)
                 ).mapIndexed { idx, deployed ->
-                    idx to MapType(
+                    idx to KuaMap(
                         mutableMapOf(
-                            "version" to NumberType(deployed.version.value),
-                            "message" to StringType(deployed.message.value),
-                            "deployed_at" to StringType(deployed.deployedAt.toString())
+                            "version" to KuaNumber(deployed.version.value),
+                            "message" to KuaString(deployed.message.value),
+                            "deployed_at" to KuaString(deployed.deployedAt.toString())
                         )
                     )
                 }.toMap().toMutableMap()
             )
         } catch (t: Throwable) {
-            ErrorType(t.message!!) to null
+            KuaError(t.message!!) to null
         }
     }
 }

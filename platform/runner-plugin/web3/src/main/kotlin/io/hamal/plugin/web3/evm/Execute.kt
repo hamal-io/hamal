@@ -5,16 +5,16 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.type.ArrayType
-import io.hamal.lib.kua.type.ErrorType
+import io.hamal.lib.kua.type.KuaArray
+import io.hamal.lib.kua.type.KuaError
 
 private val log = logger(EthExecuteFunction::class)
 
-class EthExecuteFunction : Function1In2Out<ArrayType, ErrorType, ArrayType>(
-    FunctionInput1Schema(ArrayType::class),
-    FunctionOutput2Schema(ErrorType::class, ArrayType::class)
+class EthExecuteFunction : Function1In2Out<KuaArray, KuaError, KuaArray>(
+    FunctionInput1Schema(KuaArray::class),
+    FunctionOutput2Schema(KuaError::class, KuaArray::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: ArrayType): Pair<ErrorType?, ArrayType?> {
+    override fun invoke(ctx: FunctionContext, arg1: KuaArray): Pair<KuaError?, KuaArray?> {
         try {
             log.trace("Setting up batch service")
 
@@ -75,7 +75,7 @@ class EthExecuteFunction : Function1In2Out<ArrayType, ErrorType, ArrayType>(
 
         } catch (t: Throwable) {
             t.printStackTrace()
-            return ErrorType(t.message ?: "Unknown error") to null
+            return KuaError(t.message ?: "Unknown error") to null
         }
     }
 }

@@ -3,9 +3,9 @@ package io.hamal.repository
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.NumberType
-import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.KuaMap
+import io.hamal.lib.kua.type.KuaNumber
+import io.hamal.lib.kua.type.KuaString
 import io.hamal.repository.api.BlueprintCmdRepository.CreateCmd
 import io.hamal.repository.api.BlueprintCmdRepository.UpdateCmd
 import io.hamal.repository.api.BlueprintQueryRepository.BlueprintQuery
@@ -34,9 +34,9 @@ class BlueprintRepositoryTest : AbstractUnitTest() {
                     creatorId = AccountId("123"),
                     name = BlueprintName("TestBlueprint"),
                     inputs = BlueprintInputs(
-                        MapType(
+                        KuaMap(
                             mutableMapOf(
-                                "hamal" to StringType("rockz")
+                                "hamal" to KuaString("rockz")
                             )
                         )
                     ),
@@ -49,7 +49,7 @@ class BlueprintRepositoryTest : AbstractUnitTest() {
                 assertThat(groupId, equalTo(GroupId(1)))
                 assertThat(creatorId, equalTo(AccountId("123")))
                 assertThat(name, equalTo(BlueprintName("TestBlueprint")))
-                assertThat(inputs, equalTo(BlueprintInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
+                assertThat(inputs, equalTo(BlueprintInputs(KuaMap(mutableMapOf("hamal" to KuaString("rockz"))))))
                 assertThat(value, equalTo(CodeValue("1 + 1")))
             }
             verifyCount(1)
@@ -105,7 +105,7 @@ class BlueprintRepositoryTest : AbstractUnitTest() {
                     id = CmdId(2),
                     name = BlueprintName("TestBlueprint2"),
                     value = CodeValue("1 + 1"),
-                    inputs = BlueprintInputs(MapType(mutableMapOf("answer" to NumberType(42))))
+                    inputs = BlueprintInputs(KuaMap(mutableMapOf("answer" to KuaNumber(42))))
                 )
             )
 
@@ -114,7 +114,7 @@ class BlueprintRepositoryTest : AbstractUnitTest() {
                 assertThat(groupId, equalTo(GroupId(1)))
                 assertThat(name, equalTo(BlueprintName("TestBlueprint2")))
                 assertThat(value, equalTo(CodeValue("1 + 1")))
-                assertThat(inputs, equalTo(BlueprintInputs(MapType(mutableMapOf("answer" to NumberType(42))))))
+                assertThat(inputs, equalTo(BlueprintInputs(KuaMap(mutableMapOf("answer" to KuaNumber(42))))))
                 assertThat(creatorId, equalTo(AccountId("123")))
             }
 
@@ -342,9 +342,9 @@ class BlueprintRepositoryTest : AbstractUnitTest() {
                 creatorId = AccountId("123"),
                 name = name,
                 inputs = BlueprintInputs(
-                    MapType(
+                    KuaMap(
                         mutableMapOf(
-                            "hamal" to StringType("rockz")
+                            "hamal" to KuaString("rockz")
                         )
                     )
                 ),

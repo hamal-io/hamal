@@ -3,9 +3,9 @@ package io.hamal.core.request.handler.exec
 import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.InvocationInputs
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.NumberType
-import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.KuaMap
+import io.hamal.lib.kua.type.KuaNumber
+import io.hamal.lib.kua.type.KuaString
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -21,10 +21,10 @@ class ToExecInputsTest {
     @Test
     fun ok() {
         val invocationInputs = InvocationInputs(
-            MapType(
+            KuaMap(
                 mutableMapOf(
-                    "key" to NumberType(2810),
-                    "invoke" to StringType("invoke")
+                    "key" to KuaNumber(2810),
+                    "invoke" to KuaString("invoke")
                 )
             )
         )
@@ -32,10 +32,10 @@ class ToExecInputsTest {
         assertThat(
             result, equalTo(
                 ExecInputs(
-                    MapType(
+                    KuaMap(
                         mutableMapOf(
-                            "key" to NumberType(2810),
-                            "invoke" to StringType("invoke")
+                            "key" to KuaNumber(2810),
+                            "invoke" to KuaString("invoke")
                         )
                     )
                 )
@@ -56,18 +56,18 @@ class MergeTest {
     @Test
     fun `invocation inputs overrides func inputs`() {
         val funcInputs = FuncInputs(
-            MapType(
+            KuaMap(
                 mutableMapOf(
-                    "key" to NumberType(1),
-                    "func" to StringType("func")
+                    "key" to KuaNumber(1),
+                    "func" to KuaString("func")
                 )
             )
         )
         val invocationInputs = InvocationInputs(
-            MapType(
+            KuaMap(
                 mutableMapOf(
-                    "key" to NumberType(2810),
-                    "invoke" to StringType("invoke")
+                    "key" to KuaNumber(2810),
+                    "invoke" to KuaString("invoke")
                 )
             )
         )
@@ -75,11 +75,11 @@ class MergeTest {
         assertThat(
             result, equalTo(
                 ExecInputs(
-                    MapType(
+                    KuaMap(
                         mutableMapOf(
-                            "key" to NumberType(2810),
-                            "func" to StringType("func"),
-                            "invoke" to StringType("invoke")
+                            "key" to KuaNumber(2810),
+                            "func" to KuaString("func"),
+                            "invoke" to KuaString("invoke")
                         )
                     )
                 )

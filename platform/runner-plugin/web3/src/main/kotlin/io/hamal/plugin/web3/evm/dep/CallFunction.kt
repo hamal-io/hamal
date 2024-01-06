@@ -5,14 +5,14 @@ import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.table.TableProxyMap
-import io.hamal.lib.kua.type.ErrorType
-import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.KuaError
+import io.hamal.lib.kua.type.KuaString
 
-class CallFunction : Function1In2Out<TableProxyMap, ErrorType, StringType>(
+class CallFunction : Function1In2Out<TableProxyMap, KuaError, KuaString>(
     FunctionInput1Schema(TableProxyMap::class),
-    FunctionOutput2Schema(ErrorType::class, StringType::class)
+    FunctionOutput2Schema(KuaError::class, KuaString::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: TableProxyMap): Pair<ErrorType?, StringType?> {
+    override fun invoke(ctx: FunctionContext, arg1: TableProxyMap): Pair<KuaError?, KuaString?> {
 
 //        val b = EthHttpBatchService(
 ////            HttpTemplateImpl((config.value["host"] as StringType).value)

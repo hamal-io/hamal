@@ -10,10 +10,10 @@ import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
-import io.hamal.lib.kua.type.False
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.NumberType
-import io.hamal.lib.kua.type.True
+import io.hamal.lib.kua.type.KuaFalse
+import io.hamal.lib.kua.type.KuaMap
+import io.hamal.lib.kua.type.KuaNumber
+import io.hamal.lib.kua.type.KuaTrue
 import io.hamal.lib.sdk.api.ApiError
 import io.hamal.lib.sdk.api.ApiState
 import io.hamal.lib.sdk.api.ApiStateSetRequested
@@ -28,7 +28,7 @@ internal class StateSetControllerTest : StateBaseControllerTest() {
 
         val response = httpTemplate.put("/v1/funcs/{funcId}/states/__CORRELATION__")
             .path("funcId", funcId)
-            .body(State(MapType(mutableMapOf("answer" to NumberType(42)))))
+            .body(State(KuaMap(mutableMapOf("answer" to KuaNumber(42)))))
             .execute()
 
         assertThat(response.statusCode, equalTo(Accepted))
@@ -37,7 +37,7 @@ internal class StateSetControllerTest : StateBaseControllerTest() {
         awaitCompleted(response.result(ApiStateSetRequested::class))
 
         val correlatedState = getState(funcId, CorrelationId("__CORRELATION__"))
-        assertThat(correlatedState["answer"], equalTo(NumberType(42)))
+        assertThat(correlatedState["answer"], equalTo(KuaNumber(42)))
     }
 
     @Test
@@ -47,17 +47,17 @@ internal class StateSetControllerTest : StateBaseControllerTest() {
         val correlationOne = Correlation(funcId = funcId, correlationId = CorrelationId("1"))
         val correlationTwo = Correlation(funcId = funcId, correlationId = CorrelationId("2"))
 
-        setState(CorrelatedState(correlationOne, State(MapType(mutableMapOf("result" to True)))))
-        setState(CorrelatedState(correlationTwo, State(MapType(mutableMapOf("result" to False)))))
+        setState(CorrelatedState(correlationOne, State(KuaMap(mutableMapOf("result" to KuaTrue)))))
+        setState(CorrelatedState(correlationTwo, State(KuaMap(mutableMapOf("result" to KuaFalse)))))
 
         with(getState(correlationOne)) {
             assertThat(correlation.correlationId, equalTo(CorrelationId("1")))
-            assertThat(state, equalTo(ApiState(MapType(mutableMapOf("result" to True)))))
+            assertThat(state, equalTo(ApiState(KuaMap(mutableMapOf("result" to KuaTrue)))))
         }
 
         with(getState(correlationTwo)) {
             assertThat(correlation.correlationId, equalTo(CorrelationId("2")))
-            assertThat(state, equalTo(ApiState(MapType((mutableMapOf("result" to False))))))
+            assertThat(state, equalTo(ApiState(KuaMap((mutableMapOf("result" to KuaFalse))))))
         }
     }
 
@@ -76,20 +76,20 @@ internal class StateSetControllerTest : StateBaseControllerTest() {
                 setState(
                     CorrelatedState(
                         correlation = correlation,
-                        value = State(MapType(mutableMapOf("count" to NumberType(currentCount))))
+                        value = State(KuaMap(mutableMapOf("count" to KuaNumber(currentCount))))
                     )
                 )
             )
 
             val correlatedState = getState(correlation)
-            assertThat(correlatedState["count"], equalTo(NumberType(currentCount)))
+            assertThat(correlatedState["count"], equalTo(KuaNumber(currentCount)))
         }
     }
 
     @Test
     fun `Tries to set state but func does not exists`() {
         val response = httpTemplate.put("/v1/funcs/0/states/__CORRELATION__")
-            .body(State(MapType(mutableMapOf("answer" to NumberType(42)))))
+            .body(State(KuaMap(mutableMapOf("answer" to KuaNumber(42)))))
             .execute()
 
         assertThat(response.statusCode, equalTo(NotFound))

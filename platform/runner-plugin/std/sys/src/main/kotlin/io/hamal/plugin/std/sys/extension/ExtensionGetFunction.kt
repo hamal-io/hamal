@@ -10,29 +10,29 @@ import io.hamal.lib.sdk.ApiSdk
 
 class ExtensionGetFunction(
     private val sdk: ApiSdk
-) : Function1In2Out<StringType, ErrorType, MapType>(
-    FunctionInput1Schema(StringType::class),
-    FunctionOutput2Schema(ErrorType::class, MapType::class)
+) : Function1In2Out<KuaString, KuaError, KuaMap>(
+    FunctionInput1Schema(KuaString::class),
+    FunctionOutput2Schema(KuaError::class, KuaMap::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: StringType): Pair<ErrorType?, MapType?> {
+    override fun invoke(ctx: FunctionContext, arg1: KuaString): Pair<KuaError?, KuaMap?> {
         return try {
             val ext = sdk.extension.get(ExtensionId(arg1.value))
 
             val res = mutableMapOf(
-                "id" to StringType(ext.id.value.value.toString(16)),
-                "name" to StringType(ext.name.value),
-                "code" to MapType(
+                "id" to KuaString(ext.id.value.value.toString(16)),
+                "name" to KuaString(ext.name.value),
+                "code" to KuaMap(
                     mutableMapOf(
-                        "id" to StringType(ext.code.id.value.value.toString(16)),
-                        "version" to NumberType(ext.code.version.value),
-                        "value" to CodeType(ext.code.value.value)
+                        "id" to KuaString(ext.code.id.value.value.toString(16)),
+                        "version" to KuaNumber(ext.code.version.value),
+                        "value" to KuaCode(ext.code.value.value)
                     )
                 )
             )
-            null to MapType(res)
+            null to KuaMap(res)
 
         } catch (t: Throwable) {
-            ErrorType(t.message!!) to null
+            KuaError(t.message!!) to null
         }
     }
 }

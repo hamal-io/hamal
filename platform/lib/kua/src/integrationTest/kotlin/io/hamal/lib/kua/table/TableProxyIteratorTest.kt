@@ -29,13 +29,13 @@ internal class TableEntryIteratorTest {
                     valueExtractor = { state, index -> state.getAny(index) }
                 )
 
-                val resultCollector = mutableMapOf<StringType, AnyType>()
+                val resultCollector = mutableMapOf<KuaString, KuaAny>()
                 testInstance.forEach { entry -> resultCollector[entry.key] = entry.value }
 
                 assertThat(resultCollector.keys, hasSize(3))
-                assertThat(resultCollector[StringType("key")], equalTo(AnyType(StringType("value"))))
-                assertThat(resultCollector[StringType("answer")], equalTo(AnyType(NumberType(42))))
-                assertThat(resultCollector[StringType("result")], equalTo(AnyType(True)))
+                assertThat(resultCollector[KuaString("key")], equalTo(KuaAny(KuaString("value"))))
+                assertThat(resultCollector[KuaString("answer")], equalTo(KuaAny(KuaNumber(42))))
+                assertThat(resultCollector[KuaString("result")], equalTo(KuaAny(KuaTrue)))
             }
         }
 
@@ -83,7 +83,7 @@ internal class TableEntryIteratorTest {
                     valueExtractor = { state, index -> state.getAny(index) }
                 )
 
-                val resultCollector = mutableMapOf<StringType, AnyType>()
+                val resultCollector = mutableMapOf<KuaString, KuaAny>()
                 testInstance.forEach { entry -> resultCollector[entry.key] = entry.value }
 
                 assertThat(resultCollector.keys, empty())
@@ -128,13 +128,13 @@ internal class TableEntryIteratorTest {
                     valueExtractor = { state, index -> state.getAny(index) }
                 )
 
-                val resultCollector = mutableMapOf<NumberType, AnyType>()
+                val resultCollector = mutableMapOf<KuaNumber, KuaAny>()
                 testInstance.forEach { entry -> resultCollector[entry.key] = entry.value }
 
                 assertThat(resultCollector.keys, hasSize(3))
-                assertThat(resultCollector[NumberType(1)], equalTo(AnyType(StringType("value"))))
-                assertThat(resultCollector[NumberType(2)], equalTo(AnyType(NumberType(42))))
-                assertThat(resultCollector[NumberType(3)], equalTo(AnyType(True)))
+                assertThat(resultCollector[KuaNumber(1)], equalTo(KuaAny(KuaString("value"))))
+                assertThat(resultCollector[KuaNumber(2)], equalTo(KuaAny(KuaNumber(42))))
+                assertThat(resultCollector[KuaNumber(3)], equalTo(KuaAny(KuaTrue)))
             }
         }
 
@@ -183,18 +183,18 @@ internal class TableEntryIteratorTest {
                     valueExtractor = { state, index -> state.toMapType(state.getTableMapProxy(index)) }
                 )
 
-                val resultCollector = mutableMapOf<NumberType, MapType>()
+                val resultCollector = mutableMapOf<KuaNumber, KuaMap>()
                 testInstance.forEach { entry -> resultCollector[entry.key] = entry.value }
                 assertThat(resultCollector.keys, hasSize(3))
 
-                val first = resultCollector[NumberType(1)]!!
-                assertThat(first.getStringType("type"), equalTo(StringType("call")))
+                val first = resultCollector[KuaNumber(1)]!!
+                assertThat(first.getStringType("type"), equalTo(KuaString("call")))
 
-                val second = resultCollector[NumberType(2)]!!
-                assertThat(second.getStringType("type"), equalTo(StringType("get_block")))
+                val second = resultCollector[KuaNumber(2)]!!
+                assertThat(second.getStringType("type"), equalTo(KuaString("get_block")))
 
-                val third = resultCollector[NumberType(3)]!!
-                assertThat(third.getStringType("type"), equalTo(StringType("version")))
+                val third = resultCollector[KuaNumber(3)]!!
+                assertThat(third.getStringType("type"), equalTo(KuaString("version")))
             }
         }
 
@@ -242,7 +242,7 @@ internal class TableEntryIteratorTest {
                     valueExtractor = { state, index -> state.getAny(index) }
                 )
 
-                val resultCollector = mutableMapOf<NumberType, AnyType>()
+                val resultCollector = mutableMapOf<KuaNumber, KuaAny>()
                 testInstance.forEach { entry -> resultCollector[entry.key] = entry.value }
 
                 assertThat(resultCollector.keys, empty())

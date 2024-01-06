@@ -7,8 +7,8 @@ import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.HttpSuccessResponse
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.KuaMap
+import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.sdk.api.ApiError
 import io.hamal.lib.sdk.api.ApiFunc
 import io.hamal.lib.sdk.api.ApiFuncCreateRequest
@@ -33,7 +33,7 @@ internal class FuncGetControllerTest : FuncBaseControllerTest() {
             createFunc(
                 ApiFuncCreateRequest(
                     name = FuncName("func-one"),
-                    inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("rockz")))),
+                    inputs = FuncInputs(KuaMap(mutableMapOf("hamal" to KuaString("rockz")))),
                     code = CodeValue("1+1")
                 )
             )
@@ -46,7 +46,7 @@ internal class FuncGetControllerTest : FuncBaseControllerTest() {
         with(getFuncResponse.result(ApiFunc::class)) {
             assertThat(id, equalTo(funcId))
             assertThat(name, equalTo(FuncName("func-one")))
-            assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
+            assertThat(inputs, equalTo(FuncInputs(KuaMap(mutableMapOf("hamal" to KuaString("rockz"))))))
 
             assertThat(code.version, equalTo(CodeVersion(1)))
             assertThat(code.value, equalTo(CodeValue("1+1")))

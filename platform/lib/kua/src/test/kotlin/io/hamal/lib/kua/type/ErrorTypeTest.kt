@@ -8,11 +8,11 @@ class ErrorTypeTest {
     @TestFactory
     fun serialization() = listOf(
         generateTestCases(
-            testInstance = ErrorType(""),
+            testInstance = KuaError(""),
             expectedJson = """{"type":"ErrorType","value":""}"""
         ),
         generateTestCases(
-            testInstance = ErrorType("hamal-error-message"),
+            testInstance = KuaError("hamal-error-message"),
             expectedJson = """{"type":"ErrorType","value":"hamal-error-message"}"""
         ),
     ).flatten()

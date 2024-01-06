@@ -6,9 +6,9 @@ import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.NumberType
-import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.KuaMap
+import io.hamal.lib.kua.type.KuaNumber
+import io.hamal.lib.kua.type.KuaString
 import io.hamal.runner.connector.UnitOfWork
 import io.hamal.runner.run.AbstractExecuteTest
 import org.hamcrest.MatcherAssert.assertThat
@@ -81,11 +81,11 @@ internal object EventInvocationTest : AbstractExecuteTest() {
         Event(
             topic = EventTopic(
                 id = TopicId(1), name = TopicName("Topic-One")
-            ), id = EventId(1234), payload = EventPayload(MapType(mutableMapOf("block" to NumberType(43))))
+            ), id = EventId(1234), payload = EventPayload(KuaMap(mutableMapOf("block" to KuaNumber(43))))
         ), Event(
             topic = EventTopic(
                 id = TopicId(23), name = TopicName("Topic-Two")
-            ), id = EventId(4321), payload = EventPayload(MapType(mutableMapOf("block" to NumberType(44))))
+            ), id = EventId(4321), payload = EventPayload(KuaMap(mutableMapOf("block" to KuaNumber(44))))
         )
     )
 }
@@ -124,9 +124,9 @@ internal object HookInvocationTest : AbstractExecuteTest() {
                 ),
                 invocation = HookInvocation(
                     method = HookMethod.Delete,
-                    headers = HookHeaders(MapType(mutableMapOf("content-type" to StringType("application/json")))),
-                    parameters = HookParameters(MapType(mutableMapOf("answer" to NumberType(42)))),
-                    content = HookContent(MapType(mutableMapOf("hamal" to StringType("rocks"))))
+                    headers = HookHeaders(KuaMap(mutableMapOf("content-type" to KuaString("application/json")))),
+                    parameters = HookParameters(KuaMap(mutableMapOf("answer" to KuaNumber(42)))),
+                    content = HookContent(KuaMap(mutableMapOf("hamal" to KuaString("rocks"))))
                 )
             )
         )
@@ -147,19 +147,19 @@ internal object HookInvocationTest : AbstractExecuteTest() {
                 code = CodeValue("require_plugin('test').fn()"),
                 invocation = HookInvocation(
                     method = HookMethod.Delete,
-                    headers = HookHeaders(MapType(mutableMapOf("content-type" to StringType("application/json")))),
-                    parameters = HookParameters(MapType(mutableMapOf("answer" to NumberType(42)))),
-                    content = HookContent(MapType(mutableMapOf("hamal" to StringType("rocks"))))
+                    headers = HookHeaders(KuaMap(mutableMapOf("content-type" to KuaString("application/json")))),
+                    parameters = HookParameters(KuaMap(mutableMapOf("answer" to KuaNumber(42)))),
+                    content = HookContent(KuaMap(mutableMapOf("hamal" to KuaString("rocks"))))
                 )
             )
         )
         assertThat(testFn.method, equalTo(HookMethod.Delete))
         assertThat(
             testFn.headers,
-            equalTo(HookHeaders(MapType(mutableMapOf("content-type" to StringType("application/json")))))
+            equalTo(HookHeaders(KuaMap(mutableMapOf("content-type" to KuaString("application/json")))))
         )
-        assertThat(testFn.parameters, equalTo(HookParameters(MapType(mutableMapOf("answer" to NumberType(42))))))
-        assertThat(testFn.content, equalTo(HookContent(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
+        assertThat(testFn.parameters, equalTo(HookParameters(KuaMap(mutableMapOf("answer" to KuaNumber(42))))))
+        assertThat(testFn.content, equalTo(HookContent(KuaMap(mutableMapOf("hamal" to KuaString("rocks"))))))
     }
 
     class TestFunction(
@@ -214,9 +214,9 @@ internal object EndpointInvocationTest : AbstractExecuteTest() {
                 ),
                 invocation = EndpointInvocation(
                     method = EndpointMethod.Delete,
-                    headers = EndpointHeaders(MapType(mutableMapOf("content-type" to StringType("application/json")))),
-                    parameters = EndpointParameters(MapType(mutableMapOf("answer" to NumberType(42)))),
-                    content = EndpointContent(MapType(mutableMapOf("hamal" to StringType("rocks"))))
+                    headers = EndpointHeaders(KuaMap(mutableMapOf("content-type" to KuaString("application/json")))),
+                    parameters = EndpointParameters(KuaMap(mutableMapOf("answer" to KuaNumber(42)))),
+                    content = EndpointContent(KuaMap(mutableMapOf("hamal" to KuaString("rocks"))))
                 )
             )
         )
@@ -237,19 +237,19 @@ internal object EndpointInvocationTest : AbstractExecuteTest() {
                 code = CodeValue("require_plugin('test').fn()"),
                 invocation = EndpointInvocation(
                     method = EndpointMethod.Delete,
-                    headers = EndpointHeaders(MapType(mutableMapOf("content-type" to StringType("application/json")))),
-                    parameters = EndpointParameters(MapType(mutableMapOf("answer" to NumberType(42)))),
-                    content = EndpointContent(MapType(mutableMapOf("hamal" to StringType("rocks"))))
+                    headers = EndpointHeaders(KuaMap(mutableMapOf("content-type" to KuaString("application/json")))),
+                    parameters = EndpointParameters(KuaMap(mutableMapOf("answer" to KuaNumber(42)))),
+                    content = EndpointContent(KuaMap(mutableMapOf("hamal" to KuaString("rocks"))))
                 )
             )
         )
         assertThat(testFn.method, equalTo(EndpointMethod.Delete))
         assertThat(
             testFn.headers,
-            equalTo(EndpointHeaders(MapType(mutableMapOf("content-type" to StringType("application/json")))))
+            equalTo(EndpointHeaders(KuaMap(mutableMapOf("content-type" to KuaString("application/json")))))
         )
-        assertThat(testFn.parameters, equalTo(EndpointParameters(MapType(mutableMapOf("answer" to NumberType(42))))))
-        assertThat(testFn.content, equalTo(EndpointContent(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
+        assertThat(testFn.parameters, equalTo(EndpointParameters(KuaMap(mutableMapOf("answer" to KuaNumber(42))))))
+        assertThat(testFn.content, equalTo(EndpointContent(KuaMap(mutableMapOf("hamal" to KuaString("rocks"))))))
     }
 
     class TestFunction(

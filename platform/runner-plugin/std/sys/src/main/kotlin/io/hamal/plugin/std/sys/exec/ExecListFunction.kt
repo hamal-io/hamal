@@ -9,25 +9,26 @@ import io.hamal.lib.sdk.ApiSdk
 
 class ExecListFunction(
     private val sdk: ApiSdk
-) : Function0In2Out<ErrorType, ArrayType>(
-    FunctionOutput2Schema(ErrorType::class, ArrayType::class)
+) : Function0In2Out<KuaError, KuaArray>(
+    FunctionOutput2Schema(KuaError::class, KuaArray::class)
 ) {
-    override fun invoke(ctx: FunctionContext): Pair<ErrorType?, ArrayType?> {
+    override fun invoke(ctx: FunctionContext): Pair<KuaError?, KuaArray?> {
         return try {
             val execs = sdk.exec.list(ctx[GroupId::class])
-            null to ArrayType(
+            null to KuaArray(
                 execs.mapIndexed { index, exec ->
-                    index to MapType(
+                    index to KuaMap(
                         mutableMapOf(
-                            "id" to StringType(exec.id.value.value.toString(16)),
-                            "status" to StringType(exec.status.toString()),
-                            "correlation_id" to (exec.correlation?.correlationId?.value?.let(::StringType) ?: NilType)
+                            "id" to KuaString(exec.id.value.value.toString(16)),
+                            "status" to KuaString(exec.status.toString()),
+                            "correlation_id" to (exec.correlation?.correlationId?.value?.let(::KuaString)
+                                ?: KuaNil)
                         )
                     )
                 }.toMap().toMutableMap()
             )
         } catch (t: Throwable) {
-            ErrorType(t.message!!) to null
+            KuaError(t.message!!) to null
         }
     }
 }

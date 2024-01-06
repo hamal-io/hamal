@@ -12,12 +12,12 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.*
 
 
-class HttpExecuteFunction : Function1In2Out<ArrayType, ErrorType, TableType>(
-    FunctionInput1Schema(ArrayType::class),
-    FunctionOutput2Schema(ErrorType::class, TableType::class)
+class HttpExecuteFunction : Function1In2Out<KuaArray, KuaError, KuaTableType>(
+    FunctionInput1Schema(KuaArray::class),
+    FunctionOutput2Schema(KuaError::class, KuaTableType::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: ArrayType): Pair<ErrorType?, TableType?> {
-        val results = mutableListOf<MapType>()
+    override fun invoke(ctx: FunctionContext, arg1: KuaArray): Pair<KuaError?, KuaTableType?> {
+        val results = mutableListOf<KuaMap>()
         for (idx in 0 until arg1.size) {
             val map = arg1.getMap(idx + 1)
 
@@ -28,22 +28,24 @@ class HttpExecuteFunction : Function1In2Out<ArrayType, ErrorType, TableType>(
             if (method == "GET") {
                 val template = HttpTemplateImpl().get(url).header("accept", "application/json")
 
-                if (headers is MapType) {
+                if (headers is KuaMap) {
                     headers.value.forEach { key, value ->
                         template.header(
                             key,
                             when (value) {
-                                is StringType -> value.value
-                                is False -> "false"
-                                is True -> "true"
-                                is CodeType -> value.value
-                                is DecimalType -> value.toString()
-                                is ErrorType -> value.value
-                                is NilType -> ""
-                                is NumberType -> value.value.toString()
-                                is AnySerializableType -> TODO()
-                                is ArrayType -> TODO()
-                                is MapType -> throw IllegalArgumentException("MapType not supported")
+                                is KuaString -> value.value
+                                is KuaFalse -> "false"
+                                is KuaTrue -> "true"
+                                is KuaCode -> value.value
+                                is KuaDecimal -> value.toString()
+                                is KuaError -> value.value
+                                is KuaNil -> ""
+                                is KuaNumber -> value.value.toString()
+                                is KuaAny -> TODO()
+                                is KuaArray -> TODO()
+                                is KuaMap -> throw IllegalArgumentException("MapType not supported")
+                                is KuaFunction<*, *, *, *> -> TODO()
+                                is KuaTableType -> TODO()
                             }
                         )
                     }
@@ -64,27 +66,29 @@ class HttpExecuteFunction : Function1In2Out<ArrayType, ErrorType, TableType>(
                 template.header("content-type", "application/json")
 
                 // FIXME
-                if (json !is NilType) {
+                if (json !is KuaNil) {
                     TODO()
 //                    template.body(json.toJson())
                 }
 
-                if (headers is MapType) {
+                if (headers is KuaMap) {
                     headers.value.forEach { key, value ->
                         template.header(
                             key,
                             when (value) {
-                                is StringType -> value.value
-                                is False -> "false"
-                                is True -> "true"
-                                is CodeType -> value.value
-                                is DecimalType -> value.toString()
-                                is ErrorType -> value.value
-                                is NilType -> ""
-                                is NumberType -> value.value.toString()
-                                is AnySerializableType -> TODO()
-                                is ArrayType -> TODO()
-                                is MapType -> throw IllegalArgumentException("MapType not supported")
+                                is KuaString -> value.value
+                                is KuaFalse -> "false"
+                                is KuaTrue -> "true"
+                                is KuaCode -> value.value
+                                is KuaDecimal -> value.toString()
+                                is KuaError -> value.value
+                                is KuaNil -> ""
+                                is KuaNumber -> value.value.toString()
+                                is KuaAny -> TODO()
+                                is KuaArray -> TODO()
+                                is KuaFunction<*, *, *, *> -> TODO()
+                                is KuaTableType -> TODO()
+                                is KuaMap -> throw IllegalArgumentException("MapType not supported")
                             }
                         )
                     }
@@ -104,27 +108,29 @@ class HttpExecuteFunction : Function1In2Out<ArrayType, ErrorType, TableType>(
                 template.header("content-type", "application/json")
 
                 // FIXME
-                if (json !is NilType) {
+                if (json !is KuaNil) {
                     TODO()
 //                    template.body(json.toJson())
                 }
 
-                if (headers is MapType) {
+                if (headers is KuaMap) {
                     headers.value.forEach { key, value ->
                         template.header(
                             key,
                             when (value) {
-                                is StringType -> value.value
-                                is False -> "false"
-                                is True -> "true"
-                                is CodeType -> value.value
-                                is DecimalType -> value.toString()
-                                is ErrorType -> value.value
-                                is NilType -> ""
-                                is NumberType -> value.value.toString()
-                                is AnySerializableType -> TODO()
-                                is ArrayType -> TODO()
-                                is MapType -> throw IllegalArgumentException("MapType not supported")
+                                is KuaString -> value.value
+                                is KuaFalse -> "false"
+                                is KuaTrue -> "true"
+                                is KuaCode -> value.value
+                                is KuaDecimal -> value.toString()
+                                is KuaError -> value.value
+                                is KuaNil -> ""
+                                is KuaNumber -> value.value.toString()
+                                is KuaAny -> TODO()
+                                is KuaArray -> TODO()
+                                is KuaFunction<*, *, *, *> -> TODO()
+                                is KuaTableType -> TODO()
+                                is KuaMap -> throw IllegalArgumentException("MapType not supported")
                             }
                         )
                     }
@@ -142,29 +148,31 @@ class HttpExecuteFunction : Function1In2Out<ArrayType, ErrorType, TableType>(
                 template.header("accept", "application/json")
                 template.header("content-type", "application/json")
 
-                if (headers is MapType) {
+                if (headers is KuaMap) {
                     headers.value.forEach { key, value ->
                         template.header(
                             key,
                             when (value) {
-                                is StringType -> value.value
-                                is False -> "false"
-                                is True -> "true"
-                                is CodeType -> value.value
-                                is DecimalType -> value.toString()
-                                is ErrorType -> value.value
-                                is NilType -> ""
-                                is NumberType -> value.value.toString()
-                                is AnySerializableType -> TODO()
-                                is ArrayType -> TODO()
-                                is MapType -> throw IllegalArgumentException("MapType not supported")
+                                is KuaString -> value.value
+                                is KuaFalse -> "false"
+                                is KuaTrue -> "true"
+                                is KuaCode -> value.value
+                                is KuaDecimal -> value.toString()
+                                is KuaError -> value.value
+                                is KuaNil -> ""
+                                is KuaNumber -> value.value.toString()
+                                is KuaAny -> TODO()
+                                is KuaArray -> TODO()
+                                is KuaFunction<*, *, *, *> -> TODO()
+                                is KuaTableType -> TODO()
+                                is KuaMap -> throw IllegalArgumentException("MapType not supported")
                             }
                         )
                     }
                 }
 
                 // FIXME
-                if (json !is NilType) {
+                if (json !is KuaNil) {
                     TODO()
 //                    template.body(json.toJson())
                 }
@@ -176,22 +184,24 @@ class HttpExecuteFunction : Function1In2Out<ArrayType, ErrorType, TableType>(
             if (method == "DELETE") {
                 val template = HttpTemplateImpl().delete(url).header("accept", "application/json")
 
-                if (headers is MapType) {
+                if (headers is KuaMap) {
                     headers.value.forEach { key, value ->
                         template.header(
                             key,
                             when (value) {
-                                is StringType -> value.value
-                                is False -> "false"
-                                is True -> "true"
-                                is CodeType -> value.value
-                                is DecimalType -> value.toString()
-                                is ErrorType -> value.value
-                                is NilType -> ""
-                                is NumberType -> value.value.toString()
-                                is AnySerializableType -> TODO()
-                                is ArrayType -> TODO()
-                                is MapType -> throw IllegalArgumentException("MapType not supported")
+                                is KuaString -> value.value
+                                is KuaFalse -> "false"
+                                is KuaTrue -> "true"
+                                is KuaCode -> value.value
+                                is KuaDecimal -> value.toString()
+                                is KuaError -> value.value
+                                is KuaNil -> ""
+                                is KuaNumber -> value.value.toString()
+                                is KuaAny -> TODO()
+                                is KuaArray -> TODO()
+                                is KuaFunction<*, *, *, *> -> TODO()
+                                is KuaTableType -> TODO()
+                                is KuaMap -> throw IllegalArgumentException("MapType not supported")
                             }
                         )
                     }
@@ -203,15 +213,15 @@ class HttpExecuteFunction : Function1In2Out<ArrayType, ErrorType, TableType>(
 
         }
 
-        return null to ArrayType(results.mapIndexed { index, value -> index + 1 to value }.toMap().toMutableMap())
+        return null to KuaArray(results.mapIndexed { index, value -> index + 1 to value }.toMap().toMutableMap())
     }
 }
 
 
-private fun HttpResponse.toMap() = MapType().also {
-    it["status_code"] = NumberType(statusCode.value)
-    it["content_type"] = headers.find("content-type")?.let { type -> StringType(type) } ?: NilType
-    it["content_length"] = headers.find("content-length")?.let { length -> NumberType(length.toInt()) } ?: NilType
+private fun HttpResponse.toMap() = KuaMap().also {
+    it["status_code"] = KuaNumber(statusCode.value)
+    it["content_type"] = headers.find("content-type")?.let { type -> KuaString(type) } ?: KuaNil
+    it["content_length"] = headers.find("content-length")?.let { length -> KuaNumber(length.toInt()) } ?: KuaNil
     it["headers"] = headers()
     it["content"] = content()
 }
@@ -223,7 +233,7 @@ private fun HttpResponse.content() = when (this) {
 //            el.convertToType()
             TODO()
         } else {
-            MapType()
+            KuaMap()
         }
     }
 
@@ -233,16 +243,16 @@ private fun HttpResponse.content() = when (this) {
 //            el.convertToType()
             TODO()
         } else {
-            MapType()
+            KuaMap()
         }
     }
 
-    else -> NilType
+    else -> KuaNil
 }
 
 
-private fun HttpResponse.headers() = MapType(
+private fun HttpResponse.headers() = KuaMap(
     headers.map {
-        it.key.lowercase() to StringType(it.value)
+        it.key.lowercase() to KuaString(it.value)
     }.toMap().toMutableMap()
 )

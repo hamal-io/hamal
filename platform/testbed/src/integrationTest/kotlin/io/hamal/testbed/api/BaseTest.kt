@@ -12,8 +12,8 @@ import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContext
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.KuaMap
+import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.sdk.ApiSdkImpl
 import io.hamal.lib.sdk.api.ApiAdhocInvokeRequest
 import io.hamal.plugin.net.http.PluginHttpFactory
@@ -56,9 +56,9 @@ class TestSandboxConfig {
     fun envFactory(@Value("\${io.hamal.runner.api.host}") apiHost: String): EnvFactory =
         object : EnvFactory {
             override fun create() = RunnerEnv(
-                MapType(
+                KuaMap(
                     mutableMapOf(
-                        "api_host" to StringType(apiHost)
+                        "api_host" to KuaString(apiHost)
                     )
                 )
             )

@@ -9,8 +9,8 @@ import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.HttpSuccessResponse
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.KuaMap
+import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.sdk.api.ApiCorrelatedState
 import io.hamal.lib.sdk.api.ApiError
 import io.hamal.lib.sdk.api.ApiState
@@ -33,7 +33,7 @@ internal class StateGetControllerTest : StateBaseControllerTest() {
             )
         ).id
 
-        awaitCompleted(completeExec(execId, ExecState(MapType(mutableMapOf("hamal" to StringType("rocks"))))).id)
+        awaitCompleted(completeExec(execId, ExecState(KuaMap(mutableMapOf("hamal" to KuaString("rocks"))))).id)
 
         val response = httpTemplate.get("/v1/funcs/{funcId}/states/__1__").path("funcId", funcId).execute()
 
@@ -44,7 +44,7 @@ internal class StateGetControllerTest : StateBaseControllerTest() {
         assertThat(correlatedState.correlation.func.id, equalTo(funcId))
         assertThat(correlatedState.correlation.func.name, equalTo(FuncName("SomeFunc")))
         assertThat(correlatedState.correlation.correlationId, equalTo(CorrelationId("__1__")))
-        assertThat(correlatedState.state, equalTo(ApiState(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
+        assertThat(correlatedState.state, equalTo(ApiState(KuaMap(mutableMapOf("hamal" to KuaString("rocks"))))))
     }
 
     @Test

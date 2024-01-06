@@ -15,9 +15,9 @@ internal class MapTypeTest {
     fun `Map as function result`() {
         sandbox.use { sandbox ->
             sandbox.registerGlobalFunction("func",
-                object : Function0In2Out<ErrorType, MapType>(FunctionOutput2Schema(ErrorType::class, MapType::class)) {
-                    override fun invoke(ctx: FunctionContext): Pair<ErrorType?, MapType?> {
-                        return null to MapType(mutableMapOf("id" to StringType("A")))
+                object : Function0In2Out<KuaError, KuaMap>(FunctionOutput2Schema(KuaError::class, KuaMap::class)) {
+                    override fun invoke(ctx: FunctionContext): Pair<KuaError?, KuaMap?> {
+                        return null to KuaMap(mutableMapOf("id" to KuaString("A")))
                     }
                 }
             )
@@ -36,12 +36,12 @@ internal class MapTypeTest {
     fun `Nested map as function result`() {
         sandbox.use { sandbox ->
             sandbox.registerGlobalFunction("func",
-                object : Function0In2Out<ErrorType, MapType>(FunctionOutput2Schema(ErrorType::class, MapType::class)) {
-                    override fun invoke(ctx: FunctionContext): Pair<ErrorType?, MapType?> {
-                        return null to MapType(
+                object : Function0In2Out<KuaError, KuaMap>(FunctionOutput2Schema(KuaError::class, KuaMap::class)) {
+                    override fun invoke(ctx: FunctionContext): Pair<KuaError?, KuaMap?> {
+                        return null to KuaMap(
                             mutableMapOf(
-                                "id" to StringType("A"),
-                                "level_one" to MapType(mutableMapOf("answer" to NumberType(42)))
+                                "id" to KuaString("A"),
+                                "level_one" to KuaMap(mutableMapOf("answer" to KuaNumber(42)))
                             )
                         )
                     }
