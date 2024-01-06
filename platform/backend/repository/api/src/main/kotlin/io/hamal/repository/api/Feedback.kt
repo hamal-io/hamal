@@ -47,3 +47,7 @@ interface FeedbackQueryRepository {
         var feedbackIds: List<FeedbackId> = listOf()
     )
 }
+
+data class FeedbackList(
+    val feedbacks: List<Feedback>
+)

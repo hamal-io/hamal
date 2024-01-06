@@ -38,6 +38,6 @@ internal class FeedbackGetControllerTest : FeedbackBaseControllerTest() {
         require(res is HttpErrorResponse) { "request was successful" }
 
         val error = res.error(ApiError::class)
-        assertThat(error.message, equalTo("Blueprint not found"))
+        assertThat(error.message, equalTo("Feedback not found"))
     }
 }
