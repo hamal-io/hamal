@@ -1,5 +1,7 @@
 package io.hamal.core.http
 
+import io.hamal.lib.domain.Serde
+import io.hamal.lib.sdk.api.ApiError
 import jakarta.servlet.ServletException
 import jakarta.servlet.http.HttpServletResponse
 import jakarta.servlet.http.HttpServletResponse.*
@@ -28,19 +30,18 @@ internal class ErrorController {
         if (cause is ConversionFailedException) {
             res.status = 400
             res.addHeader("Content-Type", "application/json")
-//            res.writer.write(
-//                json.encodeToString(
-//                    InvalidArgumentType(
-//                        message = "ArgumentTypeMismatch",
-//                        source = cause.sourceType?.toString() ?: "Unknown source type",
-//                        target = cause.targetType.toString()
-//                    )
-//                ))
-            TODO()
+            res.writer.write(
+                Serde.serialize(
+                    InvalidArgumentType(
+                        message = "ArgumentTypeMismatch",
+                        source = cause.sourceType?.toString() ?: "Unknown source type",
+                        target = cause.targetType.toString()
+                    )
+                )
+            )
         } else {
             res.addHeader("Content-Type", "application/json")
-//            res.writer.write(json.encodeToString(ApiError("Bad request")))
-            TODO()
+            res.writer.write(Serde.serialize(ApiError("Bad request")))
         }
     }
 
@@ -52,32 +53,16 @@ internal class ErrorController {
 
     @ExceptionHandler(value = [HttpMessageNotReadableException::class])
     fun missingFields(res: HttpServletResponse, t: HttpMessageNotReadableException) {
-        val cause = t.cause
-//        if (cause is MissingFieldException) {
-//            res.status = 400
-//            res.addHeader("Content-Type", "application/json")
-//            res.writer.write(
-//                json.encodeToString(
-//                    MissingFieldsError(
-//                        message = "Fields are missing",
-//                        fields = cause.missingFields
-//                    )
-//                )
-//            )
-//        } else {
         res.status = 400
         res.addHeader("Content-Type", "application/json")
-//            res.writer.write(json.encodeToString(ApiError("Bad request")))
-        TODO()
-//        }
+        res.writer.write(Serde.serialize(ApiError("Bad request")))
     }
 
     @ExceptionHandler(value = [NoHandlerFoundException::class])
     fun missingFields(res: HttpServletResponse) {
         res.status = SC_NOT_FOUND
         res.addHeader("Content-Type", "application/json")
-//        res.writer.write(json.encodeToString(ApiError("Request handler not found")))
-        TODO()
+        res.writer.write(Serde.serialize(ApiError("Request handler not found")))
     }
 
 
@@ -85,8 +70,7 @@ internal class ErrorController {
     fun otherwise(res: HttpServletResponse) {
         res.status = SC_FORBIDDEN
         res.addHeader("Content-Type", "application/json")
-//        res.writer.write(json.encodeToString(ApiError.serializer(), ApiError("FORBIDDEN")))
-        TODO()
+        res.writer.write(Serde.serialize(ApiError("FORBIDDEN")))
     }
 
     @ExceptionHandler(value = [Throwable::class])
@@ -105,8 +89,7 @@ internal class ErrorController {
 
         res.status = statusCode
         res.addHeader("Content-Type", "application/json")
-//        res.writer.write(json.encodeToString(ApiError.serializer(), ApiError(toHandle?.message ?: "Unknown error")))
-        TODO()
+        res.writer.write(Serde.serialize(ApiError(toHandle?.message ?: "Unknown error")))
     }
 
 }
