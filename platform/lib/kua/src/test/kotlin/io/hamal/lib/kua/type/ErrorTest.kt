@@ -4,16 +4,16 @@ import io.hamal.lib.kua.type.TypeSerializationFixture.generateTestCases
 import org.junit.jupiter.api.TestFactory
 
 
-class ErrorTypeTest {
+class KuaErrorTest {
     @TestFactory
     fun serialization() = listOf(
         generateTestCases(
             testInstance = KuaError(""),
-            expectedJson = """{"type":"ErrorType","value":""}"""
+            expectedJson = """{"value":"","type":"Error"}"""
         ),
         generateTestCases(
             testInstance = KuaError("hamal-error-message"),
-            expectedJson = """{"type":"ErrorType","value":"hamal-error-message"}"""
+            expectedJson = """{"value":"hamal-error-message","type":"Error"}"""
         ),
     ).flatten()
 }

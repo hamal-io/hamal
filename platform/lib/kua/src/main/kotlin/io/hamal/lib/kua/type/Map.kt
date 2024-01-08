@@ -1,8 +1,14 @@
 package io.hamal.lib.kua.type
 
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonElement
+import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.domain.ValueObjectId
+import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.serialization.GsonSerde
+import io.hamal.lib.common.serialization.GsonTransform
 import io.hamal.lib.common.snowflake.SnowflakeId
-
+import java.lang.reflect.Type
 import kotlin.reflect.KClass
 
 data class KuaMap(
@@ -145,6 +151,30 @@ data class KuaMap(
 
     fun type(key: String): KClass<out KuaType> {
         return value[key]?.let { it::class } ?: KuaNil::class
+    }
+
+    object Serde : GsonSerde<KuaMap> {
+        override fun serialize(instance: KuaMap, type: Type, ctx: JsonSerializationContext): JsonElement {
+            val valueBuilder = HotObject.builder()
+            instance.forEach { (key, value) ->
+                valueBuilder.set(key, GsonTransform.toNode(ctx.serialize(value)))
+            }
+            return ctx.serialize(
+                HotObject.builder()
+                    .set("value", valueBuilder.build())
+                    .set("type", instance.type.name)
+                    .build()
+            )
+        }
+
+        override fun deserialize(element: JsonElement, type: Type, ctx: JsonDeserializationContext): KuaMap {
+            val obj = element.asJsonObject.get("value").asJsonObject
+            val map = mutableMapOf<String, KuaType>()
+            obj.keySet().forEach { key ->
+                map[key] = ctx.deserialize(obj.get(key), KuaType::class.java)
+            }
+            return KuaMap(map)
+        }
     }
 }
 

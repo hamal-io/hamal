@@ -5,6 +5,7 @@ import io.hamal.lib.common.serialization.*
 import io.hamal.lib.domain.request.Requested
 import io.hamal.lib.domain.request.RequestedTypeAdapter
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.kua.type.*
 import java.io.InputStream
 import java.io.InputStreamReader
 import kotlin.reflect.KClass
@@ -72,6 +73,15 @@ val gsonInstance = GsonFactoryBuilder
 
     .registerTypeAdapter(TriggerId::class.java, ValueObjectIdAdapter(::TriggerId))
     .registerTypeAdapter(TriggerName::class.java, ValueObjectStringAdapter(::TriggerName))
+
+    // KUA
+    .registerTypeAdapter(KuaAny::class.java, KuaAny.Serde)
+    .registerTypeAdapter(KuaArray::class.java, KuaArray.Serde)
+    .registerTypeAdapter(KuaDecimal::class.java, KuaDecimal.Serde)
+    .registerTypeAdapter(KuaBoolean::class.java, KuaBoolean.Serde)
+    .registerTypeAdapter(KuaMap::class.java, KuaMap.Serde)
+    .registerTypeAdapter(KuaNil::class.java, KuaNil.Serde)
+    .registerTypeAdapter(KuaType::class.java, KuaType.Serde)
 
     .build()
 

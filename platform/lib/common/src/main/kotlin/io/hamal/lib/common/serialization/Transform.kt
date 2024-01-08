@@ -4,7 +4,7 @@ import com.google.gson.*
 import io.hamal.lib.common.hot.*
 import java.util.function.Consumer
 
-internal object GsonTransform {
+object GsonTransform {
 
     fun fromNode(node: HotNode): JsonElement {
         if (node.isObject) {
@@ -27,7 +27,7 @@ internal object GsonTransform {
         }
         return HotNull
     }
-    
+
     private fun fromObject(obj: HotObject): JsonObject {
         val result = JsonObject()
         obj.nodes.forEach { entry -> result.add(entry.key, fromNode(entry.value)) }

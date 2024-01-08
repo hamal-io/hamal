@@ -3,7 +3,7 @@ package io.hamal.lib.kua.type
 import io.hamal.lib.kua.type.TypeSerializationFixture.generateTestCases
 import org.junit.jupiter.api.TestFactory
 
-class AnySerializableTypeTest {
+class KuaAnyTest {
 
     @TestFactory
     fun serialization() = listOf(
@@ -15,45 +15,45 @@ class AnySerializableTypeTest {
                     )
                 )
             ),
-            expectedJson = """{"type":"ArrayType","value":{"1234":{"type":"StringType","value":"value"}}}"""
+            expectedJson = """{"value":{"1234":{"value":"value","type":"String"}},"type":"Array"}"""
         ),
         generateTestCases(
             testInstance = KuaAny(KuaDecimal("123456789.987654321")),
-            expectedJson = """{"type":"DecimalType","value":"123456789.987654321"}"""
+            expectedJson = """{"value":"123456789.987654321","type":"Decimal"}"""
         ),
         generateTestCases(
             testInstance = KuaAny(KuaError("SomeErrorMessage")),
-            expectedJson = """{"type":"ErrorType","value":"SomeErrorMessage"}"""
+            expectedJson = """{"value":"SomeErrorMessage","type":"Error"}"""
         ),
         generateTestCases(
             testInstance = KuaAny(KuaFalse),
-            expectedJson = """{"type":"FalseType"}"""
+            expectedJson = """{"value":false,"type":"Boolean"}"""
         ),
         generateTestCases(
             testInstance = KuaAny(
                 KuaMap(
                     mutableMapOf(
-                        "value" to KuaString("hamal")
+                        "key" to KuaString("hamal")
                     )
                 )
             ),
-            expectedJson = """{"type":"MapType","value":{"value":{"type":"StringType","value":"hamal"}}}"""
+            expectedJson = """{"value":{"key":{"value":"hamal","type":"String"}},"type":"Map"}"""
         ),
         generateTestCases(
             testInstance = KuaAny(KuaNil),
-            expectedJson = """{"type":"NilType"}"""
+            expectedJson = """{"type":"Nil"}"""
         ),
         generateTestCases(
             testInstance = KuaAny(KuaNumber(42.10)),
-            expectedJson = """{"type":"NumberType","value":"42.1"}"""
+            expectedJson = """{"value":42.1,"type":"Number"}"""
         ),
         generateTestCases(
             testInstance = KuaAny(KuaString("hamal")),
-            expectedJson = """{"type":"StringType","value":"hamal"}"""
+            expectedJson = """{"value":"hamal","type":"String"}"""
         ),
         generateTestCases(
             testInstance = KuaAny(KuaTrue),
-            expectedJson = """{"type":"TrueType"}"""
+            expectedJson = """{"value":true,"type":"Boolean"}"""
         )
     ).flatten()
 

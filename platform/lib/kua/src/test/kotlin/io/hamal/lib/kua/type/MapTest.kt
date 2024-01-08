@@ -3,12 +3,12 @@ package io.hamal.lib.kua.type
 import io.hamal.lib.kua.type.TypeSerializationFixture.generateTestCases
 import org.junit.jupiter.api.TestFactory
 
-class MapTypeTest {
+class KuaMapTest {
     @TestFactory
     fun serialization() = listOf(
         generateTestCases(
             testInstance = KuaMap(),
-            expectedJson = """{"type":"MapType"}"""
+            expectedJson = """{"value":{},"type":"Map"}"""
         ),
         generateTestCases(
             testInstance = KuaMap(
@@ -16,7 +16,7 @@ class MapTypeTest {
                     "key" to KuaString("value")
                 )
             ),
-            expectedJson = """{"type":"MapType","value":{"key":{"type":"StringType","value":"value"}}}""".trimIndent()
+            expectedJson = """{"value":{"key":{"value":"value","type":"String"}},"type":"Map"}""".trimIndent()
         ),
         generateTestCases(
             testInstance = KuaMap(
@@ -24,7 +24,7 @@ class MapTypeTest {
                     "23" to KuaNumber(34)
                 )
             ),
-            expectedJson = """{"type":"MapType","value":{"23":{"type":"NumberType","value":"34"}}}"""
+            expectedJson = """{"value":{"23":{"value":34.0,"type":"Number"}},"type":"Map"}"""
         ),
     ).flatten()
 }

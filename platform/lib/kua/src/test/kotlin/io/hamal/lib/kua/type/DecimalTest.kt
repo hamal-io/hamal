@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 
-class DecimalTypeTest {
+class KuaDecimalTest {
 
     @Nested
     inner class InvokeTest {
@@ -588,15 +588,15 @@ class DecimalTypeTest {
     fun serialization() = listOf(
         generateTestCases(
             testInstance = KuaDecimal.Zero,
-            expectedJson = """{"type":"DecimalType","value":"0"}"""
+            expectedJson = """{"value":"0","type":"Decimal"}"""
         ),
         generateTestCases(
             testInstance = KuaDecimal(-12.324),
-            expectedJson = """{"type":"DecimalType","value":"-12.324"}"""
+            expectedJson = """{"value":"-12.324","type":"Decimal"}"""
         ),
         generateTestCases(
             testInstance = KuaDecimal("123456789.987654321"),
-            expectedJson = """{"type":"DecimalType","value":"123456789.987654321"}"""
+            expectedJson = """{"value":"123456789.987654321","type":"Decimal"}"""
         )
     ).flatten()
 

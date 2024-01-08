@@ -1,8 +1,15 @@
 package io.hamal.lib.kua.type
 
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonElement
+import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.domain.ValueObjectId
+import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.serialization.GsonSerde
+import io.hamal.lib.common.serialization.GsonTransform
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.kua.type.KuaType.Type.Array
+import java.lang.reflect.Type
 import kotlin.reflect.KClass
 
 
@@ -119,6 +126,30 @@ data class KuaArray(
 
     fun type(idx: Int): KClass<out KuaType> {
         return value[idx]?.let { it::class } ?: KuaNil::class
+    }
+
+    object Serde : GsonSerde<KuaArray> {
+        override fun serialize(instance: KuaArray, type: Type, ctx: JsonSerializationContext): JsonElement {
+            val valueBuilder = HotObject.builder()
+            instance.forEach { (key, value) ->
+                valueBuilder.set(key.toString(), GsonTransform.toNode(ctx.serialize(value)))
+            }
+            return ctx.serialize(
+                HotObject.builder()
+                    .set("value", valueBuilder.build())
+                    .set("type", instance.type.name)
+                    .build()
+            )
+        }
+
+        override fun deserialize(element: JsonElement, type: Type, ctx: JsonDeserializationContext): KuaArray {
+            val obj = element.asJsonObject.get("value").asJsonObject
+            val map = mutableMapOf<Int, KuaType>()
+            obj.keySet().forEach { key ->
+                map[key.toInt()] = ctx.deserialize(obj.get(key), KuaType::class.java)
+            }
+            return KuaArray(map)
+        }
     }
 }
 

@@ -1,5 +1,8 @@
 package io.hamal.lib.kua.type
 
+import io.hamal.lib.domain.Serde
+import org.hamcrest.CoreMatchers.equalTo
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 
@@ -10,11 +13,11 @@ internal object TypeSerializationFixture {
         expectedJson: String
     ): List<DynamicTest> {
         return listOf(
-            dynamicTest("${testInstance::class.simpleName} supports json serializer") {
-//                val encoded = Json.encodeToString(testInstance)
-//                assertThat("Expects json encoding: $expectedJson", encoded, equalTo(expectedJson))
-//                val decoded = Json.decodeFromString<SerializableType>(encoded)
-//                assertThat("Decoding an encoded value must be equal to testInstance", decoded, equalTo(testInstance))
+            dynamicTest("${testInstance::class.simpleName}") {
+                val encoded = Serde.serialize(testInstance)
+                assertThat("Expects json encoding: $expectedJson", encoded, equalTo(expectedJson))
+                val decoded = Serde.deserialize(testInstance::class, encoded)
+                assertThat("Decoding an encoded value must be equal to testInstance", decoded, equalTo(testInstance))
             }
         )
     }
@@ -24,12 +27,12 @@ internal object TypeSerializationFixture {
         expectedJson: String
     ): List<DynamicTest> {
         return listOf(
-            dynamicTest("${testInstance.value::class.simpleName} supports json deserializer") {
-//                val encoded = Json.encodeToString(testInstance)
-//                assertThat("Expects json encoding: $expectedJson", encoded, equalTo(expectedJson))
-//                val decoded = Json.decodeFromString<AnySerializableType>(encoded)
-//                assertThat("Decoding an encoded value must be equal to testInstance", decoded, equalTo(testInstance))
-                TODO()
+            dynamicTest("${testInstance.value::class.simpleName}") {
+                val encoded = Serde.serialize(testInstance)
+                assertThat("Expects json encoding: $expectedJson", encoded, equalTo(expectedJson))
+                val decoded = Serde.deserialize(KuaAny::class, encoded)
+                assertThat("Decoding an encoded value must be equal to testInstance", decoded, equalTo(testInstance))
+
             }
         )
     }

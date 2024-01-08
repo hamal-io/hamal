@@ -4,16 +4,16 @@ import io.hamal.lib.kua.type.TypeSerializationFixture.generateTestCases
 import org.junit.jupiter.api.TestFactory
 
 
-class StringTypeTest {
+class KuaStringTest {
     @TestFactory
     fun serialization() = listOf(
         generateTestCases(
             testInstance = KuaString(""),
-            expectedJson = """{"type":"StringType","value":""}"""
+            expectedJson = """{"value":"","type":"String"}"""
         ),
         generateTestCases(
             testInstance = KuaString("hamal"),
-            expectedJson = """{"type":"StringType","value":"hamal"}"""
+            expectedJson = """{"value":"hamal","type":"String"}"""
         )
     ).flatten()
 }
