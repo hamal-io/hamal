@@ -4,11 +4,7 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.DomainObject
 import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.util.CollectionUtils.takeWhileInclusive
-import io.hamal.lib.domain.vo.RecordedAt
-import io.hamal.repository.record.CreateDomainObject
-import io.hamal.repository.record.Record
-import io.hamal.repository.record.RecordRepository
-import io.hamal.repository.record.RecordSequence
+import io.hamal.repository.record.*
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 import kotlin.reflect.KClass
@@ -25,7 +21,7 @@ abstract class RecordMemoryRepository<ID : ValueObjectId, RECORD : Record<ID>, O
         return lock.withLock {
             val records = store.getOrDefault(record.entityId, mutableListOf())
             record.apply {
-                sequence = RecordSequence(records.size + 1)
+                recordSequence = RecordSequence(records.size + 1)
                 recordedAt = RecordedAt.now()
             }
             store[record.entityId] = records.apply { add(record) }
@@ -54,12 +50,12 @@ abstract class RecordMemoryRepository<ID : ValueObjectId, RECORD : Record<ID>, O
     override fun versionOf(id: ID, sequence: RecordSequence): OBJ? {
         return recordsOf(id)
             .filter {
-                val seq = it.sequence
+                val seq = it.recordSequence
                 seq != null && seq >= sequence
             }
             .ifEmpty { null }
             ?.let { records ->
-                if (records.none { it.sequence == sequence }) {
+                if (records.none { it.recordSequence == sequence }) {
                     null
                 } else {
                     createDomainObject(records)

@@ -1,6 +1,5 @@
 package io.hamal.lib.domain.vo
 
-import io.hamal.lib.common.domain.UpdatedAt
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.vo.base.DomainAt
 import java.time.Instant
@@ -32,13 +31,3 @@ class FailedAt(override val value: Instant) : DomainAt() {
         fun now(): FailedAt = FailedAt(TimeUtils.now())
     }
 }
-
-class RecordedAt(override val value: Instant) : DomainAt() {
-    companion object {
-        @JvmStatic
-        fun now(): RecordedAt = RecordedAt(TimeUtils.now())
-    }
-
-    fun toUpdatedAt() = UpdatedAt(value)
-}
-

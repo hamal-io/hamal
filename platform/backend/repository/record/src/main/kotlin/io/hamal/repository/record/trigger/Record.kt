@@ -6,11 +6,12 @@ import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.record.Record
 import io.hamal.repository.record.RecordSequence
+import io.hamal.repository.record.RecordedAt
 import kotlin.time.Duration
 
 sealed class TriggerRecord(
     @Transient
-    override var sequence: RecordSequence? = null,
+    override var recordSequence: RecordSequence? = null,
     @Transient
     override var recordedAt: RecordedAt? = null
 ) : Record<TriggerId>()

@@ -5,10 +5,11 @@ import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.record.Record
 import io.hamal.repository.record.RecordSequence
+import io.hamal.repository.record.RecordedAt
 
 sealed class ExecRecord(
     @Transient
-    override var sequence: RecordSequence? = null,
+    override var recordSequence: RecordSequence? = null,
     @Transient
     override var recordedAt: RecordedAt? = null
 ) : Record<ExecId>()

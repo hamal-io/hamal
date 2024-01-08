@@ -5,13 +5,13 @@ import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.domain.vo.RecordedAt
 import io.hamal.repository.record.Record
 import io.hamal.repository.record.RecordSequence
+import io.hamal.repository.record.RecordedAt
 
 sealed class CodeRecord(
     @Transient
-    override var sequence: RecordSequence? = null,
+    override var recordSequence: RecordSequence? = null,
     @Transient
     override var recordedAt: RecordedAt? = null
 ) : Record<CodeId>()

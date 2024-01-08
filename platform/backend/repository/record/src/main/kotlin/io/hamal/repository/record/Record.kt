@@ -1,29 +1,39 @@
 package io.hamal.repository.record
 
-import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.domain.DomainObject
-import io.hamal.lib.common.domain.ValueObjectId
-import io.hamal.lib.domain.vo.RecordedAt
+import io.hamal.lib.common.domain.*
+import io.hamal.lib.common.util.TimeUtils
+import io.hamal.lib.domain.vo.base.DomainAt
+import java.time.Instant
 
-data class RecordSequence(val value: Int) : Comparable<RecordSequence>//FIXME becomes VO
-{
+class RecordType(override val value: String) : ValueObjectString()
+
+class RecordSequence(override val value: Int) : ValueObjectInt() {
     companion object {
         fun first() = RecordSequence(1)
     }
 
-    override fun compareTo(other: RecordSequence) = other.value.compareTo(value)
-
     fun next() = RecordSequence(value + 1)
 }
+
+class RecordedAt(override val value: Instant) : DomainAt() {
+    companion object {
+        @JvmStatic
+        fun now(): RecordedAt = RecordedAt(TimeUtils.now())
+    }
+
+    fun toUpdatedAt() = UpdatedAt(value)
+}
+
 
 abstract class Record<ID : ValueObjectId> {
     abstract val cmdId: CmdId
     abstract val entityId: ID
-    abstract var sequence: RecordSequence?
+    abstract var recordSequence: RecordSequence?
     abstract var recordedAt: RecordedAt?
+    val recordType: RecordType = RecordType(this::class.simpleName!!)
 
     fun sequence() =
-        sequence ?: throw IllegalStateException("Records needs to be stored to db before it can be accessed")
+        recordSequence ?: throw IllegalStateException("Records needs to be stored to db before it can be accessed")
 
     fun recordedAt() =
         recordedAt ?: throw IllegalStateException("Records needs to be stored to db before it can be accessed")

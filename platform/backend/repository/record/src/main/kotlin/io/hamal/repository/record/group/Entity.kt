@@ -4,11 +4,11 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.GroupName
-import io.hamal.lib.domain.vo.RecordedAt
 import io.hamal.repository.api.Group
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordEntity
 import io.hamal.repository.record.RecordSequence
+import io.hamal.repository.record.RecordedAt
 
 data class GroupEntity(
     override val id: GroupId,

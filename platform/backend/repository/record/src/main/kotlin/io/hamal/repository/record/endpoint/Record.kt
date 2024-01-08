@@ -4,10 +4,11 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.record.Record
 import io.hamal.repository.record.RecordSequence
+import io.hamal.repository.record.RecordedAt
 
 sealed class EndpointRecord(
     @Transient
-    override var sequence: RecordSequence? = null,
+    override var recordSequence: RecordSequence? = null,
     override var recordedAt: RecordedAt? = null
 ) : Record<EndpointId>()
 
