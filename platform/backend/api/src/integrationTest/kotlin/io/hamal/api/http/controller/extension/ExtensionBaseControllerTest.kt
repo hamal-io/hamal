@@ -17,7 +17,7 @@ internal sealed class ExtensionBaseControllerTest : BaseControllerTest() {
             .execute()
 
         assertThat(createResponse.statusCode, equalTo(HttpStatusCode.Accepted))
-        require(createResponse is HttpSuccessResponse) { "request was successful" }
+        require(createResponse is HttpSuccessResponse) { "request was not successful" }
         return createResponse.result(ApiExtensionCreateRequested::class)
     }
 
@@ -27,7 +27,7 @@ internal sealed class ExtensionBaseControllerTest : BaseControllerTest() {
             .execute()
 
         assertThat(getResponse.statusCode, equalTo(HttpStatusCode.Ok))
-        require(getResponse is HttpSuccessResponse) { "request was successful" }
+        require(getResponse is HttpSuccessResponse) { "request was not successful" }
         return getResponse.result(ApiExtension::class)
     }
 
@@ -37,7 +37,7 @@ internal sealed class ExtensionBaseControllerTest : BaseControllerTest() {
             .execute()
 
         assertThat(listResponse.statusCode, equalTo(HttpStatusCode.Ok))
-        require(listResponse is HttpSuccessResponse) { "request was successful" }
+        require(listResponse is HttpSuccessResponse) { "request was not successful" }
         return listResponse.result(ApiExtensionList::class)
 
     }
@@ -49,7 +49,7 @@ internal sealed class ExtensionBaseControllerTest : BaseControllerTest() {
             .execute()
 
         assertThat(updateResponse.statusCode, equalTo(HttpStatusCode.Accepted))
-        require(updateResponse is HttpSuccessResponse) { "request was successful" }
+        require(updateResponse is HttpSuccessResponse) { "request was not successful" }
         return updateResponse.result(ApiExtensionUpdateRequested::class)
     }
 
