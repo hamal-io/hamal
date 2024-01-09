@@ -45,6 +45,7 @@ sealed class Requested {
             EndpointCreateRequested::class,
             EndpointUpdateRequested::class,
             ExecCompleteRequested::class,
+            ExecFailRequested::class,
             ExecInvokeRequested::class,
             ExtensionCreateRequested::class,
             ExtensionUpdateRequested::class,
