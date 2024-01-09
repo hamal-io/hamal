@@ -1,8 +1,8 @@
 package io.hamal.extension.net.http.endpoint
 
 import io.hamal.lib.common.hot.HotArray
+import io.hamal.lib.common.hot.HotNode
 import io.hamal.lib.common.hot.HotObject
-import io.hamal.lib.common.hot.HotTerminal
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -45,7 +45,7 @@ open class TestJsonController {
     }
 
     @RequestMapping("/v1/json-echo")
-    fun jsonEcho(@RequestBody body: HotTerminal): ResponseEntity<HotTerminal> {
+    fun jsonEcho(@RequestBody body: HotNode): ResponseEntity<HotNode> {
         return ResponseEntity.ok(body)
     }
 }

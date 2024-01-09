@@ -1,10 +1,9 @@
 package io.hamal.plugin.net.http.function
 
 import com.google.gson.JsonElement
-import io.hamal.lib.http.HttpErrorResponse
-import io.hamal.lib.http.HttpResponse
-import io.hamal.lib.http.HttpSuccessResponse
-import io.hamal.lib.http.HttpTemplateImpl
+import io.hamal.lib.http.*
+import io.hamal.lib.kua.converter.convertToType
+import io.hamal.lib.kua.converter.toJson
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -67,8 +66,7 @@ class HttpExecuteFunction : Function1In2Out<KuaArray, KuaError, KuaTableType>(
 
                 // FIXME
                 if (json !is KuaNil) {
-                    TODO()
-//                    template.body(json.toJson())
+                    template.body(json.toJson())
                 }
 
                 if (headers is KuaMap) {
@@ -109,8 +107,7 @@ class HttpExecuteFunction : Function1In2Out<KuaArray, KuaError, KuaTableType>(
 
                 // FIXME
                 if (json !is KuaNil) {
-                    TODO()
-//                    template.body(json.toJson())
+                    template.body(json.toJson())
                 }
 
                 if (headers is KuaMap) {
@@ -173,8 +170,7 @@ class HttpExecuteFunction : Function1In2Out<KuaArray, KuaError, KuaTableType>(
 
                 // FIXME
                 if (json !is KuaNil) {
-                    TODO()
-//                    template.body(json.toJson())
+                    template.body(json.toJson())
                 }
 
                 val response = template.execute()
@@ -230,8 +226,7 @@ private fun HttpResponse.content() = when (this) {
     is HttpSuccessResponse -> {
         if (isNotEmpty) {
             val el = result(JsonElement::class)
-//            el.convertToType()
-            TODO()
+            el.convertToType()
         } else {
             KuaMap()
         }
@@ -240,8 +235,7 @@ private fun HttpResponse.content() = when (this) {
     is HttpErrorResponse -> {
         if (isNotEmpty) {
             val el = error(JsonElement::class)
-//            el.convertToType()
-            TODO()
+            el.convertToType()
         } else {
             KuaMap()
         }

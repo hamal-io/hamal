@@ -8,6 +8,7 @@ import java.time.Instant
 
 object HotJsonModule : JsonModule() {
     init {
+        set(HotNode::class, HotNode.Adapter)
         set(HotObject::class, HotObjectAdapter)
         set(HotArray::class, HotArrayAdapter)
         set(Instant::class, InstantAdapter)

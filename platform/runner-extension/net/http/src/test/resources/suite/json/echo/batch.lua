@@ -26,7 +26,7 @@ assert(#response == 3)
 
 for idx = 1, 3 do
     assert(response[idx].status_code == 200)
-    assert(response[idx].content_type == 'application/json')
+    assert(response[idx].content_type == 'application/json;charset=UTF-8')
 
     local content = response[idx].content
 
