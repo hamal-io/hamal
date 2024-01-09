@@ -5,8 +5,8 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.hot.HotObject
-import io.hamal.lib.common.serialization.GsonSerde
 import io.hamal.lib.common.serialization.GsonTransform
+import io.hamal.lib.common.serialization.JsonAdapter
 import io.hamal.lib.common.snowflake.SnowflakeId
 import java.lang.reflect.Type
 import kotlin.reflect.KClass
@@ -153,7 +153,7 @@ data class KuaMap(
         return value[key]?.let { it::class } ?: KuaNil::class
     }
 
-    object Serde : GsonSerde<KuaMap> {
+    object Adapter : JsonAdapter<KuaMap> {
         override fun serialize(instance: KuaMap, type: Type, ctx: JsonSerializationContext): JsonElement {
             val valueBuilder = HotObject.builder()
             instance.forEach { (key, value) ->

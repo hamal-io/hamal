@@ -1,7 +1,7 @@
 package io.hamal.lib.http
 
 import com.google.gson.reflect.TypeToken
-import io.hamal.lib.domain.Serde
+import io.hamal.lib.domain.Json
 import java.io.InputStream
 import kotlin.reflect.KClass
 
@@ -23,7 +23,7 @@ interface HttpErrorDeserializer {
 
 object GsonErrorDeserializer : HttpErrorDeserializer {
     override fun <ERROR : Any> deserialize(inputStream: InputStream, clazz: KClass<ERROR>): ERROR {
-        return Serde.deserialize(clazz, inputStream)
+        return Json.deserialize(clazz, inputStream)
     }
 }
 
@@ -34,11 +34,11 @@ interface HttpContentDeserializer {
 
 object GsonHttpContentDeserializer : HttpContentDeserializer {
     override fun <VALUE : Any> deserialize(inputStream: InputStream, clazz: KClass<VALUE>): VALUE {
-        return Serde.deserialize(clazz, inputStream)
+        return Json.deserialize(clazz, inputStream)
     }
 
     override fun <VALUE : Any> deserializeList(inputStream: InputStream, clazz: KClass<VALUE>): List<VALUE> {
-        return Serde.deserialize(object : TypeToken<List<VALUE>>() {}, inputStream)
+        return Json.deserialize(object : TypeToken<List<VALUE>>() {}, inputStream)
     }
 }
 
@@ -48,6 +48,6 @@ interface HttpContentSerializer {
 
 object GsonHttpContentSerializer : HttpContentSerializer {
     override fun <VALUE : Any> serialize(value: VALUE, clazz: KClass<VALUE>): String {
-        return Serde.serialize(value)
+        return Json.serialize(value)
     }
 }

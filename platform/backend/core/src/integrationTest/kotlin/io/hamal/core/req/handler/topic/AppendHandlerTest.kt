@@ -2,7 +2,7 @@ package io.hamal.core.request.handler.topic
 
 import io.hamal.core.request.handler.BaseReqHandlerTest
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.domain.Serde
+import io.hamal.lib.domain.Json
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain.request.TopicAppendToRequested
 import io.hamal.lib.domain.vo.RequestId
@@ -42,8 +42,8 @@ internal class TopicAppendHandlerTest : BaseReqHandlerTest() {
                 assertThat(segmentId, equalTo(Segment.Id(0)))
                 assertThat(id, equalTo(ChunkId(1)))
                 assertThat(topicId, equalTo(TopicId(4444)))
-                
-                val payload = Serde.decompressAndDeserialize(TopicEntryPayload::class, bytes)
+
+                val payload = Json.decompressAndDeserialize(TopicEntryPayload::class, bytes)
                 assertThat(payload.value, equalTo(KuaMap(mutableMapOf("hamal" to KuaString("rockz")))))
             }
         }

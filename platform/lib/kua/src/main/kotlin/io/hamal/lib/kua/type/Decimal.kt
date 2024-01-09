@@ -4,7 +4,7 @@ import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.hot.HotObject
-import io.hamal.lib.common.serialization.GsonSerde
+import io.hamal.lib.common.serialization.JsonAdapter
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.kua.type.KuaType.Type.Decimal
 import java.lang.reflect.Type
@@ -144,7 +144,7 @@ data class KuaDecimal(
 
     fun toBigDecimal() = value
 
-    object Serde : GsonSerde<KuaDecimal> {
+    object Adapter : JsonAdapter<KuaDecimal> {
         override fun serialize(instance: KuaDecimal, type: Type, ctx: JsonSerializationContext): JsonElement {
             return ctx.serialize(
                 HotObject.builder()

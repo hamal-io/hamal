@@ -3,7 +3,7 @@ package io.hamal.repository.sqlite
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.Serde
+import io.hamal.lib.domain.Json
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
@@ -57,7 +57,7 @@ class StateSqliteRepository(
             query {
                 set("funcId", correlatedState.correlation.funcId)
                 set("correlationId", correlatedState.correlation.correlationId.value)
-                set("value", Serde.serializeAndCompress(correlatedState.value))
+                set("value", Json.serializeAndCompress(correlatedState.value))
             }
         }
     }
@@ -78,7 +78,7 @@ class StateSqliteRepository(
                         funcId = rs.getId("func_id", ::FuncId),
                         correlationId = CorrelationId(rs.getString("correlation_id"))
                     ),
-                    value = Serde.decompressAndDeserialize(State::class, rs.getBytes("value"))
+                    value = Json.decompressAndDeserialize(State::class, rs.getBytes("value"))
                 )
             }
         }

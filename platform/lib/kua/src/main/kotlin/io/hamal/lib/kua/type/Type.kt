@@ -3,7 +3,7 @@ package io.hamal.lib.kua.type
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
-import io.hamal.lib.common.serialization.GsonSerde
+import io.hamal.lib.common.serialization.JsonAdapter
 import io.hamal.lib.kua.type.KuaType.Type
 
 sealed interface KuaType {
@@ -13,7 +13,7 @@ sealed interface KuaType {
 
     val type: Type
 
-    object Serde : GsonSerde<KuaType> {
+    object Adapter : JsonAdapter<KuaType> {
 
         override fun serialize(
             src: KuaType, typeOfSrc: java.lang.reflect.Type, context: JsonSerializationContext
@@ -45,7 +45,7 @@ interface KuaTableType : KuaType
 data class KuaAny(val value: KuaType) : KuaType {
     override val type: Type = Type.Any
 
-    object Serde : GsonSerde<KuaAny> {
+    object Adapter : JsonAdapter<KuaAny> {
         override fun serialize(
             instance: KuaAny, type: java.lang.reflect.Type, ctx: JsonSerializationContext
         ): JsonElement {
@@ -55,7 +55,7 @@ data class KuaAny(val value: KuaType) : KuaType {
         override fun deserialize(
             element: JsonElement, type: java.lang.reflect.Type, ctx: JsonDeserializationContext
         ): KuaAny {
-            return KuaAny(KuaType.Serde.deserialize(element, KuaType::class.java, ctx))
+            return KuaAny(KuaType.Adapter.deserialize(element, KuaType::class.java, ctx))
         }
     }
 }

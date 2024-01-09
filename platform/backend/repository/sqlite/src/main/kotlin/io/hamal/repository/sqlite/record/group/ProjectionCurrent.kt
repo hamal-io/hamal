@@ -1,6 +1,6 @@
 package io.hamal.repository.sqlite.record.group
 
-import io.hamal.lib.domain.Serde
+import io.hamal.lib.domain.Json
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.GroupName
 import io.hamal.lib.sqlite.Connection
@@ -25,7 +25,7 @@ internal object ProjectionCurrent : ProjectionSqlite<GroupId, GroupRecord, Group
             """.trimIndent()
             ) {
                 set("id", obj.id)
-                set("data", Serde.serializeAndCompress(obj))
+                set("data", Json.serializeAndCompress(obj))
             }
         } catch (e: SQLiteException) {
             if (e.message!!.contains("UNIQUE constraint failed: current.name)")) {
@@ -50,7 +50,7 @@ internal object ProjectionCurrent : ProjectionSqlite<GroupId, GroupRecord, Group
                 set("name", groupName.value)
             }
             map { rs ->
-                Serde.decompressAndDeserialize(Group::class, rs.getBytes("data"))
+                Json.decompressAndDeserialize(Group::class, rs.getBytes("data"))
             }
         }
     }
@@ -87,7 +87,7 @@ internal object ProjectionCurrent : ProjectionSqlite<GroupId, GroupRecord, Group
                 set("id", groupId)
             }
             map { rs ->
-                Serde.decompressAndDeserialize(Group::class, rs.getBytes("data"))
+                Json.decompressAndDeserialize(Group::class, rs.getBytes("data"))
             }
         }
     }
@@ -111,7 +111,7 @@ internal object ProjectionCurrent : ProjectionSqlite<GroupId, GroupRecord, Group
                 set("limit", query.limit)
             }
             map { rs ->
-                Serde.decompressAndDeserialize(Group::class, rs.getBytes("data"))
+                Json.decompressAndDeserialize(Group::class, rs.getBytes("data"))
             }
         }
     }

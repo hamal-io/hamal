@@ -1,6 +1,6 @@
 package io.hamal.repository.sqlite.record.account
 
-import io.hamal.lib.domain.Serde
+import io.hamal.lib.domain.Json
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
@@ -28,7 +28,7 @@ internal object ProjectionCurrent : ProjectionSqlite<AccountId, AccountRecord, A
                 set("id", accountId)
             }
             map { rs ->
-                Serde.decompressAndDeserialize(Account::class, rs.getBytes("data"))
+                Json.decompressAndDeserialize(Account::class, rs.getBytes("data"))
             }
         }
     }
@@ -52,7 +52,7 @@ internal object ProjectionCurrent : ProjectionSqlite<AccountId, AccountRecord, A
                 set("limit", query.limit)
             }
             map { rs ->
-                Serde.decompressAndDeserialize(Account::class, rs.getBytes("data"))
+                Json.decompressAndDeserialize(Account::class, rs.getBytes("data"))
             }
         }
     }
@@ -88,7 +88,7 @@ internal object ProjectionCurrent : ProjectionSqlite<AccountId, AccountRecord, A
             """.trimIndent()
         ) {
             set("id", obj.id)
-            set("data", Serde.serializeAndCompress(obj))
+            set("data", Json.serializeAndCompress(obj))
         }
     }
 

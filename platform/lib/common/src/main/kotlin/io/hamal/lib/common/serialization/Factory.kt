@@ -2,22 +2,29 @@ package io.hamal.lib.common.serialization
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import io.hamal.lib.common.hot.HotArray
-import io.hamal.lib.common.hot.HotObject
-import java.time.Instant
+import io.hamal.lib.common.hot.HotJsonModule
+import kotlin.reflect.KClass
 
-object GsonFactoryBuilder {
+object JsonFactoryBuilder {
 
     private val builder = GsonBuilder()
 
     init {
-        registerTypeAdapter(HotObject::class.java, HotObjectAdapter)
-        registerTypeAdapter(HotArray::class.java, HotArrayAdapter)
-        registerTypeAdapter(Instant::class.java, InstantAdapter)
+        register(HotJsonModule)
     }
 
-    fun <TYPE, SERDE : GsonSerde<TYPE>> registerTypeAdapter(clazz: Class<TYPE>, serde: SERDE): GsonFactoryBuilder {
-        builder.registerTypeAdapter(clazz, serde)
+    fun register(module: JsonModule): JsonFactoryBuilder {
+        module.adapters.forEach { (clazz, adapter) ->
+            builder.registerTypeAdapter(clazz.java, adapter)
+        }
+        return this
+    }
+
+    fun <TYPE : Any, ADAPTER : JsonAdapter<TYPE>> register(
+        clazz: KClass<TYPE>,
+        adapter: ADAPTER
+    ): JsonFactoryBuilder {
+        builder.registerTypeAdapter(clazz.java, adapter)
         return this
     }
 

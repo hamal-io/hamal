@@ -1,6 +1,6 @@
 package io.hamal.repository.memory
 
-import io.hamal.lib.domain.Serde
+import io.hamal.lib.domain.Json
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.Requested
 import io.hamal.lib.domain.vo.RequestId
@@ -19,7 +19,7 @@ class ReqMemoryRepository : RequestRepository {
 
     override fun queue(req: Requested) {
         return lock.withLock {
-            store[req.id] = Serde.serialize(req)
+            store[req.id] = Json.serialize(req)
             queue.add(req.id)
         }
     }
@@ -41,7 +41,7 @@ class ReqMemoryRepository : RequestRepository {
         val req = get(reqId)
         check(req.status == RequestStatus.Submitted) { "Req not submitted" }
         lock.withLock {
-            store[req.id] = Serde.serialize(req.apply { status = RequestStatus.Completed })
+            store[req.id] = Json.serialize(req.apply { status = RequestStatus.Completed })
         }
     }
 
@@ -49,7 +49,7 @@ class ReqMemoryRepository : RequestRepository {
         val req = get(reqId)
         check(req.status == RequestStatus.Submitted) { "Req not submitted" }
         lock.withLock {
-            store[req.id] = Serde.serialize(req.apply { status = RequestStatus.Failed })
+            store[req.id] = Json.serialize(req.apply { status = RequestStatus.Failed })
         }
     }
 
@@ -63,7 +63,7 @@ class ReqMemoryRepository : RequestRepository {
 
     override fun find(reqId: RequestId): Requested? {
         val result = lock.withLock { store[reqId] } ?: return null
-        return Serde.deserialize(Requested::class, result)
+        return Json.deserialize(Requested::class, result)
 
     }
 

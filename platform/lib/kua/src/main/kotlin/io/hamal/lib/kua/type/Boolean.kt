@@ -4,7 +4,7 @@ import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.hot.HotObject
-import io.hamal.lib.common.serialization.GsonSerde
+import io.hamal.lib.common.serialization.JsonAdapter
 import io.hamal.lib.kua.type.KuaType.Type
 
 fun booleanOf(value: Boolean) = if (value) KuaTrue else KuaFalse
@@ -14,7 +14,7 @@ sealed class KuaBoolean(
 ) : KuaType {
     override val type: Type = Type.Boolean
 
-    object Serde : GsonSerde<KuaBoolean> {
+    object Adapter : JsonAdapter<KuaBoolean> {
         override fun serialize(
             instance: KuaBoolean,
             type: java.lang.reflect.Type,
@@ -59,29 +59,6 @@ sealed class KuaBoolean(
 
 object KuaTrue : KuaBoolean(true) {
     override fun toString() = "true"
-
-    object Serde : GsonSerde<KuaTrue> {
-        override fun serialize(
-            instance: KuaTrue,
-            type: java.lang.reflect.Type,
-            ctx: JsonSerializationContext
-        ): JsonElement {
-            return ctx.serialize(
-                HotObject.builder()
-                    .set("value", instance.value)
-                    .set("type", instance.type.name)
-                    .build()
-            )
-        }
-
-        override fun deserialize(
-            element: JsonElement,
-            type: java.lang.reflect.Type,
-            ctx: JsonDeserializationContext
-        ): KuaTrue {
-            return KuaTrue
-        }
-    }
 }
 
 object KuaFalse : KuaBoolean(false) {

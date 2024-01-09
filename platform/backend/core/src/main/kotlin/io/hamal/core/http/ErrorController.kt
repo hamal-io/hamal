@@ -1,6 +1,6 @@
 package io.hamal.core.http
 
-import io.hamal.lib.domain.Serde
+import io.hamal.lib.domain.Json
 import io.hamal.lib.sdk.api.ApiError
 import jakarta.servlet.ServletException
 import jakarta.servlet.http.HttpServletResponse
@@ -31,7 +31,7 @@ internal class ErrorController {
             res.status = 400
             res.addHeader("Content-Type", "application/json")
             res.writer.write(
-                Serde.serialize(
+                Json.serialize(
                     InvalidArgumentType(
                         message = "ArgumentTypeMismatch",
                         source = cause.sourceType?.toString() ?: "Unknown source type",
@@ -41,7 +41,7 @@ internal class ErrorController {
             )
         } else {
             res.addHeader("Content-Type", "application/json")
-            res.writer.write(Serde.serialize(ApiError("Bad request")))
+            res.writer.write(Json.serialize(ApiError("Bad request")))
         }
     }
 
@@ -55,14 +55,14 @@ internal class ErrorController {
     fun missingFields(res: HttpServletResponse, t: HttpMessageNotReadableException) {
         res.status = 400
         res.addHeader("Content-Type", "application/json")
-        res.writer.write(Serde.serialize(ApiError("Bad request")))
+        res.writer.write(Json.serialize(ApiError("Bad request")))
     }
 
     @ExceptionHandler(value = [NoHandlerFoundException::class])
     fun missingFields(res: HttpServletResponse) {
         res.status = SC_NOT_FOUND
         res.addHeader("Content-Type", "application/json")
-        res.writer.write(Serde.serialize(ApiError("Request handler not found")))
+        res.writer.write(Json.serialize(ApiError("Request handler not found")))
     }
 
 
@@ -70,7 +70,7 @@ internal class ErrorController {
     fun otherwise(res: HttpServletResponse) {
         res.status = SC_FORBIDDEN
         res.addHeader("Content-Type", "application/json")
-        res.writer.write(Serde.serialize(ApiError("FORBIDDEN")))
+        res.writer.write(Json.serialize(ApiError("FORBIDDEN")))
     }
 
     @ExceptionHandler(value = [Throwable::class])
@@ -89,7 +89,7 @@ internal class ErrorController {
 
         res.status = statusCode
         res.addHeader("Content-Type", "application/json")
-        res.writer.write(Serde.serialize(ApiError(toHandle?.message ?: "Unknown error")))
+        res.writer.write(Json.serialize(ApiError(toHandle?.message ?: "Unknown error")))
     }
 
 }

@@ -1,6 +1,6 @@
 package io.hamal.repository.sqlite.record.blueprint
 
-import io.hamal.lib.domain.Serde
+import io.hamal.lib.domain.Json
 import io.hamal.lib.domain.vo.BlueprintId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
@@ -24,7 +24,7 @@ object ProjectionCurrent : ProjectionSqlite<BlueprintId, BlueprintRecord, Bluepr
         ) {
             set("id", obj.id)
             set("groupId", obj.groupId)
-            set("data", Serde.serializeAndCompress(obj))
+            set("data", Json.serializeAndCompress(obj))
         }
     }
 
@@ -60,7 +60,7 @@ object ProjectionCurrent : ProjectionSqlite<BlueprintId, BlueprintRecord, Bluepr
                 set("id", blueprintId)
             }
             map { rs ->
-                Serde.decompressAndDeserialize(Blueprint::class, rs.getBytes("data"))
+                Json.decompressAndDeserialize(Blueprint::class, rs.getBytes("data"))
             }
         }
     }
@@ -85,7 +85,7 @@ object ProjectionCurrent : ProjectionSqlite<BlueprintId, BlueprintRecord, Bluepr
                 set("limit", query.limit)
             }
             map { rs ->
-                Serde.decompressAndDeserialize(Blueprint::class, rs.getBytes("data"))
+                Json.decompressAndDeserialize(Blueprint::class, rs.getBytes("data"))
             }
         }
     }

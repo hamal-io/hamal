@@ -1,6 +1,6 @@
 package io.hamal.lib.kua.type
 
-import io.hamal.lib.domain.Serde
+import io.hamal.lib.domain.Json
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.DynamicTest
@@ -14,9 +14,9 @@ internal object TypeSerializationFixture {
     ): List<DynamicTest> {
         return listOf(
             dynamicTest("${testInstance::class.simpleName}") {
-                val encoded = Serde.serialize(testInstance)
+                val encoded = Json.serialize(testInstance)
                 assertThat("Expects json encoding: $expectedJson", encoded, equalTo(expectedJson))
-                val decoded = Serde.deserialize(testInstance::class, encoded)
+                val decoded = Json.deserialize(testInstance::class, encoded)
                 assertThat("Decoding an encoded value must be equal to testInstance", decoded, equalTo(testInstance))
             }
         )
@@ -28,9 +28,9 @@ internal object TypeSerializationFixture {
     ): List<DynamicTest> {
         return listOf(
             dynamicTest("${testInstance.value::class.simpleName}") {
-                val encoded = Serde.serialize(testInstance)
+                val encoded = Json.serialize(testInstance)
                 assertThat("Expects json encoding: $expectedJson", encoded, equalTo(expectedJson))
-                val decoded = Serde.deserialize(KuaAny::class, encoded)
+                val decoded = Json.deserialize(KuaAny::class, encoded)
                 assertThat("Decoding an encoded value must be equal to testInstance", decoded, equalTo(testInstance))
 
             }

@@ -1,6 +1,6 @@
 package io.hamal.repository.sqlite.record.hook
 
-import io.hamal.lib.domain.Serde
+import io.hamal.lib.domain.Json
 import io.hamal.lib.domain.vo.HookId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
@@ -27,7 +27,7 @@ internal object ProjectionCurrent : ProjectionSqlite<HookId, HookRecord, Hook> {
                 set("id", hookId)
             }
             map { rs ->
-                Serde.decompressAndDeserialize(Hook::class, rs.getBytes("data"))
+                Json.decompressAndDeserialize(Hook::class, rs.getBytes("data"))
             }
         }
     }
@@ -53,7 +53,7 @@ internal object ProjectionCurrent : ProjectionSqlite<HookId, HookRecord, Hook> {
                 set("limit", query.limit)
             }
             map { rs ->
-                Serde.decompressAndDeserialize(Hook::class, rs.getBytes("data"))
+                Json.decompressAndDeserialize(Hook::class, rs.getBytes("data"))
             }
         }
     }
@@ -93,7 +93,7 @@ internal object ProjectionCurrent : ProjectionSqlite<HookId, HookRecord, Hook> {
             set("id", obj.id)
             set("groupId", obj.groupId)
             set("flowId", obj.flowId)
-            set("data", Serde.serializeAndCompress(obj))
+            set("data", Json.serializeAndCompress(obj))
         }
     }
 

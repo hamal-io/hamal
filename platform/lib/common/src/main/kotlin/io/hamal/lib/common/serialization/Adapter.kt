@@ -13,9 +13,9 @@ import java.time.Instant
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
-interface GsonSerde<T : Any> : JsonSerializer<T>, JsonDeserializer<T>
+interface JsonAdapter<T : Any> : JsonSerializer<T>, JsonDeserializer<T>
 
-internal object HotArrayAdapter : GsonSerde<HotArray> {
+internal object HotArrayAdapter : JsonAdapter<HotArray> {
     override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): HotArray {
         return GsonTransform.toNode(json).asArray()
     }
@@ -25,7 +25,7 @@ internal object HotArrayAdapter : GsonSerde<HotArray> {
     }
 }
 
-internal object HotObjectAdapter : GsonSerde<HotObject> {
+internal object HotObjectAdapter : JsonAdapter<HotObject> {
     override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): HotObject {
         return GsonTransform.toNode(json).asObject()
     }
@@ -35,7 +35,7 @@ internal object HotObjectAdapter : GsonSerde<HotObject> {
     }
 }
 
-internal object InstantAdapter : GsonSerde<Instant> {
+internal object InstantAdapter : JsonAdapter<Instant> {
 
     override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): Instant {
         return Instant.from(formatter.parse(json.asString))
@@ -52,7 +52,7 @@ internal object InstantAdapter : GsonSerde<Instant> {
 
 class ValueObjectIdAdapter<TYPE : ValueObjectId>(
     val ctor: (SnowflakeId) -> TYPE
-) : GsonSerde<TYPE> {
+) : JsonAdapter<TYPE> {
 
     override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): TYPE {
         return ctor(SnowflakeId(json.asString))
@@ -66,7 +66,7 @@ class ValueObjectIdAdapter<TYPE : ValueObjectId>(
 
 class ValueObjectStringAdapter<TYPE : ValueObjectString>(
     val ctor: (String) -> TYPE
-) : GsonSerde<TYPE> {
+) : JsonAdapter<TYPE> {
 
     override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): TYPE {
         return ctor(json.asString)
@@ -80,7 +80,7 @@ class ValueObjectStringAdapter<TYPE : ValueObjectString>(
 
 class ValueObjectIntAdapter<TYPE : ValueObjectInt>(
     val ctor: (Int) -> TYPE
-) : GsonSerde<TYPE> {
+) : JsonAdapter<TYPE> {
 
     override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): TYPE {
         return ctor(json.asInt)
@@ -94,7 +94,7 @@ class ValueObjectIntAdapter<TYPE : ValueObjectInt>(
 
 class ValueObjectInstantAdapter<TYPE : ValueObjectInstant>(
     val ctor: (Instant) -> TYPE
-) : GsonSerde<TYPE> {
+) : JsonAdapter<TYPE> {
 
     override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): TYPE {
         return ctor(context.deserialize(json, Instant::class.java))

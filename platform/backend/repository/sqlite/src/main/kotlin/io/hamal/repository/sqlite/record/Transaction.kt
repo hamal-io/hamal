@@ -4,7 +4,7 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.DomainObject
 import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.util.CollectionUtils.takeWhileInclusive
-import io.hamal.lib.domain.Serde
+import io.hamal.lib.domain.Json
 import io.hamal.lib.sqlite.NamedPreparedStatementDelegate
 import io.hamal.lib.sqlite.NamedPreparedStatementResultSetDelegate
 import io.hamal.lib.sqlite.Transaction
@@ -29,7 +29,7 @@ class RecordTransactionSqlite<ID : ValueObjectId, RECORD : Record<ID>, OBJ : Dom
         ) {
             set("cmdId", record.cmdId)
             set("entityId", record.entityId)
-            set("data", Serde.serializeAndCompress(record))
+            set("data", Json.serializeAndCompress(record))
         }
 
         return record
@@ -45,7 +45,7 @@ class RecordTransactionSqlite<ID : ValueObjectId, RECORD : Record<ID>, OBJ : Dom
                 set("entityId", id)
             }
             map {
-                Serde.decompressAndDeserialize(recordClass, it.getBytes("data")).also { record ->
+                Json.decompressAndDeserialize(recordClass, it.getBytes("data")).also { record ->
                     record.recordSequence = RecordSequence(it.getInt("sequence"))
                     record.recordedAt = RecordedAt(it.getInstant("timestamp"))
                 }
@@ -63,7 +63,7 @@ class RecordTransactionSqlite<ID : ValueObjectId, RECORD : Record<ID>, OBJ : Dom
                 set("entityId", id)
             }
             map {
-                Serde.decompressAndDeserialize(recordClass, it.getBytes("data")).also { record ->
+                Json.decompressAndDeserialize(recordClass, it.getBytes("data")).also { record ->
                     record.recordSequence = RecordSequence(it.getInt("sequence"))
                     record.recordedAt = RecordedAt(it.getInstant("timestamp"))
                 }
@@ -92,7 +92,7 @@ class RecordTransactionSqlite<ID : ValueObjectId, RECORD : Record<ID>, OBJ : Dom
                 set("sequence", sequence.value)
             }
             map {
-                Serde.decompressAndDeserialize(recordClass, it.getBytes("data")).also { record ->
+                Json.decompressAndDeserialize(recordClass, it.getBytes("data")).also { record ->
                     record.recordSequence = RecordSequence(it.getInt("sequence"))
                     record.recordedAt = RecordedAt(it.getInstant("timestamp"))
                 }
