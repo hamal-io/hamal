@@ -60,7 +60,7 @@ interface BrokerRepository :
         val firstId = ChunkId(query.afterId.value.value.toInt() + 1)
         return read(firstId, topic, query.limit.value)
             .map { chunk ->
-                val payload = Json.decompressAndDeserialize(TopicEntryPayload::class, chunk.bytes)
+                val payload = json.decompressAndDeserialize(TopicEntryPayload::class, chunk.bytes)
                 TopicEntry(
                     id = TopicEntryId(chunk.id.value.toInt()),
                     payload = payload

@@ -28,7 +28,7 @@ class ConsumerTest : AbstractIntegrationTest() {
             TopicToCreate(TopicId(123), TopicName("topic"), FlowId(1), GroupId(1))
         )
 
-        val appender = AppenderImpl(String::class, testInstance)
+        val appender = AppenderImpl<String>(testInstance)
         IntRange(1, 10).forEach { appender.append(CmdId(it), topic, "$it") }
 
         val testConsumer = LogConsumerImpl(ConsumerId("consumer-01"), topic, testInstance, String::class)
@@ -62,7 +62,7 @@ class ConsumerTest : AbstractIntegrationTest() {
             TopicToCreate(TopicId(123), TopicName("topic"), FlowId.root, GroupId.root)
         )
 
-        val testAppender = AppenderImpl(String::class, testInstance)
+        val testAppender = AppenderImpl<String>(testInstance)
 
         val testConsumer = LogConsumerImpl(ConsumerId("consumer-01"), topic, testInstance, String::class)
         val collected = mutableListOf<String>()

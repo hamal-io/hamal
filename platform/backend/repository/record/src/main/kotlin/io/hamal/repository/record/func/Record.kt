@@ -3,6 +3,7 @@ package io.hamal.repository.record.func
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.record.Record
+import io.hamal.repository.record.RecordAdapter
 import io.hamal.repository.record.RecordSequence
 import io.hamal.repository.record.RecordedAt
 
@@ -11,7 +12,15 @@ sealed class FuncRecord(
     override var recordSequence: RecordSequence? = null,
     @Transient
     override var recordedAt: RecordedAt? = null
-) : Record<FuncId>()
+) : Record<FuncId>() {
+    internal object Adapter : RecordAdapter<FuncRecord>(
+        listOf(
+            FuncCreatedRecord::class,
+            FuncUpdatedRecord::class,
+            FuncDeployedRecord::class,
+        )
+    )
+}
 
 data class FuncCreatedRecord(
     override val entityId: FuncId,

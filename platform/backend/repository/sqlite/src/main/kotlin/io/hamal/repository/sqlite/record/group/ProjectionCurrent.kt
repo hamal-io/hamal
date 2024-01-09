@@ -1,6 +1,5 @@
 package io.hamal.repository.sqlite.record.group
 
-import io.hamal.lib.domain.Json
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.GroupName
 import io.hamal.lib.sqlite.Connection
@@ -8,6 +7,7 @@ import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Group
 import io.hamal.repository.api.GroupQueryRepository.GroupQuery
 import io.hamal.repository.record.group.GroupRecord
+import io.hamal.repository.record.json
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 import org.sqlite.SQLiteException
@@ -25,7 +25,7 @@ internal object ProjectionCurrent : ProjectionSqlite<GroupId, GroupRecord, Group
             """.trimIndent()
             ) {
                 set("id", obj.id)
-                set("data", Json.serializeAndCompress(obj))
+                set("data", json.serializeAndCompress(obj))
             }
         } catch (e: SQLiteException) {
             if (e.message!!.contains("UNIQUE constraint failed: current.name)")) {
@@ -50,7 +50,7 @@ internal object ProjectionCurrent : ProjectionSqlite<GroupId, GroupRecord, Group
                 set("name", groupName.value)
             }
             map { rs ->
-                Json.decompressAndDeserialize(Group::class, rs.getBytes("data"))
+                json.decompressAndDeserialize(Group::class, rs.getBytes("data"))
             }
         }
     }
@@ -87,7 +87,7 @@ internal object ProjectionCurrent : ProjectionSqlite<GroupId, GroupRecord, Group
                 set("id", groupId)
             }
             map { rs ->
-                Json.decompressAndDeserialize(Group::class, rs.getBytes("data"))
+                json.decompressAndDeserialize(Group::class, rs.getBytes("data"))
             }
         }
     }
@@ -111,7 +111,7 @@ internal object ProjectionCurrent : ProjectionSqlite<GroupId, GroupRecord, Group
                 set("limit", query.limit)
             }
             map { rs ->
-                Json.decompressAndDeserialize(Group::class, rs.getBytes("data"))
+                json.decompressAndDeserialize(Group::class, rs.getBytes("data"))
             }
         }
     }

@@ -2,7 +2,6 @@ package io.hamal.core.request.handler.topic
 
 import io.hamal.core.request.handler.BaseReqHandlerTest
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.domain.Json
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain.request.TopicAppendToRequested
 import io.hamal.lib.domain.vo.RequestId
@@ -13,6 +12,7 @@ import io.hamal.lib.kua.type.KuaMap
 import io.hamal.lib.kua.type.KuaString
 import io.hamal.repository.api.log.ChunkId
 import io.hamal.repository.api.log.Segment
+import io.hamal.repository.record.json
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
@@ -43,7 +43,7 @@ internal class TopicAppendHandlerTest : BaseReqHandlerTest() {
                 assertThat(id, equalTo(ChunkId(1)))
                 assertThat(topicId, equalTo(TopicId(4444)))
 
-                val payload = Json.decompressAndDeserialize(TopicEntryPayload::class, bytes)
+                val payload = json.decompressAndDeserialize(TopicEntryPayload::class, bytes)
                 assertThat(payload.value, equalTo(KuaMap(mutableMapOf("hamal" to KuaString("rockz")))))
             }
         }

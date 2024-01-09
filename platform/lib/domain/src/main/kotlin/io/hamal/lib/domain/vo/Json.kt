@@ -1,8 +1,7 @@
 package io.hamal.lib.domain.vo
 
+import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.serialization.*
-import io.hamal.lib.domain.request.Requested
-import io.hamal.lib.domain.request.RequestedTypeAdapter
 
 object ValueObjectJsonModule : JsonModule() {
     init {
@@ -22,6 +21,7 @@ object ValueObjectJsonModule : JsonModule() {
         this[BlueprintId::class] = ValueObjectIdAdapter(::BlueprintId)
         this[BlueprintName::class] = ValueObjectStringAdapter(::BlueprintName)
 
+        this[CmdId::class] = ValueObjectStringAdapter(::CmdId)
         this[CodeId::class] = ValueObjectIdAdapter(::CodeId)
         this[CodeValue::class] = ValueObjectStringAdapter(::CodeValue)
         this[CodeVersion::class] = ValueObjectIntAdapter(::CodeVersion)
@@ -34,6 +34,7 @@ object ValueObjectJsonModule : JsonModule() {
         this[EndpointName::class] = ValueObjectStringAdapter(::EndpointName)
 
         this[ExecId::class] = ValueObjectIdAdapter(::ExecId)
+        this[ExecType::class] = ValueObjectStringAdapter(::ExecType)
         this[ExecToken::class] = ValueObjectStringAdapter(::ExecToken)
         this[ExecLogId::class] = ValueObjectIdAdapter(::ExecLogId)
 
@@ -60,7 +61,6 @@ object ValueObjectJsonModule : JsonModule() {
 
         this[RequestId::class] = ValueObjectIdAdapter(::RequestId)
         this[RequestType::class] = ValueObjectStringAdapter(::RequestType)
-        this[Requested::class] = RequestedTypeAdapter()
 
         this[TopicId::class] = ValueObjectIdAdapter(::TopicId)
         this[TopicName::class] = ValueObjectStringAdapter(::TopicName)
@@ -69,5 +69,11 @@ object ValueObjectJsonModule : JsonModule() {
         this[TriggerId::class] = ValueObjectIdAdapter(::TriggerId)
         this[TriggerName::class] = ValueObjectStringAdapter(::TriggerName)
     }
+}
 
+object InvocationModule : JsonModule() {
+    init {
+        this[Invocation::class] = Invocation.Adapter
+        this[InvocationType::class] = ValueObjectStringAdapter(::InvocationType)
+    }
 }

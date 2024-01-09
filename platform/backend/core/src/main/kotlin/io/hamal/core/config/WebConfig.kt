@@ -2,7 +2,12 @@ package io.hamal.core.config
 
 import com.google.gson.Gson
 import io.hamal.core.component.*
-import io.hamal.lib.domain.gsonInstance
+import io.hamal.lib.common.hot.HotJsonModule
+import io.hamal.lib.common.serialization.JsonFactoryBuilder
+import io.hamal.lib.domain.vo.InvocationModule
+import io.hamal.lib.domain.vo.ValueObjectJsonModule
+import io.hamal.lib.kua.type.KuaJsonModule
+import io.hamal.repository.api.DomainJsonModule
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.format.FormatterRegistry
@@ -14,7 +19,6 @@ import org.springframework.http.converter.json.GsonHttpMessageConverter
 import org.springframework.http.converter.xml.SourceHttpMessageConverter
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 import java.nio.charset.StandardCharsets
-import java.util.*
 import javax.xml.transform.Source
 
 
@@ -22,13 +26,19 @@ import javax.xml.transform.Source
 open class WebConfig : WebMvcConfigurer {
 
     @Bean
-    open fun gson(): Gson = gsonInstance
+    open fun gson(): Gson = JsonFactoryBuilder()
+        .register(DomainJsonModule)
+        .register(HotJsonModule)
+        .register(InvocationModule)
+        .register(KuaJsonModule)
+        .register(ValueObjectJsonModule)
+        .build()
 
     @Bean
     open fun gsonHttpMessageConverter(gson: Gson): GsonHttpMessageConverter {
         val result = GsonHttpMessageConverter()
         result.gson = gson
-        result.supportedMediaTypes = Arrays.asList(
+        result.supportedMediaTypes = listOf(
             MediaType.APPLICATION_JSON,
             MediaType("application", "json", StandardCharsets.UTF_8)
         )

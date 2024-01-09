@@ -1,12 +1,12 @@
 package io.hamal.repository.sqlite.record.feedback
 
-import io.hamal.lib.domain.Json
 import io.hamal.lib.domain.vo.FeedbackId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Feedback
 import io.hamal.repository.api.FeedbackQueryRepository.FeedbackQuery
 import io.hamal.repository.record.feedback.FeedbackRecord
+import io.hamal.repository.record.json
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 
@@ -21,7 +21,7 @@ internal object ProjectionCurrent : ProjectionSqlite<FeedbackId, FeedbackRecord,
             """.trimIndent()
         ) {
             set("id", obj.id)
-            set("data", Json.serializeAndCompress(obj))
+            set("data", json.serializeAndCompress(obj))
         }
     }
 
@@ -56,7 +56,7 @@ internal object ProjectionCurrent : ProjectionSqlite<FeedbackId, FeedbackRecord,
                 set("id", feedbackId)
             }
             map { rs ->
-                Json.decompressAndDeserialize(Feedback::class, rs.getBytes("data"))
+                json.decompressAndDeserialize(Feedback::class, rs.getBytes("data"))
             }
         }
     }
@@ -80,7 +80,7 @@ internal object ProjectionCurrent : ProjectionSqlite<FeedbackId, FeedbackRecord,
                 set("limit", query.limit)
             }
             map { rs ->
-                Json.decompressAndDeserialize(Feedback::class, rs.getBytes("data"))
+                json.decompressAndDeserialize(Feedback::class, rs.getBytes("data"))
             }
         }
     }

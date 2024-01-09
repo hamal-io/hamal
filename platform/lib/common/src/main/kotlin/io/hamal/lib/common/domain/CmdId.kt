@@ -5,7 +5,7 @@ import java.security.SecureRandom
 
 private val rnd = SecureRandom.getInstance("SHA1PRNG", "SUN")
 
-data class CmdId(val value: String) : Comparable<CmdId> {
+data class CmdId(override val value: String) : ValueObjectString() {
 
     // FIXME make sure its max 255 chars
     constructor(value: ByteArray) : this(String(value))
@@ -13,8 +13,6 @@ data class CmdId(val value: String) : Comparable<CmdId> {
     constructor(value: Long) : this(value.toString())
     constructor(value: BigInteger) : this(value.toString())
     constructor(value: ValueObjectId) : this(value.value.value)
-    
-    override fun compareTo(other: CmdId) = value.compareTo(other.value)
 
     operator fun plus(hashcode: Int): CmdId = CmdId("${value}_$hashcode")
 

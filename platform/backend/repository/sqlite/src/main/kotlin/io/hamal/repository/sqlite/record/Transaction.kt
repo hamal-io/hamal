@@ -29,7 +29,7 @@ class RecordTransactionSqlite<ID : ValueObjectId, RECORD : Record<ID>, OBJ : Dom
         ) {
             set("cmdId", record.cmdId)
             set("entityId", record.entityId)
-            set("data", Json.serializeAndCompress(record))
+            set("data", json.serializeAndCompress(record))
         }
 
         return record
@@ -45,7 +45,7 @@ class RecordTransactionSqlite<ID : ValueObjectId, RECORD : Record<ID>, OBJ : Dom
                 set("entityId", id)
             }
             map {
-                Json.decompressAndDeserialize(recordClass, it.getBytes("data")).also { record ->
+                json.decompressAndDeserialize(recordClass, it.getBytes("data")).also { record ->
                     record.recordSequence = RecordSequence(it.getInt("sequence"))
                     record.recordedAt = RecordedAt(it.getInstant("timestamp"))
                 }
@@ -63,7 +63,7 @@ class RecordTransactionSqlite<ID : ValueObjectId, RECORD : Record<ID>, OBJ : Dom
                 set("entityId", id)
             }
             map {
-                Json.decompressAndDeserialize(recordClass, it.getBytes("data")).also { record ->
+                json.decompressAndDeserialize(recordClass, it.getBytes("data")).also { record ->
                     record.recordSequence = RecordSequence(it.getInt("sequence"))
                     record.recordedAt = RecordedAt(it.getInstant("timestamp"))
                 }
@@ -92,7 +92,7 @@ class RecordTransactionSqlite<ID : ValueObjectId, RECORD : Record<ID>, OBJ : Dom
                 set("sequence", sequence.value)
             }
             map {
-                Json.decompressAndDeserialize(recordClass, it.getBytes("data")).also { record ->
+                json.decompressAndDeserialize(recordClass, it.getBytes("data")).also { record ->
                     record.recordSequence = RecordSequence(it.getInt("sequence"))
                     record.recordedAt = RecordedAt(it.getInstant("timestamp"))
                 }

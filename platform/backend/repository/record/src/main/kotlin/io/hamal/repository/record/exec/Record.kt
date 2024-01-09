@@ -4,6 +4,7 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.record.Record
+import io.hamal.repository.record.RecordAdapter
 import io.hamal.repository.record.RecordSequence
 import io.hamal.repository.record.RecordedAt
 
@@ -12,7 +13,18 @@ sealed class ExecRecord(
     override var recordSequence: RecordSequence? = null,
     @Transient
     override var recordedAt: RecordedAt? = null
-) : Record<ExecId>()
+) : Record<ExecId>() {
+    internal object Adapter : RecordAdapter<ExecRecord>(
+        listOf(
+            ExecPlannedRecord::class,
+            ExecScheduledRecord::class,
+            ExecQueuedRecord::class,
+            ExecStartedRecord::class,
+            ExecCompletedRecord::class,
+            ExecFailedRecord::class,
+        )
+    )
+}
 
 data class ExecPlannedRecord(
     override val cmdId: CmdId,

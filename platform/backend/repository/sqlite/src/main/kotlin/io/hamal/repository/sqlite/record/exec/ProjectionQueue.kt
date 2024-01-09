@@ -1,11 +1,11 @@
 package io.hamal.repository.sqlite.record.exec
 
-import io.hamal.lib.domain.Json
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Exec
 import io.hamal.repository.record.exec.ExecRecord
+import io.hamal.repository.record.json
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 
@@ -26,7 +26,7 @@ internal object ProjectionQueue : ProjectionSqlite<ExecId, ExecRecord, Exec> {
                 set("limit", limit)
             }
             map { rs ->
-                Json.decompressAndDeserialize(Exec::class, rs.getBytes("data"))
+                json.decompressAndDeserialize(Exec::class, rs.getBytes("data"))
             }
         }
     }
@@ -45,7 +45,7 @@ internal object ProjectionQueue : ProjectionSqlite<ExecId, ExecRecord, Exec> {
             """.trimIndent()
         ) {
             set("id", obj.id)
-            set("data", Json.serializeAndCompress(obj))
+            set("data", json.serializeAndCompress(obj))
         }
     }
 

@@ -1,12 +1,12 @@
 package io.hamal.repository.sqlite.record.account
 
-import io.hamal.lib.domain.Json
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Account
 import io.hamal.repository.api.AccountQueryRepository.AccountQuery
 import io.hamal.repository.record.account.AccountRecord
+import io.hamal.repository.record.json
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 
@@ -28,7 +28,7 @@ internal object ProjectionCurrent : ProjectionSqlite<AccountId, AccountRecord, A
                 set("id", accountId)
             }
             map { rs ->
-                Json.decompressAndDeserialize(Account::class, rs.getBytes("data"))
+                json.decompressAndDeserialize(Account::class, rs.getBytes("data"))
             }
         }
     }
@@ -52,7 +52,7 @@ internal object ProjectionCurrent : ProjectionSqlite<AccountId, AccountRecord, A
                 set("limit", query.limit)
             }
             map { rs ->
-                Json.decompressAndDeserialize(Account::class, rs.getBytes("data"))
+                json.decompressAndDeserialize(Account::class, rs.getBytes("data"))
             }
         }
     }
@@ -88,7 +88,7 @@ internal object ProjectionCurrent : ProjectionSqlite<AccountId, AccountRecord, A
             """.trimIndent()
         ) {
             set("id", obj.id)
-            set("data", Json.serializeAndCompress(obj))
+            set("data", json.serializeAndCompress(obj))
         }
     }
 

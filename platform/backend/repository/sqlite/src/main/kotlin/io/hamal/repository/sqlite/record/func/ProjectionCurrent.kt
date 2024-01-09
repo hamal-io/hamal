@@ -1,12 +1,12 @@
 package io.hamal.repository.sqlite.record.func
 
-import io.hamal.lib.domain.Json
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
 import io.hamal.repository.record.func.FuncRecord
+import io.hamal.repository.record.json
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 
@@ -27,7 +27,7 @@ internal object ProjectionCurrent : ProjectionSqlite<FuncId, FuncRecord, Func> {
                 set("id", funcId)
             }
             map { rs ->
-                Json.decompressAndDeserialize(Func::class, rs.getBytes("data"))
+                json.decompressAndDeserialize(Func::class, rs.getBytes("data"))
             }
         }
     }
@@ -53,7 +53,7 @@ internal object ProjectionCurrent : ProjectionSqlite<FuncId, FuncRecord, Func> {
                 set("limit", query.limit)
             }
             map { rs ->
-                Json.decompressAndDeserialize(Func::class, rs.getBytes("data"))
+                json.decompressAndDeserialize(Func::class, rs.getBytes("data"))
             }
         }
     }
@@ -93,7 +93,7 @@ internal object ProjectionCurrent : ProjectionSqlite<FuncId, FuncRecord, Func> {
             set("id", obj.id)
             set("groupId", obj.groupId)
             set("flowId", obj.flowId)
-            set("data", Json.serializeAndCompress(obj))
+            set("data", json.serializeAndCompress(obj))
         }
     }
 

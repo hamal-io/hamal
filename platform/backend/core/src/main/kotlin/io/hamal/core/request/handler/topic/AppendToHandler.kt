@@ -17,5 +17,5 @@ class AppendToHandler(
         appender.append(req.cmdId(), topic, req.payload)
     }
 
-    private val appender = AppenderImpl(TopicEntryPayload::class, eventBrokerRepository)
+    private val appender = AppenderImpl<TopicEntryPayload>(eventBrokerRepository)
 }

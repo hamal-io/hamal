@@ -22,7 +22,7 @@ class ConsumerTest {
                 TopicToCreate(TopicId(123), TopicName("topic"), FlowId(23), GroupId(1))
             )
 
-            val appender = AppenderImpl(String::class, brokerRepository)
+            val appender = AppenderImpl<String>(brokerRepository)
             IntRange(1, 10).forEach { appender.append(CmdId(it), topic, "$it") }
         }
 

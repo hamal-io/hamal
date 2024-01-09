@@ -1,12 +1,12 @@
 package io.hamal.repository.sqlite.record.extension
 
-import io.hamal.lib.domain.Json
 import io.hamal.lib.domain.vo.ExtensionId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Extension
 import io.hamal.repository.api.ExtensionQueryRepository.ExtensionQuery
 import io.hamal.repository.record.extension.ExtensionRecord
+import io.hamal.repository.record.json
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 import org.sqlite.SQLiteException
@@ -27,7 +27,7 @@ internal object ProjectionCurrent : ProjectionSqlite<ExtensionId, ExtensionRecor
                 set("id", obj.id)
                 set("groupId", obj.groupId)
                 set("name", obj.name)
-                set("data", Json.serializeAndCompress(obj))
+                set("data", json.serializeAndCompress(obj))
             }
         } catch (e: SQLiteException) {
             if (e.message!!.contains("(UNIQUE constraint failed: current.group_id, current.name)")) {
@@ -71,7 +71,7 @@ internal object ProjectionCurrent : ProjectionSqlite<ExtensionId, ExtensionRecor
                 set("id", extId)
             }
             map { rs ->
-                Json.decompressAndDeserialize(Extension::class, rs.getBytes("data"))
+                json.decompressAndDeserialize(Extension::class, rs.getBytes("data"))
             }
         }
     }
@@ -96,7 +96,7 @@ internal object ProjectionCurrent : ProjectionSqlite<ExtensionId, ExtensionRecor
                 set("limit", query.limit)
             }
             map { rs ->
-                Json.decompressAndDeserialize(Extension::class, rs.getBytes("data"))
+                json.decompressAndDeserialize(Extension::class, rs.getBytes("data"))
             }
         }
     }

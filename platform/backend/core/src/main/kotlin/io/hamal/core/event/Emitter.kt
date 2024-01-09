@@ -22,5 +22,5 @@ class PlatformEventEmitter(
         appender.append(cmdId, topic, evt)
     }
 
-    private val appender = AppenderImpl(PlatformEvent::class, brokerRepository)
+    private val appender = AppenderImpl<PlatformEvent>(brokerRepository)
 }

@@ -6,6 +6,7 @@ import io.hamal.lib.domain.vo.ExtensionName
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.repository.api.ExtensionCode
 import io.hamal.repository.record.Record
+import io.hamal.repository.record.RecordAdapter
 import io.hamal.repository.record.RecordSequence
 import io.hamal.repository.record.RecordedAt
 
@@ -14,7 +15,14 @@ sealed class ExtensionRecord(
     override var recordSequence: RecordSequence? = null,
     @Transient
     override var recordedAt: RecordedAt? = null
-) : Record<ExtensionId>()
+) : Record<ExtensionId>() {
+    internal object Adapter : RecordAdapter<ExtensionRecord>(
+        listOf(
+            ExtensionCreatedRecord::class,
+            ExtensionUpdatedRecord::class
+        )
+    )
+}
 
 data class ExtensionCreatedRecord(
     override val entityId: ExtensionId,

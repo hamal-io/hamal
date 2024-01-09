@@ -1,7 +1,11 @@
 package io.hamal.lib.http.fixture
 
 import com.google.gson.Gson
-import io.hamal.lib.domain.gsonInstance
+import io.hamal.lib.common.hot.HotJsonModule
+import io.hamal.lib.common.serialization.JsonFactoryBuilder
+import io.hamal.lib.domain.vo.InvocationModule
+import io.hamal.lib.domain.vo.ValueObjectJsonModule
+import io.hamal.lib.kua.type.KuaJsonModule
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
@@ -20,7 +24,12 @@ import java.nio.charset.StandardCharsets
 open class TestWebConfig : WebMvcConfigurer {
 
     @Bean
-    open fun gson(): Gson = gsonInstance
+    open fun gson(): Gson = JsonFactoryBuilder()
+        .register(HotJsonModule)
+        .register(InvocationModule)
+        .register(KuaJsonModule)
+        .register(ValueObjectJsonModule)
+        .build()
 
     @Bean
     open fun gsonHttpMessageConverter(gson: Gson): GsonHttpMessageConverter {

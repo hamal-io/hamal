@@ -5,6 +5,7 @@ import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.record.Record
+import io.hamal.repository.record.RecordAdapter
 import io.hamal.repository.record.RecordSequence
 import io.hamal.repository.record.RecordedAt
 import kotlin.time.Duration
@@ -14,7 +15,18 @@ sealed class TriggerRecord(
     override var recordSequence: RecordSequence? = null,
     @Transient
     override var recordedAt: RecordedAt? = null
-) : Record<TriggerId>()
+) : Record<TriggerId>() {
+    internal object Adapter : RecordAdapter<TriggerRecord>(
+        listOf(
+            FixedRateTriggerCreatedRecord::class,
+            EventTriggerCreatedRecord::class,
+            HookTriggerCreatedRecord::class,
+            CronTriggerCreatedRecord::class,
+            TriggerSetActiveRecord::class,
+            TriggerSetInactiveRecord::class
+        )
+    )
+}
 
 data class FixedRateTriggerCreatedRecord(
     override val cmdId: CmdId,

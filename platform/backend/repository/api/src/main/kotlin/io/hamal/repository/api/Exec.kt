@@ -1,9 +1,13 @@
 package io.hamal.repository.api
 
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonElement
+import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.DomainObject
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.domain.UpdatedAt
+import io.hamal.lib.common.serialization.JsonAdapter
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.*
@@ -94,6 +98,8 @@ sealed class Exec : DomainObject<ExecId> {
     abstract val code: ExecCode
     abstract val invocation: Invocation
 
+    val type: ExecType = ExecType(this::class.simpleName!!)
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -110,6 +116,34 @@ sealed class Exec : DomainObject<ExecId> {
         result = 31 * result + cmdId.hashCode()
         result = 31 * result + status.hashCode()
         return result
+    }
+
+    object Adapter : JsonAdapter<Exec> {
+        override fun serialize(
+            src: Exec,
+            typeOfSrc: java.lang.reflect.Type,
+            context: JsonSerializationContext
+        ): JsonElement {
+            return context.serialize(src)
+        }
+
+        override fun deserialize(
+            json: JsonElement,
+            typeOfT: java.lang.reflect.Type,
+            context: JsonDeserializationContext
+        ): Exec {
+            val type = json.asJsonObject.get("type").asString
+            return context.deserialize(json, classMapping[type]!!.java)
+        }
+
+        private val classMapping = listOf(
+            PlannedExec::class,
+            ScheduledExec::class,
+            QueuedExec::class,
+            StartedExec::class,
+            CompletedExec::class,
+            FailedExec::class
+        ).associateBy { it.simpleName }
     }
 }
 

@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder
 import io.hamal.lib.common.hot.HotJsonModule
 import kotlin.reflect.KClass
 
-object JsonFactoryBuilder {
+class JsonFactoryBuilder {
 
     private val builder = GsonBuilder()
 

@@ -1,7 +1,10 @@
 package io.hamal.repository.memory.record
 
+import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain._enum.TriggerType
+import io.hamal.lib.domain.vo.FuncId
+import io.hamal.lib.domain.vo.HookId
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.repository.api.*
 import io.hamal.repository.api.TriggerCmdRepository.*
@@ -123,6 +126,12 @@ private object TriggerCurrentProjection {
         )
         require(uniqueHookTriggers.add(toCheck)) { "Trigger already exists" }
     }
+
+    private data class HookTriggerUnique(
+        val funcId: FuncId,
+        val hookId: HookId,
+        val hookMethod: HookMethod
+    )
 }
 
 

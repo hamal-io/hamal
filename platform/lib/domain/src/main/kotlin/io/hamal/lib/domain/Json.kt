@@ -1,24 +1,14 @@
 package io.hamal.lib.domain
 
 import com.google.gson.reflect.TypeToken
-import io.hamal.lib.common.hot.HotJsonModule
 import io.hamal.lib.common.serialization.JsonFactoryBuilder
-import io.hamal.lib.domain.vo.ValueObjectJsonModule
-import io.hamal.lib.kua.type.KuaJsonModule
 import java.io.InputStream
 import java.io.InputStreamReader
 import kotlin.reflect.KClass
 
-
-val gsonInstance = JsonFactoryBuilder
-    .register(HotJsonModule)
-    .register(KuaJsonModule)
-    .register(ValueObjectJsonModule)
-    .build()
-
-
-object Json {
-
+class Json(
+    factory: JsonFactoryBuilder
+) {
     fun <TYPE : Any> serialize(src: TYPE): String {
         return gsonInstance.toJson(src)
     }
@@ -41,7 +31,8 @@ object Json {
     }
 
     fun <TYPE : Any> decompressAndDeserialize(clazz: KClass<TYPE>, bytes: ByteArray): TYPE {
-        return gsonInstance.fromJson(String(bytes), clazz.java)
+        return gsonInstance.fromJson(String(bytes), clazz.java)!!
     }
 
+    private val gsonInstance = factory.build()
 }

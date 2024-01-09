@@ -1,6 +1,5 @@
 package io.hamal.repository.sqlite.record.trigger
 
-import io.hamal.lib.domain.Json
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
@@ -8,6 +7,7 @@ import io.hamal.repository.api.EventTrigger
 import io.hamal.repository.api.HookTrigger
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
+import io.hamal.repository.record.json
 import io.hamal.repository.record.trigger.TriggerRecord
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
@@ -27,7 +27,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
                 set("id", triggerId)
             }
             map { rs ->
-                Json.decompressAndDeserialize(Trigger::class, rs.getBytes("data"))
+                json.decompressAndDeserialize(Trigger::class, rs.getBytes("data"))
             }
         }
     }
@@ -60,7 +60,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
                 set("limit", query.limit)
             }
             map { rs ->
-                Json.decompressAndDeserialize(Trigger::class, rs.getBytes("data"))
+                json.decompressAndDeserialize(Trigger::class, rs.getBytes("data"))
             }
         }
     }
@@ -120,7 +120,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
             }
             set("flowId", obj.flowId)
             set("type", obj.type.value)
-            set("data", Json.serializeAndCompress(obj))
+            set("data", json.serializeAndCompress(obj))
         }
     }
 

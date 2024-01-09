@@ -1,6 +1,5 @@
 package io.hamal.repository.api.log
 
-import io.hamal.lib.domain.Json
 import kotlin.reflect.KClass
 
 interface LogConsumer<VALUE : Any> {
@@ -20,7 +19,6 @@ interface BatchConsumer<VALUE : Any> {
 
     // min batch size
     // max batch size
-
     fun consumeBatch(batchSize: Int, block: (List<VALUE>) -> Unit): Int
 
 }
@@ -39,7 +37,7 @@ class LogConsumerImpl<Value : Any>(
             fn(
                 index,
                 chunk.id,
-                Json.decompressAndDeserialize(valueClass, chunk.bytes)
+                json.decompressAndDeserialize(valueClass, chunk.bytes)
             )
             chunk.id
         }.maxByOrNull { it }?.let { repository.commit(consumerId, topic, it) }
@@ -62,7 +60,7 @@ class BatchConsumerImpl<Value : Any>(
         }
 
         val batch = chunksToConsume.map { chunk ->
-            Json.decompressAndDeserialize(valueClass, chunk.bytes)
+            json.decompressAndDeserialize(valueClass, chunk.bytes)
         }
 
         block(batch)

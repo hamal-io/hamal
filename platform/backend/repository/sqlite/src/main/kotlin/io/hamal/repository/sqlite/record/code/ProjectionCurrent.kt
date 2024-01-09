@@ -1,12 +1,12 @@
 package io.hamal.repository.sqlite.record.code
 
-import io.hamal.lib.domain.Json
 import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Code
 import io.hamal.repository.api.CodeQueryRepository.CodeQuery
 import io.hamal.repository.record.code.CodeRecord
+import io.hamal.repository.record.json
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 
@@ -27,7 +27,7 @@ internal object ProjectionCurrent : ProjectionSqlite<CodeId, CodeRecord, Code> {
                 set("id", codeId)
             }
             map { rs ->
-                Json.decompressAndDeserialize(Code::class, rs.getBytes("data"))
+                json.decompressAndDeserialize(Code::class, rs.getBytes("data"))
             }
         }
     }
@@ -53,7 +53,7 @@ internal object ProjectionCurrent : ProjectionSqlite<CodeId, CodeRecord, Code> {
                 set("limit", query.limit)
             }
             map { rs ->
-                Json.decompressAndDeserialize(Code::class, rs.getBytes("data"))
+                json.decompressAndDeserialize(Code::class, rs.getBytes("data"))
             }
         }
     }
@@ -91,7 +91,7 @@ internal object ProjectionCurrent : ProjectionSqlite<CodeId, CodeRecord, Code> {
         ) {
             set("id", obj.id)
             set("groupId", obj.groupId)
-            set("data", Json.serializeAndCompress(obj))
+            set("data", json.serializeAndCompress(obj))
         }
     }
 

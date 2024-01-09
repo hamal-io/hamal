@@ -11,6 +11,8 @@ class ExecId(override val value: SnowflakeId) : ValueObjectId() {
     constructor(value: String) : this(SnowflakeId(value.toLong(16)))
 }
 
+class ExecType(override val value: String) : ValueObjectString()
+
 class ExecInputs(override val value: KuaMap = KuaMap()) : MapValueObject()
 
 data class ExecCode(

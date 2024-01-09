@@ -3,13 +3,13 @@ package io.hamal.repository.sqlite
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.Json
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.StateRepository
+import io.hamal.repository.record.json
 import java.nio.file.Path
 
 class StateSqliteRepository(
@@ -57,7 +57,7 @@ class StateSqliteRepository(
             query {
                 set("funcId", correlatedState.correlation.funcId)
                 set("correlationId", correlatedState.correlation.correlationId.value)
-                set("value", Json.serializeAndCompress(correlatedState.value))
+                set("value", json.serializeAndCompress(correlatedState.value))
             }
         }
     }
@@ -78,7 +78,7 @@ class StateSqliteRepository(
                         funcId = rs.getId("func_id", ::FuncId),
                         correlationId = CorrelationId(rs.getString("correlation_id"))
                     ),
-                    value = Json.decompressAndDeserialize(State::class, rs.getBytes("value"))
+                    value = json.decompressAndDeserialize(State::class, rs.getBytes("value"))
                 )
             }
         }

@@ -84,6 +84,6 @@ class ExecCompleteHandler(
         }
     }
 
-    private val appender = AppenderImpl(TopicEntryPayload::class, eventBrokerRepository)
+    private val appender = AppenderImpl<TopicEntryPayload>(eventBrokerRepository)
 
 }

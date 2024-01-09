@@ -3,6 +3,7 @@ package io.hamal.repository.record.blueprint
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.record.Record
+import io.hamal.repository.record.RecordAdapter
 import io.hamal.repository.record.RecordSequence
 import io.hamal.repository.record.RecordedAt
 
@@ -11,7 +12,15 @@ sealed class BlueprintRecord(
     override var recordSequence: RecordSequence? = null,
     @Transient
     override var recordedAt: RecordedAt? = null
-) : Record<BlueprintId>()
+) : Record<BlueprintId>() {
+
+    internal object Adapter : RecordAdapter<BlueprintRecord>(
+        listOf(
+            BlueprintCreatedRecord::class,
+            BlueprintUpdatedRecord::class
+        )
+    )
+}
 
 data class BlueprintCreatedRecord(
     override val entityId: BlueprintId,
