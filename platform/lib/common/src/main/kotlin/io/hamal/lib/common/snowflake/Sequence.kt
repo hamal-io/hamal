@@ -25,8 +25,17 @@ class SequenceSourceImpl : SequenceSource {
     private val maxSequence = 4096
 
     override fun next(elapsedSource: () -> Elapsed): Pair<Elapsed, Sequence> {
-        val elapsed = elapsedSource()
-        check(elapsed >= previousCalledAt) { "Elapsed must be monotonic" }
+        var elapsed: Elapsed
+        var counter = 0
+        do {
+            elapsed = elapsedSource()
+            if (elapsed < previousCalledAt) {
+                Thread.sleep(1)
+            }
+            if (counter++ > 10) {
+                throw IllegalStateException("Elapsed must be monotonic")
+            }
+        } while (elapsed < previousCalledAt)
 
         if (elapsed == previousCalledAt) {
             if (nextSequence >= maxSequence) {

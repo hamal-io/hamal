@@ -45,17 +45,11 @@ internal class ErrorController {
         }
     }
 
-
-    data class MissingFieldsError(
-        val message: String,
-        val fields: List<String>
-    )
-
     @ExceptionHandler(value = [HttpMessageNotReadableException::class])
     fun missingFields(res: HttpServletResponse, t: HttpMessageNotReadableException) {
         res.status = 400
         res.addHeader("Content-Type", "application/json")
-        res.writer.write(json.serialize(ApiError("Bad request")))
+        res.writer.write(json.serialize(ApiError(t.cause?.message ?: "Bad request")))
     }
 
     @ExceptionHandler(value = [NoHandlerFoundException::class])

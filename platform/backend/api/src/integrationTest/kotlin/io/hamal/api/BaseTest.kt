@@ -149,6 +149,7 @@ internal abstract class BaseTest {
         eventBrokerRepository.clear()
         execCmdRepository.clear()
         extensionCmdRepository.clear()
+        feedbackCmdRepository.clear()
         funcCmdRepository.clear()
         groupCmdRepository.clear()
         hookCmdRepository.clear()
