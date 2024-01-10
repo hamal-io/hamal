@@ -11,22 +11,16 @@ interface DomainObject<ID : ValueObjectId> {
     val updatedAt: UpdatedAt
 }
 
-class CreatedAt(override val value: Instant) : DomainAt() {
+class CreatedAt(override val value: Instant) : ValueObjectInstant() {
     companion object {
         @JvmStatic
         fun now(): CreatedAt = CreatedAt(TimeUtils.now())
     }
 }
 
-class UpdatedAt(override val value: Instant) : DomainAt() {
+class UpdatedAt(override val value: Instant) : ValueObjectInstant() {
     companion object {
         @JvmStatic
         fun now(): UpdatedAt = UpdatedAt(TimeUtils.now())
-    }
-}
-
-abstract class DomainAt : ValueObject.ComparableImpl<Instant>() {
-    override fun toString(): String {
-        return "${this::class.simpleName}(${value})"
     }
 }

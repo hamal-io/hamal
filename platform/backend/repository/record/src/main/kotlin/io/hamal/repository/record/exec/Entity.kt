@@ -111,10 +111,10 @@ data class ExecEntity(
 
         if (status == ExecStatus.Planned) return plannedExec
 
-        val scheduledExec = ScheduledExec(cmdId, id, recordedAt.toUpdatedAt(), plannedExec, ScheduledAt.now())
+        val scheduledExec = ScheduledExec(cmdId, id, recordedAt.toUpdatedAt(), plannedExec, ExecScheduledAt.now())
         if (status == ExecStatus.Scheduled) return scheduledExec
 
-        val queuedExec = QueuedExec(cmdId, id, recordedAt.toUpdatedAt(), scheduledExec, QueuedAt.now())
+        val queuedExec = QueuedExec(cmdId, id, recordedAt.toUpdatedAt(), scheduledExec, ExecQueuedAt.now())
         if (status == ExecStatus.Queued) return queuedExec
 
         val startedExec = StartedExec(cmdId, id, recordedAt.toUpdatedAt(), queuedExec)
@@ -126,12 +126,20 @@ data class ExecEntity(
                 id,
                 recordedAt.toUpdatedAt(),
                 startedExec,
-                CompletedAt.now(),
+                ExecCompletedAt.now(),
                 result!!,
                 state!!
             )
 
-            ExecStatus.Failed -> FailedExec(cmdId, id, recordedAt.toUpdatedAt(), startedExec, FailedAt.now(), result!!)
+            ExecStatus.Failed -> FailedExec(
+                cmdId,
+                id,
+                recordedAt.toUpdatedAt(),
+                startedExec,
+                ExecFailedAt.now(),
+                result!!
+            )
+
             else -> TODO()
         }
     }

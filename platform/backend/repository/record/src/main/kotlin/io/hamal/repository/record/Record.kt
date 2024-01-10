@@ -2,7 +2,6 @@ package io.hamal.repository.record
 
 import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.util.TimeUtils
-import io.hamal.lib.domain.vo.base.DomainAt
 import java.time.Instant
 
 class RecordType(override val value: String) : ValueObjectString()
@@ -15,7 +14,7 @@ class RecordSequence(override val value: Int) : ValueObjectInt() {
     fun next() = RecordSequence(value + 1)
 }
 
-class RecordedAt(override val value: Instant) : DomainAt() {
+class RecordedAt(override val value: Instant) : ValueObjectInstant() {
     companion object {
         @JvmStatic
         fun now(): RecordedAt = RecordedAt(TimeUtils.now())
