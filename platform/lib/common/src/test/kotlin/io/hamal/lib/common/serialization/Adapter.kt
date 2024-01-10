@@ -2,10 +2,7 @@ package io.hamal.lib.common.serialization
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import io.hamal.lib.common.domain.ValueObjectId
-import io.hamal.lib.common.domain.ValueObjectInstant
-import io.hamal.lib.common.domain.ValueObjectInt
-import io.hamal.lib.common.domain.ValueObjectString
+import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.hot.HotArray
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.snowflake.SnowflakeId
@@ -167,4 +164,48 @@ internal object ValueObjectInstantAdapterTest {
     private class TestInstantValueObject(
         override val value: Instant
     ) : ValueObjectInstant()
+}
+
+
+internal object ValueObjectMapAdapterTest {
+
+    @Test
+    fun serialize() {
+        val result = testDelegate.toJson(
+            TestMapValueObject(
+                HotObject.builder()
+                    .set("some-string", "some-string-value")
+                    .set("some-boolean", true)
+                    .set("some-number", 42)
+                    .build()
+            )
+        )
+        assertThat(result, equalTo("""{"some-string":"some-string-value","some-boolean":true,"some-number":42}"""))
+    }
+
+    @Test
+    fun deserialize() {
+        val expected = TestMapValueObject(
+            HotObject.builder()
+                .set("some-string", "some-string-value")
+                .set("some-boolean", true)
+                .set("some-number", 42)
+                .build()
+        )
+        val result = testDelegate.fromJson(
+            """{"some-string":"some-string-value","some-boolean":true,"some-number":42}""",
+            TestMapValueObject::class.java
+        )
+        assertThat(result, equalTo(expected))
+    }
+
+    private val testDelegate: Gson =
+        GsonBuilder()
+            .registerTypeAdapter(HotObject::class.java, HotObjectAdapter)
+            .registerTypeAdapter(TestMapValueObject::class.java, ValueObjectMapAdapter(::TestMapValueObject))
+            .create()
+
+    private class TestMapValueObject(
+        override val value: HotObject
+    ) : ValueObjectMap()
 }
