@@ -55,7 +55,7 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
         return createHookResponse.result(ApiHookCreateRequested::class)
     }
 
-    fun createFixedRateTrigger(name: TriggerName): ApiTriggerCreateSubmitted {
+    fun createFixedRateTrigger(name: TriggerName): ApiTriggerCreateRequested {
         val funcId = awaitCompleted(createFunc(FuncName(name.value))).funcId
 
         val creationResponse = httpTemplate.post("/v1/flows/1/triggers")
@@ -73,10 +73,10 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
         assertThat(creationResponse.statusCode, equalTo(Accepted))
         require(creationResponse is HttpSuccessResponse) { "request was not successful" }
 
-        return creationResponse.result(ApiTriggerCreateSubmitted::class)
+        return creationResponse.result(ApiTriggerCreateRequested::class)
     }
 
-    fun createTrigger(req: ApiTriggerCreateReq): ApiTriggerCreateSubmitted {
+    fun createTrigger(req: ApiTriggerCreateReq): ApiTriggerCreateRequested {
         val creationResponse = httpTemplate.post("/v1/flows/1/triggers")
             .body(req)
             .execute()
@@ -84,7 +84,7 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
         assertThat(creationResponse.statusCode, equalTo(Accepted))
         require(creationResponse is HttpSuccessResponse) { "request was not successful" }
 
-        return creationResponse.result(ApiTriggerCreateSubmitted::class)
+        return creationResponse.result(ApiTriggerCreateRequested::class)
     }
 
     fun listTriggers(): ApiTriggerList {
@@ -106,23 +106,23 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
         return listTriggersResponse.result(ApiTrigger::class)
     }
 
-    fun activateTrigger(triggerId: TriggerId): ApiTriggerStatusSubmitted {
+    fun activateTrigger(triggerId: TriggerId): ApiTriggerStatusRequested {
         val res = httpTemplate.post("/v1/trigger/{triggerId}/activate")
             .path("triggerId", triggerId)
             .execute()
 
         assertThat(res.statusCode, equalTo(Accepted))
         require(res is HttpSuccessResponse) { "request was not successful" }
-        return res.result(ApiTriggerStatusSubmitted::class)
+        return res.result(ApiTriggerStatusRequested::class)
     }
 
-    fun deactivateTrigger(triggerId: TriggerId): ApiTriggerStatusSubmitted {
+    fun deactivateTrigger(triggerId: TriggerId): ApiTriggerStatusRequested {
         val res = httpTemplate.post("/v1/trigger/{triggerId}/deactivate")
             .path("triggerId", triggerId)
             .execute()
 
         assertThat(res.statusCode, equalTo(Accepted))
         require(res is HttpSuccessResponse) { "request was not successful" }
-        return res.result(ApiTriggerStatusSubmitted::class)
+        return res.result(ApiTriggerStatusRequested::class)
     }
 }

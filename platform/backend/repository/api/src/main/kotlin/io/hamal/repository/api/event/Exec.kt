@@ -13,21 +13,21 @@ data class ExecScheduledEvent(
 ) : PlatformEvent()
 
 @PlatformEventTopic("exec::queued")
-data class ExecutionQueuedEvent(
+data class ExecQueuedEvent(
     val queuedExec: QueuedExec
 ) : PlatformEvent()
 
 @PlatformEventTopic("exec::started")
-data class ExecutionStartedEvent(
+data class ExecStartedEvent(
     val startedExec: StartedExec
 ) : PlatformEvent()
 
 @PlatformEventTopic("exec::completed")
-data class ExecutionCompletedEvent(
+data class ExecCompletedEvent(
     val completedExec: CompletedExec
 ) : PlatformEvent()
 
 @PlatformEventTopic("exec::failed")
-data class ExecutionFailedEvent(
+data class ExecFailedEvent(
     val failedExec: FailedExec
 ) : PlatformEvent()

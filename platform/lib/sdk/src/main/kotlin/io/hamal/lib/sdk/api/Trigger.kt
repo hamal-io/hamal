@@ -1,6 +1,10 @@
 package io.hamal.lib.sdk.api
 
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonElement
+import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.serialization.JsonAdapter
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain._enum.RequestStatus
@@ -28,7 +32,7 @@ data class ApiTriggerCreateReq(
     override val cron: CronPattern? = null
 ) : TriggerCreateRequest
 
-data class ApiTriggerCreateSubmitted(
+data class ApiTriggerCreateRequested(
     override val id: RequestId,
     override val status: RequestStatus,
     val triggerId: TriggerId,
@@ -37,7 +41,7 @@ data class ApiTriggerCreateSubmitted(
 ) : ApiRequested()
 
 
-data class ApiTriggerStatusSubmitted(
+data class ApiTriggerStatusRequested(
     override val id: RequestId,
     override val status: RequestStatus,
     val triggerId: TriggerId,
@@ -52,6 +56,7 @@ data class ApiTriggerList(
         val name: TriggerName
         val func: Func
         val flow: Flow
+        val type: TriggerType
 
         data class Func(
             val id: FuncId,
@@ -62,6 +67,35 @@ data class ApiTriggerList(
             val id: FlowId,
             val name: FlowName
         )
+
+        object Adapter : JsonAdapter<Trigger> {
+            override fun serialize(
+                src: Trigger,
+                typeOfSrc: java.lang.reflect.Type,
+                context: JsonSerializationContext
+            ): JsonElement {
+                return context.serialize(src)
+            }
+
+            override fun deserialize(
+                json: JsonElement,
+                typeOfT: java.lang.reflect.Type,
+                context: JsonDeserializationContext
+            ): Trigger {
+                val triggerType = json.asJsonObject.get("type").asString
+                return context.deserialize(
+                    json, (classMapping[triggerType]
+                        ?: throw NotImplementedError("$triggerType not supported")).java
+                )
+            }
+
+            private val classMapping = mapOf(
+                "Event" to EventTrigger::class,
+                "FixedRate" to FixedRateTrigger::class,
+                "Hook" to HookTrigger::class,
+                "Cron" to CronTrigger::class
+            )
+        }
     }
 
     class FixedRateTrigger(
@@ -70,7 +104,9 @@ data class ApiTriggerList(
         override val func: Trigger.Func,
         override val flow: Trigger.Flow,
         val duration: Duration
-    ) : Trigger
+    ) : Trigger {
+        override val type: TriggerType = TriggerType.FixedRate
+    }
 
     class EventTrigger(
         override val id: TriggerId,
@@ -79,6 +115,8 @@ data class ApiTriggerList(
         override val flow: Trigger.Flow,
         val topic: Topic
     ) : Trigger {
+        override val type: TriggerType = TriggerType.Event
+
         data class Topic(
             val id: TopicId,
             val name: TopicName
@@ -92,6 +130,8 @@ data class ApiTriggerList(
         override val flow: Trigger.Flow,
         val hook: Hook
     ) : Trigger {
+        override val type: TriggerType = TriggerType.Hook
+
         data class Hook(
             val id: HookId,
             val name: HookName,
@@ -105,11 +145,15 @@ data class ApiTriggerList(
         override val func: Trigger.Func,
         override val flow: Trigger.Flow,
         val cron: CronPattern
-    ) : Trigger
+    ) : Trigger {
+        override val type: TriggerType = TriggerType.Cron
+
+    }
 }
 
 sealed interface ApiTrigger {
     val id: TriggerId
+    val type: TriggerType
     val name: TriggerName
     val func: Func
     val flow: Flow
@@ -126,6 +170,35 @@ sealed interface ApiTrigger {
         val id: FlowId,
         val name: FlowName
     )
+
+    object Adapter : JsonAdapter<ApiTrigger> {
+        override fun serialize(
+            src: ApiTrigger,
+            typeOfSrc: java.lang.reflect.Type,
+            context: JsonSerializationContext
+        ): JsonElement {
+            return context.serialize(src)
+        }
+
+        override fun deserialize(
+            json: JsonElement,
+            typeOfT: java.lang.reflect.Type,
+            context: JsonDeserializationContext
+        ): ApiTrigger {
+            val triggerType = json.asJsonObject.get("type").asString
+            return context.deserialize(
+                json, (classMapping[triggerType]
+                    ?: throw NotImplementedError("$triggerType not supported")).java
+            )
+        }
+
+        private val classMapping = mapOf(
+            "Event" to ApiEventTrigger::class,
+            "FixedRate" to ApiFixedRateTrigger::class,
+            "Hook" to ApiHookTrigger::class,
+            "Cron" to ApiCronTrigger::class
+        )
+    }
 }
 
 class ApiFixedRateTrigger(
@@ -137,7 +210,9 @@ class ApiFixedRateTrigger(
     override val status: TriggerStatus,
     override val correlationId: CorrelationId? = null,
     val duration: Duration
-) : ApiTrigger
+) : ApiTrigger {
+    override val type: TriggerType = TriggerType.FixedRate
+}
 
 class ApiEventTrigger(
     override val id: TriggerId,
@@ -149,6 +224,8 @@ class ApiEventTrigger(
     override val correlationId: CorrelationId? = null,
     val topic: Topic
 ) : ApiTrigger {
+    override val type: TriggerType = TriggerType.Event
+
     data class Topic(
         val id: TopicId,
         val name: TopicName
@@ -165,6 +242,8 @@ class ApiHookTrigger(
     override val correlationId: CorrelationId? = null,
     val hook: Hook
 ) : ApiTrigger {
+    override val type: TriggerType = TriggerType.Hook
+
     data class Hook(
         val id: HookId,
         val name: HookName,
@@ -182,15 +261,17 @@ class ApiCronTrigger(
     override val status: TriggerStatus,
     override val correlationId: CorrelationId? = null,
     val cron: CronPattern
-) : ApiTrigger
+) : ApiTrigger {
+    override val type: TriggerType = TriggerType.Cron
+}
 
 
 interface ApiTriggerService {
-    fun create(flowId: FlowId, req: ApiTriggerCreateReq): ApiTriggerCreateSubmitted
+    fun create(flowId: FlowId, req: ApiTriggerCreateReq): ApiTriggerCreateRequested
     fun list(query: TriggerQuery): List<ApiTriggerList.Trigger>
     fun get(triggerId: TriggerId): ApiTrigger
-    fun activate(triggerId: TriggerId): ApiTriggerStatusSubmitted
-    fun deactivate(triggerId: TriggerId): ApiTriggerStatusSubmitted
+    fun activate(triggerId: TriggerId): ApiTriggerStatusRequested
+    fun deactivate(triggerId: TriggerId): ApiTriggerStatusRequested
 
     data class TriggerQuery(
         var afterId: FuncId = FuncId(SnowflakeId(Long.MAX_VALUE)),
@@ -213,12 +294,12 @@ interface ApiTriggerService {
 internal class ApiTriggerServiceImpl(
     private val template: HttpTemplate
 ) : ApiTriggerService {
-    override fun create(flowId: FlowId, req: ApiTriggerCreateReq): ApiTriggerCreateSubmitted =
+    override fun create(flowId: FlowId, req: ApiTriggerCreateReq): ApiTriggerCreateRequested =
         template.post("/v1/flows/{flowId}/triggers")
             .path("flowId", flowId)
             .body(req)
             .execute()
-            .fold(ApiTriggerCreateSubmitted::class)
+            .fold(ApiTriggerCreateRequested::class)
 
     override fun list(query: TriggerQuery) =
         template.get("/v1/triggers")
@@ -233,16 +314,16 @@ internal class ApiTriggerServiceImpl(
             .execute()
             .fold(ApiTrigger::class)
 
-    override fun activate(triggerId: TriggerId): ApiTriggerStatusSubmitted =
+    override fun activate(triggerId: TriggerId): ApiTriggerStatusRequested =
         template.post("/v1/trigger/{triggerId}/activate")
             .path("triggerId", triggerId)
             .execute()
-            .fold(ApiTriggerStatusSubmitted::class)
+            .fold(ApiTriggerStatusRequested::class)
 
 
-    override fun deactivate(triggerId: TriggerId): ApiTriggerStatusSubmitted =
+    override fun deactivate(triggerId: TriggerId): ApiTriggerStatusRequested =
         template.post("/v1/trigger/{triggerId}/deactivate")
             .path("triggerId", triggerId)
             .execute()
-            .fold(ApiTriggerStatusSubmitted::class)
+            .fold(ApiTriggerStatusRequested::class)
 }

@@ -6,8 +6,8 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.repository.api.ExecCmdRepository
 import io.hamal.repository.api.ExecCmdRepository.QueueCmd
 import io.hamal.repository.api.QueuedExec
+import io.hamal.repository.api.event.ExecQueuedEvent
 import io.hamal.repository.api.event.ExecScheduledEvent
-import io.hamal.repository.api.event.ExecutionQueuedEvent
 
 class ExecScheduledHandler(
     private val execCmdRepository: ExecCmdRepository,
@@ -23,6 +23,6 @@ class ExecScheduledHandler(
     }
 
     private fun emitEvent(cmdId: CmdId, exec: QueuedExec) {
-        eventEmitter.emit(cmdId, ExecutionQueuedEvent(exec))
+        eventEmitter.emit(cmdId, ExecQueuedEvent(exec))
     }
 }

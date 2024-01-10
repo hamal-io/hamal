@@ -8,6 +8,7 @@ import io.hamal.lib.domain.vo.InvocationModule
 import io.hamal.lib.domain.vo.ValueObjectJsonModule
 import io.hamal.lib.kua.type.KuaJsonModule
 import io.hamal.repository.api.DomainJsonModule
+import io.hamal.repository.api.event.PlatformEventJsonModule
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.format.FormatterRegistry
@@ -31,6 +32,7 @@ open class WebConfig : WebMvcConfigurer {
         .register(HotJsonModule)
         .register(InvocationModule)
         .register(KuaJsonModule)
+        .register(PlatformEventJsonModule)
         .register(ValueObjectJsonModule)
         .build()
 

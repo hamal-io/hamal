@@ -9,7 +9,7 @@ import io.hamal.repository.api.CodeQueryRepository
 import io.hamal.repository.api.ExecCmdRepository
 import io.hamal.repository.api.ExecCmdRepository.StartCmd
 import io.hamal.repository.api.StateQueryRepository
-import io.hamal.repository.api.event.ExecutionStartedEvent
+import io.hamal.repository.api.event.ExecStartedEvent
 import org.springframework.http.HttpStatus.OK
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
@@ -51,6 +51,6 @@ internal class QueuePollController(
     }
 
     private fun emitEvents(cmdId: CmdId, execs: List<io.hamal.repository.api.StartedExec>) {
-        execs.forEach { eventEmitter.emit(cmdId, ExecutionStartedEvent(it)) }
+        execs.forEach { eventEmitter.emit(cmdId, ExecStartedEvent(it)) }
     }
 }

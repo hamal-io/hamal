@@ -9,7 +9,6 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContext
@@ -256,7 +255,7 @@ class TestConfig {
                     inputs = FlowInputs()
                 )
             )
-        } catch (t: Throwable) {
+        } catch (ignore: Throwable) {
         }
     }
 
@@ -276,7 +275,7 @@ class TestConfig {
 
 abstract class BaseEndpointTest : AbstractRunnerTest() {
 
-    abstract val apiHttpTemplate: HttpTemplate
+    abstract val sdk: ApiSdkImpl
 
     @TestFactory
     fun run(): List<DynamicTest> {
@@ -285,11 +284,11 @@ abstract class BaseEndpointTest : AbstractRunnerTest() {
             .map { testPath ->
                 val testName = generateTestName(testPath)
                 dynamicTest(testName) {
-                    apiHttpTemplate.post("/v1/clear").execute()
+                    sdk.template.post("/v1/clear").execute()
 
                     createTestRunner(
                         pluginFactories = listOf(
-                            PluginSysFactory(ApiSdkImpl(apiHttpTemplate)),
+                            PluginSysFactory(sdk),
                             PluginHttpFactory()
                         ),
                         extensionFactories = listOf(
@@ -298,7 +297,7 @@ abstract class BaseEndpointTest : AbstractRunnerTest() {
                         env = RunnerEnv(
                             KuaMap(
                                 mutableMapOf(
-                                    "api_host" to KuaString(apiHttpTemplate.baseUrl)
+                                    "api_host" to KuaString(sdk.template.baseUrl)
                                 )
                             )
                         )

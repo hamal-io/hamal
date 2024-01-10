@@ -33,7 +33,10 @@ sealed class Invocation {
             context: JsonDeserializationContext
         ): Invocation {
             val invocationType = json.asJsonObject.get("invocationType").asString
-            return context.deserialize(json, classMapping[invocationType]!!.java)
+            return context.deserialize(
+                json, (classMapping[invocationType]
+                    ?: throw NotImplementedError("$invocationType not supported")).java
+            )
         }
 
         private val classMapping = listOf(

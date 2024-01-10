@@ -65,7 +65,10 @@ abstract class RecordAdapter<BASE_TYPE : Record<*>>(
 
     override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): BASE_TYPE {
         val recordType = json.asJsonObject.get("recordType").asString
-        return context.deserialize(json, classMapping[recordType]!!.java)
+        return context.deserialize(
+            json, (classMapping[recordType]
+                ?: throw NotImplementedError("$recordType not supported")).java
+        )
     }
 
     private val classMapping = recordClasses.associateBy { it.simpleName }

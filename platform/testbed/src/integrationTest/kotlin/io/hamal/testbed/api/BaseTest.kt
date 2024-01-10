@@ -8,7 +8,6 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContext
@@ -268,7 +267,7 @@ class TestConfig {
                     inputs = FlowInputs()
                 )
             )
-        } catch (t: Throwable) {
+        } catch (ignored: Throwable) {
         }
     }
 
@@ -288,7 +287,7 @@ class TestConfig {
 
 abstract class BaseApiTest {
 
-    abstract val apiHttpTemplate: HttpTemplate
+    abstract val sdk: ApiSdkImpl
 
     @TestFactory
     fun run(): List<DynamicTest> {
@@ -298,7 +297,7 @@ abstract class BaseApiTest {
                 val testName = generateTestName(testPath)
                 dynamicTest(testName) {
 
-                    apiHttpTemplate.post("/v1/clear").execute()
+                    sdk.template.post("/v1/clear").execute()
 
                     var counter = 0
                     while (true) {
@@ -308,7 +307,7 @@ abstract class BaseApiTest {
                                 if (counter++ >= 3) {
                                     fail { result.message }
                                 }
-                                apiHttpTemplate.post("/v1/clear").execute()
+                                sdk.template.post("/v1/clear").execute()
                             }
 
                             is Timeout -> fail("Timeout")
@@ -327,8 +326,6 @@ abstract class BaseApiTest {
 
         for (file in files) {
             println(">>>>>>>>>>>>>> ${file.fileName}")
-
-            val sdk = ApiSdkImpl(apiHttpTemplate)
 
             val execReq = sdk.adhoc.invoke(
                 FlowId(1),
