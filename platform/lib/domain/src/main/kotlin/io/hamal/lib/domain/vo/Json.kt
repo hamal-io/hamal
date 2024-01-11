@@ -47,6 +47,8 @@ object ValueObjectJsonModule : JsonModule() {
         this[ExecState::class] = ValueObjectHotObjectAdapter(::ExecState)
         this[ExecToken::class] = ValueObjectStringAdapter(::ExecToken)
         this[ExecLogId::class] = ValueObjectIdAdapter(::ExecLogId)
+        this[ExecLogTimestamp::class] = ValueObjectInstantAdapter(::ExecLogTimestamp)
+        this[ExecLogMessage::class] = ValueObjectStringAdapter(::ExecLogMessage)
 
         this[ExtensionId::class] = ValueObjectIdAdapter(::ExtensionId)
         this[ExtensionName::class] = ValueObjectStringAdapter(::ExtensionName)

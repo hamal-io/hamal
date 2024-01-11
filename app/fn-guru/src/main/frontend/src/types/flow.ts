@@ -5,6 +5,11 @@ export interface FlowCreateSubmitted {
     groupId: string;
 }
 
+export interface DefaultFlowId {
+    flowId: string;
+    groupId: string;
+}
+
 export interface Flow {
     id: string;
     name: string;

@@ -2,14 +2,14 @@ import {Auth, AUTH_KEY} from "@/types/auth.ts";
 import useLocalStorageState from "use-local-storage-state";
 import {useCallback, useState} from "react";
 import {useNavigate} from "react-router-dom";
+import {DefaultFlowId} from "@/types";
 
 const unauthorized: Auth = {
     type: 'Unauthorized',
     accountId: '',
     groupId: '',
-    defaultFlowIds: new Map<string, string>(),
-    token: '',
-    name: ''
+    defaultFlowIds: Array<DefaultFlowId>(),
+    token: ''
 }
 
 export const useAuth = () => {
@@ -129,7 +129,6 @@ export const useMetaMaskToken = (): [MetaMaskTokenAction, string, boolean, Error
                         groupId: data.groupIds[0],
                         defaultFlowIds: data.defaultFlowIds,
                         token: data.token,
-                        name: data.name
                     })
 
                 })
