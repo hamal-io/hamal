@@ -9,9 +9,7 @@ import io.hamal.lib.domain._enum.FeedbackMood
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.FeedbackId
 import io.hamal.lib.domain.vo.FeedbackMessage
-import kotlinx.serialization.Serializable
 
-@Serializable
 data class Feedback(
     override val id: FeedbackId,
     override val updatedAt: UpdatedAt,
@@ -49,3 +47,7 @@ interface FeedbackQueryRepository {
         var feedbackIds: List<FeedbackId> = listOf()
     )
 }
+
+data class FeedbackList(
+    val feedbacks: List<Feedback>
+)

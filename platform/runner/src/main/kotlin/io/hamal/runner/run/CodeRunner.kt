@@ -5,7 +5,6 @@ import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.AssertionError
 import io.hamal.lib.kua.ExitError
 import io.hamal.lib.kua.ExtensionError
-import io.hamal.lib.kua.function.FunctionType
 import io.hamal.lib.kua.table.TableProxyArray
 import io.hamal.lib.kua.table.TableProxyMap
 import io.hamal.lib.kua.type.*
@@ -52,13 +51,13 @@ class CodeRunnerImpl(
                         val internalTable = sandbox.state.tableCreateMap(contextExtension.internals.size)
                         contextExtension.internals.forEach { entry ->
                             when (val value = entry.value) {
-                                is NilType -> {}
-                                is StringType -> internalTable[entry.key] = value
-                                is NumberType -> internalTable[entry.key] = value
-                                is FunctionType<*, *, *, *> -> internalTable[entry.key] = value
+                                is KuaNil -> {}
+                                is KuaString -> internalTable[entry.key] = value
+                                is KuaNumber -> internalTable[entry.key] = value
+                                is KuaFunction<*, *, *, *> -> internalTable[entry.key] = value
                                 is TableProxyArray -> internalTable[entry.key] = value
                                 is TableProxyMap -> internalTable[entry.key] = value
-                                is MapType -> internalTable[entry.key] = sandbox.toProxyMap(value)
+                                is KuaMap -> internalTable[entry.key] = sandbox.toProxyMap(value)
                                 else -> TODO()
                             }
                         }
@@ -69,30 +68,30 @@ class CodeRunnerImpl(
                         sandbox.state.load("${contextExtension.name} = plugin()()")
                         sandbox.unsetGlobal("_internal")
 
-                        sandbox.load(CodeType(unitOfWork.code.value))
+                        sandbox.load(KuaCode(unitOfWork.code.value))
 
                         val ctx = sandbox.getGlobalTableMap("context")
-                        val stateToSubmit = sandbox.toMapType(ctx.getTableMap("state"))
+                        val stateToSubmit = sandbox.toKuaMap(ctx.getTableMap("state")).toHotObject()
 
                         connector.complete(execId, ExecResult(), ExecState(stateToSubmit), runnerContext.eventsToSubmit)
                         log.debug("Completed exec: $execId")
                     } catch (e: ExtensionError) {
                         val cause = e.cause
                         if (cause is ExitError) {
-                            if (cause.status == NumberType(0.0)) {
+                            if (cause.status == KuaNumber(0.0)) {
 
                                 val ctx = sandbox.getGlobalTableMap("context")
-                                val stateToSubmit = sandbox.toMapType(ctx.getTableMap("state"))
+                                val stateToSubmit = sandbox.toKuaMap(ctx.getTableMap("state")).toHotObject()
 
                                 connector.complete(
                                     execId,
-                                    ExecResult(cause.result),
+                                    ExecResult(cause.result.toHotObject()),
                                     ExecState(stateToSubmit),
                                     runnerContext.eventsToSubmit
                                 )
                                 log.debug("Completed exec: $execId")
                             } else {
-                                connector.fail(execId, ExecResult(cause.result))
+                                connector.fail(execId, ExecResult(cause.result.toHotObject()))
                                 log.debug("Failed exec: $execId")
                             }
 
@@ -101,7 +100,8 @@ class CodeRunnerImpl(
                             connector.fail(
                                 execId,
                                 ExecResult(
-                                    MapType(mutableMapOf("message" to StringType(e.message ?: "Unknown reason")))
+                                    KuaMap(mutableMapOf("message" to KuaString(e.message ?: "Unknown reason")))
+                                        .toHotObject()
                                 )
                             )
                             log.debug("Failed exec: $execId")
@@ -113,7 +113,8 @@ class CodeRunnerImpl(
             connector.fail(
                 execId,
                 ExecResult(
-                    MapType(mutableMapOf("message" to StringType(a.message ?: "Unknown reason")))
+                    KuaMap(mutableMapOf("message" to KuaString(a.message ?: "Unknown reason")))
+                        .toHotObject()
                 )
             )
             log.debug("Assertion error: $execId - ${a.message}")
@@ -122,7 +123,8 @@ class CodeRunnerImpl(
             connector.fail(
                 execId,
                 ExecResult(
-                    MapType(mutableMapOf("message" to StringType(t.message ?: "Unknown reason")))
+                    KuaMap(mutableMapOf("message" to KuaString(t.message ?: "Unknown reason")))
+                        .toHotObject()
                 )
             )
             log.debug("Failed exec: $execId")

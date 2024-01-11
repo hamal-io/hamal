@@ -102,7 +102,7 @@ class SegmentRepositoryTest : AbstractUnitTest() {
 
                 listOf(
                     "Hamal".toByteArray(),
-                    "Rockz".toByteArray(),
+                    "rocks".toByteArray(),
                 ).forEachIndexed { index, value -> append(CmdId(index + 4), value) }
 
                 assertThat(count(), equalTo(5UL))

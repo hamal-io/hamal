@@ -1,25 +1,22 @@
 package io.hamal.bridge.http.controller.exec
 
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.domain.vo.EventPayload
 import io.hamal.lib.domain.vo.ExecStatus.Started
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.NumberType
-import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.api.ApiError
-import io.hamal.lib.sdk.bridge.BridgeExecCompleteReq
-import io.hamal.lib.sdk.bridge.BridgeExecCompleteSubmitted
+import io.hamal.lib.sdk.bridge.BridgeExecCompleteRequest
+import io.hamal.lib.sdk.bridge.BridgeExecCompleteRequested
 import io.hamal.repository.api.CompletedExec
 import io.hamal.repository.api.StartedExec
+import io.hamal.repository.api.log.BatchConsumerImpl
 import io.hamal.repository.api.log.ConsumerId
-import io.hamal.repository.api.log.ProtobufBatchConsumer
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
@@ -48,7 +45,7 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
                 assertThat(completionResponse.statusCode, equalTo(Accepted))
                 require(completionResponse is HttpSuccessResponse) { "request was not successful" }
 
-                val result = completionResponse.result(BridgeExecCompleteSubmitted::class)
+                val result = completionResponse.result(BridgeExecCompleteRequested::class)
 
                 awaitFailed(result.id)
                 verifyNoStateSet(result.execId)
@@ -72,7 +69,7 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
         assertThat(completionResponse.statusCode, equalTo(Accepted))
         require(completionResponse is HttpSuccessResponse) { "request was not successful" }
 
-        val result = completionResponse.result(BridgeExecCompleteSubmitted::class)
+        val result = completionResponse.result(BridgeExecCompleteRequested::class)
         awaitCompleted(result.id)
 
         verifyExecCompleted(result.execId)
@@ -85,7 +82,7 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
     fun `Tries to complete exec which does not exist`() {
         val response = httpTemplate.post("/b1/execs/123456765432/complete")
             .body(
-                BridgeExecCompleteReq(
+                BridgeExecCompleteRequest(
                     state = ExecState(),
                     result = ExecResult(),
                     events = listOf()
@@ -104,7 +101,7 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
         with(execQueryRepository.get(execId) as CompletedExec) {
             assertThat(id, equalTo(execId))
             assertThat(status, equalTo(ExecStatus.Completed))
-            assertThat(result, equalTo(ExecResult(MapType("hamal" to StringType("rocks")))))
+            assertThat(result, equalTo(ExecResult(HotObject.builder().set("hamal", "rocks").build())))
         }
     }
 
@@ -112,7 +109,7 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
         val exec = (execQueryRepository.get(execId) as CompletedExec)
         with(stateQueryRepository.get(exec.correlation!!)) {
             assertThat(correlation, equalTo(exec.correlation))
-            assertThat(value, equalTo(State(MapType(mutableMapOf("value" to NumberType(13.37))))))
+            assertThat(value, equalTo(State(HotObject.builder().set("value", 13.37).build())))
         }
     }
 
@@ -127,7 +124,7 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
     private fun verifyEventAppended() {
         val topic = eventBrokerRepository.resolveTopic(testFlow.id, TopicName("test-completion"))!!
 
-        ProtobufBatchConsumer(
+        BatchConsumerImpl(
             consumerId = ConsumerId("a"),
             repository = eventBrokerRepository,
             topic = topic,
@@ -136,7 +133,7 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
             assertThat(eventPayloads, hasSize(1))
 
             val payload = eventPayloads.first()
-            assertThat(payload, equalTo(EventPayload(MapType(mutableMapOf("value" to NumberType(42))))))
+            assertThat(payload, equalTo(EventPayload(HotObject.builder().set("value", 42).build())))
         }
     }
 
@@ -144,13 +141,13 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
         httpTemplate.post("/b1/execs/{execId}/complete")
             .path("execId", execId)
             .body(
-                BridgeExecCompleteReq(
-                    state = ExecState(MapType(mutableMapOf("value" to NumberType(13.37)))),
-                    result = ExecResult(MapType("hamal" to StringType("rocks"))),
+                BridgeExecCompleteRequest(
+                    state = ExecState(HotObject.builder().set("value", 13.37).build()),
+                    result = ExecResult(HotObject.builder().set("hamal", "rocks").build()),
                     events = listOf(
                         EventToSubmit(
                             topicName = TopicName("test-completion"),
-                            payload = EventPayload(MapType(mutableMapOf("value" to NumberType(42))))
+                            payload = EventPayload(HotObject.builder().set("value", 42).build())
                         )
                     )
                 )

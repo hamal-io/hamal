@@ -5,8 +5,8 @@ import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.NopSandboxContext
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.type.False
-import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.KuaFalse
+import io.hamal.lib.kua.type.KuaString
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.DynamicTest
@@ -20,13 +20,13 @@ internal class TableProxyArrayTest {
         lateinit var testInstance: TableProxyArray
         return listOf(
             { testInstance.append(true) },
-            { testInstance.append(False) },
+            { testInstance.append(KuaFalse) },
             { testInstance.append(23.23) },
             { testInstance.append(23) },
             { testInstance.append(23L) },
             { testInstance.append(23.0f) },
             { testInstance.append("Hamal") },
-            { testInstance.append(StringType("Hamal")) }
+            { testInstance.append(KuaString("Hamal")) }
         ).mapIndexed { idx, testFn ->
             dynamicTest("Test: ${(idx + 1)}") {
                 testInstance = state.tableCreateArray()

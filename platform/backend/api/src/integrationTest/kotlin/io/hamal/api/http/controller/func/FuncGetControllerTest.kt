@@ -1,5 +1,6 @@
 package io.hamal.api.http.controller.func
 
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.lib.domain.vo.FuncInputs
@@ -7,11 +8,9 @@ import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.HttpSuccessResponse
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.api.ApiError
 import io.hamal.lib.sdk.api.ApiFunc
-import io.hamal.lib.sdk.api.ApiFuncCreateReq
+import io.hamal.lib.sdk.api.ApiFuncCreateRequest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -31,9 +30,9 @@ internal class FuncGetControllerTest : FuncBaseControllerTest() {
     fun `Get func`() {
         val funcId = awaitCompleted(
             createFunc(
-                ApiFuncCreateReq(
+                ApiFuncCreateRequest(
                     name = FuncName("func-one"),
-                    inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("rockz")))),
+                    inputs = FuncInputs(HotObject.builder().set("hamal", "rocks").build()),
                     code = CodeValue("1+1")
                 )
             )
@@ -46,7 +45,7 @@ internal class FuncGetControllerTest : FuncBaseControllerTest() {
         with(getFuncResponse.result(ApiFunc::class)) {
             assertThat(id, equalTo(funcId))
             assertThat(name, equalTo(FuncName("func-one")))
-            assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
+            assertThat(inputs, equalTo(FuncInputs(HotObject.builder().set("hamal", "rocks").build())))
 
             assertThat(code.version, equalTo(CodeVersion(1)))
             assertThat(code.value, equalTo(CodeValue("1+1")))

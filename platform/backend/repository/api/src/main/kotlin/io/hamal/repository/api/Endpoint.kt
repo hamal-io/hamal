@@ -6,9 +6,7 @@ import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.domain.UpdatedAt
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.*
-import kotlinx.serialization.Serializable
 
-@Serializable
 data class Endpoint(
     override val id: EndpointId,
     override val updatedAt: UpdatedAt,

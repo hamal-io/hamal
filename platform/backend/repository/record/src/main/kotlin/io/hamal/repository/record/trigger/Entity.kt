@@ -12,6 +12,7 @@ import io.hamal.repository.api.*
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordEntity
 import io.hamal.repository.record.RecordSequence
+import io.hamal.repository.record.RecordedAt
 import kotlin.time.Duration
 
 

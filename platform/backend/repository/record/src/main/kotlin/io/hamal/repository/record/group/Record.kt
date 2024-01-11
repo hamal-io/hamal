@@ -4,23 +4,24 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.GroupName
-import io.hamal.lib.domain.vo.RecordedAt
 import io.hamal.repository.record.Record
+import io.hamal.repository.record.RecordAdapter
 import io.hamal.repository.record.RecordSequence
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
+import io.hamal.repository.record.RecordedAt
 
-@Serializable
 sealed class GroupRecord(
     @Transient
-    override var sequence: RecordSequence? = null,
+    override var recordSequence: RecordSequence? = null,
     @Transient
     override var recordedAt: RecordedAt? = null
-) : Record<GroupId>()
+) : Record<GroupId>() {
+    internal object Adapter : RecordAdapter<GroupRecord>(
+        listOf(
+            GroupCreatedRecord::class
+        )
+    )
+}
 
-@Serializable
-@SerialName("GroupCreatedRecord")
 data class GroupCreatedRecord(
     override val entityId: GroupId,
     override val cmdId: CmdId,

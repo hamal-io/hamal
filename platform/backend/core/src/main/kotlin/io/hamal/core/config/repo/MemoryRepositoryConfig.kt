@@ -7,13 +7,10 @@ import io.hamal.repository.memory.ReqMemoryRepository
 import io.hamal.repository.memory.StateMemoryRepository
 import io.hamal.repository.memory.log.BrokerMemoryRepository
 import io.hamal.repository.memory.record.*
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.protobuf.ProtoBuf
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
 
-@ExperimentalSerializationApi
 @Configuration
 @Profile("memory")
 open class MemoryRepositoryConfig {
@@ -142,13 +139,13 @@ open class MemoryRepositoryConfig {
     open fun execLogQueryRepository(): ExecLogQueryRepository = execLogRepository()
 
     @Bean
-    open fun reqRepository(protobuf: ProtoBuf): ReqRepository = ReqMemoryRepository(protobuf)
+    open fun reqRepository(): RequestRepository = ReqMemoryRepository()
 
     @Bean
-    open fun reqCmdRepository(protobuf: ProtoBuf): ReqCmdRepository = reqRepository(protobuf)
+    open fun reqCmdRepository(): RequestCmdRepository = reqRepository()
 
     @Bean
-    open fun reqQueryRepository(protobuf: ProtoBuf): ReqQueryRepository = reqRepository(protobuf)
+    open fun reqQueryRepository(): RequestQueryRepository = reqRepository()
 
     @Bean
     open fun stateRepository(): StateRepository = StateMemoryRepository()

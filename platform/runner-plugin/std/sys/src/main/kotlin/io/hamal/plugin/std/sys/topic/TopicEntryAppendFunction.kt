@@ -6,35 +6,36 @@ import io.hamal.lib.kua.function.Function2In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput2Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.type.ErrorType
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.KuaError
+import io.hamal.lib.kua.type.KuaMap
+import io.hamal.lib.kua.type.KuaString
+import io.hamal.lib.kua.type.toHotObject
 import io.hamal.lib.sdk.ApiSdk
 
 class TopicEntryAppendFunction(
     private val sdk: ApiSdk
-) : Function2In2Out<StringType, MapType, ErrorType, MapType>(
-    FunctionInput2Schema(StringType::class, MapType::class),
-    FunctionOutput2Schema(ErrorType::class, MapType::class)
+) : Function2In2Out<KuaString, KuaMap, KuaError, KuaMap>(
+    FunctionInput2Schema(KuaString::class, KuaMap::class),
+    FunctionOutput2Schema(KuaError::class, KuaMap::class)
 ) {
 
-    override fun invoke(ctx: FunctionContext, arg1: StringType, arg2: MapType): Pair<ErrorType?, MapType?> {
+    override fun invoke(ctx: FunctionContext, arg1: KuaString, arg2: KuaMap): Pair<KuaError?, KuaMap?> {
         return try {
             val res = sdk.topic.append(
                 TopicId(arg1.value),
-                TopicEntryPayload(arg2)
+                TopicEntryPayload(arg2.toHotObject())
             )
 
-            null to MapType(
+            null to KuaMap(
                 mutableMapOf(
-                    "id" to StringType(res.id.value.value.toString(16)),
-                    "status" to StringType(res.status.name),
-                    "topic_id" to StringType(res.topicId.value.value.toString(16))
+                    "id" to KuaString(res.id.value.value.toString(16)),
+                    "status" to KuaString(res.status.name),
+                    "topic_id" to KuaString(res.topicId.value.value.toString(16))
                 )
             )
 
         } catch (t: Throwable) {
-            ErrorType(t.message!!) to null
+            KuaError(t.message!!) to null
         }
     }
 }

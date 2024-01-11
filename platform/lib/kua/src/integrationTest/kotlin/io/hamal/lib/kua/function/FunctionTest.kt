@@ -6,8 +6,8 @@ import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.NopSandboxContext
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
-import io.hamal.lib.kua.type.NumberType
-import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.KuaNumber
+import io.hamal.lib.kua.type.KuaString
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.instanceOf
 import org.hamcrest.MatcherAssert.assertThat
@@ -121,9 +121,9 @@ internal class FunctionTest {
     @Test
     fun `Tests Function0In1Out and Function1In0Out`() {
         val captor = Captor1()
-        val emitter = object : Function0In1Out<StringType>(FunctionOutput1Schema(StringType::class)) {
-            override fun invoke(ctx: FunctionContext): StringType {
-                return StringType("Hamal Rocks")
+        val emitter = object : Function0In1Out<KuaString>(FunctionOutput1Schema(KuaString::class)) {
+            override fun invoke(ctx: FunctionContext): KuaString {
+                return KuaString("Hamal Rocks")
             }
         }
         sandbox.register(
@@ -160,12 +160,12 @@ internal class FunctionTest {
     @Test
     fun `Tests Function1In1Out`() {
         val captor = Captor1()
-        val transform = object : Function1In1Out<StringType, StringType>(
-            FunctionInput1Schema(StringType::class),
-            FunctionOutput1Schema(StringType::class)
+        val transform = object : Function1In1Out<KuaString, KuaString>(
+            FunctionInput1Schema(KuaString::class),
+            FunctionOutput1Schema(KuaString::class)
         ) {
-            override fun invoke(ctx: FunctionContext, arg1: StringType): StringType {
-                return StringType(arg1.value.uppercase())
+            override fun invoke(ctx: FunctionContext, arg1: KuaString): KuaString {
+                return KuaString(arg1.value.uppercase())
             }
         }
 
@@ -203,12 +203,12 @@ internal class FunctionTest {
     @Test
     fun `Tests Function1In2Out`() {
         val captor = Captor2()
-        val transform = object : Function1In2Out<StringType, StringType, NumberType>(
-            FunctionInput1Schema(StringType::class),
-            FunctionOutput2Schema(StringType::class, NumberType::class)
+        val transform = object : Function1In2Out<KuaString, KuaString, KuaNumber>(
+            FunctionInput1Schema(KuaString::class),
+            FunctionOutput2Schema(KuaString::class, KuaNumber::class)
         ) {
-            override fun invoke(ctx: FunctionContext, arg1: StringType): Pair<StringType, NumberType> {
-                return StringType(arg1.value.uppercase()) to NumberType(arg1.value.length)
+            override fun invoke(ctx: FunctionContext, arg1: KuaString): Pair<KuaString, KuaNumber> {
+                return KuaString(arg1.value.uppercase()) to KuaNumber(arg1.value.length)
             }
         }
 
@@ -247,16 +247,16 @@ internal class FunctionTest {
     @Test
     fun `Tests Function2In2Out`() {
         val captor = Captor2()
-        val transform = object : Function2In2Out<StringType, NumberType, StringType, NumberType>(
-            FunctionInput2Schema(StringType::class, NumberType::class),
-            FunctionOutput2Schema(StringType::class, NumberType::class)
+        val transform = object : Function2In2Out<KuaString, KuaNumber, KuaString, KuaNumber>(
+            FunctionInput2Schema(KuaString::class, KuaNumber::class),
+            FunctionOutput2Schema(KuaString::class, KuaNumber::class)
         ) {
             override fun invoke(
                 ctx: FunctionContext,
-                arg1: StringType,
-                arg2: NumberType
-            ): Pair<StringType, NumberType> {
-                return StringType(arg1.value.reversed()) to (arg2 * -1)
+                arg1: KuaString,
+                arg2: KuaNumber
+            ): Pair<KuaString, KuaNumber> {
+                return KuaString(arg1.value.reversed()) to (arg2 * -1)
             }
         }
 
@@ -295,9 +295,9 @@ internal class FunctionTest {
     fun `Tests Function0In2Out and Function2In0Out`() {
         val captor = Captor2()
         val emitter = object :
-            Function0In2Out<StringType, NumberType>(FunctionOutput2Schema(StringType::class, NumberType::class)) {
-            override fun invoke(ctx: FunctionContext): Pair<StringType, NumberType> {
-                return StringType("answer") to NumberType(42)
+            Function0In2Out<KuaString, KuaNumber>(FunctionOutput2Schema(KuaString::class, KuaNumber::class)) {
+            override fun invoke(ctx: FunctionContext): Pair<KuaString, KuaNumber> {
+                return KuaString("answer") to KuaNumber(42)
             }
         }
 
@@ -332,18 +332,18 @@ internal class FunctionTest {
         assertThat(captor.result, equalTo("answer=42.0"))
     }
 
-    private class Captor1 : Function1In0Out<StringType>(FunctionInput1Schema(StringType::class)) {
-        override fun invoke(ctx: FunctionContext, arg1: StringType) {
+    private class Captor1 : Function1In0Out<KuaString>(FunctionInput1Schema(KuaString::class)) {
+        override fun invoke(ctx: FunctionContext, arg1: KuaString) {
             result = arg1.value
         }
 
         var result: String? = null
     }
 
-    private class Captor2 : Function2In0Out<StringType, NumberType>(
-        FunctionInput2Schema(StringType::class, NumberType::class)
+    private class Captor2 : Function2In0Out<KuaString, KuaNumber>(
+        FunctionInput2Schema(KuaString::class, KuaNumber::class)
     ) {
-        override fun invoke(ctx: FunctionContext, arg1: StringType, arg2: NumberType) {
+        override fun invoke(ctx: FunctionContext, arg1: KuaString, arg2: KuaNumber) {
             result = "${arg1.value}=${arg2.value}"
         }
 

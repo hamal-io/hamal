@@ -1,45 +1,70 @@
 package io.hamal.lib.domain.vo
 
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonElement
+import com.google.gson.JsonSerializationContext
+import io.hamal.lib.common.domain.ValueObjecHotObject
+import io.hamal.lib.common.domain.ValueObjectString
+import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.serialization.JsonAdapter
 import io.hamal.lib.domain._enum.EndpointMethod
 import io.hamal.lib.domain._enum.HookMethod
-import io.hamal.lib.domain.vo.base.InputsSerializer
-import io.hamal.lib.domain.vo.base.MapValueObject
-import io.hamal.lib.kua.type.MapType
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
 
-@Serializable(with = InvocationInputs.Serializer::class)
-class InvocationInputs(override val value: MapType = MapType()) : MapValueObject() {
-    internal object Serializer : InputsSerializer<InvocationInputs>(::InvocationInputs)
+class InvocationInputs(override val value: HotObject = HotObject.empty) : ValueObjecHotObject()
+
+class InvocationType(override val value: String) : ValueObjectString()
+
+
+sealed class Invocation {
+    val invocationType: InvocationType = InvocationType(this::class.simpleName!!)
+
+    object Adapter : JsonAdapter<Invocation> {
+        override fun serialize(
+            src: Invocation,
+            typeOfSrc: java.lang.reflect.Type,
+            context: JsonSerializationContext
+        ): JsonElement {
+            return context.serialize(src)
+        }
+
+        override fun deserialize(
+            json: JsonElement,
+            typeOfT: java.lang.reflect.Type,
+            context: JsonDeserializationContext
+        ): Invocation {
+            val invocationType = json.asJsonObject.get("invocationType").asString
+            return context.deserialize(
+                json, (classMapping[invocationType]
+                    ?: throw NotImplementedError("$invocationType not supported")).java
+            )
+        }
+
+        private val classMapping = listOf(
+            EventInvocation::class,
+            HookInvocation::class,
+            EndpointInvocation::class,
+            EmptyInvocation::class
+        ).associateBy { it.simpleName }
+
+    }
 }
 
-@Serializable
-sealed interface Invocation
+data class EventInvocation(val events: List<Event>) : Invocation()
 
-@Serializable
-@SerialName("EventInvocation")
-data class EventInvocation(val events: List<Event>) : Invocation
-
-@Serializable
-@SerialName("HookInvocation")
 data class HookInvocation(
     val method: HookMethod,
     val headers: HookHeaders,
     val parameters: HookParameters,
     val content: HookContent
-) : Invocation
+) : Invocation()
 
 
-@Serializable
-@SerialName("EndpointInvocation")
 data class EndpointInvocation(
     val method: EndpointMethod,
     val headers: EndpointHeaders,
     val parameters: EndpointParameters,
     val content: EndpointContent
-) : Invocation
+) : Invocation()
 
-@Serializable
-@SerialName("EmptyInvocation")
-object EmptyInvocation : Invocation
+object EmptyInvocation : Invocation()
 

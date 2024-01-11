@@ -1,8 +1,8 @@
 package io.hamal.lib.kua
 
-import io.hamal.lib.kua.function.FunctionType
-import io.hamal.lib.kua.type.DecimalType
-import io.hamal.lib.kua.type.ErrorType
+import io.hamal.lib.kua.type.KuaDecimal
+import io.hamal.lib.kua.type.KuaError
+import io.hamal.lib.kua.type.KuaFunction
 import java.math.BigDecimal
 
 class Native(
@@ -22,11 +22,11 @@ class Native(
     external fun getGlobal(key: String)
 
     external fun pushBoolean(value: Boolean): Int
-    fun pushDecimal(value: DecimalType): Int = pushDecimal(value.toBigDecimal().toString())
+    fun pushDecimal(value: KuaDecimal): Int = pushDecimal(value.toBigDecimal().toString())
     external fun pushDecimal(value: String): Int
-    fun pushError(error: ErrorType): Int = pushError(error.value)
+    fun pushError(error: KuaError): Int = pushError(error.value)
     external fun pushError(message: String): Int
-    external fun pushFunction(value: FunctionType<*, *, *, *>): Int
+    external fun pushFunction(value: KuaFunction<*, *, *, *>): Int
     external fun pushNil(): Int
     external fun pushNumber(value: Double): Int
     external fun pushString(value: String): Int
@@ -34,9 +34,9 @@ class Native(
     external fun pop(total: Int): Int
 
     external fun toBoolean(idx: Int): Boolean
-    fun toDecimal(idx: Int) = DecimalType(BigDecimal(toDecimalString(idx)))
+    fun toDecimal(idx: Int) = KuaDecimal(BigDecimal(toDecimalString(idx)))
     external fun toDecimalString(idx: Int): String
-    external fun toError(idx: Int): ErrorType
+    external fun toError(idx: Int): KuaError
     external fun toNumber(idx: Int): Double
     external fun toString(idx: Int): String
 

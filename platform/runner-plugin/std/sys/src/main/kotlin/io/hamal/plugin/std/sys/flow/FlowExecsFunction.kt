@@ -10,26 +10,26 @@ import io.hamal.lib.sdk.ApiSdk
 
 class FlowExecsFunction(
     private val sdk: ApiSdk
-) : Function1In2Out<StringType, ErrorType, ArrayType>(
-    FunctionInput1Schema(StringType::class),
-    FunctionOutput2Schema(ErrorType::class, ArrayType::class)
+) : Function1In2Out<KuaString, KuaError, KuaArray>(
+    FunctionInput1Schema(KuaString::class),
+    FunctionOutput2Schema(KuaError::class, KuaArray::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: StringType): Pair<ErrorType?, ArrayType?> {
+    override fun invoke(ctx: FunctionContext, arg1: KuaString): Pair<KuaError?, KuaArray?> {
         return try {
-            null to ArrayType(
+            null to KuaArray(
                 sdk.exec.list(FlowId(arg1.value))
                     .mapIndexed { index, exec ->
-                    index to MapType(
+                    index to KuaMap(
                         mutableMapOf(
-                            "id" to StringType(exec.id.value.value.toString(16)),
-                            "status" to StringType(exec.status.toString()),
-                            "correlation_id" to (exec.correlation?.correlationId?.value?.let(::StringType) ?: NilType)
+                            "id" to KuaString(exec.id.value.value.toString(16)),
+                            "status" to KuaString(exec.status.toString()),
+                            "correlation_id" to (exec.correlation?.correlationId?.value?.let(::KuaString) ?: KuaNil)
                         )
                     )
                 }.toMap().toMutableMap()
             )
         } catch (t: Throwable) {
-            ErrorType(t.message!!) to null
+            KuaError(t.message!!) to null
         }
     }
 }

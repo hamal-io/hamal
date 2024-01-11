@@ -6,12 +6,10 @@ import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Feedback
 import io.hamal.repository.api.FeedbackQueryRepository.FeedbackQuery
 import io.hamal.repository.record.feedback.FeedbackRecord
+import io.hamal.repository.record.json
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
-import io.hamal.repository.sqlite.record.protobuf
-import kotlinx.serialization.ExperimentalSerializationApi
 
-@OptIn(ExperimentalSerializationApi::class)
 internal object ProjectionCurrent : ProjectionSqlite<FeedbackId, FeedbackRecord, Feedback> {
     override fun upsert(tx: RecordTransactionSqlite<FeedbackId, FeedbackRecord, Feedback>, obj: Feedback) {
         tx.execute(
@@ -23,7 +21,7 @@ internal object ProjectionCurrent : ProjectionSqlite<FeedbackId, FeedbackRecord,
             """.trimIndent()
         ) {
             set("id", obj.id)
-            set("data", protobuf.encodeToByteArray(Feedback.serializer(), obj))
+            set("data", json.serializeAndCompress(obj))
         }
     }
 
@@ -58,7 +56,7 @@ internal object ProjectionCurrent : ProjectionSqlite<FeedbackId, FeedbackRecord,
                 set("id", feedbackId)
             }
             map { rs ->
-                protobuf.decodeFromByteArray(Feedback.serializer(), rs.getBytes("data"))
+                json.decompressAndDeserialize(Feedback::class, rs.getBytes("data"))
             }
         }
     }
@@ -82,7 +80,7 @@ internal object ProjectionCurrent : ProjectionSqlite<FeedbackId, FeedbackRecord,
                 set("limit", query.limit)
             }
             map { rs ->
-                protobuf.decodeFromByteArray(Feedback.serializer(), rs.getBytes("data"))
+                json.decompressAndDeserialize(Feedback::class, rs.getBytes("data"))
             }
         }
     }

@@ -4,11 +4,11 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.AccountType
 import io.hamal.lib.domain.vo.PasswordSalt
-import io.hamal.lib.domain.vo.RecordedAt
 import io.hamal.repository.api.Account
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordEntity
 import io.hamal.repository.record.RecordSequence
+import io.hamal.repository.record.RecordedAt
 
 data class AccountEntity(
     override val id: AccountId,

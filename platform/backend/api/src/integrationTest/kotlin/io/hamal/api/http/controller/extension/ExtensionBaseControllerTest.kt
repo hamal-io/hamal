@@ -10,15 +10,15 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 
 internal sealed class ExtensionBaseControllerTest : BaseControllerTest() {
-    fun createExtension(req: ApiExtensionCreateReq): ApiExtensionCreateSubmitted {
+    fun createExtension(req: ApiExtensionCreateRequest): ApiExtensionCreateRequested {
         val createResponse = httpTemplate.post("/v1/groups/{groupId}/extensions")
             .path("groupId", testGroup.id)
             .body(req)
             .execute()
 
         assertThat(createResponse.statusCode, equalTo(HttpStatusCode.Accepted))
-        require(createResponse is HttpSuccessResponse) { "request was successful" }
-        return createResponse.result(ApiExtensionCreateSubmitted::class)
+        require(createResponse is HttpSuccessResponse) { "request was not successful" }
+        return createResponse.result(ApiExtensionCreateRequested::class)
     }
 
     fun getExtension(extId: ExtensionId): ApiExtension {
@@ -27,7 +27,7 @@ internal sealed class ExtensionBaseControllerTest : BaseControllerTest() {
             .execute()
 
         assertThat(getResponse.statusCode, equalTo(HttpStatusCode.Ok))
-        require(getResponse is HttpSuccessResponse) { "request was successful" }
+        require(getResponse is HttpSuccessResponse) { "request was not successful" }
         return getResponse.result(ApiExtension::class)
     }
 
@@ -37,20 +37,20 @@ internal sealed class ExtensionBaseControllerTest : BaseControllerTest() {
             .execute()
 
         assertThat(listResponse.statusCode, equalTo(HttpStatusCode.Ok))
-        require(listResponse is HttpSuccessResponse) { "request was successful" }
+        require(listResponse is HttpSuccessResponse) { "request was not successful" }
         return listResponse.result(ApiExtensionList::class)
 
     }
 
-    fun updateExtension(extId: ExtensionId, req: ApiExtensionUpdateReq): ApiExtensionUpdateSubmitted {
+    fun updateExtension(extId: ExtensionId, req: ApiExtensionUpdateRequest): ApiExtensionUpdateRequested {
         val updateResponse = httpTemplate.patch("/v1/extensions/{extId}")
             .path("extId", extId)
             .body(req)
             .execute()
 
         assertThat(updateResponse.statusCode, equalTo(HttpStatusCode.Accepted))
-        require(updateResponse is HttpSuccessResponse) { "request was successful" }
-        return updateResponse.result(ApiExtensionUpdateSubmitted::class)
+        require(updateResponse is HttpSuccessResponse) { "request was not successful" }
+        return updateResponse.result(ApiExtensionUpdateRequested::class)
     }
 
 }

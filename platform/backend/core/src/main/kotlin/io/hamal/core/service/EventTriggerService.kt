@@ -4,17 +4,17 @@ import io.hamal.core.adapter.FuncInvokePort
 import io.hamal.core.component.Async
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.domain.GenerateDomainId
+import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.EventTrigger
 import io.hamal.repository.api.TriggerQueryRepository
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
+import io.hamal.repository.api.log.BatchConsumerImpl
 import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.repository.api.log.ConsumerId
-import io.hamal.repository.api.log.ProtobufBatchConsumer
 import io.hamal.repository.api.log.TopicEntry
-import io.hamal.request.FuncInvokeReq
+import io.hamal.lib.domain.request.FuncInvokeRequest
 import org.springframework.beans.factory.DisposableBean
 import org.springframework.context.ApplicationListener
 import org.springframework.context.event.ContextRefreshedEvent
@@ -27,7 +27,7 @@ import kotlin.time.Duration.Companion.milliseconds
 internal class EventTriggerService(
     private val async: Async,
     internal val eventBrokerRepository: BrokerRepository,
-    internal val generateDomainId: GenerateDomainId,
+    internal val generateDomainId: GenerateId,
     internal val invokeFunc: FuncInvokePort,
     internal val triggerQueryRepository: TriggerQueryRepository,
 ) : ApplicationListener<ContextRefreshedEvent>, DisposableBean {
@@ -48,7 +48,7 @@ internal class EventTriggerService(
                         require(trigger is EventTrigger)
 
                         val topic = eventBrokerRepository.getTopic(trigger.topicId)
-                        val consumer = ProtobufBatchConsumer(
+                        val consumer = BatchConsumerImpl(
                             consumerId = ConsumerId(trigger.id.value.value.toString(16)),
                             topic = topic,
                             repository = eventBrokerRepository,
@@ -60,7 +60,7 @@ internal class EventTriggerService(
                             consumer.consumeBatch(1) { entries ->
                                 invokeFunc(
                                     trigger.funcId,
-                                    object : FuncInvokeReq {
+                                    object : FuncInvokeRequest {
                                         override val correlationId = trigger.correlationId ?: CorrelationId.default
                                         override val inputs = InvocationInputs()
                                         override val invocation = EventInvocation(entries.map {
@@ -94,5 +94,5 @@ internal class EventTriggerService(
 
     private val shutdown = AtomicBoolean(false)
     private val scheduledTasks = mutableListOf<ScheduledFuture<*>>()
-    private val triggerConsumers = mutableMapOf<TriggerId, ProtobufBatchConsumer<TopicEntry>>()
+    private val triggerConsumers = mutableMapOf<TriggerId, BatchConsumerImpl<TopicEntry>>()
 }

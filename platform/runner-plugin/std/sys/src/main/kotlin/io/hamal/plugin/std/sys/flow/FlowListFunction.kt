@@ -4,33 +4,33 @@ import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.kua.function.Function0In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.type.ArrayType
-import io.hamal.lib.kua.type.ErrorType
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.KuaArray
+import io.hamal.lib.kua.type.KuaError
+import io.hamal.lib.kua.type.KuaMap
+import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.sdk.ApiSdk
 
 class FlowListFunction(
     private val sdk: ApiSdk
-) : Function0In2Out<ErrorType, ArrayType>(
-    FunctionOutput2Schema(ErrorType::class, ArrayType::class)
+) : Function0In2Out<KuaError, KuaArray>(
+    FunctionOutput2Schema(KuaError::class, KuaArray::class)
 ) {
-    override fun invoke(ctx: FunctionContext): Pair<ErrorType?, ArrayType?> {
+    override fun invoke(ctx: FunctionContext): Pair<KuaError?, KuaArray?> {
         return try {
-            null to ArrayType(
+            null to KuaArray(
                 sdk.flow.list(ctx[GroupId::class]).mapIndexed { index, flow ->
-                    index to MapType(
+                    index to KuaMap(
                         mutableMapOf(
-                            "id" to StringType(flow.id.value.value.toString(16)),
-                            "name" to StringType(flow.name.value),
-                            "type" to StringType(flow.type.value)
+                            "id" to KuaString(flow.id.value.value.toString(16)),
+                            "name" to KuaString(flow.name.value),
+                            "type" to KuaString(flow.type.value)
                         )
                     )
                 }.toMap().toMutableMap()
             )
 
         } catch (t: Throwable) {
-            ErrorType(t.message!!) to null
+            KuaError(t.message!!) to null
         }
     }
 }

@@ -6,6 +6,7 @@ import io.hamal.repository.api.Flow
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordEntity
 import io.hamal.repository.record.RecordSequence
+import io.hamal.repository.record.RecordedAt
 
 data class FlowEntity(
     override val cmdId: CmdId,
@@ -17,7 +18,7 @@ data class FlowEntity(
     var name: FlowName? = null,
     var inputs: FlowInputs? = null,
     val type: FlowType,
-    ) : RecordEntity<FlowId, FlowRecord, Flow> {
+) : RecordEntity<FlowId, FlowRecord, Flow> {
 
     override fun apply(rec: FlowRecord): FlowEntity {
         return when (rec) {

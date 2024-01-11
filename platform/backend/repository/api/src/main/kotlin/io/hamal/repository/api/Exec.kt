@@ -1,13 +1,16 @@
 package io.hamal.repository.api
 
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonElement
+import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.DomainObject
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.domain.UpdatedAt
+import io.hamal.lib.common.serialization.JsonAdapter
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.*
-import kotlinx.serialization.Serializable
 
 interface ExecRepository : ExecCmdRepository, ExecQueryRepository
 
@@ -83,7 +86,6 @@ interface ExecQueryRepository {
     )
 }
 
-@Serializable
 sealed class Exec : DomainObject<ExecId> {
     abstract val cmdId: CmdId
     abstract override val id: ExecId
@@ -95,6 +97,8 @@ sealed class Exec : DomainObject<ExecId> {
     abstract val inputs: ExecInputs
     abstract val code: ExecCode
     abstract val invocation: Invocation
+
+    val type: ExecType = ExecType(this::class.simpleName!!)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -113,9 +117,36 @@ sealed class Exec : DomainObject<ExecId> {
         result = 31 * result + status.hashCode()
         return result
     }
+
+    object Adapter : JsonAdapter<Exec> {
+        override fun serialize(
+            src: Exec,
+            typeOfSrc: java.lang.reflect.Type,
+            context: JsonSerializationContext
+        ): JsonElement {
+            return context.serialize(src)
+        }
+
+        override fun deserialize(
+            json: JsonElement,
+            typeOfT: java.lang.reflect.Type,
+            context: JsonDeserializationContext
+        ): Exec {
+            val type = json.asJsonObject.get("type").asString
+            return context.deserialize(json, classMapping[type]!!.java)
+        }
+
+        private val classMapping = listOf(
+            PlannedExec::class,
+            ScheduledExec::class,
+            QueuedExec::class,
+            StartedExec::class,
+            CompletedExec::class,
+            FailedExec::class
+        ).associateBy { it.simpleName }
+    }
 }
 
-@Serializable
 class PlannedExec(
     override val cmdId: CmdId,
     override val id: ExecId,
@@ -136,13 +167,12 @@ class PlannedExec(
 
 }
 
-@Serializable
 class ScheduledExec(
     override val cmdId: CmdId,
     override val id: ExecId,
     override val updatedAt: UpdatedAt,
     val plannedExec: PlannedExec,
-    val scheduledAt: ScheduledAt,
+    val scheduledAt: ExecScheduledAt,
 ) : Exec() {
     override val status = ExecStatus.Scheduled
     override val flowId get() = plannedExec.flowId
@@ -157,13 +187,12 @@ class ScheduledExec(
 
 }
 
-@Serializable
 class QueuedExec(
     override val cmdId: CmdId,
     override val id: ExecId,
     override val updatedAt: UpdatedAt,
     val scheduledExec: ScheduledExec,
-    val queuedAt: QueuedAt,
+    val queuedAt: ExecQueuedAt,
 ) : Exec() {
     override val status = ExecStatus.Queued
     override val flowId get() = scheduledExec.flowId
@@ -178,7 +207,6 @@ class QueuedExec(
 }
 
 
-@Serializable
 class StartedExec(
     override val cmdId: CmdId,
     override val id: ExecId,
@@ -197,13 +225,12 @@ class StartedExec(
     }
 }
 
-@Serializable
 class CompletedExec(
     override val cmdId: CmdId,
     override val id: ExecId,
     override val updatedAt: UpdatedAt,
     val startedExec: StartedExec,
-    val completedAt: CompletedAt,
+    val completedAt: ExecCompletedAt,
     val result: ExecResult,
     val state: ExecState
 ) : Exec() {
@@ -220,14 +247,13 @@ class CompletedExec(
     }
 }
 
-@Serializable
 class FailedExec(
     override val cmdId: CmdId,
     override val id: ExecId,
     override val updatedAt: UpdatedAt,
     val startedExec: StartedExec,
     //FIXME failedAt
-    val failedAt: FailedAt,
+    val failedAt: ExecFailedAt,
     val result: ExecResult
 ) : Exec() {
     override val status = ExecStatus.Failed

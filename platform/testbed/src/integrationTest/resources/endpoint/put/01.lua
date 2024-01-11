@@ -35,7 +35,6 @@ assert(content.id ~= nil)
 assert(content.status == 'Completed')
 
 assert(content.invocation.method == 'Put')
+assert(content.result.answer == 42.0)
 
-assert(content.result.value.answer.type == 'NumberType')
-assert(content.result.value.answer.value == '42')
 

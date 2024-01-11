@@ -20,8 +20,6 @@ import io.hamal.repository.sqlite.record.func.FuncSqliteRepository
 import io.hamal.repository.sqlite.record.group.GroupSqliteRepository
 import io.hamal.repository.sqlite.record.hook.HookSqliteRepository
 import io.hamal.repository.sqlite.record.trigger.TriggerSqliteRepository
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.protobuf.ProtoBuf
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
@@ -30,7 +28,6 @@ import kotlin.io.path.Path
 
 @Configuration
 @Profile("sqlite")
-@OptIn(ExperimentalSerializationApi::class)
 open class SqliteRepositoryConfig(backendBasePath: BackendBasePath) {
 
     @Bean
@@ -175,13 +172,13 @@ open class SqliteRepositoryConfig(backendBasePath: BackendBasePath) {
     open fun stateQueryRepository(): StateQueryRepository = stateRepository()
 
     @Bean
-    open fun reqRepository(): ReqRepository = ReqMemoryRepository(ProtoBuf { })
+    open fun reqRepository(): RequestRepository = ReqMemoryRepository()
 
     @Bean
-    open fun reqCmdRepository(): ReqCmdRepository = reqRepository()
+    open fun reqCmdRepository(): RequestCmdRepository = reqRepository()
 
     @Bean
-    open fun reqQueryRepository(): ReqQueryRepository = reqRepository()
+    open fun reqQueryRepository(): RequestQueryRepository = reqRepository()
 
     private val path = Path(backendBasePath.value)
 }

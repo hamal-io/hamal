@@ -1,9 +1,10 @@
 package io.hamal.plugin.net.http.endpoint
 
-import kotlinx.serialization.json.JsonArray
-import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.JsonPrimitive
+import com.google.gson.JsonArray
+import com.google.gson.JsonElement
+import com.google.gson.JsonObject
+import io.hamal.lib.common.hot.HotArray
+import io.hamal.lib.common.hot.HotObject
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -14,38 +15,35 @@ open class TestJsonController {
 
     @RequestMapping("/v1/json-empty-object")
     fun jsonEmptyObject(): ResponseEntity<JsonObject> {
-        return ResponseEntity.ok(JsonObject(mapOf()))
+        return ResponseEntity.ok(JsonObject())
     }
 
     @RequestMapping("/v1/json-empty-array")
     fun jsonEmptyArray(): ResponseEntity<JsonArray> {
-        return ResponseEntity.ok(JsonArray(listOf()))
+        return ResponseEntity.ok(JsonArray())
     }
 
     @RequestMapping("/v1/json-array")
-    fun jsonArray(): ResponseEntity<JsonArray> {
+    fun jsonArray(): ResponseEntity<HotArray> {
         return ResponseEntity.ok(
-            JsonArray(
-                listOf(
-                    JsonPrimitive(23),
-                    JsonPrimitive(true),
-                    JsonPrimitive("24.23"),
-                    JsonPrimitive("HamalRocks")
-                )
-            )
+            HotArray.builder()
+                .add(23)
+                .add(true)
+                .add("24.23")
+                .add("HamalRocks")
+                .build()
         )
     }
 
     @RequestMapping("/v1/json-error")
-    fun jsonError(): ResponseEntity<JsonObject> {
+    fun jsonError(): ResponseEntity<HotObject> {
+
         return ResponseEntity.badRequest().body(
-            JsonObject(
-                mapOf(
-                    "code" to JsonPrimitive(400),
-                    "message" to JsonPrimitive("bad-request"),
-                    "boolean-value" to JsonPrimitive(true)
-                )
-            )
+            HotObject.builder()
+                .set("code", 400)
+                .set("message", "bad-request")
+                .set("boolean-value", true)
+                .build()
         )
     }
 

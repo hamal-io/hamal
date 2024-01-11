@@ -23,7 +23,7 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
                 awaitCompleted(
                     deployFunc(
                         funcId = func.id,
-                        req = ApiFuncDeployReq(
+                        req = ApiFuncDeployRequest(
                             version = CodeVersion(iter + 1),
                             null
                         )
@@ -48,7 +48,7 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
                 awaitCompleted(
                     deployFunc(
                         funcId = func.id,
-                        req = ApiFuncDeployReq(
+                        req = ApiFuncDeployRequest(
                             version = CodeVersion(10),
                             null
                         )
@@ -72,7 +72,7 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
                 awaitCompleted(
                     deployFunc(
                         funcId = func.id,
-                        req = ApiFuncDeployReq(
+                        req = ApiFuncDeployRequest(
                             version = CodeVersion(20 - iter),
                             null
                         )
@@ -92,7 +92,7 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
         fun `Tries to deploy to func that does not exist`() {
             val deployResponse = httpTemplate.post("/v1/funcs/{funcId}/deploy")
                 .path("funcId", FuncId(23))
-                .body(ApiFuncDeployReq(CodeVersion(1), null))
+                .body(ApiFuncDeployRequest(CodeVersion(1), null))
                 .execute()
 
             assertThat(deployResponse.statusCode, equalTo(HttpStatusCode.NotFound))
@@ -104,15 +104,15 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
 
         @Test
         fun `Tries to deploy version that does not exist`() {
-            val func: ApiFuncCreateSubmitted = createFunc(
-                ApiFuncCreateReq(
+            val func: ApiFuncCreateRequested = createFunc(
+                ApiFuncCreateRequest(
                     name = FuncName("Func-base"), inputs = FuncInputs(), code = CodeValue("40 + 2")
                 )
             )
 
             val deployResponse = httpTemplate.post("/v1/funcs/{funcId}/deploy")
                 .path("funcId", func.funcId)
-                .body(ApiFuncDeployReq(CodeVersion(23), null))
+                .body(ApiFuncDeployRequest(CodeVersion(23), null))
                 .execute()
 
             assertThat(deployResponse.statusCode, equalTo(HttpStatusCode.NotFound))
@@ -131,7 +131,7 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
                 awaitCompleted(
                     deployFunc(
                         funcId = funcId,
-                        req = ApiFuncDeployReq(
+                        req = ApiFuncDeployRequest(
                             null,
                             null
                         )
@@ -156,7 +156,7 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
                 awaitCompleted(
                     deployFunc(
                         funcId = funcId,
-                        req = ApiFuncDeployReq(
+                        req = ApiFuncDeployRequest(
                             version = null,
                             DeployMessage("SuperFunc")
                         )
@@ -177,7 +177,7 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
         private fun setup(): Func {
             val func = awaitCompleted(
                 createFunc(
-                    ApiFuncCreateReq(
+                    ApiFuncCreateRequest(
                         name = FuncName("test-func"), inputs = FuncInputs(), code = CodeValue("13 + 37")
                     )
                 )
@@ -186,7 +186,7 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
             for (i in 1..19) {
                 awaitCompleted(
                     updateFunc(
-                        func.funcId, ApiFuncUpdateReq(
+                        func.funcId, ApiFuncUpdateRequest(
                             name = null, inputs = null, code = CodeValue("code-${i}")
                         )
                     )

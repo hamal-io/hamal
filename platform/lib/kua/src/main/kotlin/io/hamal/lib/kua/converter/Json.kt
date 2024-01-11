@@ -1,69 +1,84 @@
 package io.hamal.lib.kua.converter
 
+import com.google.gson.*
 import io.hamal.lib.kua.type.*
-import kotlinx.serialization.json.*
 
-fun SerializableType.toJson(): JsonElement {
+
+fun KuaType.toJson(): JsonElement {
     return when (this) {
-        is AnySerializableType -> value.toJson()
-        is False -> JsonPrimitive(false)
-        is True -> JsonPrimitive(true)
-        is CodeType -> JsonPrimitive(value)
-        is DecimalType -> JsonPrimitive(toString())
-        is ErrorType -> JsonPrimitive(value)
-        is NilType -> JsonNull
-        is NumberType -> JsonPrimitive(value)
-        is StringType -> JsonPrimitive(value)
-        is ArrayType -> toJson()
-        is MapType -> toJson()
+        is KuaAny -> value.toJson()
+        is KuaFalse -> JsonPrimitive(false)
+        is KuaTrue -> JsonPrimitive(true)
+        is KuaCode -> JsonPrimitive(value)
+        is KuaDecimal -> JsonPrimitive(toString())
+        is KuaError -> JsonPrimitive(value)
+        is KuaNil -> JsonNull.INSTANCE
+        is KuaNumber -> JsonPrimitive(value)
+        is KuaString -> JsonPrimitive(value)
+        is KuaArray -> toJson()
+        is KuaMap -> toJson()
+        is KuaFunction<*, *, *, *> -> TODO()
+        is KuaTableType -> TODO()
     }
 }
 
-private fun MapType.toJson(): JsonObject {
-    return JsonObject(this.value.map { (key, value) ->
-        key to value.toJson()
-    }.toMap())
+private fun KuaMap.toJson(): JsonObject {
+    val result = JsonObject()
+
+    this.value.forEach { (key, value) ->
+        result.add(key, value.toJson())
+    }
+
+    return result
 }
 
-private fun ArrayType.toJson(): JsonArray {
-    return JsonArray(this.value.map { (_, value) -> value.toJson() }.toList())
+private fun KuaArray.toJson(): JsonArray {
+    val result = JsonArray()
+
+    this.value.forEach { (_, value) ->
+        result.add(value.toJson())
+    }
+
+    return result
 }
 
-fun JsonElement.convertToType(): SerializableType {
+fun JsonElement.convertToType(): KuaType {
     return when (this) {
-        is JsonNull -> NilType
+        is JsonNull -> KuaNil
         is JsonPrimitive -> convertToType()
         is JsonObject -> convertToType()
         is JsonArray -> convertToType()
+        else -> TODO()
     }
 }
 
-fun JsonArray.convertToType(): ArrayType {
+fun JsonArray.convertToType(): KuaArray {
     val arr = this
-    return ArrayType(
+    return KuaArray(
         arr.mapIndexed { index, item -> (index + 1) to item.convertToType() }.toMap().toMutableMap()
     )
 }
 
-fun JsonObject.convertToType(): MapType {
-    val arr = this
-    return MapType(
-        arr.map { (key, item) -> key to item.convertToType() }.toMap().toMutableMap()
+fun JsonObject.convertToType(): KuaMap {
+    val obj = this
+
+    return KuaMap(
+        obj.entrySet().associate { (key, item) -> key to item.convertToType() }.toMutableMap()
     )
 }
 
-fun JsonPrimitive.convertToType(): SerializableType {
+fun JsonPrimitive.convertToType(): KuaType {
     if (isString) {
-        return StringType(content)
+        return KuaString(asString)
     }
 
-    if (content == "true") {
-        return True
+    if (asString == "true") {
+        return KuaTrue
     }
 
-    if (content == "false") {
-        return False
+    if (asString == "false") {
+        return KuaFalse
     }
 
-    return NumberType(content.toDouble())
+    return KuaNumber(asDouble)
 }

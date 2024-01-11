@@ -1,36 +1,32 @@
 package io.hamal.repository.memory
 
-import io.hamal.lib.domain._enum.ReqStatus
-import io.hamal.lib.domain.vo.ReqId
-import io.hamal.repository.api.ReqQueryRepository
-import io.hamal.repository.api.ReqRepository
-import io.hamal.repository.api.submitted_req.Submitted
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.protobuf.ProtoBuf
+import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain.request.Requested
+import io.hamal.lib.domain.vo.RequestId
+import io.hamal.repository.api.RequestQueryRepository
+import io.hamal.repository.api.RequestRepository
+import io.hamal.repository.record.json
 import org.springframework.stereotype.Repository
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
 @Repository
-@OptIn(ExperimentalSerializationApi::class)
-class ReqMemoryRepository(
-    val protobuf: ProtoBuf
-) : ReqRepository {
+class ReqMemoryRepository : RequestRepository {
 
-    val queue = mutableListOf<ReqId>()
-    val store = mutableMapOf<ReqId, ByteArray>()
+    val queue = mutableListOf<RequestId>()
+    val store = mutableMapOf<RequestId, String>()
     val lock = ReentrantLock()
 
-    override fun queue(req: Submitted) {
+    override fun queue(req: Requested) {
         return lock.withLock {
-            store[req.id] = protobuf.encodeToByteArray(Submitted.serializer(), req)
+            store[req.id] = json.serialize(req)
             queue.add(req.id)
         }
     }
 
-    override fun next(limit: Int): List<Submitted> {
+    override fun next(limit: Int): List<Requested> {
         return lock.withLock {
-            val result = mutableListOf<Submitted>()
+            val result = mutableListOf<Requested>()
 
             repeat(limit) {
                 val reqId = queue.removeFirstOrNull() ?: return result
@@ -41,21 +37,19 @@ class ReqMemoryRepository(
         }
     }
 
-    override fun complete(reqId: ReqId) {
+    override fun complete(reqId: RequestId) {
         val req = get(reqId)
-        check(req.status == ReqStatus.Submitted) { "Req not submitted" }
+        check(req.status == RequestStatus.Submitted) { "Req not submitted" }
         lock.withLock {
-            store[req.id] =
-                protobuf.encodeToByteArray(Submitted.serializer(), req.apply { status = ReqStatus.Completed })
+            store[req.id] = json.serialize(req.apply { status = RequestStatus.Completed })
         }
     }
 
-    override fun fail(reqId: ReqId) {
+    override fun fail(reqId: RequestId) {
         val req = get(reqId)
-        check(req.status == ReqStatus.Submitted) { "Req not submitted" }
+        check(req.status == RequestStatus.Submitted) { "Req not submitted" }
         lock.withLock {
-            store[req.id] =
-                protobuf.encodeToByteArray(Submitted.serializer(), req.apply { status = ReqStatus.Failed })
+            store[req.id] = json.serialize(req.apply { status = RequestStatus.Failed })
         }
     }
 
@@ -67,12 +61,13 @@ class ReqMemoryRepository(
     }
 
 
-    override fun find(reqId: ReqId): Submitted? {
+    override fun find(reqId: RequestId): Requested? {
         val result = lock.withLock { store[reqId] } ?: return null
-        return protobuf.decodeFromByteArray(Submitted.serializer(), result)
+        return json.deserialize(Requested::class, result)
+
     }
 
-    override fun list(query: ReqQueryRepository.ReqQuery): List<Submitted> {
+    override fun list(query: RequestQueryRepository.ReqQuery): List<Requested> {
 
         return lock.withLock {
 
@@ -84,7 +79,7 @@ class ReqMemoryRepository(
         }
     }
 
-    override fun count(query: ReqQueryRepository.ReqQuery): ULong {
+    override fun count(query: RequestQueryRepository.ReqQuery): ULong {
         return lock.withLock {
             store.keys.sorted()
                 .dropWhile { it <= query.afterId }

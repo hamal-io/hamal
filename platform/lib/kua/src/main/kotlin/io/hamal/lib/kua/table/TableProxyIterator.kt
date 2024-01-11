@@ -1,10 +1,10 @@
 package io.hamal.lib.kua.table
 
 import io.hamal.lib.kua.State
-import io.hamal.lib.kua.type.Type
+import io.hamal.lib.kua.type.KuaType
 import kotlin.collections.Map.Entry
 
-class TableEntryIterator<KEY : Type, TYPE : Type>(
+class TableEntryIterator<KEY : KuaType, TYPE : KuaType>(
     index: Int,
     val state: State,
     val keyExtractor: (State, Int) -> KEY,

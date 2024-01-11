@@ -6,13 +6,11 @@ import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Account
 import io.hamal.repository.api.AccountQueryRepository.AccountQuery
 import io.hamal.repository.record.account.AccountRecord
+import io.hamal.repository.record.json
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
-import io.hamal.repository.sqlite.record.protobuf
-import kotlinx.serialization.ExperimentalSerializationApi
 
 
-@OptIn(ExperimentalSerializationApi::class)
 internal object ProjectionCurrent : ProjectionSqlite<AccountId, AccountRecord, Account> {
 
     fun find(connection: Connection, accountId: AccountId): Account? {
@@ -30,7 +28,7 @@ internal object ProjectionCurrent : ProjectionSqlite<AccountId, AccountRecord, A
                 set("id", accountId)
             }
             map { rs ->
-                protobuf.decodeFromByteArray(Account.serializer(), rs.getBytes("data"))
+                json.decompressAndDeserialize(Account::class, rs.getBytes("data"))
             }
         }
     }
@@ -54,7 +52,7 @@ internal object ProjectionCurrent : ProjectionSqlite<AccountId, AccountRecord, A
                 set("limit", query.limit)
             }
             map { rs ->
-                protobuf.decodeFromByteArray(Account.serializer(), rs.getBytes("data"))
+                json.decompressAndDeserialize(Account::class, rs.getBytes("data"))
             }
         }
     }
@@ -90,7 +88,7 @@ internal object ProjectionCurrent : ProjectionSqlite<AccountId, AccountRecord, A
             """.trimIndent()
         ) {
             set("id", obj.id)
-            set("data", protobuf.encodeToByteArray(Account.serializer(), obj))
+            set("data", json.serializeAndCompress(obj))
         }
     }
 

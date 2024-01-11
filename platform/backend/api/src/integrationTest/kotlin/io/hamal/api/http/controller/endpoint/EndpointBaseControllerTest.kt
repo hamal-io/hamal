@@ -18,11 +18,11 @@ internal sealed class EndpointBaseControllerTest : BaseControllerTest() {
         name: EndpointName,
         method: EndpointMethod,
         flowId: FlowId = FlowId(1),
-    ): ApiEndpointCreateSubmitted {
+    ): ApiEndpointCreateRequested {
         val response = httpTemplate.post("/v1/flows/{flowId}/endpoints")
             .path("flowId", flowId)
             .body(
-                ApiEndpointCreateReq(
+                ApiEndpointCreateRequest(
                     name = name,
                     funcId = funcId,
                     method = method
@@ -32,17 +32,17 @@ internal sealed class EndpointBaseControllerTest : BaseControllerTest() {
 
         assertThat(response.statusCode, equalTo(Accepted))
         require(response is HttpSuccessResponse) { "request was not successful" }
-        return response.result(ApiEndpointCreateSubmitted::class)
+        return response.result(ApiEndpointCreateRequested::class)
     }
 
     fun createFunc(
         name: FuncName,
         flowId: FlowId = FlowId(1)
-    ): ApiFuncCreateSubmitted {
+    ): ApiFuncCreateRequested {
         val createTopicResponse = httpTemplate.post("/v1/flows/{flowId}/funcs")
             .path("flowId", flowId)
             .body(
-                ApiFuncCreateReq(
+                ApiFuncCreateRequest(
                     name = name,
                     inputs = FuncInputs(),
                     code = CodeValue("")
@@ -53,18 +53,18 @@ internal sealed class EndpointBaseControllerTest : BaseControllerTest() {
         assertThat(createTopicResponse.statusCode, equalTo(Accepted))
         require(createTopicResponse is HttpSuccessResponse) { "request was not successful" }
 
-        return createTopicResponse.result(ApiFuncCreateSubmitted::class)
+        return createTopicResponse.result(ApiFuncCreateRequested::class)
     }
 
     fun createFlow(
         name: FlowName,
         groupId: GroupId,
         type: FlowType = FlowType.default
-    ): ApiFlowCreateSubmitted {
+    ): ApiFlowCreateRequested {
         val response = httpTemplate.post("/v1/groups/{groupId}/flows")
             .path("groupId", groupId)
             .body(
-                ApiFlowCreateReq(
+                ApiFlowCreateRequest(
                     name = name,
                     type = type,
                     inputs = FlowInputs()
@@ -74,7 +74,7 @@ internal sealed class EndpointBaseControllerTest : BaseControllerTest() {
 
         assertThat(response.statusCode, equalTo(Accepted))
         require(response is HttpSuccessResponse) { "request was not successful" }
-        return response.result(ApiFlowCreateSubmitted::class)
+        return response.result(ApiFlowCreateRequested::class)
     }
 
 

@@ -1,27 +1,23 @@
 package io.hamal.lib.domain.vo
 
-import io.hamal.lib.common.domain.StringValueObject
-import io.hamal.lib.common.domain.StringValueObjectSerializer
+import io.hamal.lib.common.domain.ValueObjecHotObject
+import io.hamal.lib.common.domain.ValueObjectId
+import io.hamal.lib.common.domain.ValueObjectInstant
+import io.hamal.lib.common.domain.ValueObjectString
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.domain.vo.base.InputsSerializer
-import io.hamal.lib.domain.vo.base.MapValueObject
-import io.hamal.lib.kua.type.MapType
-import kotlinx.serialization.Serializable
+import io.hamal.lib.common.util.TimeUtils
+import java.time.Instant
 
-@Serializable(with = ExecId.Serializer::class)
-class ExecId(override val value: SnowflakeId) : SerializableDomainId() {
+class ExecId(override val value: SnowflakeId) : ValueObjectId() {
     constructor(value: Int) : this(SnowflakeId(value.toLong()))
     constructor(value: String) : this(SnowflakeId(value.toLong(16)))
-
-    internal object Serializer : SerializableDomainIdSerializer<ExecId>(::ExecId)
 }
 
-@Serializable(with = ExecInputs.Serializer::class)
-class ExecInputs(override val value: MapType = MapType()) : MapValueObject() {
-    internal object Serializer : InputsSerializer<ExecInputs>(::ExecInputs)
-}
+class ExecType(override val value: String) : ValueObjectString()
 
-@Serializable
+class ExecInputs(override val value: HotObject = HotObject.empty) : ValueObjecHotObject()
+
 data class ExecCode(
     val id: CodeId? = null,
     val version: CodeVersion? = null,
@@ -45,18 +41,37 @@ enum class ExecStatus(val value: Int) {
 }
 
 
-@Serializable(with = ExecToken.Serializer::class)
-class ExecToken(override val value: String) : StringValueObject() {
-    internal object Serializer : StringValueObjectSerializer<ExecToken>(::ExecToken)
+class ExecToken(override val value: String) : ValueObjectString()
+
+class ExecResult(override val value: HotObject = HotObject.empty) : ValueObjecHotObject()
+
+class ExecState(override val value: HotObject = HotObject.empty) : ValueObjecHotObject()
+
+
+class ExecScheduledAt(override val value: Instant) : ValueObjectInstant() {
+    companion object {
+        @JvmStatic
+        fun now(): ExecScheduledAt = ExecScheduledAt(TimeUtils.now())
+    }
 }
 
-@Serializable(with = ExecResult.Serializer::class)
-class ExecResult(override val value: MapType = MapType()) : MapValueObject() {
-    internal object Serializer : InputsSerializer<ExecResult>(::ExecResult)
+class ExecQueuedAt(override val value: Instant) : ValueObjectInstant() {
+    companion object {
+        @JvmStatic
+        fun now(): ExecQueuedAt = ExecQueuedAt(TimeUtils.now())
+    }
 }
 
-@Serializable(with = ExecState.Serializer::class)
-class ExecState(override val value: MapType = MapType()) : MapValueObject() {
-    internal object Serializer : InputsSerializer<ExecState>(::ExecState)
+class ExecCompletedAt(override val value: Instant) : ValueObjectInstant() {
+    companion object {
+        @JvmStatic
+        fun now(): ExecCompletedAt = ExecCompletedAt(TimeUtils.now())
+    }
 }
 
+class ExecFailedAt(override val value: Instant) : ValueObjectInstant() {
+    companion object {
+        @JvmStatic
+        fun now(): ExecFailedAt = ExecFailedAt(TimeUtils.now())
+    }
+}

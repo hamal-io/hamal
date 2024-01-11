@@ -4,7 +4,7 @@ import AbstractRunnerTest
 import io.hamal.lib.domain._enum.ExecLogLevel.*
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecLogMessage
-import io.hamal.lib.sdk.api.ApiExecLogAppendCmd
+import io.hamal.lib.sdk.api.ApiExecLogAppendRequest
 import io.hamal.lib.sdk.api.ApiExecLogService
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -78,13 +78,13 @@ internal class PluginLogTest : AbstractRunnerTest() {
     }
 
     private class TestExecLogService : ApiExecLogService {
-        override fun append(execId: ExecId, req: ApiExecLogAppendCmd) {
+        override fun append(execId: ExecId, req: ApiExecLogAppendRequest) {
             this.execId = execId
             this.req = req
         }
 
         lateinit var execId: ExecId
-        lateinit var req: ApiExecLogAppendCmd
+        lateinit var req: ApiExecLogAppendRequest
     }
 
 }

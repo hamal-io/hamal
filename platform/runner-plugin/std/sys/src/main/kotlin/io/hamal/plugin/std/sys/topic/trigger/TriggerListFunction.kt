@@ -5,73 +5,73 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.type.ArrayType
-import io.hamal.lib.kua.type.ErrorType
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.kua.type.KuaArray
+import io.hamal.lib.kua.type.KuaError
+import io.hamal.lib.kua.type.KuaMap
+import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiTriggerList
 import io.hamal.lib.sdk.api.ApiTriggerService.TriggerQuery
 
 class TriggerListFunction(
     private val sdk: ApiSdk
-) : Function1In2Out<MapType, ErrorType, ArrayType>(
-    FunctionInput1Schema(MapType::class),
-    FunctionOutput2Schema(ErrorType::class, ArrayType::class)
+) : Function1In2Out<KuaMap, KuaError, KuaArray>(
+    FunctionInput1Schema(KuaMap::class),
+    FunctionOutput2Schema(KuaError::class, KuaArray::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: MapType): Pair<ErrorType?, ArrayType?> {
+    override fun invoke(ctx: FunctionContext, arg1: KuaMap): Pair<KuaError?, KuaArray?> {
         return try {
-            null to ArrayType(
+            null to KuaArray(
                 sdk.trigger.list(TriggerQuery(
                     flowIds = arg1.getArrayType("flow_ids")
-                        .map { FlowId((it.value as StringType).value) }
+                        .map { FlowId((it.value as KuaString).value) }
                 )).mapIndexed { index, trigger ->
                     index to when (trigger) {
                         is ApiTriggerList.FixedRateTrigger -> {
-                            MapType(
+                            KuaMap(
                                 mutableMapOf(
-                                    "id" to StringType(trigger.id.value.value.toString(16)),
-                                    "type" to StringType("FixedRate"),
-                                    "name" to StringType(trigger.name.value),
-                                    "flow" to MapType(
+                                    "id" to KuaString(trigger.id.value.value.toString(16)),
+                                    "type" to KuaString("FixedRate"),
+                                    "name" to KuaString(trigger.name.value),
+                                    "flow" to KuaMap(
                                         mutableMapOf(
-                                            "id" to StringType(trigger.flow.id.value.value.toString(16)),
-                                            "name" to StringType(trigger.flow.name.value)
+                                            "id" to KuaString(trigger.flow.id.value.value.toString(16)),
+                                            "name" to KuaString(trigger.flow.name.value)
                                         )
                                     ),
-                                    "func" to MapType(
+                                    "func" to KuaMap(
                                         mutableMapOf(
-                                            "id" to StringType(trigger.func.id.value.value.toString(16)),
-                                            "name" to StringType(trigger.func.name.value)
+                                            "id" to KuaString(trigger.func.id.value.value.toString(16)),
+                                            "name" to KuaString(trigger.func.name.value)
                                         )
                                     ),
-                                    "duration" to StringType(trigger.duration.toIsoString())
+                                    "duration" to KuaString(trigger.duration.toIsoString())
                                 )
                             )
                         }
 
                         is ApiTriggerList.EventTrigger -> {
-                            MapType(
+                            KuaMap(
                                 mutableMapOf(
-                                    "id" to StringType(trigger.id.value.value.toString(16)),
-                                    "type" to StringType("Event"),
-                                    "name" to StringType(trigger.name.value),
-                                    "flow" to MapType(
+                                    "id" to KuaString(trigger.id.value.value.toString(16)),
+                                    "type" to KuaString("Event"),
+                                    "name" to KuaString(trigger.name.value),
+                                    "flow" to KuaMap(
                                         mutableMapOf(
-                                            "id" to StringType(trigger.flow.id.value.value.toString(16)),
-                                            "name" to StringType(trigger.flow.name.value)
+                                            "id" to KuaString(trigger.flow.id.value.value.toString(16)),
+                                            "name" to KuaString(trigger.flow.name.value)
                                         )
                                     ),
-                                    "func" to MapType(
+                                    "func" to KuaMap(
                                         mutableMapOf(
-                                            "id" to StringType(trigger.func.id.value.value.toString(16)),
-                                            "name" to StringType(trigger.func.name.value)
+                                            "id" to KuaString(trigger.func.id.value.value.toString(16)),
+                                            "name" to KuaString(trigger.func.name.value)
                                         )
                                     ),
-                                    "topic" to MapType(
+                                    "topic" to KuaMap(
                                         mutableMapOf(
-                                            "id" to StringType(trigger.topic.id.value.value.toString(16)),
-                                            "name" to StringType(trigger.topic.name.value)
+                                            "id" to KuaString(trigger.topic.id.value.value.toString(16)),
+                                            "name" to KuaString(trigger.topic.name.value)
                                         )
                                     ),
                                 )
@@ -79,59 +79,59 @@ class TriggerListFunction(
                         }
 
                         is ApiTriggerList.HookTrigger -> {
-                            MapType(
+                            KuaMap(
                                 mutableMapOf(
-                                    "id" to StringType(trigger.id.value.value.toString(16)),
-                                    "type" to StringType("Hook"),
-                                    "name" to StringType(trigger.name.value),
-                                    "flow" to MapType(
+                                    "id" to KuaString(trigger.id.value.value.toString(16)),
+                                    "type" to KuaString("Hook"),
+                                    "name" to KuaString(trigger.name.value),
+                                    "flow" to KuaMap(
                                         mutableMapOf(
-                                            "id" to StringType(trigger.flow.id.value.value.toString(16)),
-                                            "name" to StringType(trigger.flow.name.value)
+                                            "id" to KuaString(trigger.flow.id.value.value.toString(16)),
+                                            "name" to KuaString(trigger.flow.name.value)
                                         )
                                     ),
-                                    "func" to MapType(
+                                    "func" to KuaMap(
                                         mutableMapOf(
-                                            "id" to StringType(trigger.func.id.value.value.toString(16)),
-                                            "name" to StringType(trigger.func.name.value)
+                                            "id" to KuaString(trigger.func.id.value.value.toString(16)),
+                                            "name" to KuaString(trigger.func.name.value)
                                         )
                                     ),
-                                    "hook" to MapType(
+                                    "hook" to KuaMap(
                                         mutableMapOf(
-                                            "id" to StringType(trigger.hook.id.value.value.toString(16)),
-                                            "name" to StringType(trigger.hook.name.value),
-                                            "methods" to StringType(trigger.hook.method.name)
+                                            "id" to KuaString(trigger.hook.id.value.value.toString(16)),
+                                            "name" to KuaString(trigger.hook.name.value),
+                                            "methods" to KuaString(trigger.hook.method.name)
                                         )
                                     ),
                                 )
                             )
                         }
 
-                        is ApiTriggerList.CronTrigger -> MapType(
+                        is ApiTriggerList.CronTrigger -> KuaMap(
                             mutableMapOf(
-                                "id" to StringType(trigger.id.value.value.toString(16)),
-                                "type" to StringType("Cron"),
-                                "name" to StringType(trigger.name.value),
-                                "flow" to MapType(
+                                "id" to KuaString(trigger.id.value.value.toString(16)),
+                                "type" to KuaString("Cron"),
+                                "name" to KuaString(trigger.name.value),
+                                "flow" to KuaMap(
                                     mutableMapOf(
-                                        "id" to StringType(trigger.flow.id.value.value.toString(16)),
-                                        "name" to StringType(trigger.flow.name.value)
+                                        "id" to KuaString(trigger.flow.id.value.value.toString(16)),
+                                        "name" to KuaString(trigger.flow.name.value)
                                     )
                                 ),
-                                "func" to MapType(
+                                "func" to KuaMap(
                                     mutableMapOf(
-                                        "id" to StringType(trigger.func.id.value.value.toString(16)),
-                                        "name" to StringType(trigger.func.name.value)
+                                        "id" to KuaString(trigger.func.id.value.value.toString(16)),
+                                        "name" to KuaString(trigger.func.name.value)
                                     )
                                 ),
-                                "cron" to StringType(trigger.cron.value)
+                                "cron" to KuaString(trigger.cron.value)
                             )
                         )
                     }
                 }.toMap().toMutableMap()
             )
         } catch (t: Throwable) {
-            ErrorType(t.message!!) to null
+            KuaError(t.message!!) to null
         }
     }
 }

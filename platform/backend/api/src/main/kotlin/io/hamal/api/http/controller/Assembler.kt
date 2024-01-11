@@ -1,45 +1,46 @@
 package io.hamal.api.http.controller
 
+import io.hamal.lib.domain.request.*
+import io.hamal.lib.domain.vo.GroupDefaultFlowId
 import io.hamal.lib.sdk.api.*
-import io.hamal.repository.api.submitted_req.*
 import org.springframework.http.ResponseEntity
 
-fun Submitted.accepted(): ResponseEntity<ApiSubmitted> =
+fun Requested.accepted(): ResponseEntity<ApiRequested> =
     ResponseEntity.accepted().body(toApiSubmitted())
 
 // @formatter:off
-fun Submitted.toApiSubmitted(): ApiSubmitted = when (this) {
-    is AccountCreateSubmitted -> ApiTokenSubmitted(id, status, accountId, listOf(groupId), mapOf(groupId to flowId), token)
-    is AccountCreateAnonymousSubmitted -> ApiTokenSubmitted(id, status, accountId, listOf(groupId), mapOf(groupId to flowId), token)
-    is AccountConvertSubmitted -> ApiAccountConvertSubmitted(id, status, accountId, token)
-    is AuthLoginMetaMaskSubmitted -> ApiTokenSubmitted(id, status, accountId, groupIds, defaultFlowIds, token)
-    is AuthLoginEmailSubmitted -> ApiTokenSubmitted(id, status, accountId, groupIds, defaultFlowIds, token)
-    is BlueprintCreateSubmitted -> ApiBlueprintCreateSubmitted(id, status, blueprintId, groupId)
-    is BlueprintUpdateSubmitted -> ApiBlueprintUpdateSubmitted(id, status, blueprintId)
-    is EndpointCreateSubmitted -> ApiEndpointCreateSubmitted(id, status, endpointId, groupId, funcId)
-    is EndpointUpdateSubmitted -> ApiEndpointUpdateSubmitted(id, status, endpointId)
-    is ExecInvokeSubmitted -> ApiExecInvokeSubmitted(id, status, execId, groupId, flowId)
-    is ExtensionCreateSubmitted -> ApiExtensionCreateSubmitted(id, status, extensionId, groupId)
-    is ExtensionUpdateSubmitted -> ApiExtensionUpdateSubmitted(id, status, extensionId)
-    is FuncCreateSubmitted -> ApiFuncCreateSubmitted(id, status, funcId, groupId, flowId)
-    is FuncDeploySubmitted -> ApiFuncDeploySubmitted(id, status, funcId)
-    is FuncUpdateSubmitted -> ApiFuncUpdateSubmitted(id, status, funcId)
-    is HookCreateSubmitted -> ApiHookCreateSubmitted(id, status, hookId, groupId, flowId)
-    is HookUpdateSubmitted -> ApiHookUpdateSubmitted(id, status, hookId)
-    is FlowCreateSubmitted -> ApiFlowCreateSubmitted(id, status, flowId, groupId)
-    is FlowUpdateSubmitted -> ApiFlowUpdateSubmitted(id, status, flowId)
-    is StateSetSubmitted -> ApiStateSetSubmitted(id, status)
-    is TopicAppendToSubmitted -> ApiTopicAppendSubmitted(id, status, topicId)
-    is TopicCreateSubmitted -> ApiTopicCreateSubmitted(id, status, topicId, groupId, flowId)
-    is TriggerCreateSubmitted -> ApiTriggerCreateSubmitted(id, status, triggerId, groupId, flowId)
-    is TriggerStatusSubmitted -> ApiTriggerStatusSubmitted(id, status, triggerId, triggerStatus)
+fun Requested.toApiSubmitted(): ApiRequested = when (this) {
+    is AccountCreateRequested -> ApiTokenRequested(id, status, accountId, listOf(groupId), listOf(GroupDefaultFlowId(groupId , flowId)), token)
+    is AccountCreateAnonymousRequested -> ApiTokenRequested(id, status, accountId, listOf(groupId), listOf(GroupDefaultFlowId(groupId , flowId)), token)
+    is AccountConvertRequested -> ApiAccountConvertRequested(id, status, accountId, token)
+    is AuthLoginMetaMaskRequested -> ApiTokenRequested(id, status, accountId, groupIds, defaultFlowIds, token)
+    is AuthLoginEmailRequested -> ApiTokenRequested(id, status, accountId, groupIds, defaultFlowIds, token)
+    is BlueprintCreateRequested -> ApiBlueprintCreateRequested(id, status, blueprintId, groupId)
+    is BlueprintUpdateRequested -> ApiBlueprintUpdateRequested(id, status, blueprintId)
+    is EndpointCreateRequested -> ApiEndpointCreateRequested(id, status, endpointId, groupId, funcId)
+    is EndpointUpdateRequested -> ApiEndpointUpdateRequested(id, status, endpointId)
+    is ExecInvokeRequested -> ApiExecInvokeRequested(id, status, execId, groupId, flowId)
+    is ExtensionCreateRequested -> ApiExtensionCreateRequested(id, status, extensionId, groupId)
+    is ExtensionUpdateRequested -> ApiExtensionUpdateRequested(id, status, extensionId)
+    is FuncCreateRequested -> ApiFuncCreateRequested(id, status, funcId, groupId, flowId)
+    is FuncDeployRequested -> ApiFuncDeployRequested(id, status, funcId)
+    is FuncUpdateRequested -> ApiFuncUpdateRequested(id, status, funcId)
+    is HookCreateRequested -> ApiHookCreateRequested(id, status, hookId, groupId, flowId)
+    is HookUpdateRequested -> ApiHookUpdateRequested(id, status, hookId)
+    is FlowCreateRequested -> ApiFlowCreateRequested(id, status, flowId, groupId)
+    is FlowUpdateRequested -> ApiFlowUpdateRequested(id, status, flowId)
+    is StateSetRequested -> ApiStateSetRequested(id, status)
+    is TopicAppendToRequested -> ApiTopicAppendRequested(id, status, topicId)
+    is TopicCreateRequested -> ApiTopicCreateRequested(id, status, topicId, groupId, flowId)
+    is TriggerCreateRequested -> ApiTriggerCreateRequested(id, status, triggerId, groupId, flowId)
+    is TriggerStatusRequested -> ApiTriggerStatusRequested(id, status, triggerId, triggerStatus)
 
-    is AuthLogoutSubmitted,
-    is AccountCreateMetaMaskSubmitted,
-    is TestSubmitted,
-    is ExecFailSubmitted,
-    is FeedbackCreateSubmitted,
-    is HookInvokeSubmitted,
-    is ExecCompleteSubmitted -> throw NotImplementedError()
+    is AuthLogoutRequested,
+    is AccountCreateMetaMaskRequested,
+    is ExecFailRequested,
+    is FeedbackCreateRequested,
+    is HookInvokeRequested,
+    is TestRequested,
+    is ExecCompleteRequested -> throw NotImplementedError()
 }
 // @formatter:on

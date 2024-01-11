@@ -1,53 +1,45 @@
 package io.hamal.lib.sdk.api
 
-import io.hamal.lib.domain._enum.ReqStatus
+import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain.request.AuthChallengeMetaMaskRequest
+import io.hamal.lib.domain.request.AuthLogInEmailRequest
+import io.hamal.lib.domain.request.AuthLogInMetaMaskRequest
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpTemplate
-import io.hamal.request.AuthChallengeMetaMaskReq
-import io.hamal.request.AuthLogInEmailReq
-import io.hamal.request.AuthLogInMetaMaskReq
-import kotlinx.serialization.Serializable
 
-@Serializable
-data class ApiAuthChallengeMetaMaskReq(
+data class ApiAuthChallengeMetaMaskRequest(
     override val address: Web3Address,
-) : AuthChallengeMetaMaskReq
+) : AuthChallengeMetaMaskRequest
 
-
-@Serializable
 data class ApiChallengeMetaMask(
     val challenge: Web3Challenge
 )
 
-@Serializable
-data class ApiAuthLoginMetaMaskReq(
+data class ApiAuthLoginMetaMaskRequest(
     override val address: Web3Address,
     override val signature: Web3Signature
-) : AuthLogInMetaMaskReq
+) : AuthLogInMetaMaskRequest
 
-@Serializable
-data class ApiAuthLoginEmailReq(
+data class ApiAuthLoginEmailRequest(
     override val email: Email,
     override val password: Password
-) : AuthLogInEmailReq
+) : AuthLogInEmailRequest
 
-@Serializable
-data class ApiTokenSubmitted(
-    override val id: ReqId,
-    override val status: ReqStatus,
+data class ApiTokenRequested(
+    override val id: RequestId,
+    override val status: RequestStatus,
     val accountId: AccountId,
     val groupIds: List<GroupId>,
-    val defaultFlowIds: Map<GroupId, FlowId>,
+    val defaultFlowIds: List<GroupDefaultFlowId>,
     val token: AuthToken
-) : ApiSubmitted
+) : ApiRequested()
 
-@Serializable
-data class ApiAccountConvertSubmitted(
-    override val id: ReqId,
-    override val status: ReqStatus,
+data class ApiAccountConvertRequested(
+    override val id: RequestId,
+    override val status: RequestStatus,
     val accountId: AccountId,
     val token: AuthToken
-) : ApiSubmitted
+) : ApiRequested()
 
 interface AuthService
 

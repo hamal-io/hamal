@@ -1,11 +1,10 @@
-package io.hamal.core.req.handler.blueprint
+package io.hamal.core.request.handler.blueprint
 
-import io.hamal.core.req.handler.BaseReqHandlerTest
-import io.hamal.lib.domain._enum.ReqStatus
+import io.hamal.core.request.handler.BaseReqHandlerTest
+import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain.request.BlueprintCreateRequested
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.StringType
-import io.hamal.repository.api.submitted_req.BlueprintCreateSubmitted
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -26,13 +25,13 @@ internal class BlueprintCreateHandlerTest : BaseReqHandlerTest() {
     }
 
     private val submitCreateBlueprintReq by lazy {
-        BlueprintCreateSubmitted(
-            id = ReqId(1),
-            status = ReqStatus.Submitted,
+        BlueprintCreateRequested(
+            id = RequestId(1),
+            status = RequestStatus.Submitted,
             groupId = testGroup.id,
             blueprintId = BlueprintId(123),
             name = BlueprintName("TestBlueprint"),
-            inputs = BlueprintInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
+            inputs = BlueprintInputs(HotObject.builder().set("hamal", "rocks").build()),
             value = CodeValue("1 + 1"),
             creatorId = testAccount.id
         )

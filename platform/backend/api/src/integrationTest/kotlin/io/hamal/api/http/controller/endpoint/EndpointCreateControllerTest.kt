@@ -9,7 +9,7 @@ import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.BadRequest
 import io.hamal.lib.http.body
-import io.hamal.lib.sdk.api.ApiEndpointCreateReq
+import io.hamal.lib.sdk.api.ApiEndpointCreateRequest
 import io.hamal.lib.sdk.api.ApiError
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.empty
@@ -102,7 +102,7 @@ internal class EndpointCreateControllerTest : EndpointBaseControllerTest() {
         val response = httpTemplate.post("/v1/flows/{flowId}/endpoints")
             .path("flowId", flowId)
             .body(
-                ApiEndpointCreateReq(
+                ApiEndpointCreateRequest(
                     name = EndpointName("test-endpoint"),
                     funcId = funcId,
                     method = Post

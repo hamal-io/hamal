@@ -3,22 +3,24 @@ package io.hamal.repository.record.flow
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.record.Record
+import io.hamal.repository.record.RecordAdapter
 import io.hamal.repository.record.RecordSequence
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
+import io.hamal.repository.record.RecordedAt
 
-
-@Serializable
 sealed class FlowRecord(
     @Transient
-    override var sequence: RecordSequence? = null,
+    override var recordSequence: RecordSequence? = null,
     @Transient
     override var recordedAt: RecordedAt? = null
-) : Record<FlowId>()
+) : Record<FlowId>() {
+    internal object Adapter : RecordAdapter<FlowRecord>(
+        listOf(
+            FlowCreatedRecord::class,
+            FlowUpdatedRecord::class
+        )
+    )
+}
 
-@Serializable
-@SerialName("FlowCreatedRecord")
 data class FlowCreatedRecord(
     override val entityId: FlowId,
     override val cmdId: CmdId,
@@ -28,8 +30,6 @@ data class FlowCreatedRecord(
     val type: FlowType,
 ) : FlowRecord()
 
-@Serializable
-@SerialName("FlowUpdatedRecord")
 data class FlowUpdatedRecord(
     override val entityId: FlowId,
     override val cmdId: CmdId,

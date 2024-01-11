@@ -6,15 +6,13 @@ import io.hamal.core.component.DelayRetryFixedTime
 import io.hamal.core.config.BackendBasePath
 import io.hamal.extension.net.http.ExtensionHttpFactory
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.util.TimeUtils
-import io.hamal.lib.domain.GenerateDomainId
+import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContext
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.ApiSdkImpl
 import io.hamal.plugin.net.http.PluginHttpFactory
 import io.hamal.plugin.std.debug.PluginDebugFactory
@@ -54,11 +52,9 @@ class TestSandboxConfig {
     fun envFactory(@Value("\${io.hamal.runner.api.host}") apiHost: String): EnvFactory =
         object : EnvFactory {
             override fun create() = RunnerEnv(
-                MapType(
-                    mutableMapOf(
-                        "api_host" to StringType(apiHost)
-                    )
-                )
+                HotObject.builder()
+                    .set("api_host", apiHost)
+                    .build()
             )
         }
 }
@@ -192,13 +188,13 @@ class ClearController {
     lateinit var flowRepository: FlowRepository
 
     @Autowired
-    lateinit var reqRepository: ReqRepository
+    lateinit var reqRepository: RequestRepository
 
     @Autowired
     lateinit var triggerRepository: TriggerRepository
 
     @Autowired
-    lateinit var generateDomainId: GenerateDomainId
+    lateinit var generateDomainId: GenerateId
 
     private lateinit var testAccount: Account
     private lateinit var testAccountAuthToken: AuthToken
@@ -256,7 +252,7 @@ class TestConfig {
                     inputs = FlowInputs()
                 )
             )
-        } catch (t: Throwable) {
+        } catch (ignore: Throwable) {
         }
     }
 
@@ -276,7 +272,7 @@ class TestConfig {
 
 abstract class BaseEndpointTest : AbstractRunnerTest() {
 
-    abstract val apiHttpTemplate: HttpTemplate
+    abstract val sdk: ApiSdkImpl
 
     @TestFactory
     fun run(): List<DynamicTest> {
@@ -285,22 +281,20 @@ abstract class BaseEndpointTest : AbstractRunnerTest() {
             .map { testPath ->
                 val testName = generateTestName(testPath)
                 dynamicTest(testName) {
-                    apiHttpTemplate.post("/v1/clear").execute()
+                    sdk.template.post("/v1/clear").execute()
 
                     createTestRunner(
                         pluginFactories = listOf(
-                            PluginSysFactory(ApiSdkImpl(apiHttpTemplate)),
+                            PluginSysFactory(sdk),
                             PluginHttpFactory()
                         ),
                         extensionFactories = listOf(
                             ExtensionHttpFactory
                         ),
                         env = RunnerEnv(
-                            MapType(
-                                mutableMapOf(
-                                    "api_host" to StringType(apiHttpTemplate.baseUrl)
-                                )
-                            )
+                            HotObject.builder()
+                                .set("api_host", sdk.template.baseUrl)
+                                .build()
                         )
                     ).run(
                         unitOfWork(

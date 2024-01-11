@@ -1,10 +1,11 @@
 package io.hamal.lib.kua
 
 import io.hamal.lib.kua.NativeLoader.Preference.BuildDir
-import io.hamal.lib.kua.function.FunctionType
+import io.hamal.lib.kua.type.KuaFunction
+
 import kotlin.reflect.KClass
 
-fun Sandbox.registerGlobalFunction(name: String, function: FunctionType<*, *, *, *>) {
+fun Sandbox.registerGlobalFunction(name: String, function: KuaFunction<*, *, *, *>) {
     setGlobal(name, function)
 }
 

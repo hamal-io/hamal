@@ -1,22 +1,28 @@
 package io.hamal.repository.record.hook
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.FlowId
+import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.HookId
+import io.hamal.lib.domain.vo.HookName
 import io.hamal.repository.record.Record
+import io.hamal.repository.record.RecordAdapter
 import io.hamal.repository.record.RecordSequence
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
+import io.hamal.repository.record.RecordedAt
 
-@Serializable
 sealed class HookRecord(
     @Transient
-    override var sequence: RecordSequence? = null,
+    override var recordSequence: RecordSequence? = null,
     override var recordedAt: RecordedAt? = null
-) : Record<HookId>()
+) : Record<HookId>() {
+    internal object Adapter : RecordAdapter<HookRecord>(
+        listOf(
+            HookCreatedRecord::class,
+            HookUpdatedRecord::class
+        )
+    )
+}
 
-@Serializable
-@SerialName("HookCreatedRecord")
 data class HookCreatedRecord(
     override val entityId: HookId,
     override val cmdId: CmdId,
@@ -25,8 +31,6 @@ data class HookCreatedRecord(
     val name: HookName
 ) : HookRecord()
 
-@Serializable
-@SerialName("HookUpdatedRecord")
 data class HookUpdatedRecord(
     override val entityId: HookId,
     override val cmdId: CmdId,

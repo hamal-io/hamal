@@ -3,11 +3,11 @@ package io.hamal.api.http.controller.auth
 import io.hamal.api.http.controller.accepted
 import io.hamal.core.adapter.AuthChallengeMetaMaskPort
 import io.hamal.core.adapter.AuthLoginMetaMaskPort
+import io.hamal.lib.domain.request.AuthLoginMetaMaskRequested
+import io.hamal.lib.sdk.api.ApiAuthChallengeMetaMaskRequest
+import io.hamal.lib.sdk.api.ApiAuthLoginMetaMaskRequest
 import io.hamal.lib.sdk.api.ApiChallengeMetaMask
-import io.hamal.lib.sdk.api.ApiAuthChallengeMetaMaskReq
-import io.hamal.lib.sdk.api.ApiAuthLoginMetaMaskReq
-import io.hamal.lib.sdk.api.ApiSubmitted
-import io.hamal.repository.api.submitted_req.AuthLoginMetaMaskSubmitted
+import io.hamal.lib.sdk.api.ApiRequested
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -20,13 +20,13 @@ internal class AuthLoginMetaMaskController(
 ) {
 
     @PostMapping("/v1/metamask/challenge")
-    fun challenge(@RequestBody req: ApiAuthChallengeMetaMaskReq): ResponseEntity<ApiChallengeMetaMask> {
+    fun challenge(@RequestBody req: ApiAuthChallengeMetaMaskRequest): ResponseEntity<ApiChallengeMetaMask> {
         return ResponseEntity.ok(ApiChallengeMetaMask(metaMaskChallenge(req)))
     }
 
     @PostMapping("/v1/metamask/token")
-    fun login(@RequestBody req: ApiAuthLoginMetaMaskReq): ResponseEntity<ApiSubmitted> {
-        return metamaskToken(req, AuthLoginMetaMaskSubmitted::accepted)
+    fun login(@RequestBody req: ApiAuthLoginMetaMaskRequest): ResponseEntity<ApiRequested> {
+        return metamaskToken(req, AuthLoginMetaMaskRequested::accepted)
     }
 
 }

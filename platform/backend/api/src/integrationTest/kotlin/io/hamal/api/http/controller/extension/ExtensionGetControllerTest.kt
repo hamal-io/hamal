@@ -5,7 +5,7 @@ import io.hamal.lib.domain.vo.ExtensionName
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.sdk.api.ApiError
-import io.hamal.lib.sdk.api.ApiExtensionCreateReq
+import io.hamal.lib.sdk.api.ApiExtensionCreateRequest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -16,7 +16,7 @@ internal class ExtensionGetControllerTest : ExtensionBaseControllerTest() {
     fun `Get extension`() {
         val extId = awaitCompleted(
             createExtension(
-                ApiExtensionCreateReq(
+                ApiExtensionCreateRequest(
                     name = ExtensionName("TestExtension"),
                     code = CodeValue("40 + 2")
                 )

@@ -3,7 +3,7 @@ package io.hamal.api.http.controller.flow
 import io.hamal.lib.domain.vo.FlowInputs
 import io.hamal.lib.domain.vo.FlowName
 import io.hamal.lib.domain.vo.FlowType
-import io.hamal.lib.sdk.api.ApiFlowCreateReq
+import io.hamal.lib.sdk.api.ApiFlowCreateRequest
 import io.hamal.lib.sdk.api.ApiFlowList
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -26,7 +26,7 @@ internal class FlowListControllerTest : FlowBaseControllerTest() {
     fun `Single flow`() {
         val flowId = awaitCompleted(
             createFlow(
-                ApiFlowCreateReq(
+                ApiFlowCreateRequest(
                     name = FlowName("flow-one"),
                     inputs = FlowInputs(),
                     type = FlowType.default
@@ -50,7 +50,7 @@ internal class FlowListControllerTest : FlowBaseControllerTest() {
         awaitCompleted(
             IntRange(0, 20).map {
                 createFlow(
-                    ApiFlowCreateReq(
+                    ApiFlowCreateRequest(
                         name = FlowName("flow-$it"),
                         inputs = FlowInputs(),
                         type = FlowType.default
@@ -75,7 +75,7 @@ internal class FlowListControllerTest : FlowBaseControllerTest() {
     fun `Skip and limit flows`() {
         val requests = IntRange(0, 99).map {
             createFlow(
-                ApiFlowCreateReq(
+                ApiFlowCreateRequest(
                     name = FlowName("flow-$it"),
                     inputs = FlowInputs(),
                     type = FlowType.default

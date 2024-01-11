@@ -1,10 +1,8 @@
 package io.hamal.lib.web3.eth.domain
 
 import io.hamal.lib.web3.eth.abi.type.*
-import kotlinx.serialization.Serializable
 
 
-@Serializable
 data class EthBlock(
     val number: EthUint64,
     val hash: EthHash,
@@ -20,7 +18,6 @@ data class EthBlock(
     val extraData: EthBytes32,
     val transactions: List<Transaction>
 ) {
-    @Serializable
     data class Transaction(
         val type: EthUint8,
         val hash: EthHash,
@@ -33,7 +30,6 @@ data class EthBlock(
     )
 }
 
-@Serializable
 data class EthLiteBlock(
     val number: EthUint64,
     val hash: EthHash,

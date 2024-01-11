@@ -1,25 +1,18 @@
 package io.hamal.repository.sqlite.record
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.domain.DomainId
 import io.hamal.lib.common.domain.DomainObject
+import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.util.CollectionUtils.takeWhileInclusive
-import io.hamal.lib.domain.vo.RecordedAt
+import io.hamal.lib.domain.Json
 import io.hamal.lib.sqlite.NamedPreparedStatementDelegate
 import io.hamal.lib.sqlite.NamedPreparedStatementResultSetDelegate
 import io.hamal.lib.sqlite.Transaction
-import io.hamal.repository.record.CreateDomainObject
-import io.hamal.repository.record.Record
-import io.hamal.repository.record.RecordRepository
-import io.hamal.repository.record.RecordSequence
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.InternalSerializationApi
-import kotlinx.serialization.serializer
+import io.hamal.repository.record.*
 import kotlin.reflect.KClass
 
 
-@OptIn(ExperimentalSerializationApi::class, InternalSerializationApi::class)
-class RecordTransactionSqlite<ID : DomainId, RECORD : Record<ID>, OBJ : DomainObject<ID>>(
+class RecordTransactionSqlite<ID : ValueObjectId, RECORD : Record<ID>, OBJ : DomainObject<ID>>(
     private val createDomainObject: CreateDomainObject<ID, RECORD, OBJ>,
     private val recordClass: KClass<RECORD>,
     private val delegate: Transaction,
@@ -36,7 +29,7 @@ class RecordTransactionSqlite<ID : DomainId, RECORD : Record<ID>, OBJ : DomainOb
         ) {
             set("cmdId", record.cmdId)
             set("entityId", record.entityId)
-            set("data", protobuf.encodeToByteArray(recordClass.serializer(), record))
+            set("data", json.serializeAndCompress(record))
         }
 
         return record
@@ -52,8 +45,8 @@ class RecordTransactionSqlite<ID : DomainId, RECORD : Record<ID>, OBJ : DomainOb
                 set("entityId", id)
             }
             map {
-                protobuf.decodeFromByteArray(recordClass.serializer(), it.getBytes("data")).also { record ->
-                    record.sequence = RecordSequence(it.getInt("sequence"))
+                json.decompressAndDeserialize(recordClass, it.getBytes("data")).also { record ->
+                    record.recordSequence = RecordSequence(it.getInt("sequence"))
                     record.recordedAt = RecordedAt(it.getInstant("timestamp"))
                 }
             }
@@ -70,8 +63,8 @@ class RecordTransactionSqlite<ID : DomainId, RECORD : Record<ID>, OBJ : DomainOb
                 set("entityId", id)
             }
             map {
-                protobuf.decodeFromByteArray(recordClass.serializer(), it.getBytes("data")).also { record ->
-                    record.sequence = RecordSequence(it.getInt("sequence"))
+                json.decompressAndDeserialize(recordClass, it.getBytes("data")).also { record ->
+                    record.recordSequence = RecordSequence(it.getInt("sequence"))
                     record.recordedAt = RecordedAt(it.getInstant("timestamp"))
                 }
             }
@@ -99,14 +92,14 @@ class RecordTransactionSqlite<ID : DomainId, RECORD : Record<ID>, OBJ : DomainOb
                 set("sequence", sequence.value)
             }
             map {
-                protobuf.decodeFromByteArray(recordClass.serializer(), it.getBytes("data")).also { record ->
-                    record.sequence = RecordSequence(it.getInt("sequence"))
+                json.decompressAndDeserialize(recordClass, it.getBytes("data")).also { record ->
+                    record.recordSequence = RecordSequence(it.getInt("sequence"))
                     record.recordedAt = RecordedAt(it.getInstant("timestamp"))
                 }
             }
         }.ifEmpty { null }
             ?.let { records ->
-                if (records.none { it.sequence == sequence }) {
+                if (records.none { it.recordSequence == sequence }) {
                     null
                 } else {
                     createDomainObject(records)

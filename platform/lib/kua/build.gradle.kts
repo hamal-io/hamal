@@ -1,6 +1,5 @@
 plugins {
     id("hamal.common")
-    id("org.jetbrains.kotlin.plugin.serialization")
 }
 
 dependencies {
@@ -23,6 +22,7 @@ testing {
                     implementation(external.spring.logging)
 
                     implementation(project(":platform:lib:kua"))
+                    implementation(project(":platform:lib:domain"))
                     implementation(external.junit)
                     implementation(external.hamcrest)
                 }

@@ -4,9 +4,9 @@ import io.hamal.api.http.controller.accepted
 import io.hamal.core.adapter.AdhocInvokePort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.FlowId
-import io.hamal.lib.sdk.api.ApiAdhocInvokeReq
-import io.hamal.lib.sdk.api.ApiSubmitted
-import io.hamal.repository.api.submitted_req.ExecInvokeSubmitted
+import io.hamal.lib.sdk.api.ApiAdhocInvokeRequest
+import io.hamal.lib.sdk.api.ApiRequested
+import io.hamal.lib.domain.request.ExecInvokeRequested
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -21,6 +21,6 @@ internal class AdhocController(
     @PostMapping("/v1/flows/{flowId}/adhoc")
     fun invokeAdhoc(
         @PathVariable("flowId") flowId: FlowId,
-        @RequestBody req: ApiAdhocInvokeReq
-    ): ResponseEntity<ApiSubmitted> = retry { invokeAdhoc(flowId, req, ExecInvokeSubmitted::accepted) }
+        @RequestBody req: ApiAdhocInvokeRequest
+    ): ResponseEntity<ApiRequested> = retry { invokeAdhoc(flowId, req, ExecInvokeRequested::accepted) }
 }

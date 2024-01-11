@@ -2,15 +2,15 @@ package io.hamal.repository.log
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.HashUtils
-import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.FlowId
+import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
+import io.hamal.repository.api.log.AppenderImpl
 import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.repository.api.log.ConsumerId
 import io.hamal.repository.api.log.CreateTopic.TopicToCreate
-import io.hamal.repository.api.log.ProtobufAppender
-import io.hamal.repository.api.log.ProtobufLogConsumer
+import io.hamal.repository.api.log.LogConsumerImpl
 import io.hamal.repository.fixture.AbstractIntegrationTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers
@@ -28,10 +28,10 @@ class ConsumerTest : AbstractIntegrationTest() {
             TopicToCreate(TopicId(123), TopicName("topic"), FlowId(1), GroupId(1))
         )
 
-        val appender = ProtobufAppender(String::class, testInstance)
+        val appender = AppenderImpl<String>(testInstance)
         IntRange(1, 10).forEach { appender.append(CmdId(it), topic, "$it") }
 
-        val testConsumer = ProtobufLogConsumer(ConsumerId("consumer-01"), topic, testInstance, String::class)
+        val testConsumer = LogConsumerImpl(ConsumerId("consumer-01"), topic, testInstance, String::class)
         testConsumer.consumeIndexed(10) { index, _, value ->
             assertThat("${index + 1}", equalTo(value))
         }
@@ -62,9 +62,9 @@ class ConsumerTest : AbstractIntegrationTest() {
             TopicToCreate(TopicId(123), TopicName("topic"), FlowId.root, GroupId.root)
         )
 
-        val testAppender = ProtobufAppender(String::class, testInstance)
+        val testAppender = AppenderImpl<String>(testInstance)
 
-        val testConsumer = ProtobufLogConsumer(ConsumerId("consumer-01"), topic, testInstance, String::class)
+        val testConsumer = LogConsumerImpl(ConsumerId("consumer-01"), topic, testInstance, String::class)
         val collected = mutableListOf<String>()
         val consumerFuture = CompletableFuture.runAsync {
             while (collected.size < 1_000) {

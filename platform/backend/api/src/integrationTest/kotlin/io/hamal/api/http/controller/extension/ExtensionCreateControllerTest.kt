@@ -2,7 +2,7 @@ package io.hamal.api.http.controller.extension
 
 import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.ExtensionName
-import io.hamal.lib.sdk.api.ApiExtensionCreateReq
+import io.hamal.lib.sdk.api.ApiExtensionCreateRequest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -12,7 +12,7 @@ internal class ExtensionCreateControllerTest : ExtensionBaseControllerTest() {
     fun `Creates extension`() {
         val res = awaitCompleted(
             createExtension(
-                ApiExtensionCreateReq(
+                ApiExtensionCreateRequest(
                     name = ExtensionName("TestExtension"),
                     code = CodeValue("40 + 2")
                 )

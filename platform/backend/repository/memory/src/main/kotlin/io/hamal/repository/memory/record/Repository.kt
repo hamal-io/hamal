@@ -1,19 +1,15 @@
 package io.hamal.repository.memory.record
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.domain.DomainId
 import io.hamal.lib.common.domain.DomainObject
+import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.util.CollectionUtils.takeWhileInclusive
-import io.hamal.lib.domain.vo.RecordedAt
-import io.hamal.repository.record.CreateDomainObject
-import io.hamal.repository.record.Record
-import io.hamal.repository.record.RecordRepository
-import io.hamal.repository.record.RecordSequence
+import io.hamal.repository.record.*
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 import kotlin.reflect.KClass
 
-abstract class RecordMemoryRepository<ID : DomainId, RECORD : Record<ID>, OBJ : DomainObject<ID>>(
+abstract class RecordMemoryRepository<ID : ValueObjectId, RECORD : Record<ID>, OBJ : DomainObject<ID>>(
     private val createDomainObject: CreateDomainObject<ID, RECORD, OBJ>,
     private val recordClass: KClass<RECORD>,
 ) : RecordRepository<ID, RECORD, OBJ> {
@@ -25,7 +21,7 @@ abstract class RecordMemoryRepository<ID : DomainId, RECORD : Record<ID>, OBJ : 
         return lock.withLock {
             val records = store.getOrDefault(record.entityId, mutableListOf())
             record.apply {
-                sequence = RecordSequence(records.size + 1)
+                recordSequence = RecordSequence(records.size + 1)
                 recordedAt = RecordedAt.now()
             }
             store[record.entityId] = records.apply { add(record) }
@@ -54,12 +50,12 @@ abstract class RecordMemoryRepository<ID : DomainId, RECORD : Record<ID>, OBJ : 
     override fun versionOf(id: ID, sequence: RecordSequence): OBJ? {
         return recordsOf(id)
             .filter {
-                val seq = it.sequence
-                seq != null && seq >= sequence
+                val seq = it.recordSequence
+                seq != null && seq <= sequence
             }
             .ifEmpty { null }
             ?.let { records ->
-                if (records.none { it.sequence == sequence }) {
+                if (records.none { it.recordSequence == sequence }) {
                     null
                 } else {
                     createDomainObject(records)

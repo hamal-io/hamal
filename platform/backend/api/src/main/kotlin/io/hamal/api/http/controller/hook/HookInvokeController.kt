@@ -1,33 +1,25 @@
 package io.hamal.api.http.controller.hook
 
-import io.hamal.lib.domain.GenerateDomainId
+import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain._enum.HookMethod.*
-import io.hamal.lib.domain._enum.ReqStatus
-import io.hamal.lib.domain._enum.ReqStatus.Submitted
+import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain._enum.RequestStatus.Submitted
+import io.hamal.lib.domain.request.HookInvokeRequested
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.converter.convertToType
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.HookQueryRepository
-import io.hamal.repository.api.ReqCmdRepository
-import io.hamal.repository.api.submitted_req.HookInvokeSubmitted
+import io.hamal.repository.api.RequestCmdRepository
 import jakarta.servlet.http.HttpServletRequest
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.JsonObject
 import org.springframework.http.HttpStatus.ACCEPTED
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
 internal class HookInvokeController(
-    private val generateDomainId: GenerateDomainId,
-    private val reqCmdRepository: ReqCmdRepository,
-    private val hookQueryRepository: HookQueryRepository,
-    private val json: Json
+    private val generateDomainId: GenerateId,
+    private val reqCmdRepository: RequestCmdRepository,
+    private val hookQueryRepository: HookQueryRepository
 ) {
     @GetMapping("/v1/webhooks/{id}")
     fun webhookGet(@PathVariable("id") id: HookId, req: HttpServletRequest) = handle(id, req)
@@ -47,8 +39,8 @@ internal class HookInvokeController(
     private fun handle(id: HookId, req: HttpServletRequest): ResponseEntity<Response> {
         val hook = hookQueryRepository.get(id)
 
-        val result = HookInvokeSubmitted(
-            id = generateDomainId(::ReqId),
+        val result = HookInvokeRequested(
+            id = generateDomainId(::RequestId),
             status = Submitted,
             hookId = id,
             groupId = hook.groupId,
@@ -62,23 +54,29 @@ internal class HookInvokeController(
         return ResponseEntity(Response(result), ACCEPTED)
     }
 
-    private fun HttpServletRequest.headers() = HookHeaders(
-        MapType(headerNames.asSequence()
-            .map { headerName -> headerName to StringType(getHeader(headerName)) }
-            .toMap()
-            .toMutableMap()
-        ))
+    private fun HttpServletRequest.headers(): HookHeaders {
+        val builder = HotObject.builder()
+        headerNames.asSequence().forEach { headerName ->
+            builder[headerName] = getHeader(headerName)
+        }
+        return HookHeaders(builder.build())
+    }
 
-    private fun HttpServletRequest.parameters() = HookParameters(
-        MapType(parameterMap.map { (key, value) -> key to StringType(value.joinToString(",")) }.toMap().toMutableMap())
-    )
+    private fun HttpServletRequest.parameters(): HookParameters {
+        val builder = HotObject.builder()
+        parameterMap.forEach { (key, value) ->
+            builder[key] = value.joinToString(",")
+        }
+        return HookParameters(builder.build())
+    }
 
     private fun HttpServletRequest.content(): HookContent {
         require(contentType.startsWith("application/json")) { "Only application/json supported yet" }
         val content = reader.lines().reduce("", String::plus)
-        val el = json.decodeFromString<JsonElement>(content)
-        require(el is JsonObject)
-        return HookContent(el.convertToType())
+        TODO()
+//        val el = json.decodeFromString<JsonElement>(content)
+//        require(el is JsonObject)
+//        return HookContent(el.convertToType())
     }
 
     private fun HttpServletRequest.method(): HookMethod = when (method.lowercase()) {
@@ -90,12 +88,11 @@ internal class HookInvokeController(
         else -> throw IllegalArgumentException("${method.lowercase()} not supported")
     }
 
-    @Serializable
     data class Response(
-        val reqId: ReqId,
-        val status: ReqStatus,
+        val reqId: RequestId,
+        val status: RequestStatus,
         val id: HookId
     ) {
-        constructor(req: HookInvokeSubmitted) : this(req.id, req.status, req.hookId)
+        constructor(req: HookInvokeRequested) : this(req.id, req.status, req.hookId)
     }
 }

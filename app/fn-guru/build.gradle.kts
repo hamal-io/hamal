@@ -3,7 +3,6 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
 plugins {
     id("hamal.common")
     application
-    id("org.jetbrains.kotlin.plugin.serialization")
     id("org.springframework.boot").version("3.0.5")
     kotlin("plugin.spring").version("1.8.10")
     id("com.bmuschko.docker-spring-boot-application").version("9.3.1")

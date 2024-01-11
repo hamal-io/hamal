@@ -6,13 +6,11 @@ import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Extension
 import io.hamal.repository.api.ExtensionQueryRepository.ExtensionQuery
 import io.hamal.repository.record.extension.ExtensionRecord
+import io.hamal.repository.record.json
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
-import io.hamal.repository.sqlite.record.protobuf
-import kotlinx.serialization.ExperimentalSerializationApi
 import org.sqlite.SQLiteException
 
-@OptIn(ExperimentalSerializationApi::class)
 internal object ProjectionCurrent : ProjectionSqlite<ExtensionId, ExtensionRecord, Extension> {
     override fun upsert(tx: RecordTransactionSqlite<ExtensionId, ExtensionRecord, Extension>, obj: Extension) {
         try {
@@ -29,7 +27,7 @@ internal object ProjectionCurrent : ProjectionSqlite<ExtensionId, ExtensionRecor
                 set("id", obj.id)
                 set("groupId", obj.groupId)
                 set("name", obj.name)
-                set("data", protobuf.encodeToByteArray(Extension.serializer(), obj))
+                set("data", json.serializeAndCompress(obj))
             }
         } catch (e: SQLiteException) {
             if (e.message!!.contains("(UNIQUE constraint failed: current.group_id, current.name)")) {
@@ -73,7 +71,7 @@ internal object ProjectionCurrent : ProjectionSqlite<ExtensionId, ExtensionRecor
                 set("id", extId)
             }
             map { rs ->
-                protobuf.decodeFromByteArray(Extension.serializer(), rs.getBytes("data"))
+                json.decompressAndDeserialize(Extension::class, rs.getBytes("data"))
             }
         }
     }
@@ -98,7 +96,7 @@ internal object ProjectionCurrent : ProjectionSqlite<ExtensionId, ExtensionRecor
                 set("limit", query.limit)
             }
             map { rs ->
-                protobuf.decodeFromByteArray(Extension.serializer(), rs.getBytes("data"))
+                json.decompressAndDeserialize(Extension::class, rs.getBytes("data"))
             }
         }
     }

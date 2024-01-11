@@ -9,7 +9,7 @@ import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiError
-import io.hamal.lib.sdk.api.ApiHookCreateReq
+import io.hamal.lib.sdk.api.ApiHookCreateRequest
 import io.hamal.repository.api.FlowCmdRepository.CreateCmd
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.empty
@@ -21,7 +21,7 @@ internal class HookCreateControllerTest : HookBaseControllerTest() {
     @Test
     fun `Create hook with default flow id`() {
         val result = createHook(
-            req = ApiHookCreateReq(
+            req = ApiHookCreateRequest(
                 name = HookName("test-hook"),
             ),
             flowId = FlowId(1)
@@ -52,7 +52,7 @@ internal class HookCreateControllerTest : HookBaseControllerTest() {
         )
 
         val result = createHook(
-            req = ApiHookCreateReq(HookName("test-hook")),
+            req = ApiHookCreateRequest(HookName("test-hook")),
             flowId = flow.id
         )
         awaitCompleted(result)
@@ -72,7 +72,7 @@ internal class HookCreateControllerTest : HookBaseControllerTest() {
 
         val response = httpTemplate.post("/v1/flows/12345/hooks")
             .path("groupId", testGroup.id)
-            .body(ApiHookCreateReq(HookName("test-hook")))
+            .body(ApiHookCreateRequest(HookName("test-hook")))
             .execute()
 
         assertThat(response.statusCode, equalTo(NotFound))

@@ -1,13 +1,12 @@
-package io.hamal.core.req.handler.exec
+package io.hamal.core.request.handler.exec
 
-import io.hamal.core.req.handler.BaseReqHandlerTest
+import io.hamal.core.request.handler.BaseReqHandlerTest
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain._enum.ReqStatus.Submitted
+import io.hamal.lib.domain._enum.RequestStatus.Submitted
+import io.hamal.lib.domain.request.ExecInvokeRequested
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.ExecQueryRepository.ExecQuery
-import io.hamal.repository.api.submitted_req.ExecInvokeSubmitted
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
@@ -20,13 +19,13 @@ internal class ExecInvokeHandlerTest : BaseReqHandlerTest() {
     @Test
     fun `Invokes execution with code`() {
         testInstance(
-            ExecInvokeSubmitted(
-                id = ReqId(1),
+            ExecInvokeRequested(
+                id = RequestId(1),
                 status = Submitted,
                 execId = ExecId(3333),
                 flowId = testFlow.id,
                 groupId = testGroup.id,
-                inputs = InvocationInputs(MapType(mutableMapOf("hamal" to StringType("justworks")))),
+                inputs = InvocationInputs(HotObject.builder().set("hamal", "justworks").build()),
                 code = ExecCode(value = CodeValue("code")),
                 funcId = null,
                 correlationId = null,
@@ -40,7 +39,7 @@ internal class ExecInvokeHandlerTest : BaseReqHandlerTest() {
             with(it.first()) {
                 assertThat(id, equalTo(ExecId(3333)))
                 assertThat(correlation, nullValue())
-                assertThat(inputs, equalTo(ExecInputs(MapType(mutableMapOf("hamal" to StringType("justworks"))))))
+                assertThat(inputs, equalTo(ExecInputs(HotObject.builder().set("hamal", "justworks").build())))
                 assertThat(code, equalTo(ExecCode(value = CodeValue("code"))))
             }
         }
@@ -53,27 +52,25 @@ internal class ExecInvokeHandlerTest : BaseReqHandlerTest() {
             codeId = CodeId(4455),
             codeVersion = CodeVersion(5544),
             inputs = FuncInputs(
-                MapType(
-                    mutableMapOf(
-                        "override" to StringType("false"), "func" to StringType("func")
-                    )
-                )
+                HotObject.builder()
+                    .set("override", "false")
+                    .set("func", "func")
+                    .build()
             )
         )
         testInstance(
-            ExecInvokeSubmitted(
-                id = ReqId(1),
+            ExecInvokeRequested(
+                id = RequestId(1),
                 correlationId = CorrelationId("some-correlation"),
                 status = Submitted,
                 execId = ExecId(3333),
                 flowId = testFlow.id,
                 groupId = testGroup.id,
                 inputs = InvocationInputs(
-                    MapType(
-                        mutableMapOf(
-                            "override" to StringType("true"), "invocation" to StringType("invocation")
-                        )
-                    )
+                    HotObject.builder()
+                        .set("override", "true")
+                        .set("invocation", "invocation")
+                        .build()
                 ),
                 funcId = FuncId(4444),
                 code = ExecCode(
@@ -96,13 +93,11 @@ internal class ExecInvokeHandlerTest : BaseReqHandlerTest() {
                 assertThat(
                     inputs, equalTo(
                         ExecInputs(
-                            MapType(
-                                mutableMapOf(
-                                    "func" to StringType("func"),
-                                    "invocation" to StringType("invocation"),
-                                    "override" to StringType("true"),
-                                )
-                            )
+                            HotObject.builder()
+                                .set("override", "true")
+                                .set("func", "func")
+                                .set("invocation", "invocation")
+                                .build()
                         )
                     )
                 )
@@ -132,17 +127,18 @@ internal class ExecInvokeHandlerTest : BaseReqHandlerTest() {
 
     //    @formatter:off
     private val submittedFixedRateInvocationReq by lazy {
-        ExecInvokeSubmitted(
-            id = ReqId(1),
+        ExecInvokeRequested(
+            id = RequestId(1),
             correlationId = CorrelationId("some-correlation"),
             status = Submitted,
             execId = ExecId(3333),
             flowId = testFlow.id,
             groupId = testGroup.id,
-            inputs = InvocationInputs(MapType(mutableMapOf(
-                    "override" to StringType("true"),
-                    "invocation" to StringType("invocation")
-                    ))),
+            inputs = InvocationInputs(
+                HotObject.builder()
+                    .set("override", "true")
+                    .set("invocation", "invocation")
+                    .build()),
             funcId = FuncId(4444),
             code = ExecCode(
                 id = CodeId(5555),

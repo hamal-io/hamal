@@ -1,49 +1,39 @@
 package io.hamal.lib.sdk.api
 
+import io.hamal.lib.common.domain.ValueObjecHotObject
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
-import io.hamal.lib.domain._enum.ReqStatus
+import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain.request.StateSetRequest
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.FuncName
-import io.hamal.lib.domain.vo.ReqId
-import io.hamal.lib.domain.vo.base.MapValueObject
-import io.hamal.lib.domain.vo.base.InputsSerializer
-import io.hamal.lib.kua.type.MapType
-import io.hamal.request.StateSetReq
-import kotlinx.serialization.Serializable
+import io.hamal.lib.domain.vo.RequestId
 
-@Serializable
-data class ApiStateSetReq(
+data class ApiStateSetRequest(
     override val correlation: Correlation,
     override val value: State
-) : StateSetReq
+) : StateSetRequest
 
-@Serializable
-data class ApiStateSetSubmitted(
-    override val id: ReqId,
-    override val status: ReqStatus
-) : ApiSubmitted
+data class ApiStateSetRequested(
+    override val id: RequestId,
+    override val status: RequestStatus
+) : ApiRequested()
 
 
-@Serializable(with = ApiState.Serializer::class)
-class ApiState(override val value: MapType = MapType()) : MapValueObject() {
-    internal object Serializer : InputsSerializer<ApiState>(::ApiState)
-}
+class ApiState(override val value: HotObject = HotObject.empty) : ValueObjecHotObject()
 
-@Serializable
 data class ApiCorrelation(
     val correlationId: CorrelationId,
     val func: Func
 ) {
-    @Serializable
     data class Func(
         val id: FuncId,
         val name: FuncName
     )
 }
 
-@Serializable
 data class ApiCorrelatedState(
     val correlation: ApiCorrelation,
     val state: ApiState

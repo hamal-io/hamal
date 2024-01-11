@@ -2,7 +2,7 @@ package io.hamal.api.http.controller.hook
 
 import io.hamal.lib.domain.vo.FlowName
 import io.hamal.lib.domain.vo.HookName
-import io.hamal.lib.sdk.api.ApiHookCreateReq
+import io.hamal.lib.sdk.api.ApiHookCreateRequest
 import io.hamal.lib.sdk.api.ApiHookList
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
@@ -18,7 +18,7 @@ internal class HookListControllerTest : HookBaseControllerTest() {
     @Test
     fun `Single hook`() {
         val hookId = awaitCompleted(
-            createHook(ApiHookCreateReq(HookName("hook-one")))
+            createHook(ApiHookCreateRequest(HookName("hook-one")))
         ).hookId
 
         with(listHooks()) {
@@ -34,7 +34,7 @@ internal class HookListControllerTest : HookBaseControllerTest() {
     fun `Limit hooks`() {
         awaitCompleted(
             IntRange(0, 20).map {
-                createHook(ApiHookCreateReq(HookName("hook-$it")))
+                createHook(ApiHookCreateRequest(HookName("hook-$it")))
             }
         )
 
@@ -53,7 +53,7 @@ internal class HookListControllerTest : HookBaseControllerTest() {
     @Test
     fun `Skip and limit hooks`() {
         val requests = IntRange(0, 99).map {
-            createHook(ApiHookCreateReq(HookName("hook-$it")))
+            createHook(ApiHookCreateRequest(HookName("hook-$it")))
         }
 
         awaitCompleted(requests)

@@ -1,33 +1,26 @@
 package io.hamal.api.http.controller.endpoint
 
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.util.TimeUtils
-import io.hamal.lib.domain.GenerateDomainId
+import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain._enum.EndpointMethod
-import io.hamal.lib.domain._enum.ReqStatus.Submitted
+import io.hamal.lib.domain._enum.RequestStatus.Submitted
+import io.hamal.lib.domain.request.ExecInvokeRequested
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.converter.convertToType
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.api.ApiExec
 import io.hamal.repository.api.*
-import io.hamal.repository.api.submitted_req.ExecInvokeSubmitted
 import jakarta.servlet.http.HttpServletRequest
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.JsonObject
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.util.concurrent.CompletableFuture
 
 @RestController
 internal class EndpointInvokeController(
-    private val generateDomainId: GenerateDomainId,
-    private val reqCmdRepository: ReqCmdRepository,
+    private val generateDomainId: GenerateId,
+    private val reqCmdRepository: RequestCmdRepository,
     private val execRepository: ExecRepository,
     private val endpointQueryRepository: EndpointQueryRepository,
-    private val funcQueryRepository: FuncQueryRepository,
-    private val json: Json
+    private val funcQueryRepository: FuncQueryRepository
 ) {
 
     @GetMapping("/v1/endpoints/{id}/invoke")
@@ -82,8 +75,8 @@ internal class EndpointInvokeController(
     private fun invoke(func: Func, invocation: EndpointInvocation): Exec {
         val execId = generateDomainId(::ExecId)
         reqCmdRepository.queue(
-            ExecInvokeSubmitted(
-                id = generateDomainId(::ReqId),
+            ExecInvokeRequested(
+                id = generateDomainId(::RequestId),
                 status = Submitted,
                 execId = execId,
                 flowId = func.flowId,
@@ -127,25 +120,31 @@ internal class EndpointInvokeController(
         else -> throw IllegalArgumentException("${method.lowercase()} not supported")
     }
 
-    private fun HttpServletRequest.headers() = EndpointHeaders(
-        MapType(headerNames.asSequence()
-            .map { headerName -> headerName to StringType(getHeader(headerName)) }
-            .toMap()
-            .toMutableMap()
-        ))
+    private fun HttpServletRequest.headers(): EndpointHeaders {
+        val builder = HotObject.builder()
+        headerNames.asSequence().forEach { headerName ->
+            builder[headerName] = getHeader(headerName)
+        }
+        return EndpointHeaders(builder.build())
+    }
 
-    private fun HttpServletRequest.parameters() = EndpointParameters(
-        MapType(parameterMap.map { (key, value) -> key to StringType(value.joinToString(",")) }.toMap().toMutableMap())
-    )
+    private fun HttpServletRequest.parameters(): EndpointParameters {
+        val builder = HotObject.builder()
+        parameterMap.forEach { (key, value) ->
+            builder[key] = value.joinToString(",")
+        }
+        return EndpointParameters(builder.build())
+    }
 
     private fun HttpServletRequest.content(): EndpointContent {
         val content = reader.lines().reduce("", String::plus)
         if (content.isEmpty()) return EndpointContent()
 
-        require(contentType.startsWith("application/json")) { "Only application/json supported yet" }
-        val el = json.decodeFromString<JsonElement>(content)
-        require(el is JsonObject)
-        return EndpointContent(el.convertToType())
+//        require(contentType.startsWith("application/json")) { "Only application/json supported yet" }
+//        val el = json.decodeFromString<JsonElement>(content)
+//        require(el is JsonObject)
+//        return EndpointContent(el.convertToType())
+        TODO()
     }
 
 }

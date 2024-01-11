@@ -1,15 +1,19 @@
 package io.hamal.repository.api
 
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonElement
+import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.DomainObject
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.domain.UpdatedAt
+import io.hamal.lib.common.serialization.JsonAdapter
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
-import kotlinx.serialization.Serializable
+import java.lang.reflect.Type
 import kotlin.time.Duration
 
 interface TriggerRepository : TriggerCmdRepository, TriggerQueryRepository
@@ -99,7 +103,6 @@ interface TriggerQueryRepository {
     )
 }
 
-@Serializable
 sealed interface Trigger : DomainObject<TriggerId> {
     val cmdId: CmdId
     val groupId: GroupId
@@ -110,9 +113,34 @@ sealed interface Trigger : DomainObject<TriggerId> {
     val inputs: TriggerInputs
     val type: TriggerType
     val status: TriggerStatus
+
+    object Adapter : JsonAdapter<Trigger> {
+        override fun serialize(
+            src: Trigger,
+            typeOfSrc: Type,
+            context: JsonSerializationContext
+        ): JsonElement {
+            return context.serialize(src)
+        }
+
+        override fun deserialize(
+            json: JsonElement,
+            typeOfT: Type,
+            context: JsonDeserializationContext
+        ): Trigger {
+            val type = json.asJsonObject.get("type").asString
+            return context.deserialize(json, classMapping[type]!!.java)
+        }
+
+        private val classMapping = mapOf(
+            TriggerType.FixedRate.name to FixedRateTrigger::class,
+            TriggerType.Event.name to EventTrigger::class,
+            TriggerType.Hook.name to HookTrigger::class,
+            TriggerType.Cron.name to CronTrigger::class
+        )
+    }
 }
 
-@Serializable
 class FixedRateTrigger(
     override val cmdId: CmdId,
     override val id: TriggerId,
@@ -129,7 +157,6 @@ class FixedRateTrigger(
     override val type = TriggerType.FixedRate
 }
 
-@Serializable
 class EventTrigger(
     override val cmdId: CmdId,
     override val id: TriggerId,
@@ -146,8 +173,6 @@ class EventTrigger(
     override val type = TriggerType.Event
 }
 
-
-@Serializable
 class HookTrigger(
     override val cmdId: CmdId,
     override val id: TriggerId,
@@ -165,13 +190,6 @@ class HookTrigger(
     override val type = TriggerType.Hook
 }
 
-data class HookTriggerUnique(
-    val funcId: FuncId,
-    val hookId: HookId,
-    val hookMethod: HookMethod
-)
-
-@Serializable
 class CronTrigger(
     override val cmdId: CmdId,
     override val id: TriggerId,

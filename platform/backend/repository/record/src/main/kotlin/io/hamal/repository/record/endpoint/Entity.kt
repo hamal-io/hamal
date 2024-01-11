@@ -6,6 +6,7 @@ import io.hamal.repository.api.Endpoint
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordEntity
 import io.hamal.repository.record.RecordSequence
+import io.hamal.repository.record.RecordedAt
 
 data class EndpointEntity(
     override val cmdId: CmdId,

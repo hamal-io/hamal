@@ -6,13 +6,10 @@ import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Flow
 import io.hamal.repository.api.FlowQueryRepository.FlowQuery
 import io.hamal.repository.record.flow.FlowRecord
+import io.hamal.repository.record.json
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
-import io.hamal.repository.sqlite.record.protobuf
-import kotlinx.serialization.ExperimentalSerializationApi
 
-
-@OptIn(ExperimentalSerializationApi::class)
 internal object ProjectionCurrent : ProjectionSqlite<FlowId, FlowRecord, Flow> {
 
     fun find(connection: Connection, flowId: FlowId): Flow? {
@@ -30,7 +27,7 @@ internal object ProjectionCurrent : ProjectionSqlite<FlowId, FlowRecord, Flow> {
                 set("id", flowId)
             }
             map { rs ->
-                protobuf.decodeFromByteArray(Flow.serializer(), rs.getBytes("data"))
+                json.decompressAndDeserialize(Flow::class, rs.getBytes("data"))
             }
         }
     }
@@ -55,7 +52,7 @@ internal object ProjectionCurrent : ProjectionSqlite<FlowId, FlowRecord, Flow> {
                 set("limit", query.limit)
             }
             map { rs ->
-                protobuf.decodeFromByteArray(Flow.serializer(), rs.getBytes("data"))
+                json.decompressAndDeserialize(Flow::class, rs.getBytes("data"))
             }
         }
     }
@@ -93,7 +90,7 @@ internal object ProjectionCurrent : ProjectionSqlite<FlowId, FlowRecord, Flow> {
         ) {
             set("id", obj.id)
             set("groupId", obj.groupId)
-            set("data", protobuf.encodeToByteArray(Flow.serializer(), obj))
+            set("data", json.serializeAndCompress(obj))
         }
     }
 
@@ -113,7 +110,7 @@ internal object ProjectionCurrent : ProjectionSqlite<FlowId, FlowRecord, Flow> {
     override fun clear(tx: Transaction) {
         tx.execute("""DELETE FROM current""")
     }
-    
+
     private fun FlowQuery.groupIds(): String {
         return if (groupIds.isEmpty()) {
             ""

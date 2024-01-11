@@ -4,24 +4,26 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.ExtensionId
 import io.hamal.lib.domain.vo.ExtensionName
 import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.domain.vo.RecordedAt
 import io.hamal.repository.api.ExtensionCode
 import io.hamal.repository.record.Record
+import io.hamal.repository.record.RecordAdapter
 import io.hamal.repository.record.RecordSequence
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
+import io.hamal.repository.record.RecordedAt
 
-@Serializable
 sealed class ExtensionRecord(
     @Transient
-    override var sequence: RecordSequence? = null,
+    override var recordSequence: RecordSequence? = null,
     @Transient
     override var recordedAt: RecordedAt? = null
-) : Record<ExtensionId>()
+) : Record<ExtensionId>() {
+    internal object Adapter : RecordAdapter<ExtensionRecord>(
+        listOf(
+            ExtensionCreatedRecord::class,
+            ExtensionUpdatedRecord::class
+        )
+    )
+}
 
-@Serializable
-@SerialName("ExtensionCreatedRecord")
 data class ExtensionCreatedRecord(
     override val entityId: ExtensionId,
     override val cmdId: CmdId,
@@ -31,8 +33,6 @@ data class ExtensionCreatedRecord(
 
 ) : ExtensionRecord()
 
-@Serializable
-@SerialName("ExtensionUpdatedRecord")
 data class ExtensionUpdatedRecord(
     override val entityId: ExtensionId,
     override val cmdId: CmdId,

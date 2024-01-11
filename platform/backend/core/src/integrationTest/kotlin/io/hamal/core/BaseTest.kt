@@ -1,14 +1,12 @@
 package io.hamal.core
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.GenerateDomainId
+import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.AccountType.Root
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.NumberType
-import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.*
 import io.hamal.repository.api.AuthCmdRepository.CreateTokenAuthCmd
 import io.hamal.repository.api.ExecCmdRepository.PlanCmd
@@ -87,10 +85,10 @@ internal abstract class BaseTest {
     lateinit var platformEventBrokerRepository: BrokerRepository
 
     @Autowired
-    lateinit var reqQueryRepository: ReqQueryRepository
+    lateinit var reqQueryRepository: RequestQueryRepository
 
     @Autowired
-    lateinit var reqCmdRepository: ReqCmdRepository
+    lateinit var reqCmdRepository: RequestCmdRepository
 
     @Autowired
     lateinit var blueprintCmdRepository: BlueprintCmdRepository
@@ -111,7 +109,7 @@ internal abstract class BaseTest {
     lateinit var triggerQueryRepository: TriggerQueryRepository
 
     @Autowired
-    lateinit var generateDomainId: GenerateDomainId
+    lateinit var generateDomainId: GenerateId
 
     lateinit var testAccount: Account
     lateinit var testAuthToken: AuthToken
@@ -240,8 +238,8 @@ internal abstract class BaseTest {
                 ExecCmdRepository.CompleteCmd(
                     id = CmdId(5),
                     execId = startedExec.id,
-                    result = ExecResult(MapType("hamal" to StringType("rocks"))),
-                    state = ExecState(MapType("state" to NumberType(23.23)))
+                    result = ExecResult(HotObject.builder().set("hamal", "rocks").build()),
+                    state = ExecState(HotObject.builder().set("state", 23.23).build())
                 )
             )
 
@@ -249,9 +247,7 @@ internal abstract class BaseTest {
                 ExecCmdRepository.FailCmd(
                     id = CmdId(5),
                     execId = startedExec.id,
-                    result = ExecResult(
-                        MapType("message" to StringType("BaseTest.kt"))
-                    )
+                    result = ExecResult(HotObject.builder().set("message", "BaseTest.kt").build())
                 )
             )
 

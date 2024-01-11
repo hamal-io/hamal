@@ -2,55 +2,46 @@ package io.hamal.lib.sdk.api
 
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.domain._enum.ReqStatus
+import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain.request.HookCreateRequest
+import io.hamal.lib.domain.request.HookUpdateRequest
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpRequest
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiHookService.HookQuery
 import io.hamal.lib.sdk.fold
-import io.hamal.request.HookCreateReq
-import io.hamal.request.HookUpdateReq
-import kotlinx.serialization.Serializable
 
-@Serializable
-data class ApiHookCreateReq(
+data class ApiHookCreateRequest(
     override val name: HookName
-) : HookCreateReq
+) : HookCreateRequest
 
-@Serializable
-data class ApiHookCreateSubmitted(
-    override val id: ReqId,
-    override val status: ReqStatus,
+data class ApiHookCreateRequested(
+    override val id: RequestId,
+    override val status: RequestStatus,
     val hookId: HookId,
     val groupId: GroupId,
     val flowId: FlowId
-) : ApiSubmitted
+) : ApiRequested()
 
-
-@Serializable
-data class ApiHookUpdateReq(
+data class ApiHookUpdateRequest(
     override val name: HookName? = null
-) : HookUpdateReq
+) : HookUpdateRequest
 
-@Serializable
-data class ApiHookUpdateSubmitted(
-    override val id: ReqId,
-    override val status: ReqStatus,
+data class ApiHookUpdateRequested(
+    override val id: RequestId,
+    override val status: RequestStatus,
     val hookId: HookId,
-) : ApiSubmitted
+) : ApiRequested()
 
-@Serializable
 data class ApiHookList(
     val hooks: List<Hook>
 ) {
-    @Serializable
     data class Hook(
         val id: HookId,
         val flow: Flow,
         val name: HookName
     ) {
-        @Serializable
         data class Flow(
             val id: FlowId,
             val name: FlowName
@@ -58,14 +49,11 @@ data class ApiHookList(
     }
 }
 
-
-@Serializable
 data class ApiHook(
     val id: HookId,
     val flow: Flow,
     val name: HookName,
 ) {
-    @Serializable
     data class Flow(
         val id: FlowId,
         val name: FlowName
@@ -73,7 +61,7 @@ data class ApiHook(
 }
 
 interface ApiHookService {
-    fun create(flowId: FlowId, createHookReq: ApiHookCreateReq): ApiHookCreateSubmitted
+    fun create(flowId: FlowId, createHookReq: ApiHookCreateRequest): ApiHookCreateRequested
     fun list(query: HookQuery): List<ApiHookList.Hook>
     fun get(hookId: HookId): ApiHook
 
@@ -98,11 +86,11 @@ internal class ApiHookServiceImpl(
     private val template: HttpTemplate
 ) : ApiHookService {
 
-    override fun create(flowId: FlowId, createHookReq: ApiHookCreateReq) =
+    override fun create(flowId: FlowId, createHookReq: ApiHookCreateRequest) =
         template.post("/v1/flows/{flowId}/hooks")
             .path("flowId", flowId)
             .body(createHookReq)
-            .execute(ApiHookCreateSubmitted::class)
+            .execute(ApiHookCreateRequested::class)
 
     override fun list(query: HookQuery): List<ApiHookList.Hook> =
         template.get("/v1/hooks")

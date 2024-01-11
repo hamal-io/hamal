@@ -2,14 +2,13 @@ package io.hamal.repository
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain._enum.HookMethod.*
 import io.hamal.lib.domain._enum.TriggerStatus.Active
 import io.hamal.lib.domain._enum.TriggerStatus.Inactive
 import io.hamal.lib.domain._enum.TriggerType.Event
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.EventTrigger
 import io.hamal.repository.api.FixedRateTrigger
 import io.hamal.repository.api.TriggerCmdRepository.*
@@ -40,13 +39,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     groupId = GroupId(4),
                     flowId = FlowId(5),
                     name = TriggerName("trigger-name"),
-                    inputs = TriggerInputs(
-                        MapType(
-                            mutableMapOf(
-                                "hamal" to StringType("rocks")
-                            )
-                        )
-                    ),
+                    inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
                     duration = 10.seconds
                 )
             )
@@ -56,7 +49,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 assertThat(funcId, equalTo(FuncId(3)))
                 assertThat(flowId, equalTo(FlowId(5)))
                 assertThat(name, equalTo(TriggerName("trigger-name")))
-                assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
+                assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
                 assertThat(duration, equalTo(10.seconds))
                 assertThat(status, equalTo(Active))
             }
@@ -168,7 +161,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     assertThat(groupId, equalTo(GroupId(3)))
                     assertThat(flowId, equalTo(FlowId(2)))
                     assertThat(name, equalTo(TriggerName("first-trigger-name")))
-                    assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
+                    assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
                     assertThat(duration, equalTo(10.seconds))
                     assertThat(status, equalTo(Active))
                 }
@@ -189,13 +182,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     groupId = GroupId(4),
                     flowId = FlowId(5),
                     name = TriggerName("trigger-name"),
-                    inputs = TriggerInputs(
-                        MapType(
-                            mutableMapOf(
-                                "hamal" to StringType("rocks")
-                            )
-                        )
-                    ),
+                    inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
                     topicId = TopicId(9)
                 )
             )
@@ -205,7 +192,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 assertThat(funcId, equalTo(FuncId(3)))
                 assertThat(flowId, equalTo(FlowId(5)))
                 assertThat(name, equalTo(TriggerName("trigger-name")))
-                assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
+                assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
                 assertThat(topicId, equalTo(TopicId(9)))
                 assertThat(status, equalTo(Active))
             }
@@ -317,7 +304,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     assertThat(groupId, equalTo(GroupId(3)))
                     assertThat(flowId, equalTo(FlowId(2)))
                     assertThat(name, equalTo(TriggerName("first-trigger-name")))
-                    assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
+                    assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
                     assertThat(topicId, equalTo(TopicId(9)))
                 }
 
@@ -337,13 +324,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     groupId = GroupId(4),
                     flowId = FlowId(5),
                     name = TriggerName("trigger-name"),
-                    inputs = TriggerInputs(
-                        MapType(
-                            mutableMapOf(
-                                "hamal" to StringType("rocks")
-                            )
-                        )
-                    ),
+                    inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
                     hookId = HookId(9),
                     hookMethod = Patch
                 )
@@ -354,7 +335,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 assertThat(funcId, equalTo(FuncId(3)))
                 assertThat(flowId, equalTo(FlowId(5)))
                 assertThat(name, equalTo(TriggerName("trigger-name")))
-                assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
+                assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
                 assertThat(hookId, equalTo(HookId(9)))
                 assertThat(hookMethod, equalTo(Patch))
                 assertThat(status, equalTo(Active))
@@ -441,48 +422,48 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
         @TestFactory
         fun `Creates triggers with different hookId, funcId, hookMethod combinations`() =
             runWith(TriggerRepository::class) {
-            createHookTrigger(
-                triggerId = TriggerId(1),
-                flowId = FlowId(2),
-                groupId = GroupId(1),
-                name = TriggerName("trigger-name-1"),
-                funcId = FuncId(1),
-                hookId = HookId(1),
-                hookMethod = Get
-            )
+                createHookTrigger(
+                    triggerId = TriggerId(1),
+                    flowId = FlowId(2),
+                    groupId = GroupId(1),
+                    name = TriggerName("trigger-name-1"),
+                    funcId = FuncId(1),
+                    hookId = HookId(1),
+                    hookMethod = Get
+                )
 
-            createHookTrigger(
-                triggerId = TriggerId(2),
-                flowId = FlowId(2),
-                groupId = GroupId(1),
-                name = TriggerName("trigger-name-2"),
-                funcId = FuncId(1),
-                hookId = HookId(1),
-                hookMethod = Post
-            )
+                createHookTrigger(
+                    triggerId = TriggerId(2),
+                    flowId = FlowId(2),
+                    groupId = GroupId(1),
+                    name = TriggerName("trigger-name-2"),
+                    funcId = FuncId(1),
+                    hookId = HookId(1),
+                    hookMethod = Post
+                )
 
-            createHookTrigger(
-                triggerId = TriggerId(3),
-                flowId = FlowId(2),
-                groupId = GroupId(1),
-                name = TriggerName("trigger-name-3"),
-                funcId = FuncId(1),
-                hookId = HookId(2),
-                hookMethod = Get
-            )
+                createHookTrigger(
+                    triggerId = TriggerId(3),
+                    flowId = FlowId(2),
+                    groupId = GroupId(1),
+                    name = TriggerName("trigger-name-3"),
+                    funcId = FuncId(1),
+                    hookId = HookId(2),
+                    hookMethod = Get
+                )
 
-            createHookTrigger(
-                triggerId = TriggerId(4),
-                flowId = FlowId(2),
-                groupId = GroupId(1),
-                name = TriggerName("trigger-name-4"),
-                funcId = FuncId(2),
-                hookId = HookId(1),
-                hookMethod = Get
-            )
+                createHookTrigger(
+                    triggerId = TriggerId(4),
+                    flowId = FlowId(2),
+                    groupId = GroupId(1),
+                    name = TriggerName("trigger-name-4"),
+                    funcId = FuncId(2),
+                    hookId = HookId(1),
+                    hookMethod = Get
+                )
 
-            verifyCount(4)
-        }
+                verifyCount(4)
+            }
 
 
         @TestFactory
@@ -547,7 +528,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     assertThat(groupId, equalTo(GroupId(3)))
                     assertThat(flowId, equalTo(FlowId(2)))
                     assertThat(name, equalTo(TriggerName("first-trigger-name")))
-                    assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
+                    assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
                     assertThat(hookId, equalTo(HookId(9)))
                     assertThat(status, equalTo(Active))
                 }
@@ -569,13 +550,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     groupId = GroupId(4),
                     flowId = FlowId(5),
                     name = TriggerName("trigger-name"),
-                    inputs = TriggerInputs(
-                        MapType(
-                            mutableMapOf(
-                                "hamal" to StringType("rocks")
-                            )
-                        )
-                    ),
+                    inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
                     cron = CronPattern("0 0 * * * *")
                 )
             )
@@ -585,7 +560,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 assertThat(funcId, equalTo(FuncId(3)))
                 assertThat(flowId, equalTo(FlowId(5)))
                 assertThat(name, equalTo(TriggerName("trigger-name")))
-                assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
+                assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
                 assertThat(cron, equalTo(CronPattern("0 0 * * * *")))
                 assertThat(status, equalTo(Active))
             }
@@ -661,7 +636,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     assertThat(groupId, equalTo(GroupId(3)))
                     assertThat(flowId, equalTo(FlowId(2)))
                     assertThat(name, equalTo(TriggerName("first-trigger-name")))
-                    assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
+                    assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
                     assertThat(cron, equalTo(CronPattern("0 0 * * * *")))
                     assertThat(status, equalTo(Active))
                 }
@@ -715,13 +690,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     groupId = GroupId(4),
                     flowId = FlowId(5),
                     name = TriggerName("trigger-name"),
-                    inputs = TriggerInputs(
-                        MapType(
-                            mutableMapOf(
-                                "hamal" to StringType("rocks")
-                            )
-                        )
-                    ),
+                    inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
                     duration = 10.seconds
                 )
             )
@@ -733,7 +702,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 assertThat(funcId, equalTo(FuncId(3)))
                 assertThat(flowId, equalTo(FlowId(5)))
                 assertThat(name, equalTo(TriggerName("trigger-name")))
-                assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
+                assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
                 assertThat(duration, equalTo(10.seconds))
                 assertThat(status, equalTo(Inactive))
             }
@@ -751,13 +720,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     groupId = GroupId(4),
                     flowId = FlowId(5),
                     name = TriggerName("trigger-name"),
-                    inputs = TriggerInputs(
-                        MapType(
-                            mutableMapOf(
-                                "hamal" to StringType("rocks")
-                            )
-                        )
-                    ),
+                    inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
                     duration = 10.seconds
                 )
             )
@@ -773,7 +736,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
 
                 assertThat(flowId, equalTo(FlowId(5)))
                 assertThat(name, equalTo(TriggerName("trigger-name")))
-                assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
+                assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
                 assertThat(duration, equalTo(10.seconds))
                 assertThat(status, equalTo(Active))
             }
@@ -801,7 +764,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 assertThat(groupId, equalTo(GroupId(3)))
                 assertThat(flowId, equalTo(FlowId(2)))
                 assertThat(name, equalTo(TriggerName("SomeTrigger")))
-                assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
+                assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
                 assertThat(duration, equalTo(10.seconds))
                 assertThat(status, equalTo(Active))
             }
@@ -842,7 +805,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 assertThat(groupId, equalTo(GroupId(3)))
                 assertThat(flowId, equalTo(FlowId(2)))
                 assertThat(name, equalTo(TriggerName("SomeTrigger")))
-                assertThat(inputs, equalTo(TriggerInputs(MapType(mutableMapOf("hamal" to StringType("rockz"))))))
+                assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
                 assertThat(duration, equalTo(10.seconds))
                 assertThat(status, equalTo(Active))
             }
@@ -1117,13 +1080,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 groupId = groupId,
                 flowId = flowId,
                 name = name,
-                inputs = TriggerInputs(
-                    MapType(
-                        mutableMapOf(
-                            "hamal" to StringType("rockz")
-                        )
-                    )
-                ),
+                inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
                 funcId = funcId,
                 duration = 10.seconds
             )
@@ -1146,13 +1103,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 groupId = groupId,
                 flowId = flowId,
                 name = name,
-                inputs = TriggerInputs(
-                    MapType(
-                        mutableMapOf(
-                            "hamal" to StringType("rockz")
-                        )
-                    )
-                ),
+                inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
                 funcId = funcId,
                 topicId = topicId
             )
@@ -1176,13 +1127,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 groupId = groupId,
                 flowId = flowId,
                 name = name,
-                inputs = TriggerInputs(
-                    MapType(
-                        mutableMapOf(
-                            "hamal" to StringType("rockz")
-                        )
-                    )
-                ),
+                inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
                 funcId = funcId,
                 hookId = hookId,
                 hookMethod = hookMethod
@@ -1206,13 +1151,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 groupId = groupId,
                 flowId = flowId,
                 name = name,
-                inputs = TriggerInputs(
-                    MapType(
-                        mutableMapOf(
-                            "hamal" to StringType("rockz")
-                        )
-                    )
-                ),
+                inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
                 funcId = funcId,
                 cron = cron
             )

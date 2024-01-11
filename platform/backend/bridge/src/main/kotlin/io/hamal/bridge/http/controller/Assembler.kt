@@ -1,18 +1,18 @@
 package io.hamal.bridge.http.controller
 
-import io.hamal.lib.sdk.bridge.BridgeExecCompleteSubmitted
-import io.hamal.lib.sdk.bridge.BridgeExecFailSubmitted
-import io.hamal.lib.sdk.bridge.BridgeSubmitted
-import io.hamal.repository.api.submitted_req.ExecCompleteSubmitted
-import io.hamal.repository.api.submitted_req.ExecFailSubmitted
-import io.hamal.repository.api.submitted_req.Submitted
+import io.hamal.lib.domain.request.ExecCompleteRequested
+import io.hamal.lib.domain.request.ExecFailRequested
+import io.hamal.lib.domain.request.Requested
+import io.hamal.lib.sdk.bridge.BridgeExecCompleteRequested
+import io.hamal.lib.sdk.bridge.BridgeExecFailRequested
+import io.hamal.lib.sdk.bridge.BridgeRequested
 import org.springframework.http.ResponseEntity
 
-fun Submitted.accepted(): ResponseEntity<BridgeSubmitted> =
+fun Requested.accepted(): ResponseEntity<BridgeRequested> =
     ResponseEntity.accepted().body(toBridgeSubmitted())
 
-fun Submitted.toBridgeSubmitted(): BridgeSubmitted = when (this) {
-    is ExecCompleteSubmitted -> BridgeExecCompleteSubmitted(id, status, execId)
-    is ExecFailSubmitted -> BridgeExecFailSubmitted(id, status, execId)
+fun Requested.toBridgeSubmitted(): BridgeRequested = when (this) {
+    is ExecCompleteRequested -> BridgeExecCompleteRequested(id, status, execId)
+    is ExecFailRequested -> BridgeExecFailRequested(id, status, execId)
     else -> throw NotImplementedError()
 }

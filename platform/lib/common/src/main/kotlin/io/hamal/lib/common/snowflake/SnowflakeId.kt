@@ -2,20 +2,12 @@ package io.hamal.lib.common.snowflake
 
 import io.hamal.lib.common.Partition
 import io.hamal.lib.common.util.BitUtils
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.descriptors.PrimitiveKind
-import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
-import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
 import java.util.concurrent.locks.Lock
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
 
 @JvmInline
-@Serializable(with = SnowflakeId.Serializer::class)
 value class SnowflakeId(val value: Long) : Comparable<SnowflakeId> {
     constructor(value: String) : this(value.toLong(16))
 
@@ -38,17 +30,6 @@ value class SnowflakeId(val value: Long) : Comparable<SnowflakeId> {
 
     override fun toString(): String {
         return value.toString(16)
-    }
-
-    object Serializer : KSerializer<SnowflakeId> {
-        override val descriptor: SerialDescriptor
-            get() = PrimitiveSerialDescriptor("SnowflakeId", PrimitiveKind.STRING)
-
-        override fun deserialize(decoder: Decoder) = SnowflakeId(decoder.decodeString().toLong(16))
-
-        override fun serialize(encoder: Encoder, value: SnowflakeId) {
-            encoder.encodeString(value.value.toString(16))
-        }
     }
 }
 

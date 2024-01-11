@@ -26,7 +26,7 @@ internal object ProjectionUniqueName : ProjectionSqlite<GroupId, GroupRecord, Gr
             query {
                 set("name", groupName)
             }
-            map { rs -> rs.getDomainId("id", ::GroupId) }
+            map { rs -> rs.getId("id", ::GroupId) }
         }
     }
 

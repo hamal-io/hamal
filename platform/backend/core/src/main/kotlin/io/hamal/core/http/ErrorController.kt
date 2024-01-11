@@ -1,14 +1,10 @@
 package io.hamal.core.http
 
 import io.hamal.lib.sdk.api.ApiError
+import io.hamal.repository.record.json
 import jakarta.servlet.ServletException
 import jakarta.servlet.http.HttpServletResponse
 import jakarta.servlet.http.HttpServletResponse.*
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.MissingFieldException
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import org.springframework.core.Ordered.HIGHEST_PRECEDENCE
 import org.springframework.core.annotation.Order
 import org.springframework.core.convert.ConversionFailedException
@@ -20,9 +16,8 @@ import org.springframework.web.servlet.NoHandlerFoundException
 
 @Order(HIGHEST_PRECEDENCE)
 @ControllerAdvice
-internal class ErrorController(private val json: Json) {
+internal class ErrorController {
 
-    @Serializable
     data class InvalidArgumentType(
         val message: String,
         val source: String,
@@ -36,7 +31,7 @@ internal class ErrorController(private val json: Json) {
             res.status = 400
             res.addHeader("Content-Type", "application/json")
             res.writer.write(
-                json.encodeToString(
+                json.serialize(
                     InvalidArgumentType(
                         message = "ArgumentTypeMismatch",
                         source = cause.sourceType?.toString() ?: "Unknown source type",
@@ -46,44 +41,22 @@ internal class ErrorController(private val json: Json) {
             )
         } else {
             res.addHeader("Content-Type", "application/json")
-            res.writer.write(json.encodeToString(ApiError("Bad request")))
+            res.writer.write(json.serialize(ApiError("Bad request")))
         }
     }
 
-
-    @Serializable
-    data class MissingFieldsError(
-        val message: String,
-        val fields: List<String>
-    )
-
-    @OptIn(ExperimentalSerializationApi::class)
     @ExceptionHandler(value = [HttpMessageNotReadableException::class])
     fun missingFields(res: HttpServletResponse, t: HttpMessageNotReadableException) {
-        val cause = t.cause
-        if (cause is MissingFieldException) {
-            res.status = 400
-            res.addHeader("Content-Type", "application/json")
-            res.writer.write(
-                json.encodeToString(
-                    MissingFieldsError(
-                        message = "Fields are missing",
-                        fields = cause.missingFields
-                    )
-                )
-            )
-        } else {
-            res.status = 400
-            res.addHeader("Content-Type", "application/json")
-            res.writer.write(json.encodeToString(ApiError("Bad request")))
-        }
+        res.status = 400
+        res.addHeader("Content-Type", "application/json")
+        res.writer.write(json.serialize(ApiError(t.cause?.message ?: "Bad request")))
     }
 
     @ExceptionHandler(value = [NoHandlerFoundException::class])
     fun missingFields(res: HttpServletResponse) {
         res.status = SC_NOT_FOUND
         res.addHeader("Content-Type", "application/json")
-        res.writer.write(json.encodeToString(ApiError("Request handler not found")))
+        res.writer.write(json.serialize(ApiError("Request handler not found")))
     }
 
 
@@ -91,7 +64,7 @@ internal class ErrorController(private val json: Json) {
     fun otherwise(res: HttpServletResponse) {
         res.status = SC_FORBIDDEN
         res.addHeader("Content-Type", "application/json")
-        res.writer.write(json.encodeToString(ApiError.serializer(), ApiError("FORBIDDEN")))
+        res.writer.write(json.serialize(ApiError("FORBIDDEN")))
     }
 
     @ExceptionHandler(value = [Throwable::class])
@@ -110,7 +83,7 @@ internal class ErrorController(private val json: Json) {
 
         res.status = statusCode
         res.addHeader("Content-Type", "application/json")
-        res.writer.write(json.encodeToString(ApiError.serializer(), ApiError(toHandle?.message ?: "Unknown error")))
+        res.writer.write(json.serialize(ApiError(toHandle?.message ?: "Unknown error")))
     }
 
 }

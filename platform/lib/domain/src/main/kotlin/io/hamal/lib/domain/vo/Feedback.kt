@@ -1,22 +1,15 @@
 package io.hamal.lib.domain.vo
 
-import io.hamal.lib.common.domain.StringValueObject
-import io.hamal.lib.common.domain.StringValueObjectSerializer
+import io.hamal.lib.common.domain.ValueObjectId
+import io.hamal.lib.common.domain.ValueObjectString
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.kua.type.StringType
-import kotlinx.serialization.Serializable
+import io.hamal.lib.kua.type.KuaString
 
-@Serializable(with = FeedbackId.Serializer::class)
-class FeedbackId(override val value: SnowflakeId) : SerializableDomainId() {
+class FeedbackId(override val value: SnowflakeId) : ValueObjectId() {
     constructor(value: Int) : this(SnowflakeId(value.toLong()))
     constructor(value: String) : this(SnowflakeId(value.toLong(16)))
-
-    internal object Serializer : SerializableDomainIdSerializer<FeedbackId>(::FeedbackId)
 }
 
-@Serializable(with = FeedbackMessage.Serializer::class)
-class FeedbackMessage(override val value: String) : StringValueObject() {
-    constructor(str: StringType) : this(str.value)
-
-    internal object Serializer : StringValueObjectSerializer<FeedbackMessage>(::FeedbackMessage)
+class FeedbackMessage(override val value: String) : ValueObjectString() {
+    constructor(str: KuaString) : this(str.value)
 }

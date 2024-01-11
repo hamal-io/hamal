@@ -1,11 +1,11 @@
 package io.hamal.lib.http
 
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.InternalSerializationApi
-import kotlinx.serialization.builtins.ArraySerializer
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.decodeFromStream
-import kotlinx.serialization.serializer
+import com.google.gson.reflect.TypeToken
+import io.hamal.lib.common.hot.HotJsonModule
+import io.hamal.lib.common.serialization.JsonFactoryBuilder
+import io.hamal.lib.domain.Json
+import io.hamal.lib.domain.vo.ValueObjectJsonModule
+import io.hamal.lib.kua.type.KuaJsonModule
 import java.io.InputStream
 import kotlin.reflect.KClass
 
@@ -16,19 +16,25 @@ interface HttpSerdeFactory {
 }
 
 object DefaultHttpSerdeFactory : HttpSerdeFactory {
-    override var errorDeserializer: HttpErrorDeserializer = DefaultErrorDeserializer
-    override var contentDeserializer: HttpContentDeserializer = KotlinJsonHttpContentDeserializer
-    override var contentSerializer: HttpContentSerializer = KotlinJsonHttpContentSerializer
+    override var errorDeserializer: HttpErrorDeserializer = JsonErrorDeserializer
+    override var contentDeserializer: HttpContentDeserializer = JsonHttpContentDeserializer
+    override var contentSerializer: HttpContentSerializer = JsonHttpContentSerializer
 }
+
+private val json = Json(
+    JsonFactoryBuilder()
+        .register(HotJsonModule)
+        .register(KuaJsonModule)
+        .register(ValueObjectJsonModule)
+)
 
 interface HttpErrorDeserializer {
     fun <ERROR : Any> deserialize(inputStream: InputStream, clazz: KClass<ERROR>): ERROR
 }
 
-object DefaultErrorDeserializer : HttpErrorDeserializer {
-    @OptIn(InternalSerializationApi::class, ExperimentalSerializationApi::class)
+object JsonErrorDeserializer : HttpErrorDeserializer {
     override fun <ERROR : Any> deserialize(inputStream: InputStream, clazz: KClass<ERROR>): ERROR {
-        return jsonDelegate.decodeFromStream(clazz.serializer(), inputStream)
+        return json.deserialize(clazz, inputStream)
     }
 }
 
@@ -37,15 +43,13 @@ interface HttpContentDeserializer {
     fun <VALUE : Any> deserializeList(inputStream: InputStream, clazz: KClass<VALUE>): List<VALUE>
 }
 
-object KotlinJsonHttpContentDeserializer : HttpContentDeserializer {
-    @OptIn(InternalSerializationApi::class, ExperimentalSerializationApi::class)
+object JsonHttpContentDeserializer : HttpContentDeserializer {
     override fun <VALUE : Any> deserialize(inputStream: InputStream, clazz: KClass<VALUE>): VALUE {
-        return jsonDelegate.decodeFromStream(clazz.serializer(), inputStream)
+        return json.deserialize(clazz, inputStream)
     }
 
-    @OptIn(InternalSerializationApi::class, ExperimentalSerializationApi::class)
     override fun <VALUE : Any> deserializeList(inputStream: InputStream, clazz: KClass<VALUE>): List<VALUE> {
-        return jsonDelegate.decodeFromStream(ArraySerializer(clazz, clazz.serializer()), inputStream).toList()
+        return json.deserialize(object : TypeToken<List<VALUE>>() {}, inputStream)
     }
 }
 
@@ -53,17 +57,8 @@ interface HttpContentSerializer {
     fun <VALUE : Any> serialize(value: VALUE, clazz: KClass<VALUE>): String
 }
 
-object KotlinJsonHttpContentSerializer : HttpContentSerializer {
-    @OptIn(InternalSerializationApi::class)
+object JsonHttpContentSerializer : HttpContentSerializer {
     override fun <VALUE : Any> serialize(value: VALUE, clazz: KClass<VALUE>): String {
-        return jsonDelegate.encodeToString(clazz.serializer(), value)
+        return json.serialize(value)
     }
-}
-
-
-@OptIn(ExperimentalSerializationApi::class)
-val jsonDelegate = Json {
-    explicitNulls = false
-    ignoreUnknownKeys = true
-    encodeDefaults = true
 }

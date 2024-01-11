@@ -1,29 +1,29 @@
 package io.hamal.lib.sdk.api
 
-import io.hamal.lib.domain._enum.ReqStatus
+import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.http.HttpTemplate
 
 interface ApiAwaitService {
-    operator fun invoke(req: ApiSubmitted) = await(req)
+    operator fun invoke(req: ApiRequested) = await(req)
 
-    fun await(req: ApiSubmitted)
+    fun await(req: ApiRequested)
 }
 
 internal class ApiAwaitServiceImpl(
     private val template: HttpTemplate
 ) : ApiAwaitService {
-    override fun await(req: ApiSubmitted) {
+    override fun await(req: ApiRequested) {
         while (true) {
-            template.get("/v1/reqs/{reqId}")
+            template.get("/v1/requests/{reqId}")
                 .path("reqId", req.id)
-                .execute(ApiSubmitted::class)
+                .execute(ApiRequested::class)
                 .let {
                     when (it.status) {
-                        ReqStatus.Completed -> {
+                        RequestStatus.Completed -> {
                             return
                         }
 
-                        ReqStatus.Failed -> {
+                        RequestStatus.Failed -> {
                             throw IllegalStateException("expected ${req.id} to complete but failed")
                         }
 

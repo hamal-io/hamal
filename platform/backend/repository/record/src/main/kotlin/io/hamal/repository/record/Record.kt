@@ -1,55 +1,44 @@
 package io.hamal.repository.record
 
-import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.domain.DomainId
-import io.hamal.lib.common.domain.DomainObject
-import io.hamal.lib.domain.vo.RecordedAt
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.descriptors.PrimitiveKind
-import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
+import io.hamal.lib.common.domain.*
+import io.hamal.lib.common.util.TimeUtils
+import java.time.Instant
 
-@Serializable(with = RecordSequence.Serializer::class)
-data class RecordSequence(val value: Int) : Comparable<RecordSequence>//FIXME becomes VO
-{
+class RecordType(override val value: String) : ValueObjectString()
+
+class RecordSequence(override val value: Int) : ValueObjectInt() {
     companion object {
         fun first() = RecordSequence(1)
     }
 
-    override fun compareTo(other: RecordSequence) = other.value.compareTo(value)
-
     fun next() = RecordSequence(value + 1)
-
-    object Serializer : KSerializer<RecordSequence> {
-        override val descriptor = PrimitiveSerialDescriptor("RecSeq", PrimitiveKind.INT)
-
-        override fun deserialize(decoder: Decoder): RecordSequence {
-            return RecordSequence(decoder.decodeInt())
-        }
-
-        override fun serialize(encoder: Encoder, value: RecordSequence) {
-            encoder.encodeInt(value.value)
-        }
-    }
-
 }
 
-abstract class Record<ID : DomainId> {
+class RecordedAt(override val value: Instant) : ValueObjectInstant() {
+    companion object {
+        @JvmStatic
+        fun now(): RecordedAt = RecordedAt(TimeUtils.now())
+    }
+
+    fun toUpdatedAt() = UpdatedAt(value)
+}
+
+
+abstract class Record<ID : ValueObjectId> {
     abstract val cmdId: CmdId
     abstract val entityId: ID
-    abstract var sequence: RecordSequence?
+    abstract var recordSequence: RecordSequence?
     abstract var recordedAt: RecordedAt?
+    val recordType: RecordType = RecordType(this::class.simpleName!!)
 
     fun sequence() =
-        sequence ?: throw IllegalStateException("Records needs to be stored to db before it can be accessed")
+        recordSequence ?: throw IllegalStateException("Records needs to be stored to db before it can be accessed")
 
     fun recordedAt() =
         recordedAt ?: throw IllegalStateException("Records needs to be stored to db before it can be accessed")
 }
 
-interface RecordEntity<ID : DomainId, RECORD : Record<ID>, OBJ : DomainObject<ID>> {
+interface RecordEntity<ID : ValueObjectId, RECORD : Record<ID>, OBJ : DomainObject<ID>> {
     val id: ID
     val cmdId: CmdId
     val sequence: RecordSequence
@@ -58,6 +47,6 @@ interface RecordEntity<ID : DomainId, RECORD : Record<ID>, OBJ : DomainObject<ID
     fun toDomainObject(): OBJ
 }
 
-interface CreateDomainObject<ID : DomainId, RECORD : Record<ID>, OBJ : DomainObject<ID>> {
+interface CreateDomainObject<ID : ValueObjectId, RECORD : Record<ID>, OBJ : DomainObject<ID>> {
     operator fun invoke(recs: List<RECORD>): OBJ
 }

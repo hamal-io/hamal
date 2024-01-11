@@ -1,34 +1,20 @@
 package io.hamal.lib.domain.vo
 
-import io.hamal.lib.common.domain.DomainName
-import io.hamal.lib.common.domain.DomainNameSerializer
+import io.hamal.lib.common.domain.ValueObjecHotObject
+import io.hamal.lib.common.domain.ValueObjectId
+import io.hamal.lib.common.domain.ValueObjectString
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.domain.vo.base.MapValueObject
-import io.hamal.lib.domain.vo.base.InputsSerializer
-import io.hamal.lib.kua.type.MapType
-import kotlinx.serialization.Serializable
 
-@Serializable(with = TopicId.Serializer::class)
-data class TopicId(override val value: SnowflakeId) : SerializableDomainId() {
+class TopicId(override val value: SnowflakeId) : ValueObjectId() {
     constructor(value: Int) : this(SnowflakeId(value.toLong()))
     constructor(value: String) : this(SnowflakeId(value.toLong(16)))
-
-    internal object Serializer : SerializableDomainIdSerializer<TopicId>(::TopicId)
 }
 
-@Serializable(with = TopicName.Serializer::class)
-class TopicName(override val value: String) : DomainName() {
-    internal object Serializer : DomainNameSerializer<TopicName>(::TopicName)
-}
+class TopicName(override val value: String) : ValueObjectString()
 
-@Serializable(with = TopicEntryId.Serializer::class)
-data class TopicEntryId(override val value: SnowflakeId) : SerializableDomainId() {
+class TopicEntryId(override val value: SnowflakeId) : ValueObjectId() {
     constructor(value: Int) : this(SnowflakeId(value.toLong()))
-
-    internal object Serializer : SerializableDomainIdSerializer<TopicEntryId>(::TopicEntryId)
 }
 
-@Serializable(with = TopicEntryPayload.Serializer::class)
-class TopicEntryPayload(override val value: MapType = MapType()) : MapValueObject() {
-    internal object Serializer : InputsSerializer<TopicEntryPayload>(::TopicEntryPayload)
-}
+class TopicEntryPayload(override val value: HotObject = HotObject.empty) : ValueObjecHotObject()

@@ -3,7 +3,6 @@ import org.springframework.boot.gradle.tasks.bundling.BootJar
 plugins {
     id("hamal.common")
     application
-    id("org.jetbrains.kotlin.plugin.serialization")
     id("org.springframework.boot").version("3.0.5")
     kotlin("plugin.spring").version("1.8.10")
     id("com.bmuschko.docker-spring-boot-application") version "9.3.1"
@@ -17,7 +16,7 @@ docker {
         baseImage.set("openjdk:22-slim-bullseye")
         ports.set(listOf(10000, 10000))
         images.set(listOf("hamalio/web3proxy"))
-        jvmArgs.set(listOf("-Dspring.profiles.active=default", "-Xmx8192m","-XX:+ExitOnOutOfMemoryError"))
+        jvmArgs.set(listOf("-Dspring.profiles.active=default", "-Xmx8192m", "-XX:+ExitOnOutOfMemoryError"))
     }
 }
 

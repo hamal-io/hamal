@@ -5,9 +5,9 @@ import io.hamal.lib.kua.function.Function2In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput2Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.type.DecimalType
-import io.hamal.lib.kua.type.ErrorType
-import io.hamal.lib.kua.type.NumberType
+import io.hamal.lib.kua.type.KuaDecimal
+import io.hamal.lib.kua.type.KuaError
+import io.hamal.lib.kua.type.KuaNumber
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
@@ -232,13 +232,13 @@ internal class TypeTest : NativeTest() {
 
     @Test
     fun `Error`() {
-        testInstance.pushError(ErrorType("error message"))
+        testInstance.pushError(KuaError("error message"))
         assertThat(testInstance.type(1), equalTo(10))
     }
 
     @Test
     fun `DecimalType`() {
-        testInstance.pushDecimal(DecimalType("23.456"))
+        testInstance.pushDecimal(KuaDecimal("23.456"))
         assertThat(testInstance.type(1), equalTo(11))
     }
 }
@@ -284,17 +284,17 @@ internal class PushBooleanTest : NativeTest() {
 internal class PushDecimalTest : NativeTest() {
     @Test
     fun `Pushes value on stack`() {
-        val result = testInstance.pushDecimal(DecimalType("23.23"))
+        val result = testInstance.pushDecimal(KuaDecimal("23.23"))
         assertThat(result, equalTo(1))
         assertThat(testInstance.top(), equalTo(1))
-        assertThat(testInstance.toDecimal(1), equalTo(DecimalType("23.23")))
+        assertThat(testInstance.toDecimal(1), equalTo(KuaDecimal("23.23")))
     }
 
     @Test
     fun `Tries to push too many items on the stack limited to 999_999`() {
-        repeat(999997) { testInstance.pushDecimal(DecimalType(it)) }
+        repeat(999997) { testInstance.pushDecimal(KuaDecimal(it)) }
         val exception = assertThrows<IllegalArgumentException> {
-            testInstance.pushDecimal(DecimalType(-1))
+            testInstance.pushDecimal(KuaDecimal(-1))
         }
         assertThat(exception.message, equalTo("Prevented stack overflow"))
     }
@@ -489,7 +489,7 @@ internal class ToDecimalTest : NativeTest() {
 
     @Test
     fun `Tries to read decimal with 0 index`() {
-        testInstance.pushDecimal(DecimalType(123))
+        testInstance.pushDecimal(KuaDecimal(123))
         val exception = assertThrows<IllegalArgumentException> {
             testInstance.toDecimal(0)
         }
@@ -498,7 +498,7 @@ internal class ToDecimalTest : NativeTest() {
 
     @Test
     fun `Tries to read decimal with index bigger than stack size`() {
-        testInstance.pushDecimal(DecimalType(123))
+        testInstance.pushDecimal(KuaDecimal(123))
         val exception = assertThrows<IllegalArgumentException> {
             testInstance.toBoolean(2)
         }
@@ -507,7 +507,7 @@ internal class ToDecimalTest : NativeTest() {
 
     @Test
     fun `Tries to read decimal with abs(negative index) bigger than stack size`() {
-        testInstance.pushDecimal(DecimalType(123))
+        testInstance.pushDecimal(KuaDecimal(123))
         val exception = assertThrows<IllegalArgumentException> {
             testInstance.toBoolean(-2)
         }
@@ -525,23 +525,23 @@ internal class ToDecimalTest : NativeTest() {
 
     @Test
     fun `Reads value on stack without popping the value`() {
-        testInstance.pushDecimal(DecimalType(123))
-        assertThat(testInstance.toDecimal(1), equalTo(DecimalType(123)))
+        testInstance.pushDecimal(KuaDecimal(123))
+        assertThat(testInstance.toDecimal(1), equalTo(KuaDecimal(123)))
         assertThat(testInstance.top(), equalTo(1))
 
-        testInstance.pushDecimal(DecimalType(234))
-        assertThat(testInstance.toDecimal(2), equalTo(DecimalType(234)))
+        testInstance.pushDecimal(KuaDecimal(234))
+        assertThat(testInstance.toDecimal(2), equalTo(KuaDecimal(234)))
         assertThat(testInstance.top(), equalTo(2))
     }
 
     @Test
     fun `Reads value on stack with negative index without popping the value`() {
-        testInstance.pushDecimal(DecimalType(123))
-        assertThat(testInstance.toDecimal(-1), equalTo(DecimalType(123)))
+        testInstance.pushDecimal(KuaDecimal(123))
+        assertThat(testInstance.toDecimal(-1), equalTo(KuaDecimal(123)))
         assertThat(testInstance.top(), equalTo(1))
 
-        testInstance.pushDecimal(DecimalType(234))
-        assertThat(testInstance.toDecimal(-1), equalTo(DecimalType(234)))
+        testInstance.pushDecimal(KuaDecimal(234))
+        assertThat(testInstance.toDecimal(-1), equalTo(KuaDecimal(234)))
         assertThat(testInstance.top(), equalTo(2))
     }
 }
@@ -1242,14 +1242,14 @@ internal class CallTest : NativeTest() {
         verifyStackIsEmpty()
     }
 
-    private class Magic : Function2In2Out<NumberType, NumberType, NumberType, NumberType>(
-        FunctionInput2Schema(NumberType::class, NumberType::class),
-        FunctionOutput2Schema(NumberType::class, NumberType::class)
+    private class Magic : Function2In2Out<KuaNumber, KuaNumber, KuaNumber, KuaNumber>(
+        FunctionInput2Schema(KuaNumber::class, KuaNumber::class),
+        FunctionOutput2Schema(KuaNumber::class, KuaNumber::class)
     ) {
 
         override fun invoke(
-            ctx: FunctionContext, arg1: NumberType, arg2: NumberType
-        ): Pair<NumberType, NumberType> {
+            ctx: FunctionContext, arg1: KuaNumber, arg2: KuaNumber
+        ): Pair<KuaNumber, KuaNumber> {
             return Pair(arg2 * 4, arg1 * 2)
         }
     }

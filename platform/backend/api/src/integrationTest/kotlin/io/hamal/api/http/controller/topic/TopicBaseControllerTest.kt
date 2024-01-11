@@ -48,18 +48,18 @@ internal sealed class TopicBaseControllerTest : BaseControllerTest() {
     }
 
 
-    fun createTopic(topicName: TopicName): ApiTopicCreateSubmitted {
+    fun createTopic(topicName: TopicName): ApiTopicCreateRequested {
         val createTopicResponse = httpTemplate.post("/v1/flows/1/topics")
-            .body(ApiTopicCreateReq(topicName))
+            .body(ApiTopicCreateRequest(topicName))
             .execute()
 
         assertThat(createTopicResponse.statusCode, equalTo(Accepted))
         require(createTopicResponse is HttpSuccessResponse) { "request was not successful" }
 
-        return createTopicResponse.result(ApiTopicCreateSubmitted::class)
+        return createTopicResponse.result(ApiTopicCreateRequested::class)
     }
 
-    fun appendToTopic(topicId: TopicId, toAppend: TopicEntryPayload): ApiTopicAppendSubmitted {
+    fun appendToTopic(topicId: TopicId, toAppend: TopicEntryPayload): ApiTopicAppendRequested {
         val createTopicResponse = httpTemplate.post("/v1/topics/{topicId}/entries")
             .path("topicId", topicId)
             .body(toAppend)
@@ -68,6 +68,6 @@ internal sealed class TopicBaseControllerTest : BaseControllerTest() {
         assertThat(createTopicResponse.statusCode, equalTo(Accepted))
         require(createTopicResponse is HttpSuccessResponse) { "request was not successful" }
 
-        return createTopicResponse.result(ApiTopicAppendSubmitted::class)
+        return createTopicResponse.result(ApiTopicAppendRequested::class)
     }
 }

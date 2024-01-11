@@ -154,9 +154,9 @@ private fun ExecLogQuery.execIds(): String {
 
 private fun NamedResultSet.toExecLog(): ExecLog {
     return ExecLog(
-        id = getDomainId("id", ::ExecLogId),
-        execId = getDomainId("exec_id", ::ExecId),
-        groupId = getDomainId("group_id", ::GroupId),
+        id = getId("id", ::ExecLogId),
+        execId = getId("exec_id", ::ExecId),
+        groupId = getId("group_id", ::GroupId),
         level = ExecLogLevel.of(getInt("level")),
         message = ExecLogMessage(getString("message")),
         timestamp = ExecLogTimestamp(Instant.ofEpochMilli(getLong("timestamp")))

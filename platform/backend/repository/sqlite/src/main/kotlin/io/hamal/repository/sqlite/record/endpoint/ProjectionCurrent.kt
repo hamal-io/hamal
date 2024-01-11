@@ -6,13 +6,10 @@ import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Endpoint
 import io.hamal.repository.api.EndpointQueryRepository.EndpointQuery
 import io.hamal.repository.record.endpoint.EndpointRecord
+import io.hamal.repository.record.json
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
-import io.hamal.repository.sqlite.record.protobuf
-import kotlinx.serialization.ExperimentalSerializationApi
 
-
-@OptIn(ExperimentalSerializationApi::class)
 internal object ProjectionCurrent : ProjectionSqlite<EndpointId, EndpointRecord, Endpoint> {
 
     fun find(connection: Connection, endpointId: EndpointId): Endpoint? {
@@ -30,7 +27,7 @@ internal object ProjectionCurrent : ProjectionSqlite<EndpointId, EndpointRecord,
                 set("id", endpointId)
             }
             map { rs ->
-                protobuf.decodeFromByteArray(Endpoint.serializer(), rs.getBytes("data"))
+                json.decompressAndDeserialize(Endpoint::class, rs.getBytes("data"))
             }
         }
     }
@@ -56,7 +53,7 @@ internal object ProjectionCurrent : ProjectionSqlite<EndpointId, EndpointRecord,
                 set("limit", query.limit)
             }
             map { rs ->
-                protobuf.decodeFromByteArray(Endpoint.serializer(), rs.getBytes("data"))
+                json.decompressAndDeserialize(Endpoint::class, rs.getBytes("data"))
             }
         }
     }
@@ -96,7 +93,7 @@ internal object ProjectionCurrent : ProjectionSqlite<EndpointId, EndpointRecord,
             set("id", obj.id)
             set("groupId", obj.groupId)
             set("flowId", obj.flowId)
-            set("data", protobuf.encodeToByteArray(Endpoint.serializer(), obj))
+            set("data", json.serializeAndCompress(obj))
         }
     }
 

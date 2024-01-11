@@ -1,15 +1,13 @@
-package io.hamal.core.req.handler.exec
+package io.hamal.core.request.handler.exec
 
-import io.hamal.core.req.handler.BaseReqHandlerTest
-import io.hamal.lib.domain._enum.ReqStatus
+import io.hamal.core.request.handler.BaseReqHandlerTest
+import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain.request.ExecCompleteRequested
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.ExecStatus.Completed
 import io.hamal.lib.domain.vo.ExecStatus.Started
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.NumberType
-import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.ExecQueryRepository.ExecQuery
-import io.hamal.repository.api.submitted_req.ExecCompleteSubmitted
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.DynamicTest.dynamicTest
@@ -56,16 +54,16 @@ internal class ExecCompleteHandlerTest : BaseReqHandlerTest() {
     private lateinit var testInstance: ExecCompleteHandler
 
     private val submittedCompleteExecReq by lazy {
-        ExecCompleteSubmitted(
-            id = ReqId(10),
-            status = ReqStatus.Submitted,
+        ExecCompleteRequested(
+            id = RequestId(10),
+            status = RequestStatus.Submitted,
             execId = ExecId(1234),
-            result = ExecResult(MapType("hamal" to StringType("rocks"))),
-            state = ExecState(MapType("counter" to NumberType(1))),
+            result = ExecResult(HotObject.builder().set("hamal", "rocks").build()),
+            state = ExecState(HotObject.builder().set("counter", 1).build()),
             events = listOf(
                 EventToSubmit(
                     topicName = TopicName("test-completion"),
-                    payload = EventPayload(MapType(mutableMapOf("ich" to StringType("habFertsch"))))
+                    payload = EventPayload(HotObject.builder().set("ich", "habFertsch").build())
                 )
             ),
         )
@@ -78,7 +76,7 @@ internal class ExecCompleteHandlerTest : BaseReqHandlerTest() {
                 require(this is io.hamal.repository.api.CompletedExec)
                 assertThat(id, equalTo(ExecId(1234)))
                 assertThat(status, equalTo(Completed))
-                assertThat(result, equalTo(ExecResult(MapType("hamal" to StringType("rocks")))))
+                assertThat(result, equalTo(ExecResult(HotObject.builder().set("hamal", "rocks").build())))
             }
         }
     }

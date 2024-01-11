@@ -35,6 +35,4 @@ assert(content.id ~= nil)
 assert(content.status == 'Completed')
 
 assert(content.invocation.method == 'Delete')
-
-assert(content.result.value.answer.type == 'NumberType')
-assert(content.result.value.answer.value == '42')
+assert(content.result.answer == 42.0)

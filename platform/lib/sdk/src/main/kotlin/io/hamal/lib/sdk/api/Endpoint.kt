@@ -3,59 +3,51 @@ package io.hamal.lib.sdk.api
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.EndpointMethod
-import io.hamal.lib.domain._enum.ReqStatus
+import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain.request.EndpointCreateRequest
+import io.hamal.lib.domain.request.EndpointUpdateRequest
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpRequest
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiEndpointService.EndpointQuery
 import io.hamal.lib.sdk.fold
-import io.hamal.request.EndpointCreateReq
-import io.hamal.request.EndpointUpdateReq
-import kotlinx.serialization.Serializable
 
-@Serializable
-data class ApiEndpointCreateReq(
+data class ApiEndpointCreateRequest(
     override val funcId: FuncId,
     override val name: EndpointName,
     override val method: EndpointMethod
-) : EndpointCreateReq
+) : EndpointCreateRequest
 
-@Serializable
-data class ApiEndpointCreateSubmitted(
-    override val id: ReqId,
-    override val status: ReqStatus,
+data class ApiEndpointCreateRequested(
+    override val id: RequestId,
+    override val status: RequestStatus,
     val endpointId: EndpointId,
     val groupId: GroupId,
     val funcId: FuncId
-) : ApiSubmitted
+) : ApiRequested()
 
 
-@Serializable
-data class ApiEndpointUpdateReq(
+data class ApiEndpointUpdateRequest(
     override val funcId: FuncId? = null,
     override val name: EndpointName? = null,
     override val method: EndpointMethod? = null
-) : EndpointUpdateReq
+) : EndpointUpdateRequest
 
-@Serializable
-data class ApiEndpointUpdateSubmitted(
-    override val id: ReqId,
-    override val status: ReqStatus,
+data class ApiEndpointUpdateRequested(
+    override val id: RequestId,
+    override val status: RequestStatus,
     val endpointId: EndpointId,
-) : ApiSubmitted
+) : ApiRequested()
 
-@Serializable
 data class ApiEndpointList(
     val endpoints: List<Endpoint>
 ) {
-    @Serializable
     data class Endpoint(
         val id: EndpointId,
         val func: Func,
         val name: EndpointName
     ) {
-        @Serializable
         data class Func(
             val id: FuncId,
             val name: FuncName
@@ -63,13 +55,11 @@ data class ApiEndpointList(
     }
 }
 
-@Serializable
 data class ApiEndpoint(
     val id: EndpointId,
     val func: Func,
     val name: EndpointName
 ) {
-    @Serializable
     data class Func(
         val id: FuncId,
         val name: FuncName
@@ -77,7 +67,7 @@ data class ApiEndpoint(
 }
 
 interface ApiEndpointService {
-    fun create(flowId: FlowId, createEndpointReq: ApiEndpointCreateReq): ApiEndpointCreateSubmitted
+    fun create(flowId: FlowId, createEndpointReq: ApiEndpointCreateRequest): ApiEndpointCreateRequested
     fun list(query: EndpointQuery): List<ApiEndpointList.Endpoint>
     fun get(endpointId: EndpointId): ApiEndpoint
 
@@ -102,11 +92,11 @@ internal class ApiEndpointServiceImpl(
     private val template: HttpTemplate
 ) : ApiEndpointService {
 
-    override fun create(flowId: FlowId, createEndpointReq: ApiEndpointCreateReq) =
+    override fun create(flowId: FlowId, createEndpointReq: ApiEndpointCreateRequest) =
         template.post("/v1/flows/{flowId}/endpoints")
             .path("flowId", flowId)
             .body(createEndpointReq)
-            .execute(ApiEndpointCreateSubmitted::class)
+            .execute(ApiEndpointCreateRequested::class)
 
     override fun list(query: EndpointQuery): List<ApiEndpointList.Endpoint> =
         template.get("/v1/endpoints")

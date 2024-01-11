@@ -1,5 +1,6 @@
 package io.hamal.api.http.controller.flow
 
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain.vo.FlowInputs
 import io.hamal.lib.domain.vo.FlowName
 import io.hamal.lib.domain.vo.FlowType
@@ -8,12 +9,10 @@ import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.StringType
 import io.hamal.lib.sdk.api.ApiError
-import io.hamal.lib.sdk.api.ApiFlowCreateReq
-import io.hamal.lib.sdk.api.ApiFlowUpdateReq
-import io.hamal.lib.sdk.api.ApiFlowUpdateSubmitted
+import io.hamal.lib.sdk.api.ApiFlowCreateRequest
+import io.hamal.lib.sdk.api.ApiFlowUpdateRequest
+import io.hamal.lib.sdk.api.ApiFlowUpdateRequested
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -24,7 +23,7 @@ internal class FlowUpdateControllerTest : FlowBaseControllerTest() {
     fun `Tries to update flow which does not exists`() {
         val getFlowResponse = httpTemplate.patch("/v1/flows/33333333")
             .body(
-                ApiFlowUpdateReq(
+                ApiFlowUpdateRequest(
                     name = FlowName("update"),
                     inputs = FlowInputs(),
                 )
@@ -42,9 +41,9 @@ internal class FlowUpdateControllerTest : FlowBaseControllerTest() {
     fun `Updates flow`() {
         val flow = awaitCompleted(
             createFlow(
-                ApiFlowCreateReq(
+                ApiFlowCreateRequest(
                     name = FlowName("created-name"),
-                    inputs = FlowInputs(MapType((mutableMapOf("hamal" to StringType("createdInputs"))))),
+                    inputs = FlowInputs(HotObject.builder().set("hamal", "createdInputs").build()),
                     type = FlowType.default
                 )
             )
@@ -53,22 +52,22 @@ internal class FlowUpdateControllerTest : FlowBaseControllerTest() {
         val updateFlowResponse = httpTemplate.patch("/v1/flows/{flowId}")
             .path("flowId", flow.flowId)
             .body(
-                ApiFlowUpdateReq(
+                ApiFlowUpdateRequest(
                     name = FlowName("updated-name"),
-                    inputs = FlowInputs(MapType(mutableMapOf("hamal" to StringType("updatedInputs"))))
+                    inputs = FlowInputs(HotObject.builder().set("hamal", "updatedInputs").build())
                 )
             )
             .execute()
         assertThat(updateFlowResponse.statusCode, equalTo(Accepted))
         require(updateFlowResponse is HttpSuccessResponse) { "request was not successful" }
 
-        val req = updateFlowResponse.result(ApiFlowUpdateSubmitted::class)
+        val req = updateFlowResponse.result(ApiFlowUpdateRequested::class)
         val flowId = awaitCompleted(req).flowId
 
         with(getFlow(flowId)) {
             assertThat(id, equalTo(flowId))
             assertThat(name, equalTo(FlowName("updated-name")))
-            assertThat(inputs, equalTo(FlowInputs(MapType(mutableMapOf("hamal" to StringType("updatedInputs"))))))
+            assertThat(inputs, equalTo(FlowInputs(HotObject.builder().set("hamal", "updatedInputs").build())))
             assertThat(type, equalTo(FlowType.default))
         }
     }

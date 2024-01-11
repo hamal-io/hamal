@@ -5,7 +5,7 @@ import io.hamal.lib.kua.extend.extension.RunnerExtension
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
-import io.hamal.lib.kua.type.CodeType
+import io.hamal.lib.kua.type.KuaCode
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -31,7 +31,7 @@ internal class RegisterExtensionTest : BaseSandboxTest() {
         )
 
         testInstance.load(
-            CodeType(
+            KuaCode(
                 """
                 some_plugin = require('some_plugin')
                 some_plugin.magic()
@@ -73,7 +73,7 @@ internal class RegisterPluginTest : BaseSandboxTest() {
         )
 
         testInstance.load(
-            CodeType(
+            KuaCode(
                 """
                 some_plugin = require_plugin('some_plugin')
                 some_plugin.magic()

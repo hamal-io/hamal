@@ -8,6 +8,7 @@ import io.hamal.plugin.net.smtp.Sender
 import io.hamal.plugin.net.smtp.SenderConfig
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers
+import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
@@ -115,7 +116,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
             extensionFactories = listOf(ExtensionSmtpFactory),
             connector = TestFailConnector { _, result ->
-                assertThat(result.value.getString("message"), Matchers.containsString("host not set"))
+                assertThat(result.value.stringValue("message"), containsString("host not set"))
             }
         ).run(
             unitOfWork(
@@ -353,7 +354,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
             connector = TestFailConnector { _, result ->
-                assertThat(result.value.getString("message"), Matchers.containsString("from not set"))
+                assertThat(result.value.stringValue("message"), containsString("from not set"))
             }
         ).run(
             unitOfWork(
@@ -381,7 +382,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
             connector = TestFailConnector { _, result ->
-                assertThat(result.value.getString("message"), Matchers.containsString("to not set"))
+                assertThat(result.value.stringValue("message"), containsString("to not set"))
             }
         ).run(
             unitOfWork(
@@ -409,7 +410,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
             connector = TestFailConnector { _, result ->
-                assertThat(result.value.getString("message"), Matchers.containsString("subject not set"))
+                assertThat(result.value.stringValue("message"), containsString("subject not set"))
             }
         ).run(
             unitOfWork(
@@ -437,7 +438,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
             connector = TestFailConnector { _, result ->
-                assertThat(result.value.getString("message"), Matchers.containsString("content not set"))
+                assertThat(result.value.stringValue("message"), containsString("content not set"))
             }
         ).run(
             unitOfWork(

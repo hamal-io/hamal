@@ -5,11 +5,11 @@ import io.hamal.lib.domain._enum.FeedbackMood
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.FeedbackId
 import io.hamal.lib.domain.vo.FeedbackMessage
-import io.hamal.lib.domain.vo.RecordedAt
 import io.hamal.repository.api.Feedback
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordEntity
 import io.hamal.repository.record.RecordSequence
+import io.hamal.repository.record.RecordedAt
 
 data class FeedbackEntity(
     override val cmdId: CmdId,

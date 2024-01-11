@@ -3,13 +3,12 @@ package io.hamal.api
 import io.hamal.bridge.BridgeConfig
 import io.hamal.core.CoreConfig
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.GenerateDomainId
+import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.AccountType.Root
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.*
 import io.hamal.repository.api.AuthCmdRepository.CreateTokenAuthCmd
 import io.hamal.repository.api.ExecCmdRepository.StartCmd
@@ -85,6 +84,12 @@ internal abstract class BaseTest {
     lateinit var extensionCmdRepository: ExtensionCmdRepository
 
     @Autowired
+    lateinit var feedbackQueryRepository: FeedbackQueryRepository
+
+    @Autowired
+    lateinit var feedbackCmdRepository: FeedbackCmdRepository
+
+    @Autowired
     lateinit var funcQueryRepository: FuncQueryRepository
 
     @Autowired
@@ -106,10 +111,10 @@ internal abstract class BaseTest {
     lateinit var flowCmdRepository: FlowCmdRepository
 
     @Autowired
-    lateinit var reqQueryRepository: ReqQueryRepository
+    lateinit var reqQueryRepository: RequestQueryRepository
 
     @Autowired
-    lateinit var reqCmdRepository: ReqCmdRepository
+    lateinit var reqCmdRepository: RequestCmdRepository
 
     @Autowired
     lateinit var stateQueryRepository: StateQueryRepository
@@ -124,7 +129,7 @@ internal abstract class BaseTest {
     lateinit var triggerQueryRepository: TriggerQueryRepository
 
     @Autowired
-    lateinit var generateDomainId: GenerateDomainId
+    lateinit var generateDomainId: GenerateId
 
     lateinit var testAccount: Account
     lateinit var testAuthToken: AuthToken
@@ -143,6 +148,7 @@ internal abstract class BaseTest {
         eventBrokerRepository.clear()
         execCmdRepository.clear()
         extensionCmdRepository.clear()
+        feedbackCmdRepository.clear()
         funcCmdRepository.clear()
         groupCmdRepository.clear()
         hookCmdRepository.clear()
@@ -254,8 +260,8 @@ internal abstract class BaseTest {
                 ExecCmdRepository.CompleteCmd(
                     id = CmdId(5),
                     execId = startedExec.id,
-                    result = ExecResult(MapType("hamal" to StringType("rocks"))),
-                    state = ExecState(MapType("state" to StringType("ful")))
+                    result = ExecResult(HotObject.builder().set("hamal", "rocks").build()),
+                    state = ExecState(HotObject.builder().set("state", "ful").build())
                 )
             )
 
@@ -263,7 +269,7 @@ internal abstract class BaseTest {
                 ExecCmdRepository.FailCmd(
                     id = CmdId(5),
                     execId = startedExec.id,
-                    result = ExecResult(MapType("message" to StringType("BaseTest.kt")))
+                    result = ExecResult(HotObject.builder().set("message", "BaseTest.kt").build())
                 )
             )
 

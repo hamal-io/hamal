@@ -9,9 +9,7 @@ import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.AccountType
 import io.hamal.lib.domain.vo.Email
 import io.hamal.lib.domain.vo.PasswordSalt
-import kotlinx.serialization.Serializable
 
-@Serializable
 data class Account(
     override val id: AccountId,
     override val updatedAt: UpdatedAt,

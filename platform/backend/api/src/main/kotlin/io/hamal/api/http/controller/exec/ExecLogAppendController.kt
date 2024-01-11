@@ -3,7 +3,7 @@ package io.hamal.api.http.controller.exec
 import io.hamal.core.adapter.ExecLogAppendPort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.sdk.api.ApiExecLogAppendCmd
+import io.hamal.lib.sdk.api.ApiExecLogAppendRequest
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -18,7 +18,7 @@ internal class ExecLogAppendController(
     @PostMapping("/v1/execs/{execId}/logs")
     fun appendExecLog(
         @PathVariable("execId") execId: ExecId,
-        @RequestBody cmd: ApiExecLogAppendCmd
+        @RequestBody cmd: ApiExecLogAppendRequest
     ): ResponseEntity<Unit> {
         return retry {
             appendExecLog(execId, cmd) {

@@ -17,7 +17,7 @@ object FunctionInput0Schema : FunctionInputSchema<FunctionInput0> {
     }
 }
 
-data class FunctionInput1Schema<ARG_1 : Type>(
+data class FunctionInput1Schema<ARG_1 : KuaType>(
     val arg1Class: KClass<ARG_1>
 ) : FunctionInputSchema<FunctionInput1<ARG_1>> {
     override val size = 1
@@ -28,7 +28,7 @@ data class FunctionInput1Schema<ARG_1 : Type>(
     }
 }
 
-data class FunctionInput2Schema<ARG_1 : Type, ARG_2 : Type>(
+data class FunctionInput2Schema<ARG_1 : KuaType, ARG_2 : KuaType>(
     val arg1Class: KClass<ARG_1>,
     val arg2Class: KClass<ARG_2>
 ) : FunctionInputSchema<FunctionInput2<ARG_1, ARG_2>> {
@@ -41,15 +41,15 @@ data class FunctionInput2Schema<ARG_1 : Type, ARG_2 : Type>(
     }
 }
 
-fun <ARG : Type> KClass<ARG>.extract(ctx: FunctionContext, idx: Int): ARG {
+fun <ARG : KuaType> KClass<ARG>.extract(ctx: FunctionContext, idx: Int): ARG {
     @Suppress("UNCHECKED_CAST")
     return when (this) {
-        AnyType::class -> ctx.getAny(idx) as ARG
-        ArrayType::class -> ctx.getArrayType(idx) as ARG
-        MapType::class -> ctx.getMapType(idx) as ARG
-        NumberType::class -> ctx.getNumberType(idx) as ARG
-        StringType::class -> ctx.getStringType(idx) as ARG
-        Type::class -> TODO() //FIXME loads the entire table from lua -- maybe some form of readonly table value and table value is interface?!
+        KuaAny::class -> ctx.getAny(idx) as ARG
+        KuaArray::class -> ctx.getArrayType(idx) as ARG
+        KuaMap::class -> ctx.getMapType(idx) as ARG
+        KuaNumber::class -> ctx.getNumberType(idx) as ARG
+        KuaString::class -> ctx.getStringType(idx) as ARG
+        KuaType::class -> TODO() //FIXME loads the entire table from lua -- maybe some form of readonly table value and table value is interface?!
 //        TableProxyMap::class -> DefaultTableProxy(idx, ctx.state, TableProxy.Mode.Map) as ARG
 //        TableProxyArray::class -> DefaultTableProxy(idx, ctx.state, TableProxy.Mode.Array) as ARG
         TableProxyMap::class -> ctx.getTableMapProxy(idx) as ARG

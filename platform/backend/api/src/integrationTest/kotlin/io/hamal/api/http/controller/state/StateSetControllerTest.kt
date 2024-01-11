@@ -1,5 +1,7 @@
 package io.hamal.api.http.controller.state
 
+import io.hamal.lib.common.hot.HotNumber
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
@@ -10,13 +12,9 @@ import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
-import io.hamal.lib.kua.type.False
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.NumberType
-import io.hamal.lib.kua.type.True
 import io.hamal.lib.sdk.api.ApiError
 import io.hamal.lib.sdk.api.ApiState
-import io.hamal.lib.sdk.api.ApiStateSetSubmitted
+import io.hamal.lib.sdk.api.ApiStateSetRequested
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -28,16 +26,16 @@ internal class StateSetControllerTest : StateBaseControllerTest() {
 
         val response = httpTemplate.put("/v1/funcs/{funcId}/states/__CORRELATION__")
             .path("funcId", funcId)
-            .body(State(MapType(mutableMapOf("answer" to NumberType(42)))))
+            .body(State(HotObject.builder().set("answer", 42).build()))
             .execute()
 
         assertThat(response.statusCode, equalTo(Accepted))
         require(response is HttpSuccessResponse) { "request was not successful" }
 
-        awaitCompleted(response.result(ApiStateSetSubmitted::class))
+        awaitCompleted(response.result(ApiStateSetRequested::class))
 
         val correlatedState = getState(funcId, CorrelationId("__CORRELATION__"))
-        assertThat(correlatedState["answer"], equalTo(NumberType(42)))
+        assertThat(correlatedState["answer"], equalTo(HotNumber(42)))
     }
 
     @Test
@@ -47,17 +45,17 @@ internal class StateSetControllerTest : StateBaseControllerTest() {
         val correlationOne = Correlation(funcId = funcId, correlationId = CorrelationId("1"))
         val correlationTwo = Correlation(funcId = funcId, correlationId = CorrelationId("2"))
 
-        setState(CorrelatedState(correlationOne, State(MapType(mutableMapOf("result" to True)))))
-        setState(CorrelatedState(correlationTwo, State(MapType(mutableMapOf("result" to False)))))
+        setState(CorrelatedState(correlationOne, State(HotObject.builder().set("result", true).build())))
+        setState(CorrelatedState(correlationTwo, State(HotObject.builder().set("result", false).build())))
 
         with(getState(correlationOne)) {
             assertThat(correlation.correlationId, equalTo(CorrelationId("1")))
-            assertThat(state, equalTo(ApiState(MapType(mutableMapOf("result" to True)))))
+            assertThat(state, equalTo(ApiState(HotObject.builder().set("result", true).build())))
         }
 
         with(getState(correlationTwo)) {
             assertThat(correlation.correlationId, equalTo(CorrelationId("2")))
-            assertThat(state, equalTo(ApiState(MapType((mutableMapOf("result" to False))))))
+            assertThat(state, equalTo(ApiState(HotObject.builder().set("result", false).build())))
         }
     }
 
@@ -76,20 +74,20 @@ internal class StateSetControllerTest : StateBaseControllerTest() {
                 setState(
                     CorrelatedState(
                         correlation = correlation,
-                        value = State(MapType(mutableMapOf("count" to NumberType(currentCount))))
+                        value = State(HotObject.builder().set("count", currentCount).build())
                     )
                 )
             )
 
             val correlatedState = getState(correlation)
-            assertThat(correlatedState["count"], equalTo(NumberType(currentCount)))
+            assertThat(correlatedState["count"], equalTo(HotNumber(currentCount)))
         }
     }
 
     @Test
     fun `Tries to set state but func does not exists`() {
         val response = httpTemplate.put("/v1/funcs/0/states/__CORRELATION__")
-            .body(State(MapType(mutableMapOf("answer" to NumberType(42)))))
+            .body(State(HotObject.builder().set("answer", 42).build()))
             .execute()
 
         assertThat(response.statusCode, equalTo(NotFound))

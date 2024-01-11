@@ -6,7 +6,7 @@ import io.hamal.core.event.PlatformEventEmitter
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.util.TimeUtils.now
-import io.hamal.lib.domain.GenerateDomainId
+import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.EmptyInvocation
 import io.hamal.lib.domain.vo.InvocationInputs
@@ -15,7 +15,7 @@ import io.hamal.repository.api.FixedRateTrigger
 import io.hamal.repository.api.FuncQueryRepository
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerQueryRepository
-import io.hamal.request.FuncInvokeReq
+import io.hamal.lib.domain.request.FuncInvokeRequest
 import org.springframework.beans.factory.DisposableBean
 import org.springframework.context.ApplicationListener
 import org.springframework.context.event.ContextRefreshedEvent
@@ -29,7 +29,7 @@ internal class FixedRateTriggerService(
     private val async: Async,
     internal val eventEmitter: PlatformEventEmitter,
     internal val funcQueryRepository: FuncQueryRepository,
-    internal val generateDomainId: GenerateDomainId,
+    internal val generateDomainId: GenerateId,
     internal val invokeFunc: FuncInvokePort,
     internal val triggerQueryRepository: TriggerQueryRepository,
 ) : ApplicationListener<ContextRefreshedEvent>, DisposableBean {
@@ -80,7 +80,7 @@ internal class FixedRateTriggerService(
 internal fun FixedRateTriggerService.requestInvocation(trigger: FixedRateTrigger) {
     invokeFunc(
         trigger.funcId,
-        object : FuncInvokeReq {
+        object : FuncInvokeRequest {
             override val correlationId = trigger.correlationId ?: CorrelationId.default
             override val inputs = InvocationInputs()
             override val invocation = EmptyInvocation

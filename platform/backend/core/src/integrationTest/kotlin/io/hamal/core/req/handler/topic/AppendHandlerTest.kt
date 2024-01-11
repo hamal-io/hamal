@@ -1,19 +1,17 @@
-package io.hamal.core.req.handler.topic
+package io.hamal.core.request.handler.topic
 
-import io.hamal.core.req.handler.BaseReqHandlerTest
+import io.hamal.core.request.handler.BaseReqHandlerTest
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.domain._enum.ReqStatus.Submitted
-import io.hamal.lib.domain.vo.ReqId
+import io.hamal.lib.domain._enum.RequestStatus.Submitted
+import io.hamal.lib.domain.request.TopicAppendToRequested
+import io.hamal.lib.domain.vo.RequestId
 import io.hamal.lib.domain.vo.TopicEntryPayload
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.log.ChunkId
 import io.hamal.repository.api.log.Segment
-import io.hamal.repository.api.submitted_req.TopicAppendToSubmitted
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.protobuf.ProtoBuf
+import io.hamal.repository.record.json
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
@@ -27,25 +25,25 @@ internal class TopicAppendHandlerTest : BaseReqHandlerTest() {
         val topic = createTopic(TopicId(4444), TopicName("topic"))
 
         testInstance(
-            TopicAppendToSubmitted(
-                id = ReqId(SnowflakeId(123)),
+            TopicAppendToRequested(
+                id = RequestId(SnowflakeId(123)),
                 status = Submitted,
                 topicId = TopicId(4444),
                 groupId = testGroup.id,
-                payload = TopicEntryPayload(MapType(mutableMapOf("hamal" to StringType("rockz"))))
+                payload = TopicEntryPayload(HotObject.builder().set("hamal", "rocks").build())
             )
         )
 
         eventBrokerRepository.read(ChunkId(0), topic, 1).also { payloads ->
             assertThat(payloads, hasSize(1))
 
-            @OptIn(ExperimentalSerializationApi::class) with(payloads.first()) {
+            with(payloads.first()) {
                 assertThat(segmentId, equalTo(Segment.Id(0)))
                 assertThat(id, equalTo(ChunkId(1)))
                 assertThat(topicId, equalTo(TopicId(4444)))
 
-                val payload = ProtoBuf { }.decodeFromByteArray(TopicEntryPayload.serializer(), bytes)
-                assertThat(payload.value, equalTo(MapType(mutableMapOf("hamal" to StringType("rockz")))))
+                val payload = json.decompressAndDeserialize(TopicEntryPayload::class, bytes)
+                assertThat(payload.value, equalTo(HotObject.builder().set("hamal", "rocks").build()))
             }
         }
     }
@@ -54,12 +52,12 @@ internal class TopicAppendHandlerTest : BaseReqHandlerTest() {
     fun `Tries to append entry to topic which does not exists`() {
         val exception = assertThrows<NoSuchElementException> {
             testInstance(
-                TopicAppendToSubmitted(
-                    id = ReqId(SnowflakeId(123)),
+                TopicAppendToRequested(
+                    id = RequestId(SnowflakeId(123)),
                     status = Submitted,
                     topicId = TopicId(123),
                     groupId = testGroup.id,
-                    payload = TopicEntryPayload(MapType(mutableMapOf("hamal" to StringType("rockz"))))
+                    payload = TopicEntryPayload(HotObject.builder().set("hamal", "rocks").build())
                 )
             )
         }

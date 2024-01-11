@@ -9,7 +9,7 @@ err, res = http.post({ url = '/v1/anonymous-accounts', json = { } })
 assert(err == nil)
 
 assert(res.status_code == 202)
-assert(res.content_type == 'application/json')
+assert(res.content_type == 'application/json;charset=UTF-8')
 
 content = res.content
 assert(content.id ~= nil)

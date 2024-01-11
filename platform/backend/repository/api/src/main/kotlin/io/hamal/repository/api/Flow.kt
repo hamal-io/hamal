@@ -6,9 +6,7 @@ import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.domain.UpdatedAt
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.*
-import kotlinx.serialization.Serializable
 
-@Serializable
 data class Flow(
     val cmdId: CmdId,
     override val id: FlowId,

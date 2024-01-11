@@ -7,7 +7,7 @@ assert(err == nil)
 assert(res ~= nil)
 
 assert(res.status_code == 200)
-assert(res.content_type == 'application/json')
+assert(res.content_type == 'application/json;charset=UTF-8')
 
 content = res.content
 assert(content ~= nil)

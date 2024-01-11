@@ -1,17 +1,16 @@
-package io.hamal.core.req.handler.exec
+package io.hamal.core.request.handler.exec
 
-import io.hamal.core.req.handler.BaseReqHandlerTest
-import io.hamal.lib.domain._enum.ReqStatus.Submitted
+import io.hamal.core.request.handler.BaseReqHandlerTest
+import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.domain._enum.RequestStatus.Submitted
+import io.hamal.lib.domain.request.ExecFailRequested
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecResult
 import io.hamal.lib.domain.vo.ExecStatus
 import io.hamal.lib.domain.vo.ExecStatus.Failed
 import io.hamal.lib.domain.vo.ExecStatus.Started
-import io.hamal.lib.domain.vo.ReqId
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.StringType
+import io.hamal.lib.domain.vo.RequestId
 import io.hamal.repository.api.ExecQueryRepository.ExecQuery
-import io.hamal.repository.api.submitted_req.ExecFailSubmitted
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.DynamicTest.dynamicTest
@@ -59,11 +58,11 @@ internal class ExecFailHandlerTest : BaseReqHandlerTest() {
     private lateinit var testInstance: ExecFailHandler
 
     private val submittedFailExecReq by lazy {
-        ExecFailSubmitted(
-            id = ReqId(10),
+        ExecFailRequested(
+            id = RequestId(10),
             status = Submitted,
             execId = ExecId(1234),
-            result = ExecResult(MapType("message" to StringType("You have not tried hard enough")))
+            result = ExecResult(HotObject.builder().set("message", "You have not tried hard enough").build())
         )
     }
 
@@ -76,7 +75,7 @@ internal class ExecFailHandlerTest : BaseReqHandlerTest() {
                 assertThat(status, equalTo(Failed))
                 assertThat(
                     result,
-                    equalTo(ExecResult(MapType("message" to StringType("You have not tried hard enough"))))
+                    equalTo(ExecResult(HotObject.builder().set("message", "You have not tried hard enough").build()))
                 )
             }
         }

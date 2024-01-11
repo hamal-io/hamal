@@ -4,21 +4,28 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.record.Record
+import io.hamal.repository.record.RecordAdapter
 import io.hamal.repository.record.RecordSequence
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
+import io.hamal.repository.record.RecordedAt
 
-@Serializable
 sealed class ExecRecord(
     @Transient
-    override var sequence: RecordSequence? = null,
+    override var recordSequence: RecordSequence? = null,
     @Transient
     override var recordedAt: RecordedAt? = null
-) : Record<ExecId>()
+) : Record<ExecId>() {
+    internal object Adapter : RecordAdapter<ExecRecord>(
+        listOf(
+            ExecPlannedRecord::class,
+            ExecScheduledRecord::class,
+            ExecQueuedRecord::class,
+            ExecStartedRecord::class,
+            ExecCompletedRecord::class,
+            ExecFailedRecord::class,
+        )
+    )
+}
 
-@Serializable
-@SerialName("ExecPlannedRecord")
 data class ExecPlannedRecord(
     override val cmdId: CmdId,
     override val entityId: ExecId,
@@ -30,30 +37,22 @@ data class ExecPlannedRecord(
     val invocation: Invocation
 ) : ExecRecord()
 
-@Serializable
-@SerialName("ExecScheduledRecord")
 data class ExecScheduledRecord(
     override val cmdId: CmdId,
     override val entityId: ExecId,
 ) : ExecRecord()
 
-@Serializable
-@SerialName("ExecQueuedRecord")
 data class ExecQueuedRecord(
     override val cmdId: CmdId,
     override val entityId: ExecId,
 ) : ExecRecord()
 
 
-@Serializable
-@SerialName("ExecStartedRecord")
 data class ExecStartedRecord(
     override val cmdId: CmdId,
     override val entityId: ExecId,
 ) : ExecRecord()
 
-@Serializable
-@SerialName("ExecCompletedRecord")
 data class ExecCompletedRecord(
     override val cmdId: CmdId,
     override val entityId: ExecId,
@@ -61,8 +60,6 @@ data class ExecCompletedRecord(
     val state: ExecState
 ) : ExecRecord()
 
-@Serializable
-@SerialName("ExecFailedRecord")
 data class ExecFailedRecord(
     override val cmdId: CmdId,
     override val entityId: ExecId,

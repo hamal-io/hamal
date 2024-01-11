@@ -1,12 +1,15 @@
 package io.hamal.repository.record.hook
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.vo.*
-
+import io.hamal.lib.domain.vo.FlowId
+import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.HookId
+import io.hamal.lib.domain.vo.HookName
 import io.hamal.repository.api.Hook
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordEntity
 import io.hamal.repository.record.RecordSequence
+import io.hamal.repository.record.RecordedAt
 
 data class HookEntity(
     override val cmdId: CmdId,

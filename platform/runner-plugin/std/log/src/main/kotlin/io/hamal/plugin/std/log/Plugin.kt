@@ -13,9 +13,9 @@ import io.hamal.lib.kua.function.Function2In1Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput2Schema
 import io.hamal.lib.kua.function.FunctionOutput1Schema
-import io.hamal.lib.kua.type.ErrorType
-import io.hamal.lib.kua.type.StringType
-import io.hamal.lib.sdk.api.ApiExecLogAppendCmd
+import io.hamal.lib.kua.type.KuaError
+import io.hamal.lib.kua.type.KuaString
+import io.hamal.lib.sdk.api.ApiExecLogAppendRequest
 import io.hamal.lib.sdk.api.ApiExecLogService
 
 
@@ -36,12 +36,12 @@ class PluginLogFactory(
 
 class LogFunction(
     private val execLogService: ApiExecLogService
-) : Function2In1Out<StringType, StringType, ErrorType>(
-    FunctionInput2Schema(StringType::class, StringType::class),
-    FunctionOutput1Schema(ErrorType::class)
+) : Function2In1Out<KuaString, KuaString, KuaError>(
+    FunctionInput2Schema(KuaString::class, KuaString::class),
+    FunctionOutput1Schema(KuaError::class)
 ) {
 
-    override fun invoke(ctx: FunctionContext, arg1: StringType, arg2: StringType): ErrorType? {
+    override fun invoke(ctx: FunctionContext, arg1: KuaString, arg2: KuaString): KuaError? {
         val level = ExecLogLevel.valueOf(arg1.value)
         val message = ExecLogMessage(arg2.value)
 
@@ -55,7 +55,7 @@ class LogFunction(
 
         execLogService.append(
             ctx[ExecId::class],
-            ApiExecLogAppendCmd(
+            ApiExecLogAppendRequest(
                 level = level,
                 message = message,
                 timestamp = ExecLogTimestamp.now()

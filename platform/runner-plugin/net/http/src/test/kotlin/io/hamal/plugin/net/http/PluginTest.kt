@@ -2,13 +2,12 @@ package io.hamal.plugin.net.http
 
 import AbstractRunnerTest
 import io.hamal.extension.std.decimal.ExtensionDecimalFactory
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain.vo.RunnerEnv
-import io.hamal.lib.http.fixture.TestWebConfig
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.StringType
 import io.hamal.plugin.net.http.endpoint.TestHeaderController
 import io.hamal.plugin.net.http.endpoint.TestJsonController
 import io.hamal.plugin.net.http.endpoint.TestStatusController
+import io.hamal.plugin.net.http.fixture.TestWebConfig
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
@@ -39,11 +38,9 @@ class PluginHttpTest(@LocalServerPort var localServerPort: Int) : AbstractRunner
                     pluginFactories = listOf(PluginHttpFactory()),
                     extensionFactories = listOf(ExtensionDecimalFactory),
                     env = RunnerEnv(
-                        MapType(
-                            mutableMapOf(
-                                "test_url" to StringType("http://localhost:$localServerPort")
-                            )
-                        )
+                        HotObject.builder()
+                            .set("test_url", "http://localhost:$localServerPort")
+                            .build()
                     )
                 )
                 runner.run(unitOfWork(String(Files.readAllBytes(testFile))))

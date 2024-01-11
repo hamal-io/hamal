@@ -1,26 +1,22 @@
 package io.hamal.lib.sdk.api
 
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain._enum.ReqStatus
+import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.sdk.fold
-import kotlinx.serialization.Serializable
 
-@Serializable
-data class ApiExecInvokeSubmitted(
-    override val id: ReqId,
-    override val status: ReqStatus,
+data class ApiExecInvokeRequested(
+    override val id: RequestId,
+    override val status: RequestStatus,
     val execId: ExecId,
     val groupId: GroupId,
     val flowId: FlowId
-) : ApiSubmitted
+) : ApiRequested()
 
-@Serializable
 data class ApiExecList(
     val execs: List<Exec>
 ) {
-    @Serializable
     data class Exec(
         val id: ExecId,
         val status: ExecStatus,
@@ -28,7 +24,6 @@ data class ApiExecList(
     )
 }
 
-@Serializable
 data class ApiExec(
     val id: ExecId,
     val status: ExecStatus,
@@ -38,9 +33,10 @@ data class ApiExec(
     val result: ExecResult?,
     val state: ExecState?
 ) {
-    @Serializable
     data class Code(
-        val id: CodeId?, val version: CodeVersion?, val value: CodeValue?
+        val id: CodeId?,
+        val version: CodeVersion?,
+        val value: CodeValue?
     )
 }
 

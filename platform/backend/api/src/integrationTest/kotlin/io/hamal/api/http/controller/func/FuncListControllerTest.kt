@@ -1,8 +1,8 @@
 package io.hamal.api.http.controller.func
 
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.sdk.api.ApiFuncCreateReq
-import io.hamal.lib.sdk.api.ApiFuncDeployReq
+import io.hamal.lib.sdk.api.ApiFuncCreateRequest
+import io.hamal.lib.sdk.api.ApiFuncDeployRequest
 import io.hamal.lib.sdk.api.ApiFuncList
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
@@ -19,7 +19,7 @@ internal class FuncListControllerTest : FuncBaseControllerTest() {
     fun `Single func`() {
         val funcId = awaitCompleted(
             createFunc(
-                ApiFuncCreateReq(
+                ApiFuncCreateRequest(
                     name = FuncName("func-one"),
                     inputs = FuncInputs(),
                     code = CodeValue("")
@@ -41,7 +41,7 @@ internal class FuncListControllerTest : FuncBaseControllerTest() {
         awaitCompleted(
             IntRange(0, 20).map {
                 createFunc(
-                    ApiFuncCreateReq(
+                    ApiFuncCreateRequest(
                         name = FuncName("func-$it"),
                         inputs = FuncInputs(),
                         code = CodeValue("")
@@ -66,7 +66,7 @@ internal class FuncListControllerTest : FuncBaseControllerTest() {
     fun `Skip and limit funcs`() {
         val requests = IntRange(0, 99).map {
             createFunc(
-                ApiFuncCreateReq(
+                ApiFuncCreateRequest(
                     name = FuncName("func-$it"),
                     inputs = FuncInputs(),
                     code = CodeValue("")
@@ -94,7 +94,7 @@ internal class FuncListControllerTest : FuncBaseControllerTest() {
     fun `Get a list of deployments`() {
         val funcId = awaitCompleted(
             createFunc(
-                ApiFuncCreateReq(
+                ApiFuncCreateRequest(
                     name = FuncName("func-1"),
                     inputs = FuncInputs(),
                     code = CodeValue("")
@@ -103,7 +103,7 @@ internal class FuncListControllerTest : FuncBaseControllerTest() {
         ).funcId
 
         repeat(20) {
-            awaitCompleted(deployFunc(funcId, ApiFuncDeployReq(null, DeployMessage("deployed-${it}"))))
+            awaitCompleted(deployFunc(funcId, ApiFuncDeployRequest(null, DeployMessage("deployed-${it}"))))
         }
 
         val deployments = listDeployments(funcId).deployments

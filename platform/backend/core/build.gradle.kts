@@ -2,7 +2,6 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
 
 plugins {
     id("hamal.common")
-    id("org.jetbrains.kotlin.plugin.serialization")
 }
 
 archivesName.set("platform-backend")
@@ -10,7 +9,6 @@ archivesName.set("platform-backend")
 dependencies {
     api(project(":platform:lib:sdk"))
     api(project(":platform:lib:kua"))
-    api(project(":platform:backend:request"))
 
     api(project(":platform:backend:repository:api"))
     api(project(":platform:backend:repository:memory"))

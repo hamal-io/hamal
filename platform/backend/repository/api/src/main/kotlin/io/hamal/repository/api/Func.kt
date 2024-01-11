@@ -6,9 +6,7 @@ import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.domain.UpdatedAt
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.*
-import kotlinx.serialization.Serializable
 
-@Serializable
 data class Func(
     override val id: FuncId,
     override val updatedAt: UpdatedAt,
@@ -21,13 +19,11 @@ data class Func(
     val deployment: FuncDeployment
 ) : DomainObject<FuncId>
 
-@Serializable
 data class FuncCode(
     val id: CodeId,
     val version: CodeVersion
 )
 
-@Serializable
 data class FuncDeployment(
     val id: CodeId,
     val version: CodeVersion,

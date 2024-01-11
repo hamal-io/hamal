@@ -1,12 +1,12 @@
-package io.hamal.core.req.handler.topic
+package io.hamal.core.request.handler.topic
 
-import io.hamal.core.req.handler.BaseReqHandlerTest
-import io.hamal.lib.domain._enum.ReqStatus.Submitted
-import io.hamal.lib.domain.vo.ReqId
+import io.hamal.core.request.handler.BaseReqHandlerTest
+import io.hamal.lib.domain._enum.RequestStatus.Submitted
+import io.hamal.lib.domain.vo.RequestId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.repository.api.log.BrokerTopicsRepository.TopicQuery
-import io.hamal.repository.api.submitted_req.TopicCreateSubmitted
+import io.hamal.lib.domain.request.TopicCreateRequested
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
@@ -29,8 +29,8 @@ internal class TopicCreateHandlerTest : BaseReqHandlerTest() {
 
         val exception = assertThrows<IllegalArgumentException> {
             testInstance(
-                TopicCreateSubmitted(
-                    id = ReqId(2),
+                TopicCreateRequested(
+                    id = RequestId(2),
                     status = Submitted,
                     topicId = TopicId(2345),
                     flowId = testFlow.id,
@@ -50,8 +50,8 @@ internal class TopicCreateHandlerTest : BaseReqHandlerTest() {
 
         val exception = assertThrows<IllegalArgumentException> {
             testInstance(
-                TopicCreateSubmitted(
-                    id = ReqId(2),
+                TopicCreateRequested(
+                    id = RequestId(2),
                     status = Submitted,
                     topicId = TopicId(3456),
                     flowId = testFlow.id,
@@ -79,8 +79,8 @@ internal class TopicCreateHandlerTest : BaseReqHandlerTest() {
     private lateinit var testInstance: TopicCreateHandler
 
     private val submittedCreateTopicReq by lazy {
-        TopicCreateSubmitted(
-            id = ReqId(1),
+        TopicCreateRequested(
+            id = RequestId(1),
             status = Submitted,
             topicId = TopicId(2345),
             flowId = testFlow.id,

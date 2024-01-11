@@ -1,13 +1,13 @@
 package io.hamal.lib.kua
 
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.NumberType
+import io.hamal.lib.kua.type.KuaMap
+import io.hamal.lib.kua.type.KuaNumber
 
 abstract class KuaError(message: String, throwable: Throwable? = null) : Error(message, throwable)
 
 class ExitError(
-    val status: NumberType,
-    val result: MapType
+    val status: KuaNumber,
+    val result: KuaMap
 ) : KuaError(status.toString())
 
 class AssertionError(message: String) : KuaError(message)

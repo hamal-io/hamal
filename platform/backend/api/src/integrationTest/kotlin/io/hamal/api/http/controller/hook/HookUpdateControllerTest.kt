@@ -11,9 +11,9 @@ import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiError
-import io.hamal.lib.sdk.api.ApiHookCreateReq
-import io.hamal.lib.sdk.api.ApiHookUpdateSubmitted
-import io.hamal.lib.sdk.api.ApiHookUpdateReq
+import io.hamal.lib.sdk.api.ApiHookCreateRequest
+import io.hamal.lib.sdk.api.ApiHookUpdateRequested
+import io.hamal.lib.sdk.api.ApiHookUpdateRequest
 import io.hamal.repository.api.FlowCmdRepository.CreateCmd
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -24,7 +24,7 @@ internal class HookUpdateControllerTest : HookBaseControllerTest() {
     @Test
     fun `Tries to update hook which does not exists`() {
         val getHookResponse = httpTemplate.patch("/v1/hooks/33333333")
-            .body(ApiHookUpdateReq(name = HookName("update")))
+            .body(ApiHookUpdateRequest(name = HookName("update")))
             .execute()
 
         assertThat(getHookResponse.statusCode, equalTo(NotFound))
@@ -48,20 +48,20 @@ internal class HookUpdateControllerTest : HookBaseControllerTest() {
 
         val hook = awaitCompleted(
             createHook(
-                req = ApiHookCreateReq(HookName("created-name")),
+                req = ApiHookCreateRequest(HookName("created-name")),
                 flowId = createdFlow.id
             )
         )
 
         val updateHookResponse = httpTemplate.patch("/v1/hooks/{hookId}")
             .path("hookId", hook.hookId)
-            .body(ApiHookUpdateReq(name = HookName("updated-name")))
+            .body(ApiHookUpdateRequest(name = HookName("updated-name")))
             .execute()
 
         assertThat(updateHookResponse.statusCode, equalTo(Accepted))
         require(updateHookResponse is HttpSuccessResponse) { "request was not successful" }
 
-        val submittedReq = updateHookResponse.result(ApiHookUpdateSubmitted::class)
+        val submittedReq = updateHookResponse.result(ApiHookUpdateRequested::class)
         awaitCompleted(submittedReq)
         with(getHook(submittedReq.hookId)) {
             assertThat(id, equalTo(submittedReq.hookId))
@@ -84,19 +84,19 @@ internal class HookUpdateControllerTest : HookBaseControllerTest() {
 
         val hook = awaitCompleted(
             createHook(
-                req = ApiHookCreateReq(HookName("created-name")),
+                req = ApiHookCreateRequest(HookName("created-name")),
                 flowId = createdFlow.id
             )
         )
 
         val updateHookResponse = httpTemplate.patch("/v1/hooks/{hookId}")
             .path("hookId", hook.hookId)
-            .body(ApiHookUpdateReq(name = null))
+            .body(ApiHookUpdateRequest(name = null))
             .execute()
         assertThat(updateHookResponse.statusCode, equalTo(Accepted))
         require(updateHookResponse is HttpSuccessResponse) { "request was not successful" }
 
-        val req = updateHookResponse.result(ApiHookUpdateSubmitted::class)
+        val req = updateHookResponse.result(ApiHookUpdateRequested::class)
         awaitCompleted(req)
 
         with(getHook(req.hookId)) {

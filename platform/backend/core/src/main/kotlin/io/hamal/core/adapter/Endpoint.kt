@@ -1,24 +1,24 @@
 package io.hamal.core.adapter
 
-import io.hamal.lib.domain.GenerateDomainId
-import io.hamal.lib.domain._enum.ReqStatus.Submitted
+import io.hamal.lib.domain.GenerateId
+import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain.vo.EndpointId
 import io.hamal.lib.domain.vo.FlowId
 import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.domain.vo.ReqId
+import io.hamal.lib.domain.vo.RequestId
 import io.hamal.repository.api.*
 import io.hamal.repository.api.EndpointQueryRepository.EndpointQuery
-import io.hamal.repository.api.submitted_req.EndpointCreateSubmitted
-import io.hamal.repository.api.submitted_req.EndpointUpdateSubmitted
-import io.hamal.request.EndpointCreateReq
-import io.hamal.request.EndpointUpdateReq
+import io.hamal.lib.domain.request.EndpointCreateRequested
+import io.hamal.lib.domain.request.EndpointUpdateRequested
+import io.hamal.lib.domain.request.EndpointCreateRequest
+import io.hamal.lib.domain.request.EndpointUpdateRequest
 import org.springframework.stereotype.Component
 
 interface EndpointCreatePort {
     operator fun <T : Any> invoke(
         flowId: FlowId,
-        req: EndpointCreateReq,
-        responseHandler: (EndpointCreateSubmitted) -> T
+        req: EndpointCreateRequest,
+        responseHandler: (EndpointCreateRequested) -> T
     ): T
 }
 
@@ -33,8 +33,8 @@ interface EndpointListPort {
 interface EndpointUpdatePort {
     operator fun <T : Any> invoke(
         endpointId: EndpointId,
-        req: EndpointUpdateReq,
-        responseHandler: (EndpointUpdateSubmitted) -> T
+        req: EndpointUpdateRequest,
+        responseHandler: (EndpointUpdateRequested) -> T
     ): T
 }
 
@@ -42,20 +42,20 @@ interface EndpointPort : EndpointCreatePort, EndpointGetPort, EndpointListPort, 
 
 @Component
 class EndpointAdapter(
-    private val generateDomainId: GenerateDomainId,
+    private val generateDomainId: GenerateId,
     private val endpointQueryRepository: EndpointQueryRepository,
     private val funcQueryRepository: FuncQueryRepository,
-    private val reqCmdRepository: ReqCmdRepository
+    private val reqCmdRepository: RequestCmdRepository
 ) : EndpointPort {
     override fun <T : Any> invoke(
         flowId: FlowId,
-        req: EndpointCreateReq,
-        responseHandler: (EndpointCreateSubmitted) -> T
+        req: EndpointCreateRequest,
+        responseHandler: (EndpointCreateRequested) -> T
     ): T {
         val func = funcQueryRepository.get(req.funcId)
         require(flowId == func.flowId) { "Endpoint and Func must share the same Flow" }
-        return EndpointCreateSubmitted(
-            id = generateDomainId(::ReqId),
+        return EndpointCreateRequested(
+            id = generateDomainId(::RequestId),
             status = Submitted,
             endpointId = generateDomainId(::EndpointId),
             groupId = func.groupId,
@@ -83,8 +83,8 @@ class EndpointAdapter(
 
     override fun <T : Any> invoke(
         endpointId: EndpointId,
-        req: EndpointUpdateReq,
-        responseHandler: (EndpointUpdateSubmitted) -> T
+        req: EndpointUpdateRequest,
+        responseHandler: (EndpointUpdateRequested) -> T
     ): T {
         val endpoint = endpointQueryRepository.get(endpointId)
 
@@ -93,8 +93,8 @@ class EndpointAdapter(
             require(endpoint.flowId == func.flowId) { "Endpoint and Func must share the same Flow" }
         }
 
-        return EndpointUpdateSubmitted(
-            id = generateDomainId(::ReqId),
+        return EndpointUpdateRequested(
+            id = generateDomainId(::RequestId),
             status = Submitted,
             groupId = endpoint.groupId,
             endpointId = endpointId,

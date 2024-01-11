@@ -1,15 +1,14 @@
-package io.hamal.core.req.handler.func
+package io.hamal.core.request.handler.func
 
-import io.hamal.core.req.handler.BaseReqHandlerTest
+import io.hamal.core.request.handler.BaseReqHandlerTest
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.util.TimeUtils
-import io.hamal.lib.domain._enum.ReqStatus.Submitted
+import io.hamal.lib.domain._enum.RequestStatus.Submitted
+import io.hamal.lib.domain.request.FuncCreateRequested
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.type.MapType
-import io.hamal.lib.kua.type.StringType
 import io.hamal.repository.api.FuncCode
 import io.hamal.repository.api.FuncDeployment
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
-import io.hamal.repository.api.submitted_req.FuncCreateSubmitted
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
@@ -30,7 +29,7 @@ internal class FuncCreateHandlerTest : BaseReqHandlerTest() {
                 with(funcs.first()) {
                     assertThat(id, equalTo(FuncId(12345)))
                     assertThat(name, equalTo(FuncName("awesome-func")))
-                    assertThat(inputs, equalTo(FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks"))))))
+                    assertThat(inputs, equalTo(FuncInputs(HotObject.builder().set("hamal", "rocks").build())))
                     assertThat(deployment.version, equalTo(codeQueryRepository.get(CodeId(34567)).version))
 
                     assertThat(
@@ -61,14 +60,14 @@ internal class FuncCreateHandlerTest : BaseReqHandlerTest() {
     private lateinit var testInstance: FuncCreateHandler
 
     private val submitCreateFuncReq by lazy {
-        FuncCreateSubmitted(
-            id = ReqId(1),
+        FuncCreateRequested(
+            id = RequestId(1),
             status = Submitted,
             groupId = testGroup.id,
             funcId = FuncId(12345),
             flowId = FlowId(23456),
             name = FuncName("awesome-func"),
-            inputs = FuncInputs(MapType(mutableMapOf("hamal" to StringType("rocks")))),
+            inputs = FuncInputs(HotObject.builder().set("hamal", "rocks").build()),
             codeId = CodeId(34567),
             code = CodeValue("some code"),
         )

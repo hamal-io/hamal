@@ -26,7 +26,7 @@ internal object ProjectionUniqueName : ProjectionSqlite<FlowId, FlowRecord, Flow
             query {
                 set("name", flowName)
             }
-            map { rs -> rs.getDomainId("id", ::FlowId) }
+            map { rs -> rs.getId("id", ::FlowId) }
         }
     }
 
@@ -68,5 +68,5 @@ internal object ProjectionUniqueName : ProjectionSqlite<FlowId, FlowRecord, Flow
     override fun clear(tx: Transaction) {
         tx.execute("""DELETE FROM unique_name""")
     }
-    
+
 }

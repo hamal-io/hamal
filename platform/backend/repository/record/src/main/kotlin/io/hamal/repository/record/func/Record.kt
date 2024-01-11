@@ -3,22 +3,25 @@ package io.hamal.repository.record.func
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.record.Record
+import io.hamal.repository.record.RecordAdapter
 import io.hamal.repository.record.RecordSequence
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
+import io.hamal.repository.record.RecordedAt
 
-
-@Serializable
 sealed class FuncRecord(
     @Transient
-    override var sequence: RecordSequence? = null,
+    override var recordSequence: RecordSequence? = null,
     @Transient
     override var recordedAt: RecordedAt? = null
-) : Record<FuncId>()
+) : Record<FuncId>() {
+    internal object Adapter : RecordAdapter<FuncRecord>(
+        listOf(
+            FuncCreatedRecord::class,
+            FuncUpdatedRecord::class,
+            FuncDeployedRecord::class,
+        )
+    )
+}
 
-@Serializable
-@SerialName("FuncCreatedRecord")
 data class FuncCreatedRecord(
     override val entityId: FuncId,
     override val cmdId: CmdId,
@@ -30,8 +33,6 @@ data class FuncCreatedRecord(
     val codeVersion: CodeVersion
 ) : FuncRecord()
 
-@Serializable
-@SerialName("FuncUpdatedRecord")
 data class FuncUpdatedRecord(
     override val entityId: FuncId,
     override val cmdId: CmdId,
@@ -41,8 +42,6 @@ data class FuncUpdatedRecord(
 ) : FuncRecord()
 
 
-@Serializable
-@SerialName("FuncDeployedRecord")
 data class FuncDeployedRecord(
     override val entityId: FuncId,
     override val cmdId: CmdId,

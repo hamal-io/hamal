@@ -3,8 +3,8 @@ package io.hamal.lib.kua.extend
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extend.extension.RunnerExtension
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
-import io.hamal.lib.kua.function.FunctionType
 import io.hamal.lib.kua.table.TableProxyMap
+import io.hamal.lib.kua.type.KuaFunction
 
 class RunnerRegistry(val sb: Sandbox) {
 
@@ -36,7 +36,7 @@ class RunnerRegistry(val sb: Sandbox) {
 
         internals.forEach { entry ->
             val fn = entry.value
-            require(fn is FunctionType<*, *, *, *>)
+            require(fn is KuaFunction<*, *, *, *>)
             internalTable[entry.key] = fn
         }
 

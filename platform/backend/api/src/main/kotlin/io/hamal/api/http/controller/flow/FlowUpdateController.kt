@@ -3,10 +3,10 @@ package io.hamal.api.http.controller.flow
 import io.hamal.api.http.controller.accepted
 import io.hamal.core.adapter.FlowUpdatePort
 import io.hamal.core.component.Retry
+import io.hamal.lib.domain.request.FlowUpdateRequested
 import io.hamal.lib.domain.vo.FlowId
-import io.hamal.lib.sdk.api.ApiFlowUpdateReq
-import io.hamal.lib.sdk.api.ApiSubmitted
-import io.hamal.repository.api.submitted_req.FlowUpdateSubmitted
+import io.hamal.lib.sdk.api.ApiFlowUpdateRequest
+import io.hamal.lib.sdk.api.ApiRequested
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -21,8 +21,8 @@ internal class FlowUpdateController(
     @PatchMapping("/v1/flows/{flowId}")
     fun updateFlow(
         @PathVariable("flowId") flowId: FlowId,
-        @RequestBody req: ApiFlowUpdateReq
-    ): ResponseEntity<ApiSubmitted> = retry {
-        updateFlow(flowId, req, FlowUpdateSubmitted::accepted)
+        @RequestBody req: ApiFlowUpdateRequest
+    ): ResponseEntity<ApiRequested> = retry {
+        updateFlow(flowId, req, FlowUpdateRequested::accepted)
     }
 }

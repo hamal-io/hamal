@@ -1,24 +1,27 @@
 package io.hamal.lib.kua.table
 
-import io.hamal.lib.common.domain.DomainId
+import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.kua.State
-import io.hamal.lib.kua.function.FunctionType
 import io.hamal.lib.kua.type.*
 import kotlin.reflect.KClass
 
 class TableProxyMap(
     val index: Int,
     val state: State
-) : Type { //FIXME not a type
+) : KuaTableType {
+
+    override val type: KuaType.Type = KuaType.Type.Map
 
     val length get() = state.native.tableGetLength(index)
 
-    fun unset(key: StringType) = unset(key.value)
+    fun unset(key: KuaString) = unset(key.value)
+
     @Suppress("UNUSED_PARAMETER")
-    operator fun set(key: String, value: NilType) = unset(key)
+    operator fun set(key: String, value: KuaNil) = unset(key)
+
     @Suppress("UNUSED_PARAMETER")
-    operator fun set(key: StringType, value: NilType) = unset(key.value)
+    operator fun set(key: KuaString, value: KuaNil) = unset(key.value)
     fun unset(key: String): Int {
         state.pushString(key)
         state.pushNil()
@@ -26,49 +29,49 @@ class TableProxyMap(
     }
 
 
-    operator fun set(key: String, value: BooleanType) = set(key, value.value)
-    operator fun set(key: StringType, value: BooleanType) = set(key.value, value.value)
+    operator fun set(key: String, value: KuaBoolean) = set(key, value.value)
+    operator fun set(key: KuaString, value: KuaBoolean) = set(key.value, value.value)
     operator fun set(key: String, value: Boolean): Int {
         state.pushString(key)
         state.pushBoolean(value)
         return state.tableSetRaw(index)
     }
 
-    operator fun set(key: String, value: CodeType) = set(key, value.value)
-    operator fun set(key: StringType, value: CodeType) = set(key.value, value)
+    operator fun set(key: String, value: KuaCode) = set(key, value.value)
+    operator fun set(key: KuaString, value: KuaCode) = set(key.value, value)
 
     operator fun set(key: String, value: Int) = set(key, value.toDouble())
     operator fun set(key: String, value: Long) = set(key, value.toDouble())
     operator fun set(key: String, value: Float) = set(key, value.toDouble())
-    operator fun set(key: String, value: NumberType) = set(key, value.value)
-    operator fun set(key: StringType, value: NumberType) = set(key.value, value.value)
+    operator fun set(key: String, value: KuaNumber) = set(key, value.value)
+    operator fun set(key: KuaString, value: KuaNumber) = set(key.value, value.value)
     operator fun set(key: String, value: Double): Int {
         state.pushString(key)
         state.pushNumber(value)
         return state.tableSetRaw(index)
     }
 
-    operator fun set(key: String, value: DecimalType): Int {
+    operator fun set(key: String, value: KuaDecimal): Int {
         state.pushString(key)
         state.native.pushDecimal(value)
         return state.tableSetRaw(index)
     }
 
-    operator fun set(key: String, value: DomainId) = set(key, value.value.value.toString(16))
-    operator fun set(key: StringType, value: DomainId) = set(key.value, value.value.value.toString(16))
+    operator fun set(key: String, value: ValueObjectId) = set(key, value.value.value.toString(16))
+    operator fun set(key: KuaString, value: ValueObjectId) = set(key.value, value.value.value.toString(16))
     operator fun set(key: String, value: SnowflakeId) = set(key, value.value.toString(16))
-    operator fun set(key: StringType, value: SnowflakeId) = set(key.value, value.value.toString(16))
+    operator fun set(key: KuaString, value: SnowflakeId) = set(key.value, value.value.toString(16))
 
-    operator fun set(key: String, value: StringType) = set(key, value.value)
-    operator fun set(key: StringType, value: StringType) = set(key.value, value.value)
+    operator fun set(key: String, value: KuaString) = set(key, value.value)
+    operator fun set(key: KuaString, value: KuaString) = set(key.value, value.value)
     operator fun set(key: String, value: String): Int {
         state.pushString(key)
         state.pushString(value)
         return state.tableSetRaw(index)
     }
 
-    operator fun set(key: StringType, value: FunctionType<*, *, *, *>) = set(key.value, value)
-    operator fun set(key: String, value: FunctionType<*, *, *, *>): Int {
+    operator fun set(key: KuaString, value: KuaFunction<*, *, *, *>) = set(key.value, value)
+    operator fun set(key: String, value: KuaFunction<*, *, *, *>): Int {
         state.pushString(key)
         state.pushFunction(value)
         return state.tableSetRaw(index)
@@ -83,14 +86,14 @@ class TableProxyMap(
     fun getTableMap(key: String): TableProxyMap {
         state.pushString(key)
         val type = state.tableGetRaw(index)
-        type.checkExpectedType(TableType::class)
+        type.checkExpectedType(KuaTableType::class)
         return state.getTableMapProxy(state.top.value)
     }
 
     fun getTableArray(key: String): TableProxyArray {
         state.pushString(key)
         val type = state.tableGetRaw(index)
-        type.checkExpectedType(TableType::class)
+        type.checkExpectedType(KuaTableType::class)
         return state.getTableArrayProxy(state.top.value)
     }
 
@@ -100,64 +103,64 @@ class TableProxyMap(
         return state.tableSetRaw(index)
     }
 
-    fun getBooleanType(key: StringType): BooleanType = getBooleanType(key.value)
+    fun getBooleanType(key: KuaString): KuaBoolean = getBooleanType(key.value)
     fun getBoolean(key: String): Boolean = getBooleanType(key).value
-    fun getBoolean(key: StringType): Boolean = getBoolean(key.value)
-    fun getBooleanType(key: String): BooleanType {
+    fun getBoolean(key: KuaString): Boolean = getBoolean(key.value)
+    fun getBooleanType(key: String): KuaBoolean {
         state.pushString(key)
         val type = state.tableGetRaw(index)
-        type.checkExpectedType(BooleanType::class)
+        type.checkExpectedType(KuaBoolean::class)
         return booleanOf(state.native.toBoolean(state.top.value)).also { state.native.pop(1) }
     }
 
-    fun getCode(key: StringType): CodeType = getCode(key.value)
-    fun getCode(key: String): CodeType {
+    fun getCode(key: KuaString): KuaCode = getCode(key.value)
+    fun getCode(key: String): KuaCode {
         state.pushString(key)
         val type = state.tableGetRaw(index)
-        type.checkExpectedType(StringType::class)
-        return CodeType(state.getString(state.top.value)).also { state.native.pop(1) }
+        type.checkExpectedType(KuaString::class)
+        return KuaCode(state.getString(state.top.value)).also { state.native.pop(1) }
     }
 
-    fun getNumberType(key: StringType): NumberType = getNumberType(key.value)
+    fun getNumberType(key: KuaString): KuaNumber = getNumberType(key.value)
     fun getInt(key: String): Int = getNumberType(key).value.toInt()
-    fun getInt(key: StringType) = getInt(key.value)
+    fun getInt(key: KuaString) = getInt(key.value)
     fun getLong(key: String): Long = getNumberType(key).value.toLong()
-    fun getLong(key: StringType): Long = getLong(key.value)
+    fun getLong(key: KuaString): Long = getLong(key.value)
     fun getFloat(key: String): Float = getNumberType(key).value.toFloat()
-    fun getFloat(key: StringType): Float = getFloat(key.value)
+    fun getFloat(key: KuaString): Float = getFloat(key.value)
     fun getDouble(key: String): Double = getNumberType(key).value
-    fun getDouble(key: StringType): Double = getDouble(key.value)
-    fun getNumberType(key: String): NumberType {
+    fun getDouble(key: KuaString): Double = getDouble(key.value)
+    fun getNumberType(key: String): KuaNumber {
         state.pushString(key)
         val type = state.tableGetRaw(index)
-        type.checkExpectedType(NumberType::class)
-        return NumberType(state.native.toNumber(state.top.value)).also { state.native.pop(1) }
+        type.checkExpectedType(KuaNumber::class)
+        return KuaNumber(state.native.toNumber(state.top.value)).also { state.native.pop(1) }
     }
 
-    fun getDecimalType(key: String): DecimalType {
+    fun getDecimalType(key: String): KuaDecimal {
         state.pushString(key)
         val type = state.tableGetRaw(index)
-        type.checkExpectedType(DecimalType::class)
+        type.checkExpectedType(KuaDecimal::class)
         return state.native.toDecimal(state.top.value).also { state.native.pop(1) }
     }
 
-    fun getStringType(key: StringType): StringType = getStringType(key.value)
+    fun getStringType(key: KuaString): KuaString = getStringType(key.value)
     fun getString(key: String): String = getStringType(key).value
-    fun getString(key: StringType): String = getString(key.value)
-    fun getStringType(key: String): StringType {
+    fun getString(key: KuaString): String = getString(key.value)
+    fun getStringType(key: String): KuaString {
         state.pushString(key)
         val type = state.tableGetRaw(index)
-        type.checkExpectedType(StringType::class)
-        return StringType(state.native.toString(state.top.value)).also { state.native.pop(1) }
+        type.checkExpectedType(KuaString::class)
+        return KuaString(state.native.toString(state.top.value)).also { state.native.pop(1) }
     }
 
-    fun type(key: String): KClass<out Type> {
+    fun type(key: String): KClass<out KuaType> {
         state.pushString(key)
         return state.tableGetRaw(index)
     }
 }
 
-private fun KClass<out Type>.checkExpectedType(expected: KClass<out Type>) {
+private fun KClass<out KuaType>.checkExpectedType(expected: KClass<out KuaType>) {
     check(this == expected) {
         "Expected type to be $expected but was $this"
     }

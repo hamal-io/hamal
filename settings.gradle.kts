@@ -15,6 +15,7 @@ dependencyResolutionManagement {
         create("external") {
             library("junit", "org.junit.jupiter:junit-jupiter:5.9.1")
             library("hamcrest", "org.hamcrest:hamcrest:2.2")
+            library("gson", "com.google.code.gson:gson:2.10.1")
 
             library("spring-web", "org.springframework.boot", "spring-boot-starter-web").version("3.0.5")
             library("spring-mail", "org.springframework.boot", "spring-boot-starter-mail").version("3.0.5")
@@ -24,8 +25,6 @@ dependencyResolutionManagement {
 
             library("sqlite", "org.xerial", "sqlite-jdbc").version("3.41.2.1")
 
-            library("kotlin-protobuf", "org.jetbrains.kotlinx", "kotlinx-serialization-protobuf").version("1.5.0")
-            library("kotlin-json", "org.jetbrains.kotlinx", "kotlinx-serialization-json").version("1.5.0")
             library("kotlin-reflect", "org.jetbrains.kotlin", "kotlin-reflect").version("1.8.10")
 
             library("apache-http-client", "org.apache.httpcomponents", "httpclient").version("4.5.13")
@@ -44,7 +43,6 @@ include(":platform:backend:repository:memory")
 include(":platform:backend:repository:record")
 include(":platform:backend:repository:sqlite")
 include(":platform:backend:repository:testbed")
-include(":platform:backend:request")
 
 include(":platform:lib")
 include(":platform:lib:common")

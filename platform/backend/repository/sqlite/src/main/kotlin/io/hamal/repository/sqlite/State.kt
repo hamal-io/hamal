@@ -9,11 +9,9 @@ import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.StateRepository
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.protobuf.ProtoBuf
+import io.hamal.repository.record.json
 import java.nio.file.Path
 
-@OptIn(ExperimentalSerializationApi::class)
 class StateSqliteRepository(
     config: Config
 ) : SqliteBaseRepository(config), StateRepository {
@@ -59,7 +57,7 @@ class StateSqliteRepository(
             query {
                 set("funcId", correlatedState.correlation.funcId)
                 set("correlationId", correlatedState.correlation.correlationId.value)
-                set("value", protoBuf.encodeToByteArray(State.serializer(), correlatedState.value))
+                set("value", json.serializeAndCompress(correlatedState.value))
             }
         }
     }
@@ -77,14 +75,12 @@ class StateSqliteRepository(
             map { rs ->
                 CorrelatedState(
                     correlation = Correlation(
-                        funcId = rs.getDomainId("func_id", ::FuncId),
+                        funcId = rs.getId("func_id", ::FuncId),
                         correlationId = CorrelationId(rs.getString("correlation_id"))
                     ),
-                    value = protoBuf.decodeFromByteArray(State.serializer(), rs.getBytes("value"))
+                    value = json.decompressAndDeserialize(State::class, rs.getBytes("value"))
                 )
             }
         }
     }
-
-    private val protoBuf = ProtoBuf { }
 }
