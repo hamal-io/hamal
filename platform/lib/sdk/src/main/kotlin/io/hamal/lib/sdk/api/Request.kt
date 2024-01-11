@@ -10,7 +10,7 @@ import io.hamal.lib.domain.vo.RequestType
 
 data class ApiRequestList(
     val requests: List<ApiRequested>
-)
+) : ApiObject()
 
 sealed class ApiRequested {
     abstract val id: RequestId

@@ -13,7 +13,7 @@ data class ApiBlueprint(
     val name: BlueprintName,
     val inputs: BlueprintInputs,
     val value: CodeValue
-)
+) : ApiObject()
 
 data class ApiBlueprintCreateRequest(
     override val name: BlueprintName,

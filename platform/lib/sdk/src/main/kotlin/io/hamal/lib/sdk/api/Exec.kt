@@ -16,7 +16,7 @@ data class ApiExecInvokeRequested(
 
 data class ApiExecList(
     val execs: List<Exec>
-) {
+) : ApiObject() {
     data class Exec(
         val id: ExecId,
         val status: ExecStatus,
@@ -32,7 +32,7 @@ data class ApiExec(
     val invocation: Invocation,
     val result: ExecResult?,
     val state: ExecState?
-) {
+) : ApiObject() {
     data class Code(
         val id: CodeId?,
         val version: CodeVersion?,

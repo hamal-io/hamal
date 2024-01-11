@@ -68,7 +68,7 @@ internal class FlowUpdateControllerTest : FlowBaseControllerTest() {
             assertThat(id, equalTo(flowId))
             assertThat(name, equalTo(FlowName("updated-name")))
             assertThat(inputs, equalTo(FlowInputs(HotObject.builder().set("hamal", "updatedInputs").build())))
-            assertThat(type, equalTo(FlowType.default))
+            assertThat(`class`, equalTo(FlowType.default))
         }
     }
 }

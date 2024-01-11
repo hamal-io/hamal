@@ -1,13 +1,13 @@
 package io.hamal.lib.sdk.api
 
+import io.hamal.lib.domain.request.AccountConvertAnonymousRequest
+import io.hamal.lib.domain.request.AccountCreateRequest
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.Email
 import io.hamal.lib.domain.vo.Password
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.fold
-import io.hamal.lib.domain.request.AccountConvertAnonymousRequest
-import io.hamal.lib.domain.request.AccountCreateRequest
 
 data class ApiAccountCreateRequest(
     override val email: Email,
@@ -21,7 +21,7 @@ data class ApiAccountConvertAnonymousRequest(
 
 data class ApiAccountList(
     val accounts: List<Account>
-) {
+) : ApiObject() {
     data class Account(
         val id: AccountId,
     )
@@ -29,7 +29,7 @@ data class ApiAccountList(
 
 data class ApiAccount(
     val id: AccountId
-)
+) : ApiObject()
 
 interface ApiAccountService {
     fun create(createAccountReq: ApiAccountCreateRequest): ApiTokenRequested
