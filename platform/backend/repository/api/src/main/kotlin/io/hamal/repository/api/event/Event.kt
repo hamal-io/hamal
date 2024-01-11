@@ -11,8 +11,7 @@ import kotlin.reflect.KClass
 class PlatformEventType(override val value: String) : ValueObjectString()
 
 sealed class PlatformEvent {
-    val topicName get() = this::class.topicName()
-
+    val topicName: TopicName get() = TopicName(type.value)
     val type: PlatformEventType = PlatformEventType(this::class.simpleName!!)
 
     object Adapter : JsonAdapter<PlatformEvent> {
@@ -40,16 +39,26 @@ sealed class PlatformEvent {
             AccountCreatedEvent::class,
             AccountConvertedEvent::class,
             BlueprintCreatedEvent::class,
+            EndpointCreatedEvent::class,
+            EndpointUpdatedEvent::class,
             ExecPlannedEvent::class,
             ExecScheduledEvent::class,
             ExecQueuedEvent::class,
             ExecStartedEvent::class,
             ExecCompletedEvent::class,
             ExecFailedEvent::class,
+            ExtensionCreatedEvent::class,
+            ExtensionUpdatedEvent::class,
+            FeedbackCreatedEvent::class,
             FlowCreatedEvent::class,
             FlowUpdatedEvent::class,
+            FuncCreatedEvent::class,
+            FuncUpdatedEvent::class,
+            FuncDeployedEvent::class,
+            GroupCreatedEvent::class,
             HookCreatedEvent::class,
             HookUpdatedEvent::class,
+            StateUpdatedEvent::class,
             TriggerCreatedEvent::class,
             TriggerActivatedEvent::class,
             TriggerDeactivatedEvent::class
@@ -58,12 +67,4 @@ sealed class PlatformEvent {
     }
 }
 
-fun <EVENT : PlatformEvent> KClass<EVENT>.topicName() =
-    (annotations.find { annotation -> annotation.annotationClass == PlatformEventTopic::class }
-        ?: throw IllegalStateException("PlatformEvent not annotated with @PlatformEventTopic"))
-        .let { TopicName((it as PlatformEventTopic).value) }
-
-@MustBeDocumented
-@Target(AnnotationTarget.CLASS)
-@Retention(AnnotationRetention.RUNTIME)
-annotation class PlatformEventTopic(val value: String)
+fun <EVENT : PlatformEvent> KClass<EVENT>.topicName() = TopicName(this.java.simpleName)
