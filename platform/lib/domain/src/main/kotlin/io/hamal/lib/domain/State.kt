@@ -1,11 +1,11 @@
 package io.hamal.lib.domain
 
-import io.hamal.lib.common.domain.ValueObjecHotObject
+import io.hamal.lib.common.domain.ValueObjectHotObject
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
 
-class State(override val value: HotObject = HotObject.empty) : ValueObjecHotObject()
+class State(override val value: HotObject = HotObject.empty) : ValueObjectHotObject()
 
 data class Correlation(
     val correlationId: CorrelationId,

@@ -1,6 +1,6 @@
 package io.hamal.lib.domain.vo
 
-import io.hamal.lib.common.domain.ValueObjecHotObject
+import io.hamal.lib.common.domain.ValueObjectHotObject
 import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.domain.ValueObjectInstant
 import io.hamal.lib.common.domain.ValueObjectString
@@ -17,7 +17,7 @@ class FuncId(override val value: SnowflakeId) : ValueObjectId() {
 
 class FuncName(override val value: String) : ValueObjectString()
 
-class FuncInputs(override val value: HotObject = HotObject.empty) : ValueObjecHotObject()
+class FuncInputs(override val value: HotObject = HotObject.empty) : ValueObjectHotObject()
 
 class DeployMessage(override val value: String) : ValueObjectString() {
     companion object {

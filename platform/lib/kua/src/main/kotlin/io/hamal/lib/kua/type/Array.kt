@@ -132,7 +132,7 @@ data class KuaArray(
         override fun serialize(instance: KuaArray, type: Type, ctx: JsonSerializationContext): JsonElement {
             val valueBuilder = HotObject.builder()
             instance.forEach { (key, value) ->
-                valueBuilder.set(key.toString(), GsonTransform.toNode(ctx.serialize(value)))
+                valueBuilder[key.toString()] = GsonTransform.toNode(ctx.serialize(value))
             }
             return ctx.serialize(
                 HotObject.builder()

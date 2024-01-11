@@ -47,7 +47,7 @@ internal class FlowGetControllerTest : FlowBaseControllerTest() {
 
         with(getFlowResponse.result(ApiFlow::class)) {
             assertThat(id, equalTo(flowId))
-            assertThat(`class`, equalTo(FlowType.default))
+            assertThat(type, equalTo(FlowType.default))
             assertThat(name, equalTo(FlowName("flow-one")))
             assertThat(inputs, equalTo(FlowInputs(HotObject.builder().set("hamal", "rocks").build())))
         }

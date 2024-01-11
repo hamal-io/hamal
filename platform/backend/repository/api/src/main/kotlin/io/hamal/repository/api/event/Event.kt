@@ -8,11 +8,11 @@ import io.hamal.lib.common.serialization.JsonAdapter
 import io.hamal.lib.domain.vo.TopicName
 import kotlin.reflect.KClass
 
-class PlatformEventType(override val value: String) : ValueObjectString()
+class PlatformEventClass(override val value: String) : ValueObjectString()
 
 sealed class PlatformEvent {
-    val topicName: TopicName get() = TopicName(type.value)
-    val type: PlatformEventType = PlatformEventType(this::class.simpleName!!)
+    val `class`: PlatformEventClass = PlatformEventClass(this::class.simpleName!!)
+    val topicName get() = this::class.topicName()
 
     object Adapter : JsonAdapter<PlatformEvent> {
         override fun serialize(
@@ -28,10 +28,10 @@ sealed class PlatformEvent {
             typeOfT: java.lang.reflect.Type,
             context: JsonDeserializationContext
         ): PlatformEvent {
-            val type = json.asJsonObject.get("type").asString
+            val eventClass = json.asJsonObject.get("class").asString
             return context.deserialize(
-                json, (classMapping[type]
-                    ?: throw NotImplementedError("$type not supported")).java
+                json, (classMapping[eventClass]
+                    ?: throw NotImplementedError("$eventClass not supported")).java
             )
         }
 

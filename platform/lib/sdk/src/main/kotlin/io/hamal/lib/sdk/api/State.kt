@@ -1,6 +1,6 @@
 package io.hamal.lib.sdk.api
 
-import io.hamal.lib.common.domain.ValueObjecHotObject
+import io.hamal.lib.common.domain.ValueObjectHotObject
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
@@ -22,7 +22,7 @@ data class ApiStateSetRequested(
 ) : ApiRequested()
 
 
-class ApiState(override val value: HotObject = HotObject.empty) : ValueObjecHotObject()
+class ApiState(override val value: HotObject = HotObject.empty) : ValueObjectHotObject()
 
 data class ApiCorrelation(
     val correlationId: CorrelationId,

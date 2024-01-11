@@ -8,4 +8,4 @@ class RequestId(override val value: SnowflakeId) : ValueObjectId() {
     constructor(value: Int) : this(SnowflakeId(value.toLong()))
 }
 
-class RequestType(override val value: String) : ValueObjectString()
+class RequestClass(override val value: String) : ValueObjectString()
