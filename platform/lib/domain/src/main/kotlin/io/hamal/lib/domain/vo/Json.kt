@@ -2,6 +2,7 @@ package io.hamal.lib.domain.vo
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.serialization.*
+import io.hamal.lib.domain.State
 
 object ValueObjectJsonModule : JsonModule() {
     init {
@@ -20,6 +21,7 @@ object ValueObjectJsonModule : JsonModule() {
 
         this[BlueprintId::class] = ValueObjectIdAdapter(::BlueprintId)
         this[BlueprintName::class] = ValueObjectStringAdapter(::BlueprintName)
+        this[BlueprintInputs::class] = ValueObjectHotObjectAdapter(::BlueprintInputs)
 
         this[CmdId::class] = ValueObjectStringAdapter(::CmdId)
         this[CodeId::class] = ValueObjectIdAdapter(::CodeId)
@@ -32,9 +34,17 @@ object ValueObjectJsonModule : JsonModule() {
 
         this[EndpointId::class] = ValueObjectIdAdapter(::EndpointId)
         this[EndpointName::class] = ValueObjectStringAdapter(::EndpointName)
+        this[EndpointHeaders::class] = ValueObjectHotObjectAdapter(::EndpointHeaders)
+        this[EndpointParameters::class] = ValueObjectHotObjectAdapter(::EndpointParameters)
+        this[EndpointContent::class] = ValueObjectHotObjectAdapter(::EndpointContent)
+
+        this[EventPayload::class] = ValueObjectHotObjectAdapter(::EventPayload)
 
         this[ExecId::class] = ValueObjectIdAdapter(::ExecId)
         this[ExecType::class] = ValueObjectStringAdapter(::ExecType)
+        this[ExecInputs::class] = ValueObjectHotObjectAdapter(::ExecInputs)
+        this[ExecResult::class] = ValueObjectHotObjectAdapter(::ExecResult)
+        this[ExecState::class] = ValueObjectHotObjectAdapter(::ExecState)
         this[ExecToken::class] = ValueObjectStringAdapter(::ExecToken)
         this[ExecLogId::class] = ValueObjectIdAdapter(::ExecLogId)
 
@@ -47,9 +57,11 @@ object ValueObjectJsonModule : JsonModule() {
         this[FlowId::class] = ValueObjectIdAdapter(::FlowId)
         this[FlowName::class] = ValueObjectStringAdapter(::FlowName)
         this[FlowType::class] = ValueObjectStringAdapter(::FlowType)
+        this[FlowInputs::class] = ValueObjectHotObjectAdapter(::FlowInputs)
 
         this[FuncId::class] = ValueObjectIdAdapter(::FuncId)
         this[FuncName::class] = ValueObjectStringAdapter(::FuncName)
+        this[FuncInputs::class] = ValueObjectHotObjectAdapter(::FuncInputs)
         this[DeployMessage::class] = ValueObjectStringAdapter(::DeployMessage)
         this[DeployedAt::class] = ValueObjectInstantAdapter(::DeployedAt)
 
@@ -58,22 +70,26 @@ object ValueObjectJsonModule : JsonModule() {
 
         this[HookId::class] = ValueObjectIdAdapter(::HookId)
         this[HookName::class] = ValueObjectStringAdapter(::HookName)
+        this[HookHeaders::class] = ValueObjectHotObjectAdapter(::HookHeaders)
+        this[HookParameters::class] = ValueObjectHotObjectAdapter(::HookParameters)
+        this[HookContent::class] = ValueObjectHotObjectAdapter(::HookContent)
+
+        this[Invocation::class] = Invocation.Adapter
+        this[InvocationType::class] = ValueObjectStringAdapter(::InvocationType)
+        this[InvocationInputs::class] = ValueObjectHotObjectAdapter(::InvocationInputs)
 
         this[RequestId::class] = ValueObjectIdAdapter(::RequestId)
         this[RequestType::class] = ValueObjectStringAdapter(::RequestType)
+        this[RunnerEnv::class] = ValueObjectHotObjectAdapter(::RunnerEnv)
 
+        this[State::class] = ValueObjectHotObjectAdapter(::State)
         this[TopicId::class] = ValueObjectIdAdapter(::TopicId)
         this[TopicName::class] = ValueObjectStringAdapter(::TopicName)
         this[TopicEntryId::class] = ValueObjectIdAdapter(::TopicEntryId)
+        this[TopicEntryPayload::class] = ValueObjectHotObjectAdapter(::TopicEntryPayload)
 
         this[TriggerId::class] = ValueObjectIdAdapter(::TriggerId)
         this[TriggerName::class] = ValueObjectStringAdapter(::TriggerName)
-    }
-}
-
-object InvocationModule : JsonModule() {
-    init {
-        this[Invocation::class] = Invocation.Adapter
-        this[InvocationType::class] = ValueObjectStringAdapter(::InvocationType)
+        this[TriggerInputs::class] = ValueObjectHotObjectAdapter(::TriggerInputs)
     }
 }

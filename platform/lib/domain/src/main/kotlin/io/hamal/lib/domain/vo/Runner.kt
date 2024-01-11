@@ -1,7 +1,7 @@
 package io.hamal.lib.domain.vo
 
-import io.hamal.lib.domain.vo.base.MapValueObject
-import io.hamal.lib.kua.type.KuaMap
+import io.hamal.lib.common.domain.ValueObjecHotObject
+import io.hamal.lib.common.hot.HotObject
 
 
-class RunnerEnv(override val value: KuaMap = KuaMap()) : MapValueObject()
+class RunnerEnv(override val value: HotObject = HotObject.empty) : ValueObjecHotObject()

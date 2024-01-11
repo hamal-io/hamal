@@ -180,7 +180,7 @@ internal class TableEntryIteratorTest {
                     -1,
                     ctx,
                     keyExtractor = { state, index -> state.getNumberType(index) },
-                    valueExtractor = { state, index -> state.toMapType(state.getTableMapProxy(index)) }
+                    valueExtractor = { state, index -> state.toKuaMap(state.getTableMapProxy(index)) }
                 )
 
                 val resultCollector = mutableMapOf<KuaNumber, KuaMap>()

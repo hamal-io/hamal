@@ -1,14 +1,12 @@
 package io.hamal.core
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.AccountType.Root
-import io.hamal.lib.kua.type.KuaMap
-import io.hamal.lib.kua.type.KuaNumber
-import io.hamal.lib.kua.type.KuaString
 import io.hamal.repository.api.*
 import io.hamal.repository.api.AuthCmdRepository.CreateTokenAuthCmd
 import io.hamal.repository.api.ExecCmdRepository.PlanCmd
@@ -240,8 +238,8 @@ internal abstract class BaseTest {
                 ExecCmdRepository.CompleteCmd(
                     id = CmdId(5),
                     execId = startedExec.id,
-                    result = ExecResult(KuaMap("hamal" to KuaString("rocks"))),
-                    state = ExecState(KuaMap("state" to KuaNumber(23.23)))
+                    result = ExecResult(HotObject.builder().set("hamal", "rocks").build()),
+                    state = ExecState(HotObject.builder().set("state", 23.23).build())
                 )
             )
 
@@ -249,9 +247,7 @@ internal abstract class BaseTest {
                 ExecCmdRepository.FailCmd(
                     id = CmdId(5),
                     execId = startedExec.id,
-                    result = ExecResult(
-                        KuaMap("message" to KuaString("BaseTest.kt"))
-                    )
+                    result = ExecResult(HotObject.builder().set("message", "BaseTest.kt").build())
                 )
             )
 

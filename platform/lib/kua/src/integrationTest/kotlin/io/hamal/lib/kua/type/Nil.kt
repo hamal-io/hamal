@@ -7,7 +7,7 @@ import io.hamal.lib.kua.function.*
 import io.hamal.lib.kua.registerGlobalFunction
 import org.junit.jupiter.api.Test
 
-internal class NilTypeTest {
+internal class KuaNilTest {
 
     @Test
     fun `Single result it nil`() {

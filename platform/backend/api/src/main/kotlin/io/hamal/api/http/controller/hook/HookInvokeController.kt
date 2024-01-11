@@ -1,5 +1,6 @@
 package io.hamal.api.http.controller.hook
 
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain._enum.HookMethod.*
@@ -7,8 +8,6 @@ import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain.request.HookInvokeRequested
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.type.KuaMap
-import io.hamal.lib.kua.type.KuaString
 import io.hamal.repository.api.HookQueryRepository
 import io.hamal.repository.api.RequestCmdRepository
 import jakarta.servlet.http.HttpServletRequest
@@ -55,16 +54,21 @@ internal class HookInvokeController(
         return ResponseEntity(Response(result), ACCEPTED)
     }
 
-    private fun HttpServletRequest.headers() = HookHeaders(
-        KuaMap(headerNames.asSequence()
-            .map { headerName -> headerName to KuaString(getHeader(headerName)) }
-            .toMap()
-            .toMutableMap()
-        ))
+    private fun HttpServletRequest.headers(): HookHeaders {
+        val builder = HotObject.builder()
+        headerNames.asSequence().forEach { headerName ->
+            builder[headerName] = getHeader(headerName)
+        }
+        return HookHeaders(builder.build())
+    }
 
-    private fun HttpServletRequest.parameters() = HookParameters(
-        KuaMap(parameterMap.map { (key, value) -> key to KuaString(value.joinToString(",")) }.toMap().toMutableMap())
-    )
+    private fun HttpServletRequest.parameters(): HookParameters {
+        val builder = HotObject.builder()
+        parameterMap.forEach { (key, value) ->
+            builder[key] = value.joinToString(",")
+        }
+        return HookParameters(builder.build())
+    }
 
     private fun HttpServletRequest.content(): HookContent {
         require(contentType.startsWith("application/json")) { "Only application/json supported yet" }

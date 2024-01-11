@@ -2,10 +2,8 @@ package io.hamal.repository
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.type.KuaMap
-import io.hamal.lib.kua.type.KuaNumber
-import io.hamal.lib.kua.type.KuaString
 import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncCmdRepository.*
 import io.hamal.repository.api.FuncCode
@@ -33,13 +31,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                     groupId = GroupId(1),
                     flowId = FlowId(234),
                     name = FuncName("SomeFunc"),
-                    inputs = FuncInputs(
-                        KuaMap(
-                            mutableMapOf(
-                                "hamal" to KuaString("rockz")
-                            )
-                        )
-                    ),
+                    inputs = FuncInputs(HotObject.builder().set("hamal", "rocks").build()),
                     codeId = CodeId(5),
                     codeVersion = CodeVersion(1)
                 )
@@ -50,7 +42,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                 assertThat(groupId, equalTo(GroupId(1)))
                 assertThat(flowId, equalTo(FlowId(234)))
                 assertThat(name, equalTo(FuncName("SomeFunc")))
-                assertThat(inputs, equalTo(FuncInputs(KuaMap(mutableMapOf("hamal" to KuaString("rockz"))))))
+                assertThat(inputs, equalTo(FuncInputs(HotObject.builder().set("hamal", "rocks").build())))
                 assertThat(
                     code, equalTo(
                         FuncCode(
@@ -183,7 +175,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                     assertThat(groupId, equalTo(GroupId(3)))
                     assertThat(flowId, equalTo(FlowId(2)))
                     assertThat(name, equalTo(FuncName("first-func-name")))
-                    assertThat(inputs, equalTo(FuncInputs(KuaMap(mutableMapOf("hamal" to KuaString("rockz"))))))
+                    assertThat(inputs, equalTo(FuncInputs(HotObject.builder().set("hamal", "rocks").build())))
                     assertThat(
                         code, equalTo(
                             FuncCode(
@@ -220,7 +212,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                 FuncId(1), UpdateCmd(
                     id = CmdId(2),
                     name = FuncName("Updated"),
-                    inputs = FuncInputs(KuaMap(mutableMapOf("answer" to KuaNumber(42)))),
+                    inputs = FuncInputs(HotObject.builder().set("answer", 42).build()),
                     codeVersion = CodeVersion(3),
                 )
             )
@@ -230,7 +222,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                 assertThat(groupId, equalTo(GroupId(3)))
                 assertThat(flowId, equalTo(FlowId(2)))
                 assertThat(name, equalTo(FuncName("Updated")))
-                assertThat(inputs, equalTo(FuncInputs(KuaMap(mutableMapOf("answer" to KuaNumber(42))))))
+                assertThat(inputs, equalTo(FuncInputs(HotObject.builder().set("answer", 42).build())))
                 assertThat(
                     code, equalTo(
                         FuncCode(
@@ -272,7 +264,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                 assertThat(groupId, equalTo(GroupId(3)))
                 assertThat(flowId, equalTo(FlowId(2)))
                 assertThat(name, equalTo(FuncName("func-name")))
-                assertThat(inputs, equalTo(FuncInputs(KuaMap(mutableMapOf("hamal" to KuaString("rockz"))))))
+                assertThat(inputs, equalTo(FuncInputs(HotObject.builder().set("hamal", "rocks").build())))
                 assertThat(
                     code, equalTo(
                         FuncCode(
@@ -491,7 +483,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                 assertThat(groupId, equalTo(GroupId(3)))
                 assertThat(flowId, equalTo(FlowId(2)))
                 assertThat(name, equalTo(FuncName("SomeFunc")))
-                assertThat(inputs, equalTo(FuncInputs(KuaMap(mutableMapOf("hamal" to KuaString("rockz"))))))
+                assertThat(inputs, equalTo(FuncInputs(HotObject.builder().set("hamal", "rocks").build())))
                 assertThat(
                     code, equalTo(
                         FuncCode(
@@ -539,7 +531,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                 assertThat(groupId, equalTo(GroupId(3)))
                 assertThat(flowId, equalTo(FlowId(2)))
                 assertThat(name, equalTo(FuncName("SomeFunc")))
-                assertThat(inputs, equalTo(FuncInputs(KuaMap(mutableMapOf("hamal" to KuaString("rockz"))))))
+                assertThat(inputs, equalTo(FuncInputs(HotObject.builder().set("hamal", "rocks").build())))
                 assertThat(
                     code, equalTo(
                         FuncCode(
@@ -740,13 +732,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                 groupId = groupId,
                 flowId = flowId,
                 name = name,
-                inputs = FuncInputs(
-                    KuaMap(
-                        mutableMapOf(
-                            "hamal" to KuaString("rockz")
-                        )
-                    )
-                ),
+                inputs = FuncInputs(HotObject.builder().set("hamal", "rocks").build()),
                 codeId = codeId,
                 codeVersion = codeVersion
             )

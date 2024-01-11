@@ -1,14 +1,13 @@
 package io.hamal.core.request.handler.trigger
 
 import io.hamal.core.request.handler.BaseReqHandlerTest
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain._enum.HookMethod.Get
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain._enum.TriggerType.*
 import io.hamal.lib.domain._enum.TriggerType.Event
 import io.hamal.lib.domain.request.TriggerCreateRequested
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.type.KuaMap
-import io.hamal.lib.kua.type.KuaString
 import io.hamal.repository.api.CronTrigger
 import io.hamal.repository.api.EventTrigger
 import io.hamal.repository.api.FixedRateTrigger
@@ -113,7 +112,7 @@ internal class TriggerCreateHandlerTest : BaseReqHandlerTest() {
                         hookId = HookId(1111),
                         name = TriggerName("HookTriggerInvalid"),
                         inputs = TriggerInputs(
-                            KuaMap(mutableMapOf("hamal" to KuaString("rocks"))),
+                            HotObject.builder().set("hamal", "rocks").build(),
                         ),
                         hookMethod = Get
                     )
@@ -177,7 +176,7 @@ internal class TriggerCreateHandlerTest : BaseReqHandlerTest() {
                 assertThat(name, equalTo(TriggerName("FixedRateTrigger")))
                 assertThat(funcId, equalTo(FuncId(2222)))
                 assertThat(duration, equalTo(42.seconds))
-                assertThat(inputs, equalTo(TriggerInputs(KuaMap(mutableMapOf("hamal" to KuaString("rocks"))))))
+                assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
             }
         }
     }
@@ -192,7 +191,7 @@ internal class TriggerCreateHandlerTest : BaseReqHandlerTest() {
                 assertThat(name, equalTo(TriggerName("EventTrigger")))
                 assertThat(funcId, equalTo(FuncId(2222)))
                 assertThat(topicId, equalTo(TopicId(1111)))
-                assertThat(inputs, equalTo(TriggerInputs(KuaMap(mutableMapOf("hamal" to KuaString("rocks"))))))
+                assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
             }
         }
     }
@@ -207,7 +206,7 @@ internal class TriggerCreateHandlerTest : BaseReqHandlerTest() {
                 assertThat(name, equalTo(TriggerName("HookTrigger")))
                 assertThat(funcId, equalTo(FuncId(2222)))
                 assertThat(hookId, equalTo(HookId(1111)))
-                assertThat(inputs, equalTo(TriggerInputs(KuaMap(mutableMapOf("hamal" to KuaString("rocks"))))))
+                assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
             }
         }
     }
@@ -222,7 +221,7 @@ internal class TriggerCreateHandlerTest : BaseReqHandlerTest() {
                 assertThat(name, equalTo(TriggerName("CronTrigger")))
                 assertThat(funcId, equalTo(FuncId(2222)))
                 assertThat(cron, equalTo(CronPattern("0 0 * * * *")))
-                assertThat(inputs, equalTo(TriggerInputs(KuaMap(mutableMapOf("hamal" to KuaString("rocks"))))))
+                assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
             }
         }
     }
@@ -249,7 +248,7 @@ internal class TriggerCreateHandlerTest : BaseReqHandlerTest() {
             name = TriggerName("FixedRateTrigger"),
             duration = 42.seconds,
             inputs = TriggerInputs(
-                KuaMap(mutableMapOf("hamal" to KuaString("rocks")))
+                HotObject.builder().set("hamal", "rocks").build()
             ),
         )
     }
@@ -266,7 +265,7 @@ internal class TriggerCreateHandlerTest : BaseReqHandlerTest() {
             topicId = TopicId(1111),
             name = TriggerName("EventTrigger"),
             inputs = TriggerInputs(
-                KuaMap(mutableMapOf("hamal" to KuaString("rocks"))),
+                HotObject.builder().set("hamal", "rocks").build(),
             )
         )
     }
@@ -283,7 +282,7 @@ internal class TriggerCreateHandlerTest : BaseReqHandlerTest() {
             hookId = HookId(1111),
             name = TriggerName("HookTrigger"),
             inputs = TriggerInputs(
-                KuaMap(mutableMapOf("hamal" to KuaString("rocks"))),
+                HotObject.builder().set("hamal", "rocks").build(),
             ),
             hookMethod = Get
         )
@@ -301,7 +300,7 @@ internal class TriggerCreateHandlerTest : BaseReqHandlerTest() {
             name = TriggerName("CronTrigger"),
             cron = CronPattern("0 0 * * * *"),
             inputs = TriggerInputs(
-                KuaMap(mutableMapOf("hamal" to KuaString("rocks")))
+                HotObject.builder().set("hamal", "rocks").build()
             ),
         )
     }

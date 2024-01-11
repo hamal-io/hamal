@@ -6,14 +6,13 @@ import io.hamal.core.component.DelayRetryFixedTime
 import io.hamal.core.config.BackendBasePath
 import io.hamal.extension.net.http.ExtensionHttpFactory
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContext
-import io.hamal.lib.kua.type.KuaMap
-import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.sdk.ApiSdkImpl
 import io.hamal.plugin.net.http.PluginHttpFactory
 import io.hamal.plugin.std.debug.PluginDebugFactory
@@ -53,11 +52,9 @@ class TestSandboxConfig {
     fun envFactory(@Value("\${io.hamal.runner.api.host}") apiHost: String): EnvFactory =
         object : EnvFactory {
             override fun create() = RunnerEnv(
-                KuaMap(
-                    mutableMapOf(
-                        "api_host" to KuaString(apiHost)
-                    )
-                )
+                HotObject.builder()
+                    .set("api_host", apiHost)
+                    .build()
             )
         }
 }
@@ -295,11 +292,9 @@ abstract class BaseEndpointTest : AbstractRunnerTest() {
                             ExtensionHttpFactory
                         ),
                         env = RunnerEnv(
-                            KuaMap(
-                                mutableMapOf(
-                                    "api_host" to KuaString(sdk.template.baseUrl)
-                                )
-                            )
+                            HotObject.builder()
+                                .set("api_host", sdk.template.baseUrl)
+                                .build()
                         )
                     ).run(
                         unitOfWork(

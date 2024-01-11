@@ -1,10 +1,10 @@
 package io.hamal.lib.domain.vo
 
+import io.hamal.lib.common.domain.ValueObjecHotObject
 import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.domain.ValueObjectString
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.domain.vo.base.MapValueObject
-import io.hamal.lib.kua.type.KuaMap
 
 class FlowId(override val value: SnowflakeId) : ValueObjectId() {
     constructor(value: Int) : this(SnowflakeId(value.toLong()))
@@ -22,7 +22,7 @@ class FlowName(override val value: String) : ValueObjectString() {
     }
 }
 
-class FlowInputs(override val value: KuaMap = KuaMap()) : MapValueObject()
+class FlowInputs(override val value: HotObject = HotObject.empty) : ValueObjecHotObject()
 
 class FlowType(override val value: String) : ValueObjectString() {
     companion object {

@@ -8,6 +8,7 @@ import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput2Schema
 import io.hamal.lib.kua.type.KuaMap
 import io.hamal.lib.kua.type.KuaString
+import io.hamal.lib.kua.type.toHotObject
 import io.hamal.runner.run.RunnerContext
 
 internal class EmitFunction(
@@ -16,6 +17,6 @@ internal class EmitFunction(
     FunctionInput2Schema(KuaString::class, KuaMap::class)
 ) {
     override fun invoke(ctx: FunctionContext, arg1: KuaString, arg2: KuaMap) {
-        executionCtx.emit(EventToSubmit(TopicName(arg1.value), EventPayload(arg2)))
+        executionCtx.emit(EventToSubmit(TopicName(arg1.value), EventPayload(arg2.toHotObject())))
     }
 }

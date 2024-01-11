@@ -5,10 +5,7 @@ import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
 import io.hamal.lib.kua.table.TableProxyArray
-import io.hamal.lib.kua.type.KuaNil
-import io.hamal.lib.kua.type.KuaString
-import io.hamal.lib.kua.type.KuaMap
-import io.hamal.lib.kua.type.toProxyMap
+import io.hamal.lib.kua.type.*
 import io.hamal.runner.run.function.CompleteRunFunction
 import io.hamal.runner.run.function.EmitFunction
 import io.hamal.runner.run.function.FailRunFunction
@@ -29,9 +26,9 @@ class RunnerContextFactory(
         val hook = if (invocation is HookInvocation) {
             KuaMap(
                 "method" to KuaString(invocation.method.toString()),
-                "headers" to invocation.headers.value,
-                "parameters" to invocation.parameters.value,
-                "content" to invocation.content.value
+                "headers" to invocation.headers.value.toKua(),
+                "parameters" to invocation.parameters.value.toKua(),
+                "content" to invocation.content.value.toKua()
             )
         } else {
             KuaNil
@@ -40,9 +37,9 @@ class RunnerContextFactory(
         val endpoint = if (invocation is EndpointInvocation) {
             KuaMap(
                 "method" to KuaString(invocation.method.toString()),
-                "headers" to invocation.headers.value,
-                "parameters" to invocation.parameters.value,
-                "content" to invocation.content.value
+                "headers" to invocation.headers.value.toKua(),
+                "parameters" to invocation.parameters.value.toKua(),
+                "content" to invocation.content.value.toKua()
             )
         } else {
             KuaNil
@@ -58,8 +55,8 @@ class RunnerContextFactory(
                 "emit" to EmitFunction(executionCtx),
                 "fail" to FailRunFunction,
                 "complete" to CompleteRunFunction,
-                "state" to executionCtx.state.value,
-                "env" to executionCtx[RunnerEnv::class].value
+                "state" to executionCtx.state.value.toKua(),
+                "env" to executionCtx[RunnerEnv::class].value.toKua()
             )
         )
     }
@@ -78,7 +75,7 @@ private fun Sandbox.invocationEvents(events: List<Event>): TableProxyArray =
                                 "name" to KuaString(it.topic.name.value)
                             )
                         ),
-                        "payload" to it.payload.value
+                        "payload" to it.payload.value.toKua()
                     )
                 )
             )

@@ -30,7 +30,7 @@ class HotNumber(val value: BigDecimal) : HotTerminal {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
         other as HotNumber
-        return value == other.value
+        return value.compareTo(other.value) == 0
     }
 
     override fun hashCode(): Int {

@@ -1,5 +1,6 @@
 package io.hamal.api.http.controller.blueprint
 
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain.vo.BlueprintInputs
 import io.hamal.lib.domain.vo.BlueprintName
 import io.hamal.lib.domain.vo.CodeValue
@@ -7,11 +8,9 @@ import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
-import io.hamal.lib.kua.type.KuaMap
-import io.hamal.lib.kua.type.KuaString
+import io.hamal.lib.sdk.api.ApiBlueprintCreateRequest
 import io.hamal.lib.sdk.api.ApiBlueprintUpdateRequest
 import io.hamal.lib.sdk.api.ApiBlueprintUpdateRequested
-import io.hamal.lib.sdk.api.ApiBlueprintCreateRequest
 import io.hamal.lib.sdk.api.ApiError
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -37,7 +36,7 @@ internal class BlueprintUpdateControllerTest : BlueprintBaseControllerTest() {
                 ApiBlueprintUpdateRequest(
                     name = BlueprintName("Other"),
                     value = CodeValue("1 + 1"),
-                    inputs = BlueprintInputs(KuaMap(mutableMapOf("hamal" to KuaString("createdInputs"))))
+                    inputs = BlueprintInputs(HotObject.builder().set("hamal", "createdInputs").build())
                 )
             )
             .execute()
@@ -53,7 +52,7 @@ internal class BlueprintUpdateControllerTest : BlueprintBaseControllerTest() {
             assertThat(id, equalTo(bpId))
             assertThat(name, equalTo(BlueprintName("Other")))
             assertThat(value, equalTo(CodeValue("1 + 1")))
-            assertThat(inputs, equalTo(BlueprintInputs(KuaMap(mutableMapOf("hamal" to KuaString("createdInputs"))))))
+            assertThat(inputs, equalTo(BlueprintInputs(HotObject.builder().set("hamal", "createdInputs").build())))
         }
     }
 
@@ -64,7 +63,7 @@ internal class BlueprintUpdateControllerTest : BlueprintBaseControllerTest() {
                 ApiBlueprintCreateRequest(
                     name = BlueprintName("TestBlueprint"),
                     value = CodeValue("40 + 2"),
-                    inputs = BlueprintInputs(KuaMap(mutableMapOf("hamal" to KuaString("createdInputs"))))
+                    inputs = BlueprintInputs(HotObject.builder().set("hamal", "createdInputs").build())
                 )
             )
         )
@@ -92,7 +91,7 @@ internal class BlueprintUpdateControllerTest : BlueprintBaseControllerTest() {
             assertThat(id, equalTo(bpId))
             assertThat(name, equalTo(BlueprintName("TestBlueprint")))
             assertThat(value, equalTo(CodeValue("40 + 2")))
-            assertThat(inputs, equalTo(BlueprintInputs(KuaMap(mutableMapOf("hamal" to KuaString("createdInputs"))))))
+            assertThat(inputs, equalTo(BlueprintInputs(HotObject.builder().set("hamal", "createdInputs").build())))
         }
     }
 

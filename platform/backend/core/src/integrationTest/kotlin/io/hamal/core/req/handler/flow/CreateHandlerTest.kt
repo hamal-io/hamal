@@ -1,11 +1,10 @@
 package io.hamal.core.request.handler.flow
 
 import io.hamal.core.request.handler.BaseReqHandlerTest
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain.request.FlowCreateRequested
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.type.KuaMap
-import io.hamal.lib.kua.type.KuaString
 import io.hamal.repository.api.FlowQueryRepository.FlowQuery
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -57,7 +56,7 @@ internal class FlowCreateHandlerTest : BaseReqHandlerTest() {
                 flowId = FlowId(12345),
                 groupId = testGroup.id,
                 name = FlowName("awesome-flow"),
-                inputs = FlowInputs(KuaMap(mutableMapOf("hamal" to KuaString("rocks")))),
+                inputs = FlowInputs(HotObject.builder().set("hamal", "rocks").build()),
                 flowType = FlowType("VerySpecialFlowType")
             )
         )
@@ -65,7 +64,7 @@ internal class FlowCreateHandlerTest : BaseReqHandlerTest() {
         with(flowQueryRepository.get(FlowId(12345))) {
             assertThat(id, equalTo(FlowId(12345)))
             assertThat(name, equalTo(FlowName("awesome-flow")))
-            assertThat(inputs, equalTo(FlowInputs(KuaMap(mutableMapOf("hamal" to KuaString("rocks"))))))
+            assertThat(inputs, equalTo(FlowInputs(HotObject.builder().set("hamal", "rocks").build())))
             assertThat(type, equalTo(FlowType("VerySpecialFlowType")))
         }
 
@@ -80,7 +79,7 @@ internal class FlowCreateHandlerTest : BaseReqHandlerTest() {
             with(flows.first()) {
                 assertThat(id, equalTo(FlowId(12345)))
                 assertThat(name, equalTo(FlowName("awesome-flow")))
-                assertThat(inputs, equalTo(FlowInputs(KuaMap(mutableMapOf("hamal" to KuaString("rocks"))))))
+                assertThat(inputs, equalTo(FlowInputs(HotObject.builder().set("hamal", "rocks").build())))
                 assertThat(type, equalTo(FlowType.default))
             }
         }
@@ -97,7 +96,7 @@ internal class FlowCreateHandlerTest : BaseReqHandlerTest() {
             groupId = testGroup.id,
             name = FlowName("awesome-flow"),
             inputs = FlowInputs(
-                KuaMap(mutableMapOf("hamal" to KuaString("rocks")))
+                HotObject.builder().set("hamal", "rocks").build()
             ),
             flowType = FlowType.default
         )

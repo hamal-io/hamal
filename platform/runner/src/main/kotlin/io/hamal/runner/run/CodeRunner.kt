@@ -71,7 +71,7 @@ class CodeRunnerImpl(
                         sandbox.load(KuaCode(unitOfWork.code.value))
 
                         val ctx = sandbox.getGlobalTableMap("context")
-                        val stateToSubmit = sandbox.toMapType(ctx.getTableMap("state"))
+                        val stateToSubmit = sandbox.toKuaMap(ctx.getTableMap("state")).toHotObject()
 
                         connector.complete(execId, ExecResult(), ExecState(stateToSubmit), runnerContext.eventsToSubmit)
                         log.debug("Completed exec: $execId")
@@ -81,17 +81,17 @@ class CodeRunnerImpl(
                             if (cause.status == KuaNumber(0.0)) {
 
                                 val ctx = sandbox.getGlobalTableMap("context")
-                                val stateToSubmit = sandbox.toMapType(ctx.getTableMap("state"))
+                                val stateToSubmit = sandbox.toKuaMap(ctx.getTableMap("state")).toHotObject()
 
                                 connector.complete(
                                     execId,
-                                    ExecResult(cause.result),
+                                    ExecResult(cause.result.toHotObject()),
                                     ExecState(stateToSubmit),
                                     runnerContext.eventsToSubmit
                                 )
                                 log.debug("Completed exec: $execId")
                             } else {
-                                connector.fail(execId, ExecResult(cause.result))
+                                connector.fail(execId, ExecResult(cause.result.toHotObject()))
                                 log.debug("Failed exec: $execId")
                             }
 
@@ -101,6 +101,7 @@ class CodeRunnerImpl(
                                 execId,
                                 ExecResult(
                                     KuaMap(mutableMapOf("message" to KuaString(e.message ?: "Unknown reason")))
+                                        .toHotObject()
                                 )
                             )
                             log.debug("Failed exec: $execId")
@@ -113,6 +114,7 @@ class CodeRunnerImpl(
                 execId,
                 ExecResult(
                     KuaMap(mutableMapOf("message" to KuaString(a.message ?: "Unknown reason")))
+                        .toHotObject()
                 )
             )
             log.debug("Assertion error: $execId - ${a.message}")
@@ -122,6 +124,7 @@ class CodeRunnerImpl(
                 execId,
                 ExecResult(
                     KuaMap(mutableMapOf("message" to KuaString(t.message ?: "Unknown reason")))
+                        .toHotObject()
                 )
             )
             log.debug("Failed exec: $execId")

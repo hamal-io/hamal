@@ -2,9 +2,8 @@ package io.hamal.testbed.api
 
 import AbstractRunnerTest
 import io.hamal.extension.net.http.ExtensionHttpFactory
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain.vo.RunnerEnv
-import io.hamal.lib.kua.type.KuaMap
-import io.hamal.lib.kua.type.KuaString
 import io.hamal.plugin.net.http.PluginHttpFactory
 import io.hamal.testbed.api.BaseTest.TestResult.Failure
 import io.hamal.testbed.api.BaseTest.TestResult.Success
@@ -24,11 +23,9 @@ abstract class BaseTest(val apiUrl: String) : AbstractRunnerTest() {
                 pluginFactories = listOf(PluginHttpFactory()),
                 extensionFactories = listOf(ExtensionHttpFactory),
                 env = RunnerEnv(
-                    KuaMap(
-                        mutableMapOf(
-                            "test_api" to KuaString(apiUrl)
-                        )
-                    )
+                    HotObject.builder()
+                        .set("test_api", apiUrl)
+                        .build()
                 )
             ).run(unitOfWork(String(Files.readAllBytes(testFile))))
             Success

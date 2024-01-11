@@ -1,13 +1,12 @@
 package io.hamal.core.request.handler.exec
 
 import io.hamal.core.request.handler.BaseReqHandlerTest
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
-import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.type.KuaMap
-import io.hamal.lib.kua.type.KuaString
-import io.hamal.repository.api.ExecQueryRepository.ExecQuery
 import io.hamal.lib.domain.request.ExecInvokeRequested
+import io.hamal.lib.domain.vo.*
+import io.hamal.repository.api.ExecQueryRepository.ExecQuery
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
@@ -26,7 +25,7 @@ internal class ExecInvokeHandlerTest : BaseReqHandlerTest() {
                 execId = ExecId(3333),
                 flowId = testFlow.id,
                 groupId = testGroup.id,
-                inputs = InvocationInputs(KuaMap(mutableMapOf("hamal" to KuaString("justworks")))),
+                inputs = InvocationInputs(HotObject.builder().set("hamal", "justworks").build()),
                 code = ExecCode(value = CodeValue("code")),
                 funcId = null,
                 correlationId = null,
@@ -40,7 +39,7 @@ internal class ExecInvokeHandlerTest : BaseReqHandlerTest() {
             with(it.first()) {
                 assertThat(id, equalTo(ExecId(3333)))
                 assertThat(correlation, nullValue())
-                assertThat(inputs, equalTo(ExecInputs(KuaMap(mutableMapOf("hamal" to KuaString("justworks"))))))
+                assertThat(inputs, equalTo(ExecInputs(HotObject.builder().set("hamal", "justworks").build())))
                 assertThat(code, equalTo(ExecCode(value = CodeValue("code"))))
             }
         }
@@ -53,11 +52,10 @@ internal class ExecInvokeHandlerTest : BaseReqHandlerTest() {
             codeId = CodeId(4455),
             codeVersion = CodeVersion(5544),
             inputs = FuncInputs(
-                KuaMap(
-                    mutableMapOf(
-                        "override" to KuaString("false"), "func" to KuaString("func")
-                    )
-                )
+                HotObject.builder()
+                    .set("override", "false")
+                    .set("func", "func")
+                    .build()
             )
         )
         testInstance(
@@ -69,11 +67,10 @@ internal class ExecInvokeHandlerTest : BaseReqHandlerTest() {
                 flowId = testFlow.id,
                 groupId = testGroup.id,
                 inputs = InvocationInputs(
-                    KuaMap(
-                        mutableMapOf(
-                            "override" to KuaString("true"), "invocation" to KuaString("invocation")
-                        )
-                    )
+                    HotObject.builder()
+                        .set("override", "true")
+                        .set("invocation", "invocation")
+                        .build()
                 ),
                 funcId = FuncId(4444),
                 code = ExecCode(
@@ -96,13 +93,11 @@ internal class ExecInvokeHandlerTest : BaseReqHandlerTest() {
                 assertThat(
                     inputs, equalTo(
                         ExecInputs(
-                            KuaMap(
-                                mutableMapOf(
-                                    "func" to KuaString("func"),
-                                    "invocation" to KuaString("invocation"),
-                                    "override" to KuaString("true"),
-                                )
-                            )
+                            HotObject.builder()
+                                .set("override", "true")
+                                .set("func", "func")
+                                .set("invocation", "invocation")
+                                .build()
                         )
                     )
                 )
@@ -139,10 +134,11 @@ internal class ExecInvokeHandlerTest : BaseReqHandlerTest() {
             execId = ExecId(3333),
             flowId = testFlow.id,
             groupId = testGroup.id,
-            inputs = InvocationInputs(KuaMap(mutableMapOf(
-                    "override" to KuaString("true"),
-                    "invocation" to KuaString("invocation")
-                    ))),
+            inputs = InvocationInputs(
+                HotObject.builder()
+                    .set("override", "true")
+                    .set("invocation", "invocation")
+                    .build()),
             funcId = FuncId(4444),
             code = ExecCode(
                 id = CodeId(5555),

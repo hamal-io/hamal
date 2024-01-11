@@ -9,13 +9,13 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("toMapType()")
-internal class ToMapTypeTest {
+@DisplayName("toKuaMap()")
+internal class toKuaMapTest {
 
     @Test
     fun `Empty table`() {
         val table = testState.tableCreateMap(0)
-        val result = testState.toMapType(table)
+        val result = testState.toKuaMap(table)
         assertThat(result.size, equalTo(0))
     }
 
@@ -26,7 +26,7 @@ internal class ToMapTypeTest {
             it["false_value"] = booleanOf(false)
         }
 
-        val result = testState.toMapType(table)
+        val result = testState.toKuaMap(table)
         assertThat(result.size, equalTo(2))
         assertThat(result["true_value"], equalTo(booleanOf(true)))
         assertThat(result["false_value"], equalTo(booleanOf(false)))
@@ -35,7 +35,7 @@ internal class ToMapTypeTest {
     @Test
     fun `Table with number`() {
         val table = testState.tableCreateMap(1).also { it["number"] = 41 }
-        val result = testState.toMapType(table)
+        val result = testState.toKuaMap(table)
         assertThat(result.size, equalTo(1))
         assertThat(result["number"], equalTo(KuaNumber(41)))
     }
@@ -43,7 +43,7 @@ internal class ToMapTypeTest {
     @Test
     fun `Table with string`() {
         val table = testState.tableCreateMap(1).also { it["string"] = "HamalRocks" }
-        val result = testState.toMapType(table)
+        val result = testState.toKuaMap(table)
         assertThat(result.size, equalTo(1))
         assertThat(result["string"], equalTo(KuaString("HamalRocks")))
     }
@@ -52,7 +52,7 @@ internal class ToMapTypeTest {
     fun `Table with nested map`() {
         val innerTable = testState.tableCreateMap(1).also { it["inner-key"] = "inner-value" }
         val table = testState.tableCreateMap(1).also { it["inner"] = innerTable }
-        val result = testState.toMapType(table)
+        val result = testState.toKuaMap(table)
         assertThat(result.size, equalTo(1))
 
         val inner = result["inner"] as KuaMap
@@ -64,7 +64,7 @@ internal class ToMapTypeTest {
     fun `Table with nested array`() {
         val innerTable = testState.tableCreateArray(1).also { it.append(1337) }
         val table = testState.tableCreateMap(1).also { it["inner"] = innerTable }
-        val result = testState.toMapType(table)
+        val result = testState.toKuaMap(table)
         assertThat(result.size, equalTo(1))
 
         val inner = result["inner"] as KuaArray

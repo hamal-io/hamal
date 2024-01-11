@@ -1,14 +1,13 @@
 package io.hamal.api.http.controller.func
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
-import io.hamal.lib.kua.type.KuaMap
-import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.sdk.api.*
 import io.hamal.repository.api.FlowCmdRepository.CreateCmd
 import org.hamcrest.MatcherAssert.assertThat
@@ -53,7 +52,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
                 flowId = createdFlow.id,
                 req = ApiFuncCreateRequest(
                     name = FuncName("created-name"),
-                    inputs = FuncInputs(KuaMap(mutableMapOf("hamal" to KuaString("createdInputs")))),
+                    inputs = FuncInputs(HotObject.builder().set("hamal", "createdInputs").build()),
                     code = CodeValue("createdCode")
                 )
             )
@@ -64,7 +63,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
             .body(
                 ApiFuncUpdateRequest(
                     name = FuncName("updated-name"),
-                    inputs = FuncInputs(KuaMap(mutableMapOf("hamal" to KuaString("updatedInputs")))),
+                    inputs = FuncInputs(HotObject.builder().set("hamal", "updatedInputs").build()),
                     code = CodeValue("updatedCode")
                 )
             )
@@ -82,7 +81,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
             assertThat(id, equalTo(funcId))
             assertThat(flow.name, equalTo(FlowName("createdFlow")))
             assertThat(name, equalTo(FuncName("updated-name")))
-            assertThat(inputs, equalTo(FuncInputs(KuaMap(mutableMapOf("hamal" to KuaString("updatedInputs"))))))
+            assertThat(inputs, equalTo(FuncInputs(HotObject.builder().set("hamal", "updatedInputs").build())))
 
             assertThat(code.version, equalTo(CodeVersion(2)))
             assertThat(code.value, equalTo(CodeValue("updatedCode")))
@@ -120,7 +119,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
             assertThat(id, equalTo(funcId))
             assertThat(flow.name, equalTo(FlowName("createdFlow")))
             assertThat(name, equalTo(FuncName("created-name")))
-            assertThat(inputs, equalTo(FuncInputs(KuaMap(mutableMapOf("hamal" to KuaString("createdInputs"))))))
+            assertThat(inputs, equalTo(FuncInputs(HotObject.builder().set("hamal", "createdInputs").build())))
 
             assertThat(code.version, equalTo(CodeVersion(1)))
             assertThat(code.value, equalTo(CodeValue("createdCode")))
@@ -174,7 +173,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
             .body(
                 ApiFuncUpdateRequest(
                     name = FuncName("updated-name"),
-                    inputs = FuncInputs(KuaMap(mutableMapOf("hamal" to KuaString("updatedInputs")))),
+                    inputs = FuncInputs(HotObject.builder().set("hamal", "updatedInputs").build()),
                     code = CodeValue("createdCode")
                 )
             )
@@ -189,7 +188,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
         with(getFunc(funcId)) {
             assertThat(flow.name, equalTo(FlowName("createdFlow")))
             assertThat(name, equalTo(FuncName("updated-name")))
-            assertThat(inputs, equalTo(FuncInputs(KuaMap(mutableMapOf("hamal" to KuaString("updatedInputs"))))))
+            assertThat(inputs, equalTo(FuncInputs(HotObject.builder().set("hamal", "updatedInputs").build())))
 
             assertThat(code.version, equalTo(CodeVersion(1)))
             assertThat(code.value, equalTo(CodeValue("createdCode")))
@@ -215,7 +214,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
                 flowId = createdFlow.id,
                 req = ApiFuncCreateRequest(
                     name = name,
-                    inputs = FuncInputs(KuaMap(mutableMapOf("hamal" to KuaString("createdInputs")))),
+                    inputs = FuncInputs(HotObject.builder().set("hamal", "createdInputs").build()),
                     code = code
                 )
             )

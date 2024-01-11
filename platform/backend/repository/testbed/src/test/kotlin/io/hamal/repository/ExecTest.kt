@@ -2,12 +2,10 @@ package io.hamal.repository
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.ExecStatus.*
-import io.hamal.lib.kua.type.KuaMap
-import io.hamal.lib.kua.type.KuaNumber
-import io.hamal.lib.kua.type.KuaString
 import io.hamal.repository.api.Exec
 import io.hamal.repository.api.ExecCmdRepository.*
 import io.hamal.repository.api.ExecQueryRepository.ExecQuery
@@ -36,14 +34,14 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                     correlation = Correlation(
                         correlationId = CorrelationId("some-correlation-id"), funcId = FuncId(23)
                     ),
-                    inputs = ExecInputs(KuaMap(mutableMapOf("hamal" to KuaString("rocks")))),
+                    inputs = ExecInputs(HotObject.builder().set("hamal", "rocks").build()),
                     code = ExecCode(value = CodeValue("40 + 2")),
                     invocation = EventInvocation(
                         listOf(
                             Event(
                                 topic = EventTopic(id = TopicId(90), name = TopicName("test-topic")),
                                 id = EventId(95),
-                                payload = EventPayload(KuaMap(mutableMapOf("answer" to KuaNumber(42))))
+                                payload = EventPayload(HotObject.builder().set("answer", 42).build())
                             )
                         )
                     )
@@ -226,15 +224,15 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                 CompleteCmd(
                     CmdId(5),
                     ExecId(2),
-                    ExecResult(KuaMap("answer" to KuaNumber(42))),
-                    ExecState(KuaMap("state" to KuaNumber(1337)))
+                    ExecResult(HotObject.builder().set("answer", 42).build()),
+                    ExecState(HotObject.builder().set("state", 1337).build())
                 )
             )
 
             assertBaseExec(result)
             assertThat(result.status, equalTo(Completed))
-            assertThat(result.result, equalTo(ExecResult(KuaMap("answer" to KuaNumber(42)))))
-            assertThat(result.state, equalTo(ExecState(KuaMap("state" to KuaNumber(1337)))))
+            assertThat(result.result, equalTo(ExecResult(HotObject.builder().set("answer", 42).build())))
+            assertThat(result.state, equalTo(ExecState(HotObject.builder().set("state", 1337).build())))
 
             verifyCount(1)
         }
@@ -284,10 +282,11 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
             queue(QueueCmd(CmdId(3), ExecId(2)))
             start(StartCmd(CmdId(4)))
 
-            val result = fail(FailCmd(CmdId(5), ExecId(2), ExecResult(KuaMap("message" to KuaString("SomeError")))))
+            val result =
+                fail(FailCmd(CmdId(5), ExecId(2), ExecResult(HotObject.builder().set("message", "SomeError").build())))
             assertBaseExec(result)
             assertThat(result.status, equalTo(Failed))
-            assertThat(result.result, equalTo(ExecResult(KuaMap("message" to KuaString("SomeError")))))
+            assertThat(result.result, equalTo(ExecResult(HotObject.builder().set("message", "SomeError").build())))
 
             verifyCount(1)
         }
@@ -358,7 +357,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                 assertThat(groupId, equalTo(GroupId(333)))
                 assertThat(correlation?.correlationId, equalTo(CorrelationId("SomeCorrelationId")))
                 assertThat(correlation?.funcId, equalTo(FuncId(444)))
-                assertThat(inputs, equalTo(ExecInputs(KuaMap(mutableMapOf("hamal" to KuaString("rocks"))))))
+                assertThat(inputs, equalTo(ExecInputs(HotObject.builder().set("hamal", "rocks").build())))
                 assertThat(code, equalTo(ExecCode(value = CodeValue("'13'..'37'"))))
                 assertThat(
                     invocation, equalTo(
@@ -367,7 +366,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                                 Event(
                                     topic = EventTopic(id = TopicId(90), name = TopicName("test-topic")),
                                     id = EventId(95),
-                                    payload = EventPayload(KuaMap(mutableMapOf("answer" to KuaNumber(42))))
+                                    payload = EventPayload(HotObject.builder().set("answer", 42).build())
                                 )
                             )
                         )
@@ -402,7 +401,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                 assertThat(groupId, equalTo(GroupId(333)))
                 assertThat(correlation?.correlationId, equalTo(CorrelationId("SomeCorrelationId")))
                 assertThat(correlation?.funcId, equalTo(FuncId(444)))
-                assertThat(inputs, equalTo(ExecInputs(KuaMap(mutableMapOf("hamal" to KuaString("rocks"))))))
+                assertThat(inputs, equalTo(ExecInputs(HotObject.builder().set("hamal", "rocks").build())))
                 assertThat(code, equalTo(ExecCode(value = CodeValue("'13'..'37'"))))
                 assertThat(
                     invocation, equalTo(
@@ -411,7 +410,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                                 Event(
                                     topic = EventTopic(id = TopicId(90), name = TopicName("test-topic")),
                                     id = EventId(95),
-                                    payload = EventPayload(KuaMap(mutableMapOf("answer" to KuaNumber(42))))
+                                    payload = EventPayload(HotObject.builder().set("answer", 42).build())
                                 )
                             )
                         )
@@ -588,7 +587,7 @@ private fun assertBaseExec(exec: Exec) {
                     Event(
                         topic = EventTopic(id = TopicId(90), name = TopicName("test-topic")),
                         id = EventId(95),
-                        payload = EventPayload(KuaMap(mutableMapOf("answer" to KuaNumber(42))))
+                        payload = EventPayload(HotObject.builder().set("answer", 42).build())
                     )
                 )
             )
@@ -607,14 +606,14 @@ private fun ExecRepository.planExec(
         correlation = Correlation(
             correlationId = CorrelationId("some-correlation-id"), funcId = FuncId(23)
         ),
-        inputs = ExecInputs(KuaMap(mutableMapOf("hamal" to KuaString("rocks")))),
+        inputs = ExecInputs(HotObject.builder().set("hamal", "rocks").build()),
         code = ExecCode(value = CodeValue("40 + 2")),
         invocation = EventInvocation(
             listOf(
                 Event(
                     topic = EventTopic(id = TopicId(90), name = TopicName("test-topic")),
                     id = EventId(95),
-                    payload = EventPayload(KuaMap(mutableMapOf("answer" to KuaNumber(42))))
+                    payload = EventPayload(HotObject.builder().set("answer", 42).build())
                 )
             )
         )
@@ -645,14 +644,14 @@ fun ExecRepository.createExec(
             flowId = flowId,
             groupId = groupId,
             correlation = correlation,
-            inputs = ExecInputs(KuaMap(mutableMapOf("hamal" to KuaString("rocks")))),
+            inputs = ExecInputs(HotObject.builder().set("hamal", "rocks").build()),
             code = ExecCode(value = CodeValue("'13'..'37'")),
             invocation = EventInvocation(
                 listOf(
                     Event(
                         topic = EventTopic(id = TopicId(90), name = TopicName("test-topic")),
                         id = EventId(95),
-                        payload = EventPayload(KuaMap(mutableMapOf("answer" to KuaNumber(42))))
+                        payload = EventPayload(HotObject.builder().set("answer", 42).build())
                     )
                 )
             )
@@ -693,8 +692,8 @@ fun ExecRepository.createExec(
             CompleteCmd(
                 id = CmdId(104),
                 execId = startedExec.id,
-                result = ExecResult(KuaMap("answer" to KuaNumber(42))),
-                state = ExecState(KuaMap("state" to KuaNumber(1337)))
+                result = ExecResult(HotObject.builder().set("answer", 42).build()),
+                state = ExecState(HotObject.builder().set("state", 1337).build())
             )
         )
 
@@ -702,7 +701,7 @@ fun ExecRepository.createExec(
             FailCmd(
                 id = CmdId(104),
                 execId = startedExec.id,
-                result = ExecResult(KuaMap("message" to KuaString("ExecTest")))
+                result = ExecResult(HotObject.builder().set("message", "ExecTest").build())
             )
         )
 

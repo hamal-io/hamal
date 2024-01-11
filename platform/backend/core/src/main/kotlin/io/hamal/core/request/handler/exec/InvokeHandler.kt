@@ -3,6 +3,7 @@ package io.hamal.core.request.handler.exec
 import io.hamal.core.event.PlatformEventEmitter
 import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.request.ExecInvokeRequested
 import io.hamal.lib.domain.vo.ExecInputs
@@ -57,8 +58,8 @@ class ExecInvokeHandler(
 
 internal fun InvocationInputs.toExecInputs() = ExecInputs(this.value)
 internal fun merge(funcInputs: FuncInputs, invocationInputs: InvocationInputs): ExecInputs {
-    val result = ExecInputs()
-    funcInputs.value.value.forEach { result.value[it.key] = it.value }
-    invocationInputs.value.value.forEach { result.value[it.key] = it.value }
-    return result
+    val builder = HotObject.builder()
+    funcInputs.value.nodes.forEach { builder[it.key] = it.value }
+    invocationInputs.value.nodes.forEach { builder[it.key] = it.value }
+    return ExecInputs(builder.build())
 }

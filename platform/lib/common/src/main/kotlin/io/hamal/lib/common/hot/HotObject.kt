@@ -15,7 +15,7 @@ class HotObject(
 
     fun find(key: String): HotNode? = nodes[key]
 
-    fun get(key: String): HotNode = find(key) ?: throw NoSuchElementException("$key not found")
+    operator fun get(key: String): HotNode = find(key) ?: throw NoSuchElementException("$key not found")
 
     fun isArray(key: String): Boolean = find(key)?.isArray ?: false
     fun asArray(key: String): HotArray = find(key)
@@ -99,52 +99,52 @@ class HotObject(
 class HotObjectBuilder {
     val nodes: LinkedHashMap<String, HotNode> = LinkedHashMap()
 
-    fun set(key: String, value: String): HotObjectBuilder {
+    operator fun set(key: String, value: String): HotObjectBuilder {
         nodes[key] = HotString(value)
         return this
     }
 
-    fun set(key: String, value: Byte): HotObjectBuilder {
+    operator fun set(key: String, value: Byte): HotObjectBuilder {
         nodes[key] = HotNumber(value)
         return this
     }
 
-    fun set(key: String, value: Short): HotObjectBuilder {
+    operator fun set(key: String, value: Short): HotObjectBuilder {
         nodes[key] = HotNumber(value)
         return this
     }
 
-    fun set(key: String, value: BigInteger): HotObjectBuilder {
+    operator fun set(key: String, value: BigInteger): HotObjectBuilder {
         nodes[key] = HotNumber(value)
         return this
     }
 
-    fun set(key: String, value: BigDecimal): HotObjectBuilder {
+    operator fun set(key: String, value: BigDecimal): HotObjectBuilder {
         nodes[key] = HotNumber(value)
         return this
     }
 
-    fun set(key: String, value: Int): HotObjectBuilder {
+    operator fun set(key: String, value: Int): HotObjectBuilder {
         nodes[key] = HotNumber(value)
         return this
     }
 
-    fun set(key: String, value: Float): HotObjectBuilder {
+    operator fun set(key: String, value: Float): HotObjectBuilder {
         nodes[key] = HotNumber(value)
         return this
     }
 
-    fun set(key: String, value: Double): HotObjectBuilder {
+    operator fun set(key: String, value: Double): HotObjectBuilder {
         nodes[key] = HotNumber(value)
         return this
     }
 
-    fun set(key: String, value: Long): HotObjectBuilder {
+    operator fun set(key: String, value: Long): HotObjectBuilder {
         nodes[key] = HotNumber(value)
         return this
     }
 
-    fun set(key: String, value: Boolean): HotObjectBuilder {
+    operator fun set(key: String, value: Boolean): HotObjectBuilder {
         nodes[key] = HotBoolean(value)
         return this
     }
@@ -154,12 +154,12 @@ class HotObjectBuilder {
         return this
     }
 
-    fun set(key: String, value: HotNode): HotObjectBuilder {
+    operator fun set(key: String, value: HotNode): HotObjectBuilder {
         nodes[key] = value
         return this
     }
 
-    fun set(key: String, value: Enum<*>): HotObjectBuilder {
+    operator fun set(key: String, value: Enum<*>): HotObjectBuilder {
         nodes[key] = HotString(value.name)
         return this
     }

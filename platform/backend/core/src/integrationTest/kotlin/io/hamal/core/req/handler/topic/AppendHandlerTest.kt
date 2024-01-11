@@ -1,6 +1,7 @@
 package io.hamal.core.request.handler.topic
 
 import io.hamal.core.request.handler.BaseReqHandlerTest
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain.request.TopicAppendToRequested
@@ -8,8 +9,6 @@ import io.hamal.lib.domain.vo.RequestId
 import io.hamal.lib.domain.vo.TopicEntryPayload
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
-import io.hamal.lib.kua.type.KuaMap
-import io.hamal.lib.kua.type.KuaString
 import io.hamal.repository.api.log.ChunkId
 import io.hamal.repository.api.log.Segment
 import io.hamal.repository.record.json
@@ -31,7 +30,7 @@ internal class TopicAppendHandlerTest : BaseReqHandlerTest() {
                 status = Submitted,
                 topicId = TopicId(4444),
                 groupId = testGroup.id,
-                payload = TopicEntryPayload(KuaMap(mutableMapOf("hamal" to KuaString("rockz"))))
+                payload = TopicEntryPayload(HotObject.builder().set("hamal", "rocks").build())
             )
         )
 
@@ -44,7 +43,7 @@ internal class TopicAppendHandlerTest : BaseReqHandlerTest() {
                 assertThat(topicId, equalTo(TopicId(4444)))
 
                 val payload = json.decompressAndDeserialize(TopicEntryPayload::class, bytes)
-                assertThat(payload.value, equalTo(KuaMap(mutableMapOf("hamal" to KuaString("rockz")))))
+                assertThat(payload.value, equalTo(HotObject.builder().set("hamal", "rocks").build()))
             }
         }
     }
@@ -58,7 +57,7 @@ internal class TopicAppendHandlerTest : BaseReqHandlerTest() {
                     status = Submitted,
                     topicId = TopicId(123),
                     groupId = testGroup.id,
-                    payload = TopicEntryPayload(KuaMap(mutableMapOf("hamal" to KuaString("rockz"))))
+                    payload = TopicEntryPayload(HotObject.builder().set("hamal", "rocks").build())
                 )
             )
         }

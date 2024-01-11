@@ -9,7 +9,7 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.registerGlobalFunction
 import org.junit.jupiter.api.Test
 
-internal class ArrayTypeTest {
+internal class KuaArrayTest {
 
     @Test
     fun `Array as function result`() {

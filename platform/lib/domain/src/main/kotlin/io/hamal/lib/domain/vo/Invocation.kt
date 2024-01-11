@@ -3,14 +3,14 @@ package io.hamal.lib.domain.vo
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
+import io.hamal.lib.common.domain.ValueObjecHotObject
 import io.hamal.lib.common.domain.ValueObjectString
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.serialization.JsonAdapter
 import io.hamal.lib.domain._enum.EndpointMethod
 import io.hamal.lib.domain._enum.HookMethod
-import io.hamal.lib.domain.vo.base.MapValueObject
-import io.hamal.lib.kua.type.KuaMap
 
-class InvocationInputs(override val value: KuaMap = KuaMap()) : MapValueObject()
+class InvocationInputs(override val value: HotObject = HotObject.empty) : ValueObjecHotObject()
 
 class InvocationType(override val value: String) : ValueObjectString()
 

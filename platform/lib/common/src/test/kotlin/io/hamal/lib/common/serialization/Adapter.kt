@@ -167,12 +167,12 @@ internal object ValueObjectInstantAdapterTest {
 }
 
 
-internal object ValueObjectMapAdapterTest {
+internal object ValueObjectHotObjectAdapterTest {
 
     @Test
     fun serialize() {
         val result = testDelegate.toJson(
-            TestMapValueObject(
+            TestHotObjectValueObject(
                 HotObject.builder()
                     .set("some-string", "some-string-value")
                     .set("some-boolean", true)
@@ -185,7 +185,7 @@ internal object ValueObjectMapAdapterTest {
 
     @Test
     fun deserialize() {
-        val expected = TestMapValueObject(
+        val expected = TestHotObjectValueObject(
             HotObject.builder()
                 .set("some-string", "some-string-value")
                 .set("some-boolean", true)
@@ -194,7 +194,7 @@ internal object ValueObjectMapAdapterTest {
         )
         val result = testDelegate.fromJson(
             """{"some-string":"some-string-value","some-boolean":true,"some-number":42}""",
-            TestMapValueObject::class.java
+            TestHotObjectValueObject::class.java
         )
         assertThat(result, equalTo(expected))
     }
@@ -202,10 +202,13 @@ internal object ValueObjectMapAdapterTest {
     private val testDelegate: Gson =
         GsonBuilder()
             .registerTypeAdapter(HotObject::class.java, HotObjectAdapter)
-            .registerTypeAdapter(TestMapValueObject::class.java, ValueObjectMapAdapter(::TestMapValueObject))
+            .registerTypeAdapter(
+                TestHotObjectValueObject::class.java,
+                ValueObjectHotObjectAdapter(::TestHotObjectValueObject)
+            )
             .create()
 
-    private class TestMapValueObject(
+    private class TestHotObjectValueObject(
         override val value: HotObject
-    ) : ValueObjectMap()
+    ) : ValueObjecHotObject()
 }

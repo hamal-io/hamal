@@ -2,14 +2,13 @@ package io.hamal.core.request.handler.func
 
 import io.hamal.core.request.handler.BaseReqHandlerTest
 import io.hamal.core.request.handler.NextCommandId
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain.request.FuncUpdateRequested
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.type.KuaMap
-import io.hamal.lib.kua.type.KuaString
 import io.hamal.repository.api.CodeCmdRepository
 import io.hamal.repository.api.FuncCmdRepository
 import io.hamal.repository.api.FuncCode
-import io.hamal.lib.domain.request.FuncUpdateRequested
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -25,7 +24,7 @@ internal class FuncUpdateHandlerTest : BaseReqHandlerTest() {
 
         with(funcQueryRepository.get(FuncId(1))) {
             assertThat(name, equalTo(FuncName("Func-update")))
-            assertThat(inputs, equalTo(FuncInputs(KuaMap(mutableMapOf("hamal" to KuaString("rocks"))))))
+            assertThat(inputs, equalTo(FuncInputs(HotObject.builder().set("hamal", "rocks").build())))
             assertThat(
                 code, equalTo(
                     FuncCode(
@@ -49,7 +48,7 @@ internal class FuncUpdateHandlerTest : BaseReqHandlerTest() {
             groupId = testGroup.id,
             funcId = FuncId(1),
             name = FuncName("Func-update"),
-            inputs = FuncInputs(KuaMap(mutableMapOf("hamal" to KuaString("rocks")))),
+            inputs = FuncInputs(HotObject.builder().set("hamal", "rocks").build()),
             code = CodeValue("some code")
         )
     }

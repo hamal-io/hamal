@@ -1,5 +1,7 @@
 package io.hamal.lib.sdk.api
 
+import io.hamal.lib.common.domain.ValueObjecHotObject
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain._enum.RequestStatus
@@ -8,8 +10,6 @@ import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.domain.vo.RequestId
-import io.hamal.lib.domain.vo.base.MapValueObject
-import io.hamal.lib.kua.type.KuaMap
 
 data class ApiStateSetRequest(
     override val correlation: Correlation,
@@ -22,7 +22,7 @@ data class ApiStateSetRequested(
 ) : ApiRequested()
 
 
-class ApiState(override val value: KuaMap = KuaMap()) : MapValueObject()
+class ApiState(override val value: HotObject = HotObject.empty) : ValueObjecHotObject()
 
 data class ApiCorrelation(
     val correlationId: CorrelationId,

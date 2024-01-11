@@ -1,13 +1,12 @@
 package io.hamal.repository
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.kua.type.KuaMap
-import io.hamal.lib.kua.type.KuaString
 import io.hamal.repository.api.StateRepository
 import io.hamal.repository.fixture.AbstractUnitTest
 import org.hamcrest.MatcherAssert.assertThat
@@ -29,14 +28,14 @@ internal class StateRepositoryTest : AbstractUnitTest() {
                         correlationId = CorrelationId("SomeCorrelationId"),
                         funcId = FuncId(2)
                     ),
-                    value = State(KuaMap(mutableMapOf("hamal" to KuaString("rocks"))))
+                    value = State(HotObject.builder().set("hamal", "rocks").build())
                 )
             )
 
             with(get(Correlation(CorrelationId("SomeCorrelationId"), FuncId(2)))) {
                 assertThat(correlation.correlationId, equalTo(CorrelationId("SomeCorrelationId")))
                 assertThat(correlation.funcId, equalTo(FuncId(2)))
-                assertThat(value, equalTo(State(KuaMap(mutableMapOf("hamal" to KuaString("rocks"))))))
+                assertThat(value, equalTo(State(HotObject.builder().set("hamal", "rocks").build())))
             }
         }
 
@@ -48,7 +47,7 @@ internal class StateRepositoryTest : AbstractUnitTest() {
                         correlationId = CorrelationId("SomeCorrelationId"),
                         funcId = FuncId(2)
                     ),
-                    value = State(KuaMap(mutableMapOf("hamal" to KuaString("rocks"))))
+                    value = State(HotObject.builder().set("hamal", "rocks").build())
                 )
             )
 
@@ -56,7 +55,7 @@ internal class StateRepositoryTest : AbstractUnitTest() {
             with(result) {
                 assertThat(correlation.funcId, equalTo(FuncId(22222)))
                 assertThat(correlation.correlationId, equalTo(CorrelationId("SomeCorrelationId")))
-                assertThat(value, equalTo(State(KuaMap())))
+                assertThat(value, equalTo(State(HotObject.empty)))
             }
         }
 
@@ -68,7 +67,7 @@ internal class StateRepositoryTest : AbstractUnitTest() {
                         correlationId = CorrelationId("SomeCorrelationId"),
                         funcId = FuncId(2)
                     ),
-                    value = State(KuaMap(mutableMapOf("hamal" to KuaString("rocks"))))
+                    value = State(HotObject.builder().set("hamal", "rocks").build())
                 )
             )
 
@@ -76,7 +75,7 @@ internal class StateRepositoryTest : AbstractUnitTest() {
             with(result) {
                 assertThat(correlation.funcId, equalTo(FuncId(2)))
                 assertThat(correlation.correlationId, equalTo(CorrelationId("AnotherCorrelation")))
-                assertThat(value, equalTo(State(KuaMap())))
+                assertThat(value, equalTo(State(HotObject.empty)))
             }
         }
     }
@@ -92,14 +91,14 @@ internal class StateRepositoryTest : AbstractUnitTest() {
                         correlationId = CorrelationId("SomeCorrelationId"),
                         funcId = FuncId(2)
                     ),
-                    value = State(KuaMap(mutableMapOf("hamal" to KuaString("rocks"))))
+                    value = State(HotObject.builder().set("hamal", "rocks").build())
                 )
             )
 
             with(find(Correlation(CorrelationId("SomeCorrelationId"), FuncId(2)))!!) {
                 assertThat(correlation.correlationId, equalTo(CorrelationId("SomeCorrelationId")))
                 assertThat(correlation.funcId, equalTo(FuncId(2)))
-                assertThat(value, equalTo(State(KuaMap(mutableMapOf("hamal" to KuaString("rocks"))))))
+                assertThat(value, equalTo(State(HotObject.builder().set("hamal", "rocks").build())))
             }
         }
 
@@ -111,7 +110,7 @@ internal class StateRepositoryTest : AbstractUnitTest() {
                         correlationId = CorrelationId("SomeCorrelationId"),
                         funcId = FuncId(2)
                     ),
-                    value = State(KuaMap(mutableMapOf("hamal" to KuaString("rocks"))))
+                    value = State(HotObject.builder().set("hamal", "rocks").build())
                 )
             )
 
@@ -127,7 +126,7 @@ internal class StateRepositoryTest : AbstractUnitTest() {
                         correlationId = CorrelationId("SomeCorrelationId"),
                         funcId = FuncId(2)
                     ),
-                    value = State(KuaMap(mutableMapOf("hamal" to KuaString("rocks"))))
+                    value = State(HotObject.builder().set("hamal", "rocks").build())
                 )
             )
 

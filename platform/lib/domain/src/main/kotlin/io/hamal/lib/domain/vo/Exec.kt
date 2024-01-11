@@ -1,12 +1,12 @@
 package io.hamal.lib.domain.vo
 
+import io.hamal.lib.common.domain.ValueObjecHotObject
 import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.domain.ValueObjectInstant
 import io.hamal.lib.common.domain.ValueObjectString
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.util.TimeUtils
-import io.hamal.lib.domain.vo.base.MapValueObject
-import io.hamal.lib.kua.type.KuaMap
 import java.time.Instant
 
 class ExecId(override val value: SnowflakeId) : ValueObjectId() {
@@ -16,7 +16,7 @@ class ExecId(override val value: SnowflakeId) : ValueObjectId() {
 
 class ExecType(override val value: String) : ValueObjectString()
 
-class ExecInputs(override val value: KuaMap = KuaMap()) : MapValueObject()
+class ExecInputs(override val value: HotObject = HotObject.empty) : ValueObjecHotObject()
 
 data class ExecCode(
     val id: CodeId? = null,
@@ -43,9 +43,9 @@ enum class ExecStatus(val value: Int) {
 
 class ExecToken(override val value: String) : ValueObjectString()
 
-class ExecResult(override val value: KuaMap = KuaMap()) : MapValueObject()
+class ExecResult(override val value: HotObject = HotObject.empty) : ValueObjecHotObject()
 
-class ExecState(override val value: KuaMap = KuaMap()) : MapValueObject()
+class ExecState(override val value: HotObject = HotObject.empty) : ValueObjecHotObject()
 
 
 class ExecScheduledAt(override val value: Instant) : ValueObjectInstant() {

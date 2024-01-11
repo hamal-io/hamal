@@ -60,7 +60,7 @@ abstract class ValueObjectInstant : ValueObject.ComparableImpl<Instant>() {
     }
 }
 
-abstract class ValueObjectMap : ValueObject.BaseImpl<HotObject>() {
+abstract class ValueObjecHotObject : ValueObject.BaseImpl<HotObject>() {
     override fun toString(): String {
         return "${this::class.simpleName}(${value})"
     }

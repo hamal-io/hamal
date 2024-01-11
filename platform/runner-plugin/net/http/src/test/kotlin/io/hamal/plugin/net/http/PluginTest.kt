@@ -2,9 +2,8 @@ package io.hamal.plugin.net.http
 
 import AbstractRunnerTest
 import io.hamal.extension.std.decimal.ExtensionDecimalFactory
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain.vo.RunnerEnv
-import io.hamal.lib.kua.type.KuaMap
-import io.hamal.lib.kua.type.KuaString
 import io.hamal.plugin.net.http.endpoint.TestHeaderController
 import io.hamal.plugin.net.http.endpoint.TestJsonController
 import io.hamal.plugin.net.http.endpoint.TestStatusController
@@ -39,11 +38,9 @@ class PluginHttpTest(@LocalServerPort var localServerPort: Int) : AbstractRunner
                     pluginFactories = listOf(PluginHttpFactory()),
                     extensionFactories = listOf(ExtensionDecimalFactory),
                     env = RunnerEnv(
-                        KuaMap(
-                            mutableMapOf(
-                                "test_url" to KuaString("http://localhost:$localServerPort")
-                            )
-                        )
+                        HotObject.builder()
+                            .set("test_url", "http://localhost:$localServerPort")
+                            .build()
                     )
                 )
                 runner.run(unitOfWork(String(Files.readAllBytes(testFile))))

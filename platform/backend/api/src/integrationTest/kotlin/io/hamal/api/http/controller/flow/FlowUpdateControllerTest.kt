@@ -1,5 +1,6 @@
 package io.hamal.api.http.controller.flow
 
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain.vo.FlowInputs
 import io.hamal.lib.domain.vo.FlowName
 import io.hamal.lib.domain.vo.FlowType
@@ -8,8 +9,6 @@ import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
-import io.hamal.lib.kua.type.KuaMap
-import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.sdk.api.ApiError
 import io.hamal.lib.sdk.api.ApiFlowCreateRequest
 import io.hamal.lib.sdk.api.ApiFlowUpdateRequest
@@ -44,7 +43,7 @@ internal class FlowUpdateControllerTest : FlowBaseControllerTest() {
             createFlow(
                 ApiFlowCreateRequest(
                     name = FlowName("created-name"),
-                    inputs = FlowInputs(KuaMap((mutableMapOf("hamal" to KuaString("createdInputs"))))),
+                    inputs = FlowInputs(HotObject.builder().set("hamal", "createdInputs").build()),
                     type = FlowType.default
                 )
             )
@@ -55,7 +54,7 @@ internal class FlowUpdateControllerTest : FlowBaseControllerTest() {
             .body(
                 ApiFlowUpdateRequest(
                     name = FlowName("updated-name"),
-                    inputs = FlowInputs(KuaMap(mutableMapOf("hamal" to KuaString("updatedInputs"))))
+                    inputs = FlowInputs(HotObject.builder().set("hamal", "updatedInputs").build())
                 )
             )
             .execute()
@@ -68,7 +67,7 @@ internal class FlowUpdateControllerTest : FlowBaseControllerTest() {
         with(getFlow(flowId)) {
             assertThat(id, equalTo(flowId))
             assertThat(name, equalTo(FlowName("updated-name")))
-            assertThat(inputs, equalTo(FlowInputs(KuaMap(mutableMapOf("hamal" to KuaString("updatedInputs"))))))
+            assertThat(inputs, equalTo(FlowInputs(HotObject.builder().set("hamal", "updatedInputs").build())))
             assertThat(type, equalTo(FlowType.default))
         }
     }

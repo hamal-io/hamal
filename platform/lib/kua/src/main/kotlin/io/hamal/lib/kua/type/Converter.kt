@@ -20,7 +20,7 @@ fun State.toArrayType(array: TableProxyArray): KuaArray {
                 is KuaNumber,
                 is KuaString -> value as KuaType
 
-                is TableProxyMap -> toMapType(value)
+                is TableProxyMap -> toKuaMap(value)
                 is TableProxyArray -> toArrayType(value)
                 else -> TODO("$value")
             }
@@ -53,7 +53,7 @@ fun State.toProxyArray(array: KuaArray): TableProxyArray {
     }
 }
 
-fun State.toMapType(map: TableProxyMap): KuaMap {
+fun State.toKuaMap(map: TableProxyMap): KuaMap {
     val store = mutableMapOf<String, KuaType>()
 
     TableEntryIterator(
@@ -69,7 +69,7 @@ fun State.toMapType(map: TableProxyMap): KuaMap {
                 is KuaNumber,
                 is KuaString -> value as KuaType
 
-                is TableProxyMap -> toMapType(value)
+                is TableProxyMap -> toKuaMap(value)
                 is TableProxyArray -> toArrayType(value)
                 else -> TODO("$value")
             }

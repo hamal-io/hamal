@@ -1,5 +1,6 @@
 package io.hamal.bridge.http.controller.exec
 
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.*
@@ -9,9 +10,6 @@ import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
-import io.hamal.lib.kua.type.KuaNumber
-import io.hamal.lib.kua.type.KuaString
-import io.hamal.lib.kua.type.KuaMap
 import io.hamal.lib.sdk.api.ApiError
 import io.hamal.lib.sdk.bridge.BridgeExecCompleteRequest
 import io.hamal.lib.sdk.bridge.BridgeExecCompleteRequested
@@ -103,7 +101,7 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
         with(execQueryRepository.get(execId) as CompletedExec) {
             assertThat(id, equalTo(execId))
             assertThat(status, equalTo(ExecStatus.Completed))
-            assertThat(result, equalTo(ExecResult(KuaMap("hamal" to KuaString("rocks")))))
+            assertThat(result, equalTo(ExecResult(HotObject.builder().set("hamal", "rocks").build())))
         }
     }
 
@@ -111,7 +109,7 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
         val exec = (execQueryRepository.get(execId) as CompletedExec)
         with(stateQueryRepository.get(exec.correlation!!)) {
             assertThat(correlation, equalTo(exec.correlation))
-            assertThat(value, equalTo(State(KuaMap(mutableMapOf("value" to KuaNumber(13.37))))))
+            assertThat(value, equalTo(State(HotObject.builder().set("value", 13.37).build())))
         }
     }
 
@@ -135,7 +133,7 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
             assertThat(eventPayloads, hasSize(1))
 
             val payload = eventPayloads.first()
-            assertThat(payload, equalTo(EventPayload(KuaMap(mutableMapOf("value" to KuaNumber(42))))))
+            assertThat(payload, equalTo(EventPayload(HotObject.builder().set("value", 42).build())))
         }
     }
 
@@ -144,12 +142,12 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
             .path("execId", execId)
             .body(
                 BridgeExecCompleteRequest(
-                    state = ExecState(KuaMap(mutableMapOf("value" to KuaNumber(13.37)))),
-                    result = ExecResult(KuaMap("hamal" to KuaString("rocks"))),
+                    state = ExecState(HotObject.builder().set("value", 13.37).build()),
+                    result = ExecResult(HotObject.builder().set("hamal", "rocks").build()),
                     events = listOf(
                         EventToSubmit(
                             topicName = TopicName("test-completion"),
-                            payload = EventPayload(KuaMap(mutableMapOf("value" to KuaNumber(42))))
+                            payload = EventPayload(HotObject.builder().set("value", 42).build())
                         )
                     )
                 )

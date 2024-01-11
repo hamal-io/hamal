@@ -102,7 +102,7 @@ class ValueObjectInstantAdapter<TYPE : ValueObjectInstant>(
     }
 }
 
-class ValueObjectMapAdapter<TYPE : ValueObjectMap>(
+class ValueObjectHotObjectAdapter<TYPE : ValueObjecHotObject>(
     val ctor: (HotObject) -> TYPE
 ) : JsonAdapter<TYPE> {
 
