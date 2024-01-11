@@ -12,7 +12,7 @@ export default function PlaygroundPage() {
 
     const Run = () => (
         <Button onClick={() => {
-            adhoc(auth.defaultFlowIds[auth.groupId], code)
+            adhoc(auth.defaultFlowIds.find(defaultFlowId => defaultFlowId.groupId == auth.groupId).flowId, code)
         }}>Play</Button>
     )
     return (

@@ -1,6 +1,7 @@
 package io.hamal.lib.domain.vo
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.serialization.*
 import io.hamal.lib.domain.State
 
@@ -47,6 +48,8 @@ object ValueObjectJsonModule : JsonModule() {
         this[ExecState::class] = ValueObjectHotObjectAdapter(::ExecState)
         this[ExecToken::class] = ValueObjectStringAdapter(::ExecToken)
         this[ExecLogId::class] = ValueObjectIdAdapter(::ExecLogId)
+        this[ExecLogTimestamp::class] = ValueObjectInstantAdapter(::ExecLogTimestamp)
+        this[ExecLogMessage::class] = ValueObjectStringAdapter(::ExecLogMessage)
 
         this[ExtensionId::class] = ValueObjectIdAdapter(::ExtensionId)
         this[ExtensionName::class] = ValueObjectStringAdapter(::ExtensionName)
@@ -77,6 +80,8 @@ object ValueObjectJsonModule : JsonModule() {
         this[Invocation::class] = Invocation.Adapter
         this[InvocationType::class] = ValueObjectStringAdapter(::InvocationType)
         this[InvocationInputs::class] = ValueObjectHotObjectAdapter(::InvocationInputs)
+
+        this[Limit::class] = ValueObjectIntAdapter(::Limit)
 
         this[RequestId::class] = ValueObjectIdAdapter(::RequestId)
         this[RequestType::class] = ValueObjectStringAdapter(::RequestType)
