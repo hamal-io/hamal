@@ -172,7 +172,7 @@ class ScheduledExec(
     override val id: ExecId,
     override val updatedAt: UpdatedAt,
     val plannedExec: PlannedExec,
-    val scheduledAt: ScheduledAt,
+    val scheduledAt: ExecScheduledAt,
 ) : Exec() {
     override val status = ExecStatus.Scheduled
     override val flowId get() = plannedExec.flowId
@@ -192,7 +192,7 @@ class QueuedExec(
     override val id: ExecId,
     override val updatedAt: UpdatedAt,
     val scheduledExec: ScheduledExec,
-    val queuedAt: QueuedAt,
+    val queuedAt: ExecQueuedAt,
 ) : Exec() {
     override val status = ExecStatus.Queued
     override val flowId get() = scheduledExec.flowId
@@ -230,7 +230,7 @@ class CompletedExec(
     override val id: ExecId,
     override val updatedAt: UpdatedAt,
     val startedExec: StartedExec,
-    val completedAt: CompletedAt,
+    val completedAt: ExecCompletedAt,
     val result: ExecResult,
     val state: ExecState
 ) : Exec() {
@@ -253,7 +253,7 @@ class FailedExec(
     override val updatedAt: UpdatedAt,
     val startedExec: StartedExec,
     //FIXME failedAt
-    val failedAt: FailedAt,
+    val failedAt: ExecFailedAt,
     val result: ExecResult
 ) : Exec() {
     override val status = ExecStatus.Failed

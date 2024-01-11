@@ -2,10 +2,7 @@ package io.hamal.lib.common.serialization
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import io.hamal.lib.common.domain.ValueObjectId
-import io.hamal.lib.common.domain.ValueObjectInstant
-import io.hamal.lib.common.domain.ValueObjectInt
-import io.hamal.lib.common.domain.ValueObjectString
+import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.hot.HotArray
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.snowflake.SnowflakeId
@@ -167,4 +164,51 @@ internal object ValueObjectInstantAdapterTest {
     private class TestInstantValueObject(
         override val value: Instant
     ) : ValueObjectInstant()
+}
+
+
+internal object ValueObjectHotObjectAdapterTest {
+
+    @Test
+    fun serialize() {
+        val result = testDelegate.toJson(
+            TestHotObjectValueObject(
+                HotObject.builder()
+                    .set("some-string", "some-string-value")
+                    .set("some-boolean", true)
+                    .set("some-number", 42)
+                    .build()
+            )
+        )
+        assertThat(result, equalTo("""{"some-string":"some-string-value","some-boolean":true,"some-number":42}"""))
+    }
+
+    @Test
+    fun deserialize() {
+        val expected = TestHotObjectValueObject(
+            HotObject.builder()
+                .set("some-string", "some-string-value")
+                .set("some-boolean", true)
+                .set("some-number", 42)
+                .build()
+        )
+        val result = testDelegate.fromJson(
+            """{"some-string":"some-string-value","some-boolean":true,"some-number":42}""",
+            TestHotObjectValueObject::class.java
+        )
+        assertThat(result, equalTo(expected))
+    }
+
+    private val testDelegate: Gson =
+        GsonBuilder()
+            .registerTypeAdapter(HotObject::class.java, HotObjectAdapter)
+            .registerTypeAdapter(
+                TestHotObjectValueObject::class.java,
+                ValueObjectHotObjectAdapter(::TestHotObjectValueObject)
+            )
+            .create()
+
+    private class TestHotObjectValueObject(
+        override val value: HotObject
+    ) : ValueObjecHotObject()
 }

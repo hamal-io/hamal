@@ -3,24 +3,22 @@ package io.hamal.api.http.controller.feedback
 import io.hamal.lib.domain._enum.FeedbackMood
 import io.hamal.lib.domain.request.FeedbackCreateRequest
 import io.hamal.lib.domain.vo.FeedbackMessage
-import io.hamal.repository.api.FeedbackCmdRepository
 import io.hamal.repository.api.FeedbackList
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
 
 internal class FeedbackListControllerTest : FeedbackBaseControllerTest() {
+
     @Test
     fun `No feedbacks`() {
-        val res = httpTemplate.get("/v1/feedbacks")
-            .execute(FeedbackList::class)
-
+        val res = httpTemplate.get("/v1/feedbacks").execute(FeedbackList::class)
         assertThat(res.feedbacks, empty())
     }
 
     @Test
     fun `Single Feedback`() {
-        val fbId = createFeedback(
+        createFeedback(
             FeedbackCreateRequest(
                 mood = FeedbackMood.Normal,
                 message = FeedbackMessage("My mood is so normal"),

@@ -9,7 +9,7 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.registerGlobalFunction
 import org.junit.jupiter.api.Test
 
-internal class MapTypeTest {
+internal class KuaMapTest {
 
     @Test
     fun `Map as function result`() {
@@ -48,12 +48,14 @@ internal class MapTypeTest {
                 }
             )
 
-            sandbox.load("""
+            sandbox.load(
+                """
                 local err, table = func()
                 assert(err == nil)
                 assert(table.id == "A")
                 assert(table.level_one.answer == 42)
-            """.trimIndent())
+            """.trimIndent()
+            )
         }
     }
 

@@ -1,10 +1,7 @@
 package io.hamal.lib.common.serialization
 
 import com.google.gson.*
-import io.hamal.lib.common.domain.ValueObjectId
-import io.hamal.lib.common.domain.ValueObjectInstant
-import io.hamal.lib.common.domain.ValueObjectInt
-import io.hamal.lib.common.domain.ValueObjectString
+import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.hot.HotArray
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.snowflake.SnowflakeId
@@ -102,6 +99,19 @@ class ValueObjectInstantAdapter<TYPE : ValueObjectInstant>(
 
     override fun serialize(src: TYPE, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
         return context.serialize(src.value, Instant::class.java)
+    }
+}
+
+class ValueObjectHotObjectAdapter<TYPE : ValueObjecHotObject>(
+    val ctor: (HotObject) -> TYPE
+) : JsonAdapter<TYPE> {
+
+    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): TYPE {
+        return ctor(context.deserialize(json, HotObject::class.java))
+    }
+
+    override fun serialize(src: TYPE, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
+        return context.serialize(src.value, HotObject::class.java)
     }
 }
 

@@ -33,9 +33,9 @@ internal open class PlatformEventConfig {
         .register(TriggerCreatedEvent::class, TriggerCreatedHandler(fixedRateTriggerService))
         .register(ExecPlannedEvent::class, ExecPlannedHandler(orchestrationService))
         .register(ExecScheduledEvent::class, ExecScheduledHandler(execCmdRepository, eventEmitter))
-        .register(ExecutionQueuedEvent::class, ExecQueuedHandler())
-        .register(ExecutionCompletedEvent::class, ExecCompletedHandler(orchestrationService))
-        .register(ExecutionFailedEvent::class, ExecFailedHandler(orchestrationService))
+        .register(ExecQueuedEvent::class, ExecQueuedHandler())
+        .register(ExecCompletedEvent::class, ExecCompletedHandler(orchestrationService))
+        .register(ExecFailedEvent::class, ExecFailedHandler(orchestrationService))
         .create()
 
 }

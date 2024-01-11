@@ -4,10 +4,11 @@ import com.google.gson.Gson
 import io.hamal.core.component.*
 import io.hamal.lib.common.hot.HotJsonModule
 import io.hamal.lib.common.serialization.JsonFactoryBuilder
-import io.hamal.lib.domain.vo.InvocationModule
 import io.hamal.lib.domain.vo.ValueObjectJsonModule
 import io.hamal.lib.kua.type.KuaJsonModule
+import io.hamal.lib.sdk.api.ApiJsonModule
 import io.hamal.repository.api.DomainJsonModule
+import io.hamal.repository.api.event.PlatformEventJsonModule
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.format.FormatterRegistry
@@ -27,10 +28,11 @@ open class WebConfig : WebMvcConfigurer {
 
     @Bean
     open fun gson(): Gson = JsonFactoryBuilder()
+        .register(ApiJsonModule)
         .register(DomainJsonModule)
         .register(HotJsonModule)
-        .register(InvocationModule)
         .register(KuaJsonModule)
+        .register(PlatformEventJsonModule)
         .register(ValueObjectJsonModule)
         .build()
 

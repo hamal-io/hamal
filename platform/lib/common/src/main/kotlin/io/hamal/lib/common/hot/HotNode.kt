@@ -1,5 +1,11 @@
 package io.hamal.lib.common.hot
 
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonElement
+import com.google.gson.JsonSerializationContext
+import io.hamal.lib.common.serialization.GsonTransform
+import io.hamal.lib.common.serialization.JsonAdapter
+import java.lang.reflect.Type
 import java.math.BigDecimal
 import java.math.BigInteger
 
@@ -37,4 +43,14 @@ sealed interface HotNode {
     fun asTerminal(): HotTerminal = throw IllegalStateException("Not HotTerminal")
 
     fun deepCopy(): HotNode
+
+    object Adapter : JsonAdapter<HotNode> {
+        override fun serialize(src: HotNode, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
+            return GsonTransform.fromNode(src)
+        }
+
+        override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): HotNode {
+            return GsonTransform.toNode(json)
+        }
+    }
 }

@@ -1,12 +1,11 @@
 package io.hamal.core.request.handler.func
 
 import io.hamal.core.request.handler.BaseReqHandlerTest
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain.request.FuncCreateRequested
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.type.KuaMap
-import io.hamal.lib.kua.type.KuaString
 import io.hamal.repository.api.FuncCode
 import io.hamal.repository.api.FuncDeployment
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
@@ -30,7 +29,7 @@ internal class FuncCreateHandlerTest : BaseReqHandlerTest() {
                 with(funcs.first()) {
                     assertThat(id, equalTo(FuncId(12345)))
                     assertThat(name, equalTo(FuncName("awesome-func")))
-                    assertThat(inputs, equalTo(FuncInputs(KuaMap(mutableMapOf("hamal" to KuaString("rocks"))))))
+                    assertThat(inputs, equalTo(FuncInputs(HotObject.builder().set("hamal", "rocks").build())))
                     assertThat(deployment.version, equalTo(codeQueryRepository.get(CodeId(34567)).version))
 
                     assertThat(
@@ -68,7 +67,7 @@ internal class FuncCreateHandlerTest : BaseReqHandlerTest() {
             funcId = FuncId(12345),
             flowId = FlowId(23456),
             name = FuncName("awesome-func"),
-            inputs = FuncInputs(KuaMap(mutableMapOf("hamal" to KuaString("rocks")))),
+            inputs = FuncInputs(HotObject.builder().set("hamal", "rocks").build()),
             codeId = CodeId(34567),
             code = CodeValue("some code"),
         )

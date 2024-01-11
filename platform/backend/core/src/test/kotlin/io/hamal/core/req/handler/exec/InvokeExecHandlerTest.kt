@@ -1,11 +1,9 @@
 package io.hamal.core.request.handler.exec
 
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.InvocationInputs
-import io.hamal.lib.kua.type.KuaMap
-import io.hamal.lib.kua.type.KuaNumber
-import io.hamal.lib.kua.type.KuaString
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -21,23 +19,19 @@ class ToExecInputsTest {
     @Test
     fun ok() {
         val invocationInputs = InvocationInputs(
-            KuaMap(
-                mutableMapOf(
-                    "key" to KuaNumber(2810),
-                    "invoke" to KuaString("invoke")
-                )
-            )
+            HotObject.builder()
+                .set("key", 2810)
+                .set("invoke", "invoke")
+                .build()
         )
         val result = invocationInputs.toExecInputs()
         assertThat(
             result, equalTo(
                 ExecInputs(
-                    KuaMap(
-                        mutableMapOf(
-                            "key" to KuaNumber(2810),
-                            "invoke" to KuaString("invoke")
-                        )
-                    )
+                    HotObject.builder()
+                        .set("key", 2810)
+                        .set("invoke", "invoke")
+                        .build()
                 )
             )
         )
@@ -56,32 +50,26 @@ class MergeTest {
     @Test
     fun `invocation inputs overrides func inputs`() {
         val funcInputs = FuncInputs(
-            KuaMap(
-                mutableMapOf(
-                    "key" to KuaNumber(1),
-                    "func" to KuaString("func")
-                )
-            )
+            HotObject.builder()
+                .set("key", 1)
+                .set("func", "func")
+                .build()
         )
         val invocationInputs = InvocationInputs(
-            KuaMap(
-                mutableMapOf(
-                    "key" to KuaNumber(2810),
-                    "invoke" to KuaString("invoke")
-                )
-            )
+            HotObject.builder()
+                .set("key", 2810)
+                .set("invoke", "invoke")
+                .build()
         )
         val result = merge(funcInputs, invocationInputs)
         assertThat(
             result, equalTo(
                 ExecInputs(
-                    KuaMap(
-                        mutableMapOf(
-                            "key" to KuaNumber(2810),
-                            "func" to KuaString("func"),
-                            "invoke" to KuaString("invoke")
-                        )
-                    )
+                    HotObject.builder()
+                        .set("key", 2810)
+                        .set("invoke", "invoke")
+                        .set("func", "func")
+                        .build()
                 )
             )
         )

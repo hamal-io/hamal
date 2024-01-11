@@ -9,7 +9,7 @@ import io.hamal.lib.domain.State
 import io.hamal.lib.domain.request.ExecCompleteRequested
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.*
-import io.hamal.repository.api.event.ExecutionCompletedEvent
+import io.hamal.repository.api.event.ExecCompletedEvent
 import io.hamal.repository.api.log.AppenderImpl
 import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.repository.api.log.CreateTopic.TopicToCreate
@@ -52,7 +52,7 @@ class ExecCompleteHandler(
         )
 
     private fun emitCompletionEvent(cmdId: CmdId, exec: CompletedExec) {
-        eventEmitter.emit(cmdId, ExecutionCompletedEvent(exec))
+        eventEmitter.emit(cmdId, ExecCompletedEvent(exec))
     }
 
     private fun setState(cmdId: CmdId, exec: CompletedExec) {

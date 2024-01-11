@@ -8,7 +8,17 @@ import io.hamal.lib.kua.type.KuaType.Type
 
 sealed interface KuaType {
     enum class Type {
-        Any, Array, Boolean, Code, Decimal, Error, Function, Map, Nil, Number, String
+        Any,
+        Array,
+        Boolean,
+        Code,
+        Decimal,
+        Error,
+        Function,
+        Map,
+        Nil,
+        Number,
+        String
     }
 
     val type: Type
@@ -18,7 +28,7 @@ sealed interface KuaType {
         override fun serialize(
             src: KuaType, typeOfSrc: java.lang.reflect.Type, context: JsonSerializationContext
         ): JsonElement {
-            TODO("Not yet implemented")
+            return context.serialize(src)
         }
 
         override fun deserialize(

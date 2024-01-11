@@ -16,7 +16,7 @@ assert(#response == 5)
 
 for idx = 1, 5 do
     assert(response[idx].status_code == 200)
-    assert(response[idx].content_type == 'application/json')
+    assert(response[idx].content_type == 'application/json;charset=UTF-8')
     assert(response[idx].content ~= nil)
     assert(table_length(response[idx].content) == 0)
 end

@@ -1,14 +1,13 @@
 package io.hamal.api.http.controller.topic
 
+import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.domain.request.TriggerCreateRequested
 import io.hamal.lib.domain.vo.TopicEntryPayload
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.body
-import io.hamal.lib.kua.type.KuaMap
-import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.sdk.api.ApiError
-import io.hamal.lib.domain.request.TriggerCreateRequested
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
@@ -23,7 +22,7 @@ internal class EntryAppendControllerTest : TopicBaseControllerTest() {
         awaitCompleted(
             appendToTopic(
                 topicId,
-                TopicEntryPayload(KuaMap(mutableMapOf("hamal" to KuaString("rocks"))))
+                TopicEntryPayload(HotObject.builder().set("hamal", "rocks").build())
             )
         )
 
@@ -33,7 +32,7 @@ internal class EntryAppendControllerTest : TopicBaseControllerTest() {
             val entry = entries.first()
             assertThat(
                 entry.payload, equalTo(
-                    TopicEntryPayload(KuaMap(mutableMapOf("hamal" to KuaString("rocks"))))
+                    TopicEntryPayload(HotObject.builder().set("hamal", "rocks").build())
                 )
             )
         }
@@ -47,7 +46,7 @@ internal class EntryAppendControllerTest : TopicBaseControllerTest() {
             IntRange(1, 10).map {
                 appendToTopic(
                     topicId,
-                    TopicEntryPayload(KuaMap(mutableMapOf("hamal" to KuaString("rocks"))))
+                    TopicEntryPayload(HotObject.builder().set("hamal", "rocks").build())
                 )
             }
         )
@@ -57,7 +56,7 @@ internal class EntryAppendControllerTest : TopicBaseControllerTest() {
             entries.forEach { entry ->
                 assertThat(
                     entry.payload,
-                    equalTo(TopicEntryPayload(KuaMap(mutableMapOf("hamal" to KuaString("rocks")))))
+                    equalTo(TopicEntryPayload(HotObject.builder().set("hamal", "rocks").build()))
                 )
             }
         }
@@ -66,7 +65,7 @@ internal class EntryAppendControllerTest : TopicBaseControllerTest() {
     @Test
     fun `Tries to append to topic which does not exists`() {
         val topicResponse = httpTemplate.post("/v1/topics/1234/entries")
-            .body(TopicEntryPayload(KuaMap(mutableMapOf("hamal" to KuaString("rocks")))))
+            .body(TopicEntryPayload(HotObject.builder().set("hamal", "rocks").build()))
             .execute()
 
         assertThat(topicResponse.statusCode, equalTo(NotFound))

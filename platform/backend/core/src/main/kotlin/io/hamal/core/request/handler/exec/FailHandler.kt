@@ -7,7 +7,7 @@ import io.hamal.lib.domain.request.ExecFailRequested
 import io.hamal.repository.api.ExecCmdRepository.FailCmd
 import io.hamal.repository.api.FailedExec
 import io.hamal.repository.api.StartedExec
-import io.hamal.repository.api.event.ExecutionFailedEvent
+import io.hamal.repository.api.event.ExecFailedEvent
 import org.springframework.stereotype.Component
 
 @Component
@@ -30,6 +30,6 @@ class ExecFailHandler(
         execCmdRepository.fail(FailCmd(req.cmdId(), req.execId, req.result))
 
     private fun emitFailedEvent(cmdId: CmdId, exec: FailedExec) {
-        eventEmitter.emit(cmdId, ExecutionFailedEvent(exec))
+        eventEmitter.emit(cmdId, ExecFailedEvent(exec))
     }
 }

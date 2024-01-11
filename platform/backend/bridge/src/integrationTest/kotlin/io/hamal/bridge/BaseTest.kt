@@ -2,13 +2,12 @@ package io.hamal.bridge
 
 import io.hamal.core.CoreConfig
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.AccountType.Root
-import io.hamal.lib.kua.type.KuaMap
-import io.hamal.lib.kua.type.KuaString
 import io.hamal.repository.api.*
 import io.hamal.repository.api.AuthCmdRepository.CreateTokenAuthCmd
 import io.hamal.repository.api.ExecCmdRepository.StartCmd
@@ -222,14 +221,10 @@ internal abstract class BaseTest {
                     id = CmdId(5),
                     execId = startedExec.id,
                     result = ExecResult(
-                        KuaMap(
-                            "hamal" to KuaString("Great success")
-                        )
+                        HotObject.builder().set("hamal", "Great success").build()
                     ),
                     state = ExecState(
-                        KuaMap(
-                            "persisted" to KuaString("InState")
-                        )
+                        HotObject.builder().set("persisted", "Instate").build()
                     )
                 )
             )
@@ -239,9 +234,7 @@ internal abstract class BaseTest {
                     id = CmdId(5),
                     execId = startedExec.id,
                     result = ExecResult(
-                        KuaMap(
-                            "message" to KuaString("BaseTest.kt")
-                        )
+                        HotObject.builder().set("message", "BaseTest.kt").build()
                     )
                 )
             )

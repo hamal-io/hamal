@@ -78,7 +78,7 @@ internal object PluginSmtpTest : AbstractRunnerTest() {
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
             connector = TestFailConnector { _, result ->
-                assertThat(result.value.getString("message"), containsString("default_encoding not set"))
+                assertThat(result.value.stringValue("message"), containsString("default_encoding not set"))
             }
         ).run(
             unitOfWork(
@@ -120,7 +120,7 @@ internal object PluginSmtpTest : AbstractRunnerTest() {
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
             connector = TestFailConnector { _, result ->
-                assertThat(result.value.getString("message"), containsString("host not set"))
+                assertThat(result.value.stringValue("message"), containsString("host not set"))
             }
         ).run(
             unitOfWork(
@@ -162,7 +162,7 @@ internal object PluginSmtpTest : AbstractRunnerTest() {
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
             connector = TestFailConnector { _, result ->
-                assertThat(result.value.getString("message"), containsString("port not set"))
+                assertThat(result.value.stringValue("message"), containsString("port not set"))
             }
         ).run(
             unitOfWork(
@@ -278,7 +278,7 @@ internal object PluginSmtpTest : AbstractRunnerTest() {
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
             connector = TestFailConnector { _, result ->
-                assertThat(result.value.getString("message"), containsString("protocol not set"))
+                assertThat(result.value.stringValue("message"), containsString("protocol not set"))
             }
         ).run(
             unitOfWork(
@@ -320,7 +320,7 @@ internal object PluginSmtpTest : AbstractRunnerTest() {
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
             connector = TestFailConnector { _, result ->
-                assertThat(result.value.getString("message"), containsString("debug not set"))
+                assertThat(result.value.stringValue("message"), containsString("debug not set"))
             }
         ).run(
             unitOfWork(
@@ -362,7 +362,7 @@ internal object PluginSmtpTest : AbstractRunnerTest() {
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
             connector = TestFailConnector { _, result ->
-                assertThat(result.value.getString("message"), containsString("enable_starttls not set"))
+                assertThat(result.value.stringValue("message"), containsString("enable_starttls not set"))
             }
         ).run(
             unitOfWork(
@@ -404,7 +404,7 @@ internal object PluginSmtpTest : AbstractRunnerTest() {
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
             connector = TestFailConnector { _, result ->
-                assertThat(result.value.getString("message"), containsString("test_connection not set"))
+                assertThat(result.value.stringValue("message"), containsString("test_connection not set"))
             }).run(
             unitOfWork(
                 """
@@ -445,7 +445,7 @@ internal object PluginSmtpTest : AbstractRunnerTest() {
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
             connector = TestFailConnector { _, result ->
-                assertThat(result.value.getString("message"), containsString("from not set"))
+                assertThat(result.value.stringValue("message"), containsString("from not set"))
             }
         ).run(
             unitOfWork(
@@ -487,7 +487,7 @@ internal object PluginSmtpTest : AbstractRunnerTest() {
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
             connector = TestFailConnector { _, result ->
-                assertThat(result.value.getString("message"), containsString("to not set"))
+                assertThat(result.value.stringValue("message"), containsString("to not set"))
             }
         ).run(
             unitOfWork(
@@ -529,7 +529,7 @@ internal object PluginSmtpTest : AbstractRunnerTest() {
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
             connector = TestFailConnector { _, result ->
-                assertThat(result.value.getString("message"), containsString("subject not set"))
+                assertThat(result.value.stringValue("message"), containsString("subject not set"))
             }
         ).run(
             unitOfWork(
@@ -571,7 +571,7 @@ internal object PluginSmtpTest : AbstractRunnerTest() {
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
             connector = TestFailConnector { _, result ->
-                assertThat(result.value.getString("message"), containsString("content not set"))
+                assertThat(result.value.stringValue("message"), containsString("content not set"))
             }
         ).run(
             unitOfWork(
@@ -613,7 +613,7 @@ internal object PluginSmtpTest : AbstractRunnerTest() {
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
             connector = TestFailConnector { _, result ->
-                assertThat(result.value.getString("message"), containsString("content_type not set"))
+                assertThat(result.value.stringValue("message"), containsString("content_type not set"))
             }
         ).run(
             unitOfWork(
@@ -655,7 +655,7 @@ internal object PluginSmtpTest : AbstractRunnerTest() {
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
             connector = TestFailConnector { _, result ->
-                assertThat(result.value.getString("message"), containsString("priority not set"))
+                assertThat(result.value.stringValue("message"), containsString("priority not set"))
             }
         ).run(
             unitOfWork(
@@ -697,7 +697,7 @@ internal object PluginSmtpTest : AbstractRunnerTest() {
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
             connector = TestFailConnector { _, result ->
-                assertThat(result.value.getString("message"), containsString("connection_timeout not set"))
+                assertThat(result.value.stringValue("message"), containsString("connection_timeout not set"))
             }
         ).run(
             unitOfWork(
@@ -739,7 +739,7 @@ internal object PluginSmtpTest : AbstractRunnerTest() {
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
             connector = TestFailConnector { _, result ->
-                assertThat(result.value.getString("message"), containsString("timeout not set"))
+                assertThat(result.value.stringValue("message"), containsString("timeout not set"))
             }
         ).run(
             unitOfWork(
@@ -781,7 +781,7 @@ internal object PluginSmtpTest : AbstractRunnerTest() {
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
             connector = TestFailConnector { _, result ->
-                assertThat(result.value.getString("message"), containsString("write_timeout not set"))
+                assertThat(result.value.stringValue("message"), containsString("write_timeout not set"))
             }
         ).run(
             unitOfWork(

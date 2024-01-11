@@ -1,12 +1,11 @@
 package io.hamal.api.http.controller.func
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.body
-import io.hamal.lib.kua.type.KuaMap
-import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.sdk.api.ApiError
 import io.hamal.lib.sdk.api.ApiFuncCreateRequest
 import io.hamal.repository.api.FlowCmdRepository.CreateCmd
@@ -23,7 +22,7 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
         val result = createFunc(
             ApiFuncCreateRequest(
                 name = FuncName("test-func"),
-                inputs = FuncInputs(KuaMap(mutableMapOf("hamal" to KuaString("rocks")))),
+                inputs = FuncInputs(HotObject.builder().set("hamal", "rocks").build()),
                 code = CodeValue("13 + 37")
             )
         )
@@ -32,7 +31,7 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
         val func = funcQueryRepository.get(result.funcId)
         with(func) {
             assertThat(name, equalTo(FuncName("test-func")))
-            assertThat(inputs, equalTo(FuncInputs(KuaMap(mutableMapOf("hamal" to KuaString("rocks"))))))
+            assertThat(inputs, equalTo(FuncInputs(HotObject.builder().set("hamal", "rocks").build())))
 
             val flow = flowQueryRepository.get(flowId)
             assertThat(flow.name, equalTo(FlowName("hamal")))
@@ -61,7 +60,7 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
             flowId = flow.id,
             req = ApiFuncCreateRequest(
                 name = FuncName("test-func"),
-                inputs = FuncInputs(KuaMap(mutableMapOf("hamal" to KuaString("rocks")))),
+                inputs = FuncInputs(HotObject.builder().set("hamal", "rocks").build()),
                 code = CodeValue("13 + 37")
             )
         )
@@ -71,7 +70,7 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
 
         with(func) {
             assertThat(name, equalTo(FuncName("test-func")))
-            assertThat(inputs, equalTo(FuncInputs(KuaMap(mutableMapOf("hamal" to KuaString("rocks"))))))
+            assertThat(inputs, equalTo(FuncInputs(HotObject.builder().set("hamal", "rocks").build())))
 
             flowQueryRepository.get(flowId).let {
                 assertThat(it.id, equalTo(flow.id))
@@ -92,7 +91,7 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
             .body(
                 ApiFuncCreateRequest(
                     name = FuncName("test-func"),
-                    inputs = FuncInputs(KuaMap(mutableMapOf("hamal" to KuaString("rocks")))),
+                    inputs = FuncInputs(HotObject.builder().set("hamal", "rocks").build()),
                     code = CodeValue("13 + 37")
                 )
             )

@@ -1,5 +1,6 @@
 package io.hamal.lib.common.domain
 
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.snowflake.SnowflakeId
 import java.time.Instant
 
@@ -54,6 +55,12 @@ abstract class ValueObjectInt : ValueObject.ComparableImpl<Int>() {
 }
 
 abstract class ValueObjectInstant : ValueObject.ComparableImpl<Instant>() {
+    override fun toString(): String {
+        return "${this::class.simpleName}(${value})"
+    }
+}
+
+abstract class ValueObjecHotObject : ValueObject.BaseImpl<HotObject>() {
     override fun toString(): String {
         return "${this::class.simpleName}(${value})"
     }

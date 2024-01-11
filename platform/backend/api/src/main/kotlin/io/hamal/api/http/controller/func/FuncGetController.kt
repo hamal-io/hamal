@@ -20,7 +20,7 @@ internal class FuncGetController(
 ) {
 
     @GetMapping("/v1/funcs/{funcId}")
-    fun getFunc(@PathVariable("funcId") funcId: FuncId) = retry {
+    fun getFunc(@PathVariable("funcId") funcId: FuncId): ResponseEntity<ApiFunc> = retry {
         getFunc(funcId, ::assemble)
     }
 

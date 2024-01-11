@@ -1,5 +1,6 @@
 package io.hamal.api.http.controller.blueprint
 
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain.vo.BlueprintInputs
 import io.hamal.lib.domain.vo.BlueprintName
 import io.hamal.lib.domain.vo.CodeValue
@@ -7,8 +8,6 @@ import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.HttpSuccessResponse
-import io.hamal.lib.kua.type.KuaMap
-import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.sdk.api.ApiBlueprint
 import io.hamal.lib.sdk.api.ApiBlueprintCreateRequest
 import io.hamal.lib.sdk.api.ApiError
@@ -24,7 +23,7 @@ internal class BlueprintGetControllerTest : BlueprintBaseControllerTest() {
             createBlueprint(
                 ApiBlueprintCreateRequest(
                     name = BlueprintName("TestBlueprint"),
-                    inputs = BlueprintInputs(KuaMap(mutableMapOf("hamal" to KuaString("rockz")))),
+                    inputs = BlueprintInputs(HotObject.builder().set("hamal", "rocks").build()),
                     value = CodeValue("1 + 1")
                 )
             )
@@ -41,7 +40,7 @@ internal class BlueprintGetControllerTest : BlueprintBaseControllerTest() {
         with(getResponse.result(ApiBlueprint::class)) {
             assertThat(id, equalTo(bpId))
             assertThat(name, equalTo(BlueprintName("TestBlueprint")))
-            assertThat(inputs, equalTo(BlueprintInputs(KuaMap(mutableMapOf("hamal" to KuaString("rockz"))))))
+            assertThat(inputs, equalTo(BlueprintInputs(HotObject.builder().set("hamal", "rocks").build())))
             assertThat(value, equalTo(CodeValue("1 + 1")))
         }
     }

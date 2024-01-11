@@ -51,7 +51,7 @@ abstract class RecordMemoryRepository<ID : ValueObjectId, RECORD : Record<ID>, O
         return recordsOf(id)
             .filter {
                 val seq = it.recordSequence
-                seq != null && seq >= sequence
+                seq != null && seq <= sequence
             }
             .ifEmpty { null }
             ?.let { records ->

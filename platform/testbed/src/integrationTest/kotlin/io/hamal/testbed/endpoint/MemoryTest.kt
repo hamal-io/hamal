@@ -3,7 +3,8 @@ package io.hamal.testbed.endpoint
 import io.hamal.api.ApiConfig
 import io.hamal.bridge.BridgeConfig
 import io.hamal.core.CoreConfig
-import io.hamal.lib.http.HttpTemplateImpl
+import io.hamal.lib.domain.vo.AuthToken
+import io.hamal.lib.sdk.ApiSdkImpl
 import io.hamal.runner.RunnerConfig
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
@@ -56,10 +57,9 @@ internal object MemoryEndpointTest : BaseEndpointTest() {
         }
     }
 
-    override val apiHttpTemplate = HttpTemplateImpl(
-        baseUrl = "http://localhost:8047",
-        headerFactory = {
-            this["authorization"] = "Bearer root-token"
-        }
+    override val sdk = ApiSdkImpl(
+        apiHost = "http://localhost:8047",
+        token = AuthToken("root-token")
     )
+
 }

@@ -6,9 +6,8 @@ import io.hamal.extension.net.http.endpoint.TestJsonController
 import io.hamal.extension.net.http.endpoint.TestStatusController
 import io.hamal.extension.net.http.fixture.TestWebConfig
 import io.hamal.extension.std.decimal.ExtensionDecimalFactory
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain.vo.RunnerEnv
-import io.hamal.lib.kua.type.KuaMap
-import io.hamal.lib.kua.type.KuaString
 import io.hamal.plugin.net.http.PluginHttpFactory
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
@@ -43,11 +42,9 @@ class ExtensionHttpTest(@LocalServerPort var localServerPort: Int) : AbstractRun
                         ExtensionHttpFactory
                     ),
                     env = RunnerEnv(
-                        KuaMap(
-                            mutableMapOf(
-                                "test_url" to KuaString("http://localhost:$localServerPort")
-                            )
-                        )
+                        HotObject.builder()
+                            .set("test_url", "http://localhost:$localServerPort")
+                            .build()
                     )
                 )
                 runner.run(unitOfWork(String(Files.readAllBytes(testFile))))

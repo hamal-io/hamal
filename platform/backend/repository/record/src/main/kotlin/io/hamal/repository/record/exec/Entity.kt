@@ -1,9 +1,9 @@
 package io.hamal.repository.api.record.exec
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.type.KuaMap
 import io.hamal.repository.api.*
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordEntity
@@ -104,17 +104,17 @@ data class ExecEntity(
             flowId = flowId,
             groupId = groupId,
             correlation = correlation,
-            inputs = inputs ?: ExecInputs(KuaMap()),
+            inputs = inputs ?: ExecInputs(HotObject.empty),
             code = code ?: ExecCode(),
             invocation = invocation!!
         )
 
         if (status == ExecStatus.Planned) return plannedExec
 
-        val scheduledExec = ScheduledExec(cmdId, id, recordedAt.toUpdatedAt(), plannedExec, ScheduledAt.now())
+        val scheduledExec = ScheduledExec(cmdId, id, recordedAt.toUpdatedAt(), plannedExec, ExecScheduledAt.now())
         if (status == ExecStatus.Scheduled) return scheduledExec
 
-        val queuedExec = QueuedExec(cmdId, id, recordedAt.toUpdatedAt(), scheduledExec, QueuedAt.now())
+        val queuedExec = QueuedExec(cmdId, id, recordedAt.toUpdatedAt(), scheduledExec, ExecQueuedAt.now())
         if (status == ExecStatus.Queued) return queuedExec
 
         val startedExec = StartedExec(cmdId, id, recordedAt.toUpdatedAt(), queuedExec)
@@ -126,12 +126,20 @@ data class ExecEntity(
                 id,
                 recordedAt.toUpdatedAt(),
                 startedExec,
-                CompletedAt.now(),
+                ExecCompletedAt.now(),
                 result!!,
                 state!!
             )
 
-            ExecStatus.Failed -> FailedExec(cmdId, id, recordedAt.toUpdatedAt(), startedExec, FailedAt.now(), result!!)
+            ExecStatus.Failed -> FailedExec(
+                cmdId,
+                id,
+                recordedAt.toUpdatedAt(),
+                startedExec,
+                ExecFailedAt.now(),
+                result!!
+            )
+
             else -> TODO()
         }
     }

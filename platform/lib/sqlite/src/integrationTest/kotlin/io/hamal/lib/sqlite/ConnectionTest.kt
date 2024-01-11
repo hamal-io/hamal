@@ -121,9 +121,9 @@ class ConnectionImplTest {
         @Test
         fun `With named parameter of type string`() {
             testInstance.execute("INSERT INTO string_table(value) VALUES(:some_value)") {
-                set("some_value", "ThisHamalConnectionRockz")
+                set("some_value", "ThisHamalConnectionrocks")
             }
-            verifyIsOne("SELECT COUNT(*) FROM string_table WHERE value = 'ThisHamalConnectionRockz'")
+            verifyIsOne("SELECT COUNT(*) FROM string_table WHERE value = 'ThisHamalConnectionrocks'")
         }
 
         @Test
@@ -133,14 +133,14 @@ class ConnectionImplTest {
             ) {
                 query {
                     set("some_id", 1337)
-                    set("some_value", "ThisHamalConnectionRockz")
+                    set("some_value", "ThisHamalConnectionrocks")
                 }
                 map {
                     it.getInt("id")
                 }
             }
             assertThat(result, equalTo(1337))
-            verifyIsOne("SELECT COUNT(*) FROM string_table WHERE value = 'ThisHamalConnectionRockz'")
+            verifyIsOne("SELECT COUNT(*) FROM string_table WHERE value = 'ThisHamalConnectionrocks'")
         }
 
         @Test
@@ -152,7 +152,7 @@ class ConnectionImplTest {
             ) {
                 query {
                     set("some_id", 1337)
-                    set("some_value", "ThisHamalConnectionRockz")
+                    set("some_value", "ThisHamalConnectionrocks")
                 }
                 map {
                     it.getInt("id")
@@ -272,10 +272,10 @@ class ConnectionImplTest {
         @Test
         fun `With named parameter of type string`() {
             val result = testInstance.executeUpdate("INSERT INTO string_table(value) VALUES(:some_value)") {
-                set("some_value", "ThisHamalConnectionRockz")
+                set("some_value", "ThisHamalConnectionrocks")
             }
             assertThat(result, equalTo(1))
-            verifyIsOne("SELECT COUNT(*) FROM string_table WHERE value = 'ThisHamalConnectionRockz'")
+            verifyIsOne("SELECT COUNT(*) FROM string_table WHERE value = 'ThisHamalConnectionrocks'")
         }
 
         private val testInstance =
