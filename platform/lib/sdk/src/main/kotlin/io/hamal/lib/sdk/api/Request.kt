@@ -5,17 +5,17 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.serialization.JsonAdapter
 import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain.vo.RequestClass
 import io.hamal.lib.domain.vo.RequestId
-import io.hamal.lib.domain.vo.RequestType
 
 data class ApiRequestList(
     val requests: List<ApiRequested>
-)
+) : ApiObject()
 
 sealed class ApiRequested {
     abstract val id: RequestId
     abstract val status: RequestStatus
-    val type: RequestType = RequestType(this::class.java.simpleName)
+    val `class`: RequestClass = RequestClass(this::class.java.simpleName)
 
     object Adapter : JsonAdapter<ApiRequested> {
         override fun serialize(
@@ -31,10 +31,10 @@ sealed class ApiRequested {
             typeOfT: java.lang.reflect.Type,
             context: JsonDeserializationContext
         ): ApiRequested {
-            val requestType = json.asJsonObject.get("type").asString
+            val requestClass = json.asJsonObject.get("class").asString
             return context.deserialize(
-                json, (classMapping[requestType]
-                    ?: throw NotImplementedError("$requestType not supported")).java
+                json, (classMapping[requestClass]
+                    ?: throw NotImplementedError("$requestClass not supported")).java
             )
         }
 

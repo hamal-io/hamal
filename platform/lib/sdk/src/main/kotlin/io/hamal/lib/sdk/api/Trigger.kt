@@ -50,7 +50,7 @@ data class ApiTriggerStatusRequested(
 
 data class ApiTriggerList(
     val triggers: List<Trigger>
-) {
+) : ApiObject() {
     sealed interface Trigger {
         val id: TriggerId
         val name: TriggerName
@@ -147,19 +147,18 @@ data class ApiTriggerList(
         val cron: CronPattern
     ) : Trigger {
         override val type: TriggerType = TriggerType.Cron
-
     }
 }
 
-sealed interface ApiTrigger {
-    val id: TriggerId
-    val type: TriggerType
-    val name: TriggerName
-    val func: Func
-    val flow: Flow
-    val inputs: TriggerInputs
-    val correlationId: CorrelationId?
-    val status: TriggerStatus
+sealed class ApiTrigger : ApiObject() {
+    abstract val id: TriggerId
+    abstract val type: TriggerType
+    abstract val name: TriggerName
+    abstract val func: Func
+    abstract val flow: Flow
+    abstract val inputs: TriggerInputs
+    abstract val correlationId: CorrelationId?
+    abstract val status: TriggerStatus
 
     data class Func(
         val id: FuncId,
@@ -204,26 +203,26 @@ sealed interface ApiTrigger {
 class ApiFixedRateTrigger(
     override val id: TriggerId,
     override val name: TriggerName,
-    override val func: ApiTrigger.Func,
-    override val flow: ApiTrigger.Flow,
+    override val func: Func,
+    override val flow: Flow,
     override val inputs: TriggerInputs,
     override val status: TriggerStatus,
     override val correlationId: CorrelationId? = null,
     val duration: Duration
-) : ApiTrigger {
+) : ApiTrigger() {
     override val type: TriggerType = TriggerType.FixedRate
 }
 
 class ApiEventTrigger(
     override val id: TriggerId,
     override val name: TriggerName,
-    override val func: ApiTrigger.Func,
-    override val flow: ApiTrigger.Flow,
+    override val func: Func,
+    override val flow: Flow,
     override val inputs: TriggerInputs,
     override val status: TriggerStatus,
     override val correlationId: CorrelationId? = null,
     val topic: Topic
-) : ApiTrigger {
+) : ApiTrigger() {
     override val type: TriggerType = TriggerType.Event
 
     data class Topic(
@@ -235,13 +234,13 @@ class ApiEventTrigger(
 class ApiHookTrigger(
     override val id: TriggerId,
     override val name: TriggerName,
-    override val func: ApiTrigger.Func,
-    override val flow: ApiTrigger.Flow,
+    override val func: Func,
+    override val flow: Flow,
     override val inputs: TriggerInputs,
     override val status: TriggerStatus,
     override val correlationId: CorrelationId? = null,
     val hook: Hook
-) : ApiTrigger {
+) : ApiTrigger() {
     override val type: TriggerType = TriggerType.Hook
 
     data class Hook(
@@ -255,13 +254,13 @@ class ApiHookTrigger(
 class ApiCronTrigger(
     override val id: TriggerId,
     override val name: TriggerName,
-    override val func: ApiTrigger.Func,
-    override val flow: ApiTrigger.Flow,
+    override val func: Func,
+    override val flow: Flow,
     override val inputs: TriggerInputs,
     override val status: TriggerStatus,
     override val correlationId: CorrelationId? = null,
     val cron: CronPattern
-) : ApiTrigger {
+) : ApiTrigger() {
     override val type: TriggerType = TriggerType.Cron
 }
 

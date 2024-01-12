@@ -10,7 +10,7 @@ data class ApiCode(
     val id: CodeId,
     val value: CodeValue,
     val version: CodeVersion
-)
+) : ApiObject()
 
 interface ApiCodeService {
     fun get(codeId: CodeId, codeVersion: CodeVersion? = null): ApiCode

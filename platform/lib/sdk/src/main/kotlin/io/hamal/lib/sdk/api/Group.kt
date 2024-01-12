@@ -6,7 +6,7 @@ import io.hamal.lib.http.HttpTemplate
 
 data class ApiGroupList(
     val groups: List<Group>
-) {
+) : ApiObject() {
     data class Group(
         val id: GroupId,
         val name: GroupName
@@ -16,7 +16,7 @@ data class ApiGroupList(
 data class ApiGroup(
     val id: GroupId,
     val name: GroupName,
-)
+) : ApiObject()
 
 interface ApiGroupService
 

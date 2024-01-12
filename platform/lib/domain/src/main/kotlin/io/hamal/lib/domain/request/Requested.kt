@@ -5,14 +5,14 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.serialization.JsonAdapter
 import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain.vo.RequestClass
 import io.hamal.lib.domain.vo.RequestId
-import io.hamal.lib.domain.vo.RequestType
 import java.lang.reflect.Type
 
 sealed class Requested {
     abstract val id: RequestId
     abstract var status: RequestStatus
-    val type: RequestType = RequestType(this::class.java.simpleName)
+    val `class`: RequestClass = RequestClass(this::class.java.simpleName)
 
     object Adapter : JsonAdapter<Requested> {
         override fun serialize(
@@ -28,8 +28,8 @@ sealed class Requested {
             typeOfT: Type,
             context: JsonDeserializationContext
         ): Requested {
-            val type = json.asJsonObject.get("type").asString
-            return context.deserialize(json, classMapping[type]!!.java)
+            val requestClass = json.asJsonObject.get("class").asString
+            return context.deserialize(json, classMapping[requestClass]!!.java)
         }
 
         private val classMapping = listOf(

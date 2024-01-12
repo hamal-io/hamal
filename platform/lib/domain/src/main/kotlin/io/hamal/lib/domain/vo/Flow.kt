@@ -1,6 +1,6 @@
 package io.hamal.lib.domain.vo
 
-import io.hamal.lib.common.domain.ValueObjecHotObject
+import io.hamal.lib.common.domain.ValueObjectHotObject
 import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.domain.ValueObjectString
 import io.hamal.lib.common.hot.HotObject
@@ -22,7 +22,7 @@ class FlowName(override val value: String) : ValueObjectString() {
     }
 }
 
-class FlowInputs(override val value: HotObject = HotObject.empty) : ValueObjecHotObject()
+class FlowInputs(override val value: HotObject = HotObject.empty) : ValueObjectHotObject()
 
 class FlowType(override val value: String) : ValueObjectString() {
     companion object {

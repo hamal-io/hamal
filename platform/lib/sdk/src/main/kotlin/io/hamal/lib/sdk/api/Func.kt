@@ -64,7 +64,7 @@ data class ApiFuncInvokeVersionRequest(
 
 data class ApiFuncList(
     val funcs: List<Func>
-) {
+) : ApiObject() {
     data class Func(
         val id: FuncId,
         val flow: Flow,
@@ -79,7 +79,7 @@ data class ApiFuncList(
 
 data class ApiFuncDeploymentList(
     val deployments: List<Deployment>
-) {
+) : ApiObject() {
     data class Deployment(
         val version: CodeVersion,
         val message: DeployMessage,
@@ -95,7 +95,7 @@ data class ApiFunc(
     val inputs: FuncInputs,
     val code: Code,
     val deployment: Deployment
-) {
+) : ApiObject() {
     data class Flow(
         val id: FlowId,
         val name: FlowName

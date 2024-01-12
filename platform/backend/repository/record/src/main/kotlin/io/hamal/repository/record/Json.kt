@@ -29,7 +29,7 @@ import kotlin.reflect.KClass
 
 object RecordJsonModule : JsonModule() {
     init {
-        this[RecordType::class] = ValueObjectStringAdapter(::RecordType)
+        this[RecordClass::class] = ValueObjectStringAdapter(::RecordClass)
         this[AccountRecord::class] = AccountRecord.Adapter
         this[BlueprintRecord::class] = BlueprintRecord.Adapter
         this[CodeRecord::class] = CodeRecord.Adapter
@@ -62,10 +62,10 @@ abstract class RecordAdapter<BASE_TYPE : Record<*>>(
     }
 
     override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): BASE_TYPE {
-        val recordType = json.asJsonObject.get("recordType").asString
+        val recordClass = json.asJsonObject.get("recordClass").asString
         return context.deserialize(
-            json, (classMapping[recordType]
-                ?: throw NotImplementedError("$recordType not supported")).java
+            json, (classMapping[recordClass]
+                ?: throw NotImplementedError("$recordClass not supported")).java
         )
     }
 

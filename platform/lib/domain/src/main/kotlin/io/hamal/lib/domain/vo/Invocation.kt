@@ -3,20 +3,20 @@ package io.hamal.lib.domain.vo
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
-import io.hamal.lib.common.domain.ValueObjecHotObject
+import io.hamal.lib.common.domain.ValueObjectHotObject
 import io.hamal.lib.common.domain.ValueObjectString
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.serialization.JsonAdapter
 import io.hamal.lib.domain._enum.EndpointMethod
 import io.hamal.lib.domain._enum.HookMethod
 
-class InvocationInputs(override val value: HotObject = HotObject.empty) : ValueObjecHotObject()
+class InvocationInputs(override val value: HotObject = HotObject.empty) : ValueObjectHotObject()
 
-class InvocationType(override val value: String) : ValueObjectString()
+class InvocationClass(override val value: String) : ValueObjectString()
 
 
 sealed class Invocation {
-    val invocationType: InvocationType = InvocationType(this::class.simpleName!!)
+    val invocationClass: InvocationClass = InvocationClass(this::class.simpleName!!)
 
     object Adapter : JsonAdapter<Invocation> {
         override fun serialize(
@@ -32,10 +32,10 @@ sealed class Invocation {
             typeOfT: java.lang.reflect.Type,
             context: JsonDeserializationContext
         ): Invocation {
-            val invocationType = json.asJsonObject.get("invocationType").asString
+            val invocationClass = json.asJsonObject.get("invocationClass").asString
             return context.deserialize(
-                json, (classMapping[invocationType]
-                    ?: throw NotImplementedError("$invocationType not supported")).java
+                json, (classMapping[invocationClass]
+                    ?: throw NotImplementedError("$invocationClass not supported")).java
             )
         }
 

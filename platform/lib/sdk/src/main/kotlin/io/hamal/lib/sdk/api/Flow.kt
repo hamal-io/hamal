@@ -34,7 +34,7 @@ data class ApiFlowUpdateRequested(
 
 data class ApiFlowList(
     val flows: List<Flow>
-) {
+) : ApiObject() {
     data class Flow(
         val type: FlowType,
         val id: FlowId,
@@ -47,7 +47,7 @@ data class ApiFlow(
     val type: FlowType,
     val name: FlowName,
     val inputs: FlowInputs
-)
+) : ApiObject()
 
 interface ApiFlowService {
     fun create(groupId: GroupId, createFlowReq: ApiFlowCreateRequest): ApiFlowCreateRequested

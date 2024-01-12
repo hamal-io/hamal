@@ -36,7 +36,7 @@ data class ApiHookUpdateRequested(
 
 data class ApiHookList(
     val hooks: List<Hook>
-) {
+) : ApiObject() {
     data class Hook(
         val id: HookId,
         val flow: Flow,
@@ -53,7 +53,7 @@ data class ApiHook(
     val id: HookId,
     val flow: Flow,
     val name: HookName,
-) {
+) : ApiObject() {
     data class Flow(
         val id: FlowId,
         val name: FlowName
