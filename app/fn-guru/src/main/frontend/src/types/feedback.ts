@@ -1,5 +1,5 @@
-export enum FeedbackMood {
-    Happy,
+export const enum FeedbackMood {
+    Happy = 0,
     Excited,
     Normal,
     Overwhelmed,

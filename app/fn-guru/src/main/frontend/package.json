@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "VITE_BASE_URL=http://localhost:8008 vite ",
-    "dev-host": "VITE_BASE_URL=http://localhost:8008 vite --host",
+    "dev-host": "VITE_BASE_URL=http://192.168.2.54:8008 vite --host",
     "build": "tsc && VITE_BASE_URL=https://fn.guru vite build",
     "build:preview": "tsc && VITE_BASE_URL=http://localhost:8008 vite build",
     "deploy": "rm -rf ../resources/dist && npm run build && cp -r ./dist ../resources/dist",
