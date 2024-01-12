@@ -12,7 +12,7 @@ data class ApiExtension(
     val id: ExtensionId,
     val name: ExtensionName,
     val code: Code
-) {
+) : ApiObject() {
     data class Code(
         val id: CodeId,
         val version: CodeVersion,
@@ -22,7 +22,7 @@ data class ApiExtension(
 
 data class ApiExtensionList(
     val extensions: List<Extension>
-) {
+) : ApiObject() {
     data class Extension(
         val id: ExtensionId,
         val name: ExtensionName,

@@ -4,7 +4,7 @@ import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.util.TimeUtils
 import java.time.Instant
 
-class RecordType(override val value: String) : ValueObjectString()
+class RecordClass(override val value: String) : ValueObjectString()
 
 class RecordSequence(override val value: Int) : ValueObjectInt() {
     companion object {
@@ -29,7 +29,7 @@ abstract class Record<ID : ValueObjectId> {
     abstract val entityId: ID
     abstract var recordSequence: RecordSequence?
     abstract var recordedAt: RecordedAt?
-    val recordType: RecordType = RecordType(this::class.simpleName!!)
+    val recordClass: RecordClass = RecordClass(this::class.simpleName!!)
 
     fun sequence() =
         recordSequence ?: throw IllegalStateException("Records needs to be stored to db before it can be accessed")

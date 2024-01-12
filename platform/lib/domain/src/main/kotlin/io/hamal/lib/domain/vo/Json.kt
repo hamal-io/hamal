@@ -78,13 +78,13 @@ object ValueObjectJsonModule : JsonModule() {
         this[HookContent::class] = ValueObjectHotObjectAdapter(::HookContent)
 
         this[Invocation::class] = Invocation.Adapter
-        this[InvocationType::class] = ValueObjectStringAdapter(::InvocationType)
+        this[InvocationClass::class] = ValueObjectStringAdapter(::InvocationClass)
         this[InvocationInputs::class] = ValueObjectHotObjectAdapter(::InvocationInputs)
 
         this[Limit::class] = ValueObjectIntAdapter(::Limit)
 
         this[RequestId::class] = ValueObjectIdAdapter(::RequestId)
-        this[RequestType::class] = ValueObjectStringAdapter(::RequestType)
+        this[RequestClass::class] = ValueObjectStringAdapter(::RequestClass)
         this[RunnerEnv::class] = ValueObjectHotObjectAdapter(::RunnerEnv)
 
         this[State::class] = ValueObjectHotObjectAdapter(::State)

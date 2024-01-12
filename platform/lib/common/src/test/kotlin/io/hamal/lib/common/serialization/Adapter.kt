@@ -210,5 +210,5 @@ internal object ValueObjectHotObjectAdapterTest {
 
     private class TestHotObjectValueObject(
         override val value: HotObject
-    ) : ValueObjecHotObject()
+    ) : ValueObjectHotObject()
 }

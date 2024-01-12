@@ -1,6 +1,6 @@
 package io.hamal.lib.domain.vo
 
-import io.hamal.lib.common.domain.ValueObjecHotObject
+import io.hamal.lib.common.domain.ValueObjectHotObject
 import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.domain.ValueObjectString
 import io.hamal.lib.common.hot.HotObject
@@ -13,4 +13,4 @@ class TriggerId(override val value: SnowflakeId) : ValueObjectId() {
 
 class TriggerName(override val value: String) : ValueObjectString()
 
-class TriggerInputs(override val value: HotObject = HotObject.empty) : ValueObjecHotObject()
+class TriggerInputs(override val value: HotObject = HotObject.empty) : ValueObjectHotObject()

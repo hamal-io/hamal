@@ -13,7 +13,7 @@ data class ApiAuthChallengeMetaMaskRequest(
 
 data class ApiChallengeMetaMask(
     val challenge: Web3Challenge
-)
+) : ApiObject()
 
 data class ApiAuthLoginMetaMaskRequest(
     override val address: Web3Address,

@@ -17,7 +17,7 @@ data class ApiExecLogAppendRequest(
 
 data class ApiExcLogList(
     val logs: List<ApiExecLog>
-)
+) : ApiObject()
 
 data class ApiExecLog(
     val id: ExecLogId,
@@ -25,7 +25,7 @@ data class ApiExecLog(
     val level: ExecLogLevel,
     val message: ExecLogMessage,
     val timestamp: ExecLogTimestamp
-)
+) : ApiObject()
 
 interface ApiExecLogService {
     fun append(execId: ExecId, req: ApiExecLogAppendRequest)

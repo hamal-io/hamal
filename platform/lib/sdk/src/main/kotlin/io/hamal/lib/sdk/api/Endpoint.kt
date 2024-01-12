@@ -42,7 +42,7 @@ data class ApiEndpointUpdateRequested(
 
 data class ApiEndpointList(
     val endpoints: List<Endpoint>
-) {
+) : ApiObject() {
     data class Endpoint(
         val id: EndpointId,
         val func: Func,
@@ -59,7 +59,7 @@ data class ApiEndpoint(
     val id: EndpointId,
     val func: Func,
     val name: EndpointName
-) {
+) : ApiObject() {
     data class Func(
         val id: FuncId,
         val name: FuncName

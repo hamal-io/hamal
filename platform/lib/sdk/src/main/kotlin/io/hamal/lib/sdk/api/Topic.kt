@@ -50,11 +50,11 @@ data class ApiTopicEntryList(
 data class ApiTopic(
     val id: TopicId,
     val name: TopicName
-)
+) : ApiObject()
 
 data class ApiTopicList(
     val topics: List<Topic>
-) {
+) : ApiObject() {
     data class Topic(
         val id: TopicId,
         val name: TopicName
