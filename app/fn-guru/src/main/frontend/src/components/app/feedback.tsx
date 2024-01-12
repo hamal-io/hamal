@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import * as z from "zod";
-import {FeedbackMood} from "@/types/feedback.ts";
+import {FeedbackMood, FeedbackMoods} from "@/types/feedback.ts";
 import {Dialog, DialogContent, DialogHeader, DialogTrigger} from "@/components/ui/dialog.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
@@ -9,13 +9,15 @@ import {useAuth} from "@/hook/auth.ts";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Input} from "@/components/ui/input.tsx";
-import {Loader2} from "lucide-react";
+import {Check, Loader2} from "lucide-react";
 import {Checkbox} from "@/components/ui/checkbox.tsx";
 
 
 const formSchema = z.object({
-    message: z.string().max(4096),
+    mood: z.number(),
+    message: z.string().max(512),
 })
+
 
 const Feedback = () => {
     const [auth] = useAuth()
@@ -26,11 +28,12 @@ const Feedback = () => {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            message: ""
+            message: "",
+            mood: 0
         },
     })
 
-    async function onSubmit(message: string, mood: FeedbackMood) {
+    async function onSubmit(message: string, mood: number) {
         setLoading(true)
         try {
             createFeedback(message, mood, auth.accountId)
@@ -41,8 +44,9 @@ const Feedback = () => {
             setOpenDialog(false)
             form.reset()
         }
-
     }
+
+
 
     return (
         <div style={{
@@ -64,28 +68,35 @@ const Feedback = () => {
                         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                             <FormField
                                 control={form.control}
+                                name="mood"
+                                render={({field}) => (
+                                    <FormItem>
+                                        <FormLabel>How do you feel?</FormLabel>
+                                        <FormControl>
+                                            <>
+                                                {Object.values(FeedbackMoods).map((md) => (
+                                                    <Checkbox
+                                                        key={md.label}
+                                                        value={md.value} {...field}
+                                                    />
+                                                ))}
+                                            </>
+                                        </FormControl>
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
                                 name="message"
                                 render={({field}) => (
-                                    <>
-                                        <FormItem>
-                                            <FormLabel>How do you feel?</FormLabel>
-                                            <FormControl>
-                                                <>
-                                                    <Checkbox>Happy</Checkbox>
-                                                    <Checkbox>Angry</Checkbox>
-                                                </>
-                                            </FormControl>
-
-                                        </FormItem>
-                                        <FormItem>
-                                            <FormLabel>Leave us a message</FormLabel>
-                                            <FormControl>
-                                                <Input
-                                                    placeholder="How is your experience so far? What features do you miss?" {...field} />
-                                            </FormControl>
-                                            <FormMessage/>
-                                        </FormItem>
-                                    </>
+                                    <FormItem>
+                                        <FormLabel>Leave us a message</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                placeholder="How is your experience so far? What features do you miss?" {...field} />
+                                        </FormControl>
+                                        <FormMessage/>
+                                    </FormItem>
                                 )}
                             />
                             <div className="flex flex-row justify-between items-center">
