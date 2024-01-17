@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import * as z from "zod";
-import {FeedbackMood, FeedbackMoods} from "@/types/feedback.ts";
+import {FeedbackMoods} from "@/types/feedback.ts";
 import {Dialog, DialogContent, DialogHeader, DialogTrigger} from "@/components/ui/dialog.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
@@ -9,8 +9,7 @@ import {useAuth} from "@/hook/auth.ts";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Input} from "@/components/ui/input.tsx";
-import {Check, Loader2} from "lucide-react";
-import {Checkbox} from "@/components/ui/checkbox.tsx";
+import {Loader2} from "lucide-react";
 
 
 const formSchema = z.object({
@@ -24,6 +23,7 @@ const Feedback = () => {
     const [openDialog, setOpenDialog] = useState<boolean>(false)
     const [isLoading, setLoading] = useState(false)
     const [createFeedback, submitted] = useFeedbackCreate()
+    // const [activeEmoji, setActiveEmoji] = useState<number>(0)
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -47,6 +47,9 @@ const Feedback = () => {
     }
 
 
+    function handleCheckboxChange(emoji: { value: number; label: string; emoji: string }) {
+
+    }
 
     return (
         <div style={{
@@ -73,14 +76,30 @@ const Feedback = () => {
                                     <FormItem>
                                         <FormLabel>How do you feel?</FormLabel>
                                         <FormControl>
-                                            <>
-                                                {Object.values(FeedbackMoods).map((md) => (
-                                                    <Checkbox
-                                                        key={md.label}
-                                                        value={md.value} {...field}
-                                                    />
-                                                ))}
-                                            </>
+                                            {
+
+                                                <div style={{
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                    alignItems: 'center'
+                                                }}>
+                                                    {Object.values(FeedbackMoods).map((emoji) => (
+                                                        <div key={emoji.value} style={{
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            marginBottom: '8px'
+                                                        }}>
+                                                            <span style={{marginRight: '8px'}}>{emoji.emoji}</span>
+                                                            <input
+                                                                type="checkbox"
+                                                                //checked={emoji === setActiveEmoji(emoji.value)}
+                                                                onChange={() => handleCheckboxChange(emoji)}
+                                                            />
+                                                        </div>
+                                                    ))}
+                                                </div>
+
+                                            }
                                         </FormControl>
                                     </FormItem>
                                 )}
