@@ -23,7 +23,6 @@ const Feedback = () => {
     const [openDialog, setOpenDialog] = useState<boolean>(false)
     const [isLoading, setLoading] = useState(false)
     const [createFeedback, submitted] = useFeedbackCreate()
-    // const [activeEmoji, setActiveEmoji] = useState<number>(0)
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -44,11 +43,6 @@ const Feedback = () => {
             setOpenDialog(false)
             form.reset()
         }
-    }
-
-
-    function handleCheckboxChange(emoji: { value: number; label: string; emoji: string }) {
-
     }
 
     return (
@@ -77,23 +71,28 @@ const Feedback = () => {
                                         <FormLabel>How do you feel?</FormLabel>
                                         <FormControl>
                                             {
-
                                                 <div style={{
                                                     display: 'flex',
-                                                    flexDirection: 'column',
-                                                    alignItems: 'center'
+                                                    alignItems: 'center',
+                                                    justifyContent: 'space-evenly'
                                                 }}>
                                                     {Object.values(FeedbackMoods).map((emoji) => (
-                                                        <div key={emoji.value} style={{
+                                                        <div style={{
                                                             display: 'flex',
+                                                            flexDirection: 'column',
                                                             alignItems: 'center',
-                                                            marginBottom: '8px'
+                                                            justifyContent: 'center',
+                                                            margin: '8px'
                                                         }}>
-                                                            <span style={{marginRight: '8px'}}>{emoji.emoji}</span>
+                                                            <span style={{
+                                                                fontSize: '32px'
+                                                            }}>{emoji.emoji}</span>
                                                             <input
-                                                                type="checkbox"
-                                                                //checked={emoji === setActiveEmoji(emoji.value)}
-                                                                onChange={() => handleCheckboxChange(emoji)}
+                                                                type="radio"
+                                                                name="moodSelect"
+                                                                value={emoji.value}
+                                                                checked={field.value === emoji.value}
+                                                                onChange={() => field.onChange(emoji.value)}
                                                             />
                                                         </div>
                                                     ))}
