@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import * as z from "zod";
-import {FeedbackMoods} from "@/types/feedback.ts";
+import {FeedbackMoods, FeedbackType} from "@/types/feedback.ts";
 import {Dialog, DialogContent, DialogHeader, DialogTrigger} from "@/components/ui/dialog.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
@@ -27,15 +27,16 @@ const Feedback = () => {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            message: "",
-            mood: 2
+            mood: 2,
+            message: ""
         },
     })
 
-    async function onSubmit(message: string, mood: number) {
+    async function onSubmit() {
         setLoading(true)
         try {
-            createFeedback(message, mood, auth.accountId)
+            const {mood, message} = form.getValues()
+            createFeedback(mood.toString(), message, auth.accountId)
         } catch (e) {
             console.error(e)
         } finally {
