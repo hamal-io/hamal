@@ -28,7 +28,7 @@ const Feedback = () => {
         resolver: zodResolver(formSchema),
         defaultValues: {
             message: "",
-            mood: 0
+            mood: 2
         },
     })
 
@@ -77,7 +77,7 @@ const Feedback = () => {
                                                     justifyContent: 'space-evenly'
                                                 }}>
                                                     {Object.values(FeedbackMoods).map((emoji) => (
-                                                        <div style={{
+                                                        <div key={emoji.label} style={{
                                                             display: 'flex',
                                                             flexDirection: 'column',
                                                             alignItems: 'center',

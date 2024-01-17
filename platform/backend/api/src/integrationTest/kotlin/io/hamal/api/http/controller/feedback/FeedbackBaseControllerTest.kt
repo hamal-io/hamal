@@ -14,7 +14,7 @@ import org.hamcrest.MatcherAssert.assertThat
 
 internal sealed class FeedbackBaseControllerTest : BaseControllerTest() {
     fun createFeedback(req: FeedbackCreateRequest): FeedbackCreateRequested {
-        val createResponse = httpTemplate.post("/v1/feedback/create")
+        val createResponse = httpTemplate.post("/v1/feedback")
             .body(req)
             .execute()
 

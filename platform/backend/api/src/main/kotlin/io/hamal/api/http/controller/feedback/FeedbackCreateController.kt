@@ -14,7 +14,7 @@ internal class FeedbackCreateController(
     private val retry: Retry,
     private val createFeedback: FeedbackCreatePort
 ) {
-    @PostMapping("/v1/feedback/create")
+    @PostMapping("/v1/feedback")
     fun createFeedback(
         @RequestBody req: FeedbackCreateRequest
     ): ResponseEntity<FeedbackCreateRequested> = retry {

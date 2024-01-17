@@ -3,6 +3,7 @@ package io.hamal.core.component
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.domain._enum.FeedbackMood
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.RequestId
 import org.springframework.core.convert.converter.Converter
@@ -15,6 +16,12 @@ object LimitConverter : Converter<String, Limit> {
 
 object CodeVersionConverter : Converter<String, CodeVersion> {
     override fun convert(source: String) = CodeVersion(source.toInt())
+}
+
+object FeedbackMoodConverter : Converter<String, FeedbackMood> {
+    override fun convert(source: String): FeedbackMood {
+        return FeedbackMood.of(source.toInt())
+    }
 }
 
 object CorrelationIdConverter : Converter<String, CorrelationId> {
