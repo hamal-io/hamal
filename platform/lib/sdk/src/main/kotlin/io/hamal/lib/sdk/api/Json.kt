@@ -13,5 +13,6 @@ object ApiJsonModule : JsonModule() {
         set(ApiState::class, ValueObjectHotObjectAdapter(::ApiState))
         set(ApiTrigger::class, ApiTrigger.Adapter)
         set(ApiTriggerList.Trigger::class, ApiTriggerList.Trigger.Adapter)
+        //TODO-142 set(FeedbackCreateRequest::class, FeedbackCreateRequest.Adapter)
     }
 }

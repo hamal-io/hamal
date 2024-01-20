@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import * as z from "zod";
-import {FeedbackMoods, FeedbackType} from "@/types/feedback.ts";
+import {FeedbackMoods} from "@/types/feedback.ts";
 import {Dialog, DialogContent, DialogHeader, DialogTrigger} from "@/components/ui/dialog.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
@@ -36,7 +36,7 @@ const Feedback = () => {
         setLoading(true)
         try {
             const {mood, message} = form.getValues()
-            createFeedback(mood.toString(), message, auth.accountId)
+            createFeedback(mood, message, auth.accountId)
         } catch (e) {
             console.error(e)
         } finally {
