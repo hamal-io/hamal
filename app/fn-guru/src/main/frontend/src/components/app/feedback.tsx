@@ -22,7 +22,7 @@ const Feedback = () => {
     const [auth] = useAuth()
     const [openDialog, setOpenDialog] = useState<boolean>(false)
     const [isLoading, setLoading] = useState(false)
-    const [createFeedback, submitted] = useFeedbackCreate()
+    const [createFeedback] = useFeedbackCreate()
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
