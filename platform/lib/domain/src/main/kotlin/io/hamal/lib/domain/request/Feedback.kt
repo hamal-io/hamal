@@ -31,9 +31,11 @@ data class FeedbackCreateRequest(
             typeOfT: Type,
             context: JsonDeserializationContext
         ): FeedbackCreateRequest {
-            val ordinal = json.asJsonObject.get("mood").asInt
-            val classs = FeedbackMood.of(ordinal)::class.java
-            return context.deserialize(json, classs)
+            val obj = json.asJsonObject
+            val mood = FeedbackMood.of(obj.get("mood").asInt)
+            val message = FeedbackMessage(obj.get("message").asString)
+            val accountId = obj.get("accountId")?.let { AccountId(it.asString) }
+            return FeedbackCreateRequest(mood, message, accountId)
         }
     }
 }

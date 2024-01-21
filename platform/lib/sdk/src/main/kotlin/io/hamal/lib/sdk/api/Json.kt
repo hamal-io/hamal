@@ -2,6 +2,7 @@ package io.hamal.lib.sdk.api
 
 import io.hamal.lib.common.serialization.JsonModule
 import io.hamal.lib.common.serialization.ValueObjectHotObjectAdapter
+import io.hamal.lib.domain.request.FeedbackCreateRequest
 
 sealed class ApiObject {
     val `class`: String = this::class.java.simpleName
@@ -13,6 +14,6 @@ object ApiJsonModule : JsonModule() {
         set(ApiState::class, ValueObjectHotObjectAdapter(::ApiState))
         set(ApiTrigger::class, ApiTrigger.Adapter)
         set(ApiTriggerList.Trigger::class, ApiTriggerList.Trigger.Adapter)
-        //TODO-142 set(FeedbackCreateRequest::class, FeedbackCreateRequest.Adapter)
+        set(FeedbackCreateRequest::class, FeedbackCreateRequest.Adapter)
     }
 }
