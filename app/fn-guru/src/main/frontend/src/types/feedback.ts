@@ -18,8 +18,3 @@ export interface FeedbackCreateSubmitted {
     id: string;
     status: string;
 }
-
-export interface FeedbackType {
-    mood: number;
-    message: string;
-}

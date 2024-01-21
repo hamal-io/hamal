@@ -8,13 +8,13 @@ import {useFeedbackCreate} from "@/hook/feedback.ts";
 import {useAuth} from "@/hook/auth.ts";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {Input} from "@/components/ui/input.tsx";
 import {Loader2} from "lucide-react";
+import {Textarea} from "@/components/ui/textarea.tsx";
 
 
 const formSchema = z.object({
     mood: z.number(),
-    message: z.string().max(512),
+    message: z.string().max(4096),
 })
 
 
@@ -109,9 +109,9 @@ const Feedback = () => {
                                 name="message"
                                 render={({field}) => (
                                     <FormItem>
-                                        <FormLabel>Leave us a message</FormLabel>
+                                        <FormLabel>Leave us a message:</FormLabel>
                                         <FormControl>
-                                            <Input
+                                            <Textarea
                                                 placeholder="How is your experience so far? What features do you miss?" {...field} />
                                         </FormControl>
                                         <FormMessage/>
