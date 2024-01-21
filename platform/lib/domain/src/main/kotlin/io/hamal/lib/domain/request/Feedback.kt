@@ -2,6 +2,7 @@ package io.hamal.lib.domain.request
 
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
+import com.google.gson.JsonObject
 import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.serialization.JsonAdapter
 import io.hamal.lib.domain._enum.FeedbackMood
@@ -23,7 +24,13 @@ data class FeedbackCreateRequest(
             typeOfSrc: Type,
             context: JsonSerializationContext
         ): JsonElement {
-            return context.serialize(src)
+            val obj = JsonObject()
+            obj.addProperty("mood", src.mood.value)
+            obj.addProperty("message", src.message.value)
+            if (src.accountId != null) {
+                obj.addProperty("accountId", src.accountId.value.value)
+            }
+            return obj
         }
 
         override fun deserialize(
