@@ -14,4 +14,5 @@ interface Segment {
 }
 
 
+@Deprecated("")
 interface SegmentRepository : CmdRepository, ChunkAppender, ChunkReader, ChunkCounter

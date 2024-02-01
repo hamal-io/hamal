@@ -10,6 +10,7 @@ data class Topic(
     val name: TopicName
 )
 
+@Deprecated("")
 interface TopicRepository : CmdRepository, ChunkAppender, ChunkReader, ChunkCounter
 
 data class TopicEntry(

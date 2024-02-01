@@ -44,6 +44,7 @@ interface ResolveTopic {
     fun resolveTopic(flowId: FlowId, name: TopicName): Topic?
 }
 
+@Deprecated("")
 interface BrokerRepository :
     CmdRepository,
     CreateTopic,

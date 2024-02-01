@@ -1,7 +1,11 @@
 package io.hamal.repository.memory.new_log
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.common.util.TimeUtils
 import io.hamal.repository.api.new_log.*
+import java.util.concurrent.locks.ReentrantLock
+import kotlin.concurrent.withLock
 
 data class LogSegmentMemory(
     override val id: LogSegmentId,
@@ -12,25 +16,46 @@ data class LogSegmentMemory(
 class LogSegmentMemoryRepository(
     internal val segment: LogSegmentMemory
 ) : LogSegmentRepository {
-    
+
     override fun append(cmdId: CmdId, bytes: ByteArray): LogEntryId {
-        TODO("Not yet implemented")
+        return lock.withLock {
+            LogEntryId(store.size + 1).also { id ->
+                store.add(
+                    LogEntry(
+                        id = id,
+                        segmentId = segment.id,
+                        topicId = segment.topicId,
+                        bytes = bytes,
+                        instant = TimeUtils.now()
+                    )
+                )
+            }
+        }
     }
 
     override fun read(firstId: LogEntryId, limit: Int): List<LogEntry> {
-        TODO("Not yet implemented")
+        if (limit < 1) {
+            return listOf()
+        }
+        return lock.withLock {
+            if (firstId.value == SnowflakeId(0)) {
+                store.take(limit)
+            } else {
+                store.drop(firstId.value.toInt() - 1).take(limit)
+            }
+        }
     }
 
     override fun count(): ULong {
-        TODO("Not yet implemented")
+        return lock.withLock { store.size.toULong() }
     }
 
     override fun clear() {
-        TODO("Not yet implemented")
+        lock.withLock { store.clear() }
     }
 
-    override fun close() {
-        TODO("Not yet implemented")
-    }
+    override fun close() {}
 
+    private val store = mutableListOf<LogEntry>()
+    private val lock = ReentrantLock()
 }

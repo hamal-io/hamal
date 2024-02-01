@@ -8,10 +8,10 @@ class LogEntryId(override val value: SnowflakeId) : ValueObjectId() {
     constructor(value: Int) : this(SnowflakeId(value.toLong()))
 }
 
-interface LogEntry {
-    val id: LogEntryId
-    val topicId: LogTopicId
-    val segmentId: LogSegmentId
-    val bytes: ByteArray
+data class LogEntry(
+    val id: LogEntryId,
+    val topicId: LogTopicId,
+    val segmentId: LogSegmentId,
+    val bytes: ByteArray,
     val instant: Instant
-}
+)

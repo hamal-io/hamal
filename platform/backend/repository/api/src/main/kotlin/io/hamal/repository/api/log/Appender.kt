@@ -2,6 +2,7 @@ package io.hamal.repository.api.log
 
 import io.hamal.lib.common.domain.CmdId
 
+@Deprecated("")
 interface Appender<VALUE : Any> {
     fun append(cmdId: CmdId, topic: Topic, value: VALUE)
 }
