@@ -2,6 +2,7 @@ package io.hamal.repository.fixture
 
 import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.repository.api.log.BrokerTopicsRepository
+import io.hamal.repository.api.new_log.LogBrokerRepository
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import kotlin.reflect.KClass
@@ -32,6 +33,10 @@ abstract class AbstractIntegrationTest {
         BrokerTopicsRepository::class to listOf(
             MemoryFixture,
             SqliteFixture
+        ),
+        LogBrokerRepository::class to listOf(
+            MemoryFixture,
+//            SqliteFixture
         )
     )
 }

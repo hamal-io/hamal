@@ -1,6 +1,7 @@
 package io.hamal.repository.new_log
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.util.TimeUtils.withEpochMilli
 import io.hamal.repository.api.new_log.*
 import io.hamal.repository.fixture.AbstractUnitTest
@@ -55,7 +56,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
         @TestFactory
         fun `Reads multiple entries`() = runWith(LogTopicRepository::class) {
             appendOneHundredEntries()
-            val result = read(LogEntryId(25), 36)
+            val result = read(LogEntryId(25), Limit(36))
             assertThat(result, hasSize(36))
 
             for (id in 0 until 36) {

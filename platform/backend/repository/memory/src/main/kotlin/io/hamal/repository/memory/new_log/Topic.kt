@@ -1,6 +1,7 @@
 package io.hamal.repository.memory.new_log
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.repository.api.new_log.*
 
@@ -21,7 +22,7 @@ class LogTopicMemoryRepository(
         return activeSegmentRepository.append(cmdId, bytes)
     }
 
-    override fun read(firstId: LogEntryId, limit: Int): List<LogEntry> {
+    override fun read(firstId: LogEntryId, limit: Limit): List<LogEntry> {
         return activeSegmentRepository.read(firstId, limit)
     }
 

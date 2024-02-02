@@ -10,3 +10,4 @@ class Limit(override val value: Int) : ValueObjectInt() {
         val all = Limit(Int.MAX_VALUE)
     }
 }
+

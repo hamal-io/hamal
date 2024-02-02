@@ -1,6 +1,7 @@
 package io.hamal.repository.new_log
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.util.TimeUtils.withEpochMilli
 import io.hamal.lib.common.util.TimeUtils.withInstant
 import io.hamal.repository.api.new_log.*
@@ -27,7 +28,7 @@ internal class LogSegmentRepositoryTest : AbstractUnitTest() {
 
             assertThat(count(), equalTo(2UL))
 
-            read(LogEntryId(1), 2).let {
+            read(LogEntryId(1), Limit(2)).let {
                 assertThat(it, hasSize(2))
 
                 val entry = it.first()
@@ -145,23 +146,7 @@ internal class LogSegmentRepositoryTest : AbstractUnitTest() {
         fun `Tries to read outside from range`() =
             runWith(LogSegmentRepository::class) {
                 createOneHundredEntrys()
-                val result = read(LogEntryId(200), 100)
-                assertThat(result, hasSize(0))
-            }
-
-        @TestFactory
-        fun `Tries to read with a limit of 0`() =
-            runWith(LogSegmentRepository::class) {
-                createOneHundredEntrys()
-                val result = read(LogEntryId(23), 0)
-                assertThat(result, hasSize(0))
-            }
-
-        @TestFactory
-        fun `Tries to read with a negative limit`() =
-            runWith(LogSegmentRepository::class) {
-                createOneHundredEntrys()
-                val result = read(LogEntryId(23), -20)
+                val result = read(LogEntryId(200), Limit(100))
                 assertThat(result, hasSize(0))
             }
 
@@ -178,7 +163,7 @@ internal class LogSegmentRepositoryTest : AbstractUnitTest() {
         fun `Reads multiple entries`() =
             runWith(LogSegmentRepository::class) {
                 createOneHundredEntrys()
-                val result = read(LogEntryId(25), 36)
+                val result = read(LogEntryId(25), Limit(36))
                 assertThat(result, hasSize(36))
 
                 for (id in 0 until 36) {
@@ -190,7 +175,7 @@ internal class LogSegmentRepositoryTest : AbstractUnitTest() {
         fun `Read is only partially covered by segment`() =
             runWith(LogSegmentRepository::class) {
                 createOneHundredEntrys()
-                val result = read(LogEntryId(90), 40)
+                val result = read(LogEntryId(90), Limit(40))
                 assertThat(result, hasSize(11))
 
                 for (id in 0 until 11) {

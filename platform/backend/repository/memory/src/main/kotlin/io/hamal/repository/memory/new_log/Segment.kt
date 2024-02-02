@@ -1,6 +1,7 @@
 package io.hamal.repository.memory.new_log
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.repository.api.new_log.*
@@ -33,15 +34,15 @@ class LogSegmentMemoryRepository(
         }
     }
 
-    override fun read(firstId: LogEntryId, limit: Int): List<LogEntry> {
-        if (limit < 1) {
+    override fun read(firstId: LogEntryId, limit: Limit): List<LogEntry> {
+        if (limit.value < 1) {
             return listOf()
         }
         return lock.withLock {
             if (firstId.value == SnowflakeId(0)) {
-                store.take(limit)
+                store.take(limit.value)
             } else {
-                store.drop(firstId.value.toInt() - 1).take(limit)
+                store.drop(firstId.value.toInt() - 1).take(limit.value)
             }
         }
     }
