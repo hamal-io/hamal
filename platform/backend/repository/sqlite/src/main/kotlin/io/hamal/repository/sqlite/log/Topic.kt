@@ -15,7 +15,7 @@ import java.nio.file.Path
 // like supporting multiple segments, roll over etc
 
 class TopicSqliteRepository(
-    internal val topic: Topic,
+    internal val topic: DepTopic,
     internal val path: Path
 ) : SqliteBaseRepository(
     object : Config {
@@ -23,7 +23,7 @@ class TopicSqliteRepository(
         override val filename: String get() = String.format("topics/%08d", topic.id.value.value)
 
     }
-), TopicRepository {
+), DepTopicRepository {
 
     private var activeSegment: SegmentSqlite
     private var activeSegmentRepository: SegmentSqliteRepository

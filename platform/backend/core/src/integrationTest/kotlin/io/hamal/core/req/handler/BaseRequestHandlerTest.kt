@@ -8,7 +8,7 @@ import io.hamal.repository.api.FuncCmdRepository.CreateCmd
 import io.hamal.repository.api.Hook
 import io.hamal.repository.api.HookCmdRepository
 import io.hamal.repository.api.log.CreateTopic.TopicToCreate
-import io.hamal.repository.api.log.Topic
+import io.hamal.repository.api.log.DepTopic
 import java.util.concurrent.atomic.AtomicInteger
 
 internal object NextCommandId {
@@ -42,7 +42,7 @@ internal abstract class BaseReqHandlerTest : BaseTest() {
         )
     }
 
-    fun createTopic(id: TopicId, name: TopicName): Topic {
+    fun createTopic(id: TopicId, name: TopicName): DepTopic {
         return eventBrokerRepository.create(
             NextCommandId(), TopicToCreate(
                 id = id,

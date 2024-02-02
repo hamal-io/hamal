@@ -11,10 +11,10 @@ import io.hamal.repository.api.CmdRepository
 
 @Deprecated("")
 interface BrokerTopicsRepository : CmdRepository {
-    fun create(cmdId: CmdId, toCreate: TopicToCreate): Topic
-    fun find(flowId: FlowId, name: TopicName): Topic?
-    fun find(id: TopicId): Topic?
-    fun list(query: TopicQuery): List<Topic>
+    fun create(cmdId: CmdId, toCreate: TopicToCreate): DepTopic
+    fun find(flowId: FlowId, name: TopicName): DepTopic?
+    fun find(id: TopicId): DepTopic?
+    fun list(query: TopicQuery): List<DepTopic>
     fun count(query: TopicQuery): ULong
 
     data class TopicToCreate(

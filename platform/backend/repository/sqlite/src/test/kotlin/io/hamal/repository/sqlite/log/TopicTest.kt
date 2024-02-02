@@ -5,7 +5,7 @@ import io.hamal.lib.domain.vo.FlowId
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
-import io.hamal.repository.api.log.Topic
+import io.hamal.repository.api.log.DepTopic
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -28,7 +28,7 @@ class TopicSqliteRepositoryTest {
             val targetDir = Path(testDir, "another-path", "more-nesting")
 
             TopicSqliteRepository(
-                Topic(
+                DepTopic(
                     id = TopicId(23),
                     name = TopicName("test-topic"),
                     flowId = FlowId(45),

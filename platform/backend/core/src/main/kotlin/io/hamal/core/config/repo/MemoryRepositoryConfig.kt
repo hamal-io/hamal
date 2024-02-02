@@ -6,6 +6,7 @@ import io.hamal.repository.memory.ExecLogMemoryRepository
 import io.hamal.repository.memory.ReqMemoryRepository
 import io.hamal.repository.memory.StateMemoryRepository
 import io.hamal.repository.memory.log.BrokerMemoryRepository
+import io.hamal.repository.memory.new_log.LogBrokerMemoryRepository
 import io.hamal.repository.memory.record.*
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -14,6 +15,9 @@ import org.springframework.context.annotation.Profile
 @Configuration
 @Profile("memory")
 open class MemoryRepositoryConfig {
+
+    @Bean
+    open fun logBrokerRepository() = LogBrokerMemoryRepository()
 
     @Bean
     open fun platformEventBrokerRepository() = BrokerMemoryRepository()
@@ -155,6 +159,11 @@ open class MemoryRepositoryConfig {
 
     @Bean
     open fun stateQueryRepository(): StateQueryRepository = stateRepository()
+
+    @Bean
+    open fun topicRepository(): TopicRepository = TopicMemoryRepository(
+        logBrokerRepository()
+    )
 
     @Bean
     open fun triggerRepository(): TriggerRepository = TriggerMemoryRepository()

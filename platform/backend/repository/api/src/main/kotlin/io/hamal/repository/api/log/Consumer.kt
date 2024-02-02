@@ -25,7 +25,7 @@ interface BatchConsumer<VALUE : Any> {
 
 class LogConsumerImpl<Value : Any>(
     override val consumerId: ConsumerId,
-    private val topic: Topic,
+    private val topic: DepTopic,
     private val repository: BrokerRepository,
     private val valueClass: KClass<Value>
 ) : LogConsumer<Value> {
@@ -47,7 +47,7 @@ class LogConsumerImpl<Value : Any>(
 
 class BatchConsumerImpl<Value : Any>(
     override val consumerId: ConsumerId,
-    private val topic: Topic,
+    private val topic: DepTopic,
     private val repository: BrokerRepository,
     private val valueClass: KClass<Value>
 ) : BatchConsumer<Value> {

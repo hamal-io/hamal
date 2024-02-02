@@ -11,7 +11,7 @@ import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.log.BrokerTopicsRepository
 import io.hamal.repository.api.log.BrokerTopicsRepository.TopicQuery
 import io.hamal.repository.api.log.BrokerTopicsRepository.TopicToCreate
-import io.hamal.repository.api.log.Topic
+import io.hamal.repository.api.log.DepTopic
 import java.nio.file.Path
 import java.util.concurrent.ConcurrentHashMap
 
@@ -26,7 +26,7 @@ class BrokerTopicsSqliteRepository(
     override val filename: String get() = "topics.db"
 }), BrokerTopicsRepository {
 
-    private val topicMapping = ConcurrentHashMap<TopicName, Topic>()
+    private val topicMapping = ConcurrentHashMap<TopicName, DepTopic>()
     override fun setupConnection(connection: Connection) {
         connection.execute("""PRAGMA journal_mode = wal;""")
         connection.execute("""PRAGMA locking_mode = exclusive;""")
@@ -51,9 +51,9 @@ class BrokerTopicsSqliteRepository(
         }
     }
 
-    override fun create(cmdId: CmdId, toCreate: TopicToCreate): Topic {
+    override fun create(cmdId: CmdId, toCreate: TopicToCreate): DepTopic {
         try {
-            return connection.execute<Topic>("INSERT INTO topics(id, name,flow_id, group_id, instant) VALUES (:id, :name,:flowId, :groupId, :now) RETURNING id, name, flow_id, group_id") {
+            return connection.execute<DepTopic>("INSERT INTO topics(id, name,flow_id, group_id, instant) VALUES (:id, :name,:flowId, :groupId, :now) RETURNING id, name, flow_id, group_id") {
                 query {
                     set("id", toCreate.id)
                     set("name", toCreate.name)
@@ -62,7 +62,7 @@ class BrokerTopicsSqliteRepository(
                     set("now", TimeUtils.now())
                 }
                 map { rs ->
-                    Topic(
+                    DepTopic(
                         id = rs.getId("id", ::TopicId),
                         name = TopicName(rs.getString("name")),
                         flowId = rs.getId("flow_id", ::FlowId),
@@ -78,7 +78,7 @@ class BrokerTopicsSqliteRepository(
         }
     }
 
-    override fun find(flowId: FlowId, name: TopicName): Topic? =
+    override fun find(flowId: FlowId, name: TopicName): DepTopic? =
         topicMapping[name]
             ?: connection.executeQueryOne("SELECT id, name, flow_id, group_id FROM topics WHERE name = :name AND flow_id = :flowId") {
                 query {
@@ -86,7 +86,7 @@ class BrokerTopicsSqliteRepository(
                     set("flowId", flowId.value)
                 }
                 map { rs ->
-                    Topic(
+                    DepTopic(
                         id = rs.getId("id", ::TopicId),
                         name = TopicName(rs.getString("name")),
                         flowId = rs.getId("flow_id", ::FlowId),
@@ -95,13 +95,13 @@ class BrokerTopicsSqliteRepository(
                 }
             }?.also { topicMapping[it.name] = it }
 
-    override fun find(id: TopicId): Topic? = topicMapping.values.find { it.id == id }
+    override fun find(id: TopicId): DepTopic? = topicMapping.values.find { it.id == id }
         ?: connection.executeQueryOne("SELECT id, name, flow_id, group_id FROM topics WHERE id = :id") {
             query {
                 set("id", id)
             }
             map { rs ->
-                Topic(
+                DepTopic(
                     id = rs.getId("id", ::TopicId),
                     name = TopicName(rs.getString("name")),
                     flowId = rs.getId("flow_id", ::FlowId),
@@ -110,8 +110,8 @@ class BrokerTopicsSqliteRepository(
             }
         }?.also { topicMapping[it.name] = it }
 
-    override fun list(query: TopicQuery): List<Topic> {
-        return connection.executeQuery<Topic>(
+    override fun list(query: TopicQuery): List<DepTopic> {
+        return connection.executeQuery<DepTopic>(
             """
                 SELECT
                     id, name, flow_id, group_id
@@ -131,7 +131,7 @@ class BrokerTopicsSqliteRepository(
                 set("limit", query.limit)
             }
             map { rs ->
-                Topic(
+                DepTopic(
                     id = rs.getId("id", ::TopicId),
                     name = TopicName(rs.getString("name")),
                     flowId = rs.getId("flow_id", ::FlowId),

@@ -7,7 +7,7 @@ import io.hamal.lib.domain.vo.TopicName
 import io.hamal.repository.api.log.BrokerTopicsRepository
 import io.hamal.repository.api.log.BrokerTopicsRepository.TopicQuery
 import io.hamal.repository.api.log.BrokerTopicsRepository.TopicToCreate
-import io.hamal.repository.api.log.Topic
+import io.hamal.repository.api.log.DepTopic
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
@@ -15,14 +15,14 @@ import kotlin.concurrent.withLock
 class BrokerTopicsMemoryRepository : BrokerTopicsRepository {
 
     private val lock = ReentrantLock()
-    private val topics = mutableMapOf<FlowId, MutableMap<TopicId, Topic>>()
+    private val topics = mutableMapOf<FlowId, MutableMap<TopicId, DepTopic>>()
 
-    override fun create(cmdId: CmdId, toCreate: TopicToCreate): Topic {
+    override fun create(cmdId: CmdId, toCreate: TopicToCreate): DepTopic {
         return lock.withLock {
             val flowId = toCreate.flowId
             topics.putIfAbsent(flowId, mutableMapOf())
 
-            val topic = Topic(
+            val topic = DepTopic(
                 id = toCreate.id,
                 name = toCreate.name,
                 flowId = toCreate.flowId,
@@ -38,20 +38,20 @@ class BrokerTopicsMemoryRepository : BrokerTopicsRepository {
         }
     }
 
-    override fun find(flowId: FlowId, name: TopicName): Topic? {
+    override fun find(flowId: FlowId, name: TopicName): DepTopic? {
         return lock.withLock {
             (topics[flowId] ?: emptyMap()).values.find { it.name == name }
         }
     }
 
-    override fun find(id: TopicId): Topic? = lock.withLock {
+    override fun find(id: TopicId): DepTopic? = lock.withLock {
         topics.entries.asSequence()
             .map { it.value }
             .flatMap { it.values }
             .find { it.id == id }
     }
 
-    override fun list(query: TopicQuery): List<Topic> {
+    override fun list(query: TopicQuery): List<DepTopic> {
         return lock.withLock {
             topics.filter { query.flowIds.isEmpty() || it.key in query.flowIds }
                 .flatMap { it.value.values }

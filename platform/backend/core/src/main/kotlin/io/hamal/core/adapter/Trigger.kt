@@ -11,7 +11,7 @@ import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.*
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import io.hamal.repository.api.log.BrokerRepository
-import io.hamal.repository.api.log.Topic
+import io.hamal.repository.api.log.DepTopic
 import org.springframework.stereotype.Component
 
 
@@ -26,7 +26,7 @@ interface TriggerCreatePort {
 interface TriggerGetPort {
     operator fun <T : Any> invoke(
         triggerId: TriggerId,
-        responseHandler: (Trigger, Func, Flow, Topic?, Hook?) -> T
+        responseHandler: (Trigger, Func, Flow, DepTopic?, Hook?) -> T
     ): T
 }
 
@@ -38,7 +38,7 @@ interface TriggerListPort {
             triggers: List<Trigger>,
             funcs: Map<FuncId, Func>,
             flows: Map<FlowId, Flow>,
-            topics: Map<TopicId, Topic>,
+            topics: Map<TopicId, DepTopic>,
             hooks: Map<HookId, Hook>
         ) -> T
     ): T
@@ -98,7 +98,7 @@ class TriggerAdapter(
 
     override fun <T : Any> invoke(
         triggerId: TriggerId,
-        responseHandler: (Trigger, Func, Flow, Topic?, Hook?) -> T
+        responseHandler: (Trigger, Func, Flow, DepTopic?, Hook?) -> T
     ): T {
         val trigger = triggerQueryRepository.get(triggerId)
         val func = funcQueryRepository.get(trigger.funcId)
@@ -124,7 +124,7 @@ class TriggerAdapter(
             triggers: List<Trigger>,
             funcs: Map<FuncId, Func>,
             flows: Map<FlowId, Flow>,
-            topics: Map<TopicId, Topic>,
+            topics: Map<TopicId, DepTopic>,
             hooks: Map<HookId, Hook>
         ) -> T
     ): T {

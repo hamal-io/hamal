@@ -15,9 +15,9 @@ class BrokerMemoryRepository : BrokerRepository {
     private val consumersRepository: BrokerConsumersMemoryRepository = BrokerConsumersMemoryRepository()
     private val topicsRepository: BrokerTopicsMemoryRepository = BrokerTopicsMemoryRepository()
 
-    private val repositoryMapping = KeyedOnce.default<Topic, TopicRepository>()
+    private val repositoryMapping = KeyedOnce.default<DepTopic, DepTopicRepository>()
 
-    override fun append(cmdId: CmdId, topic: Topic, bytes: ByteArray) {
+    override fun append(cmdId: CmdId, topic: DepTopic, bytes: ByteArray) {
         resolveRepository(topic).append(cmdId, bytes)
     }
 
@@ -30,12 +30,12 @@ class BrokerMemoryRepository : BrokerRepository {
             }
     }
 
-    override fun consume(consumerId: ConsumerId, topic: Topic, limit: Int): List<Chunk> {
+    override fun consume(consumerId: ConsumerId, topic: DepTopic, limit: Int): List<Chunk> {
         val nextChunkId = consumersRepository.nextChunkId(consumerId, topic.id)
         return resolveRepository(topic).read(nextChunkId, limit)
     }
 
-    override fun commit(consumerId: ConsumerId, topic: Topic, chunkId: ChunkId) {
+    override fun commit(consumerId: ConsumerId, topic: DepTopic, chunkId: ChunkId) {
         consumersRepository.commit(consumerId, topic.id, chunkId)
     }
 
@@ -61,17 +61,17 @@ class BrokerMemoryRepository : BrokerRepository {
 
     override fun findTopic(topicId: TopicId) = topicsRepository.find(topicId)
     override fun findTopic(flowId: FlowId, topicName: TopicName) = topicsRepository.find(flowId, topicName)
-    override fun listTopics(query: TopicQuery): List<Topic> {
+    override fun listTopics(query: TopicQuery): List<DepTopic> {
         return topicsRepository.list(query)
     }
 
     override fun resolveTopic(flowId: FlowId, name: TopicName) = topicsRepository.find(flowId, name)
 
-    override fun read(firstId: ChunkId, topic: Topic, limit: Int): List<Chunk> {
+    override fun read(firstId: ChunkId, topic: DepTopic, limit: Int): List<Chunk> {
         return resolveRepository(topic).read(firstId, limit)
     }
 
-    private fun resolveRepository(topic: Topic) = repositoryMapping(topic) {
+    private fun resolveRepository(topic: DepTopic) = repositoryMapping(topic) {
         TopicMemoryRepository(topic)
     }
 }

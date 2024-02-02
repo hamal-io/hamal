@@ -34,10 +34,10 @@ class BrokerSqliteRepository(
         )
     }
 
-    private val topicRepositoryMapping = KeyedOnce.default<Topic, TopicRepository>()
+    private val topicRepositoryMapping = KeyedOnce.default<DepTopic, DepTopicRepository>()
 
 
-    override fun create(cmdId: CmdId, topicToCreate: CreateTopic.TopicToCreate): Topic =
+    override fun create(cmdId: CmdId, topicToCreate: CreateTopic.TopicToCreate): DepTopic =
         topicsRepository.create(
             cmdId,
             TopicToCreate(
@@ -48,7 +48,7 @@ class BrokerSqliteRepository(
             )
         )
 
-    override fun append(cmdId: CmdId, topic: Topic, bytes: ByteArray) {
+    override fun append(cmdId: CmdId, topic: DepTopic, bytes: ByteArray) {
         resolveRepository(topic).append(cmdId, bytes)
     }
 
@@ -60,12 +60,12 @@ class BrokerSqliteRepository(
         }
     }
 
-    override fun consume(consumerId: ConsumerId, topic: Topic, limit: Int): List<Chunk> {
+    override fun consume(consumerId: ConsumerId, topic: DepTopic, limit: Int): List<Chunk> {
         val nextChunkId = consumersRepository.nextChunkId(consumerId, topic.id)
         return resolveRepository(topic).read(nextChunkId, limit)
     }
 
-    override fun commit(consumerId: ConsumerId, topic: Topic, chunkId: ChunkId) {
+    override fun commit(consumerId: ConsumerId, topic: DepTopic, chunkId: ChunkId) {
         consumersRepository.commit(consumerId, topic.id, chunkId)
     }
 
@@ -73,7 +73,7 @@ class BrokerSqliteRepository(
     override fun findTopic(flowId: FlowId, topicName: TopicName) =
         topicsRepository.find(flowId, topicName)
 
-    override fun listTopics(query: TopicQuery): List<Topic> {
+    override fun listTopics(query: TopicQuery): List<DepTopic> {
         return topicsRepository.list(query)
     }
 
@@ -88,11 +88,11 @@ class BrokerSqliteRepository(
     }
 
 
-    override fun read(firstId: ChunkId, topic: Topic, limit: Int): List<Chunk> {
+    override fun read(firstId: ChunkId, topic: DepTopic, limit: Int): List<Chunk> {
         return resolveRepository(topic).read(firstId, limit)
     }
 
-    private fun resolveRepository(topic: Topic) = topicRepositoryMapping(topic) {
+    private fun resolveRepository(topic: DepTopic) = topicRepositoryMapping(topic) {
         TopicSqliteRepository(topic, path = broker.path)
     }
 }

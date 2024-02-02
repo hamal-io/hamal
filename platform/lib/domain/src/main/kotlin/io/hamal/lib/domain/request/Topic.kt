@@ -8,7 +8,7 @@ interface TopicCreateRequest {
     val name: TopicName
 }
 
-data class TopicCreateRequested(
+data class TopicFlowCreateRequested(
     override val id: RequestId,
     override var status: RequestStatus,
     val groupId: GroupId,

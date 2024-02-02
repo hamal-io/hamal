@@ -8,8 +8,8 @@ import io.hamal.repository.api.log.*
 // like supporting multiple partitions, partitioning by key
 // keeping track of consumer group ids
 class TopicMemoryRepository(
-    internal val topic: Topic
-) : TopicRepository {
+    internal val topic: DepTopic
+) : DepTopicRepository {
 
     private var activeSegment: SegmentMemory
     private var activeSegmentRepository: SegmentMemoryRepository

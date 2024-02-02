@@ -6,7 +6,7 @@ import io.hamal.lib.domain.vo.TopicId
 import io.hamal.repository.api.log.Chunk
 import io.hamal.repository.api.log.ChunkId
 import io.hamal.repository.api.log.Segment
-import io.hamal.repository.api.log.TopicRepository
+import io.hamal.repository.api.log.DepTopicRepository
 import io.hamal.repository.fixture.AbstractUnitTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -21,7 +21,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
     inner class AppendTest {
 
         @TestFactory
-        fun `Append multiple records to empty partition`() = runWith(TopicRepository::class) {
+        fun `Append multiple records to empty partition`() = runWith(DepTopicRepository::class) {
             withEpochMilli(98765) {
                 listOf(
                     "VALUE_1".toByteArray(),
@@ -57,7 +57,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
     inner class ReadTest {
 
         @TestFactory
-        fun `Reads multiple chunks`() = runWith(TopicRepository::class) {
+        fun `Reads multiple chunks`() = runWith(DepTopicRepository::class) {
             appendOneHundredChunks()
             val result = read(ChunkId(25), 36)
             assertThat(result, hasSize(36))
@@ -75,7 +75,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
             assertThat(chunk.instant, equalTo(Instant.ofEpochMilli(id.toLong())))
         }
 
-        private fun TopicRepository.appendOneHundredChunks() {
+        private fun DepTopicRepository.appendOneHundredChunks() {
             LongRange(1, 100).forEach {
                 withEpochMilli(it) {
                     append(CmdId(it.toInt()), "VALUE_$it".toByteArray())

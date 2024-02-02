@@ -3,7 +3,7 @@ package io.hamal.api.http.controller.topic
 import io.hamal.api.http.controller.accepted
 import io.hamal.core.adapter.TopicCreatePort
 import io.hamal.core.component.Retry
-import io.hamal.lib.domain.request.TopicCreateRequested
+import io.hamal.lib.domain.request.TopicFlowCreateRequested
 import io.hamal.lib.domain.vo.FlowId
 import io.hamal.lib.sdk.api.ApiRequested
 import io.hamal.lib.sdk.api.ApiTopicCreateRequest
@@ -19,10 +19,10 @@ class TopicCreateController(
     private val createTopic: TopicCreatePort
 ) {
     @PostMapping("/v1/flows/{flowId}/topics")
-    fun createTopic(
+    fun createFlowTopic(
         @PathVariable("flowId") flowId: FlowId,
         @RequestBody req: ApiTopicCreateRequest
     ): ResponseEntity<ApiRequested> = retry {
-        createTopic(flowId, req, TopicCreateRequested::accepted)
+        createTopic(flowId, req, TopicFlowCreateRequested::accepted)
     }
 }
