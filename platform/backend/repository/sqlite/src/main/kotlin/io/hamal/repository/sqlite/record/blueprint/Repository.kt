@@ -1,5 +1,6 @@
 package io.hamal.repository.sqlite.record.blueprint
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.BlueprintId
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Blueprint
@@ -108,7 +109,7 @@ class BlueprintSqliteRepository(
         return ProjectionCurrent.list(connection, query)
     }
 
-    override fun count(query: BlueprintQuery): ULong {
+    override fun count(query: BlueprintQuery): Count {
         return ProjectionCurrent.count(connection, query)
     }
 }

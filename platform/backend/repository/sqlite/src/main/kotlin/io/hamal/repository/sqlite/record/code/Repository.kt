@@ -1,5 +1,6 @@
 package io.hamal.repository.sqlite.record.code
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.lib.sqlite.SqliteBaseRepository
@@ -115,7 +116,7 @@ class CodeSqliteRepository(
         return ProjectionCurrent.list(connection, query)
     }
 
-    override fun count(query: CodeQuery): ULong {
+    override fun count(query: CodeQuery): Count {
         return ProjectionCurrent.count(connection, query)
     }
 }

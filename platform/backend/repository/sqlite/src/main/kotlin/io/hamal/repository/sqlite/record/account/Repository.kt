@@ -1,5 +1,6 @@
 package io.hamal.repository.sqlite.record.account
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Account
@@ -104,7 +105,7 @@ class AccountSqliteRepository(
         return ProjectionCurrent.list(connection, query)
     }
 
-    override fun count(query: AccountQuery): ULong {
+    override fun count(query: AccountQuery): Count {
         return ProjectionCurrent.count(connection, query)
     }
 }

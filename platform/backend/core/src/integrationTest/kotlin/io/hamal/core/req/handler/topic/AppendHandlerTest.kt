@@ -29,7 +29,6 @@ internal class TopicAppendHandlerTest : BaseReqHandlerTest() {
                 id = RequestId(SnowflakeId(123)),
                 status = Submitted,
                 topicId = TopicId(4444),
-                groupId = testGroup.id,
                 payload = TopicEntryPayload(HotObject.builder().set("hamal", "rocks").build())
             )
         )
@@ -56,7 +55,6 @@ internal class TopicAppendHandlerTest : BaseReqHandlerTest() {
                     id = RequestId(SnowflakeId(123)),
                     status = Submitted,
                     topicId = TopicId(123),
-                    groupId = testGroup.id,
                     payload = TopicEntryPayload(HotObject.builder().set("hamal", "rocks").build())
                 )
             )

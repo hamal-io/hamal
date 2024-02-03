@@ -1,5 +1,6 @@
 package io.hamal.repository.sqlite.record.group
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.GroupName
 import io.hamal.lib.sqlite.Connection
@@ -116,9 +117,10 @@ internal object ProjectionCurrent : ProjectionSqlite<GroupId, GroupRecord, Group
         }
     }
 
-    fun count(connection: Connection, query: GroupQuery): ULong {
-        return connection.executeQueryOne(
-            """
+    fun count(connection: Connection, query: GroupQuery): Count {
+        return Count(
+            connection.executeQueryOne(
+                """
             SELECT 
                 COUNT(*) as count 
             FROM 
@@ -127,14 +129,15 @@ internal object ProjectionCurrent : ProjectionSqlite<GroupId, GroupRecord, Group
                 id < :afterId
                 ${query.ids()}
         """.trimIndent()
-        ) {
-            query {
-                set("afterId", query.afterId)
-            }
-            map {
-                it.getLong("count").toULong()
-            }
-        } ?: 0UL
+            ) {
+                query {
+                    set("afterId", query.afterId)
+                }
+                map {
+                    it.getLong("count")
+                }
+            } ?: 0
+        )
     }
 
     private fun GroupQuery.ids(): String {

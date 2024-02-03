@@ -28,6 +28,5 @@ data class TopicAppendToRequested(
     override val id: RequestId,
     override var status: RequestStatus,
     val topicId: TopicId,
-    val groupId: GroupId,
     val payload: TopicEntryPayload
 ) : Requested()

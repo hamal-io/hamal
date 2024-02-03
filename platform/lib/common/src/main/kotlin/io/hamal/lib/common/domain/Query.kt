@@ -1,7 +1,6 @@
 package io.hamal.lib.common.domain
 
 class Limit(override val value: Int) : ValueObjectInt() {
-
     init {
         require(value > 0) { "Limit must be positive" }
     }
@@ -11,3 +10,9 @@ class Limit(override val value: Int) : ValueObjectInt() {
     }
 }
 
+
+class Count(override val value: Long) : ValueObjectLong() {
+    init {
+        require(value >= 0) { "Count must not be negative" }
+    }
+}

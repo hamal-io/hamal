@@ -3,10 +3,7 @@ package io.hamal.repository.api
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
-import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.domain.DomainObject
-import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.common.domain.UpdatedAt
+import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.serialization.JsonAdapter
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.Correlation
@@ -75,7 +72,7 @@ interface ExecQueryRepository {
         )
     )
 
-    fun count(query: ExecQuery): ULong
+    fun count(query: ExecQuery): Count
     data class ExecQuery(
         var afterId: ExecId = ExecId(SnowflakeId(Long.MAX_VALUE)),
         var limit: Limit = Limit(1),

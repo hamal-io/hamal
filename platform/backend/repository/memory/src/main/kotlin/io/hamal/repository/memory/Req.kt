@@ -1,5 +1,6 @@
 package io.hamal.repository.memory
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.Requested
 import io.hamal.lib.domain.vo.RequestId
@@ -79,12 +80,14 @@ class ReqMemoryRepository : RequestRepository {
         }
     }
 
-    override fun count(query: RequestQueryRepository.ReqQuery): ULong {
+    override fun count(query: RequestQueryRepository.ReqQuery): Count {
         return lock.withLock {
-            store.keys.sorted()
-                .dropWhile { it <= query.afterId }
-                .count()
-                .toULong()
+            Count(
+                store.keys.sorted()
+                    .dropWhile { it <= query.afterId }
+                    .count()
+                    .toLong()
+            )
         }
     }
 

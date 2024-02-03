@@ -1,5 +1,6 @@
 package io.hamal.repository.sqlite.record.flow
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.FlowId
 import io.hamal.lib.domain.vo.FlowName
 import io.hamal.lib.sqlite.SqliteBaseRepository
@@ -113,7 +114,7 @@ class FlowSqliteRepository(
         return ProjectionCurrent.list(connection, query)
     }
 
-    override fun count(query: FlowQuery): ULong {
+    override fun count(query: FlowQuery): Count {
         return ProjectionCurrent.count(connection, query)
     }
 }

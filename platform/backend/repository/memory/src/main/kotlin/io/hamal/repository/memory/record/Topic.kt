@@ -1,8 +1,10 @@
 package io.hamal.repository.memory.record
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.repository.api.Topic
 import io.hamal.repository.api.TopicCmdRepository.CreateFlowTopicCmd
+import io.hamal.repository.api.TopicEntry
 import io.hamal.repository.api.TopicQueryRepository
 import io.hamal.repository.api.TopicRepository
 import io.hamal.repository.api.new_log.LogBrokerRepository
@@ -49,7 +51,7 @@ private object TopicCurrentProjection {
 //            .toList()
     }
 
-    fun count(query: TopicQueryRepository.TopicQuery): ULong {
+    fun count(query: TopicQueryRepository.TopicQuery): Count {
         TODO()
 //        return projection.filter { query.topicIds.isEmpty() || it.key in query.topicIds }
 //            .map { it.value }
@@ -108,8 +110,16 @@ class TopicMemoryRepository(
     override fun list(query: TopicQueryRepository.TopicQuery): List<Topic> =
         lock.withLock { TopicCurrentProjection.list(query) }
 
-    override fun count(query: TopicQueryRepository.TopicQuery): ULong =
+    override fun list(query: TopicQueryRepository.TopicEntryQuery): List<TopicEntry> {
+        TODO("Not yet implemented")
+    }
+
+    override fun count(query: TopicQueryRepository.TopicQuery): Count =
         lock.withLock { TopicCurrentProjection.count(query) }
+
+    override fun count(query: TopicQueryRepository.TopicEntryQuery): Count {
+        TODO("Not yet implemented")
+    }
 
     private val lock = ReentrantLock()
 }

@@ -1,5 +1,6 @@
 package io.hamal.repository.sqlite.record.group
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Group
@@ -85,7 +86,7 @@ class GroupSqliteRepository(
         return ProjectionCurrent.list(connection, query)
     }
 
-    override fun count(query: GroupQuery): ULong {
+    override fun count(query: GroupQuery): Count {
         return ProjectionCurrent.count(connection, query)
     }
 }

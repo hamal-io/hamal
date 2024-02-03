@@ -1,9 +1,6 @@
 package io.hamal.repository.api
 
-import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.domain.DomainObject
-import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.common.domain.UpdatedAt
+import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.*
 
@@ -84,7 +81,7 @@ interface FuncQueryRepository {
 
     fun listDeployments(funcId: FuncId): List<FuncDeployment>
 
-    fun count(query: FuncQuery): ULong
+    fun count(query: FuncQuery): Count
 
     data class FuncQuery(
         var afterId: FuncId = FuncId(SnowflakeId(Long.MAX_VALUE)),

@@ -1,5 +1,6 @@
 package io.hamal.repository.sqlite.record.exec
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sqlite.Connection
@@ -59,9 +60,10 @@ internal object ProjectionCurrent : ProjectionSqlite<ExecId, ExecRecord, Exec> {
         }
     }
 
-    fun count(connection: Connection, query: ExecQuery): ULong {
-        return connection.executeQueryOne(
-            """
+    fun count(connection: Connection, query: ExecQuery): Count {
+        return Count(
+            connection.executeQueryOne(
+                """
             SELECT 
                 COUNT(*) as count 
             FROM 
@@ -73,14 +75,15 @@ internal object ProjectionCurrent : ProjectionSqlite<ExecId, ExecRecord, Exec> {
                 ${query.funcIds()}
                 ${query.flowIds()}
         """.trimIndent()
-        ) {
-            query {
-                set("afterId", query.afterId)
-            }
-            map {
-                it.getLong("count").toULong()
-            }
-        } ?: 0UL
+            ) {
+                query {
+                    set("afterId", query.afterId)
+                }
+                map {
+                    it.getLong("count")
+                }
+            } ?: 0
+        )
     }
 
 

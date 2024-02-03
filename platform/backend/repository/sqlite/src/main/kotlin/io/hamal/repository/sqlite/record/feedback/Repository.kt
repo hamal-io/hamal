@@ -1,5 +1,6 @@
 package io.hamal.repository.sqlite.record.feedback
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.FeedbackId
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Feedback
@@ -80,7 +81,7 @@ class FeedbackSqliteRepository(
         return ProjectionCurrent.list(connection, query)
     }
 
-    override fun count(query: FeedbackQuery): ULong {
+    override fun count(query: FeedbackQuery): Count {
         return ProjectionCurrent.count(connection, query)
     }
 }

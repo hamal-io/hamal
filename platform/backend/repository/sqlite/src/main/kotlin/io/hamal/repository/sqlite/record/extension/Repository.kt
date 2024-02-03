@@ -1,5 +1,6 @@
 package io.hamal.repository.sqlite.record.extension
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.ExtensionId
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Extension
@@ -102,6 +103,6 @@ class ExtensionSqliteRepository(
     override fun list(query: ExtensionQuery): List<Extension> = ProjectionCurrent.list(connection, query)
 
 
-    override fun count(query: ExtensionQuery): ULong = ProjectionCurrent.count(connection, query)
+    override fun count(query: ExtensionQuery): Count = ProjectionCurrent.count(connection, query)
 
 }

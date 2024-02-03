@@ -1,5 +1,6 @@
 package io.hamal.repository.sqlite.record.flow
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.FlowId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
@@ -57,9 +58,10 @@ internal object ProjectionCurrent : ProjectionSqlite<FlowId, FlowRecord, Flow> {
         }
     }
 
-    fun count(connection: Connection, query: FlowQuery): ULong {
-        return connection.executeQueryOne(
-            """
+    fun count(connection: Connection, query: FlowQuery): Count {
+        return Count(
+            connection.executeQueryOne(
+                """
             SELECT 
                 COUNT(*) as count 
             FROM 
@@ -69,14 +71,15 @@ internal object ProjectionCurrent : ProjectionSqlite<FlowId, FlowRecord, Flow> {
                 ${query.ids()}
                 ${query.groupIds()}
         """.trimIndent()
-        ) {
-            query {
-                set("afterId", query.afterId)
-            }
-            map {
-                it.getLong("count").toULong()
-            }
-        } ?: 0UL
+            ) {
+                query {
+                    set("afterId", query.afterId)
+                }
+                map {
+                    it.getLong("count")
+                }
+            } ?: 0
+        )
     }
 
     override fun upsert(tx: RecordTransactionSqlite<FlowId, FlowRecord, Flow>, obj: Flow) {

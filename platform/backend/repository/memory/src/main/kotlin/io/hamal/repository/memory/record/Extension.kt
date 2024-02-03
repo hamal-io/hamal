@@ -1,5 +1,6 @@
 package io.hamal.repository.memory.record
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.ExtensionId
 import io.hamal.repository.api.Extension
 import io.hamal.repository.api.ExtensionCmdRepository.CreateCmd
@@ -43,15 +44,17 @@ private object ExtensionCurrentProjection {
             .toList()
     }
 
-    fun count(query: ExtensionQuery): ULong {
-        return projection.filter { query.extIds.isEmpty() || it.key in query.extIds }
-            .map { it.value }
-            .reversed()
-            .asSequence()
-            .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
-            .dropWhile { it.id >= query.afterId }
-            .count()
-            .toULong()
+    fun count(query: ExtensionQuery): Count {
+        return Count(
+            projection.filter { query.extIds.isEmpty() || it.key in query.extIds }
+                .map { it.value }
+                .reversed()
+                .asSequence()
+                .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
+                .dropWhile { it.id >= query.afterId }
+                .count()
+                .toLong()
+        )
     }
 
     fun clear() {
@@ -110,7 +113,8 @@ class ExtensionMemoryRepository : RecordMemoryRepository<ExtensionId, ExtensionR
 
     override fun list(query: ExtensionQuery): List<Extension> = lock.withLock { ExtensionCurrentProjection.list(query) }
 
-    override fun count(query: ExtensionQuery): ULong = lock.withLock { ExtensionCurrentProjection.count(query) }
+    override fun count(query: ExtensionQuery): Count
+    = lock.withLock { ExtensionCurrentProjection.count(query) }
 
     override fun clear() {
         lock.withLock {

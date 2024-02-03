@@ -4,6 +4,7 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.CmdRepository
+import io.hamal.repository.api.TopicEntry
 import io.hamal.repository.api.log.BrokerTopicsRepository.TopicQuery
 
 interface CreateTopic {

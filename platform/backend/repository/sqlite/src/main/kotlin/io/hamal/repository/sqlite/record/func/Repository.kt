@@ -1,5 +1,6 @@
 package io.hamal.repository.sqlite.record.func
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.domain.vo.DeployedAt
 import io.hamal.lib.domain.vo.FuncId
@@ -149,7 +150,7 @@ class FuncSqliteRepository(
         }
     }
 
-    override fun count(query: FuncQuery): ULong {
+    override fun count(query: FuncQuery): Count {
         return ProjectionCurrent.count(connection, query)
     }
 }

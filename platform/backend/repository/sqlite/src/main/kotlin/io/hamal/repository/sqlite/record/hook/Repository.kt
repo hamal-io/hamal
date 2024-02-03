@@ -1,5 +1,6 @@
 package io.hamal.repository.sqlite.record.hook
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.HookId
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Hook
@@ -108,7 +109,7 @@ class HookSqliteRepository(
         return ProjectionCurrent.list(connection, query)
     }
 
-    override fun count(query: HookQuery): ULong {
+    override fun count(query: HookQuery): Count {
         return ProjectionCurrent.count(connection, query)
     }
 }

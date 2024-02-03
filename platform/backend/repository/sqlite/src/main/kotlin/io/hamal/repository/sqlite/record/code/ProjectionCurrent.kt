@@ -1,5 +1,6 @@
 package io.hamal.repository.sqlite.record.code
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
@@ -58,9 +59,10 @@ internal object ProjectionCurrent : ProjectionSqlite<CodeId, CodeRecord, Code> {
         }
     }
 
-    fun count(connection: Connection, query: CodeQuery): ULong {
-        return connection.executeQueryOne(
-            """
+    fun count(connection: Connection, query: CodeQuery): Count {
+        return Count(
+            connection.executeQueryOne(
+                """
             SELECT 
                 COUNT(*) as count 
             FROM 
@@ -70,14 +72,15 @@ internal object ProjectionCurrent : ProjectionSqlite<CodeId, CodeRecord, Code> {
                 ${query.ids()}
                 ${query.groupIds()}
         """.trimIndent()
-        ) {
-            query {
-                set("afterId", query.afterId)
-            }
-            map {
-                it.getLong("count").toULong()
-            }
-        } ?: 0UL
+            ) {
+                query {
+                    set("afterId", query.afterId)
+                }
+                map {
+                    it.getLong("count")
+                }
+            } ?: 0
+        )
     }
 
     override fun upsert(tx: RecordTransactionSqlite<CodeId, CodeRecord, Code>, obj: Code) {

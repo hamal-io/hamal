@@ -1,5 +1,6 @@
 package io.hamal.repository.api
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.ExecLogLevel
@@ -21,7 +22,7 @@ interface ExecLogCmdRepository : CmdRepository {
 
 interface ExecLogQueryRepository {
     fun list(query: ExecLogQuery): List<ExecLog>
-    fun count(query: ExecLogQuery): ULong
+    fun count(query: ExecLogQuery): Count
 
     data class ExecLogQuery(
         var afterId: ExecLogId = ExecLogId(SnowflakeId(Long.MAX_VALUE)),

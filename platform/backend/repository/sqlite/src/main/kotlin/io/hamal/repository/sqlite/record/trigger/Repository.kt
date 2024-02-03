@@ -1,5 +1,6 @@
 package io.hamal.repository.sqlite.record.trigger
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.sqlite.SqliteBaseRepository
@@ -207,7 +208,7 @@ class TriggerSqliteRepository(
         return ProjectionCurrent.list(connection, query)
     }
 
-    override fun count(query: TriggerQuery): ULong {
+    override fun count(query: TriggerQuery): Count {
         return ProjectionCurrent.count(connection, query)
     }
 }

@@ -10,13 +10,9 @@ import io.hamal.lib.domain.vo.FlowId
 import io.hamal.lib.domain.vo.LogTopicId
 import io.hamal.lib.domain.vo.RequestId
 import io.hamal.lib.domain.vo.TopicId
-import io.hamal.repository.api.FlowQueryRepository
-import io.hamal.repository.api.RequestCmdRepository
-import io.hamal.repository.api.log.BrokerRepository
-import io.hamal.repository.api.log.BrokerRepository.TopicEntryQuery
-import io.hamal.repository.api.log.BrokerTopicsRepository.TopicQuery
-import io.hamal.repository.api.log.DepTopic
-import io.hamal.repository.api.log.TopicEntry
+import io.hamal.repository.api.*
+import io.hamal.repository.api.TopicQueryRepository.TopicEntryQuery
+import io.hamal.repository.api.TopicQueryRepository.TopicQuery
 import org.springframework.stereotype.Component
 
 interface TopicAppendEntryPort {
@@ -39,7 +35,7 @@ interface TopicCreatePort {
 interface TopicGetPort {
     operator fun <T : Any> invoke(
         topicId: TopicId,
-        responseHandler: (DepTopic) -> T
+        responseHandler: (Topic) -> T
     ): T
 }
 
@@ -47,23 +43,22 @@ interface TopicListEntryPort {
     operator fun <T : Any> invoke(
         topicId: TopicId,
         query: TopicEntryQuery,
-        responseHandler: (List<TopicEntry>, DepTopic) -> T
+        responseHandler: (List<TopicEntry>, Topic) -> T
     ): T
 }
 
 interface TopicListPort {
     operator fun <T : Any> invoke(
         query: TopicQuery,
-        responseHandler: (List<DepTopic>) -> T
+        responseHandler: (List<Topic>) -> T
     ): T
 }
 
 interface TopicPort : TopicAppendEntryPort, TopicCreatePort, TopicGetPort, TopicListPort, TopicListEntryPort
 
-
 @Component
 class TopicAdapter(
-    private val eventBrokerRepository: BrokerRepository,
+    private val topicRepository: TopicRepository,
     private val generateDomainId: GenerateId,
     private val flowQueryRepository: FlowQueryRepository,
     private val reqCmdRepository: RequestCmdRepository
@@ -73,11 +68,10 @@ class TopicAdapter(
         req: TopicAppendEntryRequest,
         responseHandler: (TopicAppendToRequested) -> T
     ): T {
-        val topic = eventBrokerRepository.getTopic(req.topicId)
+        val topic = topicRepository.get(req.topicId)
         return TopicAppendToRequested(
             id = generateDomainId(::RequestId),
             status = Submitted,
-            groupId = topic.groupId,
             topicId = req.topicId,
             payload = req.payload
         ).also(reqCmdRepository::queue).let(responseHandler)
@@ -100,18 +94,18 @@ class TopicAdapter(
         ).also(reqCmdRepository::queue).let(responseHandler)
     }
 
-    override fun <T : Any> invoke(topicId: TopicId, responseHandler: (DepTopic) -> T): T =
-        responseHandler(eventBrokerRepository.getTopic(topicId))
+    override fun <T : Any> invoke(topicId: TopicId, responseHandler: (Topic) -> T): T =
+        responseHandler(topicRepository.get(topicId))
 
-    override fun <T : Any> invoke(query: TopicQuery, responseHandler: (List<DepTopic>) -> T): T =
-        responseHandler(eventBrokerRepository.listTopics(query))
+    override fun <T : Any> invoke(query: TopicQuery, responseHandler: (List<Topic>) -> T): T =
+        responseHandler(topicRepository.list(query))
 
     override fun <T : Any> invoke(
         topicId: TopicId,
         query: TopicEntryQuery,
-        responseHandler: (List<TopicEntry>, DepTopic) -> T
+        responseHandler: (List<TopicEntry>, Topic) -> T
     ): T {
-        val topic = eventBrokerRepository.getTopic(topicId)
-        return responseHandler(eventBrokerRepository.listEntries(topic, query), topic)
+        val topic = topicRepository.get(topicId)
+        return responseHandler(topicRepository.list(query), topic)
     }
 }

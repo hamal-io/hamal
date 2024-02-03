@@ -1,6 +1,9 @@
 package io.hamal.repository.api.log
 
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.FlowId
+import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.TopicId
+import io.hamal.lib.domain.vo.TopicName
 import io.hamal.repository.api.CmdRepository
 
 data class DepTopic(
@@ -13,7 +16,3 @@ data class DepTopic(
 @Deprecated("")
 interface DepTopicRepository : CmdRepository, ChunkAppender, ChunkReader, ChunkCounter
 
-data class TopicEntry(
-    val id: TopicEntryId,
-    val payload: TopicEntryPayload
-)

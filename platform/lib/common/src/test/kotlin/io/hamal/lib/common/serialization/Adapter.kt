@@ -141,6 +141,30 @@ internal object ValueObjectIntAdapterTest {
     ) : ValueObjectInt()
 }
 
+internal object ValueObjectULongAdapterTest {
+
+    @Test
+    fun serialize() {
+        val result = testDelegate.toJson(TestULongValueObject(Long.MAX_VALUE))
+        assertThat(result, equalTo("9223372036854775807"))
+    }
+
+    @Test
+    fun deserialize() {
+        val expected = TestULongValueObject(Long.MAX_VALUE)
+        val result = testDelegate.fromJson("9223372036854775807", TestULongValueObject::class.java)
+        assertThat(result, equalTo(expected))
+    }
+
+    private val testDelegate: Gson = GsonBuilder().registerTypeAdapter(
+        TestULongValueObject::class.java, ValueObjectLongAdapter(::TestULongValueObject)
+    ).create()
+
+    private class TestULongValueObject(
+        override val value: Long
+    ) : ValueObjectLong()
+}
+
 internal object ValueObjectInstantAdapterTest {
 
     @Test

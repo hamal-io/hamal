@@ -1,5 +1,6 @@
 package io.hamal.repository.sqlite.record.exec
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.*
@@ -175,7 +176,7 @@ class ExecSqliteRepository(
         return ProjectionCurrent.list(connection, query)
     }
 
-    override fun count(query: ExecQuery): ULong {
+    override fun count(query: ExecQuery): Count {
         return ProjectionCurrent.count(connection, query)
     }
 

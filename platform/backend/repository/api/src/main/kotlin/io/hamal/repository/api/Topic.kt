@@ -1,9 +1,6 @@
 package io.hamal.repository.api
 
-import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.domain.DomainObject
-import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.common.domain.UpdatedAt
+import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.TopicType
 import io.hamal.lib.domain.vo.*
@@ -59,6 +56,11 @@ sealed class Topic : DomainObject<TopicId> {
 
 }
 
+data class TopicEntry(
+    val id: TopicEntryId,
+    val payload: TopicEntryPayload
+)
+
 interface TopicCmdRepository : CmdRepository {
 
     fun create(cmd: CreateFlowTopicCmd): Topic.Flow
@@ -78,16 +80,25 @@ interface TopicQueryRepository {
     fun get(topicId: TopicId) = find(topicId) ?: throw NoSuchElementException("Topic not found")
     fun find(topicId: TopicId): Topic?
     fun list(query: TopicQuery): List<Topic>
-    fun count(query: TopicQuery): ULong
+    fun count(query: TopicQuery): Count
+
+    fun list(query: TopicEntryQuery): List<TopicEntry>
+    fun count(query: TopicEntryQuery): Count
 
     data class TopicQuery(
         var afterId: TopicId = TopicId(SnowflakeId(Long.MAX_VALUE)),
         var types: List<TopicType> = TopicType.values().toList(),
         var limit: Limit = Limit(1),
         var topicIds: List<TopicId> = listOf(),
-        var hookIds: List<HookId> = listOf(),
+        var names: List<TopicName> = listOf(),
+        var funcIds: List<FuncId> = listOf(),
+        var flowIds: List<FlowId> = listOf(),
         var groupIds: List<GroupId> = listOf(),
-        var flowIds: List<FlowId> = listOf()
+    )
+
+    data class TopicEntryQuery(
+        var afterId: TopicEntryId = TopicEntryId(0),
+        var limit: Limit = Limit(1)
     )
 }
 

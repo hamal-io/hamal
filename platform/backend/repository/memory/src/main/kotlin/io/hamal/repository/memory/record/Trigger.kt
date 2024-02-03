@@ -1,5 +1,6 @@
 package io.hamal.repository.memory.record
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain._enum.TriggerType
@@ -77,40 +78,42 @@ private object TriggerCurrentProjection {
             .toList()
     }
 
-    fun count(query: TriggerQuery): ULong {
-        return projection.filter { query.triggerIds.isEmpty() || it.key in query.triggerIds }
-            .map { it.value }
-            .reversed()
-            .asSequence()
-            .filter { if (query.types.isEmpty()) true else query.types.contains(it.type) }
-            .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
-            .filter { if (query.funcIds.isEmpty()) true else query.funcIds.contains(it.funcId) }
-            .filter { if (query.flowIds.isEmpty()) true else query.flowIds.contains(it.flowId) }
-            .filter {
-                if (query.topicIds.isEmpty()) {
-                    true
-                } else {
-                    if (it is EventTrigger) {
-                        query.topicIds.contains(it.topicId)
+    fun count(query: TriggerQuery): Count {
+        return Count(
+            projection.filter { query.triggerIds.isEmpty() || it.key in query.triggerIds }
+                .map { it.value }
+                .reversed()
+                .asSequence()
+                .filter { if (query.types.isEmpty()) true else query.types.contains(it.type) }
+                .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
+                .filter { if (query.funcIds.isEmpty()) true else query.funcIds.contains(it.funcId) }
+                .filter { if (query.flowIds.isEmpty()) true else query.flowIds.contains(it.flowId) }
+                .filter {
+                    if (query.topicIds.isEmpty()) {
+                        true
                     } else {
-                        false
+                        if (it is EventTrigger) {
+                            query.topicIds.contains(it.topicId)
+                        } else {
+                            false
+                        }
                     }
                 }
-            }
-            .filter {
-                if (query.hookIds.isEmpty()) {
-                    true
-                } else {
-                    if (it is HookTrigger) {
-                        query.hookIds.contains(it.hookId)
+                .filter {
+                    if (query.hookIds.isEmpty()) {
+                        true
                     } else {
-                        false
+                        if (it is HookTrigger) {
+                            query.hookIds.contains(it.hookId)
+                        } else {
+                            false
+                        }
                     }
                 }
-            }
-            .dropWhile { it.id >= query.afterId }
-            .count()
-            .toULong()
+                .dropWhile { it.id >= query.afterId }
+                .count()
+                .toLong()
+        )
     }
 
     fun clear() {
@@ -279,7 +282,7 @@ class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord,
 
     override fun list(query: TriggerQuery): List<Trigger> = lock.withLock { TriggerCurrentProjection.list(query) }
 
-    override fun count(query: TriggerQuery): ULong = lock.withLock { TriggerCurrentProjection.count(query) }
+    override fun count(query: TriggerQuery): Count = lock.withLock { TriggerCurrentProjection.count(query) }
 
     override fun clear() {
         lock.withLock {

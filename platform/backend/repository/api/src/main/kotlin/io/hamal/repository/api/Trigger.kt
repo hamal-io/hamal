@@ -3,10 +3,7 @@ package io.hamal.repository.api
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
-import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.domain.DomainObject
-import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.common.domain.UpdatedAt
+import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.serialization.JsonAdapter
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.HookMethod
@@ -88,7 +85,7 @@ interface TriggerQueryRepository {
     fun get(triggerId: TriggerId) = find(triggerId) ?: throw NoSuchElementException("Trigger not found")
     fun find(triggerId: TriggerId): Trigger?
     fun list(query: TriggerQuery): List<Trigger>
-    fun count(query: TriggerQuery): ULong
+    fun count(query: TriggerQuery): Count
 
     data class TriggerQuery(
         var afterId: TriggerId = TriggerId(SnowflakeId(Long.MAX_VALUE)),

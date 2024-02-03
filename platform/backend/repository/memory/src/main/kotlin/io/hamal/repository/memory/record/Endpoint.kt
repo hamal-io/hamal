@@ -1,5 +1,6 @@
 package io.hamal.repository.memory.record
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.EndpointId
 import io.hamal.repository.api.Endpoint
 import io.hamal.repository.api.EndpointCmdRepository
@@ -43,16 +44,18 @@ private object EndpointCurrentProjection {
             .toList()
     }
 
-    fun count(query: EndpointQuery): ULong {
-        return projection.filter { query.endpointIds.isEmpty() || it.key in query.endpointIds }
-            .map { it.value }
-            .reversed()
-            .asSequence()
-            .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
-            .filter { if (query.flowIds.isEmpty()) true else query.flowIds.contains(it.flowId) }
-            .dropWhile { it.id >= query.afterId }
-            .count()
-            .toULong()
+    fun count(query: EndpointQuery): Count {
+        return Count(
+            projection.filter { query.endpointIds.isEmpty() || it.key in query.endpointIds }
+                .map { it.value }
+                .reversed()
+                .asSequence()
+                .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
+                .filter { if (query.flowIds.isEmpty()) true else query.flowIds.contains(it.flowId) }
+                .dropWhile { it.id >= query.afterId }
+                .count()
+                .toLong()
+        )
     }
 
     fun clear() {
@@ -110,7 +113,7 @@ class EndpointMemoryRepository : RecordMemoryRepository<EndpointId, EndpointReco
 
     override fun list(query: EndpointQuery): List<Endpoint> = lock.withLock { EndpointCurrentProjection.list(query) }
 
-    override fun count(query: EndpointQuery): ULong = lock.withLock { EndpointCurrentProjection.count(query) }
+    override fun count(query: EndpointQuery): Count = lock.withLock { EndpointCurrentProjection.count(query) }
 
     override fun clear() {
         lock.withLock {
