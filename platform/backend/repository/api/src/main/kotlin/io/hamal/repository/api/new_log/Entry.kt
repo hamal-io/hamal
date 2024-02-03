@@ -2,6 +2,7 @@ package io.hamal.repository.api.new_log
 
 import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.domain.vo.LogTopicId
 import java.time.Instant
 
 class LogEntryId(override val value: SnowflakeId) : ValueObjectId() {

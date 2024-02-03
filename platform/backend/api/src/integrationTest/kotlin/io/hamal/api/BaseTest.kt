@@ -123,6 +123,12 @@ internal abstract class BaseTest {
     lateinit var stateCmdRepository: StateCmdRepository
 
     @Autowired
+    lateinit var topicCmdRepository: TopicCmdRepository
+
+    @Autowired
+    lateinit var topicQueryRepository: TopicQueryRepository
+
+    @Autowired
     lateinit var triggerCmdRepository: TriggerCmdRepository
 
     @Autowired
@@ -155,8 +161,8 @@ internal abstract class BaseTest {
         flowCmdRepository.clear()
         reqCmdRepository.clear()
         stateCmdRepository.clear()
+        topicCmdRepository.clear()
         triggerCmdRepository.clear()
-
 
         testAccount = accountCmdRepository.create(
             AccountCmdRepository.CreateCmd(

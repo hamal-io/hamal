@@ -3,8 +3,12 @@ package io.hamal.repository.new_log
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.util.HashUtils
-import io.hamal.repository.api.new_log.*
+import io.hamal.lib.domain.vo.LogTopicId
+import io.hamal.repository.api.new_log.LogBrokerRepository
 import io.hamal.repository.api.new_log.LogBrokerRepository.LogTopicToCreate
+import io.hamal.repository.api.new_log.LogConsumerId
+import io.hamal.repository.api.new_log.LogConsumerImpl
+import io.hamal.repository.api.new_log.LogTopicAppenderImpl
 import io.hamal.repository.fixture.AbstractIntegrationTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -19,11 +23,7 @@ class LogConsumerTest : AbstractIntegrationTest() {
     fun `Late consumer starts at the beginning`() = runWith(LogBrokerRepository::class) { testInstance ->
         val topic = testInstance.create(
             CmdId(1),
-            LogTopicToCreate(
-                id = LogTopicId(123),
-                name = LogTopicName("topic"),
-                groupId = LogTopicGroupId(1)
-            )
+            LogTopicToCreate(LogTopicId(123))
         )
 
         val appender = LogTopicAppenderImpl<String>(testInstance)
@@ -57,11 +57,7 @@ class LogConsumerTest : AbstractIntegrationTest() {
 
         val topic = testInstance.create(
             CmdId(1),
-            LogTopicToCreate(
-                id = LogTopicId(123),
-                name = LogTopicName("topic"),
-                groupId = LogTopicGroupId.root
-            )
+            LogTopicToCreate(LogTopicId(123))
         )
 
         val testAppender = LogTopicAppenderImpl<String>(testInstance)

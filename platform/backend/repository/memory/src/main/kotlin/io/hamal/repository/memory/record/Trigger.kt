@@ -139,7 +139,6 @@ class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord,
     createDomainObject = CreateTriggerFromRecords,
     recordClass = TriggerRecord::class
 ), TriggerRepository {
-    private val lock = ReentrantLock()
 
     override fun create(cmd: CreateFixedRateCmd): FixedRateTrigger {
         return lock.withLock {
@@ -290,4 +289,6 @@ class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord,
     }
 
     override fun close() {}
+
+    private val lock = ReentrantLock()
 }

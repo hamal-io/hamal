@@ -11,8 +11,9 @@ interface TopicCreateRequest {
 data class TopicFlowCreateRequested(
     override val id: RequestId,
     override var status: RequestStatus,
-    val groupId: GroupId,
     val topicId: TopicId,
+    val logTopicId: LogTopicId,
+    val groupId: GroupId,
     val flowId: FlowId,
     val name: TopicName
 ) : Requested()

@@ -4,6 +4,7 @@ import io.hamal.lib.common.domain.BatchSize
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.domain.vo.LogTopicId
 import kotlin.reflect.KClass
 
 class LogConsumerId(override val value: SnowflakeId) : ValueObjectId() {

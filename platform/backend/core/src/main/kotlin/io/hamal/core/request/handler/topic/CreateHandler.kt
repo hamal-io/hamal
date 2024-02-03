@@ -16,6 +16,7 @@ class TopicFlowCreateHandler(
             CreateFlowTopicCmd(
                 id = req.cmdId(),
                 topicId = req.topicId,
+                logTopicId = req.logTopicId,
                 name = req.name,
                 flowId = req.flowId,
                 groupId = req.groupId

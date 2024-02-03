@@ -3,8 +3,10 @@ package io.hamal.repository.new_log
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.util.HashUtils
-import io.hamal.repository.api.new_log.*
+import io.hamal.lib.domain.vo.LogTopicId
+import io.hamal.repository.api.new_log.LogBrokerRepository
 import io.hamal.repository.api.new_log.LogBrokerRepository.LogTopicToCreate
+import io.hamal.repository.api.new_log.LogConsumerId
 import io.hamal.repository.fixture.AbstractIntegrationTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -18,11 +20,7 @@ class LogBrokerRepositoryTest : AbstractIntegrationTest() {
     fun `Concurrent safe - 10 threads add to the same topic`() =
         runWith(LogBrokerRepository::class) { testInstance ->
             val topic = testInstance.create(
-                CmdId(1), LogTopicToCreate(
-                    id = LogTopicId(123),
-                    name = LogTopicName("topic"),
-                    groupId = LogTopicGroupId(23)
-                )
+                CmdId(1), LogTopicToCreate(LogTopicId(123))
             )
 
             val futures = IntRange(1, 10).map { thread ->
@@ -51,11 +49,7 @@ class LogBrokerRepositoryTest : AbstractIntegrationTest() {
                 runAsync {
                     val topic = testInstance.create(
                         CmdId(1),
-                        LogTopicToCreate(
-                            id = LogTopicId(thread),
-                            name = LogTopicName("topic-$thread"),
-                            groupId = LogTopicGroupId(23)
-                        )
+                        LogTopicToCreate(LogTopicId(thread))
                     )
 
                     IntRange(1, 100).forEach {
@@ -72,7 +66,7 @@ class LogBrokerRepositoryTest : AbstractIntegrationTest() {
             IntRange(1, 100).forEach { thread ->
                 val result = testInstance.consume(
                     LogConsumerId(42),
-                    testInstance.resolveTopic(LogTopicGroupId(23), LogTopicName("topic-$thread"))!!.id,
+                    testInstance.getTopic(LogTopicId(thread)).id,
                     Limit(1_000_000)
                 )
                 assertThat(result, hasSize(100))

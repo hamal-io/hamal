@@ -3,12 +3,11 @@ package io.hamal.repository.memory.new_log
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.domain.vo.LogTopicId
 import io.hamal.repository.api.new_log.*
 
 data class LogTopicMemory(
-    override val id: LogTopicId,
-    override val groupId: LogTopicGroupId,
-    override val name: LogTopicName
+    override val id: LogTopicId
 ) : LogTopic
 
 // FIXME just a pass through for now - replace with proper implementation,

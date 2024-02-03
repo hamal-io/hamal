@@ -6,10 +6,12 @@ import io.hamal.repository.api.TopicCmdRepository.CreateFlowTopicCmd
 import io.hamal.repository.api.TopicQueryRepository
 import io.hamal.repository.api.TopicRepository
 import io.hamal.repository.api.new_log.LogBrokerRepository
-import io.hamal.repository.record.CreateDomainObject
+import io.hamal.repository.api.new_log.LogBrokerRepository.LogTopicToCreate
 import io.hamal.repository.record.topic.CreateTopicFromRecords
+import io.hamal.repository.record.topic.TopicFlowCreatedRecord
 import io.hamal.repository.record.topic.TopicRecord
-import io.hamal.repository.record.topic.createEntity
+import java.util.concurrent.locks.ReentrantLock
+import kotlin.concurrent.withLock
 
 private object TopicCurrentProjection {
     private val projection = mutableMapOf<TopicId, Topic>()
@@ -73,29 +75,42 @@ class TopicMemoryRepository(
 ), TopicRepository {
 
     override fun create(cmd: CreateFlowTopicCmd): Topic.Flow {
-        TODO("Not yet implemented")
+        return lock.withLock {
+            val topicId = cmd.topicId
+            if (commandAlreadyApplied(cmd.id, topicId)) {
+                versionOf(topicId, cmd.id) as Topic.Flow
+            }
+            store(
+                TopicFlowCreatedRecord(
+                    cmdId = cmd.id,
+                    entityId = topicId,
+                    groupId = cmd.groupId,
+                    flowId = cmd.flowId,
+                    name = cmd.name,
+                )
+            )
+            (currentVersion(topicId) as Topic.Flow)
+                .also(TopicCurrentProjection::apply)
+                .also { _ ->
+                    logBrokerRepository.create(
+                        cmd.id, LogTopicToCreate(
+                            id = cmd.logTopicId
+                        )
+                    )
+                }
+        }
     }
 
-    override fun close() {
-        TODO("Not yet implemented")
-    }
+    override fun close() {}
 
-    override fun find(topicId: TopicId): Topic? {
-        TODO("Not yet implemented")
-    }
+    override fun find(topicId: TopicId): Topic? = lock.withLock { TopicCurrentProjection.find(topicId) }
 
-    override fun list(query: TopicQueryRepository.TopicQuery): List<Topic> {
-        TODO("Not yet implemented")
-    }
+    override fun list(query: TopicQueryRepository.TopicQuery): List<Topic> =
+        lock.withLock { TopicCurrentProjection.list(query) }
 
-    override fun count(query: TopicQueryRepository.TopicQuery): ULong {
-        TODO("Not yet implemented")
-    }
+    override fun count(query: TopicQueryRepository.TopicQuery): ULong =
+        lock.withLock { TopicCurrentProjection.count(query) }
 
+    private val lock = ReentrantLock()
 }
 
-object CreateTopicFromRecords : CreateDomainObject<TopicId, TopicRecord, Topic> {
-    override fun invoke(recs: List<TopicRecord>): Topic {
-        return recs.createEntity().toDomainObject()
-    }
-}

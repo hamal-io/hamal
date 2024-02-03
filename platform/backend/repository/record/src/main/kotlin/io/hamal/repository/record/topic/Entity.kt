@@ -4,7 +4,6 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain._enum.TopicType
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.Topic
-import io.hamal.repository.api.new_log.LogTopicId
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordEntity
 import io.hamal.repository.record.RecordSequence

@@ -2,11 +2,12 @@ package io.hamal.core.request.handler.topic
 
 import io.hamal.core.request.handler.BaseReqHandlerTest
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
+import io.hamal.lib.domain.request.TopicFlowCreateRequested
+import io.hamal.lib.domain.vo.LogTopicId
 import io.hamal.lib.domain.vo.RequestId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.repository.api.log.BrokerTopicsRepository.TopicQuery
-import io.hamal.lib.domain.request.TopicFlowCreateRequested
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
@@ -33,6 +34,7 @@ internal class TopicCreateHandlerTest : BaseReqHandlerTest() {
                     id = RequestId(2),
                     status = Submitted,
                     topicId = TopicId(2345),
+                    logTopicId = LogTopicId(3456),
                     flowId = testFlow.id,
                     groupId = testGroup.id,
                     name = TopicName("another-topic-name")
@@ -54,6 +56,7 @@ internal class TopicCreateHandlerTest : BaseReqHandlerTest() {
                     id = RequestId(2),
                     status = Submitted,
                     topicId = TopicId(3456),
+                    logTopicId = LogTopicId(4567),
                     flowId = testFlow.id,
                     groupId = testGroup.id,
                     name = TopicName("some-topic-name")
@@ -83,6 +86,7 @@ internal class TopicCreateHandlerTest : BaseReqHandlerTest() {
             id = RequestId(1),
             status = Submitted,
             topicId = TopicId(2345),
+            logTopicId = LogTopicId(3456),
             flowId = testFlow.id,
             groupId = testGroup.id,
             name = TopicName("some-topic-name")

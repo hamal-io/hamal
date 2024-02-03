@@ -1,7 +1,11 @@
 package io.hamal.repository.fixture
 
+import io.hamal.lib.domain.vo.LogTopicId
 import io.hamal.repository.api.*
-import io.hamal.repository.api.new_log.*
+import io.hamal.repository.api.new_log.LogBrokerRepository
+import io.hamal.repository.api.new_log.LogSegmentId
+import io.hamal.repository.api.new_log.LogSegmentRepository
+import io.hamal.repository.api.new_log.LogTopicRepository
 import io.hamal.repository.memory.AuthMemoryRepository
 import io.hamal.repository.memory.ExecLogMemoryRepository
 import io.hamal.repository.memory.ReqMemoryRepository
@@ -35,12 +39,9 @@ object MemoryFixture : BaseTestFixture {
                 LogTopicId(1506)
             )
         ) as REPO
+
         LogTopicRepository::class -> LogTopicMemoryRepository(
-            LogTopicMemory(
-                id = LogTopicId(23),
-                groupId = LogTopicGroupId(1),
-                name = LogTopicName("test-topic")
-            )
+            LogTopicMemory(LogTopicId(23))
         ) as REPO
 
         StateRepository::class -> StateMemoryRepository() as REPO

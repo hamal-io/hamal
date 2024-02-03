@@ -7,6 +7,7 @@ import io.hamal.lib.domain.request.TopicAppendToRequested
 import io.hamal.lib.domain.request.TopicCreateRequest
 import io.hamal.lib.domain.request.TopicFlowCreateRequested
 import io.hamal.lib.domain.vo.FlowId
+import io.hamal.lib.domain.vo.LogTopicId
 import io.hamal.lib.domain.vo.RequestId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.repository.api.FlowQueryRepository
@@ -91,8 +92,9 @@ class TopicAdapter(
         return TopicFlowCreateRequested(
             id = generateDomainId(::RequestId),
             status = Submitted,
-            groupId = flow.groupId,
             topicId = generateDomainId(::TopicId),
+            logTopicId = generateDomainId(::LogTopicId),
+            groupId = flow.groupId,
             flowId = flow.id,
             name = req.name
         ).also(reqCmdRepository::queue).let(responseHandler)

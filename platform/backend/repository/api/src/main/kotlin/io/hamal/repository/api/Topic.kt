@@ -7,7 +7,6 @@ import io.hamal.lib.common.domain.UpdatedAt
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.TopicType
 import io.hamal.lib.domain.vo.*
-import io.hamal.repository.api.new_log.LogTopicId
 
 sealed class Topic : DomainObject<TopicId> {
     abstract val name: TopicName

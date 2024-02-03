@@ -3,7 +3,11 @@ package io.hamal.repository.new_log
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.util.TimeUtils.withEpochMilli
-import io.hamal.repository.api.new_log.*
+import io.hamal.lib.domain.vo.LogTopicId
+import io.hamal.repository.api.new_log.LogEntry
+import io.hamal.repository.api.new_log.LogEntryId
+import io.hamal.repository.api.new_log.LogSegmentId
+import io.hamal.repository.api.new_log.LogTopicRepository
 import io.hamal.repository.fixture.AbstractUnitTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo

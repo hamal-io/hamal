@@ -1,6 +1,7 @@
 package io.hamal.repository.api.new_log
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.domain.vo.LogTopicId
 
 interface LogTopicAppender<VALUE : Any> {
     fun append(cmdId: CmdId, topicId: LogTopicId, value: VALUE)

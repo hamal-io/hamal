@@ -4,6 +4,7 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.util.TimeUtils
+import io.hamal.lib.domain.vo.LogTopicId
 import io.hamal.repository.api.new_log.*
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
