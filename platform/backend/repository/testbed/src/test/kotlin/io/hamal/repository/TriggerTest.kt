@@ -1,6 +1,7 @@
 package io.hamal.repository
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain._enum.HookMethod
@@ -837,7 +838,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 limit = Limit(10)
             )
 
-            assertThat(count(query), equalTo(2UL))
+            assertThat(count(query), equalTo(Count(2)))
             val result = list(query)
             assertThat(result, hasSize(2))
 
@@ -865,7 +866,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 limit = Limit(10)
             )
 
-            assertThat(count(query), equalTo(2UL))
+            assertThat(count(query), equalTo(Count(2)))
             val result = list(query)
             assertThat(result, hasSize(2))
 
@@ -889,7 +890,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 limit = Limit(10)
             )
 
-            assertThat(count(query), equalTo(1UL))
+            assertThat(count(query), equalTo(Count(1)))
             val result = list(query)
             assertThat(result, hasSize(1))
 
@@ -908,7 +909,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 limit = Limit(10)
             )
 
-            assertThat(count(query), equalTo(1UL))
+            assertThat(count(query), equalTo(Count(1)))
             val result = list(query)
             assertThat(result, hasSize(1))
 
@@ -927,7 +928,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 limit = Limit(10)
             )
 
-            assertThat(count(query), equalTo(1UL))
+            assertThat(count(query), equalTo(Count(1)))
             val result = list(query)
             assertThat(result, hasSize(1))
 
@@ -947,7 +948,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 limit = Limit(10)
             )
 
-            assertThat(count(query), equalTo(3UL))
+            assertThat(count(query), equalTo(Count(3)))
             val result = list(query).reversed()
             assertThat(result, hasSize(3))
 
@@ -969,7 +970,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 limit = Limit(3)
             )
 
-            assertThat(count(query), equalTo(7UL))
+            assertThat(count(query), equalTo(Count(7)))
             val result = list(query)
             assertThat(result, hasSize(3))
         }
@@ -984,7 +985,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 limit = Limit(1)
             )
 
-            assertThat(count(query), equalTo(1UL))
+            assertThat(count(query), equalTo(Count(1)))
             val result = list(query)
             assertThat(result, hasSize(1))
 
@@ -1164,6 +1165,6 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
 
     private fun TriggerRepository.verifyCount(expected: Int, block: TriggerQuery.() -> Unit) {
         val counted = count(TriggerQuery(groupIds = listOf()).also(block))
-        assertThat("number of trigger expected", counted, equalTo(expected.toULong()))
+        assertThat("number of trigger expected", counted, equalTo(Count(expected)))
     }
 }

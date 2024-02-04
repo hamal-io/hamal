@@ -109,7 +109,7 @@ class ExecLogSqliteRepository(
                 map {
                     it.getLong("count")
                 }
-            } ?: 0
+            } ?: 0L
         )
     }
 

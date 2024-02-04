@@ -79,7 +79,7 @@ internal object ProjectionCurrent : ProjectionSqlite<CodeId, CodeRecord, Code> {
                 map {
                     it.getLong("count")
                 }
-            } ?: 0
+            } ?: 0L
         )
     }
 

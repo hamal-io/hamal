@@ -1,11 +1,12 @@
 package io.hamal.repository
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.domain.vo.FlowId
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.HookId
 import io.hamal.lib.domain.vo.HookName
-import io.hamal.lib.domain.vo.FlowId
 import io.hamal.repository.api.HookCmdRepository.CreateCmd
 import io.hamal.repository.api.HookCmdRepository.UpdateCmd
 import io.hamal.repository.api.HookQueryRepository.HookQuery
@@ -367,7 +368,7 @@ internal class HookRepositoryTest : AbstractUnitTest() {
                 limit = Limit(10)
             )
 
-            assertThat(count(query), equalTo(2UL))
+            assertThat(count(query), equalTo(Count(2)))
             val result = list(query)
             assertThat(result, hasSize(2))
 
@@ -395,7 +396,7 @@ internal class HookRepositoryTest : AbstractUnitTest() {
                 limit = Limit(10)
             )
 
-            assertThat(count(query), equalTo(1UL))
+            assertThat(count(query), equalTo(Count(1)))
             val result = list(query)
             assertThat(result, hasSize(1))
 
@@ -417,7 +418,7 @@ internal class HookRepositoryTest : AbstractUnitTest() {
                 limit = Limit(3)
             )
 
-            assertThat(count(query), equalTo(4UL))
+            assertThat(count(query), equalTo(Count(4)))
             val result = list(query)
             assertThat(result, hasSize(3))
         }
@@ -432,7 +433,7 @@ internal class HookRepositoryTest : AbstractUnitTest() {
                 limit = Limit(1)
             )
 
-            assertThat(count(query), equalTo(1UL))
+            assertThat(count(query), equalTo(Count(1)))
             val result = list(query)
             assertThat(result, hasSize(1))
 
@@ -497,5 +498,5 @@ private fun HookRepository.verifyCount(expected: Int) {
 
 private fun HookRepository.verifyCount(expected: Int, block: HookQuery.() -> Unit) {
     val counted = count(HookQuery(groupIds = listOf()).also(block))
-    assertThat("number of hooktions expected", counted, equalTo(expected.toULong()))
+    assertThat("number of hooktions expected", counted, equalTo(Count(expected)))
 }

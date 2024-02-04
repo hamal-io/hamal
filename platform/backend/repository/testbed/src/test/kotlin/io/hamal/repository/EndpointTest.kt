@@ -1,6 +1,7 @@
 package io.hamal.repository
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.EndpointCmdRepository.CreateCmd
@@ -391,7 +392,7 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
                 limit = Limit(10)
             )
 
-            assertThat(count(query), equalTo(2UL))
+            assertThat(count(query), equalTo(Count(2)))
             val result = list(query)
             assertThat(result, hasSize(2))
 
@@ -419,7 +420,7 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
                 limit = Limit(10)
             )
 
-            assertThat(count(query), equalTo(1UL))
+            assertThat(count(query), equalTo(Count(1)))
             val result = list(query)
             assertThat(result, hasSize(1))
 
@@ -441,7 +442,7 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
                 limit = Limit(3)
             )
 
-            assertThat(count(query), equalTo(4UL))
+            assertThat(count(query), equalTo(Count(4)))
             val result = list(query)
             assertThat(result, hasSize(3))
         }
@@ -456,7 +457,7 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
                 limit = Limit(1)
             )
 
-            assertThat(count(query), equalTo(1UL))
+            assertThat(count(query), equalTo(Count(1)))
             val result = list(query)
             assertThat(result, hasSize(1))
 
@@ -527,5 +528,5 @@ private fun EndpointRepository.verifyCount(expected: Int) {
 
 private fun EndpointRepository.verifyCount(expected: Int, block: EndpointQuery.() -> Unit) {
     val counted = count(EndpointQuery(groupIds = listOf()).also(block))
-    assertThat("number of endpoints expected", counted, equalTo(expected.toULong()))
+    assertThat("number of endpoints expected", counted, equalTo(Count(expected)))
 }

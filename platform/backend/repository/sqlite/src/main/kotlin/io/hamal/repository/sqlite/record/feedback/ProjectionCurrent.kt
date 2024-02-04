@@ -105,7 +105,7 @@ internal object ProjectionCurrent : ProjectionSqlite<FeedbackId, FeedbackRecord,
                 map {
                     it.getLong("count")
                 }
-            } ?: 0
+            } ?: 0L
         )
     }
 

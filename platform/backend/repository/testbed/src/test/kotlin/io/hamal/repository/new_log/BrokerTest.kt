@@ -1,6 +1,7 @@
 package io.hamal.repository.new_log
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.LogTopicId
 import io.hamal.repository.api.new_log.LogBrokerRepository
@@ -25,7 +26,7 @@ internal class LogBrokerRepositoryTest : AbstractUnitTest() {
             val result = create(CmdId(1), LogTopicToCreate(LogTopicId(1)))
             assertThat(result.id, equalTo(LogTopicId(1)))
 
-            assertThat(countTopics(LogTopicQuery()), equalTo(1UL))
+            assertThat(countTopics(LogTopicQuery()), equalTo(Count(1)))
         }
 
     }
@@ -84,7 +85,7 @@ internal class LogBrokerRepositoryTest : AbstractUnitTest() {
             assertThat(resultList, equalTo(listOf()))
 
             val resultCount = countTopics(query)
-            assertThat(resultCount, equalTo(0UL))
+            assertThat(resultCount, equalTo(Count(0)))
         }
 
         @TestFactory
@@ -100,7 +101,7 @@ internal class LogBrokerRepositoryTest : AbstractUnitTest() {
             assertThat(resultList[8].id, equalTo(LogTopicId(1)))
 
             val resultCount = countTopics(query)
-            assertThat(resultCount, equalTo(9UL))
+            assertThat(resultCount, equalTo(Count(9)))
         }
 
         @TestFactory
@@ -115,7 +116,7 @@ internal class LogBrokerRepositoryTest : AbstractUnitTest() {
             assertThat(resultList[4].id, equalTo(LogTopicId(5)))
 
             val resultCount = countTopics(query)
-            assertThat(resultCount, equalTo(9UL))
+            assertThat(resultCount, equalTo(Count(9)))
         }
 
         @TestFactory
@@ -129,7 +130,7 @@ internal class LogBrokerRepositoryTest : AbstractUnitTest() {
             assertThat(resultList[0].id, equalTo(LogTopicId(4)))
 
             val resultCount = countTopics(query)
-            assertThat(resultCount, equalTo(4UL))
+            assertThat(resultCount, equalTo(Count(4)))
         }
 
     }
@@ -143,7 +144,7 @@ internal class LogBrokerRepositoryTest : AbstractUnitTest() {
                 commit(LogConsumerId(1), LogTopicId(123), LogEntryId(23))
                 commit(LogConsumerId(1), LogTopicId(123), LogEntryId(1337))
 
-                assertThat(countConsumers(LogConsumerQuery()), equalTo(1UL))
+                assertThat(countConsumers(LogConsumerQuery()), equalTo(Count(1)))
             }
 
         @TestFactory
@@ -152,7 +153,7 @@ internal class LogBrokerRepositoryTest : AbstractUnitTest() {
                 commit(LogConsumerId(1), LogTopicId(23), LogEntryId(1))
                 commit(LogConsumerId(1), LogTopicId(34), LogEntryId(2))
 
-                assertThat(countConsumers(LogConsumerQuery()), equalTo(2UL))
+                assertThat(countConsumers(LogConsumerQuery()), equalTo(Count(2)))
             }
 
 
@@ -162,7 +163,7 @@ internal class LogBrokerRepositoryTest : AbstractUnitTest() {
                 commit(LogConsumerId(1), LogTopicId(23), LogEntryId(1))
                 commit(LogConsumerId(2), LogTopicId(23), LogEntryId(2))
 
-                assertThat(countConsumers(LogConsumerQuery()), equalTo(2UL))
+                assertThat(countConsumers(LogConsumerQuery()), equalTo(Count(2)))
             }
 
     }

@@ -80,7 +80,7 @@ internal object ProjectionCurrent : ProjectionSqlite<FuncId, FuncRecord, Func> {
                 map {
                     it.getLong("count")
                 }
-            } ?: 0
+            } ?: 0L
         )
     }
 

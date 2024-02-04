@@ -78,7 +78,7 @@ internal object ProjectionCurrent : ProjectionSqlite<FlowId, FlowRecord, Flow> {
                 map {
                     it.getLong("count")
                 }
-            } ?: 0
+            } ?: 0L
         )
     }
 

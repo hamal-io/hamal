@@ -1,5 +1,6 @@
 package io.hamal.repository
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.FeedbackMood
 import io.hamal.lib.domain.vo.AccountId
@@ -121,7 +122,7 @@ internal class FeedbackTest : AbstractUnitTest() {
                 feedbackIds = listOf(),
                 limit = Limit(3)
             )
-            assertThat(count(query), equalTo(4UL))
+            assertThat(count(query), equalTo(Count(4)))
             assertThat(list(query), hasSize(3))
         }
 
@@ -134,7 +135,7 @@ internal class FeedbackTest : AbstractUnitTest() {
                 feedbackIds = listOf(),
                 limit = Limit(1)
             )
-            assertThat(count(query), equalTo(1UL))
+            assertThat(count(query), equalTo(Count(1)))
             assertThat(list(query), hasSize(1))
 
         }
@@ -146,7 +147,7 @@ internal class FeedbackTest : AbstractUnitTest() {
 
     private fun FeedbackRepository.verifyCount(expected: Int, block: FeedbackQuery.() -> Unit) {
         val counted = count(FeedbackQuery(feedbackIds = listOf()).also(block))
-        assertThat("number of feedbacks expected", counted, equalTo(expected.toULong()))
+        assertThat("number of feedbacks expected", counted, equalTo(Count(expected)))
     }
 
     private fun FeedbackRepository.createFeedback(

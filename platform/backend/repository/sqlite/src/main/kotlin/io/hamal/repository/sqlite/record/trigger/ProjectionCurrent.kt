@@ -94,7 +94,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
                 map {
                     it.getLong("count")
                 }
-            } ?: 0
+            } ?: 0L
         )
     }
 

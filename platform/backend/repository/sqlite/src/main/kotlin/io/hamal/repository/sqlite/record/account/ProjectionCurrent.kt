@@ -77,7 +77,7 @@ internal object ProjectionCurrent : ProjectionSqlite<AccountId, AccountRecord, A
                 map {
                     it.getLong("count")
                 }
-            } ?: 0
+            } ?: 0L
         )
     }
 

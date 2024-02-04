@@ -1,6 +1,7 @@
 package io.hamal.repository.api.new_log
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.LogTopicId
@@ -26,11 +27,11 @@ interface LogBrokerRepository : CmdRepository {
 
     fun getTopic(topicId: LogTopicId): LogTopic = findTopic(topicId) ?: throw NoSuchElementException("Topic not found")
 
-    fun countTopics(query: LogTopicQuery): ULong
+    fun countTopics(query: LogTopicQuery): Count
 
     fun listTopics(query: LogTopicQuery): List<LogTopic>
 
-    fun countConsumers(query: LogConsumerQuery): ULong
+    fun countConsumers(query: LogConsumerQuery): Count
 
     data class LogTopicQuery(
         var afterId: LogTopicId = LogTopicId(SnowflakeId(Long.MAX_VALUE)),

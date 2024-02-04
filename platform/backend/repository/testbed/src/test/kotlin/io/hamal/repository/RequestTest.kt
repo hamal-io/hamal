@@ -1,5 +1,6 @@
 package io.hamal.repository
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain._enum.RequestStatus.*
@@ -213,7 +214,7 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
             setup()
             val query = ReqQuery(limit = Limit(3))
 
-            assertThat(count(query), equalTo(4UL))
+            assertThat(count(query), equalTo(Count(4)))
             val result = list(query)
             assertThat(result, hasSize(3))
         }
@@ -227,7 +228,7 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
                 limit = Limit(1)
             )
 
-            assertThat(count(query), equalTo(1UL))
+            assertThat(count(query), equalTo(Count(1)))
             val result = list(query)
             assertThat(result, hasSize(1))
 
@@ -263,5 +264,5 @@ private fun RequestRepository.verifyCount(expected: Int) {
 
 private fun RequestRepository.verifyCount(expected: Int, block: ReqQuery.() -> Unit) {
     val counted = count(ReqQuery().also(block))
-    assertThat("number of reqs expected", counted, equalTo(expected.toULong()))
+    assertThat("number of reqs expected", counted, equalTo(Count(expected)))
 }

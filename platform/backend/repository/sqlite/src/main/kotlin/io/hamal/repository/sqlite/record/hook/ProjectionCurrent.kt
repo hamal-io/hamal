@@ -80,7 +80,7 @@ internal object ProjectionCurrent : ProjectionSqlite<HookId, HookRecord, Hook> {
                 map {
                     it.getLong("count")
                 }
-            } ?: 0
+            } ?: 0L
         )
     }
 

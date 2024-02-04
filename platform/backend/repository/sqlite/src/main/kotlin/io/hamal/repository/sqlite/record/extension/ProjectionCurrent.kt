@@ -122,7 +122,7 @@ internal object ProjectionCurrent : ProjectionSqlite<ExtensionId, ExtensionRecor
                 map {
                     it.getLong("count")
                 }
-            } ?: 0
+            } ?: 0L
         )
     }
 

@@ -12,6 +12,8 @@ class Limit(override val value: Int) : ValueObjectInt() {
 
 
 class Count(override val value: Long) : ValueObjectLong() {
+    constructor(value: Int) : this(value.toLong())
+
     init {
         require(value >= 0) { "Count must not be negative" }
     }

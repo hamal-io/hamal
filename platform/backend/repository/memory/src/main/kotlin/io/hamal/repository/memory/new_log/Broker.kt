@@ -2,6 +2,7 @@ package io.hamal.repository.memory.new_log
 
 import io.hamal.lib.common.KeyedOnce
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.LogTopicId
 import io.hamal.repository.api.new_log.*
@@ -30,21 +31,22 @@ class LogBrokerMemoryRepository : LogBrokerRepository {
         }
     }
 
-    override fun countTopics(query: LogTopicQuery): ULong {
+    override fun countTopics(query: LogTopicQuery): Count {
         return lock.withLock {
-            topics.values
-                .sortedBy { it.id }
-                .reversed()
-                .asSequence()
-                .dropWhile { it.id >= query.afterId }
-                .count()
-                .toULong()
+            Count(
+                topics.values
+                    .sortedBy { it.id }
+                    .reversed()
+                    .asSequence()
+                    .dropWhile { it.id >= query.afterId }
+                    .count()
+            )
         }
     }
 
-    override fun countConsumers(query: LogConsumerQuery): ULong {
+    override fun countConsumers(query: LogConsumerQuery): Count {
         return lock.withLock {
-            consumers.values.size.toULong()
+            Count(consumers.values.size)
         }
     }
 
