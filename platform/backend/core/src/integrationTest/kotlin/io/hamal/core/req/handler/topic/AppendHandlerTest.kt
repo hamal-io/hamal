@@ -20,6 +20,7 @@ import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 
 internal class TopicAppendHandlerTest : BaseReqHandlerTest() {
+
     @Test
     fun `Appends entry to topic`() {
         val topic = createTopic(TopicId(4444), TopicName("topic"))

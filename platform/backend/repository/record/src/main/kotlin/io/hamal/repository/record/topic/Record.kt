@@ -1,7 +1,10 @@
 package io.hamal.repository.record.topic
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.LogTopicId
+import io.hamal.lib.domain.vo.TopicId
+import io.hamal.lib.domain.vo.TopicName
 import io.hamal.repository.record.Record
 import io.hamal.repository.record.RecordAdapter
 import io.hamal.repository.record.RecordSequence
@@ -15,19 +18,18 @@ sealed class TopicRecord(
 ) : Record<TopicId>() {
     internal object Adapter : RecordAdapter<TopicRecord>(
         listOf(
-            TopicFlowCreatedRecord::class,
+            TopicGroupCreatedRecord::class,
             TopicInternalCreatedRecord::class
         )
     )
 }
 
-data class TopicFlowCreatedRecord(
+data class TopicGroupCreatedRecord(
     override val cmdId: CmdId,
     override val entityId: TopicId,
     val name: TopicName,
     val logTopicId: LogTopicId,
-    val groupId: GroupId,
-    val flowId: FlowId
+    val groupId: GroupId
 ) : TopicRecord()
 
 

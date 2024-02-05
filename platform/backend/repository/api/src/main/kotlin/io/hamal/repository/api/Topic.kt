@@ -28,22 +28,6 @@ sealed class Topic : DomainObject<TopicId> {
     }
 
     /**
-     * Topic only available within the same flow
-     */
-    data class Flow(
-        override val cmdId: CmdId,
-        override val id: TopicId,
-        override val name: TopicName,
-        override val logTopicId: LogTopicId,
-        override val updatedAt: UpdatedAt,
-        override val groupId: GroupId,
-        val flowId: FlowId,
-    ) : Topic() {
-        override val type: TopicType = TopicType.Flow
-    }
-
-
-    /**
      * Topic which is only available within the same group
      */
     data class Group(
@@ -58,7 +42,8 @@ sealed class Topic : DomainObject<TopicId> {
     }
 
     /**
-     * Topic which is publicly available to all users of hamal
+     * Topic which is publicly available to all users of hamal to consume,
+     * only the group can write to
      */
     data class Public(
         override val cmdId: CmdId,
@@ -79,15 +64,14 @@ data class TopicEntry(
 
 interface TopicCmdRepository : CmdRepository {
 
-    fun create(cmd: TopicFlowCreateCmd): Topic.Flow
+    fun create(cmd: TopicGroupCreateCmd): Topic.Group
 
     fun create(cmd: TopicInternalCreateCmd): Topic.Internal
 
-    data class TopicFlowCreateCmd(
+    data class TopicGroupCreateCmd(
         val id: CmdId,
         val topicId: TopicId,
         val name: TopicName,
-        val flowId: FlowId,
         val groupId: GroupId,
         val logTopicId: LogTopicId
     )

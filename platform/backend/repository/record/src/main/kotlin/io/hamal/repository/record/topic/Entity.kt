@@ -2,7 +2,10 @@ package io.hamal.repository.record.topic
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain._enum.TopicType
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.LogTopicId
+import io.hamal.lib.domain.vo.TopicId
+import io.hamal.lib.domain.vo.TopicName
 import io.hamal.repository.api.Topic
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordEntity
@@ -20,22 +23,20 @@ data class TopicEntity(
     var type: TopicType? = null,
     var logTopicId: LogTopicId? = null,
 
-    var groupId: GroupId? = null,
-    var flowId: FlowId? = null
+    var groupId: GroupId? = null
 
 ) : RecordEntity<TopicId, TopicRecord, Topic> {
 
     override fun apply(rec: TopicRecord): TopicEntity {
         return when (rec) {
-            is TopicFlowCreatedRecord -> copy(
+            is TopicGroupCreatedRecord -> copy(
                 cmdId = rec.cmdId,
                 id = rec.entityId,
                 sequence = rec.sequence(),
                 name = rec.name,
                 groupId = rec.groupId,
-                flowId = rec.flowId,
                 logTopicId = rec.logTopicId,
-                type = TopicType.Flow,
+                type = TopicType.Group,
                 recordedAt = rec.recordedAt()
             )
 
@@ -45,7 +46,6 @@ data class TopicEntity(
                 sequence = rec.sequence(),
                 name = rec.name,
                 groupId = rec.groupId,
-                flowId = null,
                 logTopicId = rec.logTopicId,
                 type = TopicType.Internal,
                 recordedAt = rec.recordedAt()
@@ -64,17 +64,15 @@ data class TopicEntity(
                 groupId = groupId!!,
             )
 
-            TopicType.Flow -> Topic.Flow(
+            TopicType.Group -> Topic.Group(
                 cmdId = cmdId,
                 id = id,
                 name = name!!,
                 logTopicId = logTopicId!!,
                 updatedAt = recordedAt.toUpdatedAt(),
-                groupId = groupId!!,
-                flowId = flowId!!,
+                groupId = groupId!!
             )
 
-            TopicType.Group -> TODO()
             TopicType.Public -> TODO()
         }
     }
@@ -84,7 +82,7 @@ fun List<TopicRecord>.createEntity(): TopicEntity {
     check(isNotEmpty()) { "At least one record is required" }
     val firstRecord: TopicRecord = first()
 
-    check(firstRecord is TopicFlowCreatedRecord || firstRecord is TopicInternalCreatedRecord)
+    check(firstRecord is TopicGroupCreatedRecord || firstRecord is TopicInternalCreatedRecord)
 
     var result = TopicEntity(
         id = firstRecord.entityId,
