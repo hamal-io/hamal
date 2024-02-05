@@ -120,6 +120,9 @@ abstract class AbstractUnitTest {
             SqliteFixture
         ),
 
+        TopicRepository::class to listOf(
+            MemoryFixture
+        ),
         TriggerRepository::class to listOf(
             MemoryFixture,
             SqliteFixture

@@ -131,7 +131,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
             }
 
         @TestFactory
-        fun `Tries to create but cmd with func id was already applied`() =
+        fun `Tries to create but cmd with trigger id was already applied`() =
             runWith(TriggerRepository::class) {
 
                 createFixedRateTrigger(
@@ -749,7 +749,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
     @Nested
     inner class GetTest {
         @TestFactory
-        fun `Get func by id`() = runWith(TriggerRepository::class) {
+        fun `Get trigger by id`() = runWith(TriggerRepository::class) {
             createFixedRateTrigger(
                 triggerId = TriggerId(1),
                 flowId = FlowId(2),
@@ -772,7 +772,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
         }
 
         @TestFactory
-        fun `Tries to get func by id but does not exist`() = runWith(TriggerRepository::class) {
+        fun `Tries to get trigger by id but does not exist`() = runWith(TriggerRepository::class) {
             createEventTrigger(
                 triggerId = TriggerId(1),
                 flowId = FlowId(2),
@@ -790,7 +790,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
     @Nested
     inner class FindTest {
         @TestFactory
-        fun `Find func by id`() = runWith(TriggerRepository::class) {
+        fun `Find trigger by id`() = runWith(TriggerRepository::class) {
             createFixedRateTrigger(
                 triggerId = TriggerId(1),
                 flowId = FlowId(2),
@@ -813,7 +813,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
         }
 
         @TestFactory
-        fun `Tries to find func by id but does not exist`() = runWith(TriggerRepository::class) {
+        fun `Tries to find trigger by id but does not exist`() = runWith(TriggerRepository::class) {
             createEventTrigger(
                 triggerId = TriggerId(1),
                 flowId = FlowId(2),

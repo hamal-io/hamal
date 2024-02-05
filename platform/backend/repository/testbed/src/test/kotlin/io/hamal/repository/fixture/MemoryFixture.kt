@@ -45,6 +45,7 @@ object MemoryFixture : BaseTestFixture {
         ) as REPO
 
         StateRepository::class -> StateMemoryRepository() as REPO
+        TopicRepository::class -> TopicMemoryRepository(LogBrokerMemoryRepository()) as REPO
         TriggerRepository::class -> TriggerMemoryRepository() as REPO
         else -> TODO()
     }

@@ -35,6 +35,7 @@ data class TopicEntity(
                 name = rec.name,
                 groupId = rec.groupId,
                 flowId = rec.flowId,
+                logTopicId = rec.logTopicId,
                 funcId = null,
                 type = TopicType.Flow,
                 recordedAt = rec.recordedAt()

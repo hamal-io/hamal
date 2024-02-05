@@ -33,7 +33,7 @@ sealed class Topic : DomainObject<TopicId> {
     ) : Topic()
 
     /**
-     * Topic which is only available to users of the same group
+     * Topic which is only available within the same group
      */
     data class Group(
         override val id: TopicId,
@@ -91,7 +91,6 @@ interface TopicQueryRepository {
         var limit: Limit = Limit(1),
         var topicIds: List<TopicId> = listOf(),
         var names: List<TopicName> = listOf(),
-        var funcIds: List<FuncId> = listOf(),
         var flowIds: List<FlowId> = listOf(),
         var groupIds: List<GroupId> = listOf(),
     )

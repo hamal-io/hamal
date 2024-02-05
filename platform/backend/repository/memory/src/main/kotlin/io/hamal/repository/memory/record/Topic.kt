@@ -16,7 +16,6 @@ import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
 private object TopicCurrentProjection {
-    private val projection = mutableMapOf<TopicId, Topic>()
 
     fun apply(topic: Topic.Flow) {
         val currentTopic = projection[topic.id]
@@ -24,13 +23,13 @@ private object TopicCurrentProjection {
 
         val topicsInFlow = projection.values
             .filterIsInstance<Topic.Flow>()
-            .filter { it.flowId == topic.flowId }
+            .filter { it.groupId == topic.groupId }
 
         if (topicsInFlow.any { it.name == topic.name }) {
             if (currentTopic != null) {
                 projection[currentTopic.id] = currentTopic
             }
-            throw IllegalArgumentException("${topic.name} already exists in flow ${topic.flowId}")
+            throw IllegalArgumentException("${topic.name} already exists")
         }
 
         projection[topic.id] = topic
@@ -39,38 +38,81 @@ private object TopicCurrentProjection {
     fun find(topicId: TopicId): Topic? = projection[topicId]
 
     fun list(query: TopicQueryRepository.TopicQuery): List<Topic> {
-        TODO()
-//        return projection.filter { query.topicIds.isEmpty() || it.key in query.topicIds }
-//            .map { it.value }
-//            .reversed()
-//            .asSequence()
-//            .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
-//            .filter { if (query.flowIds.isEmpty()) true else query.flowIds.contains(it.flowId) }
-//            .dropWhile { it.id >= query.afterId }
-//            .take(query.limit.value)
-//            .toList()
+        return projection.filter { query.topicIds.isEmpty() || it.key in query.topicIds }
+            .map { it.value }
+            .reversed()
+            .asSequence()
+            .filter { if (query.names.isEmpty()) true else query.names.contains(it.name) }
+            .filter {
+                if (query.groupIds.isEmpty()) {
+                    true
+                } else {
+                    if (it is Topic.Flow) {
+                        query.groupIds.contains(it.groupId)
+                    } else {
+                        false
+                    }
+                }
+            }
+            .filter {
+                if (query.flowIds.isEmpty()) {
+                    true
+                } else {
+                    if (it is Topic.Flow) {
+                        query.flowIds.contains(it.flowId)
+                    } else {
+                        false
+                    }
+                }
+            }
+            .dropWhile { it.id >= query.afterId }
+            .take(query.limit.value)
+            .toList()
     }
 
     fun count(query: TopicQueryRepository.TopicQuery): Count {
-        TODO()
-//        return projection.filter { query.topicIds.isEmpty() || it.key in query.topicIds }
-//            .map { it.value }
-//            .reversed()
-//            .asSequence()
-//            .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
-//            .filter { if (query.flowIds.isEmpty()) true else query.flowIds.contains(it.flowId) }
-//            .dropWhile { it.id >= query.afterId }
-//            .count()
-//            .toULong()
+        return Count(
+            projection.filter { query.topicIds.isEmpty() || it.key in query.topicIds }
+                .map { it.value }
+                .reversed()
+                .asSequence()
+                .filter { if (query.names.isEmpty()) true else query.names.contains(it.name) }
+                .filter {
+                    if (query.groupIds.isEmpty()) {
+                        true
+                    } else {
+                        if (it is Topic.Flow) {
+                            query.groupIds.contains(it.groupId)
+                        } else {
+                            false
+                        }
+                    }
+                }
+                .filter {
+                    if (query.flowIds.isEmpty()) {
+                        true
+                    } else {
+                        if (it is Topic.Flow) {
+                            query.flowIds.contains(it.flowId)
+                        } else {
+                            false
+                        }
+                    }
+                }
+                .dropWhile { it.id >= query.afterId }
+                .count()
+        )
     }
 
     fun clear() {
         projection.clear()
     }
+
+    private val projection = mutableMapOf<TopicId, Topic>()
 }
 
 class TopicMemoryRepository(
-    val logBrokerRepository: LogBrokerRepository
+    private val logBrokerRepository: LogBrokerRepository
 ) : RecordMemoryRepository<TopicId, TopicRecord, Topic>(
     createDomainObject = CreateTopicFromRecords,
     recordClass = TopicRecord::class
@@ -88,17 +130,14 @@ class TopicMemoryRepository(
                     entityId = topicId,
                     groupId = cmd.groupId,
                     flowId = cmd.flowId,
+                    logTopicId = cmd.logTopicId,
                     name = cmd.name,
                 )
             )
             (currentVersion(topicId) as Topic.Flow)
                 .also(TopicCurrentProjection::apply)
                 .also { _ ->
-                    logBrokerRepository.create(
-                        cmd.id, LogTopicToCreate(
-                            id = cmd.logTopicId
-                        )
-                    )
+                    logBrokerRepository.create(cmd.id, LogTopicToCreate(cmd.logTopicId))
                 }
         }
     }
@@ -119,6 +158,12 @@ class TopicMemoryRepository(
 
     override fun count(query: TopicQueryRepository.TopicEntryQuery): Count {
         TODO("Not yet implemented")
+    }
+
+    override fun clear() {
+        lock.withLock {
+            TopicCurrentProjection.clear()
+        }
     }
 
     private val lock = ReentrantLock()
