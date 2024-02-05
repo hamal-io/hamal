@@ -4,10 +4,10 @@ import io.hamal.repository.api.Blueprint
 
 data class BlueprintCreatedEvent(
     val blueprint: Blueprint
-) : PlatformEvent()
+) : InternalEvent()
 
 
 data class BlueprintUpdatedEvent(
     val blueprint: Blueprint,
-) : PlatformEvent()
+) : InternalEvent()
 

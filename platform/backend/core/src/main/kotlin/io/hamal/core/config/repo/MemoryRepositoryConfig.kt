@@ -20,9 +20,11 @@ open class MemoryRepositoryConfig {
     open fun logBrokerRepository() = LogBrokerMemoryRepository()
 
     @Bean
+    @Deprecated("")
     open fun platformEventBrokerRepository() = BrokerMemoryRepository()
 
     @Bean
+    @Deprecated("")
     open fun eventBrokerRepository() = BrokerMemoryRepository()
 
     @Bean

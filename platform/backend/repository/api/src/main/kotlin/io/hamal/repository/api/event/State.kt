@@ -4,4 +4,4 @@ import io.hamal.lib.domain.CorrelatedState
 
 data class StateUpdatedEvent(
     val state: CorrelatedState,
-) : PlatformEvent()
+) : InternalEvent()

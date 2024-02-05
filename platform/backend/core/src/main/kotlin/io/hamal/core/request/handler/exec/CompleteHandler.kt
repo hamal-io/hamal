@@ -1,6 +1,6 @@
 package io.hamal.core.request.handler.exec
 
-import io.hamal.core.event.PlatformEventEmitter
+import io.hamal.core.event.InternalEventEmitter
 import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.CorrelatedState
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component
 class ExecCompleteHandler(
     private val execQueryRepository: ExecQueryRepository,
     private val execCmdRepository: ExecCmdRepository,
-    private val eventEmitter: PlatformEventEmitter,
+    private val eventEmitter: InternalEventEmitter,
     private val stateCmdRepository: StateCmdRepository,
     private val eventBrokerRepository: BrokerRepository,
     private val generateDomainId: GenerateId,

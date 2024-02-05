@@ -4,9 +4,9 @@ import io.hamal.repository.api.Hook
 
 data class HookCreatedEvent(
     val hook: Hook,
-) : PlatformEvent()
+) : InternalEvent()
 
 
 data class HookUpdatedEvent(
     val hook: Hook,
-) : PlatformEvent()
+) : InternalEvent()

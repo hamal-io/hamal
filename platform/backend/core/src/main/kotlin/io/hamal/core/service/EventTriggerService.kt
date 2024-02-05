@@ -16,8 +16,8 @@ import io.hamal.repository.api.log.BatchConsumerImpl
 import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.repository.api.log.ConsumerId
 import org.springframework.beans.factory.DisposableBean
+import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.ApplicationListener
-import org.springframework.context.event.ContextRefreshedEvent
 import org.springframework.stereotype.Service
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.atomic.AtomicBoolean
@@ -30,10 +30,10 @@ internal class EventTriggerService(
     internal val generateDomainId: GenerateId,
     internal val invokeFunc: FuncInvokePort,
     internal val triggerQueryRepository: TriggerQueryRepository,
-) : ApplicationListener<ContextRefreshedEvent>, DisposableBean {
+) : ApplicationListener<ApplicationReadyEvent>, DisposableBean {
 
 
-    override fun onApplicationEvent(event: ContextRefreshedEvent) {
+    override fun onApplicationEvent(event: ApplicationReadyEvent) {
         scheduledTasks.add(
             async.atFixedRate(1.milliseconds) {
                 if (!shutdown.get()) {

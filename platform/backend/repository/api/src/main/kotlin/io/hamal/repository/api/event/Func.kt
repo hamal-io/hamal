@@ -4,14 +4,14 @@ import io.hamal.repository.api.Func
 
 data class FuncCreatedEvent(
     val func: Func,
-) : PlatformEvent()
+) : InternalEvent()
 
 
 data class FuncUpdatedEvent(
     val func: Func,
-) : PlatformEvent()
+) : InternalEvent()
 
 
 data class FuncDeployedEvent(
     val func: Func,
-) : PlatformEvent()
+) : InternalEvent()

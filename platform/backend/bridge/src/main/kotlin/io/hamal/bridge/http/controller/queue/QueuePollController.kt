@@ -1,6 +1,6 @@
 package io.hamal.bridge.http.controller.queue
 
-import io.hamal.core.event.PlatformEventEmitter
+import io.hamal.core.event.InternalEventEmitter
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.State
 import io.hamal.lib.sdk.bridge.BridgeUnitOfWorkList
@@ -20,7 +20,7 @@ internal class QueuePollController(
     private val codeQueryRepository: CodeQueryRepository,
     private val execCmdRepository: ExecCmdRepository,
     private val stateQueryRepository: StateQueryRepository,
-    private val eventEmitter: PlatformEventEmitter
+    private val eventEmitter: InternalEventEmitter
 ) {
     @PostMapping("/v1/dequeue")
     fun dequeue(): ResponseEntity<BridgeUnitOfWorkList> {

@@ -1,6 +1,6 @@
 package io.hamal.core.request.handler.trigger
 
-import io.hamal.core.event.PlatformEventEmitter
+import io.hamal.core.event.InternalEventEmitter
 import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain._enum.HookMethod.Post
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component
 @Component
 class TriggerCreateHandler(
     private val triggerCmdRepository: TriggerCmdRepository,
-    private val eventEmitter: PlatformEventEmitter,
+    private val eventEmitter: InternalEventEmitter,
     private val funcQueryRepository: FuncQueryRepository,
     private val eventBrokerRepository: BrokerRepository,
     private val hookQueryRepository: HookQueryRepository

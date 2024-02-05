@@ -100,10 +100,10 @@ interface TopicCmdRepository : CmdRepository {
 
 interface TopicQueryRepository {
     fun find(topicId: TopicId): Topic?
-    fun get(topicId: TopicId) = find(topicId) ?: throw NoSuchElementException("Topic not found")
+    fun get(topicId: TopicId) = find(topicId) ?: throw NoSuchElementException("$topicId not found")
 
     fun getGroupTopic(groupId: GroupId, topicName: TopicName): Topic =
-        findGroupTopic(groupId, topicName) ?: throw NoSuchElementException("Topic not found")
+        findGroupTopic(groupId, topicName) ?: throw NoSuchElementException("$topicName not found")
 
     fun findGroupTopic(groupId: GroupId, topicName: TopicName): Topic?
 
