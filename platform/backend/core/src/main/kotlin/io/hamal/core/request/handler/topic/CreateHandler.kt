@@ -4,7 +4,7 @@ import io.hamal.core.request.RequestHandler
 import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.domain.request.TopicFlowCreateRequested
 import io.hamal.repository.api.TopicCmdRepository
-import io.hamal.repository.api.TopicCmdRepository.CreateFlowTopicCmd
+import io.hamal.repository.api.TopicCmdRepository.TopicFlowCreateCmd
 import org.springframework.stereotype.Component
 
 @Component
@@ -13,7 +13,7 @@ class TopicFlowCreateHandler(
 ) : RequestHandler<TopicFlowCreateRequested>(TopicFlowCreateRequested::class) {
     override fun invoke(req: TopicFlowCreateRequested) {
         topicRepository.create(
-            CreateFlowTopicCmd(
+            TopicFlowCreateCmd(
                 id = req.cmdId(),
                 topicId = req.topicId,
                 logTopicId = req.logTopicId,

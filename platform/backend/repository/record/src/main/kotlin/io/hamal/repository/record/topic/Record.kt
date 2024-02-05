@@ -15,7 +15,8 @@ sealed class TopicRecord(
 ) : Record<TopicId>() {
     internal object Adapter : RecordAdapter<TopicRecord>(
         listOf(
-            TopicFlowCreatedRecord::class
+            TopicFlowCreatedRecord::class,
+            TopicInternalCreatedRecord::class
         )
     )
 }
@@ -26,6 +27,14 @@ data class TopicFlowCreatedRecord(
     val name: TopicName,
     val logTopicId: LogTopicId,
     val groupId: GroupId,
-    val flowId: FlowId,
+    val flowId: FlowId
 ) : TopicRecord()
 
+
+data class TopicInternalCreatedRecord(
+    override val cmdId: CmdId,
+    override val entityId: TopicId,
+    val name: TopicName,
+    val logTopicId: LogTopicId,
+    val groupId: GroupId
+) : TopicRecord()

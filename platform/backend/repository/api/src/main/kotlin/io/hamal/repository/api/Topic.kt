@@ -6,66 +6,84 @@ import io.hamal.lib.domain._enum.TopicType
 import io.hamal.lib.domain.vo.*
 
 sealed class Topic : DomainObject<TopicId> {
+    abstract val cmdId: CmdId
     abstract val name: TopicName
     abstract val logTopicId: LogTopicId
+    abstract val groupId: GroupId
+
+    abstract val type: TopicType
 
     /**
      * Topic only available for internal processing
      */
     data class Internal(
+        override val cmdId: CmdId,
         override val id: TopicId,
         override val name: TopicName,
         override val logTopicId: LogTopicId,
-        override val updatedAt: UpdatedAt
-    ) : Topic()
+        override val updatedAt: UpdatedAt,
+        override val groupId: GroupId
+    ) : Topic() {
+        override val type: TopicType = TopicType.Internal
+    }
 
     /**
      * Topic only available within the same flow
      */
     data class Flow(
-        val cmdId: CmdId,
+        override val cmdId: CmdId,
         override val id: TopicId,
         override val name: TopicName,
         override val logTopicId: LogTopicId,
         override val updatedAt: UpdatedAt,
+        override val groupId: GroupId,
         val flowId: FlowId,
-        val groupId: GroupId
-    ) : Topic()
+    ) : Topic() {
+        override val type: TopicType = TopicType.Flow
+    }
+
 
     /**
      * Topic which is only available within the same group
      */
     data class Group(
+        override val cmdId: CmdId,
         override val id: TopicId,
         override val name: TopicName,
         override val logTopicId: LogTopicId,
         override val updatedAt: UpdatedAt,
-        val groupId: GroupId
-    ) : Topic()
+        override val groupId: GroupId
+    ) : Topic() {
+        override val type: TopicType = TopicType.Group
+    }
 
     /**
      * Topic which is publicly available to all users of hamal
      */
     data class Public(
+        override val cmdId: CmdId,
         override val id: TopicId,
         override val name: TopicName,
         override val logTopicId: LogTopicId,
         override val updatedAt: UpdatedAt,
-        val groupId: GroupId
-    ) : Topic()
+        override val groupId: GroupId
+    ) : Topic() {
+        override val type: TopicType = TopicType.Public
+    }
 
 }
 
 data class TopicEntry(
-    val id: TopicEntryId,
-    val payload: TopicEntryPayload
+    val id: TopicEntryId, val payload: TopicEntryPayload
 )
 
 interface TopicCmdRepository : CmdRepository {
 
-    fun create(cmd: CreateFlowTopicCmd): Topic.Flow
+    fun create(cmd: TopicFlowCreateCmd): Topic.Flow
 
-    data class CreateFlowTopicCmd(
+    fun create(cmd: TopicInternalCreateCmd): Topic.Internal
+
+    data class TopicFlowCreateCmd(
         val id: CmdId,
         val topicId: TopicId,
         val name: TopicName,
@@ -73,12 +91,22 @@ interface TopicCmdRepository : CmdRepository {
         val groupId: GroupId,
         val logTopicId: LogTopicId
     )
+
+    data class TopicInternalCreateCmd(
+        val id: CmdId, val topicId: TopicId, val name: TopicName, val logTopicId: LogTopicId
+    )
 }
 
 
 interface TopicQueryRepository {
-    fun get(topicId: TopicId) = find(topicId) ?: throw NoSuchElementException("Topic not found")
     fun find(topicId: TopicId): Topic?
+    fun get(topicId: TopicId) = find(topicId) ?: throw NoSuchElementException("Topic not found")
+
+    fun getGroupTopic(groupId: GroupId, topicName: TopicName): Topic =
+        findGroupTopic(groupId, topicName) ?: throw NoSuchElementException("Topic not found")
+
+    fun findGroupTopic(groupId: GroupId, topicName: TopicName): Topic?
+
     fun list(query: TopicQuery): List<Topic>
     fun count(query: TopicQuery): Count
 
@@ -92,12 +120,11 @@ interface TopicQueryRepository {
         var topicIds: List<TopicId> = listOf(),
         var names: List<TopicName> = listOf(),
         var flowIds: List<FlowId> = listOf(),
-        var groupIds: List<GroupId> = listOf(),
+        var groupIds: List<GroupId> = listOf()
     )
 
     data class TopicEntryQuery(
-        var afterId: TopicEntryId = TopicEntryId(0),
-        var limit: Limit = Limit(1)
+        var afterId: TopicEntryId = TopicEntryId(0), var limit: Limit = Limit(1)
     )
 }
 

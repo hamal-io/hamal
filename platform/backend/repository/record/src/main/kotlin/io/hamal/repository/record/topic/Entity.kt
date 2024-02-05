@@ -21,10 +21,9 @@ data class TopicEntity(
     var logTopicId: LogTopicId? = null,
 
     var groupId: GroupId? = null,
-    var flowId: FlowId? = null,
-    var funcId: FuncId? = null,
+    var flowId: FlowId? = null
 
-    ) : RecordEntity<TopicId, TopicRecord, Topic> {
+) : RecordEntity<TopicId, TopicRecord, Topic> {
 
     override fun apply(rec: TopicRecord): TopicEntity {
         return when (rec) {
@@ -36,8 +35,19 @@ data class TopicEntity(
                 groupId = rec.groupId,
                 flowId = rec.flowId,
                 logTopicId = rec.logTopicId,
-                funcId = null,
                 type = TopicType.Flow,
+                recordedAt = rec.recordedAt()
+            )
+
+            is TopicInternalCreatedRecord -> copy(
+                cmdId = rec.cmdId,
+                id = rec.entityId,
+                sequence = rec.sequence(),
+                name = rec.name,
+                groupId = rec.groupId,
+                flowId = null,
+                logTopicId = rec.logTopicId,
+                type = TopicType.Internal,
                 recordedAt = rec.recordedAt()
             )
         }
@@ -45,8 +55,15 @@ data class TopicEntity(
 
     override fun toDomainObject(): Topic {
         return when (type!!) {
-            TopicType.Internal -> TODO()
-            TopicType.Func -> TODO()
+            TopicType.Internal -> Topic.Internal(
+                cmdId = cmdId,
+                id = id,
+                name = name!!,
+                logTopicId = logTopicId!!,
+                updatedAt = recordedAt.toUpdatedAt(),
+                groupId = groupId!!,
+            )
+
             TopicType.Flow -> Topic.Flow(
                 cmdId = cmdId,
                 id = id,
@@ -55,8 +72,7 @@ data class TopicEntity(
                 updatedAt = recordedAt.toUpdatedAt(),
                 groupId = groupId!!,
                 flowId = flowId!!,
-
-                )
+            )
 
             TopicType.Group -> TODO()
             TopicType.Public -> TODO()
@@ -68,9 +84,7 @@ fun List<TopicRecord>.createEntity(): TopicEntity {
     check(isNotEmpty()) { "At least one record is required" }
     val firstRecord: TopicRecord = first()
 
-    check(
-        firstRecord is TopicFlowCreatedRecord
-    )
+    check(firstRecord is TopicFlowCreatedRecord || firstRecord is TopicInternalCreatedRecord)
 
     var result = TopicEntity(
         id = firstRecord.entityId,

@@ -1,31 +1,30 @@
 package io.hamal.repository.memory.record
 
 import io.hamal.lib.common.domain.Count
+import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.TopicId
-import io.hamal.repository.api.Topic
-import io.hamal.repository.api.TopicCmdRepository.CreateFlowTopicCmd
-import io.hamal.repository.api.TopicEntry
-import io.hamal.repository.api.TopicQueryRepository
-import io.hamal.repository.api.TopicRepository
+import io.hamal.lib.domain.vo.TopicName
+import io.hamal.repository.api.*
+import io.hamal.repository.api.TopicCmdRepository.TopicFlowCreateCmd
 import io.hamal.repository.api.new_log.LogBrokerRepository
 import io.hamal.repository.api.new_log.LogBrokerRepository.LogTopicToCreate
 import io.hamal.repository.record.topic.CreateTopicFromRecords
 import io.hamal.repository.record.topic.TopicFlowCreatedRecord
+import io.hamal.repository.record.topic.TopicInternalCreatedRecord
 import io.hamal.repository.record.topic.TopicRecord
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
 private object TopicCurrentProjection {
 
-    fun apply(topic: Topic.Flow) {
+    fun apply(topic: Topic) {
         val currentTopic = projection[topic.id]
         projection.remove(topic.id)
 
-        val topicsInFlow = projection.values
-            .filterIsInstance<Topic.Flow>()
+        val topicsInGroup = projection.values
             .filter { it.groupId == topic.groupId }
 
-        if (topicsInFlow.any { it.name == topic.name }) {
+        if (topicsInGroup.any { it.name == topic.name }) {
             if (currentTopic != null) {
                 projection[currentTopic.id] = currentTopic
             }
@@ -37,12 +36,17 @@ private object TopicCurrentProjection {
 
     fun find(topicId: TopicId): Topic? = projection[topicId]
 
+    fun find(groupId: GroupId, topicName: TopicName): Topic? = projection.values.find {
+        it.groupId == groupId && it.name == topicName
+    }
+
     fun list(query: TopicQueryRepository.TopicQuery): List<Topic> {
         return projection.filter { query.topicIds.isEmpty() || it.key in query.topicIds }
             .map { it.value }
             .reversed()
             .asSequence()
             .filter { if (query.names.isEmpty()) true else query.names.contains(it.name) }
+            .filter { if(query.types.isEmpty()) true else query.types.contains(it.type) }
             .filter {
                 if (query.groupIds.isEmpty()) {
                     true
@@ -77,6 +81,7 @@ private object TopicCurrentProjection {
                 .reversed()
                 .asSequence()
                 .filter { if (query.names.isEmpty()) true else query.names.contains(it.name) }
+                .filter { if(query.types.isEmpty()) true else query.types.contains(it.type) }
                 .filter {
                     if (query.groupIds.isEmpty()) {
                         true
@@ -118,7 +123,7 @@ class TopicMemoryRepository(
     recordClass = TopicRecord::class
 ), TopicRepository {
 
-    override fun create(cmd: CreateFlowTopicCmd): Topic.Flow {
+    override fun create(cmd: TopicFlowCreateCmd): Topic.Flow {
         return lock.withLock {
             val topicId = cmd.topicId
             if (commandAlreadyApplied(cmd.id, topicId)) {
@@ -142,9 +147,36 @@ class TopicMemoryRepository(
         }
     }
 
+    override fun create(cmd: TopicCmdRepository.TopicInternalCreateCmd): Topic.Internal {
+        return lock.withLock {
+            val topicId = cmd.topicId
+            if (commandAlreadyApplied(cmd.id, topicId)) {
+                versionOf(topicId, cmd.id) as Topic.Internal
+            }
+            store(
+                TopicInternalCreatedRecord(
+                    cmdId = cmd.id,
+                    entityId = topicId,
+                    logTopicId = cmd.logTopicId,
+                    name = cmd.name,
+                    groupId = GroupId.root
+                )
+            )
+            (currentVersion(topicId) as Topic.Internal)
+                .also(TopicCurrentProjection::apply)
+                .also { _ ->
+                    logBrokerRepository.create(cmd.id, LogTopicToCreate(cmd.logTopicId))
+                }
+        }
+    }
+
     override fun close() {}
 
     override fun find(topicId: TopicId): Topic? = lock.withLock { TopicCurrentProjection.find(topicId) }
+
+    override fun findGroupTopic(groupId: GroupId, topicName: TopicName): Topic? = lock.withLock {
+        TopicCurrentProjection.find(groupId, topicName)
+    }
 
     override fun list(query: TopicQueryRepository.TopicQuery): List<Topic> =
         lock.withLock { TopicCurrentProjection.list(query) }

@@ -3,9 +3,11 @@ package io.hamal.repository
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.domain._enum.TopicType
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.Topic
-import io.hamal.repository.api.TopicCmdRepository.CreateFlowTopicCmd
+import io.hamal.repository.api.TopicCmdRepository.TopicFlowCreateCmd
+import io.hamal.repository.api.TopicCmdRepository.TopicInternalCreateCmd
 import io.hamal.repository.api.TopicQueryRepository.TopicQuery
 import io.hamal.repository.api.TopicRepository
 import io.hamal.repository.fixture.AbstractUnitTest
@@ -25,7 +27,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
         @TestFactory
         fun `Creates flow topic`() = runWith(TopicRepository::class) {
             val result = create(
-                CreateFlowTopicCmd(
+                TopicFlowCreateCmd(
                     id = CmdId(1),
                     topicId = TopicId(2),
                     logTopicId = LogTopicId(3),
@@ -58,7 +60,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
 
             assertThrows<IllegalArgumentException> {
                 create(
-                    CreateFlowTopicCmd(
+                    TopicFlowCreateCmd(
                         id = CmdId(10),
                         topicId = TopicId(11),
                         logTopicId = LogTopicId(12),
@@ -83,7 +85,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
             )
 
             create(
-                CreateFlowTopicCmd(
+                TopicFlowCreateCmd(
                     id = CmdId(10),
                     topicId = TopicId(11),
                     logTopicId = LogTopicId(12),
@@ -110,7 +112,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
                 )
 
                 val result = create(
-                    CreateFlowTopicCmd(
+                    TopicFlowCreateCmd(
                         id = CmdId(23456),
                         topicId = TopicId(1),
                         groupId = GroupId(333),
@@ -131,6 +133,86 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
                 verifyCount(1)
             }
 
+    }
+
+    @Nested
+    inner class CreateTopicInternal {
+
+        @TestFactory
+        fun `Creates internal topic`() = runWith(TopicRepository::class) {
+            val result = create(
+                TopicInternalCreateCmd(
+                    id = CmdId(1),
+                    topicId = TopicId(2),
+                    logTopicId = LogTopicId(3),
+                    name = TopicName("topic-name"),
+                )
+            )
+
+            with(result) {
+                assertThat(id, equalTo(TopicId(2)))
+                assertThat(logTopicId, equalTo(LogTopicId(3)))
+                assertThat(groupId, equalTo(GroupId.root))
+                assertThat(name, equalTo(TopicName("topic-name")))
+            }
+            verifyCount(1)
+        }
+
+        @TestFactory
+        fun `Tries to create but same name already exists in group`() = runWith(TopicRepository::class) {
+            createInternalTopic(
+                topicId = TopicId(1),
+                logTopicId = LogTopicId(2),
+                name = TopicName("topic-name")
+            )
+
+            assertThrows<IllegalArgumentException> {
+                create(
+                    TopicInternalCreateCmd(
+                        id = CmdId(10),
+                        topicId = TopicId(11),
+                        logTopicId = LogTopicId(12),
+                        name = TopicName("topic-name"),
+                    )
+                )
+            }.also { exception ->
+                assertThat(
+                    exception.message, equalTo("TopicName(topic-name) already exists")
+                )
+            }
+
+            verifyCount(1)
+        }
+
+        @TestFactory
+        fun `Tries to create but cmd with trigger id was already applied`() =
+            runWith(TopicRepository::class) {
+
+                createInternalTopic(
+                    cmdId = CmdId(23456),
+                    topicId = TopicId(1),
+                    logTopicId = LogTopicId(4),
+                    name = TopicName("first-topic")
+                )
+
+                val result = create(
+                    TopicInternalCreateCmd(
+                        id = CmdId(23456),
+                        topicId = TopicId(1),
+                        logTopicId = LogTopicId(4444),
+                        name = TopicName("second-topic")
+                    )
+                )
+
+                with(result) {
+                    assertThat(id, equalTo(TopicId(1)))
+                    assertThat(logTopicId, equalTo(LogTopicId(4)))
+                    assertThat(groupId, equalTo(GroupId.root))
+                    assertThat(name, equalTo(TopicName("first-topic")))
+                }
+
+                verifyCount(1)
+            }
     }
 
     @Nested
@@ -193,7 +275,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
         }
 
         @TestFactory
-        fun `Tries to get func by id but does not exist`() = runWith(TopicRepository::class) {
+        fun `Tries to get topic by id but does not exist`() = runWith(TopicRepository::class) {
             createFlowTopic(
                 topicId = TopicId(1),
                 flowId = FlowId(2),
@@ -245,6 +327,104 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
             val result = find(TopicId(111111))
             assertThat(result, nullValue())
         }
+    }
+
+    @Nested
+    inner class GetGroupTopic {
+
+        @TestFactory
+        fun `Get topic by group id and name`() = runWith(TopicRepository::class) {
+            createFlowTopic(
+                topicId = TopicId(1),
+                flowId = FlowId(2),
+                groupId = GroupId(3),
+                logTopicId = LogTopicId(4),
+                name = TopicName("SomeTopic")
+            )
+
+            with(getGroupTopic(GroupId(3), TopicName("SomeTopic"))) {
+                require(this is Topic.Flow)
+
+                assertThat(id, equalTo(TopicId(1)))
+                assertThat(logTopicId, equalTo(LogTopicId(4)))
+                assertThat(groupId, equalTo(GroupId(3)))
+                assertThat(flowId, equalTo(FlowId(2)))
+                assertThat(name, equalTo(TopicName("SomeTopic")))
+            }
+        }
+
+        @TestFactory
+        fun `Tries to get topic by group id and name but does not exist`() = runWith(TopicRepository::class) {
+            createFlowTopic(
+                cmdId = CmdId(1),
+                topicId = TopicId(1),
+                flowId = FlowId(2),
+                groupId = GroupId(3),
+                logTopicId = LogTopicId(4),
+                name = TopicName("SomeTopic")
+            )
+
+            assertThrows<NoSuchElementException> {
+                getGroupTopic(GroupId(33333333), TopicName("SomeTopic"))
+            }.also { exception ->
+                assertThat(exception.message, equalTo("Topic not found"))
+            }
+
+            assertThrows<NoSuchElementException> {
+                getGroupTopic(GroupId(3), TopicName("AnotherTopic"))
+            }.also { exception ->
+                assertThat(exception.message, equalTo("Topic not found"))
+            }
+        }
+
+    }
+
+    @Nested
+    inner class FindGroupTopicTest {
+
+        @TestFactory
+        fun `Finds topic by group id and name`() = runWith(TopicRepository::class) {
+            createFlowTopic(
+                topicId = TopicId(1),
+                flowId = FlowId(2),
+                groupId = GroupId(3),
+                logTopicId = LogTopicId(4),
+                name = TopicName("SomeTopic")
+            )
+
+            with(findGroupTopic(GroupId(3), TopicName("SomeTopic"))) {
+                require(this is Topic.Flow)
+
+                assertThat(id, equalTo(TopicId(1)))
+                assertThat(logTopicId, equalTo(LogTopicId(4)))
+                assertThat(groupId, equalTo(GroupId(3)))
+                assertThat(flowId, equalTo(FlowId(2)))
+                assertThat(name, equalTo(TopicName("SomeTopic")))
+            }
+        }
+
+        @TestFactory
+        fun `Tries to find topic by group id and name but does not exist`() = runWith(TopicRepository::class) {
+            createFlowTopic(
+                cmdId = CmdId(1),
+                topicId = TopicId(1),
+                flowId = FlowId(2),
+                groupId = GroupId(3),
+                logTopicId = LogTopicId(4),
+                name = TopicName("SomeTopic")
+            )
+
+            assertThat(
+                findGroupTopic(GroupId(33333333), TopicName("SomeTopic")),
+                nullValue()
+            )
+
+            assertThat(
+                findGroupTopic(GroupId(3), TopicName("AnotherTopic")),
+                nullValue()
+            )
+        }
+
     }
 
     @Nested
@@ -364,6 +544,24 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
         }
 
         @TestFactory
+        fun `With types`() = runWith(TopicRepository::class) {
+            setup()
+
+            val query = TopicQuery(
+                types = listOf(TopicType.Internal),
+                limit = Limit.all
+            )
+
+            assertThat(count(query), equalTo(Count(1)))
+            val result = list(query)
+            assertThat(result, hasSize(1))
+
+            with(result[0]) {
+                assertThat(id, equalTo(TopicId(31)))
+            }
+        }
+
+        @TestFactory
         fun `Limit`() = runWith(TopicRepository::class) {
             setup()
 
@@ -371,17 +569,17 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
                 limit = Limit(2)
             )
 
-            assertThat(count(query), equalTo(Count(3)))
+            assertThat(count(query), equalTo(Count(4)))
             val result = list(query)
             assertThat(result, hasSize(2))
 
 
             with(result[0]) {
-                assertThat(id, equalTo(TopicId(21)))
+                assertThat(id, equalTo(TopicId(31)))
             }
 
             with(result[1]) {
-                assertThat(id, equalTo(TopicId(11)))
+                assertThat(id, equalTo(TopicId(21)))
             }
         }
 
@@ -429,6 +627,12 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
                 logTopicId = LogTopicId(24),
                 name = TopicName("topic-three")
             )
+
+            createInternalTopic(
+                topicId = TopicId(31),
+                name = TopicName("topic-four"),
+                logTopicId = LogTopicId(34)
+            )
         }
     }
 
@@ -440,13 +644,27 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
         groupId: GroupId = GroupId(4),
         cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
     ) = create(
-        CreateFlowTopicCmd(
+        TopicFlowCreateCmd(
             id = cmdId,
             topicId = topicId,
             logTopicId = logTopicId,
             groupId = groupId,
             flowId = flowId,
             name = name,
+        )
+    )
+
+    private fun TopicRepository.createInternalTopic(
+        topicId: TopicId,
+        name: TopicName,
+        logTopicId: LogTopicId = LogTopicId(3),
+        cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
+    ) = create(
+        TopicInternalCreateCmd(
+            id = cmdId,
+            topicId = topicId,
+            logTopicId = logTopicId,
+            name = name
         )
     )
 
