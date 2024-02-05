@@ -1,14 +1,12 @@
 package io.hamal.repository.log
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.util.HashUtils
-import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.domain.vo.FlowId
-import io.hamal.lib.domain.vo.TopicId
-import io.hamal.lib.domain.vo.TopicName
-import io.hamal.repository.api.log.BrokerRepository
-import io.hamal.repository.api.log.ConsumerId
-import io.hamal.repository.api.log.CreateTopic.TopicToCreate
+import io.hamal.lib.domain.vo.LogTopicId
+import io.hamal.repository.api.new_log.LogBrokerRepository
+import io.hamal.repository.api.new_log.LogBrokerRepository.LogTopicToCreate
+import io.hamal.repository.api.new_log.LogConsumerId
 import io.hamal.repository.fixture.AbstractIntegrationTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -16,49 +14,48 @@ import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.TestFactory
 import java.util.concurrent.CompletableFuture.runAsync
 
-class BrokerTest : AbstractIntegrationTest() {
+class LogBrokerRepositoryTest : AbstractIntegrationTest() {
 
     @TestFactory
-    fun `Concurrent safe - 10 threads add to the same topic`() = runWith(BrokerRepository::class) { testInstance ->
-        val topic = testInstance.create(
-            CmdId(1), TopicToCreate(
-                TopicId(123), TopicName("topic"), FlowId(23), GroupId(1)
+    fun `Concurrent safe - 10 threads add to the same topic`() =
+        runWith(LogBrokerRepository::class) { testInstance ->
+            val topic = testInstance.create(
+                CmdId(1), LogTopicToCreate(LogTopicId(123))
             )
-        )
 
-        val futures = IntRange(1, 10).map { thread ->
-            runAsync {
-                IntRange(1, 1_000).forEach {
-                    testInstance.append(
-                        CmdId(HashUtils.sha256("$thread $it")),
-                        topic,
-                        "$thread $it".toByteArray()
-                    )
+            val futures = IntRange(1, 10).map { thread ->
+                runAsync {
+                    IntRange(1, 1_000).forEach {
+                        testInstance.append(
+                            CmdId(HashUtils.sha256("$thread $it")),
+                            topic.id,
+                            "$thread $it".toByteArray()
+                        )
+                    }
                 }
             }
+
+            futures.forEach { it.join() }
+
+            val result = testInstance.consume(LogConsumerId(42), topic.id, Limit(100_000))
+            assertThat(result, hasSize(10_000))
         }
-
-        futures.forEach { it.join() }
-
-        val result = testInstance.consume(ConsumerId("consumer-id"), topic, 100_000)
-        assertThat(result, hasSize(10_000))
-    }
 
     @TestFactory
     fun `Concurrent safe - 100 threads add to the different topics`() =
-        runWith(BrokerRepository::class) { testInstance ->
+        runWith(LogBrokerRepository::class) { testInstance ->
 
             val futures = IntRange(1, 100).map { thread ->
                 runAsync {
                     val topic = testInstance.create(
                         CmdId(1),
-                        TopicToCreate(TopicId(thread), TopicName("topic-$thread"), FlowId(23), GroupId(1))
+                        LogTopicToCreate(LogTopicId(thread))
                     )
 
                     IntRange(1, 100).forEach {
                         testInstance.append(
                             CmdId(HashUtils.sha256("$thread $it")),
-                            topic,
+                            topic.id,
                             "$thread $it".toByteArray()
                         )
                     }
@@ -68,9 +65,9 @@ class BrokerTest : AbstractIntegrationTest() {
 
             IntRange(1, 100).forEach { thread ->
                 val result = testInstance.consume(
-                    ConsumerId("consumer-id"),
-                    testInstance.findTopic(FlowId(23), TopicName("topic-$thread"))!!,
-                    1_000_000
+                    LogConsumerId(42),
+                    testInstance.getTopic(LogTopicId(thread)).id,
+                    Limit(1_000_000)
                 )
                 assertThat(result, hasSize(100))
                 assertThat(result.first().bytes, equalTo("$thread 1".toByteArray()))

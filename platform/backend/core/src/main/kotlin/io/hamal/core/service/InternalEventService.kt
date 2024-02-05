@@ -30,7 +30,6 @@ internal class InternalEventService(
     private val scheduledTasks = mutableListOf<ScheduledFuture<*>>()
 
     override fun onApplicationEvent(event: ApplicationReadyEvent) {
-
         internalEventContainer.topicNames().forEach { topicName ->
             val topic = topicRepository.getGroupTopic(GroupId.root, topicName)
             val consumer = LogConsumerImpl(

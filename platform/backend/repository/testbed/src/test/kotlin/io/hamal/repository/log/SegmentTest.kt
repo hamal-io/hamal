@@ -1,4 +1,4 @@
-package io.hamal.repository.new_log
+package io.hamal.repository.log
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit

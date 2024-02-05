@@ -39,7 +39,7 @@ internal class TopicCreateControllerTest : TopicBaseControllerTest() {
 }
 
 private fun TopicCreateControllerTest.verifyTopicCreated(topicId: TopicId) {
-    with(eventBrokerRepository.findTopic(topicId)!!) {
+    with(topicQueryRepository.get(topicId)) {
         assertThat(id, equalTo(topicId))
         assertThat(name, equalTo(TopicName("flow::topics_one")))
     }
