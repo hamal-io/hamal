@@ -1,12 +1,9 @@
 package io.hamal.repository.fixture
 
-import io.hamal.lib.domain.vo.TopicId
 import io.hamal.repository.api.*
-import io.hamal.repository.api.log.*
 import io.hamal.repository.sqlite.AuthSqliteRepository
 import io.hamal.repository.sqlite.ExecLogSqliteRepository
 import io.hamal.repository.sqlite.StateSqliteRepository
-import io.hamal.repository.sqlite.log.*
 import io.hamal.repository.sqlite.record.account.AccountSqliteRepository
 import io.hamal.repository.sqlite.record.blueprint.BlueprintSqliteRepository
 import io.hamal.repository.sqlite.record.code.CodeSqliteRepository
@@ -36,18 +33,6 @@ object SqliteFixture : BaseTestFixture {
 
         BlueprintRepository::class -> BlueprintSqliteRepository(
             BlueprintSqliteRepository.Config(createTempDirectory("sqlite_blueprint_test"))
-        ) as REPO
-
-        BrokerConsumersRepository::class -> BrokerConsumersSqliteRepository(
-            BrokerConsumersSqlite(createTempDirectory("sqlite_broker_consumers_test"))
-        ) as REPO
-
-        BrokerRepository::class -> BrokerSqliteRepository(
-            BrokerSqlite(createTempDirectory("sqlite_broker_test"))
-        ) as REPO
-
-        BrokerTopicsRepository::class -> BrokerTopicsSqliteRepository(
-            BrokerTopicsSqlite(createTempDirectory("sqlite_broker_topics_test"))
         ) as REPO
 
         CodeRepository::class -> CodeSqliteRepository(
@@ -90,22 +75,9 @@ object SqliteFixture : BaseTestFixture {
             FlowSqliteRepository.Config(createTempDirectory("sqlite_flow_test"))
         ) as REPO
 
-        SegmentRepository::class -> SegmentSqliteRepository(
-            SegmentSqlite(
-                Segment.Id(2810),
-                TopicId(1506),
-                createTempDirectory("sqlite_topic_test")
-            )
-        ) as REPO
-
         StateRepository::class -> StateSqliteRepository(
             StateSqliteRepository.Config(createTempDirectory("sqlite_state_test"))
         ) as REPO
-
-//        DepTopicRepository::class -> TopicSqliteRepository(
-//            Topic(TopicId(23), FlowId(23), GroupId(1), TopicName("test-topic")),
-//            createTempDirectory("sqlite_topic_test")
-//        ) as REPO
 
         TriggerRepository::class -> TriggerSqliteRepository(
             TriggerSqliteRepository.Config(createTempDirectory("sqlite_trigger_test"))

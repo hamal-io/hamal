@@ -4,7 +4,7 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.LogTopicId
-import io.hamal.repository.api.new_log.*
+import io.hamal.repository.api.log.*
 
 data class LogTopicMemory(
     override val id: LogTopicId

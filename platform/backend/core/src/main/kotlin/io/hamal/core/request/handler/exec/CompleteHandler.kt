@@ -11,8 +11,8 @@ import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.*
 import io.hamal.repository.api.TopicCmdRepository.TopicGroupCreateCmd
 import io.hamal.repository.api.event.ExecCompletedEvent
-import io.hamal.repository.api.new_log.LogBrokerRepository
-import io.hamal.repository.api.new_log.LogTopicAppenderImpl
+import io.hamal.repository.api.log.LogBrokerRepository
+import io.hamal.repository.api.log.LogTopicAppenderImpl
 import org.springframework.stereotype.Component
 
 

@@ -2,7 +2,9 @@ package io.hamal.testbed.api
 
 import io.hamal.core.component.DelayRetry
 import io.hamal.core.component.DelayRetryFixedTime
+import io.hamal.core.component.SetupInternalTopics
 import io.hamal.core.config.BackendBasePath
+import io.hamal.core.service.InternalEventService
 import io.hamal.extension.net.http.ExtensionHttpFactory
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.hot.HotObject
@@ -19,7 +21,7 @@ import io.hamal.plugin.std.debug.PluginDebugFactory
 import io.hamal.plugin.std.log.PluginLogFactory
 import io.hamal.plugin.std.sys.PluginSysFactory
 import io.hamal.repository.api.*
-import io.hamal.repository.api.log.BrokerRepository
+import io.hamal.repository.api.log.LogBrokerRepository
 import io.hamal.runner.config.EnvFactory
 import io.hamal.runner.config.SandboxFactory
 import io.hamal.testbed.api.TestResult.*
@@ -102,7 +104,6 @@ class ClearController {
 
     @PostMapping("/v1/clear")
     fun clear() {
-        eventBrokerRepository.clear()
         accountRepository.clear()
         authRepository.clear()
         codeRepository.clear()
@@ -113,9 +114,15 @@ class ClearController {
         funcRepository.clear()
         groupRepository.clear()
         hookRepository.clear()
+
         flowRepository.clear()
         blueprintRepository.clear()
         triggerRepository.clear()
+
+        topicRepository.clear()
+        logBrokerRepository.clear()
+        setupInternalTopics()
+        internalEvenService.reload()
 
         testAccount = accountRepository.create(
             AccountCmdRepository.CreateCmd(
@@ -160,9 +167,6 @@ class ClearController {
     lateinit var blueprintRepository: BlueprintRepository
 
     @Autowired
-    lateinit var eventBrokerRepository: BrokerRepository
-
-    @Autowired
     lateinit var accountRepository: AccountRepository
 
     @Autowired
@@ -193,13 +197,25 @@ class ClearController {
     lateinit var flowRepository: FlowRepository
 
     @Autowired
+    lateinit var logBrokerRepository: LogBrokerRepository
+
+    @Autowired
     lateinit var reqRepository: RequestRepository
+
+    @Autowired
+    lateinit var topicRepository: TopicRepository
 
     @Autowired
     lateinit var triggerRepository: TriggerRepository
 
     @Autowired
     lateinit var generateDomainId: GenerateId
+
+    @Autowired
+    lateinit var setupInternalTopics: SetupInternalTopics
+
+    @Autowired
+    lateinit var internalEvenService: InternalEventService
 
     private lateinit var testAccount: Account
     private lateinit var testAccountAuthToken: AuthToken
@@ -225,6 +241,7 @@ class TestConfig {
 
     @PostConstruct
     fun setup() {
+        setupInternalTopics()
 
         try {
             testAccount = accountRepository.create(
@@ -279,6 +296,9 @@ class TestConfig {
 
     @Autowired
     lateinit var flowRepository: FlowRepository
+
+    @Autowired
+    lateinit var setupInternalTopics: SetupInternalTopics
 }
 
 
@@ -342,7 +362,7 @@ abstract class BaseApiTest {
                     } else {
                         if (status == ExecStatus.Failed) {
                             return Failed(message = "Execution failed: ${this.result!!.value["message"]}")
-                        } else if (startedAt.plusSeconds(5).isBefore(TimeUtils.now())) {
+                        } else if (startedAt.plusSeconds(1).isBefore(TimeUtils.now())) {
                             return Timeout
                         }
                     }

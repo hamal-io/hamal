@@ -4,10 +4,10 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.util.TimeUtils.withEpochMilli
 import io.hamal.lib.domain.vo.LogTopicId
-import io.hamal.repository.api.new_log.LogEntry
-import io.hamal.repository.api.new_log.LogEntryId
-import io.hamal.repository.api.new_log.LogSegmentId
-import io.hamal.repository.api.new_log.LogTopicRepository
+import io.hamal.repository.api.log.LogEntry
+import io.hamal.repository.api.log.LogEntryId
+import io.hamal.repository.api.log.LogSegmentId
+import io.hamal.repository.api.log.LogTopicRepository
 import io.hamal.repository.fixture.AbstractUnitTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo

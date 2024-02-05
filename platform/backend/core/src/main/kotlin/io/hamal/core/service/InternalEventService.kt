@@ -9,9 +9,9 @@ import io.hamal.lib.common.util.HashUtils.md5
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.repository.api.TopicRepository
 import io.hamal.repository.api.event.InternalEvent
-import io.hamal.repository.api.new_log.LogBrokerRepository
-import io.hamal.repository.api.new_log.LogConsumerId
-import io.hamal.repository.api.new_log.LogConsumerImpl
+import io.hamal.repository.api.log.LogBrokerRepository
+import io.hamal.repository.api.log.LogConsumerId
+import io.hamal.repository.api.log.LogConsumerImpl
 import org.springframework.beans.factory.DisposableBean
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.ApplicationListener
@@ -20,7 +20,7 @@ import java.util.concurrent.ScheduledFuture
 import kotlin.time.Duration.Companion.milliseconds
 
 @Service
-internal class InternalEventService(
+class InternalEventService(
     private val async: Async,
     private val internalEventContainer: InternalEventContainer,
     private val topicRepository: TopicRepository,
@@ -30,6 +30,18 @@ internal class InternalEventService(
     private val scheduledTasks = mutableListOf<ScheduledFuture<*>>()
 
     override fun onApplicationEvent(event: ApplicationReadyEvent) {
+        reload()
+    }
+
+    override fun destroy() {
+        scheduledTasks.forEach {
+            it.cancel(false)
+        }
+    }
+
+    fun reload() {
+        destroy()
+
         internalEventContainer.topicNames().forEach { topicName ->
             val topic = topicRepository.getGroupTopic(GroupId.root, topicName)
             val consumer = LogConsumerImpl(
@@ -50,11 +62,4 @@ internal class InternalEventService(
             )
         }
     }
-
-    override fun destroy() {
-        scheduledTasks.forEach {
-            it.cancel(false)
-        }
-    }
-
 }

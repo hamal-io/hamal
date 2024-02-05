@@ -11,7 +11,6 @@ import io.hamal.lib.domain.vo.AccountType.Root
 import io.hamal.repository.api.*
 import io.hamal.repository.api.AuthCmdRepository.CreateTokenAuthCmd
 import io.hamal.repository.api.ExecCmdRepository.StartCmd
-import io.hamal.repository.api.log.BrokerRepository
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.MethodOrderer.Random
 import org.junit.jupiter.api.TestMethodOrder
@@ -44,12 +43,6 @@ internal abstract class BaseTest {
 
     @Autowired
     lateinit var authCmdRepository: AuthCmdRepository
-
-    @Autowired
-    lateinit var platformEventBrokerRepository: BrokerRepository
-
-    @Autowired
-    lateinit var eventBrokerRepository: BrokerRepository
 
     @Autowired
     lateinit var codeCmdRepository: CodeCmdRepository
@@ -107,8 +100,6 @@ internal abstract class BaseTest {
         accountCmdRepository.clear()
         authCmdRepository.clear()
         codeCmdRepository.clear()
-        platformEventBrokerRepository.clear()
-        eventBrokerRepository.clear()
         execCmdRepository.clear()
         funcCmdRepository.clear()
         groupCmdRepository.clear()

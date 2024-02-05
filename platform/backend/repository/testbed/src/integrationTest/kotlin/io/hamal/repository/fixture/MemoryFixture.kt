@@ -1,6 +1,6 @@
 package io.hamal.repository.fixture
 
-import io.hamal.repository.api.new_log.LogBrokerRepository
+import io.hamal.repository.api.log.LogBrokerRepository
 import io.hamal.repository.memory.new_log.LogBrokerMemoryRepository
 import kotlin.reflect.KClass
 

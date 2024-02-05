@@ -32,8 +32,8 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
     }
 
     fun createTopic(topicName: TopicName): ApiTopicGroupCreateRequested {
-        val createTopicResponse = httpTemplate.post("/v1/flows/{flowId}/topics")
-            .path("flowId", testFlow.id)
+        val createTopicResponse = httpTemplate.post("/v1/groups/{groupId}/topics")
+            .path("groupId", testGroup.id)
             .body(ApiTopicCreateRequest(topicName))
             .execute()
 

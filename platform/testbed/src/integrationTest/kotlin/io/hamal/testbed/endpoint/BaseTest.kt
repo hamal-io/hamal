@@ -3,7 +3,9 @@ package io.hamal.testbed.endpoint
 import AbstractRunnerTest
 import io.hamal.core.component.DelayRetry
 import io.hamal.core.component.DelayRetryFixedTime
+import io.hamal.core.component.SetupInternalTopics
 import io.hamal.core.config.BackendBasePath
+import io.hamal.core.service.InternalEventService
 import io.hamal.extension.net.http.ExtensionHttpFactory
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.hot.HotObject
@@ -19,7 +21,7 @@ import io.hamal.plugin.std.debug.PluginDebugFactory
 import io.hamal.plugin.std.log.PluginLogFactory
 import io.hamal.plugin.std.sys.PluginSysFactory
 import io.hamal.repository.api.*
-import io.hamal.repository.api.log.BrokerRepository
+import io.hamal.repository.api.log.LogBrokerRepository
 import io.hamal.runner.config.EnvFactory
 import io.hamal.runner.config.SandboxFactory
 import jakarta.annotation.PostConstruct
@@ -97,7 +99,6 @@ class ClearController {
 
     @PostMapping("/v1/clear")
     fun clear() {
-        eventBrokerRepository.clear()
         accountRepository.clear()
         authRepository.clear()
         codeRepository.clear()
@@ -111,6 +112,11 @@ class ClearController {
         flowRepository.clear()
         blueprintRepository.clear()
         triggerRepository.clear()
+
+        topicRepository.clear()
+        logBrokerRepository.clear()
+        setupInternalTopics()
+        internalEvenService.reload()
 
         testAccount = accountRepository.create(
             AccountCmdRepository.CreateCmd(
@@ -155,9 +161,6 @@ class ClearController {
     lateinit var blueprintRepository: BlueprintRepository
 
     @Autowired
-    lateinit var eventBrokerRepository: BrokerRepository
-
-    @Autowired
     lateinit var accountRepository: AccountRepository
 
     @Autowired
@@ -196,6 +199,18 @@ class ClearController {
     @Autowired
     lateinit var generateDomainId: GenerateId
 
+    @Autowired
+    lateinit var logBrokerRepository: LogBrokerRepository
+
+    @Autowired
+    lateinit var topicRepository: TopicRepository
+
+    @Autowired
+    lateinit var setupInternalTopics: SetupInternalTopics
+
+    @Autowired
+    lateinit var internalEvenService: InternalEventService
+
     private lateinit var testAccount: Account
     private lateinit var testAccountAuthToken: AuthToken
     private lateinit var testGroup: Group
@@ -213,6 +228,7 @@ class TestConfig {
 
     @PostConstruct
     fun setup() {
+        setupInternalTopics()
 
         try {
             testAccount = accountRepository.create(
@@ -255,6 +271,10 @@ class TestConfig {
         } catch (ignore: Throwable) {
         }
     }
+
+
+    @Autowired
+    lateinit var setupInternalTopics: SetupInternalTopics
 
     @Autowired
     lateinit var accountRepository: AccountRepository

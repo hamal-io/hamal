@@ -1,70 +1,77 @@
 package io.hamal.repository.api.log
 
+import io.hamal.lib.common.domain.BatchSize
+import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.domain.ValueObjectId
+import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.domain.vo.LogTopicId
 import kotlin.reflect.KClass
 
-interface LogConsumer<VALUE : Any> {
-    val consumerId: ConsumerId
-    fun consume(limit: Int, fn: (ChunkId, VALUE) -> Unit): Int {
-        return consumeIndexed(limit) { _, chunkId, value -> fn(chunkId, value) }
-    }
-
-    fun consumeIndexed(limit: Int, fn: (Int, ChunkId, VALUE) -> Unit): Int
+class LogConsumerId(override val value: SnowflakeId) : ValueObjectId() {
+    constructor(value: Int) : this(SnowflakeId(value))
 }
 
-@JvmInline
-value class ConsumerId(val value: String) //FIXME become VO
+interface LogConsumer<VALUE : Any> {
+    val consumerId: LogConsumerId
 
-interface BatchConsumer<VALUE : Any> {
-    val consumerId: ConsumerId
+    fun consume(limit: Limit, fn: (LogEntryId, VALUE) -> Unit): Int {
+        return consumeIndexed(limit) { _, LogEntryId, value -> fn(LogEntryId, value) }
+    }
+
+    fun consumeIndexed(limit: Limit, fn: (Int, LogEntryId, VALUE) -> Unit): Int
+}
+
+interface LogConsumerBatch<VALUE : Any> {
+    val consumerId: LogConsumerId
 
     // min batch size
     // max batch size
-    fun consumeBatch(batchSize: Int, block: (List<VALUE>) -> Unit): Int
-
+    fun consumeBatch(batchSize: BatchSize, block: (List<VALUE>) -> Unit): Int
 }
 
 class LogConsumerImpl<Value : Any>(
-    override val consumerId: ConsumerId,
-    private val topic: DepTopic,
-    private val repository: BrokerRepository,
+    override val consumerId: LogConsumerId,
+    private val topicId: LogTopicId,
+    private val repository: LogBrokerRepository,
     private val valueClass: KClass<Value>
 ) : LogConsumer<Value> {
 
-    override fun consumeIndexed(limit: Int, fn: (Int, ChunkId, Value) -> Unit): Int {
-        val chunksToConsume = repository.consume(consumerId, topic, limit)
+    override fun consumeIndexed(limit: Limit, fn: (Int, LogEntryId, Value) -> Unit): Int {
+        val entriesToConsume = repository.consume(consumerId, topicId, limit)
 
-        chunksToConsume.mapIndexed { index, chunk ->
+        entriesToConsume.mapIndexed { index, chunk ->
             fn(
                 index,
                 chunk.id,
                 json.decompressAndDeserialize(valueClass, chunk.bytes)
             )
             chunk.id
-        }.maxByOrNull { it }?.let { repository.commit(consumerId, topic, it) }
-        return chunksToConsume.size
+        }.maxByOrNull { it }?.let { repository.commit(consumerId, topicId, it) }
+        return entriesToConsume.size
     }
 }
 
-class BatchConsumerImpl<Value : Any>(
-    override val consumerId: ConsumerId,
-    private val topic: DepTopic,
-    private val repository: BrokerRepository,
+
+class LogConsumerBatchImpl<Value : Any>(
+    override val consumerId: LogConsumerId,
+    private val topicId: LogTopicId,
+    private val repository: LogBrokerRepository,
     private val valueClass: KClass<Value>
-) : BatchConsumer<Value> {
+) : LogConsumerBatch<Value> {
 
-    override fun consumeBatch(batchSize: Int, block: (List<Value>) -> Unit): Int {
-        val chunksToConsume = repository.consume(consumerId, topic, batchSize)
+    override fun consumeBatch(batchSize: BatchSize, block: (List<Value>) -> Unit): Int {
+        val entriesToConsume = repository.consume(consumerId, topicId, Limit(batchSize.value))
 
-        if (chunksToConsume.isEmpty()) {
+        if (entriesToConsume.isEmpty()) {
             return 0
         }
 
-        val batch = chunksToConsume.map { chunk ->
-            json.decompressAndDeserialize(valueClass, chunk.bytes)
+        val batch = entriesToConsume.map { chunk ->
+            io.hamal.repository.api.log.json.decompressAndDeserialize(valueClass, chunk.bytes)
         }
 
         block(batch)
-        chunksToConsume.maxByOrNull { chunk -> chunk.id }?.let { repository.commit(consumerId, topic, it.id) }
+        entriesToConsume.maxByOrNull { chunk -> chunk.id }?.let { repository.commit(consumerId, topicId, it.id) }
         return batch.size
     }
 }

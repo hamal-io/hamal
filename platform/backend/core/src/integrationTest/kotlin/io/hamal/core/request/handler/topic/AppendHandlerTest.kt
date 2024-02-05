@@ -9,12 +9,8 @@ import io.hamal.lib.domain.vo.RequestId
 import io.hamal.lib.domain.vo.TopicEntryPayload
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
-import io.hamal.repository.api.log.ChunkId
-import io.hamal.repository.api.log.Segment
-import io.hamal.repository.record.json
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
-import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
@@ -34,18 +30,19 @@ internal class TopicAppendHandlerTest : BaseReqHandlerTest() {
             )
         )
 
-        eventBrokerRepository.read(ChunkId(0), topic, 1).also { payloads ->
-            assertThat(payloads, hasSize(1))
-
-            with(payloads.first()) {
-                assertThat(segmentId, equalTo(Segment.Id(0)))
-                assertThat(id, equalTo(ChunkId(1)))
-                assertThat(topicId, equalTo(TopicId(4444)))
-
-                val payload = json.decompressAndDeserialize(TopicEntryPayload::class, bytes)
-                assertThat(payload.value, equalTo(HotObject.builder().set("hamal", "rocks").build()))
-            }
-        }
+        TODO()
+//        eventBrokerRepository.read(ChunkId(0), topic, 1).also { payloads ->
+//            assertThat(payloads, hasSize(1))
+//
+//            with(payloads.first()) {
+//                assertThat(segmentId, equalTo(Segment.Id(0)))
+//                assertThat(id, equalTo(ChunkId(1)))
+//                assertThat(topicId, equalTo(TopicId(4444)))
+//
+//                val payload = json.decompressAndDeserialize(TopicEntryPayload::class, bytes)
+//                assertThat(payload.value, equalTo(HotObject.builder().set("hamal", "rocks").build()))
+//            }
+//        }
     }
 
     @Test

@@ -7,10 +7,8 @@ import io.hamal.lib.domain.vo.LogTopicId
 import io.hamal.lib.domain.vo.RequestId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
-import io.hamal.repository.api.log.BrokerTopicsRepository.TopicQuery
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
-import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
@@ -67,13 +65,14 @@ internal class TopicCreateHandlerTest : BaseReqHandlerTest() {
     }
 
     private fun verifySingleTopicExists() {
-        eventBrokerRepository.listTopics(TopicQuery(groupIds = listOf())).also { topics ->
-            assertThat(topics, hasSize(1))
-            with(topics.first()) {
-                assertThat(id, equalTo(TopicId(2345)))
-                assertThat(name, equalTo(TopicName("some-topic-name")))
-            }
-        }
+//        eventBrokerRepository.listTopics(TopicQuery(groupIds = listOf())).also { topics ->
+//            assertThat(topics, hasSize(1))
+//            with(topics.first()) {
+//                assertThat(id, equalTo(TopicId(2345)))
+//                assertThat(name, equalTo(TopicName("some-topic-name")))
+//            }
+//        }
+        TODO()
     }
 
     @Autowired

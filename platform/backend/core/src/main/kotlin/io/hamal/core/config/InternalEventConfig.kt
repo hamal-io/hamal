@@ -10,7 +10,7 @@ import io.hamal.repository.api.ExecCmdRepository
 import io.hamal.repository.api.ExecQueryRepository
 import io.hamal.repository.api.TopicRepository
 import io.hamal.repository.api.event.*
-import io.hamal.repository.api.new_log.LogBrokerRepository
+import io.hamal.repository.api.log.LogBrokerRepository
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 

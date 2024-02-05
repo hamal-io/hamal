@@ -70,7 +70,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
                 )
             }.also { exception ->
                 assertThat(
-                    exception.message, equalTo("TopicName(topic-name) already exists")
+                    exception.message, equalTo("Topic already exists")
                 )
             }
 
@@ -174,7 +174,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
                 )
             }.also { exception ->
                 assertThat(
-                    exception.message, equalTo("TopicName(topic-name) already exists")
+                    exception.message, equalTo("Topic already exists")
                 )
             }
 

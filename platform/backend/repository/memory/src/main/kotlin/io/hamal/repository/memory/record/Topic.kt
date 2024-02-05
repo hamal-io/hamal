@@ -6,8 +6,8 @@ import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.repository.api.*
 import io.hamal.repository.api.TopicCmdRepository.TopicGroupCreateCmd
-import io.hamal.repository.api.new_log.LogBrokerRepository
-import io.hamal.repository.api.new_log.LogBrokerRepository.LogTopicToCreate
+import io.hamal.repository.api.log.LogBrokerRepository
+import io.hamal.repository.api.log.LogBrokerRepository.LogTopicToCreate
 import io.hamal.repository.record.topic.CreateTopicFromRecords
 import io.hamal.repository.record.topic.TopicGroupCreatedRecord
 import io.hamal.repository.record.topic.TopicInternalCreatedRecord

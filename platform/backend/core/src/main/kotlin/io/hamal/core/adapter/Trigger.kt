@@ -9,9 +9,8 @@ import io.hamal.lib.domain.request.TriggerCreateRequested
 import io.hamal.lib.domain.request.TriggerStatusRequested
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.*
+import io.hamal.repository.api.TopicQueryRepository.TopicQuery
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
-import io.hamal.repository.api.log.BrokerRepository
-import io.hamal.repository.api.log.DepTopic
 import org.springframework.stereotype.Component
 
 
@@ -26,7 +25,7 @@ interface TriggerCreatePort {
 interface TriggerGetPort {
     operator fun <T : Any> invoke(
         triggerId: TriggerId,
-        responseHandler: (Trigger, Func, Flow, DepTopic?, Hook?) -> T
+        responseHandler: (Trigger, Func, Flow, Topic?, Hook?) -> T
     ): T
 }
 
@@ -38,7 +37,7 @@ interface TriggerListPort {
             triggers: List<Trigger>,
             funcs: Map<FuncId, Func>,
             flows: Map<FlowId, Flow>,
-            topics: Map<TopicId, DepTopic>,
+            topics: Map<TopicId, Topic>,
             hooks: Map<HookId, Hook>
         ) -> T
     ): T
@@ -56,7 +55,7 @@ interface TriggerPort : TriggerCreatePort, TriggerGetPort, TriggerListPort, Trig
 
 @Component
 class TriggerAdapter(
-    private val eventBrokerRepository: BrokerRepository,
+    private val topicRepository: TopicRepository,
     private val funcQueryRepository: FuncQueryRepository,
     private val generateDomainId: GenerateId,
     private val hookQueryRepository: HookQueryRepository,
@@ -98,13 +97,13 @@ class TriggerAdapter(
 
     override fun <T : Any> invoke(
         triggerId: TriggerId,
-        responseHandler: (Trigger, Func, Flow, DepTopic?, Hook?) -> T
+        responseHandler: (Trigger, Func, Flow, Topic?, Hook?) -> T
     ): T {
         val trigger = triggerQueryRepository.get(triggerId)
         val func = funcQueryRepository.get(trigger.funcId)
         val flow = flowQueryRepository.get(trigger.flowId)
         val topic = if (trigger is EventTrigger) {
-            eventBrokerRepository.getTopic(trigger.topicId)
+            topicRepository.get(trigger.topicId)
         } else {
             null
         }
@@ -124,7 +123,7 @@ class TriggerAdapter(
             triggers: List<Trigger>,
             funcs: Map<FuncId, Func>,
             flows: Map<FlowId, Flow>,
-            topics: Map<TopicId, DepTopic>,
+            topics: Map<TopicId, Topic>,
             hooks: Map<HookId, Hook>
         ) -> T
     ): T {
@@ -137,8 +136,9 @@ class TriggerAdapter(
         val funcs = funcQueryRepository.list(triggers.map { it.funcId })
             .associateBy { it.id }
 
-        val topics = eventBrokerRepository.list(triggers.filterIsInstance<EventTrigger>().map { it.topicId })
-            .associateBy { it.id }
+        val topics =
+            topicRepository.list(TopicQuery(topicIds = triggers.filterIsInstance<EventTrigger>().map { it.topicId }))
+                .associateBy { it.id }
 
         val hooks = hookQueryRepository.list(triggers.filterIsInstance<HookTrigger>().map { it.hookId })
             .associateBy { it.id }
@@ -167,7 +167,7 @@ class TriggerAdapter(
     private fun ensureEvent(createTrigger: TriggerCreateRequest) {
         if (createTrigger.type == TriggerType.Event) {
             requireNotNull(createTrigger.topicId) { "topicId is missing" }
-            eventBrokerRepository.getTopic(createTrigger.topicId!!)
+            topicRepository.get(createTrigger.topicId!!)
         }
     }
 

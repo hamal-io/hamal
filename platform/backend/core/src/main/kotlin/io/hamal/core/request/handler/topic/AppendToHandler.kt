@@ -5,8 +5,8 @@ import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.domain.request.TopicAppendToRequested
 import io.hamal.lib.domain.vo.TopicEntryPayload
 import io.hamal.repository.api.TopicRepository
-import io.hamal.repository.api.new_log.LogBrokerRepository
-import io.hamal.repository.api.new_log.LogTopicAppenderImpl
+import io.hamal.repository.api.log.LogBrokerRepository
+import io.hamal.repository.api.log.LogTopicAppenderImpl
 import org.springframework.stereotype.Component
 
 @Component

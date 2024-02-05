@@ -4,11 +4,11 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.util.HashUtils
 import io.hamal.lib.domain.vo.LogTopicId
-import io.hamal.repository.api.new_log.LogBrokerRepository
-import io.hamal.repository.api.new_log.LogBrokerRepository.LogTopicToCreate
-import io.hamal.repository.api.new_log.LogConsumerId
-import io.hamal.repository.api.new_log.LogConsumerImpl
-import io.hamal.repository.api.new_log.LogTopicAppenderImpl
+import io.hamal.repository.api.log.LogBrokerRepository
+import io.hamal.repository.api.log.LogBrokerRepository.LogTopicToCreate
+import io.hamal.repository.api.log.LogConsumerId
+import io.hamal.repository.api.log.LogConsumerImpl
+import io.hamal.repository.api.log.LogTopicAppenderImpl
 import io.hamal.repository.fixture.AbstractIntegrationTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo

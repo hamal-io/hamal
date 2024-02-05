@@ -4,8 +4,8 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.repository.api.TopicRepository
 import io.hamal.repository.api.event.InternalEvent
-import io.hamal.repository.api.new_log.LogBrokerRepository
-import io.hamal.repository.api.new_log.LogTopicAppenderImpl
+import io.hamal.repository.api.log.LogBrokerRepository
+import io.hamal.repository.api.log.LogTopicAppenderImpl
 
 class InternalEventEmitter(
     private val topicRepository: TopicRepository,
