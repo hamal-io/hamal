@@ -10,7 +10,7 @@ import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.request.FuncInvokeRequest
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.EventTrigger
-import io.hamal.repository.api.TopicEntry
+import io.hamal.repository.api.TopicEvent
 import io.hamal.repository.api.TopicRepository
 import io.hamal.repository.api.TriggerQueryRepository
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
@@ -55,18 +55,18 @@ internal class EventTriggerService(
                             consumerId = LogConsumerId(trigger.id.value),
                             topicId = topic.logTopicId,
                             repository = logBrokerRepository,
-                            valueClass = TopicEntry::class
+                            valueClass = TopicEvent::class
                         )
 
                         triggerConsumers[trigger.id] = consumer
                         try {
-                            consumer.consumeBatch(BatchSize(1)) { entries ->
+                            consumer.consumeBatch(BatchSize(1)) { events ->
                                 invokeFunc(
                                     trigger.funcId,
                                     object : FuncInvokeRequest {
                                         override val correlationId = trigger.correlationId ?: CorrelationId.default
                                         override val inputs = InvocationInputs()
-                                        override val invocation = EventInvocation(entries.map {
+                                        override val invocation = EventInvocation(events.map {
                                             Event(
                                                 topic = EventTopic(
                                                     id = topic.id,
@@ -97,5 +97,5 @@ internal class EventTriggerService(
 
     private val shutdown = AtomicBoolean(false)
     private val scheduledTasks = mutableListOf<ScheduledFuture<*>>()
-    private val triggerConsumers = mutableMapOf<TriggerId, LogConsumerBatchImpl<TopicEntry>>()
+    private val triggerConsumers = mutableMapOf<TriggerId, LogConsumerBatchImpl<TopicEvent>>()
 }

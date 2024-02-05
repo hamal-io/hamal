@@ -1,5 +1,6 @@
 package io.hamal.bridge.http.controller.exec
 
+import io.hamal.lib.common.domain.BatchSize
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
@@ -15,8 +16,11 @@ import io.hamal.lib.sdk.bridge.BridgeExecCompleteRequest
 import io.hamal.lib.sdk.bridge.BridgeExecCompleteRequested
 import io.hamal.repository.api.CompletedExec
 import io.hamal.repository.api.StartedExec
+import io.hamal.repository.api.log.LogConsumerBatchImpl
+import io.hamal.repository.api.log.LogConsumerId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
+import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
@@ -119,20 +123,19 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
     }
 
     private fun verifyEventAppended() {
-//        val topic = eventBrokerRepository.resolveTopic(testFlow.id, TopicName("test-completion"))!!
-//
-//        BatchConsumerImpl(
-//            consumerId = ConsumerId("a"),
-//            repository = eventBrokerRepository,
-//            topic = topic,
-//            valueClass = EventPayload::class
-//        ).consumeBatch(10) { eventPayloads ->
-//            assertThat(eventPayloads, hasSize(1))
-//
-//            val payload = eventPayloads.first()
-//            assertThat(payload, equalTo(EventPayload(HotObject.builder().set("value", 42).build())))
-//        }
-        TODO()
+        val topic = topicQueryRepository.getGroupTopic(testGroup.id, TopicName("test-completion"))
+
+        LogConsumerBatchImpl(
+            consumerId = LogConsumerId(123),
+            repository = logBrokerRepository,
+            topicId = topic.logTopicId,
+            valueClass = EventPayload::class
+        ).consumeBatch(BatchSize(10)) { eventPayloads ->
+            assertThat(eventPayloads, hasSize(1))
+
+            val payload = eventPayloads.first()
+            assertThat(payload, equalTo(EventPayload(HotObject.builder().set("value", 42).build())))
+        }
     }
 
     private fun requestCompletion(execId: ExecId) =

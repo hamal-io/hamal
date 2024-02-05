@@ -30,7 +30,7 @@ fun Requested.toApiSubmitted(): ApiRequested = when (this) {
     is FlowCreateRequested -> ApiFlowCreateRequested(id, status, flowId, groupId)
     is FlowUpdateRequested -> ApiFlowUpdateRequested(id, status, flowId)
     is StateSetRequested -> ApiStateSetRequested(id, status)
-    is TopicAppendToRequested -> ApiTopicAppendRequested(id, status, topicId)
+    is TopicAppendEventRequested -> ApiTopicAppendRequested(id, status, topicId)
     is TopicGroupCreateRequested -> ApiTopicGroupCreateRequested(id, status, topicId, groupId)
     is TriggerCreateRequested -> ApiTriggerCreateRequested(id, status, triggerId, groupId, flowId)
     is TriggerStatusRequested -> ApiTriggerStatusRequested(id, status, triggerId, triggerStatus)

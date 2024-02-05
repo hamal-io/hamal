@@ -92,8 +92,8 @@ object ValueObjectJsonModule : JsonModule() {
         this[State::class] = ValueObjectHotObjectAdapter(::State)
         this[TopicId::class] = ValueObjectIdAdapter(::TopicId)
         this[TopicName::class] = ValueObjectStringAdapter(::TopicName)
-        this[TopicEntryId::class] = ValueObjectIdAdapter(::TopicEntryId)
-        this[TopicEntryPayload::class] = ValueObjectHotObjectAdapter(::TopicEntryPayload)
+        this[TopicEventId::class] = ValueObjectIdAdapter(::TopicEventId)
+        this[TopicEventPayload::class] = ValueObjectHotObjectAdapter(::TopicEventPayload)
 
         this[TriggerId::class] = ValueObjectIdAdapter(::TriggerId)
         this[TriggerName::class] = ValueObjectStringAdapter(::TriggerName)

@@ -14,11 +14,11 @@ class LogConsumerId(override val value: SnowflakeId) : ValueObjectId() {
 interface LogConsumer<VALUE : Any> {
     val consumerId: LogConsumerId
 
-    fun consume(limit: Limit, fn: (LogEntryId, VALUE) -> Unit): Int {
-        return consumeIndexed(limit) { _, LogEntryId, value -> fn(LogEntryId, value) }
+    fun consume(limit: Limit, fn: (LogEventId, VALUE) -> Unit): Int {
+        return consumeIndexed(limit) { _, logEventId, value -> fn(logEventId, value) }
     }
 
-    fun consumeIndexed(limit: Limit, fn: (Int, LogEntryId, VALUE) -> Unit): Int
+    fun consumeIndexed(limit: Limit, fn: (Int, LogEventId, VALUE) -> Unit): Int
 }
 
 interface LogConsumerBatch<VALUE : Any> {
@@ -36,18 +36,18 @@ class LogConsumerImpl<Value : Any>(
     private val valueClass: KClass<Value>
 ) : LogConsumer<Value> {
 
-    override fun consumeIndexed(limit: Limit, fn: (Int, LogEntryId, Value) -> Unit): Int {
-        val entriesToConsume = repository.consume(consumerId, topicId, limit)
+    override fun consumeIndexed(limit: Limit, fn: (Int, LogEventId, Value) -> Unit): Int {
+        val eventsToConsume = repository.consume(consumerId, topicId, limit)
 
-        entriesToConsume.mapIndexed { index, chunk ->
+        eventsToConsume.mapIndexed { index, event ->
             fn(
                 index,
-                chunk.id,
-                json.decompressAndDeserialize(valueClass, chunk.bytes)
+                event.id,
+                json.decompressAndDeserialize(valueClass, event.bytes)
             )
-            chunk.id
+            event.id
         }.maxByOrNull { it }?.let { repository.commit(consumerId, topicId, it) }
-        return entriesToConsume.size
+        return eventsToConsume.size
     }
 }
 
@@ -60,18 +60,18 @@ class LogConsumerBatchImpl<Value : Any>(
 ) : LogConsumerBatch<Value> {
 
     override fun consumeBatch(batchSize: BatchSize, block: (List<Value>) -> Unit): Int {
-        val entriesToConsume = repository.consume(consumerId, topicId, Limit(batchSize.value))
+        val eventsToConsume = repository.consume(consumerId, topicId, Limit(batchSize.value))
 
-        if (entriesToConsume.isEmpty()) {
+        if (eventsToConsume.isEmpty()) {
             return 0
         }
 
-        val batch = entriesToConsume.map { chunk ->
-            io.hamal.repository.api.log.json.decompressAndDeserialize(valueClass, chunk.bytes)
+        val batch = eventsToConsume.map { chunk ->
+            json.decompressAndDeserialize(valueClass, chunk.bytes)
         }
 
         block(batch)
-        entriesToConsume.maxByOrNull { chunk -> chunk.id }?.let { repository.commit(consumerId, topicId, it.id) }
+        eventsToConsume.maxByOrNull { chunk -> chunk.id }?.let { repository.commit(consumerId, topicId, it.id) }
         return batch.size
     }
 }

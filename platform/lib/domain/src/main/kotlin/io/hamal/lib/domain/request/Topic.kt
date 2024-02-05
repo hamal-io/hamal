@@ -20,12 +20,12 @@ data class TopicGroupCreateRequested(
 
 interface TopicAppendEntryRequest {
     val topicId: TopicId
-    val payload: TopicEntryPayload
+    val payload: TopicEventPayload
 }
 
-data class TopicAppendToRequested(
+data class TopicAppendEventRequested(
     override val id: RequestId,
     override var status: RequestStatus,
     val topicId: TopicId,
-    val payload: TopicEntryPayload
+    val payload: TopicEventPayload
 ) : Requested()

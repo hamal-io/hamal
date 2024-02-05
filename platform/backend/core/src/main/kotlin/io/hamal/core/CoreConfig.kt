@@ -36,10 +36,13 @@ import org.springframework.scheduling.annotation.EnableScheduling
 open class CoreConfig {
 
     @Bean
+    open fun setupInternalTopicsRunner() = CommandLineRunner {
+        setupInternalTopics()
+    }
+
+    @Bean
     @Profile("!test")
     open fun commandLineRunner() = CommandLineRunner {
-        setupInternalTopics()
-
         createRoot(
             AccountCreateRootRequest(
                 email = Email("root@hamal.io"),

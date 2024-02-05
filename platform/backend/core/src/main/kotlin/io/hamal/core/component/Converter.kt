@@ -34,7 +34,7 @@ object GroupIdConverter : ValueObjectIdConverter<GroupId>(GroupId::class, ::Grou
 object FlowIdConverter : ValueObjectIdConverter<FlowId>(FlowId::class, ::FlowId)
 object ReqIdConverter : ValueObjectIdConverter<RequestId>(RequestId::class, ::RequestId)
 object TopicIdConverter : ValueObjectIdConverter<TopicId>(TopicId::class, ::TopicId)
-object TopicEntryIdConverter : ValueObjectIdConverter<TopicEntryId>(TopicEntryId::class, ::TopicEntryId)
+object TopicEntryIdConverter : ValueObjectIdConverter<TopicEventId>(TopicEventId::class, ::TopicEventId)
 object TriggerIdConverter : ValueObjectIdConverter<TriggerId>(TriggerId::class, ::TriggerId)
 
 sealed class ValueObjectIdConverter<ID : ValueObjectId>(

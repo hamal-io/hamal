@@ -7,7 +7,7 @@ import io.hamal.lib.domain.vo.LogTopicId
 import io.hamal.repository.api.log.LogBrokerRepository
 import io.hamal.repository.api.log.LogBrokerRepository.*
 import io.hamal.repository.api.log.LogConsumerId
-import io.hamal.repository.api.log.LogEntryId
+import io.hamal.repository.api.log.LogEventId
 import io.hamal.repository.fixture.AbstractUnitTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
@@ -141,8 +141,8 @@ internal class LogBrokerRepositoryTest : AbstractUnitTest() {
         @TestFactory
         fun `Committed before`() =
             runWith(LogBrokerRepository::class) {
-                commit(LogConsumerId(1), LogTopicId(123), LogEntryId(23))
-                commit(LogConsumerId(1), LogTopicId(123), LogEntryId(1337))
+                commit(LogConsumerId(1), LogTopicId(123), LogEventId(23))
+                commit(LogConsumerId(1), LogTopicId(123), LogEventId(1337))
 
                 assertThat(countConsumers(LogConsumerQuery()), equalTo(Count(1)))
             }
@@ -150,8 +150,8 @@ internal class LogBrokerRepositoryTest : AbstractUnitTest() {
         @TestFactory
         fun `Does not overwrite different topic id `() =
             runWith(LogBrokerRepository::class) {
-                commit(LogConsumerId(1), LogTopicId(23), LogEntryId(1))
-                commit(LogConsumerId(1), LogTopicId(34), LogEntryId(2))
+                commit(LogConsumerId(1), LogTopicId(23), LogEventId(1))
+                commit(LogConsumerId(1), LogTopicId(34), LogEventId(2))
 
                 assertThat(countConsumers(LogConsumerQuery()), equalTo(Count(2)))
             }
@@ -160,8 +160,8 @@ internal class LogBrokerRepositoryTest : AbstractUnitTest() {
         @TestFactory
         fun `Does not overwrite different consumer id `() =
             runWith(LogBrokerRepository::class) {
-                commit(LogConsumerId(1), LogTopicId(23), LogEntryId(1))
-                commit(LogConsumerId(2), LogTopicId(23), LogEntryId(2))
+                commit(LogConsumerId(1), LogTopicId(23), LogEventId(1))
+                commit(LogConsumerId(2), LogTopicId(23), LogEventId(2))
 
                 assertThat(countConsumers(LogConsumerQuery()), equalTo(Count(2)))
             }
@@ -192,11 +192,11 @@ internal class LogBrokerRepositoryTest : AbstractUnitTest() {
 
                 val result = consume(LogConsumerId(1), topic.id, Limit(1_000))
                 assertThat(result, hasSize(2))
-                assertThat(result[0].id, equalTo(LogEntryId(1)))
+                assertThat(result[0].id, equalTo(LogEventId(1)))
                 assertThat(result[0].topicId, equalTo(LogTopicId(2)))
                 assertThat(result[0].bytes, equalTo("some-content-1".toByteArray()))
 
-                assertThat(result[1].id, equalTo(LogEntryId(2)))
+                assertThat(result[1].id, equalTo(LogEventId(2)))
                 assertThat(result[1].topicId, equalTo(LogTopicId(2)))
                 assertThat(result[1].bytes, equalTo("some-content-2".toByteArray()))
             }

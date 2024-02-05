@@ -101,6 +101,9 @@ internal abstract class BaseTest {
     lateinit var topicCmdRepository: TopicCmdRepository
 
     @Autowired
+    lateinit var topicQueryRepository: TopicQueryRepository
+
+    @Autowired
     lateinit var logBrokerRepository: LogBrokerRepository
 
     @Autowired

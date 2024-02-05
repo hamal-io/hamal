@@ -1,6 +1,7 @@
 package io.hamal.repository.api.log
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.snowflake.SnowflakeId
@@ -17,9 +18,9 @@ interface LogSegment {
 }
 
 interface LogSegmentRepository : CmdRepository {
-    fun append(cmdId: CmdId, bytes: ByteArray): LogEntryId
+    fun append(cmdId: CmdId, bytes: ByteArray): LogEventId
 
-    fun read(firstId: LogEntryId, limit: Limit = Limit(1)): List<LogEntry>
+    fun read(firstId: LogEventId, limit: Limit = Limit(1)): List<LogEvent>
 
-    fun count(): ULong
+    fun count(): Count
 }

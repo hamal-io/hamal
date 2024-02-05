@@ -1,11 +1,12 @@
 package io.hamal.repository.log
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.util.TimeUtils.withEpochMilli
 import io.hamal.lib.domain.vo.LogTopicId
-import io.hamal.repository.api.log.LogEntry
-import io.hamal.repository.api.log.LogEntryId
+import io.hamal.repository.api.log.LogEvent
+import io.hamal.repository.api.log.LogEventId
 import io.hamal.repository.api.log.LogSegmentId
 import io.hamal.repository.api.log.LogTopicRepository
 import io.hamal.repository.fixture.AbstractUnitTest
@@ -29,23 +30,23 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
                     "VALUE_2".toByteArray(),
                     "VALUE_3".toByteArray()
                 ).forEachIndexed { index, value -> append(CmdId(index), value) }
-                assertThat(countEntries(), equalTo(3UL))
+                assertThat(countEvents(), equalTo(Count(3)))
             }
 
-            read(LogEntryId(1)).also {
+            read(LogEventId(1)).also {
                 assertThat(it, hasSize(1))
                 val entry = it.first()
-                assertThat(entry.id, equalTo(LogEntryId(1)))
+                assertThat(entry.id, equalTo(LogEventId(1)))
                 assertThat(entry.topicId, equalTo(LogTopicId(23)))
                 assertThat(entry.segmentId, equalTo(LogSegmentId(0)))
                 assertThat(entry.bytes, equalTo("VALUE_1".toByteArray()))
                 assertThat(entry.instant, equalTo(Instant.ofEpochMilli(98765)))
             }
 
-            read(LogEntryId(3)).also {
+            read(LogEventId(3)).also {
                 assertThat(it, hasSize(1))
                 val entry = it.first()
-                assertThat(entry.id, equalTo(LogEntryId(3)))
+                assertThat(entry.id, equalTo(LogEventId(3)))
                 assertThat(entry.topicId, equalTo(LogTopicId(23)))
                 assertThat(entry.segmentId, equalTo(LogSegmentId(0)))
                 assertThat(entry.bytes, equalTo("VALUE_3".toByteArray()))
@@ -58,9 +59,9 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
     inner class ReadTest {
 
         @TestFactory
-        fun `Reads multiple entries`() = runWith(LogTopicRepository::class) {
-            appendOneHundredEntries()
-            val result = read(LogEntryId(25), Limit(36))
+        fun `Reads multiple events`() = runWith(LogTopicRepository::class) {
+            appendOneHundredEvents()
+            val result = read(LogEventId(25), Limit(36))
             assertThat(result, hasSize(36))
 
             for (id in 0 until 36) {
@@ -68,15 +69,15 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
             }
         }
 
-        private fun assertEntry(entry: LogEntry, id: Int) {
-            assertThat(entry.id, equalTo(LogEntryId(id)))
+        private fun assertEntry(entry: LogEvent, id: Int) {
+            assertThat(entry.id, equalTo(LogEventId(id)))
             assertThat(entry.segmentId, equalTo(LogSegmentId(0)))
             assertThat(entry.topicId, equalTo(LogTopicId(23)))
             assertThat(entry.bytes, equalTo("VALUE_$id".toByteArray()))
             assertThat(entry.instant, equalTo(Instant.ofEpochMilli(id.toLong())))
         }
 
-        private fun LogTopicRepository.appendOneHundredEntries() {
+        private fun LogTopicRepository.appendOneHundredEvents() {
             LongRange(1, 100).forEach {
                 withEpochMilli(it) {
                     append(CmdId(it.toInt()), "VALUE_$it".toByteArray())

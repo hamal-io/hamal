@@ -1,13 +1,20 @@
 package io.hamal.repository.memory.record
 
 import io.hamal.lib.common.domain.Count
-import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.domain.vo.TopicId
-import io.hamal.lib.domain.vo.TopicName
-import io.hamal.repository.api.*
+import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.domain.vo.*
+import io.hamal.repository.api.Topic
+import io.hamal.repository.api.TopicCmdRepository
 import io.hamal.repository.api.TopicCmdRepository.TopicGroupCreateCmd
+import io.hamal.repository.api.TopicEvent
+import io.hamal.repository.api.TopicQueryRepository.TopicEventQuery
+import io.hamal.repository.api.TopicQueryRepository.TopicQuery
+import io.hamal.repository.api.TopicRepository
 import io.hamal.repository.api.log.LogBrokerRepository
 import io.hamal.repository.api.log.LogBrokerRepository.LogTopicToCreate
+import io.hamal.repository.api.log.LogEventId
+import io.hamal.repository.record.json
 import io.hamal.repository.record.topic.CreateTopicFromRecords
 import io.hamal.repository.record.topic.TopicGroupCreatedRecord
 import io.hamal.repository.record.topic.TopicInternalCreatedRecord
@@ -39,7 +46,7 @@ private object TopicCurrentProjection {
         it.groupId == groupId && it.name == topicName
     }
 
-    fun list(query: TopicQueryRepository.TopicQuery): List<Topic> {
+    fun list(query: TopicQuery): List<Topic> {
         return projection.filter { query.topicIds.isEmpty() || it.key in query.topicIds }.map { it.value }.reversed()
             .asSequence().filter { if (query.names.isEmpty()) true else query.names.contains(it.name) }
             .filter { if (query.types.isEmpty()) true else query.types.contains(it.type) }.filter {
@@ -55,7 +62,7 @@ private object TopicCurrentProjection {
             }.dropWhile { it.id >= query.afterId }.take(query.limit.value).toList()
     }
 
-    fun count(query: TopicQueryRepository.TopicQuery): Count {
+    fun count(query: TopicQuery): Count {
         return Count(projection.filter { query.topicIds.isEmpty() || it.key in query.topicIds }.map { it.value }
             .reversed().asSequence().filter { if (query.names.isEmpty()) true else query.names.contains(it.name) }
             .filter { if (query.types.isEmpty()) true else query.types.contains(it.type) }.filter {
@@ -134,17 +141,29 @@ class TopicMemoryRepository(
         TopicCurrentProjection.find(groupId, topicName)
     }
 
-    override fun list(query: TopicQueryRepository.TopicQuery): List<Topic> =
+    override fun list(query: TopicQuery): List<Topic> =
         lock.withLock { TopicCurrentProjection.list(query) }
 
-    override fun list(query: TopicQueryRepository.TopicEntryQuery): List<TopicEntry> {
-        TODO("Not yet implemented")
+    override fun list(query: TopicEventQuery): List<TopicEvent> {
+        return lock.withLock {
+            val topic = get(query.topicId)
+            logBrokerRepository.read(
+                firstId = LogEventId(SnowflakeId(query.afterId.value.value + 1)),
+                topicId = topic.logTopicId,
+                limit = query.limit
+            ).map { evt ->
+                TopicEvent(
+                    id = TopicEventId(evt.id.value),
+                    payload = TopicEventPayload(json.decompressAndDeserialize(HotObject::class, evt.bytes))
+                )
+            }
+        }
     }
 
-    override fun count(query: TopicQueryRepository.TopicQuery): Count =
+    override fun count(query: TopicQuery): Count =
         lock.withLock { TopicCurrentProjection.count(query) }
 
-    override fun count(query: TopicQueryRepository.TopicEntryQuery): Count {
+    override fun count(query: TopicEventQuery): Count {
         TODO("Not yet implemented")
     }
 

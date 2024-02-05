@@ -5,12 +5,12 @@ import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.LogTopicId
 import java.time.Instant
 
-class LogEntryId(override val value: SnowflakeId) : ValueObjectId() {
+class LogEventId(override val value: SnowflakeId) : ValueObjectId() {
     constructor(value: Int) : this(SnowflakeId(value.toLong()))
 }
 
-data class LogEntry(
-    val id: LogEntryId,
+data class LogEvent(
+    val id: LogEventId,
     val topicId: LogTopicId,
     val segmentId: LogSegmentId,
     val bytes: ByteArray,

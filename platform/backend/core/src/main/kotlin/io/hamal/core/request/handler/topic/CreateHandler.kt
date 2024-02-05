@@ -8,7 +8,7 @@ import io.hamal.repository.api.TopicCmdRepository.TopicGroupCreateCmd
 import org.springframework.stereotype.Component
 
 @Component
-class TopicFlowCreateHandler(
+class TopicGroupCreateHandler(
     private val topicRepository: TopicCmdRepository
 ) : RequestHandler<TopicGroupCreateRequested>(TopicGroupCreateRequested::class) {
     override fun invoke(req: TopicGroupCreateRequested) {

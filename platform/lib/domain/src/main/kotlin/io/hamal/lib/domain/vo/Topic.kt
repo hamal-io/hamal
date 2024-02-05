@@ -17,8 +17,8 @@ class TopicId(override val value: SnowflakeId) : ValueObjectId() {
 
 class TopicName(override val value: String) : ValueObjectString()
 
-class TopicEntryId(override val value: SnowflakeId) : ValueObjectId() {
+class TopicEventId(override val value: SnowflakeId) : ValueObjectId() {
     constructor(value: Int) : this(SnowflakeId(value.toLong()))
 }
 
-class TopicEntryPayload(override val value: HotObject = HotObject.empty) : ValueObjectHotObject()
+class TopicEventPayload(override val value: HotObject = HotObject.empty) : ValueObjectHotObject()

@@ -82,10 +82,10 @@ class ExecCompleteHandler(
                 )
             )
 
-            appender.append(cmdId, topic.logTopicId, TopicEntryPayload(evt.payload.value))
+            appender.append(cmdId, topic.logTopicId, TopicEventPayload(evt.payload.value))
         }
     }
 
-    private val appender = LogTopicAppenderImpl<TopicEntryPayload>(logBrokerRepository)
+    private val appender = LogTopicAppenderImpl<TopicEventPayload>(logBrokerRepository)
 
 }

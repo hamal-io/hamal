@@ -60,7 +60,7 @@ sealed class Requested {
             FlowUpdateRequested::class,
             StateSetRequested::class,
             TestRequested::class,
-            TopicAppendToRequested::class,
+            TopicAppendEventRequested::class,
             TopicGroupCreateRequested::class,
             TriggerCreateRequested::class,
             TriggerStatusRequested::class,

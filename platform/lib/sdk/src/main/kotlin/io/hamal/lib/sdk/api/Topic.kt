@@ -24,9 +24,9 @@ data class ApiTopicGroupCreateRequested(
     val groupId: GroupId
 ) : ApiRequested()
 
-data class ApiTopicAppendEntryRequest(
+data class ApiTopicAppendEventRequest(
     override val topicId: TopicId,
-    override val payload: TopicEntryPayload
+    override val payload: TopicEventPayload
 ) : TopicAppendEntryRequest
 
 data class ApiTopicAppendRequested(
@@ -35,14 +35,14 @@ data class ApiTopicAppendRequested(
     val topicId: TopicId
 ) : ApiRequested()
 
-data class ApiTopicEntryList(
+data class ApiTopicEventList(
     val topicId: TopicId,
     val topicName: TopicName,
-    val entries: List<Entry>
+    val events: List<Event>
 ) {
-    data class Entry(
-        val id: TopicEntryId,
-        val payload: TopicEntryPayload
+    data class Event(
+        val id: TopicEventId,
+        val payload: TopicEventPayload
     )
 }
 
@@ -61,10 +61,10 @@ data class ApiTopicList(
 }
 
 interface ApiTopicService {
-    fun append(topicId: TopicId, payload: TopicEntryPayload): ApiTopicAppendRequested
+    fun append(topicId: TopicId, payload: TopicEventPayload): ApiTopicAppendRequested
     fun create(groupId: GroupId, req: ApiTopicCreateRequest): ApiTopicGroupCreateRequested
     fun list(query: TopicQuery): List<ApiTopicList.Topic>
-    fun entries(topicId: TopicId): List<ApiTopicEntryList.Entry>
+    fun events(topicId: TopicId): List<ApiTopicEventList.Event>
     fun get(topicId: TopicId): ApiTopic
     fun resolve(flowId: FlowId, topicName: TopicName): TopicId
 
@@ -89,8 +89,8 @@ internal class ApiTopicServiceImpl(
     private val template: HttpTemplate
 ) : ApiTopicService {
 
-    override fun append(topicId: TopicId, payload: TopicEntryPayload): ApiTopicAppendRequested =
-        template.post("/v1/topics/{topicId}/entries")
+    override fun append(topicId: TopicId, payload: TopicEventPayload): ApiTopicAppendRequested =
+        template.post("/v1/topics/{topicId}/events")
             .path("topicId", topicId)
             .body(payload)
             .execute()
@@ -110,13 +110,13 @@ internal class ApiTopicServiceImpl(
             .fold(ApiTopicList::class)
             .topics
 
-    override fun entries(topicId: TopicId) =
+    override fun events(topicId: TopicId) =
         template
-            .get("/v1/topics/{topicId}/entries")
+            .get("/v1/topics/{topicId}/events")
             .path("topicId", topicId)
             .execute()
-            .fold(ApiTopicEntryList::class)
-            .entries
+            .fold(ApiTopicEventList::class)
+            .events
 
     override fun get(topicId: TopicId) =
         template.get("/v1/topics/{topicId}")

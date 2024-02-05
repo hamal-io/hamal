@@ -17,11 +17,11 @@ interface LogBrokerRepository : CmdRepository {
 
     fun append(cmdId: CmdId, topicId: LogTopicId, bytes: ByteArray)
 
-    fun consume(consumerId: LogConsumerId, topicId: LogTopicId, limit: Limit): List<LogEntry>
+    fun consume(consumerId: LogConsumerId, topicId: LogTopicId, limit: Limit): List<LogEvent>
 
-    fun read(firstId: LogEntryId, topicId: LogTopicId, limit: Limit): List<LogEntry>
+    fun read(firstId: LogEventId, topicId: LogTopicId, limit: Limit): List<LogEvent>
 
-    fun commit(consumerId: LogConsumerId, topicId: LogTopicId, entryId: LogEntryId)
+    fun commit(consumerId: LogConsumerId, topicId: LogTopicId, eventId: LogEventId)
 
     fun findTopic(topicId: LogTopicId): LogTopic?
 
@@ -33,6 +33,10 @@ interface LogBrokerRepository : CmdRepository {
 
     fun countConsumers(query: LogConsumerQuery): Count
 
+    fun listEvents(query: LogEventQuery): List<LogEvent>
+
+    fun countEvents(query: LogEventQuery): Count
+
     data class LogTopicQuery(
         var afterId: LogTopicId = LogTopicId(SnowflakeId(Long.MAX_VALUE)),
         var limit: Limit = Limit(1)
@@ -40,6 +44,12 @@ interface LogBrokerRepository : CmdRepository {
 
     data class LogConsumerQuery(
         var afterId: LogConsumerId = LogConsumerId(SnowflakeId(Long.MAX_VALUE)),
+        var limit: Limit = Limit(1)
+    )
+
+    data class LogEventQuery(
+        var topicId: LogTopicId,
+        var afterId: LogEventId = LogEventId(SnowflakeId(0)),
         var limit: Limit = Limit(1)
     )
 }

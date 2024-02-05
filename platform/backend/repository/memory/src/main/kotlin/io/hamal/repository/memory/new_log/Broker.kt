@@ -16,17 +16,17 @@ class LogBrokerMemoryRepository : LogBrokerRepository {
         resolveTopicRepository(topicId).append(cmdId, bytes)
     }
 
-    override fun commit(consumerId: LogConsumerId, topicId: LogTopicId, entryId: LogEntryId) {
+    override fun commit(consumerId: LogConsumerId, topicId: LogTopicId, eventId: LogEventId) {
         return lock.withLock {
-            consumers.putIfAbsent(Pair(consumerId, topicId), LogEntryId(0))
-            consumers[Pair(consumerId, topicId)] = LogEntryId(entryId.value.toInt() + 1)
+            consumers.putIfAbsent(Pair(consumerId, topicId), LogEventId(0))
+            consumers[Pair(consumerId, topicId)] = LogEventId(eventId.value.toInt() + 1)
             consumers[Pair(consumerId, topicId)]
         }
     }
 
-    override fun consume(consumerId: LogConsumerId, topicId: LogTopicId, limit: Limit): List<LogEntry> {
+    override fun consume(consumerId: LogConsumerId, topicId: LogTopicId, limit: Limit): List<LogEvent> {
         return lock.withLock {
-            val nextEntryId = nextEntryId(consumerId, topicId)
+            val nextEntryId = nextEventId(consumerId, topicId)
             resolveTopicRepository(topicId).read(nextEntryId, limit)
         }
     }
@@ -48,6 +48,14 @@ class LogBrokerMemoryRepository : LogBrokerRepository {
         return lock.withLock {
             Count(consumers.values.size)
         }
+    }
+
+    override fun listEvents(query: LogEventQuery): List<LogEvent> {
+        TODO("Not yet implemented")
+    }
+
+    override fun countEvents(query: LogEventQuery): Count {
+        TODO("Not yet implemented")
     }
 
     override fun create(cmdId: CmdId, topicToCreate: LogTopicToCreate): LogTopic {
@@ -77,8 +85,10 @@ class LogBrokerMemoryRepository : LogBrokerRepository {
         }
     }
 
-    override fun read(firstId: LogEntryId, topicId: LogTopicId, limit: Limit): List<LogEntry> {
-        TODO("Not yet implemented")
+    override fun read(firstId: LogEventId, topicId: LogTopicId, limit: Limit): List<LogEvent> {
+        return lock.withLock {
+            resolveTopicRepository(topicId).read(firstId, limit)
+        }
     }
 
     override fun clear() {
@@ -90,9 +100,9 @@ class LogBrokerMemoryRepository : LogBrokerRepository {
         clear()
     }
 
-    internal fun nextEntryId(consumerId: LogConsumerId, topicId: LogTopicId): LogEntryId {
+    internal fun nextEventId(consumerId: LogConsumerId, topicId: LogTopicId): LogEventId {
         return lock.withLock {
-            consumers[Pair(consumerId, topicId)] ?: LogEntryId(0)
+            consumers[Pair(consumerId, topicId)] ?: LogEventId(0)
         }
     }
 
@@ -106,5 +116,5 @@ class LogBrokerMemoryRepository : LogBrokerRepository {
     private val lock = ReentrantLock()
     private val topicRepositories = KeyedOnce.default<LogTopicId, LogTopicRepository>()
     private val topics = mutableMapOf<LogTopicId, LogTopicMemory>()
-    private val consumers = mutableMapOf<Pair<LogConsumerId, LogTopicId>, LogEntryId>()
+    private val consumers = mutableMapOf<Pair<LogConsumerId, LogTopicId>, LogEventId>()
 }

@@ -58,8 +58,8 @@ sealed class Topic : DomainObject<TopicId> {
 
 }
 
-data class TopicEntry(
-    val id: TopicEntryId, val payload: TopicEntryPayload
+data class TopicEvent(
+    val id: TopicEventId, val payload: TopicEventPayload
 )
 
 interface TopicCmdRepository : CmdRepository {
@@ -94,8 +94,8 @@ interface TopicQueryRepository {
     fun list(query: TopicQuery): List<Topic>
     fun count(query: TopicQuery): Count
 
-    fun list(query: TopicEntryQuery): List<TopicEntry>
-    fun count(query: TopicEntryQuery): Count
+    fun list(query: TopicEventQuery): List<TopicEvent>
+    fun count(query: TopicEventQuery): Count
 
     data class TopicQuery(
         var afterId: TopicId = TopicId(SnowflakeId(Long.MAX_VALUE)),
@@ -106,8 +106,10 @@ interface TopicQueryRepository {
         var groupIds: List<GroupId> = listOf()
     )
 
-    data class TopicEntryQuery(
-        var afterId: TopicEntryId = TopicEntryId(0), var limit: Limit = Limit(1)
+    data class TopicEventQuery(
+        var topicId: TopicId,
+        var afterId: TopicEventId = TopicEventId(0),
+        var limit: Limit = Limit(1)
     )
 }
 

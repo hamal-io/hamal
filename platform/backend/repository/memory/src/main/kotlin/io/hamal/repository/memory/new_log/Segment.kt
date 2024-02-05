@@ -1,6 +1,7 @@
 package io.hamal.repository.memory.new_log
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.util.TimeUtils
@@ -19,11 +20,11 @@ class LogSegmentMemoryRepository(
     internal val segment: LogSegmentMemory
 ) : LogSegmentRepository {
 
-    override fun append(cmdId: CmdId, bytes: ByteArray): LogEntryId {
+    override fun append(cmdId: CmdId, bytes: ByteArray): LogEventId {
         return lock.withLock {
-            LogEntryId(store.size + 1).also { id ->
+            LogEventId(store.size + 1).also { id ->
                 store.add(
-                    LogEntry(
+                    LogEvent(
                         id = id,
                         segmentId = segment.id,
                         topicId = segment.topicId,
@@ -35,7 +36,7 @@ class LogSegmentMemoryRepository(
         }
     }
 
-    override fun read(firstId: LogEntryId, limit: Limit): List<LogEntry> {
+    override fun read(firstId: LogEventId, limit: Limit): List<LogEvent> {
         if (limit.value < 1) {
             return listOf()
         }
@@ -48,8 +49,8 @@ class LogSegmentMemoryRepository(
         }
     }
 
-    override fun count(): ULong {
-        return lock.withLock { store.size.toULong() }
+    override fun count(): Count {
+        return lock.withLock { Count(store.size) }
     }
 
     override fun clear() {
@@ -58,6 +59,6 @@ class LogSegmentMemoryRepository(
 
     override fun close() {}
 
-    private val store = mutableListOf<LogEntry>()
+    private val store = mutableListOf<LogEvent>()
     private val lock = ReentrantLock()
 }

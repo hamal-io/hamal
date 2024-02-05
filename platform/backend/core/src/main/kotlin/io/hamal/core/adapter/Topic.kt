@@ -3,7 +3,7 @@ package io.hamal.core.adapter
 import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain.request.TopicAppendEntryRequest
-import io.hamal.lib.domain.request.TopicAppendToRequested
+import io.hamal.lib.domain.request.TopicAppendEventRequested
 import io.hamal.lib.domain.request.TopicCreateRequest
 import io.hamal.lib.domain.request.TopicGroupCreateRequested
 import io.hamal.lib.domain.vo.GroupId
@@ -11,14 +11,14 @@ import io.hamal.lib.domain.vo.LogTopicId
 import io.hamal.lib.domain.vo.RequestId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.repository.api.*
-import io.hamal.repository.api.TopicQueryRepository.TopicEntryQuery
+import io.hamal.repository.api.TopicQueryRepository.TopicEventQuery
 import io.hamal.repository.api.TopicQueryRepository.TopicQuery
 import org.springframework.stereotype.Component
 
-interface TopicAppendEntryPort {
+interface TopicAppendEventPort {
     operator fun <T : Any> invoke(
         req: TopicAppendEntryRequest,
-        responseHandler: (TopicAppendToRequested) -> T
+        responseHandler: (TopicAppendEventRequested) -> T
     ): T
 }
 
@@ -39,11 +39,10 @@ interface TopicGetPort {
     ): T
 }
 
-interface TopicListEntryPort {
+interface TopicEventListPort {
     operator fun <T : Any> invoke(
-        topicId: TopicId,
-        query: TopicEntryQuery,
-        responseHandler: (List<TopicEntry>, Topic) -> T
+        query: TopicEventQuery,
+        responseHandler: (List<TopicEvent>, Topic) -> T
     ): T
 }
 
@@ -54,7 +53,7 @@ interface TopicListPort {
     ): T
 }
 
-interface TopicPort : TopicAppendEntryPort, TopicCreatePort, TopicGetPort, TopicListPort, TopicListEntryPort
+interface TopicPort : TopicAppendEventPort, TopicCreatePort, TopicGetPort, TopicListPort, TopicEventListPort
 
 @Component
 class TopicAdapter(
@@ -66,10 +65,10 @@ class TopicAdapter(
 
     override fun <T : Any> invoke(
         req: TopicAppendEntryRequest,
-        responseHandler: (TopicAppendToRequested) -> T
+        responseHandler: (TopicAppendEventRequested) -> T
     ): T {
         topicRepository.get(req.topicId)
-        return TopicAppendToRequested(
+        return TopicAppendEventRequested(
             id = generateDomainId(::RequestId),
             status = Submitted,
             topicId = req.topicId,
@@ -100,11 +99,10 @@ class TopicAdapter(
         responseHandler(topicRepository.list(query))
 
     override fun <T : Any> invoke(
-        topicId: TopicId,
-        query: TopicEntryQuery,
-        responseHandler: (List<TopicEntry>, Topic) -> T
+        query: TopicEventQuery,
+        responseHandler: (List<TopicEvent>, Topic) -> T
     ): T {
-        val topic = topicRepository.get(topicId)
+        val topic = topicRepository.get(query.topicId)
         return responseHandler(topicRepository.list(query), topic)
     }
 }

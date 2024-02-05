@@ -1,12 +1,13 @@
 package io.hamal.repository.log
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.util.TimeUtils.withEpochMilli
 import io.hamal.lib.common.util.TimeUtils.withInstant
 import io.hamal.lib.domain.vo.LogTopicId
-import io.hamal.repository.api.log.LogEntry
-import io.hamal.repository.api.log.LogEntryId
+import io.hamal.repository.api.log.LogEvent
+import io.hamal.repository.api.log.LogEventId
 import io.hamal.repository.api.log.LogSegmentId
 import io.hamal.repository.api.log.LogSegmentRepository
 import io.hamal.repository.fixture.AbstractUnitTest
@@ -30,9 +31,9 @@ internal class LogSegmentRepositoryTest : AbstractUnitTest() {
                 append(CmdId(2), "SomeBytes".toByteArray())
             }
 
-            assertThat(count(), equalTo(2UL))
+            assertThat(count(), equalTo(Count(2)))
 
-            read(LogEntryId(1), Limit(2)).let {
+            read(LogEventId(1), Limit(2)).let {
                 assertThat(it, hasSize(2))
 
                 val entry = it.first()
@@ -45,18 +46,18 @@ internal class LogSegmentRepositoryTest : AbstractUnitTest() {
 
 
         @TestFactory
-        fun `Append single entry`() = runWith(LogSegmentRepository::class) {
+        fun `Append single event`() = runWith(LogSegmentRepository::class) {
             withInstant(Instant.ofEpochMilli(2810)) {
                 append(CmdId(1), "VALUE".toByteArray())
             }
 
-            assertThat(count(), equalTo(1UL))
+            assertThat(count(), equalTo(Count(1)))
 
-            read(LogEntryId(1)).let {
+            read(LogEventId(1)).let {
                 assertThat(it, hasSize(1))
 
                 val entry = it.first()
-                assertThat(entry.id, equalTo(LogEntryId(1)))
+                assertThat(entry.id, equalTo(LogEventId(1)))
                 assertThat(entry.segmentId, equalTo(LogSegmentId(2810)))
                 assertThat(entry.topicId, equalTo(LogTopicId(1506)))
                 assertThat(entry.bytes, equalTo("VALUE".toByteArray()))
@@ -72,22 +73,22 @@ internal class LogSegmentRepositoryTest : AbstractUnitTest() {
                 ).forEachIndexed { index, value -> append(CmdId(index), value) }
             }
 
-            assertThat(count(), equalTo(3UL))
+            assertThat(count(), equalTo(Count(3)))
 
-            read(LogEntryId(1)).let {
+            read(LogEventId(1)).let {
                 assertThat(it, hasSize(1))
                 val entry = it.first()
-                assertThat(entry.id, equalTo(LogEntryId(1)))
+                assertThat(entry.id, equalTo(LogEventId(1)))
                 assertThat(entry.segmentId, equalTo(LogSegmentId(2810)))
                 assertThat(entry.topicId, equalTo(LogTopicId(1506)))
                 assertThat(entry.bytes, equalTo("VALUE_1".toByteArray()))
                 assertThat(entry.instant, equalTo(Instant.ofEpochMilli(123456)))
             }
 
-            read(LogEntryId(3)).let {
+            read(LogEventId(3)).let {
                 assertThat(it, hasSize(1))
                 val entry = it.first()
-                assertThat(entry.id, equalTo(LogEntryId(3)))
+                assertThat(entry.id, equalTo(LogEventId(3)))
                 assertThat(entry.segmentId, equalTo(LogSegmentId(2810)))
                 assertThat(entry.topicId, equalTo(LogTopicId(1506)))
                 assertThat(entry.bytes, equalTo("VALUE_3".toByteArray()))
@@ -98,30 +99,30 @@ internal class LogSegmentRepositoryTest : AbstractUnitTest() {
 
 
         @TestFactory
-        fun `Append multiple entries to segment which already contains entries`() =
+        fun `Append multiple events to segment which already contains events`() =
             runWith(LogSegmentRepository::class) {
-                createThreeEntries()
+                createThreeEvents()
 
                 listOf(
                     "Hamal".toByteArray(),
                     "rocks".toByteArray(),
                 ).forEachIndexed { index, value -> append(CmdId(index + 4), value) }
 
-                assertThat(count(), equalTo(5UL))
+                assertThat(count(), equalTo(Count(5)))
             }
 
         @TestFactory
         fun `A entry was already created with this cmd id`() =
             runWith(LogSegmentRepository::class) {
                 withEpochMilli(123456) {
-                    createThreeEntries()
+                    createThreeEvents()
                     append(CmdId(2), "OTHER_VALUE".toByteArray())
                 }
 
-                read(LogEntryId(2)).let {
+                read(LogEventId(2)).let {
                     assertThat(it, hasSize(1))
                     val entry = it.first()
-                    assertThat(entry.id, equalTo(LogEntryId(2)))
+                    assertThat(entry.id, equalTo(LogEventId(2)))
                     assertThat(entry.segmentId, equalTo(LogSegmentId(2810)))
                     assertThat(entry.topicId, equalTo(LogTopicId(1506)))
                     assertThat(entry.bytes, equalTo("VALUE_2".toByteArray()))
@@ -129,7 +130,7 @@ internal class LogSegmentRepositoryTest : AbstractUnitTest() {
                 }
             }
 
-        private fun LogSegmentRepository.createThreeEntries() {
+        private fun LogSegmentRepository.createThreeEvents() {
             append(CmdId(1), "VALUE_1".toByteArray())
             append(CmdId(2), "VALUE_2".toByteArray())
             append(CmdId(3), "VALUE_3".toByteArray())
@@ -142,32 +143,32 @@ internal class LogSegmentRepositoryTest : AbstractUnitTest() {
         @TestFactory
         fun `Tries to read from empty segment`() =
             runWith(LogSegmentRepository::class) {
-                val result = read(LogEntryId(20))
+                val result = read(LogEventId(20))
                 assertThat(result, hasSize(0))
             }
 
         @TestFactory
         fun `Tries to read outside from range`() =
             runWith(LogSegmentRepository::class) {
-                createOneHundredEntrys()
-                val result = read(LogEntryId(200), Limit(100))
+                createOneHundredEvents()
+                val result = read(LogEventId(200), Limit(100))
                 assertThat(result, hasSize(0))
             }
 
         @TestFactory
         fun `Read exactly one entry`() =
             runWith(LogSegmentRepository::class) {
-                createOneHundredEntrys()
-                val result = read(LogEntryId(69))
+                createOneHundredEvents()
+                val result = read(LogEventId(69))
                 assertThat(result, hasSize(1))
                 assertEntry(result.first(), 69)
             }
 
         @TestFactory
-        fun `Reads multiple entries`() =
+        fun `Reads multiple events`() =
             runWith(LogSegmentRepository::class) {
-                createOneHundredEntrys()
-                val result = read(LogEntryId(25), Limit(36))
+                createOneHundredEvents()
+                val result = read(LogEventId(25), Limit(36))
                 assertThat(result, hasSize(36))
 
                 for (id in 0 until 36) {
@@ -178,8 +179,8 @@ internal class LogSegmentRepositoryTest : AbstractUnitTest() {
         @TestFactory
         fun `Read is only partially covered by segment`() =
             runWith(LogSegmentRepository::class) {
-                createOneHundredEntrys()
-                val result = read(LogEntryId(90), Limit(40))
+                createOneHundredEvents()
+                val result = read(LogEventId(90), Limit(40))
                 assertThat(result, hasSize(11))
 
                 for (id in 0 until 11) {
@@ -187,13 +188,13 @@ internal class LogSegmentRepositoryTest : AbstractUnitTest() {
                 }
             }
 
-        private fun assertEntry(entry: LogEntry, id: Int) {
-            assertThat(entry.id, equalTo(LogEntryId(id)))
+        private fun assertEntry(entry: LogEvent, id: Int) {
+            assertThat(entry.id, equalTo(LogEventId(id)))
             assertThat(entry.bytes, equalTo("VALUE_$id".toByteArray()))
             assertThat(entry.instant, equalTo(Instant.ofEpochMilli(id.toLong())))
         }
 
-        private fun LogSegmentRepository.createOneHundredEntrys() {
+        private fun LogSegmentRepository.createOneHundredEvents() {
             IntRange(1, 100).forEach {
                 withEpochMilli(it.toLong()) {
                     append(CmdId(it), "VALUE_$it".toByteArray())
