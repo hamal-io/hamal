@@ -84,10 +84,10 @@ interface TopicCmdRepository : CmdRepository {
 
 interface TopicQueryRepository {
     fun find(topicId: TopicId): Topic?
-    fun get(topicId: TopicId) = find(topicId) ?: throw NoSuchElementException("$topicId not found")
+    fun get(topicId: TopicId) = find(topicId) ?: throw NoSuchElementException("Topic not found")
 
     fun getGroupTopic(groupId: GroupId, topicName: TopicName): Topic =
-        findGroupTopic(groupId, topicName) ?: throw NoSuchElementException("$topicName not found")
+        findGroupTopic(groupId, topicName) ?: throw NoSuchElementException("Topic not found")
 
     fun findGroupTopic(groupId: GroupId, topicName: TopicName): Topic?
 
@@ -103,7 +103,6 @@ interface TopicQueryRepository {
         var limit: Limit = Limit(1),
         var topicIds: List<TopicId> = listOf(),
         var names: List<TopicName> = listOf(),
-        var flowIds: List<FlowId> = listOf(),
         var groupIds: List<GroupId> = listOf()
     )
 

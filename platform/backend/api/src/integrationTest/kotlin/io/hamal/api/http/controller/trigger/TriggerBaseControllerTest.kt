@@ -31,7 +31,7 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
         return createTopicResponse.result(ApiFuncCreateRequested::class)
     }
 
-    fun createTopic(topicName: TopicName): ApiTopicCreateRequested {
+    fun createTopic(topicName: TopicName): ApiTopicGroupCreateRequested {
         val createTopicResponse = httpTemplate.post("/v1/flows/{flowId}/topics")
             .path("flowId", testFlow.id)
             .body(ApiTopicCreateRequest(topicName))
@@ -40,7 +40,7 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
         assertThat(createTopicResponse.statusCode, equalTo(Accepted))
         require(createTopicResponse is HttpSuccessResponse) { "request was not successful" }
 
-        return createTopicResponse.result(ApiTopicCreateRequested::class)
+        return createTopicResponse.result(ApiTopicGroupCreateRequested::class)
     }
 
     fun createHook(hookName: HookName): ApiHookCreateRequested {

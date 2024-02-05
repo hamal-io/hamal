@@ -48,15 +48,15 @@ internal sealed class TopicBaseControllerTest : BaseControllerTest() {
     }
 
 
-    fun createTopic(topicName: TopicName): ApiTopicCreateRequested {
-        val createTopicResponse = httpTemplate.post("/v1/flows/1/topics")
+    fun createTopic(topicName: TopicName): ApiTopicGroupCreateRequested {
+        val createTopicResponse = httpTemplate.post("/v1/groups/1/topics")
             .body(ApiTopicCreateRequest(topicName))
             .execute()
 
         assertThat(createTopicResponse.statusCode, equalTo(Accepted))
         require(createTopicResponse is HttpSuccessResponse) { "request was not successful" }
 
-        return createTopicResponse.result(ApiTopicCreateRequested::class)
+        return createTopicResponse.result(ApiTopicGroupCreateRequested::class)
     }
 
     fun appendToTopic(topicId: TopicId, toAppend: TopicEntryPayload): ApiTopicAppendRequested {

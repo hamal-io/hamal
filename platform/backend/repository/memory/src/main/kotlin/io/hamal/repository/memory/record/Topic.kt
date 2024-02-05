@@ -27,7 +27,7 @@ private object TopicCurrentProjection {
             if (currentTopic != null) {
                 projection[currentTopic.id] = currentTopic
             }
-            throw IllegalArgumentException("${topic.name} already exists")
+            throw IllegalArgumentException("Topic already exists")
         }
 
         projection[topic.id] = topic
@@ -100,8 +100,8 @@ class TopicMemoryRepository(
                 )
             )
             (currentVersion(topicId) as Topic.Group).also(TopicCurrentProjection::apply).also { _ ->
-                    logBrokerRepository.create(cmd.id, LogTopicToCreate(cmd.logTopicId))
-                }
+                logBrokerRepository.create(cmd.id, LogTopicToCreate(cmd.logTopicId))
+            }
         }
     }
 
@@ -121,8 +121,8 @@ class TopicMemoryRepository(
                 )
             )
             (currentVersion(topicId) as Topic.Internal).also(TopicCurrentProjection::apply).also { _ ->
-                    logBrokerRepository.create(cmd.id, LogTopicToCreate(cmd.logTopicId))
-                }
+                logBrokerRepository.create(cmd.id, LogTopicToCreate(cmd.logTopicId))
+            }
         }
     }
 

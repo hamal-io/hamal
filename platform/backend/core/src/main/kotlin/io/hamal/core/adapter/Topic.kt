@@ -5,8 +5,8 @@ import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain.request.TopicAppendEntryRequest
 import io.hamal.lib.domain.request.TopicAppendToRequested
 import io.hamal.lib.domain.request.TopicCreateRequest
-import io.hamal.lib.domain.request.TopicFlowCreateRequested
-import io.hamal.lib.domain.vo.FlowId
+import io.hamal.lib.domain.request.TopicGroupCreateRequested
+import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.LogTopicId
 import io.hamal.lib.domain.vo.RequestId
 import io.hamal.lib.domain.vo.TopicId
@@ -25,9 +25,9 @@ interface TopicAppendEntryPort {
 interface TopicCreatePort {
 
     operator fun <T : Any> invoke(
-        flowId: FlowId,
+        groupId: GroupId,
         req: TopicCreateRequest,
-        responseHandler: (TopicFlowCreateRequested) -> T
+        responseHandler: (TopicGroupCreateRequested) -> T
     ): T
 
 }
@@ -60,7 +60,7 @@ interface TopicPort : TopicAppendEntryPort, TopicCreatePort, TopicGetPort, Topic
 class TopicAdapter(
     private val topicRepository: TopicRepository,
     private val generateDomainId: GenerateId,
-    private val flowQueryRepository: FlowQueryRepository,
+    private val groupRepository: GroupRepository,
     private val reqCmdRepository: RequestCmdRepository
 ) : TopicPort {
 
@@ -68,7 +68,7 @@ class TopicAdapter(
         req: TopicAppendEntryRequest,
         responseHandler: (TopicAppendToRequested) -> T
     ): T {
-        val topic = topicRepository.get(req.topicId)
+        topicRepository.get(req.topicId)
         return TopicAppendToRequested(
             id = generateDomainId(::RequestId),
             status = Submitted,
@@ -78,18 +78,17 @@ class TopicAdapter(
     }
 
     override fun <T : Any> invoke(
-        flowId: FlowId,
+        groupId: GroupId,
         req: TopicCreateRequest,
-        responseHandler: (TopicFlowCreateRequested) -> T
+        responseHandler: (TopicGroupCreateRequested) -> T
     ): T {
-        val flow = flowQueryRepository.get(flowId)
-        return TopicFlowCreateRequested(
+        groupRepository.get(groupId)
+        return TopicGroupCreateRequested(
             id = generateDomainId(::RequestId),
             status = Submitted,
             topicId = generateDomainId(::TopicId),
             logTopicId = generateDomainId(::LogTopicId),
-            groupId = flow.groupId,
-            flowId = flow.id,
+            groupId = groupId,
             name = req.name
         ).also(reqCmdRepository::queue).let(responseHandler)
     }

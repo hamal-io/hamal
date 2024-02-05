@@ -5,7 +5,7 @@ import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.LogTopicId
 import io.hamal.lib.domain.vo.TopicId
-import io.hamal.repository.api.TopicCmdRepository
+import io.hamal.repository.api.TopicCmdRepository.TopicInternalCreateCmd
 import io.hamal.repository.api.TopicRepository
 import io.hamal.repository.api.event.internalEventClasses
 import io.hamal.repository.api.event.topicName
@@ -20,7 +20,7 @@ class SetupInternalTopics {
             val topicName = internalEventClass.topicName()
             topicRepository.findGroupTopic(GroupId.root, topicName) ?: topicRepository.create(
                 generateDomainId(::TopicId).let { topicId ->
-                    TopicCmdRepository.TopicInternalCreateCmd(
+                    TopicInternalCreateCmd(
                         id = CmdId(topicId),
                         topicId = topicId,
                         name = topicName,

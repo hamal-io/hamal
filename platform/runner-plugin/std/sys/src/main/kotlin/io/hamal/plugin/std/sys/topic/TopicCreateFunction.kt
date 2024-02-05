@@ -2,6 +2,7 @@ package io.hamal.plugin.std.sys.topic
 
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.FlowId
+import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -22,7 +23,7 @@ class TopicCreateFunction(
     override fun invoke(ctx: FunctionContext, arg1: KuaMap): Pair<KuaError?, KuaMap?> {
         return try {
             val res = sdk.topic.create(
-                arg1.findString("flow_id")?.let { FlowId(SnowflakeId(it)) } ?: ctx[FlowId::class],
+                arg1.findString("group_id")?.let { GroupId(SnowflakeId(it)) } ?: ctx[GroupId::class],
                 ApiTopicCreateRequest(
                     name = TopicName(arg1.getString("name")),
                 )
@@ -33,8 +34,7 @@ class TopicCreateFunction(
                     "id" to KuaString(res.id.value.value.toString(16)),
                     "status" to KuaString(res.status.name),
                     "topic_id" to KuaString(res.topicId.value.value.toString(16)),
-                    "group_id" to KuaString(res.groupId.value.value.toString(16)),
-                    "flow_id" to KuaString(res.flowId.value.value.toString(16))
+                    "group_id" to KuaString(res.groupId.value.value.toString(16))
                 )
             )
 

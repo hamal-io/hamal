@@ -61,7 +61,7 @@ sealed class Requested {
             StateSetRequested::class,
             TestRequested::class,
             TopicAppendToRequested::class,
-            TopicFlowCreateRequested::class,
+            TopicGroupCreateRequested::class,
             TriggerCreateRequested::class,
             TriggerStatusRequested::class,
         ).associateBy { it.simpleName }

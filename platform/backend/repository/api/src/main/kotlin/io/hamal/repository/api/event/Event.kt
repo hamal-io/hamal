@@ -14,6 +14,7 @@ val internalEventClasses = listOf(
     AccountCreatedEvent::class,
     AccountConvertedEvent::class,
     BlueprintCreatedEvent::class,
+    BlueprintUpdatedEvent::class,
     EndpointCreatedEvent::class,
     EndpointUpdatedEvent::class,
     ExecPlannedEvent::class,

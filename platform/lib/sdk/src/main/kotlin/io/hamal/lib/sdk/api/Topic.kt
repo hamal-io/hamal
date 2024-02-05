@@ -17,12 +17,11 @@ data class ApiTopicCreateRequest(
     override val name: TopicName
 ) : TopicCreateRequest
 
-data class ApiTopicCreateRequested(
+data class ApiTopicGroupCreateRequested(
     override val id: RequestId,
     override val status: RequestStatus,
     val topicId: TopicId,
-    val groupId: GroupId,
-    val flowId: FlowId
+    val groupId: GroupId
 ) : ApiRequested()
 
 data class ApiTopicAppendEntryRequest(
@@ -63,7 +62,7 @@ data class ApiTopicList(
 
 interface ApiTopicService {
     fun append(topicId: TopicId, payload: TopicEntryPayload): ApiTopicAppendRequested
-    fun create(flowId: FlowId, req: ApiTopicCreateRequest): ApiTopicCreateRequested
+    fun create(groupId: GroupId, req: ApiTopicCreateRequest): ApiTopicGroupCreateRequested
     fun list(query: TopicQuery): List<ApiTopicList.Topic>
     fun entries(topicId: TopicId): List<ApiTopicEntryList.Entry>
     fun get(topicId: TopicId): ApiTopic
@@ -97,12 +96,12 @@ internal class ApiTopicServiceImpl(
             .execute()
             .fold(ApiTopicAppendRequested::class)
 
-    override fun create(flowId: FlowId, req: ApiTopicCreateRequest): ApiTopicCreateRequested =
-        template.post("/v1/flows/{flowId}/topics")
-            .path("flowId", flowId)
+    override fun create(groupId: GroupId, req: ApiTopicCreateRequest): ApiTopicGroupCreateRequested =
+        template.post("/v1/groups/{groupId}/topics")
+            .path("groupId", groupId)
             .body(req)
             .execute()
-            .fold(ApiTopicCreateRequested::class)
+            .fold(ApiTopicGroupCreateRequested::class)
 
     override fun list(query: TopicQuery) =
         template.get("/v1/topics")
