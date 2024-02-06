@@ -1,9 +1,15 @@
 package io.hamal.repository.fixture
 
+import io.hamal.lib.domain.vo.LogTopicId
 import io.hamal.repository.api.*
+import io.hamal.repository.api.log.LogBrokerRepository
+import io.hamal.repository.api.log.LogSegmentId
+import io.hamal.repository.api.log.LogSegmentRepository
+import io.hamal.repository.api.log.LogTopicRepository
 import io.hamal.repository.sqlite.AuthSqliteRepository
 import io.hamal.repository.sqlite.ExecLogSqliteRepository
 import io.hamal.repository.sqlite.StateSqliteRepository
+import io.hamal.repository.sqlite.new_log.*
 import io.hamal.repository.sqlite.record.account.AccountSqliteRepository
 import io.hamal.repository.sqlite.record.blueprint.BlueprintSqliteRepository
 import io.hamal.repository.sqlite.record.code.CodeSqliteRepository
@@ -77,6 +83,23 @@ object SqliteFixture : BaseTestFixture {
 
         StateRepository::class -> StateSqliteRepository(
             StateSqliteRepository.Config(createTempDirectory("sqlite_state_test"))
+        ) as REPO
+
+        LogBrokerRepository::class -> LogBrokerSqliteRepository(createTempDirectory("sqlite_log_broker_test")) as REPO
+
+        LogSegmentRepository::class -> LogSegmentSqliteRepository(
+            LogSegmentSqlite(
+                LogSegmentId(2810),
+                LogTopicId(1506),
+                createTempDirectory("sqlite_log_segment_test")
+            )
+        ) as REPO
+
+        LogTopicRepository::class -> LogTopicSqliteRepository(
+            LogTopicSqlite(
+                LogTopicId(23),
+                createTempDirectory("sqlite_log_topic_test")
+            )
         ) as REPO
 
         TriggerRepository::class -> TriggerSqliteRepository(

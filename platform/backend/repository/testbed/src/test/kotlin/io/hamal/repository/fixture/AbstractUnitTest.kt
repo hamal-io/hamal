@@ -71,12 +71,10 @@ abstract class AbstractUnitTest {
             MemoryFixture,
             SqliteFixture
         ),
-
         FeedbackRepository::class to listOf(
             MemoryFixture,
             SqliteFixture
         ),
-
         FlowRepository::class to listOf(
             MemoryFixture,
             SqliteFixture
@@ -86,15 +84,16 @@ abstract class AbstractUnitTest {
 // FIXME    SqliteFixture
         ),
         LogBrokerRepository::class to listOf(
-            MemoryFixture
+            MemoryFixture,
+            SqliteFixture
         ),
         LogSegmentRepository::class to listOf(
             MemoryFixture,
-//            SqliteFixture
+            SqliteFixture
         ),
         LogTopicRepository::class to listOf(
             MemoryFixture,
-//            SqliteFixture
+            SqliteFixture
         ),
         BlueprintRepository::class to listOf(
             MemoryFixture,
@@ -104,9 +103,9 @@ abstract class AbstractUnitTest {
             MemoryFixture,
             SqliteFixture
         ),
-
         TopicRepository::class to listOf(
-            MemoryFixture
+            MemoryFixture,
+            SqliteFixture
         ),
         TriggerRepository::class to listOf(
             MemoryFixture,

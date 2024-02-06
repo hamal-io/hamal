@@ -18,7 +18,7 @@ interface LogSegment {
 }
 
 interface LogSegmentRepository : CmdRepository {
-    fun append(cmdId: CmdId, bytes: ByteArray): LogEventId
+    fun append(cmdId: CmdId, bytes: ByteArray)
 
     fun read(firstId: LogEventId, limit: Limit = Limit(1)): List<LogEvent>
 

@@ -26,7 +26,7 @@ abstract class AbstractIntegrationTest {
     private val fixtures = mutableMapOf<KClass<*>, List<BaseTestFixture>>(
         LogBrokerRepository::class to listOf(
             MemoryFixture,
-//            SqliteFixture
+            SqliteFixture
         )
     )
 }

@@ -17,22 +17,20 @@ data class LogSegmentMemory(
 
 
 class LogSegmentMemoryRepository(
-    internal val segment: LogSegmentMemory
+    private val segment: LogSegmentMemory
 ) : LogSegmentRepository {
 
-    override fun append(cmdId: CmdId, bytes: ByteArray): LogEventId {
+    override fun append(cmdId: CmdId, bytes: ByteArray) {
         return lock.withLock {
-            LogEventId(store.size + 1).also { id ->
-                store.add(
-                    LogEvent(
-                        id = id,
-                        segmentId = segment.id,
-                        topicId = segment.topicId,
-                        bytes = bytes,
-                        instant = TimeUtils.now()
-                    )
+            store.add(
+                LogEvent(
+                    id = LogEventId(store.size + 1),
+                    segmentId = segment.id,
+                    topicId = segment.topicId,
+                    bytes = bytes,
+                    instant = TimeUtils.now()
                 )
-            }
+            )
         }
     }
 

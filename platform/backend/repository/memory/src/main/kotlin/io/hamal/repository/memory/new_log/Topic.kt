@@ -18,8 +18,8 @@ class LogTopicMemoryRepository(
     internal val topic: LogTopic
 ) : LogTopicRepository {
 
-    override fun append(cmdId: CmdId, bytes: ByteArray): LogEventId {
-        return activeSegmentRepository.append(cmdId, bytes)
+    override fun append(cmdId: CmdId, bytes: ByteArray) {
+        activeSegmentRepository.append(cmdId, bytes)
     }
 
     override fun read(firstId: LogEventId, limit: Limit): List<LogEvent> {
