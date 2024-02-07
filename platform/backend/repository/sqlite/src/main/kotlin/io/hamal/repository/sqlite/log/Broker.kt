@@ -1,98 +1,95 @@
 package io.hamal.repository.sqlite.log
 
 import io.hamal.lib.common.KeyedOnce
-import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.vo.FlowId
-import io.hamal.lib.domain.vo.TopicId
-import io.hamal.lib.domain.vo.TopicName
+import io.hamal.lib.common.domain.*
+import io.hamal.lib.domain.vo.LogTopicId
 import io.hamal.repository.api.log.*
-import io.hamal.repository.api.log.BrokerTopicsRepository.TopicQuery
-import io.hamal.repository.api.log.BrokerTopicsRepository.TopicToCreate
+import io.hamal.repository.api.log.LogBrokerRepository.*
 import java.nio.file.Path
+import java.util.concurrent.locks.ReentrantLock
+import kotlin.concurrent.withLock
 
-data class BrokerSqlite(
+
+class LogBrokerSqliteRepository(
     val path: Path
-)
+) : LogBrokerRepository {
 
-class BrokerSqliteRepository(
-    private val broker: BrokerSqlite
-) : BrokerRepository {
-
-    private val consumersRepository: BrokerConsumersSqliteRepository
-    private val topicsRepository: BrokerTopicsSqliteRepository
-
-    init {
-        topicsRepository = BrokerTopicsSqliteRepository(
-            BrokerTopicsSqlite(
-                path = broker.path
-            )
-        )
-        consumersRepository = BrokerConsumersSqliteRepository(
-            BrokerConsumersSqlite(
-                path = broker.path
-            )
-        )
+    override fun append(cmdId: CmdId, topicId: LogTopicId, bytes: ByteArray) {
+        resolveRepository(topicId).append(cmdId, bytes)
     }
 
-    private val topicRepositoryMapping = KeyedOnce.default<Topic, TopicRepository>()
+    override fun commit(consumerId: LogConsumerId, topicId: LogTopicId, eventId: LogEventId) {
+        consumerRepository.commit(consumerId, topicId, eventId)
+    }
+
+    override fun consume(consumerId: LogConsumerId, topicId: LogTopicId, limit: Limit): List<LogEvent> {
+        val nextEventId = consumerRepository.nextEventId(consumerId, topicId)
+        return resolveRepository(topicId).read(nextEventId, limit)
+    }
 
 
-    override fun create(cmdId: CmdId, topicToCreate: CreateTopic.TopicToCreate): Topic =
-        topicsRepository.create(
-            cmdId,
-            TopicToCreate(
-                id = topicToCreate.id,
-                name = topicToCreate.name,
-                flowId = topicToCreate.flowId,
-                groupId = topicToCreate.groupId
-            )
-        )
+    override fun countConsumers(query: LogConsumerQuery): Count {
+        return consumerRepository.count(query)
+    }
 
-    override fun append(cmdId: CmdId, topic: Topic, bytes: ByteArray) {
-        resolveRepository(topic).append(cmdId, bytes)
+    override fun listEvents(query: LogEventQuery): List<LogEvent> {
+        TODO("Not yet implemented")
+    }
+
+    override fun countEvents(query: LogEventQuery): Count {
+        TODO("Not yet implemented")
+    }
+
+    override fun create(cmdId: CmdId, topicToCreate: LogTopicToCreate): LogTopic {
+        return topicRepository.create(topicToCreate)
+    }
+
+    override fun findTopic(topicId: LogTopicId): LogTopic? = topicRepository.find(topicId)
+
+    override fun listTopics(query: LogTopicQuery): List<LogTopic> = topicRepository.list(query)
+
+    override fun countTopics(query: LogTopicQuery): Count {
+        return topicRepository.count(query)
+    }
+
+    override fun read(firstId: LogEventId, topicId: LogTopicId, limit: Limit): List<LogEvent> {
+        return resolveRepository(topicId).read(firstId, limit)
+    }
+
+    override fun clear() {
+        lock.withLock {
+            topicRepository.clear()
+            consumerRepository.clear()
+            topicRepositories.keys().forEach { topic ->
+                resolveRepository(topic).clear()
+            }
+        }
     }
 
     override fun close() {
-        topicsRepository.close()
-        consumersRepository.close()
-        topicRepositoryMapping.keys().forEach { topic ->
-            resolveRepository(topic).close()
+        lock.withLock {
+            topicRepository.close()
+            consumerRepository.close()
+            topicRepositories.keys().forEach { topic ->
+                resolveRepository(topic).close()
+            }
         }
     }
 
-    override fun consume(consumerId: ConsumerId, topic: Topic, limit: Int): List<Chunk> {
-        val nextChunkId = consumersRepository.nextChunkId(consumerId, topic.id)
-        return resolveRepository(topic).read(nextChunkId, limit)
+    private fun resolveRepository(topicId: LogTopicId) = topicRepositories(topicId) {
+        LogTopicSqliteRepository(
+            LogTopic(
+                id = topicId,
+                createdAt = CreatedAt.now(),
+                updatedAt = UpdatedAt.now()
+            ), path
+        )
     }
 
-    override fun commit(consumerId: ConsumerId, topic: Topic, chunkId: ChunkId) {
-        consumersRepository.commit(consumerId, topic.id, chunkId)
-    }
-
-    override fun findTopic(topicId: TopicId) = topicsRepository.find(topicId)
-    override fun findTopic(flowId: FlowId, topicName: TopicName) =
-        topicsRepository.find(flowId, topicName)
-
-    override fun listTopics(query: TopicQuery): List<Topic> {
-        return topicsRepository.list(query)
-    }
-
-    override fun resolveTopic(flowId: FlowId, name: TopicName) = topicsRepository.find(flowId, name)
-
-    override fun clear() {
-        topicsRepository.clear()
-        consumersRepository.clear()
-        topicRepositoryMapping.keys().forEach { topic ->
-            resolveRepository(topic).clear()
-        }
-    }
-
-
-    override fun read(firstId: ChunkId, topic: Topic, limit: Int): List<Chunk> {
-        return resolveRepository(topic).read(firstId, limit)
-    }
-
-    private fun resolveRepository(topic: Topic) = topicRepositoryMapping(topic) {
-        TopicSqliteRepository(topic, path = broker.path)
-    }
+    private val consumerRepository = LogBrokerConsumerSqliteRepository(path)
+    private val topicRepository = LogBrokerTopicSqliteRepository(path)
+    private val topicRepositories = KeyedOnce.default<LogTopicId, LogTopicSqliteRepository>()
+    private val lock = ReentrantLock()
 }
+
+

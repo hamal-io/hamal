@@ -9,7 +9,7 @@ import io.hamal.repository.record.Record
 import kotlin.reflect.KClass
 
 
-abstract class SqliteRecordRepository<ID : ValueObjectId, RECORD : Record<ID>, OBJ : DomainObject<ID>>(
+abstract class RecordSqliteRepository<ID : ValueObjectId, RECORD : Record<ID>, OBJ : DomainObject<ID>>(
     config: Config,
     private val createDomainObject: CreateDomainObject<ID, RECORD, OBJ>,
     private val recordClass: KClass<RECORD>,

@@ -1,6 +1,7 @@
 package io.hamal.repository
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain.Correlation
@@ -451,7 +452,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                 groupIds = listOf(GroupId(5), GroupId(4)), limit = Limit(10)
             )
 
-            assertThat(count(query), equalTo(2UL))
+            assertThat(count(query), equalTo(Count(2)))
             val result = list(query)
             assertThat(result, hasSize(2))
 
@@ -474,7 +475,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                 funcIds = listOf(FuncId(234), FuncId(123)), groupIds = listOf(), limit = Limit(10)
             )
 
-            assertThat(count(query), equalTo(2UL))
+            assertThat(count(query), equalTo(Count(2)))
             val result = list(query)
             assertThat(result, hasSize(2))
 
@@ -495,7 +496,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                 flowIds = listOf(FlowId(234), FlowId(123)), groupIds = listOf(), limit = Limit(10)
             )
 
-            assertThat(count(query), equalTo(2UL))
+            assertThat(count(query), equalTo(Count(2)))
             val result = list(query)
             assertThat(result, hasSize(2))
 
@@ -517,7 +518,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                 groupIds = listOf(), limit = Limit(3)
             )
 
-            assertThat(count(query), equalTo(4UL))
+            assertThat(count(query), equalTo(Count(4)))
             val result = list(query)
             assertThat(result, hasSize(3))
         }
@@ -530,7 +531,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                 afterId = ExecId(2), groupIds = listOf(), limit = Limit(1)
             )
 
-            assertThat(count(query), equalTo(1UL))
+            assertThat(count(query), equalTo(Count(1)))
             val result = list(query)
             assertThat(result, hasSize(1))
 
@@ -626,7 +627,7 @@ private fun ExecRepository.verifyCount(expected: Int) {
 
 private fun ExecRepository.verifyCount(expected: Int, block: ExecQuery.() -> Unit) {
     val counted = count(ExecQuery(groupIds = listOf()).also(block))
-    assertThat("number of executions expected", counted, equalTo(expected.toULong()))
+    assertThat("number of executions expected", counted, equalTo(Count(expected)))
 }
 
 fun ExecRepository.createExec(

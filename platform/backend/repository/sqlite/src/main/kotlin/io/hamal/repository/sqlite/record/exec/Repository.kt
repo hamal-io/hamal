@@ -1,5 +1,6 @@
 package io.hamal.repository.sqlite.record.exec
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.*
@@ -8,7 +9,7 @@ import io.hamal.repository.api.ExecQueryRepository.ExecQuery
 import io.hamal.repository.api.record.exec.ExecEntity
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.exec.*
-import io.hamal.repository.sqlite.record.SqliteRecordRepository
+import io.hamal.repository.sqlite.record.RecordSqliteRepository
 import java.nio.file.Path
 
 internal object CreateExec : CreateDomainObject<ExecId, ExecRecord, Exec> {
@@ -36,7 +37,7 @@ internal object CreateExec : CreateDomainObject<ExecId, ExecRecord, Exec> {
 
 class ExecSqliteRepository(
     config: Config
-) : SqliteRecordRepository<ExecId, ExecRecord, Exec>(
+) : RecordSqliteRepository<ExecId, ExecRecord, Exec>(
     config = config,
     createDomainObject = CreateExec,
     recordClass = ExecRecord::class,
@@ -175,7 +176,7 @@ class ExecSqliteRepository(
         return ProjectionCurrent.list(connection, query)
     }
 
-    override fun count(query: ExecQuery): ULong {
+    override fun count(query: ExecQuery): Count {
         return ProjectionCurrent.count(connection, query)
     }
 

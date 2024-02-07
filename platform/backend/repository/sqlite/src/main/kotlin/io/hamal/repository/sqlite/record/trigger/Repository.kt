@@ -1,5 +1,6 @@
 package io.hamal.repository.sqlite.record.trigger
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.sqlite.SqliteBaseRepository
@@ -8,7 +9,7 @@ import io.hamal.repository.api.TriggerCmdRepository.*
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.trigger.*
-import io.hamal.repository.sqlite.record.SqliteRecordRepository
+import io.hamal.repository.sqlite.record.RecordSqliteRepository
 import java.nio.file.Path
 
 internal object CreateTrigger : CreateDomainObject<TriggerId, TriggerRecord, Trigger> {
@@ -40,7 +41,7 @@ internal object CreateTrigger : CreateDomainObject<TriggerId, TriggerRecord, Tri
 
 class TriggerSqliteRepository(
     config: Config
-) : SqliteRecordRepository<TriggerId, TriggerRecord, Trigger>(
+) : RecordSqliteRepository<TriggerId, TriggerRecord, Trigger>(
     config = config,
     createDomainObject = CreateTrigger,
     recordClass = TriggerRecord::class,
@@ -207,7 +208,7 @@ class TriggerSqliteRepository(
         return ProjectionCurrent.list(connection, query)
     }
 
-    override fun count(query: TriggerQuery): ULong {
+    override fun count(query: TriggerQuery): Count {
         return ProjectionCurrent.count(connection, query)
     }
 }

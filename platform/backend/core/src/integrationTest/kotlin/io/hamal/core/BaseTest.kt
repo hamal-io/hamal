@@ -1,5 +1,6 @@
 package io.hamal.core
 
+import io.hamal.core.component.SetupInternalTopics
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.util.TimeUtils
@@ -11,7 +12,7 @@ import io.hamal.repository.api.*
 import io.hamal.repository.api.AuthCmdRepository.CreateTokenAuthCmd
 import io.hamal.repository.api.ExecCmdRepository.PlanCmd
 import io.hamal.repository.api.ExecCmdRepository.StartCmd
-import io.hamal.repository.api.log.BrokerRepository
+import io.hamal.repository.api.log.LogBrokerRepository
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.MethodOrderer
 import org.junit.jupiter.api.TestMethodOrder
@@ -49,9 +50,6 @@ internal abstract class BaseTest {
     lateinit var endpointRepository: EndpointRepository
 
     @Autowired
-    lateinit var eventBrokerRepository: BrokerRepository
-
-    @Autowired
     lateinit var execCmdRepository: ExecCmdRepository
 
     @Autowired
@@ -82,9 +80,6 @@ internal abstract class BaseTest {
     lateinit var flowCmdRepository: FlowCmdRepository
 
     @Autowired
-    lateinit var platformEventBrokerRepository: BrokerRepository
-
-    @Autowired
     lateinit var reqQueryRepository: RequestQueryRepository
 
     @Autowired
@@ -103,6 +98,15 @@ internal abstract class BaseTest {
     lateinit var stateCmdRepository: StateCmdRepository
 
     @Autowired
+    lateinit var topicCmdRepository: TopicCmdRepository
+
+    @Autowired
+    lateinit var topicQueryRepository: TopicQueryRepository
+
+    @Autowired
+    lateinit var logBrokerRepository: LogBrokerRepository
+
+    @Autowired
     lateinit var triggerCmdRepository: TriggerCmdRepository
 
     @Autowired
@@ -110,6 +114,9 @@ internal abstract class BaseTest {
 
     @Autowired
     lateinit var generateDomainId: GenerateId
+
+    @Autowired
+    lateinit var setupInternalTopics: SetupInternalTopics
 
     lateinit var testAccount: Account
     lateinit var testAuthToken: AuthToken
@@ -122,18 +129,19 @@ internal abstract class BaseTest {
         accountCmdRepository.clear()
         authCmdRepository.clear()
         codeCmdRepository.clear()
-        eventBrokerRepository.clear()
         execCmdRepository.clear()
         extensionCmdRepository.clear()
         funcCmdRepository.clear()
         flowCmdRepository.clear()
         groupCmdRepository.clear()
         hookRepository.clear()
-        platformEventBrokerRepository.clear()
         reqCmdRepository.clear()
         stateCmdRepository.clear()
+        topicCmdRepository.clear()
+        logBrokerRepository.clear()
         triggerCmdRepository.clear()
 
+        setupInternalTopics()
 
         testAccount = accountCmdRepository.create(
             AccountCmdRepository.CreateCmd(

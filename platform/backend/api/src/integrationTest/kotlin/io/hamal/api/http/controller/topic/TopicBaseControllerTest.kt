@@ -1,7 +1,7 @@
 package io.hamal.api.http.controller.topic
 
 import io.hamal.api.http.controller.BaseControllerTest
-import io.hamal.lib.domain.vo.TopicEntryPayload
+import io.hamal.lib.domain.vo.TopicEventPayload
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.http.HttpStatusCode.Accepted
@@ -14,14 +14,14 @@ import org.hamcrest.Matchers.equalTo
 
 internal sealed class TopicBaseControllerTest : BaseControllerTest() {
 
-    fun listTopicEntries(topicId: TopicId): ApiTopicEntryList {
-        val listTopicsResponse = httpTemplate.get("/v1/topics/{topicId}/entries")
+    fun listTopicEvents(topicId: TopicId): ApiTopicEventList {
+        val listTopicsResponse = httpTemplate.get("/v1/topics/{topicId}/events")
             .path("topicId", topicId)
             .execute()
 
         assertThat(listTopicsResponse.statusCode, equalTo(Ok))
         require(listTopicsResponse is HttpSuccessResponse) { "request was not successful" }
-        return listTopicsResponse.result(ApiTopicEntryList::class)
+        return listTopicsResponse.result(ApiTopicEventList::class)
     }
 
 
@@ -48,26 +48,26 @@ internal sealed class TopicBaseControllerTest : BaseControllerTest() {
     }
 
 
-    fun createTopic(topicName: TopicName): ApiTopicCreateRequested {
-        val createTopicResponse = httpTemplate.post("/v1/flows/1/topics")
+    fun createTopic(topicName: TopicName): ApiTopicGroupCreateRequested {
+        val createTopicResponse = httpTemplate.post("/v1/groups/1/topics")
             .body(ApiTopicCreateRequest(topicName))
             .execute()
 
         assertThat(createTopicResponse.statusCode, equalTo(Accepted))
         require(createTopicResponse is HttpSuccessResponse) { "request was not successful" }
 
-        return createTopicResponse.result(ApiTopicCreateRequested::class)
+        return createTopicResponse.result(ApiTopicGroupCreateRequested::class)
     }
 
-    fun appendToTopic(topicId: TopicId, toAppend: TopicEntryPayload): ApiTopicAppendRequested {
-        val createTopicResponse = httpTemplate.post("/v1/topics/{topicId}/entries")
+    fun appendToTopic(topicId: TopicId, toAppend: TopicEventPayload): ApiTopicAppendRequested {
+        val appendedResponse = httpTemplate.post("/v1/topics/{topicId}/events")
             .path("topicId", topicId)
             .body(toAppend)
             .execute()
 
-        assertThat(createTopicResponse.statusCode, equalTo(Accepted))
-        require(createTopicResponse is HttpSuccessResponse) { "request was not successful" }
+        assertThat(appendedResponse.statusCode, equalTo(Accepted))
+        require(appendedResponse is HttpSuccessResponse) { "request was not successful" }
 
-        return createTopicResponse.result(ApiTopicAppendRequested::class)
+        return appendedResponse.result(ApiTopicAppendRequested::class)
     }
 }

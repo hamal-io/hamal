@@ -4,9 +4,9 @@ import io.hamal.repository.api.Endpoint
 
 data class EndpointCreatedEvent(
     val endpoint: Endpoint,
-) : PlatformEvent()
+) : InternalEvent()
 
 
 data class EndpointUpdatedEvent(
     val endpoint: Endpoint,
-) : PlatformEvent()
+) : InternalEvent()

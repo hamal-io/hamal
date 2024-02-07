@@ -4,7 +4,6 @@ import io.hamal.lib.common.logger
 import io.hamal.lib.common.util.FileUtils
 import io.hamal.lib.domain.Once
 import java.nio.file.Path
-import kotlin.io.path.Path
 
 abstract class SqliteBaseRepository(
     val config: Config
@@ -33,8 +32,8 @@ abstract class SqliteBaseRepository(
         val filename: String
     }
 
-    abstract fun setupConnection(connection: Connection)
-    abstract fun setupSchema(connection: Connection)
+    protected abstract fun setupConnection(connection: Connection)
+    protected abstract fun setupSchema(connection: Connection)
     abstract fun clear()
 
     override fun close() {
@@ -45,8 +44,7 @@ abstract class SqliteBaseRepository(
 }
 
 private fun ensureFilePath(config: SqliteBaseRepository.Config): Path {
-    return FileUtils.createDirectories(config.path)
-        .resolve(config.path.resolve(Path(config.filename)))
+    return FileUtils.ensureFilePath(config.path, config.filename)
 }
 
 //FIXME properly integrate this

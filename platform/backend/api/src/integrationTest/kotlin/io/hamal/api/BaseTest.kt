@@ -2,6 +2,7 @@ package io.hamal.api
 
 import io.hamal.bridge.BridgeConfig
 import io.hamal.core.CoreConfig
+import io.hamal.core.component.SetupInternalTopics
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.util.TimeUtils
@@ -12,7 +13,7 @@ import io.hamal.lib.domain.vo.AccountType.Root
 import io.hamal.repository.api.*
 import io.hamal.repository.api.AuthCmdRepository.CreateTokenAuthCmd
 import io.hamal.repository.api.ExecCmdRepository.StartCmd
-import io.hamal.repository.api.log.BrokerRepository
+import io.hamal.repository.api.log.LogBrokerRepository
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.MethodOrderer.Random
 import org.junit.jupiter.api.TestMethodOrder
@@ -60,12 +61,6 @@ internal abstract class BaseTest {
     lateinit var codeQueryRepository: CodeQueryRepository
 
     @Autowired
-    lateinit var platformEventBrokerRepository: BrokerRepository
-
-    @Autowired
-    lateinit var eventBrokerRepository: BrokerRepository
-
-    @Autowired
     lateinit var endpointQueryRepository: EndpointQueryRepository
 
     @Autowired
@@ -108,6 +103,9 @@ internal abstract class BaseTest {
     lateinit var flowQueryRepository: FlowQueryRepository
 
     @Autowired
+    lateinit var logBrokerRepository: LogBrokerRepository
+
+    @Autowired
     lateinit var flowCmdRepository: FlowCmdRepository
 
     @Autowired
@@ -123,6 +121,12 @@ internal abstract class BaseTest {
     lateinit var stateCmdRepository: StateCmdRepository
 
     @Autowired
+    lateinit var topicCmdRepository: TopicCmdRepository
+
+    @Autowired
+    lateinit var topicQueryRepository: TopicQueryRepository
+
+    @Autowired
     lateinit var triggerCmdRepository: TriggerCmdRepository
 
     @Autowired
@@ -130,6 +134,9 @@ internal abstract class BaseTest {
 
     @Autowired
     lateinit var generateDomainId: GenerateId
+
+    @Autowired
+    private lateinit var setupInternalTopics: SetupInternalTopics
 
     lateinit var testAccount: Account
     lateinit var testAuthToken: AuthToken
@@ -143,20 +150,21 @@ internal abstract class BaseTest {
         authCmdRepository.clear()
         blueprintCmdRepository.clear()
         codeCmdRepository.clear()
-        platformEventBrokerRepository.clear()
         endpointCmdRepository.clear()
-        eventBrokerRepository.clear()
         execCmdRepository.clear()
         extensionCmdRepository.clear()
         feedbackCmdRepository.clear()
         funcCmdRepository.clear()
         groupCmdRepository.clear()
         hookCmdRepository.clear()
+        logBrokerRepository.clear()
         flowCmdRepository.clear()
         reqCmdRepository.clear()
         stateCmdRepository.clear()
+        topicCmdRepository.clear()
         triggerCmdRepository.clear()
 
+        setupInternalTopics()
 
         testAccount = accountCmdRepository.create(
             AccountCmdRepository.CreateCmd(

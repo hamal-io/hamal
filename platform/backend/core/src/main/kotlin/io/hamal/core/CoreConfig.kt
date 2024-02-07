@@ -1,6 +1,7 @@
 package io.hamal.core
 
 import io.hamal.core.adapter.AccountCreateRootPort
+import io.hamal.core.component.SetupInternalTopics
 import io.hamal.lib.domain.request.AccountCreateRootRequest
 import io.hamal.lib.domain.vo.Email
 import io.hamal.lib.domain.vo.Password
@@ -34,8 +35,10 @@ import org.springframework.scheduling.annotation.EnableScheduling
 )
 open class CoreConfig {
 
-    @Autowired
-    private lateinit var createRoot: AccountCreateRootPort
+    @Bean
+    open fun setupInternalTopicsRunner() = CommandLineRunner {
+        setupInternalTopics()
+    }
 
     @Bean
     @Profile("!test")
@@ -47,6 +50,12 @@ open class CoreConfig {
             )
         )
     }
+
+    @Autowired
+    private lateinit var createRoot: AccountCreateRootPort
+
+    @Autowired
+    private lateinit var setupInternalTopics: SetupInternalTopics
 }
 
 

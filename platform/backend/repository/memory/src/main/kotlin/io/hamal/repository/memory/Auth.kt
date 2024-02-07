@@ -1,5 +1,6 @@
 package io.hamal.repository.memory
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.AuthToken
 import io.hamal.lib.domain.vo.Email
@@ -75,16 +76,18 @@ class AuthMemoryRepository : AuthRepository {
             .toList()
     }
 
-    override fun count(query: AuthQuery): ULong {
-        return projection.filter { query.accountIds.isEmpty() || it.key in query.accountIds }
-            .flatMap { it.value }
-            .reversed()
-            .asSequence()
-            .filter {
-                if (query.authIds.isEmpty()) true else query.authIds.contains(it.id)
-            }.dropWhile { it.id >= query.afterId }
-            .count()
-            .toULong()
+    override fun count(query: AuthQuery): Count {
+        return Count(
+            projection.filter { query.accountIds.isEmpty() || it.key in query.accountIds }
+                .flatMap { it.value }
+                .reversed()
+                .asSequence()
+                .filter {
+                    if (query.authIds.isEmpty()) true else query.authIds.contains(it.id)
+                }.dropWhile { it.id >= query.afterId }
+                .count()
+                .toLong()
+        )
     }
 
     override fun clear() {

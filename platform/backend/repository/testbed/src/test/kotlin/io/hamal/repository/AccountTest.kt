@@ -1,6 +1,7 @@
 package io.hamal.repository
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.AccountType.Root
@@ -170,7 +171,7 @@ internal class AccountRepositoryTest : AbstractUnitTest() {
                 accountIds = listOf()
             )
 
-            assertThat(count(query), equalTo(4UL))
+            assertThat(count(query), equalTo(Count(4)))
             val result = list(query)
             assertThat(result, hasSize(3))
         }
@@ -184,7 +185,7 @@ internal class AccountRepositoryTest : AbstractUnitTest() {
                 limit = Limit(1)
             )
 
-            assertThat(count(query), equalTo(1UL))
+            assertThat(count(query), equalTo(Count(1)))
             val result = list(query)
             assertThat(result, hasSize(1))
 
@@ -238,5 +239,5 @@ private fun AccountRepository.verifyCount(expected: Int) {
 
 private fun AccountRepository.verifyCount(expected: Int, block: AccountQuery.() -> Unit) {
     val counted = count(AccountQuery().also(block))
-    assertThat("number of accounts expected", counted, equalTo(expected.toULong()))
+    assertThat("number of accounts expected", counted, equalTo(Count(expected)))
 }

@@ -1,5 +1,6 @@
 package io.hamal.repository.sqlite.record.feedback
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.FeedbackId
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Feedback
@@ -10,7 +11,7 @@ import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.feedback.FeedbackCreatedRecord
 import io.hamal.repository.record.feedback.FeedbackEntity
 import io.hamal.repository.record.feedback.FeedbackRecord
-import io.hamal.repository.sqlite.record.SqliteRecordRepository
+import io.hamal.repository.sqlite.record.RecordSqliteRepository
 import java.nio.file.Path
 
 internal object CreateFeedback : CreateDomainObject<FeedbackId, FeedbackRecord, Feedback> {
@@ -36,7 +37,7 @@ internal object CreateFeedback : CreateDomainObject<FeedbackId, FeedbackRecord, 
 
 class FeedbackSqliteRepository(
     config: Config
-) : SqliteRecordRepository<FeedbackId, FeedbackRecord, Feedback>(
+) : RecordSqliteRepository<FeedbackId, FeedbackRecord, Feedback>(
     config = config,
     createDomainObject = CreateFeedback,
     recordClass = FeedbackRecord::class,
@@ -80,7 +81,7 @@ class FeedbackSqliteRepository(
         return ProjectionCurrent.list(connection, query)
     }
 
-    override fun count(query: FeedbackQuery): ULong {
+    override fun count(query: FeedbackQuery): Count {
         return ProjectionCurrent.count(connection, query)
     }
 }

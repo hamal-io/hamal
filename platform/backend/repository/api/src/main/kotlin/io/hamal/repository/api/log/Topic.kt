@@ -1,18 +1,20 @@
 package io.hamal.repository.api.log
 
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.common.domain.*
+import io.hamal.lib.domain.vo.LogTopicId
 import io.hamal.repository.api.CmdRepository
 
-data class Topic(
-    val id: TopicId,
-    val flowId: FlowId,
-    val groupId: GroupId,
-    val name: TopicName
+
+data class LogTopic(
+    val id: LogTopicId,
+    val createdAt: CreatedAt,
+    val updatedAt: UpdatedAt
 )
 
-interface TopicRepository : CmdRepository, ChunkAppender, ChunkReader, ChunkCounter
+interface LogTopicRepository : CmdRepository {
+    fun append(cmdId: CmdId, bytes: ByteArray)
 
-data class TopicEntry(
-    val id: TopicEntryId,
-    val payload: TopicEntryPayload
-)
+    fun read(firstId: LogEventId, limit: Limit = Limit.One): List<LogEvent>
+
+    fun countEvents(): Count
+}

@@ -23,7 +23,7 @@ abstract class BaseApiUnauthenticatedTest(apiUrl: String) : BaseTest(apiUrl) {
             .map { testPath ->
                 val testName = generateTestName(testPath)
                 dynamicTest(testName) {
-                    apiHttpTemplate.post("/v1/clear").execute()
+//                    apiHttpTemplate.post("/v1/clear").execute()
 
                     var counter = 0
                     while (true) {
@@ -33,7 +33,7 @@ abstract class BaseApiUnauthenticatedTest(apiUrl: String) : BaseTest(apiUrl) {
                                 if (counter++ >= 3) {
                                     fail { result.message }
                                 }
-                                apiHttpTemplate.post("/v1/clear").execute()
+//                                apiHttpTemplate.post("/v1/clear").execute()
                             }
                         }
                     }

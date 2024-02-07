@@ -1,5 +1,6 @@
 package io.hamal.repository.sqlite.record.account
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Account
@@ -12,7 +13,7 @@ import io.hamal.repository.record.account.AccountConvertedRecord
 import io.hamal.repository.record.account.AccountCreatedRecord
 import io.hamal.repository.record.account.AccountEntity
 import io.hamal.repository.record.account.AccountRecord
-import io.hamal.repository.sqlite.record.SqliteRecordRepository
+import io.hamal.repository.sqlite.record.RecordSqliteRepository
 import java.nio.file.Path
 
 internal object CreateAccount : CreateDomainObject<AccountId, AccountRecord, Account> {
@@ -41,7 +42,7 @@ internal object CreateAccount : CreateDomainObject<AccountId, AccountRecord, Acc
 
 class AccountSqliteRepository(
     config: Config
-) : SqliteRecordRepository<AccountId, AccountRecord, Account>(
+) : RecordSqliteRepository<AccountId, AccountRecord, Account>(
     config = config,
     createDomainObject = CreateAccount,
     recordClass = AccountRecord::class,
@@ -104,7 +105,7 @@ class AccountSqliteRepository(
         return ProjectionCurrent.list(connection, query)
     }
 
-    override fun count(query: AccountQuery): ULong {
+    override fun count(query: AccountQuery): Count {
         return ProjectionCurrent.count(connection, query)
     }
 }

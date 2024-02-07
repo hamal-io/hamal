@@ -1,6 +1,6 @@
 package io.hamal.core.request.handler.account
 
-import io.hamal.core.event.PlatformEventEmitter
+import io.hamal.core.event.InternalEventEmitter
 import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
@@ -17,7 +17,7 @@ class AccountCreateAnonymousHandler(
     val authCmdRepository: AuthCmdRepository,
     val groupCmdRepository: GroupCmdRepository,
     val flowCmdRepository: FlowCmdRepository,
-    val eventEmitter: PlatformEventEmitter
+    val eventEmitter: InternalEventEmitter
 ) : io.hamal.core.request.RequestHandler<AccountCreateAnonymousRequested>(AccountCreateAnonymousRequested::class) {
 
     override fun invoke(req: AccountCreateAnonymousRequested) {

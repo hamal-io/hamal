@@ -1,5 +1,6 @@
 package io.hamal.repository.api
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.request.Requested
 import io.hamal.lib.domain.vo.RequestId
@@ -17,7 +18,7 @@ interface RequestQueryRepository {
     fun get(reqId: RequestId) = find(reqId) ?: throw NoSuchElementException("Req not found")
     fun find(reqId: RequestId): Requested?
     fun list(query: ReqQuery): List<Requested>
-    fun count(query: ReqQuery): ULong
+    fun count(query: ReqQuery): Count
     data class ReqQuery(
         var afterId: RequestId = RequestId(0),
         var limit: Limit = Limit(1)

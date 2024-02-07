@@ -1,6 +1,6 @@
 package io.hamal.core.request.handler.exec
 
-import io.hamal.core.event.PlatformEventEmitter
+import io.hamal.core.event.InternalEventEmitter
 import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.CorrelatedState
@@ -9,10 +9,10 @@ import io.hamal.lib.domain.State
 import io.hamal.lib.domain.request.ExecCompleteRequested
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.*
+import io.hamal.repository.api.TopicCmdRepository.TopicGroupCreateCmd
 import io.hamal.repository.api.event.ExecCompletedEvent
-import io.hamal.repository.api.log.AppenderImpl
-import io.hamal.repository.api.log.BrokerRepository
-import io.hamal.repository.api.log.CreateTopic.TopicToCreate
+import io.hamal.repository.api.log.LogBrokerRepository
+import io.hamal.repository.api.log.LogTopicAppenderImpl
 import org.springframework.stereotype.Component
 
 
@@ -20,11 +20,12 @@ import org.springframework.stereotype.Component
 class ExecCompleteHandler(
     private val execQueryRepository: ExecQueryRepository,
     private val execCmdRepository: ExecCmdRepository,
-    private val eventEmitter: PlatformEventEmitter,
+    private val eventEmitter: InternalEventEmitter,
     private val stateCmdRepository: StateCmdRepository,
-    private val eventBrokerRepository: BrokerRepository,
-    private val generateDomainId: GenerateId,
-    private val flowQueryRepository: FlowQueryRepository
+    private val flowQueryRepository: FlowQueryRepository,
+    private val topicRepository: TopicRepository,
+    private val logBrokerRepository: LogBrokerRepository,
+    private val generateId: GenerateId
 ) : io.hamal.core.request.RequestHandler<ExecCompleteRequested>(ExecCompleteRequested::class) {
 
     override fun invoke(req: ExecCompleteRequested) {
@@ -69,21 +70,22 @@ class ExecCompleteHandler(
 
     private fun appendEvents(cmdId: CmdId, flowId: FlowId, events: List<EventToSubmit>) {
         events.forEach { evt ->
-            //FIXME create topic if not exists
             val topicName = evt.topicName
             val flow = flowQueryRepository.get(flowId)
-            val topic = eventBrokerRepository.findTopic(flowId, topicName) ?: eventBrokerRepository.create(
-                cmdId, TopicToCreate(
-                    id = generateDomainId(::TopicId),
+            val topic = topicRepository.findGroupTopic(flow.groupId, topicName) ?: topicRepository.create(
+                TopicGroupCreateCmd(
+                    id = cmdId,
+                    topicId = generateId(::TopicId),
                     name = topicName,
-                    flowId = flowId,
-                    groupId = flow.groupId
+                    groupId = flow.groupId,
+                    logTopicId = generateId(::LogTopicId)
                 )
             )
-            appender.append(cmdId, topic, TopicEntryPayload(evt.payload.value))
+
+            appender.append(cmdId, topic.logTopicId, TopicEventPayload(evt.payload.value))
         }
     }
 
-    private val appender = AppenderImpl<TopicEntryPayload>(eventBrokerRepository)
+    private val appender = LogTopicAppenderImpl<TopicEventPayload>(logBrokerRepository)
 
 }

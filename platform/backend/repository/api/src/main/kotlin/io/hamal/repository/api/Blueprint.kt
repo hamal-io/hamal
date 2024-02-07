@@ -1,9 +1,6 @@
 package io.hamal.repository.api
 
-import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.domain.DomainObject
-import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.common.domain.UpdatedAt
+import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.*
 
@@ -54,7 +51,7 @@ interface BlueprintQueryRepository {
         )
     )
 
-    fun count(query: BlueprintQuery): ULong
+    fun count(query: BlueprintQuery): Count
 
     data class BlueprintQuery(
         var afterId: BlueprintId = BlueprintId(SnowflakeId(Long.MAX_VALUE)),

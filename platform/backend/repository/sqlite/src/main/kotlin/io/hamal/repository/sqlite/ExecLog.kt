@@ -1,5 +1,6 @@
 package io.hamal.repository.sqlite
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain._enum.ExecLogLevel
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.sqlite.Connection
@@ -87,9 +88,10 @@ class ExecLogSqliteRepository(
         }
     }
 
-    override fun count(query: ExecLogQuery): ULong {
-        return connection.executeQueryOne(
-            """
+    override fun count(query: ExecLogQuery): Count {
+        return Count(
+            connection.executeQueryOne(
+                """
             SELECT 
                 COUNT(*) as count 
             FROM 
@@ -100,14 +102,15 @@ class ExecLogSqliteRepository(
                 ${query.ids()}
                 ${query.execIds()}
             """.trimIndent()
-        ) {
-            query {
-                set("afterId", query.afterId)
-            }
-            map {
-                it.getLong("count").toULong()
-            }
-        } ?: 0UL
+            ) {
+                query {
+                    set("afterId", query.afterId)
+                }
+                map {
+                    it.getLong("count")
+                }
+            } ?: 0L
+        )
     }
 
     override fun clear() {

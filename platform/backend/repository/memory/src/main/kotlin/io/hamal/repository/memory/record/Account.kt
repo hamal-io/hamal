@@ -1,5 +1,6 @@
 package io.hamal.repository.memory.record
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.repository.api.Account
 import io.hamal.repository.api.AccountCmdRepository
@@ -31,14 +32,16 @@ private object AccountCurrentProjection {
             .toList()
     }
 
-    fun count(query: AccountQuery): ULong {
-        return projection.filter { query.accountIds.isEmpty() || it.key in query.accountIds }
-            .map { it.value }
-            .reversed()
-            .asSequence()
-            .dropWhile { it.id >= query.afterId }
-            .count()
-            .toULong()
+    fun count(query: AccountQuery): Count {
+        return Count(
+            projection.filter { query.accountIds.isEmpty() || it.key in query.accountIds }
+                .map { it.value }
+                .reversed()
+                .asSequence()
+                .dropWhile { it.id >= query.afterId }
+                .count()
+                .toLong()
+        )
     }
 
     fun clear() {
@@ -93,7 +96,7 @@ class AccountMemoryRepository : RecordMemoryRepository<AccountId, AccountRecord,
 
     override fun list(query: AccountQuery): List<Account> = lock.withLock { AccountCurrentProjection.list(query) }
 
-    override fun count(query: AccountQuery): ULong = lock.withLock { AccountCurrentProjection.count(query) }
+    override fun count(query: AccountQuery): Count = lock.withLock { AccountCurrentProjection.count(query) }
 
     override fun clear() {
         lock.withLock {

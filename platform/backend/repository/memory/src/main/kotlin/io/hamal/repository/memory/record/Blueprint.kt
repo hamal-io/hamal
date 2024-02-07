@@ -1,5 +1,6 @@
 package io.hamal.repository.memory.record
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.BlueprintId
 import io.hamal.repository.api.Blueprint
 import io.hamal.repository.api.BlueprintCmdRepository.CreateCmd
@@ -32,15 +33,17 @@ private object BlueprintCurrentProjection {
             .toList()
     }
 
-    fun count(query: BlueprintQuery): ULong {
-        return projection.filter { query.blueprintIds.isEmpty() || it.key in query.blueprintIds }
-            .map { it.value }
-            .reversed()
-            .asSequence()
-            .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
-            .dropWhile { it.id >= query.afterId }
-            .count()
-            .toULong()
+    fun count(query: BlueprintQuery): Count {
+        return Count(
+            projection.filter { query.blueprintIds.isEmpty() || it.key in query.blueprintIds }
+                .map { it.value }
+                .reversed()
+                .asSequence()
+                .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
+                .dropWhile { it.id >= query.afterId }
+                .count()
+                .toLong()
+        )
     }
 
     fun clear() {
@@ -102,7 +105,7 @@ class BlueprintMemoryRepository : RecordMemoryRepository<BlueprintId, BlueprintR
 
     override fun list(query: BlueprintQuery): List<Blueprint> = lock.withLock { BlueprintCurrentProjection.list(query) }
 
-    override fun count(query: BlueprintQuery): ULong = lock.withLock { BlueprintCurrentProjection.count(query) }
+    override fun count(query: BlueprintQuery): Count = lock.withLock { BlueprintCurrentProjection.count(query) }
 
     override fun clear() {
         lock.withLock {

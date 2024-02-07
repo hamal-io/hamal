@@ -4,10 +4,10 @@ import io.hamal.core.config.BackendBasePath
 import io.hamal.repository.api.*
 import io.hamal.repository.memory.ExecLogMemoryRepository
 import io.hamal.repository.memory.ReqMemoryRepository
+import io.hamal.repository.memory.record.TopicMemoryRepository
 import io.hamal.repository.sqlite.AuthSqliteRepository
 import io.hamal.repository.sqlite.StateSqliteRepository
-import io.hamal.repository.sqlite.log.BrokerSqlite
-import io.hamal.repository.sqlite.log.BrokerSqliteRepository
+import io.hamal.repository.sqlite.log.LogBrokerSqliteRepository
 import io.hamal.repository.sqlite.record.account.AccountSqliteRepository
 import io.hamal.repository.sqlite.record.blueprint.BlueprintSqliteRepository
 import io.hamal.repository.sqlite.record.code.CodeSqliteRepository
@@ -29,12 +29,6 @@ import kotlin.io.path.Path
 @Configuration
 @Profile("sqlite")
 open class SqliteRepositoryConfig(backendBasePath: BackendBasePath) {
-
-    @Bean
-    open fun platformEventBrokerRepository() = BrokerSqliteRepository(BrokerSqlite(path.resolve("platform-event")))
-
-    @Bean
-    open fun eventBrokerRepository() = BrokerSqliteRepository(BrokerSqlite(path.resolve("event")))
 
     @Bean
     open fun accountRepository() = AccountSqliteRepository(AccountSqliteRepository.Config(path))
@@ -152,6 +146,20 @@ open class SqliteRepositoryConfig(backendBasePath: BackendBasePath) {
 
     @Bean
     open fun execLogQueryRepository(): ExecLogQueryRepository = execLogRepository()
+
+    @Bean
+    open fun logBrokerRepository() = LogBrokerSqliteRepository(path)
+
+    @Bean
+    open fun topicRepository(): TopicRepository = TopicMemoryRepository(
+        logBrokerRepository()
+    )
+
+    @Bean
+    open fun topicCmdRepository(): TopicCmdRepository = topicRepository()
+
+    @Bean
+    open fun topicQueryRepository(): TopicQueryRepository = topicRepository()
 
     @Bean
     open fun triggerRepository() = TriggerSqliteRepository(TriggerSqliteRepository.Config(path))

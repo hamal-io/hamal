@@ -11,7 +11,7 @@ import io.hamal.lib.domain.vo.AccountType.Root
 import io.hamal.repository.api.*
 import io.hamal.repository.api.AuthCmdRepository.CreateTokenAuthCmd
 import io.hamal.repository.api.ExecCmdRepository.StartCmd
-import io.hamal.repository.api.log.BrokerRepository
+import io.hamal.repository.api.log.LogBrokerRepository
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.MethodOrderer.Random
 import org.junit.jupiter.api.TestMethodOrder
@@ -46,12 +46,6 @@ internal abstract class BaseTest {
     lateinit var authCmdRepository: AuthCmdRepository
 
     @Autowired
-    lateinit var platformEventBrokerRepository: BrokerRepository
-
-    @Autowired
-    lateinit var eventBrokerRepository: BrokerRepository
-
-    @Autowired
     lateinit var codeCmdRepository: CodeCmdRepository
 
     @Autowired
@@ -76,6 +70,9 @@ internal abstract class BaseTest {
     lateinit var flowCmdRepository: FlowCmdRepository
 
     @Autowired
+    lateinit var logBrokerRepository: LogBrokerRepository
+
+    @Autowired
     lateinit var reqQueryRepository: RequestQueryRepository
 
     @Autowired
@@ -86,6 +83,12 @@ internal abstract class BaseTest {
 
     @Autowired
     lateinit var stateCmdRepository: StateCmdRepository
+
+    @Autowired
+    lateinit var topicCmdRepository: TopicCmdRepository
+
+    @Autowired
+    lateinit var topicQueryRepository: TopicQueryRepository
 
     @Autowired
     lateinit var triggerCmdRepository: TriggerCmdRepository
@@ -107,8 +110,6 @@ internal abstract class BaseTest {
         accountCmdRepository.clear()
         authCmdRepository.clear()
         codeCmdRepository.clear()
-        platformEventBrokerRepository.clear()
-        eventBrokerRepository.clear()
         execCmdRepository.clear()
         funcCmdRepository.clear()
         groupCmdRepository.clear()

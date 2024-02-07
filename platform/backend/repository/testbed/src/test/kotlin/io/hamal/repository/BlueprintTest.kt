@@ -1,6 +1,7 @@
 package io.hamal.repository
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain.vo.*
@@ -241,7 +242,7 @@ class BlueprintRepositoryTest : AbstractUnitTest() {
                 limit = Limit(10)
             )
 
-            assertThat(count(query), equalTo(2UL))
+            assertThat(count(query), equalTo(Count(2)))
             val result = list(query)
             assertThat(result, hasSize(2))
 
@@ -268,7 +269,7 @@ class BlueprintRepositoryTest : AbstractUnitTest() {
                 limit = Limit(3)
             )
 
-            assertThat(count(query), equalTo(4UL))
+            assertThat(count(query), equalTo(Count(4)))
             val result = list(query)
             assertThat(result, hasSize(3))
         }
@@ -283,7 +284,7 @@ class BlueprintRepositoryTest : AbstractUnitTest() {
                 limit = Limit(1)
             )
 
-            assertThat(count(query), equalTo(1UL))
+            assertThat(count(query), equalTo(Count(1)))
             val result = list(query)
             assertThat(result, hasSize(1))
 
@@ -345,6 +346,6 @@ class BlueprintRepositoryTest : AbstractUnitTest() {
 
     private fun BlueprintRepository.verifyCount(expected: Int, block: BlueprintQuery.() -> Unit) {
         val counted = count(BlueprintQuery(groupIds = listOf()).also(block))
-        assertThat("number of blueprints expected", counted, equalTo(expected.toULong()))
+        assertThat("number of blueprints expected", counted, equalTo(Count(expected)))
     }
 }

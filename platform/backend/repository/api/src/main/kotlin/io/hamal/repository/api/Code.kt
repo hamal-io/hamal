@@ -1,9 +1,6 @@
 package io.hamal.repository.api
 
-import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.domain.DomainObject
-import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.common.domain.UpdatedAt
+import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain.vo.CodeId
@@ -59,7 +56,7 @@ interface CodeQueryRepository {
         )
     )
 
-    fun count(query: CodeQuery): ULong
+    fun count(query: CodeQuery): Count
 
     data class CodeQuery(
         var afterId: CodeId = CodeId(SnowflakeId(Long.MAX_VALUE)),

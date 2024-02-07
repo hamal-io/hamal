@@ -10,7 +10,7 @@ import kotlin.time.Duration.Companion.milliseconds
 @Service
 class RequestInvoker private constructor(
     private val reqCmdRepository: RequestCmdRepository,
-    private val regRegistry: io.hamal.core.request.RequestRegistry,
+    private val regRegistry: RequestRegistry,
     private val async: Async
 ) : ApplicationListener<ContextRefreshedEvent> {
 

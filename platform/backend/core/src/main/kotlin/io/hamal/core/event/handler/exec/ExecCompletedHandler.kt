@@ -1,6 +1,6 @@
 package io.hamal.core.event.handler.exec
 
-import io.hamal.core.event.PlatformEventHandler
+import io.hamal.core.event.InternalEventHandler
 import io.hamal.core.service.OrchestrationService
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.logger
@@ -10,7 +10,7 @@ private val log = logger(ExecCompletedHandler::class)
 
 internal class ExecCompletedHandler(
     private val orchestrationService: OrchestrationService,
-) : PlatformEventHandler<ExecCompletedEvent> {
+) : InternalEventHandler<ExecCompletedEvent> {
 
     override fun handle(cmdId: CmdId, evt: ExecCompletedEvent) {
         log.debug("Handle: $evt")

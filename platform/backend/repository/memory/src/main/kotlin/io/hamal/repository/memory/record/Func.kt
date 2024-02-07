@@ -1,5 +1,6 @@
 package io.hamal.repository.memory.record
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.domain.vo.DeployedAt
 import io.hamal.lib.domain.vo.FuncId
@@ -43,16 +44,18 @@ private object FuncCurrentProjection {
             .toList()
     }
 
-    fun count(query: FuncQuery): ULong {
-        return projection.filter { query.funcIds.isEmpty() || it.key in query.funcIds }
-            .map { it.value }
-            .reversed()
-            .asSequence()
-            .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
-            .filter { if (query.flowIds.isEmpty()) true else query.flowIds.contains(it.flowId) }
-            .dropWhile { it.id >= query.afterId }
-            .count()
-            .toULong()
+    fun count(query: FuncQuery): Count {
+        return Count(
+            projection.filter { query.funcIds.isEmpty() || it.key in query.funcIds }
+                .map { it.value }
+                .reversed()
+                .asSequence()
+                .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
+                .filter { if (query.flowIds.isEmpty()) true else query.flowIds.contains(it.flowId) }
+                .dropWhile { it.id >= query.afterId }
+                .count()
+                .toLong()
+        )
     }
 
     fun clear() {
@@ -147,8 +150,7 @@ class FuncMemoryRepository : RecordMemoryRepository<FuncId, FuncRecord, Func>(
         }
     }
 
-
-    override fun count(query: FuncQuery): ULong = lock.withLock { FuncCurrentProjection.count(query) }
+    override fun count(query: FuncQuery): Count = lock.withLock { FuncCurrentProjection.count(query) }
 
     override fun clear() {
         lock.withLock {
