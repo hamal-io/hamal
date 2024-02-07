@@ -99,30 +99,20 @@ class ClearController {
 
     @PostMapping("/v1/clear")
     fun clear() {
-        (1..10).forEach {
-            accountRepository.clear()
-            authRepository.clear()
-            codeRepository.clear()
-            endpointRepository.clear()
-            extensionRepository.clear()
-            reqRepository.clear()
-            execRepository.clear()
-            funcRepository.clear()
-            groupRepository.clear()
-            hookRepository.clear()
+        accountRepository.clear()
+        authRepository.clear()
+        codeRepository.clear()
+        endpointRepository.clear()
+        extensionRepository.clear()
+        reqRepository.clear()
+        execRepository.clear()
+        funcRepository.clear()
+        groupRepository.clear()
+        hookRepository.clear()
 
-            flowRepository.clear()
-            blueprintRepository.clear()
-            triggerRepository.clear()
-
-            topicRepository.clear()
-            logBrokerRepository.clear()
-            setupInternalTopics()
-            internalEvenService.reload()
-
-            Thread.sleep(10)
-        }
-
+        flowRepository.clear()
+        blueprintRepository.clear()
+        triggerRepository.clear()
 
         testAccount = accountRepository.create(
             AccountCmdRepository.CreateCmd(
@@ -234,7 +224,10 @@ class TestConfig {
 
     @PostConstruct
     fun setup() {
+        topicRepository.clear()
+        logBrokerRepository.clear()
         setupInternalTopics()
+//        internalEvenService.reload()
 
         try {
             testAccount = accountRepository.create(
@@ -278,6 +271,20 @@ class TestConfig {
         }
     }
 
+    @Autowired
+    lateinit var topicRepository: TopicRepository
+
+    @Autowired
+    lateinit var triggerRepository: TriggerRepository
+
+    @Autowired
+    lateinit var generateDomainId: GenerateId
+
+    @Autowired
+    lateinit var internalEvenService: InternalEventService
+
+    @Autowired
+    lateinit var logBrokerRepository: LogBrokerRepository
 
     @Autowired
     lateinit var setupInternalTopics: SetupInternalTopics

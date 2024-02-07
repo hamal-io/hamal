@@ -27,22 +27,8 @@ class InternalEventService(
     private val logBrokerRepository: LogBrokerRepository
 ) : DisposableBean, ApplicationListener<ApplicationReadyEvent> {
 
-    private val scheduledTasks = mutableListOf<ScheduledFuture<*>>()
 
     override fun onApplicationEvent(event: ApplicationReadyEvent) {
-        reload()
-    }
-
-    override fun destroy() {
-        scheduledTasks.forEach {
-            it.cancel(true)
-        }
-    }
-
-    fun reload() {
-        destroy()
-        scheduledTasks.clear()
-
         internalEventContainer.topicNames().forEach { topicName ->
             val topic = topicRepository.getGroupTopic(GroupId.root, topicName)
             val consumer = LogConsumerImpl(
@@ -63,4 +49,12 @@ class InternalEventService(
             )
         }
     }
+
+    override fun destroy() {
+        scheduledTasks.forEach {
+            it.cancel(true)
+        }
+    }
+
+    private val scheduledTasks = mutableListOf<ScheduledFuture<*>>()
 }

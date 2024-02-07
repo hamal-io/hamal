@@ -18,16 +18,18 @@ class SetupInternalTopics {
     operator fun invoke() {
         internalEventClasses.forEach { internalEventClass ->
             val topicName = internalEventClass.topicName()
-            topicRepository.findGroupTopic(GroupId.root, topicName) ?: topicRepository.create(
-                generateDomainId(::TopicId).let { topicId ->
-                    TopicInternalCreateCmd(
-                        id = CmdId(topicId),
-                        topicId = topicId,
-                        name = topicName,
-                        logTopicId = generateDomainId(::LogTopicId)
-                    )
-                }
-            )
+            topicRepository.findGroupTopic(GroupId.root, topicName) ?: run {
+                topicRepository.create(
+                    generateDomainId(::TopicId).let { topicId ->
+                        TopicInternalCreateCmd(
+                            id = CmdId(topicId),
+                            topicId = topicId,
+                            name = topicName,
+                            logTopicId = generateDomainId(::LogTopicId)
+                        )
+                    }
+                )
+            }
         }
     }
 
