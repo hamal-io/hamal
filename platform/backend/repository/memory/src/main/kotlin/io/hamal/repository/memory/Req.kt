@@ -12,7 +12,7 @@ import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
 @Repository
-class ReqMemoryRepository : RequestRepository {
+class RequestMemoryRepository : RequestRepository {
 
     val queue = mutableListOf<RequestId>()
     val store = mutableMapOf<RequestId, String>()

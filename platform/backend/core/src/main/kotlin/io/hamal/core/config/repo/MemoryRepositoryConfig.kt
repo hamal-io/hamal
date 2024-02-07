@@ -3,7 +3,7 @@ package io.hamal.core.config.repo
 import io.hamal.repository.api.*
 import io.hamal.repository.memory.AuthMemoryRepository
 import io.hamal.repository.memory.ExecLogMemoryRepository
-import io.hamal.repository.memory.ReqMemoryRepository
+import io.hamal.repository.memory.RequestMemoryRepository
 import io.hamal.repository.memory.StateMemoryRepository
 import io.hamal.repository.memory.log.LogBrokerMemoryRepository
 import io.hamal.repository.memory.record.*
@@ -136,7 +136,7 @@ open class MemoryRepositoryConfig {
     open fun logBrokerRepository() = LogBrokerMemoryRepository()
 
     @Bean
-    open fun reqRepository(): RequestRepository = ReqMemoryRepository()
+    open fun reqRepository(): RequestRepository = RequestMemoryRepository()
 
     @Bean
     open fun reqCmdRepository(): RequestCmdRepository = reqRepository()

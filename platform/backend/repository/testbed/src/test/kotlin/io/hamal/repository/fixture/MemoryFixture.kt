@@ -7,7 +7,7 @@ import io.hamal.repository.api.*
 import io.hamal.repository.api.log.*
 import io.hamal.repository.memory.AuthMemoryRepository
 import io.hamal.repository.memory.ExecLogMemoryRepository
-import io.hamal.repository.memory.ReqMemoryRepository
+import io.hamal.repository.memory.RequestMemoryRepository
 import io.hamal.repository.memory.StateMemoryRepository
 import io.hamal.repository.memory.log.LogBrokerMemoryRepository
 import io.hamal.repository.memory.log.LogSegmentMemory
@@ -32,7 +32,7 @@ object MemoryFixture : BaseTestFixture {
         GroupRepository::class -> MemoryGroupRepository() as REPO
         HookRepository::class -> HookMemoryRepository() as REPO
         FlowRepository::class -> FlowMemoryRepository() as REPO
-        RequestRepository::class -> ReqMemoryRepository() as REPO
+        RequestRepository::class -> RequestMemoryRepository() as REPO
 
         LogBrokerRepository::class -> LogBrokerMemoryRepository() as REPO
         LogSegmentRepository::class -> LogSegmentMemoryRepository(
