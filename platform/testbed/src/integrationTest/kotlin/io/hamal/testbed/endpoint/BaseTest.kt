@@ -99,24 +99,30 @@ class ClearController {
 
     @PostMapping("/v1/clear")
     fun clear() {
-        accountRepository.clear()
-        authRepository.clear()
-        codeRepository.clear()
-        endpointRepository.clear()
-        extensionRepository.clear()
-        reqRepository.clear()
-        execRepository.clear()
-        funcRepository.clear()
-        groupRepository.clear()
-        hookRepository.clear()
-        flowRepository.clear()
-        blueprintRepository.clear()
-        triggerRepository.clear()
+        (1..10).forEach {
+            accountRepository.clear()
+            authRepository.clear()
+            codeRepository.clear()
+            endpointRepository.clear()
+            extensionRepository.clear()
+            reqRepository.clear()
+            execRepository.clear()
+            funcRepository.clear()
+            groupRepository.clear()
+            hookRepository.clear()
 
-        topicRepository.clear()
-        logBrokerRepository.clear()
-        setupInternalTopics()
-        internalEvenService.reload()
+            flowRepository.clear()
+            blueprintRepository.clear()
+            triggerRepository.clear()
+
+            topicRepository.clear()
+            logBrokerRepository.clear()
+            setupInternalTopics()
+            internalEvenService.reload()
+
+            Thread.sleep(10)
+        }
+
 
         testAccount = accountRepository.create(
             AccountCmdRepository.CreateCmd(

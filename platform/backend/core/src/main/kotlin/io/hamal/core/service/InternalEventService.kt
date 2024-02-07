@@ -35,12 +35,13 @@ class InternalEventService(
 
     override fun destroy() {
         scheduledTasks.forEach {
-            it.cancel(false)
+            it.cancel(true)
         }
     }
 
     fun reload() {
         destroy()
+        scheduledTasks.clear()
 
         internalEventContainer.topicNames().forEach { topicName ->
             val topic = topicRepository.getGroupTopic(GroupId.root, topicName)
