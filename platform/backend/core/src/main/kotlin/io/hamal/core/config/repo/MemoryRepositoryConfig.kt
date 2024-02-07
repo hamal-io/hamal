@@ -5,7 +5,7 @@ import io.hamal.repository.memory.AuthMemoryRepository
 import io.hamal.repository.memory.ExecLogMemoryRepository
 import io.hamal.repository.memory.ReqMemoryRepository
 import io.hamal.repository.memory.StateMemoryRepository
-import io.hamal.repository.memory.new_log.LogBrokerMemoryRepository
+import io.hamal.repository.memory.log.LogBrokerMemoryRepository
 import io.hamal.repository.memory.record.*
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

@@ -1,4 +1,4 @@
-package io.hamal.repository.memory.new_log
+package io.hamal.repository.memory.log
 
 import io.hamal.lib.domain.vo.LogTopicId
 import io.hamal.repository.api.log.LogConsumerId
