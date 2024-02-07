@@ -1,7 +1,7 @@
 package io.hamal.repository.fixture
 
 import io.hamal.repository.api.log.LogBrokerRepository
-import io.hamal.repository.sqlite.new_log.LogBrokerSqliteRepository
+import io.hamal.repository.sqlite.log.LogBrokerSqliteRepository
 import kotlin.io.path.createTempDirectory
 import kotlin.reflect.KClass
 

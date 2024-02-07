@@ -11,7 +11,7 @@ import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.group.GroupCreatedRecord
 import io.hamal.repository.record.group.GroupEntity
 import io.hamal.repository.record.group.GroupRecord
-import io.hamal.repository.sqlite.record.SqliteRecordRepository
+import io.hamal.repository.sqlite.record.RecordSqliteRepository
 import java.nio.file.Path
 
 internal object CreateGroup : CreateDomainObject<GroupId, GroupRecord, Group> {
@@ -39,7 +39,7 @@ internal object CreateGroup : CreateDomainObject<GroupId, GroupRecord, Group> {
 
 class GroupSqliteRepository(
     config: Config
-) : SqliteRecordRepository<GroupId, GroupRecord, Group>(
+) : RecordSqliteRepository<GroupId, GroupRecord, Group>(
     config = config,
     createDomainObject = CreateGroup,
     recordClass = GroupRecord::class,

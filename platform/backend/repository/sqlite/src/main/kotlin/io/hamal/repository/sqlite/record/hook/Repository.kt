@@ -13,7 +13,7 @@ import io.hamal.repository.record.hook.HookCreatedRecord
 import io.hamal.repository.record.hook.HookEntity
 import io.hamal.repository.record.hook.HookRecord
 import io.hamal.repository.record.hook.HookUpdatedRecord
-import io.hamal.repository.sqlite.record.SqliteRecordRepository
+import io.hamal.repository.sqlite.record.RecordSqliteRepository
 import java.nio.file.Path
 
 internal object CreateHook : CreateDomainObject<HookId, HookRecord, Hook> {
@@ -40,7 +40,7 @@ internal object CreateHook : CreateDomainObject<HookId, HookRecord, Hook> {
 
 class HookSqliteRepository(
     config: Config
-) : SqliteRecordRepository<HookId, HookRecord, Hook>(
+) : RecordSqliteRepository<HookId, HookRecord, Hook>(
     config = config,
     createDomainObject = CreateHook,
     recordClass = HookRecord::class,

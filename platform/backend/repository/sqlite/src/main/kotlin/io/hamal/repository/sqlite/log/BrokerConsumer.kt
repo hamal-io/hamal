@@ -1,15 +1,16 @@
-package io.hamal.repository.sqlite.new_log
+package io.hamal.repository.sqlite.log
 
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.LogTopicId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.SqliteBaseRepository
+import io.hamal.repository.api.log.LogBrokerRepository.LogConsumerQuery
 import io.hamal.repository.api.log.LogConsumerId
 import io.hamal.repository.api.log.LogEventId
 import java.nio.file.Path
 
 
-internal class LogBrokerConsumersSqliteRepository(
+internal class LogBrokerConsumerSqliteRepository(
     val path: Path
 ) : SqliteBaseRepository(
     object : Config {
@@ -81,7 +82,7 @@ internal class LogBrokerConsumersSqliteRepository(
         connection.close()
     }
 
-    fun count() = connection.executeQueryOne("SELECT COUNT(*) as count from consumers") {
+    fun count(query: LogConsumerQuery) = connection.executeQueryOne("SELECT COUNT(*) as count from consumers") {
         map {
             Count(it.getLong("count"))
         }

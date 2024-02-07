@@ -1,9 +1,14 @@
 package io.hamal.repository.api
 
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonElement
+import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.domain.*
+import io.hamal.lib.common.serialization.JsonAdapter
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.TopicType
 import io.hamal.lib.domain.vo.*
+import java.lang.reflect.Type
 
 sealed class Topic : DomainObject<TopicId> {
     abstract val cmdId: CmdId
@@ -12,6 +17,31 @@ sealed class Topic : DomainObject<TopicId> {
     abstract val groupId: GroupId
 
     abstract val type: TopicType
+
+    object Adapter : JsonAdapter<Topic> {
+        override fun serialize(
+            src: Topic,
+            typeOfSrc: Type,
+            context: JsonSerializationContext
+        ): JsonElement {
+            return context.serialize(src)
+        }
+
+        override fun deserialize(
+            json: JsonElement,
+            typeOfT: Type,
+            context: JsonDeserializationContext
+        ): Topic {
+            val type = json.asJsonObject.get("type").asString
+            return context.deserialize(json, classMapping[type]!!.java)
+        }
+
+        private val classMapping = mapOf(
+            TopicType.Internal.name to Internal::class,
+            TopicType.Group.name to Group::class,
+            TopicType.Public.name to Public::class
+        )
+    }
 
     /**
      * Topic only available for internal processing

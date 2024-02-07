@@ -9,7 +9,7 @@ import io.hamal.repository.api.ExecQueryRepository.ExecQuery
 import io.hamal.repository.api.record.exec.ExecEntity
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.exec.*
-import io.hamal.repository.sqlite.record.SqliteRecordRepository
+import io.hamal.repository.sqlite.record.RecordSqliteRepository
 import java.nio.file.Path
 
 internal object CreateExec : CreateDomainObject<ExecId, ExecRecord, Exec> {
@@ -37,7 +37,7 @@ internal object CreateExec : CreateDomainObject<ExecId, ExecRecord, Exec> {
 
 class ExecSqliteRepository(
     config: Config
-) : SqliteRecordRepository<ExecId, ExecRecord, Exec>(
+) : RecordSqliteRepository<ExecId, ExecRecord, Exec>(
     config = config,
     createDomainObject = CreateExec,
     recordClass = ExecRecord::class,

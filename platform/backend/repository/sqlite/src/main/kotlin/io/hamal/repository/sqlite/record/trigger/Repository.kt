@@ -9,7 +9,7 @@ import io.hamal.repository.api.TriggerCmdRepository.*
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.trigger.*
-import io.hamal.repository.sqlite.record.SqliteRecordRepository
+import io.hamal.repository.sqlite.record.RecordSqliteRepository
 import java.nio.file.Path
 
 internal object CreateTrigger : CreateDomainObject<TriggerId, TriggerRecord, Trigger> {
@@ -41,7 +41,7 @@ internal object CreateTrigger : CreateDomainObject<TriggerId, TriggerRecord, Tri
 
 class TriggerSqliteRepository(
     config: Config
-) : SqliteRecordRepository<TriggerId, TriggerRecord, Trigger>(
+) : RecordSqliteRepository<TriggerId, TriggerRecord, Trigger>(
     config = config,
     createDomainObject = CreateTrigger,
     recordClass = TriggerRecord::class,

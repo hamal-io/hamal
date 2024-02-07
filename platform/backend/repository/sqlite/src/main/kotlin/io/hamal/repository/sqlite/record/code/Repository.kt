@@ -15,7 +15,7 @@ import io.hamal.repository.record.code.CodeCreatedRecord
 import io.hamal.repository.record.code.CodeEntity
 import io.hamal.repository.record.code.CodeRecord
 import io.hamal.repository.record.code.CodeUpdatedRecord
-import io.hamal.repository.sqlite.record.SqliteRecordRepository
+import io.hamal.repository.sqlite.record.RecordSqliteRepository
 import java.nio.file.Path
 
 
@@ -43,7 +43,7 @@ internal object CreateCode : CreateDomainObject<CodeId, CodeRecord, Code> {
 
 class CodeSqliteRepository(
     config: Config
-) : SqliteRecordRepository<CodeId, CodeRecord, Code>(
+) : RecordSqliteRepository<CodeId, CodeRecord, Code>(
     config = config,
     createDomainObject = CreateCode,
     recordClass = CodeRecord::class,

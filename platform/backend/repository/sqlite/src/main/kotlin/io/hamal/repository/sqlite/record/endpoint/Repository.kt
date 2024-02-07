@@ -13,7 +13,7 @@ import io.hamal.repository.record.endpoint.EndpointCreatedRecord
 import io.hamal.repository.record.endpoint.EndpointEntity
 import io.hamal.repository.record.endpoint.EndpointRecord
 import io.hamal.repository.record.endpoint.EndpointUpdatedRecord
-import io.hamal.repository.sqlite.record.SqliteRecordRepository
+import io.hamal.repository.sqlite.record.RecordSqliteRepository
 import java.nio.file.Path
 
 internal object CreateEndpoint : CreateDomainObject<EndpointId, EndpointRecord, Endpoint> {
@@ -40,7 +40,7 @@ internal object CreateEndpoint : CreateDomainObject<EndpointId, EndpointRecord, 
 
 class EndpointSqliteRepository(
     config: Config
-) : SqliteRecordRepository<EndpointId, EndpointRecord, Endpoint>(
+) : RecordSqliteRepository<EndpointId, EndpointRecord, Endpoint>(
     config = config,
     createDomainObject = CreateEndpoint,
     recordClass = EndpointRecord::class,

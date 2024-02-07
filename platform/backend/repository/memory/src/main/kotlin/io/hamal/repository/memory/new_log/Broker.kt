@@ -1,9 +1,7 @@
 package io.hamal.repository.memory.new_log
 
 import io.hamal.lib.common.KeyedOnce
-import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.domain.Count
-import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.domain.*
 import io.hamal.lib.domain.vo.LogTopicId
 import io.hamal.repository.api.log.*
 import io.hamal.repository.api.log.LogBrokerRepository.*
@@ -60,7 +58,7 @@ class LogBrokerMemoryRepository : LogBrokerRepository {
 
     override fun create(cmdId: CmdId, topicToCreate: LogTopicToCreate): LogTopic {
         return lock.withLock {
-            val topic = LogTopicMemory(topicToCreate.id)
+            val topic = LogTopic(topicToCreate.id, CreatedAt.now(), UpdatedAt.now())
             require(findTopic(topic.id) == null) { "Topic already exists" }
             topics[topic.id] = topic
             topic
@@ -115,6 +113,6 @@ class LogBrokerMemoryRepository : LogBrokerRepository {
 
     private val lock = ReentrantLock()
     private val topicRepositories = KeyedOnce.default<LogTopicId, LogTopicRepository>()
-    private val topics = mutableMapOf<LogTopicId, LogTopicMemory>()
+    private val topics = mutableMapOf<LogTopicId, LogTopic>()
     private val consumers = mutableMapOf<Pair<LogConsumerId, LogTopicId>, LogEventId>()
 }

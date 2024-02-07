@@ -13,7 +13,7 @@ import io.hamal.repository.record.extension.ExtensionCreatedRecord
 import io.hamal.repository.record.extension.ExtensionEntity
 import io.hamal.repository.record.extension.ExtensionRecord
 import io.hamal.repository.record.extension.ExtensionUpdatedRecord
-import io.hamal.repository.sqlite.record.SqliteRecordRepository
+import io.hamal.repository.sqlite.record.RecordSqliteRepository
 import java.nio.file.Path
 
 internal object CreateExtension : CreateDomainObject<ExtensionId, ExtensionRecord, Extension> {
@@ -40,7 +40,7 @@ internal object CreateExtension : CreateDomainObject<ExtensionId, ExtensionRecor
 
 class ExtensionSqliteRepository(
     config: Config
-) : SqliteRecordRepository<ExtensionId, ExtensionRecord, Extension>(
+) : RecordSqliteRepository<ExtensionId, ExtensionRecord, Extension>(
     config = config,
     createDomainObject = CreateExtension,
     recordClass = ExtensionRecord::class,

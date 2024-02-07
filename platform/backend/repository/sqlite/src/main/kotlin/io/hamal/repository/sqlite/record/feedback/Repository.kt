@@ -11,7 +11,7 @@ import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.feedback.FeedbackCreatedRecord
 import io.hamal.repository.record.feedback.FeedbackEntity
 import io.hamal.repository.record.feedback.FeedbackRecord
-import io.hamal.repository.sqlite.record.SqliteRecordRepository
+import io.hamal.repository.sqlite.record.RecordSqliteRepository
 import java.nio.file.Path
 
 internal object CreateFeedback : CreateDomainObject<FeedbackId, FeedbackRecord, Feedback> {
@@ -37,7 +37,7 @@ internal object CreateFeedback : CreateDomainObject<FeedbackId, FeedbackRecord, 
 
 class FeedbackSqliteRepository(
     config: Config
-) : SqliteRecordRepository<FeedbackId, FeedbackRecord, Feedback>(
+) : RecordSqliteRepository<FeedbackId, FeedbackRecord, Feedback>(
     config = config,
     createDomainObject = CreateFeedback,
     recordClass = FeedbackRecord::class,

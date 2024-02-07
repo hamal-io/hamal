@@ -23,6 +23,7 @@ import io.hamal.repository.record.flow.FlowRecord
 import io.hamal.repository.record.func.FuncRecord
 import io.hamal.repository.record.group.GroupRecord
 import io.hamal.repository.record.hook.HookRecord
+import io.hamal.repository.record.topic.TopicRecord
 import io.hamal.repository.record.trigger.TriggerRecord
 import java.lang.reflect.Type
 import kotlin.reflect.KClass
@@ -41,6 +42,7 @@ object RecordJsonModule : JsonModule() {
         this[FuncRecord::class] = FuncRecord.Adapter
         this[GroupRecord::class] = GroupRecord.Adapter
         this[HookRecord::class] = HookRecord.Adapter
+        this[TopicRecord::class] = TopicRecord.Adapter
         this[TriggerRecord::class] = TriggerRecord.Adapter
     }
 }

@@ -88,7 +88,8 @@ private object TopicCurrentProjection {
 class TopicMemoryRepository(
     private val logBrokerRepository: LogBrokerRepository
 ) : RecordMemoryRepository<TopicId, TopicRecord, Topic>(
-    createDomainObject = CreateTopicFromRecords, recordClass = TopicRecord::class
+    createDomainObject = CreateTopicFromRecords,
+    recordClass = TopicRecord::class
 ), TopicRepository {
 
     override fun create(cmd: TopicGroupCreateCmd): Topic.Group {

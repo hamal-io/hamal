@@ -12,7 +12,7 @@ import io.hamal.repository.api.FuncQueryRepository.FuncQuery
 import io.hamal.repository.api.FuncRepository
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.func.*
-import io.hamal.repository.sqlite.record.SqliteRecordRepository
+import io.hamal.repository.sqlite.record.RecordSqliteRepository
 import java.nio.file.Path
 
 internal object CreateFunc : CreateDomainObject<FuncId, FuncRecord, Func> {
@@ -39,7 +39,7 @@ internal object CreateFunc : CreateDomainObject<FuncId, FuncRecord, Func> {
 
 class FuncSqliteRepository(
     config: Config
-) : SqliteRecordRepository<FuncId, FuncRecord, Func>(
+) : RecordSqliteRepository<FuncId, FuncRecord, Func>(
     config = config,
     createDomainObject = CreateFunc,
     recordClass = FuncRecord::class,

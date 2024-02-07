@@ -1,16 +1,18 @@
 package io.hamal.repository.fixture
 
+import io.hamal.lib.common.domain.CreatedAt
+import io.hamal.lib.common.domain.UpdatedAt
 import io.hamal.lib.domain.vo.LogTopicId
 import io.hamal.repository.api.*
-import io.hamal.repository.api.log.LogBrokerRepository
-import io.hamal.repository.api.log.LogSegmentId
-import io.hamal.repository.api.log.LogSegmentRepository
-import io.hamal.repository.api.log.LogTopicRepository
+import io.hamal.repository.api.log.*
 import io.hamal.repository.memory.AuthMemoryRepository
 import io.hamal.repository.memory.ExecLogMemoryRepository
 import io.hamal.repository.memory.ReqMemoryRepository
 import io.hamal.repository.memory.StateMemoryRepository
-import io.hamal.repository.memory.new_log.*
+import io.hamal.repository.memory.new_log.LogBrokerMemoryRepository
+import io.hamal.repository.memory.new_log.LogSegmentMemory
+import io.hamal.repository.memory.new_log.LogSegmentMemoryRepository
+import io.hamal.repository.memory.new_log.LogTopicMemoryRepository
 import io.hamal.repository.memory.record.*
 import kotlin.reflect.KClass
 
@@ -41,7 +43,7 @@ object MemoryFixture : BaseTestFixture {
         ) as REPO
 
         LogTopicRepository::class -> LogTopicMemoryRepository(
-            LogTopicMemory(LogTopicId(23))
+            LogTopic(LogTopicId(23), CreatedAt.now(), UpdatedAt.now())
         ) as REPO
 
         StateRepository::class -> StateMemoryRepository() as REPO

@@ -13,7 +13,7 @@ import io.hamal.repository.record.blueprint.BlueprintCreatedRecord
 import io.hamal.repository.record.blueprint.BlueprintEntity
 import io.hamal.repository.record.blueprint.BlueprintRecord
 import io.hamal.repository.record.blueprint.BlueprintUpdatedRecord
-import io.hamal.repository.sqlite.record.SqliteRecordRepository
+import io.hamal.repository.sqlite.record.RecordSqliteRepository
 import java.nio.file.Path
 
 internal object CreateBlueprint : CreateDomainObject<BlueprintId, BlueprintRecord, Blueprint> {
@@ -41,7 +41,7 @@ internal object CreateBlueprint : CreateDomainObject<BlueprintId, BlueprintRecor
 
 class BlueprintSqliteRepository(
     config: Config
-) : SqliteRecordRepository<BlueprintId, BlueprintRecord, Blueprint>(
+) : RecordSqliteRepository<BlueprintId, BlueprintRecord, Blueprint>(
     config = config,
     createDomainObject = CreateBlueprint,
     recordClass = BlueprintRecord::class,
