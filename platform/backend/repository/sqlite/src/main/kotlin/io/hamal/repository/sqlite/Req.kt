@@ -93,6 +93,7 @@ class RequestSqliteRepository(
             }
         )
 
+
         connection.tx {
             execute(" DELETE FROM queue WHERE $reqIds")
         }
@@ -153,7 +154,7 @@ class RequestSqliteRepository(
             FROM
                 store
             WHERE
-                id < :afterId
+                id > :afterId
             ORDER BY id DESC
             LIMIT :limit
             """.trimIndent()
@@ -176,7 +177,7 @@ class RequestSqliteRepository(
             FROM 
                 store
             WHERE
-                id < :afterId
+                id > :afterId
             """.trimIndent()
         ) {
             query {

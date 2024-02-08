@@ -2,7 +2,6 @@ package io.hamal.repository.api
 
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.request.Requested
 import io.hamal.lib.domain.vo.RequestId
 
@@ -21,7 +20,7 @@ interface RequestQueryRepository {
     fun list(query: ReqQuery): List<Requested>
     fun count(query: ReqQuery): Count
     data class ReqQuery(
-        var afterId: RequestId = RequestId(SnowflakeId(Long.MAX_VALUE)),
+        var afterId: RequestId = RequestId(0),
         var limit: Limit = Limit(1)
     )
 }
