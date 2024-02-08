@@ -73,37 +73,45 @@ class RequestSqliteRepository(
 
 
     override fun next(limit: Int): List<Requested> {
-        val reqIds = ids(
-            connection.executeQuery<RequestId>(
-                """
+        val reqIds = connection.executeQuery<RequestId>(
+            """
                 SELECT
                     id
                 FROM
                     queue
-                ORDER BY id DESC
+                ORDER BY id ASC
                 LIMIT :limit
                 """.trimIndent()
-            ) {
-                query {
-                    set("limit", limit)
-                }
-                map { rs ->
-                    (RequestId(rs.getInt("id")))
-                }
-            }
-        )
-
-
-        connection.tx {
-            execute(" DELETE FROM queue WHERE $reqIds")
-        }
-
-
-        return connection.executeQuery<Requested>(
-            "SELECT data FROM store WHERE $reqIds"
         ) {
-            map { rs -> json.decompressAndDeserialize(Requested::class, rs.getBytes("data")) }
+            query {
+                set("limit", limit)
+            }
+            map { rs ->
+                (RequestId(rs.getInt("id")))
+            }
+        }.ifEmpty { return emptyList() }
+
+
+        val _ids: String = ids(reqIds)
+
+        connection.executeUpdate(
+            "DELETE FROM queue WHERE :ids"
+        ) {
+            set("ids", _ids)
         }
+
+        val res = connection.executeQuery<Requested>(
+            "SELECT data FROM store WHERE :ids"
+        ) {
+            query {
+                set("ids", _ids)
+            }
+            map { rs ->
+                json.decompressAndDeserialize(Requested::class, rs.getBytes("data"))
+            }
+        }
+
+        return res;
 
     }
 
@@ -127,10 +135,6 @@ class RequestSqliteRepository(
             set("data", json.serialize(req.apply { status = RequestStatus.Failed }))
             set("id", reqId)
         }
-    }
-
-    override fun close() {
-
     }
 
     override fun find(reqId: RequestId): Requested? {
@@ -194,7 +198,7 @@ class RequestSqliteRepository(
         return if (reqIds.isEmpty()) {
             ""
         } else {
-            "AND id IN (${reqIds.joinToString(",") { "${it.value.value}" }})"
+            "id IN (${reqIds.joinToString(",") { "${it.value.value}" }})"
         }
     }
 
