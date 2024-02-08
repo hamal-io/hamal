@@ -4,25 +4,25 @@ import Table from "@/pages/app/exec-list/components/list/components/table.tsx";
 import {PageHeader} from "@/components/page-header.tsx";
 import {useExecList} from "@/hook/exec.ts";
 
-type flowProps = {
+type GroupProps = {
     id: string;
     name: string;
 }
 
 type ListProps = {
-    flow: flowProps
+    group: GroupProps
 }
 
-const List: FC<ListProps> = ({flow}) => {
+const List: FC<ListProps> = ({group}) => {
     const [listExecs, execList, isLoading, error] = useExecList()
 
     useEffect(() => {
         const abortController = new AbortController()
-        listExecs(flow.id, abortController)
+        listExecs(group.id, abortController)
         return () => {
             abortController.abort()
         }
-    }, [flow.id]);
+    }, [group.id]);
 
     if (isLoading) return "Loading..."
     if (error != null) return "Error -"
@@ -31,7 +31,7 @@ const List: FC<ListProps> = ({flow}) => {
         <div className="pt-2 px-2 mb-6">
             <PageHeader
                 title="Executions"
-                description={`Executions of your flow ${flow.name}`}
+                description={`Executions of your group ${group.name}`}
                 actions={[]}
             />
             <Table data={execList.execs} columns={columns}/>

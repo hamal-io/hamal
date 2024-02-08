@@ -1,18 +1,19 @@
 import React, {FC, useContext} from "react";
 import {flowContext} from "@/pages/app/flow-detail";
 import List from "@/pages/app/exec-list/components/list";
+import {GroupContext} from "@/components/app/layout";
 
 type Props = {}
 
 const ExecListPage: FC<Props> = () => {
-    const flow = useContext(flowContext)
+    const group = useContext(GroupContext)
 
-    if (flow == null) {
+    if (group == null) {
         return "Loading..."
     }
 
     return (
-        <List flow={flow}/>
+        <List group={group}/>
     );
 }
 

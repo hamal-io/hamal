@@ -21,7 +21,7 @@ import Pagination from "./pagination.tsx"
 import Toolbar from "./toolbar.tsx"
 import {Card, CardContent, CardFooter, CardHeader} from "@/components/ui/card.tsx";
 import {useNavigate} from "react-router-dom";
-import {flowContext} from "@/pages/app/flow-detail";
+import {GroupContext} from "@/components/app/layout";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -60,7 +60,7 @@ export default function <TData, TValue>({columns, data,}: DataTableProps<TData, 
     })
 
     const navigate = useNavigate()
-    const flow = useContext(flowContext)
+    const group = useContext(GroupContext)
 
     return (
         <Card>
@@ -94,7 +94,7 @@ export default function <TData, TValue>({columns, data,}: DataTableProps<TData, 
                                     key={row.id}
                                     data-state={row.getIsSelected() && "selected"}
                                     onClick={() => {
-                                        navigate(`/groups/${flow.id}/executions/${row.original['id']}`)
+                                        navigate(`/groups/${group.id}/executions/${row.original['id']}`)
                                     }}
                                 >
                                     {row.getVisibleCells().map((cell) => (
