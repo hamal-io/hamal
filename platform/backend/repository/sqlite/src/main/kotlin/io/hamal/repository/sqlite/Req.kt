@@ -95,24 +95,16 @@ class RequestSqliteRepository(
         val _ids: String = ids(reqIds)
 
         connection.executeUpdate(
-            "DELETE FROM queue WHERE :ids"
-        ) {
-            set("ids", _ids)
-        }
+            "DELETE FROM queue WHERE $_ids"
+        )
 
-        val res = connection.executeQuery<Requested>(
-            "SELECT data FROM store WHERE :ids"
+        return connection.executeQuery<Requested>(
+            "SELECT data FROM store WHERE $_ids"
         ) {
-            query {
-                set("ids", _ids)
-            }
             map { rs ->
                 json.decompressAndDeserialize(Requested::class, rs.getBytes("data"))
             }
         }
-
-        return res;
-
     }
 
     override fun complete(reqId: RequestId) {
