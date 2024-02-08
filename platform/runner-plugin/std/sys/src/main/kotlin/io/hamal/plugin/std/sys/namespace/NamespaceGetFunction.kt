@@ -23,8 +23,7 @@ class NamespaceGetFunction(
                     KuaMap(
                         mutableMapOf(
                             "id" to KuaString(namespace.id.value.value.toString(16)),
-                            "name" to KuaString(namespace.name.value),
-                            "type" to KuaString(namespace.type.value)
+                            "name" to KuaString(namespace.name.value)
                         )
                     )
                 }

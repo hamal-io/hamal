@@ -1,9 +1,6 @@
 package io.hamal.api.http.controller.namespace
 
-import io.hamal.lib.common.hot.HotObject
-import io.hamal.lib.domain.vo.NamespaceInputs
 import io.hamal.lib.domain.vo.NamespaceName
-import io.hamal.lib.domain.vo.NamespaceType
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.HttpStatusCode.Ok
@@ -29,13 +26,7 @@ internal class NamespaceGetControllerTest : NamespaceBaseControllerTest() {
     @Test
     fun `Get namespace`() {
         val namespaceId = awaitCompleted(
-            createNamespace(
-                ApiNamespaceCreateRequest(
-                    name = NamespaceName("namespace-one"),
-                    inputs = NamespaceInputs(HotObject.builder().set("hamal", "rocks").build()),
-                    type = null
-                )
-            )
+            createNamespace(ApiNamespaceCreateRequest(NamespaceName("namespace-one")))
         ).namespaceId
 
         val getNamespaceResponse = httpTemplate.get("/v1/namespaces/{namespaceId}")
@@ -47,9 +38,7 @@ internal class NamespaceGetControllerTest : NamespaceBaseControllerTest() {
 
         with(getNamespaceResponse.result(ApiNamespace::class)) {
             assertThat(id, equalTo(namespaceId))
-            assertThat(type, equalTo(NamespaceType.default))
             assertThat(name, equalTo(NamespaceName("namespace-one")))
-            assertThat(inputs, equalTo(NamespaceInputs(HotObject.builder().set("hamal", "rocks").build())))
         }
     }
 }

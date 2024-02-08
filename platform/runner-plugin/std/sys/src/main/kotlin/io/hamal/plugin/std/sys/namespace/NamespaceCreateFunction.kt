@@ -1,9 +1,7 @@
 package io.hamal.plugin.std.sys.namespace
 
-import io.hamal.lib.domain.vo.NamespaceInputs
-import io.hamal.lib.domain.vo.NamespaceName
-import io.hamal.lib.domain.vo.NamespaceType
 import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -22,20 +20,9 @@ class NamespaceCreateFunction(
 ) {
     override fun invoke(ctx: FunctionContext, arg1: KuaMap): Pair<KuaError?, KuaMap?> {
 
-        val type = if (arg1.findString("type") != null) {
-            NamespaceType(arg1.getString("type"))
-        } else {
-            null
-        }
-
         return try {
             val res = sdk.namespace.create(
-                ctx[GroupId::class],
-                ApiNamespaceCreateRequest(
-                    name = NamespaceName(arg1.getString("name")),
-                    inputs = NamespaceInputs(),
-                    type = type
-                )
+                ctx[GroupId::class], ApiNamespaceCreateRequest(NamespaceName(arg1.getString("name")))
             )
 
             null to KuaMap(

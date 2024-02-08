@@ -2,8 +2,8 @@ package io.hamal.api.http.controller.namespace
 
 import io.hamal.core.adapter.NamespaceListPort
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.sdk.api.ApiNamespaceList
 import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
 import org.springframework.http.ResponseEntity
@@ -31,8 +31,7 @@ internal class NamespaceListController(private val listNamespace: NamespaceListP
                 namespaces.map {
                     ApiNamespaceList.Namespace(
                         id = it.id,
-                        name = it.name,
-                        type = it.type
+                        name = it.name
                     )
                 }
             ))

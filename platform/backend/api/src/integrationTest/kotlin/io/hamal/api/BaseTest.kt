@@ -199,8 +199,7 @@ internal abstract class BaseTest {
                 id = CmdId(1),
                 namespaceId = NamespaceId.root,
                 groupId = testGroup.id,
-                name = NamespaceName("hamal"),
-                inputs = NamespaceInputs()
+                name = NamespaceName("hamal")
             )
         )
     }

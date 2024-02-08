@@ -1,12 +1,13 @@
 package io.hamal.lib.domain.request
 
 import io.hamal.lib.domain._enum.RequestStatus
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.NamespaceName
+import io.hamal.lib.domain.vo.RequestId
 
 interface NamespaceCreateRequest {
     val name: NamespaceName
-    val inputs: NamespaceInputs
-    val type: NamespaceType?
 }
 
 data class NamespaceCreateRequested(
@@ -14,14 +15,11 @@ data class NamespaceCreateRequested(
     override var status: RequestStatus,
     val groupId: GroupId,
     val namespaceId: NamespaceId,
-    val name: NamespaceName,
-    val inputs: NamespaceInputs,
-    val namespaceType: NamespaceType
+    val name: NamespaceName
 ) : Requested()
 
 interface NamespaceUpdateRequest {
     val name: NamespaceName
-    val inputs: NamespaceInputs
 }
 
 
@@ -30,6 +28,5 @@ data class NamespaceUpdateRequested(
     override var status: RequestStatus,
     val groupId: GroupId,
     val namespaceId: NamespaceId,
-    val name: NamespaceName,
-    val inputs: NamespaceInputs
+    val name: NamespaceName
 ) : Requested()

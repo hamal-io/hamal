@@ -42,8 +42,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
                 id = CmdId(2),
                 namespaceId = NamespaceId(2),
                 groupId = testGroup.id,
-                name = NamespaceName("createdNamespace"),
-                inputs = NamespaceInputs()
+                name = NamespaceName("createdNamespace")
             )
         )
 
@@ -204,8 +203,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
                 id = CmdGen(),
                 namespaceId = NamespaceId(2),
                 groupId = testGroup.id,
-                name = NamespaceName("createdNamespace"),
-                inputs = NamespaceInputs()
+                name = NamespaceName("createdNamespace")
             )
         )
 

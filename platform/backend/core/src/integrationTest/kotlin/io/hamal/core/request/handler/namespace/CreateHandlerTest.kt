@@ -1,10 +1,11 @@
 package io.hamal.core.request.handler.namespace
 
 import io.hamal.core.request.handler.BaseReqHandlerTest
-import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain.request.NamespaceCreateRequested
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.NamespaceName
+import io.hamal.lib.domain.vo.RequestId
 import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -38,9 +39,7 @@ internal class NamespaceCreateHandlerTest : BaseReqHandlerTest() {
                 status = Submitted,
                 namespaceId = NamespaceId(12345),
                 groupId = testGroup.id,
-                name = NamespaceName("another-namespace"),
-                inputs = NamespaceInputs(),
-                namespaceType = NamespaceType.default
+                name = NamespaceName("another-namespace")
             )
         )
 
@@ -55,17 +54,13 @@ internal class NamespaceCreateHandlerTest : BaseReqHandlerTest() {
                 status = Submitted,
                 namespaceId = NamespaceId(12345),
                 groupId = testGroup.id,
-                name = NamespaceName("awesome-namespace"),
-                inputs = NamespaceInputs(HotObject.builder().set("hamal", "rocks").build()),
-                namespaceType = NamespaceType("VerySpecialNamespaceType")
+                name = NamespaceName("awesome-namespace")
             )
         )
 
         with(namespaceQueryRepository.get(NamespaceId(12345))) {
             assertThat(id, equalTo(NamespaceId(12345)))
             assertThat(name, equalTo(NamespaceName("awesome-namespace")))
-            assertThat(inputs, equalTo(NamespaceInputs(HotObject.builder().set("hamal", "rocks").build())))
-            assertThat(type, equalTo(NamespaceType("VerySpecialNamespaceType")))
         }
 
         assertThat(namespaceQueryRepository.list(NamespaceQuery(groupIds = listOf())), hasSize(1))
@@ -79,8 +74,6 @@ internal class NamespaceCreateHandlerTest : BaseReqHandlerTest() {
             with(namespaces.first()) {
                 assertThat(id, equalTo(NamespaceId(12345)))
                 assertThat(name, equalTo(NamespaceName("awesome-namespace")))
-                assertThat(inputs, equalTo(NamespaceInputs(HotObject.builder().set("hamal", "rocks").build())))
-                assertThat(type, equalTo(NamespaceType.default))
             }
         }
     }
@@ -94,11 +87,7 @@ internal class NamespaceCreateHandlerTest : BaseReqHandlerTest() {
             status = Submitted,
             namespaceId = NamespaceId(12345),
             groupId = testGroup.id,
-            name = NamespaceName("awesome-namespace"),
-            inputs = NamespaceInputs(
-                HotObject.builder().set("hamal", "rocks").build()
-            ),
-            namespaceType = NamespaceType.default
+            name = NamespaceName("awesome-namespace")
         )
     }
 }

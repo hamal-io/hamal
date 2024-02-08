@@ -59,17 +59,10 @@ internal sealed class EndpointBaseControllerTest : BaseControllerTest() {
     fun createNamespace(
         name: NamespaceName,
         groupId: GroupId,
-        type: NamespaceType = NamespaceType.default
     ): ApiNamespaceCreateRequested {
         val response = httpTemplate.post("/v1/groups/{groupId}/namespaces")
             .path("groupId", groupId)
-            .body(
-                ApiNamespaceCreateRequest(
-                    name = name,
-                    type = type,
-                    inputs = NamespaceInputs()
-                )
-            )
+            .body(ApiNamespaceCreateRequest(name))
             .execute()
 
         assertThat(response.statusCode, equalTo(Accepted))

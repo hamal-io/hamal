@@ -1,8 +1,6 @@
 package io.hamal.api.http.controller.namespace
 
-import io.hamal.lib.domain.vo.NamespaceInputs
 import io.hamal.lib.domain.vo.NamespaceName
-import io.hamal.lib.domain.vo.NamespaceType
 import io.hamal.lib.sdk.api.ApiNamespaceCreateRequest
 import io.hamal.lib.sdk.api.ApiNamespaceList
 import org.hamcrest.MatcherAssert.assertThat
@@ -18,21 +16,13 @@ internal class NamespaceListControllerTest : NamespaceBaseControllerTest() {
 
         with(result.namespaces.first()) {
             assertThat(name, equalTo(NamespaceName("hamal")))
-            assertThat(type, equalTo(NamespaceType.default))
         }
     }
 
     @Test
     fun `Single namespace`() {
         val namespaceId = awaitCompleted(
-            createNamespace(
-                ApiNamespaceCreateRequest(
-                    name = NamespaceName("namespace-one"),
-                    inputs = NamespaceInputs(),
-                    type = NamespaceType.default
-
-                )
-            )
+            createNamespace(ApiNamespaceCreateRequest(NamespaceName("namespace-one")))
         ).namespaceId
 
         with(listNamespaces()) {
@@ -40,7 +30,6 @@ internal class NamespaceListControllerTest : NamespaceBaseControllerTest() {
             with(namespaces.first()) {
                 assertThat(id, equalTo(namespaceId))
                 assertThat(name, equalTo(NamespaceName("namespace-one")))
-                assertThat(type, equalTo(NamespaceType.default))
             }
         }
     }
@@ -51,9 +40,7 @@ internal class NamespaceListControllerTest : NamespaceBaseControllerTest() {
             IntRange(0, 20).map {
                 createNamespace(
                     ApiNamespaceCreateRequest(
-                        name = NamespaceName("namespace-$it"),
-                        inputs = NamespaceInputs(),
-                        type = NamespaceType.default
+                        name = NamespaceName("namespace-$it")
                     )
                 )
             }
@@ -76,9 +63,7 @@ internal class NamespaceListControllerTest : NamespaceBaseControllerTest() {
         val requests = IntRange(0, 99).map {
             createNamespace(
                 ApiNamespaceCreateRequest(
-                    name = NamespaceName("namespace-$it"),
-                    inputs = NamespaceInputs(),
-                    type = NamespaceType.default
+                    name = NamespaceName("namespace-$it")
                 )
             )
         }

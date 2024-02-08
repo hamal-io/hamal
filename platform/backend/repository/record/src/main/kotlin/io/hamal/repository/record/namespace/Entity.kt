@@ -1,7 +1,9 @@
 package io.hamal.repository.record.namespace
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.repository.api.Namespace
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordEntity
@@ -14,10 +16,8 @@ data class NamespaceEntity(
     override val recordedAt: RecordedAt,
     override val sequence: RecordSequence,
     val groupId: GroupId,
+    var name: NamespaceName? = null
 
-    var name: NamespaceName? = null,
-    var inputs: NamespaceInputs? = null,
-    val type: NamespaceType,
 ) : RecordEntity<NamespaceId, NamespaceRecord, Namespace> {
 
     override fun apply(rec: NamespaceRecord): NamespaceEntity {
@@ -26,9 +26,7 @@ data class NamespaceEntity(
                 id = rec.entityId,
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
-                type = rec.type,
                 name = rec.name,
-                inputs = rec.inputs,
                 recordedAt = rec.recordedAt()
             )
 
@@ -37,7 +35,6 @@ data class NamespaceEntity(
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
                 name = rec.name,
-                inputs = rec.inputs,
                 recordedAt = rec.recordedAt()
             )
         }
@@ -49,9 +46,7 @@ data class NamespaceEntity(
             id = id,
             updatedAt = recordedAt.toUpdatedAt(),
             groupId = groupId,
-            type = type,
-            name = name!!,
-            inputs = inputs!!,
+            name = name!!
         )
     }
 }
@@ -65,7 +60,6 @@ fun List<NamespaceRecord>.createEntity(): NamespaceEntity {
         id = firstRecord.entityId,
         groupId = firstRecord.groupId,
         cmdId = firstRecord.cmdId,
-        type = firstRecord.type,
         sequence = firstRecord.sequence(),
         recordedAt = firstRecord.recordedAt()
     )

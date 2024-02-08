@@ -1,10 +1,9 @@
 package io.hamal.api.http.controller.hook
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.vo.NamespaceId
-import io.hamal.lib.domain.vo.NamespaceInputs
-import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.domain.vo.HookName
+import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.NotFound
@@ -12,8 +11,8 @@ import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiError
 import io.hamal.lib.sdk.api.ApiHookCreateRequest
-import io.hamal.lib.sdk.api.ApiHookUpdateRequested
 import io.hamal.lib.sdk.api.ApiHookUpdateRequest
+import io.hamal.lib.sdk.api.ApiHookUpdateRequested
 import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -41,8 +40,7 @@ internal class HookUpdateControllerTest : HookBaseControllerTest() {
                 id = CmdId(2),
                 namespaceId = NamespaceId(2),
                 groupId = testGroup.id,
-                name = NamespaceName("createdNamespace"),
-                inputs = NamespaceInputs()
+                name = NamespaceName("createdNamespace")
             )
         )
 
@@ -77,8 +75,7 @@ internal class HookUpdateControllerTest : HookBaseControllerTest() {
                 id = CmdId(2),
                 namespaceId = NamespaceId(2),
                 groupId = testGroup.id,
-                name = NamespaceName("createdNamespace"),
-                inputs = NamespaceInputs()
+                name = NamespaceName("createdNamespace")
             )
         )
 

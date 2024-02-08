@@ -1,10 +1,9 @@
 package io.hamal.api.http.controller.hook
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.vo.NamespaceId
-import io.hamal.lib.domain.vo.NamespaceInputs
-import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.domain.vo.HookName
+import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.body
@@ -46,8 +45,7 @@ internal class HookCreateControllerTest : HookBaseControllerTest() {
                 id = CmdId(1),
                 namespaceId = NamespaceId(2345),
                 groupId = testGroup.id,
-                name = NamespaceName("hamal::namespace"),
-                inputs = NamespaceInputs()
+                name = NamespaceName("hamal::namespace")
             )
         )
 

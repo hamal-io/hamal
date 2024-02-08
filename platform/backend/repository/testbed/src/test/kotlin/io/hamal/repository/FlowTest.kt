@@ -3,8 +3,9 @@ package io.hamal.repository
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.common.hot.HotObject
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
 import io.hamal.repository.api.NamespaceCmdRepository.UpdateCmd
 import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
@@ -32,16 +33,13 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
                     namespaceId = NamespaceId(234),
                     groupId = GroupId(1),
                     name = NamespaceName("SomeNamespace"),
-                    inputs = NamespaceInputs(HotObject.builder().set("hamal", "rocks").build())
                 )
             )
 
             with(result) {
                 assertThat(id, equalTo(NamespaceId(234)))
                 assertThat(groupId, equalTo(GroupId(1)))
-                assertThat(type, equalTo(NamespaceType.default))
                 assertThat(name, equalTo(NamespaceName("SomeNamespace")))
-                assertThat(inputs, equalTo(NamespaceInputs(HotObject.builder().set("hamal", "rocks").build())))
             }
 
             verifyCount(1)
@@ -55,18 +53,14 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
                     namespaceId = NamespaceId(234),
                     groupId = GroupId(1),
                     name = NamespaceName("SomeNamespace"),
-                    inputs = NamespaceInputs(HotObject.builder().set("hamal", "rocks").build()),
-                    type = NamespaceType("SpecialNamespaceType")
 
-                )
+                    )
             )
 
             with(result) {
                 assertThat(id, equalTo(NamespaceId(234)))
                 assertThat(groupId, equalTo(GroupId(1)))
-                assertThat(type, equalTo(NamespaceType("SpecialNamespaceType")))
                 assertThat(name, equalTo(NamespaceName("SomeNamespace")))
-                assertThat(inputs, equalTo(NamespaceInputs(HotObject.builder().set("hamal", "rocks").build())))
             }
 
             verifyCount(1)
@@ -88,8 +82,7 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
                             id = CmdId(2),
                             namespaceId = NamespaceId(4),
                             groupId = GroupId(3),
-                            name = NamespaceName("first-namespace-name"),
-                            inputs = NamespaceInputs(),
+                            name = NamespaceName("first-namespace-name")
                         )
                     )
                 }
@@ -120,8 +113,7 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
                         id = CmdId(23456),
                         namespaceId = NamespaceId(5),
                         groupId = GroupId(333),
-                        name = NamespaceName("second-namespace-name"),
-                        inputs = NamespaceInputs(),
+                        name = NamespaceName("second-namespace-name")
                     )
                 )
 
@@ -129,7 +121,6 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
                     assertThat(id, equalTo(NamespaceId(5)))
                     assertThat(groupId, equalTo(GroupId(3)))
                     assertThat(name, equalTo(NamespaceName("first-namespace-name")))
-                    assertThat(inputs, equalTo(NamespaceInputs(HotObject.builder().set("hamal", "rocks").build())))
                 }
 
                 verifyCount(1)
@@ -150,8 +141,7 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
             val result = update(
                 NamespaceId(1), UpdateCmd(
                     id = CmdId(2),
-                    name = NamespaceName("Updated"),
-                    inputs = NamespaceInputs(HotObject.builder().set("answer", 42).build()),
+                    name = NamespaceName("Updated")
                 )
             )
 
@@ -159,7 +149,6 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
                 assertThat(id, equalTo(NamespaceId(1)))
                 assertThat(groupId, equalTo(GroupId(3)))
                 assertThat(name, equalTo(NamespaceName("Updated")))
-                assertThat(inputs, equalTo(NamespaceInputs(HotObject.builder().set("answer", 42).build())))
             }
 
             verifyCount(1)
@@ -176,8 +165,7 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
             val result = update(
                 NamespaceId(1), UpdateCmd(
                     id = CmdId(2),
-                    name = null,
-                    inputs = null,
+                    name = null
                 )
             )
 
@@ -185,7 +173,6 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
                 assertThat(id, equalTo(NamespaceId(1)))
                 assertThat(groupId, equalTo(GroupId(3)))
                 assertThat(name, equalTo(NamespaceName("namespace-name")))
-                assertThat(inputs, equalTo(NamespaceInputs(HotObject.builder().set("hamal", "rocks").build())))
             }
 
             verifyCount(1)
@@ -237,7 +224,6 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
                 assertThat(id, equalTo(NamespaceId(1)))
                 assertThat(groupId, equalTo(GroupId(3)))
                 assertThat(name, equalTo(NamespaceName("SomeNamespace")))
-                assertThat(inputs, equalTo(NamespaceInputs(HotObject.builder().set("hamal", "rocks").build())))
             }
         }
 
@@ -270,7 +256,6 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
                 assertThat(id, equalTo(NamespaceId(1)))
                 assertThat(groupId, equalTo(GroupId(3)))
                 assertThat(name, equalTo(NamespaceName("SomeNamespace")))
-                assertThat(inputs, equalTo(NamespaceInputs(HotObject.builder().set("hamal", "rocks").build())))
             }
         }
 
@@ -301,7 +286,6 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
                 assertThat(id, equalTo(NamespaceId(3)))
                 assertThat(groupId, equalTo(GroupId(4)))
                 assertThat(name, equalTo(NamespaceName("Namespace-Three")))
-                assertThat(type, equalTo(NamespaceType.default))
             }
         }
 
@@ -322,14 +306,12 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
                 assertThat(id, equalTo(NamespaceId(4)))
                 assertThat(groupId, equalTo(GroupId(5)))
                 assertThat(name, equalTo(NamespaceName("Namespace-Four")))
-                assertThat(type, equalTo(NamespaceType.default))
             }
 
             with(result[1]) {
                 assertThat(id, equalTo(NamespaceId(3)))
                 assertThat(groupId, equalTo(GroupId(4)))
                 assertThat(name, equalTo(NamespaceName("Namespace-Three")))
-                assertThat(type, equalTo(NamespaceType.default))
             }
         }
 
@@ -406,8 +388,7 @@ private fun NamespaceRepository.createNamespace(
             id = cmdId,
             namespaceId = namespaceId,
             groupId = groupId,
-            name = name,
-            inputs = NamespaceInputs(HotObject.builder().set("hamal", "rocks").build())
+            name = name
         )
     )
 }

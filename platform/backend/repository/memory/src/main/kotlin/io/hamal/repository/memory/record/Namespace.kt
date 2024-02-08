@@ -83,9 +83,7 @@ class NamespaceMemoryRepository : RecordMemoryRepository<NamespaceId, NamespaceR
                         cmdId = cmd.id,
                         entityId = namespaceId,
                         groupId = cmd.groupId,
-                        type = cmd.type!!,
-                        name = cmd.name,
-                        inputs = cmd.inputs,
+                        name = cmd.name
                     )
                 )
                 (currentVersion(namespaceId)).also(NamespaceCurrentProjection::apply)
@@ -103,8 +101,7 @@ class NamespaceMemoryRepository : RecordMemoryRepository<NamespaceId, NamespaceR
                     NamespaceUpdatedRecord(
                         entityId = namespaceId,
                         cmdId = cmd.id,
-                        name = cmd.name ?: current.name,
-                        inputs = cmd.inputs ?: current.inputs,
+                        name = cmd.name ?: current.name
                     )
                 )
                 (currentVersion(namespaceId)).also(NamespaceCurrentProjection::apply)

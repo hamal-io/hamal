@@ -2,16 +2,16 @@ package io.hamal.repository.api
 
 import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.NamespaceName
 
 data class Namespace(
     val cmdId: CmdId,
     override val id: NamespaceId,
     override val updatedAt: UpdatedAt,
     val groupId: GroupId,
-    val type: NamespaceType,
-    val name: NamespaceName,
-    val inputs: NamespaceInputs
+    val name: NamespaceName
 ) : DomainObject<NamespaceId>
 
 
@@ -26,15 +26,12 @@ interface NamespaceCmdRepository : CmdRepository {
         val id: CmdId,
         val namespaceId: NamespaceId,
         val groupId: GroupId,
-        val type: NamespaceType? = NamespaceType.default,
-        val name: NamespaceName,
-        val inputs: NamespaceInputs
+        val name: NamespaceName
     )
 
     data class UpdateCmd(
         val id: CmdId,
-        val name: NamespaceName? = null,
-        val inputs: NamespaceInputs? = null
+        val name: NamespaceName? = null
     )
 }
 

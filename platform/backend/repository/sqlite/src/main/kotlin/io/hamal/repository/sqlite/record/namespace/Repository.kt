@@ -28,7 +28,6 @@ internal object CreateNamespace : CreateDomainObject<NamespaceId, NamespaceRecor
             id = firstRecord.entityId,
             groupId = firstRecord.groupId,
             sequence = firstRecord.sequence(),
-            type = firstRecord.type,
             recordedAt = firstRecord.recordedAt()
         )
 
@@ -67,9 +66,7 @@ class NamespacesqliteRepository(
                         cmdId = cmdId,
                         entityId = namespaceId,
                         groupId = cmd.groupId,
-                        type = cmd.type!!,
-                        name = cmd.name,
-                        inputs = cmd.inputs,
+                        name = cmd.name
                     )
                 )
 
@@ -91,8 +88,7 @@ class NamespacesqliteRepository(
                     NamespaceUpdatedRecord(
                         entityId = namespaceId,
                         cmdId = cmdId,
-                        name = cmd.name ?: current.name,
-                        inputs = cmd.inputs ?: current.inputs,
+                        name = cmd.name ?: current.name
                     )
                 )
                 currentVersion(namespaceId)

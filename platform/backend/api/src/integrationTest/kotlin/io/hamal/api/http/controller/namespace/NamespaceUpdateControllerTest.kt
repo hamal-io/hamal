@@ -1,9 +1,6 @@
 package io.hamal.api.http.controller.namespace
 
-import io.hamal.lib.common.hot.HotObject
-import io.hamal.lib.domain.vo.NamespaceInputs
 import io.hamal.lib.domain.vo.NamespaceName
-import io.hamal.lib.domain.vo.NamespaceType
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.NotFound
@@ -23,10 +20,7 @@ internal class NamespaceUpdateControllerTest : NamespaceBaseControllerTest() {
     fun `Tries to update namespace which does not exists`() {
         val getNamespaceResponse = httpTemplate.patch("/v1/namespaces/33333333")
             .body(
-                ApiNamespaceUpdateRequest(
-                    name = NamespaceName("update"),
-                    inputs = NamespaceInputs(),
-                )
+                ApiNamespaceUpdateRequest(NamespaceName("update"))
             )
             .execute()
 
@@ -41,22 +35,13 @@ internal class NamespaceUpdateControllerTest : NamespaceBaseControllerTest() {
     fun `Updates namespace`() {
         val namespace = awaitCompleted(
             createNamespace(
-                ApiNamespaceCreateRequest(
-                    name = NamespaceName("created-name"),
-                    inputs = NamespaceInputs(HotObject.builder().set("hamal", "createdInputs").build()),
-                    type = NamespaceType.default
-                )
+                ApiNamespaceCreateRequest(NamespaceName("created-name"))
             )
         )
 
         val updateNamespaceResponse = httpTemplate.patch("/v1/namespaces/{namespaceId}")
             .path("namespaceId", namespace.namespaceId)
-            .body(
-                ApiNamespaceUpdateRequest(
-                    name = NamespaceName("updated-name"),
-                    inputs = NamespaceInputs(HotObject.builder().set("hamal", "updatedInputs").build())
-                )
-            )
+            .body(ApiNamespaceUpdateRequest(NamespaceName("updated-name")))
             .execute()
         assertThat(updateNamespaceResponse.statusCode, equalTo(Accepted))
         require(updateNamespaceResponse is HttpSuccessResponse) { "request was not successful" }
@@ -67,8 +52,7 @@ internal class NamespaceUpdateControllerTest : NamespaceBaseControllerTest() {
         with(getNamespace(namespaceId)) {
             assertThat(id, equalTo(namespaceId))
             assertThat(name, equalTo(NamespaceName("updated-name")))
-            assertThat(inputs, equalTo(NamespaceInputs(HotObject.builder().set("hamal", "updatedInputs").build())))
-            assertThat(type, equalTo(NamespaceType.default))
         }
     }
+
 }

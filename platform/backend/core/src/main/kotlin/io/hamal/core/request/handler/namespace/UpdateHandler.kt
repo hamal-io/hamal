@@ -26,8 +26,7 @@ private fun NamespaceUpdateHandler.updateNamespace(req: NamespaceUpdateRequested
         req.namespaceId,
         NamespaceCmdRepository.UpdateCmd(
             id = req.cmdId(),
-            name = req.name,
-            inputs = req.inputs,
+            name = req.name
         )
     )
 }

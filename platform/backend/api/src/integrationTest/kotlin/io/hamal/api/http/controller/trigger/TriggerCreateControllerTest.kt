@@ -63,8 +63,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
                 id = CmdId(1),
                 namespaceId = NamespaceId(2345),
                 groupId = testGroup.id,
-                name = NamespaceName("hamal::namespace"),
-                inputs = NamespaceInputs()
+                name = NamespaceName("hamal::namespace")
             )
         )
 

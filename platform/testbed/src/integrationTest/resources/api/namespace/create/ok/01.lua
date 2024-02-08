@@ -2,7 +2,7 @@ sys = require_plugin('sys')
 
 err, namespaces = sys.namespaces.list()
 assert(err == nil)
--- hamal as default namespace
+-- default as default namespace
 assert(#namespaces == 1)
 
 err, namespace = sys.namespaces.create({

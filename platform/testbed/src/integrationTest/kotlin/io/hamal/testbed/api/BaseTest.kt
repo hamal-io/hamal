@@ -149,8 +149,7 @@ class ClearController {
                 id = CmdId(5),
                 namespaceId = NamespaceId.root,
                 groupId = testGroup.id,
-                name = NamespaceName("root-namespace"),
-                inputs = NamespaceInputs()
+                name = NamespaceName("root-namespace")
             )
         )
     }
@@ -256,8 +255,7 @@ class TestConfig {
                     id = CmdId(5),
                     namespaceId = NamespaceId.root,
                     groupId = testGroup.id,
-                    name = NamespaceName("root-namespace"),
-                    inputs = NamespaceInputs()
+                    name = NamespaceName("root-namespace")
                 )
             )
         } catch (ignored: Throwable) {

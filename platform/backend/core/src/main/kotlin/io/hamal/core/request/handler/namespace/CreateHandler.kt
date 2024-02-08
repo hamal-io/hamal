@@ -35,9 +35,7 @@ private fun NamespaceCreateHandler.createNamespace(req: NamespaceCreateRequested
             id = req.cmdId(),
             namespaceId = req.namespaceId,
             groupId = req.groupId,
-            type = req.namespaceType,
-            name = req.name,
-            inputs = req.inputs
+            name = req.name
         )
     )
 }

@@ -3,15 +3,16 @@ package io.hamal.lib.sdk.api
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.NamespaceCreateRequest
 import io.hamal.lib.domain.request.NamespaceUpdateRequest
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.NamespaceName
+import io.hamal.lib.domain.vo.RequestId
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.fold
 
 data class ApiNamespaceCreateRequest(
-    override val name: NamespaceName,
-    override val inputs: NamespaceInputs,
-    override val type: NamespaceType? = null
+    override val name: NamespaceName
 ) : NamespaceCreateRequest
 
 data class ApiNamespaceCreateRequested(
@@ -23,7 +24,6 @@ data class ApiNamespaceCreateRequested(
 
 data class ApiNamespaceUpdateRequest(
     override val name: NamespaceName,
-    override val inputs: NamespaceInputs,
 ) : NamespaceUpdateRequest
 
 data class ApiNamespaceUpdateRequested(
@@ -36,7 +36,6 @@ data class ApiNamespaceList(
     val namespaces: List<Namespace>
 ) : ApiObject() {
     data class Namespace(
-        val type: NamespaceType,
         val id: NamespaceId,
         val name: NamespaceName
     )
@@ -44,20 +43,18 @@ data class ApiNamespaceList(
 
 data class ApiNamespace(
     val id: NamespaceId,
-    val type: NamespaceType,
     val name: NamespaceName,
-    val inputs: NamespaceInputs
 ) : ApiObject()
 
-interface ApiNamespaceservice {
+interface ApiNamespaceService {
     fun create(groupId: GroupId, createNamespaceReq: ApiNamespaceCreateRequest): ApiNamespaceCreateRequested
     fun list(groupId: GroupId): List<ApiNamespaceList.Namespace>
     fun get(namespaceId: NamespaceId): ApiNamespace
 }
 
-internal class ApiNamespaceserviceImpl(
+internal class ApiNamespaceServiceImpl(
     private val template: HttpTemplate
-) : ApiNamespaceservice {
+) : ApiNamespaceService {
 
     override fun create(groupId: GroupId, createNamespaceReq: ApiNamespaceCreateRequest): ApiNamespaceCreateRequested =
         template.post("/v1/groups/{groupId}/namespaces")

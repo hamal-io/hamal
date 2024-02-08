@@ -176,8 +176,7 @@ internal abstract class BaseTest {
                 id = CmdId(1),
                 namespaceId = generateDomainId(::NamespaceId),
                 groupId = testGroup.id,
-                name = NamespaceName("hamal"),
-                inputs = NamespaceInputs()
+                name = NamespaceName("hamal")
             )
         )
 

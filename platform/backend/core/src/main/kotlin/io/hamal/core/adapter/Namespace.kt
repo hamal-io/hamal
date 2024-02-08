@@ -6,9 +6,8 @@ import io.hamal.lib.domain.request.NamespaceCreateRequest
 import io.hamal.lib.domain.request.NamespaceCreateRequested
 import io.hamal.lib.domain.request.NamespaceUpdateRequest
 import io.hamal.lib.domain.request.NamespaceUpdateRequested
-import io.hamal.lib.domain.vo.NamespaceId
-import io.hamal.lib.domain.vo.NamespaceType
 import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.RequestId
 import io.hamal.repository.api.Namespace
 import io.hamal.repository.api.NamespaceQueryRepository
@@ -60,9 +59,7 @@ class NamespaceAdapter(
             status = RequestStatus.Submitted,
             namespaceId = generateDomainId(::NamespaceId),
             groupId = groupId,
-            namespaceType = req.type ?: NamespaceType.default,
             name = req.name,
-            inputs = req.inputs
         ).also(reqCmdRepository::queue).let(responseHandler)
     }
 
@@ -85,7 +82,6 @@ class NamespaceAdapter(
             groupId = namespaceQueryRepository.get(namespaceId).groupId,
             namespaceId = namespaceId,
             name = req.name,
-            inputs = req.inputs
         ).also(reqCmdRepository::queue).let(responseHandler)
     }
 

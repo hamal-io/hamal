@@ -20,9 +20,7 @@ internal class NamespaceGetController(
             ResponseEntity.ok(
                 ApiNamespace(
                     id = namespace.id,
-                    name = namespace.name,
-                    inputs = namespace.inputs,
-                    type = namespace.type
+                    name = namespace.name
                 )
             )
         }
