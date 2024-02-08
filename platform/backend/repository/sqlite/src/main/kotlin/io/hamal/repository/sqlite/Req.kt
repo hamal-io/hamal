@@ -1,6 +1,7 @@
 package io.hamal.repository.sqlite
 
 import io.hamal.lib.common.domain.Count
+import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.Requested
 import io.hamal.lib.domain.vo.RequestId
 import io.hamal.lib.sqlite.Connection
@@ -68,8 +69,8 @@ class RequestSqliteRepository(
         connection.executeQuery<Unit>(
             """
                 BEGIN TRANSACTION;
-                INSERT INTO queue (id) VALUES (:id);
-                INSERT INTO store (id, data) VALUES (:id, :data);
+                INSERT OR REPLACE INTO queue (id) VALUES (:id);
+                INSERT OR REPLACE INTO store (id, data) VALUES (:id, :data);
                 COMMIT;
             """.trimIndent()
         ) {
@@ -77,14 +78,6 @@ class RequestSqliteRepository(
                 set("id", req.id)
                 set("data", json.serialize(req))
             }
-        }
-    }
-
-    private fun ids(reqIds: List<RequestId>): String {
-        return if (reqIds.isEmpty()) {
-            ""
-        } else {
-            "AND id IN (${reqIds.joinToString(",") { "${it.value.value}" }})"
         }
     }
 
@@ -107,23 +100,12 @@ class RequestSqliteRepository(
         )
 
         connection.tx {
-            execute(
-                """
-            DELETE FROM queue WHERE $reqIds;
-            """.trimIndent()
-            )
+            execute(" DELETE FROM queue WHERE $reqIds;")
         }
 
 
         return connection.executeQuery<Requested>(
-            """
-                SELECT
-                    data
-                FROM
-                    store
-                WHERE
-                    $reqIds
-            """.trimIndent()
+            "SELECT data FROM store WHERE $reqIds"
         ) {
             map { rs -> json.decompressAndDeserialize(Requested::class, rs.getBytes("data")) }
         }
@@ -131,20 +113,34 @@ class RequestSqliteRepository(
     }
 
     override fun complete(reqId: RequestId) {
-        TODO("Not yet implemented")
+        val req = get(reqId)
+        check(req.status == RequestStatus.Submitted) { "Req not submitted" }
+        connection.executeUpdate(
+            "UPDATE store SET data = (:data) WHERE id = (:id);"
+        ) {
+            set("data", json.serialize(req.apply { status = RequestStatus.Completed }))
+            set("id", reqId)
+        }
     }
 
     override fun fail(reqId: RequestId) {
-        TODO("Not yet implemented")
+        val req = get(reqId)
+        check(req.status == RequestStatus.Submitted) { "Req not submitted" }
+        connection.executeUpdate(
+            "UPDATE store SET data = (:data) WHERE id = (:id);"
+        ) {
+            set("data", json.serialize(req.apply { status = RequestStatus.Failed }))
+            set("id", reqId)
+        }
     }
 
     override fun close() {
-        TODO("Not yet implemented")
+
     }
 
     override fun find(reqId: RequestId): Requested? {
         return connection.executeQueryOne(
-            """" SELECT * FROM store WHERE id = :id;""".trimIndent()
+            "SELECT * FROM store WHERE id = :id;"
         ) {
             query {
                 set("id", reqId)
@@ -156,11 +152,58 @@ class RequestSqliteRepository(
     }
 
     override fun list(query: ReqQuery): List<Requested> {
-        TODO("Not yet implemented")
+        return connection.executeQuery<Requested>(
+            """
+                SELECT
+                    data
+                FROM
+                    store
+                WHERE
+                    id < :afterId
+                ORDER BY id DESC
+                LIMIT :limit  
+            """.trimIndent()
+        ) {
+            query {
+                set("afterId", query.afterId)
+                set("limit", query.limit)
+            }
+            map { rs ->
+                json.decompressAndDeserialize(Requested::class, rs.getBytes("data"))
+            }
+        }
     }
 
     override fun count(query: ReqQuery): Count {
-        TODO("Not yet implemented")
+        return Count(connection.executeQueryOne(
+            """
+                SELECT
+                    COUNT(*) as count
+                FROM
+                    store
+                WHERE
+                    id < :afterId
+                ORDER BY id DESC
+                LIMIT :limit  
+            """.trimIndent()
+        ) {
+            query {
+                set("afterId", query.afterId)
+                set("limit", query.limit)
+            }
+            map {
+                it.getLong("count")
+            }
+        } ?: 0L
+        )
+    }
+
+    private fun ids(reqIds: List<RequestId>): String {
+        return if (reqIds.isEmpty()) {
+            ""
+        } else {
+            "AND id IN (${reqIds.joinToString(",") { "${it.value.value}" }})"
+        }
     }
 
 
