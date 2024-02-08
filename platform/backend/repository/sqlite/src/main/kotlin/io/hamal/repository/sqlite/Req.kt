@@ -92,14 +92,13 @@ class RequestSqliteRepository(
         }.ifEmpty { return emptyList() }
 
 
-        val _ids: String = ids(reqIds)
-
+        val sqlIds = ids(reqIds)
         connection.executeUpdate(
-            "DELETE FROM queue WHERE $_ids"
+            "DELETE FROM queue WHERE $sqlIds"
         )
 
         return connection.executeQuery<Requested>(
-            "SELECT data FROM store WHERE $_ids"
+            "SELECT data FROM store WHERE $sqlIds"
         ) {
             map { rs ->
                 json.decompressAndDeserialize(Requested::class, rs.getBytes("data"))
@@ -166,7 +165,7 @@ class RequestSqliteRepository(
     }
 
     override fun count(query: ReqQuery): Count {
-        val z = connection.executeQueryOne(
+        return Count(connection.executeQueryOne(
             """
             SELECT 
                 COUNT(*) as count 
@@ -182,8 +181,7 @@ class RequestSqliteRepository(
             map {
                 it.getLong("count")
             }
-        } ?: 0L
-        return Count(z)
+        } ?: 0L)
     }
 
     private fun ids(reqIds: List<RequestId>): String {
