@@ -13,12 +13,7 @@ const Authenticated: React.FC<AuthenticatedProps> = (props) => {
         setAuth(null)
         return null
     }
-    return (
-        <main className="flex-col md:flex">
-            <Header/>
-            {props.children}
-        </main>
-    );
+    return (<>{props.children}</>);
 }
 
 export default Authenticated

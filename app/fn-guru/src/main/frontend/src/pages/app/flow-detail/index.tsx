@@ -3,21 +3,21 @@ import {useParams} from "react-router-dom";
 import Sidebar from "@/pages/app/flow-detail/components/sidebar";
 import Authenticated from "@/components/app/authenticated.tsx";
 import {useFlowGet} from "@/hook";
-import {flow} from "@/types";
+import {Flow} from "@/types";
 
 
 type Props = {
     children: ReactNode;
 }
 
-export const flowContext = createContext<flow | null>(null)
+export const flowContext = createContext<Flow | null>(null)
 
-const flowDetailPage: FC<Props> = ({children}) => {
+const FlowDetailPage: FC<Props> = ({children}) => {
     const {flowId} = useParams()
 
-    const [getflow, flow, loading, error] = useFlowGet()
+    const [getFlow, flow, loading, error] = useFlowGet()
     useEffect(() => {
-        getflow(flowId)
+        getFlow(flowId)
     }, [flowId]);
 
     return (
@@ -35,5 +35,5 @@ const flowDetailPage: FC<Props> = ({children}) => {
 }
 
 
-export default flowDetailPage
+export default FlowDetailPage
 
