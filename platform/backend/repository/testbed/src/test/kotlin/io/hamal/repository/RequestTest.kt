@@ -171,7 +171,7 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
     @Nested
     inner class GetTest {
         @TestFactory
-        fun `Get func by id`() = runWith(RequestRepository::class) {
+        fun `Get request by id`() = runWith(RequestRepository::class) {
             createReq(RequestId(1), Submitted)
             with(get(RequestId(1))) {
                 assertThat(status, equalTo(Submitted))
@@ -179,7 +179,7 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
         }
 
         @TestFactory
-        fun `Tries to get func by id but does not exist`() = runWith(RequestRepository::class) {
+        fun `Tries to get request by id but does not exist`() = runWith(RequestRepository::class) {
             createReq(RequestId(1), Submitted)
             val exception = assertThrows<NoSuchElementException> {
                 get(RequestId(111111))
@@ -191,7 +191,7 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
     @Nested
     inner class FindTest {
         @TestFactory
-        fun `Find func by id`() = runWith(RequestRepository::class) {
+        fun `Find request by id`() = runWith(RequestRepository::class) {
             createReq(RequestId(1), Submitted)
             with(find(RequestId(1))!!) {
                 assertThat(status, equalTo(Submitted))
@@ -199,7 +199,7 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
         }
 
         @TestFactory
-        fun `Tries to find func by id but does not exist`() = runWith(RequestRepository::class) {
+        fun `Tries to request func by id but does not exist`() = runWith(RequestRepository::class) {
             createReq(RequestId(1), Submitted)
             val result = find(RequestId(111111))
             assertThat(result, nullValue())

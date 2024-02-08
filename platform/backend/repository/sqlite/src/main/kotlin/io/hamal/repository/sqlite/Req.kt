@@ -18,7 +18,7 @@ class RequestSqliteRepository(
     data class Config(
         override val path: Path
     ) : SqliteBaseRepository.Config {
-        override val filename = "request.db"
+        override val filename = "req.db"
     }
 
 
@@ -34,65 +34,59 @@ class RequestSqliteRepository(
         connection.tx {
             execute(
                 """
-                BEGIN TRANSACTION;
                 CREATE TABLE IF NOT EXISTS store (
                 id INTEGER NOT NULL,
                 data VARCHAR(255) NOT NULL, 
                 PRIMARY KEY (id)
-                );
-                
+                )
+                """.trimIndent()
+            )
+        }
+        connection.tx {
+            execute(
+                """
                 CREATE TABLE IF NOT EXISTS queue (
                 id INTEGER NOT NULL,
                 PRIMARY KEY (id)
-                );
-                
-                COMMIT;
+                )
                 """.trimIndent()
             )
         }
     }
 
     override fun clear() {
-        connection.tx {
-            execute(
-                """
-                BEGIN TRANSACTION;
-                DELETE FROM store;
-                DELETE FROM queue;
-                COMMIT;
-                """.trimIndent()
-            )
-        }
+        connection.tx { execute("DELETE FROM store") }
+        connection.tx { execute("DELETE FROM queue") }
     }
 
     override fun queue(req: Requested) {
-        connection.executeQuery<Unit>(
-            """
-                BEGIN TRANSACTION;
-                INSERT OR REPLACE INTO queue (id) VALUES (:id);
-                INSERT OR REPLACE INTO store (id, data) VALUES (:id, :data);
-                COMMIT;
-            """.trimIndent()
-        ) {
-            query {
-                set("id", req.id)
-                set("data", json.serialize(req))
-            }
+        connection.executeUpdate("INSERT INTO queue (id) VALUES (:id)") {
+            set("id", req.id)
+        }
+
+        connection.executeUpdate("INSERT INTO store (id, data ) VALUES (:id, :data)")
+        {
+            set("id", req.id)
+            set("data", json.serialize(req))
         }
     }
+
 
     override fun next(limit: Int): List<Requested> {
         val reqIds = ids(
             connection.executeQuery<RequestId>(
                 """
-            SELECT 
-                id 
-            FROM 
-                queue 
-            ORDER BY id DESC
-            LIMIT $limit;
-            """.trimIndent()
+                SELECT
+                    id
+                FROM
+                    queue
+                ORDER BY id DESC
+                LIMIT :limit
+                """.trimIndent()
             ) {
+                query {
+                    set("limit", limit)
+                }
                 map { rs ->
                     (RequestId(rs.getInt("id")))
                 }
@@ -100,7 +94,7 @@ class RequestSqliteRepository(
         )
 
         connection.tx {
-            execute(" DELETE FROM queue WHERE $reqIds;")
+            execute(" DELETE FROM queue WHERE $reqIds")
         }
 
 
@@ -116,7 +110,7 @@ class RequestSqliteRepository(
         val req = get(reqId)
         check(req.status == RequestStatus.Submitted) { "Req not submitted" }
         connection.executeUpdate(
-            "UPDATE store SET data = (:data) WHERE id = (:id);"
+            "UPDATE store SET data = (:data) WHERE id = (:id)"
         ) {
             set("data", json.serialize(req.apply { status = RequestStatus.Completed }))
             set("id", reqId)
@@ -127,7 +121,7 @@ class RequestSqliteRepository(
         val req = get(reqId)
         check(req.status == RequestStatus.Submitted) { "Req not submitted" }
         connection.executeUpdate(
-            "UPDATE store SET data = (:data) WHERE id = (:id);"
+            "UPDATE store SET data = (:data) WHERE id = (:id)"
         ) {
             set("data", json.serialize(req.apply { status = RequestStatus.Failed }))
             set("id", reqId)
@@ -140,7 +134,7 @@ class RequestSqliteRepository(
 
     override fun find(reqId: RequestId): Requested? {
         return connection.executeQueryOne(
-            "SELECT * FROM store WHERE id = :id;"
+            "SELECT data FROM store WHERE id = :id"
         ) {
             query {
                 set("id", reqId)
@@ -154,14 +148,14 @@ class RequestSqliteRepository(
     override fun list(query: ReqQuery): List<Requested> {
         return connection.executeQuery<Requested>(
             """
-                SELECT
-                    data
-                FROM
-                    store
-                WHERE
-                    id < :afterId
-                ORDER BY id DESC
-                LIMIT :limit  
+            SELECT
+                data
+            FROM
+                store
+            WHERE
+                id < :afterId
+            ORDER BY id DESC
+            LIMIT :limit
             """.trimIndent()
         ) {
             query {
@@ -175,27 +169,24 @@ class RequestSqliteRepository(
     }
 
     override fun count(query: ReqQuery): Count {
-        return Count(connection.executeQueryOne(
+        val z = connection.executeQueryOne(
             """
-                SELECT
-                    COUNT(*) as count
-                FROM
-                    store
-                WHERE
-                    id < :afterId
-                ORDER BY id DESC
-                LIMIT :limit  
+            SELECT 
+                COUNT(*) as count 
+            FROM 
+                store
+            WHERE
+                id < :afterId
             """.trimIndent()
         ) {
             query {
                 set("afterId", query.afterId)
-                set("limit", query.limit)
             }
             map {
                 it.getLong("count")
             }
         } ?: 0L
-        )
+        return Count(z)
     }
 
     private fun ids(reqIds: List<RequestId>): String {
