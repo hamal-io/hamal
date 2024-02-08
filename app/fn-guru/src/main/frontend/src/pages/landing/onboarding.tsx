@@ -63,7 +63,7 @@ const OnboardingPage: FC = () => {
 
     useEffect(() => {
         if (adhocSubmitted != null) {
-            navigate('/flows', {replace: true})
+            navigate('/groups', {replace: true})
         }
     }, [adhocSubmitted, navigate]);
 

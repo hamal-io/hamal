@@ -94,7 +94,7 @@ export default function <TData, TValue>({columns, data,}: DataTableProps<TData, 
                                     key={row.id}
                                     data-state={row.getIsSelected() && "selected"}
                                     onClick={() => {
-                                        navigate(`/flows/${flow.id}/schedules/${row.original['id']}`)
+                                        navigate(`/groups/${flow.id}/schedules/${row.original['id']}`)
                                     }}
                                 >
                                     {row.getVisibleCells().map((cell) => (

@@ -56,7 +56,7 @@ const CreateEvery: FC<Prop> = ({flow}) => {
     //
     // useEffect(() => {
     //     if (submittedFunc !== null) {
-    //         navigate(`/flows/${flow.id}/functions/${submittedFunc.funcId}`)
+    //         navigate(`/groups/${flow.id}/functions/${submittedFunc.funcId}`)
     //         setOpenDialog(false)
     //
     //     }

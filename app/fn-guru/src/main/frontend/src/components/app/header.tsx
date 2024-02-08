@@ -194,7 +194,7 @@ const Convert = () => {
 
     useEffect(() => {
         if (auth != null && auth.type === 'User') {
-            navigate(`/flows`)
+            navigate(`/groups`)
             setOpenDialog(false)
         }
     }, [auth, navigate]);

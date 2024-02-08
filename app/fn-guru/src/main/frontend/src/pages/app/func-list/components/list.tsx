@@ -7,27 +7,28 @@ import Create from "@/pages/app/func-list/components/create.tsx";
 import {GoToDocumentation} from "@/components/documentation.tsx";
 import {useNavigate} from "react-router-dom";
 import {useFuncList} from "@/hook/func.ts";
-import {FuncListItem} from "@/types";
+import {FuncListItem, Group} from "@/types";
+import {string} from "zod";
 
-type flowProps = {
+type  GroupProps = {
     id: string;
     name: string;
 }
 
 type ListProps = {
-    flow: flowProps
+    group: GroupProps
 }
 
-const List: FC<ListProps> = ({flow}) => {
+const List: FC<ListProps> = ({group}) => {
     const [listFuncs, funcList, loading, error] = useFuncList()
 
     useEffect(() => {
         const abortController = new AbortController();
-        listFuncs(flow.id, abortController)
+        listFuncs(group.id, abortController)
         return () => {
             abortController.abort();
         };
-    }, [flow]);
+    }, [group]);
 
     if (error) return `Error`
     if (funcList == null || loading) return "Loading..."
@@ -36,23 +37,23 @@ const List: FC<ListProps> = ({flow}) => {
         <div className="pt-2 px-2">
             <PageHeader
                 title="Functions"
-                description={`Functions of your flow ${flow.name}`}
-                actions={[<Create flow={flow}/>]}
+                description={`Functions of your group ${group.name}`}
+                actions={[<Create group={group}/>]}
             />
             <Separator className="my-6"/>
             {
-                funcList.funcs.length ? (<Content flowId={flow.id} funcs={funcList.funcs}/>) : (<NoContent flow={flow}/>)
+                funcList.funcs.length ? (<Content groupId={group.id} funcs={funcList.funcs}/>) : (<NoContent group={group}/>)
             }
         </div>
     );
 }
 
 type ContentProps = {
-    flowId: string;
+    groupId: string;
     funcs: FuncListItem[]
 }
 
-const Content: FC<ContentProps> = ({flowId, funcs}) => {
+const Content: FC<ContentProps> = ({groupId, funcs}) => {
     const navigate = useNavigate()
     return (
         <ul className="grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-1 xl:grid-cols-3">
@@ -61,7 +62,7 @@ const Content: FC<ContentProps> = ({flowId, funcs}) => {
                     key={func.id}
                     className="relative overfunc-hidden duration-500 hover:border-primary/50 group"
                     onClick={() => {
-                        navigate(`/flows/${flowId}/functions/${func.id}`)
+                        navigate(`/groups/${groupId}/functions/${func.id}`)
                     }}
                 >
                     <CardHeader>
@@ -82,9 +83,9 @@ const Content: FC<ContentProps> = ({flowId, funcs}) => {
 }
 
 type NoContentProps = {
-    flow: flowProps;
+    group: GroupProps;
 }
-const NoContent: FC<NoContentProps> = ({flow}) => (
+const NoContent: FC<NoContentProps> = ({group}) => (
     <EmptyPlaceholder className="my-4 ">
         <EmptyPlaceholder.Icon>
             {/*<Code />*/}
@@ -94,7 +95,7 @@ const NoContent: FC<NoContentProps> = ({flow}) => (
             You haven&apos;t created any Funcs yet.
         </EmptyPlaceholder.Description>
         <div className="flex flex-col items-center justify-center gap-2 md:flex-row">
-            <Create flow={flow}/>
+            <Create group={group}/>
             <GoToDocumentation link={"/funcs"}/>
         </div>
     </EmptyPlaceholder>

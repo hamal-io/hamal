@@ -1,17 +1,17 @@
 import React, {FC, useContext, useEffect, useState} from "react";
 import Save from "@/pages/app/func-detail/components/save.tsx";
 import History from "@/pages/app/func-detail/components/history.tsx";
-import FuncSelector from "@/pages/app/func-detail/components/func-selector.tsx";
 import Editor from "@/components/editor.tsx";
 import {useParams} from "react-router-dom";
 import Actions from "@/pages/app/func-detail/components/actions.tsx";
-import {flowContext} from "@/pages/app/flow-detail";
 import {useFuncGet} from "@/hook/func.ts";
 import Deploy from "@/pages/app/func-detail/components/deploy.tsx";
+import {GroupContext} from "@/components/app/layout";
+import GroupFuncSelector from "@/pages/app/func-detail/components/group-func-selector.tsx";
 
 type Props = {}
 const FuncDetailPage: FC<Props> = ({}) => {
-    const flow = useContext(flowContext)
+    const group = useContext(GroupContext)
     const {funcId} = useParams()
     // const [func, funcLoading, funcError] = useFuncGet(funcId)
     const [getFunc, func, funcLoading, funcError] = useFuncGet()
@@ -37,10 +37,10 @@ const FuncDetailPage: FC<Props> = ({}) => {
     return (
         <div className="h-full ">
             <div className="container flex flex-row justify-between items-center ">
-                <FuncSelector
+                <GroupFuncSelector
                     className="max-w-[300px]"
                     funcId={funcId}
-                    flowId={flow.id}
+                    groupId={group.id}
                 />
                 <div className="flex w-full space-x-2 justify-end">
                     <Deploy funcId={funcId} code={code}/>

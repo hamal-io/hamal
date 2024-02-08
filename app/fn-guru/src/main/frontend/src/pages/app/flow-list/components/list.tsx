@@ -52,7 +52,7 @@ const Content: FC<ContentProps> = ({flows}) => {
                     key={flow.id}
                     className="relative overflow-hidden duration-500 hover:border-primary/50 group"
                     onClick={() => {
-                        navigate(`/flows/${flow.id}`)
+                        navigate(`/groups/${flow.id}`)
                     }}
                 >
                     <CardHeader>
@@ -83,7 +83,7 @@ const NoContent: FC = () => (
         </EmptyPlaceholder.Description>
         <div className="flex flex-col items-center justify-center gap-2 md:flex-row">
             <Create/>
-            <GoToDocumentation link={"/flows"}/>
+            <GoToDocumentation link={"/groups"}/>
         </div>
     </EmptyPlaceholder>
 )

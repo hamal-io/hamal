@@ -19,17 +19,17 @@ import {Dialog, DialogContent, DialogHeader, DialogTrigger} from "@/components/u
 import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {useFuncCreate} from "@/hook/func.ts";
-import {flowListItem} from "@/types";
+import {GroupListItem} from "@/types";
 
 type Prop = {
-    flow: flowListItem
+    group: GroupListItem
 }
 
 const formSchema = z.object({
     name: z.string().min(2).max(50),
 })
 
-const Create: FC<Prop> = ({flow}) => {
+const Create: FC<Prop> = ({group}) => {
     const [auth, setAuth] = useAuth()
     const navigate = useNavigate()
     const [openDialog, setOpenDialog] = useState<boolean>(false)
@@ -52,7 +52,7 @@ const Create: FC<Prop> = ({flow}) => {
         // ✅ This will be type-safe and validated.
 
         try {
-            createFunc(flow.id, values.name)
+            createFunc(group.id, values.name)
         } catch (e) {
             console.error(e)
         } finally {
@@ -63,7 +63,7 @@ const Create: FC<Prop> = ({flow}) => {
 
     useEffect(() => {
         if (submittedFunc !== null) {
-            navigate(`/flows/${flow.id}/functions/${submittedFunc.funcId}`)
+            navigate(`/groups/${group.id}/functions/${submittedFunc.funcId}`)
             setOpenDialog(false)
 
         }

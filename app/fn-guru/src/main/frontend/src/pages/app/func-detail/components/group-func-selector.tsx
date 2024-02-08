@@ -8,19 +8,19 @@ import {useFuncList} from "@/hook/func.ts";
 
 type Props = {
     className?: string;
-    flowId: string;
+    groupId: string;
     funcId: string;
 }
-const FuncSelector: FC<Props> = ({className, flowId, funcId}) => {
+const GroupFuncSelector: FC<Props> = ({className, groupId, funcId}) => {
     const navigate = useNavigate()
     const [listFuncs, funcList, loading] = useFuncList()
     const [selected, setSelected] = useState(funcId)
 
     useEffect(() => {
-        if (flowId) {
-            listFuncs(flowId)
+        if (groupId) {
+            listFuncs(groupId)
         }
-    }, [flowId]);
+    }, [groupId]);
 
     if (loading) {
         return "Loading..."
@@ -29,7 +29,7 @@ const FuncSelector: FC<Props> = ({className, flowId, funcId}) => {
     return (
         <Select value={selected} onValueChange={
             (newFuncId) => {
-                navigate(`/flows/${flowId}/functions/${newFuncId}`, {replace: true})
+                navigate(`/groups/${groupId}/functions/${newFuncId}`, {replace: true})
                 setSelected(newFuncId)
             }
         }>
@@ -48,4 +48,4 @@ const FuncSelector: FC<Props> = ({className, flowId, funcId}) => {
     )
 }
 
-export default FuncSelector
+export default GroupFuncSelector

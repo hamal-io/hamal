@@ -51,7 +51,7 @@ const Create = () => {
 
     useEffect(() => {
         if (submittedflow !== null) {
-            navigate(`/flows/${submittedflow.flowId}`)
+            navigate(`/groups/${submittedflow.flowId}`)
             setOpenDialog(false)
 
         }
