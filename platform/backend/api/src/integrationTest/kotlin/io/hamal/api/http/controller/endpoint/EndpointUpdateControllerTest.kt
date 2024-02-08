@@ -22,7 +22,7 @@ internal class EndpointUpdateControllerTest : EndpointBaseControllerTest() {
     fun `Updates endpoint`() {
         val flowId = awaitCompleted(
             createFlow(
-                name = FlowName("flow"),
+                name = FlowName("namespace"),
                 groupId = testGroup.id
             )
         ).flowId
@@ -77,7 +77,7 @@ internal class EndpointUpdateControllerTest : EndpointBaseControllerTest() {
     fun `Updates endpoint without updating values`() {
         val flowId = awaitCompleted(
             createFlow(
-                name = FlowName("flow"),
+                name = FlowName("namespace"),
                 groupId = testGroup.id
             )
         ).flowId
@@ -125,14 +125,14 @@ internal class EndpointUpdateControllerTest : EndpointBaseControllerTest() {
     fun `Tries to set func which does not belong to the same flow`() {
         val flowId = awaitCompleted(
             createFlow(
-                name = FlowName("flow"),
+                name = FlowName("namespace"),
                 groupId = testGroup.id
             )
         ).flowId
 
         val anotherFlowId = awaitCompleted(
             createFlow(
-                name = FlowName("another-flow"),
+                name = FlowName("another-namespace"),
                 groupId = testGroup.id
             )
         ).flowId

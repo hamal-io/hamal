@@ -25,6 +25,6 @@
 --assert(req_two.type == 'Event')
 --assert(req_two.name == 'trigger-to-create')
 --assert(req_two.func.name == "test-func")
---assert(req_two.flow.name == "root-flow")
+--assert(req_two.namespace.name == "root-namespace")
 --assert(req_two.topic.name == "some-amazing-topic")
 --

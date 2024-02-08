@@ -19,7 +19,7 @@ import io.hamal.repository.record.endpoint.EndpointRecord
 import io.hamal.repository.record.exec.ExecRecord
 import io.hamal.repository.record.extension.ExtensionRecord
 import io.hamal.repository.record.feedback.FeedbackRecord
-import io.hamal.repository.record.flow.FlowRecord
+import io.hamal.repository.record.namespace.FlowRecord
 import io.hamal.repository.record.func.FuncRecord
 import io.hamal.repository.record.group.GroupRecord
 import io.hamal.repository.record.hook.HookRecord

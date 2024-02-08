@@ -89,7 +89,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
 
                 assertThat(
                     exception.message,
-                    equalTo("FuncName(first-func-name) already exists in flow FlowId(2)")
+                    equalTo("FuncName(first-func-name) already exists in namespace FlowId(2)")
                 )
 
                 verifyCount(1)
@@ -312,7 +312,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
 
                 assertThat(
                     exception.message,
-                    equalTo("FuncName(already-exists) already exists in flow FlowId(2)")
+                    equalTo("FuncName(already-exists) already exists in namespace FlowId(2)")
                 )
 
                 with(get(FuncId(2))) {

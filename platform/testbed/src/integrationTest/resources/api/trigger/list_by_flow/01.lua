@@ -1,9 +1,9 @@
 sys = require_plugin('sys')
 
-one_req = fail_on_error(sys.flows.create({ name = 'flow-one' }))
+one_req = fail_on_error(sys.flows.create({ name = 'namespace-one' }))
 sys.await_completed(one_req)
 
-two_req = fail_on_error(sys.flows.create({ name = 'flow-two' }))
+two_req = fail_on_error(sys.flows.create({ name = 'namespace-two' }))
 sys.await_completed(two_req)
 
 func_one = fail_on_error(sys.funcs.create({ flow_id = one_req.id; name = 'test-func'; inputs = {}; code = [[4 + 2]] }))

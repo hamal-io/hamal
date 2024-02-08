@@ -1,6 +1,6 @@
 sys = require_plugin('sys')
 
-flow = fail_on_error(sys.flows.create({ name = 'flow-1' }))
+flow = fail_on_error(sys.flows.create({ name = 'namespace-1' }))
 sys.await_completed(flow)
 
 func_one = fail_on_error(sys.funcs.create({ flow_id = flow.id; name = 'test-func'; inputs = {}; code = [[4 + 2]] }))
@@ -34,7 +34,7 @@ assert(sys.await_failed(req_two) == nil)
 _, triggers = sys.triggers.list()
 assert(#triggers == 1)
 
--- same name different flow
+-- same name different namespace
 err, req_two = sys.triggers.create_hook({
     func_id = func_one.id,
     flow_id = flow.id,

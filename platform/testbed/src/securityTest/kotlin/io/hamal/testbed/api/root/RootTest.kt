@@ -48,7 +48,7 @@
 //                id = CmdId(5),
 //                flowId = FlowId.root,
 //                groupId = testGroup.id,
-//                name = FlowName("root-flow"),
+//                name = FlowName("root-namespace"),
 //                inputs = FlowInputs()
 //            )
 //        )

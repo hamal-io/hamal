@@ -79,7 +79,7 @@ internal class FlowRepositoryTest : AbstractUnitTest() {
                 createFlow(
                     flowId = FlowId(2),
                     groupId = GroupId(3),
-                    name = FlowName("first-flow-name")
+                    name = FlowName("first-namespace-name")
                 )
 
                 val exception = assertThrows<IllegalArgumentException> {
@@ -88,7 +88,7 @@ internal class FlowRepositoryTest : AbstractUnitTest() {
                             id = CmdId(2),
                             flowId = FlowId(4),
                             groupId = GroupId(3),
-                            name = FlowName("first-flow-name"),
+                            name = FlowName("first-namespace-name"),
                             inputs = FlowInputs(),
                         )
                     )
@@ -96,7 +96,7 @@ internal class FlowRepositoryTest : AbstractUnitTest() {
 
                 assertThat(
                     exception.message,
-                    equalTo("FlowName(first-flow-name) already exists")
+                    equalTo("FlowName(first-namespace-name) already exists")
                 )
 
                 verifyCount(1)
@@ -111,7 +111,7 @@ internal class FlowRepositoryTest : AbstractUnitTest() {
                     cmdId = CmdId(23456),
                     flowId = FlowId(5),
                     groupId = GroupId(3),
-                    name = FlowName("first-flow-name")
+                    name = FlowName("first-namespace-name")
                 )
 
 
@@ -120,7 +120,7 @@ internal class FlowRepositoryTest : AbstractUnitTest() {
                         id = CmdId(23456),
                         flowId = FlowId(5),
                         groupId = GroupId(333),
-                        name = FlowName("second-flow-name"),
+                        name = FlowName("second-namespace-name"),
                         inputs = FlowInputs(),
                     )
                 )
@@ -128,7 +128,7 @@ internal class FlowRepositoryTest : AbstractUnitTest() {
                 with(result) {
                     assertThat(id, equalTo(FlowId(5)))
                     assertThat(groupId, equalTo(GroupId(3)))
-                    assertThat(name, equalTo(FlowName("first-flow-name")))
+                    assertThat(name, equalTo(FlowName("first-namespace-name")))
                     assertThat(inputs, equalTo(FlowInputs(HotObject.builder().set("hamal", "rocks").build())))
                 }
 
@@ -144,7 +144,7 @@ internal class FlowRepositoryTest : AbstractUnitTest() {
             createFlow(
                 flowId = FlowId(1),
                 groupId = GroupId(3),
-                name = FlowName("flow-name")
+                name = FlowName("namespace-name")
             )
 
             val result = update(
@@ -170,7 +170,7 @@ internal class FlowRepositoryTest : AbstractUnitTest() {
             createFlow(
                 flowId = FlowId(1),
                 groupId = GroupId(3),
-                name = FlowName("flow-name")
+                name = FlowName("namespace-name")
             )
 
             val result = update(
@@ -184,7 +184,7 @@ internal class FlowRepositoryTest : AbstractUnitTest() {
             with(result) {
                 assertThat(id, equalTo(FlowId(1)))
                 assertThat(groupId, equalTo(GroupId(3)))
-                assertThat(name, equalTo(FlowName("flow-name")))
+                assertThat(name, equalTo(FlowName("namespace-name")))
                 assertThat(inputs, equalTo(FlowInputs(HotObject.builder().set("hamal", "rocks").build())))
             }
 

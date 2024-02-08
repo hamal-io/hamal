@@ -34,7 +34,7 @@ const List: FC<ListProps> = ({flow}) => {
                 title="Schedules"
                 description={`Periodically call your functions of flow ${flow.name}`}
                 actions={[
-                    // <CreateEvery flow={flow}/>,
+                    // <CreateEvery namespace={namespace}/>,
                     <CreateFixedRate flow={flow}/>
                 ]}
             />

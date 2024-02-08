@@ -28,7 +28,7 @@ class HookListFunction(
                     index to KuaMap(
                         mutableMapOf(
                             "id" to KuaString(hook.id.value.value.toString(16)),
-                            "flow" to KuaMap(
+                            "namespace" to KuaMap(
                                 mutableMapOf(
                                     "id" to KuaString(hook.flow.id.value.value.toString(16)),
                                     "name" to KuaString(hook.flow.name.value)

@@ -71,7 +71,7 @@ internal class HookRepositoryTest : AbstractUnitTest() {
 
                 assertThat(
                     exception.message,
-                    equalTo("HookName(first-hook-name) already exists in flow FlowId(2)")
+                    equalTo("HookName(first-hook-name) already exists in namespace FlowId(2)")
                 )
 
                 verifyCount(1)
@@ -226,7 +226,7 @@ internal class HookRepositoryTest : AbstractUnitTest() {
 
                 assertThat(
                     exception.message,
-                    equalTo("HookName(already-exists) already exists in flow FlowId(2)")
+                    equalTo("HookName(already-exists) already exists in namespace FlowId(2)")
                 )
 
                 with(get(HookId(2))) {

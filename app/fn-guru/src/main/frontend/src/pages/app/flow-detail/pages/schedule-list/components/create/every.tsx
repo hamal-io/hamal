@@ -43,7 +43,7 @@ const CreateEvery: FC<Prop> = ({flow}) => {
         console.log(values)
 
         try {
-            // createFunc(flow.id, values.name)
+            // createFunc(namespace.id, values.name)
             console.log(auth)
         } catch (e) {
             console.log(`login failed - ${e}`)
@@ -56,7 +56,7 @@ const CreateEvery: FC<Prop> = ({flow}) => {
     //
     // useEffect(() => {
     //     if (submittedFunc !== null) {
-    //         navigate(`/flows/${flow.id}/functions/${submittedFunc.funcId}`)
+    //         navigate(`/flows/${namespace.id}/functions/${submittedFunc.funcId}`)
     //         setOpenDialog(false)
     //
     //     }

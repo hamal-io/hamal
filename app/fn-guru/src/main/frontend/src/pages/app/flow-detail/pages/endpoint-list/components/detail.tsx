@@ -36,7 +36,7 @@ const Detail: FC<Prop> = ({item}) => {
                     <CardTitle>{item.name}</CardTitle>
                 </div>
                 {/*<AddTrigger*/}
-                {/*    flowId={item.hook.flow.id}*/}
+                {/*    flowId={item.hook.namespace.id}*/}
                 {/*    hookId={item.hook.id}*/}
                 {/*    hookName={item.hook.name}*/}
                 {/*    trigger={triggerList}*/}

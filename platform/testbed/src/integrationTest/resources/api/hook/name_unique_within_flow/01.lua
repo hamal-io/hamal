@@ -12,8 +12,8 @@ assert(hook ~= nil)
 _, hooks = sys.hooks.list()
 assert(#hooks == 1)
 
--- same name different flow
-flow = fail_on_error(sys.flows.create({ name = 'flow-1' }))
+-- same name different namespace
+flow = fail_on_error(sys.flows.create({ name = 'namespace-1' }))
 sys.await_completed(flow)
 
 hook = fail_on_error(sys.hooks.create({ name = 'hook-name', flow_id = flow.id }))

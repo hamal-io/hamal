@@ -1,6 +1,6 @@
 --sys = require_plugin('sys')
 --
---flow_req = fail_on_error(sys.flows.create({ name = "hamal::flow::rocks" }))
+--flow_req = fail_on_error(sys.flows.create({ name = "hamal::namespace::rocks" }))
 --sys.await_completed(flow_req)
 --
 --func_req = fail_on_error(sys.funcs.create({ flow_id = flow_req.flow_id, name = 'test-func'; inputs = {}; code = [[4 + 2]] }))
@@ -28,6 +28,6 @@
 --assert(req_two.type == 'Event')
 --assert(req_two.name == 'trigger-to-create')
 --assert(req_two.func.name == "test-func")
---assert(req_two.flow.name == "hamal::flow::rocks")
+--assert(req_two.namespace.name == "hamal::namespace::rocks")
 --assert(req_two.topic.name == "some-amazing-topic")
 --

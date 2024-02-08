@@ -26,7 +26,7 @@ internal object ProjectionUniqueName : ProjectionSqlite<FuncId, FuncRecord, Func
             }
         } catch (e: SQLiteException) {
             if (e.message!!.contains("(UNIQUE constraint failed: unique_name.name, unique_name.flow_id)")) {
-                throw IllegalArgumentException("${obj.name} already exists in flow ${obj.flowId}")
+                throw IllegalArgumentException("${obj.name} already exists in namespace ${obj.flowId}")
             }
             throw e
         }

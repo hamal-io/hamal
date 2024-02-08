@@ -24,7 +24,7 @@ private object FuncCurrentProjection {
             if (currentFunc != null) {
                 projection[currentFunc.id] = currentFunc
             }
-            throw IllegalArgumentException("${func.name} already exists in flow ${func.flowId}")
+            throw IllegalArgumentException("${func.name} already exists in namespace ${func.flowId}")
         }
 
         projection[func.id] = func

@@ -1,6 +1,6 @@
 sys = require_plugin('sys')
 
-flow = fail_on_error(sys.flows.create({ name = 'flow-1' }))
+flow = fail_on_error(sys.flows.create({ name = 'namespace-1' }))
 
 -- function name is unique
 func_one = fail_on_error(sys.funcs.create({ flow_id = '1', name = 'func-name' }))
@@ -14,7 +14,7 @@ assert(func_one ~= nil)
 _, hooks = sys.funcs.list()
 assert(#hooks == 1)
 
--- same name different flow
+-- same name different namespace
 func_one = fail_on_error(sys.funcs.create({ flow_id = flow.id, name = 'func-name' }))
 assert(err == nil)
 sys.await_completed(func_one)

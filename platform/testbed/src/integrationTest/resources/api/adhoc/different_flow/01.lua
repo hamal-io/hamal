@@ -1,6 +1,6 @@
 sys = require_plugin('sys')
 
-flow = fail_on_error(sys.flows.create({ name = 'test-flow' }))
+flow = fail_on_error(sys.flows.create({ name = 'test-namespace' }))
 sys.await_completed(flow)
 
 res = fail_on_error(sys.adhoc({

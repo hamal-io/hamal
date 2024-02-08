@@ -24,7 +24,7 @@ private object EndpointCurrentProjection {
             if (currentEndpoint != null) {
                 projection[currentEndpoint.id] = currentEndpoint
             }
-            throw IllegalArgumentException("${endpoint.name} already exists in flow ${endpoint.flowId}")
+            throw IllegalArgumentException("${endpoint.name} already exists in namespace ${endpoint.flowId}")
         }
 
         projection[endpoint.id] = endpoint

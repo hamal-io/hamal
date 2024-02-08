@@ -21,7 +21,7 @@ internal class EndpointListControllerTest : EndpointBaseControllerTest() {
     fun `Single endpoint`() {
         val flowId = awaitCompleted(
             createFlow(
-                name = FlowName("flow"),
+                name = FlowName("namespace"),
                 groupId = testGroup.id
             )
         ).flowId
@@ -59,7 +59,7 @@ internal class EndpointListControllerTest : EndpointBaseControllerTest() {
             IntRange(0, 20).map {
                 val flowId = awaitCompleted(
                     createFlow(
-                        name = FlowName("flow-$it"),
+                        name = FlowName("namespace-$it"),
                         groupId = testGroup.id
                     )
                 ).flowId
@@ -98,7 +98,7 @@ internal class EndpointListControllerTest : EndpointBaseControllerTest() {
         val requests = IntRange(0, 99).map {
             val flowId = awaitCompleted(
                 createFlow(
-                    name = FlowName("flow-$it"),
+                    name = FlowName("namespace-$it"),
                     groupId = testGroup.id
                 )
             ).flowId

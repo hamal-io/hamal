@@ -1,6 +1,6 @@
 sys = require_plugin('sys')
 
-flow_req = fail_on_error(sys.flows.create({ name = "hamal::flow::rocks" }))
+flow_req = fail_on_error(sys.flows.create({ name = "hamal::namespace::rocks" }))
 sys.await_completed(flow_req)
 
 func_req = fail_on_error(sys.funcs.create({ flow_id = flow_req.flow_id, name = 'test-func'; inputs = {}; code = [[4 + 2]] }))
@@ -25,6 +25,6 @@ req_two = fail_on_error(sys.triggers.get(req_one.trigger_id))
 assert(req_two.type == 'Cron')
 assert(req_two.name == 'trigger-to-create')
 assert(req_two.func.name == "test-func")
-assert(req_two.flow.name == "hamal::flow::rocks")
+assert(req_two.flow.name == "hamal::namespace::rocks")
 assert(req_two.cron == '0 0 8-10 * * *')
 

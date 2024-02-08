@@ -26,6 +26,6 @@ assert(req_two.type == 'Hook')
 assert(req_two.name == 'hook-trigger')
 assert(req_two.func.name == "test-func")
 assert(req_two.flow.id == '1')
-assert(req_two.flow.name == "root-flow")
+assert(req_two.flow.name == "root-namespace")
 assert(req_two.hook.name == "some-amazing-hook")
 

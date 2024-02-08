@@ -22,6 +22,6 @@ assert(req_two.type == 'FixedRate')
 assert(req_two.name == 'trigger-to-create')
 assert(req_two.func.name == "test-func")
 assert(req_two.flow.id == '1')
-assert(req_two.flow.name == "root-flow")
+assert(req_two.flow.name == "root-namespace")
 assert(req_two.duration == "PT5S")
 

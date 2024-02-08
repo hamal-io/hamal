@@ -50,7 +50,7 @@ internal class EndpointCreateControllerTest : EndpointBaseControllerTest() {
     fun `Create endpoint with flow id`() {
         val flowId = awaitCompleted(
             createFlow(
-                name = FlowName("flow"),
+                name = FlowName("namespace"),
                 groupId = testGroup.id
             )
         ).flowId
@@ -80,14 +80,14 @@ internal class EndpointCreateControllerTest : EndpointBaseControllerTest() {
     fun `Tries to create endpoint, but func does not belong to same flow`() {
         val flowId = awaitCompleted(
             createFlow(
-                name = FlowName("flow"),
+                name = FlowName("namespace"),
                 groupId = testGroup.id
             )
         ).flowId
 
         val anotherFlowId = awaitCompleted(
             createFlow(
-                name = FlowName("another-flow"),
+                name = FlowName("another-namespace"),
                 groupId = testGroup.id
             )
         ).flowId

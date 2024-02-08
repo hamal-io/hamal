@@ -18,7 +18,7 @@ err, func_one = sys.funcs.get(func_one.id)
 assert(err == nil)
 
 assert(func_one.flow.id == '1')
-assert(func_one.flow.name == 'root-flow')
+assert(func_one.flow.name == 'root-namespace')
 assert(func_one.name == 'test-func')
 
 assert(func_one.code.id ~= nil)

@@ -24,7 +24,7 @@ private object HookCurrentProjection {
             if (currentHook != null) {
                 projection[currentHook.id] = currentHook
             }
-            throw IllegalArgumentException("${hook.name} already exists in flow ${hook.flowId}")
+            throw IllegalArgumentException("${hook.name} already exists in namespace ${hook.flowId}")
         }
 
         projection[hook.id] = hook

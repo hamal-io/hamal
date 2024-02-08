@@ -19,7 +19,7 @@ import io.hamal.repository.sqlite.record.endpoint.EndpointSqliteRepository
 import io.hamal.repository.sqlite.record.exec.ExecSqliteRepository
 import io.hamal.repository.sqlite.record.extension.ExtensionSqliteRepository
 import io.hamal.repository.sqlite.record.feedback.FeedbackSqliteRepository
-import io.hamal.repository.sqlite.record.flow.FlowSqliteRepository
+import io.hamal.repository.sqlite.record.namespace.FlowSqliteRepository
 import io.hamal.repository.sqlite.record.func.FuncSqliteRepository
 import io.hamal.repository.sqlite.record.group.GroupSqliteRepository
 import io.hamal.repository.sqlite.record.hook.HookSqliteRepository

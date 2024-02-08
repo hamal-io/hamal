@@ -86,7 +86,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
 
                 assertThat(
                     exception.message,
-                    equalTo("TriggerName(first-trigger-name) already exists in flow FlowId(2)")
+                    equalTo("TriggerName(first-trigger-name) already exists in namespace FlowId(2)")
                 )
 
                 verifyCount(1)
@@ -229,7 +229,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
 
                 assertThat(
                     exception.message,
-                    equalTo("TriggerName(first-trigger-name) already exists in flow FlowId(2)")
+                    equalTo("TriggerName(first-trigger-name) already exists in namespace FlowId(2)")
                 )
 
                 verifyCount(1)
@@ -373,7 +373,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
 
                 assertThat(
                     exception.message,
-                    equalTo("TriggerName(first-trigger-name) already exists in flow FlowId(2)")
+                    equalTo("TriggerName(first-trigger-name) already exists in namespace FlowId(2)")
                 )
 
                 verifyCount(1)

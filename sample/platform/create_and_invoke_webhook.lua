@@ -3,7 +3,7 @@ sys = require_plugin('sys')
 _, r = sys.flows.create({ name = '007' })
 flow_id = r.id
 
-print('flow id: ' .. flow_id)
+print('namespace id: ' .. flow_id)
 
 _, r = sys.funcs.create({
     name = 'test-func',

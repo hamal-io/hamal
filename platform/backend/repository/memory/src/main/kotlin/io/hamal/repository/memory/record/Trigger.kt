@@ -34,7 +34,7 @@ private object TriggerCurrentProjection {
             if (currentTrigger != null) {
                 projection[currentTrigger.id] = currentTrigger
             }
-            throw IllegalArgumentException("${trigger.name} already exists in flow ${trigger.flowId}")
+            throw IllegalArgumentException("${trigger.name} already exists in namespace ${trigger.flowId}")
         }
 
         projection[trigger.id] = trigger

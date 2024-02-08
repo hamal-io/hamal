@@ -28,7 +28,7 @@ internal class EndpointGetControllerTest : EndpointBaseControllerTest() {
     fun `Get endpoint`() {
         val flowId = awaitCompleted(
             createFlow(
-                name = FlowName("flow"),
+                name = FlowName("namespace"),
                 groupId = testGroup.id
             )
         ).flowId

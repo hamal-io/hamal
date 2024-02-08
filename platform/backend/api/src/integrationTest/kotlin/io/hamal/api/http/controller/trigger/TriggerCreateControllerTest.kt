@@ -63,7 +63,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
                 id = CmdId(1),
                 flowId = FlowId(2345),
                 groupId = testGroup.id,
-                name = FlowName("hamal::flow"),
+                name = FlowName("hamal::namespace"),
                 inputs = FlowInputs()
             )
         )
@@ -92,7 +92,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
             assertThat(status, equalTo(TriggerStatus.Active))
             assertThat(name, equalTo(TriggerName("trigger")))
             assertThat(flow.id, equalTo(flow.id))
-            assertThat(flow.name, equalTo(FlowName("hamal::flow")))
+            assertThat(flow.name, equalTo(FlowName("hamal::namespace")))
         }
     }
 
