@@ -5,7 +5,7 @@ import {Button} from "@/components/ui/button.tsx"
 import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,} from "@/components/ui/dropdown-menu.tsx"
 import {useNavigate} from "react-router-dom";
 import {useContext} from "react";
-import {NamespaceContext} from "@/pages/app/namespace-detail";
+import {flowContext} from "@/pages/app/flow-detail";
 import {ExecListItem} from "@/types";
 
 interface Props {
@@ -13,7 +13,7 @@ interface Props {
 }
 
 export default function ({row}: Props) {
-    const namespace = useContext(NamespaceContext)
+    const flow = useContext(flowContext)
     const navigate = useNavigate()
 
     return (
@@ -29,7 +29,7 @@ export default function ({row}: Props) {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-[160px]">
                 <DropdownMenuItem onClick={() => {
-                    navigate(`/namespaces/${namespace.id}/executions/${row.original.id}`)
+                    navigate(`/flows/${flow.id}/executions/${row.original.id}`)
                 }}>View</DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>

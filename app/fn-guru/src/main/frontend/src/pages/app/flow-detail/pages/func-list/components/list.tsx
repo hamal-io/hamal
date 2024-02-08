@@ -3,31 +3,31 @@ import {Separator} from "@/components/ui/separator.tsx";
 import {EmptyPlaceholder} from "@/components/empty-placeholder.tsx";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx";
 import {PageHeader} from "@/components/page-header.tsx";
-import Create from "@/pages/app/namespace-detail/pages/func-list/components/create.tsx";
+import Create from "@/pages/app/flow-detail/pages/func-list/components/create.tsx";
 import {GoToDocumentation} from "@/components/documentation.tsx";
 import {useNavigate} from "react-router-dom";
 import {useFuncList} from "@/hook/func.ts";
 import {FuncListItem} from "@/types";
 
-type NamespaceProps = {
+type flowProps = {
     id: string;
     name: string;
 }
 
 type ListProps = {
-    namespace: NamespaceProps
+    flow: flowProps
 }
 
-const List: FC<ListProps> = ({namespace}) => {
+const List: FC<ListProps> = ({flow}) => {
     const [listFuncs, funcList, loading, error] = useFuncList()
 
     useEffect(() => {
         const abortController = new AbortController();
-        listFuncs(namespace.id, abortController)
+        listFuncs(flow.id, abortController)
         return () => {
             abortController.abort();
         };
-    }, [namespace]);
+    }, [flow]);
 
     if (error) return `Error`
     if (funcList == null || loading) return "Loading..."
@@ -36,23 +36,23 @@ const List: FC<ListProps> = ({namespace}) => {
         <div className="pt-2 px-2">
             <PageHeader
                 title="Functions"
-                description={`Functions of your namespace ${namespace.name}`}
-                actions={[<Create namespace={namespace}/>]}
+                description={`Functions of your flow ${flow.name}`}
+                actions={[<Create flow={flow}/>]}
             />
             <Separator className="my-6"/>
             {
-                funcList.funcs.length ? (<Content namespaceId={namespace.id} funcs={funcList.funcs}/>) : (<NoContent namespace={namespace}/>)
+                funcList.funcs.length ? (<Content flowId={flow.id} funcs={funcList.funcs}/>) : (<NoContent flow={flow}/>)
             }
         </div>
     );
 }
 
 type ContentProps = {
-    namespaceId: string;
+    flowId: string;
     funcs: FuncListItem[]
 }
 
-const Content: FC<ContentProps> = ({namespaceId, funcs}) => {
+const Content: FC<ContentProps> = ({flowId, funcs}) => {
     const navigate = useNavigate()
     return (
         <ul className="grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-1 xl:grid-cols-3">
@@ -61,7 +61,7 @@ const Content: FC<ContentProps> = ({namespaceId, funcs}) => {
                     key={func.id}
                     className="relative overfunc-hidden duration-500 hover:border-primary/50 group"
                     onClick={() => {
-                        navigate(`/namespaces/${namespaceId}/functions/${func.id}`)
+                        navigate(`/flows/${flowId}/functions/${func.id}`)
                     }}
                 >
                     <CardHeader>
@@ -82,9 +82,9 @@ const Content: FC<ContentProps> = ({namespaceId, funcs}) => {
 }
 
 type NoContentProps = {
-    namespace: NamespaceProps;
+    flow: flowProps;
 }
-const NoContent: FC<NoContentProps> = ({namespace}) => (
+const NoContent: FC<NoContentProps> = ({flow}) => (
     <EmptyPlaceholder className="my-4 ">
         <EmptyPlaceholder.Icon>
             {/*<Code />*/}
@@ -94,7 +94,7 @@ const NoContent: FC<NoContentProps> = ({namespace}) => (
             You haven&apos;t created any Funcs yet.
         </EmptyPlaceholder.Description>
         <div className="flex flex-col items-center justify-center gap-2 md:flex-row">
-            <Create namespace={namespace}/>
+            <Create flow={flow}/>
             <GoToDocumentation link={"/funcs"}/>
         </div>
     </EmptyPlaceholder>

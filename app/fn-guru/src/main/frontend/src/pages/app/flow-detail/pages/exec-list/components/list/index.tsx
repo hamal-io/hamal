@@ -1,28 +1,28 @@
 import React, {FC, useEffect} from "react";
-import {columns} from "@/pages/app/namespace-detail/pages/exec-list/components/list/components/columns.tsx";
-import Table from "@/pages/app/namespace-detail/pages/exec-list/components/list/components/table.tsx";
+import {columns} from "@/pages/app/flow-detail/pages/exec-list/components/list/components/columns.tsx";
+import Table from "@/pages/app/flow-detail/pages/exec-list/components/list/components/table.tsx";
 import {PageHeader} from "@/components/page-header.tsx";
 import {useExecList} from "@/hook/exec.ts";
 
-type NamespaceProps = {
+type flowProps = {
     id: string;
     name: string;
 }
 
 type ListProps = {
-    namespace: NamespaceProps
+    flow: flowProps
 }
 
-const List: FC<ListProps> = ({namespace}) => {
+const List: FC<ListProps> = ({flow}) => {
     const [listExecs, execList, isLoading, error] = useExecList()
 
     useEffect(() => {
         const abortController = new AbortController()
-        listExecs(namespace.id, abortController)
+        listExecs(flow.id, abortController)
         return () => {
             abortController.abort()
         }
-    }, [namespace.id]);
+    }, [flow.id]);
 
     if (isLoading) return "Loading..."
     if (error != null) return "Error -"
@@ -31,7 +31,7 @@ const List: FC<ListProps> = ({namespace}) => {
         <div className="pt-2 px-2 mb-6">
             <PageHeader
                 title="Executions"
-                description={`Executions of your namespace ${namespace.name}`}
+                description={`Executions of your flow ${flow.name}`}
                 actions={[]}
             />
             <Table data={execList.execs} columns={columns}/>

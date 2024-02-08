@@ -8,19 +8,19 @@ import {useFuncList} from "@/hook/func.ts";
 
 type Props = {
     className?: string;
-    namespaceId: string;
+    flowId: string;
     funcId: string;
 }
-const FuncSelector: FC<Props> = ({className, namespaceId, funcId}) => {
+const FuncSelector: FC<Props> = ({className, flowId, funcId}) => {
     const navigate = useNavigate()
     const [listFuncs, funcList, loading] = useFuncList()
     const [selected, setSelected] = useState(funcId)
 
     useEffect(() => {
-        if (namespaceId) {
-            listFuncs(namespaceId)
+        if (flowId) {
+            listFuncs(flowId)
         }
-    }, [namespaceId]);
+    }, [flowId]);
 
     if (loading) {
         return "Loading..."
@@ -29,7 +29,7 @@ const FuncSelector: FC<Props> = ({className, namespaceId, funcId}) => {
     return (
         <Select value={selected} onValueChange={
             (newFuncId) => {
-                navigate(`/namespaces/${namespaceId}/functions/${newFuncId}`, {replace: true})
+                navigate(`/flows/${flowId}/functions/${newFuncId}`, {replace: true})
                 setSelected(newFuncId)
             }
         }>

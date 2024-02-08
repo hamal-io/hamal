@@ -3,7 +3,7 @@ import {ColumnDef} from "@tanstack/react-table"
 import {statuses} from "../data/data.tsx"
 import {ColumnHeader} from "./column-header.tsx"
 import React from "react";
-import RowActions from "@/pages/app/namespace-detail/pages/exec-list/components/list/components/row-actions.tsx";
+import RowActions from "@/pages/app/flow-detail/pages/exec-list/components/list/components/row-actions.tsx";
 import {ExecListItem} from "@/types";
 
 export const columns: ColumnDef<ExecListItem>[] = [

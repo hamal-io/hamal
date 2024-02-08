@@ -16,7 +16,7 @@ const Log: FC<Props> = ({execId}) => {
     return (
         <div className="w-full">
             <div
-                className="coding inverse-toggle px-5 pt-4 text-gray-100 text-sm font-mono subpixel-antialiased bg-gray-50  pb-6  rounded-lg leading-normal overnamespace-hidden">
+                className="coding inverse-toggle px-5 pt-4 text-gray-100 text-sm font-mono subpixel-antialiased bg-gray-50  pb-6  rounded-lg leading-normal overflow-hidden">
                 {execLogsList.logs.map(log => {
                     return (
                         <div key={log.id} className="flex">

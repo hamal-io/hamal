@@ -1,25 +1,25 @@
-export interface NamespaceCreateSubmitted {
+export interface FlowCreateSubmitted {
     id: string;
     status: string;
-    namespaceId: string;
+    flowId: string;
     groupId: string;
 }
 
-export interface DefaultNamespaceId {
-    namespaceId: string;
+export interface DefaultFlowId {
+    flowId: string;
     groupId: string;
 }
 
-export interface Namespace {
+export interface Flow {
     id: string;
     name: string;
 }
 
-export interface NamespaceList {
-    namespaces: Array<NamespaceListItem>;
+export interface FlowList {
+    flows: Array<FlowListItem>;
 }
 
-export interface NamespaceListItem {
+export interface FlowListItem {
     id: string;
     name: string;
 }

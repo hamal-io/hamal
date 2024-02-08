@@ -89,9 +89,9 @@ const Nav = ({className, ...props}: React.HTMLAttributes<HTMLElement>) => {
             active: currentPath === '/playground'
         },
         {
-            href: `/namespaces`,
-            label: "Namespaces",
-            active: currentPath.startsWith('/namespaces')
+            href: `/flows`,
+            label: "flows",
+            active: currentPath.startsWith('/flows')
         },
         {
             href: "https://docs.fn.guru",
@@ -169,7 +169,7 @@ const Convert = () => {
 
     useEffect(() => {
         if (auth != null && auth.type === 'User') {
-            navigate(`/namespaces`)
+            navigate(`/flows`)
             setOpenDialog(false)
         }
     }, [auth, navigate]);

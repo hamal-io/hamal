@@ -1,14 +1,14 @@
 import React, {FC, useContext} from "react";
-import {NamespaceContext} from "@/pages/app/namespace-detail";
-import List from "@/pages/app/namespace-detail/pages/hook-list/components/list.tsx";
+import {flowContext} from "@/pages/app/flow-detail";
+import List from "@/pages/app/flow-detail/pages/hook-list/components/list.tsx";
 
 type Props = {}
 const HookListPage: FC<Props> = ({}) => {
-    const namespace = useContext(NamespaceContext)
-    if (namespace == null) {
+    const flow = useContext(flowContext)
+    if (flow == null) {
         return "Loading..."
     }
-    return (<List namespace={namespace}/>)
+    return (<List flow={flow}/>)
 }
 
 export default HookListPage

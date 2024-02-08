@@ -19,7 +19,7 @@ const HomePage: React.FC = () => {
             {/*<Card className="mx-auto flex w-full max-w-4xl flex-1 flex-col items-start justify-center">*/}
             {/*    <CardHeader className="w-full">*/}
             {/*        <div className="flex w-full flex-col items-center justify-center">*/}
-            {/*            <h1 className="text-2xl font-bold">Simplest way to automate your worknamespaces through cloud functions</h1>*/}
+            {/*            <h1 className="text-2xl font-bold">Simplest way to automate your workflows through cloud functions</h1>*/}
             {/*        </div>*/}
             {/*    </CardHeader>*/}
             {/*    <CardContent className="w-full p-8 bg-gray-200 ">*/}
@@ -51,7 +51,7 @@ const HomePage: React.FC = () => {
             {/*</Card>*/}
 
             <div className="flex w-full flex-col pt-16 items-center justify-center">
-                <h1 className="text-2xl font-bold">Simplest way to automate your worknamespaces through cloud functions</h1>
+                <h1 className="text-2xl font-bold">Simplest way to automate your workflows through cloud functions</h1>
             </div>
 
             <div className="container h-full py-6 max-w-4xl">

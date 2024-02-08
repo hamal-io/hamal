@@ -10,12 +10,12 @@ import {useAuth} from "@/hook/auth.ts";
 import {Dialog, DialogContent, DialogHeader, DialogTrigger} from "@/components/ui/dialog.tsx";
 import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
-import {NamespaceListItem} from "@/types";
+import {flowListItem} from "@/types";
 import {useHookCreate, useTriggerHookCreate} from "@/hook";
 import FormFuncSelect from "@/components/form/func-select.tsx";
 
 type Prop = {
-    namespace: NamespaceListItem
+    flow: flowListItem
 }
 
 const formSchema = z.object({
@@ -23,7 +23,7 @@ const formSchema = z.object({
     // funcId: z.string().min(1, "Function required"),
 })
 
-const Create: FC<Prop> = ({namespace}) => {
+const Create: FC<Prop> = ({flow}) => {
     const [auth, setAuth] = useAuth()
     const navigate = useNavigate()
     const [openDialog, setOpenDialog] = useState<boolean>(false)
@@ -41,7 +41,7 @@ const Create: FC<Prop> = ({namespace}) => {
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setLoading(true)
         try {
-            createHook(namespace.id, values.name)
+            createHook(flow.id, values.name)
         } catch (e) {
             console.error(e)
         } finally {

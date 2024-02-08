@@ -114,7 +114,7 @@ const MetaMaskButton: FC<MetaMaskButtonProps> = ({loading, setLoading}) => {
 
     useEffect(() => {
         if (token != null) {
-            navigate("/namespaces", {replace: true})
+            navigate("/flows", {replace: true})
         }
     }, [token]);
 
@@ -174,7 +174,7 @@ const LoginForm = () => {
 
     useEffect(() => {
         if (loginSubmitted != null) {
-            navigate("/namespaces", {replace: true})
+            navigate("/flows", {replace: true})
             setLoading(false)
         }
     }, [loginSubmitted]);

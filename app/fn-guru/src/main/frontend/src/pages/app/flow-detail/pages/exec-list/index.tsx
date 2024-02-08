@@ -1,18 +1,18 @@
 import React, {FC, useContext} from "react";
-import {NamespaceContext} from "@/pages/app/namespace-detail";
-import List from "@/pages/app/namespace-detail/pages/exec-list/components/list";
+import {flowContext} from "@/pages/app/flow-detail";
+import List from "@/pages/app/flow-detail/pages/exec-list/components/list";
 
 type Props = {}
 
 const ExecListPage: FC<Props> = () => {
-    const namespace = useContext(NamespaceContext)
+    const flow = useContext(flowContext)
 
-    if (namespace == null) {
+    if (flow == null) {
         return "Loading..."
     }
 
     return (
-        <List namespace={namespace}/>
+        <List flow={flow}/>
     );
 }
 

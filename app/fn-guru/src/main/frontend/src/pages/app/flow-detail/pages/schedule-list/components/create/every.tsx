@@ -10,17 +10,17 @@ import {useAuth} from "@/hook/auth.ts";
 import {Dialog, DialogContent, DialogHeader, DialogTrigger} from "@/components/ui/dialog.tsx";
 import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
-import {NamespaceListItem} from "@/types";
+import {flowListItem} from "@/types";
 
 type Prop = {
-    namespace: NamespaceListItem
+    flow: flowListItem
 }
 
 const formSchema = z.object({
     name: z.string().min(2).max(50),
 })
 
-const CreateEvery: FC<Prop> = ({namespace}) => {
+const CreateEvery: FC<Prop> = ({flow}) => {
     const [auth, setAuth] = useAuth()
     const navigate = useNavigate()
     const [openDialog, setOpenDialog] = useState<boolean>(false)
@@ -43,7 +43,7 @@ const CreateEvery: FC<Prop> = ({namespace}) => {
         console.log(values)
 
         try {
-            // createFunc(namespace.id, values.name)
+            // createFunc(flow.id, values.name)
             console.log(auth)
         } catch (e) {
             console.log(`login failed - ${e}`)
@@ -56,7 +56,7 @@ const CreateEvery: FC<Prop> = ({namespace}) => {
     //
     // useEffect(() => {
     //     if (submittedFunc !== null) {
-    //         navigate(`/namespaces/${namespace.id}/functions/${submittedFunc.funcId}`)
+    //         navigate(`/flows/${flow.id}/functions/${submittedFunc.funcId}`)
     //         setOpenDialog(false)
     //
     //     }
@@ -87,7 +87,7 @@ const CreateEvery: FC<Prop> = ({namespace}) => {
                                             <Input placeholder="Schedule - One" {...field} />
                                         </FormControl>
                                         <FormDescription>
-                                            Name of your namespace
+                                            Name of your flow
                                         </FormDescription>
                                         <FormMessage/>
                                     </FormItem>

@@ -21,7 +21,7 @@ import Pagination from "./pagination.tsx"
 import Toolbar from "./toolbar.tsx"
 import {Card, CardContent, CardFooter, CardHeader} from "@/components/ui/card.tsx";
 import {useNavigate} from "react-router-dom";
-import {NamespaceContext} from "@/pages/app/namespace-detail";
+import {flowContext} from "@/pages/app/flow-detail";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -60,7 +60,7 @@ export default function <TData, TValue>({columns, data,}: DataTableProps<TData, 
     })
 
     const navigate = useNavigate()
-    const namespace = useContext(NamespaceContext)
+    const flow = useContext(flowContext)
 
     return (
         <Card>
@@ -94,7 +94,7 @@ export default function <TData, TValue>({columns, data,}: DataTableProps<TData, 
                                     key={row.id}
                                     data-state={row.getIsSelected() && "selected"}
                                     onClick={() => {
-                                        navigate(`/namespaces/${namespace.id}/schedules/${row.original['id']}`)
+                                        navigate(`/flows/${flow.id}/schedules/${row.original['id']}`)
                                     }}
                                 >
                                     {row.getVisibleCells().map((cell) => (

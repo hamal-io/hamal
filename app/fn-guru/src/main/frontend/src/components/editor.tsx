@@ -24,7 +24,7 @@ const EditorOptions = {
 //     disableLayerHinting: false,
 //     disableMonospaceOptimizations: false,
 //     dragAndDrop: false,
-//     fixedOvernamespaceWidgets: false,
+//     fixedOverflowWidgets: false,
 //     folding: true,
 //     foldingStrategy: 'auto',
 //     fontLigatures: false,

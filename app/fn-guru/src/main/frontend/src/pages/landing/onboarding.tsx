@@ -1,5 +1,5 @@
 import React, {FC, useEffect, useState} from 'react'
-import {useAccountCreateAnonymous, useAdhoc, useNamespaceCreate} from "@/hook";
+import {useAccountCreateAnonymous, useAdhoc, useFlowCreate} from "@/hook";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useAuth} from "@/hook/auth.ts";
 import {Loader2} from "lucide-react";
@@ -10,7 +10,7 @@ const OnboardingPage: FC = () => {
     const navigate = useNavigate()
     const [auth] = useAuth()
     const [createAnonymousAccount] = useAccountCreateAnonymous()
-    const [createNamespace, namespace,] = useNamespaceCreate()
+    const [createflow, flow,] = useFlowCreate()
     const [adhoc, adhocSubmitted] = useAdhoc()
     const [code, setCode] = useState<string>('')
 
@@ -37,17 +37,17 @@ const OnboardingPage: FC = () => {
         const abortController = new AbortController()
 
         if (auth != null && auth.type !== 'Unauthorized') {
-            createNamespace(auth.groupId, `Namespace-${generateId(10)}`, abortController)
+            createflow(auth.groupId, `flow-${generateId(10)}`, abortController)
         }
         return () => {
             abortController.abort()
         }
-    }, [auth, createNamespace])
+    }, [auth, createflow])
 
     useEffect(() => {
         const abortController = new AbortController()
-        if (namespace != null) {
-            adhoc(namespace.namespaceId, `sys = require_plugin('sys')
+        if (flow != null) {
+            adhoc(flow.flowId, `sys = require_plugin('sys')
                 sys.funcs.create({
                     name = 'Hello-World',
                     inputs = {},
@@ -58,12 +58,12 @@ const OnboardingPage: FC = () => {
             abortController.abort()
         }
 
-    }, [namespace, adhoc]);
+    }, [flow, adhoc]);
 
 
     useEffect(() => {
         if (adhocSubmitted != null) {
-            navigate('/namespaces', {replace: true})
+            navigate('/flows', {replace: true})
         }
     }, [adhocSubmitted, navigate]);
 
@@ -71,7 +71,7 @@ const OnboardingPage: FC = () => {
         <main className="flex-1 w-full pt-2 mx-auto text-lg h-screen shadow-lg bg-gray-200">
             <section className="container p-4 mx-auto max-w-3xl">
                 <div className={"flex flex-row"}>
-                    <h1>Your personal namespace is deployed shortly.</h1>
+                    <h1>Your personal flow is deployed shortly.</h1>
                     <div className={"pl-3"}>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin"/>
                     </div>

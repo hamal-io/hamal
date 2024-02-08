@@ -12,7 +12,7 @@ export default function PlaygroundPage() {
 
     const Run = () => (
         <Button onClick={() => {
-            adhoc(auth.defaultNamespaceIds.find(defaultNamespaceId => defaultNamespaceId.groupId == auth.groupId).namespaceId, code)
+            adhoc(auth.defaultflowIds.find(defaultflowId => defaultflowId.groupId == auth.groupId).flowId, code)
         }}>Play</Button>
     )
     return (

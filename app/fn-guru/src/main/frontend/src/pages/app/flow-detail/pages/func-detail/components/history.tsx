@@ -3,8 +3,8 @@ import {Button} from "@/components/ui/button"
 import {Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger,} from "@/components/ui/dialog"
 import {CounterClockwiseClockIcon} from "@radix-ui/react-icons";
 import {useFuncHistory} from "@/hook";
-import Table from "@/pages/app/namespace-detail/pages/func-detail/components/history-components/table.tsx";
-import {columns} from "@/pages/app/namespace-detail/pages/func-detail/components/history-components/columns.tsx";
+import Table from "@/pages/app/flow-detail/pages/func-detail/components/history-components/table.tsx";
+import {columns} from "@/pages/app/flow-detail/pages/func-detail/components/history-components/columns.tsx";
 
 type Props = {
     funcId: string;

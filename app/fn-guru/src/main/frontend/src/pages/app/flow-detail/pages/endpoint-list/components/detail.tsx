@@ -2,7 +2,7 @@ import React, {FC, useEffect, useState} from "react";
 
 import {Dialog, DialogContent, DialogFooter, DialogHeader, DialogTrigger} from "@/components/ui/dialog.tsx";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx";
-import {HookWithTriggers} from "@/pages/app/namespace-detail/pages/hook-list/type.tsx";
+import {HookWithTriggers} from "@/pages/app/flow-detail/pages/hook-list/type.tsx";
 import * as z from "zod";
 import {useAuth} from "@/hook/auth.ts";
 import {useNavigate} from "react-router-dom";
@@ -29,14 +29,14 @@ const Detail: FC<Prop> = ({item}) => {
     return (
         <Card
             key={item.id}
-            className="relative overnamespace-hidden duration-500 hover:border-primary group"
+            className="relative overflow-hidden duration-500 hover:border-primary group"
         >
             <CardHeader>
                 <div className="flex items-center justify-between ">
                     <CardTitle>{item.name}</CardTitle>
                 </div>
                 {/*<AddTrigger*/}
-                {/*    namespaceId={item.hook.namespace.id}*/}
+                {/*    flowId={item.hook.flow.id}*/}
                 {/*    hookId={item.hook.id}*/}
                 {/*    hookName={item.hook.name}*/}
                 {/*    trigger={triggerList}*/}
@@ -70,14 +70,14 @@ export default Detail;
 
 
 type AddTriggerProps = {
-    namespaceId: string,
+    flowId: string,
     hookId: string;
     hookName: string;
     trigger: Array<TriggerListItem>;
     afterAdd: (triggerId: string) => void
 }
 
-const AddTrigger: FC<AddTriggerProps> = ({namespaceId, hookId, hookName, trigger, afterAdd}) => {
+const AddTrigger: FC<AddTriggerProps> = ({flowId, hookId, hookName, trigger, afterAdd}) => {
     const navigate = useNavigate()
     const [openDialog, setOpenDialog] = useState<boolean>(false)
     const [loading, setLoading] = useState<boolean>(false)
@@ -100,7 +100,7 @@ const AddTrigger: FC<AddTriggerProps> = ({namespaceId, hookId, hookName, trigger
         setLoading(true)
         try {
             createTrigger({
-                namespaceId: namespaceId,
+                flowId: flowId,
                 funcId: values.funcId,
                 name: `${hookName}-${trigger.length + 1}`,
                 hookId: hookId,
@@ -137,7 +137,7 @@ const AddTrigger: FC<AddTriggerProps> = ({namespaceId, hookId, hookName, trigger
 
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                            <FormFuncSelect name='funcId' namespaceId={namespaceId} form={form}/>
+                            <FormFuncSelect name='funcId' flowId={flowId} form={form}/>
                             <FormHttpMethodSelect name='httpMethod' form={form}/>
                             <Button type="submit">
                                 {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
