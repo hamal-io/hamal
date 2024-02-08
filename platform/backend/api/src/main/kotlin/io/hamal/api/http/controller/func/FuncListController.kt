@@ -3,13 +3,13 @@ package io.hamal.api.http.controller.func
 import io.hamal.core.adapter.FuncDeploymentListPort
 import io.hamal.core.adapter.FuncListPort
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.domain.vo.FlowId
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.sdk.api.ApiFuncDeploymentList
 import io.hamal.lib.sdk.api.ApiFuncList
 import io.hamal.lib.sdk.api.ApiFuncList.Func
-import io.hamal.lib.sdk.api.ApiFuncList.Func.Flow
+import io.hamal.lib.sdk.api.ApiFuncList.Func.Namespace
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -23,9 +23,9 @@ internal class FuncListController(
     private val listDeployments: FuncDeploymentListPort
 ) {
 
-    @GetMapping("/v1/flows/{flowId}/funcs")
-    fun listFlowFuncs(
-        @PathVariable("flowId") flowId: FlowId,
+    @GetMapping("/v1/namespaces/{namespaceId}/funcs")
+    fun listNamespaceFuncs(
+        @PathVariable("namespaceId") namespaceId: NamespaceId,
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: FuncId,
         @RequestParam(required = false, name = "limit", defaultValue = "10") limit: Limit,
     ): ResponseEntity<ApiFuncList> {
@@ -33,19 +33,19 @@ internal class FuncListController(
             FuncQuery(
                 afterId = afterId,
                 limit = limit,
-                flowIds = listOf(flowId)
+                namespaceIds = listOf(namespaceId)
             ),
             // assembler
-        ) { funcs, flows ->
+        ) { funcs, namespaces ->
 
             ResponseEntity.ok(ApiFuncList(
                 funcs.map { func ->
-                    val flow = flows[func.flowId]!!
+                    val namespace = namespaces[func.namespaceId]!!
                     Func(
                         id = func.id,
-                        flow = Flow(
-                            id = flow.id,
-                            name = flow.name
+                        namespace = Namespace(
+                            id = namespace.id,
+                            name = namespace.name
                         ),
                         name = func.name
                     )
@@ -60,26 +60,26 @@ internal class FuncListController(
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: FuncId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit,
         @RequestParam(required = false, name = "group_ids", defaultValue = "") groupIds: List<GroupId>,
-        @RequestParam(required = false, name = "flow_ids", defaultValue = "") flowIds: List<FlowId>
+        @RequestParam(required = false, name = "namespace_ids", defaultValue = "") namespaceIds: List<NamespaceId>
     ): ResponseEntity<ApiFuncList> {
         return listFunc(
             FuncQuery(
                 afterId = afterId,
                 limit = limit,
                 groupIds = groupIds,
-                flowIds = flowIds
+                namespaceIds = namespaceIds
             ),
             // assembler
-        ) { funcs, flows ->
+        ) { funcs, namespaces ->
 
             ResponseEntity.ok(ApiFuncList(
                 funcs.map { func ->
-                    val flow = flows[func.flowId]!!
+                    val namespace = namespaces[func.namespaceId]!!
                     Func(
                         id = func.id,
-                        flow = Flow(
-                            id = flow.id,
-                            name = flow.name
+                        namespace = Namespace(
+                            id = namespace.id,
+                            name = namespace.name
                         ),
                         name = func.name
                     )

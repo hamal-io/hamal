@@ -2,35 +2,35 @@ import React, {FC, useEffect} from "react";
 import {Separator} from "@/components/ui/separator.tsx";
 import {EmptyPlaceholder} from "@/components/empty-placeholder.tsx";
 import {PageHeader} from "@/components/page-header.tsx";
-import Create from "@/pages/app/flow-detail/pages/hook-list/components/create.tsx";
+import Create from "@/pages/app/namespace-detail/pages/hook-list/components/create.tsx";
 import {GoToDocumentation} from "@/components/documentation.tsx";
 import {useNavigate} from "react-router-dom";
 import {useHookList} from "@/hook/hook.ts";
-import Detail from "@/pages/app/flow-detail/pages/hook-list/components/detail.tsx";
+import Detail from "@/pages/app/namespace-detail/pages/hook-list/components/detail.tsx";
 import {useTriggerListHook} from "@/hook";
-import {HookWithTriggers} from "@/pages/app/flow-detail/pages/hook-list/type.tsx";
+import {HookWithTriggers} from "@/pages/app/namespace-detail/pages/hook-list/type.tsx";
 
-type FlowProps = {
+type NamespaceProps = {
     id: string;
     name: string;
 }
 
 type ListProps = {
-    flow: FlowProps
+    namespace: NamespaceProps
 }
 
-const List: FC<ListProps> = ({flow}) => {
+const List: FC<ListProps> = ({namespace}) => {
     const [listHooks, hookList, hooksLoading, hooksError] = useHookList()
     const [listTriggers, triggerList, triggerLoading, triggerError] = useTriggerListHook()
 
     useEffect(() => {
         const abortController = new AbortController();
-        listHooks(flow.id, abortController)
-        listTriggers(flow.id, abortController)
+        listHooks(namespace.id, abortController)
+        listTriggers(namespace.id, abortController)
         return () => {
             abortController.abort();
         };
-    }, [flow]);
+    }, [namespace]);
 
     if (hooksError || triggerError) return `Error`
     if (hooksLoading || triggerLoading) return "Loading..."
@@ -46,23 +46,23 @@ const List: FC<ListProps> = ({flow}) => {
         <div className="pt-2 px-2">
             <PageHeader
                 title="Webhooks"
-                description={`Webhooks of ${flow.name}`}
-                actions={[<Create flow={flow}/>]}
+                description={`Webhooks of ${namespace.name}`}
+                actions={[<Create namespace={namespace}/>]}
             />
             <Separator className="my-6"/>
             {
-                hookList.hooks.length ? (<Content flowId={flow.id} items={hooksWithTrigger}/>) : (<NoContent flow={flow}/>)
+                hookList.hooks.length ? (<Content namespaceId={namespace.id} items={hooksWithTrigger}/>) : (<NoContent namespace={namespace}/>)
             }
         </div>
     );
 }
 
 type ContentProps = {
-    flowId: string;
+    namespaceId: string;
     items: HookWithTriggers[]
 }
 
-const Content: FC<ContentProps> = ({flowId, items}) => {
+const Content: FC<ContentProps> = ({namespaceId, items}) => {
     const navigate = useNavigate()
     return (
         <ul className="grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-1 xl:grid-cols-3">
@@ -74,9 +74,9 @@ const Content: FC<ContentProps> = ({flowId, items}) => {
 }
 
 type NoContentProps = {
-    flow: FlowProps;
+    namespace: NamespaceProps;
 }
-const NoContent: FC<NoContentProps> = ({flow}) => (
+const NoContent: FC<NoContentProps> = ({namespace}) => (
     <EmptyPlaceholder className="my-4 ">
         <EmptyPlaceholder.Icon>
             {/*<Code />*/}
@@ -86,7 +86,7 @@ const NoContent: FC<NoContentProps> = ({flow}) => (
             You haven&apos;t created any Webhook yet.
         </EmptyPlaceholder.Description>
         <div className="flex flex-col items-center justify-center gap-2 md:flex-row">
-            <Create flow={flow}/>
+            <Create namespace={namespace}/>
             <GoToDocumentation link={"/hooks"}/>
         </div>
     </EmptyPlaceholder>

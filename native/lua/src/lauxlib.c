@@ -229,7 +229,7 @@ LUALIB_API void luaL_where (lua_State *L, int level) {
 /*
 ** Again, the use of 'lua_pushvfstring' ensures this function does
 ** not need reserved stack space when called. (At worst, it generates
-** an error with "stack overflow" instead of the given message.)
+** an error with "stack overnamespace" instead of the given message.)
 */
 LUALIB_API int luaL_error (lua_State *L, const char *fmt, ...) {
   va_list argp;
@@ -374,15 +374,15 @@ LUALIB_API int luaL_checkoption (lua_State *L, int arg, const char *def,
 ** Ensures the stack has at least 'space' extra slots, raising an error
 ** if it cannot fulfill the request. (The error handling needs a few
 ** extra slots to format the error message. In case of an error without
-** this extra space, Lua will generate the same 'stack overflow' error,
+** this extra space, Lua will generate the same 'stack overnamespace' error,
 ** but without 'msg'.)
 */
 LUALIB_API void luaL_checkstack (lua_State *L, int space, const char *msg) {
   if (l_unlikely(!lua_checkstack(L, space))) {
     if (msg)
-      luaL_error(L, "stack overflow (%s)", msg);
+      luaL_error(L, "stack overnamespace (%s)", msg);
     else
-      luaL_error(L, "stack overflow");
+      luaL_error(L, "stack overnamespace");
   }
 }
 
@@ -527,11 +527,11 @@ static void newbox (lua_State *L) {
 /*
 ** Compute new size for buffer 'B', enough to accommodate extra 'sz'
 ** bytes. (The test for "not big enough" also gets the case when the
-** computation of 'newsize' overflows.)
+** computation of 'newsize' overnamespaces.)
 */
 static size_t newbuffsize (luaL_Buffer *B, size_t sz) {
   size_t newsize = (B->size / 2) * 3;  /* buffer size * 1.5 */
-  if (l_unlikely(MAX_SIZET - sz < B->n))  /* overflow in (B->n + sz)? */
+  if (l_unlikely(MAX_SIZET - sz < B->n))  /* overnamespace in (B->n + sz)? */
     return luaL_error(B->L, "buffer too large");
   if (newsize < B->n + sz)  /* not big enough? */
     newsize = B->n + sz;

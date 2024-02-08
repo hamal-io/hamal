@@ -1,43 +1,43 @@
 package io.hamal.repository.memory.record
 
 import io.hamal.lib.common.domain.Count
-import io.hamal.lib.domain.vo.FlowId
-import io.hamal.lib.domain.vo.FlowName
-import io.hamal.repository.api.Flow
-import io.hamal.repository.api.FlowCmdRepository.CreateCmd
-import io.hamal.repository.api.FlowCmdRepository.UpdateCmd
-import io.hamal.repository.api.FlowQueryRepository.FlowQuery
-import io.hamal.repository.api.FlowRepository
-import io.hamal.repository.record.namespace.CreateFlowFromRecords
-import io.hamal.repository.record.namespace.FlowCreatedRecord
-import io.hamal.repository.record.namespace.FlowRecord
-import io.hamal.repository.record.namespace.FlowUpdatedRecord
+import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.NamespaceName
+import io.hamal.repository.api.Namespace
+import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
+import io.hamal.repository.api.NamespaceCmdRepository.UpdateCmd
+import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
+import io.hamal.repository.api.NamespaceRepository
+import io.hamal.repository.record.namespace.CreateNamespaceFromRecords
+import io.hamal.repository.record.namespace.NamespaceCreatedRecord
+import io.hamal.repository.record.namespace.NamespaceRecord
+import io.hamal.repository.record.namespace.NamespaceUpdatedRecord
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
-private object FlowCurrentProjection {
-    private val projection = mutableMapOf<FlowId, Flow>()
+private object NamespaceCurrentProjection {
+    private val projection = mutableMapOf<NamespaceId, Namespace>()
 
-    fun apply(flow: Flow) {
-        val currentFlow = projection[flow.id]
-        projection.remove(flow.id)
+    fun apply(namespace: Namespace) {
+        val currentNamespace = projection[namespace.id]
+        projection.remove(namespace.id)
 
-        val flowsInGroup = projection.values.filter { it.groupId == flow.groupId }
-        if (flowsInGroup.any { it.name == flow.name }) {
-            if (currentFlow != null) {
-                projection[currentFlow.id] = currentFlow
+        val namespacesInGroup = projection.values.filter { it.groupId == namespace.groupId }
+        if (namespacesInGroup.any { it.name == namespace.name }) {
+            if (currentNamespace != null) {
+                projection[currentNamespace.id] = currentNamespace
             }
-            throw IllegalArgumentException("${flow.name} already exists")
+            throw IllegalArgumentException("${namespace.name} already exists")
         }
 
-        projection[flow.id] = flow
+        projection[namespace.id] = namespace
     }
 
-    fun find(flowId: FlowId): Flow? = projection[flowId]
-    fun find(flowName: FlowName): Flow? = projection.values.find { it.name == flowName }
+    fun find(namespaceId: NamespaceId): Namespace? = projection[namespaceId]
+    fun find(namespaceName: NamespaceName): Namespace? = projection.values.find { it.name == namespaceName }
 
-    fun list(query: FlowQuery): List<Flow> {
-        return projection.filter { query.flowIds.isEmpty() || it.key in query.flowIds }
+    fun list(query: NamespaceQuery): List<Namespace> {
+        return projection.filter { query.namespaceIds.isEmpty() || it.key in query.namespaceIds }
             .map { it.value }
             .reversed()
             .asSequence()
@@ -48,9 +48,9 @@ private object FlowCurrentProjection {
             .toList()
     }
 
-    fun count(query: FlowQuery): Count {
+    fun count(query: NamespaceQuery): Count {
         return Count(
-            projection.filter { query.flowIds.isEmpty() || it.key in query.flowIds }
+            projection.filter { query.namespaceIds.isEmpty() || it.key in query.namespaceIds }
                 .map { it.value }
                 .reversed()
                 .asSequence()
@@ -67,65 +67,65 @@ private object FlowCurrentProjection {
     }
 }
 
-class FlowMemoryRepository : RecordMemoryRepository<FlowId, FlowRecord, Flow>(
-    createDomainObject = CreateFlowFromRecords,
-    recordClass = FlowRecord::class
-), FlowRepository {
+class NamespaceMemoryRepository : RecordMemoryRepository<NamespaceId, NamespaceRecord, Namespace>(
+    createDomainObject = CreateNamespaceFromRecords,
+    recordClass = NamespaceRecord::class
+), NamespaceRepository {
 
-    override fun create(cmd: CreateCmd): Flow {
+    override fun create(cmd: CreateCmd): Namespace {
         return lock.withLock {
-            val flowId = cmd.flowId
-            if (commandAlreadyApplied(cmd.id, flowId)) {
-                versionOf(flowId, cmd.id)
+            val namespaceId = cmd.namespaceId
+            if (commandAlreadyApplied(cmd.id, namespaceId)) {
+                versionOf(namespaceId, cmd.id)
             } else {
                 store(
-                    FlowCreatedRecord(
+                    NamespaceCreatedRecord(
                         cmdId = cmd.id,
-                        entityId = flowId,
+                        entityId = namespaceId,
                         groupId = cmd.groupId,
                         type = cmd.type!!,
                         name = cmd.name,
                         inputs = cmd.inputs,
                     )
                 )
-                (currentVersion(flowId)).also(FlowCurrentProjection::apply)
+                (currentVersion(namespaceId)).also(NamespaceCurrentProjection::apply)
             }
         }
     }
 
-    override fun update(flowId: FlowId, cmd: UpdateCmd): Flow {
+    override fun update(namespaceId: NamespaceId, cmd: UpdateCmd): Namespace {
         return lock.withLock {
-            if (commandAlreadyApplied(cmd.id, flowId)) {
-                versionOf(flowId, cmd.id)
+            if (commandAlreadyApplied(cmd.id, namespaceId)) {
+                versionOf(namespaceId, cmd.id)
             } else {
-                val current = currentVersion(flowId)
+                val current = currentVersion(namespaceId)
                 store(
-                    FlowUpdatedRecord(
-                        entityId = flowId,
+                    NamespaceUpdatedRecord(
+                        entityId = namespaceId,
                         cmdId = cmd.id,
                         name = cmd.name ?: current.name,
                         inputs = cmd.inputs ?: current.inputs,
                     )
                 )
-                (currentVersion(flowId)).also(FlowCurrentProjection::apply)
+                (currentVersion(namespaceId)).also(NamespaceCurrentProjection::apply)
             }
         }
     }
 
-    override fun find(flowId: FlowId): Flow? =
-        lock.withLock { FlowCurrentProjection.find(flowId) }
+    override fun find(namespaceId: NamespaceId): Namespace? =
+        lock.withLock { NamespaceCurrentProjection.find(namespaceId) }
 
-    override fun find(flowName: FlowName): Flow? =
-        lock.withLock { FlowCurrentProjection.find(flowName) }
+    override fun find(namespaceName: NamespaceName): Namespace? =
+        lock.withLock { NamespaceCurrentProjection.find(namespaceName) }
 
-    override fun list(query: FlowQuery): List<Flow> = lock.withLock { FlowCurrentProjection.list(query) }
+    override fun list(query: NamespaceQuery): List<Namespace> = lock.withLock { NamespaceCurrentProjection.list(query) }
 
-    override fun count(query: FlowQuery): Count = lock.withLock { FlowCurrentProjection.count(query) }
+    override fun count(query: NamespaceQuery): Count = lock.withLock { NamespaceCurrentProjection.count(query) }
 
     override fun clear() {
         lock.withLock {
             super.clear()
-            FlowCurrentProjection.clear()
+            NamespaceCurrentProjection.clear()
         }
     }
 

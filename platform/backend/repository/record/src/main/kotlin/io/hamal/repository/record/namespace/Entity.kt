@@ -2,27 +2,27 @@ package io.hamal.repository.record.namespace
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.*
-import io.hamal.repository.api.Flow
+import io.hamal.repository.api.Namespace
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordEntity
 import io.hamal.repository.record.RecordSequence
 import io.hamal.repository.record.RecordedAt
 
-data class FlowEntity(
+data class NamespaceEntity(
     override val cmdId: CmdId,
-    override val id: FlowId,
+    override val id: NamespaceId,
     override val recordedAt: RecordedAt,
     override val sequence: RecordSequence,
     val groupId: GroupId,
 
-    var name: FlowName? = null,
-    var inputs: FlowInputs? = null,
-    val type: FlowType,
-) : RecordEntity<FlowId, FlowRecord, Flow> {
+    var name: NamespaceName? = null,
+    var inputs: NamespaceInputs? = null,
+    val type: NamespaceType,
+) : RecordEntity<NamespaceId, NamespaceRecord, Namespace> {
 
-    override fun apply(rec: FlowRecord): FlowEntity {
+    override fun apply(rec: NamespaceRecord): NamespaceEntity {
         return when (rec) {
-            is FlowCreatedRecord -> copy(
+            is NamespaceCreatedRecord -> copy(
                 id = rec.entityId,
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
@@ -32,7 +32,7 @@ data class FlowEntity(
                 recordedAt = rec.recordedAt()
             )
 
-            is FlowUpdatedRecord -> copy(
+            is NamespaceUpdatedRecord -> copy(
                 id = rec.entityId,
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
@@ -43,8 +43,8 @@ data class FlowEntity(
         }
     }
 
-    override fun toDomainObject(): Flow {
-        return Flow(
+    override fun toDomainObject(): Namespace {
+        return Namespace(
             cmdId = cmdId,
             id = id,
             updatedAt = recordedAt.toUpdatedAt(),
@@ -56,12 +56,12 @@ data class FlowEntity(
     }
 }
 
-fun List<FlowRecord>.createEntity(): FlowEntity {
+fun List<NamespaceRecord>.createEntity(): NamespaceEntity {
     check(isNotEmpty()) { "At least one record is required" }
     val firstRecord = first()
-    check(firstRecord is FlowCreatedRecord)
+    check(firstRecord is NamespaceCreatedRecord)
 
-    var result = FlowEntity(
+    var result = NamespaceEntity(
         id = firstRecord.entityId,
         groupId = firstRecord.groupId,
         cmdId = firstRecord.cmdId,
@@ -77,8 +77,8 @@ fun List<FlowRecord>.createEntity(): FlowEntity {
     return result
 }
 
-object CreateFlowFromRecords : CreateDomainObject<FlowId, FlowRecord, Flow> {
-    override fun invoke(recs: List<FlowRecord>): Flow {
+object CreateNamespaceFromRecords : CreateDomainObject<NamespaceId, NamespaceRecord, Namespace> {
+    override fun invoke(recs: List<NamespaceRecord>): Namespace {
         return recs.createEntity().toDomainObject()
     }
 }

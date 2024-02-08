@@ -1,81 +1,81 @@
 package io.hamal.lib.sdk.api
 
 import io.hamal.lib.domain._enum.RequestStatus
-import io.hamal.lib.domain.request.FlowCreateRequest
-import io.hamal.lib.domain.request.FlowUpdateRequest
+import io.hamal.lib.domain.request.NamespaceCreateRequest
+import io.hamal.lib.domain.request.NamespaceUpdateRequest
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.fold
 
-data class ApiFlowCreateRequest(
-    override val name: FlowName,
-    override val inputs: FlowInputs,
-    override val type: FlowType? = null
-) : FlowCreateRequest
+data class ApiNamespaceCreateRequest(
+    override val name: NamespaceName,
+    override val inputs: NamespaceInputs,
+    override val type: NamespaceType? = null
+) : NamespaceCreateRequest
 
-data class ApiFlowCreateRequested(
+data class ApiNamespaceCreateRequested(
     override val id: RequestId,
     override val status: RequestStatus,
-    val flowId: FlowId,
+    val namespaceId: NamespaceId,
     val groupId: GroupId,
 ) : ApiRequested()
 
-data class ApiFlowUpdateRequest(
-    override val name: FlowName,
-    override val inputs: FlowInputs,
-) : FlowUpdateRequest
+data class ApiNamespaceUpdateRequest(
+    override val name: NamespaceName,
+    override val inputs: NamespaceInputs,
+) : NamespaceUpdateRequest
 
-data class ApiFlowUpdateRequested(
+data class ApiNamespaceUpdateRequested(
     override val id: RequestId,
     override val status: RequestStatus,
-    val flowId: FlowId,
+    val namespaceId: NamespaceId,
 ) : ApiRequested()
 
-data class ApiFlowList(
-    val flows: List<Flow>
+data class ApiNamespaceList(
+    val namespaces: List<Namespace>
 ) : ApiObject() {
-    data class Flow(
-        val type: FlowType,
-        val id: FlowId,
-        val name: FlowName
+    data class Namespace(
+        val type: NamespaceType,
+        val id: NamespaceId,
+        val name: NamespaceName
     )
 }
 
-data class ApiFlow(
-    val id: FlowId,
-    val type: FlowType,
-    val name: FlowName,
-    val inputs: FlowInputs
+data class ApiNamespace(
+    val id: NamespaceId,
+    val type: NamespaceType,
+    val name: NamespaceName,
+    val inputs: NamespaceInputs
 ) : ApiObject()
 
-interface ApiFlowService {
-    fun create(groupId: GroupId, createFlowReq: ApiFlowCreateRequest): ApiFlowCreateRequested
-    fun list(groupId: GroupId): List<ApiFlowList.Flow>
-    fun get(flowId: FlowId): ApiFlow
+interface ApiNamespaceservice {
+    fun create(groupId: GroupId, createNamespaceReq: ApiNamespaceCreateRequest): ApiNamespaceCreateRequested
+    fun list(groupId: GroupId): List<ApiNamespaceList.Namespace>
+    fun get(namespaceId: NamespaceId): ApiNamespace
 }
 
-internal class ApiFlowServiceImpl(
+internal class ApiNamespaceserviceImpl(
     private val template: HttpTemplate
-) : ApiFlowService {
+) : ApiNamespaceservice {
 
-    override fun create(groupId: GroupId, createFlowReq: ApiFlowCreateRequest): ApiFlowCreateRequested =
-        template.post("/v1/groups/{groupId}/flows")
+    override fun create(groupId: GroupId, createNamespaceReq: ApiNamespaceCreateRequest): ApiNamespaceCreateRequested =
+        template.post("/v1/groups/{groupId}/namespaces")
             .path("groupId", groupId)
-            .body(createFlowReq)
+            .body(createNamespaceReq)
             .execute()
-            .fold(ApiFlowCreateRequested::class)
+            .fold(ApiNamespaceCreateRequested::class)
 
     override fun list(groupId: GroupId) =
-        template.get("/v1/groups/{groupId}/flows")
+        template.get("/v1/groups/{groupId}/namespaces")
             .path("groupId", groupId)
             .execute()
-            .fold(ApiFlowList::class)
-            .flows
+            .fold(ApiNamespaceList::class)
+            .namespaces
 
-    override fun get(flowId: FlowId) =
-        template.get("/v1/flows/{flowId}")
-            .path("flowId", flowId)
+    override fun get(namespaceId: NamespaceId) =
+        template.get("/v1/namespaces/{namespaceId}")
+            .path("namespaceId", namespaceId)
             .execute()
-            .fold(ApiFlow::class)
+            .fold(ApiNamespace::class)
 }

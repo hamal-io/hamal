@@ -3,28 +3,28 @@ package io.hamal.core.request.handler.namespace
 import io.hamal.core.event.InternalEventEmitter
 import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.request.FlowUpdateRequested
-import io.hamal.repository.api.Flow
-import io.hamal.repository.api.FlowCmdRepository
-import io.hamal.repository.api.event.FlowCreatedEvent
+import io.hamal.lib.domain.request.NamespaceUpdateRequested
+import io.hamal.repository.api.Namespace
+import io.hamal.repository.api.NamespaceCmdRepository
+import io.hamal.repository.api.event.NamespaceCreatedEvent
 import org.springframework.stereotype.Component
 
 
 @Component
-class FlowUpdateHandler(
-    val flowCmdRepository: FlowCmdRepository,
+class NamespaceUpdateHandler(
+    val namespaceCmdRepository: NamespaceCmdRepository,
     val eventEmitter: InternalEventEmitter
-) : io.hamal.core.request.RequestHandler<FlowUpdateRequested>(FlowUpdateRequested::class) {
+) : io.hamal.core.request.RequestHandler<NamespaceUpdateRequested>(NamespaceUpdateRequested::class) {
 
-    override fun invoke(req: FlowUpdateRequested) {
-        updateFlow(req).also { emitEvent(req.cmdId(), it) }
+    override fun invoke(req: NamespaceUpdateRequested) {
+        updateNamespace(req).also { emitEvent(req.cmdId(), it) }
     }
 }
 
-private fun FlowUpdateHandler.updateFlow(req: FlowUpdateRequested): Flow {
-    return flowCmdRepository.update(
-        req.flowId,
-        FlowCmdRepository.UpdateCmd(
+private fun NamespaceUpdateHandler.updateNamespace(req: NamespaceUpdateRequested): Namespace {
+    return namespaceCmdRepository.update(
+        req.namespaceId,
+        NamespaceCmdRepository.UpdateCmd(
             id = req.cmdId(),
             name = req.name,
             inputs = req.inputs,
@@ -32,6 +32,6 @@ private fun FlowUpdateHandler.updateFlow(req: FlowUpdateRequested): Flow {
     )
 }
 
-private fun FlowUpdateHandler.emitEvent(cmdId: CmdId, flow: Flow) {
-    eventEmitter.emit(cmdId, FlowCreatedEvent(flow))
+private fun NamespaceUpdateHandler.emitEvent(cmdId: CmdId, namespace: Namespace) {
+    eventEmitter.emit(cmdId, NamespaceCreatedEvent(namespace))
 }

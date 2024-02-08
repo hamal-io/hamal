@@ -3,7 +3,7 @@ package io.hamal.core.request.handler.hook
 import io.hamal.core.request.handler.BaseReqHandlerTest
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain.request.HookCreateRequested
-import io.hamal.lib.domain.vo.FlowId
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.HookId
 import io.hamal.lib.domain.vo.HookName
 import io.hamal.lib.domain.vo.RequestId
@@ -38,7 +38,7 @@ internal class CreateHookHandlerTest : BaseReqHandlerTest() {
             status = Submitted,
             hookId = HookId(12345),
             groupId = testGroup.id,
-            flowId = FlowId(23456),
+            namespaceId = NamespaceId(23456),
             name = HookName("awesome-hook")
         )
     }

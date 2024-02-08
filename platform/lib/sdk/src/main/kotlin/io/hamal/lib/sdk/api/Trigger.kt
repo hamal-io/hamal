@@ -37,7 +37,7 @@ data class ApiTriggerCreateRequested(
     override val status: RequestStatus,
     val triggerId: TriggerId,
     val groupId: GroupId,
-    val flowId: FlowId
+    val namespaceId: NamespaceId
 ) : ApiRequested()
 
 
@@ -55,7 +55,7 @@ data class ApiTriggerList(
         val id: TriggerId
         val name: TriggerName
         val func: Func
-        val flow: Flow
+        val namespace: Namespace
         val type: TriggerType
 
         data class Func(
@@ -63,9 +63,9 @@ data class ApiTriggerList(
             val name: FuncName
         )
 
-        data class Flow(
-            val id: FlowId,
-            val name: FlowName
+        data class Namespace(
+            val id: NamespaceId,
+            val name: NamespaceName
         )
 
         object Adapter : JsonAdapter<Trigger> {
@@ -102,7 +102,7 @@ data class ApiTriggerList(
         override val id: TriggerId,
         override val name: TriggerName,
         override val func: Trigger.Func,
-        override val flow: Trigger.Flow,
+        override val namespace: Trigger.Namespace,
         val duration: Duration
     ) : Trigger {
         override val type: TriggerType = TriggerType.FixedRate
@@ -112,7 +112,7 @@ data class ApiTriggerList(
         override val id: TriggerId,
         override val name: TriggerName,
         override val func: Trigger.Func,
-        override val flow: Trigger.Flow,
+        override val namespace: Trigger.Namespace,
         val topic: Topic
     ) : Trigger {
         override val type: TriggerType = TriggerType.Event
@@ -127,7 +127,7 @@ data class ApiTriggerList(
         override val id: TriggerId,
         override val name: TriggerName,
         override val func: Trigger.Func,
-        override val flow: Trigger.Flow,
+        override val namespace: Trigger.Namespace,
         val hook: Hook
     ) : Trigger {
         override val type: TriggerType = TriggerType.Hook
@@ -143,7 +143,7 @@ data class ApiTriggerList(
         override val id: TriggerId,
         override val name: TriggerName,
         override val func: Trigger.Func,
-        override val flow: Trigger.Flow,
+        override val namespace: Trigger.Namespace,
         val cron: CronPattern
     ) : Trigger {
         override val type: TriggerType = TriggerType.Cron
@@ -155,7 +155,7 @@ sealed class ApiTrigger : ApiObject() {
     abstract val type: TriggerType
     abstract val name: TriggerName
     abstract val func: Func
-    abstract val flow: Flow
+    abstract val namespace: Namespace
     abstract val inputs: TriggerInputs
     abstract val correlationId: CorrelationId?
     abstract val status: TriggerStatus
@@ -165,9 +165,9 @@ sealed class ApiTrigger : ApiObject() {
         val name: FuncName
     )
 
-    data class Flow(
-        val id: FlowId,
-        val name: FlowName
+    data class Namespace(
+        val id: NamespaceId,
+        val name: NamespaceName
     )
 
     object Adapter : JsonAdapter<ApiTrigger> {
@@ -204,7 +204,7 @@ class ApiFixedRateTrigger(
     override val id: TriggerId,
     override val name: TriggerName,
     override val func: Func,
-    override val flow: Flow,
+    override val namespace: Namespace,
     override val inputs: TriggerInputs,
     override val status: TriggerStatus,
     override val correlationId: CorrelationId? = null,
@@ -217,7 +217,7 @@ class ApiEventTrigger(
     override val id: TriggerId,
     override val name: TriggerName,
     override val func: Func,
-    override val flow: Flow,
+    override val namespace: Namespace,
     override val inputs: TriggerInputs,
     override val status: TriggerStatus,
     override val correlationId: CorrelationId? = null,
@@ -235,7 +235,7 @@ class ApiHookTrigger(
     override val id: TriggerId,
     override val name: TriggerName,
     override val func: Func,
-    override val flow: Flow,
+    override val namespace: Namespace,
     override val inputs: TriggerInputs,
     override val status: TriggerStatus,
     override val correlationId: CorrelationId? = null,
@@ -255,7 +255,7 @@ class ApiCronTrigger(
     override val id: TriggerId,
     override val name: TriggerName,
     override val func: Func,
-    override val flow: Flow,
+    override val namespace: Namespace,
     override val inputs: TriggerInputs,
     override val status: TriggerStatus,
     override val correlationId: CorrelationId? = null,
@@ -266,7 +266,7 @@ class ApiCronTrigger(
 
 
 interface ApiTriggerService {
-    fun create(flowId: FlowId, req: ApiTriggerCreateReq): ApiTriggerCreateRequested
+    fun create(namespaceId: NamespaceId, req: ApiTriggerCreateReq): ApiTriggerCreateRequested
     fun list(query: TriggerQuery): List<ApiTriggerList.Trigger>
     fun get(triggerId: TriggerId): ApiTrigger
     fun activate(triggerId: TriggerId): ApiTriggerStatusRequested
@@ -276,14 +276,14 @@ interface ApiTriggerService {
         var afterId: FuncId = FuncId(SnowflakeId(Long.MAX_VALUE)),
         var limit: Limit = Limit(25),
         var funcIds: List<FuncId> = listOf(),
-        var flowIds: List<FlowId> = listOf(),
+        var namespaceIds: List<NamespaceId> = listOf(),
         var groupIds: List<GroupId> = listOf()
     ) {
         fun setRequestParameters(req: HttpRequest) {
             req.parameter("after_id", afterId)
             req.parameter("limit", limit)
             if (funcIds.isNotEmpty()) req.parameter("func_ids", funcIds)
-            if (flowIds.isNotEmpty()) req.parameter("flow_ids", flowIds)
+            if (namespaceIds.isNotEmpty()) req.parameter("namespace_ids", namespaceIds)
             if (groupIds.isNotEmpty()) req.parameter("group_ids", groupIds)
         }
     }
@@ -293,9 +293,9 @@ interface ApiTriggerService {
 internal class ApiTriggerServiceImpl(
     private val template: HttpTemplate
 ) : ApiTriggerService {
-    override fun create(flowId: FlowId, req: ApiTriggerCreateReq): ApiTriggerCreateRequested =
-        template.post("/v1/flows/{flowId}/triggers")
-            .path("flowId", flowId)
+    override fun create(namespaceId: NamespaceId, req: ApiTriggerCreateReq): ApiTriggerCreateRequested =
+        template.post("/v1/namespaces/{namespaceId}/triggers")
+            .path("namespaceId", namespaceId)
             .body(req)
             .execute()
             .fold(ApiTriggerCreateRequested::class)

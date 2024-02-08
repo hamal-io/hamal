@@ -1,17 +1,17 @@
 sys = require_plugin('sys')
 
-err, flows = sys.flows.list()
+err, namespaces = sys.namespaces.list()
 assert(err == nil)
 -- hamal as default namespace
-assert(#flows == 1)
+assert(#namespaces == 1)
 
-err, flow = sys.flows.create({
+err, namespace = sys.namespaces.create({
     name = 'io::hamal::web3::eth'
 })
 assert(err == nil)
-sys.await_completed(flow)
+sys.await_completed(namespace)
 
-err, flows = sys.flows.list()
+err, namespaces = sys.namespaces.list()
 assert(err == nil)
-assert(#flows == 2)
+assert(#namespaces == 2)
 

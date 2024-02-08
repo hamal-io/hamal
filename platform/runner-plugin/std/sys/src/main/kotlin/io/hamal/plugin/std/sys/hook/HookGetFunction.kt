@@ -25,8 +25,8 @@ class HookGetFunction(
                             "id" to KuaString(hook.id.value.value.toString(16)),
                             "namespace" to KuaMap(
                                 mutableMapOf(
-                                    "id" to KuaString(hook.flow.id.value.value.toString(16)),
-                                    "name" to KuaString(hook.flow.name.value)
+                                    "id" to KuaString(hook.namespace.id.value.value.toString(16)),
+                                    "name" to KuaString(hook.namespace.name.value)
                                 )
                             ),
                             "name" to KuaString(hook.name.value),

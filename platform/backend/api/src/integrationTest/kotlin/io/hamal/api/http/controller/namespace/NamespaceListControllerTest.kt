@@ -1,10 +1,10 @@
 package io.hamal.api.http.controller.namespace
 
-import io.hamal.lib.domain.vo.FlowInputs
-import io.hamal.lib.domain.vo.FlowName
-import io.hamal.lib.domain.vo.FlowType
-import io.hamal.lib.sdk.api.ApiFlowCreateRequest
-import io.hamal.lib.sdk.api.ApiFlowList
+import io.hamal.lib.domain.vo.NamespaceInputs
+import io.hamal.lib.domain.vo.NamespaceName
+import io.hamal.lib.domain.vo.NamespaceType
+import io.hamal.lib.sdk.api.ApiNamespaceCreateRequest
+import io.hamal.lib.sdk.api.ApiNamespaceList
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
@@ -12,73 +12,73 @@ import org.junit.jupiter.api.Test
 
 internal class NamespaceListControllerTest : NamespaceBaseControllerTest() {
     @Test
-    fun `Only default flows`() {
-        val result = listFlows()
-        assertThat(result.flows, hasSize(1))
+    fun `Only default namespaces`() {
+        val result = listNamespaces()
+        assertThat(result.namespaces, hasSize(1))
 
-        with(result.flows.first()) {
-            assertThat(name, equalTo(FlowName("hamal")))
-            assertThat(type, equalTo(FlowType.default))
+        with(result.namespaces.first()) {
+            assertThat(name, equalTo(NamespaceName("hamal")))
+            assertThat(type, equalTo(NamespaceType.default))
         }
     }
 
     @Test
-    fun `Single flow`() {
-        val flowId = awaitCompleted(
-            createFlow(
-                ApiFlowCreateRequest(
-                    name = FlowName("namespace-one"),
-                    inputs = FlowInputs(),
-                    type = FlowType.default
+    fun `Single namespace`() {
+        val namespaceId = awaitCompleted(
+            createNamespace(
+                ApiNamespaceCreateRequest(
+                    name = NamespaceName("namespace-one"),
+                    inputs = NamespaceInputs(),
+                    type = NamespaceType.default
 
                 )
             )
-        ).flowId
+        ).namespaceId
 
-        with(listFlows()) {
-            assertThat(flows, hasSize(2))
-            with(flows.first()) {
-                assertThat(id, equalTo(flowId))
-                assertThat(name, equalTo(FlowName("namespace-one")))
-                assertThat(type, equalTo(FlowType.default))
+        with(listNamespaces()) {
+            assertThat(namespaces, hasSize(2))
+            with(namespaces.first()) {
+                assertThat(id, equalTo(namespaceId))
+                assertThat(name, equalTo(NamespaceName("namespace-one")))
+                assertThat(type, equalTo(NamespaceType.default))
             }
         }
     }
 
     @Test
-    fun `Limit flows`() {
+    fun `Limit namespaces`() {
         awaitCompleted(
             IntRange(0, 20).map {
-                createFlow(
-                    ApiFlowCreateRequest(
-                        name = FlowName("namespace-$it"),
-                        inputs = FlowInputs(),
-                        type = FlowType.default
+                createNamespace(
+                    ApiNamespaceCreateRequest(
+                        name = NamespaceName("namespace-$it"),
+                        inputs = NamespaceInputs(),
+                        type = NamespaceType.default
                     )
                 )
             }
         )
 
-        val listResponse = httpTemplate.get("/v1/groups/{groupId}/flows")
+        val listResponse = httpTemplate.get("/v1/groups/{groupId}/namespaces")
             .path("groupId", testGroup.id)
             .parameter("limit", 12)
-            .execute(ApiFlowList::class)
+            .execute(ApiNamespaceList::class)
 
-        assertThat(listResponse.flows, hasSize(12))
+        assertThat(listResponse.namespaces, hasSize(12))
 
-        listResponse.flows.forEachIndexed { idx, flow ->
-            assertThat(flow.name, equalTo(FlowName("namespace-${(20 - idx)}")))
+        listResponse.namespaces.forEachIndexed { idx, namespace ->
+            assertThat(namespace.name, equalTo(NamespaceName("namespace-${(20 - idx)}")))
         }
     }
 
     @Test
-    fun `Skip and limit flows`() {
+    fun `Skip and limit namespaces`() {
         val requests = IntRange(0, 99).map {
-            createFlow(
-                ApiFlowCreateRequest(
-                    name = FlowName("namespace-$it"),
-                    inputs = FlowInputs(),
-                    type = FlowType.default
+            createNamespace(
+                ApiNamespaceCreateRequest(
+                    name = NamespaceName("namespace-$it"),
+                    inputs = NamespaceInputs(),
+                    type = NamespaceType.default
                 )
             )
         }
@@ -86,15 +86,15 @@ internal class NamespaceListControllerTest : NamespaceBaseControllerTest() {
         awaitCompleted(requests)
         val fortyNinth = requests[49]
 
-        val listResponse = httpTemplate.get("/v1/groups/{groupId}/flows")
+        val listResponse = httpTemplate.get("/v1/groups/{groupId}/namespaces")
             .path("groupId", testGroup.id)
-            .parameter("after_id", fortyNinth.flowId)
+            .parameter("after_id", fortyNinth.namespaceId)
             .parameter("limit", 1)
-            .execute(ApiFlowList::class)
+            .execute(ApiNamespaceList::class)
 
-        assertThat(listResponse.flows, hasSize(1))
+        assertThat(listResponse.namespaces, hasSize(1))
 
-        val flow = listResponse.flows.first()
-        assertThat(flow.name, equalTo(FlowName("namespace-48")))
+        val namespace = listResponse.namespaces.first()
+        assertThat(namespace.name, equalTo(NamespaceName("namespace-48")))
     }
 }

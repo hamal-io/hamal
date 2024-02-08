@@ -19,20 +19,20 @@ export const useFuncGet = (): [FuncGetAction, Func, boolean, Error] => {
     return [fn, func, loading, error]
 }
 
-type FuncListAction = (flowId: string, abortController?: AbortController) => void
+type FuncListAction = (namespaceId: string, abortController?: AbortController) => void
 export const useFuncList = (): [FuncListAction, FuncList, boolean, Error] => {
     const [auth] = useAuth()
     const [get, funcList, loading, error] = useGet<FuncList>()
-    const fn = useCallback(async (flowId: string, abortController?: AbortController) => get(`/v1/flows/${flowId}/funcs`, abortController), [auth])
+    const fn = useCallback(async (namespaceId: string, abortController?: AbortController) => get(`/v1/namespaces/${namespaceId}/funcs`, abortController), [auth])
     return [fn, funcList, loading, error]
 }
 
-type FuncCreateAction = (flowId: string, name: string, abortController?: AbortController) => void
+type FuncCreateAction = (namespaceId: string, name: string, abortController?: AbortController) => void
 export const useFuncCreate = (): [FuncCreateAction, FuncCreateSubmitted, boolean, Error] => {
     const [auth] = useAuth()
     const [post, submission, loading, error] = usePost<FuncCreateSubmitted>()
-    const fn = useCallback(async (flowId: string, name: string, abortController?: AbortController) =>
-        post(`/v1/flows/${flowId}/funcs`, {
+    const fn = useCallback(async (namespaceId: string, name: string, abortController?: AbortController) =>
+        post(`/v1/namespaces/${namespaceId}/funcs`, {
             name,
             inputs: {},
             code: ""

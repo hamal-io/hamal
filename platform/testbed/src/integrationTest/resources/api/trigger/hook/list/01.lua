@@ -22,6 +22,6 @@ req_two = triggers[1]
 assert(req_two.type == 'Hook')
 assert(req_two.name == 'trigger-to-create')
 assert(req_two.func.name == "test-func")
-assert(req_two.flow.id == '1')
-assert(req_two.flow.name == "root-namespace")
+assert(req_two.namespace.id == '1')
+assert(req_two.namespace.name == "root-namespace")
 assert(req_two.hook.name == "some-amazing-hook")

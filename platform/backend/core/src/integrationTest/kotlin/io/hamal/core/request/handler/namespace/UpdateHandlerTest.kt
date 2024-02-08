@@ -5,10 +5,10 @@ import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 
-internal object FlowUpdateHandlerTest : BaseReqHandlerTest() {
+internal object NamespaceUpdateHandlerTest : BaseReqHandlerTest() {
     @Test
     @Disabled
-    fun `Updates flow`() {
+    fun `Updates namespace`() {
         TODO()
     }
 }

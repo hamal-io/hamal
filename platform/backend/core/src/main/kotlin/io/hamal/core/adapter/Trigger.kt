@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component
 
 interface TriggerCreatePort {
     operator fun <T : Any> invoke(
-        flowId: FlowId,
+        namespaceId: NamespaceId,
         req: TriggerCreateRequest,
         responseHandler: (TriggerCreateRequested) -> T
     ): T
@@ -25,7 +25,7 @@ interface TriggerCreatePort {
 interface TriggerGetPort {
     operator fun <T : Any> invoke(
         triggerId: TriggerId,
-        responseHandler: (Trigger, Func, Flow, Topic?, Hook?) -> T
+        responseHandler: (Trigger, Func, Namespace, Topic?, Hook?) -> T
     ): T
 }
 
@@ -36,7 +36,7 @@ interface TriggerListPort {
         responseHandler: (
             triggers: List<Trigger>,
             funcs: Map<FuncId, Func>,
-            flows: Map<FlowId, Flow>,
+            namespaces: Map<NamespaceId, Namespace>,
             topics: Map<TopicId, Topic>,
             hooks: Map<HookId, Hook>
         ) -> T
@@ -59,12 +59,12 @@ class TriggerAdapter(
     private val funcQueryRepository: FuncQueryRepository,
     private val generateDomainId: GenerateId,
     private val hookQueryRepository: HookQueryRepository,
-    private val flowQueryRepository: FlowQueryRepository,
+    private val namespaceQueryRepository: NamespaceQueryRepository,
     private val reqCmdRepository: RequestCmdRepository,
     private val triggerQueryRepository: TriggerQueryRepository,
 ) : TriggerPort {
     override fun <T : Any> invoke(
-        flowId: FlowId,
+        namespaceId: NamespaceId,
         req: TriggerCreateRequest,
         responseHandler: (TriggerCreateRequested) -> T
     ): T {
@@ -72,7 +72,7 @@ class TriggerAdapter(
         ensureEvent(req)
         ensureHook(req)
 
-        val flow = flowQueryRepository.get(flowId)
+        val namespace = namespaceQueryRepository.get(namespaceId)
         val func = funcQueryRepository.get(req.funcId)
 
         return TriggerCreateRequested(
@@ -80,10 +80,10 @@ class TriggerAdapter(
             id = generateDomainId(::RequestId),
             status = RequestStatus.Submitted,
             triggerId = generateDomainId(::TriggerId),
-            groupId = flow.groupId,
+            groupId = namespace.groupId,
             name = req.name,
             funcId = func.id,
-            flowId = flowId,
+            namespaceId = namespaceId,
             inputs = req.inputs,
             correlationId = req.correlationId,
             duration = req.duration,
@@ -97,11 +97,11 @@ class TriggerAdapter(
 
     override fun <T : Any> invoke(
         triggerId: TriggerId,
-        responseHandler: (Trigger, Func, Flow, Topic?, Hook?) -> T
+        responseHandler: (Trigger, Func, Namespace, Topic?, Hook?) -> T
     ): T {
         val trigger = triggerQueryRepository.get(triggerId)
         val func = funcQueryRepository.get(trigger.funcId)
-        val flow = flowQueryRepository.get(trigger.flowId)
+        val namespace = namespaceQueryRepository.get(trigger.namespaceId)
         val topic = if (trigger is EventTrigger) {
             topicRepository.get(trigger.topicId)
         } else {
@@ -114,7 +114,7 @@ class TriggerAdapter(
             null
         }
 
-        return responseHandler(trigger, func, flow, topic, hook)
+        return responseHandler(trigger, func, namespace, topic, hook)
     }
 
     override operator fun <T : Any> invoke(
@@ -122,7 +122,7 @@ class TriggerAdapter(
         responseHandler: (
             triggers: List<Trigger>,
             funcs: Map<FuncId, Func>,
-            flows: Map<FlowId, Flow>,
+            namespaces: Map<NamespaceId, Namespace>,
             topics: Map<TopicId, Topic>,
             hooks: Map<HookId, Hook>
         ) -> T
@@ -130,7 +130,7 @@ class TriggerAdapter(
 
         val triggers = triggerQueryRepository.list(query)
 
-        val flows = flowQueryRepository.list(triggers.map { it.flowId })
+        val namespaces = namespaceQueryRepository.list(triggers.map { it.namespaceId })
             .associateBy { it.id }
 
         val funcs = funcQueryRepository.list(triggers.map { it.funcId })
@@ -143,7 +143,7 @@ class TriggerAdapter(
         val hooks = hookQueryRepository.list(triggers.filterIsInstance<HookTrigger>().map { it.hookId })
             .associateBy { it.id }
 
-        return responseHandler(triggers, funcs, flows, topics, hooks)
+        return responseHandler(triggers, funcs, namespaces, topics, hooks)
     }
 
     override fun <T : Any> invoke(

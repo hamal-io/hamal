@@ -198,12 +198,12 @@ static int os_clock (lua_State *L) {
 */
 
 /*
-** About the overflow check: an overflow cannot occur when time
+** About the overnamespace check: an overnamespace cannot occur when time
 ** is represented by a lua_Integer, because either lua_Integer is
 ** large enough to represent all int fields or it is not large enough
-** to represent a time that cause a field to overflow.  However, if
+** to represent a time that cause a field to overnamespace.  However, if
 ** times are represented as doubles and lua_Integer is int, then the
-** time 0x1.e1853b0d184f6p+55 would cause an overflow when adding 1900
+** time 0x1.e1853b0d184f6p+55 would cause an overnamespace when adding 1900
 ** to compute the year.
 */
 static void setfield (lua_State *L, const char *key, int value, int delta) {

@@ -3,7 +3,7 @@ package io.hamal.plugin.std.sys.endpoint
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.EndpointMethod
 import io.hamal.lib.domain.vo.EndpointName
-import io.hamal.lib.domain.vo.FlowId
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -24,7 +24,7 @@ class EndpointCreateFunction(
     override fun invoke(ctx: FunctionContext, arg1: KuaMap): Pair<KuaError?, KuaMap?> {
         return try {
             val res = sdk.endpoint.create(
-                arg1.findString("flow_id")?.let { FlowId(SnowflakeId(it)) } ?: ctx[FlowId::class],
+                arg1.findString("namespace_id")?.let { NamespaceId(SnowflakeId(it)) } ?: ctx[NamespaceId::class],
                 ApiEndpointCreateRequest(
                     funcId = FuncId(arg1.getString("func_id")),
                     name = EndpointName(arg1.getString("name")),

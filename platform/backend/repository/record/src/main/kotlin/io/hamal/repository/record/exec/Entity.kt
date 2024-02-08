@@ -17,7 +17,7 @@ data class ExecEntity(
     override val id: ExecId,
     override val sequence: RecordSequence,
     override val recordedAt: RecordedAt,
-    val flowId: FlowId,
+    val namespaceId: NamespaceId,
     val groupId: GroupId,
 
     var status: ExecStatus? = null,
@@ -37,7 +37,7 @@ data class ExecEntity(
             is ExecPlannedRecord -> copy(
                 cmdId = rec.cmdId,
                 id = rec.entityId,
-                flowId = rec.flowId,
+                namespaceId = rec.namespaceId,
                 groupId = rec.groupId,
                 sequence = rec.sequence(),
                 status = ExecStatus.Planned,
@@ -101,7 +101,7 @@ data class ExecEntity(
             cmdId = cmdId,
             id = id,
             updatedAt = recordedAt.toUpdatedAt(),
-            flowId = flowId,
+            namespaceId = namespaceId,
             groupId = groupId,
             correlation = correlation,
             inputs = inputs ?: ExecInputs(HotObject.empty),
@@ -152,7 +152,7 @@ fun List<ExecRecord>.createEntity(): ExecEntity {
 
     var result = ExecEntity(
         id = firstRecord.entityId,
-        flowId = firstRecord.flowId,
+        namespaceId = firstRecord.namespaceId,
         groupId = firstRecord.groupId,
         cmdId = firstRecord.cmdId,
         sequence = firstRecord.sequence(),

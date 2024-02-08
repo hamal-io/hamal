@@ -12,10 +12,10 @@
 #include "lstate.h"
 
 
-/* Increments 'L->top.p', checking for stack overflows */
+/* Increments 'L->top.p', checking for stack overnamespaces */
 #define api_incr_top(L)	{L->top.p++; \
 			 api_check(L, L->top.p <= L->ci->top.p, \
-					"stack overflow");}
+					"stack overnamespace");}
 
 
 /*

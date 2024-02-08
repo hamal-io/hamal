@@ -137,7 +137,7 @@ internal class PushTopTest : NativeTest() {
         val exception = assertThrows<IllegalArgumentException> {
             testInstance.pushTop(1)
         }
-        assertThat(exception.message, equalTo("Prevented stack overflow"))
+        assertThat(exception.message, equalTo("Prevented stack overnamespace"))
     }
 }
 
@@ -276,7 +276,7 @@ internal class PushBooleanTest : NativeTest() {
         val exception = assertThrows<IllegalArgumentException> {
             testInstance.pushBoolean(true)
         }
-        assertThat(exception.message, equalTo("Prevented stack overflow"))
+        assertThat(exception.message, equalTo("Prevented stack overnamespace"))
     }
 }
 
@@ -296,7 +296,7 @@ internal class PushDecimalTest : NativeTest() {
         val exception = assertThrows<IllegalArgumentException> {
             testInstance.pushDecimal(KuaDecimal(-1))
         }
-        assertThat(exception.message, equalTo("Prevented stack overflow"))
+        assertThat(exception.message, equalTo("Prevented stack overnamespace"))
     }
 }
 
@@ -335,7 +335,7 @@ internal class PushNilTest : NativeTest() {
         val exception = assertThrows<IllegalArgumentException> {
             testInstance.pushNil()
         }
-        assertThat(exception.message, equalTo("Prevented stack overflow"))
+        assertThat(exception.message, equalTo("Prevented stack overnamespace"))
     }
 }
 
@@ -356,7 +356,7 @@ internal class PushNumberTest : NativeTest() {
         val exception = assertThrows<IllegalArgumentException> {
             testInstance.pushNumber(-1.0)
         }
-        assertThat(exception.message, equalTo("Prevented stack overflow"))
+        assertThat(exception.message, equalTo("Prevented stack overnamespace"))
     }
 }
 
@@ -377,7 +377,7 @@ internal class PushStringTest : NativeTest() {
         val exception = assertThrows<IllegalArgumentException> {
             testInstance.pushString("until you can not anymore")
         }
-        assertThat(exception.message, equalTo("Prevented stack overflow"))
+        assertThat(exception.message, equalTo("Prevented stack overnamespace"))
     }
 }
 
@@ -405,7 +405,7 @@ internal class PopTest : NativeTest() {
         val exception = assertThrows<IllegalArgumentException> {
             testInstance.pop(1)
         }
-        assertThat(exception.message, equalTo("Prevented stack underflow"))
+        assertThat(exception.message, equalTo("Prevented stack undernamespace"))
     }
 
     @Test
@@ -801,7 +801,7 @@ internal class TableGetFieldTest : NativeTest() {
     }
 
     @Test
-    fun `Tries to get field from table but stack would overflow`() {
+    fun `Tries to get field from table but stack would overnamespace`() {
         testInstance.tableCreate(0, 1)
         testInstance.pushString("value")
         testInstance.tabletSetField(1, "key")
@@ -811,7 +811,7 @@ internal class TableGetFieldTest : NativeTest() {
         val exception = assertThrows<IllegalArgumentException> {
             testInstance.tableGetField(1, "key")
         }
-        assertThat(exception.message, equalTo("Prevented stack overflow"))
+        assertThat(exception.message, equalTo("Prevented stack overnamespace"))
     }
 }
 
@@ -1071,7 +1071,7 @@ internal class TableGetRawTest : NativeTest() {
     }
 
     @Test
-    fun `Tries to get field from table but stack would overflow`() {
+    fun `Tries to get field from table but stack would overnamespace`() {
         testInstance.tableCreate(0, 1)
         testInstance.pushString("key")
         testInstance.pushString("value")
@@ -1083,7 +1083,7 @@ internal class TableGetRawTest : NativeTest() {
             testInstance.pushString("key")
             testInstance.tableGetRaw(1)
         }
-        assertThat(exception.message, equalTo("Prevented stack overflow"))
+        assertThat(exception.message, equalTo("Prevented stack overnamespace"))
     }
 }
 
@@ -1126,7 +1126,7 @@ internal class TableGetRawIdxTest : NativeTest() {
     }
 
     @Test
-    fun `Tries to get field from table but stack would overflow`() {
+    fun `Tries to get field from table but stack would overnamespace`() {
         testInstance.tableCreate(0, 1)
         testInstance.pushString("value")
         testInstance.tableSetRawIdx(1, 1)
@@ -1136,7 +1136,7 @@ internal class TableGetRawIdxTest : NativeTest() {
         val exception = assertThrows<IllegalArgumentException> {
             testInstance.tableGetRawIdx(1, 1)
         }
-        assertThat(exception.message, equalTo("Prevented stack overflow"))
+        assertThat(exception.message, equalTo("Prevented stack overnamespace"))
     }
 }
 

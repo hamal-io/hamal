@@ -30,7 +30,7 @@ data class TriggerCreateRequested(
     val name: TriggerName,
     val funcId: FuncId,
     val inputs: TriggerInputs,
-    var flowId: FlowId,
+    var namespaceId: NamespaceId,
     val correlationId: CorrelationId? = null,
     val duration: Duration? = null,
     val topicId: TopicId? = null,

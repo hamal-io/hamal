@@ -28,7 +28,7 @@ interface TriggerCmdRepository : CmdRepository {
         val groupId: GroupId,
         val name: TriggerName,
         val funcId: FuncId,
-        val flowId: FlowId,
+        val namespaceId: NamespaceId,
         val inputs: TriggerInputs,
         val duration: Duration,
         val correlationId: CorrelationId? = null,
@@ -41,7 +41,7 @@ interface TriggerCmdRepository : CmdRepository {
         val groupId: GroupId,
         val name: TriggerName,
         val funcId: FuncId,
-        val flowId: FlowId,
+        val namespaceId: NamespaceId,
         val inputs: TriggerInputs,
         val topicId: TopicId,
         val correlationId: CorrelationId? = null,
@@ -54,7 +54,7 @@ interface TriggerCmdRepository : CmdRepository {
         val groupId: GroupId,
         val name: TriggerName,
         val funcId: FuncId,
-        val flowId: FlowId,
+        val namespaceId: NamespaceId,
         val inputs: TriggerInputs,
         val hookId: HookId,
         val hookMethod: HookMethod,
@@ -68,7 +68,7 @@ interface TriggerCmdRepository : CmdRepository {
         val groupId: GroupId,
         val name: TriggerName,
         val funcId: FuncId,
-        val flowId: FlowId,
+        val namespaceId: NamespaceId,
         val inputs: TriggerInputs,
         val cron: CronPattern,
         val correlationId: CorrelationId? = null,
@@ -96,7 +96,7 @@ interface TriggerQueryRepository {
         var topicIds: List<TopicId> = listOf(),
         var hookIds: List<HookId> = listOf(),
         var groupIds: List<GroupId> = listOf(),
-        var flowIds: List<FlowId> = listOf()
+        var namespaceIds: List<NamespaceId> = listOf()
     )
 }
 
@@ -105,7 +105,7 @@ sealed interface Trigger : DomainObject<TriggerId> {
     val groupId: GroupId
     val name: TriggerName
     val funcId: FuncId
-    val flowId: FlowId
+    val namespaceId: NamespaceId
     val correlationId: CorrelationId?
     val inputs: TriggerInputs
     val type: TriggerType
@@ -145,7 +145,7 @@ class FixedRateTrigger(
     override val groupId: GroupId,
     override val name: TriggerName,
     override val funcId: FuncId,
-    override val flowId: FlowId,
+    override val namespaceId: NamespaceId,
     override val inputs: TriggerInputs,
     override val status: TriggerStatus,
     val duration: Duration,
@@ -161,7 +161,7 @@ class EventTrigger(
     override val groupId: GroupId,
     override val name: TriggerName,
     override val funcId: FuncId,
-    override val flowId: FlowId,
+    override val namespaceId: NamespaceId,
     override val inputs: TriggerInputs,
     override val status: TriggerStatus,
     val topicId: TopicId,
@@ -177,7 +177,7 @@ class HookTrigger(
     override val groupId: GroupId,
     override val name: TriggerName,
     override val funcId: FuncId,
-    override val flowId: FlowId,
+    override val namespaceId: NamespaceId,
     override val inputs: TriggerInputs,
     override val status: TriggerStatus,
     override val correlationId: CorrelationId? = null,
@@ -194,7 +194,7 @@ class CronTrigger(
     override val groupId: GroupId,
     override val name: TriggerName,
     override val funcId: FuncId,
-    override val flowId: FlowId,
+    override val namespaceId: NamespaceId,
     override val inputs: TriggerInputs,
     override val status: TriggerStatus,
     override val correlationId: CorrelationId? = null,

@@ -10,12 +10,12 @@ import {useAuth} from "@/hook/auth.ts";
 import {Dialog, DialogContent, DialogHeader, DialogTrigger} from "@/components/ui/dialog.tsx";
 import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
-import {FlowListItem} from "@/types";
+import {NamespaceListItem} from "@/types";
 import {useEndpointCreate} from "@/hook/endpoint.ts";
 import FormFuncSelect from "@/components/form/func-select.tsx";
 
 type Prop = {
-    flow: FlowListItem
+    namespace: NamespaceListItem
 }
 
 const formSchema = z.object({
@@ -23,7 +23,7 @@ const formSchema = z.object({
     funcId: z.string().min(1, "Function required"),
 })
 
-const Create: FC<Prop> = ({flow}) => {
+const Create: FC<Prop> = ({namespace}) => {
     const [auth, setAuth] = useAuth()
     const navigate = useNavigate()
     const [openDialog, setOpenDialog] = useState<boolean>(false)
@@ -43,7 +43,7 @@ const Create: FC<Prop> = ({flow}) => {
         setLoading(true)
         try {
             createEndpoint({
-                flowId: flow.id,
+                namespaceId: namespace.id,
                 name: values.name,
                 funcId: values.funcId,
                 method: "Post"
@@ -94,7 +94,7 @@ const Create: FC<Prop> = ({flow}) => {
                                 )}
                             />
 
-                            <FormFuncSelect name='funcId' flowId={flow.id} form={form}/>
+                            <FormFuncSelect name='funcId' namespaceId={namespace.id} form={form}/>
 
                             <Button type="submit">
                                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}

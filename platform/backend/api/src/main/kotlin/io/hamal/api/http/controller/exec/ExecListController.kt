@@ -5,7 +5,7 @@ import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.domain.vo.FlowId
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.sdk.api.ApiExecList
 import io.hamal.repository.api.ExecQueryRepository
 import org.springframework.http.ResponseEntity
@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 internal class ExecListController(private val listExec: ExecListPort) {
 
-    @GetMapping("/v1/flows/{flowId}/execs")
-    fun flowExecList(
-        @PathVariable("flowId") flowId: FlowId,
+    @GetMapping("/v1/namespaces/{namespaceId}/execs")
+    fun namespaceExecList(
+        @PathVariable("namespaceId") namespaceId: NamespaceId,
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: ExecId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit,
     ): ResponseEntity<ApiExecList> {
@@ -27,7 +27,7 @@ internal class ExecListController(private val listExec: ExecListPort) {
             ExecQueryRepository.ExecQuery(
                 afterId = afterId,
                 limit = limit,
-                flowIds = listOf(flowId)
+                namespaceIds = listOf(namespaceId)
             )
         ) { execs ->
             ResponseEntity.ok(
@@ -50,7 +50,7 @@ internal class ExecListController(private val listExec: ExecListPort) {
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit,
         @RequestParam(required = false, name = "group_ids", defaultValue = "") groupIds: List<GroupId>,
         @RequestParam(required = false, name = "func_ids", defaultValue = "") funcIds: List<FuncId>,
-        @RequestParam(required = false, name = "flow_ids", defaultValue = "") flowIds: List<FlowId>
+        @RequestParam(required = false, name = "namespace_ids", defaultValue = "") namespaceIds: List<NamespaceId>
     ): ResponseEntity<ApiExecList> {
         return listExec(
             ExecQueryRepository.ExecQuery(
@@ -58,7 +58,7 @@ internal class ExecListController(private val listExec: ExecListPort) {
                 limit = limit,
                 groupIds = groupIds,
                 funcIds = funcIds,
-                flowIds = flowIds
+                namespaceIds = namespaceIds
             )
         ) { execs ->
             ResponseEntity.ok(

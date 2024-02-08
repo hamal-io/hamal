@@ -1,6 +1,6 @@
 import {useNavigate} from "react-router-dom";
 import React, {useEffect, useState} from "react";
-import {useFlowCreate} from "@/hook";
+import {useNamespaceCreate} from "@/hook";
 
 import * as z from "zod"
 import {zodResolver} from "@hookform/resolvers/zod";
@@ -24,7 +24,7 @@ const Create = () => {
     const props = {openModal: openDialog, setOpenModal: setOpenDialog}
     const [isLoading, setLoading] = useState(false)
 
-    const [createFlow, submittedFlow] = useFlowCreate()
+    const [createNamespace, submittedNamespace] = useNamespaceCreate()
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -40,7 +40,7 @@ const Create = () => {
         // ✅ This will be type-safe and validated.
 
         try {
-            createFlow(auth.groupId, values.name)
+            createNamespace(auth.groupId, values.name)
         } catch (e) {
             console.error(e)
         } finally {
@@ -50,12 +50,12 @@ const Create = () => {
     }
 
     useEffect(() => {
-        if (submittedFlow !== null) {
-            navigate(`/flows/${submittedFlow.flowId}`)
+        if (submittedNamespace !== null) {
+            navigate(`/namespaces/${submittedNamespace.namespaceId}`)
             setOpenDialog(false)
 
         }
-    }, [submittedFlow, navigate]);
+    }, [submittedNamespace, navigate]);
 
     return (
         <>
@@ -63,12 +63,12 @@ const Create = () => {
                 <DialogTrigger asChild>
                     <Button>
                         <Plus className="w-4 h-4 mr-1"/>
-                        New Flow
+                        New Namespace
                     </Button>
                 </DialogTrigger>
 
                 <DialogContent>
-                    <DialogHeader>Create flow</DialogHeader>
+                    <DialogHeader>Create namespace</DialogHeader>
 
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -79,10 +79,10 @@ const Create = () => {
                                     <FormItem>
                                         <FormLabel>Name</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="Workflow-One" {...field} />
+                                            <Input placeholder="Worknamespace-One" {...field} />
                                         </FormControl>
                                         <FormDescription>
-                                            Name of your flow
+                                            Name of your namespace
                                         </FormDescription>
                                         <FormMessage/>
                                     </FormItem>
@@ -90,7 +90,7 @@ const Create = () => {
                             />
                             <Button type="submit">
                                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
-                                Create Flow
+                                Create Namespace
                             </Button>
                         </form>
                     </Form>

@@ -6,22 +6,22 @@ import {cn} from "@/utils"
 
 type Props = {
     className?: string;
-    flowId: string;
+    namespaceId: string;
 }
-const FlowSelector: FC<Props> = ({className, flowId}) => {
+const Namespaceselector: FC<Props> = ({className, namespaceId}) => {
     return (
-        <Select value={flowId}>
+        <Select value={namespaceId}>
             <SelectTrigger className={cn("h-8 bg-white", className)}>
                 <SelectValue/>
             </SelectTrigger>
             <SelectContent>
                 <SelectGroup>
-                    <SelectLabel>Workflows</SelectLabel>
-                    <SelectItem value={flowId}>Current Flow</SelectItem>
+                    <SelectLabel>Worknamespaces</SelectLabel>
+                    <SelectItem value={namespaceId}>Current Namespace</SelectItem>
                 </SelectGroup>
             </SelectContent>
         </Select>
     )
 }
 
-export default FlowSelector
+export default Namespaceselector

@@ -15,7 +15,7 @@ data class FuncCreateRequested(
     override var status: RequestStatus,
     val groupId: GroupId,
     val funcId: FuncId,
-    val flowId: FlowId,
+    val namespaceId: NamespaceId,
     val name: FuncName,
     val inputs: FuncInputs,
     val codeId: CodeId,

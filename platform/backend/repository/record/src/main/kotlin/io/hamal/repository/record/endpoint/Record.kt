@@ -24,7 +24,7 @@ data class EndpointCreatedRecord(
     override val entityId: EndpointId,
     override val cmdId: CmdId,
     val groupId: GroupId,
-    val flowId: FlowId,
+    val namespaceId: NamespaceId,
     val funcId: FuncId,
     val name: EndpointName
 ) : EndpointRecord()

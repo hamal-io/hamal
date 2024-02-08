@@ -24,7 +24,7 @@ class TriggerCreateFunction(
     override fun invoke(ctx: FunctionContext, arg1: KuaMap): Pair<KuaError?, KuaMap?> {
         return try {
             val res = sdk.trigger.create(
-                arg1.findString("flow_id")?.let { FlowId(SnowflakeId(it)) } ?: ctx[FlowId::class],
+                arg1.findString("namespace_id")?.let { NamespaceId(SnowflakeId(it)) } ?: ctx[NamespaceId::class],
                 ApiTriggerCreateReq(
                     type = TriggerType.valueOf(arg1.getString("type")),
                     funcId = FuncId(SnowflakeId(arg1.getString("func_id"))),
@@ -60,7 +60,7 @@ class TriggerCreateFunction(
                     "status" to KuaString(res.status.name),
                     "trigger_id" to KuaString(res.triggerId.value.value.toString(16)),
                     "group_id" to KuaString(res.groupId.value.value.toString(16)),
-                    "flow_id" to KuaString(res.flowId.value.value.toString(16))
+                    "namespace_id" to KuaString(res.namespaceId.value.value.toString(16))
                 )
             )
 

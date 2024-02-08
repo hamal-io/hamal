@@ -2,94 +2,94 @@ package io.hamal.core.adapter
 
 import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain._enum.RequestStatus
-import io.hamal.lib.domain.request.FlowCreateRequest
-import io.hamal.lib.domain.request.FlowCreateRequested
-import io.hamal.lib.domain.request.FlowUpdateRequest
-import io.hamal.lib.domain.request.FlowUpdateRequested
-import io.hamal.lib.domain.vo.FlowId
-import io.hamal.lib.domain.vo.FlowType
+import io.hamal.lib.domain.request.NamespaceCreateRequest
+import io.hamal.lib.domain.request.NamespaceCreateRequested
+import io.hamal.lib.domain.request.NamespaceUpdateRequest
+import io.hamal.lib.domain.request.NamespaceUpdateRequested
+import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.NamespaceType
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.RequestId
-import io.hamal.repository.api.Flow
-import io.hamal.repository.api.FlowQueryRepository
-import io.hamal.repository.api.FlowQueryRepository.FlowQuery
+import io.hamal.repository.api.Namespace
+import io.hamal.repository.api.NamespaceQueryRepository
+import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
 import io.hamal.repository.api.RequestCmdRepository
 import org.springframework.stereotype.Component
 
-interface FlowCreatePort {
+interface NamespaceCreatePort {
     operator fun <T : Any> invoke(
         groupId: GroupId,
-        req: FlowCreateRequest,
-        responseHandler: (FlowCreateRequested) -> T
+        req: NamespaceCreateRequest,
+        responseHandler: (NamespaceCreateRequested) -> T
     ): T
 }
 
-interface FlowGetPort {
-    operator fun <T : Any> invoke(flowId: FlowId, responseHandler: (Flow) -> T): T
+interface NamespaceGetPort {
+    operator fun <T : Any> invoke(namespaceId: NamespaceId, responseHandler: (Namespace) -> T): T
 }
 
-interface FlowListPort {
-    operator fun <T : Any> invoke(query: FlowQuery, responseHandler: (List<Flow>) -> T): T
+interface NamespaceListPort {
+    operator fun <T : Any> invoke(query: NamespaceQuery, responseHandler: (List<Namespace>) -> T): T
 }
 
 
-interface FlowUpdatePort {
+interface NamespaceUpdatePort {
     operator fun <T : Any> invoke(
-        flowId: FlowId,
-        req: FlowUpdateRequest,
-        responseHandler: (FlowUpdateRequested) -> T
+        namespaceId: NamespaceId,
+        req: NamespaceUpdateRequest,
+        responseHandler: (NamespaceUpdateRequested) -> T
     ): T
 }
 
-interface FlowPort : FlowCreatePort, FlowGetPort, FlowListPort, FlowUpdatePort
+interface NamespacePort : NamespaceCreatePort, NamespaceGetPort, NamespaceListPort, NamespaceUpdatePort
 
 @Component
-class FlowAdapter(
+class NamespaceAdapter(
     private val generateDomainId: GenerateId,
-    private val flowQueryRepository: FlowQueryRepository,
+    private val namespaceQueryRepository: NamespaceQueryRepository,
     private val reqCmdRepository: RequestCmdRepository
-) : FlowPort {
+) : NamespacePort {
 
     override fun <T : Any> invoke(
         groupId: GroupId,
-        req: FlowCreateRequest,
-        responseHandler: (FlowCreateRequested) -> T
+        req: NamespaceCreateRequest,
+        responseHandler: (NamespaceCreateRequested) -> T
     ): T {
-        return FlowCreateRequested(
+        return NamespaceCreateRequested(
             id = generateDomainId(::RequestId),
             status = RequestStatus.Submitted,
-            flowId = generateDomainId(::FlowId),
+            namespaceId = generateDomainId(::NamespaceId),
             groupId = groupId,
-            flowType = req.type ?: FlowType.default,
+            namespaceType = req.type ?: NamespaceType.default,
             name = req.name,
             inputs = req.inputs
         ).also(reqCmdRepository::queue).let(responseHandler)
     }
 
-    override fun <T : Any> invoke(flowId: FlowId, responseHandler: (Flow) -> T): T =
-        responseHandler(flowQueryRepository.get(flowId))
+    override fun <T : Any> invoke(namespaceId: NamespaceId, responseHandler: (Namespace) -> T): T =
+        responseHandler(namespaceQueryRepository.get(namespaceId))
 
-    override fun <T : Any> invoke(query: FlowQuery, responseHandler: (List<Flow>) -> T): T =
-        responseHandler(flowQueryRepository.list(query))
+    override fun <T : Any> invoke(query: NamespaceQuery, responseHandler: (List<Namespace>) -> T): T =
+        responseHandler(namespaceQueryRepository.list(query))
 
 
     override operator fun <T : Any> invoke(
-        flowId: FlowId,
-        req: FlowUpdateRequest,
-        responseHandler: (FlowUpdateRequested) -> T
+        namespaceId: NamespaceId,
+        req: NamespaceUpdateRequest,
+        responseHandler: (NamespaceUpdateRequested) -> T
     ): T {
-        ensureFlowExists(flowId)
-        return FlowUpdateRequested(
+        ensureNamespaceExists(namespaceId)
+        return NamespaceUpdateRequested(
             id = generateDomainId(::RequestId),
             status = RequestStatus.Submitted,
-            groupId = flowQueryRepository.get(flowId).groupId,
-            flowId = flowId,
+            groupId = namespaceQueryRepository.get(namespaceId).groupId,
+            namespaceId = namespaceId,
             name = req.name,
             inputs = req.inputs
         ).also(reqCmdRepository::queue).let(responseHandler)
     }
 
-    private fun ensureFlowExists(flowId: FlowId) {
-        flowQueryRepository.get(flowId)
+    private fun ensureNamespaceExists(namespaceId: NamespaceId) {
+        namespaceQueryRepository.get(namespaceId)
     }
 }

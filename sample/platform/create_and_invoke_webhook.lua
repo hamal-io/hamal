@@ -1,13 +1,13 @@
 sys = require_plugin('sys')
 
-_, r = sys.flows.create({ name = '007' })
-flow_id = r.id
+_, r = sys.namespaces.create({ name = '007' })
+namespace_id = r.id
 
-print('namespace id: ' .. flow_id)
+print('namespace id: ' .. namespace_id)
 
 _, r = sys.funcs.create({
     name = 'test-func',
-    flow_id = flow_id,
+    namespace_id = namespace_id,
     code = [[
         print('invoked by integration')
     ]]
@@ -16,14 +16,14 @@ _, r = sys.funcs.create({
 func_id = r.id
 print('func id: ' .. func_id)
 
-_, r = sys.hooks.create({ name = 'hook', flow_id = flow_id })
+_, r = sys.hooks.create({ name = 'hook', namespace_id = namespace_id })
 hook_id = r.id
 print('hook id: ' .. hook_id)
 
 _, r = sys.triggers.create_hook({
     func_id = func_id,
     hook_id = hook_id,
-    flow_id = flow_id,
+    namespace_id = namespace_id,
     name = 'hook-trigger',
     inputs = { },
 })

@@ -65,7 +65,7 @@ internal class FuncCreateHandlerTest : BaseReqHandlerTest() {
             status = Submitted,
             groupId = testGroup.id,
             funcId = FuncId(12345),
-            flowId = FlowId(23456),
+            namespaceId = NamespaceId(23456),
             name = FuncName("awesome-func"),
             inputs = FuncInputs(HotObject.builder().set("hamal", "rocks").build()),
             codeId = CodeId(34567),

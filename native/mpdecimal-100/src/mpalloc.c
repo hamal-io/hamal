@@ -59,11 +59,11 @@ mpd_callocfunc_em(size_t nmemb, size_t size)
 {
     void *ptr;
     size_t req;
-    mpd_size_t overflow;
+    mpd_size_t overnamespace;
 
-    req = mul_size_t_overflow((mpd_size_t)nmemb, (mpd_size_t)size,
-                              &overflow);
-    if (overflow) {
+    req = mul_size_t_overnamespace((mpd_size_t)nmemb, (mpd_size_t)size,
+                              &overnamespace);
+    if (overnamespace) {
         return NULL;
     }
 
@@ -78,43 +78,43 @@ mpd_callocfunc_em(size_t nmemb, size_t size)
 }
 
 
-/* malloc with overflow checking */
+/* malloc with overnamespace checking */
 void *
 mpd_alloc(mpd_size_t nmemb, mpd_size_t size)
 {
-    mpd_size_t req, overflow;
+    mpd_size_t req, overnamespace;
 
-    req = mul_size_t_overflow(nmemb, size, &overflow);
-    if (overflow) {
+    req = mul_size_t_overnamespace(nmemb, size, &overnamespace);
+    if (overnamespace) {
         return NULL;
     }
 
     return mpd_mallocfunc(req);
 }
 
-/* calloc with overflow checking */
+/* calloc with overnamespace checking */
 void *
 mpd_calloc(mpd_size_t nmemb, mpd_size_t size)
 {
-    mpd_size_t overflow;
+    mpd_size_t overnamespace;
 
-    (void)mul_size_t_overflow(nmemb, size, &overflow);
-    if (overflow) {
+    (void)mul_size_t_overnamespace(nmemb, size, &overnamespace);
+    if (overnamespace) {
         return NULL;
     }
 
     return mpd_callocfunc(nmemb, size);
 }
 
-/* realloc with overflow checking */
+/* realloc with overnamespace checking */
 void *
 mpd_realloc(void *ptr, mpd_size_t nmemb, mpd_size_t size, uint8_t *err)
 {
     void *new;
-    mpd_size_t req, overflow;
+    mpd_size_t req, overnamespace;
 
-    req = mul_size_t_overflow(nmemb, size, &overflow);
-    if (overflow) {
+    req = mul_size_t_overnamespace(nmemb, size, &overnamespace);
+    if (overnamespace) {
         *err = 1;
         return ptr;
     }
@@ -128,19 +128,19 @@ mpd_realloc(void *ptr, mpd_size_t nmemb, mpd_size_t size, uint8_t *err)
     return new;
 }
 
-/* struct hack malloc with overflow checking */
+/* struct hack malloc with overnamespace checking */
 void *
 mpd_sh_alloc(mpd_size_t struct_size, mpd_size_t nmemb, mpd_size_t size)
 {
-    mpd_size_t req, overflow;
+    mpd_size_t req, overnamespace;
 
-    req = mul_size_t_overflow(nmemb, size, &overflow);
-    if (overflow) {
+    req = mul_size_t_overnamespace(nmemb, size, &overnamespace);
+    if (overnamespace) {
         return NULL;
     }
 
-    req = add_size_t_overflow(req, struct_size, &overflow);
-    if (overflow) {
+    req = add_size_t_overnamespace(req, struct_size, &overnamespace);
+    if (overnamespace) {
         return NULL;
     }
 

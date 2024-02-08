@@ -1,18 +1,18 @@
 package io.hamal.repository.sqlite.record.namespace
 
-import io.hamal.lib.domain.vo.FlowId
-import io.hamal.lib.domain.vo.FlowName
+import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
-import io.hamal.repository.api.Flow
-import io.hamal.repository.record.namespace.FlowRecord
+import io.hamal.repository.api.Namespace
+import io.hamal.repository.record.namespace.NamespaceRecord
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 import org.sqlite.SQLiteException
 
-internal object ProjectionUniqueName : ProjectionSqlite<FlowId, FlowRecord, Flow> {
+internal object ProjectionUniqueName : ProjectionSqlite<NamespaceId, NamespaceRecord, Namespace> {
 
-    fun find(connection: Connection, flowName: FlowName): FlowId? {
+    fun find(connection: Connection, namespaceName: NamespaceName): NamespaceId? {
         return connection.executeQueryOne(
             """
             SELECT 
@@ -24,13 +24,13 @@ internal object ProjectionUniqueName : ProjectionSqlite<FlowId, FlowRecord, Flow
         """.trimIndent()
         ) {
             query {
-                set("name", flowName)
+                set("name", namespaceName)
             }
-            map { rs -> rs.getId("id", ::FlowId) }
+            map { rs -> rs.getId("id", ::NamespaceId) }
         }
     }
 
-    override fun upsert(tx: RecordTransactionSqlite<FlowId, FlowRecord, Flow>, obj: Flow) {
+    override fun upsert(tx: RecordTransactionSqlite<NamespaceId, NamespaceRecord, Namespace>, obj: Namespace) {
         try {
             tx.execute(
                 """

@@ -3,22 +3,22 @@ import {Separator} from "@/components/ui/separator.tsx";
 import {EmptyPlaceholder} from "@/components/empty-placeholder.tsx";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx";
 import {PageHeader} from "@/components/page-header.tsx";
-import Create from "@/pages/app/flow-list/components/create.tsx";
+import Create from "@/pages/app/namespace-list/components/create.tsx";
 import {GoToDocumentation} from "@/components/documentation.tsx";
 import {useNavigate} from "react-router-dom";
-import {useFlowList} from "@/hook/flow.ts";
-import {FlowListItem} from "@/types";
+import {useNamespaceList} from "@/hook/namespace.ts";
+import {NamespaceListItem} from "@/types";
 
 type ListProps = {
     groupId: string
 }
 
 const List: FC<ListProps> = ({groupId}) => {
-    const [listFlows, flowList, isLoading, error] = useFlowList()
+    const [listNamespaces, namespaceList, isLoading, error] = useNamespaceList()
 
     useEffect(() => {
         const abortController = new AbortController()
-        listFlows(groupId, abortController)
+        listNamespaces(groupId, abortController)
         return () => {
             abortController.abort()
         }
@@ -27,37 +27,37 @@ const List: FC<ListProps> = ({groupId}) => {
     if (isLoading) return "Loading..."
     if (error != null) return "Error -"
 
-    const filteredFlows = flowList.flows.filter(flow => flow.name !== '__default__')
+    const filteredNamespaces = namespaceList.namespaces.filter(namespace => namespace.name !== '__default__')
     return (
         <div className="pt-8 px-8">
-            <PageHeader title="Workflows" description="Organise your workflows" actions={[<Create/>]}/>
+            <PageHeader title="Worknamespaces" description="Organise your worknamespaces" actions={[<Create/>]}/>
             <Separator className="my-6"/>
             {
-                filteredFlows.length ? (<Content flows={filteredFlows}/>) : (<NoContent/>)
+                filteredNamespaces.length ? (<Content namespaces={filteredNamespaces}/>) : (<NoContent/>)
             }
         </div>
     );
 }
 
 type ContentProps = {
-    flows: FlowListItem[]
+    namespaces: NamespaceListItem[]
 }
 
-const Content: FC<ContentProps> = ({flows}) => {
+const Content: FC<ContentProps> = ({namespaces}) => {
     const navigate = useNavigate()
     return (
         <ul className="grid grid-cols-1 gap-x-6 gap-y-8">
-            {flows.map((flow) => (
+            {namespaces.map((namespace) => (
                 <Card
-                    key={flow.id}
-                    className="relative overflow-hidden duration-500 hover:border-primary/50 group"
+                    key={namespace.id}
+                    className="relative overnamespace-hidden duration-500 hover:border-primary/50 group"
                     onClick={() => {
-                        navigate(`/flows/${flow.id}`)
+                        navigate(`/namespaces/${namespace.id}`)
                     }}
                 >
                     <CardHeader>
                         <div className="flex items-center justify-between ">
-                            <CardTitle>{flow.name}</CardTitle>
+                            <CardTitle>{namespace.name}</CardTitle>
                         </div>
                     </CardHeader>
                     <CardContent>
@@ -77,13 +77,13 @@ const NoContent: FC = () => (
         <EmptyPlaceholder.Icon>
             {/*<Code />*/}
         </EmptyPlaceholder.Icon>
-        <EmptyPlaceholder.Title>No Flows found</EmptyPlaceholder.Title>
+        <EmptyPlaceholder.Title>No Namespaces found</EmptyPlaceholder.Title>
         <EmptyPlaceholder.Description>
-            You haven&apos;t created any Flows yet.
+            You haven&apos;t created any Namespaces yet.
         </EmptyPlaceholder.Description>
         <div className="flex flex-col items-center justify-center gap-2 md:flex-row">
             <Create/>
-            <GoToDocumentation link={"/flows"}/>
+            <GoToDocumentation link={"/namespaces"}/>
         </div>
     </EmptyPlaceholder>
 )

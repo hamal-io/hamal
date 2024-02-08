@@ -1,4 +1,4 @@
-import {DefaultFlowId} from "@/types/flow.ts";
+import {DefaultNamespaceId} from "@/types/namespace.ts";
 
 export type AuthType = 'Unauthorized' | 'Anonymous' | 'User'
 
@@ -8,7 +8,7 @@ export interface Auth {
     type: AuthType,
     accountId: string;
     groupId: string;
-    defaultFlowIds: Array<DefaultFlowId>;
+    defaultNamespaceIds: Array<DefaultNamespaceId>;
     token: string;
 }
 
@@ -18,7 +18,7 @@ export interface LoginSubmitted {
     status: string;
     accountId: string;
     groupIds: string[];
-    defaultFlowIds: Array<DefaultFlowId>;
+    defaultNamespaceIds: Array<DefaultNamespaceId>;
     token: string;
     email: string;
 }

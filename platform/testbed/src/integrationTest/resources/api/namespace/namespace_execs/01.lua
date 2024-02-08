@@ -2,27 +2,27 @@
 
 sys = require_plugin('sys')
 
--- CREATE FLOWS
-local flow_one_req = fail_on_error(sys.flows.create({
+-- CREATE NAMESPACES
+local namespace_one_req = fail_on_error(sys.namespaces.create({
     name = 'namespace-1'
 }))
-sys.await_completed(flow_one_req)
+sys.await_completed(namespace_one_req)
 
-local flow_two_req = fail_on_error(sys.flows.create({
+local namespace_two_req = fail_on_error(sys.namespaces.create({
     name = 'namespace-2'
 }))
-sys.await_completed(flow_two_req)
+sys.await_completed(namespace_two_req)
 
 -- CREATE FUNCS
 local func_one_req = fail_on_error(sys.funcs.create({
-    flow_id = flow_one_req.flow_id,
+    namespace_id = namespace_one_req.namespace_id,
     name = 'func-1',
     code = [[print(hamal)]]
 }))
 sys.await_completed(func_one_req)
 
 local func_two_req = fail_on_error(sys.funcs.create({
-    flow_id = flow_two_req.flow_id,
+    namespace_id = namespace_two_req.namespace_id,
     name = 'func-2',
     code = [[print(lamah)]]
 }))

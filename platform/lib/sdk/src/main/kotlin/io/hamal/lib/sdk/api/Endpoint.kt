@@ -67,7 +67,7 @@ data class ApiEndpoint(
 }
 
 interface ApiEndpointService {
-    fun create(flowId: FlowId, createEndpointReq: ApiEndpointCreateRequest): ApiEndpointCreateRequested
+    fun create(namespaceId: NamespaceId, createEndpointReq: ApiEndpointCreateRequest): ApiEndpointCreateRequested
     fun list(query: EndpointQuery): List<ApiEndpointList.Endpoint>
     fun get(endpointId: EndpointId): ApiEndpoint
 
@@ -75,14 +75,14 @@ interface ApiEndpointService {
         var afterId: EndpointId = EndpointId(SnowflakeId(Long.MAX_VALUE)),
         var limit: Limit = Limit(25),
         var endpointIds: List<EndpointId> = listOf(),
-        var flowIds: List<FlowId> = listOf(),
+        var namespaceIds: List<NamespaceId> = listOf(),
         var groupIds: List<GroupId> = listOf()
     ) {
         fun setRequestParameters(req: HttpRequest) {
             req.parameter("after_id", afterId)
             req.parameter("limit", limit)
             if (endpointIds.isNotEmpty()) req.parameter("endpoint_ids", endpointIds)
-            if (flowIds.isNotEmpty()) req.parameter("flow_ids", flowIds)
+            if (namespaceIds.isNotEmpty()) req.parameter("namespace_ids", namespaceIds)
             if (groupIds.isNotEmpty()) req.parameter("group_ids", groupIds)
         }
     }
@@ -92,9 +92,9 @@ internal class ApiEndpointServiceImpl(
     private val template: HttpTemplate
 ) : ApiEndpointService {
 
-    override fun create(flowId: FlowId, createEndpointReq: ApiEndpointCreateRequest) =
-        template.post("/v1/flows/{flowId}/endpoints")
-            .path("flowId", flowId)
+    override fun create(namespaceId: NamespaceId, createEndpointReq: ApiEndpointCreateRequest) =
+        template.post("/v1/namespaces/{namespaceId}/endpoints")
+            .path("namespaceId", namespaceId)
             .body(createEndpointReq)
             .execute(ApiEndpointCreateRequested::class)
 

@@ -1,18 +1,18 @@
 sys = require_plugin('sys')
 
-flow = fail_on_error(sys.flows.create({ name = 'namespace-1' }))
-sys.await_completed(flow)
+namespace = fail_on_error(sys.namespaces.create({ name = 'namespace-1' }))
+sys.await_completed(namespace)
 
-func_one = fail_on_error(sys.funcs.create({ flow_id = flow.id; name = 'test-func'; inputs = {}; code = [[4 + 2]] }))
+func_one = fail_on_error(sys.funcs.create({ namespace_id = namespace.id; name = 'test-func'; inputs = {}; code = [[4 + 2]] }))
 sys.await_completed(func_one)
 
-hook = fail_on_error(sys.hooks.create({ flow_id = '1'; name = "some-amazing-hook" }))
+hook = fail_on_error(sys.hooks.create({ namespace_id = '1'; name = "some-amazing-hook" }))
 sys.await(hook)
 
 -- trigger name is unique
 req_two = fail_on_error(sys.triggers.create_hook({
     func_id = func_one.id,
-    flow_id = '1',
+    namespace_id = '1',
     name = 'trigger-to-create',
     inputs = { },
     hook_id = hook.id,
@@ -23,7 +23,7 @@ sys.await_completed(req_two)
 
 req_two = fail_on_error(sys.triggers.create_hook({
     func_id = func_one.id,
-    flow_id = '1',
+    namespace_id = '1',
     name = 'trigger-to-create',
     inputs = { },
     hook_id = hook.id,
@@ -37,7 +37,7 @@ assert(#triggers == 1)
 -- same name different namespace
 err, req_two = sys.triggers.create_hook({
     func_id = func_one.id,
-    flow_id = flow.id,
+    namespace_id = namespace.id,
     name = 'trigger-to-create',
     inputs = { },
     hook_id = hook.id,

@@ -1,18 +1,18 @@
 sys = require_plugin('sys')
 --
-flow = fail_on_error(sys.flows.create({ name = "hamal::namespace::rocks" }))
-sys.await_completed(flow)
+namespace = fail_on_error(sys.namespaces.create({ name = "hamal::namespace::rocks" }))
+sys.await_completed(namespace)
 
 func_one = fail_on_error(sys.funcs.create({
     name = 'test-func',
     inputs = {},
     code = [[4 + 2]],
-    flow_id = flow.flow_id
+    namespace_id = namespace.namespace_id
 }))
 sys.await_completed(func_one)
 
 endpoint = fail_on_error(sys.endpoints.create({
-    flow_id = flow.id,
+    namespace_id = namespace.id,
     func_id = func_one.func_id,
     name = 'test-endpoint'
 }))

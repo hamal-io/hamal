@@ -1,17 +1,17 @@
 sys = require_plugin('sys')
 
-create_req = fail_on_error(sys.flows.create({
+create_req = fail_on_error(sys.namespaces.create({
     name = 'test-namespace',
     inputs = {}
 }))
 
 assert(create_req.id ~= nil)
 assert(create_req.status == 'Submitted')
-assert(create_req.flow_id ~= nil)
+assert(create_req.namespace_id ~= nil)
 sys.await_completed(create_req)
 
-flow = fail_on_error(sys.flows.get(create_req.flow_id))
+namespace = fail_on_error(sys.namespaces.get(create_req.namespace_id))
 
-assert(flow.id == create_req.flow_id)
-assert(flow.name == 'test-namespace')
-assert(flow.type == '__default__')
+assert(namespace.id == create_req.namespace_id)
+assert(namespace.name == 'test-namespace')
+assert(namespace.type == '__default__')

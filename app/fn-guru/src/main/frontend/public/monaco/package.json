@@ -24,7 +24,7 @@
     "test": "mocha test/unit/all.js && ts-node ./build/check-samples",
     "deps-all-remove": "ts-node ./build/npm/removeAll",
     "deps-all-install": "ts-node ./build/npm/installAll",
-    "update-actions": "pin-github-action ./.github/workflows/website.yml",
+    "update-actions": "pin-github-action ./.github/worknamespaces/website.yml",
     "watch": "tsc -w -p ./src",
     "build": "ts-node ./build/build-languages",
     "build-monaco-editor": "npm run build && ts-node ./build/build-monaco-editor"

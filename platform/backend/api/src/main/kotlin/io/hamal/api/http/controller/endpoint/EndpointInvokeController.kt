@@ -79,7 +79,7 @@ internal class EndpointInvokeController(
                 id = generateDomainId(::RequestId),
                 status = Submitted,
                 execId = execId,
-                flowId = func.flowId,
+                namespaceId = func.namespaceId,
                 groupId = func.groupId,
                 inputs = InvocationInputs(),
                 code = ExecCode(

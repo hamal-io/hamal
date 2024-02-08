@@ -15,7 +15,7 @@ import kotlin.time.Duration.Companion.seconds
 internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
 
     fun createFunc(name: FuncName): ApiFuncCreateRequested {
-        val createTopicResponse = httpTemplate.post("/v1/flows/1/funcs")
+        val createTopicResponse = httpTemplate.post("/v1/namespaces/1/funcs")
             .body(
                 ApiFuncCreateRequest(
                     name = name,
@@ -44,7 +44,7 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
     }
 
     fun createHook(hookName: HookName): ApiHookCreateRequested {
-        val createHookResponse = httpTemplate.post("/v1/flows/1/hooks")
+        val createHookResponse = httpTemplate.post("/v1/namespaces/1/hooks")
             .path("groupId", testGroup.id)
             .body(ApiHookCreateRequest(hookName))
             .execute()
@@ -58,7 +58,7 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
     fun createFixedRateTrigger(name: TriggerName): ApiTriggerCreateRequested {
         val funcId = awaitCompleted(createFunc(FuncName(name.value))).funcId
 
-        val creationResponse = httpTemplate.post("/v1/flows/1/triggers")
+        val creationResponse = httpTemplate.post("/v1/namespaces/1/triggers")
             .body(
                 ApiTriggerCreateReq(
                     type = TriggerType.FixedRate,
@@ -77,7 +77,7 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
     }
 
     fun createTrigger(req: ApiTriggerCreateReq): ApiTriggerCreateRequested {
-        val creationResponse = httpTemplate.post("/v1/flows/1/triggers")
+        val creationResponse = httpTemplate.post("/v1/namespaces/1/triggers")
             .body(req)
             .execute()
 

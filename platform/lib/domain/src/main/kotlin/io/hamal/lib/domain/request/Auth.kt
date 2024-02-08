@@ -14,7 +14,7 @@ data class AuthLoginEmailRequested(
     val authId: AuthId,
     val accountId: AccountId,
     val groupIds: List<GroupId>,
-    val defaultFlowIds: List<GroupDefaultFlowId>,
+    val defaultNamespaceIds: List<GroupDefaultNamespaceId>,
     val hash: PasswordHash,
     val token: AuthToken,
 ) : Requested()
@@ -35,7 +35,7 @@ data class AuthLoginMetaMaskRequested(
     val authId: AuthId,
     val accountId: AccountId,
     val groupIds: List<GroupId>,
-    val defaultFlowIds: List<GroupDefaultFlowId>,
+    val defaultNamespaceIds: List<GroupDefaultNamespaceId>,
     val token: AuthToken,
     val address: Web3Address,
     val signature: Web3Signature

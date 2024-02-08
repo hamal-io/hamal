@@ -23,8 +23,8 @@ class FuncGetFunction(
                             "id" to KuaString(func.id.value.value.toString(16)),
                             "namespace" to KuaMap(
                                 mutableMapOf(
-                                    "id" to KuaString(func.flow.id.value.value.toString(16)),
-                                    "name" to KuaString(func.flow.name.value)
+                                    "id" to KuaString(func.namespace.id.value.value.toString(16)),
+                                    "name" to KuaString(func.namespace.name.value)
                                 )
                             ),
                             "name" to KuaString(func.name.value),

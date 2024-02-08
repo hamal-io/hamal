@@ -7,32 +7,32 @@ import io.hamal.repository.record.RecordAdapter
 import io.hamal.repository.record.RecordSequence
 import io.hamal.repository.record.RecordedAt
 
-sealed class FlowRecord(
+sealed class NamespaceRecord(
     @Transient
     override var recordSequence: RecordSequence? = null,
     @Transient
     override var recordedAt: RecordedAt? = null
-) : Record<FlowId>() {
-    internal object Adapter : RecordAdapter<FlowRecord>(
+) : Record<NamespaceId>() {
+    internal object Adapter : RecordAdapter<NamespaceRecord>(
         listOf(
-            FlowCreatedRecord::class,
-            FlowUpdatedRecord::class
+            NamespaceCreatedRecord::class,
+            NamespaceUpdatedRecord::class
         )
     )
 }
 
-data class FlowCreatedRecord(
-    override val entityId: FlowId,
+data class NamespaceCreatedRecord(
+    override val entityId: NamespaceId,
     override val cmdId: CmdId,
     val groupId: GroupId,
-    val name: FlowName,
-    val inputs: FlowInputs,
-    val type: FlowType,
-) : FlowRecord()
+    val name: NamespaceName,
+    val inputs: NamespaceInputs,
+    val type: NamespaceType,
+) : NamespaceRecord()
 
-data class FlowUpdatedRecord(
-    override val entityId: FlowId,
+data class NamespaceUpdatedRecord(
+    override val entityId: NamespaceId,
     override val cmdId: CmdId,
-    val name: FlowName,
-    val inputs: FlowInputs,
-) : FlowRecord()
+    val name: NamespaceName,
+    val inputs: NamespaceInputs,
+) : NamespaceRecord()

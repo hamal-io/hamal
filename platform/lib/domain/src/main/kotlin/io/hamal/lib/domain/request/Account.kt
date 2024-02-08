@@ -16,7 +16,7 @@ data class AccountCreateRequested(
     val accountType: AccountType,
     val passwordAuthId: AuthId,
     val tokenAuthId: AuthId,
-    val flowId: FlowId,
+    val namespaceId: NamespaceId,
     val email: Email,
     val salt: PasswordSalt,
     val hash: PasswordHash,
@@ -35,7 +35,7 @@ data class AccountCreateAnonymousRequested(
     val accountType: AccountType,
     val passwordAuthId: AuthId,
     val tokenAuthId: AuthId,
-    val flowId: FlowId,
+    val namespaceId: NamespaceId,
     val salt: PasswordSalt,
     val hash: PasswordHash,
     val token: AuthToken
@@ -54,7 +54,7 @@ data class AccountCreateMetaMaskRequested(
     val accountType: AccountType,
     val metamaskAuthId: AuthId,
     val tokenAuthId: AuthId,
-    val flowId: FlowId,
+    val namespaceId: NamespaceId,
     val salt: PasswordSalt,
     val address: Web3Address,
     val token: AuthToken

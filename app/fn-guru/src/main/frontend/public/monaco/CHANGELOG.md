@@ -21,7 +21,7 @@
 Contributions to `monaco-editor`:
 
 - [@claylibrarymarket](https://github.com/claylibrarymarket): Fix Twig's plain text class expression [PR #4063](https://github.com/microsoft/monaco-editor/pull/4063)
-- [@FossPrime (Ray Foss)](https://github.com/FossPrime): Use new GitHub pages workflow [PR #4000](https://github.com/microsoft/monaco-editor/pull/4000)
+- [@FossPrime (Ray Foss)](https://github.com/FossPrime): Use new GitHub pages worknamespace [PR #4000](https://github.com/microsoft/monaco-editor/pull/4000)
 - [@leandrocp (Leandro Pereira)](https://github.com/leandrocp): Elixir - Add support for multi-letter uppercase sigils [PR #4041](https://github.com/microsoft/monaco-editor/pull/4041)
 - [@philippleidig (PhilippLe)](https://github.com/philippleidig): Add TwinCAT file support for structured text (st) language [PR #3315](https://github.com/microsoft/monaco-editor/pull/3315)
 - [@remcohaszing (Remco Haszing)](https://github.com/remcohaszing)
@@ -204,7 +204,7 @@ Contributions to `monaco-editor`:
 - [@blutorange (Andre Wachsmuth)](https://github.com/blutorange): Implements #2383 Add syntax modes for FreeMarker template language [PR #2847](https://github.com/microsoft/monaco-editor/pull/2847)
 - [@forensicmike (forensicmike1)](https://github.com/forensicmike): Add "cd monaco-editor" to the step by step commandline instructions for cloning and running the samples [PR #2894](https://github.com/microsoft/monaco-editor/pull/2894)
 - [@juan-carlos-diaz](https://github.com/juan-carlos-diaz): Fix #2851 Highlight correctly the attributes and identifiers (with dashes) for Shell language [PR #2871](https://github.com/microsoft/monaco-editor/pull/2871)
-- [@MasterOdin (Matthew Peveler)](https://github.com/MasterOdin): Only run publish workflow on main monaco-editor repo [PR #2926](https://github.com/microsoft/monaco-editor/pull/2926)
+- [@MasterOdin (Matthew Peveler)](https://github.com/MasterOdin): Only run publish worknamespace on main monaco-editor repo [PR #2926](https://github.com/microsoft/monaco-editor/pull/2926)
 - [@philipturner (Philip Turner)](https://github.com/philipturner)
   - Update Swift language specification to version 5.5 [PR #2855](https://github.com/microsoft/monaco-editor/pull/2855)
   - Add @preconcurrency to Swift declaration attributes [PR #2924](https://github.com/microsoft/monaco-editor/pull/2924)
@@ -323,7 +323,7 @@ Contributions to `monaco-languages`:
 - [@aaaaaa2493 (Vladimir Turov)](https://github.com/aaaaaa2493): Support Java 12-17 syntax [PR #159](https://github.com/microsoft/monaco-languages/pull/159)
 - [@mbtools (Marc Bernard)](https://github.com/mbtools): Update ABAP syntax [PR #160](https://github.com/microsoft/monaco-languages/pull/160)
 - [@scarolan (Sean Carolan)](https://github.com/scarolan): Replace // with # for line comments [PR #158](https://github.com/microsoft/monaco-languages/pull/158)
-- [@valeriia-melnychuk (Valeriia Melnychuk)](https://github.com/valeriia-melnychuk): Implement syntax highlighting for Flow9 [PR #154](https://github.com/microsoft/monaco-languages/pull/154)
+- [@valeriia-melnychuk (Valeriia Melnychuk)](https://github.com/valeriia-melnychuk): Implement syntax highlighting for Namespace9 [PR #154](https://github.com/microsoft/monaco-languages/pull/154)
 
 Contributions to `monaco-typescript`:
 
@@ -626,7 +626,7 @@ Contributions to `monaco-typescript`:
 - New tokenization support for: Julia, Scala, Lexon, Terraform HCL, Dart, Systemverilog.
 - New semantic tokens provider [sample on the playground](https://microsoft.github.io/monaco-editor/playground.html#extending-language-services-semantic-tokens-provider-example).
 - New [shadow dom sample](https://github.com/microsoft/monaco-editor/tree/main/samples/browser-amd-shadow-dom)
-- New `overflowWidgetsDomNode` constructor option to pass in a parent for overflowing widgets.
+- New `overnamespaceWidgetsDomNode` constructor option to pass in a parent for overnamespaceing widgets.
 - New `minimap.size` option: `proportional`, `fill`, `fit`.
 - New `OnTypeRename` provider and option `renameOnType`.
 - Fixed issue where cross-origin web workers were not working on Safari.
@@ -1398,7 +1398,7 @@ Contributions to `monaco-languages`:
 - settings:
   - `lineDecorationsWidth` can now take a value in the form of `"1.2ch"` besides the previous accepted number (in px)
   - `renderLineHighlight` can now take a value in the set `'none' | 'gutter' | 'line' | 'all'`.
-  - added `fixedOverflowWidgets` to render overflowing content widgets as `'fixed'` (defaults to false)
+  - added `fixedOvernamespaceWidgets` to render overnamespaceing content widgets as `'fixed'` (defaults to false)
   - added `acceptSuggestionOnCommitCharacter` to accept suggestions on provider defined characters (defaults to true)
   - added `emptySelectionClipboard` - copying without a selection copies the current line (defaults to true)
   - added `suggestFontSize` - the font size for the suggest widget

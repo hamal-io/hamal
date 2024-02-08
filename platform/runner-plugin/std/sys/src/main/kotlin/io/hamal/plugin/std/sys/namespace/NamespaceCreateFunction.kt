@@ -1,8 +1,8 @@
 package io.hamal.plugin.std.sys.namespace
 
-import io.hamal.lib.domain.vo.FlowInputs
-import io.hamal.lib.domain.vo.FlowName
-import io.hamal.lib.domain.vo.FlowType
+import io.hamal.lib.domain.vo.NamespaceInputs
+import io.hamal.lib.domain.vo.NamespaceName
+import io.hamal.lib.domain.vo.NamespaceType
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -12,7 +12,7 @@ import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.kua.type.KuaMap
 import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.sdk.ApiSdk
-import io.hamal.lib.sdk.api.ApiFlowCreateRequest
+import io.hamal.lib.sdk.api.ApiNamespaceCreateRequest
 
 class NamespaceCreateFunction(
     private val sdk: ApiSdk
@@ -23,17 +23,17 @@ class NamespaceCreateFunction(
     override fun invoke(ctx: FunctionContext, arg1: KuaMap): Pair<KuaError?, KuaMap?> {
 
         val type = if (arg1.findString("type") != null) {
-            FlowType(arg1.getString("type"))
+            NamespaceType(arg1.getString("type"))
         } else {
             null
         }
 
         return try {
-            val res = sdk.flow.create(
+            val res = sdk.namespace.create(
                 ctx[GroupId::class],
-                ApiFlowCreateRequest(
-                    name = FlowName(arg1.getString("name")),
-                    inputs = FlowInputs(),
+                ApiNamespaceCreateRequest(
+                    name = NamespaceName(arg1.getString("name")),
+                    inputs = NamespaceInputs(),
                     type = type
                 )
             )
@@ -42,7 +42,7 @@ class NamespaceCreateFunction(
                 mutableMapOf(
                     "id" to KuaString(res.id.value.value.toString(16)),
                     "status" to KuaString(res.status.name),
-                    "flow_id" to KuaString(res.flowId.value.value.toString(16))
+                    "namespace_id" to KuaString(res.namespaceId.value.value.toString(16))
                 )
             )
 

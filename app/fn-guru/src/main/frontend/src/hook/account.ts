@@ -37,7 +37,7 @@ export const useAccountCreateAnonymous = (): [AccountCreateAnonymousAction, Logi
                         type: 'Anonymous',
                         accountId: data.accountId,
                         groupId: data.groupIds[0],
-                        defaultFlowIds: data.defaultFlowIds,
+                        defaultNamespaceIds: data.defaultNamespaceIds,
                         token: data.token,
                     })
                 })
@@ -93,7 +93,7 @@ export const useAccountLogin = (): [AccountLoginAction, LoginSubmitted, boolean,
                         type: 'User',
                         accountId: data.accountId,
                         groupId: data.groupIds[0],
-                        defaultFlowIds: data.defaultFlowIds,
+                        defaultNamespaceIds: data.defaultNamespaceIds,
                         token: data.token,
                     })
                 })
@@ -151,7 +151,7 @@ export const useAccountConvert = (): [AccountConvertAction, AccountConvertSubmit
                         type: 'User',
                         accountId: auth.accountId,
                         groupId: auth.groupId,
-                        defaultFlowIds: auth.defaultFlowIds,
+                        defaultNamespaceIds: auth.defaultNamespaceIds,
                         token: data.token,
                     })
                 })

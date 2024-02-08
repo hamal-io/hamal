@@ -74,7 +74,7 @@ abstract class AbstractRunnerTest {
         invocation: Invocation = EmptyInvocation
     ) = UnitOfWork(
         id = ExecId(1234),
-        flowId = FlowId(98876),
+        namespaceId = NamespaceId(98876),
         groupId = GroupId(5432),
         inputs = inputs,
         state = State(),

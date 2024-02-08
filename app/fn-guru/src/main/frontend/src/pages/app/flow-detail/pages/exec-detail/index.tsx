@@ -1,6 +1,6 @@
 import {FC} from "react";
 import {useParams} from "react-router-dom";
-import Log from "@/pages/app/flow-detail/pages/exec-detail/components/log.tsx";
+import Log from "@/pages/app/namespace-detail/pages/exec-detail/components/log.tsx";
 
 type Props = {}
 const ExecDetailPage: FC<Props> = () => {

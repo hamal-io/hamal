@@ -6,26 +6,26 @@ import io.hamal.lib.common.domain.ValueObjectString
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.snowflake.SnowflakeId
 
-class FlowId(override val value: SnowflakeId) : ValueObjectId() {
+class NamespaceId(override val value: SnowflakeId) : ValueObjectId() {
     constructor(value: Int) : this(SnowflakeId(value.toLong()))
     constructor(value: String) : this(SnowflakeId(value.toLong(16)))
 
     companion object {
-        val root = FlowId(1)
+        val root = NamespaceId(1)
     }
 }
 
 
-class FlowName(override val value: String) : ValueObjectString() {
+class NamespaceName(override val value: String) : ValueObjectString() {
     companion object {
-        val default = FlowName("__default__")
+        val default = NamespaceName("__default__")
     }
 }
 
-class FlowInputs(override val value: HotObject = HotObject.empty) : ValueObjectHotObject()
+class NamespaceInputs(override val value: HotObject = HotObject.empty) : ValueObjectHotObject()
 
-class FlowType(override val value: String) : ValueObjectString() {
+class NamespaceType(override val value: String) : ValueObjectString() {
     companion object {
-        val default = FlowType("__default__")
+        val default = NamespaceType("__default__")
     }
 }

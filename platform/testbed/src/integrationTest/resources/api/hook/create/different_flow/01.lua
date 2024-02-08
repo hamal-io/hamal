@@ -1,21 +1,21 @@
 sys = require_plugin('sys')
 --
-flow = fail_on_error(sys.flows.create({ name = "hamal::namespace::rocks" }))
-sys.await_completed(flow)
+namespace = fail_on_error(sys.namespaces.create({ name = "hamal::namespace::rocks" }))
+sys.await_completed(namespace)
 
 hook = fail_on_error(sys.hooks.create({
-    flow_id = flow.id,
+    namespace_id = namespace.id,
     name = 'hook-1'
 }))
 sys.await_completed(hook)
 
 assert(hook ~= nil)
 assert(hook.group_id == '1')
-assert(hook.flow_id == flow.id)
+assert(hook.namespace_id == namespace.id)
 
 _, hook = sys.hooks.get(hook.id)
-assert(hook.flow.id == flow.id)
-assert(hook.flow.name == "hamal::namespace::rocks")
+assert(hook.namespace.id == namespace.id)
+assert(hook.namespace.name == "hamal::namespace::rocks")
 
 err, hooks = sys.hooks.list()
 assert(#hooks == 1)

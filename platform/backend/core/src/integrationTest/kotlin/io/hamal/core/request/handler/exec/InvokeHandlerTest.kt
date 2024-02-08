@@ -23,7 +23,7 @@ internal class ExecInvokeHandlerTest : BaseReqHandlerTest() {
                 id = RequestId(1),
                 status = Submitted,
                 execId = ExecId(3333),
-                flowId = testFlow.id,
+                namespaceId = testNamespace.id,
                 groupId = testGroup.id,
                 inputs = InvocationInputs(HotObject.builder().set("hamal", "justworks").build()),
                 code = ExecCode(value = CodeValue("code")),
@@ -64,7 +64,7 @@ internal class ExecInvokeHandlerTest : BaseReqHandlerTest() {
                 correlationId = CorrelationId("some-correlation"),
                 status = Submitted,
                 execId = ExecId(3333),
-                flowId = testFlow.id,
+                namespaceId = testNamespace.id,
                 groupId = testGroup.id,
                 inputs = InvocationInputs(
                     HotObject.builder()
@@ -132,7 +132,7 @@ internal class ExecInvokeHandlerTest : BaseReqHandlerTest() {
             correlationId = CorrelationId("some-correlation"),
             status = Submitted,
             execId = ExecId(3333),
-            flowId = testFlow.id,
+            namespaceId = testNamespace.id,
             groupId = testGroup.id,
             inputs = InvocationInputs(
                 HotObject.builder()

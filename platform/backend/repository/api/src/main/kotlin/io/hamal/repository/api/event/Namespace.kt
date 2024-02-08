@@ -1,13 +1,13 @@
 package io.hamal.repository.api.event
 
-import io.hamal.repository.api.Flow
+import io.hamal.repository.api.Namespace
 
-data class FlowCreatedEvent(
-    val flow: Flow,
+data class NamespaceCreatedEvent(
+    val namespace: Namespace,
 ) : InternalEvent()
 
 
-data class FlowUpdatedEvent(
-    val flow: Flow,
+data class NamespaceUpdatedEvent(
+    val namespace: Namespace,
 ) : InternalEvent()
 

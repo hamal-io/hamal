@@ -58,10 +58,10 @@ object ValueObjectJsonModule : JsonModule() {
         this[FeedbackId::class] = ValueObjectIdAdapter(::FeedbackId)
         this[FeedbackMessage::class] = ValueObjectStringAdapter(::FeedbackMessage)
 
-        this[FlowId::class] = ValueObjectIdAdapter(::FlowId)
-        this[FlowName::class] = ValueObjectStringAdapter(::FlowName)
-        this[FlowType::class] = ValueObjectStringAdapter(::FlowType)
-        this[FlowInputs::class] = ValueObjectHotObjectAdapter(::FlowInputs)
+        this[NamespaceId::class] = ValueObjectIdAdapter(::NamespaceId)
+        this[NamespaceName::class] = ValueObjectStringAdapter(::NamespaceName)
+        this[NamespaceType::class] = ValueObjectStringAdapter(::NamespaceType)
+        this[NamespaceInputs::class] = ValueObjectHotObjectAdapter(::NamespaceInputs)
 
         this[FuncId::class] = ValueObjectIdAdapter(::FuncId)
         this[FuncName::class] = ValueObjectStringAdapter(::FuncName)

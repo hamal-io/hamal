@@ -1,29 +1,29 @@
 import React, {FC, useEffect} from "react";
 import {PageHeader} from "@/components/page-header.tsx";
-import Table from "@/pages/app/flow-detail/pages/schedule-list/components/list/components/table.tsx";
-import {columns} from "@/pages/app/flow-detail/pages/schedule-list/components/list/components/columns.tsx";
-import CreateFixedRate from "@/pages/app/flow-detail/pages/schedule-list/components/create/fixed-rate.tsx";
+import Table from "@/pages/app/namespace-detail/pages/schedule-list/components/list/components/table.tsx";
+import {columns} from "@/pages/app/namespace-detail/pages/schedule-list/components/list/components/columns.tsx";
+import CreateFixedRate from "@/pages/app/namespace-detail/pages/schedule-list/components/create/fixed-rate.tsx";
 import {useTriggerListSchedule} from "@/hook";
 
-type FlowProps = {
+type NamespaceProps = {
     id: string;
     name: string;
 }
 
 type ListProps = {
-    flow: FlowProps
+    namespace: NamespaceProps
 }
 
-const List: FC<ListProps> = ({flow}) => {
+const List: FC<ListProps> = ({namespace}) => {
     const [listSchedules, scheduleList, loading, error] = useTriggerListSchedule()
 
     useEffect(() => {
         const abortController = new AbortController()
-        listSchedules(flow.id, abortController)
+        listSchedules(namespace.id, abortController)
         return () => {
             abortController.abort()
         }
-    }, [flow.id]);
+    }, [namespace.id]);
 
     if (loading) return "Loading..."
     if (error != null) return "Error -"
@@ -32,10 +32,10 @@ const List: FC<ListProps> = ({flow}) => {
         <div className="pt-2 px-2 mb-6">
             <PageHeader
                 title="Schedules"
-                description={`Periodically call your functions of flow ${flow.name}`}
+                description={`Periodically call your functions of namespace ${namespace.name}`}
                 actions={[
                     // <CreateEvery namespace={namespace}/>,
-                    <CreateFixedRate flow={flow}/>
+                    <CreateFixedRate namespace={namespace}/>
                 ]}
             />
             <Table data={scheduleList.triggers} columns={columns}/>

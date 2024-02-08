@@ -4,62 +4,62 @@ import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.*
 
-data class Flow(
+data class Namespace(
     val cmdId: CmdId,
-    override val id: FlowId,
+    override val id: NamespaceId,
     override val updatedAt: UpdatedAt,
     val groupId: GroupId,
-    val type: FlowType,
-    val name: FlowName,
-    val inputs: FlowInputs
-) : DomainObject<FlowId>
+    val type: NamespaceType,
+    val name: NamespaceName,
+    val inputs: NamespaceInputs
+) : DomainObject<NamespaceId>
 
 
-interface FlowRepository : FlowCmdRepository, FlowQueryRepository
+interface NamespaceRepository : NamespaceCmdRepository, NamespaceQueryRepository
 
-interface FlowCmdRepository : CmdRepository {
-    fun create(cmd: CreateCmd): Flow
+interface NamespaceCmdRepository : CmdRepository {
+    fun create(cmd: CreateCmd): Namespace
 
-    fun update(flowId: FlowId, cmd: UpdateCmd): Flow
+    fun update(namespaceId: NamespaceId, cmd: UpdateCmd): Namespace
 
     data class CreateCmd(
         val id: CmdId,
-        val flowId: FlowId,
+        val namespaceId: NamespaceId,
         val groupId: GroupId,
-        val type: FlowType? = FlowType.default,
-        val name: FlowName,
-        val inputs: FlowInputs
+        val type: NamespaceType? = NamespaceType.default,
+        val name: NamespaceName,
+        val inputs: NamespaceInputs
     )
 
     data class UpdateCmd(
         val id: CmdId,
-        val name: FlowName? = null,
-        val inputs: FlowInputs? = null
+        val name: NamespaceName? = null,
+        val inputs: NamespaceInputs? = null
     )
 }
 
-interface FlowQueryRepository {
-    fun get(flowId: FlowId) = find(flowId) ?: throw NoSuchElementException("Flow not found")
-    fun get(flowName: FlowName) = find(flowName) ?: throw NoSuchElementException("Flow not found")
+interface NamespaceQueryRepository {
+    fun get(namespaceId: NamespaceId) = find(namespaceId) ?: throw NoSuchElementException("Namespace not found")
+    fun get(namespaceName: NamespaceName) = find(namespaceName) ?: throw NoSuchElementException("Namespace not found")
 
-    fun find(flowId: FlowId): Flow?
-    fun find(flowName: FlowName): Flow?
+    fun find(namespaceId: NamespaceId): Namespace?
+    fun find(namespaceName: NamespaceName): Namespace?
 
-    fun list(query: FlowQuery): List<Flow>
-    fun list(flowIds: List<FlowId>) = list(
-        FlowQuery(
+    fun list(query: NamespaceQuery): List<Namespace>
+    fun list(namespaceIds: List<NamespaceId>) = list(
+        NamespaceQuery(
             limit = Limit.all,
             groupIds = listOf(),
-            flowIds = flowIds,
+            namespaceIds = namespaceIds,
         )
     )
 
-    fun count(query: FlowQuery): Count
+    fun count(query: NamespaceQuery): Count
 
-    data class FlowQuery(
-        var afterId: FlowId = FlowId(SnowflakeId(Long.MAX_VALUE)),
+    data class NamespaceQuery(
+        var afterId: NamespaceId = NamespaceId(SnowflakeId(Long.MAX_VALUE)),
         var limit: Limit = Limit(1),
-        var flowIds: List<FlowId> = listOf(),
+        var namespaceIds: List<NamespaceId> = listOf(),
         var groupIds: List<GroupId> = listOf()
     )
 }

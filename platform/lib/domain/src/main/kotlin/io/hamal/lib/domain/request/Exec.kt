@@ -8,7 +8,7 @@ data class ExecInvokeRequested(
     override var status: RequestStatus,
     val groupId: GroupId,
     val execId: ExecId,
-    val flowId: FlowId,
+    val namespaceId: NamespaceId,
     val funcId: FuncId?,
     val correlationId: CorrelationId?,
     val inputs: InvocationInputs,

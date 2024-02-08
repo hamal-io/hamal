@@ -16,7 +16,7 @@ class AccountCreateEmailHandler(
     val accountCmdRepository: AccountCmdRepository,
     val authCmdRepository: AuthCmdRepository,
     val groupCmdRepository: GroupCmdRepository,
-    val flowCmdRepository: FlowCmdRepository,
+    val namespaceCmdRepository: NamespaceCmdRepository,
     val eventEmitter: InternalEventEmitter
 ) : io.hamal.core.request.RequestHandler<AccountCreateRequested>(AccountCreateRequested::class) {
 
@@ -24,7 +24,7 @@ class AccountCreateEmailHandler(
         createAccount(req)
             .also { emitEvent(req.cmdId(), it) }
             .also { createGroup(req) }
-            .also { createFlow(req) }
+            .also { createNamespace(req) }
             .also { createEmailAuth(req) }
             .also { createTokenAuth(req) }
     }
@@ -52,15 +52,15 @@ private fun AccountCreateEmailHandler.createGroup(req: AccountCreateRequested): 
     )
 }
 
-private fun AccountCreateEmailHandler.createFlow(req: AccountCreateRequested): Flow {
-    return flowCmdRepository.create(
-        FlowCmdRepository.CreateCmd(
+private fun AccountCreateEmailHandler.createNamespace(req: AccountCreateRequested): Namespace {
+    return namespaceCmdRepository.create(
+        NamespaceCmdRepository.CreateCmd(
             id = req.cmdId(),
-            flowId = req.flowId,
+            namespaceId = req.namespaceId,
             groupId = req.groupId,
-            type = FlowType.default,
-            name = FlowName.default,
-            inputs = FlowInputs()
+            type = NamespaceType.default,
+            name = NamespaceName.default,
+            inputs = NamespaceInputs()
         )
     )
 }

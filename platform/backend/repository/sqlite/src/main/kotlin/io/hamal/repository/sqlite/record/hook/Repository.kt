@@ -68,7 +68,7 @@ class HookSqliteRepository(
                         cmdId = cmdId,
                         entityId = hookId,
                         groupId = cmd.groupId,
-                        flowId = cmd.flowId,
+                        namespaceId = cmd.namespaceId,
                         name = cmd.name
                     )
                 )

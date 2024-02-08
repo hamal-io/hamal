@@ -17,7 +17,7 @@ builtin_error_register(lua_State *L) {
 
 int
 builtin_error_create(lua_State *L, char const *message) {
-    if (check_stack_overflow(L, 2) == CHECK_RESULT_ERROR) return LUA_TNONE;
+    if (check_stack_overnamespace(L, 2) == CHECK_RESULT_ERROR) return LUA_TNONE;
 
     lua_createtable(L, 0, 2);
     lua_pushstring(L, message);

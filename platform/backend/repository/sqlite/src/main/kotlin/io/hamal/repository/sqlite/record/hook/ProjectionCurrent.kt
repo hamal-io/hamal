@@ -44,7 +44,7 @@ internal object ProjectionCurrent : ProjectionSqlite<HookId, HookRecord, Hook> {
                 id < :afterId
                 ${query.ids()}
                 ${query.groupIds()}
-                ${query.flowIds()}
+                ${query.namespaceIds()}
             ORDER BY id DESC
             LIMIT :limit
         """.trimIndent()
@@ -71,7 +71,7 @@ internal object ProjectionCurrent : ProjectionSqlite<HookId, HookRecord, Hook> {
                 id < :afterId
                 ${query.ids()}
                 ${query.groupIds()}
-                ${query.flowIds()}
+                ${query.namespaceIds()}
         """.trimIndent()
             ) {
                 query {
@@ -88,14 +88,14 @@ internal object ProjectionCurrent : ProjectionSqlite<HookId, HookRecord, Hook> {
         tx.execute(
             """
                 INSERT OR REPLACE INTO current
-                    (id, group_id, flow_id, data) 
+                    (id, group_id, namespace_id, data) 
                 VALUES
-                    (:id, :groupId, :flowId, :data)
+                    (:id, :groupId, :namespaceId, :data)
             """.trimIndent()
         ) {
             set("id", obj.id)
             set("groupId", obj.groupId)
-            set("flowId", obj.flowId)
+            set("namespaceId", obj.namespaceId)
             set("data", json.serializeAndCompress(obj))
         }
     }
@@ -106,7 +106,7 @@ internal object ProjectionCurrent : ProjectionSqlite<HookId, HookRecord, Hook> {
             CREATE TABLE IF NOT EXISTS current (
                  id             INTEGER NOT NULL,
                  group_id       INTEGER NOT NULL,
-                 flow_id   INTEGER NOT NULL,
+                 namespace_id   INTEGER NOT NULL,
                  data           BLOB NOT NULL,
                  PRIMARY KEY    (id)
             );
@@ -134,11 +134,11 @@ internal object ProjectionCurrent : ProjectionSqlite<HookId, HookRecord, Hook> {
         }
     }
 
-    private fun HookQuery.flowIds(): String {
-        return if (flowIds.isEmpty()) {
+    private fun HookQuery.namespaceIds(): String {
+        return if (namespaceIds.isEmpty()) {
             ""
         } else {
-            "AND flow_id IN (${flowIds.joinToString(",") { "${it.value.value}" }})"
+            "AND namespace_id IN (${namespaceIds.joinToString(",") { "${it.value.value}" }})"
         }
     }
 }

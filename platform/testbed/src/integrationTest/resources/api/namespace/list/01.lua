@@ -1,28 +1,28 @@
 sys = require_plugin('sys')
 
-err, flows = sys.flows.list()
+err, namespaces = sys.namespaces.list()
 assert(err == nil)
 
 -- hamal as default namespace
-assert(#flows == 1)
+assert(#namespaces == 1)
 
-err, flow_one_req = sys.flows.create({
+err, namespace_one_req = sys.namespaces.create({
     name = 'namespace-1'
 })
 
-sys.await_completed(flow_one_req)
+sys.await_completed(namespace_one_req)
 
 assert(err == nil)
-assert(flow_one_req ~= nil)
+assert(namespace_one_req ~= nil)
 --
-_, flows = sys.flows.list()
-assert(#flows == 2)
+_, namespaces = sys.namespaces.list()
+assert(#namespaces == 2)
 
-assert(flow_one_req.id == flows[1].id)
-assert(flows[1].name == 'namespace-1')
+assert(namespace_one_req.id == namespaces[1].id)
+assert(namespaces[1].name == 'namespace-1')
 
-_, flow_two_req = sys.flows.create({ name = 'another-namespace' })
-sys.await_completed(flow_two_req)
+_, namespace_two_req = sys.namespaces.create({ name = 'another-namespace' })
+sys.await_completed(namespace_two_req)
 
-_, flows = sys.flows.list()
-assert(#flows == 3)
+_, namespaces = sys.namespaces.list()
+assert(#namespaces == 3)

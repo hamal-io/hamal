@@ -18,6 +18,6 @@ req_two = triggers[1]
 assert(req_two.type == 'Cron')
 assert(req_two.name == 'trigger-to-create')
 assert(req_two.func.name == "test-func")
-assert(req_two.flow.id == '1')
-assert(req_two.flow.name == "root-namespace")
+assert(req_two.namespace.id == '1')
+assert(req_two.namespace.name == "root-namespace")
 assert(req_two.cron == '0 0 8-10 * * *')

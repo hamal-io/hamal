@@ -111,7 +111,7 @@ void *luaM_growaux_ (lua_State *L, void *block, int nelems, int *psize,
       size = MINSIZEARRAY;  /* minimum size */
   }
   lua_assert(nelems + 1 <= size && size <= limit);
-  /* 'limit' ensures that multiplication will not overflow */
+  /* 'limit' ensures that multiplication will not overnamespace */
   newblock = luaM_saferealloc_(L, block, cast_sizet(*psize) * size_elems,
                                          cast_sizet(size) * size_elems);
   *psize = size;  /* update only when everything else is OK */

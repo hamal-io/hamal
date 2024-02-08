@@ -1,5 +1,5 @@
-import {ColumnHeader} from "@/pages/app/flow-detail/pages/func-detail/components/history-components/column-header.tsx";
-import RowAction from "@/pages/app/flow-detail/pages/func-detail/components/history-components/row-actions.tsx";
+import {ColumnHeader} from "@/pages/app/namespace-detail/pages/func-detail/components/history-components/column-header.tsx";
+import RowAction from "@/pages/app/namespace-detail/pages/func-detail/components/history-components/row-actions.tsx";
 import React from "react";
 
 

@@ -1,29 +1,29 @@
 package io.hamal.repository.sqlite.record.namespace
 
 import io.hamal.lib.common.domain.Count
-import io.hamal.lib.domain.vo.FlowId
-import io.hamal.lib.domain.vo.FlowName
+import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.sqlite.SqliteBaseRepository
-import io.hamal.repository.api.Flow
-import io.hamal.repository.api.FlowCmdRepository
-import io.hamal.repository.api.FlowCmdRepository.CreateCmd
-import io.hamal.repository.api.FlowQueryRepository.FlowQuery
-import io.hamal.repository.api.FlowRepository
+import io.hamal.repository.api.Namespace
+import io.hamal.repository.api.NamespaceCmdRepository
+import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
+import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
+import io.hamal.repository.api.NamespaceRepository
 import io.hamal.repository.record.CreateDomainObject
-import io.hamal.repository.record.namespace.FlowCreatedRecord
-import io.hamal.repository.record.namespace.FlowEntity
-import io.hamal.repository.record.namespace.FlowRecord
-import io.hamal.repository.record.namespace.FlowUpdatedRecord
+import io.hamal.repository.record.namespace.NamespaceCreatedRecord
+import io.hamal.repository.record.namespace.NamespaceEntity
+import io.hamal.repository.record.namespace.NamespaceRecord
+import io.hamal.repository.record.namespace.NamespaceUpdatedRecord
 import io.hamal.repository.sqlite.record.RecordSqliteRepository
 import java.nio.file.Path
 
-internal object CreateFlow : CreateDomainObject<FlowId, FlowRecord, Flow> {
-    override fun invoke(recs: List<FlowRecord>): Flow {
+internal object CreateNamespace : CreateDomainObject<NamespaceId, NamespaceRecord, Namespace> {
+    override fun invoke(recs: List<NamespaceRecord>): Namespace {
         check(recs.isNotEmpty()) { "At least one record is required" }
         val firstRecord = recs.first()
-        check(firstRecord is FlowCreatedRecord)
+        check(firstRecord is NamespaceCreatedRecord)
 
-        var result = FlowEntity(
+        var result = NamespaceEntity(
             cmdId = firstRecord.cmdId,
             id = firstRecord.entityId,
             groupId = firstRecord.groupId,
@@ -40,14 +40,14 @@ internal object CreateFlow : CreateDomainObject<FlowId, FlowRecord, Flow> {
     }
 }
 
-class FlowSqliteRepository(
+class NamespacesqliteRepository(
     config: Config
-) : RecordSqliteRepository<FlowId, FlowRecord, Flow>(
+) : RecordSqliteRepository<NamespaceId, NamespaceRecord, Namespace>(
     config = config,
-    createDomainObject = CreateFlow,
-    recordClass = FlowRecord::class,
+    createDomainObject = CreateNamespace,
+    recordClass = NamespaceRecord::class,
     projections = listOf(ProjectionCurrent, ProjectionUniqueName)
-), FlowRepository {
+), NamespaceRepository {
 
     data class Config(
         override val path: Path
@@ -55,17 +55,17 @@ class FlowSqliteRepository(
         override val filename = "namespace.db"
     }
 
-    override fun create(cmd: CreateCmd): Flow {
-        val flowId = cmd.flowId
+    override fun create(cmd: CreateCmd): Namespace {
+        val namespaceId = cmd.namespaceId
         val cmdId = cmd.id
         return tx {
-            if (commandAlreadyApplied(cmdId, flowId)) {
-                versionOf(flowId, cmdId)
+            if (commandAlreadyApplied(cmdId, namespaceId)) {
+                versionOf(namespaceId, cmdId)
             } else {
                 store(
-                    FlowCreatedRecord(
+                    NamespaceCreatedRecord(
                         cmdId = cmdId,
-                        entityId = flowId,
+                        entityId = namespaceId,
                         groupId = cmd.groupId,
                         type = cmd.type!!,
                         name = cmd.name,
@@ -73,48 +73,48 @@ class FlowSqliteRepository(
                     )
                 )
 
-                currentVersion(flowId)
+                currentVersion(namespaceId)
                     .also { ProjectionCurrent.upsert(this, it) }
                     .also { ProjectionUniqueName.upsert(this, it) }
             }
         }
     }
 
-    override fun update(flowId: FlowId, cmd: FlowCmdRepository.UpdateCmd): Flow {
+    override fun update(namespaceId: NamespaceId, cmd: NamespaceCmdRepository.UpdateCmd): Namespace {
         val cmdId = cmd.id
         return tx {
-            if (commandAlreadyApplied(cmdId, flowId)) {
-                versionOf(flowId, cmdId)
+            if (commandAlreadyApplied(cmdId, namespaceId)) {
+                versionOf(namespaceId, cmdId)
             } else {
-                val current = currentVersion(flowId)
+                val current = currentVersion(namespaceId)
                 store(
-                    FlowUpdatedRecord(
-                        entityId = flowId,
+                    NamespaceUpdatedRecord(
+                        entityId = namespaceId,
                         cmdId = cmdId,
                         name = cmd.name ?: current.name,
                         inputs = cmd.inputs ?: current.inputs,
                     )
                 )
-                currentVersion(flowId)
+                currentVersion(namespaceId)
                     .also { ProjectionCurrent.upsert(this, it) }
                     .also { ProjectionUniqueName.upsert(this, it) }
             }
         }
     }
 
-    override fun find(flowId: FlowId): Flow? {
-        return ProjectionCurrent.find(connection, flowId)
+    override fun find(namespaceId: NamespaceId): Namespace? {
+        return ProjectionCurrent.find(connection, namespaceId)
     }
 
-    override fun find(flowName: FlowName): Flow? {
-        return ProjectionUniqueName.find(connection, flowName)?.let { find((it)) }
+    override fun find(namespaceName: NamespaceName): Namespace? {
+        return ProjectionUniqueName.find(connection, namespaceName)?.let { find((it)) }
     }
 
-    override fun list(query: FlowQuery): List<Flow> {
+    override fun list(query: NamespaceQuery): List<Namespace> {
         return ProjectionCurrent.list(connection, query)
     }
 
-    override fun count(query: FlowQuery): Count {
+    override fun count(query: NamespaceQuery): Count {
         return ProjectionCurrent.count(connection, query)
     }
 }

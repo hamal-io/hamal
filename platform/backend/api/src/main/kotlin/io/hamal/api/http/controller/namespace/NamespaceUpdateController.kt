@@ -1,11 +1,11 @@
 package io.hamal.api.http.controller.namespace
 
 import io.hamal.api.http.controller.accepted
-import io.hamal.core.adapter.FlowUpdatePort
+import io.hamal.core.adapter.NamespaceUpdatePort
 import io.hamal.core.component.Retry
-import io.hamal.lib.domain.request.FlowUpdateRequested
-import io.hamal.lib.domain.vo.FlowId
-import io.hamal.lib.sdk.api.ApiFlowUpdateRequest
+import io.hamal.lib.domain.request.NamespaceUpdateRequested
+import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.sdk.api.ApiNamespaceUpdateRequest
 import io.hamal.lib.sdk.api.ApiRequested
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PatchMapping
@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 internal class NamespaceUpdateController(
     private val retry: Retry,
-    private val updateFlow: FlowUpdatePort
+    private val updateNamespace: NamespaceUpdatePort
 ) {
-    @PatchMapping("/v1/flows/{flowId}")
-    fun updateFlow(
-        @PathVariable("flowId") flowId: FlowId,
-        @RequestBody req: ApiFlowUpdateRequest
+    @PatchMapping("/v1/namespaces/{namespaceId}")
+    fun updateNamespace(
+        @PathVariable("namespaceId") namespaceId: NamespaceId,
+        @RequestBody req: ApiNamespaceUpdateRequest
     ): ResponseEntity<ApiRequested> = retry {
-        updateFlow(flowId, req, FlowUpdateRequested::accepted)
+        updateNamespace(namespaceId, req, NamespaceUpdateRequested::accepted)
     }
 }

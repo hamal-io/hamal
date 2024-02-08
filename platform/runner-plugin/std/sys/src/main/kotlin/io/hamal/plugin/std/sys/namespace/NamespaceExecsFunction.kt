@@ -1,6 +1,6 @@
 package io.hamal.plugin.std.sys.namespace
 
-import io.hamal.lib.domain.vo.FlowId
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -17,7 +17,7 @@ class NamespaceExecsFunction(
     override fun invoke(ctx: FunctionContext, arg1: KuaString): Pair<KuaError?, KuaArray?> {
         return try {
             null to KuaArray(
-                sdk.exec.list(FlowId(arg1.value))
+                sdk.exec.list(NamespaceId(arg1.value))
                     .mapIndexed { index, exec ->
                     index to KuaMap(
                         mutableMapOf(

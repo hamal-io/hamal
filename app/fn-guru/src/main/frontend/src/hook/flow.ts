@@ -1,30 +1,30 @@
-import {Flow, FlowCreateSubmitted, FlowList, FuncCreateSubmitted} from "@/types";
+import {Namespace, NamespaceCreateSubmitted, NamespaceList, FuncCreateSubmitted} from "@/types";
 import {useGet, usePost} from "@/hook/http.ts";
 import {useCallback, useState} from "react";
 import {useAuth} from "@/hook/auth.ts";
 
-type FlowGetAction = (flowId: string, abortController?: AbortController) => void
-export const useFlowGet = (): [FlowGetAction, Flow, boolean, Error] => {
+type NamespaceGetAction = (namespaceId: string, abortController?: AbortController) => void
+export const useNamespaceGet = (): [NamespaceGetAction, Namespace, boolean, Error] => {
     const [auth] = useAuth()
-    const [get, flowList, loading, error] = useGet<Flow>()
-    const fn = useCallback(async (flowId: string, abortController?: AbortController) => get(`/v1/flows/${flowId}`, abortController), [auth])
-    return [fn, flowList, loading, error]
+    const [get, namespaceList, loading, error] = useGet<Namespace>()
+    const fn = useCallback(async (namespaceId: string, abortController?: AbortController) => get(`/v1/namespaces/${namespaceId}`, abortController), [auth])
+    return [fn, namespaceList, loading, error]
 }
 
-type FlowListAction = (groupId: string, abortController?: AbortController) => void
-export const useFlowList = (): [FlowListAction, FlowList, boolean, Error] => {
+type NamespaceListAction = (groupId: string, abortController?: AbortController) => void
+export const useNamespaceList = (): [NamespaceListAction, NamespaceList, boolean, Error] => {
     const [auth] = useAuth()
-    const [get, flowList, loading, error] = useGet<FlowList>()
-    const fn = useCallback(async (groupId: string, abortController?: AbortController) => get(`/v1/groups/${groupId}/flows`, abortController), [auth])
-    return [fn, flowList, loading, error]
+    const [get, namespaceList, loading, error] = useGet<NamespaceList>()
+    const fn = useCallback(async (groupId: string, abortController?: AbortController) => get(`/v1/groups/${groupId}/namespaces`, abortController), [auth])
+    return [fn, namespaceList, loading, error]
 }
 
-type FlowCreateAction = (groupId: string, name: string, controller?: AbortController) => void
-export const useFlowCreate = (): [FlowCreateAction, FlowCreateSubmitted, boolean, Error] => {
+type NamespaceCreateAction = (groupId: string, name: string, controller?: AbortController) => void
+export const useNamespaceCreate = (): [NamespaceCreateAction, NamespaceCreateSubmitted, boolean, Error] => {
     const [auth] = useAuth()
-    const [post, submission, loading, error] = usePost<FlowCreateSubmitted>()
+    const [post, submission, loading, error] = usePost<NamespaceCreateSubmitted>()
     const fn = useCallback(async (groupId: string, name: string, abortController?: AbortController) =>
-        post(`/v1/groups/${groupId}/flows`, {
+        post(`/v1/groups/${groupId}/namespaces`, {
             name,
             inputs: {}
         }, abortController), [auth]

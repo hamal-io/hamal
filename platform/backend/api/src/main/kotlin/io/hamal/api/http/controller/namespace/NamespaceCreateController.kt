@@ -1,11 +1,11 @@
 package io.hamal.api.http.controller.namespace
 
 import io.hamal.api.http.controller.accepted
-import io.hamal.core.adapter.FlowCreatePort
+import io.hamal.core.adapter.NamespaceCreatePort
 import io.hamal.core.component.Retry
-import io.hamal.lib.domain.request.FlowCreateRequested
+import io.hamal.lib.domain.request.NamespaceCreateRequested
 import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.sdk.api.ApiFlowCreateRequest
+import io.hamal.lib.sdk.api.ApiNamespaceCreateRequest
 import io.hamal.lib.sdk.api.ApiRequested
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 internal class NamespaceCreateController(
     private val retry: Retry,
-    private val createFlow: FlowCreatePort
+    private val createNamespace: NamespaceCreatePort
 ) {
-    @PostMapping("/v1/groups/{groupId}/flows")
-    fun createFlow(
+    @PostMapping("/v1/groups/{groupId}/namespaces")
+    fun createNamespace(
         @PathVariable("groupId") groupId: GroupId,
-        @RequestBody req: ApiFlowCreateRequest
+        @RequestBody req: ApiNamespaceCreateRequest
     ): ResponseEntity<ApiRequested> = retry {
-        createFlow(groupId, req, FlowCreateRequested::accepted)
+        createNamespace(groupId, req, NamespaceCreateRequested::accepted)
     }
 }

@@ -9,7 +9,7 @@ res = fail_on_error(sys.adhoc({
 sys.await_completed(res)
 
 assert(res.group_id == '1')
-assert(res.flow_id == '1')
+assert(res.namespace_id == '1')
 
 exec_id = res.id
 

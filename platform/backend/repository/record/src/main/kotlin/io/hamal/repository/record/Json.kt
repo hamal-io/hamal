@@ -19,7 +19,7 @@ import io.hamal.repository.record.endpoint.EndpointRecord
 import io.hamal.repository.record.exec.ExecRecord
 import io.hamal.repository.record.extension.ExtensionRecord
 import io.hamal.repository.record.feedback.FeedbackRecord
-import io.hamal.repository.record.namespace.FlowRecord
+import io.hamal.repository.record.namespace.NamespaceRecord
 import io.hamal.repository.record.func.FuncRecord
 import io.hamal.repository.record.group.GroupRecord
 import io.hamal.repository.record.hook.HookRecord
@@ -38,7 +38,7 @@ object RecordJsonModule : JsonModule() {
         this[ExecRecord::class] = ExecRecord.Adapter
         this[ExtensionRecord::class] = ExtensionRecord.Adapter
         this[FeedbackRecord::class] = FeedbackRecord.Adapter
-        this[FlowRecord::class] = FlowRecord.Adapter
+        this[NamespaceRecord::class] = NamespaceRecord.Adapter
         this[FuncRecord::class] = FuncRecord.Adapter
         this[GroupRecord::class] = GroupRecord.Adapter
         this[HookRecord::class] = HookRecord.Adapter

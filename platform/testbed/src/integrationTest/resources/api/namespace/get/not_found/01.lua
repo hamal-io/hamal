@@ -1,5 +1,5 @@
 sys = require_plugin('sys')
-err, ns = sys.flows.get('123123123')
-assert(err.message == 'Flow not found')
-assert(err['message'] == 'Flow not found')
+err, ns = sys.namespaces.get('123123123')
+assert(err.message == 'Namespace not found')
+assert(err['message'] == 'Namespace not found')
 assert(ns == nil)

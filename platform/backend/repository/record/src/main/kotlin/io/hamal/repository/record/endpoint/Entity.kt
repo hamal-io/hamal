@@ -15,7 +15,7 @@ data class EndpointEntity(
     override val recordedAt: RecordedAt,
     val groupId: GroupId,
 
-    var flowId: FlowId? = null,
+    var namespaceId: NamespaceId? = null,
     var funcId: FuncId? = null,
     var name: EndpointName? = null,
 
@@ -27,7 +27,7 @@ data class EndpointEntity(
                 id = rec.entityId,
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
-                flowId = rec.flowId,
+                namespaceId = rec.namespaceId,
                 name = rec.name,
                 funcId = rec.funcId,
                 recordedAt = rec.recordedAt()
@@ -51,7 +51,7 @@ data class EndpointEntity(
             id = id,
             updatedAt = recordedAt.toUpdatedAt(),
             groupId = groupId,
-            flowId = flowId!!,
+            namespaceId = namespaceId!!,
             funcId = funcId!!,
             name = name!!
         )

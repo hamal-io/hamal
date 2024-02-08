@@ -76,9 +76,9 @@ class PluginSysFactory(
                 "hook_get" to HookGetFunction(sdk),
                 "hook_list" to HookListFunction(sdk),
 
-                "flow_create" to NamespaceCreateFunction(sdk),
-                "flow_get" to NamespaceGetFunction(sdk),
-                "flow_list" to NamespaceListFunction(sdk),
+                "namespace_create" to NamespaceCreateFunction(sdk),
+                "namespace_get" to NamespaceGetFunction(sdk),
+                "namespace_list" to NamespaceListFunction(sdk),
                 "namespace_execs" to NamespaceExecsFunction(sdk),
 
                 "topic_create" to TopicCreateFunction(sdk),

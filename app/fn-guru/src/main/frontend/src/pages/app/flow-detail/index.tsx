@@ -1,33 +1,33 @@
 import React, {createContext, FC, ReactNode, useEffect} from 'react'
 import {useParams} from "react-router-dom";
-import Sidebar from "@/pages/app/flow-detail/components/sidebar";
+import Sidebar from "@/pages/app/namespace-detail/components/sidebar";
 import Authenticated from "@/components/app/authenticated.tsx";
-import {useFlowGet} from "@/hook";
-import {Flow} from "@/types";
+import {useNamespaceGet} from "@/hook";
+import {Namespace} from "@/types";
 
 
 type Props = {
     children: ReactNode;
 }
 
-export const FlowContext = createContext<Flow | null>(null)
+export const NamespaceContext = createContext<Namespace | null>(null)
 
-const FlowDetailPage: FC<Props> = ({children}) => {
-    const {flowId} = useParams()
+const NamespaceDetailPage: FC<Props> = ({children}) => {
+    const {namespaceId} = useParams()
 
-    const [getFlow, flow, loading, error] = useFlowGet()
+    const [getNamespace, namespace, loading, error] = useNamespaceGet()
     useEffect(() => {
-        getFlow(flowId)
-    }, [flowId]);
+        getNamespace(namespaceId)
+    }, [namespaceId]);
 
     return (
         <Authenticated>
             <div className="relative flex flex-row min-h-screen ">
                 <Sidebar/>
                 <div className="p-4 border-l border-border w-full  ml-64">
-                    <FlowContext.Provider value={flow}>
+                    <NamespaceContext.Provider value={namespace}>
                         {children}
-                    </FlowContext.Provider>
+                    </NamespaceContext.Provider>
                 </div>
             </div>
         </Authenticated>
@@ -35,5 +35,5 @@ const FlowDetailPage: FC<Props> = ({children}) => {
 }
 
 
-export default FlowDetailPage
+export default NamespaceDetailPage
 

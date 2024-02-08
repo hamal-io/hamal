@@ -1,8 +1,8 @@
 import React from 'react'
 import {useAuth} from "@/hook/auth.ts";
-import List from "@/pages/app/flow-list/components/list.tsx";
+import List from "@/pages/app/namespace-list/components/list.tsx";
 
-const FlowListPage: React.FC = () => {
+const NamespaceListPage: React.FC = () => {
     const [auth] = useAuth()
     return (
         <div>
@@ -13,4 +13,4 @@ const FlowListPage: React.FC = () => {
 }
 
 
-export default FlowListPage;
+export default NamespaceListPage;

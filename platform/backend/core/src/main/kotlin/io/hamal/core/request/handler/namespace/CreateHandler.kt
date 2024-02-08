@@ -4,44 +4,44 @@ import io.hamal.core.event.InternalEventEmitter
 import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.GenerateId
-import io.hamal.lib.domain.request.FlowCreateRequested
-import io.hamal.repository.api.Flow
-import io.hamal.repository.api.FlowCmdRepository
-import io.hamal.repository.api.FlowCmdRepository.CreateCmd
-import io.hamal.repository.api.FlowQueryRepository
-import io.hamal.repository.api.event.FlowCreatedEvent
+import io.hamal.lib.domain.request.NamespaceCreateRequested
+import io.hamal.repository.api.Namespace
+import io.hamal.repository.api.NamespaceCmdRepository
+import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
+import io.hamal.repository.api.NamespaceQueryRepository
+import io.hamal.repository.api.event.NamespaceCreatedEvent
 import org.springframework.stereotype.Component
 
 
 @Component
-class FlowCreateHandler(
-    val flowCmdRepository: FlowCmdRepository,
-    val flowQueryRepository: FlowQueryRepository,
+class NamespaceCreateHandler(
+    val namespaceCmdRepository: NamespaceCmdRepository,
+    val namespaceQueryRepository: NamespaceQueryRepository,
     val eventEmitter: InternalEventEmitter,
     val generateDomainId: GenerateId
-) : io.hamal.core.request.RequestHandler<FlowCreateRequested>(FlowCreateRequested::class) {
+) : io.hamal.core.request.RequestHandler<NamespaceCreateRequested>(NamespaceCreateRequested::class) {
 
     /**
-     * Creates new flows on a best-effort basis. Might throw an exception if used concurrently
+     * Creates new namespaces on a best-effort basis. Might throw an exception if used concurrently
      */
-    override fun invoke(req: FlowCreateRequested) {
-        createFlow(req).also { emitEvent(req.cmdId(), it) }
+    override fun invoke(req: NamespaceCreateRequested) {
+        createNamespace(req).also { emitEvent(req.cmdId(), it) }
     }
 }
 
-private fun FlowCreateHandler.createFlow(req: FlowCreateRequested): Flow {
-    return flowCmdRepository.create(
+private fun NamespaceCreateHandler.createNamespace(req: NamespaceCreateRequested): Namespace {
+    return namespaceCmdRepository.create(
         CreateCmd(
             id = req.cmdId(),
-            flowId = req.flowId,
+            namespaceId = req.namespaceId,
             groupId = req.groupId,
-            type = req.flowType,
+            type = req.namespaceType,
             name = req.name,
             inputs = req.inputs
         )
     )
 }
 
-private fun FlowCreateHandler.emitEvent(cmdId: CmdId, flow: Flow) {
-    eventEmitter.emit(cmdId, FlowCreatedEvent(flow))
+private fun NamespaceCreateHandler.emitEvent(cmdId: CmdId, namespace: Namespace) {
+    eventEmitter.emit(cmdId, NamespaceCreatedEvent(namespace))
 }

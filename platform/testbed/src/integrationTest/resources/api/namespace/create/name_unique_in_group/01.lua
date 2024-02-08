@@ -1,41 +1,41 @@
 sys = require_plugin('sys')
 
-err, flows = sys.flows.list()
+err, namespaces = sys.namespaces.list()
 assert(err == nil)
 -- hamal as default namespace
-assert(#flows == 1)
+assert(#namespaces == 1)
 
-err, flow = sys.flows.create({
+err, namespace = sys.namespaces.create({
     name = 'io::hamal::web3::eth'
 })
 assert(err == nil)
-sys.await_completed(flow)
+sys.await_completed(namespace)
 
-err, flows = sys.flows.list()
+err, namespaces = sys.namespaces.list()
 assert(err == nil)
-assert(#flows == 2)
+assert(#namespaces == 2)
 
 -- tries to create namespace which is already there
-err, flow = sys.flows.create({
+err, namespace = sys.namespaces.create({
     name = 'io::hamal::web3::eth'
 })
 assert(err == nil)
-sys.await_failed(flow)
+sys.await_failed(namespace)
 
 -- nothing has changed
-err, flows = sys.flows.list()
+err, namespaces = sys.namespaces.list()
 assert(err == nil)
-assert(#flows == 2)
+assert(#namespaces == 2)
 
 -- tries to create namespace which is already there
-err, flow = sys.flows.create({
+err, namespace = sys.namespaces.create({
     name = 'io::hamal::web3::eth::sub'
 })
 assert(err == nil)
-sys.await_completed(flow)
+sys.await_completed(namespace)
 
 
 -- nothing has changed
-err, flows = sys.flows.list()
+err, namespaces = sys.namespaces.list()
 assert(err == nil)
-assert(#flows == 3)
+assert(#namespaces == 3)

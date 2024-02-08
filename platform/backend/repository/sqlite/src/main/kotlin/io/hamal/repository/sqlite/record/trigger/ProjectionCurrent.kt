@@ -51,7 +51,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
                 ${query.types()}
                 ${query.topicIds()}
                 ${query.hookIds()}
-                ${query.flowIds()}
+                ${query.namespaceIds()}
             ORDER BY id DESC
             LIMIT :limit
         """.trimIndent()
@@ -85,7 +85,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
                 ${query.types()}
                 ${query.topicIds()}
                 ${query.hookIds()}
-                ${query.flowIds()}
+                ${query.namespaceIds()}
         """.trimIndent()
             ) {
                 query {
@@ -102,9 +102,9 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
         tx.execute(
             """
                 INSERT OR REPLACE INTO current
-                    (id, group_id, func_id, topic_id, hook_id, flow_id, type, data) 
+                    (id, group_id, func_id, topic_id, hook_id, namespace_id, type, data) 
                 VALUES
-                    (:id, :groupId, :funcId, :topicId, :hookId, :flowId, :type, :data)
+                    (:id, :groupId, :funcId, :topicId, :hookId, :namespaceId, :type, :data)
             """.trimIndent()
         ) {
             set("id", obj.id)
@@ -121,7 +121,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
             } else {
                 set("hookId", 0)
             }
-            set("flowId", obj.flowId)
+            set("namespaceId", obj.namespaceId)
             set("type", obj.type.value)
             set("data", json.serializeAndCompress(obj))
         }
@@ -137,7 +137,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
                  type           INTEGER NOT NULL,
                  topic_id       INTEGER NOT NULL,
                  hook_id        INTEGER NOT NULL,
-                 flow_id        INTEGER NOT NULL,
+                 namespace_id        INTEGER NOT NULL,
                  data           BLOB NOT NULL,
                  PRIMARY KEY    (id)
         );
@@ -197,11 +197,11 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
         }
     }
 
-    private fun TriggerQuery.flowIds(): String {
-        return if (flowIds.isEmpty()) {
+    private fun TriggerQuery.namespaceIds(): String {
+        return if (namespaceIds.isEmpty()) {
             ""
         } else {
-            "AND flow_id IN (${flowIds.joinToString(",") { "${it.value.value}" }})"
+            "AND namespace_id IN (${namespaceIds.joinToString(",") { "${it.value.value}" }})"
         }
     }
 }

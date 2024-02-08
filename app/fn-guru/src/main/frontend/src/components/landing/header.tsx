@@ -35,7 +35,7 @@ const GoToApp = () => {
         return (
             <Button
                 onClick={() => {
-                    navigate("/flows", {replace: true})
+                    navigate("/namespaces", {replace: true})
                 }}>
                 Back to work
             </Button>

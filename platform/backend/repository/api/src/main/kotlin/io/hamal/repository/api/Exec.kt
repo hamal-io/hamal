@@ -24,7 +24,7 @@ interface ExecCmdRepository : CmdRepository {
     data class PlanCmd(
         val id: CmdId,
         val execId: ExecId,
-        val flowId: FlowId,
+        val namespaceId: NamespaceId,
         val groupId: GroupId,
         val correlation: Correlation?,
         val inputs: ExecInputs,
@@ -76,7 +76,7 @@ interface ExecQueryRepository {
     data class ExecQuery(
         var afterId: ExecId = ExecId(SnowflakeId(Long.MAX_VALUE)),
         var limit: Limit = Limit(1),
-        var flowIds: List<FlowId> = listOf(),
+        var namespaceIds: List<NamespaceId> = listOf(),
         var groupIds: List<GroupId> = listOf(),
         var funcIds: List<FuncId> = listOf(),
         var execIds: List<ExecId> = listOf()
@@ -86,7 +86,7 @@ interface ExecQueryRepository {
 sealed class Exec : DomainObject<ExecId> {
     abstract val cmdId: CmdId
     abstract override val id: ExecId
-    abstract val flowId: FlowId
+    abstract val namespaceId: NamespaceId
     abstract val groupId: GroupId
     abstract val status: ExecStatus
 
@@ -148,7 +148,7 @@ class PlannedExec(
     override val cmdId: CmdId,
     override val id: ExecId,
     override val updatedAt: UpdatedAt,
-    override val flowId: FlowId,
+    override val namespaceId: NamespaceId,
     override val groupId: GroupId,
     override val correlation: Correlation?,
     override val inputs: ExecInputs,
@@ -172,7 +172,7 @@ class ScheduledExec(
     val scheduledAt: ExecScheduledAt,
 ) : Exec() {
     override val status = ExecStatus.Scheduled
-    override val flowId get() = plannedExec.flowId
+    override val namespaceId get() = plannedExec.namespaceId
     override val groupId get() = plannedExec.groupId
     override val correlation get() = plannedExec.correlation
     override val inputs get() = plannedExec.inputs
@@ -192,7 +192,7 @@ class QueuedExec(
     val queuedAt: ExecQueuedAt,
 ) : Exec() {
     override val status = ExecStatus.Queued
-    override val flowId get() = scheduledExec.flowId
+    override val namespaceId get() = scheduledExec.namespaceId
     override val groupId get() = scheduledExec.groupId
     override val correlation get() = scheduledExec.correlation
     override val inputs get() = scheduledExec.inputs
@@ -211,7 +211,7 @@ class StartedExec(
     val queuedExec: QueuedExec
 ) : Exec() {
     override val status = ExecStatus.Started
-    override val flowId get() = queuedExec.flowId
+    override val namespaceId get() = queuedExec.namespaceId
     override val groupId get() = queuedExec.groupId
     override val correlation get() = queuedExec.correlation
     override val inputs get() = queuedExec.inputs
@@ -232,7 +232,7 @@ class CompletedExec(
     val state: ExecState
 ) : Exec() {
     override val status = ExecStatus.Completed
-    override val flowId get() = startedExec.flowId
+    override val namespaceId get() = startedExec.namespaceId
     override val groupId get() = startedExec.groupId
     override val correlation get() = startedExec.correlation
     override val inputs get() = startedExec.inputs
@@ -254,7 +254,7 @@ class FailedExec(
     val result: ExecResult
 ) : Exec() {
     override val status = ExecStatus.Failed
-    override val flowId get() = startedExec.flowId
+    override val namespaceId get() = startedExec.namespaceId
     override val groupId get() = startedExec.groupId
     override val correlation get() = startedExec.correlation
     override val inputs get() = startedExec.inputs

@@ -9,7 +9,7 @@ import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.*
-import io.hamal.repository.api.FlowCmdRepository.CreateCmd
+import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -37,19 +37,19 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
 
     @Test
     fun `Updates func`() {
-        val createdFlow = flowCmdRepository.create(
+        val createdNamespace = namespaceCmdRepository.create(
             CreateCmd(
                 id = CmdId(2),
-                flowId = FlowId(2),
+                namespaceId = NamespaceId(2),
                 groupId = testGroup.id,
-                name = FlowName("createdFlow"),
-                inputs = FlowInputs()
+                name = NamespaceName("createdNamespace"),
+                inputs = NamespaceInputs()
             )
         )
 
         val func = awaitCompleted(
             createFunc(
-                flowId = createdFlow.id,
+                namespaceId = createdNamespace.id,
                 req = ApiFuncCreateRequest(
                     name = FuncName("created-name"),
                     inputs = FuncInputs(HotObject.builder().set("hamal", "createdInputs").build()),
@@ -79,7 +79,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
 
         with(getFunc(funcId)) {
             assertThat(id, equalTo(funcId))
-            assertThat(flow.name, equalTo(FlowName("createdFlow")))
+            assertThat(namespace.name, equalTo(NamespaceName("createdNamespace")))
             assertThat(name, equalTo(FuncName("updated-name")))
             assertThat(inputs, equalTo(FuncInputs(HotObject.builder().set("hamal", "updatedInputs").build())))
 
@@ -93,7 +93,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
 
     @Test
     fun `Updates func without updating values`() {
-        val funcId = createFuncInFlow(
+        val funcId = createFuncInNamespace(
             FuncName("created-name"),
             CodeValue("createdCode")
         ).funcId
@@ -117,7 +117,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
 
         with(getFunc(funcId)) {
             assertThat(id, equalTo(funcId))
-            assertThat(flow.name, equalTo(FlowName("createdFlow")))
+            assertThat(namespace.name, equalTo(NamespaceName("createdNamespace")))
             assertThat(name, equalTo(FuncName("created-name")))
             assertThat(inputs, equalTo(FuncInputs(HotObject.builder().set("hamal", "createdInputs").build())))
 
@@ -131,7 +131,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
 
     @Test
     fun `Does not increment code version if req code is null`() {
-        val funcId = createFuncInFlow(
+        val funcId = createFuncInNamespace(
             FuncName("created-name"),
             CodeValue("createdCode")
         ).funcId
@@ -151,7 +151,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
 
         with(getFunc(funcId)) {
             assertThat(name, equalTo(FuncName("updated-name")))
-            assertThat(flow.name, equalTo(FlowName("createdFlow")))
+            assertThat(namespace.name, equalTo(NamespaceName("createdNamespace")))
 
             assertThat(code.version, equalTo(CodeVersion(1)))
             assertThat(code.value, equalTo(CodeValue("createdCode")))
@@ -163,7 +163,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
 
     @Test
     fun `Does not increment code version if req code is equal to existing`() {
-        val funcId = createFuncInFlow(
+        val funcId = createFuncInNamespace(
             FuncName("func-1"),
             CodeValue("createdCode")
         ).funcId
@@ -186,7 +186,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
         awaitCompleted(submittedReq)
 
         with(getFunc(funcId)) {
-            assertThat(flow.name, equalTo(FlowName("createdFlow")))
+            assertThat(namespace.name, equalTo(NamespaceName("createdNamespace")))
             assertThat(name, equalTo(FuncName("updated-name")))
             assertThat(inputs, equalTo(FuncInputs(HotObject.builder().set("hamal", "updatedInputs").build())))
 
@@ -198,20 +198,20 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
         }
     }
 
-    private fun createFuncInFlow(name: FuncName, code: CodeValue): ApiFuncCreateRequested {
-        val createdFlow = flowCmdRepository.create(
+    private fun createFuncInNamespace(name: FuncName, code: CodeValue): ApiFuncCreateRequested {
+        val createdNamespace = namespaceCmdRepository.create(
             CreateCmd(
                 id = CmdGen(),
-                flowId = FlowId(2),
+                namespaceId = NamespaceId(2),
                 groupId = testGroup.id,
-                name = FlowName("createdFlow"),
-                inputs = FlowInputs()
+                name = NamespaceName("createdNamespace"),
+                inputs = NamespaceInputs()
             )
         )
 
         return awaitCompleted(
             createFunc(
-                flowId = createdFlow.id,
+                namespaceId = createdNamespace.id,
                 req = ApiFuncCreateRequest(
                     name = name,
                     inputs = FuncInputs(HotObject.builder().set("hamal", "createdInputs").build()),

@@ -3,33 +3,33 @@ package io.hamal.lib.domain.request
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.vo.*
 
-interface FlowCreateRequest {
-    val name: FlowName
-    val inputs: FlowInputs
-    val type: FlowType?
+interface NamespaceCreateRequest {
+    val name: NamespaceName
+    val inputs: NamespaceInputs
+    val type: NamespaceType?
 }
 
-data class FlowCreateRequested(
+data class NamespaceCreateRequested(
     override val id: RequestId,
     override var status: RequestStatus,
     val groupId: GroupId,
-    val flowId: FlowId,
-    val name: FlowName,
-    val inputs: FlowInputs,
-    val flowType: FlowType
+    val namespaceId: NamespaceId,
+    val name: NamespaceName,
+    val inputs: NamespaceInputs,
+    val namespaceType: NamespaceType
 ) : Requested()
 
-interface FlowUpdateRequest {
-    val name: FlowName
-    val inputs: FlowInputs
+interface NamespaceUpdateRequest {
+    val name: NamespaceName
+    val inputs: NamespaceInputs
 }
 
 
-data class FlowUpdateRequested(
+data class NamespaceUpdateRequested(
     override val id: RequestId,
     override var status: RequestStatus,
     val groupId: GroupId,
-    val flowId: FlowId,
-    val name: FlowName,
-    val inputs: FlowInputs
+    val namespaceId: NamespaceId,
+    val name: NamespaceName,
+    val inputs: NamespaceInputs
 ) : Requested()

@@ -17,10 +17,10 @@ internal sealed class EndpointBaseControllerTest : BaseControllerTest() {
         funcId: FuncId,
         name: EndpointName,
         method: EndpointMethod,
-        flowId: FlowId = FlowId(1),
+        namespaceId: NamespaceId = NamespaceId(1),
     ): ApiEndpointCreateRequested {
-        val response = httpTemplate.post("/v1/flows/{flowId}/endpoints")
-            .path("flowId", flowId)
+        val response = httpTemplate.post("/v1/namespaces/{namespaceId}/endpoints")
+            .path("namespaceId", namespaceId)
             .body(
                 ApiEndpointCreateRequest(
                     name = name,
@@ -37,10 +37,10 @@ internal sealed class EndpointBaseControllerTest : BaseControllerTest() {
 
     fun createFunc(
         name: FuncName,
-        flowId: FlowId = FlowId(1)
+        namespaceId: NamespaceId = NamespaceId(1)
     ): ApiFuncCreateRequested {
-        val createTopicResponse = httpTemplate.post("/v1/flows/{flowId}/funcs")
-            .path("flowId", flowId)
+        val createTopicResponse = httpTemplate.post("/v1/namespaces/{namespaceId}/funcs")
+            .path("namespaceId", namespaceId)
             .body(
                 ApiFuncCreateRequest(
                     name = name,
@@ -56,25 +56,25 @@ internal sealed class EndpointBaseControllerTest : BaseControllerTest() {
         return createTopicResponse.result(ApiFuncCreateRequested::class)
     }
 
-    fun createFlow(
-        name: FlowName,
+    fun createNamespace(
+        name: NamespaceName,
         groupId: GroupId,
-        type: FlowType = FlowType.default
-    ): ApiFlowCreateRequested {
-        val response = httpTemplate.post("/v1/groups/{groupId}/flows")
+        type: NamespaceType = NamespaceType.default
+    ): ApiNamespaceCreateRequested {
+        val response = httpTemplate.post("/v1/groups/{groupId}/namespaces")
             .path("groupId", groupId)
             .body(
-                ApiFlowCreateRequest(
+                ApiNamespaceCreateRequest(
                     name = name,
                     type = type,
-                    inputs = FlowInputs()
+                    inputs = NamespaceInputs()
                 )
             )
             .execute()
 
         assertThat(response.statusCode, equalTo(Accepted))
         require(response is HttpSuccessResponse) { "request was not successful" }
-        return response.result(ApiFlowCreateRequested::class)
+        return response.result(ApiNamespaceCreateRequested::class)
     }
 
 

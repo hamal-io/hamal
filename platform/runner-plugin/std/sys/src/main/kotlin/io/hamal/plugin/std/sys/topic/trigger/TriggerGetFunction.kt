@@ -33,8 +33,8 @@ class TriggerGetFunction(
                                     "name" to KuaString(trigger.name.value),
                                     "namespace" to KuaMap(
                                         mutableMapOf(
-                                            "id" to KuaString(trigger.flow.id.value.value.toString(16)),
-                                            "name" to KuaString(trigger.flow.name.value)
+                                            "id" to KuaString(trigger.namespace.id.value.value.toString(16)),
+                                            "name" to KuaString(trigger.namespace.name.value)
                                         )
                                     ),
                                     "func" to KuaMap(
@@ -56,8 +56,8 @@ class TriggerGetFunction(
                                     "name" to KuaString(trigger.name.value),
                                     "namespace" to KuaMap(
                                         mutableMapOf(
-                                            "id" to KuaString(trigger.flow.id.value.value.toString(16)),
-                                            "name" to KuaString(trigger.flow.name.value)
+                                            "id" to KuaString(trigger.namespace.id.value.value.toString(16)),
+                                            "name" to KuaString(trigger.namespace.name.value)
                                         )
                                     ),
                                     "func" to KuaMap(
@@ -85,8 +85,8 @@ class TriggerGetFunction(
                                     "name" to KuaString(trigger.name.value),
                                     "namespace" to KuaMap(
                                         mutableMapOf(
-                                            "id" to KuaString(trigger.flow.id.value.value.toString(16)),
-                                            "name" to KuaString(trigger.flow.name.value)
+                                            "id" to KuaString(trigger.namespace.id.value.value.toString(16)),
+                                            "name" to KuaString(trigger.namespace.name.value)
                                         )
                                     ),
                                     "func" to KuaMap(
@@ -114,8 +114,8 @@ class TriggerGetFunction(
                                 "name" to KuaString(trigger.name.value),
                                 "namespace" to KuaMap(
                                     mutableMapOf(
-                                        "id" to KuaString(trigger.flow.id.value.value.toString(16)),
-                                        "name" to KuaString(trigger.flow.name.value)
+                                        "id" to KuaString(trigger.namespace.id.value.value.toString(16)),
+                                        "name" to KuaString(trigger.namespace.name.value)
                                     )
                                 ),
                                 "func" to KuaMap(

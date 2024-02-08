@@ -8,17 +8,17 @@ import Authenticated from "@/components/app/authenticated";
 
 import Dashboard from "./pages/app/dashboard";
 
-import FlowListPage from "./pages/app/flow-list";
-import FlowDetailPage from "./pages/app/flow-detail";
+import NamespaceListPage from "./pages/app/namespace-list";
+import NamespaceDetailPage from "./pages/app/namespace-detail";
 
-import FlowOverviewPage from "@/pages/app/flow-detail/pages/overview";
-import FlowEndpointListPage from "@/pages/app/flow-detail/pages/endpoint-list";
-import FlowExecDetailPage from "@/pages/app/flow-detail/pages/exec-detail";
-import FlowExecListPage from "@/pages/app/flow-detail/pages/exec-list";
-import FlowFuncListPage from "@/pages/app/flow-detail/pages/func-list";
-import FlowFuncDetailPage from "@/pages/app/flow-detail/pages/func-detail";
-import FlowHookListPage from "@/pages/app/flow-detail/pages/hook-list";
-import FlowScheduleListPage from "@/pages/app/flow-detail/pages/schedule-list";
+import NamespaceOverviewPage from "@/pages/app/namespace-detail/pages/overview";
+import NamespaceEndpointListPage from "@/pages/app/namespace-detail/pages/endpoint-list";
+import NamespaceExecDetailPage from "@/pages/app/namespace-detail/pages/exec-detail";
+import NamespaceExecListPage from "@/pages/app/namespace-detail/pages/exec-list";
+import NamespaceFuncListPage from "@/pages/app/namespace-detail/pages/func-list";
+import NamespaceFuncDetailPage from "@/pages/app/namespace-detail/pages/func-detail";
+import NamespaceHookListPage from "@/pages/app/namespace-detail/pages/hook-list";
+import NamespacescheduleListPage from "@/pages/app/namespace-detail/pages/schedule-list";
 
 import {createBrowserRouter} from "react-router-dom";
 import Playground from "@/pages/app/playground";
@@ -37,58 +37,58 @@ export const router = createBrowserRouter([
             </Authenticated>
     },
     {
-        path: "/flows", element:
+        path: "/namespaces", element:
             <Authenticated>
-                <FlowListPage/>
+                <NamespaceListPage/>
             </Authenticated>
     },
     {
-        path: "/flows/:flowId", element:
-            <FlowDetailPage>
-                <FlowOverviewPage/>
-            </FlowDetailPage>
+        path: "/namespaces/:namespaceId", element:
+            <NamespaceDetailPage>
+                <NamespaceOverviewPage/>
+            </NamespaceDetailPage>
     },
     {
-        path: "/flows/:flowId/executions", element:
-            <FlowDetailPage>
-                <FlowExecListPage/>
-            </FlowDetailPage>
+        path: "/namespaces/:namespaceId/executions", element:
+            <NamespaceDetailPage>
+                <NamespaceExecListPage/>
+            </NamespaceDetailPage>
     },
     {
-        path: "/flows/:flowId/executions/:execId", element:
-            <FlowDetailPage>
-                <FlowExecDetailPage/>
-            </FlowDetailPage>
+        path: "/namespaces/:namespaceId/executions/:execId", element:
+            <NamespaceDetailPage>
+                <NamespaceExecDetailPage/>
+            </NamespaceDetailPage>
     },
     {
-        path: "/flows/:flowId/functions", element:
-            <FlowDetailPage>
-                <FlowFuncListPage/>
-            </FlowDetailPage>
+        path: "/namespaces/:namespaceId/functions", element:
+            <NamespaceDetailPage>
+                <NamespaceFuncListPage/>
+            </NamespaceDetailPage>
     },
     {
-        path: "/flows/:flowId/functions/:funcId", element:
-            <FlowDetailPage>
-                <FlowFuncDetailPage/>
-            </FlowDetailPage>
+        path: "/namespaces/:namespaceId/functions/:funcId", element:
+            <NamespaceDetailPage>
+                <NamespaceFuncDetailPage/>
+            </NamespaceDetailPage>
     },
     {
-        path: "/flows/:flowId/hooks", element:
-            <FlowDetailPage>
-                <FlowHookListPage/>
-            </FlowDetailPage>
+        path: "/namespaces/:namespaceId/hooks", element:
+            <NamespaceDetailPage>
+                <NamespaceHookListPage/>
+            </NamespaceDetailPage>
     },
     {
-        path: "/flows/:flowId/endpoints", element:
-            <FlowDetailPage>
-                <FlowEndpointListPage/>
-            </FlowDetailPage>
+        path: "/namespaces/:namespaceId/endpoints", element:
+            <NamespaceDetailPage>
+                <NamespaceEndpointListPage/>
+            </NamespaceDetailPage>
     },
     {
-        path: "/flows/:flowId/schedules", element:
-            <FlowDetailPage>
-                <FlowScheduleListPage/>
-            </FlowDetailPage>
+        path: "/namespaces/:namespaceId/schedules", element:
+            <NamespaceDetailPage>
+                <NamespacescheduleListPage/>
+            </NamespaceDetailPage>
     },
 
     {

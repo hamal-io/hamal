@@ -19,12 +19,12 @@ private object HookCurrentProjection {
         val currentHook = projection[hook.id]
         projection.remove(hook.id)
 
-        val hooksInFlow = projection.values.filter { it.flowId == hook.flowId }
-        if (hooksInFlow.any { it.name == hook.name }) {
+        val hooksInNamespace = projection.values.filter { it.namespaceId == hook.namespaceId }
+        if (hooksInNamespace.any { it.name == hook.name }) {
             if (currentHook != null) {
                 projection[currentHook.id] = currentHook
             }
-            throw IllegalArgumentException("${hook.name} already exists in namespace ${hook.flowId}")
+            throw IllegalArgumentException("${hook.name} already exists in namespace ${hook.namespaceId}")
         }
 
         projection[hook.id] = hook
@@ -38,7 +38,7 @@ private object HookCurrentProjection {
             .reversed()
             .asSequence()
             .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
-            .filter { if (query.flowIds.isEmpty()) true else query.flowIds.contains(it.flowId) }
+            .filter { if (query.namespaceIds.isEmpty()) true else query.namespaceIds.contains(it.namespaceId) }
             .dropWhile { it.id >= query.afterId }
             .take(query.limit.value)
             .toList()
@@ -51,7 +51,7 @@ private object HookCurrentProjection {
                 .reversed()
                 .asSequence()
                 .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
-                .filter { if (query.flowIds.isEmpty()) true else query.flowIds.contains(it.flowId) }
+                .filter { if (query.namespaceIds.isEmpty()) true else query.namespaceIds.contains(it.namespaceId) }
                 .dropWhile { it.id >= query.afterId }
                 .count()
                 .toLong()
@@ -80,7 +80,7 @@ class HookMemoryRepository : RecordMemoryRepository<HookId, HookRecord, Hook>(
                         cmdId = cmd.id,
                         entityId = hookId,
                         groupId = cmd.groupId,
-                        flowId = cmd.flowId,
+                        namespaceId = cmd.namespaceId,
                         name = cmd.name
                     )
                 )

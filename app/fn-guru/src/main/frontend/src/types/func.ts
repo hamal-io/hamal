@@ -2,7 +2,7 @@ export interface FuncCreateSubmitted {
     id: string;
     status: string;
     funcId: string;
-    flowId: string;
+    namespaceId: string;
     groupId: string;
 }
 

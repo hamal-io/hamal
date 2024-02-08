@@ -123,7 +123,7 @@ static Node *hashint (const Table *t, lua_Integer i) {
 ** representation as a float, but INT_MIN does; because the absolute
 ** value of 'frexp' is smaller than 1 (unless 'n' is inf/NaN), the
 ** absolute value of the product 'frexp * -INT_MIN' is smaller or equal
-** to INT_MAX. Next, the use of 'unsigned int' avoids overflows when
+** to INT_MAX. Next, the use of 'unsigned int' avoids overnamespaces when
 ** adding 'i'; the use of '~u' (instead of '-u') avoids problems with
 ** INT_MIN.
 */
@@ -386,7 +386,7 @@ static void freehash (lua_State *L, Table *t) {
 ** between 2^(i - 1) + 1 and 2^i. 'pna' enters with the total number of
 ** integer keys in the table and leaves with the number of keys that
 ** will go to the array part; return the optimal size.  (The condition
-** 'twotoi > 0' in the for loop stops the loop if 'twotoi' overflows.)
+** 'twotoi > 0' in the for loop stops the loop if 'twotoi' overnamespaces.)
 */
 static unsigned int computesizes (unsigned int nums[], unsigned int *pna) {
   int i;
@@ -473,9 +473,9 @@ static int numusehash (const Table *t, unsigned int *nums, unsigned int *pna) {
 /*
 ** Creates an array for the hash part of a table with the given
 ** size, or reuses the dummy node if size is zero.
-** The computation for size overflow is in two steps: the first
+** The computation for size overnamespace is in two steps: the first
 ** comparison ensures that the shift in the second one does not
-** overflow.
+** overnamespace.
 */
 static void setnodevector (lua_State *L, Table *t, unsigned int size) {
   if (size == 0) {  /* no elements to hash part? */
@@ -487,7 +487,7 @@ static void setnodevector (lua_State *L, Table *t, unsigned int size) {
     int i;
     int lsize = luaO_ceillog2(size);
     if (lsize > MAXHBITS || (1u << lsize) > MAXHSIZE)
-      luaG_runerror(L, "table overflow");
+      luaG_runerror(L, "table overnamespace");
     size = twoto(lsize);
     t->node = luaM_newvector(L, size, Node);
     for (i = 0; i < cast_int(size); i++) {
@@ -845,7 +845,7 @@ void luaH_setint (lua_State *L, Table *t, lua_Integer key, TValue *value) {
 ** present. We want to find a larger key that is absent from the
 ** table, so that we can do a binary search between the two keys to
 ** find a boundary. We keep doubling 'j' until we get an absent index.
-** If the doubling would overflow, we try LUA_MAXINTEGER. If it is
+** If the doubling would overnamespace, we try LUA_MAXINTEGER. If it is
 ** absent, we are ready for the binary search. ('j', being max integer,
 ** is larger or equal to 'i', but it cannot be equal because it is
 ** absent while 'i' is present; so 'j > i'.) Otherwise, 'j' is a

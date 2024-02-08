@@ -10,7 +10,7 @@ assert(create_hook_req.id ~= nil)
 assert(create_hook_req.status == 'Submitted')
 assert(create_hook_req.hook_id ~= nil)
 assert(create_hook_req.group_id == '1')
-assert(create_hook_req.flow_id == '1')
+assert(create_hook_req.namespace_id == '1')
 
 hook = fail_on_error(sys.hooks.get(create_hook_req.hook_id))
 assert(hook.id == create_hook_req.hook_id)

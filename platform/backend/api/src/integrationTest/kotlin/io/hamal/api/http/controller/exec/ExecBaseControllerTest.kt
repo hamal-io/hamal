@@ -15,8 +15,8 @@ internal sealed class ExecBaseControllerTest : BaseControllerTest() {
 
     fun createAdhocExec(): ApiExecInvokeRequested {
         val createAdhocExecResponse = httpTemplate
-            .post("/v1/flows/{flowId}/adhoc")
-            .path("flowId", testFlow.id)
+            .post("/v1/namespaces/{namespaceId}/adhoc")
+            .path("namespaceId", testNamespace.id)
             .body(
                 ApiAdhocInvokeRequest(
                     inputs = InvocationInputs(),

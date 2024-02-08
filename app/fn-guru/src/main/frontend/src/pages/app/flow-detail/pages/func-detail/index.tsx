@@ -1,17 +1,17 @@
 import React, {FC, useContext, useEffect, useState} from "react";
-import Save from "@/pages/app/flow-detail/pages/func-detail/components/save.tsx";
-import History from "@/pages/app/flow-detail/pages/func-detail/components/history.tsx";
-import FuncSelector from "@/pages/app/flow-detail/pages/func-detail/components/func-selector.tsx";
+import Save from "@/pages/app/namespace-detail/pages/func-detail/components/save.tsx";
+import History from "@/pages/app/namespace-detail/pages/func-detail/components/history.tsx";
+import FuncSelector from "@/pages/app/namespace-detail/pages/func-detail/components/func-selector.tsx";
 import Editor from "@/components/editor.tsx";
 import {useParams} from "react-router-dom";
-import Actions from "@/pages/app/flow-detail/pages/func-detail/components/actions.tsx";
-import {FlowContext} from "@/pages/app/flow-detail";
+import Actions from "@/pages/app/namespace-detail/pages/func-detail/components/actions.tsx";
+import {NamespaceContext} from "@/pages/app/namespace-detail";
 import {useFuncGet} from "@/hook/func.ts";
-import Deploy from "@/pages/app/flow-detail/pages/func-detail/components/deploy.tsx";
+import Deploy from "@/pages/app/namespace-detail/pages/func-detail/components/deploy.tsx";
 
 type Props = {}
 const FuncDetailPage: FC<Props> = ({}) => {
-    const flow = useContext(FlowContext)
+    const namespace = useContext(NamespaceContext)
     const {funcId} = useParams()
     // const [func, funcLoading, funcError] = useFuncGet(funcId)
     const [getFunc, func, funcLoading, funcError] = useFuncGet()
@@ -40,7 +40,7 @@ const FuncDetailPage: FC<Props> = ({}) => {
                 <FuncSelector
                     className="max-w-[300px]"
                     funcId={funcId}
-                    flowId={flow.id}
+                    namespaceId={namespace.id}
                 />
                 <div className="flex w-full space-x-2 justify-end">
                     <Deploy funcId={funcId} code={code}/>

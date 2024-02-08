@@ -3,7 +3,7 @@ package io.hamal.api.http.controller.endpoint
 import io.hamal.lib.domain._enum.EndpointMethod.Delete
 import io.hamal.lib.domain._enum.EndpointMethod.Put
 import io.hamal.lib.domain.vo.EndpointName
-import io.hamal.lib.domain.vo.FlowName
+import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.Accepted
@@ -20,30 +20,30 @@ internal class EndpointUpdateControllerTest : EndpointBaseControllerTest() {
 
     @Test
     fun `Updates endpoint`() {
-        val flowId = awaitCompleted(
-            createFlow(
-                name = FlowName("namespace"),
+        val namespaceId = awaitCompleted(
+            createNamespace(
+                name = NamespaceName("namespace"),
                 groupId = testGroup.id
             )
-        ).flowId
+        ).namespaceId
 
         val funcId = awaitCompleted(
             createFunc(
-                flowId = flowId,
+                namespaceId = namespaceId,
                 name = FuncName("func")
             )
         ).funcId
 
         val anotherFuncId = awaitCompleted(
             createFunc(
-                flowId = flowId,
+                namespaceId = namespaceId,
                 name = FuncName("another-func")
             )
         ).funcId
 
         val endpoint = awaitCompleted(
             createEndpoint(
-                flowId = flowId,
+                namespaceId = namespaceId,
                 funcId = funcId,
                 name = EndpointName("created-name"),
                 method = Delete
@@ -75,23 +75,23 @@ internal class EndpointUpdateControllerTest : EndpointBaseControllerTest() {
 
     @Test
     fun `Updates endpoint without updating values`() {
-        val flowId = awaitCompleted(
-            createFlow(
-                name = FlowName("namespace"),
+        val namespaceId = awaitCompleted(
+            createNamespace(
+                name = NamespaceName("namespace"),
                 groupId = testGroup.id
             )
-        ).flowId
+        ).namespaceId
 
         val funcId = awaitCompleted(
             createFunc(
-                flowId = flowId,
+                namespaceId = namespaceId,
                 name = FuncName("func")
             )
         ).funcId
 
         val endpoint = awaitCompleted(
             createEndpoint(
-                flowId = flowId,
+                namespaceId = namespaceId,
                 funcId = funcId,
                 name = EndpointName("created-name"),
                 method = Delete
@@ -122,38 +122,38 @@ internal class EndpointUpdateControllerTest : EndpointBaseControllerTest() {
 
 
     @Test
-    fun `Tries to set func which does not belong to the same flow`() {
-        val flowId = awaitCompleted(
-            createFlow(
-                name = FlowName("namespace"),
+    fun `Tries to set func which does not belong to the same namespace`() {
+        val namespaceId = awaitCompleted(
+            createNamespace(
+                name = NamespaceName("namespace"),
                 groupId = testGroup.id
             )
-        ).flowId
+        ).namespaceId
 
-        val anotherFlowId = awaitCompleted(
-            createFlow(
-                name = FlowName("another-namespace"),
+        val anotherNamespaceId = awaitCompleted(
+            createNamespace(
+                name = NamespaceName("another-namespace"),
                 groupId = testGroup.id
             )
-        ).flowId
+        ).namespaceId
 
         val funcId = awaitCompleted(
             createFunc(
-                flowId = flowId,
+                namespaceId = namespaceId,
                 name = FuncName("func")
             )
         ).funcId
 
         val anotherFuncId = awaitCompleted(
             createFunc(
-                flowId = anotherFlowId,
+                namespaceId = anotherNamespaceId,
                 name = FuncName("another-func")
             )
         ).funcId
 
         val endpoint = awaitCompleted(
             createEndpoint(
-                flowId = flowId,
+                namespaceId = namespaceId,
                 funcId = funcId,
                 name = EndpointName("created-name"),
                 method = Delete

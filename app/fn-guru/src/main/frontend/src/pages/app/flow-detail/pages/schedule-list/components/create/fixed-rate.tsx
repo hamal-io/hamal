@@ -13,14 +13,14 @@ import {Button, buttonVariants} from "@/components/ui/button.tsx";
 import {useTriggerFixedRateCreate} from "@/hook";
 import FormFuncSelect from "@/components/form/func-select.tsx";
 
-type FlowProps = {
+type NamespaceProps = {
     id: string;
     name: string;
 }
 
 
 type Prop = {
-    flow: FlowProps
+    namespace: NamespaceProps
 }
 
 const formSchema = z.object({
@@ -29,7 +29,7 @@ const formSchema = z.object({
     rate: z.number().min(1)
 })
 
-const CreateFixedRate: FC<Prop> = ({flow}) => {
+const CreateFixedRate: FC<Prop> = ({namespace}) => {
     const [auth, setAuth] = useAuth()
     const navigate = useNavigate()
     const [openDialog, setOpenDialog] = useState<boolean>(false)
@@ -50,7 +50,7 @@ const CreateFixedRate: FC<Prop> = ({flow}) => {
         setLoading(true)
         try {
             createTrigger(
-                flow.id,
+                namespace.id,
                 values.funcId,
                 values.name,
                 "PT" + values.rate + 'S'
@@ -107,7 +107,7 @@ const CreateFixedRate: FC<Prop> = ({flow}) => {
                                 )}
                             />
 
-                            <FormFuncSelect name='funcId' flowId={flow.id} form={form}/>
+                            <FormFuncSelect name='funcId' namespaceId={namespace.id} form={form}/>
 
                             <FormField
                                 control={form.control}

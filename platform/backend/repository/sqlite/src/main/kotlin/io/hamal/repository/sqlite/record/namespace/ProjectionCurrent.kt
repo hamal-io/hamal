@@ -1,19 +1,19 @@
 package io.hamal.repository.sqlite.record.namespace
 
 import io.hamal.lib.common.domain.Count
-import io.hamal.lib.domain.vo.FlowId
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
-import io.hamal.repository.api.Flow
-import io.hamal.repository.api.FlowQueryRepository.FlowQuery
-import io.hamal.repository.record.namespace.FlowRecord
+import io.hamal.repository.api.Namespace
+import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
+import io.hamal.repository.record.namespace.NamespaceRecord
 import io.hamal.repository.record.json
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 
-internal object ProjectionCurrent : ProjectionSqlite<FlowId, FlowRecord, Flow> {
+internal object ProjectionCurrent : ProjectionSqlite<NamespaceId, NamespaceRecord, Namespace> {
 
-    fun find(connection: Connection, flowId: FlowId): Flow? {
+    fun find(connection: Connection, namespaceId: NamespaceId): Namespace? {
         return connection.executeQueryOne(
             """
             SELECT 
@@ -25,16 +25,16 @@ internal object ProjectionCurrent : ProjectionSqlite<FlowId, FlowRecord, Flow> {
         """.trimIndent()
         ) {
             query {
-                set("id", flowId)
+                set("id", namespaceId)
             }
             map { rs ->
-                json.decompressAndDeserialize(Flow::class, rs.getBytes("data"))
+                json.decompressAndDeserialize(Namespace::class, rs.getBytes("data"))
             }
         }
     }
 
-    fun list(connection: Connection, query: FlowQuery): List<Flow> {
-        return connection.executeQuery<Flow>(
+    fun list(connection: Connection, query: NamespaceQuery): List<Namespace> {
+        return connection.executeQuery<Namespace>(
             """
             SELECT 
                 data
@@ -53,12 +53,12 @@ internal object ProjectionCurrent : ProjectionSqlite<FlowId, FlowRecord, Flow> {
                 set("limit", query.limit)
             }
             map { rs ->
-                json.decompressAndDeserialize(Flow::class, rs.getBytes("data"))
+                json.decompressAndDeserialize(Namespace::class, rs.getBytes("data"))
             }
         }
     }
 
-    fun count(connection: Connection, query: FlowQuery): Count {
+    fun count(connection: Connection, query: NamespaceQuery): Count {
         return Count(
             connection.executeQueryOne(
                 """
@@ -82,7 +82,7 @@ internal object ProjectionCurrent : ProjectionSqlite<FlowId, FlowRecord, Flow> {
         )
     }
 
-    override fun upsert(tx: RecordTransactionSqlite<FlowId, FlowRecord, Flow>, obj: Flow) {
+    override fun upsert(tx: RecordTransactionSqlite<NamespaceId, NamespaceRecord, Namespace>, obj: Namespace) {
         tx.execute(
             """
                 INSERT OR REPLACE INTO current
@@ -114,7 +114,7 @@ internal object ProjectionCurrent : ProjectionSqlite<FlowId, FlowRecord, Flow> {
         tx.execute("""DELETE FROM current""")
     }
 
-    private fun FlowQuery.groupIds(): String {
+    private fun NamespaceQuery.groupIds(): String {
         return if (groupIds.isEmpty()) {
             ""
         } else {
@@ -122,11 +122,11 @@ internal object ProjectionCurrent : ProjectionSqlite<FlowId, FlowRecord, Flow> {
         }
     }
 
-    private fun FlowQuery.ids(): String {
-        return if (flowIds.isEmpty()) {
+    private fun NamespaceQuery.ids(): String {
+        return if (namespaceIds.isEmpty()) {
             ""
         } else {
-            "AND id IN (${flowIds.joinToString(",") { "${it.value.value}" }})"
+            "AND id IN (${namespaceIds.joinToString(",") { "${it.value.value}" }})"
         }
     }
 }

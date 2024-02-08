@@ -18,12 +18,12 @@ class NamespaceListFunction(
     override fun invoke(ctx: FunctionContext): Pair<KuaError?, KuaArray?> {
         return try {
             null to KuaArray(
-                sdk.flow.list(ctx[GroupId::class]).mapIndexed { index, flow ->
+                sdk.namespace.list(ctx[GroupId::class]).mapIndexed { index, namespace ->
                     index to KuaMap(
                         mutableMapOf(
-                            "id" to KuaString(flow.id.value.value.toString(16)),
-                            "name" to KuaString(flow.name.value),
-                            "type" to KuaString(flow.type.value)
+                            "id" to KuaString(namespace.id.value.value.toString(16)),
+                            "name" to KuaString(namespace.name.value),
+                            "type" to KuaString(namespace.type.value)
                         )
                     )
                 }.toMap().toMutableMap()

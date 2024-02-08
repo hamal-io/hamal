@@ -3,9 +3,9 @@ package io.hamal.core.request.handler.namespace
 import io.hamal.core.request.handler.BaseReqHandlerTest
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
-import io.hamal.lib.domain.request.FlowCreateRequested
+import io.hamal.lib.domain.request.NamespaceCreateRequested
 import io.hamal.lib.domain.vo.*
-import io.hamal.repository.api.FlowQueryRepository.FlowQuery
+import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
@@ -14,91 +14,91 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
 
-internal class FlowCreateHandlerTest : BaseReqHandlerTest() {
+internal class NamespaceCreateHandlerTest : BaseReqHandlerTest() {
 
     @BeforeEach
     fun beforeEach() {
-        flowCmdRepository.clear()
+        namespaceCmdRepository.clear()
     }
 
     @Test
-    fun `Creates flow`() {
-        testInstance(submitCreateFlowReq)
+    fun `Creates namespace`() {
+        testInstance(submitCreateNamespaceReq)
 
-        verifySingleFlowExists()
+        verifySingleNamespaceExists()
     }
 
     @Test
-    fun `Flow with id already exists`() {
-        testInstance(submitCreateFlowReq)
+    fun `Namespace with id already exists`() {
+        testInstance(submitCreateNamespaceReq)
 
         testInstance(
-            FlowCreateRequested(
+            NamespaceCreateRequested(
                 id = RequestId(1),
                 status = Submitted,
-                flowId = FlowId(12345),
+                namespaceId = NamespaceId(12345),
                 groupId = testGroup.id,
-                name = FlowName("another-namespace"),
-                inputs = FlowInputs(),
-                flowType = FlowType.default
+                name = NamespaceName("another-namespace"),
+                inputs = NamespaceInputs(),
+                namespaceType = NamespaceType.default
             )
         )
 
-        verifySingleFlowExists()
+        verifySingleNamespaceExists()
     }
 
     @Test
-    fun `Creates flow with type`() {
+    fun `Creates namespace with type`() {
         testInstance(
-            FlowCreateRequested(
+            NamespaceCreateRequested(
                 id = RequestId(1),
                 status = Submitted,
-                flowId = FlowId(12345),
+                namespaceId = NamespaceId(12345),
                 groupId = testGroup.id,
-                name = FlowName("awesome-namespace"),
-                inputs = FlowInputs(HotObject.builder().set("hamal", "rocks").build()),
-                flowType = FlowType("VerySpecialFlowType")
+                name = NamespaceName("awesome-namespace"),
+                inputs = NamespaceInputs(HotObject.builder().set("hamal", "rocks").build()),
+                namespaceType = NamespaceType("VerySpecialNamespaceType")
             )
         )
 
-        with(flowQueryRepository.get(FlowId(12345))) {
-            assertThat(id, equalTo(FlowId(12345)))
-            assertThat(name, equalTo(FlowName("awesome-namespace")))
-            assertThat(inputs, equalTo(FlowInputs(HotObject.builder().set("hamal", "rocks").build())))
-            assertThat(type, equalTo(FlowType("VerySpecialFlowType")))
+        with(namespaceQueryRepository.get(NamespaceId(12345))) {
+            assertThat(id, equalTo(NamespaceId(12345)))
+            assertThat(name, equalTo(NamespaceName("awesome-namespace")))
+            assertThat(inputs, equalTo(NamespaceInputs(HotObject.builder().set("hamal", "rocks").build())))
+            assertThat(type, equalTo(NamespaceType("VerySpecialNamespaceType")))
         }
 
-        assertThat(flowQueryRepository.list(FlowQuery(groupIds = listOf())), hasSize(1))
+        assertThat(namespaceQueryRepository.list(NamespaceQuery(groupIds = listOf())), hasSize(1))
 
     }
 
 
-    private fun verifySingleFlowExists() {
-        flowQueryRepository.list(FlowQuery(groupIds = listOf())).also { flows ->
-            assertThat(flows, hasSize(1))
-            with(flows.first()) {
-                assertThat(id, equalTo(FlowId(12345)))
-                assertThat(name, equalTo(FlowName("awesome-namespace")))
-                assertThat(inputs, equalTo(FlowInputs(HotObject.builder().set("hamal", "rocks").build())))
-                assertThat(type, equalTo(FlowType.default))
+    private fun verifySingleNamespaceExists() {
+        namespaceQueryRepository.list(NamespaceQuery(groupIds = listOf())).also { namespaces ->
+            assertThat(namespaces, hasSize(1))
+            with(namespaces.first()) {
+                assertThat(id, equalTo(NamespaceId(12345)))
+                assertThat(name, equalTo(NamespaceName("awesome-namespace")))
+                assertThat(inputs, equalTo(NamespaceInputs(HotObject.builder().set("hamal", "rocks").build())))
+                assertThat(type, equalTo(NamespaceType.default))
             }
         }
     }
 
     @Autowired
-    private lateinit var testInstance: FlowCreateHandler
+    private lateinit var testInstance: NamespaceCreateHandler
 
-    private val submitCreateFlowReq by lazy {
-        FlowCreateRequested(
+    private val submitCreateNamespaceReq by lazy {
+        NamespaceCreateRequested(
             id = RequestId(1),
             status = Submitted,
-            flowId = FlowId(12345),
+            namespaceId = NamespaceId(12345),
             groupId = testGroup.id,
-            name = FlowName("awesome-namespace"),
-            inputs = FlowInputs(
+            name = NamespaceName("awesome-namespace"),
+            inputs = NamespaceInputs(
                 HotObject.builder().set("hamal", "rocks").build()
             ),
-            flowType = FlowType.default
+            namespaceType = NamespaceType.default
         )
     }
 }

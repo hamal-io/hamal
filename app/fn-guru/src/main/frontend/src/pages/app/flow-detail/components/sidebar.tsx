@@ -2,7 +2,7 @@ import {cn} from "@/utils";
 import {BookOpen, Braces, CalendarIcon, Command, GlobeIcon, LucideIcon, Play, TimerIcon, WebhookIcon} from "lucide-react";
 import React, {FC} from "react";
 import {Link, useLocation, useParams} from "react-router-dom";
-import FlowSelector from "@/components/app/flow-selector.tsx";
+import Namespaceselector from "@/components/app/namespace-selector.tsx";
 
 type Props = {
     className?: string;
@@ -17,52 +17,52 @@ type NavItem = {
 };
 const Sidebar: React.FC<Props> = ({className}) => {
     const location = useLocation()
-    const {flowId} = useParams()
+    const {namespaceId} = useParams()
 
     const currentPath = location.pathname
     const navigation: NavItem[] = [
         {
             icon: Command,
-            href: `/flows/${flowId}`,
+            href: `/namespaces/${namespaceId}`,
             label: "Overview",
-            active: currentPath === `/flows/${flowId}`
+            active: currentPath === `/namespaces/${namespaceId}`
         },
         {
             icon: Play,
-            href: `/flows/${flowId}/executions`,
+            href: `/namespaces/${namespaceId}/executions`,
             label: "Executions",
-            active: currentPath.startsWith(`/flows/${flowId}/executions`)
+            active: currentPath.startsWith(`/namespaces/${namespaceId}/executions`)
         },
         {
             icon: Braces,
-            href: `/flows/${flowId}/functions`,
+            href: `/namespaces/${namespaceId}/functions`,
             label: "Functions",
-            active: currentPath.startsWith(`/flows/${flowId}/functions`)
+            active: currentPath.startsWith(`/namespaces/${namespaceId}/functions`)
         },
         {
             icon: TimerIcon,
-            href: `/flows/${flowId}/schedules`,
+            href: `/namespaces/${namespaceId}/schedules`,
             label: "Schedules",
-            active: currentPath === `/flows/${flowId}/schedules`
+            active: currentPath === `/namespaces/${namespaceId}/schedules`
         },
         {
             icon: WebhookIcon,
-            href: `/flows/${flowId}/hooks`,
+            href: `/namespaces/${namespaceId}/hooks`,
             label: "Webhooks",
-            active: currentPath === `/flows/${flowId}/hooks`
+            active: currentPath === `/namespaces/${namespaceId}/hooks`
         },
         {
             icon: GlobeIcon,
-            href: `/flows/${flowId}/endpoints`,
+            href: `/namespaces/${namespaceId}/endpoints`,
             label: "Endpoints",
-            active: currentPath === `/flows/${flowId}/endpoints`
+            active: currentPath === `/namespaces/${namespaceId}/endpoints`
         }
     ];
 
     return (
         <aside className={cn("fixed h-screen inset-y-0 flex w-64 flex-col px-6 gap-y-5 bg-gray-100", className)}>
             <nav className="flex flex-col flex-1 flex-grow">
-                {/*<FlowSelector flowId={flowId}/>*/}
+                {/*<Namespaceselector namespaceId={namespaceId}/>*/}
                 <ul className="flex flex-col flex-1 gap-y-7 pt-4">
                     <li>
                         <h3 className="text-xs font-semibold leading-6 text-content">General</h3>

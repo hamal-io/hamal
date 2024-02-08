@@ -33,7 +33,7 @@ class TriggerCreateHandler(
                     name = req.name,
                     correlationId = req.correlationId,
                     funcId = req.funcId,
-                    flowId = req.flowId,
+                    namespaceId = req.namespaceId,
                     inputs = req.inputs,
                     duration = requireNotNull(req.duration) { "duration must not be null" }
                 )
@@ -50,7 +50,7 @@ class TriggerCreateHandler(
                         name = req.name,
                         correlationId = req.correlationId,
                         funcId = req.funcId,
-                        flowId = req.flowId,
+                        namespaceId = req.namespaceId,
                         inputs = req.inputs,
                         topicId = topic.id,
                     )
@@ -67,7 +67,7 @@ class TriggerCreateHandler(
                         name = req.name,
                         correlationId = req.correlationId,
                         funcId = req.funcId,
-                        flowId = req.flowId,
+                        namespaceId = req.namespaceId,
                         inputs = req.inputs,
                         hookId = hook.id,
                         hookMethod = req.hookMethod ?: Post
@@ -85,7 +85,7 @@ class TriggerCreateHandler(
                     name = req.name,
                     correlationId = req.correlationId,
                     funcId = req.funcId,
-                    flowId = req.flowId,
+                    namespaceId = req.namespaceId,
                     inputs = req.inputs,
                     cron = requireNotNull(req.cron) { "cron expression must not be null" }
                 )
