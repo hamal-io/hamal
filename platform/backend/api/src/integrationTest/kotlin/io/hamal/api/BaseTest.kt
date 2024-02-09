@@ -109,10 +109,10 @@ internal abstract class BaseTest {
     lateinit var flowCmdRepository: FlowCmdRepository
 
     @Autowired
-    lateinit var reqQueryRepository: RequestQueryRepository
+    lateinit var requestQueryRepository: RequestQueryRepository
 
     @Autowired
-    lateinit var reqCmdRepository: RequestCmdRepository
+    lateinit var requestCmdRepository: RequestCmdRepository
 
     @Autowired
     lateinit var stateQueryRepository: StateQueryRepository
@@ -159,7 +159,7 @@ internal abstract class BaseTest {
         hookCmdRepository.clear()
         logBrokerRepository.clear()
         flowCmdRepository.clear()
-        reqCmdRepository.clear()
+        requestCmdRepository.clear()
         stateCmdRepository.clear()
         topicCmdRepository.clear()
         triggerCmdRepository.clear()

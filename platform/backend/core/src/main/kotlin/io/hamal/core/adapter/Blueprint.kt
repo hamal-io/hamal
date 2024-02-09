@@ -42,7 +42,7 @@ interface BlueprintPort : BlueprintCreatePort, BlueprintGetPort, BlueprintUpdate
 class BlueprintAdapter(
     private val blueprintQueryRepository: BlueprintQueryRepository,
     private val generateDomainId: GenerateId,
-    private val reqCmdRepository: RequestCmdRepository
+    private val requestCmdRepository: RequestCmdRepository
 ) : BlueprintPort {
     override fun <T : Any> invoke(
         groupId: GroupId,
@@ -59,7 +59,7 @@ class BlueprintAdapter(
             inputs = req.inputs,
             value = req.value,
             creatorId = accountId
-        ).also(reqCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue).let(responseHandler)
     }
 
     override fun <T : Any> invoke(blueprintId: BlueprintId, responseHandler: (Blueprint) -> T): T {
@@ -80,7 +80,7 @@ class BlueprintAdapter(
             name = req.name,
             inputs = req.inputs,
             value = req.value,
-        ).also(reqCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue).let(responseHandler)
     }
 
     private fun ensureBlueprintExists(blueprintId: BlueprintId) = blueprintQueryRepository.get(blueprintId)

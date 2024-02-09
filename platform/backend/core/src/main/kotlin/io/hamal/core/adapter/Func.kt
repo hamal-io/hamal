@@ -68,7 +68,7 @@ class FuncAdapter(
     private val funcQueryRepository: FuncQueryRepository,
     private val generateDomainId: GenerateId,
     private val flowQueryRepository: FlowQueryRepository,
-    private val reqCmdRepository: RequestCmdRepository
+    private val requestCmdRepository: RequestCmdRepository
 ) : FuncPort {
 
     override fun <T : Any> invoke(
@@ -87,7 +87,7 @@ class FuncAdapter(
             inputs = req.inputs,
             codeId = generateDomainId(::CodeId),
             code = req.code
-        ).also(reqCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue).let(responseHandler)
     }
 
     override fun <T : Any> invoke(funcId: FuncId, responseHandler: (Func, Code, Code, Flow) -> T): T {
@@ -116,7 +116,7 @@ class FuncAdapter(
             inputs = req.inputs,
             code = func.deployment.toExecCode(),
             invocation = req.invocation
-        ).also(reqCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue).let(responseHandler)
     }
 
     override fun <T : Any> invoke(
@@ -145,7 +145,7 @@ class FuncAdapter(
                 value = null
             ),
             invocation = EmptyInvocation
-        ).also(reqCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue).let(responseHandler)
     }
 
     override fun <T : Any> invoke(
@@ -182,7 +182,7 @@ class FuncAdapter(
             name = req.name,
             inputs = req.inputs,
             code = req.code
-        ).also(reqCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue).let(responseHandler)
     }
 
     override fun <T : Any> invoke(
@@ -201,7 +201,7 @@ class FuncAdapter(
             funcId = funcId,
             version = req.version,
             message = req.message
-        ).also(reqCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue).let(responseHandler)
     }
 
     private fun ensureFuncExists(funcId: FuncId): Func {

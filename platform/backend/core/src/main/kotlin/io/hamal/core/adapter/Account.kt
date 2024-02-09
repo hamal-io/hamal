@@ -68,7 +68,7 @@ class AccountAdapter(
     private val generateDomainId: GenerateId,
     private val generateSalt: GenerateSalt,
     private val generateToken: GenerateToken,
-    private val reqCmdRepository: RequestCmdRepository
+    private val requestCmdRepository: RequestCmdRepository
 ) : AccountPort {
 
     override fun <T : Any> invoke(req: AccountCreateRequest, responseHandler: (AccountCreateRequested) -> T): T {
@@ -89,7 +89,7 @@ class AccountAdapter(
             ),
             salt = salt,
             token = generateToken()
-        ).also(reqCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue).let(responseHandler)
     }
 
     override fun <T : Any> invoke(
@@ -112,7 +112,7 @@ class AccountAdapter(
             ),
             salt = salt,
             token = generateToken()
-        ).also(reqCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue).let(responseHandler)
     }
 
     override fun <T : Any> invoke(
@@ -131,7 +131,7 @@ class AccountAdapter(
             metamaskAuthId = generateDomainId(::AuthId),
             tokenAuthId = generateDomainId(::AuthId),
             token = generateToken()
-        ).also(reqCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue).let(responseHandler)
     }
 
     override fun invoke(req: AccountCreateRootRequest) {
@@ -155,7 +155,7 @@ class AccountAdapter(
                     ),
                     salt = salt,
                     token = generateToken()
-                ).also(reqCmdRepository::queue)
+                ).also(requestCmdRepository::queue)
             }
     }
 
@@ -177,7 +177,7 @@ class AccountAdapter(
                 salt = account.salt
             ),
             token = generateToken()
-        ).also(reqCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue).let(responseHandler)
     }
 
     override fun <T : Any> invoke(accountId: AccountId, responseHandler: (Account) -> T) =

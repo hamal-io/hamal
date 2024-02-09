@@ -136,13 +136,13 @@ open class MemoryRepositoryConfig {
     open fun logBrokerRepository() = LogBrokerMemoryRepository()
 
     @Bean
-    open fun reqRepository(): RequestRepository = RequestMemoryRepository()
+    open fun requestRepository(): RequestRepository = RequestMemoryRepository()
 
     @Bean
-    open fun reqCmdRepository(): RequestCmdRepository = reqRepository()
+    open fun requestCmdRepository(): RequestCmdRepository = requestRepository()
 
     @Bean
-    open fun reqQueryRepository(): RequestQueryRepository = reqRepository()
+    open fun requestQueryRepository(): RequestQueryRepository = requestRepository()
 
     @Bean
     open fun stateRepository(): StateRepository = StateMemoryRepository()

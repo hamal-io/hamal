@@ -1,4 +1,4 @@
-package io.hamal.api.http.controller.req
+package io.hamal.api.http.controller.request
 
 import io.hamal.api.http.controller.BaseControllerTest
 import io.hamal.lib.domain.vo.CodeValue
@@ -12,7 +12,7 @@ import io.hamal.lib.sdk.api.ApiRequestList
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 
-internal sealed class ReqBaseControllerTest : BaseControllerTest() {
+internal sealed class RequestBaseControllerTest : BaseControllerTest() {
 
     fun list(): ApiRequestList {
         val listResponse = httpTemplate.get("/v1/requests").execute()

@@ -23,7 +23,7 @@ internal abstract class BaseControllerTest : BaseTest() {
     }
 
     fun verifyReqCompleted(id: RequestId) {
-        with(reqQueryRepository.find(id)!!) {
+        with(requestQueryRepository.find(id)!!) {
             MatcherAssert.assertThat(id, Matchers.equalTo(id))
             MatcherAssert.assertThat(
                 status,
@@ -33,7 +33,7 @@ internal abstract class BaseControllerTest : BaseTest() {
     }
 
     fun verifyReqFailed(id: RequestId) {
-        with(reqQueryRepository.find(id)!!) {
+        with(requestQueryRepository.find(id)!!) {
             MatcherAssert.assertThat(id, Matchers.equalTo(id))
             MatcherAssert.assertThat(
                 status,
@@ -45,7 +45,7 @@ internal abstract class BaseControllerTest : BaseTest() {
 
     fun awaitCompleted(id: RequestId) {
         while (true) {
-            reqQueryRepository.find(id)?.let {
+            requestQueryRepository.find(id)?.let {
                 if (it.status == RequestStatus.Completed) {
                     return
                 }
@@ -72,7 +72,7 @@ internal abstract class BaseControllerTest : BaseTest() {
 
     fun awaitFailed(id: RequestId) {
         while (true) {
-            reqQueryRepository.find(id)?.let {
+            requestQueryRepository.find(id)?.let {
                 if (it.status == RequestStatus.Failed) {
                     return
                 }
@@ -96,12 +96,12 @@ internal abstract class BaseControllerTest : BaseTest() {
 
 
     fun verifyNoRequests() {
-        val requests = reqQueryRepository.list(ReqQuery())
+        val requests = requestQueryRepository.list(ReqQuery())
         MatcherAssert.assertThat(requests, Matchers.empty())
     }
 
     fun <SUBMITTED_REQ : Requested> verifyNoRequests(clazz: KClass<SUBMITTED_REQ>) {
-        val requests = reqQueryRepository.list(ReqQuery()).filterIsInstance(clazz.java)
+        val requests = requestQueryRepository.list(ReqQuery()).filterIsInstance(clazz.java)
         MatcherAssert.assertThat(requests, Matchers.empty())
     }
 

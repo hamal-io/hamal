@@ -22,7 +22,7 @@ class RequestRegistry : ApplicationListener<ContextRefreshedEvent> {
         reqOnce(reqClass) {
             val result = reqHandler[reqClass]
                 ?: reqClass.java.interfaces.asSequence().firstOrNull { reqHandler[it.kotlin] != null }
-                ?: throw IllegalArgumentException("No req handler registered for $reqClass")
+                ?: throw IllegalArgumentException("No request handler registered for $reqClass")
 
             result as io.hamal.core.request.RequestHandler<Requested>
         } as io.hamal.core.request.RequestHandler<REQ>
