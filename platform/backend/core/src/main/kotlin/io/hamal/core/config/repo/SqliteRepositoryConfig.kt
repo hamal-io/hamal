@@ -3,9 +3,9 @@ package io.hamal.core.config.repo
 import io.hamal.core.config.BackendBasePath
 import io.hamal.repository.api.*
 import io.hamal.repository.memory.ExecLogMemoryRepository
-import io.hamal.repository.memory.ReqMemoryRepository
 import io.hamal.repository.memory.record.TopicMemoryRepository
 import io.hamal.repository.sqlite.AuthSqliteRepository
+import io.hamal.repository.sqlite.RequestSqliteRepository
 import io.hamal.repository.sqlite.StateSqliteRepository
 import io.hamal.repository.sqlite.log.LogBrokerSqliteRepository
 import io.hamal.repository.sqlite.record.account.AccountSqliteRepository
@@ -180,13 +180,13 @@ open class SqliteRepositoryConfig(backendBasePath: BackendBasePath) {
     open fun stateQueryRepository(): StateQueryRepository = stateRepository()
 
     @Bean
-    open fun reqRepository(): RequestRepository = ReqMemoryRepository()
+    open fun requestRepository(): RequestRepository = RequestSqliteRepository(RequestSqliteRepository.Config(path))
 
     @Bean
-    open fun reqCmdRepository(): RequestCmdRepository = reqRepository()
+    open fun requestCmdRepository(): RequestCmdRepository = requestRepository()
 
     @Bean
-    open fun reqQueryRepository(): RequestQueryRepository = reqRepository()
+    open fun requestQueryRepository(): RequestQueryRepository = requestRepository()
 
     private val path = Path(backendBasePath.value)
 }

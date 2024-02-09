@@ -1,4 +1,4 @@
-package io.hamal.api.http.controller.req
+package io.hamal.api.http.controller.request
 
 import io.hamal.lib.domain._enum.RequestStatus.Completed
 import io.hamal.lib.http.HttpErrorResponse
@@ -12,9 +12,9 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
 
-internal class ReqGetControllerTest : ReqBaseControllerTest() {
+internal class RequestGetControllerTest : RequestBaseControllerTest() {
     @Test
-    fun `Gets req`() {
+    fun `Gets requests`() {
         val request = awaitCompleted(
             adhoc()
         )
@@ -28,13 +28,13 @@ internal class ReqGetControllerTest : ReqBaseControllerTest() {
     }
 
     @Test
-    fun `Tries to get req which does not exist`() {
+    fun `Tries to get request which does not exist`() {
         val response = httpTemplate.get("/v1/requests/123456765432").execute()
         assertThat(response.statusCode, equalTo(NotFound))
         require(response is HttpErrorResponse) { "request was successful" }
 
         val error = response.error(ApiError::class)
-        assertThat(error.message, equalTo("Req not found"))
+        assertThat(error.message, equalTo("Request not found"))
     }
 
 }

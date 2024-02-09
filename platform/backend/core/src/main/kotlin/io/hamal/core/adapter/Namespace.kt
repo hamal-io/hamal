@@ -46,7 +46,7 @@ interface NamespacePort : NamespaceCreatePort, NamespaceGetPort, NamespaceListPo
 class NamespaceAdapter(
     private val generateDomainId: GenerateId,
     private val namespaceQueryRepository: NamespaceQueryRepository,
-    private val reqCmdRepository: RequestCmdRepository
+    private val requestCmdRepository: RequestCmdRepository
 ) : NamespacePort {
 
     override fun <T : Any> invoke(
@@ -60,7 +60,7 @@ class NamespaceAdapter(
             namespaceId = generateDomainId(::NamespaceId),
             groupId = groupId,
             name = req.name,
-        ).also(reqCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue).let(responseHandler)
     }
 
     override fun <T : Any> invoke(namespaceId: NamespaceId, responseHandler: (Namespace) -> T): T =
@@ -82,7 +82,7 @@ class NamespaceAdapter(
             groupId = namespaceQueryRepository.get(namespaceId).groupId,
             namespaceId = namespaceId,
             name = req.name,
-        ).also(reqCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue).let(responseHandler)
     }
 
     private fun ensureNamespaceExists(namespaceId: NamespaceId) {

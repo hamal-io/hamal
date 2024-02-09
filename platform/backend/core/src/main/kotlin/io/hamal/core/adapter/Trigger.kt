@@ -60,7 +60,7 @@ class TriggerAdapter(
     private val generateDomainId: GenerateId,
     private val hookQueryRepository: HookQueryRepository,
     private val namespaceQueryRepository: NamespaceQueryRepository,
-    private val reqCmdRepository: RequestCmdRepository,
+    private val requestCmdRepository: RequestCmdRepository,
     private val triggerQueryRepository: TriggerQueryRepository,
 ) : TriggerPort {
     override fun <T : Any> invoke(
@@ -91,7 +91,7 @@ class TriggerAdapter(
             hookId = req.hookId,
             hookMethod = req.hookMethod,
             cron = req.cron
-        ).also(reqCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue).let(responseHandler)
 
     }
 
@@ -157,7 +157,7 @@ class TriggerAdapter(
             status = RequestStatus.Submitted,
             triggerId = triggerId,
             triggerStatus = triggerStatus
-        ).also(reqCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue).let(responseHandler)
     }
 
     private fun ensureFuncExists(createTrigger: TriggerCreateRequest) {

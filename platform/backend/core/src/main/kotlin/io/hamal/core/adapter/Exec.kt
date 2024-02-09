@@ -44,7 +44,7 @@ interface ExecPort : ExecGetPort, ExecListPort, ExecCompletePort, ExecFailPort
 class ExecAdapter(
     private val execQueryRepository: ExecQueryRepository,
     private val generateDomainId: GenerateId,
-    private val reqCmdRepository: RequestCmdRepository
+    private val requestCmdRepository: RequestCmdRepository
 ) : ExecPort {
 
     override fun <T : Any> invoke(execId: ExecId, responseHandler: (Exec) -> T) =
@@ -66,7 +66,7 @@ class ExecAdapter(
             result = req.result,
             state = req.state,
             events = req.events
-        ).also(reqCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue).let(responseHandler)
     }
 
     override fun <T : Any> invoke(execId: ExecId, req: ExecFailRequest, responseHandler: (ExecFailRequested) -> T): T {
@@ -76,7 +76,7 @@ class ExecAdapter(
             status = Submitted,
             execId = exec.id,
             result = req.result
-        ).also(reqCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue).let(responseHandler)
     }
 
 }

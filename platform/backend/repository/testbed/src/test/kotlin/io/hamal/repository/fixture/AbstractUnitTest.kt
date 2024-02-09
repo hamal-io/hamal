@@ -81,7 +81,7 @@ abstract class AbstractUnitTest {
         ),
         RequestRepository::class to listOf(
             MemoryFixture,
-// FIXME    SqliteFixture
+            SqliteFixture
         ),
         LogBrokerRepository::class to listOf(
             MemoryFixture,

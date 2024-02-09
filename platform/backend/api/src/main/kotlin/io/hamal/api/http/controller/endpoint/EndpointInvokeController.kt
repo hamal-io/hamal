@@ -17,7 +17,7 @@ import java.util.concurrent.CompletableFuture
 @RestController
 internal class EndpointInvokeController(
     private val generateDomainId: GenerateId,
-    private val reqCmdRepository: RequestCmdRepository,
+    private val requestCmdRepository: RequestCmdRepository,
     private val execRepository: ExecRepository,
     private val endpointQueryRepository: EndpointQueryRepository,
     private val funcQueryRepository: FuncQueryRepository
@@ -74,7 +74,7 @@ internal class EndpointInvokeController(
 
     private fun invoke(func: Func, invocation: EndpointInvocation): Exec {
         val execId = generateDomainId(::ExecId)
-        reqCmdRepository.queue(
+        requestCmdRepository.queue(
             ExecInvokeRequested(
                 id = generateDomainId(::RequestId),
                 status = Submitted,

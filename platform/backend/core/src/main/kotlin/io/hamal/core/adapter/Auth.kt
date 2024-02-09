@@ -45,7 +45,7 @@ class AuthAdapter(
     private val encodePassword: EncodePassword,
     private val generateDomainId: GenerateId,
     private val generateToken: GenerateToken,
-    private val reqCmdRepository: RequestCmdRepository,
+    private val requestCmdRepository: RequestCmdRepository,
     private val groupList: GroupListPort,
     private val namespaceList: NamespaceListPort,
 ) : AuthPort {
@@ -77,7 +77,7 @@ class AuthAdapter(
                 token = generateToken(),
                 address = req.address,
                 signature = req.signature
-            ).also(reqCmdRepository::queue).let(responseHandler)
+            ).also(requestCmdRepository::queue).let(responseHandler)
 
         } else {
             val groupIds = groupList(auth.accountId) { groups -> groups.map(Group::id) }
@@ -97,7 +97,7 @@ class AuthAdapter(
                 token = generateToken(),
                 address = req.address,
                 signature = req.signature
-            ).also(reqCmdRepository::queue).let(responseHandler)
+            ).also(requestCmdRepository::queue).let(responseHandler)
         }
     }
 
@@ -129,6 +129,6 @@ class AuthAdapter(
             defaultNamespaceIds = defaultNamespaceIds,
             hash = encodedPassword,
             token = generateToken()
-        ).also(reqCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue).let(responseHandler)
     }
 }

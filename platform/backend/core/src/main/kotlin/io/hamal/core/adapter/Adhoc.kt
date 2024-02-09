@@ -2,11 +2,11 @@ package io.hamal.core.adapter
 
 import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
+import io.hamal.lib.domain.request.AdhocInvokeRequest
+import io.hamal.lib.domain.request.ExecInvokeRequested
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.NamespaceQueryRepository
 import io.hamal.repository.api.RequestCmdRepository
-import io.hamal.lib.domain.request.ExecInvokeRequested
-import io.hamal.lib.domain.request.AdhocInvokeRequest
 import org.springframework.stereotype.Component
 
 
@@ -24,7 +24,7 @@ interface AdhocPort : AdhocInvokePort
 class AdhocAdapter(
     private val generateDomainId: GenerateId,
     private val namespaceQueryRepository: NamespaceQueryRepository,
-    private val reqCmdRepository: RequestCmdRepository
+    private val requestCmdRepository: RequestCmdRepository
 ) : AdhocPort {
     override operator fun <T : Any> invoke(
         namespaceId: NamespaceId,
@@ -43,6 +43,6 @@ class AdhocAdapter(
             funcId = null,
             correlationId = null,
             invocation = EmptyInvocation
-        ).also(reqCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue).let(responseHandler)
     }
 }

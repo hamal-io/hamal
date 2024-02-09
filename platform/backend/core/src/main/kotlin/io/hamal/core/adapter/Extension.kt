@@ -48,7 +48,7 @@ class ExtensionAdapter(
     private val codeQueryRepository: CodeQueryRepository,
     private val extensionQueryRepository: ExtensionQueryRepository,
     private val generateDomainId: GenerateId,
-    private val reqCmdRepository: RequestCmdRepository
+    private val requestCmdRepository: RequestCmdRepository
 ) : ExtensionPort {
     override fun <T : Any> invoke(
         groupId: GroupId,
@@ -64,7 +64,7 @@ class ExtensionAdapter(
             codeId = generateDomainId(::CodeId),
             code = req.code
 
-        ).also(reqCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue).let(responseHandler)
     }
 
     override fun <T : Any> invoke(extId: ExtensionId, responseHandler: (Extension, Code) -> T): T {
@@ -86,7 +86,7 @@ class ExtensionAdapter(
             extensionId = extId,
             name = req.name,
             code = req.code
-        ).also(reqCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue).let(responseHandler)
     }
 
     override fun <T : Any> invoke(

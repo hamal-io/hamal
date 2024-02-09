@@ -7,6 +7,7 @@ import io.hamal.repository.api.*
 import io.hamal.repository.api.log.*
 import io.hamal.repository.sqlite.AuthSqliteRepository
 import io.hamal.repository.sqlite.ExecLogSqliteRepository
+import io.hamal.repository.sqlite.RequestSqliteRepository
 import io.hamal.repository.sqlite.StateSqliteRepository
 import io.hamal.repository.sqlite.log.LogBrokerSqliteRepository
 import io.hamal.repository.sqlite.log.LogSegmentSqlite
@@ -103,6 +104,10 @@ object SqliteFixture : BaseTestFixture {
         LogTopicRepository::class -> LogTopicSqliteRepository(
             LogTopic(LogTopicId(23), CreatedAt.now(), UpdatedAt.now()),
             createTempDirectory("sqlite_log_topic_test")
+        ) as REPO
+
+        RequestRepository::class -> RequestSqliteRepository(
+            RequestSqliteRepository.Config(createTempDirectory("sqlite_req_test"))
         ) as REPO
 
         TopicRepository::class -> TopicSqliteRepository(

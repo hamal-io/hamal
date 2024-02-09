@@ -2,15 +2,15 @@ package io.hamal.core.adapter
 
 import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
+import io.hamal.lib.domain.request.HookCreateRequest
 import io.hamal.lib.domain.request.HookCreateRequested
+import io.hamal.lib.domain.request.HookUpdateRequest
 import io.hamal.lib.domain.request.HookUpdateRequested
-import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.HookId
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.RequestId
 import io.hamal.repository.api.*
 import io.hamal.repository.api.HookQueryRepository.HookQuery
-import io.hamal.lib.domain.request.HookCreateRequest
-import io.hamal.lib.domain.request.HookUpdateRequest
 import org.springframework.stereotype.Component
 
 interface HookCreatePort {
@@ -44,7 +44,7 @@ class HookAdapter(
     private val generateDomainId: GenerateId,
     private val hookQueryRepository: HookQueryRepository,
     private val namespaceQueryRepository: NamespaceQueryRepository,
-    private val reqCmdRepository: RequestCmdRepository
+    private val requestCmdRepository: RequestCmdRepository
 ) : HookPort {
     override fun <T : Any> invoke(
         namespaceId: NamespaceId,
@@ -59,7 +59,7 @@ class HookAdapter(
             groupId = namespace.groupId,
             namespaceId = namespace.id,
             name = req.name
-        ).also(reqCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue).let(responseHandler)
     }
 
     override fun <T : Any> invoke(hookId: HookId, responseHandler: (Hook, Namespace) -> T): T {
@@ -91,7 +91,7 @@ class HookAdapter(
             groupId = hookQueryRepository.get(hookId).groupId,
             hookId = hookId,
             name = req.name,
-        ).also(reqCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue).let(responseHandler)
     }
 
     private fun ensureHookExists(hookId: HookId) {
