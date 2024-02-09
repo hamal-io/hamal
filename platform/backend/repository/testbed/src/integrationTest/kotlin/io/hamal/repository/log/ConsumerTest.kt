@@ -1,43 +1,41 @@
 package io.hamal.repository.log
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.util.HashUtils
-import io.hamal.lib.domain.vo.FlowId
-import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.domain.vo.TopicId
-import io.hamal.lib.domain.vo.TopicName
-import io.hamal.repository.api.log.AppenderImpl
-import io.hamal.repository.api.log.BrokerRepository
-import io.hamal.repository.api.log.ConsumerId
-import io.hamal.repository.api.log.CreateTopic.TopicToCreate
+import io.hamal.lib.domain.vo.LogTopicId
+import io.hamal.repository.api.log.LogBrokerRepository
+import io.hamal.repository.api.log.LogBrokerRepository.LogTopicToCreate
+import io.hamal.repository.api.log.LogConsumerId
 import io.hamal.repository.api.log.LogConsumerImpl
+import io.hamal.repository.api.log.LogTopicAppenderImpl
 import io.hamal.repository.fixture.AbstractIntegrationTest
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers
 import org.hamcrest.Matchers.equalTo
+import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.TestFactory
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.atomic.AtomicInteger
 
-class ConsumerTest : AbstractIntegrationTest() {
-    @TestFactory
-    fun `Late consumer starts at the beginning`() = runWith(BrokerRepository::class) { testInstance ->
+class LogConsumerTest : AbstractIntegrationTest() {
 
+    @TestFactory
+    fun `Late consumer starts at the beginning`() = runWith(LogBrokerRepository::class) { testInstance ->
         val topic = testInstance.create(
             CmdId(1),
-            TopicToCreate(TopicId(123), TopicName("topic"), FlowId(1), GroupId(1))
+            LogTopicToCreate(LogTopicId(123))
         )
 
-        val appender = AppenderImpl<String>(testInstance)
-        IntRange(1, 10).forEach { appender.append(CmdId(it), topic, "$it") }
+        val appender = LogTopicAppenderImpl<String>(testInstance)
+        IntRange(1, 10).forEach { appender.append(CmdId(it), topic.id, "$it") }
 
-        val testConsumer = LogConsumerImpl(ConsumerId("consumer-01"), topic, testInstance, String::class)
-        testConsumer.consumeIndexed(10) { index, _, value ->
+        val testConsumer = LogConsumerImpl(LogConsumerId(1), topic.id, testInstance, String::class)
+        testConsumer.consumeIndexed(Limit(10)) { index, _, value ->
             assertThat("${index + 1}", equalTo(value))
         }
 
         val counter = AtomicInteger(0)
-        testConsumer.consume(10) { _, _ ->
+        testConsumer.consume(Limit(10)) { _, _ ->
             CompletableFuture.runAsync {
                 counter.incrementAndGet()
             }
@@ -45,8 +43,8 @@ class ConsumerTest : AbstractIntegrationTest() {
 
         assertThat(counter.get(), equalTo(0))
 
-        appender.append(CmdId(1337), topic, "1337")
-        testConsumer.consume(10) { _, value ->
+        appender.append(CmdId(1337), topic.id, "1337")
+        testConsumer.consume(Limit(10)) { _, value ->
             assertThat(value, equalTo("1337"))
             counter.incrementAndGet()
         }
@@ -55,20 +53,20 @@ class ConsumerTest : AbstractIntegrationTest() {
 
 
     @TestFactory
-    fun `Can run concurrent to appender`() = runWith(BrokerRepository::class) { testInstance ->
+    fun `Can run concurrent to appender`() = runWith(LogBrokerRepository::class) { testInstance ->
 
         val topic = testInstance.create(
             CmdId(1),
-            TopicToCreate(TopicId(123), TopicName("topic"), FlowId.root, GroupId.root)
+            LogTopicToCreate(LogTopicId(123))
         )
 
-        val testAppender = AppenderImpl<String>(testInstance)
+        val testAppender = LogTopicAppenderImpl<String>(testInstance)
 
-        val testConsumer = LogConsumerImpl(ConsumerId("consumer-01"), topic, testInstance, String::class)
+        val testConsumer = LogConsumerImpl(LogConsumerId(1), topic.id, testInstance, String::class)
         val collected = mutableListOf<String>()
         val consumerFuture = CompletableFuture.runAsync {
             while (collected.size < 1_000) {
-                testConsumer.consume(1) { _, str ->
+                testConsumer.consume(Limit(1)) { _, str ->
                     collected.add(str)
                 }
             }
@@ -77,13 +75,13 @@ class ConsumerTest : AbstractIntegrationTest() {
         IntRange(1, 10).forEach { thread ->
             CompletableFuture.runAsync {
                 IntRange(1, 100).forEach {
-                    testAppender.append(CmdId(HashUtils.sha256("$thread $it")), topic, "$it")
+                    testAppender.append(CmdId(HashUtils.sha256("$thread $it")), topic.id, "$it")
                 }
             }
         }
 
         consumerFuture.join()
-        assertThat(collected, Matchers.hasSize(1_000))
+        assertThat(collected, hasSize(1_000))
     }
 
 }

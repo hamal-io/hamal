@@ -1,5 +1,6 @@
 package io.hamal.repository.sqlite.record.flow
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.FlowId
 import io.hamal.lib.domain.vo.FlowName
 import io.hamal.lib.sqlite.SqliteBaseRepository
@@ -13,7 +14,7 @@ import io.hamal.repository.record.flow.FlowCreatedRecord
 import io.hamal.repository.record.flow.FlowEntity
 import io.hamal.repository.record.flow.FlowRecord
 import io.hamal.repository.record.flow.FlowUpdatedRecord
-import io.hamal.repository.sqlite.record.SqliteRecordRepository
+import io.hamal.repository.sqlite.record.RecordSqliteRepository
 import java.nio.file.Path
 
 internal object CreateFlow : CreateDomainObject<FlowId, FlowRecord, Flow> {
@@ -41,7 +42,7 @@ internal object CreateFlow : CreateDomainObject<FlowId, FlowRecord, Flow> {
 
 class FlowSqliteRepository(
     config: Config
-) : SqliteRecordRepository<FlowId, FlowRecord, Flow>(
+) : RecordSqliteRepository<FlowId, FlowRecord, Flow>(
     config = config,
     createDomainObject = CreateFlow,
     recordClass = FlowRecord::class,
@@ -113,7 +114,7 @@ class FlowSqliteRepository(
         return ProjectionCurrent.list(connection, query)
     }
 
-    override fun count(query: FlowQuery): ULong {
+    override fun count(query: FlowQuery): Count {
         return ProjectionCurrent.count(connection, query)
     }
 }

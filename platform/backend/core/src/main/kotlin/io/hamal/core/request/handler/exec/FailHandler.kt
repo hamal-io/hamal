@@ -1,6 +1,6 @@
 package io.hamal.core.request.handler.exec
 
-import io.hamal.core.event.PlatformEventEmitter
+import io.hamal.core.event.InternalEventEmitter
 import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.request.ExecFailRequested
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component
 class ExecFailHandler(
     private val execQueryRepository: io.hamal.repository.api.ExecQueryRepository,
     private val execCmdRepository: io.hamal.repository.api.ExecCmdRepository,
-    private val eventEmitter: PlatformEventEmitter
+    private val eventEmitter: InternalEventEmitter
 ) : io.hamal.core.request.RequestHandler<ExecFailRequested>(ExecFailRequested::class) {
 
     override fun invoke(req: ExecFailRequested) {

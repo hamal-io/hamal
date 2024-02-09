@@ -1,75 +1,55 @@
 package io.hamal.repository.api.log
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.domain.Json
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.domain.vo.LogTopicId
 import io.hamal.repository.api.CmdRepository
-import io.hamal.repository.api.log.BrokerTopicsRepository.TopicQuery
 
-interface CreateTopic {
-    fun create(cmdId: CmdId, topicToCreate: TopicToCreate): Topic
+interface LogBrokerRepository : CmdRepository {
 
-    data class TopicToCreate(
-        val id: TopicId,
-        val name: TopicName,
-        val flowId: FlowId,
-        val groupId: GroupId
+    fun create(cmdId: CmdId, topicToCreate: LogTopicToCreate): LogTopic
+
+    data class LogTopicToCreate(
+        val id: LogTopicId
     )
-}
 
-interface AppendToTopic {
-    fun append(cmdId: CmdId, topic: Topic, bytes: ByteArray)
-}
+    fun append(cmdId: CmdId, topicId: LogTopicId, bytes: ByteArray)
 
-interface ConsumeFromTopic {
-    fun consume(consumerId: ConsumerId, topic: Topic, limit: Int): List<Chunk>
+    fun consume(consumerId: LogConsumerId, topicId: LogTopicId, limit: Limit): List<LogEvent>
 
-    fun commit(consumerId: ConsumerId, topic: Topic, chunkId: ChunkId)
-}
+    fun read(firstId: LogEventId, topicId: LogTopicId, limit: Limit): List<LogEvent>
 
-interface ReadFromTopic {
-    fun read(firstId: ChunkId, topic: Topic, limit: Int): List<Chunk>
-}
+    fun commit(consumerId: LogConsumerId, topicId: LogTopicId, eventId: LogEventId)
 
-interface FindTopic {
-    fun getTopic(topicId: TopicId): Topic = findTopic(topicId) ?: throw NoSuchElementException("Topic not found")
+    fun findTopic(topicId: LogTopicId): LogTopic?
 
-    fun findTopic(topicId: TopicId): Topic?
+    fun getTopic(topicId: LogTopicId): LogTopic = findTopic(topicId) ?: throw NoSuchElementException("Topic not found")
 
-    fun findTopic(flowId: FlowId, topicName: TopicName): Topic?
-}
+    fun countTopics(query: LogTopicQuery): Count
 
-interface ResolveTopic {
-    fun resolveTopic(flowId: FlowId, name: TopicName): Topic?
-}
+    fun listTopics(query: LogTopicQuery): List<LogTopic>
 
-interface BrokerRepository :
-    CmdRepository,
-    CreateTopic,
-    AppendToTopic,
-    ConsumeFromTopic,
-    FindTopic,
-    ReadFromTopic,
-    ResolveTopic {
+    fun countConsumers(query: LogConsumerQuery): Count
 
-    fun listTopics(query: TopicQuery): List<Topic>
-    fun list(topicIds: List<TopicId>) = topicIds.map(::getTopic) //FIXME as one request  ?!
+    fun listEvents(query: LogEventQuery): List<LogEvent>
 
-    fun listEntries(topic: Topic, query: TopicEntryQuery): List<TopicEntry> {
-        val firstId = ChunkId(query.afterId.value.value.toInt() + 1)
-        return read(firstId, topic, query.limit.value)
-            .map { chunk ->
-                val payload = json.decompressAndDeserialize(TopicEntryPayload::class, chunk.bytes)
-                TopicEntry(
-                    id = TopicEntryId(chunk.id.value.toInt()),
-                    payload = payload
-                )
-            }
-    }
+    fun countEvents(query: LogEventQuery): Count
 
-    data class TopicEntryQuery(
-        var afterId: TopicEntryId = TopicEntryId(0),
+    data class LogTopicQuery(
+        var afterId: LogTopicId = LogTopicId(SnowflakeId(Long.MAX_VALUE)),
+        var limit: Limit = Limit(1)
+    )
+
+    data class LogConsumerQuery(
+        var afterId: LogConsumerId = LogConsumerId(SnowflakeId(Long.MAX_VALUE)),
+        var limit: Limit = Limit(1)
+    )
+
+    data class LogEventQuery(
+        var topicId: LogTopicId,
+        var afterId: LogEventId = LogEventId(SnowflakeId(0)),
         var limit: Limit = Limit(1)
     )
 }

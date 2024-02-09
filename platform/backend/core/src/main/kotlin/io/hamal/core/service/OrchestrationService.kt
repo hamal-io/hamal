@@ -1,6 +1,6 @@
 package io.hamal.core.service
 
-import io.hamal.core.event.PlatformEventEmitter
+import io.hamal.core.event.InternalEventEmitter
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.ExecId
@@ -14,7 +14,7 @@ import kotlin.concurrent.withLock
 @Service
 internal class OrchestrationService(
     private val execCmdRepository: ExecCmdRepository,
-    private val eventEmitter: PlatformEventEmitter
+    private val eventEmitter: InternalEventEmitter
 ) {
 
     internal val lock: ReentrantLock = ReentrantLock()

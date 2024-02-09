@@ -1,5 +1,6 @@
 package io.hamal.repository
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain._enum.RequestStatus.*
@@ -28,7 +29,7 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
     inner class NextTest {
         @TestFactory
         fun `Nothing there`() = runWith(RequestRepository::class) {
-            val result = next(10)
+            val result = next(Limit(10))
             assertThat(result, empty())
         }
 
@@ -39,7 +40,7 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
             queue(TestRequested(RequestId(3), Submitted))
             queue(TestRequested(RequestId(4), Submitted))
 
-            val result = next(5)
+            val result = next(Limit(5))
             assertThat(result, hasSize(4))
             assertThat(result[0].id, equalTo(RequestId(1)))
             assertThat(result[1].id, equalTo(RequestId(2)))
@@ -54,7 +55,7 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
             queue(TestRequested(RequestId(3), Submitted))
             queue(TestRequested(RequestId(4), Submitted))
 
-            val result = next(2)
+            val result = next(Limit(2))
             assertThat(result, hasSize(2))
             assertThat(result[0].id, equalTo(RequestId(1)))
             assertThat(result[1].id, equalTo(RequestId(2)))
@@ -71,8 +72,8 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Clear table`() = runWith(RequestRepository::class) {
-            createReq(RequestId(1), Submitted)
-            createReq(RequestId(2), Completed)
+            createRequest(RequestId(1), Submitted)
+            createRequest(RequestId(2), Completed)
 
             clear()
             verifyCount(0)
@@ -83,8 +84,8 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
     inner class CompleteTest {
 
         @TestFactory
-        fun `Complete submitted req`() = runWith(RequestRepository::class) {
-            createReq(RequestId(234), Submitted)
+        fun `Complete processing req`() = runWith(RequestRepository::class) {
+            createRequest(RequestId(234), Processing)
 
             complete(RequestId(234))
 
@@ -96,15 +97,15 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
         }
 
         @TestFactory
-        fun `Tries to complete but Submitted state`() = RequestStatus.values().filter { it != Submitted }
+        fun `Tries to complete but not processing`() = RequestStatus.values().filter { it != Processing }
             .flatMap { reqStatus ->
                 runWith(RequestRepository::class, reqStatus.name) {
-                    createReq(RequestId(234), reqStatus)
+                    createRequest(RequestId(234), reqStatus)
 
                     val exception = assertThrows<IllegalStateException> {
                         complete(RequestId(234))
                     }
-                    assertThat(exception.message, equalTo("Req not submitted"))
+                    assertThat(exception.message, equalTo("Request not processing"))
 
                     with(get(RequestId(234))) {
                         assertThat(status, equalTo(reqStatus))
@@ -113,13 +114,13 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
             }
 
         @TestFactory
-        fun `Tries to complete but req does not exist`() = runWith(RequestRepository::class) {
-            createReq(RequestId(23), Submitted)
+        fun `Tries to complete but request does not exist`() = runWith(RequestRepository::class) {
+            createRequest(RequestId(23), Submitted)
 
             val exception = assertThrows<NoSuchElementException> {
                 complete(RequestId(3223))
             }
-            assertThat(exception.message, equalTo("Req not found"))
+            assertThat(exception.message, equalTo("Request not found"))
         }
     }
 
@@ -127,8 +128,8 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
     inner class FailTest {
 
         @TestFactory
-        fun `Fail submitted req`() = runWith(RequestRepository::class) {
-            createReq(RequestId(234), Submitted)
+        fun `Fail processing request`() = runWith(RequestRepository::class) {
+            createRequest(RequestId(234), Processing)
 
             fail(RequestId(234))
 
@@ -140,15 +141,15 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
         }
 
         @TestFactory
-        fun `Tries to fail but Submitted state`() = RequestStatus.values().filter { it != Submitted }
+        fun `Tries to fail request but not processing`() = RequestStatus.values().filter { it != Processing }
             .flatMap { reqStatus ->
                 runWith(RequestRepository::class, reqStatus.name) {
-                    createReq(RequestId(234), reqStatus)
+                    createRequest(RequestId(234), reqStatus)
 
                     val exception = assertThrows<IllegalStateException> {
                         fail(RequestId(234))
                     }
-                    assertThat(exception.message, equalTo("Req not submitted"))
+                    assertThat(exception.message, equalTo("Request not processing"))
 
                     with(get(RequestId(234))) {
                         assertThat(status, equalTo(reqStatus))
@@ -157,49 +158,49 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
             }
 
         @TestFactory
-        fun `Tries to fail but req does not exist`() = runWith(RequestRepository::class) {
-            createReq(RequestId(23), Submitted)
+        fun `Tries to fail but request does not exist`() = runWith(RequestRepository::class) {
+            createRequest(RequestId(23), Submitted)
 
             val exception = assertThrows<NoSuchElementException> {
                 fail(RequestId(3223))
             }
-            assertThat(exception.message, equalTo("Req not found"))
+            assertThat(exception.message, equalTo("Request not found"))
         }
     }
 
     @Nested
     inner class GetTest {
         @TestFactory
-        fun `Get func by id`() = runWith(RequestRepository::class) {
-            createReq(RequestId(1), Submitted)
+        fun `Get request by id`() = runWith(RequestRepository::class) {
+            createRequest(RequestId(1), Submitted)
             with(get(RequestId(1))) {
                 assertThat(status, equalTo(Submitted))
             }
         }
 
         @TestFactory
-        fun `Tries to get func by id but does not exist`() = runWith(RequestRepository::class) {
-            createReq(RequestId(1), Submitted)
+        fun `Tries to get request by id but does not exist`() = runWith(RequestRepository::class) {
+            createRequest(RequestId(1), Submitted)
             val exception = assertThrows<NoSuchElementException> {
                 get(RequestId(111111))
             }
-            assertThat(exception.message, equalTo("Req not found"))
+            assertThat(exception.message, equalTo("Request not found"))
         }
     }
 
     @Nested
     inner class FindTest {
         @TestFactory
-        fun `Find func by id`() = runWith(RequestRepository::class) {
-            createReq(RequestId(1), Submitted)
+        fun `Find request by id`() = runWith(RequestRepository::class) {
+            createRequest(RequestId(1), Submitted)
             with(find(RequestId(1))!!) {
                 assertThat(status, equalTo(Submitted))
             }
         }
 
         @TestFactory
-        fun `Tries to find func by id but does not exist`() = runWith(RequestRepository::class) {
-            createReq(RequestId(1), Submitted)
+        fun `Tries to request func by id but does not exist`() = runWith(RequestRepository::class) {
+            createRequest(RequestId(1), Submitted)
             val result = find(RequestId(111111))
             assertThat(result, nullValue())
         }
@@ -213,7 +214,7 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
             setup()
             val query = ReqQuery(limit = Limit(3))
 
-            assertThat(count(query), equalTo(4UL))
+            assertThat(count(query), equalTo(Count(4)))
             val result = list(query)
             assertThat(result, hasSize(3))
         }
@@ -227,7 +228,7 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
                 limit = Limit(1)
             )
 
-            assertThat(count(query), equalTo(1UL))
+            assertThat(count(query), equalTo(Count(1)))
             val result = list(query)
             assertThat(result, hasSize(1))
 
@@ -237,15 +238,15 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
         }
 
         private fun RequestRepository.setup() {
-            createReq(RequestId(1), Submitted)
-            createReq(RequestId(2), Completed)
-            createReq(RequestId(3), Failed)
-            createReq(RequestId(4), Submitted)
+            createRequest(RequestId(1), Submitted)
+            createRequest(RequestId(2), Completed)
+            createRequest(RequestId(3), Failed)
+            createRequest(RequestId(4), Submitted)
         }
     }
 }
 
-private fun RequestRepository.createReq(
+private fun RequestRepository.createRequest(
     reqId: RequestId,
     status: RequestStatus,
 ) {
@@ -263,5 +264,5 @@ private fun RequestRepository.verifyCount(expected: Int) {
 
 private fun RequestRepository.verifyCount(expected: Int, block: ReqQuery.() -> Unit) {
     val counted = count(ReqQuery().also(block))
-    assertThat("number of reqs expected", counted, equalTo(expected.toULong()))
+    assertThat("number of reqs expected", counted, equalTo(Count(expected)))
 }

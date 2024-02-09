@@ -1,5 +1,6 @@
 package io.hamal.repository.sqlite.record.extension
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.ExtensionId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
@@ -101,9 +102,10 @@ internal object ProjectionCurrent : ProjectionSqlite<ExtensionId, ExtensionRecor
         }
     }
 
-    fun count(connection: Connection, query: ExtensionQuery): ULong {
-        return connection.executeQueryOne(
-            """
+    fun count(connection: Connection, query: ExtensionQuery): Count {
+        return Count(
+            connection.executeQueryOne(
+                """
             SELECT 
                 COUNT(*) as count 
             FROM 
@@ -113,14 +115,15 @@ internal object ProjectionCurrent : ProjectionSqlite<ExtensionId, ExtensionRecor
                 ${query.ids()}
                 ${query.groupIds()}
         """.trimIndent()
-        ) {
-            query {
-                set("afterId", query.afterId)
-            }
-            map {
-                it.getLong("count").toULong()
-            }
-        } ?: 0UL
+            ) {
+                query {
+                    set("afterId", query.afterId)
+                }
+                map {
+                    it.getLong("count")
+                }
+            } ?: 0L
+        )
     }
 
     private fun ExtensionQuery.ids(): String {

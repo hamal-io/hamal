@@ -1,5 +1,6 @@
 package io.hamal.repository.sqlite.record.func
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.domain.vo.DeployedAt
 import io.hamal.lib.domain.vo.FuncId
@@ -11,7 +12,7 @@ import io.hamal.repository.api.FuncQueryRepository.FuncQuery
 import io.hamal.repository.api.FuncRepository
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.func.*
-import io.hamal.repository.sqlite.record.SqliteRecordRepository
+import io.hamal.repository.sqlite.record.RecordSqliteRepository
 import java.nio.file.Path
 
 internal object CreateFunc : CreateDomainObject<FuncId, FuncRecord, Func> {
@@ -38,7 +39,7 @@ internal object CreateFunc : CreateDomainObject<FuncId, FuncRecord, Func> {
 
 class FuncSqliteRepository(
     config: Config
-) : SqliteRecordRepository<FuncId, FuncRecord, Func>(
+) : RecordSqliteRepository<FuncId, FuncRecord, Func>(
     config = config,
     createDomainObject = CreateFunc,
     recordClass = FuncRecord::class,
@@ -149,7 +150,7 @@ class FuncSqliteRepository(
         }
     }
 
-    override fun count(query: FuncQuery): ULong {
+    override fun count(query: FuncQuery): Count {
         return ProjectionCurrent.count(connection, query)
     }
 }

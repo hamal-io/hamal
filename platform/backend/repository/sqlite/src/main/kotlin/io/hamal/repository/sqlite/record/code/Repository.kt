@@ -1,5 +1,6 @@
 package io.hamal.repository.sqlite.record.code
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.lib.sqlite.SqliteBaseRepository
@@ -14,7 +15,7 @@ import io.hamal.repository.record.code.CodeCreatedRecord
 import io.hamal.repository.record.code.CodeEntity
 import io.hamal.repository.record.code.CodeRecord
 import io.hamal.repository.record.code.CodeUpdatedRecord
-import io.hamal.repository.sqlite.record.SqliteRecordRepository
+import io.hamal.repository.sqlite.record.RecordSqliteRepository
 import java.nio.file.Path
 
 
@@ -42,7 +43,7 @@ internal object CreateCode : CreateDomainObject<CodeId, CodeRecord, Code> {
 
 class CodeSqliteRepository(
     config: Config
-) : SqliteRecordRepository<CodeId, CodeRecord, Code>(
+) : RecordSqliteRepository<CodeId, CodeRecord, Code>(
     config = config,
     createDomainObject = CreateCode,
     recordClass = CodeRecord::class,
@@ -115,7 +116,7 @@ class CodeSqliteRepository(
         return ProjectionCurrent.list(connection, query)
     }
 
-    override fun count(query: CodeQuery): ULong {
+    override fun count(query: CodeQuery): Count {
         return ProjectionCurrent.count(connection, query)
     }
 }

@@ -29,14 +29,14 @@ internal abstract class BaseControllerTest : BaseTest() {
     }
 
     fun verifyReqCompleted(id: RequestId) {
-        with(reqQueryRepository.find(id)!!) {
+        with(requestQueryRepository.find(id)!!) {
             assertThat(id, equalTo(id))
             assertThat(status, equalTo(Completed))
         }
     }
 
     fun verifyReqFailed(id: RequestId) {
-        with(reqQueryRepository.find(id)!!) {
+        with(requestQueryRepository.find(id)!!) {
             assertThat(id, equalTo(id))
             assertThat(status, equalTo(Failed))
         }
@@ -45,7 +45,7 @@ internal abstract class BaseControllerTest : BaseTest() {
 
     fun awaitCompleted(id: RequestId) {
         while (true) {
-            reqQueryRepository.find(id)?.let {
+            requestQueryRepository.find(id)?.let {
                 if (it.status == Completed) {
                     return
                 }
@@ -72,7 +72,7 @@ internal abstract class BaseControllerTest : BaseTest() {
 
     fun awaitFailed(id: RequestId) {
         while (true) {
-            reqQueryRepository.find(id)?.let {
+            requestQueryRepository.find(id)?.let {
                 if (it.status == Failed) {
                     return
                 }
@@ -95,12 +95,12 @@ internal abstract class BaseControllerTest : BaseTest() {
     }
 
     fun verifyNoRequests() {
-        val requests = reqQueryRepository.list(ReqQuery())
+        val requests = requestQueryRepository.list(ReqQuery())
         assertThat(requests, empty())
     }
 
     fun <SUBMITTED_REQ : Requested> verifyNoRequests(clazz: KClass<SUBMITTED_REQ>) {
-        val requests = reqQueryRepository.list(ReqQuery()).filterIsInstance(clazz.java)
+        val requests = requestQueryRepository.list(ReqQuery()).filterIsInstance(clazz.java)
         assertThat(requests, empty())
     }
 

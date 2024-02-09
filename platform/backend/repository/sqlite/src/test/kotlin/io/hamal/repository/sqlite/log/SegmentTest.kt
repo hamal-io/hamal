@@ -1,8 +1,8 @@
 package io.hamal.repository.sqlite.log
 
 import io.hamal.lib.common.util.FileUtils
-import io.hamal.lib.domain.vo.TopicId
-import io.hamal.repository.api.log.Segment
+import io.hamal.lib.domain.vo.LogTopicId
+import io.hamal.repository.api.log.LogSegmentId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -14,7 +14,7 @@ import kotlin.io.path.Path
 import kotlin.io.path.pathString
 
 
-class SegmentSqliteRepositoryTest {
+internal class LogSegmentSqliteRepositoryTest {
 
     @Nested
     inner class ConstructorTest {
@@ -28,34 +28,34 @@ class SegmentSqliteRepositoryTest {
         @Test
         fun `Creates a directory if path does not exists yet`() {
             val targetDir = Path(testDir, "partition-001", "another-path")
-            SegmentSqliteRepository(testSegment(targetDir)).use { }
+            LogSegmentSqliteRepository(testSegment(targetDir)).use { }
 
             assertTrue(FileUtils.exists(targetDir))
             assertTrue(FileUtils.exists(Path(targetDir.pathString, "00000000000000002810.db")))
         }
 
         @Test
-        fun `Creates chunks table`() {
-            SegmentSqliteRepository(testSegment()).connection
-                .executeQuery("SELECT COUNT(*) as count FROM sqlite_master WHERE name = 'chunks' AND type = 'table'") { resultSet ->
+        fun `Creates events table`() {
+            LogSegmentSqliteRepository(testSegment()).connection
+                .executeQuery("SELECT COUNT(*) as count FROM sqlite_master WHERE name = 'events' AND type = 'table'") { resultSet ->
                     assertThat(resultSet.getInt("count"), equalTo(1))
                 }
         }
 
         @Test
-        fun `Does not create chunks table if already exists`() {
-            SegmentSqliteRepository(testSegment()).use {
-                it.connection.execute("""INSERT INTO chunks (cmd_id, bytes,instant) VALUES (1,'some-bytes',unixepoch());""")
+        fun `Does not create events table if already exists`() {
+            LogSegmentSqliteRepository(testSegment()).use {
+                it.connection.execute("""INSERT INTO events (cmd_id, bytes,instant) VALUES (1,'some-bytes',unixepoch());""")
             }
 
 
-            SegmentSqliteRepository(testSegment()).use { }
-            SegmentSqliteRepository(testSegment()).use {}
-            SegmentSqliteRepository(testSegment()).use {}
-            SegmentSqliteRepository(testSegment()).use {}
+            LogSegmentSqliteRepository(testSegment()).use { }
+            LogSegmentSqliteRepository(testSegment()).use {}
+            LogSegmentSqliteRepository(testSegment()).use {}
+            LogSegmentSqliteRepository(testSegment()).use {}
 
-            SegmentSqliteRepository(testSegment()).use {
-                it.connection.executeQuery("SELECT COUNT(*) as count FROM chunks") { resultSet ->
+            LogSegmentSqliteRepository(testSegment()).use {
+                it.connection.executeQuery("SELECT COUNT(*) as count FROM events") { resultSet ->
                     assertThat(resultSet.getInt("count"), equalTo(1))
                 }
             }
@@ -63,7 +63,7 @@ class SegmentSqliteRepositoryTest {
 
         @Test
         fun `Sets journal_mode to wal`() {
-            SegmentSqliteRepository(testSegment()).use {
+            LogSegmentSqliteRepository(testSegment()).use {
                 it.connection.executeQuery("""SELECT journal_mode FROM pragma_journal_mode""") { resultSet ->
                     assertThat(resultSet.getString("journal_mode"), equalTo("wal"))
                 }
@@ -72,7 +72,7 @@ class SegmentSqliteRepositoryTest {
 
         @Test
         fun `Sets locking_mode to exclusive`() {
-            SegmentSqliteRepository(testSegment()).use {
+            LogSegmentSqliteRepository(testSegment()).use {
                 it.connection.executeQuery("""SELECT locking_mode FROM pragma_locking_mode""") { resultSet ->
                     assertThat(resultSet.getString("locking_mode"), equalTo("exclusive"))
                 }
@@ -81,7 +81,7 @@ class SegmentSqliteRepositoryTest {
 
         @Test
         fun `Sets temp_store to memory`() {
-            SegmentSqliteRepository(testSegment()).use {
+            LogSegmentSqliteRepository(testSegment()).use {
                 it.connection.executeQuery("""SELECT temp_store FROM pragma_temp_store""") { resultSet ->
                     assertThat(resultSet.getString("temp_store"), equalTo("2"))
                 }
@@ -90,16 +90,16 @@ class SegmentSqliteRepositoryTest {
 
         @Test
         fun `Sets synchronous to off`() {
-            SegmentSqliteRepository(testSegment()).use {
+            LogSegmentSqliteRepository(testSegment()).use {
                 it.connection.executeQuery("""SELECT synchronous FROM pragma_synchronous""") { resultSet ->
                     assertThat(resultSet.getString("synchronous"), equalTo("0"))
                 }
             }
         }
 
-        private fun testSegment(path: Path = Path(testDir)) = SegmentSqlite(
-            id = Segment.Id(2810),
-            topicId = TopicId(1506),
+        private fun testSegment(path: Path = Path(testDir)) = LogSegmentSqlite(
+            id = LogSegmentId(2810),
+            topicId = LogTopicId(1506),
             path = path
         )
     }

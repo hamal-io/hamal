@@ -44,7 +44,7 @@ class HookAdapter(
     private val generateDomainId: GenerateId,
     private val hookQueryRepository: HookQueryRepository,
     private val flowQueryRepository: FlowQueryRepository,
-    private val reqCmdRepository: RequestCmdRepository
+    private val requestCmdRepository: RequestCmdRepository
 ) : HookPort {
     override fun <T : Any> invoke(
         flowId: FlowId,
@@ -59,7 +59,7 @@ class HookAdapter(
             groupId = flow.groupId,
             flowId = flow.id,
             name = req.name
-        ).also(reqCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue).let(responseHandler)
     }
 
     override fun <T : Any> invoke(hookId: HookId, responseHandler: (Hook, Flow) -> T): T {
@@ -91,7 +91,7 @@ class HookAdapter(
             groupId = hookQueryRepository.get(hookId).groupId,
             hookId = hookId,
             name = req.name,
-        ).also(reqCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue).let(responseHandler)
     }
 
     private fun ensureHookExists(hookId: HookId) {

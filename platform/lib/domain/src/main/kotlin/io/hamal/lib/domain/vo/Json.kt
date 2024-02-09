@@ -1,6 +1,7 @@
 package io.hamal.lib.domain.vo
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.serialization.*
 import io.hamal.lib.domain.State
@@ -82,6 +83,7 @@ object ValueObjectJsonModule : JsonModule() {
         this[InvocationInputs::class] = ValueObjectHotObjectAdapter(::InvocationInputs)
 
         this[Limit::class] = ValueObjectIntAdapter(::Limit)
+        this[Count::class] = ValueObjectLongAdapter(::Count)
 
         this[RequestId::class] = ValueObjectIdAdapter(::RequestId)
         this[RequestClass::class] = ValueObjectStringAdapter(::RequestClass)
@@ -90,8 +92,8 @@ object ValueObjectJsonModule : JsonModule() {
         this[State::class] = ValueObjectHotObjectAdapter(::State)
         this[TopicId::class] = ValueObjectIdAdapter(::TopicId)
         this[TopicName::class] = ValueObjectStringAdapter(::TopicName)
-        this[TopicEntryId::class] = ValueObjectIdAdapter(::TopicEntryId)
-        this[TopicEntryPayload::class] = ValueObjectHotObjectAdapter(::TopicEntryPayload)
+        this[TopicEventId::class] = ValueObjectIdAdapter(::TopicEventId)
+        this[TopicEventPayload::class] = ValueObjectHotObjectAdapter(::TopicEventPayload)
 
         this[TriggerId::class] = ValueObjectIdAdapter(::TriggerId)
         this[TriggerName::class] = ValueObjectStringAdapter(::TriggerName)

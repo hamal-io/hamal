@@ -1,5 +1,6 @@
 package io.hamal.repository.memory.record
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.FlowId
 import io.hamal.lib.domain.vo.FlowName
 import io.hamal.repository.api.Flow
@@ -47,16 +48,18 @@ private object FlowCurrentProjection {
             .toList()
     }
 
-    fun count(query: FlowQuery): ULong {
-        return projection.filter { query.flowIds.isEmpty() || it.key in query.flowIds }
-            .map { it.value }
-            .reversed()
-            .asSequence()
-            .filter {
-                if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId)
-            }.dropWhile { it.id >= query.afterId }
-            .count()
-            .toULong()
+    fun count(query: FlowQuery): Count {
+        return Count(
+            projection.filter { query.flowIds.isEmpty() || it.key in query.flowIds }
+                .map { it.value }
+                .reversed()
+                .asSequence()
+                .filter {
+                    if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId)
+                }.dropWhile { it.id >= query.afterId }
+                .count()
+                .toLong()
+        )
     }
 
     fun clear() {
@@ -117,7 +120,7 @@ class FlowMemoryRepository : RecordMemoryRepository<FlowId, FlowRecord, Flow>(
 
     override fun list(query: FlowQuery): List<Flow> = lock.withLock { FlowCurrentProjection.list(query) }
 
-    override fun count(query: FlowQuery): ULong = lock.withLock { FlowCurrentProjection.count(query) }
+    override fun count(query: FlowQuery): Count = lock.withLock { FlowCurrentProjection.count(query) }
 
     override fun clear() {
         lock.withLock {

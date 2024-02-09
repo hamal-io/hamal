@@ -1,5 +1,6 @@
 package io.hamal.repository.memory.record
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.repository.api.Code
@@ -36,16 +37,18 @@ private object CodeCurrentProjection {
             .toList()
     }
 
-    fun count(query: CodeQuery): ULong {
-        return projection.filter { query.codeIds.isEmpty() || it.key in query.codeIds }
-            .map { it.value }
-            .reversed()
-            .asSequence()
-            .filter {
-                if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId)
-            }.dropWhile { it.id >= query.afterId }
-            .count()
-            .toULong()
+    fun count(query: CodeQuery): Count {
+        return Count(
+            projection.filter { query.codeIds.isEmpty() || it.key in query.codeIds }
+                .map { it.value }
+                .reversed()
+                .asSequence()
+                .filter {
+                    if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId)
+                }.dropWhile { it.id >= query.afterId }
+                .count()
+                .toLong()
+        )
     }
 
     fun clear() {
@@ -116,7 +119,7 @@ class CodeMemoryRepository : RecordMemoryRepository<CodeId, CodeRecord, Code>(
 
     override fun list(query: CodeQuery): List<Code> = lock.withLock { CodeCurrentProjection.list(query) }
 
-    override fun count(query: CodeQuery): ULong = lock.withLock { CodeCurrentProjection.count(query) }
+    override fun count(query: CodeQuery): Count = lock.withLock { CodeCurrentProjection.count(query) }
 
     override fun clear() {
         lock.withLock {

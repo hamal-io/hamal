@@ -1,5 +1,6 @@
 package io.hamal.repository.memory.record
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.HookId
 import io.hamal.repository.api.Hook
 import io.hamal.repository.api.HookCmdRepository
@@ -43,16 +44,18 @@ private object HookCurrentProjection {
             .toList()
     }
 
-    fun count(query: HookQuery): ULong {
-        return projection.filter { query.hookIds.isEmpty() || it.key in query.hookIds }
-            .map { it.value }
-            .reversed()
-            .asSequence()
-            .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
-            .filter { if (query.flowIds.isEmpty()) true else query.flowIds.contains(it.flowId) }
-            .dropWhile { it.id >= query.afterId }
-            .count()
-            .toULong()
+    fun count(query: HookQuery): Count {
+        return Count(
+            projection.filter { query.hookIds.isEmpty() || it.key in query.hookIds }
+                .map { it.value }
+                .reversed()
+                .asSequence()
+                .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
+                .filter { if (query.flowIds.isEmpty()) true else query.flowIds.contains(it.flowId) }
+                .dropWhile { it.id >= query.afterId }
+                .count()
+                .toLong()
+        )
     }
 
     fun clear() {
@@ -108,7 +111,7 @@ class HookMemoryRepository : RecordMemoryRepository<HookId, HookRecord, Hook>(
 
     override fun list(query: HookQuery): List<Hook> = lock.withLock { HookCurrentProjection.list(query) }
 
-    override fun count(query: HookQuery): ULong = lock.withLock { HookCurrentProjection.count(query) }
+    override fun count(query: HookQuery): Count = lock.withLock { HookCurrentProjection.count(query) }
 
     override fun clear() {
         lock.withLock {

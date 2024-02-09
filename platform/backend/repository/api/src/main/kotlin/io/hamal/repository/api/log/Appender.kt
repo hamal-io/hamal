@@ -1,17 +1,18 @@
 package io.hamal.repository.api.log
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.domain.vo.LogTopicId
 
-interface Appender<VALUE : Any> {
-    fun append(cmdId: CmdId, topic: Topic, value: VALUE)
+interface LogTopicAppender<VALUE : Any> {
+    fun append(cmdId: CmdId, topicId: LogTopicId, value: VALUE)
 }
 
-class AppenderImpl<VALUE : Any>(
-    private val repository: BrokerRepository
-) : Appender<VALUE> {
+class LogTopicAppenderImpl<VALUE : Any>(
+    private val repository: LogBrokerRepository
+) : LogTopicAppender<VALUE> {
 
-    override fun append(cmdId: CmdId, topic: Topic, value: VALUE) {
+    override fun append(cmdId: CmdId, topicId: LogTopicId, value: VALUE) {
         val encoded = json.serialize(value).toByteArray()
-        repository.append(cmdId + encoded.contentHashCode(), topic, encoded)
+        repository.append(cmdId + encoded.contentHashCode(), topicId, encoded)
     }
 }

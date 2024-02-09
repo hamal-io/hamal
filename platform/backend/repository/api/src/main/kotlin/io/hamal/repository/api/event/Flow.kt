@@ -4,10 +4,10 @@ import io.hamal.repository.api.Flow
 
 data class FlowCreatedEvent(
     val flow: Flow,
-) : PlatformEvent()
+) : InternalEvent()
 
 
 data class FlowUpdatedEvent(
     val flow: Flow,
-) : PlatformEvent()
+) : InternalEvent()
 

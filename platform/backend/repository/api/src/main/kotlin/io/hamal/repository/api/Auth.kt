@@ -1,6 +1,7 @@
 package io.hamal.repository.api
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.*
@@ -94,7 +95,7 @@ interface AuthQueryRepository {
     )
 
     fun list(query: AuthQuery): List<Auth>
-    fun count(query: AuthQuery): ULong
+    fun count(query: AuthQuery): Count
 
     data class AuthQuery(
         var afterId: AuthId = AuthId(SnowflakeId(Long.MAX_VALUE)),

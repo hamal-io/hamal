@@ -1,0 +1,8 @@
+--sys = require_plugin('sys')
+--
+--_, request = sys.topics.create({ name = "topic-one" })
+--sys.await(request)
+--
+--err, entries = sys.topics.list_entries(request.id)
+--assert(err == nil)
+--assert(#entries == 0)

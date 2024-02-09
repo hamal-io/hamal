@@ -2,11 +2,12 @@ package io.hamal.core.service
 
 import io.hamal.core.adapter.FuncInvokePort
 import io.hamal.core.component.Async
-import io.hamal.core.event.PlatformEventEmitter
+import io.hamal.core.event.InternalEventEmitter
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.util.TimeUtils.now
 import io.hamal.lib.domain.GenerateId
+import io.hamal.lib.domain.request.FuncInvokeRequest
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.EmptyInvocation
 import io.hamal.lib.domain.vo.InvocationInputs
@@ -15,10 +16,9 @@ import io.hamal.repository.api.FixedRateTrigger
 import io.hamal.repository.api.FuncQueryRepository
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerQueryRepository
-import io.hamal.lib.domain.request.FuncInvokeRequest
 import org.springframework.beans.factory.DisposableBean
+import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.ApplicationListener
-import org.springframework.context.event.ContextRefreshedEvent
 import org.springframework.stereotype.Service
 import java.time.Instant
 import java.util.concurrent.ScheduledFuture
@@ -27,17 +27,17 @@ import kotlin.time.Duration.Companion.seconds
 @Service
 internal class FixedRateTriggerService(
     private val async: Async,
-    internal val eventEmitter: PlatformEventEmitter,
+    internal val eventEmitter: InternalEventEmitter,
     internal val funcQueryRepository: FuncQueryRepository,
     internal val generateDomainId: GenerateId,
     internal val invokeFunc: FuncInvokePort,
     internal val triggerQueryRepository: TriggerQueryRepository,
-) : ApplicationListener<ContextRefreshedEvent>, DisposableBean {
+) : ApplicationListener<ApplicationReadyEvent>, DisposableBean {
 
     private val scheduledTasks = mutableListOf<ScheduledFuture<*>>()
 
 
-    override fun onApplicationEvent(event: ContextRefreshedEvent) {
+    override fun onApplicationEvent(event: ApplicationReadyEvent) {
         triggerQueryRepository.list(
             TriggerQueryRepository.TriggerQuery(
                 afterId = TriggerId(SnowflakeId(Long.MAX_VALUE)),

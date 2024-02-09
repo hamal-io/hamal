@@ -1,5 +1,6 @@
 package io.hamal.repository.sqlite.record.blueprint
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.BlueprintId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
@@ -90,9 +91,10 @@ object ProjectionCurrent : ProjectionSqlite<BlueprintId, BlueprintRecord, Bluepr
         }
     }
 
-    fun count(connection: Connection, query: BlueprintQuery): ULong {
-        return connection.executeQueryOne(
-            """
+    fun count(connection: Connection, query: BlueprintQuery): Count {
+        return Count(
+            connection.executeQueryOne(
+                """
             SELECT 
                 COUNT(*) as count 
             FROM 
@@ -102,14 +104,15 @@ object ProjectionCurrent : ProjectionSqlite<BlueprintId, BlueprintRecord, Bluepr
                 ${query.ids()}
                 ${query.groupIds()}
         """.trimIndent()
-        ) {
-            query {
-                set("afterId", query.afterId)
-            }
-            map {
-                it.getLong("count").toULong()
-            }
-        } ?: 0UL
+            ) {
+                query {
+                    set("afterId", query.afterId)
+                }
+                map {
+                    it.getLong("count")
+                }
+            } ?: 0L
+        )
     }
 
     private fun BlueprintQuery.ids(): String {

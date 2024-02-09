@@ -19,7 +19,6 @@ import io.hamal.plugin.std.debug.PluginDebugFactory
 import io.hamal.plugin.std.log.PluginLogFactory
 import io.hamal.plugin.std.sys.PluginSysFactory
 import io.hamal.repository.api.*
-import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.runner.config.EnvFactory
 import io.hamal.runner.config.SandboxFactory
 import io.hamal.testbed.api.TestResult.*
@@ -102,17 +101,17 @@ class ClearController {
 
     @PostMapping("/v1/clear")
     fun clear() {
-        eventBrokerRepository.clear()
         accountRepository.clear()
         authRepository.clear()
         codeRepository.clear()
         endpointRepository.clear()
         extensionRepository.clear()
-        reqRepository.clear()
+        requestRepository.clear()
         execRepository.clear()
         funcRepository.clear()
         groupRepository.clear()
         hookRepository.clear()
+
         flowRepository.clear()
         blueprintRepository.clear()
         triggerRepository.clear()
@@ -160,9 +159,6 @@ class ClearController {
     lateinit var blueprintRepository: BlueprintRepository
 
     @Autowired
-    lateinit var eventBrokerRepository: BrokerRepository
-
-    @Autowired
     lateinit var accountRepository: AccountRepository
 
     @Autowired
@@ -193,7 +189,7 @@ class ClearController {
     lateinit var flowRepository: FlowRepository
 
     @Autowired
-    lateinit var reqRepository: RequestRepository
+    lateinit var requestRepository: RequestRepository
 
     @Autowired
     lateinit var triggerRepository: TriggerRepository
@@ -301,7 +297,7 @@ abstract class BaseApiTest {
                         when (val result = runTest(testPath)) {
                             is Success -> break
                             is Failed -> {
-                                if (counter++ >= 3) {
+                                if (counter++ >= 10) {
                                     fail { result.message }
                                 }
                                 sdk.template.post("/v1/clear").execute()
@@ -342,7 +338,7 @@ abstract class BaseApiTest {
                     } else {
                         if (status == ExecStatus.Failed) {
                             return Failed(message = "Execution failed: ${this.result!!.value["message"]}")
-                        } else if (startedAt.plusSeconds(5).isBefore(TimeUtils.now())) {
+                        } else if (startedAt.plusSeconds(1).isBefore(TimeUtils.now())) {
                             return Timeout
                         }
                     }

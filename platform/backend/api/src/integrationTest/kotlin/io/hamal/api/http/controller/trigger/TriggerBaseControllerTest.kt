@@ -31,16 +31,16 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
         return createTopicResponse.result(ApiFuncCreateRequested::class)
     }
 
-    fun createTopic(topicName: TopicName): ApiTopicCreateRequested {
-        val createTopicResponse = httpTemplate.post("/v1/flows/{flowId}/topics")
-            .path("flowId", testFlow.id)
+    fun createTopic(topicName: TopicName): ApiTopicGroupCreateRequested {
+        val createTopicResponse = httpTemplate.post("/v1/groups/{groupId}/topics")
+            .path("groupId", testGroup.id)
             .body(ApiTopicCreateRequest(topicName))
             .execute()
 
         assertThat(createTopicResponse.statusCode, equalTo(Accepted))
         require(createTopicResponse is HttpSuccessResponse) { "request was not successful" }
 
-        return createTopicResponse.result(ApiTopicCreateRequested::class)
+        return createTopicResponse.result(ApiTopicGroupCreateRequested::class)
     }
 
     fun createHook(hookName: HookName): ApiHookCreateRequested {

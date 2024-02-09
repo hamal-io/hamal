@@ -1,13 +1,15 @@
 package io.hamal.repository.log
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.Count
+import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.util.TimeUtils.withEpochMilli
 import io.hamal.lib.common.util.TimeUtils.withInstant
-import io.hamal.lib.domain.vo.TopicId
-import io.hamal.repository.api.log.Chunk
-import io.hamal.repository.api.log.ChunkId
-import io.hamal.repository.api.log.Segment
-import io.hamal.repository.api.log.SegmentRepository
+import io.hamal.lib.domain.vo.LogTopicId
+import io.hamal.repository.api.log.LogEvent
+import io.hamal.repository.api.log.LogEventId
+import io.hamal.repository.api.log.LogSegmentId
+import io.hamal.repository.api.log.LogSegmentRepository
 import io.hamal.repository.fixture.AbstractUnitTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -17,117 +19,118 @@ import org.junit.jupiter.api.TestFactory
 import java.time.Instant
 
 
-class SegmentRepositoryTest : AbstractUnitTest() {
+internal class LogSegmentRepositoryTest : AbstractUnitTest() {
 
     @Nested
     inner class AppendTest {
 
         @TestFactory
-        fun `Bytes, Instant does not have to be unique`() = runWith(SegmentRepository::class) {
+        fun `Bytes, Instant does not have to be unique`() = runWith(LogSegmentRepository::class) {
             withInstant(Instant.ofEpochMilli(1)) {
                 append(CmdId(1), "SomeBytes".toByteArray())
                 append(CmdId(2), "SomeBytes".toByteArray())
             }
 
-            assertThat(count(), equalTo(2UL))
+            assertThat(count(), equalTo(Count(2)))
 
-            read(ChunkId(1), 2).let {
+            read(LogEventId(1), Limit(2)).let {
                 assertThat(it, hasSize(2))
 
-                val chunk = it.first()
-                assertThat(chunk.segmentId, equalTo(Segment.Id(2810)))
-                assertThat(chunk.topicId, equalTo(TopicId(1506)))
-                assertThat(chunk.bytes, equalTo("SomeBytes".toByteArray()))
-                assertThat(chunk.instant, equalTo(Instant.ofEpochMilli(1)))
+                val entry = it.first()
+                assertThat(entry.segmentId, equalTo(LogSegmentId(2810)))
+                assertThat(entry.topicId, equalTo(LogTopicId(1506)))
+                assertThat(entry.bytes, equalTo("SomeBytes".toByteArray()))
+                assertThat(entry.instant, equalTo(Instant.ofEpochMilli(1)))
             }
         }
 
 
         @TestFactory
-        fun `Append single chunk`() = runWith(SegmentRepository::class) {
+        fun `Append single event`() = runWith(LogSegmentRepository::class) {
             withInstant(Instant.ofEpochMilli(2810)) {
                 append(CmdId(1), "VALUE".toByteArray())
             }
 
-            assertThat(count(), equalTo(1UL))
+            assertThat(count(), equalTo(Count(1)))
 
-            read(ChunkId(1)).let {
+            read(LogEventId(1)).let {
                 assertThat(it, hasSize(1))
-                val chunk = it.first()
-                assertThat(chunk.id, equalTo(ChunkId(1)))
-                assertThat(chunk.segmentId, equalTo(Segment.Id(2810)))
-                assertThat(chunk.topicId, equalTo(TopicId(1506)))
-                assertThat(chunk.bytes, equalTo("VALUE".toByteArray()))
-                assertThat(chunk.instant, equalTo(Instant.ofEpochMilli(2810)))
+
+                val entry = it.first()
+                assertThat(entry.id, equalTo(LogEventId(1)))
+                assertThat(entry.segmentId, equalTo(LogSegmentId(2810)))
+                assertThat(entry.topicId, equalTo(LogTopicId(1506)))
+                assertThat(entry.bytes, equalTo("VALUE".toByteArray()))
+                assertThat(entry.instant, equalTo(Instant.ofEpochMilli(2810)))
             }
         }
 
         @TestFactory
-        fun `Append multiple chunks to empty segment`() = runWith(SegmentRepository::class) {
+        fun `Append multiple entrys to empty segment`() = runWith(LogSegmentRepository::class) {
             withEpochMilli(123456) {
                 listOf(
                     "VALUE_1".toByteArray(), "VALUE_2".toByteArray(), "VALUE_3".toByteArray()
                 ).forEachIndexed { index, value -> append(CmdId(index), value) }
             }
 
-            assertThat(count(), equalTo(3UL))
+            assertThat(count(), equalTo(Count(3)))
 
-            read(ChunkId(1)).let {
+            read(LogEventId(1)).let {
                 assertThat(it, hasSize(1))
-                val chunk = it.first()
-                assertThat(chunk.id, equalTo(ChunkId(1)))
-                assertThat(chunk.segmentId, equalTo(Segment.Id(2810)))
-                assertThat(chunk.topicId, equalTo(TopicId(1506)))
-                assertThat(chunk.bytes, equalTo("VALUE_1".toByteArray()))
-                assertThat(chunk.instant, equalTo(Instant.ofEpochMilli(123456)))
+                val entry = it.first()
+                assertThat(entry.id, equalTo(LogEventId(1)))
+                assertThat(entry.segmentId, equalTo(LogSegmentId(2810)))
+                assertThat(entry.topicId, equalTo(LogTopicId(1506)))
+                assertThat(entry.bytes, equalTo("VALUE_1".toByteArray()))
+                assertThat(entry.instant, equalTo(Instant.ofEpochMilli(123456)))
             }
 
-            read(ChunkId(3)).let {
+            read(LogEventId(3)).let {
                 assertThat(it, hasSize(1))
-                val chunk = it.first()
-                assertThat(chunk.id, equalTo(ChunkId(3)))
-                assertThat(chunk.segmentId, equalTo(Segment.Id(2810)))
-                assertThat(chunk.topicId, equalTo(TopicId(1506)))
-                assertThat(chunk.bytes, equalTo("VALUE_3".toByteArray()))
-                assertThat(chunk.instant, equalTo(Instant.ofEpochMilli(123456)))
+                val entry = it.first()
+                assertThat(entry.id, equalTo(LogEventId(3)))
+                assertThat(entry.segmentId, equalTo(LogSegmentId(2810)))
+                assertThat(entry.topicId, equalTo(LogTopicId(1506)))
+                assertThat(entry.bytes, equalTo("VALUE_3".toByteArray()))
+                assertThat(entry.instant, equalTo(Instant.ofEpochMilli(123456)))
             }
 
         }
 
 
         @TestFactory
-        fun `Append multiple chunks to segment which already contains chunks`() =
-            runWith(SegmentRepository::class) {
-                createThreeChunks()
+        fun `Append multiple events to segment which already contains events`() =
+            runWith(LogSegmentRepository::class) {
+                createThreeEvents()
 
                 listOf(
                     "Hamal".toByteArray(),
                     "rocks".toByteArray(),
                 ).forEachIndexed { index, value -> append(CmdId(index + 4), value) }
 
-                assertThat(count(), equalTo(5UL))
+                assertThat(count(), equalTo(Count(5)))
             }
 
         @TestFactory
-        fun `A chunk was already created with this cmd id`() =
-            runWith(SegmentRepository::class) {
+        fun `A entry was already created with this cmd id`() =
+            runWith(LogSegmentRepository::class) {
                 withEpochMilli(123456) {
-                    createThreeChunks()
+                    createThreeEvents()
                     append(CmdId(2), "OTHER_VALUE".toByteArray())
                 }
 
-                read(ChunkId(2)).let {
+                read(LogEventId(2)).let {
                     assertThat(it, hasSize(1))
-                    val chunk = it.first()
-                    assertThat(chunk.id, equalTo(ChunkId(2)))
-                    assertThat(chunk.segmentId, equalTo(Segment.Id(2810)))
-                    assertThat(chunk.topicId, equalTo(TopicId(1506)))
-                    assertThat(chunk.bytes, equalTo("VALUE_2".toByteArray()))
-                    assertThat(chunk.instant, equalTo(Instant.ofEpochMilli(123456)))
+                    val entry = it.first()
+                    assertThat(entry.id, equalTo(LogEventId(2)))
+                    assertThat(entry.segmentId, equalTo(LogSegmentId(2810)))
+                    assertThat(entry.topicId, equalTo(LogTopicId(1506)))
+                    assertThat(entry.bytes, equalTo("VALUE_2".toByteArray()))
+                    assertThat(entry.instant, equalTo(Instant.ofEpochMilli(123456)))
                 }
             }
 
-        private fun SegmentRepository.createThreeChunks() {
+        private fun LogSegmentRepository.createThreeEvents() {
             append(CmdId(1), "VALUE_1".toByteArray())
             append(CmdId(2), "VALUE_2".toByteArray())
             append(CmdId(3), "VALUE_3".toByteArray())
@@ -139,75 +142,59 @@ class SegmentRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Tries to read from empty segment`() =
-            runWith(SegmentRepository::class) {
-                val result = read(ChunkId(20))
+            runWith(LogSegmentRepository::class) {
+                val result = read(LogEventId(20))
                 assertThat(result, hasSize(0))
             }
 
         @TestFactory
         fun `Tries to read outside from range`() =
-            runWith(SegmentRepository::class) {
-                createOneHundredChunks()
-                val result = read(ChunkId(200), 100)
+            runWith(LogSegmentRepository::class) {
+                createOneHundredEvents()
+                val result = read(LogEventId(200), Limit(100))
                 assertThat(result, hasSize(0))
             }
 
         @TestFactory
-        fun `Tries to read with a limit of 0`() =
-            runWith(SegmentRepository::class) {
-                createOneHundredChunks()
-                val result = read(ChunkId(23), 0)
-                assertThat(result, hasSize(0))
-            }
-
-        @TestFactory
-        fun `Tries to read with a negative limit`() =
-            runWith(SegmentRepository::class) {
-                createOneHundredChunks()
-                val result = read(ChunkId(23), -20)
-                assertThat(result, hasSize(0))
-            }
-
-        @TestFactory
-        fun `Read exactly one chunk`() =
-            runWith(SegmentRepository::class) {
-                createOneHundredChunks()
-                val result = read(ChunkId(69))
+        fun `Read exactly one entry`() =
+            runWith(LogSegmentRepository::class) {
+                createOneHundredEvents()
+                val result = read(LogEventId(69))
                 assertThat(result, hasSize(1))
-                assertChunk(result.first(), 69)
+                assertEntry(result.first(), 69)
             }
 
         @TestFactory
-        fun `Reads multiple chunks`() =
-            runWith(SegmentRepository::class) {
-                createOneHundredChunks()
-                val result = read(ChunkId(25), 36)
+        fun `Reads multiple events`() =
+            runWith(LogSegmentRepository::class) {
+                createOneHundredEvents()
+                val result = read(LogEventId(25), Limit(36))
                 assertThat(result, hasSize(36))
 
                 for (id in 0 until 36) {
-                    assertChunk(result[id], 25 + id)
+                    assertEntry(result[id], 25 + id)
                 }
             }
 
         @TestFactory
         fun `Read is only partially covered by segment`() =
-            runWith(SegmentRepository::class) {
-                createOneHundredChunks()
-                val result = read(ChunkId(90), 40)
+            runWith(LogSegmentRepository::class) {
+                createOneHundredEvents()
+                val result = read(LogEventId(90), Limit(40))
                 assertThat(result, hasSize(11))
 
                 for (id in 0 until 11) {
-                    assertChunk(result[id], 90 + id)
+                    assertEntry(result[id], 90 + id)
                 }
             }
 
-        private fun assertChunk(chunk: Chunk, id: Int) {
-            assertThat(chunk.id, equalTo(ChunkId(id)))
-            assertThat(chunk.bytes, equalTo("VALUE_$id".toByteArray()))
-            assertThat(chunk.instant, equalTo(Instant.ofEpochMilli(id.toLong())))
+        private fun assertEntry(entry: LogEvent, id: Int) {
+            assertThat(entry.id, equalTo(LogEventId(id)))
+            assertThat(entry.bytes, equalTo("VALUE_$id".toByteArray()))
+            assertThat(entry.instant, equalTo(Instant.ofEpochMilli(id.toLong())))
         }
 
-        private fun SegmentRepository.createOneHundredChunks() {
+        private fun LogSegmentRepository.createOneHundredEvents() {
             IntRange(1, 100).forEach {
                 withEpochMilli(it.toLong()) {
                     append(CmdId(it), "VALUE_$it".toByteArray())
@@ -221,13 +208,13 @@ class SegmentRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Close an open repository`() =
-            runWith(SegmentRepository::class) {
+            runWith(LogSegmentRepository::class) {
                 close()
             }
 
         @TestFactory
         fun `Closing an already closed connection is not a problem`() =
-            runWith(SegmentRepository::class) {
+            runWith(LogSegmentRepository::class) {
                 close()
                 close()
                 close()

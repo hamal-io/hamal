@@ -1,6 +1,6 @@
 package io.hamal.plugin.std.sys.topic
 
-import io.hamal.lib.domain.vo.TopicEntryPayload
+import io.hamal.lib.domain.vo.TopicEventPayload
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.kua.function.Function2In2Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -23,7 +23,7 @@ class TopicEntryAppendFunction(
         return try {
             val res = sdk.topic.append(
                 TopicId(arg1.value),
-                TopicEntryPayload(arg2.toHotObject())
+                TopicEventPayload(arg2.toHotObject())
             )
 
             null to KuaMap(

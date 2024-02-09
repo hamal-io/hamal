@@ -1,6 +1,7 @@
 package io.hamal.repository
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.common.util.TimeUtils.withEpochMilli
@@ -246,7 +247,7 @@ internal class AuthRepositoryTest : AbstractUnitTest() {
 
             val query = AuthQuery(limit = Limit(3))
 
-            assertThat(count(query), equalTo(4UL))
+            assertThat(count(query), equalTo(Count(4)))
             val result = list(query)
             assertThat(result, hasSize(3))
         }
@@ -260,7 +261,7 @@ internal class AuthRepositoryTest : AbstractUnitTest() {
                 limit = Limit(1)
             )
 
-            assertThat(count(query), equalTo(1UL))
+            assertThat(count(query), equalTo(Count(1)))
             val result = list(query)
             assertThat(result, hasSize(1))
 
@@ -336,5 +337,5 @@ private fun AuthRepository.verifyCount(expected: Int) {
 
 private fun AuthRepository.verifyCount(expected: Int, block: AuthQuery.() -> Unit) {
     val counted = count(AuthQuery().also(block))
-    assertThat("number of auths expected", counted, equalTo(expected.toULong()))
+    assertThat("number of auths expected", counted, equalTo(Count(expected)))
 }

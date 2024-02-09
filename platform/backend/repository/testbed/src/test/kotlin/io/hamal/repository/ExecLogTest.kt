@@ -1,5 +1,6 @@
 package io.hamal.repository
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.util.TimeUtils.withInstant
 import io.hamal.lib.domain._enum.ExecLogLevel
@@ -107,7 +108,7 @@ internal class ExecLogRepositoryTest : AbstractUnitTest() {
                 limit = Limit(10)
             )
 
-            assertThat(count(query), equalTo(2UL))
+            assertThat(count(query), equalTo(Count(2)))
             val result = list(query)
             assertThat(result, hasSize(2))
 
@@ -131,7 +132,7 @@ internal class ExecLogRepositoryTest : AbstractUnitTest() {
                 limit = Limit(3)
             )
 
-            assertThat(count(query), equalTo(4UL))
+            assertThat(count(query), equalTo(Count(4)))
             val result = list(query)
             assertThat(result, hasSize(3))
         }
@@ -146,7 +147,7 @@ internal class ExecLogRepositoryTest : AbstractUnitTest() {
                 limit = Limit(1)
             )
 
-            assertThat(count(query), equalTo(1UL))
+            assertThat(count(query), equalTo(Count(1)))
             val result = list(query)
             assertThat(result, hasSize(1))
 
@@ -216,5 +217,5 @@ private fun ExecLogRepository.verifyCount(expected: Int) {
 
 private fun ExecLogRepository.verifyCount(expected: Int, block: ExecLogQuery.() -> Unit) {
     val counted = count(ExecLogQuery(groupIds = listOf()).also(block))
-    assertThat("number of functions expected", counted, equalTo(expected.toULong()))
+    assertThat("number of functions expected", counted, equalTo(Count(expected)))
 }

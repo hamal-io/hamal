@@ -47,7 +47,7 @@ interface FlowPort : FlowCreatePort, FlowGetPort, FlowListPort, FlowUpdatePort
 class FlowAdapter(
     private val generateDomainId: GenerateId,
     private val flowQueryRepository: FlowQueryRepository,
-    private val reqCmdRepository: RequestCmdRepository
+    private val requestCmdRepository: RequestCmdRepository
 ) : FlowPort {
 
     override fun <T : Any> invoke(
@@ -63,7 +63,7 @@ class FlowAdapter(
             flowType = req.type ?: FlowType.default,
             name = req.name,
             inputs = req.inputs
-        ).also(reqCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue).let(responseHandler)
     }
 
     override fun <T : Any> invoke(flowId: FlowId, responseHandler: (Flow) -> T): T =
@@ -86,7 +86,7 @@ class FlowAdapter(
             flowId = flowId,
             name = req.name,
             inputs = req.inputs
-        ).also(reqCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue).let(responseHandler)
     }
 
     private fun ensureFlowExists(flowId: FlowId) {

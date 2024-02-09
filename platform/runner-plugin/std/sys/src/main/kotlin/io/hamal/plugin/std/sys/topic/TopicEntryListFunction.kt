@@ -19,7 +19,7 @@ class TopicEntryListFunction(
 ) {
     override fun invoke(ctx: FunctionContext, arg1: KuaString): Pair<KuaError?, KuaArray?> {
         return try {
-            null to KuaArray(sdk.topic.entries(TopicId(arg1.value)).mapIndexed { index, entry ->
+            null to KuaArray(sdk.topic.events(TopicId(arg1.value)).mapIndexed { index, entry ->
                 index to entry.payload.value.toKua()
             }.toMap().toMutableMap())
         } catch (t: Throwable) {

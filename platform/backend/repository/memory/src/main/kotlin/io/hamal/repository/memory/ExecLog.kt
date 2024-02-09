@@ -1,5 +1,6 @@
 package io.hamal.repository.memory
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.repository.api.ExecLog
 import io.hamal.repository.api.ExecLogCmdRepository.AppendCmd
 import io.hamal.repository.api.ExecLogQueryRepository.ExecLogQuery
@@ -45,16 +46,18 @@ class ExecLogMemoryRepository : ExecLogRepository {
         }
     }
 
-    override fun count(query: ExecLogQuery): ULong {
+    override fun count(query: ExecLogQuery): Count {
         return lock.read {
-            store.reversed()
-                .asSequence()
-                .dropWhile { it.id >= query.afterId }
-                .filter { query.groupIds.isEmpty() || query.groupIds.contains(it.groupId) }
-                .filter { query.execIds.isEmpty() || query.execIds.contains(it.execId) }
-                .filter { query.execLogIds.isEmpty() || query.execLogIds.contains(it.id) }
-                .count()
-                .toULong()
+            Count(
+                store.reversed()
+                    .asSequence()
+                    .dropWhile { it.id >= query.afterId }
+                    .filter { query.groupIds.isEmpty() || query.groupIds.contains(it.groupId) }
+                    .filter { query.execIds.isEmpty() || query.execIds.contains(it.execId) }
+                    .filter { query.execLogIds.isEmpty() || query.execLogIds.contains(it.id) }
+                    .count()
+                    .toLong()
+            )
         }
     }
 }

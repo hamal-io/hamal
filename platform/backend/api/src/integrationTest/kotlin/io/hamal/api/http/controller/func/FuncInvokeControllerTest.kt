@@ -1,6 +1,7 @@
 package io.hamal.api.http.controller.func
 
 import io.hamal.lib.domain.Correlation
+import io.hamal.lib.domain.request.ExecInvokeRequested
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.Accepted
@@ -8,7 +9,6 @@ import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.*
-import io.hamal.lib.domain.request.ExecInvokeRequested
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -140,9 +140,11 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
         )
 
         repeat(10) {
-            updateFunc(
-                createResponse.funcId, ApiFuncUpdateRequest(
-                    name = FuncName("test-update"), code = CodeValue("code-${it}")
+            awaitCompleted(
+                updateFunc(
+                    createResponse.funcId, ApiFuncUpdateRequest(
+                        name = FuncName("test-update"), code = CodeValue("code-${it}")
+                    )
                 )
             )
         }

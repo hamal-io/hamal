@@ -1,15 +1,18 @@
 package io.hamal.repository.fixture
 
-import io.hamal.lib.domain.vo.FlowId
-import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.domain.vo.TopicId
-import io.hamal.lib.domain.vo.TopicName
+import io.hamal.lib.common.domain.CreatedAt
+import io.hamal.lib.common.domain.UpdatedAt
+import io.hamal.lib.domain.vo.LogTopicId
 import io.hamal.repository.api.*
 import io.hamal.repository.api.log.*
 import io.hamal.repository.sqlite.AuthSqliteRepository
 import io.hamal.repository.sqlite.ExecLogSqliteRepository
+import io.hamal.repository.sqlite.RequestSqliteRepository
 import io.hamal.repository.sqlite.StateSqliteRepository
-import io.hamal.repository.sqlite.log.*
+import io.hamal.repository.sqlite.log.LogBrokerSqliteRepository
+import io.hamal.repository.sqlite.log.LogSegmentSqlite
+import io.hamal.repository.sqlite.log.LogSegmentSqliteRepository
+import io.hamal.repository.sqlite.log.LogTopicSqliteRepository
 import io.hamal.repository.sqlite.record.account.AccountSqliteRepository
 import io.hamal.repository.sqlite.record.blueprint.BlueprintSqliteRepository
 import io.hamal.repository.sqlite.record.code.CodeSqliteRepository
@@ -21,6 +24,7 @@ import io.hamal.repository.sqlite.record.flow.FlowSqliteRepository
 import io.hamal.repository.sqlite.record.func.FuncSqliteRepository
 import io.hamal.repository.sqlite.record.group.GroupSqliteRepository
 import io.hamal.repository.sqlite.record.hook.HookSqliteRepository
+import io.hamal.repository.sqlite.record.topic.TopicSqliteRepository
 import io.hamal.repository.sqlite.record.trigger.TriggerSqliteRepository
 import java.nio.file.Files.createTempDirectory
 import kotlin.reflect.KClass
@@ -39,18 +43,6 @@ object SqliteFixture : BaseTestFixture {
 
         BlueprintRepository::class -> BlueprintSqliteRepository(
             BlueprintSqliteRepository.Config(createTempDirectory("sqlite_blueprint_test"))
-        ) as REPO
-
-        BrokerConsumersRepository::class -> BrokerConsumersSqliteRepository(
-            BrokerConsumersSqlite(createTempDirectory("sqlite_broker_consumers_test"))
-        ) as REPO
-
-        BrokerRepository::class -> BrokerSqliteRepository(
-            BrokerSqlite(createTempDirectory("sqlite_broker_test"))
-        ) as REPO
-
-        BrokerTopicsRepository::class -> BrokerTopicsSqliteRepository(
-            BrokerTopicsSqlite(createTempDirectory("sqlite_broker_topics_test"))
         ) as REPO
 
         CodeRepository::class -> CodeSqliteRepository(
@@ -93,21 +85,34 @@ object SqliteFixture : BaseTestFixture {
             FlowSqliteRepository.Config(createTempDirectory("sqlite_flow_test"))
         ) as REPO
 
-        SegmentRepository::class -> SegmentSqliteRepository(
-            SegmentSqlite(
-                Segment.Id(2810),
-                TopicId(1506),
-                createTempDirectory("sqlite_topic_test")
-            )
-        ) as REPO
-
         StateRepository::class -> StateSqliteRepository(
             StateSqliteRepository.Config(createTempDirectory("sqlite_state_test"))
         ) as REPO
 
+        LogBrokerRepository::class -> LogBrokerSqliteRepository(
+            createTempDirectory("sqlite_log_broker_test")
+        ) as REPO
+
+        LogSegmentRepository::class -> LogSegmentSqliteRepository(
+            LogSegmentSqlite(
+                LogSegmentId(2810),
+                LogTopicId(1506),
+                createTempDirectory("sqlite_log_segment_test")
+            )
+        ) as REPO
+
+        LogTopicRepository::class -> LogTopicSqliteRepository(
+            LogTopic(LogTopicId(23), CreatedAt.now(), UpdatedAt.now()),
+            createTempDirectory("sqlite_log_topic_test")
+        ) as REPO
+
+        RequestRepository::class -> RequestSqliteRepository(
+            RequestSqliteRepository.Config(createTempDirectory("sqlite_req_test"))
+        ) as REPO
+
         TopicRepository::class -> TopicSqliteRepository(
-            Topic(TopicId(23), FlowId(23), GroupId(1), TopicName("test-topic")),
-            createTempDirectory("sqlite_topic_test")
+            TopicSqliteRepository.Config(createTempDirectory("sqlite_topic_test")),
+            LogBrokerSqliteRepository(createTempDirectory("sqlite_log_broker_test"))
         ) as REPO
 
         TriggerRepository::class -> TriggerSqliteRepository(

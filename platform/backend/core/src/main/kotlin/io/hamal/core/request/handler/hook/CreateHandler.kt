@@ -1,6 +1,6 @@
 package io.hamal.core.request.handler.hook
 
-import io.hamal.core.event.PlatformEventEmitter
+import io.hamal.core.event.InternalEventEmitter
 import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.request.HookCreateRequested
@@ -16,7 +16,7 @@ object Keep
 @Component
 class HookCreateHandler(
     val hookCmdRepository: HookCmdRepository,
-    val eventEmitter: PlatformEventEmitter,
+    val eventEmitter: InternalEventEmitter,
     val flowQueryRepository: FlowQueryRepository
 ) : io.hamal.core.request.RequestHandler<HookCreateRequested>(HookCreateRequested::class) {
     override fun invoke(req: HookCreateRequested) {

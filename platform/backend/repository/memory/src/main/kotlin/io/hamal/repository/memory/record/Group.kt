@@ -1,5 +1,6 @@
 package io.hamal.repository.memory.record
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.repository.api.Group
 import io.hamal.repository.api.GroupCmdRepository
@@ -40,14 +41,16 @@ private object GroupCurrentProjection {
             .toList()
     }
 
-    fun count(query: GroupQuery): ULong {
-        return projection.filter { query.groupIds.isEmpty() || it.key in query.groupIds }
-            .map { it.value }
-            .reversed()
-            .asSequence()
-            .dropWhile { it.id >= query.afterId }
-            .count()
-            .toULong()
+    fun count(query: GroupQuery): Count {
+        return Count(
+            projection.filter { query.groupIds.isEmpty() || it.key in query.groupIds }
+                .map { it.value }
+                .reversed()
+                .asSequence()
+                .dropWhile { it.id >= query.afterId }
+                .count()
+                .toLong()
+        )
     }
 
     fun clear() {
@@ -83,7 +86,7 @@ class MemoryGroupRepository : RecordMemoryRepository<GroupId, GroupRecord, Group
 
     override fun list(query: GroupQuery): List<Group> = lock.withLock { return GroupCurrentProjection.list(query) }
 
-    override fun count(query: GroupQuery): ULong = lock.withLock { GroupCurrentProjection.count(query) }
+    override fun count(query: GroupQuery): Count = lock.withLock { GroupCurrentProjection.count(query) }
 
     override fun clear() {
         lock.withLock {

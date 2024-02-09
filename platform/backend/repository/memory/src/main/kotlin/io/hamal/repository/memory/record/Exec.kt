@@ -1,5 +1,6 @@
 package io.hamal.repository.memory.record
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.repository.api.*
 import io.hamal.repository.api.ExecCmdRepository.*
@@ -30,17 +31,19 @@ private object ExecCurrentProjection {
             .toList()
     }
 
-    fun count(query: ExecQuery): ULong {
-        return projection.filter { query.execIds.isEmpty() || it.key in query.execIds }
-            .map { it.value }
-            .reversed()
-            .asSequence()
-            .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
-            .filter { if (query.funcIds.isEmpty()) true else (it.correlation != null && query.funcIds.contains(it.correlation!!.funcId)) }
-            .filter { if (query.flowIds.isEmpty()) true else query.flowIds.contains(it.flowId) }
-            .dropWhile { it.id >= query.afterId }
-            .count()
-            .toULong()
+    fun count(query: ExecQuery): Count {
+        return Count(
+            projection.filter { query.execIds.isEmpty() || it.key in query.execIds }
+                .map { it.value }
+                .reversed()
+                .asSequence()
+                .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
+                .filter { if (query.funcIds.isEmpty()) true else (it.correlation != null && query.funcIds.contains(it.correlation!!.funcId)) }
+                .filter { if (query.flowIds.isEmpty()) true else query.flowIds.contains(it.flowId) }
+                .dropWhile { it.id >= query.afterId }
+                .count()
+                .toLong()
+        )
     }
 
     fun clear() {
@@ -200,6 +203,6 @@ class ExecMemoryRepository : RecordMemoryRepository<ExecId, ExecRecord, Exec>(
 
     override fun list(query: ExecQuery): List<Exec> = lock.withLock { return ExecCurrentProjection.list(query) }
 
-    override fun count(query: ExecQuery): ULong = lock.withLock { return ExecCurrentProjection.count(query) }
+    override fun count(query: ExecQuery): Count = lock.withLock { return ExecCurrentProjection.count(query) }
 }
 

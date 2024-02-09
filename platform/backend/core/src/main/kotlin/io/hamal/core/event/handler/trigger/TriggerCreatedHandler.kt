@@ -1,6 +1,6 @@
 package io.hamal.core.event.handler.trigger
 
-import io.hamal.core.event.PlatformEventHandler
+import io.hamal.core.event.InternalEventHandler
 import io.hamal.core.service.FixedRateTriggerService
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.repository.api.FixedRateTrigger
@@ -8,7 +8,7 @@ import io.hamal.repository.api.event.TriggerCreatedEvent
 
 internal class TriggerCreatedHandler(
     private val fixedRateTriggerService: FixedRateTriggerService
-) : PlatformEventHandler<TriggerCreatedEvent> {
+) : InternalEventHandler<TriggerCreatedEvent> {
     override fun handle(cmdId: CmdId, evt: TriggerCreatedEvent) {
         val trigger = evt.trigger
         if (trigger is FixedRateTrigger) {

@@ -1,5 +1,6 @@
 package io.hamal.repository.sqlite
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.NamedResultSet
@@ -189,9 +190,10 @@ class AuthSqliteRepository(
         }
     }
 
-    override fun count(query: AuthQuery): ULong {
-        return connection.executeQueryOne(
-            """
+    override fun count(query: AuthQuery): Count {
+        return Count(
+            connection.executeQueryOne(
+                """
             SELECT 
                 COUNT(*) as count 
             FROM 
@@ -201,14 +203,15 @@ class AuthSqliteRepository(
                 ${query.ids()}
                 ${query.accountIds()}
         """.trimIndent()
-        ) {
-            query {
-                set("afterId", query.afterId)
-            }
-            map {
-                it.getLong("count").toULong()
-            }
-        } ?: 0UL
+            ) {
+                query {
+                    set("afterId", query.afterId)
+                }
+                map {
+                    it.getLong("count")
+                }
+            } ?: 0L
+        )
     }
 
     override fun clear() {

@@ -1,5 +1,6 @@
 package io.hamal.repository.memory.record
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.FeedbackId
 import io.hamal.repository.api.Feedback
 import io.hamal.repository.api.FeedbackCmdRepository.CreateCmd
@@ -30,14 +31,16 @@ private object FeedbackCurrentProjection {
             .toList()
     }
 
-    fun count(query: FeedbackQuery): ULong {
-        return projection.filter { query.feedbackIds.isEmpty() || it.key in query.feedbackIds }
-            .map { it.value }
-            .reversed()
-            .asSequence()
-            .dropWhile { it.id >= query.afterId }
-            .count()
-            .toULong()
+    fun count(query: FeedbackQuery): Count {
+        return Count(
+            projection.filter { query.feedbackIds.isEmpty() || it.key in query.feedbackIds }
+                .map { it.value }
+                .reversed()
+                .asSequence()
+                .dropWhile { it.id >= query.afterId }
+                .count()
+                .toLong()
+        )
     }
 
     fun clear() {
@@ -76,7 +79,7 @@ class FeedbackMemoryRepository : RecordMemoryRepository<FeedbackId, FeedbackReco
 
     override fun list(query: FeedbackQuery): List<Feedback> = lock.withLock { FeedbackCurrentProjection.list(query) }
 
-    override fun count(query: FeedbackQuery): ULong = lock.withLock { FeedbackCurrentProjection.count(query) }
+    override fun count(query: FeedbackQuery): Count = lock.withLock { FeedbackCurrentProjection.count(query) }
 
     override fun clear() = FeedbackCurrentProjection.clear()
 

@@ -45,7 +45,7 @@ class EndpointAdapter(
     private val generateDomainId: GenerateId,
     private val endpointQueryRepository: EndpointQueryRepository,
     private val funcQueryRepository: FuncQueryRepository,
-    private val reqCmdRepository: RequestCmdRepository
+    private val requestCmdRepository: RequestCmdRepository
 ) : EndpointPort {
     override fun <T : Any> invoke(
         flowId: FlowId,
@@ -62,7 +62,7 @@ class EndpointAdapter(
             funcId = func.id,
             name = req.name,
             method = req.method
-        ).also(reqCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue).let(responseHandler)
     }
 
     override fun <T : Any> invoke(endpointId: EndpointId, responseHandler: (Endpoint, Func) -> T): T {
@@ -101,6 +101,6 @@ class EndpointAdapter(
             funcId = req.funcId ?: endpoint.funcId,
             name = req.name,
             method = req.method
-        ).also(reqCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue).let(responseHandler)
     }
 }

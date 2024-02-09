@@ -2,7 +2,9 @@ package io.hamal.repository.fixture
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.repository.api.*
-import io.hamal.repository.api.log.*
+import io.hamal.repository.api.log.LogBrokerRepository
+import io.hamal.repository.api.log.LogSegmentRepository
+import io.hamal.repository.api.log.LogTopicRepository
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import java.util.concurrent.atomic.AtomicInteger
@@ -34,18 +36,6 @@ abstract class AbstractUnitTest {
             SqliteFixture
         ),
         AuthRepository::class to listOf(
-            MemoryFixture,
-            SqliteFixture
-        ),
-        BrokerConsumersRepository::class to listOf(
-            MemoryFixture,
-            SqliteFixture
-        ),
-        BrokerRepository::class to listOf(
-            MemoryFixture,
-            SqliteFixture
-        ),
-        BrokerTopicsRepository::class to listOf(
             MemoryFixture,
             SqliteFixture
         ),
@@ -81,21 +71,27 @@ abstract class AbstractUnitTest {
             MemoryFixture,
             SqliteFixture
         ),
-
         FeedbackRepository::class to listOf(
             MemoryFixture,
             SqliteFixture
         ),
-
         FlowRepository::class to listOf(
             MemoryFixture,
             SqliteFixture
         ),
         RequestRepository::class to listOf(
             MemoryFixture,
-// FIXME    SqliteFixture
+            SqliteFixture
         ),
-        SegmentRepository::class to listOf(
+        LogBrokerRepository::class to listOf(
+            MemoryFixture,
+            SqliteFixture
+        ),
+        LogSegmentRepository::class to listOf(
+            MemoryFixture,
+            SqliteFixture
+        ),
+        LogTopicRepository::class to listOf(
             MemoryFixture,
             SqliteFixture
         ),

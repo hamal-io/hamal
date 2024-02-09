@@ -88,6 +88,18 @@ class ValueObjectIntAdapter<TYPE : ValueObjectInt>(
     }
 }
 
+class ValueObjectLongAdapter<TYPE : ValueObjectLong>(
+    val ctor: (Long) -> TYPE
+) : JsonAdapter<TYPE> {
+
+    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): TYPE {
+        return ctor(json.asLong)
+    }
+
+    override fun serialize(src: TYPE, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
+        return JsonPrimitive(src.value)
+    }
+}
 
 class ValueObjectInstantAdapter<TYPE : ValueObjectInstant>(
     val ctor: (Instant) -> TYPE

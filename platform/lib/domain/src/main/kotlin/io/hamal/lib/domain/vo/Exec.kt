@@ -47,7 +47,6 @@ class ExecResult(override val value: HotObject = HotObject.empty) : ValueObjectH
 
 class ExecState(override val value: HotObject = HotObject.empty) : ValueObjectHotObject()
 
-
 class ExecScheduledAt(override val value: Instant) : ValueObjectInstant() {
     companion object {
         @JvmStatic

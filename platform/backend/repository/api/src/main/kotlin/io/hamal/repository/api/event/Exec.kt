@@ -4,24 +4,24 @@ import io.hamal.repository.api.*
 
 data class ExecPlannedEvent(
     val plannedExec: PlannedExec
-) : PlatformEvent()
+) : InternalEvent()
 
 data class ExecScheduledEvent(
     val scheduledExec: ScheduledExec
-) : PlatformEvent()
+) : InternalEvent()
 
 data class ExecQueuedEvent(
     val queuedExec: QueuedExec
-) : PlatformEvent()
+) : InternalEvent()
 
 data class ExecStartedEvent(
     val startedExec: StartedExec
-) : PlatformEvent()
+) : InternalEvent()
 
 data class ExecCompletedEvent(
     val completedExec: CompletedExec
-) : PlatformEvent()
+) : InternalEvent()
 
 data class ExecFailedEvent(
     val failedExec: FailedExec
-) : PlatformEvent()
+) : InternalEvent()

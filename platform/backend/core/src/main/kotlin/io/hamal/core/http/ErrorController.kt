@@ -26,6 +26,8 @@ internal class ErrorController {
 
     @ExceptionHandler(value = [MethodArgumentTypeMismatchException::class])
     fun argumentTypeMismatch(res: HttpServletResponse, t: MethodArgumentTypeMismatchException) {
+        t.printStackTrace()
+
         val cause = t.cause
         if (cause is ConversionFailedException) {
             res.status = 400
@@ -47,13 +49,17 @@ internal class ErrorController {
 
     @ExceptionHandler(value = [HttpMessageNotReadableException::class])
     fun missingFields(res: HttpServletResponse, t: HttpMessageNotReadableException) {
+        t.printStackTrace()
+
         res.status = 400
         res.addHeader("Content-Type", "application/json")
         res.writer.write(json.serialize(ApiError(t.cause?.message ?: "Bad request")))
     }
 
     @ExceptionHandler(value = [NoHandlerFoundException::class])
-    fun missingFields(res: HttpServletResponse) {
+    fun missingFields(res: HttpServletResponse, t: NoHandlerFoundException) {
+        t.printStackTrace()
+
         res.status = SC_NOT_FOUND
         res.addHeader("Content-Type", "application/json")
         res.writer.write(json.serialize(ApiError("Request handler not found")))
@@ -61,7 +67,9 @@ internal class ErrorController {
 
 
     @ExceptionHandler(value = [IllegalCallerException::class])
-    fun otherwise(res: HttpServletResponse) {
+    fun illegalCaller(res: HttpServletResponse, t: Throwable) {
+        t.printStackTrace()
+
         res.status = SC_FORBIDDEN
         res.addHeader("Content-Type", "application/json")
         res.writer.write(json.serialize(ApiError("FORBIDDEN")))
@@ -69,6 +77,8 @@ internal class ErrorController {
 
     @ExceptionHandler(value = [Throwable::class])
     fun otherwise(res: HttpServletResponse, t: Throwable) {
+        t.printStackTrace()
+
         val toHandle = when (t) {
             is ServletException -> t.cause
             else -> t
