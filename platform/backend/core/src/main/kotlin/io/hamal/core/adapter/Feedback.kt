@@ -39,7 +39,7 @@ interface FeedbackPort : FeedbackCreatePort, FeedbackGetPort, FeedbackListPort
 class FeedbackAdapter(
     private val feedbackQueryRepository: FeedbackQueryRepository,
     private val generateDomainId: GenerateId,
-    private val reqCmdRepository: RequestCmdRepository
+    private val requestCmdRepository: RequestCmdRepository
 
 ) : FeedbackPort {
 
@@ -54,7 +54,7 @@ class FeedbackAdapter(
             mood = req.mood,
             message = req.message,
             accountId = req.accountId
-        ).also(reqCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue).let(responseHandler)
     }
 
     override fun <T : Any> invoke(feedbackId: FeedbackId, responseHandler: (Feedback) -> T): T {

@@ -106,7 +106,7 @@ class ClearController {
         codeRepository.clear()
         endpointRepository.clear()
         extensionRepository.clear()
-        reqRepository.clear()
+        requestRepository.clear()
         execRepository.clear()
         funcRepository.clear()
         groupRepository.clear()
@@ -189,7 +189,7 @@ class ClearController {
     lateinit var flowRepository: FlowRepository
 
     @Autowired
-    lateinit var reqRepository: RequestRepository
+    lateinit var requestRepository: RequestRepository
 
     @Autowired
     lateinit var triggerRepository: TriggerRepository

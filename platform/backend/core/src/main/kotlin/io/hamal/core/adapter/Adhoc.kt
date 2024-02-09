@@ -24,7 +24,7 @@ interface AdhocPort : AdhocInvokePort
 class AdhocAdapter(
     private val generateDomainId: GenerateId,
     private val flowQueryRepository: FlowQueryRepository,
-    private val reqCmdRepository: RequestCmdRepository
+    private val requestCmdRepository: RequestCmdRepository
 ) : AdhocPort {
     override operator fun <T : Any> invoke(
         flowId: FlowId,
@@ -43,6 +43,6 @@ class AdhocAdapter(
             funcId = null,
             correlationId = null,
             invocation = EmptyInvocation
-        ).also(reqCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue).let(responseHandler)
     }
 }

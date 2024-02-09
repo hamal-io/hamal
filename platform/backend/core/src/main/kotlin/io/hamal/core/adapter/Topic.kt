@@ -60,7 +60,7 @@ class TopicAdapter(
     private val topicRepository: TopicRepository,
     private val generateDomainId: GenerateId,
     private val groupRepository: GroupRepository,
-    private val reqCmdRepository: RequestCmdRepository
+    private val requestCmdRepository: RequestCmdRepository
 ) : TopicPort {
 
     override fun <T : Any> invoke(
@@ -73,7 +73,7 @@ class TopicAdapter(
             status = Submitted,
             topicId = req.topicId,
             payload = req.payload
-        ).also(reqCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue).let(responseHandler)
     }
 
     override fun <T : Any> invoke(
@@ -89,7 +89,7 @@ class TopicAdapter(
             logTopicId = generateDomainId(::LogTopicId),
             groupId = groupId,
             name = req.name
-        ).also(reqCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue).let(responseHandler)
     }
 
     override fun <T : Any> invoke(topicId: TopicId, responseHandler: (Topic) -> T): T =

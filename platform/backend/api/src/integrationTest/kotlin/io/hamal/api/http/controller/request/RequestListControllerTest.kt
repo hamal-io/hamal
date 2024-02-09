@@ -1,4 +1,4 @@
-package io.hamal.api.http.controller.req
+package io.hamal.api.http.controller.request
 
 import io.hamal.lib.domain._enum.RequestStatus.Completed
 import io.hamal.lib.domain.vo.CodeValue
@@ -9,7 +9,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
 
-internal class ReqListControllerTest : ReqBaseControllerTest() {
+internal class RequestListControllerTest : RequestBaseControllerTest() {
     @Test
     fun `No reqs`() {
         with(list()) {

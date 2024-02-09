@@ -23,7 +23,7 @@ class EthRequestHandlerImpl(
 ) : EthRequestHandler {
 
     override fun handle(requests: List<EthRequestHandler.Request>): List<EthResponse> {
-        // fixme assert each req id is unique
+        // fixme assert each request id is unique
         TODO()
 
         // find requests which can not be served by cache / repository

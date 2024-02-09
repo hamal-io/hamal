@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*
 @RestController
 internal class HookInvokeController(
     private val generateDomainId: GenerateId,
-    private val reqCmdRepository: RequestCmdRepository,
+    private val requestCmdRepository: RequestCmdRepository,
     private val hookQueryRepository: HookQueryRepository
 ) {
     @GetMapping("/v1/webhooks/{id}")
@@ -50,7 +50,7 @@ internal class HookInvokeController(
                 parameters = req.parameters(),
                 content = req.content()
             ),
-        ).also(reqCmdRepository::queue)
+        ).also(requestCmdRepository::queue)
         return ResponseEntity(Response(result), ACCEPTED)
     }
 

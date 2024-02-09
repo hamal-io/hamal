@@ -33,7 +33,7 @@ interface StatePort : StateGetPort, StateSetPort
 class StateAdapter(
     private val funcQueryRepository: FuncQueryRepository,
     private val generateDomainId: GenerateId,
-    private val reqCmdRepository: RequestCmdRepository,
+    private val requestCmdRepository: RequestCmdRepository,
     private val stateQueryRepository: StateQueryRepository
 ) : StatePort {
 
@@ -63,7 +63,7 @@ class StateAdapter(
                 correlation = req.correlation,
                 value = req.value
             )
-        ).also(reqCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue).let(responseHandler)
     }
 
     private fun ensureFuncExists(funcId: FuncId) {
