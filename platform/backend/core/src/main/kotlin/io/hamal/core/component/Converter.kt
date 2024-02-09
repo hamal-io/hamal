@@ -16,7 +16,6 @@ object LimitConverter : Converter<String, Limit> {
 object CodeVersionConverter : Converter<String, CodeVersion> {
     override fun convert(source: String) = CodeVersion(source.toInt())
 }
-
 object CorrelationIdConverter : Converter<String, CorrelationId> {
     override fun convert(source: String) = CorrelationId(source)
 }
