@@ -105,7 +105,7 @@ internal class CompleteTest : AbstractExecuteTest() {
 
     private fun unitOfWork(code: String) = UnitOfWork(
         id = ExecId(1234),
-        flowId = FlowId(9876),
+        namespaceId = NamespaceId(9876),
         groupId = GroupId(5432),
         inputs = ExecInputs(),
         state = State(),

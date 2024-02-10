@@ -31,7 +31,7 @@ object MemoryFixture : BaseTestFixture {
         FuncRepository::class -> FuncMemoryRepository() as REPO
         GroupRepository::class -> MemoryGroupRepository() as REPO
         HookRepository::class -> HookMemoryRepository() as REPO
-        FlowRepository::class -> FlowMemoryRepository() as REPO
+        NamespaceRepository::class -> NamespaceMemoryRepository() as REPO
         RequestRepository::class -> RequestMemoryRepository() as REPO
 
         LogBrokerRepository::class -> LogBrokerMemoryRepository() as REPO

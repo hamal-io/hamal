@@ -7,7 +7,7 @@ import io.hamal.lib.domain.request.Requested
 import io.hamal.lib.domain.vo.RequestId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.SqliteBaseRepository
-import io.hamal.repository.api.RequestQueryRepository.ReqQuery
+import io.hamal.repository.api.RequestQueryRepository.RequestQuery
 import io.hamal.repository.api.RequestRepository
 import io.hamal.repository.record.json
 import java.nio.file.Path
@@ -141,7 +141,7 @@ class RequestSqliteRepository(
         }
     }
 
-    override fun list(query: ReqQuery): List<Requested> {
+    override fun list(query: RequestQuery): List<Requested> {
         return connection.executeQuery<Requested>(
             """
             SELECT
@@ -167,7 +167,7 @@ class RequestSqliteRepository(
         }
     }
 
-    override fun count(query: ReqQuery): Count {
+    override fun count(query: RequestQuery): Count {
         return Count(connection.executeQueryOne(
             """
             SELECT 

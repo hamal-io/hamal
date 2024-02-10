@@ -3,7 +3,7 @@ export interface ExecInvokeSubmitted {
     status: string;
     execId: string;
     groupId: string;
-    flowId: string;
+    namespaceId: string;
 }
 
 export interface ExecList {

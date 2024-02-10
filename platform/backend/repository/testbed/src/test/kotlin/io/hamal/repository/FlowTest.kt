@@ -3,12 +3,13 @@ package io.hamal.repository
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.common.hot.HotObject
-import io.hamal.lib.domain.vo.*
-import io.hamal.repository.api.FlowCmdRepository.CreateCmd
-import io.hamal.repository.api.FlowCmdRepository.UpdateCmd
-import io.hamal.repository.api.FlowQueryRepository.FlowQuery
-import io.hamal.repository.api.FlowRepository
+import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.NamespaceName
+import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
+import io.hamal.repository.api.NamespaceCmdRepository.UpdateCmd
+import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
+import io.hamal.repository.api.NamespaceRepository
 import io.hamal.repository.fixture.AbstractUnitTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers
@@ -20,53 +21,46 @@ import org.junit.jupiter.api.assertThrows
 import kotlin.math.abs
 import kotlin.random.Random
 
-internal class FlowRepositoryTest : AbstractUnitTest() {
+internal class NamespaceRepositoryTest : AbstractUnitTest() {
 
     @Nested
-    inner class CreateFlowTest {
+    inner class CreateNamespaceTest {
         @TestFactory
-        fun `Creates Flow`() = runWith(FlowRepository::class) {
+        fun `Creates Namespace`() = runWith(NamespaceRepository::class) {
             val result = create(
                 CreateCmd(
                     id = CmdId(1),
-                    flowId = FlowId(234),
+                    namespaceId = NamespaceId(234),
                     groupId = GroupId(1),
-                    name = FlowName("SomeFlow"),
-                    inputs = FlowInputs(HotObject.builder().set("hamal", "rocks").build())
+                    name = NamespaceName("SomeNamespace"),
                 )
             )
 
             with(result) {
-                assertThat(id, equalTo(FlowId(234)))
+                assertThat(id, equalTo(NamespaceId(234)))
                 assertThat(groupId, equalTo(GroupId(1)))
-                assertThat(type, equalTo(FlowType.default))
-                assertThat(name, equalTo(FlowName("SomeFlow")))
-                assertThat(inputs, equalTo(FlowInputs(HotObject.builder().set("hamal", "rocks").build())))
+                assertThat(name, equalTo(NamespaceName("SomeNamespace")))
             }
 
             verifyCount(1)
         }
 
         @TestFactory
-        fun `Creates Flow with type`() = runWith(FlowRepository::class) {
+        fun `Creates Namespace with type`() = runWith(NamespaceRepository::class) {
             val result = create(
                 CreateCmd(
                     id = CmdId(1),
-                    flowId = FlowId(234),
+                    namespaceId = NamespaceId(234),
                     groupId = GroupId(1),
-                    name = FlowName("SomeFlow"),
-                    inputs = FlowInputs(HotObject.builder().set("hamal", "rocks").build()),
-                    type = FlowType("SpecialFlowType")
+                    name = NamespaceName("SomeNamespace"),
 
-                )
+                    )
             )
 
             with(result) {
-                assertThat(id, equalTo(FlowId(234)))
+                assertThat(id, equalTo(NamespaceId(234)))
                 assertThat(groupId, equalTo(GroupId(1)))
-                assertThat(type, equalTo(FlowType("SpecialFlowType")))
-                assertThat(name, equalTo(FlowName("SomeFlow")))
-                assertThat(inputs, equalTo(FlowInputs(HotObject.builder().set("hamal", "rocks").build())))
+                assertThat(name, equalTo(NamespaceName("SomeNamespace")))
             }
 
             verifyCount(1)
@@ -74,29 +68,28 @@ internal class FlowRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Tries to create but same name already exist`() =
-            runWith(FlowRepository::class) {
+            runWith(NamespaceRepository::class) {
 
-                createFlow(
-                    flowId = FlowId(2),
+                createNamespace(
+                    namespaceId = NamespaceId(2),
                     groupId = GroupId(3),
-                    name = FlowName("first-flow-name")
+                    name = NamespaceName("first-namespace-name")
                 )
 
                 val exception = assertThrows<IllegalArgumentException> {
                     create(
                         CreateCmd(
                             id = CmdId(2),
-                            flowId = FlowId(4),
+                            namespaceId = NamespaceId(4),
                             groupId = GroupId(3),
-                            name = FlowName("first-flow-name"),
-                            inputs = FlowInputs(),
+                            name = NamespaceName("first-namespace-name")
                         )
                     )
                 }
 
                 assertThat(
                     exception.message,
-                    equalTo("FlowName(first-flow-name) already exists")
+                    equalTo("NamespaceName(first-namespace-name) already exists")
                 )
 
                 verifyCount(1)
@@ -104,32 +97,30 @@ internal class FlowRepositoryTest : AbstractUnitTest() {
 
 
         @TestFactory
-        fun `Tries to create but cmd with flow id was already applied`() =
-            runWith(FlowRepository::class) {
+        fun `Tries to create but cmd with namespace id was already applied`() =
+            runWith(NamespaceRepository::class) {
 
-                createFlow(
+                createNamespace(
                     cmdId = CmdId(23456),
-                    flowId = FlowId(5),
+                    namespaceId = NamespaceId(5),
                     groupId = GroupId(3),
-                    name = FlowName("first-flow-name")
+                    name = NamespaceName("first-namespace-name")
                 )
 
 
                 val result = create(
                     CreateCmd(
                         id = CmdId(23456),
-                        flowId = FlowId(5),
+                        namespaceId = NamespaceId(5),
                         groupId = GroupId(333),
-                        name = FlowName("second-flow-name"),
-                        inputs = FlowInputs(),
+                        name = NamespaceName("second-namespace-name")
                     )
                 )
 
                 with(result) {
-                    assertThat(id, equalTo(FlowId(5)))
+                    assertThat(id, equalTo(NamespaceId(5)))
                     assertThat(groupId, equalTo(GroupId(3)))
-                    assertThat(name, equalTo(FlowName("first-flow-name")))
-                    assertThat(inputs, equalTo(FlowInputs(HotObject.builder().set("hamal", "rocks").build())))
+                    assertThat(name, equalTo(NamespaceName("first-namespace-name")))
                 }
 
                 verifyCount(1)
@@ -137,55 +128,51 @@ internal class FlowRepositoryTest : AbstractUnitTest() {
     }
 
     @Nested
-    inner class UpdatesFlowTest {
+    inner class UpdatesNamespaceTest {
 
         @TestFactory
-        fun `Updates flow`() = runWith(FlowRepository::class) {
-            createFlow(
-                flowId = FlowId(1),
+        fun `Updates namespace`() = runWith(NamespaceRepository::class) {
+            createNamespace(
+                namespaceId = NamespaceId(1),
                 groupId = GroupId(3),
-                name = FlowName("flow-name")
+                name = NamespaceName("namespace-name")
             )
 
             val result = update(
-                FlowId(1), UpdateCmd(
+                NamespaceId(1), UpdateCmd(
                     id = CmdId(2),
-                    name = FlowName("Updated"),
-                    inputs = FlowInputs(HotObject.builder().set("answer", 42).build()),
+                    name = NamespaceName("Updated")
                 )
             )
 
             with(result) {
-                assertThat(id, equalTo(FlowId(1)))
+                assertThat(id, equalTo(NamespaceId(1)))
                 assertThat(groupId, equalTo(GroupId(3)))
-                assertThat(name, equalTo(FlowName("Updated")))
-                assertThat(inputs, equalTo(FlowInputs(HotObject.builder().set("answer", 42).build())))
+                assertThat(name, equalTo(NamespaceName("Updated")))
             }
 
             verifyCount(1)
         }
 
         @TestFactory
-        fun `Updates flow without updating it`() = runWith(FlowRepository::class) {
-            createFlow(
-                flowId = FlowId(1),
+        fun `Updates namespace without updating it`() = runWith(NamespaceRepository::class) {
+            createNamespace(
+                namespaceId = NamespaceId(1),
                 groupId = GroupId(3),
-                name = FlowName("flow-name")
+                name = NamespaceName("namespace-name")
             )
 
             val result = update(
-                FlowId(1), UpdateCmd(
+                NamespaceId(1), UpdateCmd(
                     id = CmdId(2),
-                    name = null,
-                    inputs = null,
+                    name = null
                 )
             )
 
             with(result) {
-                assertThat(id, equalTo(FlowId(1)))
+                assertThat(id, equalTo(NamespaceId(1)))
                 assertThat(groupId, equalTo(GroupId(3)))
-                assertThat(name, equalTo(FlowName("flow-name")))
-                assertThat(inputs, equalTo(FlowInputs(HotObject.builder().set("hamal", "rocks").build())))
+                assertThat(name, equalTo(NamespaceName("namespace-name")))
             }
 
             verifyCount(1)
@@ -196,25 +183,25 @@ internal class FlowRepositoryTest : AbstractUnitTest() {
     inner class ClearTest {
 
         @TestFactory
-        fun `Nothing to clear`() = runWith(FlowRepository::class) {
+        fun `Nothing to clear`() = runWith(NamespaceRepository::class) {
             clear()
             verifyCount(0)
         }
 
 
         @TestFactory
-        fun `Clear table`() = runWith(FlowRepository::class) {
+        fun `Clear table`() = runWith(NamespaceRepository::class) {
 
-            createFlow(
-                flowId = FlowId(1),
+            createNamespace(
+                namespaceId = NamespaceId(1),
                 groupId = GroupId(3),
-                name = FlowName("already-exists")
+                name = NamespaceName("already-exists")
             )
 
-            createFlow(
-                flowId = FlowId(2),
+            createNamespace(
+                namespaceId = NamespaceId(2),
                 groupId = GroupId(3),
-                name = FlowName("to-update")
+                name = NamespaceName("to-update")
             )
 
             clear()
@@ -226,63 +213,61 @@ internal class FlowRepositoryTest : AbstractUnitTest() {
     @Nested
     inner class GetTest {
         @TestFactory
-        fun `Get flow by id`() = runWith(FlowRepository::class) {
-            createFlow(
-                flowId = FlowId(1),
+        fun `Get namespace by id`() = runWith(NamespaceRepository::class) {
+            createNamespace(
+                namespaceId = NamespaceId(1),
                 groupId = GroupId(3),
-                name = FlowName("SomeFlow")
+                name = NamespaceName("SomeNamespace")
             )
 
-            with(get(FlowId(1))) {
-                assertThat(id, equalTo(FlowId(1)))
+            with(get(NamespaceId(1))) {
+                assertThat(id, equalTo(NamespaceId(1)))
                 assertThat(groupId, equalTo(GroupId(3)))
-                assertThat(name, equalTo(FlowName("SomeFlow")))
-                assertThat(inputs, equalTo(FlowInputs(HotObject.builder().set("hamal", "rocks").build())))
+                assertThat(name, equalTo(NamespaceName("SomeNamespace")))
             }
         }
 
         @TestFactory
-        fun `Tries to get flow by id but does not exist`() = runWith(FlowRepository::class) {
-            createFlow(
-                flowId = FlowId(1),
+        fun `Tries to get namespace by id but does not exist`() = runWith(NamespaceRepository::class) {
+            createNamespace(
+                namespaceId = NamespaceId(1),
                 groupId = GroupId(3),
-                name = FlowName("SomeFlow")
+                name = NamespaceName("SomeNamespace")
             )
 
             val exception = assertThrows<NoSuchElementException> {
-                get(FlowId(111111))
+                get(NamespaceId(111111))
             }
-            assertThat(exception.message, equalTo("Flow not found"))
+            assertThat(exception.message, equalTo("Namespace not found"))
         }
     }
 
     @Nested
     inner class FindTest {
         @TestFactory
-        fun `Find flow by id`() = runWith(FlowRepository::class) {
-            createFlow(
-                flowId = FlowId(1),
+        fun `Find namespace by id`() = runWith(NamespaceRepository::class) {
+            createNamespace(
+                namespaceId = NamespaceId(1),
                 groupId = GroupId(3),
-                name = FlowName("SomeFlow")
+                name = NamespaceName("SomeNamespace")
             )
 
-            with(find(FlowId(1))!!) {
-                assertThat(id, equalTo(FlowId(1)))
+            with(find(NamespaceId(1))!!) {
+                assertThat(id, equalTo(NamespaceId(1)))
                 assertThat(groupId, equalTo(GroupId(3)))
-                assertThat(name, equalTo(FlowName("SomeFlow")))
-                assertThat(inputs, equalTo(FlowInputs(HotObject.builder().set("hamal", "rocks").build())))
+                assertThat(name, equalTo(NamespaceName("SomeNamespace")))
             }
         }
 
         @TestFactory
-        fun `Tries to find flow by id but does not exist`() = runWith(FlowRepository::class) {
-            createFlow(
-                flowId = FlowId(1),
+        fun `Tries to find namespace by id but does not exist`() = runWith(NamespaceRepository::class) {
+            createNamespace(
+                namespaceId = NamespaceId(1),
                 groupId = GroupId(3),
-                name = FlowName("SomeFlow")
+                name = NamespaceName("SomeNamespace")
             )
 
-            val result = find(FlowId(111111))
+            val result = find(NamespaceId(111111))
             assertThat(result, Matchers.nullValue())
         }
     }
@@ -291,25 +276,24 @@ internal class FlowRepositoryTest : AbstractUnitTest() {
     inner class ListAndCountTest {
 
         @TestFactory
-        fun `By ids`() = runWith(FlowRepository::class) {
+        fun `By ids`() = runWith(NamespaceRepository::class) {
             setup()
 
-            val result = list(listOf(FlowId(111111), FlowId(3)))
+            val result = list(listOf(NamespaceId(111111), NamespaceId(3)))
             assertThat(result, hasSize(1))
 
             with(result[0]) {
-                assertThat(id, equalTo(FlowId(3)))
+                assertThat(id, equalTo(NamespaceId(3)))
                 assertThat(groupId, equalTo(GroupId(4)))
-                assertThat(name, equalTo(FlowName("Flow-Three")))
-                assertThat(type, equalTo(FlowType.default))
+                assertThat(name, equalTo(NamespaceName("Namespace-Three")))
             }
         }
 
         @TestFactory
-        fun `With group ids`() = runWith(FlowRepository::class) {
+        fun `With group ids`() = runWith(NamespaceRepository::class) {
             setup()
 
-            val query = FlowQuery(
+            val query = NamespaceQuery(
                 groupIds = listOf(GroupId(5), GroupId(4)),
                 limit = Limit(10)
             )
@@ -319,26 +303,24 @@ internal class FlowRepositoryTest : AbstractUnitTest() {
             assertThat(result, hasSize(2))
 
             with(result[0]) {
-                assertThat(id, equalTo(FlowId(4)))
+                assertThat(id, equalTo(NamespaceId(4)))
                 assertThat(groupId, equalTo(GroupId(5)))
-                assertThat(name, equalTo(FlowName("Flow-Four")))
-                assertThat(type, equalTo(FlowType.default))
+                assertThat(name, equalTo(NamespaceName("Namespace-Four")))
             }
 
             with(result[1]) {
-                assertThat(id, equalTo(FlowId(3)))
+                assertThat(id, equalTo(NamespaceId(3)))
                 assertThat(groupId, equalTo(GroupId(4)))
-                assertThat(name, equalTo(FlowName("Flow-Three")))
-                assertThat(type, equalTo(FlowType.default))
+                assertThat(name, equalTo(NamespaceName("Namespace-Three")))
             }
         }
 
 
         @TestFactory
-        fun `Limit`() = runWith(FlowRepository::class) {
+        fun `Limit`() = runWith(NamespaceRepository::class) {
             setup()
 
-            val query = FlowQuery(
+            val query = NamespaceQuery(
                 groupIds = listOf(),
                 limit = Limit(3)
             )
@@ -349,11 +331,11 @@ internal class FlowRepositoryTest : AbstractUnitTest() {
         }
 
         @TestFactory
-        fun `Skip and limit`() = runWith(FlowRepository::class) {
+        fun `Skip and limit`() = runWith(NamespaceRepository::class) {
             setup()
 
-            val query = FlowQuery(
-                afterId = FlowId(2),
+            val query = NamespaceQuery(
+                afterId = NamespaceId(2),
                 groupIds = listOf(),
                 limit = Limit(1)
             )
@@ -363,60 +345,59 @@ internal class FlowRepositoryTest : AbstractUnitTest() {
             assertThat(result, hasSize(1))
 
             with(result[0]) {
-                assertThat(id, equalTo(FlowId(1)))
+                assertThat(id, equalTo(NamespaceId(1)))
             }
         }
 
-        private fun FlowRepository.setup() {
-            createFlow(
-                flowId = FlowId(1),
+        private fun NamespaceRepository.setup() {
+            createNamespace(
+                namespaceId = NamespaceId(1),
                 groupId = GroupId(3),
-                name = FlowName("Flow-One")
+                name = NamespaceName("Namespace-One")
             )
 
-            createFlow(
-                flowId = FlowId(2),
+            createNamespace(
+                namespaceId = NamespaceId(2),
                 groupId = GroupId(3),
-                name = FlowName("Flow-Two")
+                name = NamespaceName("Namespace-Two")
             )
 
-            createFlow(
-                flowId = FlowId(3),
+            createNamespace(
+                namespaceId = NamespaceId(3),
                 groupId = GroupId(4),
-                name = FlowName("Flow-Three")
+                name = NamespaceName("Namespace-Three")
             )
 
-            createFlow(
-                flowId = FlowId(4),
+            createNamespace(
+                namespaceId = NamespaceId(4),
                 groupId = GroupId(5),
-                name = FlowName("Flow-Four")
+                name = NamespaceName("Namespace-Four")
             )
         }
     }
 }
 
-private fun FlowRepository.createFlow(
-    flowId: FlowId,
-    name: FlowName,
+private fun NamespaceRepository.createNamespace(
+    namespaceId: NamespaceId,
+    name: NamespaceName,
     groupId: GroupId,
     cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
 ) {
     create(
         CreateCmd(
             id = cmdId,
-            flowId = flowId,
+            namespaceId = namespaceId,
             groupId = groupId,
-            name = name,
-            inputs = FlowInputs(HotObject.builder().set("hamal", "rocks").build())
+            name = name
         )
     )
 }
 
-private fun FlowRepository.verifyCount(expected: Int) {
+private fun NamespaceRepository.verifyCount(expected: Int) {
     verifyCount(expected) { }
 }
 
-private fun FlowRepository.verifyCount(expected: Int, block: FlowQuery.() -> Unit) {
-    val counted = count(FlowQuery(groupIds = listOf()).also(block))
-    assertThat("number of flows expected", counted, equalTo(Count(expected)))
+private fun NamespaceRepository.verifyCount(expected: Int, block: NamespaceQuery.() -> Unit) {
+    val counted = count(NamespaceQuery(groupIds = listOf()).also(block))
+    assertThat("number of namespaces expected", counted, equalTo(Count(expected)))
 }

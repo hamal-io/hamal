@@ -30,7 +30,7 @@ data class ApiTokenRequested(
     override val status: RequestStatus,
     val accountId: AccountId,
     val groupIds: List<GroupId>,
-    val defaultFlowIds: List<GroupDefaultFlowId>,
+    val defaultNamespaceIds: List<GroupDefaultNamespaceId>,
     val token: AuthToken
 ) : ApiRequested()
 

@@ -74,14 +74,39 @@ const Nav = ({className, ...props}: React.HTMLAttributes<HTMLElement>) => {
 
     const navigation: NavItem[] = [
         {
+            href: `/dashboard`,
+            label: "Dashboard",
+            active: currentPath === '/dashboard'
+        },
+        {
             href: `/playground`,
             label: "Playground",
             active: currentPath === '/playground'
         },
         {
-            href: `/flows`,
-            label: "Flows",
-            active: currentPath.startsWith('/flows')
+            href: `/functions`,
+            label: "Function",
+            active: currentPath.startsWith('/functions')
+        },
+        {
+            href: `/executions`,
+            label: "Execution",
+            active: currentPath.startsWith('/executions')
+        },
+        {
+            href: `/webhooks`,
+            label: "Webhook",
+            active: currentPath.startsWith('/webhooks')
+        },
+        {
+            href: `/endpoints`,
+            label: "Endpoint",
+            active: currentPath.startsWith('/endpoints')
+        },
+        {
+            href: `/triggers`,
+            label: "Trigger",
+            active: currentPath.startsWith('/triggers')
         },
         {
             href: "https://docs.fn.guru",
@@ -159,7 +184,7 @@ const Convert = () => {
 
     useEffect(() => {
         if (auth != null && auth.type === 'User') {
-            navigate(`/flows`)
+            navigate(`/groups`)
             setOpenDialog(false)
         }
     }, [auth, navigate]);

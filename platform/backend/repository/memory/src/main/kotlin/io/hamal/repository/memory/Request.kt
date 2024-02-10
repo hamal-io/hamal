@@ -73,7 +73,7 @@ class RequestMemoryRepository : RequestRepository {
         return store[reqId]
     }
 
-    override fun list(query: RequestQueryRepository.ReqQuery): List<Requested> {
+    override fun list(query: RequestQueryRepository.RequestQuery): List<Requested> {
         return store.keys.sorted()
             .dropWhile { it <= query.afterId }
             .take(query.limit.value)
@@ -81,7 +81,7 @@ class RequestMemoryRepository : RequestRepository {
             .reversed()
     }
 
-    override fun count(query: RequestQueryRepository.ReqQuery): Count {
+    override fun count(query: RequestQueryRepository.RequestQuery): Count {
         return Count(
             store.keys.sorted()
                 .dropWhile { it <= query.afterId }

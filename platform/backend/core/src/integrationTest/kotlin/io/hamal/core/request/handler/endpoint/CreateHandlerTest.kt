@@ -24,7 +24,7 @@ internal class EndpointCreateHandlerTest : BaseReqHandlerTest() {
                 id = CmdId(1),
                 funcId = FuncId(23456),
                 groupId = testGroup.id,
-                flowId = testFlow.id,
+                namespaceId = testNamespace.id,
                 name = FuncName("func"),
                 inputs = FuncInputs(),
                 codeId = CodeId(1),

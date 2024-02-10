@@ -1,5 +1,5 @@
 -- As an unauthenticated user it must be possible to acquire a token by creating an anonymous account
--- With the acquired token api requests are possible - like fetching flows
+-- With the acquired token api requests are possible - like fetching namespaces
 
 http = require('net.http').create({
     base_url = context.env.test_api
@@ -19,7 +19,7 @@ assert(#content.groupIds == 1)
 
 for _ = 1, 10 do
     err, res = http.get({
-        url = '/v1/groups/' .. content.groupIds[1] .. '/flows',
+        url = '/v1/groups/' .. content.groupIds[1] .. '/namespaces',
         headers = {
             ['authorization'] = 'Bearer ' .. content.token
         } })
@@ -32,4 +32,4 @@ assert(res.err == nil)
 assert(res.status_code == 200)
 
 content = res.content
-assert(#content.flows == 1)
+assert(#content.namespaces == 1)

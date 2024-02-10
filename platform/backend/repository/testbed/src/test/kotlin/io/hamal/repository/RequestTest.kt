@@ -6,7 +6,7 @@ import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain._enum.RequestStatus.*
 import io.hamal.lib.domain.request.TestRequested
 import io.hamal.lib.domain.vo.RequestId
-import io.hamal.repository.api.RequestQueryRepository.ReqQuery
+import io.hamal.repository.api.RequestQueryRepository.RequestQuery
 import io.hamal.repository.api.RequestRepository
 import io.hamal.repository.fixture.AbstractUnitTest
 import org.hamcrest.MatcherAssert.assertThat
@@ -212,7 +212,7 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
         @TestFactory
         fun `Limit`() = runWith(RequestRepository::class) {
             setup()
-            val query = ReqQuery(limit = Limit(3))
+            val query = RequestQuery(limit = Limit(3))
 
             assertThat(count(query), equalTo(Count(4)))
             val result = list(query)
@@ -223,7 +223,7 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
         fun `Skip and limit`() = runWith(RequestRepository::class) {
             setup()
 
-            val query = ReqQuery(
+            val query = RequestQuery(
                 afterId = RequestId(3),
                 limit = Limit(1)
             )
@@ -262,7 +262,7 @@ private fun RequestRepository.verifyCount(expected: Int) {
     verifyCount(expected) { }
 }
 
-private fun RequestRepository.verifyCount(expected: Int, block: ReqQuery.() -> Unit) {
-    val counted = count(ReqQuery().also(block))
+private fun RequestRepository.verifyCount(expected: Int, block: RequestQuery.() -> Unit) {
+    val counted = count(RequestQuery().also(block))
     assertThat("number of reqs expected", counted, equalTo(Count(expected)))
 }

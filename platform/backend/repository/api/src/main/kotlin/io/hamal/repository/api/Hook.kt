@@ -2,7 +2,7 @@ package io.hamal.repository.api
 
 import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.domain.vo.FlowId
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.HookId
 import io.hamal.lib.domain.vo.HookName
@@ -12,7 +12,7 @@ data class Hook(
     override val updatedAt: UpdatedAt,
     val groupId: GroupId,
     val cmdId: CmdId,
-    val flowId: FlowId,
+    val namespaceId: NamespaceId,
     val name: HookName,
 ) : DomainObject<HookId>
 
@@ -27,7 +27,7 @@ interface HookCmdRepository : CmdRepository {
         val id: CmdId,
         val hookId: HookId,
         val groupId: GroupId,
-        val flowId: FlowId,
+        val namespaceId: NamespaceId,
         val name: HookName
     )
 
@@ -55,7 +55,7 @@ interface HookQueryRepository {
         var afterId: HookId = HookId(SnowflakeId(Long.MAX_VALUE)),
         var limit: Limit = Limit(1),
         var hookIds: List<HookId> = listOf(),
-        var flowIds: List<FlowId> = listOf(),
+        var namespaceIds: List<NamespaceId> = listOf(),
         var groupIds: List<GroupId> = listOf()
     )
 }

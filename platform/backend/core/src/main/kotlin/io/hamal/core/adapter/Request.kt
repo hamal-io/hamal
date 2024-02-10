@@ -12,7 +12,7 @@ interface RequestGetPort {
 
 interface RequestListPort {
     operator fun <T : Any> invoke(
-        query: RequestQueryRepository.ReqQuery,
+        query: RequestQueryRepository.RequestQuery,
         responseHandler: (List<Requested>) -> T
     ): T
 }
@@ -26,7 +26,7 @@ class RequestAdapter(private val requestQueryRepository: RequestQueryRepository)
         responseHandler(requestQueryRepository.get(reqId))
 
     override operator fun <T : Any> invoke(
-        query: RequestQueryRepository.ReqQuery,
+        query: RequestQueryRepository.RequestQuery,
         responseHandler: (List<Requested>) -> T
     ): T = responseHandler(requestQueryRepository.list(query))
 }

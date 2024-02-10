@@ -1,6 +1,6 @@
 package io.hamal.plugin.std.sys.hook
 
-import io.hamal.lib.domain.vo.FlowId
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -22,16 +22,16 @@ class HookListFunction(
         return try {
             null to KuaArray(
                 sdk.hook.list(HookQuery(
-                    flowIds = arg1.getArrayType("flow_ids")
-                        .map { FlowId((it.value as KuaString).value) }
+                    namespaceIds = arg1.getArrayType("namespace_ids")
+                        .map { NamespaceId((it.value as KuaString).value) }
                 )).mapIndexed { index, hook ->
                     index to KuaMap(
                         mutableMapOf(
                             "id" to KuaString(hook.id.value.value.toString(16)),
-                            "flow" to KuaMap(
+                            "namespace" to KuaMap(
                                 mutableMapOf(
-                                    "id" to KuaString(hook.flow.id.value.value.toString(16)),
-                                    "name" to KuaString(hook.flow.name.value)
+                                    "id" to KuaString(hook.namespace.id.value.value.toString(16)),
+                                    "name" to KuaString(hook.namespace.name.value)
                                 )
                             ),
                             "name" to KuaString(hook.name.value),

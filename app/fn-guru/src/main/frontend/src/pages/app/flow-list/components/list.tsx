@@ -14,11 +14,11 @@ type ListProps = {
 }
 
 const List: FC<ListProps> = ({groupId}) => {
-    const [listFlows, flowList, isLoading, error] = useFlowList()
+    const [listflows, flowList, isLoading, error] = useFlowList()
 
     useEffect(() => {
         const abortController = new AbortController()
-        listFlows(groupId, abortController)
+        listflows(groupId, abortController)
         return () => {
             abortController.abort()
         }
@@ -27,13 +27,13 @@ const List: FC<ListProps> = ({groupId}) => {
     if (isLoading) return "Loading..."
     if (error != null) return "Error -"
 
-    const filteredFlows = flowList.flows.filter(flow => flow.name !== '__default__')
+    const filteredflows = flowList.flows.filter(flow => flow.name !== '__default__')
     return (
         <div className="pt-8 px-8">
             <PageHeader title="Workflows" description="Organise your workflows" actions={[<Create/>]}/>
             <Separator className="my-6"/>
             {
-                filteredFlows.length ? (<Content flows={filteredFlows}/>) : (<NoContent/>)
+                filteredflows.length ? (<Content flows={filteredflows}/>) : (<NoContent/>)
             }
         </div>
     );
@@ -52,7 +52,7 @@ const Content: FC<ContentProps> = ({flows}) => {
                     key={flow.id}
                     className="relative overflow-hidden duration-500 hover:border-primary/50 group"
                     onClick={() => {
-                        navigate(`/flows/${flow.id}`)
+                        navigate(`/groups/${flow.id}`)
                     }}
                 >
                     <CardHeader>
@@ -77,13 +77,13 @@ const NoContent: FC = () => (
         <EmptyPlaceholder.Icon>
             {/*<Code />*/}
         </EmptyPlaceholder.Icon>
-        <EmptyPlaceholder.Title>No Flows found</EmptyPlaceholder.Title>
+        <EmptyPlaceholder.Title>No flows found</EmptyPlaceholder.Title>
         <EmptyPlaceholder.Description>
-            You haven&apos;t created any Flows yet.
+            You haven&apos;t created any flows yet.
         </EmptyPlaceholder.Description>
         <div className="flex flex-col items-center justify-center gap-2 md:flex-row">
             <Create/>
-            <GoToDocumentation link={"/flows"}/>
+            <GoToDocumentation link={"/groups"}/>
         </div>
     </EmptyPlaceholder>
 )

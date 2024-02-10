@@ -106,13 +106,13 @@ open class MemoryRepositoryConfig {
     open fun hookCmdRepository() = hookRepository()
 
     @Bean
-    open fun flowRepository() = FlowMemoryRepository()
+    open fun namespaceRepository() = NamespaceMemoryRepository()
 
     @Bean
-    open fun flowCmdRepository(): FlowCmdRepository = flowRepository()
+    open fun namespaceCmdRepository(): NamespaceCmdRepository = namespaceRepository()
 
     @Bean
-    open fun flowQueryRepository(): FlowQueryRepository = flowRepository()
+    open fun namespaceQueryRepository(): NamespaceQueryRepository = namespaceRepository()
 
     @Bean
     open fun execRepository(): ExecRepository = ExecMemoryRepository()

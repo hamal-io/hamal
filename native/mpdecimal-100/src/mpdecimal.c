@@ -1810,7 +1810,7 @@ _mpd_apply_round_fit(mpd_t *dec, mpd_uint_t rnd, const mpd_context_t *ctx,
     return 1;
 }
 
-/* Check a normal number for overflow, underflow, clamping. If the operand
+/* Check a normal number for overflow, undernamespace, clamping. If the operand
    is modified, it will be zero, special or (sub)normal with a coefficient
    that fits into the current context precision. */
 static inline void
@@ -1878,7 +1878,7 @@ _mpd_check_exp(mpd_t *dec, const mpd_context_t *ctx, uint32_t *status)
         dec->exp -= shift;
         *status |= MPD_Clamped;
         if (!mpd_iszerocoeff(dec) && adjexp < ctx->emin) {
-            /* Underflow is impossible, since exp < etiny=emin-prec+1
+            /* Undernamespace is impossible, since exp < etiny=emin-prec+1
              * and exp > etop=emax-prec+1 would imply emax < emin. */
             *status |= MPD_Subnormal;
         }
@@ -1908,7 +1908,7 @@ _mpd_check_exp(mpd_t *dec, const mpd_context_t *ctx, uint32_t *status)
             _mpd_apply_round_excess(dec, rnd, ctx, status);
             *status |= MPD_Rounded;
             if (rnd) {
-                *status |= (MPD_Inexact|MPD_Underflow);
+                *status |= (MPD_Inexact|MPD_Undernamespace);
                 if (mpd_iszerocoeff(dec)) {
                     mpd_zerocoeff(dec);
                     *status |= MPD_Clamped;
@@ -1921,17 +1921,17 @@ _mpd_check_exp(mpd_t *dec, const mpd_context_t *ctx, uint32_t *status)
     }
 }
 
-/* Transcendental functions do not always set Underflow reliably,
+/* Transcendental functions do not always set Undernamespace reliably,
  * since they only use as much precision as is necessary for correct
  * rounding. If a result like 1.0000000000e-101 is finalized, there
- * is no rounding digit that would trigger Underflow. But we can
+ * is no rounding digit that would trigger Undernamespace. But we can
  * assume Inexact, so a short check suffices. */
 static inline void
-mpd_check_underflow(mpd_t *dec, const mpd_context_t *ctx, uint32_t *status)
+mpd_check_undernamespace(mpd_t *dec, const mpd_context_t *ctx, uint32_t *status)
 {
     if (mpd_adjexp(dec) < ctx->emin && !mpd_iszero(dec) &&
         dec->exp < mpd_etiny(ctx)) {
-        *status |= MPD_Underflow;
+        *status |= MPD_Undernamespace;
     }
 }
 
@@ -4350,7 +4350,7 @@ _mpd_get_exp_iterations(const mpd_t *r, mpd_ssize_t p)
 
 /*
  * Internal function, specials have been dealt with. Apart from Overflow
- * and Underflow, two cases must be considered for the error of the result:
+ * and Undernamespace, two cases must be considered for the error of the result:
  *
  *   1) abs(a) <= 9 * 10**(-prec-1)  ==>  result == 1
  *
@@ -4404,7 +4404,7 @@ _mpd_qexp(mpd_t *result, const mpd_t *a, const mpd_context_t *ctx,
      *
      *     MAX-EMAX+1 < log10(e^(0.1*10*t)) <= log10(e^(r*10^t)) < adjexp(e^(r*10^t))+1
      *
-     *   (2) -1 < r <= -0.1, so e^r <= e^-0.1. If t > MAX_T, underflow occurs:
+     *   (2) -1 < r <= -0.1, so e^r <= e^-0.1. If t > MAX_T, undernamespace occurs:
      *
      *     adjexp(e^(r*10^t)) <= log10(e^(r*10^t)) <= log10(e^(-0.1*10^t)) < MIN-ETINY
      */
@@ -4423,7 +4423,7 @@ _mpd_qexp(mpd_t *result, const mpd_t *a, const mpd_context_t *ctx,
         else {
             _settriple(result, MPD_POS, 0, mpd_etiny(ctx));
             *status |= (MPD_Inexact|MPD_Rounded|MPD_Subnormal|
-                        MPD_Underflow|MPD_Clamped);
+                        MPD_Undernamespace|MPD_Clamped);
         }
         return;
     }
@@ -4539,7 +4539,7 @@ mpd_qexp(mpd_t *result, const mpd_t *a, const mpd_context_t *ctx,
             *status |= workstatus;
 
             ulpexp = result->exp + result->digits - workctx.prec;
-            if (workstatus & MPD_Underflow) {
+            if (workstatus & MPD_Undernamespace) {
                 /* The effective work precision is result->digits. */
                 ulpexp = result->exp;
             }
@@ -4565,7 +4565,7 @@ mpd_qexp(mpd_t *result, const mpd_t *a, const mpd_context_t *ctx,
                 mpd_qcmp(&t1, &t2, status) == 0) {
                 workctx.clamp = ctx->clamp;
                 _mpd_zeropad(result, &workctx, status);
-                mpd_check_underflow(result, &workctx, status);
+                mpd_check_undernamespace(result, &workctx, status);
                 mpd_qfinalize(result, &workctx, status);
                 break;
             }
@@ -4579,7 +4579,7 @@ mpd_qexp(mpd_t *result, const mpd_t *a, const mpd_context_t *ctx,
     else {
         _mpd_qexp(result, a, &workctx, status);
         _mpd_zeropad(result, &workctx, status);
-        mpd_check_underflow(result, &workctx, status);
+        mpd_check_undernamespace(result, &workctx, status);
         mpd_qfinalize(result, &workctx, status);
     }
 }
@@ -4904,7 +4904,7 @@ _mpd_qln(mpd_t *result, const mpd_t *a, const mpd_context_t *ctx,
     maxprec = ctx->prec + 2;
     if (t == 0 && (x <= 15 || x >= 800)) {
         /* 0.900 <= v <= 1.15: Estimate the magnitude of the logarithm.
-         * If ln(v) will underflow, skip the loop. Otherwise, adjust the
+         * If ln(v) will undernamespace, skip the loop. Otherwise, adjust the
          * precision upwards in order to obtain a sufficient number of
          * significant digits.
          *
@@ -4927,7 +4927,7 @@ _mpd_qln(mpd_t *result, const mpd_t *a, const mpd_context_t *ctx,
             tmp.exp += 1;
         }
         if (mpd_adjexp(&tmp) < mpd_etiny(ctx)) {
-            /* The upper bound is less than etiny: Underflow to zero */
+            /* The upper bound is less than etiny: Undernamespace to zero */
             _settriple(result, (cmp<0), 1, mpd_etiny(ctx)-1);
             goto finish;
         }
@@ -5098,7 +5098,7 @@ mpd_qln(mpd_t *result, const mpd_t *a, const mpd_context_t *ctx,
             if (mpd_isspecial(result) || mpd_iszerocoeff(result) ||
                 mpd_qcmp(&t1, &t2, status) == 0) {
                 workctx.clamp = ctx->clamp;
-                mpd_check_underflow(result, &workctx, status);
+                mpd_check_undernamespace(result, &workctx, status);
                 mpd_qfinalize(result, &workctx, status);
                 break;
             }
@@ -5111,7 +5111,7 @@ mpd_qln(mpd_t *result, const mpd_t *a, const mpd_context_t *ctx,
     }
     else {
         _mpd_qln(result, a, &workctx, status);
-        mpd_check_underflow(result, &workctx, status);
+        mpd_check_undernamespace(result, &workctx, status);
         mpd_qfinalize(result, &workctx, status);
     }
 }
@@ -5133,7 +5133,7 @@ _mpd_qlog10(int action, mpd_t *result, const mpd_t *a,
 
     mpd_maxcontext(&workctx);
     workctx.prec = ctx->prec + 3;
-    /* relative error: 0.1 * 10**(-p-3). The specific underflow shortcut
+    /* relative error: 0.1 * 10**(-p-3). The specific undernamespace shortcut
      * in _mpd_qln() does not change the final result. */
     _mpd_qln(result, a, &workctx, status);
     /* relative error: 5 * 10**(-p-3) */
@@ -5247,7 +5247,7 @@ mpd_qlog10(mpd_t *result, const mpd_t *a, const mpd_context_t *ctx,
             if (mpd_isspecial(result) || mpd_iszerocoeff(result) ||
                 mpd_qcmp(&t1, &t2, status) == 0) {
                 workctx.clamp = ctx->clamp;
-                mpd_check_underflow(result, &workctx, status);
+                mpd_check_undernamespace(result, &workctx, status);
                 mpd_qfinalize(result, &workctx, status);
                 break;
             }
@@ -5260,7 +5260,7 @@ mpd_qlog10(mpd_t *result, const mpd_t *a, const mpd_context_t *ctx,
     }
     else {
         _mpd_qlog10(DO_FINALIZE, result, a, &workctx, status);
-        mpd_check_underflow(result, &workctx, status);
+        mpd_check_undernamespace(result, &workctx, status);
     }
 }
 
@@ -5617,7 +5617,7 @@ mpd_set_fenv(void)
 #ifdef _MSC_VER
     unsigned int flags =
         _EM_INVALID|_EM_DENORMAL|_EM_ZERODIVIDE|_EM_OVERFLOW|
-        _EM_UNDERFLOW|_EM_INEXACT|_RC_CHOP|_PC_64;
+        _EM_UNDERNAMESPACE|_EM_INEXACT|_RC_CHOP|_PC_64;
     unsigned int mask = _MCW_EM|_MCW_RC|_MCW_PC;
     unsigned int dummy;
 
@@ -6263,7 +6263,7 @@ mpd_qnext_toward(mpd_t *result, const mpd_t *a, const mpd_t *b,
         *status |= (MPD_Overflow|MPD_Rounded|MPD_Inexact);
     }
     else if (mpd_adjexp(result) < ctx->emin) {
-        *status |= (MPD_Underflow|MPD_Subnormal|MPD_Rounded|MPD_Inexact);
+        *status |= (MPD_Undernamespace|MPD_Subnormal|MPD_Rounded|MPD_Inexact);
         if (mpd_iszero(result)) {
             *status |= MPD_Clamped;
         }
@@ -6492,7 +6492,7 @@ _qcheck_pow_one(mpd_t *result, const mpd_t *base, const mpd_t *exp,
 }
 
 /*
- * Detect certain over/underflow of x**y.
+ * Detect certain over/undernamespace of x**y.
  * ACL2 proof: pow-bounds.lisp.
  *
  *   Symbols:
@@ -6588,7 +6588,7 @@ _lower_bound_zeta(const mpd_t *x, uint32_t *status)
 }
 
 /*
- * Detect cases of certain overflow/underflow in the power function.
+ * Detect cases of certain overflow/undernamespace in the power function.
  * Assumptions: x != 1, y != 0. The proof above is for positive x.
  * If x is negative and y is an odd integer, x**y == -(abs(x)**y),
  * so the analysis does not change.
@@ -6683,7 +6683,7 @@ _mpd_qpow_real(mpd_t *result, const mpd_t *base, const mpd_t *exp,
      *   2) abs(e**(y * (2*err + err**2)) - 1)
      * Case abs(y) >= 10**extra:
      *   3) adjexp(y)+1 > log10(abs(y)) >= extra
-     *   This triggers the Overflow/Underflow shortcut in _mpd_qexp(),
+     *   This triggers the Overflow/Undernamespace shortcut in _mpd_qexp(),
      *   so no further analysis is necessary.
      * Case abs(y) < 10**extra:
      *   4) abs(y * (2*err + err**2)) < 1/5 * 10**(-prec - 2)

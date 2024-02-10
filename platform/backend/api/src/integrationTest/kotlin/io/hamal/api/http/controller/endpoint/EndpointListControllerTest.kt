@@ -3,7 +3,7 @@ package io.hamal.api.http.controller.endpoint
 import io.hamal.lib.domain._enum.EndpointMethod.Post
 import io.hamal.lib.domain._enum.EndpointMethod.Put
 import io.hamal.lib.domain.vo.EndpointName
-import io.hamal.lib.domain.vo.FlowName
+import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.sdk.api.ApiEndpointList
 import org.hamcrest.MatcherAssert.assertThat
@@ -19,16 +19,16 @@ internal class EndpointListControllerTest : EndpointBaseControllerTest() {
 
     @Test
     fun `Single endpoint`() {
-        val flowId = awaitCompleted(
-            createFlow(
-                name = FlowName("flow"),
+        val namespaceId = awaitCompleted(
+            createNamespace(
+                name = NamespaceName("namespace"),
                 groupId = testGroup.id
             )
-        ).flowId
+        ).namespaceId
 
         val funcId = awaitCompleted(
             createFunc(
-                flowId = flowId,
+                namespaceId = namespaceId,
                 name = FuncName("func")
             )
         ).funcId
@@ -38,7 +38,7 @@ internal class EndpointListControllerTest : EndpointBaseControllerTest() {
             createEndpoint(
                 name = EndpointName("endpoint-one"),
                 funcId = funcId,
-                flowId = flowId,
+                namespaceId = namespaceId,
                 method = Post
             )
         ).endpointId
@@ -57,22 +57,22 @@ internal class EndpointListControllerTest : EndpointBaseControllerTest() {
     fun `Limit endpoints`() {
         awaitCompleted(
             IntRange(0, 20).map {
-                val flowId = awaitCompleted(
-                    createFlow(
-                        name = FlowName("flow-$it"),
+                val namespaceId = awaitCompleted(
+                    createNamespace(
+                        name = NamespaceName("namespace-$it"),
                         groupId = testGroup.id
                     )
-                ).flowId
+                ).namespaceId
 
                 val funcId = awaitCompleted(
                     createFunc(
-                        flowId = flowId,
+                        namespaceId = namespaceId,
                         name = FuncName("func-$it")
                     )
                 ).funcId
 
                 createEndpoint(
-                    flowId = flowId,
+                    namespaceId = namespaceId,
                     funcId = funcId,
                     name = EndpointName("endpoint-$it"),
                     method = Put
@@ -96,22 +96,22 @@ internal class EndpointListControllerTest : EndpointBaseControllerTest() {
     @Test
     fun `Skip and limit endpoints`() {
         val requests = IntRange(0, 99).map {
-            val flowId = awaitCompleted(
-                createFlow(
-                    name = FlowName("flow-$it"),
+            val namespaceId = awaitCompleted(
+                createNamespace(
+                    name = NamespaceName("namespace-$it"),
                     groupId = testGroup.id
                 )
-            ).flowId
+            ).namespaceId
 
             val funcId = awaitCompleted(
                 createFunc(
-                    flowId = flowId,
+                    namespaceId = namespaceId,
                     name = FuncName("func-$it")
                 )
             ).funcId
 
             createEndpoint(
-                flowId = flowId,
+                namespaceId = namespaceId,
                 funcId = funcId,
                 name = EndpointName("endpoint-$it"),
                 method = Put

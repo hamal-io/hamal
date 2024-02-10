@@ -1,7 +1,7 @@
 package io.hamal.repository.record.hook
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.vo.FlowId
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.HookId
 import io.hamal.lib.domain.vo.HookName
@@ -18,7 +18,7 @@ data class HookEntity(
     override val recordedAt: RecordedAt,
     val groupId: GroupId,
 
-    var flowId: FlowId? = null,
+    var namespaceId: NamespaceId? = null,
     var name: HookName? = null
 
 ) : RecordEntity<HookId, HookRecord, Hook> {
@@ -29,7 +29,7 @@ data class HookEntity(
                 id = rec.entityId,
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
-                flowId = rec.flowId,
+                namespaceId = rec.namespaceId,
                 name = rec.name,
                 recordedAt = rec.recordedAt()
 
@@ -51,7 +51,7 @@ data class HookEntity(
             id = id,
             updatedAt = recordedAt.toUpdatedAt(),
             groupId = groupId,
-            flowId = flowId!!,
+            namespaceId = namespaceId!!,
             name = name!!
         )
     }

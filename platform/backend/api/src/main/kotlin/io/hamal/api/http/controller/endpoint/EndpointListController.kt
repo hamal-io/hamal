@@ -3,7 +3,7 @@ package io.hamal.api.http.controller.endpoint
 import io.hamal.core.adapter.EndpointListPort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.EndpointId
-import io.hamal.lib.domain.vo.FlowId
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.sdk.api.ApiEndpointList
 import io.hamal.lib.sdk.api.ApiEndpointList.Endpoint
@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 internal class EndpointListController(private val listEndpoint: EndpointListPort) {
 
-    @GetMapping("/v1/flows/{flowId}/endpoints")
-    fun flowEndpointList(
-        @PathVariable("flowId") flowId: FlowId,
+    @GetMapping("/v1/namespaces/{namespaceId}/endpoints")
+    fun namespaceEndpointList(
+        @PathVariable("namespaceId") namespaceId: NamespaceId,
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: EndpointId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit,
     ): ResponseEntity<ApiEndpointList> {
@@ -29,7 +29,7 @@ internal class EndpointListController(private val listEndpoint: EndpointListPort
                 afterId = afterId,
                 limit = limit,
                 groupIds = listOf(),
-                flowIds = listOf(flowId)
+                namespaceIds = listOf(namespaceId)
             ),
             // assembler
         ) { endpoints, funcs ->
@@ -56,21 +56,21 @@ internal class EndpointListController(private val listEndpoint: EndpointListPort
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: EndpointId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit,
         @RequestParam(required = false, name = "group_ids", defaultValue = "") groupIds: List<GroupId>,
-        @RequestParam(required = false, name = "flow_ids", defaultValue = "") flowIds: List<FlowId>
+        @RequestParam(required = false, name = "namespace_ids", defaultValue = "") namespaceIds: List<NamespaceId>
     ): ResponseEntity<ApiEndpointList> {
         return listEndpoint(
             EndpointQuery(
                 afterId = afterId,
                 limit = limit,
                 groupIds = groupIds,
-                flowIds = flowIds
+                namespaceIds = namespaceIds
             ),
             // assembler
-        ) { endpoints, flows ->
+        ) { endpoints, namespaces ->
 
             ResponseEntity.ok(ApiEndpointList(
                 endpoints.map { endpoint ->
-                    val funcs = flows[endpoint.funcId]!!
+                    val funcs = namespaces[endpoint.funcId]!!
                     Endpoint(
                         id = endpoint.id,
                         func = Func(

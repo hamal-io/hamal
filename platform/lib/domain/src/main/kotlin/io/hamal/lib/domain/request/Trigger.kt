@@ -5,7 +5,6 @@ import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
-import kotlin.time.Duration
 
 
 interface TriggerCreateRequest {
@@ -14,7 +13,7 @@ interface TriggerCreateRequest {
     val funcId: FuncId
     val inputs: TriggerInputs
     val correlationId: CorrelationId?
-    val duration: Duration?
+    val duration: TriggerDuration?
     val topicId: TopicId?
     val hookId: HookId?
     val hookMethod: HookMethod?
@@ -30,9 +29,9 @@ data class TriggerCreateRequested(
     val name: TriggerName,
     val funcId: FuncId,
     val inputs: TriggerInputs,
-    var flowId: FlowId,
+    var namespaceId: NamespaceId,
     val correlationId: CorrelationId? = null,
-    val duration: Duration? = null,
+    val duration: TriggerDuration? = null,
     val topicId: TopicId? = null,
     val hookId: HookId? = null,
     val hookMethod: HookMethod? = null,

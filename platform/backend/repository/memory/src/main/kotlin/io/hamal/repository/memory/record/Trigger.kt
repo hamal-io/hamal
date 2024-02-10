@@ -29,12 +29,12 @@ private object TriggerCurrentProjection {
         val currentTrigger = projection[trigger.id]
         projection.remove(trigger.id)
 
-        val triggersInFlow = projection.values.filter { it.flowId == trigger.flowId }
-        if (triggersInFlow.any { it.name == trigger.name }) {
+        val triggersInNamespace = projection.values.filter { it.namespaceId == trigger.namespaceId }
+        if (triggersInNamespace.any { it.name == trigger.name }) {
             if (currentTrigger != null) {
                 projection[currentTrigger.id] = currentTrigger
             }
-            throw IllegalArgumentException("${trigger.name} already exists in flow ${trigger.flowId}")
+            throw IllegalArgumentException("${trigger.name} already exists in namespace ${trigger.namespaceId}")
         }
 
         projection[trigger.id] = trigger
@@ -50,7 +50,7 @@ private object TriggerCurrentProjection {
             .filter { if (query.types.isEmpty()) true else query.types.contains(it.type) }
             .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
             .filter { if (query.funcIds.isEmpty()) true else query.funcIds.contains(it.funcId) }
-            .filter { if (query.flowIds.isEmpty()) true else query.flowIds.contains(it.flowId) }
+            .filter { if (query.namespaceIds.isEmpty()) true else query.namespaceIds.contains(it.namespaceId) }
             .filter {
                 if (query.topicIds.isEmpty()) {
                     true
@@ -87,7 +87,7 @@ private object TriggerCurrentProjection {
                 .filter { if (query.types.isEmpty()) true else query.types.contains(it.type) }
                 .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
                 .filter { if (query.funcIds.isEmpty()) true else query.funcIds.contains(it.funcId) }
-                .filter { if (query.flowIds.isEmpty()) true else query.flowIds.contains(it.flowId) }
+                .filter { if (query.namespaceIds.isEmpty()) true else query.namespaceIds.contains(it.namespaceId) }
                 .filter {
                     if (query.topicIds.isEmpty()) {
                         true
@@ -155,7 +155,7 @@ class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord,
                     entityId = triggerId,
                     groupId = cmd.groupId,
                     funcId = cmd.funcId,
-                    flowId = cmd.flowId,
+                    namespaceId = cmd.namespaceId,
                     name = cmd.name,
                     inputs = cmd.inputs,
                     duration = cmd.duration,
@@ -179,7 +179,7 @@ class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord,
                         entityId = triggerId,
                         groupId = cmd.groupId,
                         funcId = cmd.funcId,
-                        flowId = cmd.flowId,
+                        namespaceId = cmd.namespaceId,
                         name = cmd.name,
                         inputs = cmd.inputs,
                         topicId = cmd.topicId,
@@ -217,7 +217,7 @@ class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord,
                         entityId = triggerId,
                         groupId = cmd.groupId,
                         funcId = cmd.funcId,
-                        flowId = cmd.flowId,
+                        namespaceId = cmd.namespaceId,
                         name = cmd.name,
                         inputs = cmd.inputs,
                         hookId = cmd.hookId,
@@ -243,7 +243,7 @@ class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord,
                         entityId = triggerId,
                         groupId = cmd.groupId,
                         funcId = cmd.funcId,
-                        flowId = cmd.flowId,
+                        namespaceId = cmd.namespaceId,
                         name = cmd.name,
                         inputs = cmd.inputs,
                         cron = cmd.cron,

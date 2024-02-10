@@ -2,7 +2,7 @@ import {cn} from "@/utils";
 import {BookOpen, Braces, CalendarIcon, Command, GlobeIcon, LucideIcon, Play, TimerIcon, WebhookIcon} from "lucide-react";
 import React, {FC} from "react";
 import {Link, useLocation, useParams} from "react-router-dom";
-import FlowSelector from "@/components/app/flow-selector.tsx";
+import flowselector from "@/components/app/flow-selector.tsx";
 
 type Props = {
     className?: string;
@@ -23,46 +23,46 @@ const Sidebar: React.FC<Props> = ({className}) => {
     const navigation: NavItem[] = [
         {
             icon: Command,
-            href: `/flows/${flowId}`,
+            href: `/groups/${flowId}`,
             label: "Overview",
-            active: currentPath === `/flows/${flowId}`
+            active: currentPath === `/groups/${flowId}`
         },
         {
             icon: Play,
-            href: `/flows/${flowId}/executions`,
+            href: `/groups/${flowId}/executions`,
             label: "Executions",
-            active: currentPath.startsWith(`/flows/${flowId}/executions`)
+            active: currentPath.startsWith(`/groups/${flowId}/executions`)
         },
         {
             icon: Braces,
-            href: `/flows/${flowId}/functions`,
+            href: `/groups/${flowId}/functions`,
             label: "Functions",
-            active: currentPath.startsWith(`/flows/${flowId}/functions`)
+            active: currentPath.startsWith(`/groups/${flowId}/functions`)
         },
         {
             icon: TimerIcon,
-            href: `/flows/${flowId}/schedules`,
+            href: `/groups/${flowId}/schedules`,
             label: "Schedules",
-            active: currentPath === `/flows/${flowId}/schedules`
+            active: currentPath === `/groups/${flowId}/schedules`
         },
         {
             icon: WebhookIcon,
-            href: `/flows/${flowId}/hooks`,
+            href: `/groups/${flowId}/hooks`,
             label: "Webhooks",
-            active: currentPath === `/flows/${flowId}/hooks`
+            active: currentPath === `/groups/${flowId}/hooks`
         },
         {
             icon: GlobeIcon,
-            href: `/flows/${flowId}/endpoints`,
+            href: `/groups/${flowId}/endpoints`,
             label: "Endpoints",
-            active: currentPath === `/flows/${flowId}/endpoints`
+            active: currentPath === `/groups/${flowId}/endpoints`
         }
     ];
 
     return (
         <aside className={cn("fixed h-screen inset-y-0 flex w-64 flex-col px-6 gap-y-5 bg-gray-100", className)}>
             <nav className="flex flex-col flex-1 flex-grow">
-                {/*<FlowSelector flowId={flowId}/>*/}
+                {/*<flowselector flowId={flowId}/>*/}
                 <ul className="flex flex-col flex-1 gap-y-7 pt-4">
                     <li>
                         <h3 className="text-xs font-semibold leading-6 text-content">General</h3>

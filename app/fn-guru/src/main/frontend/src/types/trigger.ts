@@ -3,7 +3,7 @@ export interface TriggerCreateSubmitted {
     status: string;
     triggerId: string;
     funcId: string;
-    flowId: string;
+    namespaceId: string;
     groupId: string;
 }
 
@@ -20,8 +20,8 @@ export interface TriggerListItem {
         name: string;
     },
     hook?: {
-        id: string,
-        name: string,
-        methods: Array<String>
+        id: string;
+        name: string;
+        method: string;
     }
 }

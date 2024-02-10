@@ -5,7 +5,9 @@ import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.request.AccountCreateAnonymousRequested
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.AuthTokenExpiresAt
+import io.hamal.lib.domain.vo.GroupName
+import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.repository.api.*
 import io.hamal.repository.api.event.AccountCreatedEvent
 import org.springframework.stereotype.Component
@@ -16,7 +18,7 @@ class AccountCreateAnonymousHandler(
     val accountCmdRepository: AccountCmdRepository,
     val authCmdRepository: AuthCmdRepository,
     val groupCmdRepository: GroupCmdRepository,
-    val flowCmdRepository: FlowCmdRepository,
+    val namespaceCmdRepository: NamespaceCmdRepository,
     val eventEmitter: InternalEventEmitter
 ) : io.hamal.core.request.RequestHandler<AccountCreateAnonymousRequested>(AccountCreateAnonymousRequested::class) {
 
@@ -24,7 +26,7 @@ class AccountCreateAnonymousHandler(
         createAccount(req)
             .also { emitEvent(req.cmdId(), it) }
             .also { createGroup(req) }
-            .also { createFlow(req) }
+            .also { createNamespace(req) }
             .also { createTokenAuth(req) }
     }
 }
@@ -51,15 +53,13 @@ private fun AccountCreateAnonymousHandler.createGroup(req: AccountCreateAnonymou
     )
 }
 
-private fun AccountCreateAnonymousHandler.createFlow(req: AccountCreateAnonymousRequested): Flow {
-    return flowCmdRepository.create(
-        FlowCmdRepository.CreateCmd(
+private fun AccountCreateAnonymousHandler.createNamespace(req: AccountCreateAnonymousRequested): Namespace {
+    return namespaceCmdRepository.create(
+        NamespaceCmdRepository.CreateCmd(
             id = req.cmdId(),
-            flowId = req.flowId,
+            namespaceId = req.namespaceId,
             groupId = req.groupId,
-            type = FlowType.default,
-            name = FlowName.default,
-            inputs = FlowInputs()
+            name = NamespaceName.default
         )
     )
 }

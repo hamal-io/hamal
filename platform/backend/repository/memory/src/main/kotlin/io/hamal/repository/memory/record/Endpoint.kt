@@ -19,12 +19,12 @@ private object EndpointCurrentProjection {
         val currentEndpoint = projection[endpoint.id]
         projection.remove(endpoint.id)
 
-        val endpointsInFlow = projection.values.filter { it.flowId == endpoint.flowId }
-        if (endpointsInFlow.any { it.name == endpoint.name }) {
+        val endpointsInNamespace = projection.values.filter { it.namespaceId == endpoint.namespaceId }
+        if (endpointsInNamespace.any { it.name == endpoint.name }) {
             if (currentEndpoint != null) {
                 projection[currentEndpoint.id] = currentEndpoint
             }
-            throw IllegalArgumentException("${endpoint.name} already exists in flow ${endpoint.flowId}")
+            throw IllegalArgumentException("${endpoint.name} already exists in namespace ${endpoint.namespaceId}")
         }
 
         projection[endpoint.id] = endpoint
@@ -38,7 +38,7 @@ private object EndpointCurrentProjection {
             .reversed()
             .asSequence()
             .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
-            .filter { if (query.flowIds.isEmpty()) true else query.flowIds.contains(it.flowId) }
+            .filter { if (query.namespaceIds.isEmpty()) true else query.namespaceIds.contains(it.namespaceId) }
             .dropWhile { it.id >= query.afterId }
             .take(query.limit.value)
             .toList()
@@ -51,7 +51,7 @@ private object EndpointCurrentProjection {
                 .reversed()
                 .asSequence()
                 .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
-                .filter { if (query.flowIds.isEmpty()) true else query.flowIds.contains(it.flowId) }
+                .filter { if (query.namespaceIds.isEmpty()) true else query.namespaceIds.contains(it.namespaceId) }
                 .dropWhile { it.id >= query.afterId }
                 .count()
                 .toLong()
@@ -80,7 +80,7 @@ class EndpointMemoryRepository : RecordMemoryRepository<EndpointId, EndpointReco
                         cmdId = cmd.id,
                         entityId = endpointId,
                         groupId = cmd.groupId,
-                        flowId = cmd.flowId,
+                        namespaceId = cmd.namespaceId,
                         funcId = cmd.funcId,
                         name = cmd.name
                     )

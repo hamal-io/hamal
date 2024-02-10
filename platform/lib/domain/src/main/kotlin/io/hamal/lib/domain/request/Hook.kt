@@ -11,7 +11,7 @@ data class HookCreateRequested(
     override val id: RequestId,
     override var status: RequestStatus,
     val hookId: HookId,
-    val flowId: FlowId,
+    val namespaceId: NamespaceId,
     val groupId: GroupId,
     val name: HookName,
 ) : Requested()

@@ -13,7 +13,6 @@ import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordEntity
 import io.hamal.repository.record.RecordSequence
 import io.hamal.repository.record.RecordedAt
-import kotlin.time.Duration
 
 
 data class TriggerEntity(
@@ -24,14 +23,14 @@ data class TriggerEntity(
 
     var groupId: GroupId? = null,
     var funcId: FuncId? = null,
-    var flowId: FlowId? = null,
+    var namespaceId: NamespaceId? = null,
     var name: TriggerName? = null,
     var type: TriggerType? = null,
     var inputs: TriggerInputs? = null,
     var correlationId: CorrelationId? = null,
 
     var topicId: TopicId? = null,
-    var duration: Duration? = null,
+    var duration: TriggerDuration? = null,
     var hookId: HookId? = null,
     var hookMethod: HookMethod? = null,
 
@@ -50,7 +49,7 @@ data class TriggerEntity(
                 sequence = rec.sequence(),
                 name = rec.name,
                 funcId = rec.funcId,
-                flowId = rec.flowId,
+                namespaceId = rec.namespaceId,
                 type = FixedRate,
                 inputs = rec.inputs,
                 correlationId = rec.correlationId,
@@ -66,7 +65,7 @@ data class TriggerEntity(
                 sequence = rec.sequence(),
                 name = rec.name,
                 funcId = rec.funcId,
-                flowId = rec.flowId,
+                namespaceId = rec.namespaceId,
                 type = Event,
                 inputs = rec.inputs,
                 correlationId = rec.correlationId,
@@ -82,7 +81,7 @@ data class TriggerEntity(
                 sequence = rec.sequence(),
                 name = rec.name,
                 funcId = rec.funcId,
-                flowId = rec.flowId,
+                namespaceId = rec.namespaceId,
                 type = Hook,
                 inputs = rec.inputs,
                 correlationId = rec.correlationId,
@@ -99,7 +98,7 @@ data class TriggerEntity(
                 sequence = rec.sequence(),
                 name = rec.name,
                 funcId = rec.funcId,
-                flowId = rec.flowId,
+                namespaceId = rec.namespaceId,
                 type = Cron,
                 inputs = rec.inputs,
                 correlationId = rec.correlationId,
@@ -130,7 +129,7 @@ data class TriggerEntity(
                 updatedAt = recordedAt.toUpdatedAt(),
                 groupId = groupId!!,
                 funcId = funcId!!,
-                flowId = flowId!!,
+                namespaceId = namespaceId!!,
                 correlationId = correlationId,
                 name = name!!,
                 inputs = inputs!!,
@@ -144,7 +143,7 @@ data class TriggerEntity(
                 updatedAt = recordedAt.toUpdatedAt(),
                 groupId = groupId!!,
                 funcId = funcId!!,
-                flowId = flowId!!,
+                namespaceId = namespaceId!!,
                 correlationId = correlationId,
                 name = name!!,
                 inputs = inputs!!,
@@ -158,7 +157,7 @@ data class TriggerEntity(
                 updatedAt = recordedAt.toUpdatedAt(),
                 groupId = groupId!!,
                 funcId = funcId!!,
-                flowId = flowId!!,
+                namespaceId = namespaceId!!,
                 correlationId = correlationId,
                 name = name!!,
                 inputs = inputs!!,
@@ -173,7 +172,7 @@ data class TriggerEntity(
                 updatedAt = recordedAt.toUpdatedAt(),
                 groupId = groupId!!,
                 funcId = funcId!!,
-                flowId = flowId!!,
+                namespaceId = namespaceId!!,
                 correlationId = correlationId,
                 name = name!!,
                 inputs = inputs!!,

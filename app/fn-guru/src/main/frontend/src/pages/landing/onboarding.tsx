@@ -10,7 +10,7 @@ const OnboardingPage: FC = () => {
     const navigate = useNavigate()
     const [auth] = useAuth()
     const [createAnonymousAccount] = useAccountCreateAnonymous()
-    const [createFlow, flow,] = useFlowCreate()
+    const [createflow, flow,] = useFlowCreate()
     const [adhoc, adhocSubmitted] = useAdhoc()
     const [code, setCode] = useState<string>('')
 
@@ -37,12 +37,12 @@ const OnboardingPage: FC = () => {
         const abortController = new AbortController()
 
         if (auth != null && auth.type !== 'Unauthorized') {
-            createFlow(auth.groupId, `Flow-${generateId(10)}`, abortController)
+            createflow(auth.groupId, `flow-${generateId(10)}`, abortController)
         }
         return () => {
             abortController.abort()
         }
-    }, [auth, createFlow])
+    }, [auth, createflow])
 
     useEffect(() => {
         const abortController = new AbortController()
@@ -63,7 +63,7 @@ const OnboardingPage: FC = () => {
 
     useEffect(() => {
         if (adhocSubmitted != null) {
-            navigate('/flows', {replace: true})
+            navigate('/groups', {replace: true})
         }
     }, [adhocSubmitted, navigate]);
 

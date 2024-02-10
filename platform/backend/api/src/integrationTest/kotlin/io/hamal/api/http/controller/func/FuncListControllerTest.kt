@@ -86,7 +86,7 @@ internal class FuncListControllerTest : FuncBaseControllerTest() {
         assertThat(listResponse.funcs, hasSize(1))
 
         val func = listResponse.funcs.first()
-        assertThat(func.flow.name, equalTo(FlowName("hamal")))
+        assertThat(func.namespace.name, equalTo(NamespaceName("hamal")))
         assertThat(func.name, equalTo(FuncName("func-48")))
     }
 

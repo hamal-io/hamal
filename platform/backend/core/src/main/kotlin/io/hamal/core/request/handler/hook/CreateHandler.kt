@@ -4,7 +4,7 @@ import io.hamal.core.event.InternalEventEmitter
 import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.request.HookCreateRequested
-import io.hamal.repository.api.FlowQueryRepository
+import io.hamal.repository.api.NamespaceQueryRepository
 import io.hamal.repository.api.Hook
 import io.hamal.repository.api.HookCmdRepository
 import io.hamal.repository.api.HookCmdRepository.CreateCmd
@@ -17,7 +17,7 @@ object Keep
 class HookCreateHandler(
     val hookCmdRepository: HookCmdRepository,
     val eventEmitter: InternalEventEmitter,
-    val flowQueryRepository: FlowQueryRepository
+    val namespaceQueryRepository: NamespaceQueryRepository
 ) : io.hamal.core.request.RequestHandler<HookCreateRequested>(HookCreateRequested::class) {
     override fun invoke(req: HookCreateRequested) {
         createHook(req).also { emitEvent(req.cmdId(), it) }
@@ -30,7 +30,7 @@ private fun HookCreateHandler.createHook(req: HookCreateRequested): Hook {
             id = req.cmdId(),
             hookId = req.hookId,
             groupId = req.groupId,
-            flowId = req.flowId,
+            namespaceId = req.namespaceId,
             name = req.name
         )
     )

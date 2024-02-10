@@ -9,7 +9,7 @@ import io.hamal.lib.domain.vo.RequestId
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.sdk.ApiSdkImpl
 import io.hamal.lib.sdk.api.ApiRequested
-import io.hamal.repository.api.RequestQueryRepository.ReqQuery
+import io.hamal.repository.api.RequestQueryRepository.RequestQuery
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.empty
 import org.hamcrest.Matchers.equalTo
@@ -95,12 +95,12 @@ internal abstract class BaseControllerTest : BaseTest() {
     }
 
     fun verifyNoRequests() {
-        val requests = requestQueryRepository.list(ReqQuery())
+        val requests = requestQueryRepository.list(RequestQuery())
         assertThat(requests, empty())
     }
 
     fun <SUBMITTED_REQ : Requested> verifyNoRequests(clazz: KClass<SUBMITTED_REQ>) {
-        val requests = requestQueryRepository.list(ReqQuery()).filterIsInstance(clazz.java)
+        val requests = requestQueryRepository.list(RequestQuery()).filterIsInstance(clazz.java)
         assertThat(requests, empty())
     }
 

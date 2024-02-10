@@ -106,7 +106,7 @@ internal class TriggerCreateHandlerTest : BaseReqHandlerTest() {
                         status = Submitted,
                         triggerType = Hook,
                         triggerId = TriggerId(2),
-                        flowId = testFlow.id,
+                        namespaceId = testNamespace.id,
                         groupId = testGroup.id,
                         funcId = FuncId(2222),
                         hookId = HookId(1111),
@@ -175,7 +175,7 @@ internal class TriggerCreateHandlerTest : BaseReqHandlerTest() {
                 assertThat(id, equalTo(TriggerId(1234)))
                 assertThat(name, equalTo(TriggerName("FixedRateTrigger")))
                 assertThat(funcId, equalTo(FuncId(2222)))
-                assertThat(duration, equalTo(42.seconds))
+                assertThat(duration, equalTo(TriggerDuration("PT42S")))
                 assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
             }
         }
@@ -242,11 +242,11 @@ internal class TriggerCreateHandlerTest : BaseReqHandlerTest() {
             status = Submitted,
             triggerType = FixedRate,
             triggerId = TriggerId(1234),
-            flowId = testFlow.id,
+            namespaceId = testNamespace.id,
             groupId = testGroup.id,
             funcId = FuncId(2222),
             name = TriggerName("FixedRateTrigger"),
-            duration = 42.seconds,
+            duration = TriggerDuration(42.seconds.toIsoString()),
             inputs = TriggerInputs(
                 HotObject.builder().set("hamal", "rocks").build()
             ),
@@ -259,7 +259,7 @@ internal class TriggerCreateHandlerTest : BaseReqHandlerTest() {
             status = Submitted,
             triggerType = Event,
             triggerId = TriggerId(1234),
-            flowId = testFlow.id,
+            namespaceId = testNamespace.id,
             groupId = testGroup.id,
             funcId = FuncId(2222),
             topicId = TopicId(1111),
@@ -276,7 +276,7 @@ internal class TriggerCreateHandlerTest : BaseReqHandlerTest() {
             status = Submitted,
             triggerType = Hook,
             triggerId = TriggerId(1234),
-            flowId = testFlow.id,
+            namespaceId = testNamespace.id,
             groupId = testGroup.id,
             funcId = FuncId(2222),
             hookId = HookId(1111),
@@ -294,7 +294,7 @@ internal class TriggerCreateHandlerTest : BaseReqHandlerTest() {
             status = Submitted,
             triggerType = Cron,
             triggerId = TriggerId(1234),
-            flowId = testFlow.id,
+            namespaceId = testNamespace.id,
             groupId = testGroup.id,
             funcId = FuncId(2222),
             name = TriggerName("CronTrigger"),

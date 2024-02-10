@@ -75,7 +75,7 @@ abstract class AbstractUnitTest {
             MemoryFixture,
             SqliteFixture
         ),
-        FlowRepository::class to listOf(
+        NamespaceRepository::class to listOf(
             MemoryFixture,
             SqliteFixture
         ),

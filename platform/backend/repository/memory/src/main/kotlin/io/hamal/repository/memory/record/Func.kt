@@ -19,12 +19,12 @@ private object FuncCurrentProjection {
         val currentFunc = projection[func.id]
         projection.remove(func.id)
 
-        val funcsInFlow = projection.values.filter { it.flowId == func.flowId }
-        if (funcsInFlow.any { it.name == func.name }) {
+        val funcsInNamespace = projection.values.filter { it.namespaceId == func.namespaceId }
+        if (funcsInNamespace.any { it.name == func.name }) {
             if (currentFunc != null) {
                 projection[currentFunc.id] = currentFunc
             }
-            throw IllegalArgumentException("${func.name} already exists in flow ${func.flowId}")
+            throw IllegalArgumentException("${func.name} already exists in namespace ${func.namespaceId}")
         }
 
         projection[func.id] = func
@@ -38,7 +38,7 @@ private object FuncCurrentProjection {
             .reversed()
             .asSequence()
             .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
-            .filter { if (query.flowIds.isEmpty()) true else query.flowIds.contains(it.flowId) }
+            .filter { if (query.namespaceIds.isEmpty()) true else query.namespaceIds.contains(it.namespaceId) }
             .dropWhile { it.id >= query.afterId }
             .take(query.limit.value)
             .toList()
@@ -51,7 +51,7 @@ private object FuncCurrentProjection {
                 .reversed()
                 .asSequence()
                 .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
-                .filter { if (query.flowIds.isEmpty()) true else query.flowIds.contains(it.flowId) }
+                .filter { if (query.namespaceIds.isEmpty()) true else query.namespaceIds.contains(it.namespaceId) }
                 .dropWhile { it.id >= query.afterId }
                 .count()
                 .toLong()
@@ -80,7 +80,7 @@ class FuncMemoryRepository : RecordMemoryRepository<FuncId, FuncRecord, Func>(
                         cmdId = cmd.id,
                         entityId = funcId,
                         groupId = cmd.groupId,
-                        flowId = cmd.flowId,
+                        namespaceId = cmd.namespaceId,
                         name = cmd.name,
                         inputs = cmd.inputs,
                         codeId = cmd.codeId,

@@ -8,7 +8,7 @@ type Props = {
     className?: string;
     flowId: string;
 }
-const FlowSelector: FC<Props> = ({className, flowId}) => {
+const flowselector: FC<Props> = ({className, flowId}) => {
     return (
         <Select value={flowId}>
             <SelectTrigger className={cn("h-8 bg-white", className)}>
@@ -17,11 +17,11 @@ const FlowSelector: FC<Props> = ({className, flowId}) => {
             <SelectContent>
                 <SelectGroup>
                     <SelectLabel>Workflows</SelectLabel>
-                    <SelectItem value={flowId}>Current Flow</SelectItem>
+                    <SelectItem value={flowId}>Current flow</SelectItem>
                 </SelectGroup>
             </SelectContent>
         </Select>
     )
 }
 
-export default FlowSelector
+export default flowselector

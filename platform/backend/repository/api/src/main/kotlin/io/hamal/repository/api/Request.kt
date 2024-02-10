@@ -17,9 +17,9 @@ interface RequestCmdRepository : CmdRepository {
 interface RequestQueryRepository {
     fun get(reqId: RequestId) = find(reqId) ?: throw NoSuchElementException("Request not found")
     fun find(reqId: RequestId): Requested?
-    fun list(query: ReqQuery): List<Requested>
-    fun count(query: ReqQuery): Count
-    data class ReqQuery(
+    fun list(query: RequestQuery): List<Requested>
+    fun count(query: RequestQuery): Count
+    data class RequestQuery(
         var afterId: RequestId = RequestId(0),
         var limit: Limit = Limit(1)
     )

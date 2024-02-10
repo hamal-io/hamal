@@ -8,7 +8,6 @@ import io.hamal.repository.record.Record
 import io.hamal.repository.record.RecordAdapter
 import io.hamal.repository.record.RecordSequence
 import io.hamal.repository.record.RecordedAt
-import kotlin.time.Duration
 
 sealed class TriggerRecord(
     @Transient
@@ -33,10 +32,10 @@ data class FixedRateTriggerCreatedRecord(
     override val entityId: TriggerId,
     val groupId: GroupId,
     val funcId: FuncId,
-    val flowId: FlowId,
+    val namespaceId: NamespaceId,
     val name: TriggerName,
     val inputs: TriggerInputs,
-    val duration: Duration,
+    val duration: TriggerDuration,
     val status: TriggerStatus,
     val correlationId: CorrelationId? = null
 ) : TriggerRecord()
@@ -46,7 +45,7 @@ data class EventTriggerCreatedRecord(
     override val entityId: TriggerId,
     val groupId: GroupId,
     val funcId: FuncId,
-    val flowId: FlowId,
+    val namespaceId: NamespaceId,
     val name: TriggerName,
     val inputs: TriggerInputs,
     val topicId: TopicId,
@@ -59,7 +58,7 @@ data class HookTriggerCreatedRecord(
     override val entityId: TriggerId,
     val groupId: GroupId,
     val funcId: FuncId,
-    val flowId: FlowId,
+    val namespaceId: NamespaceId,
     val name: TriggerName,
     val inputs: TriggerInputs,
     val hookId: HookId,
@@ -73,7 +72,7 @@ data class CronTriggerCreatedRecord(
     override val entityId: TriggerId,
     val groupId: GroupId,
     val funcId: FuncId,
-    val flowId: FlowId,
+    val namespaceId: NamespaceId,
     val name: TriggerName,
     val inputs: TriggerInputs,
     val cron: CronPattern,

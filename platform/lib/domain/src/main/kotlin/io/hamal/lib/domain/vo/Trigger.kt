@@ -14,3 +14,5 @@ class TriggerId(override val value: SnowflakeId) : ValueObjectId() {
 class TriggerName(override val value: String) : ValueObjectString()
 
 class TriggerInputs(override val value: HotObject = HotObject.empty) : ValueObjectHotObject()
+
+class TriggerDuration(override val value: String) : ValueObjectString()

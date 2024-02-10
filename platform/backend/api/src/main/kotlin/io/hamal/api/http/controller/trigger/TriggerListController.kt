@@ -3,14 +3,14 @@ package io.hamal.api.http.controller.trigger
 import io.hamal.core.adapter.TriggerListPort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.TriggerType
-import io.hamal.lib.domain.vo.FlowId
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.sdk.api.ApiTriggerList
 import io.hamal.lib.sdk.api.ApiTriggerList.EventTrigger.Topic
 import io.hamal.lib.sdk.api.ApiTriggerList.HookTrigger.Hook
-import io.hamal.lib.sdk.api.ApiTriggerList.Trigger.Flow
+import io.hamal.lib.sdk.api.ApiTriggerList.Trigger.Namespace
 import io.hamal.lib.sdk.api.ApiTriggerList.Trigger.Func
 import io.hamal.repository.api.CronTrigger
 import io.hamal.repository.api.EventTrigger
@@ -27,9 +27,9 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class TriggerListController(private val listTriggers: TriggerListPort) {
 
-    @GetMapping("/v1/flows/{flowId}/triggers")
-    fun listFlowTriggers(
-        @PathVariable("flowId") flowId: FlowId,
+    @GetMapping("/v1/namespaces/{namespaceId}/triggers")
+    fun listNamespaceTriggers(
+        @PathVariable("namespaceId") namespaceId: NamespaceId,
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") triggerId: TriggerId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit,
         @RequestParam(required = false, name = "func_ids", defaultValue = "") funcIds: List<FuncId> = listOf(),
@@ -41,9 +41,9 @@ class TriggerListController(private val listTriggers: TriggerListPort) {
                 types = types,
                 limit = limit,
                 funcIds = funcIds,
-                flowIds = listOf(flowId)
+                namespaceIds = listOf(namespaceId)
             )
-        ) { triggers, funcs, flows, topics, hooks ->
+        ) { triggers, funcs, namespaces, topics, hooks ->
             ResponseEntity.ok(
                 ApiTriggerList(
                     triggers.map { trigger ->
@@ -56,9 +56,9 @@ class TriggerListController(private val listTriggers: TriggerListPort) {
                                         id = trigger.funcId,
                                         name = funcs[trigger.funcId]!!.name
                                     ),
-                                    flow = Flow(
-                                        id = trigger.flowId,
-                                        name = flows[trigger.flowId]!!.name
+                                    namespace = Namespace(
+                                        id = trigger.namespaceId,
+                                        name = namespaces[trigger.namespaceId]!!.name
                                     ),
                                     duration = trigger.duration
                                 )
@@ -72,9 +72,9 @@ class TriggerListController(private val listTriggers: TriggerListPort) {
                                         id = trigger.funcId,
                                         name = funcs[trigger.funcId]!!.name
                                     ),
-                                    flow = Flow(
-                                        id = trigger.flowId,
-                                        name = flows[trigger.flowId]!!.name
+                                    namespace = Namespace(
+                                        id = trigger.namespaceId,
+                                        name = namespaces[trigger.namespaceId]!!.name
                                     ),
                                     topic = Topic(
                                         id = trigger.topicId,
@@ -91,9 +91,9 @@ class TriggerListController(private val listTriggers: TriggerListPort) {
                                         id = trigger.funcId,
                                         name = funcs[trigger.funcId]!!.name
                                     ),
-                                    flow = Flow(
-                                        id = trigger.flowId,
-                                        name = flows[trigger.flowId]!!.name
+                                    namespace = Namespace(
+                                        id = trigger.namespaceId,
+                                        name = namespaces[trigger.namespaceId]!!.name
                                     ),
                                     hook = Hook(
                                         id = trigger.hookId,
@@ -111,9 +111,9 @@ class TriggerListController(private val listTriggers: TriggerListPort) {
                                         id = trigger.funcId,
                                         name = funcs[trigger.funcId]!!.name
                                     ),
-                                    flow = Flow(
-                                        id = trigger.flowId,
-                                        name = flows[trigger.flowId]!!.name
+                                    namespace = Namespace(
+                                        id = trigger.namespaceId,
+                                        name = namespaces[trigger.namespaceId]!!.name
                                     ),
                                     cron = trigger.cron
                                 )
@@ -133,7 +133,7 @@ class TriggerListController(private val listTriggers: TriggerListPort) {
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit,
         @RequestParam(required = false, name = "func_ids", defaultValue = "") funcIds: List<FuncId> = listOf(),
         @RequestParam(required = false, name = "group_ids", defaultValue = "") groupIds: List<GroupId> = listOf(),
-        @RequestParam(required = false, name = "flow_ids", defaultValue = "") flowIds: List<FlowId> = listOf(),
+        @RequestParam(required = false, name = "namespace_ids", defaultValue = "") namespaceIds: List<NamespaceId> = listOf(),
         @RequestParam(required = false, name = "types", defaultValue = "") types: List<TriggerType> = listOf()
     ): ResponseEntity<ApiTriggerList> {
         return listTriggers(
@@ -143,9 +143,9 @@ class TriggerListController(private val listTriggers: TriggerListPort) {
                 limit = limit,
                 groupIds = groupIds,
                 funcIds = funcIds,
-                flowIds = flowIds
+                namespaceIds = namespaceIds
             )
-        ) { triggers, funcs, flows, topics, hooks ->
+        ) { triggers, funcs, namespaces, topics, hooks ->
             ResponseEntity.ok(
                 ApiTriggerList(
                     triggers.map { trigger ->
@@ -158,9 +158,9 @@ class TriggerListController(private val listTriggers: TriggerListPort) {
                                         id = trigger.funcId,
                                         name = funcs[trigger.funcId]!!.name
                                     ),
-                                    flow = Flow(
-                                        id = trigger.flowId,
-                                        name = flows[trigger.flowId]!!.name
+                                    namespace = Namespace(
+                                        id = trigger.namespaceId,
+                                        name = namespaces[trigger.namespaceId]!!.name
                                     ),
                                     duration = trigger.duration
                                 )
@@ -174,9 +174,9 @@ class TriggerListController(private val listTriggers: TriggerListPort) {
                                         id = trigger.funcId,
                                         name = funcs[trigger.funcId]!!.name
                                     ),
-                                    flow = Flow(
-                                        id = trigger.flowId,
-                                        name = flows[trigger.flowId]!!.name
+                                    namespace = Namespace(
+                                        id = trigger.namespaceId,
+                                        name = namespaces[trigger.namespaceId]!!.name
                                     ),
                                     topic = Topic(
                                         id = trigger.topicId,
@@ -193,9 +193,9 @@ class TriggerListController(private val listTriggers: TriggerListPort) {
                                         id = trigger.funcId,
                                         name = funcs[trigger.funcId]!!.name
                                     ),
-                                    flow = Flow(
-                                        id = trigger.flowId,
-                                        name = flows[trigger.flowId]!!.name
+                                    namespace = Namespace(
+                                        id = trigger.namespaceId,
+                                        name = namespaces[trigger.namespaceId]!!.name
                                     ),
                                     hook = Hook(
                                         id = trigger.hookId,
@@ -213,9 +213,9 @@ class TriggerListController(private val listTriggers: TriggerListPort) {
                                         id = trigger.funcId,
                                         name = funcs[trigger.funcId]!!.name
                                     ),
-                                    flow = Flow(
-                                        id = trigger.flowId,
-                                        name = flows[trigger.flowId]!!.name
+                                    namespace = Namespace(
+                                        id = trigger.namespaceId,
+                                        name = namespaces[trigger.namespaceId]!!.name
                                     ),
                                     cron = trigger.cron
                                 )

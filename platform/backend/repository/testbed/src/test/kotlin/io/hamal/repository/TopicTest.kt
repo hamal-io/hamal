@@ -51,7 +51,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Tries to create but same name already exists in group`() = runWith(TopicRepository::class) {
-            createFlowTopic(
+            createNamespaceTopic(
                 topicId = TopicId(1),
                 groupId = GroupId(3),
                 logTopicId = LogTopicId(4),
@@ -79,7 +79,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Creates with same name but different group`() = runWith(TopicRepository::class) {
-            createFlowTopic(
+            createNamespaceTopic(
                 topicId = TopicId(1),
                 groupId = GroupId(3),
                 name = TopicName("first-topic-name")
@@ -102,7 +102,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
         fun `Tries to create but cmd with trigger id was already applied`() =
             runWith(TopicRepository::class) {
 
-                createFlowTopic(
+                createNamespaceTopic(
                     cmdId = CmdId(23456),
                     topicId = TopicId(1),
                     groupId = GroupId(3),
@@ -223,7 +223,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Clear table`() = runWith(TopicRepository::class) {
-            createFlowTopic(
+            createNamespaceTopic(
                 cmdId = CmdId(1),
                 topicId = TopicId(1),
                 groupId = GroupId(3),
@@ -231,7 +231,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
                 name = TopicName("first-topic-name")
             )
 
-            createFlowTopic(
+            createNamespaceTopic(
                 cmdId = CmdId(2),
                 topicId = TopicId(20),
                 groupId = GroupId(23),
@@ -250,7 +250,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Get topic by id`() = runWith(TopicRepository::class) {
-            createFlowTopic(
+            createNamespaceTopic(
                 topicId = TopicId(1),
                 groupId = GroupId(3),
                 logTopicId = LogTopicId(4),
@@ -269,7 +269,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Tries to get topic by id but does not exist`() = runWith(TopicRepository::class) {
-            createFlowTopic(
+            createNamespaceTopic(
                 topicId = TopicId(1),
                 groupId = GroupId(3),
                 logTopicId = LogTopicId(4),
@@ -288,7 +288,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
     inner class FindTest {
         @TestFactory
         fun `Find topic by id`() = runWith(TopicRepository::class) {
-            createFlowTopic(
+            createNamespaceTopic(
                 topicId = TopicId(1),
                 groupId = GroupId(3),
                 logTopicId = LogTopicId(4),
@@ -307,7 +307,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Tries to find topic by id but does not exist`() = runWith(TopicRepository::class) {
-            createFlowTopic(
+            createNamespaceTopic(
                 topicId = TopicId(1),
                 groupId = GroupId(3),
                 logTopicId = LogTopicId(4),
@@ -323,7 +323,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Get topic by group id and name`() = runWith(TopicRepository::class) {
-            createFlowTopic(
+            createNamespaceTopic(
                 topicId = TopicId(1),
                 groupId = GroupId(3),
                 logTopicId = LogTopicId(4),
@@ -342,7 +342,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Tries to get topic by group id and name but does not exist`() = runWith(TopicRepository::class) {
-            createFlowTopic(
+            createNamespaceTopic(
                 cmdId = CmdId(1),
                 topicId = TopicId(1),
                 groupId = GroupId(3),
@@ -370,7 +370,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Finds topic by group id and name`() = runWith(TopicRepository::class) {
-            createFlowTopic(
+            createNamespaceTopic(
                 topicId = TopicId(1),
                 groupId = GroupId(3),
                 logTopicId = LogTopicId(4),
@@ -389,7 +389,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Tries to find topic by group id and name but does not exist`() = runWith(TopicRepository::class) {
-            createFlowTopic(
+            createNamespaceTopic(
                 cmdId = CmdId(1),
                 topicId = TopicId(1),
                 groupId = GroupId(3),
@@ -564,21 +564,21 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
 
 
         private fun TopicRepository.setup() {
-            createFlowTopic(
+            createNamespaceTopic(
                 topicId = TopicId(1),
                 groupId = GroupId(3),
                 logTopicId = LogTopicId(4),
                 name = TopicName("topic-one")
             )
 
-            createFlowTopic(
+            createNamespaceTopic(
                 topicId = TopicId(11),
                 groupId = GroupId(13),
                 logTopicId = LogTopicId(14),
                 name = TopicName("topic-two")
             )
 
-            createFlowTopic(
+            createNamespaceTopic(
                 topicId = TopicId(21),
                 groupId = GroupId(23),
                 logTopicId = LogTopicId(24),
@@ -593,7 +593,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
         }
     }
 
-    private fun TopicRepository.createFlowTopic(
+    private fun TopicRepository.createNamespaceTopic(
         topicId: TopicId,
         name: TopicName,
         logTopicId: LogTopicId = LogTopicId(3),

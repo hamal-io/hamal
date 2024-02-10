@@ -9,7 +9,7 @@ import io.hamal.lib.domain.request.AuthLoginEmailRequested
 import io.hamal.lib.domain.request.AuthLoginMetaMaskRequested
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.*
-import io.hamal.repository.api.FlowQueryRepository.FlowQuery
+import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
 import io.hamal.lib.domain.request.AccountCreateMetaMaskRequest
 import io.hamal.lib.domain.request.AuthChallengeMetaMaskRequest
 import io.hamal.lib.domain.request.AuthLogInEmailRequest
@@ -47,7 +47,7 @@ class AuthAdapter(
     private val generateToken: GenerateToken,
     private val requestCmdRepository: RequestCmdRepository,
     private val groupList: GroupListPort,
-    private val flowList: FlowListPort,
+    private val namespaceList: NamespaceListPort,
 ) : AuthPort {
 
     override fun invoke(req: AuthChallengeMetaMaskRequest): Web3Challenge {
@@ -73,7 +73,7 @@ class AuthAdapter(
                 authId = generateDomainId(::AuthId),
                 accountId = submitted.accountId,
                 groupIds = listOf(submitted.groupId),
-                defaultFlowIds = listOf(io.hamal.lib.domain.vo.GroupDefaultFlowId(submitted.groupId, submitted.flowId)),
+                defaultNamespaceIds = listOf(io.hamal.lib.domain.vo.GroupDefaultNamespaceId(submitted.groupId, submitted.namespaceId)),
                 token = generateToken(),
                 address = req.address,
                 signature = req.signature
@@ -81,10 +81,10 @@ class AuthAdapter(
 
         } else {
             val groupIds = groupList(auth.accountId) { groups -> groups.map(Group::id) }
-            val flows = flowList(FlowQuery(groupIds = groupIds, limit = Limit.all)) { it }
-            val defaultFlowIds = flows.filter { it.name == FlowName.default }
+            val namespaces = namespaceList(NamespaceQuery(groupIds = groupIds, limit = Limit.all)) { it }
+            val defaultNamespaceIds = namespaces.filter { it.name == NamespaceName.default }
                 .map {
-                    io.hamal.lib.domain.vo.GroupDefaultFlowId(it.groupId, it.id)
+                    io.hamal.lib.domain.vo.GroupDefaultNamespaceId(it.groupId, it.id)
                 }
 
             return AuthLoginMetaMaskRequested(
@@ -93,7 +93,7 @@ class AuthAdapter(
                 authId = generateDomainId(::AuthId),
                 accountId = auth.accountId,
                 groupIds = groupIds,
-                defaultFlowIds = defaultFlowIds,
+                defaultNamespaceIds = defaultNamespaceIds,
                 token = generateToken(),
                 address = req.address,
                 signature = req.signature
@@ -116,9 +116,9 @@ class AuthAdapter(
 
         val groupIds = groupList(account.id) { groups -> groups.map(Group::id) }
 
-        val flows = flowList(FlowQuery(groupIds = groupIds, limit = Limit.all)) { it }
-        val defaultFlowIds = flows.filter { it.name == FlowName.default }
-            .map { io.hamal.lib.domain.vo.GroupDefaultFlowId(it.groupId, it.id) }
+        val namespaces = namespaceList(NamespaceQuery(groupIds = groupIds, limit = Limit.all)) { it }
+        val defaultNamespaceIds = namespaces.filter { it.name == NamespaceName.default }
+            .map { io.hamal.lib.domain.vo.GroupDefaultNamespaceId(it.groupId, it.id) }
 
         return AuthLoginEmailRequested(
             id = generateDomainId(::RequestId),
@@ -126,7 +126,7 @@ class AuthAdapter(
             authId = generateDomainId(::AuthId),
             accountId = account.id,
             groupIds = groupList(account.id) { groups -> groups.map(Group::id) },
-            defaultFlowIds = defaultFlowIds,
+            defaultNamespaceIds = defaultNamespaceIds,
             hash = encodedPassword,
             token = generateToken()
         ).also(requestCmdRepository::queue).let(responseHandler)

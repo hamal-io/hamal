@@ -66,20 +66,20 @@ interface ApiTopicService {
     fun list(query: TopicQuery): List<ApiTopicList.Topic>
     fun events(topicId: TopicId): List<ApiTopicEventList.Event>
     fun get(topicId: TopicId): ApiTopic
-    fun resolve(flowId: FlowId, topicName: TopicName): TopicId
+    fun resolve(namespaceId: NamespaceId, topicName: TopicName): TopicId
 
     data class TopicQuery(
         var afterId: TopicId = TopicId(SnowflakeId(Long.MAX_VALUE)),
         var limit: Limit = Limit(25),
         var topicIds: List<TopicId> = listOf(),
-        var flowIds: List<FlowId> = listOf(),
+        var namespaceIds: List<NamespaceId> = listOf(),
         var groupIds: List<GroupId> = listOf()
     ) {
         fun setRequestParameters(req: HttpRequest) {
             req.parameter("after_id", afterId)
             req.parameter("limit", limit)
             if (topicIds.isNotEmpty()) req.parameter("topic_ids", topicIds)
-            if (flowIds.isNotEmpty()) req.parameter("flow_ids", flowIds)
+            if (namespaceIds.isNotEmpty()) req.parameter("namespace_ids", namespaceIds)
             if (groupIds.isNotEmpty()) req.parameter("group_ids", groupIds)
         }
     }
@@ -124,10 +124,10 @@ internal class ApiTopicServiceImpl(
             .execute()
             .fold(ApiTopic::class)
 
-    override fun resolve(flowId: FlowId, topicName: TopicName): TopicId {
+    override fun resolve(namespaceId: NamespaceId, topicName: TopicName): TopicId {
         return topicNameCache(topicName) {
             template.get("/v1/topics")
-                .parameter("flow_ids", flowId)
+                .parameter("namespace_ids", namespaceId)
                 .parameter("names", topicName.value)
                 .execute()
                 .fold(ApiTopicList::class)

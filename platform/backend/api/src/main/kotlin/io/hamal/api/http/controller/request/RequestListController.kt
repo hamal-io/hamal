@@ -20,7 +20,7 @@ internal class RequestListController(private val listReqs: RequestListPort) {
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit
     ): ResponseEntity<ApiRequestList> {
         return listReqs(
-            RequestQueryRepository.ReqQuery(
+            RequestQueryRepository.RequestQuery(
                 afterId = afterId,
                 limit = limit
                 // groupId = ...

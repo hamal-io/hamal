@@ -68,7 +68,7 @@ class EndpointSqliteRepository(
                         cmdId = cmdId,
                         entityId = endpointId,
                         groupId = cmd.groupId,
-                        flowId = cmd.flowId,
+                        namespaceId = cmd.namespaceId,
                         name = cmd.name,
                         funcId = cmd.funcId,
                     )

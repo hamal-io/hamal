@@ -15,11 +15,10 @@ const Authenticated: React.FC<AuthenticatedProps> = (props) => {
         return null
     }
     return (
-        <main className="flex-col md:flex">
-            <Header/>
+        <>
             {props.children}
             <Feedback/>
-        </main>
+        </>
     );
 }
 

@@ -405,7 +405,7 @@ internal class PopTest : NativeTest() {
         val exception = assertThrows<IllegalArgumentException> {
             testInstance.pop(1)
         }
-        assertThat(exception.message, equalTo("Prevented stack underflow"))
+        assertThat(exception.message, equalTo("Prevented stack undernamespace"))
     }
 
     @Test

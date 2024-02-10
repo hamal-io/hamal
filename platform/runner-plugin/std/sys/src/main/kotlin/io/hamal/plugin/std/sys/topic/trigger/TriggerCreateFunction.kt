@@ -13,7 +13,6 @@ import io.hamal.lib.kua.type.KuaMap
 import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiTriggerCreateReq
-import kotlin.time.Duration
 
 class TriggerCreateFunction(
     private val sdk: ApiSdk
@@ -24,14 +23,14 @@ class TriggerCreateFunction(
     override fun invoke(ctx: FunctionContext, arg1: KuaMap): Pair<KuaError?, KuaMap?> {
         return try {
             val res = sdk.trigger.create(
-                arg1.findString("flow_id")?.let { FlowId(SnowflakeId(it)) } ?: ctx[FlowId::class],
+                arg1.findString("namespace_id")?.let { NamespaceId(SnowflakeId(it)) } ?: ctx[NamespaceId::class],
                 ApiTriggerCreateReq(
                     type = TriggerType.valueOf(arg1.getString("type")),
                     funcId = FuncId(SnowflakeId(arg1.getString("func_id"))),
                     name = TriggerName(arg1.getString("name")),
                     inputs = TriggerInputs(),
                     duration = if (arg1.type("duration") == KuaString::class) {
-                        Duration.parseIsoString(arg1.getString("duration"))
+                        TriggerDuration(arg1.getString("duration"))
                     } else {
                         null
                     },
@@ -60,7 +59,7 @@ class TriggerCreateFunction(
                     "status" to KuaString(res.status.name),
                     "trigger_id" to KuaString(res.triggerId.value.value.toString(16)),
                     "group_id" to KuaString(res.groupId.value.value.toString(16)),
-                    "flow_id" to KuaString(res.flowId.value.value.toString(16))
+                    "namespace_id" to KuaString(res.namespaceId.value.value.toString(16))
                 )
             )
 

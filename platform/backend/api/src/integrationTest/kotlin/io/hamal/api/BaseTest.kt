@@ -100,13 +100,13 @@ internal abstract class BaseTest {
     lateinit var hookCmdRepository: HookCmdRepository
 
     @Autowired
-    lateinit var flowQueryRepository: FlowQueryRepository
+    lateinit var namespaceQueryRepository: NamespaceQueryRepository
 
     @Autowired
     lateinit var logBrokerRepository: LogBrokerRepository
 
     @Autowired
-    lateinit var flowCmdRepository: FlowCmdRepository
+    lateinit var namespaceCmdRepository: NamespaceCmdRepository
 
     @Autowired
     lateinit var requestQueryRepository: RequestQueryRepository
@@ -141,7 +141,7 @@ internal abstract class BaseTest {
     lateinit var testAccount: Account
     lateinit var testAuthToken: AuthToken
     lateinit var testGroup: Group
-    lateinit var testFlow: Flow
+    lateinit var testNamespace: Namespace
 
     @BeforeEach
     fun before() {
@@ -158,7 +158,7 @@ internal abstract class BaseTest {
         groupCmdRepository.clear()
         hookCmdRepository.clear()
         logBrokerRepository.clear()
-        flowCmdRepository.clear()
+        namespaceCmdRepository.clear()
         requestCmdRepository.clear()
         stateCmdRepository.clear()
         topicCmdRepository.clear()
@@ -194,13 +194,12 @@ internal abstract class BaseTest {
             )
         )
 
-        testFlow = flowCmdRepository.create(
-            FlowCmdRepository.CreateCmd(
+        testNamespace = namespaceCmdRepository.create(
+            NamespaceCmdRepository.CreateCmd(
                 id = CmdId(1),
-                flowId = FlowId.root,
+                namespaceId = NamespaceId.root,
                 groupId = testGroup.id,
-                name = FlowName("hamal"),
-                inputs = FlowInputs()
+                name = NamespaceName("hamal")
             )
         )
     }
@@ -220,7 +219,7 @@ internal abstract class BaseTest {
             ExecCmdRepository.PlanCmd(
                 id = CmdId(1),
                 execId = execId,
-                flowId = testFlow.id,
+                namespaceId = testNamespace.id,
                 groupId = testGroup.id,
                 correlation = correlation,
                 inputs = ExecInputs(),

@@ -38,7 +38,7 @@ data class BridgeUnitOfWorkList(
 ) {
     data class UnitOfWork(
         val id: ExecId,
-        val flowId: FlowId,
+        val namespaceId: NamespaceId,
         val groupId: GroupId,
         val inputs: ExecInputs,
         val state: State,

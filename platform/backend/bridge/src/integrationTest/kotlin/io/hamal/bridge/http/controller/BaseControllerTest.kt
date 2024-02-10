@@ -6,7 +6,7 @@ import io.hamal.lib.domain.request.Requested
 import io.hamal.lib.domain.vo.RequestId
 import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.sdk.api.ApiRequested
-import io.hamal.repository.api.RequestQueryRepository.ReqQuery
+import io.hamal.repository.api.RequestQueryRepository.RequestQuery
 import org.hamcrest.MatcherAssert
 import org.hamcrest.Matchers
 import kotlin.reflect.KClass
@@ -96,12 +96,12 @@ internal abstract class BaseControllerTest : BaseTest() {
 
 
     fun verifyNoRequests() {
-        val requests = requestQueryRepository.list(ReqQuery())
+        val requests = requestQueryRepository.list(RequestQuery())
         MatcherAssert.assertThat(requests, Matchers.empty())
     }
 
     fun <SUBMITTED_REQ : Requested> verifyNoRequests(clazz: KClass<SUBMITTED_REQ>) {
-        val requests = requestQueryRepository.list(ReqQuery()).filterIsInstance(clazz.java)
+        val requests = requestQueryRepository.list(RequestQuery()).filterIsInstance(clazz.java)
         MatcherAssert.assertThat(requests, Matchers.empty())
     }
 

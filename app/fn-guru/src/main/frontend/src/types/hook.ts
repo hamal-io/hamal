@@ -1,7 +1,7 @@
 export interface HookCreateSubmitted {
     id: string;
     hookId: string;
-    flowId: string;
+    namespaceId: string;
     groupId: string;
 }
 
@@ -12,7 +12,7 @@ export interface HookList {
 export interface HookListItem {
     id: string;
     name: string;
-    flow: {
+    namespace: {
         id: string;
         name: string
     },
@@ -21,7 +21,7 @@ export interface HookListItem {
 export interface Hook {
     id: string;
     name: string;
-    flow: {
+    namespace: {
         id: string;
         name: string
     },

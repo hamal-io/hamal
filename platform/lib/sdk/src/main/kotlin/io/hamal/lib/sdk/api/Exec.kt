@@ -11,7 +11,7 @@ data class ApiExecInvokeRequested(
     override val status: RequestStatus,
     val execId: ExecId,
     val groupId: GroupId,
-    val flowId: FlowId
+    val namespaceId: NamespaceId
 ) : ApiRequested()
 
 data class ApiExecList(
@@ -42,7 +42,7 @@ data class ApiExec(
 
 interface ApiExecService {
     fun list(groupId: GroupId): List<ApiExecList.Exec>
-    fun list(flowId: FlowId): List<ApiExecList.Exec>
+    fun list(namespaceId: NamespaceId): List<ApiExecList.Exec>
     fun get(execId: ExecId): ApiExec
 }
 
@@ -53,9 +53,9 @@ internal class ApiExecServiceImpl(
     override fun list(groupId: GroupId) =
         template.get("/v1/execs").parameter("group_ids", groupId).execute().fold(ApiExecList::class).execs
 
-    override fun list(flowId: FlowId): List<ApiExecList.Exec> =
-        template.get("/v1/flows/{flowId}/execs")
-            .path("flowId", flowId)
+    override fun list(namespaceId: NamespaceId): List<ApiExecList.Exec> =
+        template.get("/v1/namespaces/{namespaceId}/execs")
+            .path("namespaceId", namespaceId)
             .execute()
             .fold(ApiExecList::class).execs
 

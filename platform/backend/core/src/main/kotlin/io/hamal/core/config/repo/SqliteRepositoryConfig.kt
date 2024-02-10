@@ -15,7 +15,7 @@ import io.hamal.repository.sqlite.record.endpoint.EndpointSqliteRepository
 import io.hamal.repository.sqlite.record.exec.ExecSqliteRepository
 import io.hamal.repository.sqlite.record.extension.ExtensionSqliteRepository
 import io.hamal.repository.sqlite.record.feedback.FeedbackSqliteRepository
-import io.hamal.repository.sqlite.record.flow.FlowSqliteRepository
+import io.hamal.repository.sqlite.record.namespace.NamespacesqliteRepository
 import io.hamal.repository.sqlite.record.func.FuncSqliteRepository
 import io.hamal.repository.sqlite.record.group.GroupSqliteRepository
 import io.hamal.repository.sqlite.record.hook.HookSqliteRepository
@@ -121,13 +121,13 @@ open class SqliteRepositoryConfig(backendBasePath: BackendBasePath) {
     open fun hookCmdRepository() = hookRepository()
 
     @Bean
-    open fun flowRepository() = FlowSqliteRepository(FlowSqliteRepository.Config(path))
+    open fun namespaceRepository() = NamespacesqliteRepository(NamespacesqliteRepository.Config(path))
 
     @Bean
-    open fun flowCmdRepository(): FlowCmdRepository = flowRepository()
+    open fun namespaceCmdRepository(): NamespaceCmdRepository = namespaceRepository()
 
     @Bean
-    open fun flowQueryRepository(): FlowQueryRepository = flowRepository()
+    open fun namespaceQueryRepository(): NamespaceQueryRepository = namespaceRepository()
 
     @Bean
     open fun execRepository() = ExecSqliteRepository(ExecSqliteRepository.Config(path))

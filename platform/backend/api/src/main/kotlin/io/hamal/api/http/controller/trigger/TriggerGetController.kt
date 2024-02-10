@@ -23,7 +23,7 @@ internal class TriggerGetController(
         @PathVariable("triggerId") triggerId: TriggerId,
     ): ResponseEntity<ApiTrigger> {
         return retry {
-            getTrigger(triggerId) { trigger, func, flow, topic, hook ->
+            getTrigger(triggerId) { trigger, func, namespace, topic, hook ->
                 ResponseEntity.ok(
                     when (trigger) {
                         is FixedRateTrigger -> ApiFixedRateTrigger(
@@ -33,9 +33,9 @@ internal class TriggerGetController(
                                 id = func.id,
                                 name = func.name
                             ),
-                            flow = ApiTrigger.Flow(
-                                id = flow.id,
-                                name = flow.name
+                            namespace = ApiTrigger.Namespace(
+                                id = namespace.id,
+                                name = namespace.name
                             ),
                             inputs = trigger.inputs,
                             duration = trigger.duration,
@@ -49,9 +49,9 @@ internal class TriggerGetController(
                                 id = func.id,
                                 name = func.name
                             ),
-                            flow = ApiTrigger.Flow(
-                                id = flow.id,
-                                name = flow.name
+                            namespace = ApiTrigger.Namespace(
+                                id = namespace.id,
+                                name = namespace.name
                             ),
                             inputs = trigger.inputs,
                             topic = ApiEventTrigger.Topic(
@@ -68,9 +68,9 @@ internal class TriggerGetController(
                                 id = func.id,
                                 name = func.name
                             ),
-                            flow = ApiTrigger.Flow(
-                                id = flow.id,
-                                name = flow.name
+                            namespace = ApiTrigger.Namespace(
+                                id = namespace.id,
+                                name = namespace.name
                             ),
                             inputs = trigger.inputs,
                             hook = ApiHookTrigger.Hook(
@@ -88,9 +88,9 @@ internal class TriggerGetController(
                                 id = func.id,
                                 name = func.name
                             ),
-                            flow = ApiTrigger.Flow(
-                                id = flow.id,
-                                name = flow.name
+                            namespace = ApiTrigger.Namespace(
+                                id = namespace.id,
+                                name = namespace.name
                             ),
                             inputs = trigger.inputs,
                             cron = trigger.cron,

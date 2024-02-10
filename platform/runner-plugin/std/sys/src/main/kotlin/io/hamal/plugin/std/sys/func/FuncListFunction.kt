@@ -1,6 +1,6 @@
 package io.hamal.plugin.std.sys.func
 
-import io.hamal.lib.domain.vo.FlowId
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -23,17 +23,17 @@ class FuncListFunction(
             null to KuaArray(
                 sdk.func.list(
                     FuncQuery(
-                        flowIds = arg1.getArrayType("flow_ids")
-                            .map { FlowId((it.value as KuaString).value) }
+                        namespaceIds = arg1.getArrayType("namespace_ids")
+                            .map { NamespaceId((it.value as KuaString).value) }
                     )
                 ).mapIndexed { index, func ->
                     index to KuaMap(
                         mutableMapOf(
                             "id" to KuaString(func.id.value.value.toString(16)),
-                            "flow" to KuaMap(
+                            "namespace" to KuaMap(
                                 mutableMapOf(
-                                    "id" to KuaString(func.flow.id.value.value.toString(16)),
-                                    "name" to KuaString(func.flow.name.value)
+                                    "id" to KuaString(func.namespace.id.value.value.toString(16)),
+                                    "name" to KuaString(func.namespace.name.value)
                                 )
                             ),
                             "name" to KuaString(func.name.value),

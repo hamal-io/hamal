@@ -10,7 +10,7 @@ type Props = {
     children: ReactNode;
 }
 
-export const FlowContext = createContext<Flow | null>(null)
+export const flowContext = createContext<Flow | null>(null)
 
 const FlowDetailPage: FC<Props> = ({children}) => {
     const {flowId} = useParams()
@@ -25,9 +25,9 @@ const FlowDetailPage: FC<Props> = ({children}) => {
             <div className="relative flex flex-row min-h-screen ">
                 <Sidebar/>
                 <div className="p-4 border-l border-border w-full  ml-64">
-                    <FlowContext.Provider value={flow}>
+                    <flowContext.Provider value={flow}>
                         {children}
-                    </FlowContext.Provider>
+                    </flowContext.Provider>
                 </div>
             </div>
         </Authenticated>

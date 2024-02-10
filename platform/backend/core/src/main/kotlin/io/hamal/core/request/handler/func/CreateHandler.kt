@@ -5,7 +5,7 @@ import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.request.FuncCreateRequested
 import io.hamal.repository.api.CodeCmdRepository
-import io.hamal.repository.api.FlowQueryRepository
+import io.hamal.repository.api.NamespaceQueryRepository
 import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncCmdRepository
 import io.hamal.repository.api.FuncCmdRepository.CreateCmd
@@ -17,7 +17,7 @@ class FuncCreateHandler(
     val codeCmdRepository: CodeCmdRepository,
     val funcCmdRepository: FuncCmdRepository,
     val eventEmitter: InternalEventEmitter,
-    val flowQueryRepository: FlowQueryRepository
+    val namespaceQueryRepository: NamespaceQueryRepository
 ) : io.hamal.core.request.RequestHandler<FuncCreateRequested>(FuncCreateRequested::class) {
     override fun invoke(req: FuncCreateRequested) {
         createFunc(req).also { emitEvent(req.cmdId(), it) }
@@ -38,7 +38,7 @@ private fun FuncCreateHandler.createFunc(req: FuncCreateRequested): Func {
             id = req.cmdId(),
             funcId = req.funcId,
             groupId = req.groupId,
-            flowId = req.flowId,
+            namespaceId = req.namespaceId,
             name = req.name,
             inputs = req.inputs,
             codeId = code.id,

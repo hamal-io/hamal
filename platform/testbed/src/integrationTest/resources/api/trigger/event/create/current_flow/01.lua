@@ -18,13 +18,13 @@
 --assert(req_two.status == 'Submitted')
 --assert(req_two.trigger_id ~= nil)
 --assert(req_two.group_id == '1')
---assert(req_two.flow_id == '1')
+--assert(req_two.namespace_id == '1')
 --
 --req_two = fail_on_error(sys.triggers.get(req_two.id))
 --
 --assert(req_two.type == 'Event')
 --assert(req_two.name == 'trigger-to-create')
 --assert(req_two.func.name == "test-func")
---assert(req_two.flow.name == "root-flow")
+--assert(req_two.namespace.name == "root-namespace")
 --assert(req_two.topic.name == "some-amazing-topic")
 --

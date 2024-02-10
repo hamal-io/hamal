@@ -21,7 +21,7 @@ internal object EventInvocationTest : AbstractExecuteTest() {
         testExecutor.run(
             UnitOfWork(
                 id = ExecId(1234),
-                flowId = FlowId(9876),
+                namespaceId = NamespaceId(9876),
                 groupId = GroupId(5432),
                 inputs = ExecInputs(),
                 state = State(),
@@ -56,7 +56,7 @@ internal object EventInvocationTest : AbstractExecuteTest() {
         testExecutor.run(
             UnitOfWork(
                 id = ExecId(1234),
-                flowId = FlowId(9876),
+                namespaceId = NamespaceId(9876),
                 groupId = GroupId(5432),
                 inputs = ExecInputs(),
                 state = State(),
@@ -96,7 +96,7 @@ internal object HookInvocationTest : AbstractExecuteTest() {
         testExecutor.run(
             UnitOfWork(
                 id = ExecId(1234),
-                flowId = FlowId(9876),
+                namespaceId = NamespaceId(9876),
                 groupId = GroupId(5432),
                 inputs = ExecInputs(),
                 state = State(),
@@ -138,7 +138,7 @@ internal object HookInvocationTest : AbstractExecuteTest() {
         testExecutor.run(
             UnitOfWork(
                 id = ExecId(1234),
-                flowId = FlowId(9876),
+                namespaceId = NamespaceId(9876),
                 groupId = GroupId(5432),
                 inputs = ExecInputs(),
                 state = State(),
@@ -186,7 +186,7 @@ internal object EndpointInvocationTest : AbstractExecuteTest() {
         testExecutor.run(
             UnitOfWork(
                 id = ExecId(1234),
-                flowId = FlowId(9876),
+                namespaceId = NamespaceId(9876),
                 groupId = GroupId(5432),
                 inputs = ExecInputs(),
                 state = State(),
@@ -228,7 +228,7 @@ internal object EndpointInvocationTest : AbstractExecuteTest() {
         testExecutor.run(
             UnitOfWork(
                 id = ExecId(1234),
-                flowId = FlowId(9876),
+                namespaceId = NamespaceId(9876),
                 groupId = GroupId(5432),
                 inputs = ExecInputs(),
                 state = State(),

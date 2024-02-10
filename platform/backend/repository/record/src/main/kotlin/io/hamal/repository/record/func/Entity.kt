@@ -17,7 +17,7 @@ data class FuncEntity(
     override val recordedAt: RecordedAt,
     val groupId: GroupId,
 
-    var flowId: FlowId? = null,
+    var namespaceId: NamespaceId? = null,
     var name: FuncName? = null,
     var inputs: FuncInputs? = null,
     var code: FuncCode? = null,
@@ -31,7 +31,7 @@ data class FuncEntity(
                 id = rec.entityId,
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
-                flowId = rec.flowId,
+                namespaceId = rec.namespaceId,
                 name = rec.name,
                 inputs = rec.inputs,
                 code = FuncCode(
@@ -83,7 +83,7 @@ data class FuncEntity(
             id = id,
             updatedAt = recordedAt.toUpdatedAt(),
             groupId = groupId,
-            flowId = flowId!!,
+            namespaceId = namespaceId!!,
             name = name!!,
             inputs = inputs!!,
             code = code!!,

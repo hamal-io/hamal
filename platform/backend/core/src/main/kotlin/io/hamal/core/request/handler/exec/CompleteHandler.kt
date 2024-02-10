@@ -22,7 +22,7 @@ class ExecCompleteHandler(
     private val execCmdRepository: ExecCmdRepository,
     private val eventEmitter: InternalEventEmitter,
     private val stateCmdRepository: StateCmdRepository,
-    private val flowQueryRepository: FlowQueryRepository,
+    private val namespaceQueryRepository: NamespaceQueryRepository,
     private val topicRepository: TopicRepository,
     private val logBrokerRepository: LogBrokerRepository,
     private val generateId: GenerateId
@@ -34,12 +34,12 @@ class ExecCompleteHandler(
         val exec = execQueryRepository.get(req.execId)
         require(exec is StartedExec) { "Exec not in status Started" }
 
-        val flowId = exec.flowId
+        val namespaceId = exec.namespaceId
 
         completeExec(req)
             .also { emitCompletionEvent(cmdId, it) }
             .also { setState(cmdId, it) }
-            .also { appendEvents(cmdId, flowId, req.events) }
+            .also { appendEvents(cmdId, namespaceId, req.events) }
     }
 
     private fun completeExec(req: ExecCompleteRequested) =
@@ -68,16 +68,16 @@ class ExecCompleteHandler(
         }
     }
 
-    private fun appendEvents(cmdId: CmdId, flowId: FlowId, events: List<EventToSubmit>) {
+    private fun appendEvents(cmdId: CmdId, namespaceId: NamespaceId, events: List<EventToSubmit>) {
         events.forEach { evt ->
             val topicName = evt.topicName
-            val flow = flowQueryRepository.get(flowId)
-            val topic = topicRepository.findGroupTopic(flow.groupId, topicName) ?: topicRepository.create(
+            val namespace = namespaceQueryRepository.get(namespaceId)
+            val topic = topicRepository.findGroupTopic(namespace.groupId, topicName) ?: topicRepository.create(
                 TopicGroupCreateCmd(
                     id = cmdId,
                     topicId = generateId(::TopicId),
                     name = topicName,
-                    groupId = flow.groupId,
+                    groupId = namespace.groupId,
                     logTopicId = generateId(::LogTopicId)
                 )
             )

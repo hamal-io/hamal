@@ -10,14 +10,14 @@ import org.springframework.stereotype.Component
 
 interface FuncCreatePort {
     operator fun <T : Any> invoke(
-        flowId: FlowId,
+        namespaceId: NamespaceId,
         req: FuncCreateRequest,
         responseHandler: (FuncCreateRequested) -> T
     ): T
 }
 
 interface FuncGetPort {
-    operator fun <T : Any> invoke(funcId: FuncId, responseHandler: (Func, Code, Code, Flow) -> T): T
+    operator fun <T : Any> invoke(funcId: FuncId, responseHandler: (Func, Code, Code, Namespace) -> T): T
 }
 
 interface FuncInvokePort {
@@ -35,7 +35,7 @@ interface FuncInvokePort {
 }
 
 interface FuncListPort {
-    operator fun <T : Any> invoke(query: FuncQuery, responseHandler: (List<Func>, Map<FlowId, Flow>) -> T): T
+    operator fun <T : Any> invoke(query: FuncQuery, responseHandler: (List<Func>, Map<NamespaceId, Namespace>) -> T): T
 }
 
 interface FuncDeploymentListPort {
@@ -67,22 +67,22 @@ class FuncAdapter(
     private val codeQueryRepository: CodeQueryRepository,
     private val funcQueryRepository: FuncQueryRepository,
     private val generateDomainId: GenerateId,
-    private val flowQueryRepository: FlowQueryRepository,
+    private val namespaceQueryRepository: NamespaceQueryRepository,
     private val requestCmdRepository: RequestCmdRepository
 ) : FuncPort {
 
     override fun <T : Any> invoke(
-        flowId: FlowId,
+        namespaceId: NamespaceId,
         req: FuncCreateRequest,
         responseHandler: (FuncCreateRequested) -> T
     ): T {
-        val flow = flowQueryRepository.get(flowId)
+        val namespace = namespaceQueryRepository.get(namespaceId)
         return FuncCreateRequested(
             id = generateDomainId(::RequestId),
             status = RequestStatus.Submitted,
-            groupId = flow.groupId,
+            groupId = namespace.groupId,
             funcId = generateDomainId(::FuncId),
-            flowId = flowId,
+            namespaceId = namespaceId,
             name = req.name,
             inputs = req.inputs,
             codeId = generateDomainId(::CodeId),
@@ -90,12 +90,12 @@ class FuncAdapter(
         ).also(requestCmdRepository::queue).let(responseHandler)
     }
 
-    override fun <T : Any> invoke(funcId: FuncId, responseHandler: (Func, Code, Code, Flow) -> T): T {
+    override fun <T : Any> invoke(funcId: FuncId, responseHandler: (Func, Code, Code, Namespace) -> T): T {
         val func = funcQueryRepository.get(funcId)
         val current = codeQueryRepository.get(func.code.id, func.code.version)
         val deployed = codeQueryRepository.get(func.code.id, func.deployment.version)
-        val flows = flowQueryRepository.get(func.flowId)
-        return responseHandler(func, current, deployed, flows)
+        val namespaces = namespaceQueryRepository.get(func.namespaceId)
+        return responseHandler(func, current, deployed, namespaces)
     }
 
     override fun <T : Any> invoke(
@@ -109,7 +109,7 @@ class FuncAdapter(
             id = generateDomainId(::RequestId),
             status = RequestStatus.Submitted,
             execId = generateDomainId(::ExecId),
-            flowId = func.flowId,
+            namespaceId = func.namespaceId,
             groupId = func.groupId,
             funcId = funcId,
             correlationId = req.correlationId,
@@ -134,7 +134,7 @@ class FuncAdapter(
             id = generateDomainId(::RequestId),
             status = RequestStatus.Submitted,
             execId = generateDomainId(::ExecId),
-            flowId = func.flowId,
+            namespaceId = func.namespaceId,
             groupId = func.groupId,
             funcId = funcId,
             correlationId = req.correlationId,
@@ -150,12 +150,12 @@ class FuncAdapter(
 
     override fun <T : Any> invoke(
         query: FuncQuery,
-        responseHandler: (List<Func>, Map<FlowId, Flow>) -> T
+        responseHandler: (List<Func>, Map<NamespaceId, Namespace>) -> T
     ): T {
         val funcs = funcQueryRepository.list(query)
-        val flows = flowQueryRepository.list(funcs.map(Func::flowId))
-            .associateBy(Flow::id)
-        return responseHandler(funcs, flows)
+        val namespaces = namespaceQueryRepository.list(funcs.map(Func::namespaceId))
+            .associateBy(Namespace::id)
+        return responseHandler(funcs, namespaces)
     }
 
 

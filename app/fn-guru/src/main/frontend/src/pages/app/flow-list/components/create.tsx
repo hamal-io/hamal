@@ -24,7 +24,7 @@ const Create = () => {
     const props = {openModal: openDialog, setOpenModal: setOpenDialog}
     const [isLoading, setLoading] = useState(false)
 
-    const [createFlow, submittedFlow] = useFlowCreate()
+    const [createflow, submittedflow] = useFlowCreate()
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -40,7 +40,7 @@ const Create = () => {
         // ✅ This will be type-safe and validated.
 
         try {
-            createFlow(auth.groupId, values.name)
+            createflow(auth.groupId, values.name)
         } catch (e) {
             console.error(e)
         } finally {
@@ -50,12 +50,12 @@ const Create = () => {
     }
 
     useEffect(() => {
-        if (submittedFlow !== null) {
-            navigate(`/flows/${submittedFlow.flowId}`)
+        if (submittedflow !== null) {
+            navigate(`/groups/${submittedflow.flowId}`)
             setOpenDialog(false)
 
         }
-    }, [submittedFlow, navigate]);
+    }, [submittedflow, navigate]);
 
     return (
         <>
@@ -63,7 +63,7 @@ const Create = () => {
                 <DialogTrigger asChild>
                     <Button>
                         <Plus className="w-4 h-4 mr-1"/>
-                        New Flow
+                        New flow
                     </Button>
                 </DialogTrigger>
 
@@ -90,7 +90,7 @@ const Create = () => {
                             />
                             <Button type="submit">
                                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
-                                Create Flow
+                                Create flow
                             </Button>
                         </form>
                     </Form>

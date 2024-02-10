@@ -3,7 +3,7 @@ package io.hamal.core.adapter
 import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain.vo.EndpointId
-import io.hamal.lib.domain.vo.FlowId
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.RequestId
 import io.hamal.repository.api.*
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component
 
 interface EndpointCreatePort {
     operator fun <T : Any> invoke(
-        flowId: FlowId,
+        namespaceId: NamespaceId,
         req: EndpointCreateRequest,
         responseHandler: (EndpointCreateRequested) -> T
     ): T
@@ -48,12 +48,12 @@ class EndpointAdapter(
     private val requestCmdRepository: RequestCmdRepository
 ) : EndpointPort {
     override fun <T : Any> invoke(
-        flowId: FlowId,
+        namespaceId: NamespaceId,
         req: EndpointCreateRequest,
         responseHandler: (EndpointCreateRequested) -> T
     ): T {
         val func = funcQueryRepository.get(req.funcId)
-        require(flowId == func.flowId) { "Endpoint and Func must share the same Flow" }
+        require(namespaceId == func.namespaceId) { "Endpoint and Func must share the same Namespace" }
         return EndpointCreateRequested(
             id = generateDomainId(::RequestId),
             status = Submitted,
@@ -90,7 +90,7 @@ class EndpointAdapter(
 
         req.funcId?.let { funcId ->
             val func = funcQueryRepository.get(funcId)
-            require(endpoint.flowId == func.flowId) { "Endpoint and Func must share the same Flow" }
+            require(endpoint.namespaceId == func.namespaceId) { "Endpoint and Func must share the same Namespace" }
         }
 
         return EndpointUpdateRequested(

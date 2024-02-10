@@ -9,7 +9,7 @@ data class Endpoint(
     override val updatedAt: UpdatedAt,
     val groupId: GroupId,
     val cmdId: CmdId,
-    val flowId: FlowId,
+    val namespaceId: NamespaceId,
     val funcId: FuncId,
     val name: EndpointName
 ) : DomainObject<EndpointId>
@@ -25,7 +25,7 @@ interface EndpointCmdRepository : CmdRepository {
         val id: CmdId,
         val endpointId: EndpointId,
         val groupId: GroupId,
-        val flowId: FlowId,
+        val namespaceId: NamespaceId,
         val funcId: FuncId,
         val name: EndpointName
     )
@@ -55,7 +55,7 @@ interface EndpointQueryRepository {
         var afterId: EndpointId = EndpointId(SnowflakeId(Long.MAX_VALUE)),
         var limit: Limit = Limit(1),
         var endpointIds: List<EndpointId> = listOf(),
-        var flowIds: List<FlowId> = listOf(),
+        var namespaceIds: List<NamespaceId> = listOf(),
         var funcIds: List<FuncId> = listOf(),
         var groupIds: List<GroupId> = listOf()
     )

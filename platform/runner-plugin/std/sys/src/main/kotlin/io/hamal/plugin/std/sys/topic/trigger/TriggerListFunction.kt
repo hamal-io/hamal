@@ -1,6 +1,6 @@
 package io.hamal.plugin.std.sys.topic.trigger
 
-import io.hamal.lib.domain.vo.FlowId
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -23,8 +23,8 @@ class TriggerListFunction(
         return try {
             null to KuaArray(
                 sdk.trigger.list(TriggerQuery(
-                    flowIds = arg1.getArrayType("flow_ids")
-                        .map { FlowId((it.value as KuaString).value) }
+                    namespaceIds = arg1.getArrayType("namespace_ids")
+                        .map { NamespaceId((it.value as KuaString).value) }
                 )).mapIndexed { index, trigger ->
                     index to when (trigger) {
                         is ApiTriggerList.FixedRateTrigger -> {
@@ -33,10 +33,10 @@ class TriggerListFunction(
                                     "id" to KuaString(trigger.id.value.value.toString(16)),
                                     "type" to KuaString("FixedRate"),
                                     "name" to KuaString(trigger.name.value),
-                                    "flow" to KuaMap(
+                                    "namespace" to KuaMap(
                                         mutableMapOf(
-                                            "id" to KuaString(trigger.flow.id.value.value.toString(16)),
-                                            "name" to KuaString(trigger.flow.name.value)
+                                            "id" to KuaString(trigger.namespace.id.value.value.toString(16)),
+                                            "name" to KuaString(trigger.namespace.name.value)
                                         )
                                     ),
                                     "func" to KuaMap(
@@ -45,7 +45,7 @@ class TriggerListFunction(
                                             "name" to KuaString(trigger.func.name.value)
                                         )
                                     ),
-                                    "duration" to KuaString(trigger.duration.toIsoString())
+                                    "duration" to KuaString(trigger.duration.value)
                                 )
                             )
                         }
@@ -56,10 +56,10 @@ class TriggerListFunction(
                                     "id" to KuaString(trigger.id.value.value.toString(16)),
                                     "type" to KuaString("Event"),
                                     "name" to KuaString(trigger.name.value),
-                                    "flow" to KuaMap(
+                                    "namespace" to KuaMap(
                                         mutableMapOf(
-                                            "id" to KuaString(trigger.flow.id.value.value.toString(16)),
-                                            "name" to KuaString(trigger.flow.name.value)
+                                            "id" to KuaString(trigger.namespace.id.value.value.toString(16)),
+                                            "name" to KuaString(trigger.namespace.name.value)
                                         )
                                     ),
                                     "func" to KuaMap(
@@ -84,10 +84,10 @@ class TriggerListFunction(
                                     "id" to KuaString(trigger.id.value.value.toString(16)),
                                     "type" to KuaString("Hook"),
                                     "name" to KuaString(trigger.name.value),
-                                    "flow" to KuaMap(
+                                    "namespace" to KuaMap(
                                         mutableMapOf(
-                                            "id" to KuaString(trigger.flow.id.value.value.toString(16)),
-                                            "name" to KuaString(trigger.flow.name.value)
+                                            "id" to KuaString(trigger.namespace.id.value.value.toString(16)),
+                                            "name" to KuaString(trigger.namespace.name.value)
                                         )
                                     ),
                                     "func" to KuaMap(
@@ -112,10 +112,10 @@ class TriggerListFunction(
                                 "id" to KuaString(trigger.id.value.value.toString(16)),
                                 "type" to KuaString("Cron"),
                                 "name" to KuaString(trigger.name.value),
-                                "flow" to KuaMap(
+                                "namespace" to KuaMap(
                                     mutableMapOf(
-                                        "id" to KuaString(trigger.flow.id.value.value.toString(16)),
-                                        "name" to KuaString(trigger.flow.name.value)
+                                        "id" to KuaString(trigger.namespace.id.value.value.toString(16)),
+                                        "name" to KuaString(trigger.namespace.name.value)
                                     )
                                 ),
                                 "func" to KuaMap(
