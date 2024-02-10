@@ -13,10 +13,8 @@ import java.nio.file.Path
 internal class LogBrokerConsumerSqliteRepository(
     val path: Path
 ) : SqliteBaseRepository(
-    object : Config {
-        override val path: Path get() = path
-        override val filename: String get() = "log-broker-consumers.db"
-    }
+    path = path,
+    filename = "log-broker-consumer.db"
 ) {
 
     override fun setupConnection(connection: Connection) {

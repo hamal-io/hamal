@@ -2,7 +2,6 @@ package io.hamal.repository.sqlite.record.group
 
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Group
 import io.hamal.repository.api.GroupCmdRepository.CreateCmd
 import io.hamal.repository.api.GroupQueryRepository.GroupQuery
@@ -37,9 +36,10 @@ internal object CreateGroup : CreateDomainObject<GroupId, GroupRecord, Group> {
 }
 
 class GroupSqliteRepository(
-    config: Config
+    path: Path
 ) : RecordSqliteRepository<GroupId, GroupRecord, Group>(
-    config = config,
+    path = path,
+    filename = "group.db",
     createDomainObject = CreateGroup,
     recordClass = GroupRecord::class,
     projections = listOf(
@@ -47,11 +47,6 @@ class GroupSqliteRepository(
         ProjectionCurrent
     )
 ), GroupRepository {
-    data class Config(
-        override val path: Path
-    ) : SqliteBaseRepository.Config {
-        override val filename = "group.db"
-    }
 
     override fun create(cmd: CreateCmd): Group {
         val groupId = cmd.groupId

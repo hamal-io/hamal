@@ -2,7 +2,6 @@ package io.hamal.repository.sqlite.record.account
 
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.AccountId
-import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Account
 import io.hamal.repository.api.AccountCmdRepository
 import io.hamal.repository.api.AccountCmdRepository.CreateCmd
@@ -39,19 +38,15 @@ internal object CreateAccount : CreateDomainObject<AccountId, AccountRecord, Acc
 }
 
 class AccountSqliteRepository(
-    config: Config
+    path: Path
 ) : RecordSqliteRepository<AccountId, AccountRecord, Account>(
-    config = config,
+    path = path,
+    filename = "account.db",
     createDomainObject = CreateAccount,
     recordClass = AccountRecord::class,
     projections = listOf(ProjectionCurrent)
 ), AccountRepository {
 
-    data class Config(
-        override val path: Path
-    ) : SqliteBaseRepository.Config {
-        override val filename = "account.db"
-    }
 
     override fun create(cmd: CreateCmd): Account {
         val accountId = cmd.accountId

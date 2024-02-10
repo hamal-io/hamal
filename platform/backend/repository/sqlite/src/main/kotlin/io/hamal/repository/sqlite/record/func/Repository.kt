@@ -4,7 +4,6 @@ import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.domain.vo.DeployedAt
 import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncCmdRepository.*
 import io.hamal.repository.api.FuncDeployment
@@ -39,9 +38,10 @@ internal object CreateFunc : CreateDomainObject<FuncId, FuncRecord, Func> {
 }
 
 class FuncSqliteRepository(
-    config: Config
+    path: Path
 ) : RecordSqliteRepository<FuncId, FuncRecord, Func>(
-    config = config,
+    path = path,
+    filename = "func.db",
     createDomainObject = CreateFunc,
     recordClass = FuncRecord::class,
     projections = listOf(
@@ -49,12 +49,6 @@ class FuncSqliteRepository(
         ProjectionUniqueName
     )
 ), FuncRepository {
-
-    data class Config(
-        override val path: Path
-    ) : SqliteBaseRepository.Config {
-        override val filename = "func.db"
-    }
 
     override fun create(cmd: CreateCmd): Func {
         val funcId = cmd.funcId

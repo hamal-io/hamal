@@ -3,7 +3,6 @@ package io.hamal.repository.sqlite.record.trigger
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain.vo.TriggerId
-import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerCmdRepository.*
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
@@ -42,19 +41,14 @@ internal object CreateTrigger : CreateDomainObject<TriggerId, TriggerRecord, Tri
 }
 
 class TriggerSqliteRepository(
-    config: Config
+    path: Path
 ) : RecordSqliteRepository<TriggerId, TriggerRecord, Trigger>(
-    config = config,
+    path = path,
+    filename = "trigger.db",
     createDomainObject = CreateTrigger,
     recordClass = TriggerRecord::class,
     projections = listOf(ProjectionCurrent, ProjectionUniqueName, ProjectionUniqueHook)
 ), TriggerRepository {
-
-    data class Config(
-        override val path: Path,
-    ) : SqliteBaseRepository.Config {
-        override val filename = "trigger.db"
-    }
 
     override fun create(cmd: CreateFixedRateCmd): Trigger.FixedRate {
         val triggerId = cmd.triggerId

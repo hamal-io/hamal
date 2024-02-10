@@ -20,11 +20,11 @@ data class LogSegmentSqlite(
 ) : LogSegment
 
 class LogSegmentSqliteRepository(
-    internal val segment: LogSegmentSqlite
-) : SqliteBaseRepository(object : Config {
-    override val path: Path get() = segment.path
-    override val filename: String get() = String.format("%020d.db", segment.id.value.toLong())
-}), LogSegmentRepository {
+    private val segment: LogSegmentSqlite
+) : SqliteBaseRepository(
+    path = segment.path,
+    filename = String.format("%020d.db", segment.id.value.toLong())
+), LogSegmentRepository {
 
     override fun setupConnection(connection: Connection) {
         connection.execute("""PRAGMA journal_mode = wal;""")

@@ -28,7 +28,7 @@ class LogBrokerConsumerSqliteRepositoryTest {
             LogBrokerConsumerSqliteRepository(targetDir).use { }
 
             assertTrue(FileUtils.exists(targetDir))
-            assertTrue(FileUtils.exists(Path(targetDir.pathString, "log-broker-consumers.db")))
+            assertTrue(FileUtils.exists(Path(targetDir.pathString, "log-broker-consumer.db")))
         }
 
         @Test

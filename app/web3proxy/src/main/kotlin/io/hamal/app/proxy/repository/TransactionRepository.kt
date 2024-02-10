@@ -37,10 +37,10 @@ class SqliteTransactionRepository(
 class SqliteTransactionPartitionRepository(
     val path: Path,
     val partition: Int
-) : SqliteBaseRepository(object : Config {
-    override val path = path
-    override val filename: String = "transactions-${partition}.db"
-}), TransactionRepository {
+) : SqliteBaseRepository(
+    path = path,
+    filename = "transactions-${partition}.db"
+), TransactionRepository {
 
     override fun setupConnection(connection: Connection) {
         connection.execute("""PRAGMA journal_mode = wal;""")

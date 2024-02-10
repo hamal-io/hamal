@@ -6,19 +6,18 @@ import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.Record
+import java.nio.file.Path
 import kotlin.reflect.KClass
 
 
 abstract class RecordSqliteRepository<ID : ValueObjectId, RECORD : Record<ID>, OBJ : DomainObject<ID>>(
-    config: Config,
+    path: Path,
+    filename: String,
     private val createDomainObject: CreateDomainObject<ID, RECORD, OBJ>,
     private val recordClass: KClass<RECORD>,
     private val projections: List<ProjectionSqlite<ID, RECORD, OBJ>>
 
-) : SqliteBaseRepository(object : Config {
-    override val path = config.path
-    override val filename = config.filename
-}) {
+) : SqliteBaseRepository(path, filename) {
 
     override fun setupConnection(connection: Connection) {
         connection.execute("""PRAGMA journal_mode = wal;""")
