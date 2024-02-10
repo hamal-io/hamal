@@ -8,9 +8,7 @@ import io.hamal.repository.api.ExtensionCmdRepository.UpdateCmd
 import io.hamal.repository.api.ExtensionQueryRepository.ExtensionQuery
 import io.hamal.repository.api.ExtensionRepository
 import io.hamal.repository.record.extension.CreateExtensionFromRecords
-import io.hamal.repository.record.extension.ExtensionCreatedRecord
 import io.hamal.repository.record.extension.ExtensionRecord
-import io.hamal.repository.record.extension.ExtensionUpdatedRecord
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
@@ -75,7 +73,7 @@ class ExtensionMemoryRepository : RecordMemoryRepository<ExtensionId, ExtensionR
                 versionOf(extId, cmd.id)
             } else {
                 store(
-                    ExtensionCreatedRecord(
+                    ExtensionRecord.Created(
                         cmdId = cmd.id,
                         entityId = extId,
                         groupId = cmd.groupId,
@@ -95,7 +93,7 @@ class ExtensionMemoryRepository : RecordMemoryRepository<ExtensionId, ExtensionR
             } else {
                 val currentVersion = versionOf(extId, cmd.id)
                 store(
-                    ExtensionUpdatedRecord(
+                    ExtensionRecord.Updated(
                         entityId = extId,
                         cmdId = cmd.id,
                         name = cmd.name ?: currentVersion.name,
@@ -113,8 +111,7 @@ class ExtensionMemoryRepository : RecordMemoryRepository<ExtensionId, ExtensionR
 
     override fun list(query: ExtensionQuery): List<Extension> = lock.withLock { ExtensionCurrentProjection.list(query) }
 
-    override fun count(query: ExtensionQuery): Count
-    = lock.withLock { ExtensionCurrentProjection.count(query) }
+    override fun count(query: ExtensionQuery): Count = lock.withLock { ExtensionCurrentProjection.count(query) }
 
     override fun clear() {
         lock.withLock {

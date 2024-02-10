@@ -6,7 +6,7 @@ import io.hamal.repository.api.*
 import io.hamal.repository.api.ExecCmdRepository.*
 import io.hamal.repository.api.ExecQueryRepository.ExecQuery
 import io.hamal.repository.api.record.exec.CreateExecFromRecords
-import io.hamal.repository.record.exec.*
+import io.hamal.repository.record.exec.ExecRecord
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
@@ -87,7 +87,7 @@ class ExecMemoryRepository : RecordMemoryRepository<ExecId, ExecRecord, Exec>(
                 versionOf(execId, cmd.id) as PlannedExec
             } else {
                 store(
-                    ExecPlannedRecord(
+                    ExecRecord.Planned(
                         cmdId = cmd.id,
                         entityId = execId,
                         namespaceId = cmd.namespaceId,
@@ -113,7 +113,7 @@ class ExecMemoryRepository : RecordMemoryRepository<ExecId, ExecRecord, Exec>(
             } else {
                 check(currentVersion(execId) is PlannedExec) { "$execId not planned" }
 
-                store(ExecScheduledRecord(cmdId, execId))
+                store(ExecRecord.Scheduled(cmdId, execId))
 
                 (currentVersion(execId) as ScheduledExec).also(ExecCurrentProjection::apply)
             }
@@ -130,7 +130,7 @@ class ExecMemoryRepository : RecordMemoryRepository<ExecId, ExecRecord, Exec>(
             } else {
                 check(currentVersion(execId) is ScheduledExec) { "$execId not scheduled" }
 
-                store(ExecQueuedRecord(cmdId, execId))
+                store(ExecRecord.Queued(cmdId, execId))
 
                 (currentVersion(execId) as QueuedExec)
                     .also(ExecCurrentProjection::apply)
@@ -146,7 +146,7 @@ class ExecMemoryRepository : RecordMemoryRepository<ExecId, ExecRecord, Exec>(
                 val execId = queuedExec.id
                 check(currentVersion(execId) is QueuedExec) { "$execId not queued" }
 
-                store(ExecStartedRecord(cmd.id, execId))
+                store(ExecRecord.Started(cmd.id, execId))
 
                 result.add((currentVersion(execId) as StartedExec).also(ExecCurrentProjection::apply))
             }
@@ -174,7 +174,7 @@ class ExecMemoryRepository : RecordMemoryRepository<ExecId, ExecRecord, Exec>(
             } else {
                 check(currentVersion(execId) is StartedExec) { "$execId not started" }
 
-                store(ExecCompletedRecord(cmdId, execId, cmd.result, cmd.state))
+                store(ExecRecord.Completed(cmdId, execId, cmd.result, cmd.state))
 
                 (versionOf(execId, cmdId) as CompletedExec).also(ExecCurrentProjection::apply)
             }
@@ -191,7 +191,7 @@ class ExecMemoryRepository : RecordMemoryRepository<ExecId, ExecRecord, Exec>(
             } else {
                 check(currentVersion(execId) is StartedExec) { "$execId not started" }
 
-                store(ExecFailedRecord(cmdId, execId, cmd.result))
+                store(ExecRecord.Failed(cmdId, execId, cmd.result))
 
                 (versionOf(execId, cmdId) as FailedExec).also(ExecCurrentProjection::apply)
             }

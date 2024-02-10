@@ -8,10 +8,8 @@ import io.hamal.repository.api.ExtensionCmdRepository.UpdateCmd
 import io.hamal.repository.api.ExtensionQueryRepository.ExtensionQuery
 import io.hamal.repository.api.ExtensionRepository
 import io.hamal.repository.record.CreateDomainObject
-import io.hamal.repository.record.extension.ExtensionCreatedRecord
 import io.hamal.repository.record.extension.ExtensionEntity
 import io.hamal.repository.record.extension.ExtensionRecord
-import io.hamal.repository.record.extension.ExtensionUpdatedRecord
 import io.hamal.repository.sqlite.record.RecordSqliteRepository
 import java.nio.file.Path
 
@@ -19,7 +17,7 @@ internal object CreateExtension : CreateDomainObject<ExtensionId, ExtensionRecor
     override fun invoke(recs: List<ExtensionRecord>): Extension {
         check(recs.isNotEmpty()) { "At least one record is required" }
         val firstRecord = recs.first()
-        check(firstRecord is ExtensionCreatedRecord)
+        check(firstRecord is ExtensionRecord.Created)
 
         var result = ExtensionEntity(
             cmdId = firstRecord.cmdId,
@@ -57,7 +55,7 @@ class ExtensionSqliteRepository(
                 versionOf(extId, cmdId)
             } else {
                 store(
-                    ExtensionCreatedRecord(
+                    ExtensionRecord.Created(
                         cmdId = cmdId,
                         entityId = extId,
                         groupId = cmd.groupId,
@@ -78,7 +76,7 @@ class ExtensionSqliteRepository(
             } else {
                 val currentVersion = versionOf(extId, cmdId)
                 store(
-                    ExtensionUpdatedRecord(
+                    ExtensionRecord.Updated(
                         entityId = extId,
                         cmdId = cmdId,
                         name = cmd.name ?: currentVersion.name,

@@ -7,7 +7,8 @@ import io.hamal.repository.api.*
 import io.hamal.repository.api.TriggerCmdRepository.*
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import io.hamal.repository.record.CreateDomainObject
-import io.hamal.repository.record.trigger.*
+import io.hamal.repository.record.trigger.TriggerEntity
+import io.hamal.repository.record.trigger.TriggerRecord
 import io.hamal.repository.sqlite.record.RecordSqliteRepository
 import java.nio.file.Path
 
@@ -17,10 +18,10 @@ internal object CreateTrigger : CreateDomainObject<TriggerId, TriggerRecord, Tri
         val firstRecord = recs.first()
 
         check(
-            firstRecord is FixedRateTriggerCreatedRecord ||
-                    firstRecord is EventTriggerCreatedRecord ||
-                    firstRecord is HookTriggerCreatedRecord ||
-                    firstRecord is CronTriggerCreatedRecord
+            firstRecord is TriggerRecord.FixedRateCreated ||
+                    firstRecord is TriggerRecord.EventCreated ||
+                    firstRecord is TriggerRecord.HookCreated ||
+                    firstRecord is TriggerRecord.CronCreated
         )
 
         var result = TriggerEntity(
@@ -56,7 +57,7 @@ class TriggerSqliteRepository(
                 versionOf(triggerId, cmdId) as FixedRateTrigger
             } else {
                 store(
-                    FixedRateTriggerCreatedRecord(
+                    TriggerRecord.FixedRateCreated(
                         cmdId = cmdId,
                         entityId = triggerId,
                         groupId = cmd.groupId,
@@ -85,7 +86,7 @@ class TriggerSqliteRepository(
                 versionOf(triggerId, cmdId) as EventTrigger
             } else {
                 store(
-                    EventTriggerCreatedRecord(
+                    TriggerRecord.EventCreated(
                         cmdId = cmdId,
                         entityId = triggerId,
                         groupId = cmd.groupId,
@@ -115,7 +116,7 @@ class TriggerSqliteRepository(
             } else {
 
                 store(
-                    HookTriggerCreatedRecord(
+                    TriggerRecord.HookCreated(
                         cmdId = cmdId,
                         entityId = triggerId,
                         groupId = cmd.groupId,
@@ -146,7 +147,7 @@ class TriggerSqliteRepository(
                 versionOf(triggerId, cmdId) as CronTrigger
             } else {
                 store(
-                    CronTriggerCreatedRecord(
+                    TriggerRecord.CronCreated(
                         cmdId = cmdId,
                         entityId = triggerId,
                         groupId = cmd.groupId,
@@ -174,14 +175,14 @@ class TriggerSqliteRepository(
             } else {
                 if (cmd.status == TriggerStatus.Active) {
                     store(
-                        TriggerSetActiveRecord(
+                        TriggerRecord.SetActive(
                             cmdId = cmd.id,
                             entityId = triggerId
                         )
                     )
                 } else {
                     store(
-                        TriggerSetInactiveRecord(
+                        TriggerRecord.SetInactive(
                             cmdId = cmd.id,
                             entityId = triggerId
                         )

@@ -17,21 +17,22 @@ sealed class NamespaceRecord(
 ) : Record<NamespaceId>() {
     internal object Adapter : RecordAdapter<NamespaceRecord>(
         listOf(
-            NamespaceCreatedRecord::class,
-            NamespaceUpdatedRecord::class
+            Created::class,
+            Updated::class
         )
     )
+
+    data class Created(
+        override val entityId: NamespaceId,
+        override val cmdId: CmdId,
+        val groupId: GroupId,
+        val name: NamespaceName
+    ) : NamespaceRecord()
+
+    data class Updated(
+        override val entityId: NamespaceId,
+        override val cmdId: CmdId,
+        val name: NamespaceName
+    ) : NamespaceRecord()
 }
 
-data class NamespaceCreatedRecord(
-    override val entityId: NamespaceId,
-    override val cmdId: CmdId,
-    val groupId: GroupId,
-    val name: NamespaceName
-) : NamespaceRecord()
-
-data class NamespaceUpdatedRecord(
-    override val entityId: NamespaceId,
-    override val cmdId: CmdId,
-    val name: NamespaceName
-) : NamespaceRecord()

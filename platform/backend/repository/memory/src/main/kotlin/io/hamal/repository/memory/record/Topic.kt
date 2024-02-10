@@ -16,8 +16,6 @@ import io.hamal.repository.api.log.LogBrokerRepository.LogTopicToCreate
 import io.hamal.repository.api.log.LogEventId
 import io.hamal.repository.record.json
 import io.hamal.repository.record.topic.CreateTopicFromRecords
-import io.hamal.repository.record.topic.TopicGroupCreatedRecord
-import io.hamal.repository.record.topic.TopicInternalCreatedRecord
 import io.hamal.repository.record.topic.TopicRecord
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
@@ -99,7 +97,7 @@ class TopicMemoryRepository(
                 versionOf(topicId, cmd.id) as Topic.Group
             }
             store(
-                TopicGroupCreatedRecord(
+                TopicRecord.GroupCreated(
                     cmdId = cmd.id,
                     entityId = topicId,
                     groupId = cmd.groupId,
@@ -120,7 +118,7 @@ class TopicMemoryRepository(
                 versionOf(topicId, cmd.id) as Topic.Internal
             }
             store(
-                TopicInternalCreatedRecord(
+                TopicRecord.InternalCreated(
                     cmdId = cmd.id,
                     entityId = topicId,
                     logTopicId = cmd.logTopicId,

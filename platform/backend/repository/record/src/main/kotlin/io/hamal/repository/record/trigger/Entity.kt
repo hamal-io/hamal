@@ -42,7 +42,7 @@ data class TriggerEntity(
 
     override fun apply(rec: TriggerRecord): TriggerEntity {
         return when (rec) {
-            is FixedRateTriggerCreatedRecord -> copy(
+            is TriggerRecord.FixedRateCreated -> copy(
                 cmdId = rec.cmdId,
                 id = rec.entityId,
                 groupId = rec.groupId,
@@ -58,7 +58,7 @@ data class TriggerEntity(
                 status = rec.status
             )
 
-            is EventTriggerCreatedRecord -> copy(
+            is TriggerRecord.EventCreated -> copy(
                 cmdId = rec.cmdId,
                 id = rec.entityId,
                 groupId = rec.groupId,
@@ -74,7 +74,7 @@ data class TriggerEntity(
                 status = rec.status
             )
 
-            is HookTriggerCreatedRecord -> copy(
+            is TriggerRecord.HookCreated -> copy(
                 cmdId = rec.cmdId,
                 id = rec.entityId,
                 groupId = rec.groupId,
@@ -91,7 +91,7 @@ data class TriggerEntity(
                 status = rec.status
             )
 
-            is CronTriggerCreatedRecord -> copy(
+            is TriggerRecord.CronCreated -> copy(
                 cmdId = rec.cmdId,
                 id = rec.entityId,
                 groupId = rec.groupId,
@@ -107,13 +107,13 @@ data class TriggerEntity(
                 status = rec.status
             )
 
-            is TriggerSetActiveRecord -> copy(
+            is TriggerRecord.SetActive -> copy(
                 cmdId = rec.cmdId,
                 id = rec.entityId,
                 status = TriggerStatus.Active
             )
 
-            is TriggerSetInactiveRecord -> copy(
+            is TriggerRecord.SetInactive -> copy(
                 cmdId = rec.cmdId,
                 id = rec.entityId,
                 status = TriggerStatus.Inactive
@@ -188,10 +188,10 @@ fun List<TriggerRecord>.createEntity(): TriggerEntity {
     val firstRecord: TriggerRecord = first()
 
     check(
-        firstRecord is FixedRateTriggerCreatedRecord ||
-                firstRecord is EventTriggerCreatedRecord ||
-                firstRecord is HookTriggerCreatedRecord ||
-                firstRecord is CronTriggerCreatedRecord
+        firstRecord is TriggerRecord.FixedRateCreated ||
+                firstRecord is TriggerRecord.EventCreated ||
+                firstRecord is TriggerRecord.HookCreated ||
+                firstRecord is TriggerRecord.CronCreated
     )
 
     var result = TriggerEntity(

@@ -18,24 +18,25 @@ sealed class ExtensionRecord(
 ) : Record<ExtensionId>() {
     internal object Adapter : RecordAdapter<ExtensionRecord>(
         listOf(
-            ExtensionCreatedRecord::class,
-            ExtensionUpdatedRecord::class
+            Created::class,
+            Updated::class
         )
     )
+
+    data class Created(
+        override val entityId: ExtensionId,
+        override val cmdId: CmdId,
+        val groupId: GroupId,
+        val name: ExtensionName,
+        val code: ExtensionCode
+
+    ) : ExtensionRecord()
+
+    data class Updated(
+        override val entityId: ExtensionId,
+        override val cmdId: CmdId,
+        val name: ExtensionName,
+        val code: ExtensionCode
+    ) : ExtensionRecord()
+
 }
-
-data class ExtensionCreatedRecord(
-    override val entityId: ExtensionId,
-    override val cmdId: CmdId,
-    val groupId: GroupId,
-    val name: ExtensionName,
-    val code: ExtensionCode
-
-) : ExtensionRecord()
-
-data class ExtensionUpdatedRecord(
-    override val entityId: ExtensionId,
-    override val cmdId: CmdId,
-    val name: ExtensionName,
-    val code: ExtensionCode
-) : ExtensionRecord()

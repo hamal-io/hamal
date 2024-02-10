@@ -17,14 +17,15 @@ sealed class GroupRecord(
 ) : Record<GroupId>() {
     internal object Adapter : RecordAdapter<GroupRecord>(
         listOf(
-            GroupCreatedRecord::class
+            Created::class
         )
     )
+
+    data class Created(
+        override val entityId: GroupId,
+        override val cmdId: CmdId,
+        val name: GroupName,
+        val creatorId: AccountId
+    ) : GroupRecord()
 }
 
-data class GroupCreatedRecord(
-    override val entityId: GroupId,
-    override val cmdId: CmdId,
-    val name: GroupName,
-    val creatorId: AccountId
-) : GroupRecord()

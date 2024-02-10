@@ -9,10 +9,8 @@ import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
 import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
 import io.hamal.repository.api.NamespaceRepository
 import io.hamal.repository.record.CreateDomainObject
-import io.hamal.repository.record.namespace.NamespaceCreatedRecord
 import io.hamal.repository.record.namespace.NamespaceEntity
 import io.hamal.repository.record.namespace.NamespaceRecord
-import io.hamal.repository.record.namespace.NamespaceUpdatedRecord
 import io.hamal.repository.sqlite.record.RecordSqliteRepository
 import java.nio.file.Path
 
@@ -20,7 +18,7 @@ internal object CreateNamespace : CreateDomainObject<NamespaceId, NamespaceRecor
     override fun invoke(recs: List<NamespaceRecord>): Namespace {
         check(recs.isNotEmpty()) { "At least one record is required" }
         val firstRecord = recs.first()
-        check(firstRecord is NamespaceCreatedRecord)
+        check(firstRecord is NamespaceRecord.Created)
 
         var result = NamespaceEntity(
             cmdId = firstRecord.cmdId,
@@ -56,7 +54,7 @@ class NamespaceSqliteRepository(
                 versionOf(namespaceId, cmdId)
             } else {
                 store(
-                    NamespaceCreatedRecord(
+                    NamespaceRecord.Created(
                         cmdId = cmdId,
                         entityId = namespaceId,
                         groupId = cmd.groupId,
@@ -79,7 +77,7 @@ class NamespaceSqliteRepository(
             } else {
                 val current = currentVersion(namespaceId)
                 store(
-                    NamespaceUpdatedRecord(
+                    NamespaceRecord.Updated(
                         entityId = namespaceId,
                         cmdId = cmdId,
                         name = cmd.name ?: current.name

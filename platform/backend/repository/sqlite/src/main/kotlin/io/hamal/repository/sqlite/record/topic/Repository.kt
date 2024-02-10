@@ -14,8 +14,6 @@ import io.hamal.repository.api.TopicRepository
 import io.hamal.repository.api.log.LogBrokerRepository
 import io.hamal.repository.api.log.LogBrokerRepository.LogTopicToCreate
 import io.hamal.repository.record.topic.CreateTopicFromRecords
-import io.hamal.repository.record.topic.TopicGroupCreatedRecord
-import io.hamal.repository.record.topic.TopicInternalCreatedRecord
 import io.hamal.repository.record.topic.TopicRecord
 import io.hamal.repository.sqlite.record.RecordSqliteRepository
 import java.nio.file.Path
@@ -39,7 +37,7 @@ class TopicSqliteRepository(
                 versionOf(topicId, cmdId) as Topic.Group
             } else {
                 store(
-                    TopicGroupCreatedRecord(
+                    TopicRecord.GroupCreated(
                         cmdId = cmd.id,
                         entityId = topicId,
                         groupId = cmd.groupId,
@@ -64,7 +62,7 @@ class TopicSqliteRepository(
                 versionOf(topicId, cmdId) as Topic.Internal
             } else {
                 store(
-                    TopicInternalCreatedRecord(
+                    TopicRecord.InternalCreated(
                         cmdId = cmd.id,
                         entityId = topicId,
                         logTopicId = cmd.logTopicId,

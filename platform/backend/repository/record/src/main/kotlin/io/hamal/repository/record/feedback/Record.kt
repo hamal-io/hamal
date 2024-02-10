@@ -18,15 +18,15 @@ sealed class FeedbackRecord(
 ) : Record<FeedbackId>() {
     internal object Adapter : RecordAdapter<FeedbackRecord>(
         listOf(
-            FeedbackCreatedRecord::class
+            Created::class
         )
     )
-}
 
-data class FeedbackCreatedRecord(
-    override val entityId: FeedbackId,
-    override val cmdId: CmdId,
-    val mood: FeedbackMood,
-    val message: FeedbackMessage,
-    val accountId: AccountId?
-) : FeedbackRecord()
+    data class Created(
+        override val entityId: FeedbackId,
+        override val cmdId: CmdId,
+        val mood: FeedbackMood,
+        val message: FeedbackMessage,
+        val accountId: AccountId?
+    ) : FeedbackRecord()
+}

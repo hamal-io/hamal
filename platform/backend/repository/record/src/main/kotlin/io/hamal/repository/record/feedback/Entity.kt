@@ -24,7 +24,7 @@ data class FeedbackEntity(
 ) : RecordEntity<FeedbackId, FeedbackRecord, Feedback> {
     override fun apply(rec: FeedbackRecord): FeedbackEntity {
         return when (rec) {
-            is FeedbackCreatedRecord -> copy(
+            is FeedbackRecord.Created -> copy(
                 cmdId = rec.cmdId,
                 id = rec.entityId,
                 sequence = rec.sequence(),
@@ -51,7 +51,7 @@ data class FeedbackEntity(
 fun List<FeedbackRecord>.createEntity(): FeedbackEntity {
     check(isNotEmpty()) { "At least one record is required" }
     val firstRecord = first()
-    check(firstRecord is FeedbackCreatedRecord)
+    check(firstRecord is FeedbackRecord.Created)
 
     var result = FeedbackEntity(
         id = firstRecord.entityId,

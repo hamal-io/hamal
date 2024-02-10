@@ -18,20 +18,21 @@ sealed class AccountRecord(
 
     internal object Adapter : RecordAdapter<AccountRecord>(
         listOf(
-            AccountCreatedRecord::class,
-            AccountCreatedRecord::class
+            Created::class,
+            Converted::class
         )
     )
+
+    data class Created(
+        override val entityId: AccountId,
+        override val cmdId: CmdId,
+        val salt: PasswordSalt,
+        val type: AccountType
+    ) : AccountRecord()
+
+    data class Converted(
+        override val entityId: AccountId,
+        override val cmdId: CmdId,
+    ) : AccountRecord()
 }
 
-data class AccountCreatedRecord(
-    override val entityId: AccountId,
-    override val cmdId: CmdId,
-    val salt: PasswordSalt,
-    val type: AccountType
-) : AccountRecord()
-
-data class AccountConvertedRecord(
-    override val entityId: AccountId,
-    override val cmdId: CmdId,
-) : AccountRecord()

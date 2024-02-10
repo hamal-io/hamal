@@ -10,7 +10,8 @@ import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.repository.api.*
 import io.hamal.repository.api.TriggerCmdRepository.*
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
-import io.hamal.repository.record.trigger.*
+import io.hamal.repository.record.trigger.CreateTriggerFromRecords
+import io.hamal.repository.record.trigger.TriggerRecord
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
@@ -150,7 +151,7 @@ class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord,
                 versionOf(triggerId, cmd.id) as FixedRateTrigger
             }
             store(
-                FixedRateTriggerCreatedRecord(
+                TriggerRecord.FixedRateCreated(
                     cmdId = cmd.id,
                     entityId = triggerId,
                     groupId = cmd.groupId,
@@ -174,7 +175,7 @@ class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord,
                 versionOf(triggerId, cmd.id) as EventTrigger
             } else {
                 store(
-                    EventTriggerCreatedRecord(
+                    TriggerRecord.EventCreated(
                         cmdId = cmd.id,
                         entityId = triggerId,
                         groupId = cmd.groupId,
@@ -212,7 +213,7 @@ class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord,
                 }
 
                 store(
-                    HookTriggerCreatedRecord(
+                    TriggerRecord.HookCreated(
                         cmdId = cmd.id,
                         entityId = triggerId,
                         groupId = cmd.groupId,
@@ -238,7 +239,7 @@ class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord,
                 versionOf(triggerId, cmd.id) as CronTrigger
             } else {
                 store(
-                    CronTriggerCreatedRecord(
+                    TriggerRecord.CronCreated(
                         cmdId = cmd.id,
                         entityId = triggerId,
                         groupId = cmd.groupId,
@@ -262,12 +263,12 @@ class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord,
                 versionOf(triggerId, cmd.id)
             } else {
                 val rec: TriggerRecord = if (cmd.status == TriggerStatus.Active) {
-                    TriggerSetActiveRecord(
+                    TriggerRecord.SetActive(
                         cmdId = cmd.id,
                         entityId = triggerId
                     )
                 } else {
-                    TriggerSetInactiveRecord(
+                    TriggerRecord.SetInactive(
                         cmdId = cmd.id,
                         entityId = triggerId
                     )
