@@ -9,7 +9,7 @@ import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordEntity
 import io.hamal.repository.record.RecordSequence
 import io.hamal.repository.record.RecordedAt
-import io.hamal.repository.record.exec.*
+import io.hamal.repository.record.exec.ExecRecord
 import java.time.Instant
 
 data class ExecEntity(
@@ -34,7 +34,7 @@ data class ExecEntity(
 
     override fun apply(rec: ExecRecord): ExecEntity {
         return when (rec) {
-            is ExecPlannedRecord -> copy(
+            is ExecRecord.Planned -> copy(
                 cmdId = rec.cmdId,
                 id = rec.entityId,
                 namespaceId = rec.namespaceId,
@@ -49,7 +49,7 @@ data class ExecEntity(
                 recordedAt = rec.recordedAt()
             )
 
-            is ExecScheduledRecord -> copy(
+            is ExecRecord.Scheduled -> copy(
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
                 status = ExecStatus.Scheduled,
@@ -57,7 +57,7 @@ data class ExecEntity(
                 recordedAt = rec.recordedAt()
             )
 
-            is ExecQueuedRecord -> copy(
+            is ExecRecord.Queued -> copy(
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
                 status = ExecStatus.Queued,
@@ -66,7 +66,7 @@ data class ExecEntity(
 
             )
 
-            is ExecStartedRecord -> copy(
+            is ExecRecord.Started -> copy(
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
                 status = ExecStatus.Started,
@@ -75,7 +75,7 @@ data class ExecEntity(
                 //picked by :platform:runner id..
             )
 
-            is ExecCompletedRecord -> copy(
+            is ExecRecord.Completed -> copy(
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
                 status = ExecStatus.Completed,
@@ -85,7 +85,7 @@ data class ExecEntity(
                 state = rec.state
             )
 
-            is ExecFailedRecord -> copy(
+            is ExecRecord.Failed -> copy(
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
                 status = ExecStatus.Failed,
@@ -148,7 +148,7 @@ data class ExecEntity(
 fun List<ExecRecord>.createEntity(): ExecEntity {
     check(isNotEmpty()) { "At least one record is required" }
     val firstRecord = first()
-    check(firstRecord is ExecPlannedRecord)
+    check(firstRecord is ExecRecord.Planned)
 
     var result = ExecEntity(
         id = firstRecord.entityId,

@@ -22,7 +22,7 @@ data class NamespaceEntity(
 
     override fun apply(rec: NamespaceRecord): NamespaceEntity {
         return when (rec) {
-            is NamespaceCreatedRecord -> copy(
+            is NamespaceRecord.Created -> copy(
                 id = rec.entityId,
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
@@ -30,7 +30,7 @@ data class NamespaceEntity(
                 recordedAt = rec.recordedAt()
             )
 
-            is NamespaceUpdatedRecord -> copy(
+            is NamespaceRecord.Updated -> copy(
                 id = rec.entityId,
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
@@ -54,7 +54,7 @@ data class NamespaceEntity(
 fun List<NamespaceRecord>.createEntity(): NamespaceEntity {
     check(isNotEmpty()) { "At least one record is required" }
     val firstRecord = first()
-    check(firstRecord is NamespaceCreatedRecord)
+    check(firstRecord is NamespaceRecord.Created)
 
     var result = NamespaceEntity(
         id = firstRecord.entityId,

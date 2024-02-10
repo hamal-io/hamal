@@ -29,7 +29,7 @@ data class TopicEntity(
 
     override fun apply(rec: TopicRecord): TopicEntity {
         return when (rec) {
-            is TopicGroupCreatedRecord -> copy(
+            is TopicRecord.GroupCreated -> copy(
                 cmdId = rec.cmdId,
                 id = rec.entityId,
                 sequence = rec.sequence(),
@@ -40,7 +40,7 @@ data class TopicEntity(
                 recordedAt = rec.recordedAt()
             )
 
-            is TopicInternalCreatedRecord -> copy(
+            is TopicRecord.InternalCreated -> copy(
                 cmdId = rec.cmdId,
                 id = rec.entityId,
                 sequence = rec.sequence(),
@@ -82,7 +82,7 @@ fun List<TopicRecord>.createEntity(): TopicEntity {
     check(isNotEmpty()) { "At least one record is required" }
     val firstRecord: TopicRecord = first()
 
-    check(firstRecord is TopicGroupCreatedRecord || firstRecord is TopicInternalCreatedRecord)
+    check(firstRecord is TopicRecord.GroupCreated || firstRecord is TopicRecord.InternalCreated)
 
     var result = TopicEntity(
         id = firstRecord.entityId,

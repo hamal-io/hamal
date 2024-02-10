@@ -7,9 +7,7 @@ import io.hamal.repository.api.BlueprintCmdRepository.CreateCmd
 import io.hamal.repository.api.BlueprintCmdRepository.UpdateCmd
 import io.hamal.repository.api.BlueprintQueryRepository.BlueprintQuery
 import io.hamal.repository.api.BlueprintRepository
-import io.hamal.repository.record.blueprint.BlueprintCreatedRecord
 import io.hamal.repository.record.blueprint.BlueprintRecord
-import io.hamal.repository.record.blueprint.BlueprintUpdatedRecord
 import io.hamal.repository.record.blueprint.CreateBlueprintFromRecords
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
@@ -65,7 +63,7 @@ class BlueprintMemoryRepository : RecordMemoryRepository<BlueprintId, BlueprintR
                 versionOf(bpId, cmd.id)
             } else {
                 store(
-                    BlueprintCreatedRecord(
+                    BlueprintRecord.Created(
                         cmdId = cmd.id,
                         entityId = bpId,
                         groupId = cmd.groupId,
@@ -87,7 +85,7 @@ class BlueprintMemoryRepository : RecordMemoryRepository<BlueprintId, BlueprintR
             } else {
                 val currentVersion = versionOf(blueprintId, cmd.id)
                 store(
-                    BlueprintUpdatedRecord(
+                    BlueprintRecord.Updated(
                         entityId = blueprintId,
                         cmdId = cmd.id,
                         name = cmd.name ?: currentVersion.name,

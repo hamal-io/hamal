@@ -14,24 +14,26 @@ sealed class EndpointRecord(
 ) : Record<EndpointId>() {
     internal object Adapter : RecordAdapter<EndpointRecord>(
         listOf(
-            EndpointCreatedRecord::class,
-            EndpointUpdatedRecord::class
+            Created::class,
+            Updated::class
         )
     )
+
+    data class Created(
+        override val entityId: EndpointId,
+        override val cmdId: CmdId,
+        val groupId: GroupId,
+        val namespaceId: NamespaceId,
+        val funcId: FuncId,
+        val name: EndpointName
+    ) : EndpointRecord()
+
+    data class Updated(
+        override val entityId: EndpointId,
+        override val cmdId: CmdId,
+        val funcId: FuncId,
+        val name: EndpointName
+    ) : EndpointRecord()
+
 }
 
-data class EndpointCreatedRecord(
-    override val entityId: EndpointId,
-    override val cmdId: CmdId,
-    val groupId: GroupId,
-    val namespaceId: NamespaceId,
-    val funcId: FuncId,
-    val name: EndpointName
-) : EndpointRecord()
-
-data class EndpointUpdatedRecord(
-    override val entityId: EndpointId,
-    override val cmdId: CmdId,
-    val funcId: FuncId,
-    val name: EndpointName
-) : EndpointRecord()

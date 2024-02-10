@@ -11,7 +11,8 @@ import io.hamal.repository.api.FuncDeployment
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
 import io.hamal.repository.api.FuncRepository
 import io.hamal.repository.record.CreateDomainObject
-import io.hamal.repository.record.func.*
+import io.hamal.repository.record.func.FuncEntity
+import io.hamal.repository.record.func.FuncRecord
 import io.hamal.repository.sqlite.record.RecordSqliteRepository
 import java.nio.file.Path
 
@@ -19,7 +20,7 @@ internal object CreateFunc : CreateDomainObject<FuncId, FuncRecord, Func> {
     override fun invoke(recs: List<FuncRecord>): Func {
         check(recs.isNotEmpty()) { "At least one record is required" }
         val firstRecord = recs.first()
-        check(firstRecord is FuncCreatedRecord)
+        check(firstRecord is FuncRecord.Created)
 
         var result = FuncEntity(
             cmdId = firstRecord.cmdId,
@@ -63,7 +64,7 @@ class FuncSqliteRepository(
                 versionOf(funcId, cmdId)
             } else {
                 store(
-                    FuncCreatedRecord(
+                    FuncRecord.Created(
                         cmdId = cmdId,
                         entityId = funcId,
                         groupId = cmd.groupId,
@@ -91,7 +92,7 @@ class FuncSqliteRepository(
                 val current = versionOf(funcId, cmdId)
                 require(cmd.version <= current.code.version) { "${cmd.version} can not be deployed" }
                 store(
-                    FuncDeployedRecord(
+                    FuncRecord.Deployed(
                         cmdId = cmd.id,
                         entityId = funcId,
                         version = cmd.version,
@@ -113,7 +114,7 @@ class FuncSqliteRepository(
             } else {
                 val currentVersion = versionOf(funcId, cmdId)
                 store(
-                    FuncUpdatedRecord(
+                    FuncRecord.Updated(
                         entityId = funcId,
                         cmdId = cmdId,
                         name = cmd.name ?: currentVersion.name,
@@ -139,7 +140,7 @@ class FuncSqliteRepository(
     override fun listDeployments(funcId: FuncId): List<FuncDeployment> {
         return tx {
             val recs = recordsOf(funcId)
-            recs.filterIsInstance<FuncDeployedRecord>().map { rec ->
+            recs.filterIsInstance<FuncRecord.Deployed>().map { rec ->
                 FuncDeployment(
                     id = CodeId(rec.entityId.value),
                     message = rec.message,

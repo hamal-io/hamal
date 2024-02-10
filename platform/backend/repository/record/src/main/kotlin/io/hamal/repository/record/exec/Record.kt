@@ -16,52 +16,53 @@ sealed class ExecRecord(
 ) : Record<ExecId>() {
     internal object Adapter : RecordAdapter<ExecRecord>(
         listOf(
-            ExecPlannedRecord::class,
-            ExecScheduledRecord::class,
-            ExecQueuedRecord::class,
-            ExecStartedRecord::class,
-            ExecCompletedRecord::class,
-            ExecFailedRecord::class,
+            Planned::class,
+            Scheduled::class,
+            Queued::class,
+            Started::class,
+            Completed::class,
+            Failed::class,
         )
     )
+
+    data class Planned(
+        override val cmdId: CmdId,
+        override val entityId: ExecId,
+        val namespaceId: NamespaceId,
+        val groupId: GroupId,
+        val correlation: Correlation?,
+        val inputs: ExecInputs,
+        val code: ExecCode,
+        val invocation: Invocation
+    ) : ExecRecord()
+
+    data class Scheduled(
+        override val cmdId: CmdId,
+        override val entityId: ExecId,
+    ) : ExecRecord()
+
+    data class Queued(
+        override val cmdId: CmdId,
+        override val entityId: ExecId,
+    ) : ExecRecord()
+
+
+    data class Started(
+        override val cmdId: CmdId,
+        override val entityId: ExecId,
+    ) : ExecRecord()
+
+    data class Completed(
+        override val cmdId: CmdId,
+        override val entityId: ExecId,
+        val result: ExecResult,
+        val state: ExecState
+    ) : ExecRecord()
+
+    data class Failed(
+        override val cmdId: CmdId,
+        override val entityId: ExecId,
+        val result: ExecResult
+    ) : ExecRecord()
 }
 
-data class ExecPlannedRecord(
-    override val cmdId: CmdId,
-    override val entityId: ExecId,
-    val namespaceId: NamespaceId,
-    val groupId: GroupId,
-    val correlation: Correlation?,
-    val inputs: ExecInputs,
-    val code: ExecCode,
-    val invocation: Invocation
-) : ExecRecord()
-
-data class ExecScheduledRecord(
-    override val cmdId: CmdId,
-    override val entityId: ExecId,
-) : ExecRecord()
-
-data class ExecQueuedRecord(
-    override val cmdId: CmdId,
-    override val entityId: ExecId,
-) : ExecRecord()
-
-
-data class ExecStartedRecord(
-    override val cmdId: CmdId,
-    override val entityId: ExecId,
-) : ExecRecord()
-
-data class ExecCompletedRecord(
-    override val cmdId: CmdId,
-    override val entityId: ExecId,
-    val result: ExecResult,
-    val state: ExecState
-) : ExecRecord()
-
-data class ExecFailedRecord(
-    override val cmdId: CmdId,
-    override val entityId: ExecId,
-    val result: ExecResult
-) : ExecRecord()

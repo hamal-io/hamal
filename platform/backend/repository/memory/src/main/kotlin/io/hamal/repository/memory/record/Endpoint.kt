@@ -7,9 +7,7 @@ import io.hamal.repository.api.EndpointCmdRepository
 import io.hamal.repository.api.EndpointQueryRepository.EndpointQuery
 import io.hamal.repository.api.EndpointRepository
 import io.hamal.repository.record.endpoint.CreateEndpointFromRecords
-import io.hamal.repository.record.endpoint.EndpointCreatedRecord
 import io.hamal.repository.record.endpoint.EndpointRecord
-import io.hamal.repository.record.endpoint.EndpointUpdatedRecord
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
@@ -76,7 +74,7 @@ class EndpointMemoryRepository : RecordMemoryRepository<EndpointId, EndpointReco
                 versionOf(endpointId, cmd.id)
             } else {
                 store(
-                    EndpointCreatedRecord(
+                    EndpointRecord.Created(
                         cmdId = cmd.id,
                         entityId = endpointId,
                         groupId = cmd.groupId,
@@ -97,7 +95,7 @@ class EndpointMemoryRepository : RecordMemoryRepository<EndpointId, EndpointReco
             } else {
                 val currentVersion = versionOf(endpointId, cmd.id)
                 store(
-                    EndpointUpdatedRecord(
+                    EndpointRecord.Updated(
                         entityId = endpointId,
                         cmdId = cmd.id,
                         name = cmd.name ?: currentVersion.name,

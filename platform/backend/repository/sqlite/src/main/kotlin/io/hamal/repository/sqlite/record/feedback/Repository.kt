@@ -8,7 +8,6 @@ import io.hamal.repository.api.FeedbackCmdRepository
 import io.hamal.repository.api.FeedbackQueryRepository.FeedbackQuery
 import io.hamal.repository.api.FeedbackRepository
 import io.hamal.repository.record.CreateDomainObject
-import io.hamal.repository.record.feedback.FeedbackCreatedRecord
 import io.hamal.repository.record.feedback.FeedbackEntity
 import io.hamal.repository.record.feedback.FeedbackRecord
 import io.hamal.repository.sqlite.record.RecordSqliteRepository
@@ -18,7 +17,7 @@ internal object CreateFeedback : CreateDomainObject<FeedbackId, FeedbackRecord, 
     override fun invoke(recs: List<FeedbackRecord>): Feedback {
         check(recs.isNotEmpty()) { "At least one record is required" }
         val firstRecord = recs.first()
-        check(firstRecord is FeedbackCreatedRecord)
+        check(firstRecord is FeedbackRecord.Created)
 
         var result = FeedbackEntity(
             cmdId = firstRecord.cmdId,
@@ -60,7 +59,7 @@ class FeedbackSqliteRepository(
                 versionOf(feedbackId, cmdId)
             } else {
                 store(
-                    FeedbackCreatedRecord(
+                    FeedbackRecord.Created(
                         entityId = feedbackId,
                         cmdId = cmdId,
                         mood = cmd.mood,

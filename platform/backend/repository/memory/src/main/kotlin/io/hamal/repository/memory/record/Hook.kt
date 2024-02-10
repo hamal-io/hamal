@@ -7,9 +7,7 @@ import io.hamal.repository.api.HookCmdRepository
 import io.hamal.repository.api.HookQueryRepository.HookQuery
 import io.hamal.repository.api.HookRepository
 import io.hamal.repository.record.hook.CreateHookFromRecords
-import io.hamal.repository.record.hook.HookCreatedRecord
 import io.hamal.repository.record.hook.HookRecord
-import io.hamal.repository.record.hook.HookUpdatedRecord
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
@@ -76,7 +74,7 @@ class HookMemoryRepository : RecordMemoryRepository<HookId, HookRecord, Hook>(
                 versionOf(hookId, cmd.id)
             } else {
                 store(
-                    HookCreatedRecord(
+                    HookRecord.Created(
                         cmdId = cmd.id,
                         entityId = hookId,
                         groupId = cmd.groupId,
@@ -96,7 +94,7 @@ class HookMemoryRepository : RecordMemoryRepository<HookId, HookRecord, Hook>(
             } else {
                 val currentVersion = versionOf(hookId, cmd.id)
                 store(
-                    HookUpdatedRecord(
+                    HookRecord.Updated(
                         entityId = hookId,
                         cmdId = cmd.id,
                         name = cmd.name ?: currentVersion.name

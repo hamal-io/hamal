@@ -9,9 +9,7 @@ import io.hamal.repository.api.CodeCmdRepository.UpdateCmd
 import io.hamal.repository.api.CodeQueryRepository.CodeQuery
 import io.hamal.repository.api.CodeRepository
 import io.hamal.repository.record.RecordSequence
-import io.hamal.repository.record.code.CodeCreatedRecord
 import io.hamal.repository.record.code.CodeRecord
-import io.hamal.repository.record.code.CodeUpdatedRecord
 import io.hamal.repository.record.code.CreateCodeFromRecords
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
@@ -71,7 +69,7 @@ class CodeMemoryRepository : RecordMemoryRepository<CodeId, CodeRecord, Code>(
                 versionOf(codeId, cmd.id)
             } else {
                 store(
-                    CodeCreatedRecord(
+                    CodeRecord.Created(
                         cmdId = cmd.id,
                         entityId = codeId,
                         groupId = cmd.groupId,
@@ -96,7 +94,7 @@ class CodeMemoryRepository : RecordMemoryRepository<CodeId, CodeRecord, Code>(
                     currentVersion
                 } else {
                     store(
-                        CodeUpdatedRecord(
+                        CodeRecord.Updated(
                             entityId = codeId,
                             cmdId = cmd.id,
                             value = codeValue

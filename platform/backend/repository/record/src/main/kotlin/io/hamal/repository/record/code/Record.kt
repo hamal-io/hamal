@@ -19,22 +19,23 @@ sealed class CodeRecord(
 
     internal object Adapter : RecordAdapter<CodeRecord>(
         listOf(
-            CodeCreatedRecord::class,
-            CodeUpdatedRecord::class
+            Created::class,
+            Updated::class
         )
     )
+
+    data class Created(
+        override val entityId: CodeId,
+        override val cmdId: CmdId,
+        val groupId: GroupId,
+        val value: CodeValue,
+        val type: CodeType
+    ) : CodeRecord()
+
+    data class Updated(
+        override val entityId: CodeId,
+        override val cmdId: CmdId,
+        val value: CodeValue
+    ) : CodeRecord()
 }
 
-data class CodeCreatedRecord(
-    override val entityId: CodeId,
-    override val cmdId: CmdId,
-    val groupId: GroupId,
-    val value: CodeValue,
-    val type: CodeType
-) : CodeRecord()
-
-data class CodeUpdatedRecord(
-    override val entityId: CodeId,
-    override val cmdId: CmdId,
-    val value: CodeValue
-) : CodeRecord()

@@ -9,10 +9,8 @@ import io.hamal.repository.api.EndpointCmdRepository.UpdateCmd
 import io.hamal.repository.api.EndpointQueryRepository.EndpointQuery
 import io.hamal.repository.api.EndpointRepository
 import io.hamal.repository.record.CreateDomainObject
-import io.hamal.repository.record.endpoint.EndpointCreatedRecord
 import io.hamal.repository.record.endpoint.EndpointEntity
 import io.hamal.repository.record.endpoint.EndpointRecord
-import io.hamal.repository.record.endpoint.EndpointUpdatedRecord
 import io.hamal.repository.sqlite.record.RecordSqliteRepository
 import java.nio.file.Path
 
@@ -20,7 +18,7 @@ internal object CreateEndpoint : CreateDomainObject<EndpointId, EndpointRecord, 
     override fun invoke(recs: List<EndpointRecord>): Endpoint {
         check(recs.isNotEmpty()) { "At least one record is required" }
         val firstRecord = recs.first()
-        check(firstRecord is EndpointCreatedRecord)
+        check(firstRecord is EndpointRecord.Created)
 
         var result = EndpointEntity(
             cmdId = firstRecord.cmdId,
@@ -64,7 +62,7 @@ class EndpointSqliteRepository(
                 versionOf(endpointId, cmdId)
             } else {
                 store(
-                    EndpointCreatedRecord(
+                    EndpointRecord.Created(
                         cmdId = cmdId,
                         entityId = endpointId,
                         groupId = cmd.groupId,
@@ -89,7 +87,7 @@ class EndpointSqliteRepository(
             } else {
                 val currentVersion = versionOf(endpointId, cmdId)
                 store(
-                    EndpointUpdatedRecord(
+                    EndpointRecord.Updated(
                         entityId = endpointId,
                         cmdId = cmdId,
                         name = cmd.name ?: currentVersion.name,

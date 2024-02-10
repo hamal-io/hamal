@@ -18,25 +18,26 @@ sealed class TopicRecord(
 ) : Record<TopicId>() {
     internal object Adapter : RecordAdapter<TopicRecord>(
         listOf(
-            TopicGroupCreatedRecord::class,
-            TopicInternalCreatedRecord::class
+            GroupCreated::class,
+            InternalCreated::class
         )
     )
+
+    data class GroupCreated(
+        override val cmdId: CmdId,
+        override val entityId: TopicId,
+        val name: TopicName,
+        val logTopicId: LogTopicId,
+        val groupId: GroupId
+    ) : TopicRecord()
+
+
+    data class InternalCreated(
+        override val cmdId: CmdId,
+        override val entityId: TopicId,
+        val name: TopicName,
+        val logTopicId: LogTopicId,
+        val groupId: GroupId
+    ) : TopicRecord()
+
 }
-
-data class TopicGroupCreatedRecord(
-    override val cmdId: CmdId,
-    override val entityId: TopicId,
-    val name: TopicName,
-    val logTopicId: LogTopicId,
-    val groupId: GroupId
-) : TopicRecord()
-
-
-data class TopicInternalCreatedRecord(
-    override val cmdId: CmdId,
-    override val entityId: TopicId,
-    val name: TopicName,
-    val logTopicId: LogTopicId,
-    val groupId: GroupId
-) : TopicRecord()

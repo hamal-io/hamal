@@ -9,7 +9,8 @@ import io.hamal.repository.api.FuncCmdRepository.*
 import io.hamal.repository.api.FuncDeployment
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
 import io.hamal.repository.api.FuncRepository
-import io.hamal.repository.record.func.*
+import io.hamal.repository.record.func.CreateFuncFromRecords
+import io.hamal.repository.record.func.FuncRecord
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
@@ -76,7 +77,7 @@ class FuncMemoryRepository : RecordMemoryRepository<FuncId, FuncRecord, Func>(
                 versionOf(funcId, cmd.id)
             } else {
                 store(
-                    FuncCreatedRecord(
+                    FuncRecord.Created(
                         cmdId = cmd.id,
                         entityId = funcId,
                         groupId = cmd.groupId,
@@ -100,7 +101,7 @@ class FuncMemoryRepository : RecordMemoryRepository<FuncId, FuncRecord, Func>(
                 val current = versionOf(funcId, cmd.id)
                 require(cmd.version <= current.code.version) { "${cmd.version} can not be deployed" }
                 store(
-                    FuncDeployedRecord(
+                    FuncRecord.Deployed(
                         cmdId = cmd.id,
                         entityId = funcId,
                         version = cmd.version,
@@ -119,7 +120,7 @@ class FuncMemoryRepository : RecordMemoryRepository<FuncId, FuncRecord, Func>(
             } else {
                 val currentVersion = versionOf(funcId, cmd.id)
                 store(
-                    FuncUpdatedRecord(
+                    FuncRecord.Updated(
                         entityId = funcId,
                         cmdId = cmd.id,
                         name = cmd.name ?: currentVersion.name,
@@ -139,7 +140,7 @@ class FuncMemoryRepository : RecordMemoryRepository<FuncId, FuncRecord, Func>(
     override fun listDeployments(funcId: FuncId): List<FuncDeployment> {
         lock.withLock {
             val recs = recordsOf(funcId)
-            return recs.filterIsInstance<FuncDeployedRecord>().map { rec ->
+            return recs.filterIsInstance<FuncRecord.Deployed>().map { rec ->
                 FuncDeployment(
                     id = CodeId(rec.entityId.value),
                     message = rec.message,

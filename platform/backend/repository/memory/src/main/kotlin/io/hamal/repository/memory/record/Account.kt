@@ -7,8 +7,6 @@ import io.hamal.repository.api.AccountCmdRepository
 import io.hamal.repository.api.AccountCmdRepository.CreateCmd
 import io.hamal.repository.api.AccountQueryRepository.AccountQuery
 import io.hamal.repository.api.AccountRepository
-import io.hamal.repository.record.account.AccountConvertedRecord
-import io.hamal.repository.record.account.AccountCreatedRecord
 import io.hamal.repository.record.account.AccountRecord
 import io.hamal.repository.record.account.CreateAccountFromRecords
 import java.util.concurrent.locks.ReentrantLock
@@ -62,7 +60,7 @@ class AccountMemoryRepository : RecordMemoryRepository<AccountId, AccountRecord,
                 versionOf(accountId, cmd.id)
             } else {
                 store(
-                    AccountCreatedRecord(
+                    AccountRecord.Created(
                         cmdId = cmd.id,
                         entityId = accountId,
                         type = cmd.accountType,
@@ -80,9 +78,8 @@ class AccountMemoryRepository : RecordMemoryRepository<AccountId, AccountRecord,
             if (commandAlreadyApplied(cmd.id, accountId)) {
                 versionOf(accountId, cmd.id)
             } else {
-                val currentVersion = currentVersion(accountId)
                 store(
-                    AccountConvertedRecord(
+                    AccountRecord.Converted(
                         cmdId = cmd.id,
                         entityId = accountId
                     )

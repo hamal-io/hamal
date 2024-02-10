@@ -7,7 +7,6 @@ import io.hamal.repository.api.FeedbackCmdRepository.CreateCmd
 import io.hamal.repository.api.FeedbackQueryRepository.FeedbackQuery
 import io.hamal.repository.api.FeedbackRepository
 import io.hamal.repository.record.feedback.CreateFeedbackFromRecords
-import io.hamal.repository.record.feedback.FeedbackCreatedRecord
 import io.hamal.repository.record.feedback.FeedbackRecord
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
@@ -62,7 +61,7 @@ class FeedbackMemoryRepository : RecordMemoryRepository<FeedbackId, FeedbackReco
                 versionOf(feedbackId, cmdId)
             } else {
                 store(
-                    FeedbackCreatedRecord(
+                    FeedbackRecord.Created(
                         entityId = feedbackId,
                         cmdId = cmdId,
                         mood = cmd.mood,

@@ -23,7 +23,7 @@ data class GroupEntity(
 
     override fun apply(rec: GroupRecord): GroupEntity {
         return when (rec) {
-            is GroupCreatedRecord -> copy(
+            is GroupRecord.Created -> copy(
                 id = rec.entityId,
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
@@ -48,7 +48,7 @@ data class GroupEntity(
 fun List<GroupRecord>.createEntity(): GroupEntity {
     check(isNotEmpty()) { "At least one record is required" }
     val firstRecord = first()
-    check(firstRecord is GroupCreatedRecord)
+    check(firstRecord is GroupRecord.Created)
 
     var result = GroupEntity(
         id = firstRecord.entityId,

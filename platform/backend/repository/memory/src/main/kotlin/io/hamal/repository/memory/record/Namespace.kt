@@ -9,9 +9,7 @@ import io.hamal.repository.api.NamespaceCmdRepository.UpdateCmd
 import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
 import io.hamal.repository.api.NamespaceRepository
 import io.hamal.repository.record.namespace.CreateNamespaceFromRecords
-import io.hamal.repository.record.namespace.NamespaceCreatedRecord
 import io.hamal.repository.record.namespace.NamespaceRecord
-import io.hamal.repository.record.namespace.NamespaceUpdatedRecord
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
@@ -79,7 +77,7 @@ class NamespaceMemoryRepository : RecordMemoryRepository<NamespaceId, NamespaceR
                 versionOf(namespaceId, cmd.id)
             } else {
                 store(
-                    NamespaceCreatedRecord(
+                    NamespaceRecord.Created(
                         cmdId = cmd.id,
                         entityId = namespaceId,
                         groupId = cmd.groupId,
@@ -98,7 +96,7 @@ class NamespaceMemoryRepository : RecordMemoryRepository<NamespaceId, NamespaceR
             } else {
                 val current = currentVersion(namespaceId)
                 store(
-                    NamespaceUpdatedRecord(
+                    NamespaceRecord.Updated(
                         entityId = namespaceId,
                         cmdId = cmd.id,
                         name = cmd.name ?: current.name

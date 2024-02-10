@@ -9,10 +9,8 @@ import io.hamal.repository.api.BlueprintCmdRepository.UpdateCmd
 import io.hamal.repository.api.BlueprintQueryRepository.BlueprintQuery
 import io.hamal.repository.api.BlueprintRepository
 import io.hamal.repository.record.CreateDomainObject
-import io.hamal.repository.record.blueprint.BlueprintCreatedRecord
 import io.hamal.repository.record.blueprint.BlueprintEntity
 import io.hamal.repository.record.blueprint.BlueprintRecord
-import io.hamal.repository.record.blueprint.BlueprintUpdatedRecord
 import io.hamal.repository.sqlite.record.RecordSqliteRepository
 import java.nio.file.Path
 
@@ -20,7 +18,7 @@ internal object CreateBlueprint : CreateDomainObject<BlueprintId, BlueprintRecor
     override fun invoke(recs: List<BlueprintRecord>): Blueprint {
         check(recs.isNotEmpty()) { "At least one record is required" }
         val firstRecord = recs.first()
-        check(firstRecord is BlueprintCreatedRecord)
+        check(firstRecord is BlueprintRecord.Created)
 
         var result = BlueprintEntity(
             cmdId = firstRecord.cmdId,
@@ -61,7 +59,7 @@ class BlueprintSqliteRepository(
                 versionOf(bpId, cmdId)
             } else {
                 store(
-                    BlueprintCreatedRecord(
+                    BlueprintRecord.Created(
                         cmdId = cmdId,
                         entityId = bpId,
                         groupId = cmd.groupId,
@@ -86,7 +84,7 @@ class BlueprintSqliteRepository(
             } else {
                 val currentVersion = versionOf(blueprintId, cmdId)
                 store(
-                    BlueprintUpdatedRecord(
+                    BlueprintRecord.Updated(
                         entityId = blueprintId,
                         cmdId = cmdId,
                         name = cmd.name ?: currentVersion.name,

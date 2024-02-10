@@ -1,10 +1,10 @@
 package io.hamal.repository.record.hook
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.HookId
 import io.hamal.lib.domain.vo.HookName
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.repository.api.Hook
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordEntity
@@ -25,7 +25,7 @@ data class HookEntity(
 
     override fun apply(rec: HookRecord): HookEntity {
         return when (rec) {
-            is HookCreatedRecord -> copy(
+            is HookRecord.Created -> copy(
                 id = rec.entityId,
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
@@ -35,7 +35,7 @@ data class HookEntity(
 
             )
 
-            is HookUpdatedRecord -> copy(
+            is HookRecord.Updated -> copy(
                 id = rec.entityId,
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
@@ -60,7 +60,7 @@ data class HookEntity(
 fun List<HookRecord>.createEntity(): HookEntity {
     check(isNotEmpty()) { "At least one record is required" }
     val firstRecord = first()
-    check(firstRecord is HookCreatedRecord)
+    check(firstRecord is HookRecord.Created)
 
     var result = HookEntity(
         id = firstRecord.entityId,
