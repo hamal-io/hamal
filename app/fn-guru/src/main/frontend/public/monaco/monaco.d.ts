@@ -3170,10 +3170,10 @@ declare namespace monaco.editor {
          */
         find?: IEditorFindOptions;
         /**
-         * Display overnamespace widgets as `fixed`.
+         * Display overflow widgets as `fixed`.
          * Defaults to `false`.
          */
-        fixedOvernamespaceWidgets?: boolean;
+        fixedOverflowWidgets?: boolean;
         /**
          * The number of vertical lanes the overview ruler should render.
          * Defaults to 3.
@@ -3308,7 +3308,7 @@ declare namespace monaco.editor {
          */
         wordWrapBreakAfterCharacters?: string;
         /**
-         * Sets whether line breaks appear wherever the text would otherwise overnamespace its content box.
+         * Sets whether line breaks appear wherever the text would otherwise overflow its content box.
          * When wordBreak = 'normal', Use the default line break rule.
          * When wordBreak = 'keepAll', Word breaks should not be used for Chinese/Japanese/Korean (CJK) text. Non-CJK text behavior is the same as for normal.
          */
@@ -4747,7 +4747,7 @@ declare namespace monaco.editor {
         extraEditorClassName = 39,
         fastScrollSensitivity = 40,
         find = 41,
-        fixedOvernamespaceWidgets = 42,
+        fixedOverflowWidgets = 42,
         folding = 43,
         foldingStrategy = 44,
         foldingHighlight = 45,
@@ -4901,7 +4901,7 @@ declare namespace monaco.editor {
         extraEditorClassName: IEditorOption<EditorOption.extraEditorClassName, string>;
         fastScrollSensitivity: IEditorOption<EditorOption.fastScrollSensitivity, number>;
         find: IEditorOption<EditorOption.find, Readonly<Required<IEditorFindOptions>>>;
-        fixedOvernamespaceWidgets: IEditorOption<EditorOption.fixedOvernamespaceWidgets, boolean>;
+        fixedOverflowWidgets: IEditorOption<EditorOption.fixedOverflowWidgets, boolean>;
         folding: IEditorOption<EditorOption.folding, boolean>;
         foldingStrategy: IEditorOption<EditorOption.foldingStrategy, 'auto' | 'indentation'>;
         foldingHighlight: IEditorOption<EditorOption.foldingHighlight, boolean>;
@@ -5022,10 +5022,10 @@ declare namespace monaco.editor {
          */
         dimension?: IDimension;
         /**
-         * Place overnamespace widgets inside an external DOM node.
+         * Place overflow widgets inside an external DOM node.
          * Defaults to an internal DOM node.
          */
-        overnamespaceWidgetsDomNode?: HTMLElement;
+        overflowWidgetsDomNode?: HTMLElement;
     }
 
     /**
@@ -5177,9 +5177,9 @@ declare namespace monaco.editor {
      */
     export interface IContentWidget {
         /**
-         * Render this content widget in a location where it could overnamespace the editor's view dom node.
+         * Render this content widget in a location where it could overflow the editor's view dom node.
          */
-        allowEditorOvernamespace?: boolean;
+        allowEditorOverflow?: boolean;
         /**
          * Call preventDefault() on mousedown events that target the content widget.
          */
@@ -5501,10 +5501,10 @@ declare namespace monaco.editor {
 
     export interface IDiffEditorConstructionOptions extends IDiffEditorOptions, IEditorConstructionOptions {
         /**
-         * Place overnamespace widgets inside an external DOM node.
+         * Place overflow widgets inside an external DOM node.
          * Defaults to an internal DOM node.
          */
-        overnamespaceWidgetsDomNode?: HTMLElement;
+        overflowWidgetsDomNode?: HTMLElement;
         /**
          * Aria label for original editor.
          */

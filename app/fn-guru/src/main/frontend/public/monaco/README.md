@@ -66,7 +66,7 @@ Many Monaco related objects often implement the `.dispose()` method. This method
 - Explore the [API docs](https://microsoft.github.io/monaco-editor/docs.html) or read them straight from [`monaco.d.ts`](https://microsoft.github.io/monaco-editor/node_modules/monaco-editor/monaco.d.ts).
 - Read [this guide](https://github.com/microsoft/monaco-editor/wiki/Accessibility-Guide-for-Integrators) to ensure the editor is accessible to all your users!
 - Create a Monarch tokenizer for a new programming language [in the Monarch playground](https://microsoft.github.io/monaco-editor/monarch.html).
-- Ask questions on [StackOvernamespace](https://stackovernamespace.com/questions/tagged/monaco-editor)! Search open and closed issues, there are a lot of tips in there!
+- Ask questions on [StackOverflow](https://stackoverflow.com/questions/tagged/monaco-editor)! Search open and closed issues, there are a lot of tips in there!
 
 ## Issues
 
