@@ -4,10 +4,7 @@ import {Button} from "@/components/ui/button.tsx";
 import {
     DropdownMenu,
     DropdownMenuContent,
-    DropdownMenuGroup,
     DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu.tsx";
 
@@ -18,9 +15,9 @@ import {Dialog, DialogContent, DialogHeader, DialogTrigger} from "@/components/u
 import {Input} from "@/components/ui/input.tsx";
 import * as z from "zod"
 import {zodResolver} from "@hookform/resolvers/zod";
-import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
+import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
 import {useForm} from "react-hook-form";
-import {BookOpen, Loader2} from "lucide-react";
+import {Loader2} from "lucide-react";
 import {useAccountConvert} from "@/hook";
 
 
@@ -57,13 +54,6 @@ const Profile = () => {
         </DropdownMenu>
     )
 }
-
-export interface ApiLogoutSubmitted {
-    id: string;
-    status: string;
-    accountId: string;
-}
-
 
 const LogoutMenuItem = () => {
     const [logout,] = useLogout()
