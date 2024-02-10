@@ -6,6 +6,7 @@ import io.hamal.lib.domain.State
 import io.hamal.lib.sdk.bridge.BridgeUnitOfWorkList
 import io.hamal.lib.sdk.bridge.BridgeUnitOfWorkList.UnitOfWork
 import io.hamal.repository.api.CodeQueryRepository
+import io.hamal.repository.api.Exec
 import io.hamal.repository.api.ExecCmdRepository
 import io.hamal.repository.api.ExecCmdRepository.StartCmd
 import io.hamal.repository.api.StateQueryRepository
@@ -50,7 +51,7 @@ internal class QueuePollController(
         )
     }
 
-    private fun emitEvents(cmdId: CmdId, execs: List<io.hamal.repository.api.StartedExec>) {
+    private fun emitEvents(cmdId: CmdId, execs: List<Exec.Started>) {
         execs.forEach { eventEmitter.emit(cmdId, ExecStartedEvent(it)) }
     }
 }

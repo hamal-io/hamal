@@ -10,6 +10,7 @@ import io.hamal.lib.domain.vo.ExecStatus
 import io.hamal.lib.domain.vo.ExecStatus.Failed
 import io.hamal.lib.domain.vo.ExecStatus.Started
 import io.hamal.lib.domain.vo.RequestId
+import io.hamal.repository.api.Exec
 import io.hamal.repository.api.ExecQueryRepository.ExecQuery
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
@@ -70,7 +71,7 @@ internal class ExecFailHandlerTest : BaseReqHandlerTest() {
         execQueryRepository.list(ExecQuery(groupIds = listOf())).also { execs ->
             assertThat(execs, hasSize(1))
             with(execs.first()) {
-                require(this is io.hamal.repository.api.FailedExec)
+                require(this is Exec.Failed)
                 assertThat(id, equalTo(ExecId(1234)))
                 assertThat(status, equalTo(Failed))
                 assertThat(

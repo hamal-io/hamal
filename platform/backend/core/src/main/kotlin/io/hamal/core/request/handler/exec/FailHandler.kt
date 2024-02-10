@@ -4,9 +4,8 @@ import io.hamal.core.event.InternalEventEmitter
 import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.request.ExecFailRequested
+import io.hamal.repository.api.Exec
 import io.hamal.repository.api.ExecCmdRepository.FailCmd
-import io.hamal.repository.api.FailedExec
-import io.hamal.repository.api.StartedExec
 import io.hamal.repository.api.event.ExecFailedEvent
 import org.springframework.stereotype.Component
 
@@ -21,7 +20,7 @@ class ExecFailHandler(
         val cmdId = req.cmdId()
 
         val exec = execQueryRepository.get(req.execId)
-        require(exec is StartedExec) { "Exec not in status Started" }
+        require(exec is Exec.Started) { "Exec not in status Started" }
 
         failExec(req).also { emitFailedEvent(cmdId, it) }
     }
@@ -29,7 +28,7 @@ class ExecFailHandler(
     private fun failExec(req: ExecFailRequested) =
         execCmdRepository.fail(FailCmd(req.cmdId(), req.execId, req.result))
 
-    private fun emitFailedEvent(cmdId: CmdId, exec: FailedExec) {
+    private fun emitFailedEvent(cmdId: CmdId, exec: Exec.Failed) {
         eventEmitter.emit(cmdId, ExecFailedEvent(exec))
     }
 }

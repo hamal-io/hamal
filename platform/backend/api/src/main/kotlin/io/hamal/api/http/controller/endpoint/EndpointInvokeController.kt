@@ -56,14 +56,14 @@ internal class EndpointInvokeController(
                     correlation = exec.correlation,
                     inputs = exec.inputs,
                     invocation = exec.invocation,
-                    result = if (exec is CompletedExec) {
+                    result = if (exec is Exec.Completed) {
                         exec.result
-                    } else if (exec is FailedExec) {
+                    } else if (exec is Exec.Failed) {
                         exec.result
                     } else {
                         null
                     },
-                    state = if (exec is CompletedExec) {
+                    state = if (exec is Exec.Completed) {
                         exec.state
                     } else {
                         null
@@ -102,7 +102,7 @@ internal class EndpointInvokeController(
                         return exec
                     } else {
                         if (this?.status == ExecStatus.Failed) {
-                            return exec as FailedExec
+                            return exec as Exec.Failed
                         } else if (startedAt.plusSeconds(5).isBefore(TimeUtils.now())) {
                             return exec
                         }

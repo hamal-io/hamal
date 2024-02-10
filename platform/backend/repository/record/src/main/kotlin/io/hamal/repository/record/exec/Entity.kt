@@ -4,7 +4,7 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.*
-import io.hamal.repository.api.*
+import io.hamal.repository.api.Exec
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordEntity
 import io.hamal.repository.record.RecordSequence
@@ -97,7 +97,7 @@ data class ExecEntity(
 
     override fun toDomainObject(): Exec {
 
-        val plannedExec = PlannedExec(
+        val plannedExec = Exec.Planned(
             cmdId = cmdId,
             id = id,
             updatedAt = recordedAt.toUpdatedAt(),
@@ -111,17 +111,17 @@ data class ExecEntity(
 
         if (status == ExecStatus.Planned) return plannedExec
 
-        val scheduledExec = ScheduledExec(cmdId, id, recordedAt.toUpdatedAt(), plannedExec, ExecScheduledAt.now())
+        val scheduledExec = Exec.Scheduled(cmdId, id, recordedAt.toUpdatedAt(), plannedExec, ExecScheduledAt.now())
         if (status == ExecStatus.Scheduled) return scheduledExec
 
-        val queuedExec = QueuedExec(cmdId, id, recordedAt.toUpdatedAt(), scheduledExec, ExecQueuedAt.now())
+        val queuedExec = Exec.Queued(cmdId, id, recordedAt.toUpdatedAt(), scheduledExec, ExecQueuedAt.now())
         if (status == ExecStatus.Queued) return queuedExec
 
-        val startedExec = StartedExec(cmdId, id, recordedAt.toUpdatedAt(), queuedExec)
+        val startedExec = Exec.Started(cmdId, id, recordedAt.toUpdatedAt(), queuedExec)
         if (status == ExecStatus.Started) return startedExec
 
         return when (status) {
-            ExecStatus.Completed -> CompletedExec(
+            ExecStatus.Completed -> Exec.Completed(
                 cmdId,
                 id,
                 recordedAt.toUpdatedAt(),
@@ -131,7 +131,7 @@ data class ExecEntity(
                 state!!
             )
 
-            ExecStatus.Failed -> FailedExec(
+            ExecStatus.Failed -> Exec.Failed(
                 cmdId,
                 id,
                 recordedAt.toUpdatedAt(),
