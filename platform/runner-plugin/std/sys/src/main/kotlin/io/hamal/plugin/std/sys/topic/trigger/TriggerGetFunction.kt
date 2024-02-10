@@ -43,7 +43,7 @@ class TriggerGetFunction(
                                             "name" to KuaString(trigger.func.name.value)
                                         )
                                     ),
-                                    "duration" to KuaString(trigger.duration.toIsoString()),
+                                    "duration" to KuaString(trigger.duration.value),
                                     "status" to KuaString(trigger.status.name),
                                 )
                             )

@@ -16,7 +16,7 @@ import ExecListPage from "@/pages/app/exec-list";
 import FuncListPage from "@/pages/app/func-list";
 import FuncDetailPage from "@/pages/app/func-detail";
 import HookListPage from "@/pages/app/hook-list";
-import FlowscheduleListPage from "@/pages/app/schedule-list";
+import ScheduleListPage from "@/pages/app/schedule-list";
 
 import {createBrowserRouter} from "react-router-dom";
 import Playground from "@/pages/app/playground";
@@ -83,10 +83,10 @@ export const router = createBrowserRouter([
                 <EndpointListPage/>
             </GroupLayout>
     },
-    // {
-    //     path: "/groups/:groupId/schedules", element:
-    //         <GroupLayout>
-    //             <FlowscheduleListPage/>
-    //         </GroupLayout>
-    // }
+    {
+        path: "/groups/:groupId/schedules", element:
+            <GroupLayout>
+                <ScheduleListPage/>
+            </GroupLayout>
+    }
 ]);

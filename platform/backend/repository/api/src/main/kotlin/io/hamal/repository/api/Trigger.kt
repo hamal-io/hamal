@@ -11,7 +11,6 @@ import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
 import java.lang.reflect.Type
-import kotlin.time.Duration
 
 interface TriggerRepository : TriggerCmdRepository, TriggerQueryRepository
 
@@ -30,7 +29,7 @@ interface TriggerCmdRepository : CmdRepository {
         val funcId: FuncId,
         val namespaceId: NamespaceId,
         val inputs: TriggerInputs,
-        val duration: Duration,
+        val duration: TriggerDuration,
         val correlationId: CorrelationId? = null,
         val status: TriggerStatus = TriggerStatus.Active
     )
@@ -148,7 +147,7 @@ class FixedRateTrigger(
     override val namespaceId: NamespaceId,
     override val inputs: TriggerInputs,
     override val status: TriggerStatus,
-    val duration: Duration,
+    val duration: TriggerDuration,
     override val correlationId: CorrelationId? = null
 ) : Trigger {
     override val type = TriggerType.FixedRate

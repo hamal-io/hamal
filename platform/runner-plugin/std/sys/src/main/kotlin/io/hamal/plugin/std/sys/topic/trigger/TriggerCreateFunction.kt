@@ -13,7 +13,6 @@ import io.hamal.lib.kua.type.KuaMap
 import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiTriggerCreateReq
-import kotlin.time.Duration
 
 class TriggerCreateFunction(
     private val sdk: ApiSdk
@@ -31,7 +30,7 @@ class TriggerCreateFunction(
                     name = TriggerName(arg1.getString("name")),
                     inputs = TriggerInputs(),
                     duration = if (arg1.type("duration") == KuaString::class) {
-                        Duration.parseIsoString(arg1.getString("duration"))
+                        TriggerDuration(arg1.getString("duration"))
                     } else {
                         null
                     },

@@ -45,7 +45,7 @@ class TriggerListFunction(
                                             "name" to KuaString(trigger.func.name.value)
                                         )
                                     ),
-                                    "duration" to KuaString(trigger.duration.toIsoString())
+                                    "duration" to KuaString(trigger.duration.value)
                                 )
                             )
                         }

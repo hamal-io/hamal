@@ -37,7 +37,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
                 name = TriggerName("trigger"),
                 funcId = funcId,
                 inputs = TriggerInputs(),
-                duration = 10.seconds,
+                duration = TriggerDuration(10.seconds.toIsoString()),
             )
         ).execute()
 
@@ -76,7 +76,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
                     name = TriggerName("trigger"),
                     funcId = funcId,
                     inputs = TriggerInputs(),
-                    duration = 10.seconds,
+                    duration = TriggerDuration(10.seconds.toIsoString()),
                 )
             ).execute()
 
@@ -105,7 +105,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
                 name = TriggerName("trigger"),
                 funcId = funcId,
                 inputs = TriggerInputs(),
-                duration = 10.seconds,
+                duration = TriggerDuration(10.seconds.toIsoString()),
             )
         ).execute()
 
@@ -131,7 +131,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
                     name = TriggerName("fixed-rate-trigger"),
                     funcId = funcId,
                     inputs = TriggerInputs(),
-                    duration = 10.seconds,
+                    duration = TriggerDuration(10.seconds.toIsoString()),
                 )
             ).execute()
 
@@ -159,7 +159,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
                     name = TriggerName("fixed-rate-trigger"),
                     funcId = FuncId(123),
                     inputs = TriggerInputs(),
-                    duration = 10.seconds,
+                    duration = TriggerDuration(10.seconds.toIsoString()),
                 )
             ).execute()
 

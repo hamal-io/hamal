@@ -13,7 +13,6 @@ import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordEntity
 import io.hamal.repository.record.RecordSequence
 import io.hamal.repository.record.RecordedAt
-import kotlin.time.Duration
 
 
 data class TriggerEntity(
@@ -31,7 +30,7 @@ data class TriggerEntity(
     var correlationId: CorrelationId? = null,
 
     var topicId: TopicId? = null,
-    var duration: Duration? = null,
+    var duration: TriggerDuration? = null,
     var hookId: HookId? = null,
     var hookMethod: HookMethod? = null,
 

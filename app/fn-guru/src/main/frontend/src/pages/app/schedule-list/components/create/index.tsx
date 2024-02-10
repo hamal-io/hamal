@@ -5,62 +5,75 @@ import * as z from "zod"
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
 import {useForm} from "react-hook-form";
-import {Loader2, Plus} from "lucide-react";
+import {ChevronDownIcon, Loader2, Plus} from "lucide-react";
 import {useAuth} from "@/hook/auth.ts";
 import {Dialog, DialogContent, DialogHeader, DialogTrigger} from "@/components/ui/dialog.tsx";
 import {Input} from "@/components/ui/input.tsx";
-import {Button} from "@/components/ui/button.tsx";
-import {flowListItem} from "@/types";
+import {Button, buttonVariants} from "@/components/ui/button.tsx";
+import {useTriggerFixedRateCreate} from "@/hook";
+import FormFuncSelect from "@/components/form/func-select.tsx";
+
+type flowProps = {
+    id: string;
+    name: string;
+}
+
 
 type Prop = {
-    flow: flowListItem
+    group: flowProps
 }
 
 const formSchema = z.object({
     name: z.string().min(2).max(50),
+    funcId: z.string().min(1, "Function required"),
+    rate: z.number().min(1)
 })
 
-const CreateEvery: FC<Prop> = ({flow}) => {
+const CreateFixedRate: FC<Prop> = ({group}) => {
     const [auth, setAuth] = useAuth()
     const navigate = useNavigate()
     const [openDialog, setOpenDialog] = useState<boolean>(false)
     const props = {openModal: openDialog, setOpenModal: setOpenDialog}
     const [isLoading, setLoading] = useState(false)
 
-
+    const [createTrigger, submittedTrigger] = useTriggerFixedRateCreate()
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: ""
+            name: "",
+            rate: 300,
         },
     })
 
     // 2. Define a submit handler.
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setLoading(true)
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        console.log(values)
-
         try {
-            // createFunc(flow.id, values.name)
-            console.log(auth)
+            createTrigger(
+                group.id,
+                values.funcId,
+                values.name,
+                "PT" + values.rate + 'S'
+            )
         } catch (e) {
-            console.log(`login failed - ${e}`)
+            console.error(e)
         } finally {
             // setLoading(false)
         }
-
     }
 
-    //
-    // useEffect(() => {
-    //     if (submittedFunc !== null) {
-    //         navigate(`/groups/${flow.id}/functions/${submittedFunc.funcId}`)
-    //         setOpenDialog(false)
-    //
-    //     }
-    // }, [submittedFunc, navigate]);
+    useEffect(() => {
+        if (openDialog === false) {
+            form.control._reset()
+        }
+    }, [openDialog]);
+
+    useEffect(() => {
+        if (submittedTrigger !== null) {
+            setOpenDialog(false)
+            window.location.reload()
+        }
+    }, [submittedTrigger, navigate]);
 
     return (
         <>
@@ -68,12 +81,12 @@ const CreateEvery: FC<Prop> = ({flow}) => {
                 <DialogTrigger asChild>
                     <Button>
                         <Plus className="w-4 h-4 mr-1"/>
-                        New Every
+                        New Schedule
                     </Button>
                 </DialogTrigger>
 
                 <DialogContent>
-                    <DialogHeader>Create function</DialogHeader>
+                    <DialogHeader>Create Fixed Rate</DialogHeader>
 
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -84,18 +97,41 @@ const CreateEvery: FC<Prop> = ({flow}) => {
                                     <FormItem>
                                         <FormLabel>Name</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="Schedule - One" {...field} />
+                                            <Input placeholder="Schedule One" {...field} />
                                         </FormControl>
                                         <FormDescription>
-                                            Name of your flow
+                                            Name of your trigger
                                         </FormDescription>
                                         <FormMessage/>
                                     </FormItem>
                                 )}
                             />
+
+                            <FormFuncSelect name='funcId' groupId={group.id} form={form}/>
+
+                            <FormField
+                                control={form.control}
+                                name="rate"
+                                render={({field}) => (
+                                    <FormItem>
+                                        <FormLabel>Rate in seconds</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                placeholder="300" type="number" {...field}
+                                                onChange={event => field.onChange(+event.target.value)}
+                                            />
+                                        </FormControl>
+                                        <FormDescription>
+                                            Amount of seconds until function gets invoked again
+                                        </FormDescription>
+                                        <FormMessage/>
+                                    </FormItem>
+                                )}
+                            />
+                            <FormMessage/>
                             <Button type="submit">
                                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
-                                Create Schedule
+                                Create
                             </Button>
                         </form>
                     </Form>
@@ -106,4 +142,4 @@ const CreateEvery: FC<Prop> = ({flow}) => {
 }
 
 
-export default CreateEvery;
+export default CreateFixedRate;

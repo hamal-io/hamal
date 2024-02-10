@@ -17,7 +17,6 @@ import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiTriggerService.TriggerQuery
 import io.hamal.lib.sdk.fold
-import kotlin.time.Duration
 
 data class ApiTriggerCreateReq(
     override val type: TriggerType,
@@ -25,7 +24,7 @@ data class ApiTriggerCreateReq(
     override val funcId: FuncId,
     override val inputs: TriggerInputs,
     override val correlationId: CorrelationId? = null,
-    override val duration: Duration? = null,
+    override val duration: TriggerDuration? = null,
     override val topicId: TopicId? = null,
     override val hookId: HookId? = null,
     override val hookMethod: HookMethod? = null,
@@ -103,7 +102,7 @@ data class ApiTriggerList(
         override val name: TriggerName,
         override val func: Trigger.Func,
         override val namespace: Trigger.Namespace,
-        val duration: Duration
+        val duration: TriggerDuration
     ) : Trigger {
         override val type: TriggerType = TriggerType.FixedRate
     }
@@ -208,7 +207,7 @@ class ApiFixedRateTrigger(
     override val inputs: TriggerInputs,
     override val status: TriggerStatus,
     override val correlationId: CorrelationId? = null,
-    val duration: Duration
+    val duration: TriggerDuration
 ) : ApiTrigger() {
     override val type: TriggerType = TriggerType.FixedRate
 }

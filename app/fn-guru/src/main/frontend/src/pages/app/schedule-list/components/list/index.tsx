@@ -2,28 +2,28 @@ import React, {FC, useEffect} from "react";
 import {PageHeader} from "@/components/page-header.tsx";
 import Table from "@/pages/app/schedule-list/components/list/components/table.tsx";
 import {columns} from "@/pages/app/schedule-list/components/list/components/columns.tsx";
-import CreateFixedRate from "@/pages/app/schedule-list/components/create/fixed-rate.tsx";
+import CreateSchedule from "@/pages/app/schedule-list/components/create";
 import {useTriggerListSchedule} from "@/hook";
 
-type flowProps = {
+type GroupProps = {
     id: string;
     name: string;
 }
 
 type ListProps = {
-    flow: flowProps
+    group: GroupProps
 }
 
-const List: FC<ListProps> = ({flow}) => {
+const List: FC<ListProps> = ({group}) => {
     const [listSchedules, scheduleList, loading, error] = useTriggerListSchedule()
 
     useEffect(() => {
         const abortController = new AbortController()
-        listSchedules(flow.id, abortController)
+        listSchedules(group.id, abortController)
         return () => {
             abortController.abort()
         }
-    }, [flow.id]);
+    }, [group.id]);
 
     if (loading) return "Loading..."
     if (error != null) return "Error -"
@@ -32,10 +32,9 @@ const List: FC<ListProps> = ({flow}) => {
         <div className="pt-2 px-2 mb-6">
             <PageHeader
                 title="Schedules"
-                description={`Periodically call your functions of flow ${flow.name}`}
+                description={`Periodically call your function`}
                 actions={[
-                    // <CreateEvery flow={flow}/>,
-                    <CreateFixedRate flow={flow}/>
+                    <CreateSchedule group={group}/>
                 ]}
             />
             <Table data={scheduleList.triggers} columns={columns}/>

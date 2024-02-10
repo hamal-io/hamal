@@ -41,7 +41,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     namespaceId = NamespaceId(5),
                     name = TriggerName("trigger-name"),
                     inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
-                    duration = 10.seconds
+                    duration = TriggerDuration(10.seconds.toIsoString())
                 )
             )
 
@@ -79,7 +79,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                             namespaceId = NamespaceId(2),
                             name = TriggerName("first-trigger-name"),
                             inputs = TriggerInputs(),
-                            duration = 100.seconds,
+                            duration = TriggerDuration(100.seconds.toIsoString()),
                         )
                     )
                 }
@@ -112,7 +112,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                         namespaceId = NamespaceId(22),
                         name = TriggerName("trigger-name"),
                         inputs = TriggerInputs(),
-                        duration = 10.hours
+                        duration = TriggerDuration(10.hours.toIsoString())
                     )
                 )
 
@@ -152,7 +152,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                         namespaceId = NamespaceId(2222),
                         name = TriggerName("second-trigger-name"),
                         inputs = TriggerInputs(),
-                        duration = 23.seconds,
+                        duration = TriggerDuration(23.seconds.toIsoString()),
                     )
                 )
 
@@ -692,7 +692,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     namespaceId = NamespaceId(5),
                     name = TriggerName("trigger-name"),
                     inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
-                    duration = 10.seconds
+                    duration = TriggerDuration(10.seconds.toIsoString())
                 )
             )
 
@@ -722,7 +722,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     namespaceId = NamespaceId(5),
                     name = TriggerName("trigger-name"),
                     inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
-                    duration = 10.seconds
+                    duration = TriggerDuration(10.seconds.toIsoString())
                 )
             )
 
@@ -1083,7 +1083,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 name = name,
                 inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
                 funcId = funcId,
-                duration = 10.seconds
+                duration = TriggerDuration(10.seconds.toIsoString())
             )
         )
     }

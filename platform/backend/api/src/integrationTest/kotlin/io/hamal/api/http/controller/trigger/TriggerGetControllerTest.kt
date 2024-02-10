@@ -37,7 +37,7 @@ internal class TriggerGetControllerTest : TriggerBaseControllerTest() {
                     name = TriggerName("trigger-one"),
                     inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
                     funcId = someFuncId,
-                    duration = 10.seconds
+                    duration = TriggerDuration(10.seconds.toIsoString())
                 )
             )
         ).triggerId

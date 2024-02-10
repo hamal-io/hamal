@@ -8,7 +8,6 @@ import io.hamal.repository.record.Record
 import io.hamal.repository.record.RecordAdapter
 import io.hamal.repository.record.RecordSequence
 import io.hamal.repository.record.RecordedAt
-import kotlin.time.Duration
 
 sealed class TriggerRecord(
     @Transient
@@ -36,7 +35,7 @@ data class FixedRateTriggerCreatedRecord(
     val namespaceId: NamespaceId,
     val name: TriggerName,
     val inputs: TriggerInputs,
-    val duration: Duration,
+    val duration: TriggerDuration,
     val status: TriggerStatus,
     val correlationId: CorrelationId? = null
 ) : TriggerRecord()

@@ -36,13 +36,18 @@ const Nav = ({className, ...props}: React.HTMLAttributes<HTMLElement>) => {
         },
         {
             href: `/groups/${groupId}/executions`,
-            label: "Execution",
+            label: "Executions",
             active: currentPath.startsWith(`/groups/${groupId}/executions`)
         },
         {
             href: `/groups/${groupId}/functions`,
-            label: "Function",
+            label: "Functions",
             active: currentPath.startsWith(`/groups/${groupId}/functions`)
+        },
+        {
+            href: `/groups/${groupId}/schedules`,
+            label: "Schedules",
+            active: currentPath.startsWith(`/groups/${groupId}/schedules`)
         },
         // {
         //     href: `/groups/${groupId}/webhooks`,

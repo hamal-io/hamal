@@ -18,7 +18,6 @@ import {
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow,} from "@/components/ui/table.tsx"
 
 import Pagination from "./pagination.tsx"
-import Toolbar from "./toolbar.tsx"
 import {Card, CardContent, CardFooter, CardHeader} from "@/components/ui/card.tsx";
 import {useNavigate} from "react-router-dom";
 import {flowContext} from "@/pages/app/flow-detail";
@@ -64,9 +63,6 @@ export default function <TData, TValue>({columns, data,}: DataTableProps<TData, 
 
     return (
         <Card>
-            <CardHeader>
-                <Toolbar table={table}/>
-            </CardHeader>
             <CardContent>
                 <Table>
                     <TableHeader>

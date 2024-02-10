@@ -65,7 +65,7 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
                     name = name,
                     funcId = funcId,
                     inputs = TriggerInputs(),
-                    duration = 10.seconds,
+                    duration = TriggerDuration(10.seconds.toIsoString()),
                 )
             )
             .execute()

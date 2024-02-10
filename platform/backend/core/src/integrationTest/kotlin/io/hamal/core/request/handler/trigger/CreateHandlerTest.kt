@@ -246,7 +246,7 @@ internal class TriggerCreateHandlerTest : BaseReqHandlerTest() {
             groupId = testGroup.id,
             funcId = FuncId(2222),
             name = TriggerName("FixedRateTrigger"),
-            duration = 42.seconds,
+            duration = TriggerDuration(42.seconds.toIsoString()),
             inputs = TriggerInputs(
                 HotObject.builder().set("hamal", "rocks").build()
             ),
