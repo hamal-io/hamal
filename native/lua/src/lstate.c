@@ -157,14 +157,14 @@ void luaE_shrinkCI (lua_State *L) {
 
 /*
 ** Called when 'getCcalls(L)' larger or equal to LUAI_MAXCCALLS.
-** If equal, raises an overnamespace error. If value is larger than
-** LUAI_MAXCCALLS (which means it is handling an overnamespace) but
-** not much larger, does not report an error (to allow overnamespace
+** If equal, raises an overflow error. If value is larger than
+** LUAI_MAXCCALLS (which means it is handling an overflow) but
+** not much larger, does not report an error (to allow overflow
 ** handling to work).
 */
 void luaE_checkcstack (lua_State *L) {
   if (getCcalls(L) == LUAI_MAXCCALLS)
-    luaG_runerror(L, "C stack overnamespace");
+    luaG_runerror(L, "C stack overflow");
   else if (getCcalls(L) >= (LUAI_MAXCCALLS / 10 * 11))
     luaD_throw(L, LUA_ERRERR);  /* error while handling stack error */
 }

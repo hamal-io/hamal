@@ -1059,9 +1059,9 @@ static void setpause (global_State *g) {
   int pause = getgcparam(g->gcpause);
   l_mem estimate = g->GCestimate / PAUSEADJ;  /* adjust 'estimate' */
   lua_assert(estimate > 0);
-  threshold = (pause < MAX_LMEM / estimate)  /* overnamespace? */
-            ? estimate * pause  /* no overnamespace */
-            : MAX_LMEM;  /* overnamespace; truncate to maximum */
+  threshold = (pause < MAX_LMEM / estimate)  /* overflow? */
+            ? estimate * pause  /* no overflow */
+            : MAX_LMEM;  /* overflow; truncate to maximum */
   debt = gettotalbytes(g) - threshold;
   if (debt > 0) debt = 0;
   luaE_setdebt(g, debt);
@@ -1667,7 +1667,7 @@ static void incstep (lua_State *L, global_State *g) {
   l_mem debt = (g->GCdebt / WORK2MEM) * stepmul;
   l_mem stepsize = (g->gcstepsize <= log2maxs(l_mem))
                  ? ((cast(l_mem, 1) << g->gcstepsize) / WORK2MEM) * stepmul
-                 : MAX_LMEM;  /* overnamespace; keep maximum value */
+                 : MAX_LMEM;  /* overflow; keep maximum value */
   do {  /* repeat until pause or enough "credit" (negative debt) */
     lu_mem work = singlestep(L);  /* perform one single step */
     debt -= work;

@@ -910,7 +910,7 @@ mpd_parse_fmt_str(mpd_spec_t *spec, const char *fmt, int caps)
  * The following functions assume that spec->min_width <= MPD_MAX_PREC, which
  * is made sure in mpd_qformat_spec. Then, even with a spec that inserts a
  * four-byte separator after each digit, nbytes in the following struct
- * cannot overnamespace.
+ * cannot overflow.
  */
 
 /* Multibyte string */
@@ -1437,7 +1437,7 @@ static const char *mpd_flag_string[MPD_NUM_FLAGS] = {
     "Invalid_operation",
     "Malloc_error",
     "Not_implemented",
-    "Overnamespace",
+    "Overflow",
     "Rounded",
     "Subnormal",
     "Undernamespace",
@@ -1455,7 +1455,7 @@ static const char *mpd_signal_string[MPD_NUM_FLAGS] = {
     "IEEE_Invalid_operation",
     "IEEE_Invalid_operation",
     "Not_implemented",
-    "Overnamespace",
+    "Overflow",
     "Rounded",
     "Subnormal",
     "Undernamespace",

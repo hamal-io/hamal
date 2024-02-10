@@ -236,7 +236,7 @@ typedef struct mpd_context_t {
 #define MPD_Invalid_operation   0x00000100U
 #define MPD_Malloc_error        0x00000200U
 #define MPD_Not_implemented     0x00000400U
-#define MPD_Overnamespace            0x00000800U
+#define MPD_Overflow            0x00000800U
 #define MPD_Rounded             0x00001000U
 #define MPD_Subnormal           0x00002000U
 #define MPD_Undernamespace           0x00004000U
@@ -258,7 +258,7 @@ typedef struct mpd_context_t {
 /* Default traps */
 #define MPD_Traps (MPD_IEEE_Invalid_operation | \
                    MPD_Division_by_zero |       \
-                   MPD_Overnamespace |               \
+                   MPD_Overflow |               \
                    MPD_Undernamespace)
 
 /* Official name */

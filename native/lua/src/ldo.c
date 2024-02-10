@@ -250,7 +250,7 @@ int luaD_growstack (lua_State *L, int n, int raiseerror) {
       luaD_throw(L, LUA_ERRERR);  /* error inside message handler */
     return 0;  /* if not 'raiseerror', just signal it */
   }
-  else if (n < LUAI_MAXSTACK) {  /* avoids arithmetic overnamespaces */
+  else if (n < LUAI_MAXSTACK) {  /* avoids arithmetic overflows */
     int newsize = 2 * size;  /* tentative new size */
     int needed = cast_int(L->top.p - L->stack.p) + n;
     if (newsize > LUAI_MAXSTACK)  /* cannot cross the limit */
@@ -260,11 +260,11 @@ int luaD_growstack (lua_State *L, int n, int raiseerror) {
     if (l_likely(newsize <= LUAI_MAXSTACK))
       return luaD_reallocstack(L, newsize, raiseerror);
   }
-  /* else stack overnamespace */
+  /* else stack overflow */
   /* add extra size to be able to handle the error message */
   luaD_reallocstack(L, ERRORSTACKSIZE, raiseerror);
   if (raiseerror)
-    luaG_runerror(L, "stack overnamespace");
+    luaG_runerror(L, "stack overflow");
   return 0;
 }
 
@@ -292,7 +292,7 @@ static int stackinuse (lua_State *L) {
 ** If stack size is more than 3 times the current use, reduce that size
 ** to twice the current use. (So, the final stack size is at most 2/3 the
 ** previous size, and half of its entries are empty.)
-** As a particular case, if stack was handling a stack overnamespace and now
+** As a particular case, if stack was handling a stack overflow and now
 ** it is not, 'max' (limited by LUAI_MAXSTACK) will be smaller than
 ** stacksize (equal to ERRORSTACKSIZE in this case), and so the stack
 ** will be reduced to a "regular" size.
@@ -300,7 +300,7 @@ static int stackinuse (lua_State *L) {
 void luaD_shrinkstack (lua_State *L) {
   int inuse = stackinuse(L);
   int max = (inuse > LUAI_MAXSTACK / 3) ? LUAI_MAXSTACK : inuse * 3;
-  /* if thread is currently not handling a stack overnamespace and its
+  /* if thread is currently not handling a stack overflow and its
      size is larger than maximum "reasonable" size, shrink it */
   if (inuse <= LUAI_MAXSTACK && stacksize(L) > max) {
     int nsize = (inuse > LUAI_MAXSTACK / 2) ? LUAI_MAXSTACK : inuse * 2;
@@ -681,7 +681,7 @@ static int finishpcallk (lua_State *L,  CallInfo *ci) {
     L->allowhook = getoah(ci->callstatus);  /* restore 'allowhook' */
     func = luaF_close(L, func, status, 1);  /* can yield or raise an error */
     luaD_seterrorobj(L, status, func);
-    luaD_shrinkstack(L);   /* restore stack size in case of overnamespace */
+    luaD_shrinkstack(L);   /* restore stack size in case of overflow */
     setcistrecst(ci, LUA_OK);  /* clear original status */
   }
   ci->callstatus &= ~CIST_YPCALL;
@@ -842,7 +842,7 @@ LUA_API int lua_resume (lua_State *L, lua_State *from, int nargs,
     return resume_error(L, "cannot resume dead coroutine", nargs);
   L->nCcalls = (from) ? getCcalls(from) : 0;
   if (getCcalls(L) >= LUAI_MAXCCALLS)
-    return resume_error(L, "C stack overnamespace", nargs);
+    return resume_error(L, "C stack overflow", nargs);
   L->nCcalls++;
   luai_userstateresume(L, nargs);
   api_checknelems(L, (L->status == LUA_OK) ? nargs + 1 : nargs);
@@ -956,7 +956,7 @@ int luaD_pcall (lua_State *L, Pfunc func, void *u,
     L->allowhook = old_allowhooks;
     status = luaD_closeprotected(L, old_top, status);
     luaD_seterrorobj(L, status, restorestack(L, old_top));
-    luaD_shrinkstack(L);   /* restore stack size in case of overnamespace */
+    luaD_shrinkstack(L);   /* restore stack size in case of overflow */
   }
   L->errfunc = old_errfunc;
   return status;

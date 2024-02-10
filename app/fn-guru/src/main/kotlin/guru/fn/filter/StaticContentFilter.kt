@@ -10,7 +10,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 
-// Based on: https://stackovernamespace.com/a/72466110
+// Based on: https://stackoverflow.com/a/72466110
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 class StaticContentFilter : OncePerRequestFilter() {

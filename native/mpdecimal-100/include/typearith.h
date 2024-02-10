@@ -580,13 +580,13 @@ _mpd_idiv_word(mpd_ssize_t *q, mpd_ssize_t *r, mpd_ssize_t v, mpd_ssize_t d)
 
 
 /** ------------------------------------------------------------
- **              Arithmetic with overnamespace checking
+ **              Arithmetic with overflow checking
  ** ------------------------------------------------------------
  */
 
-/* The following macros do call exit() in case of an overnamespace.
+/* The following macros do call exit() in case of an overflow.
    If the library is used correctly (i.e. with valid context
-   parameters), such overnamespaces cannot occur. The macros are used
+   parameters), such overflows cannot occur. The macros are used
    as sanity checks in a couple of strategic places and should
    be viewed as a handwritten version of gcc's -ftrapv option. */
 
@@ -594,7 +594,7 @@ static inline mpd_size_t
 add_size_t(mpd_size_t a, mpd_size_t b)
 {
     if (a > MPD_SIZE_MAX - b) {
-        mpd_err_fatal("add_size_t(): overnamespace: check the context"); /* GCOV_NOT_REACHED */
+        mpd_err_fatal("add_size_t(): overflow: check the context"); /* GCOV_NOT_REACHED */
     }
     return a + b;
 }
@@ -603,7 +603,7 @@ static inline mpd_size_t
 sub_size_t(mpd_size_t a, mpd_size_t b)
 {
     if (b > a) {
-        mpd_err_fatal("sub_size_t(): overnamespace: check the context"); /* GCOV_NOT_REACHED */
+        mpd_err_fatal("sub_size_t(): overflow: check the context"); /* GCOV_NOT_REACHED */
     }
     return a - b;
 }
@@ -619,29 +619,29 @@ mul_size_t(mpd_size_t a, mpd_size_t b)
 
     _mpd_mul_words(&hi, &lo, (mpd_uint_t)a, (mpd_uint_t)b);
     if (hi) {
-        mpd_err_fatal("mul_size_t(): overnamespace: check the context"); /* GCOV_NOT_REACHED */
+        mpd_err_fatal("mul_size_t(): overflow: check the context"); /* GCOV_NOT_REACHED */
     }
     return lo;
 }
 
 static inline mpd_size_t
-add_size_t_overnamespace(mpd_size_t a, mpd_size_t b, mpd_size_t *overnamespace)
+add_size_t_overflow(mpd_size_t a, mpd_size_t b, mpd_size_t *overflow)
 {
     mpd_size_t ret;
 
-    *overnamespace = 0;
+    *overflow = 0;
     ret = a + b;
-    if (ret < a) *overnamespace = 1;
+    if (ret < a) *overflow = 1;
     return ret;
 }
 
 static inline mpd_size_t
-mul_size_t_overnamespace(mpd_size_t a, mpd_size_t b, mpd_size_t *overnamespace)
+mul_size_t_overflow(mpd_size_t a, mpd_size_t b, mpd_size_t *overflow)
 {
     mpd_uint_t hi, lo;
 
     _mpd_mul_words(&hi, &lo, (mpd_uint_t)a, (mpd_uint_t)b);
-    *overnamespace = (mpd_size_t)hi;
+    *overflow = (mpd_size_t)hi;
     return lo;
 }
 

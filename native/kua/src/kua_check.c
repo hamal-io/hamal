@@ -25,9 +25,9 @@ check_argument(int condition, char const *error_message) {
 }
 
 enum check_result
-check_stack_overnamespace(lua_State *L, int total) {
+check_stack_overflow(lua_State *L, int total) {
     if (lua_checkstack(L, abs(total)) == 0) {
-        throw_illegal_argument("Prevented stack overnamespace");
+        throw_illegal_argument("Prevented stack overflow");
         return CHECK_RESULT_ERROR;
     }
     return CHECK_RESULT_OK;

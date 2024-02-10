@@ -17,7 +17,7 @@ Mike Cowlishaw/IBM's General Decimal Arithmetic Specification.
     context.c        ->  Context functions.
     io.{c,h}         ->  Conversions between mpd_t and ASCII strings,
                          mpd_t formatting (allows UTF-8 fill character).
-    mpalloc.{c,h}    ->  Allocation handlers with overnamespace detection
+    mpalloc.{c,h}    ->  Allocation handlers with overflow detection
                          and functions for switching between static
                          and dynamic mpd_t.
     mpdecimal.{c,h}  ->  All (quiet) functions of the specification.

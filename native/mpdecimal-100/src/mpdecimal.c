@@ -1391,7 +1391,7 @@ _mpd_qget_uint(int use_sign, const mpd_t *a, uint32_t *status)
  *   - specials
  *   - negative numbers (except negative zero)
  *   - non-integers
- *   - overnamespace
+ *   - overflow
  */
 mpd_uint_t
 mpd_qget_uint(const mpd_t *a, uint32_t *status)
@@ -1728,9 +1728,9 @@ _mpd_rnd_incr(const mpd_t *dec, mpd_uint_t rnd, const mpd_context_t *ctx)
 
 /*
  * Apply rounding to a decimal that has been right-shifted into a full
- * precision decimal. If an increment leads to an overnamespace of the precision,
+ * precision decimal. If an increment leads to an overflow of the precision,
  * adjust the coefficient and the exponent and check the new exponent for
- * overnamespace.
+ * overflow.
  */
 static inline void
 _mpd_apply_round(mpd_t *dec, mpd_uint_t rnd, const mpd_context_t *ctx,
@@ -1738,7 +1738,7 @@ _mpd_apply_round(mpd_t *dec, mpd_uint_t rnd, const mpd_context_t *ctx,
 {
     if (_mpd_rnd_incr(dec, rnd, ctx)) {
         /* We have a number with exactly global_ctx->prec digits. The increment
-         * can only lead to an overnamespace if the decimal is all nines. In
+         * can only lead to an overflow if the decimal is all nines. In
          * that case, the result is a power of ten with prec+1 digits.
          *
          * If the precision is a multiple of MPD_RDIGITS, this situation is
@@ -1764,7 +1764,7 @@ _mpd_apply_round(mpd_t *dec, mpd_uint_t rnd, const mpd_context_t *ctx,
 }
 
 /*
- * Apply rounding to a decimal. Allow overnamespace of the precision.
+ * Apply rounding to a decimal. Allow overflow of the precision.
  */
 static inline void
 _mpd_apply_round_excess(mpd_t *dec, mpd_uint_t rnd, const mpd_context_t *ctx,
@@ -1786,7 +1786,7 @@ _mpd_apply_round_excess(mpd_t *dec, mpd_uint_t rnd, const mpd_context_t *ctx,
 /*
  * Apply rounding to a decimal that has been right-shifted into a decimal
  * with full precision or less. Return failure if an increment would
- * overnamespace the precision.
+ * overflow the precision.
  */
 static inline int
 _mpd_apply_round_fit(mpd_t *dec, mpd_uint_t rnd, const mpd_context_t *ctx,
@@ -1810,7 +1810,7 @@ _mpd_apply_round_fit(mpd_t *dec, mpd_uint_t rnd, const mpd_context_t *ctx,
     return 1;
 }
 
-/* Check a normal number for overnamespace, undernamespace, clamping. If the operand
+/* Check a normal number for overflow, undernamespace, clamping. If the operand
    is modified, it will be zero, special or (sub)normal with a coefficient
    that fits into the current context precision. */
 static inline void
@@ -1864,7 +1864,7 @@ _mpd_check_exp(mpd_t *dec, const mpd_context_t *ctx, uint32_t *status)
             abort(); /* GCOV_NOT_REACHED */
         }
 
-        *status |= MPD_Overnamespace|MPD_Inexact|MPD_Rounded;
+        *status |= MPD_Overflow|MPD_Inexact|MPD_Rounded;
 
     } /* fold down */
     else if (ctx->clamp && dec->exp > mpd_etop(ctx)) {
@@ -4349,7 +4349,7 @@ _mpd_get_exp_iterations(const mpd_t *r, mpd_ssize_t p)
 }
 
 /*
- * Internal function, specials have been dealt with. Apart from Overnamespace
+ * Internal function, specials have been dealt with. Apart from Overflow
  * and Undernamespace, two cases must be considered for the error of the result:
  *
  *   1) abs(a) <= 9 * 10**(-prec-1)  ==>  result == 1
@@ -4400,7 +4400,7 @@ _mpd_qexp(mpd_t *result, const mpd_t *a, const mpd_context_t *ctx,
      *
      * If t > 0, we have:
      *
-     *   (1) 0.1 <= r < 1, so e^0.1 <= e^r. If t > MAX_T, overnamespace occurs:
+     *   (1) 0.1 <= r < 1, so e^0.1 <= e^r. If t > MAX_T, overflow occurs:
      *
      *     MAX-EMAX+1 < log10(e^(0.1*10*t)) <= log10(e^(r*10^t)) < adjexp(e^(r*10^t))+1
      *
@@ -4418,7 +4418,7 @@ _mpd_qexp(mpd_t *result, const mpd_t *a, const mpd_context_t *ctx,
     if (t > MPD_EXP_MAX_T) {
         if (mpd_ispositive(a)) {
             mpd_setspecial(result, MPD_POS, MPD_INF);
-            *status |= MPD_Overnamespace|MPD_Inexact|MPD_Rounded;
+            *status |= MPD_Overflow|MPD_Inexact|MPD_Rounded;
         }
         else {
             _settriple(result, MPD_POS, 0, mpd_etiny(ctx));
@@ -5037,7 +5037,7 @@ mpd_qln(mpd_t *result, const mpd_t *a, const mpd_context_t *ctx,
         return;
     }
     /*
-     * Check if the result will overnamespace (0 < x, x != 1):
+     * Check if the result will overflow (0 < x, x != 1):
      *   1) log10(x) < 0 iff adjexp(x) < 0
      *   2) 0 < x /\ x <= y ==> adjexp(x) <= adjexp(y)
      *   3) 0 < x /\ x != 1 ==> 2 * abs(log10(x)) < abs(log(x))
@@ -5061,7 +5061,7 @@ mpd_qln(mpd_t *result, const mpd_t *a, const mpd_context_t *ctx,
     t = (adjexp < 0) ? -adjexp-1 : adjexp;
     t *= 2;
     if (mpd_exp_digits(t)-1 > ctx->emax) {
-        *status |= MPD_Overnamespace|MPD_Inexact|MPD_Rounded;
+        *status |= MPD_Overflow|MPD_Inexact|MPD_Rounded;
         mpd_setspecial(result, (adjexp<0), MPD_INF);
         return;
     }
@@ -5191,7 +5191,7 @@ mpd_qlog10(mpd_t *result, const mpd_t *a, const mpd_context_t *ctx,
         return;
     }
     /*
-     * Check if the result will overnamespace (0 < x, x != 1):
+     * Check if the result will overflow (0 < x, x != 1):
      *   1) log10(x) < 0 iff adjexp(x) < 0
      *   2) 0 < x /\ x <= y ==> adjexp(x) <= adjexp(y)
      *   3) adjexp(x) <= log10(x) < adjexp(x) + 1
@@ -5213,7 +5213,7 @@ mpd_qlog10(mpd_t *result, const mpd_t *a, const mpd_context_t *ctx,
     adjexp = mpd_adjexp(a);
     t = (adjexp < 0) ? -adjexp-1 : adjexp;
     if (mpd_exp_digits(t)-1 > ctx->emax) {
-        *status |= MPD_Overnamespace|MPD_Inexact|MPD_Rounded;
+        *status |= MPD_Overflow|MPD_Inexact|MPD_Rounded;
         mpd_setspecial(result, (adjexp<0), MPD_INF);
         return;
     }
@@ -5616,7 +5616,7 @@ mpd_set_fenv(void)
     unsigned int cw;
 #ifdef _MSC_VER
     unsigned int flags =
-        _EM_INVALID|_EM_DENORMAL|_EM_ZERODIVIDE|_EM_OVERNAMESPACE|
+        _EM_INVALID|_EM_DENORMAL|_EM_ZERODIVIDE|_EM_OVERFLOW|
         _EM_UNDERNAMESPACE|_EM_INEXACT|_RC_CHOP|_PC_64;
     unsigned int mask = _MCW_EM|_MCW_RC|_MCW_PC;
     unsigned int dummy;
@@ -6260,7 +6260,7 @@ mpd_qnext_toward(mpd_t *result, const mpd_t *a, const mpd_t *b,
     }
 
     if (mpd_isinfinite(result)) {
-        *status |= (MPD_Overnamespace|MPD_Rounded|MPD_Inexact);
+        *status |= (MPD_Overflow|MPD_Rounded|MPD_Inexact);
     }
     else if (mpd_adjexp(result) < ctx->emin) {
         *status |= (MPD_Undernamespace|MPD_Subnormal|MPD_Rounded|MPD_Inexact);
@@ -6588,7 +6588,7 @@ _lower_bound_zeta(const mpd_t *x, uint32_t *status)
 }
 
 /*
- * Detect cases of certain overnamespace/undernamespace in the power function.
+ * Detect cases of certain overflow/undernamespace in the power function.
  * Assumptions: x != 1, y != 0. The proof above is for positive x.
  * If x is negative and y is an odd integer, x**y == -(abs(x)**y),
  * so the analysis does not change.
@@ -6683,7 +6683,7 @@ _mpd_qpow_real(mpd_t *result, const mpd_t *base, const mpd_t *exp,
      *   2) abs(e**(y * (2*err + err**2)) - 1)
      * Case abs(y) >= 10**extra:
      *   3) adjexp(y)+1 > log10(abs(y)) >= extra
-     *   This triggers the Overnamespace/Undernamespace shortcut in _mpd_qexp(),
+     *   This triggers the Overflow/Undernamespace shortcut in _mpd_qexp(),
      *   so no further analysis is necessary.
      * Case abs(y) < 10**extra:
      *   4) abs(y * (2*err + err**2)) < 1/5 * 10**(-prec - 2)

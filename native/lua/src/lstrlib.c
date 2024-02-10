@@ -64,8 +64,8 @@ static int str_len (lua_State *L) {
 ** translate a relative initial string position
 ** (negative means back from end): clip result to [1, inf).
 ** The length of any string in Lua must fit in a lua_Integer,
-** so there are no overnamespaces in the casts.
-** The inverted comparison avoids a possible overnamespace
+** so there are no overflows in the casts.
+** The inverted comparison avoids a possible overflow
 ** computing '-pos'.
 */
 static size_t posrelatI (lua_Integer pos, size_t len) {
@@ -182,7 +182,7 @@ static int str_byte (lua_State *L) {
   size_t pose = getendpos(L, 3, pi, l);
   int n, i;
   if (posi > pose) return 0;  /* empty interval; return no values */
-  if (l_unlikely(pose - posi >= (size_t)INT_MAX))  /* arithmetic overnamespace? */
+  if (l_unlikely(pose - posi >= (size_t)INT_MAX))  /* arithmetic overflow? */
     return luaL_error(L, "string slice too long");
   n = (int)(pose -  posi) + 1;
   luaL_checkstack(L, n, "string slice too long");
@@ -360,7 +360,7 @@ typedef struct MatchState {
   const char *src_end;  /* end ('\0') of source string */
   const char *p_end;  /* end ('\0') of pattern */
   lua_State *L;
-  int matchdepth;  /* control for recursive depth (to avoid C stack overnamespace) */
+  int matchdepth;  /* control for recursive depth (to avoid C stack overflow) */
   unsigned char level;  /* total number of captures (finished or unfinished) */
   struct {
     const char *init;
@@ -860,7 +860,7 @@ static int gmatch (lua_State *L) {
   lua_settop(L, 2);  /* keep strings on closure to avoid being collected */
   gm = (GMatchState *)lua_newuserdatauv(L, sizeof(GMatchState), 0);
   if (init > ls)  /* start after string's end? */
-    init = ls + 1;  /* avoid overnamespaces in 's + init' */
+    init = ls + 1;  /* avoid overflows in 's + init' */
   prepstate(&gm->ms, L, s, ls, p, lp);
   gm->src = s + init; gm->p = p; gm->lastmatch = NULL;
   lua_pushcclosure(L, gmatch_aux, 3);
@@ -1617,18 +1617,18 @@ static int str_pack (lua_State *L) {
     switch (opt) {
       case Kint: {  /* signed integers */
         lua_Integer n = luaL_checkinteger(L, arg);
-        if (size < SZINT) {  /* need overnamespace check? */
+        if (size < SZINT) {  /* need overflow check? */
           lua_Integer lim = (lua_Integer)1 << ((size * NB) - 1);
-          luaL_argcheck(L, -lim <= n && n < lim, arg, "integer overnamespace");
+          luaL_argcheck(L, -lim <= n && n < lim, arg, "integer overflow");
         }
         packint(&b, (lua_Unsigned)n, h.islittle, size, (n < 0));
         break;
       }
       case Kuint: {  /* unsigned integers */
         lua_Integer n = luaL_checkinteger(L, arg);
-        if (size < SZINT)  /* need overnamespace check? */
+        if (size < SZINT)  /* need overflow check? */
           luaL_argcheck(L, (lua_Unsigned)n < ((lua_Unsigned)1 << (size * NB)),
-                           arg, "unsigned overnamespace");
+                           arg, "unsigned overflow");
         packint(&b, (lua_Unsigned)n, h.islittle, size, 0);
         break;
       }
@@ -1723,7 +1723,7 @@ static int str_packsize (lua_State *L) {
 ** is signed, must do sign extension (propagating the sign to the
 ** higher bits); if size is larger than the size of a Lua integer,
 ** it must check the unread bytes to see whether they do not cause an
-** overnamespace.
+** overflow.
 */
 static lua_Integer unpackint (lua_State *L, const char *str,
                               int islittle, int size, int issigned) {

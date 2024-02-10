@@ -131,7 +131,7 @@ LUA_API void lua_xmove (lua_State *from, lua_State *to, int n) {
   lua_lock(to);
   api_checknelems(from, n);
   api_check(from, G(from) == G(to), "moving among independent states");
-  api_check(from, to->ci->top.p - to->top.p >= n, "stack overnamespace");
+  api_check(from, to->ci->top.p - to->top.p >= n, "stack overflow");
   from->top.p -= n;
   for (i = 0; i < n; i++) {
     setobjs2s(to, to->top.p, from->top.p + i);
@@ -998,7 +998,7 @@ LUA_API int lua_setiuservalue (lua_State *L, int idx, int n) {
 #define checkresults(L,na,nr) \
      api_check(L, (nr) == LUA_MULTRET \
                || (L->ci->top.p - L->top.p >= (nr) - (na)), \
-	"results from function overnamespace current stack size")
+	"results from function overflow current stack size")
 
 
 LUA_API void lua_callk (lua_State *L, int nargs, int nresults,

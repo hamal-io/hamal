@@ -125,7 +125,7 @@ _crt_div3(mpd_uint_t *w, const mpd_uint_t *u, mpd_uint_t v)
  *
  * The following statements hold for both versions:
  *
- *   1) cmax + zmax < N, so the addition does not overnamespace.
+ *   1) cmax + zmax < N, so the addition does not overflow.
  *
  *   2) (cmax + zmax) / MPD_RADIX == cmax.
  *

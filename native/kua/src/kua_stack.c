@@ -24,14 +24,14 @@ abs_index(lua_State *L, int idx) {
 
 void
 set_top(lua_State *L, int idx) {
-    if (check_stack_overnamespace(L, idx) == CHECK_RESULT_ERROR) return;
+    if (check_stack_overflow(L, idx) == CHECK_RESULT_ERROR) return;
     lua_settop(L, idx);
 }
 
 int
 push_top(lua_State *L, int idx) {
     if (check_argument(idx != 0, "Index must not be 0") == CHECK_RESULT_ERROR) return LUA_TNONE;
-    if (check_stack_overnamespace(L, idx) == CHECK_RESULT_ERROR) return LUA_TNONE;
+    if (check_stack_overflow(L, idx) == CHECK_RESULT_ERROR) return LUA_TNONE;
     lua_pushvalue(L, idx);
     return top(L);
 }
@@ -46,42 +46,42 @@ pop(lua_State *L, int total) {
 
 int
 push_nil(lua_State *L) {
-    if (check_stack_overnamespace(L, 1) == CHECK_RESULT_ERROR) return LUA_TNONE;
+    if (check_stack_overflow(L, 1) == CHECK_RESULT_ERROR) return LUA_TNONE;
     lua_pushnil(L);
     return top(L);
 }
 
 int
 push_boolean(lua_State *L, int value) {
-    if (check_stack_overnamespace(L, 1) == CHECK_RESULT_ERROR) return LUA_TNONE;
+    if (check_stack_overflow(L, 1) == CHECK_RESULT_ERROR) return LUA_TNONE;
     lua_pushboolean(L, value);
     return top(L);
 }
 
 int
 push_decimal(lua_State *L, char const *value) {
-    if (check_stack_overnamespace(L, 3) == CHECK_RESULT_ERROR) return LUA_TNONE;
+    if (check_stack_overflow(L, 3) == CHECK_RESULT_ERROR) return LUA_TNONE;
     decimal_new_from_string(L, value);
     return top(L);
 }
 
 int
 push_error(lua_State *L, char const *message) {
-    if (check_stack_overnamespace(L, 2) == CHECK_RESULT_ERROR) return LUA_TNONE;
+    if (check_stack_overflow(L, 2) == CHECK_RESULT_ERROR) return LUA_TNONE;
     builtin_error_create(L, message);
     return top(L);
 }
 
 int
 push_number(lua_State *L, double value) {
-    if (check_stack_overnamespace(L, 1) == CHECK_RESULT_ERROR) return LUA_TNONE;
+    if (check_stack_overflow(L, 1) == CHECK_RESULT_ERROR) return LUA_TNONE;
     lua_pushnumber(L, value);
     return top(L);
 }
 
 int
 push_string(lua_State *L, char const *value) {
-    if (check_stack_overnamespace(L, 1) == CHECK_RESULT_ERROR) return LUA_TNONE;
+    if (check_stack_overflow(L, 1) == CHECK_RESULT_ERROR) return LUA_TNONE;
     lua_pushstring(L, value);
     return top(L);
 }
@@ -89,7 +89,7 @@ push_string(lua_State *L, char const *value) {
 int
 push_func(lua_State *L, void *func) {
     //FIXME figure required stack size
-    if (check_stack_overnamespace(L, 3) == CHECK_RESULT_ERROR) return LUA_TNONE;
+    if (check_stack_overflow(L, 3) == CHECK_RESULT_ERROR) return LUA_TNONE;
     lua_pushcfunction(L, call_func_value_closure);
     lua_pushlightuserdata(L, func);
     lua_pcall(L, 1, 1, 0);

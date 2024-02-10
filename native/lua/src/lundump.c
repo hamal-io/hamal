@@ -73,7 +73,7 @@ static size_t loadUnsigned (LoadState *S, size_t limit) {
   do {
     b = loadByte(S);
     if (x >= limit)
-      error(S, "integer overnamespace");
+      error(S, "integer overflow");
     x = (x << 7) | (b & 0x7f);
   } while ((b & 0x80) == 0);
   return x;

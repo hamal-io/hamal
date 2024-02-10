@@ -654,7 +654,7 @@ static int nilK (FuncState *fs) {
 /*
 ** Check whether 'i' can be stored in an 'sC' operand. Equivalent to
 ** (0 <= int2sC(i) && int2sC(i) <= MAXARG_C) but without risk of
-** overnamespaces in the hidden addition inside 'int2sC'.
+** overflows in the hidden addition inside 'int2sC'.
 */
 static int fitsC (lua_Integer i) {
   return (l_castS2U(i) + OFFSET_sC <= cast_uint(MAXARG_C));
