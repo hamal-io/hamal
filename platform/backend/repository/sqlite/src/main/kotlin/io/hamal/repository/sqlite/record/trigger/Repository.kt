@@ -4,9 +4,10 @@ import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.sqlite.SqliteBaseRepository
-import io.hamal.repository.api.*
+import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerCmdRepository.*
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
+import io.hamal.repository.api.TriggerRepository
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.trigger.TriggerEntity
 import io.hamal.repository.record.trigger.TriggerRecord
@@ -55,12 +56,12 @@ class TriggerSqliteRepository(
         override val filename = "trigger.db"
     }
 
-    override fun create(cmd: CreateFixedRateCmd): FixedRateTrigger {
+    override fun create(cmd: CreateFixedRateCmd): Trigger.FixedRate {
         val triggerId = cmd.triggerId
         val cmdId = cmd.id
         return tx {
             if (commandAlreadyApplied(cmdId, triggerId)) {
-                versionOf(triggerId, cmdId) as FixedRateTrigger
+                versionOf(triggerId, cmdId) as Trigger.FixedRate
             } else {
                 store(
                     TriggerRecord.FixedRateCreated(
@@ -77,19 +78,19 @@ class TriggerSqliteRepository(
                     )
                 )
 
-                (currentVersion(triggerId) as FixedRateTrigger)
+                (currentVersion(triggerId) as Trigger.FixedRate)
                     .also { ProjectionCurrent.upsert(this, it) }
                     .also { ProjectionUniqueName.upsert(this, it) }
             }
         }
     }
 
-    override fun create(cmd: CreateEventCmd): EventTrigger {
+    override fun create(cmd: CreateEventCmd): Trigger.Event {
         val triggerId = cmd.triggerId
         val cmdId = cmd.id
         return tx {
             if (commandAlreadyApplied(cmdId, triggerId)) {
-                versionOf(triggerId, cmdId) as EventTrigger
+                versionOf(triggerId, cmdId) as Trigger.Event
             } else {
                 store(
                     TriggerRecord.EventCreated(
@@ -106,19 +107,19 @@ class TriggerSqliteRepository(
                     )
                 )
 
-                (currentVersion(triggerId) as EventTrigger)
+                (currentVersion(triggerId) as Trigger.Event)
                     .also { ProjectionCurrent.upsert(this, it) }
                     .also { ProjectionUniqueName.upsert(this, it) }
             }
         }
     }
 
-    override fun create(cmd: CreateHookCmd): HookTrigger {
+    override fun create(cmd: CreateHookCmd): Trigger.Hook {
         val triggerId = cmd.triggerId
         val cmdId = cmd.id
         return tx {
             if (commandAlreadyApplied(cmdId, triggerId)) {
-                versionOf(triggerId, cmdId) as HookTrigger
+                versionOf(triggerId, cmdId) as Trigger.Hook
             } else {
 
                 store(
@@ -137,7 +138,7 @@ class TriggerSqliteRepository(
                     )
                 )
 
-                (currentVersion(triggerId) as HookTrigger)
+                (currentVersion(triggerId) as Trigger.Hook)
                     .also { ProjectionCurrent.upsert(this, it) }
                     .also { ProjectionUniqueName.upsert(this, it) }
                     .also { ProjectionUniqueHook.upsert(this, it) }
@@ -145,12 +146,12 @@ class TriggerSqliteRepository(
         }
     }
 
-    override fun create(cmd: CreateCronCmd): CronTrigger {
+    override fun create(cmd: CreateCronCmd): Trigger.Cron {
         val triggerId = cmd.triggerId
         val cmdId = cmd.id
         return tx {
             if (commandAlreadyApplied(cmdId, triggerId)) {
-                versionOf(triggerId, cmdId) as CronTrigger
+                versionOf(triggerId, cmdId) as Trigger.Cron
             } else {
                 store(
                     TriggerRecord.CronCreated(
@@ -167,7 +168,7 @@ class TriggerSqliteRepository(
                     )
                 )
 
-                (currentVersion(triggerId) as CronTrigger)
+                (currentVersion(triggerId) as Trigger.Cron)
                     .also { ProjectionCurrent.upsert(this, it) }
                     .also { ProjectionUniqueName.upsert(this, it) }
             }

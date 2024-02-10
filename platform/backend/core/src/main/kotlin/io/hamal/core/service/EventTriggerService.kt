@@ -9,9 +9,9 @@ import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.request.FuncInvokeRequest
 import io.hamal.lib.domain.vo.*
-import io.hamal.repository.api.EventTrigger
 import io.hamal.repository.api.TopicEvent
 import io.hamal.repository.api.TopicRepository
+import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerQueryRepository
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import io.hamal.repository.api.log.LogBrokerRepository
@@ -48,7 +48,7 @@ internal class EventTriggerService(
                             groupIds = listOf()
                         )
                     ).forEach { trigger ->
-                        require(trigger is EventTrigger)
+                        require(trigger is Trigger.Event)
 
                         val topic = topicRepository.get(trigger.topicId)
                         val consumer = LogConsumerBatchImpl(

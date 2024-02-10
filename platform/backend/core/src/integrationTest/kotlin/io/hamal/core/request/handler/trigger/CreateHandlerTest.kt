@@ -8,10 +8,7 @@ import io.hamal.lib.domain._enum.TriggerType.*
 import io.hamal.lib.domain._enum.TriggerType.Event
 import io.hamal.lib.domain.request.TriggerCreateRequested
 import io.hamal.lib.domain.vo.*
-import io.hamal.repository.api.CronTrigger
-import io.hamal.repository.api.EventTrigger
-import io.hamal.repository.api.FixedRateTrigger
-import io.hamal.repository.api.HookTrigger
+import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
@@ -171,7 +168,7 @@ internal class TriggerCreateHandlerTest : BaseReqHandlerTest() {
             assertThat(triggers, hasSize(1))
 
             with(triggers.first()) {
-                require(this is FixedRateTrigger)
+                require(this is Trigger.FixedRate)
                 assertThat(id, equalTo(TriggerId(1234)))
                 assertThat(name, equalTo(TriggerName("FixedRateTrigger")))
                 assertThat(funcId, equalTo(FuncId(2222)))
@@ -186,7 +183,7 @@ internal class TriggerCreateHandlerTest : BaseReqHandlerTest() {
             assertThat(triggers, hasSize(1))
 
             with(triggers.first()) {
-                require(this is EventTrigger)
+                require(this is Trigger.Event)
                 assertThat(id, equalTo(TriggerId(1234)))
                 assertThat(name, equalTo(TriggerName("EventTrigger")))
                 assertThat(funcId, equalTo(FuncId(2222)))
@@ -201,7 +198,7 @@ internal class TriggerCreateHandlerTest : BaseReqHandlerTest() {
             assertThat(triggers, hasSize(1))
 
             with(triggers.first()) {
-                require(this is HookTrigger)
+                require(this is Trigger.Hook)
                 assertThat(id, equalTo(TriggerId(1234)))
                 assertThat(name, equalTo(TriggerName("HookTrigger")))
                 assertThat(funcId, equalTo(FuncId(2222)))
@@ -216,7 +213,7 @@ internal class TriggerCreateHandlerTest : BaseReqHandlerTest() {
             assertThat(triggers, hasSize(1))
 
             with(triggers.first()) {
-                require(this is CronTrigger)
+                require(this is Trigger.Cron)
                 assertThat(id, equalTo(TriggerId(1234)))
                 assertThat(name, equalTo(TriggerName("CronTrigger")))
                 assertThat(funcId, equalTo(FuncId(2222)))

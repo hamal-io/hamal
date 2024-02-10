@@ -3,19 +3,16 @@ package io.hamal.api.http.controller.trigger
 import io.hamal.core.adapter.TriggerListPort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.TriggerType
-import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.sdk.api.ApiTriggerList
 import io.hamal.lib.sdk.api.ApiTriggerList.EventTrigger.Topic
 import io.hamal.lib.sdk.api.ApiTriggerList.HookTrigger.Hook
-import io.hamal.lib.sdk.api.ApiTriggerList.Trigger.Namespace
 import io.hamal.lib.sdk.api.ApiTriggerList.Trigger.Func
-import io.hamal.repository.api.CronTrigger
-import io.hamal.repository.api.EventTrigger
-import io.hamal.repository.api.FixedRateTrigger
-import io.hamal.repository.api.HookTrigger
+import io.hamal.lib.sdk.api.ApiTriggerList.Trigger.Namespace
+import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -48,7 +45,7 @@ class TriggerListController(private val listTriggers: TriggerListPort) {
                 ApiTriggerList(
                     triggers.map { trigger ->
                         when (trigger) {
-                            is FixedRateTrigger -> {
+                            is Trigger.FixedRate -> {
                                 ApiTriggerList.FixedRateTrigger(
                                     id = trigger.id,
                                     name = trigger.name,
@@ -64,7 +61,7 @@ class TriggerListController(private val listTriggers: TriggerListPort) {
                                 )
                             }
 
-                            is EventTrigger -> {
+                            is Trigger.Event -> {
                                 ApiTriggerList.EventTrigger(
                                     id = trigger.id,
                                     name = trigger.name,
@@ -83,7 +80,7 @@ class TriggerListController(private val listTriggers: TriggerListPort) {
                                 )
                             }
 
-                            is HookTrigger -> {
+                            is Trigger.Hook -> {
                                 ApiTriggerList.HookTrigger(
                                     id = trigger.id,
                                     name = trigger.name,
@@ -103,7 +100,7 @@ class TriggerListController(private val listTriggers: TriggerListPort) {
                                 )
                             }
 
-                            is CronTrigger -> {
+                            is Trigger.Cron -> {
                                 ApiTriggerList.CronTrigger(
                                     id = trigger.id,
                                     name = trigger.name,
@@ -133,7 +130,11 @@ class TriggerListController(private val listTriggers: TriggerListPort) {
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit,
         @RequestParam(required = false, name = "func_ids", defaultValue = "") funcIds: List<FuncId> = listOf(),
         @RequestParam(required = false, name = "group_ids", defaultValue = "") groupIds: List<GroupId> = listOf(),
-        @RequestParam(required = false, name = "namespace_ids", defaultValue = "") namespaceIds: List<NamespaceId> = listOf(),
+        @RequestParam(
+            required = false,
+            name = "namespace_ids",
+            defaultValue = ""
+        ) namespaceIds: List<NamespaceId> = listOf(),
         @RequestParam(required = false, name = "types", defaultValue = "") types: List<TriggerType> = listOf()
     ): ResponseEntity<ApiTriggerList> {
         return listTriggers(
@@ -150,7 +151,7 @@ class TriggerListController(private val listTriggers: TriggerListPort) {
                 ApiTriggerList(
                     triggers.map { trigger ->
                         when (trigger) {
-                            is FixedRateTrigger -> {
+                            is Trigger.FixedRate -> {
                                 ApiTriggerList.FixedRateTrigger(
                                     id = trigger.id,
                                     name = trigger.name,
@@ -166,7 +167,7 @@ class TriggerListController(private val listTriggers: TriggerListPort) {
                                 )
                             }
 
-                            is EventTrigger -> {
+                            is Trigger.Event -> {
                                 ApiTriggerList.EventTrigger(
                                     id = trigger.id,
                                     name = trigger.name,
@@ -185,7 +186,7 @@ class TriggerListController(private val listTriggers: TriggerListPort) {
                                 )
                             }
 
-                            is HookTrigger -> {
+                            is Trigger.Hook -> {
                                 ApiTriggerList.HookTrigger(
                                     id = trigger.id,
                                     name = trigger.name,
@@ -205,7 +206,7 @@ class TriggerListController(private val listTriggers: TriggerListPort) {
                                 )
                             }
 
-                            is CronTrigger -> {
+                            is Trigger.Cron -> {
                                 ApiTriggerList.CronTrigger(
                                     id = trigger.id,
                                     name = trigger.name,

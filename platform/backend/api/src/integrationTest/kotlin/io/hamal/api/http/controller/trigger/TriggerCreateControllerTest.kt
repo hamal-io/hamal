@@ -18,7 +18,9 @@ import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiError
 import io.hamal.lib.sdk.api.ApiTriggerCreateReq
 import io.hamal.lib.sdk.api.ApiTriggerCreateRequested
-import io.hamal.repository.api.*
+import io.hamal.repository.api.NamespaceCmdRepository
+import io.hamal.repository.api.Trigger
+import io.hamal.repository.api.TriggerQueryRepository
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Nested
@@ -146,7 +148,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
                 assertThat(name, equalTo(TriggerName("fixed-rate-trigger")))
                 assertThat(inputs, equalTo(TriggerInputs()))
                 assertThat(this.funcId, equalTo(funcId))
-                require(this is FixedRateTrigger) { "not FixedRateTrigger" }
+                require(this is Trigger.FixedRate) { "not FixedRateTrigger" }
                 assertThat(duration, equalTo(TriggerDuration("PT10S")))
             }
         }
@@ -201,7 +203,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
                 assertThat(name, equalTo(TriggerName("event-trigger")))
                 assertThat(inputs, equalTo(TriggerInputs()))
                 assertThat(this.funcId, equalTo(funcId))
-                require(this is EventTrigger) { "not EventTrigger" }
+                require(this is Trigger.Event) { "not EventTrigger" }
                 assertThat(this.topicId, equalTo(topicId))
             }
         }
@@ -302,7 +304,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
                 assertThat(name, equalTo(TriggerName("hook-trigger")))
                 assertThat(inputs, equalTo(TriggerInputs()))
                 assertThat(this.funcId, equalTo(funcId))
-                require(this is HookTrigger) { "not HookTrigger" }
+                require(this is Trigger.Hook) { "not HookTrigger" }
                 assertThat(this.hookId, equalTo(hookId))
                 assertThat(this.hookMethod, equalTo(Post))
             }
@@ -480,7 +482,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
                 assertThat(name, equalTo(TriggerName("cron-trigger")))
                 assertThat(inputs, equalTo(TriggerInputs()))
                 assertThat(this.funcId, equalTo(funcId))
-                require(this is CronTrigger) { "not cron trigger" }
+                require(this is Trigger.Cron) { "not cron trigger" }
                 assertThat(cron, equalTo(CronPattern("0 0 9-17 * * MON-FRI")))
             }
         }
