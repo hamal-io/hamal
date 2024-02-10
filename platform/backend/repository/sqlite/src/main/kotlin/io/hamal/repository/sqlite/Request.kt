@@ -13,15 +13,11 @@ import io.hamal.repository.record.json
 import java.nio.file.Path
 
 class RequestSqliteRepository(
-    config: Config
-) : SqliteBaseRepository(config), RequestRepository {
-
-    data class Config(
-        override val path: Path
-    ) : SqliteBaseRepository.Config {
-        override val filename = "requests.db"
-    }
-
+    path: Path
+) : SqliteBaseRepository(
+    path = path,
+    filename = "request.db"
+), RequestRepository {
 
     override fun setupConnection(connection: Connection) {
         connection.execute("""PRAGMA journal_mode = wal;""")
@@ -29,7 +25,6 @@ class RequestSqliteRepository(
         connection.execute("""PRAGMA temp_store = memory;""")
         connection.execute("""PRAGMA synchronous = off;""")
     }
-
 
     override fun setupSchema(connection: Connection) {
         connection.tx {

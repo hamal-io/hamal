@@ -6,7 +6,8 @@ import io.hamal.lib.domain.Once
 import java.nio.file.Path
 
 abstract class SqliteBaseRepository(
-    val config: Config
+    private val path: Path,
+    private val filename: String
 ) : AutoCloseable {
 
     protected val log = logger(this::class)
@@ -17,7 +18,7 @@ abstract class SqliteBaseRepository(
         connectionOnce {
             val result = ConnectionImpl(
                 this::class,
-                "jdbc:sqlite:${ensureFilePath(config)}"
+                "jdbc:sqlite:${ensureFilePath(path, filename)}"
             )
             log.debug("Setup connection")
             setupConnection(result)
@@ -25,11 +26,6 @@ abstract class SqliteBaseRepository(
             setupSchema(result)
             result
         }
-    }
-
-    interface Config {
-        val path: Path
-        val filename: String
     }
 
     protected abstract fun setupConnection(connection: Connection)
@@ -43,11 +39,6 @@ abstract class SqliteBaseRepository(
     }
 }
 
-private fun ensureFilePath(config: SqliteBaseRepository.Config): Path {
-    return FileUtils.ensureFilePath(config.path, config.filename)
-}
-
-//FIXME properly integrate this
-fun <T : Any> unsafeInCriteria(parameter: String, values: Iterable<T>): String {
-    return "$parameter in (${values.joinToString(",") { it.toString() }})"
+private fun ensureFilePath(path: Path, filename: String): Path {
+    return FileUtils.ensureFilePath(path, filename)
 }

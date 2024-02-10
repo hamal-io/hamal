@@ -11,13 +11,11 @@ import io.hamal.repository.api.AuthQueryRepository.AuthQuery
 import java.nio.file.Path
 
 class AuthSqliteRepository(
-    config: Config
-) : SqliteBaseRepository(config), AuthRepository {
-    data class Config(
-        override val path: Path
-    ) : SqliteBaseRepository.Config {
-        override val filename = "auth.db"
-    }
+    path: Path
+) : SqliteBaseRepository(
+    path = path,
+    filename = "auth.db"
+), AuthRepository {
 
     override fun setupConnection(connection: Connection) {
         connection.execute("""PRAGMA journal_mode = wal;""")

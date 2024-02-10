@@ -14,10 +14,10 @@ import java.nio.file.Path
 
 internal class LogBrokerTopicSqliteRepository(
     internal val path: Path
-) : SqliteBaseRepository(object : Config {
-    override val path: Path get() = path
-    override val filename: String get() = "log-broker-topics.db"
-}) {
+) : SqliteBaseRepository(
+    path = path,
+    filename = "log-broker-topic.db"
+) {
 
     override fun setupConnection(connection: Connection) {
         connection.execute("""PRAGMA journal_mode = wal;""")

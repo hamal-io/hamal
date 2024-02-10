@@ -3,7 +3,6 @@ package io.hamal.repository.sqlite.record.namespace
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceName
-import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Namespace
 import io.hamal.repository.api.NamespaceCmdRepository
 import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
@@ -39,20 +38,15 @@ internal object CreateNamespace : CreateDomainObject<NamespaceId, NamespaceRecor
     }
 }
 
-class NamespacesqliteRepository(
-    config: Config
+class NamespaceSqliteRepository(
+    path: Path
 ) : RecordSqliteRepository<NamespaceId, NamespaceRecord, Namespace>(
-    config = config,
+    path = path,
+    filename = "namespace.db",
     createDomainObject = CreateNamespace,
     recordClass = NamespaceRecord::class,
     projections = listOf(ProjectionCurrent, ProjectionUniqueName)
 ), NamespaceRepository {
-
-    data class Config(
-        override val path: Path
-    ) : SqliteBaseRepository.Config {
-        override val filename = "namespace.db"
-    }
 
     override fun create(cmd: CreateCmd): Namespace {
         val namespaceId = cmd.namespaceId

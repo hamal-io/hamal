@@ -4,7 +4,6 @@ import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
-import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Topic
 import io.hamal.repository.api.TopicCmdRepository
 import io.hamal.repository.api.TopicCmdRepository.TopicGroupCreateCmd
@@ -22,20 +21,15 @@ import io.hamal.repository.sqlite.record.RecordSqliteRepository
 import java.nio.file.Path
 
 class TopicSqliteRepository(
-    config: Config,
+    path: Path,
     private val logBrokerRepository: LogBrokerRepository
 ) : RecordSqliteRepository<TopicId, TopicRecord, Topic>(
-    config = config,
+    path = path,
+    filename = "topic.db",
     createDomainObject = CreateTopicFromRecords,
     recordClass = TopicRecord::class,
     projections = listOf(ProjectionCurrent, ProjectionUniqueName)
 ), TopicRepository {
-
-    data class Config(
-        override val path: Path,
-    ) : SqliteBaseRepository.Config {
-        override val filename = "topic.db"
-    }
 
     override fun create(cmd: TopicGroupCreateCmd): Topic.Group {
         val topicId = cmd.topicId

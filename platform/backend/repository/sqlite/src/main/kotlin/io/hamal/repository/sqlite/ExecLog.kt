@@ -14,13 +14,11 @@ import java.nio.file.Path
 import java.time.Instant
 
 class ExecLogSqliteRepository(
-    config: Config
-) : SqliteBaseRepository(config), ExecLogRepository {
-    data class Config(
-        override val path: Path
-    ) : SqliteBaseRepository.Config {
-        override val filename = "exec_log.db"
-    }
+    path: Path
+) : SqliteBaseRepository(
+    path = path,
+    filename = "exec_log.db"
+), ExecLogRepository {
 
     override fun setupSchema(connection: Connection) {
         connection.tx {

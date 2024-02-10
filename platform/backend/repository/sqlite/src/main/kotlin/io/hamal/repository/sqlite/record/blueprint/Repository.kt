@@ -2,7 +2,6 @@ package io.hamal.repository.sqlite.record.blueprint
 
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.BlueprintId
-import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Blueprint
 import io.hamal.repository.api.BlueprintCmdRepository.CreateCmd
 import io.hamal.repository.api.BlueprintCmdRepository.UpdateCmd
@@ -40,18 +39,14 @@ internal object CreateBlueprint : CreateDomainObject<BlueprintId, BlueprintRecor
 }
 
 class BlueprintSqliteRepository(
-    config: Config
+    path: Path
 ) : RecordSqliteRepository<BlueprintId, BlueprintRecord, Blueprint>(
-    config = config,
+    path = path,
+    filename = "blueprint.db",
     createDomainObject = CreateBlueprint,
     recordClass = BlueprintRecord::class,
     projections = listOf(ProjectionCurrent)
 ), BlueprintRepository {
-    data class Config(
-        override val path: Path
-    ) : SqliteBaseRepository.Config {
-        override val filename = "blueprint.db"
-    }
 
     override fun create(cmd: CreateCmd): Blueprint {
         val bpId = cmd.blueprintId

@@ -3,7 +3,6 @@ package io.hamal.repository.sqlite.record.code
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.domain.vo.CodeVersion
-import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Code
 import io.hamal.repository.api.CodeCmdRepository.CreateCmd
 import io.hamal.repository.api.CodeCmdRepository.UpdateCmd
@@ -42,19 +41,14 @@ internal object CreateCode : CreateDomainObject<CodeId, CodeRecord, Code> {
 }
 
 class CodeSqliteRepository(
-    config: Config
+    path: Path
 ) : RecordSqliteRepository<CodeId, CodeRecord, Code>(
-    config = config,
+    path = path,
+    filename = "code.db",
     createDomainObject = CreateCode,
     recordClass = CodeRecord::class,
     projections = listOf(ProjectionCurrent)
 ), CodeRepository {
-
-    data class Config(
-        override val path: Path
-    ) : SqliteBaseRepository.Config {
-        override val filename = "code.db"
-    }
 
     override fun create(cmd: CreateCmd): Code {
         val codeId = cmd.codeId
