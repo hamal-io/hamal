@@ -12,14 +12,14 @@ import io.hamal.lib.domain.vo.*
 interface ExecRepository : ExecCmdRepository, ExecQueryRepository
 
 interface ExecCmdRepository : CmdRepository {
-    fun plan(cmd: PlanCmd): PlannedExec
-    fun schedule(cmd: ScheduleCmd): ScheduledExec
-    fun queue(cmd: QueueCmd): QueuedExec
+    fun plan(cmd: PlanCmd): Exec.Planned
+    fun schedule(cmd: ScheduleCmd): Exec.Scheduled
+    fun queue(cmd: QueueCmd): Exec.Queued
 
-    fun complete(cmd: CompleteCmd): CompletedExec
-    fun fail(cmd: FailCmd): FailedExec
+    fun complete(cmd: CompleteCmd): Exec.Completed
+    fun fail(cmd: FailCmd): Exec.Failed
 
-    fun start(cmd: StartCmd): List<StartedExec>
+    fun start(cmd: StartCmd): List<Exec.Started>
 
     data class PlanCmd(
         val id: CmdId,
@@ -134,133 +134,134 @@ sealed class Exec : DomainObject<ExecId> {
         }
 
         private val classMapping = listOf(
-            PlannedExec::class,
-            ScheduledExec::class,
-            QueuedExec::class,
-            StartedExec::class,
-            CompletedExec::class,
-            FailedExec::class
+            Planned::class,
+            Scheduled::class,
+            Queued::class,
+            Started::class,
+            Completed::class,
+            Failed::class
         ).associateBy { it.simpleName }
     }
-}
 
-class PlannedExec(
-    override val cmdId: CmdId,
-    override val id: ExecId,
-    override val updatedAt: UpdatedAt,
-    override val namespaceId: NamespaceId,
-    override val groupId: GroupId,
-    override val correlation: Correlation?,
-    override val inputs: ExecInputs,
-    override val code: ExecCode,
-    override val invocation: Invocation,
+    class Planned(
+        override val cmdId: CmdId,
+        override val id: ExecId,
+        override val updatedAt: UpdatedAt,
+        override val namespaceId: NamespaceId,
+        override val groupId: GroupId,
+        override val correlation: Correlation?,
+        override val inputs: ExecInputs,
+        override val code: ExecCode,
+        override val invocation: Invocation,
 // FIXME    val plannedAt: PlannedAt
-) : Exec() {
-    override val status = ExecStatus.Planned
+    ) : Exec() {
+        override val status = ExecStatus.Planned
 
-    override fun toString(): String {
-        return "PlannedExec($id)"
+        override fun toString(): String {
+            return "Planned($id)"
+        }
+
     }
 
-}
+    class Scheduled(
+        override val cmdId: CmdId,
+        override val id: ExecId,
+        override val updatedAt: UpdatedAt,
+        val plannedExec: Planned,
+        val scheduledAt: ExecScheduledAt,
+    ) : Exec() {
+        override val status = ExecStatus.Scheduled
+        override val namespaceId get() = plannedExec.namespaceId
+        override val groupId get() = plannedExec.groupId
+        override val correlation get() = plannedExec.correlation
+        override val inputs get() = plannedExec.inputs
+        override val code get() = plannedExec.code
+        override val invocation get() = plannedExec.invocation
+        override fun toString(): String {
+            return "Scheduled($id)"
+        }
 
-class ScheduledExec(
-    override val cmdId: CmdId,
-    override val id: ExecId,
-    override val updatedAt: UpdatedAt,
-    val plannedExec: PlannedExec,
-    val scheduledAt: ExecScheduledAt,
-) : Exec() {
-    override val status = ExecStatus.Scheduled
-    override val namespaceId get() = plannedExec.namespaceId
-    override val groupId get() = plannedExec.groupId
-    override val correlation get() = plannedExec.correlation
-    override val inputs get() = plannedExec.inputs
-    override val code get() = plannedExec.code
-    override val invocation get() = plannedExec.invocation
-    override fun toString(): String {
-        return "ScheduledExec($id)"
     }
 
-}
+    class Queued(
+        override val cmdId: CmdId,
+        override val id: ExecId,
+        override val updatedAt: UpdatedAt,
+        val scheduledExec: Scheduled,
+        val queuedAt: ExecQueuedAt,
+    ) : Exec() {
+        override val status = ExecStatus.Queued
+        override val namespaceId get() = scheduledExec.namespaceId
+        override val groupId get() = scheduledExec.groupId
+        override val correlation get() = scheduledExec.correlation
+        override val inputs get() = scheduledExec.inputs
+        override val code get() = scheduledExec.code
+        override val invocation get() = scheduledExec.invocation
+        override fun toString(): String {
+            return "Queued($id)"
+        }
+    }
 
-class QueuedExec(
-    override val cmdId: CmdId,
-    override val id: ExecId,
-    override val updatedAt: UpdatedAt,
-    val scheduledExec: ScheduledExec,
-    val queuedAt: ExecQueuedAt,
-) : Exec() {
-    override val status = ExecStatus.Queued
-    override val namespaceId get() = scheduledExec.namespaceId
-    override val groupId get() = scheduledExec.groupId
-    override val correlation get() = scheduledExec.correlation
-    override val inputs get() = scheduledExec.inputs
-    override val code get() = scheduledExec.code
-    override val invocation get() = scheduledExec.invocation
-    override fun toString(): String {
-        return "QueuedExec($id)"
+
+    class Started(
+        override val cmdId: CmdId,
+        override val id: ExecId,
+        override val updatedAt: UpdatedAt,
+        val queuedExec: Queued
+    ) : Exec() {
+        override val status = ExecStatus.Started
+        override val namespaceId get() = queuedExec.namespaceId
+        override val groupId get() = queuedExec.groupId
+        override val correlation get() = queuedExec.correlation
+        override val inputs get() = queuedExec.inputs
+        override val code get() = queuedExec.code
+        override val invocation get() = queuedExec.invocation
+        override fun toString(): String {
+            return "Started($id)"
+        }
+    }
+
+    class Completed(
+        override val cmdId: CmdId,
+        override val id: ExecId,
+        override val updatedAt: UpdatedAt,
+        val startedExec: Started,
+        val completedAt: ExecCompletedAt,
+        val result: ExecResult,
+        val state: ExecState
+    ) : Exec() {
+        override val status = ExecStatus.Completed
+        override val namespaceId get() = startedExec.namespaceId
+        override val groupId get() = startedExec.groupId
+        override val correlation get() = startedExec.correlation
+        override val inputs get() = startedExec.inputs
+        override val code get() = startedExec.code
+        override val invocation get() = startedExec.invocation
+
+        override fun toString(): String {
+            return "Completed($id)"
+        }
+    }
+
+    class Failed(
+        override val cmdId: CmdId,
+        override val id: ExecId,
+        override val updatedAt: UpdatedAt,
+        val startedExec: Started,
+        //FIXME failedAt
+        val failedAt: ExecFailedAt,
+        val result: ExecResult
+    ) : Exec() {
+        override val status = ExecStatus.Failed
+        override val namespaceId get() = startedExec.namespaceId
+        override val groupId get() = startedExec.groupId
+        override val correlation get() = startedExec.correlation
+        override val inputs get() = startedExec.inputs
+        override val code get() = startedExec.code
+        override val invocation get() = startedExec.invocation
+        override fun toString(): String {
+            return "Failed($id)"
+        }
     }
 }
 
-
-class StartedExec(
-    override val cmdId: CmdId,
-    override val id: ExecId,
-    override val updatedAt: UpdatedAt,
-    val queuedExec: QueuedExec
-) : Exec() {
-    override val status = ExecStatus.Started
-    override val namespaceId get() = queuedExec.namespaceId
-    override val groupId get() = queuedExec.groupId
-    override val correlation get() = queuedExec.correlation
-    override val inputs get() = queuedExec.inputs
-    override val code get() = queuedExec.code
-    override val invocation get() = queuedExec.invocation
-    override fun toString(): String {
-        return "StartedExec($id)"
-    }
-}
-
-class CompletedExec(
-    override val cmdId: CmdId,
-    override val id: ExecId,
-    override val updatedAt: UpdatedAt,
-    val startedExec: StartedExec,
-    val completedAt: ExecCompletedAt,
-    val result: ExecResult,
-    val state: ExecState
-) : Exec() {
-    override val status = ExecStatus.Completed
-    override val namespaceId get() = startedExec.namespaceId
-    override val groupId get() = startedExec.groupId
-    override val correlation get() = startedExec.correlation
-    override val inputs get() = startedExec.inputs
-    override val code get() = startedExec.code
-    override val invocation get() = startedExec.invocation
-
-    override fun toString(): String {
-        return "CompletedExec($id)"
-    }
-}
-
-class FailedExec(
-    override val cmdId: CmdId,
-    override val id: ExecId,
-    override val updatedAt: UpdatedAt,
-    val startedExec: StartedExec,
-    //FIXME failedAt
-    val failedAt: ExecFailedAt,
-    val result: ExecResult
-) : Exec() {
-    override val status = ExecStatus.Failed
-    override val namespaceId get() = startedExec.namespaceId
-    override val groupId get() = startedExec.groupId
-    override val correlation get() = startedExec.correlation
-    override val inputs get() = startedExec.inputs
-    override val code get() = startedExec.code
-    override val invocation get() = startedExec.invocation
-    override fun toString(): String {
-        return "FailedExec($id)"
-    }
-}

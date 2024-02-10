@@ -10,8 +10,7 @@ import io.hamal.lib.domain._enum.TriggerStatus.Active
 import io.hamal.lib.domain._enum.TriggerStatus.Inactive
 import io.hamal.lib.domain._enum.TriggerType.Event
 import io.hamal.lib.domain.vo.*
-import io.hamal.repository.api.EventTrigger
-import io.hamal.repository.api.FixedRateTrigger
+import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerCmdRepository.*
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import io.hamal.repository.api.TriggerRepository
@@ -698,7 +697,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
 
             set(TriggerId(2), SetTriggerStatusCmd(CmdGen(), Inactive))
 
-            with(get(TriggerId(2)) as FixedRateTrigger) {
+            with(get(TriggerId(2)) as Trigger.FixedRate) {
                 assertThat(id, equalTo(TriggerId(2)))
                 assertThat(funcId, equalTo(FuncId(3)))
                 assertThat(namespaceId, equalTo(NamespaceId(5)))
@@ -730,7 +729,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 set(TriggerId(2), SetTriggerStatusCmd(CmdGen(), Active))
             }
 
-            with(get(TriggerId(2)) as FixedRateTrigger) {
+            with(get(TriggerId(2)) as Trigger.FixedRate) {
                 assertThat(id, equalTo(TriggerId(2)))
                 assertThat(funcId, equalTo(FuncId(3)))
 
@@ -758,7 +757,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
             )
 
             with(get(TriggerId(1))) {
-                require(this is FixedRateTrigger)
+                require(this is Trigger.FixedRate)
 
                 assertThat(id, equalTo(TriggerId(1)))
                 assertThat(funcId, equalTo(FuncId(4)))
@@ -799,7 +798,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
             )
 
             with(find(TriggerId(1))) {
-                require(this is FixedRateTrigger)
+                require(this is Trigger.FixedRate)
 
                 assertThat(id, equalTo(TriggerId(1)))
                 assertThat(funcId, equalTo(FuncId(4)))
@@ -871,12 +870,12 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
             assertThat(result, hasSize(2))
 
             with(result[0]) {
-                require(this is EventTrigger)
+                require(this is Trigger.Event)
                 assertThat(id, equalTo(TriggerId(2)))
             }
 
             with(result[1]) {
-                require(this is FixedRateTrigger)
+                require(this is Trigger.FixedRate)
                 assertThat(id, equalTo(TriggerId(1)))
             }
         }

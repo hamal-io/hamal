@@ -11,8 +11,8 @@ import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.EmptyInvocation
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.domain.vo.TriggerId
-import io.hamal.repository.api.FixedRateTrigger
 import io.hamal.repository.api.FuncQueryRepository
+import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerQueryRepository
 import jakarta.annotation.PostConstruct
 import org.springframework.beans.factory.DisposableBean
@@ -42,10 +42,10 @@ internal class FixedRateTriggerService(
                 limit = Limit(10),
                 groupIds = listOf()
             )
-        ).filterIsInstance<FixedRateTrigger>().forEach { trigger -> triggerAdded(trigger) }
+        ).filterIsInstance<Trigger.FixedRate>().forEach { trigger -> triggerAdded(trigger) }
     }
 
-    fun triggerAdded(trigger: FixedRateTrigger) {
+    fun triggerAdded(trigger: Trigger.FixedRate) {
         scheduledTasks.add(
             async.atFixedRate(Duration.parseIsoString(trigger.duration.value).inWholeSeconds.seconds) {
                 requestInvocation(trigger)
@@ -60,7 +60,7 @@ internal class FixedRateTriggerService(
     }
 }
 
-internal fun FixedRateTriggerService.requestInvocation(trigger: FixedRateTrigger) {
+internal fun FixedRateTriggerService.requestInvocation(trigger: Trigger.FixedRate) {
     invokeFunc(
         trigger.funcId,
         object : FuncInvokeRequest {

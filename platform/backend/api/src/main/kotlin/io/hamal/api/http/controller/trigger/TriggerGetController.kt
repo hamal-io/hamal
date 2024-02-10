@@ -4,10 +4,7 @@ import io.hamal.core.adapter.TriggerGetPort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.sdk.api.*
-import io.hamal.repository.api.CronTrigger
-import io.hamal.repository.api.EventTrigger
-import io.hamal.repository.api.FixedRateTrigger
-import io.hamal.repository.api.HookTrigger
+import io.hamal.repository.api.Trigger
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -26,7 +23,7 @@ internal class TriggerGetController(
             getTrigger(triggerId) { trigger, func, namespace, topic, hook ->
                 ResponseEntity.ok(
                     when (trigger) {
-                        is FixedRateTrigger -> ApiFixedRateTrigger(
+                        is Trigger.FixedRate -> ApiFixedRateTrigger(
                             id = trigger.id,
                             name = trigger.name,
                             func = ApiTrigger.Func(
@@ -42,7 +39,7 @@ internal class TriggerGetController(
                             status = trigger.status
                         )
 
-                        is EventTrigger -> ApiEventTrigger(
+                        is Trigger.Event -> ApiEventTrigger(
                             id = trigger.id,
                             name = trigger.name,
                             func = ApiTrigger.Func(
@@ -61,7 +58,7 @@ internal class TriggerGetController(
                             status = trigger.status
                         )
 
-                        is HookTrigger -> ApiHookTrigger(
+                        is Trigger.Hook -> ApiHookTrigger(
                             id = trigger.id,
                             name = trigger.name,
                             func = ApiTrigger.Func(
@@ -81,7 +78,7 @@ internal class TriggerGetController(
                             status = trigger.status
                         )
 
-                        is CronTrigger -> ApiCronTrigger(
+                        is Trigger.Cron -> ApiCronTrigger(
                             id = trigger.id,
                             name = trigger.name,
                             func = ApiTrigger.Func(

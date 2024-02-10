@@ -6,9 +6,8 @@ import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain._enum.TriggerType.*
 import io.hamal.lib.domain._enum.TriggerType.Event
-import io.hamal.lib.domain._enum.TriggerType.Hook
 import io.hamal.lib.domain.vo.*
-import io.hamal.repository.api.*
+import io.hamal.repository.api.Trigger
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordEntity
 import io.hamal.repository.record.RecordSequence
@@ -123,7 +122,7 @@ data class TriggerEntity(
 
     override fun toDomainObject(): Trigger {
         return when (type!!) {
-            FixedRate -> FixedRateTrigger(
+            FixedRate -> Trigger.FixedRate(
                 cmdId = cmdId,
                 id = id,
                 updatedAt = recordedAt.toUpdatedAt(),
@@ -137,7 +136,7 @@ data class TriggerEntity(
                 status = status!!
             )
 
-            Event -> EventTrigger(
+            Event -> Trigger.Event(
                 cmdId = cmdId,
                 id = id,
                 updatedAt = recordedAt.toUpdatedAt(),
@@ -151,7 +150,7 @@ data class TriggerEntity(
                 status = status!!
             )
 
-            Hook -> HookTrigger(
+            Hook -> Trigger.Hook(
                 cmdId = cmdId,
                 id = id,
                 updatedAt = recordedAt.toUpdatedAt(),
@@ -166,7 +165,7 @@ data class TriggerEntity(
                 status = status!!
             )
 
-            Cron -> CronTrigger(
+            Cron -> Trigger.Cron(
                 cmdId = cmdId,
                 id = id,
                 updatedAt = recordedAt.toUpdatedAt(),

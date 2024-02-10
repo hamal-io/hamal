@@ -7,6 +7,7 @@ import io.hamal.lib.domain.request.ExecCompleteRequested
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.ExecStatus.Completed
 import io.hamal.lib.domain.vo.ExecStatus.Started
+import io.hamal.repository.api.Exec
 import io.hamal.repository.api.ExecQueryRepository.ExecQuery
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
@@ -73,7 +74,7 @@ internal class ExecCompleteHandlerTest : BaseReqHandlerTest() {
         execQueryRepository.list(ExecQuery(groupIds = listOf())).also { execs ->
             assertThat(execs, hasSize(1))
             with(execs.first()) {
-                require(this is io.hamal.repository.api.CompletedExec)
+                require(this is Exec.Completed)
                 assertThat(id, equalTo(ExecId(1234)))
                 assertThat(status, equalTo(Completed))
                 assertThat(result, equalTo(ExecResult(HotObject.builder().set("hamal", "rocks").build())))

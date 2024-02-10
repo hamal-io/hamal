@@ -4,8 +4,6 @@ import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
-import io.hamal.repository.api.EventTrigger
-import io.hamal.repository.api.HookTrigger
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import io.hamal.repository.record.json
@@ -110,13 +108,13 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
             set("id", obj.id)
             set("groupId", obj.groupId)
             set("funcId", obj.funcId)
-            if (obj is EventTrigger) {
+            if (obj is Trigger.Event) {
                 set("topicId", obj.topicId)
             } else {
                 set("topicId", 0)
             }
 
-            if (obj is HookTrigger) {
+            if (obj is Trigger.Hook) {
                 set("hookId", obj.hookId)
             } else {
                 set("hookId", 0)
