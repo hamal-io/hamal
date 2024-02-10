@@ -54,11 +54,11 @@ const Nav = ({className, ...props}: React.HTMLAttributes<HTMLElement>) => {
         //     label: "Webhook",
         //     active: currentPath.startsWith(`/groups/${groupId}/webhooks`)
         // },
-        // {
-        //     href: `/groups/${groupId}/endpoints`,
-        //     label: "Endpoint",
-        //     active: currentPath.startsWith(`/groups/${groupId}/endpoints`)
-        // },
+        {
+            href: `/groups/${groupId}/endpoints`,
+            label: "Endpoint",
+            active: currentPath.startsWith(`/groups/${groupId}/endpoints`)
+        },
         // {
         //     href: `/groups/${groupId}/triggers`,
         //     label: "Trigger",

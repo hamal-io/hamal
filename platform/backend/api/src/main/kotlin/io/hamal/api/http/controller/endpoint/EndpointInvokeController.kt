@@ -9,6 +9,7 @@ import io.hamal.lib.domain.request.ExecInvokeRequested
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.sdk.api.ApiExec
 import io.hamal.repository.api.*
+import io.hamal.repository.record.json
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -140,11 +141,11 @@ internal class EndpointInvokeController(
         val content = reader.lines().reduce("", String::plus)
         if (content.isEmpty()) return EndpointContent()
 
-//        require(contentType.startsWith("application/json")) { "Only application/json supported yet" }
+        require(contentType.startsWith("application/json")) { "Only application/json supported yet" }
 //        val el = json.decodeFromString<JsonElement>(content)
 //        require(el is JsonObject)
 //        return EndpointContent(el.convertToType())
-        TODO()
+        return EndpointContent(json.deserialize(HotObject::class, content))
     }
 
 }
