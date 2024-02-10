@@ -51,7 +51,7 @@ internal class TriggerGetControllerTest : TriggerBaseControllerTest() {
             assertThat(id, equalTo(triggerId))
             assertThat(name, equalTo(TriggerName("trigger-one")))
             assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
-            assertThat(duration, equalTo(10.seconds))
+            assertThat(duration, equalTo(TriggerDuration("PT10S")))
             assertThat(func.id, equalTo(someFuncId))
             assertThat(func.name, equalTo(FuncName("some-func-to-trigger")))
         }

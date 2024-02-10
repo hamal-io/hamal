@@ -175,7 +175,7 @@ internal class TriggerCreateHandlerTest : BaseReqHandlerTest() {
                 assertThat(id, equalTo(TriggerId(1234)))
                 assertThat(name, equalTo(TriggerName("FixedRateTrigger")))
                 assertThat(funcId, equalTo(FuncId(2222)))
-                assertThat(duration, equalTo(42.seconds))
+                assertThat(duration, equalTo(TriggerDuration("PT42S")))
                 assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
             }
         }

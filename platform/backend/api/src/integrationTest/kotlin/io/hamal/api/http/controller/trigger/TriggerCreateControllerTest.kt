@@ -131,7 +131,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
                     name = TriggerName("fixed-rate-trigger"),
                     funcId = funcId,
                     inputs = TriggerInputs(),
-                    duration = TriggerDuration(10.seconds.toIsoString()),
+                    duration = TriggerDuration("PT10S"),
                 )
             ).execute()
 
@@ -147,7 +147,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
                 assertThat(inputs, equalTo(TriggerInputs()))
                 assertThat(this.funcId, equalTo(funcId))
                 require(this is FixedRateTrigger) { "not FixedRateTrigger" }
-                assertThat(duration, equalTo(10.seconds))
+                assertThat(duration, equalTo(TriggerDuration("PT10S")))
             }
         }
 

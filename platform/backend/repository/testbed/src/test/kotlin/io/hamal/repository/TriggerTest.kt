@@ -41,7 +41,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     namespaceId = NamespaceId(5),
                     name = TriggerName("trigger-name"),
                     inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
-                    duration = TriggerDuration(10.seconds.toIsoString())
+                    duration = TriggerDuration("PT10S")
                 )
             )
 
@@ -51,7 +51,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 assertThat(namespaceId, equalTo(NamespaceId(5)))
                 assertThat(name, equalTo(TriggerName("trigger-name")))
                 assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
-                assertThat(duration, equalTo(10.seconds))
+                assertThat(duration, equalTo(TriggerDuration("PT10S")))
                 assertThat(status, equalTo(Active))
             }
 
@@ -123,7 +123,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     assertThat(namespaceId, equalTo(NamespaceId(22)))
                     assertThat(name, equalTo(TriggerName("trigger-name")))
                     assertThat(inputs, equalTo(TriggerInputs()))
-                    assertThat(duration, equalTo(10.hours))
+                    assertThat(duration, equalTo(TriggerDuration("PT10H")))
                     assertThat(status, equalTo(Active))
                 }
 
@@ -163,7 +163,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     assertThat(namespaceId, equalTo(NamespaceId(2)))
                     assertThat(name, equalTo(TriggerName("first-trigger-name")))
                     assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
-                    assertThat(duration, equalTo(10.seconds))
+                    assertThat(duration, equalTo(TriggerDuration("PT10S")))
                     assertThat(status, equalTo(Active))
                 }
 
@@ -704,7 +704,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 assertThat(namespaceId, equalTo(NamespaceId(5)))
                 assertThat(name, equalTo(TriggerName("trigger-name")))
                 assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
-                assertThat(duration, equalTo(10.seconds))
+                assertThat(duration, equalTo(TriggerDuration("PT10S")))
                 assertThat(status, equalTo(Inactive))
             }
 
@@ -738,7 +738,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 assertThat(namespaceId, equalTo(NamespaceId(5)))
                 assertThat(name, equalTo(TriggerName("trigger-name")))
                 assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
-                assertThat(duration, equalTo(10.seconds))
+                assertThat(duration, equalTo(TriggerDuration("PT10S")))
                 assertThat(status, equalTo(Active))
             }
 
@@ -766,7 +766,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 assertThat(namespaceId, equalTo(NamespaceId(2)))
                 assertThat(name, equalTo(TriggerName("SomeTrigger")))
                 assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
-                assertThat(duration, equalTo(10.seconds))
+                assertThat(duration, equalTo(TriggerDuration("PT10S")))
                 assertThat(status, equalTo(Active))
             }
         }
@@ -807,7 +807,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 assertThat(namespaceId, equalTo(NamespaceId(2)))
                 assertThat(name, equalTo(TriggerName("SomeTrigger")))
                 assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
-                assertThat(duration, equalTo(10.seconds))
+                assertThat(duration, equalTo(TriggerDuration("PT10S")))
                 assertThat(status, equalTo(Active))
             }
         }
