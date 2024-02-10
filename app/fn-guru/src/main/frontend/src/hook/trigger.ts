@@ -59,7 +59,7 @@ export const useTriggerHookCreate = (): [TriggerHookCreateAction, TriggerCreateS
             funcId,
             inputs: {},
             hookId,
-            hookMethods: [hookMethod]
+            hookMethod
         }, abortController), [auth]
     )
     return [fn, submission, loading, error]

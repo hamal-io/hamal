@@ -10,27 +10,27 @@ import Detail from "@/pages/app/hook-list/components/detail.tsx";
 import {useTriggerListHook} from "@/hook";
 import {HookWithTriggers} from "@/pages/app/hook-list/type.tsx";
 
-type flowProps = {
+type GroupProps = {
     id: string;
     name: string;
 }
 
 type ListProps = {
-    flow: flowProps
+    group: GroupProps
 }
 
-const List: FC<ListProps> = ({flow}) => {
+const List: FC<ListProps> = ({group}) => {
     const [listHooks, hookList, hooksLoading, hooksError] = useHookList()
     const [listTriggers, triggerList, triggerLoading, triggerError] = useTriggerListHook()
 
     useEffect(() => {
         const abortController = new AbortController();
-        listHooks(flow.id, abortController)
-        listTriggers(flow.id, abortController)
+        listHooks(group.id, abortController)
+        listTriggers(group.id, abortController)
         return () => {
             abortController.abort();
         };
-    }, [flow]);
+    }, [group]);
 
     if (hooksError || triggerError) return `Error`
     if (hooksLoading || triggerLoading) return "Loading..."
@@ -46,23 +46,23 @@ const List: FC<ListProps> = ({flow}) => {
         <div className="pt-2 px-2">
             <PageHeader
                 title="Webhooks"
-                description={`Webhooks of ${flow.name}`}
-                actions={[<Create flow={flow}/>]}
+                description={`Webhooks of ${group.name}`}
+                actions={[<Create group={group}/>]}
             />
             <Separator className="my-6"/>
             {
-                hookList.hooks.length ? (<Content flowId={flow.id} items={hooksWithTrigger}/>) : (<NoContent flow={flow}/>)
+                hookList.hooks.length ? (<Content groupId={group.id} items={hooksWithTrigger}/>) : (<NoContent flow={group}/>)
             }
         </div>
     );
 }
 
 type ContentProps = {
-    flowId: string;
+    groupId: string;
     items: HookWithTriggers[]
 }
 
-const Content: FC<ContentProps> = ({flowId, items}) => {
+const Content: FC<ContentProps> = ({groupId, items}) => {
     const navigate = useNavigate()
     return (
         <ul className="grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-1 xl:grid-cols-3">
@@ -74,7 +74,7 @@ const Content: FC<ContentProps> = ({flowId, items}) => {
 }
 
 type NoContentProps = {
-    flow: flowProps;
+    flow: GroupProps;
 }
 const NoContent: FC<NoContentProps> = ({flow}) => (
     <EmptyPlaceholder className="my-4 ">
@@ -86,7 +86,7 @@ const NoContent: FC<NoContentProps> = ({flow}) => (
             You haven&apos;t created any Webhook yet.
         </EmptyPlaceholder.Description>
         <div className="flex flex-col items-center justify-center gap-2 md:flex-row">
-            <Create flow={flow}/>
+            <Create group={flow}/>
             <GoToDocumentation link={"/hooks"}/>
         </div>
     </EmptyPlaceholder>

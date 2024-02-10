@@ -10,6 +10,7 @@ import io.hamal.lib.domain.request.HookInvokeRequested
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.HookQueryRepository
 import io.hamal.repository.api.RequestCmdRepository
+import io.hamal.repository.record.json
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.HttpStatus.ACCEPTED
 import org.springframework.http.ResponseEntity
@@ -45,10 +46,7 @@ internal class HookInvokeController(
             hookId = id,
             groupId = hook.groupId,
             invocation = HookInvocation(
-                method = req.method(),
-                headers = req.headers(),
-                parameters = req.parameters(),
-                content = req.content()
+                method = req.method(), headers = req.headers(), parameters = req.parameters(), content = req.content()
             ),
         ).also(requestCmdRepository::queue)
         return ResponseEntity(Response(result), ACCEPTED)
@@ -73,10 +71,7 @@ internal class HookInvokeController(
     private fun HttpServletRequest.content(): HookContent {
         require(contentType.startsWith("application/json")) { "Only application/json supported yet" }
         val content = reader.lines().reduce("", String::plus)
-        TODO()
-//        val el = json.decodeFromString<JsonElement>(content)
-//        require(el is JsonObject)
-//        return HookContent(el.convertToType())
+        return HookContent(json.deserialize(HotObject::class, content))
     }
 
     private fun HttpServletRequest.method(): HookMethod = when (method.lowercase()) {
@@ -89,9 +84,7 @@ internal class HookInvokeController(
     }
 
     data class Response(
-        val reqId: RequestId,
-        val status: RequestStatus,
-        val id: HookId
+        val reqId: RequestId, val status: RequestStatus, val id: HookId
     ) {
         constructor(req: HookInvokeRequested) : this(req.id, req.status, req.hookId)
     }

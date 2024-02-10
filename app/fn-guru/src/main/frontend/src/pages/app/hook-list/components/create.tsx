@@ -5,17 +5,16 @@ import * as z from "zod"
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
 import {useForm} from "react-hook-form";
-import {BookOpen, Loader2, Plus,} from "lucide-react";
+import {Loader2, Plus,} from "lucide-react";
 import {useAuth} from "@/hook/auth.ts";
 import {Dialog, DialogContent, DialogHeader, DialogTrigger} from "@/components/ui/dialog.tsx";
 import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
-import {flowListItem} from "@/types";
-import {useHookCreate, useTriggerHookCreate} from "@/hook";
-import FormFuncSelect from "@/components/form/func-select.tsx";
+import {GroupListItem} from "@/types";
+import {useHookCreate} from "@/hook";
 
 type Prop = {
-    flow: flowListItem
+    group: GroupListItem
 }
 
 const formSchema = z.object({
@@ -23,7 +22,7 @@ const formSchema = z.object({
     // funcId: z.string().min(1, "Function required"),
 })
 
-const Create: FC<Prop> = ({flow}) => {
+const Create: FC<Prop> = ({group}) => {
     const [auth, setAuth] = useAuth()
     const navigate = useNavigate()
     const [openDialog, setOpenDialog] = useState<boolean>(false)
@@ -41,7 +40,7 @@ const Create: FC<Prop> = ({flow}) => {
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setLoading(true)
         try {
-            createHook(flow.id, values.name)
+            createHook(group.id, values.name)
         } catch (e) {
             console.error(e)
         } finally {

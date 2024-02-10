@@ -142,9 +142,6 @@ internal class EndpointInvokeController(
         if (content.isEmpty()) return EndpointContent()
 
         require(contentType.startsWith("application/json")) { "Only application/json supported yet" }
-//        val el = json.decodeFromString<JsonElement>(content)
-//        require(el is JsonObject)
-//        return EndpointContent(el.convertToType())
         return EndpointContent(json.deserialize(HotObject::class, content))
     }
 
