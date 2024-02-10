@@ -13,14 +13,11 @@ import io.hamal.repository.record.json
 import java.nio.file.Path
 
 class StateSqliteRepository(
-    config: Config
-) : SqliteBaseRepository(config), StateRepository {
-
-    data class Config(
-        override val path: Path
-    ) : SqliteBaseRepository.Config {
-        override val filename = "state.db"
-    }
+    path: Path
+) : SqliteBaseRepository(
+    path = path,
+    filename = "state.db"
+), StateRepository {
 
     override fun setupConnection(connection: Connection) {
         connection.execute("""PRAGMA journal_mode = wal;""")

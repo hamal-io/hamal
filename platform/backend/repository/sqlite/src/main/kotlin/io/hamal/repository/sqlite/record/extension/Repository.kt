@@ -2,7 +2,6 @@ package io.hamal.repository.sqlite.record.extension
 
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.ExtensionId
-import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Extension
 import io.hamal.repository.api.ExtensionCmdRepository.CreateCmd
 import io.hamal.repository.api.ExtensionCmdRepository.UpdateCmd
@@ -39,21 +38,16 @@ internal object CreateExtension : CreateDomainObject<ExtensionId, ExtensionRecor
 }
 
 class ExtensionSqliteRepository(
-    config: Config
+    path: Path
 ) : RecordSqliteRepository<ExtensionId, ExtensionRecord, Extension>(
-    config = config,
+    path = path,
+    filename = "extension.db",
     createDomainObject = CreateExtension,
     recordClass = ExtensionRecord::class,
     projections = listOf(
         ProjectionCurrent
     )
 ), ExtensionRepository {
-
-    data class Config(
-        override val path: Path
-    ) : SqliteBaseRepository.Config {
-        override val filename = "extension.db"
-    }
 
     override fun create(cmd: CreateCmd): Extension {
         val extId = cmd.extId

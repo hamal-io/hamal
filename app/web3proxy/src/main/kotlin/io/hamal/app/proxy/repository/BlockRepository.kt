@@ -10,11 +10,11 @@ interface BlockRepository {
 }
 
 class SqliteBlockRepository(
-    val path: Path,
-) : SqliteBaseRepository(object : Config {
-    override val path = path
-    override val filename: String = "blocks.db"
-}), BlockRepository {
+    path: Path,
+) : SqliteBaseRepository(
+    path = path,
+    filename = "blocks.db"
+), BlockRepository {
 
     override fun setupConnection(connection: Connection) {
         connection.execute("""PRAGMA journal_mode = wal;""")

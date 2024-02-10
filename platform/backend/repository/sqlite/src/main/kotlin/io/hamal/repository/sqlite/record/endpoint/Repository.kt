@@ -2,7 +2,6 @@ package io.hamal.repository.sqlite.record.endpoint
 
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.EndpointId
-import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Endpoint
 import io.hamal.repository.api.EndpointCmdRepository.CreateCmd
 import io.hamal.repository.api.EndpointCmdRepository.UpdateCmd
@@ -39,9 +38,10 @@ internal object CreateEndpoint : CreateDomainObject<EndpointId, EndpointRecord, 
 }
 
 class EndpointSqliteRepository(
-    config: Config
+    path: Path
 ) : RecordSqliteRepository<EndpointId, EndpointRecord, Endpoint>(
-    config = config,
+    path = path,
+    filename = "endpoint.db",
     createDomainObject = CreateEndpoint,
     recordClass = EndpointRecord::class,
     projections = listOf(
@@ -49,12 +49,6 @@ class EndpointSqliteRepository(
         ProjectionUniqueName
     )
 ), EndpointRepository {
-
-    data class Config(
-        override val path: Path
-    ) : SqliteBaseRepository.Config {
-        override val filename = "endpoint.db"
-    }
 
     override fun create(cmd: CreateCmd): Endpoint {
         val endpointId = cmd.endpointId

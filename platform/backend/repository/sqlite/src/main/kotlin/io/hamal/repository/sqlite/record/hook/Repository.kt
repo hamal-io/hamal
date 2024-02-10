@@ -2,7 +2,6 @@ package io.hamal.repository.sqlite.record.hook
 
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.HookId
-import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Hook
 import io.hamal.repository.api.HookCmdRepository.CreateCmd
 import io.hamal.repository.api.HookCmdRepository.UpdateCmd
@@ -39,9 +38,10 @@ internal object CreateHook : CreateDomainObject<HookId, HookRecord, Hook> {
 }
 
 class HookSqliteRepository(
-    config: Config
+    path: Path
 ) : RecordSqliteRepository<HookId, HookRecord, Hook>(
-    config = config,
+    path = path,
+    filename = "hook.db",
     createDomainObject = CreateHook,
     recordClass = HookRecord::class,
     projections = listOf(
@@ -49,12 +49,6 @@ class HookSqliteRepository(
         ProjectionUniqueName
     )
 ), HookRepository {
-
-    data class Config(
-        override val path: Path
-    ) : SqliteBaseRepository.Config {
-        override val filename = "hook.db"
-    }
 
     override fun create(cmd: CreateCmd): Hook {
         val hookId = cmd.hookId

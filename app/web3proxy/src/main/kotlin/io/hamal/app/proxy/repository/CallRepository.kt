@@ -34,10 +34,10 @@ class SqliteCallRepository(
 class SqliteCallPartitionRepository(
     val path: Path,
     val partition: Int
-) : SqliteBaseRepository(object : Config {
-    override val path = path
-    override val filename: String = "calls-${partition}.db"
-}), CallRepository {
+) : SqliteBaseRepository(
+    path = path,
+    filename = "calls-${partition}.db"
+), CallRepository {
 
     override fun setupConnection(connection: Connection) {
         connection.execute("""PRAGMA journal_mode = wal;""")

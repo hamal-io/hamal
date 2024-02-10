@@ -2,7 +2,6 @@ package io.hamal.repository.sqlite.record.exec
 
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.*
 import io.hamal.repository.api.ExecCmdRepository.*
 import io.hamal.repository.api.ExecQueryRepository.ExecQuery
@@ -36,9 +35,10 @@ internal object CreateExec : CreateDomainObject<ExecId, ExecRecord, Exec> {
 }
 
 class ExecSqliteRepository(
-    config: Config
+    path: Path
 ) : RecordSqliteRepository<ExecId, ExecRecord, Exec>(
-    config = config,
+    path = path,
+    filename = "exec.db",
     createDomainObject = CreateExec,
     recordClass = ExecRecord::class,
     projections = listOf(
@@ -46,12 +46,6 @@ class ExecSqliteRepository(
         ProjectionQueue
     )
 ), ExecRepository {
-
-    data class Config(
-        override val path: Path
-    ) : SqliteBaseRepository.Config {
-        override val filename = "exec.db"
-    }
 
     override fun plan(cmd: PlanCmd): PlannedExec {
         val execId = cmd.execId
