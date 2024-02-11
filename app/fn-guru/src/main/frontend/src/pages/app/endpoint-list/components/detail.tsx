@@ -36,7 +36,7 @@ const Detail: FC<Prop> = ({item}) => {
                     <CardTitle>{item.name}</CardTitle>
                 </div>
                 {/*<AddTrigger*/}
-                {/*    flowId={item.hook.flow.id}*/}
+                {/*    namespaceId={item.hook.flow.id}*/}
                 {/*    hookId={item.hook.id}*/}
                 {/*    hookName={item.hook.name}*/}
                 {/*    trigger={triggerList}*/}
@@ -70,14 +70,14 @@ export default Detail;
 
 
 type AddTriggerProps = {
-    flowId: string,
+    namespaceId: string,
     hookId: string;
     hookName: string;
     trigger: Array<TriggerListItem>;
     afterAdd: (triggerId: string) => void
 }
 
-const AddTrigger: FC<AddTriggerProps> = ({flowId, hookId, hookName, trigger, afterAdd}) => {
+const AddTrigger: FC<AddTriggerProps> = ({namespaceId, hookId, hookName, trigger, afterAdd}) => {
     const navigate = useNavigate()
     const [openDialog, setOpenDialog] = useState<boolean>(false)
     const [loading, setLoading] = useState<boolean>(false)
@@ -100,7 +100,7 @@ const AddTrigger: FC<AddTriggerProps> = ({flowId, hookId, hookName, trigger, aft
         setLoading(true)
         try {
             createTrigger({
-                flowId: flowId,
+                namespaceId: namespaceId,
                 funcId: values.funcId,
                 name: `${hookName}-${trigger.length + 1}`,
                 hookId: hookId,
@@ -137,7 +137,7 @@ const AddTrigger: FC<AddTriggerProps> = ({flowId, hookId, hookName, trigger, aft
 
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                            <FormFuncSelect name='funcId' flowId={flowId} form={form}/>
+                            <FormFuncSelect name='funcId' namespaceId={namespaceId} form={form}/>
                             <FormHttpMethodSelect name='httpMethod' form={form}/>
                             <Button type="submit">
                                 {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}

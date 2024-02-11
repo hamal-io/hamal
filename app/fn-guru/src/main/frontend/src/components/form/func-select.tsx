@@ -3,17 +3,17 @@ import React, {useEffect} from "react";
 import {FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
 import {Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select.tsx";
 
-const FormFuncSelect = ({groupId, name, form}) => {
+const FormFuncSelect = ({namespaceId, name, form}) => {
     const [listFuncs, funcList, loading] = useFuncList()
 
     // const [funcs, loading] = useApiFuncList(flowId)
 
 
     useEffect(() => {
-        if (groupId) {
-            listFuncs(groupId)
+        if (namespaceId) {
+            listFuncs(namespaceId)
         }
-    }, [groupId]);
+    }, [namespaceId]);
 
     if (loading || !form) {
         return "Loading..."
