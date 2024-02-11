@@ -111,6 +111,27 @@ class TopicMemoryRepository(
         }
     }
 
+    override fun create(cmd: TopicCmdRepository.TopicPublicCreateCmd): Topic.Public {
+        return lock.withLock {
+            val topicId = cmd.topicId
+            if (commandAlreadyApplied(cmd.id, topicId)) {
+                versionOf(topicId, cmd.id) as Topic.Public
+            }
+            store(
+                TopicRecord.PublicCreated(
+                    cmdId = cmd.id,
+                    entityId = topicId,
+                    groupId = cmd.groupId,
+                    logTopicId = cmd.logTopicId,
+                    name = cmd.name,
+                )
+            )
+            (currentVersion(topicId) as Topic.Public).also(TopicCurrentProjection::apply).also { _ ->
+                logBrokerRepository.create(cmd.id, LogTopicToCreate(cmd.logTopicId))
+            }
+        }
+    }
+
     override fun create(cmd: TopicCmdRepository.TopicInternalCreateCmd): Topic.Internal {
         return lock.withLock {
             val topicId = cmd.topicId

@@ -4,8 +4,10 @@ import io.hamal.lib.common.KeyedOnce
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain._enum.TopicType
 import io.hamal.lib.domain.request.TopicAppendEntryRequest
-import io.hamal.lib.domain.request.TopicCreateRequest
+import io.hamal.lib.domain.request.TopicGroupCreateRequest
+import io.hamal.lib.domain.request.TopicPublicCreateRequest
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpRequest
 import io.hamal.lib.http.HttpTemplate
@@ -13,11 +15,23 @@ import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiTopicService.TopicQuery
 import io.hamal.lib.sdk.fold
 
-data class ApiTopicCreateRequest(
+data class ApiTopicGroupCreateRequest(
     override val name: TopicName
-) : TopicCreateRequest
+) : TopicGroupCreateRequest
 
 data class ApiTopicGroupCreateRequested(
+    override val id: RequestId,
+    override val status: RequestStatus,
+    val topicId: TopicId,
+    val groupId: GroupId
+) : ApiRequested()
+
+data class ApiTopicPublicCreateRequest(
+    override val name: TopicName
+) : TopicPublicCreateRequest
+
+
+data class ApiTopicPublicCreateRequested(
     override val id: RequestId,
     override val status: RequestStatus,
     val topicId: TopicId,
@@ -48,7 +62,8 @@ data class ApiTopicEventList(
 
 data class ApiTopic(
     val id: TopicId,
-    val name: TopicName
+    val name: TopicName,
+    val type: TopicType
 ) : ApiObject()
 
 data class ApiTopicList(
@@ -56,13 +71,14 @@ data class ApiTopicList(
 ) : ApiObject() {
     data class Topic(
         val id: TopicId,
-        val name: TopicName
+        val name: TopicName,
+        val type: TopicType
     )
 }
 
 interface ApiTopicService {
     fun append(topicId: TopicId, payload: TopicEventPayload): ApiTopicAppendRequested
-    fun create(groupId: GroupId, req: ApiTopicCreateRequest): ApiTopicGroupCreateRequested
+    fun createGroupTopic(groupId: GroupId, req: ApiTopicGroupCreateRequest): ApiTopicGroupCreateRequested
     fun list(query: TopicQuery): List<ApiTopicList.Topic>
     fun events(topicId: TopicId): List<ApiTopicEventList.Event>
     fun get(topicId: TopicId): ApiTopic
@@ -96,7 +112,7 @@ internal class ApiTopicServiceImpl(
             .execute()
             .fold(ApiTopicAppendRequested::class)
 
-    override fun create(groupId: GroupId, req: ApiTopicCreateRequest): ApiTopicGroupCreateRequested =
+    override fun createGroupTopic(groupId: GroupId, req: ApiTopicGroupCreateRequest): ApiTopicGroupCreateRequested =
         template.post("/v1/groups/{groupId}/topics")
             .path("groupId", groupId)
             .body(req)

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 internal class TopicListController(private val listTopics: TopicListPort) {
+
     @GetMapping("/v1/topics")
     fun listTopics(
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: TopicId,
@@ -38,7 +39,8 @@ internal class TopicListController(private val listTopics: TopicListPort) {
                     topics = topics.map { topic ->
                         Topic(
                             id = topic.id,
-                            name = topic.name
+                            name = topic.name,
+                            type = topic.type
                         )
                     }
                 )

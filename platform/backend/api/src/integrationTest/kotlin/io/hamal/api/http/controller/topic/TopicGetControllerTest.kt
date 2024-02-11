@@ -1,6 +1,7 @@
 package io.hamal.api.http.controller.topic
 
 
+import io.hamal.lib.domain._enum.TopicType
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode
@@ -13,12 +14,23 @@ import org.junit.jupiter.api.Test
 internal class TopicGetControllerTest : TopicBaseControllerTest() {
 
     @Test
-    fun `Single topic`() {
-        val topicId = awaitCompleted(createTopic(TopicName("namespace::topics_one"))).topicId
+    fun `Gets group topic`() {
+        val topicId = awaitCompleted(createGroupTopic(TopicName("topics_one"))).topicId
+        with(getTopic(topicId)) {
+            assertThat(id, equalTo(topicId))
+            assertThat(name, equalTo(TopicName("topics_one")))
+            assertThat(type, equalTo(TopicType.Group))
+        }
+    }
+
+    @Test
+    fun `Gets public topic`() {
+        val topicId = awaitCompleted(createPublicTopic(TopicName("topics_one"))).topicId
 
         with(getTopic(topicId)) {
             assertThat(id, equalTo(topicId))
-            assertThat(name, equalTo(TopicName("namespace::topics_one")))
+            assertThat(name, equalTo(TopicName("topics_one")))
+            assertThat(type, equalTo(TopicType.Public))
         }
     }
 
