@@ -1,4 +1,4 @@
-export interface FuncCreateSubmitted {
+export interface FuncCreateRequested {
     id: string;
     status: string;
     funcId: string;
@@ -6,20 +6,20 @@ export interface FuncCreateSubmitted {
     groupId: string;
 }
 
-export interface FuncUpdateSubmitted {
+export interface FuncUpdateRequested {
     id: string;
     status: string;
     funcId: string;
 }
 
 
-export interface FuncInvokeSubmitted {
+export interface FuncInvokeRequested {
     id: string;
     status: string;
     funcId: string;
 }
 
-export interface FuncDeploySubmitted {
+export interface FuncDeployRequested {
     id: string;
     status: string;
     funcId: string;

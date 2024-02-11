@@ -1,6 +1,6 @@
 import {useGet, usePost} from "@/hook/http.ts";
 import {useCallback} from "react";
-import {TriggerCreateSubmitted, TriggerList} from "@/types";
+import {TriggerCreateRequested, TriggerList} from "@/types";
 import {useAuth} from "@/hook/auth.ts";
 
 type TriggerListScheduleAction = (namespaceId: string, abortController?: AbortController) => void
@@ -24,9 +24,9 @@ export const useTriggerListHook = (): [TriggerListScheduleAction, TriggerList, b
 }
 
 type TriggerFixedRateCreateAction = (namespaceId: string, funcId: string, name: string, duration: string, abortController?: AbortController) => void
-export const useTriggerFixedRateCreate = (): [TriggerFixedRateCreateAction, TriggerCreateSubmitted, boolean, Error] => {
+export const useTriggerFixedRateCreate = (): [TriggerFixedRateCreateAction, TriggerCreateRequested, boolean, Error] => {
     const [auth] = useAuth()
-    const [post, submission, loading, error] = usePost<TriggerCreateSubmitted>()
+    const [post, submission, loading, error] = usePost<TriggerCreateRequested>()
     const fn = useCallback(async (namespaceId: string, funcId: string, name: string, duration: string, abortController?: AbortController) =>
         post(`/v1/namespaces/${namespaceId}/triggers`, {
             type: "FixedRate",
@@ -49,9 +49,9 @@ type TriggerHookCreateProps = {
 }
 
 type TriggerHookCreateAction = (props: TriggerHookCreateProps) => void
-export const useTriggerHookCreate = (): [TriggerHookCreateAction, TriggerCreateSubmitted, boolean, Error] => {
+export const useTriggerHookCreate = (): [TriggerHookCreateAction, TriggerCreateRequested, boolean, Error] => {
     const [auth] = useAuth()
-    const [post, submission, loading, error] = usePost<TriggerCreateSubmitted>()
+    const [post, submission, loading, error] = usePost<TriggerCreateRequested>()
     const fn = useCallback(async ({namespaceId, funcId, name, hookId, hookMethod, abortController}: TriggerHookCreateProps) =>
         post(`/v1/namespaces/${namespaceId}/triggers`, {
             type: "Hook",

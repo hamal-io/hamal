@@ -1,4 +1,4 @@
-export interface TriggerCreateSubmitted {
+export interface TriggerCreateRequested {
     id: string;
     status: string;
     triggerId: string;

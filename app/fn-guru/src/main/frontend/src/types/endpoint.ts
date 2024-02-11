@@ -1,4 +1,4 @@
-export interface EndpointCreateSubmitted {
+export interface EndpointCreateRequested {
     id: string;
     endpointId: string;
     namespaceId: string;

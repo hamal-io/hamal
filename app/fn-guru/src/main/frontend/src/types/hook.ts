@@ -1,4 +1,4 @@
-export interface HookCreateSubmitted {
+export interface HookCreateRequested {
     id: string;
     hookId: string;
     namespaceId: string;

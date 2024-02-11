@@ -1,5 +1,3 @@
-import {DefaultNamespaceId} from "@/types/namespace.ts";
-
 export type AuthType = 'Unauthorized' | 'Anonymous' | 'User'
 
 export const AUTH_KEY = 'auth'
@@ -11,8 +9,7 @@ export interface Auth {
     token: string;
 }
 
-
-export interface LoginSubmitted {
+export interface LoginRequested {
     id: string;
     status: string;
     accountId: string;

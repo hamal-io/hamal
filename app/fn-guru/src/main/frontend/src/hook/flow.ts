@@ -1,4 +1,4 @@
-import {Flow, FlowCreateSubmitted, FlowList, FuncCreateSubmitted} from "@/types";
+import {Flow, FlowCreateSubmitted, FlowList, FuncCreateRequested} from "@/types";
 import {useGet, usePost} from "@/hook/http.ts";
 import {useCallback, useState} from "react";
 import {useAuth} from "@/hook/auth.ts";

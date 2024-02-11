@@ -1,12 +1,12 @@
 import {useAuth} from "@/hook/auth.ts";
 import {useCallback, useState} from "react";
-import {AccountConvertSubmitted, FuncCreateSubmitted, LoginSubmitted} from "@/types";
+import {AccountConvertRequested, FuncCreateRequested, LoginRequested} from "@/types";
 
 type AccountCreateAnonymousAction = (abortController?: AbortController) => void
-export const useAccountCreateAnonymous = (): [AccountCreateAnonymousAction, LoginSubmitted, boolean, Error] => {
+export const useAccountCreateAnonymous = (): [AccountCreateAnonymousAction, LoginRequested, boolean, Error] => {
     const [auth, setAuth] = useAuth()
 
-    const [data, setData] = useState<LoginSubmitted | null>(null);
+    const [data, setData] = useState<LoginRequested | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<Error | null>(null);
 
@@ -59,10 +59,10 @@ export const useAccountCreateAnonymous = (): [AccountCreateAnonymousAction, Logi
 }
 
 type AccountLoginAction = (email: string, password: string, controller?: AbortController) => void
-export const useAccountLogin = (): [AccountLoginAction, LoginSubmitted, boolean, Error] => {
+export const useAccountLogin = (): [AccountLoginAction, LoginRequested, boolean, Error] => {
     const [auth, setAuth] = useAuth()
 
-    const [data, setData] = useState<LoginSubmitted | null>(null);
+    const [data, setData] = useState<LoginRequested | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<Error>(null);
 
@@ -115,10 +115,10 @@ export const useAccountLogin = (): [AccountLoginAction, LoginSubmitted, boolean,
 
 
 type AccountConvertAction = (email: string, password: string, abortController?: AbortController) => void
-export const useAccountConvert = (): [AccountConvertAction, AccountConvertSubmitted, boolean, Error] => {
+export const useAccountConvert = (): [AccountConvertAction, AccountConvertRequested, boolean, Error] => {
     const [auth, setAuth] = useAuth()
 
-    const [data, setData] = useState<AccountConvertSubmitted | null>(null);
+    const [data, setData] = useState<AccountConvertRequested | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<Error>(null);
 
