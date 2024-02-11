@@ -13,11 +13,13 @@ const GroupHeader: FC = () => {
     return (
         <div className="border-b bg-white">
             <div className="flex h-16 px-4">
-                <GroupNamespaceSelector
-                    groupId={groupId}
-                    namespaceId={namespaceId}
-                />
                 <div className="w-full flex items-center justify-between space-x-4">
+                    <div>
+                        <GroupNamespaceSelector
+                            groupId={groupId}
+                            namespaceId={namespaceId}
+                        />
+                    </div>
                     <Nav className="mx-6"/>
                     <Profile/>
                 </div>

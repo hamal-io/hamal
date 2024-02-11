@@ -4,7 +4,7 @@ import {useAuth} from "@/hook/auth.ts";
 import {Namespace, NamespaceCreateRequested, NamespaceList} from "@/types";
 
 type NamespaceGetAction = (namespaceIdId: string, abortController?: AbortController) => void
-export const useNamespaceIdGet = (): [NamespaceGetAction, Namespace, boolean, Error] => {
+export const useNamespaceGet = (): [NamespaceGetAction, Namespace, boolean, Error] => {
     const [auth] = useAuth()
     const [get, namespace, loading, error] = useGet<Namespace>()
     const fn = useCallback(async (namespaceIdId: string, abortController?: AbortController) => get(`/v1/namespaces/${namespaceIdId}`, abortController), [auth])

@@ -1,7 +1,7 @@
-import React, {createContext, FC, ReactNode, useEffect} from 'react'
+import React, {createContext, FC, ReactNode, useEffect, useState} from 'react'
 import Index from "@/components/app/layout/authenticated";
 import {useParams} from "react-router-dom";
-import {useGroupGet} from "@/hook";
+import {useGroupGet, useNamespaceGet} from "@/hook";
 import {Group} from "@/types";
 import GroupHeader from "./header.tsx";
 
@@ -14,19 +14,26 @@ export const GroupLayoutContext = createContext<
         groupId: string;
         groupName: string;
         namespaceId: string;
+        namespaceName: string;
     } | null
 >(null)
 
 
 const GroupLayout: FC<Props> = ({children}) => {
     const {groupId, namespaceId} = useParams()
+    const [getGroup, group] = useGroupGet()
+    const [getNamespace, namespace] = useNamespaceGet()
 
-    const [getGroup, group, loading, error] = useGroupGet()
     useEffect(() => {
         getGroup(groupId)
     }, [groupId]);
 
-    if (loading) {
+    useEffect(() => {
+        getNamespace((namespaceId))
+    }, [namespaceId]);
+
+
+    if (group == null || namespace == null) {
         return ("Loading..")
     }
 
@@ -35,7 +42,8 @@ const GroupLayout: FC<Props> = ({children}) => {
             <GroupLayoutContext.Provider value={{
                 groupId: group.id,
                 groupName: group.name,
-                namespaceId: namespaceId
+                namespaceId: namespace.id,
+                namespaceName: namespace.name
             }}>
                 <main className="flex-col md:flex">
                     <GroupHeader/>
