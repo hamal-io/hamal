@@ -1,7 +1,10 @@
 import React, {FC} from "react";
-import {useAuth} from "@/hook/auth.ts";
+import {useAuth, useLogout} from "@/hook/auth.ts";
 import {Link, useLocation, useParams} from "react-router-dom";
 import {cn} from "@/utils";
+import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger} from "@/components/ui/dropdown-menu.tsx";
+import {Button} from "@/components/ui/button.tsx";
+import {Avatar, AvatarFallback} from "@/components/ui/avatar.tsx";
 
 const GroupHeader: FC = () => {
     return (
@@ -9,6 +12,7 @@ const GroupHeader: FC = () => {
             <div className="flex h-16 px-4">
                 <div className="w-full flex items-center justify-between space-x-4">
                     <Nav className="mx-6"/>
+                    <Profile/>
                 </div>
             </div>
         </div>
@@ -99,3 +103,33 @@ const NavLink: FC<{
         </Link>
     );
 };
+
+const Profile = () => {
+    return (
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                    <Avatar className="h-8 w-8">
+                        <AvatarFallback>You</AvatarFallback>
+                    </Avatar>
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-32" align="end" forceMount>
+                <LogoutMenuItem/>
+            </DropdownMenuContent>
+        </DropdownMenu>
+    )
+}
+
+
+const LogoutMenuItem = () => {
+    const [logout,] = useLogout()
+
+    return (
+        <DropdownMenuItem onClick={() => {
+            logout()
+        }}>
+            Log out
+        </DropdownMenuItem>
+    )
+}

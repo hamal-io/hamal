@@ -4,7 +4,7 @@ import LoginInPage from "./pages/landing/login";
 import OnboardingPage from "./pages/landing/onboarding";
 
 // app
-import Authenticated from "@/components/app/authenticated";
+import Index from "@/components/app/layout/authenticated";
 import Dashboard from "./pages/app/dashboard";
 
 import FlowListPage from "./pages/app/flow-list";
@@ -31,9 +31,9 @@ export const router = createBrowserRouter([
     },
     {
         path: "/groups", element:
-            <Authenticated>
+            <Index>
                 <FlowListPage/>
-            </Authenticated>
+            </Index>
     },
     {
         path: "/groups/:groupId/dashboard", element:

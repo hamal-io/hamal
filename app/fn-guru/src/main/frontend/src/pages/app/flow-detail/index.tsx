@@ -1,7 +1,7 @@
 import React, {createContext, FC, ReactNode, useEffect} from 'react'
 import {useParams} from "react-router-dom";
 import Sidebar from "@/pages/app/flow-detail/components/sidebar";
-import Authenticated from "@/components/app/authenticated.tsx";
+import Index from "@/components/app/layout/authenticated";
 import {useFlowGet} from "@/hook";
 import {Flow} from "@/types";
 
@@ -21,7 +21,7 @@ const FlowDetailPage: FC<Props> = ({children}) => {
     }, [flowId]);
 
     return (
-        <Authenticated>
+        <Index>
             <div className="relative flex flex-row min-h-screen ">
                 <Sidebar/>
                 <div className="p-4 border-l border-border w-full  ml-64">
@@ -30,7 +30,7 @@ const FlowDetailPage: FC<Props> = ({children}) => {
                     </flowContext.Provider>
                 </div>
             </div>
-        </Authenticated>
+        </Index>
     );
 }
 
