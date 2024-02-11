@@ -1,17 +1,26 @@
 import React, {FC} from "react";
-import {useAuth, useLogout} from "@/hook/auth.ts";
+import {useLogout} from "@/hook/auth.ts";
 import {Link, useLocation, useParams} from "react-router-dom";
 import {cn} from "@/utils";
 import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger} from "@/components/ui/dropdown-menu.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {Avatar, AvatarFallback} from "@/components/ui/avatar.tsx";
+import GroupNamespaceSelector from "@/components/app/group-namespace-selector.tsx";
 
 const GroupHeader: FC = () => {
+    const {groupId, namespaceId} = useParams()
+
     return (
         <div className="border-b bg-white">
             <div className="flex h-16 px-4">
                 <div className="w-full flex items-center justify-between space-x-4">
-                    <Nav className="mx-6"/>
+                    <div>
+                        <GroupNamespaceSelector
+                            groupId={groupId}
+                            namespaceId={namespaceId}
+                        />
+                    </div>
+                    <Nav/>
                     <Profile/>
                 </div>
             </div>
@@ -21,7 +30,7 @@ const GroupHeader: FC = () => {
 
 export default GroupHeader;
 
-const Nav = ({className, ...props}: React.HTMLAttributes<HTMLElement>) => {
+const Nav = () => {
     const location = useLocation()
     const currentPath = location.pathname
 
@@ -37,6 +46,11 @@ const Nav = ({className, ...props}: React.HTMLAttributes<HTMLElement>) => {
             href: `/groups/${groupId}/namespaces/${namespaceId}/playground`,
             label: "Playground",
             active: currentPath === `/groups/${groupId}/namespaces/${namespaceId}/playground`
+        },
+        {
+            href: `/groups/${groupId}/namespaces`,
+            label: "Namespaces",
+            active: currentPath === `/groups/${groupId}/namespaces`
         },
         {
             href: `/groups/${groupId}/namespaces/${namespaceId}/executions`,

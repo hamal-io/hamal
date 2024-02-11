@@ -17,11 +17,11 @@ const FuncListPage: FC<Props> = ({}) => {
 
     useEffect(() => {
         const abortController = new AbortController();
-        listFuncs(groupId, abortController)
+        listFuncs(namespaceId, abortController)
         return () => {
             abortController.abort();
         };
-    }, [groupId]);
+    }, [namespaceId]);
 
     if (error) return `Error`
     if (funcList == null || loading) return "Loading..."

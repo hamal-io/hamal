@@ -5,15 +5,15 @@ import {Button} from "@/components/ui/button.tsx"
 import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,} from "@/components/ui/dropdown-menu.tsx"
 import {useNavigate} from "react-router-dom";
 import {useContext} from "react";
-import {flowContext} from "@/pages/app/flow-detail";
 import {TriggerListItem} from "@/types";
+import {GroupLayoutContext} from "@/components/app/layout";
 
 interface Props {
     row: Row<TriggerListItem>
 }
 
 export default function ({row}: Props) {
-    const flow = useContext(flowContext)
+    const {groupId, namespaceId} = useContext(GroupLayoutContext)
     const navigate = useNavigate()
 
     return (
@@ -29,7 +29,7 @@ export default function ({row}: Props) {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-[160px]">
                 <DropdownMenuItem onClick={() => {
-                    navigate(`/groups/${flow.id}/schedules/${row.original.id}`)
+                    navigate(`/groups/${groupId}/namespaces/${namespaceId}/schedules/${row.original.id}`)
                 }}>View</DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>

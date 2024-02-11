@@ -8,16 +8,16 @@ import CreateFixedRate from "@/pages/app/schedule-list/components/create.tsx";
 
 type Props = {}
 const ScheduleListPage: FC<Props> = () => {
-    const {groupId, groupName} = useContext(GroupLayoutContext)
+    const {namespaceId} = useContext(GroupLayoutContext)
     const [listSchedules, scheduleList, loading, error] = useTriggerListSchedule()
 
     useEffect(() => {
         const abortController = new AbortController()
-        listSchedules(groupId, abortController)
+        listSchedules(namespaceId, abortController)
         return () => {
             abortController.abort()
         }
-    }, [groupId]);
+    }, [namespaceId]);
 
     if (loading) return "Loading..."
     if (error != null) return "Error -"

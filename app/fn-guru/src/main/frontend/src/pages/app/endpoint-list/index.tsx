@@ -19,12 +19,12 @@ const EndpointListPage: FC<Props> = ({}) => {
 
     useEffect(() => {
         const abortController = new AbortController();
-        listEndpoints(groupId, abortController)
-        listTriggers(groupId, abortController)
+        listEndpoints(namespaceId, abortController)
+        listTriggers(namespaceId, abortController)
         return () => {
             abortController.abort();
         };
-    }, [groupId]);
+    }, [namespaceId]);
 
     if (endpointsError || triggerError) return `Error`
     if (endpointsLoading || triggerLoading) return "Loading..."
