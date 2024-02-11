@@ -7,8 +7,7 @@ import OnboardingPage from "./pages/landing/onboarding";
 import Index from "@/components/app/layout/authenticated";
 import Dashboard from "./pages/app/dashboard";
 
-import FlowListPage from "./pages/app/flow-list";
-import FlowDetailPage from "./pages/app/flow-detail";
+import FlowListPage from "./pages/app/namespace-list";
 
 import EndpointListPage from "@/pages/app/endpoint-list";
 import ExecDetailPage from "@/pages/app/exec-detail";
@@ -21,6 +20,7 @@ import ScheduleListPage from "@/pages/app/schedule-list";
 import {createBrowserRouter} from "react-router-dom";
 import Playground from "@/pages/app/playground";
 import GroupLayout from "@/components/app/layout/group";
+import NamespaceListPage from "./pages/app/namespace-list";
 
 export const router = createBrowserRouter([
     {path: "/", element: <HomePage/>},
@@ -87,6 +87,12 @@ export const router = createBrowserRouter([
         path: "/groups/:groupId/namespaces/:namespaceId/schedules", element:
             <GroupLayout>
                 <ScheduleListPage/>
+            </GroupLayout>
+    },
+    {
+        path: "/groups/:groupId/namespaces", element:
+            <GroupLayout>
+                <NamespaceListPage/>
             </GroupLayout>
     }
 ]);

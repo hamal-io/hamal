@@ -39,6 +39,11 @@ const Nav = ({className, ...props}: React.HTMLAttributes<HTMLElement>) => {
             active: currentPath === `/groups/${groupId}/namespaces/${namespaceId}/playground`
         },
         {
+            href: `/groups/${groupId}/namespaces`,
+            label: "Namespaces",
+            active: currentPath === `/groups/${groupId}/namespaces`
+        },
+        {
             href: `/groups/${groupId}/namespaces/${namespaceId}/executions`,
             label: "Executions",
             active: currentPath.startsWith(`/groups/${groupId}/namespaces/${namespaceId}/executions`)
