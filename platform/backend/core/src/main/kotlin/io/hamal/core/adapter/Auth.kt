@@ -2,18 +2,11 @@ package io.hamal.core.adapter
 
 import io.hamal.core.component.EncodePassword
 import io.hamal.core.component.GenerateToken
-import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain._enum.RequestStatus
-import io.hamal.lib.domain.request.AuthLoginEmailRequested
-import io.hamal.lib.domain.request.AuthLoginMetaMaskRequested
+import io.hamal.lib.domain.request.*
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.*
-import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
-import io.hamal.lib.domain.request.AccountCreateMetaMaskRequest
-import io.hamal.lib.domain.request.AuthChallengeMetaMaskRequest
-import io.hamal.lib.domain.request.AuthLogInEmailRequest
-import io.hamal.lib.domain.request.AuthLogInMetaMaskRequest
 import org.springframework.stereotype.Component
 
 
@@ -73,27 +66,18 @@ class AuthAdapter(
                 authId = generateDomainId(::AuthId),
                 accountId = submitted.accountId,
                 groupIds = listOf(submitted.groupId),
-                defaultNamespaceIds = listOf(io.hamal.lib.domain.vo.GroupDefaultNamespaceId(submitted.groupId, submitted.namespaceId)),
                 token = generateToken(),
                 address = req.address,
                 signature = req.signature
             ).also(requestCmdRepository::queue).let(responseHandler)
 
         } else {
-            val groupIds = groupList(auth.accountId) { groups -> groups.map(Group::id) }
-            val namespaces = namespaceList(NamespaceQuery(groupIds = groupIds, limit = Limit.all)) { it }
-            val defaultNamespaceIds = namespaces.filter { it.name == NamespaceName.default }
-                .map {
-                    io.hamal.lib.domain.vo.GroupDefaultNamespaceId(it.groupId, it.id)
-                }
-
             return AuthLoginMetaMaskRequested(
                 id = generateDomainId(::RequestId),
                 status = RequestStatus.Submitted,
                 authId = generateDomainId(::AuthId),
                 accountId = auth.accountId,
-                groupIds = groupIds,
-                defaultNamespaceIds = defaultNamespaceIds,
+                groupIds = groupList(auth.accountId) { groups -> groups.map(Group::id) },
                 token = generateToken(),
                 address = req.address,
                 signature = req.signature
@@ -114,19 +98,12 @@ class AuthAdapter(
             throw NoSuchElementException("Account not found")
         }
 
-        val groupIds = groupList(account.id) { groups -> groups.map(Group::id) }
-
-        val namespaces = namespaceList(NamespaceQuery(groupIds = groupIds, limit = Limit.all)) { it }
-        val defaultNamespaceIds = namespaces.filter { it.name == NamespaceName.default }
-            .map { io.hamal.lib.domain.vo.GroupDefaultNamespaceId(it.groupId, it.id) }
-
         return AuthLoginEmailRequested(
             id = generateDomainId(::RequestId),
             status = RequestStatus.Submitted,
             authId = generateDomainId(::AuthId),
             accountId = account.id,
             groupIds = groupList(account.id) { groups -> groups.map(Group::id) },
-            defaultNamespaceIds = defaultNamespaceIds,
             hash = encodedPassword,
             token = generateToken()
         ).also(requestCmdRepository::queue).let(responseHandler)

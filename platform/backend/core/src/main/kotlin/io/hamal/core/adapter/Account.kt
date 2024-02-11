@@ -73,13 +73,14 @@ class AccountAdapter(
 
     override fun <T : Any> invoke(req: AccountCreateRequest, responseHandler: (AccountCreateRequested) -> T): T {
         val salt = generateSalt()
+        val groupId = generateDomainId(::GroupId)
         return AccountCreateRequested(
             id = generateDomainId(::RequestId),
             status = Submitted,
             accountId = generateDomainId(::AccountId),
             accountType = User,
-            groupId = generateDomainId(::GroupId),
-            namespaceId = generateDomainId(::NamespaceId),
+            groupId = groupId,
+            namespaceId = NamespaceId(groupId.value),
             email = req.email,
             passwordAuthId = generateDomainId(::AuthId),
             tokenAuthId = generateDomainId(::AuthId),
@@ -97,13 +98,14 @@ class AccountAdapter(
         responseHandler: (AccountCreateAnonymousRequested) -> T
     ): T {
         val salt = generateSalt()
+        val groupId = generateDomainId(::GroupId)
         return AccountCreateAnonymousRequested(
             id = generateDomainId(::RequestId),
             status = Submitted,
             accountId = req.id,
             accountType = Anonymous,
-            groupId = generateDomainId(::GroupId),
-            namespaceId = generateDomainId(::NamespaceId),
+            groupId = groupId,
+            namespaceId = NamespaceId(groupId.value),
             passwordAuthId = generateDomainId(::AuthId),
             tokenAuthId = generateDomainId(::AuthId),
             hash = encodePassword(
@@ -119,13 +121,14 @@ class AccountAdapter(
         req: AccountCreateMetaMaskRequest,
         responseHandler: (AccountCreateMetaMaskRequested) -> T
     ): T {
+        val groupId = generateDomainId(::GroupId)
         return AccountCreateMetaMaskRequested(
             id = generateDomainId(::RequestId),
             status = Submitted,
             accountId = req.id,
             accountType = User,
-            groupId = generateDomainId(::GroupId),
-            namespaceId = generateDomainId(::NamespaceId),
+            groupId = groupId,
+            namespaceId = NamespaceId(groupId.value),
             salt = generateSalt(),
             address = req.address,
             metamaskAuthId = generateDomainId(::AuthId),
