@@ -137,7 +137,7 @@ const AddTrigger: FC<AddTriggerProps> = ({namespaceId, hookId, hookName, trigger
 
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                            <FormFuncSelect name='funcId' groupId={namespaceId} form={form}/>
+                            <FormFuncSelect name='funcId' namespaceId={namespaceId} form={form}/>
                             <FormHttpMethodSelect name='httpMethod' form={form}/>
                             <Button type="submit">
                                 {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
