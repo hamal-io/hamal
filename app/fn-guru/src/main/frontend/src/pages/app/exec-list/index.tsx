@@ -1,13 +1,37 @@
-import React, {FC, useContext} from "react";
-import {flowContext} from "@/pages/app/flow-detail";
-import List from "@/pages/app/exec-list/components/list";
+import React, {FC, useContext, useEffect} from "react";
 import {GroupLayoutContext} from "@/components/app/layout";
+import {useExecList} from "@/hook";
+import {PageHeader} from "@/components/page-header.tsx";
+import {columns} from "@/pages/app/exec-list/components/columns.tsx";
+import Table from "@/pages/app/exec-list/components/table.tsx";
 
 type Props = {}
 
 const ExecListPage: FC<Props> = () => {
-    const {groupId, groupName} = useContext(GroupLayoutContext)
-    return (<List group={{id: groupId, name: groupName}}/>)
+    const {groupId, groupName, namespaceId} = useContext(GroupLayoutContext)
+    const [listExecs, execList, isLoading, error] = useExecList()
+
+    useEffect(() => {
+        const abortController = new AbortController()
+        listExecs(groupId, abortController)
+        return () => {
+            abortController.abort()
+        }
+    }, [groupId]);
+
+    if (isLoading) return "Loading..."
+    if (error != null) return "Error -"
+
+    return (
+        <div className="pt-2 px-2 mb-6">
+            <PageHeader
+                title="Executions"
+                description={`Executions of your namespace TBD`}
+                actions={[]}
+            />
+            <Table data={execList.execs} columns={columns}/>
+        </div>
+    );
 }
 
 export default ExecListPage

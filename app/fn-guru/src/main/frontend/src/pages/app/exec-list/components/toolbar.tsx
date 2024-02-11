@@ -1,6 +1,6 @@
 import {Table} from "@tanstack/react-table"
 import FacetedFilter from "./faceted-filter.tsx"
-import {statuses} from "@/pages/app/exec-list/components/list/data/data.tsx";
+import {statuses} from "@/pages/app/exec-list/components/data.tsx";
 
 interface Props<TData> {
     table: Table<TData>

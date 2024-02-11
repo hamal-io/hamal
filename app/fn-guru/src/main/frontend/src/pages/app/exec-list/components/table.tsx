@@ -60,7 +60,7 @@ export default function <TData, TValue>({columns, data,}: DataTableProps<TData, 
     })
 
     const navigate = useNavigate()
-    const group = useContext(GroupLayoutContext)
+    const {groupId, groupName, namespaceId} = useContext(GroupLayoutContext)
 
     return (
         <Card>
@@ -94,7 +94,7 @@ export default function <TData, TValue>({columns, data,}: DataTableProps<TData, 
                                     key={row.id}
                                     data-state={row.getIsSelected() && "selected"}
                                     onClick={() => {
-                                        navigate(`/groups/${group.id}/executions/${row.original['id']}`)
+                                        navigate(`/groups/${groupId}/namespaces/${namespaceId}/executions/${row.original['id']}`)
                                     }}
                                 >
                                     {row.getVisibleCells().map((cell) => (
