@@ -12,18 +12,18 @@ import {GoToDocumentation} from "@/components/documentation.tsx";
 
 type Props = {}
 const HookListPage: FC<Props> = ({}) => {
-    const {groupId, groupName} = useContext(GroupLayoutContext)
+    const {namespaceId, groupId} = useContext(GroupLayoutContext)
     const [listHooks, hookList, hooksLoading, hooksError] = useHookList()
     const [listTriggers, triggerList, triggerLoading, triggerError] = useTriggerListHook()
 
     useEffect(() => {
         const abortController = new AbortController();
-        listHooks(groupId, abortController)
-        listTriggers(groupId, abortController)
+        listHooks(namespaceId, abortController)
+        listTriggers(namespaceId, abortController)
         return () => {
             abortController.abort();
         };
-    }, [groupId]);
+    }, [namespaceId]);
 
     if (hooksError || triggerError) return `Error`
     if (hooksLoading || triggerLoading) return "Loading..."

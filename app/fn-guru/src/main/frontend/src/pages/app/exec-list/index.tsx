@@ -13,7 +13,7 @@ const ExecListPage: FC<Props> = () => {
 
     useEffect(() => {
         const abortController = new AbortController()
-        listExecs(groupId, abortController)
+        listExecs(namespaceId, abortController)
         return () => {
             abortController.abort()
         }

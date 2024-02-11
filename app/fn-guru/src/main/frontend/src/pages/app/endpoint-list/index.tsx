@@ -12,19 +12,19 @@ import {GoToDocumentation} from "@/components/documentation.tsx";
 
 type Props = {}
 const EndpointListPage: FC<Props> = ({}) => {
-    const {groupId, groupName, namespaceId} = useContext(GroupLayoutContext)
+    const {namespaceId, groupId} = useContext(GroupLayoutContext)
 
     const [listEndpoints, endpointList, endpointsLoading, endpointsError] = useEndpointList()
     const [listTriggers, triggerList, triggerLoading, triggerError] = useEndpointList()
 
     useEffect(() => {
         const abortController = new AbortController();
-        listEndpoints(groupId, abortController)
-        listTriggers(groupId, abortController)
+        listEndpoints(namespaceId, abortController)
+        listTriggers(namespaceId, abortController)
         return () => {
             abortController.abort();
         };
-    }, [groupId]);
+    }, [namespaceId]);
 
     if (endpointsError || triggerError) return `Error`
     if (endpointsLoading || triggerLoading) return "Loading..."
