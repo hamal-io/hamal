@@ -40,6 +40,17 @@ data class TopicEntity(
                 recordedAt = rec.recordedAt()
             )
 
+            is TopicRecord.PublicCreated -> copy(
+                cmdId = rec.cmdId,
+                id = rec.entityId,
+                sequence = rec.sequence(),
+                name = rec.name,
+                groupId = rec.groupId,
+                logTopicId = rec.logTopicId,
+                type = TopicType.Public,
+                recordedAt = rec.recordedAt()
+            )
+
             is TopicRecord.InternalCreated -> copy(
                 cmdId = rec.cmdId,
                 id = rec.entityId,
@@ -73,7 +84,15 @@ data class TopicEntity(
                 groupId = groupId!!
             )
 
-            TopicType.Public -> TODO()
+            TopicType.Public -> Topic.Public(
+                cmdId = cmdId,
+                id = id,
+                name = name!!,
+                logTopicId = logTopicId!!,
+                updatedAt = recordedAt.toUpdatedAt(),
+                groupId = groupId!!
+            )
+
         }
     }
 }
@@ -82,7 +101,11 @@ fun List<TopicRecord>.createEntity(): TopicEntity {
     check(isNotEmpty()) { "At least one record is required" }
     val firstRecord: TopicRecord = first()
 
-    check(firstRecord is TopicRecord.GroupCreated || firstRecord is TopicRecord.InternalCreated)
+    check(
+        firstRecord is TopicRecord.GroupCreated ||
+                firstRecord is TopicRecord.InternalCreated ||
+                firstRecord is TopicRecord.PublicCreated
+    )
 
     var result = TopicEntity(
         id = firstRecord.entityId,

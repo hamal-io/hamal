@@ -22,7 +22,8 @@ internal class TopicGetController(
             ResponseEntity.ok(
                 ApiTopic(
                     id = it.id,
-                    name = it.name
+                    name = it.name,
+                    type = it.type
                 )
             )
         }

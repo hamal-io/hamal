@@ -1,6 +1,6 @@
 package io.hamal.api.http.controller.request
 
-import io.hamal.api.http.controller.toApiSubmitted
+import io.hamal.api.http.controller.toApiRequested
 import io.hamal.core.adapter.RequestListPort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.request.Requested
@@ -25,6 +25,6 @@ internal class RequestListController(private val listReqs: RequestListPort) {
                 limit = limit
                 // groupId = ...
             ),
-        ) { reqs -> ResponseEntity.ok(ApiRequestList(reqs.map(Requested::toApiSubmitted))) }
+        ) { reqs -> ResponseEntity.ok(ApiRequestList(reqs.map(Requested::toApiRequested))) }
     }
 }

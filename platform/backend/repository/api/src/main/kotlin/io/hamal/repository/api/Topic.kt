@@ -96,6 +96,8 @@ interface TopicCmdRepository : CmdRepository {
 
     fun create(cmd: TopicGroupCreateCmd): Topic.Group
 
+    fun create(cmd: TopicPublicCreateCmd): Topic.Public
+
     fun create(cmd: TopicInternalCreateCmd): Topic.Internal
 
     data class TopicGroupCreateCmd(
@@ -107,8 +109,20 @@ interface TopicCmdRepository : CmdRepository {
     )
 
     data class TopicInternalCreateCmd(
-        val id: CmdId, val topicId: TopicId, val name: TopicName, val logTopicId: LogTopicId
+        val id: CmdId,
+        val topicId: TopicId,
+        val name: TopicName,
+        val logTopicId: LogTopicId
     )
+
+    data class TopicPublicCreateCmd(
+        val id: CmdId,
+        val topicId: TopicId,
+        val name: TopicName,
+        val groupId: GroupId,
+        val logTopicId: LogTopicId
+    )
+
 }
 
 
