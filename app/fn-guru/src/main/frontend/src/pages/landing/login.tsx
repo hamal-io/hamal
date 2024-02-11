@@ -98,6 +98,7 @@ const MetaMaskButton: FC<MetaMaskButtonProps> = ({loading, setLoading}) => {
             console.log("init challenge", challenge)
             const msg = `0x${Buffer.from("test", 'utf8').toString('hex')}`;
             const invoke = async () => {
+                // @ts-ignore
                 const signature = await ethereum.request({
                     method: 'personal_sign',
                     params: [challenge, address],
