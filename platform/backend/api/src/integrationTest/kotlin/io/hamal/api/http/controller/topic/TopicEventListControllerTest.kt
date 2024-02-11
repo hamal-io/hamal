@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test
 internal class TopicEventListControllerTest : TopicBaseControllerTest() {
     @Test
     fun `No events`() {
-        val topicId = awaitCompleted(createTopic(TopicName("test-topic"))).topicId
+        val topicId = awaitCompleted(createGroupTopic(TopicName("test-topic"))).topicId
 
         val result = listTopicEvents(topicId)
         assertThat(result.events, empty())
@@ -24,7 +24,7 @@ internal class TopicEventListControllerTest : TopicBaseControllerTest() {
 
     @Test
     fun `Single event`() {
-        val topicId = awaitCompleted(createTopic(TopicName("test-topic"))).topicId
+        val topicId = awaitCompleted(createGroupTopic(TopicName("test-topic"))).topicId
 
         awaitCompleted(
             appendToTopic(topicId, TopicEventPayload(HotObject.builder().set("counter", 1).build()))
@@ -43,7 +43,7 @@ internal class TopicEventListControllerTest : TopicBaseControllerTest() {
 
     @Test
     fun `Limit events`() {
-        val topicId = awaitCompleted(createTopic(TopicName("test-topic")).also { awaitCompleted(it.id) }).topicId
+        val topicId = awaitCompleted(createGroupTopic(TopicName("test-topic")).also { awaitCompleted(it.id) }).topicId
 
         awaitCompleted(
             IntRange(1, 100).map {
@@ -69,7 +69,7 @@ internal class TopicEventListControllerTest : TopicBaseControllerTest() {
 
     @Test
     fun `Skip and limit events`() {
-        val topicId = awaitCompleted(createTopic(TopicName("test-topic"))).topicId
+        val topicId = awaitCompleted(createGroupTopic(TopicName("test-topic"))).topicId
 
         awaitCompleted(
             IntRange(1, 100).map {
@@ -92,8 +92,8 @@ internal class TopicEventListControllerTest : TopicBaseControllerTest() {
 
     @Test
     fun `Does not show events of different topic`() {
-        val topicId = awaitCompleted(createTopic(TopicName("test-topic"))).topicId
-        val anotherTopicId = awaitCompleted(createTopic(TopicName("another-test-topic"))).topicId
+        val topicId = awaitCompleted(createGroupTopic(TopicName("test-topic"))).topicId
+        val anotherTopicId = awaitCompleted(createGroupTopic(TopicName("another-test-topic"))).topicId
 
         awaitCompleted(
             appendToTopic(topicId, TopicEventPayload(HotObject.builder().set("counter", 1).build()))

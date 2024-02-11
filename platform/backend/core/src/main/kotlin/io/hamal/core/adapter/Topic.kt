@@ -2,10 +2,7 @@ package io.hamal.core.adapter
 
 import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
-import io.hamal.lib.domain.request.TopicAppendEntryRequest
-import io.hamal.lib.domain.request.TopicAppendEventRequested
-import io.hamal.lib.domain.request.TopicCreateRequest
-import io.hamal.lib.domain.request.TopicGroupCreateRequested
+import io.hamal.lib.domain.request.*
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.LogTopicId
 import io.hamal.lib.domain.vo.RequestId
@@ -26,8 +23,14 @@ interface TopicCreatePort {
 
     operator fun <T : Any> invoke(
         groupId: GroupId,
-        req: TopicCreateRequest,
+        req: TopicGroupCreateRequest,
         responseHandler: (TopicGroupCreateRequested) -> T
+    ): T
+
+    operator fun <T : Any> invoke(
+        groupId: GroupId,
+        req: TopicPublicCreateRequest,
+        responseHandler: (TopicPublicCreateRequested) -> T
     ): T
 
 }
@@ -78,11 +81,27 @@ class TopicAdapter(
 
     override fun <T : Any> invoke(
         groupId: GroupId,
-        req: TopicCreateRequest,
+        req: TopicGroupCreateRequest,
         responseHandler: (TopicGroupCreateRequested) -> T
     ): T {
         groupRepository.get(groupId)
         return TopicGroupCreateRequested(
+            id = generateDomainId(::RequestId),
+            status = Submitted,
+            topicId = generateDomainId(::TopicId),
+            logTopicId = generateDomainId(::LogTopicId),
+            groupId = groupId,
+            name = req.name
+        ).also(requestCmdRepository::queue).let(responseHandler)
+    }
+
+    override fun <T : Any> invoke(
+        groupId: GroupId,
+        req: TopicPublicCreateRequest,
+        responseHandler: (TopicPublicCreateRequested) -> T
+    ): T {
+        groupRepository.get(groupId)
+        return TopicPublicCreateRequested(
             id = generateDomainId(::RequestId),
             status = Submitted,
             topicId = generateDomainId(::TopicId),

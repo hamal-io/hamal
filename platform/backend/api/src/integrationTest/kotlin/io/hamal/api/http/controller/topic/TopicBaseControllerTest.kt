@@ -48,15 +48,26 @@ internal sealed class TopicBaseControllerTest : BaseControllerTest() {
     }
 
 
-    fun createTopic(topicName: TopicName): ApiTopicGroupCreateRequested {
+    fun createGroupTopic(topicName: TopicName): ApiTopicGroupCreateRequested {
         val createTopicResponse = httpTemplate.post("/v1/groups/1/topics")
-            .body(ApiTopicCreateRequest(topicName))
+            .body(ApiTopicGroupCreateRequest(topicName))
             .execute()
 
         assertThat(createTopicResponse.statusCode, equalTo(Accepted))
         require(createTopicResponse is HttpSuccessResponse) { "request was not successful" }
 
         return createTopicResponse.result(ApiTopicGroupCreateRequested::class)
+    }
+
+    fun createPublicTopic(topicName: TopicName): ApiTopicPublicCreateRequested {
+        val createTopicResponse = httpTemplate.post("/v1/groups/1/public-topics")
+            .body(ApiTopicPublicCreateRequest(topicName))
+            .execute()
+
+        assertThat(createTopicResponse.statusCode, equalTo(Accepted))
+        require(createTopicResponse is HttpSuccessResponse) { "request was not successful" }
+
+        return createTopicResponse.result(ApiTopicPublicCreateRequested::class)
     }
 
     fun appendToTopic(topicId: TopicId, toAppend: TopicEventPayload): ApiTopicAppendRequested {

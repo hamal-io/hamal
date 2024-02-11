@@ -34,7 +34,7 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
     fun createTopic(topicName: TopicName): ApiTopicGroupCreateRequested {
         val createTopicResponse = httpTemplate.post("/v1/groups/{groupId}/topics")
             .path("groupId", testGroup.id)
-            .body(ApiTopicCreateRequest(topicName))
+            .body(ApiTopicGroupCreateRequest(topicName))
             .execute()
 
         assertThat(createTopicResponse.statusCode, equalTo(Accepted))

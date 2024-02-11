@@ -54,6 +54,31 @@ class TopicSqliteRepository(
         }
     }
 
+    override fun create(cmd: TopicCmdRepository.TopicPublicCreateCmd): Topic.Public {
+        val topicId = cmd.topicId
+        val cmdId = cmd.id
+        return tx {
+            if (commandAlreadyApplied(cmdId, topicId)) {
+                versionOf(topicId, cmdId) as Topic.Public
+            } else {
+                store(
+                    TopicRecord.PublicCreated(
+                        cmdId = cmd.id,
+                        entityId = topicId,
+                        groupId = cmd.groupId,
+                        logTopicId = cmd.logTopicId,
+                        name = cmd.name,
+                    )
+                )
+
+                (currentVersion(topicId) as Topic.Public)
+                    .also { logBrokerRepository.create(cmd.id, LogTopicToCreate(cmd.logTopicId)) }
+                    .also { ProjectionCurrent.upsert(this, it) }
+                    .also { ProjectionUniqueName.upsert(this, it) }
+            }
+        }
+    }
+
     override fun create(cmd: TopicCmdRepository.TopicInternalCreateCmd): Topic.Internal {
         val topicId = cmd.topicId
         val cmdId = cmd.id
