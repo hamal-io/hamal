@@ -8,7 +8,6 @@ export interface Auth {
     type: AuthType,
     accountId: string;
     groupId: string;
-    defaultNamespaceIds: Array<DefaultNamespaceId>;
     token: string;
 }
 
@@ -18,7 +17,6 @@ export interface LoginSubmitted {
     status: string;
     accountId: string;
     groupIds: string[];
-    defaultNamespaceIds: Array<DefaultNamespaceId>;
     token: string;
     email: string;
 }

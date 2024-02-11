@@ -2,13 +2,11 @@ import {Auth, AUTH_KEY} from "@/types/auth.ts";
 import useLocalStorageState from "use-local-storage-state";
 import {useCallback, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {DefaultNamespaceId} from "@/types";
 
 const unauthorized: Auth = {
     type: 'Unauthorized',
     accountId: '',
     groupId: '',
-    defaultNamespaceIds: Array<DefaultNamespaceId>(),
     token: ''
 }
 
@@ -127,7 +125,6 @@ export const useMetaMaskToken = (): [MetaMaskTokenAction, string, boolean, Error
                         type: 'User',
                         accountId: data.accountId,
                         groupId: data.groupIds[0],
-                        defaultNamespaceIds: data.defaultNamespaceIds,
                         token: data.token,
                     })
 
