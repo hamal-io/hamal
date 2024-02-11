@@ -174,7 +174,7 @@ const LoginForm = () => {
 
     useEffect(() => {
         if (loginSubmitted != null) {
-            navigate("/groups", {replace: true})
+            navigate(`/groups/${loginSubmitted.groupIds[0]}/dashboard`, {replace: true})
             setLoading(false)
         }
     }, [loginSubmitted]);
@@ -245,10 +245,10 @@ const LoginForm = () => {
                     </span>
                 </div>
             </div>
-            <MetaMaskButton
-                loading={isLoading}
-                setLoading={setLoading}
-            />
+            {/*<MetaMaskButton*/}
+            {/*    loading={isLoading}*/}
+            {/*    setLoading={setLoading}*/}
+            {/*/>*/}
         </div>
     )
 }
