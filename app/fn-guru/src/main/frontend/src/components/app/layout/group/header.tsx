@@ -1,15 +1,22 @@
 import React, {FC} from "react";
-import {useAuth, useLogout} from "@/hook/auth.ts";
+import {useLogout} from "@/hook/auth.ts";
 import {Link, useLocation, useParams} from "react-router-dom";
 import {cn} from "@/utils";
 import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger} from "@/components/ui/dropdown-menu.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {Avatar, AvatarFallback} from "@/components/ui/avatar.tsx";
+import GroupNamespaceSelector from "@/components/app/group-namespace-selector.tsx";
 
 const GroupHeader: FC = () => {
+    const {groupId, namespaceId} = useParams()
+
     return (
         <div className="border-b bg-white">
             <div className="flex h-16 px-4">
+                <GroupNamespaceSelector
+                    groupId={groupId}
+                    namespaceId={namespaceId}
+                />
                 <div className="w-full flex items-center justify-between space-x-4">
                     <Nav className="mx-6"/>
                     <Profile/>
