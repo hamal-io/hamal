@@ -21,7 +21,7 @@ import Pagination from "./pagination.tsx"
 import Toolbar from "./toolbar.tsx"
 import {Card, CardContent, CardFooter, CardHeader} from "@/components/ui/card.tsx";
 import {useNavigate} from "react-router-dom";
-import {GroupContext} from "@/components/app/layout";
+import {GroupLayoutContext} from "@/components/app/layout";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -60,7 +60,7 @@ export default function <TData, TValue>({columns, data,}: DataTableProps<TData, 
     })
 
     const navigate = useNavigate()
-    const group = useContext(GroupContext)
+    const group = useContext(GroupLayoutContext)
 
     return (
         <Card>

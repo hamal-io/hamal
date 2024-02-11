@@ -25,49 +25,44 @@ const Nav = ({className, ...props}: React.HTMLAttributes<HTMLElement>) => {
     const location = useLocation()
     const currentPath = location.pathname
 
-    const {groupId} = useParams()
+    const {groupId, namespaceId} = useParams()
 
     const navigation: NavItem[] = [
         {
-            href: `/groups/${groupId}/dashboard`,
+            href: `/groups/${groupId}/namespaces/${namespaceId}/dashboard`,
             label: "Dashboard",
-            active: currentPath === `/groups/${groupId}/dashboard`
+            active: currentPath === `/groups/${groupId}/namespaces/${namespaceId}/dashboard`
         },
         {
-            href: `/groups/${groupId}/playground`,
+            href: `/groups/${groupId}/namespaces/${namespaceId}/playground`,
             label: "Playground",
-            active: currentPath === `/groups/${groupId}/playground`
+            active: currentPath === `/groups/${groupId}/namespaces/${namespaceId}/playground`
         },
         {
-            href: `/groups/${groupId}/executions`,
+            href: `/groups/${groupId}/namespaces/${namespaceId}/executions`,
             label: "Executions",
-            active: currentPath.startsWith(`/groups/${groupId}/executions`)
+            active: currentPath.startsWith(`/groups/${groupId}/namespaces/${namespaceId}/executions`)
         },
         {
-            href: `/groups/${groupId}/functions`,
+            href: `/groups/${groupId}/namespaces/${namespaceId}/functions`,
             label: "Functions",
-            active: currentPath.startsWith(`/groups/${groupId}/functions`)
+            active: currentPath.startsWith(`/groups/${groupId}/namespaces/${namespaceId}/functions`)
         },
         {
-            href: `/groups/${groupId}/schedules`,
+            href: `/groups/${groupId}/namespaces/${namespaceId}/schedules`,
             label: "Schedules",
-            active: currentPath.startsWith(`/groups/${groupId}/schedules`)
+            active: currentPath.startsWith(`/groups/${groupId}/namespaces/${namespaceId}/schedules`)
         },
         {
-            href: `/groups/${groupId}/webhooks`,
+            href: `/groups/${groupId}/namespaces/${namespaceId}/webhooks`,
             label: "Webhooks",
-            active: currentPath.startsWith(`/groups/${groupId}/webhooks`)
+            active: currentPath.startsWith(`/groups/${groupId}/namespaces/${namespaceId}/webhooks`)
         },
         {
-            href: `/groups/${groupId}/endpoints`,
+            href: `/groups/${groupId}/namespaces/${namespaceId}/endpoints`,
             label: "Endpoints",
-            active: currentPath.startsWith(`/groups/${groupId}/endpoints`)
+            active: currentPath.startsWith(`/groups/${groupId}/namespaces/${namespaceId}/endpoints`)
         },
-        // {
-        //     href: `/groups/${groupId}/triggers`,
-        //     label: "Trigger",
-        //     active: currentPath.startsWith(`/groups/${groupId}/triggers`)
-        // },
         {
             href: "https://docs.fn.guru",
             external: true,

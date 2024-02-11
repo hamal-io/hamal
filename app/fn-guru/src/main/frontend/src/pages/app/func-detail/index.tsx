@@ -6,12 +6,12 @@ import {useParams} from "react-router-dom";
 import Actions from "@/pages/app/func-detail/components/actions.tsx";
 import {useFuncGet} from "@/hook/func.ts";
 import Deploy from "@/pages/app/func-detail/components/deploy.tsx";
-import {GroupContext} from "@/components/app/layout";
+import {GroupLayoutContext} from "@/components/app/layout";
 import GroupFuncSelector from "@/pages/app/func-detail/components/group-func-selector.tsx";
 
 type Props = {}
 const FuncDetailPage: FC<Props> = ({}) => {
-    const group = useContext(GroupContext)
+    const group = useContext(GroupLayoutContext)
     const {funcId} = useParams()
     // const [func, funcLoading, funcError] = useFuncGet(funcId)
     const [getFunc, func, funcLoading, funcError] = useFuncGet()

@@ -9,26 +9,39 @@ type Props = {
     children: ReactNode;
 }
 
-export const GroupContext = createContext<Group | null>(null)
+export const GroupLayoutContext = createContext<
+    {
+        groupId: string;
+        groupName: string;
+        namespaceId: string;
+    } | null
+>(null)
 
 
 const GroupLayout: FC<Props> = ({children}) => {
-    const {groupId} = useParams()
+    const {groupId, namespaceId} = useParams()
 
     const [getGroup, group, loading, error] = useGroupGet()
     useEffect(() => {
         getGroup(groupId)
     }, [groupId]);
 
+    if (loading) {
+        return ("Loading..")
+    }
 
     return (
         <Index>
-            <GroupContext.Provider value={group}>
+            <GroupLayoutContext.Provider value={{
+                groupId: group.id,
+                groupName: group.name,
+                namespaceId: namespaceId
+            }}>
                 <main className="flex-col md:flex">
                     <GroupHeader/>
                     {children}
                 </main>
-            </GroupContext.Provider>
+            </GroupLayoutContext.Provider>
         </Index>
     );
 }
