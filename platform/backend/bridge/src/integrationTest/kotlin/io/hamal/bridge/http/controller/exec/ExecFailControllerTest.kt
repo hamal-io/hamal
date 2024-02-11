@@ -11,7 +11,7 @@ import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiError
 import io.hamal.lib.sdk.bridge.BridgeExecFailRequest
 import io.hamal.lib.sdk.bridge.BridgeExecFailRequested
-import io.hamal.repository.api.StartedExec
+import io.hamal.repository.api.Exec
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.DynamicTest.dynamicTest
@@ -54,7 +54,7 @@ internal class ExecFailControllerTest : BaseExecControllerTest() {
                 correlationId = CorrelationId("__correlation__")
             ),
             invocation = EmptyInvocation
-        ) as StartedExec
+        ) as Exec.Started
 
         val failureResponse = requestFailure(startedExec.id)
         assertThat(failureResponse.statusCode, equalTo(Accepted))
@@ -82,7 +82,7 @@ internal class ExecFailControllerTest : BaseExecControllerTest() {
     }
 
     private fun verifyExecFailed(execId: ExecId) {
-        with(execQueryRepository.get(execId) as io.hamal.repository.api.FailedExec) {
+        with(execQueryRepository.get(execId) as Exec.Failed) {
             assertThat(id, equalTo(execId))
             assertThat(status, equalTo(ExecStatus.Failed))
             assertThat(result, equalTo(ExecResult(HotObject.builder().set("message", "SomeErrorCause").build())))

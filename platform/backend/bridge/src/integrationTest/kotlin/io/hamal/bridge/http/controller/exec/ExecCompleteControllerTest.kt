@@ -14,8 +14,7 @@ import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiError
 import io.hamal.lib.sdk.bridge.BridgeExecCompleteRequest
 import io.hamal.lib.sdk.bridge.BridgeExecCompleteRequested
-import io.hamal.repository.api.CompletedExec
-import io.hamal.repository.api.StartedExec
+import io.hamal.repository.api.Exec
 import io.hamal.repository.api.log.LogConsumerBatchImpl
 import io.hamal.repository.api.log.LogConsumerId
 import org.hamcrest.MatcherAssert.assertThat
@@ -64,7 +63,7 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
                 correlationId = CorrelationId("__correlation__")
             ),
             invocation = EmptyInvocation
-        ) as StartedExec
+        ) as Exec.Started
 
         val completionResponse = requestCompletion(startedExec.id)
         assertThat(completionResponse.statusCode, equalTo(Accepted))
@@ -99,7 +98,7 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
     }
 
     private fun verifyExecCompleted(execId: ExecId) {
-        with(execQueryRepository.get(execId) as CompletedExec) {
+        with(execQueryRepository.get(execId) as Exec.Completed) {
             assertThat(id, equalTo(execId))
             assertThat(status, equalTo(ExecStatus.Completed))
             assertThat(result, equalTo(ExecResult(HotObject.builder().set("hamal", "rocks").build())))
@@ -107,7 +106,7 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
     }
 
     private fun verifyStateSet(execId: ExecId) {
-        val exec = (execQueryRepository.get(execId) as CompletedExec)
+        val exec = (execQueryRepository.get(execId) as Exec.Completed)
         with(stateQueryRepository.get(exec.correlation!!)) {
             assertThat(correlation, equalTo(exec.correlation))
             assertThat(value, equalTo(State(HotObject.builder().set("value", 13.37).build())))

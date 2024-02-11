@@ -3,15 +3,15 @@ package io.hamal.core.request.handler.hook
 import io.hamal.core.adapter.FuncInvokePort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.TriggerType.Hook
+import io.hamal.lib.domain.request.FuncInvokeRequest
 import io.hamal.lib.domain.request.HookInvokeRequested
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.Invocation
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.repository.api.HookQueryRepository
-import io.hamal.repository.api.HookTrigger
+import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerQueryRepository
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
-import io.hamal.lib.domain.request.FuncInvokeRequest
 import org.springframework.stereotype.Component
 
 
@@ -35,7 +35,7 @@ class HookInvokeHandler(
                 groupIds = listOf(hook.groupId),
                 hookIds = listOf(hook.id)
             )
-        ).filterIsInstance<HookTrigger>()
+        ).filterIsInstance<Trigger.Hook>()
 
         triggers.forEach { trigger ->
             invokeFunc(

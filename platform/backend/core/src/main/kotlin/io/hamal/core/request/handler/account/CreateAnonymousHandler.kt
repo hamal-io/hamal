@@ -47,7 +47,7 @@ private fun AccountCreateAnonymousHandler.createGroup(req: AccountCreateAnonymou
         GroupCmdRepository.CreateCmd(
             id = req.cmdId(),
             groupId = req.groupId,
-            name = GroupName("Group ${req.groupId}"),
+            name = GroupName("Group ${req.groupId.value.value.toString(16)}"),
             creatorId = req.accountId
         )
     )

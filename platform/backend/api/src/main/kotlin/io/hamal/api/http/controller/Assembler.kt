@@ -1,7 +1,6 @@
 package io.hamal.api.http.controller
 
 import io.hamal.lib.domain.request.*
-import io.hamal.lib.domain.vo.GroupDefaultNamespaceId
 import io.hamal.lib.sdk.api.*
 import org.springframework.http.ResponseEntity
 
@@ -10,11 +9,11 @@ fun Requested.accepted(): ResponseEntity<ApiRequested> =
 
 // @formatter:off
 fun Requested.toApiRequested(): ApiRequested = when (this) {
-    is AccountCreateRequested -> ApiTokenRequested(id, status, accountId, listOf(groupId), listOf(GroupDefaultNamespaceId(groupId , namespaceId)), token)
-    is AccountCreateAnonymousRequested -> ApiTokenRequested(id, status, accountId, listOf(groupId), listOf(GroupDefaultNamespaceId(groupId , namespaceId)), token)
+    is AccountCreateRequested -> ApiTokenRequested(id, status, accountId, listOf(groupId), token)
+    is AccountCreateAnonymousRequested -> ApiTokenRequested(id, status, accountId, listOf(groupId), token)
     is AccountConvertRequested -> ApiAccountConvertRequested(id, status, accountId, token)
-    is AuthLoginMetaMaskRequested -> ApiTokenRequested(id, status, accountId, groupIds, defaultNamespaceIds, token)
-    is AuthLoginEmailRequested -> ApiTokenRequested(id, status, accountId, groupIds, defaultNamespaceIds, token)
+    is AuthLoginMetaMaskRequested -> ApiTokenRequested(id, status, accountId, groupIds, token)
+    is AuthLoginEmailRequested -> ApiTokenRequested(id, status, accountId, groupIds,  token)
     is BlueprintCreateRequested -> ApiBlueprintCreateRequested(id, status, blueprintId, groupId)
     is BlueprintUpdateRequested -> ApiBlueprintUpdateRequested(id, status, blueprintId)
     is EndpointCreateRequested -> ApiEndpointCreateRequested(id, status, endpointId, groupId, funcId)

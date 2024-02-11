@@ -102,13 +102,13 @@ class TriggerAdapter(
         val trigger = triggerQueryRepository.get(triggerId)
         val func = funcQueryRepository.get(trigger.funcId)
         val namespace = namespaceQueryRepository.get(trigger.namespaceId)
-        val topic = if (trigger is EventTrigger) {
+        val topic = if (trigger is Trigger.Event) {
             topicRepository.get(trigger.topicId)
         } else {
             null
         }
 
-        val hook = if (trigger is HookTrigger) {
+        val hook = if (trigger is Trigger.Hook) {
             hookQueryRepository.get(trigger.hookId)
         } else {
             null
@@ -137,10 +137,10 @@ class TriggerAdapter(
             .associateBy { it.id }
 
         val topics =
-            topicRepository.list(TopicQuery(topicIds = triggers.filterIsInstance<EventTrigger>().map { it.topicId }))
+            topicRepository.list(TopicQuery(topicIds = triggers.filterIsInstance<Trigger.Event>().map { it.topicId }))
                 .associateBy { it.id }
 
-        val hooks = hookQueryRepository.list(triggers.filterIsInstance<HookTrigger>().map { it.hookId })
+        val hooks = hookQueryRepository.list(triggers.filterIsInstance<Trigger.Hook>().map { it.hookId })
             .associateBy { it.id }
 
         return responseHandler(triggers, funcs, namespaces, topics, hooks)

@@ -7,9 +7,10 @@ import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.HookId
 import io.hamal.lib.domain.vo.TriggerId
-import io.hamal.repository.api.*
+import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerCmdRepository.*
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
+import io.hamal.repository.api.TriggerRepository
 import io.hamal.repository.record.trigger.CreateTriggerFromRecords
 import io.hamal.repository.record.trigger.TriggerRecord
 import java.util.concurrent.locks.ReentrantLock
@@ -24,7 +25,7 @@ private object TriggerCurrentProjection {
     fun apply(trigger: Trigger) {
 
         if (trigger.type == TriggerType.Hook) {
-            handleHookTrigger(trigger as HookTrigger)
+            handleHookTrigger(trigger as Trigger.Hook)
         }
 
         val currentTrigger = projection[trigger.id]
@@ -56,7 +57,7 @@ private object TriggerCurrentProjection {
                 if (query.topicIds.isEmpty()) {
                     true
                 } else {
-                    if (it is EventTrigger) {
+                    if (it is Trigger.Event) {
                         query.topicIds.contains(it.topicId)
                     } else {
                         false
@@ -67,7 +68,7 @@ private object TriggerCurrentProjection {
                 if (query.hookIds.isEmpty()) {
                     true
                 } else {
-                    if (it is HookTrigger) {
+                    if (it is Trigger.Hook) {
                         query.hookIds.contains(it.hookId)
                     } else {
                         false
@@ -93,7 +94,7 @@ private object TriggerCurrentProjection {
                     if (query.topicIds.isEmpty()) {
                         true
                     } else {
-                        if (it is EventTrigger) {
+                        if (it is Trigger.Event) {
                             query.topicIds.contains(it.topicId)
                         } else {
                             false
@@ -104,7 +105,7 @@ private object TriggerCurrentProjection {
                     if (query.hookIds.isEmpty()) {
                         true
                     } else {
-                        if (it is HookTrigger) {
+                        if (it is Trigger.Hook) {
                             query.hookIds.contains(it.hookId)
                         } else {
                             false
@@ -122,7 +123,7 @@ private object TriggerCurrentProjection {
         uniqueHookTriggers.clear()
     }
 
-    private fun handleHookTrigger(trigger: HookTrigger) {
+    private fun handleHookTrigger(trigger: Trigger.Hook) {
         val toCheck = HookTriggerUnique(
             trigger.funcId,
             trigger.hookId,
@@ -144,11 +145,11 @@ class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord,
     recordClass = TriggerRecord::class
 ), TriggerRepository {
 
-    override fun create(cmd: CreateFixedRateCmd): FixedRateTrigger {
+    override fun create(cmd: CreateFixedRateCmd): Trigger.FixedRate {
         return lock.withLock {
             val triggerId = cmd.triggerId
             if (commandAlreadyApplied(cmd.id, triggerId)) {
-                versionOf(triggerId, cmd.id) as FixedRateTrigger
+                versionOf(triggerId, cmd.id) as Trigger.FixedRate
             }
             store(
                 TriggerRecord.FixedRateCreated(
@@ -164,15 +165,15 @@ class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord,
                     status = cmd.status
                 )
             )
-            (currentVersion(triggerId) as FixedRateTrigger).also(TriggerCurrentProjection::apply)
+            (currentVersion(triggerId) as Trigger.FixedRate).also(TriggerCurrentProjection::apply)
         }
     }
 
-    override fun create(cmd: CreateEventCmd): EventTrigger {
+    override fun create(cmd: CreateEventCmd): Trigger.Event {
         return lock.withLock {
             val triggerId = cmd.triggerId
             if (commandAlreadyApplied(cmd.id, triggerId)) {
-                versionOf(triggerId, cmd.id) as EventTrigger
+                versionOf(triggerId, cmd.id) as Trigger.Event
             } else {
                 store(
                     TriggerRecord.EventCreated(
@@ -188,17 +189,17 @@ class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord,
                         status = cmd.status
                     )
                 )
-                (currentVersion(triggerId) as EventTrigger).also(TriggerCurrentProjection::apply)
+                (currentVersion(triggerId) as Trigger.Event).also(TriggerCurrentProjection::apply)
             }
         }
     }
 
-    override fun create(cmd: CreateHookCmd): HookTrigger {
+    override fun create(cmd: CreateHookCmd): Trigger.Hook {
 
         return lock.withLock {
             val triggerId = cmd.triggerId
             if (commandAlreadyApplied(cmd.id, triggerId)) {
-                versionOf(triggerId, cmd.id) as HookTrigger
+                versionOf(triggerId, cmd.id) as Trigger.Hook
             } else {
 
                 TriggerCurrentProjection.list(
@@ -206,7 +207,7 @@ class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord,
                         hookIds = listOf(cmd.hookId)
                     )
                 ).firstOrNull()?.let { trigger ->
-                    trigger as HookTrigger
+                    trigger as Trigger.Hook
                     if (trigger.funcId == cmd.funcId && trigger.hookMethod == cmd.hookMethod) {
                         throw IllegalArgumentException("Trigger already exists")
                     }
@@ -227,16 +228,16 @@ class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord,
                         status = cmd.status
                     )
                 )
-                (currentVersion(triggerId) as HookTrigger).also(TriggerCurrentProjection::apply)
+                (currentVersion(triggerId) as Trigger.Hook).also(TriggerCurrentProjection::apply)
             }
         }
     }
 
-    override fun create(cmd: CreateCronCmd): CronTrigger {
+    override fun create(cmd: CreateCronCmd): Trigger.Cron {
         return lock.withLock {
             val triggerId = cmd.triggerId
             if (commandAlreadyApplied(cmd.id, triggerId)) {
-                versionOf(triggerId, cmd.id) as CronTrigger
+                versionOf(triggerId, cmd.id) as Trigger.Cron
             } else {
                 store(
                     TriggerRecord.CronCreated(
@@ -252,7 +253,7 @@ class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord,
                         status = cmd.status
                     )
                 )
-                (currentVersion(triggerId) as CronTrigger).also(TriggerCurrentProjection::apply)
+                (currentVersion(triggerId) as Trigger.Cron).also(TriggerCurrentProjection::apply)
             }
         }
     }

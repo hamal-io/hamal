@@ -32,7 +32,7 @@ class ExecCompleteHandler(
         val cmdId = req.cmdId()
 
         val exec = execQueryRepository.get(req.execId)
-        require(exec is StartedExec) { "Exec not in status Started" }
+        require(exec is Exec.Started) { "Exec not in status Started" }
 
         val namespaceId = exec.namespaceId
 
@@ -52,11 +52,11 @@ class ExecCompleteHandler(
             )
         )
 
-    private fun emitCompletionEvent(cmdId: CmdId, exec: CompletedExec) {
+    private fun emitCompletionEvent(cmdId: CmdId, exec: Exec.Completed) {
         eventEmitter.emit(cmdId, ExecCompletedEvent(exec))
     }
 
-    private fun setState(cmdId: CmdId, exec: CompletedExec) {
+    private fun setState(cmdId: CmdId, exec: Exec.Completed) {
         val correlation = exec.correlation
         if (correlation != null) {
             stateCmdRepository.set(

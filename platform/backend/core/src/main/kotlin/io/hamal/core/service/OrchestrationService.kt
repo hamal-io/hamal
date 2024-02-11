@@ -4,7 +4,8 @@ import io.hamal.core.event.InternalEventEmitter
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.ExecId
-import io.hamal.repository.api.*
+import io.hamal.repository.api.Exec
+import io.hamal.repository.api.ExecCmdRepository
 import io.hamal.repository.api.ExecCmdRepository.ScheduleCmd
 import io.hamal.repository.api.event.ExecScheduledEvent
 import org.springframework.stereotype.Service
@@ -18,7 +19,7 @@ internal class OrchestrationService(
 ) {
 
     internal val lock: ReentrantLock = ReentrantLock()
-    internal val backlog = mutableMapOf<Correlation, MutableList<PlannedExec>>()
+    internal val backlog = mutableMapOf<Correlation, MutableList<Exec.Planned>>()
 
     // all execs in state of scheduled or greater
     internal val execs = mutableMapOf<ExecId, Exec>()
@@ -27,7 +28,7 @@ internal class OrchestrationService(
     internal val inflight = mutableMapOf<Correlation, ExecId>()
 
 
-    fun schedule(cmdId: CmdId, plannedExec: PlannedExec) {
+    fun schedule(cmdId: CmdId, plannedExec: Exec.Planned) {
         lock.withLock {
             val correlation = plannedExec.correlation
 
@@ -49,7 +50,7 @@ internal class OrchestrationService(
         }
     }
 
-    fun completed(cmdId: CmdId, completedExec: CompletedExec) {
+    fun completed(cmdId: CmdId, completedExec: Exec.Completed) {
         lock.withLock {
             if (completedExec.correlation != null) {
                 // remove from inflight
@@ -70,7 +71,7 @@ internal class OrchestrationService(
         }
     }
 
-    fun failed(cmdId: CmdId, failedExec: FailedExec) {
+    fun failed(cmdId: CmdId, failedExec: Exec.Failed) {
         lock.withLock {
             // FIXME retry or permanent fail or maybe do not fail at all...
             // remove from inflight
@@ -92,7 +93,7 @@ internal class OrchestrationService(
         }
     }
 
-    private fun scheduleExec(cmdId: CmdId, plannedExec: PlannedExec) {
+    private fun scheduleExec(cmdId: CmdId, plannedExec: Exec.Planned) {
         val scheduledExec =
             execCmdRepository.schedule(ScheduleCmd(cmdId, plannedExec.id))
                 .also { emitEvent(cmdId, it) }
@@ -100,7 +101,7 @@ internal class OrchestrationService(
         execs[scheduledExec.id] = scheduledExec
     }
 
-    private fun emitEvent(cmdId: CmdId, exec: ScheduledExec) {
+    private fun emitEvent(cmdId: CmdId, exec: Exec.Scheduled) {
         eventEmitter.emit(cmdId, ExecScheduledEvent(exec))
     }
 }
