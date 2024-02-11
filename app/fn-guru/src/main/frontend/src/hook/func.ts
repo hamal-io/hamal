@@ -2,12 +2,12 @@ import {useCallback} from "react";
 import {useGet, usePatch, usePost} from "@/hook/http.ts";
 import {
     Func,
-    FuncCreateSubmitted,
+    FuncCreateRequested,
     FuncDeploymentList,
-    FuncDeploySubmitted,
-    FuncInvokeSubmitted,
+    FuncDeployRequested,
+    FuncInvokeRequested,
     FuncList,
-    FuncUpdateSubmitted
+    FuncUpdateRequested
 } from "@/types";
 import {useAuth} from "@/hook/auth.ts";
 
@@ -28,9 +28,9 @@ export const useFuncList = (): [FuncListAction, FuncList, boolean, Error] => {
 }
 
 type FuncCreateAction = (namespaceId: string, name: string, abortController?: AbortController) => void
-export const useFuncCreate = (): [FuncCreateAction, FuncCreateSubmitted, boolean, Error] => {
+export const useFuncCreate = (): [FuncCreateAction, FuncCreateRequested, boolean, Error] => {
     const [auth] = useAuth()
-    const [post, submission, loading, error] = usePost<FuncCreateSubmitted>()
+    const [post, submission, loading, error] = usePost<FuncCreateRequested>()
     const fn = useCallback(async (namespaceId: string, name: string, abortController?: AbortController) =>
         post(`/v1/namespaces/${namespaceId}/funcs`, {
             name,
@@ -42,9 +42,9 @@ export const useFuncCreate = (): [FuncCreateAction, FuncCreateSubmitted, boolean
 }
 
 type FuncUpdateAction = (funcId: string, name?: string, code?: string, abortController?: AbortController) => void
-export const useFuncUpdate = (): [FuncUpdateAction, FuncUpdateSubmitted, boolean, Error] => {
+export const useFuncUpdate = (): [FuncUpdateAction, FuncUpdateRequested, boolean, Error] => {
     const [auth] = useAuth()
-    const [patch, submission, loading, error] = usePatch<FuncUpdateSubmitted>()
+    const [patch, submission, loading, error] = usePatch<FuncUpdateRequested>()
     const fn = useCallback(async (funcId: string, name?: string, code?: string, abortController?: AbortController) =>
         patch(`/v1/funcs/${funcId}`, {
             name,
@@ -57,9 +57,9 @@ export const useFuncUpdate = (): [FuncUpdateAction, FuncUpdateSubmitted, boolean
 
 
 type FuncInvokeAction = (funcId: string, controller?: AbortController) => void
-export const useFuncInvoke = (): [FuncInvokeAction, FuncInvokeSubmitted, boolean, Error] => {
+export const useFuncInvoke = (): [FuncInvokeAction, FuncInvokeRequested, boolean, Error] => {
     const [auth] = useAuth()
-    const [post, submission, loading, error] = usePost<FuncCreateSubmitted>()
+    const [post, submission, loading, error] = usePost<FuncCreateRequested>()
     const fn = useCallback(async (funcId: string, abortController?: AbortController) =>
         post(`/v1/funcs/${funcId}/invoke`, {
             inputs: {},
@@ -70,9 +70,9 @@ export const useFuncInvoke = (): [FuncInvokeAction, FuncInvokeSubmitted, boolean
 }
 
 type FuncDeployLatestCodeAction = (funcId: string, message: string, abortController?: AbortController) => void
-export const useFuncDeployLatestCode = (): [FuncDeployLatestCodeAction, FuncDeploySubmitted, boolean, Error] => {
+export const useFuncDeployLatestCode = (): [FuncDeployLatestCodeAction, FuncDeployRequested, boolean, Error] => {
     const [auth] = useAuth()
-    const [post, submission, loading, error] = usePost<FuncDeploySubmitted>()
+    const [post, submission, loading, error] = usePost<FuncDeployRequested>()
     const fn = useCallback(async (funcId: string, message: string, abortController?: AbortController) =>
         post(`/v1/funcs/${funcId}/deploy`, {
             message: message

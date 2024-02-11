@@ -1,5 +1,5 @@
 import {useNavigate} from "react-router-dom";
-import React, {FC, useEffect, useState} from "react";
+import React, {FC, useContext, useEffect, useState} from "react";
 
 import * as z from "zod"
 import {zodResolver} from "@hookform/resolvers/zod";
@@ -12,17 +12,17 @@ import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {GroupListItem} from "@/types";
 import {useHookCreate} from "@/hook";
+import {GroupLayoutContext} from "@/components/app/layout";
 
-type Prop = {
-    group: GroupListItem
-}
 
 const formSchema = z.object({
     name: z.string().min(2).max(50),
     // funcId: z.string().min(1, "Function required"),
 })
 
-const Create: FC<Prop> = ({group}) => {
+const Create = () => {
+    const {groupId, groupName, namespaceId} = useContext(GroupLayoutContext)
+
     const [auth, setAuth] = useAuth()
     const navigate = useNavigate()
     const [openDialog, setOpenDialog] = useState<boolean>(false)
@@ -40,7 +40,7 @@ const Create: FC<Prop> = ({group}) => {
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setLoading(true)
         try {
-            createHook(group.id, values.name)
+            createHook(namespaceId, values.name)
         } catch (e) {
             console.error(e)
         } finally {

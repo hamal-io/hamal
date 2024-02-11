@@ -1,5 +1,5 @@
 import React, {createContext, FC, ReactNode, useEffect} from 'react'
-import Authenticated from "@/components/app/authenticated.tsx";
+import Index from "@/components/app/layout/authenticated";
 import {useParams} from "react-router-dom";
 import {useGroupGet} from "@/hook";
 import {Group} from "@/types";
@@ -9,27 +9,40 @@ type Props = {
     children: ReactNode;
 }
 
-export const GroupContext = createContext<Group | null>(null)
+export const GroupLayoutContext = createContext<
+    {
+        groupId: string;
+        groupName: string;
+        namespaceId: string;
+    } | null
+>(null)
 
 
 const GroupLayout: FC<Props> = ({children}) => {
-    const {groupId} = useParams()
+    const {groupId, namespaceId} = useParams()
 
     const [getGroup, group, loading, error] = useGroupGet()
     useEffect(() => {
         getGroup(groupId)
     }, [groupId]);
 
+    if (loading) {
+        return ("Loading..")
+    }
 
     return (
-        <Authenticated>
-            <GroupContext.Provider value={group}>
+        <Index>
+            <GroupLayoutContext.Provider value={{
+                groupId: group.id,
+                groupName: group.name,
+                namespaceId: namespaceId
+            }}>
                 <main className="flex-col md:flex">
                     <GroupHeader/>
                     {children}
                 </main>
-            </GroupContext.Provider>
-        </Authenticated>
+            </GroupLayoutContext.Provider>
+        </Index>
     );
 }
 

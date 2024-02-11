@@ -16,7 +16,7 @@ class InvocationClass(override val value: String) : ValueObjectString()
 
 
 sealed class Invocation {
-    val invocationClass: InvocationClass = InvocationClass(this::class.simpleName!!)
+    val `class`: InvocationClass = InvocationClass(this::class.simpleName!!)
 
     object Adapter : JsonAdapter<Invocation> {
         override fun serialize(
@@ -32,7 +32,7 @@ sealed class Invocation {
             typeOfT: java.lang.reflect.Type,
             context: JsonDeserializationContext
         ): Invocation {
-            val invocationClass = json.asJsonObject.get("invocationClass").asString
+            val invocationClass = json.asJsonObject.get("class").asString
             return context.deserialize(
                 json, (classMapping[invocationClass]
                     ?: throw NotImplementedError("$invocationClass not supported")).java

@@ -1,9 +1,9 @@
 import {ColumnDef} from "@tanstack/react-table"
 
-import {statuses} from "../data/data.tsx"
+import {statuses} from "./data.tsx"
 import {ColumnHeader} from "./column-header.tsx"
 import React from "react";
-import RowActions from "@/pages/app/exec-list/components/list/components/row-actions.tsx";
+import RowActions from "@/pages/app/exec-list/components/row-actions.tsx";
 import {ExecListItem} from "@/types";
 
 export const columns: ColumnDef<ExecListItem>[] = [

@@ -98,6 +98,7 @@ const MetaMaskButton: FC<MetaMaskButtonProps> = ({loading, setLoading}) => {
             console.log("init challenge", challenge)
             const msg = `0x${Buffer.from("test", 'utf8').toString('hex')}`;
             const invoke = async () => {
+                // @ts-ignore
                 const signature = await ethereum.request({
                     method: 'personal_sign',
                     params: [challenge, address],
@@ -174,7 +175,7 @@ const LoginForm = () => {
 
     useEffect(() => {
         if (loginSubmitted != null) {
-            navigate("/groups", {replace: true})
+            navigate(`/groups/${loginSubmitted.groupIds[0]}/namespaces/${loginSubmitted.groupIds[0]}/dashboard`, {replace: true})
             setLoading(false)
         }
     }, [loginSubmitted]);
@@ -245,10 +246,10 @@ const LoginForm = () => {
                     </span>
                 </div>
             </div>
-            <MetaMaskButton
-                loading={isLoading}
-                setLoading={setLoading}
-            />
+            {/*<MetaMaskButton*/}
+            {/*    loading={isLoading}*/}
+            {/*    setLoading={setLoading}*/}
+            {/*/>*/}
         </div>
     )
 }

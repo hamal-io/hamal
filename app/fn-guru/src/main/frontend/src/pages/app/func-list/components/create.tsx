@@ -1,5 +1,5 @@
 import {useNavigate} from "react-router-dom";
-import React, {FC, useEffect, useState} from "react";
+import React, {FC, useContext, useEffect, useState} from "react";
 
 import * as z from "zod"
 import {zodResolver} from "@hookform/resolvers/zod";
@@ -19,17 +19,16 @@ import {Dialog, DialogContent, DialogHeader, DialogTrigger} from "@/components/u
 import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {useFuncCreate} from "@/hook/func.ts";
-import {GroupListItem} from "@/types";
+import {GroupLayoutContext} from "@/components/app/layout";
 
-type Prop = {
-    group: GroupListItem
-}
 
 const formSchema = z.object({
     name: z.string().min(2).max(50),
 })
 
-const Create: FC<Prop> = ({group}) => {
+const Create = () => {
+    const {groupId, namespaceId} = useContext(GroupLayoutContext)
+
     const [auth, setAuth] = useAuth()
     const navigate = useNavigate()
     const [openDialog, setOpenDialog] = useState<boolean>(false)
@@ -50,9 +49,8 @@ const Create: FC<Prop> = ({group}) => {
         setLoading(true)
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
-
         try {
-            createFunc(group.id, values.name)
+            createFunc(namespaceId, values.name)
         } catch (e) {
             console.error(e)
         } finally {
@@ -63,9 +61,8 @@ const Create: FC<Prop> = ({group}) => {
 
     useEffect(() => {
         if (submittedFunc !== null) {
-            navigate(`/groups/${group.id}/functions/${submittedFunc.funcId}`)
+            navigate(`/groups/${groupId}/namespaces/${namespaceId}/functions/${submittedFunc.funcId}`)
             setOpenDialog(false)
-
         }
     }, [submittedFunc, navigate]);
 

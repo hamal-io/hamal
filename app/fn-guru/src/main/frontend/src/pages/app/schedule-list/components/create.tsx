@@ -1,5 +1,5 @@
 import {useNavigate} from "react-router-dom";
-import React, {FC, useEffect, useState} from "react";
+import React, {FC, useContext, useEffect, useState} from "react";
 
 import * as z from "zod"
 import {zodResolver} from "@hookform/resolvers/zod";
@@ -12,16 +12,7 @@ import {Input} from "@/components/ui/input.tsx";
 import {Button, buttonVariants} from "@/components/ui/button.tsx";
 import {useTriggerFixedRateCreate} from "@/hook";
 import FormFuncSelect from "@/components/form/func-select.tsx";
-
-type flowProps = {
-    id: string;
-    name: string;
-}
-
-
-type Prop = {
-    group: flowProps
-}
+import {GroupLayoutContext} from "@/components/app/layout";
 
 const formSchema = z.object({
     name: z.string().min(2).max(50),
@@ -29,7 +20,9 @@ const formSchema = z.object({
     rate: z.number().min(1)
 })
 
-const CreateFixedRate: FC<Prop> = ({group}) => {
+const CreateFixedRate = () => {
+    const {namespaceId} = useContext(GroupLayoutContext)
+
     const [auth, setAuth] = useAuth()
     const navigate = useNavigate()
     const [openDialog, setOpenDialog] = useState<boolean>(false)
@@ -50,7 +43,7 @@ const CreateFixedRate: FC<Prop> = ({group}) => {
         setLoading(true)
         try {
             createTrigger(
-                group.id,
+                namespaceId,
                 values.funcId,
                 values.name,
                 "PT" + values.rate + 'S'
@@ -107,7 +100,7 @@ const CreateFixedRate: FC<Prop> = ({group}) => {
                                 )}
                             />
 
-                            <FormFuncSelect name='funcId' groupId={group.id} form={form}/>
+                            <FormFuncSelect name='funcId' namespaceId={namespaceId} form={form}/>
 
                             <FormField
                                 control={form.control}

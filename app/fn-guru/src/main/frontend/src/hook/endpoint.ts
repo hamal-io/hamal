@@ -1,4 +1,4 @@
-import {EndpointCreateSubmitted, EndpointList} from "@/types";
+import {EndpointCreateRequested, EndpointList} from "@/types";
 import {useAuth} from "@/hook/auth.ts";
 import {useGet, usePost} from "@/hook/http.ts";
 import {useCallback} from "react";
@@ -20,9 +20,9 @@ export type EndpointCreateActionProps = {
 }
 
 type EndpointCreateAction = (props: EndpointCreateActionProps) => void
-export const useEndpointCreate = (): [EndpointCreateAction, EndpointCreateSubmitted, boolean, Error] => {
+export const useEndpointCreate = (): [EndpointCreateAction, EndpointCreateRequested, boolean, Error] => {
     const [auth] = useAuth()
-    const [post, submission, loading, error] = usePost<EndpointCreateSubmitted>()
+    const [post, submission, loading, error] = usePost<EndpointCreateRequested>()
     const fn = useCallback(async ({namespaceId, name, funcId, method, abortController}: EndpointCreateActionProps) =>
         post(`/v1/namespaces/${namespaceId}/endpoints`, {
             name,

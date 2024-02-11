@@ -10,7 +10,6 @@ const OnboardingPage: FC = () => {
     const navigate = useNavigate()
     const [auth] = useAuth()
     const [createAnonymousAccount] = useAccountCreateAnonymous()
-    const [createflow, flow,] = useFlowCreate()
     const [adhoc, adhocSubmitted] = useAdhoc()
     const [code, setCode] = useState<string>('')
 
@@ -35,35 +34,26 @@ const OnboardingPage: FC = () => {
 
     useEffect(() => {
         const abortController = new AbortController()
-
         if (auth != null && auth.type !== 'Unauthorized') {
-            createflow(auth.groupId, `flow-${generateId(10)}`, abortController)
-        }
-        return () => {
-            abortController.abort()
-        }
-    }, [auth, createflow])
-
-    useEffect(() => {
-        const abortController = new AbortController()
-        if (flow != null) {
-            adhoc(flow.flowId, `sys = require_plugin('sys')
-                sys.funcs.create({
-                    name = 'Hello-World',
-                    inputs = {},
-                    code = [[ ${code} ]]
-                })`, abortController)
+            adhoc(auth.groupId, `
+            sys = require_plugin('sys')
+            log = require('log').create({})
+            log.info('Setting up account')
+            sys.funcs.create({
+                name = 'Hello-World',
+                inputs = {},
+                code = [[ ${code} ]]
+            })`, abortController)
         }
         return () => {
             abortController.abort()
         }
 
-    }, [flow, adhoc]);
-
+    }, [auth, adhoc]);
 
     useEffect(() => {
         if (adhocSubmitted != null) {
-            navigate('/groups', {replace: true})
+            navigate(`/groups/${adhocSubmitted.groupId}/namespaces/${adhocSubmitted.namespaceId}/dashboard`, {replace: true})
         }
     }, [adhocSubmitted, navigate]);
 

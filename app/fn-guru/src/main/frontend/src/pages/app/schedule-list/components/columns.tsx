@@ -1,9 +1,9 @@
 import {ColumnDef} from "@tanstack/react-table"
 
-import {types} from "../data/data.tsx"
+import {types} from "./data.tsx"
 import {ColumnHeader} from "./column-header.tsx"
 import React from "react";
-import RowActions from "@/pages/app/schedule-list/components/list/components/row-actions.tsx";
+import RowActions from "@/pages/app/schedule-list/components/row-actions.tsx";
 import {TriggerListItem} from "@/types";
 
 export const columns: ColumnDef<TriggerListItem>[] = [

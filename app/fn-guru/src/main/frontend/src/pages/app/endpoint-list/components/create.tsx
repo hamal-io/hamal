@@ -1,5 +1,5 @@
 import {useNavigate} from "react-router-dom";
-import React, {FC, useEffect, useState} from "react";
+import React, {FC, useContext, useEffect, useState} from "react";
 
 import * as z from "zod"
 import {zodResolver} from "@hookform/resolvers/zod";
@@ -13,17 +13,17 @@ import {Button} from "@/components/ui/button.tsx";
 import {useEndpointCreate} from "@/hook/endpoint.ts";
 import FormFuncSelect from "@/components/form/func-select.tsx";
 import {GroupListItem} from "@/types";
+import {GroupLayoutContext} from "@/components/app/layout";
 
-type Prop = {
-    group: GroupListItem
-}
 
 const formSchema = z.object({
     name: z.string().min(2).max(50),
     funcId: z.string().min(1, "Function required"),
 })
 
-const Create: FC<Prop> = ({group}) => {
+const Create = () => {
+    const {groupId, groupName, namespaceId} = useContext(GroupLayoutContext)
+
     const [auth, setAuth] = useAuth()
     const navigate = useNavigate()
     const [openDialog, setOpenDialog] = useState<boolean>(false)
@@ -43,7 +43,7 @@ const Create: FC<Prop> = ({group}) => {
         setLoading(true)
         try {
             createEndpoint({
-                namespaceId: group.id,
+                namespaceId: namespaceId,
                 name: values.name,
                 funcId: values.funcId,
                 method: "Post"
@@ -94,7 +94,7 @@ const Create: FC<Prop> = ({group}) => {
                                 )}
                             />
 
-                            <FormFuncSelect name='funcId' groupId={group.id} form={form}/>
+                            <FormFuncSelect name='funcId' namespaceId={namespaceId} form={form}/>
 
                             <Button type="submit">
                                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}

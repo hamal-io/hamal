@@ -4,7 +4,7 @@ import LoginInPage from "./pages/landing/login";
 import OnboardingPage from "./pages/landing/onboarding";
 
 // app
-import Authenticated from "@/components/app/authenticated";
+import Index from "@/components/app/layout/authenticated";
 import Dashboard from "./pages/app/dashboard";
 
 import FlowListPage from "./pages/app/flow-list";
@@ -31,60 +31,60 @@ export const router = createBrowserRouter([
     },
     {
         path: "/groups", element:
-            <Authenticated>
+            <Index>
                 <FlowListPage/>
-            </Authenticated>
+            </Index>
     },
     {
-        path: "/groups/:groupId/dashboard", element:
+        path: "/groups/:groupId/namespaces/:namespaceId/dashboard", element:
             <GroupLayout>
                 <Dashboard/>
             </GroupLayout>
     },
     {
-        path: "/groups/:groupId/playground", element:
+        path: "/groups/:groupId/namespaces/:namespaceId/playground", element:
             <GroupLayout>
                 <Playground/>
             </GroupLayout>
     },
     {
-        path: "/groups/:groupId/executions", element:
+        path: "/groups/:groupId/namespaces/:namespaceId/executions", element:
             <GroupLayout>
                 <ExecListPage/>
             </GroupLayout>
     },
     {
-        path: "/groups/:groupId/executions/:execId", element:
+        path: "/groups/:groupId/namespaces/:namespaceId/executions/:execId", element:
             <GroupLayout>
                 <ExecDetailPage/>
             </GroupLayout>
     },
     {
-        path: "/groups/:groupId/functions", element:
+        path: "/groups/:groupId/namespaces/:namespaceId/functions", element:
             <GroupLayout>
                 <FuncListPage/>
             </GroupLayout>
     },
     {
-        path: "/groups/:groupId/functions/:funcId", element:
+        path: "/groups/:groupId/namespaces/:namespaceId/functions/:funcId", element:
             <GroupLayout>
                 <FuncDetailPage/>
             </GroupLayout>
     },
     {
-        path: "/groups/:groupId/webhooks", element:
+        path: "/groups/:groupId/namespaces/:namespaceId/webhooks", element:
             <GroupLayout>
                 <HookListPage/>
             </GroupLayout>
     },
     {
-        path: "/groups/:groupId/endpoints", element:
+        path: "/groups/:groupId/namespaces/:namespaceId/endpoints", element:
             <GroupLayout>
                 <EndpointListPage/>
             </GroupLayout>
     },
     {
-        path: "/groups/:groupId/schedules", element:
+        path: "/groups/:groupId/namespaces/:namespaceId/schedules", element:
             <GroupLayout>
                 <ScheduleListPage/>
             </GroupLayout>

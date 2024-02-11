@@ -1,4 +1,4 @@
-export interface ExecInvokeSubmitted {
+export interface ExecInvokeRequested {
     id: string;
     status: string;
     execId: string;

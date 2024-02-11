@@ -14,7 +14,7 @@ export const FeedbackMoods: FeedbackMood = {
     Angry: {value: 4, label: "Angry", emoji: '😡'}
 };
 
-export interface FeedbackCreateSubmitted {
+export interface FeedbackCreateRequested {
     id: string;
     status: string;
 }
