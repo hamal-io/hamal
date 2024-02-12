@@ -5,7 +5,6 @@ import {useAdhoc} from "@/hook";
 import {PageHeader} from "@/components/page-header.tsx";
 import {useAuth} from "@/hook/auth.ts";
 import {GroupLayoutContext} from "@/components/app/layout";
-import List from "@/pages/app/func-list/components/list.tsx";
 
 export default function PlaygroundPage() {
     const [auth] = useAuth()

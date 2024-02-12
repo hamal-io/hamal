@@ -1,35 +1,26 @@
 package io.hamal.lib.domain.request
 
 import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain._enum.TopicType
 import io.hamal.lib.domain.vo.*
 
 
-interface TopicGroupCreateRequest {
+interface TopicCreateRequest {
     val name: TopicName
+    val type: TopicType
 }
 
-interface TopicPublicCreateRequest {
-    val name: TopicName
-}
-
-data class TopicGroupCreateRequested(
+data class TopicCreateRequested(
     override val id: RequestId,
     override var status: RequestStatus,
     val topicId: TopicId,
     val logTopicId: LogTopicId,
     val groupId: GroupId,
-    val name: TopicName
+    val namespaceId: NamespaceId,
+    val name: TopicName,
+    val type: TopicType
 ) : Requested()
 
-
-data class TopicPublicCreateRequested(
-    override val id: RequestId,
-    override var status: RequestStatus,
-    val topicId: TopicId,
-    val logTopicId: LogTopicId,
-    val groupId: GroupId,
-    val name: TopicName
-) : Requested()
 
 interface TopicAppendEntryRequest {
     val topicId: TopicId

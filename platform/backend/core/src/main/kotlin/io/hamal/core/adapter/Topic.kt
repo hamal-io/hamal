@@ -2,9 +2,13 @@ package io.hamal.core.adapter
 
 import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
-import io.hamal.lib.domain.request.*
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain._enum.TopicType
+import io.hamal.lib.domain.request.TopicAppendEntryRequest
+import io.hamal.lib.domain.request.TopicAppendEventRequested
+import io.hamal.lib.domain.request.TopicCreateRequest
+import io.hamal.lib.domain.request.TopicCreateRequested
 import io.hamal.lib.domain.vo.LogTopicId
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.RequestId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.repository.api.*
@@ -20,19 +24,11 @@ interface TopicAppendEventPort {
 }
 
 interface TopicCreatePort {
-
     operator fun <T : Any> invoke(
-        groupId: GroupId,
-        req: TopicGroupCreateRequest,
-        responseHandler: (TopicGroupCreateRequested) -> T
+        namespaceId: NamespaceId,
+        req: TopicCreateRequest,
+        responseHandler: (TopicCreateRequested) -> T
     ): T
-
-    operator fun <T : Any> invoke(
-        groupId: GroupId,
-        req: TopicPublicCreateRequest,
-        responseHandler: (TopicPublicCreateRequested) -> T
-    ): T
-
 }
 
 interface TopicGetPort {
@@ -63,6 +59,7 @@ class TopicAdapter(
     private val topicRepository: TopicRepository,
     private val generateDomainId: GenerateId,
     private val groupRepository: GroupRepository,
+    private val namespaceRepository: NamespaceRepository,
     private val requestCmdRepository: RequestCmdRepository
 ) : TopicPort {
 
@@ -80,34 +77,23 @@ class TopicAdapter(
     }
 
     override fun <T : Any> invoke(
-        groupId: GroupId,
-        req: TopicGroupCreateRequest,
-        responseHandler: (TopicGroupCreateRequested) -> T
+        namespaceId: NamespaceId,
+        req: TopicCreateRequest,
+        responseHandler: (TopicCreateRequested) -> T
     ): T {
-        groupRepository.get(groupId)
-        return TopicGroupCreateRequested(
+        if (req.type == TopicType.Internal) {
+            throw IllegalArgumentException("Can not create internal topics")
+        }
+        val namespace = namespaceRepository.get(namespaceId)
+        return TopicCreateRequested(
             id = generateDomainId(::RequestId),
             status = Submitted,
             topicId = generateDomainId(::TopicId),
             logTopicId = generateDomainId(::LogTopicId),
-            groupId = groupId,
-            name = req.name
-        ).also(requestCmdRepository::queue).let(responseHandler)
-    }
-
-    override fun <T : Any> invoke(
-        groupId: GroupId,
-        req: TopicPublicCreateRequest,
-        responseHandler: (TopicPublicCreateRequested) -> T
-    ): T {
-        groupRepository.get(groupId)
-        return TopicPublicCreateRequested(
-            id = generateDomainId(::RequestId),
-            status = Submitted,
-            topicId = generateDomainId(::TopicId),
-            logTopicId = generateDomainId(::LogTopicId),
-            groupId = groupId,
-            name = req.name
+            groupId = namespace.groupId,
+            namespaceId = namespace.id,
+            name = req.name,
+            type = req.type
         ).also(requestCmdRepository::queue).let(responseHandler)
     }
 

@@ -23,7 +23,7 @@ const GroupFuncSelector: FC<Props> = ({className, funcId}) => {
         }
     }, [groupId]);
 
-    if (loading) {
+    if (funcList == null || loading) {
         return "Loading..."
     }
 

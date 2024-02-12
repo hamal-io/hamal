@@ -2,10 +2,7 @@ package io.hamal.repository.record.topic
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain._enum.TopicType
-import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.domain.vo.LogTopicId
-import io.hamal.lib.domain.vo.TopicId
-import io.hamal.lib.domain.vo.TopicName
+import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.Topic
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordEntity
@@ -22,43 +19,22 @@ data class TopicEntity(
     var name: TopicName? = null,
     var type: TopicType? = null,
     var logTopicId: LogTopicId? = null,
-
-    var groupId: GroupId? = null
+    var groupId: GroupId? = null,
+    var namespaceId: NamespaceId? = null
 
 ) : RecordEntity<TopicId, TopicRecord, Topic> {
 
     override fun apply(rec: TopicRecord): TopicEntity {
         return when (rec) {
-            is TopicRecord.GroupCreated -> copy(
+            is TopicRecord.Created -> copy(
                 cmdId = rec.cmdId,
                 id = rec.entityId,
                 sequence = rec.sequence(),
                 name = rec.name,
                 groupId = rec.groupId,
+                namespaceId = rec.namespaceId,
                 logTopicId = rec.logTopicId,
-                type = TopicType.Group,
-                recordedAt = rec.recordedAt()
-            )
-
-            is TopicRecord.PublicCreated -> copy(
-                cmdId = rec.cmdId,
-                id = rec.entityId,
-                sequence = rec.sequence(),
-                name = rec.name,
-                groupId = rec.groupId,
-                logTopicId = rec.logTopicId,
-                type = TopicType.Public,
-                recordedAt = rec.recordedAt()
-            )
-
-            is TopicRecord.InternalCreated -> copy(
-                cmdId = rec.cmdId,
-                id = rec.entityId,
-                sequence = rec.sequence(),
-                name = rec.name,
-                groupId = rec.groupId,
-                logTopicId = rec.logTopicId,
-                type = TopicType.Internal,
+                type = rec.type,
                 recordedAt = rec.recordedAt()
             )
         }
@@ -73,6 +49,17 @@ data class TopicEntity(
                 logTopicId = logTopicId!!,
                 updatedAt = recordedAt.toUpdatedAt(),
                 groupId = groupId!!,
+                namespaceId = namespaceId!!
+            )
+
+            TopicType.Namespace -> Topic.Namespace(
+                cmdId = cmdId,
+                id = id,
+                name = name!!,
+                logTopicId = logTopicId!!,
+                updatedAt = recordedAt.toUpdatedAt(),
+                groupId = groupId!!,
+                namespaceId = namespaceId!!
             )
 
             TopicType.Group -> Topic.Group(
@@ -81,7 +68,8 @@ data class TopicEntity(
                 name = name!!,
                 logTopicId = logTopicId!!,
                 updatedAt = recordedAt.toUpdatedAt(),
-                groupId = groupId!!
+                groupId = groupId!!,
+                namespaceId = namespaceId!!
             )
 
             TopicType.Public -> Topic.Public(
@@ -90,7 +78,8 @@ data class TopicEntity(
                 name = name!!,
                 logTopicId = logTopicId!!,
                 updatedAt = recordedAt.toUpdatedAt(),
-                groupId = groupId!!
+                groupId = groupId!!,
+                namespaceId = namespaceId!!
             )
 
         }
@@ -101,11 +90,7 @@ fun List<TopicRecord>.createEntity(): TopicEntity {
     check(isNotEmpty()) { "At least one record is required" }
     val firstRecord: TopicRecord = first()
 
-    check(
-        firstRecord is TopicRecord.GroupCreated ||
-                firstRecord is TopicRecord.InternalCreated ||
-                firstRecord is TopicRecord.PublicCreated
-    )
+    check(firstRecord is TopicRecord.Created)
 
     var result = TopicEntity(
         id = firstRecord.entityId,

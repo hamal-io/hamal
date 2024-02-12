@@ -22,7 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired
 internal class TopicAppendHandlerTest : BaseReqHandlerTest() {
 
     @Test
-    fun `Appends entry to topic`() {
+    fun `Appends event to topic`() {
         val topic = createTopic(TopicId(4444), TopicName("topic"))
 
         testInstance(
@@ -47,7 +47,7 @@ internal class TopicAppendHandlerTest : BaseReqHandlerTest() {
     }
 
     @Test
-    fun `Tries to append entry to topic which does not exists`() {
+    fun `Tries to append event to topic which does not exists`() {
         val exception = assertThrows<NoSuchElementException> {
             testInstance(
                 TopicAppendEventRequested(

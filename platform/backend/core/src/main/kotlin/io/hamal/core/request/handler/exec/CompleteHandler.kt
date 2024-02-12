@@ -6,10 +6,10 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain.State
+import io.hamal.lib.domain._enum.TopicType
 import io.hamal.lib.domain.request.ExecCompleteRequested
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.*
-import io.hamal.repository.api.TopicCmdRepository.TopicGroupCreateCmd
 import io.hamal.repository.api.event.ExecCompletedEvent
 import io.hamal.repository.api.log.LogBrokerRepository
 import io.hamal.repository.api.log.LogTopicAppenderImpl
@@ -72,13 +72,15 @@ class ExecCompleteHandler(
         events.forEach { evt ->
             val topicName = evt.topicName
             val namespace = namespaceQueryRepository.get(namespaceId)
-            val topic = topicRepository.findGroupTopic(namespace.groupId, topicName) ?: topicRepository.create(
-                TopicGroupCreateCmd(
+            val topic = topicRepository.findTopic(namespace.id, topicName) ?: topicRepository.create(
+                TopicCmdRepository.TopicCreateCmd(
                     id = cmdId,
                     topicId = generateId(::TopicId),
                     name = topicName,
                     groupId = namespace.groupId,
-                    logTopicId = generateId(::LogTopicId)
+                    namespaceId = namespace.id,
+                    logTopicId = generateId(::LogTopicId),
+                    type = TopicType.Namespace
                 )
             )
 

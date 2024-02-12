@@ -122,7 +122,7 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
     }
 
     private fun verifyEventAppended() {
-        val topic = topicQueryRepository.getGroupTopic(testGroup.id, TopicName("test-completion"))
+        val topic = topicQueryRepository.getTopic(testNamespace.id, TopicName("test-completion"))
 
         LogConsumerBatchImpl(
             consumerId = LogConsumerId(123),

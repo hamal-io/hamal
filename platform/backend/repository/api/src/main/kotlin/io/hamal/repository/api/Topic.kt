@@ -15,6 +15,7 @@ sealed class Topic : DomainObject<TopicId> {
     abstract val name: TopicName
     abstract val logTopicId: LogTopicId
     abstract val groupId: GroupId
+    abstract val namespaceId: NamespaceId
 
     abstract val type: TopicType
 
@@ -38,6 +39,7 @@ sealed class Topic : DomainObject<TopicId> {
 
         private val classMapping = mapOf(
             TopicType.Internal.name to Internal::class,
+            TopicType.Namespace.name to Namespace::class,
             TopicType.Group.name to Group::class,
             TopicType.Public.name to Public::class
         )
@@ -52,13 +54,29 @@ sealed class Topic : DomainObject<TopicId> {
         override val name: TopicName,
         override val logTopicId: LogTopicId,
         override val updatedAt: UpdatedAt,
-        override val groupId: GroupId
+        override val groupId: GroupId,
+        override val namespaceId: NamespaceId
     ) : Topic() {
         override val type: TopicType = TopicType.Internal
     }
 
     /**
-     * Topic which is only available within the same group
+     * Topic which is only visible within the same namespace
+     */
+    data class Namespace(
+        override val cmdId: CmdId,
+        override val id: TopicId,
+        override val name: TopicName,
+        override val logTopicId: LogTopicId,
+        override val updatedAt: UpdatedAt,
+        override val groupId: GroupId,
+        override val namespaceId: NamespaceId
+    ) : Topic() {
+        override val type: TopicType = TopicType.Namespace
+    }
+
+    /**
+     * Topic which is only visible within the same group
      */
     data class Group(
         override val cmdId: CmdId,
@@ -66,7 +84,8 @@ sealed class Topic : DomainObject<TopicId> {
         override val name: TopicName,
         override val logTopicId: LogTopicId,
         override val updatedAt: UpdatedAt,
-        override val groupId: GroupId
+        override val groupId: GroupId,
+        override val namespaceId: NamespaceId
     ) : Topic() {
         override val type: TopicType = TopicType.Group
     }
@@ -81,7 +100,8 @@ sealed class Topic : DomainObject<TopicId> {
         override val name: TopicName,
         override val logTopicId: LogTopicId,
         override val updatedAt: UpdatedAt,
-        override val groupId: GroupId
+        override val groupId: GroupId,
+        override val namespaceId: NamespaceId
     ) : Topic() {
         override val type: TopicType = TopicType.Public
     }
@@ -94,35 +114,17 @@ data class TopicEvent(
 
 interface TopicCmdRepository : CmdRepository {
 
-    fun create(cmd: TopicGroupCreateCmd): Topic.Group
+    fun create(cmd: TopicCreateCmd): Topic
 
-    fun create(cmd: TopicPublicCreateCmd): Topic.Public
-
-    fun create(cmd: TopicInternalCreateCmd): Topic.Internal
-
-    data class TopicGroupCreateCmd(
+    data class TopicCreateCmd(
         val id: CmdId,
         val topicId: TopicId,
         val name: TopicName,
         val groupId: GroupId,
-        val logTopicId: LogTopicId
+        val namespaceId: NamespaceId,
+        val logTopicId: LogTopicId,
+        val type: TopicType
     )
-
-    data class TopicInternalCreateCmd(
-        val id: CmdId,
-        val topicId: TopicId,
-        val name: TopicName,
-        val logTopicId: LogTopicId
-    )
-
-    data class TopicPublicCreateCmd(
-        val id: CmdId,
-        val topicId: TopicId,
-        val name: TopicName,
-        val groupId: GroupId,
-        val logTopicId: LogTopicId
-    )
-
 }
 
 
@@ -130,10 +132,10 @@ interface TopicQueryRepository {
     fun find(topicId: TopicId): Topic?
     fun get(topicId: TopicId) = find(topicId) ?: throw NoSuchElementException("Topic not found")
 
-    fun getGroupTopic(groupId: GroupId, topicName: TopicName): Topic =
-        findGroupTopic(groupId, topicName) ?: throw NoSuchElementException("Topic not found")
+    fun getTopic(namespaceId: NamespaceId, topicName: TopicName): Topic =
+        findTopic(namespaceId, topicName) ?: throw NoSuchElementException("Topic not found")
 
-    fun findGroupTopic(groupId: GroupId, topicName: TopicName): Topic?
+    fun findTopic(namespaceId: NamespaceId, topicName: TopicName): Topic?
 
     fun list(query: TopicQuery): List<Topic>
     fun count(query: TopicQuery): Count
@@ -147,7 +149,8 @@ interface TopicQueryRepository {
         var limit: Limit = Limit(1),
         var topicIds: List<TopicId> = listOf(),
         var names: List<TopicName> = listOf(),
-        var groupIds: List<GroupId> = listOf()
+        var groupIds: List<GroupId> = listOf(),
+        var namespaceIds: List<NamespaceId> = listOf()
     )
 
     data class TopicEventQuery(

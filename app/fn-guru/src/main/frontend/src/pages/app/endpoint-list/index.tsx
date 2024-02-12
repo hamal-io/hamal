@@ -27,7 +27,7 @@ const EndpointListPage: FC<Props> = ({}) => {
     }, [namespaceId]);
 
     if (endpointsError || triggerError) return `Error`
-    if (endpointsLoading || triggerLoading) return "Loading..."
+    if (endpointList == null || triggerList == null || endpointsLoading || triggerLoading) return "Loading..."
 
     return (
         <div className="pt-2 px-2">

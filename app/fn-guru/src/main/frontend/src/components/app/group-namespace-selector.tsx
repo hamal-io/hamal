@@ -23,7 +23,7 @@ const GroupNamespaceSelector: FC<Props> = ({className, groupId, namespaceId}) =>
         }
     }, [groupId]);
 
-    if (loading) {
+    if (namespaceList == null || loading) {
         return "Loading..."
     }
 

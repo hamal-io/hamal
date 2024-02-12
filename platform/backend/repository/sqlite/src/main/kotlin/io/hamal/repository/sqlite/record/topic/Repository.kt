@@ -1,12 +1,11 @@
 package io.hamal.repository.sqlite.record.topic
 
 import io.hamal.lib.common.domain.Count
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.repository.api.Topic
-import io.hamal.repository.api.TopicCmdRepository
-import io.hamal.repository.api.TopicCmdRepository.TopicGroupCreateCmd
+import io.hamal.repository.api.TopicCmdRepository.TopicCreateCmd
 import io.hamal.repository.api.TopicEvent
 import io.hamal.repository.api.TopicQueryRepository.TopicEventQuery
 import io.hamal.repository.api.TopicQueryRepository.TopicQuery
@@ -29,86 +28,37 @@ class TopicSqliteRepository(
     projections = listOf(ProjectionCurrent, ProjectionUniqueName)
 ), TopicRepository {
 
-    override fun create(cmd: TopicGroupCreateCmd): Topic.Group {
+    override fun create(cmd: TopicCreateCmd): Topic {
         val topicId = cmd.topicId
         val cmdId = cmd.id
         return tx {
             if (commandAlreadyApplied(cmdId, topicId)) {
-                versionOf(topicId, cmdId) as Topic.Group
+                versionOf(topicId, cmdId)
             } else {
                 store(
-                    TopicRecord.GroupCreated(
+                    TopicRecord.Created(
                         cmdId = cmd.id,
                         entityId = topicId,
                         groupId = cmd.groupId,
+                        namespaceId = cmd.namespaceId,
                         logTopicId = cmd.logTopicId,
                         name = cmd.name,
+                        type = cmd.type
                     )
                 )
 
-                (currentVersion(topicId) as Topic.Group)
+                currentVersion(topicId)
                     .also { logBrokerRepository.create(cmd.id, LogTopicToCreate(cmd.logTopicId)) }
                     .also { ProjectionCurrent.upsert(this, it) }
                     .also { ProjectionUniqueName.upsert(this, it) }
             }
         }
     }
-
-    override fun create(cmd: TopicCmdRepository.TopicPublicCreateCmd): Topic.Public {
-        val topicId = cmd.topicId
-        val cmdId = cmd.id
-        return tx {
-            if (commandAlreadyApplied(cmdId, topicId)) {
-                versionOf(topicId, cmdId) as Topic.Public
-            } else {
-                store(
-                    TopicRecord.PublicCreated(
-                        cmdId = cmd.id,
-                        entityId = topicId,
-                        groupId = cmd.groupId,
-                        logTopicId = cmd.logTopicId,
-                        name = cmd.name,
-                    )
-                )
-
-                (currentVersion(topicId) as Topic.Public)
-                    .also { logBrokerRepository.create(cmd.id, LogTopicToCreate(cmd.logTopicId)) }
-                    .also { ProjectionCurrent.upsert(this, it) }
-                    .also { ProjectionUniqueName.upsert(this, it) }
-            }
-        }
-    }
-
-    override fun create(cmd: TopicCmdRepository.TopicInternalCreateCmd): Topic.Internal {
-        val topicId = cmd.topicId
-        val cmdId = cmd.id
-        return tx {
-            if (commandAlreadyApplied(cmdId, topicId)) {
-                versionOf(topicId, cmdId) as Topic.Internal
-            } else {
-                store(
-                    TopicRecord.InternalCreated(
-                        cmdId = cmd.id,
-                        entityId = topicId,
-                        logTopicId = cmd.logTopicId,
-                        name = cmd.name,
-                        groupId = GroupId.root
-                    )
-                )
-
-                (currentVersion(topicId) as Topic.Internal)
-                    .also { logBrokerRepository.create(cmd.id, LogTopicToCreate(cmd.logTopicId)) }
-                    .also { ProjectionCurrent.upsert(this, it) }
-                    .also { ProjectionUniqueName.upsert(this, it) }
-            }
-        }
-    }
-
 
     override fun find(topicId: TopicId): Topic? = ProjectionCurrent.find(connection, topicId)
 
-    override fun findGroupTopic(groupId: GroupId, topicName: TopicName): Topic? =
-        ProjectionCurrent.find(connection, groupId, topicName)
+    override fun findTopic(namespaceId: NamespaceId, topicName: TopicName): Topic? =
+        ProjectionCurrent.find(connection, namespaceId, topicName)
 
     override fun list(query: TopicQuery): List<Topic> = ProjectionCurrent.list(connection, query)
 

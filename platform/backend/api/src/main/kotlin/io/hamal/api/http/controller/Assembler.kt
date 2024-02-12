@@ -30,8 +30,7 @@ fun Requested.toApiRequested(): ApiRequested = when (this) {
     is NamespaceUpdateRequested -> ApiNamespaceUpdateRequested(id, status, namespaceId)
     is StateSetRequested -> ApiStateSetRequested(id, status)
     is TopicAppendEventRequested -> ApiTopicAppendRequested(id, status, topicId)
-    is TopicGroupCreateRequested -> ApiTopicGroupCreateRequested(id, status, topicId, groupId)
-    is TopicPublicCreateRequested -> ApiTopicPublicCreateRequested(id, status, topicId, groupId)
+    is TopicCreateRequested -> ApiTopicCreateRequested(id, status, topicId, groupId, namespaceId, type)
     is TriggerCreateRequested -> ApiTriggerCreateRequested(id, status, triggerId, groupId, namespaceId)
     is TriggerStatusRequested -> ApiTriggerStatusRequested(id, status, triggerId, triggerStatus)
 

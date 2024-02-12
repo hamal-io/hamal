@@ -14,8 +14,18 @@ import org.junit.jupiter.api.Test
 internal class TopicGetControllerTest : TopicBaseControllerTest() {
 
     @Test
+    fun `Gets namespace topic`() {
+        val topicId = awaitCompleted(createTopic(TopicName("topics_one"), TopicType.Namespace)).topicId
+        with(getTopic(topicId)) {
+            assertThat(id, equalTo(topicId))
+            assertThat(name, equalTo(TopicName("topics_one")))
+            assertThat(type, equalTo(TopicType.Namespace))
+        }
+    }
+
+    @Test
     fun `Gets group topic`() {
-        val topicId = awaitCompleted(createGroupTopic(TopicName("topics_one"))).topicId
+        val topicId = awaitCompleted(createTopic(TopicName("topics_one"), TopicType.Group)).topicId
         with(getTopic(topicId)) {
             assertThat(id, equalTo(topicId))
             assertThat(name, equalTo(TopicName("topics_one")))
@@ -25,7 +35,7 @@ internal class TopicGetControllerTest : TopicBaseControllerTest() {
 
     @Test
     fun `Gets public topic`() {
-        val topicId = awaitCompleted(createPublicTopic(TopicName("topics_one"))).topicId
+        val topicId = awaitCompleted(createTopic(TopicName("topics_one"), TopicType.Public)).topicId
 
         with(getTopic(topicId)) {
             assertThat(id, equalTo(topicId))

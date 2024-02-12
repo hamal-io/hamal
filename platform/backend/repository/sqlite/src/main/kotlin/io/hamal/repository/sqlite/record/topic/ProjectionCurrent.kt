@@ -1,7 +1,7 @@
 package io.hamal.repository.sqlite.record.topic
 
 import io.hamal.lib.common.domain.Count
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.sqlite.Connection
@@ -33,18 +33,18 @@ internal object ProjectionCurrent : ProjectionSqlite<TopicId, TopicRecord, Topic
         }
     }
 
-    fun find(connection: Connection, groupId: GroupId, topicName: TopicName): Topic? {
+    fun find(connection: Connection, namespaceId: NamespaceId, topicName: TopicName): Topic? {
         return connection.executeQueryOne(
             """
             SELECT 
                 data
              FROM
                 current
-            WHERE group_id = :groupId and name = :topicName
+            WHERE namespace_id = :namespaceId and name = :topicName
         """.trimIndent()
         ) {
             query {
-                set("groupId", groupId)
+                set("namespaceId", namespaceId)
                 set("topicName", topicName)
             }
             map { rs ->
@@ -67,6 +67,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TopicId, TopicRecord, Topic
                 id < :afterId
                 ${query.ids()}
                 ${query.groupIds()}
+                ${query.namespaceIds()}
                 ${query.types()}
                 ${query.names()}
             ORDER BY id DESC
@@ -98,6 +99,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TopicId, TopicRecord, Topic
                 id < :afterId
                 ${query.ids()}
                 ${query.groupIds()}
+                ${query.namespaceIds()}
                 ${query.types()}
                 ${query.names()}
         """.trimIndent()
@@ -116,13 +118,14 @@ internal object ProjectionCurrent : ProjectionSqlite<TopicId, TopicRecord, Topic
         tx.execute(
             """
                 INSERT OR REPLACE INTO current
-                    (id, group_id, type, name, data) 
+                    (id, group_id, namespace_id, type, name, data) 
                 VALUES
-                    (:id, :groupId, :type, :name, :data)
+                    (:id, :groupId, :namespaceId, :type, :name, :data)
             """.trimIndent()
         ) {
             set("id", obj.id)
             set("groupId", obj.groupId)
+            set("namespaceId", obj.namespaceId)
             set("type", obj.type.value)
             set("name", obj.name)
             set("data", json.serializeAndCompress(obj))
@@ -135,6 +138,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TopicId, TopicRecord, Topic
             CREATE TABLE IF NOT EXISTS current (
                  id             INTEGER NOT NULL,
                  group_id       INTEGER NOT NULL,
+                 namespace_id   INTEGER NOT NULL,
                  type           INTEGER NOT NULL,
                  name           VARCHAR(255) NOT NULL,
                  data           BLOB NOT NULL,
@@ -171,6 +175,15 @@ internal object ProjectionCurrent : ProjectionSqlite<TopicId, TopicRecord, Topic
             "AND group_id IN (${groupIds.joinToString(",") { "${it.value.value}" }})"
         }
     }
+
+    private fun TopicQuery.namespaceIds(): String {
+        return if (namespaceIds.isEmpty()) {
+            ""
+        } else {
+            "AND namespace_id IN (${namespaceIds.joinToString(",") { "${it.value.value}" }})"
+        }
+    }
+
 
     private fun TopicQuery.names(): String {
         return if (names.isEmpty()) {

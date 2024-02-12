@@ -5,8 +5,7 @@ import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.Topic
-import io.hamal.repository.api.TopicCmdRepository
-import io.hamal.repository.api.TopicCmdRepository.TopicGroupCreateCmd
+import io.hamal.repository.api.TopicCmdRepository.TopicCreateCmd
 import io.hamal.repository.api.TopicEvent
 import io.hamal.repository.api.TopicQueryRepository.TopicEventQuery
 import io.hamal.repository.api.TopicQueryRepository.TopicQuery
@@ -26,9 +25,9 @@ private object TopicCurrentProjection {
         val currentTopic = projection[topic.id]
         projection.remove(topic.id)
 
-        val topicsInGroup = projection.values.filter { it.groupId == topic.groupId }
+        val topicsInNamespace = projection.values.filter { it.namespaceId == topic.namespaceId }
 
-        if (topicsInGroup.any { it.name == topic.name }) {
+        if (topicsInNamespace.any { it.name == topic.name }) {
             if (currentTopic != null) {
                 projection[currentTopic.id] = currentTopic
             }
@@ -40,40 +39,26 @@ private object TopicCurrentProjection {
 
     fun find(topicId: TopicId): Topic? = projection[topicId]
 
-    fun find(groupId: GroupId, topicName: TopicName): Topic? = projection.values.find {
-        it.groupId == groupId && it.name == topicName
+    fun find(namespaceId: NamespaceId, topicName: TopicName): Topic? = projection.values.find {
+        it.namespaceId == namespaceId && it.name == topicName
     }
 
     fun list(query: TopicQuery): List<Topic> {
         return projection.filter { query.topicIds.isEmpty() || it.key in query.topicIds }.map { it.value }.reversed()
             .asSequence().filter { if (query.names.isEmpty()) true else query.names.contains(it.name) }
-            .filter { if (query.types.isEmpty()) true else query.types.contains(it.type) }.filter {
-                if (query.groupIds.isEmpty()) {
-                    true
-                } else {
-                    if (it is Topic.Group) {
-                        query.groupIds.contains(it.groupId)
-                    } else {
-                        false
-                    }
-                }
-            }.dropWhile { it.id >= query.afterId }.take(query.limit.value).toList()
+            .filter { if (query.types.isEmpty()) true else query.types.contains(it.type) }
+            .filter { if (query.groupIds.isEmpty()) { true } else { query.groupIds.contains(it.groupId) } }
+            .filter { if (query.namespaceIds.isEmpty()) { true } else { query.namespaceIds.contains(it.namespaceId) } }
+            .dropWhile { it.id >= query.afterId }.take(query.limit.value).toList()
     }
 
     fun count(query: TopicQuery): Count {
         return Count(projection.filter { query.topicIds.isEmpty() || it.key in query.topicIds }.map { it.value }
             .reversed().asSequence().filter { if (query.names.isEmpty()) true else query.names.contains(it.name) }
-            .filter { if (query.types.isEmpty()) true else query.types.contains(it.type) }.filter {
-                if (query.groupIds.isEmpty()) {
-                    true
-                } else {
-                    if (it is Topic.Group) {
-                        query.groupIds.contains(it.groupId)
-                    } else {
-                        false
-                    }
-                }
-            }.dropWhile { it.id >= query.afterId }.count())
+            .filter { if (query.types.isEmpty()) true else query.types.contains(it.type) }
+            .filter { if (query.groupIds.isEmpty()) { true } else { query.groupIds.contains(it.groupId) } }
+            .filter { if (query.namespaceIds.isEmpty()) { true } else { query.namespaceIds.contains(it.namespaceId) } }
+            .dropWhile { it.id >= query.afterId }.count())
     }
 
     fun clear() {
@@ -90,64 +75,24 @@ class TopicMemoryRepository(
     recordClass = TopicRecord::class
 ), TopicRepository {
 
-    override fun create(cmd: TopicGroupCreateCmd): Topic.Group {
+    override fun create(cmd: TopicCreateCmd): Topic {
         return lock.withLock {
             val topicId = cmd.topicId
             if (commandAlreadyApplied(cmd.id, topicId)) {
-                versionOf(topicId, cmd.id) as Topic.Group
+                versionOf(topicId, cmd.id)
             }
             store(
-                TopicRecord.GroupCreated(
+                TopicRecord.Created(
                     cmdId = cmd.id,
                     entityId = topicId,
                     groupId = cmd.groupId,
+                    namespaceId = cmd.namespaceId,
                     logTopicId = cmd.logTopicId,
                     name = cmd.name,
+                    type = cmd.type
                 )
             )
-            (currentVersion(topicId) as Topic.Group).also(TopicCurrentProjection::apply).also { _ ->
-                logBrokerRepository.create(cmd.id, LogTopicToCreate(cmd.logTopicId))
-            }
-        }
-    }
-
-    override fun create(cmd: TopicCmdRepository.TopicPublicCreateCmd): Topic.Public {
-        return lock.withLock {
-            val topicId = cmd.topicId
-            if (commandAlreadyApplied(cmd.id, topicId)) {
-                versionOf(topicId, cmd.id) as Topic.Public
-            }
-            store(
-                TopicRecord.PublicCreated(
-                    cmdId = cmd.id,
-                    entityId = topicId,
-                    groupId = cmd.groupId,
-                    logTopicId = cmd.logTopicId,
-                    name = cmd.name,
-                )
-            )
-            (currentVersion(topicId) as Topic.Public).also(TopicCurrentProjection::apply).also { _ ->
-                logBrokerRepository.create(cmd.id, LogTopicToCreate(cmd.logTopicId))
-            }
-        }
-    }
-
-    override fun create(cmd: TopicCmdRepository.TopicInternalCreateCmd): Topic.Internal {
-        return lock.withLock {
-            val topicId = cmd.topicId
-            if (commandAlreadyApplied(cmd.id, topicId)) {
-                versionOf(topicId, cmd.id) as Topic.Internal
-            }
-            store(
-                TopicRecord.InternalCreated(
-                    cmdId = cmd.id,
-                    entityId = topicId,
-                    logTopicId = cmd.logTopicId,
-                    name = cmd.name,
-                    groupId = GroupId.root
-                )
-            )
-            (currentVersion(topicId) as Topic.Internal).also(TopicCurrentProjection::apply).also { _ ->
+            currentVersion(topicId).also(TopicCurrentProjection::apply).also { _ ->
                 logBrokerRepository.create(cmd.id, LogTopicToCreate(cmd.logTopicId))
             }
         }
@@ -157,8 +102,8 @@ class TopicMemoryRepository(
 
     override fun find(topicId: TopicId): Topic? = lock.withLock { TopicCurrentProjection.find(topicId) }
 
-    override fun findGroupTopic(groupId: GroupId, topicName: TopicName): Topic? = lock.withLock {
-        TopicCurrentProjection.find(groupId, topicName)
+    override fun findTopic(namespaceId: NamespaceId, topicName: TopicName): Topic? = lock.withLock {
+        TopicCurrentProjection.find(namespaceId, topicName)
     }
 
     override fun list(query: TopicQuery): List<Topic> =

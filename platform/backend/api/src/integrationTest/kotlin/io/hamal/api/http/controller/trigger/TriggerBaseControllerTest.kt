@@ -1,6 +1,7 @@
 package io.hamal.api.http.controller.trigger
 
 import io.hamal.api.http.controller.BaseControllerTest
+import io.hamal.lib.domain._enum.TopicType
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpStatusCode.Accepted
@@ -31,21 +32,19 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
         return createTopicResponse.result(ApiFuncCreateRequested::class)
     }
 
-    fun createTopic(topicName: TopicName): ApiTopicGroupCreateRequested {
-        val createTopicResponse = httpTemplate.post("/v1/groups/{groupId}/topics")
-            .path("groupId", testGroup.id)
-            .body(ApiTopicGroupCreateRequest(topicName))
+    fun createTopic(topicName: TopicName): ApiTopicCreateRequested {
+        val createTopicResponse = httpTemplate.post("/v1/namespaces/1/topics")
+            .body(ApiTopicCreateRequest(topicName, TopicType.Namespace))
             .execute()
 
         assertThat(createTopicResponse.statusCode, equalTo(Accepted))
         require(createTopicResponse is HttpSuccessResponse) { "request was not successful" }
 
-        return createTopicResponse.result(ApiTopicGroupCreateRequested::class)
+        return createTopicResponse.result(ApiTopicCreateRequested::class)
     }
 
     fun createHook(hookName: HookName): ApiHookCreateRequested {
         val createHookResponse = httpTemplate.post("/v1/namespaces/1/hooks")
-            .path("groupId", testGroup.id)
             .body(ApiHookCreateRequest(hookName))
             .execute()
 

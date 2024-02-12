@@ -20,7 +20,7 @@ const NamespaceListPage: React.FC = () => {
         }
     }, [groupId]);
 
-    if (isLoading) return "Loading..."
+    if (namespaceList == null || isLoading) return "Loading..."
     if (error != null) return "Error -"
 
     return (

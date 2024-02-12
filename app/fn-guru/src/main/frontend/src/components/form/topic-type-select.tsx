@@ -1,52 +1,35 @@
-import {useFuncList} from "@/hook";
-import React, {useEffect} from "react";
+import React from "react";
 import {FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
 import {Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select.tsx";
 
-const FormFuncSelect = ({namespaceId, name, form}) => {
-    const [listFuncs, funcList, loading] = useFuncList()
-
-    // const [funcs, loading] = useApiFuncList(flowId)
-
-
-    useEffect(() => {
-        if (namespaceId) {
-            listFuncs(namespaceId)
-        }
-    }, [namespaceId]);
-
-    if (funcList == null || loading || !form) {
-        return "Loading..."
-    }
-
+const FormTopicTypeSelect = ({name, form}) => {
     return (
-
         <FormField
             control={form.control}
             name={name}
             render={({field}) => (
                 <FormItem>
-                    <FormLabel>Function</FormLabel>
+                    <FormLabel>Topic Type</FormLabel>
                     <div className="relative w-max">
                         <Select
                             onValueChange={field.onChange}
                         >
                             <FormControl>
                                 <SelectTrigger className="w-[280px]">
-                                    <SelectValue placeholder="Select a function"/>
+                                    <SelectValue placeholder="Select topic visibility"/>
                                 </SelectTrigger>
                             </FormControl>
                             <SelectContent>
                                 <SelectGroup>
-                                    {funcList.funcs.map(func =>
-                                        <SelectItem key={func.id} value={func.id}> {func.name} </SelectItem>
-                                    )}
+                                    <SelectItem value={'Namespace'}> Namespace </SelectItem>
+                                    <SelectItem value={'Group'}> Group </SelectItem>
+                                    <SelectItem value={'Public'}> Public </SelectItem>
                                 </SelectGroup>
                             </SelectContent>
                         </Select>
                     </div>
                     <FormDescription>
-                        The function will be invoked by your trigger
+                        Visibility of your topic
                     </FormDescription>
                     <FormMessage/>
                 </FormItem>
@@ -55,4 +38,4 @@ const FormFuncSelect = ({namespaceId, name, form}) => {
     )
 }
 
-export default FormFuncSelect;
+export default FormTopicTypeSelect;

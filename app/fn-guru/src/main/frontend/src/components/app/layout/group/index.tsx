@@ -12,27 +12,28 @@ export const GroupLayoutContext = createContext<
     {
         groupId: string;
         groupName: string;
-        namespaceId: string;
-        namespaceName: string;
+        namespaceId?: string;
+        namespaceName?: string;
     } | null
 >(null)
 
 
 const GroupLayout: FC<Props> = ({children}) => {
     const {groupId, namespaceId} = useParams()
-    const [getGroup, group] = useGroupGet()
-    const [getNamespace, namespace] = useNamespaceGet()
+    const [getGroup, group, groupLoading] = useGroupGet()
+    const [getNamespace, namespace, namespaceLoading] = useNamespaceGet()
 
     useEffect(() => {
         getGroup(groupId)
     }, [groupId]);
 
     useEffect(() => {
-        getNamespace((namespaceId))
+        if (namespaceId) {
+            getNamespace((namespaceId))
+        }
     }, [namespaceId]);
 
-
-    if (group == null || namespace == null) {
+    if (group == null || groupLoading || namespaceLoading) {
         return ("Loading..")
     }
 
@@ -41,8 +42,8 @@ const GroupLayout: FC<Props> = ({children}) => {
             <GroupLayoutContext.Provider value={{
                 groupId: group.id,
                 groupName: group.name,
-                namespaceId: namespace.id,
-                namespaceName: namespace.name
+                namespaceId: namespace?.id,
+                namespaceName: namespace?.name
             }}>
 
                 <div className="flex flex-row min-h-screen ">
