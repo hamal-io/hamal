@@ -1,23 +1,23 @@
 import React, {FC, useContext, useEffect} from "react";
-import {GroupLayoutContext} from "@/components/app/layout";
 import {useTriggerListSchedule} from "@/hook";
 import {PageHeader} from "@/components/page-header.tsx";
 import {columns} from "@/pages/app/schedule-list/components/columns.tsx";
 import Table from "@/pages/app/schedule-list/components/table.tsx";
 import CreateFixedRate from "@/pages/app/schedule-list/components/create.tsx";
+import {useUiState} from "@/hook/ui-state.ts";
 
 type Props = {}
 const ScheduleListPage: FC<Props> = () => {
-    const {namespaceId} = useContext(GroupLayoutContext)
+    const [uiState] = useUiState()
     const [listSchedules, scheduleList, loading, error] = useTriggerListSchedule()
 
     useEffect(() => {
         const abortController = new AbortController()
-        listSchedules(namespaceId, abortController)
+        listSchedules(uiState.namespaceId, abortController)
         return () => {
             abortController.abort()
         }
-    }, [namespaceId]);
+    }, [uiState.namespaceId]);
 
     if (scheduleList == null || loading) return "Loading..."
     if (error != null) return "Error -"

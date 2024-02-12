@@ -19,7 +19,7 @@ import {Dialog, DialogContent, DialogHeader, DialogTrigger} from "@/components/u
 import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {useFuncCreate} from "@/hook/func.ts";
-import {GroupLayoutContext} from "@/components/app/layout";
+import {useUiState} from "@/hook/ui-state.ts";
 
 
 const formSchema = z.object({
@@ -27,9 +27,7 @@ const formSchema = z.object({
 })
 
 const Create = () => {
-    const {groupId, namespaceId} = useContext(GroupLayoutContext)
-
-    const [auth, setAuth] = useAuth()
+    const [uiState] = useUiState()
     const navigate = useNavigate()
     const [openDialog, setOpenDialog] = useState<boolean>(false)
     const props = {openModal: openDialog, setOpenModal: setOpenDialog}
@@ -50,7 +48,7 @@ const Create = () => {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
         try {
-            createFunc(namespaceId, values.name)
+            createFunc(uiState.namespaceId, values.name)
         } catch (e) {
             console.error(e)
         } finally {
@@ -61,7 +59,7 @@ const Create = () => {
 
     useEffect(() => {
         if (submittedFunc !== null) {
-            navigate(`/groups/${groupId}/namespaces/${namespaceId}/functions/${submittedFunc.funcId}`)
+            navigate(`/functions/${submittedFunc.funcId}`)
             setOpenDialog(false)
         }
     }, [submittedFunc, navigate]);

@@ -1,29 +1,28 @@
 import React, {FC, useContext, useEffect} from "react";
-import {GroupLayoutContext} from "@/components/app/layout";
 import {useHookList, useTriggerListHook} from "@/hook";
 import {HookWithTriggers} from "@/pages/app/hook-list/type.tsx";
 import {PageHeader} from "@/components/page-header.tsx";
 import Create from "@/pages/app/hook-list/components/create.tsx";
-import {Separator} from "@/components/ui/separator.tsx";
 import {useNavigate} from "react-router-dom";
 import Detail from "@/pages/app/hook-list/components/detail.tsx";
 import {EmptyPlaceholder} from "@/components/empty-placeholder.tsx";
 import {GoToDocumentation} from "@/components/documentation.tsx";
+import {useUiState} from "@/hook/ui-state.ts";
 
 type Props = {}
 const HookListPage: FC<Props> = ({}) => {
-    const {namespaceId, groupId} = useContext(GroupLayoutContext)
+    const [uiState] = useUiState()
     const [listHooks, hookList, hooksLoading, hooksError] = useHookList()
     const [listTriggers, triggerList, triggerLoading, triggerError] = useTriggerListHook()
 
     useEffect(() => {
         const abortController = new AbortController();
-        listHooks(namespaceId, abortController)
-        listTriggers(namespaceId, abortController)
+        listHooks(uiState.namespaceId, abortController)
+        listTriggers(uiState.namespaceId, abortController)
         return () => {
             abortController.abort();
         };
-    }, [namespaceId]);
+    }, [uiState.namespaceId]);
 
     if (hooksError || triggerError) return `Error`
     if (hookList == null || triggerList == null || hooksLoading || triggerLoading) return "Loading..."

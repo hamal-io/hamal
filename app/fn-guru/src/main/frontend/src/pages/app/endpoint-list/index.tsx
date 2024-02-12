@@ -1,5 +1,4 @@
 import React, {FC, useContext, useEffect} from "react";
-import {GroupLayoutContext} from "@/components/app/layout";
 import {useEndpointList} from "@/hook/endpoint.ts";
 import {PageHeader} from "@/components/page-header.tsx";
 import Create from "@/pages/app/endpoint-list/components/create.tsx";
@@ -9,22 +8,22 @@ import {useNavigate} from "react-router-dom";
 import Detail from "@/pages/app/endpoint-list/components/detail.tsx";
 import {EmptyPlaceholder} from "@/components/empty-placeholder.tsx";
 import {GoToDocumentation} from "@/components/documentation.tsx";
+import {useUiState} from "@/hook/ui-state.ts";
 
 type Props = {}
 const EndpointListPage: FC<Props> = ({}) => {
-    const {groupId, groupName, namespaceId} = useContext(GroupLayoutContext)
-
+    const [uiState] = useUiState()
     const [listEndpoints, endpointList, endpointsLoading, endpointsError] = useEndpointList()
     const [listTriggers, triggerList, triggerLoading, triggerError] = useEndpointList()
 
     useEffect(() => {
         const abortController = new AbortController();
-        listEndpoints(namespaceId, abortController)
-        listTriggers(namespaceId, abortController)
+        listEndpoints(uiState.namespaceId, abortController)
+        listTriggers(uiState.namespaceId, abortController)
         return () => {
             abortController.abort();
         };
-    }, [namespaceId]);
+    }, [uiState.namespaceId]);
 
     if (endpointsError || triggerError) return `Error`
     if (endpointList == null || triggerList == null || endpointsLoading || triggerLoading) return "Loading..."

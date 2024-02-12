@@ -1,5 +1,4 @@
 import React, {FC, useContext, useEffect} from "react";
-import {GroupLayoutContext} from "@/components/app/layout";
 import {PageHeader} from "@/components/page-header.tsx";
 import {useNavigate} from "react-router-dom";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx";
@@ -8,19 +7,20 @@ import {GoToDocumentation} from "@/components/documentation.tsx";
 import {useTopicList} from "@/hook/topic.ts";
 import {TopicListItem} from "@/types/topic.ts";
 import Create from "@/pages/app/topic-list/components/create.tsx";
+import {useUiState} from "@/hook/ui-state.ts";
 
 type Props = {}
 const TopicListPage: FC<Props> = ({}) => {
-    const {namespaceId} = useContext(GroupLayoutContext)
+    const [uiState] = useUiState()
     const [listTopics, topicList, loading, error] = useTopicList()
 
     useEffect(() => {
         const abortController = new AbortController();
-        listTopics(namespaceId, abortController)
+        listTopics(uiState.namespaceId, abortController)
         return () => {
             abortController.abort();
         };
-    }, [namespaceId]);
+    }, [uiState.namespaceId]);
 
     if (error) return `Error`
     if (topicList == null || loading) return "Loading..."
@@ -46,8 +46,6 @@ type ContentProps = {
 }
 
 const Content: FC<ContentProps> = ({topics}) => {
-    const {groupId, namespaceId} = useContext(GroupLayoutContext)
-
     const navigate = useNavigate()
     return (
         <ul className="grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-1 xl:grid-cols-3">
@@ -56,7 +54,7 @@ const Content: FC<ContentProps> = ({topics}) => {
                     key={topic.id}
                     className="relative overtopic-hidden duration-500 hover:border-primary/50 group"
                     onClick={() => {
-                        navigate(`/groups/${groupId}/namespaces/${namespaceId}/topics/${topic.id}`)
+                        navigate(`/topics/${topic.id}`)
                     }}
                 >
                     <CardHeader>

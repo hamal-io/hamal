@@ -1,19 +1,16 @@
 import {useNavigate} from "react-router-dom";
-import React, {FC, useContext, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 
 import * as z from "zod"
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
 import {useForm} from "react-hook-form";
 import {Loader2, Plus,} from "lucide-react";
-import {useAuth} from "@/hook/auth.ts";
 import {Dialog, DialogContent, DialogHeader, DialogTrigger} from "@/components/ui/dialog.tsx";
 import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
-import {GroupListItem} from "@/types";
 import {useHookCreate} from "@/hook";
-import {GroupLayoutContext} from "@/components/app/layout";
-
+import {useUiState} from "@/hook/ui-state.ts";
 
 const formSchema = z.object({
     name: z.string().min(2).max(50),
@@ -21,9 +18,7 @@ const formSchema = z.object({
 })
 
 const Create = () => {
-    const {groupId, groupName, namespaceId} = useContext(GroupLayoutContext)
-
-    const [auth, setAuth] = useAuth()
+    const [uiState] = useUiState()
     const navigate = useNavigate()
     const [openDialog, setOpenDialog] = useState<boolean>(false)
     const props = {openModal: openDialog, setOpenModal: setOpenDialog}
@@ -40,7 +35,7 @@ const Create = () => {
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setLoading(true)
         try {
-            createHook(namespaceId, values.name)
+            createHook(uiState.namespaceId, values.name)
         } catch (e) {
             console.error(e)
         } finally {

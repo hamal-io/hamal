@@ -19,10 +19,9 @@ import {Dialog, DialogContent, DialogHeader, DialogTrigger} from "@/components/u
 import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {useTopicCreate} from "@/hook/topic.ts";
-import {GroupLayoutContext} from "@/components/app/layout";
-import FormHttpMethodSelect from "@/components/form/http-method-select.tsx";
 import FormTopicTypeSelect from "@/components/form/topic-type-select.tsx";
 import {TopicType} from "@/types/topic.ts";
+import {useUiState} from "@/hook/ui-state.ts";
 
 
 const formSchema = z.object({
@@ -31,9 +30,7 @@ const formSchema = z.object({
 })
 
 const Create = () => {
-    const {groupId} = useContext(GroupLayoutContext)
-
-    const [auth, setAuth] = useAuth()
+    const [uiState] = useUiState()
     const navigate = useNavigate()
     const [openDialog, setOpenDialog] = useState<boolean>(false)
     const props = {openModal: openDialog, setOpenModal: setOpenDialog}
@@ -55,7 +52,7 @@ const Create = () => {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
         try {
-            createTopic(groupId, values.name, values.topicType as TopicType)
+            createTopic(uiState.namespaceId, values.name, values.topicType as TopicType)
         } catch (e) {
             console.error(e)
         } finally {

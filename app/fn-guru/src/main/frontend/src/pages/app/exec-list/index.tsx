@@ -1,23 +1,23 @@
 import React, {FC, useContext, useEffect} from "react";
-import {GroupLayoutContext} from "@/components/app/layout";
 import {useExecList} from "@/hook";
 import {PageHeader} from "@/components/page-header.tsx";
 import {columns} from "@/pages/app/exec-list/components/columns.tsx";
 import Table from "@/pages/app/exec-list/components/table.tsx";
+import {useUiState} from "@/hook/ui-state.ts";
 
 type Props = {}
 
 const ExecListPage: FC<Props> = () => {
-    const {groupId, groupName, namespaceId} = useContext(GroupLayoutContext)
+    const [uiState] = useUiState()
     const [listExecs, execList, isLoading, error] = useExecList()
 
     useEffect(() => {
         const abortController = new AbortController()
-        listExecs(namespaceId, abortController)
+        listExecs(uiState.namespaceId, abortController)
         return () => {
             abortController.abort()
         }
-    }, [groupId]);
+    }, [uiState.namespaceId]);
 
     if (execList == null || isLoading) return "Loading..."
     if (error != null) return "Error -"

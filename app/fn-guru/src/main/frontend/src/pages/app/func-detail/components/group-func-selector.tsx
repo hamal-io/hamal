@@ -5,23 +5,21 @@ import React, {FC, useContext, useEffect, useState} from "react";
 import {cn} from "@/utils"
 import {useNavigate} from "react-router-dom";
 import {useFuncList} from "@/hook/func.ts";
-import {GroupLayoutContext} from "@/components/app/layout";
+import {useUiState} from "@/hook/ui-state.ts";
 
 type Props = {
     className?: string;
     funcId: string;
 }
 const GroupFuncSelector: FC<Props> = ({className, funcId}) => {
+    const [uiState] = useUiState()
     const navigate = useNavigate()
-    const {groupId, namespaceId} = useContext(GroupLayoutContext)
     const [listFuncs, funcList, loading] = useFuncList()
     const [selected, setSelected] = useState(funcId)
 
     useEffect(() => {
-        if (groupId) {
-            listFuncs(groupId)
-        }
-    }, [groupId]);
+        listFuncs(uiState.namespaceId)
+    }, [uiState.namespaceId]);
 
     if (funcList == null || loading) {
         return "Loading..."
@@ -30,7 +28,7 @@ const GroupFuncSelector: FC<Props> = ({className, funcId}) => {
     return (
         <Select value={selected} onValueChange={
             (newFuncId) => {
-                navigate(`/groups/${groupId}/namespaces/${namespaceId}/functions/${newFuncId}`, {replace: true})
+                navigate(`/functions/${newFuncId}`, {replace: true})
                 setSelected(newFuncId)
             }
         }>
