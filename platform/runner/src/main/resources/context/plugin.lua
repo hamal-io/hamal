@@ -24,11 +24,12 @@ function plugin()
             end
         end
 
-        function export.emit(topic, event)
-            if topic == nil then
+        function export.emit(event)
+            local evt = event or {}
+            if evt.topic == nil then
                 return error("Topic not present")
             end
-            internal.emit(topic, event or {})
+            internal.emit(evt)
         end
 
         function export.fail(reason)

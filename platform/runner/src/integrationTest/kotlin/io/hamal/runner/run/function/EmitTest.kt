@@ -29,7 +29,7 @@ internal class EmitTest : AbstractExecuteTest() {
     }
 
     @Test
-    fun `Emit event without topic`() {
+    fun `Emit event without any data`() {
         val runner = createTestRunner(
             connector = TestFailConnector { execId, result ->
                 assertThat(execId, equalTo(ExecId(1234)))
@@ -42,32 +42,40 @@ internal class EmitTest : AbstractExecuteTest() {
         assertThat(eventsToEmit, hasSize(0))
     }
 
+    @Test
+    fun `Emit event without topic`() {
+        val runner = createTestRunner(
+            connector = TestFailConnector { execId, result ->
+                assertThat(execId, equalTo(ExecId(1234)))
+                assertThat(result.value["message"].toString(), containsString("Topic not present"))
+            }
+        )
+        runner.run(unitOfWork("context.emit({answer = 42})"))
+
+        val eventsToEmit = runner.context.eventsToSubmit
+        assertThat(eventsToEmit, hasSize(0))
+    }
+
 
     @Test
     fun `Emit event without payload`() {
         val runner = createTestRunner()
-        runner.run(unitOfWork("context.emit('test-topic')"))
+        runner.run(unitOfWork("context.emit({topic = 'test-topic'})"))
 
         val eventsToEmit = runner.context.eventsToSubmit
         assertThat(eventsToEmit, hasSize(1))
 
         with(eventsToEmit.first()) {
             assertThat(topicName, equalTo(TopicName("test-topic")))
-            assertThat(payload, equalTo(EventPayload()))
-        }
-    }
-
-    @Test
-    fun `Emit event with empty payload`() {
-        val runner = createTestRunner()
-        runner.run(unitOfWork("context.emit('test-topic', {})"))
-
-        val eventsToEmit = runner.context.eventsToSubmit
-        assertThat(eventsToEmit, hasSize(1))
-
-        with(eventsToEmit.first()) {
-            assertThat(topicName, equalTo(TopicName("test-topic")))
-            assertThat(payload, equalTo(EventPayload()))
+            assertThat(
+                payload, equalTo(
+                    EventPayload(
+                        HotObject.builder()
+                            .set("topic", "test-topic")
+                            .build()
+                    )
+                )
+            )
         }
     }
 
@@ -75,49 +83,75 @@ internal class EmitTest : AbstractExecuteTest() {
     @Test
     fun `Emit event with nil payload`() {
         val runner = createTestRunner()
-        runner.run(unitOfWork("context.emit('test-topic', {hamal=nil})"))
+        runner.run(unitOfWork("context.emit({ topic = 'test-topic', hamal=nil })"))
 
         val eventsToEmit = runner.context.eventsToSubmit
         assertThat(eventsToEmit, hasSize(1))
 
         with(eventsToEmit.first()) {
             assertThat(topicName, equalTo(TopicName("test-topic")))
-            assertThat(payload, equalTo(EventPayload()))
+            assertThat(
+                payload, equalTo(
+                    EventPayload(
+                        HotObject.builder()
+                            .set("topic", "test-topic")
+                            .build()
+                    )
+                )
+            )
         }
     }
 
     @Test
     fun `Emit event with string payload`() {
         val runner = createTestRunner()
-        runner.run(unitOfWork("context.emit('test-topic', {hamal='rocks'})"))
+        runner.run(unitOfWork("context.emit({topic = 'test-topic', hamal='rocks'})"))
 
         val eventsToEmit = runner.context.eventsToSubmit
         assertThat(eventsToEmit, hasSize(1))
 
         with(eventsToEmit.first()) {
             assertThat(topicName, equalTo(TopicName("test-topic")))
-            assertThat(payload, equalTo(EventPayload(HotObject.builder().set("hamal", "rocks").build())))
+            assertThat(
+                payload, equalTo(
+                    EventPayload(
+                        HotObject.builder()
+                            .set("hamal", "rocks")
+                            .set("topic", "test-topic")
+                            .build()
+                    )
+                )
+            )
         }
     }
 
     @Test
     fun `Emit event with number payload`() {
         val runner = createTestRunner()
-        runner.run(unitOfWork("context.emit('test-topic', { answer=42 })"))
+        runner.run(unitOfWork("context.emit({ topic = 'test-topic', answer=42 })"))
 
         val eventsToEmit = runner.context.eventsToSubmit
         assertThat(eventsToEmit, hasSize(1))
 
         with(eventsToEmit.first()) {
             assertThat(topicName, equalTo(TopicName("test-topic")))
-            assertThat(payload, equalTo(EventPayload(HotObject.builder().set("answer", 42.0).build())))
+            assertThat(
+                payload, equalTo(
+                    EventPayload(
+                        HotObject.builder()
+                            .set("answer", 42.0)
+                            .set("topic", "test-topic")
+                            .build()
+                    )
+                )
+            )
         }
     }
 
     @Test
     fun `Emit event with boolean payload`() {
         val runner = createTestRunner()
-        runner.run(unitOfWork("context.emit('test-topic', {true_value=true, false_value=false})"))
+        runner.run(unitOfWork("context.emit({topic = 'test-topic', true_value=true, false_value=false})"))
 
         val eventsToEmit = runner.context.eventsToSubmit
         assertThat(eventsToEmit, hasSize(1))
@@ -130,6 +164,7 @@ internal class EmitTest : AbstractExecuteTest() {
                         HotObject.builder()
                             .set("true_value", true)
                             .set("false_value", false)
+                            .set("topic", "test-topic")
                             .build()
                     )
                 )
@@ -141,7 +176,7 @@ internal class EmitTest : AbstractExecuteTest() {
     @Disabled
     fun `Emit event with table payload`() {
         val runner = createTestRunner()
-        runner.run(unitOfWork("context.emit('test-topic', { nested_table = { value = 23 } })"))
+        runner.run(unitOfWork("context.emit({ topic = 'test-topic', nested_table = { value = 23 } })"))
 
         val eventsToEmit = runner.context.eventsToSubmit
         assertThat(eventsToEmit, hasSize(1))
@@ -157,6 +192,7 @@ internal class EmitTest : AbstractExecuteTest() {
                                     .set("value", 23)
                                     .build()
                             )
+                            .set("topic", "test-topic")
                             .build()
                     )
                 )
