@@ -6,12 +6,10 @@ import {useParams} from "react-router-dom";
 import Actions from "@/pages/app/func-detail/components/actions.tsx";
 import {useFuncGet} from "@/hook/func.ts";
 import Deploy from "@/pages/app/func-detail/components/deploy.tsx";
-import {GroupLayoutContext} from "@/components/app/layout";
 import GroupFuncSelector from "@/pages/app/func-detail/components/group-func-selector.tsx";
 
 type Props = {}
 const FuncDetailPage: FC<Props> = ({}) => {
-    const group = useContext(GroupLayoutContext)
     const {funcId} = useParams()
     // const [func, funcLoading, funcError] = useFuncGet(funcId)
     const [getFunc, func, funcLoading, funcError] = useFuncGet()
@@ -40,7 +38,6 @@ const FuncDetailPage: FC<Props> = ({}) => {
                 <GroupFuncSelector
                     className="max-w-[300px]"
                     funcId={funcId}
-                    groupId={group.id}
                 />
                 <div className="flex w-full space-x-2 justify-end">
                     <Deploy funcId={funcId} code={code}/>

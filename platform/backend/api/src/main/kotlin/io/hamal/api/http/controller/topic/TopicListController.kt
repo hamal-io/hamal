@@ -12,11 +12,42 @@ import io.hamal.lib.sdk.api.ApiTopicList.Topic
 import io.hamal.repository.api.TopicQueryRepository.TopicQuery
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
 internal class TopicListController(private val listTopics: TopicListPort) {
+
+    @GetMapping("/v1/groups/{groupId}/topics")
+    fun listGroupTopics(
+        @PathVariable(required = true, value = "groupId") groupId: GroupId,
+        @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: TopicId,
+        @RequestParam(required = false, name = "names", defaultValue = "") topicNames: List<TopicName>,
+        @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit,
+    ): ResponseEntity<ApiTopicList> {
+        return listTopics(
+            TopicQuery(
+                afterId = afterId,
+                names = topicNames,
+                limit = limit,
+                groupIds = listOf(groupId),
+                types = listOf(Group, Public)
+            )
+        ) { topics ->
+            ResponseEntity.ok(
+                ApiTopicList(
+                    topics = topics.map { topic ->
+                        Topic(
+                            id = topic.id,
+                            name = topic.name,
+                            type = topic.type
+                        )
+                    }
+                )
+            )
+        }
+    }
 
     @GetMapping("/v1/topics")
     fun listTopics(
