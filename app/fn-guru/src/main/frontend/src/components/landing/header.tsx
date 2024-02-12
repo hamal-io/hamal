@@ -35,7 +35,7 @@ const GoToApp = () => {
         return (
             <Button
                 onClick={() => {
-                    navigate("/groups", {replace: true})
+                    navigate("/dashboard", {replace: true})
                 }}>
                 Back to work
             </Button>
