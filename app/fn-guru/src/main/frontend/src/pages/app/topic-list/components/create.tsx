@@ -18,7 +18,7 @@ import {useAuth} from "@/hook/auth.ts";
 import {Dialog, DialogContent, DialogHeader, DialogTrigger} from "@/components/ui/dialog.tsx";
 import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
-import {useTopicGroupCreate} from "@/hook/topic.ts";
+import {useTopicCreate} from "@/hook/topic.ts";
 import {GroupLayoutContext} from "@/components/app/layout";
 
 
@@ -35,7 +35,7 @@ const Create = () => {
     const props = {openModal: openDialog, setOpenModal: setOpenDialog}
     const [isLoading, setLoading] = useState(false)
 
-    const [createGroupTopic, groupTopicRequested] = useTopicGroupCreate()
+    const [createGroupTopic, groupTopicRequested] = useTopicCreate()
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -50,7 +50,7 @@ const Create = () => {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
         try {
-            createGroupTopic(groupId, values.name)
+            createGroupTopic(groupId, values.name, 'Namespace')
         } catch (e) {
             console.error(e)
         } finally {

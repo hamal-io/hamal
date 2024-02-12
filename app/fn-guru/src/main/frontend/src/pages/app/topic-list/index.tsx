@@ -5,22 +5,22 @@ import {useNavigate} from "react-router-dom";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx";
 import {EmptyPlaceholder} from "@/components/empty-placeholder.tsx";
 import {GoToDocumentation} from "@/components/documentation.tsx";
-import {useTopicGroupList} from "@/hook/topic.ts";
+import {useTopicList} from "@/hook/topic.ts";
 import {TopicListItem} from "@/types/topic.ts";
 import Create from "@/pages/app/topic-list/components/create.tsx";
 
 type Props = {}
 const TopicListPage: FC<Props> = ({}) => {
-    const {groupId} = useContext(GroupLayoutContext)
-    const [listTopics, topicList, loading, error] = useTopicGroupList()
+    const {namespaceId} = useContext(GroupLayoutContext)
+    const [listTopics, topicList, loading, error] = useTopicList()
 
     useEffect(() => {
         const abortController = new AbortController();
-        listTopics(groupId, abortController)
+        listTopics(namespaceId, abortController)
         return () => {
             abortController.abort();
         };
-    }, [groupId]);
+    }, [namespaceId]);
 
     if (error) return `Error`
     if (topicList == null || loading) return "Loading..."

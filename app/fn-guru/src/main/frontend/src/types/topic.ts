@@ -5,7 +5,7 @@ export interface TopicCreateRequested {
     groupId: string;
 }
 
-export type TopicType = 'Internal' | 'Group' | 'Public'
+export type TopicType = 'Internal' | 'Namespace' | 'Group' | 'Public'
 
 export interface Topic {
     id: string;
