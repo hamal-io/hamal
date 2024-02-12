@@ -2,8 +2,7 @@ package io.hamal.api.http.controller.topic
 
 import io.hamal.core.adapter.TopicListPort
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.domain._enum.TopicType.Group
-import io.hamal.lib.domain._enum.TopicType.Public
+import io.hamal.lib.domain._enum.TopicType.*
 import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
@@ -32,7 +31,7 @@ internal class TopicListController(private val listTopics: TopicListPort) {
                 names = topicNames,
                 limit = limit,
                 groupIds = listOf(groupId),
-                types = listOf(Group, Public)
+                types = listOf(Namespace, Group, Public)
             )
         ) { topics ->
             ResponseEntity.ok(
@@ -62,7 +61,7 @@ internal class TopicListController(private val listTopics: TopicListPort) {
                 names = topicNames,
                 limit = limit,
                 groupIds = groupIds,
-                types = listOf(Group, Public)
+                types = listOf(Namespace, Group, Public)
             )
         ) { topics ->
             ResponseEntity.ok(

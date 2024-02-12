@@ -1,6 +1,7 @@
 package io.hamal.api.http.controller.topic
 
 import io.hamal.api.http.controller.BaseControllerTest
+import io.hamal.lib.domain._enum.TopicType
 import io.hamal.lib.domain.vo.TopicEventPayload
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
@@ -48,26 +49,16 @@ internal sealed class TopicBaseControllerTest : BaseControllerTest() {
     }
 
 
-    fun createGroupTopic(topicName: TopicName): ApiTopicGroupCreateRequested {
-        val createTopicResponse = httpTemplate.post("/v1/groups/1/topics")
-            .body(ApiTopicGroupCreateRequest(topicName))
+    fun createTopic(topicName: TopicName, type: TopicType = TopicType.Namespace): ApiTopicCreateRequested {
+        val createTopicResponse = httpTemplate.post("/v1/namespaces/{namespaceId}/topics")
+            .path("namespaceId", testNamespace.id)
+            .body(ApiTopicCreateRequest(topicName, type))
             .execute()
 
         assertThat(createTopicResponse.statusCode, equalTo(Accepted))
         require(createTopicResponse is HttpSuccessResponse) { "request was not successful" }
 
-        return createTopicResponse.result(ApiTopicGroupCreateRequested::class)
-    }
-
-    fun createPublicTopic(topicName: TopicName): ApiTopicPublicCreateRequested {
-        val createTopicResponse = httpTemplate.post("/v1/groups/1/public-topics")
-            .body(ApiTopicPublicCreateRequest(topicName))
-            .execute()
-
-        assertThat(createTopicResponse.statusCode, equalTo(Accepted))
-        require(createTopicResponse is HttpSuccessResponse) { "request was not successful" }
-
-        return createTopicResponse.result(ApiTopicPublicCreateRequested::class)
+        return createTopicResponse.result(ApiTopicCreateRequested::class)
     }
 
     fun appendToTopic(topicId: TopicId, toAppend: TopicEventPayload): ApiTopicAppendRequested {

@@ -16,7 +16,7 @@ internal class TopicListControllerTest : TopicBaseControllerTest() {
 
     @Test
     fun `Single topic`() {
-        awaitCompleted(createGroupTopic(TopicName("topics_one")))
+        awaitCompleted(createTopic(TopicName("topics_one")))
 
         with(listTopics()) {
             assertThat(topics, hasSize(1))
@@ -30,9 +30,9 @@ internal class TopicListControllerTest : TopicBaseControllerTest() {
     @Test
     fun `Multiple topics`() {
         awaitCompleted(
-            createGroupTopic(TopicName("topics_one")),
-            createGroupTopic(TopicName("namespace::topics_two")),
-            createGroupTopic(TopicName("namespace::topics_three"))
+            createTopic(TopicName("topics_one")),
+            createTopic(TopicName("namespace::topics_two")),
+            createTopic(TopicName("namespace::topics_three"))
         )
 
         with(listTopics()) {
@@ -52,9 +52,9 @@ internal class TopicListControllerTest : TopicBaseControllerTest() {
     @Test
     fun `List topics by names`() {
         awaitCompleted(
-            createGroupTopic(TopicName("some::topics_one")),
-            createGroupTopic(TopicName("some::topics_two")),
-            createGroupTopic(TopicName("some::topics_three"))
+            createTopic(TopicName("some::topics_one")),
+            createTopic(TopicName("some::topics_two")),
+            createTopic(TopicName("some::topics_three"))
         )
 
         with(

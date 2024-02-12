@@ -2,6 +2,7 @@ package io.hamal.lib.domain._enum
 
 enum class TopicType(val value: Int) {
     Internal(1),
-    Group(2),
-    Public(3)
+    Namespace(2),
+    Group(3),
+    Public(4)
 }

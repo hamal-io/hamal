@@ -17,7 +17,7 @@ internal class TopicEventAppendControllerTest : TopicBaseControllerTest() {
 
     @Test
     fun `Append event`() {
-        val topicId = awaitCompleted(createGroupTopic(TopicName("topics_one"))).topicId
+        val topicId = awaitCompleted(createTopic(TopicName("topics_one"))).topicId
 
         awaitCompleted(
             appendToTopic(
@@ -40,7 +40,7 @@ internal class TopicEventAppendControllerTest : TopicBaseControllerTest() {
 
     @Test
     fun `Append event multiple times`() {
-        val topicId = awaitCompleted(createGroupTopic(TopicName("topics_one"))).topicId
+        val topicId = awaitCompleted(createTopic(TopicName("topics_one"))).topicId
 
         awaitCompleted(
             IntRange(1, 10).map {

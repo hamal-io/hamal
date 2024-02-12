@@ -2,42 +2,24 @@ package io.hamal.core.request.handler.topic
 
 import io.hamal.core.request.RequestHandler
 import io.hamal.core.request.handler.cmdId
-import io.hamal.lib.domain.request.TopicGroupCreateRequested
-import io.hamal.lib.domain.request.TopicPublicCreateRequested
+import io.hamal.lib.domain.request.TopicCreateRequested
 import io.hamal.repository.api.TopicCmdRepository
-import io.hamal.repository.api.TopicCmdRepository.TopicGroupCreateCmd
-import io.hamal.repository.api.TopicCmdRepository.TopicPublicCreateCmd
 import org.springframework.stereotype.Component
 
 @Component
-class TopicGroupCreateHandler(
+class TopicCreateHandler(
     private val topicRepository: TopicCmdRepository
-) : RequestHandler<TopicGroupCreateRequested>(TopicGroupCreateRequested::class) {
-    override fun invoke(req: TopicGroupCreateRequested) {
+) : RequestHandler<TopicCreateRequested>(TopicCreateRequested::class) {
+    override fun invoke(req: TopicCreateRequested) {
         topicRepository.create(
-            TopicGroupCreateCmd(
+            TopicCmdRepository.TopicCreateCmd(
                 id = req.cmdId(),
                 topicId = req.topicId,
                 logTopicId = req.logTopicId,
                 name = req.name,
-                groupId = req.groupId
-            )
-        )
-    }
-}
-
-@Component
-class TopicPublicCreateHandler(
-    private val topicRepository: TopicCmdRepository
-) : RequestHandler<TopicPublicCreateRequested>(TopicPublicCreateRequested::class) {
-    override fun invoke(req: TopicPublicCreateRequested) {
-        topicRepository.create(
-            TopicPublicCreateCmd(
-                id = req.cmdId(),
-                topicId = req.topicId,
-                logTopicId = req.logTopicId,
-                name = req.name,
-                groupId = req.groupId
+                groupId = req.groupId,
+                namespaceId = req.namespaceId,
+                type = req.type
             )
         )
     }

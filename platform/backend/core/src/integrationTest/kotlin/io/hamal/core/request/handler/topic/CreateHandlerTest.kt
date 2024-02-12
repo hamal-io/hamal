@@ -3,8 +3,8 @@ package io.hamal.core.request.handler.topic
 import io.hamal.core.request.handler.BaseReqHandlerTest
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
-import io.hamal.lib.domain._enum.TopicType
-import io.hamal.lib.domain.request.TopicGroupCreateRequested
+import io.hamal.lib.domain._enum.TopicType.Namespace
+import io.hamal.lib.domain.request.TopicCreateRequested
 import io.hamal.lib.domain.vo.LogTopicId
 import io.hamal.lib.domain.vo.RequestId
 import io.hamal.lib.domain.vo.TopicId
@@ -18,25 +18,26 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
 
-internal class TopicGroupCreateHandlerTest : BaseReqHandlerTest() {
+internal class TopicCreateHandlerTest : BaseReqHandlerTest() {
     @Test
-    fun `Creates topic with id`() {
+    fun `Creates topic`() {
         logBrokerRepository.clear()
 
-        testInstance(submittedCreateTopicReq)
+        testInstance(topicCreateRequested)
 
         verifySingleTopicExists()
     }
 
     private fun verifySingleTopicExists() {
-        topicQueryRepository.list(TopicQuery(types = listOf(TopicType.Group), limit = Limit(100))).also { topics ->
+        topicQueryRepository.list(TopicQuery(types = listOf(Namespace), limit = Limit(100))).also { topics ->
             assertThat(topics, hasSize(1))
             with(topics.first()) {
                 assertThat(id, equalTo(TopicId(2345)))
                 assertThat(name, equalTo(TopicName("some-topic-name")))
                 assertThat(logTopicId, equalTo(LogTopicId(3456)))
                 assertThat(groupId, equalTo(testGroup.id))
-                assertThat(type, equalTo(TopicType.Group))
+                assertThat(namespaceId, equalTo(testNamespace.id))
+                assertThat(type, equalTo(Namespace))
             }
         }
 
@@ -49,15 +50,17 @@ internal class TopicGroupCreateHandlerTest : BaseReqHandlerTest() {
     }
 
     @Autowired
-    private lateinit var testInstance: TopicGroupCreateHandler
+    private lateinit var testInstance: TopicCreateHandler
 
-    private val submittedCreateTopicReq by lazy {
-        TopicGroupCreateRequested(
+    private val topicCreateRequested by lazy {
+        TopicCreateRequested(
             id = RequestId(1),
             status = Submitted,
             topicId = TopicId(2345),
             logTopicId = LogTopicId(3456),
             groupId = testGroup.id,
+            namespaceId = testNamespace.id,
+            type = Namespace,
             name = TopicName("some-topic-name")
         )
     }

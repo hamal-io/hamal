@@ -15,17 +15,17 @@ internal object ProjectionUniqueName : ProjectionSqlite<TopicId, TopicRecord, To
         try {
             tx.execute(
                 """
-                INSERT INTO unique_name (id,group_id, name)  VALUES(:id,:groupId, :name)
+                INSERT INTO unique_name (id,namespace_id, name)  VALUES(:id,:namespaceId, :name)
                     ON CONFLICT(id) DO UPDATE
-                        SET name=:name, group_id=:groupId;
+                        SET name=:name, namespace_id=:namespaceId;
             """.trimIndent()
             ) {
                 set("id", obj.id)
-                set("groupId", obj.groupId)
+                set("namespaceId", obj.namespaceId)
                 set("name", obj.name)
             }
         } catch (e: SQLiteException) {
-            if (e.message!!.contains("(UNIQUE constraint failed: unique_name.group_id, unique_name.name)")) {
+            if (e.message!!.contains("(UNIQUE constraint failed: unique_name.namespace_id, unique_name.name)")) {
                 throw IllegalArgumentException("Topic already exists")
             }
             throw e
@@ -37,10 +37,10 @@ internal object ProjectionUniqueName : ProjectionSqlite<TopicId, TopicRecord, To
             """
             CREATE TABLE IF NOT EXISTS unique_name (
                  id             INTEGER NOT NULL,
-                 group_id       INTEGER NOT NULL,
+                 namespace_id       INTEGER NOT NULL,
                  name           VARCHAR(255) NOT NULL,
                  PRIMARY KEY    (id),
-                 UNIQUE (group_id, name)
+                 UNIQUE (namespace_id, name)
             );
         """.trimIndent()
         )

@@ -6,7 +6,7 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.util.HashUtils.md5
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.repository.api.TopicRepository
 import io.hamal.repository.api.event.InternalEvent
 import io.hamal.repository.api.log.LogBrokerRepository
@@ -30,7 +30,7 @@ class InternalEventService(
 
     override fun onApplicationEvent(event: ApplicationReadyEvent) {
         internalEventContainer.topicNames().forEach { topicName ->
-            val topic = topicRepository.getGroupTopic(GroupId.root, topicName)
+            val topic = topicRepository.getTopic(NamespaceId.root, topicName)
             val consumer = LogConsumerImpl(
                 consumerId = LogConsumerId(SnowflakeId(1)),
                 topicId = topic.logTopicId,

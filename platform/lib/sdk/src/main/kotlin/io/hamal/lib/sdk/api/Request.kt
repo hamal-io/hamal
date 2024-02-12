@@ -55,7 +55,7 @@ sealed class ApiRequested {
             ApiHookCreateRequested::class,
             ApiHookUpdateRequested::class,
             ApiTopicAppendRequested::class,
-            ApiTopicGroupCreateRequested::class,
+            ApiTopicCreateRequested::class,
             ApiTriggerCreateRequested::class,
             ApiTriggerStatusRequested::class
         ).associateBy { it.simpleName }

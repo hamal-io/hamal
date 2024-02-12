@@ -6,8 +6,7 @@ import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain._enum.TopicType
 import io.hamal.lib.domain.request.TopicAppendEntryRequest
-import io.hamal.lib.domain.request.TopicGroupCreateRequest
-import io.hamal.lib.domain.request.TopicPublicCreateRequest
+import io.hamal.lib.domain.request.TopicCreateRequest
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpRequest
 import io.hamal.lib.http.HttpTemplate
@@ -15,28 +14,20 @@ import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiTopicService.TopicQuery
 import io.hamal.lib.sdk.fold
 
-data class ApiTopicGroupCreateRequest(
-    override val name: TopicName
-) : TopicGroupCreateRequest
+data class ApiTopicCreateRequest(
+    override val name: TopicName,
+    override val type: TopicType
+) : TopicCreateRequest
 
-data class ApiTopicGroupCreateRequested(
+data class ApiTopicCreateRequested(
     override val id: RequestId,
     override val status: RequestStatus,
     val topicId: TopicId,
-    val groupId: GroupId
+    val groupId: GroupId,
+    val namespaceId: NamespaceId,
+    val type: TopicType
 ) : ApiRequested()
 
-data class ApiTopicPublicCreateRequest(
-    override val name: TopicName
-) : TopicPublicCreateRequest
-
-
-data class ApiTopicPublicCreateRequested(
-    override val id: RequestId,
-    override val status: RequestStatus,
-    val topicId: TopicId,
-    val groupId: GroupId
-) : ApiRequested()
 
 data class ApiTopicAppendEventRequest(
     override val topicId: TopicId,
@@ -78,7 +69,7 @@ data class ApiTopicList(
 
 interface ApiTopicService {
     fun append(topicId: TopicId, payload: TopicEventPayload): ApiTopicAppendRequested
-    fun createGroupTopic(groupId: GroupId, req: ApiTopicGroupCreateRequest): ApiTopicGroupCreateRequested
+    fun createTopic(namespaceId: NamespaceId, req: ApiTopicCreateRequest): ApiTopicCreateRequested
     fun list(query: TopicQuery): List<ApiTopicList.Topic>
     fun events(topicId: TopicId): List<ApiTopicEventList.Event>
     fun get(topicId: TopicId): ApiTopic
@@ -112,12 +103,12 @@ internal class ApiTopicServiceImpl(
             .execute()
             .fold(ApiTopicAppendRequested::class)
 
-    override fun createGroupTopic(groupId: GroupId, req: ApiTopicGroupCreateRequest): ApiTopicGroupCreateRequested =
-        template.post("/v1/groups/{groupId}/topics")
-            .path("groupId", groupId)
+    override fun createTopic(namespaceId: NamespaceId, req: ApiTopicCreateRequest): ApiTopicCreateRequested =
+        template.post("/v1/namespaces/{namespaceId}/topics")
+            .path("namespaceId", namespaceId)
             .body(req)
             .execute()
-            .fold(ApiTopicGroupCreateRequested::class)
+            .fold(ApiTopicCreateRequested::class)
 
     override fun list(query: TopicQuery) =
         template.get("/v1/topics")
