@@ -34,7 +34,6 @@ const TopicListPage: FC<Props> = ({}) => {
             />
             {
                 topicList.topics.length ? (<Content
-                    groupId={groupId}
                     topics={topicList.topics}
                 />) : (<NoContent/>)
             }
@@ -43,11 +42,12 @@ const TopicListPage: FC<Props> = ({}) => {
 }
 
 type ContentProps = {
-    groupId: string;
     topics: TopicListItem[]
 }
 
-const Content: FC<ContentProps> = ({groupId, topics}) => {
+const Content: FC<ContentProps> = ({topics}) => {
+    const {groupId, namespaceId} = useContext(GroupLayoutContext)
+
     const navigate = useNavigate()
     return (
         <ul className="grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-1 xl:grid-cols-3">
@@ -56,7 +56,7 @@ const Content: FC<ContentProps> = ({groupId, topics}) => {
                     key={topic.id}
                     className="relative overtopic-hidden duration-500 hover:border-primary/50 group"
                     onClick={() => {
-                        navigate(`/groups/${groupId}/topics/${topic.id}`)
+                        navigate(`/groups/${groupId}/namespaces/${namespaceId}/topics/${topic.id}`)
                     }}
                 >
                     <CardHeader>
@@ -67,6 +67,7 @@ const Content: FC<ContentProps> = ({groupId, topics}) => {
                     <CardContent>
                         <dl className="text-sm leading-6 divide-y divide-gray-100 ">
                             <div className="flex justify-between py-3 gap-x-4">
+                                Visibility: {topic.type}
                             </div>
                         </dl>
                     </CardContent>

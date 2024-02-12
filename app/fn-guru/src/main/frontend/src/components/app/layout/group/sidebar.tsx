@@ -3,15 +3,12 @@ import {
     ActivityIcon,
     BookOpen,
     Braces,
-    CalendarIcon,
     Command,
     FolderTree,
     GlobeIcon,
     Layers3Icon,
-    ListEndIcon,
     LucideIcon,
     Play,
-    RowsIcon,
     TimerIcon,
     WebhookIcon
 } from "lucide-react";
@@ -19,7 +16,6 @@ import React, {FC} from "react";
 import {Link, useLocation, useParams} from "react-router-dom";
 import Profile from "@/components/app/layout/group/profile.tsx";
 import GroupNamespaceSelector from "@/components/app/group-namespace-selector.tsx";
-import {Separator} from "@/components/ui/separator.tsx";
 
 type Props = {
     className?: string;
@@ -77,9 +73,9 @@ const Sidebar: React.FC<Props> = ({className}) => {
         },
         {
             icon: Layers3Icon,
-            href: `/groups/${groupId}/topics`,
+            href: `/groups/${groupId}/namespaces/${namespaceId}/topics`,
             label: "Topics",
-            active: currentPath.startsWith(`/groups/${groupId}/topics`)
+            active: currentPath.startsWith(`/groups/${groupId}/namespaces/${namespaceId}/topics`)
         },
         {
             icon: WebhookIcon,
