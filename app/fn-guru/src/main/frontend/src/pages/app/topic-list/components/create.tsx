@@ -20,10 +20,14 @@ import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {useTopicCreate} from "@/hook/topic.ts";
 import {GroupLayoutContext} from "@/components/app/layout";
+import FormHttpMethodSelect from "@/components/form/http-method-select.tsx";
+import FormTopicTypeSelect from "@/components/form/topic-type-select.tsx";
+import {TopicType} from "@/types/topic.ts";
 
 
 const formSchema = z.object({
     name: z.string().min(2).max(50),
+    topicType: z.string().min(1, "Topic type required"),
 })
 
 const Create = () => {
@@ -35,12 +39,13 @@ const Create = () => {
     const props = {openModal: openDialog, setOpenModal: setOpenDialog}
     const [isLoading, setLoading] = useState(false)
 
-    const [createGroupTopic, groupTopicRequested] = useTopicCreate()
+    const [createTopic, groupTopicRequested] = useTopicCreate()
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: ""
+            name: "",
+            topicType: ""
         },
     })
 
@@ -50,7 +55,7 @@ const Create = () => {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
         try {
-            createGroupTopic(groupId, values.name, 'Namespace')
+            createTopic(groupId, values.name, values.topicType as TopicType)
         } catch (e) {
             console.error(e)
         } finally {
@@ -97,6 +102,7 @@ const Create = () => {
                                     </FormItem>
                                 )}
                             />
+                            <FormTopicTypeSelect name='topicType' form={form}/>
                             <Button type="submit">
                                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
                                 Create topic
