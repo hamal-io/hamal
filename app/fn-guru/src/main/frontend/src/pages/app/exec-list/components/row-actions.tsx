@@ -6,14 +6,12 @@ import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger
 import {useNavigate} from "react-router-dom";
 import {useContext} from "react";
 import {ExecListItem} from "@/types";
-import {GroupLayoutContext} from "@/components/app/layout";
 
 interface Props {
     row: Row<ExecListItem>
 }
 
 export default function ({row}: Props) {
-    const {groupId, namespaceId} = useContext(GroupLayoutContext)
     const navigate = useNavigate()
 
     return (
@@ -29,7 +27,7 @@ export default function ({row}: Props) {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-[160px]">
                 <DropdownMenuItem onClick={() => {
-                    navigate(`/groups/${groupId}/namespaces/${namespaceId}/executions/${row.original.id}`)
+                    navigate(`/executions/${row.original.id}`)
                 }}>View</DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>

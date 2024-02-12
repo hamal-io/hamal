@@ -37,57 +37,57 @@ const Sidebar: React.FC<Props> = ({className}) => {
     const primaryNavigation: NavItem[] = [
         {
             icon: Command,
-            href: `/groups/${groupId}/namespaces/${namespaceId}/dashboard`,
+            href: `/dashboard`,
             label: "Dashboard",
-            active: currentPath === `/groups/${groupId}/namespaces/${namespaceId}/dashboard`
+            active: currentPath === `/dashboard`
         },
         {
             icon: Play,
-            href: `/groups/${groupId}/namespaces/${namespaceId}/playground`,
+            href: `/playground`,
             label: "Playground",
-            active: currentPath === `/groups/${groupId}/namespaces/${namespaceId}/playground`
+            active: currentPath === `/playground`
         },
         {
             icon: ActivityIcon,
-            href: `/groups/${groupId}/namespaces/${namespaceId}/executions`,
+            href: `/executions`,
             label: "Executions",
-            active: currentPath.startsWith(`/groups/${groupId}/namespaces/${namespaceId}/executions`)
+            active: currentPath.startsWith(`/executions`)
         },
         {
             icon: FolderTree,
-            href: `/groups/${groupId}/namespaces`,
+            href: `/namespaces`,
             label: "Namespaces",
-            active: currentPath === `/groups/${groupId}/namespaces`
+            active: currentPath === `/namespaces`
         },
         {
             icon: Braces,
-            href: `/groups/${groupId}/namespaces/${namespaceId}/functions`,
+            href: `/functions`,
             label: "Functions",
-            active: currentPath.startsWith(`/groups/${groupId}/namespaces/${namespaceId}/functions`)
+            active: currentPath.startsWith(`/functions`)
         },
         {
             icon: TimerIcon,
-            href: `/groups/${groupId}/namespaces/${namespaceId}/schedules`,
+            href: `/schedules`,
             label: "Schedules",
-            active: currentPath.startsWith(`/groups/${groupId}/namespaces/${namespaceId}/schedules`)
+            active: currentPath.startsWith(`/schedules`)
         },
         {
             icon: Layers3Icon,
-            href: `/groups/${groupId}/namespaces/${namespaceId}/topics`,
+            href: `/topics`,
             label: "Topics",
-            active: currentPath.startsWith(`/groups/${groupId}/namespaces/${namespaceId}/topics`)
+            active: currentPath.startsWith(`/topics`)
         },
         {
             icon: WebhookIcon,
-            href: `/groups/${groupId}/namespaces/${namespaceId}/webhooks`,
+            href: `/webhooks`,
             label: "Webhooks",
-            active: currentPath.startsWith(`/groups/${groupId}/namespaces/${namespaceId}/webhooks`)
+            active: currentPath.startsWith(`/webhooks`)
         },
         {
             icon: GlobeIcon,
-            href: `/groups/${groupId}/namespaces/${namespaceId}/endpoints`,
+            href: `/endpoints`,
             label: "Endpoints",
-            active: currentPath.startsWith(`/groups/${groupId}/namespaces/${namespaceId}/endpoints`)
+            active: currentPath.startsWith(`/endpoints`)
         },
     ];
 
@@ -106,10 +106,7 @@ const Sidebar: React.FC<Props> = ({className}) => {
             <nav className="flex flex-col ">
                 <h1 className="text-2xl font-bold leading-6 text-content mt-6">fn(guru)</h1>
                 <div className="pt-8">
-                    <GroupNamespaceSelector
-                        groupId={groupId}
-                        namespaceId={namespaceId}
-                    />
+                    <GroupNamespaceSelector/>
                 </div>
                 <ul className="pt-4">
                     <li>

@@ -9,10 +9,10 @@ import {ChevronDownIcon, Loader2, Plus} from "lucide-react";
 import {useAuth} from "@/hook/auth.ts";
 import {Dialog, DialogContent, DialogHeader, DialogTrigger} from "@/components/ui/dialog.tsx";
 import {Input} from "@/components/ui/input.tsx";
-import {Button, buttonVariants} from "@/components/ui/button.tsx";
+import {Button} from "@/components/ui/button.tsx";
 import {useTriggerFixedRateCreate} from "@/hook";
 import FormFuncSelect from "@/components/form/func-select.tsx";
-import {GroupLayoutContext} from "@/components/app/layout";
+import {useUiState} from "@/hook/ui-state.ts";
 
 const formSchema = z.object({
     name: z.string().min(2).max(50),
@@ -21,9 +21,7 @@ const formSchema = z.object({
 })
 
 const CreateFixedRate = () => {
-    const {namespaceId} = useContext(GroupLayoutContext)
-
-    const [auth, setAuth] = useAuth()
+    const [uiState] = useUiState()
     const navigate = useNavigate()
     const [openDialog, setOpenDialog] = useState<boolean>(false)
     const props = {openModal: openDialog, setOpenModal: setOpenDialog}
@@ -43,7 +41,7 @@ const CreateFixedRate = () => {
         setLoading(true)
         try {
             createTrigger(
-                namespaceId,
+                uiState.namespaceId,
                 values.funcId,
                 values.name,
                 "PT" + values.rate + 'S'
@@ -100,7 +98,7 @@ const CreateFixedRate = () => {
                                 )}
                             />
 
-                            <FormFuncSelect name='funcId' namespaceId={namespaceId} form={form}/>
+                            <FormFuncSelect name='funcId'  form={form}/>
 
                             <FormField
                                 control={form.control}

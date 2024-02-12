@@ -1,27 +1,26 @@
-import React, {FC, useContext, useEffect} from "react";
-import {GroupLayoutContext} from "@/components/app/layout";
+import React, {FC, useContext, useEffect, useState} from "react";
 import {useFuncList} from "@/hook";
 import {PageHeader} from "@/components/page-header.tsx";
 import Create from "@/pages/app/func-list/components/create.tsx";
-import {Separator} from "@/components/ui/separator.tsx";
 import {FuncListItem} from "@/types";
 import {useNavigate} from "react-router-dom";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx";
 import {EmptyPlaceholder} from "@/components/empty-placeholder.tsx";
 import {GoToDocumentation} from "@/components/documentation.tsx";
+import {useUiState} from "@/hook/ui-state.ts";
 
 type Props = {}
 const FuncListPage: FC<Props> = ({}) => {
-    const {groupId, groupName, namespaceId} = useContext(GroupLayoutContext)
+    const [uiState] = useUiState()
     const [listFuncs, funcList, loading, error] = useFuncList()
 
     useEffect(() => {
         const abortController = new AbortController();
-        listFuncs(namespaceId, abortController)
+        listFuncs(uiState.namespaceId, abortController)
         return () => {
             abortController.abort();
         };
-    }, [namespaceId]);
+    }, [uiState.namespaceId]);
 
     if (error) return `Error`
     if (funcList == null || loading) return "Loading..."
@@ -30,13 +29,11 @@ const FuncListPage: FC<Props> = ({}) => {
         <div className="pt-2 px-2">
             <PageHeader
                 title="Functions"
-                description={`Functions of your group ${groupName}`}
+                description={`Functions of your TBD`}
                 actions={[<Create/>]}
             />
             {
                 funcList.funcs.length ? (<Content
-                    groupId={groupId}
-                    namespaceId={namespaceId}
                     funcs={funcList.funcs}
                 />) : (<NoContent/>)
             }
@@ -45,12 +42,10 @@ const FuncListPage: FC<Props> = ({}) => {
 }
 
 type ContentProps = {
-    groupId: string;
-    namespaceId: string;
     funcs: FuncListItem[]
 }
 
-const Content: FC<ContentProps> = ({groupId, namespaceId, funcs}) => {
+const Content: FC<ContentProps> = ({funcs}) => {
     const navigate = useNavigate()
     return (
         <ul className="grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-1 xl:grid-cols-3">
@@ -59,7 +54,7 @@ const Content: FC<ContentProps> = ({groupId, namespaceId, funcs}) => {
                     key={func.id}
                     className="relative overfunc-hidden duration-500 hover:border-primary/50 group"
                     onClick={() => {
-                        navigate(`/groups/${groupId}/namespaces/${namespaceId}/functions/${func.id}`)
+                        navigate(`/functions/${func.id}`)
                     }}
                 >
                     <CardHeader>

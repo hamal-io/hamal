@@ -2,18 +2,15 @@ import {useFuncList} from "@/hook";
 import React, {useEffect} from "react";
 import {FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
 import {Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select.tsx";
+import {useUiState} from "@/hook/ui-state.ts";
 
-const FormFuncSelect = ({namespaceId, name, form}) => {
+const FormFuncSelect = ({name, form}) => {
+    const [uiState] = useUiState()
     const [listFuncs, funcList, loading] = useFuncList()
 
-    // const [funcs, loading] = useApiFuncList(flowId)
-
-
     useEffect(() => {
-        if (namespaceId) {
-            listFuncs(namespaceId)
-        }
-    }, [namespaceId]);
+        listFuncs(uiState.namespaceId)
+    }, [uiState.namespaceId]);
 
     if (funcList == null || loading || !form) {
         return "Loading..."

@@ -12,8 +12,7 @@ import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {useEndpointCreate} from "@/hook/endpoint.ts";
 import FormFuncSelect from "@/components/form/func-select.tsx";
-import {GroupListItem} from "@/types";
-import {GroupLayoutContext} from "@/components/app/layout";
+import {useUiState} from "@/hook/ui-state.ts";
 
 
 const formSchema = z.object({
@@ -22,9 +21,7 @@ const formSchema = z.object({
 })
 
 const Create = () => {
-    const {groupId, groupName, namespaceId} = useContext(GroupLayoutContext)
-
-    const [auth, setAuth] = useAuth()
+    const [uiState] = useUiState()
     const navigate = useNavigate()
     const [openDialog, setOpenDialog] = useState<boolean>(false)
     const props = {openModal: openDialog, setOpenModal: setOpenDialog}
@@ -43,7 +40,7 @@ const Create = () => {
         setLoading(true)
         try {
             createEndpoint({
-                namespaceId: namespaceId,
+                namespaceId: uiState.namespaceId,
                 name: values.name,
                 funcId: values.funcId,
                 method: "Post"
@@ -94,7 +91,7 @@ const Create = () => {
                                 )}
                             />
 
-                            <FormFuncSelect name='funcId' namespaceId={namespaceId} form={form}/>
+                            <FormFuncSelect name='funcId' form={form}/>
 
                             <Button type="submit">
                                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}

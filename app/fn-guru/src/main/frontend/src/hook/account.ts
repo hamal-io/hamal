@@ -1,6 +1,7 @@
 import {useAuth} from "@/hook/auth.ts";
 import {useCallback, useState} from "react";
 import {AccountConvertRequested, FuncCreateRequested, LoginRequested} from "@/types";
+import {useInitUiState, useUiState} from "@/hook/ui-state.ts";
 
 type AccountCreateAnonymousAction = (abortController?: AbortController) => void
 export const useAccountCreateAnonymous = (): [AccountCreateAnonymousAction, LoginRequested, boolean, Error] => {
@@ -61,6 +62,7 @@ export const useAccountCreateAnonymous = (): [AccountCreateAnonymousAction, Logi
 type AccountLoginAction = (email: string, password: string, controller?: AbortController) => void
 export const useAccountLogin = (): [AccountLoginAction, LoginRequested, boolean, Error] => {
     const [auth, setAuth] = useAuth()
+    const [initUiState] = useInitUiState()
 
     const [data, setData] = useState<LoginRequested | null>(null);
     const [loading, setLoading] = useState(true);
@@ -94,6 +96,8 @@ export const useAccountLogin = (): [AccountLoginAction, LoginRequested, boolean,
                         groupId: data.groupIds[0],
                         token: data.token,
                     })
+
+                    initUiState(data.groupIds[0], data.groupIds[0])
                 })
             })
             .catch(error => {
