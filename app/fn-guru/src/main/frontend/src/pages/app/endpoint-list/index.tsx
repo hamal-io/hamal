@@ -12,7 +12,7 @@ import {GoToDocumentation} from "@/components/documentation.tsx";
 
 type Props = {}
 const EndpointListPage: FC<Props> = ({}) => {
-    const {namespaceId, groupId} = useContext(GroupLayoutContext)
+    const {groupId, groupName, namespaceId} = useContext(GroupLayoutContext)
 
     const [listEndpoints, endpointList, endpointsLoading, endpointsError] = useEndpointList()
     const [listTriggers, triggerList, triggerLoading, triggerError] = useEndpointList()

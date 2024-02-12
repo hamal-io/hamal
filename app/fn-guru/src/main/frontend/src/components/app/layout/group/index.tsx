@@ -1,8 +1,7 @@
-import React, {createContext, FC, ReactNode, useEffect, useState} from 'react'
+import React, {createContext, FC, ReactNode, useEffect} from 'react'
 import Index from "@/components/app/layout/authenticated";
 import {useParams} from "react-router-dom";
 import {useGroupGet, useNamespaceGet} from "@/hook";
-import {Group} from "@/types";
 import GroupHeader from "./header.tsx";
 
 type Props = {

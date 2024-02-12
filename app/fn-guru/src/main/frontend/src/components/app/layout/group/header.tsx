@@ -20,7 +20,7 @@ const GroupHeader: FC = () => {
                             namespaceId={namespaceId}
                         />
                     </div>
-                    <Nav className="mx-6"/>
+                    <Nav/>
                     <Profile/>
                 </div>
             </div>
@@ -30,7 +30,7 @@ const GroupHeader: FC = () => {
 
 export default GroupHeader;
 
-const Nav = ({className, ...props}: React.HTMLAttributes<HTMLElement>) => {
+const Nav = () => {
     const location = useLocation()
     const currentPath = location.pathname
 

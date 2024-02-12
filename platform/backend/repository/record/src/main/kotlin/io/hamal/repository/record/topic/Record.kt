@@ -19,6 +19,7 @@ sealed class TopicRecord(
     internal object Adapter : RecordAdapter<TopicRecord>(
         listOf(
             GroupCreated::class,
+            PublicCreated::class,
             InternalCreated::class
         )
     )
@@ -31,6 +32,13 @@ sealed class TopicRecord(
         val groupId: GroupId
     ) : TopicRecord()
 
+    data class PublicCreated(
+        override val cmdId: CmdId,
+        override val entityId: TopicId,
+        val name: TopicName,
+        val logTopicId: LogTopicId,
+        val groupId: GroupId
+    ) : TopicRecord()
 
     data class InternalCreated(
         override val cmdId: CmdId,

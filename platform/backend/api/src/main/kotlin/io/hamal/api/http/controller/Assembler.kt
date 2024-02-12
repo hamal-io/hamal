@@ -5,12 +5,12 @@ import io.hamal.lib.sdk.api.*
 import org.springframework.http.ResponseEntity
 
 fun Requested.accepted(): ResponseEntity<ApiRequested> =
-    ResponseEntity.accepted().body(toApiSubmitted())
+    ResponseEntity.accepted().body(toApiRequested())
 
 // @formatter:off
-fun Requested.toApiSubmitted(): ApiRequested = when (this) {
+fun Requested.toApiRequested(): ApiRequested = when (this) {
     is AccountCreateRequested -> ApiTokenRequested(id, status, accountId, listOf(groupId), token)
-    is AccountCreateAnonymousRequested -> ApiTokenRequested(id, status, accountId, listOf(groupId),  token)
+    is AccountCreateAnonymousRequested -> ApiTokenRequested(id, status, accountId, listOf(groupId), token)
     is AccountConvertRequested -> ApiAccountConvertRequested(id, status, accountId, token)
     is AuthLoginMetaMaskRequested -> ApiTokenRequested(id, status, accountId, groupIds, token)
     is AuthLoginEmailRequested -> ApiTokenRequested(id, status, accountId, groupIds,  token)
@@ -31,6 +31,7 @@ fun Requested.toApiSubmitted(): ApiRequested = when (this) {
     is StateSetRequested -> ApiStateSetRequested(id, status)
     is TopicAppendEventRequested -> ApiTopicAppendRequested(id, status, topicId)
     is TopicGroupCreateRequested -> ApiTopicGroupCreateRequested(id, status, topicId, groupId)
+    is TopicPublicCreateRequested -> ApiTopicPublicCreateRequested(id, status, topicId, groupId)
     is TriggerCreateRequested -> ApiTriggerCreateRequested(id, status, triggerId, groupId, namespaceId)
     is TriggerStatusRequested -> ApiTriggerStatusRequested(id, status, triggerId, triggerStatus)
 

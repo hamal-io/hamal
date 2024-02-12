@@ -16,13 +16,13 @@ internal class TopicListControllerTest : TopicBaseControllerTest() {
 
     @Test
     fun `Single topic`() {
-        awaitCompleted(createTopic(TopicName("namespace::topics_one")))
+        awaitCompleted(createGroupTopic(TopicName("topics_one")))
 
         with(listTopics()) {
             assertThat(topics, hasSize(1))
 
             with(topics.first()) {
-                assertThat(name, equalTo(TopicName("namespace::topics_one")))
+                assertThat(name, equalTo(TopicName("topics_one")))
             }
         }
     }
@@ -30,9 +30,9 @@ internal class TopicListControllerTest : TopicBaseControllerTest() {
     @Test
     fun `Multiple topics`() {
         awaitCompleted(
-            createTopic(TopicName("namespace::topics_one")),
-            createTopic(TopicName("namespace::topics_two")),
-            createTopic(TopicName("namespace::topics_three"))
+            createGroupTopic(TopicName("topics_one")),
+            createGroupTopic(TopicName("namespace::topics_two")),
+            createGroupTopic(TopicName("namespace::topics_three"))
         )
 
         with(listTopics()) {
@@ -45,16 +45,16 @@ internal class TopicListControllerTest : TopicBaseControllerTest() {
             assertThat(topicTwo.name, equalTo(TopicName("namespace::topics_two")))
 
             val topicThree = topics[2]
-            assertThat(topicThree.name, equalTo(TopicName("namespace::topics_one")))
+            assertThat(topicThree.name, equalTo(TopicName("topics_one")))
         }
     }
 
     @Test
     fun `List topics by names`() {
         awaitCompleted(
-            createTopic(TopicName("some::topics_one")),
-            createTopic(TopicName("some::topics_two")),
-            createTopic(TopicName("some::topics_three"))
+            createGroupTopic(TopicName("some::topics_one")),
+            createGroupTopic(TopicName("some::topics_two")),
+            createGroupTopic(TopicName("some::topics_three"))
         )
 
         with(
