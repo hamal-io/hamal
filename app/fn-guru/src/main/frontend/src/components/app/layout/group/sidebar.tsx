@@ -1,5 +1,20 @@
 import {cn} from "@/utils";
-import {ActivityIcon, BookOpen, Braces, CalendarIcon, Command, FolderTree, GlobeIcon, LucideIcon, Play, TimerIcon, WebhookIcon} from "lucide-react";
+import {
+    ActivityIcon,
+    BookOpen,
+    Braces,
+    CalendarIcon,
+    Command,
+    FolderTree,
+    GlobeIcon,
+    Layers3Icon,
+    ListEndIcon,
+    LucideIcon,
+    Play,
+    RowsIcon,
+    TimerIcon,
+    WebhookIcon
+} from "lucide-react";
 import React, {FC} from "react";
 import {Link, useLocation, useParams} from "react-router-dom";
 import Profile from "@/components/app/layout/group/profile.tsx";
@@ -59,6 +74,12 @@ const Sidebar: React.FC<Props> = ({className}) => {
             href: `/groups/${groupId}/namespaces/${namespaceId}/schedules`,
             label: "Schedules",
             active: currentPath.startsWith(`/groups/${groupId}/namespaces/${namespaceId}/schedules`)
+        },
+        {
+            icon: Layers3Icon,
+            href: `/groups/${groupId}/topics`,
+            label: "Topics",
+            active: currentPath.startsWith(`/groups/${groupId}/topics`)
         },
         {
             icon: WebhookIcon,

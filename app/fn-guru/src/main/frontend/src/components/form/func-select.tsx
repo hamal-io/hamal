@@ -15,7 +15,7 @@ const FormFuncSelect = ({namespaceId, name, form}) => {
         }
     }, [namespaceId]);
 
-    if (loading || !form) {
+    if (funcList == null || loading || !form) {
         return "Loading..."
     }
 

@@ -12,7 +12,7 @@ const Log: FC<Props> = ({execId}) => {
         listExecLogs(execId)
     }, [execId]);
 
-    if (loading) return "Loading..."
+    if (execLogsList == null || loading) return "Loading..."
     return (
         <div className="w-full">
             <div

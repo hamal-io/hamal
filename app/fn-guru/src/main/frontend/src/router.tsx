@@ -21,6 +21,7 @@ import {createBrowserRouter} from "react-router-dom";
 import Playground from "@/pages/app/playground";
 import GroupLayout from "@/components/app/layout/group";
 import NamespaceListPage from "./pages/app/namespace-list";
+import TopicListPage from "@/pages/app/topic-list";
 
 export const router = createBrowserRouter([
     {path: "/", element: <HomePage/>},
@@ -93,6 +94,12 @@ export const router = createBrowserRouter([
         path: "/groups/:groupId/namespaces", element:
             <GroupLayout>
                 <NamespaceListPage/>
+            </GroupLayout>
+    },
+    {
+        path: "/groups/:groupId/topics", element:
+            <GroupLayout>
+                <TopicListPage/>
             </GroupLayout>
     }
 ]);

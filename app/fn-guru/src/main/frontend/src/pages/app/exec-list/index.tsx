@@ -19,7 +19,7 @@ const ExecListPage: FC<Props> = () => {
         }
     }, [groupId]);
 
-    if (isLoading) return "Loading..."
+    if (execList == null || isLoading) return "Loading..."
     if (error != null) return "Error -"
 
     return (

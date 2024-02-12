@@ -6,11 +6,8 @@ import React from "react";
 
 const LogoutMenuItem = () => {
     const [logout,] = useLogout()
-
     return (
-        <DropdownMenuItem onClick={() => {
-            logout()
-        }}>
+        <DropdownMenuItem onClick={() => {logout()}}>
             Log out
         </DropdownMenuItem>
     )

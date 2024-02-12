@@ -26,7 +26,7 @@ const HookListPage: FC<Props> = ({}) => {
     }, [namespaceId]);
 
     if (hooksError || triggerError) return `Error`
-    if (hooksLoading || triggerLoading) return "Loading..."
+    if (hookList == null || triggerList == null || hooksLoading || triggerLoading) return "Loading..."
 
     const hooksWithTrigger = hookList.hooks.map<HookWithTriggers>(hook => {
         return {

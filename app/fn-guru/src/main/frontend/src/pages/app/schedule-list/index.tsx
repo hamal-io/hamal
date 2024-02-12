@@ -19,7 +19,7 @@ const ScheduleListPage: FC<Props> = () => {
         }
     }, [namespaceId]);
 
-    if (loading) return "Loading..."
+    if (scheduleList == null || loading) return "Loading..."
     if (error != null) return "Error -"
 
     return (

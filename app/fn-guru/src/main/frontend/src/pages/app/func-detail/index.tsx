@@ -31,7 +31,7 @@ const FuncDetailPage: FC<Props> = ({}) => {
         }
     }, [func]);
 
-    if (funcLoading) return "Loading..."
+    if (func == null || funcLoading) return "Loading..."
     return (
         <div className="h-full ">
             <div className="container flex flex-row justify-between items-center ">
