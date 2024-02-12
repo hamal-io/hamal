@@ -42,7 +42,6 @@ const HookListPage: FC<Props> = ({}) => {
                 description={`Webhooks of namespace TBD`}
                 actions={[<Create/>]}
             />
-            <Separator className="my-6"/>
             {
                 hookList.hooks.length ? (<Content items={hooksWithTrigger}/>) : (<NoContent/>)
             }

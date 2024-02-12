@@ -1,8 +1,8 @@
 import React, {createContext, FC, ReactNode, useEffect} from 'react'
-import Index from "@/components/app/layout/authenticated";
+import Authenticated from "@/components/app/layout/authenticated";
 import {useParams} from "react-router-dom";
 import {useGroupGet, useNamespaceGet} from "@/hook";
-import GroupHeader from "./header.tsx";
+import Sidebar from "@/components/app/layout/group/sidebar.tsx";
 
 type Props = {
     children: ReactNode;
@@ -37,19 +37,23 @@ const GroupLayout: FC<Props> = ({children}) => {
     }
 
     return (
-        <Index>
+        <Authenticated>
             <GroupLayoutContext.Provider value={{
                 groupId: group.id,
                 groupName: group.name,
                 namespaceId: namespace.id,
                 namespaceName: namespace.name
             }}>
-                <main className="flex-col md:flex">
-                    <GroupHeader/>
-                    {children}
-                </main>
+
+                <div className="flex flex-row min-h-screen ">
+                    <Sidebar/>
+                    <div className="p-4 border-l border-border w-full ml-48">
+                        {children}
+                    </div>
+                </div>
+
             </GroupLayoutContext.Provider>
-        </Index>
+        </Authenticated>
     );
 }
 

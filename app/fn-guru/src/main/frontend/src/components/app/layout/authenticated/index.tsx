@@ -1,6 +1,5 @@
 import React, {ReactNode} from 'react'
 import {useAuth} from "@/hook/auth.ts";
-import Header from "@/components/app/header.tsx";
 import Feedback from "@/components/app/feedback.tsx";
 
 interface AuthenticatedProps {
@@ -15,10 +14,10 @@ const Authenticated: React.FC<AuthenticatedProps> = (props) => {
         return null
     }
     return (
-        <>
+        <main className="flex flex-col">
             {props.children}
-            <Feedback/>
-        </>
+            {/*<Feedback/>*/}
+        </main>
     );
 }
 

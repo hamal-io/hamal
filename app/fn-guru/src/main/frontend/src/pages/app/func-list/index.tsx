@@ -33,7 +33,6 @@ const FuncListPage: FC<Props> = ({}) => {
                 description={`Functions of your group ${groupName}`}
                 actions={[<Create/>]}
             />
-            <Separator className="my-6"/>
             {
                 funcList.funcs.length ? (<Content
                     groupId={groupId}

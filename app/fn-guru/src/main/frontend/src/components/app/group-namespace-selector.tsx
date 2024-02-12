@@ -28,7 +28,9 @@ const GroupNamespaceSelector: FC<Props> = ({className, groupId, namespaceId}) =>
     }
 
     return (
-        <Select value={selected} onValueChange={
+        <Select
+            value={selected}
+            onValueChange={
             (newNamespaceId) => {
                 navigate(location.pathname.replace(`namespaces/${selected}/`, `namespaces/${newNamespaceId}/`), {replace: true})
                 setSelected(newNamespaceId)
@@ -40,7 +42,7 @@ const GroupNamespaceSelector: FC<Props> = ({className, groupId, namespaceId}) =>
             </SelectTrigger>
             <SelectContent>
                 <SelectGroup>
-                    <SelectLabel>Namespaces</SelectLabel>
+                    <SelectLabel>Current Namespace</SelectLabel>
                     {namespaceList.namespaces.map(namespace =>
                         <SelectItem
                             key={namespace.id}
