@@ -2,6 +2,7 @@ import {Auth, AUTH_KEY} from "@/types/auth.ts";
 import useLocalStorageState from "use-local-storage-state";
 import {useCallback, useState} from "react";
 import {useNavigate} from "react-router-dom";
+import {useResetUiState} from "@/hook/ui-state.ts";
 
 const unauthorized: Auth = {
     type: 'Unauthorized',
@@ -20,6 +21,7 @@ type LogoutAction = (abortController?: AbortController) => void
 export const useLogout = (): [LogoutAction, boolean, Error] => {
     const navigate = useNavigate()
     const [auth, setAuth] = useAuth()
+    const [resetUiState] = useResetUiState()
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<Error | null>(null);
 
@@ -34,9 +36,9 @@ export const useLogout = (): [LogoutAction, boolean, Error] => {
             signal: abortController?.signal,
         })
             .then(response => {
-
                 setLoading(false)
                 setAuth({...unauthorized})
+                resetUiState()
                 navigate("/", {replace: true})
             })
             .catch(error => {

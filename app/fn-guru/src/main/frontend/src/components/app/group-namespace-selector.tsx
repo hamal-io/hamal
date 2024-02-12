@@ -5,23 +5,24 @@ import React, {FC, useEffect, useState} from "react";
 import {cn} from "@/utils"
 import {useNamespaceList} from "@/hook/namespace.ts";
 import {useLocation, useNavigate} from "react-router-dom";
+import {useChangeGroup, useChangeNamespace, useUiState} from "@/hook/ui-state.ts";
 
 type Props = {
     className?: string;
-    groupId: string;
-    namespaceId: string;
 }
-const GroupNamespaceSelector: FC<Props> = ({className, groupId, namespaceId}) => {
+const GroupNamespaceSelector: FC<Props> = ({className}) => {
     const [listNamespaces, namespaceList, loading] = useNamespaceList()
-    const [selected, setSelected] = useState(namespaceId)
+    const [uiState] = useUiState()
+    const [selected, setSelected] = useState(uiState.namespaceId)
+    const [changeNamespace] = useChangeNamespace()
     const navigate = useNavigate()
     const location = useLocation()
 
     useEffect(() => {
-        if (groupId) {
-            listNamespaces(groupId)
+        if (uiState.groupId) {
+            listNamespaces(uiState.groupId)
         }
-    }, [groupId]);
+    }, [uiState.namespaceId]);
 
     if (namespaceList == null || loading) {
         return "Loading..."
@@ -31,12 +32,13 @@ const GroupNamespaceSelector: FC<Props> = ({className, groupId, namespaceId}) =>
         <Select
             value={selected}
             onValueChange={
-            (newNamespaceId) => {
-                navigate(location.pathname.replace(`namespaces/${selected}/`, `namespaces/${newNamespaceId}/`), {replace: true})
-                setSelected(newNamespaceId)
+                (newNamespaceId) => {
+                    changeNamespace(newNamespaceId, "changed")
+                    navigate(location.pathname.replace(`namespaces/${selected}/`, `namespaces/${newNamespaceId}/`), {replace: true})
+                    setSelected(newNamespaceId)
 
-            }
-        }>
+                }
+            }>
             <SelectTrigger className={cn("h-8 bg-white", className)}>
                 <SelectValue/>
             </SelectTrigger>
