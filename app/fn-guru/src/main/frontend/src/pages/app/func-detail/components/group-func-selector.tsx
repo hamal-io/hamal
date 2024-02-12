@@ -1,18 +1,19 @@
 import {Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger} from "@/components/ui/select.tsx";
 import {SelectValue} from "@radix-ui/react-select";
-import React, {FC, useEffect, useState} from "react";
+import React, {FC, useContext, useEffect, useState} from "react";
 
 import {cn} from "@/utils"
 import {useNavigate} from "react-router-dom";
 import {useFuncList} from "@/hook/func.ts";
+import {GroupLayoutContext} from "@/components/app/layout";
 
 type Props = {
     className?: string;
-    groupId: string;
     funcId: string;
 }
-const GroupFuncSelector: FC<Props> = ({className, groupId, funcId}) => {
+const GroupFuncSelector: FC<Props> = ({className, funcId}) => {
     const navigate = useNavigate()
+    const {groupId, namespaceId} = useContext(GroupLayoutContext)
     const [listFuncs, funcList, loading] = useFuncList()
     const [selected, setSelected] = useState(funcId)
 
@@ -29,7 +30,7 @@ const GroupFuncSelector: FC<Props> = ({className, groupId, funcId}) => {
     return (
         <Select value={selected} onValueChange={
             (newFuncId) => {
-                navigate(`/groups/${groupId}/functions/${newFuncId}`, {replace: true})
+                navigate(`/groups/${groupId}/namespaces/${namespaceId}/functions/${newFuncId}`, {replace: true})
                 setSelected(newFuncId)
             }
         }>

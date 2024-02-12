@@ -36,7 +36,6 @@ const EndpointListPage: FC<Props> = ({}) => {
                 description={`Endpoints of namespace TBD`}
                 actions={[<Create/>]}
             />
-            <Separator className="my-6"/>
             {
                 endpointList.endpoints.length ? (<Content endpoints={endpointList.endpoints}/>) : (<NoContent/>)
             }

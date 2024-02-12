@@ -26,7 +26,6 @@ const NamespaceListPage: React.FC = () => {
     return (
         <div className="pt-8 px-8">
             <PageHeader title="Namespaces" description="Organise your workflows" actions={[<Create/>]}/>
-            <Separator className="my-6"/>
             <Content
                 groupId={groupId}
                 namespaces={namespaceList.namespaces}
