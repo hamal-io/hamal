@@ -12,5 +12,7 @@ export interface BlueprintList {
 export interface BlueprintListItem {
     id: string;
     name: string;
-    description: string;
+    description: {
+        value: string;
+    }
 }

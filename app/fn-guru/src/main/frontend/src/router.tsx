@@ -19,6 +19,7 @@ import GroupLayout from "@/components/app/layout/group";
 import NamespaceListPage from "./pages/app/namespace-list";
 import TopicListPage from "@/pages/app/topic-list";
 import TopicDetailPage from "@/pages/app/topic-detail";
+import BlueprintListPage from "@/pages/app/blueprint-list";
 
 export const router = createBrowserRouter([
     {path: "/", element: <HomePage/>},
@@ -30,13 +31,7 @@ export const router = createBrowserRouter([
     {
         path: "/blueprints", element:
             <GroupLayout>
-                {/*<BlueprintListPage> */}
-            </GroupLayout>
-    },
-    {
-        path: "/blueprints/:blueprintId", element:
-            <GroupLayout>
-                {/*<BlueprintDetailPage> */}
+                <BlueprintListPage/>
             </GroupLayout>
     },
     {
