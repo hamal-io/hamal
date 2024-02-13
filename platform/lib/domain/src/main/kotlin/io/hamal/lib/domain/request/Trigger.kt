@@ -11,7 +11,7 @@ interface TriggerCreateRequest {
     val type: TriggerType
     val name: TriggerName
     val funcId: FuncId
-    val inputs: TriggerInputs
+    val inputs: TriggerInputs?
     val correlationId: CorrelationId?
     val duration: TriggerDuration?
     val topicId: TopicId?

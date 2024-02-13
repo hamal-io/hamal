@@ -9,14 +9,13 @@ import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.request.FuncInvokeRequest
 import io.hamal.lib.domain.vo.*
-import io.hamal.repository.api.TopicEvent
 import io.hamal.repository.api.TopicRepository
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerQueryRepository
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import io.hamal.repository.api.log.LogBrokerRepository
-import io.hamal.repository.api.log.LogConsumerBatchImpl
 import io.hamal.repository.api.log.LogConsumerId
+import io.hamal.repository.api.log.TopicEventConsumerBatchImpl
 import org.springframework.beans.factory.DisposableBean
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.ApplicationListener
@@ -51,11 +50,10 @@ internal class EventTriggerService(
                         require(trigger is Trigger.Event)
 
                         val topic = topicRepository.get(trigger.topicId)
-                        val consumer = LogConsumerBatchImpl(
+                        val consumer = TopicEventConsumerBatchImpl(
                             consumerId = LogConsumerId(trigger.id.value),
                             topicId = topic.logTopicId,
-                            repository = logBrokerRepository,
-                            valueClass = TopicEvent::class
+                            repository = logBrokerRepository
                         )
 
                         triggerConsumers[trigger.id] = consumer
@@ -97,5 +95,5 @@ internal class EventTriggerService(
 
     private val shutdown = AtomicBoolean(false)
     private val scheduledTasks = mutableListOf<ScheduledFuture<*>>()
-    private val triggerConsumers = mutableMapOf<TriggerId, LogConsumerBatchImpl<TopicEvent>>()
+    private val triggerConsumers = mutableMapOf<TriggerId, TopicEventConsumerBatchImpl>()
 }

@@ -22,7 +22,7 @@ data class ApiTriggerCreateReq(
     override val type: TriggerType,
     override val name: TriggerName,
     override val funcId: FuncId,
-    override val inputs: TriggerInputs,
+    override val inputs: TriggerInputs? = null,
     override val correlationId: CorrelationId? = null,
     override val duration: TriggerDuration? = null,
     override val topicId: TopicId? = null,
