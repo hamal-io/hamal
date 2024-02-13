@@ -1,9 +1,9 @@
 package io.hamal.repository.sqlite.record.topic
 
 import io.hamal.lib.common.domain.Count
-import io.hamal.lib.domain.vo.NamespaceId
-import io.hamal.lib.domain.vo.TopicId
-import io.hamal.lib.domain.vo.TopicName
+import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.Topic
 import io.hamal.repository.api.TopicCmdRepository.TopicCreateCmd
 import io.hamal.repository.api.TopicEvent
@@ -12,6 +12,8 @@ import io.hamal.repository.api.TopicQueryRepository.TopicQuery
 import io.hamal.repository.api.TopicRepository
 import io.hamal.repository.api.log.LogBrokerRepository
 import io.hamal.repository.api.log.LogBrokerRepository.LogTopicToCreate
+import io.hamal.repository.api.log.LogEventId
+import io.hamal.repository.record.json
 import io.hamal.repository.record.topic.CreateTopicFromRecords
 import io.hamal.repository.record.topic.TopicRecord
 import io.hamal.repository.sqlite.record.RecordSqliteRepository
@@ -63,7 +65,17 @@ class TopicSqliteRepository(
     override fun list(query: TopicQuery): List<Topic> = ProjectionCurrent.list(connection, query)
 
     override fun list(query: TopicEventQuery): List<TopicEvent> {
-        TODO()
+        val topic = get(query.topicId)
+        return logBrokerRepository.read(
+            firstId = LogEventId(SnowflakeId(query.afterId.value.value + 1)),
+            topicId = topic.logTopicId,
+            limit = query.limit
+        ).map { evt ->
+            TopicEvent(
+                id = TopicEventId(evt.id.value),
+                payload = TopicEventPayload(json.decompressAndDeserialize(HotObject::class, evt.bytes))
+            )
+        }
     }
 
     override fun count(query: TopicQuery): Count = ProjectionCurrent.count(connection, query)
