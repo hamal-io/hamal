@@ -38,14 +38,9 @@ interface BlueprintUpdatePort {
 
 interface BlueprintListPort {
     //TODO(196)
-    /*operator fun <T : Any> invoke(
-        operator fun <T : Any> invoke(
-            query: BlueprintQuery,
-            responseHandler: (List<Blueprint>, Map<NamespaceId, Namespace>) -> T): T
-    )*/
 }
 
-interface BlueprintPort : BlueprintCreatePort, BlueprintGetPort, BlueprintUpdatePort
+interface BlueprintPort : BlueprintCreatePort, BlueprintGetPort, BlueprintUpdatePort, BlueprintListPort
 
 @Component
 class BlueprintAdapter(

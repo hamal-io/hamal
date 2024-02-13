@@ -10,19 +10,14 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class BlueprintListController(
     private val retry: Retry,
-    private val getBlueprint: BlueprintListPort
+    private val getBlueprints: BlueprintListPort
 ) {
 
     @GetMapping("/v1/groups/{groupId}/blueprints")
     fun listBlueprints(
         @PathVariable("groupId") groupId: GroupId
     ) {
-    }/*: ResponseEntity<ApiBlueprintList> {
-        return ResponseEntity.ok(ApiBlueprintList(
-            id = RequestId(value = SnowflakeId(value = 5986)),
-            status = RequestStatus.Submitted
-            //TODO(196)
-        ))
-    }*/
-
+    }
 }
+//: ResponseEntity<ApiBlueprintList> TODO(196)
+

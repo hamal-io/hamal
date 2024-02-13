@@ -13,7 +13,7 @@ export const useBlueprintGet = (): [BlueprintGetAction, Blueprint, boolean, Erro
 }
 
 type BlueprintListAction = (groupId: string, abortController?: AbortController) => void
-export const useFuncList = (): [BlueprintListAction, BlueprintList, boolean, Error] => {
+export const useBlueprintList = (): [BlueprintListAction, BlueprintList, boolean, Error] => {
     const [auth] = useAuth()
     const [get, bps, loading, error] = useGet<BlueprintList>()
     const fn = useCallback(async (groupId: string, abortController?: AbortController) =>
