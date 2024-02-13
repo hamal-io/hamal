@@ -89,15 +89,15 @@ data class ApiTriggerList(
             }
 
             private val classMapping = mapOf(
-                "Event" to EventTrigger::class,
-                "FixedRate" to FixedRateTrigger::class,
-                "Hook" to HookTrigger::class,
-                "Cron" to CronTrigger::class
+                "Event" to Event::class,
+                "FixedRate" to FixedRate::class,
+                "Hook" to Hook::class,
+                "Cron" to Cron::class
             )
         }
     }
 
-    class FixedRateTrigger(
+    class FixedRate(
         override val id: TriggerId,
         override val name: TriggerName,
         override val func: Trigger.Func,
@@ -107,7 +107,7 @@ data class ApiTriggerList(
         override val type: TriggerType = TriggerType.FixedRate
     }
 
-    class EventTrigger(
+    class Event(
         override val id: TriggerId,
         override val name: TriggerName,
         override val func: Trigger.Func,
@@ -122,7 +122,7 @@ data class ApiTriggerList(
         )
     }
 
-    class HookTrigger(
+    class Hook(
         override val id: TriggerId,
         override val name: TriggerName,
         override val func: Trigger.Func,
@@ -138,7 +138,7 @@ data class ApiTriggerList(
         )
     }
 
-    class CronTrigger(
+    class Cron(
         override val id: TriggerId,
         override val name: TriggerName,
         override val func: Trigger.Func,
@@ -191,76 +191,78 @@ sealed class ApiTrigger : ApiObject() {
         }
 
         private val classMapping = mapOf(
-            "Event" to ApiEventTrigger::class,
-            "FixedRate" to ApiFixedRateTrigger::class,
-            "Hook" to ApiHookTrigger::class,
-            "Cron" to ApiCronTrigger::class
+            "Event" to Event::class,
+            "FixedRate" to FixedRate::class,
+            "Hook" to Hook::class,
+            "Cron" to Cron::class
         )
     }
-}
-
-class ApiFixedRateTrigger(
-    override val id: TriggerId,
-    override val name: TriggerName,
-    override val func: Func,
-    override val namespace: Namespace,
-    override val inputs: TriggerInputs,
-    override val status: TriggerStatus,
-    override val correlationId: CorrelationId? = null,
-    val duration: TriggerDuration
-) : ApiTrigger() {
-    override val type: TriggerType = TriggerType.FixedRate
-}
-
-class ApiEventTrigger(
-    override val id: TriggerId,
-    override val name: TriggerName,
-    override val func: Func,
-    override val namespace: Namespace,
-    override val inputs: TriggerInputs,
-    override val status: TriggerStatus,
-    override val correlationId: CorrelationId? = null,
-    val topic: Topic
-) : ApiTrigger() {
-    override val type: TriggerType = TriggerType.Event
-
-    data class Topic(
-        val id: TopicId,
-        val name: TopicName
-    )
-}
-
-class ApiHookTrigger(
-    override val id: TriggerId,
-    override val name: TriggerName,
-    override val func: Func,
-    override val namespace: Namespace,
-    override val inputs: TriggerInputs,
-    override val status: TriggerStatus,
-    override val correlationId: CorrelationId? = null,
-    val hook: Hook
-) : ApiTrigger() {
-    override val type: TriggerType = TriggerType.Hook
-
-    data class Hook(
-        val id: HookId,
-        val name: HookName,
-        val method: HookMethod
-    )
-}
 
 
-class ApiCronTrigger(
-    override val id: TriggerId,
-    override val name: TriggerName,
-    override val func: Func,
-    override val namespace: Namespace,
-    override val inputs: TriggerInputs,
-    override val status: TriggerStatus,
-    override val correlationId: CorrelationId? = null,
-    val cron: CronPattern
-) : ApiTrigger() {
-    override val type: TriggerType = TriggerType.Cron
+    class FixedRate(
+        override val id: TriggerId,
+        override val name: TriggerName,
+        override val func: Func,
+        override val namespace: Namespace,
+        override val inputs: TriggerInputs,
+        override val status: TriggerStatus,
+        override val correlationId: CorrelationId? = null,
+        val duration: TriggerDuration
+    ) : ApiTrigger() {
+        override val type: TriggerType = TriggerType.FixedRate
+    }
+
+    class Event(
+        override val id: TriggerId,
+        override val name: TriggerName,
+        override val func: Func,
+        override val namespace: Namespace,
+        override val inputs: TriggerInputs,
+        override val status: TriggerStatus,
+        override val correlationId: CorrelationId? = null,
+        val topic: Topic
+    ) : ApiTrigger() {
+        override val type: TriggerType = TriggerType.Event
+
+        data class Topic(
+            val id: TopicId,
+            val name: TopicName
+        )
+    }
+
+    class Hook(
+        override val id: TriggerId,
+        override val name: TriggerName,
+        override val func: Func,
+        override val namespace: Namespace,
+        override val inputs: TriggerInputs,
+        override val status: TriggerStatus,
+        override val correlationId: CorrelationId? = null,
+        val hook: Hook
+    ) : ApiTrigger() {
+        override val type: TriggerType = TriggerType.Hook
+
+        data class Hook(
+            val id: HookId,
+            val name: HookName,
+            val method: HookMethod
+        )
+    }
+
+
+    class Cron(
+        override val id: TriggerId,
+        override val name: TriggerName,
+        override val func: Func,
+        override val namespace: Namespace,
+        override val inputs: TriggerInputs,
+        override val status: TriggerStatus,
+        override val correlationId: CorrelationId? = null,
+        val cron: CronPattern
+    ) : ApiTrigger() {
+        override val type: TriggerType = TriggerType.Cron
+    }
+
 }
 
 

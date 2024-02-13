@@ -9,10 +9,7 @@ import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.kua.type.KuaMap
 import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.sdk.ApiSdk
-import io.hamal.lib.sdk.api.ApiCronTrigger
-import io.hamal.lib.sdk.api.ApiEventTrigger
-import io.hamal.lib.sdk.api.ApiFixedRateTrigger
-import io.hamal.lib.sdk.api.ApiHookTrigger
+import io.hamal.lib.sdk.api.ApiTrigger
 
 class TriggerGetFunction(
     private val sdk: ApiSdk
@@ -25,7 +22,7 @@ class TriggerGetFunction(
             null to sdk.trigger.get(TriggerId(arg1.value))
                 .let { trigger ->
                     when (trigger) {
-                        is ApiFixedRateTrigger ->
+                        is ApiTrigger.FixedRate ->
                             KuaMap(
                                 mutableMapOf(
                                     "id" to KuaString(trigger.id.value.value.toString(16)),
@@ -48,7 +45,7 @@ class TriggerGetFunction(
                                 )
                             )
 
-                        is ApiEventTrigger -> {
+                        is ApiTrigger.Event -> {
                             KuaMap(
                                 mutableMapOf(
                                     "id" to KuaString(trigger.id.value.value.toString(16)),
@@ -77,7 +74,7 @@ class TriggerGetFunction(
                             )
                         }
 
-                        is ApiHookTrigger -> {
+                        is ApiTrigger.Hook -> {
                             KuaMap(
                                 mutableMapOf(
                                     "id" to KuaString(trigger.id.value.value.toString(16)),
@@ -107,7 +104,7 @@ class TriggerGetFunction(
                             )
                         }
 
-                        is ApiCronTrigger -> KuaMap(
+                        is ApiTrigger.Cron -> KuaMap(
                             mutableMapOf(
                                 "id" to KuaString(trigger.id.value.value.toString(16)),
                                 "type" to KuaString("Cron"),

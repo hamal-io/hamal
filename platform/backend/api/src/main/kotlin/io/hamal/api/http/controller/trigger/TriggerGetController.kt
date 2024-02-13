@@ -3,7 +3,7 @@ package io.hamal.api.http.controller.trigger
 import io.hamal.core.adapter.TriggerGetPort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.TriggerId
-import io.hamal.lib.sdk.api.*
+import io.hamal.lib.sdk.api.ApiTrigger
 import io.hamal.repository.api.Trigger
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -23,7 +23,7 @@ internal class TriggerGetController(
             getTrigger(triggerId) { trigger, func, namespace, topic, hook ->
                 ResponseEntity.ok(
                     when (trigger) {
-                        is Trigger.FixedRate -> ApiFixedRateTrigger(
+                        is Trigger.FixedRate -> ApiTrigger.FixedRate(
                             id = trigger.id,
                             name = trigger.name,
                             func = ApiTrigger.Func(
@@ -39,7 +39,7 @@ internal class TriggerGetController(
                             status = trigger.status
                         )
 
-                        is Trigger.Event -> ApiEventTrigger(
+                        is Trigger.Event -> ApiTrigger.Event(
                             id = trigger.id,
                             name = trigger.name,
                             func = ApiTrigger.Func(
@@ -51,14 +51,14 @@ internal class TriggerGetController(
                                 name = namespace.name
                             ),
                             inputs = trigger.inputs,
-                            topic = ApiEventTrigger.Topic(
+                            topic = ApiTrigger.Event.Topic(
                                 id = topic!!.id,
                                 name = topic.name
                             ),
                             status = trigger.status
                         )
 
-                        is Trigger.Hook -> ApiHookTrigger(
+                        is Trigger.Hook -> ApiTrigger.Hook(
                             id = trigger.id,
                             name = trigger.name,
                             func = ApiTrigger.Func(
@@ -70,7 +70,7 @@ internal class TriggerGetController(
                                 name = namespace.name
                             ),
                             inputs = trigger.inputs,
-                            hook = ApiHookTrigger.Hook(
+                            hook = ApiTrigger.Hook.Hook(
                                 id = hook!!.id,
                                 name = hook.name,
                                 method = trigger.hookMethod
@@ -78,7 +78,7 @@ internal class TriggerGetController(
                             status = trigger.status
                         )
 
-                        is Trigger.Cron -> ApiCronTrigger(
+                        is Trigger.Cron -> ApiTrigger.Cron(
                             id = trigger.id,
                             name = trigger.name,
                             func = ApiTrigger.Func(
