@@ -2,6 +2,10 @@ package io.hamal.core.adapter
 
 import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
+import io.hamal.lib.domain.request.BlueprintCreateRequest
+import io.hamal.lib.domain.request.BlueprintCreateRequested
+import io.hamal.lib.domain.request.BlueprintUpdateRequest
+import io.hamal.lib.domain.request.BlueprintUpdateRequested
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.BlueprintId
 import io.hamal.lib.domain.vo.GroupId
@@ -9,10 +13,6 @@ import io.hamal.lib.domain.vo.RequestId
 import io.hamal.repository.api.Blueprint
 import io.hamal.repository.api.BlueprintQueryRepository
 import io.hamal.repository.api.RequestCmdRepository
-import io.hamal.lib.domain.request.BlueprintCreateRequested
-import io.hamal.lib.domain.request.BlueprintUpdateRequested
-import io.hamal.lib.domain.request.BlueprintCreateRequest
-import io.hamal.lib.domain.request.BlueprintUpdateRequest
 import org.springframework.stereotype.Component
 
 interface BlueprintCreatePort {
@@ -34,6 +34,15 @@ interface BlueprintUpdatePort {
         req: BlueprintUpdateRequest,
         responseHandler: (BlueprintUpdateRequested) -> T
     ): T
+}
+
+interface BlueprintListPort {
+    //TODO(196)
+    /*operator fun <T : Any> invoke(
+        operator fun <T : Any> invoke(
+            query: BlueprintQuery,
+            responseHandler: (List<Blueprint>, Map<NamespaceId, Namespace>) -> T): T
+    )*/
 }
 
 interface BlueprintPort : BlueprintCreatePort, BlueprintGetPort, BlueprintUpdatePort

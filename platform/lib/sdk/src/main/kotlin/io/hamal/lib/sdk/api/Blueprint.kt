@@ -40,6 +40,11 @@ data class ApiBlueprintUpdateRequested(
     val blueprintId: BlueprintId
 ) : ApiRequested()
 
+data class ApiBlueprintList(
+    override val id: RequestId,
+    override val status: RequestStatus,
+    //TODO(196)
+) : ApiRequested()
 
 interface ApiBlueprintService {
     fun create(groupId: GroupId, req: ApiBlueprintCreateRequest): ApiBlueprintCreateRequested

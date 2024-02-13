@@ -3,6 +3,7 @@ import {
     ActivityIcon,
     BookOpen,
     Braces,
+    ClipboardPaste,
     Command,
     FolderTree,
     GlobeIcon,
@@ -92,7 +93,13 @@ const Sidebar: React.FC<Props> = ({className}) => {
     ];
 
 
+
     const secondaryNavigation: NavItem[] = [
+        {
+            icon: ClipboardPaste,
+            href: '/blueprints',
+            label: "Blueprints"
+        },
         {
             icon: BookOpen,
             href: "https://docs.fn.guru",

@@ -28,6 +28,18 @@ export const router = createBrowserRouter([
         path: "/onboarding", element: <OnboardingPage/>
     },
     {
+        path: "/blueprints", element:
+            <GroupLayout>
+                {/*<BlueprintListPage> */}
+            </GroupLayout>
+    },
+    {
+        path: "/blueprints/:blueprintId", element:
+            <GroupLayout>
+                {/*<BlueprintDetailPage> */}
+            </GroupLayout>
+    },
+    {
         path: "/dashboard", element:
             <GroupLayout>
                 <Dashboard/>
