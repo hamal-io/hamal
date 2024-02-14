@@ -20,8 +20,8 @@ private object NamespaceCurrentProjection {
         val currentNamespace = projection[namespace.id]
         projection.remove(namespace.id)
 
-        val namespacesInGroup = projection.values.filter { it.groupId == namespace.groupId }
-        if (namespacesInGroup.any { it.name == namespace.name }) {
+        val namespacesInWorkspace = projection.values.filter { it.workspaceId == namespace.workspaceId }
+        if (namespacesInWorkspace.any { it.name == namespace.name }) {
             if (currentNamespace != null) {
                 projection[currentNamespace.id] = currentNamespace
             }
@@ -40,7 +40,7 @@ private object NamespaceCurrentProjection {
             .reversed()
             .asSequence()
             .filter {
-                if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId)
+                if (query.workspaceIds.isEmpty()) true else query.workspaceIds.contains(it.workspaceId)
             }.dropWhile { it.id >= query.afterId }
             .take(query.limit.value)
             .toList()
@@ -53,7 +53,7 @@ private object NamespaceCurrentProjection {
                 .reversed()
                 .asSequence()
                 .filter {
-                    if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId)
+                    if (query.workspaceIds.isEmpty()) true else query.workspaceIds.contains(it.workspaceId)
                 }.dropWhile { it.id >= query.afterId }
                 .count()
                 .toLong()
@@ -80,7 +80,7 @@ class NamespaceMemoryRepository : RecordMemoryRepository<NamespaceId, NamespaceR
                     NamespaceRecord.Created(
                         cmdId = cmd.id,
                         entityId = namespaceId,
-                        groupId = cmd.groupId,
+                        workspaceId = cmd.workspaceId,
                         name = cmd.name
                     )
                 )

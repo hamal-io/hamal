@@ -1,6 +1,6 @@
 package io.hamal.plugin.std.sys.exec
 
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.kua.function.Function0In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionOutput2Schema
@@ -14,7 +14,7 @@ class ExecListFunction(
 ) {
     override fun invoke(ctx: FunctionContext): Pair<KuaError?, KuaArray?> {
         return try {
-            val execs = sdk.exec.list(ctx[GroupId::class])
+            val execs = sdk.exec.list(ctx[WorkspaceId::class])
             null to KuaArray(
                 execs.mapIndexed { index, exec ->
                     index to KuaMap(

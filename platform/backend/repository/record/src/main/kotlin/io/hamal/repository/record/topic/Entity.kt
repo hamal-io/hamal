@@ -19,7 +19,7 @@ data class TopicEntity(
     var name: TopicName? = null,
     var type: TopicType? = null,
     var logTopicId: LogTopicId? = null,
-    var groupId: GroupId? = null,
+    var workspaceId: WorkspaceId? = null,
     var namespaceId: NamespaceId? = null
 
 ) : RecordEntity<TopicId, TopicRecord, Topic> {
@@ -31,7 +31,7 @@ data class TopicEntity(
                 id = rec.entityId,
                 sequence = rec.sequence(),
                 name = rec.name,
-                groupId = rec.groupId,
+                workspaceId = rec.workspaceId,
                 namespaceId = rec.namespaceId,
                 logTopicId = rec.logTopicId,
                 type = rec.type,
@@ -48,7 +48,7 @@ data class TopicEntity(
                 name = name!!,
                 logTopicId = logTopicId!!,
                 updatedAt = recordedAt.toUpdatedAt(),
-                groupId = groupId!!,
+                workspaceId = workspaceId!!,
                 namespaceId = namespaceId!!
             )
 
@@ -58,17 +58,17 @@ data class TopicEntity(
                 name = name!!,
                 logTopicId = logTopicId!!,
                 updatedAt = recordedAt.toUpdatedAt(),
-                groupId = groupId!!,
+                workspaceId = workspaceId!!,
                 namespaceId = namespaceId!!
             )
 
-            TopicType.Group -> Topic.Group(
+            TopicType.Workspace -> Topic.Workspace(
                 cmdId = cmdId,
                 id = id,
                 name = name!!,
                 logTopicId = logTopicId!!,
                 updatedAt = recordedAt.toUpdatedAt(),
-                groupId = groupId!!,
+                workspaceId = workspaceId!!,
                 namespaceId = namespaceId!!
             )
 
@@ -78,7 +78,7 @@ data class TopicEntity(
                 name = name!!,
                 logTopicId = logTopicId!!,
                 updatedAt = recordedAt.toUpdatedAt(),
-                groupId = groupId!!,
+                workspaceId = workspaceId!!,
                 namespaceId = namespaceId!!
             )
 

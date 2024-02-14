@@ -17,7 +17,7 @@
 --assert(req_two.id ~= nil)
 --assert(req_two.status == 'Submitted')
 --assert(req_two.trigger_id ~= nil)
---assert(req_two.group_id == '1')
+--assert(req_two.workspace_id == '1')
 --assert(req_two.namespace_id == '1')
 --
 --req_two = fail_on_error(sys.triggers.get(req_two.id))

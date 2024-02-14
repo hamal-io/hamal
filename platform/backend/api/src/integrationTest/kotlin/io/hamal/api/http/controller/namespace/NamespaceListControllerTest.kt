@@ -46,8 +46,8 @@ internal class NamespaceListControllerTest : NamespaceBaseControllerTest() {
             }
         )
 
-        val listResponse = httpTemplate.get("/v1/groups/{groupId}/namespaces")
-            .path("groupId", testGroup.id)
+        val listResponse = httpTemplate.get("/v1/workspaces/{workspaceId}/namespaces")
+            .path("workspaceId", testWorkspace.id)
             .parameter("limit", 12)
             .execute(ApiNamespaceList::class)
 
@@ -71,8 +71,8 @@ internal class NamespaceListControllerTest : NamespaceBaseControllerTest() {
         awaitCompleted(requests)
         val fortyNinth = requests[49]
 
-        val listResponse = httpTemplate.get("/v1/groups/{groupId}/namespaces")
-            .path("groupId", testGroup.id)
+        val listResponse = httpTemplate.get("/v1/workspaces/{workspaceId}/namespaces")
+            .path("workspaceId", testWorkspace.id)
             .parameter("after_id", fortyNinth.namespaceId)
             .parameter("limit", 1)
             .execute(ApiNamespaceList::class)

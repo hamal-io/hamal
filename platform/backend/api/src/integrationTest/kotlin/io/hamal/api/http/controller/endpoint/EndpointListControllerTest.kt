@@ -22,7 +22,7 @@ internal class EndpointListControllerTest : EndpointBaseControllerTest() {
         val namespaceId = awaitCompleted(
             createNamespace(
                 name = NamespaceName("namespace"),
-                groupId = testGroup.id
+                workspaceId = testWorkspace.id
             )
         ).namespaceId
 
@@ -60,7 +60,7 @@ internal class EndpointListControllerTest : EndpointBaseControllerTest() {
                 val namespaceId = awaitCompleted(
                     createNamespace(
                         name = NamespaceName("namespace-$it"),
-                        groupId = testGroup.id
+                        workspaceId = testWorkspace.id
                     )
                 ).namespaceId
 
@@ -81,7 +81,7 @@ internal class EndpointListControllerTest : EndpointBaseControllerTest() {
         )
 
         val listResponse = httpTemplate.get("/v1/endpoints")
-            .parameter("group_ids", testGroup.id)
+            .parameter("workspace_ids", testWorkspace.id)
             .parameter("limit", 12)
             .execute(ApiEndpointList::class)
 
@@ -99,7 +99,7 @@ internal class EndpointListControllerTest : EndpointBaseControllerTest() {
             val namespaceId = awaitCompleted(
                 createNamespace(
                     name = NamespaceName("namespace-$it"),
-                    groupId = testGroup.id
+                    workspaceId = testWorkspace.id
                 )
             ).namespaceId
 
@@ -122,7 +122,7 @@ internal class EndpointListControllerTest : EndpointBaseControllerTest() {
         val fortyNinth = requests[49]
 
         val listResponse = httpTemplate.get("/v1/endpoints")
-            .parameter("group_ids", testGroup.id)
+            .parameter("workspace_ids", testWorkspace.id)
             .parameter("after_id", fortyNinth.endpointId)
             .parameter("limit", 1)
             .execute(ApiEndpointList::class)

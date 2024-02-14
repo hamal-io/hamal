@@ -18,7 +18,7 @@ data class ExecEntity(
     override val sequence: RecordSequence,
     override val recordedAt: RecordedAt,
     val namespaceId: NamespaceId,
-    val groupId: GroupId,
+    val workspaceId: WorkspaceId,
 
     var status: ExecStatus? = null,
     var correlation: Correlation? = null,
@@ -38,7 +38,7 @@ data class ExecEntity(
                 cmdId = rec.cmdId,
                 id = rec.entityId,
                 namespaceId = rec.namespaceId,
-                groupId = rec.groupId,
+                workspaceId = rec.workspaceId,
                 sequence = rec.sequence(),
                 status = ExecStatus.Planned,
                 correlation = rec.correlation,
@@ -102,7 +102,7 @@ data class ExecEntity(
             id = id,
             updatedAt = recordedAt.toUpdatedAt(),
             namespaceId = namespaceId,
-            groupId = groupId,
+            workspaceId = workspaceId,
             correlation = correlation,
             inputs = inputs ?: ExecInputs(HotObject.empty),
             code = code ?: ExecCode(),
@@ -153,7 +153,7 @@ fun List<ExecRecord>.createEntity(): ExecEntity {
     var result = ExecEntity(
         id = firstRecord.entityId,
         namespaceId = firstRecord.namespaceId,
-        groupId = firstRecord.groupId,
+        workspaceId = firstRecord.workspaceId,
         cmdId = firstRecord.cmdId,
         sequence = firstRecord.sequence(),
         recordedAt = firstRecord.recordedAt()

@@ -44,7 +44,7 @@ internal class EventTriggerService(
                             afterId = TriggerId(SnowflakeId(Long.MAX_VALUE)),
                             types = listOf(TriggerType.Event),
                             limit = Limit(10),
-                            groupIds = listOf()
+                            workspaceIds = listOf()
                         )
                     ).forEach { trigger ->
                         require(trigger is Trigger.Event)

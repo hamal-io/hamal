@@ -80,7 +80,7 @@ class TriggerAdapter(
             id = generateDomainId(::RequestId),
             status = RequestStatus.Submitted,
             triggerId = generateDomainId(::TriggerId),
-            groupId = namespace.groupId,
+            workspaceId = namespace.workspaceId,
             name = req.name,
             funcId = func.id,
             namespaceId = namespaceId,

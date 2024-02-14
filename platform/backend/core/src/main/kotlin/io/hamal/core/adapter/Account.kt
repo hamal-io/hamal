@@ -73,14 +73,14 @@ class AccountAdapter(
 
     override fun <T : Any> invoke(req: AccountCreateRequest, responseHandler: (AccountCreateRequested) -> T): T {
         val salt = generateSalt()
-        val groupId = generateDomainId(::GroupId)
+        val workspaceId = generateDomainId(::WorkspaceId)
         return AccountCreateRequested(
             id = generateDomainId(::RequestId),
             status = Submitted,
             accountId = generateDomainId(::AccountId),
             accountType = User,
-            groupId = groupId,
-            namespaceId = NamespaceId(groupId.value),
+            workspaceId = workspaceId,
+            namespaceId = NamespaceId(workspaceId.value),
             email = req.email,
             passwordAuthId = generateDomainId(::AuthId),
             tokenAuthId = generateDomainId(::AuthId),
@@ -98,14 +98,14 @@ class AccountAdapter(
         responseHandler: (AccountCreateAnonymousRequested) -> T
     ): T {
         val salt = generateSalt()
-        val groupId = generateDomainId(::GroupId)
+        val workspaceId = generateDomainId(::WorkspaceId)
         return AccountCreateAnonymousRequested(
             id = generateDomainId(::RequestId),
             status = Submitted,
             accountId = req.id,
             accountType = Anonymous,
-            groupId = groupId,
-            namespaceId = NamespaceId(groupId.value),
+            workspaceId = workspaceId,
+            namespaceId = NamespaceId(workspaceId.value),
             passwordAuthId = generateDomainId(::AuthId),
             tokenAuthId = generateDomainId(::AuthId),
             hash = encodePassword(
@@ -121,14 +121,14 @@ class AccountAdapter(
         req: AccountCreateMetaMaskRequest,
         responseHandler: (AccountCreateMetaMaskRequested) -> T
     ): T {
-        val groupId = generateDomainId(::GroupId)
+        val workspaceId = generateDomainId(::WorkspaceId)
         return AccountCreateMetaMaskRequested(
             id = generateDomainId(::RequestId),
             status = Submitted,
             accountId = req.id,
             accountType = User,
-            groupId = groupId,
-            namespaceId = NamespaceId(groupId.value),
+            workspaceId = workspaceId,
+            namespaceId = NamespaceId(workspaceId.value),
             salt = generateSalt(),
             address = req.address,
             metamaskAuthId = generateDomainId(::AuthId),
@@ -147,7 +147,7 @@ class AccountAdapter(
                     status = Submitted,
                     accountId = AccountId.root,
                     accountType = AccountType.Root,
-                    groupId = GroupId.root,
+                    workspaceId = WorkspaceId.root,
                     namespaceId = NamespaceId.root,
                     email = req.email,
                     passwordAuthId = generateDomainId(::AuthId),

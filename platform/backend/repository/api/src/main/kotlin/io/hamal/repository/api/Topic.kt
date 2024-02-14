@@ -14,7 +14,7 @@ sealed class Topic : DomainObject<TopicId> {
     abstract val cmdId: CmdId
     abstract val name: TopicName
     abstract val logTopicId: LogTopicId
-    abstract val groupId: GroupId
+    abstract val workspaceId: WorkspaceId
     abstract val namespaceId: NamespaceId
 
     abstract val type: TopicType
@@ -40,7 +40,7 @@ sealed class Topic : DomainObject<TopicId> {
         private val classMapping = mapOf(
             TopicType.Internal.name to Internal::class,
             TopicType.Namespace.name to Namespace::class,
-            TopicType.Group.name to Group::class,
+            TopicType.Workspace.name to Workspace::class,
             TopicType.Public.name to Public::class
         )
     }
@@ -54,7 +54,7 @@ sealed class Topic : DomainObject<TopicId> {
         override val name: TopicName,
         override val logTopicId: LogTopicId,
         override val updatedAt: UpdatedAt,
-        override val groupId: GroupId,
+        override val workspaceId: WorkspaceId,
         override val namespaceId: NamespaceId
     ) : Topic() {
         override val type: TopicType = TopicType.Internal
@@ -69,30 +69,30 @@ sealed class Topic : DomainObject<TopicId> {
         override val name: TopicName,
         override val logTopicId: LogTopicId,
         override val updatedAt: UpdatedAt,
-        override val groupId: GroupId,
+        override val workspaceId: WorkspaceId,
         override val namespaceId: NamespaceId
     ) : Topic() {
         override val type: TopicType = TopicType.Namespace
     }
 
     /**
-     * Topic which is only visible within the same group
+     * Topic which is only visible within the same workspace
      */
-    data class Group(
+    data class Workspace(
         override val cmdId: CmdId,
         override val id: TopicId,
         override val name: TopicName,
         override val logTopicId: LogTopicId,
         override val updatedAt: UpdatedAt,
-        override val groupId: GroupId,
+        override val workspaceId: WorkspaceId,
         override val namespaceId: NamespaceId
     ) : Topic() {
-        override val type: TopicType = TopicType.Group
+        override val type: TopicType = TopicType.Workspace
     }
 
     /**
      * Topic which is publicly available to all users of hamal to consume,
-     * only the group can write to
+     * only the workspace can write to
      */
     data class Public(
         override val cmdId: CmdId,
@@ -100,7 +100,7 @@ sealed class Topic : DomainObject<TopicId> {
         override val name: TopicName,
         override val logTopicId: LogTopicId,
         override val updatedAt: UpdatedAt,
-        override val groupId: GroupId,
+        override val workspaceId: WorkspaceId,
         override val namespaceId: NamespaceId
     ) : Topic() {
         override val type: TopicType = TopicType.Public
@@ -121,7 +121,7 @@ interface TopicCmdRepository : CmdRepository {
         val id: CmdId,
         val topicId: TopicId,
         val name: TopicName,
-        val groupId: GroupId,
+        val workspaceId: WorkspaceId,
         val namespaceId: NamespaceId,
         val logTopicId: LogTopicId,
         val type: TopicType
@@ -150,7 +150,7 @@ interface TopicQueryRepository {
         var limit: Limit = Limit(1),
         var topicIds: List<TopicId> = listOf(),
         var names: List<TopicName> = listOf(),
-        var groupIds: List<GroupId> = listOf(),
+        var workspaceIds: List<WorkspaceId> = listOf(),
         var namespaceIds: List<NamespaceId> = listOf()
     )
 

@@ -29,7 +29,7 @@ private fun FuncCreateHandler.createFunc(req: FuncCreateRequested): Func {
         CodeCmdRepository.CreateCmd(
             id = req.cmdId(),
             codeId = req.codeId,
-            groupId = req.groupId,
+            workspaceId = req.workspaceId,
             value = req.code
         )
     )
@@ -37,7 +37,7 @@ private fun FuncCreateHandler.createFunc(req: FuncCreateRequested): Func {
         CreateCmd(
             id = req.cmdId(),
             funcId = req.funcId,
-            groupId = req.groupId,
+            workspaceId = req.workspaceId,
             namespaceId = req.namespaceId,
             name = req.name,
             inputs = req.inputs,

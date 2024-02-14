@@ -6,7 +6,7 @@ import io.hamal.lib.domain.vo.*
 data class ExecInvokeRequested(
     override val id: RequestId,
     override var status: RequestStatus,
-    val groupId: GroupId,
+    val workspaceId: WorkspaceId,
     val execId: ExecId,
     val namespaceId: NamespaceId,
     val funcId: FuncId?,

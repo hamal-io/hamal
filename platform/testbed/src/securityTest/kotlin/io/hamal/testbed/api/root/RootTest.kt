@@ -34,11 +34,11 @@
 //            )
 //        ) as TokenAuth).token
 //
-//        testGroup = groupRepository.create(
-//            GroupCmdRepository.CreateCmd(
+//        testWorkspace = workspaceRepository.create(
+//            WorkspaceCmdRepository.CreateCmd(
 //                id = CmdId(4),
-//                groupId = GroupId.root,
-//                name = GroupName("root-group"),
+//                workspaceId = WorkspaceId.root,
+//                name = WorkspaceName("root-workspace"),
 //                creatorId = testAccount.id
 //            )
 //        )
@@ -47,7 +47,7 @@
 //            NamespaceCmdRepository.CreateCmd(
 //                id = CmdId(5),
 //                namespaceId = NamespaceId.root,
-//                groupId = testGroup.id,
+//                workspaceId = testWorkspace.id,
 //                name = NamespaceName("root-namespace"),
 //                inputs = NamespaceInputs()
 //            )

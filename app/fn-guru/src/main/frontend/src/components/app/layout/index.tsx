@@ -1,2 +1,2 @@
 export * from './authenticated'
-export * from './group'
+export * from './workspace'

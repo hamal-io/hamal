@@ -28,7 +28,7 @@ internal class BlueprintCreateHandlerTest : BaseReqHandlerTest() {
         BlueprintCreateRequested(
             id = RequestId(1),
             status = RequestStatus.Submitted,
-            groupId = testGroup.id,
+            workspaceId = testWorkspace.id,
             blueprintId = BlueprintId(123),
             name = BlueprintName("TestBlueprint"),
             inputs = BlueprintInputs(HotObject.builder().set("hamal", "rocks").build()),

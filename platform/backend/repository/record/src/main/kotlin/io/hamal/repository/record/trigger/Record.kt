@@ -29,7 +29,7 @@ sealed class TriggerRecord(
     data class FixedRateCreated(
         override val cmdId: CmdId,
         override val entityId: TriggerId,
-        val groupId: GroupId,
+        val workspaceId: WorkspaceId,
         val funcId: FuncId,
         val namespaceId: NamespaceId,
         val name: TriggerName,
@@ -42,7 +42,7 @@ sealed class TriggerRecord(
     data class EventCreated(
         override val cmdId: CmdId,
         override val entityId: TriggerId,
-        val groupId: GroupId,
+        val workspaceId: WorkspaceId,
         val funcId: FuncId,
         val namespaceId: NamespaceId,
         val name: TriggerName,
@@ -55,7 +55,7 @@ sealed class TriggerRecord(
     data class HookCreated(
         override val cmdId: CmdId,
         override val entityId: TriggerId,
-        val groupId: GroupId,
+        val workspaceId: WorkspaceId,
         val funcId: FuncId,
         val namespaceId: NamespaceId,
         val name: TriggerName,
@@ -69,7 +69,7 @@ sealed class TriggerRecord(
     data class CronCreated(
         override val cmdId: CmdId,
         override val entityId: TriggerId,
-        val groupId: GroupId,
+        val workspaceId: WorkspaceId,
         val funcId: FuncId,
         val namespaceId: NamespaceId,
         val name: TriggerName,

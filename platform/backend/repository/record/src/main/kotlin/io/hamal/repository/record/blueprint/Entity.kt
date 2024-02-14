@@ -13,7 +13,7 @@ data class BlueprintEntity(
     override val id: BlueprintId,
     override val sequence: RecordSequence,
     override val recordedAt: RecordedAt,
-    val groupId: GroupId,
+    val workspaceId: WorkspaceId,
     var creatorId: AccountId,
 
     var name: BlueprintName? = null,
@@ -51,7 +51,7 @@ data class BlueprintEntity(
             cmdId = cmdId,
             id = id,
             updatedAt = recordedAt.toUpdatedAt(),
-            groupId = groupId,
+            workspaceId = workspaceId,
             creatorId = creatorId,
             name = name!!,
             inputs = inputs!!,
@@ -68,7 +68,7 @@ fun List<BlueprintRecord>.createEntity(): BlueprintEntity {
     var result = BlueprintEntity(
         cmdId = firstRecord.cmdId,
         id = firstRecord.entityId,
-        groupId = firstRecord.groupId,
+        workspaceId = firstRecord.workspaceId,
         creatorId = firstRecord.creatorId,
         sequence = firstRecord.sequence(),
         recordedAt = firstRecord.recordedAt()

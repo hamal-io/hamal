@@ -3,7 +3,7 @@ package io.hamal.repository
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
@@ -31,14 +31,14 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
                 CreateCmd(
                     id = CmdId(1),
                     namespaceId = NamespaceId(234),
-                    groupId = GroupId(1),
+                    workspaceId = WorkspaceId(1),
                     name = NamespaceName("SomeNamespace"),
                 )
             )
 
             with(result) {
                 assertThat(id, equalTo(NamespaceId(234)))
-                assertThat(groupId, equalTo(GroupId(1)))
+                assertThat(workspaceId, equalTo(WorkspaceId(1)))
                 assertThat(name, equalTo(NamespaceName("SomeNamespace")))
             }
 
@@ -51,7 +51,7 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
                 CreateCmd(
                     id = CmdId(1),
                     namespaceId = NamespaceId(234),
-                    groupId = GroupId(1),
+                    workspaceId = WorkspaceId(1),
                     name = NamespaceName("SomeNamespace"),
 
                     )
@@ -59,7 +59,7 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
 
             with(result) {
                 assertThat(id, equalTo(NamespaceId(234)))
-                assertThat(groupId, equalTo(GroupId(1)))
+                assertThat(workspaceId, equalTo(WorkspaceId(1)))
                 assertThat(name, equalTo(NamespaceName("SomeNamespace")))
             }
 
@@ -72,7 +72,7 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
 
                 createNamespace(
                     namespaceId = NamespaceId(2),
-                    groupId = GroupId(3),
+                    workspaceId = WorkspaceId(3),
                     name = NamespaceName("first-namespace-name")
                 )
 
@@ -81,7 +81,7 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
                         CreateCmd(
                             id = CmdId(2),
                             namespaceId = NamespaceId(4),
-                            groupId = GroupId(3),
+                            workspaceId = WorkspaceId(3),
                             name = NamespaceName("first-namespace-name")
                         )
                     )
@@ -103,7 +103,7 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
                 createNamespace(
                     cmdId = CmdId(23456),
                     namespaceId = NamespaceId(5),
-                    groupId = GroupId(3),
+                    workspaceId = WorkspaceId(3),
                     name = NamespaceName("first-namespace-name")
                 )
 
@@ -112,14 +112,14 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
                     CreateCmd(
                         id = CmdId(23456),
                         namespaceId = NamespaceId(5),
-                        groupId = GroupId(333),
+                        workspaceId = WorkspaceId(333),
                         name = NamespaceName("second-namespace-name")
                     )
                 )
 
                 with(result) {
                     assertThat(id, equalTo(NamespaceId(5)))
-                    assertThat(groupId, equalTo(GroupId(3)))
+                    assertThat(workspaceId, equalTo(WorkspaceId(3)))
                     assertThat(name, equalTo(NamespaceName("first-namespace-name")))
                 }
 
@@ -134,7 +134,7 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
         fun `Updates namespace`() = runWith(NamespaceRepository::class) {
             createNamespace(
                 namespaceId = NamespaceId(1),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 name = NamespaceName("namespace-name")
             )
 
@@ -147,7 +147,7 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
 
             with(result) {
                 assertThat(id, equalTo(NamespaceId(1)))
-                assertThat(groupId, equalTo(GroupId(3)))
+                assertThat(workspaceId, equalTo(WorkspaceId(3)))
                 assertThat(name, equalTo(NamespaceName("Updated")))
             }
 
@@ -158,7 +158,7 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
         fun `Updates namespace without updating it`() = runWith(NamespaceRepository::class) {
             createNamespace(
                 namespaceId = NamespaceId(1),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 name = NamespaceName("namespace-name")
             )
 
@@ -171,7 +171,7 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
 
             with(result) {
                 assertThat(id, equalTo(NamespaceId(1)))
-                assertThat(groupId, equalTo(GroupId(3)))
+                assertThat(workspaceId, equalTo(WorkspaceId(3)))
                 assertThat(name, equalTo(NamespaceName("namespace-name")))
             }
 
@@ -194,13 +194,13 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
 
             createNamespace(
                 namespaceId = NamespaceId(1),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 name = NamespaceName("already-exists")
             )
 
             createNamespace(
                 namespaceId = NamespaceId(2),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 name = NamespaceName("to-update")
             )
 
@@ -216,13 +216,13 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
         fun `Get namespace by id`() = runWith(NamespaceRepository::class) {
             createNamespace(
                 namespaceId = NamespaceId(1),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 name = NamespaceName("SomeNamespace")
             )
 
             with(get(NamespaceId(1))) {
                 assertThat(id, equalTo(NamespaceId(1)))
-                assertThat(groupId, equalTo(GroupId(3)))
+                assertThat(workspaceId, equalTo(WorkspaceId(3)))
                 assertThat(name, equalTo(NamespaceName("SomeNamespace")))
             }
         }
@@ -231,7 +231,7 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
         fun `Tries to get namespace by id but does not exist`() = runWith(NamespaceRepository::class) {
             createNamespace(
                 namespaceId = NamespaceId(1),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 name = NamespaceName("SomeNamespace")
             )
 
@@ -248,13 +248,13 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
         fun `Find namespace by id`() = runWith(NamespaceRepository::class) {
             createNamespace(
                 namespaceId = NamespaceId(1),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 name = NamespaceName("SomeNamespace")
             )
 
             with(find(NamespaceId(1))!!) {
                 assertThat(id, equalTo(NamespaceId(1)))
-                assertThat(groupId, equalTo(GroupId(3)))
+                assertThat(workspaceId, equalTo(WorkspaceId(3)))
                 assertThat(name, equalTo(NamespaceName("SomeNamespace")))
             }
         }
@@ -263,7 +263,7 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
         fun `Tries to find namespace by id but does not exist`() = runWith(NamespaceRepository::class) {
             createNamespace(
                 namespaceId = NamespaceId(1),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 name = NamespaceName("SomeNamespace")
             )
 
@@ -284,17 +284,17 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
 
             with(result[0]) {
                 assertThat(id, equalTo(NamespaceId(3)))
-                assertThat(groupId, equalTo(GroupId(4)))
+                assertThat(workspaceId, equalTo(WorkspaceId(4)))
                 assertThat(name, equalTo(NamespaceName("Namespace-Three")))
             }
         }
 
         @TestFactory
-        fun `With group ids`() = runWith(NamespaceRepository::class) {
+        fun `With workspace ids`() = runWith(NamespaceRepository::class) {
             setup()
 
             val query = NamespaceQuery(
-                groupIds = listOf(GroupId(5), GroupId(4)),
+                workspaceIds = listOf(WorkspaceId(5), WorkspaceId(4)),
                 limit = Limit(10)
             )
 
@@ -304,13 +304,13 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
 
             with(result[0]) {
                 assertThat(id, equalTo(NamespaceId(4)))
-                assertThat(groupId, equalTo(GroupId(5)))
+                assertThat(workspaceId, equalTo(WorkspaceId(5)))
                 assertThat(name, equalTo(NamespaceName("Namespace-Four")))
             }
 
             with(result[1]) {
                 assertThat(id, equalTo(NamespaceId(3)))
-                assertThat(groupId, equalTo(GroupId(4)))
+                assertThat(workspaceId, equalTo(WorkspaceId(4)))
                 assertThat(name, equalTo(NamespaceName("Namespace-Three")))
             }
         }
@@ -321,7 +321,7 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
             setup()
 
             val query = NamespaceQuery(
-                groupIds = listOf(),
+                workspaceIds = listOf(),
                 limit = Limit(3)
             )
 
@@ -336,7 +336,7 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
 
             val query = NamespaceQuery(
                 afterId = NamespaceId(2),
-                groupIds = listOf(),
+                workspaceIds = listOf(),
                 limit = Limit(1)
             )
 
@@ -352,25 +352,25 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
         private fun NamespaceRepository.setup() {
             createNamespace(
                 namespaceId = NamespaceId(1),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 name = NamespaceName("Namespace-One")
             )
 
             createNamespace(
                 namespaceId = NamespaceId(2),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 name = NamespaceName("Namespace-Two")
             )
 
             createNamespace(
                 namespaceId = NamespaceId(3),
-                groupId = GroupId(4),
+                workspaceId = WorkspaceId(4),
                 name = NamespaceName("Namespace-Three")
             )
 
             createNamespace(
                 namespaceId = NamespaceId(4),
-                groupId = GroupId(5),
+                workspaceId = WorkspaceId(5),
                 name = NamespaceName("Namespace-Four")
             )
         }
@@ -380,14 +380,14 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
 private fun NamespaceRepository.createNamespace(
     namespaceId: NamespaceId,
     name: NamespaceName,
-    groupId: GroupId,
+    workspaceId: WorkspaceId,
     cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
 ) {
     create(
         CreateCmd(
             id = cmdId,
             namespaceId = namespaceId,
-            groupId = groupId,
+            workspaceId = workspaceId,
             name = name
         )
     )
@@ -398,6 +398,6 @@ private fun NamespaceRepository.verifyCount(expected: Int) {
 }
 
 private fun NamespaceRepository.verifyCount(expected: Int, block: NamespaceQuery.() -> Unit) {
-    val counted = count(NamespaceQuery(groupIds = listOf()).also(block))
+    val counted = count(NamespaceQuery(workspaceIds = listOf()).also(block))
     assertThat("number of namespaces expected", counted, equalTo(Count(expected)))
 }

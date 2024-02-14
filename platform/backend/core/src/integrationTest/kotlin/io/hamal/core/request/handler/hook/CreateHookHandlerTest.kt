@@ -20,7 +20,7 @@ internal class CreateHookHandlerTest : BaseReqHandlerTest() {
     fun `Creates hook`() {
         testInstance(submitCreateHookReq)
 
-        hookRepository.list(HookQuery(groupIds = listOf())).also { hooks ->
+        hookRepository.list(HookQuery(workspaceIds = listOf())).also { hooks ->
             assertThat(hooks, hasSize(1))
             with(hooks.first()) {
                 assertThat(id, equalTo(HookId(12345)))
@@ -37,7 +37,7 @@ internal class CreateHookHandlerTest : BaseReqHandlerTest() {
             id = RequestId(1),
             status = Submitted,
             hookId = HookId(12345),
-            groupId = testGroup.id,
+            workspaceId = testWorkspace.id,
             namespaceId = NamespaceId(23456),
             name = HookName("awesome-hook")
         )

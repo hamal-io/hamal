@@ -29,7 +29,7 @@ class BlueprintRepositoryTest : AbstractUnitTest() {
                 CreateCmd(
                     id = CmdId(1),
                     blueprintId = BlueprintId(123),
-                    groupId = GroupId(1),
+                    workspaceId = WorkspaceId(1),
                     creatorId = AccountId("123"),
                     name = BlueprintName("TestBlueprint"),
                     inputs = BlueprintInputs(HotObject.builder().set("hamal", "rocks").build()),
@@ -39,7 +39,7 @@ class BlueprintRepositoryTest : AbstractUnitTest() {
 
             with(result) {
                 assertThat(id, equalTo(BlueprintId(123)))
-                assertThat(groupId, equalTo(GroupId(1)))
+                assertThat(workspaceId, equalTo(WorkspaceId(1)))
                 assertThat(creatorId, equalTo(AccountId("123")))
                 assertThat(name, equalTo(BlueprintName("TestBlueprint")))
                 assertThat(inputs, equalTo(BlueprintInputs(HotObject.builder().set("hamal", "rocks").build())))
@@ -52,14 +52,14 @@ class BlueprintRepositoryTest : AbstractUnitTest() {
         fun `Creates Blueprint duplicate`() = runWith(BlueprintRepository::class) {
             createBlueprint(
                 blueprintId = BlueprintId(1),
-                groupId = GroupId(1),
+                workspaceId = WorkspaceId(1),
                 name = BlueprintName("TestBlueprint"),
                 value = CodeValue("40 + 2")
             )
 
             createBlueprint(
                 blueprintId = BlueprintId(2),
-                groupId = GroupId(1),
+                workspaceId = WorkspaceId(1),
                 name = BlueprintName("TestBlueprint"),
                 value = CodeValue("40 + 2")
             )
@@ -88,7 +88,7 @@ class BlueprintRepositoryTest : AbstractUnitTest() {
         fun `Updates Blueprint`() = runWith(BlueprintRepository::class) {
             createBlueprint(
                 blueprintId = BlueprintId(1),
-                groupId = GroupId(1),
+                workspaceId = WorkspaceId(1),
                 name = BlueprintName("TestBlueprint")
             )
 
@@ -104,7 +104,7 @@ class BlueprintRepositoryTest : AbstractUnitTest() {
 
             with(result) {
                 assertThat(id, equalTo(BlueprintId(1)))
-                assertThat(groupId, equalTo(GroupId(1)))
+                assertThat(workspaceId, equalTo(WorkspaceId(1)))
                 assertThat(name, equalTo(BlueprintName("TestBlueprint2")))
                 assertThat(value, equalTo(CodeValue("1 + 1")))
                 assertThat(inputs, equalTo(BlueprintInputs(HotObject.builder().set("answer", 42).build())))
@@ -118,7 +118,7 @@ class BlueprintRepositoryTest : AbstractUnitTest() {
         fun `Updates blueprint multiple times`() = runWith(BlueprintRepository::class) {
             createBlueprint(
                 blueprintId = BlueprintId(1),
-                groupId = GroupId(1),
+                workspaceId = WorkspaceId(1),
                 name = BlueprintName("TestBlueprint")
             )
 
@@ -133,7 +133,7 @@ class BlueprintRepositoryTest : AbstractUnitTest() {
 
                 with(result) {
                     assertThat(id, equalTo(BlueprintId(1)))
-                    assertThat(groupId, equalTo(GroupId(1)))
+                    assertThat(workspaceId, equalTo(WorkspaceId(1)))
                     assertThat(creatorId, equalTo(AccountId("123")))
                     assertThat(name, equalTo(BlueprintName("TestBlueprint$iteration")))
                     assertThat(value, equalTo(CodeValue("40 + $iteration")))
@@ -149,14 +149,14 @@ class BlueprintRepositoryTest : AbstractUnitTest() {
         fun `Get blueprint by id`() = runWith(BlueprintRepository::class) {
             createBlueprint(
                 blueprintId = BlueprintId(1),
-                groupId = GroupId(1),
+                workspaceId = WorkspaceId(1),
                 name = BlueprintName("TestBlueprint"),
                 value = CodeValue("1 + 1")
             )
 
             with(find(BlueprintId(1))!!) {
                 assertThat(id, equalTo(BlueprintId(1)))
-                assertThat(groupId, equalTo(GroupId(1)))
+                assertThat(workspaceId, equalTo(WorkspaceId(1)))
                 assertThat(creatorId, equalTo(AccountId("123")))
                 assertThat(name, equalTo(BlueprintName("TestBlueprint")))
                 assertThat(value, equalTo(CodeValue("1 + 1")))
@@ -179,14 +179,14 @@ class BlueprintRepositoryTest : AbstractUnitTest() {
         fun `Find blueprint by id`() = runWith(BlueprintRepository::class) {
             createBlueprint(
                 blueprintId = BlueprintId(1),
-                groupId = GroupId(1),
+                workspaceId = WorkspaceId(1),
                 name = BlueprintName("TestBlueprint"),
                 value = CodeValue("1 + 1")
             )
 
             with(find(BlueprintId(1))!!) {
                 assertThat(id, equalTo(BlueprintId(1)))
-                assertThat(groupId, equalTo(GroupId(1)))
+                assertThat(workspaceId, equalTo(WorkspaceId(1)))
                 assertThat(creatorId, equalTo(AccountId("123")))
                 assertThat(name, equalTo(BlueprintName("TestBlueprint")))
                 assertThat(value, equalTo(CodeValue("1 + 1")))
@@ -226,7 +226,7 @@ class BlueprintRepositoryTest : AbstractUnitTest() {
 
             with(result[0]) {
                 assertThat(id, equalTo(BlueprintId(3)))
-                assertThat(groupId, equalTo(GroupId(4)))
+                assertThat(workspaceId, equalTo(WorkspaceId(4)))
                 assertThat(name, equalTo(BlueprintName("Blueprint")))
             }
 
@@ -234,11 +234,11 @@ class BlueprintRepositoryTest : AbstractUnitTest() {
 
 
         @TestFactory
-        fun `With group ids`() = runWith(BlueprintRepository::class) {
+        fun `With workspace ids`() = runWith(BlueprintRepository::class) {
             setup()
 
             val query = BlueprintQuery(
-                groupIds = listOf(GroupId(5), GroupId(4)),
+                workspaceIds = listOf(WorkspaceId(5), WorkspaceId(4)),
                 limit = Limit(10)
             )
 
@@ -248,13 +248,13 @@ class BlueprintRepositoryTest : AbstractUnitTest() {
 
             with(result[0]) {
                 assertThat(id, equalTo(BlueprintId(4)))
-                assertThat(groupId, equalTo(GroupId(5)))
+                assertThat(workspaceId, equalTo(WorkspaceId(5)))
                 assertThat(name, equalTo(BlueprintName("Blueprint")))
             }
 
             with(result[1]) {
                 assertThat(id, equalTo(BlueprintId(3)))
-                assertThat(groupId, equalTo(GroupId(4)))
+                assertThat(workspaceId, equalTo(WorkspaceId(4)))
                 assertThat(name, equalTo(BlueprintName("Blueprint")))
             }
         }
@@ -265,7 +265,7 @@ class BlueprintRepositoryTest : AbstractUnitTest() {
             setup()
 
             val query = BlueprintQuery(
-                groupIds = listOf(),
+                workspaceIds = listOf(),
                 limit = Limit(3)
             )
 
@@ -280,7 +280,7 @@ class BlueprintRepositoryTest : AbstractUnitTest() {
 
             val query = BlueprintQuery(
                 afterId = BlueprintId(2),
-                groupIds = listOf(),
+                workspaceIds = listOf(),
                 limit = Limit(1)
             )
 
@@ -297,32 +297,32 @@ class BlueprintRepositoryTest : AbstractUnitTest() {
     private fun BlueprintRepository.setup() {
         createBlueprint(
             blueprintId = BlueprintId(1),
-            groupId = GroupId(3),
+            workspaceId = WorkspaceId(3),
             name = BlueprintName("Blueprint")
         )
 
         createBlueprint(
             blueprintId = BlueprintId(2),
-            groupId = GroupId(3),
+            workspaceId = WorkspaceId(3),
             name = BlueprintName("Blueprint")
         )
 
         createBlueprint(
             blueprintId = BlueprintId(3),
-            groupId = GroupId(4),
+            workspaceId = WorkspaceId(4),
             name = BlueprintName("Blueprint")
         )
 
         createBlueprint(
             blueprintId = BlueprintId(4),
-            groupId = GroupId(5),
+            workspaceId = WorkspaceId(5),
             name = BlueprintName("Blueprint")
         )
     }
 
     private fun BlueprintRepository.createBlueprint(
         blueprintId: BlueprintId,
-        groupId: GroupId,
+        workspaceId: WorkspaceId,
         name: BlueprintName,
         value: CodeValue = CodeValue("1 + 1"),
         cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
@@ -331,7 +331,7 @@ class BlueprintRepositoryTest : AbstractUnitTest() {
             CreateCmd(
                 id = cmdId,
                 blueprintId = blueprintId,
-                groupId = groupId,
+                workspaceId = workspaceId,
                 creatorId = AccountId("123"),
                 name = name,
                 inputs = BlueprintInputs(HotObject.builder().set("hamal", "rocks").build()),
@@ -345,7 +345,7 @@ class BlueprintRepositoryTest : AbstractUnitTest() {
     }
 
     private fun BlueprintRepository.verifyCount(expected: Int, block: BlueprintQuery.() -> Unit) {
-        val counted = count(BlueprintQuery(groupIds = listOf()).also(block))
+        val counted = count(BlueprintQuery(workspaceIds = listOf()).also(block))
         assertThat("number of blueprints expected", counted, equalTo(Count(expected)))
     }
 }

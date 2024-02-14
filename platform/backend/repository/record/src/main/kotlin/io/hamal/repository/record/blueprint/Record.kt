@@ -24,7 +24,7 @@ sealed class BlueprintRecord(
     data class Created(
         override val entityId: BlueprintId,
         override val cmdId: CmdId,
-        val groupId: GroupId,
+        val workspaceId: WorkspaceId,
         val creatorId: AccountId,
         val name: BlueprintName,
         val inputs: BlueprintInputs,

@@ -22,7 +22,7 @@ const FormTopicTypeSelect = ({name, form}) => {
                             <SelectContent>
                                 <SelectGroup>
                                     <SelectItem value={'Namespace'}> Namespace </SelectItem>
-                                    <SelectItem value={'Group'}> Group </SelectItem>
+                                    <SelectItem value={'Workspace'}> Workspace </SelectItem>
                                     <SelectItem value={'Public'}> Public </SelectItem>
                                 </SelectGroup>
                             </SelectContent>

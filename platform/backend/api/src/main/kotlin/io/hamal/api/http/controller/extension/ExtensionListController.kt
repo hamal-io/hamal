@@ -3,7 +3,7 @@ package io.hamal.api.http.controller.extension
 import io.hamal.core.adapter.ExtensionListPort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.ExtensionId
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.sdk.api.ApiExtensionList
 import io.hamal.repository.api.ExtensionQueryRepository.ExtensionQuery
 import org.springframework.http.ResponseEntity
@@ -17,13 +17,13 @@ internal class ExtensionListController(private val listExt: ExtensionListPort) {
     fun listExtensions(
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: ExtensionId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit,
-        @RequestParam(required = false, name = "group_ids", defaultValue = "") groupIds: List<GroupId>
+        @RequestParam(required = false, name = "workspace_ids", defaultValue = "") workspaceIds: List<WorkspaceId>
     ): ResponseEntity<ApiExtensionList> {
         return listExt(
             ExtensionQuery(
                 afterId = afterId,
                 limit = limit,
-                groupIds = groupIds
+                workspaceIds = workspaceIds
             )
         ) {
             ResponseEntity.ok(

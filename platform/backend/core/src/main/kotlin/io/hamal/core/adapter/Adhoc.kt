@@ -37,7 +37,7 @@ class AdhocAdapter(
             status = Submitted,
             execId = generateDomainId(::ExecId),
             namespaceId = namespace.id,
-            groupId = namespace.groupId,
+            workspaceId = namespace.workspaceId,
             inputs = req.inputs,
             code = ExecCode(value = req.code),
             funcId = null,

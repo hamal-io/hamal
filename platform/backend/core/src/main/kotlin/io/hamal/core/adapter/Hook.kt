@@ -56,7 +56,7 @@ class HookAdapter(
             id = generateDomainId(::RequestId),
             status = Submitted,
             hookId = generateDomainId(::HookId),
-            groupId = namespace.groupId,
+            workspaceId = namespace.workspaceId,
             namespaceId = namespace.id,
             name = req.name
         ).also(requestCmdRepository::queue).let(responseHandler)
@@ -88,7 +88,7 @@ class HookAdapter(
         return HookUpdateRequested(
             id = generateDomainId(::RequestId),
             status = Submitted,
-            groupId = hookQueryRepository.get(hookId).groupId,
+            workspaceId = hookQueryRepository.get(hookId).workspaceId,
             hookId = hookId,
             name = req.name,
         ).also(requestCmdRepository::queue).let(responseHandler)

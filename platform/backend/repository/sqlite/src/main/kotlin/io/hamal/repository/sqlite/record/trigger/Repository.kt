@@ -61,7 +61,7 @@ class TriggerSqliteRepository(
                     TriggerRecord.FixedRateCreated(
                         cmdId = cmdId,
                         entityId = triggerId,
-                        groupId = cmd.groupId,
+                        workspaceId = cmd.workspaceId,
                         funcId = cmd.funcId,
                         namespaceId = cmd.namespaceId,
                         name = cmd.name,
@@ -90,7 +90,7 @@ class TriggerSqliteRepository(
                     TriggerRecord.EventCreated(
                         cmdId = cmdId,
                         entityId = triggerId,
-                        groupId = cmd.groupId,
+                        workspaceId = cmd.workspaceId,
                         funcId = cmd.funcId,
                         namespaceId = cmd.namespaceId,
                         name = cmd.name,
@@ -120,7 +120,7 @@ class TriggerSqliteRepository(
                     TriggerRecord.HookCreated(
                         cmdId = cmdId,
                         entityId = triggerId,
-                        groupId = cmd.groupId,
+                        workspaceId = cmd.workspaceId,
                         funcId = cmd.funcId,
                         namespaceId = cmd.namespaceId,
                         name = cmd.name,
@@ -151,7 +151,7 @@ class TriggerSqliteRepository(
                     TriggerRecord.CronCreated(
                         cmdId = cmdId,
                         entityId = triggerId,
-                        groupId = cmd.groupId,
+                        workspaceId = cmd.workspaceId,
                         funcId = cmd.funcId,
                         namespaceId = cmd.namespaceId,
                         name = cmd.name,

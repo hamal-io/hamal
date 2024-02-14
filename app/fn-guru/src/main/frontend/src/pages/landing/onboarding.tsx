@@ -35,7 +35,7 @@ const OnboardingPage: FC = () => {
     useEffect(() => {
         const abortController = new AbortController()
         if (auth != null && auth.type !== 'Unauthorized') {
-            adhoc(auth.groupId, `
+            adhoc(auth.workspaceId, `
             sys = require_plugin('sys')
             log = require('log').create({})
             log.info('Setting up account')
@@ -53,7 +53,7 @@ const OnboardingPage: FC = () => {
 
     useEffect(() => {
         if (adhocSubmitted != null) {
-            navigate(`/groups/${adhocSubmitted.groupId}/namespaces/${adhocSubmitted.namespaceId}/dashboard`, {replace: true})
+            navigate(`/dashboard`, {replace: true})
         }
     }, [adhocSubmitted, navigate]);
 

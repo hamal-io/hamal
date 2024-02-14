@@ -44,7 +44,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
             WHERE
                 id < :afterId
                 ${query.ids()}
-                ${query.groupIds()}
+                ${query.workspaceIds()}
                 ${query.funcIds()}
                 ${query.types()}
                 ${query.topicIds()}
@@ -78,7 +78,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
             WHERE
                 id < :afterId
                 ${query.ids()}
-                ${query.groupIds()}
+                ${query.workspaceIds()}
                 ${query.funcIds()}
                 ${query.types()}
                 ${query.topicIds()}
@@ -100,13 +100,13 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
         tx.execute(
             """
                 INSERT OR REPLACE INTO current
-                    (id, group_id, func_id, topic_id, hook_id, namespace_id, type, data) 
+                    (id, workspace_id, func_id, topic_id, hook_id, namespace_id, type, data) 
                 VALUES
-                    (:id, :groupId, :funcId, :topicId, :hookId, :namespaceId, :type, :data)
+                    (:id, :workspaceId, :funcId, :topicId, :hookId, :namespaceId, :type, :data)
             """.trimIndent()
         ) {
             set("id", obj.id)
-            set("groupId", obj.groupId)
+            set("workspaceId", obj.workspaceId)
             set("funcId", obj.funcId)
             if (obj is Trigger.Event) {
                 set("topicId", obj.topicId)
@@ -130,7 +130,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
             """
             CREATE TABLE IF NOT EXISTS current (
                  id             INTEGER NOT NULL,
-                 group_id       INTEGER NOT NULL,
+                 workspace_id       INTEGER NOT NULL,
                  func_id        INTEGER NOT NULL,
                  type           INTEGER NOT NULL,
                  topic_id       INTEGER NOT NULL,
@@ -163,11 +163,11 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
         }
     }
 
-    private fun TriggerQuery.groupIds(): String {
-        return if (groupIds.isEmpty()) {
+    private fun TriggerQuery.workspaceIds(): String {
+        return if (workspaceIds.isEmpty()) {
             ""
         } else {
-            "AND group_id IN (${groupIds.joinToString(",") { "${it.value.value}" }})"
+            "AND workspace_id IN (${workspaceIds.joinToString(",") { "${it.value.value}" }})"
         }
     }
 

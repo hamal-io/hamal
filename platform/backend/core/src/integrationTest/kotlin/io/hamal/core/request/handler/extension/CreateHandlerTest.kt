@@ -29,7 +29,7 @@ internal class ExtensionCreateHandlerTest : BaseReqHandlerTest() {
         ExtensionCreateRequested(
             id = RequestId(1),
             status = RequestStatus.Submitted,
-            groupId = testGroup.id,
+            workspaceId = testWorkspace.id,
             extensionId = ExtensionId(1234),
             name = ExtensionName("TestExtension"),
             codeId = CodeId(1),

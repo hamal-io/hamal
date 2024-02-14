@@ -23,7 +23,7 @@ internal class ExtensionListControllerTest : ExtensionBaseControllerTest() {
             ExtensionCmdRepository.CreateCmd(
                 id = CmdId(12),
                 extId = ExtensionId(1234),
-                groupId = testGroup.id,
+                workspaceId = testWorkspace.id,
                 name = ExtensionName("TestExtension"),
                 code = ExtensionCode(
                     id = CodeId(3),
@@ -55,7 +55,7 @@ internal class ExtensionListControllerTest : ExtensionBaseControllerTest() {
         )
 
         val listResponse = httpTemplate.get("/v1/extensions")
-            .parameter("group_ids", testGroup.id)
+            .parameter("workspace_ids", testWorkspace.id)
             .parameter("limit", 12)
             .execute(ApiExtensionList::class)
 
@@ -78,7 +78,7 @@ internal class ExtensionListControllerTest : ExtensionBaseControllerTest() {
         val fortyNinth = requests.toList()[49]
 
         val listResponse = httpTemplate.get("/v1/extensions")
-            .parameter("group_ids", testGroup.id)
+            .parameter("workspace_ids", testWorkspace.id)
             .parameter("after_id", fortyNinth.extensionId)
             .parameter("limit", 1)
             .execute(ApiExtensionList::class)

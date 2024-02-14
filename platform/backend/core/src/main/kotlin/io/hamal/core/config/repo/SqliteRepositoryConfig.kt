@@ -15,7 +15,7 @@ import io.hamal.repository.sqlite.record.exec.ExecSqliteRepository
 import io.hamal.repository.sqlite.record.extension.ExtensionSqliteRepository
 import io.hamal.repository.sqlite.record.feedback.FeedbackSqliteRepository
 import io.hamal.repository.sqlite.record.func.FuncSqliteRepository
-import io.hamal.repository.sqlite.record.group.GroupSqliteRepository
+import io.hamal.repository.sqlite.record.workspace.WorkspaceSqliteRepository
 import io.hamal.repository.sqlite.record.hook.HookSqliteRepository
 import io.hamal.repository.sqlite.record.namespace.NamespaceSqliteRepository
 import io.hamal.repository.sqlite.record.topic.TopicSqliteRepository
@@ -103,13 +103,13 @@ open class SqliteRepositoryConfig(backendBasePath: BackendBasePath) {
     open fun funcQueryRepository(): FuncQueryRepository = funcRepository()
 
     @Bean
-    open fun groupRepository() = GroupSqliteRepository(path)
+    open fun workspaceRepository() = WorkspaceSqliteRepository(path)
 
     @Bean
-    open fun groupQueryRepository() = groupRepository()
+    open fun workspaceQueryRepository() = workspaceRepository()
 
     @Bean
-    open fun groupCmdRepository() = groupRepository()
+    open fun workspaceCmdRepository() = workspaceRepository()
 
     @Bean
     open fun hookRepository() = HookSqliteRepository(path)

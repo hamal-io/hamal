@@ -6,7 +6,7 @@ import {useParams} from "react-router-dom";
 import Actions from "@/pages/app/func-detail/components/actions.tsx";
 import {useFuncGet} from "@/hook/func.ts";
 import Deploy from "@/pages/app/func-detail/components/deploy.tsx";
-import GroupFuncSelector from "@/pages/app/func-detail/components/group-func-selector.tsx";
+import WorkspaceFuncSelector from "@/pages/app/func-detail/components/workspace-func-selector.tsx";
 
 type Props = {}
 const FuncDetailPage: FC<Props> = ({}) => {
@@ -35,7 +35,7 @@ const FuncDetailPage: FC<Props> = ({}) => {
     return (
         <div className="h-full ">
             <div className="container flex flex-row justify-between items-center ">
-                <GroupFuncSelector
+                <WorkspaceFuncSelector
                     className="max-w-[300px]"
                     funcId={funcId}
                 />

@@ -51,7 +51,7 @@ internal class FuncListControllerTest : FuncBaseControllerTest() {
         )
 
         val listResponse = httpTemplate.get("/v1/funcs")
-            .parameter("group_ids", testGroup.id)
+            .parameter("workspace_ids", testWorkspace.id)
             .parameter("limit", 12)
             .execute(ApiFuncList::class)
 
@@ -78,7 +78,7 @@ internal class FuncListControllerTest : FuncBaseControllerTest() {
         val fortyNinth = requests[49]
 
         val listResponse = httpTemplate.get("/v1/funcs")
-            .parameter("group_ids", testGroup.id)
+            .parameter("workspace_ids", testWorkspace.id)
             .parameter("after_id", fortyNinth.funcId)
             .parameter("limit", 1)
             .execute(ApiFuncList::class)

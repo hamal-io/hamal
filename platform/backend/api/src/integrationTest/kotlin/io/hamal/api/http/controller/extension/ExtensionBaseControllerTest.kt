@@ -11,8 +11,8 @@ import org.hamcrest.Matchers.equalTo
 
 internal sealed class ExtensionBaseControllerTest : BaseControllerTest() {
     fun createExtension(req: ApiExtensionCreateRequest): ApiExtensionCreateRequested {
-        val createResponse = httpTemplate.post("/v1/groups/{groupId}/extensions")
-            .path("groupId", testGroup.id)
+        val createResponse = httpTemplate.post("/v1/workspaces/{workspaceId}/extensions")
+            .path("workspaceId", testWorkspace.id)
             .body(req)
             .execute()
 
@@ -33,7 +33,7 @@ internal sealed class ExtensionBaseControllerTest : BaseControllerTest() {
 
     fun getExtensionList(): ApiExtensionList {
         val listResponse = httpTemplate.get("/v1/extensions")
-            .parameter("group_ids", testGroup.id)
+            .parameter("workspace_ids", testWorkspace.id)
             .execute()
 
         assertThat(listResponse.statusCode, equalTo(HttpStatusCode.Ok))

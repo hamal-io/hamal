@@ -41,7 +41,7 @@ class TopicSqliteRepository(
                     TopicRecord.Created(
                         cmdId = cmd.id,
                         entityId = topicId,
-                        groupId = cmd.groupId,
+                        workspaceId = cmd.workspaceId,
                         namespaceId = cmd.namespaceId,
                         logTopicId = cmd.logTopicId,
                         name = cmd.name,

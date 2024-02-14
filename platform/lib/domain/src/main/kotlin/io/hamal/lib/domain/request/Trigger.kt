@@ -23,7 +23,7 @@ interface TriggerCreateRequest {
 data class TriggerCreateRequested(
     override val id: RequestId,
     override var status: RequestStatus,
-    val groupId: GroupId,
+    val workspaceId: WorkspaceId,
     val triggerType: TriggerType,
     val triggerId: TriggerId,
     val name: TriggerName,

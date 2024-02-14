@@ -23,7 +23,7 @@ internal class CodeGetControllerTest : CodeBaseControllerTest() {
                 CodeCmdRepository.CreateCmd(
                     id = CmdGen(),
                     codeId = CodeId(iter + 5),
-                    groupId = testGroup.id,
+                    workspaceId = testWorkspace.id,
                     value = CodeValue("1 + $iter")
                 )
             )
@@ -43,7 +43,7 @@ internal class CodeGetControllerTest : CodeBaseControllerTest() {
             CodeCmdRepository.CreateCmd(
                 id = CmdGen(),
                 codeId = CodeId(2),
-                groupId = testGroup.id,
+                workspaceId = testWorkspace.id,
                 value = CodeValue("1 + 1")
             )
         )
@@ -72,7 +72,7 @@ internal class CodeGetControllerTest : CodeBaseControllerTest() {
             CodeCmdRepository.CreateCmd(
                 id = CmdGen(),
                 codeId = CodeId(3),
-                groupId = testGroup.id,
+                workspaceId = testWorkspace.id,
                 value = CodeValue("1 + 1")
             )
         )
@@ -100,7 +100,7 @@ internal class CodeGetControllerTest : CodeBaseControllerTest() {
             CodeCmdRepository.CreateCmd(
                 id = CmdGen(),
                 codeId = CodeId(4),
-                groupId = testGroup.id,
+                workspaceId = testWorkspace.id,
                 value = CodeValue("1 + 1")
             )
         )

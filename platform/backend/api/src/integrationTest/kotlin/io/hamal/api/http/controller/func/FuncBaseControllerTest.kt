@@ -29,7 +29,7 @@ internal sealed class FuncBaseControllerTest : BaseControllerTest() {
 
     fun listFuncs(): ApiFuncList {
         val listFuncsResponse = httpTemplate.get("/v1/funcs")
-            .parameter("group_ids", testGroup.id)
+            .parameter("workspace_ids", testWorkspace.id)
             .execute()
 
         assertThat(listFuncsResponse.statusCode, equalTo(Ok))

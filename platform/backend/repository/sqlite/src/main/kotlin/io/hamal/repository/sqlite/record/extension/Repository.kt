@@ -22,7 +22,7 @@ internal object CreateExtension : CreateDomainObject<ExtensionId, ExtensionRecor
         var result = ExtensionEntity(
             cmdId = firstRecord.cmdId,
             id = firstRecord.entityId,
-            groupId = firstRecord.groupId,
+            workspaceId = firstRecord.workspaceId,
             sequence = firstRecord.sequence(),
             recordedAt = firstRecord.recordedAt()
         )
@@ -58,7 +58,7 @@ class ExtensionSqliteRepository(
                     ExtensionRecord.Created(
                         cmdId = cmdId,
                         entityId = extId,
-                        groupId = cmd.groupId,
+                        workspaceId = cmd.workspaceId,
                         name = cmd.name,
                         code = cmd.code
                     )

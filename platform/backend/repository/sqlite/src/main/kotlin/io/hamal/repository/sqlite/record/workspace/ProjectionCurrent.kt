@@ -1,21 +1,21 @@
-package io.hamal.repository.sqlite.record.group
+package io.hamal.repository.sqlite.record.workspace
 
 import io.hamal.lib.common.domain.Count
-import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.domain.vo.GroupName
+import io.hamal.lib.domain.vo.WorkspaceId
+import io.hamal.lib.domain.vo.WorkspaceName
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
-import io.hamal.repository.api.Group
-import io.hamal.repository.api.GroupQueryRepository.GroupQuery
-import io.hamal.repository.record.group.GroupRecord
+import io.hamal.repository.api.Workspace
+import io.hamal.repository.api.WorkspaceQueryRepository.WorkspaceQuery
+import io.hamal.repository.record.workspace.WorkspaceRecord
 import io.hamal.repository.record.json
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 import org.sqlite.SQLiteException
 
 
-internal object ProjectionCurrent : ProjectionSqlite<GroupId, GroupRecord, Group> {
-    override fun upsert(tx: RecordTransactionSqlite<GroupId, GroupRecord, Group>, obj: Group) {
+internal object ProjectionCurrent : ProjectionSqlite<WorkspaceId, WorkspaceRecord, Workspace> {
+    override fun upsert(tx: RecordTransactionSqlite<WorkspaceId, WorkspaceRecord, Workspace>, obj: Workspace) {
         try {
             tx.execute(
                 """
@@ -36,7 +36,7 @@ internal object ProjectionCurrent : ProjectionSqlite<GroupId, GroupRecord, Group
         }
     }
 
-    private fun find(tx: RecordTransactionSqlite<GroupId, GroupRecord, Group>, groupName: GroupName): Group? {
+    private fun find(tx: RecordTransactionSqlite<WorkspaceId, WorkspaceRecord, Workspace>, workspaceName: WorkspaceName): Workspace? {
         return tx.executeQueryOne(
             """
                 SELECT 
@@ -48,10 +48,10 @@ internal object ProjectionCurrent : ProjectionSqlite<GroupId, GroupRecord, Group
             """.trimIndent()
         ) {
             query {
-                set("name", groupName.value)
+                set("name", workspaceName.value)
             }
             map { rs ->
-                json.decompressAndDeserialize(Group::class, rs.getBytes("data"))
+                json.decompressAndDeserialize(Workspace::class, rs.getBytes("data"))
             }
         }
     }
@@ -73,7 +73,7 @@ internal object ProjectionCurrent : ProjectionSqlite<GroupId, GroupRecord, Group
         tx.execute("""DELETE FROM current""")
     }
 
-    fun find(connection: Connection, groupId: GroupId): Group? {
+    fun find(connection: Connection, workspaceId: WorkspaceId): Workspace? {
         return connection.executeQueryOne(
             """
             SELECT 
@@ -85,16 +85,16 @@ internal object ProjectionCurrent : ProjectionSqlite<GroupId, GroupRecord, Group
         """.trimIndent()
         ) {
             query {
-                set("id", groupId)
+                set("id", workspaceId)
             }
             map { rs ->
-                json.decompressAndDeserialize(Group::class, rs.getBytes("data"))
+                json.decompressAndDeserialize(Workspace::class, rs.getBytes("data"))
             }
         }
     }
 
-    fun list(connection: Connection, query: GroupQuery): List<Group> {
-        return connection.executeQuery<Group>(
+    fun list(connection: Connection, query: WorkspaceQuery): List<Workspace> {
+        return connection.executeQuery<Workspace>(
             """
             SELECT 
                 data
@@ -112,12 +112,12 @@ internal object ProjectionCurrent : ProjectionSqlite<GroupId, GroupRecord, Group
                 set("limit", query.limit)
             }
             map { rs ->
-                json.decompressAndDeserialize(Group::class, rs.getBytes("data"))
+                json.decompressAndDeserialize(Workspace::class, rs.getBytes("data"))
             }
         }
     }
 
-    fun count(connection: Connection, query: GroupQuery): Count {
+    fun count(connection: Connection, query: WorkspaceQuery): Count {
         return Count(
             connection.executeQueryOne(
                 """
@@ -140,11 +140,11 @@ internal object ProjectionCurrent : ProjectionSqlite<GroupId, GroupRecord, Group
         )
     }
 
-    private fun GroupQuery.ids(): String {
-        return if (groupIds.isEmpty()) {
+    private fun WorkspaceQuery.ids(): String {
+        return if (workspaceIds.isEmpty()) {
             ""
         } else {
-            "AND id IN (${groupIds.joinToString(",") { "${it.value.value}" }})"
+            "AND id IN (${workspaceIds.joinToString(",") { "${it.value.value}" }})"
         }
     }
 

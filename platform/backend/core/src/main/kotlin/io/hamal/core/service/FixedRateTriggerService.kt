@@ -40,7 +40,7 @@ internal class FixedRateTriggerService(
             TriggerQueryRepository.TriggerQuery(
                 afterId = TriggerId(SnowflakeId(Long.MAX_VALUE)),
                 limit = Limit(10),
-                groupIds = listOf()
+                workspaceIds = listOf()
             )
         ).filterIsInstance<Trigger.FixedRate>().forEach { trigger -> triggerAdded(trigger) }
     }

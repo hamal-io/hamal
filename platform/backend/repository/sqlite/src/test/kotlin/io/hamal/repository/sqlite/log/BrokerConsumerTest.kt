@@ -44,7 +44,7 @@ class LogBrokerConsumerSqliteRepositoryTest {
         fun `Does not create consumers table if already exists`() {
             LogBrokerConsumerSqliteRepository(testDir).use {
                 it.connection.execute(
-                    """INSERT INTO consumers (group_id,topic_id,next_event_id) VALUES ('some-consumer-id',1234,4321);"""
+                    """INSERT INTO consumers (workspace_id,topic_id,next_event_id) VALUES ('some-consumer-id',1234,4321);"""
                 )
             }
 

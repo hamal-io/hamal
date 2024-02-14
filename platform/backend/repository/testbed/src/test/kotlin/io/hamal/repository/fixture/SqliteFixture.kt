@@ -21,7 +21,7 @@ import io.hamal.repository.sqlite.record.exec.ExecSqliteRepository
 import io.hamal.repository.sqlite.record.extension.ExtensionSqliteRepository
 import io.hamal.repository.sqlite.record.feedback.FeedbackSqliteRepository
 import io.hamal.repository.sqlite.record.func.FuncSqliteRepository
-import io.hamal.repository.sqlite.record.group.GroupSqliteRepository
+import io.hamal.repository.sqlite.record.workspace.WorkspaceSqliteRepository
 import io.hamal.repository.sqlite.record.hook.HookSqliteRepository
 import io.hamal.repository.sqlite.record.namespace.NamespaceSqliteRepository
 import io.hamal.repository.sqlite.record.topic.TopicSqliteRepository
@@ -43,7 +43,7 @@ object SqliteFixture : BaseTestFixture {
         ExtensionRepository::class -> ExtensionSqliteRepository(createTempDirectory("sqlite_extension_test")) as REPO
         FeedbackRepository::class -> FeedbackSqliteRepository(createTempDirectory("sqlite_feedback_test")) as REPO
         FuncRepository::class -> FuncSqliteRepository(createTempDirectory("sqlite_func_test")) as REPO
-        GroupRepository::class -> GroupSqliteRepository(createTempDirectory("sqlite_group_test")) as REPO
+        WorkspaceRepository::class -> WorkspaceSqliteRepository(createTempDirectory("sqlite_workspace_test")) as REPO
         HookRepository::class -> HookSqliteRepository(createTempDirectory("sqlite_hook_test")) as REPO
         NamespaceRepository::class -> NamespaceSqliteRepository(createTempDirectory("sqlite_namespace_test")) as REPO
         StateRepository::class -> StateSqliteRepository(createTempDirectory("sqlite_state_test")) as REPO

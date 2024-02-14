@@ -30,7 +30,7 @@ internal abstract class BaseReqHandlerTest : BaseTest() {
                 id = NextCommandId(),
                 funcId = id,
                 namespaceId = testNamespace.id,
-                groupId = testGroup.id,
+                workspaceId = testWorkspace.id,
                 name = name,
                 inputs = inputs,
                 codeId = codeId,
@@ -45,7 +45,7 @@ internal abstract class BaseReqHandlerTest : BaseTest() {
                 id = NextCommandId(),
                 topicId = id,
                 name = name,
-                groupId = testGroup.id,
+                workspaceId = testWorkspace.id,
                 namespaceId = testNamespace.id,
                 type = TopicType.Namespace,
                 logTopicId = generateDomainId(::LogTopicId)
@@ -61,7 +61,7 @@ internal abstract class BaseReqHandlerTest : BaseTest() {
         return hookRepository.create(
             HookCmdRepository.CreateCmd(
                 id = NextCommandId(),
-                groupId = testGroup.id,
+                workspaceId = testWorkspace.id,
                 hookId = id,
                 name = name,
                 namespaceId = namespaceId,

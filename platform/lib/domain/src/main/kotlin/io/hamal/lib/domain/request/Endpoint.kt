@@ -15,7 +15,7 @@ data class EndpointCreateRequested(
     override var status: RequestStatus,
     val endpointId: EndpointId,
     val funcId: FuncId,
-    val groupId: GroupId,
+    val workspaceId: WorkspaceId,
     val name: EndpointName,
     val method: EndpointMethod
 ) : Requested()
@@ -30,7 +30,7 @@ data class EndpointUpdateRequested(
     override val id: RequestId,
     override var status: RequestStatus,
     val endpointId: EndpointId,
-    val groupId: GroupId,
+    val workspaceId: WorkspaceId,
     val funcId: FuncId,
     val name: EndpointName?,
     val method: EndpointMethod?

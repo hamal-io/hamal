@@ -29,10 +29,10 @@ internal class LogBrokerConsumerSqliteRepository(
             execute(
                 """
                 CREATE TABLE IF NOT EXISTS consumers (
-                   group_id TEXT NOT NULL ,
+                   workspace_id TEXT NOT NULL ,
                    topic_id INTEGER NOT NULL ,
                    next_event_id INTEGER NOT NULL ,
-                   PRIMARY KEY (topic_id,group_id)
+                   PRIMARY KEY (topic_id,workspace_id)
                )
             """.trimIndent()
             )
@@ -41,10 +41,10 @@ internal class LogBrokerConsumerSqliteRepository(
 
     fun nextEventId(consumerId: LogConsumerId, topicId: LogTopicId): LogEventId {
         return connection.executeQueryOne(
-            """SELECT next_event_id FROM consumers WHERE group_id = :groupId and topic_id = :topicId"""
+            """SELECT next_event_id FROM consumers WHERE workspace_id = :workspaceId and topic_id = :topicId"""
         ) {
             query {
-                set("groupId", consumerId.value)
+                set("workspaceId", consumerId.value)
                 set("topicId", topicId.value)
             }
             map {
@@ -56,16 +56,16 @@ internal class LogBrokerConsumerSqliteRepository(
     fun commit(consumerId: LogConsumerId, topicId: LogTopicId, eventId: LogEventId) {
         connection.execute(
             """
-            INSERT INTO consumers(group_id, topic_id, next_event_id)
-                  VALUES(:groupId, :topicId, :nextEventId)
-                     ON CONFLICT(group_id, topic_id) DO UPDATE SET
+            INSERT INTO consumers(workspace_id, topic_id, next_event_id)
+                  VALUES(:workspaceId, :topicId, :nextEventId)
+                     ON CONFLICT(workspace_id, topic_id) DO UPDATE SET
                         next_event_id=excluded.next_event_id
                         WHERE
-                            excluded.group_id  == consumers.group_id AND
+                            excluded.workspace_id  == consumers.workspace_id AND
                             excluded.topic_id  == consumers.topic_id;
                     """.trimIndent(),
         ) {
-            set("groupId", consumerId.value)
+            set("workspaceId", consumerId.value)
             set("topicId", topicId.value)
             set("nextEventId", eventId.value.toInt() + 1)
         }

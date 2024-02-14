@@ -15,8 +15,8 @@ import org.hamcrest.Matchers.equalTo
 
 internal sealed class NamespaceBaseControllerTest : BaseControllerTest() {
     fun createNamespace(req: ApiNamespaceCreateRequest): ApiNamespaceCreateRequested {
-        val response = httpTemplate.post("/v1/groups/{groupId}/namespaces")
-            .path("groupId", testGroup.id)
+        val response = httpTemplate.post("/v1/workspaces/{workspaceId}/namespaces")
+            .path("workspaceId", testWorkspace.id)
             .body(req)
             .execute()
 
@@ -26,8 +26,8 @@ internal sealed class NamespaceBaseControllerTest : BaseControllerTest() {
     }
 
     fun listNamespaces(): ApiNamespaceList {
-        val listNamespacesResponse = httpTemplate.get("/v1/groups/{groupId}/namespaces")
-            .path("groupId", testGroup.id)
+        val listNamespacesResponse = httpTemplate.get("/v1/workspaces/{workspaceId}/namespaces")
+            .path("workspaceId", testWorkspace.id)
             .execute()
 
         assertThat(listNamespacesResponse.statusCode, equalTo(Ok))

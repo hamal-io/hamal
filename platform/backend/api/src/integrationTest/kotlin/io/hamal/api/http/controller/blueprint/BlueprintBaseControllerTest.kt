@@ -14,8 +14,8 @@ import org.hamcrest.Matchers.equalTo
 
 internal sealed class BlueprintBaseControllerTest : BaseControllerTest() {
     fun createBlueprint(req: ApiBlueprintCreateRequest): ApiBlueprintCreateRequested {
-        val createBlueprintResponse = httpTemplate.post("/v1/groups/{groupId}/blueprints")
-            .path("groupId", testGroup.id)
+        val createBlueprintResponse = httpTemplate.post("/v1/workspaces/{workspaceId}/blueprints")
+            .path("workspaceId", testWorkspace.id)
             .body(req)
             .execute()
 

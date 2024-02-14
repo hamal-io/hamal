@@ -3,7 +3,7 @@ package io.hamal.core.component
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain._enum.TopicType
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.domain.vo.LogTopicId
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.TopicId
@@ -28,7 +28,7 @@ class SetupInternalTopics {
                             topicId = topicId,
                             name = topicName,
                             logTopicId = generateDomainId(::LogTopicId),
-                            groupId = GroupId.root,
+                            workspaceId = WorkspaceId.root,
                             namespaceId = NamespaceId.root,
                             type = TopicType.Internal
                         )

@@ -25,7 +25,7 @@ internal object CreateCode : CreateDomainObject<CodeId, CodeRecord, Code> {
         var result = CodeEntity(
             cmdId = firstRecord.cmdId,
             id = firstRecord.entityId,
-            groupId = firstRecord.groupId,
+            workspaceId = firstRecord.workspaceId,
             sequence = firstRecord.sequence(),
             recordedAt = firstRecord.recordedAt()
         )
@@ -59,7 +59,7 @@ class CodeSqliteRepository(
                     CodeRecord.Created(
                         cmdId = cmdId,
                         entityId = codeId,
-                        groupId = cmd.groupId,
+                        workspaceId = cmd.workspaceId,
                         value = cmd.value,
                         type = cmd.type
                     )

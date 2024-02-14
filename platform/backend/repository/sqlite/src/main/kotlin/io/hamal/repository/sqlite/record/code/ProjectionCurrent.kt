@@ -44,7 +44,7 @@ internal object ProjectionCurrent : ProjectionSqlite<CodeId, CodeRecord, Code> {
             WHERE
                 id < :afterId
                 ${query.ids()}
-                ${query.groupIds()}
+                ${query.workspaceIds()}
             ORDER BY id DESC
             LIMIT :limit
         """.trimIndent()
@@ -70,7 +70,7 @@ internal object ProjectionCurrent : ProjectionSqlite<CodeId, CodeRecord, Code> {
             WHERE
                 id < :afterId
                 ${query.ids()}
-                ${query.groupIds()}
+                ${query.workspaceIds()}
         """.trimIndent()
             ) {
                 query {
@@ -87,13 +87,13 @@ internal object ProjectionCurrent : ProjectionSqlite<CodeId, CodeRecord, Code> {
         tx.execute(
             """
                 INSERT OR REPLACE INTO current
-                    (id, group_id, data) 
+                    (id, workspace_id, data) 
                 VALUES
-                    (:id, :groupId, :data)
+                    (:id, :workspaceId, :data)
             """.trimIndent()
         ) {
             set("id", obj.id)
-            set("groupId", obj.groupId)
+            set("workspaceId", obj.workspaceId)
             set("data", json.serializeAndCompress(obj))
         }
     }
@@ -103,7 +103,7 @@ internal object ProjectionCurrent : ProjectionSqlite<CodeId, CodeRecord, Code> {
             """
             CREATE TABLE IF NOT EXISTS current (
                  id             INTEGER NOT NULL,
-                 group_id       INTEGER NOT NULL,
+                 workspace_id       INTEGER NOT NULL,
                  data           BLOB NOT NULL,
                  PRIMARY KEY    (id)
             );
@@ -115,11 +115,11 @@ internal object ProjectionCurrent : ProjectionSqlite<CodeId, CodeRecord, Code> {
         tx.execute("""DELETE FROM current""")
     }
 
-    private fun CodeQuery.groupIds(): String {
-        return if (groupIds.isEmpty()) {
+    private fun CodeQuery.workspaceIds(): String {
+        return if (workspaceIds.isEmpty()) {
             ""
         } else {
-            "AND group_id IN (${groupIds.joinToString(",") { "${it.value.value}" }})"
+            "AND workspace_id IN (${workspaceIds.joinToString(",") { "${it.value.value}" }})"
         }
     }
 

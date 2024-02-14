@@ -10,7 +10,7 @@ import {useChangeGroup, useChangeNamespace, useUiState} from "@/hook/ui-state.ts
 type Props = {
     className?: string;
 }
-const GroupNamespaceSelector: FC<Props> = ({className}) => {
+const WorkspaceNamespaceSelector: FC<Props> = ({className}) => {
     const [listNamespaces, namespaceList, loading] = useNamespaceList()
     const [uiState] = useUiState()
     const [selected, setSelected] = useState(uiState.namespaceId)
@@ -19,8 +19,8 @@ const GroupNamespaceSelector: FC<Props> = ({className}) => {
     const location = useLocation()
 
     useEffect(() => {
-        if (uiState.groupId) {
-            listNamespaces(uiState.groupId)
+        if (uiState.workspaceId) {
+            listNamespaces(uiState.workspaceId)
         }
     }, [uiState.namespaceId]);
 
@@ -57,4 +57,4 @@ const GroupNamespaceSelector: FC<Props> = ({className}) => {
     )
 }
 
-export default GroupNamespaceSelector
+export default WorkspaceNamespaceSelector

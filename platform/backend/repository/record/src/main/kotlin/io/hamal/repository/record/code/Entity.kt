@@ -5,7 +5,7 @@ import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.CodeVersion
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.repository.api.Code
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordEntity
@@ -19,7 +19,7 @@ data class CodeEntity(
     override val sequence: RecordSequence,
     override val recordedAt: RecordedAt,
 
-    val groupId: GroupId,
+    val workspaceId: WorkspaceId,
     var value: CodeValue? = null,
     val type: CodeType? = null
 
@@ -52,7 +52,7 @@ data class CodeEntity(
             cmdId = cmdId,
             id = id,
             updatedAt = recordedAt.toUpdatedAt(),
-            groupId = groupId,
+            workspaceId = workspaceId,
             version = CodeVersion(sequence.value),
             value = value!!,
             type = type!!
@@ -67,7 +67,7 @@ fun List<CodeRecord>.createEntity(): CodeEntity {
 
     var result = CodeEntity(
         id = firstRecord.entityId,
-        groupId = firstRecord.groupId,
+        workspaceId = firstRecord.workspaceId,
         cmdId = firstRecord.cmdId,
         sequence = firstRecord.sequence(),
         recordedAt = firstRecord.recordedAt()

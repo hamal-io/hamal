@@ -39,7 +39,7 @@ internal class HookListControllerTest : HookBaseControllerTest() {
         )
 
         val listResponse = httpTemplate.get("/v1/hooks")
-            .parameter("group_ids", testGroup.id)
+            .parameter("workspace_ids", testWorkspace.id)
             .parameter("limit", 12)
             .execute(ApiHookList::class)
 
@@ -60,7 +60,7 @@ internal class HookListControllerTest : HookBaseControllerTest() {
         val fortyNinth = requests[49]
 
         val listResponse = httpTemplate.get("/v1/hooks")
-            .parameter("group_ids", testGroup.id)
+            .parameter("workspace_ids", testWorkspace.id)
             .parameter("after_id", fortyNinth.hookId)
             .parameter("limit", 1)
             .execute(ApiHookList::class)

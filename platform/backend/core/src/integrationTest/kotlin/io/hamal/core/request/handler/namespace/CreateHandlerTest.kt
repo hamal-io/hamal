@@ -38,7 +38,7 @@ internal class NamespaceCreateHandlerTest : BaseReqHandlerTest() {
                 id = RequestId(1),
                 status = Submitted,
                 namespaceId = NamespaceId(12345),
-                groupId = testGroup.id,
+                workspaceId = testWorkspace.id,
                 name = NamespaceName("another-namespace")
             )
         )
@@ -53,7 +53,7 @@ internal class NamespaceCreateHandlerTest : BaseReqHandlerTest() {
                 id = RequestId(1),
                 status = Submitted,
                 namespaceId = NamespaceId(12345),
-                groupId = testGroup.id,
+                workspaceId = testWorkspace.id,
                 name = NamespaceName("awesome-namespace")
             )
         )
@@ -63,13 +63,13 @@ internal class NamespaceCreateHandlerTest : BaseReqHandlerTest() {
             assertThat(name, equalTo(NamespaceName("awesome-namespace")))
         }
 
-        assertThat(namespaceQueryRepository.list(NamespaceQuery(groupIds = listOf())), hasSize(1))
+        assertThat(namespaceQueryRepository.list(NamespaceQuery(workspaceIds = listOf())), hasSize(1))
 
     }
 
 
     private fun verifySingleNamespaceExists() {
-        namespaceQueryRepository.list(NamespaceQuery(groupIds = listOf())).also { namespaces ->
+        namespaceQueryRepository.list(NamespaceQuery(workspaceIds = listOf())).also { namespaces ->
             assertThat(namespaces, hasSize(1))
             with(namespaces.first()) {
                 assertThat(id, equalTo(NamespaceId(12345)))
@@ -86,7 +86,7 @@ internal class NamespaceCreateHandlerTest : BaseReqHandlerTest() {
             id = RequestId(1),
             status = Submitted,
             namespaceId = NamespaceId(12345),
-            groupId = testGroup.id,
+            workspaceId = testWorkspace.id,
             name = NamespaceName("awesome-namespace")
         )
     }

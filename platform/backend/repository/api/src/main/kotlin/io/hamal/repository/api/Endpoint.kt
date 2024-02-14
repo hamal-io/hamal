@@ -7,7 +7,7 @@ import io.hamal.lib.domain.vo.*
 data class Endpoint(
     override val id: EndpointId,
     override val updatedAt: UpdatedAt,
-    val groupId: GroupId,
+    val workspaceId: WorkspaceId,
     val cmdId: CmdId,
     val namespaceId: NamespaceId,
     val funcId: FuncId,
@@ -24,7 +24,7 @@ interface EndpointCmdRepository : CmdRepository {
     data class CreateCmd(
         val id: CmdId,
         val endpointId: EndpointId,
-        val groupId: GroupId,
+        val workspaceId: WorkspaceId,
         val namespaceId: NamespaceId,
         val funcId: FuncId,
         val name: EndpointName
@@ -44,7 +44,7 @@ interface EndpointQueryRepository {
     fun list(endpointIds: List<EndpointId>): List<Endpoint> = list(
         EndpointQuery(
             limit = Limit.all,
-            groupIds = listOf(),
+            workspaceIds = listOf(),
             endpointIds = endpointIds,
         )
     )
@@ -57,6 +57,6 @@ interface EndpointQueryRepository {
         var endpointIds: List<EndpointId> = listOf(),
         var namespaceIds: List<NamespaceId> = listOf(),
         var funcIds: List<FuncId> = listOf(),
-        var groupIds: List<GroupId> = listOf()
+        var workspaceIds: List<WorkspaceId> = listOf()
     )
 }

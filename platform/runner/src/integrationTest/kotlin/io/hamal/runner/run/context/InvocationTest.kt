@@ -22,7 +22,7 @@ internal object EventInvocationTest : AbstractExecuteTest() {
             UnitOfWork(
                 id = ExecId(1234),
                 namespaceId = NamespaceId(9876),
-                groupId = GroupId(5432),
+                workspaceId = WorkspaceId(5432),
                 inputs = ExecInputs(),
                 state = State(),
                 code = CodeValue(
@@ -57,7 +57,7 @@ internal object EventInvocationTest : AbstractExecuteTest() {
             UnitOfWork(
                 id = ExecId(1234),
                 namespaceId = NamespaceId(9876),
-                groupId = GroupId(5432),
+                workspaceId = WorkspaceId(5432),
                 inputs = ExecInputs(),
                 state = State(),
                 code = CodeValue("require_plugin('test').fn()"),
@@ -97,7 +97,7 @@ internal object HookInvocationTest : AbstractExecuteTest() {
             UnitOfWork(
                 id = ExecId(1234),
                 namespaceId = NamespaceId(9876),
-                groupId = GroupId(5432),
+                workspaceId = WorkspaceId(5432),
                 inputs = ExecInputs(),
                 state = State(),
                 code = CodeValue(
@@ -139,7 +139,7 @@ internal object HookInvocationTest : AbstractExecuteTest() {
             UnitOfWork(
                 id = ExecId(1234),
                 namespaceId = NamespaceId(9876),
-                groupId = GroupId(5432),
+                workspaceId = WorkspaceId(5432),
                 inputs = ExecInputs(),
                 state = State(),
                 code = CodeValue("require_plugin('test').fn()"),
@@ -187,7 +187,7 @@ internal object EndpointInvocationTest : AbstractExecuteTest() {
             UnitOfWork(
                 id = ExecId(1234),
                 namespaceId = NamespaceId(9876),
-                groupId = GroupId(5432),
+                workspaceId = WorkspaceId(5432),
                 inputs = ExecInputs(),
                 state = State(),
                 code = CodeValue(
@@ -229,7 +229,7 @@ internal object EndpointInvocationTest : AbstractExecuteTest() {
             UnitOfWork(
                 id = ExecId(1234),
                 namespaceId = NamespaceId(9876),
-                groupId = GroupId(5432),
+                workspaceId = WorkspaceId(5432),
                 inputs = ExecInputs(),
                 state = State(),
                 code = CodeValue("require_plugin('test').fn()"),

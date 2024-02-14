@@ -41,7 +41,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
             CreateCmd(
                 id = CmdId(2),
                 namespaceId = NamespaceId(2),
-                groupId = testGroup.id,
+                workspaceId = testWorkspace.id,
                 name = NamespaceName("createdNamespace")
             )
         )
@@ -202,7 +202,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
             CreateCmd(
                 id = CmdGen(),
                 namespaceId = NamespaceId(2),
-                groupId = testGroup.id,
+                workspaceId = testWorkspace.id,
                 name = NamespaceName("createdNamespace")
             )
         )

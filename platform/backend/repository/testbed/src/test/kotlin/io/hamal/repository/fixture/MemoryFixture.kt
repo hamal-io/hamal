@@ -29,7 +29,7 @@ object MemoryFixture : BaseTestFixture {
         ExtensionRepository::class -> ExtensionMemoryRepository() as REPO
         FeedbackRepository::class -> FeedbackMemoryRepository() as REPO
         FuncRepository::class -> FuncMemoryRepository() as REPO
-        GroupRepository::class -> MemoryGroupRepository() as REPO
+        WorkspaceRepository::class -> MemoryWorkspaceRepository() as REPO
         HookRepository::class -> HookMemoryRepository() as REPO
         NamespaceRepository::class -> NamespaceMemoryRepository() as REPO
         RequestRepository::class -> RequestMemoryRepository() as REPO

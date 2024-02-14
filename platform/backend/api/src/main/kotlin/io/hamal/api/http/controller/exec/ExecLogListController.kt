@@ -4,7 +4,7 @@ import io.hamal.core.adapter.ExecLogListPort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecLogId
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.sdk.api.ApiExcLogList
 import io.hamal.lib.sdk.api.ApiExecLog
 import io.hamal.repository.api.ExecLogQueryRepository.ExecLogQuery
@@ -30,7 +30,7 @@ internal class ExecLogListController(
                 afterId = afterId,
                 limit = limit,
                 execIds = listOf(execId),
-                groupIds = listOf()
+                workspaceIds = listOf()
             )
         ) { logs ->
             ResponseEntity.ok(
@@ -47,9 +47,9 @@ internal class ExecLogListController(
         }
     }
 
-    @GetMapping("/v1/groups/{groupId}/exec-logs")
+    @GetMapping("/v1/workspaces/{workspaceId}/exec-logs")
     fun getExecLogs(
-        @PathVariable("groupId") groupId: GroupId,
+        @PathVariable("workspaceId") workspaceId: WorkspaceId,
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: ExecLogId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit
     ): ResponseEntity<ApiExcLogList> {
@@ -57,7 +57,7 @@ internal class ExecLogListController(
             ExecLogQuery(
                 afterId = afterId,
                 limit = limit,
-                groupIds = listOf(groupId)
+                workspaceIds = listOf(workspaceId)
             )
         ) { logs ->
             ResponseEntity.ok(

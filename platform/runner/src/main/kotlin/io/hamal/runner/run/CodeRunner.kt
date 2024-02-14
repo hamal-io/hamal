@@ -37,7 +37,7 @@ class CodeRunnerImpl(
                 unitOfWork.invocation
             )
             runnerContext[ExecId::class] = unitOfWork.id
-            runnerContext[GroupId::class] = unitOfWork.groupId
+            runnerContext[WorkspaceId::class] = unitOfWork.workspaceId
             runnerContext[NamespaceId::class] = unitOfWork.namespaceId
             runnerContext[ExecToken::class] = unitOfWork.token
             runnerContext[RunnerEnv::class] = envFactory.create()

@@ -21,7 +21,7 @@ internal class BlueprintUpdateHandlerTest : BaseReqHandlerTest() {
             BlueprintCmdRepository.CreateCmd(
                 id = CmdId(1),
                 blueprintId = BlueprintId(123),
-                groupId = testGroup.id,
+                workspaceId = testWorkspace.id,
                 name = BlueprintName("TestBlueprint"),
                 inputs = BlueprintInputs(HotObject.builder().set("hamal", "rocks").build()),
                 value = CodeValue("1 + 1"),
@@ -43,7 +43,7 @@ internal class BlueprintUpdateHandlerTest : BaseReqHandlerTest() {
         BlueprintUpdateRequested(
             id = RequestId(2),
             status = RequestStatus.Submitted,
-            groupId = testGroup.id,
+            workspaceId = testWorkspace.id,
             blueprintId = BlueprintId(123),
             name = BlueprintName("UpdatedBlueprint"),
             inputs = BlueprintInputs(HotObject.builder().set("hamal", "updates").build()),

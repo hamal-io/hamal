@@ -3,7 +3,7 @@ package io.hamal.api.http.controller.topic
 import io.hamal.core.adapter.TopicListPort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.TopicType.*
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
@@ -23,7 +23,7 @@ internal class TopicListController(private val listTopics: TopicListPort) {
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: TopicId,
         @RequestParam(required = false, name = "names", defaultValue = "") topicNames: List<TopicName>,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit,
-        @RequestParam(required = false, name = "group_ids", defaultValue = "") groupIds: List<GroupId> = listOf(),
+        @RequestParam(required = false, name = "workspace_ids", defaultValue = "") workspaceIds: List<WorkspaceId> = listOf(),
         @RequestParam(required = false, name = "namespace_ids", defaultValue = "") namespaceIds: List<NamespaceId> = listOf()
     ): ResponseEntity<ApiTopicList> {
         return listTopics(
@@ -31,9 +31,9 @@ internal class TopicListController(private val listTopics: TopicListPort) {
                 afterId = afterId,
                 names = topicNames,
                 limit = limit,
-                groupIds = groupIds,
+                workspaceIds = workspaceIds,
                 namespaceIds = namespaceIds,
-                types = listOf(Namespace, Group, Public)
+                types = listOf(Namespace, Workspace, Public)
             )
         ) { topics ->
             ResponseEntity.ok(

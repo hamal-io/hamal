@@ -17,7 +17,7 @@ internal class ExecIdTest : AbstractExecuteTest() {
             UnitOfWork(
                 id = ExecId(1234),
                 namespaceId = NamespaceId(9876),
-                groupId = GroupId(5432),
+                workspaceId = WorkspaceId(5432),
                 inputs = ExecInputs(),
                 state = State(),
                 code = CodeValue("assert(context.exec.id == '4d2')"),
@@ -36,7 +36,7 @@ internal class ExecIdTest : AbstractExecuteTest() {
             UnitOfWork(
                 id = ExecId(1234),
                 namespaceId = NamespaceId(9876),
-                groupId = GroupId(5432),
+                workspaceId = WorkspaceId(5432),
                 inputs = ExecInputs(),
                 state = State(),
                 code = CodeValue("require_plugin('test').fn()"),

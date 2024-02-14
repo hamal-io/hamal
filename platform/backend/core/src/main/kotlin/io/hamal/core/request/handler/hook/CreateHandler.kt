@@ -29,7 +29,7 @@ private fun HookCreateHandler.createHook(req: HookCreateRequested): Hook {
         CreateCmd(
             id = req.cmdId(),
             hookId = req.hookId,
-            groupId = req.groupId,
+            workspaceId = req.workspaceId,
             namespaceId = req.namespaceId,
             name = req.name
         )

@@ -18,21 +18,21 @@ internal object ProjectionCurrent : ProjectionSqlite<ExtensionId, ExtensionRecor
             tx.execute(
                 """
                 INSERT INTO current
-                    (id, group_id, name, data) 
+                    (id, workspace_id, name, data) 
                 VALUES
-                    (:id, :groupId, :name, :data)
+                    (:id, :workspaceId, :name, :data)
                 ON CONFLICT(id) DO UPDATE 
                         SET name= :name, data= :data;
             """.trimIndent()
             ) {
                 set("id", obj.id)
-                set("groupId", obj.groupId)
+                set("workspaceId", obj.workspaceId)
                 set("name", obj.name)
                 set("data", json.serializeAndCompress(obj))
             }
         } catch (e: SQLiteException) {
-            if (e.message!!.contains("(UNIQUE constraint failed: current.group_id, current.name)")) {
-                throw IllegalArgumentException("${obj.name} already exists in group ${obj.groupId}")
+            if (e.message!!.contains("(UNIQUE constraint failed: current.workspace_id, current.name)")) {
+                throw IllegalArgumentException("${obj.name} already exists in workspace ${obj.workspaceId}")
             }
             throw e
         }
@@ -43,11 +43,11 @@ internal object ProjectionCurrent : ProjectionSqlite<ExtensionId, ExtensionRecor
             """
             CREATE TABLE IF NOT EXISTS current (
                  id             INTEGER NOT NULL,
-                 group_id       INTEGER NOT NULL,
+                 workspace_id       INTEGER NOT NULL,
                  name           VARCHAR(255) NOT NULL,
                  data           BLOB NOT NULL,
                  PRIMARY KEY    (id),
-                 UNIQUE (group_id, name)
+                 UNIQUE (workspace_id, name)
             );
         """.trimIndent()
         )
@@ -87,7 +87,7 @@ internal object ProjectionCurrent : ProjectionSqlite<ExtensionId, ExtensionRecor
             WHERE
                 id < :afterId
                 ${query.ids()}
-                ${query.groupIds()}
+                ${query.workspaceIds()}
             ORDER BY id DESC
             LIMIT :limit
         """.trimIndent()
@@ -113,7 +113,7 @@ internal object ProjectionCurrent : ProjectionSqlite<ExtensionId, ExtensionRecor
             WHERE
                 id < :afterId
                 ${query.ids()}
-                ${query.groupIds()}
+                ${query.workspaceIds()}
         """.trimIndent()
             ) {
                 query {
@@ -134,11 +134,11 @@ internal object ProjectionCurrent : ProjectionSqlite<ExtensionId, ExtensionRecor
         }
     }
 
-    private fun ExtensionQuery.groupIds(): String {
-        return if (groupIds.isEmpty()) {
+    private fun ExtensionQuery.workspaceIds(): String {
+        return if (workspaceIds.isEmpty()) {
             ""
         } else {
-            "AND group_id IN (${groupIds.joinToString(",") { "${it.value.value}" }})"
+            "AND workspace_id IN (${workspaceIds.joinToString(",") { "${it.value.value}" }})"
         }
     }
 }

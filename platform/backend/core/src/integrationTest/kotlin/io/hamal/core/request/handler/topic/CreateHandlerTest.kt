@@ -35,7 +35,7 @@ internal class TopicCreateHandlerTest : BaseReqHandlerTest() {
                 assertThat(id, equalTo(TopicId(2345)))
                 assertThat(name, equalTo(TopicName("some-topic-name")))
                 assertThat(logTopicId, equalTo(LogTopicId(3456)))
-                assertThat(groupId, equalTo(testGroup.id))
+                assertThat(workspaceId, equalTo(testWorkspace.id))
                 assertThat(namespaceId, equalTo(testNamespace.id))
                 assertThat(type, equalTo(Namespace))
             }
@@ -58,7 +58,7 @@ internal class TopicCreateHandlerTest : BaseReqHandlerTest() {
             status = Submitted,
             topicId = TopicId(2345),
             logTopicId = LogTopicId(3456),
-            groupId = testGroup.id,
+            workspaceId = testWorkspace.id,
             namespaceId = testNamespace.id,
             type = Namespace,
             name = TopicName("some-topic-name")

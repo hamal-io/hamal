@@ -10,7 +10,7 @@ hook = fail_on_error(sys.hooks.create({
 sys.await_completed(hook)
 
 assert(hook ~= nil)
-assert(hook.group_id == '1')
+assert(hook.workspace_id == '1')
 assert(hook.namespace_id == namespace.id)
 
 _, hook = sys.hooks.get(hook.id)

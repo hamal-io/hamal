@@ -3,7 +3,7 @@ package io.hamal.api.http.controller.hook
 import io.hamal.core.adapter.HookListPort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.NamespaceId
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.domain.vo.HookId
 import io.hamal.lib.sdk.api.ApiHookList
 import io.hamal.lib.sdk.api.ApiHookList.Hook
@@ -28,7 +28,7 @@ internal class HookListController(private val listHook: HookListPort) {
             HookQuery(
                 afterId = afterId,
                 limit = limit,
-                groupIds = listOf(),
+                workspaceIds = listOf(),
                 namespaceIds = listOf(namespaceId)
             ),
             // assembler
@@ -55,14 +55,14 @@ internal class HookListController(private val listHook: HookListPort) {
     fun listHook(
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: HookId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit,
-        @RequestParam(required = false, name = "group_ids", defaultValue = "") groupIds: List<GroupId>,
+        @RequestParam(required = false, name = "workspace_ids", defaultValue = "") workspaceIds: List<WorkspaceId>,
         @RequestParam(required = false, name = "namespace_ids", defaultValue = "") namespaceIds: List<NamespaceId>
     ): ResponseEntity<ApiHookList> {
         return listHook(
             HookQuery(
                 afterId = afterId,
                 limit = limit,
-                groupIds = groupIds,
+                workspaceIds = workspaceIds,
                 namespaceIds = namespaceIds
             ),
             // assembler
