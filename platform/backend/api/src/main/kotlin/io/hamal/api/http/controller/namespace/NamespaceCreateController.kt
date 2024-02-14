@@ -4,7 +4,7 @@ import io.hamal.api.http.controller.accepted
 import io.hamal.core.adapter.NamespaceCreatePort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.request.NamespaceCreateRequested
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.sdk.api.ApiNamespaceCreateRequest
 import io.hamal.lib.sdk.api.ApiRequested
 import org.springframework.http.ResponseEntity
@@ -18,11 +18,11 @@ internal class NamespaceCreateController(
     private val retry: Retry,
     private val createNamespace: NamespaceCreatePort
 ) {
-    @PostMapping("/v1/groups/{groupId}/namespaces")
+    @PostMapping("/v1/workspaces/{workspaceId}/namespaces")
     fun createNamespace(
-        @PathVariable("groupId") groupId: GroupId,
+        @PathVariable("workspaceId") workspaceId: WorkspaceId,
         @RequestBody req: ApiNamespaceCreateRequest
     ): ResponseEntity<ApiRequested> = retry {
-        createNamespace(groupId, req, NamespaceCreateRequested::accepted)
+        createNamespace(workspaceId, req, NamespaceCreateRequested::accepted)
     }
 }

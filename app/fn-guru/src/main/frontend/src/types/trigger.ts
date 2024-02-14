@@ -4,7 +4,7 @@ export interface TriggerCreateRequested {
     triggerId: string;
     funcId: string;
     namespaceId: string;
-    groupId: string;
+    workspaceId: string;
 }
 
 export interface TriggerList {

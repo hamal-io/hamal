@@ -39,7 +39,7 @@ class AuthAdapter(
     private val generateDomainId: GenerateId,
     private val generateToken: GenerateToken,
     private val requestCmdRepository: RequestCmdRepository,
-    private val groupList: GroupListPort,
+    private val workspaceList: WorkspaceListPort,
     private val namespaceList: NamespaceListPort,
 ) : AuthPort {
 
@@ -65,7 +65,7 @@ class AuthAdapter(
                 status = RequestStatus.Submitted,
                 authId = generateDomainId(::AuthId),
                 accountId = submitted.accountId,
-                groupIds = listOf(submitted.groupId),
+                workspaceIds = listOf(submitted.workspaceId),
                 token = generateToken(),
                 address = req.address,
                 signature = req.signature
@@ -77,7 +77,7 @@ class AuthAdapter(
                 status = RequestStatus.Submitted,
                 authId = generateDomainId(::AuthId),
                 accountId = auth.accountId,
-                groupIds = groupList(auth.accountId) { groups -> groups.map(Group::id) },
+                workspaceIds = workspaceList(auth.accountId) { workspaces -> workspaces.map(Workspace::id) },
                 token = generateToken(),
                 address = req.address,
                 signature = req.signature
@@ -103,7 +103,7 @@ class AuthAdapter(
             status = RequestStatus.Submitted,
             authId = generateDomainId(::AuthId),
             accountId = account.id,
-            groupIds = groupList(account.id) { groups -> groups.map(Group::id) },
+            workspaceIds = workspaceList(account.id) { workspaces -> workspaces.map(Workspace::id) },
             hash = encodedPassword,
             token = generateToken()
         ).also(requestCmdRepository::queue).let(responseHandler)

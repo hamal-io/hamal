@@ -4,7 +4,7 @@ import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.BlueprintId
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.domain.vo.RequestId
 import io.hamal.repository.api.Blueprint
 import io.hamal.repository.api.BlueprintQueryRepository
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component
 
 interface BlueprintCreatePort {
     operator fun <T : Any> invoke(
-        groupId: GroupId,
+        workspaceId: WorkspaceId,
         accountId: AccountId,
         req: BlueprintCreateRequest,
         responseHandler: (BlueprintCreateRequested) -> T
@@ -45,7 +45,7 @@ class BlueprintAdapter(
     private val requestCmdRepository: RequestCmdRepository
 ) : BlueprintPort {
     override fun <T : Any> invoke(
-        groupId: GroupId,
+        workspaceId: WorkspaceId,
         accountId: AccountId,
         req: BlueprintCreateRequest,
         responseHandler: (BlueprintCreateRequested) -> T
@@ -53,7 +53,7 @@ class BlueprintAdapter(
         return BlueprintCreateRequested(
             id = generateDomainId(::RequestId),
             status = Submitted,
-            groupId = groupId,
+            workspaceId = workspaceId,
             blueprintId = generateDomainId(::BlueprintId),
             name = req.name,
             inputs = req.inputs,
@@ -75,7 +75,7 @@ class BlueprintAdapter(
         return BlueprintUpdateRequested(
             id = generateDomainId(::RequestId),
             status = Submitted,
-            groupId = blueprintQueryRepository.get(bpId).groupId,
+            workspaceId = blueprintQueryRepository.get(bpId).workspaceId,
             blueprintId = bpId,
             name = req.name,
             inputs = req.inputs,

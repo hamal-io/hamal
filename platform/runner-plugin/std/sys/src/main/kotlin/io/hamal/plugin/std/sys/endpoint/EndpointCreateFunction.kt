@@ -37,7 +37,7 @@ class EndpointCreateFunction(
                     "id" to KuaString(res.id.value.value.toString(16)),
                     "status" to KuaString(res.status.name),
                     "endpoint_id" to KuaString(res.endpointId.value.value.toString(16)),
-                    "group_id" to KuaString(res.groupId.value.value.toString(16)),
+                    "workspace_id" to KuaString(res.workspaceId.value.value.toString(16)),
                     "func_id" to KuaString(res.funcId.value.value.toString(16))
                 )
             )

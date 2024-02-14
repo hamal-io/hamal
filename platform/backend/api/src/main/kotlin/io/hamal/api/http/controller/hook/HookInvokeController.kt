@@ -44,7 +44,7 @@ internal class HookInvokeController(
             id = generateDomainId(::RequestId),
             status = Submitted,
             hookId = id,
-            groupId = hook.groupId,
+            workspaceId = hook.workspaceId,
             invocation = HookInvocation(
                 method = req.method(), headers = req.headers(), parameters = req.parameters(), content = req.content()
             ),

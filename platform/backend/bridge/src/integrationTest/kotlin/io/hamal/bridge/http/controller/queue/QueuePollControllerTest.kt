@@ -29,7 +29,7 @@ internal class QueuePollControllerTest : BaseQueueControllerTest() {
 
             with(work.first()) {
                 assertThat(namespaceId, equalTo(testNamespace.id))
-                assertThat(groupId, equalTo(testGroup.id))
+                assertThat(workspaceId, equalTo(testWorkspace.id))
                 assertThat(inputs, equalTo(ExecInputs()))
                 assertThat(correlation, nullValue())
                 assertThat(code, equalTo(CodeValue("40 + 2")))
@@ -56,7 +56,7 @@ internal class QueuePollControllerTest : BaseQueueControllerTest() {
 
             with(work.first()) {
                 assertThat(namespaceId, equalTo(testNamespace.id))
-                assertThat(groupId, equalTo(testGroup.id))
+                assertThat(workspaceId, equalTo(testWorkspace.id))
                 assertThat(inputs, equalTo(ExecInputs()))
                 assertThat(
                     correlation, equalTo(

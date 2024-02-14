@@ -24,7 +24,7 @@ sealed class FuncRecord(
     data class Created(
         override val entityId: FuncId,
         override val cmdId: CmdId,
-        val groupId: GroupId,
+        val workspaceId: WorkspaceId,
         val namespaceId: NamespaceId,
         val name: FuncName,
         val inputs: FuncInputs,

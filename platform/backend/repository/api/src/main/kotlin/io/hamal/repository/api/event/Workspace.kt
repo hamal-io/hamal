@@ -1,7 +1,7 @@
 package io.hamal.repository.api.event
 
-import io.hamal.repository.api.Group
+import io.hamal.repository.api.Workspace
 
-data class GroupCreatedEvent(
-    val group: Group,
+data class WorkspaceCreatedEvent(
+    val workspace: Workspace,
 ) : InternalEvent()

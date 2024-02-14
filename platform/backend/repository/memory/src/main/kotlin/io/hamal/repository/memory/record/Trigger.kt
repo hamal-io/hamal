@@ -50,7 +50,7 @@ private object TriggerCurrentProjection {
             .reversed()
             .asSequence()
             .filter { if (query.types.isEmpty()) true else query.types.contains(it.type) }
-            .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
+            .filter { if (query.workspaceIds.isEmpty()) true else query.workspaceIds.contains(it.workspaceId) }
             .filter { if (query.funcIds.isEmpty()) true else query.funcIds.contains(it.funcId) }
             .filter { if (query.namespaceIds.isEmpty()) true else query.namespaceIds.contains(it.namespaceId) }
             .filter {
@@ -87,7 +87,7 @@ private object TriggerCurrentProjection {
                 .reversed()
                 .asSequence()
                 .filter { if (query.types.isEmpty()) true else query.types.contains(it.type) }
-                .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
+                .filter { if (query.workspaceIds.isEmpty()) true else query.workspaceIds.contains(it.workspaceId) }
                 .filter { if (query.funcIds.isEmpty()) true else query.funcIds.contains(it.funcId) }
                 .filter { if (query.namespaceIds.isEmpty()) true else query.namespaceIds.contains(it.namespaceId) }
                 .filter {
@@ -155,7 +155,7 @@ class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord,
                 TriggerRecord.FixedRateCreated(
                     cmdId = cmd.id,
                     entityId = triggerId,
-                    groupId = cmd.groupId,
+                    workspaceId = cmd.workspaceId,
                     funcId = cmd.funcId,
                     namespaceId = cmd.namespaceId,
                     name = cmd.name,
@@ -179,7 +179,7 @@ class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord,
                     TriggerRecord.EventCreated(
                         cmdId = cmd.id,
                         entityId = triggerId,
-                        groupId = cmd.groupId,
+                        workspaceId = cmd.workspaceId,
                         funcId = cmd.funcId,
                         namespaceId = cmd.namespaceId,
                         name = cmd.name,
@@ -217,7 +217,7 @@ class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord,
                     TriggerRecord.HookCreated(
                         cmdId = cmd.id,
                         entityId = triggerId,
-                        groupId = cmd.groupId,
+                        workspaceId = cmd.workspaceId,
                         funcId = cmd.funcId,
                         namespaceId = cmd.namespaceId,
                         name = cmd.name,
@@ -243,7 +243,7 @@ class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord,
                     TriggerRecord.CronCreated(
                         cmdId = cmd.id,
                         entityId = triggerId,
-                        groupId = cmd.groupId,
+                        workspaceId = cmd.workspaceId,
                         funcId = cmd.funcId,
                         namespaceId = cmd.namespaceId,
                         name = cmd.name,

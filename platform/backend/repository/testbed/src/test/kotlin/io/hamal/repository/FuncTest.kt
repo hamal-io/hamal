@@ -29,7 +29,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                 CreateCmd(
                     id = CmdId(1),
                     funcId = FuncId(123),
-                    groupId = GroupId(1),
+                    workspaceId = WorkspaceId(1),
                     namespaceId = NamespaceId(234),
                     name = FuncName("SomeFunc"),
                     inputs = FuncInputs(HotObject.builder().set("hamal", "rocks").build()),
@@ -40,7 +40,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
 
             with(result) {
                 assertThat(id, equalTo(FuncId(123)))
-                assertThat(groupId, equalTo(GroupId(1)))
+                assertThat(workspaceId, equalTo(WorkspaceId(1)))
                 assertThat(namespaceId, equalTo(NamespaceId(234)))
                 assertThat(name, equalTo(FuncName("SomeFunc")))
                 assertThat(inputs, equalTo(FuncInputs(HotObject.builder().set("hamal", "rocks").build())))
@@ -68,7 +68,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                 createFunc(
                     funcId = FuncId(1),
                     namespaceId = NamespaceId(2),
-                    groupId = GroupId(3),
+                    workspaceId = WorkspaceId(3),
                     name = FuncName("first-func-name")
                 )
 
@@ -77,7 +77,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                         CreateCmd(
                             id = CmdId(2),
                             funcId = FuncId(4),
-                            groupId = GroupId(3),
+                            workspaceId = WorkspaceId(3),
                             namespaceId = NamespaceId(2),
                             name = FuncName("first-func-name"),
                             inputs = FuncInputs(),
@@ -102,7 +102,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                 createFunc(
                     funcId = FuncId(1),
                     namespaceId = NamespaceId(2),
-                    groupId = GroupId(3),
+                    workspaceId = WorkspaceId(3),
                     name = FuncName("func-name")
                 )
 
@@ -110,7 +110,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                     CreateCmd(
                         id = CmdId(2),
                         funcId = FuncId(4),
-                        groupId = GroupId(3),
+                        workspaceId = WorkspaceId(3),
                         namespaceId = NamespaceId(22),
                         name = FuncName("func-name"),
                         inputs = FuncInputs(),
@@ -121,7 +121,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
 
                 with(result) {
                     assertThat(id, equalTo(FuncId(4)))
-                    assertThat(groupId, equalTo(GroupId(3)))
+                    assertThat(workspaceId, equalTo(WorkspaceId(3)))
                     assertThat(namespaceId, equalTo(NamespaceId(22)))
                     assertThat(name, equalTo(FuncName("func-name")))
                     assertThat(inputs, equalTo(FuncInputs()))
@@ -150,7 +150,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                     cmdId = CmdId(23456),
                     funcId = FuncId(5),
                     namespaceId = NamespaceId(2),
-                    groupId = GroupId(3),
+                    workspaceId = WorkspaceId(3),
                     name = FuncName("first-func-name"),
                     codeId = CodeId(7),
                     codeVersion = CodeVersion(7)
@@ -161,7 +161,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                     CreateCmd(
                         id = CmdId(23456),
                         funcId = FuncId(5),
-                        groupId = GroupId(333),
+                        workspaceId = WorkspaceId(333),
                         namespaceId = NamespaceId(2222),
                         name = FuncName("second-func-name"),
                         inputs = FuncInputs(),
@@ -173,7 +173,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
 
                 with(result) {
                     assertThat(id, equalTo(FuncId(5)))
-                    assertThat(groupId, equalTo(GroupId(3)))
+                    assertThat(workspaceId, equalTo(WorkspaceId(3)))
                     assertThat(namespaceId, equalTo(NamespaceId(2)))
                     assertThat(name, equalTo(FuncName("first-func-name")))
                     assertThat(inputs, equalTo(FuncInputs(HotObject.builder().set("hamal", "rocks").build())))
@@ -202,7 +202,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
             createFunc(
                 funcId = FuncId(1),
                 namespaceId = NamespaceId(2),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 name = FuncName("func-name"),
                 codeId = CodeId(7),
                 codeVersion = CodeVersion(7)
@@ -220,7 +220,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
 
             with(result) {
                 assertThat(id, equalTo(FuncId(1)))
-                assertThat(groupId, equalTo(GroupId(3)))
+                assertThat(workspaceId, equalTo(WorkspaceId(3)))
                 assertThat(namespaceId, equalTo(NamespaceId(2)))
                 assertThat(name, equalTo(FuncName("Updated")))
                 assertThat(inputs, equalTo(FuncInputs(HotObject.builder().set("answer", 42).build())))
@@ -245,7 +245,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
             createFunc(
                 funcId = FuncId(1),
                 namespaceId = NamespaceId(2),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 name = FuncName("func-name"),
                 codeId = CodeId(9),
                 codeVersion = CodeVersion(9)
@@ -262,7 +262,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
 
             with(result) {
                 assertThat(id, equalTo(FuncId(1)))
-                assertThat(groupId, equalTo(GroupId(3)))
+                assertThat(workspaceId, equalTo(WorkspaceId(3)))
                 assertThat(namespaceId, equalTo(NamespaceId(2)))
                 assertThat(name, equalTo(FuncName("func-name")))
                 assertThat(inputs, equalTo(FuncInputs(HotObject.builder().set("hamal", "rocks").build())))
@@ -290,14 +290,14 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                 createFunc(
                     funcId = FuncId(1),
                     namespaceId = NamespaceId(2),
-                    groupId = GroupId(3),
+                    workspaceId = WorkspaceId(3),
                     name = FuncName("already-exists")
                 )
 
                 createFunc(
                     funcId = FuncId(2),
                     namespaceId = NamespaceId(2),
-                    groupId = GroupId(3),
+                    workspaceId = WorkspaceId(3),
                     name = FuncName("to-update")
                 )
 
@@ -318,7 +318,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                 with(get(FuncId(2))) {
                     assertThat(id, equalTo(FuncId(2)))
                     assertThat(namespaceId, equalTo(NamespaceId(2)))
-                    assertThat(groupId, equalTo(GroupId(3)))
+                    assertThat(workspaceId, equalTo(WorkspaceId(3)))
                     assertThat(name, equalTo(FuncName("to-update")))
                 }
 
@@ -417,7 +417,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
             createFunc(
                 funcId = FuncId(1),
                 namespaceId = NamespaceId(2),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 name = FuncName("func")
             )
 
@@ -449,14 +449,14 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
             createFunc(
                 funcId = FuncId(1),
                 namespaceId = NamespaceId(2),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 name = FuncName("already-exists")
             )
 
             createFunc(
                 funcId = FuncId(2),
                 namespaceId = NamespaceId(2),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 name = FuncName("to-update")
             )
 
@@ -473,7 +473,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
             createFunc(
                 funcId = FuncId(1),
                 namespaceId = NamespaceId(2),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 name = FuncName("SomeFunc"),
                 codeId = CodeId(4),
                 codeVersion = CodeVersion(5)
@@ -481,7 +481,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
 
             with(get(FuncId(1))) {
                 assertThat(id, equalTo(FuncId(1)))
-                assertThat(groupId, equalTo(GroupId(3)))
+                assertThat(workspaceId, equalTo(WorkspaceId(3)))
                 assertThat(namespaceId, equalTo(NamespaceId(2)))
                 assertThat(name, equalTo(FuncName("SomeFunc")))
                 assertThat(inputs, equalTo(FuncInputs(HotObject.builder().set("hamal", "rocks").build())))
@@ -503,7 +503,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
             createFunc(
                 funcId = FuncId(1),
                 namespaceId = NamespaceId(2),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 name = FuncName("SomeFunc")
             )
 
@@ -521,7 +521,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
             createFunc(
                 funcId = FuncId(1),
                 namespaceId = NamespaceId(2),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 name = FuncName("SomeFunc"),
                 codeId = CodeId(4),
                 codeVersion = CodeVersion(5)
@@ -529,7 +529,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
 
             with(find(FuncId(1))!!) {
                 assertThat(id, equalTo(FuncId(1)))
-                assertThat(groupId, equalTo(GroupId(3)))
+                assertThat(workspaceId, equalTo(WorkspaceId(3)))
                 assertThat(namespaceId, equalTo(NamespaceId(2)))
                 assertThat(name, equalTo(FuncName("SomeFunc")))
                 assertThat(inputs, equalTo(FuncInputs(HotObject.builder().set("hamal", "rocks").build())))
@@ -551,7 +551,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
             createFunc(
                 funcId = FuncId(1),
                 namespaceId = NamespaceId(2),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 name = FuncName("SomeFunc")
             )
 
@@ -573,17 +573,17 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
             with(result[0]) {
                 assertThat(id, equalTo(FuncId(3)))
                 assertThat(namespaceId, equalTo(NamespaceId(4)))
-                assertThat(groupId, equalTo(GroupId(4)))
+                assertThat(workspaceId, equalTo(WorkspaceId(4)))
                 assertThat(name, equalTo(FuncName("Func")))
             }
         }
 
         @TestFactory
-        fun `With group ids`() = runWith(FuncRepository::class) {
+        fun `With workspace ids`() = runWith(FuncRepository::class) {
             setup()
 
             val query = FuncQuery(
-                groupIds = listOf(GroupId(5), GroupId(4)),
+                workspaceIds = listOf(WorkspaceId(5), WorkspaceId(4)),
                 limit = Limit(10)
             )
 
@@ -594,14 +594,14 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
             with(result[0]) {
                 assertThat(id, equalTo(FuncId(4)))
                 assertThat(namespaceId, equalTo(NamespaceId(10)))
-                assertThat(groupId, equalTo(GroupId(5)))
+                assertThat(workspaceId, equalTo(WorkspaceId(5)))
                 assertThat(name, equalTo(FuncName("Func")))
             }
 
             with(result[1]) {
                 assertThat(id, equalTo(FuncId(3)))
                 assertThat(namespaceId, equalTo(NamespaceId(4)))
-                assertThat(groupId, equalTo(GroupId(4)))
+                assertThat(workspaceId, equalTo(WorkspaceId(4)))
                 assertThat(name, equalTo(FuncName("Func")))
             }
         }
@@ -612,7 +612,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
 
             val query = FuncQuery(
                 namespaceIds = listOf(NamespaceId(10), NamespaceId(12)),
-                groupIds = listOf(),
+                workspaceIds = listOf(),
                 limit = Limit(10)
             )
 
@@ -623,7 +623,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
             with(result[0]) {
                 assertThat(id, equalTo(FuncId(4)))
                 assertThat(namespaceId, equalTo(NamespaceId(10)))
-                assertThat(groupId, equalTo(GroupId(5)))
+                assertThat(workspaceId, equalTo(WorkspaceId(5)))
                 assertThat(name, equalTo(FuncName("Func")))
             }
         }
@@ -633,7 +633,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
             createFunc(
                 funcId = FuncId(1),
                 namespaceId = NamespaceId(2),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 name = FuncName("Func"),
                 codeVersion = CodeVersion(1)
             )
@@ -657,7 +657,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
             setup()
 
             val query = FuncQuery(
-                groupIds = listOf(),
+                workspaceIds = listOf(),
                 limit = Limit(3)
             )
 
@@ -672,7 +672,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
 
             val query = FuncQuery(
                 afterId = FuncId(2),
-                groupIds = listOf(),
+                workspaceIds = listOf(),
                 limit = Limit(1)
             )
 
@@ -689,28 +689,28 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
             createFunc(
                 funcId = FuncId(1),
                 namespaceId = NamespaceId(2),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 name = FuncName("Func")
             )
 
             createFunc(
                 funcId = FuncId(2),
                 namespaceId = NamespaceId(3),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 name = FuncName("Func")
             )
 
             createFunc(
                 funcId = FuncId(3),
                 namespaceId = NamespaceId(4),
-                groupId = GroupId(4),
+                workspaceId = WorkspaceId(4),
                 name = FuncName("Func")
             )
 
             createFunc(
                 funcId = FuncId(4),
                 namespaceId = NamespaceId(10),
-                groupId = GroupId(5),
+                workspaceId = WorkspaceId(5),
                 name = FuncName("Func")
             )
         }
@@ -721,7 +721,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
         funcId: FuncId,
         namespaceId: NamespaceId,
         name: FuncName,
-        groupId: GroupId,
+        workspaceId: WorkspaceId,
         codeId: CodeId = CodeId(5),
         codeVersion: CodeVersion = CodeVersion(6),
         cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
@@ -730,7 +730,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
             CreateCmd(
                 id = cmdId,
                 funcId = funcId,
-                groupId = groupId,
+                workspaceId = workspaceId,
                 namespaceId = namespaceId,
                 name = name,
                 inputs = FuncInputs(HotObject.builder().set("hamal", "rocks").build()),
@@ -749,7 +749,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
             CreateCmd(
                 id = CmdGen(),
                 funcId = funcId,
-                groupId = GroupId(1),
+                workspaceId = WorkspaceId(1),
                 namespaceId = NamespaceId(234),
                 name = FuncName("SomeFunc"),
                 inputs = FuncInputs(),
@@ -774,6 +774,6 @@ private fun FuncRepository.verifyCount(expected: Int) {
 }
 
 private fun FuncRepository.verifyCount(expected: Int, block: FuncQuery.() -> Unit) {
-    val counted = count(FuncQuery(groupIds = listOf()).also(block))
+    val counted = count(FuncQuery(workspaceIds = listOf()).also(block))
     assertThat("number of functions expected", counted, equalTo(Count(expected)))
 }

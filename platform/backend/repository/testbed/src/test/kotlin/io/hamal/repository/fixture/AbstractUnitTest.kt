@@ -63,7 +63,7 @@ abstract class AbstractUnitTest {
             MemoryFixture,
             SqliteFixture
         ),
-        GroupRepository::class to listOf(
+        WorkspaceRepository::class to listOf(
             MemoryFixture,
             SqliteFixture
         ),

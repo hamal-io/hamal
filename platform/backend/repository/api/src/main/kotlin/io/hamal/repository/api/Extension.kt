@@ -7,7 +7,7 @@ import io.hamal.lib.domain.vo.*
 data class Extension(
     override val id: ExtensionId,
     override val updatedAt: UpdatedAt,
-    val groupId: GroupId,
+    val workspaceId: WorkspaceId,
     val cmdId: CmdId,
     val name: ExtensionName,
     val code: ExtensionCode,
@@ -27,7 +27,7 @@ interface ExtensionCmdRepository : CmdRepository {
     data class CreateCmd(
         val id: CmdId,
         val extId: ExtensionId,
-        val groupId: GroupId,
+        val workspaceId: WorkspaceId,
         val name: ExtensionName,
         val code: ExtensionCode
     )
@@ -46,7 +46,7 @@ interface ExtensionQueryRepository {
     fun list(extIds: List<ExtensionId>): List<Extension> = list(
         ExtensionQuery(
             limit = Limit.all,
-            groupIds = listOf(),
+            workspaceIds = listOf(),
             extIds = extIds,
         )
     )
@@ -57,6 +57,6 @@ interface ExtensionQueryRepository {
         var afterId: ExtensionId = ExtensionId(SnowflakeId(Long.MAX_VALUE)),
         var limit: Limit = Limit(1),
         var extIds: List<ExtensionId> = listOf(),
-        var groupIds: List<GroupId>
+        var workspaceIds: List<WorkspaceId>
     )
 }

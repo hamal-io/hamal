@@ -15,7 +15,7 @@ data class FuncEntity(
     override val id: FuncId,
     override val sequence: RecordSequence,
     override val recordedAt: RecordedAt,
-    val groupId: GroupId,
+    val workspaceId: WorkspaceId,
 
     var namespaceId: NamespaceId? = null,
     var name: FuncName? = null,
@@ -82,7 +82,7 @@ data class FuncEntity(
             cmdId = cmdId,
             id = id,
             updatedAt = recordedAt.toUpdatedAt(),
-            groupId = groupId,
+            workspaceId = workspaceId,
             namespaceId = namespaceId!!,
             name = name!!,
             inputs = inputs!!,
@@ -99,7 +99,7 @@ fun List<FuncRecord>.createEntity(): FuncEntity {
 
     var result = FuncEntity(
         id = firstRecord.entityId,
-        groupId = firstRecord.groupId,
+        workspaceId = firstRecord.workspaceId,
         cmdId = firstRecord.cmdId,
         sequence = firstRecord.sequence(),
         recordedAt = firstRecord.recordedAt()

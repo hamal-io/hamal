@@ -3,7 +3,7 @@ package io.hamal.lib.sdk.api
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.NamespaceCreateRequest
 import io.hamal.lib.domain.request.NamespaceUpdateRequest
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.domain.vo.RequestId
@@ -19,7 +19,7 @@ data class ApiNamespaceCreateRequested(
     override val id: RequestId,
     override val status: RequestStatus,
     val namespaceId: NamespaceId,
-    val groupId: GroupId,
+    val workspaceId: WorkspaceId,
 ) : ApiRequested()
 
 data class ApiNamespaceUpdateRequest(
@@ -47,8 +47,8 @@ data class ApiNamespace(
 ) : ApiObject()
 
 interface ApiNamespaceService {
-    fun create(groupId: GroupId, createNamespaceReq: ApiNamespaceCreateRequest): ApiNamespaceCreateRequested
-    fun list(groupId: GroupId): List<ApiNamespaceList.Namespace>
+    fun create(workspaceId: WorkspaceId, createNamespaceReq: ApiNamespaceCreateRequest): ApiNamespaceCreateRequested
+    fun list(workspaceId: WorkspaceId): List<ApiNamespaceList.Namespace>
     fun get(namespaceId: NamespaceId): ApiNamespace
 }
 
@@ -56,16 +56,16 @@ internal class ApiNamespaceServiceImpl(
     private val template: HttpTemplate
 ) : ApiNamespaceService {
 
-    override fun create(groupId: GroupId, createNamespaceReq: ApiNamespaceCreateRequest): ApiNamespaceCreateRequested =
-        template.post("/v1/groups/{groupId}/namespaces")
-            .path("groupId", groupId)
+    override fun create(workspaceId: WorkspaceId, createNamespaceReq: ApiNamespaceCreateRequest): ApiNamespaceCreateRequested =
+        template.post("/v1/workspaces/{workspaceId}/namespaces")
+            .path("workspaceId", workspaceId)
             .body(createNamespaceReq)
             .execute()
             .fold(ApiNamespaceCreateRequested::class)
 
-    override fun list(groupId: GroupId) =
-        template.get("/v1/groups/{groupId}/namespaces")
-            .path("groupId", groupId)
+    override fun list(workspaceId: WorkspaceId) =
+        template.get("/v1/workspaces/{workspaceId}/namespaces")
+            .path("workspaceId", workspaceId)
             .execute()
             .fold(ApiNamespaceList::class)
             .namespaces

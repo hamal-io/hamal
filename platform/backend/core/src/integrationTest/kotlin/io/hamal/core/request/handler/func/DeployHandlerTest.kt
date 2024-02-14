@@ -22,7 +22,7 @@ internal class FuncDeployHandlerTest : BaseReqHandlerTest() {
             FuncDeployRequested(
                 id = RequestId(500),
                 status = Submitted,
-                groupId = testGroup.id,
+                workspaceId = testWorkspace.id,
                 FuncId(1),
                 version = CodeVersion(10),
                 message = null
@@ -44,7 +44,7 @@ internal class FuncDeployHandlerTest : BaseReqHandlerTest() {
             FuncDeployRequested(
                 id = RequestId(500),
                 status = Submitted,
-                groupId = testGroup.id,
+                workspaceId = testWorkspace.id,
                 FuncId(1),
                 version = CodeVersion(10),
                 message = DeployMessage("This function and hamal rocks")
@@ -66,7 +66,7 @@ internal class FuncDeployHandlerTest : BaseReqHandlerTest() {
             FuncDeployRequested(
                 id = RequestId(500),
                 status = Submitted,
-                groupId = testGroup.id,
+                workspaceId = testWorkspace.id,
                 funcId = FuncId(1),
                 version = null,
                 message = null
@@ -86,7 +86,7 @@ internal class FuncDeployHandlerTest : BaseReqHandlerTest() {
             CodeCmdRepository.CreateCmd(
                 id = NextCommandId(),
                 codeId = codeId,
-                groupId = testGroup.id,
+                workspaceId = testWorkspace.id,
                 value = CodeValue("1 + 1")
             )
         )
@@ -95,7 +95,7 @@ internal class FuncDeployHandlerTest : BaseReqHandlerTest() {
             FuncCmdRepository.CreateCmd(
                 id = NextCommandId(),
                 funcId = FuncId(1),
-                groupId = testGroup.id,
+                workspaceId = testWorkspace.id,
                 namespaceId = testNamespace.id,
                 name = FuncName("Func-base"),
                 inputs = FuncInputs(),

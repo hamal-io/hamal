@@ -23,7 +23,7 @@ data class ApiTopicCreateRequested(
     override val id: RequestId,
     override val status: RequestStatus,
     val topicId: TopicId,
-    val groupId: GroupId,
+    val workspaceId: WorkspaceId,
     val namespaceId: NamespaceId,
     val type: TopicType
 ) : ApiRequested()
@@ -80,14 +80,14 @@ interface ApiTopicService {
         var limit: Limit = Limit(25),
         var topicIds: List<TopicId> = listOf(),
         var namespaceIds: List<NamespaceId> = listOf(),
-        var groupIds: List<GroupId> = listOf()
+        var workspaceIds: List<WorkspaceId> = listOf()
     ) {
         fun setRequestParameters(req: HttpRequest) {
             req.parameter("after_id", afterId)
             req.parameter("limit", limit)
             if (topicIds.isNotEmpty()) req.parameter("topic_ids", topicIds)
             if (namespaceIds.isNotEmpty()) req.parameter("namespace_ids", namespaceIds)
-            if (groupIds.isNotEmpty()) req.parameter("group_ids", groupIds)
+            if (workspaceIds.isNotEmpty()) req.parameter("workspace_ids", workspaceIds)
         }
     }
 }

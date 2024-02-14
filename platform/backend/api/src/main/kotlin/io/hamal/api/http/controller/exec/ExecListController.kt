@@ -4,7 +4,7 @@ import io.hamal.core.adapter.ExecListPort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.sdk.api.ApiExecList
 import io.hamal.repository.api.ExecQueryRepository
@@ -48,7 +48,7 @@ internal class ExecListController(private val listExec: ExecListPort) {
     fun list(
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: ExecId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit,
-        @RequestParam(required = false, name = "group_ids", defaultValue = "") groupIds: List<GroupId>,
+        @RequestParam(required = false, name = "workspace_ids", defaultValue = "") workspaceIds: List<WorkspaceId>,
         @RequestParam(required = false, name = "func_ids", defaultValue = "") funcIds: List<FuncId>,
         @RequestParam(required = false, name = "namespace_ids", defaultValue = "") namespaceIds: List<NamespaceId>
     ): ResponseEntity<ApiExecList> {
@@ -56,7 +56,7 @@ internal class ExecListController(private val listExec: ExecListPort) {
             ExecQueryRepository.ExecQuery(
                 afterId = afterId,
                 limit = limit,
-                groupIds = groupIds,
+                workspaceIds = workspaceIds,
                 funcIds = funcIds,
                 namespaceIds = namespaceIds
             )

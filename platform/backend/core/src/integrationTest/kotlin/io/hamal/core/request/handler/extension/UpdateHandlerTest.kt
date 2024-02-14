@@ -26,7 +26,7 @@ internal class ExtensionUpdateHandlerTest : BaseReqHandlerTest() {
         ExtensionCreateRequested(
             id = RequestId(10),
             status = RequestStatus.Submitted,
-            groupId = testGroup.id,
+            workspaceId = testWorkspace.id,
             extensionId = ExtensionId(1234),
             name = ExtensionName("TestExtension"),
             codeId = CodeId(1),
@@ -38,7 +38,7 @@ internal class ExtensionUpdateHandlerTest : BaseReqHandlerTest() {
         ExtensionUpdateRequested(
             id = RequestId(1),
             status = RequestStatus.Submitted,
-            groupId = testGroup.id,
+            workspaceId = testWorkspace.id,
             extensionId = ExtensionId(1234),
             name = ExtensionName("UpdateExtension"),
             code = CodeValue("40 + 2")

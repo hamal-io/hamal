@@ -6,7 +6,7 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.request.AccountCreateMetaMaskRequested
 import io.hamal.lib.domain.vo.AuthTokenExpiresAt
-import io.hamal.lib.domain.vo.GroupName
+import io.hamal.lib.domain.vo.WorkspaceName
 import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.repository.api.*
 import io.hamal.repository.api.event.AccountCreatedEvent
@@ -17,7 +17,7 @@ import java.time.temporal.ChronoUnit
 class AccountCreateMetaMaskHandler(
     val accountCmdRepository: AccountCmdRepository,
     val authCmdRepository: AuthCmdRepository,
-    val groupCmdRepository: GroupCmdRepository,
+    val workspaceCmdRepository: WorkspaceCmdRepository,
     val namespaceCmdRepository: NamespaceCmdRepository,
     val eventEmitter: InternalEventEmitter
 ) : io.hamal.core.request.RequestHandler<AccountCreateMetaMaskRequested>(AccountCreateMetaMaskRequested::class) {
@@ -25,7 +25,7 @@ class AccountCreateMetaMaskHandler(
     override fun invoke(req: AccountCreateMetaMaskRequested) {
         createAccount(req)
             .also { emitEvent(req.cmdId(), it) }
-            .also { createGroup(req) }
+            .also { createWorkspace(req) }
             .also { createNamespace(req) }
             .also { createMetaMaskAuth(req) }
             .also { createTokenAuth(req) }
@@ -43,12 +43,12 @@ private fun AccountCreateMetaMaskHandler.createAccount(req: AccountCreateMetaMas
     )
 }
 
-private fun AccountCreateMetaMaskHandler.createGroup(req: AccountCreateMetaMaskRequested): Group {
-    return groupCmdRepository.create(
-        GroupCmdRepository.CreateCmd(
+private fun AccountCreateMetaMaskHandler.createWorkspace(req: AccountCreateMetaMaskRequested): Workspace {
+    return workspaceCmdRepository.create(
+        WorkspaceCmdRepository.CreateCmd(
             id = req.cmdId(),
-            groupId = req.groupId,
-            name = GroupName("Group ${req.groupId}"),
+            workspaceId = req.workspaceId,
+            name = WorkspaceName("Workspace ${req.workspaceId}"),
             creatorId = req.accountId
         )
     )
@@ -59,7 +59,7 @@ private fun AccountCreateMetaMaskHandler.createNamespace(req: AccountCreateMetaM
         NamespaceCmdRepository.CreateCmd(
             id = req.cmdId(),
             namespaceId = req.namespaceId,
-            groupId = req.groupId,
+            workspaceId = req.workspaceId,
             name = NamespaceName.default
         )
     )

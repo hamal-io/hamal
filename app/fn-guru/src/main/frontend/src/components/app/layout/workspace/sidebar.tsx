@@ -14,8 +14,8 @@ import {
 } from "lucide-react";
 import React, {FC} from "react";
 import {Link, useLocation, useParams} from "react-router-dom";
-import Profile from "@/components/app/layout/group/profile.tsx";
-import GroupNamespaceSelector from "@/components/app/group-namespace-selector.tsx";
+import Profile from "@/components/app/layout/workspace/profile.tsx";
+import WorkspaceNamespaceSelector from "@/components/app/workspace-namespace-selector.tsx";
 
 type Props = {
     className?: string;
@@ -29,7 +29,7 @@ type NavItem = {
     active?: boolean;
 };
 const Sidebar: React.FC<Props> = ({className}) => {
-    const {groupId, namespaceId} = useParams()
+    const {workspaceId, namespaceId} = useParams()
 
     const location = useLocation()
 
@@ -106,7 +106,7 @@ const Sidebar: React.FC<Props> = ({className}) => {
             <nav className="flex flex-col ">
                 <h1 className="text-2xl font-bold leading-6 text-content mt-6">fn(guru)</h1>
                 <div className="pt-8">
-                    <GroupNamespaceSelector/>
+                    <WorkspaceNamespaceSelector/>
                 </div>
                 <ul className="pt-4">
                     <li>

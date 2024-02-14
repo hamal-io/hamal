@@ -4,11 +4,11 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.AccountId
-import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.domain.vo.GroupName
-import io.hamal.repository.api.GroupCmdRepository.CreateCmd
-import io.hamal.repository.api.GroupQueryRepository.GroupQuery
-import io.hamal.repository.api.GroupRepository
+import io.hamal.lib.domain.vo.WorkspaceId
+import io.hamal.lib.domain.vo.WorkspaceName
+import io.hamal.repository.api.WorkspaceCmdRepository.CreateCmd
+import io.hamal.repository.api.WorkspaceQueryRepository.WorkspaceQuery
+import io.hamal.repository.api.WorkspaceRepository
 import io.hamal.repository.fixture.AbstractUnitTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
@@ -18,24 +18,24 @@ import org.junit.jupiter.api.assertThrows
 import kotlin.math.abs
 import kotlin.random.Random
 
-internal class GroupRepositoryTest : AbstractUnitTest() {
+internal class WorkspaceRepositoryTest : AbstractUnitTest() {
 
     @Nested
     inner class CreateTest {
         @TestFactory
-        fun `Creates Group`() = runWith(GroupRepository::class) {
+        fun `Creates Workspace`() = runWith(WorkspaceRepository::class) {
             val result = create(
                 CreateCmd(
                     id = CmdId(1),
-                    groupId = GroupId(123),
-                    name = GroupName("SomeGroup"),
+                    workspaceId = WorkspaceId(123),
+                    name = WorkspaceName("SomeWorkspace"),
                     creatorId = AccountId(234)
                 )
             )
 
             with(result) {
-                assertThat(id, equalTo(GroupId(123)))
-                assertThat(name, equalTo(GroupName("SomeGroup")))
+                assertThat(id, equalTo(WorkspaceId(123)))
+                assertThat(name, equalTo(WorkspaceName("SomeWorkspace")))
                 assertThat(creatorId, equalTo(AccountId(234)))
             }
 
@@ -44,12 +44,12 @@ internal class GroupRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Tries to create but same name already exists`() =
-            runWith(GroupRepository::class) {
+            runWith(WorkspaceRepository::class) {
 
-                createGroup(
+                createWorkspace(
                     cmdId = CmdId(1),
-                    groupId = GroupId(123),
-                    name = GroupName("SomeGroup"),
+                    workspaceId = WorkspaceId(123),
+                    name = WorkspaceName("SomeWorkspace"),
                     creatorId = AccountId(234)
                 )
 
@@ -57,44 +57,44 @@ internal class GroupRepositoryTest : AbstractUnitTest() {
                     create(
                         CreateCmd(
                             id = CmdId(2),
-                            groupId = GroupId(321),
+                            workspaceId = WorkspaceId(321),
                             creatorId = AccountId(234),
-                            name = GroupName("SomeGroup")
+                            name = WorkspaceName("SomeWorkspace")
                         )
                     )
                 }
 
                 assertThat(
                     exception.message,
-                    equalTo("GroupName(SomeGroup) already exists")
+                    equalTo("WorkspaceName(SomeWorkspace) already exists")
                 )
 
                 verifyCount(1)
             }
 
         @TestFactory
-        fun `Tries to create but cmd with group id was already applied`() =
-            runWith(GroupRepository::class) {
+        fun `Tries to create but cmd with workspace id was already applied`() =
+            runWith(WorkspaceRepository::class) {
 
-                createGroup(
+                createWorkspace(
                     cmdId = CmdId(23456),
-                    groupId = GroupId(2),
-                    name = GroupName("SomeGroup"),
+                    workspaceId = WorkspaceId(2),
+                    name = WorkspaceName("SomeWorkspace"),
                     creatorId = AccountId(3)
                 )
 
                 val result = create(
                     CreateCmd(
                         id = CmdId(23456),
-                        groupId = GroupId(2),
+                        workspaceId = WorkspaceId(2),
                         creatorId = AccountId(234),
-                        name = GroupName("AnotherGroupName")
+                        name = WorkspaceName("AnotherWorkspaceName")
                     )
                 )
 
                 with(result) {
-                    assertThat(id, equalTo(GroupId(2)))
-                    assertThat(name, equalTo(GroupName("SomeGroup")))
+                    assertThat(id, equalTo(WorkspaceId(2)))
+                    assertThat(name, equalTo(WorkspaceName("SomeWorkspace")))
                     assertThat(creatorId, equalTo(AccountId(3)))
                 }
 
@@ -106,22 +106,22 @@ internal class GroupRepositoryTest : AbstractUnitTest() {
     inner class ClearTest {
 
         @TestFactory
-        fun `Nothing to clear`() = runWith(GroupRepository::class) {
+        fun `Nothing to clear`() = runWith(WorkspaceRepository::class) {
             clear()
             verifyCount(0)
         }
 
         @TestFactory
-        fun `Clear table`() = runWith(GroupRepository::class) {
-            createGroup(
-                name = GroupName("already-exists"),
-                groupId = GroupId(1),
+        fun `Clear table`() = runWith(WorkspaceRepository::class) {
+            createWorkspace(
+                name = WorkspaceName("already-exists"),
+                workspaceId = WorkspaceId(1),
                 creatorId = AccountId(2)
             )
 
-            createGroup(
-                name = GroupName("to-update"),
-                groupId = GroupId(3),
+            createWorkspace(
+                name = WorkspaceName("to-update"),
+                workspaceId = WorkspaceId(3),
                 creatorId = AccountId(4)
             )
 
@@ -134,61 +134,61 @@ internal class GroupRepositoryTest : AbstractUnitTest() {
     @Nested
     inner class GetTest {
         @TestFactory
-        fun `Get group by id`() = runWith(GroupRepository::class) {
-            createGroup(
-                groupId = GroupId(1),
+        fun `Get workspace by id`() = runWith(WorkspaceRepository::class) {
+            createWorkspace(
+                workspaceId = WorkspaceId(1),
                 creatorId = AccountId(3),
-                name = GroupName("SomeGroup")
+                name = WorkspaceName("SomeWorkspace")
             )
 
-            with(get(GroupId(1))) {
-                assertThat(id, equalTo(GroupId(1)))
+            with(get(WorkspaceId(1))) {
+                assertThat(id, equalTo(WorkspaceId(1)))
                 assertThat(creatorId, equalTo(AccountId(3)))
-                assertThat(name, equalTo(GroupName("SomeGroup")))
+                assertThat(name, equalTo(WorkspaceName("SomeWorkspace")))
             }
         }
 
         @TestFactory
-        fun `Tries to get group by id but does not exist`() = runWith(GroupRepository::class) {
-            createGroup(
-                groupId = GroupId(1),
+        fun `Tries to get workspace by id but does not exist`() = runWith(WorkspaceRepository::class) {
+            createWorkspace(
+                workspaceId = WorkspaceId(1),
                 creatorId = AccountId(3),
-                name = GroupName("SomeGroup")
+                name = WorkspaceName("SomeWorkspace")
             )
 
             val exception = assertThrows<NoSuchElementException> {
-                get(GroupId(111111))
+                get(WorkspaceId(111111))
             }
-            assertThat(exception.message, equalTo("Group not found"))
+            assertThat(exception.message, equalTo("Workspace not found"))
         }
     }
 
     @Nested
     inner class FindTest {
         @TestFactory
-        fun `Find group by id`() = runWith(GroupRepository::class) {
-            createGroup(
-                groupId = GroupId(1),
+        fun `Find workspace by id`() = runWith(WorkspaceRepository::class) {
+            createWorkspace(
+                workspaceId = WorkspaceId(1),
                 creatorId = AccountId(3),
-                name = GroupName("SomeGroup")
+                name = WorkspaceName("SomeWorkspace")
             )
 
-            with(find(GroupId(1))!!) {
-                assertThat(id, equalTo(GroupId(1)))
+            with(find(WorkspaceId(1))!!) {
+                assertThat(id, equalTo(WorkspaceId(1)))
                 assertThat(creatorId, equalTo(AccountId(3)))
-                assertThat(name, equalTo(GroupName("SomeGroup")))
+                assertThat(name, equalTo(WorkspaceName("SomeWorkspace")))
             }
         }
 
         @TestFactory
-        fun `Tries to find group by id but does not exist`() = runWith(GroupRepository::class) {
-            createGroup(
-                groupId = GroupId(1),
+        fun `Tries to find workspace by id but does not exist`() = runWith(WorkspaceRepository::class) {
+            createWorkspace(
+                workspaceId = WorkspaceId(1),
                 creatorId = AccountId(3),
-                name = GroupName("SomeGroup")
+                name = WorkspaceName("SomeWorkspace")
             )
 
-            val result = find(GroupId(111111))
+            val result = find(WorkspaceId(111111))
             assertThat(result, nullValue())
         }
     }
@@ -197,25 +197,25 @@ internal class GroupRepositoryTest : AbstractUnitTest() {
     inner class ListAndCountTest {
 
         @TestFactory
-        fun `By ids`() = runWith(GroupRepository::class) {
+        fun `By ids`() = runWith(WorkspaceRepository::class) {
             setup()
 
-            val result = list(listOf(GroupId(111111), GroupId(3)))
+            val result = list(listOf(WorkspaceId(111111), WorkspaceId(3)))
             assertThat(result, hasSize(1))
 
             with(result[0]) {
-                assertThat(id, equalTo(GroupId(3)))
+                assertThat(id, equalTo(WorkspaceId(3)))
                 assertThat(creatorId, equalTo(AccountId(4)))
-                assertThat(name, equalTo(GroupName("Group-Three")))
+                assertThat(name, equalTo(WorkspaceName("Workspace-Three")))
             }
         }
 
         @TestFactory
-        fun `With group ids`() = runWith(GroupRepository::class) {
+        fun `With workspace ids`() = runWith(WorkspaceRepository::class) {
             setup()
 
-            val query = GroupQuery(
-                groupIds = listOf(GroupId(4), GroupId(3)),
+            val query = WorkspaceQuery(
+                workspaceIds = listOf(WorkspaceId(4), WorkspaceId(3)),
                 limit = Limit(10)
             )
 
@@ -224,25 +224,25 @@ internal class GroupRepositoryTest : AbstractUnitTest() {
             assertThat(result, hasSize(2))
 
             with(result[0]) {
-                assertThat(id, equalTo(GroupId(4)))
+                assertThat(id, equalTo(WorkspaceId(4)))
                 assertThat(creatorId, equalTo(AccountId(5)))
-                assertThat(name, equalTo(GroupName("Group-Four")))
+                assertThat(name, equalTo(WorkspaceName("Workspace-Four")))
             }
 
             with(result[1]) {
-                assertThat(id, equalTo(GroupId(3)))
+                assertThat(id, equalTo(WorkspaceId(3)))
                 assertThat(creatorId, equalTo(AccountId(4)))
-                assertThat(name, equalTo(GroupName("Group-Three")))
+                assertThat(name, equalTo(WorkspaceName("Workspace-Three")))
             }
         }
 
 
         @TestFactory
-        fun `Limit`() = runWith(GroupRepository::class) {
+        fun `Limit`() = runWith(WorkspaceRepository::class) {
             setup()
 
-            val query = GroupQuery(
-                groupIds = listOf(),
+            val query = WorkspaceQuery(
+                workspaceIds = listOf(),
                 limit = Limit(3)
             )
 
@@ -252,12 +252,12 @@ internal class GroupRepositoryTest : AbstractUnitTest() {
         }
 
         @TestFactory
-        fun `Skip and limit`() = runWith(GroupRepository::class) {
+        fun `Skip and limit`() = runWith(WorkspaceRepository::class) {
             setup()
 
-            val query = GroupQuery(
-                afterId = GroupId(2),
-                groupIds = listOf(),
+            val query = WorkspaceQuery(
+                afterId = WorkspaceId(2),
+                workspaceIds = listOf(),
                 limit = Limit(1)
             )
 
@@ -266,59 +266,59 @@ internal class GroupRepositoryTest : AbstractUnitTest() {
             assertThat(result, hasSize(1))
 
             with(result[0]) {
-                assertThat(id, equalTo(GroupId(1)))
+                assertThat(id, equalTo(WorkspaceId(1)))
             }
         }
 
-        private fun GroupRepository.setup() {
-            createGroup(
-                groupId = GroupId(1),
+        private fun WorkspaceRepository.setup() {
+            createWorkspace(
+                workspaceId = WorkspaceId(1),
                 creatorId = AccountId(3),
-                name = GroupName("Group-One")
+                name = WorkspaceName("Workspace-One")
             )
 
-            createGroup(
-                groupId = GroupId(2),
+            createWorkspace(
+                workspaceId = WorkspaceId(2),
                 creatorId = AccountId(3),
-                name = GroupName("Group-Two")
+                name = WorkspaceName("Workspace-Two")
             )
 
-            createGroup(
-                groupId = GroupId(3),
+            createWorkspace(
+                workspaceId = WorkspaceId(3),
                 creatorId = AccountId(4),
-                name = GroupName("Group-Three")
+                name = WorkspaceName("Workspace-Three")
             )
 
-            createGroup(
-                groupId = GroupId(4),
+            createWorkspace(
+                workspaceId = WorkspaceId(4),
                 creatorId = AccountId(5),
-                name = GroupName("Group-Four")
+                name = WorkspaceName("Workspace-Four")
             )
         }
     }
 }
 
-private fun GroupRepository.createGroup(
-    name: GroupName,
-    groupId: GroupId,
+private fun WorkspaceRepository.createWorkspace(
+    name: WorkspaceName,
+    workspaceId: WorkspaceId,
     creatorId: AccountId,
     cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
 ) {
     create(
         CreateCmd(
             id = cmdId,
-            groupId = groupId,
+            workspaceId = workspaceId,
             name = name,
             creatorId = creatorId
         )
     )
 }
 
-private fun GroupRepository.verifyCount(expected: Int) {
+private fun WorkspaceRepository.verifyCount(expected: Int) {
     verifyCount(expected) { }
 }
 
-private fun GroupRepository.verifyCount(expected: Int, block: GroupQuery.() -> Unit) {
-    val counted = count(GroupQuery(groupIds = listOf()).also(block))
-    assertThat("number of groups expected", counted, equalTo(Count(expected)))
+private fun WorkspaceRepository.verifyCount(expected: Int, block: WorkspaceQuery.() -> Unit) {
+    val counted = count(WorkspaceQuery(workspaceIds = listOf()).also(block))
+    assertThat("number of workspaces expected", counted, equalTo(Count(expected)))
 }

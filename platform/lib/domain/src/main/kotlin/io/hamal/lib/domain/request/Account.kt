@@ -11,7 +11,7 @@ interface AccountCreateRequest {
 data class AccountCreateRequested(
     override val id: RequestId,
     override var status: RequestStatus,
-    val groupId: GroupId,
+    val workspaceId: WorkspaceId,
     val accountId: AccountId,
     val accountType: AccountType,
     val passwordAuthId: AuthId,
@@ -30,7 +30,7 @@ interface AccountCreateAnonymousRequest {
 data class AccountCreateAnonymousRequested(
     override val id: RequestId,
     override var status: RequestStatus,
-    val groupId: GroupId,
+    val workspaceId: WorkspaceId,
     val accountId: AccountId,
     val accountType: AccountType,
     val passwordAuthId: AuthId,
@@ -49,7 +49,7 @@ interface AccountCreateMetaMaskRequest {
 data class AccountCreateMetaMaskRequested(
     override val id: RequestId,
     override var status: RequestStatus,
-    val groupId: GroupId,
+    val workspaceId: WorkspaceId,
     val accountId: AccountId,
     val accountType: AccountType,
     val metamaskAuthId: AuthId,

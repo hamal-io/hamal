@@ -88,13 +88,13 @@ open class MemoryRepositoryConfig {
     open fun funcQueryRepository(): FuncQueryRepository = funcRepository()
 
     @Bean
-    open fun groupRepository() = MemoryGroupRepository()
+    open fun workspaceRepository() = MemoryWorkspaceRepository()
 
     @Bean
-    open fun groupQueryRepository() = groupRepository()
+    open fun workspaceQueryRepository() = workspaceRepository()
 
     @Bean
-    open fun groupCmdRepository() = groupRepository()
+    open fun workspaceCmdRepository() = workspaceRepository()
 
     @Bean
     open fun hookRepository() = HookMemoryRepository()

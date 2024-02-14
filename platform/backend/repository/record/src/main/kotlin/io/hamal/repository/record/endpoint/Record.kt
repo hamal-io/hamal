@@ -22,7 +22,7 @@ sealed class EndpointRecord(
     data class Created(
         override val entityId: EndpointId,
         override val cmdId: CmdId,
-        val groupId: GroupId,
+        val workspaceId: WorkspaceId,
         val namespaceId: NamespaceId,
         val funcId: FuncId,
         val name: EndpointName

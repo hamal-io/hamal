@@ -104,7 +104,7 @@ internal class TriggerCreateHandlerTest : BaseReqHandlerTest() {
                         triggerType = Hook,
                         triggerId = TriggerId(2),
                         namespaceId = testNamespace.id,
-                        groupId = testGroup.id,
+                        workspaceId = testWorkspace.id,
                         funcId = FuncId(2222),
                         hookId = HookId(1111),
                         name = TriggerName("HookTriggerInvalid"),
@@ -164,7 +164,7 @@ internal class TriggerCreateHandlerTest : BaseReqHandlerTest() {
     }
 
     private fun verifySingleFixedRateTriggerExists() {
-        triggerQueryRepository.list(TriggerQuery(types = listOf(FixedRate), groupIds = listOf())).also { triggers ->
+        triggerQueryRepository.list(TriggerQuery(types = listOf(FixedRate), workspaceIds = listOf())).also { triggers ->
             assertThat(triggers, hasSize(1))
 
             with(triggers.first()) {
@@ -179,7 +179,7 @@ internal class TriggerCreateHandlerTest : BaseReqHandlerTest() {
     }
 
     private fun verifySingleEventTriggerExists() {
-        triggerQueryRepository.list(TriggerQuery(types = listOf(Event), groupIds = listOf())).also { triggers ->
+        triggerQueryRepository.list(TriggerQuery(types = listOf(Event), workspaceIds = listOf())).also { triggers ->
             assertThat(triggers, hasSize(1))
 
             with(triggers.first()) {
@@ -194,7 +194,7 @@ internal class TriggerCreateHandlerTest : BaseReqHandlerTest() {
     }
 
     private fun verifySingleHookTriggerExists() {
-        triggerQueryRepository.list(TriggerQuery(types = listOf(Hook), groupIds = listOf())).also { triggers ->
+        triggerQueryRepository.list(TriggerQuery(types = listOf(Hook), workspaceIds = listOf())).also { triggers ->
             assertThat(triggers, hasSize(1))
 
             with(triggers.first()) {
@@ -209,7 +209,7 @@ internal class TriggerCreateHandlerTest : BaseReqHandlerTest() {
     }
 
     private fun verifySingleCronTriggerExists() {
-        triggerQueryRepository.list(TriggerQuery(types = listOf(Cron), groupIds = listOf())).also { triggers ->
+        triggerQueryRepository.list(TriggerQuery(types = listOf(Cron), workspaceIds = listOf())).also { triggers ->
             assertThat(triggers, hasSize(1))
 
             with(triggers.first()) {
@@ -225,7 +225,7 @@ internal class TriggerCreateHandlerTest : BaseReqHandlerTest() {
 
 
     private fun verifyNoTriggerExists() {
-        triggerQueryRepository.list(TriggerQuery(groupIds = listOf())).also { triggers ->
+        triggerQueryRepository.list(TriggerQuery(workspaceIds = listOf())).also { triggers ->
             assertThat(triggers, empty())
         }
     }
@@ -240,7 +240,7 @@ internal class TriggerCreateHandlerTest : BaseReqHandlerTest() {
             triggerType = FixedRate,
             triggerId = TriggerId(1234),
             namespaceId = testNamespace.id,
-            groupId = testGroup.id,
+            workspaceId = testWorkspace.id,
             funcId = FuncId(2222),
             name = TriggerName("FixedRateTrigger"),
             duration = TriggerDuration(42.seconds.toIsoString()),
@@ -257,7 +257,7 @@ internal class TriggerCreateHandlerTest : BaseReqHandlerTest() {
             triggerType = Event,
             triggerId = TriggerId(1234),
             namespaceId = testNamespace.id,
-            groupId = testGroup.id,
+            workspaceId = testWorkspace.id,
             funcId = FuncId(2222),
             topicId = TopicId(1111),
             name = TriggerName("EventTrigger"),
@@ -274,7 +274,7 @@ internal class TriggerCreateHandlerTest : BaseReqHandlerTest() {
             triggerType = Hook,
             triggerId = TriggerId(1234),
             namespaceId = testNamespace.id,
-            groupId = testGroup.id,
+            workspaceId = testWorkspace.id,
             funcId = FuncId(2222),
             hookId = HookId(1111),
             name = TriggerName("HookTrigger"),
@@ -292,7 +292,7 @@ internal class TriggerCreateHandlerTest : BaseReqHandlerTest() {
             triggerType = Cron,
             triggerId = TriggerId(1234),
             namespaceId = testNamespace.id,
-            groupId = testGroup.id,
+            workspaceId = testWorkspace.id,
             funcId = FuncId(2222),
             name = TriggerName("CronTrigger"),
             cron = CronPattern("0 0 * * * *"),

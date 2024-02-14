@@ -29,7 +29,7 @@ sealed class ExecRecord(
         override val cmdId: CmdId,
         override val entityId: ExecId,
         val namespaceId: NamespaceId,
-        val groupId: GroupId,
+        val workspaceId: WorkspaceId,
         val correlation: Correlation?,
         val inputs: ExecInputs,
         val code: ExecCode,

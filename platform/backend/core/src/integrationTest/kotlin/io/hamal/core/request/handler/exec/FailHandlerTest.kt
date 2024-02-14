@@ -68,7 +68,7 @@ internal class ExecFailHandlerTest : BaseReqHandlerTest() {
     }
 
     private fun verifyFailed() {
-        execQueryRepository.list(ExecQuery(groupIds = listOf())).also { execs ->
+        execQueryRepository.list(ExecQuery(workspaceIds = listOf())).also { execs ->
             assertThat(execs, hasSize(1))
             with(execs.first()) {
                 require(this is Exec.Failed)
@@ -83,7 +83,7 @@ internal class ExecFailHandlerTest : BaseReqHandlerTest() {
     }
 
     private fun verifyNoFailedExecExists() {
-        execQueryRepository.list(ExecQuery(groupIds = listOf())).also { execs ->
+        execQueryRepository.list(ExecQuery(workspaceIds = listOf())).also { execs ->
             assertThat(execs, hasSize(1))
             with(execs.first()) {
                 assertThat(status, not(equalTo(Failed)))

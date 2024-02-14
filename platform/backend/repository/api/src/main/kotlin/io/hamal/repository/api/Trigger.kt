@@ -24,7 +24,7 @@ interface TriggerCmdRepository : CmdRepository {
     data class CreateFixedRateCmd(
         val id: CmdId,
         val triggerId: TriggerId,
-        val groupId: GroupId,
+        val workspaceId: WorkspaceId,
         val name: TriggerName,
         val funcId: FuncId,
         val namespaceId: NamespaceId,
@@ -37,7 +37,7 @@ interface TriggerCmdRepository : CmdRepository {
     data class CreateEventCmd(
         val id: CmdId,
         val triggerId: TriggerId,
-        val groupId: GroupId,
+        val workspaceId: WorkspaceId,
         val name: TriggerName,
         val funcId: FuncId,
         val namespaceId: NamespaceId,
@@ -50,7 +50,7 @@ interface TriggerCmdRepository : CmdRepository {
     data class CreateHookCmd(
         val id: CmdId,
         val triggerId: TriggerId,
-        val groupId: GroupId,
+        val workspaceId: WorkspaceId,
         val name: TriggerName,
         val funcId: FuncId,
         val namespaceId: NamespaceId,
@@ -64,7 +64,7 @@ interface TriggerCmdRepository : CmdRepository {
     data class CreateCronCmd(
         val id: CmdId,
         val triggerId: TriggerId,
-        val groupId: GroupId,
+        val workspaceId: WorkspaceId,
         val name: TriggerName,
         val funcId: FuncId,
         val namespaceId: NamespaceId,
@@ -94,14 +94,14 @@ interface TriggerQueryRepository {
         var funcIds: List<FuncId> = listOf(),
         var topicIds: List<TopicId> = listOf(),
         var hookIds: List<HookId> = listOf(),
-        var groupIds: List<GroupId> = listOf(),
+        var workspaceIds: List<WorkspaceId> = listOf(),
         var namespaceIds: List<NamespaceId> = listOf()
     )
 }
 
 sealed interface Trigger : DomainObject<TriggerId> {
     val cmdId: CmdId
-    val groupId: GroupId
+    val workspaceId: WorkspaceId
     val name: TriggerName
     val funcId: FuncId
     val namespaceId: NamespaceId
@@ -140,7 +140,7 @@ sealed interface Trigger : DomainObject<TriggerId> {
         override val cmdId: CmdId,
         override val id: TriggerId,
         override val updatedAt: UpdatedAt,
-        override val groupId: GroupId,
+        override val workspaceId: WorkspaceId,
         override val name: TriggerName,
         override val funcId: FuncId,
         override val namespaceId: NamespaceId,
@@ -156,7 +156,7 @@ sealed interface Trigger : DomainObject<TriggerId> {
         override val cmdId: CmdId,
         override val id: TriggerId,
         override val updatedAt: UpdatedAt,
-        override val groupId: GroupId,
+        override val workspaceId: WorkspaceId,
         override val name: TriggerName,
         override val funcId: FuncId,
         override val namespaceId: NamespaceId,
@@ -172,7 +172,7 @@ sealed interface Trigger : DomainObject<TriggerId> {
         override val cmdId: CmdId,
         override val id: TriggerId,
         override val updatedAt: UpdatedAt,
-        override val groupId: GroupId,
+        override val workspaceId: WorkspaceId,
         override val name: TriggerName,
         override val funcId: FuncId,
         override val namespaceId: NamespaceId,
@@ -189,7 +189,7 @@ sealed interface Trigger : DomainObject<TriggerId> {
         override val cmdId: CmdId,
         override val id: TriggerId,
         override val updatedAt: UpdatedAt,
-        override val groupId: GroupId,
+        override val workspaceId: WorkspaceId,
         override val name: TriggerName,
         override val funcId: FuncId,
         override val namespaceId: NamespaceId,

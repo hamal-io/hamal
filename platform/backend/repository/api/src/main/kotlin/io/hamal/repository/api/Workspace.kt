@@ -3,49 +3,49 @@ package io.hamal.repository.api
 import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.AccountId
-import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.domain.vo.GroupName
+import io.hamal.lib.domain.vo.WorkspaceId
+import io.hamal.lib.domain.vo.WorkspaceName
 
 
-data class Group(
-    override val id: GroupId,
+data class Workspace(
+    override val id: WorkspaceId,
     override val updatedAt: UpdatedAt,
     val cmdId: CmdId,
-    val name: GroupName,
+    val name: WorkspaceName,
     val creatorId: AccountId
-) : DomainObject<GroupId>
+) : DomainObject<WorkspaceId>
 
 
-interface GroupRepository : GroupCmdRepository, GroupQueryRepository
+interface WorkspaceRepository : WorkspaceCmdRepository, WorkspaceQueryRepository
 
-interface GroupCmdRepository : CmdRepository {
+interface WorkspaceCmdRepository : CmdRepository {
 
-    fun create(cmd: CreateCmd): Group
+    fun create(cmd: CreateCmd): Workspace
 
     data class CreateCmd(
         val id: CmdId,
-        val groupId: GroupId,
-        val name: GroupName,
+        val workspaceId: WorkspaceId,
+        val name: WorkspaceName,
         val creatorId: AccountId
     )
 }
 
-interface GroupQueryRepository {
-    fun get(groupId: GroupId) = find(groupId) ?: throw NoSuchElementException("Group not found")
-    fun find(groupId: GroupId): Group?
-    fun list(groupIds: List<GroupId>): List<Group> = list(
-        GroupQuery(
+interface WorkspaceQueryRepository {
+    fun get(workspaceId: WorkspaceId) = find(workspaceId) ?: throw NoSuchElementException("Workspace not found")
+    fun find(workspaceId: WorkspaceId): Workspace?
+    fun list(workspaceIds: List<WorkspaceId>): List<Workspace> = list(
+        WorkspaceQuery(
             limit = Limit.all,
-            groupIds = groupIds,
+            workspaceIds = workspaceIds,
         )
     )
 
-    fun list(query: GroupQuery): List<Group>
-    fun count(query: GroupQuery): Count
-    data class GroupQuery(
-        var afterId: GroupId = GroupId(SnowflakeId(Long.MAX_VALUE)),
+    fun list(query: WorkspaceQuery): List<Workspace>
+    fun count(query: WorkspaceQuery): Count
+    data class WorkspaceQuery(
+        var afterId: WorkspaceId = WorkspaceId(SnowflakeId(Long.MAX_VALUE)),
         var limit: Limit = Limit(1),
-        var groupIds: List<GroupId> = listOf()
+        var workspaceIds: List<WorkspaceId> = listOf()
     )
 }
 

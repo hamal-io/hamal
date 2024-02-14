@@ -36,7 +36,7 @@ class ExecLogAdapter(
                 AppendCmd(
                     execLogId = generateDomainId(::ExecLogId),
                     execId = execId,
-                    groupId = execQueryRepository.get(execId).groupId,
+                    workspaceId = execQueryRepository.get(execId).workspaceId,
                     level = req.level,
                     message = req.message,
                     timestamp = req.timestamp

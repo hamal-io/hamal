@@ -58,7 +58,7 @@ class TriggerCreateFunction(
                     "id" to KuaString(res.id.value.value.toString(16)),
                     "status" to KuaString(res.status.name),
                     "trigger_id" to KuaString(res.triggerId.value.value.toString(16)),
-                    "group_id" to KuaString(res.groupId.value.value.toString(16)),
+                    "workspace_id" to KuaString(res.workspaceId.value.value.toString(16)),
                     "namespace_id" to KuaString(res.namespaceId.value.value.toString(16))
                 )
             )

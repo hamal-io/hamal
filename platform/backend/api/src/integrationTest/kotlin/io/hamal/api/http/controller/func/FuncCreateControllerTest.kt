@@ -50,7 +50,7 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
             CreateCmd(
                 id = CmdId(1),
                 namespaceId = NamespaceId(2345),
-                groupId = testGroup.id,
+                workspaceId = testWorkspace.id,
                 name = NamespaceName("hamal::namespace")
             )
         )

@@ -1,9 +1,9 @@
 package io.hamal.api.http.controller.workspace
 
-import io.hamal.core.adapter.GroupGetPort
+import io.hamal.core.adapter.WorkspaceGetPort
 import io.hamal.core.component.Retry
-import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.sdk.api.ApiGroup
+import io.hamal.lib.domain.vo.WorkspaceId
+import io.hamal.lib.sdk.api.ApiWorkspace
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -12,18 +12,18 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 internal class WorkspaceGetController(
     private val retry: Retry,
-    private val getGroup: GroupGetPort
+    private val getWorkspace: WorkspaceGetPort
 ) {
-    @GetMapping("/v1/groups/{groupId}")
-    fun getGroup(
-        @PathVariable("groupId") groupId: GroupId,
-    ): ResponseEntity<ApiGroup> {
+    @GetMapping("/v1/workspaces/{workspaceId}")
+    fun getWorkspace(
+        @PathVariable("workspaceId") workspaceId: WorkspaceId,
+    ): ResponseEntity<ApiWorkspace> {
         return retry {
-            getGroup(groupId) { group ->
+            getWorkspace(workspaceId) { workspace ->
                 ResponseEntity.ok(
-                    ApiGroup(
-                        id = group.id,
-                        name = group.name,
+                    ApiWorkspace(
+                        id = workspace.id,
+                        name = workspace.name,
                     )
                 )
             }

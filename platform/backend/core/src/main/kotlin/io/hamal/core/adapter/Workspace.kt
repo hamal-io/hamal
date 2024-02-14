@@ -2,43 +2,43 @@ package io.hamal.core.adapter
 
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.AccountId
-import io.hamal.lib.domain.vo.GroupId
-import io.hamal.repository.api.Group
-import io.hamal.repository.api.GroupQueryRepository
-import io.hamal.repository.api.GroupQueryRepository.GroupQuery
+import io.hamal.lib.domain.vo.WorkspaceId
+import io.hamal.repository.api.Workspace
+import io.hamal.repository.api.WorkspaceQueryRepository
+import io.hamal.repository.api.WorkspaceQueryRepository.WorkspaceQuery
 import org.springframework.stereotype.Component
 
 
-interface GroupGetPort {
-    operator fun <T : Any> invoke(groupId: GroupId, responseHandler: (Group) -> T): T
+interface WorkspaceGetPort {
+    operator fun <T : Any> invoke(workspaceId: WorkspaceId, responseHandler: (Workspace) -> T): T
 }
 
-interface GroupListPort {
-    operator fun <T : Any> invoke(query: GroupQuery, responseHandler: (List<Group>) -> T): T
-    operator fun <T : Any> invoke(accountId: AccountId, responseHandler: (List<Group>) -> T): T
+interface WorkspaceListPort {
+    operator fun <T : Any> invoke(query: WorkspaceQuery, responseHandler: (List<Workspace>) -> T): T
+    operator fun <T : Any> invoke(accountId: AccountId, responseHandler: (List<Workspace>) -> T): T
 }
 
-interface GroupPort : GroupGetPort, GroupListPort
+interface WorkspacePort : WorkspaceGetPort, WorkspaceListPort
 
 @Component
-class GroupAdapter(
-    private val groupQueryRepository: GroupQueryRepository
-) : GroupPort {
+class WorkspaceAdapter(
+    private val workspaceQueryRepository: WorkspaceQueryRepository
+) : WorkspacePort {
 
     override operator fun <T : Any> invoke(
-        groupId: GroupId,
-        responseHandler: (Group) -> T
-    ): T = responseHandler(groupQueryRepository.get(groupId))
+        workspaceId: WorkspaceId,
+        responseHandler: (Workspace) -> T
+    ): T = responseHandler(workspaceQueryRepository.get(workspaceId))
 
     override operator fun <T : Any> invoke(
-        query: GroupQuery,
-        responseHandler: (List<Group>) -> T
-    ): T = responseHandler(groupQueryRepository.list(query))
+        query: WorkspaceQuery,
+        responseHandler: (List<Workspace>) -> T
+    ): T = responseHandler(workspaceQueryRepository.list(query))
 
-    override fun <T : Any> invoke(accountId: AccountId, responseHandler: (List<Group>) -> T): T {
+    override fun <T : Any> invoke(accountId: AccountId, responseHandler: (List<Workspace>) -> T): T {
         // FIXME this must come directly from the repository
-        return responseHandler(groupQueryRepository.list(
-            GroupQuery(
+        return responseHandler(workspaceQueryRepository.list(
+            WorkspaceQuery(
                 limit = Limit.all
             )
         ).filter { it.creatorId == accountId }

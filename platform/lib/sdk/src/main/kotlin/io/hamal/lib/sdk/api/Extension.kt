@@ -38,7 +38,7 @@ data class ApiExtensionCreateRequested(
     override val id: RequestId,
     override val status: RequestStatus,
     val extensionId: ExtensionId,
-    val groupId: GroupId
+    val workspaceId: WorkspaceId
 ) : ApiRequested()
 
 data class ApiExtensionUpdateRequest(
@@ -54,9 +54,9 @@ data class ApiExtensionUpdateRequested(
 
 
 interface ApiExtensionService {
-    fun create(groupId: GroupId, req: ApiExtensionCreateRequest): ApiExtensionCreateRequested
+    fun create(workspaceId: WorkspaceId, req: ApiExtensionCreateRequest): ApiExtensionCreateRequested
     fun get(extId: ExtensionId): ApiExtension
-    fun list(groupId: GroupId): List<ApiExtensionList.Extension>
+    fun list(workspaceId: WorkspaceId): List<ApiExtensionList.Extension>
     fun update(extId: ExtensionId, req: ApiExtensionUpdateRequest): ApiExtensionUpdateRequested
 }
 
@@ -64,9 +64,9 @@ interface ApiExtensionService {
 internal class ApiExtensionServiceImpl(
     private val template: HttpTemplate
 ) : ApiExtensionService {
-    override fun create(groupId: GroupId, req: ApiExtensionCreateRequest): ApiExtensionCreateRequested =
-        template.post("/v1/groups/{groupId}/extensions")
-            .path("groupId", groupId)
+    override fun create(workspaceId: WorkspaceId, req: ApiExtensionCreateRequest): ApiExtensionCreateRequested =
+        template.post("/v1/workspaces/{workspaceId}/extensions")
+            .path("workspaceId", workspaceId)
             .body(req)
             .execute()
             .fold(ApiExtensionCreateRequested::class)
@@ -77,9 +77,9 @@ internal class ApiExtensionServiceImpl(
             .execute()
             .fold(ApiExtension::class)
 
-    override fun list(groupId: GroupId): List<ApiExtensionList.Extension> =
+    override fun list(workspaceId: WorkspaceId): List<ApiExtensionList.Extension> =
         template.get("/v1/extensions")
-            .parameter("group_ids", groupId)
+            .parameter("workspace_ids", workspaceId)
             .execute()
             .fold(ApiExtensionList::class)
             .extensions

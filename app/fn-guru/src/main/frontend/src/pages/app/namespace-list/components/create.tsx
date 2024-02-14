@@ -40,7 +40,7 @@ const Create = () => {
         // ✅ This will be type-safe and validated.
 
         try {
-            createNamespace(auth.groupId, values.name)
+            createNamespace(auth.workspaceId, values.name)
         } catch (e) {
             console.error(e)
         } finally {

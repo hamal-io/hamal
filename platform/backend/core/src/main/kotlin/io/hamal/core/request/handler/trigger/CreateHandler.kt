@@ -29,7 +29,7 @@ class TriggerCreateHandler(
                 TriggerCmdRepository.CreateFixedRateCmd(
                     id = req.cmdId(),
                     triggerId = req.triggerId,
-                    groupId = func.groupId,
+                    workspaceId = func.workspaceId,
                     name = req.name,
                     correlationId = req.correlationId,
                     funcId = req.funcId,
@@ -46,7 +46,7 @@ class TriggerCreateHandler(
                     TriggerCmdRepository.CreateEventCmd(
                         id = req.cmdId(),
                         triggerId = req.triggerId,
-                        groupId = func.groupId,
+                        workspaceId = func.workspaceId,
                         name = req.name,
                         correlationId = req.correlationId,
                         funcId = req.funcId,
@@ -63,7 +63,7 @@ class TriggerCreateHandler(
                     TriggerCmdRepository.CreateHookCmd(
                         id = req.cmdId(),
                         triggerId = req.triggerId,
-                        groupId = func.groupId,
+                        workspaceId = func.workspaceId,
                         name = req.name,
                         correlationId = req.correlationId,
                         funcId = req.funcId,
@@ -81,7 +81,7 @@ class TriggerCreateHandler(
                 TriggerCmdRepository.CreateCronCmd(
                     id = req.cmdId(),
                     triggerId = req.triggerId,
-                    groupId = func.groupId,
+                    workspaceId = func.workspaceId,
                     name = req.name,
                     correlationId = req.correlationId,
                     funcId = req.funcId,

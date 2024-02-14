@@ -25,7 +25,7 @@ data class ApiBlueprintCreateRequested(
     override val id: RequestId,
     override val status: RequestStatus,
     val blueprintId: BlueprintId,
-    val groupId: GroupId,
+    val workspaceId: WorkspaceId,
 ) : ApiRequested()
 
 data class ApiBlueprintUpdateRequest(
@@ -42,7 +42,7 @@ data class ApiBlueprintUpdateRequested(
 
 
 interface ApiBlueprintService {
-    fun create(groupId: GroupId, req: ApiBlueprintCreateRequest): ApiBlueprintCreateRequested
+    fun create(workspaceId: WorkspaceId, req: ApiBlueprintCreateRequest): ApiBlueprintCreateRequested
     fun get(bpId: BlueprintId): ApiBlueprint
     fun update(bpId: BlueprintId, req: ApiBlueprintUpdateRequest): ApiBlueprintUpdateRequested
 }
@@ -51,9 +51,9 @@ internal class ApiBlueprintServiceImpl(
     private val template: HttpTemplate
 ) : ApiBlueprintService {
 
-    override fun create(groupId: GroupId, req: ApiBlueprintCreateRequest): ApiBlueprintCreateRequested =
-        template.post("/v1/groups/{groupId}/blueprints")
-            .path("groupId", groupId)
+    override fun create(workspaceId: WorkspaceId, req: ApiBlueprintCreateRequest): ApiBlueprintCreateRequested =
+        template.post("/v1/workspaces/{workspaceId}/blueprints")
+            .path("workspaceId", workspaceId)
             .body(req)
             .execute()
             .fold(ApiBlueprintCreateRequested::class)

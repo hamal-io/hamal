@@ -6,12 +6,12 @@ import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.CodeVersion
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.WorkspaceId
 
 data class Code(
     override val id: CodeId,
     override val updatedAt: UpdatedAt,
-    val groupId: GroupId,
+    val workspaceId: WorkspaceId,
     val cmdId: CmdId,
     val version: CodeVersion,
     val value: CodeValue,
@@ -27,7 +27,7 @@ interface CodeCmdRepository : CmdRepository {
     data class CreateCmd(
         val id: CmdId,
         val codeId: CodeId,
-        val groupId: GroupId,
+        val workspaceId: WorkspaceId,
         val value: CodeValue,
         val type: CodeType = CodeType.Lua54
     )
@@ -51,7 +51,7 @@ interface CodeQueryRepository {
     fun list(codeIds: List<CodeId>): List<Code> = list(
         CodeQuery(
             limit = Limit.all,
-            groupIds = listOf(),
+            workspaceIds = listOf(),
             codeIds = codeIds,
         )
     )
@@ -62,7 +62,7 @@ interface CodeQueryRepository {
         var afterId: CodeId = CodeId(SnowflakeId(Long.MAX_VALUE)),
         var limit: Limit = Limit(1),
         var codeIds: List<CodeId> = listOf(),
-        var groupIds: List<GroupId>
+        var workspaceIds: List<WorkspaceId>
     )
 
 }

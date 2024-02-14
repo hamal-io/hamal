@@ -24,7 +24,7 @@ internal class ExecInvokeHandlerTest : BaseReqHandlerTest() {
                 status = Submitted,
                 execId = ExecId(3333),
                 namespaceId = testNamespace.id,
-                groupId = testGroup.id,
+                workspaceId = testWorkspace.id,
                 inputs = InvocationInputs(HotObject.builder().set("hamal", "justworks").build()),
                 code = ExecCode(value = CodeValue("code")),
                 funcId = null,
@@ -33,7 +33,7 @@ internal class ExecInvokeHandlerTest : BaseReqHandlerTest() {
             )
         )
 
-        execQueryRepository.list(ExecQuery(groupIds = listOf())).also {
+        execQueryRepository.list(ExecQuery(workspaceIds = listOf())).also {
             assertThat(it, hasSize(1))
 
             with(it.first()) {
@@ -65,7 +65,7 @@ internal class ExecInvokeHandlerTest : BaseReqHandlerTest() {
                 status = Submitted,
                 execId = ExecId(3333),
                 namespaceId = testNamespace.id,
-                groupId = testGroup.id,
+                workspaceId = testWorkspace.id,
                 inputs = InvocationInputs(
                     HotObject.builder()
                         .set("override", "true")
@@ -81,7 +81,7 @@ internal class ExecInvokeHandlerTest : BaseReqHandlerTest() {
             )
         )
 
-        execQueryRepository.list(ExecQuery(groupIds = listOf())).also {
+        execQueryRepository.list(ExecQuery(workspaceIds = listOf())).also {
             assertThat(it, hasSize(1))
 
             with(it.first()) {
@@ -117,7 +117,7 @@ internal class ExecInvokeHandlerTest : BaseReqHandlerTest() {
     fun `Tries to invoke exec but func does not exists`() {
         val exception = assertThrows<NoSuchElementException> { testInstance(submittedFixedRateInvocationReq) }
         assertThat(exception.message, equalTo("Func not found"))
-        execQueryRepository.list(ExecQuery(groupIds = listOf())).also {
+        execQueryRepository.list(ExecQuery(workspaceIds = listOf())).also {
             assertThat(it, empty())
         }
     }
@@ -133,7 +133,7 @@ internal class ExecInvokeHandlerTest : BaseReqHandlerTest() {
             status = Submitted,
             execId = ExecId(3333),
             namespaceId = testNamespace.id,
-            groupId = testGroup.id,
+            workspaceId = testWorkspace.id,
             inputs = InvocationInputs(
                 HotObject.builder()
                     .set("override", "true")

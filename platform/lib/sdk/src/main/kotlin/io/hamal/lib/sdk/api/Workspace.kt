@@ -1,25 +1,25 @@
 package io.hamal.lib.sdk.api
 
-import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.domain.vo.GroupName
+import io.hamal.lib.domain.vo.WorkspaceId
+import io.hamal.lib.domain.vo.WorkspaceName
 import io.hamal.lib.http.HttpTemplate
 
-data class ApiGroupList(
-    val groups: List<Group>
+data class ApiWorkspaceList(
+    val workspaces: List<Workspace>
 ) : ApiObject() {
-    data class Group(
-        val id: GroupId,
-        val name: GroupName
+    data class Workspace(
+        val id: WorkspaceId,
+        val name: WorkspaceName
     )
 }
 
-data class ApiGroup(
-    val id: GroupId,
-    val name: GroupName,
+data class ApiWorkspace(
+    val id: WorkspaceId,
+    val name: WorkspaceName,
 ) : ApiObject()
 
-interface ApiGroupService
+interface ApiWorkspaceService
 
-internal class ApiGroupServiceImpl(
+internal class ApiWorkspaceServiceImpl(
     private val template: HttpTemplate
-) : ApiGroupService
+) : ApiWorkspaceService

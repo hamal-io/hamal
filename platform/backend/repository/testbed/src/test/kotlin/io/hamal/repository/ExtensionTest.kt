@@ -29,7 +29,7 @@ internal class ExtensionRepositoryTest : AbstractUnitTest() {
                 CreateCmd(
                     id = CmdId(1),
                     extId = ExtensionId(123),
-                    groupId = GroupId(1),
+                    workspaceId = WorkspaceId(1),
                     name = ExtensionName("Extension1"),
                     code = ExtensionCode(
                         id = CodeId(5),
@@ -40,7 +40,7 @@ internal class ExtensionRepositoryTest : AbstractUnitTest() {
 
             with(result) {
                 assertThat(id, equalTo(ExtensionId(123)))
-                assertThat(groupId, equalTo(GroupId(1)))
+                assertThat(workspaceId, equalTo(WorkspaceId(1)))
                 assertThat(name, equalTo(ExtensionName("Extension1")))
                 assertThat(
                     code, equalTo(
@@ -55,11 +55,11 @@ internal class ExtensionRepositoryTest : AbstractUnitTest() {
         }
 
         @TestFactory
-        fun `Tries to create extension but name already exists in group`() =
+        fun `Tries to create extension but name already exists in workspace`() =
             runWith(ExtensionRepository::class) {
                 createExtension(
                     extId = ExtensionId(1),
-                    groupId = GroupId(1),
+                    workspaceId = WorkspaceId(1),
                     name = ExtensionName("TestExt")
                 )
 
@@ -68,7 +68,7 @@ internal class ExtensionRepositoryTest : AbstractUnitTest() {
                         CreateCmd(
                             id = CmdId(2),
                             extId = ExtensionId(5),
-                            groupId = GroupId(1),
+                            workspaceId = WorkspaceId(1),
                             name = ExtensionName("TestExt"),
                             code = ExtensionCode(
                                 id = CodeId(5),
@@ -80,23 +80,23 @@ internal class ExtensionRepositoryTest : AbstractUnitTest() {
 
                 assertThat(
                     exception.message,
-                    equalTo("ExtensionName(TestExt) already exists in workspace GroupId(1)")
+                    equalTo("ExtensionName(TestExt) already exists in workspace WorkspaceId(1)")
                 )
                 verifyCount(1)
             }
 
         @TestFactory
-        fun `Creates with same name but different group`() =
+        fun `Creates with same name but different workspace`() =
             runWith(ExtensionRepository::class) {
                 createExtension(
                     extId = ExtensionId(1),
-                    groupId = GroupId(1),
+                    workspaceId = WorkspaceId(1),
                     name = ExtensionName("TestExt")
                 )
 
                 createExtension(
                     extId = ExtensionId(2),
-                    groupId = GroupId(2),
+                    workspaceId = WorkspaceId(2),
                     name = ExtensionName("TestExt")
                 )
 
@@ -111,7 +111,7 @@ internal class ExtensionRepositoryTest : AbstractUnitTest() {
         fun `Updates extension`() = runWith(ExtensionRepository::class) {
             createExtension(
                 extId = ExtensionId(1),
-                groupId = GroupId(1),
+                workspaceId = WorkspaceId(1),
                 name = ExtensionName("TestExt")
             )
 
@@ -128,7 +128,7 @@ internal class ExtensionRepositoryTest : AbstractUnitTest() {
 
             with(res) {
                 assertThat(id, equalTo(ExtensionId(1)))
-                assertThat(groupId, equalTo(GroupId(1)))
+                assertThat(workspaceId, equalTo(WorkspaceId(1)))
                 assertThat(name, equalTo(ExtensionName("UpdateExt")))
                 assertThat(
                     code, equalTo(
@@ -146,7 +146,7 @@ internal class ExtensionRepositoryTest : AbstractUnitTest() {
         fun `Tries to update but id does not exist`() = runWith(ExtensionRepository::class) {
             createExtension(
                 extId = ExtensionId(1),
-                groupId = GroupId(1),
+                workspaceId = WorkspaceId(1),
                 name = ExtensionName("TestExt")
             )
 
@@ -187,7 +187,7 @@ internal class ExtensionRepositoryTest : AbstractUnitTest() {
                 CreateCmd(
                     id = CmdId(1),
                     extId = ExtensionId(1),
-                    groupId = GroupId(1),
+                    workspaceId = WorkspaceId(1),
                     name = ExtensionName("TestExt"),
                     code = ExtensionCode(
                         id = CodeId(1),
@@ -198,7 +198,7 @@ internal class ExtensionRepositoryTest : AbstractUnitTest() {
 
             with(get(ExtensionId(1))) {
                 assertThat(id, equalTo(ExtensionId(1)))
-                assertThat(groupId, equalTo(GroupId(1)))
+                assertThat(workspaceId, equalTo(WorkspaceId(1)))
                 assertThat(name, equalTo(ExtensionName("TestExt")))
                 assertThat(
                     code, equalTo(
@@ -229,7 +229,7 @@ internal class ExtensionRepositoryTest : AbstractUnitTest() {
                 CreateCmd(
                     id = CmdId(1),
                     extId = ExtensionId(1),
-                    groupId = GroupId(1),
+                    workspaceId = WorkspaceId(1),
                     name = ExtensionName("TestExt"),
                     code = ExtensionCode(
                         id = CodeId(1),
@@ -240,7 +240,7 @@ internal class ExtensionRepositoryTest : AbstractUnitTest() {
 
             with(find(ExtensionId(1))!!) {
                 assertThat(id, equalTo(ExtensionId(1)))
-                assertThat(groupId, equalTo(GroupId(1)))
+                assertThat(workspaceId, equalTo(WorkspaceId(1)))
                 assertThat(name, equalTo(ExtensionName("TestExt")))
                 assertThat(
                     code, equalTo(
@@ -271,7 +271,7 @@ internal class ExtensionRepositoryTest : AbstractUnitTest() {
 
             with(result[0]) {
                 assertThat(id, equalTo(ExtensionId(3)))
-                assertThat(groupId, equalTo(GroupId(4)))
+                assertThat(workspaceId, equalTo(WorkspaceId(4)))
                 assertThat(name, equalTo(ExtensionName("Extension3")))
             }
 
@@ -279,11 +279,11 @@ internal class ExtensionRepositoryTest : AbstractUnitTest() {
 
 
         @TestFactory
-        fun `With group ids`() = runWith(ExtensionRepository::class) {
+        fun `With workspace ids`() = runWith(ExtensionRepository::class) {
             setup()
 
             val query = ExtensionQuery(
-                groupIds = listOf(GroupId(5), GroupId(4)),
+                workspaceIds = listOf(WorkspaceId(5), WorkspaceId(4)),
                 limit = Limit(10)
             )
 
@@ -293,13 +293,13 @@ internal class ExtensionRepositoryTest : AbstractUnitTest() {
 
             with(result[0]) {
                 assertThat(id, equalTo(ExtensionId(4)))
-                assertThat(groupId, equalTo(GroupId(5)))
+                assertThat(workspaceId, equalTo(WorkspaceId(5)))
                 assertThat(name, equalTo(ExtensionName("Extension4")))
             }
 
             with(result[1]) {
                 assertThat(id, equalTo(ExtensionId(3)))
-                assertThat(groupId, equalTo(GroupId(4)))
+                assertThat(workspaceId, equalTo(WorkspaceId(4)))
                 assertThat(name, equalTo(ExtensionName("Extension3")))
             }
         }
@@ -310,7 +310,7 @@ internal class ExtensionRepositoryTest : AbstractUnitTest() {
             setup()
 
             val query = ExtensionQuery(
-                groupIds = listOf(),
+                workspaceIds = listOf(),
                 limit = Limit(3)
             )
 
@@ -325,7 +325,7 @@ internal class ExtensionRepositoryTest : AbstractUnitTest() {
 
             val query = ExtensionQuery(
                 afterId = ExtensionId(2),
-                groupIds = listOf(),
+                workspaceIds = listOf(),
                 limit = Limit(1)
             )
 
@@ -345,7 +345,7 @@ internal class ExtensionRepositoryTest : AbstractUnitTest() {
 private fun ExtensionRepository.createExtension(
     extId: ExtensionId,
     name: ExtensionName,
-    groupId: GroupId,
+    workspaceId: WorkspaceId,
     codeId: CodeId = CodeId(5),
     codeVersion: CodeVersion = CodeVersion(6),
     cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
@@ -354,7 +354,7 @@ private fun ExtensionRepository.createExtension(
         CreateCmd(
             id = cmdId,
             extId = extId,
-            groupId = groupId,
+            workspaceId = workspaceId,
             name = name,
             code = ExtensionCode(
                 id = codeId,
@@ -369,32 +369,32 @@ private fun ExtensionRepository.verifyCount(expected: Int) {
 }
 
 private fun ExtensionRepository.verifyCount(expected: Int, block: ExtensionQuery.() -> Unit) {
-    val counted = count(ExtensionQuery(groupIds = listOf()).also(block))
+    val counted = count(ExtensionQuery(workspaceIds = listOf()).also(block))
     assertThat("number of extensions expected", counted, equalTo(Count(expected)))
 }
 
 private fun ExtensionRepository.setup() {
     createExtension(
         extId = ExtensionId(1),
-        groupId = GroupId(3),
+        workspaceId = WorkspaceId(3),
         name = ExtensionName("Extension1")
     )
 
     createExtension(
         extId = ExtensionId(2),
-        groupId = GroupId(3),
+        workspaceId = WorkspaceId(3),
         name = ExtensionName("Extension2")
     )
 
     createExtension(
         extId = ExtensionId(3),
-        groupId = GroupId(4),
+        workspaceId = WorkspaceId(4),
         name = ExtensionName("Extension3")
     )
 
     createExtension(
         extId = ExtensionId(4),
-        groupId = GroupId(5),
+        workspaceId = WorkspaceId(5),
         name = ExtensionName("Extension4")
     )
 }

@@ -32,7 +32,7 @@ class HookInvokeHandler(
             TriggerQuery(
                 types = listOf(Hook),
                 limit = Limit.all,
-                groupIds = listOf(hook.groupId),
+                workspaceIds = listOf(hook.workspaceId),
                 hookIds = listOf(hook.id)
             )
         ).filterIsInstance<Trigger.Hook>()

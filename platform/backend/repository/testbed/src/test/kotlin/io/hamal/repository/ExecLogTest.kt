@@ -29,7 +29,7 @@ internal class ExecLogRepositoryTest : AbstractUnitTest() {
                         execId = ExecId(3),
                         level = ExecLogLevel.Info,
                         message = ExecLogMessage("Some Message"),
-                        groupId = GroupId(4),
+                        workspaceId = WorkspaceId(4),
                         timestamp = ExecLogTimestamp(Instant.ofEpochMilli(12345678))
                     )
                 )
@@ -37,7 +37,7 @@ internal class ExecLogRepositoryTest : AbstractUnitTest() {
                 with(result) {
                     assertThat(id, equalTo(ExecLogId(2)))
                     assertThat(execId, equalTo(ExecId(3)))
-                    assertThat(groupId, equalTo(GroupId(4)))
+                    assertThat(workspaceId, equalTo(WorkspaceId(4)))
                     assertThat(level, equalTo(ExecLogLevel.Info))
                     assertThat(message, equalTo(ExecLogMessage("Some Message")))
                     assertThat(timestamp, equalTo(ExecLogTimestamp(Instant.ofEpochMilli(12345678))))
@@ -51,7 +51,7 @@ internal class ExecLogRepositoryTest : AbstractUnitTest() {
         @TestFactory
         fun `Second time appending to same exec log`() = runWith(ExecLogRepository::class) {
             withInstant(Instant.ofEpochMilli(23456)) {
-                appendExecLog(ExecLogId(2), ExecId(3), GroupId(4), ExecLogLevel.Info, ExecLogMessage("First Message"))
+                appendExecLog(ExecLogId(2), ExecId(3), WorkspaceId(4), ExecLogLevel.Info, ExecLogMessage("First Message"))
 
                 val result = append(
                     AppendCmd(
@@ -59,7 +59,7 @@ internal class ExecLogRepositoryTest : AbstractUnitTest() {
                         execId = ExecId(3),
                         level = ExecLogLevel.Info,
                         message = ExecLogMessage("Second Message"),
-                        groupId = GroupId(4),
+                        workspaceId = WorkspaceId(4),
                         timestamp = ExecLogTimestamp(Instant.ofEpochMilli(12345678))
                     )
                 )
@@ -67,7 +67,7 @@ internal class ExecLogRepositoryTest : AbstractUnitTest() {
                 with(result) {
                     assertThat(id, equalTo(ExecLogId(2)))
                     assertThat(execId, equalTo(ExecId(3)))
-                    assertThat(groupId, equalTo(GroupId(4)))
+                    assertThat(workspaceId, equalTo(WorkspaceId(4)))
                     assertThat(level, equalTo(ExecLogLevel.Info))
                     assertThat(message, equalTo(ExecLogMessage("Second Message")))
                     assertThat(timestamp, equalTo(ExecLogTimestamp(Instant.ofEpochMilli(12345678))))
@@ -88,8 +88,8 @@ internal class ExecLogRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Clear table`() = runWith(ExecLogRepository::class) {
-            appendExecLog(ExecLogId(1), ExecId(1), GroupId(3), ExecLogLevel.Info, ExecLogMessage("Here we go"))
-            appendExecLog(ExecLogId(3), ExecId(4), GroupId(3), ExecLogLevel.Info, ExecLogMessage("Hamal Rocks"))
+            appendExecLog(ExecLogId(1), ExecId(1), WorkspaceId(3), ExecLogLevel.Info, ExecLogMessage("Here we go"))
+            appendExecLog(ExecLogId(3), ExecId(4), WorkspaceId(3), ExecLogLevel.Info, ExecLogMessage("Hamal Rocks"))
 
             clear()
             verifyCount(0)
@@ -100,11 +100,11 @@ internal class ExecLogRepositoryTest : AbstractUnitTest() {
     inner class ListAndCountTest {
 
         @TestFactory
-        fun `With group ids`() = runWith(ExecLogRepository::class) {
+        fun `With workspace ids`() = runWith(ExecLogRepository::class) {
             setup()
 
             val query = ExecLogQuery(
-                groupIds = listOf(GroupId(5), GroupId(4)),
+                workspaceIds = listOf(WorkspaceId(5), WorkspaceId(4)),
                 limit = Limit(10)
             )
 
@@ -118,7 +118,7 @@ internal class ExecLogRepositoryTest : AbstractUnitTest() {
 
             with(result[1]) {
                 assertThat(id, equalTo(ExecLogId(3)))
-                assertThat(groupId, equalTo(GroupId(4)))
+                assertThat(workspaceId, equalTo(WorkspaceId(4)))
             }
         }
 
@@ -128,7 +128,7 @@ internal class ExecLogRepositoryTest : AbstractUnitTest() {
             setup()
 
             val query = ExecLogQuery(
-                groupIds = listOf(),
+                workspaceIds = listOf(),
                 limit = Limit(3)
             )
 
@@ -143,7 +143,7 @@ internal class ExecLogRepositoryTest : AbstractUnitTest() {
 
             val query = ExecLogQuery(
                 afterId = ExecLogId(2),
-                groupIds = listOf(),
+                workspaceIds = listOf(),
                 limit = Limit(1)
             )
 
@@ -160,7 +160,7 @@ internal class ExecLogRepositoryTest : AbstractUnitTest() {
             appendExecLog(
                 execLogId = ExecLogId(1),
                 execId = ExecId(2),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 level = ExecLogLevel.Info,
                 message = ExecLogMessage("Message One")
             )
@@ -168,7 +168,7 @@ internal class ExecLogRepositoryTest : AbstractUnitTest() {
             appendExecLog(
                 execLogId = ExecLogId(2),
                 execId = ExecId(2),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 level = ExecLogLevel.Warn,
                 message = ExecLogMessage("Message Two")
             )
@@ -176,7 +176,7 @@ internal class ExecLogRepositoryTest : AbstractUnitTest() {
             appendExecLog(
                 execLogId = ExecLogId(3),
                 execId = ExecId(3),
-                groupId = GroupId(4),
+                workspaceId = WorkspaceId(4),
                 level = ExecLogLevel.Error,
                 message = ExecLogMessage("Message Three")
             )
@@ -184,7 +184,7 @@ internal class ExecLogRepositoryTest : AbstractUnitTest() {
             appendExecLog(
                 execLogId = ExecLogId(4),
                 execId = ExecId(5),
-                groupId = GroupId(4),
+                workspaceId = WorkspaceId(4),
                 level = ExecLogLevel.Error,
                 message = ExecLogMessage("Message Four")
             )
@@ -195,7 +195,7 @@ internal class ExecLogRepositoryTest : AbstractUnitTest() {
 private fun ExecLogRepository.appendExecLog(
     execLogId: ExecLogId,
     execId: ExecId,
-    groupId: GroupId,
+    workspaceId: WorkspaceId,
     level: ExecLogLevel,
     message: ExecLogMessage
 ) {
@@ -203,7 +203,7 @@ private fun ExecLogRepository.appendExecLog(
         AppendCmd(
             execLogId = execLogId,
             execId = execId,
-            groupId = groupId,
+            workspaceId = workspaceId,
             message = message,
             level = level,
             timestamp = ExecLogTimestamp.now()
@@ -216,6 +216,6 @@ private fun ExecLogRepository.verifyCount(expected: Int) {
 }
 
 private fun ExecLogRepository.verifyCount(expected: Int, block: ExecLogQuery.() -> Unit) {
-    val counted = count(ExecLogQuery(groupIds = listOf()).also(block))
+    val counted = count(ExecLogQuery(workspaceIds = listOf()).also(block))
     assertThat("number of functions expected", counted, equalTo(Count(expected)))
 }

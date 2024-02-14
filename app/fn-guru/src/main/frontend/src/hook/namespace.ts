@@ -11,20 +11,20 @@ export const useNamespaceGet = (): [NamespaceGetAction, Namespace, boolean, Erro
     return [fn, namespace, loading, error]
 }
 
-type NamespaceListAction = (groupId: string, abortController?: AbortController) => void
+type NamespaceListAction = (workspaceId: string, abortController?: AbortController) => void
 export const useNamespaceList = (): [NamespaceListAction, NamespaceList, boolean, Error] => {
     const [auth] = useAuth()
     const [get, namespaceList, loading, error] = useGet<NamespaceList>()
-    const fn = useCallback(async (groupId: string, abortController?: AbortController) => get(`/v1/groups/${groupId}/namespaces`, abortController), [auth])
+    const fn = useCallback(async (workspaceId: string, abortController?: AbortController) => get(`/v1/workspaces/${workspaceId}/namespaces`, abortController), [auth])
     return [fn, namespaceList, loading, error]
 }
 
-type NamespaceCreateAction = (groupId: string, name: string, controller?: AbortController) => void
+type NamespaceCreateAction = (workspaceId: string, name: string, controller?: AbortController) => void
 export const useNamespaceCreate = (): [NamespaceCreateAction, NamespaceCreateRequested, boolean, Error] => {
     const [auth] = useAuth()
     const [post, submission, loading, error] = usePost<NamespaceCreateRequested>()
-    const fn = useCallback(async (groupId: string, name: string, abortController?: AbortController) =>
-        post(`/v1/groups/${groupId}/namespaces`, {
+    const fn = useCallback(async (workspaceId: string, name: string, abortController?: AbortController) =>
+        post(`/v1/workspaces/${workspaceId}/namespaces`, {
             name,
             inputs: {}
         }, abortController), [auth]

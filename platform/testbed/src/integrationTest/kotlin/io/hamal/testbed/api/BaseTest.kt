@@ -109,7 +109,7 @@ class ClearController {
         requestRepository.clear()
         execRepository.clear()
         funcRepository.clear()
-        groupRepository.clear()
+        workspaceRepository.clear()
         hookRepository.clear()
 
         namespaceRepository.clear()
@@ -135,11 +135,11 @@ class ClearController {
             )
         ) as TokenAuth).token
 
-        testGroup = groupRepository.create(
-            GroupCmdRepository.CreateCmd(
+        testWorkspace = workspaceRepository.create(
+            WorkspaceCmdRepository.CreateCmd(
                 id = CmdId(4),
-                groupId = GroupId.root,
-                name = GroupName("root-workspace"),
+                workspaceId = WorkspaceId.root,
+                name = WorkspaceName("root-workspace"),
                 creatorId = testAccount.id
             )
         )
@@ -148,7 +148,7 @@ class ClearController {
             NamespaceCmdRepository.CreateCmd(
                 id = CmdId(5),
                 namespaceId = NamespaceId.root,
-                groupId = testGroup.id,
+                workspaceId = testWorkspace.id,
                 name = NamespaceName("root-namespace")
             )
         )
@@ -179,7 +179,7 @@ class ClearController {
     lateinit var funcRepository: FuncRepository
 
     @Autowired
-    lateinit var groupRepository: GroupRepository
+    lateinit var workspaceRepository: WorkspaceRepository
 
     @Autowired
     lateinit var hookRepository: HookRepository
@@ -198,7 +198,7 @@ class ClearController {
 
     private lateinit var testAccount: Account
     private lateinit var testAccountAuthToken: AuthToken
-    private lateinit var testGroup: Group
+    private lateinit var testWorkspace: Workspace
     private lateinit var testNamespace: Namespace
 }
 
@@ -215,7 +215,7 @@ class TestConfig {
 
     private lateinit var testAccount: Account
     private lateinit var testAccountAuthToken: AuthToken
-    private lateinit var testGroup: Group
+    private lateinit var testWorkspace: Workspace
     private lateinit var testNamespace: Namespace
 
     @PostConstruct
@@ -241,11 +241,11 @@ class TestConfig {
                 )
             ) as TokenAuth).token
 
-            testGroup = groupRepository.create(
-                GroupCmdRepository.CreateCmd(
+            testWorkspace = workspaceRepository.create(
+                WorkspaceCmdRepository.CreateCmd(
                     id = CmdId(4),
-                    groupId = GroupId.root,
-                    name = GroupName("root-workspace"),
+                    workspaceId = WorkspaceId.root,
+                    name = WorkspaceName("root-workspace"),
                     creatorId = testAccount.id
                 )
             )
@@ -254,7 +254,7 @@ class TestConfig {
                 NamespaceCmdRepository.CreateCmd(
                     id = CmdId(5),
                     namespaceId = NamespaceId.root,
-                    groupId = testGroup.id,
+                    workspaceId = testWorkspace.id,
                     name = NamespaceName("root-namespace")
                 )
             )
@@ -269,7 +269,7 @@ class TestConfig {
     lateinit var authRepository: AuthRepository
 
     @Autowired
-    lateinit var groupRepository: GroupRepository
+    lateinit var workspaceRepository: WorkspaceRepository
 
     @Autowired
     lateinit var namespaceRepository: NamespaceRepository

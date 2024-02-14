@@ -4,7 +4,7 @@ import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain._enum.RequestStatus
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.domain.vo.RequestId
 
 interface StateSetRequest {
@@ -15,6 +15,6 @@ interface StateSetRequest {
 data class StateSetRequested(
     override val id: RequestId,
     override var status: RequestStatus,
-    val groupId: GroupId,
+    val workspaceId: WorkspaceId,
     val state: CorrelatedState
 ) : Requested()

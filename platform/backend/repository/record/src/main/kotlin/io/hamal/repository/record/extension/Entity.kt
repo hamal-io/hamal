@@ -3,7 +3,7 @@ package io.hamal.repository.record.extension
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.ExtensionId
 import io.hamal.lib.domain.vo.ExtensionName
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.repository.api.Extension
 import io.hamal.repository.api.ExtensionCode
 import io.hamal.repository.record.CreateDomainObject
@@ -16,7 +16,7 @@ data class ExtensionEntity(
     override val id: ExtensionId,
     override val sequence: RecordSequence,
     override val recordedAt: RecordedAt,
-    val groupId: GroupId,
+    val workspaceId: WorkspaceId,
 
     var name: ExtensionName? = null,
     var code: ExtensionCode? = null
@@ -47,7 +47,7 @@ data class ExtensionEntity(
             cmdId = cmdId,
             id = id,
             updatedAt = recordedAt.toUpdatedAt(),
-            groupId = groupId,
+            workspaceId = workspaceId,
             name = name!!,
             code = code!!
         )
@@ -61,7 +61,7 @@ fun List<ExtensionRecord>.createEntity(): ExtensionEntity {
 
     var result = ExtensionEntity(
         id = firstRecord.entityId,
-        groupId = firstRecord.groupId,
+        workspaceId = firstRecord.workspaceId,
         cmdId = firstRecord.cmdId,
         sequence = firstRecord.sequence(),
         recordedAt = firstRecord.recordedAt()

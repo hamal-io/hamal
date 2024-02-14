@@ -2,7 +2,7 @@ export interface EndpointCreateRequested {
     id: string;
     endpointId: string;
     namespaceId: string;
-    groupId: string;
+    workspaceId: string;
 }
 
 export interface EndpointList {

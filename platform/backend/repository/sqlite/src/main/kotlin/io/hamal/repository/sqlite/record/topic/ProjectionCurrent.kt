@@ -66,7 +66,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TopicId, TopicRecord, Topic
             WHERE
                 id < :afterId
                 ${query.ids()}
-                ${query.groupIds()}
+                ${query.workspaceIds()}
                 ${query.namespaceIds()}
                 ${query.types()}
                 ${query.names()}
@@ -98,7 +98,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TopicId, TopicRecord, Topic
             WHERE
                 id < :afterId
                 ${query.ids()}
-                ${query.groupIds()}
+                ${query.workspaceIds()}
                 ${query.namespaceIds()}
                 ${query.types()}
                 ${query.names()}
@@ -118,13 +118,13 @@ internal object ProjectionCurrent : ProjectionSqlite<TopicId, TopicRecord, Topic
         tx.execute(
             """
                 INSERT OR REPLACE INTO current
-                    (id, group_id, namespace_id, type, name, data) 
+                    (id, workspace_id, namespace_id, type, name, data) 
                 VALUES
-                    (:id, :groupId, :namespaceId, :type, :name, :data)
+                    (:id, :workspaceId, :namespaceId, :type, :name, :data)
             """.trimIndent()
         ) {
             set("id", obj.id)
-            set("groupId", obj.groupId)
+            set("workspaceId", obj.workspaceId)
             set("namespaceId", obj.namespaceId)
             set("type", obj.type.value)
             set("name", obj.name)
@@ -137,7 +137,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TopicId, TopicRecord, Topic
             """
             CREATE TABLE IF NOT EXISTS current (
                  id             INTEGER NOT NULL,
-                 group_id       INTEGER NOT NULL,
+                 workspace_id       INTEGER NOT NULL,
                  namespace_id   INTEGER NOT NULL,
                  type           INTEGER NOT NULL,
                  name           VARCHAR(255) NOT NULL,
@@ -168,11 +168,11 @@ internal object ProjectionCurrent : ProjectionSqlite<TopicId, TopicRecord, Topic
         }
     }
 
-    private fun TopicQuery.groupIds(): String {
-        return if (groupIds.isEmpty()) {
+    private fun TopicQuery.workspaceIds(): String {
+        return if (workspaceIds.isEmpty()) {
             ""
         } else {
-            "AND group_id IN (${groupIds.joinToString(",") { "${it.value.value}" }})"
+            "AND workspace_id IN (${workspaceIds.joinToString(",") { "${it.value.value}" }})"
         }
     }
 

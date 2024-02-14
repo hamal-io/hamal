@@ -3,7 +3,7 @@ package io.hamal.plugin.std.sys.blueprint
 import io.hamal.lib.domain.vo.BlueprintInputs
 import io.hamal.lib.domain.vo.BlueprintName
 import io.hamal.lib.domain.vo.CodeValue
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -23,7 +23,7 @@ class BlueprintCreateFunction(
     override fun invoke(ctx: FunctionContext, arg1: KuaMap): Pair<KuaError?, KuaMap?> {
         return try {
             val res = sdk.blueprint.create(
-                ctx[GroupId::class],
+                ctx[WorkspaceId::class],
                 ApiBlueprintCreateRequest(
                     name = BlueprintName(arg1.getString("name")),
                     inputs = BlueprintInputs(),
@@ -36,7 +36,7 @@ class BlueprintCreateFunction(
                     "id" to KuaString(res.id.value.value.toString(16)),
                     "status" to KuaString(res.status.name),
                     "blueprint_id" to KuaString(res.blueprintId.value.value.toString(16)),
-                    "group_id" to KuaString(res.groupId.value.value.toString(16)),
+                    "workspace_id" to KuaString(res.workspaceId.value.value.toString(16)),
                 )
             )
 

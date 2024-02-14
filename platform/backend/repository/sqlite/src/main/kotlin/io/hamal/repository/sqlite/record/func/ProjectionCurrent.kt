@@ -43,7 +43,7 @@ internal object ProjectionCurrent : ProjectionSqlite<FuncId, FuncRecord, Func> {
             WHERE
                 id < :afterId
                 ${query.ids()}
-                ${query.groupIds()}
+                ${query.workspaceIds()}
                 ${query.namespaceIds()}
             ORDER BY id DESC
             LIMIT :limit
@@ -70,7 +70,7 @@ internal object ProjectionCurrent : ProjectionSqlite<FuncId, FuncRecord, Func> {
             WHERE
                 id < :afterId
                 ${query.ids()}
-                ${query.groupIds()}
+                ${query.workspaceIds()}
                 ${query.namespaceIds()}
         """.trimIndent()
             ) {
@@ -88,13 +88,13 @@ internal object ProjectionCurrent : ProjectionSqlite<FuncId, FuncRecord, Func> {
         tx.execute(
             """
                 INSERT OR REPLACE INTO current
-                    (id, group_id, namespace_id, data) 
+                    (id, workspace_id, namespace_id, data) 
                 VALUES
-                    (:id, :groupId, :namespaceId, :data)
+                    (:id, :workspaceId, :namespaceId, :data)
             """.trimIndent()
         ) {
             set("id", obj.id)
-            set("groupId", obj.groupId)
+            set("workspaceId", obj.workspaceId)
             set("namespaceId", obj.namespaceId)
             set("data", json.serializeAndCompress(obj))
         }
@@ -105,7 +105,7 @@ internal object ProjectionCurrent : ProjectionSqlite<FuncId, FuncRecord, Func> {
             """
             CREATE TABLE IF NOT EXISTS current (
                  id             INTEGER NOT NULL,
-                 group_id       INTEGER NOT NULL,
+                 workspace_id       INTEGER NOT NULL,
                  namespace_id        INTEGER NOT NULL,
                  data           BLOB NOT NULL,
                  PRIMARY KEY    (id)
@@ -126,11 +126,11 @@ internal object ProjectionCurrent : ProjectionSqlite<FuncId, FuncRecord, Func> {
         }
     }
 
-    private fun FuncQuery.groupIds(): String {
-        return if (groupIds.isEmpty()) {
+    private fun FuncQuery.workspaceIds(): String {
+        return if (workspaceIds.isEmpty()) {
             ""
         } else {
-            "AND group_id IN (${groupIds.joinToString(",") { "${it.value.value}" }})"
+            "AND workspace_id IN (${workspaceIds.joinToString(",") { "${it.value.value}" }})"
         }
     }
 

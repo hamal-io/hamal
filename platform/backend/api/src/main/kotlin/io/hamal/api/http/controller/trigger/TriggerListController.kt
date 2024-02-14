@@ -4,7 +4,7 @@ import io.hamal.core.adapter.TriggerListPort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.sdk.api.ApiTriggerList
@@ -129,7 +129,7 @@ class TriggerListController(private val listTriggers: TriggerListPort) {
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") triggerId: TriggerId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit,
         @RequestParam(required = false, name = "func_ids", defaultValue = "") funcIds: List<FuncId> = listOf(),
-        @RequestParam(required = false, name = "group_ids", defaultValue = "") groupIds: List<GroupId> = listOf(),
+        @RequestParam(required = false, name = "workspace_ids", defaultValue = "") workspaceIds: List<WorkspaceId> = listOf(),
         @RequestParam(
             required = false,
             name = "namespace_ids",
@@ -142,7 +142,7 @@ class TriggerListController(private val listTriggers: TriggerListPort) {
                 afterId = triggerId,
                 types = types,
                 limit = limit,
-                groupIds = groupIds,
+                workspaceIds = workspaceIds,
                 funcIds = funcIds,
                 namespaceIds = namespaceIds
             )

@@ -23,7 +23,7 @@ internal class EndpointCreateHandlerTest : BaseReqHandlerTest() {
             CreateCmd(
                 id = CmdId(1),
                 funcId = FuncId(23456),
-                groupId = testGroup.id,
+                workspaceId = testWorkspace.id,
                 namespaceId = testNamespace.id,
                 name = FuncName("func"),
                 inputs = FuncInputs(),
@@ -34,12 +34,12 @@ internal class EndpointCreateHandlerTest : BaseReqHandlerTest() {
 
         testInstance(submitCreateEndpointReq)
 
-        endpointRepository.list(EndpointQuery(groupIds = listOf())).also { endpoints ->
+        endpointRepository.list(EndpointQuery(workspaceIds = listOf())).also { endpoints ->
             assertThat(endpoints, hasSize(1))
             with(endpoints.first()) {
                 assertThat(id, equalTo(EndpointId(12345)))
                 assertThat(name, equalTo(EndpointName("awesome-endpoint")))
-                assertThat(groupId, equalTo(testGroup.id))
+                assertThat(workspaceId, equalTo(testWorkspace.id))
                 assertThat(funcId, equalTo(FuncId(23456)))
             }
         }
@@ -53,7 +53,7 @@ internal class EndpointCreateHandlerTest : BaseReqHandlerTest() {
             id = RequestId(1),
             status = Submitted,
             endpointId = EndpointId(12345),
-            groupId = testGroup.id,
+            workspaceId = testWorkspace.id,
             funcId = FuncId(23456),
             name = EndpointName("awesome-endpoint"),
             method = Post

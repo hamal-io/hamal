@@ -24,7 +24,7 @@ internal object CreateFunc : CreateDomainObject<FuncId, FuncRecord, Func> {
         var result = FuncEntity(
             cmdId = firstRecord.cmdId,
             id = firstRecord.entityId,
-            groupId = firstRecord.groupId,
+            workspaceId = firstRecord.workspaceId,
             sequence = firstRecord.sequence(),
             recordedAt = firstRecord.recordedAt()
         )
@@ -61,7 +61,7 @@ class FuncSqliteRepository(
                     FuncRecord.Created(
                         cmdId = cmdId,
                         entityId = funcId,
-                        groupId = cmd.groupId,
+                        workspaceId = cmd.workspaceId,
                         namespaceId = cmd.namespaceId,
                         name = cmd.name,
                         inputs = cmd.inputs,

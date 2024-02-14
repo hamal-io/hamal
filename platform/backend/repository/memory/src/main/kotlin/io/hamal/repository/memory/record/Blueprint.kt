@@ -25,7 +25,7 @@ private object BlueprintCurrentProjection {
             .map { it.value }
             .reversed()
             .asSequence()
-            .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
+            .filter { if (query.workspaceIds.isEmpty()) true else query.workspaceIds.contains(it.workspaceId) }
             .dropWhile { it.id >= query.afterId }
             .take(query.limit.value)
             .toList()
@@ -37,7 +37,7 @@ private object BlueprintCurrentProjection {
                 .map { it.value }
                 .reversed()
                 .asSequence()
-                .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
+                .filter { if (query.workspaceIds.isEmpty()) true else query.workspaceIds.contains(it.workspaceId) }
                 .dropWhile { it.id >= query.afterId }
                 .count()
                 .toLong()
@@ -66,7 +66,7 @@ class BlueprintMemoryRepository : RecordMemoryRepository<BlueprintId, BlueprintR
                     BlueprintRecord.Created(
                         cmdId = cmd.id,
                         entityId = bpId,
-                        groupId = cmd.groupId,
+                        workspaceId = cmd.workspaceId,
                         name = cmd.name,
                         inputs = cmd.inputs,
                         value = cmd.value,

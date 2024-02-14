@@ -1,18 +1,18 @@
 package io.hamal.repository.sqlite.record.workspace
 
-import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.domain.vo.GroupName
+import io.hamal.lib.domain.vo.WorkspaceId
+import io.hamal.lib.domain.vo.WorkspaceName
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
-import io.hamal.repository.api.Group
-import io.hamal.repository.record.workspace.GroupRecord
+import io.hamal.repository.api.Workspace
+import io.hamal.repository.record.workspace.WorkspaceRecord
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 import org.sqlite.SQLiteException
 
-internal object ProjectionUniqueName : ProjectionSqlite<GroupId, GroupRecord, Group> {
+internal object ProjectionUniqueName : ProjectionSqlite<WorkspaceId, WorkspaceRecord, Workspace> {
 
-    fun find(connection: Connection, groupName: GroupName): GroupId? {
+    fun find(connection: Connection, workspaceName: WorkspaceName): WorkspaceId? {
         return connection.executeQueryOne(
             """
             SELECT 
@@ -24,13 +24,13 @@ internal object ProjectionUniqueName : ProjectionSqlite<GroupId, GroupRecord, Gr
         """.trimIndent()
         ) {
             query {
-                set("name", groupName)
+                set("name", workspaceName)
             }
-            map { rs -> rs.getId("id", ::GroupId) }
+            map { rs -> rs.getId("id", ::WorkspaceId) }
         }
     }
 
-    override fun upsert(tx: RecordTransactionSqlite<GroupId, GroupRecord, Group>, obj: Group) {
+    override fun upsert(tx: RecordTransactionSqlite<WorkspaceId, WorkspaceRecord, Workspace>, obj: Workspace) {
         try {
             tx.execute(
                 """

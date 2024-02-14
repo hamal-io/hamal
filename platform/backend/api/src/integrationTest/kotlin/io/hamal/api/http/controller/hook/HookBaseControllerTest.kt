@@ -32,7 +32,7 @@ internal sealed class HookBaseControllerTest : BaseControllerTest() {
 
     fun listHooks(): ApiHookList {
         val listHooksResponse = httpTemplate.get("/v1/hooks")
-            .parameter("group_ids", testGroup.id)
+            .parameter("workspace_ids", testWorkspace.id)
             .execute()
 
         assertThat(listHooksResponse.statusCode, equalTo(Ok))

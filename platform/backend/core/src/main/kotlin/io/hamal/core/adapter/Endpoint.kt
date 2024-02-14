@@ -58,7 +58,7 @@ class EndpointAdapter(
             id = generateDomainId(::RequestId),
             status = Submitted,
             endpointId = generateDomainId(::EndpointId),
-            groupId = func.groupId,
+            workspaceId = func.workspaceId,
             funcId = func.id,
             name = req.name,
             method = req.method
@@ -96,7 +96,7 @@ class EndpointAdapter(
         return EndpointUpdateRequested(
             id = generateDomainId(::RequestId),
             status = Submitted,
-            groupId = endpoint.groupId,
+            workspaceId = endpoint.workspaceId,
             endpointId = endpointId,
             funcId = req.funcId ?: endpoint.funcId,
             name = req.name,

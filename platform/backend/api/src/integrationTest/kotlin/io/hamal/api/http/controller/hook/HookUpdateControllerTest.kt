@@ -39,7 +39,7 @@ internal class HookUpdateControllerTest : HookBaseControllerTest() {
             CreateCmd(
                 id = CmdId(2),
                 namespaceId = NamespaceId(2),
-                groupId = testGroup.id,
+                workspaceId = testWorkspace.id,
                 name = NamespaceName("createdNamespace")
             )
         )
@@ -74,7 +74,7 @@ internal class HookUpdateControllerTest : HookBaseControllerTest() {
             CreateCmd(
                 id = CmdId(2),
                 namespaceId = NamespaceId(2),
-                groupId = testGroup.id,
+                workspaceId = testWorkspace.id,
                 name = NamespaceName("createdNamespace")
             )
         )

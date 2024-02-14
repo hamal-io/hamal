@@ -18,12 +18,12 @@ private object ExtensionCurrentProjection {
         val currentExt = projection[ext.id]
         projection.remove(ext.id)
 
-        val extInGroup = projection.values.filter { it.groupId == ext.groupId }
-        if (extInGroup.any { it.name == ext.name }) {
+        val extInWorkspace = projection.values.filter { it.workspaceId == ext.workspaceId }
+        if (extInWorkspace.any { it.name == ext.name }) {
             if (currentExt != null) {
                 projection[currentExt.id] = currentExt
             }
-            throw IllegalArgumentException("${ext.name} already exists in workspace ${ext.groupId}")
+            throw IllegalArgumentException("${ext.name} already exists in workspace ${ext.workspaceId}")
         }
 
         projection[ext.id] = ext
@@ -36,7 +36,7 @@ private object ExtensionCurrentProjection {
             .map { it.value }
             .reversed()
             .asSequence()
-            .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
+            .filter { if (query.workspaceIds.isEmpty()) true else query.workspaceIds.contains(it.workspaceId) }
             .dropWhile { it.id >= query.afterId }
             .take(query.limit.value)
             .toList()
@@ -48,7 +48,7 @@ private object ExtensionCurrentProjection {
                 .map { it.value }
                 .reversed()
                 .asSequence()
-                .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
+                .filter { if (query.workspaceIds.isEmpty()) true else query.workspaceIds.contains(it.workspaceId) }
                 .dropWhile { it.id >= query.afterId }
                 .count()
                 .toLong()
@@ -76,7 +76,7 @@ class ExtensionMemoryRepository : RecordMemoryRepository<ExtensionId, ExtensionR
                     ExtensionRecord.Created(
                         cmdId = cmd.id,
                         entityId = extId,
-                        groupId = cmd.groupId,
+                        workspaceId = cmd.workspaceId,
                         name = cmd.name,
                         code = cmd.code
                     )

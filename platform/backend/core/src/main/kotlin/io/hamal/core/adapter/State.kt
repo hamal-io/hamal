@@ -58,7 +58,7 @@ class StateAdapter(
         return StateSetRequested(
             id = generateDomainId(::RequestId),
             status = Submitted,
-            groupId = func.groupId,
+            workspaceId = func.workspaceId,
             state = CorrelatedState(
                 correlation = req.correlation,
                 value = req.value

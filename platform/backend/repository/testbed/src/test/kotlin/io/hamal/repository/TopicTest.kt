@@ -20,7 +20,7 @@ import kotlin.random.Random
 internal class TopicRepositoryTest : AbstractUnitTest() {
 
     @Nested
-    inner class CreateTopicGroup {
+    inner class CreateTopicWorkspace {
 
         @TestFactory
         fun `Creates topic`() = runWith(TopicRepository::class) {
@@ -29,20 +29,20 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
                     id = CmdId(1),
                     topicId = TopicId(2),
                     logTopicId = LogTopicId(3),
-                    groupId = GroupId(4),
+                    workspaceId = WorkspaceId(4),
                     namespaceId = NamespaceId(5),
                     name = TopicName("topic-name"),
-                    type = TopicType.Group
+                    type = TopicType.Workspace
                 )
             )
 
             with(result) {
                 assertThat(id, equalTo(TopicId(2)))
                 assertThat(logTopicId, equalTo(LogTopicId(3)))
-                assertThat(groupId, equalTo(GroupId(4)))
+                assertThat(workspaceId, equalTo(WorkspaceId(4)))
                 assertThat(namespaceId, equalTo(NamespaceId(5)))
                 assertThat(name, equalTo(TopicName("topic-name")))
-                assertThat(type, equalTo(TopicType.Group))
+                assertThat(type, equalTo(TopicType.Workspace))
             }
 
             verifyCount(1)
@@ -52,7 +52,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
         fun `Tries to create but same name already exists in namespace`() = runWith(TopicRepository::class) {
             createTopic(
                 topicId = TopicId(1),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 namespaceId = NamespaceId(5),
                 logTopicId = LogTopicId(4),
                 name = TopicName("topic-name")
@@ -64,7 +64,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
                         id = CmdId(10),
                         topicId = TopicId(11),
                         logTopicId = LogTopicId(12),
-                        groupId = GroupId(3),
+                        workspaceId = WorkspaceId(3),
                         namespaceId = NamespaceId(5),
                         name = TopicName("topic-name"),
                         type = TopicType.Public
@@ -80,10 +80,10 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
         }
 
         @TestFactory
-        fun `Creates with same name but different group`() = runWith(TopicRepository::class) {
+        fun `Creates with same name but different workspace`() = runWith(TopicRepository::class) {
             createTopic(
                 topicId = TopicId(1),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 name = TopicName("first-topic-name")
             )
 
@@ -92,7 +92,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
                     id = CmdId(10),
                     topicId = TopicId(11),
                     logTopicId = LogTopicId(12),
-                    groupId = GroupId(14),
+                    workspaceId = WorkspaceId(14),
                     namespaceId = NamespaceId(15),
                     name = TopicName("first-topic-name"),
                     type = TopicType.Public
@@ -109,7 +109,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
                 createTopic(
                     cmdId = CmdId(23456),
                     topicId = TopicId(1),
-                    groupId = GroupId(3),
+                    workspaceId = WorkspaceId(3),
                     logTopicId = LogTopicId(4),
                     namespaceId = NamespaceId(5),
                     name = TopicName("first-topic"),
@@ -120,17 +120,17 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
                     TopicCreateCmd(
                         id = CmdId(23456),
                         topicId = TopicId(1),
-                        groupId = GroupId(333),
+                        workspaceId = WorkspaceId(333),
                         logTopicId = LogTopicId(4444),
                         namespaceId = NamespaceId(5555),
                         name = TopicName("second-topic"),
-                        type = TopicType.Group
+                        type = TopicType.Workspace
                     )
                 )
 
                 with(result) {
                     assertThat(id, equalTo(TopicId(1)))
-                    assertThat(groupId, equalTo(GroupId(3)))
+                    assertThat(workspaceId, equalTo(WorkspaceId(3)))
                     assertThat(logTopicId, equalTo(LogTopicId(4)))
                     assertThat(namespaceId, equalTo(NamespaceId(5)))
                     assertThat(name, equalTo(TopicName("first-topic")))
@@ -156,7 +156,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
             createTopic(
                 cmdId = CmdId(1),
                 topicId = TopicId(1),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 logTopicId = LogTopicId(4),
                 name = TopicName("first-topic-name")
             )
@@ -164,7 +164,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
             createTopic(
                 cmdId = CmdId(2),
                 topicId = TopicId(20),
-                groupId = GroupId(23),
+                workspaceId = WorkspaceId(23),
                 logTopicId = LogTopicId(5),
                 name = TopicName("another-topic-name")
             )
@@ -182,7 +182,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
         fun `Get topic by id`() = runWith(TopicRepository::class) {
             createTopic(
                 topicId = TopicId(1),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 logTopicId = LogTopicId(4),
                 name = TopicName("SomeTopic")
             )
@@ -190,7 +190,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
             with(get(TopicId(1))) {
                 assertThat(id, equalTo(TopicId(1)))
                 assertThat(logTopicId, equalTo(LogTopicId(4)))
-                assertThat(groupId, equalTo(GroupId(3)))
+                assertThat(workspaceId, equalTo(WorkspaceId(3)))
                 assertThat(name, equalTo(TopicName("SomeTopic")))
             }
         }
@@ -199,7 +199,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
         fun `Tries to get topic by id but does not exist`() = runWith(TopicRepository::class) {
             createTopic(
                 topicId = TopicId(1),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 logTopicId = LogTopicId(4),
                 name = TopicName("SomeTopic")
             )
@@ -216,7 +216,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
         fun `Get topic by namespace id and name`() = runWith(TopicRepository::class) {
             createTopic(
                 topicId = TopicId(1),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 logTopicId = LogTopicId(4),
                 namespaceId = NamespaceId(5),
                 name = TopicName("SomeTopic")
@@ -225,7 +225,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
             with(getTopic(NamespaceId(5), TopicName("SomeTopic"))) {
                 assertThat(id, equalTo(TopicId(1)))
                 assertThat(logTopicId, equalTo(LogTopicId(4)))
-                assertThat(groupId, equalTo(GroupId(3)))
+                assertThat(workspaceId, equalTo(WorkspaceId(3)))
                 assertThat(namespaceId, equalTo(NamespaceId(5)))
                 assertThat(name, equalTo(TopicName("SomeTopic")))
             }
@@ -236,7 +236,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
             createTopic(
                 cmdId = CmdId(1),
                 topicId = TopicId(1),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 logTopicId = LogTopicId(4),
                 namespaceId = NamespaceId(5),
                 name = TopicName("SomeTopic")
@@ -262,7 +262,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
         fun `Find topic by id`() = runWith(TopicRepository::class) {
             createTopic(
                 topicId = TopicId(1),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 logTopicId = LogTopicId(4),
                 name = TopicName("SomeTopic")
             )
@@ -271,7 +271,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
 
                 assertThat(id, equalTo(TopicId(1)))
                 assertThat(logTopicId, equalTo(LogTopicId(4)))
-                assertThat(groupId, equalTo(GroupId(3)))
+                assertThat(workspaceId, equalTo(WorkspaceId(3)))
                 assertThat(name, equalTo(TopicName("SomeTopic")))
             }
         }
@@ -280,7 +280,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
         fun `Tries to find topic by id but does not exist`() = runWith(TopicRepository::class) {
             createTopic(
                 topicId = TopicId(1),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 logTopicId = LogTopicId(4),
                 name = TopicName("SomeTopic")
             )
@@ -292,7 +292,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
         fun `Finds topic by namespace id and name`() = runWith(TopicRepository::class) {
             createTopic(
                 topicId = TopicId(1),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 logTopicId = LogTopicId(4),
                 namespaceId = NamespaceId(5),
                 name = TopicName("SomeTopic")
@@ -301,7 +301,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
             with(findTopic(NamespaceId(5), TopicName("SomeTopic"))!!) {
                 assertThat(id, equalTo(TopicId(1)))
                 assertThat(logTopicId, equalTo(LogTopicId(4)))
-                assertThat(groupId, equalTo(GroupId(3)))
+                assertThat(workspaceId, equalTo(WorkspaceId(3)))
                 assertThat(name, equalTo(TopicName("SomeTopic")))
             }
         }
@@ -311,7 +311,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
             createTopic(
                 cmdId = CmdId(1),
                 topicId = TopicId(1),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 logTopicId = LogTopicId(4),
                 namespaceId = NamespaceId(5),
                 name = TopicName("SomeTopic")
@@ -348,17 +348,17 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
             with(result.first()) {
                 assertThat(id, equalTo(TopicId(1)))
                 assertThat(name, equalTo(TopicName("topic-one")))
-                assertThat(groupId, equalTo(GroupId(3)))
+                assertThat(workspaceId, equalTo(WorkspaceId(3)))
                 assertThat(logTopicId, equalTo(LogTopicId(4)))
             }
         }
 
         @TestFactory
-        fun `With group ids`() = runWith(TopicRepository::class) {
+        fun `With workspace ids`() = runWith(TopicRepository::class) {
             setup()
 
             val query = TopicQuery(
-                groupIds = listOf(GroupId(3), GroupId(13)),
+                workspaceIds = listOf(WorkspaceId(3), WorkspaceId(13)),
                 limit = Limit.all
             )
 
@@ -507,7 +507,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
         private fun TopicRepository.setup() {
             createTopic(
                 topicId = TopicId(1),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 logTopicId = LogTopicId(4),
                 namespaceId = NamespaceId(5),
                 name = TopicName("topic-one")
@@ -515,7 +515,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
 
             createTopic(
                 topicId = TopicId(11),
-                groupId = GroupId(13),
+                workspaceId = WorkspaceId(13),
                 logTopicId = LogTopicId(14),
                 namespaceId = NamespaceId(15),
                 name = TopicName("topic-two")
@@ -523,7 +523,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
 
             createTopic(
                 topicId = TopicId(21),
-                groupId = GroupId(23),
+                workspaceId = WorkspaceId(23),
                 logTopicId = LogTopicId(24),
                 namespaceId = NamespaceId(25),
                 name = TopicName("topic-three")
@@ -543,7 +543,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
         topicId: TopicId,
         name: TopicName,
         logTopicId: LogTopicId = LogTopicId(3),
-        groupId: GroupId = GroupId(4),
+        workspaceId: WorkspaceId = WorkspaceId(4),
         namespaceId: NamespaceId = NamespaceId(5),
         type: TopicType = TopicType.Namespace,
         cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
@@ -552,7 +552,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
             id = cmdId,
             topicId = topicId,
             logTopicId = logTopicId,
-            groupId = groupId,
+            workspaceId = workspaceId,
             namespaceId = namespaceId,
             name = name,
             type = type
@@ -564,7 +564,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
     }
 
     private fun TopicRepository.verifyCount(expected: Int, block: TopicQuery.() -> Unit) {
-        val counted = count(TopicQuery(groupIds = listOf()).also(block))
+        val counted = count(TopicQuery(workspaceIds = listOf()).also(block))
         assertThat("number of topic expected", counted, equalTo(Count(expected)))
     }
 }

@@ -66,8 +66,8 @@ internal class TopicCreateControllerTest : TopicBaseControllerTest() {
 
 
     @Test
-    fun `Creates group topic`() {
-        val topicId = awaitCompleted(createTopic(TopicName("topics_one"), TopicType.Group)).topicId
+    fun `Creates workspace topic`() {
+        val topicId = awaitCompleted(createTopic(TopicName("topics_one"), TopicType.Workspace)).topicId
 
         verifyTopicCreated(topicId)
 
@@ -79,10 +79,10 @@ internal class TopicCreateControllerTest : TopicBaseControllerTest() {
     }
 
     @Test
-    fun `Tries to create group topic but name already exists`() {
+    fun `Tries to create workspace topic but name already exists`() {
         awaitCompleted(createTopic(TopicName("topics_one")))
 
-        with(createTopic(TopicName("topics_one"), TopicType.Group)) {
+        with(createTopic(TopicName("topics_one"), TopicType.Workspace)) {
             awaitFailed(id)
         }
 

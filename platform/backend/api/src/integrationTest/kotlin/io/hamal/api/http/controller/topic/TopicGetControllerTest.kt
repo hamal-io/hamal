@@ -24,12 +24,12 @@ internal class TopicGetControllerTest : TopicBaseControllerTest() {
     }
 
     @Test
-    fun `Gets group topic`() {
-        val topicId = awaitCompleted(createTopic(TopicName("topics_one"), TopicType.Group)).topicId
+    fun `Gets workspace topic`() {
+        val topicId = awaitCompleted(createTopic(TopicName("topics_one"), TopicType.Workspace)).topicId
         with(getTopic(topicId)) {
             assertThat(id, equalTo(topicId))
             assertThat(name, equalTo(TopicName("topics_one")))
-            assertThat(type, equalTo(TopicType.Group))
+            assertThat(type, equalTo(TopicType.Workspace))
         }
     }
 

@@ -7,7 +7,7 @@ import io.hamal.lib.domain.vo.*
 data class Func(
     override val id: FuncId,
     override val updatedAt: UpdatedAt,
-    val groupId: GroupId,
+    val workspaceId: WorkspaceId,
     val cmdId: CmdId,
     val namespaceId: NamespaceId,
     val name: FuncName,
@@ -45,7 +45,7 @@ interface FuncCmdRepository : CmdRepository {
     data class CreateCmd(
         val id: CmdId,
         val funcId: FuncId,
-        val groupId: GroupId,
+        val workspaceId: WorkspaceId,
         val namespaceId: NamespaceId,
         val name: FuncName,
         val inputs: FuncInputs,
@@ -74,7 +74,7 @@ interface FuncQueryRepository {
     fun list(funcIds: List<FuncId>): List<Func> = list(
         FuncQuery(
             limit = Limit.all,
-            groupIds = listOf(),
+            workspaceIds = listOf(),
             funcIds = funcIds,
         )
     )
@@ -88,7 +88,7 @@ interface FuncQueryRepository {
         var limit: Limit = Limit(1),
         var funcIds: List<FuncId> = listOf(),
         var namespaceIds: List<NamespaceId> = listOf(),
-        var groupIds: List<GroupId> = listOf()
+        var workspaceIds: List<WorkspaceId> = listOf()
     )
 
 

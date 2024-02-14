@@ -77,7 +77,7 @@ class ExecCompleteHandler(
                     id = cmdId,
                     topicId = generateId(::TopicId),
                     name = topicName,
-                    groupId = namespace.groupId,
+                    workspaceId = namespace.workspaceId,
                     namespaceId = namespace.id,
                     logTopicId = generateId(::LogTopicId),
                     type = TopicType.Namespace

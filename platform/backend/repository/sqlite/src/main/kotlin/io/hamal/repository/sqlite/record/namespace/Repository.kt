@@ -23,7 +23,7 @@ internal object CreateNamespace : CreateDomainObject<NamespaceId, NamespaceRecor
         var result = NamespaceEntity(
             cmdId = firstRecord.cmdId,
             id = firstRecord.entityId,
-            groupId = firstRecord.groupId,
+            workspaceId = firstRecord.workspaceId,
             sequence = firstRecord.sequence(),
             recordedAt = firstRecord.recordedAt()
         )
@@ -57,7 +57,7 @@ class NamespaceSqliteRepository(
                     NamespaceRecord.Created(
                         cmdId = cmdId,
                         entityId = namespaceId,
-                        groupId = cmd.groupId,
+                        workspaceId = cmd.workspaceId,
                         name = cmd.name
                     )
                 )

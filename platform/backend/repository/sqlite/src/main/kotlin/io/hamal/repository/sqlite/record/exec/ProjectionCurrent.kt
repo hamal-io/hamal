@@ -43,7 +43,7 @@ internal object ProjectionCurrent : ProjectionSqlite<ExecId, ExecRecord, Exec> {
             WHERE
                 id < :afterId
                 ${query.ids()}
-                ${query.groupIds()}
+                ${query.workspaceIds()}
                 ${query.funcIds()}
                 ${query.namespaceIds()}
             ORDER BY id DESC
@@ -71,7 +71,7 @@ internal object ProjectionCurrent : ProjectionSqlite<ExecId, ExecRecord, Exec> {
             WHERE
                 id < :afterId
                 ${query.ids()}
-                ${query.groupIds()}
+                ${query.workspaceIds()}
                 ${query.funcIds()}
                 ${query.namespaceIds()}
         """.trimIndent()
@@ -93,15 +93,15 @@ internal object ProjectionCurrent : ProjectionSqlite<ExecId, ExecRecord, Exec> {
         tx.execute(
             """
                 INSERT OR REPLACE INTO current
-                    ( id, status, namespace_id, group_id, func_id, data) 
+                    ( id, status, namespace_id, workspace_id, func_id, data) 
                 VALUES
-                    ( :id, :status, :namespaceId, :groupId, :funcId, :data)
+                    ( :id, :status, :namespaceId, :workspaceId, :funcId, :data)
             """.trimIndent()
         ) {
             set("id", obj.id)
             set("status", obj.status.value)
             set("namespaceId", obj.namespaceId)
-            set("groupId", obj.groupId)
+            set("workspaceId", obj.workspaceId)
             set("funcId", obj.correlation?.funcId ?: FuncId(0))
             set("data", json.serializeAndCompress(obj))
         }
@@ -113,7 +113,7 @@ internal object ProjectionCurrent : ProjectionSqlite<ExecId, ExecRecord, Exec> {
             CREATE TABLE IF NOT EXISTS current (
                  id             INTEGER NOT NULL,
                  status         INTEGER NOT NULL,
-                 group_id       INTEGER NOT NULL,
+                 workspace_id       INTEGER NOT NULL,
                  func_id        INTEGER NOT NULL,
                  namespace_id        INTEGER NOT NULL,
                  data           BLOB NOT NULL,
@@ -135,11 +135,11 @@ internal object ProjectionCurrent : ProjectionSqlite<ExecId, ExecRecord, Exec> {
         }
     }
 
-    private fun ExecQuery.groupIds(): String {
-        return if (groupIds.isEmpty()) {
+    private fun ExecQuery.workspaceIds(): String {
+        return if (workspaceIds.isEmpty()) {
             ""
         } else {
-            "AND group_id IN (${groupIds.joinToString(",") { "${it.value.value}" }})"
+            "AND workspace_id IN (${workspaceIds.joinToString(",") { "${it.value.value}" }})"
         }
     }
 
