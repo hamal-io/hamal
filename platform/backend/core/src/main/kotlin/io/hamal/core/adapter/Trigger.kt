@@ -84,7 +84,7 @@ class TriggerAdapter(
             name = req.name,
             funcId = func.id,
             namespaceId = namespaceId,
-            inputs = req.inputs,
+            inputs = req.inputs ?: TriggerInputs(),
             correlationId = req.correlationId,
             duration = req.duration,
             topicId = req.topicId,

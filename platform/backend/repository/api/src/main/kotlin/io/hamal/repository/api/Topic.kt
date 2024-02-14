@@ -109,7 +109,8 @@ sealed class Topic : DomainObject<TopicId> {
 }
 
 data class TopicEvent(
-    val id: TopicEventId, val payload: TopicEventPayload
+    val id: TopicEventId,
+    val payload: TopicEventPayload
 )
 
 interface TopicCmdRepository : CmdRepository {

@@ -8,8 +8,8 @@ import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.sdk.api.ApiTriggerList
-import io.hamal.lib.sdk.api.ApiTriggerList.EventTrigger.Topic
-import io.hamal.lib.sdk.api.ApiTriggerList.HookTrigger.Hook
+import io.hamal.lib.sdk.api.ApiTriggerList.Event.Topic
+import io.hamal.lib.sdk.api.ApiTriggerList.Hook.Hook
 import io.hamal.lib.sdk.api.ApiTriggerList.Trigger.Func
 import io.hamal.lib.sdk.api.ApiTriggerList.Trigger.Namespace
 import io.hamal.repository.api.Trigger
@@ -46,7 +46,7 @@ class TriggerListController(private val listTriggers: TriggerListPort) {
                     triggers.map { trigger ->
                         when (trigger) {
                             is Trigger.FixedRate -> {
-                                ApiTriggerList.FixedRateTrigger(
+                                ApiTriggerList.FixedRate(
                                     id = trigger.id,
                                     name = trigger.name,
                                     func = Func(
@@ -62,7 +62,7 @@ class TriggerListController(private val listTriggers: TriggerListPort) {
                             }
 
                             is Trigger.Event -> {
-                                ApiTriggerList.EventTrigger(
+                                ApiTriggerList.Event(
                                     id = trigger.id,
                                     name = trigger.name,
                                     func = Func(
@@ -81,7 +81,7 @@ class TriggerListController(private val listTriggers: TriggerListPort) {
                             }
 
                             is Trigger.Hook -> {
-                                ApiTriggerList.HookTrigger(
+                                ApiTriggerList.Hook(
                                     id = trigger.id,
                                     name = trigger.name,
                                     func = Func(
@@ -101,7 +101,7 @@ class TriggerListController(private val listTriggers: TriggerListPort) {
                             }
 
                             is Trigger.Cron -> {
-                                ApiTriggerList.CronTrigger(
+                                ApiTriggerList.Cron(
                                     id = trigger.id,
                                     name = trigger.name,
                                     func = Func(
@@ -152,7 +152,7 @@ class TriggerListController(private val listTriggers: TriggerListPort) {
                     triggers.map { trigger ->
                         when (trigger) {
                             is Trigger.FixedRate -> {
-                                ApiTriggerList.FixedRateTrigger(
+                                ApiTriggerList.FixedRate(
                                     id = trigger.id,
                                     name = trigger.name,
                                     func = Func(
@@ -168,7 +168,7 @@ class TriggerListController(private val listTriggers: TriggerListPort) {
                             }
 
                             is Trigger.Event -> {
-                                ApiTriggerList.EventTrigger(
+                                ApiTriggerList.Event(
                                     id = trigger.id,
                                     name = trigger.name,
                                     func = Func(
@@ -187,7 +187,7 @@ class TriggerListController(private val listTriggers: TriggerListPort) {
                             }
 
                             is Trigger.Hook -> {
-                                ApiTriggerList.HookTrigger(
+                                ApiTriggerList.Hook(
                                     id = trigger.id,
                                     name = trigger.name,
                                     func = Func(
@@ -207,7 +207,7 @@ class TriggerListController(private val listTriggers: TriggerListPort) {
                             }
 
                             is Trigger.Cron -> {
-                                ApiTriggerList.CronTrigger(
+                                ApiTriggerList.Cron(
                                     id = trigger.id,
                                     name = trigger.name,
                                     func = Func(

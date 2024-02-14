@@ -2,9 +2,8 @@ package io.hamal.core.config.repo
 
 import io.hamal.core.config.BackendBasePath
 import io.hamal.repository.api.*
-import io.hamal.repository.memory.ExecLogMemoryRepository
-import io.hamal.repository.memory.record.TopicMemoryRepository
 import io.hamal.repository.sqlite.AuthSqliteRepository
+import io.hamal.repository.sqlite.ExecLogSqliteRepository
 import io.hamal.repository.sqlite.RequestSqliteRepository
 import io.hamal.repository.sqlite.StateSqliteRepository
 import io.hamal.repository.sqlite.log.LogBrokerSqliteRepository
@@ -19,6 +18,7 @@ import io.hamal.repository.sqlite.record.func.FuncSqliteRepository
 import io.hamal.repository.sqlite.record.group.GroupSqliteRepository
 import io.hamal.repository.sqlite.record.hook.HookSqliteRepository
 import io.hamal.repository.sqlite.record.namespace.NamespaceSqliteRepository
+import io.hamal.repository.sqlite.record.topic.TopicSqliteRepository
 import io.hamal.repository.sqlite.record.trigger.TriggerSqliteRepository
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -139,7 +139,7 @@ open class SqliteRepositoryConfig(backendBasePath: BackendBasePath) {
     open fun execQueryRepository(): ExecQueryRepository = execRepository()
 
     @Bean
-    open fun execLogRepository(): ExecLogRepository = ExecLogMemoryRepository()
+    open fun execLogRepository(): ExecLogRepository = ExecLogSqliteRepository(path)
 
     @Bean
     open fun execLogCmdRepository(): ExecLogCmdRepository = execLogRepository()
@@ -151,8 +151,9 @@ open class SqliteRepositoryConfig(backendBasePath: BackendBasePath) {
     open fun logBrokerRepository() = LogBrokerSqliteRepository(path)
 
     @Bean
-    open fun topicRepository(): TopicRepository = TopicMemoryRepository(
-        logBrokerRepository()
+    open fun topicRepository(): TopicRepository = TopicSqliteRepository(
+        path = path,
+        logBrokerRepository = logBrokerRepository(),
     )
 
     @Bean

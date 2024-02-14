@@ -27,7 +27,7 @@ class TriggerListFunction(
                         .map { NamespaceId((it.value as KuaString).value) }
                 )).mapIndexed { index, trigger ->
                     index to when (trigger) {
-                        is ApiTriggerList.FixedRateTrigger -> {
+                        is ApiTriggerList.FixedRate -> {
                             KuaMap(
                                 mutableMapOf(
                                     "id" to KuaString(trigger.id.value.value.toString(16)),
@@ -50,7 +50,7 @@ class TriggerListFunction(
                             )
                         }
 
-                        is ApiTriggerList.EventTrigger -> {
+                        is ApiTriggerList.Event -> {
                             KuaMap(
                                 mutableMapOf(
                                     "id" to KuaString(trigger.id.value.value.toString(16)),
@@ -78,7 +78,7 @@ class TriggerListFunction(
                             )
                         }
 
-                        is ApiTriggerList.HookTrigger -> {
+                        is ApiTriggerList.Hook -> {
                             KuaMap(
                                 mutableMapOf(
                                     "id" to KuaString(trigger.id.value.value.toString(16)),
@@ -107,7 +107,7 @@ class TriggerListFunction(
                             )
                         }
 
-                        is ApiTriggerList.CronTrigger -> KuaMap(
+                        is ApiTriggerList.Cron -> KuaMap(
                             mutableMapOf(
                                 "id" to KuaString(trigger.id.value.value.toString(16)),
                                 "type" to KuaString("Cron"),

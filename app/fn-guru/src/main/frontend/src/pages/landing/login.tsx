@@ -175,7 +175,7 @@ const LoginForm = () => {
 
     useEffect(() => {
         if (loginSubmitted != null) {
-            navigate(`/groups/${loginSubmitted.groupIds[0]}/namespaces/${loginSubmitted.groupIds[0]}/dashboard`, {replace: true})
+            navigate(`/dashboard`, {replace: true})
             setLoading(false)
         }
     }, [loginSubmitted]);
