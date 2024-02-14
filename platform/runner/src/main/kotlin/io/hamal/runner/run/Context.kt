@@ -22,6 +22,7 @@ class RunnerContext(
     }
 
     fun emit(evt: EventToSubmit) {
+        evt.payload.value.nodes.remove("topic")
         eventsToSubmit.add(evt)
     }
 
