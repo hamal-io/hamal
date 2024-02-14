@@ -32,7 +32,7 @@ internal object ProjectionCurrent : ProjectionSqlite<ExtensionId, ExtensionRecor
             }
         } catch (e: SQLiteException) {
             if (e.message!!.contains("(UNIQUE constraint failed: current.group_id, current.name)")) {
-                throw IllegalArgumentException("${obj.name} already exists in group ${obj.groupId}")
+                throw IllegalArgumentException("${obj.name} already exists in workspace ${obj.groupId}")
             }
             throw e
         }

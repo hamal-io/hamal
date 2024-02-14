@@ -1,4 +1,4 @@
-package io.hamal.repository.sqlite.record.group
+package io.hamal.repository.sqlite.record.workspace
 
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.GroupId
@@ -7,8 +7,8 @@ import io.hamal.repository.api.GroupCmdRepository.CreateCmd
 import io.hamal.repository.api.GroupQueryRepository.GroupQuery
 import io.hamal.repository.api.GroupRepository
 import io.hamal.repository.record.CreateDomainObject
-import io.hamal.repository.record.group.GroupEntity
-import io.hamal.repository.record.group.GroupRecord
+import io.hamal.repository.record.workspace.GroupEntity
+import io.hamal.repository.record.workspace.GroupRecord
 import io.hamal.repository.sqlite.record.RecordSqliteRepository
 import java.nio.file.Path
 
@@ -39,7 +39,7 @@ class GroupSqliteRepository(
     path: Path
 ) : RecordSqliteRepository<GroupId, GroupRecord, Group>(
     path = path,
-    filename = "group.db",
+    filename = "workspace.db",
     createDomainObject = CreateGroup,
     recordClass = GroupRecord::class,
     projections = listOf(

@@ -189,7 +189,7 @@ internal abstract class BaseTest {
             GroupCmdRepository.CreateCmd(
                 id = CmdId(4),
                 groupId = GroupId.root,
-                name = GroupName("test-group"),
+                name = GroupName("test-workspace"),
                 creatorId = testAccount.id
             )
         )

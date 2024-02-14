@@ -6,8 +6,8 @@ import io.hamal.repository.api.Group
 import io.hamal.repository.api.GroupCmdRepository
 import io.hamal.repository.api.GroupQueryRepository.GroupQuery
 import io.hamal.repository.api.GroupRepository
-import io.hamal.repository.record.group.CreateGroupFromRecords
-import io.hamal.repository.record.group.GroupRecord
+import io.hamal.repository.record.workspace.CreateGroupFromRecords
+import io.hamal.repository.record.workspace.GroupRecord
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 

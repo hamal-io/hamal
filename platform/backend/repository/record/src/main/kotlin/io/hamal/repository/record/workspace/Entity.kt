@@ -1,4 +1,4 @@
-package io.hamal.repository.record.group
+package io.hamal.repository.record.workspace
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.AccountId

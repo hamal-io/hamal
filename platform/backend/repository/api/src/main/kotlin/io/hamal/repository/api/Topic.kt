@@ -76,7 +76,7 @@ sealed class Topic : DomainObject<TopicId> {
     }
 
     /**
-     * Topic which is only visible within the same group
+     * Topic which is only visible within the same workspace
      */
     data class Group(
         override val cmdId: CmdId,
@@ -92,7 +92,7 @@ sealed class Topic : DomainObject<TopicId> {
 
     /**
      * Topic which is publicly available to all users of hamal to consume,
-     * only the group can write to
+     * only the workspace can write to
      */
     data class Public(
         override val cmdId: CmdId,

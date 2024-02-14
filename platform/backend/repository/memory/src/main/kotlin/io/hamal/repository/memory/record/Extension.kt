@@ -23,7 +23,7 @@ private object ExtensionCurrentProjection {
             if (currentExt != null) {
                 projection[currentExt.id] = currentExt
             }
-            throw IllegalArgumentException("${ext.name} already exists in group ${ext.groupId}")
+            throw IllegalArgumentException("${ext.name} already exists in workspace ${ext.groupId}")
         }
 
         projection[ext.id] = ext

@@ -1,4 +1,4 @@
-package io.hamal.api.http.controller.group
+package io.hamal.api.http.controller.workspace
 
 import io.hamal.api.http.auth.AuthContextHolder
 import io.hamal.core.adapter.GroupListPort
@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class GroupListController(
+internal class WorkspaceListController(
     private val list: GroupListPort
 ) {
     @GetMapping("/v1/groups")

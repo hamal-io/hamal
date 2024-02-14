@@ -38,7 +38,7 @@
 //            GroupCmdRepository.CreateCmd(
 //                id = CmdId(4),
 //                groupId = GroupId.root,
-//                name = GroupName("root-group"),
+//                name = GroupName("root-workspace"),
 //                creatorId = testAccount.id
 //            )
 //        )

@@ -1,4 +1,4 @@
-package io.hamal.repository.sqlite.record.group
+package io.hamal.repository.sqlite.record.workspace
 
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.GroupId
@@ -7,7 +7,7 @@ import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Group
 import io.hamal.repository.api.GroupQueryRepository.GroupQuery
-import io.hamal.repository.record.group.GroupRecord
+import io.hamal.repository.record.workspace.GroupRecord
 import io.hamal.repository.record.json
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite

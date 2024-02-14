@@ -1,4 +1,4 @@
-package io.hamal.api.http.controller.group
+package io.hamal.api.http.controller.workspace
 
 import io.hamal.core.adapter.GroupGetPort
 import io.hamal.core.component.Retry
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class GroupGetController(
+internal class WorkspaceGetController(
     private val retry: Retry,
     private val getGroup: GroupGetPort
 ) {

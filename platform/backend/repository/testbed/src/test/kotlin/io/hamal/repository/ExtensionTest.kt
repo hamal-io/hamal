@@ -80,7 +80,7 @@ internal class ExtensionRepositoryTest : AbstractUnitTest() {
 
                 assertThat(
                     exception.message,
-                    equalTo("ExtensionName(TestExt) already exists in group GroupId(1)")
+                    equalTo("ExtensionName(TestExt) already exists in workspace GroupId(1)")
                 )
                 verifyCount(1)
             }

@@ -8,7 +8,7 @@ import io.hamal.repository.api.log.*
 
 // FIXME just a pass through for now - replace with proper implementation,
 // like supporting multiple partitions, partitioning by key
-// keeping track of consumer group ids
+// keeping track of consumer workspace ids
 class LogTopicMemoryRepository(
     internal val topic: LogTopic
 ) : LogTopicRepository {
