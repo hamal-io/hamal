@@ -11,7 +11,7 @@ const BlueprintListPage: FC<Props> = ({}) => {
     setLoading(true)
     try {
         setLoading(true)
-        listBlueprints("1")
+        listBlueprints()
     } catch (e) {
         console.error(e)
     } finally {

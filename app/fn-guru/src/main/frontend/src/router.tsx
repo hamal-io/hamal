@@ -31,9 +31,7 @@ export const router = createBrowserRouter([
     },
     {
         path: "/blueprints", element:
-            <GroupLayout>
-                <BlueprintListPage/>
-            </GroupLayout>
+            <BlueprintListPage/>
     },
     {
         path: "/dashboard", element:
