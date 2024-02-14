@@ -1,23 +1,22 @@
-import React, {FC, useState} from "react";
+import React, {FC, useEffect} from "react";
 import {useBlueprintList} from "@/hook/blueprint.ts";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx";
 import {BlueprintListItem} from "@/types/blueprint.ts";
 
 type Props = {}
 const BlueprintListPage: FC<Props> = ({}) => {
-    const [isLoading, setLoading] = useState(false)
     const [listBlueprints, blueprintList, loading, error] = useBlueprintList()
 
-    setLoading(true)
-    try {
-        setLoading(true)
-        listBlueprints()
-    } catch (e) {
-        console.error(e)
-    } finally {
-        setLoading(false)
-    }
+    useEffect(() => {
+        const abortController = new AbortController();
+        listBlueprints(abortController)
+        return () => {
+            abortController.abort();
+        };
+    });
 
+    if (error) return `Error`
+    if (blueprintList == null || loading) return "Loading..."
 
     return (
         <ul className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">

@@ -1,7 +1,5 @@
 package io.hamal.api.http.controller.blueprint
 
-import io.hamal.core.adapter.BlueprintListPort
-import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.BlueprintDescription
 import io.hamal.lib.domain.vo.BlueprintId
 import io.hamal.lib.domain.vo.BlueprintName
@@ -13,8 +11,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class BlueprintListController(
-    private val retry: Retry,
-    private val getBlueprints: BlueprintListPort
+    //private val getBlueprints: BlueprintListPort
 ) {
 
     @GetMapping("/v1/blueprints")
