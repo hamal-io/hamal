@@ -24,11 +24,11 @@ sealed class BlueprintRecord(
     data class Created(
         override val entityId: BlueprintId,
         override val cmdId: CmdId,
-        val workspaceId: WorkspaceId,
         val creatorId: AccountId,
         val name: BlueprintName,
         val inputs: BlueprintInputs,
-        val value: CodeValue
+        val value: CodeValue,
+        val description: BlueprintDescription
     ) : BlueprintRecord()
 
 
@@ -37,7 +37,8 @@ sealed class BlueprintRecord(
         override val cmdId: CmdId,
         val name: BlueprintName,
         val inputs: BlueprintInputs,
-        val value: CodeValue
+        val value: CodeValue,
+        val description: BlueprintDescription
     ) : BlueprintRecord()
 }
 

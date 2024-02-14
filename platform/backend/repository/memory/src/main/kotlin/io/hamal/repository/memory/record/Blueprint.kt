@@ -25,7 +25,6 @@ private object BlueprintCurrentProjection {
             .map { it.value }
             .reversed()
             .asSequence()
-            .filter { if (query.workspaceIds.isEmpty()) true else query.workspaceIds.contains(it.workspaceId) }
             .dropWhile { it.id >= query.afterId }
             .take(query.limit.value)
             .toList()
@@ -37,7 +36,6 @@ private object BlueprintCurrentProjection {
                 .map { it.value }
                 .reversed()
                 .asSequence()
-                .filter { if (query.workspaceIds.isEmpty()) true else query.workspaceIds.contains(it.workspaceId) }
                 .dropWhile { it.id >= query.afterId }
                 .count()
                 .toLong()
@@ -66,11 +64,11 @@ class BlueprintMemoryRepository : RecordMemoryRepository<BlueprintId, BlueprintR
                     BlueprintRecord.Created(
                         cmdId = cmd.id,
                         entityId = bpId,
-                        workspaceId = cmd.workspaceId,
                         name = cmd.name,
                         inputs = cmd.inputs,
                         value = cmd.value,
-                        creatorId = cmd.creatorId
+                        creatorId = cmd.creatorId,
+                        description = cmd.description
                     )
                 )
                 (currentVersion(bpId)).also(BlueprintCurrentProjection::apply)
@@ -90,7 +88,8 @@ class BlueprintMemoryRepository : RecordMemoryRepository<BlueprintId, BlueprintR
                         cmdId = cmd.id,
                         name = cmd.name ?: currentVersion.name,
                         inputs = cmd.inputs ?: currentVersion.inputs,
-                        value = cmd.value ?: currentVersion.value
+                        value = cmd.value ?: currentVersion.value,
+                        description = cmd.description ?: currentVersion.description
                     )
                 )
                 (currentVersion(blueprintId)).also(BlueprintCurrentProjection::apply)

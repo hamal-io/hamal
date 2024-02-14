@@ -8,8 +8,8 @@ import io.hamal.lib.domain.request.BlueprintUpdateRequest
 import io.hamal.lib.domain.request.BlueprintUpdateRequested
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.BlueprintId
-import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.domain.vo.RequestId
+import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.repository.api.Blueprint
 import io.hamal.repository.api.BlueprintQueryRepository
 import io.hamal.repository.api.RequestCmdRepository
@@ -79,12 +79,12 @@ class BlueprintAdapter(
         return BlueprintUpdateRequested(
             id = generateDomainId(::RequestId),
             status = Submitted,
-            workspaceId = blueprintQueryRepository.get(bpId).workspaceId,
             blueprintId = bpId,
             name = req.name,
             inputs = req.inputs,
             value = req.value,
-        ).also(requestCmdRepository::queue).let(responseHandler)
+
+            ).also(requestCmdRepository::queue).let(responseHandler)
     }
 
     private fun ensureBlueprintExists(blueprintId: BlueprintId) = blueprintQueryRepository.get(blueprintId)

@@ -24,6 +24,7 @@ object ValueObjectJsonModule : JsonModule() {
         this[BlueprintId::class] = ValueObjectIdAdapter(::BlueprintId)
         this[BlueprintName::class] = ValueObjectStringAdapter(::BlueprintName)
         this[BlueprintInputs::class] = ValueObjectHotObjectAdapter(::BlueprintInputs)
+        this[BlueprintDescription::class] = ValueObjectStringAdapter(::BlueprintDescription)
 
         this[CmdId::class] = ValueObjectStringAdapter(::CmdId)
         this[CodeId::class] = ValueObjectIdAdapter(::CodeId)
