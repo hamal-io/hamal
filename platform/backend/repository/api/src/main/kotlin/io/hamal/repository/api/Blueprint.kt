@@ -36,7 +36,7 @@ interface BlueprintCmdRepository : CmdRepository {
         val name: BlueprintName? = null,
         val inputs: BlueprintInputs? = null,
         val value: CodeValue? = null,
-        val description: BlueprintDescription
+        val description: BlueprintDescription? = null
     )
 }
 

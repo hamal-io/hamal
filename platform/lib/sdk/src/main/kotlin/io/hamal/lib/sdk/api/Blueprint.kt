@@ -12,26 +12,28 @@ data class ApiBlueprint(
     val id: BlueprintId,
     val name: BlueprintName,
     val inputs: BlueprintInputs,
-    val value: CodeValue
+    val value: CodeValue,
+    val description: BlueprintDescription
 ) : ApiObject()
 
 data class ApiBlueprintCreateRequest(
     override val name: BlueprintName,
     override val inputs: BlueprintInputs,
-    override val value: CodeValue
+    override val value: CodeValue,
+    override val description: BlueprintDescription? = null
 ) : BlueprintCreateRequest
 
 data class ApiBlueprintCreateRequested(
     override val id: RequestId,
     override val status: RequestStatus,
-    val blueprintId: BlueprintId,
-    val workspaceId: WorkspaceId,
+    val blueprintId: BlueprintId
 ) : ApiRequested()
 
 data class ApiBlueprintUpdateRequest(
     override val name: BlueprintName? = null,
     override val inputs: BlueprintInputs? = null,
-    override val value: CodeValue? = null
+    override val value: CodeValue? = null,
+    override val description: BlueprintDescription? = null
 ) : BlueprintUpdateRequest
 
 data class ApiBlueprintUpdateRequested(
@@ -48,9 +50,7 @@ data class ApiBlueprintList(
         val name: BlueprintName,
         val description: BlueprintDescription
     )
-
 }
-
 
 interface ApiBlueprintService {
     fun create(workspaceId: WorkspaceId, req: ApiBlueprintCreateRequest): ApiBlueprintCreateRequested
@@ -63,8 +63,7 @@ internal class ApiBlueprintServiceImpl(
 ) : ApiBlueprintService {
 
     override fun create(workspaceId: WorkspaceId, req: ApiBlueprintCreateRequest): ApiBlueprintCreateRequested =
-        template.post("/v1/workspaces/{workspaceId}/blueprints")
-            .path("workspaceId", workspaceId)
+        template.post("/v1/blueprints")
             .body(req)
             .execute()
             .fold(ApiBlueprintCreateRequested::class)

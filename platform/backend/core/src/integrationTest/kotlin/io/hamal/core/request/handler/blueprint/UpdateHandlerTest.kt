@@ -21,11 +21,11 @@ internal class BlueprintUpdateHandlerTest : BaseReqHandlerTest() {
             BlueprintCmdRepository.CreateCmd(
                 id = CmdId(1),
                 blueprintId = BlueprintId(123),
-                workspaceId = testWorkspace.id,
                 name = BlueprintName("TestBlueprint"),
                 inputs = BlueprintInputs(HotObject.builder().set("hamal", "rocks").build()),
                 value = CodeValue("1 + 1"),
-                creatorId = testAccount.id
+                creatorId = testAccount.id,
+                description = BlueprintDescription("TestDescription")
             )
         )
 
@@ -36,6 +36,7 @@ internal class BlueprintUpdateHandlerTest : BaseReqHandlerTest() {
             assertThat(name, equalTo(BlueprintName("UpdatedBlueprint")))
             assertThat(value, equalTo(CodeValue("40 + 2")))
             assertThat(inputs, equalTo(BlueprintInputs(HotObject.builder().set("hamal", "updates").build())))
+            assertThat(description, equalTo(BlueprintDescription("TestUpdateDescription")))
         }
     }
 
@@ -43,11 +44,11 @@ internal class BlueprintUpdateHandlerTest : BaseReqHandlerTest() {
         BlueprintUpdateRequested(
             id = RequestId(2),
             status = RequestStatus.Submitted,
-            workspaceId = testWorkspace.id,
             blueprintId = BlueprintId(123),
             name = BlueprintName("UpdatedBlueprint"),
             inputs = BlueprintInputs(HotObject.builder().set("hamal", "updates").build()),
-            value = CodeValue("40 + 2")
+            value = CodeValue("40 + 2"),
+            description = BlueprintDescription("TestUpdateDescription")
         )
     }
 

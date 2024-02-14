@@ -35,8 +35,7 @@ class BlueprintCreateFunction(
                 mutableMapOf(
                     "id" to KuaString(res.id.value.value.toString(16)),
                     "status" to KuaString(res.status.name),
-                    "blueprint_id" to KuaString(res.blueprintId.value.value.toString(16)),
-                    "workspace_id" to KuaString(res.workspaceId.value.value.toString(16)),
+                    "blueprint_id" to KuaString(res.blueprintId.value.value.toString(16))
                 )
             )
 

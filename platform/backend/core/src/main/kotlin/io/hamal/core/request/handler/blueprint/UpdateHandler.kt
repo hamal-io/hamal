@@ -27,7 +27,8 @@ private fun BlueprintUpdateHandler.updateBlueprint(req: BlueprintUpdateRequested
             id = req.cmdId(),
             name = req.name,
             inputs = req.inputs,
-            value = req.value
+            value = req.value,
+            description = req.description
         )
     )
 }

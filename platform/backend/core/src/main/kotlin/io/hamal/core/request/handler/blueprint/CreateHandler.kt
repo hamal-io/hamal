@@ -4,6 +4,7 @@ import io.hamal.core.event.InternalEventEmitter
 import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.request.BlueprintCreateRequested
+import io.hamal.lib.domain.vo.BlueprintDescription
 import io.hamal.repository.api.Blueprint
 import io.hamal.repository.api.BlueprintCmdRepository
 import io.hamal.repository.api.event.BlueprintCreatedEvent
@@ -20,15 +21,16 @@ class BlueprintCreateHandler(
 }
 
 private fun BlueprintCreateHandler.createBlueprint(req: BlueprintCreateRequested): Blueprint {
+
     return blueprintCmdRepository.create(
         BlueprintCmdRepository.CreateCmd(
             id = req.cmdId(),
             blueprintId = req.blueprintId,
-            workspaceId = req.workspaceId,
             name = req.name,
             inputs = req.inputs,
             value = req.value,
-            creatorId = req.creatorId
+            creatorId = req.creatorId,
+            description = req.description ?: BlueprintDescription.empty
         )
     )
 }
