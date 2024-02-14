@@ -58,7 +58,7 @@ interface TopicPort : TopicAppendEventPort, TopicCreatePort, TopicGetPort, Topic
 class TopicAdapter(
     private val topicRepository: TopicRepository,
     private val generateDomainId: GenerateId,
-    private val groupRepository: GroupRepository,
+    private val workspaceRepository: WorkspaceRepository,
     private val namespaceRepository: NamespaceRepository,
     private val requestCmdRepository: RequestCmdRepository
 ) : TopicPort {
@@ -90,7 +90,7 @@ class TopicAdapter(
             status = Submitted,
             topicId = generateDomainId(::TopicId),
             logTopicId = generateDomainId(::LogTopicId),
-            groupId = namespace.groupId,
+            workspaceId = namespace.workspaceId,
             namespaceId = namespace.id,
             name = req.name,
             type = req.type

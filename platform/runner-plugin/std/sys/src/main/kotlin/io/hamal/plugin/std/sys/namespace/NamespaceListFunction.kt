@@ -1,6 +1,6 @@
 package io.hamal.plugin.std.sys.namespace
 
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.kua.function.Function0In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionOutput2Schema
@@ -18,7 +18,7 @@ class NamespaceListFunction(
     override fun invoke(ctx: FunctionContext): Pair<KuaError?, KuaArray?> {
         return try {
             null to KuaArray(
-                sdk.namespace.list(ctx[GroupId::class]).mapIndexed { index, namespace ->
+                sdk.namespace.list(ctx[WorkspaceId::class]).mapIndexed { index, namespace ->
                     index to KuaMap(
                         mutableMapOf(
                             "id" to KuaString(namespace.id.value.value.toString(16)),

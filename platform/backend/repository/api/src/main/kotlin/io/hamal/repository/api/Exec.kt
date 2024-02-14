@@ -25,7 +25,7 @@ interface ExecCmdRepository : CmdRepository {
         val id: CmdId,
         val execId: ExecId,
         val namespaceId: NamespaceId,
-        val groupId: GroupId,
+        val workspaceId: WorkspaceId,
         val correlation: Correlation?,
         val inputs: ExecInputs,
         val code: ExecCode,
@@ -67,7 +67,7 @@ interface ExecQueryRepository {
     fun list(execIds: List<ExecId>): List<Exec> = list(
         ExecQuery(
             limit = Limit.all,
-            groupIds = listOf(),
+            workspaceIds = listOf(),
             execIds = execIds,
         )
     )
@@ -77,7 +77,7 @@ interface ExecQueryRepository {
         var afterId: ExecId = ExecId(SnowflakeId(Long.MAX_VALUE)),
         var limit: Limit = Limit(1),
         var namespaceIds: List<NamespaceId> = listOf(),
-        var groupIds: List<GroupId> = listOf(),
+        var workspaceIds: List<WorkspaceId> = listOf(),
         var funcIds: List<FuncId> = listOf(),
         var execIds: List<ExecId> = listOf()
     )
@@ -87,7 +87,7 @@ sealed class Exec : DomainObject<ExecId> {
     abstract val cmdId: CmdId
     abstract override val id: ExecId
     abstract val namespaceId: NamespaceId
-    abstract val groupId: GroupId
+    abstract val workspaceId: WorkspaceId
     abstract val status: ExecStatus
 
     abstract val correlation: Correlation?
@@ -148,7 +148,7 @@ sealed class Exec : DomainObject<ExecId> {
         override val id: ExecId,
         override val updatedAt: UpdatedAt,
         override val namespaceId: NamespaceId,
-        override val groupId: GroupId,
+        override val workspaceId: WorkspaceId,
         override val correlation: Correlation?,
         override val inputs: ExecInputs,
         override val code: ExecCode,
@@ -172,7 +172,7 @@ sealed class Exec : DomainObject<ExecId> {
     ) : Exec() {
         override val status = ExecStatus.Scheduled
         override val namespaceId get() = plannedExec.namespaceId
-        override val groupId get() = plannedExec.groupId
+        override val workspaceId get() = plannedExec.workspaceId
         override val correlation get() = plannedExec.correlation
         override val inputs get() = plannedExec.inputs
         override val code get() = plannedExec.code
@@ -192,7 +192,7 @@ sealed class Exec : DomainObject<ExecId> {
     ) : Exec() {
         override val status = ExecStatus.Queued
         override val namespaceId get() = scheduledExec.namespaceId
-        override val groupId get() = scheduledExec.groupId
+        override val workspaceId get() = scheduledExec.workspaceId
         override val correlation get() = scheduledExec.correlation
         override val inputs get() = scheduledExec.inputs
         override val code get() = scheduledExec.code
@@ -211,7 +211,7 @@ sealed class Exec : DomainObject<ExecId> {
     ) : Exec() {
         override val status = ExecStatus.Started
         override val namespaceId get() = queuedExec.namespaceId
-        override val groupId get() = queuedExec.groupId
+        override val workspaceId get() = queuedExec.workspaceId
         override val correlation get() = queuedExec.correlation
         override val inputs get() = queuedExec.inputs
         override val code get() = queuedExec.code
@@ -232,7 +232,7 @@ sealed class Exec : DomainObject<ExecId> {
     ) : Exec() {
         override val status = ExecStatus.Completed
         override val namespaceId get() = startedExec.namespaceId
-        override val groupId get() = startedExec.groupId
+        override val workspaceId get() = startedExec.workspaceId
         override val correlation get() = startedExec.correlation
         override val inputs get() = startedExec.inputs
         override val code get() = startedExec.code
@@ -254,7 +254,7 @@ sealed class Exec : DomainObject<ExecId> {
     ) : Exec() {
         override val status = ExecStatus.Failed
         override val namespaceId get() = startedExec.namespaceId
-        override val groupId get() = startedExec.groupId
+        override val workspaceId get() = startedExec.workspaceId
         override val correlation get() = startedExec.correlation
         override val inputs get() = startedExec.inputs
         override val code get() = startedExec.code

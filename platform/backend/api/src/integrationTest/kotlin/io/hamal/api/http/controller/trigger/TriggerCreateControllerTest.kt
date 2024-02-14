@@ -64,7 +64,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
             NamespaceCmdRepository.CreateCmd(
                 id = CmdId(1),
                 namespaceId = NamespaceId(2345),
-                groupId = testGroup.id,
+                workspaceId = testWorkspace.id,
                 name = NamespaceName("hamal::namespace")
             )
         )
@@ -355,7 +355,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
             assertThat(
                 triggerQueryRepository.list(
                     TriggerQueryRepository.TriggerQuery(
-                        groupIds = listOf(testGroup.id),
+                        workspaceIds = listOf(testWorkspace.id),
                         limit = Limit(10)
 
                     )

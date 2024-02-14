@@ -38,7 +38,7 @@ private object FuncCurrentProjection {
             .map { it.value }
             .reversed()
             .asSequence()
-            .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
+            .filter { if (query.workspaceIds.isEmpty()) true else query.workspaceIds.contains(it.workspaceId) }
             .filter { if (query.namespaceIds.isEmpty()) true else query.namespaceIds.contains(it.namespaceId) }
             .dropWhile { it.id >= query.afterId }
             .take(query.limit.value)
@@ -51,7 +51,7 @@ private object FuncCurrentProjection {
                 .map { it.value }
                 .reversed()
                 .asSequence()
-                .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
+                .filter { if (query.workspaceIds.isEmpty()) true else query.workspaceIds.contains(it.workspaceId) }
                 .filter { if (query.namespaceIds.isEmpty()) true else query.namespaceIds.contains(it.namespaceId) }
                 .dropWhile { it.id >= query.afterId }
                 .count()
@@ -80,7 +80,7 @@ class FuncMemoryRepository : RecordMemoryRepository<FuncId, FuncRecord, Func>(
                     FuncRecord.Created(
                         cmdId = cmd.id,
                         entityId = funcId,
-                        groupId = cmd.groupId,
+                        workspaceId = cmd.workspaceId,
                         namespaceId = cmd.namespaceId,
                         name = cmd.name,
                         inputs = cmd.inputs,

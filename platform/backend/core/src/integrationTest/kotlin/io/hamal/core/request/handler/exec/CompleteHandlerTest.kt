@@ -71,7 +71,7 @@ internal class ExecCompleteHandlerTest : BaseReqHandlerTest() {
     }
 
     private fun verifyCompleted() {
-        execQueryRepository.list(ExecQuery(groupIds = listOf())).also { execs ->
+        execQueryRepository.list(ExecQuery(workspaceIds = listOf())).also { execs ->
             assertThat(execs, hasSize(1))
             with(execs.first()) {
                 require(this is Exec.Completed)
@@ -83,7 +83,7 @@ internal class ExecCompleteHandlerTest : BaseReqHandlerTest() {
     }
 
     private fun verifyNoCompletedExecExists() {
-        execQueryRepository.list(ExecQuery(groupIds = listOf())).also { execs ->
+        execQueryRepository.list(ExecQuery(workspaceIds = listOf())).also { execs ->
             assertThat(execs, hasSize(1))
             with(execs.first()) {
                 assertThat(status, not(equalTo(Completed)))

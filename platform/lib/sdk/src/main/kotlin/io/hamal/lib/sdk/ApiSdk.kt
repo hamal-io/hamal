@@ -26,7 +26,7 @@ interface ApiSdk {
     val execLog: ApiExecLogService
     val extension: ApiExtensionService
     val func: ApiFuncService
-    val group: ApiGroupService
+    val workspace: ApiWorkspaceService
     val hook: ApiHookService
     val namespace: ApiNamespaceService
     val blueprint: ApiBlueprintService
@@ -117,8 +117,8 @@ class ApiSdkImpl : ApiSdk {
         ApiFuncServiceImpl(template)
     }
 
-    override val group: ApiGroupService by lazy {
-        ApiGroupServiceImpl(template)
+    override val workspace: ApiWorkspaceService by lazy {
+        ApiWorkspaceServiceImpl(template)
     }
 
     override val hook: ApiHookService by lazy {

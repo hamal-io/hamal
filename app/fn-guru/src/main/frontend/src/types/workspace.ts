@@ -1,9 +1,9 @@
-export interface Group {
+export interface Workspace {
     id: string;
     name: string;
 }
 
-export interface GroupListItem {
+export interface WorkspaceListItem {
     id: string;
     name: string;
 }

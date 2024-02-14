@@ -35,7 +35,7 @@ private object EndpointCurrentProjection {
             .map { it.value }
             .reversed()
             .asSequence()
-            .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
+            .filter { if (query.workspaceIds.isEmpty()) true else query.workspaceIds.contains(it.workspaceId) }
             .filter { if (query.namespaceIds.isEmpty()) true else query.namespaceIds.contains(it.namespaceId) }
             .dropWhile { it.id >= query.afterId }
             .take(query.limit.value)
@@ -48,7 +48,7 @@ private object EndpointCurrentProjection {
                 .map { it.value }
                 .reversed()
                 .asSequence()
-                .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
+                .filter { if (query.workspaceIds.isEmpty()) true else query.workspaceIds.contains(it.workspaceId) }
                 .filter { if (query.namespaceIds.isEmpty()) true else query.namespaceIds.contains(it.namespaceId) }
                 .dropWhile { it.id >= query.afterId }
                 .count()
@@ -77,7 +77,7 @@ class EndpointMemoryRepository : RecordMemoryRepository<EndpointId, EndpointReco
                     EndpointRecord.Created(
                         cmdId = cmd.id,
                         entityId = endpointId,
-                        groupId = cmd.groupId,
+                        workspaceId = cmd.workspaceId,
                         namespaceId = cmd.namespaceId,
                         funcId = cmd.funcId,
                         name = cmd.name

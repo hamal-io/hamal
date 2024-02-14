@@ -1,6 +1,6 @@
 package io.hamal.plugin.std.sys.namespace
 
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -22,7 +22,7 @@ class NamespaceCreateFunction(
 
         return try {
             val res = sdk.namespace.create(
-                ctx[GroupId::class], ApiNamespaceCreateRequest(NamespaceName(arg1.getString("name")))
+                ctx[WorkspaceId::class], ApiNamespaceCreateRequest(NamespaceName(arg1.getString("name")))
             )
 
             null to KuaMap(

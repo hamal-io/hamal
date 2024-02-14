@@ -17,12 +17,12 @@ content = res.content
 assert(content.id ~= nil)
 assert(content.accountId ~= nil)
 assert(content.token ~= nil)
-assert(#content.groupIds == 1)
+assert(#content.workspaceIds == 1)
 
 token = content.token
 
 err, res = http.get({
-    url = '/v1/groups/' .. content.groupIds[1] .. '/namespaces',
+    url = '/v1/workspaces/' .. content.workspaceIds[1] .. '/namespaces',
     headers = {
         ['authorization'] = 'Bearer ' .. token
     }
@@ -42,7 +42,7 @@ assert(res.err == nil)
 assert(res.status_code == 204)
 
 err, res = http.get({
-    url = '/v1/groups/' .. content.groupIds[1] .. '/namespaces',
+    url = '/v1/workspaces/' .. content.workspaceIds[1] .. '/namespaces',
     headers = {
         ['authorization'] = 'Bearer ' .. token
     }

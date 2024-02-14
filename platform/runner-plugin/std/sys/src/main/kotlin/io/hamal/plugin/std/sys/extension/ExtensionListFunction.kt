@@ -1,6 +1,6 @@
 package io.hamal.plugin.std.sys.extension
 
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.kua.function.Function0In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionOutput2Schema
@@ -17,7 +17,7 @@ class ExtensionListFunction(
 ) {
     override fun invoke(ctx: FunctionContext): Pair<KuaError?, KuaArray?> {
         return try {
-            val extensions = sdk.extension.list(ctx[GroupId::class])
+            val extensions = sdk.extension.list(ctx[WorkspaceId::class])
             null to KuaArray(
                 extensions.mapIndexed { index, ext ->
                     index to KuaMap(

@@ -24,7 +24,7 @@ private fun BlueprintCreateHandler.createBlueprint(req: BlueprintCreateRequested
         BlueprintCmdRepository.CreateCmd(
             id = req.cmdId(),
             blueprintId = req.blueprintId,
-            groupId = req.groupId,
+            workspaceId = req.workspaceId,
             name = req.name,
             inputs = req.inputs,
             value = req.value,

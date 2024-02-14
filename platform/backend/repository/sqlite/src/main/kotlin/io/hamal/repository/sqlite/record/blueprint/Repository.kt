@@ -22,7 +22,7 @@ internal object CreateBlueprint : CreateDomainObject<BlueprintId, BlueprintRecor
         var result = BlueprintEntity(
             cmdId = firstRecord.cmdId,
             id = firstRecord.entityId,
-            groupId = firstRecord.groupId,
+            workspaceId = firstRecord.workspaceId,
             creatorId = firstRecord.creatorId,
             sequence = firstRecord.sequence(),
             recordedAt = firstRecord.recordedAt()
@@ -57,7 +57,7 @@ class BlueprintSqliteRepository(
                     BlueprintRecord.Created(
                         cmdId = cmdId,
                         entityId = bpId,
-                        groupId = cmd.groupId,
+                        workspaceId = cmd.workspaceId,
                         name = cmd.name,
                         inputs = cmd.inputs,
                         value = cmd.value,

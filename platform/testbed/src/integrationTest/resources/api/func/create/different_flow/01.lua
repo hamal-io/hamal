@@ -10,7 +10,7 @@ func_one = fail_on_error(sys.funcs.create({
 sys.await_completed(func_one)
 
 assert(func_one ~= nil)
-assert(func_one.group_id == '1')
+assert(func_one.workspace_id == '1')
 assert(func_one.namespace_id == namespace.id)
 
 func_one = fail_on_error(sys.funcs.get(func_one.id))

@@ -34,17 +34,17 @@ internal object ProjectionUniqueName : ProjectionSqlite<NamespaceId, NamespaceRe
         try {
             tx.execute(
                 """
-                INSERT INTO unique_name (id, group_id, name)  VALUES(:id, :groupId, :name)
+                INSERT INTO unique_name (id, workspace_id, name)  VALUES(:id, :workspaceId, :name)
                     ON CONFLICT(id) DO UPDATE 
                         SET name=:name;
             """.trimIndent()
             ) {
                 set("id", obj.id)
-                set("groupId", obj.groupId)
+                set("workspaceId", obj.workspaceId)
                 set("name", obj.name)
             }
         } catch (e: SQLiteException) {
-            if (e.message!!.contains("(UNIQUE constraint failed: unique_name.group_id, unique_name.name)")) {
+            if (e.message!!.contains("(UNIQUE constraint failed: unique_name.workspace_id, unique_name.name)")) {
                 throw IllegalArgumentException("${obj.name} already exists")
             }
             throw e
@@ -56,10 +56,10 @@ internal object ProjectionUniqueName : ProjectionSqlite<NamespaceId, NamespaceRe
             """
             CREATE TABLE IF NOT EXISTS unique_name (
                  id             INTEGER NOT NULL,
-                 group_id       INTEGER NOT NULL,
+                 workspace_id       INTEGER NOT NULL,
                  name           VARCHAR(255) NOT NULL,
                  PRIMARY KEY    (id),
-                 UNIQUE (group_id, name)
+                 UNIQUE (workspace_id, name)
             );
         """.trimIndent()
         )

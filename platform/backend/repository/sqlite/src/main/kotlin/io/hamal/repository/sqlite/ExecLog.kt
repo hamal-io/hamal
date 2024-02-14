@@ -27,7 +27,7 @@ class ExecLogSqliteRepository(
                 CREATE TABLE IF NOT EXISTS exec_log (
                     id INTEGER NOT NULL,
                     exec_id INTEGER NOT NULL,
-                    group_id INTEGER NOT NULL,
+                    workspace_id INTEGER NOT NULL,
                     level INTEGER NOT NULL,
                     message VARCHAR(255) NOT NULL,
                     timestamp INTEGER NOT NULL,
@@ -43,16 +43,16 @@ class ExecLogSqliteRepository(
         return connection.execute<ExecLog>(
             """
             INSERT OR REPLACE INTO exec_log 
-                (id, exec_id, group_id, message, level, timestamp)
+                (id, exec_id, workspace_id, message, level, timestamp)
             VALUES
-                (:id, :exec_id, :group_id, :message, :level, :timestamp) 
+                (:id, :exec_id, :workspace_id, :message, :level, :timestamp) 
             RETURNING *;
         """.trimIndent()
         ) {
             query {
                 set("id", cmd.execLogId)
                 set("exec_id", cmd.execId)
-                set("group_id", cmd.groupId)
+                set("workspace_id", cmd.workspaceId)
                 set("message", cmd.message.value)
                 set("level", cmd.level.value)
                 set("timestamp", cmd.timestamp.value.toEpochMilli())
@@ -71,7 +71,7 @@ class ExecLogSqliteRepository(
                 exec_log
             WHERE
                 id < :afterId
-                ${query.groupIds()}
+                ${query.workspaceIds()}
                 ${query.ids()}
                 ${query.execIds()}
             ORDER BY id DESC
@@ -96,7 +96,7 @@ class ExecLogSqliteRepository(
                 exec_log
             WHERE
                 id < :afterId
-                ${query.groupIds()}
+                ${query.workspaceIds()}
                 ${query.ids()}
                 ${query.execIds()}
             """.trimIndent()
@@ -137,11 +137,11 @@ private fun ExecLogQuery.ids(): String {
     }
 }
 
-private fun ExecLogQuery.groupIds(): String {
-    return if (groupIds.isEmpty()) {
+private fun ExecLogQuery.workspaceIds(): String {
+    return if (workspaceIds.isEmpty()) {
         ""
     } else {
-        "AND group_id IN (${groupIds.joinToString(",") { "${it.value.value}" }})"
+        "AND workspace_id IN (${workspaceIds.joinToString(",") { "${it.value.value}" }})"
     }
 }
 
@@ -157,7 +157,7 @@ private fun NamedResultSet.toExecLog(): ExecLog {
     return ExecLog(
         id = getId("id", ::ExecLogId),
         execId = getId("exec_id", ::ExecId),
-        groupId = getId("group_id", ::GroupId),
+        workspaceId = getId("workspace_id", ::WorkspaceId),
         level = ExecLogLevel.of(getInt("level")),
         message = ExecLogMessage(getString("message")),
         timestamp = ExecLogTimestamp(Instant.ofEpochMilli(getLong("timestamp")))

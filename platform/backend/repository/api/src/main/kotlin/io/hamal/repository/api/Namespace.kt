@@ -2,7 +2,7 @@ package io.hamal.repository.api
 
 import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceName
 
@@ -10,7 +10,7 @@ data class Namespace(
     val cmdId: CmdId,
     override val id: NamespaceId,
     override val updatedAt: UpdatedAt,
-    val groupId: GroupId,
+    val workspaceId: WorkspaceId,
     val name: NamespaceName
 ) : DomainObject<NamespaceId>
 
@@ -25,7 +25,7 @@ interface NamespaceCmdRepository : CmdRepository {
     data class CreateCmd(
         val id: CmdId,
         val namespaceId: NamespaceId,
-        val groupId: GroupId,
+        val workspaceId: WorkspaceId,
         val name: NamespaceName
     )
 
@@ -46,7 +46,7 @@ interface NamespaceQueryRepository {
     fun list(namespaceIds: List<NamespaceId>) = list(
         NamespaceQuery(
             limit = Limit.all,
-            groupIds = listOf(),
+            workspaceIds = listOf(),
             namespaceIds = namespaceIds,
         )
     )
@@ -57,6 +57,6 @@ interface NamespaceQueryRepository {
         var afterId: NamespaceId = NamespaceId(SnowflakeId(Long.MAX_VALUE)),
         var limit: Limit = Limit(1),
         var namespaceIds: List<NamespaceId> = listOf(),
-        var groupIds: List<GroupId> = listOf()
+        var workspaceIds: List<WorkspaceId> = listOf()
     )
 }

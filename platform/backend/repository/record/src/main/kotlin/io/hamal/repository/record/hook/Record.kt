@@ -1,7 +1,7 @@
 package io.hamal.repository.record.hook
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.domain.vo.HookId
 import io.hamal.lib.domain.vo.HookName
 import io.hamal.lib.domain.vo.NamespaceId
@@ -25,7 +25,7 @@ sealed class HookRecord(
     data class Created(
         override val entityId: HookId,
         override val cmdId: CmdId,
-        val groupId: GroupId,
+        val workspaceId: WorkspaceId,
         val namespaceId: NamespaceId,
         val name: HookName
     ) : HookRecord()

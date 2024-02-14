@@ -13,7 +13,7 @@ data class EndpointEntity(
     override val id: EndpointId,
     override val sequence: RecordSequence,
     override val recordedAt: RecordedAt,
-    val groupId: GroupId,
+    val workspaceId: WorkspaceId,
 
     var namespaceId: NamespaceId? = null,
     var funcId: FuncId? = null,
@@ -49,7 +49,7 @@ data class EndpointEntity(
             cmdId = cmdId,
             id = id,
             updatedAt = recordedAt.toUpdatedAt(),
-            groupId = groupId,
+            workspaceId = workspaceId,
             namespaceId = namespaceId!!,
             funcId = funcId!!,
             name = name!!
@@ -64,7 +64,7 @@ fun List<EndpointRecord>.createEntity(): EndpointEntity {
 
     var result = EndpointEntity(
         id = firstRecord.entityId,
-        groupId = firstRecord.groupId,
+        workspaceId = firstRecord.workspaceId,
         cmdId = firstRecord.cmdId,
         sequence = firstRecord.sequence(),
         recordedAt = firstRecord.recordedAt()

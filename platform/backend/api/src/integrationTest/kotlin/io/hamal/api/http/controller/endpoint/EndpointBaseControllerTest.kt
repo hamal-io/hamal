@@ -58,10 +58,10 @@ internal sealed class EndpointBaseControllerTest : BaseControllerTest() {
 
     fun createNamespace(
         name: NamespaceName,
-        groupId: GroupId,
+        workspaceId: WorkspaceId,
     ): ApiNamespaceCreateRequested {
-        val response = httpTemplate.post("/v1/groups/{groupId}/namespaces")
-            .path("groupId", groupId)
+        val response = httpTemplate.post("/v1/workspaces/{workspaceId}/namespaces")
+            .path("workspaceId", workspaceId)
             .body(ApiNamespaceCreateRequest(name))
             .execute()
 
@@ -73,7 +73,7 @@ internal sealed class EndpointBaseControllerTest : BaseControllerTest() {
 
     fun listEndpoints(): ApiEndpointList {
         val listEndpointsResponse = httpTemplate.get("/v1/endpoints")
-            .parameter("group_ids", testGroup.id)
+            .parameter("workspace_ids", testWorkspace.id)
             .execute()
 
         assertThat(listEndpointsResponse.statusCode, equalTo(Ok))

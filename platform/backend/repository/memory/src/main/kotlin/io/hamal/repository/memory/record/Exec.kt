@@ -24,7 +24,7 @@ private object ExecCurrentProjection {
             .map { it.value }
             .reversed()
             .asSequence()
-            .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
+            .filter { if (query.workspaceIds.isEmpty()) true else query.workspaceIds.contains(it.workspaceId) }
             .filter { if (query.funcIds.isEmpty()) true else (it.correlation != null && query.funcIds.contains(it.correlation!!.funcId)) }
             .filter { if (query.namespaceIds.isEmpty()) true else query.namespaceIds.contains(it.namespaceId) }
             .dropWhile { it.id >= query.afterId }
@@ -38,7 +38,7 @@ private object ExecCurrentProjection {
                 .map { it.value }
                 .reversed()
                 .asSequence()
-                .filter { if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId) }
+                .filter { if (query.workspaceIds.isEmpty()) true else query.workspaceIds.contains(it.workspaceId) }
                 .filter { if (query.funcIds.isEmpty()) true else (it.correlation != null && query.funcIds.contains(it.correlation!!.funcId)) }
                 .filter { if (query.namespaceIds.isEmpty()) true else query.namespaceIds.contains(it.namespaceId) }
                 .dropWhile { it.id >= query.afterId }
@@ -92,7 +92,7 @@ class ExecMemoryRepository : RecordMemoryRepository<ExecId, ExecRecord, Exec>(
                         cmdId = cmd.id,
                         entityId = execId,
                         namespaceId = cmd.namespaceId,
-                        groupId = cmd.groupId,
+                        workspaceId = cmd.workspaceId,
                         correlation = cmd.correlation,
                         inputs = cmd.inputs,
                         code = cmd.code,

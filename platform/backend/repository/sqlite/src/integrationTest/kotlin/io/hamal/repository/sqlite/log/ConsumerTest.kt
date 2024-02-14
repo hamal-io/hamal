@@ -2,7 +2,7 @@
 //
 //import io.hamal.lib.common.domain.CmdId
 //import io.hamal.lib.domain.vo.NamespaceId
-//import io.hamal.lib.domain.vo.GroupId
+//import io.hamal.lib.domain.vo.WorkspaceId
 //import io.hamal.lib.domain.vo.TopicId
 //import io.hamal.lib.domain.vo.TopicName
 //import io.hamal.repository.api.log.AppenderImpl
@@ -23,7 +23,7 @@
 //            .use { brokerRepository ->
 //                val topic = brokerRepository.create(
 //                    CmdId(1),
-//                    TopicToCreate(TopicId(123), TopicName("topic"), NamespaceId(1), GroupId.root)
+//                    TopicToCreate(TopicId(123), TopicName("topic"), NamespaceId(1), WorkspaceId.root)
 //                )
 //                val appender = AppenderImpl<String>(brokerRepository)
 //                IntRange(1, 10).forEach { appender.append(CmdId(it), topic, "$it") }

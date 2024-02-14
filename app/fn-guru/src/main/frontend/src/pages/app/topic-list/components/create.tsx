@@ -63,7 +63,7 @@ const Create = () => {
 
     useEffect(() => {
         if (groupTopicRequested !== null) {
-            // navigate(`/groups/${groupId}/topics/${groupTopicRequested.topicId}`)
+            // navigate(`/groups/${workspaceId}/topics/${groupTopicRequested.topicId}`)
             setOpenDialog(false)
         }
     }, [groupTopicRequested, navigate]);

@@ -1,29 +1,29 @@
-package io.hamal.repository.record.group
+package io.hamal.repository.record.workspace
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.AccountId
-import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.domain.vo.GroupName
-import io.hamal.repository.api.Group
+import io.hamal.lib.domain.vo.WorkspaceId
+import io.hamal.lib.domain.vo.WorkspaceName
+import io.hamal.repository.api.Workspace
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordEntity
 import io.hamal.repository.record.RecordSequence
 import io.hamal.repository.record.RecordedAt
 
-data class GroupEntity(
-    override val id: GroupId,
+data class WorkspaceEntity(
+    override val id: WorkspaceId,
     override val cmdId: CmdId,
     override val sequence: RecordSequence,
     override val recordedAt: RecordedAt,
 
-    var name: GroupName?,
+    var name: WorkspaceName?,
     var creatorId: AccountId?
 
-) : RecordEntity<GroupId, GroupRecord, Group> {
+) : RecordEntity<WorkspaceId, WorkspaceRecord, Workspace> {
 
-    override fun apply(rec: GroupRecord): GroupEntity {
+    override fun apply(rec: WorkspaceRecord): WorkspaceEntity {
         return when (rec) {
-            is GroupRecord.Created -> copy(
+            is WorkspaceRecord.Created -> copy(
                 id = rec.entityId,
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
@@ -34,8 +34,8 @@ data class GroupEntity(
         }
     }
 
-    override fun toDomainObject(): Group {
-        return Group(
+    override fun toDomainObject(): Workspace {
+        return Workspace(
             cmdId = cmdId,
             id = id,
             updatedAt = recordedAt.toUpdatedAt(),
@@ -45,12 +45,12 @@ data class GroupEntity(
     }
 }
 
-fun List<GroupRecord>.createEntity(): GroupEntity {
+fun List<WorkspaceRecord>.createEntity(): WorkspaceEntity {
     check(isNotEmpty()) { "At least one record is required" }
     val firstRecord = first()
-    check(firstRecord is GroupRecord.Created)
+    check(firstRecord is WorkspaceRecord.Created)
 
-    var result = GroupEntity(
+    var result = WorkspaceEntity(
         id = firstRecord.entityId,
         cmdId = firstRecord.cmdId,
         sequence = firstRecord.sequence(),
@@ -66,8 +66,8 @@ fun List<GroupRecord>.createEntity(): GroupEntity {
     return result
 }
 
-object CreateGroupFromRecords : CreateDomainObject<GroupId, GroupRecord, Group> {
-    override fun invoke(recs: List<GroupRecord>): Group {
+object CreateWorkspaceFromRecords : CreateDomainObject<WorkspaceId, WorkspaceRecord, Workspace> {
+    override fun invoke(recs: List<WorkspaceRecord>): Workspace {
         return recs.createEntity().toDomainObject()
     }
 }

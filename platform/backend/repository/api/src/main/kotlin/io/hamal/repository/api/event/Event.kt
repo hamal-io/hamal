@@ -31,7 +31,7 @@ val internalEventClasses = listOf(
     FuncCreatedEvent::class,
     FuncUpdatedEvent::class,
     FuncDeployedEvent::class,
-    GroupCreatedEvent::class,
+    WorkspaceCreatedEvent::class,
     HookCreatedEvent::class,
     HookUpdatedEvent::class,
     StateUpdatedEvent::class,

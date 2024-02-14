@@ -4,7 +4,7 @@ import io.hamal.api.http.controller.accepted
 import io.hamal.core.adapter.BlueprintCreatePort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.AccountId
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.sdk.api.ApiBlueprintCreateRequest
 import io.hamal.lib.sdk.api.ApiRequested
 import io.hamal.lib.domain.request.BlueprintCreateRequested
@@ -19,11 +19,11 @@ class BlueprintCreateController(
     private val retry: Retry,
     private val createBlueprint: BlueprintCreatePort
 ) {
-    @PostMapping("/v1/groups/{groupId}/blueprints")
+    @PostMapping("/v1/workspaces/{workspaceId}/blueprints")
     fun createBlueprint(
-        @PathVariable("groupId") groupId: GroupId,
+        @PathVariable("workspaceId") workspaceId: WorkspaceId,
         @RequestBody req: ApiBlueprintCreateRequest
     ): ResponseEntity<ApiRequested> = retry {
-        createBlueprint(groupId, AccountId(1), req, BlueprintCreateRequested::accepted)
+        createBlueprint(workspaceId, AccountId(1), req, BlueprintCreateRequested::accepted)
     }
 }

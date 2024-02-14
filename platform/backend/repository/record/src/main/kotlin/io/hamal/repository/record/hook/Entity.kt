@@ -1,7 +1,7 @@
 package io.hamal.repository.record.hook
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.domain.vo.HookId
 import io.hamal.lib.domain.vo.HookName
 import io.hamal.lib.domain.vo.NamespaceId
@@ -16,7 +16,7 @@ data class HookEntity(
     override val id: HookId,
     override val sequence: RecordSequence,
     override val recordedAt: RecordedAt,
-    val groupId: GroupId,
+    val workspaceId: WorkspaceId,
 
     var namespaceId: NamespaceId? = null,
     var name: HookName? = null
@@ -50,7 +50,7 @@ data class HookEntity(
             cmdId = cmdId,
             id = id,
             updatedAt = recordedAt.toUpdatedAt(),
-            groupId = groupId,
+            workspaceId = workspaceId,
             namespaceId = namespaceId!!,
             name = name!!
         )
@@ -64,7 +64,7 @@ fun List<HookRecord>.createEntity(): HookEntity {
 
     var result = HookEntity(
         id = firstRecord.entityId,
-        groupId = firstRecord.groupId,
+        workspaceId = firstRecord.workspaceId,
         cmdId = firstRecord.cmdId,
         sequence = firstRecord.sequence(),
         recordedAt = firstRecord.recordedAt()

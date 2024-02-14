@@ -3,7 +3,7 @@ export interface FuncCreateRequested {
     status: string;
     funcId: string;
     namespaceId: string;
-    groupId: string;
+    workspaceId: string;
 }
 
 export interface FuncUpdateRequested {

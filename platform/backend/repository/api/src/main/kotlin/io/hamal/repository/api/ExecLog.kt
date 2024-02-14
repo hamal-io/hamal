@@ -14,7 +14,7 @@ interface ExecLogCmdRepository : CmdRepository {
         val execLogId: ExecLogId,
         val level: ExecLogLevel,
         val execId: ExecId,
-        val groupId: GroupId,
+        val workspaceId: WorkspaceId,
         val message: ExecLogMessage,
         val timestamp: ExecLogTimestamp
     )
@@ -29,14 +29,14 @@ interface ExecLogQueryRepository {
         var limit: Limit = Limit(1),
         var execLogIds: List<ExecLogId> = listOf(),
         var execIds: List<ExecId> = listOf(),
-        var groupIds: List<GroupId>
+        var workspaceIds: List<WorkspaceId>
     )
 }
 
 data class ExecLog(
     val id: ExecLogId,
     val execId: ExecId,
-    val groupId: GroupId,
+    val workspaceId: WorkspaceId,
     val level: ExecLogLevel,
     val message: ExecLogMessage,
     val timestamp: ExecLogTimestamp,

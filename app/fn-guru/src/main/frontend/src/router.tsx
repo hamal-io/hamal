@@ -15,7 +15,8 @@ import FuncDetailPage from "@/pages/app/func-detail";
 import HookListPage from "@/pages/app/hook-list";
 import ScheduleListPage from "@/pages/app/schedule-list";
 import Playground from "@/pages/app/playground";
-import GroupLayout from "@/components/app/layout/group";
+
+import WorkspaceLayout from "./components/app/layout/workspace";
 import NamespaceListPage from "./pages/app/namespace-list";
 import TopicListPage from "@/pages/app/topic-list";
 import TopicDetailPage from "@/pages/app/topic-detail";
@@ -36,74 +37,74 @@ export const router = createBrowserRouter([
     },
     {
         path: "/dashboard", element:
-            <GroupLayout>
+            <WorkspaceLayout>
                 <Dashboard/>
-            </GroupLayout>
+            </WorkspaceLayout>
     },
     {
         path: "/playground", element:
-            <GroupLayout>
+            <WorkspaceLayout>
                 <Playground/>
-            </GroupLayout>
+            </WorkspaceLayout>
     },
     {
         path: "/executions", element:
-            <GroupLayout>
+            <WorkspaceLayout>
                 <ExecListPage/>
-            </GroupLayout>
+            </WorkspaceLayout>
     },
     {
         path: "/executions/:execId", element:
-            <GroupLayout>
+            <WorkspaceLayout>
                 <ExecDetailPage/>
-            </GroupLayout>
+            </WorkspaceLayout>
     },
     {
         path: "/functions", element:
-            <GroupLayout>
+            <WorkspaceLayout>
                 <FuncListPage/>
-            </GroupLayout>
+            </WorkspaceLayout>
     },
     {
         path: "/functions/:funcId", element:
-            <GroupLayout>
+            <WorkspaceLayout>
                 <FuncDetailPage/>
-            </GroupLayout>
+            </WorkspaceLayout>
     },
     {
         path: "/webhooks", element:
-            <GroupLayout>
+            <WorkspaceLayout>
                 <HookListPage/>
-            </GroupLayout>
+            </WorkspaceLayout>
     },
     {
         path: "/endpoints", element:
-            <GroupLayout>
+            <WorkspaceLayout>
                 <EndpointListPage/>
-            </GroupLayout>
+            </WorkspaceLayout>
     },
     {
         path: "/schedules", element:
-            <GroupLayout>
+            <WorkspaceLayout>
                 <ScheduleListPage/>
-            </GroupLayout>
+            </WorkspaceLayout>
     },
     {
         path: "/namespaces", element:
-            <GroupLayout>
+            <WorkspaceLayout>
                 <NamespaceListPage/>
-            </GroupLayout>
+            </WorkspaceLayout>
     },
     {
         path: "/topics", element:
-            <GroupLayout>
+            <WorkspaceLayout>
                 <TopicListPage/>
-            </GroupLayout>
+            </WorkspaceLayout>
     },
     {
         path: "/topics/:topicId", element:
-            <GroupLayout>
+            <WorkspaceLayout>
                 <TopicDetailPage/>
-            </GroupLayout>
+            </WorkspaceLayout>
     }
 ]);

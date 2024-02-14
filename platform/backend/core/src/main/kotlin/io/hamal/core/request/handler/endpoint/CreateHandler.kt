@@ -28,7 +28,7 @@ private fun EndpointCreateHandler.createEndpoint(req: EndpointCreateRequested): 
         CreateCmd(
             id = req.cmdId(),
             endpointId = req.endpointId,
-            groupId = req.groupId,
+            workspaceId = req.workspaceId,
             funcId = func.id,
             namespaceId = func.namespaceId,
             name = req.name

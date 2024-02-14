@@ -6,7 +6,7 @@ import {string} from "zod";
 
 const unauthorized: UiState = {
     type: 'Unauthorized',
-    groupId: '',
+    workspaceId: '',
     namespaceId: '',
 }
 
@@ -16,14 +16,14 @@ export const useUiState = () => {
     })
 }
 
-type InitUiStateAction = (groupId: string, namespaceId: string) => void
+type InitUiStateAction = (workspaceId: string, namespaceId: string) => void
 export const useInitUiState = (): [InitUiStateAction] => {
     const [uiState, setUiState] = useUiState()
 
-    const fn = useCallback((groupId: string, namespaceId: string) => {
+    const fn = useCallback((workspaceId: string, namespaceId: string) => {
         setUiState({
             type: 'Authorized',
-            groupId,
+            workspaceId,
             namespaceId,
         })
     }, [uiState])
@@ -42,14 +42,14 @@ export const useResetUiState = (): [ResetUiStateAction] => {
     return [fn]
 }
 
-type ChangeGroupAction = (groupId: string, groupName: string) => void
+type ChangeGroupAction = (workspaceId: string, groupName: string) => void
 export const useChangeGroup = (): [ChangeGroupAction] => {
     const [uiState, setUiState] = useUiState()
 
-    const fn = useCallback((groupId: string) => {
+    const fn = useCallback((workspaceId: string) => {
         setUiState({
             ...uiState,
-            groupId
+            workspaceId
         })
     }, [uiState])
 

@@ -8,7 +8,7 @@ import io.hamal.lib.domain.request.ExtensionCreateRequested
 import io.hamal.lib.domain.request.ExtensionUpdateRequested
 import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.domain.vo.ExtensionId
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.domain.vo.RequestId
 import io.hamal.repository.api.*
 import io.hamal.repository.api.ExtensionQueryRepository.ExtensionQuery
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component
 
 interface ExtensionExtensionPort {
     operator fun <T : Any> invoke(
-        groupId: GroupId,
+        workspaceId: WorkspaceId,
         req: ExtensionCreateRequest,
         responseHandler: (ExtensionCreateRequested) -> T
     ): T
@@ -51,14 +51,14 @@ class ExtensionAdapter(
     private val requestCmdRepository: RequestCmdRepository
 ) : ExtensionPort {
     override fun <T : Any> invoke(
-        groupId: GroupId,
+        workspaceId: WorkspaceId,
         req: ExtensionCreateRequest,
         responseHandler: (ExtensionCreateRequested) -> T
     ): T {
         return ExtensionCreateRequested(
             id = generateDomainId(::RequestId),
             status = Submitted,
-            groupId = groupId,
+            workspaceId = workspaceId,
             extensionId = generateDomainId(::ExtensionId),
             name = req.name,
             codeId = generateDomainId(::CodeId),
@@ -82,7 +82,7 @@ class ExtensionAdapter(
         return ExtensionUpdateRequested(
             id = generateDomainId(::RequestId),
             status = Submitted,
-            groupId = extensionQueryRepository.get(extId).groupId,
+            workspaceId = extensionQueryRepository.get(extId).workspaceId,
             extensionId = extId,
             name = req.name,
             code = req.code

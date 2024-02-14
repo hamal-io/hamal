@@ -12,7 +12,7 @@ interface BlueprintCreateRequest {
 data class BlueprintCreateRequested(
     override val id: RequestId,
     override var status: RequestStatus,
-    val groupId: GroupId,
+    val workspaceId: WorkspaceId,
     val blueprintId: BlueprintId,
     val creatorId: AccountId,
     val name: BlueprintName,
@@ -30,7 +30,7 @@ interface BlueprintUpdateRequest {
 data class BlueprintUpdateRequested(
     override val id: RequestId,
     override var status: RequestStatus,
-    val groupId: GroupId,
+    val workspaceId: WorkspaceId,
     val blueprintId: BlueprintId,
     val name: BlueprintName?,
     val inputs: BlueprintInputs?,

@@ -9,7 +9,6 @@ import io.hamal.runner.connector.UnitOfWork
 import io.hamal.runner.run.AbstractExecuteTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 internal class EmitTest : AbstractExecuteTest() {
@@ -67,38 +66,7 @@ internal class EmitTest : AbstractExecuteTest() {
 
         with(eventsToEmit.first()) {
             assertThat(topicName, equalTo(TopicName("test-topic")))
-            assertThat(
-                payload, equalTo(
-                    EventPayload(
-                        HotObject.builder()
-                            .set("topic", "test-topic")
-                            .build()
-                    )
-                )
-            )
-        }
-    }
-
-
-    @Test
-    fun `Emit event with nil payload`() {
-        val runner = createTestRunner()
-        runner.run(unitOfWork("context.emit({ topic = 'test-topic', hamal=nil })"))
-
-        val eventsToEmit = runner.context.eventsToSubmit
-        assertThat(eventsToEmit, hasSize(1))
-
-        with(eventsToEmit.first()) {
-            assertThat(topicName, equalTo(TopicName("test-topic")))
-            assertThat(
-                payload, equalTo(
-                    EventPayload(
-                        HotObject.builder()
-                            .set("topic", "test-topic")
-                            .build()
-                    )
-                )
-            )
+            assertThat(payload, equalTo(EventPayload(HotObject.builder().build())))
         }
     }
 
@@ -117,7 +85,6 @@ internal class EmitTest : AbstractExecuteTest() {
                     EventPayload(
                         HotObject.builder()
                             .set("hamal", "rocks")
-                            .set("topic", "test-topic")
                             .build()
                     )
                 )
@@ -140,7 +107,6 @@ internal class EmitTest : AbstractExecuteTest() {
                     EventPayload(
                         HotObject.builder()
                             .set("answer", 42.0)
-                            .set("topic", "test-topic")
                             .build()
                     )
                 )
@@ -164,7 +130,6 @@ internal class EmitTest : AbstractExecuteTest() {
                         HotObject.builder()
                             .set("true_value", true)
                             .set("false_value", false)
-                            .set("topic", "test-topic")
                             .build()
                     )
                 )
@@ -173,7 +138,7 @@ internal class EmitTest : AbstractExecuteTest() {
     }
 
     @Test
-    @Disabled
+
     fun `Emit event with table payload`() {
         val runner = createTestRunner()
         runner.run(unitOfWork("context.emit({ topic = 'test-topic', nested_table = { value = 23 } })"))
@@ -192,7 +157,6 @@ internal class EmitTest : AbstractExecuteTest() {
                                     .set("value", 23)
                                     .build()
                             )
-                            .set("topic", "test-topic")
                             .build()
                     )
                 )
@@ -204,7 +168,7 @@ internal class EmitTest : AbstractExecuteTest() {
     private fun unitOfWork(code: String) = UnitOfWork(
         id = ExecId(1234),
         namespaceId = NamespaceId(9876),
-        groupId = GroupId(5432),
+        workspaceId = WorkspaceId(5432),
         inputs = ExecInputs(),
         state = State(),
         code = CodeValue(code),

@@ -19,7 +19,7 @@ class HttpConnector(
                 UnitOfWork(
                     id = it.id,
                     namespaceId = it.namespaceId,
-                    groupId = it.groupId,
+                    workspaceId = it.workspaceId,
                     inputs = it.inputs,
                     state = it.state,
                     code = it.code,

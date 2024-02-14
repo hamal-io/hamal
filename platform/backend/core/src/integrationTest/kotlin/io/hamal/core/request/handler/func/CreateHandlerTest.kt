@@ -24,7 +24,7 @@ internal class FuncCreateHandlerTest : BaseReqHandlerTest() {
         TimeUtils.withEpochMilli(123456789) {
             testInstance(submitCreateFuncReq)
 
-            funcQueryRepository.list(FuncQuery(groupIds = listOf())).also { funcs ->
+            funcQueryRepository.list(FuncQuery(workspaceIds = listOf())).also { funcs ->
                 assertThat(funcs, hasSize(1))
                 with(funcs.first()) {
                     assertThat(id, equalTo(FuncId(12345)))
@@ -63,7 +63,7 @@ internal class FuncCreateHandlerTest : BaseReqHandlerTest() {
         FuncCreateRequested(
             id = RequestId(1),
             status = Submitted,
-            groupId = testGroup.id,
+            workspaceId = testWorkspace.id,
             funcId = FuncId(12345),
             namespaceId = NamespaceId(23456),
             name = FuncName("awesome-func"),

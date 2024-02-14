@@ -13,7 +13,7 @@ data class AuthLoginEmailRequested(
     override var status: RequestStatus,
     val authId: AuthId,
     val accountId: AccountId,
-    val groupIds: List<GroupId>,
+    val workspaceIds: List<WorkspaceId>,
     val hash: PasswordHash,
     val token: AuthToken,
 ) : Requested()
@@ -33,7 +33,7 @@ data class AuthLoginMetaMaskRequested(
     override var status: RequestStatus,
     val authId: AuthId,
     val accountId: AccountId,
-    val groupIds: List<GroupId>,
+    val workspaceIds: List<WorkspaceId>,
     val token: AuthToken,
     val address: Web3Address,
     val signature: Web3Signature

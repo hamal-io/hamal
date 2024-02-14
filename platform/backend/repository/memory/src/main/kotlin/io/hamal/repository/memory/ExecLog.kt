@@ -19,7 +19,7 @@ class ExecLogMemoryRepository : ExecLogRepository {
             ExecLog(
                 id = cmd.execLogId,
                 execId = cmd.execId,
-                groupId = cmd.groupId,
+                workspaceId = cmd.workspaceId,
                 level = cmd.level,
                 message = cmd.message,
                 timestamp = cmd.timestamp
@@ -38,7 +38,7 @@ class ExecLogMemoryRepository : ExecLogRepository {
             store.reversed()
                 .asSequence()
                 .dropWhile { it.id >= query.afterId }
-                .filter { query.groupIds.isEmpty() || query.groupIds.contains(it.groupId) }
+                .filter { query.workspaceIds.isEmpty() || query.workspaceIds.contains(it.workspaceId) }
                 .filter { query.execIds.isEmpty() || query.execIds.contains(it.execId) }
                 .filter { query.execLogIds.isEmpty() || query.execLogIds.contains(it.id) }
                 .take(query.limit.value)
@@ -52,7 +52,7 @@ class ExecLogMemoryRepository : ExecLogRepository {
                 store.reversed()
                     .asSequence()
                     .dropWhile { it.id >= query.afterId }
-                    .filter { query.groupIds.isEmpty() || query.groupIds.contains(it.groupId) }
+                    .filter { query.workspaceIds.isEmpty() || query.workspaceIds.contains(it.workspaceId) }
                     .filter { query.execIds.isEmpty() || query.execIds.contains(it.execId) }
                     .filter { query.execLogIds.isEmpty() || query.execLogIds.contains(it.id) }
                     .count()

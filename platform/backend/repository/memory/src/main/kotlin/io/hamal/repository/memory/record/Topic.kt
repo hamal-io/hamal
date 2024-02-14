@@ -47,7 +47,7 @@ private object TopicCurrentProjection {
         return projection.filter { query.topicIds.isEmpty() || it.key in query.topicIds }.map { it.value }.reversed()
             .asSequence().filter { if (query.names.isEmpty()) true else query.names.contains(it.name) }
             .filter { if (query.types.isEmpty()) true else query.types.contains(it.type) }
-            .filter { if (query.groupIds.isEmpty()) { true } else { query.groupIds.contains(it.groupId) } }
+            .filter { if (query.workspaceIds.isEmpty()) { true } else { query.workspaceIds.contains(it.workspaceId) } }
             .filter { if (query.namespaceIds.isEmpty()) { true } else { query.namespaceIds.contains(it.namespaceId) } }
             .dropWhile { it.id >= query.afterId }.take(query.limit.value).toList()
     }
@@ -56,7 +56,7 @@ private object TopicCurrentProjection {
         return Count(projection.filter { query.topicIds.isEmpty() || it.key in query.topicIds }.map { it.value }
             .reversed().asSequence().filter { if (query.names.isEmpty()) true else query.names.contains(it.name) }
             .filter { if (query.types.isEmpty()) true else query.types.contains(it.type) }
-            .filter { if (query.groupIds.isEmpty()) { true } else { query.groupIds.contains(it.groupId) } }
+            .filter { if (query.workspaceIds.isEmpty()) { true } else { query.workspaceIds.contains(it.workspaceId) } }
             .filter { if (query.namespaceIds.isEmpty()) { true } else { query.namespaceIds.contains(it.namespaceId) } }
             .dropWhile { it.id >= query.afterId }.count())
     }
@@ -85,7 +85,7 @@ class TopicMemoryRepository(
                 TopicRecord.Created(
                     cmdId = cmd.id,
                     entityId = topicId,
-                    groupId = cmd.groupId,
+                    workspaceId = cmd.workspaceId,
                     namespaceId = cmd.namespaceId,
                     logTopicId = cmd.logTopicId,
                     name = cmd.name,

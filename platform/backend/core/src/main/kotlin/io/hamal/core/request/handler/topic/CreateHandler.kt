@@ -17,7 +17,7 @@ class TopicCreateHandler(
                 topicId = req.topicId,
                 logTopicId = req.logTopicId,
                 name = req.name,
-                groupId = req.groupId,
+                workspaceId = req.workspaceId,
                 namespaceId = req.namespaceId,
                 type = req.type
             )

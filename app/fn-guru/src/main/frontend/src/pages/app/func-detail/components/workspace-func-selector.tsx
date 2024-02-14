@@ -1,6 +1,6 @@
 import {Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger} from "@/components/ui/select.tsx";
 import {SelectValue} from "@radix-ui/react-select";
-import React, {FC, useContext, useEffect, useState} from "react";
+import React, {FC, useEffect, useState} from "react";
 
 import {cn} from "@/utils"
 import {useNavigate} from "react-router-dom";
@@ -11,7 +11,7 @@ type Props = {
     className?: string;
     funcId: string;
 }
-const GroupFuncSelector: FC<Props> = ({className, funcId}) => {
+const WorkspaceFuncSelector: FC<Props> = ({className, funcId}) => {
     const [uiState] = useUiState()
     const navigate = useNavigate()
     const [listFuncs, funcList, loading] = useFuncList()
@@ -47,4 +47,4 @@ const GroupFuncSelector: FC<Props> = ({className, funcId}) => {
     )
 }
 
-export default GroupFuncSelector
+export default WorkspaceFuncSelector

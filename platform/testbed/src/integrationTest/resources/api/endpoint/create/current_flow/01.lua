@@ -17,7 +17,7 @@ sys.await_completed(submitted_endpoint)
 assert(submitted_endpoint.id ~= nil)
 assert(submitted_endpoint.status == 'Submitted')
 assert(submitted_endpoint.endpoint_id ~= nil)
-assert(submitted_endpoint.group_id == '1')
+assert(submitted_endpoint.workspace_id == '1')
 assert(submitted_endpoint.func_id == func_one.func_id)
 
 endpoint = fail_on_error(sys.endpoints.get(submitted_endpoint.endpoint_id))

@@ -29,7 +29,7 @@ internal class EndpointGetControllerTest : EndpointBaseControllerTest() {
         val namespaceId = awaitCompleted(
             createNamespace(
                 name = NamespaceName("namespace"),
-                groupId = testGroup.id
+                workspaceId = testWorkspace.id
             )
         ).namespaceId
 

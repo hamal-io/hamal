@@ -22,7 +22,7 @@ internal object CreateExec : CreateDomainObject<ExecId, ExecRecord, Exec> {
             cmdId = firstRecord.cmdId,
             id = firstRecord.entityId,
             namespaceId = firstRecord.namespaceId,
-            groupId = firstRecord.groupId,
+            workspaceId = firstRecord.workspaceId,
             sequence = firstRecord.sequence(),
             recordedAt = firstRecord.recordedAt()
         )
@@ -60,7 +60,7 @@ class ExecSqliteRepository(
                         cmdId = cmdId,
                         entityId = execId,
                         namespaceId = cmd.namespaceId,
-                        groupId = cmd.groupId,
+                        workspaceId = cmd.workspaceId,
                         correlation = cmd.correlation,
                         inputs = cmd.inputs,
                         code = cmd.code,

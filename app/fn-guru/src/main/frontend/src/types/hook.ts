@@ -2,7 +2,7 @@ export interface HookCreateRequested {
     id: string;
     hookId: string;
     namespaceId: string;
-    groupId: string;
+    workspaceId: string;
 }
 
 export interface HookList {

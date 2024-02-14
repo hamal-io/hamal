@@ -2,7 +2,7 @@ export interface NamespaceCreateRequested {
     id: string;
     status: string;
     namespaceIdId: string;
-    groupId: string;
+    workspaceId: string;
 }
 
 export interface Namespace {

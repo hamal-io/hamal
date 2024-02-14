@@ -12,11 +12,11 @@ const NamespaceListPage: React.FC = () => {
 
     useEffect(() => {
         const abortController = new AbortController()
-        listNamespaces(uiState.groupId, abortController)
+        listNamespaces(uiState.workspaceId, abortController)
         return () => {
             abortController.abort()
         }
-    }, [uiState.groupId]);
+    }, [uiState.workspaceId]);
 
     if (namespaceList == null || isLoading) return "Loading..."
     if (error != null) return "Error -"

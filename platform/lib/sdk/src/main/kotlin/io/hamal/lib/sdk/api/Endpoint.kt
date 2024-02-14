@@ -23,7 +23,7 @@ data class ApiEndpointCreateRequested(
     override val id: RequestId,
     override val status: RequestStatus,
     val endpointId: EndpointId,
-    val groupId: GroupId,
+    val workspaceId: WorkspaceId,
     val funcId: FuncId
 ) : ApiRequested()
 
@@ -76,14 +76,14 @@ interface ApiEndpointService {
         var limit: Limit = Limit(25),
         var endpointIds: List<EndpointId> = listOf(),
         var namespaceIds: List<NamespaceId> = listOf(),
-        var groupIds: List<GroupId> = listOf()
+        var workspaceIds: List<WorkspaceId> = listOf()
     ) {
         fun setRequestParameters(req: HttpRequest) {
             req.parameter("after_id", afterId)
             req.parameter("limit", limit)
             if (endpointIds.isNotEmpty()) req.parameter("endpoint_ids", endpointIds)
             if (namespaceIds.isNotEmpty()) req.parameter("namespace_ids", namespaceIds)
-            if (groupIds.isNotEmpty()) req.parameter("group_ids", groupIds)
+            if (workspaceIds.isNotEmpty()) req.parameter("workspace_ids", workspaceIds)
         }
     }
 }

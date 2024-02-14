@@ -23,7 +23,7 @@ internal class RequestListController(private val listReqs: RequestListPort) {
             RequestQueryRepository.RequestQuery(
                 afterId = afterId,
                 limit = limit
-                // groupId = ...
+                // workspaceId = ...
             ),
         ) { reqs -> ResponseEntity.ok(ApiRequestList(reqs.map(Requested::toApiRequested))) }
     }

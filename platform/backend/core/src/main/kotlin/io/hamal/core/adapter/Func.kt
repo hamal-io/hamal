@@ -80,7 +80,7 @@ class FuncAdapter(
         return FuncCreateRequested(
             id = generateDomainId(::RequestId),
             status = RequestStatus.Submitted,
-            groupId = namespace.groupId,
+            workspaceId = namespace.workspaceId,
             funcId = generateDomainId(::FuncId),
             namespaceId = namespaceId,
             name = req.name,
@@ -110,7 +110,7 @@ class FuncAdapter(
             status = RequestStatus.Submitted,
             execId = generateDomainId(::ExecId),
             namespaceId = func.namespaceId,
-            groupId = func.groupId,
+            workspaceId = func.workspaceId,
             funcId = funcId,
             correlationId = req.correlationId,
             inputs = req.inputs,
@@ -135,7 +135,7 @@ class FuncAdapter(
             status = RequestStatus.Submitted,
             execId = generateDomainId(::ExecId),
             namespaceId = func.namespaceId,
-            groupId = func.groupId,
+            workspaceId = func.workspaceId,
             funcId = funcId,
             correlationId = req.correlationId,
             inputs = req.inputs,
@@ -177,7 +177,7 @@ class FuncAdapter(
         return FuncUpdateRequested(
             id = generateDomainId(::RequestId),
             status = RequestStatus.Submitted,
-            groupId = func.groupId,
+            workspaceId = func.workspaceId,
             funcId = funcId,
             name = req.name,
             inputs = req.inputs,
@@ -197,7 +197,7 @@ class FuncAdapter(
         return FuncDeployRequested(
             id = generateDomainId(::RequestId),
             status = RequestStatus.Submitted,
-            groupId = func.groupId,
+            workspaceId = func.workspaceId,
             funcId = funcId,
             version = req.version,
             message = req.message

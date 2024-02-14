@@ -29,7 +29,7 @@ private fun ExtensionCreateHandler.createExtension(req: ExtensionCreateRequested
         CodeCmdRepository.CreateCmd(
             id = req.cmdId(),
             codeId = req.codeId,
-            groupId = req.groupId,
+            workspaceId = req.workspaceId,
             value = req.code
         )
     )
@@ -37,7 +37,7 @@ private fun ExtensionCreateHandler.createExtension(req: ExtensionCreateRequested
         CreateCmd(
             id = req.cmdId(),
             extId = req.extensionId,
-            groupId = req.groupId,
+            workspaceId = req.workspaceId,
             name = req.name,
             code = ExtensionCode(
                 code.id,

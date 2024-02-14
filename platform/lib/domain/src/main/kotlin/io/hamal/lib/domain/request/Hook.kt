@@ -12,7 +12,7 @@ data class HookCreateRequested(
     override var status: RequestStatus,
     val hookId: HookId,
     val namespaceId: NamespaceId,
-    val groupId: GroupId,
+    val workspaceId: WorkspaceId,
     val name: HookName,
 ) : Requested()
 
@@ -25,7 +25,7 @@ data class HookUpdateRequested(
     override val id: RequestId,
     override var status: RequestStatus,
     val hookId: HookId,
-    val groupId: GroupId,
+    val workspaceId: WorkspaceId,
     val name: HookName?,
 ) : Requested()
 
@@ -33,6 +33,6 @@ data class HookInvokeRequested(
     override val id: RequestId,
     override var status: RequestStatus,
     val hookId: HookId,
-    val groupId: GroupId,
+    val workspaceId: WorkspaceId,
     val invocation: HookInvocation
 ) : Requested()

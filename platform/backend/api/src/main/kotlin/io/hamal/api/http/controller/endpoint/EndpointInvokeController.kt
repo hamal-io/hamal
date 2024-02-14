@@ -81,7 +81,7 @@ internal class EndpointInvokeController(
                 status = Submitted,
                 execId = execId,
                 namespaceId = func.namespaceId,
-                groupId = func.groupId,
+                workspaceId = func.workspaceId,
                 inputs = InvocationInputs(),
                 code = ExecCode(
                     id = func.code.id,

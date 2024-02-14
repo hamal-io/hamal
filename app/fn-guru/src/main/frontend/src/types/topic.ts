@@ -2,10 +2,10 @@ export interface TopicCreateRequested {
     id: string;
     status: string;
     topicId: string;
-    groupId: string;
+    workspaceId: string;
 }
 
-export type TopicType = 'Internal' | 'Namespace' | 'Group' | 'Public'
+export type TopicType = 'Internal' | 'Namespace' | 'Workspace' | 'Public'
 
 export interface Topic {
     id: string;

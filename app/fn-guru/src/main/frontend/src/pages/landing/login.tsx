@@ -115,7 +115,7 @@ const MetaMaskButton: FC<MetaMaskButtonProps> = ({loading, setLoading}) => {
 
     useEffect(() => {
         if (token != null) {
-            navigate("/groups", {replace: true})
+            navigate("/workspaces", {replace: true})
         }
     }, [token]);
 

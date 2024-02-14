@@ -6,7 +6,7 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.request.AccountCreateRequested
 import io.hamal.lib.domain.vo.AuthTokenExpiresAt
-import io.hamal.lib.domain.vo.GroupName
+import io.hamal.lib.domain.vo.WorkspaceName
 import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.repository.api.*
 import io.hamal.repository.api.event.AccountCreatedEvent
@@ -17,7 +17,7 @@ import java.time.temporal.ChronoUnit
 class AccountCreateEmailHandler(
     val accountCmdRepository: AccountCmdRepository,
     val authCmdRepository: AuthCmdRepository,
-    val groupCmdRepository: GroupCmdRepository,
+    val workspaceCmdRepository: WorkspaceCmdRepository,
     val namespaceCmdRepository: NamespaceCmdRepository,
     val eventEmitter: InternalEventEmitter
 ) : io.hamal.core.request.RequestHandler<AccountCreateRequested>(AccountCreateRequested::class) {
@@ -25,7 +25,7 @@ class AccountCreateEmailHandler(
     override fun invoke(req: AccountCreateRequested) {
         createAccount(req)
             .also { emitEvent(req.cmdId(), it) }
-            .also { createGroup(req) }
+            .also { createWorkspace(req) }
             .also { createNamespace(req) }
             .also { createEmailAuth(req) }
             .also { createTokenAuth(req) }
@@ -43,12 +43,12 @@ private fun AccountCreateEmailHandler.createAccount(req: AccountCreateRequested)
     )
 }
 
-private fun AccountCreateEmailHandler.createGroup(req: AccountCreateRequested): Group {
-    return groupCmdRepository.create(
-        GroupCmdRepository.CreateCmd(
+private fun AccountCreateEmailHandler.createWorkspace(req: AccountCreateRequested): Workspace {
+    return workspaceCmdRepository.create(
+        WorkspaceCmdRepository.CreateCmd(
             id = req.cmdId(),
-            groupId = req.groupId,
-            name = GroupName("Group ${req.groupId}"),
+            workspaceId = req.workspaceId,
+            name = WorkspaceName("Workspace ${req.workspaceId}"),
             creatorId = req.accountId
         )
     )
@@ -59,7 +59,7 @@ private fun AccountCreateEmailHandler.createNamespace(req: AccountCreateRequeste
         NamespaceCmdRepository.CreateCmd(
             id = req.cmdId(),
             namespaceId = req.namespaceId,
-            groupId = req.groupId,
+            workspaceId = req.workspaceId,
             name = NamespaceName.default
         )
     )

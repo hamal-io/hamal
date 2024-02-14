@@ -51,7 +51,7 @@ internal class EndpointCreateControllerTest : EndpointBaseControllerTest() {
         val namespaceId = awaitCompleted(
             createNamespace(
                 name = NamespaceName("namespace"),
-                groupId = testGroup.id
+                workspaceId = testWorkspace.id
             )
         ).namespaceId
 
@@ -81,14 +81,14 @@ internal class EndpointCreateControllerTest : EndpointBaseControllerTest() {
         val namespaceId = awaitCompleted(
             createNamespace(
                 name = NamespaceName("namespace"),
-                groupId = testGroup.id
+                workspaceId = testWorkspace.id
             )
         ).namespaceId
 
         val anotherNamespaceId = awaitCompleted(
             createNamespace(
                 name = NamespaceName("another-namespace"),
-                groupId = testGroup.id
+                workspaceId = testWorkspace.id
             )
         ).namespaceId
 

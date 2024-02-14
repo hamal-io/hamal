@@ -15,7 +15,7 @@ data class TopicCreateRequested(
     override var status: RequestStatus,
     val topicId: TopicId,
     val logTopicId: LogTopicId,
-    val groupId: GroupId,
+    val workspaceId: WorkspaceId,
     val namespaceId: NamespaceId,
     val name: TopicName,
     val type: TopicType

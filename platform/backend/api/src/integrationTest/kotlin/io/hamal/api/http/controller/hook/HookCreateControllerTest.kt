@@ -44,7 +44,7 @@ internal class HookCreateControllerTest : HookBaseControllerTest() {
             CreateCmd(
                 id = CmdId(1),
                 namespaceId = NamespaceId(2345),
-                groupId = testGroup.id,
+                workspaceId = testWorkspace.id,
                 name = NamespaceName("hamal::namespace")
             )
         )
@@ -69,7 +69,7 @@ internal class HookCreateControllerTest : HookBaseControllerTest() {
     fun `Tries to create hook with namespace which does not exist`() {
 
         val response = httpTemplate.post("/v1/namespaces/12345/hooks")
-            .path("groupId", testGroup.id)
+            .path("workspaceId", testWorkspace.id)
             .body(ApiHookCreateRequest(HookName("test-hook")))
             .execute()
 

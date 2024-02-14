@@ -7,7 +7,7 @@ import {useResetUiState} from "@/hook/ui-state.ts";
 const unauthorized: Auth = {
     type: 'Unauthorized',
     accountId: '',
-    groupId: '',
+    workspaceId: '',
     token: ''
 }
 
@@ -126,7 +126,7 @@ export const useMetaMaskToken = (): [MetaMaskTokenAction, string, boolean, Error
                     setAuth({
                         type: 'User',
                         accountId: data.accountId,
-                        groupId: data.groupIds[0],
+                        workspaceId: data.workspaceIds[0],
                         token: data.token,
                     })
 

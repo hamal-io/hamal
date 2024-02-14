@@ -67,8 +67,8 @@ object ValueObjectJsonModule : JsonModule() {
         this[DeployMessage::class] = ValueObjectStringAdapter(::DeployMessage)
         this[DeployedAt::class] = ValueObjectInstantAdapter(::DeployedAt)
 
-        this[GroupId::class] = ValueObjectIdAdapter(::GroupId)
-        this[GroupName::class] = ValueObjectStringAdapter(::GroupName)
+        this[WorkspaceId::class] = ValueObjectIdAdapter(::WorkspaceId)
+        this[WorkspaceName::class] = ValueObjectStringAdapter(::WorkspaceName)
 
         this[HookId::class] = ValueObjectIdAdapter(::HookId)
         this[HookName::class] = ValueObjectStringAdapter(::HookName)

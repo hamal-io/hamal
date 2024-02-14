@@ -22,7 +22,7 @@ internal object CreateEndpoint : CreateDomainObject<EndpointId, EndpointRecord, 
         var result = EndpointEntity(
             cmdId = firstRecord.cmdId,
             id = firstRecord.entityId,
-            groupId = firstRecord.groupId,
+            workspaceId = firstRecord.workspaceId,
             sequence = firstRecord.sequence(),
             recordedAt = firstRecord.recordedAt()
         )
@@ -59,7 +59,7 @@ class EndpointSqliteRepository(
                     EndpointRecord.Created(
                         cmdId = cmdId,
                         entityId = endpointId,
-                        groupId = cmd.groupId,
+                        workspaceId = cmd.workspaceId,
                         namespaceId = cmd.namespaceId,
                         name = cmd.name,
                         funcId = cmd.funcId,

@@ -42,7 +42,7 @@ class ExecInvokeHandler(
                 id = req.cmdId(),
                 execId = req.execId,
                 namespaceId = req.namespaceId,
-                groupId = req.groupId,
+                workspaceId = req.workspaceId,
                 correlation = correlation,
                 inputs = merge(func?.inputs ?: FuncInputs(), req.inputs),
                 code = req.code,

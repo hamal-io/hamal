@@ -1,12 +1,12 @@
 import React, {createContext, FC, ReactNode, useEffect} from 'react'
 import Authenticated from "@/components/app/layout/authenticated";
-import Sidebar from "@/components/app/layout/group/sidebar.tsx";
+import Sidebar from "@/components/app/layout/workspace/sidebar.tsx";
 
 type Props = {
     children: ReactNode;
 }
 
-const GroupLayout: FC<Props> = ({children}) => {
+const WorkspaceLayout: FC<Props> = ({children}) => {
     return (
         <Authenticated>
             <div className="flex flex-row min-h-screen ">
@@ -19,5 +19,5 @@ const GroupLayout: FC<Props> = ({children}) => {
     );
 }
 
-export default GroupLayout;
+export default WorkspaceLayout;
 

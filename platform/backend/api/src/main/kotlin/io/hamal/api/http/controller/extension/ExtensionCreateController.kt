@@ -4,7 +4,7 @@ import io.hamal.api.http.controller.accepted
 import io.hamal.core.adapter.ExtensionExtensionPort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.request.ExtensionCreateRequested
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.sdk.api.ApiExtensionCreateRequest
 import io.hamal.lib.sdk.api.ApiRequested
 import org.springframework.http.ResponseEntity
@@ -18,12 +18,12 @@ internal class ExtensionCreateController(
     private val retry: Retry,
     private val createExtension: ExtensionExtensionPort
 ) {
-    @PostMapping("/v1/groups/{groupId}/extensions")
+    @PostMapping("/v1/workspaces/{workspaceId}/extensions")
     fun createExtension(
-        @PathVariable("groupId") groupId: GroupId,
+        @PathVariable("workspaceId") workspaceId: WorkspaceId,
         @RequestBody req: ApiExtensionCreateRequest
     ): ResponseEntity<ApiRequested> = retry {
-        createExtension(groupId, req, ExtensionCreateRequested::accepted)
+        createExtension(workspaceId, req, ExtensionCreateRequested::accepted)
     }
 
 }

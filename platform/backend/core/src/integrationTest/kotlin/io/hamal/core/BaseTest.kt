@@ -68,7 +68,7 @@ internal abstract class BaseTest {
     lateinit var funcCmdRepository: FuncCmdRepository
 
     @Autowired
-    lateinit var groupCmdRepository: GroupCmdRepository
+    lateinit var workspaceCmdRepository: WorkspaceCmdRepository
 
     @Autowired
     lateinit var hookRepository: HookRepository
@@ -120,7 +120,7 @@ internal abstract class BaseTest {
 
     lateinit var testAccount: Account
     lateinit var testAuthToken: AuthToken
-    lateinit var testGroup: Group
+    lateinit var testWorkspace: Workspace
     lateinit var testNamespace: Namespace
 
     @BeforeEach
@@ -133,7 +133,7 @@ internal abstract class BaseTest {
         extensionCmdRepository.clear()
         funcCmdRepository.clear()
         namespaceCmdRepository.clear()
-        groupCmdRepository.clear()
+        workspaceCmdRepository.clear()
         hookRepository.clear()
         requestCmdRepository.clear()
         stateCmdRepository.clear()
@@ -162,11 +162,11 @@ internal abstract class BaseTest {
             )
         ) as TokenAuth).token
 
-        testGroup = groupCmdRepository.create(
-            GroupCmdRepository.CreateCmd(
+        testWorkspace = workspaceCmdRepository.create(
+            WorkspaceCmdRepository.CreateCmd(
                 id = CmdId(4),
-                groupId = generateDomainId(::GroupId),
-                name = GroupName("test-group"),
+                workspaceId = generateDomainId(::WorkspaceId),
+                name = WorkspaceName("test-workspace"),
                 creatorId = testAccount.id
             )
         )
@@ -175,7 +175,7 @@ internal abstract class BaseTest {
             NamespaceCmdRepository.CreateCmd(
                 id = CmdId(1),
                 namespaceId = generateDomainId(::NamespaceId),
-                groupId = testGroup.id,
+                workspaceId = testWorkspace.id,
                 name = NamespaceName("hamal")
             )
         )
@@ -197,7 +197,7 @@ internal abstract class BaseTest {
             PlanCmd(
                 id = CmdId(1),
                 execId = execId,
-                groupId = testGroup.id,
+                workspaceId = testWorkspace.id,
                 namespaceId = testNamespace.id,
                 correlation = correlation,
                 inputs = ExecInputs(),

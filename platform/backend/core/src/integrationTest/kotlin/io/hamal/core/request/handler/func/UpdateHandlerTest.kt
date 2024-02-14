@@ -45,7 +45,7 @@ internal class FuncUpdateHandlerTest : BaseReqHandlerTest() {
         FuncUpdateRequested(
             id = RequestId(500),
             status = RequestStatus.Submitted,
-            groupId = testGroup.id,
+            workspaceId = testWorkspace.id,
             funcId = FuncId(1),
             name = FuncName("Func-update"),
             inputs = FuncInputs(HotObject.builder().set("hamal", "rocks").build()),
@@ -58,7 +58,7 @@ internal class FuncUpdateHandlerTest : BaseReqHandlerTest() {
             CodeCmdRepository.CreateCmd(
                 id = NextCommandId(),
                 codeId = codeId,
-                groupId = testGroup.id,
+                workspaceId = testWorkspace.id,
                 value = CodeValue("1 + 1")
             )
         )
@@ -67,7 +67,7 @@ internal class FuncUpdateHandlerTest : BaseReqHandlerTest() {
             FuncCmdRepository.CreateCmd(
                 id = NextCommandId(),
                 funcId = FuncId(1),
-                groupId = testGroup.id,
+                workspaceId = testWorkspace.id,
                 namespaceId = testNamespace.id,
                 name = FuncName("Func-base"),
                 inputs = FuncInputs(),

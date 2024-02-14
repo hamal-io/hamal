@@ -75,7 +75,7 @@ abstract class AbstractRunnerTest {
     ) = UnitOfWork(
         id = ExecId(1234),
         namespaceId = NamespaceId(98876),
-        groupId = GroupId(5432),
+        workspaceId = WorkspaceId(5432),
         inputs = inputs,
         state = State(),
         code = CodeValue(code),

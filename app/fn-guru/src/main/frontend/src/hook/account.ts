@@ -37,7 +37,7 @@ export const useAccountCreateAnonymous = (): [AccountCreateAnonymousAction, Logi
                     setAuth({
                         type: 'Anonymous',
                         accountId: data.accountId,
-                        groupId: data.groupIds[0],
+                        workspaceId: data.workspaceIds[0],
                         token: data.token,
                     })
                 })
@@ -93,11 +93,11 @@ export const useAccountLogin = (): [AccountLoginAction, LoginRequested, boolean,
                     setAuth({
                         type: 'User',
                         accountId: data.accountId,
-                        groupId: data.groupIds[0],
+                        workspaceId: data.workspaceIds[0],
                         token: data.token,
                     })
 
-                    initUiState(data.groupIds[0], data.groupIds[0])
+                    initUiState(data.workspaceIds[0], data.workspaceIds[0])
                 })
             })
             .catch(error => {
@@ -152,7 +152,7 @@ export const useAccountConvert = (): [AccountConvertAction, AccountConvertReques
                     setAuth({
                         type: 'User',
                         accountId: auth.accountId,
-                        groupId: auth.groupId,
+                        workspaceId: auth.workspaceId,
                         token: data.token,
                     })
                 })

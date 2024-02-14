@@ -29,7 +29,7 @@ private object CodeCurrentProjection {
             .reversed()
             .asSequence()
             .filter {
-                if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId)
+                if (query.workspaceIds.isEmpty()) true else query.workspaceIds.contains(it.workspaceId)
             }.dropWhile { it.id >= query.afterId }
             .take(query.limit.value)
             .toList()
@@ -42,7 +42,7 @@ private object CodeCurrentProjection {
                 .reversed()
                 .asSequence()
                 .filter {
-                    if (query.groupIds.isEmpty()) true else query.groupIds.contains(it.groupId)
+                    if (query.workspaceIds.isEmpty()) true else query.workspaceIds.contains(it.workspaceId)
                 }.dropWhile { it.id >= query.afterId }
                 .count()
                 .toLong()
@@ -72,7 +72,7 @@ class CodeMemoryRepository : RecordMemoryRepository<CodeId, CodeRecord, Code>(
                     CodeRecord.Created(
                         cmdId = cmd.id,
                         entityId = codeId,
-                        groupId = cmd.groupId,
+                        workspaceId = cmd.workspaceId,
                         value = cmd.value,
                         type = cmd.type
                     )

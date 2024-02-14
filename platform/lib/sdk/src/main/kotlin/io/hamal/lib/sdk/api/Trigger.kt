@@ -35,7 +35,7 @@ data class ApiTriggerCreateRequested(
     override val id: RequestId,
     override val status: RequestStatus,
     val triggerId: TriggerId,
-    val groupId: GroupId,
+    val workspaceId: WorkspaceId,
     val namespaceId: NamespaceId
 ) : ApiRequested()
 
@@ -278,14 +278,14 @@ interface ApiTriggerService {
         var limit: Limit = Limit(25),
         var funcIds: List<FuncId> = listOf(),
         var namespaceIds: List<NamespaceId> = listOf(),
-        var groupIds: List<GroupId> = listOf()
+        var workspaceIds: List<WorkspaceId> = listOf()
     ) {
         fun setRequestParameters(req: HttpRequest) {
             req.parameter("after_id", afterId)
             req.parameter("limit", limit)
             if (funcIds.isNotEmpty()) req.parameter("func_ids", funcIds)
             if (namespaceIds.isNotEmpty()) req.parameter("namespace_ids", namespaceIds)
-            if (groupIds.isNotEmpty()) req.parameter("group_ids", groupIds)
+            if (workspaceIds.isNotEmpty()) req.parameter("workspace_ids", workspaceIds)
         }
     }
 }

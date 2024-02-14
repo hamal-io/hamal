@@ -25,7 +25,7 @@ sealed class TopicRecord(
         override val entityId: TopicId,
         val name: TopicName,
         val logTopicId: LogTopicId,
-        val groupId: GroupId,
+        val workspaceId: WorkspaceId,
         val namespaceId: NamespaceId,
         val type: TopicType
     ) : TopicRecord()

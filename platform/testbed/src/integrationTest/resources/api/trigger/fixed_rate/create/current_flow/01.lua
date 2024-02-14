@@ -14,7 +14,7 @@ sys.await_completed(req_one)
 assert(req_one.id ~= nil)
 assert(req_one.status == 'Submitted')
 assert(req_one.trigger_id ~= nil)
-assert(req_one.group_id == '1')
+assert(req_one.workspace_id == '1')
 assert(req_one.namespace_id == '1')
 
 req_two = fail_on_error(sys.triggers.get(req_one.trigger_id))
