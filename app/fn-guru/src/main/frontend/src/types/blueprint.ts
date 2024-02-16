@@ -10,9 +10,7 @@ export interface BlueprintList {
 }
 
 export interface BlueprintListItem {
-    id: string;
-    name: string;
-    description: {
-        value: string;
-    }
+    id: string
+    name: string
+    description: string
 }
