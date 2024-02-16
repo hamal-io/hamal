@@ -21,6 +21,7 @@ internal class BlueprintCreateHandlerTest : BaseReqHandlerTest() {
             assertThat(name, equalTo(BlueprintName("TestBlueprint")))
             assertThat(value, equalTo(CodeValue("1 + 1")))
             assertThat(creatorId, equalTo(testAccount.id))
+            assertThat(description, equalTo(BlueprintDescription("TestDescription")))
         }
     }
 
@@ -28,12 +29,13 @@ internal class BlueprintCreateHandlerTest : BaseReqHandlerTest() {
         BlueprintCreateRequested(
             id = RequestId(1),
             status = RequestStatus.Submitted,
-            workspaceId = testWorkspace.id,
             blueprintId = BlueprintId(123),
             name = BlueprintName("TestBlueprint"),
             inputs = BlueprintInputs(HotObject.builder().set("hamal", "rocks").build()),
             value = CodeValue("1 + 1"),
-            creatorId = testAccount.id
+            creatorId = testAccount.id,
+            description = BlueprintDescription("TestDescription")
+
         )
     }
 

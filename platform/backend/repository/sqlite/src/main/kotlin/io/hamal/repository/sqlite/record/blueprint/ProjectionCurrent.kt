@@ -18,13 +18,12 @@ object ProjectionCurrent : ProjectionSqlite<BlueprintId, BlueprintRecord, Bluepr
         tx.execute(
             """
                 INSERT OR REPLACE INTO current
-                    (id, workspace_id, data) 
+                    (id, data) 
                 VALUES
-                    (:id, :workspaceId, :data)
+                    (:id, :data)
             """.trimIndent()
         ) {
             set("id", obj.id)
-            set("workspaceId", obj.workspaceId)
             set("data", json.serializeAndCompress(obj))
         }
     }
@@ -34,7 +33,6 @@ object ProjectionCurrent : ProjectionSqlite<BlueprintId, BlueprintRecord, Bluepr
             """
             CREATE TABLE IF NOT EXISTS current (
                  id             INTEGER NOT NULL,
-                 workspace_id       INTEGER NOT NULL,
                  data           BLOB NOT NULL,
                  PRIMARY KEY    (id)
             );
@@ -76,7 +74,6 @@ object ProjectionCurrent : ProjectionSqlite<BlueprintId, BlueprintRecord, Bluepr
             WHERE
                 id < :afterId
                 ${query.ids()}
-                ${query.workspaceIds()}
             ORDER BY id DESC
             LIMIT :limit
         """.trimIndent()
@@ -102,7 +99,6 @@ object ProjectionCurrent : ProjectionSqlite<BlueprintId, BlueprintRecord, Bluepr
             WHERE
                 id < :afterId
                 ${query.ids()}
-                ${query.workspaceIds()}
         """.trimIndent()
             ) {
                 query {
@@ -120,14 +116,6 @@ object ProjectionCurrent : ProjectionSqlite<BlueprintId, BlueprintRecord, Bluepr
             ""
         } else {
             "AND id IN (${blueprintIds.joinToString(",") { "${it.value.value}" }})"
-        }
-    }
-
-    private fun BlueprintQuery.workspaceIds(): String {
-        return if (workspaceIds.isEmpty()) {
-            ""
-        } else {
-            "AND workspace_id IN (${workspaceIds.joinToString(",") { "${it.value.value}" }})"
         }
     }
 }

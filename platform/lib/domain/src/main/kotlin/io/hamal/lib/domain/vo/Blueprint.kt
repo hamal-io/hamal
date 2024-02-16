@@ -14,4 +14,10 @@ class BlueprintId(override val value: SnowflakeId) : ValueObjectId() {
 
 class BlueprintName(override val value: String) : ValueObjectString()
 
+class BlueprintDescription(override val value: String) : ValueObjectString() {
+    companion object {
+        val empty = BlueprintDescription("")
+    }
+}
+
 class BlueprintInputs(override val value: HotObject = HotObject.empty) : ValueObjectHotObject()
