@@ -11,7 +11,7 @@ const WorkspaceLayout: FC<Props> = ({children}) => {
         <Authenticated>
             <div className="flex flex-row min-h-screen ">
                 <Sidebar/>
-                <div className="p-4 border-l border-border w-full ml-48">
+                <div className="border-l border-border w-full ml-48">
                     {children}
                 </div>
             </div>
