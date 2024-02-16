@@ -17,9 +17,12 @@ import ScheduleListPage from "@/pages/app/schedule-list";
 import Playground from "@/pages/app/playground";
 
 import WorkspaceLayout from "./components/app/layout/workspace";
-import NamespaceListPage from "./pages/app/namespace-list";
+import WorkspaceNamespaceListTab from "./pages/app/workspace-detail/tab/namespace-list";
 import TopicListPage from "@/pages/app/topic-list";
 import TopicDetailPage from "@/pages/app/topic-detail";
+import React from "react";
+import WorkspaceDetailPage from "@/pages/app/workspace-detail";
+import WorkspaceGeneralTab from "@/pages/app/workspace-detail/tab/general";
 
 export const router = createBrowserRouter([
     {path: "/", element: <HomePage/>},
@@ -85,7 +88,7 @@ export const router = createBrowserRouter([
     {
         path: "/namespaces", element:
             <WorkspaceLayout>
-                <NamespaceListPage/>
+                <WorkspaceNamespaceListTab/>
             </WorkspaceLayout>
     },
     {
@@ -98,6 +101,22 @@ export const router = createBrowserRouter([
         path: "/topics/:topicId", element:
             <WorkspaceLayout>
                 <TopicDetailPage/>
+            </WorkspaceLayout>
+    },
+    {
+        path: "/workspace", element:
+            <WorkspaceLayout>
+                <WorkspaceDetailPage>
+                    <WorkspaceGeneralTab/>
+                </WorkspaceDetailPage>
+            </WorkspaceLayout>
+    },
+    {
+        path: "/workspace/namespaces", element:
+            <WorkspaceLayout>
+                <WorkspaceDetailPage>
+                    <WorkspaceNamespaceListTab/>
+                </WorkspaceDetailPage>
             </WorkspaceLayout>
     }
 ]);

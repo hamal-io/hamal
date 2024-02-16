@@ -8,7 +8,7 @@ import {
     GlobeIcon,
     Layers3Icon,
     LucideIcon,
-    Play,
+    Play, Settings,
     TimerIcon,
     WebhookIcon
 } from "lucide-react";
@@ -54,12 +54,6 @@ const Sidebar: React.FC<Props> = ({className}) => {
             active: currentPath.startsWith(`/executions`)
         },
         {
-            icon: FolderTree,
-            href: `/namespaces`,
-            label: "Namespaces",
-            active: currentPath === `/namespaces`
-        },
-        {
             icon: Braces,
             href: `/functions`,
             label: "Functions",
@@ -94,6 +88,12 @@ const Sidebar: React.FC<Props> = ({className}) => {
 
     const secondaryNavigation: NavItem[] = [
         {
+            icon: Settings,
+            href: "/workspace",
+            label: "Settings",
+            active: currentPath.startsWith(`/workspace`)
+        },
+        {
             icon: BookOpen,
             href: "https://docs.fn.guru",
             external: true,
@@ -102,7 +102,7 @@ const Sidebar: React.FC<Props> = ({className}) => {
     ];
 
     return (
-        <aside className={cn("fixed h-screen inset-y-0 flex w-48 flex-col px-6 gap-y-5 bg-gray-50", className)}>
+        <aside className={cn("fixed h-screen inset-y-0 flex w-48 flex-col px-6 gap-y-5 bg-gray-100", className)}>
             <nav className="flex flex-col ">
                 <h1 className="text-2xl font-bold leading-6 text-content mt-6">fn(guru)</h1>
                 <div className="pt-8">
@@ -119,7 +119,7 @@ const Sidebar: React.FC<Props> = ({className}) => {
                         </ul>
                     </li>
                 </ul>
-                <div className="fixed bottom-4 left-1 z-50 flex flex-col items-center justify-center">
+                <div className="fixed bottom-4 flex flex-col items-center justify-center">
                     <ul className="pt-4">
                         <li>
                             <ul className="mt-2 -mx-2 space-y-1">
