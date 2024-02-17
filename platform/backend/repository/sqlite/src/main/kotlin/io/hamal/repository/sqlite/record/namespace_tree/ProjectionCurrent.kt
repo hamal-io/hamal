@@ -1,19 +1,20 @@
-package io.hamal.repository.sqlite.record.namespace
+package io.hamal.repository.sqlite.record.namespace_tree
 
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.NamespaceTreeId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
-import io.hamal.repository.api.Namespace
-import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
+import io.hamal.repository.api.NamespaceTree
+import io.hamal.repository.api.NamespaceTreeQueryRepository
 import io.hamal.repository.record.json
-import io.hamal.repository.record.namespace.NamespaceRecord
+import io.hamal.repository.record.namespace_tree.NamespaceTreeRecord
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 
-internal object ProjectionCurrent : ProjectionSqlite<NamespaceId, NamespaceRecord, Namespace> {
+internal object ProjectionCurrent : ProjectionSqlite<NamespaceTreeId, NamespaceTreeRecord, NamespaceTree> {
 
-    fun find(connection: Connection, namespaceId: NamespaceId): Namespace? {
+    fun find(connection: Connection, treeId: NamespaceTreeId): NamespaceTree? {
         return connection.executeQueryOne(
             """
             SELECT 
@@ -25,16 +26,39 @@ internal object ProjectionCurrent : ProjectionSqlite<NamespaceId, NamespaceRecor
         """.trimIndent()
         ) {
             query {
-                set("id", namespaceId)
+                set("id", treeId)
             }
             map { rs ->
-                json.decompressAndDeserialize(Namespace::class, rs.getBytes("data"))
+                json.decompressAndDeserialize(NamespaceTree::class, rs.getBytes("data"))
             }
         }
     }
 
-    fun list(connection: Connection, query: NamespaceQuery): List<Namespace> {
-        return connection.executeQuery<Namespace>(
+    fun find(connection: Connection, namespaceId: NamespaceId): NamespaceTree? {
+        return connection.executeQueryOne(
+            """
+            SELECT
+                data
+             FROM
+                current
+            WHERE
+                id  = (
+                    SELECT tree_id FROM namespaces WHERE namespace_id = :namespaceId
+                )
+        """.trimIndent()
+        ) {
+            query {
+                set("namespaceId", namespaceId)
+            }
+            map { rs ->
+                json.decompressAndDeserialize(NamespaceTree::class, rs.getBytes("data"))
+            }
+        }
+    }
+
+
+    fun list(connection: Connection, query: NamespaceTreeQueryRepository.NamespaceTreeQuery): List<NamespaceTree> {
+        return connection.executeQuery<NamespaceTree>(
             """
             SELECT 
                 data
@@ -53,12 +77,12 @@ internal object ProjectionCurrent : ProjectionSqlite<NamespaceId, NamespaceRecor
                 set("limit", query.limit)
             }
             map { rs ->
-                json.decompressAndDeserialize(Namespace::class, rs.getBytes("data"))
+                json.decompressAndDeserialize(NamespaceTree::class, rs.getBytes("data"))
             }
         }
     }
 
-    fun count(connection: Connection, query: NamespaceQuery): Count {
+    fun count(connection: Connection, query: NamespaceTreeQueryRepository.NamespaceTreeQuery): Count {
         return Count(
             connection.executeQueryOne(
                 """
@@ -82,7 +106,11 @@ internal object ProjectionCurrent : ProjectionSqlite<NamespaceId, NamespaceRecor
         )
     }
 
-    override fun upsert(tx: RecordTransactionSqlite<NamespaceId, NamespaceRecord, Namespace>, obj: Namespace) {
+
+    override fun upsert(
+        tx: RecordTransactionSqlite<NamespaceTreeId, NamespaceTreeRecord, NamespaceTree>,
+        obj: NamespaceTree
+    ) {
         tx.execute(
             """
                 INSERT OR REPLACE INTO current
@@ -94,6 +122,20 @@ internal object ProjectionCurrent : ProjectionSqlite<NamespaceId, NamespaceRecor
             set("id", obj.id)
             set("workspaceId", obj.workspaceId)
             set("data", json.serializeAndCompress(obj))
+        }
+
+        obj.root.preorder().forEach { namespaceId ->
+            tx.execute(
+                """
+                INSERT OR REPLACE INTO namespaces
+                    (namespace_id, tree_id) 
+                VALUES
+                    (:namespaceId, :treeId)
+            """.trimIndent()
+            ) {
+                set("namespaceId", namespaceId)
+                set("treeId", obj.id)
+            }
         }
     }
 
@@ -108,13 +150,23 @@ internal object ProjectionCurrent : ProjectionSqlite<NamespaceId, NamespaceRecor
             );
         """.trimIndent()
         )
+
+        connection.execute(
+            """
+            CREATE TABLE IF NOT EXISTS namespaces (
+                 namespace_id   INTEGER NOT NULL,
+                 tree_id        INTEGER NOT NULL,
+                 PRIMARY KEY    (namespace_id)
+            );
+        """.trimIndent()
+        )
     }
 
     override fun clear(tx: Transaction) {
         tx.execute("""DELETE FROM current""")
     }
 
-    private fun NamespaceQuery.workspaceIds(): String {
+    private fun NamespaceTreeQueryRepository.NamespaceTreeQuery.workspaceIds(): String {
         return if (workspaceIds.isEmpty()) {
             ""
         } else {
@@ -122,11 +174,11 @@ internal object ProjectionCurrent : ProjectionSqlite<NamespaceId, NamespaceRecor
         }
     }
 
-    private fun NamespaceQuery.ids(): String {
-        return if (namespaceIds.isEmpty()) {
+    private fun NamespaceTreeQueryRepository.NamespaceTreeQuery.ids(): String {
+        return if (treeIds.isEmpty()) {
             ""
         } else {
-            "AND id IN (${namespaceIds.joinToString(",") { "${it.value.value}" }})"
+            "AND id IN (${treeIds.joinToString(",") { "${it.value.value}" }})"
         }
     }
 }

@@ -15,11 +15,12 @@ import io.hamal.repository.sqlite.record.exec.ExecSqliteRepository
 import io.hamal.repository.sqlite.record.extension.ExtensionSqliteRepository
 import io.hamal.repository.sqlite.record.feedback.FeedbackSqliteRepository
 import io.hamal.repository.sqlite.record.func.FuncSqliteRepository
-import io.hamal.repository.sqlite.record.workspace.WorkspaceSqliteRepository
 import io.hamal.repository.sqlite.record.hook.HookSqliteRepository
 import io.hamal.repository.sqlite.record.namespace.NamespaceSqliteRepository
+import io.hamal.repository.sqlite.record.namespace_tree.NamespaceTreeSqliteRepository
 import io.hamal.repository.sqlite.record.topic.TopicSqliteRepository
 import io.hamal.repository.sqlite.record.trigger.TriggerSqliteRepository
+import io.hamal.repository.sqlite.record.workspace.WorkspaceSqliteRepository
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
@@ -128,6 +129,15 @@ open class SqliteRepositoryConfig(backendBasePath: BackendBasePath) {
 
     @Bean
     open fun namespaceQueryRepository(): NamespaceQueryRepository = namespaceRepository()
+
+    @Bean
+    open fun namespaceTreeRepository() = NamespaceTreeSqliteRepository(path)
+
+    @Bean
+    open fun namespaceTreeCmdRepository() = namespaceTreeRepository()
+
+    @Bean
+    open fun namespaceTreeQueryRepository() = namespaceTreeRepository()
 
     @Bean
     open fun execRepository() = ExecSqliteRepository(path)
