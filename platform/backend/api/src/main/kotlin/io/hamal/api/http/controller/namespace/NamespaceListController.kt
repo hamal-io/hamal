@@ -2,9 +2,10 @@ package io.hamal.api.http.controller.namespace
 
 import io.hamal.core.adapter.NamespaceListPort
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.sdk.api.ApiNamespaceList
+import io.hamal.repository.api.Namespace
 import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -27,14 +28,15 @@ internal class NamespaceListController(private val listNamespace: NamespaceListP
                 workspaceIds = listOf(workspaceId)
             )
         ) { namespaces ->
-            ResponseEntity.ok(ApiNamespaceList(
-                namespaces.map {
-                    ApiNamespaceList.Namespace(
-                        id = it.id,
-                        name = it.name
-                    )
-                }
-            ))
+            ResponseEntity.ok(ApiNamespaceList(namespaces.map(::assemble)))
         }
+    }
+
+    private fun assemble(namespace: Namespace): ApiNamespaceList.Namespace {
+        return ApiNamespaceList.Namespace(
+            id = namespace.id,
+            name = namespace.name,
+            children = namespace.children.map(::assemble)
+        )
     }
 }

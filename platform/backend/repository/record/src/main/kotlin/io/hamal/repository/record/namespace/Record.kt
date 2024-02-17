@@ -1,9 +1,9 @@
 package io.hamal.repository.record.namespace
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceName
+import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.repository.record.Record
 import io.hamal.repository.record.RecordAdapter
 import io.hamal.repository.record.RecordSequence
@@ -25,6 +25,7 @@ sealed class NamespaceRecord(
     data class Created(
         override val entityId: NamespaceId,
         override val cmdId: CmdId,
+        val parentId: NamespaceId,
         val workspaceId: WorkspaceId,
         val name: NamespaceName
     ) : NamespaceRecord()

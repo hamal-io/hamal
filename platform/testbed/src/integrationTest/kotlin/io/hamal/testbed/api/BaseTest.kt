@@ -147,6 +147,7 @@ class ClearController {
         testNamespace = namespaceRepository.create(
             NamespaceCmdRepository.CreateCmd(
                 id = CmdId(5),
+                parentId = NamespaceId.root,
                 namespaceId = NamespaceId.root,
                 workspaceId = testWorkspace.id,
                 name = NamespaceName("root-namespace")
@@ -253,6 +254,7 @@ class TestConfig {
             testNamespace = namespaceRepository.create(
                 NamespaceCmdRepository.CreateCmd(
                     id = CmdId(5),
+                    parentId = NamespaceId.root,
                     namespaceId = NamespaceId.root,
                     workspaceId = testWorkspace.id,
                     name = NamespaceName("root-namespace")

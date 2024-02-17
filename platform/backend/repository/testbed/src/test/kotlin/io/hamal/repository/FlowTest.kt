@@ -3,9 +3,9 @@ package io.hamal.repository
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceName
+import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
 import io.hamal.repository.api.NamespaceCmdRepository.UpdateCmd
 import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
@@ -30,31 +30,11 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
             val result = create(
                 CreateCmd(
                     id = CmdId(1),
+                    parentId = NamespaceId(1),
                     namespaceId = NamespaceId(234),
                     workspaceId = WorkspaceId(1),
                     name = NamespaceName("SomeNamespace"),
                 )
-            )
-
-            with(result) {
-                assertThat(id, equalTo(NamespaceId(234)))
-                assertThat(workspaceId, equalTo(WorkspaceId(1)))
-                assertThat(name, equalTo(NamespaceName("SomeNamespace")))
-            }
-
-            verifyCount(1)
-        }
-
-        @TestFactory
-        fun `Creates Namespace with type`() = runWith(NamespaceRepository::class) {
-            val result = create(
-                CreateCmd(
-                    id = CmdId(1),
-                    namespaceId = NamespaceId(234),
-                    workspaceId = WorkspaceId(1),
-                    name = NamespaceName("SomeNamespace"),
-
-                    )
             )
 
             with(result) {
@@ -80,6 +60,7 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
                     create(
                         CreateCmd(
                             id = CmdId(2),
+                            parentId = NamespaceId(1),
                             namespaceId = NamespaceId(4),
                             workspaceId = WorkspaceId(3),
                             name = NamespaceName("first-namespace-name")
@@ -111,6 +92,7 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
                 val result = create(
                     CreateCmd(
                         id = CmdId(23456),
+                        parentId = NamespaceId(1),
                         namespaceId = NamespaceId(5),
                         workspaceId = WorkspaceId(333),
                         name = NamespaceName("second-namespace-name")
@@ -386,6 +368,7 @@ private fun NamespaceRepository.createNamespace(
     create(
         CreateCmd(
             id = cmdId,
+            parentId = NamespaceId(1),
             namespaceId = namespaceId,
             workspaceId = workspaceId,
             name = name

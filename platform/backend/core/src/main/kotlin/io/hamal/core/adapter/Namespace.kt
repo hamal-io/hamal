@@ -6,7 +6,6 @@ import io.hamal.lib.domain.request.NamespaceCreateRequest
 import io.hamal.lib.domain.request.NamespaceCreateRequested
 import io.hamal.lib.domain.request.NamespaceUpdateRequest
 import io.hamal.lib.domain.request.NamespaceUpdateRequested
-import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.RequestId
 import io.hamal.repository.api.Namespace
@@ -17,7 +16,7 @@ import org.springframework.stereotype.Component
 
 interface NamespaceCreatePort {
     operator fun <T : Any> invoke(
-        workspaceId: WorkspaceId,
+        parentId: NamespaceId,
         req: NamespaceCreateRequest,
         responseHandler: (NamespaceCreateRequested) -> T
     ): T
@@ -50,7 +49,7 @@ class NamespaceAdapter(
 ) : NamespacePort {
 
     override fun <T : Any> invoke(
-        workspaceId: WorkspaceId,
+        parentId: NamespaceId,
         req: NamespaceCreateRequest,
         responseHandler: (NamespaceCreateRequested) -> T
     ): T {
@@ -58,7 +57,7 @@ class NamespaceAdapter(
             id = generateDomainId(::RequestId),
             status = RequestStatus.Submitted,
             namespaceId = generateDomainId(::NamespaceId),
-            workspaceId = workspaceId,
+            parentId = parentId,
             name = req.name,
         ).also(requestCmdRepository::queue).let(responseHandler)
     }

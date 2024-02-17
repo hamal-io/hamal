@@ -171,10 +171,12 @@ internal abstract class BaseTest {
             )
         )
 
+        val namespaceId = generateDomainId(::NamespaceId)
         testNamespace = namespaceCmdRepository.create(
             NamespaceCmdRepository.CreateCmd(
                 id = CmdId(1),
-                namespaceId = generateDomainId(::NamespaceId),
+                parentId = namespaceId,
+                namespaceId = namespaceId,
                 workspaceId = testWorkspace.id,
                 name = NamespaceName("hamal")
             )

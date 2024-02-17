@@ -49,6 +49,7 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
         val namespace = namespaceCmdRepository.create(
             CreateCmd(
                 id = CmdId(1),
+                parentId = NamespaceId(2345),
                 namespaceId = NamespaceId(2345),
                 workspaceId = testWorkspace.id,
                 name = NamespaceName("hamal::namespace")

@@ -80,6 +80,7 @@ class NamespaceMemoryRepository : RecordMemoryRepository<NamespaceId, NamespaceR
                     NamespaceRecord.Created(
                         cmdId = cmd.id,
                         entityId = namespaceId,
+                        parentId = cmd.parentId,
                         workspaceId = cmd.workspaceId,
                         name = cmd.name
                     )

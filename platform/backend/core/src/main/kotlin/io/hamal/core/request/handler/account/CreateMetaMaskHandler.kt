@@ -6,8 +6,8 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.request.AccountCreateMetaMaskRequested
 import io.hamal.lib.domain.vo.AuthTokenExpiresAt
-import io.hamal.lib.domain.vo.WorkspaceName
 import io.hamal.lib.domain.vo.NamespaceName
+import io.hamal.lib.domain.vo.WorkspaceName
 import io.hamal.repository.api.*
 import io.hamal.repository.api.event.AccountCreatedEvent
 import org.springframework.stereotype.Component
@@ -58,6 +58,7 @@ private fun AccountCreateMetaMaskHandler.createNamespace(req: AccountCreateMetaM
     return namespaceCmdRepository.create(
         NamespaceCmdRepository.CreateCmd(
             id = req.cmdId(),
+            parentId = req.namespaceId,
             namespaceId = req.namespaceId,
             workspaceId = req.workspaceId,
             name = NamespaceName.default

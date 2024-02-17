@@ -30,11 +30,13 @@ class NamespaceCreateHandler(
 }
 
 private fun NamespaceCreateHandler.createNamespace(req: NamespaceCreateRequested): Namespace {
+    val parentId = namespaceQueryRepository.get(req.parentId)
     return namespaceCmdRepository.create(
         CreateCmd(
             id = req.cmdId(),
+            parentId = req.parentId,
             namespaceId = req.namespaceId,
-            workspaceId = req.workspaceId,
+            workspaceId = parentId.workspaceId,
             name = req.name
         )
     )

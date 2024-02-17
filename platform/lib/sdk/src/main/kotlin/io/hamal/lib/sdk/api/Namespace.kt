@@ -3,10 +3,10 @@ package io.hamal.lib.sdk.api
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.NamespaceCreateRequest
 import io.hamal.lib.domain.request.NamespaceUpdateRequest
-import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.domain.vo.RequestId
+import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.fold
@@ -18,8 +18,8 @@ data class ApiNamespaceCreateRequest(
 data class ApiNamespaceCreateRequested(
     override val id: RequestId,
     override val status: RequestStatus,
-    val namespaceId: NamespaceId,
-    val workspaceId: WorkspaceId,
+    val parentId: NamespaceId,
+    val namespaceId: NamespaceId
 ) : ApiRequested()
 
 data class ApiNamespaceUpdateRequest(
@@ -37,13 +37,15 @@ data class ApiNamespaceList(
 ) : ApiObject() {
     data class Namespace(
         val id: NamespaceId,
-        val name: NamespaceName
+        val name: NamespaceName,
+        val children: List<Namespace>
     )
 }
 
 data class ApiNamespace(
     val id: NamespaceId,
     val name: NamespaceName,
+    val children: List<ApiNamespace>
 ) : ApiObject()
 
 interface ApiNamespaceService {
@@ -56,7 +58,10 @@ internal class ApiNamespaceServiceImpl(
     private val template: HttpTemplate
 ) : ApiNamespaceService {
 
-    override fun create(workspaceId: WorkspaceId, createNamespaceReq: ApiNamespaceCreateRequest): ApiNamespaceCreateRequested =
+    override fun create(
+        workspaceId: WorkspaceId,
+        createNamespaceReq: ApiNamespaceCreateRequest
+    ): ApiNamespaceCreateRequested =
         template.post("/v1/workspaces/{workspaceId}/namespaces")
             .path("workspaceId", workspaceId)
             .body(createNamespaceReq)

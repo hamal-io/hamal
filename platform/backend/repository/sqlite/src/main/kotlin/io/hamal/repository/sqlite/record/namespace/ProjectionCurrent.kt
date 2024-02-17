@@ -6,8 +6,8 @@ import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Namespace
 import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
-import io.hamal.repository.record.namespace.NamespaceRecord
 import io.hamal.repository.record.json
+import io.hamal.repository.record.namespace.NamespaceRecord
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 
@@ -102,10 +102,17 @@ internal object ProjectionCurrent : ProjectionSqlite<NamespaceId, NamespaceRecor
             """
             CREATE TABLE IF NOT EXISTS current (
                  id             INTEGER NOT NULL,
-                 workspace_id       INTEGER NOT NULL,
+                 workspace_id   INTEGER NOT NULL,
                  data           BLOB NOT NULL,
                  PRIMARY KEY    (id)
             );
+            
+            CREATE TABLE IF NOT EXISTS links(
+                parent INTEGER NOT NULL,
+                child INTEGER NOT NULL,
+                depth INTEGER NOT NULL
+            );
+            
         """.trimIndent()
         )
     }
