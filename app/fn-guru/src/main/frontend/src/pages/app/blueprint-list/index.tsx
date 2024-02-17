@@ -4,6 +4,8 @@ import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx
 import {PageHeader} from "@/components/page-header.tsx";
 import {EmptyPlaceholder} from "@/components/empty-placeholder.tsx";
 import CreateBlueprint from "@/pages/app/blueprint-list/components/create.tsx";
+import {Button} from "@/components/ui/button.tsx";
+import {useNavigate} from "react-router-dom";
 
 type Props = {}
 const BlueprintListPage: FC<Props> = ({}) => {
@@ -15,7 +17,7 @@ const BlueprintListPage: FC<Props> = ({}) => {
         return () => {
             abortController.abort();
         }
-    }, []);
+    }, [listBlueprints]);
 
 
     if (error) return `Error`
@@ -37,11 +39,12 @@ const BlueprintListPage: FC<Props> = ({}) => {
         </div>
     );
 }
+
 type CardProps = {
     blueprints
 }
 const BlueprintCards: FC<CardProps> = ({blueprints}) => {
-
+    const navigate = useNavigate()
     return (
         <ul className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             {blueprints.map((bp) => (
@@ -59,6 +62,18 @@ const BlueprintCards: FC<CardProps> = ({blueprints}) => {
                                 {bp.description}
                             </div>
                         </dl>
+                        <div className="flex flex-row justify-between items-center">
+                            <Button onClick={() => {
+                                console.log("nice try")
+                            }} variant="secondary">
+                                Run
+                            </Button>
+                            <Button onClick={() => {
+                                navigate(`/blueprints/editor/${bp.id}`)
+                            }} variant="secondary">
+                                Config
+                            </Button>
+                        </div>
                     </CardContent>
                 </Card>
             ))}

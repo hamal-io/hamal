@@ -1,6 +1,6 @@
-import {Blueprint, BlueprintCreateRequested, BlueprintList} from "@/types/blueprint.ts";
+import {Blueprint, BlueprintCreateRequested, BlueprintList, BlueprintUpdateRequested} from "@/types/blueprint.ts";
 import {useAuth} from "@/hook/auth.ts";
-import {useGet, usePost} from "@/hook/http.ts";
+import {useGet, usePatch, usePost} from "@/hook/http.ts";
 import {useCallback} from "react";
 
 
@@ -27,6 +27,22 @@ export const useBlueprintGet = (): [BlueprintGetAction, Blueprint, boolean, Erro
         get(`/v1/blueprints/${bpId}`, abortController), [auth])
     return [fn, bp, loading, error]
 }
+
+
+type BlueprintUpdateAction = (bp: Blueprint, abortController?: AbortController) => void
+export const useBlueprintUpdate = (): [BlueprintUpdateAction, BlueprintUpdateRequested, boolean, Error] => {
+    const [auth] = useAuth()
+    const [patch, submission, loading, error] = usePatch<BlueprintUpdateRequested>()
+    const fn = useCallback(async (bp: Blueprint, abortController?: AbortController) =>
+        patch(`/v1/blueprints/${bp.id}`, {
+            name: bp.name,
+            inputs: {},
+            value: bp.value,
+            description: bp.description
+        }, abortController), [auth])
+    return [fn, submission, loading, error]
+}
+
 
 type BlueprintListAction = (abortController?: AbortController) => void
 export const useBlueprintList = (): [BlueprintListAction, BlueprintList, boolean, Error] => {

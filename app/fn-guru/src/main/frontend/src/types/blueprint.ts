@@ -11,6 +11,13 @@ export interface BlueprintCreateRequested {
     status: string;
     blueprintId: string;
 }
+
+export interface BlueprintUpdateRequested {
+    id: string;
+    status: string;
+    blueprintId: string;
+}
+
 export interface BlueprintList {
     blueprints: Array<BlueprintListItem>
 }

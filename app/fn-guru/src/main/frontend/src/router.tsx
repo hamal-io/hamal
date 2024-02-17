@@ -24,6 +24,7 @@ import BlueprintListPage from "@/pages/app/blueprint-list";
 import React from "react";
 import WorkspaceDetailPage from "@/pages/app/workspace-detail";
 import WorkspaceGeneralTab from "@/pages/app/workspace-detail/tab/general";
+import BlueprintEditor from "@/pages/app/blueprint-list/components/editor.tsx";
 
 export const router = createBrowserRouter([
     {path: "/", element: <HomePage/>},
@@ -33,15 +34,15 @@ export const router = createBrowserRouter([
         path: "/onboarding", element: <OnboardingPage/>
     },
     {
-        path: "/blueprints/playground", element:
+        path: "/blueprints/editor/:bpId", element:
             <WorkspaceLayout>
-                {/*<BlueprintPlayground/>*/}
+                <BlueprintEditor/>
             </WorkspaceLayout>
     },
     {
         path: "/blueprints", element:
             <WorkspaceLayout>
-            <BlueprintListPage/>
+                <BlueprintListPage/>
             </WorkspaceLayout>
     },
     {
