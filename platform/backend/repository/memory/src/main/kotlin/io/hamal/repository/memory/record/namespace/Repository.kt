@@ -1,4 +1,4 @@
-package io.hamal.repository.memory.record
+package io.hamal.repository.memory.record.namespace
 
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.NamespaceId
@@ -8,62 +8,11 @@ import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
 import io.hamal.repository.api.NamespaceCmdRepository.UpdateCmd
 import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
 import io.hamal.repository.api.NamespaceRepository
+import io.hamal.repository.memory.record.RecordMemoryRepository
 import io.hamal.repository.record.namespace.CreateNamespaceFromRecords
 import io.hamal.repository.record.namespace.NamespaceRecord
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
-
-private object NamespaceCurrentProjection {
-    private val projection = mutableMapOf<NamespaceId, Namespace>()
-
-    fun apply(namespace: Namespace) {
-        val currentNamespace = projection[namespace.id]
-        projection.remove(namespace.id)
-
-        val namespacesInWorkspace = projection.values.filter { it.workspaceId == namespace.workspaceId }
-        if (namespacesInWorkspace.any { it.name == namespace.name }) {
-            if (currentNamespace != null) {
-                projection[currentNamespace.id] = currentNamespace
-            }
-            throw IllegalArgumentException("${namespace.name} already exists")
-        }
-
-        projection[namespace.id] = namespace
-    }
-
-    fun find(namespaceId: NamespaceId): Namespace? = projection[namespaceId]
-    fun find(namespaceName: NamespaceName): Namespace? = projection.values.find { it.name == namespaceName }
-
-    fun list(query: NamespaceQuery): List<Namespace> {
-        return projection.filter { query.namespaceIds.isEmpty() || it.key in query.namespaceIds }
-            .map { it.value }
-            .reversed()
-            .asSequence()
-            .filter {
-                if (query.workspaceIds.isEmpty()) true else query.workspaceIds.contains(it.workspaceId)
-            }.dropWhile { it.id >= query.afterId }
-            .take(query.limit.value)
-            .toList()
-    }
-
-    fun count(query: NamespaceQuery): Count {
-        return Count(
-            projection.filter { query.namespaceIds.isEmpty() || it.key in query.namespaceIds }
-                .map { it.value }
-                .reversed()
-                .asSequence()
-                .filter {
-                    if (query.workspaceIds.isEmpty()) true else query.workspaceIds.contains(it.workspaceId)
-                }.dropWhile { it.id >= query.afterId }
-                .count()
-                .toLong()
-        )
-    }
-
-    fun clear() {
-        projection.clear()
-    }
-}
 
 class NamespaceMemoryRepository : RecordMemoryRepository<NamespaceId, NamespaceRecord, Namespace>(
     createDomainObject = CreateNamespaceFromRecords,

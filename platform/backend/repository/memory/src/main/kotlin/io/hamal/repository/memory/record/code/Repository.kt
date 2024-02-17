@@ -1,4 +1,4 @@
-package io.hamal.repository.memory.record
+package io.hamal.repository.memory.record.code
 
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.CodeId
@@ -8,6 +8,7 @@ import io.hamal.repository.api.CodeCmdRepository.CreateCmd
 import io.hamal.repository.api.CodeCmdRepository.UpdateCmd
 import io.hamal.repository.api.CodeQueryRepository.CodeQuery
 import io.hamal.repository.api.CodeRepository
+import io.hamal.repository.memory.record.RecordMemoryRepository
 import io.hamal.repository.record.RecordSequence
 import io.hamal.repository.record.code.CodeRecord
 import io.hamal.repository.record.code.CreateCodeFromRecords
@@ -15,44 +16,6 @@ import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
 
-private object CodeCurrentProjection {
-    private val projection = mutableMapOf<CodeId, Code>()
-    fun apply(code: Code) {
-        projection[code.id] = code
-    }
-
-    fun find(codeId: CodeId): Code? = projection[codeId]
-
-    fun list(query: CodeQuery): List<Code> {
-        return projection.filter { query.codeIds.isEmpty() || it.key in query.codeIds }
-            .map { it.value }
-            .reversed()
-            .asSequence()
-            .filter {
-                if (query.workspaceIds.isEmpty()) true else query.workspaceIds.contains(it.workspaceId)
-            }.dropWhile { it.id >= query.afterId }
-            .take(query.limit.value)
-            .toList()
-    }
-
-    fun count(query: CodeQuery): Count {
-        return Count(
-            projection.filter { query.codeIds.isEmpty() || it.key in query.codeIds }
-                .map { it.value }
-                .reversed()
-                .asSequence()
-                .filter {
-                    if (query.workspaceIds.isEmpty()) true else query.workspaceIds.contains(it.workspaceId)
-                }.dropWhile { it.id >= query.afterId }
-                .count()
-                .toLong()
-        )
-    }
-
-    fun clear() {
-        projection.clear()
-    }
-}
 
 
 class CodeMemoryRepository : RecordMemoryRepository<CodeId, CodeRecord, Code>(
