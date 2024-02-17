@@ -26,6 +26,10 @@ class Json(
         return gsonInstance.fromJson(InputStreamReader(stream), clazz.java)
     }
 
+    fun <TYPE : Any> deserialize(typeToken: TypeToken<TYPE>, content: String): TYPE {
+        return gsonInstance.fromJson(content, typeToken)
+    }
+
     fun <TYPE : Any> deserialize(typeToken: TypeToken<TYPE>, stream: InputStream): TYPE {
         return gsonInstance.fromJson(InputStreamReader(stream), typeToken)
     }

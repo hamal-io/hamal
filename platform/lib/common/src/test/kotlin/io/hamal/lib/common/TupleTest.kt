@@ -1,6 +1,5 @@
 package io.hamal.lib.common
 
-import io.hamal.lib.domain.*
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
