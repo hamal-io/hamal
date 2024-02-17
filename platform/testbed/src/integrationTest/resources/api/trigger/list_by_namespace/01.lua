@@ -1,9 +1,9 @@
 sys = require_plugin('sys')
 
-one_req = fail_on_error(sys.namespaces.create({ name = 'namespace-one' }))
+one_req = fail_on_error(sys.namespaces.append({ name = 'namespace-one' }))
 sys.await_completed(one_req)
 
-two_req = fail_on_error(sys.namespaces.create({ name = 'namespace-two' }))
+two_req = fail_on_error(sys.namespaces.append({ name = 'namespace-two' }))
 sys.await_completed(two_req)
 
 func_one = fail_on_error(sys.funcs.create({ namespace_id = one_req.id; name = 'test-func'; inputs = {}; code = [[4 + 2]] }))
@@ -12,7 +12,7 @@ sys.await_completed(func_one)
 func_one = fail_on_error(sys.triggers.create_fixed_rate({
     func_id = func_one.id,
     namespace_id = one_req.id,
-    name = 'trigger-to-create',
+    name = 'trigger-to-append',
     inputs = { },
     duration = 'PT5S'
 }))

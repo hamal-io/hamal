@@ -5,7 +5,7 @@ import io.hamal.core.adapter.NamespaceTreeAppendPort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.request.NamespaceAppendRequested
 import io.hamal.lib.domain.vo.NamespaceId
-import io.hamal.lib.sdk.api.ApiNamespaceCreateRequest
+import io.hamal.lib.sdk.api.ApiNamespaceAppendRequest
 import io.hamal.lib.sdk.api.ApiRequested
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
@@ -21,7 +21,7 @@ internal class NamespaceAppendController(
     @PostMapping("/v1/namespaces/{namespaceId}/namespaces")
     fun createNamespace(
         @PathVariable("namespaceId") namespaceId: NamespaceId,
-        @RequestBody req: ApiNamespaceCreateRequest
+        @RequestBody req: ApiNamespaceAppendRequest
     ): ResponseEntity<ApiRequested> = retry {
         appendNamespace(namespaceId, req, NamespaceAppendRequested::accepted)
     }

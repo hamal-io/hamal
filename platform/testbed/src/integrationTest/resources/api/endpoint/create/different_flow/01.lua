@@ -1,6 +1,6 @@
 sys = require_plugin('sys')
 --
-namespace = fail_on_error(sys.namespaces.create({ name = "hamal::namespace::rocks" }))
+namespace = fail_on_error(sys.namespaces.append({ name = "hamal::namespace::rocks" }))
 sys.await_completed(namespace)
 
 func_one = fail_on_error(sys.funcs.create({

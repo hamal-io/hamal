@@ -1,6 +1,6 @@
 sys = require_plugin('sys')
 
-namespace = fail_on_error(sys.namespaces.create({ name = 'namespace-1' }))
+namespace = fail_on_error(sys.namespaces.append({ name = 'namespace-1' }))
 
 -- function name is unique
 func_one = fail_on_error(sys.funcs.create({ namespace_id = '1', name = 'func-name' }))

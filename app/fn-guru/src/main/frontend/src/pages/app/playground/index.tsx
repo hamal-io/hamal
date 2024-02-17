@@ -9,7 +9,7 @@ import {useUiState} from "@/hook/ui-state.ts";
 export default function PlaygroundPage() {
     const [uiState] = useUiState()
     const [adhoc, data] = useAdhoc()
-    const [code, setCode] = useState("log = require('log').create({})\nlog.info('Let\\'s go..')")
+    const [code, setCode] = useState("log = require('log').append({})\nlog.info('Let\\'s go..')")
     const Run = () => (
         <Button onClick={() => {
             adhoc(uiState.namespaceId, code)

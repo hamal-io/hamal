@@ -6,6 +6,9 @@ class TreeNode<T : Any>(
     val descendants: List<TreeNode<T>> = listOf()
 ) {
 
+    fun get(predicate: (TreeNode<T>) -> Boolean): TreeNode<T> =
+        find(predicate) ?: throw NoSuchElementException("TreeNode does not exists")
+
     fun find(predicate: (TreeNode<T>) -> Boolean): TreeNode<T>? {
         if (predicate(this)) {
             return this

@@ -13,7 +13,7 @@ _, hooks = sys.hooks.list()
 assert(#hooks == 1)
 
 -- same name different namespace
-namespace = fail_on_error(sys.namespaces.create({ name = 'namespace-1' }))
+namespace = fail_on_error(sys.namespaces.append({ name = 'namespace-1' }))
 sys.await_completed(namespace)
 
 hook = fail_on_error(sys.hooks.create({ name = 'hook-name', namespace_id = namespace.id }))

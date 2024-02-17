@@ -56,18 +56,18 @@ internal sealed class EndpointBaseControllerTest : BaseControllerTest() {
         return createTopicResponse.result(ApiFuncCreateRequested::class)
     }
 
-    fun createNamespace(
+    fun appendNamespace(
         name: NamespaceName,
-        workspaceId: WorkspaceId,
-    ): ApiNamespaceCreateRequested {
-        val response = httpTemplate.post("/v1/workspaces/{workspaceId}/namespaces")
-            .path("workspaceId", workspaceId)
-            .body(ApiNamespaceCreateRequest(name))
+        parentId: NamespaceId,
+    ): ApiNamespaceAppendRequested {
+        val response = httpTemplate.post("/v1/namespaces/{namespaceId}/namespaces")
+            .path("namespaceId", parentId)
+            .body(ApiNamespaceAppendRequest(name))
             .execute()
 
         assertThat(response.statusCode, equalTo(Accepted))
         require(response is HttpSuccessResponse) { "request was not successful" }
-        return response.result(ApiNamespaceCreateRequested::class)
+        return response.result(ApiNamespaceAppendRequested::class)
     }
 
 

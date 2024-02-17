@@ -1,19 +1,19 @@
 --sys = require_plugin('sys')
 --
---namespace = fail_on_error(sys.namespaces.create({ name = 'namespace-1' }))
+--namespace = fail_on_error(sys.namespaces.append({ name = 'namespace-1' }))
 --sys.await_completed(namespace)
 --
---func_one = fail_on_error(sys.funcs.create({ namespace_id = namespace.id; name = 'test-func'; inputs = {}; code = [[4 + 2]] }))
+--func_one = fail_on_error(sys.funcs.append({ namespace_id = namespace.id; name = 'test-func'; inputs = {}; code = [[4 + 2]] }))
 --sys.await_completed(func_one)
 --
---_, topic_req = sys.topics.create({ name = "some-amazing-topic" })
+--_, topic_req = sys.topics.append({ name = "some-amazing-topic" })
 --sys.await(topic_req)
 --
 ---- trigger name is unique
 --req_two = fail_on_error(sys.triggers.create_event({
 --    func_id = func_one.id,
 --    namespace_id = '1',
---    name = 'trigger-to-create',
+--    name = 'trigger-to-append',
 --    inputs = { },
 --    topic_id = topic_req.id
 --}))
@@ -22,7 +22,7 @@
 --req_two = fail_on_error(sys.triggers.create_event({
 --    func_id = func_one.id,
 --    namespace_id = '1',
---    name = 'trigger-to-create',
+--    name = 'trigger-to-append',
 --    inputs = { },
 --    topic_id = topic_req.id
 --}))
@@ -35,7 +35,7 @@
 --req_two = fail_on_error(sys.triggers.create_event({
 --    func_id = func_one.id,
 --    namespace_id = namespace.id,
---    name = 'trigger-to-create',
+--    name = 'trigger-to-append',
 --    inputs = { },
 --    topic_id = topic_req.id
 --}))

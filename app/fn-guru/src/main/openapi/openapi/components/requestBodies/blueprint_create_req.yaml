@@ -6,4 +6,4 @@ properties:
     $ref: ../schemas/blueprint_inputs.yaml
   value:
     $ref: ../schemas/code_value.yaml
-description: Response to a create blueprint request.
+description: Response to a append blueprint request.

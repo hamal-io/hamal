@@ -27,7 +27,7 @@ class EthRequestHandlerImpl(
         TODO()
 
         // find requests which can not be served by cache / repository
-        // create batch request
+        // append batch request
         // populate cache
         // result
 

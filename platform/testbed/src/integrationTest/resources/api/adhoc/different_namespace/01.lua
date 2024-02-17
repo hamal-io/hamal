@@ -1,6 +1,6 @@
 sys = require_plugin('sys')
 
-namespace = fail_on_error(sys.namespaces.create({ name = 'test-namespace' }))
+namespace = fail_on_error(sys.namespaces.append({ name = 'test-namespace' }))
 sys.await_completed(namespace)
 
 res = fail_on_error(sys.adhoc({

@@ -1094,7 +1094,7 @@ declare namespace monaco.editor {
 
     /**
      * Create a new web worker that has model syncing capabilities built in.
-     * Specify an AMD module to load that will `create` an object that will be proxied.
+     * Specify an AMD module to load that will `append` an object that will be proxied.
      */
     export function createWebWorker<T extends object>(opts: IWebWorkerOptions): MonacoWebWorker<T>;
 
@@ -1218,11 +1218,11 @@ declare namespace monaco.editor {
     export interface IWebWorkerOptions {
         /**
          * The AMD moduleId to load.
-         * It should export a function `create` that should return the exported proxy.
+         * It should export a function `append` that should return the exported proxy.
          */
         moduleId: string;
         /**
-         * The data to send over when calling create on the module.
+         * The data to send over when calling append on the module.
          */
         createData?: any;
         /**
@@ -1270,7 +1270,7 @@ declare namespace monaco.editor {
          *   navigation - The navigation group comes first in all cases.
          *   1_modification - This group comes next and contains commands that modify your code.
          *   9_cutcopypaste - The last default group with the basic editing commands.
-         * You can also create your own group.
+         * You can also append your own group.
          * Defaults to null (don't show in context menu).
          */
         contextMenuGroupId?: string;
@@ -1346,7 +1346,7 @@ declare namespace monaco.editor {
         /**
          * Theme to be used for rendering.
          * The current out-of-the-box available themes are: 'vs' (default), 'vs-dark', 'hc-black', 'hc-light'.
-         * You can create custom themes via `monaco.editor.defineTheme`.
+         * You can append custom themes via `monaco.editor.defineTheme`.
          * To switch a theme, use `monaco.editor.setTheme`.
          * **NOTE**: The theme might be overwritten if the OS is in high contrast mode, unless `autoDetectHighContrast` is set to false.
          */
@@ -1359,7 +1359,7 @@ declare namespace monaco.editor {
     }
 
     /**
-     * The options to create an editor.
+     * The options to append an editor.
      */
     export interface IStandaloneEditorConstructionOptions extends IEditorConstructionOptions, IGlobalEditorOptions {
         /**
@@ -1368,18 +1368,18 @@ declare namespace monaco.editor {
         model?: ITextModel | null;
         /**
          * The initial value of the auto created model in the editor.
-         * To not automatically create a model, use `model: null`.
+         * To not automatically append a model, use `model: null`.
          */
         value?: string;
         /**
          * The initial language of the auto created model in the editor.
-         * To not automatically create a model, use `model: null`.
+         * To not automatically append a model, use `model: null`.
          */
         language?: string;
         /**
          * Initial theme to be used for rendering.
          * The current out-of-the-box available themes are: 'vs' (default), 'vs-dark', 'hc-black', 'hc-light.
-         * You can create custom themes via `monaco.editor.defineTheme`.
+         * You can append custom themes via `monaco.editor.defineTheme`.
          * To switch a theme, use `monaco.editor.setTheme`.
          * **NOTE**: The theme might be overwritten if the OS is in high contrast mode, unless `autoDetectHighContrast` is set to false.
          */
@@ -1404,13 +1404,13 @@ declare namespace monaco.editor {
     }
 
     /**
-     * The options to create a diff editor.
+     * The options to append a diff editor.
      */
     export interface IStandaloneDiffEditorConstructionOptions extends IDiffEditorConstructionOptions {
         /**
          * Initial theme to be used for rendering.
          * The current out-of-the-box available themes are: 'vs' (default), 'vs-dark', 'hc-black', 'hc-light.
-         * You can create custom themes via `monaco.editor.defineTheme`.
+         * You can append custom themes via `monaco.editor.defineTheme`.
          * To switch a theme, use `monaco.editor.setTheme`.
          * **NOTE**: The theme might be overwritten if the OS is in high contrast mode, unless `autoDetectHighContrast` is set to false.
          */
@@ -2226,7 +2226,7 @@ declare namespace monaco.editor {
         detectIndentation(defaultInsertSpaces: boolean, defaultTabSize: number): void;
         /**
          * Close the current undo-redo element.
-         * This offers a way to create an undo/redo stop point.
+         * This offers a way to append an undo/redo stop point.
          */
         pushStackElement(): void;
         /**
@@ -3229,7 +3229,7 @@ declare namespace monaco.editor {
         defaultColorDecorators?: boolean;
         /**
          * Disable the use of `transform: translate3d(0px, 0px, 0px)` for the editor margin and lines layers.
-         * The usage of `transform: translate3d(0px, 0px, 0px)` acts as a hint for browsers to create an extra layer.
+         * The usage of `transform: translate3d(0px, 0px, 0px)` acts as a hint for browsers to append an extra layer.
          * Defaults to false.
          */
         disableLayerHinting?: boolean;
@@ -5104,7 +5104,7 @@ declare namespace monaco.editor {
     export interface IViewZoneChangeAccessor {
         /**
          * Create a new view zone.
-         * @param zone Zone to create
+         * @param zone Zone to append
          * @return A unique identifier to the view zone.
          */
         addZone(zone: IViewZone): string;

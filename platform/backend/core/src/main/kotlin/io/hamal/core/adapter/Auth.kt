@@ -43,7 +43,7 @@ class AuthAdapter(
 ) : AuthPort {
 
     override fun invoke(req: AuthChallengeMetaMaskRequest): Web3Challenge {
-        // FIXME 138 - create challenge based on address
+        // FIXME 138 - append challenge based on address
         return Web3Challenge("challenge123")
     }
 

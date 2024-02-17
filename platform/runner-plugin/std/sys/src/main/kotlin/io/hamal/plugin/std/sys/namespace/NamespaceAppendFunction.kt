@@ -1,6 +1,6 @@
 package io.hamal.plugin.std.sys.namespace
 
-import io.hamal.lib.domain.vo.WorkspaceId
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -10,9 +10,9 @@ import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.kua.type.KuaMap
 import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.sdk.ApiSdk
-import io.hamal.lib.sdk.api.ApiNamespaceCreateRequest
+import io.hamal.lib.sdk.api.ApiNamespaceAppendRequest
 
-class NamespaceCreateFunction(
+class NamespaceAppendFunction(
     private val sdk: ApiSdk
 ) : Function1In2Out<KuaMap, KuaError, KuaMap>(
     FunctionInput1Schema(KuaMap::class),
@@ -21,8 +21,8 @@ class NamespaceCreateFunction(
     override fun invoke(ctx: FunctionContext, arg1: KuaMap): Pair<KuaError?, KuaMap?> {
 
         return try {
-            val res = sdk.namespace.create(
-                ctx[WorkspaceId::class], ApiNamespaceCreateRequest(NamespaceName(arg1.getString("name")))
+            val res = sdk.namespace.append(
+                ctx[NamespaceId::class], ApiNamespaceAppendRequest(NamespaceName(arg1.getString("name")))
             )
 
             null to KuaMap(

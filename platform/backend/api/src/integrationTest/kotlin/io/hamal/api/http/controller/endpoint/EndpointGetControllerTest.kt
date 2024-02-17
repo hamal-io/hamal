@@ -2,8 +2,8 @@ package io.hamal.api.http.controller.endpoint
 
 import io.hamal.lib.domain._enum.EndpointMethod
 import io.hamal.lib.domain.vo.EndpointName
-import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.domain.vo.FuncName
+import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.HttpSuccessResponse
@@ -27,9 +27,9 @@ internal class EndpointGetControllerTest : EndpointBaseControllerTest() {
     @Test
     fun `Get endpoint`() {
         val namespaceId = awaitCompleted(
-            createNamespace(
+            appendNamespace(
                 name = NamespaceName("namespace"),
-                workspaceId = testWorkspace.id
+                parentId = testNamespace.id
             )
         ).namespaceId
 

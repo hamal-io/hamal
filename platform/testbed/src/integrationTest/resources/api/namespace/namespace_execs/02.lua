@@ -19,8 +19,8 @@ assert(exec_one ~= nil)
 assert(exec_two ~= nil)
 
 namespaces = fail_on_error(sys.namespaces.list())
-namespace_one = findInList(namespaces, 'name', 'namespace-1')
-namespace_two = findInList(namespaces, 'name', 'namespace-2')
+namespace_one = findInList(namespaces[1].children, 'name', 'namespace-1')
+namespace_two = findInList(namespaces[1].children, 'name', 'namespace-2')
 
 assert(namespace_one ~= nil)
 assert(namespace_two ~= nil)

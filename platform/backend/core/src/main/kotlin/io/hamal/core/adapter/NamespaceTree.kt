@@ -55,7 +55,7 @@ class NamespaceTreeAdapter(
     }
 
     override fun <T : Any> invoke(namespaceId: NamespaceId, responseHandler: (tree: NamespaceTree) -> T): T =
-        responseHandler(namespaceTreeQueryRepository.get(namespaceId))
+        responseHandler(namespaceTreeQueryRepository.get(namespaceId).findSubTree(namespaceId))
 
     override fun <T : Any> invoke(query: NamespaceTreeQuery, responseHandler: (trees: List<NamespaceTree>) -> T): T =
         responseHandler(namespaceTreeQueryRepository.list(query))

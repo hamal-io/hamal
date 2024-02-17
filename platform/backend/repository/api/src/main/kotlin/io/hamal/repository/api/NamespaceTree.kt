@@ -14,7 +14,11 @@ data class NamespaceTree(
     override val updatedAt: UpdatedAt,
     val workspaceId: WorkspaceId,
     val root: TreeNode<NamespaceId>
-) : DomainObject<NamespaceTreeId>
+) : DomainObject<NamespaceTreeId> {
+
+    fun findSubTree(namespaceId: NamespaceId): NamespaceTree = copy(root = root.get { it.value == namespaceId })
+
+}
 
 interface NamespaceTreeRepository : NamespaceTreeCmdRepository, NamespaceTreeQueryRepository
 
@@ -40,10 +44,10 @@ interface NamespaceTreeCmdRepository : CmdRepository {
 }
 
 interface NamespaceTreeQueryRepository {
-    fun get(treeId: NamespaceTreeId) = find(treeId) ?: throw NoSuchElementException("NamespaceTree not found")
+    fun get(treeId: NamespaceTreeId) = find(treeId) ?: throw NoSuchElementException("Namespace not found")
     fun find(treeId: NamespaceTreeId): NamespaceTree?
 
-    fun get(namespaceId: NamespaceId) = find(namespaceId) ?: throw NoSuchElementException("NamespaceTree not found")
+    fun get(namespaceId: NamespaceId) = find(namespaceId) ?: throw NoSuchElementException("Namespace not found")
     fun find(namespaceId: NamespaceId): NamespaceTree?
 
     fun list(query: NamespaceTreeQuery): List<NamespaceTree>

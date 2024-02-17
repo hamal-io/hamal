@@ -3,9 +3,9 @@ package io.hamal.api.http.controller.endpoint
 import io.hamal.lib.domain._enum.EndpointMethod.Patch
 import io.hamal.lib.domain._enum.EndpointMethod.Post
 import io.hamal.lib.domain.vo.EndpointName
+import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceName
-import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.BadRequest
 import io.hamal.lib.http.body
@@ -49,9 +49,9 @@ internal class EndpointCreateControllerTest : EndpointBaseControllerTest() {
     @Test
     fun `Create endpoint with namespace id`() {
         val namespaceId = awaitCompleted(
-            createNamespace(
+            appendNamespace(
                 name = NamespaceName("namespace"),
-                workspaceId = testWorkspace.id
+                parentId = testNamespace.id
             )
         ).namespaceId
 
@@ -79,16 +79,16 @@ internal class EndpointCreateControllerTest : EndpointBaseControllerTest() {
     @Test
     fun `Tries to create endpoint, but func does not belong to same namespace`() {
         val namespaceId = awaitCompleted(
-            createNamespace(
+            appendNamespace(
                 name = NamespaceName("namespace"),
-                workspaceId = testWorkspace.id
+                parentId = testNamespace.id
             )
         ).namespaceId
 
         val anotherNamespaceId = awaitCompleted(
-            createNamespace(
+            appendNamespace(
                 name = NamespaceName("another-namespace"),
-                workspaceId = testWorkspace.id
+                parentId = testNamespace.id
             )
         ).namespaceId
 

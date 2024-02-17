@@ -1,30 +1,33 @@
 sys = require_plugin('sys')
 
-namespace = fail_on_error(sys.namespaces.create({ name = 'namespace-1' }))
+namespace = fail_on_error(sys.namespaces.append({ name = 'namespace-1' }))
 sys.await_completed(namespace)
 
 func_one = fail_on_error(sys.funcs.create({ namespace_id = namespace.id; name = 'test-func'; inputs = {}; code = [[4 + 2]] }))
 sys.await_completed(func_one)
 
-_, topic_req = sys.topics.create({ name = "some-amazing-topic" })
-sys.await(topic_req)
+hook = fail_on_error(sys.hooks.create({ namespace_id = '1'; name = "some-amazing-hook" }))
+sys.await(hook)
 
 -- trigger name is unique
-req_two = fail_on_error(sys.triggers.create_cron({
+req_two = fail_on_error(sys.triggers.create_hook({
     func_id = func_one.id,
     namespace_id = '1',
-    name = 'trigger-to-create',
+    name = 'trigger-to-append',
     inputs = { },
-    cron = '0 0 8-10 * * *'
+    hook_id = hook.id,
+    hook_method = 'Get'
+
 }))
 sys.await_completed(req_two)
 
-req_two = fail_on_error(sys.triggers.create_cron({
+req_two = fail_on_error(sys.triggers.create_hook({
     func_id = func_one.id,
     namespace_id = '1',
-    name = 'trigger-to-create',
+    name = 'trigger-to-append',
     inputs = { },
-    cron = '0 0 8-10 * * *'
+    hook_id = hook.id,
+    hook_method = 'Post'
 }))
 assert(sys.await_failed(req_two) == nil)
 
@@ -32,13 +35,15 @@ _, triggers = sys.triggers.list()
 assert(#triggers == 1)
 
 -- same name different namespace
-req_two = fail_on_error(sys.triggers.create_cron({
+err, req_two = sys.triggers.create_hook({
     func_id = func_one.id,
     namespace_id = namespace.id,
-    name = 'trigger-to-create',
+    name = 'trigger-to-append',
     inputs = { },
-    cron = '0 0 8-10 * * *'
-}))
+    hook_id = hook.id,
+    hook_method = 'Patch'
+})
+assert(err == nil)
 sys.await_completed(req_two)
 
 _, triggers = sys.triggers.list()

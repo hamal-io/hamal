@@ -3,7 +3,7 @@ post:
   description: Create a blueprint
   tags:
     - Blueprint
-  operationId: blueprint/create
+  operationId: blueprint/append
   parameters:
     - $ref: ../components/parameters/group_id.yaml
   requestBody:
