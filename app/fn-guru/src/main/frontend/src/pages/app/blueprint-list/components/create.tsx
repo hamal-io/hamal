@@ -13,7 +13,7 @@ import {Textarea} from "@/components/ui/textarea.tsx";
 import {Input} from "@/components/ui/input.tsx";
 
 const formSchema = z.object({
-    name: z.string().max(128).optional().or(z.literal('anonymous')),
+    name: z.string().max(128),
     description: z.string().max(512).optional(),
 })
 
@@ -25,7 +25,10 @@ const CreateBlueprint = () => {
     const [createBlueprint, submission] = useBlueprintCreate()
 
     const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema)
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            name: "anonymous" //test
+        }
     })
 
     async function onSubmit() {

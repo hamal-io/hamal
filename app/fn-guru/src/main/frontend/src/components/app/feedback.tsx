@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import * as z from "zod";
 import {FeedbackMoods} from "@/types/feedback.ts";
 import {Dialog, DialogContent, DialogHeader, DialogTrigger} from "@/components/ui/dialog.tsx";
@@ -22,7 +22,7 @@ const Feedback = () => {
     const [auth] = useAuth()
     const [openDialog, setOpenDialog] = useState<boolean>(false)
     const [isLoading, setLoading] = useState(false)
-    const [createFeedback] = useFeedbackCreate()
+    const [createFeedback, submission] = useFeedbackCreate()
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -44,6 +44,17 @@ const Feedback = () => {
             form.reset()
         }
     }
+
+    useEffect(() => {
+        const abortController = new AbortController();
+        if (submission !== null) {
+            setOpenDialog(false)
+        }
+        return () => {
+            abortController.abort();
+        }
+
+    }, []);
 
     return (
         <div style={{
