@@ -13,7 +13,19 @@ import io.hamal.repository.memory.log.LogBrokerMemoryRepository
 import io.hamal.repository.memory.log.LogSegmentMemory
 import io.hamal.repository.memory.log.LogSegmentMemoryRepository
 import io.hamal.repository.memory.log.LogTopicMemoryRepository
-import io.hamal.repository.memory.record.*
+import io.hamal.repository.memory.record.account.AccountMemoryRepository
+import io.hamal.repository.memory.record.blueprint.BlueprintMemoryRepository
+import io.hamal.repository.memory.record.code.CodeMemoryRepository
+import io.hamal.repository.memory.record.endpoint.EndpointMemoryRepository
+import io.hamal.repository.memory.record.exec.ExecMemoryRepository
+import io.hamal.repository.memory.record.extension.ExtensionMemoryRepository
+import io.hamal.repository.memory.record.feedback.FeedbackMemoryRepository
+import io.hamal.repository.memory.record.func.FuncMemoryRepository
+import io.hamal.repository.memory.record.hook.HookMemoryRepository
+import io.hamal.repository.memory.record.namespace.NamespaceMemoryRepository
+import io.hamal.repository.memory.record.topic.TopicMemoryRepository
+import io.hamal.repository.memory.record.trigger.TriggerMemoryRepository
+import io.hamal.repository.memory.record.workspace.MemoryWorkspaceRepository
 import kotlin.reflect.KClass
 
 object MemoryFixture : BaseTestFixture {
