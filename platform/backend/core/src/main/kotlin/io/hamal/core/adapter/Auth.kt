@@ -39,8 +39,7 @@ class AuthAdapter(
     private val generateDomainId: GenerateId,
     private val generateToken: GenerateToken,
     private val requestCmdRepository: RequestCmdRepository,
-    private val workspaceList: WorkspaceListPort,
-    private val namespaceList: NamespaceListPort,
+    private val workspaceList: WorkspaceListPort
 ) : AuthPort {
 
     override fun invoke(req: AuthChallengeMetaMaskRequest): Web3Challenge {

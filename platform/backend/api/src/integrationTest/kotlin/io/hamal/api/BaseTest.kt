@@ -197,7 +197,6 @@ internal abstract class BaseTest {
         testNamespace = namespaceCmdRepository.create(
             NamespaceCmdRepository.CreateCmd(
                 id = CmdId(1),
-                parentId = NamespaceId.root,
                 namespaceId = NamespaceId.root,
                 workspaceId = testWorkspace.id,
                 name = NamespaceName("hamal")

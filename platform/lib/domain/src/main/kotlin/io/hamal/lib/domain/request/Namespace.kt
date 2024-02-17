@@ -13,7 +13,7 @@ interface NamespaceCreateRequest {
 data class NamespaceCreateRequested(
     override val id: RequestId,
     override var status: RequestStatus,
-    val parentId: NamespaceId,
+    val workspaceId: WorkspaceId,
     val namespaceId: NamespaceId,
     val name: NamespaceName
 ) : Requested()

@@ -1,12 +1,14 @@
 package io.hamal.core.request.handler.account
 
 import io.hamal.core.event.InternalEventEmitter
+import io.hamal.core.request.RequestHandler
 import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.request.AccountCreateAnonymousRequested
 import io.hamal.lib.domain.vo.AuthTokenExpiresAt
 import io.hamal.lib.domain.vo.NamespaceName
+import io.hamal.lib.domain.vo.NamespaceTreeId
 import io.hamal.lib.domain.vo.WorkspaceName
 import io.hamal.repository.api.*
 import io.hamal.repository.api.event.AccountCreatedEvent
@@ -19,14 +21,16 @@ class AccountCreateAnonymousHandler(
     val authCmdRepository: AuthCmdRepository,
     val workspaceCmdRepository: WorkspaceCmdRepository,
     val namespaceCmdRepository: NamespaceCmdRepository,
+    val namespaceTreeCmdRepository: NamespaceTreeCmdRepository,
     val eventEmitter: InternalEventEmitter
-) : io.hamal.core.request.RequestHandler<AccountCreateAnonymousRequested>(AccountCreateAnonymousRequested::class) {
+) : RequestHandler<AccountCreateAnonymousRequested>(AccountCreateAnonymousRequested::class) {
 
     override fun invoke(req: AccountCreateAnonymousRequested) {
         createAccount(req)
             .also { emitEvent(req.cmdId(), it) }
             .also { createWorkspace(req) }
             .also { createNamespace(req) }
+            .also { createNamespaceTree(req) }
             .also { createTokenAuth(req) }
     }
 }
@@ -57,10 +61,20 @@ private fun AccountCreateAnonymousHandler.createNamespace(req: AccountCreateAnon
     return namespaceCmdRepository.create(
         NamespaceCmdRepository.CreateCmd(
             id = req.cmdId(),
-            parentId = req.namespaceId,
             namespaceId = req.namespaceId,
             workspaceId = req.workspaceId,
             name = NamespaceName.default
+        )
+    )
+}
+
+private fun AccountCreateAnonymousHandler.createNamespaceTree(req: AccountCreateAnonymousRequested): NamespaceTree {
+    return namespaceTreeCmdRepository.create(
+        NamespaceTreeCmdRepository.CreateCmd(
+            id = req.cmdId(),
+            treeId = NamespaceTreeId(req.namespaceId.value),
+            rootNodeId = req.namespaceId,
+            workspaceId = req.workspaceId,
         )
     )
 }

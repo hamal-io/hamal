@@ -11,8 +11,7 @@ data class Namespace(
     override val id: NamespaceId,
     override val updatedAt: UpdatedAt,
     val workspaceId: WorkspaceId,
-    val name: NamespaceName,
-    val children: List<Namespace>
+    val name: NamespaceName
 ) : DomainObject<NamespaceId>
 
 
@@ -25,7 +24,6 @@ interface NamespaceCmdRepository : CmdRepository {
 
     data class CreateCmd(
         val id: CmdId,
-        val parentId: NamespaceId,
         val namespaceId: NamespaceId,
         val workspaceId: WorkspaceId,
         val name: NamespaceName

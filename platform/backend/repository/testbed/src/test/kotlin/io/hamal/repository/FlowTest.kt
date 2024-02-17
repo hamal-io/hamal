@@ -30,7 +30,6 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
             val result = create(
                 CreateCmd(
                     id = CmdId(1),
-                    parentId = NamespaceId(1),
                     namespaceId = NamespaceId(234),
                     workspaceId = WorkspaceId(1),
                     name = NamespaceName("SomeNamespace"),
@@ -60,7 +59,6 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
                     create(
                         CreateCmd(
                             id = CmdId(2),
-                            parentId = NamespaceId(1),
                             namespaceId = NamespaceId(4),
                             workspaceId = WorkspaceId(3),
                             name = NamespaceName("first-namespace-name")
@@ -92,7 +90,6 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
                 val result = create(
                     CreateCmd(
                         id = CmdId(23456),
-                        parentId = NamespaceId(1),
                         namespaceId = NamespaceId(5),
                         workspaceId = WorkspaceId(333),
                         name = NamespaceName("second-namespace-name")
@@ -368,7 +365,6 @@ private fun NamespaceRepository.createNamespace(
     create(
         CreateCmd(
             id = cmdId,
-            parentId = NamespaceId(1),
             namespaceId = namespaceId,
             workspaceId = workspaceId,
             name = name

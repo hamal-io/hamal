@@ -1,0 +1,67 @@
+package io.hamal.core.adapter
+
+import io.hamal.lib.domain.GenerateId
+import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain.request.NamespaceCreateRequest
+import io.hamal.lib.domain.request.NamespaceCreateRequested
+import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.RequestId
+import io.hamal.repository.api.NamespaceQueryRepository
+import io.hamal.repository.api.NamespaceTree
+import io.hamal.repository.api.NamespaceTreeQueryRepository
+import io.hamal.repository.api.NamespaceTreeQueryRepository.NamespaceTreeQuery
+import io.hamal.repository.api.RequestCmdRepository
+import org.springframework.stereotype.Component
+
+interface NamespaceTreeAppendPort {
+    operator fun <T : Any> invoke(
+        parentId: NamespaceId,
+        req: NamespaceCreateRequest,
+        responseHandler: (NamespaceCreateRequested) -> T
+    ): T
+}
+
+interface NamespaceTreeGetPort {
+    operator fun <T : Any> invoke(
+        namespaceId: NamespaceId,
+        responseHandler: (NamespaceTree) -> T
+    ): T
+}
+
+interface NamespaceTreeListPort {
+    operator fun <T : Any> invoke(query: NamespaceTreeQuery, responseHandler: (List<NamespaceTree>) -> T): T
+}
+
+
+interface NamespaceTreePort : NamespaceTreeAppendPort, NamespaceTreeGetPort, NamespaceTreeListPort
+
+@Component
+class NamespaceTreeAdapter(
+    private val generateDomainId: GenerateId,
+    private val namespaceQueryRepository: NamespaceQueryRepository,
+    private val namespaceTreeQueryRepository: NamespaceTreeQueryRepository,
+    private val requestCmdRepository: RequestCmdRepository
+) : NamespaceTreePort {
+
+    override fun <T : Any> invoke(
+        parentId: NamespaceId,
+        req: NamespaceCreateRequest,
+        responseHandler: (NamespaceCreateRequested) -> T
+    ): T {
+        val parent = namespaceQueryRepository.get(parentId)
+        // FIXME fetch tree
+        return NamespaceCreateRequested(
+            id = generateDomainId(::RequestId),
+            status = RequestStatus.Submitted,
+            namespaceId = generateDomainId(::NamespaceId),
+            workspaceId = parent.workspaceId,
+            name = req.name,
+        ).also(requestCmdRepository::queue).let(responseHandler)
+    }
+
+    override fun <T : Any> invoke(namespaceId: NamespaceId, responseHandler: (tree: NamespaceTree) -> T): T =
+        responseHandler(namespaceTreeQueryRepository.get(namespaceId))
+
+    override fun <T : Any> invoke(query: NamespaceTreeQuery, responseHandler: (trees: List<NamespaceTree>) -> T): T =
+        responseHandler(namespaceTreeQueryRepository.list(query))
+}

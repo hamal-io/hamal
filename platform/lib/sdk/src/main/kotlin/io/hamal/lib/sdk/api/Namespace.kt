@@ -18,8 +18,8 @@ data class ApiNamespaceCreateRequest(
 data class ApiNamespaceCreateRequested(
     override val id: RequestId,
     override val status: RequestStatus,
-    val parentId: NamespaceId,
-    val namespaceId: NamespaceId
+    val namespaceId: NamespaceId,
+    val workspaceId: WorkspaceId
 ) : ApiRequested()
 
 data class ApiNamespaceUpdateRequest(

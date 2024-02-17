@@ -1,62 +1,63 @@
-package io.hamal.repository.record.namespace
+package io.hamal.repository.record.namespace_tree
 
+import io.hamal.lib.common.TreeNode
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.NamespaceId
-import io.hamal.lib.domain.vo.NamespaceName
+import io.hamal.lib.domain.vo.NamespaceTreeId
 import io.hamal.lib.domain.vo.WorkspaceId
-import io.hamal.repository.api.Namespace
+import io.hamal.repository.api.NamespaceTree
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordEntity
 import io.hamal.repository.record.RecordSequence
 import io.hamal.repository.record.RecordedAt
 
-data class NamespaceEntity(
+data class NamespaceTreeEntity(
     override val cmdId: CmdId,
-    override val id: NamespaceId,
+    override val id: NamespaceTreeId,
     override val recordedAt: RecordedAt,
     override val sequence: RecordSequence,
     val workspaceId: WorkspaceId,
-    var name: NamespaceName? = null
+    var root: TreeNode<NamespaceId>? = null
+) : RecordEntity<NamespaceTreeId, NamespaceTreeRecord, NamespaceTree> {
 
-) : RecordEntity<NamespaceId, NamespaceRecord, Namespace> {
-
-    override fun apply(rec: NamespaceRecord): NamespaceEntity {
+    override fun apply(rec: NamespaceTreeRecord): NamespaceTreeEntity {
         return when (rec) {
-            is NamespaceRecord.Created -> copy(
+            is NamespaceTreeRecord.Created -> copy(
                 id = rec.entityId,
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
-                name = rec.name,
+                workspaceId = rec.workspaceId,
+                root = rec.root,
                 recordedAt = rec.recordedAt()
             )
 
-            is NamespaceRecord.Updated -> copy(
+            is NamespaceTreeRecord.Appended -> copy(
                 id = rec.entityId,
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
-                name = rec.name,
+                root = rec.root,
                 recordedAt = rec.recordedAt()
             )
         }
     }
 
-    override fun toDomainObject(): Namespace {
-        return Namespace(
+    override fun toDomainObject(): NamespaceTree {
+        return NamespaceTree(
             cmdId = cmdId,
             id = id,
             updatedAt = recordedAt.toUpdatedAt(),
             workspaceId = workspaceId,
-            name = name!!
+            root = root!!
         )
     }
 }
 
-fun List<NamespaceRecord>.createEntity(): NamespaceEntity {
+fun List<NamespaceTreeRecord>.createEntity(): NamespaceTreeEntity {
     check(isNotEmpty()) { "At least one record is required" }
     val firstRecord = first()
-    check(firstRecord is NamespaceRecord.Created)
+    check(firstRecord is NamespaceTreeRecord.Created)
 
-    var result = NamespaceEntity(
+    var result = NamespaceTreeEntity(
         id = firstRecord.entityId,
         cmdId = firstRecord.cmdId,
         sequence = firstRecord.sequence(),
@@ -71,8 +72,9 @@ fun List<NamespaceRecord>.createEntity(): NamespaceEntity {
     return result
 }
 
-object CreateNamespaceFromRecords : CreateDomainObject<NamespaceId, NamespaceRecord, Namespace> {
-    override fun invoke(recs: List<NamespaceRecord>): Namespace {
+
+object CreateNamespaceTreeFromRecords : CreateDomainObject<NamespaceTreeId, NamespaceTreeRecord, NamespaceTree> {
+    override fun invoke(recs: List<NamespaceTreeRecord>): NamespaceTree {
         return recs.createEntity().toDomainObject()
     }
 }

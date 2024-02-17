@@ -40,7 +40,6 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
         val createdNamespace = namespaceCmdRepository.create(
             CreateCmd(
                 id = CmdId(2),
-                parentId = NamespaceId(2),
                 namespaceId = NamespaceId(2),
                 workspaceId = testWorkspace.id,
                 name = NamespaceName("createdNamespace")
@@ -202,7 +201,6 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
         val createdNamespace = namespaceCmdRepository.create(
             CreateCmd(
                 id = CmdGen(),
-                parentId = NamespaceId(2),
                 namespaceId = NamespaceId(2),
                 workspaceId = testWorkspace.id,
                 name = NamespaceName("createdNamespace")

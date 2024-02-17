@@ -53,11 +53,12 @@ class NamespaceAdapter(
         req: NamespaceCreateRequest,
         responseHandler: (NamespaceCreateRequested) -> T
     ): T {
+        val parent = namespaceQueryRepository.get(parentId)
         return NamespaceCreateRequested(
             id = generateDomainId(::RequestId),
             status = RequestStatus.Submitted,
             namespaceId = generateDomainId(::NamespaceId),
-            parentId = parentId,
+            workspaceId = parent.workspaceId,
             name = req.name,
         ).also(requestCmdRepository::queue).let(responseHandler)
     }
