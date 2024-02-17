@@ -2,22 +2,21 @@ package io.hamal.core.adapter
 
 import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
+import io.hamal.lib.domain.request.BlueprintCreateRequest
+import io.hamal.lib.domain.request.BlueprintCreateRequested
+import io.hamal.lib.domain.request.BlueprintUpdateRequest
+import io.hamal.lib.domain.request.BlueprintUpdateRequested
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.BlueprintId
-import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.domain.vo.RequestId
 import io.hamal.repository.api.Blueprint
 import io.hamal.repository.api.BlueprintQueryRepository
+import io.hamal.repository.api.BlueprintQueryRepository.BlueprintQuery
 import io.hamal.repository.api.RequestCmdRepository
-import io.hamal.lib.domain.request.BlueprintCreateRequested
-import io.hamal.lib.domain.request.BlueprintUpdateRequested
-import io.hamal.lib.domain.request.BlueprintCreateRequest
-import io.hamal.lib.domain.request.BlueprintUpdateRequest
 import org.springframework.stereotype.Component
 
 interface BlueprintCreatePort {
     operator fun <T : Any> invoke(
-        workspaceId: WorkspaceId,
         accountId: AccountId,
         req: BlueprintCreateRequest,
         responseHandler: (BlueprintCreateRequested) -> T
@@ -36,7 +35,14 @@ interface BlueprintUpdatePort {
     ): T
 }
 
-interface BlueprintPort : BlueprintCreatePort, BlueprintGetPort, BlueprintUpdatePort
+interface BlueprintListPort {
+    operator fun <T : Any> invoke(
+        query: BlueprintQuery,
+        responseHandler: (List<Blueprint>) -> T
+    ): T
+}
+
+interface BlueprintPort : BlueprintCreatePort, BlueprintGetPort, BlueprintUpdatePort, BlueprintListPort
 
 @Component
 class BlueprintAdapter(
@@ -45,7 +51,6 @@ class BlueprintAdapter(
     private val requestCmdRepository: RequestCmdRepository
 ) : BlueprintPort {
     override fun <T : Any> invoke(
-        workspaceId: WorkspaceId,
         accountId: AccountId,
         req: BlueprintCreateRequest,
         responseHandler: (BlueprintCreateRequested) -> T
@@ -53,12 +58,12 @@ class BlueprintAdapter(
         return BlueprintCreateRequested(
             id = generateDomainId(::RequestId),
             status = Submitted,
-            workspaceId = workspaceId,
             blueprintId = generateDomainId(::BlueprintId),
             name = req.name,
             inputs = req.inputs,
             value = req.value,
-            creatorId = accountId
+            creatorId = accountId,
+            description = req.description
         ).also(requestCmdRepository::queue).let(responseHandler)
     }
 
@@ -75,12 +80,17 @@ class BlueprintAdapter(
         return BlueprintUpdateRequested(
             id = generateDomainId(::RequestId),
             status = Submitted,
-            workspaceId = blueprintQueryRepository.get(bpId).workspaceId,
             blueprintId = bpId,
             name = req.name,
             inputs = req.inputs,
             value = req.value,
-        ).also(requestCmdRepository::queue).let(responseHandler)
+            description = req.description
+
+            ).also(requestCmdRepository::queue).let(responseHandler)
+    }
+
+    override fun <T : Any> invoke(query: BlueprintQuery, responseHandler: (List<Blueprint>) -> T): T {
+        return responseHandler(blueprintQueryRepository.list(query))
     }
 
     private fun ensureBlueprintExists(blueprintId: BlueprintId) = blueprintQueryRepository.get(blueprintId)

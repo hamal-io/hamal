@@ -13,12 +13,12 @@ data class BlueprintEntity(
     override val id: BlueprintId,
     override val sequence: RecordSequence,
     override val recordedAt: RecordedAt,
-    val workspaceId: WorkspaceId,
     var creatorId: AccountId,
 
     var name: BlueprintName? = null,
     var inputs: BlueprintInputs? = null,
-    var codeValue: CodeValue? = null
+    var codeValue: CodeValue? = null,
+    var description: BlueprintDescription? = null,
 
 ) : RecordEntity<BlueprintId, BlueprintRecord, Blueprint> {
     override fun apply(rec: BlueprintRecord): BlueprintEntity {
@@ -31,6 +31,7 @@ data class BlueprintEntity(
                 name = rec.name,
                 inputs = rec.inputs,
                 codeValue = rec.value,
+                description = rec.description,
                 recordedAt = rec.recordedAt()
             )
 
@@ -41,6 +42,7 @@ data class BlueprintEntity(
                 name = rec.name,
                 inputs = rec.inputs,
                 codeValue = rec.value,
+                description = rec.description,
                 recordedAt = rec.recordedAt()
             )
         }
@@ -51,11 +53,11 @@ data class BlueprintEntity(
             cmdId = cmdId,
             id = id,
             updatedAt = recordedAt.toUpdatedAt(),
-            workspaceId = workspaceId,
             creatorId = creatorId,
             name = name!!,
             inputs = inputs!!,
-            value = codeValue!!
+            value = codeValue!!,
+            description = description!!
         )
     }
 }
@@ -68,7 +70,6 @@ fun List<BlueprintRecord>.createEntity(): BlueprintEntity {
     var result = BlueprintEntity(
         cmdId = firstRecord.cmdId,
         id = firstRecord.entityId,
-        workspaceId = firstRecord.workspaceId,
         creatorId = firstRecord.creatorId,
         sequence = firstRecord.sequence(),
         recordedAt = firstRecord.recordedAt()

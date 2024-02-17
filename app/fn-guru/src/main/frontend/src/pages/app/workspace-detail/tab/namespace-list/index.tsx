@@ -1,12 +1,12 @@
-import React, {FC, useContext, useEffect} from 'react'
+import React, {FC, useEffect} from 'react'
 import {PageHeader} from "@/components/page-header.tsx";
-import Create from "@/pages/app/namespace-list/components/create.tsx";
+import Create from "@/pages/app/workspace-detail/tab/namespace-list/components/create.tsx";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx";
 import {NamespaceListItem} from "@/types";
 import {useNamespaceList} from "@/hook";
 import {useUiState} from "@/hook/ui-state.ts";
 
-const NamespaceListPage: React.FC = () => {
+const WorkspaceNamespaceListTab: React.FC = () => {
     const [uiState] = useUiState()
     const [listNamespaces, namespaceList, isLoading, error] = useNamespaceList()
 
@@ -23,7 +23,7 @@ const NamespaceListPage: React.FC = () => {
 
     return (
         <div className="pt-8 px-8">
-            <PageHeader title="Namespaces" description="Organise your workflows" actions={[<Create/>]}/>
+            <PageHeader title="" description="" actions={[<Create/>]}/>
             <Content
                 namespaces={namespaceList.namespaces}
             />
@@ -61,4 +61,4 @@ const Content: FC<ContentProps> = ({namespaces}) => {
 }
 
 
-export default NamespaceListPage;
+export default WorkspaceNamespaceListTab;

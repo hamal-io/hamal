@@ -9,13 +9,13 @@ import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiBlueprint
 import io.hamal.lib.sdk.api.ApiBlueprintCreateRequest
 import io.hamal.lib.sdk.api.ApiBlueprintCreateRequested
+import io.hamal.lib.sdk.api.ApiBlueprintList
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 
 internal sealed class BlueprintBaseControllerTest : BaseControllerTest() {
     fun createBlueprint(req: ApiBlueprintCreateRequest): ApiBlueprintCreateRequested {
-        val createBlueprintResponse = httpTemplate.post("/v1/workspaces/{workspaceId}/blueprints")
-            .path("workspaceId", testWorkspace.id)
+        val createBlueprintResponse = httpTemplate.post("/v1/blueprints")
             .body(req)
             .execute()
 
@@ -33,5 +33,14 @@ internal sealed class BlueprintBaseControllerTest : BaseControllerTest() {
         assertThat(getBlueprintResponse.statusCode, equalTo(Ok))
         require(getBlueprintResponse is HttpSuccessResponse) { "request was not successful" }
         return getBlueprintResponse.result(ApiBlueprint::class)
+    }
+
+    fun listBlueprint(): ApiBlueprintList {
+        val listBlueprintResponse = httpTemplate.get("/v1/blueprints")
+            .execute()
+
+        assertThat(listBlueprintResponse.statusCode, equalTo(Ok))
+        require(listBlueprintResponse is HttpSuccessResponse) { "request was not successful" }
+        return listBlueprintResponse.result(ApiBlueprintList::class)
     }
 }

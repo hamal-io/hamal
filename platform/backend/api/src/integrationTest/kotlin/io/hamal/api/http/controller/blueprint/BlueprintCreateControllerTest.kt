@@ -1,6 +1,7 @@
 package io.hamal.api.http.controller.blueprint
 
 import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.domain.vo.BlueprintDescription
 import io.hamal.lib.domain.vo.BlueprintInputs
 import io.hamal.lib.domain.vo.BlueprintName
 import io.hamal.lib.domain.vo.CodeValue
@@ -27,6 +28,7 @@ internal class BlueprintCreateControllerTest : BlueprintBaseControllerTest() {
             assertThat(inputs, equalTo(BlueprintInputs(HotObject.builder().set("hamal", "rocks").build())))
             assertThat(name, equalTo(BlueprintName("TestBlueprint")))
             assertThat(value, equalTo(CodeValue("13 + 37")))
+            assertThat(description, equalTo(BlueprintDescription.empty))
         }
     }
 }

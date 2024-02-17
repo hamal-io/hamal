@@ -8,11 +8,11 @@ data class Blueprint(
     override val id: BlueprintId,
     override val updatedAt: UpdatedAt,
     val cmdId: CmdId,
-    val workspaceId: WorkspaceId,
     val creatorId: AccountId,
     val name: BlueprintName,
     val inputs: BlueprintInputs,
-    val value: CodeValue
+    val value: CodeValue,
+    val description: BlueprintDescription
 ) : DomainObject<BlueprintId>
 
 interface BlueprintRepository : BlueprintCmdRepository, BlueprintQueryRepository
@@ -24,18 +24,19 @@ interface BlueprintCmdRepository : CmdRepository {
     data class CreateCmd(
         val id: CmdId,
         val blueprintId: BlueprintId,
-        val workspaceId: WorkspaceId,
         val creatorId: AccountId,
         val inputs: BlueprintInputs,
         val name: BlueprintName,
-        val value: CodeValue
+        val value: CodeValue,
+        val description: BlueprintDescription
     )
 
     data class UpdateCmd(
         val id: CmdId,
         val name: BlueprintName? = null,
         val inputs: BlueprintInputs? = null,
-        val value: CodeValue? = null
+        val value: CodeValue? = null,
+        val description: BlueprintDescription? = null
     )
 }
 
@@ -46,7 +47,6 @@ interface BlueprintQueryRepository {
     fun list(blueprintIds: List<BlueprintId>): List<Blueprint> = list(
         BlueprintQuery(
             limit = Limit.all,
-            workspaceIds = listOf(),
             blueprintIds = blueprintIds
         )
     )
@@ -57,6 +57,5 @@ interface BlueprintQueryRepository {
         var afterId: BlueprintId = BlueprintId(SnowflakeId(Long.MAX_VALUE)),
         var limit: Limit = Limit(1),
         var blueprintIds: List<BlueprintId> = listOf(),
-        var workspaceIds: List<WorkspaceId>
     )
 }

@@ -26,7 +26,8 @@ internal class BlueprintGetController(
                 id = blueprint.id,
                 name = blueprint.name,
                 inputs = blueprint.inputs,
-                value = blueprint.value
+                value = blueprint.value,
+                description = blueprint.description
             )
         )
 }
