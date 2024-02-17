@@ -1,7 +1,23 @@
-import {Blueprint, BlueprintList} from "@/types/blueprint.ts";
+import {Blueprint, BlueprintCreateRequested, BlueprintList} from "@/types/blueprint.ts";
 import {useAuth} from "@/hook/auth.ts";
-import {useGet} from "@/hook/http.ts";
+import {useGet, usePost} from "@/hook/http.ts";
 import {useCallback} from "react";
+
+
+type BlueprintCreateAction = (name: string, value: string, description: string, abortController?: AbortController) => void
+export const useBlueprintCreate = (): [BlueprintCreateAction, BlueprintCreateRequested, boolean, Error] => {
+    const [auth] = useAuth()
+    const [post, submission, loading, error] = usePost<BlueprintCreateRequested>()
+    const fn = useCallback(async (name: string, value: string, description: string, abortController?: AbortController) =>
+        post(`/v1/blueprints`, {
+            name,
+            inputs: {},
+            value,
+            description
+        }, abortController), [auth]
+    )
+    return [fn, submission, loading, error]
+}
 
 type BlueprintGetAction = (bpId: string, abortController?: AbortController) => void
 export const useBlueprintGet = (): [BlueprintGetAction, Blueprint, boolean, Error] => {

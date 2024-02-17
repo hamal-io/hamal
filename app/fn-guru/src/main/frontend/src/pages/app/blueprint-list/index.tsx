@@ -1,94 +1,86 @@
-import React, {FC} from "react";
+import React, {FC, useEffect} from "react";
 import {useBlueprintList} from "@/hook/blueprint.ts";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx";
-import {BlueprintListItem} from "@/types/blueprint.ts";
 import {PageHeader} from "@/components/page-header.tsx";
+import {EmptyPlaceholder} from "@/components/empty-placeholder.tsx";
+import CreateBlueprint from "@/pages/app/blueprint-list/components/create.tsx";
 
 type Props = {}
 const BlueprintListPage: FC<Props> = ({}) => {
     const [listBlueprints, blueprintList, loading, error] = useBlueprintList()
 
-    /*   useEffect(() => {
-           const abortController = new AbortController();
-           listBlueprints(abortController)
-           return () => {
-               abortController.abort();
-           }
-       },[]);
+    useEffect(() => {
+        const abortController = new AbortController();
+        listBlueprints(abortController)
+        return () => {
+            abortController.abort();
+        }
+    }, []);
 
-       if (error) return `Error`
-       if (blueprintList == null || loading) return "Loading..."*/
+
+    if (error) return `Error`
+    if (blueprintList == null || loading) return "Loading..."
 
     return (
         <div className="pt-2 px-2">
             <PageHeader
                 title="Blueprints"
                 description={'Tryout our predefined workflows, proudly brought to you by the hamal.io team.'}
-                actions={[]}
+                actions={[<CreateBlueprint/>]}
             />
-            <ul className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                {/*    {blueprintList.blueprints.map((item) => (
-                BlueprintCard(item)
-                         ))}*/}
+            {
+                blueprintList.blueprints.length ?
+                    (<BlueprintCards blueprints={blueprintList.blueprints}/>) : (<NoContent/>)
+            }
 
-                <BlueprintCard id={"1234"} name={"Telegram Money Service"}
-                               description={"Be the first to know when your bank account hits a billion."}>
 
-                </BlueprintCard>
-
-                <BlueprintCard id={"1234"} name={"Email Crypto Bot"}
-                               description={"Generates passive income every minute."}>
-
-                </BlueprintCard>
-
-                <BlueprintCard id={"1234"} name={"Telegram Spam Service"}
-                               description={"Be the first to know when your bank account hits a billion."}>
-
-                </BlueprintCard>
-
-                <BlueprintCard id={"1234"} name={"Email Spam Bot"}
-                               description={"Generates passive income every minute."}>
-
-                </BlueprintCard>
-
-                <BlueprintCard id={"1234"} name={"Telegram Spam Service"}
-                               description={"Be the first to know when your bank account hits a billion."}>
-
-                </BlueprintCard>
-
-                <BlueprintCard id={"1234"} name={"Email Spam Bot"}
-                               description={"Generates passive income every minute."}>
-
-                </BlueprintCard>
-
-            </ul>
         </div>
     );
 }
+type CardProps = {
+    blueprints
+}
+const BlueprintCards: FC<CardProps> = ({blueprints}) => {
 
-const BlueprintCard = (item: BlueprintListItem) => {
+    return (
+        <ul className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            {blueprints.map((bp) => (
+                <Card
+                    key={bp.id}
+                    className="relative overfunc-hidden duration-500 hover:border-primary/50 group"
 
-    return (<Card
-        key={item.id}
-        className="relative overfunc-hidden duration-500 hover:border-primary/50 group"
-        onClick={() => {
-            console.log("Not implemented")
-            //navigate(`/blueprints/${item.id}`)
-        }}
-    >
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle>{item.name}</CardTitle>
-        </CardHeader>
-        <CardContent>
-            <dl className="text-sm leading-6 divide-y divide-gray-100 ">
-                <div className="flex justify-between py-3 gap-x-4">
-                    {item.description}
-                </div>
-            </dl>
-        </CardContent>
-    </Card>)
+                >
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <CardTitle>{bp.name}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <dl className="text-sm leading-6 divide-y divide-gray-100 ">
+                            <div className="flex justify-between py-3 gap-x-4">
+                                {bp.description}
+                            </div>
+                        </dl>
+                    </CardContent>
+                </Card>
+            ))}
+        </ul>)
 
 }
+
+
+const NoContent = () => (
+    <EmptyPlaceholder className="my-4 ">
+        <EmptyPlaceholder.Icon>
+            {/*<Code />*/}
+        </EmptyPlaceholder.Icon>
+        <EmptyPlaceholder.Title>No Blueprints found.</EmptyPlaceholder.Title>
+        <EmptyPlaceholder.Description>
+
+        </EmptyPlaceholder.Description>
+        <div className="flex flex-col items-center justify-center gap-2 md:flex-row">
+            <CreateBlueprint/>
+        </div>
+    </EmptyPlaceholder>
+)
 
 
 export default BlueprintListPage

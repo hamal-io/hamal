@@ -33,6 +33,12 @@ export const router = createBrowserRouter([
         path: "/onboarding", element: <OnboardingPage/>
     },
     {
+        path: "/blueprints/playground", element:
+            <WorkspaceLayout>
+                {/*<BlueprintPlayground/>*/}
+            </WorkspaceLayout>
+    },
+    {
         path: "/blueprints", element:
             <WorkspaceLayout>
             <BlueprintListPage/>

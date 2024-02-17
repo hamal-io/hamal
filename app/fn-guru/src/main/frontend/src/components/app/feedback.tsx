@@ -27,8 +27,7 @@ const Feedback = () => {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            mood: 2,
-            message: ""
+            mood: 2
         },
     })
 
