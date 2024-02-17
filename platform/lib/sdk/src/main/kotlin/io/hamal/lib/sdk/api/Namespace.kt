@@ -37,8 +37,8 @@ data class ApiNamespaceList(
 ) : ApiObject() {
     data class Namespace(
         val id: NamespaceId,
-        val name: NamespaceName,
-        val children: List<Namespace>
+        val parentId: NamespaceId,
+        val name: NamespaceName
     )
 }
 

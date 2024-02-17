@@ -63,9 +63,6 @@ const RenderNamespace: FC<RenderNamespaceProps> = ({namespace}) => {
             <CardContent>
                 <dl className="text-sm leading-6 divide-y divide-gray-100 ">
                     <div className="flex flex-row py-3 gap-x-4">
-                        {namespace.children.map((namespace) => (
-                            <RenderNamespace namespace={namespace}/>
-                        ))}
                     </div>
                 </dl>
             </CardContent>

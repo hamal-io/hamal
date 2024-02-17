@@ -30,8 +30,8 @@ class NamespaceListFunction(
                 index to KuaMap(
                     mutableMapOf(
                         "id" to KuaString(namespace.id.value.value.toString(16)),
+                        "parent_id" to KuaString(namespace.parentId.value.value.toString(16)),
                         "name" to KuaString(namespace.name.value),
-                        "children" to namespace.children.toKua()
                     )
                 )
             }.toMap().toMutableMap()

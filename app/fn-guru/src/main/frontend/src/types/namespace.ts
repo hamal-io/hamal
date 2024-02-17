@@ -25,6 +25,6 @@ export interface NamespaceList {
 
 export interface NamespaceListItem {
     id: string;
+    parentId: string;
     name: string;
-    children: Array<NamespaceListItem>
 }
