@@ -56,7 +56,7 @@ sealed class Requested {
             HookCreateRequested::class,
             HookInvokeRequested::class,
             HookUpdateRequested::class,
-            NamespaceCreateRequested::class,
+            NamespaceAppendRequested::class,
             NamespaceUpdateRequested::class,
             StateSetRequested::class,
             TestRequested::class,

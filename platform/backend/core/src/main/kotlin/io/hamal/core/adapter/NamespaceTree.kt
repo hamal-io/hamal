@@ -2,8 +2,8 @@ package io.hamal.core.adapter
 
 import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain.request.NamespaceAppendRequested
 import io.hamal.lib.domain.request.NamespaceCreateRequest
-import io.hamal.lib.domain.request.NamespaceCreateRequested
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.RequestId
 import io.hamal.repository.api.NamespaceQueryRepository
@@ -15,16 +15,13 @@ import org.springframework.stereotype.Component
 
 interface NamespaceTreeAppendPort {
     operator fun <T : Any> invoke(
-        parentId: NamespaceId,
-        req: NamespaceCreateRequest,
-        responseHandler: (NamespaceCreateRequested) -> T
+        parentId: NamespaceId, req: NamespaceCreateRequest, responseHandler: (NamespaceAppendRequested) -> T
     ): T
 }
 
 interface NamespaceTreeGetPort {
     operator fun <T : Any> invoke(
-        namespaceId: NamespaceId,
-        responseHandler: (NamespaceTree) -> T
+        namespaceId: NamespaceId, responseHandler: (NamespaceTree) -> T
     ): T
 }
 
@@ -44,15 +41,13 @@ class NamespaceTreeAdapter(
 ) : NamespaceTreePort {
 
     override fun <T : Any> invoke(
-        parentId: NamespaceId,
-        req: NamespaceCreateRequest,
-        responseHandler: (NamespaceCreateRequested) -> T
+        parentId: NamespaceId, req: NamespaceCreateRequest, responseHandler: (NamespaceAppendRequested) -> T
     ): T {
         val parent = namespaceQueryRepository.get(parentId)
-        // FIXME fetch tree
-        return NamespaceCreateRequested(
+        return NamespaceAppendRequested(
             id = generateDomainId(::RequestId),
             status = RequestStatus.Submitted,
+            parentId = parent.id,
             namespaceId = generateDomainId(::NamespaceId),
             workspaceId = parent.workspaceId,
             name = req.name,

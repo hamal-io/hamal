@@ -1,30 +1,34 @@
 import {useNavigate} from "react-router-dom";
-import React, {useEffect, useState} from "react";
+import React, {FC, useEffect, useState} from "react";
 
 import * as z from "zod"
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
 import {useForm} from "react-hook-form";
-import {BookOpen, Loader2, Plus, PlusCircle} from "lucide-react";
+import {Loader2, Plus} from "lucide-react";
 import {useAuth} from "@/hook/auth.ts";
 import {Dialog, DialogContent, DialogHeader, DialogTrigger} from "@/components/ui/dialog.tsx";
 import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
-import {useNamespaceCreate} from "@/hook";
+import {useNamespaceAppend} from "@/hook";
 
 
 const formSchema = z.object({
     name: z.string().min(2).max(50),
 })
 
-const Create = () => {
+type Props = {
+    parentId: string;
+}
+
+const Append: FC<Props> = ({parentId}) => {
     const [auth, setAuth] = useAuth()
     const navigate = useNavigate()
     const [openDialog, setOpenDialog] = useState<boolean>(false)
     const props = {openModal: openDialog, setOpenModal: setOpenDialog}
     const [isLoading, setLoading] = useState(false)
 
-    const [createNamespace, requestedNamespace] = useNamespaceCreate()
+    const [appendNamespace, requestedNamespace] = useNamespaceAppend()
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -40,7 +44,7 @@ const Create = () => {
         // ✅ This will be type-safe and validated.
 
         try {
-            createNamespace(auth.workspaceId, values.name)
+            appendNamespace(parentId, values.name)
         } catch (e) {
             console.error(e)
         } finally {
@@ -63,7 +67,6 @@ const Create = () => {
                 <DialogTrigger asChild>
                     <Button>
                         <Plus className="w-4 h-4 mr-1"/>
-                        New Namespace
                     </Button>
                 </DialogTrigger>
 
@@ -101,4 +104,4 @@ const Create = () => {
 }
 
 
-export default Create;
+export default Append;

@@ -1,6 +1,5 @@
 package io.hamal.repository.memory.record.namespace_tree
 
-import io.hamal.lib.common.TreeNode
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceTreeId
@@ -29,7 +28,7 @@ class NamespaceTreeMemoryRepository : RecordMemoryRepository<NamespaceTreeId, Na
                     NamespaceTreeRecord.Created(
                         cmdId = cmd.id,
                         entityId = treeId,
-                        root = TreeNode.Builder(cmd.rootNodeId).build(),
+                        rootId = cmd.rootNodeId,
                         workspaceId = cmd.workspaceId,
                     )
                 )
@@ -39,7 +38,22 @@ class NamespaceTreeMemoryRepository : RecordMemoryRepository<NamespaceTreeId, Na
     }
 
     override fun append(cmd: NamespaceTreeCmdRepository.AppendCmd): NamespaceTree {
-        TODO("Not yet implemented")
+        return lock.withLock {
+            val treeId = cmd.treeId
+            if (commandAlreadyApplied(cmd.id, treeId)) {
+                versionOf(treeId, cmd.id)
+            } else {
+                store(
+                    NamespaceTreeRecord.Appended(
+                        cmdId = cmd.id,
+                        entityId = treeId,
+                        parentId = cmd.parentId,
+                        namespaceId = cmd.namespaceId
+                    )
+                )
+                (currentVersion(treeId)).also(NamespaceTreeCurrentProjection::apply)
+            }
+        }
     }
 
     override fun close() {
@@ -51,13 +65,12 @@ class NamespaceTreeMemoryRepository : RecordMemoryRepository<NamespaceTreeId, Na
 
     override fun find(namespaceId: NamespaceId): NamespaceTree? = NamespaceTreeCurrentProjection.find(namespaceId)
 
-    override fun list(query: NamespaceTreeQueryRepository.NamespaceTreeQuery): List<NamespaceTree> {
-        TODO("Not yet implemented")
-    }
+    override fun list(query: NamespaceTreeQueryRepository.NamespaceTreeQuery): List<NamespaceTree> =
+        NamespaceTreeCurrentProjection.list(query)
 
-    override fun count(query: NamespaceTreeQueryRepository.NamespaceTreeQuery): Count {
-        TODO("Not yet implemented")
-    }
+
+    override fun count(query: NamespaceTreeQueryRepository.NamespaceTreeQuery): Count =
+        NamespaceTreeCurrentProjection.count(query)
 
     private val lock = ReentrantLock()
 }

@@ -1,7 +1,9 @@
 package io.hamal.repository.record.namespace_tree
 
 import io.hamal.lib.common.TreeNode
+import io.hamal.lib.common.TreeNodeMutable
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.mutate
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceTreeId
 import io.hamal.lib.domain.vo.WorkspaceId
@@ -27,17 +29,23 @@ data class NamespaceTreeEntity(
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
                 workspaceId = rec.workspaceId,
-                root = rec.root,
+                root = TreeNode(rec.rootId),
                 recordedAt = rec.recordedAt()
             )
 
-            is NamespaceTreeRecord.Appended -> copy(
-                id = rec.entityId,
-                cmdId = rec.cmdId,
-                sequence = rec.sequence(),
-                root = rec.root,
-                recordedAt = rec.recordedAt()
-            )
+            is NamespaceTreeRecord.Appended ->
+                copy(
+                    id = rec.entityId,
+                    cmdId = rec.cmdId,
+                    sequence = rec.sequence(),
+                    root = root!!.mutate().let { rootNode ->
+                        val parent = rootNode.find { it.value == rec.parentId }!!
+                        parent.descendants.add(TreeNodeMutable(rec.namespaceId))
+                        rootNode.toTreeNode()
+                    },
+                    recordedAt = rec.recordedAt()
+                )
+
         }
     }
 

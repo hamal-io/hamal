@@ -34,8 +34,8 @@ interface NamespaceTreeCmdRepository : CmdRepository {
     data class AppendCmd(
         val id: CmdId,
         val treeId: NamespaceTreeId,
-        val appendToId: NamespaceId,
-        val nodeId: NamespaceId
+        val parentId: NamespaceId,
+        val namespaceId: NamespaceId,
     )
 }
 
@@ -52,8 +52,8 @@ interface NamespaceTreeQueryRepository {
     data class NamespaceTreeQuery(
         var afterId: NamespaceTreeId = NamespaceTreeId(SnowflakeId(Long.MAX_VALUE)),
         var limit: Limit = Limit(1),
-        var treeIds: List<NamespaceTreeId> = listOf(),
-        var workspaceIds: List<WorkspaceId> = listOf()
+        var workspaceIds: List<WorkspaceId> = listOf(),
+        var treeIds: List<NamespaceTreeId> = listOf()
     )
 
 

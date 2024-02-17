@@ -1,6 +1,5 @@
 package io.hamal.repository.record.namespace_tree
 
-import io.hamal.lib.common.TreeNode
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceTreeId
@@ -27,12 +26,13 @@ sealed class NamespaceTreeRecord(
         override val entityId: NamespaceTreeId,
         override val cmdId: CmdId,
         val workspaceId: WorkspaceId,
-        val root: TreeNode<NamespaceId>
+        val rootId: NamespaceId
     ) : NamespaceTreeRecord()
 
     data class Appended(
         override val entityId: NamespaceTreeId,
         override val cmdId: CmdId,
-        val root: TreeNode<NamespaceId>
+        val parentId: NamespaceId,
+        val namespaceId: NamespaceId
     ) : NamespaceTreeRecord()
 }
