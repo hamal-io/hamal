@@ -22,7 +22,7 @@ const CreateBlueprint = () => {
     const navigate = useNavigate()
     const [openDialog, setOpenDialog] = useState<boolean>(false)
     const [isLoading, setLoading] = useState(false)
-    const [createBlueprint, submission] = useBlueprintCreate()
+    const [createBlueprint, submitted] = useBlueprintCreate()
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -47,14 +47,13 @@ const CreateBlueprint = () => {
 
     useEffect(() => {
         const abortController = new AbortController();
-        if (submission !== null) {
-            navigate('/blueprints/playground')
-            setOpenDialog(false)
+        if (submitted !== null) {
+            navigate(`/blueprints/editor/${submitted.id}`)
         }
         return () => {
             abortController.abort();
         }
-    }, [submission, navigate]);
+    }, [submitted, navigate]);
 
     return (
         <>
