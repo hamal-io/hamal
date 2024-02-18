@@ -9,6 +9,11 @@ import io.hamal.repository.api.NamespaceTreeQueryRepository
 internal object NamespaceTreeCurrentProjection {
 
     fun apply(tree: NamespaceTree) {
+        projection.values
+            .filter { it.id != tree.id }
+            .find { it.workspaceId == tree.workspaceId }
+            ?.let { throw IllegalArgumentException("NamespaceTree already exists in workspace") }
+
         projection[tree.id] = tree
 
         tree.root.preorder().forEach { namespaceId ->
@@ -45,6 +50,11 @@ internal object NamespaceTreeCurrentProjection {
                 .count()
                 .toLong()
         )
+    }
+
+    fun clear() {
+        projection.clear()
+        namespaceMapping.clear()
     }
 
     private val projection = mutableMapOf<NamespaceTreeId, NamespaceTree>()

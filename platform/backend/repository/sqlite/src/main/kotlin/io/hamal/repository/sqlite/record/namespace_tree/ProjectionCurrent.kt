@@ -126,7 +126,8 @@ internal object ProjectionCurrent : ProjectionSqlite<NamespaceTreeId, NamespaceT
                  id             INTEGER NOT NULL,
                  workspace_id   INTEGER NOT NULL,
                  data           BLOB NOT NULL,
-                 PRIMARY KEY    (id)
+                 PRIMARY KEY    (id),
+                 UNIQUE (workspace_id)
             );
         """.trimIndent()
         )

@@ -56,7 +56,15 @@ class NamespaceTreeMemoryRepository : RecordMemoryRepository<NamespaceTreeId, Na
         }
     }
 
-    override fun close() { }
+    override fun close() {}
+
+    override fun clear() {
+        lock.withLock {
+            super.clear()
+            NamespaceTreeCurrentProjection.clear()
+        }
+    }
+
 
     override fun find(namespaceId: NamespaceId): NamespaceTree? = NamespaceTreeCurrentProjection.find(namespaceId)
 

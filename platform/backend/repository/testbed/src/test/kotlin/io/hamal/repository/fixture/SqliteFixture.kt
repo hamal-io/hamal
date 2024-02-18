@@ -21,11 +21,12 @@ import io.hamal.repository.sqlite.record.exec.ExecSqliteRepository
 import io.hamal.repository.sqlite.record.extension.ExtensionSqliteRepository
 import io.hamal.repository.sqlite.record.feedback.FeedbackSqliteRepository
 import io.hamal.repository.sqlite.record.func.FuncSqliteRepository
-import io.hamal.repository.sqlite.record.workspace.WorkspaceSqliteRepository
 import io.hamal.repository.sqlite.record.hook.HookSqliteRepository
 import io.hamal.repository.sqlite.record.namespace.NamespaceSqliteRepository
+import io.hamal.repository.sqlite.record.namespace_tree.NamespaceTreeSqliteRepository
 import io.hamal.repository.sqlite.record.topic.TopicSqliteRepository
 import io.hamal.repository.sqlite.record.trigger.TriggerSqliteRepository
+import io.hamal.repository.sqlite.record.workspace.WorkspaceSqliteRepository
 import java.nio.file.Files.createTempDirectory
 import kotlin.reflect.KClass
 
@@ -46,6 +47,7 @@ object SqliteFixture : BaseTestFixture {
         WorkspaceRepository::class -> WorkspaceSqliteRepository(createTempDirectory("sqlite_workspace_test")) as REPO
         HookRepository::class -> HookSqliteRepository(createTempDirectory("sqlite_hook_test")) as REPO
         NamespaceRepository::class -> NamespaceSqliteRepository(createTempDirectory("sqlite_namespace_test")) as REPO
+        NamespaceTreeRepository::class -> NamespaceTreeSqliteRepository(createTempDirectory("sqlite_namespace_tree_test")) as REPO
         StateRepository::class -> StateSqliteRepository(createTempDirectory("sqlite_state_test")) as REPO
         LogBrokerRepository::class -> LogBrokerSqliteRepository(createTempDirectory("sqlite_log_broker_test")) as REPO
         LogSegmentRepository::class -> LogSegmentSqliteRepository(

@@ -1,7 +1,7 @@
 package io.hamal.lib.common
 
 
-class TreeNode<T : Any>(
+data class TreeNode<T : Any>(
     val value: T,
     val descendants: List<TreeNode<T>> = listOf()
 ) {
