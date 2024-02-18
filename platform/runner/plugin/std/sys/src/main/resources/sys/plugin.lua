@@ -68,6 +68,9 @@ function plugin()
 
         function export.endpoints.list(query)
             query = query or {}
+            query.namespace_ids = query.namespace_ids or {}
+            query.workspace_ids = query.workspace_ids or {}
+
             return internal.endpoint_list(query)
         end
 

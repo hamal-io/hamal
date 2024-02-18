@@ -1,5 +1,6 @@
 package io.hamal.plugin.std.sys.endpoint
 
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -20,7 +21,9 @@ class EndpointListFunction(
     override fun invoke(ctx: FunctionContext, arg1: KuaMap): Pair<KuaError?, KuaArray?> {
         return try {
             null to KuaArray(
-                sdk.endpoint.list(EndpointQuery()).mapIndexed { index, endpoint ->
+                sdk.endpoint.list(EndpointQuery(
+                    namespaceIds = arg1.getArrayType("namespace_ids").map { NamespaceId((it.value as KuaString).value) }
+                )).mapIndexed { index, endpoint ->
                     index to KuaMap(
                         mutableMapOf(
                             "id" to KuaString(endpoint.id.value.value.toString(16)),

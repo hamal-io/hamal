@@ -1,6 +1,7 @@
 package io.hamal.api.http.controller.endpoint
 
 import io.hamal.core.adapter.EndpointListPort
+import io.hamal.core.adapter.NamespaceTreeGetSubTreePort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.EndpointId
 import io.hamal.lib.domain.vo.NamespaceId
@@ -16,7 +17,10 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class EndpointListController(private val listEndpoint: EndpointListPort) {
+internal class EndpointListController(
+    private val listEndpoint: EndpointListPort,
+    private val namespaceTreeGetSubTree: NamespaceTreeGetSubTreePort
+) {
 
     @GetMapping("/v1/namespaces/{namespaceId}/endpoints")
     fun namespaceEndpointList(
@@ -24,46 +28,31 @@ internal class EndpointListController(private val listEndpoint: EndpointListPort
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: EndpointId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit,
     ): ResponseEntity<ApiEndpointList> {
-        return listEndpoint(
-            EndpointQuery(
-                afterId = afterId,
-                limit = limit,
-                workspaceIds = listOf(),
-                namespaceIds = listOf(namespaceId)
-            ),
-            // assembler
-        ) { endpoints, funcs ->
-
-            ResponseEntity.ok(ApiEndpointList(
-                endpoints.map { endpoint ->
-                    val func = funcs[endpoint.funcId]!!
-                    Endpoint(
-                        id = endpoint.id,
-                        func = Func(
-                            id = func.id,
-                            name = func.name
-                        ),
-                        name = endpoint.name
-                    )
-                }
-            ))
-
-        }
+        return list(
+            afterId = afterId,
+            limit = limit,
+            workspaceIds = listOf(),
+            namespaceIds = listOf(namespaceId)
+        )
     }
 
     @GetMapping("/v1/endpoints")
-    fun listEndpoint(
+    fun list(
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: EndpointId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit,
         @RequestParam(required = false, name = "workspace_ids", defaultValue = "") workspaceIds: List<WorkspaceId>,
         @RequestParam(required = false, name = "namespace_ids", defaultValue = "") namespaceIds: List<NamespaceId>
     ): ResponseEntity<ApiEndpointList> {
+        val allNamespaceIds = namespaceIds.flatMap { namespaceId ->
+            namespaceTreeGetSubTree(namespaceId) { it }.values
+        }
+
         return listEndpoint(
             EndpointQuery(
                 afterId = afterId,
                 limit = limit,
                 workspaceIds = workspaceIds,
-                namespaceIds = namespaceIds
+                namespaceIds = allNamespaceIds
             ),
             // assembler
         ) { endpoints, namespaces ->
