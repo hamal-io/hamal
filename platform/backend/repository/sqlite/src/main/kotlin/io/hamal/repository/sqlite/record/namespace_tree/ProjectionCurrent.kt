@@ -14,26 +14,6 @@ import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 
 internal object ProjectionCurrent : ProjectionSqlite<NamespaceTreeId, NamespaceTreeRecord, NamespaceTree> {
 
-    fun find(connection: Connection, treeId: NamespaceTreeId): NamespaceTree? {
-        return connection.executeQueryOne(
-            """
-            SELECT 
-                data
-             FROM
-                current
-            WHERE
-                id  = :id
-        """.trimIndent()
-        ) {
-            query {
-                set("id", treeId)
-            }
-            map { rs ->
-                json.decompressAndDeserialize(NamespaceTree::class, rs.getBytes("data"))
-            }
-        }
-    }
-
     fun find(connection: Connection, namespaceId: NamespaceId): NamespaceTree? {
         return connection.executeQueryOne(
             """

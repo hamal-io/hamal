@@ -56,12 +56,7 @@ class NamespaceTreeMemoryRepository : RecordMemoryRepository<NamespaceTreeId, Na
         }
     }
 
-    override fun close() {
-    }
-
-    override fun find(treeId: NamespaceTreeId): NamespaceTree? {
-        TODO("Not yet implemented")
-    }
+    override fun close() { }
 
     override fun find(namespaceId: NamespaceId): NamespaceTree? = NamespaceTreeCurrentProjection.find(namespaceId)
 

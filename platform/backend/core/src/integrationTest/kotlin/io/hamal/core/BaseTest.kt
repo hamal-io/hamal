@@ -80,6 +80,9 @@ internal abstract class BaseTest {
     lateinit var namespaceCmdRepository: NamespaceCmdRepository
 
     @Autowired
+    lateinit var namespaceTreeRepository: NamespaceTreeRepository
+
+    @Autowired
     lateinit var requestQueryRepository: RequestQueryRepository
 
     @Autowired

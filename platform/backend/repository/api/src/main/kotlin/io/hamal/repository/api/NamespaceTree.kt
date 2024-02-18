@@ -44,9 +44,6 @@ interface NamespaceTreeCmdRepository : CmdRepository {
 }
 
 interface NamespaceTreeQueryRepository {
-    fun get(treeId: NamespaceTreeId) = find(treeId) ?: throw NoSuchElementException("Namespace not found")
-    fun find(treeId: NamespaceTreeId): NamespaceTree?
-
     fun get(namespaceId: NamespaceId) = find(namespaceId) ?: throw NoSuchElementException("Namespace not found")
     fun find(namespaceId: NamespaceId): NamespaceTree?
 

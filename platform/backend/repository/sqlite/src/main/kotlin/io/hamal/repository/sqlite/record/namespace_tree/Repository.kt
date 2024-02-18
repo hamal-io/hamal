@@ -86,8 +86,6 @@ class NamespaceTreeSqliteRepository(
         }
     }
 
-    override fun find(treeId: NamespaceTreeId): NamespaceTree? = ProjectionCurrent.find(connection, treeId)
-
     override fun find(namespaceId: NamespaceId): NamespaceTree? = ProjectionCurrent.find(connection, namespaceId)
 
     override fun list(query: NamespaceTreeQuery): List<NamespaceTree> =
