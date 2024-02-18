@@ -31,7 +31,7 @@ dependencies {
         exclude("com.fasterxml.jackson.core", "jackson-annotations")
     }
 
-    implementation(project(":platform:runner"))
+    implementation(project(":platform:runner:runner"))
 }
 
 tasks.named<BootJar>("bootJar") {
