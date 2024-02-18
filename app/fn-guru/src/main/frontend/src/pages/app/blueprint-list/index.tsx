@@ -1,14 +1,16 @@
 import React, {FC, useEffect, useState} from "react";
-import {useBlueprintCreate, useBlueprintList} from "@/hook/blueprint.ts";
+import {useBlueprintCreate, useBlueprintGet, useBlueprintList} from "@/hook/blueprint.ts";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx";
 import {PageHeader} from "@/components/page-header.tsx";
 import {EmptyPlaceholder} from "@/components/empty-placeholder.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {useNavigate} from "react-router-dom";
 import {Plus} from "lucide-react";
+import {useUiState} from "@/hook/ui-state.ts";
+import {useAdhoc} from "@/hook";
+import {BlueprintListItem} from "@/types/blueprint.ts";
 
-type Props = {}
-const BlueprintListPage: FC<Props> = ({}) => {
+const BlueprintListPage = () => {
     const [listBlueprints, blueprintList, loading, error] = useBlueprintList()
 
     useEffect(() => {
@@ -41,12 +43,12 @@ const BlueprintListPage: FC<Props> = ({}) => {
 }
 
 type CardProps = {
-    blueprints
+    blueprints: Array<BlueprintListItem>
 }
 const BlueprintCards: FC<CardProps> = ({blueprints}) => {
     const navigate = useNavigate()
     return (
-        <ul className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <ul className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {blueprints.map((bp) => (
                 <Card
                     key={bp.id}
@@ -63,14 +65,12 @@ const BlueprintCards: FC<CardProps> = ({blueprints}) => {
                             </div>
                         </dl>
                         <div className="flex flex-row justify-between items-center">
-                            <Button onClick={() => {
-                                console.log("nice try")
-                            }} variant="secondary">
-                                Run
-                            </Button>
-                            <Button onClick={() => {
-                                navigate(`/blueprints/editor/${bp.id}`)
-                            }} variant="secondary">
+                            <SetupBlueprint blueprintId={bp.id}/>
+                            <Button
+                                size={"sm"}
+                                onClick={() => {
+                                    navigate(`/blueprints/editor/${bp.id}`)
+                                }} variant="secondary">
                                 Config
                             </Button>
                         </div>
@@ -127,6 +127,34 @@ const CreateBlueprint = () => {
         <Button type={"submit"} size="lg" onClick={create}>
             <Plus className="w-4 h-4 mr-1"/>
             Create Blueprint
+        </Button>
+    )
+}
+
+type SetupProps = { blueprintId: string }
+const SetupBlueprint: FC<SetupProps> = ({blueprintId}) => {
+    const [uiState] = useUiState()
+    const [adhoc, data] = useAdhoc()
+    const [getBlueprint, blueprint, loading, error] = useBlueprintGet()
+
+
+    useEffect(() => {
+        const abortController = new AbortController();
+        getBlueprint(blueprintId)
+        return () => {
+            abortController.abort();
+        };
+    }, [blueprintId]);
+
+    async function setup() {
+        if (blueprint !== null) {
+            adhoc(uiState.namespaceId, blueprint.value)
+        }
+    }
+
+    return (
+        <Button type={"submit"} size="sm" onClick={setup}>
+            Setup
         </Button>
     )
 }
