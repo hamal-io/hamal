@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {PageHeader} from "@/components/page-header.tsx";
 import Editor from "@/components/editor.tsx";
 import {useBlueprintGet, useBlueprintUpdate} from "@/hook/blueprint.ts";
@@ -6,17 +6,16 @@ import {useNavigate, useParams} from "react-router-dom";
 import {Button} from "@/components/ui/button.tsx";
 import {Input} from "@/components/ui/input.tsx";
 
-type Props = {}
-const BlueprintEditor: FC<Props> = () => {
+const BlueprintEditor = () => {
     const {bpId} = useParams()
     const navigate = useNavigate()
-    const [getBlueprint, blueprint, getLoad, getError] = useBlueprintGet()
+    const [getBlueprint, blueprint, loading, getError] = useBlueprintGet()
     const [isLoading, setLoading] = useState(false)
-    const [updateBlueprint, submittedUpdate, updateLoad, errorLoad] = useBlueprintUpdate()
+    const [updateBlueprint] = useBlueprintUpdate()
 
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
-    const [code, setCode] = useState("empty blueprint")
+    const [value, setValue] = useState('')
 
 
     useEffect(() => {
@@ -31,7 +30,7 @@ const BlueprintEditor: FC<Props> = () => {
         if (blueprint !== null) {
             setName(blueprint.name)
             setDescription(blueprint.description)
-            setCode(blueprint.value)
+            setValue(blueprint.value)
         }
     }, [blueprint]);
 
@@ -40,7 +39,7 @@ const BlueprintEditor: FC<Props> = () => {
         setLoading(true)
         const abortController = new AbortController();
         try {
-            updateBlueprint(blueprint.id, name, code, description)
+            updateBlueprint(blueprint.id, name, value, description)
         } catch (e) {
             console.error(e)
         } finally {
@@ -49,8 +48,7 @@ const BlueprintEditor: FC<Props> = () => {
         }
     }
 
-    if (blueprint == null || getLoad) return "Loading..."
-
+    if (blueprint == null || loading) return "Loading..."
 
     return (
         <div className="h-full pt-4">
@@ -99,7 +97,7 @@ const BlueprintEditor: FC<Props> = () => {
                 <label>
                     Value:
                     <div className="bg-white p-4 rounded-sm border-2">
-                        <Editor code={code} onChange={setCode}/>
+                        <Editor code={value} onChange={setValue}/>
 
                     </div>
                 </label>
