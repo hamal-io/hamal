@@ -57,5 +57,4 @@ interface NamespaceTreeQueryRepository {
         var treeIds: List<NamespaceTreeId> = listOf()
     )
 
-
 }

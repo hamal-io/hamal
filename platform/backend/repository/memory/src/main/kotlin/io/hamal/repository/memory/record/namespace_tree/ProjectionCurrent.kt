@@ -14,11 +14,15 @@ internal object NamespaceTreeCurrentProjection {
             .find { it.workspaceId == tree.workspaceId }
             ?.let { throw IllegalArgumentException("NamespaceTree already exists in workspace") }
 
-        projection[tree.id] = tree
-
+        tree.root.preorder().forEach(namespaceMapping::remove)
         tree.root.preorder().forEach { namespaceId ->
+            if (namespaceMapping[namespaceId] != null) {
+                throw IllegalArgumentException("Namespace already exists in NamespaceTree")
+            }
             namespaceMapping[namespaceId] = tree.id
         }
+
+        projection[tree.id] = tree
     }
 
     fun find(namespaceId: NamespaceId): NamespaceTree? {

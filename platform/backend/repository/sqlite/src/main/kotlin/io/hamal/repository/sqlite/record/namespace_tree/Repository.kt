@@ -43,7 +43,7 @@ class NamespaceTreeSqliteRepository(
     filename = "namespace-tree.db",
     createDomainObject = CreateNamespaceTree,
     recordClass = NamespaceTreeRecord::class,
-    projections = listOf(ProjectionCurrent, ProjectionUniqueWorkspace)
+    projections = listOf(ProjectionCurrent, ProjectionUniqueWorkspace, ProjectionUniqueNamespace)
 ), NamespaceTreeRepository {
 
     override fun create(cmd: CreateCmd): NamespaceTree {
@@ -63,6 +63,7 @@ class NamespaceTreeSqliteRepository(
                 currentVersion(treeId)
                     .also { ProjectionCurrent.upsert(this, it) }
                     .also { ProjectionUniqueWorkspace.upsert(this, it) }
+                    .also { ProjectionUniqueNamespace.upsert(this, it) }
             }
         }
     }
@@ -81,9 +82,9 @@ class NamespaceTreeSqliteRepository(
                         namespaceId = cmd.namespaceId
                     )
                 )
-                (currentVersion(treeId)).also {
-                    ProjectionCurrent.upsert(this, it)
-                }
+                (currentVersion(treeId))
+                    .also { ProjectionCurrent.upsert(this, it) }
+                    .also { ProjectionUniqueNamespace.upsert(this, it) }
             }
         }
     }
