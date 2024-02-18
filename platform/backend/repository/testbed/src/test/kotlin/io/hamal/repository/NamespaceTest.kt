@@ -46,36 +46,6 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
         }
 
         @TestFactory
-        fun `Tries to create but same name already exist`() =
-            runWith(NamespaceRepository::class) {
-
-                createNamespace(
-                    namespaceId = NamespaceId(2),
-                    workspaceId = WorkspaceId(3),
-                    name = NamespaceName("first-namespace-name")
-                )
-
-                val exception = assertThrows<IllegalArgumentException> {
-                    create(
-                        CreateCmd(
-                            id = CmdId(2),
-                            namespaceId = NamespaceId(4),
-                            workspaceId = WorkspaceId(3),
-                            name = NamespaceName("first-namespace-name")
-                        )
-                    )
-                }
-
-                assertThat(
-                    exception.message,
-                    equalTo("NamespaceName(first-namespace-name) already exists")
-                )
-
-                verifyCount(1)
-            }
-
-
-        @TestFactory
         fun `Tries to create but cmd with namespace id was already applied`() =
             runWith(NamespaceRepository::class) {
 

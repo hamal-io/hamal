@@ -9,7 +9,7 @@ import io.hamal.lib.domain.request.NamespaceAppendRequested
 import io.hamal.repository.api.*
 import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
 import io.hamal.repository.api.NamespaceTreeCmdRepository.AppendCmd
-import io.hamal.repository.api.event.NamespaceCreatedEvent
+import io.hamal.repository.api.event.NamespaceAppendedEvent
 import org.springframework.stereotype.Component
 
 
@@ -57,5 +57,5 @@ private fun NamespaceAppendHandler.appendNamespace(req: NamespaceAppendRequested
 }
 
 private fun NamespaceAppendHandler.emitEvent(cmdId: CmdId, namespace: Namespace) {
-    eventEmitter.emit(cmdId, NamespaceCreatedEvent(namespace))
+    eventEmitter.emit(cmdId, NamespaceAppendedEvent(namespace))
 }

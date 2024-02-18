@@ -17,7 +17,6 @@ import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 
 
@@ -68,46 +67,6 @@ internal class NamespaceAppendHandlerTest : BaseReqHandlerTest() {
             }
         }
     }
-
-    @Test
-    fun `Tries to append namespace which already exists`() {
-        testInstance(requestedAppendNamespace)
-
-        assertThrows<IllegalArgumentException> {
-            testInstance(
-                NamespaceAppendRequested(
-                    id = RequestId(3),
-                    status = Submitted,
-                    parentId = NamespaceId.root,
-                    namespaceId = NamespaceId(23456),
-                    workspaceId = testWorkspace.id,
-                    name = NamespaceName("awesome-namespace")
-                )
-            )
-        }.also { exception ->
-            assertThat(exception.message, equalTo("NamespaceName(awesome-namespace) already exists"))
-        }
-
-        namespaceQueryRepository.list(
-            NamespaceQuery(
-                limit = Limit.all,
-                workspaceIds = listOf(testWorkspace.id)
-            )
-        ).also { namespaces ->
-            assertThat(namespaces, hasSize(2))
-
-            with(namespaces[0]) {
-                assertThat(id, equalTo(NamespaceId(12345)))
-                assertThat(name, equalTo(NamespaceName("awesome-namespace")))
-            }
-
-            with(namespaces[1]) {
-                assertThat(id, equalTo(NamespaceId.root))
-                assertThat(name, equalTo(NamespaceName("root")))
-            }
-        }
-    }
-
 
     @Autowired
     private lateinit var testInstance: NamespaceAppendHandler

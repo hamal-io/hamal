@@ -2,7 +2,6 @@ package io.hamal.repository.memory.record.namespace
 
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.NamespaceId
-import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.repository.api.Namespace
 import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
 import io.hamal.repository.api.NamespaceCmdRepository.UpdateCmd
@@ -58,9 +57,6 @@ class NamespaceMemoryRepository : RecordMemoryRepository<NamespaceId, NamespaceR
 
     override fun find(namespaceId: NamespaceId): Namespace? =
         lock.withLock { NamespaceCurrentProjection.find(namespaceId) }
-
-    override fun find(namespaceName: NamespaceName): Namespace? =
-        lock.withLock { NamespaceCurrentProjection.find(namespaceName) }
 
     override fun list(query: NamespaceQuery): List<Namespace> = lock.withLock { NamespaceCurrentProjection.list(query) }
 

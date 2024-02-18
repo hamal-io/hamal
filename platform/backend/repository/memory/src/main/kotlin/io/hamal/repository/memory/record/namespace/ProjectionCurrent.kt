@@ -10,17 +10,6 @@ internal object NamespaceCurrentProjection {
     private val projection = mutableMapOf<NamespaceId, Namespace>()
 
     fun apply(namespace: Namespace) {
-        val currentNamespace = projection[namespace.id]
-        projection.remove(namespace.id)
-
-        val namespacesInWorkspace = projection.values.filter { it.workspaceId == namespace.workspaceId }
-        if (namespacesInWorkspace.any { it.name == namespace.name }) {
-            if (currentNamespace != null) {
-                projection[currentNamespace.id] = currentNamespace
-            }
-            throw IllegalArgumentException("${namespace.name} already exists")
-        }
-
         projection[namespace.id] = namespace
     }
 
