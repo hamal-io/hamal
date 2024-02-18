@@ -1,7 +1,7 @@
 package io.hamal.api.http.controller.namespace
 
 import io.hamal.core.adapter.NamespacePort
-import io.hamal.core.adapter.NamespaceTreeGetPort
+import io.hamal.core.adapter.NamespaceTreeGetSubTreePort
 import io.hamal.core.component.Retry
 import io.hamal.lib.common.TreeNode
 import io.hamal.lib.domain.vo.NamespaceId
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 internal class NamespaceGetController(
     private val retry: Retry,
-    private val getNamespaceTree: NamespaceTreeGetPort,
+    private val getNamespaceTree: NamespaceTreeGetSubTreePort,
     private val getNamespace: NamespacePort
 ) {
     @GetMapping("/v1/namespaces/{namespaceId}")

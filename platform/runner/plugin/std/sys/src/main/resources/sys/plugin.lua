@@ -78,6 +78,7 @@ function plugin()
         function export.execs.list(query)
             query = query or {}
             query.namespace_ids = query.namespace_ids or {}
+            query.workspace_ids = query.workspace_ids or {}
 
             return internal.exec_list(query)
         end
@@ -191,10 +192,6 @@ function plugin()
 
         function export.namespaces.list()
             return internal.namespace_list()
-        end
-
-        function export.namespaces.execs(namespace_id)
-            return internal.namespace_execs(namespace_id)
         end
 
         function export.reqs.get(req_id)

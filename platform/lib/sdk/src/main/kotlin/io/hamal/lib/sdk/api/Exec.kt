@@ -41,24 +41,29 @@ data class ApiExec(
 }
 
 interface ApiExecService {
-    fun list(workspaceId: WorkspaceId): List<ApiExecList.Exec>
-    fun list(namespaceId: NamespaceId): List<ApiExecList.Exec>
+    fun list(query: Query): List<ApiExecList.Exec>
     fun get(execId: ExecId): ApiExec
+
+    data class Query(
+        val workspaceIds: List<WorkspaceId>,
+        val namespaceIds: List<NamespaceId>
+    )
 }
 
 internal class ApiExecServiceImpl(
     private val template: HttpTemplate
 ) : ApiExecService {
 
-    override fun list(workspaceId: WorkspaceId) =
-        template.get("/v1/execs").parameter("workspace_ids", workspaceId).execute().fold(ApiExecList::class).execs
-
-    override fun list(namespaceId: NamespaceId): List<ApiExecList.Exec> =
-        template.get("/v1/namespaces/{namespaceId}/execs")
-            .path("namespaceId", namespaceId)
+    override fun list(query: ApiExecService.Query) =
+        template.get("/v1/execs")
+            .parameter("workspace_ids", query.workspaceIds)
+            .parameter("namespace_ids", query.namespaceIds)
             .execute()
             .fold(ApiExecList::class).execs
 
     override fun get(execId: ExecId) =
-        template.get("/v1/execs/{execId}").path("execId", execId).execute().fold(ApiExec::class)
+        template.get("/v1/execs/{execId}")
+            .path("execId", execId)
+            .execute()
+            .fold(ApiExec::class)
 }
