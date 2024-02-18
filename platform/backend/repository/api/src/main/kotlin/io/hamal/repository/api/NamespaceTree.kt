@@ -7,6 +7,14 @@ import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceTreeId
 import io.hamal.lib.domain.vo.WorkspaceId
 
+data class NamespaceSubTree(
+    val cmdId: CmdId,
+    val id: NamespaceTreeId,
+    val workspaceId: WorkspaceId,
+    val root: TreeNode<NamespaceId>
+) {
+    val values by lazy { root.preorder() }
+}
 
 data class NamespaceTree(
     val cmdId: CmdId,
@@ -14,11 +22,7 @@ data class NamespaceTree(
     override val updatedAt: UpdatedAt,
     val workspaceId: WorkspaceId,
     val root: TreeNode<NamespaceId>
-) : DomainObject<NamespaceTreeId> {
-
-    fun findSubTree(namespaceId: NamespaceId): NamespaceTree = copy(root = root.get { it.value == namespaceId })
-
-}
+) : DomainObject<NamespaceTreeId>
 
 interface NamespaceTreeRepository : NamespaceTreeCmdRepository, NamespaceTreeQueryRepository
 

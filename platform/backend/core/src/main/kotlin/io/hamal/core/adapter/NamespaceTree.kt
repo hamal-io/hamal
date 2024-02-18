@@ -6,11 +6,8 @@ import io.hamal.lib.domain.request.NamespaceAppendRequested
 import io.hamal.lib.domain.request.NamespaceCreateRequest
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.RequestId
-import io.hamal.repository.api.NamespaceQueryRepository
-import io.hamal.repository.api.NamespaceTree
-import io.hamal.repository.api.NamespaceTreeQueryRepository
+import io.hamal.repository.api.*
 import io.hamal.repository.api.NamespaceTreeQueryRepository.NamespaceTreeQuery
-import io.hamal.repository.api.RequestCmdRepository
 import org.springframework.stereotype.Component
 
 interface NamespaceTreeAppendPort {
@@ -19,9 +16,9 @@ interface NamespaceTreeAppendPort {
     ): T
 }
 
-interface NamespaceTreeGetPort {
+interface NamespaceTreeGetSubTreePort {
     operator fun <T : Any> invoke(
-        namespaceId: NamespaceId, responseHandler: (NamespaceTree) -> T
+        namespaceId: NamespaceId, responseHandler: (NamespaceSubTree) -> T
     ): T
 }
 
@@ -30,7 +27,7 @@ interface NamespaceTreeListPort {
 }
 
 
-interface NamespaceTreePort : NamespaceTreeAppendPort, NamespaceTreeGetPort, NamespaceTreeListPort
+interface NamespaceTreePort : NamespaceTreeAppendPort, NamespaceTreeGetSubTreePort, NamespaceTreeListPort
 
 @Component
 class NamespaceTreeAdapter(
@@ -54,8 +51,17 @@ class NamespaceTreeAdapter(
         ).also(requestCmdRepository::queue).let(responseHandler)
     }
 
-    override fun <T : Any> invoke(namespaceId: NamespaceId, responseHandler: (tree: NamespaceTree) -> T): T =
-        responseHandler(namespaceTreeQueryRepository.get(namespaceId).findSubTree(namespaceId))
+    override fun <T : Any> invoke(namespaceId: NamespaceId, responseHandler: (tree: NamespaceSubTree) -> T): T =
+        responseHandler(
+            namespaceTreeQueryRepository.get(namespaceId).let { tree ->
+                NamespaceSubTree(
+                    cmdId = tree.cmdId,
+                    id = tree.id,
+                    workspaceId = tree.workspaceId,
+                    root = tree.root.get { it.value == namespaceId }
+                )
+            }
+        )
 
     override fun <T : Any> invoke(query: NamespaceTreeQuery, responseHandler: (trees: List<NamespaceTree>) -> T): T =
         responseHandler(namespaceTreeQueryRepository.list(query))
