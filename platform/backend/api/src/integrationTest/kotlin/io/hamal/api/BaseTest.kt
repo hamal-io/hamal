@@ -109,6 +109,9 @@ internal abstract class BaseTest {
     lateinit var namespaceCmdRepository: NamespaceCmdRepository
 
     @Autowired
+    lateinit var namespaceTreeCmdRepository: NamespaceTreeCmdRepository
+
+    @Autowired
     lateinit var requestQueryRepository: RequestQueryRepository
 
     @Autowired
@@ -159,6 +162,7 @@ internal abstract class BaseTest {
         hookCmdRepository.clear()
         logBrokerRepository.clear()
         namespaceCmdRepository.clear()
+        namespaceTreeCmdRepository.clear()
         requestCmdRepository.clear()
         stateCmdRepository.clear()
         topicCmdRepository.clear()
@@ -196,10 +200,19 @@ internal abstract class BaseTest {
 
         testNamespace = namespaceCmdRepository.create(
             NamespaceCmdRepository.CreateCmd(
-                id = CmdId(1),
+                id = CmdId(5),
                 namespaceId = NamespaceId.root,
                 workspaceId = testWorkspace.id,
                 name = NamespaceName("hamal")
+            )
+        )
+
+        namespaceTreeCmdRepository.create(
+            NamespaceTreeCmdRepository.CreateCmd(
+                id = CmdId(6),
+                workspaceId = testWorkspace.id,
+                rootNodeId = testNamespace.id,
+                treeId = NamespaceTreeId.root
             )
         )
     }

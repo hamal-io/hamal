@@ -19,12 +19,13 @@ import io.hamal.repository.record.endpoint.EndpointRecord
 import io.hamal.repository.record.exec.ExecRecord
 import io.hamal.repository.record.extension.ExtensionRecord
 import io.hamal.repository.record.feedback.FeedbackRecord
-import io.hamal.repository.record.namespace.NamespaceRecord
 import io.hamal.repository.record.func.FuncRecord
-import io.hamal.repository.record.workspace.WorkspaceRecord
 import io.hamal.repository.record.hook.HookRecord
+import io.hamal.repository.record.namespace.NamespaceRecord
+import io.hamal.repository.record.namespace_tree.NamespaceTreeRecord
 import io.hamal.repository.record.topic.TopicRecord
 import io.hamal.repository.record.trigger.TriggerRecord
+import io.hamal.repository.record.workspace.WorkspaceRecord
 import java.lang.reflect.Type
 import kotlin.reflect.KClass
 
@@ -39,6 +40,7 @@ object RecordJsonModule : JsonModule() {
         this[ExtensionRecord::class] = ExtensionRecord.Adapter
         this[FeedbackRecord::class] = FeedbackRecord.Adapter
         this[NamespaceRecord::class] = NamespaceRecord.Adapter
+        this[NamespaceTreeRecord::class] = NamespaceTreeRecord.Adapter
         this[FuncRecord::class] = FuncRecord.Adapter
         this[WorkspaceRecord::class] = WorkspaceRecord.Adapter
         this[HookRecord::class] = HookRecord.Adapter

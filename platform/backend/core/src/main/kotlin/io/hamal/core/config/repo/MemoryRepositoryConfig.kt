@@ -16,6 +16,7 @@ import io.hamal.repository.memory.record.feedback.FeedbackMemoryRepository
 import io.hamal.repository.memory.record.func.FuncMemoryRepository
 import io.hamal.repository.memory.record.hook.HookMemoryRepository
 import io.hamal.repository.memory.record.namespace.NamespaceMemoryRepository
+import io.hamal.repository.memory.record.namespace_tree.NamespaceTreeMemoryRepository
 import io.hamal.repository.memory.record.topic.TopicMemoryRepository
 import io.hamal.repository.memory.record.trigger.TriggerMemoryRepository
 import io.hamal.repository.memory.record.workspace.MemoryWorkspaceRepository
@@ -125,6 +126,15 @@ open class MemoryRepositoryConfig {
 
     @Bean
     open fun namespaceQueryRepository(): NamespaceQueryRepository = namespaceRepository()
+
+    @Bean
+    open fun namespaceTreeRepository() = NamespaceTreeMemoryRepository()
+
+    @Bean
+    open fun namespaceTreeCmdRepository(): NamespaceTreeCmdRepository = namespaceTreeRepository()
+
+    @Bean
+    open fun namespaceTreeQueryRepository(): NamespaceTreeQueryRepository = namespaceTreeRepository()
 
     @Bean
     open fun execRepository(): ExecRepository = ExecMemoryRepository()

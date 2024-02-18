@@ -26,7 +26,7 @@ fun Requested.toApiRequested(): ApiRequested = when (this) {
     is FuncUpdateRequested -> ApiFuncUpdateRequested(id, status, funcId)
     is HookCreateRequested -> ApiHookCreateRequested(id, status, hookId, workspaceId, namespaceId)
     is HookUpdateRequested -> ApiHookUpdateRequested(id, status, hookId)
-    is NamespaceCreateRequested -> ApiNamespaceCreateRequested(id, status, namespaceId, workspaceId)
+    is NamespaceAppendRequested -> ApiNamespaceAppendRequested(id, status,  namespaceId, workspaceId)
     is NamespaceUpdateRequested -> ApiNamespaceUpdateRequested(id, status, namespaceId)
     is StateSetRequested -> ApiStateSetRequested(id, status)
     is TopicAppendEventRequested -> ApiTopicAppendRequested(id, status, topicId)

@@ -2,9 +2,9 @@ package io.hamal.repository.api
 
 import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceName
+import io.hamal.lib.domain.vo.WorkspaceId
 
 data class Namespace(
     val cmdId: CmdId,
@@ -37,10 +37,7 @@ interface NamespaceCmdRepository : CmdRepository {
 
 interface NamespaceQueryRepository {
     fun get(namespaceId: NamespaceId) = find(namespaceId) ?: throw NoSuchElementException("Namespace not found")
-    fun get(namespaceName: NamespaceName) = find(namespaceName) ?: throw NoSuchElementException("Namespace not found")
-
     fun find(namespaceId: NamespaceId): Namespace?
-    fun find(namespaceName: NamespaceName): Namespace?
 
     fun list(query: NamespaceQuery): List<Namespace>
     fun list(namespaceIds: List<NamespaceId>) = list(

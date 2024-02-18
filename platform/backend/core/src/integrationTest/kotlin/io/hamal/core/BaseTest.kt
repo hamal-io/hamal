@@ -80,6 +80,9 @@ internal abstract class BaseTest {
     lateinit var namespaceCmdRepository: NamespaceCmdRepository
 
     @Autowired
+    lateinit var namespaceTreeRepository: NamespaceTreeRepository
+
+    @Autowired
     lateinit var requestQueryRepository: RequestQueryRepository
 
     @Autowired
@@ -171,10 +174,11 @@ internal abstract class BaseTest {
             )
         )
 
+        val namespaceId = generateDomainId(::NamespaceId)
         testNamespace = namespaceCmdRepository.create(
             NamespaceCmdRepository.CreateCmd(
                 id = CmdId(1),
-                namespaceId = generateDomainId(::NamespaceId),
+                namespaceId = namespaceId,
                 workspaceId = testWorkspace.id,
                 name = NamespaceName("hamal")
             )

@@ -5,6 +5,15 @@ export interface NamespaceCreateRequested {
     workspaceId: string;
 }
 
+
+export interface NamespaceAppendRequested {
+    id: string;
+    status: string;
+    parentId: string;
+    namespaceIdId: string;
+    workspaceId: string;
+}
+
 export interface Namespace {
     id: string;
     name: string;
@@ -16,5 +25,6 @@ export interface NamespaceList {
 
 export interface NamespaceListItem {
     id: string;
+    parentId: string;
     name: string;
 }

@@ -1,6 +1,6 @@
 --sys = require_plugin('sys')
 --
---_, request = sys.topics.create({ name = "topic-one" })
+--_, request = sys.topics.append({ name = "topic-one" })
 --sys.await(request)
 --
 --err, entries = sys.topics.list_entries(request.id)

@@ -14,7 +14,7 @@ data class LogTopic(
 interface LogTopicRepository : CmdRepository {
     fun append(cmdId: CmdId, bytes: ByteArray)
 
-    fun read(firstId: LogEventId, limit: Limit = Limit.One): List<LogEvent>
+    fun read(firstId: LogEventId, limit: Limit = Limit.one): List<LogEvent>
 
     fun countEvents(): Count
 }

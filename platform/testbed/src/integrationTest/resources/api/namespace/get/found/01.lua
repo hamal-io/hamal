@@ -1,6 +1,6 @@
 sys = require_plugin('sys')
 
-create_req = fail_on_error(sys.namespaces.create({
+create_req = fail_on_error(sys.namespaces.append({
     name = 'test-namespace'
 }))
 

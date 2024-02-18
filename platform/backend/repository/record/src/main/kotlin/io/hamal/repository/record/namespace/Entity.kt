@@ -1,9 +1,9 @@
 package io.hamal.repository.record.namespace
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceName
+import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.repository.api.Namespace
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordEntity
@@ -58,10 +58,10 @@ fun List<NamespaceRecord>.createEntity(): NamespaceEntity {
 
     var result = NamespaceEntity(
         id = firstRecord.entityId,
-        workspaceId = firstRecord.workspaceId,
         cmdId = firstRecord.cmdId,
         sequence = firstRecord.sequence(),
-        recordedAt = firstRecord.recordedAt()
+        recordedAt = firstRecord.recordedAt(),
+        workspaceId = firstRecord.workspaceId
     )
 
     forEach { record ->

@@ -1,6 +1,6 @@
 --sys = require_plugin('sys')
 --
---topic_req = fail_on_error(sys.topics.create({ name = "some-amazing-topic" }))
+--topic_req = fail_on_error(sys.topics.append({ name = "some-amazing-topic" }))
 --assert(topic_req.id ~= nil)
 --assert(topic_req.status == 'Submitted')
 --assert(topic_req.topic_id ~= nil)

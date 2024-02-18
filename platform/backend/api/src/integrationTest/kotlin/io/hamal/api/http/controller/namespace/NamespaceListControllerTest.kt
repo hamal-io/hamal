@@ -1,7 +1,8 @@
 package io.hamal.api.http.controller.namespace
 
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceName
-import io.hamal.lib.sdk.api.ApiNamespaceCreateRequest
+import io.hamal.lib.sdk.api.ApiNamespaceAppendRequest
 import io.hamal.lib.sdk.api.ApiNamespaceList
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -20,59 +21,59 @@ internal class NamespaceListControllerTest : NamespaceBaseControllerTest() {
     }
 
     @Test
-    fun `Single namespace`() {
+    fun `List namespaces`() {
         val namespaceId = awaitCompleted(
-            createNamespace(ApiNamespaceCreateRequest(NamespaceName("namespace-one")))
+            appendNamespace(ApiNamespaceAppendRequest(NamespaceName("namespace-one")))
         ).namespaceId
 
         with(listNamespaces()) {
             assertThat(namespaces, hasSize(2))
-            with(namespaces.first()) {
+
+            with(namespaces[0]) {
                 assertThat(id, equalTo(namespaceId))
-                assertThat(name, equalTo(NamespaceName("namespace-one")))
+                assertThat(parentId, equalTo(NamespaceId.root))
+                assertThat(name, equalTo(NamespaceName("hamal::namespace-one")))
+            }
+
+            with(namespaces[1]) {
+                assertThat(id, equalTo(NamespaceId.root))
+                assertThat(parentId, equalTo(NamespaceId.root))
+                assertThat(name, equalTo(NamespaceName("hamal")))
             }
         }
     }
+
 
     @Test
     fun `Limit namespaces`() {
         awaitCompleted(
             IntRange(0, 20).map {
-                createNamespace(
-                    ApiNamespaceCreateRequest(
-                        name = NamespaceName("namespace-$it")
-                    )
-                )
+                appendNamespace(ApiNamespaceAppendRequest(NamespaceName("namespace-$it")))
             }
         )
 
-        val listResponse = httpTemplate.get("/v1/workspaces/{workspaceId}/namespaces")
-            .path("workspaceId", testWorkspace.id)
+        val listResponse = httpTemplate.get("/v1/workspaces/1/namespaces")
             .parameter("limit", 12)
             .execute(ApiNamespaceList::class)
 
         assertThat(listResponse.namespaces, hasSize(12))
 
         listResponse.namespaces.forEachIndexed { idx, namespace ->
-            assertThat(namespace.name, equalTo(NamespaceName("namespace-${(20 - idx)}")))
+            assertThat(namespace.parentId, equalTo(NamespaceId(1)))
+            assertThat(namespace.name, equalTo(NamespaceName("hamal::namespace-${(20 - idx)}")))
         }
     }
 
     @Test
     fun `Skip and limit namespaces`() {
         val requests = IntRange(0, 99).map {
-            createNamespace(
-                ApiNamespaceCreateRequest(
-                    name = NamespaceName("namespace-$it")
-                )
-            )
+            appendNamespace(ApiNamespaceAppendRequest(NamespaceName("namespace-$it")))
         }
 
         awaitCompleted(requests)
         val fortyNinth = requests[49]
 
-        val listResponse = httpTemplate.get("/v1/workspaces/{workspaceId}/namespaces")
-            .path("workspaceId", testWorkspace.id)
+        val listResponse = httpTemplate.get("/v1/workspaces/1/namespaces")
             .parameter("after_id", fortyNinth.namespaceId)
             .parameter("limit", 1)
             .execute(ApiNamespaceList::class)
@@ -80,6 +81,7 @@ internal class NamespaceListControllerTest : NamespaceBaseControllerTest() {
         assertThat(listResponse.namespaces, hasSize(1))
 
         val namespace = listResponse.namespaces.first()
-        assertThat(namespace.name, equalTo(NamespaceName("namespace-48")))
+        assertThat(namespace.parentId, equalTo(NamespaceId(1)))
+        assertThat(namespace.name, equalTo(NamespaceName("hamal::namespace-48")))
     }
 }

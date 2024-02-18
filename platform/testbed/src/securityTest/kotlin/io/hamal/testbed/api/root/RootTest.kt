@@ -13,7 +13,7 @@
 //    override fun setupTest() {
 //        clearRepository()
 //
-//        testAccount = accountRepository.create(
+//        testAccount = accountRepository.append(
 //            AccountCmdRepository.CreateCmd(
 //                id = CmdId(2),
 //                accountId = AccountId.root,
@@ -24,7 +24,7 @@
 //            )
 //        )
 //
-//        testAccountAuthToken = (authRepository.create(
+//        testAccountAuthToken = (authRepository.append(
 //            AuthCmdRepository.CreateTokenAuthCmd(
 //                id = CmdId(3),
 //                authId = generateDomainId(::AuthId),
@@ -34,7 +34,7 @@
 //            )
 //        ) as TokenAuth).token
 //
-//        testWorkspace = workspaceRepository.create(
+//        testWorkspace = workspaceRepository.append(
 //            WorkspaceCmdRepository.CreateCmd(
 //                id = CmdId(4),
 //                workspaceId = WorkspaceId.root,
@@ -43,7 +43,7 @@
 //            )
 //        )
 //
-//        testNamespace = namespaceRepository.create(
+//        testNamespace = namespaceRepository.append(
 //            NamespaceCmdRepository.CreateCmd(
 //                id = CmdId(5),
 //                namespaceId = NamespaceId.root,

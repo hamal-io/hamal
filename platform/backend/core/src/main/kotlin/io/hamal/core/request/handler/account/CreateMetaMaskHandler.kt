@@ -6,8 +6,9 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.request.AccountCreateMetaMaskRequested
 import io.hamal.lib.domain.vo.AuthTokenExpiresAt
-import io.hamal.lib.domain.vo.WorkspaceName
 import io.hamal.lib.domain.vo.NamespaceName
+import io.hamal.lib.domain.vo.NamespaceTreeId
+import io.hamal.lib.domain.vo.WorkspaceName
 import io.hamal.repository.api.*
 import io.hamal.repository.api.event.AccountCreatedEvent
 import org.springframework.stereotype.Component
@@ -19,6 +20,7 @@ class AccountCreateMetaMaskHandler(
     val authCmdRepository: AuthCmdRepository,
     val workspaceCmdRepository: WorkspaceCmdRepository,
     val namespaceCmdRepository: NamespaceCmdRepository,
+    val namespaceTreeCmdRepository: NamespaceTreeCmdRepository,
     val eventEmitter: InternalEventEmitter
 ) : io.hamal.core.request.RequestHandler<AccountCreateMetaMaskRequested>(AccountCreateMetaMaskRequested::class) {
 
@@ -27,6 +29,7 @@ class AccountCreateMetaMaskHandler(
             .also { emitEvent(req.cmdId(), it) }
             .also { createWorkspace(req) }
             .also { createNamespace(req) }
+            .also { createNamespaceTree(req) }
             .also { createMetaMaskAuth(req) }
             .also { createTokenAuth(req) }
     }
@@ -61,6 +64,17 @@ private fun AccountCreateMetaMaskHandler.createNamespace(req: AccountCreateMetaM
             namespaceId = req.namespaceId,
             workspaceId = req.workspaceId,
             name = NamespaceName.default
+        )
+    )
+}
+
+private fun AccountCreateMetaMaskHandler.createNamespaceTree(req: AccountCreateMetaMaskRequested): NamespaceTree {
+    return namespaceTreeCmdRepository.create(
+        NamespaceTreeCmdRepository.CreateCmd(
+            id = req.cmdId(),
+            treeId = NamespaceTreeId(req.namespaceId.value),
+            rootNodeId = req.namespaceId,
+            workspaceId = req.workspaceId,
         )
     )
 }

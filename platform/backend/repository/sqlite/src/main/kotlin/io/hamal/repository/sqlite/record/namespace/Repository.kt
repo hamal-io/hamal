@@ -2,7 +2,6 @@ package io.hamal.repository.sqlite.record.namespace
 
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.NamespaceId
-import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.repository.api.Namespace
 import io.hamal.repository.api.NamespaceCmdRepository
 import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
@@ -43,7 +42,7 @@ class NamespaceSqliteRepository(
     filename = "namespace.db",
     createDomainObject = CreateNamespace,
     recordClass = NamespaceRecord::class,
-    projections = listOf(ProjectionCurrent, ProjectionUniqueName)
+    projections = listOf(ProjectionCurrent)
 ), NamespaceRepository {
 
     override fun create(cmd: CreateCmd): Namespace {
@@ -62,9 +61,7 @@ class NamespaceSqliteRepository(
                     )
                 )
 
-                currentVersion(namespaceId)
-                    .also { ProjectionCurrent.upsert(this, it) }
-                    .also { ProjectionUniqueName.upsert(this, it) }
+                currentVersion(namespaceId).also { ProjectionCurrent.upsert(this, it) }
             }
         }
     }
@@ -83,19 +80,13 @@ class NamespaceSqliteRepository(
                         name = cmd.name ?: current.name
                     )
                 )
-                currentVersion(namespaceId)
-                    .also { ProjectionCurrent.upsert(this, it) }
-                    .also { ProjectionUniqueName.upsert(this, it) }
+                currentVersion(namespaceId).also { ProjectionCurrent.upsert(this, it) }
             }
         }
     }
 
     override fun find(namespaceId: NamespaceId): Namespace? {
         return ProjectionCurrent.find(connection, namespaceId)
-    }
-
-    override fun find(namespaceName: NamespaceName): Namespace? {
-        return ProjectionUniqueName.find(connection, namespaceName)?.let { find((it)) }
     }
 
     override fun list(query: NamespaceQuery): List<Namespace> {

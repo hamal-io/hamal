@@ -26,7 +26,7 @@ val internalEventClasses = listOf(
     ExtensionCreatedEvent::class,
     ExtensionUpdatedEvent::class,
     FeedbackCreatedEvent::class,
-    NamespaceCreatedEvent::class,
+    NamespaceAppendedEvent::class,
     NamespaceUpdatedEvent::class,
     FuncCreatedEvent::class,
     FuncUpdatedEvent::class,

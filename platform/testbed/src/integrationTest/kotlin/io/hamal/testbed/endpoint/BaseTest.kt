@@ -1,6 +1,6 @@
 package io.hamal.testbed.endpoint
 
-import AbstractRunnerTest
+import io.hamal.runner.test.AbstractRunnerTest
 import io.hamal.core.component.DelayRetry
 import io.hamal.core.component.DelayRetryFixedTime
 import io.hamal.core.component.SetupInternalTopics

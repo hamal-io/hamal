@@ -1,12 +1,13 @@
 package io.hamal.api.http.controller.topic
 
+import io.hamal.core.adapter.NamespaceTreeGetSubTreePort
 import io.hamal.core.adapter.TopicListPort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.TopicType.*
-import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
+import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.sdk.api.ApiTopicList
 import io.hamal.lib.sdk.api.ApiTopicList.Topic
 import io.hamal.repository.api.TopicQueryRepository.TopicQuery
@@ -16,7 +17,10 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class TopicListController(private val listTopics: TopicListPort) {
+internal class TopicListController(
+    private val listTopics: TopicListPort,
+    private val namespaceTreeGetSubTree: NamespaceTreeGetSubTreePort
+) {
 
     @GetMapping("/v1/topics")
     fun listTopics(
@@ -26,13 +30,16 @@ internal class TopicListController(private val listTopics: TopicListPort) {
         @RequestParam(required = false, name = "workspace_ids", defaultValue = "") workspaceIds: List<WorkspaceId> = listOf(),
         @RequestParam(required = false, name = "namespace_ids", defaultValue = "") namespaceIds: List<NamespaceId> = listOf()
     ): ResponseEntity<ApiTopicList> {
+        val allNamespaceIds = namespaceIds.flatMap { namespaceId ->
+            namespaceTreeGetSubTree(namespaceId) { it }.values
+        }
         return listTopics(
             TopicQuery(
                 afterId = afterId,
                 names = topicNames,
                 limit = limit,
                 workspaceIds = workspaceIds,
-                namespaceIds = namespaceIds,
+                namespaceIds = allNamespaceIds,
                 types = listOf(Namespace, Workspace, Public)
             )
         ) { topics ->
