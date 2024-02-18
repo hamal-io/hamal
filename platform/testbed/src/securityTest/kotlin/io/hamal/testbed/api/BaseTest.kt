@@ -1,6 +1,6 @@
 package io.hamal.testbed.api
 
-import AbstractRunnerTest
+import io.hamal.runner.test.AbstractRunnerTest
 import io.hamal.extension.net.http.ExtensionHttpFactory
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain.vo.RunnerEnv

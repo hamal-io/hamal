@@ -22,7 +22,7 @@ testing {
                     implementation(project())
                     implementation(project(":platform:lib:sdk"))
                     implementation(project(":platform:backend:core"))
-                    implementation(project(":platform:runner"))
+                    implementation(project(":platform:runner:runner"))
 
                     implementation(external.junit)
                     implementation(external.hamcrest)

@@ -20,7 +20,7 @@ dependencies {
         exclude("com.fasterxml.jackson.core", "jackson-annotations")
     }
 
-    api(project(":platform:runner-plugin:std:log"))
+    api(project(":platform:runner:plugin:std:log"))
 }
 
 
@@ -41,7 +41,7 @@ testing {
                     }
 
                     implementation(project(":platform:backend:api"))
-                    implementation(project(":platform:runner"))
+                    implementation(project(":platform:runner:runner"))
                     implementation(project(":platform:backend:repository:api"))
                     implementation(project(":platform:backend:repository:memory"))
 
