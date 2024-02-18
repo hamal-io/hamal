@@ -1,11 +1,11 @@
-import React, {FC, useEffect} from "react";
-import {useBlueprintList} from "@/hook/blueprint.ts";
+import React, {FC, useEffect, useState} from "react";
+import {useBlueprintCreate, useBlueprintList} from "@/hook/blueprint.ts";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx";
 import {PageHeader} from "@/components/page-header.tsx";
 import {EmptyPlaceholder} from "@/components/empty-placeholder.tsx";
-import CreateBlueprint from "@/pages/app/blueprint-list/components/create.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {useNavigate} from "react-router-dom";
+import {Plus} from "lucide-react";
 
 type Props = {}
 const BlueprintListPage: FC<Props> = ({}) => {
@@ -96,6 +96,40 @@ const NoContent = () => (
         </div>
     </EmptyPlaceholder>
 )
+
+const CreateBlueprint = () => {
+    const navigate = useNavigate()
+    const [isLoading, setLoading] = useState(false)
+    const [createBlueprint, submitted] = useBlueprintCreate()
+
+    async function create() {
+        setLoading(true)
+        try {
+            createBlueprint("New Blueprint", "print('hamal')", "I will print 'hamal'")
+        } catch (e) {
+            console.log(e)
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    useEffect(() => {
+        const abortController = new AbortController();
+        if (submitted !== null) {
+            navigate(`/blueprints/editor/${submitted.id}`)
+        }
+        return () => {
+            abortController.abort();
+        }
+    }, [submitted, navigate]);
+
+    return (
+        <Button type={"submit"} size="lg" onClick={create}>
+            <Plus className="w-4 h-4 mr-1"/>
+            Create Blueprint
+        </Button>
+    )
+}
 
 
 export default BlueprintListPage
