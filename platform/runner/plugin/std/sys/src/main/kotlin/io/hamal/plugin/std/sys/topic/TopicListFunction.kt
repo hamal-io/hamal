@@ -1,5 +1,6 @@
 package io.hamal.plugin.std.sys.topic
 
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -22,7 +23,8 @@ class TopicListFunction(
             null to KuaArray(
                 sdk.topic.list(
                     ApiTopicService.TopicQuery(
-
+                        namespaceIds = arg1.getArrayType("namespace_ids")
+                            .map { NamespaceId((it.value as KuaString).value) }
                     )
                 ).mapIndexed { index, topic ->
                     index to KuaMap(
