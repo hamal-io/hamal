@@ -44,8 +44,7 @@ data class ApiNamespaceList(
 
 data class ApiNamespace(
     val id: NamespaceId,
-    val name: NamespaceName,
-    val children: List<ApiNamespace>
+    val name: NamespaceName
 ) : ApiObject()
 
 interface ApiNamespaceService {

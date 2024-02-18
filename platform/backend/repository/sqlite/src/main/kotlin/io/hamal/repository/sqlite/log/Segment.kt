@@ -4,7 +4,7 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Count.Companion.None
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.common.domain.Limit.Companion.One
+import io.hamal.lib.common.domain.Limit.Companion.one
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.vo.LogTopicId
 import io.hamal.lib.sqlite.Connection
@@ -59,7 +59,7 @@ class LogSegmentSqliteRepository(
     }
 
     override fun read(firstId: LogEventId, limit: Limit): List<LogEvent> {
-        if (limit < One) {
+        if (limit < one) {
             return listOf()
         }
         return connection.executeQuery<LogEvent>(

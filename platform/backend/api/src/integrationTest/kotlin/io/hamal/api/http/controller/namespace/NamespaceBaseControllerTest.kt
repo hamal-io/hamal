@@ -14,6 +14,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 
 internal sealed class NamespaceBaseControllerTest : BaseControllerTest() {
+
     fun appendNamespace(req: ApiNamespaceAppendRequest): ApiNamespaceAppendRequested {
         val response = httpTemplate.post("/v1/namespaces/{namespaceId}/namespaces")
             .path("namespaceId", testNamespace.id)

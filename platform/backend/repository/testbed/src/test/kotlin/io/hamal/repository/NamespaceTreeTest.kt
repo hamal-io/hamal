@@ -407,7 +407,7 @@ internal class NamespaceTreeRepositoryTest : AbstractUnitTest() {
 
             val query = NamespaceTreeQuery(
                 afterId = NamespaceTreeId(12),
-                limit = Limit.One,
+                limit = Limit.one,
                 workspaceIds = listOf()
             )
 

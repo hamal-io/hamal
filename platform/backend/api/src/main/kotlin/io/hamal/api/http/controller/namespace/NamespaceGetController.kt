@@ -22,13 +22,11 @@ internal class NamespaceGetController(
         getNamespaceTree(namespaceId) { namespace -> ResponseEntity.ok(assemble(namespace.root)) }
     }
 
-    // FIXME fetch all namespaces at once and assemble together later
     private fun assemble(node: TreeNode<NamespaceId>): ApiNamespace {
         return getNamespace(node.value) { namespace ->
             ApiNamespace(
                 id = namespace.id,
-                name = namespace.name,
-                children = node.descendants.map(::assemble)
+                name = namespace.name
             )
         }
     }

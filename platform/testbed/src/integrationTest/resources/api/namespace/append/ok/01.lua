@@ -14,6 +14,7 @@ sys.await_completed(namespace)
 err, namespaces = sys.namespaces.list()
 assert(err == nil)
 assert(#namespaces == 2)
-assert(namespaces[1].name == 'root-namespace')
-assert(namespaces[2].name == 'root-namespace::appended_namespace_name')
+assert(namespaces[1].name == 'root-namespace::appended_namespace_name')
+assert(namespaces[2].name == 'root-namespace')
+
 --
