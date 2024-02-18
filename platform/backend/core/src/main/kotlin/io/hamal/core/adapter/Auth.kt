@@ -39,12 +39,11 @@ class AuthAdapter(
     private val generateDomainId: GenerateId,
     private val generateToken: GenerateToken,
     private val requestCmdRepository: RequestCmdRepository,
-    private val workspaceList: WorkspaceListPort,
-    private val namespaceList: NamespaceListPort,
+    private val workspaceList: WorkspaceListPort
 ) : AuthPort {
 
     override fun invoke(req: AuthChallengeMetaMaskRequest): Web3Challenge {
-        // FIXME 138 - create challenge based on address
+        // FIXME 138 - append challenge based on address
         return Web3Challenge("challenge123")
     }
 

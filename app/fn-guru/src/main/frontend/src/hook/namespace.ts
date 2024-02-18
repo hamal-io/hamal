@@ -1,7 +1,7 @@
 import {useGet, usePost} from "@/hook/http.ts";
-import {useCallback, useState} from "react";
+import {useCallback} from "react";
 import {useAuth} from "@/hook/auth.ts";
-import {Namespace, NamespaceCreateRequested, NamespaceList} from "@/types";
+import {Namespace, NamespaceAppendRequested, NamespaceList} from "@/types";
 
 type NamespaceGetAction = (namespaceIdId: string, abortController?: AbortController) => void
 export const useNamespaceGet = (): [NamespaceGetAction, Namespace, boolean, Error] => {
@@ -19,15 +19,12 @@ export const useNamespaceList = (): [NamespaceListAction, NamespaceList, boolean
     return [fn, namespaceList, loading, error]
 }
 
-type NamespaceCreateAction = (workspaceId: string, name: string, controller?: AbortController) => void
-export const useNamespaceCreate = (): [NamespaceCreateAction, NamespaceCreateRequested, boolean, Error] => {
+type NamespaceAppendAction = (namespaceId: string, name: string, controller?: AbortController) => void
+export const useNamespaceAppend = (): [NamespaceAppendAction, NamespaceAppendRequested, boolean, Error] => {
     const [auth] = useAuth()
-    const [post, submission, loading, error] = usePost<NamespaceCreateRequested>()
-    const fn = useCallback(async (workspaceId: string, name: string, abortController?: AbortController) =>
-        post(`/v1/workspaces/${workspaceId}/namespaces`, {
-            name,
-            inputs: {}
-        }, abortController), [auth]
+    const [post, submission, loading, error] = usePost<NamespaceAppendRequested>()
+    const fn = useCallback(async (namespaceId: string, name: string, abortController?: AbortController) =>
+        post(`/v1/namespaces/${namespaceId}/namespaces`, {name}, abortController), [auth]
     )
     return [fn, submission, loading, error]
 }

@@ -179,11 +179,9 @@ function plugin()
             return internal.hook_list(query)
         end
 
-        function export.namespaces.create(cmd)
-            return internal.namespace_create({
+        function export.namespaces.append(cmd)
+            return internal.namespace_append({
                 name = cmd.name or "",
-                inputs = cmd.inputs or {},
-                type = cmd.type or nil
             })
         end
 

@@ -3,7 +3,7 @@
 --topics = fail_on_error(sys.topics.list())
 --assert(#topics == 0)
 --
---topic_req = fail_on_error(sys.topics.create({ name = "topic-one" }))
+--topic_req = fail_on_error(sys.topics.append({ name = "topic-one" }))
 --sys.await(topic_req)
 --
 --topics = fail_on_error(sys.topics.list())

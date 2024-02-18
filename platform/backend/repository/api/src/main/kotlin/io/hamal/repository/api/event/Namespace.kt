@@ -2,7 +2,7 @@ package io.hamal.repository.api.event
 
 import io.hamal.repository.api.Namespace
 
-data class NamespaceCreatedEvent(
+data class NamespaceAppendedEvent(
     val namespace: Namespace,
 ) : InternalEvent()
 

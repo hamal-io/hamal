@@ -9,6 +9,7 @@ import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.kua.type.KuaMap
 import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.sdk.ApiSdk
+import io.hamal.lib.sdk.api.ApiNamespaceList
 
 class NamespaceListFunction(
     private val sdk: ApiSdk
@@ -17,19 +18,23 @@ class NamespaceListFunction(
 ) {
     override fun invoke(ctx: FunctionContext): Pair<KuaError?, KuaArray?> {
         return try {
-            null to KuaArray(
-                sdk.namespace.list(ctx[WorkspaceId::class]).mapIndexed { index, namespace ->
-                    index to KuaMap(
-                        mutableMapOf(
-                            "id" to KuaString(namespace.id.value.value.toString(16)),
-                            "name" to KuaString(namespace.name.value)
-                        )
-                    )
-                }.toMap().toMutableMap()
-            )
-
+            null to sdk.namespace.list(ctx[WorkspaceId::class]).toKua()
         } catch (t: Throwable) {
             KuaError(t.message!!) to null
         }
+    }
+
+    private fun List<ApiNamespaceList.Namespace>.toKua(): KuaArray {
+        return KuaArray(
+            mapIndexed { index, namespace ->
+                index to KuaMap(
+                    mutableMapOf(
+                        "id" to KuaString(namespace.id.value.value.toString(16)),
+                        "parent_id" to KuaString(namespace.parentId.value.value.toString(16)),
+                        "name" to KuaString(namespace.name.value),
+                    )
+                )
+            }.toMap().toMutableMap()
+        )
     }
 }

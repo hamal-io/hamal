@@ -82,7 +82,7 @@ class TopicAdapter(
         responseHandler: (TopicCreateRequested) -> T
     ): T {
         if (req.type == TopicType.Internal) {
-            throw IllegalArgumentException("Can not create internal topics")
+            throw IllegalArgumentException("Can not append internal topics")
         }
         val namespace = namespaceRepository.get(namespaceId)
         return TopicCreateRequested(

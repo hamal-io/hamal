@@ -3,12 +3,12 @@
 sys = require_plugin('sys')
 
 -- CREATE NAMESPACES
-local namespace_one_req = fail_on_error(sys.namespaces.create({
+local namespace_one_req = fail_on_error(sys.namespaces.append({
     name = 'namespace-1'
 }))
 sys.await_completed(namespace_one_req)
 
-local namespace_two_req = fail_on_error(sys.namespaces.create({
+local namespace_two_req = fail_on_error(sys.namespaces.append({
     name = 'namespace-2'
 }))
 sys.await_completed(namespace_two_req)

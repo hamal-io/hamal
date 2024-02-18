@@ -21,7 +21,7 @@
 //
 //        BrokerSqliteRepository(BrokerSqlite(path))
 //            .use { brokerRepository ->
-//                val topic = brokerRepository.create(
+//                val topic = brokerRepository.append(
 //                    CmdId(1),
 //                    TopicToCreate(TopicId(123), TopicName("topic"), NamespaceId(1), WorkspaceId.root)
 //                )

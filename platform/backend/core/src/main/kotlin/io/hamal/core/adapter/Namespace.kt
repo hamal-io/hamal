@@ -2,11 +2,10 @@ package io.hamal.core.adapter
 
 import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain.request.NamespaceAppendRequested
 import io.hamal.lib.domain.request.NamespaceCreateRequest
-import io.hamal.lib.domain.request.NamespaceCreateRequested
 import io.hamal.lib.domain.request.NamespaceUpdateRequest
 import io.hamal.lib.domain.request.NamespaceUpdateRequested
-import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.RequestId
 import io.hamal.repository.api.Namespace
@@ -17,9 +16,9 @@ import org.springframework.stereotype.Component
 
 interface NamespaceCreatePort {
     operator fun <T : Any> invoke(
-        workspaceId: WorkspaceId,
+        parentId: NamespaceId,
         req: NamespaceCreateRequest,
-        responseHandler: (NamespaceCreateRequested) -> T
+        responseHandler: (NamespaceAppendRequested) -> T
     ): T
 }
 
@@ -50,15 +49,17 @@ class NamespaceAdapter(
 ) : NamespacePort {
 
     override fun <T : Any> invoke(
-        workspaceId: WorkspaceId,
+        parentId: NamespaceId,
         req: NamespaceCreateRequest,
-        responseHandler: (NamespaceCreateRequested) -> T
+        responseHandler: (NamespaceAppendRequested) -> T
     ): T {
-        return NamespaceCreateRequested(
+        val parent = namespaceQueryRepository.get(parentId)
+        return NamespaceAppendRequested(
             id = generateDomainId(::RequestId),
             status = RequestStatus.Submitted,
+            parentId = parent.id,
             namespaceId = generateDomainId(::NamespaceId),
-            workspaceId = workspaceId,
+            workspaceId = parent.workspaceId,
             name = req.name,
         ).also(requestCmdRepository::queue).let(responseHandler)
     }

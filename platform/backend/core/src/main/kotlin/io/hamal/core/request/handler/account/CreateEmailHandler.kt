@@ -6,8 +6,9 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.request.AccountCreateRequested
 import io.hamal.lib.domain.vo.AuthTokenExpiresAt
-import io.hamal.lib.domain.vo.WorkspaceName
 import io.hamal.lib.domain.vo.NamespaceName
+import io.hamal.lib.domain.vo.NamespaceTreeId
+import io.hamal.lib.domain.vo.WorkspaceName
 import io.hamal.repository.api.*
 import io.hamal.repository.api.event.AccountCreatedEvent
 import org.springframework.stereotype.Component
@@ -19,6 +20,7 @@ class AccountCreateEmailHandler(
     val authCmdRepository: AuthCmdRepository,
     val workspaceCmdRepository: WorkspaceCmdRepository,
     val namespaceCmdRepository: NamespaceCmdRepository,
+    val namespaceTreeCmdRepository: NamespaceTreeCmdRepository,
     val eventEmitter: InternalEventEmitter
 ) : io.hamal.core.request.RequestHandler<AccountCreateRequested>(AccountCreateRequested::class) {
 
@@ -27,6 +29,7 @@ class AccountCreateEmailHandler(
             .also { emitEvent(req.cmdId(), it) }
             .also { createWorkspace(req) }
             .also { createNamespace(req) }
+            .also { createNamespaceTree(req) }
             .also { createEmailAuth(req) }
             .also { createTokenAuth(req) }
     }
@@ -65,6 +68,16 @@ private fun AccountCreateEmailHandler.createNamespace(req: AccountCreateRequeste
     )
 }
 
+private fun AccountCreateEmailHandler.createNamespaceTree(req: AccountCreateRequested): NamespaceTree {
+    return namespaceTreeCmdRepository.create(
+        NamespaceTreeCmdRepository.CreateCmd(
+            id = req.cmdId(),
+            treeId = NamespaceTreeId(req.namespaceId.value),
+            rootNodeId = req.namespaceId,
+            workspaceId = req.workspaceId,
+        )
+    )
+}
 
 private fun AccountCreateEmailHandler.createEmailAuth(req: AccountCreateRequested): Auth {
     return authCmdRepository.create(

@@ -3,15 +3,15 @@ package io.hamal.api.http.controller.endpoint
 import io.hamal.lib.domain._enum.EndpointMethod.Delete
 import io.hamal.lib.domain._enum.EndpointMethod.Put
 import io.hamal.lib.domain.vo.EndpointName
-import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.domain.vo.FuncName
+import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.BadRequest
 import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
-import io.hamal.lib.sdk.api.ApiEndpointUpdateRequested
 import io.hamal.lib.sdk.api.ApiEndpointUpdateRequest
+import io.hamal.lib.sdk.api.ApiEndpointUpdateRequested
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -21,9 +21,9 @@ internal class EndpointUpdateControllerTest : EndpointBaseControllerTest() {
     @Test
     fun `Updates endpoint`() {
         val namespaceId = awaitCompleted(
-            createNamespace(
+            appendNamespace(
                 name = NamespaceName("namespace"),
-                workspaceId = testWorkspace.id
+                parentId = testNamespace.id
             )
         ).namespaceId
 
@@ -76,9 +76,9 @@ internal class EndpointUpdateControllerTest : EndpointBaseControllerTest() {
     @Test
     fun `Updates endpoint without updating values`() {
         val namespaceId = awaitCompleted(
-            createNamespace(
+            appendNamespace(
                 name = NamespaceName("namespace"),
-                workspaceId = testWorkspace.id
+                parentId = testNamespace.id
             )
         ).namespaceId
 
@@ -124,16 +124,16 @@ internal class EndpointUpdateControllerTest : EndpointBaseControllerTest() {
     @Test
     fun `Tries to set func which does not belong to the same namespace`() {
         val namespaceId = awaitCompleted(
-            createNamespace(
+            appendNamespace(
                 name = NamespaceName("namespace"),
-                workspaceId = testWorkspace.id
+                parentId = testNamespace.id
             )
         ).namespaceId
 
         val anotherNamespaceId = awaitCompleted(
-            createNamespace(
+            appendNamespace(
                 name = NamespaceName("another-namespace"),
-                workspaceId = testWorkspace.id
+                parentId = testNamespace.id
             )
         ).namespaceId
 

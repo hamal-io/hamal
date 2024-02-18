@@ -3,23 +3,23 @@ package io.hamal.lib.sdk.api
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.NamespaceCreateRequest
 import io.hamal.lib.domain.request.NamespaceUpdateRequest
-import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.domain.vo.RequestId
+import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.fold
 
-data class ApiNamespaceCreateRequest(
+data class ApiNamespaceAppendRequest(
     override val name: NamespaceName
 ) : NamespaceCreateRequest
 
-data class ApiNamespaceCreateRequested(
+data class ApiNamespaceAppendRequested(
     override val id: RequestId,
     override val status: RequestStatus,
     val namespaceId: NamespaceId,
-    val workspaceId: WorkspaceId,
+    val workspaceId: WorkspaceId
 ) : ApiRequested()
 
 data class ApiNamespaceUpdateRequest(
@@ -37,17 +37,18 @@ data class ApiNamespaceList(
 ) : ApiObject() {
     data class Namespace(
         val id: NamespaceId,
+        val parentId: NamespaceId,
         val name: NamespaceName
     )
 }
 
 data class ApiNamespace(
     val id: NamespaceId,
-    val name: NamespaceName,
+    val name: NamespaceName
 ) : ApiObject()
 
 interface ApiNamespaceService {
-    fun create(workspaceId: WorkspaceId, createNamespaceReq: ApiNamespaceCreateRequest): ApiNamespaceCreateRequested
+    fun append(parentId: NamespaceId, createNamespaceReq: ApiNamespaceAppendRequest): ApiNamespaceAppendRequested
     fun list(workspaceId: WorkspaceId): List<ApiNamespaceList.Namespace>
     fun get(namespaceId: NamespaceId): ApiNamespace
 }
@@ -56,12 +57,15 @@ internal class ApiNamespaceServiceImpl(
     private val template: HttpTemplate
 ) : ApiNamespaceService {
 
-    override fun create(workspaceId: WorkspaceId, createNamespaceReq: ApiNamespaceCreateRequest): ApiNamespaceCreateRequested =
-        template.post("/v1/workspaces/{workspaceId}/namespaces")
-            .path("workspaceId", workspaceId)
+    override fun append(
+        parentId: NamespaceId,
+        createNamespaceReq: ApiNamespaceAppendRequest
+    ): ApiNamespaceAppendRequested =
+        template.post("/v1/namespaces/{namespaceId}/namespaces")
+            .path("namespaceId", parentId)
             .body(createNamespaceReq)
             .execute()
-            .fold(ApiNamespaceCreateRequested::class)
+            .fold(ApiNamespaceAppendRequested::class)
 
     override fun list(workspaceId: WorkspaceId) =
         template.get("/v1/workspaces/{workspaceId}/namespaces")

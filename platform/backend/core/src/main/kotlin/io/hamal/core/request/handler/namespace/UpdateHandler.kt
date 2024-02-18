@@ -6,7 +6,7 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.request.NamespaceUpdateRequested
 import io.hamal.repository.api.Namespace
 import io.hamal.repository.api.NamespaceCmdRepository
-import io.hamal.repository.api.event.NamespaceCreatedEvent
+import io.hamal.repository.api.event.NamespaceUpdatedEvent
 import org.springframework.stereotype.Component
 
 
@@ -32,5 +32,5 @@ private fun NamespaceUpdateHandler.updateNamespace(req: NamespaceUpdateRequested
 }
 
 private fun NamespaceUpdateHandler.emitEvent(cmdId: CmdId, namespace: Namespace) {
-    eventEmitter.emit(cmdId, NamespaceCreatedEvent(namespace))
+    eventEmitter.emit(cmdId, NamespaceUpdatedEvent(namespace))
 }

@@ -1,6 +1,6 @@
 sys = require_plugin('sys')
 
-_, r = sys.namespaces.create({ name = '007' })
+_, r = sys.namespaces.append({ name = '007' })
 namespace_id = r.id
 
 print('namespace id: ' .. namespace_id)

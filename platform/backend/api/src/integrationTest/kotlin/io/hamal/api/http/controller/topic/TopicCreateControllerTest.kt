@@ -27,7 +27,7 @@ internal class TopicCreateControllerTest : TopicBaseControllerTest() {
         require(createTopicResponse is HttpErrorResponse) { "request was successful" }
 
         createTopicResponse.error(ApiError::class).also { error ->
-            assertThat(error.message, equalTo("Can not create internal topics"))
+            assertThat(error.message, equalTo("Can not append internal topics"))
         }
 
         with(listTopics()) {

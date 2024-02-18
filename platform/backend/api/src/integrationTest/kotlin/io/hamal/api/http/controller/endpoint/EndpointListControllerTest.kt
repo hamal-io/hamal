@@ -3,8 +3,8 @@ package io.hamal.api.http.controller.endpoint
 import io.hamal.lib.domain._enum.EndpointMethod.Post
 import io.hamal.lib.domain._enum.EndpointMethod.Put
 import io.hamal.lib.domain.vo.EndpointName
-import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.domain.vo.FuncName
+import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.sdk.api.ApiEndpointList
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
@@ -20,9 +20,9 @@ internal class EndpointListControllerTest : EndpointBaseControllerTest() {
     @Test
     fun `Single endpoint`() {
         val namespaceId = awaitCompleted(
-            createNamespace(
+            appendNamespace(
                 name = NamespaceName("namespace"),
-                workspaceId = testWorkspace.id
+                parentId = testNamespace.id
             )
         ).namespaceId
 
@@ -58,9 +58,9 @@ internal class EndpointListControllerTest : EndpointBaseControllerTest() {
         awaitCompleted(
             IntRange(0, 20).map {
                 val namespaceId = awaitCompleted(
-                    createNamespace(
+                    appendNamespace(
                         name = NamespaceName("namespace-$it"),
-                        workspaceId = testWorkspace.id
+                        parentId = testNamespace.id
                     )
                 ).namespaceId
 
@@ -97,9 +97,9 @@ internal class EndpointListControllerTest : EndpointBaseControllerTest() {
     fun `Skip and limit endpoints`() {
         val requests = IntRange(0, 99).map {
             val namespaceId = awaitCompleted(
-                createNamespace(
+                appendNamespace(
                     name = NamespaceName("namespace-$it"),
-                    workspaceId = testWorkspace.id
+                    parentId = testNamespace.id
                 )
             ).namespaceId
 

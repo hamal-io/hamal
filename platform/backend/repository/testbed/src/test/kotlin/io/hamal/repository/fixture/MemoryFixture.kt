@@ -23,6 +23,7 @@ import io.hamal.repository.memory.record.feedback.FeedbackMemoryRepository
 import io.hamal.repository.memory.record.func.FuncMemoryRepository
 import io.hamal.repository.memory.record.hook.HookMemoryRepository
 import io.hamal.repository.memory.record.namespace.NamespaceMemoryRepository
+import io.hamal.repository.memory.record.namespace_tree.NamespaceTreeMemoryRepository
 import io.hamal.repository.memory.record.topic.TopicMemoryRepository
 import io.hamal.repository.memory.record.trigger.TriggerMemoryRepository
 import io.hamal.repository.memory.record.workspace.MemoryWorkspaceRepository
@@ -44,6 +45,7 @@ object MemoryFixture : BaseTestFixture {
         WorkspaceRepository::class -> MemoryWorkspaceRepository() as REPO
         HookRepository::class -> HookMemoryRepository() as REPO
         NamespaceRepository::class -> NamespaceMemoryRepository() as REPO
+        NamespaceTreeRepository::class -> NamespaceTreeMemoryRepository() as REPO
         RequestRepository::class -> RequestMemoryRepository() as REPO
 
         LogBrokerRepository::class -> LogBrokerMemoryRepository() as REPO

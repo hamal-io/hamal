@@ -113,6 +113,7 @@ class ClearController {
         hookRepository.clear()
 
         namespaceRepository.clear()
+        namespaceTreeRepository.clear()
         blueprintRepository.clear()
         triggerRepository.clear()
 
@@ -152,6 +153,15 @@ class ClearController {
                 name = NamespaceName("root-namespace")
             )
         )
+
+        namespaceTreeRepository.create(
+            NamespaceTreeCmdRepository.CreateCmd(
+                id = CmdId(6),
+                treeId = NamespaceTreeId.root,
+                workspaceId = testWorkspace.id,
+                rootNodeId = testNamespace.id
+            )
+        )
     }
 
     @Autowired
@@ -186,6 +196,9 @@ class ClearController {
 
     @Autowired
     lateinit var namespaceRepository: NamespaceRepository
+
+    @Autowired
+    lateinit var namespaceTreeRepository: NamespaceTreeRepository
 
     @Autowired
     lateinit var requestRepository: RequestRepository

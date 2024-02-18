@@ -18,14 +18,14 @@ import io.hamal.plugin.std.sys.extension.ExtensionCreateFunction
 import io.hamal.plugin.std.sys.extension.ExtensionGetFunction
 import io.hamal.plugin.std.sys.extension.ExtensionListFunction
 import io.hamal.plugin.std.sys.extension.ExtensionUpdateFunction
-import io.hamal.plugin.std.sys.namespace.NamespaceCreateFunction
-import io.hamal.plugin.std.sys.namespace.NamespaceExecsFunction
-import io.hamal.plugin.std.sys.namespace.NamespaceGetFunction
-import io.hamal.plugin.std.sys.namespace.NamespaceListFunction
 import io.hamal.plugin.std.sys.func.*
 import io.hamal.plugin.std.sys.hook.HookCreateFunction
 import io.hamal.plugin.std.sys.hook.HookGetFunction
 import io.hamal.plugin.std.sys.hook.HookListFunction
+import io.hamal.plugin.std.sys.namespace.NamespaceAppendFunction
+import io.hamal.plugin.std.sys.namespace.NamespaceExecsFunction
+import io.hamal.plugin.std.sys.namespace.NamespaceGetFunction
+import io.hamal.plugin.std.sys.namespace.NamespaceListFunction
 import io.hamal.plugin.std.sys.req.ReqGetFunction
 import io.hamal.plugin.std.sys.topic.*
 import io.hamal.plugin.std.sys.topic.trigger.*
@@ -76,7 +76,7 @@ class PluginSysFactory(
                 "hook_get" to HookGetFunction(sdk),
                 "hook_list" to HookListFunction(sdk),
 
-                "namespace_create" to NamespaceCreateFunction(sdk),
+                "namespace_append" to NamespaceAppendFunction(sdk),
                 "namespace_get" to NamespaceGetFunction(sdk),
                 "namespace_list" to NamespaceListFunction(sdk),
                 "namespace_execs" to NamespaceExecsFunction(sdk),

@@ -7,7 +7,7 @@ import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiError
-import io.hamal.lib.sdk.api.ApiNamespaceCreateRequest
+import io.hamal.lib.sdk.api.ApiNamespaceAppendRequest
 import io.hamal.lib.sdk.api.ApiNamespaceUpdateRequest
 import io.hamal.lib.sdk.api.ApiNamespaceUpdateRequested
 import org.hamcrest.MatcherAssert.assertThat
@@ -34,8 +34,8 @@ internal class NamespaceUpdateControllerTest : NamespaceBaseControllerTest() {
     @Test
     fun `Updates namespace`() {
         val namespace = awaitCompleted(
-            createNamespace(
-                ApiNamespaceCreateRequest(NamespaceName("created-name"))
+            appendNamespace(
+                ApiNamespaceAppendRequest(NamespaceName("created-name"))
             )
         )
 

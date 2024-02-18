@@ -1,7 +1,7 @@
 sys = require_plugin 'sys'
 http = require('net.http').create()
 
-namespace = fail_on_error(sys.namespaces.create({ name = 'io::hamal' }))
+namespace = fail_on_error(sys.namespaces.append({ name = 'io::hamal' }))
 sys.await_completed(namespace)
 
 func_one = fail_on_error(sys.funcs.create({

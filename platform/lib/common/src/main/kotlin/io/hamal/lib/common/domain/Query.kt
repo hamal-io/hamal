@@ -6,7 +6,7 @@ class Limit(override val value: Int) : ValueObjectInt() {
     }
 
     companion object {
-        val One = Limit(1)
+        val one = Limit(1)
         val all = Limit(Int.MAX_VALUE)
     }
 }

@@ -79,6 +79,10 @@ abstract class AbstractUnitTest {
             MemoryFixture,
             SqliteFixture
         ),
+        NamespaceTreeRepository::class to listOf(
+            MemoryFixture,
+            SqliteFixture
+        ),
         RequestRepository::class to listOf(
             MemoryFixture,
             SqliteFixture
