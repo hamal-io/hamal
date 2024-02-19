@@ -16,7 +16,7 @@ import {
 import React, {FC} from "react";
 import {Link, useLocation, useParams} from "react-router-dom";
 import Profile from "@/components/app/layout/workspace/profile.tsx";
-import WorkspaceNamespaceSelector from "@/components/app/workspace-namespace-selector.tsx";
+import NamespaceSelector from "@/components/app/layout/workspace/namespace-selector.tsx";
 
 type Props = {
     className?: string;
@@ -111,9 +111,6 @@ const Sidebar: React.FC<Props> = ({className}) => {
         <aside className={cn("fixed h-screen inset-y-0 flex w-48 flex-col px-6 gap-y-5 bg-gray-100", className)}>
             <nav className="flex flex-col ">
                 <h1 className="text-2xl font-bold leading-6 text-content mt-6">fn(guru)</h1>
-                <div className="pt-8">
-                    <WorkspaceNamespaceSelector/>
-                </div>
                 <ul className="pt-4">
                     <li>
                         <ul className="mt-2 -mx-2 space-y-1">

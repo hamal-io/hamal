@@ -10,7 +10,7 @@ import {useChangeGroup, useChangeNamespace, useUiState} from "@/hook/ui-state.ts
 type Props = {
     className?: string;
 }
-const WorkspaceNamespaceSelector: FC<Props> = ({className}) => {
+const NamespaceSelector: FC<Props> = ({className}) => {
     const [listNamespaces, namespaceList, loading] = useNamespaceList()
     const [uiState] = useUiState()
     const [selected, setSelected] = useState(uiState.namespaceId)
@@ -57,4 +57,4 @@ const WorkspaceNamespaceSelector: FC<Props> = ({className}) => {
     )
 }
 
-export default WorkspaceNamespaceSelector
+export default NamespaceSelector
