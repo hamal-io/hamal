@@ -1,93 +1,162 @@
-import React, {FC} from "react";
-import {useBlueprintList} from "@/hook/blueprint.ts";
+import React, {FC, useEffect, useState} from "react";
+import {useBlueprintCreate, useBlueprintGet, useBlueprintList} from "@/hook/blueprint.ts";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx";
-import {BlueprintListItem} from "@/types/blueprint.ts";
 import {PageHeader} from "@/components/page-header.tsx";
+import {EmptyPlaceholder} from "@/components/empty-placeholder.tsx";
+import {Button} from "@/components/ui/button.tsx";
+import {useNavigate} from "react-router-dom";
+import {Plus} from "lucide-react";
+import {useUiState} from "@/hook/ui-state.ts";
+import {useAdhoc} from "@/hook";
+import {BlueprintListItem} from "@/types/blueprint.ts";
 
-type Props = {}
-const BlueprintListPage: FC<Props> = ({}) => {
+const BlueprintListPage = () => {
     const [listBlueprints, blueprintList, loading, error] = useBlueprintList()
 
-    /*   useEffect(() => {
-           const abortController = new AbortController();
-           listBlueprints(abortController)
-           return () => {
-               abortController.abort();
-           }
-       },[]);
+    useEffect(() => {
+        const abortController = new AbortController();
+        listBlueprints(abortController)
+        return () => {
+            abortController.abort();
+        }
+    }, [listBlueprints]);
 
-       if (error) return `Error`
-       if (blueprintList == null || loading) return "Loading..."*/
+
+    if (error) return `Error`
+    if (blueprintList == null || loading) return "Loading..."
 
     return (
         <div className="pt-2 px-2">
             <PageHeader
                 title="Blueprints"
                 description={'Tryout our predefined workflows, proudly brought to you by the hamal.io team.'}
-                actions={[]}
+                actions={[<CreateBlueprint/>]}
             />
-            <ul className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                {/*    {blueprintList.blueprints.map((item) => (
-                BlueprintCard(item)
-                         ))}*/}
+            {
+                blueprintList.blueprints.length ?
+                    (<BlueprintCards blueprints={blueprintList.blueprints}/>) : (<NoContent/>)
+            }
 
-                <BlueprintCard id={"1234"} name={"Telegram Money Service"}
-                               description={"Be the first to know when your bank account hits a billion."}>
 
-                </BlueprintCard>
-
-                <BlueprintCard id={"1234"} name={"Email Crypto Bot"}
-                               description={"Generates passive income every minute."}>
-
-                </BlueprintCard>
-
-                <BlueprintCard id={"1234"} name={"Telegram Spam Service"}
-                               description={"Be the first to know when your bank account hits a billion."}>
-
-                </BlueprintCard>
-
-                <BlueprintCard id={"1234"} name={"Email Spam Bot"}
-                               description={"Generates passive income every minute."}>
-
-                </BlueprintCard>
-
-                <BlueprintCard id={"1234"} name={"Telegram Spam Service"}
-                               description={"Be the first to know when your bank account hits a billion."}>
-
-                </BlueprintCard>
-
-                <BlueprintCard id={"1234"} name={"Email Spam Bot"}
-                               description={"Generates passive income every minute."}>
-
-                </BlueprintCard>
-
-            </ul>
         </div>
     );
 }
 
-const BlueprintCard = (item: BlueprintListItem) => {
+type CardProps = {
+    blueprints: Array<BlueprintListItem>
+}
+const BlueprintCards: FC<CardProps> = ({blueprints}) => {
+    const navigate = useNavigate()
+    return (
+        <ul className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {blueprints.map((bp) => (
+                <Card
+                    key={bp.id}
+                    className="relative overfunc-hidden duration-500 hover:border-primary/50 group"
 
-    return (<Card
-        key={item.id}
-        className="relative overfunc-hidden duration-500 hover:border-primary/50 group"
-        onClick={() => {
-            console.log("Not implemented")
-            //navigate(`/blueprints/${item.id}`)
-        }}
-    >
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle>{item.name}</CardTitle>
-        </CardHeader>
-        <CardContent>
-            <dl className="text-sm leading-6 divide-y divide-gray-100 ">
-                <div className="flex justify-between py-3 gap-x-4">
-                    {item.description}
-                </div>
-            </dl>
-        </CardContent>
-    </Card>)
+                >
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <CardTitle>{bp.name}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <dl className="text-sm leading-6 divide-y divide-gray-100 ">
+                            <div className="flex justify-between py-3 gap-x-4">
+                                {bp.description}
+                            </div>
+                        </dl>
+                        <div className="flex flex-row justify-between items-center">
+                            <SetupBlueprint blueprintId={bp.id}/>
+                            <Button
+                                size={"sm"}
+                                onClick={() => {
+                                    navigate(`/blueprints/editor/${bp.id}`)
+                                }} variant="secondary">
+                                Config
+                            </Button>
+                        </div>
+                    </CardContent>
+                </Card>
+            ))}
+        </ul>)
 
+}
+
+
+const NoContent = () => (
+    <EmptyPlaceholder className="my-4 ">
+        <EmptyPlaceholder.Icon>
+            {/*<Code />*/}
+        </EmptyPlaceholder.Icon>
+        <EmptyPlaceholder.Title>No Blueprints found.</EmptyPlaceholder.Title>
+        <EmptyPlaceholder.Description>
+
+        </EmptyPlaceholder.Description>
+        <div className="flex flex-col items-center justify-center gap-2 md:flex-row">
+            <CreateBlueprint/>
+        </div>
+    </EmptyPlaceholder>
+)
+
+const CreateBlueprint = () => {
+    const navigate = useNavigate()
+    const [isLoading, setLoading] = useState(false)
+    const [createBlueprint, submitted] = useBlueprintCreate()
+
+    async function create() {
+        setLoading(true)
+        try {
+            createBlueprint("New Blueprint", "print('hamal')", "I will print 'hamal'")
+        } catch (e) {
+            console.log(e)
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    useEffect(() => {
+        const abortController = new AbortController();
+        if (submitted !== null) {
+            navigate(`/blueprints/editor/${submitted.id}`)
+        }
+        return () => {
+            abortController.abort();
+        }
+    }, [submitted, navigate]);
+
+    return (
+        <Button type={"submit"} size="lg" onClick={create}>
+            <Plus className="w-4 h-4 mr-1"/>
+            Create Blueprint
+        </Button>
+    )
+}
+
+type SetupProps = { blueprintId: string }
+const SetupBlueprint: FC<SetupProps> = ({blueprintId}) => {
+    const [uiState] = useUiState()
+    const [adhoc, data] = useAdhoc()
+    const [getBlueprint, blueprint, loading, error] = useBlueprintGet()
+
+
+    useEffect(() => {
+        const abortController = new AbortController();
+        getBlueprint(blueprintId)
+        return () => {
+            abortController.abort();
+        };
+    }, [blueprintId]);
+
+    async function setup() {
+        if (blueprint !== null) {
+            adhoc(uiState.namespaceId, blueprint.value)
+        }
+    }
+
+    return (
+        <Button type={"submit"} size="sm" onClick={setup}>
+            Setup
+        </Button>
+    )
 }
 
 

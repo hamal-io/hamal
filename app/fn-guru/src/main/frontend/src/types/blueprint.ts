@@ -2,7 +2,20 @@ export interface Blueprint {
     id: string,
     name: string,
     inputs: object,
-    value: string
+    value: string,
+    description: string
+}
+
+export interface BlueprintCreateRequested {
+    id: string;
+    status: string;
+    blueprintId: string;
+}
+
+export interface BlueprintUpdateRequested {
+    id: string;
+    status: string;
+    blueprintId: string;
 }
 
 export interface BlueprintList {
