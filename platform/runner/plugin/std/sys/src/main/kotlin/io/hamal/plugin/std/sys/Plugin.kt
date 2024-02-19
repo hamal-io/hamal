@@ -27,7 +27,7 @@ import io.hamal.plugin.std.sys.namespace.NamespaceGetFunction
 import io.hamal.plugin.std.sys.namespace.NamespaceListFunction
 import io.hamal.plugin.std.sys.req.ReqGetFunction
 import io.hamal.plugin.std.sys.topic.*
-import io.hamal.plugin.std.sys.topic.trigger.*
+import io.hamal.plugin.std.sys.trigger.*
 
 
 class PluginSysFactory(

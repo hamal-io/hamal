@@ -1,4 +1,4 @@
-package io.hamal.plugin.std.sys.topic.trigger
+package io.hamal.plugin.std.sys.trigger
 
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.kua.function.Function1In2Out

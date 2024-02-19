@@ -1,33 +1,28 @@
-package io.hamal.plugin.std.sys.topic.trigger
+package io.hamal.plugin.std.sys.trigger
 
-import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.type.KuaArray
 import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.kua.type.KuaMap
 import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.sdk.ApiSdk
-import io.hamal.lib.sdk.api.ApiTriggerList
-import io.hamal.lib.sdk.api.ApiTriggerService.TriggerQuery
+import io.hamal.lib.sdk.api.ApiTrigger
 
-class TriggerListFunction(
+class TriggerGetFunction(
     private val sdk: ApiSdk
-) : Function1In2Out<KuaMap, KuaError, KuaArray>(
-    FunctionInput1Schema(KuaMap::class),
-    FunctionOutput2Schema(KuaError::class, KuaArray::class)
+) : Function1In2Out<KuaString, KuaError, KuaMap>(
+    FunctionInput1Schema(KuaString::class),
+    FunctionOutput2Schema(KuaError::class, KuaMap::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: KuaMap): Pair<KuaError?, KuaArray?> {
+    override fun invoke(ctx: FunctionContext, arg1: KuaString): Pair<KuaError?, KuaMap?> {
         return try {
-            null to KuaArray(
-                sdk.trigger.list(TriggerQuery(
-                    namespaceIds = arg1.getArrayType("namespace_ids")
-                        .map { NamespaceId((it.value as KuaString).value) }
-                )).mapIndexed { index, trigger ->
-                    index to when (trigger) {
-                        is ApiTriggerList.FixedRate -> {
+            null to sdk.trigger.get(TriggerId(arg1.value))
+                .let { trigger ->
+                    when (trigger) {
+                        is ApiTrigger.FixedRate ->
                             KuaMap(
                                 mutableMapOf(
                                     "id" to KuaString(trigger.id.value.value.toString(16)),
@@ -45,12 +40,12 @@ class TriggerListFunction(
                                             "name" to KuaString(trigger.func.name.value)
                                         )
                                     ),
-                                    "duration" to KuaString(trigger.duration.value)
+                                    "duration" to KuaString(trigger.duration.value),
+                                    "status" to KuaString(trigger.status.name),
                                 )
                             )
-                        }
 
-                        is ApiTriggerList.Event -> {
+                        is ApiTrigger.Event -> {
                             KuaMap(
                                 mutableMapOf(
                                     "id" to KuaString(trigger.id.value.value.toString(16)),
@@ -74,11 +69,12 @@ class TriggerListFunction(
                                             "name" to KuaString(trigger.topic.name.value)
                                         )
                                     ),
+                                    "status" to KuaString(trigger.status.name),
                                 )
                             )
                         }
 
-                        is ApiTriggerList.Hook -> {
+                        is ApiTrigger.Hook -> {
                             KuaMap(
                                 mutableMapOf(
                                     "id" to KuaString(trigger.id.value.value.toString(16)),
@@ -100,14 +96,15 @@ class TriggerListFunction(
                                         mutableMapOf(
                                             "id" to KuaString(trigger.hook.id.value.value.toString(16)),
                                             "name" to KuaString(trigger.hook.name.value),
-                                            "methods" to KuaString(trigger.hook.method.name)
+                                            "method" to KuaString(trigger.hook.method.name)
                                         )
                                     ),
+                                    "status" to KuaString(trigger.status.name),
                                 )
                             )
                         }
 
-                        is ApiTriggerList.Cron -> KuaMap(
+                        is ApiTrigger.Cron -> KuaMap(
                             mutableMapOf(
                                 "id" to KuaString(trigger.id.value.value.toString(16)),
                                 "type" to KuaString("Cron"),
@@ -124,12 +121,12 @@ class TriggerListFunction(
                                         "name" to KuaString(trigger.func.name.value)
                                     )
                                 ),
-                                "cron" to KuaString(trigger.cron.value)
+                                "cron" to KuaString(trigger.cron.value),
+                                "status" to KuaString(trigger.status.name)
                             )
                         )
                     }
-                }.toMap().toMutableMap()
-            )
+                }
         } catch (t: Throwable) {
             KuaError(t.message!!) to null
         }
