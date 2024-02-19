@@ -1,34 +1,29 @@
-import React, {FC, useEffect} from "react";
+import React, {FC, useEffect, useState} from "react";
 import {useBlueprintGet} from "@/hook/blueprint.ts";
 import {useNavigate} from "react-router-dom";
 import {DialogContent, DialogHeader} from "@/components/ui/dialog.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {useUiState} from "@/hook/ui-state.ts";
 import {useAdhoc} from "@/hook";
+import {BlueprintListItem} from "@/types/blueprint.ts";
 
-type DProps = { id: string }
-export const DDialog: FC<DProps> = ({id}) => {
-    const [getBlueprint, blueprint, loading, error] = useBlueprintGet()
+type DProps = {
+    item: BlueprintListItem
+}
+export const DDialog: FC<DProps> = ({item}) => {
     const navigate = useNavigate()
+    const [uiState] = useUiState()
+    const [namespaceId, setNamespace] = useState(uiState.namespaceId)
 
-    useEffect(() => {
-        const abortController = new AbortController();
-        getBlueprint(id, abortController)
-        return () => {
-            abortController.abort();
-        }
-    }, [id]);
-
-    if (blueprint == null || loading) return "Loading..."
 
     return (
         <DialogContent>
-            <DialogHeader>{blueprint.name}</DialogHeader>
-            <p>{blueprint.description}</p>
-            <Deploy blueprintId={blueprint.id}/>
+            <DialogHeader>{item.name}</DialogHeader>
+            <p>{item.description}</p>
+            <Deploy blueprintId={item.id} namespaceId={namespaceId}/>
             <Button size={"sm"}
                     onClick={() => {
-                        navigate(`/blueprints/editor/${blueprint.id}`)
+                        navigate(`/blueprints/editor/${item.id}`)
                     }} variant="secondary">
                 Config
             </Button>
@@ -36,8 +31,11 @@ export const DDialog: FC<DProps> = ({id}) => {
     )
 }
 
-type DeployProps = { blueprintId: string }
-const Deploy: FC<DeployProps> = ({blueprintId}) => {
+type DeployProps = {
+    blueprintId: string,
+    namespaceId: string
+}
+const Deploy: FC<DeployProps> = ({blueprintId, namespaceId}) => {
     const [uiState] = useUiState()
     const [adhoc, data] = useAdhoc()
     const [getBlueprint, blueprint, loading, error] = useBlueprintGet()
@@ -53,7 +51,7 @@ const Deploy: FC<DeployProps> = ({blueprintId}) => {
 
     async function setup() {
         if (blueprint !== null) {
-            adhoc(uiState.namespaceId, blueprint.value)
+            adhoc(namespaceId, blueprint.value)
         }
     }
 

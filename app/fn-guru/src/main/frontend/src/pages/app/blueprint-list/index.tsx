@@ -41,10 +41,10 @@ const BlueprintListPage = () => {
 type CardProps = { blueprints: Array<BlueprintListItem> }
 const BlueprintCards: FC<CardProps> = ({blueprints}) => {
     const [dialog, setDialog] = useState(null);
-    const [id, setId] = useState('')
+    const [item, setItem] = useState<BlueprintListItem>(null)
 
-    const handleClick = (id: string) => {
-        setId(id)
+    const handleClick = (bp: BlueprintListItem) => {
+        setItem(bp)
         setDialog(true)
     }
 
@@ -54,7 +54,7 @@ const BlueprintCards: FC<CardProps> = ({blueprints}) => {
                 <div style={{cursor: 'pointer'}}>
                     <Card
                         key={bp.id}
-                        onClick={() => handleClick(bp.id)}
+                        onClick={() => handleClick(bp)}
                         className="relative overfunc-hidden duration-500 hover:border-primary/50 group"
 
                     >
@@ -74,7 +74,7 @@ const BlueprintCards: FC<CardProps> = ({blueprints}) => {
                 </div>
             ))}
             {dialog && <Dialog open={dialog} onOpenChange={setDialog}>
-                <DDialog id={id}></DDialog>
+                <DDialog item={item}></DDialog>
             </Dialog>}
         </ul>)
 }
