@@ -43,6 +43,7 @@ data class EthPrefixedHexString(
     override val value: String
 ) : EthBaseString {
     constructor(byteArray: ByteArray) : this(String(byteArray, Charset.forName("UTF-8")))
+    constructor(value: EthPrefixedHexString) : this(value.value)
 
     init {
         require(value.startsWith("0x")) { "$value does not start with 0x" }

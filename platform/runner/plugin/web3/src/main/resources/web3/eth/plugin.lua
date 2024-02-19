@@ -31,7 +31,11 @@ function plugin()
         end
 
         function export.get_block(block)
-            return export.execute({ export.request.get_block(block) })
+            err, responses = export.execute({ export.request.get_block(block) })
+            if err ~= nil then
+                return err, nil
+            end
+            return nil, responses[1]
         end
 
         return export
