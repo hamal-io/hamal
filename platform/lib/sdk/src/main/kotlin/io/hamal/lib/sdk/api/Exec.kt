@@ -21,6 +21,13 @@ data class ApiExecList(
         val id: ExecId,
         val status: ExecStatus,
         val correlation: Correlation?,
+        val namespace: Namespace,
+        val invocation: Invocation
+    )
+
+    data class Namespace(
+        val id: NamespaceId,
+        val name: NamespaceName
     )
 }
 

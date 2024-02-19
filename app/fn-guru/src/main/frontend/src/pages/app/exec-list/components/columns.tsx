@@ -4,7 +4,7 @@ import {statuses} from "./data.tsx"
 import {ColumnHeader} from "./column-header.tsx"
 import React from "react";
 import RowActions from "@/pages/app/exec-list/components/row-actions.tsx";
-import {ExecListItem} from "@/types";
+import {ExecListItem, ExecListItemNamespace} from "@/types";
 
 export const columns: ColumnDef<ExecListItem>[] = [
     {
@@ -42,6 +42,22 @@ export const columns: ColumnDef<ExecListItem>[] = [
         filterFn: (row, id, value) => {
             return value.includes(row.getValue(id))
         },
+    },
+    {
+        accessorKey: "namespace",
+        header: ({column}) => (
+            <ColumnHeader column={column} title="Namespace"/>
+        ),
+        cell: ({row}) => {
+            const {name} = row.getValue<ExecListItemNamespace>("namespace")
+            return (
+                <div className="flex  items-center">
+                    <span>{name}</span>
+                </div>
+            )
+        },
+        enableSorting: false,
+        enableHiding: false,
     },
     {
         id: "actions",

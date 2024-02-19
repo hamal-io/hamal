@@ -8,7 +8,7 @@ import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.sdk.api.ApiExecList
-import io.hamal.repository.api.ExecQueryRepository
+import io.hamal.repository.api.ExecQueryRepository.ExecQuery
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -47,16 +47,15 @@ internal class ExecListController(
         val allNamespaceIds = namespaceIds.flatMap { namespaceId ->
             namespaceTreeGetSubTree(namespaceId) { it }.values
         }
-
         return listExec(
-            ExecQueryRepository.ExecQuery(
+            ExecQuery(
                 afterId = afterId,
                 limit = limit,
                 workspaceIds = workspaceIds,
                 funcIds = funcIds,
                 namespaceIds = allNamespaceIds
             )
-        ) { execs ->
+        ) { execs, namespaces ->
             ResponseEntity.ok(
                 ApiExecList(
                     execs = execs.map {
@@ -64,6 +63,13 @@ internal class ExecListController(
                             id = it.id,
                             status = it.status,
                             correlation = it.correlation,
+                            namespace = namespaces[it.namespaceId]!!.let { namespace ->
+                                ApiExecList.Namespace(
+                                    id = namespace.id,
+                                    name = namespace.name
+                                )
+                            },
+                            invocation = it.invocation
                         )
                     }
                 )

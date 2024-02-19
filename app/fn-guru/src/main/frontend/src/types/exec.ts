@@ -13,4 +13,10 @@ export interface ExecList {
 export interface ExecListItem {
     id: string;
     status: string;
+    namespace: ExecListItemNamespace;
+}
+
+export interface ExecListItemNamespace {
+    id: string;
+    name: string;
 }
