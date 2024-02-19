@@ -42,7 +42,7 @@ class AdhocAdapter(
             code = ExecCode(value = req.code),
             funcId = null,
             correlationId = null,
-            invocation = EmptyInvocation
+            invocation = Invocation.Adhoc
         ).also(requestCmdRepository::queue).let(responseHandler)
     }
 }

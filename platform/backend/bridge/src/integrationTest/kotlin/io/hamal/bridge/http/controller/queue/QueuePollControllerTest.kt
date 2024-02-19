@@ -22,7 +22,7 @@ internal class QueuePollControllerTest : BaseQueueControllerTest() {
             execId = generateDomainId(::ExecId),
             status = Queued,
             code = CodeValue("40 + 2"),
-            invocation = EmptyInvocation
+            invocation = Invocation.DeprecatedEmptyInvocation
         )
         with(dequeue()) {
             assertThat(work, hasSize(1))
@@ -49,7 +49,7 @@ internal class QueuePollControllerTest : BaseQueueControllerTest() {
                 correlationId = CorrelationId("_some_chosen_correlation_@")
             ),
             code = CodeValue("40 + 2"),
-            invocation = EmptyInvocation
+            invocation = Invocation.DeprecatedEmptyInvocation
         )
         with(dequeue()) {
             assertThat(work, hasSize(1))

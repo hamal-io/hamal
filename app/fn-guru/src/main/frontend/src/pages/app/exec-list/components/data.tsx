@@ -38,3 +38,14 @@ export const statuses = [
     },
 ]
 
+
+export const invocations = [
+    {
+        value: "Adhoc",
+        label: "Adhoc",
+    },
+    {
+        value: "Schedule",
+        label: "Schedule",
+    },
+]

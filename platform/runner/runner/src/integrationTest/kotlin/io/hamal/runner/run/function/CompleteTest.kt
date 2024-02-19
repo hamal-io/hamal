@@ -1,11 +1,11 @@
 package io.hamal.runner.run.function
 
-import io.hamal.runner.test.TestConnector
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.*
 import io.hamal.runner.connector.UnitOfWork
 import io.hamal.runner.run.AbstractExecuteTest
+import io.hamal.runner.test.TestConnector
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
@@ -111,6 +111,6 @@ internal class CompleteTest : AbstractExecuteTest() {
         state = State(),
         code = CodeValue(code),
         correlation = null,
-        invocation = EmptyInvocation
+        invocation = Invocation.DeprecatedEmptyInvocation
     )
 }

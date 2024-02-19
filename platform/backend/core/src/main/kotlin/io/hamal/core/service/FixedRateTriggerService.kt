@@ -8,7 +8,7 @@ import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain.request.FuncInvokeRequest
 import io.hamal.lib.domain.vo.CorrelationId
-import io.hamal.lib.domain.vo.EmptyInvocation
+import io.hamal.lib.domain.vo.Invocation
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.repository.api.FuncQueryRepository
@@ -66,7 +66,7 @@ internal fun FixedRateTriggerService.requestInvocation(trigger: Trigger.FixedRat
         object : FuncInvokeRequest {
             override val correlationId = trigger.correlationId ?: CorrelationId.default
             override val inputs = InvocationInputs()
-            override val invocation = EmptyInvocation
+            override val invocation = Invocation.Schedule
         },
     ) {}
 }

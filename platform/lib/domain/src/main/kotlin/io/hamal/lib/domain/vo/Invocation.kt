@@ -40,31 +40,40 @@ sealed class Invocation {
         }
 
         private val classMapping = listOf(
-            EventInvocation::class,
-            HookInvocation::class,
-            EndpointInvocation::class,
-            EmptyInvocation::class
+            Adhoc::class,
+            Endpoint::class,
+            Event::class,
+            Hook::class,
+            Schedule::class,
+            DeprecatedEmptyInvocation::class
         ).associateBy { it.simpleName }
 
     }
+
+    object Adhoc : Invocation()
+
+    data class Event(val events: List<io.hamal.lib.domain.vo.Event>) : Invocation()
+
+    data class Hook(
+        val method: HookMethod,
+        val headers: HookHeaders,
+        val parameters: HookParameters,
+        val content: HookContent
+    ) : Invocation()
+
+
+    data class Endpoint(
+        val method: EndpointMethod,
+        val headers: EndpointHeaders,
+        val parameters: EndpointParameters,
+        val content: EndpointContent
+    ) : Invocation()
+
+    object Schedule : Invocation()
+
+    //FIXME 223 get rid of this
+    @Deprecated("Replace and remove this")
+    object DeprecatedEmptyInvocation : Invocation()
+
 }
-
-data class EventInvocation(val events: List<Event>) : Invocation()
-
-data class HookInvocation(
-    val method: HookMethod,
-    val headers: HookHeaders,
-    val parameters: HookParameters,
-    val content: HookContent
-) : Invocation()
-
-
-data class EndpointInvocation(
-    val method: EndpointMethod,
-    val headers: EndpointHeaders,
-    val parameters: EndpointParameters,
-    val content: EndpointContent
-) : Invocation()
-
-object EmptyInvocation : Invocation()
 

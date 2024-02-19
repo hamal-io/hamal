@@ -43,7 +43,7 @@ internal class EndpointInvokeController(
         return CompletableFuture.supplyAsync {
             val endpoint = endpointQueryRepository.get(id)
             val func = funcQueryRepository.get(endpoint.funcId)
-            val invocation = EndpointInvocation(
+            val invocation = Invocation.Endpoint(
                 method = req.method(),
                 headers = req.headers(),
                 parameters = req.parameters(),
@@ -73,7 +73,7 @@ internal class EndpointInvokeController(
         }
     }
 
-    private fun invoke(func: Func, invocation: EndpointInvocation): Exec {
+    private fun invoke(func: Func, invocation: Invocation.Endpoint): Exec {
         val execId = generateDomainId(::ExecId)
         requestCmdRepository.queue(
             ExecInvokeRequested(

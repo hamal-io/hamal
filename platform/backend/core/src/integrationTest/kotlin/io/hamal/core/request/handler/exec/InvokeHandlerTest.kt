@@ -29,7 +29,7 @@ internal class ExecInvokeHandlerTest : BaseReqHandlerTest() {
                 code = ExecCode(value = CodeValue("code")),
                 funcId = null,
                 correlationId = null,
-                invocation = EventInvocation(listOf())
+                invocation = Invocation.Event(listOf())
             )
         )
 
@@ -77,7 +77,7 @@ internal class ExecInvokeHandlerTest : BaseReqHandlerTest() {
                     id = CodeId(4455),
                     version = CodeVersion(5544),
                 ),
-                invocation = EventInvocation(listOf())
+                invocation = Invocation.Event(listOf())
             )
         )
 
@@ -144,7 +144,7 @@ internal class ExecInvokeHandlerTest : BaseReqHandlerTest() {
                 id = CodeId(5555),
                 version = CodeVersion(6666),
             ),
-            invocation = EventInvocation(listOf())
+            invocation = Invocation.Event(listOf())
         )
     }
     //@formatter:on

@@ -144,7 +144,7 @@ class FuncAdapter(
                 version = version,
                 value = null
             ),
-            invocation = EmptyInvocation
+            invocation = Invocation.DeprecatedEmptyInvocation
         ).also(requestCmdRepository::queue).let(responseHandler)
     }
 

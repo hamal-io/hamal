@@ -1,6 +1,9 @@
 package io.hamal.runner.run
 
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.Event
+import io.hamal.lib.domain.vo.ExecId
+import io.hamal.lib.domain.vo.Invocation
+import io.hamal.lib.domain.vo.RunnerEnv
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
@@ -17,13 +20,13 @@ class RunnerContextFactory(
     override fun create(sandbox: Sandbox): RunnerPlugin {
         val invocation = executionCtx[Invocation::class]
 
-        val events = if (invocation is EventInvocation) {
+        val events = if (invocation is Invocation.Event) {
             sandbox.invocationEvents(invocation.events)
         } else {
             KuaNil
         }
 
-        val hook = if (invocation is HookInvocation) {
+        val hook = if (invocation is Invocation.Hook) {
             KuaMap(
                 "method" to KuaString(invocation.method.toString()),
                 "headers" to invocation.headers.value.toKua(),
@@ -34,7 +37,7 @@ class RunnerContextFactory(
             KuaNil
         }
 
-        val endpoint = if (invocation is EndpointInvocation) {
+        val endpoint = if (invocation is Invocation.Endpoint) {
             KuaMap(
                 "method" to KuaString(invocation.method.toString()),
                 "headers" to invocation.headers.value.toKua(),

@@ -1,10 +1,10 @@
 import {ColumnDef} from "@tanstack/react-table"
 
-import {statuses} from "./data.tsx"
+import {invocations, statuses} from "./data.tsx"
 import {ColumnHeader} from "./column-header.tsx"
 import React from "react";
 import RowActions from "@/pages/app/exec-list/components/row-actions.tsx";
-import {ExecListItem, ExecListItemNamespace} from "@/types";
+import {ExecListItem, ExecListItemInvocation, ExecListItemNamespace} from "@/types";
 
 export const columns: ColumnDef<ExecListItem>[] = [
     {
@@ -50,9 +50,35 @@ export const columns: ColumnDef<ExecListItem>[] = [
         ),
         cell: ({row}) => {
             const {name} = row.getValue<ExecListItemNamespace>("namespace")
+
             return (
                 <div className="flex  items-center">
                     <span>{name}</span>
+                </div>
+            )
+        },
+        enableSorting: false,
+        enableHiding: false,
+    },
+    {
+        accessorKey: "invocation",
+        header: ({column}) => (
+            <ColumnHeader column={column} title="Invocation"/>
+        ),
+        cell: ({row}) => {
+            const className = row.getValue<ExecListItemInvocation>("invocation").class
+
+            const invocation = invocations.find(
+                (invocation) => invocation.value === className
+            )
+
+            if (!invocation) {
+                return null
+            }
+            
+            return (
+                <div className="flex  items-center">
+                    <span>{className}</span>
                 </div>
             )
         },

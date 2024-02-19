@@ -43,7 +43,7 @@ internal object EventInvocationTest : AbstractExecuteTest() {
                     
                 """.trimIndent()
                 ),
-                invocation = EventInvocation(events)
+                invocation = Invocation.Event(events)
             )
         )
     }
@@ -61,7 +61,7 @@ internal object EventInvocationTest : AbstractExecuteTest() {
                 inputs = ExecInputs(),
                 state = State(),
                 code = CodeValue("require_plugin('test').fn()"),
-                invocation = EventInvocation(events)
+                invocation = Invocation.Event(events)
             )
         )
         assertThat(testFn.result, equalTo(events))
@@ -70,7 +70,7 @@ internal object EventInvocationTest : AbstractExecuteTest() {
     class TestFunction(var result: List<Event>? = null) : Function0In0Out() {
         override fun invoke(ctx: FunctionContext) {
             val invocation = ctx[Invocation::class]
-            check(invocation is EventInvocation)
+            check(invocation is Invocation.Event)
             result = invocation.events
         }
     }
@@ -120,7 +120,7 @@ internal object HookInvocationTest : AbstractExecuteTest() {
 
                 """.trimIndent()
                 ),
-                invocation = HookInvocation(
+                invocation = Invocation.Hook(
                     method = HookMethod.Delete,
                     headers = HookHeaders(HotObject.builder().set("content-type", "application/json").build()),
                     parameters = HookParameters(HotObject.builder().set("answer", 42).build()),
@@ -143,7 +143,7 @@ internal object HookInvocationTest : AbstractExecuteTest() {
                 inputs = ExecInputs(),
                 state = State(),
                 code = CodeValue("require_plugin('test').fn()"),
-                invocation = HookInvocation(
+                invocation = Invocation.Hook(
                     method = HookMethod.Delete,
                     headers = HookHeaders(HotObject.builder().set("content-type", "application/json").build()),
                     parameters = HookParameters(HotObject.builder().set("answer", 42).build()),
@@ -168,7 +168,7 @@ internal object HookInvocationTest : AbstractExecuteTest() {
     ) : Function0In0Out() {
         override fun invoke(ctx: FunctionContext) {
             val invocation = ctx[Invocation::class]
-            check(invocation is HookInvocation)
+            check(invocation is Invocation.Hook)
             method = invocation.method
             headers = invocation.headers
             parameters = invocation.parameters
@@ -210,7 +210,7 @@ internal object EndpointInvocationTest : AbstractExecuteTest() {
 
                 """.trimIndent()
                 ),
-                invocation = EndpointInvocation(
+                invocation = Invocation.Endpoint(
                     method = EndpointMethod.Delete,
                     headers = EndpointHeaders(HotObject.builder().set("content-type", "application/json").build()),
                     parameters = EndpointParameters(HotObject.builder().set("answer", "42").build()),
@@ -233,7 +233,7 @@ internal object EndpointInvocationTest : AbstractExecuteTest() {
                 inputs = ExecInputs(),
                 state = State(),
                 code = CodeValue("require_plugin('test').fn()"),
-                invocation = EndpointInvocation(
+                invocation = Invocation.Endpoint(
                     method = EndpointMethod.Delete,
                     headers = EndpointHeaders(HotObject.builder().set("content-type", "application/json").build()),
                     parameters = EndpointParameters(HotObject.builder().set("answer", "42").build()),
@@ -259,7 +259,7 @@ internal object EndpointInvocationTest : AbstractExecuteTest() {
     ) : Function0In0Out() {
         override fun invoke(ctx: FunctionContext) {
             val invocation = ctx[Invocation::class]
-            check(invocation is EndpointInvocation)
+            check(invocation is Invocation.Endpoint)
             method = invocation.method
             headers = invocation.headers
             parameters = invocation.parameters

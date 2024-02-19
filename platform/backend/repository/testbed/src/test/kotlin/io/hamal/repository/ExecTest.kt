@@ -37,7 +37,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                     ),
                     inputs = ExecInputs(HotObject.builder().set("hamal", "rocks").build()),
                     code = ExecCode(value = CodeValue("40 + 2")),
-                    invocation = EventInvocation(
+                    invocation = Invocation.Event(
                         listOf(
                             Event(
                                 topic = EventTopic(id = TopicId(90), name = TopicName("test-topic")),
@@ -362,7 +362,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                 assertThat(code, equalTo(ExecCode(value = CodeValue("'13'..'37'"))))
                 assertThat(
                     invocation, equalTo(
-                        EventInvocation(
+                        Invocation.Event(
                             listOf(
                                 Event(
                                     topic = EventTopic(id = TopicId(90), name = TopicName("test-topic")),
@@ -406,7 +406,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                 assertThat(code, equalTo(ExecCode(value = CodeValue("'13'..'37'"))))
                 assertThat(
                     invocation, equalTo(
-                        EventInvocation(
+                        Invocation.Event(
                             listOf(
                                 Event(
                                     topic = EventTopic(id = TopicId(90), name = TopicName("test-topic")),
@@ -583,7 +583,7 @@ private fun assertBaseExec(exec: Exec) {
     assertThat(exec.code, equalTo(ExecCode(value = CodeValue("40 + 2"))))
     assertThat(
         exec.invocation, equalTo(
-            EventInvocation(
+            Invocation.Event(
                 listOf(
                     Event(
                         topic = EventTopic(id = TopicId(90), name = TopicName("test-topic")),
@@ -597,7 +597,10 @@ private fun assertBaseExec(exec: Exec) {
 }
 
 private fun ExecRepository.planExec(
-    execId: ExecId, namespaceId: NamespaceId, workspaceId: WorkspaceId, cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
+    execId: ExecId,
+    namespaceId: NamespaceId,
+    workspaceId: WorkspaceId,
+    cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
 ) = plan(
     PlanCmd(
         id = cmdId,
@@ -609,7 +612,7 @@ private fun ExecRepository.planExec(
         ),
         inputs = ExecInputs(HotObject.builder().set("hamal", "rocks").build()),
         code = ExecCode(value = CodeValue("40 + 2")),
-        invocation = EventInvocation(
+        invocation = Invocation.Event(
             listOf(
                 Event(
                     topic = EventTopic(id = TopicId(90), name = TopicName("test-topic")),
@@ -647,7 +650,7 @@ fun ExecRepository.createExec(
             correlation = correlation,
             inputs = ExecInputs(HotObject.builder().set("hamal", "rocks").build()),
             code = ExecCode(value = CodeValue("'13'..'37'")),
-            invocation = EventInvocation(
+            invocation = Invocation.Event(
                 listOf(
                     Event(
                         topic = EventTopic(id = TopicId(90), name = TopicName("test-topic")),

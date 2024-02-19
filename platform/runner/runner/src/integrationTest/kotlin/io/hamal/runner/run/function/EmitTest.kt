@@ -1,12 +1,12 @@
 package io.hamal.runner.run.function
 
-import io.hamal.runner.test.TestConnector
-import io.hamal.runner.test.TestFailConnector
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.*
 import io.hamal.runner.connector.UnitOfWork
 import io.hamal.runner.run.AbstractExecuteTest
+import io.hamal.runner.test.TestConnector
+import io.hamal.runner.test.TestFailConnector
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
@@ -173,6 +173,6 @@ internal class EmitTest : AbstractExecuteTest() {
         state = State(),
         code = CodeValue(code),
         correlation = null,
-        invocation = EmptyInvocation
+        invocation = Invocation.DeprecatedEmptyInvocation
     )
 }

@@ -34,5 +34,5 @@ data class HookInvokeRequested(
     override var status: RequestStatus,
     val hookId: HookId,
     val workspaceId: WorkspaceId,
-    val invocation: HookInvocation
+    val invocation: Invocation.Hook
 ) : Requested()

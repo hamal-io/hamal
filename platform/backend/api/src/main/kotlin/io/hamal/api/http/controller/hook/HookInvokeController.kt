@@ -45,7 +45,7 @@ internal class HookInvokeController(
             status = Submitted,
             hookId = id,
             workspaceId = hook.workspaceId,
-            invocation = HookInvocation(
+            invocation = Invocation.Hook(
                 method = req.method(), headers = req.headers(), parameters = req.parameters(), content = req.content()
             ),
         ).also(requestCmdRepository::queue)

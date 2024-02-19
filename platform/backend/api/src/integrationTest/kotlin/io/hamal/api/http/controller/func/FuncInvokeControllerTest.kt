@@ -30,7 +30,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
                 ApiFuncInvokeRequest(
                     correlationId = CorrelationId("some-correlation-id"),
                     inputs = InvocationInputs(),
-                    invocation = EmptyInvocation
+                    invocation = Invocation.DeprecatedEmptyInvocation
                 )
             ).execute()
 
@@ -66,7 +66,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
                 ApiFuncInvokeRequest(
                     inputs = InvocationInputs(),
                     correlationId = null,
-                    invocation = EmptyInvocation,
+                    invocation = Invocation.DeprecatedEmptyInvocation,
                 )
             ).execute()
 
@@ -204,7 +204,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
             ApiFuncInvokeRequest(
                 correlationId = CorrelationId.default,
                 inputs = InvocationInputs(),
-                invocation = EmptyInvocation,
+                invocation = Invocation.DeprecatedEmptyInvocation,
             )
         ).execute()
 
