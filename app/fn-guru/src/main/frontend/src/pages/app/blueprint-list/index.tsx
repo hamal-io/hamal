@@ -9,6 +9,7 @@ import {Plus} from "lucide-react";
 import {useUiState} from "@/hook/ui-state.ts";
 import {useAdhoc} from "@/hook";
 import {BlueprintListItem} from "@/types/blueprint.ts";
+import {Dialog, DialogContent, DialogHeader} from "@/components/ui/dialog.tsx";
 
 const BlueprintListPage = () => {
     const [listBlueprints, blueprintList, loading, error] = useBlueprintList()
@@ -46,12 +47,20 @@ type CardProps = {
     blueprints: Array<BlueprintListItem>
 }
 const BlueprintCards: FC<CardProps> = ({blueprints}) => {
-    const navigate = useNavigate()
+    const [dialog, setDialog] = useState(null);
+    const [id, setId] = useState('')
+
+    const handleClick = (id: string) => {
+        setId(id)
+        setDialog(true)
+    }
+
     return (
         <ul className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {blueprints.map((bp) => (
                 <Card
                     key={bp.id}
+                    onClick={() => handleClick(bp.id)}
                     className="relative overfunc-hidden duration-500 hover:border-primary/50 group"
 
                 >
@@ -65,20 +74,44 @@ const BlueprintCards: FC<CardProps> = ({blueprints}) => {
                             </div>
                         </dl>
                         <div className="flex flex-row justify-between items-center">
-                            <SetupBlueprint blueprintId={bp.id}/>
-                            <Button
-                                size={"sm"}
-                                onClick={() => {
-                                    navigate(`/blueprints/editor/${bp.id}`)
-                                }} variant="secondary">
-                                Config
-                            </Button>
                         </div>
                     </CardContent>
                 </Card>
             ))}
+            {dialog && <Dialog open={dialog} onOpenChange={setDialog}>
+                <DDialog id={id}></DDialog>
+            </Dialog>}
         </ul>)
+}
 
+type DProps = { id: string }
+const DDialog: FC<DProps> = ({id}) => {
+    const [getBlueprint, blueprint, loading, error] = useBlueprintGet()
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        const abortController = new AbortController();
+        getBlueprint(id, abortController)
+        return () => {
+            abortController.abort();
+        }
+    }, [id]);
+
+    if (blueprint == null || loading) return "Loading..."
+
+    return (
+        <DialogContent>
+            <DialogHeader>{blueprint.name}</DialogHeader>
+            <p>{blueprint.description}</p>
+            <Deploy blueprintId={blueprint.id}/>
+            <Button size={"sm"}
+                    onClick={() => {
+                        navigate(`/blueprints/editor/${blueprint.id}`)
+                    }} variant="secondary">
+                Config
+            </Button>
+        </DialogContent>
+    )
 }
 
 
@@ -131,8 +164,8 @@ const CreateBlueprint = () => {
     )
 }
 
-type SetupProps = { blueprintId: string }
-const SetupBlueprint: FC<SetupProps> = ({blueprintId}) => {
+type DeployProps = { blueprintId: string }
+const Deploy: FC<DeployProps> = ({blueprintId}) => {
     const [uiState] = useUiState()
     const [adhoc, data] = useAdhoc()
     const [getBlueprint, blueprint, loading, error] = useBlueprintGet()
@@ -154,7 +187,7 @@ const SetupBlueprint: FC<SetupProps> = ({blueprintId}) => {
 
     return (
         <Button type={"submit"} size="sm" onClick={setup}>
-            Setup
+            Deploy
         </Button>
     )
 }
