@@ -32,7 +32,7 @@ internal class ExecFailControllerTest : BaseExecControllerTest() {
                         funcId = generateDomainId(::FuncId),
                         correlationId = CorrelationId("__correlation__")
                     ),
-                    invocation = Invocation.DeprecatedEmptyInvocation
+                    invocation = Invocation.Adhoc
                 )
 
                 val failureResponse = requestFailure(exec.id)
@@ -53,7 +53,7 @@ internal class ExecFailControllerTest : BaseExecControllerTest() {
                 funcId = generateDomainId(::FuncId),
                 correlationId = CorrelationId("__correlation__")
             ),
-            invocation = Invocation.DeprecatedEmptyInvocation
+            invocation = Invocation.Adhoc
         ) as Exec.Started
 
         val failureResponse = requestFailure(startedExec.id)

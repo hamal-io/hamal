@@ -3,7 +3,10 @@ package io.hamal.lib.sdk.api
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.RequestStatus
-import io.hamal.lib.domain.request.*
+import io.hamal.lib.domain.request.FuncCreateRequest
+import io.hamal.lib.domain.request.FuncDeployRequest
+import io.hamal.lib.domain.request.FuncInvokeRequest
+import io.hamal.lib.domain.request.FuncUpdateRequest
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpRequest
 import io.hamal.lib.http.HttpTemplate
@@ -53,14 +56,8 @@ data class ApiFuncUpdateRequested(
 data class ApiFuncInvokeRequest(
     override val correlationId: CorrelationId?,
     override val inputs: InvocationInputs,
-    override val invocation: Invocation,
+    override val version: CodeVersion? = null
 ) : FuncInvokeRequest
-
-data class ApiFuncInvokeVersionRequest(
-    override val correlationId: CorrelationId?,
-    override val inputs: InvocationInputs,
-    override val version: CodeVersion?
-) : FuncInvokeVersionRequest
 
 data class ApiFuncList(
     val funcs: List<Func>
@@ -123,7 +120,7 @@ interface ApiFuncService {
     fun get(funcId: FuncId): ApiFunc
     fun update(funcId: FuncId, req: ApiFuncUpdateRequest): ApiFuncUpdateRequested
 
-    fun invoke(funcId: FuncId, req: ApiFuncInvokeVersionRequest): ApiExecInvokeRequested
+    fun invoke(funcId: FuncId, req: ApiFuncInvokeRequest): ApiExecInvokeRequested
 
     data class FuncQuery(
         var afterId: FuncId = FuncId(SnowflakeId(Long.MAX_VALUE)),
@@ -181,7 +178,7 @@ internal class ApiFuncServiceImpl(
             .execute()
             .fold(ApiFunc::class)
 
-    override fun invoke(funcId: FuncId, req: ApiFuncInvokeVersionRequest) =
+    override fun invoke(funcId: FuncId, req: ApiFuncInvokeRequest) =
         template.post("/v1/funcs/{funcId}/invoke")
             .path("funcId", funcId)
             .body(req)

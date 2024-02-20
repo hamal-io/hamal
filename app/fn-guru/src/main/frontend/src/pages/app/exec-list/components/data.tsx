@@ -1,7 +1,4 @@
-import {
-    CheckCircledIcon,
-    CrossCircledIcon,
-} from "@radix-ui/react-icons"
+import {CheckCircledIcon, CrossCircledIcon,} from "@radix-ui/react-icons"
 
 import {CircleDashed, PlayIcon} from "lucide-react";
 
@@ -38,11 +35,26 @@ export const statuses = [
     },
 ]
 
-
 export const invocations = [
     {
         value: "Adhoc",
         label: "Adhoc",
+    },
+    {
+        value: "Endpoint",
+        label: "Endpoint",
+    },
+    {
+        value: "Event",
+        label: "Event",
+    },
+    {
+        value: "Func",
+        label: "Func",
+    },
+    {
+        value: "Hook",
+        label: "Hook",
     },
     {
         value: "Schedule",

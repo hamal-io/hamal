@@ -30,8 +30,8 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
                 ApiFuncInvokeRequest(
                     correlationId = CorrelationId("some-correlation-id"),
                     inputs = InvocationInputs(),
-                    invocation = Invocation.DeprecatedEmptyInvocation
-                )
+
+                    )
             ).execute()
 
         assertThat(invocationResponse.statusCode, equalTo(Accepted))
@@ -66,7 +66,6 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
                 ApiFuncInvokeRequest(
                     inputs = InvocationInputs(),
                     correlationId = null,
-                    invocation = Invocation.DeprecatedEmptyInvocation,
                 )
             ).execute()
 
@@ -110,7 +109,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
 
         val invocationResponse =
             httpTemplate.post("/v1/funcs/{funcId}/invoke").path("funcId", createResponse.funcId).body(
-                ApiFuncInvokeVersionRequest(
+                ApiFuncInvokeRequest(
                     correlationId = CorrelationId("some-correlation-id"),
                     inputs = InvocationInputs(),
                     version = CodeVersion(5)
@@ -152,7 +151,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
 
         val invocationResponse =
             httpTemplate.post("/v1/funcs/{funcId}/invoke").path("funcId", createResponse.funcId).body(
-                ApiFuncInvokeVersionRequest(
+                ApiFuncInvokeRequest(
                     correlationId = CorrelationId("some-correlation-id"),
                     inputs = InvocationInputs(),
                     version = null
@@ -182,7 +181,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
 
         val invocationResponse =
             httpTemplate.post("/v1/funcs/{funcId}/invoke").path("funcId", createResponse.funcId).body(
-                ApiFuncInvokeVersionRequest(
+                ApiFuncInvokeRequest(
                     correlationId = CorrelationId("some-correlation-id"),
                     inputs = InvocationInputs(),
                     version = CodeVersion(10)
@@ -203,8 +202,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
         val invocationResponse = httpTemplate.post("/v1/funcs/1234/invoke").body(
             ApiFuncInvokeRequest(
                 correlationId = CorrelationId.default,
-                inputs = InvocationInputs(),
-                invocation = Invocation.DeprecatedEmptyInvocation,
+                inputs = InvocationInputs()
             )
         ).execute()
 

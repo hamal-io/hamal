@@ -1,12 +1,12 @@
 package io.hamal.core.request.handler.hook
 
 import io.hamal.core.adapter.FuncInvokePort
+import io.hamal.core.request.RequestHandler
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.TriggerType.Hook
 import io.hamal.lib.domain.request.FuncInvokeRequest
 import io.hamal.lib.domain.request.HookInvokeRequested
 import io.hamal.lib.domain.vo.CorrelationId
-import io.hamal.lib.domain.vo.Invocation
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.repository.api.HookQueryRepository
 import io.hamal.repository.api.Trigger
@@ -20,7 +20,7 @@ class HookInvokeHandler(
     private val hookQueryRepository: HookQueryRepository,
     private val invokeFunc: FuncInvokePort,
     private val triggerQueryRepository: TriggerQueryRepository
-) : io.hamal.core.request.RequestHandler<HookInvokeRequested>(HookInvokeRequested::class) {
+) : RequestHandler<HookInvokeRequested>(HookInvokeRequested::class) {
 
     /**
      * At least once delivery is good enough for now
@@ -43,8 +43,9 @@ class HookInvokeHandler(
                 object : FuncInvokeRequest {
                     override val correlationId = trigger.correlationId ?: CorrelationId.default
                     override val inputs = InvocationInputs()
-                    override val invocation: Invocation = req.invocation
-                }
+                    override val version = null
+                },
+                req.invocation
             ) {}
         }
     }

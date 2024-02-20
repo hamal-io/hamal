@@ -24,12 +24,7 @@ interface FuncInvokePort {
     operator fun <T : Any> invoke(
         funcId: FuncId,
         req: FuncInvokeRequest,
-        responseHandler: (ExecInvokeRequested) -> T
-    ): T
-
-    operator fun <T : Any> invoke(
-        funcId: FuncId,
-        req: FuncInvokeVersionRequest,
+        invocation: Invocation,
         responseHandler: (ExecInvokeRequested) -> T
     ): T
 }
@@ -101,27 +96,7 @@ class FuncAdapter(
     override fun <T : Any> invoke(
         funcId: FuncId,
         req: FuncInvokeRequest,
-        responseHandler: (ExecInvokeRequested) -> T
-    ): T {
-        val func = funcQueryRepository.get(funcId)
-
-        return ExecInvokeRequested(
-            id = generateDomainId(::RequestId),
-            status = RequestStatus.Submitted,
-            execId = generateDomainId(::ExecId),
-            namespaceId = func.namespaceId,
-            workspaceId = func.workspaceId,
-            funcId = funcId,
-            correlationId = req.correlationId,
-            inputs = req.inputs,
-            code = func.deployment.toExecCode(),
-            invocation = req.invocation
-        ).also(requestCmdRepository::queue).let(responseHandler)
-    }
-
-    override fun <T : Any> invoke(
-        funcId: FuncId,
-        req: FuncInvokeVersionRequest,
+        invocation: Invocation,
         responseHandler: (ExecInvokeRequested) -> T
     ): T {
         val func = funcQueryRepository.get(funcId)
@@ -144,7 +119,7 @@ class FuncAdapter(
                 version = version,
                 value = null
             ),
-            invocation = Invocation.DeprecatedEmptyInvocation
+            invocation = invocation
         ).also(requestCmdRepository::queue).let(responseHandler)
     }
 

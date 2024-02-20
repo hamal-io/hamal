@@ -73,7 +73,7 @@ abstract class AbstractRunnerTest {
     fun unitOfWork(
         code: String,
         inputs: ExecInputs = ExecInputs(),
-        invocation: Invocation = Invocation.DeprecatedEmptyInvocation
+        invocation: Invocation = Invocation.Adhoc
     ) = UnitOfWork(
         id = ExecId(1234),
         namespaceId = NamespaceId(98876),

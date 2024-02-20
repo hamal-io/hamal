@@ -66,7 +66,8 @@ internal fun FixedRateTriggerService.requestInvocation(trigger: Trigger.FixedRat
         object : FuncInvokeRequest {
             override val correlationId = trigger.correlationId ?: CorrelationId.default
             override val inputs = InvocationInputs()
-            override val invocation = Invocation.Schedule
+            override val version = null
         },
+        Invocation.Schedule
     ) {}
 }

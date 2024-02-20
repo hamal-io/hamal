@@ -38,7 +38,7 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
                         funcId = generateDomainId(::FuncId),
                         correlationId = CorrelationId("__correlation__")
                     ),
-                    invocation = Invocation.DeprecatedEmptyInvocation
+                    invocation = Invocation.Adhoc
                 )
 
                 val completionResponse = requestCompletion(exec.id)
@@ -62,7 +62,7 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
                 funcId = generateDomainId(::FuncId),
                 correlationId = CorrelationId("__correlation__")
             ),
-            invocation = Invocation.DeprecatedEmptyInvocation
+            invocation = Invocation.Adhoc
         ) as Exec.Started
 
         val completionResponse = requestCompletion(startedExec.id)
