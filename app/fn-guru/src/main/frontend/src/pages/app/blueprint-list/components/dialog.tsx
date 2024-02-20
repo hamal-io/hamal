@@ -11,12 +11,12 @@ import {SelectValue} from "@radix-ui/react-select";
 
 type DProps = {
     item: BlueprintListItem
+    onClose: () => void
 }
-
-export const BpDialog: FC<DProps> = ({item}) => {
+export const BpDialog: FC<DProps> = ({item, onClose}) => {
+    const [uiState] = useUiState()
     const navigate = useNavigate()
-    const [namespaceId, setNamespaceId] = useState(null)
-
+    const [namespaceId, setNamespaceId] = useState(uiState.namespaceId)
 
     const selHandler = (ns: string) => {
         setNamespaceId(ns)
@@ -27,7 +27,7 @@ export const BpDialog: FC<DProps> = ({item}) => {
             <DialogHeader>{item.name}</DialogHeader>
             <DialogDescription>{item.description}</DialogDescription>
             <div/>
-            <div className="flex flex-row justify-between items-center">
+            <div className="flex flex-row justify-between items-center gap-4">
                 <NamespaceSelector selHandler={selHandler}/>
                 <Deploy blueprintId={item.id} namespaceId={namespaceId}/>
                 <Button size={"sm"}
@@ -53,7 +53,7 @@ const NamespaceSelector: FC<SelProps> = ({selHandler}) => {
         if (uiState.workspaceId) {
             listNamespaces(uiState.workspaceId)
         }
-    }, [uiState.namespaceId]);
+    }, [uiState.workspaceId]);
 
     if (namespaceList == null || loading) {
         return "Loading..."
@@ -65,7 +65,7 @@ const NamespaceSelector: FC<SelProps> = ({selHandler}) => {
             onValueChange={
                 (newNamespaceId) => {
                     setSelected(newNamespaceId)
-                    selHandler(selected)
+                    selHandler(newNamespaceId)
                 }
             }>
             <SelectTrigger>
@@ -73,7 +73,7 @@ const NamespaceSelector: FC<SelProps> = ({selHandler}) => {
             </SelectTrigger>
             <SelectContent>
                 <SelectGroup>
-                    <SelectLabel>Current Namespace</SelectLabel>
+                    <SelectLabel>Deploy to Namespace: </SelectLabel>
                     {namespaceList.namespaces.map(namespace =>
                         <SelectItem
                             key={namespace.id}
@@ -89,7 +89,8 @@ const NamespaceSelector: FC<SelProps> = ({selHandler}) => {
 
 type DeployProps = {
     blueprintId: string,
-    namespaceId: string
+    namespaceId: string,
+
 }
 const Deploy: FC<DeployProps> = ({blueprintId, namespaceId}) => {
     const [adhoc, data] = useAdhoc()
@@ -104,19 +105,18 @@ const Deploy: FC<DeployProps> = ({blueprintId, namespaceId}) => {
         };
     }, [blueprintId]);
 
-
-    if (blueprint == null || loading) {
-        return "Loading..."
-    }
-
     async function deployAction() {
         if (blueprint !== null) {
             adhoc(namespaceId, blueprint.value)
         }
     }
 
+    if (blueprint == null || loading) {
+        return "Loading..."
+    }
+
     return (
-        <Button type={"submit"} size="sm" onClick={deployAction}>
+        <Button type={"submit"} size="sm" onClick={deployAction} disabled={!namespaceId}>
             Deploy
         </Button>
     )

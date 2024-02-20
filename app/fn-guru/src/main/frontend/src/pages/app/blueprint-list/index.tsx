@@ -51,9 +51,8 @@ const BlueprintCards: FC<CardProps> = ({blueprints}) => {
     return (
         <ul className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 cursor">
             {blueprints.map((bp) => (
-                <div style={{cursor: 'pointer'}}>
+                <div key={bp.id} style={{cursor: 'pointer'}}>
                     <Card
-                        key={bp.id}
                         onClick={() => handleClick(bp)}
                         className="relative overfunc-hidden duration-500 hover:border-primary/50 group"
 
