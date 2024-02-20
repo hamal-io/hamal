@@ -35,4 +35,12 @@ export interface ExecListItemFunc {
 
 export interface Exec {
     id: string;
+    status: string;
+    func?: {
+        id: string;
+        name: string;
+    };
+    correlation: string;
+    result?: object;
+    state?: object;
 }

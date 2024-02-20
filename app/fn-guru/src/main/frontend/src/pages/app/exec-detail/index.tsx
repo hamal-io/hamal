@@ -17,28 +17,49 @@ const ExecDetailPage: FC<Props> = () => {
     if (exec == null || loading) {
         return "Loading..."
     }
-
-
     return (
         <div>
             <PageHeader
-                title={`Execution ${execId}`}
+                title={` ${exec.status} Execution ${execId}`}
                 actions={[]}
             />
             <Tabs defaultValue="overview" className="space-y-4">
                 <TabsList>
                     <TabsTrigger value="overview">Overview</TabsTrigger>
                     <TabsTrigger value="logs">Logs</TabsTrigger>
-                    <TabsTrigger value="reports" disabled>Reports</TabsTrigger>
-                    <TabsTrigger value="notifications" disabled>Notifications</TabsTrigger>
+                    <TabsTrigger value="result">Result</TabsTrigger>
+                    <TabsTrigger value="state">State</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="overview" className="space-y-4">
                     <h1>Overview</h1>
+                    <div className="flex flex-col">
+                        <ul>
+                            <li>Id: {exec.id} </li>
+                            <li>Status: {exec.status} </li>
+                            {exec.func && <li>Func: {exec?.func?.name}</li>}
+                            {exec.correlation && <li>Correlation: {exec.correlation}</li>}
+                        </ul>
+
+
+                    </div>
+
                 </TabsContent>
 
                 <TabsContent value="logs" className="space-y-4">
                     <Log execId={execId}/>
+                </TabsContent>
+
+                <TabsContent value="result" className="space-y-4">
+                    <section>
+                        {JSON.stringify(exec.result)}
+                    </section>
+                </TabsContent>
+
+                <TabsContent value="state" className="space-y-4">
+                    <section>
+                        {JSON.stringify(exec.state)}
+                    </section>
                 </TabsContent>
             </Tabs>
         </div>
