@@ -18,7 +18,7 @@ import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
 import org.springframework.stereotype.Component
 
 interface ExecGetPort {
-    operator fun <T : Any> invoke(execId: ExecId, responseHandler: (Exec) -> T): T
+    operator fun <T : Any> invoke(execId: ExecId, responseHandler: (Exec, Func?) -> T): T
 }
 
 interface ExecListPort {
@@ -55,8 +55,13 @@ class ExecAdapter(
     private val requestCmdRepository: RequestCmdRepository
 ) : ExecPort {
 
-    override fun <T : Any> invoke(execId: ExecId, responseHandler: (Exec) -> T) =
-        responseHandler(execQueryRepository.get(execId))
+    override fun <T : Any> invoke(execId: ExecId, responseHandler: (Exec, Func?) -> T): T {
+        val exec = execQueryRepository.get(execId)
+        val func = exec.correlation?.funcId?.let { funcId ->
+            funcQueryRepository.get(funcId)
+        }
+        return responseHandler(exec, func)
+    }
 
     override fun <T : Any> invoke(
         query: ExecQuery,

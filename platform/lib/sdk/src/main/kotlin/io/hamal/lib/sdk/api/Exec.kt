@@ -1,6 +1,5 @@
 package io.hamal.lib.sdk.api
 
-import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpTemplate
@@ -40,12 +39,19 @@ data class ApiExecList(
 data class ApiExec(
     val id: ExecId,
     val status: ExecStatus,
-    val correlation: Correlation?,
+    val correlation: CorrelationId?,
     val inputs: ExecInputs,
     val invocation: Invocation,
     val result: ExecResult?,
-    val state: ExecState?
+    val state: ExecState?,
+    val func: Func?
 ) : ApiObject() {
+
+    data class Func(
+        val id: FuncId,
+        val name: FuncName
+    )
+
     data class Code(
         val id: CodeId?,
         val version: CodeVersion?,

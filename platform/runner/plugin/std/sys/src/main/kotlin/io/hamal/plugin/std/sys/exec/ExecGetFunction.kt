@@ -23,7 +23,7 @@ class ExecGetFunction(
                 it["id"] = exec.id.value.value.toString(16)
                 it["status"] = KuaString(exec.status.name)
                 it["inputs"] = KuaMap() // FIXME
-                exec.correlation?.correlationId?.value?.let { corId ->
+                exec.correlation?.value?.let { corId ->
                     it["correlation_id"] = corId
                 } // FIXME set nil value to table --> makes the api nicer
             }
