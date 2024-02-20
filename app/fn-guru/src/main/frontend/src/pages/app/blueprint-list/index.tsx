@@ -21,7 +21,7 @@ const BlueprintListPage = () => {
 
 
     if (error) return `Error`
-    if (blueprintList == null || loading) return "Loading..."
+    if (blueprintList === null || loading) return "Loading..."
 
     return (
         <div className="pt-2 px-2">
@@ -43,17 +43,18 @@ const BlueprintCards: FC<CardProps> = ({blueprints}) => {
     const [dialog, setDialog] = useState(null);
     const [item, setItem] = useState<BlueprintListItem>(null)
 
-    const handleClick = (bp: BlueprintListItem) => {
-        setItem(bp)
-        setDialog(true)
-    }
+    useEffect(() => {
+        if (item) {
+            setDialog(true)
+        }
+    }, [item]);
 
     return (
         <ul className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 cursor">
             {blueprints.map((bp) => (
                 <div key={bp.id} style={{cursor: 'pointer'}}>
                     <Card
-                        onClick={() => handleClick(bp)}
+                        onClick={() => setItem(bp)}
                         className="relative overfunc-hidden duration-500 hover:border-primary/50 group"
 
                     >
@@ -73,7 +74,7 @@ const BlueprintCards: FC<CardProps> = ({blueprints}) => {
                 </div>
             ))}
             {dialog && <Dialog open={dialog} onOpenChange={setDialog}>
-                <BpDialog item={item}></BpDialog>
+                <BpDialog item={item} onClose={() => setDialog(false)}></BpDialog>
             </Dialog>}
         </ul>)
 }
@@ -81,9 +82,6 @@ const BlueprintCards: FC<CardProps> = ({blueprints}) => {
 
 const NoContent = () => (
     <EmptyPlaceholder className="my-4 ">
-        <EmptyPlaceholder.Icon>
-            {/*<Code />*/}
-        </EmptyPlaceholder.Icon>
         <EmptyPlaceholder.Title>No Blueprints found.</EmptyPlaceholder.Title>
         <EmptyPlaceholder.Description>
 
