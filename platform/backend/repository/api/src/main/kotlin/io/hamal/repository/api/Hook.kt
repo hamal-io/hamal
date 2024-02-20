@@ -2,19 +2,19 @@ package io.hamal.repository.api
 
 import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.domain.vo.NamespaceId
-import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.domain.vo.HookId
 import io.hamal.lib.domain.vo.HookName
+import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.WorkspaceId
 
 data class Hook(
     override val id: HookId,
     override val updatedAt: UpdatedAt,
-    val workspaceId: WorkspaceId,
+    override val workspaceId: WorkspaceId,
     val cmdId: CmdId,
-    val namespaceId: NamespaceId,
+    override val namespaceId: NamespaceId,
     val name: HookName,
-) : DomainObject<HookId>
+) : DomainObject<HookId>, HasNamespaceId, HasWorkspaceId
 
 interface HookRepository : HookCmdRepository, HookQueryRepository
 

@@ -7,14 +7,14 @@ import io.hamal.lib.domain.vo.*
 data class Func(
     override val id: FuncId,
     override val updatedAt: UpdatedAt,
-    val workspaceId: WorkspaceId,
+    override val workspaceId: WorkspaceId,
     val cmdId: CmdId,
-    val namespaceId: NamespaceId,
+    override val namespaceId: NamespaceId,
     val name: FuncName,
     val inputs: FuncInputs,
     val code: FuncCode,
     val deployment: FuncDeployment
-) : DomainObject<FuncId>
+) : DomainObject<FuncId>, HasNamespaceId, HasWorkspaceId
 
 data class FuncCode(
     val id: CodeId,

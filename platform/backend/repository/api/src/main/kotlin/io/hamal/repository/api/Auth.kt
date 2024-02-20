@@ -6,9 +6,9 @@ import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.*
 
-sealed interface Auth {
+sealed interface Auth : HasAccountId {
     val id: AuthId
-    val accountId: AccountId
+    override val accountId: AccountId
 }
 
 data class EmailAuth(

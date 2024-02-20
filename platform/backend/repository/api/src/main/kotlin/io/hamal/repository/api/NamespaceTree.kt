@@ -10,9 +10,9 @@ import io.hamal.lib.domain.vo.WorkspaceId
 data class NamespaceSubTree(
     val cmdId: CmdId,
     val id: NamespaceTreeId,
-    val workspaceId: WorkspaceId,
+    override val workspaceId: WorkspaceId,
     val root: TreeNode<NamespaceId>
-) {
+) : HasWorkspaceId {
     val values by lazy { root.preorder() }
 }
 

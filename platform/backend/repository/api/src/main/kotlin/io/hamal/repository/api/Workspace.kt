@@ -13,7 +13,10 @@ data class Workspace(
     val cmdId: CmdId,
     val name: WorkspaceName,
     val creatorId: AccountId
-) : DomainObject<WorkspaceId>
+) : DomainObject<WorkspaceId>, HasAccountId, HasWorkspaceId {
+    override val accountId: AccountId get() = creatorId
+    override val workspaceId: WorkspaceId get() = id
+}
 
 
 interface WorkspaceRepository : WorkspaceCmdRepository, WorkspaceQueryRepository
