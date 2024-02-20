@@ -55,21 +55,29 @@ internal class ExecListController(
                 funcIds = funcIds,
                 namespaceIds = allNamespaceIds
             )
-        ) { execs, namespaces ->
+        ) { execs, namespaces, funcs ->
             ResponseEntity.ok(
                 ApiExecList(
                     execs = execs.map {
                         ApiExecList.Exec(
                             id = it.id,
                             status = it.status,
-                            correlation = it.correlation,
                             namespace = namespaces[it.namespaceId]!!.let { namespace ->
                                 ApiExecList.Namespace(
                                     id = namespace.id,
                                     name = namespace.name
                                 )
                             },
-                            invocation = it.invocation
+                            invocation = it.invocation,
+                            correlation = it.correlation?.correlationId,
+                            func = it.correlation?.funcId?.let { funcId ->
+                                funcs[funcId]!!.let { func ->
+                                    ApiExecList.Func(
+                                        id = func.id,
+                                        name = func.name
+                                    )
+                                }
+                            }
                         )
                     }
                 )

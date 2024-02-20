@@ -35,7 +35,7 @@ class ExecListFunction(
                         mutableMapOf(
                             "id" to KuaString(exec.id.value.value.toString(16)),
                             "status" to KuaString(exec.status.toString()),
-                            "correlation_id" to (exec.correlation?.correlationId?.value?.let(::KuaString)
+                            "correlation_id" to (exec.correlation?.value?.let(::KuaString)
                                 ?: KuaNil)
                         )
                     )

@@ -4,18 +4,9 @@ import {invocations, statuses} from "./data.tsx"
 import {ColumnHeader} from "./column-header.tsx"
 import React from "react";
 import RowActions from "@/pages/app/exec-list/components/row-actions.tsx";
-import {ExecListItem, ExecListItemInvocation, ExecListItemNamespace} from "@/types";
+import {ExecListItem, ExecListItemFunc, ExecListItemInvocation, ExecListItemNamespace} from "@/types";
 
 export const columns: ColumnDef<ExecListItem>[] = [
-    {
-        accessorKey: "id",
-        header: ({column}) => (
-            <ColumnHeader column={column} title="Id"/>
-        ),
-        cell: ({row}) => <div className="">{row.getValue("id")}</div>,
-        enableSorting: false,
-        enableHiding: false,
-    },
     {
         accessorKey: "status",
         header: ({column}) => (
@@ -44,6 +35,15 @@ export const columns: ColumnDef<ExecListItem>[] = [
         },
     },
     {
+        accessorKey: "id",
+        header: ({column}) => (
+            <ColumnHeader column={column} title="Id"/>
+        ),
+        cell: ({row}) => <div className="">{row.getValue("id")}</div>,
+        enableSorting: false,
+        enableHiding: false,
+    },
+    {
         accessorKey: "namespace",
         header: ({column}) => (
             <ColumnHeader column={column} title="Namespace"/>
@@ -54,6 +54,40 @@ export const columns: ColumnDef<ExecListItem>[] = [
             return (
                 <div className="flex  items-center">
                     <span>{name}</span>
+                </div>
+            )
+        },
+        enableSorting: false,
+        enableHiding: false,
+    },
+    {
+        accessorKey: "func",
+        header: ({column}) => (
+            <ColumnHeader column={column} title="Func"/>
+        ),
+        cell: ({row}) => {
+            const {id, name} = (row.getValue<ExecListItemFunc>("func") || {})
+
+            return (
+                <div className="flex  items-center">
+                    <span>{name}</span>
+                </div>
+            )
+        },
+        enableSorting: false,
+        enableHiding: false,
+    },
+    {
+        accessorKey: "correlation",
+        header: ({column}) => (
+            <ColumnHeader column={column} title="Correlation"/>
+        ),
+        cell: ({row}) => {
+            const correlation = row.getValue<string>("correlation")
+
+            return (
+                <div className="flex  items-center">
+                    <span>{correlation}</span>
                 </div>
             )
         },
@@ -75,7 +109,7 @@ export const columns: ColumnDef<ExecListItem>[] = [
             if (!invocation) {
                 return null
             }
-            
+
             return (
                 <div className="flex  items-center">
                     <span>{className}</span>
