@@ -1,12 +1,11 @@
 import React, {FC, useEffect, useState} from "react";
 import {useBlueprintGet} from "@/hook/blueprint.ts";
 import {useNavigate} from "react-router-dom";
-import {DialogContent, DialogHeader} from "@/components/ui/dialog.tsx";
+import {DialogContent, DialogDescription, DialogHeader} from "@/components/ui/dialog.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {useUiState} from "@/hook/ui-state.ts";
 import {useAdhoc, useNamespaceList} from "@/hook";
 import {BlueprintListItem} from "@/types/blueprint.ts";
-import {Textarea} from "@/components/ui/textarea.tsx";
 import {Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger} from "@/components/ui/select.tsx";
 import {SelectValue} from "@radix-ui/react-select";
 
@@ -14,7 +13,7 @@ type DProps = {
     item: BlueprintListItem
 }
 
-export const DDialog: FC<DProps> = ({item}) => {
+export const BpDialog: FC<DProps> = ({item}) => {
     const navigate = useNavigate()
     const [namespaceId, setNamespaceId] = useState(null)
 
@@ -26,9 +25,10 @@ export const DDialog: FC<DProps> = ({item}) => {
     return (
         <DialogContent>
             <DialogHeader>{item.name}</DialogHeader>
-            <Textarea readOnly={true}>{item.description}</Textarea>
-            <NamespaceSelector selHandler={selHandler}/>
+            <DialogDescription>{item.description}</DialogDescription>
+            <div/>
             <div className="flex flex-row justify-between items-center">
+                <NamespaceSelector selHandler={selHandler}/>
                 <Deploy blueprintId={item.id} namespaceId={namespaceId}/>
                 <Button size={"sm"}
                         onClick={() => {
@@ -104,21 +104,19 @@ const Deploy: FC<DeployProps> = ({blueprintId, namespaceId}) => {
         };
     }, [blueprintId]);
 
-    if (error) {
-        return error
-    }
+
     if (blueprint == null || loading) {
         return "Loading..."
     }
 
-    async function setup() {
+    async function deployAction() {
         if (blueprint !== null) {
             adhoc(namespaceId, blueprint.value)
         }
     }
 
     return (
-        <Button type={"submit"} size="sm" onClick={setup}>
+        <Button type={"submit"} size="sm" onClick={deployAction}>
             Deploy
         </Button>
     )

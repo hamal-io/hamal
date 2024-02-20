@@ -5,7 +5,7 @@ import {PageHeader} from "@/components/page-header.tsx";
 import {EmptyPlaceholder} from "@/components/empty-placeholder.tsx";
 import {BlueprintListItem} from "@/types/blueprint.ts";
 import {Dialog} from "@/components/ui/dialog.tsx";
-import {DDialog} from "@/pages/app/blueprint-list/components/dialog.tsx";
+import {BpDialog} from "@/pages/app/blueprint-list/components/dialog.tsx";
 import {CreateBlueprint} from "@/pages/app/blueprint-list/components/create.tsx";
 
 const BlueprintListPage = () => {
@@ -74,7 +74,7 @@ const BlueprintCards: FC<CardProps> = ({blueprints}) => {
                 </div>
             ))}
             {dialog && <Dialog open={dialog} onOpenChange={setDialog}>
-                <DDialog item={item}></DDialog>
+                <BpDialog item={item}></BpDialog>
             </Dialog>}
         </ul>)
 }
