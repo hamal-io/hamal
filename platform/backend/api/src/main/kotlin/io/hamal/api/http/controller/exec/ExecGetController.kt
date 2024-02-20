@@ -18,12 +18,12 @@ internal class ExecGetController(
     @GetMapping("/v1/execs/{execId}")
     fun get(@PathVariable("execId") execId: ExecId): ResponseEntity<ApiExec> {
         return retry {
-            getExec(execId) { exec ->
+            getExec(execId) { exec, func ->
                 ResponseEntity.ok(
                     ApiExec(
                         id = exec.id,
                         status = exec.status,
-                        correlation = exec.correlation,
+                        correlation = exec.correlation?.correlationId,
                         inputs = exec.inputs,
                         invocation = exec.invocation,
                         result = if (exec is Exec.Completed) {
@@ -37,6 +37,12 @@ internal class ExecGetController(
                             exec.state
                         } else {
                             null
+                        },
+                        func = func?.let {
+                            ApiExec.Func(
+                                id = it.id,
+                                name = it.name
+                            )
                         }
                     )
                 )

@@ -14,7 +14,6 @@ class InvocationInputs(override val value: HotObject = HotObject.empty) : ValueO
 
 class InvocationClass(override val value: String) : ValueObjectString()
 
-
 sealed class Invocation {
     val `class`: InvocationClass = InvocationClass(this::class.simpleName!!)
 
@@ -43,14 +42,16 @@ sealed class Invocation {
             Adhoc::class,
             Endpoint::class,
             Event::class,
+            Func::class,
             Hook::class,
-            Schedule::class,
-            DeprecatedEmptyInvocation::class
+            Schedule::class
         ).associateBy { it.simpleName }
 
     }
 
     object Adhoc : Invocation()
+
+    object Func : Invocation()
 
     data class Event(val events: List<io.hamal.lib.domain.vo.Event>) : Invocation()
 
@@ -70,10 +71,5 @@ sealed class Invocation {
     ) : Invocation()
 
     object Schedule : Invocation()
-
-    //FIXME 223 get rid of this
-    @Deprecated("Replace and remove this")
-    object DeprecatedEmptyInvocation : Invocation()
-
 }
 

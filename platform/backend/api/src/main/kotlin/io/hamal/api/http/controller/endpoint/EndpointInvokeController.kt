@@ -53,7 +53,7 @@ internal class EndpointInvokeController(
                 ApiExec(
                     id = exec.id,
                     status = exec.status,
-                    correlation = exec.correlation,
+                    correlation = exec.correlation?.correlationId,
                     inputs = exec.inputs,
                     invocation = exec.invocation,
                     result = if (exec is Exec.Completed) {
@@ -67,7 +67,11 @@ internal class EndpointInvokeController(
                         exec.state
                     } else {
                         null
-                    }
+                    },
+                    func = ApiExec.Func(
+                        id = func.id,
+                        name = func.name
+                    )
                 )
             })
         }

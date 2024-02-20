@@ -111,6 +111,6 @@ internal class CompleteTest : AbstractExecuteTest() {
         state = State(),
         code = CodeValue(code),
         correlation = null,
-        invocation = Invocation.DeprecatedEmptyInvocation
+        invocation = Invocation.Adhoc
     )
 }

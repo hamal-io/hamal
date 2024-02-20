@@ -42,12 +42,6 @@ data class FuncUpdateRequested(
 interface FuncInvokeRequest {
     val correlationId: CorrelationId?
     val inputs: InvocationInputs
-    val invocation: Invocation
-}
-
-interface FuncInvokeVersionRequest {
-    val correlationId: CorrelationId?
-    val inputs: InvocationInputs
     val version: CodeVersion?
 }
 

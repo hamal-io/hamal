@@ -64,17 +64,18 @@ internal class EventTriggerService(
                                     object : FuncInvokeRequest {
                                         override val correlationId = trigger.correlationId ?: CorrelationId.default
                                         override val inputs = InvocationInputs()
-                                        override val invocation = Invocation.Event(events.map {
-                                            Event(
-                                                topic = EventTopic(
-                                                    id = topic.id,
-                                                    name = topic.name
-                                                ),
-                                                id = EventId(it.id.value),
-                                                payload = EventPayload(it.payload.value)
-                                            )
-                                        })
-                                    }
+                                        override val version = null
+                                    },
+                                    Invocation.Event(events.map {
+                                        Event(
+                                            topic = EventTopic(
+                                                id = topic.id,
+                                                name = topic.name
+                                            ),
+                                            id = EventId(it.id.value),
+                                            payload = EventPayload(it.payload.value)
+                                        )
+                                    })
                                 ) {}
                             }
                         } catch (t: Throwable) {

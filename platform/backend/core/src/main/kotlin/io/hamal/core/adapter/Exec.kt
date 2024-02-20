@@ -8,19 +8,24 @@ import io.hamal.lib.domain.request.ExecCompleteRequested
 import io.hamal.lib.domain.request.ExecFailRequest
 import io.hamal.lib.domain.request.ExecFailRequested
 import io.hamal.lib.domain.vo.ExecId
+import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.RequestId
 import io.hamal.repository.api.*
 import io.hamal.repository.api.ExecQueryRepository.ExecQuery
+import io.hamal.repository.api.FuncQueryRepository.FuncQuery
 import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
 import org.springframework.stereotype.Component
 
 interface ExecGetPort {
-    operator fun <T : Any> invoke(execId: ExecId, responseHandler: (Exec) -> T): T
+    operator fun <T : Any> invoke(execId: ExecId, responseHandler: (Exec, Func?) -> T): T
 }
 
 interface ExecListPort {
-    operator fun <T : Any> invoke(query: ExecQuery, responseHandler: (List<Exec>, Map<NamespaceId, Namespace>) -> T): T
+    operator fun <T : Any> invoke(
+        query: ExecQuery,
+        responseHandler: (List<Exec>, Map<NamespaceId, Namespace>, Map<FuncId, Func>) -> T
+    ): T
 }
 
 interface ExecCompletePort {
@@ -44,17 +49,23 @@ interface ExecPort : ExecGetPort, ExecListPort, ExecCompletePort, ExecFailPort
 @Component
 class ExecAdapter(
     private val execQueryRepository: ExecQueryRepository,
+    private val funcQueryRepository: FuncQueryRepository,
     private val namespaceQueryRepository: NamespaceQueryRepository,
     private val generateDomainId: GenerateId,
     private val requestCmdRepository: RequestCmdRepository
 ) : ExecPort {
 
-    override fun <T : Any> invoke(execId: ExecId, responseHandler: (Exec) -> T) =
-        responseHandler(execQueryRepository.get(execId))
+    override fun <T : Any> invoke(execId: ExecId, responseHandler: (Exec, Func?) -> T): T {
+        val exec = execQueryRepository.get(execId)
+        val func = exec.correlation?.funcId?.let { funcId ->
+            funcQueryRepository.get(funcId)
+        }
+        return responseHandler(exec, func)
+    }
 
     override fun <T : Any> invoke(
         query: ExecQuery,
-        responseHandler: (List<Exec>, Map<NamespaceId, Namespace>) -> T
+        responseHandler: (List<Exec>, Map<NamespaceId, Namespace>, Map<FuncId, Func>) -> T
     ): T {
         val execs = execQueryRepository.list(query)
 
@@ -63,8 +74,13 @@ class ExecAdapter(
             namespaceIds = execs.map { it.namespaceId }
         )).associateBy { it.id }
 
+        val funcs = funcQueryRepository.list(FuncQuery(
+            limit = Limit.all,
+            funcIds = execs.mapNotNull { it.correlation?.funcId }
+        )).associateBy { it.id }
 
-        return responseHandler(execs, namespaces)
+
+        return responseHandler(execs, namespaces, funcs)
     }
 
     override fun <T : Any> invoke(

@@ -194,7 +194,7 @@ internal abstract class BaseTest {
         codeId: CodeId? = null,
         codeVersion: CodeVersion? = null,
         code: CodeValue = CodeValue(""),
-        invocation: Invocation = Invocation.DeprecatedEmptyInvocation
+        invocation: Invocation = Invocation.Adhoc
     ): Exec {
 
         val planedExec = execCmdRepository.plan(
