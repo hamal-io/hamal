@@ -1,8 +1,9 @@
 package io.hamal.core.adapter
 
+import io.hamal.core.adapter.account.AccountCreateMetaMaskPort
 import io.hamal.core.component.EncodePassword
 import io.hamal.core.component.GenerateToken
-import io.hamal.lib.domain.GenerateId
+import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.*
 import io.hamal.lib.domain.vo.*
@@ -34,7 +35,7 @@ class AuthAdapter(
     private val accountQueryRepository: AccountQueryRepository,
     private val authRepository: AuthRepository,
     private val encodePassword: EncodePassword,
-    private val generateDomainId: GenerateId,
+    private val generateDomainId: GenerateDomainId,
     private val generateToken: GenerateToken,
     private val requestCmdRepository: RequestCmdRepository,
     private val workspaceList: WorkspaceListPort

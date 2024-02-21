@@ -1,6 +1,6 @@
 package io.hamal.core.adapter
 
-import io.hamal.lib.domain.GenerateId
+import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain.request.AdhocInvokeRequest
 import io.hamal.lib.domain.request.ExecInvokeRequested
@@ -21,7 +21,7 @@ interface AdhocPort : AdhocInvokePort
 
 @Component
 class AdhocAdapter(
-    private val generateDomainId: GenerateId,
+    private val generateDomainId: GenerateDomainId,
     private val namespaceQueryRepository: NamespaceQueryRepository,
     private val requestCmdRepository: RequestCmdRepository
 ) : AdhocPort {

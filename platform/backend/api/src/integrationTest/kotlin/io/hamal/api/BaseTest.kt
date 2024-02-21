@@ -7,7 +7,7 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.GenerateId
+import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.AccountType.Root
 import io.hamal.repository.api.*
@@ -136,7 +136,7 @@ internal abstract class BaseTest {
     lateinit var triggerQueryRepository: TriggerQueryRepository
 
     @Autowired
-    lateinit var generateDomainId: GenerateId
+    lateinit var generateDomainId: GenerateDomainId
 
     @Autowired
     private lateinit var setupInternalTopics: SetupInternalTopics

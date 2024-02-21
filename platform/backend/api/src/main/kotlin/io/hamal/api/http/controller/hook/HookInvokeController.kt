@@ -1,7 +1,7 @@
 package io.hamal.api.http.controller.hook
 
 import io.hamal.lib.common.hot.HotObject
-import io.hamal.lib.domain.GenerateId
+import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain._enum.HookMethod.*
 import io.hamal.lib.domain._enum.RequestStatus
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 internal class HookInvokeController(
-    private val generateDomainId: GenerateId,
+    private val generateDomainId: GenerateDomainId,
     private val requestCmdRepository: RequestCmdRepository,
     private val hookQueryRepository: HookQueryRepository
 ) {

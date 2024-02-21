@@ -1,6 +1,6 @@
 package io.hamal.core
 
-import io.hamal.core.adapter.AccountCreateRootPort
+import io.hamal.core.adapter.account.AccountCreateRootPort
 import io.hamal.core.component.SetupInternalTopics
 import io.hamal.lib.domain.request.AccountCreateRootRequest
 import io.hamal.lib.domain.vo.Email

@@ -1,6 +1,6 @@
 package io.hamal.core.adapter
 
-import io.hamal.lib.domain.GenerateId
+import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain._enum.TriggerType
@@ -39,7 +39,7 @@ interface TriggerPort : TriggerCreatePort, TriggerGetPort, TriggerListPort, Trig
 class TriggerAdapter(
     private val topicRepository: TopicRepository,
     private val funcQueryRepository: FuncQueryRepository,
-    private val generateDomainId: GenerateId,
+    private val generateDomainId: GenerateDomainId,
     private val hookQueryRepository: HookQueryRepository,
     private val namespaceQueryRepository: NamespaceQueryRepository,
     private val requestCmdRepository: RequestCmdRepository,

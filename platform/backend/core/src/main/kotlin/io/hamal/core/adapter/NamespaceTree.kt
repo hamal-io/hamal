@@ -1,6 +1,6 @@
 package io.hamal.core.adapter
 
-import io.hamal.lib.domain.GenerateId
+import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.NamespaceAppendRequest
 import io.hamal.lib.domain.request.NamespaceAppendRequested
@@ -26,7 +26,7 @@ interface NamespaceTreePort : NamespaceTreeAppendPort, NamespaceTreeGetSubTreePo
 
 @Component
 class NamespaceTreeAdapter(
-    private val generateDomainId: GenerateId,
+    private val generateDomainId: GenerateDomainId,
     private val namespaceQueryRepository: NamespaceQueryRepository,
     private val namespaceTreeQueryRepository: NamespaceTreeQueryRepository,
     private val requestCmdRepository: RequestCmdRepository

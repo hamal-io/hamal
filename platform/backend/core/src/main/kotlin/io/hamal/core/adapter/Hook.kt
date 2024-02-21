@@ -1,6 +1,6 @@
 package io.hamal.core.adapter
 
-import io.hamal.lib.domain.GenerateId
+import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain.request.HookCreateRequest
 import io.hamal.lib.domain.request.HookCreateRequested
@@ -36,7 +36,7 @@ interface HookPort : HookCreatePort, HookGetPort, HookListPort, HookUpdatePort
 
 @Component
 class HookAdapter(
-    private val generateDomainId: GenerateId,
+    private val generateDomainId: GenerateDomainId,
     private val hookQueryRepository: HookQueryRepository,
     private val namespaceQueryRepository: NamespaceQueryRepository,
     private val requestCmdRepository: RequestCmdRepository

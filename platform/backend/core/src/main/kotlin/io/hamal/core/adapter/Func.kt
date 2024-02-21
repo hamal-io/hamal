@@ -1,6 +1,6 @@
 package io.hamal.core.adapter
 
-import io.hamal.lib.domain.GenerateId
+import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.*
 import io.hamal.lib.domain.vo.*
@@ -12,8 +12,13 @@ interface FuncCreatePort {
     operator fun invoke(namespaceId: NamespaceId, req: FuncCreateRequest): FuncCreateRequested
 }
 
-interface FuncGetPort {
+fun interface FuncGetPort {
     operator fun invoke(funcId: FuncId): Func
+}
+
+@Component
+class FuncGetAdapter(private val funcQueryRepository: FuncQueryRepository) : FuncGetPort {
+    override fun invoke(funcId: FuncId): Func = funcQueryRepository.get(funcId)
 }
 
 interface FuncInvokePort {
@@ -37,15 +42,14 @@ interface FuncUpdatePort {
 
 }
 
-interface FuncPort : FuncCreatePort, FuncDeployPort, FuncGetPort, FuncInvokePort, FuncListPort, FuncUpdatePort,
+interface FuncPort : FuncCreatePort, FuncDeployPort, FuncInvokePort, FuncListPort, FuncUpdatePort,
     FuncDeploymentListPort
 
 @Component
 class FuncAdapter(
     private val codeQueryRepository: CodeQueryRepository,
     private val funcQueryRepository: FuncQueryRepository,
-    private val generateDomainId: GenerateId,
-    private val namespaceQueryRepository: NamespaceQueryRepository,
+    private val generateDomainId: GenerateDomainId,
     private val namespaceGet: NamespaceGetPort,
     private val requestCmdRepository: RequestCmdRepository
 ) : FuncPort {
@@ -69,7 +73,7 @@ class FuncAdapter(
         ).also(requestCmdRepository::queue)
     }
 
-    override fun invoke(funcId: FuncId) = funcQueryRepository.get(funcId)
+//    override fun invoke(funcId: FuncId) = funcQueryRepository.get(funcId)
 
     override fun invoke(
         funcId: FuncId,

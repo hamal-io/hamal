@@ -2,6 +2,7 @@ package io.hamal.core.adapter
 
 import io.hamal.lib.domain.request.Requested
 import io.hamal.lib.domain.vo.RequestId
+import io.hamal.repository.api.RequestCmdRepository
 import io.hamal.repository.api.RequestQueryRepository
 import org.springframework.stereotype.Component
 
@@ -12,6 +13,19 @@ interface RequestGetPort {
 
 interface RequestListPort {
     operator fun invoke(query: RequestQueryRepository.RequestQuery): List<Requested>
+}
+
+interface RequestEnqueuePort {
+    operator fun invoke(requested: Requested)
+}
+
+@Component
+class RequestQueueAdapter(
+    private val requestCmdRepository: RequestCmdRepository
+) : RequestEnqueuePort {
+    override fun invoke(requested: Requested) {
+        requestCmdRepository.queue(requested)
+    }
 }
 
 interface RequestPort : RequestGetPort, RequestListPort

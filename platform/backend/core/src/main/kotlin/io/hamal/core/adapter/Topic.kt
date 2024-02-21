@@ -1,6 +1,6 @@
 package io.hamal.core.adapter
 
-import io.hamal.lib.domain.GenerateId
+import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain._enum.TopicType
 import io.hamal.lib.domain.request.TopicAppendEntryRequest
@@ -41,7 +41,7 @@ interface TopicPort : TopicEventAppendPort, TopicCreatePort, TopicGetPort, Topic
 @Component
 class TopicAdapter(
     private val topicRepository: TopicRepository,
-    private val generateDomainId: GenerateId,
+    private val generateDomainId: GenerateDomainId,
     private val namespaceRepository: NamespaceRepository,
     private val requestCmdRepository: RequestCmdRepository
 ) : TopicPort {

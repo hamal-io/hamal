@@ -1,6 +1,6 @@
 package io.hamal.core.adapter
 
-import io.hamal.lib.domain.GenerateId
+import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.request.ExecLogAppendRequest
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecLogId
@@ -24,7 +24,7 @@ interface ExecLogPort : ExecLogAppendPort, ExecLogListPort
 
 @Component
 class ExecLogAdapter(
-    private val generateDomainId: GenerateId,
+    private val generateDomainId: GenerateDomainId,
     private val execLogCmdRepository: ExecLogCmdRepository,
     private val execLogQueryRepository: ExecLogQueryRepository,
     private val execQueryRepository: ExecQueryRepository

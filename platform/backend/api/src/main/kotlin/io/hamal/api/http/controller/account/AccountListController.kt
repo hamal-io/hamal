@@ -1,6 +1,6 @@
 package io.hamal.api.http.controller.account
 
-import io.hamal.core.adapter.AccountListPort
+import io.hamal.core.adapter.account.AccountListPort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.sdk.api.ApiAccountList

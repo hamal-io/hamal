@@ -10,7 +10,7 @@ import io.hamal.extension.net.http.ExtensionHttpFactory
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.util.TimeUtils
-import io.hamal.lib.domain.GenerateId
+import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.Sandbox
@@ -192,7 +192,7 @@ class ClearController {
     lateinit var triggerRepository: TriggerRepository
 
     @Autowired
-    lateinit var generateDomainId: GenerateId
+    lateinit var generateDomainId: GenerateDomainId
 
     @Autowired
     lateinit var logBrokerRepository: LogBrokerRepository
@@ -276,7 +276,7 @@ class TestConfig {
     lateinit var triggerRepository: TriggerRepository
 
     @Autowired
-    lateinit var generateDomainId: GenerateId
+    lateinit var generateDomainId: GenerateDomainId
 
     @Autowired
     lateinit var internalEvenService: InternalEventService

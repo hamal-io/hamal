@@ -5,7 +5,7 @@ import io.hamal.core.component.Async
 import io.hamal.core.event.InternalEventEmitter
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.domain.GenerateId
+import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.request.FuncInvokeRequest
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.Invocation
@@ -26,7 +26,7 @@ internal class FixedRateTriggerService(
     private val async: Async,
     internal val eventEmitter: InternalEventEmitter,
     internal val funcQueryRepository: FuncQueryRepository,
-    internal val generateDomainId: GenerateId,
+    internal val generateDomainId: GenerateDomainId,
     internal val invokeFunc: FuncInvokePort,
     internal val triggerQueryRepository: TriggerQueryRepository,
 ) : DisposableBean {

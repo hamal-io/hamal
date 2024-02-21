@@ -7,13 +7,13 @@ import io.hamal.lib.common.snowflake.PartitionSourceImpl
 import io.hamal.lib.common.snowflake.SnowflakeGenerator
 import io.hamal.lib.common.snowflake.SnowflakeId
 
-interface GenerateId {
+interface GenerateDomainId {
     operator fun <ID : ValueObjectId> invoke(ctor: (SnowflakeId) -> ID): ID
 }
 
 class IdGeneratorImpl(
     private val partition: Partition
-) : GenerateId {
+) : GenerateDomainId {
     private val provideGenerator = KeyedOnce.default<(SnowflakeId) -> ValueObjectId, SnowflakeId.Generator>()
     override fun <ID : ValueObjectId> invoke(ctor: (SnowflakeId) -> ID): ID {
         val generator = provideGenerator(ctor) {

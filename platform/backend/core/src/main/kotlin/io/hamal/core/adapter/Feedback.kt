@@ -1,6 +1,6 @@
 package io.hamal.core.adapter
 
-import io.hamal.lib.domain.GenerateId
+import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain.request.FeedbackCreateRequest
 import io.hamal.lib.domain.request.FeedbackCreateRequested
@@ -29,7 +29,7 @@ interface FeedbackPort : FeedbackCreatePort, FeedbackGetPort, FeedbackListPort
 @Component
 class FeedbackAdapter(
     private val feedbackQueryRepository: FeedbackQueryRepository,
-    private val generateDomainId: GenerateId,
+    private val generateDomainId: GenerateDomainId,
     private val requestCmdRepository: RequestCmdRepository
 
 ) : FeedbackPort {

@@ -4,7 +4,7 @@ import io.hamal.core.event.InternalEventEmitter
 import io.hamal.core.request.RequestHandler
 import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.GenerateId
+import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.request.NamespaceAppendRequested
 import io.hamal.repository.api.*
 import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
@@ -20,7 +20,7 @@ class NamespaceAppendHandler(
     val namespaceQueryRepository: NamespaceQueryRepository,
     val namespaceTreeQueryRepository: NamespaceTreeQueryRepository,
     val eventEmitter: InternalEventEmitter,
-    val generateDomainId: GenerateId
+    val generateDomainId: GenerateDomainId
 ) : RequestHandler<NamespaceAppendRequested>(NamespaceAppendRequested::class) {
 
     /**
