@@ -1,7 +1,7 @@
-package io.hamal.api.http
+package io.hamal.api.http.controller.state
 
 import io.hamal.api.http.controller.accepted
-import io.hamal.core.adapter.StateSetPort
+import io.hamal.core.adapter.state.StateSetPort
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.CorrelationId
