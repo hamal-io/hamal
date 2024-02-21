@@ -1,6 +1,6 @@
 package io.hamal.bridge.http.controller.code
 
-import io.hamal.core.adapter.CodeGetPort
+import io.hamal.core.adapter.code.CodeGetPort
 import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.lib.sdk.bridge.BridgeCode

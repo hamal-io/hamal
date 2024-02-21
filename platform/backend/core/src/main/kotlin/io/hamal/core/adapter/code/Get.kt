@@ -1,4 +1,4 @@
-package io.hamal.core.adapter
+package io.hamal.core.adapter.code
 
 import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.domain.vo.CodeVersion
@@ -6,26 +6,23 @@ import io.hamal.repository.api.Code
 import io.hamal.repository.api.CodeQueryRepository
 import org.springframework.stereotype.Component
 
-interface CodeGetPort {
+fun interface CodeGetPort {
     operator fun invoke(codeId: CodeId, codeVersion: CodeVersion?): Code
 }
 
-interface CodePort : CodeGetPort
-
 @Component
-class CodeAdapter(
+class CodeGetAdapter(
     private val codeQueryRepository: CodeQueryRepository
-) : CodePort {
+) : CodeGetPort {
 
     override fun invoke(codeId: CodeId, codeVersion: CodeVersion?): Code {
-        ensureCodeExists(codeId)
         return if (codeVersion != null) {
             ensureVersionExists(codeId, codeVersion)
             codeQueryRepository.get(codeId, codeVersion)
         } else {
+            ensureCodeExists(codeId)
             codeQueryRepository.get(codeId)
         }
-
     }
 
     private fun ensureCodeExists(codeId: CodeId) = codeQueryRepository.get(codeId)
