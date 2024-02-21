@@ -1,8 +1,8 @@
 package io.hamal.api.http.controller.hook
 
-import io.hamal.core.adapter.NamespaceTreeGetSubTreePort
 import io.hamal.core.adapter.hook.HookListPort
 import io.hamal.core.adapter.namespace.NamespaceListPort
+import io.hamal.core.adapter.namespace_tree.NamespaceTreeGetSubTreePort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.HookId
 import io.hamal.lib.domain.vo.NamespaceId
