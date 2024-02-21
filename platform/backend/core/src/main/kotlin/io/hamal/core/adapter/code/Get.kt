@@ -16,6 +16,7 @@ class CodeGetAdapter(
 ) : CodeGetPort {
 
     override fun invoke(codeId: CodeId, codeVersion: CodeVersion?): Code {
+        ensureCodeExists(codeId)
         return if (codeVersion != null) {
             ensureVersionExists(codeId, codeVersion)
             codeQueryRepository.get(codeId, codeVersion)

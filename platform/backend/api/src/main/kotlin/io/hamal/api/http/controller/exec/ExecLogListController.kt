@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 internal class ExecLogListController(
-    private val execLogList: ExecLogListPort,
+    private val execLogList: ExecLogListPort
 ) {
     @GetMapping("/v1/execs/{execId}/logs")
     fun getExecLogs(
