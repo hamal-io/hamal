@@ -1,7 +1,7 @@
 package io.hamal.bridge.http.controller.exec
 
 import io.hamal.bridge.http.controller.accepted
-import io.hamal.core.adapter.ExecFailPort
+import io.hamal.core.adapter.exec.ExecFailPort
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.sdk.bridge.BridgeExecFailRequest
 import io.hamal.lib.sdk.bridge.BridgeRequested

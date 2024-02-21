@@ -1,9 +1,9 @@
 package io.hamal.api.http.controller.exec
 
-import io.hamal.core.adapter.ExecListPort
 import io.hamal.core.adapter.FuncListPort
 import io.hamal.core.adapter.NamespaceListPort
 import io.hamal.core.adapter.NamespaceTreeGetSubTreePort
+import io.hamal.core.adapter.exec.ExecListPort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.FuncId
@@ -62,42 +62,34 @@ internal class ExecListController(
                 namespaceIds = allNamespaceIds
             )
         ).let { execs ->
-            val namespaces = namespaceList(NamespaceQuery(
-                limit = Limit.all,
-                namespaceIds = execs.map { it.namespaceId }
-            )).associateBy { it.id }
+            val namespaces = namespaceList(
+                NamespaceQuery(limit = Limit.all,
+                    namespaceIds = execs.map { it.namespaceId })
+            ).associateBy { it.id }
 
-            val funcs = funcList(FuncQuery(
-                limit = Limit.all,
-                funcIds = execs.mapNotNull { it.correlation?.funcId }
-            )).associateBy { it.id }
+            val funcs = funcList(
+                FuncQuery(limit = Limit.all,
+                    funcIds = execs.mapNotNull { it.correlation?.funcId })
+            ).associateBy { it.id }
 
-            ResponseEntity.ok(
-                ApiExecList(
-                    execs = execs.map {
-                        ApiExecList.Exec(
-                            id = it.id,
-                            status = it.status,
-                            namespace = namespaces[it.namespaceId]!!.let { namespace ->
-                                ApiExecList.Namespace(
-                                    id = namespace.id,
-                                    name = namespace.name
-                                )
-                            },
-                            invocation = it.invocation,
-                            correlation = it.correlation?.correlationId,
-                            func = it.correlation?.funcId?.let { funcId ->
-                                funcs[funcId]!!.let { func ->
-                                    ApiExecList.Func(
-                                        id = func.id,
-                                        name = func.name
-                                    )
-                                }
-                            }
+            ResponseEntity.ok(ApiExecList(execs = execs.map {
+                ApiExecList.Exec(id = it.id,
+                    status = it.status,
+                    namespace = namespaces[it.namespaceId]!!.let { namespace ->
+                        ApiExecList.Namespace(
+                            id = namespace.id, name = namespace.name
                         )
-                    }
-                )
-            )
+                    },
+                    invocation = it.invocation,
+                    correlation = it.correlation?.correlationId,
+                    func = it.correlation?.funcId?.let { funcId ->
+                        funcs[funcId]!!.let { func ->
+                            ApiExecList.Func(
+                                id = func.id, name = func.name
+                            )
+                        }
+                    })
+            }))
         }
     }
 }

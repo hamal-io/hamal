@@ -1,7 +1,7 @@
 package io.hamal.bridge.http.controller.exec
 
 import io.hamal.bridge.http.controller.accepted
-import io.hamal.core.adapter.ExecCompletePort
+import io.hamal.core.adapter.exec.ExecCompletePort
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.sdk.bridge.BridgeExecCompleteRequest
 import io.hamal.lib.sdk.bridge.BridgeRequested
