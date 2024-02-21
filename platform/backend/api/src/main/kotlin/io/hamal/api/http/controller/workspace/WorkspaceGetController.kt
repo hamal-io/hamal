@@ -1,6 +1,6 @@
 package io.hamal.api.http.controller.workspace
 
-import io.hamal.core.adapter.WorkspaceGetPort
+import io.hamal.core.adapter.workspace.WorkspaceGetPort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.sdk.api.ApiWorkspace
