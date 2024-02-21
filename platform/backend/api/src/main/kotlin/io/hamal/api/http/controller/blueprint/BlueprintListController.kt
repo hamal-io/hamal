@@ -1,6 +1,6 @@
 package io.hamal.api.http.controller.blueprint
 
-import io.hamal.core.adapter.BlueprintListPort
+import io.hamal.core.adapter.blueprint.BlueprintListPort
 import io.hamal.core.component.Retry
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.BlueprintId
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 internal class BlueprintListController(
-    private val listBlueprints: BlueprintListPort,
+    private val blueprintList: BlueprintListPort,
     private val retry: Retry,
 ) {
 
@@ -24,7 +24,7 @@ internal class BlueprintListController(
         @RequestParam(required = false, name = "limit", defaultValue = "10") limit: Limit,
         @RequestParam(required = false, name = "blueprint_ids", defaultValue = "") bpIds: List<BlueprintId>,
     ): ResponseEntity<ApiBlueprintList> = retry {
-        listBlueprints(
+        blueprintList(
             BlueprintQuery(
                 afterId = bpId,
                 limit = limit,
