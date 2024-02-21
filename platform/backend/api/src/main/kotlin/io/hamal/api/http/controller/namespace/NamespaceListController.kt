@@ -1,7 +1,7 @@
 package io.hamal.api.http.controller.namespace
 
-import io.hamal.core.adapter.NamespaceListPort
 import io.hamal.core.adapter.NamespaceTreeListPort
+import io.hamal.core.adapter.namespace.NamespaceListPort
 import io.hamal.lib.common.TreeNode
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.NamespaceId

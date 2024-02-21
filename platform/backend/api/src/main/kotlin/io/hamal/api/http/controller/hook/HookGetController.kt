@@ -1,7 +1,7 @@
 package io.hamal.api.http.controller.hook
 
-import io.hamal.core.adapter.HookGetPort
-import io.hamal.core.adapter.NamespaceGetPort
+import io.hamal.core.adapter.hook.HookGetPort
+import io.hamal.core.adapter.namespace.NamespaceGetPort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.HookId
 import io.hamal.lib.sdk.api.ApiHook

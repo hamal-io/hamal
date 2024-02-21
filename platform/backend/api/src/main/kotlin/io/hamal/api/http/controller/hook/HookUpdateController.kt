@@ -1,7 +1,7 @@
 package io.hamal.api.http.controller.hook
 
 import io.hamal.api.http.controller.accepted
-import io.hamal.core.adapter.HookUpdatePort
+import io.hamal.core.adapter.hook.HookUpdatePort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.HookId
 import io.hamal.lib.sdk.api.ApiHookUpdateRequest

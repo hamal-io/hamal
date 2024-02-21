@@ -1,7 +1,7 @@
 package io.hamal.api.http.controller.namespace
 
 import io.hamal.api.http.controller.accepted
-import io.hamal.core.adapter.NamespaceUpdatePort
+import io.hamal.core.adapter.namespace.NamespaceUpdatePort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.sdk.api.ApiNamespaceUpdateRequest
