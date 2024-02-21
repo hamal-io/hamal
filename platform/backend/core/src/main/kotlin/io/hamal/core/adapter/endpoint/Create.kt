@@ -1,6 +1,6 @@
 package io.hamal.core.adapter.endpoint
 
-import io.hamal.core.adapter.RequestEnqueuePort
+import io.hamal.core.adapter.request.RequestEnqueuePort
 import io.hamal.core.adapter.func.FuncGetPort
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.RequestStatus

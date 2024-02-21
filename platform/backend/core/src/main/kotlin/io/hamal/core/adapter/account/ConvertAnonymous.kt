@@ -1,6 +1,6 @@
 package io.hamal.core.adapter.account
 
-import io.hamal.core.adapter.RequestEnqueuePort
+import io.hamal.core.adapter.request.RequestEnqueuePort
 import io.hamal.core.component.EncodePassword
 import io.hamal.core.component.GenerateToken
 import io.hamal.lib.domain.GenerateDomainId

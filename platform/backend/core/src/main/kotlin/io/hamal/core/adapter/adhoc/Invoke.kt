@@ -1,7 +1,7 @@
 package io.hamal.core.adapter.adhoc
 
-import io.hamal.core.adapter.RequestEnqueuePort
 import io.hamal.core.adapter.namespace.NamespaceGetPort
+import io.hamal.core.adapter.request.RequestEnqueuePort
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain.request.AdhocInvokeRequest

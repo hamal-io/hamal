@@ -1,7 +1,7 @@
 package io.hamal.api.http.controller.request
 
 import io.hamal.api.http.controller.accepted
-import io.hamal.core.adapter.RequestGetPort
+import io.hamal.core.adapter.request.RequestGetPort
 import io.hamal.lib.domain.vo.RequestId
 import io.hamal.lib.sdk.api.ApiRequested
 import org.springframework.http.ResponseEntity

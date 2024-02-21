@@ -1,6 +1,6 @@
 package io.hamal.core.adapter.auth
 
-import io.hamal.core.adapter.RequestEnqueuePort
+import io.hamal.core.adapter.request.RequestEnqueuePort
 import io.hamal.core.adapter.account.AccountFindPort
 import io.hamal.core.adapter.workspace.WorkspaceListPort
 import io.hamal.core.component.EncodePassword
