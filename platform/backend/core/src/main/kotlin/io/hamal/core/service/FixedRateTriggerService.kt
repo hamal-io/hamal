@@ -1,6 +1,6 @@
 package io.hamal.core.service
 
-import io.hamal.core.adapter.FuncInvokePort
+import io.hamal.core.adapter.func.FuncInvokePort
 import io.hamal.core.component.Async
 import io.hamal.core.event.InternalEventEmitter
 import io.hamal.lib.common.domain.Limit
@@ -27,7 +27,7 @@ internal class FixedRateTriggerService(
     internal val eventEmitter: InternalEventEmitter,
     internal val funcQueryRepository: FuncQueryRepository,
     internal val generateDomainId: GenerateDomainId,
-    internal val invokeFunc: FuncInvokePort,
+    internal val funcInvoke: FuncInvokePort,
     internal val triggerQueryRepository: TriggerQueryRepository,
 ) : DisposableBean {
 
@@ -61,7 +61,7 @@ internal class FixedRateTriggerService(
 }
 
 internal fun FixedRateTriggerService.requestInvocation(trigger: Trigger.FixedRate) {
-    invokeFunc(
+    funcInvoke(
         trigger.funcId,
         object : FuncInvokeRequest {
             override val correlationId = trigger.correlationId ?: CorrelationId.default

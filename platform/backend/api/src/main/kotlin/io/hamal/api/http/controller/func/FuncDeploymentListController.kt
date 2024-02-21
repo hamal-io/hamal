@@ -1,6 +1,6 @@
 package io.hamal.api.http.controller.func
 
-import io.hamal.core.adapter.FuncDeploymentListPort
+import io.hamal.core.adapter.func.FuncDeploymentListPort
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sdk.api.ApiFuncDeploymentList
 import org.springframework.http.ResponseEntity
