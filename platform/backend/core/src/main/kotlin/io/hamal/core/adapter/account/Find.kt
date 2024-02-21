@@ -5,7 +5,7 @@ import io.hamal.repository.api.Account
 import io.hamal.repository.api.AccountQueryRepository
 import org.springframework.stereotype.Component
 
-interface AccountFindPort {
+fun interface AccountFindPort {
     operator fun invoke(accountId: AccountId): Account?
 }
 

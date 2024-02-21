@@ -11,7 +11,7 @@ import io.hamal.lib.domain.request.AccountCreateAnonymousRequested
 import io.hamal.lib.domain.vo.*
 import org.springframework.stereotype.Component
 
-interface AccountCreateAnonymousPort {
+fun interface AccountCreateAnonymousPort {
     operator fun invoke(req: AccountCreateAnonymousRequest): AccountCreateAnonymousRequested
 }
 

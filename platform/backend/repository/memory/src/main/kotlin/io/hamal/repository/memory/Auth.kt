@@ -69,9 +69,9 @@ class AuthMemoryRepository : AuthRepository {
             .flatMap { it.value }
             .reversed()
             .asSequence()
-            .filter {
-                if (query.authIds.isEmpty()) true else query.authIds.contains(it.id)
-            }.dropWhile { it.id >= query.afterId }
+            .filter { if (query.authIds.isEmpty()) true else query.authIds.contains(it.id) }
+            .filter { if(query.accountIds.isEmpty()) true else query.accountIds.contains(it.accountId) }
+            .dropWhile { it.id >= query.afterId }
             .take(query.limit.value)
             .toList()
     }
@@ -82,9 +82,9 @@ class AuthMemoryRepository : AuthRepository {
                 .flatMap { it.value }
                 .reversed()
                 .asSequence()
-                .filter {
-                    if (query.authIds.isEmpty()) true else query.authIds.contains(it.id)
-                }.dropWhile { it.id >= query.afterId }
+                .filter { if (query.authIds.isEmpty()) true else query.authIds.contains(it.id) }
+                .filter { if(query.accountIds.isEmpty()) true else query.accountIds.contains(it.accountId) }
+                .dropWhile { it.id >= query.afterId }
                 .count()
                 .toLong()
         )

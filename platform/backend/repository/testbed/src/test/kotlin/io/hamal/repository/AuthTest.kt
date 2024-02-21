@@ -215,10 +215,15 @@ internal class AuthRepositoryTest : AbstractUnitTest() {
     inner class ListAndCountTest {
 
         @TestFactory
-        fun `List by accountId`() = runWith(AuthRepository::class) {
+        fun `List by account ids`() = runWith(AuthRepository::class) {
             setup()
 
-            val result = list(AccountId(3))
+            val result = list(
+                AuthQuery(
+                    limit = Limit.all,
+                    accountIds = listOf(AccountId(3))
+                )
+            )
             assertThat(result, hasSize(2))
 
             with(result[1]) {

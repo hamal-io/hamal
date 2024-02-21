@@ -12,7 +12,7 @@ import io.hamal.lib.domain.vo.AuthId
 import io.hamal.lib.domain.vo.RequestId
 import org.springframework.stereotype.Component
 
-interface AccountConvertAnonymousPort {
+fun interface AccountConvertAnonymousPort {
     operator fun invoke(accountId: AccountId, req: AccountConvertAnonymousRequest): AccountConvertRequested
 }
 

@@ -11,7 +11,7 @@ import io.hamal.lib.domain.request.AccountCreateRootRequest
 import io.hamal.lib.domain.vo.*
 import org.springframework.stereotype.Component
 
-interface AccountCreateRootPort {
+fun interface AccountCreateRootPort {
     operator fun invoke(req: AccountCreateRootRequest)
 }
 
