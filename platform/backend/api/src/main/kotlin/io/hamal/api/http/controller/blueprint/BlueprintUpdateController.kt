@@ -6,7 +6,6 @@ import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.BlueprintId
 import io.hamal.lib.sdk.api.ApiBlueprintUpdateRequest
 import io.hamal.lib.sdk.api.ApiRequested
-import io.hamal.lib.domain.request.BlueprintUpdateRequested
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -19,10 +18,10 @@ internal class BlueprintUpdateController(
     private val updateBlueprint: BlueprintUpdatePort
 ) {
     @PatchMapping("/v1/blueprints/{bpId}")
-    fun updateBlueprint(
+    fun update(
         @PathVariable("bpId") bpId: BlueprintId,
         @RequestBody req: ApiBlueprintUpdateRequest
     ): ResponseEntity<ApiRequested> = retry {
-        updateBlueprint(bpId, req, BlueprintUpdateRequested::accepted)
+        updateBlueprint(bpId, req).accepted()
     }
 }

@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 internal class WorkspaceListController(
-    private val list: WorkspaceListPort
+    private val workspaceList: WorkspaceListPort
 ) {
     @GetMapping("/v1/workspaces")
-    fun listWorkspace(): ResponseEntity<ApiWorkspaceList> {
-        return list(AuthContextHolder.get().accountId) { workspaces ->
+    fun list(): ResponseEntity<ApiWorkspaceList> {
+        return workspaceList(AuthContextHolder.get().accountId).let { workspaces ->
             ResponseEntity.ok(
                 ApiWorkspaceList(
                     workspaces = workspaces.map { workspace ->

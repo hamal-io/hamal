@@ -69,5 +69,5 @@ internal fun FixedRateTriggerService.requestInvocation(trigger: Trigger.FixedRat
             override val version = null
         },
         Invocation.Schedule
-    ) {}
+    )
 }

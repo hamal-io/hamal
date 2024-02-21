@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 internal class FuncUpdateController(
     private val retry: Retry,
-    private val updateFunc: FuncUpdatePort,
+    private val funcUpdate: FuncUpdatePort,
 ) {
     @PatchMapping("/v1/funcs/{funcId}")
-    fun updateFunc(
+    fun update(
         @PathVariable("funcId") funcId: FuncId,
         @RequestBody req: ApiFuncUpdateRequest
     ): ResponseEntity<ApiRequested> = retry {
-        updateFunc(funcId, req) { it.accepted() }
+        funcUpdate(funcId, req).accepted()
     }
 }

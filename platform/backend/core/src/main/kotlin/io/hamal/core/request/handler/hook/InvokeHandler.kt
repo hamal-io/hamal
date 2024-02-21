@@ -46,7 +46,7 @@ class HookInvokeHandler(
                     override val version = null
                 },
                 req.invocation
-            ) {}
+            )
         }
     }
 }

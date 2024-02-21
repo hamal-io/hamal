@@ -22,7 +22,7 @@ internal class AccountListController(private val listAccount: AccountListPort) {
                 afterId = afterId,
                 limit = limit
             )
-        ) { accounts ->
+        ).let { accounts ->
             ResponseEntity.ok(ApiAccountList(
                 accounts.map { account ->
                     ApiAccountList.Account(

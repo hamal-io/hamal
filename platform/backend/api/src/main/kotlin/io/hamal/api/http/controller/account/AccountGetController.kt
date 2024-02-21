@@ -19,7 +19,7 @@ internal class AccountGetController(
         @PathVariable("accountId") accountId: AccountId,
     ): ResponseEntity<ApiAccount> {
         return retry {
-            getAccount(accountId) { account ->
+            getAccount(accountId).let { account ->
                 ResponseEntity.ok(
                     ApiAccount(
                         id = account.id

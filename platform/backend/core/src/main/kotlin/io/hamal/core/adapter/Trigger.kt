@@ -29,11 +29,11 @@ interface TriggerListPort {
     operator fun invoke(query: TriggerQuery): List<Trigger>
 }
 
-interface TriggerStatusPort {
+interface TriggerSetStatusPort {
     operator fun invoke(triggerId: TriggerId, triggerStatus: TriggerStatus): TriggerStatusRequested
 }
 
-interface TriggerPort : TriggerCreatePort, TriggerGetPort, TriggerListPort, TriggerStatusPort
+interface TriggerPort : TriggerCreatePort, TriggerGetPort, TriggerListPort, TriggerSetStatusPort
 
 @Component
 class TriggerAdapter(

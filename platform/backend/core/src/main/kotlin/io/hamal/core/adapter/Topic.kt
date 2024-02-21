@@ -16,7 +16,7 @@ import io.hamal.repository.api.TopicQueryRepository.TopicEventQuery
 import io.hamal.repository.api.TopicQueryRepository.TopicQuery
 import org.springframework.stereotype.Component
 
-interface TopicAppendEventPort {
+interface TopicEventAppendPort {
     operator fun invoke(req: TopicAppendEntryRequest): TopicAppendEventRequested
 }
 
@@ -36,7 +36,7 @@ interface TopicListPort {
     operator fun invoke(query: TopicQuery): List<Topic>
 }
 
-interface TopicPort : TopicAppendEventPort, TopicCreatePort, TopicGetPort, TopicListPort, TopicEventListPort
+interface TopicPort : TopicEventAppendPort, TopicCreatePort, TopicGetPort, TopicListPort, TopicEventListPort
 
 @Component
 class TopicAdapter(

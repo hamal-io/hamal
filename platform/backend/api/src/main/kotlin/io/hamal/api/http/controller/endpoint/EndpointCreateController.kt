@@ -6,7 +6,6 @@ import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.sdk.api.ApiEndpointCreateRequest
 import io.hamal.lib.sdk.api.ApiRequested
-import io.hamal.lib.domain.request.EndpointCreateRequested
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -19,10 +18,8 @@ internal class EndpointCreateController(
     private val createEndpoint: EndpointCreatePort
 ) {
     @PostMapping("/v1/namespaces/{namespaceId}/endpoints")
-    fun createEndpoint(
+    fun create(
         @PathVariable("namespaceId") namespaceId: NamespaceId,
         @RequestBody req: ApiEndpointCreateRequest
-    ): ResponseEntity<ApiRequested> = retry {
-        createEndpoint(namespaceId, req, EndpointCreateRequested::accepted)
-    }
+    ): ResponseEntity<ApiRequested> = retry { createEndpoint(namespaceId, req).accepted() }
 }

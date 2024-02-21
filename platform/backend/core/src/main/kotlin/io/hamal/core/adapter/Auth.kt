@@ -73,7 +73,7 @@ class AuthAdapter(
                 status = RequestStatus.Submitted,
                 authId = generateDomainId(::AuthId),
                 accountId = auth.accountId,
-                workspaceIds = workspaceList(auth.accountId) { workspaces -> workspaces.map(Workspace::id) },
+                workspaceIds = workspaceList(auth.accountId).let { workspaces -> workspaces.map(Workspace::id) },
                 token = generateToken(),
                 address = req.address,
                 signature = req.signature
@@ -98,7 +98,7 @@ class AuthAdapter(
             status = RequestStatus.Submitted,
             authId = generateDomainId(::AuthId),
             accountId = account.id,
-            workspaceIds = workspaceList(account.id) { workspaces -> workspaces.map(Workspace::id) },
+            workspaceIds = workspaceList(account.id).let { workspaces -> workspaces.map(Workspace::id) },
             hash = encodedPassword,
             token = generateToken()
         ).also(requestCmdRepository::queue)

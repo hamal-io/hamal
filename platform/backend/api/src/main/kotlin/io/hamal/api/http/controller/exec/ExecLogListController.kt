@@ -16,8 +16,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 internal class ExecLogListController(
-    private val execLogs: ExecLogListPort,
-    private val execsLogs: ExecLogListPort
+    private val logList: ExecLogListPort,
 ) {
     @GetMapping("/v1/execs/{execId}/logs")
     fun getExecLogs(
@@ -25,14 +24,14 @@ internal class ExecLogListController(
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: ExecLogId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit
     ): ResponseEntity<ApiExcLogList> {
-        return execLogs(
+        return logList(
             ExecLogQuery(
                 afterId = afterId,
                 limit = limit,
                 execIds = listOf(execId),
                 workspaceIds = listOf()
             )
-        ) { logs ->
+        ).let { logs ->
             ResponseEntity.ok(
                 ApiExcLogList(logs.map {
                     ApiExecLog(
@@ -53,13 +52,13 @@ internal class ExecLogListController(
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: ExecLogId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit
     ): ResponseEntity<ApiExcLogList> {
-        return execsLogs(
+        return logList(
             ExecLogQuery(
                 afterId = afterId,
                 limit = limit,
                 workspaceIds = listOf(workspaceId)
             )
-        ) { logs ->
+        ).let { logs ->
             ResponseEntity.ok(
                 ApiExcLogList(
                     logs.map {

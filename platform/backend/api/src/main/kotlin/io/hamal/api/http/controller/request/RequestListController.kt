@@ -13,18 +13,18 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class RequestListController(private val listReqs: RequestListPort) {
+internal class RequestListController(private val requestList: RequestListPort) {
     @GetMapping("/v1/requests")
-    fun listReqs(
+    fun list(
         @RequestParam(required = false, name = "after_id", defaultValue = "0") afterId: RequestId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit
     ): ResponseEntity<ApiRequestList> {
-        return listReqs(
+        return requestList(
             RequestQueryRepository.RequestQuery(
                 afterId = afterId,
                 limit = limit
                 // workspaceId = ...
             ),
-        ) { reqs -> ResponseEntity.ok(ApiRequestList(reqs.map(Requested::toApiRequested))) }
+        ).let { reqs -> ResponseEntity.ok(ApiRequestList(reqs.map(Requested::toApiRequested))) }
     }
 }

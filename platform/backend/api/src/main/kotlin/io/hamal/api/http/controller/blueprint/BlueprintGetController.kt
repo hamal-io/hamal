@@ -16,8 +16,8 @@ internal class BlueprintGetController(
     private val getBlueprint: BlueprintGetPort
 ) {
     @GetMapping("/v1/blueprints/{bpId}")
-    fun getBlueprint(@PathVariable("bpId") blueprintId: BlueprintId) = retry {
-        getBlueprint(blueprintId, ::assemble)
+    fun get(@PathVariable("bpId") blueprintId: BlueprintId): ResponseEntity<ApiBlueprint> = retry {
+        assemble(getBlueprint(blueprintId))
     }
 
     private fun assemble(blueprint: Blueprint) =

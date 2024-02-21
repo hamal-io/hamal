@@ -16,12 +16,12 @@ internal class ExecLogAppendController(
     private val appendExecLog: ExecLogAppendPort
 ) {
     @PostMapping("/v1/execs/{execId}/logs")
-    fun appendExecLog(
+    fun append(
         @PathVariable("execId") execId: ExecId,
         @RequestBody cmd: ApiExecLogAppendRequest
     ): ResponseEntity<Unit> {
         return retry {
-            appendExecLog(execId, cmd) {
+            appendExecLog(execId, cmd).let {
                 ResponseEntity.accepted().build()
             }
         }

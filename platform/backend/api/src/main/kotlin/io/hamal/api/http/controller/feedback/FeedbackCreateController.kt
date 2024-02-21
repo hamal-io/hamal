@@ -1,10 +1,9 @@
 package io.hamal.api.http.controller.feedback
 
+import io.hamal.api.http.controller.accepted
 import io.hamal.core.adapter.FeedbackCreatePort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.request.FeedbackCreateRequest
-import io.hamal.lib.domain.request.FeedbackCreateRequested
-import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
@@ -15,12 +14,10 @@ internal class FeedbackCreateController(
     private val createFeedback: FeedbackCreatePort
 ) {
     @PostMapping("/v1/feedback")
-    fun createFeedback(
+    fun create(
         @RequestBody req: FeedbackCreateRequest
-    ): ResponseEntity<FeedbackCreateRequested> = retry {
-        createFeedback(req) {
-            ResponseEntity.ok(it)
-        }
+    ) = retry {
+        createFeedback(req).accepted()
     }
 }
 
