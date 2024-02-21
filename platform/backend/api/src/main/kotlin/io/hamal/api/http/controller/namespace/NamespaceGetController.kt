@@ -14,16 +14,18 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 internal class NamespaceGetController(
     private val retry: Retry,
-    private val getNamespaceTree: NamespaceTreeGetSubTreePort,
-    private val getNamespace: NamespacePort
+    private val namespaceTreeGet: NamespaceTreeGetSubTreePort,
+    private val namespaceGet: NamespacePort
 ) {
     @GetMapping("/v1/namespaces/{namespaceId}")
     fun get(@PathVariable("namespaceId") namespaceId: NamespaceId): ResponseEntity<ApiNamespace> = retry {
-        getNamespaceTree(namespaceId) { namespace -> ResponseEntity.ok(assemble(namespace.root)) }
+        namespaceTreeGet.invoke(namespaceId).let { tree ->
+            ResponseEntity.ok(assemble(tree.root))
+        }
     }
 
     private fun assemble(node: TreeNode<NamespaceId>): ApiNamespace {
-        return getNamespace(node.value) { namespace ->
+        return namespaceGet(node.value).let { namespace ->
             ApiNamespace(
                 id = namespace.id,
                 name = namespace.name

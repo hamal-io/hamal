@@ -3,7 +3,6 @@ package io.hamal.api.http.controller.auth
 import io.hamal.api.http.controller.accepted
 import io.hamal.core.adapter.AuthChallengeMetaMaskPort
 import io.hamal.core.adapter.AuthLoginMetaMaskPort
-import io.hamal.lib.domain.request.AuthLoginMetaMaskRequested
 import io.hamal.lib.sdk.api.ApiAuthChallengeMetaMaskRequest
 import io.hamal.lib.sdk.api.ApiAuthLoginMetaMaskRequest
 import io.hamal.lib.sdk.api.ApiChallengeMetaMask
@@ -26,7 +25,7 @@ internal class AuthLoginMetaMaskController(
 
     @PostMapping("/v1/metamask/token")
     fun login(@RequestBody req: ApiAuthLoginMetaMaskRequest): ResponseEntity<ApiRequested> {
-        return metamaskToken(req, AuthLoginMetaMaskRequested::accepted)
+        return metamaskToken(req).accepted()
     }
 
 }

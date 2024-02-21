@@ -6,7 +6,6 @@ import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.sdk.api.ApiAdhocInvokeRequest
 import io.hamal.lib.sdk.api.ApiRequested
-import io.hamal.lib.domain.request.ExecInvokeRequested
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -19,8 +18,8 @@ internal class AdhocController(
     private val retry: Retry
 ) {
     @PostMapping("/v1/namespaces/{namespaceId}/adhoc")
-    fun invokeAdhoc(
+    fun invoke(
         @PathVariable("namespaceId") namespaceId: NamespaceId,
         @RequestBody req: ApiAdhocInvokeRequest
-    ): ResponseEntity<ApiRequested> = retry { invokeAdhoc(namespaceId, req, ExecInvokeRequested::accepted) }
+    ): ResponseEntity<ApiRequested> = retry { invokeAdhoc(namespaceId, req).accepted() }
 }

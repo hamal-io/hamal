@@ -76,7 +76,7 @@ internal class EventTriggerService(
                                             payload = EventPayload(it.payload.value)
                                         )
                                     })
-                                ) {}
+                                )
                             }
                         } catch (t: Throwable) {
                             t.printStackTrace()

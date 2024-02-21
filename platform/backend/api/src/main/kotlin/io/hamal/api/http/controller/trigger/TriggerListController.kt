@@ -1,7 +1,6 @@
 package io.hamal.api.http.controller.trigger
 
-import io.hamal.core.adapter.NamespaceTreeGetSubTreePort
-import io.hamal.core.adapter.TriggerListPort
+import io.hamal.core.adapter.*
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.FuncId
@@ -13,6 +12,10 @@ import io.hamal.lib.sdk.api.ApiTriggerList.Event.Topic
 import io.hamal.lib.sdk.api.ApiTriggerList.Hook.Hook
 import io.hamal.lib.sdk.api.ApiTriggerList.Trigger.Func
 import io.hamal.lib.sdk.api.ApiTriggerList.Trigger.Namespace
+import io.hamal.repository.api.FuncQueryRepository.FuncQuery
+import io.hamal.repository.api.HookQueryRepository.HookQuery
+import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
+import io.hamal.repository.api.TopicQueryRepository.TopicQuery
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import org.springframework.http.ResponseEntity
@@ -24,7 +27,11 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class TriggerListController(
-    private val listTriggers: TriggerListPort,
+    private val triggerList: TriggerListPort,
+    private val funcList: FuncListPort,
+    private val namespaceList: NamespaceListPort,
+    private val topicList: TopicListPort,
+    private val hookList: HookListPort,
     private val namespaceTreeGetSubTree: NamespaceTreeGetSubTreePort
 ) {
 
@@ -51,14 +58,22 @@ class TriggerListController(
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: TriggerId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit,
         @RequestParam(required = false, name = "func_ids", defaultValue = "") funcIds: List<FuncId> = listOf(),
-        @RequestParam(required = false, name = "workspace_ids", defaultValue = "") workspaceIds: List<WorkspaceId> = listOf(),
-        @RequestParam(required = false, name = "namespace_ids", defaultValue = "") namespaceIds: List<NamespaceId> = listOf(),
+        @RequestParam(
+            required = false,
+            name = "workspace_ids",
+            defaultValue = ""
+        ) workspaceIds: List<WorkspaceId> = listOf(),
+        @RequestParam(
+            required = false,
+            name = "namespace_ids",
+            defaultValue = ""
+        ) namespaceIds: List<NamespaceId> = listOf(),
         @RequestParam(required = false, name = "types", defaultValue = "") types: List<TriggerType> = listOf()
     ): ResponseEntity<ApiTriggerList> {
         val allNamespaceIds = namespaceIds.flatMap { namespaceId ->
-            namespaceTreeGetSubTree(namespaceId) { it }.values
+            namespaceTreeGetSubTree(namespaceId).values
         }
-        return listTriggers(
+        return triggerList(
             TriggerQuery(
                 afterId = afterId,
                 types = types,
@@ -67,7 +82,28 @@ class TriggerListController(
                 funcIds = funcIds,
                 namespaceIds = allNamespaceIds
             )
-        ) { triggers, funcs, namespaces, topics, hooks ->
+        ).let { triggers ->
+            val funcs = funcList(FuncQuery(
+                limit = Limit.all,
+                funcIds = triggers.map { it.funcId }
+            )).associateBy { it.id }
+
+            val namespaces = namespaceList(NamespaceQuery(
+                limit = Limit.all,
+                namespaceIds = triggers.map { it.namespaceId }
+            )).associateBy { it.id }
+
+            val topics = topicList(TopicQuery(
+                limit = Limit.all,
+                topicIds = triggers.filterIsInstance<Trigger.Event>().map { it.topicId }
+            )).associateBy { it.id }
+
+            val hooks = hookList(HookQuery(
+                limit = Limit.all,
+                hookIds = triggers.filterIsInstance<Trigger.Hook>().map { it.hookId }
+            )).associateBy { it.id }
+
+
             ResponseEntity.ok(
                 ApiTriggerList(
                     triggers.map { trigger ->

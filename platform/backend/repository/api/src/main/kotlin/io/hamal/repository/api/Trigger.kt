@@ -99,12 +99,12 @@ interface TriggerQueryRepository {
     )
 }
 
-sealed interface Trigger : DomainObject<TriggerId> {
+sealed interface Trigger : DomainObject<TriggerId>, HasNamespaceId, HasWorkspaceId {
     val cmdId: CmdId
-    val workspaceId: WorkspaceId
+    override val workspaceId: WorkspaceId
     val name: TriggerName
     val funcId: FuncId
-    val namespaceId: NamespaceId
+    override val namespaceId: NamespaceId
     val correlationId: CorrelationId?
     val inputs: TriggerInputs
     val type: TriggerType

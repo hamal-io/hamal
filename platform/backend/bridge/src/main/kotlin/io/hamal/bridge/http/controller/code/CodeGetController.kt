@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class CodeGetBridgeController(private val getCode: CodeGetPort) {
+internal class CodeGetBridgeController(private val codeGet: CodeGetPort) {
     @GetMapping("/b1/code/{id}")
-    fun getCode(
+    fun get(
         @PathVariable("id") codeId: CodeId,
         @RequestParam(required = false, name = "version") codeVersion: CodeVersion?
-    ) = getCode(codeId, codeVersion, ::assemble)
+    ) = assemble(codeGet(codeId, codeVersion))
 
     private fun assemble(code: Code) =
         ResponseEntity.ok(

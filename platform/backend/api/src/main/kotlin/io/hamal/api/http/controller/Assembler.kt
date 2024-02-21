@@ -2,6 +2,7 @@ package io.hamal.api.http.controller
 
 import io.hamal.lib.domain.request.*
 import io.hamal.lib.sdk.api.*
+import io.hamal.repository.api.Feedback
 import org.springframework.http.ResponseEntity
 
 fun Requested.accepted(): ResponseEntity<ApiRequested> =
@@ -21,6 +22,7 @@ fun Requested.toApiRequested(): ApiRequested = when (this) {
     is ExecInvokeRequested -> ApiExecInvokeRequested(id, status, execId, workspaceId, namespaceId)
     is ExtensionCreateRequested -> ApiExtensionCreateRequested(id, status, extensionId, workspaceId)
     is ExtensionUpdateRequested -> ApiExtensionUpdateRequested(id, status, extensionId)
+    is FeedbackCreateRequested -> ApiFeedbackCreateRequested(id, status, feedbackId)
     is FuncCreateRequested -> ApiFuncCreateRequested(id, status, funcId, workspaceId, namespaceId)
     is FuncDeployRequested -> ApiFuncDeployRequested(id, status, funcId)
     is FuncUpdateRequested -> ApiFuncUpdateRequested(id, status, funcId)

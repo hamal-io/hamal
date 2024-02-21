@@ -11,17 +11,15 @@ import org.springframework.stereotype.Component
 
 
 interface AuthLoginEmailPort {
-    operator fun <T : Any> invoke(
+    operator fun invoke(
         req: AuthLogInEmailRequest,
-        responseHandler: (AuthLoginEmailRequested) -> T
-    ): T
+    ): AuthLoginEmailRequested
 }
 
 interface AuthLoginMetaMaskPort {
-    operator fun <T : Any> invoke(
+    operator fun invoke(
         req: AuthLogInMetaMaskRequest,
-        responseHandler: (AuthLoginMetaMaskRequested) -> T
-    ): T
+    ): AuthLoginMetaMaskRequested
 }
 
 interface AuthChallengeMetaMaskPort {
@@ -47,17 +45,16 @@ class AuthAdapter(
         return Web3Challenge("challenge123")
     }
 
-    override fun <T : Any> invoke(
+    override fun invoke(
         req: AuthLogInMetaMaskRequest,
-        responseHandler: (AuthLoginMetaMaskRequested) -> T
-    ): T {
+    ): AuthLoginMetaMaskRequested {
         // FIXME 138 - verify signature
         val auth = authRepository.find(req.address)
         if (auth == null) {
             val submitted = createAccount(object : AccountCreateMetaMaskRequest {
                 override val id: AccountId = generateDomainId(::AccountId)
                 override val address: Web3Address = req.address
-            }) { it }
+            })
 
             return AuthLoginMetaMaskRequested(
                 id = generateDomainId(::RequestId),
@@ -68,7 +65,7 @@ class AuthAdapter(
                 token = generateToken(),
                 address = req.address,
                 signature = req.signature
-            ).also(requestCmdRepository::queue).let(responseHandler)
+            ).also(requestCmdRepository::queue)
 
         } else {
             return AuthLoginMetaMaskRequested(
@@ -76,18 +73,17 @@ class AuthAdapter(
                 status = RequestStatus.Submitted,
                 authId = generateDomainId(::AuthId),
                 accountId = auth.accountId,
-                workspaceIds = workspaceList(auth.accountId) { workspaces -> workspaces.map(Workspace::id) },
+                workspaceIds = workspaceList(auth.accountId).let { workspaces -> workspaces.map(Workspace::id) },
                 token = generateToken(),
                 address = req.address,
                 signature = req.signature
-            ).also(requestCmdRepository::queue).let(responseHandler)
+            ).also(requestCmdRepository::queue)
         }
     }
 
-    override operator fun <T : Any> invoke(
+    override operator fun invoke(
         req: AuthLogInEmailRequest,
-        responseHandler: (AuthLoginEmailRequested) -> T
-    ): T {
+    ): AuthLoginEmailRequested {
         val auth = authRepository.find(req.email) ?: throw NoSuchElementException("Account not found")
         val account = accountQueryRepository.find(auth.accountId) ?: throw NoSuchElementException("Account not found")
 
@@ -102,9 +98,9 @@ class AuthAdapter(
             status = RequestStatus.Submitted,
             authId = generateDomainId(::AuthId),
             accountId = account.id,
-            workspaceIds = workspaceList(account.id) { workspaces -> workspaces.map(Workspace::id) },
+            workspaceIds = workspaceList(account.id).let { workspaces -> workspaces.map(Workspace::id) },
             hash = encodedPassword,
             token = generateToken()
-        ).also(requestCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue)
     }
 }

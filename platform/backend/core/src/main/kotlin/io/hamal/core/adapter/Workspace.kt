@@ -10,12 +10,12 @@ import org.springframework.stereotype.Component
 
 
 interface WorkspaceGetPort {
-    operator fun <T : Any> invoke(workspaceId: WorkspaceId, responseHandler: (Workspace) -> T): T
+    operator fun invoke(workspaceId: WorkspaceId): Workspace
 }
 
 interface WorkspaceListPort {
-    operator fun <T : Any> invoke(query: WorkspaceQuery, responseHandler: (List<Workspace>) -> T): T
-    operator fun <T : Any> invoke(accountId: AccountId, responseHandler: (List<Workspace>) -> T): T
+    operator fun invoke(query: WorkspaceQuery): (List<Workspace>)
+    operator fun invoke(accountId: AccountId): (List<Workspace>)
 }
 
 interface WorkspacePort : WorkspaceGetPort, WorkspaceListPort
@@ -25,23 +25,16 @@ class WorkspaceAdapter(
     private val workspaceQueryRepository: WorkspaceQueryRepository
 ) : WorkspacePort {
 
-    override operator fun <T : Any> invoke(
-        workspaceId: WorkspaceId,
-        responseHandler: (Workspace) -> T
-    ): T = responseHandler(workspaceQueryRepository.get(workspaceId))
+    override operator fun invoke(workspaceId: WorkspaceId): Workspace = workspaceQueryRepository.get(workspaceId)
 
-    override operator fun <T : Any> invoke(
-        query: WorkspaceQuery,
-        responseHandler: (List<Workspace>) -> T
-    ): T = responseHandler(workspaceQueryRepository.list(query))
+    override operator fun invoke(query: WorkspaceQuery): (List<Workspace>) = workspaceQueryRepository.list(query)
 
-    override fun <T : Any> invoke(accountId: AccountId, responseHandler: (List<Workspace>) -> T): T {
+    override fun invoke(accountId: AccountId): List<Workspace> {
         // FIXME this must come directly from the repository
-        return responseHandler(workspaceQueryRepository.list(
+        return workspaceQueryRepository.list(
             WorkspaceQuery(
                 limit = Limit.all
             )
         ).filter { it.creatorId == accountId }
-        )
     }
 }

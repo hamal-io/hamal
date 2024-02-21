@@ -3,7 +3,6 @@ package io.hamal.api.http.controller.func
 import io.hamal.api.http.controller.accepted
 import io.hamal.core.adapter.FuncInvokePort
 import io.hamal.core.component.Retry
-import io.hamal.lib.domain.request.ExecInvokeRequested
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.Invocation
@@ -18,18 +17,17 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 internal class FuncInvokeController(
     private val retry: Retry,
-    private val invokeFunc: FuncInvokePort,
+    private val funcInvoke: FuncInvokePort,
 ) {
     @PostMapping("/v1/funcs/{funcId}/invoke")
-    fun execFunc(
+    fun invoke(
         @PathVariable("funcId") funcId: FuncId,
         @RequestBody req: ApiFuncInvokeRequest
     ): ResponseEntity<ApiRequested> = retry {
-        invokeFunc(
+        funcInvoke(
             funcId,
             req.copy(correlationId = req.correlationId ?: CorrelationId.default),
-            Invocation.Func,
-            ExecInvokeRequested::accepted,
-        )
+            Invocation.Func
+        ).accepted()
     }
 }

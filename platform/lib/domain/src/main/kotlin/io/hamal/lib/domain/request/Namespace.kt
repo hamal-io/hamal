@@ -6,7 +6,7 @@ import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.domain.vo.RequestId
 import io.hamal.lib.domain.vo.WorkspaceId
 
-interface NamespaceCreateRequest {
+interface NamespaceAppendRequest {
     val name: NamespaceName
 }
 

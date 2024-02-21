@@ -9,48 +9,31 @@ import io.hamal.repository.api.FuncQueryRepository.FuncQuery
 import org.springframework.stereotype.Component
 
 interface FuncCreatePort {
-    operator fun <T : Any> invoke(
-        namespaceId: NamespaceId,
-        req: FuncCreateRequest,
-        responseHandler: (FuncCreateRequested) -> T
-    ): T
+    operator fun invoke(namespaceId: NamespaceId, req: FuncCreateRequest): FuncCreateRequested
 }
 
 interface FuncGetPort {
-    operator fun <T : Any> invoke(funcId: FuncId, responseHandler: (Func, Code, Code, Namespace) -> T): T
+    operator fun invoke(funcId: FuncId): Func
 }
 
 interface FuncInvokePort {
-    operator fun <T : Any> invoke(
-        funcId: FuncId,
-        req: FuncInvokeRequest,
-        invocation: Invocation,
-        responseHandler: (ExecInvokeRequested) -> T
-    ): T
+    operator fun invoke(funcId: FuncId, req: FuncInvokeRequest, invocation: Invocation): ExecInvokeRequested
 }
 
 interface FuncListPort {
-    operator fun <T : Any> invoke(query: FuncQuery, responseHandler: (List<Func>, Map<NamespaceId, Namespace>) -> T): T
+    operator fun invoke(query: FuncQuery): List<Func>
 }
 
-interface FuncDeploymentListPort {
-    operator fun <T : Any> invoke(funcId: FuncId, responseHandler: (List<FuncDeployment>) -> T): T
+fun interface FuncDeploymentListPort {
+    fun funcDeploymentList(funcId: FuncId): List<FuncDeployment>
 }
 
 interface FuncDeployPort {
-    operator fun <T : Any> invoke(
-        funcId: FuncId,
-        req: FuncDeployRequest,
-        responseHandler: (FuncDeployRequested) -> T
-    ): T
+    operator fun invoke(funcId: FuncId, req: FuncDeployRequest): FuncDeployRequested
 }
 
 interface FuncUpdatePort {
-    operator fun <T : Any> invoke(
-        funcId: FuncId,
-        req: FuncUpdateRequest,
-        responseHandler: (FuncUpdateRequested) -> T
-    ): T
+    operator fun invoke(funcId: FuncId, req: FuncUpdateRequest): FuncUpdateRequested
 
 }
 
@@ -63,15 +46,16 @@ class FuncAdapter(
     private val funcQueryRepository: FuncQueryRepository,
     private val generateDomainId: GenerateId,
     private val namespaceQueryRepository: NamespaceQueryRepository,
+    private val namespaceGet: NamespaceGetPort,
     private val requestCmdRepository: RequestCmdRepository
 ) : FuncPort {
 
-    override fun <T : Any> invoke(
+    override fun invoke(
         namespaceId: NamespaceId,
         req: FuncCreateRequest,
-        responseHandler: (FuncCreateRequested) -> T
-    ): T {
-        val namespace = namespaceQueryRepository.get(namespaceId)
+    ): FuncCreateRequested {
+        val namespace = namespaceGet(namespaceId)
+
         return FuncCreateRequested(
             id = generateDomainId(::RequestId),
             status = RequestStatus.Submitted,
@@ -82,23 +66,16 @@ class FuncAdapter(
             inputs = req.inputs,
             codeId = generateDomainId(::CodeId),
             code = req.code
-        ).also(requestCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue)
     }
 
-    override fun <T : Any> invoke(funcId: FuncId, responseHandler: (Func, Code, Code, Namespace) -> T): T {
-        val func = funcQueryRepository.get(funcId)
-        val current = codeQueryRepository.get(func.code.id, func.code.version)
-        val deployed = codeQueryRepository.get(func.code.id, func.deployment.version)
-        val namespaces = namespaceQueryRepository.get(func.namespaceId)
-        return responseHandler(func, current, deployed, namespaces)
-    }
+    override fun invoke(funcId: FuncId) = funcQueryRepository.get(funcId)
 
-    override fun <T : Any> invoke(
+    override fun invoke(
         funcId: FuncId,
         req: FuncInvokeRequest,
-        invocation: Invocation,
-        responseHandler: (ExecInvokeRequested) -> T
-    ): T {
+        invocation: Invocation
+    ): ExecInvokeRequested {
         val func = funcQueryRepository.get(funcId)
 
         val version = req.version?.also {
@@ -120,33 +97,17 @@ class FuncAdapter(
                 value = null
             ),
             invocation = invocation
-        ).also(requestCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue)
     }
 
-    override fun <T : Any> invoke(
-        query: FuncQuery,
-        responseHandler: (List<Func>, Map<NamespaceId, Namespace>) -> T
-    ): T {
-        val funcs = funcQueryRepository.list(query)
-        val namespaces = namespaceQueryRepository.list(funcs.map(Func::namespaceId))
-            .associateBy(Namespace::id)
-        return responseHandler(funcs, namespaces)
-    }
+    override fun invoke(query: FuncQuery): List<Func> = funcQueryRepository.list(query)
 
-
-    override fun <T : Any> invoke(
-        funcId: FuncId,
-        responseHandler: (List<FuncDeployment>) -> T
-    ): T {
+    override fun funcDeploymentList(funcId: FuncId): List<FuncDeployment> {
         ensureFuncExists(funcId)
-        return responseHandler(funcQueryRepository.listDeployments(funcId))
+        return funcQueryRepository.listDeployments(funcId)
     }
 
-    override fun <T : Any> invoke(
-        funcId: FuncId,
-        req: FuncUpdateRequest,
-        responseHandler: (FuncUpdateRequested) -> T
-    ): T {
+    override fun invoke(funcId: FuncId, req: FuncUpdateRequest): FuncUpdateRequested {
         ensureFuncExists(funcId)
         val func = funcQueryRepository.get(funcId)
         return FuncUpdateRequested(
@@ -157,14 +118,10 @@ class FuncAdapter(
             name = req.name,
             inputs = req.inputs,
             code = req.code
-        ).also(requestCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue)
     }
 
-    override fun <T : Any> invoke(
-        funcId: FuncId,
-        req: FuncDeployRequest,
-        responseHandler: (FuncDeployRequested) -> T
-    ): T {
+    override fun invoke(funcId: FuncId, req: FuncDeployRequest): FuncDeployRequested {
         val func = funcQueryRepository.get(funcId)
         req.version?.let {
             ensureCodeExists(func.code.id, req.version!!)
@@ -176,7 +133,7 @@ class FuncAdapter(
             funcId = funcId,
             version = req.version,
             message = req.message
-        ).also(requestCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue)
     }
 
     private fun ensureFuncExists(funcId: FuncId): Func {

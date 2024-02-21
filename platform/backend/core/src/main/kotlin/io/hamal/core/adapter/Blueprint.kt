@@ -16,30 +16,27 @@ import io.hamal.repository.api.RequestCmdRepository
 import org.springframework.stereotype.Component
 
 interface BlueprintCreatePort {
-    operator fun <T : Any> invoke(
+    operator fun invoke(
         accountId: AccountId,
         req: BlueprintCreateRequest,
-        responseHandler: (BlueprintCreateRequested) -> T
-    ): T
+    ): BlueprintCreateRequested
 }
 
 interface BlueprintGetPort {
-    operator fun <T : Any> invoke(blueprintId: BlueprintId, responseHandler: (Blueprint) -> T): T
+    operator fun invoke(blueprintId: BlueprintId): Blueprint
 }
 
 interface BlueprintUpdatePort {
-    operator fun <T : Any> invoke(
+    operator fun invoke(
         bpId: BlueprintId,
         req: BlueprintUpdateRequest,
-        responseHandler: (BlueprintUpdateRequested) -> T
-    ): T
+    ): BlueprintUpdateRequested
 }
 
 interface BlueprintListPort {
-    operator fun <T : Any> invoke(
+    operator fun invoke(
         query: BlueprintQuery,
-        responseHandler: (List<Blueprint>) -> T
-    ): T
+    ): List<Blueprint>
 }
 
 interface BlueprintPort : BlueprintCreatePort, BlueprintGetPort, BlueprintUpdatePort, BlueprintListPort
@@ -50,11 +47,10 @@ class BlueprintAdapter(
     private val generateDomainId: GenerateId,
     private val requestCmdRepository: RequestCmdRepository
 ) : BlueprintPort {
-    override fun <T : Any> invoke(
+    override fun invoke(
         accountId: AccountId,
         req: BlueprintCreateRequest,
-        responseHandler: (BlueprintCreateRequested) -> T
-    ): T {
+    ): BlueprintCreateRequested {
         return BlueprintCreateRequested(
             id = generateDomainId(::RequestId),
             status = Submitted,
@@ -64,18 +60,15 @@ class BlueprintAdapter(
             value = req.value,
             creatorId = accountId,
             description = req.description
-        ).also(requestCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue)
     }
 
-    override fun <T : Any> invoke(blueprintId: BlueprintId, responseHandler: (Blueprint) -> T): T {
-        return responseHandler(blueprintQueryRepository.get(blueprintId))
-    }
+    override fun invoke(blueprintId: BlueprintId): Blueprint = blueprintQueryRepository.get(blueprintId)
 
-    override fun <T : Any> invoke(
+    override fun invoke(
         bpId: BlueprintId,
         req: BlueprintUpdateRequest,
-        responseHandler: (BlueprintUpdateRequested) -> T
-    ): T {
+    ): BlueprintUpdateRequested {
         ensureBlueprintExists(bpId)
         return BlueprintUpdateRequested(
             id = generateDomainId(::RequestId),
@@ -86,12 +79,10 @@ class BlueprintAdapter(
             value = req.value,
             description = req.description
 
-            ).also(requestCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue)
     }
 
-    override fun <T : Any> invoke(query: BlueprintQuery, responseHandler: (List<Blueprint>) -> T): T {
-        return responseHandler(blueprintQueryRepository.list(query))
-    }
+    override fun invoke(query: BlueprintQuery): List<Blueprint> = blueprintQueryRepository.list(query)
 
     private fun ensureBlueprintExists(blueprintId: BlueprintId) = blueprintQueryRepository.get(blueprintId)
 }

@@ -7,51 +7,33 @@ import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.request.TriggerCreateRequest
 import io.hamal.lib.domain.request.TriggerCreateRequested
 import io.hamal.lib.domain.request.TriggerStatusRequested
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.RequestId
+import io.hamal.lib.domain.vo.TriggerId
+import io.hamal.lib.domain.vo.TriggerInputs
 import io.hamal.repository.api.*
-import io.hamal.repository.api.TopicQueryRepository.TopicQuery
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import org.springframework.stereotype.Component
 
 
 interface TriggerCreatePort {
-    operator fun <T : Any> invoke(
-        namespaceId: NamespaceId,
-        req: TriggerCreateRequest,
-        responseHandler: (TriggerCreateRequested) -> T
-    ): T
+    operator fun invoke(namespaceId: NamespaceId, req: TriggerCreateRequest): TriggerCreateRequested
 }
 
 interface TriggerGetPort {
-    operator fun <T : Any> invoke(
-        triggerId: TriggerId,
-        responseHandler: (Trigger, Func, Namespace, Topic?, Hook?) -> T
-    ): T
+    operator fun invoke(triggerId: TriggerId): Trigger
 }
 
 
 interface TriggerListPort {
-    operator fun <T : Any> invoke(
-        query: TriggerQuery,
-        responseHandler: (
-            triggers: List<Trigger>,
-            funcs: Map<FuncId, Func>,
-            namespaces: Map<NamespaceId, Namespace>,
-            topics: Map<TopicId, Topic>,
-            hooks: Map<HookId, Hook>
-        ) -> T
-    ): T
+    operator fun invoke(query: TriggerQuery): List<Trigger>
 }
 
-interface TriggerStatusPort {
-    operator fun <T : Any> invoke(
-        triggerId: TriggerId,
-        triggerStatus: TriggerStatus,
-        responseHandler: (TriggerStatusRequested) -> T
-    ): T
+interface TriggerSetStatusPort {
+    operator fun invoke(triggerId: TriggerId, triggerStatus: TriggerStatus): TriggerStatusRequested
 }
 
-interface TriggerPort : TriggerCreatePort, TriggerGetPort, TriggerListPort, TriggerStatusPort
+interface TriggerPort : TriggerCreatePort, TriggerGetPort, TriggerListPort, TriggerSetStatusPort
 
 @Component
 class TriggerAdapter(
@@ -63,11 +45,7 @@ class TriggerAdapter(
     private val requestCmdRepository: RequestCmdRepository,
     private val triggerQueryRepository: TriggerQueryRepository,
 ) : TriggerPort {
-    override fun <T : Any> invoke(
-        namespaceId: NamespaceId,
-        req: TriggerCreateRequest,
-        responseHandler: (TriggerCreateRequested) -> T
-    ): T {
+    override fun invoke(namespaceId: NamespaceId, req: TriggerCreateRequest): TriggerCreateRequested {
         ensureFuncExists(req)
         ensureEvent(req)
         ensureHook(req)
@@ -91,73 +69,23 @@ class TriggerAdapter(
             hookId = req.hookId,
             hookMethod = req.hookMethod,
             cron = req.cron
-        ).also(requestCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue)
 
     }
 
-    override fun <T : Any> invoke(
-        triggerId: TriggerId,
-        responseHandler: (Trigger, Func, Namespace, Topic?, Hook?) -> T
-    ): T {
-        val trigger = triggerQueryRepository.get(triggerId)
-        val func = funcQueryRepository.get(trigger.funcId)
-        val namespace = namespaceQueryRepository.get(trigger.namespaceId)
-        val topic = if (trigger is Trigger.Event) {
-            topicRepository.get(trigger.topicId)
-        } else {
-            null
-        }
+    override fun invoke(triggerId: TriggerId): Trigger = triggerQueryRepository.get(triggerId)
 
-        val hook = if (trigger is Trigger.Hook) {
-            hookQueryRepository.get(trigger.hookId)
-        } else {
-            null
-        }
+    override operator fun invoke(query: TriggerQuery): List<Trigger> = triggerQueryRepository.list(query)
 
-        return responseHandler(trigger, func, namespace, topic, hook)
-    }
 
-    override operator fun <T : Any> invoke(
-        query: TriggerQuery,
-        responseHandler: (
-            triggers: List<Trigger>,
-            funcs: Map<FuncId, Func>,
-            namespaces: Map<NamespaceId, Namespace>,
-            topics: Map<TopicId, Topic>,
-            hooks: Map<HookId, Hook>
-        ) -> T
-    ): T {
-
-        val triggers = triggerQueryRepository.list(query)
-
-        val namespaces = namespaceQueryRepository.list(triggers.map { it.namespaceId })
-            .associateBy { it.id }
-
-        val funcs = funcQueryRepository.list(triggers.map { it.funcId })
-            .associateBy { it.id }
-
-        val topics =
-            topicRepository.list(TopicQuery(topicIds = triggers.filterIsInstance<Trigger.Event>().map { it.topicId }))
-                .associateBy { it.id }
-
-        val hooks = hookQueryRepository.list(triggers.filterIsInstance<Trigger.Hook>().map { it.hookId })
-            .associateBy { it.id }
-
-        return responseHandler(triggers, funcs, namespaces, topics, hooks)
-    }
-
-    override fun <T : Any> invoke(
-        triggerId: TriggerId,
-        triggerStatus: TriggerStatus,
-        responseHandler: (TriggerStatusRequested) -> T
-    ): T {
+    override fun invoke(triggerId: TriggerId, triggerStatus: TriggerStatus): TriggerStatusRequested {
         ensureTriggerExists(triggerId)
         return TriggerStatusRequested(
             id = generateDomainId(::RequestId),
             status = RequestStatus.Submitted,
             triggerId = triggerId,
             triggerStatus = triggerStatus
-        ).also(requestCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue)
     }
 
     private fun ensureFuncExists(createTrigger: TriggerCreateRequest) {

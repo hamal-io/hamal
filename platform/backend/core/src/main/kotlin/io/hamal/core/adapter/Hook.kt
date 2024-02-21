@@ -9,32 +9,27 @@ import io.hamal.lib.domain.request.HookUpdateRequested
 import io.hamal.lib.domain.vo.HookId
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.RequestId
-import io.hamal.repository.api.*
+import io.hamal.repository.api.Hook
+import io.hamal.repository.api.HookQueryRepository
 import io.hamal.repository.api.HookQueryRepository.HookQuery
+import io.hamal.repository.api.NamespaceQueryRepository
+import io.hamal.repository.api.RequestCmdRepository
 import org.springframework.stereotype.Component
 
 interface HookCreatePort {
-    operator fun <T : Any> invoke(
-        namespaceId: NamespaceId,
-        req: HookCreateRequest,
-        responseHandler: (HookCreateRequested) -> T
-    ): T
+    operator fun invoke(namespaceId: NamespaceId, req: HookCreateRequest): HookCreateRequested
 }
 
 interface HookGetPort {
-    operator fun <T : Any> invoke(hookId: HookId, responseHandler: (Hook, Namespace) -> T): T
+    operator fun invoke(hookId: HookId): Hook
 }
 
 interface HookListPort {
-    operator fun <T : Any> invoke(query: HookQuery, responseHandler: (List<Hook>, Map<NamespaceId, Namespace>) -> T): T
+    operator fun invoke(query: HookQuery): List<Hook>
 }
 
 interface HookUpdatePort {
-    operator fun <T : Any> invoke(
-        hookId: HookId,
-        req: HookUpdateRequest,
-        responseHandler: (HookUpdateRequested) -> T
-    ): T
+    operator fun invoke(hookId: HookId, req: HookUpdateRequest): HookUpdateRequested
 }
 
 interface HookPort : HookCreatePort, HookGetPort, HookListPort, HookUpdatePort
@@ -46,11 +41,7 @@ class HookAdapter(
     private val namespaceQueryRepository: NamespaceQueryRepository,
     private val requestCmdRepository: RequestCmdRepository
 ) : HookPort {
-    override fun <T : Any> invoke(
-        namespaceId: NamespaceId,
-        req: HookCreateRequest,
-        responseHandler: (HookCreateRequested) -> T
-    ): T {
+    override fun invoke(namespaceId: NamespaceId, req: HookCreateRequest): HookCreateRequested {
         val namespace = namespaceQueryRepository.get(namespaceId)
         return HookCreateRequested(
             id = generateDomainId(::RequestId),
@@ -59,31 +50,14 @@ class HookAdapter(
             workspaceId = namespace.workspaceId,
             namespaceId = namespace.id,
             name = req.name
-        ).also(requestCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue)
     }
 
-    override fun <T : Any> invoke(hookId: HookId, responseHandler: (Hook, Namespace) -> T): T {
-        val hook = hookQueryRepository.get(hookId)
-        val namespaces = namespaceQueryRepository.get(hook.namespaceId)
-        return responseHandler(hook, namespaces)
-    }
+    override fun invoke(hookId: HookId): Hook = hookQueryRepository.get(hookId)
 
+    override fun invoke(query: HookQuery): List<Hook> = hookQueryRepository.list(query)
 
-    override fun <T : Any> invoke(
-        query: HookQuery,
-        responseHandler: (List<Hook>, Map<NamespaceId, Namespace>) -> T
-    ): T {
-        val hooks = hookQueryRepository.list(query)
-        val namespaces = namespaceQueryRepository.list(hooks.map(Hook::namespaceId))
-            .associateBy(Namespace::id)
-        return responseHandler(hooks, namespaces)
-    }
-
-    override fun <T : Any> invoke(
-        hookId: HookId,
-        req: HookUpdateRequest,
-        responseHandler: (HookUpdateRequested) -> T
-    ): T {
+    override fun invoke(hookId: HookId, req: HookUpdateRequest): HookUpdateRequested {
         ensureHookExists(hookId)
         return HookUpdateRequested(
             id = generateDomainId(::RequestId),
@@ -91,7 +65,7 @@ class HookAdapter(
             workspaceId = hookQueryRepository.get(hookId).workspaceId,
             hookId = hookId,
             name = req.name,
-        ).also(requestCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue)
     }
 
     private fun ensureHookExists(hookId: HookId) {

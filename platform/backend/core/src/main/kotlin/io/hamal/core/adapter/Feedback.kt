@@ -13,24 +13,15 @@ import io.hamal.repository.api.RequestCmdRepository
 import org.springframework.stereotype.Component
 
 interface FeedbackCreatePort {
-    operator fun <T : Any> invoke(
-        req: FeedbackCreateRequest,
-        responseHandler: (FeedbackCreateRequested) -> T
-    ): T
+    operator fun invoke(req: FeedbackCreateRequest): FeedbackCreateRequested
 }
 
 interface FeedbackGetPort {
-    operator fun <T : Any> invoke(
-        feedbackId: FeedbackId,
-        responseHandler: (Feedback) -> T
-    ): T
+    operator fun invoke(feedbackId: FeedbackId): Feedback
 }
 
 interface FeedbackListPort {
-    operator fun <T : Any> invoke(
-        query: FeedbackQuery,
-        responseHandler: (List<Feedback>) -> T
-    ): T
+    operator fun invoke(query: FeedbackQuery): List<Feedback>
 }
 
 interface FeedbackPort : FeedbackCreatePort, FeedbackGetPort, FeedbackListPort
@@ -43,10 +34,7 @@ class FeedbackAdapter(
 
 ) : FeedbackPort {
 
-    override fun <T : Any> invoke(
-        req: FeedbackCreateRequest,
-        responseHandler: (FeedbackCreateRequested) -> T
-    ): T {
+    override fun invoke(req: FeedbackCreateRequest): FeedbackCreateRequested {
         return FeedbackCreateRequested(
             id = generateDomainId(::RequestId),
             status = Submitted,
@@ -54,15 +42,10 @@ class FeedbackAdapter(
             mood = req.mood,
             message = req.message,
             accountId = req.accountId
-        ).also(requestCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue)
     }
 
-    override fun <T : Any> invoke(feedbackId: FeedbackId, responseHandler: (Feedback) -> T): T {
-        return responseHandler(feedbackQueryRepository.get(feedbackId))
-    }
+    override fun invoke(feedbackId: FeedbackId): Feedback = feedbackQueryRepository.get(feedbackId)
 
-    override fun <T : Any> invoke(query: FeedbackQuery, responseHandler: (List<Feedback>) -> T): T {
-        return responseHandler(feedbackQueryRepository.list(query))
-    }
-
+    override fun invoke(query: FeedbackQuery): List<Feedback> = feedbackQueryRepository.list(query)
 }

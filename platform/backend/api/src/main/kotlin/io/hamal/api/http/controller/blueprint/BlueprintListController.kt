@@ -30,7 +30,7 @@ internal class BlueprintListController(
                 limit = limit,
                 blueprintIds = bpIds
             )
-        ) { blueprints ->
+        ).let { blueprints ->
             ResponseEntity.ok(
                 ApiBlueprintList(
                     blueprints.map { blueprint ->

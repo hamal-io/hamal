@@ -12,14 +12,14 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 internal class WorkspaceGetController(
     private val retry: Retry,
-    private val getWorkspace: WorkspaceGetPort
+    private val workspaceGet: WorkspaceGetPort
 ) {
     @GetMapping("/v1/workspaces/{workspaceId}")
-    fun getWorkspace(
+    fun get(
         @PathVariable("workspaceId") workspaceId: WorkspaceId,
     ): ResponseEntity<ApiWorkspace> {
         return retry {
-            getWorkspace(workspaceId) { workspace ->
+            workspaceGet(workspaceId).let { workspace ->
                 ResponseEntity.ok(
                     ApiWorkspace(
                         id = workspace.id,

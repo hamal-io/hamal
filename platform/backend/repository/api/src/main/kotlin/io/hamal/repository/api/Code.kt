@@ -11,12 +11,12 @@ import io.hamal.lib.domain.vo.WorkspaceId
 data class Code(
     override val id: CodeId,
     override val updatedAt: UpdatedAt,
-    val workspaceId: WorkspaceId,
+    override val workspaceId: WorkspaceId,
     val cmdId: CmdId,
     val version: CodeVersion,
     val value: CodeValue,
     var type: CodeType,
-) : DomainObject<CodeId>
+) : DomainObject<CodeId>, HasWorkspaceId
 
 interface CodeRepository : CodeCmdRepository, CodeQueryRepository
 

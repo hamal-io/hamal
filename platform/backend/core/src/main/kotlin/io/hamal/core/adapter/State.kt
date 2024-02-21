@@ -9,22 +9,17 @@ import io.hamal.lib.domain.request.StateSetRequested
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.RequestId
-import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncQueryRepository
 import io.hamal.repository.api.RequestCmdRepository
 import io.hamal.repository.api.StateQueryRepository
 import org.springframework.stereotype.Component
 
 interface StateGetPort {
-    operator fun <T : Any> invoke(
-        funcId: FuncId,
-        correlationId: CorrelationId,
-        responseHandler: (CorrelatedState, Func) -> T
-    ): T
+    operator fun invoke(funcId: FuncId, correlationId: CorrelationId): CorrelatedState
 }
 
 interface StateSetPort {
-    operator fun <T : Any> invoke(req: StateSetRequest, responseHandler: (StateSetRequested) -> T): T
+    operator fun invoke(req: StateSetRequest): StateSetRequested
 }
 
 interface StatePort : StateGetPort, StateSetPort
@@ -37,22 +32,11 @@ class StateAdapter(
     private val stateQueryRepository: StateQueryRepository
 ) : StatePort {
 
-    override operator fun <T : Any> invoke(
-        funcId: FuncId,
-        correlationId: CorrelationId,
-        responseHandler: (CorrelatedState, Func) -> T
-    ): T {
-        val func = funcQueryRepository.get(funcId)
-        return responseHandler(
-            stateQueryRepository.get(Correlation(correlationId, funcId)),
-            func
-        )
+    override operator fun invoke(funcId: FuncId, correlationId: CorrelationId): CorrelatedState {
+        return stateQueryRepository.get(Correlation(correlationId, funcId))
     }
 
-    override operator fun <T : Any> invoke(
-        req: StateSetRequest,
-        responseHandler: (StateSetRequested) -> T
-    ): T {
+    override operator fun invoke(req: StateSetRequest): StateSetRequested {
         ensureFuncExists(req.correlation.funcId)
         val func = funcQueryRepository.get(req.correlation.funcId)
         return StateSetRequested(
@@ -63,7 +47,7 @@ class StateAdapter(
                 correlation = req.correlation,
                 value = req.value
             )
-        ).also(requestCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue)
     }
 
     private fun ensureFuncExists(funcId: FuncId) {

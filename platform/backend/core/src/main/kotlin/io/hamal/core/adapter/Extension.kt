@@ -3,42 +3,40 @@ package io.hamal.core.adapter
 import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain.request.ExtensionCreateRequest
-import io.hamal.lib.domain.request.ExtensionUpdateRequest
 import io.hamal.lib.domain.request.ExtensionCreateRequested
+import io.hamal.lib.domain.request.ExtensionUpdateRequest
 import io.hamal.lib.domain.request.ExtensionUpdateRequested
 import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.domain.vo.ExtensionId
-import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.domain.vo.RequestId
-import io.hamal.repository.api.*
+import io.hamal.lib.domain.vo.WorkspaceId
+import io.hamal.repository.api.CodeQueryRepository
+import io.hamal.repository.api.Extension
+import io.hamal.repository.api.ExtensionQueryRepository
 import io.hamal.repository.api.ExtensionQueryRepository.ExtensionQuery
+import io.hamal.repository.api.RequestCmdRepository
 import org.springframework.stereotype.Component
 
 interface ExtensionExtensionPort {
-    operator fun <T : Any> invoke(
+    operator fun invoke(
         workspaceId: WorkspaceId,
-        req: ExtensionCreateRequest,
-        responseHandler: (ExtensionCreateRequested) -> T
-    ): T
+        req: ExtensionCreateRequest
+    ): ExtensionCreateRequested
 }
 
 interface ExtensionGetPort {
-    operator fun <T : Any> invoke(extId: ExtensionId, responseHandler: (Extension, Code) -> T): T
+    operator fun invoke(extId: ExtensionId): Extension
 }
 
 interface ExtensionListPort {
-    operator fun <T : Any> invoke(
-        query: ExtensionQuery,
-        responseHandler: (List<Extension>) -> T
-    ): T
+    operator fun invoke(query: ExtensionQuery): List<Extension>
 }
 
 interface ExtensionUpdatePort {
-    operator fun <T : Any> invoke(
+    operator fun invoke(
         extId: ExtensionId,
-        req: ExtensionUpdateRequest,
-        responseHandler: (ExtensionUpdateRequested) -> T
-    ): T
+        req: ExtensionUpdateRequest
+    ): ExtensionUpdateRequested
 }
 
 interface ExtensionPort : ExtensionExtensionPort, ExtensionGetPort, ExtensionListPort, ExtensionUpdatePort
@@ -50,11 +48,10 @@ class ExtensionAdapter(
     private val generateDomainId: GenerateId,
     private val requestCmdRepository: RequestCmdRepository
 ) : ExtensionPort {
-    override fun <T : Any> invoke(
+    override fun invoke(
         workspaceId: WorkspaceId,
-        req: ExtensionCreateRequest,
-        responseHandler: (ExtensionCreateRequested) -> T
-    ): T {
+        req: ExtensionCreateRequest
+    ): ExtensionCreateRequested {
         return ExtensionCreateRequested(
             id = generateDomainId(::RequestId),
             status = Submitted,
@@ -64,20 +61,15 @@ class ExtensionAdapter(
             codeId = generateDomainId(::CodeId),
             code = req.code
 
-        ).also(requestCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue)
     }
 
-    override fun <T : Any> invoke(extId: ExtensionId, responseHandler: (Extension, Code) -> T): T {
-        val ext = extensionQueryRepository.get(extId)
-        val code = codeQueryRepository.get(ext.code.id)
-        return responseHandler(ext, code)
-    }
+    override fun invoke(extId: ExtensionId): Extension = extensionQueryRepository.get(extId)
 
-    override fun <T : Any> invoke(
+    override fun invoke(
         extId: ExtensionId,
-        req: ExtensionUpdateRequest,
-        responseHandler: (ExtensionUpdateRequested) -> T
-    ): T {
+        req: ExtensionUpdateRequest
+    ): ExtensionUpdateRequested {
         ensureExtensionExists(extId)
         return ExtensionUpdateRequested(
             id = generateDomainId(::RequestId),
@@ -86,15 +78,10 @@ class ExtensionAdapter(
             extensionId = extId,
             name = req.name,
             code = req.code
-        ).also(requestCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue)
     }
 
-    override fun <T : Any> invoke(
-        query: ExtensionQuery,
-        responseHandler: (List<Extension>) -> T
-    ): T {
-        return responseHandler(extensionQueryRepository.list(query))
-    }
+    override fun invoke(query: ExtensionQuery): List<Extension> = extensionQueryRepository.list(query)
 
     private fun ensureExtensionExists(extId: ExtensionId) {
         extensionQueryRepository.get(extId)

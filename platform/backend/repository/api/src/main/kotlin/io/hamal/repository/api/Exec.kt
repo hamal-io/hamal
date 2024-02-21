@@ -83,11 +83,9 @@ interface ExecQueryRepository {
     )
 }
 
-sealed class Exec : DomainObject<ExecId> {
+sealed class Exec : DomainObject<ExecId>, HasNamespaceId, HasWorkspaceId {
     abstract val cmdId: CmdId
     abstract override val id: ExecId
-    abstract val namespaceId: NamespaceId
-    abstract val workspaceId: WorkspaceId
     abstract val status: ExecStatus
 
     abstract val correlation: Correlation?

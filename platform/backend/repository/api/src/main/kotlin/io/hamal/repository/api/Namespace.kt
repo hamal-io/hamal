@@ -10,9 +10,11 @@ data class Namespace(
     val cmdId: CmdId,
     override val id: NamespaceId,
     override val updatedAt: UpdatedAt,
-    val workspaceId: WorkspaceId,
+    override val workspaceId: WorkspaceId,
     val name: NamespaceName
-) : DomainObject<NamespaceId>
+) : DomainObject<NamespaceId>, HasNamespaceId, HasWorkspaceId {
+    override val namespaceId: NamespaceId get() = id
+}
 
 
 interface NamespaceRepository : NamespaceCmdRepository, NamespaceQueryRepository

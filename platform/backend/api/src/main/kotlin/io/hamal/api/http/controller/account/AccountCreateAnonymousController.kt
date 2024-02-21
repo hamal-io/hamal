@@ -6,7 +6,6 @@ import io.hamal.core.adapter.AccountCreateAnonymousPort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain.request.AccountCreateAnonymousRequest
-import io.hamal.lib.domain.request.Requested
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.sdk.api.ApiRequested
 import org.springframework.http.ResponseEntity
@@ -24,6 +23,6 @@ internal class AccountCreateAnonymousController(
         val id = generateDomainId(::AccountId)
         createAccount(object : AccountCreateAnonymousRequest {
             override val id = id
-        }, Requested::accepted)
+        }).accepted()
     }
 }

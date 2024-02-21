@@ -1,6 +1,8 @@
 package io.hamal.api.http.controller.func
 
+import io.hamal.core.adapter.CodeGetPort
 import io.hamal.core.adapter.FuncGetPort
+import io.hamal.core.adapter.NamespaceGetPort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sdk.api.ApiFunc
@@ -16,12 +18,21 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 internal class FuncGetController(
     private val retry: Retry,
-    private val getFunc: FuncGetPort
+    private val funcGet: FuncGetPort,
+    private val codeGet: CodeGetPort,
+    private val namespaceGet: NamespaceGetPort
 ) {
 
     @GetMapping("/v1/funcs/{funcId}")
-    fun getFunc(@PathVariable("funcId") funcId: FuncId): ResponseEntity<ApiFunc> = retry {
-        getFunc(funcId, ::assemble)
+    fun get(@PathVariable("funcId") funcId: FuncId): ResponseEntity<ApiFunc> = retry {
+        funcGet(funcId).let { func ->
+            assemble(
+                func,
+                codeGet(func.code.id, func.code.version),
+                codeGet(func.deployment.id, func.deployment.version),
+                namespaceGet(func.namespaceId)
+            )
+        }
     }
 
     private fun assemble(func: Func, current: Code, deployed: Code, namespace: Namespace) =

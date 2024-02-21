@@ -1,7 +1,7 @@
 package io.hamal.lib.sdk.api
 
 import io.hamal.lib.domain._enum.RequestStatus
-import io.hamal.lib.domain.request.NamespaceCreateRequest
+import io.hamal.lib.domain.request.NamespaceAppendRequest
 import io.hamal.lib.domain.request.NamespaceUpdateRequest
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceName
@@ -13,7 +13,7 @@ import io.hamal.lib.sdk.fold
 
 data class ApiNamespaceAppendRequest(
     override val name: NamespaceName
-) : NamespaceCreateRequest
+) : NamespaceAppendRequest
 
 data class ApiNamespaceAppendRequested(
     override val id: RequestId,

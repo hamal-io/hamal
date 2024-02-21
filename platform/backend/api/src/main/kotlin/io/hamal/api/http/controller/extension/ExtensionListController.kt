@@ -12,20 +12,20 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class ExtensionListController(private val listExt: ExtensionListPort) {
+internal class ExtensionListController(private val extensionList: ExtensionListPort) {
     @GetMapping("/v1/extensions")
     fun listExtensions(
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: ExtensionId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit,
         @RequestParam(required = false, name = "workspace_ids", defaultValue = "") workspaceIds: List<WorkspaceId>
     ): ResponseEntity<ApiExtensionList> {
-        return listExt(
+        return extensionList(
             ExtensionQuery(
                 afterId = afterId,
                 limit = limit,
                 workspaceIds = workspaceIds
             )
-        ) {
+        ).let {
             ResponseEntity.ok(
                 ApiExtensionList(
                     it.map {

@@ -10,13 +10,10 @@ import io.hamal.lib.domain._enum.TopicType
 import io.hamal.lib.domain.vo.*
 import java.lang.reflect.Type
 
-sealed class Topic : DomainObject<TopicId> {
+sealed class Topic : DomainObject<TopicId>, HasNamespaceId, HasWorkspaceId {
     abstract val cmdId: CmdId
     abstract val name: TopicName
     abstract val logTopicId: LogTopicId
-    abstract val workspaceId: WorkspaceId
-    abstract val namespaceId: NamespaceId
-
     abstract val type: TopicType
 
     object Adapter : JsonAdapter<Topic> {

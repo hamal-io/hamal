@@ -45,6 +45,3 @@ interface FeedbackQueryRepository {
     )
 }
 
-data class FeedbackList(
-    val feedbacks: List<Feedback>
-)
