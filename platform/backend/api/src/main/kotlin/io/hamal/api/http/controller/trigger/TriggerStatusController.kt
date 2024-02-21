@@ -1,7 +1,7 @@
 package io.hamal.api.http.controller.trigger
 
 import io.hamal.api.http.controller.accepted
-import io.hamal.core.adapter.TriggerSetStatusPort
+import io.hamal.core.adapter.trigger.TriggerSetStatusPort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain._enum.TriggerStatus.Active
 import io.hamal.lib.domain._enum.TriggerStatus.Inactive

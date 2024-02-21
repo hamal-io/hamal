@@ -433,7 +433,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
         }
 
         @Test
-        fun `Tries to create trigger but topic does not exists`() {
+        fun `Tries to create trigger but func does not exists`() {
             val hookId = awaitCompleted(createHook(HookName("hook-name"))).hookId
 
             val creationResponse = httpTemplate.post("/v1/namespaces/1/triggers").body(
