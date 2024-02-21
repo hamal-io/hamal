@@ -1,8 +1,8 @@
 package io.hamal.api.http.controller.func
 
-import io.hamal.core.adapter.code.CodeGetPort
-import io.hamal.core.adapter.FuncGetPort
 import io.hamal.core.adapter.NamespaceGetPort
+import io.hamal.core.adapter.code.CodeGetPort
+import io.hamal.core.adapter.func.FuncGetPort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sdk.api.ApiFunc

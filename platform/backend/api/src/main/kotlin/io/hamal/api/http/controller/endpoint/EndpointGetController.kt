@@ -1,7 +1,7 @@
 package io.hamal.api.http.controller.endpoint
 
-import io.hamal.core.adapter.EndpointGetPort
-import io.hamal.core.adapter.FuncGetPort
+import io.hamal.core.adapter.endpoint.EndpointGetPort
+import io.hamal.core.adapter.func.FuncGetPort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.EndpointId
 import io.hamal.lib.sdk.api.ApiEndpoint
@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 internal class EndpointGetController(
     private val retry: Retry,
-    private val getEndpoint: EndpointGetPort,
+    private val endpointGet: EndpointGetPort,
     private val funcGet: FuncGetPort
 ) {
 
     @GetMapping("/v1/endpoints/{endpointId}")
     fun get(@PathVariable("endpointId") endpointId: EndpointId): ResponseEntity<ApiEndpoint> = retry {
-        getEndpoint(endpointId).let { endpoint ->
+        endpointGet(endpointId).let { endpoint ->
             assemble(endpoint, funcGet(endpoint.funcId))
         }
     }

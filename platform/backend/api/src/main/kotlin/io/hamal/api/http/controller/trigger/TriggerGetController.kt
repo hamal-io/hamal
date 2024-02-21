@@ -1,6 +1,10 @@
 package io.hamal.api.http.controller.trigger
 
-import io.hamal.core.adapter.*
+import io.hamal.core.adapter.HookGetPort
+import io.hamal.core.adapter.NamespaceGetPort
+import io.hamal.core.adapter.TopicGetPort
+import io.hamal.core.adapter.TriggerGetPort
+import io.hamal.core.adapter.func.FuncGetPort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.sdk.api.ApiTrigger

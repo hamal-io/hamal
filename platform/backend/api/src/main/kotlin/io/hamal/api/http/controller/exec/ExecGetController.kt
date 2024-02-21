@@ -1,7 +1,7 @@
 package io.hamal.api.http.controller.exec
 
 import io.hamal.core.adapter.ExecGetPort
-import io.hamal.core.adapter.FuncGetPort
+import io.hamal.core.adapter.func.FuncGetPort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.sdk.api.ApiExec

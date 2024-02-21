@@ -1,7 +1,7 @@
 package io.hamal.api.http.controller.state
 
-import io.hamal.core.adapter.FuncGetPort
 import io.hamal.core.adapter.StateGetPort
+import io.hamal.core.adapter.func.FuncGetPort
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sdk.api.ApiCorrelatedState

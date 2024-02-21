@@ -12,15 +12,6 @@ interface FuncCreatePort {
     operator fun invoke(namespaceId: NamespaceId, req: FuncCreateRequest): FuncCreateRequested
 }
 
-fun interface FuncGetPort {
-    operator fun invoke(funcId: FuncId): Func
-}
-
-@Component
-class FuncGetAdapter(private val funcQueryRepository: FuncQueryRepository) : FuncGetPort {
-    override fun invoke(funcId: FuncId): Func = funcQueryRepository.get(funcId)
-}
-
 interface FuncInvokePort {
     operator fun invoke(funcId: FuncId, req: FuncInvokeRequest, invocation: Invocation): ExecInvokeRequested
 }
