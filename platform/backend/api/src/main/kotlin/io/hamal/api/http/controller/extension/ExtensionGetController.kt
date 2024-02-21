@@ -1,7 +1,7 @@
 package io.hamal.api.http.controller.extension
 
 import io.hamal.core.adapter.code.CodeGetPort
-import io.hamal.core.adapter.ExtensionGetPort
+import io.hamal.core.adapter.extension.ExtensionGetPort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.ExtensionId
 import io.hamal.lib.sdk.api.ApiExtension

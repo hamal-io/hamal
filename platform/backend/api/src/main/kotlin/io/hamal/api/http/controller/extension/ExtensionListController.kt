@@ -1,6 +1,6 @@
 package io.hamal.api.http.controller.extension
 
-import io.hamal.core.adapter.ExtensionListPort
+import io.hamal.core.adapter.extension.ExtensionListPort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.ExtensionId
 import io.hamal.lib.domain.vo.WorkspaceId
