@@ -23,7 +23,7 @@ internal class NamespaceGetController(
     }
 
     private fun assemble(node: TreeNode<NamespaceId>): ApiNamespace {
-        return getNamespace(node.value) { namespace ->
+        return getNamespace(node.value).let { namespace ->
             ApiNamespace(
                 id = namespace.id,
                 name = namespace.name

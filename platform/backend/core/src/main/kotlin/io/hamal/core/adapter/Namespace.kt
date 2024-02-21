@@ -23,7 +23,7 @@ interface NamespaceCreatePort {
 }
 
 interface NamespaceGetPort {
-    operator fun <T : Any> invoke(namespaceId: NamespaceId, responseHandler: (Namespace) -> T): T
+    operator fun invoke(namespaceId: NamespaceId): Namespace
 }
 
 interface NamespaceListPort {
@@ -64,8 +64,7 @@ class NamespaceAdapter(
         ).also(requestCmdRepository::queue).let(responseHandler)
     }
 
-    override fun <T : Any> invoke(namespaceId: NamespaceId, responseHandler: (Namespace) -> T): T =
-        responseHandler(namespaceQueryRepository.get(namespaceId))
+    override fun invoke(namespaceId: NamespaceId): Namespace = namespaceQueryRepository.get(namespaceId)
 
     override fun <T : Any> invoke(query: NamespaceQuery, responseHandler: (List<Namespace>) -> T): T =
         responseHandler(namespaceQueryRepository.list(query))

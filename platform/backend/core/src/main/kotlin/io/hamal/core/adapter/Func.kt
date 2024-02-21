@@ -9,11 +9,10 @@ import io.hamal.repository.api.FuncQueryRepository.FuncQuery
 import org.springframework.stereotype.Component
 
 interface FuncCreatePort {
-    operator fun <T : Any> invoke(
+    operator fun invoke(
         namespaceId: NamespaceId,
-        req: FuncCreateRequest,
-        responseHandler: (FuncCreateRequested) -> T
-    ): T
+        req: FuncCreateRequest
+    ): FuncCreateRequested
 }
 
 interface FuncGetPort {
@@ -63,15 +62,16 @@ class FuncAdapter(
     private val funcQueryRepository: FuncQueryRepository,
     private val generateDomainId: GenerateId,
     private val namespaceQueryRepository: NamespaceQueryRepository,
+    private val namespaceGet: NamespaceGetPort,
     private val requestCmdRepository: RequestCmdRepository
 ) : FuncPort {
 
-    override fun <T : Any> invoke(
+    override fun invoke(
         namespaceId: NamespaceId,
         req: FuncCreateRequest,
-        responseHandler: (FuncCreateRequested) -> T
-    ): T {
-        val namespace = namespaceQueryRepository.get(namespaceId)
+    ): FuncCreateRequested {
+        val namespace = namespaceGet(namespaceId)
+
         return FuncCreateRequested(
             id = generateDomainId(::RequestId),
             status = RequestStatus.Submitted,
@@ -82,7 +82,7 @@ class FuncAdapter(
             inputs = req.inputs,
             codeId = generateDomainId(::CodeId),
             code = req.code
-        ).also(requestCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue)
     }
 
     override fun <T : Any> invoke(funcId: FuncId, responseHandler: (Func, Code, Code, Namespace) -> T): T {
