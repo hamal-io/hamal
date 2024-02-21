@@ -7,14 +7,11 @@ import org.springframework.stereotype.Component
 
 
 interface RequestGetPort {
-    operator fun <T : Any> invoke(reqId: RequestId, responseHandler: (Requested) -> T): T
+    operator fun invoke(reqId: RequestId): Requested
 }
 
 interface RequestListPort {
-    operator fun <T : Any> invoke(
-        query: RequestQueryRepository.RequestQuery,
-        responseHandler: (List<Requested>) -> T
-    ): T
+    operator fun invoke(query: RequestQueryRepository.RequestQuery): List<Requested>
 }
 
 interface RequestPort : RequestGetPort, RequestListPort
@@ -22,11 +19,8 @@ interface RequestPort : RequestGetPort, RequestListPort
 @Component
 class RequestAdapter(private val requestQueryRepository: RequestQueryRepository) : RequestPort {
 
-    override fun <T : Any> invoke(reqId: RequestId, responseHandler: (Requested) -> T): T =
-        responseHandler(requestQueryRepository.get(reqId))
+    override fun invoke(reqId: RequestId): Requested = requestQueryRepository.get(reqId)
 
-    override operator fun <T : Any> invoke(
-        query: RequestQueryRepository.RequestQuery,
-        responseHandler: (List<Requested>) -> T
-    ): T = responseHandler(requestQueryRepository.list(query))
+    override operator fun invoke(query: RequestQueryRepository.RequestQuery): (List<Requested>) =
+        requestQueryRepository.list(query)
 }

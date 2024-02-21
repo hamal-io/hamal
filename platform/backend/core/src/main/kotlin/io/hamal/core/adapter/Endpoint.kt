@@ -2,40 +2,40 @@ package io.hamal.core.adapter
 
 import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
+import io.hamal.lib.domain.request.EndpointCreateRequest
+import io.hamal.lib.domain.request.EndpointCreateRequested
+import io.hamal.lib.domain.request.EndpointUpdateRequest
+import io.hamal.lib.domain.request.EndpointUpdateRequested
 import io.hamal.lib.domain.vo.EndpointId
 import io.hamal.lib.domain.vo.NamespaceId
-import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.RequestId
-import io.hamal.repository.api.*
+import io.hamal.repository.api.Endpoint
+import io.hamal.repository.api.EndpointQueryRepository
 import io.hamal.repository.api.EndpointQueryRepository.EndpointQuery
-import io.hamal.lib.domain.request.EndpointCreateRequested
-import io.hamal.lib.domain.request.EndpointUpdateRequested
-import io.hamal.lib.domain.request.EndpointCreateRequest
-import io.hamal.lib.domain.request.EndpointUpdateRequest
+import io.hamal.repository.api.FuncQueryRepository
+import io.hamal.repository.api.RequestCmdRepository
 import org.springframework.stereotype.Component
 
 interface EndpointCreatePort {
-    operator fun <T : Any> invoke(
+    operator fun invoke(
         namespaceId: NamespaceId,
-        req: EndpointCreateRequest,
-        responseHandler: (EndpointCreateRequested) -> T
-    ): T
+        req: EndpointCreateRequest
+    ): EndpointCreateRequested
 }
 
 interface EndpointGetPort {
-    operator fun <T : Any> invoke(endpointId: EndpointId, responseHandler: (Endpoint, Func) -> T): T
+    operator fun invoke(endpointId: EndpointId): Endpoint
 }
 
 interface EndpointListPort {
-    operator fun <T : Any> invoke(query: EndpointQuery, responseHandler: (List<Endpoint>, Map<FuncId, Func>) -> T): T
+    operator fun invoke(query: EndpointQuery): List<Endpoint>
 }
 
 interface EndpointUpdatePort {
-    operator fun <T : Any> invoke(
+    operator fun invoke(
         endpointId: EndpointId,
-        req: EndpointUpdateRequest,
-        responseHandler: (EndpointUpdateRequested) -> T
-    ): T
+        req: EndpointUpdateRequest
+    ): EndpointUpdateRequested
 }
 
 interface EndpointPort : EndpointCreatePort, EndpointGetPort, EndpointListPort, EndpointUpdatePort
@@ -47,11 +47,10 @@ class EndpointAdapter(
     private val funcQueryRepository: FuncQueryRepository,
     private val requestCmdRepository: RequestCmdRepository
 ) : EndpointPort {
-    override fun <T : Any> invoke(
+    override fun invoke(
         namespaceId: NamespaceId,
         req: EndpointCreateRequest,
-        responseHandler: (EndpointCreateRequested) -> T
-    ): T {
+    ): EndpointCreateRequested {
         val func = funcQueryRepository.get(req.funcId)
         require(namespaceId == func.namespaceId) { "Endpoint and Func must share the same Namespace" }
         return EndpointCreateRequested(
@@ -62,30 +61,19 @@ class EndpointAdapter(
             funcId = func.id,
             name = req.name,
             method = req.method
-        ).also(requestCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue)
     }
 
-    override fun <T : Any> invoke(endpointId: EndpointId, responseHandler: (Endpoint, Func) -> T): T {
-        val endpoint = endpointQueryRepository.get(endpointId)
-        val funcs = funcQueryRepository.get(endpoint.funcId)
-        return responseHandler(endpoint, funcs)
-    }
+    override fun invoke(endpointId: EndpointId): Endpoint = endpointQueryRepository.get(endpointId)
 
-    override fun <T : Any> invoke(
-        query: EndpointQuery,
-        responseHandler: (List<Endpoint>, Map<FuncId, Func>) -> T
-    ): T {
-        val endpoints = endpointQueryRepository.list(query)
-        val funcs = funcQueryRepository.list(endpoints.map(Endpoint::funcId))
-            .associateBy(Func::id)
-        return responseHandler(endpoints, funcs)
-    }
+    override fun invoke(
+        query: EndpointQuery
+    ): List<Endpoint> = endpointQueryRepository.list(query)
 
-    override fun <T : Any> invoke(
+    override fun invoke(
         endpointId: EndpointId,
-        req: EndpointUpdateRequest,
-        responseHandler: (EndpointUpdateRequested) -> T
-    ): T {
+        req: EndpointUpdateRequest
+    ): EndpointUpdateRequested {
         val endpoint = endpointQueryRepository.get(endpointId)
 
         req.funcId?.let { funcId ->
@@ -101,6 +89,6 @@ class EndpointAdapter(
             funcId = req.funcId ?: endpoint.funcId,
             name = req.name,
             method = req.method
-        ).also(requestCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue)
     }
 }

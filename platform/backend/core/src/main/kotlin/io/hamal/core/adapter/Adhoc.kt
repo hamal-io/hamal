@@ -11,11 +11,10 @@ import org.springframework.stereotype.Component
 
 
 interface AdhocInvokePort {
-    operator fun <T : Any> invoke(
+    operator fun invoke(
         namespaceId: NamespaceId,
-        req: AdhocInvokeRequest,
-        responseHandler: (ExecInvokeRequested) -> T
-    ): T
+        req: AdhocInvokeRequest
+    ): ExecInvokeRequested
 }
 
 interface AdhocPort : AdhocInvokePort
@@ -26,11 +25,10 @@ class AdhocAdapter(
     private val namespaceQueryRepository: NamespaceQueryRepository,
     private val requestCmdRepository: RequestCmdRepository
 ) : AdhocPort {
-    override operator fun <T : Any> invoke(
+    override operator fun invoke(
         namespaceId: NamespaceId,
-        req: AdhocInvokeRequest,
-        responseHandler: (ExecInvokeRequested) -> T
-    ): T {
+        req: AdhocInvokeRequest
+    ): ExecInvokeRequested {
         val namespace = namespaceQueryRepository.get(namespaceId)
         return ExecInvokeRequested(
             id = generateDomainId(::RequestId),
@@ -43,6 +41,6 @@ class AdhocAdapter(
             funcId = null,
             correlationId = null,
             invocation = Invocation.Adhoc
-        ).also(requestCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue)
     }
 }

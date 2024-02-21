@@ -3,7 +3,7 @@ package io.hamal.core.adapter
 import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.NamespaceAppendRequested
-import io.hamal.lib.domain.request.NamespaceCreateRequest
+import io.hamal.lib.domain.request.NamespaceAppendRequest
 import io.hamal.lib.domain.request.NamespaceUpdateRequest
 import io.hamal.lib.domain.request.NamespaceUpdateRequested
 import io.hamal.lib.domain.vo.NamespaceId
@@ -15,11 +15,7 @@ import io.hamal.repository.api.RequestCmdRepository
 import org.springframework.stereotype.Component
 
 interface NamespaceCreatePort {
-    operator fun <T : Any> invoke(
-        parentId: NamespaceId,
-        req: NamespaceCreateRequest,
-        responseHandler: (NamespaceAppendRequested) -> T
-    ): T
+    operator fun invoke(parentId: NamespaceId, req: NamespaceAppendRequest): NamespaceAppendRequested
 }
 
 interface NamespaceGetPort {
@@ -27,16 +23,12 @@ interface NamespaceGetPort {
 }
 
 interface NamespaceListPort {
-    operator fun <T : Any> invoke(query: NamespaceQuery, responseHandler: (List<Namespace>) -> T): T
+    operator fun invoke(query: NamespaceQuery): List<Namespace>
 }
 
 
 interface NamespaceUpdatePort {
-    operator fun <T : Any> invoke(
-        namespaceId: NamespaceId,
-        req: NamespaceUpdateRequest,
-        responseHandler: (NamespaceUpdateRequested) -> T
-    ): T
+    operator fun invoke(namespaceId: NamespaceId, req: NamespaceUpdateRequest): NamespaceUpdateRequested
 }
 
 interface NamespacePort : NamespaceCreatePort, NamespaceGetPort, NamespaceListPort, NamespaceUpdatePort
@@ -48,11 +40,7 @@ class NamespaceAdapter(
     private val requestCmdRepository: RequestCmdRepository
 ) : NamespacePort {
 
-    override fun <T : Any> invoke(
-        parentId: NamespaceId,
-        req: NamespaceCreateRequest,
-        responseHandler: (NamespaceAppendRequested) -> T
-    ): T {
+    override fun invoke(parentId: NamespaceId, req: NamespaceAppendRequest): NamespaceAppendRequested {
         val parent = namespaceQueryRepository.get(parentId)
         return NamespaceAppendRequested(
             id = generateDomainId(::RequestId),
@@ -61,20 +49,14 @@ class NamespaceAdapter(
             namespaceId = generateDomainId(::NamespaceId),
             workspaceId = parent.workspaceId,
             name = req.name,
-        ).also(requestCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue)
     }
 
     override fun invoke(namespaceId: NamespaceId): Namespace = namespaceQueryRepository.get(namespaceId)
 
-    override fun <T : Any> invoke(query: NamespaceQuery, responseHandler: (List<Namespace>) -> T): T =
-        responseHandler(namespaceQueryRepository.list(query))
+    override fun invoke(query: NamespaceQuery): List<Namespace> = namespaceQueryRepository.list(query)
 
-
-    override operator fun <T : Any> invoke(
-        namespaceId: NamespaceId,
-        req: NamespaceUpdateRequest,
-        responseHandler: (NamespaceUpdateRequested) -> T
-    ): T {
+    override operator fun invoke(namespaceId: NamespaceId, req: NamespaceUpdateRequest): NamespaceUpdateRequested {
         ensureNamespaceExists(namespaceId)
         return NamespaceUpdateRequested(
             id = generateDomainId(::RequestId),
@@ -82,7 +64,7 @@ class NamespaceAdapter(
             workspaceId = namespaceQueryRepository.get(namespaceId).workspaceId,
             namespaceId = namespaceId,
             name = req.name,
-        ).also(requestCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue)
     }
 
     private fun ensureNamespaceExists(namespaceId: NamespaceId) {

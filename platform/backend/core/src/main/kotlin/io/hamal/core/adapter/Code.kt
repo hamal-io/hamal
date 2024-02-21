@@ -7,7 +7,7 @@ import io.hamal.repository.api.CodeQueryRepository
 import org.springframework.stereotype.Component
 
 interface CodeGetPort {
-    operator fun <T : Any> invoke(codeId: CodeId, codeVersion: CodeVersion?, responseHandler: (Code) -> T): T
+    operator fun invoke(codeId: CodeId, codeVersion: CodeVersion?): Code
 }
 
 interface CodePort : CodeGetPort
@@ -17,13 +17,13 @@ class CodeAdapter(
     private val codeQueryRepository: CodeQueryRepository
 ) : CodePort {
 
-    override fun <T : Any> invoke(codeId: CodeId, codeVersion: CodeVersion?, responseHandler: (Code) -> T): T {
+    override fun invoke(codeId: CodeId, codeVersion: CodeVersion?): Code {
         ensureCodeExists(codeId)
         return if (codeVersion != null) {
             ensureVersionExists(codeId, codeVersion)
-            responseHandler(codeQueryRepository.get(codeId, codeVersion))
+            codeQueryRepository.get(codeId, codeVersion)
         } else {
-            responseHandler(codeQueryRepository.get(codeId))
+            codeQueryRepository.get(codeId)
         }
 
     }

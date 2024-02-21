@@ -17,39 +17,23 @@ import io.hamal.repository.api.TopicQueryRepository.TopicQuery
 import org.springframework.stereotype.Component
 
 interface TopicAppendEventPort {
-    operator fun <T : Any> invoke(
-        req: TopicAppendEntryRequest,
-        responseHandler: (TopicAppendEventRequested) -> T
-    ): T
+    operator fun invoke(req: TopicAppendEntryRequest): TopicAppendEventRequested
 }
 
 interface TopicCreatePort {
-    operator fun <T : Any> invoke(
-        namespaceId: NamespaceId,
-        req: TopicCreateRequest,
-        responseHandler: (TopicCreateRequested) -> T
-    ): T
+    operator fun invoke(namespaceId: NamespaceId, req: TopicCreateRequest): TopicCreateRequested
 }
 
 interface TopicGetPort {
-    operator fun <T : Any> invoke(
-        topicId: TopicId,
-        responseHandler: (Topic) -> T
-    ): T
+    operator fun invoke(topicId: TopicId): Topic
 }
 
 interface TopicEventListPort {
-    operator fun <T : Any> invoke(
-        query: TopicEventQuery,
-        responseHandler: (List<TopicEvent>, Topic) -> T
-    ): T
+    operator fun invoke(query: TopicEventQuery): List<TopicEvent>
 }
 
 interface TopicListPort {
-    operator fun <T : Any> invoke(
-        query: TopicQuery,
-        responseHandler: (List<Topic>) -> T
-    ): T
+    operator fun invoke(query: TopicQuery): List<Topic>
 }
 
 interface TopicPort : TopicAppendEventPort, TopicCreatePort, TopicGetPort, TopicListPort, TopicEventListPort
@@ -58,29 +42,21 @@ interface TopicPort : TopicAppendEventPort, TopicCreatePort, TopicGetPort, Topic
 class TopicAdapter(
     private val topicRepository: TopicRepository,
     private val generateDomainId: GenerateId,
-    private val workspaceRepository: WorkspaceRepository,
     private val namespaceRepository: NamespaceRepository,
     private val requestCmdRepository: RequestCmdRepository
 ) : TopicPort {
 
-    override fun <T : Any> invoke(
-        req: TopicAppendEntryRequest,
-        responseHandler: (TopicAppendEventRequested) -> T
-    ): T {
+    override fun invoke(req: TopicAppendEntryRequest): TopicAppendEventRequested {
         topicRepository.get(req.topicId)
         return TopicAppendEventRequested(
             id = generateDomainId(::RequestId),
             status = Submitted,
             topicId = req.topicId,
             payload = req.payload
-        ).also(requestCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue)
     }
 
-    override fun <T : Any> invoke(
-        namespaceId: NamespaceId,
-        req: TopicCreateRequest,
-        responseHandler: (TopicCreateRequested) -> T
-    ): T {
+    override fun invoke(namespaceId: NamespaceId, req: TopicCreateRequest): TopicCreateRequested {
         if (req.type == TopicType.Internal) {
             throw IllegalArgumentException("Can not append internal topics")
         }
@@ -94,20 +70,12 @@ class TopicAdapter(
             namespaceId = namespace.id,
             name = req.name,
             type = req.type
-        ).also(requestCmdRepository::queue).let(responseHandler)
+        ).also(requestCmdRepository::queue)
     }
 
-    override fun <T : Any> invoke(topicId: TopicId, responseHandler: (Topic) -> T): T =
-        responseHandler(topicRepository.get(topicId))
+    override fun invoke(topicId: TopicId): Topic = topicRepository.get(topicId)
 
-    override fun <T : Any> invoke(query: TopicQuery, responseHandler: (List<Topic>) -> T): T =
-        responseHandler(topicRepository.list(query))
+    override fun invoke(query: TopicQuery): (List<Topic>) = topicRepository.list(query)
 
-    override fun <T : Any> invoke(
-        query: TopicEventQuery,
-        responseHandler: (List<TopicEvent>, Topic) -> T
-    ): T {
-        val topic = topicRepository.get(query.topicId)
-        return responseHandler(topicRepository.list(query), topic)
-    }
+    override fun invoke(query: TopicEventQuery): List<TopicEvent> = topicRepository.list(query)
 }
