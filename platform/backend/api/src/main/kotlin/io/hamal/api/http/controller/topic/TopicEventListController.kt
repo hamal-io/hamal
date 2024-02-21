@@ -1,7 +1,7 @@
 package io.hamal.api.http.controller.topic
 
-import io.hamal.core.adapter.TopicEventListPort
-import io.hamal.core.adapter.TopicGetPort
+import io.hamal.core.adapter.topic.TopicEventListPort
+import io.hamal.core.adapter.topic.TopicGetPort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.TopicEventId
 import io.hamal.lib.domain.vo.TopicId

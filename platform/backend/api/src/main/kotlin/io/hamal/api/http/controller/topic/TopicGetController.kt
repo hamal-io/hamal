@@ -1,6 +1,6 @@
 package io.hamal.api.http.controller.topic
 
-import io.hamal.core.adapter.TopicGetPort
+import io.hamal.core.adapter.topic.TopicGetPort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.sdk.api.ApiTopic

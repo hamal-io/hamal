@@ -1,7 +1,7 @@
 package io.hamal.api.http.controller.topic
 
 import io.hamal.api.http.controller.accepted
-import io.hamal.core.adapter.TopicEventAppendPort
+import io.hamal.core.adapter.topic.TopicEventAppendPort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.TopicEventPayload
 import io.hamal.lib.domain.vo.TopicId

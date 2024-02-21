@@ -1,7 +1,7 @@
 package io.hamal.api.http.controller.topic
 
-import io.hamal.core.adapter.TopicListPort
 import io.hamal.core.adapter.namespace_tree.NamespaceTreeGetSubTreePort
+import io.hamal.core.adapter.topic.TopicListPort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.TopicType.*
 import io.hamal.lib.domain.vo.NamespaceId

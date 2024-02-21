@@ -1,11 +1,11 @@
 package io.hamal.api.http.controller.trigger
 
-import io.hamal.core.adapter.TopicListPort
 import io.hamal.core.adapter.TriggerListPort
 import io.hamal.core.adapter.func.FuncListPort
 import io.hamal.core.adapter.hook.HookListPort
 import io.hamal.core.adapter.namespace.NamespaceListPort
 import io.hamal.core.adapter.namespace_tree.NamespaceTreeGetSubTreePort
+import io.hamal.core.adapter.topic.TopicListPort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.FuncId
