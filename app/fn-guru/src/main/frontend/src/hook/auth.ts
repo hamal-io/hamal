@@ -17,15 +17,31 @@ export const useAuth = () => {
     })
 }
 
+type ResetAuthAction = () => void
+export const useResetAuth = (): [ResetAuthAction] => {
+    const [_, setAuth] = useAuth()
+
+    const fn = useCallback(() => {
+        setAuth({...unauthorized})
+    }, [setAuth])
+
+    return [fn]
+}
+
+
 type LogoutAction = (abortController?: AbortController) => void
 export const useLogout = (): [LogoutAction, boolean, Error] => {
     const navigate = useNavigate()
-    const [auth, setAuth] = useAuth()
+    const [auth] = useAuth()
+    const [resetAuth] = useResetAuth()
     const [resetUiState] = useResetUiState()
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<Error | null>(null);
 
     const fn = useCallback((abortController?: AbortController) => {
+        resetAuth()
+        resetUiState()
+
         fetch(`${import.meta.env.VITE_BASE_URL}/v1/logout`, {
             method: "POST",
             headers: {
@@ -37,8 +53,6 @@ export const useLogout = (): [LogoutAction, boolean, Error] => {
         })
             .then(response => {
                 setLoading(false)
-                setAuth({...unauthorized})
-                resetUiState()
                 navigate("/", {replace: true})
             })
             .catch(error => {
@@ -49,7 +63,6 @@ export const useLogout = (): [LogoutAction, boolean, Error] => {
                 }
 
                 if (error.message === 'NetworkError when attempting to fetch resource.') {
-                    setAuth(null)
                     window.location.href = '/login'
                 }
             })

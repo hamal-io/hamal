@@ -1,18 +1,17 @@
-import React, {ReactNode} from 'react'
+import React, {ReactNode, useEffect} from 'react'
 import {useAuth} from "@/hook/auth.ts";
-import Feedback from "@/components/app/feedback.tsx";
 
 interface AuthenticatedProps {
     children: ReactNode;
 }
 
 const Authenticated: React.FC<AuthenticatedProps> = (props) => {
-    const [auth, setAuth] = useAuth()
-    if (!auth || auth.type === 'Unauthorized') {
-        window.location.href = "/"
-        setAuth(null)
-        return null
-    }
+    const [auth] = useAuth()
+    useEffect(() => {
+        if (!auth || auth.type === 'Unauthorized') {
+            window.location.href = "/"
+        }
+    }, [auth]);
     return (
         <main className="flex flex-col">
             {props.children}

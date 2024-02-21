@@ -6,8 +6,8 @@ import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sdk.api.ApiFunc
 import io.hamal.lib.sdk.api.ApiFunc.*
 import io.hamal.repository.api.Code
-import io.hamal.repository.api.Namespace
 import io.hamal.repository.api.Func
+import io.hamal.repository.api.Namespace
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -23,7 +23,6 @@ internal class FuncGetController(
     fun getFunc(@PathVariable("funcId") funcId: FuncId): ResponseEntity<ApiFunc> = retry {
         getFunc(funcId, ::assemble)
     }
-
 
     private fun assemble(func: Func, current: Code, deployed: Code, namespace: Namespace) =
         ResponseEntity.ok(
