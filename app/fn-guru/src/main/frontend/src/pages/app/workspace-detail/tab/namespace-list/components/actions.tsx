@@ -1,4 +1,4 @@
-import {FC, useState} from "react";
+import {FC, useEffect, useState} from "react";
 import {
     DropdownMenu,
     DropdownMenuContent, DropdownMenuItem,
@@ -13,24 +13,24 @@ import Append from "@/pages/app/workspace-detail/tab/namespace-list/components/a
 import {Dialog, DialogTrigger} from "@/components/ui/dialog.tsx";
 import {Plus} from "lucide-react";
 import Update from "@/pages/app/workspace-detail/tab/namespace-list/components/update.tsx";
+import {NamespaceListItem} from "@/types";
 
 
-type Props = { name: string, namespaceId: string, parentId: string }
-const NamespaceActions: FC<Props> = ({name, namespaceId, parentId}) => {
+type Props = {
+    item: NamespaceListItem,
+}
+const NamespaceActions: FC<Props> = ({item}) => {
     const [open, setOpen] = useState(false);
     const [dialogContent, setDialogContent] = useState(null);
 
+
     const closeDialog = () => setOpen(false)
-    const handleDialog = (type: string) => {
-        if (type === "rename") {
-            setDialogContent(<Update currName={name} namespaceId={namespaceId} onClose={closeDialog}></Update>)
-        } else if (type === "append") {
-            setDialogContent(<Append parentId={parentId} onClose={closeDialog}></Append>)
-        } else {
-            console.log("no good")
+
+    useEffect(() => {
+        if (dialogContent) {
+            setOpen(true)
         }
-        setOpen(true)
-    }
+    }, [dialogContent]);
 
     return (
         <>
@@ -45,13 +45,19 @@ const NamespaceActions: FC<Props> = ({name, namespaceId, parentId}) => {
                     <DropdownMenuSeparator/>
                     <DropdownMenuItem
                         onClick={() => {
-                            handleDialog("rename")
+                            console.log("not implemented")
+                        }}>
+                        Choose
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                        onClick={() => {
+                            setDialogContent(<Update item={item} onClose={closeDialog}></Update>)
                         }}>
                         Rename
                     </DropdownMenuItem>
                     <DropdownMenuItem
                         onClick={() => {
-                            handleDialog("append")
+                            setDialogContent(<Append parentId={item.parentId} onClose={closeDialog}></Append>)
                         }}>
                         Append
                     </DropdownMenuItem>

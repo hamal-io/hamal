@@ -19,14 +19,15 @@ import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {useNamespaceAppend, useNamespaceUpdate} from "@/hook";
 import Append from "@/pages/app/workspace-detail/tab/namespace-list/components/append.tsx";
+import {NamespaceListItem} from "@/types";
 
 
 const formSchema = z.object({
     name: z.string().min(2).max(50),
 })
 
-type Props = { currName: string, namespaceId: string, onClose: () => void }
-const Update: FC<Props> = ({currName, namespaceId, onClose}) => {
+type Props = { item: NamespaceListItem, onClose: () => void }
+const Update: FC<Props> = ({item, onClose}) => {
     const [updateNamespace, updateSubmitted] = useNamespaceUpdate()
     const [isLoading, setLoading] = useState(false)
 
@@ -40,7 +41,7 @@ const Update: FC<Props> = ({currName, namespaceId, onClose}) => {
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setLoading(true)
         try {
-            updateNamespace(namespaceId, values.name)
+            updateNamespace(item.id, values.name)
         } catch (e) {
             console.error(e)
         } finally {
@@ -68,11 +69,8 @@ const Update: FC<Props> = ({currName, namespaceId, onClose}) => {
                                 <FormItem>
                                     <FormLabel>Name</FormLabel>
                                     <FormControl>
-                                        <Input placeholder={currName} {...field} />
+                                        <Input placeholder={item.name} {...field} />
                                     </FormControl>
-                                    <FormDescription>
-
-                                    </FormDescription>
                                     <FormMessage/>
                                 </FormItem>
                             )}
