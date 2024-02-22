@@ -1,7 +1,7 @@
 package io.hamal.core.adapter.func
 
-import io.hamal.core.adapter.request.RequestEnqueuePort
 import io.hamal.core.adapter.namespace.NamespaceGetPort
+import io.hamal.core.adapter.request.RequestEnqueuePort
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.FuncCreateRequest

@@ -1,7 +1,7 @@
 package io.hamal.api.http.controller.workspace
 
-import io.hamal.api.http.auth.AuthContextHolder
 import io.hamal.core.adapter.workspace.WorkspaceListPort
+import io.hamal.core.security.SecurityContext
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.sdk.api.ApiWorkspaceList
 import io.hamal.repository.api.WorkspaceQueryRepository.WorkspaceQuery
@@ -18,7 +18,7 @@ internal class WorkspaceListController(
         return workspaceList(
             WorkspaceQuery(
                 limit = Limit.all,
-                accountId = listOf(AuthContextHolder.get().accountId)
+                accountId = listOf(SecurityContext.currentAccountId)
             )
         ).let { workspaces ->
             ResponseEntity.ok(

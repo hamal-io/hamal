@@ -18,14 +18,18 @@ class RequestInvoker private constructor(
     override fun onApplicationEvent(event: ContextRefreshedEvent) {
         async.atFixedRate(1.milliseconds) {
             requestCmdRepository.next(Limit(10))
-                .forEach { request ->
+                .forEach { requested ->
                     try {
-                        val handleRequest = requestRegistry[request::class]
-                        handleRequest(request)
-                        requestCmdRepository.complete(request.id)
+                        val handleRequested = requestRegistry[requested::class]
+
+//                        SecurityContext.with(TODO()) {
+                            handleRequested(requested)
+//                        }
+
+                        requestCmdRepository.complete(requested.id)
                     } catch (t: Throwable) {
                         t.printStackTrace()
-                        requestCmdRepository.fail(request.id)
+                        requestCmdRepository.fail(requested.id)
                     }
                 }
         }
