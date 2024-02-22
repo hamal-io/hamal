@@ -18,7 +18,7 @@ internal class WorkspaceListController(
         return workspaceList(
             WorkspaceQuery(
                 limit = Limit.all,
-                accountId = listOf(SecurityContext.currentAccountId)
+                accountIds = listOf(SecurityContext.currentAccountId)
             )
         ).let { workspaces ->
             ResponseEntity.ok(

@@ -6,6 +6,10 @@ import io.hamal.repository.api.Auth
 
 object SecurityContext {
 
+    fun set(auth: Auth) {
+        store.set(auth)
+    }
+
     fun <T : Any> with(auth: Auth, action: () -> T): T {
         try {
             store.set(auth)
@@ -14,8 +18,6 @@ object SecurityContext {
             store.remove()
         }
     }
-
-    private val store = ThreadLocal<Auth?>()
 
     val current: Auth get() = store.get() ?: Auth.Anonymous
 
@@ -29,4 +31,7 @@ object SecurityContext {
             }
             currentAuth.accountId
         }
+
+    private val store = ThreadLocal<Auth?>()
+
 }

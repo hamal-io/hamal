@@ -30,6 +30,7 @@ object WorkspaceCurrentProjection {
             .map { it.value }
             .reversed()
             .asSequence()
+            .filter { if (query.accountIds.isEmpty()) true else query.accountIds.contains(it.creatorId) }
             .dropWhile { it.id >= query.afterId }
             .take(query.limit.value)
             .toList()
@@ -41,6 +42,7 @@ object WorkspaceCurrentProjection {
                 .map { it.value }
                 .reversed()
                 .asSequence()
+                .filter { if (query.accountIds.isEmpty()) true else query.accountIds.contains(it.creatorId) }
                 .dropWhile { it.id >= query.afterId }
                 .count()
                 .toLong()

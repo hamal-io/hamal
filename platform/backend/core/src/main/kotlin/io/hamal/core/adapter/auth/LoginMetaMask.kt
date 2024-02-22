@@ -69,7 +69,7 @@ class AuthLoginMetaMaskAdapter(
                 workspaceIds = workspaceList(
                     WorkspaceQuery(
                         limit = Limit.all,
-                        accountId = listOf(auth.accountId)
+                        accountIds = listOf(auth.accountId)
                     )
                 ).map(Workspace::id),
                 token = generateToken(),

@@ -197,6 +197,27 @@ internal class WorkspaceRepositoryTest : AbstractUnitTest() {
     inner class ListAndCountTest {
 
         @TestFactory
+        fun `By account ids`() = runWith(WorkspaceRepository::class) {
+            setup()
+
+            val query = WorkspaceQuery(
+                limit = Limit.all,
+                accountIds = listOf(
+                    AccountId(4),
+                    AccountId(5)
+                )
+            )
+
+            assertThat(count(query), equalTo(Count(2)))
+
+            val result = list(query)
+            assertThat(result, hasSize(2))
+            assertThat(result[0].id, equalTo(WorkspaceId(4)))
+            assertThat(result[1].id, equalTo(WorkspaceId(3)))
+        }
+
+
+        @TestFactory
         fun `By ids`() = runWith(WorkspaceRepository::class) {
             setup()
 

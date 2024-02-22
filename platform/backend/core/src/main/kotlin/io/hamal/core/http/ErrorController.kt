@@ -87,6 +87,7 @@ internal class ErrorController {
         val statusCode = when (toHandle) {
             is IllegalArgumentException, is MethodArgumentTypeMismatchException -> SC_BAD_REQUEST
             is NoSuchElementException -> SC_NOT_FOUND
+            is IllegalAccessError -> SC_NOT_FOUND
             is IllegalCallerException -> SC_FORBIDDEN
             else -> SC_INTERNAL_SERVER_ERROR
         }

@@ -63,7 +63,7 @@ class AuthLoginEmailAdapter(
             workspaceIds = workspaceList(
                 WorkspaceQuery(
                     limit = Limit.all,
-                    accountId = listOf(auth.accountId)
+                    accountIds = listOf(auth.accountId)
                 )
             ).map(Workspace::id),
             hash = encodedPassword,
