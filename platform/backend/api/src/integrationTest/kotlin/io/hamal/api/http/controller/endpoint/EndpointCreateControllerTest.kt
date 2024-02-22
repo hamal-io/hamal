@@ -22,7 +22,7 @@ internal class EndpointCreateControllerTest : EndpointBaseControllerTest() {
     fun `Create endpoint with default namespace id`() {
         val funcId = awaitCompleted(
             createFunc(
-                namespaceId = NamespaceId(1),
+                namespaceId = NamespaceId.root,
                 name = FuncName("func")
             )
         ).funcId
@@ -31,7 +31,7 @@ internal class EndpointCreateControllerTest : EndpointBaseControllerTest() {
             name = EndpointName("test-endpoint"),
             funcId = funcId,
             method = Patch,
-            namespaceId = NamespaceId(1)
+            namespaceId = NamespaceId.root
         )
         awaitCompleted(result)
 

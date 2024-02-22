@@ -90,7 +90,7 @@ init_connection(JNIEnv *env, jobject K) {
     lua_State *L;
     L = luaL_newstate();
 
-    lua_setallocf(L, memory_arena_reallocate, NULL);
+//    lua_setallocf(L, memory_arena_reallocate, NULL);
 
     lua_pushlightuserdata(L, (void *) K);
 

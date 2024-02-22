@@ -52,14 +52,14 @@ internal class NamespaceListControllerTest : NamespaceBaseControllerTest() {
             }
         )
 
-        val listResponse = httpTemplate.get("/v1/workspaces/1/namespaces")
+        val listResponse = httpTemplate.get("/v1/workspaces/539/namespaces")
             .parameter("limit", 12)
             .execute(ApiNamespaceList::class)
 
         assertThat(listResponse.namespaces, hasSize(12))
 
         listResponse.namespaces.forEachIndexed { idx, namespace ->
-            assertThat(namespace.parentId, equalTo(NamespaceId(1)))
+            assertThat(namespace.parentId, equalTo(NamespaceId(1337)))
             assertThat(namespace.name, equalTo(NamespaceName("hamal::namespace-${(20 - idx)}")))
         }
     }
@@ -73,7 +73,7 @@ internal class NamespaceListControllerTest : NamespaceBaseControllerTest() {
         awaitCompleted(requests)
         val fortyNinth = requests[49]
 
-        val listResponse = httpTemplate.get("/v1/workspaces/1/namespaces")
+        val listResponse = httpTemplate.get("/v1/workspaces/539/namespaces")
             .parameter("after_id", fortyNinth.namespaceId)
             .parameter("limit", 1)
             .execute(ApiNamespaceList::class)
@@ -81,7 +81,7 @@ internal class NamespaceListControllerTest : NamespaceBaseControllerTest() {
         assertThat(listResponse.namespaces, hasSize(1))
 
         val namespace = listResponse.namespaces.first()
-        assertThat(namespace.parentId, equalTo(NamespaceId(1)))
+        assertThat(namespace.parentId, equalTo(NamespaceId(1337)))
         assertThat(namespace.name, equalTo(NamespaceName("hamal::namespace-48")))
     }
 }

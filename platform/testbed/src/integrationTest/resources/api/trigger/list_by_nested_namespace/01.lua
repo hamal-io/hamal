@@ -27,7 +27,7 @@ sys.await_completed(fail_on_error(sys.triggers.create_fixed_rate({
 assert(#fail_on_error(sys.triggers.list({ namespace_ids = { namespace_one_req.id } })) == 1)
 assert(#fail_on_error(sys.triggers.list({ namespace_ids = { namespace_two_req.id } })) == 1)
 
-root_namespace_triggers = fail_on_error(sys.triggers.list({ namespace_ids = { '1' } }))
+root_namespace_triggers = fail_on_error(sys.triggers.list({ namespace_ids = { '539' } }))
 assert(#root_namespace_triggers == 2)
 assert(root_namespace_triggers[1].name == 'trigger-2')
 assert(root_namespace_triggers[2].name == 'trigger-1')

@@ -13,7 +13,7 @@ assert(#fail_on_error(sys.funcs.list({ namespace_ids = { namespace_one_req.id } 
 assert(#fail_on_error(sys.funcs.list({ namespace_ids = { namespace_two_req.id } })) == 1)
 
 -- root-namespace contains 2 namespace-one (func-1) and namespace_two(func-2)
-root_namespace_hooks = fail_on_error(sys.funcs.list({ namespace_ids = { '1' } }))
+root_namespace_hooks = fail_on_error(sys.funcs.list({ namespace_ids = { '539' } }))
 assert(#root_namespace_hooks == 2)
 assert(root_namespace_hooks[1].name == 'func-2')
 assert(root_namespace_hooks[2].name == 'func-1')

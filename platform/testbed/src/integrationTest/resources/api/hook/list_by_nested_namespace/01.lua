@@ -12,7 +12,7 @@ sys.await_completed(fail_on_error(sys.hooks.create({ namespace_id = namespace_tw
 assert(#fail_on_error(sys.hooks.list({ namespace_ids = { namespace_one_req.id } })) == 1)
 assert(#fail_on_error(sys.hooks.list({ namespace_ids = { namespace_two_req.id } })) == 1)
 
-root_namespace_hooks = fail_on_error(sys.hooks.list({ namespace_ids = { '1' } }))
+root_namespace_hooks = fail_on_error(sys.hooks.list({ namespace_ids = { '539' } }))
 assert(#root_namespace_hooks == 2)
 assert(root_namespace_hooks[1].name == 'hook-2')
 assert(root_namespace_hooks[2].name == 'hook-1')

@@ -9,7 +9,7 @@ sys.await_completed(func_one)
 -- trigger name is unique
 req_two = fail_on_error(sys.triggers.create_fixed_rate({
     func_id = func_one.id,
-    namespace_id = '1',
+    namespace_id = '539',
     name = 'trigger-to-append',
     inputs = { },
     duration = 'PT5S'
@@ -18,7 +18,7 @@ sys.await_completed(req_two)
 
 req_two = fail_on_error(sys.triggers.create_fixed_rate({
     func_id = func_one.id,
-    namespace_id = '1',
+    namespace_id = '539',
     name = 'trigger-to-append',
     inputs = { },
     duration = 'PT5S'
