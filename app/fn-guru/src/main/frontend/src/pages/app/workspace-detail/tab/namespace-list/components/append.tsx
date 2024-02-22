@@ -18,16 +18,12 @@ const formSchema = z.object({
 })
 
 type Props = {
-    parentId: string;
+    parentId: string
+    onClose: () => void
 }
-
-const Append: FC<Props> = ({parentId}) => {
-    const [auth, setAuth] = useAuth()
+const Append: FC<Props> = ({parentId, onClose}) => {
     const navigate = useNavigate()
-    const [openDialog, setOpenDialog] = useState<boolean>(false)
-    const props = {openModal: openDialog, setOpenModal: setOpenDialog}
     const [isLoading, setLoading] = useState(false)
-
     const [appendNamespace, requestedNamespace] = useNamespaceAppend()
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -37,69 +33,49 @@ const Append: FC<Props> = ({parentId}) => {
         },
     })
 
-    // 2. Define a submit handler.
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setLoading(true)
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-
         try {
             appendNamespace(parentId, values.name)
         } catch (e) {
             console.error(e)
-        } finally {
-            // setLoading(false)
         }
-
     }
 
     useEffect(() => {
-        if (requestedNamespace !== null) {
-            setOpenDialog(false)
-            window.location.reload()
-
+        if (requestedNamespace) {
+            onClose()
         }
     }, [requestedNamespace, navigate]);
 
     return (
-        <>
-            <Dialog open={openDialog} onOpenChange={setOpenDialog}>
-                <DialogTrigger asChild>
-                    <Button>
-                        <Plus className="w-4 h-4 mr-1"/>
+        <DialogContent>
+            <DialogHeader>Create Namespace</DialogHeader>
+            <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                    <FormField
+                        control={form.control}
+                        name="name"
+                        render={({field}) => (
+                            <FormItem>
+                                <FormLabel>Name</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="Worknamespace-One" {...field} />
+                                </FormControl>
+                                <FormDescription>
+                                    Name of your namespace
+                                </FormDescription>
+                                <FormMessage/>
+                            </FormItem>
+                        )}
+                    />
+                    <Button type="submit">
+                        {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
+                        Create namespace
                     </Button>
-                </DialogTrigger>
-
-                <DialogContent>
-                    <DialogHeader>Create Namespace</DialogHeader>
-
-                    <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                            <FormField
-                                control={form.control}
-                                name="name"
-                                render={({field}) => (
-                                    <FormItem>
-                                        <FormLabel>Name</FormLabel>
-                                        <FormControl>
-                                            <Input placeholder="Worknamespace-One" {...field} />
-                                        </FormControl>
-                                        <FormDescription>
-                                            Name of your namespace
-                                        </FormDescription>
-                                        <FormMessage/>
-                                    </FormItem>
-                                )}
-                            />
-                            <Button type="submit">
-                                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
-                                Create namespace
-                            </Button>
-                        </form>
-                    </Form>
-                </DialogContent>
-            </Dialog>
-        </>
+                </form>
+            </Form>
+        </DialogContent>
     )
 }
 

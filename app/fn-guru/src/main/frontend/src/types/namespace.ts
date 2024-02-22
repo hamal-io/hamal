@@ -14,6 +14,13 @@ export interface NamespaceAppendRequested {
     workspaceId: string;
 }
 
+export interface NamespaceUpdateRequested {
+    id: string;
+    status: string;
+    namespaceIdId: string;
+    workspaceId: string;
+}
+
 export interface Namespace {
     id: string;
     name: string;
