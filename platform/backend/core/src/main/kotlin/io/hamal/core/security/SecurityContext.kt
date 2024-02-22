@@ -21,5 +21,12 @@ object SecurityContext {
 
     val currentAuthId: AuthId get() = current.id
 
-    val currentAccountId: AccountId get() = current.accountId
+    val currentAccountId: AccountId
+        get() = run {
+            val currentAuth = current
+            if (currentAuth !is Auth.Account) {
+                throw IllegalStateException("Not an account")
+            }
+            currentAuth.accountId
+        }
 }

@@ -1,6 +1,7 @@
 package io.hamal.core.request.handler.extension
 
 import io.hamal.core.event.InternalEventEmitter
+import io.hamal.core.request.RequestHandler
 import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.request.ExtensionCreateRequested
@@ -18,7 +19,7 @@ class ExtensionCreateHandler(
     val extensionCmdRepository: ExtensionCmdRepository,
     val codeCmdRepository: CodeCmdRepository,
     val eventEmitter: InternalEventEmitter,
-) : io.hamal.core.request.RequestHandler<ExtensionCreateRequested>(ExtensionCreateRequested::class) {
+) : RequestHandler<ExtensionCreateRequested>(ExtensionCreateRequested::class) {
     override fun invoke(req: ExtensionCreateRequested) {
         createExtension(req).also { emitEvent(req.cmdId(), it) }
     }

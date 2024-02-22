@@ -9,7 +9,7 @@ class AccountId(override val value: SnowflakeId) : ValueObjectId() {
     constructor(value: String) : this(SnowflakeId(value.toLong(16)))
 
     companion object {
-        val root = AccountId(1)
+        val root = AccountId(1337)
     }
 }
 

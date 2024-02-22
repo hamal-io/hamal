@@ -1,5 +1,6 @@
 package io.hamal.core.request.handler.auth
 
+import io.hamal.core.request.RequestHandler
 import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.request.AuthLoginEmailRequested
@@ -13,7 +14,7 @@ import java.time.temporal.ChronoUnit.DAYS
 @Component
 class LoginEmailHandler(
     private val authRepository: AuthRepository
-) : io.hamal.core.request.RequestHandler<AuthLoginEmailRequested>(AuthLoginEmailRequested::class) {
+) : RequestHandler<AuthLoginEmailRequested>(AuthLoginEmailRequested::class) {
 
     override fun invoke(req: AuthLoginEmailRequested) {
         authRepository.list(req.accountId).filterIsInstance<Auth.Email>().find { it.hash == req.hash }?.let { auth ->

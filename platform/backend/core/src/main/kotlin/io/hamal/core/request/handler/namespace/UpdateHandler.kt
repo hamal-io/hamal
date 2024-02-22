@@ -1,6 +1,7 @@
 package io.hamal.core.request.handler.namespace
 
 import io.hamal.core.event.InternalEventEmitter
+import io.hamal.core.request.RequestHandler
 import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.request.NamespaceUpdateRequested
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Component
 class NamespaceUpdateHandler(
     val namespaceCmdRepository: NamespaceCmdRepository,
     val eventEmitter: InternalEventEmitter
-) : io.hamal.core.request.RequestHandler<NamespaceUpdateRequested>(NamespaceUpdateRequested::class) {
+) : RequestHandler<NamespaceUpdateRequested>(NamespaceUpdateRequested::class) {
 
     override fun invoke(req: NamespaceUpdateRequested) {
         updateNamespace(req).also { emitEvent(req.cmdId(), it) }

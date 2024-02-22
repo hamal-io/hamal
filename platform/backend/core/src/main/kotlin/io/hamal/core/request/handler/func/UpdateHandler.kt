@@ -1,6 +1,7 @@
 package io.hamal.core.request.handler.func
 
 import io.hamal.core.event.InternalEventEmitter
+import io.hamal.core.request.RequestHandler
 import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.request.FuncUpdateRequested
@@ -18,7 +19,7 @@ class FuncUpdateHandler(
     val codeRepository: CodeRepository,
     val funcRepository: FuncRepository,
     val eventEmitter: InternalEventEmitter
-) : io.hamal.core.request.RequestHandler<FuncUpdateRequested>(FuncUpdateRequested::class) {
+) : RequestHandler<FuncUpdateRequested>(FuncUpdateRequested::class) {
 
     override fun invoke(req: FuncUpdateRequested) {
         updateFunc(req).also { emitEvent(req.cmdId(), it) }

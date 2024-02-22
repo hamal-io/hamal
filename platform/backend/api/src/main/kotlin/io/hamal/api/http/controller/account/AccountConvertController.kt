@@ -21,6 +21,6 @@ internal class AccountConvertController(
     fun convert(
         @RequestBody req: ApiAccountConvertAnonymousRequest
     ): ResponseEntity<ApiRequested> = retry {
-        convertAccount(SecurityContext.current.accountId, req).accepted()
+        convertAccount(SecurityContext.currentAccountId, req).accepted()
     }
 }

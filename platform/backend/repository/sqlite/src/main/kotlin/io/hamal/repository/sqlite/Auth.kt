@@ -222,6 +222,24 @@ class AuthSqliteRepository(
     override fun close() {
 
     }
+
+    override fun find(authId: AuthId): Auth? {
+        return connection.executeQueryOne(
+            """
+            SELECT 
+                *
+             FROM
+                auth
+            WHERE
+                id = :id
+        """.trimIndent()
+        ) {
+            query {
+                set("id", authId)
+            }
+            map(NamedResultSet::toAuth)
+        }
+    }
 }
 
 private fun NamedResultSet.toAuth(): Auth {

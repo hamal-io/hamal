@@ -1,6 +1,7 @@
 package io.hamal.core.request.handler.endpoint
 
 import io.hamal.core.event.InternalEventEmitter
+import io.hamal.core.request.RequestHandler
 import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.request.EndpointCreateRequested
@@ -16,7 +17,7 @@ class EndpointCreateHandler(
     val endpointCmdRepository: EndpointCmdRepository,
     val eventEmitter: InternalEventEmitter,
     val funcQueryRepository: FuncQueryRepository
-) : io.hamal.core.request.RequestHandler<EndpointCreateRequested>(EndpointCreateRequested::class) {
+) : RequestHandler<EndpointCreateRequested>(EndpointCreateRequested::class) {
     override fun invoke(req: EndpointCreateRequested) {
         createEndpoint(req).also { emitEvent(req.cmdId(), it) }
     }

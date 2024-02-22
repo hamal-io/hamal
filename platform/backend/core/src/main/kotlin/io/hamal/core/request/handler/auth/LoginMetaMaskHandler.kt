@@ -1,5 +1,6 @@
 package io.hamal.core.request.handler.auth
 
+import io.hamal.core.request.RequestHandler
 import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.request.AuthLoginMetaMaskRequested
@@ -13,7 +14,7 @@ import java.time.temporal.ChronoUnit
 @Component
 class LoginMetaMaskHandler(
     private val authRepository: AuthRepository
-) : io.hamal.core.request.RequestHandler<AuthLoginMetaMaskRequested>(AuthLoginMetaMaskRequested::class) {
+) : RequestHandler<AuthLoginMetaMaskRequested>(AuthLoginMetaMaskRequested::class) {
     override fun invoke(req: AuthLoginMetaMaskRequested) {
         authRepository.list(req.accountId).filterIsInstance<Auth.MetaMask>().find { it.address == req.address }
             ?.let { auth ->

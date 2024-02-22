@@ -1,5 +1,7 @@
 package io.hamal.bridge.http.filter
 
+import io.hamal.core.security.SecurityContext
+import io.hamal.repository.api.Auth
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -10,9 +12,7 @@ import org.springframework.web.filter.OncePerRequestFilter
 
 @Component
 @Order(BASIC_AUTH_ORDER)
-class AuthBridgeFilter(
-//    private val authRepository: AuthRepository
-) : OncePerRequestFilter() {
+class AuthBridgeFilter : OncePerRequestFilter() {
 
     override fun doFilterInternal(
         request: HttpServletRequest,
@@ -40,7 +40,9 @@ class AuthBridgeFilter(
 //
 //        val auth = authRepository.get(token)
 ////        // FIXME not expired
-        return filterChain.doFilter(request, response)
+
+        // FIXME make sure runner
+        return SecurityContext.with(Auth.Runner) { filterChain.doFilter(request, response) }
     }
 
 }

@@ -1,14 +1,15 @@
 package io.hamal.core.request.handler.func
 
 import io.hamal.core.event.InternalEventEmitter
+import io.hamal.core.request.RequestHandler
 import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.request.FuncCreateRequested
 import io.hamal.repository.api.CodeCmdRepository
-import io.hamal.repository.api.NamespaceQueryRepository
 import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncCmdRepository
 import io.hamal.repository.api.FuncCmdRepository.CreateCmd
+import io.hamal.repository.api.NamespaceQueryRepository
 import io.hamal.repository.api.event.FuncCreatedEvent
 import org.springframework.stereotype.Component
 
@@ -18,7 +19,7 @@ class FuncCreateHandler(
     val funcCmdRepository: FuncCmdRepository,
     val eventEmitter: InternalEventEmitter,
     val namespaceQueryRepository: NamespaceQueryRepository
-) : io.hamal.core.request.RequestHandler<FuncCreateRequested>(FuncCreateRequested::class) {
+) : RequestHandler<FuncCreateRequested>(FuncCreateRequested::class) {
     override fun invoke(req: FuncCreateRequested) {
         createFunc(req).also { emitEvent(req.cmdId(), it) }
     }

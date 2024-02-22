@@ -15,6 +15,7 @@ import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.AuthId
 import io.hamal.lib.domain.vo.RequestId
 import io.hamal.lib.domain.vo.Web3Address
+import io.hamal.repository.api.Auth
 import io.hamal.repository.api.Workspace
 import io.hamal.repository.api.WorkspaceQueryRepository.WorkspaceQuery
 import org.springframework.stereotype.Component
@@ -55,6 +56,10 @@ class AuthLoginMetaMaskAdapter(
             ).also(requestEnqueue::invoke)
 
         } else {
+            if (auth !is Auth.Account) {
+                throw NoSuchElementException("Account not found")
+            }
+
             return AuthLoginMetaMaskRequested(
                 id = generateDomainId(::RequestId),
                 by = SecurityContext.currentAuthId,

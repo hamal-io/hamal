@@ -33,7 +33,7 @@ class AccountConvertAnonymousAdapter(
             status = RequestStatus.Submitted,
             accountId = accountId,
             email = req.email,
-            passwordAuthId = generateDomainId(::AuthId),
+            emailAuthId = generateDomainId(::AuthId),
             tokenAuthId = generateDomainId(::AuthId),
             hash = encodePassword(
                 password = req.password,

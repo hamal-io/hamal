@@ -1,6 +1,7 @@
 package io.hamal.core.request.handler.hook
 
 import io.hamal.core.event.InternalEventEmitter
+import io.hamal.core.request.RequestHandler
 import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.request.HookUpdateRequested
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Component
 @Component
 class HookUpdateHandler(
     val hookRepository: HookRepository, val eventEmitter: InternalEventEmitter
-) : io.hamal.core.request.RequestHandler<HookUpdateRequested>(HookUpdateRequested::class) {
+) : RequestHandler<HookUpdateRequested>(HookUpdateRequested::class) {
 
     override fun invoke(req: HookUpdateRequested) {
         updateHook(req).also { emitEvent(req.cmdId(), it) }

@@ -38,7 +38,7 @@ class AccountCreateRootAdapter(
                     workspaceId = WorkspaceId.root,
                     namespaceId = NamespaceId.root,
                     email = req.email,
-                    passwordAuthId = generateDomainId(::AuthId),
+                    emailAuthId = AuthId.root,
                     tokenAuthId = generateDomainId(::AuthId),
                     hash = encodePassword(
                         password = req.password,

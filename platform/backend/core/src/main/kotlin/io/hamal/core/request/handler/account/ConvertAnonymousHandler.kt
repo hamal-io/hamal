@@ -1,6 +1,7 @@
 package io.hamal.core.request.handler.account
 
 import io.hamal.core.event.InternalEventEmitter
+import io.hamal.core.request.RequestHandler
 import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
@@ -20,7 +21,7 @@ class AccountConvertAnonymousHandler(
     val accountCmdRepository: AccountCmdRepository,
     val authCmdRepository: AuthCmdRepository,
     val eventEmitter: InternalEventEmitter,
-) : io.hamal.core.request.RequestHandler<AccountConvertRequested>(AccountConvertRequested::class) {
+) : RequestHandler<AccountConvertRequested>(AccountConvertRequested::class) {
 
     override fun invoke(req: AccountConvertRequested) {
         convertAccount(req)
@@ -45,7 +46,7 @@ private fun AccountConvertAnonymousHandler.createEmailAuth(req: AccountConvertRe
     return authCmdRepository.create(
         AuthCmdRepository.CreateEmailAuthCmd(
             id = req.cmdId(),
-            authId = req.passwordAuthId,
+            authId = req.emailAuthId,
             accountId = req.accountId,
             email = req.email,
             hash = req.hash

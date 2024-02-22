@@ -91,7 +91,10 @@ internal class AuthRepositoryTest : AbstractUnitTest() {
 
                 with(list(AccountId(3))) {
                     assertThat(find(AuthToken("supersecret")), nullValue())
-                    assertThat(get(0).accountId, equalTo(AccountId(3)))
+                    get(0).also { auth ->
+                        require(auth is Auth.Account)
+                        assertThat(auth.accountId, equalTo(AccountId(3)))
+                    }
                     assertTrue(any { it.id == AuthId(1) })
                     assertFalse(any { it.id == AuthId(5) })
                 }

@@ -35,7 +35,7 @@ class AccountCreateAnonymousAdapter(
             accountType = AccountType.Anonymous,
             workspaceId = workspaceId,
             namespaceId = NamespaceId(workspaceId.value),
-            passwordAuthId = generateDomainId(::AuthId),
+            emailAuthId = generateDomainId(::AuthId),
             tokenAuthId = generateDomainId(::AuthId),
             hash = encodePassword(
                 password = Password(">>You-shall-not-know<<"),

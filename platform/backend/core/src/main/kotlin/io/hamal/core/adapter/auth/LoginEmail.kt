@@ -34,8 +34,12 @@ class AuthLoginEmailAdapter(
     private val listAuth: AuthListPort,
     private val workspaceList: WorkspaceListPort
 ) : AuthLoginEmailPort {
+
     override fun invoke(req: AuthLogInEmailRequest): AuthLoginEmailRequested {
         val auth = authFind(req.email) ?: throw NoSuchElementException("Account not found")
+        if (auth !is Auth.Account) {
+            throw NoSuchElementException("Account not found")
+        }
         val account = accountFind(auth.accountId) ?: throw NoSuchElementException("Account not found")
 
         val encodedPassword = encodePassword(req.password, account.salt)

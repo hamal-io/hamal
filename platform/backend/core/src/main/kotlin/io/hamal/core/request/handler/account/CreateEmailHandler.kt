@@ -1,6 +1,7 @@
 package io.hamal.core.request.handler.account
 
 import io.hamal.core.event.InternalEventEmitter
+import io.hamal.core.request.RequestHandler
 import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
@@ -22,7 +23,7 @@ class AccountCreateEmailHandler(
     val namespaceCmdRepository: NamespaceCmdRepository,
     val namespaceTreeCmdRepository: NamespaceTreeCmdRepository,
     val eventEmitter: InternalEventEmitter
-) : io.hamal.core.request.RequestHandler<AccountCreateRequested>(AccountCreateRequested::class) {
+) : RequestHandler<AccountCreateRequested>(AccountCreateRequested::class) {
 
     override fun invoke(req: AccountCreateRequested) {
         createAccount(req)
@@ -83,7 +84,7 @@ private fun AccountCreateEmailHandler.createEmailAuth(req: AccountCreateRequeste
     return authCmdRepository.create(
         AuthCmdRepository.CreateEmailAuthCmd(
             id = req.cmdId(),
-            authId = req.passwordAuthId,
+            authId = req.emailAuthId,
             accountId = req.accountId,
             email = req.email,
             hash = req.hash

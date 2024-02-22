@@ -37,7 +37,7 @@ class AccountCreateAdapter(
             workspaceId = workspaceId,
             namespaceId = NamespaceId(workspaceId.value),
             email = req.email,
-            passwordAuthId = generateDomainId(::AuthId),
+            emailAuthId = generateDomainId(::AuthId),
             tokenAuthId = generateDomainId(::AuthId),
             hash = encodePassword(
                 password = req.password,

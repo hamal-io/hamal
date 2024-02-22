@@ -1,6 +1,7 @@
 package io.hamal.core.request.handler.trigger
 
 import io.hamal.core.event.InternalEventEmitter
+import io.hamal.core.request.RequestHandler
 import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain._enum.TriggerStatus
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Component
 class TriggerSetStatusHandler(
     val triggerCmdRepository: TriggerCmdRepository,
     val eventEmitter: InternalEventEmitter
-) : io.hamal.core.request.RequestHandler<TriggerStatusRequested>(TriggerStatusRequested::class) {
+) : RequestHandler<TriggerStatusRequested>(TriggerStatusRequested::class) {
     override fun invoke(req: TriggerStatusRequested) {
         setStatus(req).also { emitEvent(req.cmdId(), it) }
     }
