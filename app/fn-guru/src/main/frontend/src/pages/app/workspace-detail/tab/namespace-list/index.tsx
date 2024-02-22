@@ -17,6 +17,7 @@ const WorkspaceNamespaceListTab: React.FC = () => {
     const [listNamespaces, namespaceList, isLoading, error] = useNamespaceList()
 
 
+
     useEffect(() => {
         const abortController = new AbortController()
         listNamespaces(uiState.workspaceId, abortController)
@@ -33,7 +34,10 @@ const WorkspaceNamespaceListTab: React.FC = () => {
             <PageHeader
                 title="Namespaces"
                 description=""
-                actions={[<CreateNamespace currNamespace={uiState.namespaceId}/>]}/>
+                actions={[
+                    <CreateNamespace currNamespace={uiState.namespaceId}/>,
+                    <NamespaceActions item={namespaceList.namespaces.at(0)}/>
+                ]}/>
             <Content
                 namespaces={namespaceList.namespaces}
             />
@@ -41,15 +45,12 @@ const WorkspaceNamespaceListTab: React.FC = () => {
     );
 }
 
-type ContentProps = {
-    namespaces: NamespaceListItem[]
-}
-
+type ContentProps = { namespaces: NamespaceListItem[] }
 const Content: FC<ContentProps> = ({namespaces}) => {
     return (
         <ul className="grid grid-cols-1 gap-x-6 gap-y-8">
             {namespaces.map((namespace) => (
-                <NamespaceCard namespace={namespace}/>
+                <NamespaceCard namespace={namespace} key={namespace.id}/>
             ))}
         </ul>
     )
@@ -58,7 +59,6 @@ const Content: FC<ContentProps> = ({namespaces}) => {
 type RenderNamespaceProps = { namespace: NamespaceListItem }
 const NamespaceCard: FC<RenderNamespaceProps> = ({namespace}) => {
     return (<Card
-            key={namespace.id}
             className="relative overflow-hidden duration-500 hover:border-primary/50 group"
         >
             <CardHeader>
