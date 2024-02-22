@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class AccountListController(private val listAccount: AccountListPort) {
+internal class AccountListController(
+    private val listAccount: AccountListPort
+) {
     @GetMapping("/v1/accounts")
     fun list(
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: AccountId,

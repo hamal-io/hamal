@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 internal class AccountConvertController(
     private val retry: Retry,
-    private val convert: AccountConvertAnonymousPort
+    private val convertAccount: AccountConvertAnonymousPort
 ) {
     @PostMapping("/v1/anonymous-accounts/convert")
     fun convert(
         @RequestBody req: ApiAccountConvertAnonymousRequest
     ): ResponseEntity<ApiRequested> = retry {
-        convert(AuthContextHolder.get().accountId, req).accepted()
+        convertAccount(AuthContextHolder.get().accountId, req).accepted()
     }
 }

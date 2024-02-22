@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.RestController
 internal class AccountCreateAnonymousController(
     private val generateDomainId: GenerateDomainId,
     private val retry: Retry,
-    private val createAccount: AccountCreateAnonymousPort
+    private val createAnonymousAccount: AccountCreateAnonymousPort
 ) {
     @PostMapping("/v1/anonymous-accounts")
     fun create(): ResponseEntity<ApiRequested> = retry {
         val id = generateDomainId(::AccountId)
-        createAccount(object : AccountCreateAnonymousRequest {
+        createAnonymousAccount(object : AccountCreateAnonymousRequest {
             override val id = id
         }).accepted()
     }
