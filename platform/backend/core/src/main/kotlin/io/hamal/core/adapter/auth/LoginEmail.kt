@@ -5,6 +5,7 @@ import io.hamal.core.adapter.request.RequestEnqueuePort
 import io.hamal.core.adapter.workspace.WorkspaceListPort
 import io.hamal.core.component.EncodePassword
 import io.hamal.core.component.GenerateToken
+import io.hamal.core.security.SecurityContext
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.RequestStatus
@@ -51,6 +52,7 @@ class AuthLoginEmailAdapter(
 
         return AuthLoginEmailRequested(
             id = generateDomainId(::RequestId),
+            by = SecurityContext.currentAuthId,
             status = RequestStatus.Submitted,
             authId = generateDomainId(::AuthId),
             accountId = account.id,

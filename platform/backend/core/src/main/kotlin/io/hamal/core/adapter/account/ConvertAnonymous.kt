@@ -3,6 +3,7 @@ package io.hamal.core.adapter.account
 import io.hamal.core.adapter.request.RequestEnqueuePort
 import io.hamal.core.component.EncodePassword
 import io.hamal.core.component.GenerateToken
+import io.hamal.core.security.SecurityContext
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.AccountConvertAnonymousRequest
@@ -28,6 +29,7 @@ class AccountConvertAnonymousAdapter(
         val account = accountGet(accountId)
         return AccountConvertRequested(
             id = generateDomainId(::RequestId),
+            by = SecurityContext.currentAuthId,
             status = RequestStatus.Submitted,
             accountId = accountId,
             email = req.email,

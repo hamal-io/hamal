@@ -1,6 +1,7 @@
 package io.hamal.core.adapter.extension
 
 import io.hamal.core.adapter.request.RequestEnqueuePort
+import io.hamal.core.security.SecurityContext
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.ExtensionCreateRequest
@@ -23,6 +24,7 @@ class ExtensionCreateAdapter(
     override fun invoke(workspaceId: WorkspaceId, req: ExtensionCreateRequest): ExtensionCreateRequested {
         return ExtensionCreateRequested(
             id = generateDomainId(::RequestId),
+            by = SecurityContext.currentAuthId,
             status = RequestStatus.Submitted,
             workspaceId = workspaceId,
             extensionId = generateDomainId(::ExtensionId),

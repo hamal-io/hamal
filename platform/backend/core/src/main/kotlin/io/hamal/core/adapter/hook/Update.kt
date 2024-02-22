@@ -1,6 +1,7 @@
 package io.hamal.core.adapter.hook
 
 import io.hamal.core.adapter.request.RequestEnqueuePort
+import io.hamal.core.security.SecurityContext
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.HookUpdateRequest
@@ -23,6 +24,7 @@ class HookUpdateAdapter(
         val hook = hookGet(hookId)
         return HookUpdateRequested(
             id = generateDomainId(::RequestId),
+            by = SecurityContext.currentAuthId,
             status = RequestStatus.Submitted,
             workspaceId = hook.workspaceId,
             hookId = hookId,

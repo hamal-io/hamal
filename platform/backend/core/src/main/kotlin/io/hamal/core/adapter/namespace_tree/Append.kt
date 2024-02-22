@@ -1,7 +1,8 @@
 package io.hamal.core.adapter.namespace_tree
 
-import io.hamal.core.adapter.request.RequestEnqueuePort
 import io.hamal.core.adapter.namespace.NamespaceGetPort
+import io.hamal.core.adapter.request.RequestEnqueuePort
+import io.hamal.core.security.SecurityContext
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.NamespaceAppendRequest
@@ -24,6 +25,7 @@ class NamespaceTreeAppendAdapter(
         val parent = namespaceGet(parentId)
         return NamespaceAppendRequested(
             id = generateDomainId(::RequestId),
+            by = SecurityContext.currentAuthId,
             status = RequestStatus.Submitted,
             parentId = parent.id,
             namespaceId = generateDomainId(::NamespaceId),

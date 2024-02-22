@@ -10,6 +10,11 @@ sealed interface Auth : HasAccountId {
     val id: AuthId
     override val accountId: AccountId
 
+    object Anonymous : Auth {
+        override val id: AuthId get() = AuthId(1)
+        override val accountId: AccountId get() = throw IllegalStateException("Anonymous does not have an account id")
+    }
+
     data class Email(
         override val id: AuthId,
         val cmdId: CmdId,
@@ -32,6 +37,7 @@ sealed interface Auth : HasAccountId {
         val token: AuthToken,
         val expiresAt: AuthTokenExpiresAt
     ) : Auth
+
 
 }
 

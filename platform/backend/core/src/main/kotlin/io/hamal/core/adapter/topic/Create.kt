@@ -2,6 +2,7 @@ package io.hamal.core.adapter.topic
 
 import io.hamal.core.adapter.namespace.NamespaceGetPort
 import io.hamal.core.adapter.request.RequestEnqueuePort
+import io.hamal.core.security.SecurityContext
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain._enum.TopicType
@@ -30,6 +31,7 @@ class TopicCreateAdapter(
         val namespace = namespaceGet(namespaceId)
         return TopicCreateRequested(
             id = generateDomainId(::RequestId),
+            by = SecurityContext.currentAuthId,
             status = RequestStatus.Submitted,
             topicId = generateDomainId(::TopicId),
             logTopicId = generateDomainId(::LogTopicId),

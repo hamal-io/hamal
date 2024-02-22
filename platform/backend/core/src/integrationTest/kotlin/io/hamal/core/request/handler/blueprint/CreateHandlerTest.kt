@@ -28,6 +28,7 @@ internal class BlueprintCreateHandlerTest : BaseReqHandlerTest() {
     private val submitCreateBlueprintReq by lazy {
         BlueprintCreateRequested(
             id = RequestId(1),
+            by = AuthId(2),
             status = RequestStatus.Submitted,
             blueprintId = BlueprintId(123),
             name = BlueprintName("TestBlueprint"),

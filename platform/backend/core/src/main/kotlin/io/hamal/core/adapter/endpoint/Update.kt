@@ -2,6 +2,7 @@ package io.hamal.core.adapter.endpoint
 
 import io.hamal.core.adapter.request.RequestEnqueuePort
 import io.hamal.core.adapter.func.FuncGetPort
+import io.hamal.core.security.SecurityContext
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.EndpointUpdateRequest
@@ -31,6 +32,7 @@ class EndpointUpdateAdapter(
 
         return EndpointUpdateRequested(
             id = generateDomainId(::RequestId),
+            by = SecurityContext.currentAuthId,
             status = RequestStatus.Submitted,
             workspaceId = endpoint.workspaceId,
             endpointId = endpointId,

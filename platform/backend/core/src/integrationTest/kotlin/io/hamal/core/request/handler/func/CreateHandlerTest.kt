@@ -62,6 +62,7 @@ internal class FuncCreateHandlerTest : BaseReqHandlerTest() {
     private val submitCreateFuncReq by lazy {
         FuncCreateRequested(
             id = RequestId(1),
+            by = AuthId(2),
             status = Submitted,
             workspaceId = testWorkspace.id,
             funcId = FuncId(12345),

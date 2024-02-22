@@ -1,6 +1,7 @@
 package io.hamal.core.adapter.blueprint
 
 import io.hamal.core.adapter.request.RequestEnqueuePort
+import io.hamal.core.security.SecurityContext
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.BlueprintCreateRequest
@@ -22,6 +23,7 @@ class BlueprintCreateAdapter(
     override fun invoke(accountId: AccountId, req: BlueprintCreateRequest): BlueprintCreateRequested {
         return BlueprintCreateRequested(
             id = generateDomainId(::RequestId),
+            by = SecurityContext.currentAuthId,
             status = RequestStatus.Submitted,
             blueprintId = generateDomainId(::BlueprintId),
             name = req.name,

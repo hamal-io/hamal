@@ -5,6 +5,7 @@ import io.hamal.core.adapter.hook.HookGetPort
 import io.hamal.core.adapter.namespace.NamespaceGetPort
 import io.hamal.core.adapter.request.RequestEnqueuePort
 import io.hamal.core.adapter.topic.TopicGetPort
+import io.hamal.core.security.SecurityContext
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain._enum.TriggerType
@@ -38,6 +39,7 @@ class TriggerCreateAdapter(
         return TriggerCreateRequested(
             triggerType = req.type,
             id = generateDomainId(::RequestId),
+            by = SecurityContext.currentAuthId,
             status = RequestStatus.Submitted,
             triggerId = generateDomainId(::TriggerId),
             workspaceId = namespace.workspaceId,

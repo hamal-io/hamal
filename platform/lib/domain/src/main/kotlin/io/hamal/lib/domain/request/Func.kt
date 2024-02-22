@@ -12,6 +12,7 @@ interface FuncCreateRequest {
 
 data class FuncCreateRequested(
     override val id: RequestId,
+    override val by: AuthId,
     override var status: RequestStatus,
     val workspaceId: WorkspaceId,
     val funcId: FuncId,
@@ -30,6 +31,7 @@ interface FuncUpdateRequest {
 
 data class FuncUpdateRequested(
     override val id: RequestId,
+    override val by: AuthId,
     override var status: RequestStatus,
     val workspaceId: WorkspaceId,
     val funcId: FuncId,
@@ -52,6 +54,7 @@ interface FuncDeployRequest {
 
 data class FuncDeployRequested(
     override val id: RequestId,
+    override val by: AuthId,
     override var status: RequestStatus,
     val workspaceId: WorkspaceId,
     val funcId: FuncId,

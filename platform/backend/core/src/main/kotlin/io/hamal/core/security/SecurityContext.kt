@@ -15,9 +15,9 @@ object SecurityContext {
         }
     }
 
-    private val store = ThreadLocal<Auth>()
+    private val store = ThreadLocal<Auth?>()
 
-    val current: Auth get() = store.get()
+    val current: Auth get() = store.get() ?: Auth.Anonymous
 
     val currentAuthId: AuthId get() = current.id
 
