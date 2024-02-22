@@ -22,28 +22,27 @@ jobs:
       - name: Assemble
         run: ./gradlew assemble
 
-#      - name: Run tests
-#        run: ./gradlew check
-#
-#      - name: Generate report
-#        if: github.ref == 'refs/heads/main'
-#        run: ./gradlew integrationTestCodeCoverageReport
-#
-#      - name: Upload coverage report
-#        if: github.ref == 'refs/heads/main'
-#        uses: actions/checkout@v3
-#        with:
-#          repository: hamal-io/code-cov
-#          token: ${{ secrets.SERVICE_TOKEN }}
-#          fetch-depth: 0
-#          path: 'code-cov'
-#          run: |
-#            cd code-cov
-#            rm -rf *
-#            cp -r ${{github.workspace}}/app/hamal-mono/build/reports/jacoco/integrationTestCodeCoverageReport/html/* .
-#            git add -A
-#            git config user.email "code-cov@hamal.io"
-#            git config user.name "code cov"
-#            git commit -m "${{ github.sha }}"
-#            git push -f
-#
+      - name: Run tests
+        run: ./gradlew check
+
+      - name: Generate report
+        if: github.ref == 'refs/heads/main'
+        run: ./gradlew integrationTestCodeCoverageReport
+
+      - name: Upload coverage report
+        if: github.ref == 'refs/heads/main'
+        uses: actions/checkout@v3
+        with:
+          repository: hamal-io/code-cov
+          token: ${{ secrets.SERVICE_TOKEN }}
+          fetch-depth: 0
+          path: 'code-cov'
+          run: |
+            cd code-cov
+            rm -rf *
+            cp -r ${{github.workspace}}/app/hamal-mono/build/reports/jacoco/integrationTestCodeCoverageReport/html/* .
+            git add -A
+            git config user.email "codecov@hamal.io"
+            git config user.name "codecov"
+            git commit -m "${{ github.sha }}"
+            git push -f
