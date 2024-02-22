@@ -9,31 +9,31 @@ import io.hamal.lib.domain.vo.*
 sealed interface Auth : HasAccountId {
     val id: AuthId
     override val accountId: AccountId
+
+    data class Email(
+        override val id: AuthId,
+        val cmdId: CmdId,
+        override val accountId: AccountId,
+        val email: io.hamal.lib.domain.vo.Email,
+        val hash: PasswordHash
+    ) : Auth
+
+    data class MetaMask(
+        override val id: AuthId,
+        val cmdId: CmdId,
+        override val accountId: AccountId,
+        val address: Web3Address
+    ) : Auth
+
+    data class Token(
+        override val id: AuthId,
+        val cmdId: CmdId,
+        override val accountId: AccountId,
+        val token: AuthToken,
+        val expiresAt: AuthTokenExpiresAt
+    ) : Auth
+
 }
-
-data class EmailAuth(
-    override val id: AuthId,
-    val cmdId: CmdId,
-    override val accountId: AccountId,
-    val email: Email,
-    val hash: PasswordHash
-) : Auth
-
-data class MetaMaskAuth(
-    override val id: AuthId,
-    val cmdId: CmdId,
-    override val accountId: AccountId,
-    val address: Web3Address
-) : Auth
-
-data class TokenAuth(
-    override val id: AuthId,
-    val cmdId: CmdId,
-    override val accountId: AccountId,
-    val token: AuthToken,
-    val expiresAt: AuthTokenExpiresAt
-) : Auth
-
 
 interface AuthRepository : AuthCmdRepository, AuthQueryRepository
 

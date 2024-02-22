@@ -134,7 +134,7 @@ class ClearController {
                 token = AuthToken("root-token"),
                 expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(1, ChronoUnit.DAYS))
             )
-        ) as TokenAuth).token
+        ) as Auth.Token).token
 
         testWorkspace = workspaceRepository.create(
             WorkspaceCmdRepository.CreateCmd(
@@ -252,7 +252,7 @@ class TestConfig {
                     token = AuthToken("root-token"),
                     expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(1, ChronoUnit.DAYS))
                 )
-            ) as TokenAuth).token
+            ) as Auth.Token).token
 
             testWorkspace = workspaceRepository.create(
                 WorkspaceCmdRepository.CreateCmd(

@@ -163,7 +163,7 @@ internal abstract class BaseTest {
                 token = AuthToken("test-token"),
                 expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(1, DAYS))
             )
-        ) as TokenAuth).token
+        ) as Auth.Token).token
 
         testWorkspace = workspaceCmdRepository.create(
             WorkspaceCmdRepository.CreateCmd(

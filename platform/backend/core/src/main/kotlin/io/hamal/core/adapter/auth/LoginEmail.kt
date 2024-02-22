@@ -1,7 +1,7 @@
 package io.hamal.core.adapter.auth
 
-import io.hamal.core.adapter.request.RequestEnqueuePort
 import io.hamal.core.adapter.account.AccountFindPort
+import io.hamal.core.adapter.request.RequestEnqueuePort
 import io.hamal.core.adapter.workspace.WorkspaceListPort
 import io.hamal.core.component.EncodePassword
 import io.hamal.core.component.GenerateToken
@@ -12,8 +12,8 @@ import io.hamal.lib.domain.request.AuthLogInEmailRequest
 import io.hamal.lib.domain.request.AuthLoginEmailRequested
 import io.hamal.lib.domain.vo.AuthId
 import io.hamal.lib.domain.vo.RequestId
+import io.hamal.repository.api.Auth
 import io.hamal.repository.api.AuthQueryRepository.AuthQuery
-import io.hamal.repository.api.EmailAuth
 import io.hamal.repository.api.Workspace
 import io.hamal.repository.api.WorkspaceQueryRepository.WorkspaceQuery
 import org.springframework.stereotype.Component
@@ -43,7 +43,7 @@ class AuthLoginEmailAdapter(
                 limit = Limit.all,
                 authIds = listOf(auth.id)
             )
-        ).filterIsInstance<EmailAuth>().any { it.hash == encodedPassword }
+        ).filterIsInstance<Auth.Email>().any { it.hash == encodedPassword }
 
         if (!match) {
             throw NoSuchElementException("Account not found")
