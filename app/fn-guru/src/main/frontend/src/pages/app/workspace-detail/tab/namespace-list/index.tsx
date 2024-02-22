@@ -16,8 +16,6 @@ const WorkspaceNamespaceListTab: React.FC = () => {
     const [uiState] = useUiState()
     const [listNamespaces, namespaceList, isLoading, error] = useNamespaceList()
 
-
-
     useEffect(() => {
         const abortController = new AbortController()
         listNamespaces(uiState.workspaceId, abortController)
@@ -29,6 +27,8 @@ const WorkspaceNamespaceListTab: React.FC = () => {
     if (namespaceList == null || isLoading) return "Loading..."
     if (error != null) return "Error -"
 
+    const _this = namespaceList.namespaces.at(namespaceList.namespaces.length - 1)
+
     return (
         <div className="pt-8 px-8">
             <PageHeader
@@ -36,8 +36,9 @@ const WorkspaceNamespaceListTab: React.FC = () => {
                 description=""
                 actions={[
                     <CreateNamespace currNamespace={uiState.namespaceId}/>,
-                    <NamespaceActions item={namespaceList.namespaces.at(0)}/>
+                    <NamespaceActions item={_this}/>
                 ]}/>
+            Root Namespace: {_this.name}
             <Content
                 namespaces={namespaceList.namespaces}
             />
@@ -86,7 +87,7 @@ const CreateNamespace: FC<CreateProps> = ({currNamespace}) => {
             <DialogTrigger asChild>
                 <Button>
                     <Plus className="w-4 h-4 mr-1"/>
-                    Create Namespace
+                    Append
                 </Button>
             </DialogTrigger>
             <Append parentId={currNamespace} onClose={() => setOpen(false)}/>
