@@ -16,38 +16,41 @@ import org.springframework.stereotype.Component
 
 @Component
 class ExtensionCreateHandler(
-    val extensionCmdRepository: ExtensionCmdRepository,
-    val codeCmdRepository: CodeCmdRepository,
-    val eventEmitter: InternalEventEmitter,
+    private val extensionCmdRepository: ExtensionCmdRepository,
+    private val codeCmdRepository: CodeCmdRepository,
+    private val eventEmitter: InternalEventEmitter,
 ) : RequestHandler<ExtensionCreateRequested>(ExtensionCreateRequested::class) {
+
     override fun invoke(req: ExtensionCreateRequested) {
-        createExtension(req).also { emitEvent(req.cmdId(), it) }
+        createExtension(req)
+            .also { emitEvent(req.cmdId(), it) }
+    }
+
+    private fun createExtension(req: ExtensionCreateRequested): Extension {
+        val code = codeCmdRepository.create(
+            CodeCmdRepository.CreateCmd(
+                id = req.cmdId(),
+                codeId = req.codeId,
+                workspaceId = req.workspaceId,
+                value = req.code
+            )
+        )
+        return extensionCmdRepository.create(
+            CreateCmd(
+                id = req.cmdId(),
+                extId = req.extensionId,
+                workspaceId = req.workspaceId,
+                name = req.name,
+                code = ExtensionCode(
+                    code.id,
+                    code.version
+                )
+            )
+        )
+    }
+
+    private fun emitEvent(cmdId: CmdId, ext: Extension) {
+        eventEmitter.emit(cmdId, ExtensionCreatedEvent(ext))
     }
 }
 
-private fun ExtensionCreateHandler.createExtension(req: ExtensionCreateRequested): Extension {
-    val code = codeCmdRepository.create(
-        CodeCmdRepository.CreateCmd(
-            id = req.cmdId(),
-            codeId = req.codeId,
-            workspaceId = req.workspaceId,
-            value = req.code
-        )
-    )
-    return extensionCmdRepository.create(
-        CreateCmd(
-            id = req.cmdId(),
-            extId = req.extensionId,
-            workspaceId = req.workspaceId,
-            name = req.name,
-            code = ExtensionCode(
-                code.id,
-                code.version
-            )
-        )
-    )
-}
-
-private fun ExtensionCreateHandler.emitEvent(cmdId: CmdId, ext: Extension) {
-    eventEmitter.emit(cmdId, ExtensionCreatedEvent(ext))
-}

@@ -12,31 +12,33 @@ import io.hamal.repository.api.NamespaceQueryRepository
 import io.hamal.repository.api.event.HookCreatedEvent
 import org.springframework.stereotype.Component
 
-object Keep
-
 @Component
 class HookCreateHandler(
-    val hookCmdRepository: HookCmdRepository,
-    val eventEmitter: InternalEventEmitter,
-    val namespaceQueryRepository: NamespaceQueryRepository
+    private val hookCmdRepository: HookCmdRepository,
+    private val eventEmitter: InternalEventEmitter,
+    private val namespaceQueryRepository: NamespaceQueryRepository
 ) : RequestHandler<HookCreateRequested>(HookCreateRequested::class) {
+
     override fun invoke(req: HookCreateRequested) {
-        createHook(req).also { emitEvent(req.cmdId(), it) }
+        createHook(req)
+            .also { emitEvent(req.cmdId(), it) }
     }
-}
 
-private fun HookCreateHandler.createHook(req: HookCreateRequested): Hook {
-    return hookCmdRepository.create(
-        CreateCmd(
-            id = req.cmdId(),
-            hookId = req.hookId,
-            workspaceId = req.workspaceId,
-            namespaceId = req.namespaceId,
-            name = req.name
+    private fun createHook(req: HookCreateRequested): Hook {
+        return hookCmdRepository.create(
+            CreateCmd(
+                id = req.cmdId(),
+                hookId = req.hookId,
+                workspaceId = req.workspaceId,
+                namespaceId = req.namespaceId,
+                name = req.name
+            )
         )
-    )
+    }
+
+    private fun emitEvent(cmdId: CmdId, hook: Hook) {
+        eventEmitter.emit(cmdId, HookCreatedEvent(hook))
+    }
+
 }
 
-private fun HookCreateHandler.emitEvent(cmdId: CmdId, hook: Hook) {
-    eventEmitter.emit(cmdId, HookCreatedEvent(hook))
-}

@@ -27,6 +27,6 @@ class LoginEmailHandler(
                     expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(30, DAYS))
                 )
             )
-        } ?: throw NoSuchElementException("Account not found")
+        }
     }
 }

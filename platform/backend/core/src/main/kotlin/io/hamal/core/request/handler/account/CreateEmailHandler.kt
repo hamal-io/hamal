@@ -17,93 +17,93 @@ import java.time.temporal.ChronoUnit
 
 @Component
 class AccountCreateEmailHandler(
-    val accountCmdRepository: AccountCmdRepository,
-    val authCmdRepository: AuthCmdRepository,
-    val workspaceCmdRepository: WorkspaceCmdRepository,
-    val namespaceCmdRepository: NamespaceCmdRepository,
-    val namespaceTreeCmdRepository: NamespaceTreeCmdRepository,
-    val eventEmitter: InternalEventEmitter
+    private val accountCmdRepository: AccountCmdRepository,
+    private val authCmdRepository: AuthCmdRepository,
+    private val workspaceCmdRepository: WorkspaceCmdRepository,
+    private val namespaceCmdRepository: NamespaceCmdRepository,
+    private val namespaceTreeCmdRepository: NamespaceTreeCmdRepository,
+    private val eventEmitter: InternalEventEmitter
 ) : RequestHandler<AccountCreateRequested>(AccountCreateRequested::class) {
 
     override fun invoke(req: AccountCreateRequested) {
         createAccount(req)
-            .also { emitEvent(req.cmdId(), it) }
             .also { createWorkspace(req) }
             .also { createNamespace(req) }
             .also { createNamespaceTree(req) }
             .also { createEmailAuth(req) }
             .also { createTokenAuth(req) }
+            .also { emitEvent(req.cmdId(), it) }
     }
-}
 
-private fun AccountCreateEmailHandler.createAccount(req: AccountCreateRequested): Account {
-    return accountCmdRepository.create(
-        AccountCmdRepository.CreateCmd(
-            id = req.cmdId(),
-            accountId = req.accountId,
-            accountType = req.accountType,
-            salt = req.salt
+    private fun createAccount(req: AccountCreateRequested): Account {
+        return accountCmdRepository.create(
+            AccountCmdRepository.CreateCmd(
+                id = req.cmdId(),
+                accountId = req.accountId,
+                accountType = req.accountType,
+                salt = req.salt
+            )
         )
-    )
-}
+    }
 
-private fun AccountCreateEmailHandler.createWorkspace(req: AccountCreateRequested): Workspace {
-    return workspaceCmdRepository.create(
-        WorkspaceCmdRepository.CreateCmd(
-            id = req.cmdId(),
-            workspaceId = req.workspaceId,
-            name = WorkspaceName("Workspace ${req.workspaceId}"),
-            creatorId = req.accountId
+    private fun createWorkspace(req: AccountCreateRequested): Workspace {
+        return workspaceCmdRepository.create(
+            WorkspaceCmdRepository.CreateCmd(
+                id = req.cmdId(),
+                workspaceId = req.workspaceId,
+                name = WorkspaceName("Workspace ${req.workspaceId}"),
+                creatorId = req.accountId
+            )
         )
-    )
-}
+    }
 
-private fun AccountCreateEmailHandler.createNamespace(req: AccountCreateRequested): Namespace {
-    return namespaceCmdRepository.create(
-        NamespaceCmdRepository.CreateCmd(
-            id = req.cmdId(),
-            namespaceId = req.namespaceId,
-            workspaceId = req.workspaceId,
-            name = NamespaceName.default
+    private fun createNamespace(req: AccountCreateRequested): Namespace {
+        return namespaceCmdRepository.create(
+            NamespaceCmdRepository.CreateCmd(
+                id = req.cmdId(),
+                namespaceId = req.namespaceId,
+                workspaceId = req.workspaceId,
+                name = NamespaceName.default
+            )
         )
-    )
-}
+    }
 
-private fun AccountCreateEmailHandler.createNamespaceTree(req: AccountCreateRequested): NamespaceTree {
-    return namespaceTreeCmdRepository.create(
-        NamespaceTreeCmdRepository.CreateCmd(
-            id = req.cmdId(),
-            treeId = NamespaceTreeId(req.namespaceId.value),
-            rootNodeId = req.namespaceId,
-            workspaceId = req.workspaceId,
+    private fun createNamespaceTree(req: AccountCreateRequested): NamespaceTree {
+        return namespaceTreeCmdRepository.create(
+            NamespaceTreeCmdRepository.CreateCmd(
+                id = req.cmdId(),
+                treeId = NamespaceTreeId(req.namespaceId.value),
+                rootNodeId = req.namespaceId,
+                workspaceId = req.workspaceId,
+            )
         )
-    )
-}
+    }
 
-private fun AccountCreateEmailHandler.createEmailAuth(req: AccountCreateRequested): Auth {
-    return authCmdRepository.create(
-        AuthCmdRepository.CreateEmailAuthCmd(
-            id = req.cmdId(),
-            authId = req.emailAuthId,
-            accountId = req.accountId,
-            email = req.email,
-            hash = req.hash
+    private fun createEmailAuth(req: AccountCreateRequested): Auth {
+        return authCmdRepository.create(
+            AuthCmdRepository.CreateEmailAuthCmd(
+                id = req.cmdId(),
+                authId = req.emailAuthId,
+                accountId = req.accountId,
+                email = req.email,
+                hash = req.hash
+            )
         )
-    )
-}
+    }
 
-private fun AccountCreateEmailHandler.createTokenAuth(req: AccountCreateRequested): Auth {
-    return authCmdRepository.create(
-        AuthCmdRepository.CreateTokenAuthCmd(
-            id = req.cmdId(),
-            authId = req.tokenAuthId,
-            accountId = req.accountId,
-            token = req.token,
-            expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(30, ChronoUnit.DAYS))
+    private fun createTokenAuth(req: AccountCreateRequested): Auth {
+        return authCmdRepository.create(
+            AuthCmdRepository.CreateTokenAuthCmd(
+                id = req.cmdId(),
+                authId = req.tokenAuthId,
+                accountId = req.accountId,
+                token = req.token,
+                expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(30, ChronoUnit.DAYS))
+            )
         )
-    )
-}
+    }
 
-private fun AccountCreateEmailHandler.emitEvent(cmdId: CmdId, account: Account) {
-    eventEmitter.emit(cmdId, AccountCreatedEvent(account))
+    private fun emitEvent(cmdId: CmdId, account: Account) {
+        eventEmitter.emit(cmdId, AccountCreatedEvent(account))
+    }
 }

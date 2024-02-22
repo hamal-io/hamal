@@ -14,23 +14,27 @@ import org.springframework.stereotype.Component
 
 @Component
 class HookUpdateHandler(
-    val hookRepository: HookRepository, val eventEmitter: InternalEventEmitter
+    private val hookRepository: HookRepository,
+    private val eventEmitter: InternalEventEmitter
 ) : RequestHandler<HookUpdateRequested>(HookUpdateRequested::class) {
 
     override fun invoke(req: HookUpdateRequested) {
-        updateHook(req).also { emitEvent(req.cmdId(), it) }
+        updateHook(req)
+            .also { emitEvent(req.cmdId(), it) }
     }
-}
 
-private fun HookUpdateHandler.updateHook(req: HookUpdateRequested): Hook {
-    return hookRepository.update(
-        req.hookId, UpdateCmd(
-            id = req.cmdId(),
-            name = req.name,
+    private fun updateHook(req: HookUpdateRequested): Hook {
+        return hookRepository.update(
+            req.hookId, UpdateCmd(
+                id = req.cmdId(),
+                name = req.name,
+            )
         )
-    )
+    }
+
+    private fun emitEvent(cmdId: CmdId, hook: Hook) {
+        eventEmitter.emit(cmdId, HookCreatedEvent(hook))
+    }
+
 }
 
-private fun HookUpdateHandler.emitEvent(cmdId: CmdId, hook: Hook) {
-    eventEmitter.emit(cmdId, HookCreatedEvent(hook))
-}

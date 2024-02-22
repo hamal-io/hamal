@@ -28,6 +28,5 @@ class LoginMetaMaskHandler(
                     )
                 )
             }
-            ?: throw NoSuchElementException("Account not found")
     }
 }

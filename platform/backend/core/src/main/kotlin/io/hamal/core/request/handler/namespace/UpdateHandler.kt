@@ -13,25 +13,28 @@ import org.springframework.stereotype.Component
 
 @Component
 class NamespaceUpdateHandler(
-    val namespaceCmdRepository: NamespaceCmdRepository,
-    val eventEmitter: InternalEventEmitter
+    private val namespaceCmdRepository: NamespaceCmdRepository,
+    private val eventEmitter: InternalEventEmitter
 ) : RequestHandler<NamespaceUpdateRequested>(NamespaceUpdateRequested::class) {
 
     override fun invoke(req: NamespaceUpdateRequested) {
-        updateNamespace(req).also { emitEvent(req.cmdId(), it) }
+        updateNamespace(req)
+            .also { emitEvent(req.cmdId(), it) }
     }
-}
 
-private fun NamespaceUpdateHandler.updateNamespace(req: NamespaceUpdateRequested): Namespace {
-    return namespaceCmdRepository.update(
-        req.namespaceId,
-        NamespaceCmdRepository.UpdateCmd(
-            id = req.cmdId(),
-            name = req.name
+    private fun updateNamespace(req: NamespaceUpdateRequested): Namespace {
+        return namespaceCmdRepository.update(
+            req.namespaceId,
+            NamespaceCmdRepository.UpdateCmd(
+                id = req.cmdId(),
+                name = req.name
+            )
         )
-    )
+    }
+
+    private fun emitEvent(cmdId: CmdId, namespace: Namespace) {
+        eventEmitter.emit(cmdId, NamespaceUpdatedEvent(namespace))
+    }
+
 }
 
-private fun NamespaceUpdateHandler.emitEvent(cmdId: CmdId, namespace: Namespace) {
-    eventEmitter.emit(cmdId, NamespaceUpdatedEvent(namespace))
-}

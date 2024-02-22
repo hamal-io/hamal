@@ -14,7 +14,8 @@ import org.springframework.stereotype.Component
 
 @Component
 class EndpointUpdateHandler(
-    val endpointRepository: EndpointRepository, val eventEmitter: InternalEventEmitter
+    val endpointRepository: EndpointRepository,
+    val eventEmitter: InternalEventEmitter
 ) : RequestHandler<EndpointUpdateRequested>(EndpointUpdateRequested::class) {
 
     override fun invoke(req: EndpointUpdateRequested) {

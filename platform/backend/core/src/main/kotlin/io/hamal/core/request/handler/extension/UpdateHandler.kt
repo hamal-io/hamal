@@ -15,37 +15,38 @@ import org.springframework.stereotype.Component
 
 @Component
 class ExtensionUpdateHandler(
-    val extensionRepository: ExtensionRepository,
-    val codeCmdRepository: CodeCmdRepository,
-    val eventEmitter: InternalEventEmitter
+    private val extensionRepository: ExtensionRepository,
+    private val codeCmdRepository: CodeCmdRepository,
+    private val eventEmitter: InternalEventEmitter
 ) : RequestHandler<ExtensionUpdateRequested>(ExtensionUpdateRequested::class) {
 
     override fun invoke(req: ExtensionUpdateRequested) {
-        updateExtension(req).also { emitEvent(req.cmdId(), it) }
+        updateExtension(req)
+            .also { emitEvent(req.cmdId(), it) }
     }
-}
 
-private fun ExtensionUpdateHandler.updateExtension(req: ExtensionUpdateRequested): Extension {
-    val ext = extensionRepository.get(req.extensionId)
-    val code = codeCmdRepository.update(
-        ext.code.id, CodeCmdRepository.UpdateCmd(
-            id = req.cmdId(),
-            value = req.code
-        )
-    )
-
-    return extensionRepository.update(
-        req.extensionId, UpdateCmd(
-            id = req.cmdId(),
-            name = req.name,
-            code = ExtensionCode(
-                id = code.id,
-                version = code.version
+    private fun updateExtension(req: ExtensionUpdateRequested): Extension {
+        val ext = extensionRepository.get(req.extensionId)
+        val code = codeCmdRepository.update(
+            ext.code.id, CodeCmdRepository.UpdateCmd(
+                id = req.cmdId(),
+                value = req.code
             )
         )
-    )
-}
 
-private fun ExtensionUpdateHandler.emitEvent(cmdId: CmdId, ext: Extension) {
-    eventEmitter.emit(cmdId, ExtensionUpdatedEvent(ext))
+        return extensionRepository.update(
+            req.extensionId, UpdateCmd(
+                id = req.cmdId(),
+                name = req.name,
+                code = ExtensionCode(
+                    id = code.id,
+                    version = code.version
+                )
+            )
+        )
+    }
+
+    private fun emitEvent(cmdId: CmdId, ext: Extension) {
+        eventEmitter.emit(cmdId, ExtensionUpdatedEvent(ext))
+    }
 }

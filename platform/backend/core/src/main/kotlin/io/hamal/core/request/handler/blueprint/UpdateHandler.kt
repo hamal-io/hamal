@@ -13,27 +13,29 @@ import org.springframework.stereotype.Component
 
 @Component
 class BlueprintUpdateHandler(
-    val blueprintRepository: BlueprintRepository,
-    val eventEmitter: InternalEventEmitter
+    private val blueprintRepository: BlueprintRepository,
+    private val eventEmitter: InternalEventEmitter
 ) : RequestHandler<BlueprintUpdateRequested>(BlueprintUpdateRequested::class) {
 
     override fun invoke(req: BlueprintUpdateRequested) {
-        updateBlueprint(req).also { emitEvent(req.cmdId(), it) }
+        updateBlueprint(req)
+            .also { emitEvent(req.cmdId(), it) }
+    }
+
+    private fun updateBlueprint(req: BlueprintUpdateRequested): Blueprint {
+        return blueprintRepository.update(
+            req.blueprintId, UpdateCmd(
+                id = req.cmdId(),
+                name = req.name,
+                inputs = req.inputs,
+                value = req.value,
+                description = req.description
+            )
+        )
+    }
+
+    private fun emitEvent(cmdId: CmdId, bp: Blueprint) {
+        eventEmitter.emit(cmdId, BlueprintUpdatedEvent(bp))
     }
 }
 
-private fun BlueprintUpdateHandler.updateBlueprint(req: BlueprintUpdateRequested): Blueprint {
-    return blueprintRepository.update(
-        req.blueprintId, UpdateCmd(
-            id = req.cmdId(),
-            name = req.name,
-            inputs = req.inputs,
-            value = req.value,
-            description = req.description
-        )
-    )
-}
-
-private fun BlueprintUpdateHandler.emitEvent(cmdId: CmdId, bp: Blueprint) {
-    eventEmitter.emit(cmdId, BlueprintUpdatedEvent(bp))
-}
