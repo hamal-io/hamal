@@ -10,6 +10,7 @@ import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
+import io.hamal.lib.domain._enum.TopicType
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.*
 import io.hamal.repository.api.EndpointCmdRepository.CreateCmd
@@ -41,8 +42,8 @@ class TestSetupConfig {
             setupInternalTopics()
 
             setupUser(1) // test user & resources which other users try to access
-            setupAnonymous(2)
-            setupUser(3)
+            setupAnonymous(200)
+            setupUser(300)
         } catch (t: Throwable) {
             t.printStackTrace()
         }
@@ -204,6 +205,42 @@ class TestSetupConfig {
                 )
             )
         )
+
+        topicRepository.create(
+            TopicCmdRepository.TopicCreateCmd(
+                id = CmdId(id),
+                topicId = TopicId(id),
+                name = TopicName("$id-namespace-topic"),
+                namespaceId = NamespaceId(id),
+                workspaceId = WorkspaceId(id),
+                type = TopicType.Namespace,
+                logTopicId = LogTopicId(id)
+            )
+        )
+
+        topicRepository.create(
+            TopicCmdRepository.TopicCreateCmd(
+                id = CmdId(id + 1),
+                topicId = TopicId(id + 1),
+                name = TopicName("$id-workspace-topic"),
+                namespaceId = NamespaceId(id),
+                workspaceId = WorkspaceId(id),
+                type = TopicType.Workspace,
+                logTopicId = LogTopicId(id + 1)
+            )
+        )
+
+        topicRepository.create(
+            TopicCmdRepository.TopicCreateCmd(
+                id = CmdId(id + 2),
+                topicId = TopicId(id + 2),
+                name = TopicName("$id-public-topic"),
+                namespaceId = NamespaceId(id),
+                workspaceId = WorkspaceId(id),
+                type = TopicType.Public,
+                logTopicId = LogTopicId(id + 2)
+            )
+        )
     }
 
     @Autowired
@@ -238,6 +275,9 @@ class TestSetupConfig {
 
     @Autowired
     lateinit var stateRepository: StateRepository
+
+    @Autowired
+    lateinit var topicRepository: TopicRepository
 
     @Autowired
     lateinit var workspaceRepository: WorkspaceRepository

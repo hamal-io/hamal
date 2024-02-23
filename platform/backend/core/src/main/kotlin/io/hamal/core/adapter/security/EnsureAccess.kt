@@ -77,6 +77,7 @@ class EnsureAccessAdapter(
     private fun accessDenied(obj: DomainObject<*>): Nothing {
         val name = when (obj) {
             is Exec -> "Exec"
+            is Topic -> "Topic"
             is Trigger -> "Trigger"
             else -> obj.javaClass.simpleName
         }

@@ -21,8 +21,8 @@ abstract class BaseApiUnauthorizedTest(apiUrl: String) : BaseTest(apiUrl) {
             .flatMap { testPath ->
                 val testName = generateTestName(testPath)
                 listOf(
-                    TestParameter("2", "Anonymous", "2-token"),
-                    TestParameter("3", "User", "3-token")
+                    TestParameter("200", "Anonymous", "200-token"),
+                    TestParameter("300", "User", "300-token")
                 ).map { testParameter ->
 
                     dynamicTest("$testName - ${testParameter.name}") {
