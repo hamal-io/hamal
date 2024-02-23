@@ -178,6 +178,16 @@ class TestSetupConfig {
                 workspaceId = WorkspaceId(id)
             )
         )
+
+        hookRepository.create(
+            HookCmdRepository.CreateCmd(
+                id = CmdId(id),
+                hookId = HookId(id),
+                name = HookName("$id-hook"),
+                namespaceId = NamespaceId(id),
+                workspaceId = WorkspaceId(id)
+            )
+        )
     }
 
     @Autowired
@@ -200,6 +210,9 @@ class TestSetupConfig {
 
     @Autowired
     lateinit var funcRepository: FuncRepository
+
+    @Autowired
+    lateinit var hookRepository: HookRepository
 
     @Autowired
     lateinit var namespaceRepository: NamespaceRepository
