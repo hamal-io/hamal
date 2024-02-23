@@ -48,7 +48,7 @@ internal sealed class NamespaceBaseControllerTest : BaseControllerTest() {
     }
 
     fun listDescendants(namespaceId: NamespaceId): ApiNamespaceList {
-        val listNamespacesResponse = httpTemplate.get("/v1/namespaces/{namespaceId}/descendants")
+        val listNamespacesResponse = httpTemplate.get("/v1/namespaces/{namespaceId}/sublist")
             .path("namespaceId", namespaceId)
             .execute()
 

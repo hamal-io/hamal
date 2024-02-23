@@ -64,8 +64,8 @@ internal class NamespaceListController(
         })
     }
 
-    @GetMapping("/v1/namespaces/{namespaceId}/descendants")
-    fun listDescendants(
+    @GetMapping("/v1/namespaces/{namespaceId}/sublist")
+    fun sublist(
         @PathVariable("namespaceId") namespaceId: NamespaceId
     ): ResponseEntity<ApiNamespaceList> {
         return ResponseEntity.ok(

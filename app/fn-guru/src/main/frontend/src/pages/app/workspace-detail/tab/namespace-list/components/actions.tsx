@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/dropdown-menu.tsx";
 import {DotsHorizontalIcon} from "@radix-ui/react-icons";
 import {Button} from "@/components/ui/button.tsx";
-import Append from "@/pages/app/workspace-detail/tab/namespace-list/components/append.tsx";
 import {Dialog} from "@/components/ui/dialog.tsx";
 import Update from "@/pages/app/workspace-detail/tab/namespace-list/components/update.tsx";
 import {NamespaceListItem} from "@/types";
@@ -43,23 +42,17 @@ const NamespaceActions: FC<Props> = ({item}) => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                     <DropdownMenuSeparator/>
-                    <DropdownMenuItem
+                {/*    <DropdownMenuItem
                         onClick={() => {
                             console.log("not implemented")
                         }}>
                         Choose
-                    </DropdownMenuItem>
+                    </DropdownMenuItem>*/}
                     <DropdownMenuItem
                         onClick={() => {
                             setDialogContent(<Update item={item} onClose={closeDialog}></Update>)
                         }}>
                         Rename
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                        onClick={() => {
-                            setDialogContent(<Append parentId={item.parentId} onClose={closeDialog}></Append>)
-                        }}>
-                        Append
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
