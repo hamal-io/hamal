@@ -1,4 +1,4 @@
-package io.hamal.testbed.api.unauthenticated
+package io.hamal.testbed.api.misc
 
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.testbed.api.BaseTest

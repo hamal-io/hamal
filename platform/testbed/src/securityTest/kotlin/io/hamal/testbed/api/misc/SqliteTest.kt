@@ -1,4 +1,4 @@
-package io.hamal.testbed.api.unauthenticated
+package io.hamal.testbed.api.misc
 
 import io.hamal.api.ApiConfig
 import io.hamal.core.CoreConfig
