@@ -9,6 +9,6 @@ export const useCodeGet = (): [CodeGetAction, Code, boolean, Error] => {
     const [auth] = useAuth()
     const [get, code, loading, error] = useGet<Code>()
     const fn = useCallback(async (codeId: string, version: number, abortController?: AbortController) =>
-        get(`/v1/code/${codeId}?version=${version}`, abortController), [auth])
+        get(`/v1/codes/${codeId}?version=${version}`, abortController), [auth])
     return [fn, code, loading, error]
 }

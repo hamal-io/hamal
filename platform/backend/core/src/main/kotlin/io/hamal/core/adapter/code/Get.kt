@@ -1,5 +1,6 @@
 package io.hamal.core.adapter.code
 
+import io.hamal.core.adapter.security.EnsureAccessPort
 import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.repository.api.Code
@@ -12,24 +13,16 @@ fun interface CodeGetPort {
 
 @Component
 class CodeGetAdapter(
-    private val codeQueryRepository: CodeQueryRepository
+    private val codeQueryRepository: CodeQueryRepository,
+    private val ensureAccess: EnsureAccessPort
 ) : CodeGetPort {
 
     override fun invoke(codeId: CodeId, codeVersion: CodeVersion?): Code {
-        ensureCodeExists(codeId)
         return if (codeVersion != null) {
-            ensureVersionExists(codeId, codeVersion)
-            codeQueryRepository.get(codeId, codeVersion)
+            ensureAccess(codeQueryRepository.get(codeId, codeVersion))
         } else {
-            ensureCodeExists(codeId)
-            codeQueryRepository.get(codeId)
+            ensureAccess(codeQueryRepository.get(codeId))
         }
-    }
-
-    private fun ensureCodeExists(codeId: CodeId) = codeQueryRepository.get(codeId)
-
-    private fun ensureVersionExists(codeId: CodeId, codeVersion: CodeVersion) {
-        codeQueryRepository.get(codeId, codeVersion)
     }
 }
 
