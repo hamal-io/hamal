@@ -19,7 +19,7 @@ const WorkspaceNamespaceListTab: FC = () => {
     if (namespaceList == null || isLoading) return "Loading..."
     if (error != null) return "Error -"
 
-    const root = namespaceList.namespaces.find(i => i.id == uiState.namespaceId)
+    const root = namespaceList.namespaces[0].id
 
     return (
         <SublistView parent={root}/>
