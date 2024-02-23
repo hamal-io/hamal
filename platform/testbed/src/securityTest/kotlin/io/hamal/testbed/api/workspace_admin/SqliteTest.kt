@@ -1,4 +1,4 @@
-package io.hamal.testbed.api.unauthorized
+package io.hamal.testbed.api.workspace_admin
 
 import io.hamal.api.ApiConfig
 import io.hamal.core.CoreConfig
@@ -12,13 +12,13 @@ import org.springframework.boot.WebApplicationType.SERVLET
 import org.springframework.boot.builder.SpringApplicationBuilder
 
 @TestInstance(PER_CLASS)
-internal object ApiUnauthorizedMemoryTest : BaseApiUnauthorizedTest(
-    "http://localhost:8041"
+internal object ApiWorkspaceAdminSqliteTest : BaseApiWorkspaceAdminTest(
+    "http://localhost:8052"
 ) {
     init {
         val applicationBuilder = SpringApplicationBuilder()
             .parent(CoreConfig::class.java, TestApiConfig::class.java)
-            .profiles("test", "api", "unauthorized", "memory")
+            .profiles("test", "api", "workspace_admin", "sqlite")
             .bannerMode(OFF)
             .web(NONE)
 
@@ -27,7 +27,7 @@ internal object ApiUnauthorizedMemoryTest : BaseApiUnauthorizedTest(
                 .parent(it)
                 .child(ApiConfig::class.java, TestSetupConfig::class.java)
                 .web(SERVLET)
-                .properties("server.port=8041")
+                .properties("server.port=8052")
                 .bannerMode(OFF)
                 .run()
         }

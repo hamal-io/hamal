@@ -2,6 +2,7 @@ package io.hamal.testbed.api
 
 import io.hamal.core.component.DelayRetry
 import io.hamal.core.component.DelayRetryFixedTime
+import io.hamal.core.component.SetupInternalTopics
 import io.hamal.core.config.BackendBasePath
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
@@ -31,8 +32,9 @@ class TestSetupConfig {
     @PostConstruct
     fun setup() {
         try {
-            setupUser(1) // test user & resources which other users try to access
+            setupInternalTopics()
 
+            setupUser(1) // test user & resources which other users try to access
             setupAnonymous(2)
             setupUser(3)
         } catch (t: Throwable) {
@@ -140,4 +142,7 @@ class TestSetupConfig {
 
     @Autowired
     lateinit var workspaceRepository: WorkspaceRepository
+
+    @Autowired
+    lateinit var setupInternalTopics: SetupInternalTopics
 }

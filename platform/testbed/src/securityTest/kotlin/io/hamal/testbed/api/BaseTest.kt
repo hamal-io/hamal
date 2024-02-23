@@ -10,7 +10,7 @@ import io.hamal.testbed.api.BaseTest.TestResult.Success
 import java.nio.file.Files
 import java.nio.file.Path
 
-abstract class BaseTest(val apiUrl: String) : AbstractRunnerTest() {
+abstract class BaseTest(private val apiUrl: String) : AbstractRunnerTest() {
 
     sealed interface TestResult {
         object Success : TestResult

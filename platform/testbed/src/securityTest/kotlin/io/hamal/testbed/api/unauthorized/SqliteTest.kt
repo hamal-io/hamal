@@ -12,7 +12,7 @@ import org.springframework.boot.WebApplicationType.SERVLET
 import org.springframework.boot.builder.SpringApplicationBuilder
 
 @TestInstance(PER_CLASS)
-internal object ApiUnauthenticatedSqliteTest : BaseApiUnauthorizedTest(
+internal object ApiUnauthorizedSqliteTest : BaseApiUnauthorizedTest(
     "http://localhost:8051"
 ) {
     init {

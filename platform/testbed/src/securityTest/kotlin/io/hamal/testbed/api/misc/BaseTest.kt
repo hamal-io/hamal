@@ -12,7 +12,7 @@ import java.nio.file.Paths
 import java.util.stream.Stream
 import kotlin.io.path.name
 
-abstract class BaseApiUnauthenticatedTest(apiUrl: String) : BaseTest(apiUrl) {
+abstract class BaseApiMiscTest(apiUrl: String) : BaseTest(apiUrl) {
 
     @TestFactory
     fun run(): List<DynamicTest> {
@@ -39,5 +39,5 @@ abstract class BaseApiUnauthenticatedTest(apiUrl: String) : BaseTest(apiUrl) {
         .distinct()
         .sorted()
 
-    private val testPath = Paths.get("src", "securityTest", "resources", "api", "unauthenticated")
+    private val testPath = Paths.get("src", "securityTest", "resources", "api", "misc")
 }
