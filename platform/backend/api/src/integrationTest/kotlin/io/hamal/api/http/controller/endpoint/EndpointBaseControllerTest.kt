@@ -37,7 +37,7 @@ internal sealed class EndpointBaseControllerTest : BaseControllerTest() {
 
     fun createFunc(
         name: FuncName,
-        namespaceId: NamespaceId = NamespaceId(1)
+        namespaceId: NamespaceId = NamespaceId.root
     ): ApiFuncCreateRequested {
         val createTopicResponse = httpTemplate.post("/v1/namespaces/{namespaceId}/funcs")
             .path("namespaceId", namespaceId)

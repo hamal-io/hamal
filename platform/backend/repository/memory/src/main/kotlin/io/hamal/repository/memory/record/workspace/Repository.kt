@@ -42,9 +42,10 @@ class MemoryWorkspaceRepository : RecordMemoryRepository<WorkspaceId, WorkspaceR
         )
     }
 
-    override fun list(query: WorkspaceQuery): List<Workspace> = lock.withLock { return WorkspaceCurrentProjection.list(
-        query
-    )
+    override fun list(query: WorkspaceQuery): List<Workspace> = lock.withLock {
+        return WorkspaceCurrentProjection.list(
+            query
+        )
     }
 
     override fun count(query: WorkspaceQuery): Count = lock.withLock { WorkspaceCurrentProjection.count(query) }

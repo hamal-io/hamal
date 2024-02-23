@@ -6,11 +6,10 @@ import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.common.util.TimeUtils.withEpochMilli
 import io.hamal.lib.domain.vo.*
+import io.hamal.repository.api.Auth
 import io.hamal.repository.api.AuthCmdRepository.*
 import io.hamal.repository.api.AuthQueryRepository.AuthQuery
 import io.hamal.repository.api.AuthRepository
-import io.hamal.repository.api.EmailAuth
-import io.hamal.repository.api.TokenAuth
 import io.hamal.repository.fixture.AbstractUnitTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
@@ -41,7 +40,7 @@ internal class AuthRepositoryTest : AbstractUnitTest() {
             )
 
             with(result) {
-                require(this is EmailAuth)
+                require(this is Auth.Email)
                 assertThat(id, equalTo(AuthId(2)))
                 assertThat(accountId, equalTo(AccountId(3)))
                 assertThat(email, equalTo(Email("email@fn.guru")))
@@ -65,7 +64,7 @@ internal class AuthRepositoryTest : AbstractUnitTest() {
                 )
 
                 with(result) {
-                    require(this is TokenAuth)
+                    require(this is Auth.Token)
                     assertThat(id, equalTo(AuthId(2)))
                     assertThat(accountId, equalTo(AccountId(3)))
                     assertThat(token, equalTo(AuthToken("someSuperSecretAccessToken")))
@@ -92,7 +91,10 @@ internal class AuthRepositoryTest : AbstractUnitTest() {
 
                 with(list(AccountId(3))) {
                     assertThat(find(AuthToken("supersecret")), nullValue())
-                    assertThat(get(0).accountId, equalTo(AccountId(3)))
+                    get(0).also { auth ->
+                        require(auth is Auth.Account)
+                        assertThat(auth.accountId, equalTo(AccountId(3)))
+                    }
                     assertTrue(any { it.id == AuthId(1) })
                     assertFalse(any { it.id == AuthId(5) })
                 }
@@ -152,7 +154,7 @@ internal class AuthRepositoryTest : AbstractUnitTest() {
                 )
 
                 with(get(AuthToken("some-token"))) {
-                    require(this is TokenAuth)
+                    require(this is Auth.Token)
                     assertThat(id, equalTo(AuthId(1)))
                     assertThat(accountId, equalTo(AccountId(2)))
                     assertThat(token, equalTo(AuthToken("some-token")))
@@ -189,7 +191,7 @@ internal class AuthRepositoryTest : AbstractUnitTest() {
                 )
 
                 with(find(AuthToken("some-token"))) {
-                    require(this is TokenAuth)
+                    require(this is Auth.Token)
                     assertThat(id, equalTo(AuthId(1)))
                     assertThat(accountId, equalTo(AccountId(2)))
                     assertThat(token, equalTo(AuthToken("some-token")))
@@ -227,13 +229,13 @@ internal class AuthRepositoryTest : AbstractUnitTest() {
             assertThat(result, hasSize(2))
 
             with(result[1]) {
-                require(this is EmailAuth)
+                require(this is Auth.Email)
                 assertThat(id, equalTo(AuthId(1)))
                 assertThat(accountId, equalTo(AccountId(3)))
             }
 
             with(result[0]) {
-                require(this is TokenAuth)
+                require(this is Auth.Token)
                 assertThat(id, equalTo(AuthId(2)))
                 assertThat(accountId, equalTo(AccountId(3)))
             }

@@ -12,6 +12,7 @@ interface EndpointCreateRequest {
 
 data class EndpointCreateRequested(
     override val id: RequestId,
+    override val by: AuthId,
     override var status: RequestStatus,
     val endpointId: EndpointId,
     val funcId: FuncId,
@@ -28,6 +29,7 @@ interface EndpointUpdateRequest {
 
 data class EndpointUpdateRequested(
     override val id: RequestId,
+    override val by: AuthId,
     override var status: RequestStatus,
     val endpointId: EndpointId,
     val workspaceId: WorkspaceId,

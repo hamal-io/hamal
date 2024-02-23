@@ -3,6 +3,7 @@ package io.hamal.core.adapter.endpoint
 import io.hamal.core.adapter.exec.ExecFindPort
 import io.hamal.core.adapter.func.FuncGetPort
 import io.hamal.core.adapter.request.RequestEnqueuePort
+import io.hamal.core.security.SecurityContext
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.RequestStatus
@@ -39,6 +40,7 @@ class EndpointInvokeAdapter(
         requestEnqueue(
             ExecInvokeRequested(
                 id = generateDomainId(::RequestId),
+                by = SecurityContext.currentAuthId,
                 status = RequestStatus.Submitted,
                 execId = execId,
                 namespaceId = func.namespaceId,

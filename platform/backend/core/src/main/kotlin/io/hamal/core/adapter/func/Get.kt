@@ -1,5 +1,6 @@
 package io.hamal.core.adapter.func
 
+import io.hamal.core.adapter.security.EnsureAccessPort
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncQueryRepository
@@ -11,7 +12,9 @@ fun interface FuncGetPort {
 
 @Component
 class FuncGetAdapter(
-    private val funcQueryRepository: FuncQueryRepository
+    private val funcQueryRepository: FuncQueryRepository,
+    private val ensureAccess: EnsureAccessPort
 ) : FuncGetPort {
-    override fun invoke(funcId: FuncId): Func = funcQueryRepository.get(funcId)
+    override fun invoke(funcId: FuncId): Func = ensureAccess(funcQueryRepository.get(funcId))
+
 }

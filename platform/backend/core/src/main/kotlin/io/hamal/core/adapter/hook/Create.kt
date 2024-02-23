@@ -2,6 +2,7 @@ package io.hamal.core.adapter.hook
 
 import io.hamal.core.adapter.request.RequestEnqueuePort
 import io.hamal.core.adapter.namespace.NamespaceGetPort
+import io.hamal.core.security.SecurityContext
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.HookCreateRequest
@@ -25,6 +26,7 @@ class HookCreateAdapter(
         val namespace = namespaceGet(namespaceId)
         return HookCreateRequested(
             id = generateDomainId(::RequestId),
+            by = SecurityContext.currentAuthId,
             status = RequestStatus.Submitted,
             hookId = generateDomainId(::HookId),
             workspaceId = namespace.workspaceId,

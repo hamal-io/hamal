@@ -12,7 +12,7 @@ sys.await(topic_req)
 -- trigger name is unique
 req_two = fail_on_error(sys.triggers.create_cron({
     func_id = func_one.id,
-    namespace_id = '1',
+    namespace_id = '539',
     name = 'trigger-to-append',
     inputs = { },
     cron = '0 0 8-10 * * *'
@@ -21,7 +21,7 @@ sys.await_completed(req_two)
 
 req_two = fail_on_error(sys.triggers.create_cron({
     func_id = func_one.id,
-    namespace_id = '1',
+    namespace_id = '539',
     name = 'trigger-to-append',
     inputs = { },
     cron = '0 0 8-10 * * *'

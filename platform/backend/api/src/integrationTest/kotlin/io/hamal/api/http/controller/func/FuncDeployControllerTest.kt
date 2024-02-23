@@ -178,7 +178,9 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
             val func = awaitCompleted(
                 createFunc(
                     ApiFuncCreateRequest(
-                        name = FuncName("test-func"), inputs = FuncInputs(), code = CodeValue("13 + 37")
+                        name = FuncName("test-func"),
+                        inputs = FuncInputs(),
+                        code = CodeValue("13 + 37")
                     )
                 )
             )
@@ -187,7 +189,9 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
                 awaitCompleted(
                     updateFunc(
                         func.funcId, ApiFuncUpdateRequest(
-                            name = null, inputs = null, code = CodeValue("code-${i}")
+                            name = null,
+                            inputs = null,
+                            code = CodeValue("code-${i}")
                         )
                     )
                 )

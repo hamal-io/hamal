@@ -1,6 +1,7 @@
 package io.hamal.core.request.handler.exec
 
 import io.hamal.core.event.InternalEventEmitter
+import io.hamal.core.request.RequestHandler
 import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.hot.HotObject
@@ -21,7 +22,7 @@ class ExecInvokeHandler(
     private val execCmdRepository: ExecCmdRepository,
     private val eventEmitter: InternalEventEmitter,
     private val funcQueryRepository: FuncQueryRepository
-) : io.hamal.core.request.RequestHandler<ExecInvokeRequested>(ExecInvokeRequested::class) {
+) : RequestHandler<ExecInvokeRequested>(ExecInvokeRequested::class) {
 
     override fun invoke(req: ExecInvokeRequested) {
         planExec(req).also { emitEvent(req.cmdId(), it) }

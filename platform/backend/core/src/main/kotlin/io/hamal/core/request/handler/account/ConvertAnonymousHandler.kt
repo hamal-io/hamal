@@ -1,6 +1,7 @@
 package io.hamal.core.request.handler.account
 
 import io.hamal.core.event.InternalEventEmitter
+import io.hamal.core.request.RequestHandler
 import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
@@ -17,54 +18,54 @@ import java.time.temporal.ChronoUnit
 
 @Component
 class AccountConvertAnonymousHandler(
-    val accountCmdRepository: AccountCmdRepository,
-    val authCmdRepository: AuthCmdRepository,
-    val eventEmitter: InternalEventEmitter,
-) : io.hamal.core.request.RequestHandler<AccountConvertRequested>(AccountConvertRequested::class) {
+    private val accountCmdRepository: AccountCmdRepository,
+    private val authCmdRepository: AuthCmdRepository,
+    private val eventEmitter: InternalEventEmitter,
+) : RequestHandler<AccountConvertRequested>(AccountConvertRequested::class) {
 
     override fun invoke(req: AccountConvertRequested) {
         convertAccount(req)
-            .also { emitEvent(req.cmdId(), it) }
             .also { createEmailAuth(req) }
             .also { createTokenAuth(req) }
+            .also { emitEvent(req.cmdId(), it) }
     }
-}
 
-private fun AccountConvertAnonymousHandler.convertAccount(req: AccountConvertRequested): Account {
-    return accountCmdRepository.convert(
-        AccountCmdRepository.ConvertCmd(
-            id = req.cmdId(),
-            accountId = req.accountId,
-            email = req.email
+    private fun convertAccount(req: AccountConvertRequested): Account {
+        return accountCmdRepository.convert(
+            AccountCmdRepository.ConvertCmd(
+                id = req.cmdId(),
+                accountId = req.accountId,
+                email = req.email
+            )
         )
-    )
-}
+    }
 
 
-private fun AccountConvertAnonymousHandler.createEmailAuth(req: AccountConvertRequested): Auth {
-    return authCmdRepository.create(
-        AuthCmdRepository.CreateEmailAuthCmd(
-            id = req.cmdId(),
-            authId = req.passwordAuthId,
-            accountId = req.accountId,
-            email = req.email,
-            hash = req.hash
+    private fun createEmailAuth(req: AccountConvertRequested): Auth {
+        return authCmdRepository.create(
+            AuthCmdRepository.CreateEmailAuthCmd(
+                id = req.cmdId(),
+                authId = req.emailAuthId,
+                accountId = req.accountId,
+                email = req.email,
+                hash = req.hash
+            )
         )
-    )
-}
+    }
 
-private fun AccountConvertAnonymousHandler.createTokenAuth(req: AccountConvertRequested): Auth {
-    return authCmdRepository.create(
-        AuthCmdRepository.CreateTokenAuthCmd(
-            id = req.cmdId(),
-            authId = req.tokenAuthId,
-            accountId = req.accountId,
-            token = req.token,
-            expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(30, ChronoUnit.DAYS))
+    private fun createTokenAuth(req: AccountConvertRequested): Auth {
+        return authCmdRepository.create(
+            AuthCmdRepository.CreateTokenAuthCmd(
+                id = req.cmdId(),
+                authId = req.tokenAuthId,
+                accountId = req.accountId,
+                token = req.token,
+                expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(30, ChronoUnit.DAYS))
+            )
         )
-    )
-}
+    }
 
-private fun AccountConvertAnonymousHandler.emitEvent(cmdId: CmdId, account: Account) {
-    eventEmitter.emit(cmdId, AccountConvertedEvent(account))
+    private fun emitEvent(cmdId: CmdId, account: Account) {
+        eventEmitter.emit(cmdId, AccountConvertedEvent(account))
+    }
 }

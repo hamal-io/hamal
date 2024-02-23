@@ -5,10 +5,7 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain.request.NamespaceAppendRequested
-import io.hamal.lib.domain.vo.NamespaceId
-import io.hamal.lib.domain.vo.NamespaceName
-import io.hamal.lib.domain.vo.NamespaceTreeId
-import io.hamal.lib.domain.vo.RequestId
+import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.NamespaceCmdRepository
 import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
 import io.hamal.repository.api.NamespaceTreeCmdRepository
@@ -74,6 +71,7 @@ internal class NamespaceAppendHandlerTest : BaseReqHandlerTest() {
     private val requestedAppendNamespace by lazy {
         NamespaceAppendRequested(
             id = RequestId(3),
+            by = AuthId(4),
             status = Submitted,
             parentId = NamespaceId.root,
             namespaceId = NamespaceId(12345),

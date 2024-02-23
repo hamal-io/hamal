@@ -2,7 +2,6 @@ package io.hamal.api.http.controller
 
 import io.hamal.lib.domain.request.*
 import io.hamal.lib.sdk.api.*
-import io.hamal.repository.api.Feedback
 import org.springframework.http.ResponseEntity
 
 fun Requested.accepted(): ResponseEntity<ApiRequested> =
@@ -39,7 +38,6 @@ fun Requested.toApiRequested(): ApiRequested = when (this) {
     is AuthLogoutRequested,
     is AccountCreateMetaMaskRequested,
     is ExecFailRequested,
-    is FeedbackCreateRequested,
     is HookInvokeRequested,
     is TestRequested,
     is ExecCompleteRequested -> throw NotImplementedError()

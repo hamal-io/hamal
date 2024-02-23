@@ -4,6 +4,7 @@ import io.hamal.core.adapter.request.RequestEnqueuePort
 import io.hamal.core.component.EncodePassword
 import io.hamal.core.component.GenerateSalt
 import io.hamal.core.component.GenerateToken
+import io.hamal.core.security.SecurityContext
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.AccountCreateRequested
@@ -30,13 +31,14 @@ class AccountCreateRootAdapter(
             ?: run {
                 AccountCreateRequested(
                     id = generateDomainId(::RequestId),
+                    by = SecurityContext.currentAuthId,
                     status = RequestStatus.Submitted,
                     accountId = AccountId.root,
                     accountType = AccountType.Root,
                     workspaceId = WorkspaceId.root,
                     namespaceId = NamespaceId.root,
                     email = req.email,
-                    passwordAuthId = generateDomainId(::AuthId),
+                    emailAuthId = AuthId.root,
                     tokenAuthId = generateDomainId(::AuthId),
                     hash = encodePassword(
                         password = req.password,
