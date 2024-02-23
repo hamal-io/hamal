@@ -6,9 +6,11 @@ import io.hamal.core.component.SetupInternalTopics
 import io.hamal.core.config.BackendBasePath
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
+import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.*
 import io.hamal.repository.api.EndpointCmdRepository.CreateCmd
+import io.hamal.repository.api.ExecCmdRepository.PlanCmd
 import jakarta.annotation.PostConstruct
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.TestConfiguration
@@ -144,6 +146,25 @@ class TestSetupConfig {
                 name = EndpointName("$id-name"),
             )
         )
+
+        execRepository.plan(
+            PlanCmd(
+                id = CmdId(id),
+                execId = ExecId(id),
+                namespaceId = NamespaceId(id),
+                workspaceId = WorkspaceId(id),
+                correlation = Correlation(
+                    correlationId = CorrelationId("test"),
+                    funcId = FuncId(id)
+                ),
+                inputs = ExecInputs(),
+                code = ExecCode(
+                    id = CodeId(id),
+                    version = CodeVersion(1)
+                ),
+                Invocation.Func
+            )
+        )
     }
 
     @Autowired
@@ -157,6 +178,9 @@ class TestSetupConfig {
 
     @Autowired
     lateinit var endpointRepository: EndpointRepository
+
+    @Autowired
+    lateinit var execRepository: ExecRepository
 
     @Autowired
     lateinit var funcRepository: FuncRepository

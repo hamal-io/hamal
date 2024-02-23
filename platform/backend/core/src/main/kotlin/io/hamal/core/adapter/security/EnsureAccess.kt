@@ -75,7 +75,12 @@ class EnsureAccessAdapter(
     }
 
     private fun accessDenied(obj: DomainObject<*>): Nothing {
-        throw IllegalAccessError("${obj.javaClass.simpleName} not found")
+        val name = when (obj) {
+            is Exec -> "Exec"
+            is Trigger -> "Trigger"
+            else -> obj.javaClass.simpleName
+        }
+        throw IllegalAccessError("$name not found")
     }
 }
 
