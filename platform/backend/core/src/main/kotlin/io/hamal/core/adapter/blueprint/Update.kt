@@ -1,6 +1,7 @@
 package io.hamal.core.adapter.blueprint
 
 import io.hamal.core.adapter.request.RequestEnqueuePort
+import io.hamal.core.security.SecurityContext
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.BlueprintUpdateRequest
@@ -23,6 +24,7 @@ class BlueprintUpdateAdapter(
         ensureBlueprintExists(blueprintId)
         return BlueprintUpdateRequested(
             id = generateDomainId(::RequestId),
+            by = SecurityContext.currentAuthId,
             status = RequestStatus.Submitted,
             blueprintId = blueprintId,
             name = req.name,

@@ -2,6 +2,7 @@ package io.hamal.core.adapter.func
 
 import io.hamal.core.adapter.request.RequestEnqueuePort
 import io.hamal.core.adapter.code.CodeGetPort
+import io.hamal.core.security.SecurityContext
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.FuncDeployRequest
@@ -26,6 +27,7 @@ class FuncDeployAdapter(
         req.version?.let { codeGet(func.code.id, req.version!!) }
         return FuncDeployRequested(
             id = generateDomainId(::RequestId),
+            by = SecurityContext.currentAuthId,
             status = RequestStatus.Submitted,
             workspaceId = func.workspaceId,
             funcId = funcId,

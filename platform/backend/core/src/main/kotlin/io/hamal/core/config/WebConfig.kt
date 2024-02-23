@@ -40,8 +40,8 @@ open class WebConfig : WebMvcConfigurer {
     open fun gsonHttpMessageConverter(gson: Gson): GsonHttpMessageConverter {
         val result = GsonHttpMessageConverter()
         result.gson = gson
+        result.defaultCharset = StandardCharsets.UTF_8
         result.supportedMediaTypes = listOf(
-            MediaType.APPLICATION_JSON,
             MediaType("application", "json", StandardCharsets.UTF_8)
         )
         return result

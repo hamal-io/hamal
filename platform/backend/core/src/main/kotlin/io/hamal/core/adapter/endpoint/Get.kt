@@ -1,5 +1,6 @@
 package io.hamal.core.adapter.endpoint
 
+import io.hamal.core.adapter.security.EnsureAccessPort
 import io.hamal.lib.domain.vo.EndpointId
 import io.hamal.repository.api.Endpoint
 import io.hamal.repository.api.EndpointQueryRepository
@@ -11,7 +12,8 @@ fun interface EndpointGetPort {
 
 @Component
 class EndpointGetAdapter(
-    private val endpointQueryRepository: EndpointQueryRepository
+    private val endpointQueryRepository: EndpointQueryRepository,
+    private val ensureAccess: EnsureAccessPort
 ) : EndpointGetPort {
-    override fun invoke(endpointId: EndpointId): Endpoint = endpointQueryRepository.get(endpointId)
+    override fun invoke(endpointId: EndpointId): Endpoint = ensureAccess(endpointQueryRepository.get(endpointId))
 }

@@ -1,6 +1,7 @@
 package io.hamal.core.adapter.feedback
 
 import io.hamal.core.adapter.request.RequestEnqueuePort
+import io.hamal.core.security.SecurityContext
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.FeedbackCreateRequest
@@ -21,6 +22,7 @@ class FeedbackCreateAdapter(
     override fun invoke(req: FeedbackCreateRequest): FeedbackCreateRequested {
         return FeedbackCreateRequested(
             id = generateDomainId(::RequestId),
+            by = SecurityContext.currentAuthId,
             status = RequestStatus.Submitted,
             feedbackId = generateDomainId(::FeedbackId),
             mood = req.mood,

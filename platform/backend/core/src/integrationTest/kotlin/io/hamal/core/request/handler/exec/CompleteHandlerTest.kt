@@ -57,6 +57,7 @@ internal class ExecCompleteHandlerTest : BaseReqHandlerTest() {
     private val submittedCompleteExecReq by lazy {
         ExecCompleteRequested(
             id = RequestId(10),
+            by = AuthId(20),
             status = RequestStatus.Submitted,
             execId = ExecId(1234),
             result = ExecResult(HotObject.builder().set("hamal", "rocks").build()),

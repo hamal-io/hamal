@@ -2,6 +2,7 @@ package io.hamal.core.adapter.state
 
 import io.hamal.core.adapter.func.FuncGetPort
 import io.hamal.core.adapter.request.RequestEnqueuePort
+import io.hamal.core.security.SecurityContext
 import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.RequestStatus
@@ -25,6 +26,7 @@ class StateAdapter(
         val func = funcGet(req.correlation.funcId)
         return StateSetRequested(
             id = generateDomainId(::RequestId),
+            by = SecurityContext.currentAuthId,
             status = RequestStatus.Submitted,
             workspaceId = func.workspaceId,
             state = CorrelatedState(

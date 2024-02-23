@@ -1,6 +1,7 @@
 package io.hamal.core.adapter.namespace
 
 import io.hamal.core.adapter.request.RequestEnqueuePort
+import io.hamal.core.security.SecurityContext
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.NamespaceUpdateRequest
@@ -23,6 +24,7 @@ class NamespaceUpdateAdapter(
         val namespace = namespaceGet(namespaceId)
         return NamespaceUpdateRequested(
             id = generateDomainId(::RequestId),
+            by = SecurityContext.currentAuthId,
             status = RequestStatus.Submitted,
             workspaceId = namespace.workspaceId,
             namespaceId = namespaceId,

@@ -10,11 +10,12 @@ interface AccountCreateRequest {
 
 data class AccountCreateRequested(
     override val id: RequestId,
+    override val by: AuthId,
     override var status: RequestStatus,
     val workspaceId: WorkspaceId,
     val accountId: AccountId,
     val accountType: AccountType,
-    val passwordAuthId: AuthId,
+    val emailAuthId: AuthId,
     val tokenAuthId: AuthId,
     val namespaceId: NamespaceId,
     val email: Email,
@@ -29,11 +30,12 @@ interface AccountCreateAnonymousRequest {
 
 data class AccountCreateAnonymousRequested(
     override val id: RequestId,
+    override val by: AuthId,
     override var status: RequestStatus,
     val workspaceId: WorkspaceId,
     val accountId: AccountId,
     val accountType: AccountType,
-    val passwordAuthId: AuthId,
+    val emailAuthId: AuthId,
     val tokenAuthId: AuthId,
     val namespaceId: NamespaceId,
     val salt: PasswordSalt,
@@ -48,6 +50,7 @@ interface AccountCreateMetaMaskRequest {
 
 data class AccountCreateMetaMaskRequested(
     override val id: RequestId,
+    override val by: AuthId,
     override var status: RequestStatus,
     val workspaceId: WorkspaceId,
     val accountId: AccountId,
@@ -67,9 +70,10 @@ interface AccountConvertAnonymousRequest {
 
 data class AccountConvertRequested(
     override val id: RequestId,
+    override val by: AuthId,
     override var status: RequestStatus,
     val accountId: AccountId,
-    val passwordAuthId: AuthId,
+    val emailAuthId: AuthId,
     val tokenAuthId: AuthId,
     val email: Email,
     val hash: PasswordHash,

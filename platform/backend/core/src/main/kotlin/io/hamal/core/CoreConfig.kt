@@ -2,9 +2,11 @@ package io.hamal.core
 
 import io.hamal.core.adapter.account.AccountCreateRootPort
 import io.hamal.core.component.SetupInternalTopics
+import io.hamal.core.security.SecurityContext
 import io.hamal.lib.domain.request.AccountCreateRootRequest
 import io.hamal.lib.domain.vo.Email
 import io.hamal.lib.domain.vo.Password
+import io.hamal.repository.api.Auth
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
@@ -43,12 +45,14 @@ open class CoreConfig {
     @Bean
     @Profile("!test")
     open fun commandLineRunner() = CommandLineRunner {
-        createRoot(
-            AccountCreateRootRequest(
-                email = Email("root@hamal.io"),
-                password = Password("toor")
+        SecurityContext.with(Auth.System) {
+            createRoot(
+                AccountCreateRootRequest(
+                    email = Email("root@hamal.io"),
+                    password = Password("toor")
+                )
             )
-        )
+        }
     }
 
     @Autowired

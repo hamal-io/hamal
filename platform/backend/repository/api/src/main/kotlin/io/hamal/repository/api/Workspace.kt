@@ -49,7 +49,7 @@ interface WorkspaceQueryRepository {
         var afterId: WorkspaceId = WorkspaceId(SnowflakeId(Long.MAX_VALUE)),
         var limit: Limit = Limit(1),
         var workspaceIds: List<WorkspaceId> = listOf(),
-        var accountId: List<AccountId> = listOf()
+        var accountIds: List<AccountId> = listOf()
     )
 }
 

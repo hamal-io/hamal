@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController
 internal class CodeGetController(
     private val codeGet: CodeGetPort
 ) {
-    @GetMapping("/v1/code/{id}")
+    @GetMapping("/v1/codes/{id}")
     fun get(
         @PathVariable("id") codeId: CodeId,
         @RequestParam(required = false, name = "version") codeVersion: CodeVersion?

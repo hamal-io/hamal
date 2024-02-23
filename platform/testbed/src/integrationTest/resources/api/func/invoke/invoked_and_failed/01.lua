@@ -1,7 +1,7 @@
 sys = require_plugin('sys')
 
 func_req = fail_on_error(sys.funcs.create({
-    namespace_id = '1',
+    namespace_id = '539',
     name = 'test-func',
     inputs = {},
     code = [[ doomed to fail ]]

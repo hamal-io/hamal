@@ -1,9 +1,10 @@
 package io.hamal.core.adapter.auth
 
-import io.hamal.core.adapter.request.RequestEnqueuePort
 import io.hamal.core.adapter.account.AccountCreateMetaMaskPort
+import io.hamal.core.adapter.request.RequestEnqueuePort
 import io.hamal.core.adapter.workspace.WorkspaceListPort
 import io.hamal.core.component.GenerateToken
+import io.hamal.core.security.SecurityContext
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.RequestStatus
@@ -14,6 +15,7 @@ import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.AuthId
 import io.hamal.lib.domain.vo.RequestId
 import io.hamal.lib.domain.vo.Web3Address
+import io.hamal.repository.api.Auth
 import io.hamal.repository.api.Workspace
 import io.hamal.repository.api.WorkspaceQueryRepository.WorkspaceQuery
 import org.springframework.stereotype.Component
@@ -43,6 +45,7 @@ class AuthLoginMetaMaskAdapter(
 
             return AuthLoginMetaMaskRequested(
                 id = generateDomainId(::RequestId),
+                by = SecurityContext.currentAuthId,
                 status = RequestStatus.Submitted,
                 authId = generateDomainId(::AuthId),
                 accountId = submitted.accountId,
@@ -53,15 +56,20 @@ class AuthLoginMetaMaskAdapter(
             ).also(requestEnqueue::invoke)
 
         } else {
+            if (auth !is Auth.Account) {
+                throw NoSuchElementException("Account not found")
+            }
+
             return AuthLoginMetaMaskRequested(
                 id = generateDomainId(::RequestId),
+                by = SecurityContext.currentAuthId,
                 status = RequestStatus.Submitted,
                 authId = generateDomainId(::AuthId),
                 accountId = auth.accountId,
                 workspaceIds = workspaceList(
                     WorkspaceQuery(
                         limit = Limit.all,
-                        accountId = listOf(auth.accountId)
+                        accountIds = listOf(auth.accountId)
                     )
                 ).map(Workspace::id),
                 token = generateToken(),

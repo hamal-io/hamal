@@ -5,12 +5,15 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.serialization.JsonAdapter
 import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain.vo.AuthId
 import io.hamal.lib.domain.vo.RequestClass
 import io.hamal.lib.domain.vo.RequestId
 import java.lang.reflect.Type
 
+
 sealed class Requested {
     abstract val id: RequestId
+    abstract val by: AuthId
     abstract var status: RequestStatus
     val `class`: RequestClass = RequestClass(this::class.java.simpleName)
 

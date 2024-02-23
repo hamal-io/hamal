@@ -31,7 +31,7 @@ internal class ErrorController {
         val cause = t.cause
         if (cause is ConversionFailedException) {
             res.status = 400
-            res.addHeader("Content-Type", "application/json")
+            res.addHeader("Content-Type", "application/json;charset=UTF-8")
             res.writer.write(
                 json.serialize(
                     InvalidArgumentType(
@@ -42,7 +42,7 @@ internal class ErrorController {
                 )
             )
         } else {
-            res.addHeader("Content-Type", "application/json")
+            res.addHeader("Content-Type", "application/json;charset=UTF-8")
             res.writer.write(json.serialize(ApiError("Bad request")))
         }
     }
@@ -52,7 +52,7 @@ internal class ErrorController {
         t.printStackTrace()
 
         res.status = 400
-        res.addHeader("Content-Type", "application/json")
+        res.addHeader("Content-Type", "application/json;charset=UTF-8")
         res.writer.write(json.serialize(ApiError(t.cause?.message ?: "Bad request")))
     }
 
@@ -61,7 +61,7 @@ internal class ErrorController {
         t.printStackTrace()
 
         res.status = SC_NOT_FOUND
-        res.addHeader("Content-Type", "application/json")
+        res.addHeader("Content-Type", "application/json;charset=UTF-8")
         res.writer.write(json.serialize(ApiError("Request handler not found")))
     }
 
@@ -71,7 +71,7 @@ internal class ErrorController {
         t.printStackTrace()
 
         res.status = SC_FORBIDDEN
-        res.addHeader("Content-Type", "application/json")
+        res.addHeader("Content-Type", "application/json;charset=UTF-8")
         res.writer.write(json.serialize(ApiError("FORBIDDEN")))
     }
 
@@ -87,12 +87,13 @@ internal class ErrorController {
         val statusCode = when (toHandle) {
             is IllegalArgumentException, is MethodArgumentTypeMismatchException -> SC_BAD_REQUEST
             is NoSuchElementException -> SC_NOT_FOUND
+            is IllegalAccessError -> SC_NOT_FOUND
             is IllegalCallerException -> SC_FORBIDDEN
             else -> SC_INTERNAL_SERVER_ERROR
         }
 
         res.status = statusCode
-        res.addHeader("Content-Type", "application/json")
+        res.addHeader("Content-Type", "application/json;charset=UTF-8")
         res.writer.write(json.serialize(ApiError(toHandle?.message ?: "Unknown error")))
     }
 

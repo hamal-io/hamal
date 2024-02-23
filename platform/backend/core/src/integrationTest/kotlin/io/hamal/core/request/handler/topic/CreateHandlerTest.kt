@@ -5,10 +5,7 @@ import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain._enum.TopicType.Namespace
 import io.hamal.lib.domain.request.TopicCreateRequested
-import io.hamal.lib.domain.vo.LogTopicId
-import io.hamal.lib.domain.vo.RequestId
-import io.hamal.lib.domain.vo.TopicId
-import io.hamal.lib.domain.vo.TopicName
+import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.TopicQueryRepository.TopicQuery
 import io.hamal.repository.api.log.LogBrokerRepository
 import org.hamcrest.MatcherAssert.assertThat
@@ -55,6 +52,7 @@ internal class TopicCreateHandlerTest : BaseReqHandlerTest() {
     private val topicCreateRequested by lazy {
         TopicCreateRequested(
             id = RequestId(1),
+            by = AuthId(2),
             status = Submitted,
             topicId = TopicId(2345),
             logTopicId = LogTopicId(3456),

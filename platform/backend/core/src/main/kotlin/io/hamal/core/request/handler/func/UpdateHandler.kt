@@ -1,6 +1,7 @@
 package io.hamal.core.request.handler.func
 
 import io.hamal.core.event.InternalEventEmitter
+import io.hamal.core.request.RequestHandler
 import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.request.FuncUpdateRequested
@@ -15,37 +16,40 @@ import org.springframework.stereotype.Component
 
 @Component
 class FuncUpdateHandler(
-    val codeRepository: CodeRepository,
-    val funcRepository: FuncRepository,
-    val eventEmitter: InternalEventEmitter
-) : io.hamal.core.request.RequestHandler<FuncUpdateRequested>(FuncUpdateRequested::class) {
+    private val codeRepository: CodeRepository,
+    private val funcRepository: FuncRepository,
+    private val eventEmitter: InternalEventEmitter
+) : RequestHandler<FuncUpdateRequested>(FuncUpdateRequested::class) {
 
     override fun invoke(req: FuncUpdateRequested) {
-        updateFunc(req).also { emitEvent(req.cmdId(), it) }
+        updateFunc(req)
+            .also { emitEvent(req.cmdId(), it) }
     }
-}
 
-private fun FuncUpdateHandler.updateFunc(req: FuncUpdateRequested): Func {
-    val func = funcRepository.get(req.funcId)
+    private fun updateFunc(req: FuncUpdateRequested): Func {
+        val func = funcRepository.get(req.funcId)
 
-    val code = codeRepository.update(
-        func.code.id, CodeCmdRepository.UpdateCmd(
-            id = req.cmdId(),
-            value = req.code
+        val code = codeRepository.update(
+            func.code.id, CodeCmdRepository.UpdateCmd(
+                id = req.cmdId(),
+                value = req.code
+            )
         )
-    )
 
-    return funcRepository.update(
-        req.funcId,
-        UpdateCmd(
-            id = req.cmdId(),
-            name = req.name,
-            inputs = req.inputs,
-            codeVersion = code.version
+        return funcRepository.update(
+            req.funcId,
+            UpdateCmd(
+                id = req.cmdId(),
+                name = req.name,
+                inputs = req.inputs,
+                codeVersion = code.version
+            )
         )
-    )
+    }
+
+    private fun emitEvent(cmdId: CmdId, func: Func) {
+        eventEmitter.emit(cmdId, FuncUpdatedEvent(func))
+    }
+
 }
 
-private fun FuncUpdateHandler.emitEvent(cmdId: CmdId, func: Func) {
-    eventEmitter.emit(cmdId, FuncUpdatedEvent(func))
-}

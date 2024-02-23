@@ -1,6 +1,7 @@
 package io.hamal.core
 
 import io.hamal.core.component.SetupInternalTopics
+import io.hamal.core.security.SecurityContext
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.util.TimeUtils
@@ -122,7 +123,7 @@ internal abstract class BaseTest {
     lateinit var setupInternalTopics: SetupInternalTopics
 
     lateinit var testAccount: Account
-    lateinit var testAuthToken: AuthToken
+    lateinit var testAuth: Auth
     lateinit var testWorkspace: Workspace
     lateinit var testNamespace: Namespace
 
@@ -155,7 +156,7 @@ internal abstract class BaseTest {
             )
         )
 
-        testAuthToken = (authCmdRepository.create(
+        testAuth = (authCmdRepository.create(
             CreateTokenAuthCmd(
                 id = CmdId(3),
                 authId = generateDomainId(::AuthId),
@@ -163,7 +164,7 @@ internal abstract class BaseTest {
                 token = AuthToken("test-token"),
                 expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(1, DAYS))
             )
-        ) as TokenAuth).token
+        ) as Auth.Token)
 
         testWorkspace = workspaceCmdRepository.create(
             WorkspaceCmdRepository.CreateCmd(
@@ -184,6 +185,7 @@ internal abstract class BaseTest {
             )
         )
 
+        SecurityContext.set(testAuth)
     }
 
 

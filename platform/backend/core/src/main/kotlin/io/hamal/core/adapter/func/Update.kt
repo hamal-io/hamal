@@ -1,6 +1,7 @@
 package io.hamal.core.adapter.func
 
 import io.hamal.core.adapter.request.RequestEnqueuePort
+import io.hamal.core.security.SecurityContext
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.FuncUpdateRequest
@@ -23,6 +24,7 @@ class FuncUpdateAdapter(
         val func = funcGet(funcId)
         return FuncUpdateRequested(
             id = generateDomainId(::RequestId),
+            by = SecurityContext.currentAuthId,
             status = RequestStatus.Submitted,
             workspaceId = func.workspaceId,
             funcId = funcId,

@@ -1,7 +1,8 @@
 package io.hamal.core.adapter.endpoint
 
-import io.hamal.core.adapter.request.RequestEnqueuePort
 import io.hamal.core.adapter.func.FuncGetPort
+import io.hamal.core.adapter.request.RequestEnqueuePort
+import io.hamal.core.security.SecurityContext
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.EndpointCreateRequest
@@ -26,6 +27,7 @@ class EndpointCreateAdapter(
         require(namespaceId == func.namespaceId) { "Endpoint and Func must share the same Namespace" }
         return EndpointCreateRequested(
             id = generateDomainId(::RequestId),
+            by = SecurityContext.currentAuthId,
             status = RequestStatus.Submitted,
             endpointId = generateDomainId(::EndpointId),
             workspaceId = func.workspaceId,

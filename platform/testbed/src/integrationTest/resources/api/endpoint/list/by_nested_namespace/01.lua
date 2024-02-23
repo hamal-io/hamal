@@ -25,8 +25,8 @@ sys.await_completed(fail_on_error(sys.endpoints.create({ namespace_id = namespac
 assert(#fail_on_error(sys.endpoints.list({ namespace_ids = { namespace_one_req.id } })) == 1)
 assert(#fail_on_error(sys.endpoints.list({ namespace_ids = { namespace_two_req.id } })) == 1)
 --
----- root-namespace contains 2 namespace-one (endpoint-1) and namespace_two(endpoint-2)
-root_namespace_endpoints = fail_on_error(sys.endpoints.list({ namespace_ids = { '1' } }))
+
+root_namespace_endpoints = fail_on_error(sys.endpoints.list({ namespace_ids = { '539' } }))
 assert(#root_namespace_endpoints == 2)
 assert(root_namespace_endpoints[1].name == 'endpoint-2')
 assert(root_namespace_endpoints[2].name == 'endpoint-1')

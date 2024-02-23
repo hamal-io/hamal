@@ -2,6 +2,7 @@ package io.hamal.core.adapter.adhoc
 
 import io.hamal.core.adapter.namespace.NamespaceGetPort
 import io.hamal.core.adapter.request.RequestEnqueuePort
+import io.hamal.core.security.SecurityContext
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain.request.AdhocInvokeRequest
@@ -23,6 +24,7 @@ class AdhocInvokeAdapter(
         val namespace = namespaceGet(namespaceId)
         return ExecInvokeRequested(
             id = generateDomainId(::RequestId),
+            by = SecurityContext.currentAuthId,
             status = Submitted,
             execId = generateDomainId(::ExecId),
             namespaceId = namespace.id,

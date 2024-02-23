@@ -1,6 +1,5 @@
 package io.hamal.testbed.endpoint
 
-import io.hamal.runner.test.AbstractRunnerTest
 import io.hamal.core.component.DelayRetry
 import io.hamal.core.component.DelayRetryFixedTime
 import io.hamal.core.component.SetupInternalTopics
@@ -24,6 +23,7 @@ import io.hamal.repository.api.*
 import io.hamal.repository.api.log.LogBrokerRepository
 import io.hamal.runner.config.EnvFactory
 import io.hamal.runner.config.SandboxFactory
+import io.hamal.runner.test.AbstractRunnerTest
 import jakarta.annotation.PostConstruct
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
@@ -131,7 +131,7 @@ class ClearController {
                 token = AuthToken("root-token"),
                 expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(1, ChronoUnit.DAYS))
             )
-        ) as TokenAuth).token
+        ) as Auth.Token).token
 
         testWorkspace = workspaceRepository.create(
             WorkspaceCmdRepository.CreateCmd(
@@ -246,7 +246,7 @@ class TestConfig {
                     token = AuthToken("root-token"),
                     expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(1, ChronoUnit.DAYS))
                 )
-            ) as TokenAuth).token
+            ) as Auth.Token).token
 
             testWorkspace = workspaceRepository.create(
                 WorkspaceCmdRepository.CreateCmd(

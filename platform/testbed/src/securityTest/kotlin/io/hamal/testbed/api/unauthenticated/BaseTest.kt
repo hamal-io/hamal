@@ -1,8 +1,7 @@
 package io.hamal.testbed.api.unauthenticated
 
-import io.hamal.lib.http.HttpTemplateImpl
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.testbed.api.BaseTest
-import io.hamal.testbed.api.BaseTest.TestResult.Success
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
@@ -17,30 +16,18 @@ abstract class BaseApiUnauthenticatedTest(apiUrl: String) : BaseTest(apiUrl) {
 
     @TestFactory
     fun run(): List<DynamicTest> {
-        val apiHttpTemplate = HttpTemplateImpl(baseUrl = this.apiUrl)
         return testFiles()
             .sorted()
             .map { testPath ->
                 val testName = generateTestName(testPath)
                 dynamicTest(testName) {
-//                    apiHttpTemplate.post("/v1/clear").execute()
-
-                    var counter = 0
-                    while (true) {
-                        when (val result = runTest(testPath)) {
-                            is Success -> break
-                            is TestResult.Failure -> {
-                                if (counter++ >= 3) {
-                                    fail { result.message }
-                                }
-//                                apiHttpTemplate.post("/v1/clear").execute()
-                            }
-                        }
+                    val result = runTest(testPath, HotObject.empty)
+                    if (result is TestResult.Failure) {
+                        fail { result.message }
                     }
                 }
             }.toList()
     }
-
 
     private fun generateTestName(testPath: Path) = testPath.toAbsolutePath().toString().split("/")
         .dropWhile { it != "resources" }

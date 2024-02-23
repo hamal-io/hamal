@@ -18,7 +18,7 @@ internal sealed class HookBaseControllerTest : BaseControllerTest() {
 
     fun createHook(
         req: ApiHookCreateRequest,
-        namespaceId: NamespaceId = NamespaceId(1),
+        namespaceId: NamespaceId = NamespaceId.root,
     ): ApiHookCreateRequested {
         val response = httpTemplate.post("/v1/namespaces/{namespaceId}/hooks")
             .path("namespaceId", namespaceId)

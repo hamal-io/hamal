@@ -5,9 +5,10 @@ import io.hamal.lib.domain.vo.*
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.NamedResultSet
 import io.hamal.lib.sqlite.SqliteBaseRepository
-import io.hamal.repository.api.*
+import io.hamal.repository.api.Auth
 import io.hamal.repository.api.AuthCmdRepository.*
 import io.hamal.repository.api.AuthQueryRepository.AuthQuery
+import io.hamal.repository.api.AuthRepository
 import java.nio.file.Path
 
 class AuthSqliteRepository(
@@ -221,12 +222,30 @@ class AuthSqliteRepository(
     override fun close() {
 
     }
+
+    override fun find(authId: AuthId): Auth? {
+        return connection.executeQueryOne(
+            """
+            SELECT 
+                *
+             FROM
+                auth
+            WHERE
+                id = :id
+        """.trimIndent()
+        ) {
+            query {
+                set("id", authId)
+            }
+            map(NamedResultSet::toAuth)
+        }
+    }
 }
 
 private fun NamedResultSet.toAuth(): Auth {
     return when (getInt("type")) {
         1 -> {
-            EmailAuth(
+            Auth.Email(
                 cmdId = getCommandId("cmd_id"),
                 id = getId("id", ::AuthId),
                 accountId = getId("account_id", ::AccountId),
@@ -236,7 +255,7 @@ private fun NamedResultSet.toAuth(): Auth {
         }
 
         2 -> {
-            TokenAuth(
+            Auth.Token(
                 cmdId = getCommandId("cmd_id"),
                 id = getId("id", ::AuthId),
                 accountId = getId("account_id", ::AccountId),
@@ -246,7 +265,7 @@ private fun NamedResultSet.toAuth(): Auth {
         }
 
         3 -> {
-            MetaMaskAuth(
+            Auth.MetaMask(
                 cmdId = getCommandId("cmd_id"),
                 id = getId("id", ::AuthId),
                 accountId = getId("account_id", ::AccountId),
