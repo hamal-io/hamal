@@ -8,6 +8,7 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.*
+import io.hamal.repository.api.EndpointCmdRepository.CreateCmd
 import jakarta.annotation.PostConstruct
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.TestConfiguration
@@ -102,12 +103,14 @@ class TestSetupConfig {
             )
         )
 
-        namespaceTreeRepository.create(NamespaceTreeCmdRepository.CreateCmd(
-            id = CmdId(id),
-            treeId = NamespaceTreeId(id),
-            workspaceId = WorkspaceId(id),
-            rootNodeId = NamespaceId(id)
-        ))
+        namespaceTreeRepository.create(
+            NamespaceTreeCmdRepository.CreateCmd(
+                id = CmdId(id),
+                treeId = NamespaceTreeId(id),
+                workspaceId = WorkspaceId(id),
+                rootNodeId = NamespaceId(id)
+            )
+        )
 
         codeRepository.create(
             CodeCmdRepository.CreateCmd(
@@ -130,6 +133,17 @@ class TestSetupConfig {
                 codeVersion = CodeVersion(1)
             )
         )
+
+        endpointRepository.create(
+            CreateCmd(
+                id = CmdId(id),
+                endpointId = EndpointId(id),
+                funcId = FuncId(id),
+                workspaceId = WorkspaceId(id),
+                namespaceId = NamespaceId(id),
+                name = EndpointName("$id-name"),
+            )
+        )
     }
 
     @Autowired
@@ -140,6 +154,9 @@ class TestSetupConfig {
 
     @Autowired
     lateinit var codeRepository: CodeRepository
+
+    @Autowired
+    lateinit var endpointRepository: EndpointRepository
 
     @Autowired
     lateinit var funcRepository: FuncRepository
