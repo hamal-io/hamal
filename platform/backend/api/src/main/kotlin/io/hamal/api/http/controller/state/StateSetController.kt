@@ -26,7 +26,7 @@ internal class StateSetController(private val stateSet: StateSetPort) {
         ApiStateSetRequest(
             correlation = Correlation(
                 funcId = funcId,
-                correlationId = correlationId,
+                id = correlationId,
             ),
             value = State(state.value)
         )

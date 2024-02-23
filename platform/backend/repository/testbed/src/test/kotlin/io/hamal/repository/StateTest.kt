@@ -25,7 +25,7 @@ internal class StateRepositoryTest : AbstractUnitTest() {
             set(
                 CmdId(1), CorrelatedState(
                     correlation = Correlation(
-                        correlationId = CorrelationId("SomeCorrelationId"),
+                        id = CorrelationId("SomeCorrelationId"),
                         funcId = FuncId(2)
                     ),
                     value = State(HotObject.builder().set("hamal", "rocks").build())
@@ -33,7 +33,7 @@ internal class StateRepositoryTest : AbstractUnitTest() {
             )
 
             with(get(Correlation(CorrelationId("SomeCorrelationId"), FuncId(2)))) {
-                assertThat(correlation.correlationId, equalTo(CorrelationId("SomeCorrelationId")))
+                assertThat(correlation.id, equalTo(CorrelationId("SomeCorrelationId")))
                 assertThat(correlation.funcId, equalTo(FuncId(2)))
                 assertThat(value, equalTo(State(HotObject.builder().set("hamal", "rocks").build())))
             }
@@ -44,7 +44,7 @@ internal class StateRepositoryTest : AbstractUnitTest() {
             set(
                 CmdId(1), CorrelatedState(
                     correlation = Correlation(
-                        correlationId = CorrelationId("SomeCorrelationId"),
+                        id = CorrelationId("SomeCorrelationId"),
                         funcId = FuncId(2)
                     ),
                     value = State(HotObject.builder().set("hamal", "rocks").build())
@@ -54,7 +54,7 @@ internal class StateRepositoryTest : AbstractUnitTest() {
             val result = get(Correlation(CorrelationId("SomeCorrelationId"), FuncId(22222)))
             with(result) {
                 assertThat(correlation.funcId, equalTo(FuncId(22222)))
-                assertThat(correlation.correlationId, equalTo(CorrelationId("SomeCorrelationId")))
+                assertThat(correlation.id, equalTo(CorrelationId("SomeCorrelationId")))
                 assertThat(value, equalTo(State(HotObject.empty)))
             }
         }
@@ -64,7 +64,7 @@ internal class StateRepositoryTest : AbstractUnitTest() {
             set(
                 CmdId(1), CorrelatedState(
                     correlation = Correlation(
-                        correlationId = CorrelationId("SomeCorrelationId"),
+                        id = CorrelationId("SomeCorrelationId"),
                         funcId = FuncId(2)
                     ),
                     value = State(HotObject.builder().set("hamal", "rocks").build())
@@ -74,7 +74,7 @@ internal class StateRepositoryTest : AbstractUnitTest() {
             val result = get(Correlation(CorrelationId("AnotherCorrelation"), FuncId(2)))
             with(result) {
                 assertThat(correlation.funcId, equalTo(FuncId(2)))
-                assertThat(correlation.correlationId, equalTo(CorrelationId("AnotherCorrelation")))
+                assertThat(correlation.id, equalTo(CorrelationId("AnotherCorrelation")))
                 assertThat(value, equalTo(State(HotObject.empty)))
             }
         }
@@ -88,7 +88,7 @@ internal class StateRepositoryTest : AbstractUnitTest() {
             set(
                 CmdId(1), CorrelatedState(
                     correlation = Correlation(
-                        correlationId = CorrelationId("SomeCorrelationId"),
+                        id = CorrelationId("SomeCorrelationId"),
                         funcId = FuncId(2)
                     ),
                     value = State(HotObject.builder().set("hamal", "rocks").build())
@@ -96,7 +96,7 @@ internal class StateRepositoryTest : AbstractUnitTest() {
             )
 
             with(find(Correlation(CorrelationId("SomeCorrelationId"), FuncId(2)))!!) {
-                assertThat(correlation.correlationId, equalTo(CorrelationId("SomeCorrelationId")))
+                assertThat(correlation.id, equalTo(CorrelationId("SomeCorrelationId")))
                 assertThat(correlation.funcId, equalTo(FuncId(2)))
                 assertThat(value, equalTo(State(HotObject.builder().set("hamal", "rocks").build())))
             }
@@ -107,7 +107,7 @@ internal class StateRepositoryTest : AbstractUnitTest() {
             set(
                 CmdId(1), CorrelatedState(
                     correlation = Correlation(
-                        correlationId = CorrelationId("SomeCorrelationId"),
+                        id = CorrelationId("SomeCorrelationId"),
                         funcId = FuncId(2)
                     ),
                     value = State(HotObject.builder().set("hamal", "rocks").build())
@@ -123,7 +123,7 @@ internal class StateRepositoryTest : AbstractUnitTest() {
             set(
                 CmdId(1), CorrelatedState(
                     correlation = Correlation(
-                        correlationId = CorrelationId("SomeCorrelationId"),
+                        id = CorrelationId("SomeCorrelationId"),
                         funcId = FuncId(2)
                     ),
                     value = State(HotObject.builder().set("hamal", "rocks").build())

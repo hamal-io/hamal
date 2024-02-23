@@ -44,7 +44,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
             assertThat(
                 correlation, equalTo(
                     Correlation(
-                        correlationId = CorrelationId("some-correlation-id"), funcId = createResponse.funcId
+                        id = CorrelationId("some-correlation-id"), funcId = createResponse.funcId
                     )
                 )
             )
@@ -79,7 +79,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
             assertThat(
                 correlation, equalTo(
                     Correlation(
-                        correlationId = CorrelationId.default, funcId = createResponse.funcId
+                        id = CorrelationId.default, funcId = createResponse.funcId
                     )
                 )
             )

@@ -5,8 +5,11 @@ import io.hamal.core.component.DelayRetryFixedTime
 import io.hamal.core.component.SetupInternalTopics
 import io.hamal.core.config.BackendBasePath
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.util.TimeUtils
+import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation
+import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.*
 import io.hamal.repository.api.EndpointCmdRepository.CreateCmd
@@ -154,7 +157,7 @@ class TestSetupConfig {
                 namespaceId = NamespaceId(id),
                 workspaceId = WorkspaceId(id),
                 correlation = Correlation(
-                    correlationId = CorrelationId("test"),
+                    id = CorrelationId("test"),
                     funcId = FuncId(id)
                 ),
                 inputs = ExecInputs(),
@@ -188,6 +191,19 @@ class TestSetupConfig {
                 workspaceId = WorkspaceId(id)
             )
         )
+
+        stateRepository.set(
+            StateCmdRepository.SetCmd(
+                id = CmdId(id),
+                correlatedState = CorrelatedState(
+                    correlation = Correlation(
+                        id = CorrelationId("correlationId"),
+                        funcId = FuncId(id)
+                    ),
+                    value = State(HotObject.builder().set("value", 1337).build())
+                )
+            )
+        )
     }
 
     @Autowired
@@ -219,6 +235,9 @@ class TestSetupConfig {
 
     @Autowired
     lateinit var namespaceTreeRepository: NamespaceTreeRepository
+
+    @Autowired
+    lateinit var stateRepository: StateRepository
 
     @Autowired
     lateinit var workspaceRepository: WorkspaceRepository

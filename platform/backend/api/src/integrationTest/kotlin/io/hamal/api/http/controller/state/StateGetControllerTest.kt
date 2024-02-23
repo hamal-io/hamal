@@ -28,7 +28,7 @@ internal class StateGetControllerTest : StateBaseControllerTest() {
             status = Started,
             correlation = Correlation(
                 funcId = funcId,
-                correlationId = CorrelationId("__1__")
+                id = CorrelationId("__1__")
             )
         ).id
 
@@ -42,7 +42,7 @@ internal class StateGetControllerTest : StateBaseControllerTest() {
         val correlatedState = response.result(ApiCorrelatedState::class)
         assertThat(correlatedState.correlation.func.id, equalTo(funcId))
         assertThat(correlatedState.correlation.func.name, equalTo(FuncName("SomeFunc")))
-        assertThat(correlatedState.correlation.correlationId, equalTo(CorrelationId("__1__")))
+        assertThat(correlatedState.correlation.id, equalTo(CorrelationId("__1__")))
         assertThat(correlatedState.state, equalTo(ApiState(HotObject.builder().set("hamal", "rocks").build())))
     }
 
@@ -57,7 +57,7 @@ internal class StateGetControllerTest : StateBaseControllerTest() {
         val correlatedState = response.result(ApiCorrelatedState::class)
         assertThat(correlatedState.correlation.func.id, equalTo(funcId))
         assertThat(correlatedState.correlation.func.name, equalTo(FuncName("SomeFunc")))
-        assertThat(correlatedState.correlation.correlationId, equalTo(CorrelationId("__1__")))
+        assertThat(correlatedState.correlation.id, equalTo(CorrelationId("__1__")))
         assertThat(correlatedState.state, equalTo(ApiState()))
     }
 
