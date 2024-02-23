@@ -49,7 +49,7 @@ const BlueprintCards: FC<CardProps> = ({blueprints}) => {
         }
     }, [item]);
 
-    const onclose = () => {
+    const onClose = () => {
         setDialog(false)
         setItem(null)
     }
@@ -77,9 +77,9 @@ const BlueprintCards: FC<CardProps> = ({blueprints}) => {
                         </CardContent>
                     </Card>
                 </div>
-            ))}
-            {item && <Dialog open={dialog} onOpenChange={setDialog}>
-                <BpDialog item={item} onClose={onclose}></BpDialog>
+
+            ))}{item && <Dialog open={dialog} onOpenChange={onClose}>
+                <BpDialog item={item} onClose={onClose}></BpDialog>
             </Dialog>}
         </ul>)
 }
