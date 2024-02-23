@@ -31,7 +31,7 @@ internal class ErrorController {
         val cause = t.cause
         if (cause is ConversionFailedException) {
             res.status = 400
-            res.addHeader("Content-Type", "application/json")
+            res.addHeader("Content-Type", "application/json;charset=UTF-8")
             res.writer.write(
                 json.serialize(
                     InvalidArgumentType(
@@ -42,7 +42,7 @@ internal class ErrorController {
                 )
             )
         } else {
-            res.addHeader("Content-Type", "application/json")
+            res.addHeader("Content-Type", "application/json;charset=UTF-8")
             res.writer.write(json.serialize(ApiError("Bad request")))
         }
     }
@@ -52,7 +52,7 @@ internal class ErrorController {
         t.printStackTrace()
 
         res.status = 400
-        res.addHeader("Content-Type", "application/json")
+        res.addHeader("Content-Type", "application/json;charset=UTF-8")
         res.writer.write(json.serialize(ApiError(t.cause?.message ?: "Bad request")))
     }
 
@@ -61,7 +61,7 @@ internal class ErrorController {
         t.printStackTrace()
 
         res.status = SC_NOT_FOUND
-        res.addHeader("Content-Type", "application/json")
+        res.addHeader("Content-Type", "application/json;charset=UTF-8")
         res.writer.write(json.serialize(ApiError("Request handler not found")))
     }
 
@@ -71,7 +71,7 @@ internal class ErrorController {
         t.printStackTrace()
 
         res.status = SC_FORBIDDEN
-        res.addHeader("Content-Type", "application/json")
+        res.addHeader("Content-Type", "application/json;charset=UTF-8")
         res.writer.write(json.serialize(ApiError("FORBIDDEN")))
     }
 
@@ -93,7 +93,7 @@ internal class ErrorController {
         }
 
         res.status = statusCode
-        res.addHeader("Content-Type", "application/json")
+        res.addHeader("Content-Type", "application/json;charset=UTF-8")
         res.writer.write(json.serialize(ApiError(toHandle?.message ?: "Unknown error")))
     }
 

@@ -1,5 +1,6 @@
 package io.hamal.testbed.api.unauthenticated
 
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.testbed.api.BaseTest
 import io.hamal.testbed.api.BaseTest.TestResult.Success
@@ -27,7 +28,7 @@ abstract class BaseApiUnauthenticatedTest(apiUrl: String) : BaseTest(apiUrl) {
 
                     var counter = 0
                     while (true) {
-                        when (val result = runTest(testPath)) {
+                        when (val result = runTest(testPath, HotObject.empty)) {
                             is Success -> break
                             is TestResult.Failure -> {
                                 if (counter++ >= 3) {
