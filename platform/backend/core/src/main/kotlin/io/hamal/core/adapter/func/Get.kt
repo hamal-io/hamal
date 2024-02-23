@@ -15,7 +15,6 @@ class FuncGetAdapter(
     private val funcQueryRepository: FuncQueryRepository,
     private val ensureAccess: EnsureAccessPort
 ) : FuncGetPort {
-    override fun invoke(funcId: FuncId): Func = funcQueryRepository.get(funcId).also { func ->
-        ensureAccess(func)
-    }
+    override fun invoke(funcId: FuncId): Func = ensureAccess(funcQueryRepository.get(funcId))
+
 }

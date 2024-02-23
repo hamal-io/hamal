@@ -45,7 +45,7 @@ class TestSetupConfig {
     private fun setupAnonymous(id: Int) {
         accountRepository.create(
             AccountCmdRepository.CreateCmd(
-                id = CmdId(id + 2),
+                id = CmdId(id),
                 accountId = AccountId(id),
                 accountType = AccountType.Anonymous,
                 salt = PasswordSalt("$id-salt")
@@ -54,7 +54,7 @@ class TestSetupConfig {
 
         authRepository.create(
             AuthCmdRepository.CreateTokenAuthCmd(
-                id = CmdId(id + 3),
+                id = CmdId(id),
                 authId = AuthId(id),
                 accountId = AccountId(id),
                 token = AuthToken("$id-token"),
@@ -67,7 +67,7 @@ class TestSetupConfig {
     private fun setupUser(id: Int) {
         accountRepository.create(
             AccountCmdRepository.CreateCmd(
-                id = CmdId(id + 2),
+                id = CmdId(id),
                 accountId = AccountId(id),
                 accountType = AccountType.User,
                 salt = PasswordSalt("$id-salt")
@@ -76,7 +76,7 @@ class TestSetupConfig {
 
         authRepository.create(
             AuthCmdRepository.CreateTokenAuthCmd(
-                id = CmdId(id + 3),
+                id = CmdId(id),
                 authId = AuthId(id),
                 accountId = AccountId(id),
                 token = AuthToken("$id-token"),
@@ -86,7 +86,7 @@ class TestSetupConfig {
 
         workspaceRepository.create(
             WorkspaceCmdRepository.CreateCmd(
-                id = CmdId(id + 4),
+                id = CmdId(id),
                 workspaceId = WorkspaceId(id),
                 name = WorkspaceName("$id-workspace"),
                 creatorId = AccountId(id)
@@ -95,16 +95,23 @@ class TestSetupConfig {
 
         namespaceRepository.create(
             NamespaceCmdRepository.CreateCmd(
-                id = CmdId(id + 5),
+                id = CmdId(id),
                 namespaceId = NamespaceId(id),
                 workspaceId = WorkspaceId(id),
                 name = NamespaceName("$id-namespace")
             )
         )
 
+        namespaceTreeRepository.create(NamespaceTreeCmdRepository.CreateCmd(
+            id = CmdId(id),
+            treeId = NamespaceTreeId(id),
+            workspaceId = WorkspaceId(id),
+            rootNodeId = NamespaceId(id)
+        ))
+
         codeRepository.create(
             CodeCmdRepository.CreateCmd(
-                id = CmdId(id + 6),
+                id = CmdId(id),
                 codeId = CodeId(id),
                 value = CodeValue(""),
                 workspaceId = WorkspaceId(id)
@@ -113,7 +120,7 @@ class TestSetupConfig {
 
         funcRepository.create(
             FuncCmdRepository.CreateCmd(
-                id = CmdId(id + 7),
+                id = CmdId(id),
                 funcId = FuncId(id),
                 name = FuncName("$id-func"),
                 workspaceId = WorkspaceId(id),
@@ -139,6 +146,9 @@ class TestSetupConfig {
 
     @Autowired
     lateinit var namespaceRepository: NamespaceRepository
+
+    @Autowired
+    lateinit var namespaceTreeRepository: NamespaceTreeRepository
 
     @Autowired
     lateinit var workspaceRepository: WorkspaceRepository

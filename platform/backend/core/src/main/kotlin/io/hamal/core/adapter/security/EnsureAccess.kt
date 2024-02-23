@@ -12,13 +12,13 @@ import io.hamal.repository.api.NamespaceTreeQueryRepository.NamespaceTreeQuery
 import io.hamal.repository.api.WorkspaceQueryRepository.WorkspaceQuery
 import org.springframework.stereotype.Component
 
-fun interface EnsureAccessPort {
+interface EnsureAccessPort {
 
     /**
      * Ensures that the current authentication in the SecurityContext has access to the domain object
      * @throws IllegalAccessError
      */
-    operator fun invoke(obj: DomainObject<*>)
+    operator fun <T : DomainObject<*>> invoke(obj: T): T
 }
 
 @Component
@@ -28,11 +28,11 @@ class EnsureAccessAdapter(
 ) : EnsureAccessPort {
 
     // FIXME this implementation is not optimal - replace it later
-    override fun invoke(obj: DomainObject<*>) {
+    override fun <T : DomainObject<*>> invoke(obj: T): T {
         val current = SecurityContext.current
         // FIXME not sure about this
         if (current is Auth.Runner || current is Auth.System) {
-            return
+            return obj
         }
 
         if (current is Anonymous) {
@@ -40,9 +40,9 @@ class EnsureAccessAdapter(
         }
         if (current is Auth.Account) {
             when {
-                obj is HasAccountId && accessAllowed(current, obj.accountId) -> return
-                obj is HasWorkspaceId && accessAllowed(current, obj.workspaceId) -> return
-                obj is HasNamespaceId && accessAllowed(current, obj.namespaceId) -> return
+                obj is HasAccountId && accessAllowed(current, obj.accountId) -> return obj
+                obj is HasWorkspaceId && accessAllowed(current, obj.workspaceId) -> return obj
+                obj is HasNamespaceId && accessAllowed(current, obj.namespaceId) -> return obj
                 else -> accessDenied(obj)
             }
         }
