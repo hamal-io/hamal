@@ -16,7 +16,7 @@ internal class ExtensionUpdateControllerTest : ExtensionBaseControllerTest() {
 
     @Test
     fun `Updates extension`() {
-        val extId = awaitCompleted(
+        val extensionId = awaitCompleted(
             createExtension(
                 ApiExtensionCreateRequest(
                     name = ExtensionName("TestExtension"),
@@ -27,7 +27,7 @@ internal class ExtensionUpdateControllerTest : ExtensionBaseControllerTest() {
 
         awaitCompleted(
             updateExtension(
-                extId,
+                extensionId,
                 ApiExtensionUpdateRequest(
                     name = ExtensionName("UpdateExtension"),
                     code = CodeValue("x='hamal")
@@ -35,7 +35,7 @@ internal class ExtensionUpdateControllerTest : ExtensionBaseControllerTest() {
             )
         )
 
-        val ext = extensionQueryRepository.get(extId)
+        val ext = extensionQueryRepository.get(extensionId)
         assertThat(ext.name, equalTo(ExtensionName("UpdateExtension")))
         assertThat(codeQueryRepository.get(ext.code.id).value, equalTo(CodeValue("x='hamal")))
     }
@@ -43,7 +43,7 @@ internal class ExtensionUpdateControllerTest : ExtensionBaseControllerTest() {
 
     @Test
     fun `Updates extension without updating values`() {
-        val extId = awaitCompleted(
+        val extensionId = awaitCompleted(
             createExtension(
                 ApiExtensionCreateRequest(
                     name = ExtensionName("TestExtension"),
@@ -54,7 +54,7 @@ internal class ExtensionUpdateControllerTest : ExtensionBaseControllerTest() {
 
         awaitCompleted(
             updateExtension(
-                extId,
+                extensionId,
                 ApiExtensionUpdateRequest(
                     name = null,
                     code = null
@@ -62,7 +62,7 @@ internal class ExtensionUpdateControllerTest : ExtensionBaseControllerTest() {
             )
         )
 
-        val ext = extensionQueryRepository.get(extId)
+        val ext = extensionQueryRepository.get(extensionId)
         assertThat(ext.name, equalTo(ExtensionName("TestExtension")))
     }
 

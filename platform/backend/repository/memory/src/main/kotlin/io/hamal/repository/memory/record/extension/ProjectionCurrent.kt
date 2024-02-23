@@ -22,10 +22,10 @@ internal object ExtensionCurrentProjection {
         projection[ext.id] = ext
     }
 
-    fun find(extId: ExtensionId): Extension? = projection[extId]
+    fun find(extensionId: ExtensionId): Extension? = projection[extensionId]
 
     fun list(query: ExtensionQuery): List<Extension> {
-        return projection.filter { query.extIds.isEmpty() || it.key in query.extIds }
+        return projection.filter { query.extensionIds.isEmpty() || it.key in query.extensionIds }
             .map { it.value }
             .reversed()
             .asSequence()
@@ -37,7 +37,7 @@ internal object ExtensionCurrentProjection {
 
     fun count(query: ExtensionQuery): Count {
         return Count(
-            projection.filter { query.extIds.isEmpty() || it.key in query.extIds }
+            projection.filter { query.extensionIds.isEmpty() || it.key in query.extensionIds }
                 .map { it.value }
                 .reversed()
                 .asSequence()

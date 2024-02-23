@@ -22,7 +22,7 @@ internal class ExtensionListControllerTest : ExtensionBaseControllerTest() {
         extensionCmdRepository.create(
             ExtensionCmdRepository.CreateCmd(
                 id = CmdId(12),
-                extId = ExtensionId(1234),
+                extensionId = ExtensionId(1234),
                 workspaceId = testWorkspace.id,
                 name = ExtensionName("TestExtension"),
                 code = ExtensionCode(

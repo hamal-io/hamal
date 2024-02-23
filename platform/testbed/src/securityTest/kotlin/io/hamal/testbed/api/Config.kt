@@ -165,6 +165,19 @@ class TestSetupConfig {
                 Invocation.Func
             )
         )
+
+        extensionRepository.create(
+            ExtensionCmdRepository.CreateCmd(
+                id = CmdId(id),
+                extensionId = ExtensionId(id),
+                name = ExtensionName("$id-extension"),
+                code = ExtensionCode(
+                    id = CodeId(id),
+                    version = CodeVersion(1)
+                ),
+                workspaceId = WorkspaceId(id)
+            )
+        )
     }
 
     @Autowired
@@ -181,6 +194,9 @@ class TestSetupConfig {
 
     @Autowired
     lateinit var execRepository: ExecRepository
+
+    @Autowired
+    lateinit var extensionRepository: ExtensionRepository
 
     @Autowired
     lateinit var funcRepository: FuncRepository
