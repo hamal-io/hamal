@@ -1,10 +1,6 @@
 package io.hamal.repository.memory.record.trigger
 
 import io.hamal.lib.common.domain.Count
-import io.hamal.lib.domain._enum.HookMethod
-import io.hamal.lib.domain._enum.TriggerType
-import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.domain.vo.HookId
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
@@ -13,14 +9,8 @@ import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 internal object TriggerCurrentProjection {
 
     private val projection = mutableMapOf<TriggerId, Trigger>()
-    private val uniqueHookTriggers = mutableSetOf<HookTriggerUnique>()
 
     fun apply(trigger: Trigger) {
-
-        if (trigger.type == TriggerType.Hook) {
-            handleHookTrigger(trigger as Trigger.Hook)
-        }
-
         val currentTrigger = projection[trigger.id]
         projection.remove(trigger.id)
 
@@ -113,21 +103,5 @@ internal object TriggerCurrentProjection {
 
     fun clear() {
         projection.clear()
-        uniqueHookTriggers.clear()
     }
-
-    private fun handleHookTrigger(trigger: Trigger.Hook) {
-        val toCheck = HookTriggerUnique(
-            trigger.funcId,
-            trigger.hookId,
-            trigger.hookMethod
-        )
-        require(uniqueHookTriggers.add(toCheck)) { "Trigger already exists" }
-    }
-
-    private data class HookTriggerUnique(
-        val funcId: FuncId,
-        val hookId: HookId,
-        val hookMethod: HookMethod
-    )
 }

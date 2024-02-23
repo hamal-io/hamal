@@ -56,9 +56,9 @@ class LogBrokerMemoryRepository : LogBrokerRepository {
         TODO("Not yet implemented")
     }
 
-    override fun create(cmdId: CmdId, topicToCreate: LogTopicToCreate): LogTopic {
+    override fun create(cmd: CreateTopicCmd): LogTopic {
         return lock.withLock {
-            val topic = LogTopic(topicToCreate.id, CreatedAt.now(), UpdatedAt.now())
+            val topic = LogTopic(cmd.logTopicId, CreatedAt.now(), UpdatedAt.now())
             require(findTopic(topic.id) == null) { "Topic already exists" }
             topics[topic.id] = topic
             topic

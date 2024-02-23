@@ -10,12 +10,15 @@ import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
+import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain._enum.TopicType
+import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.*
 import io.hamal.repository.api.EndpointCmdRepository.CreateCmd
 import io.hamal.repository.api.ExecCmdRepository.PlanCmd
 import jakarta.annotation.PostConstruct
+import org.junit.jupiter.api.fail
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
@@ -46,6 +49,7 @@ class TestSetupConfig {
             setupUser(300)
         } catch (t: Throwable) {
             t.printStackTrace()
+            fail("Test setup failed", t)
         }
     }
 
@@ -241,6 +245,64 @@ class TestSetupConfig {
                 logTopicId = LogTopicId(id + 2)
             )
         )
+
+        triggerRepository.create(
+            TriggerCmdRepository.CreateFixedRateCmd(
+                id = CmdId(id),
+                triggerId = TriggerId(id),
+                name = TriggerName("$id-fixed-rate-trigger"),
+                funcId = FuncId(id),
+                workspaceId = WorkspaceId(id),
+                namespaceId = NamespaceId(id),
+                inputs = TriggerInputs(),
+                status = TriggerStatus.Active,
+                duration = TriggerDuration("PT10S")
+            )
+        )
+
+        triggerRepository.create(
+            TriggerCmdRepository.CreateEventCmd(
+                id = CmdId(id + 1),
+                triggerId = TriggerId(id + 1),
+                name = TriggerName("$id-event-trigger"),
+                funcId = FuncId(id),
+                workspaceId = WorkspaceId(id),
+                namespaceId = NamespaceId(id),
+                inputs = TriggerInputs(),
+                status = TriggerStatus.Active,
+                topicId = TopicId(id)
+            )
+        )
+
+        triggerRepository.create(
+            TriggerCmdRepository.CreateHookCmd(
+                id = CmdId(id + 2),
+                triggerId = TriggerId(id + 2),
+                name = TriggerName("$id-hook-trigger"),
+                funcId = FuncId(id),
+                workspaceId = WorkspaceId(id),
+                namespaceId = NamespaceId(id),
+                inputs = TriggerInputs(),
+                status = TriggerStatus.Inactive,
+                hookId = HookId(id),
+                hookMethod = HookMethod.Post
+            )
+        )
+
+        triggerRepository.create(
+            TriggerCmdRepository.CreateCronCmd(
+                id = CmdId(id + 3),
+                triggerId = TriggerId(id + 3),
+                name = TriggerName("$id-cron-trigger"),
+                funcId = FuncId(id),
+                workspaceId = WorkspaceId(id),
+                namespaceId = NamespaceId(id),
+                inputs = TriggerInputs(),
+                status = TriggerStatus.Active,
+                cron = CronPattern("0 0 * * * *")
+            )
+        )
+
     }
 
     @Autowired
@@ -280,8 +342,12 @@ class TestSetupConfig {
     lateinit var topicRepository: TopicRepository
 
     @Autowired
+    lateinit var triggerRepository: TriggerRepository
+
+    @Autowired
     lateinit var workspaceRepository: WorkspaceRepository
 
     @Autowired
     lateinit var setupInternalTopics: SetupInternalTopics
+
 }

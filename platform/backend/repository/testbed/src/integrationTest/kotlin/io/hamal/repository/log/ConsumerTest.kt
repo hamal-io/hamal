@@ -5,7 +5,7 @@ import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.util.HashUtils
 import io.hamal.lib.domain.vo.LogTopicId
 import io.hamal.repository.api.log.LogBrokerRepository
-import io.hamal.repository.api.log.LogBrokerRepository.LogTopicToCreate
+import io.hamal.repository.api.log.LogBrokerRepository.CreateTopicCmd
 import io.hamal.repository.api.log.LogConsumerId
 import io.hamal.repository.api.log.LogConsumerImpl
 import io.hamal.repository.api.log.LogTopicAppenderImpl
@@ -21,10 +21,7 @@ class LogConsumerTest : AbstractIntegrationTest() {
 
     @TestFactory
     fun `Late consumer starts at the beginning`() = runWith(LogBrokerRepository::class) { testInstance ->
-        val topic = testInstance.create(
-            CmdId(1),
-            LogTopicToCreate(LogTopicId(123))
-        )
+        val topic = testInstance.create(CreateTopicCmd(CmdId(1), LogTopicId(123)))
 
         val appender = LogTopicAppenderImpl<String>(testInstance)
         IntRange(1, 10).forEach { appender.append(CmdId(it), topic.id, "$it") }
@@ -55,10 +52,7 @@ class LogConsumerTest : AbstractIntegrationTest() {
     @TestFactory
     fun `Can run concurrent to appender`() = runWith(LogBrokerRepository::class) { testInstance ->
 
-        val topic = testInstance.create(
-            CmdId(1),
-            LogTopicToCreate(LogTopicId(123))
-        )
+        val topic = testInstance.create(CreateTopicCmd(CmdId(1), LogTopicId(123)))
 
         val testAppender = LogTopicAppenderImpl<String>(testInstance)
 

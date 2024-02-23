@@ -7,6 +7,7 @@ import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
+import io.hamal.repository.api.StateCmdRepository
 import io.hamal.repository.api.StateRepository
 import io.hamal.repository.fixture.AbstractUnitTest
 import org.hamcrest.MatcherAssert.assertThat
@@ -23,12 +24,14 @@ internal class StateRepositoryTest : AbstractUnitTest() {
         @TestFactory
         fun `Get state by correlation`() = runWith(StateRepository::class) {
             set(
-                CmdId(1), CorrelatedState(
-                    correlation = Correlation(
-                        id = CorrelationId("SomeCorrelationId"),
-                        funcId = FuncId(2)
-                    ),
-                    value = State(HotObject.builder().set("hamal", "rocks").build())
+                StateCmdRepository.SetCmd(
+                    CmdId(1), CorrelatedState(
+                        correlation = Correlation(
+                            id = CorrelationId("SomeCorrelationId"),
+                            funcId = FuncId(2)
+                        ),
+                        value = State(HotObject.builder().set("hamal", "rocks").build())
+                    )
                 )
             )
 
@@ -42,12 +45,14 @@ internal class StateRepositoryTest : AbstractUnitTest() {
         @TestFactory
         fun `Get state but func id does not exists`() = runWith(StateRepository::class) {
             set(
-                CmdId(1), CorrelatedState(
-                    correlation = Correlation(
-                        id = CorrelationId("SomeCorrelationId"),
-                        funcId = FuncId(2)
-                    ),
-                    value = State(HotObject.builder().set("hamal", "rocks").build())
+                StateCmdRepository.SetCmd(
+                    CmdId(1), CorrelatedState(
+                        correlation = Correlation(
+                            id = CorrelationId("SomeCorrelationId"),
+                            funcId = FuncId(2)
+                        ),
+                        value = State(HotObject.builder().set("hamal", "rocks").build())
+                    )
                 )
             )
 
@@ -62,12 +67,14 @@ internal class StateRepositoryTest : AbstractUnitTest() {
         @TestFactory
         fun `Get state but correlation  id does not exists`() = runWith(StateRepository::class) {
             set(
-                CmdId(1), CorrelatedState(
-                    correlation = Correlation(
-                        id = CorrelationId("SomeCorrelationId"),
-                        funcId = FuncId(2)
-                    ),
-                    value = State(HotObject.builder().set("hamal", "rocks").build())
+                StateCmdRepository.SetCmd(
+                    CmdId(1), CorrelatedState(
+                        correlation = Correlation(
+                            id = CorrelationId("SomeCorrelationId"),
+                            funcId = FuncId(2)
+                        ),
+                        value = State(HotObject.builder().set("hamal", "rocks").build())
+                    )
                 )
             )
 
@@ -86,12 +93,14 @@ internal class StateRepositoryTest : AbstractUnitTest() {
         @TestFactory
         fun `Find state by correlation`() = runWith(StateRepository::class) {
             set(
-                CmdId(1), CorrelatedState(
-                    correlation = Correlation(
-                        id = CorrelationId("SomeCorrelationId"),
-                        funcId = FuncId(2)
-                    ),
-                    value = State(HotObject.builder().set("hamal", "rocks").build())
+                StateCmdRepository.SetCmd(
+                    CmdId(1), CorrelatedState(
+                        correlation = Correlation(
+                            id = CorrelationId("SomeCorrelationId"),
+                            funcId = FuncId(2)
+                        ),
+                        value = State(HotObject.builder().set("hamal", "rocks").build())
+                    )
                 )
             )
 
@@ -105,12 +114,14 @@ internal class StateRepositoryTest : AbstractUnitTest() {
         @TestFactory
         fun `Find state but func id does not exists`() = runWith(StateRepository::class) {
             set(
-                CmdId(1), CorrelatedState(
-                    correlation = Correlation(
-                        id = CorrelationId("SomeCorrelationId"),
-                        funcId = FuncId(2)
-                    ),
-                    value = State(HotObject.builder().set("hamal", "rocks").build())
+                StateCmdRepository.SetCmd(
+                    CmdId(1), CorrelatedState(
+                        correlation = Correlation(
+                            id = CorrelationId("SomeCorrelationId"),
+                            funcId = FuncId(2)
+                        ),
+                        value = State(HotObject.builder().set("hamal", "rocks").build())
+                    )
                 )
             )
 
@@ -121,12 +132,14 @@ internal class StateRepositoryTest : AbstractUnitTest() {
         @TestFactory
         fun `Find state but correlation  id does not exists`() = runWith(StateRepository::class) {
             set(
-                CmdId(1), CorrelatedState(
-                    correlation = Correlation(
-                        id = CorrelationId("SomeCorrelationId"),
-                        funcId = FuncId(2)
-                    ),
-                    value = State(HotObject.builder().set("hamal", "rocks").build())
+                StateCmdRepository.SetCmd(
+                    CmdId(1), CorrelatedState(
+                        correlation = Correlation(
+                            id = CorrelationId("SomeCorrelationId"),
+                            funcId = FuncId(2)
+                        ),
+                        value = State(HotObject.builder().set("hamal", "rocks").build())
+                    )
                 )
             )
 
