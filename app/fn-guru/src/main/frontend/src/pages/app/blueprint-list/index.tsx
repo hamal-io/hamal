@@ -49,6 +49,11 @@ const BlueprintCards: FC<CardProps> = ({blueprints}) => {
         }
     }, [item]);
 
+    const onclose = () => {
+        setDialog(false)
+        setItem(null)
+    }
+
     return (
         <ul className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 cursor">
             {blueprints.map((bp) => (
@@ -73,8 +78,8 @@ const BlueprintCards: FC<CardProps> = ({blueprints}) => {
                     </Card>
                 </div>
             ))}
-            {dialog && <Dialog open={dialog} onOpenChange={setDialog}>
-                <BpDialog item={item} onClose={() => setDialog(false)}></BpDialog>
+            {item && <Dialog open={dialog} onOpenChange={setDialog}>
+                <BpDialog item={item} onClose={onclose}></BpDialog>
             </Dialog>}
         </ul>)
 }
