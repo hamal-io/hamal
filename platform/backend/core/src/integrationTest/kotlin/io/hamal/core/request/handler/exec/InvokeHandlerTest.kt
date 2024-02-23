@@ -21,6 +21,7 @@ internal class ExecInvokeHandlerTest : BaseReqHandlerTest() {
         testInstance(
             ExecInvokeRequested(
                 id = RequestId(1),
+                by = AuthId(2),
                 status = Submitted,
                 execId = ExecId(3333),
                 namespaceId = testNamespace.id,
@@ -61,6 +62,7 @@ internal class ExecInvokeHandlerTest : BaseReqHandlerTest() {
         testInstance(
             ExecInvokeRequested(
                 id = RequestId(1),
+                by = AuthId(2),
                 correlationId = CorrelationId("some-correlation"),
                 status = Submitted,
                 execId = ExecId(3333),
@@ -129,6 +131,7 @@ internal class ExecInvokeHandlerTest : BaseReqHandlerTest() {
     private val submittedFixedRateInvocationReq by lazy {
         ExecInvokeRequested(
             id = RequestId(1),
+            by = AuthId(2),
             correlationId = CorrelationId("some-correlation"),
             status = Submitted,
             execId = ExecId(3333),

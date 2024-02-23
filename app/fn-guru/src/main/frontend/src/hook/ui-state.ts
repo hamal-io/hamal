@@ -1,7 +1,6 @@
 import useLocalStorageState from "use-local-storage-state";
 import {UI_STATE_KEY, UiState} from "@/types/ui-state.ts";
 import {useCallback} from "react";
-import {string} from "zod";
 
 
 const unauthorized: UiState = {
@@ -33,11 +32,11 @@ export const useInitUiState = (): [InitUiStateAction] => {
 
 type ResetUiStateAction = () => void
 export const useResetUiState = (): [ResetUiStateAction] => {
-    const [uiState, setUiState] = useUiState()
+    const [_, setUiState] = useUiState()
 
     const fn = useCallback(() => {
         setUiState({...unauthorized})
-    }, [uiState])
+    }, [setUiState])
 
     return [fn]
 }

@@ -1,15 +1,12 @@
 package io.hamal.api.http.controller.hook
 
+import io.hamal.core.adapter.hook.HookInvokePort
 import io.hamal.lib.common.hot.HotObject
-import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain._enum.HookMethod.*
 import io.hamal.lib.domain._enum.RequestStatus
-import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain.request.HookInvokeRequested
 import io.hamal.lib.domain.vo.*
-import io.hamal.repository.api.HookQueryRepository
-import io.hamal.repository.api.RequestCmdRepository
 import io.hamal.repository.record.json
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.HttpStatus.ACCEPTED
@@ -18,9 +15,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 internal class HookInvokeController(
-    private val generateDomainId: GenerateId,
-    private val requestCmdRepository: RequestCmdRepository,
-    private val hookQueryRepository: HookQueryRepository
+    private val hookInvoke: HookInvokePort
 ) {
     @GetMapping("/v1/webhooks/{id}")
     fun webhookGet(@PathVariable("id") id: HookId, req: HttpServletRequest) = handle(id, req)
@@ -38,18 +33,19 @@ internal class HookInvokeController(
     fun webhookDelete(@PathVariable("id") id: HookId, req: HttpServletRequest) = handle(id, req)
 
     private fun handle(id: HookId, req: HttpServletRequest): ResponseEntity<Response> {
-        val hook = hookQueryRepository.get(id)
-
-        val result = HookInvokeRequested(
-            id = generateDomainId(::RequestId),
-            status = Submitted,
-            hookId = id,
-            workspaceId = hook.workspaceId,
-            invocation = Invocation.Hook(
-                method = req.method(), headers = req.headers(), parameters = req.parameters(), content = req.content()
-            ),
-        ).also(requestCmdRepository::queue)
-        return ResponseEntity(Response(result), ACCEPTED)
+        return ResponseEntity(
+            Response(
+                hookInvoke(
+                    hookId = id,
+                    invocation = Invocation.Hook(
+                        method = req.method(),
+                        headers = req.headers(),
+                        parameters = req.parameters(),
+                        content = req.content()
+                    ),
+                )
+            ), ACCEPTED
+        )
     }
 
     private fun HttpServletRequest.headers(): HookHeaders {

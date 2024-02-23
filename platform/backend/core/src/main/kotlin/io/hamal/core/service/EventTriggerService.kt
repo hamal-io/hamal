@@ -1,11 +1,11 @@
 package io.hamal.core.service
 
-import io.hamal.core.adapter.FuncInvokePort
+import io.hamal.core.adapter.func.FuncInvokePort
 import io.hamal.core.component.Async
 import io.hamal.lib.common.domain.BatchSize
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.domain.GenerateId
+import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.request.FuncInvokeRequest
 import io.hamal.lib.domain.vo.*
@@ -27,8 +27,8 @@ import kotlin.time.Duration.Companion.milliseconds
 @Service
 internal class EventTriggerService(
     private val async: Async,
-    internal val generateDomainId: GenerateId,
-    internal val invokeFunc: FuncInvokePort,
+    internal val generateDomainId: GenerateDomainId,
+    internal val funcInvoke: FuncInvokePort,
     internal val triggerQueryRepository: TriggerQueryRepository,
     internal val topicRepository: TopicRepository,
     internal val logBrokerRepository: LogBrokerRepository
@@ -59,7 +59,7 @@ internal class EventTriggerService(
                         triggerConsumers[trigger.id] = consumer
                         try {
                             consumer.consumeBatch(BatchSize(1)) { events ->
-                                invokeFunc(
+                                funcInvoke(
                                     trigger.funcId,
                                     object : FuncInvokeRequest {
                                         override val correlationId = trigger.correlationId ?: CorrelationId.default
@@ -76,7 +76,7 @@ internal class EventTriggerService(
                                             payload = EventPayload(it.payload.value)
                                         )
                                     })
-                                ) {}
+                                )
                             }
                         } catch (t: Throwable) {
                             t.printStackTrace()

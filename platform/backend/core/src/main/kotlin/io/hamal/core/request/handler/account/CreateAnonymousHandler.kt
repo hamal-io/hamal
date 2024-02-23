@@ -17,80 +17,80 @@ import java.time.temporal.ChronoUnit
 
 @Component
 class AccountCreateAnonymousHandler(
-    val accountCmdRepository: AccountCmdRepository,
-    val authCmdRepository: AuthCmdRepository,
-    val workspaceCmdRepository: WorkspaceCmdRepository,
-    val namespaceCmdRepository: NamespaceCmdRepository,
-    val namespaceTreeCmdRepository: NamespaceTreeCmdRepository,
-    val eventEmitter: InternalEventEmitter
+    private val accountCmdRepository: AccountCmdRepository,
+    private val authCmdRepository: AuthCmdRepository,
+    private val workspaceCmdRepository: WorkspaceCmdRepository,
+    private val namespaceCmdRepository: NamespaceCmdRepository,
+    private val namespaceTreeCmdRepository: NamespaceTreeCmdRepository,
+    private val eventEmitter: InternalEventEmitter
 ) : RequestHandler<AccountCreateAnonymousRequested>(AccountCreateAnonymousRequested::class) {
 
     override fun invoke(req: AccountCreateAnonymousRequested) {
         createAccount(req)
-            .also { emitEvent(req.cmdId(), it) }
             .also { createWorkspace(req) }
             .also { createNamespace(req) }
             .also { createNamespaceTree(req) }
             .also { createTokenAuth(req) }
+            .also { emitEvent(req.cmdId(), it) }
     }
-}
 
-private fun AccountCreateAnonymousHandler.createAccount(req: AccountCreateAnonymousRequested): Account {
-    return accountCmdRepository.create(
-        AccountCmdRepository.CreateCmd(
-            id = req.cmdId(),
-            accountId = req.accountId,
-            accountType = req.accountType,
-            salt = req.salt
+    private fun createAccount(req: AccountCreateAnonymousRequested): Account {
+        return accountCmdRepository.create(
+            AccountCmdRepository.CreateCmd(
+                id = req.cmdId(),
+                accountId = req.accountId,
+                accountType = req.accountType,
+                salt = req.salt
+            )
         )
-    )
-}
+    }
 
-private fun AccountCreateAnonymousHandler.createWorkspace(req: AccountCreateAnonymousRequested): Workspace {
-    return workspaceCmdRepository.create(
-        WorkspaceCmdRepository.CreateCmd(
-            id = req.cmdId(),
-            workspaceId = req.workspaceId,
-            name = WorkspaceName("Workspace ${req.workspaceId.value.value.toString(16)}"),
-            creatorId = req.accountId
+    private fun createWorkspace(req: AccountCreateAnonymousRequested): Workspace {
+        return workspaceCmdRepository.create(
+            WorkspaceCmdRepository.CreateCmd(
+                id = req.cmdId(),
+                workspaceId = req.workspaceId,
+                name = WorkspaceName("Workspace ${req.workspaceId.value.value.toString(16)}"),
+                creatorId = req.accountId
+            )
         )
-    )
-}
+    }
 
-private fun AccountCreateAnonymousHandler.createNamespace(req: AccountCreateAnonymousRequested): Namespace {
-    return namespaceCmdRepository.create(
-        NamespaceCmdRepository.CreateCmd(
-            id = req.cmdId(),
-            namespaceId = req.namespaceId,
-            workspaceId = req.workspaceId,
-            name = NamespaceName.default
+    private fun createNamespace(req: AccountCreateAnonymousRequested): Namespace {
+        return namespaceCmdRepository.create(
+            NamespaceCmdRepository.CreateCmd(
+                id = req.cmdId(),
+                namespaceId = req.namespaceId,
+                workspaceId = req.workspaceId,
+                name = NamespaceName.default
+            )
         )
-    )
-}
+    }
 
-private fun AccountCreateAnonymousHandler.createNamespaceTree(req: AccountCreateAnonymousRequested): NamespaceTree {
-    return namespaceTreeCmdRepository.create(
-        NamespaceTreeCmdRepository.CreateCmd(
-            id = req.cmdId(),
-            treeId = NamespaceTreeId(req.namespaceId.value),
-            rootNodeId = req.namespaceId,
-            workspaceId = req.workspaceId,
+    private fun createNamespaceTree(req: AccountCreateAnonymousRequested): NamespaceTree {
+        return namespaceTreeCmdRepository.create(
+            NamespaceTreeCmdRepository.CreateCmd(
+                id = req.cmdId(),
+                treeId = NamespaceTreeId(req.namespaceId.value),
+                rootNodeId = req.namespaceId,
+                workspaceId = req.workspaceId,
+            )
         )
-    )
-}
+    }
 
-private fun AccountCreateAnonymousHandler.createTokenAuth(req: AccountCreateAnonymousRequested): Auth {
-    return authCmdRepository.create(
-        AuthCmdRepository.CreateTokenAuthCmd(
-            id = req.cmdId(),
-            authId = req.tokenAuthId,
-            accountId = req.accountId,
-            token = req.token,
-            expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(30, ChronoUnit.DAYS))
+    private fun createTokenAuth(req: AccountCreateAnonymousRequested): Auth {
+        return authCmdRepository.create(
+            AuthCmdRepository.CreateTokenAuthCmd(
+                id = req.cmdId(),
+                authId = req.tokenAuthId,
+                accountId = req.accountId,
+                token = req.token,
+                expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(30, ChronoUnit.DAYS))
+            )
         )
-    )
-}
+    }
 
-private fun AccountCreateAnonymousHandler.emitEvent(cmdId: CmdId, account: Account) {
-    eventEmitter.emit(cmdId, AccountCreatedEvent(account))
+    private fun emitEvent(cmdId: CmdId, account: Account) {
+        eventEmitter.emit(cmdId, AccountCreatedEvent(account))
+    }
 }

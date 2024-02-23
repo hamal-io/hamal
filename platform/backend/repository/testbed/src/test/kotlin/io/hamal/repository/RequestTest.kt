@@ -5,6 +5,7 @@ import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain._enum.RequestStatus.*
 import io.hamal.lib.domain.request.TestRequested
+import io.hamal.lib.domain.vo.AuthId
 import io.hamal.lib.domain.vo.RequestId
 import io.hamal.repository.api.RequestQueryRepository.RequestQuery
 import io.hamal.repository.api.RequestRepository
@@ -20,7 +21,7 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
     inner class QueueTest {
         @TestFactory
         fun `Queues req`() = runWith(RequestRepository::class) {
-            queue(TestRequested(RequestId(1), Submitted))
+            queue(TestRequested(RequestId(1), AuthId(1), Submitted))
             verifyCount(1)
         }
     }
@@ -35,10 +36,10 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Less reqs there than limit`() = runWith(RequestRepository::class) {
-            queue(TestRequested(RequestId(1), Submitted))
-            queue(TestRequested(RequestId(2), Submitted))
-            queue(TestRequested(RequestId(3), Submitted))
-            queue(TestRequested(RequestId(4), Submitted))
+            queue(TestRequested(RequestId(1), AuthId(5), Submitted))
+            queue(TestRequested(RequestId(2), AuthId(6), Submitted))
+            queue(TestRequested(RequestId(3), AuthId(7), Submitted))
+            queue(TestRequested(RequestId(4), AuthId(8), Submitted))
 
             val result = next(Limit(5))
             assertThat(result, hasSize(4))
@@ -50,10 +51,10 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Limit req amount`() = runWith(RequestRepository::class) {
-            queue(TestRequested(RequestId(1), Submitted))
-            queue(TestRequested(RequestId(2), Submitted))
-            queue(TestRequested(RequestId(3), Submitted))
-            queue(TestRequested(RequestId(4), Submitted))
+            queue(TestRequested(RequestId(1), AuthId(5), Submitted))
+            queue(TestRequested(RequestId(2), AuthId(6), Submitted))
+            queue(TestRequested(RequestId(3), AuthId(7), Submitted))
+            queue(TestRequested(RequestId(4), AuthId(8), Submitted))
 
             val result = next(Limit(2))
             assertThat(result, hasSize(2))
@@ -253,6 +254,7 @@ private fun RequestRepository.createRequest(
     queue(
         TestRequested(
             id = reqId,
+            by = AuthId(42),
             status = status,
         )
     )

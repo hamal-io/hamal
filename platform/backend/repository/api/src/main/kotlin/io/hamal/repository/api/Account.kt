@@ -13,7 +13,9 @@ data class Account(
     val cmdId: CmdId,
     val type: AccountType,
     val salt: PasswordSalt
-) : DomainObject<AccountId>
+) : DomainObject<AccountId>, HasAccountId {
+    override val accountId: AccountId get() = id
+}
 
 interface AccountRepository : AccountCmdRepository, AccountQueryRepository
 

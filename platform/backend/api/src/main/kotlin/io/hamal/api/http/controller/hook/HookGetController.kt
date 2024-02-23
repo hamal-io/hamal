@@ -1,6 +1,7 @@
 package io.hamal.api.http.controller.hook
 
-import io.hamal.core.adapter.HookGetPort
+import io.hamal.core.adapter.hook.HookGetPort
+import io.hamal.core.adapter.namespace.NamespaceGetPort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.HookId
 import io.hamal.lib.sdk.api.ApiHook
@@ -15,12 +16,16 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 internal class HookGetController(
     private val retry: Retry,
-    private val getHook: HookGetPort
+    private val hookGet: HookGetPort,
+    private val namespaceGet: NamespaceGetPort
 ) {
 
     @GetMapping("/v1/hooks/{hookId}")
-    fun getHook(@PathVariable("hookId") hookId: HookId): ResponseEntity<ApiHook> = retry {
-        getHook(hookId, ::assemble)
+    fun get(@PathVariable("hookId") hookId: HookId): ResponseEntity<ApiHook> = retry {
+        hookGet(hookId).let { hook ->
+            val namespace = namespaceGet(hook.namespaceId)
+            assemble(hook, namespace)
+        }
     }
 
     private fun assemble(hook: Hook, namespace: Namespace) =

@@ -7,7 +7,6 @@ import io.hamal.extension.net.http.ExtensionHttpFactory
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.util.TimeUtils
-import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.Sandbox
@@ -129,19 +128,19 @@ class ClearController {
         testAccountAuthToken = (authRepository.create(
             AuthCmdRepository.CreateTokenAuthCmd(
                 id = CmdId(3),
-                authId = generateDomainId(::AuthId),
-                accountId = testAccount.id,
+                authId = AuthId.root,
+                accountId = AccountId.root,
                 token = AuthToken("root-token"),
                 expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(1, ChronoUnit.DAYS))
             )
-        ) as TokenAuth).token
+        ) as Auth.Token).token
 
         testWorkspace = workspaceRepository.create(
             WorkspaceCmdRepository.CreateCmd(
                 id = CmdId(4),
                 workspaceId = WorkspaceId.root,
                 name = WorkspaceName("root-workspace"),
-                creatorId = testAccount.id
+                creatorId = AccountId.root
             )
         )
 
@@ -149,7 +148,7 @@ class ClearController {
             NamespaceCmdRepository.CreateCmd(
                 id = CmdId(5),
                 namespaceId = NamespaceId.root,
-                workspaceId = testWorkspace.id,
+                workspaceId = WorkspaceId.root,
                 name = NamespaceName("root-namespace")
             )
         )
@@ -158,8 +157,8 @@ class ClearController {
             NamespaceTreeCmdRepository.CreateCmd(
                 id = CmdId(6),
                 treeId = NamespaceTreeId.root,
-                workspaceId = testWorkspace.id,
-                rootNodeId = testNamespace.id
+                workspaceId = WorkspaceId.root,
+                rootNodeId = NamespaceId.root
             )
         )
     }
@@ -206,9 +205,6 @@ class ClearController {
     @Autowired
     lateinit var triggerRepository: TriggerRepository
 
-    @Autowired
-    lateinit var generateDomainId: GenerateId
-
     private lateinit var testAccount: Account
     private lateinit var testAccountAuthToken: AuthToken
     private lateinit var testWorkspace: Workspace
@@ -247,19 +243,19 @@ class TestConfig {
             testAccountAuthToken = (authRepository.create(
                 AuthCmdRepository.CreateTokenAuthCmd(
                     id = CmdId(3),
-                    authId = AuthId(1),
-                    accountId = testAccount.id,
+                    authId = AuthId.root,
+                    accountId = AccountId.root,
                     token = AuthToken("root-token"),
                     expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(1, ChronoUnit.DAYS))
                 )
-            ) as TokenAuth).token
+            ) as Auth.Token).token
 
             testWorkspace = workspaceRepository.create(
                 WorkspaceCmdRepository.CreateCmd(
                     id = CmdId(4),
                     workspaceId = WorkspaceId.root,
                     name = WorkspaceName("root-workspace"),
-                    creatorId = testAccount.id
+                    creatorId = AccountId.root
                 )
             )
 
@@ -267,7 +263,7 @@ class TestConfig {
                 NamespaceCmdRepository.CreateCmd(
                     id = CmdId(5),
                     namespaceId = NamespaceId.root,
-                    workspaceId = testWorkspace.id,
+                    workspaceId = WorkspaceId.root,
                     name = NamespaceName("root-namespace")
                 )
             )
@@ -332,7 +328,7 @@ abstract class BaseApiTest {
             println(">>>>>>>>>>>>>> ${file.fileName}")
 
             val execReq = sdk.adhoc.invoke(
-                NamespaceId(1),
+                NamespaceId.root,
                 ApiAdhocInvokeRequest(InvocationInputs(), CodeValue(String(Files.readAllBytes(file))))
             )
 

@@ -21,6 +21,7 @@ fun Requested.toApiRequested(): ApiRequested = when (this) {
     is ExecInvokeRequested -> ApiExecInvokeRequested(id, status, execId, workspaceId, namespaceId)
     is ExtensionCreateRequested -> ApiExtensionCreateRequested(id, status, extensionId, workspaceId)
     is ExtensionUpdateRequested -> ApiExtensionUpdateRequested(id, status, extensionId)
+    is FeedbackCreateRequested -> ApiFeedbackCreateRequested(id, status, feedbackId)
     is FuncCreateRequested -> ApiFuncCreateRequested(id, status, funcId, workspaceId, namespaceId)
     is FuncDeployRequested -> ApiFuncDeployRequested(id, status, funcId)
     is FuncUpdateRequested -> ApiFuncUpdateRequested(id, status, funcId)
@@ -37,7 +38,6 @@ fun Requested.toApiRequested(): ApiRequested = when (this) {
     is AuthLogoutRequested,
     is AccountCreateMetaMaskRequested,
     is ExecFailRequested,
-    is FeedbackCreateRequested,
     is HookInvokeRequested,
     is TestRequested,
     is ExecCompleteRequested -> throw NotImplementedError()

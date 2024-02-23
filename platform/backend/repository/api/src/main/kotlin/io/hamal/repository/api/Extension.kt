@@ -7,11 +7,11 @@ import io.hamal.lib.domain.vo.*
 data class Extension(
     override val id: ExtensionId,
     override val updatedAt: UpdatedAt,
-    val workspaceId: WorkspaceId,
+    override val workspaceId: WorkspaceId,
     val cmdId: CmdId,
     val name: ExtensionName,
     val code: ExtensionCode,
-) : DomainObject<ExtensionId>
+) : DomainObject<ExtensionId>, HasWorkspaceId
 
 data class ExtensionCode(
     val id: CodeId,

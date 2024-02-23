@@ -100,6 +100,7 @@ internal class TriggerCreateHandlerTest : BaseReqHandlerTest() {
                 testInstance(
                     TriggerCreateRequested(
                         id = RequestId(12345),
+                        by = AuthId(2345),
                         status = Submitted,
                         triggerType = Hook,
                         triggerId = TriggerId(2),
@@ -236,6 +237,7 @@ internal class TriggerCreateHandlerTest : BaseReqHandlerTest() {
     private val submitCreateFixedRateTriggerReq by lazy {
         TriggerCreateRequested(
             id = RequestId(1),
+            by = AuthId(2),
             status = Submitted,
             triggerType = FixedRate,
             triggerId = TriggerId(1234),
@@ -253,6 +255,7 @@ internal class TriggerCreateHandlerTest : BaseReqHandlerTest() {
     private val submitCreateEventTriggerReq by lazy {
         TriggerCreateRequested(
             id = RequestId(1),
+            by = AuthId(2),
             status = Submitted,
             triggerType = Event,
             triggerId = TriggerId(1234),
@@ -270,6 +273,7 @@ internal class TriggerCreateHandlerTest : BaseReqHandlerTest() {
     private val submitCreateHookTriggerReq by lazy {
         TriggerCreateRequested(
             id = RequestId(1),
+            by = AuthId(2),
             status = Submitted,
             triggerType = Hook,
             triggerId = TriggerId(1234),
@@ -288,6 +292,7 @@ internal class TriggerCreateHandlerTest : BaseReqHandlerTest() {
     private val submitCreateCronTriggerReq by lazy {
         TriggerCreateRequested(
             id = RequestId(1),
+            by = AuthId(2),
             status = Submitted,
             triggerType = Cron,
             triggerId = TriggerId(1234),

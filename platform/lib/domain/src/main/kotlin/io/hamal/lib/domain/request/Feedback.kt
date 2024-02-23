@@ -7,10 +7,7 @@ import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.serialization.JsonAdapter
 import io.hamal.lib.domain._enum.FeedbackMood
 import io.hamal.lib.domain._enum.RequestStatus
-import io.hamal.lib.domain.vo.AccountId
-import io.hamal.lib.domain.vo.FeedbackId
-import io.hamal.lib.domain.vo.FeedbackMessage
-import io.hamal.lib.domain.vo.RequestId
+import io.hamal.lib.domain.vo.*
 import java.lang.reflect.Type
 
 data class FeedbackCreateRequest(
@@ -49,6 +46,7 @@ data class FeedbackCreateRequest(
 
 data class FeedbackCreateRequested(
     override val id: RequestId,
+    override val by: AuthId,
     override var status: RequestStatus,
     val feedbackId: FeedbackId,
     val mood: FeedbackMood,

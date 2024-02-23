@@ -1,6 +1,5 @@
 package io.hamal.testbed.endpoint
 
-import io.hamal.runner.test.AbstractRunnerTest
 import io.hamal.core.component.DelayRetry
 import io.hamal.core.component.DelayRetryFixedTime
 import io.hamal.core.component.SetupInternalTopics
@@ -10,7 +9,7 @@ import io.hamal.extension.net.http.ExtensionHttpFactory
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.util.TimeUtils
-import io.hamal.lib.domain.GenerateId
+import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.Sandbox
@@ -24,6 +23,7 @@ import io.hamal.repository.api.*
 import io.hamal.repository.api.log.LogBrokerRepository
 import io.hamal.runner.config.EnvFactory
 import io.hamal.runner.config.SandboxFactory
+import io.hamal.runner.test.AbstractRunnerTest
 import jakarta.annotation.PostConstruct
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
@@ -131,7 +131,7 @@ class ClearController {
                 token = AuthToken("root-token"),
                 expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(1, ChronoUnit.DAYS))
             )
-        ) as TokenAuth).token
+        ) as Auth.Token).token
 
         testWorkspace = workspaceRepository.create(
             WorkspaceCmdRepository.CreateCmd(
@@ -192,7 +192,7 @@ class ClearController {
     lateinit var triggerRepository: TriggerRepository
 
     @Autowired
-    lateinit var generateDomainId: GenerateId
+    lateinit var generateDomainId: GenerateDomainId
 
     @Autowired
     lateinit var logBrokerRepository: LogBrokerRepository
@@ -246,7 +246,7 @@ class TestConfig {
                     token = AuthToken("root-token"),
                     expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(1, ChronoUnit.DAYS))
                 )
-            ) as TokenAuth).token
+            ) as Auth.Token).token
 
             testWorkspace = workspaceRepository.create(
                 WorkspaceCmdRepository.CreateCmd(
@@ -276,7 +276,7 @@ class TestConfig {
     lateinit var triggerRepository: TriggerRepository
 
     @Autowired
-    lateinit var generateDomainId: GenerateId
+    lateinit var generateDomainId: GenerateDomainId
 
     @Autowired
     lateinit var internalEvenService: InternalEventService

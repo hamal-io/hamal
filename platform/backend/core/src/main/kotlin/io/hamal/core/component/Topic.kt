@@ -1,7 +1,7 @@
 package io.hamal.core.component
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.GenerateId
+import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.TopicType
 import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.domain.vo.LogTopicId
@@ -42,5 +42,5 @@ class SetupInternalTopics {
     private lateinit var topicRepository: TopicRepository
 
     @Autowired
-    private lateinit var generateDomainId: GenerateId
+    private lateinit var generateDomainId: GenerateDomainId
 }

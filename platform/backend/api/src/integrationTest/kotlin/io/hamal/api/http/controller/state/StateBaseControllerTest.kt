@@ -20,7 +20,7 @@ import org.hamcrest.Matchers.equalTo
 internal sealed class StateBaseControllerTest : BaseControllerTest() {
 
     fun createFunc(name: FuncName): ApiFuncCreateRequested {
-        val response = httpTemplate.post("/v1/namespaces/1/funcs")
+        val response = httpTemplate.post("/v1/namespaces/539/funcs")
             .body(
                 ApiFuncCreateRequest(
                     name = name,

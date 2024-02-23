@@ -1,7 +1,8 @@
 package io.hamal.api.http.controller.hook
 
-import io.hamal.core.adapter.HookListPort
-import io.hamal.core.adapter.NamespaceTreeGetSubTreePort
+import io.hamal.core.adapter.hook.HookListPort
+import io.hamal.core.adapter.namespace.NamespaceListPort
+import io.hamal.core.adapter.namespace_tree.NamespaceTreeGetSubTreePort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.HookId
 import io.hamal.lib.domain.vo.NamespaceId
@@ -10,6 +11,7 @@ import io.hamal.lib.sdk.api.ApiHookList
 import io.hamal.lib.sdk.api.ApiHookList.Hook
 import io.hamal.lib.sdk.api.ApiHookList.Hook.Namespace
 import io.hamal.repository.api.HookQueryRepository.HookQuery
+import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -18,7 +20,8 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 internal class HookListController(
-    private val listHook: HookListPort,
+    private val hookList: HookListPort,
+    private val namespaceList: NamespaceListPort,
     private val namespaceTreeGetSubTree: NamespaceTreeGetSubTreePort
 ) {
 
@@ -44,16 +47,21 @@ internal class HookListController(
         @RequestParam(required = false, name = "namespace_ids", defaultValue = "") namespaceIds: List<NamespaceId>
     ): ResponseEntity<ApiHookList> {
         val allNamespaceIds = namespaceIds.flatMap { namespaceId ->
-            namespaceTreeGetSubTree(namespaceId) { it }.values
+            namespaceTreeGetSubTree(namespaceId).values
         }
-        return listHook(
+        return hookList(
             HookQuery(
                 afterId = afterId,
                 limit = limit,
                 workspaceIds = workspaceIds,
                 namespaceIds = allNamespaceIds
             ),
-        ) { hooks, namespaces ->
+        ).let { hooks ->
+
+            val namespaces = namespaceList(NamespaceQuery(
+                limit = Limit.all,
+                namespaceIds = hooks.map { it.namespaceId }
+            )).associateBy { it.id }
 
             ResponseEntity.ok(ApiHookList(
                 hooks.map { hook ->

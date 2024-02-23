@@ -13,7 +13,10 @@ data class Workspace(
     val cmdId: CmdId,
     val name: WorkspaceName,
     val creatorId: AccountId
-) : DomainObject<WorkspaceId>
+) : DomainObject<WorkspaceId>, HasAccountId, HasWorkspaceId {
+    override val accountId: AccountId get() = creatorId
+    override val workspaceId: WorkspaceId get() = id
+}
 
 
 interface WorkspaceRepository : WorkspaceCmdRepository, WorkspaceQueryRepository
@@ -45,7 +48,8 @@ interface WorkspaceQueryRepository {
     data class WorkspaceQuery(
         var afterId: WorkspaceId = WorkspaceId(SnowflakeId(Long.MAX_VALUE)),
         var limit: Limit = Limit(1),
-        var workspaceIds: List<WorkspaceId> = listOf()
+        var workspaceIds: List<WorkspaceId> = listOf(),
+        var accountIds: List<AccountId> = listOf()
     )
 }
 

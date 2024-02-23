@@ -21,7 +21,7 @@ internal class ApiCodeServiceImpl(
 ) : ApiCodeService {
 
     override fun get(codeId: CodeId, codeVersion: CodeVersion?): ApiCode {
-        return template.get("/v1/code/{codeId}")
+        return template.get("/v1/codes/{codeId}")
             .path("codeId", codeId)
             .let { builder ->
                 if (codeVersion != null) {

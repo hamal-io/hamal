@@ -12,7 +12,7 @@
 ---- trigger name is unique
 --req_two = fail_on_error(sys.triggers.create_event({
 --    func_id = func_one.id,
---    namespace_id = '1',
+--    namespace_id = '539',
 --    name = 'trigger-to-append',
 --    inputs = { },
 --    topic_id = topic_req.id
@@ -21,7 +21,7 @@
 --
 --req_two = fail_on_error(sys.triggers.create_event({
 --    func_id = func_one.id,
---    namespace_id = '1',
+--    namespace_id = '539',
 --    name = 'trigger-to-append',
 --    inputs = { },
 --    topic_id = topic_req.id

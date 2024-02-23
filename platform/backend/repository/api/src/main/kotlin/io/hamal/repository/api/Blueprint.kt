@@ -13,7 +13,9 @@ data class Blueprint(
     val inputs: BlueprintInputs,
     val value: CodeValue,
     val description: BlueprintDescription
-) : DomainObject<BlueprintId>
+) : DomainObject<BlueprintId>, HasAccountId {
+    override val accountId: AccountId get() = creatorId
+}
 
 interface BlueprintRepository : BlueprintCmdRepository, BlueprintQueryRepository
 

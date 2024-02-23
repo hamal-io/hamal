@@ -23,7 +23,7 @@ internal class HookCreateControllerTest : HookBaseControllerTest() {
             req = ApiHookCreateRequest(
                 name = HookName("test-hook"),
             ),
-            namespaceId = NamespaceId(1)
+            namespaceId = NamespaceId.root
         )
         awaitCompleted(result)
 
@@ -43,7 +43,7 @@ internal class HookCreateControllerTest : HookBaseControllerTest() {
         val namespace = namespaceCmdRepository.create(
             CreateCmd(
                 id = CmdId(1),
-                namespaceId = NamespaceId(2345),
+                namespaceId = testNamespace.id,
                 workspaceId = testWorkspace.id,
                 name = NamespaceName("hamal::namespace")
             )

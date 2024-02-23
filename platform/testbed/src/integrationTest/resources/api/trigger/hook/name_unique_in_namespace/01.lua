@@ -6,13 +6,13 @@ sys.await_completed(namespace)
 func_one = fail_on_error(sys.funcs.create({ namespace_id = namespace.id; name = 'test-func'; inputs = {}; code = [[4 + 2]] }))
 sys.await_completed(func_one)
 
-hook = fail_on_error(sys.hooks.create({ namespace_id = '1'; name = "some-amazing-hook" }))
+hook = fail_on_error(sys.hooks.create({ namespace_id = '539'; name = "some-amazing-hook" }))
 sys.await(hook)
 
 -- trigger name is unique
 req_two = fail_on_error(sys.triggers.create_hook({
     func_id = func_one.id,
-    namespace_id = '1',
+    namespace_id = '539',
     name = 'trigger-to-append',
     inputs = { },
     hook_id = hook.id,
@@ -23,7 +23,7 @@ sys.await_completed(req_two)
 
 req_two = fail_on_error(sys.triggers.create_hook({
     func_id = func_one.id,
-    namespace_id = '1',
+    namespace_id = '539',
     name = 'trigger-to-append',
     inputs = { },
     hook_id = hook.id,

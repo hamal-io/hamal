@@ -12,6 +12,7 @@ interface TopicCreateRequest {
 
 data class TopicCreateRequested(
     override val id: RequestId,
+    override val by: AuthId,
     override var status: RequestStatus,
     val topicId: TopicId,
     val logTopicId: LogTopicId,
@@ -29,6 +30,7 @@ interface TopicAppendEntryRequest {
 
 data class TopicAppendEventRequested(
     override val id: RequestId,
+    override val by: AuthId,
     override var status: RequestStatus,
     val topicId: TopicId,
     val payload: TopicEventPayload

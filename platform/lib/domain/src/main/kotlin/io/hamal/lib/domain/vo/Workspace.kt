@@ -8,7 +8,7 @@ class WorkspaceId(override val value: SnowflakeId) : ValueObjectId() {
     constructor(value: Int) : this(SnowflakeId(value.toLong()))
 
     companion object {
-        val root = WorkspaceId(1)
+        val root = WorkspaceId(1337)
     }
 }
 

@@ -3,10 +3,10 @@ package io.hamal.core.request.handler.func
 import io.hamal.core.request.handler.BaseReqHandlerTest
 import io.hamal.core.request.handler.NextCommandId
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
+import io.hamal.lib.domain.request.FuncDeployRequested
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.CodeCmdRepository
 import io.hamal.repository.api.FuncCmdRepository
-import io.hamal.lib.domain.request.FuncDeployRequested
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
@@ -21,6 +21,7 @@ internal class FuncDeployHandlerTest : BaseReqHandlerTest() {
         testInstance(
             FuncDeployRequested(
                 id = RequestId(500),
+                by = AuthId(2),
                 status = Submitted,
                 workspaceId = testWorkspace.id,
                 FuncId(1),
@@ -43,6 +44,7 @@ internal class FuncDeployHandlerTest : BaseReqHandlerTest() {
         testInstance(
             FuncDeployRequested(
                 id = RequestId(500),
+                by = AuthId(2),
                 status = Submitted,
                 workspaceId = testWorkspace.id,
                 FuncId(1),
@@ -65,6 +67,7 @@ internal class FuncDeployHandlerTest : BaseReqHandlerTest() {
         testInstance(
             FuncDeployRequested(
                 id = RequestId(500),
+                by = AuthId(2),
                 status = Submitted,
                 workspaceId = testWorkspace.id,
                 funcId = FuncId(1),

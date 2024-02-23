@@ -1,6 +1,6 @@
 package io.hamal.core.request.handler.hook
 
-import io.hamal.core.adapter.FuncInvokePort
+import io.hamal.core.adapter.func.FuncInvokePort
 import io.hamal.core.request.RequestHandler
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.TriggerType.Hook
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component
 @Component
 class HookInvokeHandler(
     private val hookQueryRepository: HookQueryRepository,
-    private val invokeFunc: FuncInvokePort,
+    private val funcInvoke: FuncInvokePort,
     private val triggerQueryRepository: TriggerQueryRepository
 ) : RequestHandler<HookInvokeRequested>(HookInvokeRequested::class) {
 
@@ -38,7 +38,7 @@ class HookInvokeHandler(
         ).filterIsInstance<Trigger.Hook>()
 
         triggers.forEach { trigger ->
-            invokeFunc(
+            funcInvoke(
                 trigger.funcId,
                 object : FuncInvokeRequest {
                     override val correlationId = trigger.correlationId ?: CorrelationId.default
@@ -46,7 +46,7 @@ class HookInvokeHandler(
                     override val version = null
                 },
                 req.invocation
-            ) {}
+            )
         }
     }
 }

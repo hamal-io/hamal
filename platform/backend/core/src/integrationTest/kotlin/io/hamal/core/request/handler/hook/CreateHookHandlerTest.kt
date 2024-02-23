@@ -3,10 +3,7 @@ package io.hamal.core.request.handler.hook
 import io.hamal.core.request.handler.BaseReqHandlerTest
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain.request.HookCreateRequested
-import io.hamal.lib.domain.vo.NamespaceId
-import io.hamal.lib.domain.vo.HookId
-import io.hamal.lib.domain.vo.HookName
-import io.hamal.lib.domain.vo.RequestId
+import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.HookQueryRepository.HookQuery
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -35,6 +32,7 @@ internal class CreateHookHandlerTest : BaseReqHandlerTest() {
     private val submitCreateHookReq by lazy {
         HookCreateRequested(
             id = RequestId(1),
+            by = AuthId(2),
             status = Submitted,
             hookId = HookId(12345),
             workspaceId = testWorkspace.id,

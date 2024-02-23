@@ -1,9 +1,8 @@
 package io.hamal.api.http.controller.blueprint
 
 import io.hamal.api.http.controller.accepted
-import io.hamal.core.adapter.BlueprintCreatePort
+import io.hamal.core.adapter.blueprint.BlueprintCreatePort
 import io.hamal.core.component.Retry
-import io.hamal.lib.domain.request.BlueprintCreateRequested
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.sdk.api.ApiBlueprintCreateRequest
 import io.hamal.lib.sdk.api.ApiRequested
@@ -15,12 +14,13 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class BlueprintCreateController(
     private val retry: Retry,
-    private val createBlueprint: BlueprintCreatePort
+    private val blueprintCreate: BlueprintCreatePort
 ) {
     @PostMapping("/v1/blueprints")
     fun createBlueprint(
         @RequestBody req: ApiBlueprintCreateRequest
     ): ResponseEntity<ApiRequested> = retry {
-        createBlueprint(AccountId(1), req, BlueprintCreateRequested::accepted)
+        // 227 - FIXME remove hardcode account id
+        blueprintCreate(AccountId(1), req).accepted()
     }
 }

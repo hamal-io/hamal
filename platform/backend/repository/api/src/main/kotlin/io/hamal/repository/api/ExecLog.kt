@@ -36,8 +36,8 @@ interface ExecLogQueryRepository {
 data class ExecLog(
     val id: ExecLogId,
     val execId: ExecId,
-    val workspaceId: WorkspaceId,
+    override val workspaceId: WorkspaceId,
     val level: ExecLogLevel,
     val message: ExecLogMessage,
     val timestamp: ExecLogTimestamp,
-)
+) : HasWorkspaceId

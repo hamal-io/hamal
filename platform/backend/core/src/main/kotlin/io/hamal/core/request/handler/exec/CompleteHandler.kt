@@ -1,10 +1,11 @@
 package io.hamal.core.request.handler.exec
 
 import io.hamal.core.event.InternalEventEmitter
+import io.hamal.core.request.RequestHandler
 import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.CorrelatedState
-import io.hamal.lib.domain.GenerateId
+import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain._enum.TopicType
 import io.hamal.lib.domain.request.ExecCompleteRequested
@@ -25,8 +26,8 @@ class ExecCompleteHandler(
     private val namespaceQueryRepository: NamespaceQueryRepository,
     private val topicRepository: TopicRepository,
     private val logBrokerRepository: LogBrokerRepository,
-    private val generateId: GenerateId
-) : io.hamal.core.request.RequestHandler<ExecCompleteRequested>(ExecCompleteRequested::class) {
+    private val generateId: GenerateDomainId
+) : RequestHandler<ExecCompleteRequested>(ExecCompleteRequested::class) {
 
     override fun invoke(req: ExecCompleteRequested) {
         val cmdId = req.cmdId()

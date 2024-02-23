@@ -1,8 +1,8 @@
 package io.hamal.api.http.auth
 
+import io.hamal.core.security.SecurityContext
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.AuthToken
-import io.hamal.repository.api.AccountQueryRepository
 import io.hamal.repository.api.AuthCmdRepository.RevokeAuthCmd
 import io.hamal.repository.api.AuthRepository
 import jakarta.servlet.FilterChain
@@ -20,8 +20,7 @@ private val log = LoggerFactory.getLogger(AuthApiFilter::class.java)
 @Component
 @Order(BASIC_AUTH_ORDER)
 class AuthApiFilter(
-    private val authRepository: AuthRepository,
-    private val accountQueryRepository: AccountQueryRepository
+    private val authRepository: AuthRepository
 ) : OncePerRequestFilter() {
 
     override fun doFilterInternal(
@@ -77,18 +76,14 @@ class AuthApiFilter(
         while (true) {
             val auth = authRepository.find(token)
             if (auth != null) {
-                try {
+                if (path == "/v1/logout") {
+                    authRepository.revokeAuth(RevokeAuthCmd(CmdId.random(), auth.id))
+                    response.status = 204
+                    return
+                }
 
-                    if (path == "/v1/logout") {
-                        authRepository.revokeAuth(RevokeAuthCmd(CmdId.random(), auth.id))
-                        response.status = 204
-                        return
-                    }
-
-                    AuthContextHolder.set(AuthContext(auth, accountQueryRepository.get(auth.accountId), token))
-                    return filterChain.doFilter(request, response)
-                } finally {
-                    AuthContextHolder.clear()
+                return SecurityContext.with(auth) {
+                    filterChain.doFilter(request, response)
                 }
             }
             if (counter++ > 20) {

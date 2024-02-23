@@ -7,12 +7,12 @@ import io.hamal.lib.domain.vo.*
 data class Endpoint(
     override val id: EndpointId,
     override val updatedAt: UpdatedAt,
-    val workspaceId: WorkspaceId,
+    override val workspaceId: WorkspaceId,
     val cmdId: CmdId,
-    val namespaceId: NamespaceId,
+    override val namespaceId: NamespaceId,
     val funcId: FuncId,
     val name: EndpointName
-) : DomainObject<EndpointId>
+) : DomainObject<EndpointId>, HasNamespaceId, HasWorkspaceId
 
 interface EndpointRepository : EndpointCmdRepository, EndpointQueryRepository
 

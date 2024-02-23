@@ -1,7 +1,8 @@
 package io.hamal.api.http.controller.endpoint
 
-import io.hamal.core.adapter.EndpointListPort
-import io.hamal.core.adapter.NamespaceTreeGetSubTreePort
+import io.hamal.core.adapter.endpoint.EndpointListPort
+import io.hamal.core.adapter.func.FuncListPort
+import io.hamal.core.adapter.namespace_tree.NamespaceTreeGetSubTreePort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.EndpointId
 import io.hamal.lib.domain.vo.NamespaceId
@@ -10,6 +11,7 @@ import io.hamal.lib.sdk.api.ApiEndpointList
 import io.hamal.lib.sdk.api.ApiEndpointList.Endpoint
 import io.hamal.lib.sdk.api.ApiEndpointList.Endpoint.Func
 import io.hamal.repository.api.EndpointQueryRepository.EndpointQuery
+import io.hamal.repository.api.FuncQueryRepository
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -18,7 +20,8 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 internal class EndpointListController(
-    private val listEndpoint: EndpointListPort,
+    private val endpointList: EndpointListPort,
+    private val funcList: FuncListPort,
     private val namespaceTreeGetSubTree: NamespaceTreeGetSubTreePort
 ) {
 
@@ -44,10 +47,10 @@ internal class EndpointListController(
         @RequestParam(required = false, name = "namespace_ids", defaultValue = "") namespaceIds: List<NamespaceId>
     ): ResponseEntity<ApiEndpointList> {
         val allNamespaceIds = namespaceIds.flatMap { namespaceId ->
-            namespaceTreeGetSubTree(namespaceId) { it }.values
+            namespaceTreeGetSubTree(namespaceId).values
         }
 
-        return listEndpoint(
+        return endpointList(
             EndpointQuery(
                 afterId = afterId,
                 limit = limit,
@@ -55,7 +58,13 @@ internal class EndpointListController(
                 namespaceIds = allNamespaceIds
             ),
             // assembler
-        ) { endpoints, namespaces ->
+        ).let { endpoints ->
+
+            val namespaces = funcList(
+                FuncQueryRepository.FuncQuery(
+                    limit = Limit.all,
+                    funcIds = endpoints.map { it.funcId }
+                )).associateBy { it.id }
 
             ResponseEntity.ok(ApiEndpointList(
                 endpoints.map { endpoint ->

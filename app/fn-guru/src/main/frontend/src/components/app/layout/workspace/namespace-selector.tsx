@@ -5,7 +5,7 @@ import React, {FC, useEffect, useState} from "react";
 import {cn} from "@/utils"
 import {useNamespaceList} from "@/hook/namespace.ts";
 import {useLocation, useNavigate} from "react-router-dom";
-import {useChangeGroup, useChangeNamespace, useUiState} from "@/hook/ui-state.ts";
+import {useChangeNamespace, useUiState} from "@/hook/ui-state.ts";
 
 type Props = {
     className?: string;

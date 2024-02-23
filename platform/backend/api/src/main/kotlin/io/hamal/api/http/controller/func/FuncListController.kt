@@ -1,7 +1,8 @@
 package io.hamal.api.http.controller.func
 
-import io.hamal.core.adapter.FuncListPort
-import io.hamal.core.adapter.NamespaceTreeGetSubTreePort
+import io.hamal.core.adapter.func.FuncListPort
+import io.hamal.core.adapter.namespace.NamespaceListPort
+import io.hamal.core.adapter.namespace_tree.NamespaceTreeGetSubTreePort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.NamespaceId
@@ -10,6 +11,7 @@ import io.hamal.lib.sdk.api.ApiFuncList
 import io.hamal.lib.sdk.api.ApiFuncList.Func
 import io.hamal.lib.sdk.api.ApiFuncList.Func.Namespace
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
+import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -18,7 +20,8 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 internal class FuncListController(
-    private val listFunc: FuncListPort,
+    private val funcList: FuncListPort,
+    private val namespaceList: NamespaceListPort,
     private val namespaceTreeGetSubTree: NamespaceTreeGetSubTreePort
 ) {
 
@@ -45,17 +48,22 @@ internal class FuncListController(
     ): ResponseEntity<ApiFuncList> {
 
         val allNamespaceIds = namespaceIds.flatMap { namespaceId ->
-            namespaceTreeGetSubTree(namespaceId) { it }.values
+            namespaceTreeGetSubTree(namespaceId).values
         }
 
-        return listFunc(
+        return funcList(
             FuncQuery(
                 afterId = afterId,
                 limit = limit,
                 workspaceIds = workspaceIds,
                 namespaceIds = allNamespaceIds
             ),
-        ) { funcs, namespaces ->
+        ).let { funcs ->
+            val namespaces = namespaceList(NamespaceQuery(
+                limit = Limit.all,
+                namespaceIds = funcs.map { it.namespaceId }
+            )).associateBy { it.id }
+
             ResponseEntity.ok(ApiFuncList(
                 funcs.map { func ->
                     val namespace = namespaces[func.namespaceId]!!

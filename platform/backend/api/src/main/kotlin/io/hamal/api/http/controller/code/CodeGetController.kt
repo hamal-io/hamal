@@ -1,6 +1,6 @@
 package io.hamal.api.http.controller.code
 
-import io.hamal.core.adapter.CodeGetPort
+import io.hamal.core.adapter.code.CodeGetPort
 import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.lib.sdk.api.ApiCode
@@ -12,12 +12,14 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class CodeGetController(private val getCode: CodeGetPort) {
-    @GetMapping("/v1/code/{id}")
-    fun getCode(
+internal class CodeGetController(
+    private val codeGet: CodeGetPort
+) {
+    @GetMapping("/v1/codes/{id}")
+    fun get(
         @PathVariable("id") codeId: CodeId,
         @RequestParam(required = false, name = "version") codeVersion: CodeVersion?
-    ): ResponseEntity<ApiCode> = getCode(codeId, codeVersion, ::assemble)
+    ): ResponseEntity<ApiCode> = assemble(codeGet(codeId, codeVersion))
 
     private fun assemble(code: Code) =
         ResponseEntity.ok(

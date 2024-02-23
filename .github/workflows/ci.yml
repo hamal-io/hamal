@@ -42,8 +42,7 @@ jobs:
 #            rm -rf *
 #            cp -r ${{github.workspace}}/app/hamal-mono/build/reports/jacoco/integrationTestCodeCoverageReport/html/* .
 #            git add -A
-#            git config user.email "code-cov@hamal.io"
-#            git config user.name "code cov"
+#            git config user.email "codecov@hamal.io"
+#            git config user.name "codecov"
 #            git commit -m "${{ github.sha }}"
 #            git push -f
-#

@@ -1,7 +1,7 @@
 package io.hamal.api.http.controller.namespace
 
-import io.hamal.core.adapter.NamespaceListPort
-import io.hamal.core.adapter.NamespaceTreeListPort
+import io.hamal.core.adapter.namespace.NamespaceListPort
+import io.hamal.core.adapter.namespace_tree.NamespaceTreeListPort
 import io.hamal.lib.common.TreeNode
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.NamespaceId
@@ -19,28 +19,28 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 internal class NamespaceListController(
-    private val listNamespaceTrees: NamespaceTreeListPort,
-    private val listNamespaces: NamespaceListPort
+    private val namespaceTreeList: NamespaceTreeListPort,
+    private val namespaceList: NamespaceListPort
 ) {
     @GetMapping("/v1/workspaces/{workspaceId}/namespaces")
-    fun listNamespace(
+    fun list(
         @PathVariable("workspaceId") workspaceId: WorkspaceId,
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: NamespaceId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit
     ): ResponseEntity<ApiNamespaceList> {
-        return ResponseEntity.ok(listNamespaceTrees(
+        return ResponseEntity.ok(namespaceTreeList(
             NamespaceTreeQuery(
                 limit = Limit.one,
                 workspaceIds = listOf(workspaceId)
             )
-        ) {
+        ).let {
             it.map { tree ->
-                listNamespaces(
+                namespaceList(
                     NamespaceQuery(
                         limit = Limit.all,
                         namespaceIds = tree.root.preorder()
                     )
-                ) { namespaces ->
+                ).let { namespaces ->
                     val namespacesById = namespaces.associateBy(Namespace::id)
 
                     val root = namespacesById[tree.root.value]!!.let { namespace ->

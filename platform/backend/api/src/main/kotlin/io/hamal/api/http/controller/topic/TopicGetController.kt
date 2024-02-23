@@ -1,6 +1,6 @@
 package io.hamal.api.http.controller.topic
 
-import io.hamal.core.adapter.TopicGetPort
+import io.hamal.core.adapter.topic.TopicGetPort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.sdk.api.ApiTopic
@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 internal class TopicGetController(
     private val retry: Retry,
-    private val getTopic: TopicGetPort
+    private val topicGet: TopicGetPort
 ) {
     @GetMapping("/v1/topics/{topicId}")
-    fun getTopic(
+    fun get(
         @PathVariable("topicId") topicId: TopicId
     ): ResponseEntity<ApiTopic> = retry {
-        getTopic(topicId) {
+        topicGet(topicId).let {
             ResponseEntity.ok(
                 ApiTopic(
                     id = it.id,

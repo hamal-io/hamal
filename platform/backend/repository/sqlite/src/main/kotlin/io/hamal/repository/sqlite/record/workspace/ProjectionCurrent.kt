@@ -7,8 +7,8 @@ import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Workspace
 import io.hamal.repository.api.WorkspaceQueryRepository.WorkspaceQuery
-import io.hamal.repository.record.workspace.WorkspaceRecord
 import io.hamal.repository.record.json
+import io.hamal.repository.record.workspace.WorkspaceRecord
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 import org.sqlite.SQLiteException
@@ -20,12 +20,13 @@ internal object ProjectionCurrent : ProjectionSqlite<WorkspaceId, WorkspaceRecor
             tx.execute(
                 """
                 INSERT OR REPLACE INTO current
-                    (id, data) 
+                    (id, creator_id, data) 
                 VALUES
-                    (:id, :data)
+                    (:id, :creatorId, :data)
             """.trimIndent()
             ) {
                 set("id", obj.id)
+                set("creatorId", obj.creatorId)
                 set("data", json.serializeAndCompress(obj))
             }
         } catch (e: SQLiteException) {
@@ -36,7 +37,10 @@ internal object ProjectionCurrent : ProjectionSqlite<WorkspaceId, WorkspaceRecor
         }
     }
 
-    private fun find(tx: RecordTransactionSqlite<WorkspaceId, WorkspaceRecord, Workspace>, workspaceName: WorkspaceName): Workspace? {
+    private fun find(
+        tx: RecordTransactionSqlite<WorkspaceId, WorkspaceRecord, Workspace>,
+        workspaceName: WorkspaceName
+    ): Workspace? {
         return tx.executeQueryOne(
             """
                 SELECT 
@@ -62,6 +66,7 @@ internal object ProjectionCurrent : ProjectionSqlite<WorkspaceId, WorkspaceRecor
             """
             CREATE TABLE IF NOT EXISTS current (
                  id             INTEGER NOT NULL,
+                 creator_id     INTEGER NOT NULL,
                  data           BLOB NOT NULL,
                  PRIMARY KEY    (id)
             );
@@ -103,6 +108,7 @@ internal object ProjectionCurrent : ProjectionSqlite<WorkspaceId, WorkspaceRecor
             WHERE
                 id < :afterId
                 ${query.ids()}
+                ${query.accountIds()}
             ORDER BY id DESC
             LIMIT :limit
         """.trimIndent()
@@ -128,6 +134,7 @@ internal object ProjectionCurrent : ProjectionSqlite<WorkspaceId, WorkspaceRecor
             WHERE
                 id < :afterId
                 ${query.ids()}
+                ${query.accountIds()}
         """.trimIndent()
             ) {
                 query {
@@ -148,5 +155,11 @@ internal object ProjectionCurrent : ProjectionSqlite<WorkspaceId, WorkspaceRecor
         }
     }
 
-
+    private fun WorkspaceQuery.accountIds(): String {
+        return if (accountIds.isEmpty()) {
+            ""
+        } else {
+            "AND creator_id IN (${accountIds.joinToString(",") { "${it.value.value}" }})"
+        }
+    }
 }

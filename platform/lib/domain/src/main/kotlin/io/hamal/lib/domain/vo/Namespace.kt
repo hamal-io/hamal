@@ -10,7 +10,7 @@ class NamespaceId(override val value: SnowflakeId) : ValueObjectId() {
     constructor(value: String) : this(SnowflakeId(value.toLong(16)))
 
     companion object {
-        val root = NamespaceId(1)
+        val root = NamespaceId(1337)
     }
 }
 
