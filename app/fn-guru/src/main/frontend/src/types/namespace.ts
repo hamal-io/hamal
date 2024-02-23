@@ -19,6 +19,7 @@ export interface NamespaceUpdateRequested {
     status: string;
     namespaceIdId: string;
     workspaceId: string;
+    name: string;
 }
 
 export interface Namespace {

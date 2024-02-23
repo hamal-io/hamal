@@ -1,24 +1,14 @@
-import {useNavigate} from "react-router-dom";
 import React, {FC, useEffect, useState} from "react";
 
 import * as z from "zod"
 import {zodResolver} from "@hookform/resolvers/zod";
-import {
-    Form,
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage
-} from "@/components/ui/form.tsx";
+import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
 import {useForm} from "react-hook-form";
-import {Loader2, Plus} from "lucide-react";
-import {Dialog, DialogContent, DialogHeader, DialogTrigger} from "@/components/ui/dialog.tsx";
+import {Loader2} from "lucide-react";
+import {DialogContent, DialogHeader} from "@/components/ui/dialog.tsx";
 import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
-import {useNamespaceAppend, useNamespaceUpdate} from "@/hook";
-import Append from "@/pages/app/workspace-detail/tab/namespace-list/components/append.tsx";
+import {useNamespaceUpdate} from "@/hook";
 import {NamespaceListItem} from "@/types";
 
 
