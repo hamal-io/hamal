@@ -7,6 +7,7 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.request.StateSetRequested
 import io.hamal.repository.api.StateCmdRepository
+import io.hamal.repository.api.StateCmdRepository.SetCmd
 import io.hamal.repository.api.event.StateUpdatedEvent
 import org.springframework.stereotype.Component
 
@@ -22,7 +23,7 @@ class StateSetHandler(
     }
 
     private fun updateState(req: StateSetRequested) {
-        return stateCmdRepository.set(req.cmdId(), req.state)
+        return stateCmdRepository.set(SetCmd(req.cmdId(), req.state))
     }
 
     private fun emitEvent(cmdId: CmdId, state: CorrelatedState) {

@@ -27,8 +27,9 @@ internal class TopicListController(
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: TopicId,
         @RequestParam(required = false, name = "names", defaultValue = "") topicNames: List<TopicName>,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit,
-        @RequestParam(required = false, name = "workspace_ids", defaultValue = "") workspaceIds: List<WorkspaceId> = listOf(),
-        @RequestParam(required = false, name = "namespace_ids", defaultValue = "") namespaceIds: List<NamespaceId> = listOf()
+        @RequestParam(required = false, name = "ids", defaultValue = "") ids: List<TopicId>,
+        @RequestParam(required = false, name = "workspace_ids", defaultValue = "") workspaceIds: List<WorkspaceId>,
+        @RequestParam(required = false, name = "namespace_ids", defaultValue = "") namespaceIds: List<NamespaceId>
     ): ResponseEntity<ApiTopicList> {
         val allNamespaceIds = namespaceIds.flatMap { namespaceId ->
             namespaceTreeGetSubTree(namespaceId).values
@@ -38,6 +39,7 @@ internal class TopicListController(
                 afterId = afterId,
                 names = topicNames,
                 limit = limit,
+                topicIds = ids,
                 workspaceIds = workspaceIds,
                 namespaceIds = allNamespaceIds,
                 types = listOf(Namespace, Workspace, Public)

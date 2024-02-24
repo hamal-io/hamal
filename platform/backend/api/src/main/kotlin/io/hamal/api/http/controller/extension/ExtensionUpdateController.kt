@@ -17,11 +17,11 @@ internal class ExtensionUpdateController(
     private val retry: Retry,
     private val extensionUpdate: ExtensionUpdatePort
 ) {
-    @PatchMapping("/v1/extensions/{extId}")
+    @PatchMapping("/v1/extensions/{extensionId}")
     fun update(
-        @PathVariable("extId") extId: ExtensionId,
+        @PathVariable("extensionId") extensionId: ExtensionId,
         @RequestBody req: ApiExtensionUpdateRequest
     ): ResponseEntity<ApiRequested> = retry {
-        extensionUpdate(extId, req).accepted()
+        extensionUpdate(extensionId, req).accepted()
     }
 }

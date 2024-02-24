@@ -81,7 +81,7 @@ internal class ExecListController(
                         )
                     },
                     invocation = it.invocation,
-                    correlation = it.correlation?.correlationId,
+                    correlation = it.correlation?.id,
                     func = it.correlation?.funcId?.let { funcId ->
                         funcs[funcId]!!.let { func ->
                             ApiExecList.Func(

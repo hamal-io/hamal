@@ -51,7 +51,7 @@ internal sealed class StateBaseControllerTest : BaseControllerTest() {
         return response.result(BridgeExecCompleteRequested::class)
     }
 
-    fun getState(correlation: Correlation) = getState(correlation.funcId, correlation.correlationId)
+    fun getState(correlation: Correlation) = getState(correlation.funcId, correlation.id)
 
     fun getState(funcId: FuncId, correlationId: CorrelationId): ApiCorrelatedState {
         val response = httpTemplate.get("/v1/funcs/{funcId}/states/{correlationId}")
@@ -67,7 +67,7 @@ internal sealed class StateBaseControllerTest : BaseControllerTest() {
     fun setState(correlatedState: CorrelatedState): ApiStateSetRequested {
         val response = httpTemplate.put("/v1/funcs/{funcId}/states/{correlationId}")
             .path("funcId", correlatedState.correlation.funcId)
-            .path("correlationId", correlatedState.correlation.correlationId.value)
+            .path("correlationId", correlatedState.correlation.id.value)
             .body(correlatedState.value)
             .execute()
 

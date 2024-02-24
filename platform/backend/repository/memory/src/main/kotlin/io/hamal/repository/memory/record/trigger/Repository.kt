@@ -75,18 +75,6 @@ class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord,
             if (commandAlreadyApplied(cmd.id, triggerId)) {
                 versionOf(triggerId, cmd.id) as Trigger.Hook
             } else {
-
-                TriggerCurrentProjection.list(
-                    TriggerQuery(
-                        hookIds = listOf(cmd.hookId)
-                    )
-                ).firstOrNull()?.let { trigger ->
-                    trigger as Trigger.Hook
-                    if (trigger.funcId == cmd.funcId && trigger.hookMethod == cmd.hookMethod) {
-                        throw IllegalArgumentException("Trigger already exists")
-                    }
-                }
-
                 store(
                     TriggerRecord.HookCreated(
                         cmdId = cmd.id,
@@ -102,7 +90,9 @@ class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord,
                         status = cmd.status
                     )
                 )
-                (currentVersion(triggerId) as Trigger.Hook).also(TriggerCurrentProjection::apply)
+                (currentVersion(triggerId) as Trigger.Hook)
+                    .also(uniqueHookProjection::create)
+                    .also(TriggerCurrentProjection::apply)
             }
         }
     }
@@ -164,10 +154,13 @@ class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord,
         lock.withLock {
             super.clear()
             TriggerCurrentProjection.clear()
+            uniqueHookProjection.clear()
         }
     }
 
     override fun close() {}
 
     private val lock = ReentrantLock()
+
+    private val uniqueHookProjection = TriggerProjectionUniqueHook()
 }

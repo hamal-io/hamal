@@ -48,48 +48,48 @@ class ExtensionSqliteRepository(
 ), ExtensionRepository {
 
     override fun create(cmd: CreateCmd): Extension {
-        val extId = cmd.extId
+        val extensionId = cmd.extensionId
         val cmdId = cmd.id
         return tx {
-            if (commandAlreadyApplied(cmdId, extId)) {
-                versionOf(extId, cmdId)
+            if (commandAlreadyApplied(cmdId, extensionId)) {
+                versionOf(extensionId, cmdId)
             } else {
                 store(
                     ExtensionRecord.Created(
                         cmdId = cmdId,
-                        entityId = extId,
+                        entityId = extensionId,
                         workspaceId = cmd.workspaceId,
                         name = cmd.name,
                         code = cmd.code
                     )
                 )
-                currentVersion(extId).also { ProjectionCurrent.upsert(this, it) }
+                currentVersion(extensionId).also { ProjectionCurrent.upsert(this, it) }
             }
         }
     }
 
-    override fun update(extId: ExtensionId, cmd: UpdateCmd): Extension {
+    override fun update(extensionId: ExtensionId, cmd: UpdateCmd): Extension {
         val cmdId = cmd.id
         return tx {
-            if (commandAlreadyApplied(cmdId, extId)) {
-                versionOf(extId, cmdId)
+            if (commandAlreadyApplied(cmdId, extensionId)) {
+                versionOf(extensionId, cmdId)
             } else {
-                val currentVersion = versionOf(extId, cmdId)
+                val currentVersion = versionOf(extensionId, cmdId)
                 store(
                     ExtensionRecord.Updated(
-                        entityId = extId,
+                        entityId = extensionId,
                         cmdId = cmdId,
                         name = cmd.name ?: currentVersion.name,
                         code = cmd.code ?: currentVersion.code
                     )
                 )
-                currentVersion(extId)
+                currentVersion(extensionId)
                     .also { ProjectionCurrent.upsert(this, it) }
             }
         }
     }
 
-    override fun find(extId: ExtensionId): Extension? = ProjectionCurrent.find(connection, extId)
+    override fun find(extensionId: ExtensionId): Extension? = ProjectionCurrent.find(connection, extensionId)
 
 
     override fun list(query: ExtensionQuery): List<Extension> = ProjectionCurrent.list(connection, query)

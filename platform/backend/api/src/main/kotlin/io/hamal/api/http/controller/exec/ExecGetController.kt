@@ -31,7 +31,7 @@ internal class ExecGetController(
                     ApiExec(
                         id = exec.id,
                         status = exec.status,
-                        correlation = exec.correlation?.correlationId,
+                        correlation = exec.correlation?.id,
                         inputs = exec.inputs,
                         invocation = exec.invocation,
                         result = if (exec is Exec.Completed) {

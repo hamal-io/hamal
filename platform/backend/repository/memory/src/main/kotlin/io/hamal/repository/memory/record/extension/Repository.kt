@@ -20,47 +20,47 @@ class ExtensionMemoryRepository : RecordMemoryRepository<ExtensionId, ExtensionR
     private val lock = ReentrantLock()
     override fun create(cmd: CreateCmd): Extension {
         return lock.withLock {
-            val extId = cmd.extId
+            val extensionId = cmd.extensionId
             val cmdId = cmd.id
-            if (commandAlreadyApplied(cmdId, extId)) {
-                versionOf(extId, cmd.id)
+            if (commandAlreadyApplied(cmdId, extensionId)) {
+                versionOf(extensionId, cmd.id)
             } else {
                 store(
                     ExtensionRecord.Created(
                         cmdId = cmd.id,
-                        entityId = extId,
+                        entityId = extensionId,
                         workspaceId = cmd.workspaceId,
                         name = cmd.name,
                         code = cmd.code
                     )
                 )
-                (currentVersion(extId)).also(ExtensionCurrentProjection::apply)
+                (currentVersion(extensionId)).also(ExtensionCurrentProjection::apply)
             }
         }
     }
 
-    override fun update(extId: ExtensionId, cmd: UpdateCmd): Extension {
+    override fun update(extensionId: ExtensionId, cmd: UpdateCmd): Extension {
         return lock.withLock {
-            if (commandAlreadyApplied(cmd.id, extId)) {
-                versionOf(extId, cmd.id)
+            if (commandAlreadyApplied(cmd.id, extensionId)) {
+                versionOf(extensionId, cmd.id)
             } else {
-                val currentVersion = versionOf(extId, cmd.id)
+                val currentVersion = versionOf(extensionId, cmd.id)
                 store(
                     ExtensionRecord.Updated(
-                        entityId = extId,
+                        entityId = extensionId,
                         cmdId = cmd.id,
                         name = cmd.name ?: currentVersion.name,
                         code = cmd.code ?: currentVersion.code
                     )
                 )
-                (currentVersion(extId)).also(ExtensionCurrentProjection::apply)
+                (currentVersion(extensionId)).also(ExtensionCurrentProjection::apply)
             }
         }
     }
 
     override fun close() {}
 
-    override fun find(extId: ExtensionId): Extension? = lock.withLock { ExtensionCurrentProjection.find(extId) }
+    override fun find(extensionId: ExtensionId): Extension? = lock.withLock { ExtensionCurrentProjection.find(extensionId) }
 
     override fun list(query: ExtensionQuery): List<Extension> = lock.withLock { ExtensionCurrentProjection.list(query) }
 

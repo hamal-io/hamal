@@ -1,43 +1,135 @@
 package io.hamal.testbed.api
 
-import io.hamal.extension.net.http.ExtensionHttpFactory
 import io.hamal.lib.common.hot.HotObject
-import io.hamal.lib.domain.vo.RunnerEnv
-import io.hamal.plugin.net.http.PluginHttpFactory
-import io.hamal.runner.test.AbstractRunnerTest
-import io.hamal.testbed.api.BaseTest.TestResult.Failure
-import io.hamal.testbed.api.BaseTest.TestResult.Success
+import io.hamal.testbed.BaseTest
+import org.junit.jupiter.api.DynamicTest
+import org.junit.jupiter.api.DynamicTest.dynamicTest
+import org.junit.jupiter.api.TestFactory
+import org.junit.jupiter.api.fail
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.Paths
+import kotlin.io.path.name
 
-abstract class BaseTest(private val apiUrl: String) : AbstractRunnerTest() {
 
-    sealed interface TestResult {
-        object Success : TestResult
-        data class Failure(val message: String) : TestResult
+abstract class ApiBaseSecurityTest(apiUrl: String) : BaseTest(apiUrl) {
+
+    @TestFactory
+    fun misc(): List<DynamicTest> {
+        return miscFiles()
+            .sorted()
+            .map { testPath ->
+                val testName = generateTestName(testPath)
+                dynamicTest(testName) {
+                    val result = runTest(testPath, HotObject.empty)
+                    if (result is TestResult.Failure) {
+                        fail { result.message }
+                    }
+                }
+            }.toList()
     }
 
-    protected fun runTest(
-        testFile: Path,
-        testEnv: HotObject
-    ): TestResult {
-        return try {
-            createTestRunner(
-                pluginFactories = listOf(PluginHttpFactory()),
-                extensionFactories = listOf(ExtensionHttpFactory),
-                env = RunnerEnv(
-                    HotObject.builder().also { builder ->
-                        testEnv.nodes.forEach { (key, value) ->
-                            builder[key] = value
+    @TestFactory
+    fun unauthenticated(): List<DynamicTest> {
+        return unauthenticatedFiles()
+            .sorted()
+            .map { testPath ->
+                val testName = generateTestName(testPath)
+                dynamicTest(testName) {
+                    val result = runTest(testPath, HotObject.empty)
+                    if (result is TestResult.Failure) {
+                        fail { result.message }
+                    }
+                }
+            }.toList()
+    }
+
+    @TestFactory
+    fun unauthorized(): List<DynamicTest> {
+        return unauthorizedFiles()
+            .sorted()
+            .flatMap { testPath ->
+                val testName = generateTestName(testPath)
+                listOf(
+                    TestParameter("200", "Anonymous", "200-token"),
+                    TestParameter("300", "User", "300-token")
+                ).map { testParameter ->
+
+                    dynamicTest("$testName - ${testParameter.name}") {
+                        val result = runTest(
+                            testFile = testPath,
+                            testEnv = HotObject.builder()
+                                .set("token", testParameter.token)
+                                .set("id", testParameter.id)
+                                .build()
+                        )
+
+                        if (result is TestResult.Failure) {
+                            fail { result.message }
                         }
                     }
-                        .set("test_api", apiUrl)
-                        .build()
-                )
-            ).run(unitOfWork(String(Files.readAllBytes(testFile))))
-            Success
-        } catch (t: Throwable) {
-            Failure(t.message ?: "Unknown error")
-        }
+                }
+            }
     }
+
+    @TestFactory
+    fun workspace_admin(): List<DynamicTest> {
+        return workspaceAdminFiles()
+            .sorted()
+            .map { testPath ->
+                val testName = generateTestName(testPath)
+                dynamicTest(testName) {
+                    val result = runTest(
+                        testFile = testPath,
+                        testEnv = HotObject.builder()
+                            .set("token", "1-token")
+                            .set("id", "1")
+                            .build()
+                    )
+                    if (result is TestResult.Failure) {
+                        fail { result.message }
+                    }
+                }
+            }
+    }
+
+    private data class TestParameter(
+        val id: String,
+        val name: String,
+        val token: String
+    )
 }
+
+private fun generateTestName(testPath: Path) = testPath.toAbsolutePath().toString().split("/")
+    .dropWhile { it != "resources" }
+    .drop(1)
+    .joinToString("/")
+
+
+private fun miscFiles(): List<Path> =
+    Files.walk(Paths.get("src", "securityTest", "resources", "api", "misc"))
+        .filter { f: Path -> f.name.endsWith(".lua") }
+        .distinct()
+        .sorted()
+        .toList()
+
+private fun unauthorizedFiles(): List<Path> =
+    Files.walk(Paths.get("src", "securityTest", "resources", "api", "unauthorized"))
+        .filter { f: Path -> f.name.endsWith(".lua") }
+        .distinct()
+        .sorted()
+        .toList()
+
+private fun unauthenticatedFiles(): List<Path> =
+    Files.walk(Paths.get("src", "securityTest", "resources", "api", "unauthenticated"))
+        .filter { f: Path -> f.name.endsWith(".lua") }
+        .distinct()
+        .sorted()
+        .toList()
+
+private fun workspaceAdminFiles(): List<Path> =
+    Files.walk(Paths.get("src", "securityTest", "resources", "api", "workspace_admin"))
+        .filter { f: Path -> f.name.endsWith(".lua") }
+        .distinct()
+        .sorted()
+        .toList()
