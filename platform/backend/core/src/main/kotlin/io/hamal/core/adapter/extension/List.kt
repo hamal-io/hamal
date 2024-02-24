@@ -1,5 +1,6 @@
 package io.hamal.core.adapter.extension
 
+import io.hamal.core.adapter.security.FilterAccessPort
 import io.hamal.repository.api.Extension
 import io.hamal.repository.api.ExtensionQueryRepository
 import io.hamal.repository.api.ExtensionQueryRepository.ExtensionQuery
@@ -11,7 +12,8 @@ fun interface ExtensionListPort {
 
 @Component
 class ExtensionListAdapter(
-    private val extensionQueryRepository: ExtensionQueryRepository
+    private val extensionQueryRepository: ExtensionQueryRepository,
+    private val filterAccess: FilterAccessPort
 ) : ExtensionListPort {
-    override fun invoke(query: ExtensionQuery): List<Extension> = extensionQueryRepository.list(query)
+    override fun invoke(query: ExtensionQuery): List<Extension> = filterAccess(extensionQueryRepository.list(query))
 }
