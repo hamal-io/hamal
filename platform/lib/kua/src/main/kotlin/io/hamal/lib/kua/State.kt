@@ -113,7 +113,7 @@ class ClosableState(
                         else -> throw IllegalStateException("Must either be number or string")
                     }
                 } else {
-                    KuaAny(KuaArray())
+                    KuaAny(KuaMap())
                 }
             } // FIXME what about table and array ?
             else -> TODO("$type not supported yet")
