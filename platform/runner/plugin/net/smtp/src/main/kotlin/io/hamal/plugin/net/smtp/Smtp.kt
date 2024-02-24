@@ -5,16 +5,16 @@ import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput1Schema
 import io.hamal.lib.kua.type.KuaError
-import io.hamal.lib.kua.type.KuaMap
+import io.hamal.lib.kua.type.KuaTable
 
 class SmtpSendFunction(
     private val sender: Sender
-) : Function1In1Out<KuaMap, KuaError>(
-    FunctionInput1Schema(KuaMap::class),
+) : Function1In1Out<KuaTable, KuaError>(
+    FunctionInput1Schema(KuaTable::class),
     FunctionOutput1Schema(KuaError::class)
 ) {
 
-    override fun invoke(ctx: FunctionContext, arg1: KuaMap): KuaError? {
+    override fun invoke(ctx: FunctionContext, arg1: KuaTable): KuaError? {
 
         sender.send(
             SenderConfig(

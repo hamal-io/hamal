@@ -7,16 +7,17 @@ class KuaAnyTest {
 
     @TestFactory
     fun serialization() = listOf(
-        generateTestCases(
-            testInstance = KuaAny(
-                KuaArray(
-                    mutableMapOf(
-                        1234 to KuaString("value")
-                    )
-                )
-            ),
-            expectedJson = """{"value":{"1234":{"value":"value","type":"String"}},"type":"Array"}"""
-        ),
+//        generateTestCases(
+//            testInstance = KuaAny(
+//                KuaArray(
+//                    mutableMapOf(
+//                        1234 to KuaString("value")
+//                    )
+//                )
+//            ),
+//            expectedJson = """{"value":{"1234":{"value":"value","type":"String"}},"type":"Array"}"""
+//        ),
+        TODO(),
         generateTestCases(
             testInstance = KuaAny(KuaDecimal("123456789.987654321")),
             expectedJson = """{"value":"123456789.987654321","type":"Decimal"}"""
@@ -31,7 +32,7 @@ class KuaAnyTest {
         ),
         generateTestCases(
             testInstance = KuaAny(
-                KuaMap(
+                KuaTable(
                     mutableMapOf(
                         "key" to KuaString("hamal")
                     )

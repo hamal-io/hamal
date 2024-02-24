@@ -35,11 +35,11 @@ sealed interface KuaType {
             element: JsonElement, typeOfT: java.lang.reflect.Type, context: JsonDeserializationContext
         ): KuaType {
             return when (val kuaType = element.asJsonObject.get("type").asString) {
-                "Array" -> context.deserialize(element, KuaArray::class.java)
+//                "Array" -> context.deserialize(element, KuaArray::class.java)
                 "Boolean" -> context.deserialize(element, KuaBoolean::class.java)
                 "Decimal" -> context.deserialize(element, KuaDecimal::class.java)
                 "Error" -> context.deserialize(element, KuaError::class.java)
-                "Map" -> context.deserialize(element, KuaMap::class.java)
+                "Table" -> context.deserialize(element, KuaTable::class.java)
                 "Nil" -> KuaNil
                 "Number" -> context.deserialize(element, KuaNumber::class.java)
                 "String" -> context.deserialize(element, KuaString::class.java)

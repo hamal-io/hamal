@@ -1,8 +1,6 @@
 package io.hamal.lib.kua
 
-import io.hamal.lib.kua.table.TableProxyArray
-import io.hamal.lib.kua.table.TableProxyMap
-import io.hamal.lib.kua.table.tableKeyType
+import io.hamal.lib.kua.table.TableProxy
 import io.hamal.lib.kua.type.*
 import io.hamal.lib.kua.type.KuaError
 import kotlin.reflect.KClass
@@ -28,8 +26,6 @@ interface State {
     fun pushAny(value: KuaAny): StackTop
     fun getAny(idx: Int): KuaAny
 
-    fun getArrayType(idx: Int): KuaArray
-
     fun pushBoolean(value: Boolean): StackTop
     fun pushBoolean(value: KuaBoolean) = pushBoolean(value.value)
     fun getBoolean(idx: Int): Boolean
@@ -47,21 +43,17 @@ interface State {
     fun pushString(value: String): StackTop
     fun pushString(value: KuaString) = pushString(value.value)
 
-    fun pushTable(proxy: TableProxyMap): StackTop
-    fun pushTable(proxy: TableProxyArray): StackTop
-    fun getTableMapProxy(idx: Int): TableProxyMap
-    fun getTableArrayProxy(idx: Int): TableProxyArray
+    fun pushTable(proxy: TableProxy): StackTop
+    fun getTable(idx: Int): TableProxy
 
-    fun getMapType(idx: Int): KuaMap
+    fun getTableType(idx: Int): KuaTable
 
     fun setGlobal(name: String, value: KuaFunction<*, *, *, *>)
-    fun setGlobal(name: String, value: TableProxyMap)
-    fun setGlobal(name: String, value: TableProxyArray)
-    fun getGlobalTableMap(name: String): TableProxyMap
+    fun setGlobal(name: String, value: TableProxy)
+    fun getGlobalTableMap(name: String): TableProxy
     fun unsetGlobal(name: String)
 
-    fun tableCreateMap(capacity: Int = 0): TableProxyMap
-    fun tableCreateArray(capacity: Int = 0): TableProxyArray
+    fun tableCreate(capacity: Int = 0): TableProxy
     fun tableAppend(idx: Int): Int
     fun tableSetRaw(idx: Int): Int
     fun tableSetRawIdx(stackIdx: Int, tableIdx: Int): Int
@@ -90,9 +82,8 @@ class ClosableState(
 
     override fun pushAny(value: KuaAny): StackTop {
         return when (val underlying = value.value) {
-            is KuaArray -> pushTable(toProxyArray(underlying))
             is KuaBoolean -> pushBoolean(underlying)
-            is KuaMap -> pushTable(toProxyMap(underlying))
+            is KuaTable -> pushTable(toTableProxy(underlying))
             is KuaNumber -> pushNumber(underlying)
             is KuaString -> pushString(underlying)
             else -> TODO("${underlying.javaClass} not supported yet")
@@ -105,24 +96,9 @@ class ClosableState(
             KuaDecimal::class -> KuaAny(native.toDecimal(idx))
             KuaNumber::class -> KuaAny(getNumberType(idx))
             KuaString::class -> KuaAny(getStringType(idx))
-            KuaTableType::class -> {
-                if (native.tableGetLength(idx) > 0) {
-                    when (tableKeyType(idx)) {
-                        KuaString::class -> KuaAny(getMapType(idx))
-                        KuaNumber::class -> KuaAny(getArrayType(idx))
-                        else -> throw IllegalStateException("Must either be number or string")
-                    }
-                } else {
-                    KuaAny(KuaMap())
-                }
-            } // FIXME what about table and array ?
+            KuaTableType::class -> KuaAny(getTableType(idx))
             else -> TODO("$type not supported yet")
         }
-    }
-
-    override fun getArrayType(idx: Int): KuaArray {
-        val ref = TableProxyArray(absIndex(idx), this)
-        return toArrayType(ref)
     }
 
     override fun pushBoolean(value: Boolean): StackTop = StackTop(native.pushBoolean(value))
@@ -135,18 +111,13 @@ class ClosableState(
     override fun getString(idx: Int) = native.toString(idx)
     override fun pushString(value: String) = StackTop(native.pushString(value))
 
-    override fun pushTable(proxy: TableProxyMap) = StackTop(native.pushTop(proxy.index))
-    override fun pushTable(proxy: TableProxyArray) = StackTop(native.pushTop(proxy.index))
+    override fun pushTable(proxy: TableProxy) = StackTop(native.pushTop(proxy.index))
 
-    //FIXME type check
-    override fun getTableMapProxy(idx: Int): TableProxyMap = TableProxyMap(absIndex(idx), this)
+    override fun getTable(idx: Int): TableProxy = TableProxy(absIndex(idx), this)
 
-    //FIXME type check
-    override fun getTableArrayProxy(idx: Int): TableProxyArray = TableProxyArray(absIndex(idx), this)
-
-    override fun getMapType(idx: Int): KuaMap {
-        val ref = TableProxyMap(absIndex(idx), this)
-        return toKuaMap(ref)
+    override fun getTableType(idx: Int): KuaTable {
+        val ref = TableProxy(absIndex(idx), this)
+        return toKuaTable(ref)
     }
 
     override fun setGlobal(name: String, value: KuaFunction<*, *, *, *>) {
@@ -154,19 +125,14 @@ class ClosableState(
         native.setGlobal(name)
     }
 
-    override fun setGlobal(name: String, value: TableProxyMap) {
+    override fun setGlobal(name: String, value: TableProxy) {
         native.pushTop(value.index)
         native.setGlobal(name)
     }
 
-    override fun setGlobal(name: String, value: TableProxyArray) {
-        native.pushTop(value.index)
-        native.setGlobal(name)
-    }
-
-    override fun getGlobalTableMap(name: String): TableProxyMap {
+    override fun getGlobalTableMap(name: String): TableProxy {
         native.getGlobal(name)
-        return getTableMapProxy(top.value)
+        return getTable(top.value)
     }
 
     override fun unsetGlobal(name: String) {
@@ -174,16 +140,9 @@ class ClosableState(
         native.setGlobal(name)
     }
 
-    override fun tableCreateMap(capacity: Int): TableProxyMap {
-        return TableProxyMap(
+    override fun tableCreate(capacity: Int): TableProxy {
+        return TableProxy(
             index = native.tableCreate(0, capacity),
-            state = this
-        )
-    }
-
-    override fun tableCreateArray(capacity: Int): TableProxyArray {
-        return TableProxyArray(
-            index = native.tableCreate(capacity, 0),
             state = this
         )
     }

@@ -10,32 +10,32 @@ import io.hamal.lib.sdk.ApiSdk
 
 class FuncGetFunction(
     private val sdk: ApiSdk
-) : Function1In2Out<KuaString, KuaError, KuaMap>(
+) : Function1In2Out<KuaString, KuaError, KuaTable>(
     FunctionInput1Schema(KuaString::class),
-    FunctionOutput2Schema(KuaError::class, KuaMap::class)
+    FunctionOutput2Schema(KuaError::class, KuaTable::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: KuaString): Pair<KuaError?, KuaMap?> {
+    override fun invoke(ctx: FunctionContext, arg1: KuaString): Pair<KuaError?, KuaTable?> {
         return try {
             null to sdk.func.get(FuncId(arg1.value))
                 .let { func ->
-                    KuaMap(
+                    KuaTable(
                         mutableMapOf(
                             "id" to KuaString(func.id.value.value.toString(16)),
-                            "namespace" to KuaMap(
+                            "namespace" to KuaTable(
                                 mutableMapOf(
                                     "id" to KuaString(func.namespace.id.value.value.toString(16)),
                                     "name" to KuaString(func.namespace.name.value)
                                 )
                             ),
                             "name" to KuaString(func.name.value),
-                            "code" to KuaMap(
+                            "code" to KuaTable(
                                 mutableMapOf(
                                     "id" to KuaString(func.code.id.value.value.toString(16)),
                                     "version" to KuaNumber(func.code.version.value),
                                     "value" to KuaCode(func.code.value.value)
                                 )
                             ),
-                            "deployment" to KuaMap(
+                            "deployment" to KuaTable(
                                 mutableMapOf(
                                     "id" to KuaString(func.deployment.id.value.value.toString(16)),
                                     "version" to KuaNumber(func.deployment.version.value),

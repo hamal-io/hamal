@@ -11,7 +11,7 @@ import io.hamal.lib.common.snowflake.SnowflakeId
 import java.lang.reflect.Type
 import kotlin.reflect.KClass
 
-data class KuaMap(
+data class KuaTable(
     val value: MutableMap<String, KuaType> = mutableMapOf(),
 ) : KuaTableType, Map<String, KuaType> {
 
@@ -54,11 +54,11 @@ data class KuaMap(
         return size
     }
 
-    fun getArrayType(key: KuaString): KuaArray = getArrayType(key.value)
-    fun getArrayType(key: String): KuaArray {
-        checkExpectedType(key, KuaArray::class)
-        return value[key]!! as KuaArray
-    }
+//    fun getArrayType(key: KuaString): KuaArray = getArrayType(key.value)
+//    fun getArrayType(key: String): KuaArray {
+//        checkExpectedType(key, KuaArray::class)
+//        return value[key]!! as KuaArray
+//    }
 
     fun getBooleanValue(key: KuaString) = getBooleanValue(key.value)
     fun getBoolean(key: String): Boolean = getBooleanValue(key).value
@@ -116,7 +116,7 @@ data class KuaMap(
         return size
     }
 
-    operator fun set(key: String, value: KuaMap): Int {
+    operator fun set(key: String, value: KuaTable): Int {
         this.value[key] = value
         return size
     }
@@ -153,8 +153,8 @@ data class KuaMap(
         return value[key]?.let { it::class } ?: KuaNil::class
     }
 
-    object Adapter : JsonAdapter<KuaMap> {
-        override fun serialize(instance: KuaMap, type: Type, ctx: JsonSerializationContext): JsonElement {
+    object Adapter : JsonAdapter<KuaTable> {
+        override fun serialize(instance: KuaTable, type: Type, ctx: JsonSerializationContext): JsonElement {
             val valueBuilder = HotObject.builder()
             instance.forEach { (key, value) ->
                 valueBuilder.set(key, GsonTransform.toNode(ctx.serialize(value)))
@@ -167,20 +167,20 @@ data class KuaMap(
             )
         }
 
-        override fun deserialize(element: JsonElement, type: Type, ctx: JsonDeserializationContext): KuaMap {
+        override fun deserialize(element: JsonElement, type: Type, ctx: JsonDeserializationContext): KuaTable {
             val obj = element.asJsonObject.get("value").asJsonObject
             val map = mutableMapOf<String, KuaType>()
             obj.keySet().forEach { key ->
                 map[key] = ctx.deserialize(obj.get(key), KuaType::class.java)
             }
-            return KuaMap(map)
+            return KuaTable(map)
         }
     }
 }
 
-internal fun KuaMap.isNull(key: String) = type(key) == KuaNil::class
+internal fun KuaTable.isNull(key: String) = type(key) == KuaNil::class
 
-internal fun KuaMap.checkExpectedType(key: String, expected: KClass<out KuaType>) {
+internal fun KuaTable.checkExpectedType(key: String, expected: KClass<out KuaType>) {
     check(type(key) == expected) {
         "Expected type to be $expected but was $this"
     }

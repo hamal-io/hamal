@@ -12,15 +12,15 @@ import io.hamal.lib.sdk.ApiSdk
 
 class CodeGetFunction(
     private val sdk: ApiSdk
-) : Function2In2Out<KuaString, KuaNumber, KuaError, KuaMap>(
+) : Function2In2Out<KuaString, KuaNumber, KuaError, KuaTable>(
     FunctionInput2Schema(KuaString::class, KuaNumber::class),
-    FunctionOutput2Schema(KuaError::class, KuaMap::class)
+    FunctionOutput2Schema(KuaError::class, KuaTable::class)
 ) {
     override fun invoke(
         ctx: FunctionContext,
         arg1: KuaString,
         arg2: KuaNumber
-    ): Pair<KuaError?, KuaMap?> {
+    ): Pair<KuaError?, KuaTable?> {
         return try {
             val response = if (arg2 == KuaNumber(-1)) {
                 sdk.code.get(CodeId(arg1.value))
@@ -30,7 +30,7 @@ class CodeGetFunction(
 
             null to response
                 .let { code ->
-                    KuaMap(
+                    KuaTable(
                         mutableMapOf(
                             "id" to KuaString(code.id.value.value.toString(16)),
                             "code" to KuaCode(code.value.value),

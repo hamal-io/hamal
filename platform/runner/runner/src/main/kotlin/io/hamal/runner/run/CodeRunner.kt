@@ -5,8 +5,7 @@ import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.AssertionError
 import io.hamal.lib.kua.ExitError
 import io.hamal.lib.kua.ExtensionError
-import io.hamal.lib.kua.table.TableProxyArray
-import io.hamal.lib.kua.table.TableProxyMap
+import io.hamal.lib.kua.table.TableProxy
 import io.hamal.lib.kua.type.*
 import io.hamal.runner.config.EnvFactory
 import io.hamal.runner.config.SandboxFactory
@@ -48,16 +47,15 @@ class CodeRunnerImpl(
                     try {
                         val contextExtension = RunnerContextFactory(runnerContext).create(sandbox)
 
-                        val internalTable = sandbox.state.tableCreateMap(contextExtension.internals.size)
+                        val internalTable = sandbox.state.tableCreate(contextExtension.internals.size)
                         contextExtension.internals.forEach { entry ->
                             when (val value = entry.value) {
                                 is KuaNil -> {}
                                 is KuaString -> internalTable[entry.key] = value
                                 is KuaNumber -> internalTable[entry.key] = value
                                 is KuaFunction<*, *, *, *> -> internalTable[entry.key] = value
-                                is TableProxyArray -> internalTable[entry.key] = value
-                                is TableProxyMap -> internalTable[entry.key] = value
-                                is KuaMap -> internalTable[entry.key] = sandbox.toProxyMap(value)
+                                is TableProxy -> internalTable[entry.key] = value
+                                is KuaTable -> internalTable[entry.key] = sandbox.toTableProxy(value)
                                 else -> TODO()
                             }
                         }
@@ -71,7 +69,7 @@ class CodeRunnerImpl(
                         sandbox.load(KuaCode(unitOfWork.code.value))
 
                         val ctx = sandbox.getGlobalTableMap("context")
-                        val stateToSubmit = sandbox.toKuaMap(ctx.getTableMap("state")).toHotObject()
+                        val stateToSubmit = sandbox.toKuaTable(ctx.getTable("state")).toHotObject()
 
                         connector.complete(execId, ExecResult(), ExecState(stateToSubmit), runnerContext.eventsToSubmit)
                         log.debug("Completed exec: $execId")
@@ -81,7 +79,7 @@ class CodeRunnerImpl(
                             if (cause.status == KuaNumber(0.0)) {
 
                                 val ctx = sandbox.getGlobalTableMap("context")
-                                val stateToSubmit = sandbox.toKuaMap(ctx.getTableMap("state")).toHotObject()
+                                val stateToSubmit = sandbox.toKuaTable(ctx.getTable("state")).toHotObject()
 
                                 connector.complete(
                                     execId,
@@ -100,7 +98,7 @@ class CodeRunnerImpl(
                             connector.fail(
                                 execId,
                                 ExecResult(
-                                    KuaMap(mutableMapOf("message" to KuaString(e.message ?: "Unknown reason")))
+                                    KuaTable(mutableMapOf("message" to KuaString(e.message ?: "Unknown reason")))
                                         .toHotObject()
                                 )
                             )
@@ -113,7 +111,7 @@ class CodeRunnerImpl(
             connector.fail(
                 execId,
                 ExecResult(
-                    KuaMap(mutableMapOf("message" to KuaString(a.message ?: "Unknown reason")))
+                    KuaTable(mutableMapOf("message" to KuaString(a.message ?: "Unknown reason")))
                         .toHotObject()
                 )
             )
@@ -123,7 +121,7 @@ class CodeRunnerImpl(
             connector.fail(
                 execId,
                 ExecResult(
-                    KuaMap(mutableMapOf("message" to KuaString(t.message ?: "Unknown reason")))
+                    KuaTable(mutableMapOf("message" to KuaString(t.message ?: "Unknown reason")))
                         .toHotObject()
                 )
             )

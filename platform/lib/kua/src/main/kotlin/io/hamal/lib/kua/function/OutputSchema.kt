@@ -1,8 +1,7 @@
 package io.hamal.lib.kua.function
 
 import io.hamal.lib.kua.StackTop
-import io.hamal.lib.kua.table.TableProxyArray
-import io.hamal.lib.kua.table.TableProxyMap
+import io.hamal.lib.kua.table.TableProxy
 import io.hamal.lib.kua.type.*
 import kotlin.reflect.KClass
 
@@ -38,13 +37,11 @@ data class FunctionOutput2Schema<ARG_1 : KuaType, ARG_2 : KuaType>(
 
 fun <VALUE : KuaType> FunctionContext.push(value: VALUE) = when (value) {
     is KuaAny -> pushAny(value)
-    is KuaArray -> StackTop(toProxyArray(value).index)
     is KuaNil -> pushNil()
     is KuaNumber -> pushNumber(value)
     is KuaString -> pushString(value)
-    is KuaMap -> StackTop(toProxyMap(value).index)
+    is KuaTable -> StackTop(toTableProxy(value).index)
     is KuaError -> pushError(value)
-    is TableProxyArray -> pushTable(value)
-    is TableProxyMap -> pushTable(value)
+    is TableProxy -> pushTable(value)
     else -> throw NotImplementedError("${value::class.simpleName} not implemented yet")
 }

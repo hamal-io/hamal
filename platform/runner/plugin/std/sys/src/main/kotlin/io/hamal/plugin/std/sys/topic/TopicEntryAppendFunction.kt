@@ -7,26 +7,26 @@ import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput2Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.KuaError
-import io.hamal.lib.kua.type.KuaMap
+import io.hamal.lib.kua.type.KuaTable
 import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.kua.type.toHotObject
 import io.hamal.lib.sdk.ApiSdk
 
 class TopicEntryAppendFunction(
     private val sdk: ApiSdk
-) : Function2In2Out<KuaString, KuaMap, KuaError, KuaMap>(
-    FunctionInput2Schema(KuaString::class, KuaMap::class),
-    FunctionOutput2Schema(KuaError::class, KuaMap::class)
+) : Function2In2Out<KuaString, KuaTable, KuaError, KuaTable>(
+    FunctionInput2Schema(KuaString::class, KuaTable::class),
+    FunctionOutput2Schema(KuaError::class, KuaTable::class)
 ) {
 
-    override fun invoke(ctx: FunctionContext, arg1: KuaString, arg2: KuaMap): Pair<KuaError?, KuaMap?> {
+    override fun invoke(ctx: FunctionContext, arg1: KuaString, arg2: KuaTable): Pair<KuaError?, KuaTable?> {
         return try {
             val res = sdk.topic.append(
                 TopicId(arg1.value),
                 TopicEventPayload(arg2.toHotObject())
             )
 
-            null to KuaMap(
+            null to KuaTable(
                 mutableMapOf(
                     "id" to KuaString(res.id.value.value.toString(16)),
                     "status" to KuaString(res.status.name),

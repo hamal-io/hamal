@@ -9,15 +9,15 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.registerGlobalFunction
 import org.junit.jupiter.api.Test
 
-internal class KuaMapTest {
+internal class KuaTableTest {
 
     @Test
     fun `Map as function result`() {
         sandbox.use { sandbox ->
             sandbox.registerGlobalFunction("func",
-                object : Function0In2Out<KuaError, KuaMap>(FunctionOutput2Schema(KuaError::class, KuaMap::class)) {
-                    override fun invoke(ctx: FunctionContext): Pair<KuaError?, KuaMap?> {
-                        return null to KuaMap(mutableMapOf("id" to KuaString("A")))
+                object : Function0In2Out<KuaError, KuaTable>(FunctionOutput2Schema(KuaError::class, KuaTable::class)) {
+                    override fun invoke(ctx: FunctionContext): Pair<KuaError?, KuaTable?> {
+                        return null to KuaTable(mutableMapOf("id" to KuaString("A")))
                     }
                 }
             )
@@ -36,12 +36,12 @@ internal class KuaMapTest {
     fun `Nested map as function result`() {
         sandbox.use { sandbox ->
             sandbox.registerGlobalFunction("func",
-                object : Function0In2Out<KuaError, KuaMap>(FunctionOutput2Schema(KuaError::class, KuaMap::class)) {
-                    override fun invoke(ctx: FunctionContext): Pair<KuaError?, KuaMap?> {
-                        return null to KuaMap(
+                object : Function0In2Out<KuaError, KuaTable>(FunctionOutput2Schema(KuaError::class, KuaTable::class)) {
+                    override fun invoke(ctx: FunctionContext): Pair<KuaError?, KuaTable?> {
+                        return null to KuaTable(
                             mutableMapOf(
                                 "id" to KuaString("A"),
-                                "level_one" to KuaMap(mutableMapOf("answer" to KuaNumber(42)))
+                                "level_one" to KuaTable(mutableMapOf("answer" to KuaNumber(42)))
                             )
                         )
                     }

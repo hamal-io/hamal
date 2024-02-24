@@ -10,18 +10,18 @@ import io.hamal.lib.sdk.ApiSdk
 
 class ExtensionGetFunction(
     private val sdk: ApiSdk
-) : Function1In2Out<KuaString, KuaError, KuaMap>(
+) : Function1In2Out<KuaString, KuaError, KuaTable>(
     FunctionInput1Schema(KuaString::class),
-    FunctionOutput2Schema(KuaError::class, KuaMap::class)
+    FunctionOutput2Schema(KuaError::class, KuaTable::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: KuaString): Pair<KuaError?, KuaMap?> {
+    override fun invoke(ctx: FunctionContext, arg1: KuaString): Pair<KuaError?, KuaTable?> {
         return try {
             val ext = sdk.extension.get(ExtensionId(arg1.value))
 
             val res = mutableMapOf(
                 "id" to KuaString(ext.id.value.value.toString(16)),
                 "name" to KuaString(ext.name.value),
-                "code" to KuaMap(
+                "code" to KuaTable(
                     mutableMapOf(
                         "id" to KuaString(ext.code.id.value.value.toString(16)),
                         "version" to KuaNumber(ext.code.version.value),
@@ -29,7 +29,7 @@ class ExtensionGetFunction(
                     )
                 )
             )
-            null to KuaMap(res)
+            null to KuaTable(res)
 
         } catch (t: Throwable) {
             KuaError(t.message!!) to null

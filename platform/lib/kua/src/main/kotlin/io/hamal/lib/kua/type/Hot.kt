@@ -4,17 +4,18 @@ import io.hamal.lib.common.hot.*
 
 fun HotNode.toKua(): KuaType {
     return when (this) {
-        is HotObject -> KuaMap(
+        is HotObject -> KuaTable(
             nodes.map { (key, node) ->
                 key to node.toKua()
             }.toMap().toMutableMap()
         )
 
-        is HotArray -> KuaArray(
-            nodes.mapIndexed { index, node ->
-                index to node.toKua()
-            }.toMap().toMutableMap()
-        )
+//        is HotArray -> KuaArray(
+//            nodes.mapIndexed { index, node ->
+//                index to node.toKua()
+//            }.toMap().toMutableMap()
+//        )
+        is HotArray -> TODO()
 
         is HotBoolean -> if (value) KuaTrue else KuaFalse
         is HotNull -> KuaNil
@@ -40,7 +41,7 @@ fun KuaType.toHot(): HotNode {
 }
 
 fun KuaType.toHotObject(): HotObject {
-    require(this is KuaMap)
+    require(this is KuaTable)
     val builder = HotObject.builder()
     this.value.forEach { (key, value) ->
         builder[key] = value.toHot()

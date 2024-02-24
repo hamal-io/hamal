@@ -2,58 +2,9 @@ package io.hamal.lib.kua.type
 
 import io.hamal.lib.kua.State
 import io.hamal.lib.kua.table.TableEntryIterator
-import io.hamal.lib.kua.table.TableProxyArray
-import io.hamal.lib.kua.table.TableProxyMap
+import io.hamal.lib.kua.table.TableProxy
 
-fun State.toArrayType(array: TableProxyArray): KuaArray {
-    val result = KuaArray()
-    TableEntryIterator(
-        index = array.index,
-        state = this,
-        keyExtractor = { state, index -> state.getNumberType(index) },
-        valueExtractor = { state, index ->
-            when (val value = state.getAny(index).value) {
-                is KuaArray,
-                is KuaBoolean,
-                is KuaDecimal,
-                is KuaMap,
-                is KuaNumber,
-                is KuaString -> value as KuaType
-
-                is TableProxyMap -> toKuaMap(value)
-                is TableProxyArray -> toArrayType(value)
-                else -> TODO("$value")
-            }
-        }
-    ).forEach { (_, value) -> result.append(value) }
-
-    return result
-}
-
-fun State.toProxyArray(array: KuaArray): TableProxyArray {
-    return tableCreateArray(array.size).also {
-        // FIXME probably instead of of appending it should be set to keep the index
-        array.value.forEach { (_, value) ->
-            when (value) {
-                is KuaBoolean -> it.append(value)
-                is KuaDecimal -> it.append(value)
-                is KuaNumber -> it.append(value)
-                is KuaString -> it.append(value)
-                is KuaMap -> {
-                    it.append(toProxyMap(value)); pop(1)
-                }
-
-                is KuaArray -> {
-                    it.append(toProxyArray(value)); pop(1)
-                }
-
-                else -> TODO("$value")
-            }
-        }
-    }
-}
-
-fun State.toKuaMap(map: TableProxyMap): KuaMap {
+fun State.toKuaTable(map: TableProxy): KuaTable {
     val store = mutableMapOf<String, KuaType>()
 
     TableEntryIterator(
@@ -62,25 +13,23 @@ fun State.toKuaMap(map: TableProxyMap): KuaMap {
         keyExtractor = { state, index -> state.getStringType(index) },
         valueExtractor = { state, index ->
             when (val value = state.getAny(index).value) {
-                is KuaArray,
                 is KuaBoolean,
                 is KuaDecimal,
-                is KuaMap,
+                is KuaTable,
                 is KuaNumber,
-                is KuaString -> value as KuaType
+                is KuaString -> value
 
-                is TableProxyMap -> toKuaMap(value)
-                is TableProxyArray -> toArrayType(value)
+                is TableProxy -> toKuaTable(value)
                 else -> TODO("$value")
             }
         }
     ).forEach { (key, value) -> store[key.value] = value }
 
-    return KuaMap(store)
+    return KuaTable(store)
 }
 
-fun State.toProxyMap(map: KuaMap): TableProxyMap {
-    return tableCreateMap(map.size).also {
+fun State.toTableProxy(map: KuaTable): TableProxy {
+    return tableCreate(map.size).also {
         map.value.forEach { (key, value) ->
             when (value) {
                 is KuaBoolean -> it[key] = value
@@ -89,12 +38,8 @@ fun State.toProxyMap(map: KuaMap): TableProxyMap {
                 is KuaNil -> it[key] = KuaNil
                 is KuaNumber -> it[key] = value
                 is KuaString -> it[key] = value
-                is KuaMap -> {
-                    it[key] = toProxyMap(value); pop(1)
-                }
-
-                is KuaArray -> {
-                    it[key] = toProxyArray(value); pop(1)
+                is KuaTable -> {
+                    it[key] = toTableProxy(value); pop(1)
                 }
 
                 else -> TODO("$value")

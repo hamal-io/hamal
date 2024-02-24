@@ -7,8 +7,11 @@ import io.hamal.lib.domain.vo.RunnerEnv
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
-import io.hamal.lib.kua.table.TableProxyArray
-import io.hamal.lib.kua.type.*
+import io.hamal.lib.kua.table.TableProxy
+import io.hamal.lib.kua.type.KuaNil
+import io.hamal.lib.kua.type.KuaString
+import io.hamal.lib.kua.type.KuaTable
+import io.hamal.lib.kua.type.toKua
 import io.hamal.runner.run.function.CompleteRunFunction
 import io.hamal.runner.run.function.EmitFunction
 import io.hamal.runner.run.function.FailRunFunction
@@ -27,7 +30,7 @@ class RunnerContextFactory(
         }
 
         val hook = if (invocation is Invocation.Hook) {
-            KuaMap(
+            KuaTable(
                 "method" to KuaString(invocation.method.toString()),
                 "headers" to invocation.headers.value.toKua(),
                 "parameters" to invocation.parameters.value.toKua(),
@@ -38,7 +41,7 @@ class RunnerContextFactory(
         }
 
         val endpoint = if (invocation is Invocation.Endpoint) {
-            KuaMap(
+            KuaTable(
                 "method" to KuaString(invocation.method.toString()),
                 "headers" to invocation.headers.value.toKua(),
                 "parameters" to invocation.parameters.value.toKua(),
@@ -65,23 +68,24 @@ class RunnerContextFactory(
     }
 }
 
-private fun Sandbox.invocationEvents(events: List<Event>): TableProxyArray =
-    tableCreateArray(events.size).let { result ->
-        events.map {
-            toProxyMap(
-                KuaMap(
-                    mutableMapOf(
-                        "id" to KuaString(it.id.value.value.toString(16)),
-                        "topic" to KuaMap(
-                            mutableMapOf(
-                                "id" to KuaString(it.topic.id.value.value.toString(16)),
-                                "name" to KuaString(it.topic.name.value)
-                            )
-                        ),
-                        "payload" to it.payload.value.toKua()
-                    )
-                )
-            )
-        }.forEach(result::append)
-        result
-    }
+private fun Sandbox.invocationEvents(events: List<Event>): TableProxy =
+//    tableCreate(events.size).let { result ->
+//        events.map {
+//            toTableProxy(
+//                KuaTable(
+//                    mutableMapOf(
+//                        "id" to KuaString(it.id.value.value.toString(16)),
+//                        "topic" to KuaTable(
+//                            mutableMapOf(
+//                                "id" to KuaString(it.topic.id.value.value.toString(16)),
+//                                "name" to KuaString(it.topic.name.value)
+//                            )
+//                        ),
+//                        "payload" to it.payload.value.toKua()
+//                    )
+//                )
+//            )
+//        }.forEach(result::append)
+//        result
+    TODO()
+//}
