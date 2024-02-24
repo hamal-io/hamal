@@ -144,6 +144,14 @@ class TestSetupConfig {
             )
         )
 
+        funcRepository.deploy(
+            FuncId(1), FuncCmdRepository.DeployCmd(
+                id = CmdId(id),
+                version = CodeVersion(1),
+                message = DeployMessage("deployed")
+            )
+        )
+
         endpointRepository.create(
             CreateCmd(
                 id = CmdId(id),
