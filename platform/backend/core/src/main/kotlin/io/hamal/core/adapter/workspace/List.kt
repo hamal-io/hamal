@@ -1,5 +1,6 @@
 package io.hamal.core.adapter.workspace
 
+import io.hamal.core.adapter.security.FilterAccessPort
 import io.hamal.repository.api.Workspace
 import io.hamal.repository.api.WorkspaceQueryRepository
 import io.hamal.repository.api.WorkspaceQueryRepository.WorkspaceQuery
@@ -11,7 +12,8 @@ fun interface WorkspaceListPort {
 
 @Component
 class WorkspaceListAdapter(
-    private val workspaceQueryRepository: WorkspaceQueryRepository
+    private val workspaceQueryRepository: WorkspaceQueryRepository,
+    private val filterAccess: FilterAccessPort
 ) : WorkspaceListPort {
-    override fun invoke(query: WorkspaceQuery): List<Workspace> = workspaceQueryRepository.list(query)
+    override fun invoke(query: WorkspaceQuery): List<Workspace> = filterAccess(workspaceQueryRepository.list(query))
 }
