@@ -829,6 +829,34 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
     inner class ListAndCountTest {
 
         @TestFactory
+        fun `With ids`() = runWith(TriggerRepository::class) {
+            setup()
+
+            val query = TriggerQuery(
+                triggerIds = listOf(TriggerId(4), TriggerId(3)),
+                limit = Limit(10)
+            )
+
+            assertThat(count(query), equalTo(Count(2)))
+            val result = list(query)
+            assertThat(result, hasSize(2))
+
+            with(result[0]) {
+                assertThat(id, equalTo(TriggerId(4)))
+                assertThat(namespaceId, equalTo(NamespaceId(10)))
+                assertThat(workspaceId, equalTo(WorkspaceId(5)))
+                assertThat(name, equalTo(TriggerName("Trigger")))
+            }
+
+            with(result[1]) {
+                assertThat(id, equalTo(TriggerId(3)))
+                assertThat(namespaceId, equalTo(NamespaceId(4)))
+                assertThat(workspaceId, equalTo(WorkspaceId(4)))
+                assertThat(name, equalTo(TriggerName("Trigger")))
+            }
+        }
+
+        @TestFactory
         fun `With workspace ids`() = runWith(TriggerRepository::class) {
             setup()
 

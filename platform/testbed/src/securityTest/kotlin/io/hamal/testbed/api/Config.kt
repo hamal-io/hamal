@@ -154,7 +154,7 @@ class TestSetupConfig {
                 namespaceId = NamespaceId(id),
                 workspaceId = WorkspaceId(id),
                 correlation = Correlation(
-                    correlationId = CorrelationId("test"),
+                    id = CorrelationId("test"),
                     funcId = FuncId(id)
                 ),
                 inputs = ExecInputs(),

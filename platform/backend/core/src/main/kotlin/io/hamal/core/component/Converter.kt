@@ -29,12 +29,12 @@ object CodeIdConverter : ValueObjectIdConverter<CodeId>(CodeId::class, ::CodeId)
 object ExecIdConverter : ValueObjectIdConverter<ExecId>(ExecId::class, ::ExecId)
 object ExecLogIdConverter : ValueObjectIdConverter<ExecLogId>(ExecLogId::class, ::ExecLogId)
 object FuncIdConverter : ValueObjectIdConverter<FuncId>(FuncId::class, ::FuncId)
-object WorkspaceIdConverter : ValueObjectIdConverter<WorkspaceId>(WorkspaceId::class, ::WorkspaceId)
 object NamespaceIdConverter : ValueObjectIdConverter<NamespaceId>(NamespaceId::class, ::NamespaceId)
-object ReqIdConverter : ValueObjectIdConverter<RequestId>(RequestId::class, ::RequestId)
+object RequestIdConverter : ValueObjectIdConverter<RequestId>(RequestId::class, ::RequestId)
 object TopicIdConverter : ValueObjectIdConverter<TopicId>(TopicId::class, ::TopicId)
 object TopicEntryIdConverter : ValueObjectIdConverter<TopicEventId>(TopicEventId::class, ::TopicEventId)
 object TriggerIdConverter : ValueObjectIdConverter<TriggerId>(TriggerId::class, ::TriggerId)
+object WorkspaceIdConverter : ValueObjectIdConverter<WorkspaceId>(WorkspaceId::class, ::WorkspaceId)
 
 sealed class ValueObjectIdConverter<ID : ValueObjectId>(
     val clazz: KClass<ID>,

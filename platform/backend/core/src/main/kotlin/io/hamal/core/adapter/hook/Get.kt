@@ -1,5 +1,6 @@
 package io.hamal.core.adapter.hook
 
+import io.hamal.core.adapter.security.EnsureAccessPort
 import io.hamal.lib.domain.vo.HookId
 import io.hamal.repository.api.Hook
 import io.hamal.repository.api.HookQueryRepository
@@ -11,7 +12,8 @@ fun interface HookGetPort {
 
 @Component
 class HookGetAdapter(
-    private val hookQueryRepository: HookQueryRepository
+    private val hookQueryRepository: HookQueryRepository,
+    private val ensureAccess: EnsureAccessPort
 ) : HookGetPort {
-    override fun invoke(hookId: HookId): Hook = hookQueryRepository.get(hookId)
+    override fun invoke(hookId: HookId): Hook = ensureAccess(hookQueryRepository.get(hookId))
 }

@@ -1,5 +1,6 @@
 package io.hamal.core.adapter.trigger
 
+import io.hamal.core.adapter.security.EnsureAccessPort
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerQueryRepository
@@ -11,7 +12,8 @@ fun interface TriggerGetPort {
 
 @Component
 class TriggerGetAdapter(
-    private val triggerQueryRepository: TriggerQueryRepository
+    private val triggerQueryRepository: TriggerQueryRepository,
+    private val ensureAccess: EnsureAccessPort
 ) : TriggerGetPort {
-    override fun invoke(triggerId: TriggerId): Trigger = triggerQueryRepository.get(triggerId)
+    override fun invoke(triggerId: TriggerId): Trigger = ensureAccess(triggerQueryRepository.get(triggerId))
 }
