@@ -12,6 +12,28 @@ import org.junit.jupiter.api.TestFactory
 internal class TableProxyTest {
 
     @TestFactory
+    fun append(): List<DynamicTest> {
+        lateinit var testInstance: TableProxy
+        return listOf(
+            { testInstance.append(true) },
+            { testInstance.append(KuaFalse) },
+            { testInstance.append(23.23) },
+            { testInstance.append(23) },
+            { testInstance.append(23L) },
+            { testInstance.append(23.0f) },
+            { testInstance.append("Hamal") },
+            { testInstance.append(KuaString("Hamal")) }
+        ).mapIndexed { idx, testFn ->
+            dynamicTest("Test: ${(idx + 1)}") {
+                testInstance = state.tableCreate()
+
+                val result = testFn()
+                assertThat(result, equalTo(1))
+            }
+        }
+    }
+
+    @TestFactory
     fun set(): List<DynamicTest> {
         lateinit var testInstance: TableProxy
         return listOf(

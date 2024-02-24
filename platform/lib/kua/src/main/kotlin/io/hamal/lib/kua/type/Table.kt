@@ -15,7 +15,7 @@ data class KuaTable(
     val value: MutableMap<String, KuaType> = mutableMapOf(),
 ) : KuaTableType, Map<String, KuaType> {
 
-    override val type: KuaType.Type = KuaType.Type.Map
+    override val type: KuaType.Type = KuaType.Type.Table
 
     constructor(vararg pairs: Pair<String, KuaType>) : this(mutableMapOf(*pairs))
 
@@ -53,12 +53,6 @@ data class KuaTable(
         value.remove(key)
         return size
     }
-
-//    fun getArrayType(key: KuaString): KuaArray = getArrayType(key.value)
-//    fun getArrayType(key: String): KuaArray {
-//        checkExpectedType(key, KuaArray::class)
-//        return value[key]!! as KuaArray
-//    }
 
     fun getBooleanValue(key: KuaString) = getBooleanValue(key.value)
     fun getBoolean(key: String): Boolean = getBooleanValue(key).value

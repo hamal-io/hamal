@@ -9,13 +9,12 @@ import io.hamal.lib.kua.type.KuaType.Type
 sealed interface KuaType {
     enum class Type {
         Any,
-        Array,
         Boolean,
         Code,
         Decimal,
         Error,
         Function,
-        Map,
+        Table,
         Nil,
         Number,
         String
@@ -35,7 +34,6 @@ sealed interface KuaType {
             element: JsonElement, typeOfT: java.lang.reflect.Type, context: JsonDeserializationContext
         ): KuaType {
             return when (val kuaType = element.asJsonObject.get("type").asString) {
-//                "Array" -> context.deserialize(element, KuaArray::class.java)
                 "Boolean" -> context.deserialize(element, KuaBoolean::class.java)
                 "Decimal" -> context.deserialize(element, KuaDecimal::class.java)
                 "Error" -> context.deserialize(element, KuaError::class.java)

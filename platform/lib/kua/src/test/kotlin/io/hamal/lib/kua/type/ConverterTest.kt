@@ -8,6 +8,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+
 //
 //@DisplayName("toKuaMap()")
 //internal class toKuaMapTest {
@@ -248,9 +249,10 @@ internal class ToProxyMapTest {
     }
 
     @Test
-    fun `Map with nested map`() {
-        val testMap = KuaTable(mutableMapOf("nested" to KuaTable(mutableMapOf("value" to KuaString("HamalRocks")))))
-        val result = testState.toTableProxy(testMap)
+    fun `Map with nested table`() {
+        val testInstance =
+            KuaTable(mutableMapOf("nested" to KuaTable(mutableMapOf("value" to KuaString("HamalRocks")))))
+        val result = testState.toTableProxy(testInstance)
         assertThat(result.length, equalTo(1))
 
         val nested = result.getTable("nested")
@@ -260,14 +262,14 @@ internal class ToProxyMapTest {
 
     @Test
     fun `Map with nested array`() {
-        TODO()
-//        val testMap = KuaTable(mutableMapOf("nested" to KuaArray(mutableMapOf(3 to KuaNumber(13)))))
+//        val testMap = KuaTable(mutableMapOf("nested" to KuaTable(mutableMapOf(3 to KuaNumber(13)))))
 //        val result = testState.toTableProxy(testMap)
 //        assertThat(result.length, equalTo(1))
 //
 //        val nested = result.getTable("nested")
 //        assertThat(nested.length, equalTo(1))
 //        assertThat(nested.getNumberType(1), equalTo(KuaNumber(13)))
+        TODO()
     }
 
     private val testSandbox by lazy {

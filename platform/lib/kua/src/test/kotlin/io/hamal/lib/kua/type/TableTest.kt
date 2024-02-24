@@ -8,7 +8,7 @@ class KuaTableTest {
     fun serialization() = listOf(
         generateTestCases(
             testInstance = KuaTable(),
-            expectedJson = """{"value":{},"type":"Map"}"""
+            expectedJson = """{"value":{},"type":"Table"}"""
         ),
         generateTestCases(
             testInstance = KuaTable(
@@ -16,7 +16,7 @@ class KuaTableTest {
                     "key" to KuaString("value")
                 )
             ),
-            expectedJson = """{"value":{"key":{"value":"value","type":"String"}},"type":"Map"}""".trimIndent()
+            expectedJson = """{"value":{"key":{"value":"value","type":"String"}},"type":"Table"}""".trimIndent()
         ),
         generateTestCases(
             testInstance = KuaTable(
@@ -24,7 +24,24 @@ class KuaTableTest {
                     "23" to KuaNumber(34)
                 )
             ),
-            expectedJson = """{"value":{"23":{"value":34.0,"type":"Number"}},"type":"Map"}"""
+            expectedJson = """{"value":{"23":{"value":34.0,"type":"Number"}},"type":"Table"}"""
         ),
+
+        generateTestCases(
+            testInstance = KuaTable(
+                mutableMapOf(
+                    "1234" to KuaString("value")
+                )
+            ),
+            expectedJson = """{"value":{"1234":{"value":"value","type":"String"}},"type":"Table"}"""
+        ),
+        generateTestCases(
+            testInstance = KuaTable(
+                mutableMapOf(
+                    "23" to KuaNumber(34)
+                )
+            ),
+            expectedJson = """{"value":{"23":{"value":34.0,"type":"Number"}},"type":"Table"}"""
+        )
     ).flatten()
 }
