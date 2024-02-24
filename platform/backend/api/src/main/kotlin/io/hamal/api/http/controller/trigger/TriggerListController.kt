@@ -51,6 +51,7 @@ class TriggerListController(
         return list(
             afterId = afterId,
             limit = limit,
+            ids = listOf(),
             funcIds = funcIds,
             types = types,
             workspaceIds = listOf(),
@@ -62,18 +63,11 @@ class TriggerListController(
     fun list(
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: TriggerId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit,
-        @RequestParam(required = false, name = "func_ids", defaultValue = "") funcIds: List<FuncId> = listOf(),
-        @RequestParam(
-            required = false,
-            name = "workspace_ids",
-            defaultValue = ""
-        ) workspaceIds: List<WorkspaceId> = listOf(),
-        @RequestParam(
-            required = false,
-            name = "namespace_ids",
-            defaultValue = ""
-        ) namespaceIds: List<NamespaceId> = listOf(),
-        @RequestParam(required = false, name = "types", defaultValue = "") types: List<TriggerType> = listOf()
+        @RequestParam(required = false, name = "ids", defaultValue = "") ids: List<TriggerId>,
+        @RequestParam(required = false, name = "func_ids", defaultValue = "") funcIds: List<FuncId>,
+        @RequestParam(required = false, name = "workspace_ids", defaultValue = "") workspaceIds: List<WorkspaceId>,
+        @RequestParam(required = false, name = "namespace_ids", defaultValue = "") namespaceIds: List<NamespaceId>,
+        @RequestParam(required = false, name = "types", defaultValue = "") types: List<TriggerType>
     ): ResponseEntity<ApiTriggerList> {
         val allNamespaceIds = namespaceIds.flatMap { namespaceId ->
             namespaceTreeGetSubTree(namespaceId).values
@@ -83,6 +77,7 @@ class TriggerListController(
                 afterId = afterId,
                 types = types,
                 limit = limit,
+                triggerIds = ids,
                 workspaceIds = workspaceIds,
                 funcIds = funcIds,
                 namespaceIds = allNamespaceIds
