@@ -41,11 +41,11 @@ internal class NamespaceListController(
                         namespaceIds = tree.root.preorder()
                     )
                 ).let { namespaces ->
-                    if(namespaces.isEmpty()){
+                    if (namespaces.isEmpty()) {
                         ApiNamespaceList(
                             namespaces = listOf()
                         )
-                    }else {
+                    } else {
                         val namespacesById = namespaces.associateBy(Namespace::id)
 
                         val root = namespacesById[tree.root.value]!!.let { namespace ->
