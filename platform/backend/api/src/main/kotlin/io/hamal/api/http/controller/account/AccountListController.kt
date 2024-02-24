@@ -17,12 +17,14 @@ internal class AccountListController(
     @GetMapping("/v1/accounts")
     fun list(
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: AccountId,
-        @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit
+        @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit,
+        @RequestParam(required = false, name = "ids", defaultValue = "[]") accountIds: List<AccountId>
     ): ResponseEntity<ApiAccountList> {
         return listAccount(
             AccountQuery(
                 afterId = afterId,
-                limit = limit
+                limit = limit,
+                accountIds = accountIds
             )
         ).let { accounts ->
             ResponseEntity.ok(ApiAccountList(

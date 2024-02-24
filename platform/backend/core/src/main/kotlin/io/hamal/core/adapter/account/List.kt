@@ -1,5 +1,6 @@
 package io.hamal.core.adapter.account
 
+import io.hamal.core.adapter.security.FilterAccessPort
 import io.hamal.repository.api.Account
 import io.hamal.repository.api.AccountQueryRepository
 import io.hamal.repository.api.AccountQueryRepository.AccountQuery
@@ -11,7 +12,8 @@ fun interface AccountListPort {
 
 @Component
 class AccountListAdapter(
-    private val accountQueryRepository: AccountQueryRepository
+    private val accountQueryRepository: AccountQueryRepository,
+    private val filterAccess: FilterAccessPort
 ) : AccountListPort {
-    override fun invoke(query: AccountQuery): List<Account> = accountQueryRepository.list(query)
+    override fun invoke(query: AccountQuery): List<Account> = filterAccess(accountQueryRepository.list(query))
 }
