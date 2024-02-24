@@ -2,14 +2,8 @@ package io.hamal.core.adapter.security
 
 import io.hamal.core.security.SecurityContext
 import io.hamal.lib.common.domain.DomainObject
-import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.domain.vo.AccountId
-import io.hamal.lib.domain.vo.NamespaceId
-import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.repository.api.*
 import io.hamal.repository.api.Auth.Anonymous
-import io.hamal.repository.api.NamespaceTreeQueryRepository.NamespaceTreeQuery
-import io.hamal.repository.api.WorkspaceQueryRepository.WorkspaceQuery
 import org.springframework.stereotype.Component
 
 interface EnsureAccessPort {
@@ -22,10 +16,10 @@ interface EnsureAccessPort {
 }
 
 @Component
-class EnsureAccessAdapter(
-    private val workspaceQueryRepository: WorkspaceQueryRepository,
-    private val namespaceTreeQueryRepository: NamespaceTreeQueryRepository
-) : EnsureAccessPort {
+internal class EnsureAccessAdapter(
+    workspaceQueryRepository: WorkspaceQueryRepository,
+    namespaceTreeQueryRepository: NamespaceTreeQueryRepository
+) : BaseAccess(workspaceQueryRepository, namespaceTreeQueryRepository), EnsureAccessPort {
 
     // FIXME this implementation is not optimal - replace it later
     override fun <T : DomainObject<*>> invoke(obj: T): T {
@@ -39,39 +33,14 @@ class EnsureAccessAdapter(
             accessDenied(obj)
         }
         if (current is Auth.Account) {
-            when {
-                obj is HasAccountId && accessAllowed(current, obj.accountId) -> return obj
-                obj is HasWorkspaceId && accessAllowed(current, obj.workspaceId) -> return obj
-                obj is HasNamespaceId && accessAllowed(current, obj.namespaceId) -> return obj
+            return when {
+                obj is HasAccountId && accessAllowed(current, obj.accountId) -> obj
+                obj is HasWorkspaceId && accessAllowed(current, obj.workspaceId) -> obj
+                obj is HasNamespaceId && accessAllowed(current, obj.namespaceId) -> obj
                 else -> accessDenied(obj)
             }
         }
         TODO()
-    }
-
-    internal fun accessAllowed(auth: Auth.Account, accountId: AccountId): Boolean {
-        return auth.accountId == accountId
-    }
-
-    internal fun accessAllowed(auth: Auth.Account, workspaceId: WorkspaceId): Boolean {
-        return workspaceQueryRepository.list(
-            WorkspaceQuery(
-                limit = Limit.all,
-                accountIds = listOf(auth.accountId)
-            )
-        ).any { it.workspaceId == workspaceId }
-    }
-
-    internal fun accessAllowed(auth: Auth.Account, namespaceId: NamespaceId): Boolean {
-        return namespaceTreeQueryRepository.list(NamespaceTreeQuery(
-            limit = Limit.one,
-            workspaceIds = workspaceQueryRepository.list(
-                WorkspaceQuery(
-                    limit = Limit.all,
-                    accountIds = listOf(auth.accountId)
-                )
-            ).map { it.workspaceId }
-        )).any { it.root.find { node -> node.value == namespaceId } != null }
     }
 
     private fun accessDenied(obj: DomainObject<*>): Nothing {
