@@ -12,37 +12,34 @@ import Actions from "@/pages/app/workspace-detail/tab/namespace-list/components/
 const WorkspaceNamespaceListTab: FC = () => {
     const [uiState] = useUiState()
     const [getSublist, sublist, isLoading, error] = useNamespaceSublist()
-    const [currentNamespace, setCurrentNamespace] = useState<string>(uiState.workspaceId)
-    const [children, setChildren] = useState<NamespaceList>()
+    const [currentParent, setCurrentParent] = useState<string>(uiState.workspaceId)
+    const [children, setChildren] = useState<NamespaceList>(null)
+
 
     useEffect(() => {
         const abortController = new AbortController()
-        getSublist(currentNamespace, abortController)
+        getSublist(currentParent, abortController)
         return () => {
             abortController.abort()
         }
-    }, [currentNamespace]);
+    }, [currentParent]);
 
 
     useEffect(() => {
-        if (sublist) {
-            const c = findChildren(currentNamespace, sublist)
-            if (c.namespaces.length === 0) {
+        if (sublist != null && currentParent != null) {
+            if (sublist.namespaces.length == 1) {
                 setChildren(sublist)
             }
-            setChildren(c)
-
+            const res = sublist.namespaces.filter(item => item.parentId === currentParent)
+            setChildren({namespaces: res})
         }
-    }, [sublist]);
+    }, [sublist, currentParent]);
 
-    if (currentNamespace == null || isLoading) return "Loading..."
+
+
     if (sublist == null || isLoading) return "Loading..."
     if (error != null) return "Error -"
 
-
-    function onChange(id: string) {
-        setCurrentNamespace(id)
-    }
 
     return (
         <div className="pt-8 px-8">
@@ -50,50 +47,41 @@ const WorkspaceNamespaceListTab: FC = () => {
                 title="Namespaces"
                 description=""
                 actions={[
-                    <Append appendTo={currentNamespace}/>,
+                    <Append appendTo={currentParent}/>,
                     // <Actions item={root}/>
                 ]}/>
-            Current Position: {sublist.namespaces[0].name}
-            <ListView sublist={sublist} onChange={onChange}/>
+            Position: {sublist.namespaces[0].name}
+            {children &&
+                <ul className="grid grid-cols-1 gap-x-6 gap-y-8">
+                    {children.namespaces.map(namespace =>
+                        <Card
+                            className="relative overflow-hidden duration-500 hover:border-primary/50 group"
+                            key={namespace.id}
+                            onClick={() => setCurrentParent(namespace.id)}
+                        >
+                            <CardHeader>
+                                <div className="flex items-center justify-between">
+                                    <CardTitle>{namespace.name}</CardTitle>
+                                </div>
+                            </CardHeader>
+                            <CardContent>
+                                <Actions item={namespace}/>
+                            </CardContent>
+                        </Card>
+                    )}
+                </ul>
+            }
         </div>
     )
 }
 
-
+/*
 type ListViewProps = { sublist: NamespaceList, onChange: (id: string) => void }
 const ListView: FC<ListViewProps> = ({sublist, onChange}) => {
-    const list = sublist.namespaces.map(namespace =>
-        <li className="grid grid-cols-1 gap-x-6 gap-y-8" key={namespace.id}>
-            <Card
-                className="relative overflow-hidden duration-500 hover:border-primary/50 group"
-                key={namespace.id}
-                onClick={() => {
-                    onChange(namespace.id)
-                }}
-            >
-                <CardHeader>
-                    <div className="flex items-center justify-between">
-                        <CardTitle>{namespace.name}</CardTitle>
-                    </div>
-                </CardHeader>
-                <CardContent>
-                    <Actions item={namespace}/>
-                </CardContent>
-            </Card>
-        </li>
-    )
-
     return (
-        <ul>
-            {list}
-        </ul>
+
     )
 }
-
-
-const findChildren = (parentId: string, list: NamespaceList): NamespaceList => {
-    const items = list.namespaces.filter(item => item.parentId === parentId)
-    return {namespaces: items}
-}
+*/
 
 export default WorkspaceNamespaceListTab;
