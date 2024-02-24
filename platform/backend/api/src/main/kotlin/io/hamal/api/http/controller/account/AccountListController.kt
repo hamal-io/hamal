@@ -18,7 +18,7 @@ internal class AccountListController(
     fun list(
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: AccountId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit,
-        @RequestParam(required = false, name = "ids", defaultValue = "[]") accountIds: List<AccountId>
+        @RequestParam(required = false, name = "ids", defaultValue = "") accountIds: List<AccountId>
     ): ResponseEntity<ApiAccountList> {
         return listAccount(
             AccountQuery(
