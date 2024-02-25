@@ -39,13 +39,14 @@ class FunctionContext(
     override fun pushTable(proxy: KuaTableMap) = state.pushTable(proxy)
     override fun pushTable(proxy: KuaTableArray) = state.pushTable(proxy)
 
-
+    override fun getTable(idx: Int): KuaTable = state.getTable(idx)
     override fun getTableArray(idx: Int): KuaTableArray = state.getTableArray(idx)
-    override fun getKuaTableMap(idx: Int): KuaTableMap = state.getKuaTableMap(idx)
-
+    override fun getTableMap(idx: Int): KuaTableMap = state.getTableMap(idx)
 
     override fun setGlobal(name: String, value: KuaFunction<*, *, *, *>) = state.setGlobal(name, value)
     override fun setGlobal(name: String, value: KuaTableMap) = state.setGlobal(name, value)
+    override fun setGlobal(name: String, value: KuaTableArray) = state.setGlobal(name, value)
+
     override fun getGlobalKuaTableMap(name: String): KuaTableMap = state.getGlobalKuaTableMap(name)
     override fun unsetGlobal(name: String) = state.unsetGlobal(name)
 

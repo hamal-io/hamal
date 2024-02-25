@@ -1,20 +1,17 @@
-package io.hamal.lib.kua.table
+package io.hamal.lib.kua.type
 
 import io.hamal.lib.kua.ClosableState
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.NopSandboxContext
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.type.KuaFalse
-import io.hamal.lib.kua.type.KuaString
-import io.hamal.lib.kua.type.KuaTableMap
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
 
-internal class TableArrayTest {
+internal class KuaTableArrayTest {
 
     @TestFactory
     fun append(): List<DynamicTest> {

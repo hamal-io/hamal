@@ -31,57 +31,54 @@ internal class KuaNilTest {
 
     @Test
     fun `First result is nil`() {
-//        sandbox.use { sandbox ->
-//            sandbox.registerGlobalFunction("func",
-//                object : Function0In2Out<KuaArray, KuaTable>(
-//                    FunctionOutput2Schema(
-//                        KuaArray::class,
-//                        KuaTable::class
-//                    )
-//                ) {
-//                    override fun invoke(ctx: FunctionContext): Pair<KuaArray?, KuaTable?> {
-//                        return null to KuaTable()
-//                    }
-//                }
-//            )
-//
-//            sandbox.load(
-//                """
-//                local x, y = func()
-//                assert(x == nil)
-//                assert(#y == 0)
-//            """.trimIndent()
-//            )
-//        }
-        TODO()
+        sandbox.use { sandbox ->
+            sandbox.registerGlobalFunction("func",
+                object : Function0In2Out<KuaTableArray, KuaTableMap>(
+                    FunctionOutput2Schema(
+                        KuaTableArray::class,
+                        KuaTableMap::class
+                    )
+                ) {
+                    override fun invoke(ctx: FunctionContext): Pair<KuaTableArray?, KuaTableMap?> {
+                        return null to ctx.tableCreateMap(0)
+                    }
+                }
+            )
+
+            sandbox.load(
+                """
+                local x, y = func()
+                assert(x == nil)
+                assert(#y == 0)
+            """.trimIndent()
+            )
+        }
     }
 
     @Test
     fun `Second result is nil`() {
-//        sandbox.use { sandbox ->
-//            sandbox.registerGlobalFunction("func",
-//                object :
-//                    Function0In2Out<KuaArray, KuaTable>(
-//                        FunctionOutput2Schema(
-//                            KuaArray::class,
-//                            KuaTable::class
-//                        )
-//                    ) {
-//                    override fun invoke(ctx: FunctionContext): Pair<KuaArray?, KuaTable?> {
-//                        return KuaArray() to null
-//                    }
-//                })
-//
-//            sandbox.load(
-//                """
-//                local x, y = func()
-//                assert(#x == 0)
-//                assert(y == nil)
-//            """.trimIndent()
-//            )
-//        }
+        sandbox.use { sandbox ->
+            sandbox.registerGlobalFunction("func",
+                object :
+                    Function0In2Out<KuaTableArray, KuaTableMap>(
+                        FunctionOutput2Schema(
+                            KuaTableArray::class,
+                            KuaTableMap::class
+                        )
+                    ) {
+                    override fun invoke(ctx: FunctionContext): Pair<KuaTableArray?, KuaTableMap?> {
+                        return ctx.tableCreateArray(0) to null
+                    }
+                })
 
-        TODO()
+            sandbox.load(
+                """
+                local x, y = func()
+                assert(#x == 0)
+                assert(y == nil)
+            """.trimIndent()
+            )
+        }
     }
 
     @Test

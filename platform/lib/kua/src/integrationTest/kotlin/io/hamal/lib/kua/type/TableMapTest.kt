@@ -6,7 +6,7 @@ import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import org.junit.jupiter.api.Test
 
-internal class KuaTableTest {
+internal class KuaTableMaTest {
 
     @Test
     fun `Map as function result`() {

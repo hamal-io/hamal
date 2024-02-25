@@ -1,22 +1,20 @@
-package io.hamal.lib.kua.table
+package io.hamal.lib.kua.type
 
 import io.hamal.lib.kua.ClosableState
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NopSandboxContext
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.type.KuaNumber
-import io.hamal.lib.kua.type.TableEntryIterator
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
-internal class TableEntryIteratorTest {
+internal class KuaTableEntryIteratorTest {
 
     @Test
     fun `Empty table`() {
         val emptyTableIndex = state.native.tableCreate(0, 0)
-        val testInstance = TableEntryIterator(
+        val testInstance = KuaTableEntryIterator(
             index = emptyTableIndex,
             state = state,
             keyExtractor = { state, index -> state.getStringType(index) },
@@ -35,7 +33,7 @@ internal class TableEntryIteratorTest {
         val table = state.tableCreateMap(123)
         table.append(21)
 
-        val testInstance = TableEntryIterator(
+        val testInstance = KuaTableEntryIterator(
             index = table.index,
             state = state,
             keyExtractor = { state, index -> state.getNumberType(index) },
@@ -64,7 +62,7 @@ internal class TableEntryIteratorTest {
             println(idx)
         }
 
-        val testInstance = TableEntryIterator(
+        val testInstance = KuaTableEntryIterator(
             index = table.index,
             state = state,
             keyExtractor = { state, index -> state.getNumberType(index) },

@@ -17,12 +17,14 @@ abstract class KuaFunction<
     abstract operator fun invoke(ctx: FunctionContext, input: INPUT): OUTPUT
 
     fun invokedByLua(native: Native): Int {
-        val ctx = FunctionContext(ClosableState(native))
+        return ClosableState(native).use { state ->
+            val ctx = FunctionContext(state)
 
-        val input = inputSchema.createInput(ctx)
-        val output = invoke(ctx, input)
-        outputSchema.pushResult(ctx, output)
-        return output.size
+            val input = inputSchema.createInput(ctx)
+            val output = invoke(ctx, input)
+            outputSchema.pushResult(ctx, output)
+            output.size
+        }
     }
 
     override val type: KuaType.Type = KuaType.Type.Function

@@ -16,12 +16,12 @@ fun KuaType.toJson(): JsonElement {
         is KuaNumber -> JsonPrimitive(value)
         is KuaString -> JsonPrimitive(value)
         is KuaFunction<*, *, *, *> -> TODO()
-        is KuaTableType -> TODO()
+        is KuaTable -> TODO()
     }
 }
 
 // FIXME JSON NODE
-private fun KuaTableType.toJson(): JsonObject {
+private fun KuaTable.toJson(): JsonObject {
     val result = JsonObject()
 
 
@@ -62,7 +62,7 @@ fun JsonElement.convertToType(): KuaType {
 //    )
 //}
 
-fun JsonObject.convertToType(): KuaTableType {
+fun JsonObject.convertToType(): KuaTable {
     val obj = this
 
 //    return KuaTable(

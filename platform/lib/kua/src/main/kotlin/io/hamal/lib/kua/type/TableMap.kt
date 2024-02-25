@@ -6,39 +6,18 @@ import io.hamal.lib.kua.State
 import kotlin.reflect.KClass
 
 class KuaTableMap(
-    val index: Int,
-    val state: State
-) : KuaTableType {
+    override val index: Int,
+    override val state: State
+) : KuaTable {
 
     override val type: KuaType.Type = KuaType.Type.Table
 
-    companion object {
-        fun create(state: State, data: Map<String, KuaType>): KuaTableMap {
-            return state.tableCreateMap(data.size).also {
-                data.entries.forEach { (key, value) ->
-                    it[key] = value
-                }
-            }
-        }
-    }
-
-    fun entries(): Sequence<Pair<KuaString, KuaType>> {
-        return TableEntryIterator(
+    fun asSequence(): Sequence<Pair<KuaString, KuaType>> {
+        return KuaTableEntryIterator(
             index = index,
             state = state,
             keyExtractor = { state, index -> state.getStringType(index) },
-            valueExtractor = { state, index ->
-                when (val value = state.getAny(index).value) {
-//                is KuaTableArray,
-                    is KuaBoolean,
-                    is KuaDecimal,
-//                is KuaTableMap,
-                    is KuaNumber,
-                    is KuaString -> value
-
-                    else -> TODO("$value")
-                }
-            }
+            valueExtractor = { state, index -> state.getAny(index).value }
         ).asSequence().map { it.key to it.value }
     }
 
@@ -55,7 +34,7 @@ class KuaTableMap(
 
         state.pushString(key)
         val type = state.tableGetRaw(index)
-        type.checkExpectedType(KuaTableType::class)
+        type.checkExpectedType(KuaTable::class)
         return state.getTableArray(state.top.value)
     }
 
@@ -66,17 +45,19 @@ class KuaTableMap(
 
     operator fun set(key: String, value: KuaType): Int {
         return when (value) {
-            is KuaString -> set(key, value)
+            is KuaBoolean -> set(key, value)
+            is KuaCode -> set(key, value)
+            is KuaDecimal -> set(key, value)
+            is KuaError -> set(key, value)
+            is KuaFunction<*, *, *, *> -> set(key, value)
             is KuaNil -> unset(key)
+            is KuaNumber -> set(key, value)
+            is KuaString -> set(key, value)
+            is KuaTableArray -> set(key, value)
+            is KuaTableMap -> set(key, value)
             else -> TODO()
         }
     }
-
-
-    val size: Int get() = 0
-    val isArray: Boolean get() = false
-    val isMap: Boolean get() = true
-
 
     val length get() = state.native.tableGetLength(index)
 
@@ -155,8 +136,8 @@ class KuaTableMap(
     fun getTable(key: String): KuaTableMap {
         state.pushString(key)
         val type = state.tableGetRaw(index)
-        type.checkExpectedType(KuaTableType::class)
-        return state.getKuaTableMap(state.top.value)
+        type.checkExpectedType(KuaTable::class)
+        return state.getTableMap(state.top.value)
     }
 
     fun getBooleanType(key: KuaString): KuaBoolean = getBooleanType(key.value)

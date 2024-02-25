@@ -13,9 +13,9 @@ import org.junit.jupiter.api.Test
 internal class KuaAnyTest {
 
     @Test
-    fun `AnyValue can be used with BooleanType`() {
+    fun `Can be used with boolean`() {
         val captor = AnyValueResultCaptor()
-        sandbox.register(capability(captor))
+        sandbox.register(plugin(captor))
 
         sandbox.load(
             """
@@ -27,9 +27,9 @@ internal class KuaAnyTest {
     }
 
     @Test
-    fun `AnyValue can be used with NumberType`() {
+    fun `Can be used with number`() {
         val captor = AnyValueResultCaptor()
-        sandbox.register(capability(captor))
+        sandbox.register(plugin(captor))
 
         sandbox.load(
             """
@@ -42,9 +42,9 @@ internal class KuaAnyTest {
     }
 
     @Test
-    fun `AnyValue can be used with StringType`() {
+    fun `Can be used with string`() {
         val captor = AnyValueResultCaptor()
-        sandbox.register(capability(captor))
+        sandbox.register(plugin(captor))
 
         sandbox.load(
             """
@@ -57,13 +57,13 @@ internal class KuaAnyTest {
     }
 
     @Test
-    fun `AnyValue can be used with MapType`() {
+    fun `Can be used with table map`() {
         val map = sandbox.tableCreateMap(2)
         map["key"] = "value"
         sandbox.setGlobal("test_map", map)
 
         val captor = AnyValueResultCaptor()
-        sandbox.register(capability(captor))
+        sandbox.register(plugin(captor))
 
         sandbox.load(
             """
@@ -73,36 +73,35 @@ internal class KuaAnyTest {
         )
 
         val underlying = (captor.result as KuaAny).value
-        require(underlying is KuaTableMap) { "Not a KuaTableMap" }
-        assertThat(underlying.size, equalTo(1))
+        require(underlying is KuaTableMap) { "Not a map" }
+        assertThat(underlying.length, equalTo(1))
         assertThat(underlying.getString("key"), equalTo("value"))
     }
 
 
     @Test
-    fun `AnyValue can be used with ArrayType`() {
-        TODO()
-//        val array = sandbox.tableCreateArray(2)
-//        array.append(23)
-//        array.append("hamal.io")
-//        sandbox.setGlobal("test_array", array)
-//
-//        val captor = AnyValueResultCaptor()
-//        sandbox.register(capability(captor))
-//
-//        sandbox.load(
-//            """
-//            test = require_plugin('test')
-//            test.captor(test.pass_through(test_array))
-//        """
-//        )
-//
-//        val underlying = (captor.result as KuaAny).value
-//        require(underlying is KuaArray) { "Not a ArrayType" }
-//        assertThat(underlying.size, equalTo(2))
-//
-//        assertThat(underlying.getInt(1), equalTo(23))
-//        assertThat(underlying.getString(2), equalTo("hamal.io"))
+    fun `AnyValue can be used with array`() {
+        val array = sandbox.tableCreateArray(2)
+        array.append(23)
+        array.append("hamal.io")
+        sandbox.setGlobal("test_array", array)
+
+        val captor = AnyValueResultCaptor()
+        sandbox.register(plugin(captor))
+
+        sandbox.load(
+            """
+            test = require_plugin('test')
+            test.captor(test.pass_through(test_array))
+        """
+        )
+
+        val underlying = (captor.result as KuaAny).value
+        require(underlying is KuaTableArray) { "Not a array" }
+        assertThat(underlying.length, equalTo(2))
+
+        assertThat(underlying.getInt(1), equalTo(23))
+        assertThat(underlying.getString(2), equalTo("hamal.io"))
     }
 
     private class AnyValuePassThrough : Function1In1Out<KuaAny, KuaAny>(
@@ -124,7 +123,7 @@ internal class KuaAnyTest {
         var result: KuaType = KuaNil
     }
 
-    private fun capability(captor: KuaFunction<*, *, *, *>) =
+    private fun plugin(captor: KuaFunction<*, *, *, *>) =
         RunnerPlugin(
             name = "test",
             factoryCode = """

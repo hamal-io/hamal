@@ -1,8 +1,7 @@
-package io.hamal.lib.kua.table
+package io.hamal.lib.kua.type
 
 import io.hamal.lib.kua.*
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
-import io.hamal.lib.kua.type.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.DynamicTest
@@ -41,7 +40,7 @@ internal class KuaTableMapTest {
                 assertThat(result, equalTo(1))
 
                 assertThat("One element on stack", state.top, equalTo(StackTop(1)))
-                assertThat("Only table on stack", state.type(1), equalTo(KuaTableType::class))
+                assertThat("Only table on stack", state.type(1), equalTo(KuaTable::class))
 
                 state.native.pop(1)
                 verifyStackIsEmpty()
@@ -69,7 +68,7 @@ internal class KuaTableMapTest {
                 assertThat(testInstance.length, equalTo(1))
 
                 assertThat("One element on stack", state.top, equalTo(StackTop(1)))
-                assertThat("Only table on stack", state.type(1), equalTo(KuaTableType::class))
+                assertThat("Only table on stack", state.type(1), equalTo(KuaTable::class))
 
                 state.native.tableGetField(1, "another-key")
                 assertThat(state.getString(-1), equalTo("another-value"))
@@ -103,7 +102,7 @@ internal class KuaTableMapTest {
                 assertThat(testInstance.length, equalTo(1))
 
                 assertThat("One element on stack", state.top, equalTo(StackTop(1)))
-                assertThat("Only table on stack", state.type(1), equalTo(KuaTableType::class))
+                assertThat("Only table on stack", state.type(1), equalTo(KuaTable::class))
 
                 state.native.pop(1)
                 verifyStackIsEmpty()
@@ -127,7 +126,7 @@ internal class KuaTableMapTest {
                 assertThat(testInstance.length, equalTo(1))
 
                 assertThat("One element on stack", state.top, equalTo(StackTop(1)))
-                assertThat("Only table on stack", state.type(1), equalTo(KuaTableType::class))
+                assertThat("Only table on stack", state.type(1), equalTo(KuaTable::class))
 
                 state.native.pop(1)
                 verifyStackIsEmpty()
@@ -167,7 +166,7 @@ internal class KuaTableMapTest {
                 assertThat(testInstance.length, equalTo(1))
 
                 assertThat("One element on stack", state.top, equalTo(StackTop(1)))
-                assertThat("Only table on stack", state.type(1), equalTo(KuaTableType::class))
+                assertThat("Only table on stack", state.type(1), equalTo(KuaTable::class))
 
                 state.native.pop(1)
                 verifyStackIsEmpty()
@@ -198,7 +197,7 @@ internal class KuaTableMapTest {
                 assertThat(testInstance.length, equalTo(1))
 
                 assertThat("One element on stack", state.top, equalTo(StackTop(1)))
-                assertThat("Only table on stack", state.type(1), equalTo(KuaTableType::class))
+                assertThat("Only table on stack", state.type(1), equalTo(KuaTable::class))
 
                 state.native.pop(1)
                 verifyStackIsEmpty()

@@ -47,8 +47,8 @@ fun <ARG : KuaType> KClass<ARG>.extract(ctx: FunctionContext, idx: Int): ARG {
         KuaNumber::class -> ctx.getNumberType(idx) as ARG
         KuaString::class -> ctx.getStringType(idx) as ARG
         KuaType::class -> TODO() //FIXME loads the entire table from lua -- maybe some form of readonly table value and table value is interface?!
-        KuaTableMap::class -> ctx.getKuaTableMap(idx) as ARG
-        KuaTableType::class -> ctx.getKuaTableMap(idx) as ARG
+        KuaTableMap::class -> ctx.getTableMap(idx) as ARG
+        KuaTable::class -> ctx.getTableMap(idx) as ARG
         else -> TODO()
     }
 }

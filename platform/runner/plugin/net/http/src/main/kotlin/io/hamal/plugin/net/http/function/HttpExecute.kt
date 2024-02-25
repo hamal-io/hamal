@@ -6,12 +6,12 @@ import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.kua.type.KuaTableMap
-import io.hamal.lib.kua.type.KuaTableType
+import io.hamal.lib.kua.type.KuaTable
 
 
-class HttpExecuteFunction : Function1In2Out<KuaTableMap, KuaError, KuaTableType>(
+class HttpExecuteFunction : Function1In2Out<KuaTableMap, KuaError, KuaTable>(
     FunctionInput1Schema(KuaTableMap::class),
-    FunctionOutput2Schema(KuaError::class, KuaTableType::class)
+    FunctionOutput2Schema(KuaError::class, KuaTable::class)
 ) {
     override fun invoke(ctx: FunctionContext, arg1: KuaTableMap): Pair<KuaError?, KuaTableMap?> {
 //        val results = mutableListOf<KuaTable>()

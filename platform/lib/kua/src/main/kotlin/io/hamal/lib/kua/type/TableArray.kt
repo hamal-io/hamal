@@ -6,44 +6,34 @@ import io.hamal.lib.kua.State
 import kotlin.reflect.KClass
 
 class KuaTableArray(
-    val index: Int,
-    val state: State
-) : KuaTableType {
+    override val index: Int,
+    override val state: State
+) : KuaTable {
 
     override val type: KuaType.Type = KuaType.Type.Table
 
-    val underlyingArray: Map<Int, KuaType>
-        get() = TODO("Not yet implemented")
-
     fun asSequence(): Sequence<KuaType> {
-        return TableEntryIterator(
+        return KuaTableEntryIterator(
             index = index,
             state = state,
             keyExtractor = { state, index -> state.getNumberType(index) },
-            valueExtractor = { state, index ->
-                when (val value = state.getAny(index).value) {
-//                is KuaTableArray,
-                    is KuaBoolean,
-                    is KuaDecimal,
-//                is KuaTableMap,
-                    is KuaNumber,
-                    is KuaString -> value
-
-                    is KuaTableMap -> value
-                    is KuaTableArray -> value
-                    else -> TODO("$value")
-                }
-            }
+            valueExtractor = { state, index -> state.getAny(index).value }
         ).asSequence().map { it.value }
     }
 
-
     fun append(value: KuaType): Int {
         return when (value) {
+            is KuaBoolean -> append(value)
+            is KuaCode -> append(value)
+            is KuaDecimal -> append(value)
+            is KuaError -> append(value)
+            is KuaFunction<*, *, *, *> -> append(value)
+            is KuaNil -> append(value)
+            is KuaNumber -> append(value)
             is KuaString -> append(value)
-            is KuaTableMap -> append(value)
             is KuaTableArray -> append(value)
-            else -> TODO("Not yet implemented")
+            is KuaTableMap -> append(value)
+            else -> TODO()
         }
     }
 
@@ -55,15 +45,10 @@ class KuaTableArray(
         TODO("Not yet implemented")
     }
 
-    val size: Int = 0
-    val isArray: Boolean = true
-    val isMap: Boolean = false
-
     fun append(value: KuaString) = append(value.value)
     fun get(key: Int): KuaType {
         TODO("Not yet implemented")
     }
-
 
 
     val length get() = state.native.tableGetLength(index)

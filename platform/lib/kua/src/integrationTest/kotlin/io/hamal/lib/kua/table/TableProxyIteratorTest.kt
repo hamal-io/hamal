@@ -22,7 +22,7 @@ internal class TableEntryIteratorTest {
             FunctionInput1Schema(KuaTableMap::class)
         ) {
             override fun invoke(ctx: FunctionContext, arg1: KuaTableMap) {
-                val testInstance = TableEntryIterator(
+                val testInstance = KuaTableEntryIterator(
                     -1,
                     ctx,
                     keyExtractor = { state, index -> state.getStringType(index) },
@@ -76,7 +76,7 @@ internal class TableEntryIteratorTest {
             FunctionInput1Schema(KuaTableMap::class)
         ) {
             override fun invoke(ctx: FunctionContext, arg1: KuaTableMap) {
-                val testInstance = TableEntryIterator(
+                val testInstance = KuaTableEntryIterator(
                     -1,
                     ctx,
                     keyExtractor = { state, index -> state.getStringType(index) },
@@ -123,7 +123,7 @@ internal class TableEntryIteratorTest {
             FunctionInput1Schema(KuaTableArray::class)
         ) {
             override fun invoke(ctx: FunctionContext, arg1: KuaTableArray) {
-                val testInstance = TableEntryIterator(-1, ctx,
+                val testInstance = KuaTableEntryIterator(-1, ctx,
                     keyExtractor = { state, index -> state.getNumberType(index) },
                     valueExtractor = { state, index -> state.getAny(index) }
                 )
