@@ -7,8 +7,8 @@ import io.hamal.lib.kua.extend.extension.RunnerExtension
 import io.hamal.lib.kua.extend.extension.RunnerExtensionFactory
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
-import io.hamal.lib.kua.table.TableProxyArray
-import io.hamal.lib.kua.table.TableProxyMap
+import io.hamal.lib.kua.type.TableProxyArray
+import io.hamal.lib.kua.type.TableProxyMap
 import io.hamal.lib.kua.type.KuaAny
 import io.hamal.lib.kua.type.KuaCode
 import io.hamal.lib.kua.type.KuaError

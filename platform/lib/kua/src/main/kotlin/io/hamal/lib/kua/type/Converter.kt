@@ -1,9 +1,6 @@
 package io.hamal.lib.kua.type
 
 import io.hamal.lib.kua.State
-import io.hamal.lib.kua.table.TableEntryIterator
-import io.hamal.lib.kua.table.TableProxyArray
-import io.hamal.lib.kua.table.TableProxyMap
 
 fun State.toKuaTableArray(array: TableProxyArray): KuaTable.Array {
     val result = KuaTable.Array()

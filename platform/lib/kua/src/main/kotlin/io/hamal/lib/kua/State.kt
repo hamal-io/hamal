@@ -1,7 +1,7 @@
 package io.hamal.lib.kua
 
-import io.hamal.lib.kua.table.TableProxyArray
-import io.hamal.lib.kua.table.TableProxyMap
+import io.hamal.lib.kua.type.TableProxyArray
+import io.hamal.lib.kua.type.TableProxyMap
 import io.hamal.lib.kua.type.*
 import io.hamal.lib.kua.type.KuaError
 import kotlin.reflect.KClass

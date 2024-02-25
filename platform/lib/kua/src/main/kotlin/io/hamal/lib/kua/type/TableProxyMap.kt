@@ -1,9 +1,8 @@
-package io.hamal.lib.kua.table
+package io.hamal.lib.kua.type
 
 import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.kua.State
-import io.hamal.lib.kua.type.*
 import kotlin.reflect.KClass
 
 class TableProxyMap(

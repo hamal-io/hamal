@@ -7,7 +7,7 @@ import io.hamal.lib.domain.vo.RunnerEnv
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
-import io.hamal.lib.kua.table.TableProxyMap
+import io.hamal.lib.kua.type.TableProxyMap
 import io.hamal.lib.kua.type.KuaNil
 import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.kua.type.KuaTable

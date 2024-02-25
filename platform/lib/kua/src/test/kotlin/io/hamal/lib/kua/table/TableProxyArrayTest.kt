@@ -7,6 +7,7 @@ import io.hamal.lib.kua.NopSandboxContext
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.type.KuaFalse
 import io.hamal.lib.kua.type.KuaString
+import io.hamal.lib.kua.type.TableProxyMap
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.DynamicTest

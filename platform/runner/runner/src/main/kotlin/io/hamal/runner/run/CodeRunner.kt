@@ -5,8 +5,8 @@ import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.AssertionError
 import io.hamal.lib.kua.ExitError
 import io.hamal.lib.kua.ExtensionError
-import io.hamal.lib.kua.table.TableProxyArray
-import io.hamal.lib.kua.table.TableProxyMap
+import io.hamal.lib.kua.type.TableProxyArray
+import io.hamal.lib.kua.type.TableProxyMap
 import io.hamal.lib.kua.type.*
 import io.hamal.runner.config.EnvFactory
 import io.hamal.runner.config.SandboxFactory

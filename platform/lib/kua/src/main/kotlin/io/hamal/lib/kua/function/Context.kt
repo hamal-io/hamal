@@ -3,8 +3,8 @@ package io.hamal.lib.kua.function
 import io.hamal.lib.kua.SandboxContext
 import io.hamal.lib.kua.StackTop
 import io.hamal.lib.kua.State
-import io.hamal.lib.kua.table.TableProxyArray
-import io.hamal.lib.kua.table.TableProxyMap
+import io.hamal.lib.kua.type.TableProxyArray
+import io.hamal.lib.kua.type.TableProxyMap
 import io.hamal.lib.kua.type.KuaAny
 import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.kua.type.KuaFunction

@@ -3,7 +3,7 @@ package io.hamal.lib.kua.extend
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extend.extension.RunnerExtension
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
-import io.hamal.lib.kua.table.TableProxyMap
+import io.hamal.lib.kua.type.TableProxyMap
 import io.hamal.lib.kua.type.KuaFunction
 
 class RunnerRegistry(val sb: Sandbox) {
