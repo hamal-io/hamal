@@ -5,6 +5,7 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
+import io.hamal.lib.kua.toMap
 import io.hamal.lib.kua.type.*
 import io.hamal.lib.sdk.ApiSdk
 
@@ -18,10 +19,10 @@ class ExtensionGetFunction(
         return try {
             val ext = sdk.extension.get(ExtensionId(arg1.value))
 
-            null to KuaTable.Map(
+            null to ctx.toMap(
                 "id" to KuaString(ext.id.value.value.toString(16)),
                 "name" to KuaString(ext.name.value),
-                "code" to KuaTable.Map(
+                "code" to ctx.toMap(
                     "id" to KuaString(ext.code.id.value.value.toString(16)),
                     "version" to KuaNumber(ext.code.version.value),
                     "value" to KuaCode(ext.code.value.value)

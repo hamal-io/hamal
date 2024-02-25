@@ -87,8 +87,8 @@ class ClosableState(
     override fun pushAny(value: KuaAny): StackTop {
         return when (val underlying = value.value) {
             is KuaBoolean -> pushBoolean(underlying)
-            is KuaTable.Array -> pushTable(toTableProxyArray(underlying))
-            is KuaTable.Map -> pushTable(toTableProxyMap(underlying))
+            is TableProxyArray -> pushTable(underlying)
+            is TableProxyMap -> pushTable(underlying)
             is KuaNumber -> pushNumber(underlying)
             is KuaString -> pushString(underlying)
             else -> TODO("${underlying.javaClass} not supported yet")
@@ -125,12 +125,12 @@ class ClosableState(
 
     override fun getTableArray(idx: Int): KuaTable.Array {
         val ref = TableProxyArray(absIndex(idx), this)
-        return toKuaTableArray(ref)
+        return ref
     }
 
     override fun getTableMap(idx: Int): KuaTable.Map {
         val ref = TableProxyMap(absIndex(idx), this)
-        return toKuaTableMap(ref)
+        return ref
     }
 
     override fun setGlobal(name: String, value: KuaFunction<*, *, *, *>) {
@@ -192,7 +192,10 @@ private fun luaToType(value: Int) = when (value) {
     else -> TODO("$value not implemented yet")
 }
 
-fun <T : State> T.map(data: Map<String, KuaType>): TableProxyMap {
+fun <T : State> T.toMap(vararg pairs: Pair<String, KuaType>): TableProxyMap = toMap(pairs.toMap())
+
+
+fun <T : State> T.toMap(data: Map<String, KuaType>): TableProxyMap {
     return tableCreateMap(data.size).also { map ->
         data.forEach { (key, value) ->
             map[key] = value
@@ -200,7 +203,7 @@ fun <T : State> T.map(data: Map<String, KuaType>): TableProxyMap {
     }
 }
 
-fun <T : State> T.array(data: List<KuaType>): TableProxyArray {
+fun <T : State> T.toArray(data: List<KuaType>): TableProxyArray {
     return tableCreateArray(data.size).also { array ->
         data.forEach(array::append)
     }

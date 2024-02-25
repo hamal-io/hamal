@@ -6,6 +6,7 @@ import io.hamal.lib.kua.function.Function2In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput2Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
+import io.hamal.lib.kua.toMap
 import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.kua.type.KuaTable
@@ -26,10 +27,10 @@ class TopicEntryAppendFunction(
                 TopicEventPayload(arg2.toHotObject())
             )
 
-            null to KuaTable.Map(
-                    "id" to KuaString(res.id.value.value.toString(16)),
-                    "status" to KuaString(res.status.name),
-                    "topic_id" to KuaString(res.topicId.value.value.toString(16))
+            null to ctx.toMap(
+                "id" to KuaString(res.id.value.value.toString(16)),
+                "status" to KuaString(res.status.name),
+                "topic_id" to KuaString(res.topicId.value.value.toString(16))
             )
 
         } catch (t: Throwable) {

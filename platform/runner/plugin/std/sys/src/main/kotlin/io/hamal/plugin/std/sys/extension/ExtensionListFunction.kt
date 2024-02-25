@@ -1,10 +1,11 @@
 package io.hamal.plugin.std.sys.extension
 
 import io.hamal.lib.domain.vo.WorkspaceId
-import io.hamal.lib.kua.array
 import io.hamal.lib.kua.function.Function0In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionOutput2Schema
+import io.hamal.lib.kua.toArray
+import io.hamal.lib.kua.toMap
 import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.kua.type.KuaTable
@@ -18,13 +19,11 @@ class ExtensionListFunction(
     override fun invoke(ctx: FunctionContext): Pair<KuaError?, KuaTable.Array?> {
         return try {
             val extensions = sdk.extension.list(ctx[WorkspaceId::class])
-            null to ctx.array(
+            null to ctx.toArray(
                 extensions.map { ext ->
-                    KuaTable.Map(
-                        mutableMapOf(
-                            "id" to KuaString(ext.id.value.value.toString(16)),
-                            "name" to KuaString(ext.name.value)
-                        )
+                    ctx.toMap(
+                        "id" to KuaString(ext.id.value.value.toString(16)),
+                        "name" to KuaString(ext.name.value)
                     )
                 }
             )

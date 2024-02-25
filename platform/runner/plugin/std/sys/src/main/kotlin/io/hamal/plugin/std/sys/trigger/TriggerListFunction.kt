@@ -1,11 +1,12 @@
 package io.hamal.plugin.std.sys.trigger
 
 import io.hamal.lib.domain.vo.NamespaceId
-import io.hamal.lib.kua.array
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
+import io.hamal.lib.kua.toArray
+import io.hamal.lib.kua.toMap
 import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.kua.type.KuaTable
@@ -20,7 +21,7 @@ class TriggerListFunction(
 ) {
     override fun invoke(ctx: FunctionContext, arg1: KuaTable.Map): Pair<KuaError?, KuaTable.Array?> {
         return try {
-            null to ctx.array(sdk.trigger.list(
+            null to ctx.toArray(sdk.trigger.list(
                 ApiTriggerService.TriggerQuery(
                     namespaceIds = arg1.findArray("namespace_ids")
                         ?.asSequence()?.map { NamespaceId((it as KuaString).value) }?.toList()
@@ -30,15 +31,15 @@ class TriggerListFunction(
             ).map { trigger ->
                 when (trigger) {
                     is ApiTriggerList.FixedRate -> {
-                        KuaTable.Map(
+                        ctx.toMap(
                             "id" to KuaString(trigger.id.value.value.toString(16)),
                             "type" to KuaString("FixedRate"),
                             "name" to KuaString(trigger.name.value),
-                            "namespace" to KuaTable.Map(
+                            "namespace" to ctx.toMap(
                                 "id" to KuaString(trigger.namespace.id.value.value.toString(16)),
                                 "name" to KuaString(trigger.namespace.name.value)
                             ),
-                            "func" to KuaTable.Map(
+                            "func" to ctx.toMap(
                                 "id" to KuaString(trigger.func.id.value.value.toString(16)),
                                 "name" to KuaString(trigger.func.name.value)
                             ),
@@ -47,19 +48,19 @@ class TriggerListFunction(
                     }
 
                     is ApiTriggerList.Event -> {
-                        KuaTable.Map(
+                        ctx.toMap(
                             "id" to KuaString(trigger.id.value.value.toString(16)),
                             "type" to KuaString("Event"),
                             "name" to KuaString(trigger.name.value),
-                            "namespace" to KuaTable.Map(
+                            "namespace" to ctx.toMap(
                                 "id" to KuaString(trigger.namespace.id.value.value.toString(16)),
                                 "name" to KuaString(trigger.namespace.name.value)
                             ),
-                            "func" to KuaTable.Map(
+                            "func" to ctx.toMap(
                                 "id" to KuaString(trigger.func.id.value.value.toString(16)),
                                 "name" to KuaString(trigger.func.name.value)
                             ),
-                            "topic" to KuaTable.Map(
+                            "topic" to ctx.toMap(
                                 "id" to KuaString(trigger.topic.id.value.value.toString(16)),
                                 "name" to KuaString(trigger.topic.name.value)
                             ),
@@ -67,19 +68,19 @@ class TriggerListFunction(
                     }
 
                     is ApiTriggerList.Hook -> {
-                        KuaTable.Map(
+                        ctx.toMap(
                             "id" to KuaString(trigger.id.value.value.toString(16)),
                             "type" to KuaString("Hook"),
                             "name" to KuaString(trigger.name.value),
-                            "namespace" to KuaTable.Map(
+                            "namespace" to ctx.toMap(
                                 "id" to KuaString(trigger.namespace.id.value.value.toString(16)),
                                 "name" to KuaString(trigger.namespace.name.value)
                             ),
-                            "func" to KuaTable.Map(
+                            "func" to ctx.toMap(
                                 "id" to KuaString(trigger.func.id.value.value.toString(16)),
                                 "name" to KuaString(trigger.func.name.value)
                             ),
-                            "hook" to KuaTable.Map(
+                            "hook" to ctx.toMap(
                                 "id" to KuaString(trigger.hook.id.value.value.toString(16)),
                                 "name" to KuaString(trigger.hook.name.value),
                                 "methods" to KuaString(trigger.hook.method.name)
@@ -87,15 +88,15 @@ class TriggerListFunction(
                         )
                     }
 
-                    is ApiTriggerList.Cron -> KuaTable.Map(
+                    is ApiTriggerList.Cron -> ctx.toMap(
                         "id" to KuaString(trigger.id.value.value.toString(16)),
                         "type" to KuaString("Cron"),
                         "name" to KuaString(trigger.name.value),
-                        "namespace" to KuaTable.Map(
+                        "namespace" to ctx.toMap(
                             "id" to KuaString(trigger.namespace.id.value.value.toString(16)),
                             "name" to KuaString(trigger.namespace.name.value)
                         ),
-                        "func" to KuaTable.Map(
+                        "func" to ctx.toMap(
                             "id" to KuaString(trigger.func.id.value.value.toString(16)),
                             "name" to KuaString(trigger.func.name.value)
                         ),

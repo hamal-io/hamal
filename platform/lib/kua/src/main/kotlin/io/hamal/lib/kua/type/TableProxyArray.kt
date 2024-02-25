@@ -28,8 +28,8 @@ class TableProxyArray(
                     is KuaNumber,
                     is KuaString -> value
 
-                    is TableProxyMap -> state.toKuaTableMap(value)
-                    is TableProxyArray -> state.toKuaTableArray(value)
+                    is TableProxyMap -> value
+                    is TableProxyArray -> value
                     else -> TODO("$value")
                 }
             }
@@ -43,6 +43,8 @@ class TableProxyArray(
     override fun append(value: KuaType): Int {
         return when (value) {
             is KuaString -> append(value)
+            is TableProxyMap -> append(value)
+            is TableProxyArray -> append(value)
             else -> TODO("Not yet implemented")
         }
     }

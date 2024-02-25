@@ -1,15 +1,12 @@
 package io.hamal.plugin.net.http.function
 
-import com.google.gson.JsonElement
-import io.hamal.lib.http.HttpErrorResponse
-import io.hamal.lib.http.HttpResponse
-import io.hamal.lib.http.HttpSuccessResponse
-import io.hamal.lib.kua.converter.convertToType
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.type.*
+import io.hamal.lib.kua.type.KuaError
+import io.hamal.lib.kua.type.KuaTable
+import io.hamal.lib.kua.type.KuaTableType
 
 
 class HttpExecuteFunction : Function1In2Out<KuaTable, KuaError, KuaTableType>(
@@ -217,39 +214,39 @@ class HttpExecuteFunction : Function1In2Out<KuaTable, KuaError, KuaTableType>(
 }
 
 
-private fun HttpResponse.toMap() = KuaTable.Map().also {
-    it["status_code"] = KuaNumber(statusCode.value)
-    it["content_type"] = headers.find("content-type")?.let { type -> KuaString(type) } ?: KuaNil
-    it["content_length"] = headers.find("content-length")?.let { length -> KuaNumber(length.toInt()) } ?: KuaNil
-    it["headers"] = headers()
-    it["content"] = content()
-}
-
-private fun HttpResponse.content() = when (this) {
-    is HttpSuccessResponse -> {
-        if (isNotEmpty) {
-            val el = result(JsonElement::class)
-            el.convertToType()
-        } else {
-            KuaTable.Map()
-        }
-    }
-
-    is HttpErrorResponse -> {
-        if (isNotEmpty) {
-            val el = error(JsonElement::class)
-            el.convertToType()
-        } else {
-            KuaTable.Map()
-        }
-    }
-
-    else -> KuaNil
-}
-
-
-private fun HttpResponse.headers() = KuaTable.Map(
-    headers.map {
-        it.key.lowercase() to KuaString(it.value)
-    }.toMap().toMutableMap()
-)
+//private fun HttpResponse.toMap() = ctx.toMap().also {
+//    it["status_code"] = KuaNumber(statusCode.value)
+//    it["content_type"] = headers.find("content-type")?.let { type -> KuaString(type) } ?: KuaNil
+//    it["content_length"] = headers.find("content-length")?.let { length -> KuaNumber(length.toInt()) } ?: KuaNil
+//    it["headers"] = headers()
+//    it["content"] = content()
+//}
+//
+//private fun HttpResponse.content() = when (this) {
+//    is HttpSuccessResponse -> {
+//        if (isNotEmpty) {
+//            val el = result(JsonElement::class)
+//            el.convertToType()
+//        } else {
+//            ctx.toMap()
+//        }
+//    }
+//
+//    is HttpErrorResponse -> {
+//        if (isNotEmpty) {
+//            val el = error(JsonElement::class)
+//            el.convertToType()
+//        } else {
+//            ctx.toMap()
+//        }
+//    }
+//
+//    else -> KuaNil
+//}
+//
+//
+//private fun HttpResponse.headers() = ctx.toMap(
+//    headers.map {
+//        it.key.lowercase() to KuaString(it.value)
+//    }.toMap().toMutableMap()
+//)

@@ -7,6 +7,7 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
+import io.hamal.lib.kua.toMap
 import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.kua.type.KuaTable
@@ -29,7 +30,7 @@ class ExtensionCreateFunction(
                 )
             )
 
-            null to KuaTable.Map(
+            null to ctx.toMap(
                 "id" to KuaString(res.id.value.value.toString(16)),
                 "status" to KuaString(res.status.name),
                 "extension_id" to KuaString(res.extensionId.value.value.toString(16)),

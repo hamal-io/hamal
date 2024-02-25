@@ -1,11 +1,11 @@
 package io.hamal.plugin.std.sys.topic
 
 import io.hamal.lib.domain.vo.TopicId
-import io.hamal.lib.kua.array
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
+import io.hamal.lib.kua.toArray
 import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.kua.type.KuaTable
@@ -20,7 +20,7 @@ class TopicEntryListFunction(
 ) {
     override fun invoke(ctx: FunctionContext, arg1: KuaString): Pair<KuaError?, KuaTable.Array?> {
         return try {
-            null to ctx.array(
+            null to ctx.toArray(
                 sdk.topic.events(TopicId(arg1.value))
                     .map { entry -> entry.payload.value.toKua(ctx) }
             )

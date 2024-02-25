@@ -5,6 +5,7 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
+import io.hamal.lib.kua.toMap
 import io.hamal.lib.kua.type.*
 import io.hamal.lib.sdk.ApiSdk
 
@@ -18,19 +19,19 @@ class FuncGetFunction(
         return try {
             null to sdk.func.get(FuncId(arg1.value))
                 .let { func ->
-                    KuaTable.Map(
+                    ctx.toMap(
                         "id" to KuaString(func.id.value.value.toString(16)),
-                        "namespace" to KuaTable.Map(
+                        "namespace" to ctx.toMap(
                             "id" to KuaString(func.namespace.id.value.value.toString(16)),
                             "name" to KuaString(func.namespace.name.value)
                         ),
                         "name" to KuaString(func.name.value),
-                        "code" to KuaTable.Map(
+                        "code" to ctx.toMap(
                             "id" to KuaString(func.code.id.value.value.toString(16)),
                             "version" to KuaNumber(func.code.version.value),
                             "value" to KuaCode(func.code.value.value)
                         ),
-                        "deployment" to KuaTable.Map(
+                        "deployment" to ctx.toMap(
                             "id" to KuaString(func.deployment.id.value.value.toString(16)),
                             "version" to KuaNumber(func.deployment.version.value),
                             "value" to KuaCode(func.deployment.value.value),

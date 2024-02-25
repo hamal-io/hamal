@@ -56,32 +56,33 @@ class EthExecuteFunction : Function1In2Out<KuaTable.Map, KuaError, KuaTable.Map>
 
 
             return null to batchService.execute().let {
-                val result = KuaTable.Map()
-                it.forEach { ethRes ->
-                    when (ethRes) {
-                        is EthGetBlockNumberResponse -> TODO()
-                        is EthGetLiteBlockResponse -> TODO()
-                        is EthGetBlockResponse -> {
-                            val res = KuaTable.Map()
-                            res["number"] = ethRes.result.number.value.toLong()
-                            res["hash"] = ethRes.result.hash.toPrefixedHexString().value
-                            res["parent_hash"] = ethRes.result.parentHash.toPrefixedHexString().value
-                            res["gas_used"] = ethRes.result.gasUsed.value.toLong()
-                            res["gas_limit"] = ethRes.result.gasLimit.value.toLong()
-
-//                            result.append(res)
-                            TODO()
-                            log.trace("${ethRes.id} - block response: $res")
-                        }
-
-                        is EthCallResponse -> {
-//                            result.append(ethRes.result.value)
-                            TODO()
-                            log.trace("${ethRes.id} - call response: ${ethRes.result.value}")
-                        }
-                    }
-                }
-                result
+                TODO()
+//                val result = ctx.toMap()
+//                it.forEach { ethRes ->
+//                    when (ethRes) {
+//                        is EthGetBlockNumberResponse -> TODO()
+//                        is EthGetLiteBlockResponse -> TODO()
+//                        is EthGetBlockResponse -> {
+//                            val res = ctx.toMap()
+//                            res["number"] = ethRes.result.number.value.toLong()
+//                            res["hash"] = ethRes.result.hash.toPrefixedHexString().value
+//                            res["parent_hash"] = ethRes.result.parentHash.toPrefixedHexString().value
+//                            res["gas_used"] = ethRes.result.gasUsed.value.toLong()
+//                            res["gas_limit"] = ethRes.result.gasLimit.value.toLong()
+//
+////                            result.append(res)
+//                            TODO()
+//                            log.trace("${ethRes.id} - block response: $res")
+//                        }
+//
+//                        is EthCallResponse -> {
+////                            result.append(ethRes.result.value)
+//                            TODO()
+//                            log.trace("${ethRes.id} - call response: ${ethRes.result.value}")
+//                        }
+//                    }
+//                }
+//                result
             }
 
         } catch (t: Throwable) {

@@ -34,8 +34,6 @@ class TableProxyMap(
                     is KuaNumber,
                     is KuaString -> value
 
-                    is TableProxyMap -> state.toKuaTableMap(value)
-                    is TableProxyArray -> state.toKuaTableArray(value)
                     else -> TODO("$value")
                 }
             }
@@ -65,6 +63,7 @@ class TableProxyMap(
     override fun set(key: String, value: KuaType): Int {
         return when (value) {
             is KuaString -> set(key, value)
+            is KuaNil -> unset(key)
             else -> TODO()
         }
     }

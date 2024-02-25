@@ -5,6 +5,7 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
+import io.hamal.lib.kua.toMap
 import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.kua.type.KuaTable
@@ -23,38 +24,36 @@ class TriggerGetFunction(
                 .let { trigger ->
                     when (trigger) {
                         is ApiTrigger.FixedRate ->
-                            KuaTable.Map(
-                                mutableMapOf(
-                                    "id" to KuaString(trigger.id.value.value.toString(16)),
-                                    "type" to KuaString("FixedRate"),
-                                    "name" to KuaString(trigger.name.value),
-                                    "namespace" to KuaTable.Map(
-                                        "id" to KuaString(trigger.namespace.id.value.value.toString(16)),
-                                        "name" to KuaString(trigger.namespace.name.value)
-                                    ),
-                                    "func" to KuaTable.Map(
-                                        "id" to KuaString(trigger.func.id.value.value.toString(16)),
-                                        "name" to KuaString(trigger.func.name.value)
-                                    ),
-                                    "duration" to KuaString(trigger.duration.value),
-                                    "status" to KuaString(trigger.status.name),
-                                )
-                            )
-
-                        is ApiTrigger.Event -> {
-                            KuaTable.Map(
+                            ctx.toMap(
                                 "id" to KuaString(trigger.id.value.value.toString(16)),
-                                "type" to KuaString("Event"),
+                                "type" to KuaString("FixedRate"),
                                 "name" to KuaString(trigger.name.value),
-                                "namespace" to KuaTable.Map(
+                                "namespace" to ctx.toMap(
                                     "id" to KuaString(trigger.namespace.id.value.value.toString(16)),
                                     "name" to KuaString(trigger.namespace.name.value)
                                 ),
-                                "func" to KuaTable.Map(
+                                "func" to ctx.toMap(
                                     "id" to KuaString(trigger.func.id.value.value.toString(16)),
                                     "name" to KuaString(trigger.func.name.value)
                                 ),
-                                "topic" to KuaTable.Map(
+                                "duration" to KuaString(trigger.duration.value),
+                                "status" to KuaString(trigger.status.name),
+                            )
+
+                        is ApiTrigger.Event -> {
+                            ctx.toMap(
+                                "id" to KuaString(trigger.id.value.value.toString(16)),
+                                "type" to KuaString("Event"),
+                                "name" to KuaString(trigger.name.value),
+                                "namespace" to ctx.toMap(
+                                    "id" to KuaString(trigger.namespace.id.value.value.toString(16)),
+                                    "name" to KuaString(trigger.namespace.name.value)
+                                ),
+                                "func" to ctx.toMap(
+                                    "id" to KuaString(trigger.func.id.value.value.toString(16)),
+                                    "name" to KuaString(trigger.func.name.value)
+                                ),
+                                "topic" to ctx.toMap(
                                     "id" to KuaString(trigger.topic.id.value.value.toString(16)),
                                     "name" to KuaString(trigger.topic.name.value)
                                 ),
@@ -63,19 +62,19 @@ class TriggerGetFunction(
                         }
 
                         is ApiTrigger.Hook -> {
-                            KuaTable.Map(
+                            ctx.toMap(
                                 "id" to KuaString(trigger.id.value.value.toString(16)),
                                 "type" to KuaString("Hook"),
                                 "name" to KuaString(trigger.name.value),
-                                "namespace" to KuaTable.Map(
+                                "namespace" to ctx.toMap(
                                     "id" to KuaString(trigger.namespace.id.value.value.toString(16)),
                                     "name" to KuaString(trigger.namespace.name.value)
                                 ),
-                                "func" to KuaTable.Map(
+                                "func" to ctx.toMap(
                                     "id" to KuaString(trigger.func.id.value.value.toString(16)),
                                     "name" to KuaString(trigger.func.name.value)
                                 ),
-                                "hook" to KuaTable.Map(
+                                "hook" to ctx.toMap(
                                     "id" to KuaString(trigger.hook.id.value.value.toString(16)),
                                     "name" to KuaString(trigger.hook.name.value),
                                     "method" to KuaString(trigger.hook.method.name)
@@ -84,15 +83,15 @@ class TriggerGetFunction(
                             )
                         }
 
-                        is ApiTrigger.Cron -> KuaTable.Map(
+                        is ApiTrigger.Cron -> ctx.toMap(
                             "id" to KuaString(trigger.id.value.value.toString(16)),
                             "type" to KuaString("Cron"),
                             "name" to KuaString(trigger.name.value),
-                            "namespace" to KuaTable.Map(
+                            "namespace" to ctx.toMap(
                                 "id" to KuaString(trigger.namespace.id.value.value.toString(16)),
                                 "name" to KuaString(trigger.namespace.name.value)
                             ),
-                            "func" to KuaTable.Map(
+                            "func" to ctx.toMap(
                                 "id" to KuaString(trigger.func.id.value.value.toString(16)),
                                 "name" to KuaString(trigger.func.name.value)
                             ),

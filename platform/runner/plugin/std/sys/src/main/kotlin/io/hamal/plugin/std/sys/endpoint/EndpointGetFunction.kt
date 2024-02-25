@@ -5,6 +5,7 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
+import io.hamal.lib.kua.toMap
 import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.kua.type.KuaTable
@@ -20,10 +21,10 @@ class EndpointGetFunction(
         return try {
             null to sdk.endpoint.get(EndpointId(arg1.value))
                 .let { endpoint ->
-                    KuaTable.Map(
+                    ctx.toMap(
                         "id" to KuaString(endpoint.id.value.value.toString(16)),
                         "name" to KuaString(endpoint.name.value),
-                        "func" to KuaTable.Map(
+                        "func" to ctx.toMap(
                             "id" to KuaString(endpoint.func.id.value.value.toString(16)),
                             "name" to KuaString(endpoint.func.name.value)
                         )

@@ -6,6 +6,7 @@ import io.hamal.lib.kua.function.Function2In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput2Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
+import io.hamal.lib.kua.toMap
 import io.hamal.lib.kua.type.*
 import io.hamal.lib.sdk.ApiSdk
 
@@ -30,7 +31,7 @@ class CodeGetFunction(
 
             null to response
                 .let { code ->
-                    KuaTable.Map(
+                    ctx.toMap(
                         "id" to KuaString(code.id.value.value.toString(16)),
                         "code" to KuaCode(code.value.value),
                         "version" to KuaNumber(code.version.value)
