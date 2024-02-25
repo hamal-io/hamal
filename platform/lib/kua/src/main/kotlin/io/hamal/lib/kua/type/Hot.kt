@@ -4,18 +4,8 @@ import io.hamal.lib.common.hot.*
 
 fun HotNode.toKua(): KuaType {
     return when (this) {
-        is HotObject -> KuaTable(
-            nodes.map { (key, node) ->
-                key to node.toKua()
-            }.toMap().toMutableMap()
-        )
-
-//        is HotArray -> KuaArray(
-//            nodes.mapIndexed { index, node ->
-//                index to node.toKua()
-//            }.toMap().toMutableMap()
-//        )
-        is HotArray -> TODO()
+        is HotObject -> KuaTable.Map(nodes.map { (key, node) -> key to node.toKua() }.toMap())
+        is HotArray -> KuaTable.Array(nodes.mapIndexed { index, node -> index to node.toKua() }.toMap())
 
         is HotBoolean -> if (value) KuaTrue else KuaFalse
         is HotNull -> KuaNil
@@ -36,15 +26,36 @@ fun KuaType.toHot(): HotNode {
         is KuaNil -> HotNull
         is KuaNumber -> HotNumber(value)
         is KuaString -> HotString(value)
-        is KuaTableType -> toHotObject()
+        is KuaTable.Map -> toHotObject()
+        is KuaTable.Array -> toHotArray()
+        is KuaTable -> toHotNode()
+        is KuaTableType -> TODO()
     }
 }
 
-fun KuaType.toHotObject(): HotObject {
-    require(this is KuaTable)
+fun KuaTable.Map.toHotObject(): HotObject {
     val builder = HotObject.builder()
-    this.value.forEach { (key, value) ->
+    this.underlyingMap.forEach { (key, value) ->
         builder[key] = value.toHot()
     }
     return builder.build()
+}
+
+
+fun KuaTable.Array.toHotArray(): HotArray {
+    val builder = HotObject.builder()
+//    this.value.forEach { (key, value) ->
+//        builder[key] = value.toHot()
+//    }
+//    return builder.build()
+    TODO()
+}
+
+fun KuaTable.toHotNode(): HotObject {
+//    val builder = HotObject.builder()
+//    this.underlyingMap.forEach { (key, value) ->
+//        builder[key] = value.toHot()
+//    }
+//    return builder.build()
+    TODO()
 }

@@ -6,25 +6,23 @@ import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.KuaError
-import io.hamal.lib.kua.type.KuaTable
 import io.hamal.lib.kua.type.KuaString
+import io.hamal.lib.kua.type.KuaTable
 import io.hamal.lib.sdk.ApiSdk
 
 class TopicGetFunction(
     private val sdk: ApiSdk
-) : Function1In2Out<KuaString, KuaError, KuaTable>(
+) : Function1In2Out<KuaString, KuaError, KuaTable.Map>(
     FunctionInput1Schema(KuaString::class),
-    FunctionOutput2Schema(KuaError::class, KuaTable::class)
+    FunctionOutput2Schema(KuaError::class, KuaTable.Map::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: KuaString): Pair<KuaError?, KuaTable?> {
+    override fun invoke(ctx: FunctionContext, arg1: KuaString): Pair<KuaError?, KuaTable.Map?> {
         return try {
             null to sdk.topic.get(TopicId(arg1.value))
                 .let { topic ->
-                    KuaTable(
-                        mutableMapOf(
-                            "id" to KuaString(topic.id.value.value.toString(16)),
-                            "name" to KuaString(topic.name.value),
-                        )
+                    KuaTable.Map(
+                        "id" to KuaString(topic.id.value.value.toString(16)),
+                        "name" to KuaString(topic.name.value),
                     )
                 }
         } catch (t: Throwable) {

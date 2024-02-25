@@ -17,7 +17,7 @@ internal class KuaTableTest {
             sandbox.registerGlobalFunction("func",
                 object : Function0In2Out<KuaError, KuaTable>(FunctionOutput2Schema(KuaError::class, KuaTable::class)) {
                     override fun invoke(ctx: FunctionContext): Pair<KuaError?, KuaTable?> {
-                        return null to KuaTable(mutableMapOf("id" to KuaString("A")))
+                        return null to KuaTable.Map(mutableMapOf("id" to KuaString("A")))
                     }
                 }
             )
@@ -38,11 +38,9 @@ internal class KuaTableTest {
             sandbox.registerGlobalFunction("func",
                 object : Function0In2Out<KuaError, KuaTable>(FunctionOutput2Schema(KuaError::class, KuaTable::class)) {
                     override fun invoke(ctx: FunctionContext): Pair<KuaError?, KuaTable?> {
-                        return null to KuaTable(
-                            mutableMapOf(
-                                "id" to KuaString("A"),
-                                "level_one" to KuaTable(mutableMapOf("answer" to KuaNumber(42)))
-                            )
+                        return null to KuaTable.Map(
+                            "id" to KuaString("A"),
+                            "level_one" to KuaTable.Map(mutableMapOf("answer" to KuaNumber(42)))
                         )
                     }
                 }

@@ -21,23 +21,20 @@ class KuaAnyTest {
         ),
         generateTestCases(
             testInstance = KuaAny(
-                KuaTable(
-                    mutableMapOf(
-                        "key" to KuaString("hamal")
-                    )
+                KuaTable.Map(
+                    "key" to KuaString("hamal")
                 )
             ),
             expectedJson = """{"value":{"key":{"value":"hamal","type":"String"}},"type":"Table"}"""
         ),
         generateTestCases(
             testInstance = KuaAny(
-                KuaTable(
-                    mutableMapOf(
-                        "1234" to KuaString("value")
-                    )
+                KuaTable.Array(
+                    1234 to KuaString("value")
                 )
             ),
-            expectedJson = """{"value":{"1234":{"value":"value","type":"String"}},"type":"Table"}"""
+//            expectedJson = """{"value":{"1234":{"value":"value","type":"String"}},"type":"Table"}"""
+            expectedJson = TODO()
         ),
         generateTestCases(
             testInstance = KuaAny(KuaNil),

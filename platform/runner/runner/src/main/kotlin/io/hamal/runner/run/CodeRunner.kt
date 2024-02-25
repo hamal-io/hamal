@@ -69,7 +69,7 @@ class CodeRunnerImpl(
                         sandbox.load(KuaCode(unitOfWork.code.value))
 
                         val ctx = sandbox.getGlobalTableMap("context")
-                        val stateToSubmit = sandbox.toKuaTable(ctx.getTable("state")).toHotObject()
+                        val stateToSubmit = sandbox.toKuaTableMap(ctx.getTable("state")).toHotObject()
 
                         connector.complete(execId, ExecResult(), ExecState(stateToSubmit), runnerContext.eventsToSubmit)
                         log.debug("Completed exec: $execId")
@@ -79,7 +79,7 @@ class CodeRunnerImpl(
                             if (cause.status == KuaNumber(0.0)) {
 
                                 val ctx = sandbox.getGlobalTableMap("context")
-                                val stateToSubmit = sandbox.toKuaTable(ctx.getTable("state")).toHotObject()
+                                val stateToSubmit = sandbox.toKuaTableMap(ctx.getTable("state")).toHotObject()
 
                                 connector.complete(
                                     execId,
@@ -98,7 +98,7 @@ class CodeRunnerImpl(
                             connector.fail(
                                 execId,
                                 ExecResult(
-                                    KuaTable(mutableMapOf("message" to KuaString(e.message ?: "Unknown reason")))
+                                    KuaTable.Map("message" to KuaString(e.message ?: "Unknown reason"))
                                         .toHotObject()
                                 )
                             )
@@ -111,7 +111,7 @@ class CodeRunnerImpl(
             connector.fail(
                 execId,
                 ExecResult(
-                    KuaTable(mutableMapOf("message" to KuaString(a.message ?: "Unknown reason")))
+                    KuaTable.Map("message" to KuaString(a.message ?: "Unknown reason"))
                         .toHotObject()
                 )
             )
@@ -121,7 +121,7 @@ class CodeRunnerImpl(
             connector.fail(
                 execId,
                 ExecResult(
-                    KuaTable(mutableMapOf("message" to KuaString(t.message ?: "Unknown reason")))
+                    KuaTable.Map("message" to KuaString(t.message ?: "Unknown reason"))
                         .toHotObject()
                 )
             )

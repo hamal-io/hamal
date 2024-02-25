@@ -25,9 +25,12 @@ fun KuaType.toJson(): JsonElement {
 private fun KuaTable.toJson(): JsonObject {
     val result = JsonObject()
 
-    this.value.forEach { (key, value) ->
-        result.add(key, value.toJson())
-    }
+
+
+//    this.value.un.forEach { (key, value) ->
+//        result.add(key, value.toJson())
+//    }
+    TODO()
 
     return result
 }
@@ -63,9 +66,10 @@ fun JsonElement.convertToType(): KuaType {
 fun JsonObject.convertToType(): KuaTable {
     val obj = this
 
-    return KuaTable(
-        obj.entrySet().associate { (key, item) -> key to item.convertToType() }.toMutableMap()
-    )
+//    return KuaTable(
+//        obj.entrySet().associate { (key, item) -> key to item.convertToType() }.toMutableMap()
+//    )
+    TODO()
 }
 
 fun JsonPrimitive.convertToType(): KuaType {

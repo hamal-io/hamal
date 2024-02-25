@@ -117,7 +117,7 @@ class ClosableState(
 
     override fun getTableType(idx: Int): KuaTable {
         val ref = TableProxy(absIndex(idx), this)
-        return toKuaTable(ref)
+        return toKuaTableMap(ref)
     }
 
     override fun setGlobal(name: String, value: KuaFunction<*, *, *, *>) {

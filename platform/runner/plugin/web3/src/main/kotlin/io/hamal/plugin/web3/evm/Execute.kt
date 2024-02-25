@@ -20,19 +20,19 @@ import io.hamal.lib.web3.eth.http.EthHttpBatchService
 
 private val log = logger(EthExecuteFunction::class)
 
-class EthExecuteFunction : Function1In2Out<KuaTable, KuaError, KuaTable>(
-    FunctionInput1Schema(KuaTable::class),
-    FunctionOutput2Schema(KuaError::class, KuaTable::class)
+class EthExecuteFunction : Function1In2Out<KuaTable.Map, KuaError, KuaTable.Map>(
+    FunctionInput1Schema(KuaTable.Map::class),
+    FunctionOutput2Schema(KuaError::class, KuaTable.Map::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: KuaTable): Pair<KuaError?, KuaTable?> {
+    override fun invoke(ctx: FunctionContext, arg1: KuaTable.Map): Pair<KuaError?, KuaTable.Map?> {
         try {
             log.trace("Setting up batch service")
 
             val batchService = EthHttpBatchService(HttpTemplateImpl("http://localhost:10001"))
 
-            arg1.value.forEach { entry ->
+            arg1.underlyingMap.forEach { entry ->
                 val v = entry.value
-                require(v is KuaTable)
+                require(v is KuaTable.Map)
 
                 when (v.getString("type")) {
                     "get_block" -> {
@@ -57,13 +57,13 @@ class EthExecuteFunction : Function1In2Out<KuaTable, KuaError, KuaTable>(
 
 
             return null to batchService.execute().let {
-                val result = KuaTable()
+                val result = KuaTable.Map()
                 it.forEach { ethRes ->
                     when (ethRes) {
                         is EthGetBlockNumberResponse -> TODO()
                         is EthGetLiteBlockResponse -> TODO()
                         is EthGetBlockResponse -> {
-                            val res = KuaTable()
+                            val res = KuaTable.Map()
                             res["number"] = ethRes.result.number.value.toLong()
                             res["hash"] = ethRes.result.hash.toPrefixedHexString().value
                             res["parent_hash"] = ethRes.result.parentHash.toPrefixedHexString().value

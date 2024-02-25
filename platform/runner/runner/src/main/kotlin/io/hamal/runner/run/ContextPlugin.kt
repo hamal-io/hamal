@@ -30,7 +30,7 @@ class RunnerContextFactory(
         }
 
         val hook = if (invocation is Invocation.Hook) {
-            KuaTable(
+            KuaTable.Map(
                 "method" to KuaString(invocation.method.toString()),
                 "headers" to invocation.headers.value.toKua(),
                 "parameters" to invocation.parameters.value.toKua(),
@@ -41,7 +41,7 @@ class RunnerContextFactory(
         }
 
         val endpoint = if (invocation is Invocation.Endpoint) {
-            KuaTable(
+            KuaTable.Map(
                 "method" to KuaString(invocation.method.toString()),
                 "headers" to invocation.headers.value.toKua(),
                 "parameters" to invocation.parameters.value.toKua(),

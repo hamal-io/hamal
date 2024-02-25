@@ -217,7 +217,7 @@ class HttpExecuteFunction : Function1In2Out<KuaTable, KuaError, KuaTableType>(
 }
 
 
-private fun HttpResponse.toMap() = KuaTable().also {
+private fun HttpResponse.toMap() = KuaTable.Map().also {
     it["status_code"] = KuaNumber(statusCode.value)
     it["content_type"] = headers.find("content-type")?.let { type -> KuaString(type) } ?: KuaNil
     it["content_length"] = headers.find("content-length")?.let { length -> KuaNumber(length.toInt()) } ?: KuaNil
@@ -231,7 +231,7 @@ private fun HttpResponse.content() = when (this) {
             val el = result(JsonElement::class)
             el.convertToType()
         } else {
-            KuaTable()
+            KuaTable.Map()
         }
     }
 
@@ -240,7 +240,7 @@ private fun HttpResponse.content() = when (this) {
             val el = error(JsonElement::class)
             el.convertToType()
         } else {
-            KuaTable()
+            KuaTable.Map()
         }
     }
 
@@ -248,7 +248,7 @@ private fun HttpResponse.content() = when (this) {
 }
 
 
-private fun HttpResponse.headers() = KuaTable(
+private fun HttpResponse.headers() = KuaTable.Map(
     headers.map {
         it.key.lowercase() to KuaString(it.value)
     }.toMap().toMutableMap()

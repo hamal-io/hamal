@@ -8,18 +8,18 @@ import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.KuaError
-import io.hamal.lib.kua.type.KuaTable
 import io.hamal.lib.kua.type.KuaString
+import io.hamal.lib.kua.type.KuaTable
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiBlueprintCreateRequest
 
 class BlueprintCreateFunction(
     private val sdk: ApiSdk
-) : Function1In2Out<KuaTable, KuaError, KuaTable>(
-    FunctionInput1Schema(KuaTable::class),
-    FunctionOutput2Schema(KuaError::class, KuaTable::class)
+) : Function1In2Out<KuaTable.Map, KuaError, KuaTable.Map>(
+    FunctionInput1Schema(KuaTable.Map::class),
+    FunctionOutput2Schema(KuaError::class, KuaTable.Map::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: KuaTable): Pair<KuaError?, KuaTable?> {
+    override fun invoke(ctx: FunctionContext, arg1: KuaTable.Map): Pair<KuaError?, KuaTable.Map?> {
         return try {
             val res = sdk.blueprint.create(
                 ApiBlueprintCreateRequest(
@@ -29,7 +29,7 @@ class BlueprintCreateFunction(
                 )
             )
 
-            null to KuaTable(
+            null to KuaTable.Map(
                 mutableMapOf(
                     "id" to KuaString(res.id.value.value.toString(16)),
                     "status" to KuaString(res.status.name),

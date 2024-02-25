@@ -10,26 +10,23 @@ import io.hamal.lib.sdk.ApiSdk
 
 class ExtensionGetFunction(
     private val sdk: ApiSdk
-) : Function1In2Out<KuaString, KuaError, KuaTable>(
+) : Function1In2Out<KuaString, KuaError, KuaTable.Map>(
     FunctionInput1Schema(KuaString::class),
-    FunctionOutput2Schema(KuaError::class, KuaTable::class)
+    FunctionOutput2Schema(KuaError::class, KuaTable.Map::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: KuaString): Pair<KuaError?, KuaTable?> {
+    override fun invoke(ctx: FunctionContext, arg1: KuaString): Pair<KuaError?, KuaTable.Map?> {
         return try {
             val ext = sdk.extension.get(ExtensionId(arg1.value))
 
-            val res = mutableMapOf(
+            null to KuaTable.Map(
                 "id" to KuaString(ext.id.value.value.toString(16)),
                 "name" to KuaString(ext.name.value),
-                "code" to KuaTable(
-                    mutableMapOf(
-                        "id" to KuaString(ext.code.id.value.value.toString(16)),
-                        "version" to KuaNumber(ext.code.version.value),
-                        "value" to KuaCode(ext.code.value.value)
-                    )
+                "code" to KuaTable.Map(
+                    "id" to KuaString(ext.code.id.value.value.toString(16)),
+                    "version" to KuaNumber(ext.code.version.value),
+                    "value" to KuaCode(ext.code.value.value)
                 )
             )
-            null to KuaTable(res)
 
         } catch (t: Throwable) {
             KuaError(t.message!!) to null

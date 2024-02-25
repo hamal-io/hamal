@@ -8,19 +8,19 @@ import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.KuaError
-import io.hamal.lib.kua.type.KuaTable
 import io.hamal.lib.kua.type.KuaNumber
 import io.hamal.lib.kua.type.KuaString
+import io.hamal.lib.kua.type.KuaTable
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiFuncDeployRequest
 
 class FuncDeployFunction(
     private val sdk: ApiSdk
-) : Function1In2Out<KuaTable, KuaError, KuaTable>(
-    FunctionInput1Schema(KuaTable::class),
-    FunctionOutput2Schema(KuaError::class, KuaTable::class)
+) : Function1In2Out<KuaTable.Map, KuaError, KuaTable.Map>(
+    FunctionInput1Schema(KuaTable.Map::class),
+    FunctionOutput2Schema(KuaError::class, KuaTable.Map::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: KuaTable): Pair<KuaError?, KuaTable?> {
+    override fun invoke(ctx: FunctionContext, arg1: KuaTable.Map): Pair<KuaError?, KuaTable.Map?> {
         return try {
 
             val funcId = FuncId(arg1.getString("id"))
@@ -43,12 +43,10 @@ class FuncDeployFunction(
                 )
             )
 
-            null to KuaTable(
-                mutableMapOf(
-                    "id" to KuaString(res.id.value.value.toString(16)),
-                    "status" to KuaString(res.status.name),
-                    "func_id" to KuaString(res.funcId.value.value.toString(16)),
-                )
+            null to KuaTable.Map(
+                "id" to KuaString(res.id.value.value.toString(16)),
+                "status" to KuaString(res.status.name),
+                "func_id" to KuaString(res.funcId.value.value.toString(16)),
             )
         } catch (t: Throwable) {
             KuaError(t.message!!) to null

@@ -4,7 +4,7 @@ import io.hamal.lib.kua.State
 import io.hamal.lib.kua.table.TableEntryIterator
 import io.hamal.lib.kua.table.TableProxy
 
-fun State.toKuaTable(map: TableProxy): KuaTable {
+fun State.toKuaTableMap(map: TableProxy): KuaTable.Map {
     val store = mutableMapOf<String, KuaType>()
 
     TableEntryIterator(
@@ -19,18 +19,18 @@ fun State.toKuaTable(map: TableProxy): KuaTable {
                 is KuaNumber,
                 is KuaString -> value
 
-                is TableProxy -> toKuaTable(value)
+                is TableProxy -> toKuaTableMap(value)
                 else -> TODO("$value")
             }
         }
     ).forEach { (key, value) -> store[key.value] = value }
 
-    return KuaTable(store)
+    return KuaTable.Map(store)
 }
 
 fun State.toTableProxy(map: KuaTable): TableProxy {
     return tableCreate(map.size).also {
-        map.value.forEach { (key, value) ->
+        (map as KuaTable.Map).underlyingMap.forEach { (key, value) ->
             when (value) {
                 is KuaBoolean -> it[key] = value
                 is KuaDecimal -> it[key] = value

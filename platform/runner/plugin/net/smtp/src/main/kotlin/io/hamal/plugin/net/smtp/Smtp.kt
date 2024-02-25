@@ -9,12 +9,12 @@ import io.hamal.lib.kua.type.KuaTable
 
 class SmtpSendFunction(
     private val sender: Sender
-) : Function1In1Out<KuaTable, KuaError>(
-    FunctionInput1Schema(KuaTable::class),
+) : Function1In1Out<KuaTable.Map, KuaError>(
+    FunctionInput1Schema(KuaTable.Map::class),
     FunctionOutput1Schema(KuaError::class)
 ) {
 
-    override fun invoke(ctx: FunctionContext, arg1: KuaTable): KuaError? {
+    override fun invoke(ctx: FunctionContext, arg1: KuaTable.Map): KuaError? {
 
         sender.send(
             SenderConfig(
