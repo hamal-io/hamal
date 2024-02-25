@@ -54,10 +54,10 @@ class CodeRunnerImpl(
                                 is KuaString -> internalTable[entry.key] = value
                                 is KuaNumber -> internalTable[entry.key] = value
                                 is KuaFunction<*, *, *, *> -> internalTable[entry.key] = value
-                                is TableProxyArray -> internalTable[entry.key] = value
-                                is TableProxyMap -> internalTable[entry.key] = value
-//                                is KuaTable.Map -> internalTable[entry.key] = sandbox.toTableProxyMap(value)
-//                                is KuaTable.Array -> internalTable[entry.key] = sandbox.toTableProxyArray(value)
+                                is KuaTableArray -> internalTable[entry.key] = value
+                                is KuaTableMap -> internalTable[entry.key] = value
+//                                is KuaTableMap -> internalTable[entry.key] = sandbox.toKuaTableMap(value)
+//                                is KuaTableArray -> internalTable[entry.key] = sandbox.toTableArray(value)
                                 else -> TODO()
                             }
                         }
@@ -70,7 +70,7 @@ class CodeRunnerImpl(
 
                         sandbox.load(KuaCode(unitOfWork.code.value))
 
-                        val ctx = sandbox.getGlobalTableMap("context")
+                        val ctx = sandbox.getGlobalKuaTableMap("context")
                         val stateToSubmit = ctx.getTable("state").toHotObject()
 
                         connector.complete(execId, ExecResult(), ExecState(stateToSubmit), runnerContext.eventsToSubmit)
@@ -80,7 +80,7 @@ class CodeRunnerImpl(
                         if (cause is ExitError) {
                             if (cause.status == KuaNumber(0.0)) {
 
-                                val ctx = sandbox.getGlobalTableMap("context")
+                                val ctx = sandbox.getGlobalKuaTableMap("context")
                                 val stateToSubmit = ctx.getTable("state").toHotObject()
 
                                 connector.complete(

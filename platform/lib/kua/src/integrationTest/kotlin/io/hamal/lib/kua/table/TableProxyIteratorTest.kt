@@ -18,10 +18,10 @@ internal class TableEntryIteratorTest {
 
     @Test
     fun `Iterate over table map`() {
-        class TestIteratorFunction : Function1In0Out<TableProxyMap>(
-            FunctionInput1Schema(TableProxyMap::class)
+        class TestIteratorFunction : Function1In0Out<KuaTableMap>(
+            FunctionInput1Schema(KuaTableMap::class)
         ) {
-            override fun invoke(ctx: FunctionContext, arg1: TableProxyMap) {
+            override fun invoke(ctx: FunctionContext, arg1: KuaTableMap) {
                 val testInstance = TableEntryIterator(
                     -1,
                     ctx,
@@ -72,10 +72,10 @@ internal class TableEntryIteratorTest {
 
     @Test
     fun `Iterate over empty table map`() {
-        class TestIteratorFunction : Function1In0Out<TableProxyMap>(
-            FunctionInput1Schema(TableProxyMap::class)
+        class TestIteratorFunction : Function1In0Out<KuaTableMap>(
+            FunctionInput1Schema(KuaTableMap::class)
         ) {
-            override fun invoke(ctx: FunctionContext, arg1: TableProxyMap) {
+            override fun invoke(ctx: FunctionContext, arg1: KuaTableMap) {
                 val testInstance = TableEntryIterator(
                     -1,
                     ctx,
@@ -119,10 +119,10 @@ internal class TableEntryIteratorTest {
 
     @Test
     fun `Iterate over table array`() {
-        class TestIteratorFunction : Function1In0Out<TableProxyArray>(
-            FunctionInput1Schema(TableProxyArray::class)
+        class TestIteratorFunction : Function1In0Out<KuaTableArray>(
+            FunctionInput1Schema(KuaTableArray::class)
         ) {
-            override fun invoke(ctx: FunctionContext, arg1: TableProxyArray) {
+            override fun invoke(ctx: FunctionContext, arg1: KuaTableArray) {
                 val testInstance = TableEntryIterator(-1, ctx,
                     keyExtractor = { state, index -> state.getNumberType(index) },
                     valueExtractor = { state, index -> state.getAny(index) }
@@ -173,9 +173,9 @@ internal class TableEntryIteratorTest {
     @Test
     fun `Iterate over nested table array`() {
 //        class TestIteratorFunction : Function1In0Out<TableProxy>(
-//            FunctionInput1Schema(TableProxyArray::class)
+//            FunctionInput1Schema(TableArray::class)
 //        ) {
-//            override fun invoke(ctx: FunctionContext, arg1: TableProxyArray) {
+//            override fun invoke(ctx: FunctionContext, arg1: TableArray) {
 //                val testInstance = TableEntryIterator(
 //                    -1,
 //                    ctx,
@@ -231,10 +231,10 @@ internal class TableEntryIteratorTest {
 
     @Test
     fun `Iterate over empty table array`() {
-//        class TestIteratorFunction : Function1In0Out<TableProxyArray>(
-//            FunctionInput1Schema(TableProxyArray::class)
+//        class TestIteratorFunction : Function1In0Out<TableArray>(
+//            FunctionInput1Schema(TableArray::class)
 //        ) {
-//            override fun invoke(ctx: FunctionContext, arg1: TableProxyArray) {
+//            override fun invoke(ctx: FunctionContext, arg1: TableArray) {
 //                val testInstance = TableEntryIterator(
 //                    -1,
 //                    ctx,

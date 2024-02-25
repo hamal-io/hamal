@@ -73,7 +73,7 @@ internal class KuaAnyTest {
         )
 
         val underlying = (captor.result as KuaAny).value
-        require(underlying is KuaTable.Map) { "Not a KuaTable.Map" }
+        require(underlying is KuaTableMap) { "Not a KuaTableMap" }
         assertThat(underlying.size, equalTo(1))
         assertThat(underlying.getString("key"), equalTo("value"))
     }

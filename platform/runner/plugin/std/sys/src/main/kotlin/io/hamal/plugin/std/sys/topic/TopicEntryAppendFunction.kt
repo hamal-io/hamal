@@ -7,20 +7,17 @@ import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput2Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.toMap
-import io.hamal.lib.kua.type.KuaError
-import io.hamal.lib.kua.type.KuaString
-import io.hamal.lib.kua.type.KuaTable
-import io.hamal.lib.kua.type.toHotObject
+import io.hamal.lib.kua.type.*
 import io.hamal.lib.sdk.ApiSdk
 
 class TopicEntryAppendFunction(
     private val sdk: ApiSdk
-) : Function2In2Out<KuaString, KuaTable.Map, KuaError, KuaTable.Map>(
-    FunctionInput2Schema(KuaString::class, KuaTable.Map::class),
-    FunctionOutput2Schema(KuaError::class, KuaTable.Map::class)
+) : Function2In2Out<KuaString, KuaTableMap, KuaError, KuaTableMap>(
+    FunctionInput2Schema(KuaString::class, KuaTableMap::class),
+    FunctionOutput2Schema(KuaError::class, KuaTableMap::class)
 ) {
 
-    override fun invoke(ctx: FunctionContext, arg1: KuaString, arg2: KuaTable.Map): Pair<KuaError?, KuaTable.Map?> {
+    override fun invoke(ctx: FunctionContext, arg1: KuaString, arg2: KuaTableMap): Pair<KuaError?, KuaTableMap?> {
         return try {
             val res = sdk.topic.append(
                 TopicId(arg1.value),

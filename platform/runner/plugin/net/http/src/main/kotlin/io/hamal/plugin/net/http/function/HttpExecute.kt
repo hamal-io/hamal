@@ -5,15 +5,15 @@ import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.KuaError
-import io.hamal.lib.kua.type.KuaTable
+import io.hamal.lib.kua.type.KuaTableMap
 import io.hamal.lib.kua.type.KuaTableType
 
 
-class HttpExecuteFunction : Function1In2Out<KuaTable, KuaError, KuaTableType>(
-    FunctionInput1Schema(KuaTable::class),
+class HttpExecuteFunction : Function1In2Out<KuaTableMap, KuaError, KuaTableType>(
+    FunctionInput1Schema(KuaTableMap::class),
     FunctionOutput2Schema(KuaError::class, KuaTableType::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: KuaTable): Pair<KuaError?, KuaTableType?> {
+    override fun invoke(ctx: FunctionContext, arg1: KuaTableMap): Pair<KuaError?, KuaTableMap?> {
 //        val results = mutableListOf<KuaTable>()
 //        for (idx in 0 until arg1.size) {
 //            val map = arg1.getT(idx + 1)
@@ -207,7 +207,7 @@ class HttpExecuteFunction : Function1In2Out<KuaTable, KuaError, KuaTableType>(
 //
 //        }
 //
-//        return null to KuaArray(results.mapIndexed { index, value -> index + 1 to value }.toMap().toMutableMap())
+//        return null to KuaArray(results.mapIndexed { index, value -> index + 1 to value }.toMap().toMukuaTableMap())
 
         TODO()
     }
@@ -248,5 +248,5 @@ class HttpExecuteFunction : Function1In2Out<KuaTable, KuaError, KuaTableType>(
 //private fun HttpResponse.headers() = ctx.toMap(
 //    headers.map {
 //        it.key.lowercase() to KuaString(it.value)
-//    }.toMap().toMutableMap()
+//    }.toMap().toMukuaTableMap()
 //)

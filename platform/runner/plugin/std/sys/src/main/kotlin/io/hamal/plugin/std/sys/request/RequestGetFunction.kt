@@ -10,16 +10,16 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.toMap
 import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.kua.type.KuaString
-import io.hamal.lib.kua.type.KuaTable
+import io.hamal.lib.kua.type.KuaTableMap
 import io.hamal.lib.sdk.api.ApiRequested
 
 class RequestGetFunction(
     private val httpTemplate: HttpTemplate
-) : Function1In2Out<KuaString, KuaError, KuaTable.Map>(
+) : Function1In2Out<KuaString, KuaError, KuaTableMap>(
     FunctionInput1Schema(KuaString::class),
-    FunctionOutput2Schema(KuaError::class, KuaTable.Map::class)
+    FunctionOutput2Schema(KuaError::class, KuaTableMap::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: KuaString): Pair<KuaError?, KuaTable.Map?> {
+    override fun invoke(ctx: FunctionContext, arg1: KuaString): Pair<KuaError?, KuaTableMap?> {
         val response = httpTemplate.get("/v1/requests/{reqId}")
             .path("reqId", arg1.value)
             .execute()

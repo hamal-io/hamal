@@ -7,12 +7,8 @@ import io.hamal.lib.kua.extend.extension.RunnerExtension
 import io.hamal.lib.kua.extend.extension.RunnerExtensionFactory
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
-import io.hamal.lib.kua.type.TableProxyArray
-import io.hamal.lib.kua.type.TableProxyMap
-import io.hamal.lib.kua.type.KuaAny
-import io.hamal.lib.kua.type.KuaCode
+import io.hamal.lib.kua.type.*
 import io.hamal.lib.kua.type.KuaError
-import io.hamal.lib.kua.type.KuaFunction
 
 class Sandbox(
     val ctx: SandboxContext
@@ -79,8 +75,6 @@ class Sandbox(
     override fun pushNil() = state.pushNil()
     override fun pushAny(value: KuaAny) = state.pushAny(value)
     override fun getAny(idx: Int) = state.getAny(idx)
-    override fun getTableProxyMap(idx: Int) = state.getTableProxyMap(idx)
-    override fun getTableProxyArray(idx: Int) = state.getTableProxyArray(idx)
 
 
     override fun pushBoolean(value: Boolean) = state.pushBoolean(value)
@@ -93,15 +87,15 @@ class Sandbox(
     override fun getString(idx: Int) = state.getString(idx)
     override fun pushString(value: String) = state.pushString(value)
 
-    override fun pushTable(proxy: TableProxyMap) = state.pushTable(proxy)
-    override fun pushTable(proxy: TableProxyArray): StackTop = state.pushTable(proxy)
+    override fun pushTable(proxy: KuaTableMap) = state.pushTable(proxy)
+    override fun pushTable(proxy: KuaTableArray): StackTop = state.pushTable(proxy)
 
     override fun getTableArray(idx: Int) = state.getTableArray(idx)
-    override fun getTableMap(idx: Int) = state.getTableMap(idx)
+    override fun getKuaTableMap(idx: Int) = state.getKuaTableMap(idx)
 
     override fun setGlobal(name: String, value: KuaFunction<*, *, *, *>) = state.setGlobal(name, value)
-    override fun setGlobal(name: String, value: TableProxyMap) = state.setGlobal(name, value)
-    override fun getGlobalTableMap(name: String): TableProxyMap = state.getGlobalTableMap(name)
+    override fun setGlobal(name: String, value: KuaTableMap) = state.setGlobal(name, value)
+    override fun getGlobalKuaTableMap(name: String): KuaTableMap = state.getGlobalKuaTableMap(name)
     override fun unsetGlobal(name: String) = state.unsetGlobal(name)
 
     override fun tableCreateMap(capacity: Int) = state.tableCreateMap(capacity)

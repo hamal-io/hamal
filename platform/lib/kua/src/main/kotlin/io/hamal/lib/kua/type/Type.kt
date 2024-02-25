@@ -37,7 +37,7 @@ sealed interface KuaType {
                 "Boolean" -> context.deserialize(element, KuaBoolean::class.java)
                 "Decimal" -> context.deserialize(element, KuaDecimal::class.java)
                 "Error" -> context.deserialize(element, KuaError::class.java)
-                "Table" -> context.deserialize(element, KuaTable::class.java)
+                "Table" -> context.deserialize(element, KuaTableType::class.java)
                 "Nil" -> KuaNil
                 "Number" -> context.deserialize(element, KuaNumber::class.java)
                 "String" -> context.deserialize(element, KuaString::class.java)
@@ -48,7 +48,23 @@ sealed interface KuaType {
     }
 }
 
-interface KuaTableType : KuaType
+interface KuaTableType : KuaType {
+    object Adapter : JsonAdapter<KuaTableType> {
+        override fun serialize(
+            instance: KuaTableType, type: java.lang.reflect.Type, ctx: JsonSerializationContext
+        ): JsonElement {
+            TODO()
+        }
+
+        override fun deserialize(
+            element: JsonElement,
+            type: java.lang.reflect.Type,
+            ctx: JsonDeserializationContext
+        ): KuaTableType {
+            TODO()
+        }
+    }
+}
 
 data class KuaAny(val value: KuaType) : KuaType {
     override val type: Type = Type.Any

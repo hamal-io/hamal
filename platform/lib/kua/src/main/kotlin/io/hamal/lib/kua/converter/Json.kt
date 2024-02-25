@@ -15,14 +15,13 @@ fun KuaType.toJson(): JsonElement {
         is KuaNil -> JsonNull.INSTANCE
         is KuaNumber -> JsonPrimitive(value)
         is KuaString -> JsonPrimitive(value)
-        is KuaTable -> toJson()
         is KuaFunction<*, *, *, *> -> TODO()
         is KuaTableType -> TODO()
     }
 }
 
 // FIXME JSON NODE
-private fun KuaTable.toJson(): JsonObject {
+private fun KuaTableType.toJson(): JsonObject {
     val result = JsonObject()
 
 
@@ -59,15 +58,15 @@ fun JsonElement.convertToType(): KuaType {
 //fun JsonArray.convertToType(): KuaArray {
 //    val arr = this
 //    return KuaArray(
-//        arr.mapIndexed { index, item -> (index + 1) to item.convertToType() }.toMap().toMutableMap()
+//        arr.mapIndexed { index, item -> (index + 1) to item.convertToType() }.toMap().toMukuaTableMap()
 //    )
 //}
 
-fun JsonObject.convertToType(): KuaTable {
+fun JsonObject.convertToType(): KuaTableType {
     val obj = this
 
 //    return KuaTable(
-//        obj.entrySet().associate { (key, item) -> key to item.convertToType() }.toMutableMap()
+//        obj.entrySet().associate { (key, item) -> key to item.convertToType() }.toMukuaTableMap()
 //    )
     TODO()
 }

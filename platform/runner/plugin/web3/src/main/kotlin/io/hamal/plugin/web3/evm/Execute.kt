@@ -7,31 +7,27 @@ import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.KuaError
-import io.hamal.lib.kua.type.KuaTable
+import io.hamal.lib.kua.type.KuaTableMap
 import io.hamal.lib.web3.eth.EthBatchService
 import io.hamal.lib.web3.eth.abi.type.EthAddress
 import io.hamal.lib.web3.eth.abi.type.EthPrefixedHexString
 import io.hamal.lib.web3.eth.abi.type.EthUint64
-import io.hamal.lib.web3.eth.domain.EthCallResponse
-import io.hamal.lib.web3.eth.domain.EthGetBlockNumberResponse
-import io.hamal.lib.web3.eth.domain.EthGetBlockResponse
-import io.hamal.lib.web3.eth.domain.EthGetLiteBlockResponse
 import io.hamal.lib.web3.eth.http.EthHttpBatchService
 
 private val log = logger(EthExecuteFunction::class)
 
-class EthExecuteFunction : Function1In2Out<KuaTable.Map, KuaError, KuaTable.Map>(
-    FunctionInput1Schema(KuaTable.Map::class),
-    FunctionOutput2Schema(KuaError::class, KuaTable.Map::class)
+class EthExecuteFunction : Function1In2Out<KuaTableMap, KuaError, KuaTableMap>(
+    FunctionInput1Schema(KuaTableMap::class),
+    FunctionOutput2Schema(KuaError::class, KuaTableMap::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: KuaTable.Map): Pair<KuaError?, KuaTable.Map?> {
+    override fun invoke(ctx: FunctionContext, arg1: KuaTableMap): Pair<KuaError?, KuaTableMap?> {
         try {
             log.trace("Setting up batch service")
 
             val batchService = EthHttpBatchService(HttpTemplateImpl("http://localhost:10001"))
 
             arg1.entries().forEach { (_, v) ->
-                require(v is KuaTable.Map)
+                require(v is KuaTableMap)
 
                 when (v.getString("type")) {
                     "get_block" -> {

@@ -11,11 +11,11 @@ import io.hamal.lib.sdk.ApiSdk
 
 class FuncGetFunction(
     private val sdk: ApiSdk
-) : Function1In2Out<KuaString, KuaError, KuaTable.Map>(
+) : Function1In2Out<KuaString, KuaError, KuaTableMap>(
     FunctionInput1Schema(KuaString::class),
-    FunctionOutput2Schema(KuaError::class, KuaTable.Map::class)
+    FunctionOutput2Schema(KuaError::class, KuaTableMap::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: KuaString): Pair<KuaError?, KuaTable.Map?> {
+    override fun invoke(ctx: FunctionContext, arg1: KuaString): Pair<KuaError?, KuaTableMap?> {
         return try {
             null to sdk.func.get(FuncId(arg1.value))
                 .let { func ->

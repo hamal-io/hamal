@@ -87,13 +87,13 @@ internal class KuaNilTest {
     @Test
     fun `Both results are nil`() {
         val func =
-            object : Function0In2Out<KuaError, KuaTable>(
+            object : Function0In2Out<KuaError, KuaTableArray>(
                 FunctionOutput2Schema(
                     KuaError::class,
-                    KuaTable::class
+                    KuaTableArray::class
                 )
             ) {
-                override fun invoke(ctx: FunctionContext): Pair<KuaError?, KuaTable?> {
+                override fun invoke(ctx: FunctionContext): Pair<KuaError?, KuaTableArray?> {
                     return null to null
                 }
             }

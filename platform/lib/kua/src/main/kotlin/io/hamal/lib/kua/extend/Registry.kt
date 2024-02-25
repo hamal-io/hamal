@@ -3,7 +3,7 @@ package io.hamal.lib.kua.extend
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extend.extension.RunnerExtension
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
-import io.hamal.lib.kua.type.TableProxyMap
+import io.hamal.lib.kua.type.KuaTableMap
 import io.hamal.lib.kua.type.KuaFunction
 
 class RunnerRegistry(val sb: Sandbox) {
@@ -11,7 +11,7 @@ class RunnerRegistry(val sb: Sandbox) {
     val state = sb.state
     val plugins = mutableMapOf<String, RunnerPlugin>()
     val extensions = mutableMapOf<String, RunnerExtension>()
-    val factories = mutableMapOf<String, TableProxyMap>()
+    val factories = mutableMapOf<String, KuaTableMap>()
 
     fun isScript(name: String) = extensions.keys.contains(name)
 
@@ -29,7 +29,7 @@ class RunnerRegistry(val sb: Sandbox) {
         loadExtensionFactory(extension.name)
     }
 
-    fun loadPluginFactory(name: String): TableProxyMap {
+    fun loadPluginFactory(name: String): KuaTableMap {
         val extension = plugins[name]!!
         val internals = extension.internals
         val internalTable = state.tableCreateMap(internals.size)
@@ -48,21 +48,21 @@ class RunnerRegistry(val sb: Sandbox) {
         sb.unsetGlobal("_internal")
 
         // FIXME cache factory so that it does not have to be loaded over and over again
-        val factory = state.getGlobalTableMap("_factory")
+        val factory = state.getGlobalKuaTableMap("_factory")
         factories[name] = factory
 
         state.unsetGlobal("plugin")
         return factory
     }
 
-    fun loadExtensionFactory(name: String): TableProxyMap {
+    fun loadExtensionFactory(name: String): KuaTableMap {
         val extension = extensions[name]!!
 
         state.load(extension.factoryCode)
         state.load("_factory = extension()")
 
         // FIXME cache factory so that it does not have to be loaded over and over again
-        val factory = state.getGlobalTableMap("_factory")
+        val factory = state.getGlobalKuaTableMap("_factory")
         factories[name] = factory
 
         state.unsetGlobal("extension")

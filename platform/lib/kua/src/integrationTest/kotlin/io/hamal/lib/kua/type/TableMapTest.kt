@@ -12,8 +12,9 @@ internal class KuaTableTest {
     fun `Map as function result`() {
         sandbox.use { sandbox ->
             sandbox.registerGlobalFunction("func",
-                object : Function0In2Out<KuaError, KuaTable>(FunctionOutput2Schema(KuaError::class, KuaTable::class)) {
-                    override fun invoke(ctx: FunctionContext): Pair<KuaError?, KuaTable?> {
+                object :
+                    Function0In2Out<KuaError, KuaTableMap>(FunctionOutput2Schema(KuaError::class, KuaTableMap::class)) {
+                    override fun invoke(ctx: FunctionContext): Pair<KuaError?, KuaTableMap?> {
                         return null to ctx.toMap("id" to KuaString("A"))
                     }
                 }
@@ -33,8 +34,9 @@ internal class KuaTableTest {
     fun `Nested map as function result`() {
         sandbox.use { sandbox ->
             sandbox.registerGlobalFunction("func",
-                object : Function0In2Out<KuaError, KuaTable>(FunctionOutput2Schema(KuaError::class, KuaTable::class)) {
-                    override fun invoke(ctx: FunctionContext): Pair<KuaError?, KuaTable?> {
+                object :
+                    Function0In2Out<KuaError, KuaTableMap>(FunctionOutput2Schema(KuaError::class, KuaTableMap::class)) {
+                    override fun invoke(ctx: FunctionContext): Pair<KuaError?, KuaTableMap?> {
                         return null to sandbox.toMap(
                             "id" to KuaString("A"),
                             "level_one" to sandbox.toMap("answer" to KuaNumber(42))

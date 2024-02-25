@@ -8,15 +8,15 @@ import io.hamal.lib.kua.toArray
 import io.hamal.lib.kua.toMap
 import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.kua.type.KuaString
-import io.hamal.lib.kua.type.KuaTable
+import io.hamal.lib.kua.type.KuaTableArray
 import io.hamal.lib.sdk.ApiSdk
 
 class NamespaceListFunction(
     private val sdk: ApiSdk
-) : Function0In2Out<KuaError, KuaTable.Array>(
-    FunctionOutput2Schema(KuaError::class, KuaTable.Array::class)
+) : Function0In2Out<KuaError, KuaTableArray>(
+    FunctionOutput2Schema(KuaError::class, KuaTableArray::class)
 ) {
-    override fun invoke(ctx: FunctionContext): Pair<KuaError?, KuaTable.Array?> {
+    override fun invoke(ctx: FunctionContext): Pair<KuaError?, KuaTableArray?> {
         return try {
             null to ctx.toArray(sdk.namespace.list(ctx[WorkspaceId::class]).map { namespace ->
                 ctx.toMap(

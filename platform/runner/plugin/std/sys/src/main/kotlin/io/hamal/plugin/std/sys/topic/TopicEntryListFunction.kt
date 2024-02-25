@@ -8,17 +8,17 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.toArray
 import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.kua.type.KuaString
-import io.hamal.lib.kua.type.KuaTable
+import io.hamal.lib.kua.type.KuaTableArray
 import io.hamal.lib.kua.type.toKua
 import io.hamal.lib.sdk.ApiSdk
 
 class TopicEntryListFunction(
     private val sdk: ApiSdk
-) : Function1In2Out<KuaString, KuaError, KuaTable.Array>(
+) : Function1In2Out<KuaString, KuaError, KuaTableArray>(
     FunctionInput1Schema(KuaString::class),
-    FunctionOutput2Schema(KuaError::class, KuaTable.Array::class)
+    FunctionOutput2Schema(KuaError::class, KuaTableArray::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: KuaString): Pair<KuaError?, KuaTable.Array?> {
+    override fun invoke(ctx: FunctionContext, arg1: KuaString): Pair<KuaError?, KuaTableArray?> {
         return try {
             null to ctx.toArray(
                 sdk.topic.events(TopicId(arg1.value))

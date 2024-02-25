@@ -7,7 +7,7 @@ object KuaJsonModule : JsonModule() {
         this[KuaAny::class] = KuaAny.Adapter
         this[KuaDecimal::class] = KuaDecimal.Adapter
         this[KuaBoolean::class] = KuaBoolean.Adapter
-        this[KuaTable::class] = KuaTable.Adapter
+        this[KuaTableType::class] = KuaTableType.Adapter
         this[KuaNil::class] = KuaNil.Adapter
         this[KuaType::class] = KuaType.Adapter
     }

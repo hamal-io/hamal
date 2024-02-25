@@ -95,10 +95,10 @@ internal class KuaErrorTest {
     }
 
 
-    private object AssertMetatable : Function1In0Out<TableProxyMap>(
-        FunctionInput1Schema(TableProxyMap::class)
+    private object AssertMetatable : Function1In0Out<KuaTableMap>(
+        FunctionInput1Schema(KuaTableMap::class)
     ) {
-        override fun invoke(ctx: FunctionContext, arg1: TableProxyMap) {
+        override fun invoke(ctx: FunctionContext, arg1: KuaTableMap) {
             assertThat(arg1.getInt("__type_id"), equalTo(10))
             assertThat(arg1.getString("__typename"), equalTo("error"))
         }

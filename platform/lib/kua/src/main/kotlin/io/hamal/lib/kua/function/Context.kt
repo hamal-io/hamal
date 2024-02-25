@@ -27,11 +27,6 @@ class FunctionContext(
     override fun pushAny(value: KuaAny) = state.pushAny(value)
     override fun getAny(idx: Int) = state.getAny(idx)
 
-    override fun getTableProxyArray(idx: Int) = state.getTableProxyArray(idx)
-
-    override fun getTableProxyMap(idx: Int) = state.getTableProxyMap(idx)
-
-
     override fun pushBoolean(value: Boolean) = state.pushBoolean(value)
     override fun getBoolean(idx: Int) = state.getBoolean(idx)
     override fun pushError(value: KuaError) = state.pushError(value)
@@ -41,21 +36,21 @@ class FunctionContext(
     override fun pushNumber(value: Double) = state.pushNumber(value)
     override fun getString(idx: Int) = state.getString(idx)
     override fun pushString(value: String) = state.pushString(value)
-    override fun pushTable(proxy: TableProxyMap) = state.pushTable(proxy)
-    override fun pushTable(proxy: TableProxyArray) = state.pushTable(proxy)
+    override fun pushTable(proxy: KuaTableMap) = state.pushTable(proxy)
+    override fun pushTable(proxy: KuaTableArray) = state.pushTable(proxy)
 
 
-    override fun getTableArray(idx: Int): KuaTable.Array = state.getTableArray(idx)
-    override fun getTableMap(idx: Int): KuaTable.Map = state.getTableMap(idx)
+    override fun getTableArray(idx: Int): KuaTableArray = state.getTableArray(idx)
+    override fun getKuaTableMap(idx: Int): KuaTableMap = state.getKuaTableMap(idx)
 
 
     override fun setGlobal(name: String, value: KuaFunction<*, *, *, *>) = state.setGlobal(name, value)
-    override fun setGlobal(name: String, value: TableProxyMap) = state.setGlobal(name, value)
-    override fun getGlobalTableMap(name: String): TableProxyMap = state.getGlobalTableMap(name)
+    override fun setGlobal(name: String, value: KuaTableMap) = state.setGlobal(name, value)
+    override fun getGlobalKuaTableMap(name: String): KuaTableMap = state.getGlobalKuaTableMap(name)
     override fun unsetGlobal(name: String) = state.unsetGlobal(name)
 
     override fun tableCreateMap(capacity: Int) = state.tableCreateMap(capacity)
-    override fun tableCreateArray(capacity: Int): TableProxyArray = state.tableCreateArray(capacity)
+    override fun tableCreateArray(capacity: Int): KuaTableArray = state.tableCreateArray(capacity)
 
     override fun tableAppend(idx: Int) = state.tableAppend(idx)
     override fun tableSetRaw(idx: Int) = state.tableSetRaw(idx)

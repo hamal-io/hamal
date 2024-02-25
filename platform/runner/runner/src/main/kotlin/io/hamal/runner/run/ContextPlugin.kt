@@ -10,7 +10,7 @@ import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
 import io.hamal.lib.kua.toMap
 import io.hamal.lib.kua.type.KuaNil
 import io.hamal.lib.kua.type.KuaString
-import io.hamal.lib.kua.type.TableProxyMap
+import io.hamal.lib.kua.type.KuaTableMap
 import io.hamal.lib.kua.type.toKua
 import io.hamal.runner.run.function.CompleteRunFunction
 import io.hamal.runner.run.function.EmitFunction
@@ -68,7 +68,7 @@ class RunnerContextFactory(
     }
 }
 
-private fun Sandbox.invocationEvents(events: List<Event>): TableProxyMap =
+private fun Sandbox.invocationEvents(events: List<Event>): KuaTableMap =
 //    tableCreate(events.size).let { result ->
 //        events.map {
 //            toTableProxy(

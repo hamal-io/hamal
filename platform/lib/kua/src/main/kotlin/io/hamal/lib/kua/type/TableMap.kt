@@ -5,13 +5,15 @@ import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.kua.State
 import kotlin.reflect.KClass
 
-class TableProxyMap(
+class KuaTableMap(
     val index: Int,
     val state: State
-) : KuaTable.Map {
+) : KuaTableType {
+
+    override val type: KuaType.Type = KuaType.Type.Table
 
     companion object {
-        fun create(state: State, data: Map<String, KuaType>): TableProxyMap {
+        fun create(state: State, data: Map<String, KuaType>): KuaTableMap {
             return state.tableCreateMap(data.size).also {
                 data.entries.forEach { (key, value) ->
                     it[key] = value
@@ -20,17 +22,17 @@ class TableProxyMap(
         }
     }
 
-    override fun entries(): Sequence<Pair<KuaString, KuaType>> {
+    fun entries(): Sequence<Pair<KuaString, KuaType>> {
         return TableEntryIterator(
             index = index,
             state = state,
             keyExtractor = { state, index -> state.getStringType(index) },
             valueExtractor = { state, index ->
                 when (val value = state.getAny(index).value) {
-//                is KuaTable.Array,
+//                is KuaTableArray,
                     is KuaBoolean,
                     is KuaDecimal,
-//                is KuaTable.Map,
+//                is KuaTableMap,
                     is KuaNumber,
                     is KuaString -> value
 
@@ -40,11 +42,13 @@ class TableProxyMap(
         ).asSequence().map { it.key to it.value }
     }
 
-    override fun getArray(key: String): KuaTable.Array {
+    fun getArray(key: String): KuaTableArray {
         return findArray(key) ?: throw NoSuchElementException("$key not found")
     }
 
-    override fun findArray(key: String): KuaTable.Array? {
+    fun isNull(key: String): Boolean = type(key) == KuaNil::class
+
+    fun findArray(key: String): KuaTableArray? {
         if (isNull(key)) {
             return null
         }
@@ -52,15 +56,15 @@ class TableProxyMap(
         state.pushString(key)
         val type = state.tableGetRaw(index)
         type.checkExpectedType(KuaTableType::class)
-        return state.getTableProxyArray(state.top.value)
+        return state.getTableArray(state.top.value)
     }
 
 
-    override fun get(key: String): KuaType {
+    fun get(key: String): KuaType {
         TODO("Not yet implemented")
     }
 
-    override fun set(key: String, value: KuaType): Int {
+    operator fun set(key: String, value: KuaType): Int {
         return when (value) {
             is KuaString -> set(key, value)
             is KuaNil -> unset(key)
@@ -69,54 +73,48 @@ class TableProxyMap(
     }
 
 
-    override val size: Int get() = 0
-    override val isArray: Boolean get() = false
-    override val isMap: Boolean get() = true
+    val size: Int get() = 0
+    val isArray: Boolean get() = false
+    val isMap: Boolean get() = true
 
-
-    override val type: KuaType.Type = KuaType.Type.Table
 
     val length get() = state.native.tableGetLength(index)
 
-    override fun unset(key: KuaString) = unset(key.value)
+    fun unset(key: KuaString) = unset(key.value)
 
 
     @Suppress("UNUSED_PARAMETER")
-    override operator fun set(key: String, value: KuaNil) = unset(key)
+    operator fun set(key: String, value: KuaNil) = unset(key)
 
     @Suppress("UNUSED_PARAMETER")
-    override operator fun set(key: KuaString, value: KuaNil) = unset(key.value)
-    override fun unset(key: String): Int {
+    operator fun set(key: KuaString, value: KuaNil) = unset(key.value)
+    fun unset(key: String): Int {
         state.pushString(key)
         state.pushNil()
         return state.tableSetRaw(index)
     }
 
-    override fun getBooleanValue(key: String): KuaBoolean {
+    fun getBooleanValue(key: String): KuaBoolean {
         TODO("Not yet implemented")
     }
 
-    override operator fun set(key: String, value: KuaBoolean) = set(key, value.value)
-    override operator fun set(key: KuaString, value: KuaBoolean) = set(key.value, value.value)
-    override operator fun set(key: String, value: Boolean): Int {
+    operator fun set(key: String, value: KuaBoolean) = set(key, value.value)
+    operator fun set(key: KuaString, value: KuaBoolean) = set(key.value, value.value)
+    operator fun set(key: String, value: Boolean): Int {
         state.pushString(key)
         state.pushBoolean(value)
         return state.tableSetRaw(index)
     }
 
-    override operator fun set(key: String, value: KuaCode) = set(key, value.value)
-    override operator fun set(key: KuaString, value: KuaCode) = set(key.value, value)
+    operator fun set(key: String, value: KuaCode) = set(key, value.value)
+    operator fun set(key: KuaString, value: KuaCode) = set(key.value, value)
 
-    override operator fun set(key: String, value: Int) = set(key, value.toDouble())
-    override operator fun set(key: String, value: Long) = set(key, value.toDouble())
-    override operator fun set(key: String, value: Float) = set(key, value.toDouble())
-    override operator fun set(key: String, value: KuaNumber) = set(key, value.value)
-    override fun set(key: String, value: KuaTable): Int {
-        TODO("Not yet implemented")
-    }
-
-    override operator fun set(key: KuaString, value: KuaNumber) = set(key.value, value.value)
-    override operator fun set(key: String, value: Double): Int {
+    operator fun set(key: String, value: Int) = set(key, value.toDouble())
+    operator fun set(key: String, value: Long) = set(key, value.toDouble())
+    operator fun set(key: String, value: Float) = set(key, value.toDouble())
+    operator fun set(key: String, value: KuaNumber) = set(key, value.value)
+    operator fun set(key: KuaString, value: KuaNumber) = set(key.value, value.value)
+    operator fun set(key: String, value: Double): Int {
         state.pushString(key)
         state.pushNumber(value)
         return state.tableSetRaw(index)
@@ -128,14 +126,14 @@ class TableProxyMap(
         return state.tableSetRaw(index)
     }
 
-    override operator fun set(key: String, value: ValueObjectId) = set(key, value.value.value.toString(16))
-    override operator fun set(key: KuaString, value: ValueObjectId) = set(key.value, value.value.value.toString(16))
-    override operator fun set(key: String, value: SnowflakeId) = set(key, value.value.toString(16))
-    override operator fun set(key: KuaString, value: SnowflakeId) = set(key.value, value.value.toString(16))
+    operator fun set(key: String, value: ValueObjectId) = set(key, value.value.value.toString(16))
+    operator fun set(key: KuaString, value: ValueObjectId) = set(key.value, value.value.value.toString(16))
+    operator fun set(key: String, value: SnowflakeId) = set(key, value.value.toString(16))
+    operator fun set(key: KuaString, value: SnowflakeId) = set(key.value, value.value.toString(16))
 
-    override operator fun set(key: String, value: KuaString) = set(key, value.value)
-    override operator fun set(key: KuaString, value: KuaString) = set(key.value, value.value)
-    override operator fun set(key: String, value: String): Int {
+    operator fun set(key: String, value: KuaString) = set(key, value.value)
+    operator fun set(key: KuaString, value: KuaString) = set(key.value, value.value)
+    operator fun set(key: String, value: String): Int {
         state.pushString(key)
         state.pushString(value)
         return state.tableSetRaw(index)
@@ -148,22 +146,22 @@ class TableProxyMap(
         return state.tableSetRaw(index)
     }
 
-    operator fun set(key: String, value: TableProxyMap): Int {
+    operator fun set(key: String, value: KuaTableMap): Int {
         state.pushString(key)
         state.pushTable(value)
         return state.tableSetRaw(index)
     }
 
-    fun getTable(key: String): TableProxyMap {
+    fun getTable(key: String): KuaTableMap {
         state.pushString(key)
         val type = state.tableGetRaw(index)
         type.checkExpectedType(KuaTableType::class)
-        return state.getTableProxyMap(state.top.value)
+        return state.getKuaTableMap(state.top.value)
     }
 
     fun getBooleanType(key: KuaString): KuaBoolean = getBooleanType(key.value)
-    override fun getBoolean(key: String): Boolean = getBooleanType(key).value
-    override fun getBoolean(key: KuaString): Boolean = getBoolean(key.value)
+    fun getBoolean(key: String): Boolean = getBooleanType(key).value
+    fun getBoolean(key: KuaString): Boolean = getBoolean(key.value)
     fun getBooleanType(key: String): KuaBoolean {
         state.pushString(key)
         val type = state.tableGetRaw(index)
@@ -180,15 +178,15 @@ class TableProxyMap(
     }
 
     fun getNumberType(key: KuaString): KuaNumber = getNumberType(key.value)
-    override fun getInt(key: String): Int = getNumberType(key).value.toInt()
-    override fun getInt(key: KuaString) = getInt(key.value)
-    override fun getLong(key: String): Long = getNumberType(key).value.toLong()
-    override fun getLong(key: KuaString): Long = getLong(key.value)
-    override fun getFloat(key: String): Float = getNumberType(key).value.toFloat()
-    override fun getFloat(key: KuaString): Float = getFloat(key.value)
-    override fun getDouble(key: String): Double = getNumberType(key).value
-    override fun getDouble(key: KuaString): Double = getDouble(key.value)
-    override fun getNumberValue(key: String): KuaNumber {
+    fun getInt(key: String): Int = getNumberType(key).value.toInt()
+    fun getInt(key: KuaString) = getInt(key.value)
+    fun getLong(key: String): Long = getNumberType(key).value.toLong()
+    fun getLong(key: KuaString): Long = getLong(key.value)
+    fun getFloat(key: String): Float = getNumberType(key).value.toFloat()
+    fun getFloat(key: KuaString): Float = getFloat(key.value)
+    fun getDouble(key: String): Double = getNumberType(key).value
+    fun getDouble(key: KuaString): Double = getDouble(key.value)
+    fun getNumberValue(key: String): KuaNumber {
         TODO("Not yet implemented")
     }
 
@@ -206,10 +204,15 @@ class TableProxyMap(
         return state.native.toDecimal(state.top.value).also { state.native.pop(1) }
     }
 
-    override fun getStringType(key: KuaString): KuaString = getStringType(key.value)
-    override fun getString(key: String): String = getStringType(key).value
-    override fun getString(key: KuaString): String = getString(key.value)
-    override fun findStringType(key: String): KuaString? {
+
+    fun getStringType(key: KuaString): KuaString = getStringType(key.value)
+    fun getString(key: String): String = getStringType(key).value
+    fun getString(key: KuaString): String = getString(key.value)
+    fun findString(key: String): String? {
+        return findStringType(key)?.value
+    }
+
+    fun findStringType(key: String): KuaString? {
         if (isNull(key)) {
             return null
         }
@@ -219,14 +222,14 @@ class TableProxyMap(
         return KuaString(state.native.toString(state.top.value).also { state.native.pop(1) })
     }
 
-    override fun getStringType(key: String): KuaString {
+    fun getStringType(key: String): KuaString {
         state.pushString(key)
         val type = state.tableGetRaw(index)
         type.checkExpectedType(KuaString::class)
         return KuaString(state.native.toString(state.top.value)).also { state.native.pop(1) }
     }
 
-    override fun type(key: String): KClass<out KuaType> {
+    fun type(key: String): KClass<out KuaType> {
         state.pushString(key)
         return state.tableGetRaw(index)
     }
@@ -286,7 +289,7 @@ class TableProxyMap(
         return state.tableAppend(index)
     }
 
-    fun append(value: TableProxyMap): Int {
+    fun append(value: KuaTableMap): Int {
         state.pushTable(value)
         return state.tableAppend(index)
     }

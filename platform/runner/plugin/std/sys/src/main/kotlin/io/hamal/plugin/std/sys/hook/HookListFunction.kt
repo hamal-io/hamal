@@ -7,19 +7,17 @@ import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.toArray
 import io.hamal.lib.kua.toMap
-import io.hamal.lib.kua.type.KuaError
-import io.hamal.lib.kua.type.KuaString
-import io.hamal.lib.kua.type.KuaTable
+import io.hamal.lib.kua.type.*
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiHookService
 
 class HookListFunction(
     private val sdk: ApiSdk
-) : Function1In2Out<KuaTable.Map, KuaError, KuaTable.Array>(
-    FunctionInput1Schema(KuaTable.Map::class),
-    FunctionOutput2Schema(KuaError::class, KuaTable.Array::class)
+) : Function1In2Out<KuaTableMap, KuaError, KuaTableArray>(
+    FunctionInput1Schema(KuaTableMap::class),
+    FunctionOutput2Schema(KuaError::class, KuaTableArray::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: KuaTable.Map): Pair<KuaError?, KuaTable.Array?> {
+    override fun invoke(ctx: FunctionContext, arg1: KuaTableMap): Pair<KuaError?, KuaTableArray?> {
         return try {
             null to ctx.toArray(
                 sdk.hook.list(ApiHookService.HookQuery(

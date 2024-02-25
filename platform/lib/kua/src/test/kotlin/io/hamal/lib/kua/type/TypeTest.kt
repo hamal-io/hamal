@@ -30,7 +30,7 @@ class KuaAnyTest {
         generateTestCases(
             testInstance = TODO(),
 //            testInstance = KuaAny(
-//                KuaTable.Array(
+//                KuaTableArray(
 //                    1234 to KuaString("value")
 //                )
 //            ),
