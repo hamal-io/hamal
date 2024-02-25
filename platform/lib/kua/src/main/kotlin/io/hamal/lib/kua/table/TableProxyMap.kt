@@ -7,11 +7,41 @@ import io.hamal.lib.kua.type.*
 import kotlin.reflect.KClass
 
 class TableProxyMap(
-    val index: Int, val state: State
+    val index: Int,
+    val state: State
 ) : KuaTable.Map {
 
-    override val underlyingMap: Map<String, KuaType>
-        get() = TODO("Not yet implemented")
+    companion object {
+        fun create(state: State, data: Map<String, KuaType>): TableProxyMap {
+            return state.tableCreateMap(data.size).also {
+                data.entries.forEach { (key, value) ->
+                    it[key] = value
+                }
+            }
+        }
+    }
+
+    override fun entries(): Sequence<Pair<KuaString, KuaType>> {
+        return TableEntryIterator(
+            index = index,
+            state = state,
+            keyExtractor = { state, index -> state.getStringType(index) },
+            valueExtractor = { state, index ->
+                when (val value = state.getAny(index).value) {
+//                is KuaTable.Array,
+                    is KuaBoolean,
+                    is KuaDecimal,
+//                is KuaTable.Map,
+                    is KuaNumber,
+                    is KuaString -> value
+
+                    is TableProxyMap -> state.toKuaTableMap(value)
+                    is TableProxyArray -> state.toKuaTableArray(value)
+                    else -> TODO("$value")
+                }
+            }
+        ).asSequence().map { it.key to it.value }
+    }
 
     override fun getArray(key: String): KuaTable.Array {
         return findArray(key) ?: throw NoSuchElementException("$key not found")
@@ -34,7 +64,10 @@ class TableProxyMap(
     }
 
     override fun set(key: String, value: KuaType): Int {
-        TODO("Not yet implemented")
+        return when (value) {
+            is KuaString -> set(key, value)
+            else -> TODO()
+        }
     }
 
 
@@ -179,7 +212,13 @@ class TableProxyMap(
     override fun getString(key: String): String = getStringType(key).value
     override fun getString(key: KuaString): String = getString(key.value)
     override fun findStringType(key: String): KuaString? {
-        TODO("Not yet implemented")
+        if (isNull(key)) {
+            return null
+        }
+
+        val type = state.tableGetRaw(index)
+        type.checkExpectedType(KuaString::class)
+        return KuaString(state.native.toString(state.top.value).also { state.native.pop(1) })
     }
 
     override fun getStringType(key: String): KuaString {

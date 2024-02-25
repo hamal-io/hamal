@@ -35,9 +35,15 @@ fun KuaType.toHot(): HotNode {
 
 fun KuaTable.Map.toHotObject(): HotObject {
     val builder = HotObject.builder()
-    this.underlyingMap.forEach { (key, value) ->
-        builder[key] = value.toHot()
+//    this.underlyingMap.forEach { (key, value) ->
+//        builder[key] = value.toHot()
+//    }
+
+    entries().forEach { (key, value) ->
+        builder[key.value] = value.toHot()
     }
+
+
     return builder.build()
 }
 

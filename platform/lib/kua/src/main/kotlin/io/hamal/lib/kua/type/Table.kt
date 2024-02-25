@@ -64,9 +64,8 @@ sealed interface KuaTable : KuaTableType {
 
     interface Map : KuaTable {
 
-        //FIXME this is a temp hack
-        val underlyingMap: kotlin.collections.Map<String, KuaType>
-//
+        fun entries(): Sequence<Pair<KuaString, KuaType>>
+
 //        val entries: Set<kotlin.collections.Map.Entry<String, KuaType>> get() = underlyingMap.entries
 //        val keys: Set<String> get() = underlyingMap.keys
 //        val values: Collection<KuaType> get() = underlyingMap.values
@@ -186,7 +185,7 @@ sealed interface KuaTable : KuaTableType {
 }
 
 data class KuaTableDefaultImpl(
-    override val underlyingMap: MutableMap<String, KuaType> = mutableMapOf(),
+    val underlyingMap: MutableMap<String, KuaType> = mutableMapOf(),
     override val underlyingArray: MutableMap<Int, KuaType> = mutableMapOf()
 ) : KuaTable.Map, KuaTable.Array {
 
@@ -207,6 +206,11 @@ data class KuaTableDefaultImpl(
     override fun asSequence(): Sequence<KuaType> {
         return underlyingArray.values.asSequence()
     }
+
+    override fun entries(): Sequence<Pair<KuaString, KuaType>> {
+        return underlyingMap.asSequence().map { (key, value) -> KuaString(key) to value }
+    }
+
 
     override fun append(value: KuaTable): Int {
         this.underlyingArray[this.underlyingArray.size + 1] = value
@@ -287,6 +291,7 @@ data class KuaTableDefaultImpl(
     override fun type(idx: Int): KClass<out KuaType> {
         return underlyingArray[idx]?.let { it::class } ?: KuaNil::class
     }
+
 
     override fun getArray(key: String): KuaTable.Array =
         findArray(key) ?: throw NoSuchElementException("$key not found")

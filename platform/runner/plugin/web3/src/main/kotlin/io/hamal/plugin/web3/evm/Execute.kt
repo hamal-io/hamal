@@ -30,8 +30,7 @@ class EthExecuteFunction : Function1In2Out<KuaTable.Map, KuaError, KuaTable.Map>
 
             val batchService = EthHttpBatchService(HttpTemplateImpl("http://localhost:10001"))
 
-            arg1.underlyingMap.forEach { entry ->
-                val v = entry.value
+            arg1.entries().forEach { (_, v) ->
                 require(v is KuaTable.Map)
 
                 when (v.getString("type")) {

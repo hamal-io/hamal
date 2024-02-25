@@ -91,20 +91,23 @@ fun State.toTableProxyMap(map: KuaTable.Map): TableProxyMap {
 
     return tableCreateMap(map.size).also {
         // FIXME this really sucks
-        map.underlyingMap.forEach { (key, value) ->
+        val list = map.entries().toList()
+        println(list)
+
+        map.entries().forEach { (key, value) ->
             when (value) {
                 is KuaBoolean -> it[key] = value
-                is KuaDecimal -> it[key] = value
+                is KuaDecimal -> it[key.value] = value
                 is KuaCode -> it[key] = value
                 is KuaNil -> it[key] = KuaNil
                 is KuaNumber -> it[key] = value
                 is KuaString -> it[key] = value
                 is KuaTable.Map -> {
-                    it[key] = toTableProxyMap(value); pop(1)
+                    it[key.value] = toTableProxyMap(value); pop(1)
                 }
 
                 is KuaTable.Array -> {
-                    it[key] = toTableProxyArray(value); pop(1)
+                    it[key.value] = toTableProxyArray(value); pop(1)
                 }
 
                 else -> TODO("$value")

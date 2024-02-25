@@ -23,7 +23,6 @@ class AdhocFunction(
 ) {
     override fun invoke(ctx: FunctionContext, arg1: KuaTable.Map): Pair<KuaError?, KuaTable.Map?> {
         return try {
-            require(arg1 is TableProxyMap)
 
             val res = sdk.adhoc(
                 namespaceId = arg1.findString("namespace_id")
@@ -35,16 +34,23 @@ class AdhocFunction(
                 )
             )
 
-            null to KuaTable.Map(
-                "id" to KuaString(res.id.value.value.toString(16)),
-                "status" to KuaString(res.status.name),
-                "exec_id" to KuaString(res.execId.value.value.toString(16)),
-                "workspace_id" to KuaString(res.workspaceId.value.value.toString(16)),
-                "namespace_id" to KuaString(res.namespaceId.value.value.toString(16))
+//            null to ctx.tableCreateMap().also {
+//                it["id"] = KuaString(res.id.value.value.toString(16))
+//            }
 
+
+//
+            return null to TableProxyMap.create(
+                ctx, mapOf(
+                    "id" to KuaString(res.id.value.value.toString(16)),
+                    "status" to KuaString(res.status.name),
+                    "exec_id" to KuaString(res.execId.value.value.toString(16)),
+                    "workspace_id" to KuaString(res.workspaceId.value.value.toString(16)),
+                    "namespace_id" to KuaString(res.namespaceId.value.value.toString(16))
+                )
             )
-
         } catch (t: Throwable) {
+            t.printStackTrace()
             KuaError(t.message!!) to null
         }
     }
