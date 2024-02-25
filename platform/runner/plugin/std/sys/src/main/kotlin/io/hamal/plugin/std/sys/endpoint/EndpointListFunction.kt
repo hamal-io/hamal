@@ -1,6 +1,7 @@
 package io.hamal.plugin.std.sys.endpoint
 
 import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.kua.array
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -19,7 +20,7 @@ class EndpointListFunction(
 ) {
     override fun invoke(ctx: FunctionContext, arg1: KuaTable.Map): Pair<KuaError?, KuaTable.Array?> {
         return try {
-            null to KuaTable.Array(
+            null to ctx.array(
                 sdk.endpoint.list(ApiEndpointService.EndpointQuery(
                     namespaceIds = arg1.findArray("namespace_ids")
                         ?.asSequence()
@@ -27,8 +28,8 @@ class EndpointListFunction(
                         ?.toList()
                         ?: listOf(ctx[NamespaceId::class])
 
-                )).mapIndexed { index, endpoint ->
-                    index to KuaTable.Map(
+                )).map { endpoint ->
+                    KuaTable.Map(
                         "id" to KuaString(endpoint.id.value.value.toString(16)),
                         "func" to KuaTable.Map(
                             "id" to KuaString(endpoint.func.id.value.value.toString(16)),
@@ -36,7 +37,7 @@ class EndpointListFunction(
                         ),
                         "name" to KuaString(endpoint.name.value)
                     )
-                }.toMap().toMutableMap()
+                }
             )
         } catch (t: Throwable) {
             KuaError(t.message!!) to null

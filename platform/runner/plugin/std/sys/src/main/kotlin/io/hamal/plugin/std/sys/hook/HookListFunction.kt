@@ -1,6 +1,7 @@
 package io.hamal.plugin.std.sys.hook
 
 import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.kua.array
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -19,7 +20,7 @@ class HookListFunction(
 ) {
     override fun invoke(ctx: FunctionContext, arg1: KuaTable.Map): Pair<KuaError?, KuaTable.Array?> {
         return try {
-            null to KuaTable.Array(
+            null to ctx.array(
                 sdk.hook.list(ApiHookService.HookQuery(
                     namespaceIds = arg1.findArray("namespace_ids")
                         ?.asSequence()
@@ -27,8 +28,8 @@ class HookListFunction(
                         ?.toList()
                         ?: listOf(ctx[NamespaceId::class])
 
-                )).mapIndexed { index, hook ->
-                    index to KuaTable.Map(
+                )).map { hook ->
+                    KuaTable.Map(
                         "id" to KuaString(hook.id.value.value.toString(16)),
                         "namespace" to KuaTable.Map(
                             "id" to KuaString(hook.namespace.id.value.value.toString(16)),
@@ -36,7 +37,7 @@ class HookListFunction(
                         ),
                         "name" to KuaString(hook.name.value),
                     )
-                }.toMap().toMutableMap()
+                }
             )
         } catch (t: Throwable) {
             KuaError(t.message!!) to null

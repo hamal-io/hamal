@@ -1,6 +1,7 @@
 package io.hamal.plugin.std.sys.func
 
 import io.hamal.lib.domain.vo.FuncId
+import io.hamal.lib.kua.array
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -19,16 +20,15 @@ class FuncDeploymentsFunction(
 ) {
     override fun invoke(ctx: FunctionContext, arg1: KuaString): Pair<KuaError?, KuaTable.Array?> {
         return try {
-            null to KuaTable.Array(
-                sdk.func.listDeployments(
-                    FuncId(arg1.value)
-                ).mapIndexed { idx, deployed ->
-                    idx to KuaTable.Map(
-                        "version" to KuaNumber(deployed.version.value),
-                        "message" to KuaString(deployed.message.value),
-                        "deployed_at" to KuaString(deployed.deployedAt.toString())
-                    )
-                }.toMap().toMutableMap()
+            null to ctx.array(
+                sdk.func.listDeployments(FuncId(arg1.value))
+                    .map { deployed ->
+                        KuaTable.Map(
+                            "version" to KuaNumber(deployed.version.value),
+                            "message" to KuaString(deployed.message.value),
+                            "deployed_at" to KuaString(deployed.deployedAt.toString())
+                        )
+                    }
             )
         } catch (t: Throwable) {
             KuaError(t.message!!) to null

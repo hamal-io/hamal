@@ -41,7 +41,10 @@ class TableProxyArray(
     }
 
     override fun append(value: KuaType): Int {
-        TODO("Not yet implemented")
+        return when (value) {
+            is KuaString -> append(value)
+            else -> TODO("Not yet implemented")
+        }
     }
 
     override fun append(value: KuaAny): Int {

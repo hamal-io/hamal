@@ -6,6 +6,7 @@ import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.serialization.JsonAdapter
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.kua.State
 import java.lang.reflect.Type
 import kotlin.reflect.KClass
 
@@ -143,11 +144,17 @@ sealed interface KuaTable : KuaTableType {
     }
 
     companion object {
-        fun Array(vararg pairs: Pair<Int, KuaType>): KuaTableDefaultImpl =
-            KuaTableDefaultImpl(mutableMapOf(), mutableMapOf(*pairs))
 
-        fun Array(array: kotlin.collections.Map<Int, KuaType>): KuaTableDefaultImpl =
-            KuaTableDefaultImpl(mutableMapOf(), array.toMutableMap())
+//        fun Array(state: State, data: List<KuaType>): Array =
+//            state.tableCreateArray(data.size).also { table ->
+//                data.forEach(table::append)
+//            }
+//
+//        fun Array(vararg pairs: Pair<Int, KuaType>): KuaTableDefaultImpl =
+//            KuaTableDefaultImpl(mutableMapOf(), mutableMapOf(*pairs))
+//
+//        fun Array(array: kotlin.collections.Map<Int, KuaType>): KuaTableDefaultImpl =
+//            KuaTableDefaultImpl(mutableMapOf(), array.toMutableMap())
 
         fun Map(vararg pairs: Pair<String, KuaType>): KuaTableDefaultImpl =
             KuaTableDefaultImpl(mutableMapOf(*pairs), mutableMapOf())

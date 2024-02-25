@@ -3,28 +3,29 @@ package io.hamal.lib.kua.type
 import io.hamal.lib.kua.State
 
 fun State.toKuaTableArray(array: TableProxyArray): KuaTable.Array {
-    val result = KuaTable.Array()
-    TableEntryIterator(
-        index = array.index,
-        state = this,
-        keyExtractor = { state, index -> state.getNumberType(index) },
-        valueExtractor = { state, index ->
-            when (val value = state.getAny(index).value) {
-//                is KuaTable.Array,
-                is KuaBoolean,
-                is KuaDecimal,
-//                is KuaTable.Map,
-                is KuaNumber,
-                is KuaString -> value
-
-                is TableProxyMap -> toKuaTableMap(value)
-                is TableProxyArray -> toKuaTableArray(value)
-                else -> TODO("$value")
-            }
-        }
-    ).forEach { (_, value) -> result.append(value) }
-
-    return result
+    return array
+//    val result = KuaTable.Array()
+//    TableEntryIterator(
+//        index = array.index,
+//        state = this,
+//        keyExtractor = { state, index -> state.getNumberType(index) },
+//        valueExtractor = { state, index ->
+//            when (val value = state.getAny(index).value) {
+////                is KuaTable.Array,
+//                is KuaBoolean,
+//                is KuaDecimal,
+////                is KuaTable.Map,
+//                is KuaNumber,
+//                is KuaString -> value
+//
+//                is TableProxyMap -> toKuaTableMap(value)
+//                is TableProxyArray -> toKuaTableArray(value)
+//                else -> TODO("$value")
+//            }
+//        }
+//    ).forEach { (_, value) -> result.append(value) }
+//
+//    return result
 }
 
 fun State.toTableProxyArray(array: KuaTable.Array): TableProxyArray {
@@ -69,7 +70,7 @@ fun State.toKuaTableMap(map: TableProxyMap): KuaTable.Map {
                 is KuaString -> value
 
                 is TableProxyMap -> toKuaTableMap(value)
-                is TableProxyArray -> toKuaTableArray(value)
+                is TableProxyArray -> value
 
                 is KuaTable.Map -> value
                 is KuaTable.Array -> value

@@ -1,6 +1,7 @@
 package io.hamal.plugin.std.sys.func
 
 import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.kua.array
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -19,7 +20,7 @@ class FuncListFunction(
 ) {
     override fun invoke(ctx: FunctionContext, arg1: KuaTable.Map): Pair<KuaError?, KuaTable.Array?> {
         return try {
-            null to KuaTable.Array(
+            null to ctx.array(
                 sdk.func.list(
                     ApiFuncService.FuncQuery(
                         namespaceIds = arg1.findArray("namespace_ids")
@@ -28,8 +29,8 @@ class FuncListFunction(
                             ?.toList()
                             ?: listOf(ctx[NamespaceId::class])
                     )
-                ).mapIndexed { index, func ->
-                    index to KuaTable.Map(
+                ).map { func ->
+                    KuaTable.Map(
                         "id" to KuaString(func.id.value.value.toString(16)),
                         "namespace" to KuaTable.Map(
                             "id" to KuaString(func.namespace.id.value.value.toString(16)),
@@ -37,7 +38,7 @@ class FuncListFunction(
                         ),
                         "name" to KuaString(func.name.value),
                     )
-                }.toMap().toMutableMap()
+                }
             )
         } catch (t: Throwable) {
             KuaError(t.message!!) to null

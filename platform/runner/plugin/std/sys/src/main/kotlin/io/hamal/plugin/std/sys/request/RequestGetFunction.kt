@@ -1,4 +1,4 @@
-package io.hamal.plugin.std.sys.req
+package io.hamal.plugin.std.sys.request
 
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpSuccessResponse
@@ -12,7 +12,7 @@ import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.kua.type.KuaTable
 import io.hamal.lib.sdk.api.ApiRequested
 
-class ReqGetFunction(
+class RequestGetFunction(
     private val httpTemplate: HttpTemplate
 ) : Function1In2Out<KuaString, KuaError, KuaTable.Map>(
     FunctionInput1Schema(KuaString::class),

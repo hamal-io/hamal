@@ -2,6 +2,7 @@ package io.hamal.plugin.std.sys.exec
 
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.WorkspaceId
+import io.hamal.lib.kua.array
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -35,14 +36,14 @@ class ExecListFunction(
                         ?: listOf(ctx[WorkspaceId::class])
                 )
             )
-            null to KuaTable.Array(
-                execs.mapIndexed { index, exec ->
-                    index to KuaTable.Map(
+            null to ctx.array(
+                execs.map { exec ->
+                    KuaTable.Map(
                         "id" to KuaString(exec.id.value.value.toString(16)),
                         "status" to KuaString(exec.status.toString()),
                         "correlation_id" to (exec.correlation?.value?.let(::KuaString) ?: KuaNil)
                     )
-                }.toMap()
+                }
             )
         } catch (t: Throwable) {
             KuaError(t.message!!) to null

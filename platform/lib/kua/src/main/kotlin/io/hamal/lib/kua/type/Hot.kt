@@ -1,18 +1,23 @@
 package io.hamal.lib.kua.type
 
 import io.hamal.lib.common.hot.*
+import io.hamal.lib.kua.State
+import io.hamal.lib.kua.array
+import io.hamal.lib.kua.map
 
-fun HotNode.toKua(): KuaType {
+//FIXME replace toKua with this
+fun HotNode.toKua(state: State): KuaType {
     return when (this) {
-        is HotObject -> KuaTable.Map(nodes.map { (key, node) -> key to node.toKua() }.toMap())
-        is HotArray -> KuaTable.Array(nodes.mapIndexed { index, node -> index to node.toKua() }.toMap())
-
+        is HotObject -> state.map(nodes.map { (key, value) -> key to value.toKua(state) }.toMap())
+        is HotArray -> state.array(nodes.map { it.toKua(state) })
         is HotBoolean -> if (value) KuaTrue else KuaFalse
         is HotNull -> KuaNil
         is HotNumber -> KuaNumber(value.toDouble())
         is HotString -> KuaString(value)
+        else -> TODO()
     }
 }
+
 
 fun KuaType.toHot(): HotNode {
     return when (this) {

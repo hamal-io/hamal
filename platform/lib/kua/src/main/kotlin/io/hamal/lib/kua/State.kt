@@ -1,7 +1,5 @@
 package io.hamal.lib.kua
 
-import io.hamal.lib.kua.type.TableProxyArray
-import io.hamal.lib.kua.type.TableProxyMap
 import io.hamal.lib.kua.type.*
 import io.hamal.lib.kua.type.KuaError
 import kotlin.reflect.KClass
@@ -192,4 +190,18 @@ private fun luaToType(value: Int) = when (value) {
     5 -> KuaTableType::class
     11 -> KuaDecimal::class
     else -> TODO("$value not implemented yet")
+}
+
+fun <T : State> T.map(data: Map<String, KuaType>): TableProxyMap {
+    return tableCreateMap(data.size).also { map ->
+        data.forEach { (key, value) ->
+            map[key] = value
+        }
+    }
+}
+
+fun <T : State> T.array(data: List<KuaType>): TableProxyArray {
+    return tableCreateArray(data.size).also { array ->
+        data.forEach(array::append)
+    }
 }

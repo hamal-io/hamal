@@ -1,6 +1,7 @@
 package io.hamal.plugin.std.sys.topic
 
 import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.kua.array
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -19,7 +20,7 @@ class TopicListFunction(
 ) {
     override fun invoke(ctx: FunctionContext, arg1: KuaTable.Map): Pair<KuaError?, KuaTable.Array?> {
         return try {
-            null to KuaTable.Array(
+            null to ctx.array(
                 sdk.topic.list(
                     ApiTopicService.TopicQuery(
                         namespaceIds = arg1.findArray("namespace_ids")
@@ -28,12 +29,12 @@ class TopicListFunction(
                             ?.toList()
                             ?: listOf(ctx[NamespaceId::class])
                     )
-                ).mapIndexed { index, topic ->
-                    index to KuaTable.Map(
+                ).map { topic ->
+                    KuaTable.Map(
                         "id" to KuaString(topic.id.value.value.toString(16)),
                         "name" to KuaString(topic.name.value),
                     )
-                }.toMap().toMutableMap()
+                }
             )
         } catch (t: Throwable) {
             KuaError(t.message!!) to null

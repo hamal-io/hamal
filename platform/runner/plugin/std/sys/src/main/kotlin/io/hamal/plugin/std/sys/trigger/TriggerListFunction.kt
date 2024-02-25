@@ -1,6 +1,7 @@
 package io.hamal.plugin.std.sys.trigger
 
 import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.kua.array
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -19,12 +20,15 @@ class TriggerListFunction(
 ) {
     override fun invoke(ctx: FunctionContext, arg1: KuaTable.Map): Pair<KuaError?, KuaTable.Array?> {
         return try {
-            null to KuaTable.Array(sdk.trigger.list(ApiTriggerService.TriggerQuery(namespaceIds = arg1.findArray("namespace_ids")
-                ?.asSequence()?.map { NamespaceId((it as KuaString).value) }?.toList()
-                ?: listOf(ctx[NamespaceId::class])
+            null to ctx.array(sdk.trigger.list(
+                ApiTriggerService.TriggerQuery(
+                    namespaceIds = arg1.findArray("namespace_ids")
+                        ?.asSequence()?.map { NamespaceId((it as KuaString).value) }?.toList()
+                        ?: listOf(ctx[NamespaceId::class])
 
-            )).mapIndexed { index, trigger ->
-                index to when (trigger) {
+                )
+            ).map { trigger ->
+                when (trigger) {
                     is ApiTriggerList.FixedRate -> {
                         KuaTable.Map(
                             "id" to KuaString(trigger.id.value.value.toString(16)),
@@ -98,8 +102,7 @@ class TriggerListFunction(
                         "cron" to KuaString(trigger.cron.value)
                     )
                 }
-            }.toMap().toMutableMap()
-            )
+            })
         } catch (t: Throwable) {
             KuaError(t.message!!) to null
         }

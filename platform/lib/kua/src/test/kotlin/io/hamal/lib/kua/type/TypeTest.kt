@@ -28,11 +28,12 @@ class KuaAnyTest {
             expectedJson = """{"value":{"key":{"value":"hamal","type":"String"}},"type":"Table"}"""
         ),
         generateTestCases(
-            testInstance = KuaAny(
-                KuaTable.Array(
-                    1234 to KuaString("value")
-                )
-            ),
+            testInstance = TODO(),
+//            testInstance = KuaAny(
+//                KuaTable.Array(
+//                    1234 to KuaString("value")
+//                )
+//            ),
 //            expectedJson = """{"value":{"1234":{"value":"value","type":"String"}},"type":"Table"}"""
             expectedJson = TODO()
         ),
