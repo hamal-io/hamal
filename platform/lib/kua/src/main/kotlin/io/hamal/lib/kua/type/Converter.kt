@@ -29,6 +29,10 @@ fun State.toKuaTableMap(map: TableProxy): KuaTable.Map {
 }
 
 fun State.toTableProxy(map: KuaTable): TableProxy {
+    if (map is TableProxy) {
+        return map
+    }
+
     return tableCreate(map.size).also {
         (map as KuaTable.Map).underlyingMap.forEach { (key, value) ->
             when (value) {

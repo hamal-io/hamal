@@ -11,23 +11,22 @@ import io.hamal.lib.kua.table.TableProxy
 import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.kua.type.KuaTable
-import io.hamal.lib.kua.type.KuaTableType
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiAdhocInvokeRequest
 
 class AdhocFunction(
     private val sdk: ApiSdk
-) : Function1In2Out<KuaTableType, KuaError, KuaTable.Map>(
-    FunctionInput1Schema(KuaTableType::class),
+) : Function1In2Out<KuaTable.Map, KuaError, KuaTable.Map>(
+    FunctionInput1Schema(KuaTable.Map::class),
     FunctionOutput2Schema(KuaError::class, KuaTable.Map::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: KuaTableType): Pair<KuaError?, KuaTable.Map?> {
+    override fun invoke(ctx: FunctionContext, arg1: KuaTable.Map): Pair<KuaError?, KuaTable.Map?> {
         return try {
             require(arg1 is TableProxy)
 
 
             val res = sdk.adhoc(
-                 ctx[NamespaceId::class],
+                ctx[NamespaceId::class],
 //                arg1.findString("namespace_id")?.let { NamespaceId(SnowflakeId(it)) } ?: ctx[NamespaceId::class],
                 ApiAdhocInvokeRequest(
                     inputs = InvocationInputs(),
