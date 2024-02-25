@@ -5,7 +5,6 @@ import io.hamal.lib.common.serialization.JsonFactoryBuilder
 import io.hamal.lib.domain.Json
 import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.http.body
-import io.hamal.lib.kua.type.KuaJsonModule
 import io.hamal.lib.web3.Web3JsonModule
 import io.hamal.lib.web3.eth.EthBatchService
 import io.hamal.lib.web3.eth.abi.type.EthUint64
@@ -104,7 +103,6 @@ class EthHttpBatchService(
         JsonFactoryBuilder()
             .register(HotJsonModule)
             .register(Web3JsonModule)
-            .register(KuaJsonModule)
     )
 
     private fun <RESPONSE : EthResponse> request(
