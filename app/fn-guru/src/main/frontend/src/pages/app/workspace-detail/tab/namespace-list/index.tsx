@@ -1,19 +1,18 @@
-import React, {FC, useCallback, useEffect, useMemo, useRef, useState} from 'react'
+import React, {FC, useEffect, useState} from 'react'
 import {useUiState} from "@/hook/ui-state.ts";
 import {PageHeader} from "@/components/page-header.tsx";
 import Append from "@/pages/app/workspace-detail/tab/namespace-list/components/append.tsx";
 
-import {NamespaceList, NamespaceListItem, NamespaceView} from "@/types";
+import {NamespaceView} from "@/types";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx";
 import Actions from "@/pages/app/workspace-detail/tab/namespace-list/components/actions.tsx";
 import {useNamespaceList} from "@/hook";
 import {Button} from "@/components/ui/button.tsx";
-import {Pocket} from "lucide-react";
 
 const WorkspaceNamespaceListTab: FC = () => {
     const [uiState] = useUiState()
     const [treePointer, setTreePointer] = useState(uiState.workspaceId)
-    const [listNamespaces, namespaceList, listLoading, listError] = useNamespaceList()
+    const [listNamespaces, namespaceList] = useNamespaceList()
     const [listView, setListView] = useState<NamespaceView>(null)
 
     useEffect(() => {
@@ -31,7 +30,7 @@ const WorkspaceNamespaceListTab: FC = () => {
             const res = {root: foundRoot, children: foundChildren}
             setListView(() => res)
         }
-    }, [namespaceList]);
+    }, [namespaceList, treePointer]);
 
 
     function handleClick(id: string) {
