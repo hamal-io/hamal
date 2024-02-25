@@ -1,5 +1,4 @@
-import React, {FC, useEffect, useState} from 'react'
-import {useNamespaceSublist} from "@/hook";
+import React, {FC, useCallback, useEffect, useMemo, useState} from 'react'
 import {useUiState} from "@/hook/ui-state.ts";
 import {PageHeader} from "@/components/page-header.tsx";
 import Append from "@/pages/app/workspace-detail/tab/namespace-list/components/append.tsx";
@@ -7,39 +6,35 @@ import Append from "@/pages/app/workspace-detail/tab/namespace-list/components/a
 import {NamespaceList} from "@/types";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx";
 import Actions from "@/pages/app/workspace-detail/tab/namespace-list/components/actions.tsx";
-
+import {useNamespaceList} from "@/hook";
 
 const WorkspaceNamespaceListTab: FC = () => {
     const [uiState] = useUiState()
-    const [getSublist, sublist, isLoading, error] = useNamespaceSublist()
-    const [currentParent, setCurrentParent] = useState<string>(uiState.workspaceId)
-    const [children, setChildren] = useState<NamespaceList>(null)
-
+    const [listNamespaces, namespaces, isLoading, error] = useNamespaceList()
+    const [treePointer, setTreePointer] = useState('')
 
     useEffect(() => {
         const abortController = new AbortController()
-        getSublist(currentParent, abortController)
+        listNamespaces(uiState.workspaceId, abortController)
+        setTreePointer(() => uiState.workspaceId)
         return () => {
             abortController.abort()
         }
-    }, [currentParent]);
-
+    }, [uiState.workspaceId]);
 
     useEffect(() => {
-        if (sublist != null && currentParent != null) {
-            if (sublist.namespaces.length == 1) {
-                setChildren(sublist)
-            }
-            const res = sublist.namespaces.filter(item => item.parentId === currentParent)
-            setChildren({namespaces: res})
-        }
-    }, [sublist, currentParent]);
+        console.log('TreePointer = ' + treePointer)
+    }, [treePointer]);
 
 
-
-    if (sublist == null || isLoading) return "Loading..."
+    if (namespaces == null || isLoading) return "Loading..."
     if (error != null) return "Error -"
 
+    function handleClick(id: string) {
+        setTreePointer(() => id)
+    }
+
+    const currentRoot = namespaces.namespaces.reverse()[0].id
 
     return (
         <div className="pt-8 px-8">
@@ -47,17 +42,17 @@ const WorkspaceNamespaceListTab: FC = () => {
                 title="Namespaces"
                 description=""
                 actions={[
-                    <Append appendTo={currentParent}/>,
+                    <Append appendTo={currentRoot}/>,
                     // <Actions item={root}/>
                 ]}/>
-            Position: {sublist.namespaces[0].name}
-            {children &&
+
+            {namespaces &&
                 <ul className="grid grid-cols-1 gap-x-6 gap-y-8">
-                    {children.namespaces.map(namespace =>
+                    {namespaces.namespaces.map(namespace =>
                         <Card
                             className="relative overflow-hidden duration-500 hover:border-primary/50 group"
                             key={namespace.id}
-                            onClick={() => setCurrentParent(namespace.id)}
+                            onClick={() => handleClick(namespace.id)}
                         >
                             <CardHeader>
                                 <div className="flex items-center justify-between">
@@ -71,17 +66,9 @@ const WorkspaceNamespaceListTab: FC = () => {
                     )}
                 </ul>
             }
+
         </div>
     )
 }
-
-/*
-type ListViewProps = { sublist: NamespaceList, onChange: (id: string) => void }
-const ListView: FC<ListViewProps> = ({sublist, onChange}) => {
-    return (
-
-    )
-}
-*/
 
 export default WorkspaceNamespaceListTab;

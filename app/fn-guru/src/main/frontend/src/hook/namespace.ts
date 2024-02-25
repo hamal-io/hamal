@@ -38,12 +38,3 @@ export const useNamespaceUpdate = (): [NamespaceUpdateAction, NamespaceUpdateReq
     )
     return [fn, submission, loading, error]
 }
-
-type NamespaceSublistAction = (namespaceId: string, abortController ?: AbortController) => void
-export const useNamespaceSublist = (): [NamespaceSublistAction, NamespaceList, boolean, Error] => {
-    const [auth] = useAuth()
-    const [get, namespaceList, loading, error] = useGet<NamespaceList>()
-    const fn = useCallback(async (namespaceId: string, abortController?: AbortController) =>
-        get(`/v1/namespaces/${namespaceId}/sublist`, abortController), [auth])
-    return [fn, namespaceList, loading, error]
-}
