@@ -22,6 +22,8 @@ sealed interface KuaTable : KuaTableType {
 //        val keys: Set<Int> get() = underlyingArray.keys
 //        val values: Collection<KuaType> get() = underlyingArray.values
 
+        fun asSequence(): Sequence<KuaType>
+
         fun append(value: KuaTable): Int
         fun append(value: KuaType): Int
         fun append(value: KuaAny): Int
@@ -69,6 +71,8 @@ sealed interface KuaTable : KuaTableType {
 //        val keys: Set<String> get() = underlyingMap.keys
 //        val values: Collection<KuaType> get() = underlyingMap.values
 
+        fun getArray(key: String): Array
+        fun findArray(key: String): Array?
 
         operator fun get(key: String): KuaType
         operator fun set(key: String, value: KuaType): Int
@@ -200,6 +204,10 @@ data class KuaTableDefaultImpl(
     // FIXME is this required?
     override val isArray: Boolean get() = !isMap
 
+    override fun asSequence(): Sequence<KuaType> {
+        return underlyingArray.values.asSequence()
+    }
+
     override fun append(value: KuaTable): Int {
         this.underlyingArray[this.underlyingArray.size + 1] = value
         return underlyingArray.size
@@ -278,6 +286,14 @@ data class KuaTableDefaultImpl(
 
     override fun type(idx: Int): KClass<out KuaType> {
         return underlyingArray[idx]?.let { it::class } ?: KuaNil::class
+    }
+
+    override fun getArray(key: String): KuaTable.Array =
+        findArray(key) ?: throw NoSuchElementException("$key not found")
+
+    override fun findArray(key: String): KuaTable.Array? {
+        checkExpectedType(key, KuaTable.Array::class)
+        return underlyingMap[key]?.let { value -> value as KuaTable.Array }
     }
 
 

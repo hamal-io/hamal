@@ -14,17 +14,17 @@ data class ApiAdhocInvokeRequest(
 
 
 interface ApiAdhocService {
-    operator fun invoke(namespaceId: NamespaceId, req: ApiAdhocInvokeRequest): ApiExecInvokeRequested
+    operator fun invoke(namespaceId: NamespaceId, request: ApiAdhocInvokeRequest): ApiExecInvokeRequested
 }
 
 internal class ApiAdhocServiceImpl(
     private val template: HttpTemplate
 ) : ApiAdhocService {
-    override fun invoke(namespaceId: NamespaceId, req: ApiAdhocInvokeRequest): ApiExecInvokeRequested {
+    override fun invoke(namespaceId: NamespaceId, request: ApiAdhocInvokeRequest): ApiExecInvokeRequested {
         return template
             .post("/v1/namespaces/{namespaceId}/adhoc")
             .path("namespaceId", namespaceId)
-            .body(req)
+            .body(request)
             .execute(ApiExecInvokeRequested::class)
     }
 }

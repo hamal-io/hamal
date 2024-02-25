@@ -9,33 +9,11 @@ import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
 
-internal class TableProxyTest {
-
-    @TestFactory
-    fun append(): List<DynamicTest> {
-        lateinit var testInstance: TableProxy
-        return listOf(
-            { testInstance.append(true) },
-            { testInstance.append(KuaFalse) },
-            { testInstance.append(23.23) },
-            { testInstance.append(23) },
-            { testInstance.append(23L) },
-            { testInstance.append(23.0f) },
-            { testInstance.append("Hamal") },
-            { testInstance.append(KuaString("Hamal")) }
-        ).mapIndexed { idx, testFn ->
-            dynamicTest("Test: ${(idx + 1)}") {
-                testInstance = state.tableCreate()
-
-                val result = testFn()
-                assertThat(result, equalTo(1))
-            }
-        }
-    }
+internal class TableProxyMapTest {
 
     @TestFactory
     fun set(): List<DynamicTest> {
-        lateinit var testInstance: TableProxy
+        lateinit var testInstance: TableProxyMap
         return listOf(
             { testInstance.set("key", true) },
             { testInstance.set("key", KuaTrue) },
@@ -56,7 +34,7 @@ internal class TableProxyTest {
             { testInstance.set(KuaString("key"), KuaString("value")) }
         ).mapIndexed { idx, testFn ->
             dynamicTest("Test: ${(idx + 1)}") {
-                testInstance = state.tableCreate()
+                testInstance = state.tableCreateMap()
 
                 val result = testFn()
                 assertThat("item set", testInstance.length, equalTo(1))
@@ -73,7 +51,7 @@ internal class TableProxyTest {
 
     @TestFactory
     fun unset(): List<DynamicTest> {
-        lateinit var testInstance: TableProxy
+        lateinit var testInstance: TableProxyMap
         return listOf(
             { testInstance.unset("key") },
             { testInstance.unset(KuaString("key")) },
@@ -81,7 +59,7 @@ internal class TableProxyTest {
             { testInstance.set(KuaString("key"), KuaNil) }
         ).mapIndexed { idx, testFn ->
             dynamicTest("Test: ${(idx + 1)}") {
-                testInstance = state.tableCreate()
+                testInstance = state.tableCreateMap()
 
                 testInstance["key"] = "value"
                 testInstance["another-key"] = "another-value"
@@ -104,7 +82,7 @@ internal class TableProxyTest {
 
     @TestFactory
     fun getBooleanValue(): List<DynamicTest> {
-        lateinit var testInstance: TableProxy
+        lateinit var testInstance: TableProxyMap
         return listOf(
             { testInstance.getBooleanType("key") },
             { testInstance.getBooleanType(KuaString("key")) },
@@ -113,7 +91,7 @@ internal class TableProxyTest {
         ).mapIndexed { idx, testFn ->
             dynamicTest("Test: ${(idx + 1)}") {
 
-                testInstance = state.tableCreate()
+                testInstance = state.tableCreateMap()
                 testInstance["key"] = true
 
                 when (val result = testFn()) {
@@ -135,13 +113,13 @@ internal class TableProxyTest {
 
     @TestFactory
     fun getCodeValue(): List<DynamicTest> {
-        lateinit var testInstance: TableProxy
+        lateinit var testInstance: TableProxyMap
         return listOf(
             { testInstance.getCode("key") },
             { testInstance.getCode(KuaString("key")) },
         ).mapIndexed { idx, testFn ->
             dynamicTest("Test: ${(idx + 1)}") {
-                testInstance = state.tableCreate()
+                testInstance = state.tableCreateMap()
                 testInstance["key"] = "print('doing something interesting')"
 
                 val result = testFn()
@@ -159,7 +137,7 @@ internal class TableProxyTest {
 
     @TestFactory
     fun getNumberValue(): List<DynamicTest> {
-        lateinit var testInstance: TableProxy
+        lateinit var testInstance: TableProxyMap
         return listOf(
             { testInstance.getNumberType("key") },
             { testInstance.getNumberType(KuaString("key")) },
@@ -173,7 +151,7 @@ internal class TableProxyTest {
             { testInstance.getDouble(KuaString("key")) }
         ).mapIndexed { idx, testFn ->
             dynamicTest("Test: ${(idx + 1)}") {
-                testInstance = state.tableCreate()
+                testInstance = state.tableCreateMap()
 
                 testInstance["key"] = 23
 
@@ -199,7 +177,7 @@ internal class TableProxyTest {
 
     @TestFactory
     fun getStringValue(): List<DynamicTest> {
-        lateinit var testInstance: TableProxy
+        lateinit var testInstance: TableProxyMap
         return listOf(
             { testInstance.getString("key") },
             { testInstance.getString(KuaString("key")) },
@@ -207,7 +185,7 @@ internal class TableProxyTest {
             { testInstance.getStringType(KuaString("key")) }
         ).mapIndexed { idx, testFn ->
             dynamicTest("Test: ${(idx + 1)}") {
-                testInstance = state.tableCreate()
+                testInstance = state.tableCreateMap()
 
                 testInstance["key"] = "Hamal Rocks"
 

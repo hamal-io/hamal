@@ -58,7 +58,7 @@ internal class KuaAnyTest {
 
     @Test
     fun `AnyValue can be used with MapType`() {
-        val map = sandbox.tableCreate(2)
+        val map = sandbox.tableCreateMap(2)
         map["key"] = "value"
         sandbox.setGlobal("test_map", map)
 

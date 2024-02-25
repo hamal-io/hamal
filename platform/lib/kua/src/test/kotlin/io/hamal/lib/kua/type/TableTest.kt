@@ -4,6 +4,7 @@ import io.hamal.lib.kua.type.TypeSerializationFixture.generateTestCases
 import org.junit.jupiter.api.TestFactory
 
 class KuaTableTest {
+
     @TestFactory
     fun serialization() = listOf(
         generateTestCases(

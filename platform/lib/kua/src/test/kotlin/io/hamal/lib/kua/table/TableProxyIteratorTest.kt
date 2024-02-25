@@ -31,7 +31,7 @@ internal class TableEntryIteratorTest {
 
     @Test
     fun `Table with single element`() {
-        val table = state.tableCreate(123)
+        val table = state.tableCreateMap(123)
         table.append(21)
 
         val testInstance = TableEntryIterator(
@@ -57,7 +57,7 @@ internal class TableEntryIteratorTest {
 
     @Test
     fun `Table with multiple elements`() {
-        val table = state.tableCreate(0)
+        val table = state.tableCreateMap(0)
         repeat(10) { idx ->
             table.append(idx)
             println(idx)

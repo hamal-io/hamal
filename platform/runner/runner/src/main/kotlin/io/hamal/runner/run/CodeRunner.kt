@@ -5,7 +5,8 @@ import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.AssertionError
 import io.hamal.lib.kua.ExitError
 import io.hamal.lib.kua.ExtensionError
-import io.hamal.lib.kua.table.TableProxy
+import io.hamal.lib.kua.table.TableProxyArray
+import io.hamal.lib.kua.table.TableProxyMap
 import io.hamal.lib.kua.type.*
 import io.hamal.runner.config.EnvFactory
 import io.hamal.runner.config.SandboxFactory
@@ -47,15 +48,17 @@ class CodeRunnerImpl(
                     try {
                         val contextExtension = RunnerContextFactory(runnerContext).create(sandbox)
 
-                        val internalTable = sandbox.state.tableCreate(contextExtension.internals.size)
+                        val internalTable = sandbox.state.tableCreateMap(contextExtension.internals.size)
                         contextExtension.internals.forEach { entry ->
                             when (val value = entry.value) {
                                 is KuaNil -> {}
                                 is KuaString -> internalTable[entry.key] = value
                                 is KuaNumber -> internalTable[entry.key] = value
                                 is KuaFunction<*, *, *, *> -> internalTable[entry.key] = value
-                                is TableProxy -> internalTable[entry.key] = value
-                                is KuaTable -> internalTable[entry.key] = sandbox.toTableProxy(value)
+                                is TableProxyArray -> internalTable[entry.key] = value
+                                is TableProxyMap -> internalTable[entry.key] = value
+                                is KuaTable.Map -> internalTable[entry.key] = sandbox.toTableProxyMap(value)
+                                is KuaTable.Array -> internalTable[entry.key] = sandbox.toTableProxyArray(value)
                                 else -> TODO()
                             }
                         }

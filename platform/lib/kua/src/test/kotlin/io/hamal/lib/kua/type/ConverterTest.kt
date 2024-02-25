@@ -219,14 +219,14 @@ internal class ToProxyMapTest {
     @Test
     fun `Empty map`() {
         val testMap = KuaTable.Map()
-        val result = testState.toTableProxy(testMap)
+        val result = testState.toTableProxyMap(testMap)
         assertThat(result.length, equalTo(0))
     }
 
     @Test
     fun `Map with boolean type`() {
         val testMap = KuaTable.Map("true_value" to KuaTrue, "false_value" to KuaFalse)
-        val result = testState.toTableProxy(testMap)
+        val result = testState.toTableProxyMap(testMap)
         assertThat(result.length, equalTo(2))
         assertThat(result.getBooleanType("true_value"), equalTo(KuaTrue))
         assertThat(result.getBooleanType("false_value"), equalTo(KuaFalse))
@@ -235,7 +235,7 @@ internal class ToProxyMapTest {
     @Test
     fun `Map with number type`() {
         val testMap = KuaTable.Map("number" to KuaNumber(1337))
-        val result = testState.toTableProxy(testMap)
+        val result = testState.toTableProxyMap(testMap)
         assertThat(result.length, equalTo(1))
         assertThat(result.getNumberType("number"), equalTo(KuaNumber(1337)))
     }
@@ -243,7 +243,7 @@ internal class ToProxyMapTest {
     @Test
     fun `Map with string type`() {
         val testMap = KuaTable.Map("some_string" to KuaString("HamalRocks"))
-        val result = testState.toTableProxy(testMap)
+        val result = testState.toTableProxyMap(testMap)
         assertThat(result.length, equalTo(1))
         assertThat(result.getStringType("some_string"), equalTo(KuaString("HamalRocks")))
     }
@@ -255,7 +255,7 @@ internal class ToProxyMapTest {
                 "value" to KuaString("HamalRocks")
             )
         )
-        val result = testState.toTableProxy(testInstance)
+        val result = testState.toTableProxyMap(testInstance)
         assertThat(result.length, equalTo(1))
 
         val nested = result.getTable("nested")

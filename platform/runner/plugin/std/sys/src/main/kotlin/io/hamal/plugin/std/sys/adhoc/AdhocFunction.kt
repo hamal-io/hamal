@@ -1,5 +1,6 @@
 package io.hamal.plugin.std.sys.adhoc
 
+import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.domain.vo.NamespaceId
@@ -7,7 +8,7 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.table.TableProxy
+import io.hamal.lib.kua.table.TableProxyMap
 import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.kua.type.KuaTable
@@ -22,13 +23,13 @@ class AdhocFunction(
 ) {
     override fun invoke(ctx: FunctionContext, arg1: KuaTable.Map): Pair<KuaError?, KuaTable.Map?> {
         return try {
-            require(arg1 is TableProxy)
-
+            require(arg1 is TableProxyMap)
 
             val res = sdk.adhoc(
-                ctx[NamespaceId::class],
-//                arg1.findString("namespace_id")?.let { NamespaceId(SnowflakeId(it)) } ?: ctx[NamespaceId::class],
-                ApiAdhocInvokeRequest(
+                namespaceId = arg1.findString("namespace_id")
+                    ?.let { NamespaceId(SnowflakeId(it)) }
+                    ?: ctx[NamespaceId::class],
+                request = ApiAdhocInvokeRequest(
                     inputs = InvocationInputs(),
                     code = CodeValue(arg1.getString("code"))
                 )

@@ -6,15 +6,28 @@ import io.hamal.lib.kua.State
 import io.hamal.lib.kua.type.*
 import kotlin.reflect.KClass
 
-
-
-class TableProxy(
-    val index: Int,
-    val state: State
+class TableProxyMap(
+    val index: Int, val state: State
 ) : KuaTable.Map {
 
     override val underlyingMap: Map<String, KuaType>
         get() = TODO("Not yet implemented")
+
+    override fun getArray(key: String): KuaTable.Array {
+        return findArray(key) ?: throw NoSuchElementException("$key not found")
+    }
+
+    override fun findArray(key: String): KuaTable.Array? {
+        if (isNull(key)) {
+            return null
+        }
+
+        state.pushString(key)
+        val type = state.tableGetRaw(index)
+        type.checkExpectedType(KuaTableType::class)
+        return state.getTableProxyArray(state.top.value)
+    }
+
 
     override fun get(key: String): KuaType {
         TODO("Not yet implemented")
@@ -28,7 +41,6 @@ class TableProxy(
     override val size: Int get() = 0
     override val isArray: Boolean get() = false
     override val isMap: Boolean get() = true
-
 
 
     override val type: KuaType.Type = KuaType.Type.Table
@@ -105,17 +117,17 @@ class TableProxy(
         return state.tableSetRaw(index)
     }
 
-    operator fun set(key: String, value: TableProxy): Int {
+    operator fun set(key: String, value: TableProxyMap): Int {
         state.pushString(key)
         state.pushTable(value)
         return state.tableSetRaw(index)
     }
 
-    fun getTable(key: String): TableProxy {
+    fun getTable(key: String): TableProxyMap {
         state.pushString(key)
         val type = state.tableGetRaw(index)
         type.checkExpectedType(KuaTableType::class)
-        return state.getTable(state.top.value)
+        return state.getTableProxyMap(state.top.value)
     }
 
     fun getBooleanType(key: KuaString): KuaBoolean = getBooleanType(key.value)
@@ -183,7 +195,6 @@ class TableProxy(
     }
 
 
-
     fun getBoolean(idx: Int) = getBooleanType(idx) == KuaTrue
     fun getBooleanType(idx: Int): KuaBoolean {
         val type = state.tableGetRawIdx(index, idx)
@@ -238,7 +249,7 @@ class TableProxy(
         return state.tableAppend(index)
     }
 
-    fun append(value: TableProxy): Int {
+    fun append(value: TableProxyMap): Int {
         state.pushTable(value)
         return state.tableAppend(index)
     }

@@ -2,9 +2,61 @@ package io.hamal.lib.kua.type
 
 import io.hamal.lib.kua.State
 import io.hamal.lib.kua.table.TableEntryIterator
-import io.hamal.lib.kua.table.TableProxy
+import io.hamal.lib.kua.table.TableProxyArray
+import io.hamal.lib.kua.table.TableProxyMap
 
-fun State.toKuaTableMap(map: TableProxy): KuaTable.Map {
+fun State.toKuaTableArray(array: TableProxyArray): KuaTable.Array {
+    val result = KuaTable.Array()
+    TableEntryIterator(
+        index = array.index,
+        state = this,
+        keyExtractor = { state, index -> state.getNumberType(index) },
+        valueExtractor = { state, index ->
+            when (val value = state.getAny(index).value) {
+//                is KuaTable.Array,
+                is KuaBoolean,
+                is KuaDecimal,
+//                is KuaTable.Map,
+                is KuaNumber,
+                is KuaString -> value
+
+                is TableProxyMap -> toKuaTableMap(value)
+                is TableProxyArray -> toKuaTableArray(value)
+                else -> TODO("$value")
+            }
+        }
+    ).forEach { (_, value) -> result.append(value) }
+
+    return result
+}
+
+fun State.toTableProxyArray(array: KuaTable.Array): TableProxyArray {
+    if (array is TableProxyArray) {
+        return array
+    }
+    return tableCreateArray(array.size).also {
+        // FIXME probably instead of of appending it should be set to keep the index
+        array.underlyingArray.forEach { (_, value) ->
+            when (value) {
+                is KuaBoolean -> it.append(value)
+                is KuaDecimal -> it.append(value)
+                is KuaNumber -> it.append(value)
+                is KuaString -> it.append(value)
+                is KuaTable.Map -> {
+                    it.append(toTableProxyMap(value)); pop(1)
+                }
+
+                is KuaTable.Array -> {
+                    it.append(toTableProxyArray(value)); pop(1)
+                }
+
+                else -> TODO("$value")
+            }
+        }
+    }
+}
+
+fun State.toKuaTableMap(map: TableProxyMap): KuaTable.Map {
     val store = mutableMapOf<String, KuaType>()
 
     TableEntryIterator(
@@ -15,11 +67,15 @@ fun State.toKuaTableMap(map: TableProxy): KuaTable.Map {
             when (val value = state.getAny(index).value) {
                 is KuaBoolean,
                 is KuaDecimal,
-                is KuaTable,
+//                is KuaTable,
                 is KuaNumber,
                 is KuaString -> value
 
-                is TableProxy -> toKuaTableMap(value)
+                is TableProxyMap -> toKuaTableMap(value)
+                is TableProxyArray -> toKuaTableArray(value)
+
+                is KuaTable.Map -> value
+                is KuaTable.Array -> value
                 else -> TODO("$value")
             }
         }
@@ -28,13 +84,14 @@ fun State.toKuaTableMap(map: TableProxy): KuaTable.Map {
     return KuaTable.Map(store)
 }
 
-fun State.toTableProxy(map: KuaTable): TableProxy {
-    if (map is TableProxy) {
+fun State.toTableProxyMap(map: KuaTable.Map): TableProxyMap {
+    if (map is TableProxyMap) {
         return map
     }
 
-    return tableCreate(map.size).also {
-        (map as KuaTable.Map).underlyingMap.forEach { (key, value) ->
+    return tableCreateMap(map.size).also {
+        // FIXME this really sucks
+        map.underlyingMap.forEach { (key, value) ->
             when (value) {
                 is KuaBoolean -> it[key] = value
                 is KuaDecimal -> it[key] = value
@@ -42,8 +99,12 @@ fun State.toTableProxy(map: KuaTable): TableProxy {
                 is KuaNil -> it[key] = KuaNil
                 is KuaNumber -> it[key] = value
                 is KuaString -> it[key] = value
-                is KuaTable -> {
-                    it[key] = toTableProxy(value); pop(1)
+                is KuaTable.Map -> {
+                    it[key] = toTableProxyMap(value); pop(1)
+                }
+
+                is KuaTable.Array -> {
+                    it[key] = toTableProxyArray(value); pop(1)
                 }
 
                 else -> TODO("$value")

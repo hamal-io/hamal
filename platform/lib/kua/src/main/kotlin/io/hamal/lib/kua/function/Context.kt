@@ -3,7 +3,8 @@ package io.hamal.lib.kua.function
 import io.hamal.lib.kua.SandboxContext
 import io.hamal.lib.kua.StackTop
 import io.hamal.lib.kua.State
-import io.hamal.lib.kua.table.TableProxy
+import io.hamal.lib.kua.table.TableProxyArray
+import io.hamal.lib.kua.table.TableProxyMap
 import io.hamal.lib.kua.type.KuaAny
 import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.kua.type.KuaFunction
@@ -30,7 +31,11 @@ class FunctionContext(
     override fun pushNil() = state.pushNil()
     override fun pushAny(value: KuaAny) = state.pushAny(value)
     override fun getAny(idx: Int) = state.getAny(idx)
-    override fun getTable(idx: Int) = state.getTable(idx)
+
+    override fun getTableProxyArray(idx: Int) = state.getTableProxyArray(idx)
+
+    override fun getTableProxyMap(idx: Int) = state.getTableProxyMap(idx)
+
 
     override fun pushBoolean(value: Boolean) = state.pushBoolean(value)
     override fun getBoolean(idx: Int) = state.getBoolean(idx)
@@ -41,17 +46,21 @@ class FunctionContext(
     override fun pushNumber(value: Double) = state.pushNumber(value)
     override fun getString(idx: Int) = state.getString(idx)
     override fun pushString(value: String) = state.pushString(value)
-    override fun pushTable(proxy: TableProxy) = state.pushTable(proxy)
+    override fun pushTable(proxy: TableProxyMap) = state.pushTable(proxy)
+    override fun pushTable(proxy: TableProxyArray) = state.pushTable(proxy)
 
-    override fun getTableType(idx: Int): KuaTable = state.getTableType(idx)
+
+    override fun getTableArray(idx: Int): KuaTable.Array = state.getTableArray(idx)
+    override fun getTableMap(idx: Int): KuaTable.Map = state.getTableMap(idx)
 
 
     override fun setGlobal(name: String, value: KuaFunction<*, *, *, *>) = state.setGlobal(name, value)
-    override fun setGlobal(name: String, value: TableProxy) = state.setGlobal(name, value)
-    override fun getGlobalTableMap(name: String): TableProxy = state.getGlobalTableMap(name)
+    override fun setGlobal(name: String, value: TableProxyMap) = state.setGlobal(name, value)
+    override fun getGlobalTableMap(name: String): TableProxyMap = state.getGlobalTableMap(name)
     override fun unsetGlobal(name: String) = state.unsetGlobal(name)
 
-    override fun tableCreate(capacity: Int) = state.tableCreate(capacity)
+    override fun tableCreateMap(capacity: Int) = state.tableCreateMap(capacity)
+    override fun tableCreateArray(capacity: Int): TableProxyArray = state.tableCreateArray(capacity)
 
     override fun tableAppend(idx: Int) = state.tableAppend(idx)
     override fun tableSetRaw(idx: Int) = state.tableSetRaw(idx)
