@@ -51,7 +51,7 @@ class Native(
     external fun tableGetRaw(idx: Int): Int
     external fun tableGetRawIdx(stackIdx: Int, tableIdx: Int): Int
     external fun tableNext(idx: Int): Boolean
-    external fun tableGetSub(idx: Int, key: String): Int
+    external fun tableGetSubTable(idx: Int, key: String): Int
 
     external fun loadString(code: String): Int
     external fun call(argCount: Int, returnCount: Int)

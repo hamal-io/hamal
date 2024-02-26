@@ -243,7 +243,7 @@ STATE_METHOD_NAME(tableGetLength)(JNIEnv *env, jobject K, jint idx) {
 }
 
 JNIEXPORT jint JNICALL
-STATE_METHOD_NAME(tableGetSub)(JNIEnv *env, jobject K, jint idx, jstring key) {
+STATE_METHOD_NAME(tableGetSubTable)(JNIEnv *env, jobject K, jint idx, jstring key) {
     ENV_AND_STATE
     char const *table_key = to_raw_string(key);
     int result = table_get_sub_table(L, idx, table_key);
