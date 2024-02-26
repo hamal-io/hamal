@@ -7,6 +7,7 @@ import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.toMap
 import io.hamal.lib.kua.type.KuaError
+import io.hamal.lib.kua.type.KuaNil
 import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.kua.type.KuaTableMap
 import io.hamal.lib.sdk.ApiSdk
@@ -22,7 +23,11 @@ class ExecGetFunction(
             val exec = sdk.exec.get(ExecId(arg1.value))
             null to ctx.toMap(
                 "id" to KuaString(exec.id.value.value.toString(16)),
-                "status" to KuaString(exec.status.name)
+                "status" to KuaString(exec.status.name),
+                "inputs" to ctx.toMap(),
+                "correlation" to ctx.toMap(
+                    "id" to (exec.correlation?.value?.let(::KuaString) ?: KuaNil)
+                )
             )
         } catch (t: Throwable) {
             KuaError(t.message!!) to null

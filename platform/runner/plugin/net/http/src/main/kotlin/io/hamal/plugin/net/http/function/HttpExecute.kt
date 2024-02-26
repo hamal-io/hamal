@@ -1,57 +1,91 @@
 package io.hamal.plugin.net.http.function
 
+import io.hamal.lib.http.HttpResponse
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.type.KuaError
-import io.hamal.lib.kua.type.KuaTableMap
-import io.hamal.lib.kua.type.KuaTable
+import io.hamal.lib.kua.toArray
+import io.hamal.lib.kua.type.*
 
 
-class HttpExecuteFunction : Function1In2Out<KuaTableMap, KuaError, KuaTable>(
-    FunctionInput1Schema(KuaTableMap::class),
-    FunctionOutput2Schema(KuaError::class, KuaTable::class)
+class HttpExecuteFunction : Function1In2Out<KuaTableArray, KuaError, KuaTableArray>(
+    FunctionInput1Schema(KuaTableArray::class),
+    FunctionOutput2Schema(KuaError::class, KuaTableArray::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: KuaTableMap): Pair<KuaError?, KuaTableMap?> {
-//        val results = mutableListOf<KuaTable>()
-//        for (idx in 0 until arg1.size) {
-//            val map = arg1.getT(idx + 1)
+    override fun invoke(ctx: FunctionContext, arg1: KuaTableArray): Pair<KuaError?, KuaTableArray?> {
+        val results = mutableListOf<KuaTableMap>()
+
+        ctx.pushNil()
+        while (ctx.native.tableNext(arg1.index)) {
+            val requestIndex = ctx.getNumberType(ctx.absIndex(-2))
+            val request = ctx.getTableMap(ctx.absIndex(-1))
+            println(requestIndex)
+            println(request)
+
+            ctx.pushNil()
+            while (ctx.native.tableNext(request.index)) {
+                val key = ctx.getString(ctx.absIndex(-2))
+                val value = ctx.getAny(ctx.absIndex(-1))
+                println(key)
+                println(value)
+                ctx.native.pop(1)
+            }
+
+            ctx.native.pop(1)
+        }
+
+//        KuaTableEntryIterator(
+//            index = arg1.index,
+//            state = ctx,
+//            keyExtractor = { state, index -> state.getNumberType(index) },
+//            valueExtractor = { state, index -> state.getTableMap(index) }
+//        ).asSequence().forEach { (_, request) ->
+//            println(ctx.getStringType(request.index))
+////            println(request.getString("method"))
+////            println(request)
+//        }
+
+
+//        for (idx in 0 until arg1.length) {
+//            val map = arg1.getTableMap(idx + 1)
+//
+//
 //
 //            val method = map.getString("method")
 //            val url = map.getString("url")
 //
-//            val headers = map.get("headers")
+//            val headers = map.getTableMap("headers")
 //            if (method == "GET") {
 //                val template = HttpTemplateImpl().get(url).header("accept", "application/json")
 //
-//                if (headers is KuaTable) {
-//                    headers.value.forEach { key, value ->
-//                        template.header(
-//                            key,
-//                            when (value) {
-//                                is KuaString -> value.value
-//                                is KuaFalse -> "false"
-//                                is KuaTrue -> "true"
-//                                is KuaCode -> value.value
-//                                is KuaDecimal -> value.toString()
-//                                is KuaError -> value.value
-//                                is KuaNil -> ""
-//                                is KuaNumber -> value.value.toString()
-//                                is KuaAny -> TODO()
-//                                is KuaArray -> TODO()
-//                                is KuaTable -> throw IllegalArgumentException("MapType not supported")
-//                                is KuaFunction<*, *, *, *> -> TODO()
-//                                is KuaTableType -> TODO()
-//                            }
-//                        )
-//                    }
+//                headers.asSequence().forEach { (key, value) ->
+//                    template.header(
+//                        key.value, when (value) {
+//                            is KuaString -> value.value
+//                            is KuaFalse -> "false"
+//                            is KuaTrue -> "true"
+//                            is KuaCode -> value.value
+//                            is KuaDecimal -> value.toString()
+//                            is KuaError -> value.value
+//                            is KuaNil -> ""
+//                            is KuaNumber -> value.value.toString()
+//                            is KuaAny -> TODO()
+//                            is KuaTableArray -> TODO()
+//                            is KuaTableMap -> TODO()
+//                            is KuaTable -> throw IllegalArgumentException("MapType not supported")
+//                            is KuaFunction<*, *, *, *> -> TODO()
+//                            else -> TODO()
+//                        }
+//                    )
 //                }
 //
 //
 //                val response = template.execute()
-//                results.add(response.toMap())
+//                results.add(response.toMap(ctx))
 //            }
+//
+//
 //
 //            if (method == "POST") {
 //
@@ -63,37 +97,36 @@ class HttpExecuteFunction : Function1In2Out<KuaTableMap, KuaError, KuaTable>(
 //                template.header("content-type", "application/json")
 //
 //                // FIXME
-//                if (json !is KuaNil) {
-//                    template.body(json.toJson())
+////                if (json !is KuaNil) {
+////                    template.body(json.toJson())
+////                }
+//
+//                headers.asSequence().forEach { (key, value) ->
+//                    template.header(
+//                        key.value, when (value) {
+//                            is KuaString -> value.value
+//                            is KuaFalse -> "false"
+//                            is KuaTrue -> "true"
+//                            is KuaCode -> value.value
+//                            is KuaDecimal -> value.toString()
+//                            is KuaError -> value.value
+//                            is KuaNil -> ""
+//                            is KuaNumber -> value.value.toString()
+//                            is KuaAny -> TODO()
+//                            is KuaTableArray -> TODO()
+//                            is KuaTableMap -> TODO()
+//                            is KuaTable -> throw IllegalArgumentException("MapType not supported")
+//                            is KuaFunction<*, *, *, *> -> TODO()
+//                            else -> TODO()
+//                        }
+//                    )
 //                }
 //
-//                if (headers is KuaTable) {
-//                    headers.value.forEach { key, value ->
-//                        template.header(
-//                            key,
-//                            when (value) {
-//                                is KuaString -> value.value
-//                                is KuaFalse -> "false"
-//                                is KuaTrue -> "true"
-//                                is KuaCode -> value.value
-//                                is KuaDecimal -> value.toString()
-//                                is KuaError -> value.value
-//                                is KuaNil -> ""
-//                                is KuaNumber -> value.value.toString()
-//                                is KuaAny -> TODO()
-//                                is KuaArray -> TODO()
-//                                is KuaFunction<*, *, *, *> -> TODO()
-//                                is KuaTableType -> TODO()
-//                                is KuaTable -> throw IllegalArgumentException("MapType not supported")
-//                            }
-//                        )
-//                    }
-//                }
 //
 //                val response = template.execute()
-//                results.add(response.toMap())
+//                results.add(response.toMap(ctx))
 //            }
-//
+
 //
 //            if (method == "PATCH") {
 //                val json = map.get("json")
@@ -122,10 +155,10 @@ class HttpExecuteFunction : Function1In2Out<KuaTableMap, KuaError, KuaTable>(
 //                                is KuaNil -> ""
 //                                is KuaNumber -> value.value.toString()
 //                                is KuaAny -> TODO()
-//                                is KuaArray -> TODO()
+//                                is KuaTableArray -> TODO()
+//                                is KuaTableMap -> TODO()
 //                                is KuaFunction<*, *, *, *> -> TODO()
-//                                is KuaTableType -> TODO()
-//                                is KuaTable -> throw IllegalArgumentException("MapType not supported")
+//                                else -> TODO()
 //                            }
 //                        )
 //                    }
@@ -157,10 +190,11 @@ class HttpExecuteFunction : Function1In2Out<KuaTableMap, KuaError, KuaTable>(
 //                                is KuaNil -> ""
 //                                is KuaNumber -> value.value.toString()
 //                                is KuaAny -> TODO()
-//                                is KuaArray -> TODO()
+//                                is KuaTableArray -> TODO()
+//                                is KuaTableMap -> TODO()
 //                                is KuaFunction<*, *, *, *> -> TODO()
-//                                is KuaTableType -> TODO()
 //                                is KuaTable -> throw IllegalArgumentException("MapType not supported")
+//                                else -> TODO()
 //                            }
 //                        )
 //                    }
@@ -192,10 +226,11 @@ class HttpExecuteFunction : Function1In2Out<KuaTableMap, KuaError, KuaTable>(
 //                                is KuaNil -> ""
 //                                is KuaNumber -> value.value.toString()
 //                                is KuaAny -> TODO()
-//                                is KuaArray -> TODO()
+//                                is KuaTableArray -> TODO()
+//                                is KuaTableMap -> TODO()
 //                                is KuaFunction<*, *, *, *> -> TODO()
-//                                is KuaTableType -> TODO()
 //                                is KuaTable -> throw IllegalArgumentException("MapType not supported")
+//                                else -> TODO()
 //                            }
 //                        )
 //                    }
@@ -206,22 +241,20 @@ class HttpExecuteFunction : Function1In2Out<KuaTableMap, KuaError, KuaTable>(
 //            }
 //
 //        }
-//
-//        return null to KuaArray(results.mapIndexed { index, value -> index + 1 to value }.toMap().toMukuaTableMap())
 
-        TODO()
+//            return null to KuaArray(results.mapIndexed { index, value -> index + 1 to value }.toMap().toMukuaTableMap())
+        return null to ctx.toArray(results)
     }
 }
 
-
-//private fun HttpResponse.toMap() = ctx.toMap().also {
-//    it["status_code"] = KuaNumber(statusCode.value)
-//    it["content_type"] = headers.find("content-type")?.let { type -> KuaString(type) } ?: KuaNil
-//    it["content_length"] = headers.find("content-length")?.let { length -> KuaNumber(length.toInt()) } ?: KuaNil
+private fun HttpResponse.toMap(ctx: FunctionContext) = ctx.tableCreateMap().also {
+    it["status_code"] = KuaNumber(statusCode.value)
+    it["content_type"] = headers.find("content-type")?.let { type -> KuaString(type) } ?: KuaNil
+    it["content_length"] = headers.find("content-length")?.let { length -> KuaNumber(length.toInt()) } ?: KuaNil
 //    it["headers"] = headers()
 //    it["content"] = content()
-//}
-//
+}
+
 //private fun HttpResponse.content() = when (this) {
 //    is HttpSuccessResponse -> {
 //        if (isNotEmpty) {

@@ -1,7 +1,6 @@
 package io.hamal.lib.kua.function
 
 import io.hamal.lib.kua.type.*
-import io.hamal.lib.kua.type.KuaTableMap
 import kotlin.reflect.KClass
 
 sealed interface FunctionInputSchema<INPUT : FunctionInput<*, *>> {
@@ -46,9 +45,10 @@ fun <ARG : KuaType> KClass<ARG>.extract(ctx: FunctionContext, idx: Int): ARG {
         KuaAny::class -> ctx.getAny(idx) as ARG
         KuaNumber::class -> ctx.getNumberType(idx) as ARG
         KuaString::class -> ctx.getStringType(idx) as ARG
-        KuaType::class -> TODO() //FIXME loads the entire table from lua -- maybe some form of readonly table value and table value is interface?!
+        KuaTable::class -> ctx.getTable(idx) as ARG
+        KuaTableArray::class -> ctx.getTableArray(idx) as ARG
         KuaTableMap::class -> ctx.getTableMap(idx) as ARG
-        KuaTable::class -> ctx.getTableMap(idx) as ARG
+        KuaType::class -> TODO()
         else -> TODO()
     }
 }

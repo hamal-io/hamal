@@ -39,8 +39,21 @@ class KuaTableMap(
     }
 
 
-    fun get(key: String): KuaType {
-        TODO("Not yet implemented")
+    fun get(key: String): KuaAny {
+        state.pushString(key)
+        return state.getAny(state.top.value)
+    }
+
+    operator fun set(key: String, value: KuaAny): Int {
+        return set(key, value.value)
+    }
+
+    operator fun set(key: KuaString, value: KuaAny): Int {
+        return set(key.value, value.value)
+    }
+
+    operator fun set(key: KuaString, value: KuaType): Int {
+        return set(key.value, value)
     }
 
     operator fun set(key: String, value: KuaType): Int {
@@ -133,7 +146,7 @@ class KuaTableMap(
         return state.tableSetRaw(index)
     }
 
-    fun getTable(key: String): KuaTableMap {
+    fun getTableMap(key: String): KuaTableMap {
         state.pushString(key)
         val type = state.tableGetRaw(index)
         type.checkExpectedType(KuaTable::class)
@@ -194,11 +207,11 @@ class KuaTableMap(
     }
 
     fun findStringType(key: String): KuaString? {
-        if (isNull(key)) {
+        state.pushString(key)
+        val type = state.tableGetRaw(index)
+        if (type == KuaNil::class) {
             return null
         }
-
-        val type = state.tableGetRaw(index)
         type.checkExpectedType(KuaString::class)
         return KuaString(state.native.toString(state.top.value).also { state.native.pop(1) })
     }
@@ -213,66 +226,6 @@ class KuaTableMap(
     fun type(key: String): KClass<out KuaType> {
         state.pushString(key)
         return state.tableGetRaw(index)
-    }
-
-
-    fun getBoolean(idx: Int) = getBooleanType(idx) == KuaTrue
-    fun getBooleanType(idx: Int): KuaBoolean {
-        val type = state.tableGetRawIdx(index, idx)
-        type.checkExpectedType(KuaBoolean::class)
-        return state.getBooleanValue(-1)
-    }
-
-    fun append(value: KuaBoolean) = append(value.value)
-    fun append(value: Boolean): Int {
-        state.native.pushBoolean(value)
-        return state.tableAppend(index)
-    }
-
-
-    fun getInt(idx: Int) = getNumberType(idx).value.toInt()
-    fun getLong(idx: Int) = getNumberType(idx).value.toLong()
-    fun getFloat(idx: Int) = getNumberType(idx).value.toFloat()
-    fun getDouble(idx: Int) = getNumberType(idx).value.toDouble()
-    fun getNumberType(idx: Int): KuaNumber {
-        val type = state.tableGetRawIdx(index, idx)
-        type.checkExpectedType(KuaNumber::class)
-        return state.getNumberType(-1)
-    }
-
-    fun append(value: Int) = append(value.toDouble())
-    fun append(value: Long) = append(value.toDouble())
-    fun append(value: Float) = append(value.toDouble())
-    fun append(value: KuaNumber) = append(value.value)
-    fun append(value: Double): Int {
-        state.native.pushNumber(value)
-        return state.tableAppend(index)
-    }
-
-    fun append(value: KuaDecimal): Int {
-        state.native.pushDecimal(value)
-        return state.tableAppend(index)
-    }
-
-    fun append(value: ValueObjectId) = append(value.value.value)
-    fun append(value: SnowflakeId) = append(value.value.toString(16))
-
-    fun getString(idx: Int) = getStringType(idx).value
-    fun getStringType(idx: Int): KuaString {
-        val type = state.tableGetRawIdx(index, idx)
-        type.checkExpectedType(KuaString::class)
-        return state.getStringType(-1)
-    }
-
-    fun append(value: KuaString) = append(value.value)
-    fun append(value: String): Int {
-        state.native.pushString(value)
-        return state.tableAppend(index)
-    }
-
-    fun append(value: KuaTableMap): Int {
-        state.pushTable(value)
-        return state.tableAppend(index)
     }
 
 }

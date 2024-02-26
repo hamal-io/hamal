@@ -100,6 +100,8 @@ class ClosableState(
             KuaDecimal::class -> KuaAny(native.toDecimal(idx))
             KuaNumber::class -> KuaAny(getNumberType(idx))
             KuaString::class -> KuaAny(getStringType(idx))
+            KuaTableMap::class -> KuaAny(getTableMap(idx))
+            KuaTableArray::class -> KuaAny(getTableArray(idx))
             KuaTable::class -> KuaAny(getTable(idx))
             else -> TODO("$type not supported yet")
         }
@@ -119,7 +121,8 @@ class ClosableState(
     override fun pushTable(proxy: KuaTableArray) = StackTop(native.pushTop(proxy.index))
 
     override fun getTable(idx: Int): KuaTable {
-        TODO()
+        // FIXME figure out whether its array or map
+        return getTableMap(idx)
     }
 
     override fun getTableArray(idx: Int) = KuaTableArray(absIndex(idx), this)
@@ -159,7 +162,7 @@ class ClosableState(
 
     override fun tableCreateArray(capacity: Int): KuaTableArray {
         return KuaTableArray(
-            index = native.tableCreate(0, capacity),
+            index = native.tableCreate(capacity, 0),
             state = this
         )
     }

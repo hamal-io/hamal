@@ -71,7 +71,7 @@ class CodeRunnerImpl(
                         sandbox.load(KuaCode(unitOfWork.code.value))
 
                         val ctx = sandbox.getGlobalKuaTableMap("context")
-                        val stateToSubmit = ctx.getTable("state").toHotObject()
+                        val stateToSubmit = ctx.getTableMap("state").toHotObject()
 
                         connector.complete(execId, ExecResult(), ExecState(stateToSubmit), runnerContext.eventsToSubmit)
                         log.debug("Completed exec: $execId")
@@ -81,7 +81,7 @@ class CodeRunnerImpl(
                             if (cause.status == KuaNumber(0.0)) {
 
                                 val ctx = sandbox.getGlobalKuaTableMap("context")
-                                val stateToSubmit = ctx.getTable("state").toHotObject()
+                                val stateToSubmit = ctx.getTableMap("state").toHotObject()
 
                                 connector.complete(
                                     execId,

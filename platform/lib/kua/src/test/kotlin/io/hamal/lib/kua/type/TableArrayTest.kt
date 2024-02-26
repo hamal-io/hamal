@@ -15,7 +15,7 @@ internal class KuaTableArrayTest {
 
     @TestFactory
     fun append(): List<DynamicTest> {
-        lateinit var testInstance: KuaTableMap
+        lateinit var testInstance: KuaTableArray
         return listOf(
             { testInstance.append(true) },
             { testInstance.append(KuaFalse) },
@@ -27,7 +27,7 @@ internal class KuaTableArrayTest {
             { testInstance.append(KuaString("Hamal")) }
         ).mapIndexed { idx, testFn ->
             dynamicTest("Test: ${(idx + 1)}") {
-                testInstance = state.tableCreateMap()
+                testInstance = state.tableCreateArray()
 
                 val result = testFn()
                 assertThat(result, equalTo(1))

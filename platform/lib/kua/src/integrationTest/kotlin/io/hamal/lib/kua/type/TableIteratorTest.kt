@@ -1,4 +1,4 @@
-package io.hamal.lib.kua.table
+package io.hamal.lib.kua.type
 
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NopSandboxContext
@@ -8,13 +8,12 @@ import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.function.Function1In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
-import io.hamal.lib.kua.type.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
 
 
-internal class TableEntryIteratorTest {
+internal class KuaTableIteratorTest {
 
     @Test
     fun `Iterate over table map`() {
@@ -171,19 +170,17 @@ internal class TableEntryIteratorTest {
     }
 
     @Test
-    fun `Iterate over nested table array`() {
-//        class TestIteratorFunction : Function1In0Out<TableProxy>(
-//            FunctionInput1Schema(TableArray::class)
-//        ) {
-//            override fun invoke(ctx: FunctionContext, arg1: TableArray) {
-//                val testInstance = TableEntryIterator(
-//                    -1,
-//                    ctx,
+    fun `Iterate over table array of table maps`() {
+        class TestIteratorFunction : Function1In0Out<KuaTableArray>(
+            FunctionInput1Schema(KuaTableArray::class)
+        ) {
+            override fun invoke(ctx: FunctionContext, arg1: KuaTableArray) {
+//                val testInstance = KuaTableEntryIterator(arg1.index, ctx,
 //                    keyExtractor = { state, index -> state.getNumberType(index) },
-//                    valueExtractor = { state, index -> state.toKuaTable(state.getTable(index)) }
+//                    valueExtractor = { state, index -> state.getTableMap(index) }
 //                )
 //
-//                val resultCollector = mutableMapOf<KuaNumber, KuaTable>()
+//                val resultCollector = mutableMapOf<KuaNumber, KuaTableMap>()
 //                testInstance.forEach { entry -> resultCollector[entry.key] = entry.value }
 //                assertThat(resultCollector.keys, hasSize(3))
 //
@@ -195,86 +192,85 @@ internal class TableEntryIteratorTest {
 //
 //                val third = resultCollector[KuaNumber(3)]!!
 //                assertThat(third.getStringType("type"), equalTo(KuaString("version")))
-//            }
-//        }
-//
-//        sandbox.register(
-//            RunnerPlugin(
-//                name = "test",
-//                factoryCode = """
-//                    function plugin()
-//                        local internal = _internal
-//                        return function()
-//                            local export = {
-//                                invoke =  internal.invoke,
-//                            }
-//                            return export
-//                        end
-//                    end
-//                """.trimIndent(),
-//                internals = mapOf("invoke" to TestIteratorFunction())
-//            )
-//        )
-//        sandbox.load(
-//            """
-//            test = require_plugin('test')
-//
-//            local table = {
-//                { type = 'call' },
-//                { type = 'get_block' },
-//                { type = 'version' }
-//            }
-//            test.invoke(table)
-//        """.trimIndent()
-//        )
+            }
+        }
+
+
+        sandbox.register(
+            RunnerPlugin(
+                name = "test",
+                factoryCode = """
+                    function plugin()
+                        local internal = _internal
+                        return function()
+                            local export = {
+                                invoke =  internal.invoke,
+                            }
+                            return export
+                        end
+                    end
+                """.trimIndent(),
+                internals = mapOf("invoke" to TestIteratorFunction())
+            )
+        )
+        sandbox.load(
+            """
+            test = require_plugin('test')
+
+            local table = {
+                { type = 'call', value = 1 },
+                { type = 'get_block', value = 2 },
+                { type = 'version', value = 3 }
+            }
+            test.invoke(table)
+        """.trimIndent()
+        )
     }
 
     @Test
     fun `Iterate over empty table array`() {
-//        class TestIteratorFunction : Function1In0Out<TableArray>(
-//            FunctionInput1Schema(TableArray::class)
-//        ) {
-//            override fun invoke(ctx: FunctionContext, arg1: TableArray) {
-//                val testInstance = TableEntryIterator(
-//                    -1,
-//                    ctx,
-//                    keyExtractor = { state, index -> state.getNumberType(index) },
-//                    valueExtractor = { state, index -> state.getAny(index) }
-//                )
-//
-//                val resultCollector = mutableMapOf<KuaNumber, KuaAny>()
-//                testInstance.forEach { entry -> resultCollector[entry.key] = entry.value }
-//
-//                assertThat(resultCollector.keys, empty())
-//            }
-//        }
-//
-//        sandbox.register(
-//            RunnerPlugin(
-//                name = "test",
-//                factoryCode = """
-//                    function plugin()
-//                        local internal = _internal
-//                        return function()
-//                            local export = {
-//                                invoke =  internal.invoke,
-//                            }
-//                            return export
-//                        end
-//                    end
-//                """.trimIndent(),
-//                internals = mapOf("invoke" to TestIteratorFunction())
-//            )
-//        )
-//        sandbox.load(
-//            """
-//            test = require_plugin('test')
-//            local table = {}
-//            test.invoke(table)
-//        """.trimIndent()
-//        )
+        class TestIteratorFunction : Function1In0Out<KuaTableArray>(
+            FunctionInput1Schema(KuaTableArray::class)
+        ) {
+            override fun invoke(ctx: FunctionContext, arg1: KuaTableArray) {
+                val testInstance = KuaTableEntryIterator(
+                    -1,
+                    ctx,
+                    keyExtractor = { state, index -> state.getNumberType(index) },
+                    valueExtractor = { state, index -> state.getAny(index) }
+                )
 
-        TODO()
+                val resultCollector = mutableMapOf<KuaNumber, KuaAny>()
+                testInstance.forEach { entry -> resultCollector[entry.key] = entry.value }
+
+                assertThat(resultCollector.keys, empty())
+            }
+        }
+
+        sandbox.register(
+            RunnerPlugin(
+                name = "test",
+                factoryCode = """
+                    function plugin()
+                        local internal = _internal
+                        return function()
+                            local export = {
+                                invoke =  internal.invoke,
+                            }
+                            return export
+                        end
+                    end
+                """.trimIndent(),
+                internals = mapOf("invoke" to TestIteratorFunction())
+            )
+        )
+        sandbox.load(
+            """
+            test = require_plugin('test')
+            local table = {}
+            test.invoke(table)
+        """.trimIndent()
+        )
     }
 
     private val sandbox = run {

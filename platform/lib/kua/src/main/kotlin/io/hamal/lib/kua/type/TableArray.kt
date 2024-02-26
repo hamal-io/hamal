@@ -37,6 +37,14 @@ class KuaTableArray(
         }
     }
 
+    fun getTableMap(idx: Int): KuaTableMap {
+        return state.getTableMap(idx)
+    }
+
+    fun getTableArray(idx: Int): KuaTableArray {
+        return state.getTableArray(idx)
+    }
+
     fun append(value: KuaAny): Int {
         TODO("Not yet implemented")
     }
