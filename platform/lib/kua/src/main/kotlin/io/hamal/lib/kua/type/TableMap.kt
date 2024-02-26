@@ -38,6 +38,16 @@ class KuaTableMap(
         return state.getTableArray(state.top.value)
     }
 
+    fun forEach(action: (key: KuaType, value: KuaType) -> Unit) {
+        state.pushNil()
+        while (state.native.tableNext(index)) {
+            val key = state.getStringType(state.absIndex(-2))
+            val value = state.getAny(state.absIndex(-1))
+            action(key, value)
+            state.native.pop(1)
+        }
+        state.native.pop(1)
+    }
 
     fun get(key: String): KuaAny {
         state.pushString(key)

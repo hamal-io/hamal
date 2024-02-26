@@ -121,8 +121,11 @@ class ClosableState(
     override fun pushTable(proxy: KuaTableArray) = StackTop(native.pushTop(proxy.index))
 
     override fun getTable(idx: Int): KuaTable {
-        // FIXME figure out whether its array or map
-        return getTableMap(idx)
+        return if (native.tableGetLength(idx) == 0) {
+            getTableMap(idx)
+        } else {
+            getTableArray(idx)
+        }
     }
 
     override fun getTableArray(idx: Int) = KuaTableArray(absIndex(idx), this)

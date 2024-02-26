@@ -21,6 +21,17 @@ class KuaTableArray(
         ).asSequence().map { it.value }
     }
 
+    fun forEach(action: (KuaType) -> Unit) {
+        state.pushNil()
+        while (state.native.tableNext(index)) {
+            val index = state.getNumberType(state.absIndex(-2))
+            val value = state.getAny(state.absIndex(-1)).value
+            action(value)
+//            state.native.pop(1)
+        }
+        state.native.pop(1)
+    }
+
     fun append(value: KuaType): Int {
         return when (value) {
             is KuaBoolean -> append(value)

@@ -16,24 +16,33 @@ class HttpExecuteFunction : Function1In2Out<KuaTableArray, KuaError, KuaTableArr
     override fun invoke(ctx: FunctionContext, arg1: KuaTableArray): Pair<KuaError?, KuaTableArray?> {
         val results = mutableListOf<KuaTableMap>()
 
-        ctx.pushNil()
-        while (ctx.native.tableNext(arg1.index)) {
-            val requestIndex = ctx.getNumberType(ctx.absIndex(-2))
-            val request = ctx.getTableMap(ctx.absIndex(-1))
-            println(requestIndex)
+        arg1.forEach { request ->
+            require(request is KuaTableMap)
             println(request)
-
-            ctx.pushNil()
-            while (ctx.native.tableNext(request.index)) {
-                val key = ctx.getString(ctx.absIndex(-2))
-                val value = ctx.getAny(ctx.absIndex(-1))
+            request.forEach { key, value ->
                 println(key)
                 println(value)
-                ctx.native.pop(1)
             }
-
-            ctx.native.pop(1)
         }
+
+//        ctx.pushNil()
+//        while (ctx.native.tableNext(arg1.index)) {
+//            val requestIndex = ctx.getNumberType(ctx.absIndex(-2))
+//            val request = ctx.getTableMap(ctx.absIndex(-1))
+//            println(requestIndex)
+//            println(request)
+//
+//            ctx.pushNil()
+//            while (ctx.native.tableNext(request.index)) {
+//                val key = ctx.getString(ctx.absIndex(-2))
+//                val value = ctx.getAny(ctx.absIndex(-1))
+//                println(key)
+//                println(value)
+//                ctx.native.pop(1)
+//            }
+//
+//            ctx.native.pop(1)
+//        }
 
 //        KuaTableEntryIterator(
 //            index = arg1.index,
