@@ -39,7 +39,7 @@ push_top(lua_State *L, int idx) {
 int
 pop(lua_State *L, int total) {
     if (check_argument(total > 0, "Total must be positive (>0)") == CHECK_RESULT_ERROR) return LUA_TNONE;
-    if (check_stack_undernamespace(L, total) == CHECK_RESULT_ERROR) return LUA_TNONE;
+    if (check_stack_underflow(L, total) == CHECK_RESULT_ERROR) return LUA_TNONE;
     lua_pop(L, total);
     return top(L);
 }
