@@ -1,5 +1,6 @@
 package io.hamal.runner.run
 
+import io.hamal.lib.common.hot.HotNumber
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.logger
 import io.hamal.lib.domain.vo.*
@@ -78,20 +79,20 @@ class CodeRunnerImpl(
                     } catch (e: ExtensionError) {
                         val cause = e.cause
                         if (cause is ExitError) {
-                            if (cause.status == KuaNumber(0.0)) {
+                            if (cause.status == HotNumber(0.0)) {
 
                                 val ctx = sandbox.getGlobalKuaTableMap("context")
                                 val stateToSubmit = ctx.getTableMap("state").toHotObject()
 
                                 connector.complete(
                                     execId,
-                                    ExecResult(cause.result.toHotObject()),
+                                    ExecResult(cause.result),
                                     ExecState(stateToSubmit),
                                     runnerContext.eventsToSubmit
                                 )
                                 log.debug("Completed exec: $execId")
                             } else {
-                                connector.fail(execId, ExecResult(cause.result.toHotObject()))
+                                connector.fail(execId, ExecResult(cause.result))
                                 log.debug("Failed exec: $execId")
                             }
 

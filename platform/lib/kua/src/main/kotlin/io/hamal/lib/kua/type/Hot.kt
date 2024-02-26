@@ -18,9 +18,9 @@ fun HotNode.toKua(state: State): KuaType {
 }
 
 
-fun KuaType.toHot(): HotNode {
+fun KuaType.toHotNode(): HotNode {
     return when (this) {
-        is KuaAny -> value.toHot()
+        is KuaAny -> value.toHotNode()
         is KuaFalse -> HotBoolean(false)
         is KuaTrue -> HotBoolean(true)
         is KuaCode -> HotString(value)
@@ -31,8 +31,6 @@ fun KuaType.toHot(): HotNode {
         is KuaNumber -> HotNumber(value)
         is KuaString -> HotString(value)
         is KuaTable -> toHotObject()
-        is KuaTable -> toHotArray()
-        is KuaTable -> TODO()
     }
 }
 
@@ -42,10 +40,15 @@ fun KuaTable.toHotObject(): HotObject {
 //        builder[key] = value.toHot()
 //    }
 
+    forEach { key, value ->
+        require(key is KuaString)
+        builder[key.value] = value.toHotNode()
+    }
+
 //    entries().forEach { (key, value) ->
 //        builder[key.value] = value.toHot()
 //    }
-
+//
 
     return builder.build()
 }

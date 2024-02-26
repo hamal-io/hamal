@@ -5,9 +5,9 @@ import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.Invocation
 import io.hamal.lib.domain.vo.RunnerEnv
 import io.hamal.lib.kua.Sandbox
+import io.hamal.lib.kua.createTable
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
-import io.hamal.lib.kua.createTable
 import io.hamal.lib.kua.type.KuaNil
 import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.kua.type.KuaTable
@@ -69,23 +69,16 @@ class RunnerContextFactory(
 }
 
 private fun Sandbox.invocationEvents(events: List<Event>): KuaTable =
-//    tableCreate(events.size).let { result ->
-//        events.map {
-//            toTableProxy(
-//                KuaTable(
-//                    mutableMapOf(
-//                        "id" to KuaString(it.id.value.value.toString(16)),
-//                        "topic" to KuaTable(
-//                            mutableMapOf(
-//                                "id" to KuaString(it.topic.id.value.value.toString(16)),
-//                                "name" to KuaString(it.topic.name.value)
-//                            )
-//                        ),
-//                        "payload" to it.payload.value.toKua()
-//                    )
-//                )
-//            )
-//        }.forEach(result::append)
-//        result
-    TODO()
-//}
+    createTable(
+        events.map { evt ->
+            createTable(
+                "id" to KuaString(evt.id.value.value.toString(16)),
+                "topic" to createTable(
+                    "id" to KuaString(evt.topic.id.value.value.toString(16)),
+                    "name" to KuaString(evt.topic.name.value)
+                ),
+                "payload" to evt.payload.value.toKua(this)
+            )
+        }
+    )
+

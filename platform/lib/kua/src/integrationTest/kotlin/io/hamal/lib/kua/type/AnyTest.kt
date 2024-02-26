@@ -57,7 +57,7 @@ internal class KuaAnyTest {
     }
 
     @Test
-    fun `Can be used with table map`() {
+    fun `Can be used with table object style table`() {
         val map = sandbox.tableCreateMap(2)
         map["key"] = "value"
         sandbox.setGlobal("test_map", map)
@@ -73,14 +73,14 @@ internal class KuaAnyTest {
         )
 
         val underlying = (captor.result as KuaAny).value
-        require(underlying is KuaTable) { "Not a map" }
+        require(underlying is KuaTable) { "Not a table" }
         assertThat(underlying.length, equalTo(1))
         assertThat(underlying.getString("key"), equalTo("value"))
     }
 
 
     @Test
-    fun `AnyValue can be used with array`() {
+    fun `AnyValue can be used with array style table`() {
         val array = sandbox.tableCreateArray(2)
         array.append(23)
         array.append("hamal.io")
