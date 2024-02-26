@@ -3,7 +3,7 @@ import {useUiState} from "@/hook/ui-state.ts";
 import {PageHeader} from "@/components/page-header.tsx";
 import Append from "@/pages/app/workspace-detail/tab/namespace-list/components/append.tsx";
 
-import {NamespaceView} from "@/types";
+import {NamespaceNode} from "@/types";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx";
 import Actions from "@/pages/app/workspace-detail/tab/namespace-list/components/actions.tsx";
 import {useNamespaceList} from "@/hook";
@@ -13,75 +13,81 @@ const WorkspaceNamespaceListTab: FC = () => {
     const [uiState] = useUiState()
     const [treePointer, setTreePointer] = useState(uiState.workspaceId)
     const [listNamespaces, namespaceList] = useNamespaceList()
-    const [listView, setListView] = useState<NamespaceView>(null)
+    const [namespaceNode, setNamespaceNode] = useState<NamespaceNode>(null)
+
 
     useEffect(() => {
-        const abortController = new AbortController()
-        listNamespaces(uiState.workspaceId, abortController)
-        return (() =>
-                abortController.abort()
-        )
-    }, [treePointer]);
+            const abortController = new AbortController()
+            listNamespaces(uiState.workspaceId, abortController)
+            return (() =>
+                    abortController.abort()
+            )
+
+        }, [treePointer]
+    )
 
     useEffect(() => {
         if (namespaceList != null) {
             const foundRoot = namespaceList.namespaces.find(item => item.id === treePointer)
-            const foundChildren = namespaceList.namespaces.filter(item => item.parentId == treePointer)
+            const foundChildren = namespaceList.namespaces.filter(item => item.parentId == treePointer).reverse()
             const res = {root: foundRoot, children: foundChildren}
-            setListView(() => res)
+            setNamespaceNode(() => res)
         }
     }, [namespaceList, treePointer]);
 
 
-    function handleClick(id: string) {
+    function changeNode(id: string) {
         setTreePointer(() => id)
-
     }
 
-    if (listView == null) return "Loading"
+    if (namespaceNode == null) return "Loading"
 
     return (
         <div className="pt-8 px-8">
-            <SublistView view={listView} callback={handleClick}/>
+            <NamespaceRoot node={namespaceNode} changeNode={changeNode}/>
         </div>
     )
 }
 
-type SublistProps = {
-    view: NamespaceView
-    callback: (id: string) => void
+type NamespaceRootProps = {
+    node: NamespaceNode
+    changeNode: (id: string) => void
 }
-const SublistView: FC<SublistProps> = ({view, callback}) => {
+const NamespaceRoot: FC<NamespaceRootProps> = ({node, changeNode}) => {
+
+    const list = node.children.map(namespace =>
+        <Card
+            className="relative overflow-hidden duration-500 hover:border-primary/50 group"
+            key={namespace.id}
+            onClick={() => changeNode(namespace.id)}
+        >
+            <CardHeader>
+                <div className="flex items-center justify-between">
+                    <CardTitle>{namespace.name}</CardTitle>
+                </div>
+            </CardHeader>
+            <CardContent>
+            </CardContent>
+        </Card>
+    )
+
     return (
         <div>
             <PageHeader
                 title="Namespaces"
                 actions={[
-                    <Append appendTo={view.root.id}/>,
-                    <Button onClick={() => callback(view.root.parentId)}>Go up</Button>
+                    <Button onClick={() => changeNode(node.root.parentId)}>Go up</Button>,
+                    <Append appendTo={node.root.id}/>,
+                    <Actions item={node.root}/>
                 ]}/>
-            <p>Current Location: {view.root.name}</p>
+            <p>Current Location: {node.root.name}</p>
             <ul>
-                {view.children.map(namespace =>
-                    <Card
-                        className="relative overflow-hidden duration-500 hover:border-primary/50 group"
-                        key={namespace.id}
-                        onClick={() => callback(namespace.id)}
-                    >
-                        <CardHeader>
-                            <div className="flex items-center justify-between">
-                                <CardTitle>{namespace.name}</CardTitle>
-                            </div>
-                        </CardHeader>
-                        <CardContent>
-                            <Actions item={namespace}/>
-                        </CardContent>
-                    </Card>
-                )}
+                {list}
             </ul>
         </div>
     )
 }
+
 
 export default WorkspaceNamespaceListTab;
 

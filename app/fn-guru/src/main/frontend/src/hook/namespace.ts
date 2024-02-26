@@ -1,7 +1,7 @@
 import {useGet, usePatch, usePost} from "@/hook/http.ts";
 import {useCallback} from "react";
 import {useAuth} from "@/hook/auth.ts";
-import {Namespace, NamespaceAppendRequested, NamespaceList, NamespaceUpdateRequested, NamespaceView} from "@/types";
+import {Namespace, NamespaceAppendRequested, NamespaceList, NamespaceUpdateRequested} from "@/types";
 
 type NamespaceGetAction = (namespaceIdId: string, abortController?: AbortController) => void
 export const useNamespaceGet = (): [NamespaceGetAction, Namespace, boolean, Error] => {

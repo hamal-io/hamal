@@ -21,10 +21,6 @@ const NamespaceActions: FC<Props> = ({item}) => {
     const [open, setOpen] = useState(false);
     const [dialogContent, setDialogContent] = useState(null);
 
-    const closeDialog = () => {
-        setOpen(false)
-    }
-
     useEffect(() => {
         if (dialogContent) {
             setOpen(true)
@@ -42,15 +38,17 @@ const NamespaceActions: FC<Props> = ({item}) => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                     <DropdownMenuSeparator/>
-                {/*    <DropdownMenuItem
+                    <DropdownMenuItem
                         onClick={() => {
                             console.log("not implemented")
                         }}>
                         Choose
-                    </DropdownMenuItem>*/}
+                    </DropdownMenuItem>
                     <DropdownMenuItem
                         onClick={() => {
-                            setDialogContent(<Update item={item} onClose={closeDialog}></Update>)
+                            setDialogContent(
+                                <Update item={item} onClose={() => setOpen(false)}></Update>
+                            )
                         }}>
                         Rename
                     </DropdownMenuItem>

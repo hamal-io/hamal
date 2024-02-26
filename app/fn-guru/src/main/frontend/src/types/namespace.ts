@@ -34,7 +34,7 @@ export interface NamespaceListItem {
     name: string;
 }
 
-export interface NamespaceView {
+export interface NamespaceNode {
     root: NamespaceListItem
     children: Array<NamespaceListItem>
 }
