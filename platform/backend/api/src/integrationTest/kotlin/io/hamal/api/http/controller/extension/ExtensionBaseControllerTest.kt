@@ -21,9 +21,9 @@ internal sealed class ExtensionBaseControllerTest : BaseControllerTest() {
         return createResponse.result(ApiExtensionCreateRequested::class)
     }
 
-    fun getExtension(extId: ExtensionId): ApiExtension {
-        val getResponse = httpTemplate.get("/v1/extensions/{extId}")
-            .path("extId", extId)
+    fun getExtension(extensionId: ExtensionId): ApiExtension {
+        val getResponse = httpTemplate.get("/v1/extensions/{extensionId}")
+            .path("extensionId", extensionId)
             .execute()
 
         assertThat(getResponse.statusCode, equalTo(HttpStatusCode.Ok))
@@ -42,9 +42,9 @@ internal sealed class ExtensionBaseControllerTest : BaseControllerTest() {
 
     }
 
-    fun updateExtension(extId: ExtensionId, req: ApiExtensionUpdateRequest): ApiExtensionUpdateRequested {
-        val updateResponse = httpTemplate.patch("/v1/extensions/{extId}")
-            .path("extId", extId)
+    fun updateExtension(extensionId: ExtensionId, req: ApiExtensionUpdateRequest): ApiExtensionUpdateRequested {
+        val updateResponse = httpTemplate.patch("/v1/extensions/{extensionId}")
+            .path("extensionId", extensionId)
             .body(req)
             .execute()
 

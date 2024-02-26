@@ -57,7 +57,7 @@ internal object ProjectionCurrent : ProjectionSqlite<ExtensionId, ExtensionRecor
         tx.execute("""DELETE FROM current""")
     }
 
-    fun find(connection: Connection, extId: ExtensionId): Extension? {
+    fun find(connection: Connection, extensionId: ExtensionId): Extension? {
         return connection.executeQueryOne(
             """
             SELECT 
@@ -69,7 +69,7 @@ internal object ProjectionCurrent : ProjectionSqlite<ExtensionId, ExtensionRecor
         """.trimIndent()
         ) {
             query {
-                set("id", extId)
+                set("id", extensionId)
             }
             map { rs ->
                 json.decompressAndDeserialize(Extension::class, rs.getBytes("data"))
@@ -127,10 +127,10 @@ internal object ProjectionCurrent : ProjectionSqlite<ExtensionId, ExtensionRecor
     }
 
     private fun ExtensionQuery.ids(): String {
-        return if (extIds.isEmpty()) {
+        return if (extensionIds.isEmpty()) {
             ""
         } else {
-            "AND id IN (${extIds.joinToString(",") { "${it.value.value}" }})"
+            "AND id IN (${extensionIds.joinToString(",") { "${it.value.value}" }})"
         }
     }
 

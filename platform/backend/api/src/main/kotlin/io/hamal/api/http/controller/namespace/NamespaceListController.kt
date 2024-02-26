@@ -41,22 +41,28 @@ internal class NamespaceListController(
                         namespaceIds = tree.root.preorder()
                     )
                 ).let { namespaces ->
-                    val namespacesById = namespaces.associateBy(Namespace::id)
+                    if(namespaces.isEmpty()){
+                        ApiNamespaceList(
+                            namespaces = listOf()
+                        )
+                    }else {
+                        val namespacesById = namespaces.associateBy(Namespace::id)
 
-                    val root = namespacesById[tree.root.value]!!.let { namespace ->
-                        ApiNamespaceList.Namespace(
-                            id = namespace.id,
-                            parentId = namespace.id,
-                            name = namespace.name,
+                        val root = namespacesById[tree.root.value]!!.let { namespace ->
+                            ApiNamespaceList.Namespace(
+                                id = namespace.id,
+                                parentId = namespace.id,
+                                name = namespace.name,
+                            )
+                        }
+
+                        ApiNamespaceList(
+                            namespaces = (listOfNotNull(root).plus(assemble(root, tree.root, namespacesById)))
+                                .filter { namespace -> namespace.id < afterId }
+                                .reversed()
+                                .take(limit.value)
                         )
                     }
-
-                    ApiNamespaceList(
-                        namespaces = (listOfNotNull(root).plus(assemble(root, tree.root, namespacesById)))
-                            .filter { namespace -> namespace.id < afterId }
-                            .reversed()
-                            .take(limit.value)
-                    )
                 }
             }.firstOrNull() ?: throw NoSuchElementException("Workspace not found")
         })

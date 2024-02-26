@@ -33,7 +33,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                     namespaceId = NamespaceId(5),
                     workspaceId = WorkspaceId(3),
                     correlation = Correlation(
-                        correlationId = CorrelationId("some-correlation-id"), funcId = FuncId(23)
+                        id = CorrelationId("some-correlation-id"), funcId = FuncId(23)
                     ),
                     inputs = ExecInputs(HotObject.builder().set("hamal", "rocks").build()),
                     code = ExecCode(value = CodeValue("40 + 2")),
@@ -356,7 +356,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
             with(get(ExecId(1))) {
                 assertThat(id, equalTo(ExecId(1)))
                 assertThat(workspaceId, equalTo(WorkspaceId(333)))
-                assertThat(correlation?.correlationId, equalTo(CorrelationId("SomeCorrelationId")))
+                assertThat(correlation?.id, equalTo(CorrelationId("SomeCorrelationId")))
                 assertThat(correlation?.funcId, equalTo(FuncId(444)))
                 assertThat(inputs, equalTo(ExecInputs(HotObject.builder().set("hamal", "rocks").build())))
                 assertThat(code, equalTo(ExecCode(value = CodeValue("'13'..'37'"))))
@@ -400,7 +400,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
             with(find(ExecId(1))!!) {
                 assertThat(id, equalTo(ExecId(1)))
                 assertThat(workspaceId, equalTo(WorkspaceId(333)))
-                assertThat(correlation?.correlationId, equalTo(CorrelationId("SomeCorrelationId")))
+                assertThat(correlation?.id, equalTo(CorrelationId("SomeCorrelationId")))
                 assertThat(correlation?.funcId, equalTo(FuncId(444)))
                 assertThat(inputs, equalTo(ExecInputs(HotObject.builder().set("hamal", "rocks").build())))
                 assertThat(code, equalTo(ExecCode(value = CodeValue("'13'..'37'"))))
@@ -543,21 +543,21 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
         private fun ExecRepository.setup() {
             createExec(
                 execId = ExecId(1), workspaceId = WorkspaceId(3), status = Completed, correlation = Correlation(
-                    correlationId = CorrelationId("CID-1"), funcId = FuncId(234)
+                    id = CorrelationId("CID-1"), funcId = FuncId(234)
                 ),
                 namespaceId = NamespaceId(234)
             )
 
             createExec(
                 execId = ExecId(2), workspaceId = WorkspaceId(3), status = Failed, correlation = Correlation(
-                    correlationId = CorrelationId("CID-2"), funcId = FuncId(234)
+                    id = CorrelationId("CID-2"), funcId = FuncId(234)
                 ),
                 namespaceId = NamespaceId(234)
             )
 
             createExec(
                 execId = ExecId(3), workspaceId = WorkspaceId(4), status = Started, correlation = Correlation(
-                    correlationId = CorrelationId("CID-1"), funcId = FuncId(444)
+                    id = CorrelationId("CID-1"), funcId = FuncId(444)
                 ),
                 namespaceId = NamespaceId(444)
             )
@@ -576,7 +576,7 @@ private fun assertBaseExec(exec: Exec) {
     assertThat(
         exec.correlation, equalTo(
             Correlation(
-                correlationId = CorrelationId("some-correlation-id"), funcId = FuncId(23)
+                id = CorrelationId("some-correlation-id"), funcId = FuncId(23)
             )
         )
     )
@@ -608,7 +608,7 @@ private fun ExecRepository.planExec(
         namespaceId = namespaceId,
         workspaceId = workspaceId,
         correlation = Correlation(
-            correlationId = CorrelationId("some-correlation-id"), funcId = FuncId(23)
+            id = CorrelationId("some-correlation-id"), funcId = FuncId(23)
         ),
         inputs = ExecInputs(HotObject.builder().set("hamal", "rocks").build()),
         code = ExecCode(value = CodeValue("40 + 2")),

@@ -1,5 +1,6 @@
 package io.hamal.core.adapter.trigger
 
+import io.hamal.core.adapter.security.FilterAccessPort
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerQueryRepository
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
@@ -11,7 +12,8 @@ fun interface TriggerListPort {
 
 @Component
 class TriggerListAdapter(
-    private val triggerQueryRepository: TriggerQueryRepository
+    private val triggerQueryRepository: TriggerQueryRepository,
+    private val filterAccess: FilterAccessPort
 ) : TriggerListPort {
-    override fun invoke(query: TriggerQuery): List<Trigger> = triggerQueryRepository.list(query)
+    override fun invoke(query: TriggerQuery): List<Trigger> = filterAccess(triggerQueryRepository.list(query))
 }

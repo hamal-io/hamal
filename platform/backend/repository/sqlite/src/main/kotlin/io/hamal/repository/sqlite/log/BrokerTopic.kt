@@ -7,8 +7,8 @@ import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.vo.LogTopicId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.SqliteBaseRepository
+import io.hamal.repository.api.log.LogBrokerRepository.CreateTopicCmd
 import io.hamal.repository.api.log.LogBrokerRepository.LogTopicQuery
-import io.hamal.repository.api.log.LogBrokerRepository.LogTopicToCreate
 import io.hamal.repository.api.log.LogTopic
 import java.nio.file.Path
 
@@ -40,7 +40,7 @@ internal class LogBrokerTopicSqliteRepository(
         }
     }
 
-    fun create(toCreate: LogTopicToCreate): LogTopic {
+    fun create(cmd: CreateTopicCmd): LogTopic {
         return connection.execute<LogTopic>(
             """
             INSERT INTO topics(id, created_at, updated_at)
@@ -48,7 +48,7 @@ internal class LogBrokerTopicSqliteRepository(
             """
         ) {
             query {
-                set("id", toCreate.id)
+                set("id", cmd.logTopicId)
                 set("now", TimeUtils.now())
             }
             map { rs ->

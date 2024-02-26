@@ -28,7 +28,7 @@ internal class ExtensionRepositoryTest : AbstractUnitTest() {
             val result = create(
                 CreateCmd(
                     id = CmdId(1),
-                    extId = ExtensionId(123),
+                    extensionId = ExtensionId(123),
                     workspaceId = WorkspaceId(1),
                     name = ExtensionName("Extension1"),
                     code = ExtensionCode(
@@ -58,7 +58,7 @@ internal class ExtensionRepositoryTest : AbstractUnitTest() {
         fun `Tries to create extension but name already exists in workspace`() =
             runWith(ExtensionRepository::class) {
                 createExtension(
-                    extId = ExtensionId(1),
+                    extensionId = ExtensionId(1),
                     workspaceId = WorkspaceId(1),
                     name = ExtensionName("TestExt")
                 )
@@ -67,7 +67,7 @@ internal class ExtensionRepositoryTest : AbstractUnitTest() {
                     create(
                         CreateCmd(
                             id = CmdId(2),
-                            extId = ExtensionId(5),
+                            extensionId = ExtensionId(5),
                             workspaceId = WorkspaceId(1),
                             name = ExtensionName("TestExt"),
                             code = ExtensionCode(
@@ -89,13 +89,13 @@ internal class ExtensionRepositoryTest : AbstractUnitTest() {
         fun `Creates with same name but different workspace`() =
             runWith(ExtensionRepository::class) {
                 createExtension(
-                    extId = ExtensionId(1),
+                    extensionId = ExtensionId(1),
                     workspaceId = WorkspaceId(1),
                     name = ExtensionName("TestExt")
                 )
 
                 createExtension(
-                    extId = ExtensionId(2),
+                    extensionId = ExtensionId(2),
                     workspaceId = WorkspaceId(2),
                     name = ExtensionName("TestExt")
                 )
@@ -110,7 +110,7 @@ internal class ExtensionRepositoryTest : AbstractUnitTest() {
         @TestFactory
         fun `Updates extension`() = runWith(ExtensionRepository::class) {
             createExtension(
-                extId = ExtensionId(1),
+                extensionId = ExtensionId(1),
                 workspaceId = WorkspaceId(1),
                 name = ExtensionName("TestExt")
             )
@@ -145,7 +145,7 @@ internal class ExtensionRepositoryTest : AbstractUnitTest() {
         @TestFactory
         fun `Tries to update but id does not exist`() = runWith(ExtensionRepository::class) {
             createExtension(
-                extId = ExtensionId(1),
+                extensionId = ExtensionId(1),
                 workspaceId = WorkspaceId(1),
                 name = ExtensionName("TestExt")
             )
@@ -186,7 +186,7 @@ internal class ExtensionRepositoryTest : AbstractUnitTest() {
             create(
                 CreateCmd(
                     id = CmdId(1),
-                    extId = ExtensionId(1),
+                    extensionId = ExtensionId(1),
                     workspaceId = WorkspaceId(1),
                     name = ExtensionName("TestExt"),
                     code = ExtensionCode(
@@ -228,7 +228,7 @@ internal class ExtensionRepositoryTest : AbstractUnitTest() {
             create(
                 CreateCmd(
                     id = CmdId(1),
-                    extId = ExtensionId(1),
+                    extensionId = ExtensionId(1),
                     workspaceId = WorkspaceId(1),
                     name = ExtensionName("TestExt"),
                     code = ExtensionCode(
@@ -343,7 +343,7 @@ internal class ExtensionRepositoryTest : AbstractUnitTest() {
 }
 
 private fun ExtensionRepository.createExtension(
-    extId: ExtensionId,
+    extensionId: ExtensionId,
     name: ExtensionName,
     workspaceId: WorkspaceId,
     codeId: CodeId = CodeId(5),
@@ -353,7 +353,7 @@ private fun ExtensionRepository.createExtension(
     create(
         CreateCmd(
             id = cmdId,
-            extId = extId,
+            extensionId = extensionId,
             workspaceId = workspaceId,
             name = name,
             code = ExtensionCode(
@@ -375,25 +375,25 @@ private fun ExtensionRepository.verifyCount(expected: Int, block: ExtensionQuery
 
 private fun ExtensionRepository.setup() {
     createExtension(
-        extId = ExtensionId(1),
+        extensionId = ExtensionId(1),
         workspaceId = WorkspaceId(3),
         name = ExtensionName("Extension1")
     )
 
     createExtension(
-        extId = ExtensionId(2),
+        extensionId = ExtensionId(2),
         workspaceId = WorkspaceId(3),
         name = ExtensionName("Extension2")
     )
 
     createExtension(
-        extId = ExtensionId(3),
+        extensionId = ExtensionId(3),
         workspaceId = WorkspaceId(4),
         name = ExtensionName("Extension3")
     )
 
     createExtension(
-        extId = ExtensionId(4),
+        extensionId = ExtensionId(4),
         workspaceId = WorkspaceId(5),
         name = ExtensionName("Extension4")
     )

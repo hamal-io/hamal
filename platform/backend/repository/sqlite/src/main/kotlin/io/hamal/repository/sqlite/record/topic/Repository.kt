@@ -11,7 +11,7 @@ import io.hamal.repository.api.TopicQueryRepository.TopicEventQuery
 import io.hamal.repository.api.TopicQueryRepository.TopicQuery
 import io.hamal.repository.api.TopicRepository
 import io.hamal.repository.api.log.LogBrokerRepository
-import io.hamal.repository.api.log.LogBrokerRepository.LogTopicToCreate
+import io.hamal.repository.api.log.LogBrokerRepository.CreateTopicCmd
 import io.hamal.repository.api.log.LogEventId
 import io.hamal.repository.record.json
 import io.hamal.repository.record.topic.CreateTopicFromRecords
@@ -50,7 +50,7 @@ class TopicSqliteRepository(
                 )
 
                 currentVersion(topicId)
-                    .also { logBrokerRepository.create(cmd.id, LogTopicToCreate(cmd.logTopicId)) }
+                    .also { logBrokerRepository.create(CreateTopicCmd(cmd.id, cmd.logTopicId)) }
                     .also { ProjectionCurrent.upsert(this, it) }
                     .also { ProjectionUniqueName.upsert(this, it) }
             }
