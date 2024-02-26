@@ -74,8 +74,8 @@ class KuaTable(
     }
 
     fun append(value: KuaString) = append(value.value)
-    fun get(key: Int): KuaType {
-        TODO("Not yet implemented")
+    fun get(idx: Int): KuaType {
+        return state.getAny(idx).value
     }
 
 

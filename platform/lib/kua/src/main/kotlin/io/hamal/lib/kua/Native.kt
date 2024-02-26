@@ -35,7 +35,8 @@ class Native(
 
     fun errorPush(error: KuaError): Int = errorPush(error.value)
     external fun errorPush(message: String): Int
-    external fun errorGet(idx: Int): KuaError
+    external fun errorGetString(idx: Int): Int
+    fun errorGet(idx: Int): KuaError = KuaError("TBD")
 
     external fun functionPush(value: KuaFunction<*, *, *, *>): Int
     external fun functionCall(argCount: Int, returnCount: Int)
@@ -61,7 +62,6 @@ class Native(
     external fun tableGetRawIdx(stackIdx: Int, tableIdx: Int): Int
     external fun tableNext(idx: Int): Boolean
     external fun tableGetSubTable(idx: Int, key: String): Int
-
 
 
     private external fun initConnection()

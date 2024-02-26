@@ -39,14 +39,6 @@ internal class GetGlobalTest : NativeBaseTest() {
 }
 
 
-@DisplayName("pushFunction()")
-internal class PushFunctionTest : NativeBaseTest() {
-    @Test
-    @Disabled
-    fun implementMe() {
-    }
-}
-
 @DisplayName("toError()")
 internal class ToErrorTest : NativeBaseTest() {
     @Test
