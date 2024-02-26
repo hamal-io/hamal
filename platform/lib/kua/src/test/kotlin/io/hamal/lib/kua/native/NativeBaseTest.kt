@@ -15,6 +15,6 @@ internal abstract class NativeBaseTest {
     }
 
     fun verifyStackIsEmpty() {
-        assertThat("Stack is empty", testInstance.top(), equalTo(0))
+        assertThat("Stack is empty", testInstance.topGet(), equalTo(0))
     }
 }

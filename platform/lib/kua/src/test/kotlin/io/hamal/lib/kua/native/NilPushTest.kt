@@ -5,20 +5,20 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
-internal class PushStringTest : NativeBaseTest() {
+internal class NilPushTest : NativeBaseTest() {
+
     @Test
     fun `Pushes value on stack`() {
-        val result = testInstance.pushString("hamal")
+        val result = testInstance.nilPush()
         assertThat(result, equalTo(1))
-        assertThat(testInstance.top(), equalTo(1))
-        assertThat(testInstance.toString(1), equalTo("hamal"))
+        assertThat(testInstance.topGet(), equalTo(1))
     }
 
     @Test
     fun `Tries to push too many items on the stack limited to 999_999`() {
-        repeat(999999) { testInstance.pushString("code-sleep-repeat") }
+        repeat(999999) { testInstance.nilPush() }
 
-        assertThrows<IllegalArgumentException> { testInstance.pushString("until you can not anymore") }
+        assertThrows<IllegalArgumentException> { testInstance.nilPush() }
             .also { exception -> assertThat(exception.message, equalTo("Prevented stack overflow")) }
     }
 }

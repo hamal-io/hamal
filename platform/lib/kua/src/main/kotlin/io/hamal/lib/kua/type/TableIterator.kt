@@ -25,7 +25,7 @@ class KuaTableEntryIterator<KEY : KuaType, TYPE : KuaType>(
                 override val key = keyExtractor(state, state.absIndex(-2))
                 override val value = valueExtractor(state, state.absIndex(-1))
             }
-            state.native.pop(1)
+            state.native.topPop(1)
             true
         } else {
             nextTableEntry = null

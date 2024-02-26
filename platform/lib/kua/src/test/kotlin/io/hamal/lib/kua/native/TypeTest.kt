@@ -12,35 +12,35 @@ internal class TypeTest : NativeBaseTest() {
 
     @Test
     fun `Tries to read boolean with 0 index`() {
-        testInstance.pushBoolean(true)
+        testInstance.booleanPush(true)
         assertThrows<IllegalArgumentException> { testInstance.type(0) }
             .also { exception -> assertThat(exception.message, equalTo("Index must not be 0")) }
     }
 
     @Test
     fun `Tries to get type with index bigger than stack size`() {
-        testInstance.pushBoolean(true)
+        testInstance.booleanPush(true)
         assertThrows<IllegalArgumentException> { testInstance.type(2) }
             .also { exception -> assertThat(exception.message, equalTo("Index out of bounds")) }
     }
 
     @Test
     fun `Tries to get type with abs(negative index) bigger than stack size`() {
-        testInstance.pushBoolean(true)
+        testInstance.booleanPush(true)
         assertThrows<IllegalArgumentException> { testInstance.type(-2) }
             .also { exception -> assertThat(exception.message, equalTo("Index out of bounds")) }
     }
 
     @Test
     fun `Nil`() {
-        testInstance.pushNil()
+        testInstance.nilPush()
         val result = testInstance.type(1)
         assertThat(result, equalTo(0))
     }
 
     @Test
     fun `Boolean`() {
-        testInstance.pushBoolean(true)
+        testInstance.booleanPush(true)
         val result = testInstance.type(1)
         assertThat(result, equalTo(1))
     }
@@ -53,14 +53,14 @@ internal class TypeTest : NativeBaseTest() {
 
     @Test
     fun `Number`() {
-        testInstance.pushNumber(13.0)
+        testInstance.numberPush(13.0)
         val result = testInstance.type(1)
         assertThat(result, equalTo(3))
     }
 
     @Test
     fun `String`() {
-        testInstance.pushString("hamal")
+        testInstance.stringPush("hamal")
         val result = testInstance.type(1)
         assertThat(result, equalTo(4))
     }
@@ -74,7 +74,7 @@ internal class TypeTest : NativeBaseTest() {
 
     @Test
     fun `Function`() {
-        testInstance.loadString("local x = 10")
+        testInstance.stringLoad("local x = 10")
         assertThat(testInstance.type(1), equalTo(6))
     }
 
@@ -92,13 +92,13 @@ internal class TypeTest : NativeBaseTest() {
 
     @Test
     fun `Error`() {
-        testInstance.pushError(KuaError("error message"))
+        testInstance.errorPush(KuaError("error message"))
         assertThat(testInstance.type(1), equalTo(10))
     }
 
     @Test
     fun `DecimalType`() {
-        testInstance.pushDecimal(KuaDecimal("23.456"))
+        testInstance.decimalPush(KuaDecimal("23.456"))
         assertThat(testInstance.type(1), equalTo(11))
     }
 }

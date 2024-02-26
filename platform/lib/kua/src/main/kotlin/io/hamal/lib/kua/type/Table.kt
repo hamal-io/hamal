@@ -38,7 +38,7 @@ class KuaTable(
             action(value)
 //            state.native.pop(1)
         }
-        state.native.pop(1)
+        state.native.topPop(1)
     }
 
     fun append(value: KuaType): Int {
@@ -93,7 +93,7 @@ class KuaTable(
     fun append(value: KuaBoolean) = append(value.value)
 
     fun append(value: Boolean): Int {
-        state.native.pushBoolean(value)
+        state.native.booleanPush(value)
         return state.tableAppend(index)
     }
 
@@ -117,12 +117,12 @@ class KuaTable(
     fun append(value: Float) = append(value.toDouble())
     fun append(value: KuaNumber) = append(value.value)
     fun append(value: Double): Int {
-        state.native.pushNumber(value)
+        state.native.numberPush(value)
         return state.tableAppend(index)
     }
 
     fun append(value: KuaDecimal): Int {
-        state.native.pushDecimal(value)
+        state.native.decimalPush(value)
         return state.tableAppend(index)
     }
 
@@ -138,7 +138,7 @@ class KuaTable(
 
 
     fun append(value: String): Int {
-        state.native.pushString(value)
+        state.native.stringPush(value)
         return state.tableAppend(index)
     }
 
@@ -173,7 +173,7 @@ class KuaTable(
             action(key, value)
 //            state.native.pop(1)
         }
-        state.native.pop(1)
+        state.native.topPop(1)
     }
 
     fun get(key: String): KuaAny {
@@ -253,7 +253,7 @@ class KuaTable(
 
     operator fun set(key: String, value: KuaDecimal): Int {
         state.pushString(key)
-        state.native.pushDecimal(value)
+        state.native.decimalPush(value)
         return state.tableSetRaw(index)
     }
 
@@ -297,7 +297,7 @@ class KuaTable(
         state.pushString(key)
         val type = state.tableGetRaw(index)
         type.checkExpectedType(KuaBoolean::class)
-        return booleanOf(state.native.toBoolean(state.top.value)).also { state.native.pop(1) }
+        return booleanOf(state.native.booleanGet(state.top.value)).also { state.native.topPop(1) }
     }
 
     fun getCode(key: KuaString): KuaCode = getCode(key.value)
@@ -305,7 +305,7 @@ class KuaTable(
         state.pushString(key)
         val type = state.tableGetRaw(index)
         type.checkExpectedType(KuaString::class)
-        return KuaCode(state.getString(state.top.value)).also { state.native.pop(1) }
+        return KuaCode(state.getString(state.top.value)).also { state.native.topPop(1) }
     }
 
     fun getNumberType(key: KuaString): KuaNumber = getNumberType(key.value)
@@ -325,14 +325,14 @@ class KuaTable(
         state.pushString(key)
         val type = state.tableGetRaw(index)
         type.checkExpectedType(KuaNumber::class)
-        return KuaNumber(state.native.toNumber(state.top.value)).also { state.native.pop(1) }
+        return KuaNumber(state.native.numberGet(state.top.value)).also { state.native.topPop(1) }
     }
 
     fun getDecimalType(key: String): KuaDecimal {
         state.pushString(key)
         val type = state.tableGetRaw(index)
         type.checkExpectedType(KuaDecimal::class)
-        return state.native.toDecimal(state.top.value).also { state.native.pop(1) }
+        return state.native.decimalGet(state.top.value).also { state.native.topPop(1) }
     }
 
 
@@ -350,14 +350,14 @@ class KuaTable(
             return null
         }
         type.checkExpectedType(KuaString::class)
-        return KuaString(state.native.toString(state.top.value).also { state.native.pop(1) })
+        return KuaString(state.native.stringGet(state.top.value).also { state.native.topPop(1) })
     }
 
     fun getStringType(key: String): KuaString {
         state.pushString(key)
         val type = state.tableGetRaw(index)
         type.checkExpectedType(KuaString::class)
-        return KuaString(state.native.toString(state.top.value)).also { state.native.pop(1) }
+        return KuaString(state.native.stringGet(state.top.value)).also { state.native.topPop(1) }
     }
 
     fun type(key: String): KClass<out KuaType> {
@@ -375,10 +375,10 @@ private fun KClass<out KuaType>.checkExpectedType(expected: KClass<out KuaType>)
 
 
 fun State.tableKeyType(idx: Int): KClass<out KuaType> {
-    native.pushNil()
+    native.nilPush()
     native.tableNext(idx)
     val result = type(-2)
-    native.pop(2)
+    native.topPop(2)
     return result
 }
 

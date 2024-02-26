@@ -10,31 +10,31 @@ internal class TableGetFieldTest : NativeBaseTest() {
     @Test
     fun `Gets value from table`() {
         testInstance.tableCreate(0, 1)
-        testInstance.pushString("value")
+        testInstance.stringPush("value")
         testInstance.tabletSetField(1, "key")
-        assertThat(testInstance.top(), equalTo(1))
+        assertThat(testInstance.topGet(), equalTo(1))
 
         val result = testInstance.tableGetField(1, "key")
         assertThat(result, equalTo(4))
-        assertThat(testInstance.toString(-1), equalTo("value"))
-        assertThat(testInstance.top(), equalTo(2))
+        assertThat(testInstance.stringGet(-1), equalTo("value"))
+        assertThat(testInstance.topGet(), equalTo(2))
     }
 
     @Test
     fun `Tries to get value from table which key does not exists for`() {
         testInstance.tableCreate(0, 1)
-        testInstance.pushString("value")
+        testInstance.stringPush("value")
         testInstance.tabletSetField(1, "key")
 
         val result = testInstance.tableGetField(1, "does-not-find-anything")
         assertThat(result, equalTo(0))
         assertThat(testInstance.type(-1), equalTo(0)) // Nil
-        assertThat(testInstance.top(), equalTo(2))
+        assertThat(testInstance.topGet(), equalTo(2))
     }
 
     @Test
     fun `Tries to get a value but not a table`() {
-        testInstance.pushNumber(2.34)
+        testInstance.numberPush(2.34)
         assertThrows<IllegalStateException> { testInstance.tableGetField(1, "key") }
             .also { exception -> assertThat(exception.message, equalTo("Expected type to be table but was number")) }
     }
@@ -42,10 +42,10 @@ internal class TableGetFieldTest : NativeBaseTest() {
     @Test
     fun `Tries to get field from table but stack would overflow`() {
         testInstance.tableCreate(0, 1)
-        testInstance.pushString("value")
+        testInstance.stringPush("value")
         testInstance.tabletSetField(1, "key")
 
-        repeat(999998) { testInstance.pushBoolean(true) }
+        repeat(999998) { testInstance.booleanPush(true) }
 
         assertThrows<IllegalArgumentException> { testInstance.tableGetField(1, "key") }
             .also { exception -> assertThat(exception.message, equalTo("Prevented stack overflow")) }

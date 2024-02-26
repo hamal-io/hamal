@@ -18,10 +18,10 @@ internal class InvokeFuncValueTest : BaseStateTest() {
             var called = false
         }
 
-        testInstance.pushFunction(testFunc)
-        testInstance.setGlobal("test_func")
-        testInstance.loadString("test_func()".trimIndent())
-        testInstance.call(0, 0)
+        testInstance.functionPush(testFunc)
+        testInstance.globalSet("test_func")
+        testInstance.stringLoad("test_func()".trimIndent())
+        testInstance.functionCall(0, 0)
         assertThat("testFunc was called", testFunc.called, equalTo(true))
 
         verifyStackIsEmpty()
@@ -31,14 +31,14 @@ internal class InvokeFuncValueTest : BaseStateTest() {
 internal class CallFunctionTest : BaseStateTest() {
     @Test
     fun `Creates and invokes a lua function without parameter`() {
-        testInstance.loadString("function answer() return 42 end")
-        testInstance.call(0, 0)
+        testInstance.stringLoad("function answer() return 42 end")
+        testInstance.functionCall(0, 0)
 
-        testInstance.getGlobal("answer")
-        testInstance.call(0, 1)
+        testInstance.globalGet("answer")
+        testInstance.functionCall(0, 1)
 
-        assertThat("The universal answer", testInstance.toNumber(1), equalTo(42.0))
-        testInstance.pop(1)
+        assertThat("The universal answer", testInstance.numberGet(1), equalTo(42.0))
+        testInstance.topPop(1)
 
         verifyStackIsEmpty()
     }
@@ -47,15 +47,15 @@ internal class CallFunctionTest : BaseStateTest() {
 internal class GlobalTest : BaseStateTest() {
     @Test
     fun `Sets and gets globals`() {
-        testInstance.pushString("Hamal")
-        testInstance.setGlobal("name")
+        testInstance.stringPush("Hamal")
+        testInstance.globalSet("name")
         verifyStackIsEmpty()
 
-        testInstance.getGlobal("name")
+        testInstance.globalGet("name")
         assertThat(testInstance.type(1), equalTo(4))
-        assertThat(testInstance.toString(1), equalTo("Hamal"))
+        assertThat(testInstance.stringGet(1), equalTo("Hamal"))
 
-        testInstance.pop(1)
+        testInstance.topPop(1)
         verifyStackIsEmpty()
     }
 }
@@ -64,14 +64,14 @@ internal class TableTest : BaseStateTest() {
     @Test
     fun `Sets and gets value from table`() {
         testInstance.tableCreate(0, 1)
-        testInstance.pushString("value")
+        testInstance.stringPush("value")
         testInstance.tabletSetField(1, "key")
         testInstance.tableGetField(1, "key")
-        assertThat(testInstance.toString(-1), equalTo("value"))
+        assertThat(testInstance.stringGet(-1), equalTo("value"))
 
         assertThat(testInstance.tableGetLength(1), equalTo(1))
 
-        testInstance.pop(2)
+        testInstance.topPop(2)
         verifyStackIsEmpty()
     }
 }
@@ -83,6 +83,6 @@ internal sealed class BaseStateTest {
     }
 
     fun verifyStackIsEmpty() {
-        assertThat("Stack is empty", testInstance.top(), equalTo(0))
+        assertThat("Stack is empty", testInstance.topGet(), equalTo(0))
     }
 }

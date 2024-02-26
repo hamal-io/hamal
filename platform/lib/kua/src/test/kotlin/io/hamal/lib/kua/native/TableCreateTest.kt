@@ -11,7 +11,7 @@ internal class TableCreateTest : NativeBaseTest() {
     fun `Creates an empty table on empty stack`() {
         val result = testInstance.tableCreate(1, 2)
         assertThat(result, equalTo(1))
-        assertThat(testInstance.top(), equalTo(1))
+        assertThat(testInstance.topGet(), equalTo(1))
 
         assertThat(testInstance.type(1), equalTo(5))
     }

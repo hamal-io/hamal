@@ -68,19 +68,19 @@ interface State {
 class ClosableState(
     override val native: Native
 ) : State, AutoCloseable {
-    override val top: StackTop get() = StackTop(native.top())
-    override fun pop(len: Int) = StackTop(native.pop(len))
+    override val top: StackTop get() = StackTop(native.topGet())
+    override fun pop(len: Int) = StackTop(native.topPop(len))
 
-    override fun isEmpty() = native.top() == 0
+    override fun isEmpty() = native.topGet() == 0
     override fun isNotEmpty() = !isEmpty()
-    override fun setTop(idx: Int) = native.setTop(idx)
+    override fun setTop(idx: Int) = native.topSet(idx)
     override fun absIndex(idx: Int) = native.absIndex(idx)
 
-    override fun pushTop(idx: Int): StackTop = StackTop(native.pushTop(idx))
+    override fun pushTop(idx: Int): StackTop = StackTop(native.topPush(idx))
 
     override fun type(idx: Int) = luaToType(native.type(idx))
 
-    override fun pushNil() = StackTop(native.pushNil())
+    override fun pushNil() = StackTop(native.nilPush())
 
     override fun pushAny(value: KuaAny): StackTop {
         return when (val underlying = value.value) {
@@ -96,7 +96,7 @@ class ClosableState(
     override fun getAny(idx: Int): KuaAny {
         return when (val type = type(idx)) {
             KuaBoolean::class -> KuaAny(getBooleanValue(idx))
-            KuaDecimal::class -> KuaAny(native.toDecimal(idx))
+            KuaDecimal::class -> KuaAny(native.decimalGet(idx))
             KuaNumber::class -> KuaAny(getNumberType(idx))
             KuaString::class -> KuaAny(getStringType(idx))
             KuaTable::class -> KuaAny(getTableMap(idx))
@@ -106,17 +106,17 @@ class ClosableState(
         }
     }
 
-    override fun pushBoolean(value: Boolean): StackTop = StackTop(native.pushBoolean(value))
-    override fun getBoolean(idx: Int): Boolean = native.toBoolean(idx)
-    override fun pushError(value: KuaError) = StackTop(native.pushError(value.value))
-    override fun pushFunction(value: KuaFunction<*, *, *, *>) = StackTop(native.pushFunction(value))
+    override fun pushBoolean(value: Boolean): StackTop = StackTop(native.booleanPush(value))
+    override fun getBoolean(idx: Int): Boolean = native.booleanGet(idx)
+    override fun pushError(value: KuaError) = StackTop(native.errorPush(value.value))
+    override fun pushFunction(value: KuaFunction<*, *, *, *>) = StackTop(native.functionPush(value))
 
-    override fun getNumber(idx: Int) = native.toNumber(idx)
-    override fun pushNumber(value: Double) = StackTop(native.pushNumber(value))
-    override fun getString(idx: Int) = native.toString(idx)
-    override fun pushString(value: String) = StackTop(native.pushString(value))
+    override fun getNumber(idx: Int) = native.numberGet(idx)
+    override fun pushNumber(value: Double) = StackTop(native.numberPush(value))
+    override fun getString(idx: Int) = native.stringGet(idx)
+    override fun pushString(value: String) = StackTop(native.stringPush(value))
 
-    override fun pushTable(proxy: KuaTable) = StackTop(native.pushTop(proxy.index))
+    override fun pushTable(proxy: KuaTable) = StackTop(native.topPush(proxy.index))
 
     override fun getTable(idx: Int): KuaTable {
         return if (native.tableGetLength(idx) == 0) {
@@ -130,23 +130,23 @@ class ClosableState(
     override fun getTableMap(idx: Int): KuaTable = KuaTable(absIndex(idx), this)
 
     override fun setGlobal(name: String, value: KuaFunction<*, *, *, *>) {
-        native.pushFunction(value)
-        native.setGlobal(name)
+        native.functionPush(value)
+        native.globalSet(name)
     }
 
     override fun setGlobal(name: String, value: KuaTable) {
-        native.pushTop(value.index)
-        native.setGlobal(name)
+        native.topPush(value.index)
+        native.globalSet(name)
     }
 
     override fun getGlobalKuaTableMap(name: String): KuaTable {
-        native.getGlobal(name)
+        native.globalGet(name)
         return getTableMap(top.value)
     }
 
     override fun unsetGlobal(name: String) {
-        native.pushNil()
-        native.setGlobal(name)
+        native.nilPush()
+        native.globalSet(name)
     }
 
     override fun tableCreateMap(capacity: Int): KuaTable {

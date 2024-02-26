@@ -4,18 +4,18 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
-internal class TopTest : NativeBaseTest() {
+internal class TopGetTest : NativeBaseTest() {
     @Test
     fun `Nothing pushed on the stack`() {
-        val result = testInstance.top()
+        val result = testInstance.topGet()
         assertThat(result, equalTo(0))
     }
 
     @Test
     fun `Pushing to the stack cause stack to grow`() {
         repeat(100) { idx ->
-            assertThat(testInstance.top(), equalTo(idx))
-            testInstance.pushBoolean(true)
+            assertThat(testInstance.topGet(), equalTo(idx))
+            testInstance.booleanPush(true)
         }
     }
 }

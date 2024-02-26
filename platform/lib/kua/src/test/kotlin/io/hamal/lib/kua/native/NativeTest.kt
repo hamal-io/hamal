@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test
 
 
 @DisplayName("setTop()")
-internal class SetTopTest : NativeBaseTest() {
+internal class TopSetTest : NativeBaseTest() {
     @Test
     @Disabled
     fun implementMe() {

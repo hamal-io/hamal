@@ -109,6 +109,6 @@ class Sandbox(
 }
 
 internal fun Native.load(code: String) {
-    loadString(code)
-    call(0, 0)
+    stringLoad(code)
+    functionCall(0, 0)
 }

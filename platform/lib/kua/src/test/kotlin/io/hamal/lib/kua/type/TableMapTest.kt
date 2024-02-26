@@ -42,7 +42,7 @@ internal class KuaTableMapTest {
                 assertThat("One element on stack", state.top, equalTo(StackTop(1)))
                 assertThat("Only table on stack", state.type(1), equalTo(KuaTable::class))
 
-                state.native.pop(1)
+                state.native.topPop(1)
                 verifyStackIsEmpty()
             }
         }
@@ -73,7 +73,7 @@ internal class KuaTableMapTest {
                 state.native.tableGetField(1, "another-key")
                 assertThat(state.getString(-1), equalTo("another-value"))
 
-                state.native.pop(2)
+                state.native.topPop(2)
                 verifyStackIsEmpty()
             }
         }
@@ -104,7 +104,7 @@ internal class KuaTableMapTest {
                 assertThat("One element on stack", state.top, equalTo(StackTop(1)))
                 assertThat("Only table on stack", state.type(1), equalTo(KuaTable::class))
 
-                state.native.pop(1)
+                state.native.topPop(1)
                 verifyStackIsEmpty()
             }
         }
@@ -128,7 +128,7 @@ internal class KuaTableMapTest {
                 assertThat("One element on stack", state.top, equalTo(StackTop(1)))
                 assertThat("Only table on stack", state.type(1), equalTo(KuaTable::class))
 
-                state.native.pop(1)
+                state.native.topPop(1)
                 verifyStackIsEmpty()
             }
         }
@@ -168,7 +168,7 @@ internal class KuaTableMapTest {
                 assertThat("One element on stack", state.top, equalTo(StackTop(1)))
                 assertThat("Only table on stack", state.type(1), equalTo(KuaTable::class))
 
-                state.native.pop(1)
+                state.native.topPop(1)
                 verifyStackIsEmpty()
             }
         }
@@ -199,7 +199,7 @@ internal class KuaTableMapTest {
                 assertThat("One element on stack", state.top, equalTo(StackTop(1)))
                 assertThat("Only table on stack", state.type(1), equalTo(KuaTable::class))
 
-                state.native.pop(1)
+                state.native.topPop(1)
                 verifyStackIsEmpty()
             }
         }

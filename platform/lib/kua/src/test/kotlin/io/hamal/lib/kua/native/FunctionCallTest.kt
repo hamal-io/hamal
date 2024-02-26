@@ -9,19 +9,19 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
-internal class CallTest : NativeBaseTest() {
+internal class FunctionCallTest : NativeBaseTest() {
 
     @Test
     fun `Calls kotlin function with 2 parameter and 2 receives 2 values back`() {
-        testInstance.pushFunction(TwoInTwoOut())
-        testInstance.pushNumber(1.0)
-        testInstance.pushNumber(5.0)
-        testInstance.call(2, 2)
+        testInstance.functionPush(TwoInTwoOut())
+        testInstance.numberPush(1.0)
+        testInstance.numberPush(5.0)
+        testInstance.functionCall(2, 2)
 
-        assertThat(testInstance.toNumber(-1), equalTo(2.0))
-        assertThat(testInstance.toNumber(-2), equalTo(20.0))
+        assertThat(testInstance.numberGet(-1), equalTo(2.0))
+        assertThat(testInstance.numberGet(-2), equalTo(20.0))
 
-        testInstance.pop(2)
+        testInstance.topPop(2)
         verifyStackIsEmpty()
     }
 

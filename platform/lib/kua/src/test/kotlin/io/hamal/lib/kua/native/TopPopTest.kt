@@ -5,11 +5,11 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
-internal class PopTest : NativeBaseTest() {
+internal class TopPopTest : NativeBaseTest() {
 
     @Test
     fun `Tries to pop negative amount from empty`() {
-        assertThrows<IllegalArgumentException> { testInstance.pop(-1) }
+        assertThrows<IllegalArgumentException> { testInstance.topPop(-1) }
             .also { exception ->
                 assertThat(exception.message, equalTo("Total must be positive (>0)"))
             }
@@ -17,27 +17,27 @@ internal class PopTest : NativeBaseTest() {
 
     @Test
     fun `Tries to pop -1 elements from empty stack`() {
-        testInstance.pushBoolean(true)
-        assertThrows<IllegalArgumentException> { testInstance.pop(0) }
+        testInstance.booleanPush(true)
+        assertThrows<IllegalArgumentException> { testInstance.topPop(0) }
             .also { exception -> assertThat(exception.message, equalTo("Total must be positive (>0)")) }
     }
 
     @Test
     fun `Tries to pop 1 element from empty stack`() {
-        assertThrows<IllegalArgumentException> { testInstance.pop(1) }
+        assertThrows<IllegalArgumentException> { testInstance.topPop(1) }
             .also { exception -> assertThat(exception.message, equalTo("Prevented stack underflow")) }
     }
 
     @Test
     fun `Pops 2 elements from stack`() {
-        testInstance.pushNumber(1.0)
-        testInstance.pushNumber(2.0)
-        testInstance.pushNumber(3.0)
+        testInstance.numberPush(1.0)
+        testInstance.numberPush(2.0)
+        testInstance.numberPush(3.0)
 
-        val result = testInstance.pop(2)
+        val result = testInstance.topPop(2)
         assertThat(result, equalTo(1))
-        assertThat(testInstance.top(), equalTo(1))
+        assertThat(testInstance.topGet(), equalTo(1))
 
-        assertThat(testInstance.toNumber(1), equalTo(1.0))
+        assertThat(testInstance.numberGet(1), equalTo(1.0))
     }
 }
