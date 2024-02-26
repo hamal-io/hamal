@@ -33,13 +33,13 @@ internal class KuaNilTest {
     fun `First result is nil`() {
         sandbox.use { sandbox ->
             sandbox.registerGlobalFunction("func",
-                object : Function0In2Out<KuaTableArray, KuaTableMap>(
+                object : Function0In2Out<KuaTable, KuaTable>(
                     FunctionOutput2Schema(
-                        KuaTableArray::class,
-                        KuaTableMap::class
+                        KuaTable::class,
+                        KuaTable::class
                     )
                 ) {
-                    override fun invoke(ctx: FunctionContext): Pair<KuaTableArray?, KuaTableMap?> {
+                    override fun invoke(ctx: FunctionContext): Pair<KuaTable?, KuaTable?> {
                         return null to ctx.tableCreateMap(0)
                     }
                 }
@@ -60,13 +60,13 @@ internal class KuaNilTest {
         sandbox.use { sandbox ->
             sandbox.registerGlobalFunction("func",
                 object :
-                    Function0In2Out<KuaTableArray, KuaTableMap>(
+                    Function0In2Out<KuaTable, KuaTable>(
                         FunctionOutput2Schema(
-                            KuaTableArray::class,
-                            KuaTableMap::class
+                            KuaTable::class,
+                            KuaTable::class
                         )
                     ) {
-                    override fun invoke(ctx: FunctionContext): Pair<KuaTableArray?, KuaTableMap?> {
+                    override fun invoke(ctx: FunctionContext): Pair<KuaTable?, KuaTable?> {
                         return ctx.tableCreateArray(0) to null
                     }
                 })
@@ -84,13 +84,13 @@ internal class KuaNilTest {
     @Test
     fun `Both results are nil`() {
         val func =
-            object : Function0In2Out<KuaError, KuaTableArray>(
+            object : Function0In2Out<KuaError, KuaTable>(
                 FunctionOutput2Schema(
                     KuaError::class,
-                    KuaTableArray::class
+                    KuaTable::class
                 )
             ) {
-                override fun invoke(ctx: FunctionContext): Pair<KuaError?, KuaTableArray?> {
+                override fun invoke(ctx: FunctionContext): Pair<KuaError?, KuaTable?> {
                     return null to null
                 }
             }

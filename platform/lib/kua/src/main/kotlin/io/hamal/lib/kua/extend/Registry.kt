@@ -3,15 +3,15 @@ package io.hamal.lib.kua.extend
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extend.extension.RunnerExtension
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
-import io.hamal.lib.kua.type.KuaTableMap
 import io.hamal.lib.kua.type.KuaFunction
+import io.hamal.lib.kua.type.KuaTable
 
 class RunnerRegistry(val sb: Sandbox) {
 
     val state = sb.state
     val plugins = mutableMapOf<String, RunnerPlugin>()
     val extensions = mutableMapOf<String, RunnerExtension>()
-    val factories = mutableMapOf<String, KuaTableMap>()
+    val factories = mutableMapOf<String, KuaTable>()
 
     fun isScript(name: String) = extensions.keys.contains(name)
 
@@ -29,7 +29,7 @@ class RunnerRegistry(val sb: Sandbox) {
         loadExtensionFactory(extension.name)
     }
 
-    fun loadPluginFactory(name: String): KuaTableMap {
+    fun loadPluginFactory(name: String): KuaTable {
         val extension = plugins[name]!!
         val internals = extension.internals
         val internalTable = state.tableCreateMap(internals.size)
@@ -55,7 +55,7 @@ class RunnerRegistry(val sb: Sandbox) {
         return factory
     }
 
-    fun loadExtensionFactory(name: String): KuaTableMap {
+    fun loadExtensionFactory(name: String): KuaTable {
         val extension = extensions[name]!!
 
         state.load(extension.factoryCode)

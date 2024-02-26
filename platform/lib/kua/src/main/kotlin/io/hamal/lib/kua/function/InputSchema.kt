@@ -46,8 +46,8 @@ fun <ARG : KuaType> KClass<ARG>.extract(ctx: FunctionContext, idx: Int): ARG {
         KuaNumber::class -> ctx.getNumberType(idx) as ARG
         KuaString::class -> ctx.getStringType(idx) as ARG
         KuaTable::class -> ctx.getTable(idx) as ARG
-        KuaTableArray::class -> ctx.getTableArray(idx) as ARG
-        KuaTableMap::class -> ctx.getTableMap(idx) as ARG
+        KuaTable::class -> ctx.getTableArray(idx) as ARG
+        KuaTable::class -> ctx.getTableMap(idx) as ARG
         KuaType::class -> TODO()
         else -> TODO()
     }

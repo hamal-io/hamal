@@ -5,33 +5,33 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.toMap
+import io.hamal.lib.kua.createTable
 import io.hamal.lib.kua.type.*
 import io.hamal.lib.sdk.ApiSdk
 
 class FuncGetFunction(
     private val sdk: ApiSdk
-) : Function1In2Out<KuaString, KuaError, KuaTableMap>(
+) : Function1In2Out<KuaString, KuaError, KuaTable>(
     FunctionInput1Schema(KuaString::class),
-    FunctionOutput2Schema(KuaError::class, KuaTableMap::class)
+    FunctionOutput2Schema(KuaError::class, KuaTable::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: KuaString): Pair<KuaError?, KuaTableMap?> {
+    override fun invoke(ctx: FunctionContext, arg1: KuaString): Pair<KuaError?, KuaTable?> {
         return try {
             null to sdk.func.get(FuncId(arg1.value))
                 .let { func ->
-                    ctx.toMap(
+                    ctx.createTable(
                         "id" to KuaString(func.id.value.value.toString(16)),
-                        "namespace" to ctx.toMap(
+                        "namespace" to ctx.createTable(
                             "id" to KuaString(func.namespace.id.value.value.toString(16)),
                             "name" to KuaString(func.namespace.name.value)
                         ),
                         "name" to KuaString(func.name.value),
-                        "code" to ctx.toMap(
+                        "code" to ctx.createTable(
                             "id" to KuaString(func.code.id.value.value.toString(16)),
                             "version" to KuaNumber(func.code.version.value),
                             "value" to KuaCode(func.code.value.value)
                         ),
-                        "deployment" to ctx.toMap(
+                        "deployment" to ctx.createTable(
                             "id" to KuaString(func.deployment.id.value.value.toString(16)),
                             "version" to KuaNumber(func.deployment.version.value),
                             "value" to KuaCode(func.deployment.value.value),

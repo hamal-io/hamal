@@ -5,19 +5,19 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.toArray
+import io.hamal.lib.kua.createTable
 import io.hamal.lib.kua.type.*
 
 
-class HttpExecuteFunction : Function1In2Out<KuaTableArray, KuaError, KuaTableArray>(
-    FunctionInput1Schema(KuaTableArray::class),
-    FunctionOutput2Schema(KuaError::class, KuaTableArray::class)
+class HttpExecuteFunction : Function1In2Out<KuaTable, KuaError, KuaTable>(
+    FunctionInput1Schema(KuaTable::class),
+    FunctionOutput2Schema(KuaError::class, KuaTable::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: KuaTableArray): Pair<KuaError?, KuaTableArray?> {
-        val results = mutableListOf<KuaTableMap>()
+    override fun invoke(ctx: FunctionContext, arg1: KuaTable): Pair<KuaError?, KuaTable?> {
+        val results = mutableListOf<KuaTable>()
 
         arg1.forEach { request ->
-            require(request is KuaTableMap)
+            require(request is KuaTable)
             println(request)
             request.forEach { key, value ->
                 println(key)
@@ -80,8 +80,8 @@ class HttpExecuteFunction : Function1In2Out<KuaTableArray, KuaError, KuaTableArr
 //                            is KuaNil -> ""
 //                            is KuaNumber -> value.value.toString()
 //                            is KuaAny -> TODO()
-//                            is KuaTableArray -> TODO()
-//                            is KuaTableMap -> TODO()
+//                            is KuaTable -> TODO()
+//                            is KuaTable -> TODO()
 //                            is KuaTable -> throw IllegalArgumentException("MapType not supported")
 //                            is KuaFunction<*, *, *, *> -> TODO()
 //                            else -> TODO()
@@ -122,8 +122,8 @@ class HttpExecuteFunction : Function1In2Out<KuaTableArray, KuaError, KuaTableArr
 //                            is KuaNil -> ""
 //                            is KuaNumber -> value.value.toString()
 //                            is KuaAny -> TODO()
-//                            is KuaTableArray -> TODO()
-//                            is KuaTableMap -> TODO()
+//                            is KuaTable -> TODO()
+//                            is KuaTable -> TODO()
 //                            is KuaTable -> throw IllegalArgumentException("MapType not supported")
 //                            is KuaFunction<*, *, *, *> -> TODO()
 //                            else -> TODO()
@@ -164,8 +164,8 @@ class HttpExecuteFunction : Function1In2Out<KuaTableArray, KuaError, KuaTableArr
 //                                is KuaNil -> ""
 //                                is KuaNumber -> value.value.toString()
 //                                is KuaAny -> TODO()
-//                                is KuaTableArray -> TODO()
-//                                is KuaTableMap -> TODO()
+//                                is KuaTable -> TODO()
+//                                is KuaTable -> TODO()
 //                                is KuaFunction<*, *, *, *> -> TODO()
 //                                else -> TODO()
 //                            }
@@ -199,8 +199,8 @@ class HttpExecuteFunction : Function1In2Out<KuaTableArray, KuaError, KuaTableArr
 //                                is KuaNil -> ""
 //                                is KuaNumber -> value.value.toString()
 //                                is KuaAny -> TODO()
-//                                is KuaTableArray -> TODO()
-//                                is KuaTableMap -> TODO()
+//                                is KuaTable -> TODO()
+//                                is KuaTable -> TODO()
 //                                is KuaFunction<*, *, *, *> -> TODO()
 //                                is KuaTable -> throw IllegalArgumentException("MapType not supported")
 //                                else -> TODO()
@@ -235,8 +235,8 @@ class HttpExecuteFunction : Function1In2Out<KuaTableArray, KuaError, KuaTableArr
 //                                is KuaNil -> ""
 //                                is KuaNumber -> value.value.toString()
 //                                is KuaAny -> TODO()
-//                                is KuaTableArray -> TODO()
-//                                is KuaTableMap -> TODO()
+//                                is KuaTable -> TODO()
+//                                is KuaTable -> TODO()
 //                                is KuaFunction<*, *, *, *> -> TODO()
 //                                is KuaTable -> throw IllegalArgumentException("MapType not supported")
 //                                else -> TODO()
@@ -252,7 +252,7 @@ class HttpExecuteFunction : Function1In2Out<KuaTableArray, KuaError, KuaTableArr
 //        }
 
 //            return null to KuaArray(results.mapIndexed { index, value -> index + 1 to value }.toMap().toMukuaTableMap())
-        return null to ctx.toArray(results)
+        return null to ctx.createTable(results)
     }
 }
 

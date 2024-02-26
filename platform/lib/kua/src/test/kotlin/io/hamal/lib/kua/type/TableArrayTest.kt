@@ -15,7 +15,7 @@ internal class KuaTableArrayTest {
 
     @TestFactory
     fun append(): List<DynamicTest> {
-        lateinit var testInstance: KuaTableArray
+        lateinit var testInstance: KuaTable
         return listOf(
             { testInstance.append(true) },
             { testInstance.append(KuaFalse) },

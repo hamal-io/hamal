@@ -7,48 +7,45 @@ import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.KuaError
-import io.hamal.lib.kua.type.KuaTableMap
-import io.hamal.lib.web3.eth.EthBatchService
-import io.hamal.lib.web3.eth.abi.type.EthAddress
-import io.hamal.lib.web3.eth.abi.type.EthPrefixedHexString
-import io.hamal.lib.web3.eth.abi.type.EthUint64
+import io.hamal.lib.kua.type.KuaTable
 import io.hamal.lib.web3.eth.http.EthHttpBatchService
 
 private val log = logger(EthExecuteFunction::class)
 
-class EthExecuteFunction : Function1In2Out<KuaTableMap, KuaError, KuaTableMap>(
-    FunctionInput1Schema(KuaTableMap::class),
-    FunctionOutput2Schema(KuaError::class, KuaTableMap::class)
+class EthExecuteFunction : Function1In2Out<KuaTable, KuaError, KuaTable>(
+    FunctionInput1Schema(KuaTable::class),
+    FunctionOutput2Schema(KuaError::class, KuaTable::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: KuaTableMap): Pair<KuaError?, KuaTableMap?> {
+    override fun invoke(ctx: FunctionContext, arg1: KuaTable): Pair<KuaError?, KuaTable?> {
         try {
             log.trace("Setting up batch service")
 
             val batchService = EthHttpBatchService(HttpTemplateImpl("http://localhost:10001"))
 
-            arg1.asSequence().forEach { (_, v) ->
-                require(v is KuaTableMap)
-
-                when (v.getString("type")) {
-                    "get_block" -> {
-                        val block = v.getLong("block")
-                        batchService.getBlock(EthUint64(block))
-                        log.trace("Requesting block $block")
-                    }
-
-                    "call" -> {
-                        val block = v.getLong("block")
-                        batchService.call(
-                            EthBatchService.EthCallRequest(
-                                to = EthAddress(EthPrefixedHexString(v.getString("to"))),
-                                data = EthPrefixedHexString(v.getString("data")),
-                                blockNumber = EthUint64(block),
-                            )
-                        )
-                        log.trace("Requesting block $block")
-                    }
-                }
-            }
+            TODO()
+//            arg1.asSequence().forEach { (_, v) ->
+//                require(v is KuaTable)
+//
+//                when (v.getString("type")) {
+//                    "get_block" -> {
+//                        val block = v.getLong("block")
+//                        batchService.getBlock(EthUint64(block))
+//                        log.trace("Requesting block $block")
+//                    }
+//
+//                    "call" -> {
+//                        val block = v.getLong("block")
+//                        batchService.call(
+//                            EthBatchService.EthCallRequest(
+//                                to = EthAddress(EthPrefixedHexString(v.getString("to"))),
+//                                data = EthPrefixedHexString(v.getString("data")),
+//                                blockNumber = EthUint64(block),
+//                            )
+//                        )
+//                        log.trace("Requesting block $block")
+//                    }
+//                }
+//            }
 
 
             return null to batchService.execute().let {

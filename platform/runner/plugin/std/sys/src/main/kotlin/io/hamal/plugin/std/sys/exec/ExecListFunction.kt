@@ -6,19 +6,18 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.toArray
-import io.hamal.lib.kua.toMap
+import io.hamal.lib.kua.createTable
 import io.hamal.lib.kua.type.*
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiExecService
 
 class ExecListFunction(
     private val sdk: ApiSdk
-) : Function1In2Out<KuaTableMap, KuaError, KuaTableArray>(
-    FunctionInput1Schema(KuaTableMap::class),
-    FunctionOutput2Schema(KuaError::class, KuaTableArray::class)
+) : Function1In2Out<KuaTable, KuaError, KuaTable>(
+    FunctionInput1Schema(KuaTable::class),
+    FunctionOutput2Schema(KuaError::class, KuaTable::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: KuaTableMap): Pair<KuaError?, KuaTableArray?> {
+    override fun invoke(ctx: FunctionContext, arg1: KuaTable): Pair<KuaError?, KuaTable?> {
         return try {
             val execs = sdk.exec.list(
                 ApiExecService.ExecQuery(
@@ -34,9 +33,9 @@ class ExecListFunction(
                         ?: listOf(ctx[WorkspaceId::class])
                 )
             )
-            null to ctx.toArray(
+            null to ctx.createTable(
                 execs.map { exec ->
-                    ctx.toMap(
+                    ctx.createTable(
                         "id" to KuaString(exec.id.value.value.toString(16)),
                         "status" to KuaString(exec.status.toString()),
                         "correlation_id" to (exec.correlation?.value?.let(::KuaString) ?: KuaNil)

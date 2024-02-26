@@ -13,14 +13,14 @@ internal class KuaTableArrayTest {
         sandbox.use { sandbox ->
             sandbox.registerGlobalFunction("func",
                 object :
-                    Function0In2Out<KuaError, KuaTableArray>(
+                    Function0In2Out<KuaError, KuaTable>(
                         FunctionOutput2Schema(
                             KuaError::class,
-                            KuaTableArray::class
+                            KuaTable::class
                         )
                     ) {
-                    override fun invoke(ctx: FunctionContext): Pair<KuaError?, KuaTableArray?> {
-                        return null to ctx.toArray(listOf(KuaString("A")))
+                    override fun invoke(ctx: FunctionContext): Pair<KuaError?, KuaTable?> {
+                        return null to ctx.createTable(listOf(KuaString("A")))
                     }
                 }
             )
@@ -40,17 +40,17 @@ internal class KuaTableArrayTest {
         sandbox.use { sandbox ->
             sandbox.registerGlobalFunction("func",
                 object :
-                    Function0In2Out<KuaError, KuaTableArray>(
+                    Function0In2Out<KuaError, KuaTable>(
                         FunctionOutput2Schema(
                             KuaError::class,
-                            KuaTableArray::class
+                            KuaTable::class
                         )
                     ) {
-                    override fun invoke(ctx: FunctionContext): Pair<KuaError?, KuaTableArray?> {
-                        return null to sandbox.toArray(
+                    override fun invoke(ctx: FunctionContext): Pair<KuaError?, KuaTable?> {
+                        return null to sandbox.createTable(
                             listOf(
                                 KuaString("A"),
-                                sandbox.toArray(
+                                sandbox.createTable(
                                     listOf(
                                         KuaNumber(42)
                                     )

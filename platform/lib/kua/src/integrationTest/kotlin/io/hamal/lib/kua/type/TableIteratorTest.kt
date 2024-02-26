@@ -17,10 +17,10 @@ internal class KuaTableIteratorTest {
 
     @Test
     fun `Iterate over table map`() {
-        class TestIteratorFunction : Function1In0Out<KuaTableMap>(
-            FunctionInput1Schema(KuaTableMap::class)
+        class TestIteratorFunction : Function1In0Out<KuaTable>(
+            FunctionInput1Schema(KuaTable::class)
         ) {
-            override fun invoke(ctx: FunctionContext, arg1: KuaTableMap) {
+            override fun invoke(ctx: FunctionContext, arg1: KuaTable) {
                 val testInstance = KuaTableEntryIterator(
                     -1,
                     ctx,
@@ -71,10 +71,10 @@ internal class KuaTableIteratorTest {
 
     @Test
     fun `Iterate over empty table map`() {
-        class TestIteratorFunction : Function1In0Out<KuaTableMap>(
-            FunctionInput1Schema(KuaTableMap::class)
+        class TestIteratorFunction : Function1In0Out<KuaTable>(
+            FunctionInput1Schema(KuaTable::class)
         ) {
-            override fun invoke(ctx: FunctionContext, arg1: KuaTableMap) {
+            override fun invoke(ctx: FunctionContext, arg1: KuaTable) {
                 val testInstance = KuaTableEntryIterator(
                     -1,
                     ctx,
@@ -118,10 +118,10 @@ internal class KuaTableIteratorTest {
 
     @Test
     fun `Iterate over table array`() {
-        class TestIteratorFunction : Function1In0Out<KuaTableArray>(
-            FunctionInput1Schema(KuaTableArray::class)
+        class TestIteratorFunction : Function1In0Out<KuaTable>(
+            FunctionInput1Schema(KuaTable::class)
         ) {
-            override fun invoke(ctx: FunctionContext, arg1: KuaTableArray) {
+            override fun invoke(ctx: FunctionContext, arg1: KuaTable) {
                 val testInstance = KuaTableEntryIterator(-1, ctx,
                     keyExtractor = { state, index -> state.getNumberType(index) },
                     valueExtractor = { state, index -> state.getAny(index) }
@@ -171,16 +171,16 @@ internal class KuaTableIteratorTest {
 
     @Test
     fun `Iterate over table array of table maps`() {
-        class TestIteratorFunction : Function1In0Out<KuaTableArray>(
-            FunctionInput1Schema(KuaTableArray::class)
+        class TestIteratorFunction : Function1In0Out<KuaTable>(
+            FunctionInput1Schema(KuaTable::class)
         ) {
-            override fun invoke(ctx: FunctionContext, arg1: KuaTableArray) {
+            override fun invoke(ctx: FunctionContext, arg1: KuaTable) {
 //                val testInstance = KuaTableEntryIterator(arg1.index, ctx,
 //                    keyExtractor = { state, index -> state.getNumberType(index) },
 //                    valueExtractor = { state, index -> state.getTableMap(index) }
 //                )
 //
-//                val resultCollector = mutableMapOf<KuaNumber, KuaTableMap>()
+//                val resultCollector = mutableMapOf<KuaNumber, KuaTable>()
 //                testInstance.forEach { entry -> resultCollector[entry.key] = entry.value }
 //                assertThat(resultCollector.keys, hasSize(3))
 //
@@ -229,10 +229,10 @@ internal class KuaTableIteratorTest {
 
     @Test
     fun `Iterate over empty table array`() {
-        class TestIteratorFunction : Function1In0Out<KuaTableArray>(
-            FunctionInput1Schema(KuaTableArray::class)
+        class TestIteratorFunction : Function1In0Out<KuaTable>(
+            FunctionInput1Schema(KuaTable::class)
         ) {
-            override fun invoke(ctx: FunctionContext, arg1: KuaTableArray) {
+            override fun invoke(ctx: FunctionContext, arg1: KuaTable) {
                 val testInstance = KuaTableEntryIterator(
                     -1,
                     ctx,

@@ -5,26 +5,25 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.toArray
-import io.hamal.lib.kua.toMap
+import io.hamal.lib.kua.createTable
 import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.kua.type.KuaNumber
 import io.hamal.lib.kua.type.KuaString
-import io.hamal.lib.kua.type.KuaTableArray
+import io.hamal.lib.kua.type.KuaTable
 import io.hamal.lib.sdk.ApiSdk
 
 class FuncDeploymentsFunction(
     private val sdk: ApiSdk
-) : Function1In2Out<KuaString, KuaError, KuaTableArray>(
+) : Function1In2Out<KuaString, KuaError, KuaTable>(
     FunctionInput1Schema(KuaString::class),
-    FunctionOutput2Schema(KuaError::class, KuaTableArray::class)
+    FunctionOutput2Schema(KuaError::class, KuaTable::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: KuaString): Pair<KuaError?, KuaTableArray?> {
+    override fun invoke(ctx: FunctionContext, arg1: KuaString): Pair<KuaError?, KuaTable?> {
         return try {
-            null to ctx.toArray(
+            null to ctx.createTable(
                 sdk.func.listDeployments(FuncId(arg1.value))
                     .map { deployed ->
-                        ctx.toMap(
+                        ctx.createTable(
                             "version" to KuaNumber(deployed.version.value),
                             "message" to KuaString(deployed.message.value),
                             "deployed_at" to KuaString(deployed.deployedAt.toString())

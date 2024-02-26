@@ -73,7 +73,7 @@ internal class KuaAnyTest {
         )
 
         val underlying = (captor.result as KuaAny).value
-        require(underlying is KuaTableMap) { "Not a map" }
+        require(underlying is KuaTable) { "Not a map" }
         assertThat(underlying.length, equalTo(1))
         assertThat(underlying.getString("key"), equalTo("value"))
     }
@@ -97,7 +97,7 @@ internal class KuaAnyTest {
         )
 
         val underlying = (captor.result as KuaAny).value
-        require(underlying is KuaTableArray) { "Not a array" }
+        require(underlying is KuaTable) { "Not a array" }
         assertThat(underlying.length, equalTo(2))
 
         assertThat(underlying.getInt(1), equalTo(23))

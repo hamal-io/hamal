@@ -12,7 +12,7 @@ internal class KuaTableMapTest {
 
     @TestFactory
     fun set(): List<DynamicTest> {
-        lateinit var testInstance: KuaTableMap
+        lateinit var testInstance: KuaTable
         return listOf(
             { testInstance.set("key", true) },
             { testInstance.set("key", KuaTrue) },
@@ -50,7 +50,7 @@ internal class KuaTableMapTest {
 
     @TestFactory
     fun unset(): List<DynamicTest> {
-        lateinit var testInstance: KuaTableMap
+        lateinit var testInstance: KuaTable
         return listOf(
             { testInstance.unset("key") },
             { testInstance.unset(KuaString("key")) },
@@ -81,7 +81,7 @@ internal class KuaTableMapTest {
 
     @TestFactory
     fun getBooleanValue(): List<DynamicTest> {
-        lateinit var testInstance: KuaTableMap
+        lateinit var testInstance: KuaTable
         return listOf(
             { testInstance.getBooleanType("key") },
             { testInstance.getBooleanType(KuaString("key")) },
@@ -112,7 +112,7 @@ internal class KuaTableMapTest {
 
     @TestFactory
     fun getCodeValue(): List<DynamicTest> {
-        lateinit var testInstance: KuaTableMap
+        lateinit var testInstance: KuaTable
         return listOf(
             { testInstance.getCode("key") },
             { testInstance.getCode(KuaString("key")) },
@@ -136,7 +136,7 @@ internal class KuaTableMapTest {
 
     @TestFactory
     fun getNumberValue(): List<DynamicTest> {
-        lateinit var testInstance: KuaTableMap
+        lateinit var testInstance: KuaTable
         return listOf(
             { testInstance.getNumberType("key") },
             { testInstance.getNumberType(KuaString("key")) },
@@ -176,7 +176,7 @@ internal class KuaTableMapTest {
 
     @TestFactory
     fun getStringValue(): List<DynamicTest> {
-        lateinit var testInstance: KuaTableMap
+        lateinit var testInstance: KuaTable
         return listOf(
             { testInstance.getString("key") },
             { testInstance.getString(KuaString("key")) },

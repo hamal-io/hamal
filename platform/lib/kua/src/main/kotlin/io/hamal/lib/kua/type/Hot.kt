@@ -2,14 +2,13 @@ package io.hamal.lib.kua.type
 
 import io.hamal.lib.common.hot.*
 import io.hamal.lib.kua.State
-import io.hamal.lib.kua.toArray
-import io.hamal.lib.kua.toMap
+import io.hamal.lib.kua.createTable
 
 //FIXME replace toKua with this
 fun HotNode.toKua(state: State): KuaType {
     return when (this) {
-        is HotObject -> state.toMap(nodes.map { (key, value) -> key to value.toKua(state) }.toMap())
-        is HotArray -> state.toArray(nodes.map { it.toKua(state) })
+        is HotObject -> state.createTable(nodes.map { (key, value) -> key to value.toKua(state) }.toMap())
+        is HotArray -> state.createTable(nodes.map { it.toKua(state) })
         is HotBoolean -> if (value) KuaTrue else KuaFalse
         is HotNull -> KuaNil
         is HotNumber -> KuaNumber(value.toDouble())
@@ -31,13 +30,13 @@ fun KuaType.toHot(): HotNode {
         is KuaNil -> HotNull
         is KuaNumber -> HotNumber(value)
         is KuaString -> HotString(value)
-        is KuaTableMap -> toHotObject()
-        is KuaTableArray -> toHotArray()
+        is KuaTable -> toHotObject()
+        is KuaTable -> toHotArray()
         is KuaTable -> TODO()
     }
 }
 
-fun KuaTableMap.toHotObject(): HotObject {
+fun KuaTable.toHotObject(): HotObject {
     val builder = HotObject.builder()
 //    this.underlyingMap.forEach { (key, value) ->
 //        builder[key] = value.toHot()
@@ -52,7 +51,7 @@ fun KuaTableMap.toHotObject(): HotObject {
 }
 
 
-fun KuaTableArray.toHotArray(): HotArray {
+fun KuaTable.toHotArray(): HotArray {
     val builder = HotObject.builder()
 //    this.value.forEach { (key, value) ->
 //        builder[key] = value.toHot()

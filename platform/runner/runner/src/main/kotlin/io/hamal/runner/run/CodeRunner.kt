@@ -54,10 +54,10 @@ class CodeRunnerImpl(
                                 is KuaString -> internalTable[entry.key] = value
                                 is KuaNumber -> internalTable[entry.key] = value
                                 is KuaFunction<*, *, *, *> -> internalTable[entry.key] = value
-                                is KuaTableArray -> internalTable[entry.key] = value
-                                is KuaTableMap -> internalTable[entry.key] = value
-//                                is KuaTableMap -> internalTable[entry.key] = sandbox.toKuaTableMap(value)
-//                                is KuaTableArray -> internalTable[entry.key] = sandbox.toTableArray(value)
+                                is KuaTable -> internalTable[entry.key] = value
+                                is KuaTable -> internalTable[entry.key] = value
+//                                is KuaTable -> internalTable[entry.key] = sandbox.toKuaTableMap(value)
+//                                is KuaTable -> internalTable[entry.key] = sandbox.toTableArray(value)
                                 else -> TODO()
                             }
                         }

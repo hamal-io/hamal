@@ -7,10 +7,10 @@ import io.hamal.lib.domain.vo.RunnerEnv
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
-import io.hamal.lib.kua.toMap
+import io.hamal.lib.kua.createTable
 import io.hamal.lib.kua.type.KuaNil
 import io.hamal.lib.kua.type.KuaString
-import io.hamal.lib.kua.type.KuaTableMap
+import io.hamal.lib.kua.type.KuaTable
 import io.hamal.lib.kua.type.toKua
 import io.hamal.runner.run.function.CompleteRunFunction
 import io.hamal.runner.run.function.EmitFunction
@@ -30,7 +30,7 @@ class RunnerContextFactory(
         }
 
         val hook = if (invocation is Invocation.Hook) {
-            sandbox.toMap(
+            sandbox.createTable(
                 "method" to KuaString(invocation.method.toString()),
                 "headers" to invocation.headers.value.toKua(sandbox),
                 "parameters" to invocation.parameters.value.toKua(sandbox),
@@ -41,7 +41,7 @@ class RunnerContextFactory(
         }
 
         val endpoint = if (invocation is Invocation.Endpoint) {
-            sandbox.toMap(
+            sandbox.createTable(
                 "method" to KuaString(invocation.method.toString()),
                 "headers" to invocation.headers.value.toKua(sandbox),
                 "parameters" to invocation.parameters.value.toKua(sandbox),
@@ -68,7 +68,7 @@ class RunnerContextFactory(
     }
 }
 
-private fun Sandbox.invocationEvents(events: List<Event>): KuaTableMap =
+private fun Sandbox.invocationEvents(events: List<Event>): KuaTable =
 //    tableCreate(events.size).let { result ->
 //        events.map {
 //            toTableProxy(

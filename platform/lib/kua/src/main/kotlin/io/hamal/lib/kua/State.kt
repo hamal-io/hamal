@@ -42,21 +42,20 @@ interface State {
     fun pushString(value: String): StackTop
     fun pushString(value: KuaString) = pushString(value.value)
 
-    fun pushTable(proxy: KuaTableMap): StackTop
-    fun pushTable(proxy: KuaTableArray): StackTop
+    fun pushTable(proxy: KuaTable): StackTop
 
     fun getTable(idx: Int): KuaTable
-    fun getTableArray(idx: Int): KuaTableArray
-    fun getTableMap(idx: Int): KuaTableMap
+    fun getTableArray(idx: Int): KuaTable
+    fun getTableMap(idx: Int): KuaTable
 
     fun setGlobal(name: String, value: KuaFunction<*, *, *, *>)
-    fun setGlobal(name: String, value: KuaTableMap)
-    fun setGlobal(name: String, value: KuaTableArray)
-    fun getGlobalKuaTableMap(name: String): KuaTableMap
+    fun setGlobal(name: String, value: KuaTable)
+
+    fun getGlobalKuaTableMap(name: String): KuaTable
     fun unsetGlobal(name: String)
 
-    fun tableCreateMap(capacity: Int = 0): KuaTableMap
-    fun tableCreateArray(capacity: Int = 0): KuaTableArray
+    fun tableCreateMap(capacity: Int = 0): KuaTable
+    fun tableCreateArray(capacity: Int = 0): KuaTable
     fun tableAppend(idx: Int): Int
     fun tableSetRaw(idx: Int): Int
     fun tableSetRawIdx(stackIdx: Int, tableIdx: Int): Int
@@ -86,8 +85,8 @@ class ClosableState(
     override fun pushAny(value: KuaAny): StackTop {
         return when (val underlying = value.value) {
             is KuaBoolean -> pushBoolean(underlying)
-            is KuaTableArray -> pushTable(underlying)
-            is KuaTableMap -> pushTable(underlying)
+            is KuaTable -> pushTable(underlying)
+            is KuaTable -> pushTable(underlying)
             is KuaNumber -> pushNumber(underlying)
             is KuaString -> pushString(underlying)
             else -> TODO("${underlying.javaClass} not supported yet")
@@ -100,8 +99,8 @@ class ClosableState(
             KuaDecimal::class -> KuaAny(native.toDecimal(idx))
             KuaNumber::class -> KuaAny(getNumberType(idx))
             KuaString::class -> KuaAny(getStringType(idx))
-            KuaTableMap::class -> KuaAny(getTableMap(idx))
-            KuaTableArray::class -> KuaAny(getTableArray(idx))
+            KuaTable::class -> KuaAny(getTableMap(idx))
+            KuaTable::class -> KuaAny(getTableArray(idx))
             KuaTable::class -> KuaAny(getTable(idx))
             else -> TODO("$type not supported yet")
         }
@@ -117,8 +116,7 @@ class ClosableState(
     override fun getString(idx: Int) = native.toString(idx)
     override fun pushString(value: String) = StackTop(native.pushString(value))
 
-    override fun pushTable(proxy: KuaTableMap) = StackTop(native.pushTop(proxy.index))
-    override fun pushTable(proxy: KuaTableArray) = StackTop(native.pushTop(proxy.index))
+    override fun pushTable(proxy: KuaTable) = StackTop(native.pushTop(proxy.index))
 
     override fun getTable(idx: Int): KuaTable {
         return if (native.tableGetLength(idx) == 0) {
@@ -128,25 +126,20 @@ class ClosableState(
         }
     }
 
-    override fun getTableArray(idx: Int) = KuaTableArray(absIndex(idx), this)
-    override fun getTableMap(idx: Int): KuaTableMap = KuaTableMap(absIndex(idx), this)
+    override fun getTableArray(idx: Int) = KuaTable(absIndex(idx), this)
+    override fun getTableMap(idx: Int): KuaTable = KuaTable(absIndex(idx), this)
 
     override fun setGlobal(name: String, value: KuaFunction<*, *, *, *>) {
         native.pushFunction(value)
         native.setGlobal(name)
     }
 
-    override fun setGlobal(name: String, value: KuaTableMap) {
+    override fun setGlobal(name: String, value: KuaTable) {
         native.pushTop(value.index)
         native.setGlobal(name)
     }
 
-    override fun setGlobal(name: String, value: KuaTableArray) {
-        native.pushTop(value.index)
-        native.setGlobal(name)
-    }
-
-    override fun getGlobalKuaTableMap(name: String): KuaTableMap {
+    override fun getGlobalKuaTableMap(name: String): KuaTable {
         native.getGlobal(name)
         return getTableMap(top.value)
     }
@@ -156,15 +149,15 @@ class ClosableState(
         native.setGlobal(name)
     }
 
-    override fun tableCreateMap(capacity: Int): KuaTableMap {
-        return KuaTableMap(
+    override fun tableCreateMap(capacity: Int): KuaTable {
+        return KuaTable(
             index = native.tableCreate(0, capacity),
             state = this
         )
     }
 
-    override fun tableCreateArray(capacity: Int): KuaTableArray {
-        return KuaTableArray(
+    override fun tableCreateArray(capacity: Int): KuaTable {
+        return KuaTable(
             index = native.tableCreate(capacity, 0),
             state = this
         )
@@ -195,10 +188,10 @@ private fun luaToType(value: Int) = when (value) {
     else -> TODO("$value not implemented yet")
 }
 
-fun <T : State> T.toMap(vararg pairs: Pair<String, KuaType>): KuaTableMap = toMap(pairs.toMap())
+fun <T : State> T.createTable(vararg pairs: Pair<String, KuaType>): KuaTable = createTable(pairs.toMap())
 
 
-fun <T : State> T.toMap(data: Map<String, KuaType>): KuaTableMap {
+fun <T : State> T.createTable(data: Map<String, KuaType>): KuaTable {
     return tableCreateMap(data.size).also { map ->
         data.forEach { (key, value) ->
             map[key] = value
@@ -206,7 +199,7 @@ fun <T : State> T.toMap(data: Map<String, KuaType>): KuaTableMap {
     }
 }
 
-fun <T : State> T.toArray(data: List<KuaType>): KuaTableArray {
+fun <T : State> T.createTable(data: List<KuaType>): KuaTable {
     return tableCreateArray(data.size).also { array ->
         data.forEach(array::append)
     }

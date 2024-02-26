@@ -4,22 +4,21 @@ import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.kua.function.Function0In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.toArray
-import io.hamal.lib.kua.toMap
+import io.hamal.lib.kua.createTable
 import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.kua.type.KuaString
-import io.hamal.lib.kua.type.KuaTableArray
+import io.hamal.lib.kua.type.KuaTable
 import io.hamal.lib.sdk.ApiSdk
 
 class NamespaceListFunction(
     private val sdk: ApiSdk
-) : Function0In2Out<KuaError, KuaTableArray>(
-    FunctionOutput2Schema(KuaError::class, KuaTableArray::class)
+) : Function0In2Out<KuaError, KuaTable>(
+    FunctionOutput2Schema(KuaError::class, KuaTable::class)
 ) {
-    override fun invoke(ctx: FunctionContext): Pair<KuaError?, KuaTableArray?> {
+    override fun invoke(ctx: FunctionContext): Pair<KuaError?, KuaTable?> {
         return try {
-            null to ctx.toArray(sdk.namespace.list(ctx[WorkspaceId::class]).map { namespace ->
-                ctx.toMap(
+            null to ctx.createTable(sdk.namespace.list(ctx[WorkspaceId::class]).map { namespace ->
+                ctx.createTable(
                     "id" to KuaString(namespace.id.value.value.toString(16)),
                     "parent_id" to KuaString(namespace.parentId.value.value.toString(16)),
                     "name" to KuaString(namespace.name.value),

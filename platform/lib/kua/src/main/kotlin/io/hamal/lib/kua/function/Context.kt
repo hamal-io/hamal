@@ -3,7 +3,10 @@ package io.hamal.lib.kua.function
 import io.hamal.lib.kua.SandboxContext
 import io.hamal.lib.kua.StackTop
 import io.hamal.lib.kua.State
-import io.hamal.lib.kua.type.*
+import io.hamal.lib.kua.type.KuaAny
+import io.hamal.lib.kua.type.KuaError
+import io.hamal.lib.kua.type.KuaFunction
+import io.hamal.lib.kua.type.KuaTable
 import kotlin.reflect.KClass
 
 
@@ -36,22 +39,20 @@ class FunctionContext(
     override fun pushNumber(value: Double) = state.pushNumber(value)
     override fun getString(idx: Int) = state.getString(idx)
     override fun pushString(value: String) = state.pushString(value)
-    override fun pushTable(proxy: KuaTableMap) = state.pushTable(proxy)
-    override fun pushTable(proxy: KuaTableArray) = state.pushTable(proxy)
+    override fun pushTable(proxy: KuaTable) = state.pushTable(proxy)
 
     override fun getTable(idx: Int): KuaTable = state.getTable(idx)
-    override fun getTableArray(idx: Int): KuaTableArray = state.getTableArray(idx)
-    override fun getTableMap(idx: Int): KuaTableMap = state.getTableMap(idx)
+    override fun getTableArray(idx: Int): KuaTable = state.getTableArray(idx)
+    override fun getTableMap(idx: Int): KuaTable = state.getTableMap(idx)
 
     override fun setGlobal(name: String, value: KuaFunction<*, *, *, *>) = state.setGlobal(name, value)
-    override fun setGlobal(name: String, value: KuaTableMap) = state.setGlobal(name, value)
-    override fun setGlobal(name: String, value: KuaTableArray) = state.setGlobal(name, value)
+    override fun setGlobal(name: String, value: KuaTable) = state.setGlobal(name, value)
 
-    override fun getGlobalKuaTableMap(name: String): KuaTableMap = state.getGlobalKuaTableMap(name)
+    override fun getGlobalKuaTableMap(name: String): KuaTable = state.getGlobalKuaTableMap(name)
     override fun unsetGlobal(name: String) = state.unsetGlobal(name)
 
     override fun tableCreateMap(capacity: Int) = state.tableCreateMap(capacity)
-    override fun tableCreateArray(capacity: Int): KuaTableArray = state.tableCreateArray(capacity)
+    override fun tableCreateArray(capacity: Int): KuaTable = state.tableCreateArray(capacity)
 
     override fun tableAppend(idx: Int) = state.tableAppend(idx)
     override fun tableSetRaw(idx: Int) = state.tableSetRaw(idx)
