@@ -12,14 +12,14 @@ class KuaTable(
 
     override val type: KuaType.Type = KuaType.Type.Table
 
-//    fun asSequence(): Sequence<Pair<KuaString, KuaType>> {
-//        return KuaTableEntryIterator(
-//            index = index,
-//            state = state,
-//            keyExtractor = { state, index -> state.getStringType(index) },
-//            valueExtractor = { state, index -> state.getAny(index).value }
-//        ).asSequence().map { it.key to it.value }
-//    }
+    fun mapEntries(): Sequence<Pair<KuaString, KuaType>> {
+        return KuaTableEntryIterator(
+            index = index,
+            state = state,
+            keyExtractor = { state, index -> state.getStringType(index) },
+            valueExtractor = { state, index -> state.getAny(index).value }
+        ).asSequence().map { it.key to it.value }
+    }
 
     fun asSequence(): Sequence<KuaType> {
         return KuaTableEntryIterator(
@@ -171,7 +171,7 @@ class KuaTable(
             val key = state.getStringType(state.absIndex(-2))
             val value = state.getAny(state.absIndex(-1))
             action(key, value)
-            state.native.pop(1)
+//            state.native.pop(1)
         }
         state.native.pop(1)
     }

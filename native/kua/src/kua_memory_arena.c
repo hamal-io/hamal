@@ -30,8 +30,8 @@ Region
     size_t size_bytes = sizeof(Region) + sizeof(uintptr_t) * capacity;
 
     // FIXME that should be configurable
-    // 100MB hard limit
-    if (size_bytes > 1024 * 1024 * 100) {
+    // 20MB hard limit
+    if (size_bytes > 1024 * 1024 * 20) {
         // causes a big bang
         return NULL;
     }

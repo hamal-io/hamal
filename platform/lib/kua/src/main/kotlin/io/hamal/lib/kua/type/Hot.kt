@@ -40,8 +40,7 @@ fun KuaTable.toHotObject(): HotObject {
 //        builder[key] = value.toHot()
 //    }
 
-    forEach { key, value ->
-        require(key is KuaString)
+    mapEntries().forEach { (key, value) ->
         builder[key.value] = value.toHotNode()
     }
 
@@ -51,23 +50,4 @@ fun KuaTable.toHotObject(): HotObject {
 //
 
     return builder.build()
-}
-
-
-fun KuaTable.toHotArray(): HotArray {
-    val builder = HotObject.builder()
-//    this.value.forEach { (key, value) ->
-//        builder[key] = value.toHot()
-//    }
-//    return builder.build()
-    TODO()
-}
-
-fun KuaTable.toHotNode(): HotObject {
-//    val builder = HotObject.builder()
-//    this.underlyingMap.forEach { (key, value) ->
-//        builder[key] = value.toHot()
-//    }
-//    return builder.build()
-    TODO()
 }
