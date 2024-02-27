@@ -14,8 +14,32 @@ class Sandbox(
     val ctx: SandboxContext
 ) : State, AutoCloseable {
 
+
+
+    override fun decimalPush(value: KuaDecimal): StackTop {
+        TODO("Not yet implemented")
+    }
+
+    override fun decimalGet(idx: Int): KuaDecimal {
+        TODO("Not yet implemented")
+    }
+
+    override fun errorPush(error: KuaError): StackTop {
+        TODO("Not yet implemented")
+    }
+
+    override fun errorGet(idx: Int): KuaError {
+        TODO("Not yet implemented")
+    }
+
+    override fun topGet(): StackTop {
+        TODO("Not yet implemented")
+    }
+
+
     override val native: Native = Native(this)
     override val top: StackTop get() = state.top
+
     override fun pop(len: Int) = state.pop(len)
 
     val state = ClosableState(native)

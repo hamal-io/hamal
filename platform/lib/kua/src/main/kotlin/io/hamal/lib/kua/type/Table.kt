@@ -122,7 +122,7 @@ class KuaTable(
     }
 
     fun append(value: KuaDecimal): Int {
-        state.native.decimalPush(value)
+        state.decimalPush(value)
         return state.tableAppend(index)
     }
 
@@ -253,7 +253,7 @@ class KuaTable(
 
     operator fun set(key: String, value: KuaDecimal): Int {
         state.pushString(key)
-        state.native.decimalPush(value)
+        state.decimalPush(value)
         return state.tableSetRaw(index)
     }
 
@@ -332,7 +332,7 @@ class KuaTable(
         state.pushString(key)
         val type = state.tableGetRaw(index)
         type.checkExpectedType(KuaDecimal::class)
-        return state.native.decimalGet(state.top.value).also { state.native.topPop(1) }
+        return state.decimalGet(state.top.value).also { state.native.topPop(1) }
     }
 
 

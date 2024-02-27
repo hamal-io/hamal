@@ -2,6 +2,7 @@ package io.hamal.lib.kua
 
 import io.hamal.lib.kua.type.*
 import io.hamal.lib.kua.type.KuaError
+import java.math.BigDecimal
 import kotlin.reflect.KClass
 
 @JvmInline
@@ -11,6 +12,17 @@ interface State {
     //FIXME probably not a good idea to expose this internal - only for development / prototyping
     val native: Native
     val top: StackTop
+
+
+    fun decimalPush(value: KuaDecimal): StackTop
+    fun decimalGet(idx: Int): KuaDecimal
+
+    fun errorPush(error: KuaError): StackTop
+    fun errorGet(idx: Int): KuaError
+
+    fun topGet(): StackTop
+
+    /// OLD STUFF TO BE REPLACED
 
     fun pop(len: Int): StackTop
 
@@ -31,6 +43,7 @@ interface State {
     fun getBooleanValue(idx: Int) = booleanOf(getBoolean(idx))
     fun pushError(value: KuaError): StackTop
     fun pushFunction(value: KuaFunction<*, *, *, *>): StackTop
+
 
     fun getNumber(idx: Int): Double
     fun getNumberType(idx: Int) = KuaNumber(getNumber(idx))
@@ -68,7 +81,23 @@ interface State {
 class ClosableState(
     override val native: Native
 ) : State, AutoCloseable {
+
+    override fun decimalPush(value: KuaDecimal): StackTop =
+        StackTop(native.decimalPush(value.toBigDecimal().toString()))
+
+    override fun decimalGet(idx: Int): KuaDecimal = KuaDecimal(BigDecimal(native.decimalGet(idx)))
+
+    override fun errorPush(error: KuaError) = StackTop(native.errorPush(error.value))
+
+    override fun errorGet(idx: Int): KuaError = KuaError(native.errorGet(idx))
+
+    override fun topGet(): StackTop = StackTop(native.topGet())
+
+
+    // FIXME TO BE REPLACED
+
     override val top: StackTop get() = StackTop(native.topGet())
+
     override fun pop(len: Int) = StackTop(native.topPop(len))
 
     override fun isEmpty() = native.topGet() == 0
@@ -96,7 +125,7 @@ class ClosableState(
     override fun getAny(idx: Int): KuaAny {
         return when (val type = type(idx)) {
             KuaBoolean::class -> KuaAny(getBooleanValue(idx))
-            KuaDecimal::class -> KuaAny(native.decimalGet(idx))
+            KuaDecimal::class -> KuaAny(decimalGet(idx))
             KuaNumber::class -> KuaAny(getNumberType(idx))
             KuaString::class -> KuaAny(getStringType(idx))
             KuaTable::class -> KuaAny(getTableMap(idx))

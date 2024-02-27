@@ -1,12 +1,9 @@
 package io.hamal.lib.kua
 
-import io.hamal.lib.kua.type.KuaDecimal
-import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.kua.type.KuaFunction
-import java.math.BigDecimal
 
 class Native(
-    val sandbox: Sandbox
+    val sandbox: Sandbox? = null
 ) : AutoCloseable {
 
     external fun luaVersionNumber(): Int
@@ -27,16 +24,12 @@ class Native(
     external fun booleanPush(value: Boolean): Int
     external fun booleanGet(idx: Int): Boolean
 
-    fun decimalPush(value: KuaDecimal): Int = decimalPush(value.toBigDecimal().toString())
     external fun decimalPush(value: String): Int
-    fun decimalGet(idx: Int) = KuaDecimal(BigDecimal(decimalGetString(idx)))
-    external fun decimalGetString(idx: Int): String
+    external fun decimalGet(idx: Int): String
 
 
-    fun errorPush(error: KuaError): Int = errorPush(error.value)
     external fun errorPush(message: String): Int
-    external fun errorGetString(idx: Int): Int
-    fun errorGet(idx: Int): KuaError = KuaError("TBD")
+    external fun errorGet(idx: Int): String
 
     external fun functionPush(value: KuaFunction<*, *, *, *>): Int
     external fun functionCall(argCount: Int, returnCount: Int)

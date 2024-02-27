@@ -115,13 +115,15 @@ to_decimal(lua_State *L, int idx) {
     return result;
 }
 
-int
+char const *
 to_error(lua_State *L, int idx) {
     if (check_argument(idx != 0, "Index must not be 0") == CHECK_RESULT_ERROR) return NULL;
     if (check_index(L, idx) == CHECK_RESULT_ERROR) return NULL;
     if (check_type_at(L, idx, ERROR_TYPE) == CHECK_RESULT_ERROR) return NULL;
-
-    return lua_rawget(L, idx);
+    error_as_string(L, idx);
+    char const *result = lua_tostring(L, -1);
+    lua_pop(L, 1);
+    return result;
 }
 
 double

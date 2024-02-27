@@ -1,7 +1,5 @@
 package io.hamal.lib.kua.native
 
-import io.hamal.lib.kua.type.KuaDecimal
-import io.hamal.lib.kua.type.KuaError
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Disabled
@@ -92,13 +90,13 @@ internal class TypeTest : NativeBaseTest() {
 
     @Test
     fun `Error`() {
-        testInstance.errorPush(KuaError("error message"))
+        testInstance.errorPush("error message")
         assertThat(testInstance.type(1), equalTo(10))
     }
 
     @Test
     fun `DecimalType`() {
-        testInstance.decimalPush(KuaDecimal("23.456"))
+        testInstance.decimalPush("23.456")
         assertThat(testInstance.type(1), equalTo(11))
     }
 }

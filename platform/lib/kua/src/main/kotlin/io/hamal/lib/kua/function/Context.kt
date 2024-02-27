@@ -3,10 +3,7 @@ package io.hamal.lib.kua.function
 import io.hamal.lib.kua.SandboxContext
 import io.hamal.lib.kua.StackTop
 import io.hamal.lib.kua.State
-import io.hamal.lib.kua.type.KuaAny
-import io.hamal.lib.kua.type.KuaError
-import io.hamal.lib.kua.type.KuaFunction
-import io.hamal.lib.kua.type.KuaTable
+import io.hamal.lib.kua.type.*
 import kotlin.reflect.KClass
 
 
@@ -14,8 +11,19 @@ class FunctionContext(
     val state: State
 ) : State, SandboxContext {
 
+    override fun decimalPush(value: KuaDecimal): StackTop = state.decimalPush(value)
+    override fun decimalGet(idx: Int): KuaDecimal = state.decimalGet(idx)
+
+    override fun errorPush(error: KuaError): StackTop = state.errorPush(error)
+    override fun errorGet(idx: Int): KuaError = state.errorGet(idx)
+
+    override fun topGet(): StackTop = state.topGet()
+
+    // FIXME
+
     override val native = state.native
     override val top: StackTop get() = state.top
+
     override fun pop(len: Int) = state.pop(len)
 
     override fun isEmpty() = state.isEmpty()
@@ -63,6 +71,6 @@ class FunctionContext(
     override fun load(code: String) = state.load(code)
 
     override fun <OBJ : Any> get(clazz: KClass<OBJ>): OBJ {
-        return native.sandbox.ctx[clazz]
+        return native.sandbox!!.ctx[clazz]
     }
 }

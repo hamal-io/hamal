@@ -42,7 +42,7 @@ push_string(lua_State *L, char const *value);
 int
 push_func(lua_State *L, void *func);
 
-int
+char const *
 to_error(lua_State *L, int idx);
 
 char const *

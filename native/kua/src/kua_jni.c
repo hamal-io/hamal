@@ -151,13 +151,11 @@ STATE_METHOD_NAME(decimalGetString)(JNIEnv *env, jobject K, jint idx) {
 }
 
 
-//JNIEXPORT jstring JNICALL
-JNIEXPORT jint JNICALL
-STATE_METHOD_NAME(errorGetString)(JNIEnv *env, jobject K, jint idx) {
+JNIEXPORT jstring JNICALL
+STATE_METHOD_NAME(errorGet)(JNIEnv *env, jobject K, jint idx) {
     ENV_AND_STATE
-//    char const *str = to_error(L, idx);
-//    return (*env)->NewStringUTF(env, str);
-    return to_error(L, idx);
+    char const *str = to_error(L, idx);
+    return (*env)->NewStringUTF(env, str);
 }
 
 
