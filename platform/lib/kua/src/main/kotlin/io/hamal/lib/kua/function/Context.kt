@@ -21,7 +21,7 @@ class FunctionContext(
 
     // FIXME
 
-    override fun pop(len: Int) = state.pop(len)
+    override fun topPop(len: Int) = state.topPop(len)
 
     override fun isEmpty() = state.isEmpty()
     override fun isNotEmpty() = state.isNotEmpty()

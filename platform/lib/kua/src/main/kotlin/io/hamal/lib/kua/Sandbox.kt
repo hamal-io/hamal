@@ -27,7 +27,7 @@ class Sandbox(
 
     // FIXME to remove
 
-    override fun pop(len: Int) = state.pop(len)
+    override fun topPop(len: Int) = state.topPop(len)
 
     //    val state = CloseableStateImpl(native)
     val registry: RunnerRegistry = RunnerRegistry(this)

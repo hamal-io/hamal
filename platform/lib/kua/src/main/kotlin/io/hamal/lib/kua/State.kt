@@ -17,9 +17,9 @@ interface State {
 
     fun topGet(): StackTop
     fun topSet(idx: Int)
+    fun topPop(len: Int): StackTop
 
     /// OLD STUFF TO BE REPLACED
-    fun pop(len: Int): StackTop
     fun isEmpty(): Boolean
     fun isNotEmpty(): Boolean
     fun absIndex(idx: Int): Int
@@ -88,7 +88,7 @@ class CloseableStateImpl(private val native: Native = Native()) : CloseableState
 
     // FIXME TO BE REPLACED
 
-    override fun pop(len: Int) = StackTop(native.topPop(len))
+    override fun topPop(len: Int) = StackTop(native.topPop(len))
 
     override fun isEmpty() = native.topGet() == 0
     override fun isNotEmpty() = !isEmpty()
