@@ -17,7 +17,7 @@ class KuaTable(
             index = index,
             state = state,
             keyExtractor = { state, index -> state.stringGet(index) },
-            valueExtractor = { state, index -> state.getAny(index).value }
+            valueExtractor = { state, index -> state.anyGet(index).value }
         ).asSequence().map { it.key to it.value }
     }
 
@@ -26,7 +26,7 @@ class KuaTable(
             index = index,
             state = state,
             keyExtractor = { state, index -> state.numberGet(index) },
-            valueExtractor = { state, index -> state.getAny(index).value }
+            valueExtractor = { state, index -> state.anyGet(index).value }
         ).asSequence().map { it.value }
     }
 
@@ -57,13 +57,6 @@ class KuaTable(
         }
     }
 
-    fun getTableMap(idx: Int): KuaTable {
-        return state.getTableMap(idx)
-    }
-
-    fun getTableArray(idx: Int): KuaTable {
-        return state.getTableArray(idx)
-    }
 
     fun append(value: KuaAny): Int {
         TODO("Not yet implemented")
@@ -75,7 +68,7 @@ class KuaTable(
 
     fun append(value: KuaString) = append(value.value)
     fun get(idx: Int): KuaType {
-        return state.getAny(idx).value
+        return state.anyGet(idx).value
     }
 
 
@@ -146,7 +139,7 @@ class KuaTable(
     }
 
     fun append(value: KuaTable): Int {
-        state.pushTable(value)
+        state.tablePush(value)
         return state.tableAppend(index)
     }
 
@@ -286,7 +279,7 @@ class KuaTable(
 
     operator fun set(key: String, value: KuaTable): Int {
         state.stringPush(KuaString(key))
-        state.pushTable(value)
+        state.tablePush(value)
         return state.tableSetRaw(index)
     }
 
@@ -367,11 +360,10 @@ class KuaTable(
     }
 
     fun getStringType(key: String): KuaString {
-//        state.pushString(key)
-//        val type = state.tableGetRaw(index)
-//        type.checkExpectedType(KuaString::class)
-//        return KuaString(state.native.stringGet(state.top.value)).also { state.native.topPop(1) }
-        TODO()
+        state.stringPush(KuaString(key))
+        val type = state.tableGetRaw(index)
+        type.checkExpectedType(KuaString::class)
+        return state.stringGet(state.topGet().value).also { state.topPop(1) }
     }
 
     fun type(key: String): KClass<out KuaType> {

@@ -2,13 +2,13 @@ package io.hamal.lib.kua.type
 
 import io.hamal.lib.common.hot.*
 import io.hamal.lib.kua.State
-import io.hamal.lib.kua.createTable
+import io.hamal.lib.kua.tableCreate
 
 //FIXME replace toKua with this
 fun HotNode.toKua(state: State): KuaType {
     return when (this) {
-        is HotObject -> state.createTable(nodes.map { (key, value) -> key to value.toKua(state) }.toMap())
-        is HotArray -> state.createTable(nodes.map { it.toKua(state) })
+        is HotObject -> state.tableCreate(nodes.map { (key, value) -> key to value.toKua(state) }.toMap())
+        is HotArray -> state.tableCreate(nodes.map { it.toKua(state) })
         is HotBoolean -> if (value) KuaTrue else KuaFalse
         is HotNull -> KuaNil
         is HotNumber -> KuaNumber(value.toDouble())

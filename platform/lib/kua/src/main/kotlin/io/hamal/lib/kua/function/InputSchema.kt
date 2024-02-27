@@ -42,12 +42,10 @@ data class FunctionInput2Schema<ARG_1 : KuaType, ARG_2 : KuaType>(
 fun <ARG : KuaType> KClass<ARG>.extract(ctx: FunctionContext, idx: Int): ARG {
     @Suppress("UNCHECKED_CAST")
     return when (this) {
-        KuaAny::class -> ctx.getAny(idx) as ARG
+        KuaAny::class -> ctx.anyGet(idx) as ARG
         KuaNumber::class -> ctx.numberGet(idx) as ARG
         KuaString::class -> ctx.stringGet(idx) as ARG
-        KuaTable::class -> ctx.getTable(idx) as ARG
-        KuaTable::class -> ctx.getTableArray(idx) as ARG
-        KuaTable::class -> ctx.getTableMap(idx) as ARG
+        KuaTable::class -> ctx.tableGet(idx) as ARG
         KuaType::class -> TODO()
         else -> TODO()
     }

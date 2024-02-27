@@ -11,6 +11,9 @@ value class StackTop(val value: Int)
 interface State {
     fun absIndex(idx: Int): Int
 
+    fun anyGet(idx: Int): KuaAny
+    fun anyPush(value: KuaAny): StackTop
+
     fun booleanPush(value: KuaBoolean): StackTop
     fun booleanGet(idx: Int): KuaBoolean
 
@@ -28,6 +31,9 @@ interface State {
     fun stringGet(idx: Int): KuaString
     fun stringPush(value: KuaString): StackTop
 
+    fun tablePush(proxy: KuaTable): StackTop
+    fun tableGet(idx: Int): KuaTable
+
     fun topGet(): StackTop
     fun topPop(len: Int): StackTop
     fun topPush(idx: Int): StackTop
@@ -39,15 +45,7 @@ interface State {
 
 
     fun pushNil(): StackTop
-    fun pushAny(value: KuaAny): StackTop
-    fun getAny(idx: Int): KuaAny
 
-
-    fun pushTable(proxy: KuaTable): StackTop
-
-    fun getTable(idx: Int): KuaTable
-    fun getTableArray(idx: Int): KuaTable
-    fun getTableMap(idx: Int): KuaTable
 
     fun setGlobal(name: String, value: KuaFunction<*, *, *, *>)
     fun setGlobal(name: String, value: KuaTable)
@@ -72,6 +70,28 @@ class CloseableStateImpl(private val native: Native = Native()) : CloseableState
 
     override fun absIndex(idx: Int): Int = native.absIndex(idx)
 
+    override fun anyGet(idx: Int): KuaAny {
+        return when (val type = type(idx)) {
+            KuaBoolean::class -> KuaAny(booleanGet(idx))
+            KuaDecimal::class -> KuaAny(decimalGet(idx))
+            KuaNumber::class -> KuaAny(numberGet(idx))
+            KuaString::class -> KuaAny(stringGet(idx))
+            KuaTable::class -> KuaAny(tableGet(idx))
+            else -> TODO("$type not supported yet")
+        }
+    }
+
+    override fun anyPush(value: KuaAny): StackTop {
+        return when (val underlying = value.value) {
+            is KuaBoolean -> booleanPush(underlying)
+            is KuaTable -> tablePush(underlying)
+            is KuaNumber -> numberPush(underlying)
+            is KuaString -> stringPush(underlying)
+            else -> TODO("${underlying.javaClass} not supported yet")
+        }
+    }
+
+
     override fun booleanPush(value: KuaBoolean): StackTop = StackTop(native.booleanPush(value.value))
     override fun booleanGet(idx: Int): KuaBoolean = KuaBoolean.of(native.booleanGet(idx))
 
@@ -83,11 +103,16 @@ class CloseableStateImpl(private val native: Native = Native()) : CloseableState
     override fun errorPush(error: KuaError) = StackTop(native.errorPush(error.value))
     override fun errorGet(idx: Int): KuaError = KuaError(native.errorGet(idx))
 
+    override fun functionPush(value: KuaFunction<*, *, *, *>) = StackTop(native.functionPush(value))
+
     override fun numberGet(idx: Int) = KuaNumber(native.numberGet(idx))
     override fun numberPush(value: KuaNumber) = StackTop(native.numberPush(value.value))
 
     override fun stringGet(idx: Int) = KuaString(native.stringGet(idx))
     override fun stringPush(value: KuaString) = StackTop(native.stringPush(value.value))
+
+    override fun tablePush(proxy: KuaTable) = StackTop(native.topPush(proxy.index))
+    override fun tableGet(idx: Int) = KuaTable(absIndex(idx), this)
 
     override fun topGet(): StackTop = StackTop(native.topGet())
     override fun topSet(idx: Int) = native.topSet(idx)
@@ -107,45 +132,6 @@ class CloseableStateImpl(private val native: Native = Native()) : CloseableState
 
     override fun pushNil() = StackTop(native.nilPush())
 
-    override fun pushAny(value: KuaAny): StackTop {
-        return when (val underlying = value.value) {
-            is KuaBoolean -> booleanPush(underlying)
-            is KuaTable -> pushTable(underlying)
-            is KuaTable -> pushTable(underlying)
-            is KuaNumber -> numberPush(underlying)
-            is KuaString -> stringPush(underlying)
-            else -> TODO("${underlying.javaClass} not supported yet")
-        }
-    }
-
-    override fun getAny(idx: Int): KuaAny {
-        return when (val type = type(idx)) {
-            KuaBoolean::class -> KuaAny(booleanGet(idx))
-            KuaDecimal::class -> KuaAny(decimalGet(idx))
-            KuaNumber::class -> KuaAny(numberGet(idx))
-            KuaString::class -> KuaAny(stringGet(idx))
-            KuaTable::class -> KuaAny(getTableMap(idx))
-            KuaTable::class -> KuaAny(getTableArray(idx))
-            KuaTable::class -> KuaAny(getTable(idx))
-            else -> TODO("$type not supported yet")
-        }
-    }
-
-
-    override fun functionPush(value: KuaFunction<*, *, *, *>) = StackTop(native.functionPush(value))
-
-    override fun pushTable(proxy: KuaTable) = StackTop(native.topPush(proxy.index))
-
-    override fun getTable(idx: Int): KuaTable {
-        return if (native.tableGetLength(idx) == 0) {
-            getTableMap(idx)
-        } else {
-            getTableArray(idx)
-        }
-    }
-
-    override fun getTableArray(idx: Int) = KuaTable(absIndex(idx), this)
-    override fun getTableMap(idx: Int): KuaTable = KuaTable(absIndex(idx), this)
 
     override fun setGlobal(name: String, value: KuaFunction<*, *, *, *>) {
         native.functionPush(value)
@@ -159,7 +145,7 @@ class CloseableStateImpl(private val native: Native = Native()) : CloseableState
 
     override fun getGlobalKuaTableMap(name: String): KuaTable {
         native.globalGet(name)
-        return getTableMap(native.topGet())
+        return tableGet(native.topGet())
     }
 
     override fun unsetGlobal(name: String) {
@@ -209,10 +195,10 @@ private fun luaToType(value: Int) = when (value) {
     else -> TODO("$value not implemented yet")
 }
 
-fun <T : State> T.createTable(vararg pairs: Pair<String, KuaType>): KuaTable = createTable(pairs.toMap())
+fun <T : State> T.tableCreate(vararg pairs: Pair<String, KuaType>): KuaTable = tableCreate(pairs.toMap())
 
 
-fun <T : State> T.createTable(data: Map<String, KuaType>): KuaTable {
+fun <T : State> T.tableCreate(data: Map<String, KuaType>): KuaTable {
     return tableCreateMap(data.size).also { map ->
         data.forEach { (key, value) ->
             map[key] = value
@@ -220,7 +206,7 @@ fun <T : State> T.createTable(data: Map<String, KuaType>): KuaTable {
     }
 }
 
-fun <T : State> T.createTable(data: List<KuaType>): KuaTable {
+fun <T : State> T.tableCreate(data: List<KuaType>): KuaTable {
     return tableCreateArray(data.size).also { array ->
         data.forEach(array::append)
     }

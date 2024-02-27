@@ -5,7 +5,7 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.createTable
+import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.kua.type.KuaTable
@@ -21,9 +21,9 @@ class HookGetFunction(
         return try {
             null to sdk.hook.get(HookId(arg1.value))
                 .let { hook ->
-                    ctx.createTable(
+                    ctx.tableCreate(
                         "id" to KuaString(hook.id.value.value.toString(16)),
-                        "namespace" to ctx.createTable(
+                        "namespace" to ctx.tableCreate(
                             "id" to KuaString(hook.namespace.id.value.value.toString(16)),
                             "name" to KuaString(hook.namespace.name.value)
                         ),

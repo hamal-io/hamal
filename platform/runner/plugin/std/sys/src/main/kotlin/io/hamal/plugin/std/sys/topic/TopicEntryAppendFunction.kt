@@ -6,7 +6,7 @@ import io.hamal.lib.kua.function.Function2In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput2Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.createTable
+import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.type.*
 import io.hamal.lib.sdk.ApiSdk
 
@@ -24,7 +24,7 @@ class TopicEntryAppendFunction(
                 TopicEventPayload(arg2.toHotObject())
             )
 
-            null to ctx.createTable(
+            null to ctx.tableCreate(
                 "id" to KuaString(res.id.value.value.toString(16)),
                 "status" to KuaString(res.status.name),
                 "topic_id" to KuaString(res.topicId.value.value.toString(16))

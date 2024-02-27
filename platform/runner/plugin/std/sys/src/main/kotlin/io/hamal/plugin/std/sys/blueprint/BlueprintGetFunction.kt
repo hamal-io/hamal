@@ -5,7 +5,7 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.createTable
+import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.type.KuaCode
 import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.kua.type.KuaString
@@ -22,7 +22,7 @@ class BlueprintGetFunction(
         return try {
             null to sdk.blueprint.get(BlueprintId(arg1.value))
                 .let { bp ->
-                    ctx.createTable(
+                    ctx.tableCreate(
                         "id" to KuaString(bp.id.value.value.toString(16)),
                         "name" to KuaString(bp.name.value),
                         "value" to KuaCode(bp.value.value)

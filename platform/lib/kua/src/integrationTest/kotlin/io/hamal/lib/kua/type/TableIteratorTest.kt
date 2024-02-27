@@ -23,7 +23,7 @@ internal class KuaTableIteratorTest {
                     -1,
                     ctx,
                     keyExtractor = { state, index -> state.stringGet(index) },
-                    valueExtractor = { state, index -> state.getAny(index) }
+                    valueExtractor = { state, index -> state.anyGet(index) }
                 )
 
                 val resultCollector = mutableMapOf<KuaString, KuaAny>()
@@ -77,7 +77,7 @@ internal class KuaTableIteratorTest {
                     -1,
                     ctx,
                     keyExtractor = { state, index -> state.stringGet(index) },
-                    valueExtractor = { state, index -> state.getAny(index) }
+                    valueExtractor = { state, index -> state.anyGet(index) }
                 )
 
                 val resultCollector = mutableMapOf<KuaString, KuaAny>()
@@ -122,7 +122,7 @@ internal class KuaTableIteratorTest {
             override fun invoke(ctx: FunctionContext, arg1: KuaTable) {
                 val testInstance = KuaTableEntryIterator(-1, ctx,
                     keyExtractor = { state, index -> state.numberGet(index) },
-                    valueExtractor = { state, index -> state.getAny(index) }
+                    valueExtractor = { state, index -> state.anyGet(index) }
                 )
 
                 val resultCollector = mutableMapOf<KuaNumber, KuaAny>()
@@ -235,7 +235,7 @@ internal class KuaTableIteratorTest {
                     -1,
                     ctx,
                     keyExtractor = { state, index -> state.numberGet(index) },
-                    valueExtractor = { state, index -> state.getAny(index) }
+                    valueExtractor = { state, index -> state.anyGet(index) }
                 )
 
                 val resultCollector = mutableMapOf<KuaNumber, KuaAny>()

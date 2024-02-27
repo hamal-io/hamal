@@ -13,6 +13,9 @@ class FunctionContext(
 
     override fun absIndex(idx: Int) = state.absIndex(idx)
 
+    override fun anyGet(idx: Int) = state.anyGet(idx)
+    override fun anyPush(value: KuaAny) = state.anyPush(value)
+
     override fun booleanGet(idx: Int) = state.booleanGet(idx)
     override fun booleanPush(value: KuaBoolean) = state.booleanPush(value)
 
@@ -30,6 +33,9 @@ class FunctionContext(
     override fun stringGet(idx: Int) = state.stringGet(idx)
     override fun stringPush(value: KuaString) = state.stringPush(value)
 
+    override fun tableGet(idx: Int): KuaTable = state.tableGet(idx)
+    override fun tablePush(proxy: KuaTable): StackTop = state.tablePush(proxy)
+
     override fun topGet(): StackTop = state.topGet()
     override fun topPop(len: Int) = state.topPop(len)
     override fun topPush(idx: Int) = state.topPush(idx)
@@ -41,14 +47,7 @@ class FunctionContext(
 
     override fun type(idx: Int) = state.type(idx)
     override fun pushNil() = state.pushNil()
-    override fun pushAny(value: KuaAny) = state.pushAny(value)
-    override fun getAny(idx: Int) = state.getAny(idx)
 
-    override fun pushTable(proxy: KuaTable) = state.pushTable(proxy)
-
-    override fun getTable(idx: Int): KuaTable = state.getTable(idx)
-    override fun getTableArray(idx: Int): KuaTable = state.getTableArray(idx)
-    override fun getTableMap(idx: Int): KuaTable = state.getTableMap(idx)
 
     override fun setGlobal(name: String, value: KuaFunction<*, *, *, *>) = state.setGlobal(name, value)
     override fun setGlobal(name: String, value: KuaTable) = state.setGlobal(name, value)

@@ -7,7 +7,7 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.createTable
+import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.kua.type.KuaTable
@@ -27,7 +27,7 @@ class RequestGetFunction(
         if (response is HttpSuccessResponse) {
             return null to response.result(ApiRequested::class)
                 .let { exec ->
-                    ctx.createTable(
+                    ctx.tableCreate(
                         "reqId" to KuaString(exec.id.value.value.toString(16)),
                         "status" to KuaString(exec.status.name)
                     )

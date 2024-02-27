@@ -20,7 +20,7 @@ internal class KuaTableArrayTest {
                         )
                     ) {
                     override fun invoke(ctx: FunctionContext): Pair<KuaError?, KuaTable?> {
-                        return null to ctx.createTable(listOf(KuaString("A")))
+                        return null to ctx.tableCreate(listOf(KuaString("A")))
                     }
                 }
             )
@@ -47,10 +47,10 @@ internal class KuaTableArrayTest {
                         )
                     ) {
                     override fun invoke(ctx: FunctionContext): Pair<KuaError?, KuaTable?> {
-                        return null to sandbox.createTable(
+                        return null to sandbox.tableCreate(
                             listOf(
                                 KuaString("A"),
-                                sandbox.createTable(
+                                sandbox.tableCreate(
                                     listOf(
                                         KuaNumber(42)
                                     )

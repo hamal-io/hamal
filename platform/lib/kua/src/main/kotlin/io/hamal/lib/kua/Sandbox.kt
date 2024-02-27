@@ -17,6 +17,9 @@ class Sandbox(
 
     override fun absIndex(idx: Int) = state.absIndex(idx)
 
+    override fun anyGet(idx: Int) = state.anyGet(idx)
+    override fun anyPush(value: KuaAny) = state.anyPush(value)
+
     override fun booleanGet(idx: Int) = state.booleanGet(idx)
     override fun booleanPush(value: KuaBoolean) = state.booleanPush(value)
 
@@ -34,11 +37,13 @@ class Sandbox(
     override fun stringGet(idx: Int) = state.stringGet(idx)
     override fun stringPush(value: KuaString) = state.stringPush(value)
 
+    override fun tableGet(idx: Int): KuaTable = state.tableGet(idx)
+    override fun tablePush(proxy: KuaTable): StackTop = state.tablePush(proxy)
+
     override fun topGet(): StackTop = state.topGet()
     override fun topPop(len: Int) = state.topPop(len)
     override fun topPush(idx: Int) = state.topPush(idx)
     override fun topSet(idx: Int) = state.topSet(idx)
-
 
 
     // FIXME to remove
@@ -97,17 +102,7 @@ class Sandbox(
 
     override fun type(idx: Int) = state.type(idx)
     override fun pushNil() = state.pushNil()
-    override fun pushAny(value: KuaAny) = state.pushAny(value)
-    override fun getAny(idx: Int) = state.getAny(idx)
 
-
-
-
-    override fun pushTable(proxy: KuaTable): StackTop = state.pushTable(proxy)
-
-    override fun getTable(idx: Int): KuaTable = state.getTable(idx)
-    override fun getTableArray(idx: Int) = state.getTableArray(idx)
-    override fun getTableMap(idx: Int) = state.getTableMap(idx)
 
     override fun setGlobal(name: String, value: KuaFunction<*, *, *, *>) = state.setGlobal(name, value)
     override fun setGlobal(name: String, value: KuaTable) = state.setGlobal(name, value)

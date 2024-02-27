@@ -5,7 +5,7 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.createTable
+import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.type.*
 
 
@@ -252,7 +252,7 @@ class HttpExecuteFunction : Function1In2Out<KuaTable, KuaError, KuaTable>(
 //        }
 
 //            return null to KuaArray(results.mapIndexed { index, value -> index + 1 to value }.toMap().toMukuaTableMap())
-        return null to ctx.createTable(results)
+        return null to ctx.tableCreate(results)
     }
 }
 

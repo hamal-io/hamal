@@ -1,7 +1,7 @@
 package io.hamal.plugin.std.sys.exec
 
 import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.kua.createTable
+import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -21,11 +21,11 @@ class ExecGetFunction(
     override fun invoke(ctx: FunctionContext, arg1: KuaString): Pair<KuaError?, KuaTable?> {
         return try {
             val exec = sdk.exec.get(ExecId(arg1.value))
-            null to ctx.createTable(
+            null to ctx.tableCreate(
                 "id" to KuaString(exec.id.value.value.toString(16)),
                 "status" to KuaString(exec.status.name),
-                "inputs" to ctx.createTable(),
-                "correlation" to ctx.createTable(
+                "inputs" to ctx.tableCreate(),
+                "correlation" to ctx.tableCreate(
                     "id" to (exec.correlation?.value?.let(::KuaString) ?: KuaNil)
                 )
             )

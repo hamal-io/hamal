@@ -5,7 +5,7 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.createTable
+import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.type.*
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiHookService
@@ -18,7 +18,7 @@ class HookListFunction(
 ) {
     override fun invoke(ctx: FunctionContext, arg1: KuaTable): Pair<KuaError?, KuaTable?> {
         return try {
-            null to ctx.createTable(
+            null to ctx.tableCreate(
                 sdk.hook.list(ApiHookService.HookQuery(
                     namespaceIds = arg1.findArray("namespace_ids")
                         ?.asSequence()
@@ -27,9 +27,9 @@ class HookListFunction(
                         ?: listOf(ctx[NamespaceId::class])
 
                 )).map { hook ->
-                    ctx.createTable(
+                    ctx.tableCreate(
                         "id" to KuaString(hook.id.value.value.toString(16)),
-                        "namespace" to ctx.createTable(
+                        "namespace" to ctx.tableCreate(
                             "id" to KuaString(hook.namespace.id.value.value.toString(16)),
                             "name" to KuaString(hook.namespace.name.value)
                         ),

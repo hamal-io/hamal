@@ -9,7 +9,7 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.createTable
+import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.type.*
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiFuncInvokeRequest
@@ -44,7 +44,7 @@ class FuncInvokeFunction(
                 )
             )
 
-            null to ctx.createTable(
+            null to ctx.tableCreate(
                 "id" to KuaString(res.id.value.value.toString(16)),
                 "status" to KuaString(res.status.name),
                 "exec_id" to KuaString(res.execId.value.value.toString(16))
