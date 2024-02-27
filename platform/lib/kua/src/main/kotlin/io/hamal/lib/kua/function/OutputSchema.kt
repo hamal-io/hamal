@@ -36,7 +36,7 @@ data class FunctionOutput2Schema<ARG_1 : KuaType, ARG_2 : KuaType>(
 fun <VALUE : KuaType> FunctionContext.push(value: VALUE) = when (value) {
     is KuaAny -> pushAny(value)
     is KuaNil -> pushNil()
-    is KuaNumber -> pushNumber(value)
+    is KuaNumber -> numberPush(value)
     is KuaString -> pushString(value)
     is KuaTable -> pushTable(value)
     is KuaTable -> pushTable(value)

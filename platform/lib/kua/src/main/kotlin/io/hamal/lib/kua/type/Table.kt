@@ -25,7 +25,7 @@ class KuaTable(
         return KuaTableEntryIterator(
             index = index,
             state = state,
-            keyExtractor = { state, index -> state.getNumberType(index) },
+            keyExtractor = { state, index -> state.numberGet(index) },
             valueExtractor = { state, index -> state.getAny(index).value }
         ).asSequence().map { it.value }
     }
@@ -106,7 +106,7 @@ class KuaTable(
     fun getNumberType(idx: Int): KuaNumber {
         val type = state.tableGetRawIdx(index, idx)
         type.checkExpectedType(KuaNumber::class)
-        return state.getNumberType(-1)
+        return state.numberGet(-1)
     }
 
     fun getDecimalType(idx: Int): KuaDecimal {
@@ -254,7 +254,7 @@ class KuaTable(
     operator fun set(key: KuaString, value: KuaNumber) = set(key.value, value.value)
     operator fun set(key: String, value: Double): Int {
         state.pushString(key)
-        state.pushNumber(value)
+        state.numberPush(KuaNumber(value))
         return state.tableSetRaw(index)
     }
 

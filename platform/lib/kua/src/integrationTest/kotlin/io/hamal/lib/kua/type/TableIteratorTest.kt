@@ -121,7 +121,7 @@ internal class KuaTableIteratorTest {
         ) {
             override fun invoke(ctx: FunctionContext, arg1: KuaTable) {
                 val testInstance = KuaTableEntryIterator(-1, ctx,
-                    keyExtractor = { state, index -> state.getNumberType(index) },
+                    keyExtractor = { state, index -> state.numberGet(index) },
                     valueExtractor = { state, index -> state.getAny(index) }
                 )
 
@@ -234,7 +234,7 @@ internal class KuaTableIteratorTest {
                 val testInstance = KuaTableEntryIterator(
                     -1,
                     ctx,
-                    keyExtractor = { state, index -> state.getNumberType(index) },
+                    keyExtractor = { state, index -> state.numberGet(index) },
                     valueExtractor = { state, index -> state.getAny(index) }
                 )
 

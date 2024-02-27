@@ -43,7 +43,7 @@ fun <ARG : KuaType> KClass<ARG>.extract(ctx: FunctionContext, idx: Int): ARG {
     @Suppress("UNCHECKED_CAST")
     return when (this) {
         KuaAny::class -> ctx.getAny(idx) as ARG
-        KuaNumber::class -> ctx.getNumberType(idx) as ARG
+        KuaNumber::class -> ctx.numberGet(idx) as ARG
         KuaString::class -> ctx.getStringType(idx) as ARG
         KuaTable::class -> ctx.getTable(idx) as ARG
         KuaTable::class -> ctx.getTableArray(idx) as ARG

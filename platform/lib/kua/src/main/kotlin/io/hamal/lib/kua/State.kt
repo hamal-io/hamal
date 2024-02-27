@@ -20,6 +20,9 @@ interface State {
     fun errorPush(error: KuaError): StackTop
     fun errorGet(idx: Int): KuaError
 
+    fun numberGet(idx: Int): KuaNumber
+    fun numberPush(value: KuaNumber): StackTop
+
     fun topGet(): StackTop
     fun topPop(len: Int): StackTop
     fun topPush(idx: Int): StackTop
@@ -37,11 +40,6 @@ interface State {
 
     fun pushFunction(value: KuaFunction<*, *, *, *>): StackTop
 
-
-    fun getNumber(idx: Int): Double
-    fun getNumberType(idx: Int) = KuaNumber(getNumber(idx))
-    fun pushNumber(value: Double): StackTop
-    fun pushNumber(value: KuaNumber) = pushNumber(value.value)
 
     fun getString(idx: Int): String
     fun getStringType(idx: Int) = KuaString(getString(idx))
@@ -86,8 +84,10 @@ class CloseableStateImpl(private val native: Native = Native()) : CloseableState
     override fun decimalGet(idx: Int): KuaDecimal = KuaDecimal(BigDecimal(native.decimalGet(idx)))
 
     override fun errorPush(error: KuaError) = StackTop(native.errorPush(error.value))
-
     override fun errorGet(idx: Int): KuaError = KuaError(native.errorGet(idx))
+
+    override fun numberGet(idx: Int) = KuaNumber(native.numberGet(idx))
+    override fun numberPush(value: KuaNumber) = StackTop(native.numberPush(value.value))
 
     override fun topGet(): StackTop = StackTop(native.topGet())
     override fun topSet(idx: Int) = native.topSet(idx)
@@ -112,7 +112,7 @@ class CloseableStateImpl(private val native: Native = Native()) : CloseableState
             is KuaBoolean -> booleanPush(underlying)
             is KuaTable -> pushTable(underlying)
             is KuaTable -> pushTable(underlying)
-            is KuaNumber -> pushNumber(underlying)
+            is KuaNumber -> numberPush(underlying)
             is KuaString -> pushString(underlying)
             else -> TODO("${underlying.javaClass} not supported yet")
         }
@@ -122,7 +122,7 @@ class CloseableStateImpl(private val native: Native = Native()) : CloseableState
         return when (val type = type(idx)) {
             KuaBoolean::class -> KuaAny(booleanGet(idx))
             KuaDecimal::class -> KuaAny(decimalGet(idx))
-            KuaNumber::class -> KuaAny(getNumberType(idx))
+            KuaNumber::class -> KuaAny(numberGet(idx))
             KuaString::class -> KuaAny(getStringType(idx))
             KuaTable::class -> KuaAny(getTableMap(idx))
             KuaTable::class -> KuaAny(getTableArray(idx))
@@ -134,8 +134,7 @@ class CloseableStateImpl(private val native: Native = Native()) : CloseableState
 
     override fun pushFunction(value: KuaFunction<*, *, *, *>) = StackTop(native.functionPush(value))
 
-    override fun getNumber(idx: Int) = native.numberGet(idx)
-    override fun pushNumber(value: Double) = StackTop(native.numberPush(value))
+
     override fun getString(idx: Int) = native.stringGet(idx)
     override fun pushString(value: String) = StackTop(native.stringPush(value))
 

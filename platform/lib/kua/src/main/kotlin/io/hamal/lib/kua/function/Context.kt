@@ -10,14 +10,18 @@ import kotlin.reflect.KClass
 class FunctionContext(
     val state: State
 ) : State, SandboxContext {
-    override fun booleanPush(value: KuaBoolean) = state.booleanPush(value)
+
     override fun booleanGet(idx: Int) = state.booleanGet(idx)
+    override fun booleanPush(value: KuaBoolean) = state.booleanPush(value)
 
-    override fun decimalPush(value: KuaDecimal): StackTop = state.decimalPush(value)
     override fun decimalGet(idx: Int): KuaDecimal = state.decimalGet(idx)
+    override fun decimalPush(value: KuaDecimal): StackTop = state.decimalPush(value)
 
-    override fun errorPush(error: KuaError): StackTop = state.errorPush(error)
     override fun errorGet(idx: Int): KuaError = state.errorGet(idx)
+    override fun errorPush(error: KuaError): StackTop = state.errorPush(error)
+
+    override fun numberGet(idx: Int) = state.numberGet(idx)
+    override fun numberPush(value: KuaNumber) = state.numberPush(value)
 
     override fun topGet(): StackTop = state.topGet()
 
@@ -39,8 +43,6 @@ class FunctionContext(
 
     override fun pushFunction(value: KuaFunction<*, *, *, *>) = state.pushFunction(value)
 
-    override fun getNumber(idx: Int) = state.getNumber(idx)
-    override fun pushNumber(value: Double) = state.pushNumber(value)
     override fun getString(idx: Int) = state.getString(idx)
     override fun pushString(value: String) = state.pushString(value)
     override fun pushTable(proxy: KuaTable) = state.pushTable(proxy)
