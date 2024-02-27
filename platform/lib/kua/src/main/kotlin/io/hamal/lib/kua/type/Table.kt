@@ -16,7 +16,7 @@ class KuaTable(
         return KuaTableEntryIterator(
             index = index,
             state = state,
-            keyExtractor = { state, index -> state.getStringType(index) },
+            keyExtractor = { state, index -> state.stringGet(index) },
             valueExtractor = { state, index -> state.getAny(index).value }
         ).asSequence().map { it.key to it.value }
     }
@@ -135,7 +135,7 @@ class KuaTable(
     fun getStringType(idx: Int): KuaString {
         val type = state.tableGetRawIdx(index, idx)
         type.checkExpectedType(KuaString::class)
-        return state.getStringType(-1)
+        return state.stringGet(-1)
     }
 
 
@@ -227,7 +227,7 @@ class KuaTable(
     @Suppress("UNUSED_PARAMETER")
     operator fun set(key: KuaString, value: KuaNil) = unset(key.value)
     fun unset(key: String): Int {
-        state.pushString(key)
+        state.stringPush(KuaString(key))
         state.pushNil()
         return state.tableSetRaw(index)
     }
@@ -239,7 +239,7 @@ class KuaTable(
     operator fun set(key: String, value: KuaBoolean) = set(key, value.value)
     operator fun set(key: KuaString, value: KuaBoolean) = set(key.value, value.value)
     operator fun set(key: String, value: Boolean): Int {
-        state.pushString(key)
+        state.stringPush(KuaString(key))
         state.booleanPush(if (value) KuaTrue else KuaFalse)
         return state.tableSetRaw(index)
     }
@@ -253,13 +253,13 @@ class KuaTable(
     operator fun set(key: String, value: KuaNumber) = set(key, value.value)
     operator fun set(key: KuaString, value: KuaNumber) = set(key.value, value.value)
     operator fun set(key: String, value: Double): Int {
-        state.pushString(key)
+        state.stringPush(KuaString(key))
         state.numberPush(KuaNumber(value))
         return state.tableSetRaw(index)
     }
 
     operator fun set(key: String, value: KuaDecimal): Int {
-        state.pushString(key)
+        state.stringPush(KuaString(key))
         state.decimalPush(value)
         return state.tableSetRaw(index)
     }
@@ -272,20 +272,20 @@ class KuaTable(
     operator fun set(key: String, value: KuaString) = set(key, value.value)
     operator fun set(key: KuaString, value: KuaString) = set(key.value, value.value)
     operator fun set(key: String, value: String): Int {
-        state.pushString(key)
-        state.pushString(value)
+        state.stringPush(KuaString(key))
+        state.stringPush(KuaString(value))
         return state.tableSetRaw(index)
     }
 
     operator fun set(key: KuaString, value: KuaFunction<*, *, *, *>) = set(key.value, value)
     operator fun set(key: String, value: KuaFunction<*, *, *, *>): Int {
-        state.pushString(key)
+        state.stringPush(KuaString(key))
         state.pushFunction(value)
         return state.tableSetRaw(index)
     }
 
     operator fun set(key: String, value: KuaTable): Int {
-        state.pushString(key)
+        state.stringPush(KuaString(key))
         state.pushTable(value)
         return state.tableSetRaw(index)
     }
@@ -332,7 +332,7 @@ class KuaTable(
     }
 
     fun getNumberType(key: String): KuaNumber {
-        state.pushString(key)
+        state.stringPush(KuaString(key))
 //        val type = state.tableGetRaw(index)
 //        type.checkExpectedType(KuaNumber::class)
 //        return KuaNumber(state.native.numberGet(state.top.value)).also { state.native.topPop(1) }
@@ -375,7 +375,7 @@ class KuaTable(
     }
 
     fun type(key: String): KClass<out KuaType> {
-        state.pushString(key)
+        state.stringPush(KuaString(key))
         return state.tableGetRaw(index)
     }
 

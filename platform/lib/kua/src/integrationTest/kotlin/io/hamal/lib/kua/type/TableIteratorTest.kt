@@ -22,7 +22,7 @@ internal class KuaTableIteratorTest {
                 val testInstance = KuaTableEntryIterator(
                     -1,
                     ctx,
-                    keyExtractor = { state, index -> state.getStringType(index) },
+                    keyExtractor = { state, index -> state.stringGet(index) },
                     valueExtractor = { state, index -> state.getAny(index) }
                 )
 
@@ -76,7 +76,7 @@ internal class KuaTableIteratorTest {
                 val testInstance = KuaTableEntryIterator(
                     -1,
                     ctx,
-                    keyExtractor = { state, index -> state.getStringType(index) },
+                    keyExtractor = { state, index -> state.stringGet(index) },
                     valueExtractor = { state, index -> state.getAny(index) }
                 )
 

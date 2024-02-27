@@ -23,6 +23,9 @@ class FunctionContext(
     override fun numberGet(idx: Int) = state.numberGet(idx)
     override fun numberPush(value: KuaNumber) = state.numberPush(value)
 
+    override fun stringGet(idx: Int) = state.stringGet(idx)
+    override fun stringPush(value: KuaString) = state.stringPush(value)
+
     override fun topGet(): StackTop = state.topGet()
 
     // FIXME
@@ -43,8 +46,6 @@ class FunctionContext(
 
     override fun pushFunction(value: KuaFunction<*, *, *, *>) = state.pushFunction(value)
 
-    override fun getString(idx: Int) = state.getString(idx)
-    override fun pushString(value: String) = state.pushString(value)
     override fun pushTable(proxy: KuaTable) = state.pushTable(proxy)
 
     override fun getTable(idx: Int): KuaTable = state.getTable(idx)

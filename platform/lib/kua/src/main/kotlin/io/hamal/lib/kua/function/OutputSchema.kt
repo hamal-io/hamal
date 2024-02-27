@@ -37,7 +37,7 @@ fun <VALUE : KuaType> FunctionContext.push(value: VALUE) = when (value) {
     is KuaAny -> pushAny(value)
     is KuaNil -> pushNil()
     is KuaNumber -> numberPush(value)
-    is KuaString -> pushString(value)
+    is KuaString -> stringPush(value)
     is KuaTable -> pushTable(value)
     is KuaTable -> pushTable(value)
     is KuaError -> errorPush(value)

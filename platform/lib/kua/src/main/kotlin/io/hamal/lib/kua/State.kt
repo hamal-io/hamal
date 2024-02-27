@@ -23,6 +23,10 @@ interface State {
     fun numberGet(idx: Int): KuaNumber
     fun numberPush(value: KuaNumber): StackTop
 
+    fun stringGet(idx: Int): KuaString
+    fun stringPush(value: KuaString): StackTop
+
+
     fun topGet(): StackTop
     fun topPop(len: Int): StackTop
     fun topPush(idx: Int): StackTop
@@ -40,11 +44,6 @@ interface State {
 
     fun pushFunction(value: KuaFunction<*, *, *, *>): StackTop
 
-
-    fun getString(idx: Int): String
-    fun getStringType(idx: Int) = KuaString(getString(idx))
-    fun pushString(value: String): StackTop
-    fun pushString(value: KuaString) = pushString(value.value)
 
     fun pushTable(proxy: KuaTable): StackTop
 
@@ -89,6 +88,9 @@ class CloseableStateImpl(private val native: Native = Native()) : CloseableState
     override fun numberGet(idx: Int) = KuaNumber(native.numberGet(idx))
     override fun numberPush(value: KuaNumber) = StackTop(native.numberPush(value.value))
 
+    override fun stringGet(idx: Int) = KuaString(native.stringGet(idx))
+    override fun stringPush(value: KuaString) = StackTop(native.stringPush(value.value))
+
     override fun topGet(): StackTop = StackTop(native.topGet())
     override fun topSet(idx: Int) = native.topSet(idx)
 
@@ -113,7 +115,7 @@ class CloseableStateImpl(private val native: Native = Native()) : CloseableState
             is KuaTable -> pushTable(underlying)
             is KuaTable -> pushTable(underlying)
             is KuaNumber -> numberPush(underlying)
-            is KuaString -> pushString(underlying)
+            is KuaString -> stringPush(underlying)
             else -> TODO("${underlying.javaClass} not supported yet")
         }
     }
@@ -123,7 +125,7 @@ class CloseableStateImpl(private val native: Native = Native()) : CloseableState
             KuaBoolean::class -> KuaAny(booleanGet(idx))
             KuaDecimal::class -> KuaAny(decimalGet(idx))
             KuaNumber::class -> KuaAny(numberGet(idx))
-            KuaString::class -> KuaAny(getStringType(idx))
+            KuaString::class -> KuaAny(stringGet(idx))
             KuaTable::class -> KuaAny(getTableMap(idx))
             KuaTable::class -> KuaAny(getTableArray(idx))
             KuaTable::class -> KuaAny(getTable(idx))
@@ -133,10 +135,6 @@ class CloseableStateImpl(private val native: Native = Native()) : CloseableState
 
 
     override fun pushFunction(value: KuaFunction<*, *, *, *>) = StackTop(native.functionPush(value))
-
-
-    override fun getString(idx: Int) = native.stringGet(idx)
-    override fun pushString(value: String) = StackTop(native.stringPush(value))
 
     override fun pushTable(proxy: KuaTable) = StackTop(native.topPush(proxy.index))
 
