@@ -280,7 +280,7 @@ class KuaTable(
     operator fun set(key: KuaString, value: KuaFunction<*, *, *, *>) = set(key.value, value)
     operator fun set(key: String, value: KuaFunction<*, *, *, *>): Int {
         state.stringPush(KuaString(key))
-        state.pushFunction(value)
+        state.functionPush(value)
         return state.tableSetRaw(index)
     }
 

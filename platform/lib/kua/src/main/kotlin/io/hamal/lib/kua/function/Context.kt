@@ -11,6 +11,8 @@ class FunctionContext(
     val state: State
 ) : State, SandboxContext {
 
+    override fun absIndex(idx: Int) = state.absIndex(idx)
+
     override fun booleanGet(idx: Int) = state.booleanGet(idx)
     override fun booleanPush(value: KuaBoolean) = state.booleanPush(value)
 
@@ -20,6 +22,8 @@ class FunctionContext(
     override fun errorGet(idx: Int): KuaError = state.errorGet(idx)
     override fun errorPush(error: KuaError): StackTop = state.errorPush(error)
 
+    override fun functionPush(value: KuaFunction<*, *, *, *>) = state.functionPush(value)
+
     override fun numberGet(idx: Int) = state.numberGet(idx)
     override fun numberPush(value: KuaNumber) = state.numberPush(value)
 
@@ -27,24 +31,18 @@ class FunctionContext(
     override fun stringPush(value: KuaString) = state.stringPush(value)
 
     override fun topGet(): StackTop = state.topGet()
+    override fun topPop(len: Int) = state.topPop(len)
+    override fun topPush(idx: Int) = state.topPush(idx)
+    override fun topSet(idx: Int) = state.topSet(idx)
+
 
     // FIXME
 
-    override fun topPop(len: Int) = state.topPop(len)
-
-    //    override fun isEmpty() = state.isEmpty()
-//    override fun isNotEmpty() = state.isNotEmpty()
-    override fun topSet(idx: Int) = state.topSet(idx)
-    override fun absIndex(idx: Int) = state.absIndex(idx)
-
-    override fun topPush(idx: Int) = state.topPush(idx)
 
     override fun type(idx: Int) = state.type(idx)
     override fun pushNil() = state.pushNil()
     override fun pushAny(value: KuaAny) = state.pushAny(value)
     override fun getAny(idx: Int) = state.getAny(idx)
-
-    override fun pushFunction(value: KuaFunction<*, *, *, *>) = state.pushFunction(value)
 
     override fun pushTable(proxy: KuaTable) = state.pushTable(proxy)
 
