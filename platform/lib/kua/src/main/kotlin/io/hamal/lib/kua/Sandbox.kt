@@ -81,7 +81,7 @@ class Sandbox(
     override fun topSet(idx: Int) = state.topSet(idx)
     override fun absIndex(idx: Int) = state.absIndex(idx)
 
-    override fun pushTop(idx: Int) = state.pushTop(idx)
+    override fun topPush(idx: Int) = state.topPush(idx)
 
     override fun type(idx: Int) = state.type(idx)
     override fun pushNil() = state.pushNil()

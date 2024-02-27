@@ -7,7 +7,6 @@ import org.junit.jupiter.api.TestFactory
 
 internal class AbsIndexTest : StateBaseTest() {
 
-
     @TestFactory
     fun `abs of positive index`() = runTest { testInstance ->
         testInstance.decimalPush(KuaDecimal(1.0))

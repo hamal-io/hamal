@@ -17,14 +17,13 @@ interface State {
     fun errorGet(idx: Int): KuaError
 
     fun topGet(): StackTop
-    fun topSet(idx: Int)
     fun topPop(len: Int): StackTop
+    fun topPush(idx: Int): StackTop
+    fun topSet(idx: Int)
+
 
     /// OLD STUFF TO BE REPLACED
-//    fun isEmpty(): Boolean
-//    fun isNotEmpty(): Boolean
 
-    fun pushTop(idx: Int): StackTop
     fun type(idx: Int): KClass<out KuaType>
     fun pushNil(): StackTop
     fun pushAny(value: KuaAny): StackTop
@@ -98,7 +97,7 @@ class CloseableStateImpl(private val native: Native = Native()) : CloseableState
 //    override fun isNotEmpty() = !isEmpty()
 
 
-    override fun pushTop(idx: Int): StackTop = StackTop(native.topPush(idx))
+    override fun topPush(idx: Int): StackTop = StackTop(native.topPush(idx))
 
     override fun type(idx: Int) = luaToType(native.type(idx))
 
@@ -207,6 +206,7 @@ private fun luaToType(value: Int) = when (value) {
     3 -> KuaNumber::class
     4 -> KuaString::class
     5 -> KuaTable::class
+    10 -> KuaError::class
     11 -> KuaDecimal::class
     else -> TODO("$value not implemented yet")
 }
