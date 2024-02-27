@@ -67,10 +67,10 @@ STATE_METHOD_NAME(topGet)(JNIEnv *env, jobject K) {
     return (jint) top(L);
 }
 
-JNIEXPORT void JNICALL
+JNIEXPORT jint JNICALL
 STATE_METHOD_NAME(topSet)(JNIEnv *env, jobject K, jint idx) {
     ENV_AND_STATE
-    set_top(L, idx);
+    return (jint) set_top(L, idx);
 }
 
 JNIEXPORT jint JNICALL

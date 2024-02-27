@@ -78,7 +78,7 @@ class Sandbox(
 
     override fun isEmpty() = state.isEmpty()
     override fun isNotEmpty() = state.isNotEmpty()
-    override fun setTop(idx: Int) = state.setTop(idx)
+    override fun topSet(idx: Int) = state.topSet(idx)
     override fun absIndex(idx: Int) = state.absIndex(idx)
 
     override fun pushTop(idx: Int) = state.pushTop(idx)

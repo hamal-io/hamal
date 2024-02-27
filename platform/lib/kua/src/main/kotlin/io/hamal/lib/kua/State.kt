@@ -16,16 +16,14 @@ interface State {
     fun errorGet(idx: Int): KuaError
 
     fun topGet(): StackTop
+    fun topSet(idx: Int)
 
     /// OLD STUFF TO BE REPLACED
     fun pop(len: Int): StackTop
-
     fun isEmpty(): Boolean
     fun isNotEmpty(): Boolean
-    fun setTop(idx: Int)
     fun absIndex(idx: Int): Int
     fun pushTop(idx: Int): StackTop
-
     fun type(idx: Int): KClass<out KuaType>
     fun pushNil(): StackTop
     fun pushAny(value: KuaAny): StackTop
@@ -94,7 +92,7 @@ class CloseableStateImpl(private val native: Native = Native()) : CloseableState
 
     override fun isEmpty() = native.topGet() == 0
     override fun isNotEmpty() = !isEmpty()
-    override fun setTop(idx: Int) = native.topSet(idx)
+    override fun topSet(idx: Int) = native.topSet(idx)
     override fun absIndex(idx: Int) = native.absIndex(idx)
 
     override fun pushTop(idx: Int): StackTop = StackTop(native.topPush(idx))

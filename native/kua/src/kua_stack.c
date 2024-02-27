@@ -1,4 +1,5 @@
 #include <lua.h>
+#include <stdlib.h>
 
 #include "kua_check.h"
 #include "kua_builtin_error.h"
@@ -22,10 +23,16 @@ abs_index(lua_State *L, int idx) {
     return lua_absindex(L, idx);
 }
 
-void
+int
 set_top(lua_State *L, int idx) {
-    if (check_stack_overflow(L, idx) == CHECK_RESULT_ERROR) return;
+    if (idx > 0) {
+        if (check_stack_overflow(L, idx) == CHECK_RESULT_ERROR) return LUA_TNONE;
+    }
+    if (idx < 0) {
+        if (check_stack_underflow(L, idx * -1) == CHECK_RESULT_ERROR) return LUA_TNONE;
+    }
     lua_settop(L, idx);
+    return top(L);
 }
 
 int

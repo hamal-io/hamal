@@ -5,13 +5,6 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
 
-@DisplayName("setTop()")
-internal class TopSetTest : NativeBaseTest() {
-    @Test
-    @Disabled
-    fun implementMe() {
-    }
-}
 
 @DisplayName("absIndex()")
 internal class AbsIndexTest : NativeBaseTest() {
