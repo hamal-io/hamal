@@ -1,6 +1,5 @@
 package io.hamal.lib.kua.type
 
-import io.hamal.lib.kua.CloseableStateImpl
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.NopSandboxContext
@@ -37,7 +36,7 @@ internal class KuaTableArrayTest {
 
     private val state = run {
         NativeLoader.load(Resources)
-        CloseableStateImpl(Sandbox(NopSandboxContext()).native)
+        Sandbox(NopSandboxContext())
     }
 
 }

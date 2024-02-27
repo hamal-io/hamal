@@ -19,15 +19,15 @@ internal class ErrorGetTest : StateBaseTest() {
         assertThat(testInstance.topGet(), equalTo(StackTop(2)))
     }
 
-//    @Test
-//    fun `Reads value on stack with negative index without popping the value`() {
-//        testInstance.errorPush(KuaError("Some Error Message"))
-//        assertThat(testInstance.errorGet(-1), equalTo(KuaError("Some Error Message")))
-//        assertThat(testInstance.topGet(), equalTo(StackTop(1)))
-//
-//        testInstance.errorPush(KuaError("Another Error Message"))
-//        assertThat(testInstance.errorGet(-1), equalTo(KuaError("Another Error Message")))
-//        assertThat(testInstance.topGet(), equalTo(StackTop(2)))
-//    }
+    @TestFactory
+    fun `Reads value on stack with negative index without popping the value`() = runTest { testInstance ->
+        testInstance.errorPush(KuaError("Some Error Message"))
+        assertThat(testInstance.errorGet(-1), equalTo(KuaError("Some Error Message")))
+        assertThat(testInstance.topGet(), equalTo(StackTop(1)))
+
+        testInstance.errorPush(KuaError("Another Error Message"))
+        assertThat(testInstance.errorGet(-1), equalTo(KuaError("Another Error Message")))
+        assertThat(testInstance.topGet(), equalTo(StackTop(2)))
+    }
 
 }

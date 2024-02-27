@@ -81,7 +81,7 @@ interface State {
 interface CloseableState : State, AutoCloseable
 
 class CloseableStateImpl(
-    override val native: Native
+    override val native: Native = Native()
 ) : CloseableState {
 
     override fun decimalPush(value: KuaDecimal): StackTop =
@@ -201,7 +201,8 @@ class CloseableStateImpl(
     override fun tableGetRawIdx(stackIdx: Int, tableIdx: Int) = luaToType(native.tableGetRawIdx(stackIdx, tableIdx))
 
     override fun load(code: String) {
-        native.load(code)
+        native.stringLoad(code)
+        native.functionCall(0, 0)
     }
 
     override fun close() {

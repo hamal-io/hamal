@@ -1,9 +1,6 @@
 package io.hamal.lib.kua.type
 
-import io.hamal.lib.kua.CloseableStateImpl
-import io.hamal.lib.kua.NativeLoader
-import io.hamal.lib.kua.NopSandboxContext
-import io.hamal.lib.kua.Sandbox
+import io.hamal.lib.kua.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Disabled
@@ -120,6 +117,6 @@ internal class KuaTableEntryIteratorTest {
 
     private val state = run {
         NativeLoader.load(NativeLoader.Preference.Resources)
-        CloseableStateImpl(Sandbox(NopSandboxContext()).native)
+        Sandbox(NopSandboxContext())
     }
 }

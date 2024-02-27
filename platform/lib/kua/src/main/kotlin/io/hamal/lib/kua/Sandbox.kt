@@ -11,38 +11,28 @@ import io.hamal.lib.kua.type.*
 import io.hamal.lib.kua.type.KuaError
 
 class Sandbox(
-    val ctx: SandboxContext
-) : State, AutoCloseable {
+    val ctx: SandboxContext,
+    val state: CloseableState = CloseableStateImpl()
+) : CloseableState {
 
 
+    override fun decimalPush(value: KuaDecimal): StackTop = state.decimalPush(value)
+    override fun decimalGet(idx: Int): KuaDecimal = state.decimalGet(idx)
 
-    override fun decimalPush(value: KuaDecimal): StackTop {
-        TODO("Not yet implemented")
-    }
+    override fun errorPush(error: KuaError): StackTop = state.errorPush(error)
+    override fun errorGet(idx: Int): KuaError = state.errorGet(idx)
 
-    override fun decimalGet(idx: Int): KuaDecimal {
-        TODO("Not yet implemented")
-    }
+    override fun topGet(): StackTop = state.topGet()
 
-    override fun errorPush(error: KuaError): StackTop {
-        TODO("Not yet implemented")
-    }
 
-    override fun errorGet(idx: Int): KuaError {
-        TODO("Not yet implemented")
-    }
-
-    override fun topGet(): StackTop {
-        TODO("Not yet implemented")
-    }
-
+    // FIXME to remove
 
     override val native: Native = Native()
     override val top: StackTop get() = state.top
 
     override fun pop(len: Int) = state.pop(len)
 
-    val state = CloseableStateImpl(native)
+    //    val state = CloseableStateImpl(native)
     val registry: RunnerRegistry = RunnerRegistry(this)
 
     init {
@@ -55,7 +45,8 @@ class Sandbox(
 
     fun load(code: KuaCode) = load(code.value)
 
-    override fun load(code: String) = native.load(code)
+    //    override fun load(code: String) = native.load(code)
+    override fun load(code: String) = state.load(code)
 
     fun run(fn: (State) -> Unit) {
         fn(state)
@@ -130,9 +121,4 @@ class Sandbox(
     override fun tableSetRawIdx(stackIdx: Int, tableIdx: Int) = state.tableSetRawIdx(stackIdx, tableIdx)
     override fun tableGetRaw(idx: Int) = state.tableGetRaw(idx)
     override fun tableGetRawIdx(stackIdx: Int, tableIdx: Int) = state.tableGetRawIdx(stackIdx, tableIdx)
-}
-
-internal fun Native.load(code: String) {
-    stringLoad(code)
-    functionCall(0, 0)
 }

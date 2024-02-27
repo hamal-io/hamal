@@ -15,7 +15,7 @@ internal abstract class StateBaseTest {
     fun runTest(action: (State) -> Unit): List<DynamicTest> = listOf(
         "StateImpl" to ::closeableStateImpl,
         "FunctionContext" to ::functionContext,
-//        "Sandbox" to ::sandbox,
+        "Sandbox" to ::sandbox,
     ).map { (name, factory) ->
         dynamicTest(name) {
             Native().use { native ->
@@ -29,8 +29,8 @@ internal abstract class StateBaseTest {
     private fun closeableStateImpl(state: CloseableState) = state
 
     private fun functionContext(state: CloseableState): FunctionContext = FunctionContext(state)
-//    private fun sandbox(native: Native): Sandbox = Sandbox(
-//        ctx = SandboxContextNop,
-//        state = StateImpl(native)
-//    )
+    private fun sandbox(state: CloseableState): Sandbox = Sandbox(
+        ctx = NopSandboxContext(),
+        state = state
+    )
 }
