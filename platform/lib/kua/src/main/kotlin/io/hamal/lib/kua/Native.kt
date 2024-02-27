@@ -13,7 +13,6 @@ class Native : AutoCloseable {
     external fun topPush(idx: Int): Int
     external fun topPop(total: Int): Int
 
-
     external fun absIndex(idx: Int): Int
     external fun type(idx: Int): Int
     external fun globalSet(key: String)
@@ -24,7 +23,6 @@ class Native : AutoCloseable {
 
     external fun decimalPush(value: String): Int
     external fun decimalGet(idx: Int): String
-
 
     external fun errorPush(message: String): Int
     external fun errorGet(idx: Int): String
