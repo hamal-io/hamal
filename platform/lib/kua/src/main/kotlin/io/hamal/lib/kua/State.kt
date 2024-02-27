@@ -9,6 +9,7 @@ import kotlin.reflect.KClass
 value class StackTop(val value: Int)
 
 interface State {
+    fun absIndex(idx: Int): Int
     fun decimalPush(value: KuaDecimal): StackTop
     fun decimalGet(idx: Int): KuaDecimal
 
@@ -20,9 +21,9 @@ interface State {
     fun topPop(len: Int): StackTop
 
     /// OLD STUFF TO BE REPLACED
-    fun isEmpty(): Boolean
-    fun isNotEmpty(): Boolean
-    fun absIndex(idx: Int): Int
+//    fun isEmpty(): Boolean
+//    fun isNotEmpty(): Boolean
+
     fun pushTop(idx: Int): StackTop
     fun type(idx: Int): KClass<out KuaType>
     fun pushNil(): StackTop
@@ -74,6 +75,8 @@ interface CloseableState : State, AutoCloseable
 
 class CloseableStateImpl(private val native: Native = Native()) : CloseableState {
 
+    override fun absIndex(idx: Int): Int = native.absIndex(idx)
+
     override fun decimalPush(value: KuaDecimal): StackTop =
         StackTop(native.decimalPush(value.toBigDecimal().toString()))
 
@@ -84,16 +87,16 @@ class CloseableStateImpl(private val native: Native = Native()) : CloseableState
     override fun errorGet(idx: Int): KuaError = KuaError(native.errorGet(idx))
 
     override fun topGet(): StackTop = StackTop(native.topGet())
+    override fun topSet(idx: Int) = native.topSet(idx)
 
 
     // FIXME TO BE REPLACED
 
     override fun topPop(len: Int) = StackTop(native.topPop(len))
 
-    override fun isEmpty() = native.topGet() == 0
-    override fun isNotEmpty() = !isEmpty()
-    override fun topSet(idx: Int) = native.topSet(idx)
-    override fun absIndex(idx: Int) = native.absIndex(idx)
+//    override fun isEmpty() = native.topGet() == 0
+//    override fun isNotEmpty() = !isEmpty()
+
 
     override fun pushTop(idx: Int): StackTop = StackTop(native.topPush(idx))
 

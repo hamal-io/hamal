@@ -6,13 +6,6 @@ import org.junit.jupiter.api.Test
 
 
 
-@DisplayName("absIndex()")
-internal class AbsIndexTest : NativeBaseTest() {
-    @Test
-    @Disabled
-    fun implementMe() {
-    }
-}
 
 
 @DisplayName("setGlobal()")

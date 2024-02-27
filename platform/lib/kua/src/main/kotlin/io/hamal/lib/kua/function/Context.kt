@@ -23,8 +23,8 @@ class FunctionContext(
 
     override fun topPop(len: Int) = state.topPop(len)
 
-    override fun isEmpty() = state.isEmpty()
-    override fun isNotEmpty() = state.isNotEmpty()
+//    override fun isEmpty() = state.isEmpty()
+//    override fun isNotEmpty() = state.isNotEmpty()
     override fun topSet(idx: Int) = state.topSet(idx)
     override fun absIndex(idx: Int) = state.absIndex(idx)
 
