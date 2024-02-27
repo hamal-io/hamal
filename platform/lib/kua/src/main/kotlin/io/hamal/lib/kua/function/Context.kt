@@ -70,7 +70,9 @@ class FunctionContext(
 
     override fun load(code: String) = state.load(code)
 
+
     override fun <OBJ : Any> get(clazz: KClass<OBJ>): OBJ {
-        return native.sandbox!!.ctx[clazz]
+        TODO()
+//        return native.sandbox!!.ctx[clazz]
     }
 }

@@ -79,7 +79,7 @@ internal class TableTest : BaseStateTest() {
 internal sealed class BaseStateTest {
     val testInstance: Native = run {
         NativeLoader.load(Resources)
-        Native(Sandbox(NopSandboxContext()))
+        Native()
     }
 
     fun verifyStackIsEmpty() {

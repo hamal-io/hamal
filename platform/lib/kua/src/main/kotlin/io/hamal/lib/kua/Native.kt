@@ -2,9 +2,7 @@ package io.hamal.lib.kua
 
 import io.hamal.lib.kua.type.KuaFunction
 
-class Native(
-    val sandbox: Sandbox? = null
-) : AutoCloseable {
+class Native : AutoCloseable {
 
     external fun luaVersionNumber(): Int
     external fun luaIntegerWidth(): Int

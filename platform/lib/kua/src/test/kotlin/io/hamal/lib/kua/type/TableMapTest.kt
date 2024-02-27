@@ -207,7 +207,7 @@ internal class KuaTableMapTest {
 
     private val state = run {
         NativeLoader.load(Resources)
-        ClosableState(Sandbox(NopSandboxContext()).native)
+        CloseableStateImpl(Sandbox(NopSandboxContext()).native)
     }
 
     private fun verifyStackIsEmpty() {

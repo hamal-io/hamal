@@ -1,6 +1,6 @@
 package io.hamal.lib.kua.type
 
-import io.hamal.lib.kua.ClosableState
+import io.hamal.lib.kua.CloseableStateImpl
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NopSandboxContext
 import io.hamal.lib.kua.Sandbox
@@ -120,6 +120,6 @@ internal class KuaTableEntryIteratorTest {
 
     private val state = run {
         NativeLoader.load(NativeLoader.Preference.Resources)
-        ClosableState(Sandbox(NopSandboxContext()).native)
+        CloseableStateImpl(Sandbox(NopSandboxContext()).native)
     }
 }

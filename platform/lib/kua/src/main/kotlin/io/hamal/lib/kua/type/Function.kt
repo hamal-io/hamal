@@ -1,6 +1,6 @@
 package io.hamal.lib.kua.type
 
-import io.hamal.lib.kua.ClosableState
+import io.hamal.lib.kua.CloseableStateImpl
 import io.hamal.lib.kua.Native
 import io.hamal.lib.kua.function.*
 
@@ -17,7 +17,7 @@ abstract class KuaFunction<
     abstract operator fun invoke(ctx: FunctionContext, input: INPUT): OUTPUT
 
     fun invokedByLua(native: Native): Int {
-        return ClosableState(native).use { state ->
+        return CloseableStateImpl(native).use { state ->
             val ctx = FunctionContext(state)
 
             val input = inputSchema.createInput(ctx)

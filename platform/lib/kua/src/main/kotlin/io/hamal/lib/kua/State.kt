@@ -78,9 +78,11 @@ interface State {
     fun load(code: String) // FIXME add return value
 }
 
-class ClosableState(
+interface CloseableState : State, AutoCloseable
+
+class CloseableStateImpl(
     override val native: Native
-) : State, AutoCloseable {
+) : CloseableState {
 
     override fun decimalPush(value: KuaDecimal): StackTop =
         StackTop(native.decimalPush(value.toBigDecimal().toString()))

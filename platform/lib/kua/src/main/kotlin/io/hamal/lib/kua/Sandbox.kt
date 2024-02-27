@@ -37,12 +37,12 @@ class Sandbox(
     }
 
 
-    override val native: Native = Native(this)
+    override val native: Native = Native()
     override val top: StackTop get() = state.top
 
     override fun pop(len: Int) = state.pop(len)
 
-    val state = ClosableState(native)
+    val state = CloseableStateImpl(native)
     val registry: RunnerRegistry = RunnerRegistry(this)
 
     init {
