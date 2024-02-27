@@ -10,6 +10,8 @@ import kotlin.reflect.KClass
 class FunctionContext(
     val state: State
 ) : State, SandboxContext {
+    override fun booleanPush(value: KuaBoolean) = state.booleanPush(value)
+    override fun booleanGet(idx: Int) = state.booleanGet(idx)
 
     override fun decimalPush(value: KuaDecimal): StackTop = state.decimalPush(value)
     override fun decimalGet(idx: Int): KuaDecimal = state.decimalGet(idx)
@@ -23,7 +25,7 @@ class FunctionContext(
 
     override fun topPop(len: Int) = state.topPop(len)
 
-//    override fun isEmpty() = state.isEmpty()
+    //    override fun isEmpty() = state.isEmpty()
 //    override fun isNotEmpty() = state.isNotEmpty()
     override fun topSet(idx: Int) = state.topSet(idx)
     override fun absIndex(idx: Int) = state.absIndex(idx)
@@ -35,9 +37,6 @@ class FunctionContext(
     override fun pushAny(value: KuaAny) = state.pushAny(value)
     override fun getAny(idx: Int) = state.getAny(idx)
 
-    override fun pushBoolean(value: Boolean) = state.pushBoolean(value)
-    override fun getBoolean(idx: Int) = state.getBoolean(idx)
-    override fun pushError(value: KuaError) = state.pushError(value)
     override fun pushFunction(value: KuaFunction<*, *, *, *>) = state.pushFunction(value)
 
     override fun getNumber(idx: Int) = state.getNumber(idx)

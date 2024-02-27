@@ -10,6 +10,10 @@ value class StackTop(val value: Int)
 
 interface State {
     fun absIndex(idx: Int): Int
+
+    fun booleanPush(value: KuaBoolean): StackTop
+    fun booleanGet(idx: Int): KuaBoolean
+
     fun decimalPush(value: KuaDecimal): StackTop
     fun decimalGet(idx: Int): KuaDecimal
 
@@ -21,19 +25,16 @@ interface State {
     fun topPush(idx: Int): StackTop
     fun topSet(idx: Int)
 
+    fun type(idx: Int): KClass<out KuaType>
 
     /// OLD STUFF TO BE REPLACED
 
-    fun type(idx: Int): KClass<out KuaType>
+
     fun pushNil(): StackTop
     fun pushAny(value: KuaAny): StackTop
     fun getAny(idx: Int): KuaAny
 
-    fun pushBoolean(value: Boolean): StackTop
-    fun pushBoolean(value: KuaBoolean) = pushBoolean(value.value)
-    fun getBoolean(idx: Int): Boolean
-    fun getBooleanValue(idx: Int) = booleanOf(getBoolean(idx))
-    fun pushError(value: KuaError): StackTop
+
     fun pushFunction(value: KuaFunction<*, *, *, *>): StackTop
 
 
@@ -76,6 +77,9 @@ class CloseableStateImpl(private val native: Native = Native()) : CloseableState
 
     override fun absIndex(idx: Int): Int = native.absIndex(idx)
 
+    override fun booleanPush(value: KuaBoolean): StackTop = StackTop(native.booleanPush(value.value))
+    override fun booleanGet(idx: Int): KuaBoolean = KuaBoolean.of(native.booleanGet(idx))
+
     override fun decimalPush(value: KuaDecimal): StackTop =
         StackTop(native.decimalPush(value.toBigDecimal().toString()))
 
@@ -105,7 +109,7 @@ class CloseableStateImpl(private val native: Native = Native()) : CloseableState
 
     override fun pushAny(value: KuaAny): StackTop {
         return when (val underlying = value.value) {
-            is KuaBoolean -> pushBoolean(underlying)
+            is KuaBoolean -> booleanPush(underlying)
             is KuaTable -> pushTable(underlying)
             is KuaTable -> pushTable(underlying)
             is KuaNumber -> pushNumber(underlying)
@@ -116,7 +120,7 @@ class CloseableStateImpl(private val native: Native = Native()) : CloseableState
 
     override fun getAny(idx: Int): KuaAny {
         return when (val type = type(idx)) {
-            KuaBoolean::class -> KuaAny(getBooleanValue(idx))
+            KuaBoolean::class -> KuaAny(booleanGet(idx))
             KuaDecimal::class -> KuaAny(decimalGet(idx))
             KuaNumber::class -> KuaAny(getNumberType(idx))
             KuaString::class -> KuaAny(getStringType(idx))
@@ -127,9 +131,7 @@ class CloseableStateImpl(private val native: Native = Native()) : CloseableState
         }
     }
 
-    override fun pushBoolean(value: Boolean): StackTop = StackTop(native.booleanPush(value))
-    override fun getBoolean(idx: Int): Boolean = native.booleanGet(idx)
-    override fun pushError(value: KuaError) = StackTop(native.errorPush(value.value))
+
     override fun pushFunction(value: KuaFunction<*, *, *, *>) = StackTop(native.functionPush(value))
 
     override fun getNumber(idx: Int) = native.numberGet(idx)

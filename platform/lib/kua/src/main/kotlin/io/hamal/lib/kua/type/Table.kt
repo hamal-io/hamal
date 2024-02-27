@@ -87,7 +87,7 @@ class KuaTable(
     fun getBooleanType(idx: Int): KuaBoolean {
         val type = state.tableGetRawIdx(index, idx)
         type.checkExpectedType(KuaBoolean::class)
-        return state.getBooleanValue(-1)
+        return state.booleanGet(-1)
     }
 
     fun append(value: KuaBoolean) = append(value.value)
@@ -215,7 +215,7 @@ class KuaTable(
         }
     }
 
-//    val length get() : Int = state.native.tableGetLength(index)
+    //    val length get() : Int = state.native.tableGetLength(index)
     val length get() : Int = TODO()
 
     fun unset(key: KuaString) = unset(key.value)
@@ -240,7 +240,7 @@ class KuaTable(
     operator fun set(key: KuaString, value: KuaBoolean) = set(key.value, value.value)
     operator fun set(key: String, value: Boolean): Int {
         state.pushString(key)
-        state.pushBoolean(value)
+        state.booleanPush(if (value) KuaTrue else KuaFalse)
         return state.tableSetRaw(index)
     }
 

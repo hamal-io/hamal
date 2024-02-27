@@ -40,6 +40,6 @@ fun <VALUE : KuaType> FunctionContext.push(value: VALUE) = when (value) {
     is KuaString -> pushString(value)
     is KuaTable -> pushTable(value)
     is KuaTable -> pushTable(value)
-    is KuaError -> pushError(value)
+    is KuaError -> errorPush(value)
     else -> throw NotImplementedError("${value::class.simpleName} not implemented yet")
 }

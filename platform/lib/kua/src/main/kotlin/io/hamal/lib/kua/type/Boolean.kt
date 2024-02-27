@@ -23,6 +23,10 @@ sealed class KuaBoolean(
         result = 31 * result + type.hashCode()
         return result
     }
+
+    companion object {
+        fun of(value: Boolean) = if (value) KuaTrue else KuaFalse
+    }
 }
 
 object KuaTrue : KuaBoolean(true) {
