@@ -144,7 +144,7 @@ STATE_METHOD_NAME(functionPush)(JNIEnv *env, jobject K, jobject func) {
 }
 
 JNIEXPORT jstring JNICALL
-STATE_METHOD_NAME(decimalGetString)(JNIEnv *env, jobject K, jint idx) {
+STATE_METHOD_NAME(decimalGet)(JNIEnv *env, jobject K, jint idx) {
     ENV_AND_STATE
     char const *str = to_decimal(L, idx);
     return (*env)->NewStringUTF(env, str);
