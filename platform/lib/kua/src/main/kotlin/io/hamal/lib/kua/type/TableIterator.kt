@@ -19,18 +19,19 @@ class KuaTableEntryIterator<KEY : KuaType, TYPE : KuaType>(
     }
 
     override fun hasNext(): Boolean {
-        hasNext = state.native.tableNext(index)
-        return if (hasNext) {
-            nextTableEntry = object : Entry<KEY, TYPE> {
-                override val key = keyExtractor(state, state.absIndex(-2))
-                override val value = valueExtractor(state, state.absIndex(-1))
-            }
-            state.native.topPop(1)
-            true
-        } else {
-            nextTableEntry = null
-            false
-        }
+//        hasNext = state.native.tableNext(index)
+//        return if (hasNext) {
+//            nextTableEntry = object : Entry<KEY, TYPE> {
+//                override val key = keyExtractor(state, state.absIndex(-2))
+//                override val value = valueExtractor(state, state.absIndex(-1))
+//            }
+//            state.native.topPop(1)
+//            true
+//        } else {
+//            nextTableEntry = null
+//            false
+//        }
+        TODO()
     }
 
     override fun next(): Entry<KEY, TYPE> {

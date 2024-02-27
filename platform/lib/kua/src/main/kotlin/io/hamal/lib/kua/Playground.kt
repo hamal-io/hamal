@@ -22,6 +22,6 @@ fun main() {
         """.trimIndent()
         )
 
-        println(sb.top)
+        println(sb.topGet())
     }
 }

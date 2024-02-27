@@ -16,14 +16,14 @@ class HttpExecuteFunction : Function1In2Out<KuaTable, KuaError, KuaTable>(
     override fun invoke(ctx: FunctionContext, arg1: KuaTable): Pair<KuaError?, KuaTable?> {
         val results = mutableListOf<KuaTable>()
 
-        arg1.forEach { request ->
-            require(request is KuaTable)
-            println(request)
-            request.forEach { key, value ->
-                println(key)
-                println(value)
-            }
-        }
+//        arg1.forEach { request ->
+//            require(request is KuaTable)
+//            println(request)
+//            request.forEach { key, value ->
+//                println(key)
+//                println(value)
+//            }
+//        }
 
 //        ctx.pushNil()
 //        while (ctx.native.tableNext(arg1.index)) {

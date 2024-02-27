@@ -9,11 +9,6 @@ import kotlin.reflect.KClass
 value class StackTop(val value: Int)
 
 interface State {
-    //FIXME probably not a good idea to expose this internal - only for development / prototyping
-    val native: Native
-    val top: StackTop
-
-
     fun decimalPush(value: KuaDecimal): StackTop
     fun decimalGet(idx: Int): KuaDecimal
 
@@ -23,7 +18,6 @@ interface State {
     fun topGet(): StackTop
 
     /// OLD STUFF TO BE REPLACED
-
     fun pop(len: Int): StackTop
 
     fun isEmpty(): Boolean
@@ -80,9 +74,7 @@ interface State {
 
 interface CloseableState : State, AutoCloseable
 
-class CloseableStateImpl(
-    override val native: Native = Native()
-) : CloseableState {
+class CloseableStateImpl(private val native: Native = Native()) : CloseableState {
 
     override fun decimalPush(value: KuaDecimal): StackTop =
         StackTop(native.decimalPush(value.toBigDecimal().toString()))
@@ -97,8 +89,6 @@ class CloseableStateImpl(
 
 
     // FIXME TO BE REPLACED
-
-    override val top: StackTop get() = StackTop(native.topGet())
 
     override fun pop(len: Int) = StackTop(native.topPop(len))
 
@@ -172,7 +162,7 @@ class CloseableStateImpl(
 
     override fun getGlobalKuaTableMap(name: String): KuaTable {
         native.globalGet(name)
-        return getTableMap(top.value)
+        return getTableMap(native.topGet())
     }
 
     override fun unsetGlobal(name: String) {

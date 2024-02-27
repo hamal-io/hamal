@@ -21,9 +21,6 @@ class FunctionContext(
 
     // FIXME
 
-    override val native = state.native
-    override val top: StackTop get() = state.top
-
     override fun pop(len: Int) = state.pop(len)
 
     override fun isEmpty() = state.isEmpty()

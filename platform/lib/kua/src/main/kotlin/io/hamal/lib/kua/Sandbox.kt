@@ -27,9 +27,6 @@ class Sandbox(
 
     // FIXME to remove
 
-    override val native: Native = Native()
-    override val top: StackTop get() = state.top
-
     override fun pop(len: Int) = state.pop(len)
 
     //    val state = CloseableStateImpl(native)

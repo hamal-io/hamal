@@ -31,14 +31,14 @@ class KuaTable(
     }
 
     fun forEach(action: (KuaType) -> Unit) {
-        state.pushNil()
-        while (state.native.tableNext(index)) {
-            val index = state.getNumberType(state.absIndex(-2))
-            val value = state.getAny(state.absIndex(-1)).value
-            action(value)
+//        state.pushNil()
+//        while (state.native.tableNext(index)) {
+//            val index = state.getNumberType(state.absIndex(-2))
+//            val value = state.getAny(state.absIndex(-1)).value
+//            action(value)
 //            state.native.pop(1)
-        }
-        state.native.topPop(1)
+//        }
+//        state.native.topPop(1)
     }
 
     fun append(value: KuaType): Int {
@@ -93,8 +93,9 @@ class KuaTable(
     fun append(value: KuaBoolean) = append(value.value)
 
     fun append(value: Boolean): Int {
-        state.native.booleanPush(value)
-        return state.tableAppend(index)
+        TODO()
+//        state.native.booleanPush(value)
+//        return state.tableAppend(index)
     }
 
 
@@ -117,8 +118,9 @@ class KuaTable(
     fun append(value: Float) = append(value.toDouble())
     fun append(value: KuaNumber) = append(value.value)
     fun append(value: Double): Int {
-        state.native.numberPush(value)
-        return state.tableAppend(index)
+        TODO()
+//        state.native.numberPush(value)
+//        return state.tableAppend(index)
     }
 
     fun append(value: KuaDecimal): Int {
@@ -138,8 +140,9 @@ class KuaTable(
 
 
     fun append(value: String): Int {
-        state.native.stringPush(value)
-        return state.tableAppend(index)
+        TODO()
+//        state.native.stringPush(value)
+//        return state.tableAppend(index)
     }
 
     fun append(value: KuaTable): Int {
@@ -155,30 +158,33 @@ class KuaTable(
     fun isNull(key: String): Boolean = type(key) == KuaNil::class
 
     fun findArray(key: String): KuaTable? {
-        if (isNull(key)) {
-            return null
-        }
-
-        state.pushString(key)
-        val type = state.tableGetRaw(index)
-        type.checkExpectedType(KuaTable::class)
-        return state.getTableArray(state.top.value)
+//        if (isNull(key)) {
+//            return null
+//        }
+//
+//        state.pushString(key)
+//        val type = state.tableGetRaw(index)
+//        type.checkExpectedType(KuaTable::class)
+//        return state.getTableArray(state.top.value)
+        TODO()
     }
 
     fun forEach(action: (key: KuaType, value: KuaType) -> Unit) {
-        state.pushNil()
-        while (state.native.tableNext(index)) {
-            val key = state.getStringType(state.absIndex(-2))
-            val value = state.getAny(state.absIndex(-1))
-            action(key, value)
-//            state.native.pop(1)
-        }
-        state.native.topPop(1)
+//        state.pushNil()
+//        while (state.native.tableNext(index)) {
+//            val key = state.getStringType(state.absIndex(-2))
+//            val value = state.getAny(state.absIndex(-1))
+//            action(key, value)
+////            state.native.pop(1)
+//        }
+//        state.native.topPop(1)
+        TODO()
     }
 
     fun get(key: String): KuaAny {
-        state.pushString(key)
-        return state.getAny(state.top.value)
+//        state.pushString(key)
+//        return state.getAny(state.top.value)
+        TODO()
     }
 
     operator fun set(key: String, value: KuaAny): Int {
@@ -209,7 +215,8 @@ class KuaTable(
         }
     }
 
-    val length get() = state.native.tableGetLength(index)
+//    val length get() : Int = state.native.tableGetLength(index)
+    val length get() : Int = TODO()
 
     fun unset(key: KuaString) = unset(key.value)
 
@@ -284,28 +291,31 @@ class KuaTable(
     }
 
     fun getTableMap(key: String): KuaTable {
-        state.pushString(key)
-        val type = state.tableGetRaw(index)
-        type.checkExpectedType(KuaTable::class)
-        return state.getTableMap(state.top.value)
+//        state.pushString(key)
+//        val type = state.tableGetRaw(index)
+//        type.checkExpectedType(KuaTable::class)
+//        return state.getTableMap(state.top.value)
+        TODO()
     }
 
     fun getBooleanType(key: KuaString): KuaBoolean = getBooleanType(key.value)
     fun getBoolean(key: String): Boolean = getBooleanType(key).value
     fun getBoolean(key: KuaString): Boolean = getBoolean(key.value)
     fun getBooleanType(key: String): KuaBoolean {
-        state.pushString(key)
-        val type = state.tableGetRaw(index)
-        type.checkExpectedType(KuaBoolean::class)
-        return booleanOf(state.native.booleanGet(state.top.value)).also { state.native.topPop(1) }
+//        state.pushString(key)
+//        val type = state.tableGetRaw(index)
+//        type.checkExpectedType(KuaBoolean::class)
+//        return booleanOf(state.native.booleanGet(state.top.value)).also { state.native.topPop(1) }
+        TODO()
     }
 
     fun getCode(key: KuaString): KuaCode = getCode(key.value)
     fun getCode(key: String): KuaCode {
-        state.pushString(key)
-        val type = state.tableGetRaw(index)
-        type.checkExpectedType(KuaString::class)
-        return KuaCode(state.getString(state.top.value)).also { state.native.topPop(1) }
+//        state.pushString(key)
+//        val type = state.tableGetRaw(index)
+//        type.checkExpectedType(KuaString::class)
+//        return KuaCode(state.getString(state.top.value)).also { state.native.topPop(1) }
+        TODO()
     }
 
     fun getNumberType(key: KuaString): KuaNumber = getNumberType(key.value)
@@ -323,16 +333,18 @@ class KuaTable(
 
     fun getNumberType(key: String): KuaNumber {
         state.pushString(key)
-        val type = state.tableGetRaw(index)
-        type.checkExpectedType(KuaNumber::class)
-        return KuaNumber(state.native.numberGet(state.top.value)).also { state.native.topPop(1) }
+//        val type = state.tableGetRaw(index)
+//        type.checkExpectedType(KuaNumber::class)
+//        return KuaNumber(state.native.numberGet(state.top.value)).also { state.native.topPop(1) }
+        TODO()
     }
 
     fun getDecimalType(key: String): KuaDecimal {
-        state.pushString(key)
-        val type = state.tableGetRaw(index)
-        type.checkExpectedType(KuaDecimal::class)
-        return state.decimalGet(state.top.value).also { state.native.topPop(1) }
+//        state.pushString(key)
+//        val type = state.tableGetRaw(index)
+//        type.checkExpectedType(KuaDecimal::class)
+//        return state.decimalGet(state.top.value).also { state.native.topPop(1) }
+        TODO()
     }
 
 
@@ -344,20 +356,22 @@ class KuaTable(
     }
 
     fun findStringType(key: String): KuaString? {
-        state.pushString(key)
-        val type = state.tableGetRaw(index)
-        if (type == KuaNil::class) {
-            return null
-        }
-        type.checkExpectedType(KuaString::class)
-        return KuaString(state.native.stringGet(state.top.value).also { state.native.topPop(1) })
+//        state.pushString(key)
+//        val type = state.tableGetRaw(index)
+//        if (type == KuaNil::class) {
+//            return null
+//        }
+//        type.checkExpectedType(KuaString::class)
+//        return KuaString(state.native.stringGet(state.top.value).also { state.native.topPop(1) })
+        TODO()
     }
 
     fun getStringType(key: String): KuaString {
-        state.pushString(key)
-        val type = state.tableGetRaw(index)
-        type.checkExpectedType(KuaString::class)
-        return KuaString(state.native.stringGet(state.top.value)).also { state.native.topPop(1) }
+//        state.pushString(key)
+//        val type = state.tableGetRaw(index)
+//        type.checkExpectedType(KuaString::class)
+//        return KuaString(state.native.stringGet(state.top.value)).also { state.native.topPop(1) }
+        TODO()
     }
 
     fun type(key: String): KClass<out KuaType> {
@@ -375,10 +389,11 @@ private fun KClass<out KuaType>.checkExpectedType(expected: KClass<out KuaType>)
 
 
 fun State.tableKeyType(idx: Int): KClass<out KuaType> {
-    native.nilPush()
-    native.tableNext(idx)
-    val result = type(-2)
-    native.topPop(2)
-    return result
+//    native.nilPush()
+//    native.tableNext(idx)
+//    val result = type(-2)
+//    native.topPop(2)
+//    return result
+    TODO()
 }
 
