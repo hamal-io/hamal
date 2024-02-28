@@ -8,6 +8,9 @@ import kotlin.reflect.KClass
 @JvmInline
 value class StackTop(val value: Int)
 
+@JvmInline
+value class TableLength(val value: Int)
+
 interface State {
     fun absIndex(idx: Int): Int
 
@@ -31,8 +34,17 @@ interface State {
     fun stringGet(idx: Int): KuaString
     fun stringPush(value: KuaString): StackTop
 
-    fun tablePush(proxy: KuaTable): StackTop
+    fun tableAppend(idx: Int): Int
+    fun tableCreate(arrayCount: Int, recordCount: Int): KuaTable
+    fun tableFieldSet(idx: Int, key: KuaString): StackTop
+    fun tableFieldGet(idx: Int, key: KuaString): StackTop
     fun tableGet(idx: Int): KuaTable
+    fun tableLength(idx: Int): TableLength
+    fun tablePush(proxy: KuaTable): StackTop
+    fun tableRawSet(idx: Int): Int
+    fun tableRawSetIdx(stackIdx: Int, tableIdx: Int): Int
+    fun tableRawGet(idx: Int): KClass<out KuaType>
+    fun tableRawGetIdx(stackIdx: Int, tableIdx: Int): KClass<out KuaType>
 
     fun topGet(): StackTop
     fun topPop(len: Int): StackTop
@@ -53,12 +65,6 @@ interface State {
     fun getGlobalKuaTableMap(name: String): KuaTable
     fun unsetGlobal(name: String)
 
-    fun tableCreate(arrayCount: Int, recordCount: Int): KuaTable
-    fun tableAppend(idx: Int): Int
-    fun tableRawSet(idx: Int): Int
-    fun tableRawSetIdx(stackIdx: Int, tableIdx: Int): Int
-    fun tableRawGet(idx: Int): KClass<out KuaType>
-    fun tableRawGetIdx(stackIdx: Int, tableIdx: Int): KClass<out KuaType>
 
     fun load(code: String) // FIXME add return value
 }
@@ -119,8 +125,11 @@ class CloseableStateImpl(private val native: Native = Native()) : CloseableState
         )
     }
 
-    override fun tablePush(proxy: KuaTable) = StackTop(native.topPush(proxy.index))
+    override fun tableFieldGet(idx: Int, key: KuaString) = StackTop(native.tableFieldGet(idx, key.value))
+    override fun tableFieldSet(idx: Int, key: KuaString) = StackTop(native.tableFieldSet(idx, key.value))
     override fun tableGet(idx: Int) = KuaTable(absIndex(idx), this)
+    override fun tableLength(idx: Int) = TableLength(native.tableLength(idx))
+    override fun tablePush(proxy: KuaTable) = StackTop(native.topPush(proxy.index))
     override fun tableRawSet(idx: Int) = native.tableRawSet(idx)
     override fun tableRawSetIdx(stackIdx: Int, tableIdx: Int) = native.tableRawSetIdx(stackIdx, tableIdx)
     override fun tableRawGet(idx: Int) = luaToType(native.tableRawGet(idx))

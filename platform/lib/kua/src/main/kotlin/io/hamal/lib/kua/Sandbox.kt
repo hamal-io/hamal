@@ -39,9 +39,12 @@ class Sandbox(
     override fun stringGet(idx: Int) = state.stringGet(idx)
     override fun stringPush(value: KuaString) = state.stringPush(value)
 
-    override fun tableCreate(arrayCount: Int, recordCount: Int) = state.tableCreate(arrayCount, recordCount)
     override fun tableAppend(idx: Int) = state.tableAppend(idx)
+    override fun tableCreate(arrayCount: Int, recordCount: Int) = state.tableCreate(arrayCount, recordCount)
     override fun tableGet(idx: Int): KuaTable = state.tableGet(idx)
+    override fun tableFieldSet(idx: Int, key: KuaString) = state.tableFieldGet(idx, key)
+    override fun tableFieldGet(idx: Int, key: KuaString) = state.tableFieldSet(idx, key)
+    override fun tableLength(idx: Int) = state.tableLength(idx)
     override fun tablePush(proxy: KuaTable): StackTop = state.tablePush(proxy)
     override fun tableRawSet(idx: Int) = state.tableRawSet(idx)
     override fun tableRawSetIdx(stackIdx: Int, tableIdx: Int) = state.tableRawSetIdx(stackIdx, tableIdx)
@@ -111,12 +114,10 @@ class Sandbox(
     override fun type(idx: Int) = state.type(idx)
 
 
-
     override fun setGlobal(name: String, value: KuaFunction<*, *, *, *>) = state.setGlobal(name, value)
     override fun setGlobal(name: String, value: KuaTable) = state.setGlobal(name, value)
     override fun getGlobalKuaTableMap(name: String): KuaTable = state.getGlobalKuaTableMap(name)
     override fun unsetGlobal(name: String) = state.unsetGlobal(name)
-
 
 
 }
