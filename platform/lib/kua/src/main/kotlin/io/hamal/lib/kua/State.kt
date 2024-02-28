@@ -53,13 +53,12 @@ interface State {
     fun getGlobalKuaTableMap(name: String): KuaTable
     fun unsetGlobal(name: String)
 
-    fun tableCreateMap(capacity: Int = 0): KuaTable
-    fun tableCreateArray(capacity: Int = 0): KuaTable
+    fun tableCreate(arrayCount: Int, recordCount: Int): KuaTable
     fun tableAppend(idx: Int): Int
-    fun tableSetRaw(idx: Int): Int
-    fun tableSetRawIdx(stackIdx: Int, tableIdx: Int): Int
-    fun tableGetRaw(idx: Int): KClass<out KuaType>
-    fun tableGetRawIdx(stackIdx: Int, tableIdx: Int): KClass<out KuaType>
+    fun tableRawSet(idx: Int): Int
+    fun tableRawSetIdx(stackIdx: Int, tableIdx: Int): Int
+    fun tableRawGet(idx: Int): KClass<out KuaType>
+    fun tableRawGetIdx(stackIdx: Int, tableIdx: Int): KClass<out KuaType>
 
     fun load(code: String) // FIXME add return value
 }
@@ -111,12 +110,24 @@ class CloseableStateImpl(private val native: Native = Native()) : CloseableState
     override fun stringGet(idx: Int) = KuaString(native.stringGet(idx))
     override fun stringPush(value: KuaString) = StackTop(native.stringPush(value.value))
 
+
+    override fun tableAppend(idx: Int) = native.tableAppend(idx)
+    override fun tableCreate(arrayCount: Int, recordCount: Int): KuaTable {
+        return KuaTable(
+            index = native.tableCreate(arrayCount, recordCount),
+            state = this
+        )
+    }
+
     override fun tablePush(proxy: KuaTable) = StackTop(native.topPush(proxy.index))
     override fun tableGet(idx: Int) = KuaTable(absIndex(idx), this)
+    override fun tableRawSet(idx: Int) = native.tableRawSet(idx)
+    override fun tableRawSetIdx(stackIdx: Int, tableIdx: Int) = native.tableRawSetIdx(stackIdx, tableIdx)
+    override fun tableRawGet(idx: Int) = luaToType(native.tableRawGet(idx))
+    override fun tableRawGetIdx(stackIdx: Int, tableIdx: Int) = luaToType(native.tableRawGetIdx(stackIdx, tableIdx))
 
     override fun topGet(): StackTop = StackTop(native.topGet())
     override fun topSet(idx: Int) = native.topSet(idx)
-
 
     // FIXME TO BE REPLACED
 
@@ -153,25 +164,6 @@ class CloseableStateImpl(private val native: Native = Native()) : CloseableState
         native.globalSet(name)
     }
 
-    override fun tableCreateMap(capacity: Int): KuaTable {
-        return KuaTable(
-            index = native.tableCreate(0, capacity),
-            state = this
-        )
-    }
-
-    override fun tableCreateArray(capacity: Int): KuaTable {
-        return KuaTable(
-            index = native.tableCreate(capacity, 0),
-            state = this
-        )
-    }
-
-    override fun tableAppend(idx: Int) = native.tableAppend(idx)
-    override fun tableSetRaw(idx: Int) = native.tableRawSet(idx)
-    override fun tableSetRawIdx(stackIdx: Int, tableIdx: Int) = native.tableRawSetIdx(stackIdx, tableIdx)
-    override fun tableGetRaw(idx: Int) = luaToType(native.tableRawGet(idx))
-    override fun tableGetRawIdx(stackIdx: Int, tableIdx: Int) = luaToType(native.tableRawGetIdx(stackIdx, tableIdx))
 
     override fun load(code: String) {
         native.stringLoad(code)
@@ -199,7 +191,7 @@ fun <T : State> T.tableCreate(vararg pairs: Pair<String, KuaType>): KuaTable = t
 
 
 fun <T : State> T.tableCreate(data: Map<String, KuaType>): KuaTable {
-    return tableCreateMap(data.size).also { map ->
+    return tableCreate(0, data.size).also { map ->
         data.forEach { (key, value) ->
             map[key] = value
         }
@@ -207,7 +199,7 @@ fun <T : State> T.tableCreate(data: Map<String, KuaType>): KuaTable {
 }
 
 fun <T : State> T.tableCreate(data: List<KuaType>): KuaTable {
-    return tableCreateArray(data.size).also { array ->
+    return tableCreate(data.size, 0).also { array ->
         data.forEach(array::append)
     }
 }

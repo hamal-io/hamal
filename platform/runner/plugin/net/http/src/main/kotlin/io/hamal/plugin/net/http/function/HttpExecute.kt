@@ -256,7 +256,7 @@ class HttpExecuteFunction : Function1In2Out<KuaTable, KuaError, KuaTable>(
     }
 }
 
-private fun HttpResponse.toMap(ctx: FunctionContext) = ctx.tableCreateMap().also {
+private fun HttpResponse.toMap(ctx: FunctionContext) = ctx.tableCreate().also {
     it["status_code"] = KuaNumber(statusCode.value)
     it["content_type"] = headers.find("content-type")?.let { type -> KuaString(type) } ?: KuaNil
     it["content_length"] = headers.find("content-length")?.let { length -> KuaNumber(length.toInt()) } ?: KuaNil

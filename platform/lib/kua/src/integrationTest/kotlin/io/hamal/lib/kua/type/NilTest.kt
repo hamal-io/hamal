@@ -37,7 +37,7 @@ internal class KuaNilTest {
                     )
                 ) {
                     override fun invoke(ctx: FunctionContext): Pair<KuaTable?, KuaTable?> {
-                        return null to ctx.tableCreateMap(0)
+                        return null to ctx.tableCreate()
                     }
                 }
             )
@@ -64,7 +64,7 @@ internal class KuaNilTest {
                         )
                     ) {
                     override fun invoke(ctx: FunctionContext): Pair<KuaTable?, KuaTable?> {
-                        return ctx.tableCreateArray(0) to null
+                        return ctx.tableCreate() to null
                     }
                 })
 

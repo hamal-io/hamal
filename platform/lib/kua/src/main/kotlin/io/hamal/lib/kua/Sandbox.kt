@@ -39,8 +39,14 @@ class Sandbox(
     override fun stringGet(idx: Int) = state.stringGet(idx)
     override fun stringPush(value: KuaString) = state.stringPush(value)
 
+    override fun tableCreate(arrayCount: Int, recordCount: Int) = state.tableCreate(arrayCount, recordCount)
+    override fun tableAppend(idx: Int) = state.tableAppend(idx)
     override fun tableGet(idx: Int): KuaTable = state.tableGet(idx)
     override fun tablePush(proxy: KuaTable): StackTop = state.tablePush(proxy)
+    override fun tableRawSet(idx: Int) = state.tableRawSet(idx)
+    override fun tableRawSetIdx(stackIdx: Int, tableIdx: Int) = state.tableRawSetIdx(stackIdx, tableIdx)
+    override fun tableRawGet(idx: Int) = state.tableRawGet(idx)
+    override fun tableRawGetIdx(stackIdx: Int, tableIdx: Int) = state.tableRawGetIdx(stackIdx, tableIdx)
 
     override fun topGet(): StackTop = state.topGet()
     override fun topPop(len: Int) = state.topPop(len)
@@ -111,12 +117,6 @@ class Sandbox(
     override fun getGlobalKuaTableMap(name: String): KuaTable = state.getGlobalKuaTableMap(name)
     override fun unsetGlobal(name: String) = state.unsetGlobal(name)
 
-    override fun tableCreateMap(capacity: Int) = state.tableCreateMap(capacity)
-    override fun tableCreateArray(capacity: Int) = state.tableCreateArray(capacity)
 
-    override fun tableAppend(idx: Int) = state.tableAppend(idx)
-    override fun tableSetRaw(idx: Int) = state.tableSetRaw(idx)
-    override fun tableSetRawIdx(stackIdx: Int, tableIdx: Int) = state.tableSetRawIdx(stackIdx, tableIdx)
-    override fun tableGetRaw(idx: Int) = state.tableGetRaw(idx)
-    override fun tableGetRawIdx(stackIdx: Int, tableIdx: Int) = state.tableGetRawIdx(stackIdx, tableIdx)
+
 }

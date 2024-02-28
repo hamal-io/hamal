@@ -48,7 +48,7 @@ class CodeRunnerImpl(
                     try {
                         val contextExtension = RunnerContextFactory(runnerContext).create(sandbox)
 
-                        val internalTable = sandbox.state.tableCreateMap(contextExtension.internals.size)
+                        val internalTable = sandbox.state.tableCreate(0, contextExtension.internals.size)
                         contextExtension.internals.forEach { entry ->
                             when (val value = entry.value) {
                                 is KuaNil -> {}

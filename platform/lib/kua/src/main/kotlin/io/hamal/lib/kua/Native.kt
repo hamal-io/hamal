@@ -51,7 +51,6 @@ class Native : AutoCloseable {
     external fun tableRawGetIdx(stackIdx: Int, tableIdx: Int): Int
     external fun tableSubTableGet(idx: Int, key: String): Int
 
-
     private external fun initConnection()
     private external fun closeConnection()
 

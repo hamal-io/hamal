@@ -1,7 +1,9 @@
 package io.hamal.lib.kua.type
 
-import io.hamal.lib.kua.*
+import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
+import io.hamal.lib.kua.NopSandboxContext
+import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.function.*
 import org.hamcrest.CoreMatchers.equalTo
@@ -56,7 +58,7 @@ internal class KuaAnyTest {
 
     @Test
     fun `Can be used with table object style table`() {
-        val map = sandbox.tableCreateMap(2)
+        val map = sandbox.tableCreate(0, 2)
         map["key"] = "value"
         sandbox.setGlobal("test_map", map)
 
@@ -79,7 +81,7 @@ internal class KuaAnyTest {
 
     @Test
     fun `AnyValue can be used with array style table`() {
-        val array = sandbox.tableCreateArray(2)
+        val array = sandbox.tableCreate(2, 0)
         array.append(23)
         array.append("hamal.io")
         sandbox.setGlobal("test_array", array)

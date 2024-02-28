@@ -32,7 +32,7 @@ class RunnerRegistry(val sb: Sandbox) {
     fun loadPluginFactory(name: String): KuaTable {
         val extension = plugins[name]!!
         val internals = extension.internals
-        val internalTable = state.tableCreateMap(internals.size)
+        val internalTable = state.tableCreate(0, internals.size)
 
         internals.forEach { entry ->
             val fn = entry.value
