@@ -42,7 +42,7 @@ class KuaTable(
 //        state.native.topPop(1)
     }
 
-    fun append(value: KuaType): Int {
+    fun append(value: KuaType): TableLength {
         return when (value) {
             is KuaBoolean -> append(value)
             is KuaCode -> append(value)
@@ -86,7 +86,7 @@ class KuaTable(
 
     fun append(value: KuaBoolean) = append(value.value)
 
-    fun append(value: Boolean): Int {
+    fun append(value: Boolean): TableLength {
         TODO()
 //        state.native.booleanPush(value)
 //        return state.tableAppend(index)
@@ -111,13 +111,13 @@ class KuaTable(
     fun append(value: Long) = append(value.toDouble())
     fun append(value: Float) = append(value.toDouble())
     fun append(value: KuaNumber) = append(value.value)
-    fun append(value: Double): Int {
+    fun append(value: Double): TableLength {
         TODO()
 //        state.native.numberPush(value)
 //        return state.tableAppend(index)
     }
 
-    fun append(value: KuaDecimal): Int {
+    fun append(value: KuaDecimal): TableLength {
         state.decimalPush(value)
         return state.tableAppend(index)
     }
@@ -133,13 +133,13 @@ class KuaTable(
     }
 
 
-    fun append(value: String): Int {
+    fun append(value: String): TableLength {
         TODO()
 //        state.native.stringPush(value)
 //        return state.tableAppend(index)
     }
 
-    fun append(value: KuaTable): Int {
+    fun append(value: KuaTable): TableLength {
         state.tablePush(value)
         return state.tableAppend(index)
     }

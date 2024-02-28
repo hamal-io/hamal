@@ -8,7 +8,7 @@ import org.junit.jupiter.api.assertThrows
 internal class TableAppendTest : NativeBaseTest() {
 
     @Test
-    fun `Insert value to empty table`() {
+    fun `Append value to empty table`() {
         testInstance.tableCreate(0, 0)
         testInstance.numberPush(512.0)
         testInstance.tableAppend(1)
@@ -18,7 +18,7 @@ internal class TableAppendTest : NativeBaseTest() {
     }
 
     @Test
-    fun `Insert multiple values to table`() {
+    fun `Append multiple values to table`() {
         testInstance.tableCreate(1000, 0)
         repeat(1000) { idx ->
             testInstance.numberPush(idx.toDouble())

@@ -18,8 +18,8 @@ internal class TableRawSetIdxTest : StateBaseTest() {
         assertThat(testInstance.topGet(), equalTo(StackTop(1)))
 
         testInstance.numberPush(KuaNumber(23.0))
-        testInstance.tableRawGet(1).also { resultClass ->
-            assertThat(resultClass, equalTo(KuaString::class))
+        testInstance.tableRawGet(1).also { valueClass ->
+            assertThat(valueClass, equalTo(KuaString::class))
         }
         assertThat(testInstance.stringGet(-1), equalTo(KuaString("value")))
         assertThat(testInstance.tableLength(1), equalTo(TableLength(1)))
@@ -40,8 +40,8 @@ internal class TableRawSetIdxTest : StateBaseTest() {
         }
 
         testInstance.numberPush(KuaNumber(23.0))
-        testInstance.tableRawGet(1).also { resultClass ->
-            assertThat(resultClass, equalTo(KuaNumber::class))
+        testInstance.tableRawGet(1).also { valueClass ->
+            assertThat(valueClass, equalTo(KuaNumber::class))
         }
         assertThat(testInstance.numberGet(-1), equalTo(KuaNumber(42.0)))
         assertThat(testInstance.tableLength(1), equalTo(TableLength(1)))

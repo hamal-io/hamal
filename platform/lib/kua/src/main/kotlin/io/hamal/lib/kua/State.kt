@@ -34,7 +34,7 @@ interface State {
     fun stringGet(idx: Int): KuaString
     fun stringPush(value: KuaString): StackTop
 
-    fun tableAppend(idx: Int): Int
+    fun tableAppend(idx: Int): TableLength
     fun tableCreate(arrayCount: Int, recordCount: Int): KuaTable
     fun tableFieldSet(idx: Int, key: KuaString): TableLength
     fun tableFieldGet(idx: Int, key: KuaString): StackTop
@@ -117,7 +117,7 @@ class CloseableStateImpl(private val native: Native = Native()) : CloseableState
     override fun stringPush(value: KuaString) = StackTop(native.stringPush(value.value))
 
 
-    override fun tableAppend(idx: Int) = native.tableAppend(idx)
+    override fun tableAppend(idx: Int) = TableLength(native.tableAppend(idx))
     override fun tableCreate(arrayCount: Int, recordCount: Int): KuaTable {
         return KuaTable(
             index = native.tableCreate(arrayCount, recordCount),
@@ -136,11 +136,11 @@ class CloseableStateImpl(private val native: Native = Native()) : CloseableState
     override fun tableRawGetIdx(stackIdx: Int, tableIdx: Int) = luaToType(native.tableRawGetIdx(stackIdx, tableIdx))
 
     override fun topGet(): StackTop = StackTop(native.topGet())
+    override fun topPop(len: Int) = StackTop(native.topPop(len))
     override fun topSet(idx: Int) = native.topSet(idx)
 
     // FIXME TO BE REPLACED
 
-    override fun topPop(len: Int) = StackTop(native.topPop(len))
 
 //    override fun isEmpty() = native.topGet() == 0
 //    override fun isNotEmpty() = !isEmpty()
