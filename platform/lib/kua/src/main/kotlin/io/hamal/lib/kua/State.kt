@@ -28,6 +28,7 @@ interface State {
 
     fun functionPush(value: KuaFunction<*, *, *, *>): StackTop
 
+    fun nilPush(): StackTop
     fun numberGet(idx: Int): KuaNumber
     fun numberPush(value: KuaNumber): StackTop
 
@@ -54,10 +55,6 @@ interface State {
     fun type(idx: Int): KClass<out KuaType>
 
     /// OLD STUFF TO BE REPLACED
-
-
-    fun nilPush(): StackTop
-
 
     fun setGlobal(name: String, value: KuaFunction<*, *, *, *>)
     fun setGlobal(name: String, value: KuaTable)
@@ -110,6 +107,7 @@ class CloseableStateImpl(private val native: Native = Native()) : CloseableState
 
     override fun functionPush(value: KuaFunction<*, *, *, *>) = StackTop(native.functionPush(value))
 
+    override fun nilPush() = StackTop(native.nilPush())
     override fun numberGet(idx: Int) = KuaNumber(native.numberGet(idx))
     override fun numberPush(value: KuaNumber) = StackTop(native.numberPush(value.value))
 
@@ -137,7 +135,10 @@ class CloseableStateImpl(private val native: Native = Native()) : CloseableState
 
     override fun topGet(): StackTop = StackTop(native.topGet())
     override fun topPop(len: Int) = StackTop(native.topPop(len))
+    override fun topPush(idx: Int): StackTop = StackTop(native.topPush(idx))
     override fun topSet(idx: Int) = native.topSet(idx)
+
+    override fun type(idx: Int) = luaToType(native.type(idx))
 
     // FIXME TO BE REPLACED
 
@@ -146,11 +147,7 @@ class CloseableStateImpl(private val native: Native = Native()) : CloseableState
 //    override fun isNotEmpty() = !isEmpty()
 
 
-    override fun topPush(idx: Int): StackTop = StackTop(native.topPush(idx))
 
-    override fun type(idx: Int) = luaToType(native.type(idx))
-
-    override fun nilPush() = StackTop(native.nilPush())
 
 
     override fun setGlobal(name: String, value: KuaFunction<*, *, *, *>) {

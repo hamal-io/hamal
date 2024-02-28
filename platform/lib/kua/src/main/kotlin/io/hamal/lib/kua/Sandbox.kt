@@ -56,6 +56,8 @@ class Sandbox(
     override fun topPush(idx: Int) = state.topPush(idx)
     override fun topSet(idx: Int) = state.topSet(idx)
 
+    override fun type(idx: Int) = state.type(idx)
+
 
     // FIXME to remove
 
@@ -111,7 +113,6 @@ class Sandbox(
 //    override fun isNotEmpty() = state.isNotEmpty()
 
 
-    override fun type(idx: Int) = state.type(idx)
 
 
     override fun setGlobal(name: String, value: KuaFunction<*, *, *, *>) = state.setGlobal(name, value)

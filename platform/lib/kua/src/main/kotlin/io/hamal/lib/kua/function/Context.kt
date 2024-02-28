@@ -52,10 +52,10 @@ class FunctionContext(
     override fun topPush(idx: Int) = state.topPush(idx)
     override fun topSet(idx: Int) = state.topSet(idx)
 
-    // FIXME
-
-
     override fun type(idx: Int) = state.type(idx)
+
+
+    // FIXME
 
     override fun setGlobal(name: String, value: KuaFunction<*, *, *, *>) = state.setGlobal(name, value)
     override fun setGlobal(name: String, value: KuaTable) = state.setGlobal(name, value)

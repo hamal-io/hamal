@@ -2,39 +2,10 @@ package io.hamal.lib.kua.native
 
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
 internal class TypeTest : NativeBaseTest() {
-
-    @Test
-    fun `Tries to read boolean with 0 index`() {
-        testInstance.booleanPush(true)
-        assertThrows<IllegalArgumentException> { testInstance.type(0) }
-            .also { exception -> assertThat(exception.message, equalTo("Index must not be 0")) }
-    }
-
-    @Test
-    fun `Tries to get type with index bigger than stack size`() {
-        testInstance.booleanPush(true)
-        assertThrows<IllegalArgumentException> { testInstance.type(2) }
-            .also { exception -> assertThat(exception.message, equalTo("Index out of bounds")) }
-    }
-
-    @Test
-    fun `Tries to get type with abs(negative index) bigger than stack size`() {
-        testInstance.booleanPush(true)
-        assertThrows<IllegalArgumentException> { testInstance.type(-2) }
-            .also { exception -> assertThat(exception.message, equalTo("Index out of bounds")) }
-    }
-
-    @Test
-    fun `Nil`() {
-        testInstance.nilPush()
-        val result = testInstance.type(1)
-        assertThat(result, equalTo(0))
-    }
 
     @Test
     fun `Boolean`() {
@@ -44,9 +15,28 @@ internal class TypeTest : NativeBaseTest() {
     }
 
     @Test
-    @Disabled
-    fun `LightUserData`() {
-        TODO()
+    fun `Decimal`() {
+        testInstance.decimalPush("23.456")
+        assertThat(testInstance.type(1), equalTo(11))
+    }
+
+    @Test
+    fun `Error`() {
+        testInstance.errorPush("error message")
+        assertThat(testInstance.type(1), equalTo(10))
+    }
+
+    @Test
+    fun `Function`() {
+        testInstance.stringLoad("local x = 10")
+        assertThat(testInstance.type(1), equalTo(6))
+    }
+
+    @Test
+    fun `Nil`() {
+        testInstance.nilPush()
+        val result = testInstance.type(1)
+        assertThat(result, equalTo(0))
     }
 
     @Test
@@ -71,32 +61,23 @@ internal class TypeTest : NativeBaseTest() {
     }
 
     @Test
-    fun `Function`() {
-        testInstance.stringLoad("local x = 10")
-        assertThat(testInstance.type(1), equalTo(6))
+    fun `Tries to read boolean with 0 index`() {
+        testInstance.booleanPush(true)
+        assertThrows<IllegalArgumentException> { testInstance.type(0) }
+            .also { exception -> assertThat(exception.message, equalTo("Index must not be 0")) }
     }
 
     @Test
-    @Disabled
-    fun `UserData`() {
-        TODO()
+    fun `Tries to get type with index bigger than stack size`() {
+        testInstance.booleanPush(true)
+        assertThrows<IllegalArgumentException> { testInstance.type(2) }
+            .also { exception -> assertThat(exception.message, equalTo("Index out of bounds")) }
     }
 
     @Test
-    @Disabled
-    fun `Thread`() {
-        TODO()
-    }
-
-    @Test
-    fun `Error`() {
-        testInstance.errorPush("error message")
-        assertThat(testInstance.type(1), equalTo(10))
-    }
-
-    @Test
-    fun `DecimalType`() {
-        testInstance.decimalPush("23.456")
-        assertThat(testInstance.type(1), equalTo(11))
+    fun `Tries to get type with abs(negative index) bigger than stack size`() {
+        testInstance.booleanPush(true)
+        assertThrows<IllegalArgumentException> { testInstance.type(-2) }
+            .also { exception -> assertThat(exception.message, equalTo("Index out of bounds")) }
     }
 }
