@@ -32,6 +32,7 @@ class Native : AutoCloseable {
 
     external fun nilPush(): Int
 
+
     external fun numberPush(value: Double): Int
     external fun numberGet(idx: Int): Double
 
@@ -40,6 +41,7 @@ class Native : AutoCloseable {
     external fun stringGet(idx: Int): String
 
     external fun tableAppend(idx: Int): Int
+    external fun tableGet(idx: Int): Int
     external fun tableCreate(arrayCount: Int, recordCount: Int): Int
     external fun tableFieldSet(idx: Int, key: String): Int
     external fun tableFieldGet(idx: Int, key: String): Int

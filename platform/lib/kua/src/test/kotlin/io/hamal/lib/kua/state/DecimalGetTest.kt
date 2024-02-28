@@ -2,9 +2,11 @@ package io.hamal.lib.kua.state
 
 import io.hamal.lib.kua.StackTop
 import io.hamal.lib.kua.type.KuaDecimal
+import io.hamal.lib.kua.type.KuaString
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.TestFactory
+import org.junit.jupiter.api.assertThrows
 
 internal class DecimalGetTest : StateBaseTest() {
 
@@ -29,4 +31,18 @@ internal class DecimalGetTest : StateBaseTest() {
         assertThat(testInstance.decimalGet(-1), equalTo(KuaDecimal("234")))
         assertThat(testInstance.topGet(), equalTo(StackTop(2)))
     }
+
+    @TestFactory
+    fun `Not a decimal`() = runTest { testInstance ->
+        testInstance.stringPush(KuaString("Not  a boolean"))
+        assertThrows<IllegalStateException> {
+            testInstance.decimalGet(1)
+        }.also { exception ->
+            assertThat(
+                exception.message,
+                equalTo("Expected type to be decimal but was string")
+            )
+        }
+    }
+
 }

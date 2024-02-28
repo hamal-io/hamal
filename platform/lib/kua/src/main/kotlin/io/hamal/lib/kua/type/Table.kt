@@ -112,9 +112,8 @@ class KuaTable(
     fun append(value: Float) = append(value.toDouble())
     fun append(value: KuaNumber) = append(value.value)
     fun append(value: Double): TableLength {
-        TODO()
-//        state.native.numberPush(value)
-//        return state.tableAppend(index)
+        state.numberPush(KuaNumber(value))
+        return state.tableAppend(index)
     }
 
     fun append(value: KuaDecimal): TableLength {
@@ -372,12 +371,6 @@ class KuaTable(
         return state.tableRawGet(index)
     }
 
-}
-
-private fun KClass<out KuaType>.checkExpectedType(expected: KClass<out KuaType>) {
-    check(this == expected) {
-        "Expected type to be $expected but was $this"
-    }
 }
 
 

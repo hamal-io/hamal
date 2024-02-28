@@ -69,4 +69,20 @@ class FunctionContext(
         TODO()
 //        return native.sandbox!!.ctx[clazz]
     }
+
+
+// FIXME add for easier access
+//    fun tableCreate(vararg pairs: Pair<String, Any>): KuaTable = tableCreate(pairs.toMap())
+//     fun tableCreate(data: Map<String, Any>): KuaTable
+//     fun tableCreate(data: List<Any>): KuaTable
+
+    fun tableCreate(vararg pairs: Pair<String, KuaType>): KuaTable = tableCreate(pairs.toMap())
+
+    fun tableCreate(data: Map<String, KuaType>): KuaTable {
+        return tableCreate(0, data.size).also { map ->
+            data.forEach { (key, value) ->
+                map[key] = value
+            }
+        }
+    }
 }

@@ -54,6 +54,7 @@ interface State {
 
     fun type(idx: Int): KClass<out KuaType>
 
+
     /// OLD STUFF TO BE REPLACED
 
     fun setGlobal(name: String, value: KuaFunction<*, *, *, *>)
@@ -76,6 +77,8 @@ class CloseableStateImpl(private val native: Native = Native()) : CloseableState
         return when (val type = type(idx)) {
             KuaBoolean::class -> KuaAny(booleanGet(idx))
             KuaDecimal::class -> KuaAny(decimalGet(idx))
+            KuaError::class -> KuaAny(errorGet(idx))
+            KuaNil::class -> KuaAny(KuaNil)
             KuaNumber::class -> KuaAny(numberGet(idx))
             KuaString::class -> KuaAny(stringGet(idx))
             KuaTable::class -> KuaAny(tableGet(idx))
@@ -86,19 +89,24 @@ class CloseableStateImpl(private val native: Native = Native()) : CloseableState
     override fun anyPush(value: KuaAny): StackTop {
         return when (val underlying = value.value) {
             is KuaBoolean -> booleanPush(underlying)
-            is KuaTable -> tablePush(underlying)
+            is KuaDecimal -> decimalPush(underlying)
+            is KuaError -> errorPush(underlying)
+            is KuaFunction<*, *, *, *> -> functionPush(underlying)
+            is KuaNil -> nilPush()
             is KuaNumber -> numberPush(underlying)
             is KuaString -> stringPush(underlying)
+            is KuaTable -> tablePush(underlying)
             else -> TODO("${underlying.javaClass} not supported yet")
         }
     }
 
 
     override fun booleanPush(value: KuaBoolean): StackTop = StackTop(native.booleanPush(value.value))
-    override fun booleanGet(idx: Int): KuaBoolean = KuaBoolean.of(native.booleanGet(idx))
+    override fun booleanGet(idx: Int) = KuaBoolean.of(native.booleanGet(idx))
 
-    override fun decimalPush(value: KuaDecimal): StackTop =
-        StackTop(native.decimalPush(value.toBigDecimal().toString()))
+    override fun decimalPush(value: KuaDecimal): StackTop = StackTop(
+        native.decimalPush(value.toBigDecimal().toString())
+    )
 
     override fun decimalGet(idx: Int): KuaDecimal = KuaDecimal(BigDecimal(native.decimalGet(idx)))
 
@@ -125,7 +133,7 @@ class CloseableStateImpl(private val native: Native = Native()) : CloseableState
 
     override fun tableFieldGet(idx: Int, key: KuaString) = StackTop(native.tableFieldGet(idx, key.value))
     override fun tableFieldSet(idx: Int, key: KuaString) = TableLength(native.tableFieldSet(idx, key.value))
-    override fun tableGet(idx: Int) = KuaTable(absIndex(idx), this)
+    override fun tableGet(idx: Int) = KuaTable(native.tableGet(native.absIndex(idx)), this)
     override fun tableLength(idx: Int) = TableLength(native.tableLength(idx))
     override fun tablePush(proxy: KuaTable) = StackTop(native.topPush(proxy.index))
     override fun tableRawSet(idx: Int) = TableLength(native.tableRawSet(idx))
@@ -141,14 +149,6 @@ class CloseableStateImpl(private val native: Native = Native()) : CloseableState
     override fun type(idx: Int) = luaToType(native.type(idx))
 
     // FIXME TO BE REPLACED
-
-
-//    override fun isEmpty() = native.topGet() == 0
-//    override fun isNotEmpty() = !isEmpty()
-
-
-
-
 
     override fun setGlobal(name: String, value: KuaFunction<*, *, *, *>) {
         native.functionPush(value)
@@ -193,10 +193,10 @@ private fun luaToType(value: Int) = when (value) {
     else -> TODO("$value not implemented yet")
 }
 
-fun <T : State> T.tableCreate(vararg pairs: Pair<String, KuaType>): KuaTable = tableCreate(pairs.toMap())
+fun <T : State> T.tableCreate(vararg pairs: Pair<KuaString, KuaType>): KuaTable = tableCreate(pairs.toMap())
 
 
-fun <T : State> T.tableCreate(data: Map<String, KuaType>): KuaTable {
+fun <T : State> T.tableCreate(data: Map<KuaString, KuaType>): KuaTable {
     return tableCreate(0, data.size).also { map ->
         data.forEach { (key, value) ->
             map[key] = value

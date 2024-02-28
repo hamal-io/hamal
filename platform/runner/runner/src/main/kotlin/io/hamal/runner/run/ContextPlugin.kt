@@ -5,9 +5,9 @@ import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.Invocation
 import io.hamal.lib.domain.vo.RunnerEnv
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
+import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.type.KuaNil
 import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.kua.type.KuaTable
@@ -31,10 +31,10 @@ class RunnerContextFactory(
 
         val hook = if (invocation is Invocation.Hook) {
             sandbox.tableCreate(
-                "method" to KuaString(invocation.method.toString()),
-                "headers" to invocation.headers.value.toKua(sandbox),
-                "parameters" to invocation.parameters.value.toKua(sandbox),
-                "content" to invocation.content.value.toKua(sandbox)
+                KuaString("method") to KuaString(invocation.method.toString()),
+                KuaString("headers") to invocation.headers.value.toKua(sandbox),
+                KuaString("parameters") to invocation.parameters.value.toKua(sandbox),
+                KuaString("content") to invocation.content.value.toKua(sandbox)
             )
         } else {
             KuaNil
@@ -42,10 +42,10 @@ class RunnerContextFactory(
 
         val endpoint = if (invocation is Invocation.Endpoint) {
             sandbox.tableCreate(
-                "method" to KuaString(invocation.method.toString()),
-                "headers" to invocation.headers.value.toKua(sandbox),
-                "parameters" to invocation.parameters.value.toKua(sandbox),
-                "content" to invocation.content.value.toKua(sandbox)
+                KuaString("method") to KuaString(invocation.method.toString()),
+                KuaString("headers") to invocation.headers.value.toKua(sandbox),
+                KuaString("parameters") to invocation.parameters.value.toKua(sandbox),
+                KuaString("content") to invocation.content.value.toKua(sandbox)
             )
         } else {
             KuaNil
@@ -72,12 +72,12 @@ private fun Sandbox.invocationEvents(events: List<Event>): KuaTable =
     tableCreate(
         events.map { evt ->
             tableCreate(
-                "id" to KuaString(evt.id.value.value.toString(16)),
-                "topic" to tableCreate(
-                    "id" to KuaString(evt.topic.id.value.value.toString(16)),
-                    "name" to KuaString(evt.topic.name.value)
+                KuaString("id") to KuaString(evt.id.value.value.toString(16)),
+                KuaString("topic") to tableCreate(
+                    KuaString("id") to KuaString(evt.topic.id.value.value.toString(16)),
+                    KuaString("name") to KuaString(evt.topic.name.value)
                 ),
-                "payload" to evt.payload.value.toKua(this)
+                KuaString("payload") to evt.payload.value.toKua(this)
             )
         }
     )

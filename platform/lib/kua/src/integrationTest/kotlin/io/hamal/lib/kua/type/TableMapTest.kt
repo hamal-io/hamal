@@ -15,7 +15,7 @@ internal class KuaTableMaTest {
                 object :
                     Function0In2Out<KuaError, KuaTable>(FunctionOutput2Schema(KuaError::class, KuaTable::class)) {
                     override fun invoke(ctx: FunctionContext): Pair<KuaError?, KuaTable?> {
-                        return null to ctx.tableCreate("id" to KuaString("A"))
+                        return null to ctx.tableCreate(KuaString("id") to KuaString("A"))
                     }
                 }
             )
@@ -38,8 +38,8 @@ internal class KuaTableMaTest {
                     Function0In2Out<KuaError, KuaTable>(FunctionOutput2Schema(KuaError::class, KuaTable::class)) {
                     override fun invoke(ctx: FunctionContext): Pair<KuaError?, KuaTable?> {
                         return null to sandbox.tableCreate(
-                            "id" to KuaString("A"),
-                            "level_one" to sandbox.tableCreate("answer" to KuaNumber(42))
+                            KuaString("id") to KuaString("A"),
+                            KuaString("level_one") to sandbox.tableCreate(KuaString("answer") to KuaNumber(42))
                         )
                     }
                 }

@@ -1,10 +1,12 @@
 package io.hamal.lib.kua.state
 
 import io.hamal.lib.kua.StackTop
+import io.hamal.lib.kua.type.KuaNumber
 import io.hamal.lib.kua.type.KuaString
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.TestFactory
+import org.junit.jupiter.api.assertThrows
 
 internal class StringGetTest : StateBaseTest() {
 
@@ -29,4 +31,18 @@ internal class StringGetTest : StateBaseTest() {
         assertThat(testInstance.stringGet(-1), equalTo(KuaString("rocks")))
         assertThat(testInstance.topGet(), equalTo(StackTop(2)))
     }
+
+    @TestFactory
+    fun `Not a boolean`() = runTest { testInstance ->
+        testInstance.numberPush(KuaNumber(42))
+        assertThrows<IllegalStateException> {
+            testInstance.stringGet(1)
+        }.also { exception ->
+            assertThat(
+                exception.message,
+                equalTo("Expected type to be string but was number")
+            )
+        }
+    }
+
 }

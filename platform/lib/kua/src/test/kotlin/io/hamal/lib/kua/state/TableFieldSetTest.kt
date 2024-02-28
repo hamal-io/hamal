@@ -57,6 +57,4 @@ internal class TableFieldSetTest : StateBaseTest() {
 
         assertThat(testInstance.tableLength(1), equalTo(TableLength(2)))
     }
-
-
 }

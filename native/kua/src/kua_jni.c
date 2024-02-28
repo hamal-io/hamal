@@ -190,7 +190,7 @@ JNIEXPORT jint JNICALL
 STATE_METHOD_NAME(tableFieldSet)(JNIEnv *env, jobject K, jint idx, jstring key) {
     ENV_AND_STATE
     char const *table_key = to_raw_string(key);
-    int result = table_set(L, idx, table_key);
+    int result = table_field_set(L, idx, table_key);
     release_raw_string(key, table_key);
     return (jint) result;
 }
@@ -219,7 +219,7 @@ JNIEXPORT jint JNICALL
 STATE_METHOD_NAME(tableFieldGet)(JNIEnv *env, jobject K, jint idx, jstring key) {
     ENV_AND_STATE
     char const *table_key = to_raw_string(key);
-    int result = table_get(L, idx, table_key);
+    int result = table_field_get(L, idx, table_key);
     release_raw_string(key, table_key);
     return (jint) result;
 }
@@ -255,6 +255,12 @@ JNIEXPORT jboolean JNICALL
 STATE_METHOD_NAME(tableNext)(JNIEnv *env, jobject K, jint idx) {
     ENV_AND_STATE
     return table_next(L, idx);
+}
+
+JNIEXPORT jint JNICALL
+STATE_METHOD_NAME(tableGet)(JNIEnv *env, jobject K, jint idx) {
+    ENV_AND_STATE
+    return table_get(L, idx);
 }
 
 //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+[INVOKE]-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-

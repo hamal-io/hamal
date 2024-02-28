@@ -7,7 +7,7 @@ import io.hamal.lib.kua.tableCreate
 //FIXME replace toKua with this
 fun HotNode.toKua(state: State): KuaType {
     return when (this) {
-        is HotObject -> state.tableCreate(nodes.map { (key, value) -> key to value.toKua(state) }.toMap())
+        is HotObject -> state.tableCreate(nodes.map { (key, value) -> KuaString(key) to value.toKua(state) }.toMap())
         is HotArray -> state.tableCreate(nodes.map { it.toKua(state) })
         is HotBoolean -> if (value) KuaTrue else KuaFalse
         is HotNull -> KuaNil

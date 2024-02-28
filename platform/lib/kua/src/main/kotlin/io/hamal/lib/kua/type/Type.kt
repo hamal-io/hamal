@@ -1,5 +1,7 @@
 package io.hamal.lib.kua.type
 
+import kotlin.reflect.KClass
+
 sealed interface KuaType {
     enum class Type {
         Any,
@@ -17,3 +19,8 @@ sealed interface KuaType {
     val type: Type
 }
 
+fun KClass<out KuaType>.checkExpectedType(expected: KClass<out KuaType>) {
+    check(this == expected) {
+        "Expected type to be ${expected.java.simpleName} but was ${this.java.simpleName}"
+    }
+}

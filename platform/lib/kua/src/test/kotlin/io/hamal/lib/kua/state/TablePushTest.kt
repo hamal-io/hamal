@@ -12,7 +12,7 @@ internal class TablePushTest : StateBaseTest() {
 
     @TestFactory
     fun `Pushes value on stack`() = runTest { testInstance ->
-        val table = testInstance.tableCreate("message" to KuaString("secret"))
+        val table = testInstance.tableCreate(KuaString("message") to KuaString("secret"))
 
         testInstance.tablePush(table)
 

@@ -1,5 +1,6 @@
 package io.hamal.lib.kua.state
 
+import io.hamal.lib.kua.StackTop
 import io.hamal.lib.kua.TableLength
 import io.hamal.lib.kua.type.KuaNumber
 import org.hamcrest.MatcherAssert.assertThat
@@ -12,11 +13,11 @@ internal class TableAppendTest : StateBaseTest() {
     fun `Append value to empty table`() = runTest { testInstance ->
         testInstance.tableCreate(0, 0)
         testInstance.numberPush(KuaNumber(512.0))
-        testInstance.tableAppend(1)
+        testInstance.tableAppend(1).also { tableLength ->
+            assertThat(tableLength, equalTo(TableLength(1)))
+        }
 
-        assertThat(testInstance.tableLength(1), equalTo(TableLength(1)))
-
-        testInstance.topPop(1)
+        assertThat(testInstance.topGet(), equalTo(StackTop(1)))
     }
 
     @TestFactory
@@ -38,5 +39,6 @@ internal class TableAppendTest : StateBaseTest() {
         }
 
         assertThat(testInstance.tableLength(1), equalTo(TableLength(3)))
+        assertThat(testInstance.topGet(), equalTo(StackTop(1)))
     }
 }

@@ -25,7 +25,16 @@ table_len(lua_State *L, int idx) {
 }
 
 int
-table_set(lua_State *L, int idx, char const *key) {
+table_get(lua_State *L, int idx) {
+    if (check_argument(idx != 0, "Index must not be 0") == CHECK_RESULT_ERROR) return LUA_TNONE;
+    if (check_index(L, idx) == CHECK_RESULT_ERROR) return LUA_TNONE;
+    if (check_lua_type_at(L, idx, TABLE_TYPE) == CHECK_RESULT_ERROR) return LUA_TNONE;
+    if (check_stack_overflow(L, 1) == CHECK_RESULT_ERROR) return LUA_TNONE;
+    return lua_absindex(L, idx);
+}
+
+int
+table_field_set(lua_State *L, int idx, char const *key) {
     if (check_index(L, idx) == CHECK_RESULT_ERROR) return LUA_TNONE;
     if (check_lua_type_at(L, idx, TABLE_TYPE) == CHECK_RESULT_ERROR) return LUA_TNONE;
     lua_setfield(L, idx, key);
@@ -49,7 +58,7 @@ table_raw_set_idx(lua_State *L, int stack_idx, int table_idx) {
 }
 
 int
-table_get(lua_State *L, int idx, char const *key) {
+table_field_get(lua_State *L, int idx, char const *key) {
     if (check_index(L, idx) == CHECK_RESULT_ERROR) return LUA_TNONE;
     if (check_lua_type_at(L, idx, TABLE_TYPE) == CHECK_RESULT_ERROR) return LUA_TNONE;
     if (check_stack_overflow(L, 1) == CHECK_RESULT_ERROR) return LUA_TNONE;
