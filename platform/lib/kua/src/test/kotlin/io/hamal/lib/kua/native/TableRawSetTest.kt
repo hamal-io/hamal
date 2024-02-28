@@ -5,20 +5,20 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
-internal class TableSetRawTest : NativeBaseTest() {
+internal class TableRawSetTest : NativeBaseTest() {
 
     @Test
     fun `Sets value to empty table`() {
         testInstance.tableCreate(0, 1)
         testInstance.stringPush("key")
         testInstance.stringPush("value")
-        testInstance.tableSetRaw(1)
+        testInstance.tableRawSet(1)
         assertThat(testInstance.topGet(), equalTo(1))
 
         testInstance.stringPush("key")
-        testInstance.tableGetRaw(1)
+        testInstance.tableRawGet(1)
         assertThat(testInstance.stringGet(-1), equalTo("value"))
-        assertThat(testInstance.tableGetLength(1), equalTo(1))
+        assertThat(testInstance.tableLength(1), equalTo(1))
     }
 
     @Test
@@ -26,16 +26,16 @@ internal class TableSetRawTest : NativeBaseTest() {
         testInstance.tableCreate(0, 1)
         testInstance.stringPush("key")
         testInstance.stringPush("value")
-        testInstance.tableSetRaw(1)
+        testInstance.tableRawSet(1)
         assertThat(testInstance.topGet(), equalTo(1))
 
         testInstance.stringPush("key")
         testInstance.numberPush(42.0)
-        testInstance.tableSetRaw(1)
+        testInstance.tableRawSet(1)
 
-        testInstance.tableGetField(1, "key")
+        testInstance.tableFieldGet(1, "key")
         assertThat(testInstance.numberGet(-1), equalTo(42.0))
-        assertThat(testInstance.tableGetLength(1), equalTo(1))
+        assertThat(testInstance.tableLength(1), equalTo(1))
     }
 
     @Test
@@ -44,19 +44,19 @@ internal class TableSetRawTest : NativeBaseTest() {
 
         testInstance.stringPush("key")
         testInstance.stringPush("value")
-        testInstance.tableSetRaw(1)
+        testInstance.tableRawSet(1)
 
         testInstance.stringPush("different")
         testInstance.numberPush(42.0)
-        testInstance.tableSetRaw(1)
+        testInstance.tableRawSet(1)
 
-        testInstance.tableGetField(1, "key")
+        testInstance.tableFieldGet(1, "key")
         assertThat(testInstance.stringGet(-1), equalTo("value"))
 
-        testInstance.tableGetField(1, "different")
+        testInstance.tableFieldGet(1, "different")
         assertThat(testInstance.numberGet(-1), equalTo(42.0))
 
-        assertThat(testInstance.tableGetLength(1), equalTo(2))
+        assertThat(testInstance.tableLength(1), equalTo(2))
     }
 
     @Test
@@ -65,7 +65,7 @@ internal class TableSetRawTest : NativeBaseTest() {
         assertThrows<IllegalStateException> {
             testInstance.stringPush("key")
             testInstance.stringPush("value")
-            testInstance.tableSetRaw(1)
+            testInstance.tableRawSet(1)
         }.also { exception -> assertThat(exception.message, equalTo("Expected type to be table but was number")) }
     }
 }

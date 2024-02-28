@@ -24,7 +24,7 @@ internal class TableNextTest : NativeBaseTest() {
         testInstance.tableCreate(0, 1)
         testInstance.stringPush("key")
         testInstance.stringPush("value")
-        testInstance.tableSetRaw(1)
+        testInstance.tableRawSet(1)
 
         testInstance.nilPush()
         val result = testInstance.tableNext(1)
@@ -43,7 +43,7 @@ internal class TableNextTest : NativeBaseTest() {
         repeat(1000) { idx ->
             testInstance.stringPush("key-${idx}")
             testInstance.stringPush("value-${idx}")
-            testInstance.tableSetRaw(1)
+            testInstance.tableRawSet(1)
         }
 
         val keys = mutableSetOf<String>()

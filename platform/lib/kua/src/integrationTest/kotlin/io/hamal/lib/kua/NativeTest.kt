@@ -65,11 +65,11 @@ internal class TableTest : BaseStateTest() {
     fun `Sets and gets value from table`() {
         testInstance.tableCreate(0, 1)
         testInstance.stringPush("value")
-        testInstance.tabletSetField(1, "key")
-        testInstance.tableGetField(1, "key")
+        testInstance.tableFieldSet(1, "key")
+        testInstance.tableFieldGet(1, "key")
         assertThat(testInstance.stringGet(-1), equalTo("value"))
 
-        assertThat(testInstance.tableGetLength(1), equalTo(1))
+        assertThat(testInstance.tableLength(1), equalTo(1))
 
         testInstance.topPop(2)
         verifyStackIsEmpty()

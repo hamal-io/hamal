@@ -39,18 +39,17 @@ class Native : AutoCloseable {
     external fun stringLoad(code: String): Int
     external fun stringGet(idx: Int): String
 
-    external fun tableCreate(arrayCount: Int, recordCount: Int): Int
-    external fun tabletSetField(idx: Int, key: String): Int
-    external fun tableGetField(idx: Int, key: String): Int
-    external fun tableGetLength(idx: Int): Int
-
     external fun tableAppend(idx: Int): Int
-    external fun tableSetRaw(idx: Int): Int
-    external fun tableSetRawIdx(stackIdx: Int, tableIdx: Int): Int
-    external fun tableGetRaw(idx: Int): Int
-    external fun tableGetRawIdx(stackIdx: Int, tableIdx: Int): Int
+    external fun tableCreate(arrayCount: Int, recordCount: Int): Int
+    external fun tableFieldSet(idx: Int, key: String): Int
+    external fun tableFieldGet(idx: Int, key: String): Int
+    external fun tableLength(idx: Int): Int
     external fun tableNext(idx: Int): Boolean
-    external fun tableGetSubTable(idx: Int, key: String): Int
+    external fun tableRawSet(idx: Int): Int
+    external fun tableRawSetIdx(stackIdx: Int, tableIdx: Int): Int
+    external fun tableRawGet(idx: Int): Int
+    external fun tableRawGetIdx(stackIdx: Int, tableIdx: Int): Int
+    external fun tableSubTableGet(idx: Int, key: String): Int
 
 
     private external fun initConnection()

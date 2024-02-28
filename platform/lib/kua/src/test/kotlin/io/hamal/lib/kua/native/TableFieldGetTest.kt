@@ -5,16 +5,16 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
-internal class TableGetFieldTest : NativeBaseTest() {
+internal class TableFieldGetTest : NativeBaseTest() {
 
     @Test
     fun `Gets value from table`() {
         testInstance.tableCreate(0, 1)
         testInstance.stringPush("value")
-        testInstance.tabletSetField(1, "key")
+        testInstance.tableFieldSet(1, "key")
         assertThat(testInstance.topGet(), equalTo(1))
 
-        val result = testInstance.tableGetField(1, "key")
+        val result = testInstance.tableFieldGet(1, "key")
         assertThat(result, equalTo(4))
         assertThat(testInstance.stringGet(-1), equalTo("value"))
         assertThat(testInstance.topGet(), equalTo(2))
@@ -24,9 +24,9 @@ internal class TableGetFieldTest : NativeBaseTest() {
     fun `Tries to get value from table which key does not exists for`() {
         testInstance.tableCreate(0, 1)
         testInstance.stringPush("value")
-        testInstance.tabletSetField(1, "key")
+        testInstance.tableFieldSet(1, "key")
 
-        val result = testInstance.tableGetField(1, "does-not-find-anything")
+        val result = testInstance.tableFieldGet(1, "does-not-find-anything")
         assertThat(result, equalTo(0))
         assertThat(testInstance.type(-1), equalTo(0)) // Nil
         assertThat(testInstance.topGet(), equalTo(2))
@@ -35,7 +35,7 @@ internal class TableGetFieldTest : NativeBaseTest() {
     @Test
     fun `Tries to get a value but not a table`() {
         testInstance.numberPush(2.34)
-        assertThrows<IllegalStateException> { testInstance.tableGetField(1, "key") }
+        assertThrows<IllegalStateException> { testInstance.tableFieldGet(1, "key") }
             .also { exception -> assertThat(exception.message, equalTo("Expected type to be table but was number")) }
     }
 
@@ -43,11 +43,11 @@ internal class TableGetFieldTest : NativeBaseTest() {
     fun `Tries to get field from table but stack would overflow`() {
         testInstance.tableCreate(0, 1)
         testInstance.stringPush("value")
-        testInstance.tabletSetField(1, "key")
+        testInstance.tableFieldSet(1, "key")
 
         repeat(999998) { testInstance.booleanPush(true) }
 
-        assertThrows<IllegalArgumentException> { testInstance.tableGetField(1, "key") }
+        assertThrows<IllegalArgumentException> { testInstance.tableFieldGet(1, "key") }
             .also { exception -> assertThat(exception.message, equalTo("Prevented stack overflow")) }
     }
 }

@@ -168,10 +168,10 @@ class CloseableStateImpl(private val native: Native = Native()) : CloseableState
     }
 
     override fun tableAppend(idx: Int) = native.tableAppend(idx)
-    override fun tableSetRaw(idx: Int) = native.tableSetRaw(idx)
-    override fun tableSetRawIdx(stackIdx: Int, tableIdx: Int) = native.tableSetRawIdx(stackIdx, tableIdx)
-    override fun tableGetRaw(idx: Int) = luaToType(native.tableGetRaw(idx))
-    override fun tableGetRawIdx(stackIdx: Int, tableIdx: Int) = luaToType(native.tableGetRawIdx(stackIdx, tableIdx))
+    override fun tableSetRaw(idx: Int) = native.tableRawSet(idx)
+    override fun tableSetRawIdx(stackIdx: Int, tableIdx: Int) = native.tableRawSetIdx(stackIdx, tableIdx)
+    override fun tableGetRaw(idx: Int) = luaToType(native.tableRawGet(idx))
+    override fun tableGetRawIdx(stackIdx: Int, tableIdx: Int) = luaToType(native.tableRawGetIdx(stackIdx, tableIdx))
 
     override fun load(code: String) {
         native.stringLoad(code)

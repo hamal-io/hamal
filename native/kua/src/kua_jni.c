@@ -187,7 +187,7 @@ STATE_METHOD_NAME(tableCreate)(JNIEnv *env, jobject K, jint arrayCount, jint rec
 }
 
 JNIEXPORT jint JNICALL
-STATE_METHOD_NAME(tabletSetField)(JNIEnv *env, jobject K, jint idx, jstring key) {
+STATE_METHOD_NAME(tableFieldSet)(JNIEnv *env, jobject K, jint idx, jstring key) {
     ENV_AND_STATE
     char const *table_key = to_raw_string(key);
     int result = table_set(L, idx, table_key);
@@ -203,20 +203,20 @@ STATE_METHOD_NAME(tableAppend)(JNIEnv *env, jobject K, jint idx) {
 
 
 JNIEXPORT jint JNICALL
-STATE_METHOD_NAME(tableSetRaw)(JNIEnv *env, jobject K, jint idx) {
+STATE_METHOD_NAME(tableRawSet)(JNIEnv *env, jobject K, jint idx) {
     ENV_AND_STATE
     return table_raw_set(L, idx);
 }
 
 JNIEXPORT jint JNICALL
-STATE_METHOD_NAME(tableSetRawIdx)(JNIEnv *env, jobject K, jint stack_idx, jint table_idx) {
+STATE_METHOD_NAME(tableRawSetIdx)(JNIEnv *env, jobject K, jint stack_idx, jint table_idx) {
     ENV_AND_STATE
     return table_raw_set_idx(L, stack_idx, table_idx);
 }
 
 
 JNIEXPORT jint JNICALL
-STATE_METHOD_NAME(tableGetField)(JNIEnv *env, jobject K, jint idx, jstring key) {
+STATE_METHOD_NAME(tableFieldGet)(JNIEnv *env, jobject K, jint idx, jstring key) {
     ENV_AND_STATE
     char const *table_key = to_raw_string(key);
     int result = table_get(L, idx, table_key);
@@ -225,25 +225,25 @@ STATE_METHOD_NAME(tableGetField)(JNIEnv *env, jobject K, jint idx, jstring key) 
 }
 
 JNIEXPORT jint JNICALL
-STATE_METHOD_NAME(tableGetRaw)(JNIEnv *env, jobject K, jint idx) {
+STATE_METHOD_NAME(tableRawGet)(JNIEnv *env, jobject K, jint idx) {
     ENV_AND_STATE
     return (jint) table_raw_get(L, idx);
 }
 
 JNIEXPORT jint JNICALL
-STATE_METHOD_NAME(tableGetRawIdx)(JNIEnv *env, jobject K, jint stack_idx, jint table_idx) {
+STATE_METHOD_NAME(tableRawGetIdx)(JNIEnv *env, jobject K, jint stack_idx, jint table_idx) {
     ENV_AND_STATE
     return (jint) table_raw_get_idx(L, stack_idx, table_idx);
 }
 
 JNIEXPORT jint JNICALL
-STATE_METHOD_NAME(tableGetLength)(JNIEnv *env, jobject K, jint idx) {
+STATE_METHOD_NAME(tableLength)(JNIEnv *env, jobject K, jint idx) {
     ENV_AND_STATE
     return (jint) table_len(L, idx);
 }
 
 JNIEXPORT jint JNICALL
-STATE_METHOD_NAME(tableGetSubTable)(JNIEnv *env, jobject K, jint idx, jstring key) {
+STATE_METHOD_NAME(tableSubTableGet)(JNIEnv *env, jobject K, jint idx, jstring key) {
     ENV_AND_STATE
     char const *table_key = to_raw_string(key);
     int result = table_get_sub_table(L, idx, table_key);

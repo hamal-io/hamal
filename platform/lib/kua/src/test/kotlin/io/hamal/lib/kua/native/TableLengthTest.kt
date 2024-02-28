@@ -5,12 +5,12 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
-internal class TableGetLengthTest : NativeBaseTest() {
+internal class TableLengthTest : NativeBaseTest() {
 
     @Test
     fun `Size of empty table`() {
         testInstance.tableCreate(12, 12)
-        val result = testInstance.tableGetLength(1)
+        val result = testInstance.tableLength(1)
         assertThat(result, equalTo(0))
     }
 
@@ -18,10 +18,10 @@ internal class TableGetLengthTest : NativeBaseTest() {
     fun `Size of table with single field`() {
         testInstance.tableCreate(0, 1)
         testInstance.stringPush("value")
-        testInstance.tabletSetField(1, "key")
+        testInstance.tableFieldSet(1, "key")
         assertThat(testInstance.topGet(), equalTo(1))
 
-        val result = testInstance.tableGetLength(1)
+        val result = testInstance.tableLength(1)
         assertThat(result, equalTo(1))
         assertThat(testInstance.topGet(), equalTo(1))
     }
@@ -31,9 +31,9 @@ internal class TableGetLengthTest : NativeBaseTest() {
         testInstance.tableCreate(0, 1)
         repeat(10) { idx ->
             testInstance.stringPush("value")
-            testInstance.tabletSetField(1, "key-${idx}")
+            testInstance.tableFieldSet(1, "key-${idx}")
 
-            val result = testInstance.tableGetLength(1)
+            val result = testInstance.tableLength(1)
             assertThat(result, equalTo(idx + 1))
         }
         assertThat(testInstance.topGet(), equalTo(1))
@@ -44,13 +44,13 @@ internal class TableGetLengthTest : NativeBaseTest() {
         testInstance.tableCreate(0, 1)
         repeat(10) { idx ->
             testInstance.stringPush("value")
-            testInstance.tabletSetField(1, "key-${idx}")
-            testInstance.tableGetField(1, "Key-${idx}")
+            testInstance.tableFieldSet(1, "key-${idx}")
+            testInstance.tableFieldGet(1, "Key-${idx}")
         }
 
         assertThat(testInstance.topGet(), equalTo(11))
 
-        val result = testInstance.tableGetLength(1)
+        val result = testInstance.tableLength(1)
         assertThat(result, equalTo(10))
 
         assertThat(testInstance.topGet(), equalTo(11))
@@ -59,7 +59,7 @@ internal class TableGetLengthTest : NativeBaseTest() {
     @Test
     fun `Tries to get table size but not a table`() {
         testInstance.numberPush(2.34)
-        assertThrows<IllegalStateException> { testInstance.tableGetLength(1) }
+        assertThrows<IllegalStateException> { testInstance.tableLength(1) }
             .also { exception -> assertThat(exception.message, equalTo("Expected type to be table but was number")) }
     }
 }
