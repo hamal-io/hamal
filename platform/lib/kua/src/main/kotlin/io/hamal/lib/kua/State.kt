@@ -41,8 +41,8 @@ interface State {
     fun tableGet(idx: Int): KuaTable
     fun tableLength(idx: Int): TableLength
     fun tablePush(proxy: KuaTable): StackTop
-    fun tableRawSet(idx: Int): Int
-    fun tableRawSetIdx(stackIdx: Int, tableIdx: Int): Int
+    fun tableRawSet(idx: Int): TableLength
+    fun tableRawSetIdx(stackIdx: Int, tableIdx: Int): TableLength
     fun tableRawGet(idx: Int): KClass<out KuaType>
     fun tableRawGetIdx(stackIdx: Int, tableIdx: Int): KClass<out KuaType>
 
@@ -130,8 +130,8 @@ class CloseableStateImpl(private val native: Native = Native()) : CloseableState
     override fun tableGet(idx: Int) = KuaTable(absIndex(idx), this)
     override fun tableLength(idx: Int) = TableLength(native.tableLength(idx))
     override fun tablePush(proxy: KuaTable) = StackTop(native.topPush(proxy.index))
-    override fun tableRawSet(idx: Int) = native.tableRawSet(idx)
-    override fun tableRawSetIdx(stackIdx: Int, tableIdx: Int) = native.tableRawSetIdx(stackIdx, tableIdx)
+    override fun tableRawSet(idx: Int) = TableLength(native.tableRawSet(idx))
+    override fun tableRawSetIdx(stackIdx: Int, tableIdx: Int) = TableLength(native.tableRawSetIdx(stackIdx, tableIdx))
     override fun tableRawGet(idx: Int) = luaToType(native.tableRawGet(idx))
     override fun tableRawGetIdx(stackIdx: Int, tableIdx: Int) = luaToType(native.tableRawGetIdx(stackIdx, tableIdx))
 

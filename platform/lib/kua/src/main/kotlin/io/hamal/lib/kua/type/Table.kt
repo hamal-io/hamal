@@ -3,6 +3,7 @@ package io.hamal.lib.kua.type
 import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.kua.State
+import io.hamal.lib.kua.TableLength
 import kotlin.reflect.KClass
 
 class KuaTable(
@@ -180,19 +181,19 @@ class KuaTable(
         TODO()
     }
 
-    operator fun set(key: String, value: KuaAny): Int {
+    operator fun set(key: String, value: KuaAny): TableLength {
         return set(key, value.value)
     }
 
-    operator fun set(key: KuaString, value: KuaAny): Int {
+    operator fun set(key: KuaString, value: KuaAny): TableLength {
         return set(key.value, value.value)
     }
 
-    operator fun set(key: KuaString, value: KuaType): Int {
+    operator fun set(key: KuaString, value: KuaType): TableLength {
         return set(key.value, value)
     }
 
-    operator fun set(key: String, value: KuaType): Int {
+    operator fun set(key: String, value: KuaType): TableLength {
         return when (value) {
             is KuaBoolean -> set(key, value)
             is KuaCode -> set(key, value)
@@ -219,7 +220,7 @@ class KuaTable(
 
     @Suppress("UNUSED_PARAMETER")
     operator fun set(key: KuaString, value: KuaNil) = unset(key.value)
-    fun unset(key: String): Int {
+    fun unset(key: String): TableLength {
         state.stringPush(KuaString(key))
         state.nilPush()
         return state.tableRawSet(index)
@@ -231,7 +232,7 @@ class KuaTable(
 
     operator fun set(key: String, value: KuaBoolean) = set(key, value.value)
     operator fun set(key: KuaString, value: KuaBoolean) = set(key.value, value.value)
-    operator fun set(key: String, value: Boolean): Int {
+    operator fun set(key: String, value: Boolean): TableLength {
         state.stringPush(KuaString(key))
         state.booleanPush(if (value) KuaTrue else KuaFalse)
         return state.tableRawSet(index)
@@ -245,13 +246,13 @@ class KuaTable(
     operator fun set(key: String, value: Float) = set(key, value.toDouble())
     operator fun set(key: String, value: KuaNumber) = set(key, value.value)
     operator fun set(key: KuaString, value: KuaNumber) = set(key.value, value.value)
-    operator fun set(key: String, value: Double): Int {
+    operator fun set(key: String, value: Double): TableLength {
         state.stringPush(KuaString(key))
         state.numberPush(KuaNumber(value))
         return state.tableRawSet(index)
     }
 
-    operator fun set(key: String, value: KuaDecimal): Int {
+    operator fun set(key: String, value: KuaDecimal): TableLength {
         state.stringPush(KuaString(key))
         state.decimalPush(value)
         return state.tableRawSet(index)
@@ -264,20 +265,20 @@ class KuaTable(
 
     operator fun set(key: String, value: KuaString) = set(key, value.value)
     operator fun set(key: KuaString, value: KuaString) = set(key.value, value.value)
-    operator fun set(key: String, value: String): Int {
+    operator fun set(key: String, value: String): TableLength {
         state.stringPush(KuaString(key))
         state.stringPush(KuaString(value))
         return state.tableRawSet(index)
     }
 
     operator fun set(key: KuaString, value: KuaFunction<*, *, *, *>) = set(key.value, value)
-    operator fun set(key: String, value: KuaFunction<*, *, *, *>): Int {
+    operator fun set(key: String, value: KuaFunction<*, *, *, *>): TableLength {
         state.stringPush(KuaString(key))
         state.functionPush(value)
         return state.tableRawSet(index)
     }
 
-    operator fun set(key: String, value: KuaTable): Int {
+    operator fun set(key: String, value: KuaTable): TableLength {
         state.stringPush(KuaString(key))
         state.tablePush(value)
         return state.tableRawSet(index)
