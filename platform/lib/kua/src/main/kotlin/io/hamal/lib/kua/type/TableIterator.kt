@@ -15,7 +15,7 @@ class KuaTableEntryIterator<KEY : KuaType, TYPE : KuaType>(
     private var nextTableEntry: Entry<KEY, TYPE>? = null
 
     init {
-        state.pushNil()
+        state.nilPush()
     }
 
     override fun hasNext(): Boolean {

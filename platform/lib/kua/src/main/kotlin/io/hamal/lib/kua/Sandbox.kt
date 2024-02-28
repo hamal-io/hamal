@@ -31,6 +31,8 @@ class Sandbox(
 
     override fun functionPush(value: KuaFunction<*, *, *, *>) = state.functionPush(value)
 
+    override fun nilPush() = state.nilPush()
+
     override fun numberGet(idx: Int) = state.numberGet(idx)
     override fun numberPush(value: KuaNumber) = state.numberPush(value)
 
@@ -101,7 +103,7 @@ class Sandbox(
 
 
     override fun type(idx: Int) = state.type(idx)
-    override fun pushNil() = state.pushNil()
+
 
 
     override fun setGlobal(name: String, value: KuaFunction<*, *, *, *>) = state.setGlobal(name, value)

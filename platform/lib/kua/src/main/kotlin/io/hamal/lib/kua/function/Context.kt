@@ -46,7 +46,7 @@ class FunctionContext(
 
 
     override fun type(idx: Int) = state.type(idx)
-    override fun pushNil() = state.pushNil()
+    override fun nilPush() = state.nilPush()
 
 
     override fun setGlobal(name: String, value: KuaFunction<*, *, *, *>) = state.setGlobal(name, value)

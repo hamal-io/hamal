@@ -221,7 +221,7 @@ class KuaTable(
     operator fun set(key: KuaString, value: KuaNil) = unset(key.value)
     fun unset(key: String): Int {
         state.stringPush(KuaString(key))
-        state.pushNil()
+        state.nilPush()
         return state.tableSetRaw(index)
     }
 

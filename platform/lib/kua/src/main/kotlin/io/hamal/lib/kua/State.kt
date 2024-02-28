@@ -44,7 +44,7 @@ interface State {
     /// OLD STUFF TO BE REPLACED
 
 
-    fun pushNil(): StackTop
+    fun nilPush(): StackTop
 
 
     fun setGlobal(name: String, value: KuaFunction<*, *, *, *>)
@@ -130,7 +130,7 @@ class CloseableStateImpl(private val native: Native = Native()) : CloseableState
 
     override fun type(idx: Int) = luaToType(native.type(idx))
 
-    override fun pushNil() = StackTop(native.nilPush())
+    override fun nilPush() = StackTop(native.nilPush())
 
 
     override fun setGlobal(name: String, value: KuaFunction<*, *, *, *>) {
