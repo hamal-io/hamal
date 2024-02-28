@@ -36,7 +36,7 @@ interface State {
 
     fun tableAppend(idx: Int): Int
     fun tableCreate(arrayCount: Int, recordCount: Int): KuaTable
-    fun tableFieldSet(idx: Int, key: KuaString): StackTop
+    fun tableFieldSet(idx: Int, key: KuaString): TableLength
     fun tableFieldGet(idx: Int, key: KuaString): StackTop
     fun tableGet(idx: Int): KuaTable
     fun tableLength(idx: Int): TableLength
@@ -126,7 +126,7 @@ class CloseableStateImpl(private val native: Native = Native()) : CloseableState
     }
 
     override fun tableFieldGet(idx: Int, key: KuaString) = StackTop(native.tableFieldGet(idx, key.value))
-    override fun tableFieldSet(idx: Int, key: KuaString) = StackTop(native.tableFieldSet(idx, key.value))
+    override fun tableFieldSet(idx: Int, key: KuaString) = TableLength(native.tableFieldSet(idx, key.value))
     override fun tableGet(idx: Int) = KuaTable(absIndex(idx), this)
     override fun tableLength(idx: Int) = TableLength(native.tableLength(idx))
     override fun tablePush(proxy: KuaTable) = StackTop(native.topPush(proxy.index))

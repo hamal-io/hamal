@@ -37,8 +37,8 @@ class FunctionContext(
 
     override fun tableCreate(arrayCount: Int, recordCount: Int) = state.tableCreate(arrayCount, recordCount)
     override fun tableAppend(idx: Int) = state.tableAppend(idx)
-    override fun tableFieldSet(idx: Int, key: KuaString) = state.tableFieldGet(idx, key)
     override fun tableFieldGet(idx: Int, key: KuaString) = state.tableFieldGet(idx, key)
+    override fun tableFieldSet(idx: Int, key: KuaString) = state.tableFieldSet(idx, key)
     override fun tableGet(idx: Int): KuaTable = state.tableGet(idx)
     override fun tableLength(idx: Int) = state.tableLength(idx)
     override fun tablePush(proxy: KuaTable): StackTop = state.tablePush(proxy)
