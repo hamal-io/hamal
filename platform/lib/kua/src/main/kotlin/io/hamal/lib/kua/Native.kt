@@ -15,8 +15,10 @@ class Native : AutoCloseable {
 
     external fun absIndex(idx: Int): Int
     external fun type(idx: Int): Int
-    external fun globalSet(key: String)
+
     external fun globalGet(key: String)
+    external fun globalGetTable(key: String)
+    external fun globalSet(key: String)
 
     external fun booleanPush(value: Boolean): Int
     external fun booleanGet(idx: Int): Boolean
@@ -31,7 +33,6 @@ class Native : AutoCloseable {
     external fun functionCall(argCount: Int, returnCount: Int)
 
     external fun nilPush(): Int
-
 
     external fun numberPush(value: Double): Int
     external fun numberGet(idx: Int): Double

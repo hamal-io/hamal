@@ -31,6 +31,11 @@ class Sandbox(
 
     override fun functionPush(value: KuaFunction<*, *, *, *>) = state.functionPush(value)
 
+    override fun globalGet(key: KuaString) = state.globalGet(key)
+    override fun globalGetTable(key: KuaString) = state.globalGetTable(key)
+    override fun globalSet(key: KuaString, value: KuaType) = state.globalSet(key, value)
+    override fun globalUnset(key: KuaString) = state.globalUnset(key)
+
     override fun nilPush() = state.nilPush()
 
     override fun numberGet(idx: Int) = state.numberGet(idx)
@@ -108,17 +113,5 @@ class Sandbox(
     override fun close() {
         state.close()
     }
-
-    //    override fun isEmpty() = state.isEmpty()
-//    override fun isNotEmpty() = state.isNotEmpty()
-
-
-
-
-    override fun setGlobal(name: String, value: KuaFunction<*, *, *, *>) = state.setGlobal(name, value)
-    override fun setGlobal(name: String, value: KuaTable) = state.setGlobal(name, value)
-    override fun getGlobalKuaTableMap(name: String): KuaTable = state.getGlobalKuaTableMap(name)
-    override fun unsetGlobal(name: String) = state.unsetGlobal(name)
-
 
 }

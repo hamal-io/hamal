@@ -8,7 +8,7 @@ import org.junit.jupiter.api.assertThrows
 internal class StringGetTest : NativeBaseTest() {
 
     @Test
-    fun `Reads value on stack without popping the value`() {
+    fun `Get value on stack without popping the value`() {
         testInstance.stringPush("eat-poop-sleep-repeat")
         assertThat(testInstance.stringGet(1), equalTo("eat-poop-sleep-repeat"))
         assertThat(testInstance.topGet(), equalTo(1))
@@ -19,7 +19,7 @@ internal class StringGetTest : NativeBaseTest() {
     }
 
     @Test
-    fun `Reads value on stack with negative index without popping the value`() {
+    fun `Get value with negative index without popping the value`() {
         testInstance.stringPush("eat-poop-sleep-repeat")
         assertThat(testInstance.stringGet(-1), equalTo("eat-poop-sleep-repeat"))
         assertThat(testInstance.topGet(), equalTo(1))
@@ -31,28 +31,28 @@ internal class StringGetTest : NativeBaseTest() {
 
 
     @Test
-    fun `Tries to read string with 0 index`() {
+    fun `Tries to get string with 0 index`() {
         testInstance.stringPush("some-string")
         assertThrows<IllegalArgumentException> { testInstance.stringGet(0) }
             .also { exception -> assertThat(exception.message, equalTo("Index must not be 0")) }
     }
 
     @Test
-    fun `Tries to read string with index bigger than stack size`() {
+    fun `Tries to get string with index bigger than stack size`() {
         testInstance.stringPush("some-string")
         assertThrows<IllegalArgumentException> { testInstance.stringGet(2) }
             .also { exception -> assertThat(exception.message, equalTo("Index out of bounds")) }
     }
 
     @Test
-    fun `Tries to read string with abs(negative index) bigger than stack size`() {
+    fun `Tries to get string with abs(negative index) bigger than stack size`() {
         testInstance.stringPush("some-string")
         assertThrows<IllegalArgumentException> { testInstance.stringGet(2) }
             .also { exception -> assertThat(exception.message, equalTo("Index out of bounds")) }
     }
 
     @Test
-    fun `Tries to read not a string as string`() {
+    fun `Tries to get not a string as string`() {
         testInstance.numberPush(1.0)
         assertThrows<IllegalStateException> { testInstance.stringGet(1) }
             .also { exception -> assertThat(exception.message, equalTo("Expected type to be string but was number")) }

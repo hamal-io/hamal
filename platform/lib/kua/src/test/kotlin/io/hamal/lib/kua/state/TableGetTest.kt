@@ -11,7 +11,7 @@ import org.junit.jupiter.api.assertThrows
 internal class TableGetTest : StateBaseTest() {
 
     @TestFactory
-    fun `Reads value on stack without popping the value`() = runTest { testInstance ->
+    fun `Get value on stack without popping the value`() = runTest { testInstance ->
         val tableOne = testInstance.tableCreate(KuaString("instance") to KuaString("One"))
 
         testInstance.tablePush(tableOne)
@@ -25,7 +25,7 @@ internal class TableGetTest : StateBaseTest() {
     }
 
     @TestFactory
-    fun `Reads value on stack with negative index without popping the value`() = runTest { testInstance ->
+    fun `Get value with negative index without popping the value`() = runTest { testInstance ->
         val tableOne = testInstance.tableCreate(KuaString("instance") to KuaString("One"))
 
         testInstance.tablePush(tableOne)

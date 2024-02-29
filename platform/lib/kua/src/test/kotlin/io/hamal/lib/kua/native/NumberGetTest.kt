@@ -7,21 +7,21 @@ import org.junit.jupiter.api.assertThrows
 
 internal class NumberGetTest : NativeBaseTest() {
     @Test
-    fun `Tries to read Number with 0 index`() {
+    fun `Tries to get number with 0 index`() {
         testInstance.numberPush(812.123)
         assertThrows<IllegalArgumentException> { testInstance.numberGet(0) }
             .also { exception -> assertThat(exception.message, equalTo("Index must not be 0")) }
     }
 
     @Test
-    fun `Tries to read Number with index bigger than stack size`() {
+    fun `Tries to get number with index bigger than stack size`() {
         testInstance.numberPush(123.321)
         assertThrows<IllegalArgumentException> { testInstance.numberGet(2) }
             .also { exception -> assertThat(exception.message, equalTo("Index out of bounds")) }
     }
 
     @Test
-    fun `Tries to read Number with abs(negative index) bigger than stack size`() {
+    fun `Tries to get number with abs(negative index) bigger than stack size`() {
         testInstance.numberPush(123.321)
         assertThrows<IllegalArgumentException> { testInstance.numberGet(-2) }
             .also { exception -> assertThat(exception.message, equalTo("Index out of bounds")) }
@@ -29,14 +29,14 @@ internal class NumberGetTest : NativeBaseTest() {
 
 
     @Test
-    fun `Tries to read not a number as number`() {
+    fun `Tries to get not a number as number`() {
         testInstance.booleanPush(true)
         assertThrows<IllegalStateException> { testInstance.numberGet(1) }
             .also { exception -> assertThat(exception.message, equalTo("Expected type to be number but was boolean")) }
     }
 
     @Test
-    fun `Reads value on stack without popping the value`() {
+    fun `Get value on stack without popping the value`() {
         testInstance.numberPush(99.88)
         assertThat(testInstance.numberGet(1), equalTo(99.88))
         assertThat(testInstance.topGet(), equalTo(1))
@@ -47,7 +47,7 @@ internal class NumberGetTest : NativeBaseTest() {
     }
 
     @Test
-    fun `Reads value on stack with negative index without popping the value`() {
+    fun `Get value with negative index without popping the value`() {
         testInstance.numberPush(99.88)
         assertThat(testInstance.numberGet(-1), equalTo(99.88))
         assertThat(testInstance.topGet(), equalTo(1))

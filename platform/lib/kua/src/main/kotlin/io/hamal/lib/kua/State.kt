@@ -28,6 +28,11 @@ interface State {
 
     fun functionPush(value: KuaFunction<*, *, *, *>): StackTop
 
+    fun globalSet(key: KuaString, value: KuaType)
+    fun globalGet(key: KuaString): KuaType
+    fun globalGetTable(key: KuaString): KuaTable
+    fun globalUnset(key: KuaString)
+
     fun nilPush(): StackTop
     fun numberGet(idx: Int): KuaNumber
     fun numberPush(value: KuaNumber): StackTop
@@ -56,12 +61,6 @@ interface State {
 
 
     /// OLD STUFF TO BE REPLACED
-
-    fun setGlobal(name: String, value: KuaFunction<*, *, *, *>)
-    fun setGlobal(name: String, value: KuaTable)
-
-    fun getGlobalKuaTableMap(name: String): KuaTable
-    fun unsetGlobal(name: String)
 
 
     fun load(code: String) // FIXME add return value
@@ -115,6 +114,26 @@ class CloseableStateImpl(private val native: Native = Native()) : CloseableState
 
     override fun functionPush(value: KuaFunction<*, *, *, *>) = StackTop(native.functionPush(value))
 
+    override fun globalGet(key: KuaString): KuaType {
+        native.globalGet(key.value)
+        return anyGet(-1).value
+    }
+
+    override fun globalGetTable(key: KuaString): KuaTable {
+        native.globalGetTable(key.value)
+        return tableGet(-1)
+    }
+
+    override fun globalSet(key: KuaString, value: KuaType) {
+        anyPush(KuaAny(value))
+        native.globalSet(key.value)
+    }
+
+    override fun globalUnset(key: KuaString) {
+        native.nilPush()
+        native.globalSet(key.value)
+    }
+
     override fun nilPush() = StackTop(native.nilPush())
     override fun numberGet(idx: Int) = KuaNumber(native.numberGet(idx))
     override fun numberPush(value: KuaNumber) = StackTop(native.numberPush(value.value))
@@ -149,26 +168,6 @@ class CloseableStateImpl(private val native: Native = Native()) : CloseableState
     override fun type(idx: Int) = luaToType(native.type(idx))
 
     // FIXME TO BE REPLACED
-
-    override fun setGlobal(name: String, value: KuaFunction<*, *, *, *>) {
-        native.functionPush(value)
-        native.globalSet(name)
-    }
-
-    override fun setGlobal(name: String, value: KuaTable) {
-        native.topPush(value.index)
-        native.globalSet(name)
-    }
-
-    override fun getGlobalKuaTableMap(name: String): KuaTable {
-        native.globalGet(name)
-        return tableGet(native.topGet())
-    }
-
-    override fun unsetGlobal(name: String) {
-        native.nilPush()
-        native.globalSet(name)
-    }
 
 
     override fun load(code: String) {

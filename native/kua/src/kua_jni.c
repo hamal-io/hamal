@@ -8,6 +8,7 @@
 #include "kua_stack.h"
 #include "kua_state.h"
 #include "kua_table.h"
+#include "kua_check.h"
 
 
 #define UNUSED __attribute__((unused))
@@ -300,10 +301,24 @@ JNIEXPORT void JNICALL
 STATE_METHOD_NAME(globalGet)(JNIEnv *env, jobject K, jstring key) {
     const char *c_str = to_raw_string(key);
     lua_State *L = current_state(env, K);
+    if (check_stack_overflow(L, 1) == CHECK_RESULT_ERROR) return;
     lua_getglobal(L, (const char *) c_str);
     release_raw_string(key, c_str);
 }
 
+
+JNIEXPORT void JNICALL
+STATE_METHOD_NAME(globalGetTable)(JNIEnv *env, jobject K, jstring key) {
+    const char *c_str = to_raw_string(key);
+    lua_State *L = current_state(env, K);
+    if (check_stack_overflow(L, 1) == CHECK_RESULT_ERROR) return;
+    lua_getglobal(L, (const char *) c_str);
+    if (check_type_at(L, -1, TABLE_TYPE) == CHECK_RESULT_ERROR) {
+        lua_pop(L, 2);
+        return;
+    }
+    release_raw_string(key, c_str);
+}
 
 JNIEXPORT void JNICALL
 STATE_METHOD_NAME(globalSet)(JNIEnv *env, jobject K, jstring name) {

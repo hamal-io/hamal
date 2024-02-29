@@ -6,42 +6,7 @@ import org.junit.jupiter.api.Test
 
 
 
-
-
-@DisplayName("setGlobal()")
-internal class SetGlobalTest : NativeBaseTest() {
-    @Test
-    @Disabled
-    fun implementMe() {
-    }
-}
-
-@DisplayName("getGlobal()")
-internal class GetGlobalTest : NativeBaseTest() {
-    @Test
-    @Disabled
-    fun implementMe() {
-    }
-}
-
-
-@DisplayName("toError()")
-internal class ToErrorTest : NativeBaseTest() {
-    @Test
-    @Disabled
-    fun implementMe() {
-    }
-}
-
 internal class TableGetSubTable : NativeBaseTest() {
-    @Test
-    @Disabled
-    fun implementMe() {
-    }
-}
-
-@DisplayName("tableGetSub")
-internal class TableGetSubTest : NativeBaseTest() {
     @Test
     @Disabled
     fun implementMe() {

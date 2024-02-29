@@ -27,6 +27,11 @@ class FunctionContext(
 
     override fun functionPush(value: KuaFunction<*, *, *, *>) = state.functionPush(value)
 
+    override fun globalGet(key: KuaString) = state.globalGet(key)
+    override fun globalGetTable(key: KuaString) = state.globalGetTable(key)
+    override fun globalSet(key: KuaString, value: KuaType) = state.globalSet(key, value)
+    override fun globalUnset(key: KuaString) = state.globalUnset(key)
+
     override fun nilPush() = state.nilPush()
 
     override fun numberGet(idx: Int) = state.numberGet(idx)
@@ -56,13 +61,6 @@ class FunctionContext(
 
 
     // FIXME
-
-    override fun setGlobal(name: String, value: KuaFunction<*, *, *, *>) = state.setGlobal(name, value)
-    override fun setGlobal(name: String, value: KuaTable) = state.setGlobal(name, value)
-
-    override fun getGlobalKuaTableMap(name: String): KuaTable = state.getGlobalKuaTableMap(name)
-    override fun unsetGlobal(name: String) = state.unsetGlobal(name)
-
     override fun load(code: String) = state.load(code)
 
     override fun <OBJ : Any> get(clazz: KClass<OBJ>): OBJ {

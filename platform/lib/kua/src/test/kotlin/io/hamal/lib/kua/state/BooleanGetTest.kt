@@ -12,7 +12,7 @@ import org.junit.jupiter.api.assertThrows
 internal class BooleanGetTest : StateBaseTest() {
 
     @TestFactory
-    fun `Reads value on stack without popping the value`() = runTest { testInstance ->
+    fun `Get value on stack without popping the value`() = runTest { testInstance ->
         testInstance.booleanPush(KuaTrue)
         assertThat(testInstance.booleanGet(1), equalTo(KuaTrue))
         assertThat(testInstance.topGet(), equalTo(StackTop(1)))
@@ -23,7 +23,7 @@ internal class BooleanGetTest : StateBaseTest() {
     }
 
     @TestFactory
-    fun `Reads value on stack with negative index without popping the value`() = runTest { testInstance ->
+    fun `Get value with negative index without popping the value`() = runTest { testInstance ->
         testInstance.booleanPush(KuaTrue)
         assertThat(testInstance.booleanGet(1), equalTo(KuaTrue))
         assertThat(testInstance.topGet(), equalTo(StackTop(1)))

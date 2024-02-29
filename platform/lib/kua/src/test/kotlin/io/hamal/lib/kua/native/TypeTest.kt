@@ -61,7 +61,7 @@ internal class TypeTest : NativeBaseTest() {
     }
 
     @Test
-    fun `Tries to read boolean with 0 index`() {
+    fun `Tries to get boolean with 0 index`() {
         testInstance.booleanPush(true)
         assertThrows<IllegalArgumentException> { testInstance.type(0) }
             .also { exception -> assertThat(exception.message, equalTo("Index must not be 0")) }

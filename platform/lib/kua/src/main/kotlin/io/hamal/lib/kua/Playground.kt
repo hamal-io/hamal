@@ -2,9 +2,10 @@ package io.hamal.lib.kua
 
 import io.hamal.lib.kua.NativeLoader.Preference.BuildDir
 import io.hamal.lib.kua.type.KuaFunction
+import io.hamal.lib.kua.type.KuaString
 
 fun Sandbox.registerGlobalFunction(name: String, function: KuaFunction<*, *, *, *>) {
-    setGlobal(name, function)
+    globalSet(KuaString(name), function)
 }
 
 

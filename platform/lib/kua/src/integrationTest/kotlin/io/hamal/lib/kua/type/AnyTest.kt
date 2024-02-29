@@ -60,7 +60,7 @@ internal class KuaAnyTest {
     fun `Can be used with table object style table`() {
         val map = sandbox.tableCreate(0, 2)
         map["key"] = "value"
-        sandbox.setGlobal("test_map", map)
+        sandbox.globalSet(KuaString("test_map"), map)
 
         val captor = AnyValueResultCaptor()
         sandbox.register(plugin(captor))
@@ -84,7 +84,7 @@ internal class KuaAnyTest {
         val array = sandbox.tableCreate(2, 0)
         array.append(23)
         array.append("hamal.io")
-        sandbox.setGlobal("test_array", array)
+        sandbox.globalSet(KuaString("test_array"), array)
 
         val captor = AnyValueResultCaptor()
         sandbox.register(plugin(captor))

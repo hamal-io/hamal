@@ -5,8 +5,8 @@ import io.hamal.lib.kua.function.Function1In1Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput1Schema
-import io.hamal.lib.kua.type.KuaTable
 import io.hamal.lib.kua.type.KuaString
+import io.hamal.lib.kua.type.KuaTable
 
 class Require(
     private val registry: RunnerRegistry
@@ -15,14 +15,14 @@ class Require(
     FunctionOutput1Schema(KuaTable::class)
 ) {
     override fun invoke(ctx: FunctionContext, arg1: KuaString): KuaTable {
-        ctx.setGlobal("_factory", registry.loadExtensionFactory(arg1.value))
+        ctx.globalSet(KuaString("_factory"), registry.loadExtensionFactory(arg1.value))
         ctx.load("_instance = _factory()")
 
-        val result = ctx.getGlobalKuaTableMap("_instance")
+        val result = ctx.globalGetTable(KuaString("_instance"))
 
-        ctx.unsetGlobal("_factory")
-        ctx.unsetGlobal("_instance")
-        ctx.unsetGlobal("extension")
+        ctx.globalUnset(KuaString("_factory"))
+        ctx.globalUnset(KuaString("_instance"))
+        ctx.globalUnset(KuaString("extension"))
 
         return result
     }

@@ -63,15 +63,15 @@ class CodeRunnerImpl(
                             }
                         }
 
-                        sandbox.setGlobal("_internal", internalTable)
+                        sandbox.globalSet(KuaString("_internal"), internalTable)
                         sandbox.state.load(contextExtension.factoryCode)
 
                         sandbox.state.load("${contextExtension.name} = plugin()()")
-                        sandbox.unsetGlobal("_internal")
+                        sandbox.globalUnset(KuaString("_internal"))
 
                         sandbox.load(KuaCode(unitOfWork.code.value))
 
-                        val ctx = sandbox.getGlobalKuaTableMap("context")
+                        val ctx = sandbox.globalGetTable(KuaString("context"))
                         val stateToSubmit = ctx.getTableMap("state").toHotObject()
 
                         connector.complete(execId, ExecResult(), ExecState(stateToSubmit), runnerContext.eventsToSubmit)
@@ -81,7 +81,7 @@ class CodeRunnerImpl(
                         if (cause is ExitError) {
                             if (cause.status == HotNumber(0.0)) {
 
-                                val ctx = sandbox.getGlobalKuaTableMap("context")
+                                val ctx = sandbox.globalGetTable(KuaString("context"))
                                 val stateToSubmit = ctx.getTableMap("state").toHotObject()
 
                                 connector.complete(

@@ -11,7 +11,7 @@ import org.junit.jupiter.api.assertThrows
 internal class ErrorGetTest : StateBaseTest() {
 
     @TestFactory
-    fun `Reads value on stack without popping the value`() = runTest { testInstance ->
+    fun `Get value on stack without popping the value`() = runTest { testInstance ->
         testInstance.errorPush(KuaError("Some Error Message"))
         assertThat(testInstance.errorGet(1), equalTo(KuaError("Some Error Message")))
         assertThat(testInstance.topGet(), equalTo(StackTop(1)))
@@ -22,7 +22,7 @@ internal class ErrorGetTest : StateBaseTest() {
     }
 
     @TestFactory
-    fun `Reads value on stack with negative index without popping the value`() = runTest { testInstance ->
+    fun `Get value with negative index without popping the value`() = runTest { testInstance ->
         testInstance.errorPush(KuaError("Some Error Message"))
         assertThat(testInstance.errorGet(-1), equalTo(KuaError("Some Error Message")))
         assertThat(testInstance.topGet(), equalTo(StackTop(1)))
