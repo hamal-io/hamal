@@ -2,7 +2,7 @@ package io.hamal.lib.kua.error
 
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
-import io.hamal.lib.kua.NopSandboxContext
+import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.ScriptError
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
@@ -39,7 +39,7 @@ class ScriptErrorTest {
 
     private val sandbox = run {
         NativeLoader.load(Resources)
-        Sandbox(NopSandboxContext()).also {
+        Sandbox(SandboxContextNop).also {
             it.register(
                 RunnerPlugin(
                     name = "test",

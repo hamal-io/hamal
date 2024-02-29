@@ -1,7 +1,7 @@
 package io.hamal.lib.kua.builtin
 
 import io.hamal.lib.kua.NativeLoader
-import io.hamal.lib.kua.NopSandboxContext
+import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extend.extension.RunnerExtension
 import io.hamal.lib.kua.type.KuaCode
@@ -30,7 +30,7 @@ internal object ExtensionTest {
 
     private val sandbox = run {
         NativeLoader.load(NativeLoader.Preference.Resources)
-        Sandbox(NopSandboxContext()).also { sb ->
+        Sandbox(SandboxContextNop).also { sb ->
             sb.register(
                 RunnerExtension(
                     name = "test",

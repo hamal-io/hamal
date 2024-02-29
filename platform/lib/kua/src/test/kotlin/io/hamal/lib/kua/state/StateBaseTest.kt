@@ -30,7 +30,7 @@ internal abstract class StateBaseTest {
 
     private fun functionContext(state: CloseableState): FunctionContext = FunctionContext(state)
     private fun sandbox(state: CloseableState): Sandbox = Sandbox(
-        ctx = NopSandboxContext(),
+        ctx = SandboxContextNop,
         state = state
     )
 }

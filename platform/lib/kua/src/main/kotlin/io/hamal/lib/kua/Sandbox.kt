@@ -11,8 +11,9 @@ import io.hamal.lib.kua.type.*
 import io.hamal.lib.kua.type.KuaError
 
 class Sandbox(
-    val ctx: SandboxContext,
-    val state: CloseableState = CloseableStateImpl()
+    private val ctx: SandboxContext,
+    private val state: CloseableState = CloseableStateImpl(),
+    private val registry: RunnerRegistry = RunnerRegistry(state)
 ) : CloseableState {
 
     override fun absIndex(idx: Int) = state.absIndex(idx)
@@ -65,41 +66,25 @@ class Sandbox(
 
     override fun type(idx: Int) = state.type(idx)
 
-
-    // FIXME to remove
-
-
-    //    val state = CloseableStateImpl(native)
-    val registry: RunnerRegistry = RunnerRegistry(this)
-
     init {
         registerGlobalFunction("require", Require(registry))
         registerGlobalFunction("require_plugin", RequirePlugin(registry))
-
         val classLoader = Sandbox::class.java.classLoader
         codeLoad(KuaCode(String(classLoader.getResource("std.lua").readBytes())))
     }
 
 
-    fun run(fn: (State) -> Unit) {
-        fn(state)
-    }
-
-    fun register(extension: RunnerPlugin) {
-        registry.register(extension)
+    fun register(plugin: RunnerPlugin) {
+        registry.register(plugin)
     }
 
     fun registerPlugins(vararg factories: RunnerPluginFactory): Sandbox {
-        factories.map { it.create(this) }.forEach { plugin ->
-            this.register(plugin)
-        }
+        factories.map { it.create(this) }.forEach(this::register)
         return this
     }
 
     fun registerExtensions(vararg factories: RunnerExtensionFactory): Sandbox {
-        factories.map { it.create(this) }.forEach { extension ->
-            this.register(extension)
-        }
+        factories.map { it.create(this) }.forEach(this::register)
         return this
     }
 
@@ -107,9 +92,7 @@ class Sandbox(
         registry.register(extension)
     }
 
-
     override fun close() {
         state.close()
     }
-
 }

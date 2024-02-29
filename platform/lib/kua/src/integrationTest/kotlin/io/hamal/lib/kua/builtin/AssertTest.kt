@@ -81,7 +81,7 @@ class AssertTest {
 
     private val sandbox = run {
         NativeLoader.load(Resources)
-        Sandbox(NopSandboxContext()).also {
+        Sandbox(SandboxContextNop).also {
             it.register(
                 RunnerPlugin(
                     "test",

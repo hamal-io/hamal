@@ -48,7 +48,7 @@ class CodeRunnerImpl(
                     try {
                         val contextExtension = RunnerContextFactory(runnerContext).create(sandbox)
 
-                        val internalTable = sandbox.state.tableCreate(0, contextExtension.internals.size)
+                        val internalTable = sandbox.tableCreate(0, contextExtension.internals.size)
                         contextExtension.internals.forEach { entry ->
                             when (val value = entry.value) {
                                 is KuaNil -> {}
@@ -64,9 +64,9 @@ class CodeRunnerImpl(
                         }
 
                         sandbox.globalSet(KuaString("_internal"), internalTable)
-                        sandbox.state.codeLoad(contextExtension.factoryCode)
+                        sandbox.codeLoad(contextExtension.factoryCode)
 
-                        sandbox.state.codeLoad(KuaCode("${contextExtension.name} = plugin()()"))
+                        sandbox.codeLoad(KuaCode("${contextExtension.name} = plugin()()"))
                         sandbox.globalUnset(KuaString("_internal"))
 
                         sandbox.codeLoad(KuaCode(unitOfWork.code.value))

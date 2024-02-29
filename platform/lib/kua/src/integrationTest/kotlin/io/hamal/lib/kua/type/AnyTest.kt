@@ -2,7 +2,7 @@ package io.hamal.lib.kua.type
 
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
-import io.hamal.lib.kua.NopSandboxContext
+import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.function.*
@@ -159,6 +159,6 @@ internal class KuaAnyTest {
 
     private val sandbox = run {
         NativeLoader.load(Resources)
-        Sandbox(NopSandboxContext())
+        Sandbox(SandboxContextNop)
     }
 }

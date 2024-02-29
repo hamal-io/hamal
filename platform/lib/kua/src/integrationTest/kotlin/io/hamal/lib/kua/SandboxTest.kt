@@ -92,6 +92,6 @@ internal class RegisterPluginTest : BaseSandboxTest() {
 internal sealed class BaseSandboxTest {
     val testInstance = run {
         NativeLoader.load(Resources)
-        Sandbox(NopSandboxContext())
+        Sandbox(SandboxContextNop)
     }
 }

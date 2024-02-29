@@ -2,7 +2,7 @@ package io.hamal.lib.kua.error
 
 import io.hamal.lib.kua.DecimalError
 import io.hamal.lib.kua.NativeLoader
-import io.hamal.lib.kua.NopSandboxContext
+import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.type.KuaCode
 import org.hamcrest.MatcherAssert.assertThat
@@ -29,6 +29,6 @@ class DecimalErrorTest {
 
     private val sandbox = run {
         NativeLoader.load(NativeLoader.Preference.Resources)
-        Sandbox(NopSandboxContext())
+        Sandbox(SandboxContextNop)
     }
 }

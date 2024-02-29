@@ -12,7 +12,7 @@ fun Sandbox.registerGlobalFunction(name: String, function: KuaFunction<*, *, *, 
 
 fun main() {
     NativeLoader.load(BuildDir)
-    Sandbox(NopSandboxContext()).use { sb ->
+    Sandbox(SandboxContextNop).use { sb ->
         sb.codeLoad(
             KuaCode(
                 """
