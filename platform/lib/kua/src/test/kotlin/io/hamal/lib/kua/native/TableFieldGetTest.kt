@@ -21,7 +21,7 @@ internal class TableFieldGetTest : NativeBaseTest() {
     }
 
     @Test
-    fun `Tries to get value from table which key does not exists for`() {
+    fun `Tries to get value from table , but key does not exists`() {
         testInstance.tableCreate(0, 1)
         testInstance.stringPush("value")
         testInstance.tableFieldSet(1, "key")
