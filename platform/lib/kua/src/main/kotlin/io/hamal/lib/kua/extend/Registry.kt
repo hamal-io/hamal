@@ -3,6 +3,7 @@ package io.hamal.lib.kua.extend
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extend.extension.RunnerExtension
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
+import io.hamal.lib.kua.type.KuaCode
 import io.hamal.lib.kua.type.KuaFunction
 import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.kua.type.KuaTable
@@ -43,8 +44,8 @@ class RunnerRegistry(val sb: Sandbox) {
 
         sb.globalSet(KuaString("_internal"), internalTable)
 
-        state.load(plugins[name]!!.factoryCode)
-        state.load("_factory = plugin()")
+        state.codeLoad(plugins[name]!!.factoryCode)
+        state.codeLoad(KuaCode("_factory = plugin()"))
 
         sb.globalUnset(KuaString("_internal"))
 
@@ -59,8 +60,8 @@ class RunnerRegistry(val sb: Sandbox) {
     fun loadExtensionFactory(name: String): KuaTable {
         val extension = extensions[name]!!
 
-        state.load(extension.factoryCode)
-        state.load("_factory = extension()")
+        state.codeLoad(extension.factoryCode)
+        state.codeLoad(KuaCode("_factory = extension()"))
 
         // FIXME cache factory so that it does not have to be loaded over and over again
         val factory = state.globalGetTable(KuaString("_factory"))

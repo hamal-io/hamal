@@ -5,6 +5,7 @@ import io.hamal.lib.kua.function.Function1In1Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput1Schema
+import io.hamal.lib.kua.type.KuaCode
 import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.kua.type.KuaTable
 
@@ -16,7 +17,7 @@ class Require(
 ) {
     override fun invoke(ctx: FunctionContext, arg1: KuaString): KuaTable {
         ctx.globalSet(KuaString("_factory"), registry.loadExtensionFactory(arg1.value))
-        ctx.load("_instance = _factory()")
+        ctx.codeLoad(KuaCode("_instance = _factory()"))
 
         val result = ctx.globalGetTable(KuaString("_instance"))
 

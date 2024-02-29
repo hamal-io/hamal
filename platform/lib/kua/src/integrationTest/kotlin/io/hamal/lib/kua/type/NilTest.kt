@@ -1,7 +1,10 @@
 package io.hamal.lib.kua.type
 
-import io.hamal.lib.kua.*
+import io.hamal.lib.kua.NativeLoader
+import io.hamal.lib.kua.NopSandboxContext
+import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.function.*
+import io.hamal.lib.kua.registerGlobalFunction
 import org.junit.jupiter.api.Test
 
 internal class KuaNilTest {
@@ -17,11 +20,13 @@ internal class KuaNilTest {
                 }
             )
 
-            sandbox.load(
-                """
+            sandbox.codeLoad(
+                KuaCode(
+                    """
                 local result = func()
                 assert(result == nil)
             """.trimIndent()
+                )
             )
         }
     }
@@ -42,12 +47,14 @@ internal class KuaNilTest {
                 }
             )
 
-            sandbox.load(
-                """
+            sandbox.codeLoad(
+                KuaCode(
+                    """
                 local x, y = func()
                 assert(x == nil)
                 assert(#y == 0)
             """.trimIndent()
+                )
             )
         }
     }
@@ -68,12 +75,14 @@ internal class KuaNilTest {
                     }
                 })
 
-            sandbox.load(
-                """
+            sandbox.codeLoad(
+                KuaCode(
+                    """
                 local x, y = func()
                 assert(#x == 0)
                 assert(y == nil)
             """.trimIndent()
+                )
             )
         }
     }
@@ -94,12 +103,14 @@ internal class KuaNilTest {
 
         sandbox.use { sandbox ->
             sandbox.registerGlobalFunction("func", func)
-            sandbox.load(
-                """
+            sandbox.codeLoad(
+                KuaCode(
+                    """
                 local x, y = func()
                 assert(x == nil)
                 assert(y == nil)
             """.trimIndent()
+                )
             )
         }
     }

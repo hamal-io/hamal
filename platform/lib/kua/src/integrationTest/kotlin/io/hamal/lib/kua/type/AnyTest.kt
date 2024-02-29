@@ -17,11 +17,13 @@ internal class KuaAnyTest {
         val captor = AnyValueResultCaptor()
         sandbox.register(plugin(captor))
 
-        sandbox.load(
-            """
+        sandbox.codeLoad(
+            KuaCode(
+                """
             test = require_plugin('test')
             test.captor(test.pass_through(true))
         """
+            )
         )
         assertThat(captor.result, equalTo(KuaAny(KuaTrue)))
     }
@@ -31,11 +33,13 @@ internal class KuaAnyTest {
         val captor = AnyValueResultCaptor()
         sandbox.register(plugin(captor))
 
-        sandbox.load(
-            """
+        sandbox.codeLoad(
+            KuaCode(
+                """
             test = require_plugin('test')
             test.captor(test.pass_through(23))
         """
+            )
         )
 
         assertThat(captor.result, equalTo(KuaAny(KuaNumber(23))))
@@ -46,11 +50,13 @@ internal class KuaAnyTest {
         val captor = AnyValueResultCaptor()
         sandbox.register(plugin(captor))
 
-        sandbox.load(
-            """
+        sandbox.codeLoad(
+            KuaCode(
+                """
             test = require_plugin('test')
             test.captor(test.pass_through('hamal.io'))
         """.trimIndent()
+            )
         )
 
         assertThat(captor.result, equalTo(KuaAny(KuaString("hamal.io"))))
@@ -65,11 +71,13 @@ internal class KuaAnyTest {
         val captor = AnyValueResultCaptor()
         sandbox.register(plugin(captor))
 
-        sandbox.load(
-            """
+        sandbox.codeLoad(
+            KuaCode(
+                """
             test = require_plugin('test')
             test.captor(test.pass_through(test_map))
         """
+            )
         )
 
         val underlying = (captor.result as KuaAny).value
@@ -89,11 +97,13 @@ internal class KuaAnyTest {
         val captor = AnyValueResultCaptor()
         sandbox.register(plugin(captor))
 
-        sandbox.load(
-            """
+        sandbox.codeLoad(
+            KuaCode(
+                """
             test = require_plugin('test')
             test.captor(test.pass_through(test_array))
         """
+            )
         )
 
         val underlying = (captor.result as KuaAny).value
@@ -126,7 +136,8 @@ internal class KuaAnyTest {
     private fun plugin(captor: KuaFunction<*, *, *, *>) =
         RunnerPlugin(
             name = "test",
-            factoryCode = """
+            factoryCode = KuaCode(
+                """
                     function plugin()
                         local internal = _internal
                         return function()
@@ -137,7 +148,8 @@ internal class KuaAnyTest {
                             return export
                         end
                     end
-                """.trimIndent(),
+                """.trimIndent()
+            ),
             internals = mapOf(
                 "pass_through" to AnyValuePassThrough(),
                 "captor" to captor

@@ -1,9 +1,12 @@
 package io.hamal.runner.run
 
 import io.hamal.lib.domain.vo.RunnerEnv
-import io.hamal.lib.kua.*
+import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
+import io.hamal.lib.kua.Sandbox
+import io.hamal.lib.kua.SandboxContext
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
+import io.hamal.lib.kua.type.KuaCode
 import io.hamal.lib.kua.type.KuaType
 import io.hamal.runner.config.EnvFactory
 import io.hamal.runner.config.SandboxFactory
@@ -23,7 +26,8 @@ internal abstract class AbstractExecuteTest {
                     it.register(
                         RunnerPlugin(
                             name = "test",
-                            factoryCode = """
+                            factoryCode = KuaCode(
+                                """
                             function plugin()
                                 local internal = _internal
                                 return function()
@@ -33,7 +37,8 @@ internal abstract class AbstractExecuteTest {
                                     return export
                                 end
                             end
-                            """.trimIndent(),
+                            """.trimIndent()
+                            ),
                             internals = testPlugins.toMap()
                         )
                     )

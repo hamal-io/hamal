@@ -20,6 +20,8 @@ interface State {
     fun booleanPush(value: KuaBoolean): StackTop
     fun booleanGet(idx: Int): KuaBoolean
 
+    fun codeLoad(code: KuaCode)
+
     fun decimalPush(value: KuaDecimal): StackTop
     fun decimalGet(idx: Int): KuaDecimal
 
@@ -58,12 +60,6 @@ interface State {
     fun topSet(idx: Int)
 
     fun type(idx: Int): KClass<out KuaType>
-
-
-    /// OLD STUFF TO BE REPLACED
-
-
-    fun load(code: String) // FIXME add return value
 }
 
 interface CloseableState : State, AutoCloseable
@@ -102,6 +98,11 @@ class CloseableStateImpl(private val native: Native = Native()) : CloseableState
 
     override fun booleanPush(value: KuaBoolean): StackTop = StackTop(native.booleanPush(value.value))
     override fun booleanGet(idx: Int) = KuaBoolean.of(native.booleanGet(idx))
+
+    override fun codeLoad(code: KuaCode) {
+        native.stringLoad(code.value)
+        native.functionCall(0, 0)
+    }
 
     override fun decimalPush(value: KuaDecimal): StackTop = StackTop(
         native.decimalPush(value.toBigDecimal().toString())
@@ -166,14 +167,6 @@ class CloseableStateImpl(private val native: Native = Native()) : CloseableState
     override fun topSet(idx: Int) = native.topSet(idx)
 
     override fun type(idx: Int) = luaToType(native.type(idx))
-
-    // FIXME TO BE REPLACED
-
-
-    override fun load(code: String) {
-        native.stringLoad(code)
-        native.functionCall(0, 0)
-    }
 
     override fun close() {
         native.close()

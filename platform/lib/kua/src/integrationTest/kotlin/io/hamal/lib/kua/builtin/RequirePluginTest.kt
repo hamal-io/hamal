@@ -1,15 +1,19 @@
 package io.hamal.lib.kua.builtin
 
-import io.hamal.lib.kua.*
+import io.hamal.lib.kua.NativeLoader
+import io.hamal.lib.kua.NopSandboxContext
+import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
+import io.hamal.lib.kua.type.KuaCode
 import org.junit.jupiter.api.Test
 
 internal object PluginTest {
 
     @Test
     fun `Creates a new instance - everytime it gets invoked`() {
-        sandbox.load(
-            """
+        sandbox.codeLoad(
+            KuaCode(
+                """
             local one = require_plugin('test')
             assert( one.some_number == 42 )
             one.some_number = 1337
@@ -19,6 +23,7 @@ internal object PluginTest {
             
             assert( one.some_number == 1337 )
         """.trimIndent()
+            )
         )
     }
 
@@ -28,7 +33,8 @@ internal object PluginTest {
             sb.register(
                 RunnerPlugin(
                     name = "test",
-                    factoryCode = """
+                    factoryCode = KuaCode(
+                        """
                             function plugin()
                                 local internal = _internal
                                 return function()
@@ -36,7 +42,8 @@ internal object PluginTest {
                                     return export
                                 end
                             end
-                    """.trimIndent(),
+                    """.trimIndent()
+                    ),
                     internals = mapOf()
                 )
             )

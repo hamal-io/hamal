@@ -17,6 +17,8 @@ class FunctionContext(
     override fun anyPush(value: KuaAny) = state.anyPush(value)
 
     override fun booleanGet(idx: Int) = state.booleanGet(idx)
+    override fun codeLoad(code: KuaCode) = state.codeLoad(code)
+
     override fun booleanPush(value: KuaBoolean) = state.booleanPush(value)
 
     override fun decimalGet(idx: Int): KuaDecimal = state.decimalGet(idx)
@@ -58,10 +60,6 @@ class FunctionContext(
     override fun topSet(idx: Int) = state.topSet(idx)
 
     override fun type(idx: Int) = state.type(idx)
-
-
-    // FIXME
-    override fun load(code: String) = state.load(code)
 
     override fun <OBJ : Any> get(clazz: KClass<OBJ>): OBJ {
         TODO()

@@ -1,10 +1,14 @@
 package io.hamal.lib.kua.error
 
-import io.hamal.lib.kua.*
+import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
+import io.hamal.lib.kua.NopSandboxContext
+import io.hamal.lib.kua.Sandbox
+import io.hamal.lib.kua.ScriptError
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
+import io.hamal.lib.kua.type.KuaCode
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -15,7 +19,7 @@ class ScriptErrorTest {
     @Test
     fun `Throws an error if script error occurs`() {
         val error = assertThrows<ScriptError> {
-            sandbox.load("""local x = does.not.exist""")
+            sandbox.codeLoad(KuaCode("""local x = does.not.exist"""))
         }
         assertThat(error.message, equalTo("[string \"local x = does.not.exist\"]:1: <name> expected near 'not'"))
     }
@@ -23,7 +27,7 @@ class ScriptErrorTest {
     @Test
     fun `Script error interrupts execution`() {
         assertThrows<ScriptError> {
-            sandbox.load("""local x = does.not.exist; require('test').call()""")
+            sandbox.codeLoad(KuaCode("""local x = does.not.exist; require('test').call()"""))
         }
     }
 
@@ -39,7 +43,8 @@ class ScriptErrorTest {
             it.register(
                 RunnerPlugin(
                     name = "test",
-                    factoryCode = """
+                    factoryCode = KuaCode(
+                        """
                             function plugin()
                                 local internal = _internal
                                 return function()
@@ -49,7 +54,8 @@ class ScriptErrorTest {
                                     return export
                                 end
                             end
-                    """.trimIndent(),
+                    """.trimIndent()
+                    ),
                     internals = mapOf("call" to CallbackFunction())
                 )
             )

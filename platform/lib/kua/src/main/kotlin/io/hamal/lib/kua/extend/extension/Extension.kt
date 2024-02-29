@@ -1,6 +1,7 @@
 package io.hamal.lib.kua.extend.extension
 
 import io.hamal.lib.kua.Sandbox
+import io.hamal.lib.kua.type.KuaCode
 
 
 interface RunnerExtensionFactory {
@@ -9,16 +10,16 @@ interface RunnerExtensionFactory {
 
 class RunnerExtension(
     val name: String,
-    val factoryCode: String = loadFactoryCodeFromResources(name)
+    val factoryCode: KuaCode = loadFactoryCodeFromResources(name)
 ) {
     companion object {
         @JvmStatic
-        private fun loadFactoryCodeFromResources(extensionName: String): String { // FIXME extend name VO
+        private fun loadFactoryCodeFromResources(extensionName: String): KuaCode {
             val path = "${extensionName.replace(".", "/")}/extension.lua"
             val classLoader = this::class.java.classLoader
             val resource = classLoader.getResource(path)
             checkNotNull(resource) { "Unable to load: $path" }
-            return String(resource.readBytes())
+            return KuaCode(String(resource.readBytes()))
         }
     }
 }

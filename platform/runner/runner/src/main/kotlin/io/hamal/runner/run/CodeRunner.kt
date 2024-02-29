@@ -64,12 +64,12 @@ class CodeRunnerImpl(
                         }
 
                         sandbox.globalSet(KuaString("_internal"), internalTable)
-                        sandbox.state.load(contextExtension.factoryCode)
+                        sandbox.state.codeLoad(contextExtension.factoryCode)
 
-                        sandbox.state.load("${contextExtension.name} = plugin()()")
+                        sandbox.state.codeLoad(KuaCode("${contextExtension.name} = plugin()()"))
                         sandbox.globalUnset(KuaString("_internal"))
 
-                        sandbox.load(KuaCode(unitOfWork.code.value))
+                        sandbox.codeLoad(KuaCode(unitOfWork.code.value))
 
                         val ctx = sandbox.globalGetTable(KuaString("context"))
                         val stateToSubmit = ctx.getTableMap("state").toHotObject()

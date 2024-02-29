@@ -1,7 +1,9 @@
 package io.hamal.lib.kua.type
 
-import io.hamal.lib.kua.*
+import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
+import io.hamal.lib.kua.NopSandboxContext
+import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.function.*
 import org.hamcrest.MatcherAssert.assertThat
@@ -18,7 +20,8 @@ internal class KuaErrorTest {
         sandbox.register(
             RunnerPlugin(
                 name = "test",
-                factoryCode = """
+                factoryCode = KuaCode(
+                    """
                     function plugin()
                         local internal = _internal
                         return function()
@@ -30,7 +33,8 @@ internal class KuaErrorTest {
                             return export
                         end
                     end
-                """.trimIndent(),
+                """.trimIndent()
+                ),
                 internals = mapOf(
                     "error" to FunctionReturnsError(),
                     "message_captor" to messageCaptor,
@@ -39,8 +43,9 @@ internal class KuaErrorTest {
             )
         )
 
-        sandbox.load(
-            """
+        sandbox.codeLoad(
+            KuaCode(
+                """
             test = require_plugin('test')
             local err = test.error()
             test.message_captor(err.message)
@@ -48,6 +53,7 @@ internal class KuaErrorTest {
             local mtbl = getmetatable(err)
             test.assert_metatable(mtbl)
         """.trimIndent()
+            )
         )
 
         assertThat(messageCaptor.result, equalTo(KuaAny(KuaString("Sometimes an error can be a good thing"))))
@@ -61,7 +67,8 @@ internal class KuaErrorTest {
         sandbox.register(
             RunnerPlugin(
                 name = "test",
-                factoryCode = """
+                factoryCode = KuaCode(
+                    """
                     function plugin()
                         local internal = _internal
                         return function()
@@ -73,7 +80,8 @@ internal class KuaErrorTest {
                             return export
                         end
                     end
-                """.trimIndent(),
+                """.trimIndent()
+                ),
                 internals = mapOf(
                     "call" to FunctionNeverInvoked(),
                     "captor" to errorCaptor,
@@ -82,11 +90,13 @@ internal class KuaErrorTest {
             )
         )
 
-        sandbox.load(
-            """
+        sandbox.codeLoad(
+            KuaCode(
+                """
             local err = test.call()
             test.captor(err)
         """.trimIndent()
+            )
         )
 
         assertThat(errorCaptor.result, equalTo(KuaAny(KuaError("Sometimes an error can be a good thing"))))

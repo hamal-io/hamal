@@ -23,6 +23,8 @@ class Sandbox(
     override fun booleanGet(idx: Int) = state.booleanGet(idx)
     override fun booleanPush(value: KuaBoolean) = state.booleanPush(value)
 
+    override fun codeLoad(code: KuaCode) = state.codeLoad(code)
+
     override fun decimalGet(idx: Int): KuaDecimal = state.decimalGet(idx)
     override fun decimalPush(value: KuaDecimal): StackTop = state.decimalPush(value)
 
@@ -75,13 +77,9 @@ class Sandbox(
         registerGlobalFunction("require_plugin", RequirePlugin(registry))
 
         val classLoader = Sandbox::class.java.classLoader
-        load(String(classLoader.getResource("std.lua").readBytes()))
+        codeLoad(KuaCode(String(classLoader.getResource("std.lua").readBytes())))
     }
 
-    fun load(code: KuaCode) = load(code.value)
-
-    //    override fun load(code: String) = native.load(code)
-    override fun load(code: String) = state.load(code)
 
     fun run(fn: (State) -> Unit) {
         fn(state)

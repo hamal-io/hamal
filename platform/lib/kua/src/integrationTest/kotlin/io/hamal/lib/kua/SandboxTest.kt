@@ -17,7 +17,8 @@ internal class RegisterExtensionTest : BaseSandboxTest() {
         testInstance.register(
             RunnerExtension(
                 name = "some_plugin",
-                factoryCode = """
+                factoryCode = KuaCode(
+                    """
                     function extension()
                         return function()
                             local export = { 
@@ -26,11 +27,12 @@ internal class RegisterExtensionTest : BaseSandboxTest() {
                             return export
                         end
                     end
-                """.trimIndent(),
+                """.trimIndent()
+                ),
             )
         )
 
-        testInstance.load(
+        testInstance.codeLoad(
             KuaCode(
                 """
                 some_plugin = require('some_plugin')
@@ -57,7 +59,8 @@ internal class RegisterPluginTest : BaseSandboxTest() {
         testInstance.register(
             RunnerPlugin(
                 name = "some_plugin",
-                factoryCode = """
+                factoryCode = KuaCode(
+                    """
                     function plugin()
                         local internal = _internal
                         return function()
@@ -67,12 +70,13 @@ internal class RegisterPluginTest : BaseSandboxTest() {
                             return export
                         end
                     end
-                """.trimIndent(),
+                """.trimIndent()
+                ),
                 internals = mapOf("magic" to func)
             )
         )
 
-        testInstance.load(
+        testInstance.codeLoad(
             KuaCode(
                 """
                 some_plugin = require_plugin('some_plugin')

@@ -1,6 +1,7 @@
 package io.hamal.lib.kua
 
 import io.hamal.lib.kua.NativeLoader.Preference.BuildDir
+import io.hamal.lib.kua.type.KuaCode
 import io.hamal.lib.kua.type.KuaFunction
 import io.hamal.lib.kua.type.KuaString
 
@@ -12,8 +13,9 @@ fun Sandbox.registerGlobalFunction(name: String, function: KuaFunction<*, *, *, 
 fun main() {
     NativeLoader.load(BuildDir)
     Sandbox(NopSandboxContext()).use { sb ->
-        sb.load(
-            """
+        sb.codeLoad(
+            KuaCode(
+                """
                 local x = 512
                 local y = __decimal__.new(1024)
                 local z = __decimal__.new(512)
@@ -21,8 +23,7 @@ fun main() {
                 -- assert(x ~= y)
                 assert(y == x)
         """.trimIndent()
+            )
         )
-
-        println(sb.topGet())
     }
 }

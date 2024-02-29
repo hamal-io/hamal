@@ -5,6 +5,7 @@ import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
+import io.hamal.lib.kua.type.KuaCode
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -15,22 +16,26 @@ class AssertTest {
 
     @Test
     fun `Assertion passes`() {
-        sandbox.load(
-            """
+        sandbox.codeLoad(
+            KuaCode(
+                """
             assert(1 == 1)
         """.trimIndent()
+            )
         )
     }
 
     @Test
     fun `Assertion fails`() {
         val error = assertThrows<AssertionError> {
-            sandbox.load(
-                """
+            sandbox.codeLoad(
+                KuaCode(
+                    """
                 local provide_answer = function() return 24 end
                 
                 assert(provide_answer() == 42)
             """.trimIndent()
+                )
             )
         }
         assertThat(error.message, equalTo("Line 3: assertion failed!"))
@@ -39,11 +44,13 @@ class AssertTest {
     @Test
     fun `Assertion failure interrupts script execution`() {
         assertThrows<AssertionError> {
-            sandbox.load(
-                """
+            sandbox.codeLoad(
+                KuaCode(
+                    """
                 assert(true == false)
                 require('test').call()
                 """.trimIndent()
+                )
             )
         }
     }
@@ -51,11 +58,13 @@ class AssertTest {
     @Test
     fun `Throws an error if error happen within assert - length of nil`() {
         val error = assertThrows<ScriptError> {
-            sandbox.load(
-                """
+            sandbox.codeLoad(
+                KuaCode(
+                    """
                 local value = nil
                 assert(#value == 0)
             """.trimIndent()
+                )
             )
         }
         assertThat(
@@ -76,7 +85,8 @@ class AssertTest {
             it.register(
                 RunnerPlugin(
                     "test",
-                    factoryCode = """
+                    factoryCode = KuaCode(
+                        """
                             function plugin()
                                 local internal = _internal
                                 return function()
@@ -86,7 +96,8 @@ class AssertTest {
                                     return export
                                 end
                             end
-                    """.trimIndent(),
+                    """.trimIndent()
+                    ),
                     internals = mapOf("call" to CallbackFunction())
                 )
             )
