@@ -10,7 +10,6 @@ import io.hamal.lib.common.serialization.JsonModule
 import io.hamal.lib.common.serialization.ValueObjectStringAdapter
 import io.hamal.lib.domain.Json
 import io.hamal.lib.domain.vo.ValueObjectJsonModule
-import io.hamal.lib.kua.type.KuaJsonModule
 import io.hamal.repository.api.DomainJsonModule
 import io.hamal.repository.record.account.AccountRecord
 import io.hamal.repository.record.blueprint.BlueprintRecord
@@ -53,7 +52,6 @@ val json = Json(
     JsonFactoryBuilder()
         .register(DomainJsonModule)
         .register(HotJsonModule)
-        .register(KuaJsonModule)
         .register(RecordJsonModule)
         .register(ValueObjectJsonModule)
 )

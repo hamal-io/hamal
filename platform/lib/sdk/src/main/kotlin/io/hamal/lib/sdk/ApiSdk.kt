@@ -10,7 +10,6 @@ import io.hamal.lib.http.HttpContentDeserializer
 import io.hamal.lib.http.HttpContentSerializer
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.HttpTemplateImpl
-import io.hamal.lib.kua.type.KuaJsonModule
 import io.hamal.lib.sdk.api.*
 import java.io.InputStream
 import kotlin.reflect.KClass
@@ -41,7 +40,6 @@ class ApiSdkImpl : ApiSdk {
             JsonFactoryBuilder()
                 .register(ApiJsonModule)
                 .register(HotJsonModule)
-                .register(KuaJsonModule)
                 .register(ValueObjectJsonModule)
         )
 

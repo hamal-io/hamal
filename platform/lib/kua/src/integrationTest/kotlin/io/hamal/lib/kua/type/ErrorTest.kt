@@ -1,12 +1,9 @@
 package io.hamal.lib.kua.type
 
-import io.hamal.lib.kua.NativeLoader
+import io.hamal.lib.kua.*
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
-import io.hamal.lib.kua.NopSandboxContext
-import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.function.*
-import io.hamal.lib.kua.table.TableProxyMap
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Disabled
@@ -96,10 +93,10 @@ internal class KuaErrorTest {
     }
 
 
-    private object AssertMetatable : Function1In0Out<TableProxyMap>(
-        FunctionInput1Schema(TableProxyMap::class)
+    private object AssertMetatable : Function1In0Out<KuaTable>(
+        FunctionInput1Schema(KuaTable::class)
     ) {
-        override fun invoke(ctx: FunctionContext, arg1: TableProxyMap) {
+        override fun invoke(ctx: FunctionContext, arg1: KuaTable) {
             assertThat(arg1.getInt("__type_id"), equalTo(10))
             assertThat(arg1.getString("__typename"), equalTo("error"))
         }

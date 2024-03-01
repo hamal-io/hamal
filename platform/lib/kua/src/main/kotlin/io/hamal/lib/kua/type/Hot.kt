@@ -1,31 +1,26 @@
 package io.hamal.lib.kua.type
 
 import io.hamal.lib.common.hot.*
+import io.hamal.lib.kua.State
+import io.hamal.lib.kua.tableCreate
 
-fun HotNode.toKua(): KuaType {
+//FIXME replace toKua with this
+fun HotNode.toKua(state: State): KuaType {
     return when (this) {
-        is HotObject -> KuaMap(
-            nodes.map { (key, node) ->
-                key to node.toKua()
-            }.toMap().toMutableMap()
-        )
-
-        is HotArray -> KuaArray(
-            nodes.mapIndexed { index, node ->
-                index to node.toKua()
-            }.toMap().toMutableMap()
-        )
-
+        is HotObject -> state.tableCreate(nodes.map { (key, value) -> key to value.toKua(state) }.toMap())
+        is HotArray -> state.tableCreate(nodes.map { it.toKua(state) })
         is HotBoolean -> if (value) KuaTrue else KuaFalse
         is HotNull -> KuaNil
         is HotNumber -> KuaNumber(value.toDouble())
         is HotString -> KuaString(value)
+        else -> TODO()
     }
 }
 
-fun KuaType.toHot(): HotNode {
+
+fun KuaType.toHotNode(): HotNode {
     return when (this) {
-        is KuaAny -> value.toHot()
+        is KuaAny -> value.toHotNode()
         is KuaFalse -> HotBoolean(false)
         is KuaTrue -> HotBoolean(true)
         is KuaCode -> HotString(value)
@@ -35,15 +30,24 @@ fun KuaType.toHot(): HotNode {
         is KuaNil -> HotNull
         is KuaNumber -> HotNumber(value)
         is KuaString -> HotString(value)
-        is KuaTableType -> toHotObject()
+        is KuaTable -> toHotObject()
     }
 }
 
-fun KuaType.toHotObject(): HotObject {
-    require(this is KuaMap)
+fun KuaTable.toHotObject(): HotObject {
     val builder = HotObject.builder()
-    this.value.forEach { (key, value) ->
-        builder[key] = value.toHot()
+//    this.underlyingMap.forEach { (key, value) ->
+//        builder[key] = value.toHot()
+//    }
+
+    mapEntries().forEach { (key, value) ->
+        builder[key.value] = value.toHotNode()
     }
+
+//    entries().forEach { (key, value) ->
+//        builder[key.value] = value.toHot()
+//    }
+//
+
     return builder.build()
 }

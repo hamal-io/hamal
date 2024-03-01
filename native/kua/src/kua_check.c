@@ -34,9 +34,9 @@ check_stack_overflow(lua_State *L, int total) {
 }
 
 enum check_result
-check_stack_undernamespace(lua_State *L, int total) {
+check_stack_underflow(lua_State *L, int total) {
     if (lua_gettop(L) - total < 0) {
-        throw_illegal_argument("Prevented stack undernamespace");
+        throw_illegal_argument("Prevented stack underflow");
         return CHECK_RESULT_ERROR;
     }
     return CHECK_RESULT_OK;

@@ -1,7 +1,5 @@
 package io.hamal.lib.kua.function
 
-import io.hamal.lib.kua.table.TableProxyArray
-import io.hamal.lib.kua.table.TableProxyMap
 import io.hamal.lib.kua.type.*
 import kotlin.reflect.KClass
 
@@ -44,16 +42,11 @@ data class FunctionInput2Schema<ARG_1 : KuaType, ARG_2 : KuaType>(
 fun <ARG : KuaType> KClass<ARG>.extract(ctx: FunctionContext, idx: Int): ARG {
     @Suppress("UNCHECKED_CAST")
     return when (this) {
-        KuaAny::class -> ctx.getAny(idx) as ARG
-        KuaArray::class -> ctx.getArrayType(idx) as ARG
-        KuaMap::class -> ctx.getMapType(idx) as ARG
-        KuaNumber::class -> ctx.getNumberType(idx) as ARG
-        KuaString::class -> ctx.getStringType(idx) as ARG
-        KuaType::class -> TODO() //FIXME loads the entire table from lua -- maybe some form of readonly table value and table value is interface?!
-//        TableProxyMap::class -> DefaultTableProxy(idx, ctx.state, TableProxy.Mode.Map) as ARG
-//        TableProxyArray::class -> DefaultTableProxy(idx, ctx.state, TableProxy.Mode.Array) as ARG
-        TableProxyMap::class -> ctx.getTableMapProxy(idx) as ARG
-        TableProxyArray::class -> ctx.getTableArrayProxy(idx) as ARG
+        KuaAny::class -> ctx.anyGet(idx) as ARG
+        KuaNumber::class -> ctx.numberGet(idx) as ARG
+        KuaString::class -> ctx.stringGet(idx) as ARG
+        KuaTable::class -> ctx.tableGet(idx) as ARG
+        KuaType::class -> TODO()
         else -> TODO()
     }
 }

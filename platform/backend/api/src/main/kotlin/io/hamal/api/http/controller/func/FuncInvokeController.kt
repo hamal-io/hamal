@@ -22,11 +22,11 @@ internal class FuncInvokeController(
     @PostMapping("/v1/funcs/{funcId}/invoke")
     fun invoke(
         @PathVariable("funcId") funcId: FuncId,
-        @RequestBody req: ApiFuncInvokeRequest
+        @RequestBody req: ApiFuncInvokeRequest? = null
     ): ResponseEntity<ApiRequested> = retry {
         funcInvoke(
             funcId,
-            req.copy(correlationId = req.correlationId ?: CorrelationId.default),
+            (req ?: ApiFuncInvokeRequest()).copy(correlationId = req?.correlationId ?: CorrelationId.default),
             Invocation.Func
         ).accepted()
     }

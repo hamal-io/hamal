@@ -25,7 +25,7 @@ import io.hamal.plugin.std.sys.hook.HookListFunction
 import io.hamal.plugin.std.sys.namespace.NamespaceAppendFunction
 import io.hamal.plugin.std.sys.namespace.NamespaceGetFunction
 import io.hamal.plugin.std.sys.namespace.NamespaceListFunction
-import io.hamal.plugin.std.sys.req.ReqGetFunction
+import io.hamal.plugin.std.sys.request.RequestGetFunction
 import io.hamal.plugin.std.sys.topic.*
 import io.hamal.plugin.std.sys.trigger.*
 
@@ -49,7 +49,7 @@ class PluginSysFactory(
 
                 "code_get" to CodeGetFunction(sdk),
 
-                "req_get" to ReqGetFunction(sdk.template),
+                "req_get" to RequestGetFunction(sdk.template),
 
                 "endpoint_create" to EndpointCreateFunction(sdk),
                 "endpoint_get" to EndpointGetFunction(sdk),

@@ -5,7 +5,6 @@ import io.hamal.lib.common.hot.HotJsonModule
 import io.hamal.lib.common.serialization.JsonFactoryBuilder
 import io.hamal.lib.domain.Json
 import io.hamal.lib.domain.vo.ValueObjectJsonModule
-import io.hamal.lib.kua.type.KuaJsonModule
 import java.io.InputStream
 import kotlin.reflect.KClass
 
@@ -24,7 +23,6 @@ object DefaultHttpSerdeFactory : HttpSerdeFactory {
 private val json = Json(
     JsonFactoryBuilder()
         .register(HotJsonModule)
-        .register(KuaJsonModule)
         .register(ValueObjectJsonModule)
 )
 

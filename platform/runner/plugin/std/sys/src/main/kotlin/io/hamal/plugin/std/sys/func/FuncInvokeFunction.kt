@@ -1,25 +1,26 @@
 package io.hamal.plugin.std.sys.func
 
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.CodeVersion
+import io.hamal.lib.domain.vo.CorrelationId
+import io.hamal.lib.domain.vo.FuncId
+import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.type.KuaError
-import io.hamal.lib.kua.type.KuaMap
-import io.hamal.lib.kua.type.KuaNumber
-import io.hamal.lib.kua.type.KuaString
+import io.hamal.lib.kua.tableCreate
+import io.hamal.lib.kua.type.*
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiFuncInvokeRequest
 
 class FuncInvokeFunction(
     private val sdk: ApiSdk
-) : Function1In2Out<KuaMap, KuaError, KuaMap>(
-    FunctionInput1Schema(KuaMap::class),
-    FunctionOutput2Schema(KuaError::class, KuaMap::class)
+) : Function1In2Out<KuaTable, KuaError, KuaTable>(
+    FunctionInput1Schema(KuaTable::class),
+    FunctionOutput2Schema(KuaError::class, KuaTable::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: KuaMap): Pair<KuaError?, KuaMap?> {
+    override fun invoke(ctx: FunctionContext, arg1: KuaTable): Pair<KuaError?, KuaTable?> {
         return try {
 
             val correlationId = if (arg1.type("correlation_id") == KuaString::class) {
@@ -43,12 +44,10 @@ class FuncInvokeFunction(
                 )
             )
 
-            null to KuaMap(
-                mutableMapOf(
-                    "id" to KuaString(res.id.value.value.toString(16)),
-                    "status" to KuaString(res.status.name),
-                    "exec_id" to KuaString(res.execId.value.value.toString(16))
-                )
+            null to ctx.tableCreate(
+                "id" to KuaString(res.id.value.value.toString(16)),
+                "status" to KuaString(res.status.name),
+                "exec_id" to KuaString(res.execId.value.value.toString(16))
             )
 
         } catch (t: Throwable) {

@@ -3,7 +3,6 @@
 #include "lua.h"
 #include "lauxlib.h"
 
-#include "kua_check.h"
 #include "kua_jni_error.h"
 #include "kua_builtin_decimal.h"
 

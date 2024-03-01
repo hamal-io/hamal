@@ -1,4 +1,5 @@
 #include <lua.h>
+#include <stdlib.h>
 
 #include "kua_check.h"
 #include "kua_builtin_error.h"
@@ -22,10 +23,16 @@ abs_index(lua_State *L, int idx) {
     return lua_absindex(L, idx);
 }
 
-void
+int
 set_top(lua_State *L, int idx) {
-    if (check_stack_overflow(L, idx) == CHECK_RESULT_ERROR) return;
+    if (idx > 0) {
+        if (check_stack_overflow(L, idx) == CHECK_RESULT_ERROR) return LUA_TNONE;
+    }
+    if (idx < 0) {
+        if (check_stack_underflow(L, idx * -1) == CHECK_RESULT_ERROR) return LUA_TNONE;
+    }
     lua_settop(L, idx);
+    return top(L);
 }
 
 int
@@ -39,7 +46,7 @@ push_top(lua_State *L, int idx) {
 int
 pop(lua_State *L, int total) {
     if (check_argument(total > 0, "Total must be positive (>0)") == CHECK_RESULT_ERROR) return LUA_TNONE;
-    if (check_stack_undernamespace(L, total) == CHECK_RESULT_ERROR) return LUA_TNONE;
+    if (check_stack_underflow(L, total) == CHECK_RESULT_ERROR) return LUA_TNONE;
     lua_pop(L, total);
     return top(L);
 }
@@ -119,8 +126,11 @@ char const *
 to_error(lua_State *L, int idx) {
     if (check_argument(idx != 0, "Index must not be 0") == CHECK_RESULT_ERROR) return NULL;
     if (check_index(L, idx) == CHECK_RESULT_ERROR) return NULL;
-    if (check_type_at(L, idx, STRING_TYPE) == CHECK_RESULT_ERROR) return NULL;
-    return lua_tostring(L, idx);
+    if (check_type_at(L, idx, ERROR_TYPE) == CHECK_RESULT_ERROR) return NULL;
+    error_as_string(L, idx);
+    char const *result = lua_tostring(L, -1);
+    lua_pop(L, 1);
+    return result;
 }
 
 double

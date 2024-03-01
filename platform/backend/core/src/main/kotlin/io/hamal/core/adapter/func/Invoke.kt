@@ -1,7 +1,7 @@
 package io.hamal.core.adapter.func
 
-import io.hamal.core.adapter.request.RequestEnqueuePort
 import io.hamal.core.adapter.code.CodeGetPort
+import io.hamal.core.adapter.request.RequestEnqueuePort
 import io.hamal.core.security.SecurityContext
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.RequestStatus
@@ -21,7 +21,11 @@ class FuncInvokeAdapter(
     private val generateDomainId: GenerateDomainId,
     private val requestEnqueue: RequestEnqueuePort
 ) : FuncInvokePort {
-    override fun invoke(funcId: FuncId, req: FuncInvokeRequest, invocation: Invocation): ExecInvokeRequested {
+    override fun invoke(
+        funcId: FuncId,
+        req: FuncInvokeRequest,
+        invocation: Invocation
+    ): ExecInvokeRequested {
         val func = funcGet(funcId)
 
         val version = req.version?.also {
@@ -37,7 +41,7 @@ class FuncInvokeAdapter(
             workspaceId = func.workspaceId,
             funcId = funcId,
             correlationId = req.correlationId,
-            inputs = req.inputs,
+            inputs = req.inputs ?: InvocationInputs(),
             code = ExecCode(
                 id = func.code.id,
                 version = version,

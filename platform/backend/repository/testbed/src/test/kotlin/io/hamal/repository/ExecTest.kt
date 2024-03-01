@@ -445,6 +445,29 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
         }
 
         @TestFactory
+        fun `With ids`() = runWith(ExecRepository::class) {
+            setup()
+
+            val query = ExecQuery(
+                execIds = listOf(ExecId(1), ExecId(2)),
+                limit = Limit(10)
+            )
+
+            assertThat(count(query), equalTo(Count(2)))
+            val result = list(query)
+            assertThat(result, hasSize(2))
+
+            with(result[0]) {
+                assertThat(id, equalTo(ExecId(2)))
+            }
+
+            with(result[1]) {
+                assertThat(id, equalTo(ExecId(1)))
+            }
+        }
+
+
+        @TestFactory
         fun `With workspace ids`() = runWith(ExecRepository::class) {
             setup()
 
@@ -542,28 +565,43 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
 
         private fun ExecRepository.setup() {
             createExec(
-                execId = ExecId(1), workspaceId = WorkspaceId(3), status = Completed, correlation = Correlation(
-                    id = CorrelationId("CID-1"), funcId = FuncId(234)
+                execId = ExecId(1),
+                workspaceId = WorkspaceId(3),
+                status = Completed,
+                correlation = Correlation(
+                    id = CorrelationId("CID-1"),
+                    funcId = FuncId(234)
                 ),
                 namespaceId = NamespaceId(234)
             )
 
             createExec(
-                execId = ExecId(2), workspaceId = WorkspaceId(3), status = Failed, correlation = Correlation(
-                    id = CorrelationId("CID-2"), funcId = FuncId(234)
+                execId = ExecId(2),
+                workspaceId = WorkspaceId(3),
+                status = Failed,
+                correlation = Correlation(
+                    id = CorrelationId("CID-2"),
+                    funcId = FuncId(234)
                 ),
                 namespaceId = NamespaceId(234)
             )
 
             createExec(
-                execId = ExecId(3), workspaceId = WorkspaceId(4), status = Started, correlation = Correlation(
-                    id = CorrelationId("CID-1"), funcId = FuncId(444)
+                execId = ExecId(3),
+                workspaceId = WorkspaceId(4),
+                status = Started,
+                correlation = Correlation(
+                    id = CorrelationId("CID-1"),
+                    funcId = FuncId(444)
                 ),
                 namespaceId = NamespaceId(444)
             )
 
             createExec(
-                execId = ExecId(4), workspaceId = WorkspaceId(5), status = Queued, correlation = null
+                execId = ExecId(4),
+                workspaceId = WorkspaceId(5),
+                status = Queued,
+                correlation = null
             )
 
         }

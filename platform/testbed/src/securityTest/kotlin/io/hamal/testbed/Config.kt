@@ -10,6 +10,7 @@ import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
+import io.hamal.lib.domain._enum.ExecLogLevel
 import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain._enum.TopicType
 import io.hamal.lib.domain._enum.TriggerStatus
@@ -144,6 +145,14 @@ class TestSetupConfig {
             )
         )
 
+        funcRepository.deploy(
+            FuncId(1), FuncCmdRepository.DeployCmd(
+                id = CmdId(id),
+                version = CodeVersion(1),
+                message = DeployMessage("deployed")
+            )
+        )
+
         endpointRepository.create(
             CreateCmd(
                 id = CmdId(id),
@@ -171,6 +180,17 @@ class TestSetupConfig {
                     version = CodeVersion(1)
                 ),
                 Invocation.Func
+            )
+        )
+
+        execLogRepository.append(
+            ExecLogCmdRepository.AppendCmd(
+                execId = ExecId(id),
+                execLogId = ExecLogId(id),
+                level = ExecLogLevel.Warn,
+                message = ExecLogMessage("Hamal Rocks"),
+                workspaceId = WorkspaceId(id),
+                timestamp = ExecLogTimestamp.now()
             )
         )
 
@@ -319,6 +339,9 @@ class TestSetupConfig {
 
     @Autowired
     lateinit var execRepository: ExecRepository
+
+    @Autowired
+    lateinit var execLogRepository: ExecLogRepository
 
     @Autowired
     lateinit var extensionRepository: ExtensionRepository
