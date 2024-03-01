@@ -23,7 +23,7 @@ internal class LogBrokerRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Creates a new topic`() = runWith(LogBrokerRepository::class) {
-            val result = create(CmdId(1), LogTopicToCreate(LogTopicId(1)))
+            val result = create(CreateTopicCmd(CmdId(1), LogTopicId(1)))
             assertThat(result.id, equalTo(LogTopicId(1)))
 
             assertThat(countTopics(LogTopicQuery()), equalTo(Count(1)))
@@ -173,10 +173,7 @@ internal class LogBrokerRepositoryTest : AbstractUnitTest() {
         @TestFactory
         fun `Append value to topic with long cmd id`() =
             runWith(LogBrokerRepository::class) {
-                val topic = create(
-                    cmdId = CmdId(1),
-                    topicToCreate = LogTopicToCreate(LogTopicId(2))
-                )
+                val topic = create(CreateTopicCmd(CmdId(1), LogTopicId(2)))
 
                 append(
                     CmdId(BigInteger("380896718712995851145215087")),
@@ -204,18 +201,18 @@ internal class LogBrokerRepositoryTest : AbstractUnitTest() {
 }
 
 private fun LogBrokerRepository.setupTopic() {
-    create(CmdId(1), LogTopicToCreate(LogTopicId(5432)))
+    create(CreateTopicCmd(CmdId(1), (LogTopicId(5432))))
 }
 
 private fun LogBrokerRepository.setupTopics() {
-    create(CmdId(1), LogTopicToCreate(LogTopicId(1)))
-    create(CmdId(2), LogTopicToCreate(LogTopicId(2)))
-    create(CmdId(3), LogTopicToCreate(LogTopicId(3)))
-    create(CmdId(4), LogTopicToCreate(LogTopicId(4)))
-    create(CmdId(5), LogTopicToCreate(LogTopicId(5)))
-    create(CmdId(6), LogTopicToCreate(LogTopicId(6)))
-    create(CmdId(7), LogTopicToCreate(LogTopicId(7)))
-    create(CmdId(8), LogTopicToCreate(LogTopicId(8)))
-    create(CmdId(9), LogTopicToCreate(LogTopicId(9)))
+    create(CreateTopicCmd(CmdId(1), LogTopicId(1)))
+    create(CreateTopicCmd(CmdId(2), LogTopicId(2)))
+    create(CreateTopicCmd(CmdId(3), LogTopicId(3)))
+    create(CreateTopicCmd(CmdId(4), LogTopicId(4)))
+    create(CreateTopicCmd(CmdId(5), LogTopicId(5)))
+    create(CreateTopicCmd(CmdId(6), LogTopicId(6)))
+    create(CreateTopicCmd(CmdId(7), LogTopicId(7)))
+    create(CreateTopicCmd(CmdId(8), LogTopicId(8)))
+    create(CreateTopicCmd(CmdId(9), LogTopicId(9)))
 }
 

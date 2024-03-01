@@ -47,60 +47,57 @@ local function maybe_string(tbl, key)
     return value
 end
 
-function extension()
+function extension_create()
     local smtp = require_plugin('net.smtp')
-    return function()
-        local export = { }
+    local export = { }
 
-        function export.create(_cfg)
-            local instance = {
-                cfg = {
-                    default_encoding = require_string(_cfg, 'default_encoding', 'UTF-8'),
-                    host = require_string(_cfg, 'host', nil),
-                    port = require_number(_cfg, 'port', 25),
-                    username = maybe_string(_cfg, 'username'),
-                    password = maybe_string(_cfg, 'password'),
-                    protocol = require_string(_cfg, 'protocol', 'smtp'),
-                    debug = require_boolean(_cfg, 'debug', false),
-                    enable_starttls = require_boolean(_cfg, 'enable_starttls', false),
-                    test_connection = require_boolean(_cfg, "test_connection", false),
+    function export.create(_cfg)
+        local instance = {
+            cfg = {
+                default_encoding = require_string(_cfg, 'default_encoding', 'UTF-8'),
+                host = require_string(_cfg, 'host', nil),
+                port = require_number(_cfg, 'port', 25),
+                username = maybe_string(_cfg, 'username'),
+                password = maybe_string(_cfg, 'password'),
+                protocol = require_string(_cfg, 'protocol', 'smtp'),
+                debug = require_boolean(_cfg, 'debug', false),
+                enable_starttls = require_boolean(_cfg, 'enable_starttls', false),
+                test_connection = require_boolean(_cfg, "test_connection", false),
 
-                    connection_timeout = require_number(_cfg, "connection_timeout", 5000),
-                    timeout = require_number(_cfg, "timeout", 5000),
-                    write_timeout = require_number(_cfg, "write_timeout", 3000)
-                }
+                connection_timeout = require_number(_cfg, "connection_timeout", 5000),
+                timeout = require_number(_cfg, "timeout", 5000),
+                write_timeout = require_number(_cfg, "write_timeout", 3000)
             }
+        }
 
-            function instance.send(_mail)
-                local mail = _mail or {}
+        function instance.send(_mail)
+            local mail = _mail or {}
 
-                smtp.send({
-                    default_encoding = instance.cfg.default_encoding,
-                    host = instance.cfg.host,
-                    port = instance.cfg.port,
-                    username = instance.cfg.username,
-                    password = instance.cfg.password,
-                    protocol = instance.cfg.protocol,
-                    debug = instance.cfg.debug,
-                    enable_starttls = instance.cfg.enable_starttls,
-                    test_connection = instance.cfg.test_connection,
+            smtp.send({
+                default_encoding = instance.cfg.default_encoding,
+                host = instance.cfg.host,
+                port = instance.cfg.port,
+                username = instance.cfg.username,
+                password = instance.cfg.password,
+                protocol = instance.cfg.protocol,
+                debug = instance.cfg.debug,
+                enable_starttls = instance.cfg.enable_starttls,
+                test_connection = instance.cfg.test_connection,
 
-                    from = require_string(mail, 'from', nil),
-                    to = require_string(mail, 'to', nil),
-                    subject = require_string(mail, 'subject', nil),
-                    content = require_string(mail, 'content', nil),
-                    content_type = require_string(mail, 'content_type', 'text/plain'),
-                    priority = require_number(mail, 'priority', 1),
+                from = require_string(mail, 'from', nil),
+                to = require_string(mail, 'to', nil),
+                subject = require_string(mail, 'subject', nil),
+                content = require_string(mail, 'content', nil),
+                content_type = require_string(mail, 'content_type', 'text/plain'),
+                priority = require_number(mail, 'priority', 1),
 
-                    connection_timeout = instance.cfg.connection_timeout,
-                    timeout = instance.cfg.timeout,
-                    write_timeout = instance.cfg.write_timeout
-                })
-
-            end
-
-            return instance
+                connection_timeout = instance.cfg.connection_timeout,
+                timeout = instance.cfg.timeout,
+                write_timeout = instance.cfg.write_timeout
+            })
         end
-        return export
+
+        return instance
     end
+    return export
 end

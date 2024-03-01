@@ -47,39 +47,36 @@ local function maybe_string(tbl, key)
     return value
 end
 
-function plugin()
-    local internal = _internal
-    return function()
-        local export = { }
+function plugin_create(internal)
+    local export = { }
 
-        function export.send(_mail)
-            local mail = _mail or {}
+    function export.send(_mail)
+        local mail = _mail or {}
 
-            internal.send({
-                default_encoding = require_string(mail, 'default_encoding'),
-                host = require_string(mail, 'host'),
-                port = require_number(mail, 'port'),
-                username = maybe_string(mail, 'username'),
-                password = maybe_string(mail, 'password'),
-                protocol = require_string(mail, 'protocol'),
-                debug = require_boolean(mail, 'debug'),
-                enable_starttls = require_boolean(mail, 'enable_starttls'),
-                test_connection = require_boolean(mail, "test_connection"),
+        internal.send({
+            default_encoding = require_string(mail, 'default_encoding'),
+            host = require_string(mail, 'host'),
+            port = require_number(mail, 'port'),
+            username = maybe_string(mail, 'username'),
+            password = maybe_string(mail, 'password'),
+            protocol = require_string(mail, 'protocol'),
+            debug = require_boolean(mail, 'debug'),
+            enable_starttls = require_boolean(mail, 'enable_starttls'),
+            test_connection = require_boolean(mail, "test_connection"),
 
-                from = require_string(mail, 'from'),
-                to = require_string(mail, 'to'),
-                subject = require_string(mail, 'subject'),
-                content = require_string(mail, 'content'),
-                content_type = require_string(mail, 'content_type'),
-                priority = require_number(mail, 'priority'),
+            from = require_string(mail, 'from'),
+            to = require_string(mail, 'to'),
+            subject = require_string(mail, 'subject'),
+            content = require_string(mail, 'content'),
+            content_type = require_string(mail, 'content_type'),
+            priority = require_number(mail, 'priority'),
 
-                connection_timeout = require_number(mail, "connection_timeout"),
-                timeout = require_number(mail, "timeout"),
-                write_timeout = require_number(mail, "write_timeout")
-            })
+            connection_timeout = require_number(mail, "connection_timeout"),
+            timeout = require_number(mail, "timeout"),
+            write_timeout = require_number(mail, "write_timeout")
+        })
 
-        end
-
-        return export
     end
+
+    return export
 end

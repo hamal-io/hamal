@@ -9,10 +9,11 @@ import io.hamal.repository.api.CmdRepository
 
 interface LogBrokerRepository : CmdRepository {
 
-    fun create(cmdId: CmdId, topicToCreate: LogTopicToCreate): LogTopic
+    fun create(cmd: CreateTopicCmd): LogTopic
 
-    data class LogTopicToCreate(
-        val id: LogTopicId
+    data class CreateTopicCmd(
+        val id: CmdId,
+        val logTopicId: LogTopicId
     )
 
     fun append(cmdId: CmdId, topicId: LogTopicId, bytes: ByteArray)

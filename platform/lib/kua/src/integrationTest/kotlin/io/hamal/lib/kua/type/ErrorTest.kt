@@ -2,11 +2,10 @@ package io.hamal.lib.kua.type
 
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
-import io.hamal.lib.kua.NopSandboxContext
 import io.hamal.lib.kua.Sandbox
+import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.function.*
-import io.hamal.lib.kua.table.TableProxyMap
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Disabled
@@ -21,29 +20,29 @@ internal class KuaErrorTest {
         sandbox.register(
             RunnerPlugin(
                 name = "test",
-                factoryCode = """
-                    function plugin()
-                        local internal = _internal
-                        return function()
-                            local export = { 
-                                error =  internal.error,
-                                message_captor =  internal.message_captor,
-                                assert_metatable =  internal.assert_metatable,
-                            }
-                            return export
-                        end
+                factoryCode = KuaCode(
+                    """
+                    function plugin_create(internal)
+                        local export = { 
+                            error =  internal.error,
+                            message_captor =  internal.message_captor,
+                            assert_metatable =  internal.assert_metatable,
+                        }
+                        return export
                     end
-                """.trimIndent(),
+                """.trimIndent()
+                ),
                 internals = mapOf(
-                    "error" to FunctionReturnsError(),
-                    "message_captor" to messageCaptor,
-                    "assert_metatable" to AssertMetatable
+                    KuaString("error") to FunctionReturnsError(),
+                    KuaString("message_captor") to messageCaptor,
+                    KuaString("assert_metatable") to AssertMetatable
                 )
             )
         )
 
-        sandbox.load(
-            """
+        sandbox.codeLoad(
+            KuaCode(
+                """
             test = require_plugin('test')
             local err = test.error()
             test.message_captor(err.message)
@@ -51,6 +50,7 @@ internal class KuaErrorTest {
             local mtbl = getmetatable(err)
             test.assert_metatable(mtbl)
         """.trimIndent()
+            )
         )
 
         assertThat(messageCaptor.result, equalTo(KuaAny(KuaString("Sometimes an error can be a good thing"))))
@@ -64,42 +64,43 @@ internal class KuaErrorTest {
         sandbox.register(
             RunnerPlugin(
                 name = "test",
-                factoryCode = """
-                    function plugin()
-                        local internal = _internal
-                        return function()
-                            local export = { 
-                                call =  internal.call,
-                                captor =  internal.captor,
-                                assert_metatable =  internal.assert_metatable,
-                            }
-                            return export
-                        end
+                factoryCode = KuaCode(
+                    """
+                    function plugin_create(internal)
+                        local export = { 
+                            call =  internal.call,
+                            captor =  internal.captor,
+                            assert_metatable =  internal.assert_metatable,
+                        }
+                        return export
                     end
-                """.trimIndent(),
+                """.trimIndent()
+                ),
                 internals = mapOf(
-                    "call" to FunctionNeverInvoked(),
-                    "captor" to errorCaptor,
-                    "assert_metatable" to AssertMetatable
+                    KuaString("call") to FunctionNeverInvoked(),
+                    KuaString("captor") to errorCaptor,
+                    KuaString("assert_metatable") to AssertMetatable
                 )
             )
         )
 
-        sandbox.load(
-            """
+        sandbox.codeLoad(
+            KuaCode(
+                """
             local err = test.call()
             test.captor(err)
         """.trimIndent()
+            )
         )
 
         assertThat(errorCaptor.result, equalTo(KuaAny(KuaError("Sometimes an error can be a good thing"))))
     }
 
 
-    private object AssertMetatable : Function1In0Out<TableProxyMap>(
-        FunctionInput1Schema(TableProxyMap::class)
+    private object AssertMetatable : Function1In0Out<KuaTable>(
+        FunctionInput1Schema(KuaTable::class)
     ) {
-        override fun invoke(ctx: FunctionContext, arg1: TableProxyMap) {
+        override fun invoke(ctx: FunctionContext, arg1: KuaTable) {
             assertThat(arg1.getInt("__type_id"), equalTo(10))
             assertThat(arg1.getString("__typename"), equalTo("error"))
         }
@@ -134,6 +135,6 @@ internal class KuaErrorTest {
 
     private val sandbox = run {
         NativeLoader.load(Resources)
-        Sandbox(NopSandboxContext())
+        Sandbox(SandboxContextNop)
     }
 }

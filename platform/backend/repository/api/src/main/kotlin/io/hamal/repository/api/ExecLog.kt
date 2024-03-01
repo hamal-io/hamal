@@ -1,7 +1,9 @@
 package io.hamal.repository.api
 
 import io.hamal.lib.common.domain.Count
+import io.hamal.lib.common.domain.DomainObject
 import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.domain.UpdatedAt
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.ExecLogLevel
 import io.hamal.lib.domain.vo.*
@@ -34,10 +36,12 @@ interface ExecLogQueryRepository {
 }
 
 data class ExecLog(
-    val id: ExecLogId,
+    override val id: ExecLogId,
     val execId: ExecId,
     override val workspaceId: WorkspaceId,
     val level: ExecLogLevel,
     val message: ExecLogMessage,
     val timestamp: ExecLogTimestamp,
-) : HasWorkspaceId
+) : DomainObject<ExecLogId>, HasWorkspaceId {
+    override val updatedAt: UpdatedAt = UpdatedAt(timestamp.value)
+}

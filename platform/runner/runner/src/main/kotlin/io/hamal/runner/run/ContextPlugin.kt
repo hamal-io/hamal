@@ -7,8 +7,11 @@ import io.hamal.lib.domain.vo.RunnerEnv
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
-import io.hamal.lib.kua.table.TableProxyArray
-import io.hamal.lib.kua.type.*
+import io.hamal.lib.kua.tableCreate
+import io.hamal.lib.kua.type.KuaNil
+import io.hamal.lib.kua.type.KuaString
+import io.hamal.lib.kua.type.KuaTable
+import io.hamal.lib.kua.type.toKua
 import io.hamal.runner.run.function.CompleteRunFunction
 import io.hamal.runner.run.function.EmitFunction
 import io.hamal.runner.run.function.FailRunFunction
@@ -27,22 +30,22 @@ class RunnerContextFactory(
         }
 
         val hook = if (invocation is Invocation.Hook) {
-            KuaMap(
-                "method" to KuaString(invocation.method.toString()),
-                "headers" to invocation.headers.value.toKua(),
-                "parameters" to invocation.parameters.value.toKua(),
-                "content" to invocation.content.value.toKua()
+            sandbox.tableCreate(
+                KuaString("method") to KuaString(invocation.method.toString()),
+                KuaString("headers") to invocation.headers.value.toKua(sandbox),
+                KuaString("parameters") to invocation.parameters.value.toKua(sandbox),
+                KuaString("content") to invocation.content.value.toKua(sandbox)
             )
         } else {
             KuaNil
         }
 
         val endpoint = if (invocation is Invocation.Endpoint) {
-            KuaMap(
-                "method" to KuaString(invocation.method.toString()),
-                "headers" to invocation.headers.value.toKua(),
-                "parameters" to invocation.parameters.value.toKua(),
-                "content" to invocation.content.value.toKua()
+            sandbox.tableCreate(
+                KuaString("method") to KuaString(invocation.method.toString()),
+                KuaString("headers") to invocation.headers.value.toKua(sandbox),
+                KuaString("parameters") to invocation.parameters.value.toKua(sandbox),
+                KuaString("content") to invocation.content.value.toKua(sandbox)
             )
         } else {
             KuaNil
@@ -51,37 +54,31 @@ class RunnerContextFactory(
         return RunnerPlugin(
             name = "context",
             internals = mapOf(
-                "events" to events,
-                "hook" to hook,
-                "endpoint" to endpoint,
-                "exec_id" to KuaString(executionCtx[ExecId::class].value.value.toString(16)),
-                "emit" to EmitFunction(executionCtx),
-                "fail" to FailRunFunction,
-                "complete" to CompleteRunFunction,
-                "state" to executionCtx.state.value.toKua(),
-                "env" to executionCtx[RunnerEnv::class].value.toKua()
+                KuaString("events") to events,
+                KuaString("hook") to hook,
+                KuaString("endpoint") to endpoint,
+                KuaString("exec_id") to KuaString(executionCtx[ExecId::class].value.value.toString(16)),
+                KuaString("emit") to EmitFunction(executionCtx),
+                KuaString("fail") to FailRunFunction,
+                KuaString("complete") to CompleteRunFunction,
+                KuaString("state") to executionCtx.state.value.toKua(sandbox),
+                KuaString("env") to executionCtx[RunnerEnv::class].value.toKua(sandbox)
             )
         )
     }
 }
 
-private fun Sandbox.invocationEvents(events: List<Event>): TableProxyArray =
-    tableCreateArray(events.size).let { result ->
-        events.map {
-            toProxyMap(
-                KuaMap(
-                    mutableMapOf(
-                        "id" to KuaString(it.id.value.value.toString(16)),
-                        "topic" to KuaMap(
-                            mutableMapOf(
-                                "id" to KuaString(it.topic.id.value.value.toString(16)),
-                                "name" to KuaString(it.topic.name.value)
-                            )
-                        ),
-                        "payload" to it.payload.value.toKua()
-                    )
-                )
+private fun Sandbox.invocationEvents(events: List<Event>): KuaTable =
+    tableCreate(
+        events.map { evt ->
+            tableCreate(
+                KuaString("id") to KuaString(evt.id.value.value.toString(16)),
+                KuaString("topic") to tableCreate(
+                    KuaString("id") to KuaString(evt.topic.id.value.value.toString(16)),
+                    KuaString("name") to KuaString(evt.topic.name.value)
+                ),
+                KuaString("payload") to evt.payload.value.toKua(this)
             )
-        }.forEach(result::append)
-        result
-    }
+        }
+    )
+

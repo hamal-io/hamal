@@ -17,21 +17,23 @@ internal class ExtensionListController(private val extensionList: ExtensionListP
     fun listExtensions(
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: ExtensionId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit,
+        @RequestParam(required = false, name = "ids", defaultValue = "") ids: List<ExtensionId>,
         @RequestParam(required = false, name = "workspace_ids", defaultValue = "") workspaceIds: List<WorkspaceId>
     ): ResponseEntity<ApiExtensionList> {
         return extensionList(
             ExtensionQuery(
                 afterId = afterId,
                 limit = limit,
+                extensionIds = ids,
                 workspaceIds = workspaceIds
             )
-        ).let {
+        ).let { extensions ->
             ResponseEntity.ok(
                 ApiExtensionList(
-                    it.map {
+                    extensions.map { extension ->
                         ApiExtensionList.Extension(
-                            id = it.id,
-                            name = it.name
+                            id = extension.id,
+                            name = extension.name
                         )
                     })
             )

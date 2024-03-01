@@ -3,6 +3,7 @@ package io.hamal.plugin.net.smtp
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
+import io.hamal.lib.kua.type.KuaString
 
 class PluginSmtpFactory(
     private val sender: Sender = SenderDefaultImpl
@@ -11,7 +12,7 @@ class PluginSmtpFactory(
         return RunnerPlugin(
             name = "net.smtp",
             internals = mapOf(
-                "send" to SmtpSendFunction(sender)
+                KuaString("send") to SmtpSendFunction(sender)
             )
         )
     }

@@ -3,6 +3,7 @@ package io.hamal.plugin.std.debug
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
+import io.hamal.lib.kua.type.KuaString
 
 
 class PluginDebugFactory : RunnerPluginFactory {
@@ -10,7 +11,7 @@ class PluginDebugFactory : RunnerPluginFactory {
         return RunnerPlugin(
             name = "debug",
             internals = mapOf(
-                "sleep" to SleepFunction,
+                KuaString("sleep") to SleepFunction,
             )
         )
     }

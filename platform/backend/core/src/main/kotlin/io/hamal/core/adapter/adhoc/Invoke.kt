@@ -29,7 +29,7 @@ class AdhocInvokeAdapter(
             execId = generateDomainId(::ExecId),
             namespaceId = namespace.id,
             workspaceId = namespace.workspaceId,
-            inputs = req.inputs,
+            inputs = req.inputs ?: InvocationInputs(),
             code = ExecCode(value = req.code),
             funcId = null,
             correlationId = null,

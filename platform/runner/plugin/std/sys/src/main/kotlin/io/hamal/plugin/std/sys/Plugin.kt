@@ -3,6 +3,7 @@ package io.hamal.plugin.std.sys
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
+import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.sdk.ApiSdkImpl
 import io.hamal.plugin.std.sys.adhoc.AdhocFunction
 import io.hamal.plugin.std.sys.blueprint.BlueprintCreateFunction
@@ -25,7 +26,7 @@ import io.hamal.plugin.std.sys.hook.HookListFunction
 import io.hamal.plugin.std.sys.namespace.NamespaceAppendFunction
 import io.hamal.plugin.std.sys.namespace.NamespaceGetFunction
 import io.hamal.plugin.std.sys.namespace.NamespaceListFunction
-import io.hamal.plugin.std.sys.req.ReqGetFunction
+import io.hamal.plugin.std.sys.request.RequestGetFunction
 import io.hamal.plugin.std.sys.topic.*
 import io.hamal.plugin.std.sys.trigger.*
 
@@ -37,60 +38,60 @@ class PluginSysFactory(
         return RunnerPlugin(
             name = "sys",
             internals = mapOf(
-                "await" to AwaitFunction(sdk.template),
-                "await_completed" to AwaitCompletedFunction(sdk.template),
-                "await_failed" to AwaitFailedFunction(sdk.template),
+                KuaString("await") to AwaitFunction(sdk.template),
+                KuaString("await_completed") to AwaitCompletedFunction(sdk.template),
+                KuaString("await_failed") to AwaitFailedFunction(sdk.template),
 
-                "adhoc" to AdhocFunction(sdk),
+                KuaString("adhoc") to AdhocFunction(sdk),
 
-                "blueprint_create" to BlueprintCreateFunction(sdk),
-                "blueprint_get" to BlueprintGetFunction(sdk),
-                "blueprint_update" to BlueprintUpdateFunction(sdk),
+                KuaString("blueprint_create") to BlueprintCreateFunction(sdk),
+                KuaString("blueprint_get") to BlueprintGetFunction(sdk),
+                KuaString("blueprint_update") to BlueprintUpdateFunction(sdk),
 
-                "code_get" to CodeGetFunction(sdk),
+                KuaString("code_get") to CodeGetFunction(sdk),
 
-                "req_get" to ReqGetFunction(sdk.template),
+                KuaString("req_get") to RequestGetFunction(sdk.template),
 
-                "endpoint_create" to EndpointCreateFunction(sdk),
-                "endpoint_get" to EndpointGetFunction(sdk),
-                "endpoint_list" to EndpointListFunction(sdk),
+                KuaString("endpoint_create") to EndpointCreateFunction(sdk),
+                KuaString("endpoint_get") to EndpointGetFunction(sdk),
+                KuaString("endpoint_list") to EndpointListFunction(sdk),
 
-                "exec_list" to ExecListFunction(sdk),
-                "exec_get" to ExecGetFunction(sdk),
+                KuaString("exec_list") to ExecListFunction(sdk),
+                KuaString("exec_get") to ExecGetFunction(sdk),
 
-                "extension_create" to ExtensionCreateFunction(sdk),
-                "extension_get" to ExtensionGetFunction(sdk),
-                "extension_list" to ExtensionListFunction(sdk),
-                "extension_update" to ExtensionUpdateFunction(sdk),
+                KuaString("extension_create") to ExtensionCreateFunction(sdk),
+                KuaString("extension_get") to ExtensionGetFunction(sdk),
+                KuaString("extension_list") to ExtensionListFunction(sdk),
+                KuaString("extension_update") to ExtensionUpdateFunction(sdk),
 
-                "func_create" to FuncCreateFunction(sdk),
-                "func_deploy" to FuncDeployFunction(sdk),
-                "func_deployment_list" to FuncDeploymentsFunction(sdk),
-                "func_get" to FuncGetFunction(sdk),
-                "func_list" to FuncListFunction(sdk),
-                "func_invoke" to FuncInvokeFunction(sdk),
-                "func_update" to FuncUpdateFunction(sdk),
+                KuaString("func_create") to FuncCreateFunction(sdk),
+                KuaString("func_deploy") to FuncDeployFunction(sdk),
+                KuaString("func_deployment_list") to FuncDeploymentsFunction(sdk),
+                KuaString("func_get") to FuncGetFunction(sdk),
+                KuaString("func_list") to FuncListFunction(sdk),
+                KuaString("func_invoke") to FuncInvokeFunction(sdk),
+                KuaString("func_update") to FuncUpdateFunction(sdk),
 
-                "hook_create" to HookCreateFunction(sdk),
-                "hook_get" to HookGetFunction(sdk),
-                "hook_list" to HookListFunction(sdk),
+                KuaString("hook_create") to HookCreateFunction(sdk),
+                KuaString("hook_get") to HookGetFunction(sdk),
+                KuaString("hook_list") to HookListFunction(sdk),
 
-                "namespace_append" to NamespaceAppendFunction(sdk),
-                "namespace_get" to NamespaceGetFunction(sdk),
-                "namespace_list" to NamespaceListFunction(sdk),
+                KuaString("namespace_append") to NamespaceAppendFunction(sdk),
+                KuaString("namespace_get") to NamespaceGetFunction(sdk),
+                KuaString("namespace_list") to NamespaceListFunction(sdk),
 
-                "topic_create" to TopicCreateFunction(sdk),
-                "topic_resolve" to TopicResolveFunction(sdk),
-                "topic_list" to TopicListFunction(sdk),
-                "topic_get" to TopicGetFunction(sdk),
-                "topic_entry_append" to TopicEntryAppendFunction(sdk),
-                "topic_entry_list" to TopicEntryListFunction(sdk),
+                KuaString("topic_create") to TopicCreateFunction(sdk),
+                KuaString("topic_resolve") to TopicResolveFunction(sdk),
+                KuaString("topic_list") to TopicListFunction(sdk),
+                KuaString("topic_get") to TopicGetFunction(sdk),
+                KuaString("topic_entry_append") to TopicEntryAppendFunction(sdk),
+                KuaString("topic_entry_list") to TopicEntryListFunction(sdk),
 
-                "trigger_create" to TriggerCreateFunction(sdk),
-                "trigger_get" to TriggerGetFunction(sdk),
-                "trigger_list" to TriggerListFunction(sdk),
-                "trigger_activate" to TriggerActivateFunction(sdk),
-                "trigger_deactivate" to TriggerDeactivateFunction(sdk),
+                KuaString("trigger_create") to TriggerCreateFunction(sdk),
+                KuaString("trigger_get") to TriggerGetFunction(sdk),
+                KuaString("trigger_list") to TriggerListFunction(sdk),
+                KuaString("trigger_activate") to TriggerActivateFunction(sdk),
+                KuaString("trigger_deactivate") to TriggerDeactivateFunction(sdk),
             )
         )
     }

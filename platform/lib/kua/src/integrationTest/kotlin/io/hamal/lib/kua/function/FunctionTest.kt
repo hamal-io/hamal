@@ -3,9 +3,10 @@ package io.hamal.lib.kua.function
 import io.hamal.lib.kua.ExtensionError
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
-import io.hamal.lib.kua.NopSandboxContext
 import io.hamal.lib.kua.Sandbox
+import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
+import io.hamal.lib.kua.type.KuaCode
 import io.hamal.lib.kua.type.KuaNumber
 import io.hamal.lib.kua.type.KuaString
 import org.hamcrest.CoreMatchers.equalTo
@@ -34,32 +35,33 @@ internal class FunctionTest {
         sandbox.register(
             RunnerPlugin(
                 name = "test",
-                factoryCode = """
-                    function plugin()
-                        local internal = _internal
-                        return function()
-                            local export = { 
-                                throw_exception =  internal.throw_exception,
-                                never_called =  internal.never_called
-                            }
-                            return export
-                        end
+                factoryCode = KuaCode(
+                    """
+                    function plugin_create(internal)
+                        local export = { 
+                            throw_exception =  internal.throw_exception,
+                            never_called =  internal.never_called
+                        }
+                        return export
                     end
-                """.trimIndent(),
+                """.trimIndent()
+                ),
                 internals = mapOf(
-                    "throw_exception" to throwException,
-                    "never_called" to neverCalled,
+                    KuaString("throw_exception") to throwException,
+                    KuaString("never_called") to neverCalled,
                 )
             )
         )
 
         val exception = assertThrows<ExtensionError> {
-            sandbox.load(
-                """
+            sandbox.codeLoad(
+                KuaCode(
+                    """
                 test = require_plugin('test')
                 test.throw_exception()
                 test.never_called()
-            """
+                """
+                )
             )
         }
 
@@ -85,32 +87,33 @@ internal class FunctionTest {
         sandbox.register(
             RunnerPlugin(
                 name = "test",
-                factoryCode = """
-                    function plugin()
-                        local internal = _internal
-                        return function()
-                            local export = { 
-                                throw_error =  internal.throw_error,
-                                throw_error =  internal.throw_error
-                            }
-                            return export
-                        end
+                factoryCode = KuaCode(
+                    """
+                    function plugin_create(internal)
+                        local export = { 
+                            throw_error =  internal.throw_error,
+                            throw_error =  internal.throw_error
+                        }
+                        return export
                     end
-                """.trimIndent(),
+                """.trimIndent()
+                ),
                 internals = mapOf(
-                    "throw_error" to throwError,
-                    "never_called" to neverCalled,
+                    KuaString("throw_error") to throwError,
+                    KuaString("never_called") to neverCalled,
                 )
             )
         )
 
         val error = assertThrows<Error> {
-            sandbox.load(
-                """
+            sandbox.codeLoad(
+                KuaCode(
+                    """
                 test = require_plugin('test')
                 test.throw_error()
                 test.never_called()
-            """
+                """
+                )
             )
         }
         assertThat(error.cause, instanceOf(Error::class.java))
@@ -129,30 +132,31 @@ internal class FunctionTest {
         sandbox.register(
             RunnerPlugin(
                 name = "test",
-                factoryCode = """
-                    function plugin()
-                        local internal = _internal
-                        return function()
-                            local export = { 
-                                emit =  internal.emit,
-                                capture =  internal.capture
-                            }
-                            return export
-                        end
+                factoryCode = KuaCode(
+                    """
+                    function plugin_create(internal)
+                        local export = { 
+                            emit =  internal.emit,
+                            capture =  internal.capture
+                        }
+                        return export
                     end
-                """.trimIndent(),
+                """.trimIndent()
+                ),
                 internals = mapOf(
-                    "emit" to emitter,
-                    "capture" to captor
+                    KuaString("emit") to emitter,
+                    KuaString("capture") to captor
                 )
             )
         )
 
-        sandbox.load(
-            """
+        sandbox.codeLoad(
+            KuaCode(
+                """
             test = require_plugin('test')
             test.capture(test.emit())
         """.trimIndent()
+            )
         )
         assertThat(captor.result, equalTo("Hamal Rocks"))
     }
@@ -172,30 +176,31 @@ internal class FunctionTest {
         sandbox.register(
             RunnerPlugin(
                 name = "test",
-                factoryCode = """
-                    function plugin()
-                        local internal = _internal
-                        return function()
-                            local export = { 
-                                transform =  internal.transform,
-                                capture =  internal.capture
-                            }
-                            return export
-                        end
+                factoryCode = KuaCode(
+                    """
+                    function plugin_create(internal)
+                        local export = { 
+                            transform =  internal.transform,
+                            capture =  internal.capture
+                        }
+                        return export
                     end
-                """.trimIndent(),
+                """.trimIndent()
+                ),
                 internals = mapOf(
-                    "transform" to transform,
-                    "capture" to captor
+                    KuaString("transform") to transform,
+                    KuaString("capture") to captor
                 )
             )
         )
 
-        sandbox.load(
-            """
+        sandbox.codeLoad(
+            KuaCode(
+                """
             test = require_plugin('test')
             test.capture(test.transform('some message'))
         """
+            )
         )
         assertThat(captor.result, equalTo("SOME MESSAGE"))
     }
@@ -215,31 +220,32 @@ internal class FunctionTest {
         sandbox.register(
             RunnerPlugin(
                 name = "test",
-                factoryCode = """
-                    function plugin()
-                        local internal = _internal
-                        return function()
-                            local export = { 
-                                transform =  internal.transform,
-                                capture =  internal.capture
-                            }
-                            return export
-                        end
+                factoryCode = KuaCode(
+                    """
+                    function plugin_create(internal)
+                        local export = { 
+                            transform =  internal.transform,
+                            capture =  internal.capture
+                        }
+                        return export
                     end
-                """.trimIndent(),
+                """.trimIndent()
+                ),
                 internals = mapOf(
-                    "transform" to transform,
-                    "capture" to captor
+                    KuaString("transform") to transform,
+                    KuaString("capture") to captor
                 )
             )
         )
 
-        sandbox.load(
-            """
+        sandbox.codeLoad(
+            KuaCode(
+                """
             test = require_plugin('test')
             local x,y = test.transform('hamal')
             test.capture(x,y)
         """
+            )
         )
         assertThat(captor.result, equalTo("HAMAL=5.0"))
     }
@@ -263,30 +269,31 @@ internal class FunctionTest {
         sandbox.register(
             RunnerPlugin(
                 name = "test",
-                factoryCode = """
-                    function plugin()
-                        local internal = _internal
-                        return function()
-                            local export = { 
-                                transform =  internal.transform,
-                                capture =  internal.capture
-                            }
-                            return export
-                        end
+                factoryCode = KuaCode(
+                    """
+                    function plugin_create(internal)
+                        local export = { 
+                            transform =  internal.transform,
+                            capture =  internal.capture
+                        }
+                        return export
                     end
-                """.trimIndent(),
+                """.trimIndent()
+                ),
                 internals = mapOf(
-                    "transform" to transform,
-                    "capture" to captor
+                    KuaString("transform") to transform,
+                    KuaString("capture") to captor
                 )
             )
         )
 
-        sandbox.load(
-            """
+        sandbox.codeLoad(
+            KuaCode(
+                """
             test = require_plugin('test')
             test.capture(test.transform('lazy', 42))
         """
+            )
         )
         assertThat(captor.result, equalTo("yzal=-42.0"))
     }
@@ -304,30 +311,31 @@ internal class FunctionTest {
         sandbox.register(
             RunnerPlugin(
                 name = "test",
-                factoryCode = """
-                    function plugin()
-                        local internal = _internal
-                        return function()
-                            local export = { 
-                                emit =  internal.emit,
-                                capture =  internal.capture
-                            }
-                            return export
-                        end
+                factoryCode = KuaCode(
+                    """
+                    function plugin_create(internal)
+                        local export = { 
+                            emit =  internal.emit,
+                            capture =  internal.capture
+                        }
+                        return export
                     end
-                """.trimIndent(),
+                """.trimIndent()
+                ),
                 internals = mapOf(
-                    "emit" to emitter,
-                    "capture" to captor
+                    KuaString("emit") to emitter,
+                    KuaString("capture") to captor
                 )
             )
         )
 
-        sandbox.load(
-            """
+        sandbox.codeLoad(
+            KuaCode(
+                """
             test = require_plugin('test')
             test.capture(test.emit())
         """
+            )
         )
         assertThat(captor.result, equalTo("answer=42.0"))
     }
@@ -352,6 +360,6 @@ internal class FunctionTest {
 
     private val sandbox = run {
         NativeLoader.load(Resources)
-        Sandbox(NopSandboxContext())
+        Sandbox(SandboxContextNop)
     }
 }

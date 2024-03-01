@@ -28,7 +28,7 @@ class PluginLogFactory(
         return RunnerPlugin(
             name = "log",
             internals = mapOf(
-                "log" to LogFunction(execLogService),
+                KuaString("log") to LogFunction(execLogService),
             )
         )
     }

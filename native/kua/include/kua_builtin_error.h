@@ -20,4 +20,7 @@ builtin_error_create(lua_State *L, char const *message);
 void
 builtin_error_register(lua_State *L);
 
+int
+error_as_string(lua_State *L, int idx);
+
 #endif //KUA_ERROR_H

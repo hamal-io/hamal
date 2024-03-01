@@ -1,12 +1,12 @@
 package io.hamal.runner.run
 
+import io.hamal.lib.common.hot.HotNumber
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.logger
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.AssertionError
 import io.hamal.lib.kua.ExitError
 import io.hamal.lib.kua.ExtensionError
-import io.hamal.lib.kua.table.TableProxyArray
-import io.hamal.lib.kua.table.TableProxyMap
 import io.hamal.lib.kua.type.*
 import io.hamal.runner.config.EnvFactory
 import io.hamal.runner.config.SandboxFactory
@@ -48,50 +48,54 @@ class CodeRunnerImpl(
                     try {
                         val contextExtension = RunnerContextFactory(runnerContext).create(sandbox)
 
-                        val internalTable = sandbox.state.tableCreateMap(contextExtension.internals.size)
+                        val internalTable = sandbox.tableCreate(0, contextExtension.internals.size)
                         contextExtension.internals.forEach { entry ->
                             when (val value = entry.value) {
                                 is KuaNil -> {}
                                 is KuaString -> internalTable[entry.key] = value
                                 is KuaNumber -> internalTable[entry.key] = value
                                 is KuaFunction<*, *, *, *> -> internalTable[entry.key] = value
-                                is TableProxyArray -> internalTable[entry.key] = value
-                                is TableProxyMap -> internalTable[entry.key] = value
-                                is KuaMap -> internalTable[entry.key] = sandbox.toProxyMap(value)
+                                is KuaTable -> internalTable[entry.key] = value
+                                is KuaTable -> internalTable[entry.key] = value
+//                                is KuaTable -> internalTable[entry.key] = sandbox.toKuaTableMap(value)
+//                                is KuaTable -> internalTable[entry.key] = sandbox.toTableArray(value)
                                 else -> TODO()
                             }
                         }
+                        sandbox.globalSet(KuaString("_internal"), internalTable)
+                        sandbox.codeLoad(contextExtension.factoryCode)
+//                        sandbox.codeLoad(KuaCode("_instance = plugin_create(_internal)"))
 
-                        sandbox.setGlobal("_internal", internalTable)
-                        sandbox.state.load(contextExtension.factoryCode)
+//                        sandbox.globalSet(KuaString("_internal"), internalTable)
+//                        sandbox.codeLoad(contextExtension.factoryCode)
+//
+                        sandbox.codeLoad(KuaCode("${contextExtension.name} = plugin_create(_internal)"))
+                        sandbox.globalUnset(KuaString("_internal"))
 
-                        sandbox.state.load("${contextExtension.name} = plugin()()")
-                        sandbox.unsetGlobal("_internal")
+                        sandbox.codeLoad(KuaCode(unitOfWork.code.value))
 
-                        sandbox.load(KuaCode(unitOfWork.code.value))
-
-                        val ctx = sandbox.getGlobalTableMap("context")
-                        val stateToSubmit = sandbox.toKuaMap(ctx.getTableMap("state")).toHotObject()
+                        val ctx = sandbox.globalGetTable(KuaString("context"))
+                        val stateToSubmit = ctx.getTableMap("state").toHotObject()
 
                         connector.complete(execId, ExecResult(), ExecState(stateToSubmit), runnerContext.eventsToSubmit)
                         log.debug("Completed exec: $execId")
                     } catch (e: ExtensionError) {
                         val cause = e.cause
                         if (cause is ExitError) {
-                            if (cause.status == KuaNumber(0.0)) {
+                            if (cause.status == HotNumber(0.0)) {
 
-                                val ctx = sandbox.getGlobalTableMap("context")
-                                val stateToSubmit = sandbox.toKuaMap(ctx.getTableMap("state")).toHotObject()
+                                val ctx = sandbox.globalGetTable(KuaString("context"))
+                                val stateToSubmit = ctx.getTableMap("state").toHotObject()
 
                                 connector.complete(
                                     execId,
-                                    ExecResult(cause.result.toHotObject()),
+                                    ExecResult(cause.result),
                                     ExecState(stateToSubmit),
                                     runnerContext.eventsToSubmit
                                 )
                                 log.debug("Completed exec: $execId")
                             } else {
-                                connector.fail(execId, ExecResult(cause.result.toHotObject()))
+                                connector.fail(execId, ExecResult(cause.result))
                                 log.debug("Failed exec: $execId")
                             }
 
@@ -99,10 +103,7 @@ class CodeRunnerImpl(
                             e.printStackTrace()
                             connector.fail(
                                 execId,
-                                ExecResult(
-                                    KuaMap(mutableMapOf("message" to KuaString(e.message ?: "Unknown reason")))
-                                        .toHotObject()
-                                )
+                                ExecResult(HotObject.builder().set("message", e.message ?: "Unknown reason").build())
                             )
                             log.debug("Failed exec: $execId")
                         }
@@ -112,20 +113,14 @@ class CodeRunnerImpl(
             a.printStackTrace()
             connector.fail(
                 execId,
-                ExecResult(
-                    KuaMap(mutableMapOf("message" to KuaString(a.message ?: "Unknown reason")))
-                        .toHotObject()
-                )
+                ExecResult(HotObject.builder().set("message", a.message ?: "Unknown reason").build())
             )
             log.debug("Assertion error: $execId - ${a.message}")
         } catch (t: Throwable) {
             t.printStackTrace()
             connector.fail(
                 execId,
-                ExecResult(
-                    KuaMap(mutableMapOf("message" to KuaString(t.message ?: "Unknown reason")))
-                        .toHotObject()
-                )
+                ExecResult(HotObject.builder().set("message", t.message ?: "Unknown reason").build())
             )
             log.debug("Failed exec: $execId")
         }

@@ -181,7 +181,7 @@ class ByteWindowTest {
         }
 
         @Test
-        fun `Tries to read not multiple of window size`() {
+        fun `Tries to get not multiple of window size`() {
             val exception = assertThrows<IllegalArgumentException> {
                 testInstance.next(40)
             }
@@ -189,7 +189,7 @@ class ByteWindowTest {
         }
 
         @Test
-        fun `Tries to read nothing`() {
+        fun `Tries to get nothing`() {
             val exception = assertThrows<IllegalArgumentException> {
                 testInstance.next(0)
             }

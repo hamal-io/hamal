@@ -40,8 +40,8 @@ class LogBrokerSqliteRepository(
         TODO("Not yet implemented")
     }
 
-    override fun create(cmdId: CmdId, topicToCreate: LogTopicToCreate): LogTopic {
-        return topicRepository.create(topicToCreate)
+    override fun create(cmd: CreateTopicCmd): LogTopic {
+        return topicRepository.create(cmd)
     }
 
     override fun findTopic(topicId: LogTopicId): LogTopic? = topicRepository.find(topicId)

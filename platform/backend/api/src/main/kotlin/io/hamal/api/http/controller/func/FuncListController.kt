@@ -30,10 +30,12 @@ internal class FuncListController(
         @PathVariable("namespaceId") namespaceId: NamespaceId,
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: FuncId,
         @RequestParam(required = false, name = "limit", defaultValue = "10") limit: Limit,
+        @RequestParam(required = false, name = "ids", defaultValue = "") ids: List<FuncId>
     ): ResponseEntity<ApiFuncList> {
         return list(
             afterId = afterId,
             limit = limit,
+            ids = ids,
             workspaceIds = listOf(),
             namespaceIds = listOf(namespaceId)
         )
@@ -43,6 +45,7 @@ internal class FuncListController(
     fun list(
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: FuncId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit,
+        @RequestParam(required = false, name = "ids", defaultValue = "") ids: List<FuncId>,
         @RequestParam(required = false, name = "workspace_ids", defaultValue = "") workspaceIds: List<WorkspaceId>,
         @RequestParam(required = false, name = "namespace_ids", defaultValue = "") namespaceIds: List<NamespaceId>
     ): ResponseEntity<ApiFuncList> {
@@ -55,6 +58,7 @@ internal class FuncListController(
             FuncQuery(
                 afterId = afterId,
                 limit = limit,
+                funcIds = ids,
                 workspaceIds = workspaceIds,
                 namespaceIds = allNamespaceIds
             ),

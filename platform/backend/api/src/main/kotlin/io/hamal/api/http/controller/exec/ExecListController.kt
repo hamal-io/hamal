@@ -32,10 +32,12 @@ internal class ExecListController(
         @PathVariable("namespaceId") namespaceId: NamespaceId,
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: ExecId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit,
+        @RequestParam(required = false, name = "ids", defaultValue = "") ids: List<ExecId>
     ): ResponseEntity<ApiExecList> {
         return list(
             afterId = afterId,
             limit = limit,
+            ids = ids,
             workspaceIds = listOf(),
             funcIds = listOf(),
             namespaceIds = listOf(namespaceId)
@@ -46,6 +48,7 @@ internal class ExecListController(
     fun list(
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: ExecId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit,
+        @RequestParam(required = false, name = "ids", defaultValue = "") ids: List<ExecId>,
         @RequestParam(required = false, name = "workspace_ids", defaultValue = "") workspaceIds: List<WorkspaceId>,
         @RequestParam(required = false, name = "func_ids", defaultValue = "") funcIds: List<FuncId>,
         @RequestParam(required = false, name = "namespace_ids", defaultValue = "") namespaceIds: List<NamespaceId>
@@ -57,6 +60,7 @@ internal class ExecListController(
             ExecQuery(
                 afterId = afterId,
                 limit = limit,
+                execIds = ids,
                 workspaceIds = workspaceIds,
                 funcIds = funcIds,
                 namespaceIds = allNamespaceIds
@@ -81,7 +85,7 @@ internal class ExecListController(
                         )
                     },
                     invocation = it.invocation,
-                    correlation = it.correlation?.correlationId,
+                    correlation = it.correlation?.id,
                     func = it.correlation?.funcId?.let { funcId ->
                         funcs[funcId]!!.let { func ->
                             ApiExecList.Func(

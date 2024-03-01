@@ -141,14 +141,14 @@ internal class LogSegmentRepositoryTest : AbstractUnitTest() {
     inner class ReadTest {
 
         @TestFactory
-        fun `Tries to read from empty segment`() =
+        fun `Tries to get from empty segment`() =
             runWith(LogSegmentRepository::class) {
                 val result = read(LogEventId(20))
                 assertThat(result, hasSize(0))
             }
 
         @TestFactory
-        fun `Tries to read outside from range`() =
+        fun `Tries to get outside from range`() =
             runWith(LogSegmentRepository::class) {
                 createOneHundredEvents()
                 val result = read(LogEventId(200), Limit(100))

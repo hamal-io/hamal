@@ -1,45 +1,46 @@
 package io.hamal.plugin.std.sys.exec
 
-import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
+import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.type.*
 import io.hamal.lib.sdk.ApiSdk
-import io.hamal.lib.sdk.api.ApiExecService.Query
+import io.hamal.lib.sdk.api.ApiExecService
 
 class ExecListFunction(
     private val sdk: ApiSdk
-) : Function1In2Out<KuaMap, KuaError, KuaArray>(
-    FunctionInput1Schema(KuaMap::class),
-    FunctionOutput2Schema(KuaError::class, KuaArray::class)
+) : Function1In2Out<KuaTable, KuaError, KuaTable>(
+    FunctionInput1Schema(KuaTable::class),
+    FunctionOutput2Schema(KuaError::class, KuaTable::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: KuaMap): Pair<KuaError?, KuaArray?> {
+    override fun invoke(ctx: FunctionContext, arg1: KuaTable): Pair<KuaError?, KuaTable?> {
         return try {
             val execs = sdk.exec.list(
-                Query(
-                    namespaceIds = arg1.getArrayType("namespace_ids").map { (_, string) ->
-                        NamespaceId(SnowflakeId(string.toString()))
-                    },
-                    workspaceIds = arg1.getArrayType("workspace_ids").map { (_, string) ->
-                        WorkspaceId(SnowflakeId(string.toString()))
-                    },
+                ApiExecService.ExecQuery(
+                    namespaceIds = arg1.findArray("namespace_ids")
+                        ?.asSequence()
+                        ?.map { NamespaceId((it as KuaString).value) }
+                        ?.toList()
+                        ?: listOf(ctx[NamespaceId::class]),
+                    workspaceIds = arg1.findArray("workspace_ids")
+                        ?.asSequence()
+                        ?.map { WorkspaceId((it as KuaString).value) }
+                        ?.toList()
+                        ?: listOf(ctx[WorkspaceId::class])
                 )
             )
-            null to KuaArray(
-                execs.mapIndexed { index, exec ->
-                    index to KuaMap(
-                        mutableMapOf(
-                            "id" to KuaString(exec.id.value.value.toString(16)),
-                            "status" to KuaString(exec.status.toString()),
-                            "correlation_id" to (exec.correlation?.value?.let(::KuaString)
-                                ?: KuaNil)
-                        )
+            null to ctx.tableCreate(
+                execs.map { exec ->
+                    ctx.tableCreate(
+                        "id" to KuaString(exec.id.value.value.toString(16)),
+                        "status" to KuaString(exec.status.toString()),
+                        "correlation_id" to (exec.correlation?.value?.let(::KuaString) ?: KuaNil)
                     )
-                }.toMap().toMutableMap()
+                }
             )
         } catch (t: Throwable) {
             KuaError(t.message!!) to null
