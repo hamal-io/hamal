@@ -1,92 +1,78 @@
-import React, {FC, useEffect, useState} from 'react'
+import React, {FC, useCallback, useEffect, useState} from 'react'
 import {useUiState} from "@/hook/ui-state.ts";
-import {PageHeader} from "@/components/page-header.tsx";
-import Append from "@/pages/app/workspace-detail/tab/namespace-list/components/append.tsx";
-
-import {NamespaceNode} from "@/types";
-import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx";
-import Actions from "@/pages/app/workspace-detail/tab/namespace-list/components/actions.tsx";
+import {NamespaceListItem} from "@/types";
 import {useNamespaceList} from "@/hook";
-import {Button} from "@/components/ui/button.tsx";
+import NamespaceNodeView from "@/pages/app/workspace-detail/tab/namespace-list/components/root.tsx";
+import {Node} from "@/pages/app/workspace-detail/tab/namespace-list/components/types.ts";
+
 
 const WorkspaceNamespaceListTab: FC = () => {
     const [uiState] = useUiState()
-    const [treePointer, setTreePointer] = useState(uiState.workspaceId)
-    const [listNamespaces, namespaceList] = useNamespaceList()
-    const [namespaceNode, setNamespaceNode] = useState<NamespaceNode>(null)
-
+    const [loadTree, tree, isLoading] = useNamespaceTree()
 
     useEffect(() => {
-            const abortController = new AbortController()
-            listNamespaces(uiState.workspaceId, abortController)
-            return (() =>
-                    abortController.abort()
-            )
+        loadTree(uiState.workspaceId)
+    }, [uiState]);
 
-        }, [treePointer]
-    )
-
-    useEffect(() => {
-        if (namespaceList != null) {
-            const foundRoot = namespaceList.namespaces.find(item => item.id === treePointer)
-            const foundChildren = namespaceList.namespaces.filter(item => item.parentId == treePointer).reverse()
-            const res = {root: foundRoot, children: foundChildren}
-            setNamespaceNode(() => res)
-        }
-    }, [namespaceList, treePointer]);
-
-
-    function changeNode(id: string) {
-        setTreePointer(() => id)
+    function onChange() {
+        loadTree(uiState.workspaceId)
     }
-
-    if (namespaceNode == null) return "Loading"
 
     return (
         <div className="pt-8 px-8">
-            <NamespaceRoot node={namespaceNode} changeNode={changeNode}/>
+            {isLoading ? "Loading" : <NamespaceNodeView node={tree} changeNode={onChange}/>}
         </div>
     )
 }
 
-type NamespaceRootProps = {
-    node: NamespaceNode
-    changeNode: (id: string) => void
-}
-const NamespaceRoot: FC<NamespaceRootProps> = ({node, changeNode}) => {
+type NamespaceLoadAction = (workspaceId: string) => void
+const useNamespaceTree = (): [NamespaceLoadAction, Node<NamespaceListItem>, boolean] => {
+    const [listNamespaces, namespacesList, isLoading, error] = useNamespaceList()
+    const [loading, setLoading] = useState(true)
+    const [root, setRoot] = useState(null)
 
-    const list = node.children.map(namespace =>
-        <Card
-            className="relative overflow-hidden duration-500 hover:border-primary/50 group"
-            key={namespace.id}
-            onClick={() => changeNode(namespace.id)}
-        >
-            <CardHeader>
-                <div className="flex items-center justify-between">
-                    <CardTitle>{namespace.name}</CardTitle>
-                </div>
-            </CardHeader>
-            <CardContent>
-            </CardContent>
-        </Card>
-    )
+    function asyncFetch(workspaceId: string): Promise<Node<NamespaceListItem>> {
+        return new Promise((resolve, reject) => {
+            const abortController = new AbortController()
+            listNamespaces(workspaceId, abortController)
+            if (error) reject(error)
 
-    return (
-        <div>
-            <PageHeader
-                title="Namespaces"
-                actions={[
-                    <Button onClick={() => changeNode(node.root.parentId)}>Go up</Button>,
-                    <Append appendTo={node.root.id}/>,
-                    <Actions item={node.root}/>
-                ]}/>
-            <p>Current Location: {node.root.name}</p>
-            <ul>
-                {list}
-            </ul>
-        </div>
-    )
+            setTimeout(() => {
+                if (namespacesList) {
+                    console.log("Promise resolve")
+                    resolve(unroll(namespacesList.namespaces, workspaceId))
+                }
+                reject("timeout")
+            }, 1000)
+
+            abortController.abort()
+        })
+    }
+
+    const fn = useCallback(async (workspaceId: string) => {
+        asyncFetch(workspaceId)
+            .then(res => {
+                setLoading(false)
+            })
+            .catch(e => console.log(e))
+    }, [])
+
+    return [fn, root, loading]
 }
+
+function unroll(list: Array<NamespaceListItem>, rootId: string) {
+    const store = new Array<Node<NamespaceListItem>>
+    for (const ns of list) {
+        const current = new Node(ns)
+        store.push(current)
+        const parent = store.find(storeItem => storeItem.node.id === ns.parentId)
+        if (parent != undefined) {
+            parent.addDescendant(current)
+        }
+    }
+    return store.find(id => id.node.id === rootId)
+}
+
 
 
 export default WorkspaceNamespaceListTab;

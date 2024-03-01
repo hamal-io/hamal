@@ -33,8 +33,3 @@ export interface NamespaceListItem {
     parentId: string;
     name: string;
 }
-
-export interface NamespaceNode {
-    root: NamespaceListItem
-    children: Array<NamespaceListItem>
-}

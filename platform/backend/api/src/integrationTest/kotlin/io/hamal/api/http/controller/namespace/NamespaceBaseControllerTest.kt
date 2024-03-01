@@ -47,16 +47,6 @@ internal sealed class NamespaceBaseControllerTest : BaseControllerTest() {
         return listNamespacesResponse.result(ApiNamespaceList::class)
     }
 
-    fun listDescendants(namespaceId: NamespaceId): ApiNamespaceList {
-        val listNamespacesResponse = httpTemplate.get("/v1/namespaces/{namespaceId}/sublist")
-            .path("namespaceId", namespaceId)
-            .execute()
-
-        assertThat(listNamespacesResponse.statusCode, equalTo(Ok))
-        require(listNamespacesResponse is HttpSuccessResponse) { "request was not successful" }
-        return listNamespacesResponse.result(ApiNamespaceList::class)
-    }
-
     fun getNamespace(namespaceId: NamespaceId): ApiNamespace {
         val getNamespaceResponse = httpTemplate.get("/v1/namespaces/{namespaceId}")
             .path("namespaceId", namespaceId)
