@@ -62,9 +62,7 @@ interface State {
     fun type(idx: Int): KClass<out KuaType>
 }
 
-interface CloseableState : State, AutoCloseable
-
-class CloseableStateImpl(private val native: Native = Native()) : CloseableState {
+open class StateImpl(val native: Native = Native()) : State {
 
     override fun absIndex(idx: Int): Int = native.absIndex(idx)
 
@@ -168,6 +166,11 @@ class CloseableStateImpl(private val native: Native = Native()) : CloseableState
 
     override fun type(idx: Int) = luaToType(native.type(idx))
 
+}
+
+interface CloseableState : State, AutoCloseable
+
+class CloseableStateImpl(native: Native = Native()) : StateImpl(native), CloseableState {
     override fun close() {
         native.close()
     }

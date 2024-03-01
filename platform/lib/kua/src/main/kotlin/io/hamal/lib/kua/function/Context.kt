@@ -3,6 +3,7 @@ package io.hamal.lib.kua.function
 import io.hamal.lib.kua.SandboxContext
 import io.hamal.lib.kua.StackTop
 import io.hamal.lib.kua.State
+import io.hamal.lib.kua.sandboxContextLocal
 import io.hamal.lib.kua.type.*
 import kotlin.reflect.KClass
 
@@ -62,7 +63,7 @@ class FunctionContext(
     override fun type(idx: Int) = state.type(idx)
 
     override fun <OBJ : Any> get(clazz: KClass<OBJ>): OBJ {
-        TODO()
+        return sandboxContextLocal.get()[clazz]
 //        return native.sandbox!!.ctx[clazz]
     }
 

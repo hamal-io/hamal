@@ -6,13 +6,11 @@ import io.hamal.core.CoreConfig
 import io.hamal.lib.domain.vo.AuthToken
 import io.hamal.lib.sdk.ApiSdkImpl
 import io.hamal.runner.RunnerConfig
-import org.junit.jupiter.api.Disabled
 import org.springframework.boot.Banner
 import org.springframework.boot.WebApplicationType
 import org.springframework.boot.builder.SpringApplicationBuilder
 import java.util.*
 
-@Disabled
 internal object MemoryApiTest : BaseApiTest() {
 
     init {

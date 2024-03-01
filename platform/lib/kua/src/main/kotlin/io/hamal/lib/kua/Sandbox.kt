@@ -9,11 +9,18 @@ import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
 import io.hamal.lib.kua.type.*
 import io.hamal.lib.kua.type.KuaError
 
+// FIXME super dirty temporary hack
+val sandboxContextLocal = ThreadLocal<SandboxContext>()
+
 class Sandbox(
     private val ctx: SandboxContext,
     private val state: CloseableState = CloseableStateImpl(),
     private val registry: SandboxRegistry = SandboxRegistryImpl(state)
 ) : CloseableState {
+
+    init {
+        sandboxContextLocal.set(ctx)
+    }
 
     override fun absIndex(idx: Int) = state.absIndex(idx)
 

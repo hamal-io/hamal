@@ -151,15 +151,14 @@ class KuaTable(
     fun isNull(key: String): Boolean = type(key) == KuaNil::class
 
     fun findArray(key: String): KuaTable? {
-//        if (isNull(key)) {
-//            return null
-//        }
-//
-//        state.pushString(key)
-//        val type = state.tableGetRaw(index)
-//        type.checkExpectedType(KuaTable::class)
-//        return state.getTableArray(state.top.value)
-        TODO()
+        if (isNull(key)) {
+            return null
+        }
+
+        state.stringPush(KuaString(key))
+        val type = state.tableRawGet(index)
+        type.checkExpectedType(KuaTable::class)
+        return state.tableGet(-1)
     }
 
     fun forEach(action: (key: KuaType, value: KuaType) -> Unit) {
@@ -284,11 +283,10 @@ class KuaTable(
     }
 
     fun getTableMap(key: String): KuaTable {
-//        state.pushString(key)
-//        val type = state.tableGetRaw(index)
-//        type.checkExpectedType(KuaTable::class)
-//        return state.getTableMap(state.top.value)
-        TODO()
+        state.stringPush(KuaString(key))
+        val type = state.tableRawGet(index)
+        type.checkExpectedType(KuaTable::class)
+        return state.tableGet(-1)
     }
 
     fun getBooleanType(key: KuaString): KuaBoolean = getBooleanType(key.value)
@@ -348,14 +346,13 @@ class KuaTable(
     }
 
     fun findStringType(key: String): KuaString? {
-//        state.pushString(key)
-//        val type = state.tableGetRaw(index)
-//        if (type == KuaNil::class) {
-//            return null
-//        }
-//        type.checkExpectedType(KuaString::class)
-//        return KuaString(state.native.stringGet(state.top.value).also { state.native.topPop(1) })
-        TODO()
+        state.stringPush(KuaString(key))
+        val type = state.tableRawGet(index)
+        if (type == KuaNil::class) {
+            return null
+        }
+        type.checkExpectedType(KuaString::class)
+        return state.stringGet(-1).also { state.topPop(1) }
     }
 
     fun getStringType(key: String): KuaString {

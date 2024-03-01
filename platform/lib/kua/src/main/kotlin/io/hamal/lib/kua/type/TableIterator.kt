@@ -1,6 +1,7 @@
 package io.hamal.lib.kua.type
 
 import io.hamal.lib.kua.State
+import io.hamal.lib.kua.StateImpl
 import kotlin.collections.Map.Entry
 
 class KuaTableEntryIterator<KEY : KuaType, TYPE : KuaType>(
@@ -19,19 +20,20 @@ class KuaTableEntryIterator<KEY : KuaType, TYPE : KuaType>(
     }
 
     override fun hasNext(): Boolean {
-//        hasNext = state.native.tableNext(index)
-//        return if (hasNext) {
-//            nextTableEntry = object : Entry<KEY, TYPE> {
-//                override val key = keyExtractor(state, state.absIndex(-2))
-//                override val value = valueExtractor(state, state.absIndex(-1))
-//            }
-//            state.native.topPop(1)
-//            true
-//        } else {
-//            nextTableEntry = null
-//            false
-//        }
-        TODO()
+        val s = state
+        require(s is StateImpl)
+        hasNext = s.native.tableNext(index)
+        return if (hasNext) {
+            nextTableEntry = object : Entry<KEY, TYPE> {
+                override val key = keyExtractor(state, state.absIndex(-2))
+                override val value = valueExtractor(state, state.absIndex(-1))
+            }
+            state.topPop(1)
+            true
+        } else {
+            nextTableEntry = null
+            false
+        }
     }
 
     override fun next(): Entry<KEY, TYPE> {
