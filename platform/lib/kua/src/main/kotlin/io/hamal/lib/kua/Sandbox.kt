@@ -12,7 +12,7 @@ import io.hamal.lib.kua.type.KuaError
 class Sandbox(
     private val ctx: SandboxContext,
     private val state: CloseableState = CloseableStateImpl(),
-    private val registry: SandboxRegistry = SandboxRegistry(state)
+    private val registry: SandboxRegistry = SandboxRegistryImpl(state)
 ) : CloseableState {
 
     override fun absIndex(idx: Int) = state.absIndex(idx)

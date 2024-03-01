@@ -66,7 +66,7 @@ class CodeRunnerImpl(
                         sandbox.globalSet(KuaString("_internal"), internalTable)
                         sandbox.codeLoad(contextExtension.factoryCode)
 
-                        sandbox.codeLoad(KuaCode("${contextExtension.name} = plugin_factory_create()()"))
+                        sandbox.codeLoad(KuaCode("${contextExtension.name} = plugin_create()()"))
                         sandbox.globalUnset(KuaString("_internal"))
 
                         sandbox.codeLoad(KuaCode(unitOfWork.code.value))

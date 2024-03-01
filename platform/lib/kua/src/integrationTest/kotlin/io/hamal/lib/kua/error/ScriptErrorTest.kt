@@ -2,13 +2,14 @@ package io.hamal.lib.kua.error
 
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
-import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.Sandbox
+import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.ScriptError
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.type.KuaCode
+import io.hamal.lib.kua.type.KuaString
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -45,18 +46,15 @@ class ScriptErrorTest {
                     name = "test",
                     factoryCode = KuaCode(
                         """
-                            function plugin_factory_create()
-                                local internal = _internal
-                                return function()
-                                    local export = {
-                                        call = internal.call
-                                     }
-                                    return export
-                                end
+                            function plugin_create(internal)
+                                local export = {
+                                    call = internal.call
+                                 }
+                                return export
                             end
                     """.trimIndent()
                     ),
-                    internals = mapOf("call" to CallbackFunction())
+                    internals = mapOf(KuaString("call") to CallbackFunction())
                 )
             )
         }

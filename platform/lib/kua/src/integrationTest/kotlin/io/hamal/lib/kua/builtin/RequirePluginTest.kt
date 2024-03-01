@@ -1,8 +1,8 @@
 package io.hamal.lib.kua.builtin
 
 import io.hamal.lib.kua.NativeLoader
-import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.Sandbox
+import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.type.KuaCode
 import org.junit.jupiter.api.Test
@@ -35,12 +35,9 @@ internal object PluginTest {
                     name = "test",
                     factoryCode = KuaCode(
                         """
-                            function plugin_factory_create()
-                                local internal = _internal
-                                return function()
-                                    local export = { some_number = 42 }
-                                    return export
-                                end
+                            function plugin_create(internal)
+                                local export = { some_number = 42 }
+                                return export
                             end
                     """.trimIndent()
                     ),

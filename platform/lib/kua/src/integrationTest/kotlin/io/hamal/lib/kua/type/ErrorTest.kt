@@ -22,23 +22,20 @@ internal class KuaErrorTest {
                 name = "test",
                 factoryCode = KuaCode(
                     """
-                    function plugin_factory_create()
-                        local internal = _internal
-                        return function()
-                            local export = { 
-                                error =  internal.error,
-                                message_captor =  internal.message_captor,
-                                assert_metatable =  internal.assert_metatable,
-                            }
-                            return export
-                        end
+                    function plugin_create(internal)
+                        local export = { 
+                            error =  internal.error,
+                            message_captor =  internal.message_captor,
+                            assert_metatable =  internal.assert_metatable,
+                        }
+                        return export
                     end
                 """.trimIndent()
                 ),
                 internals = mapOf(
-                    "error" to FunctionReturnsError(),
-                    "message_captor" to messageCaptor,
-                    "assert_metatable" to AssertMetatable
+                    KuaString("error") to FunctionReturnsError(),
+                    KuaString("message_captor") to messageCaptor,
+                    KuaString("assert_metatable") to AssertMetatable
                 )
             )
         )
@@ -69,23 +66,20 @@ internal class KuaErrorTest {
                 name = "test",
                 factoryCode = KuaCode(
                     """
-                    function plugin_factory_create()
-                        local internal = _internal
-                        return function()
-                            local export = { 
-                                call =  internal.call,
-                                captor =  internal.captor,
-                                assert_metatable =  internal.assert_metatable,
-                            }
-                            return export
-                        end
+                    function plugin_create(internal)
+                        local export = { 
+                            call =  internal.call,
+                            captor =  internal.captor,
+                            assert_metatable =  internal.assert_metatable,
+                        }
+                        return export
                     end
                 """.trimIndent()
                 ),
                 internals = mapOf(
-                    "call" to FunctionNeverInvoked(),
-                    "captor" to errorCaptor,
-                    "assert_metatable" to AssertMetatable
+                    KuaString("call") to FunctionNeverInvoked(),
+                    KuaString("captor") to errorCaptor,
+                    KuaString("assert_metatable") to AssertMetatable
                 )
             )
         )

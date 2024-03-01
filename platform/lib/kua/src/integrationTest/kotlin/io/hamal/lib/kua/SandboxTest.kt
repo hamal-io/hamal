@@ -6,6 +6,7 @@ import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.type.KuaCode
+import io.hamal.lib.kua.type.KuaString
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -61,18 +62,15 @@ internal class RegisterPluginTest : BaseSandboxTest() {
                 name = "some_plugin",
                 factoryCode = KuaCode(
                     """
-                    function plugin_factory_create()
-                        local internal = _internal
-                        return function()
-                            local export = { 
-                                magic =  internal.magic
-                            }
-                            return export
-                        end
+                    function plugin_create(internal)
+                        local export = { 
+                            magic =  internal.magic
+                        }
+                        return export
                     end
                 """.trimIndent()
                 ),
-                internals = mapOf("magic" to func)
+                internals = mapOf(KuaString("magic") to func)
             )
         )
 

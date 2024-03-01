@@ -8,6 +8,7 @@ import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.type.KuaCode
+import io.hamal.lib.kua.type.KuaString
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -50,21 +51,18 @@ internal class PluginTest {
                     name = "test",
                     factoryCode = KuaCode(
                         """
-                            function plugin_factory_create()
-                                local internal = _internal
-                                return function()
-                                    local export = {
-                                        call = internal.test_call,
-                                        some_number = 42,
-                                        some_boolean = true
-                                     }
-                                    return export
-                                end
+                            function plugin_create(internal)
+                                local export = {
+                                    call = internal.test_call,
+                                    some_number = 42,
+                                    some_boolean = true
+                                 }
+                                return export
                             end
                     """.trimIndent()
                     ),
                     internals = mapOf(
-                        "test_call" to TestCall0In0OutFunction
+                        KuaString("test_call") to TestCall0In0OutFunction
                     )
                 )
             )

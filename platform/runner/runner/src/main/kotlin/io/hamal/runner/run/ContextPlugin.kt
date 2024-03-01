@@ -54,15 +54,15 @@ class RunnerContextFactory(
         return RunnerPlugin(
             name = "context",
             internals = mapOf(
-                "events" to events,
-                "hook" to hook,
-                "endpoint" to endpoint,
-                "exec_id" to KuaString(executionCtx[ExecId::class].value.value.toString(16)),
-                "emit" to EmitFunction(executionCtx),
-                "fail" to FailRunFunction,
-                "complete" to CompleteRunFunction,
-                "state" to executionCtx.state.value.toKua(sandbox),
-                "env" to executionCtx[RunnerEnv::class].value.toKua(sandbox)
+                KuaString("events") to events,
+                KuaString("hook") to hook,
+                KuaString("endpoint") to endpoint,
+                KuaString("exec_id") to KuaString(executionCtx[ExecId::class].value.value.toString(16)),
+                KuaString("emit") to EmitFunction(executionCtx),
+                KuaString("fail") to FailRunFunction,
+                KuaString("complete") to CompleteRunFunction,
+                KuaString("state") to executionCtx.state.value.toKua(sandbox),
+                KuaString("env") to executionCtx[RunnerEnv::class].value.toKua(sandbox)
             )
         )
     }

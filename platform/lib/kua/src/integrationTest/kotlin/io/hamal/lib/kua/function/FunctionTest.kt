@@ -3,8 +3,8 @@ package io.hamal.lib.kua.function
 import io.hamal.lib.kua.ExtensionError
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
-import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.Sandbox
+import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.type.KuaCode
 import io.hamal.lib.kua.type.KuaNumber
@@ -37,21 +37,18 @@ internal class FunctionTest {
                 name = "test",
                 factoryCode = KuaCode(
                     """
-                    function plugin_factory_create()
-                        local internal = _internal
-                        return function()
-                            local export = { 
-                                throw_exception =  internal.throw_exception,
-                                never_called =  internal.never_called
-                            }
-                            return export
-                        end
+                    function plugin_create(internal)
+                        local export = { 
+                            throw_exception =  internal.throw_exception,
+                            never_called =  internal.never_called
+                        }
+                        return export
                     end
                 """.trimIndent()
                 ),
                 internals = mapOf(
-                    "throw_exception" to throwException,
-                    "never_called" to neverCalled,
+                    KuaString("throw_exception") to throwException,
+                    KuaString("never_called") to neverCalled,
                 )
             )
         )
@@ -92,21 +89,18 @@ internal class FunctionTest {
                 name = "test",
                 factoryCode = KuaCode(
                     """
-                    function plugin_factory_create()
-                        local internal = _internal
-                        return function()
-                            local export = { 
-                                throw_error =  internal.throw_error,
-                                throw_error =  internal.throw_error
-                            }
-                            return export
-                        end
+                    function plugin_create(internal)
+                        local export = { 
+                            throw_error =  internal.throw_error,
+                            throw_error =  internal.throw_error
+                        }
+                        return export
                     end
                 """.trimIndent()
                 ),
                 internals = mapOf(
-                    "throw_error" to throwError,
-                    "never_called" to neverCalled,
+                    KuaString("throw_error") to throwError,
+                    KuaString("never_called") to neverCalled,
                 )
             )
         )
@@ -140,21 +134,18 @@ internal class FunctionTest {
                 name = "test",
                 factoryCode = KuaCode(
                     """
-                    function plugin_factory_create()
-                        local internal = _internal
-                        return function()
-                            local export = { 
-                                emit =  internal.emit,
-                                capture =  internal.capture
-                            }
-                            return export
-                        end
+                    function plugin_create(internal)
+                        local export = { 
+                            emit =  internal.emit,
+                            capture =  internal.capture
+                        }
+                        return export
                     end
                 """.trimIndent()
                 ),
                 internals = mapOf(
-                    "emit" to emitter,
-                    "capture" to captor
+                    KuaString("emit") to emitter,
+                    KuaString("capture") to captor
                 )
             )
         )
@@ -187,21 +178,18 @@ internal class FunctionTest {
                 name = "test",
                 factoryCode = KuaCode(
                     """
-                    function plugin_factory_create()
-                        local internal = _internal
-                        return function()
-                            local export = { 
-                                transform =  internal.transform,
-                                capture =  internal.capture
-                            }
-                            return export
-                        end
+                    function plugin_create(internal)
+                        local export = { 
+                            transform =  internal.transform,
+                            capture =  internal.capture
+                        }
+                        return export
                     end
                 """.trimIndent()
                 ),
                 internals = mapOf(
-                    "transform" to transform,
-                    "capture" to captor
+                    KuaString("transform") to transform,
+                    KuaString("capture") to captor
                 )
             )
         )
@@ -234,21 +222,18 @@ internal class FunctionTest {
                 name = "test",
                 factoryCode = KuaCode(
                     """
-                    function plugin_factory_create()
-                        local internal = _internal
-                        return function()
-                            local export = { 
-                                transform =  internal.transform,
-                                capture =  internal.capture
-                            }
-                            return export
-                        end
+                    function plugin_create(internal)
+                        local export = { 
+                            transform =  internal.transform,
+                            capture =  internal.capture
+                        }
+                        return export
                     end
                 """.trimIndent()
                 ),
                 internals = mapOf(
-                    "transform" to transform,
-                    "capture" to captor
+                    KuaString("transform") to transform,
+                    KuaString("capture") to captor
                 )
             )
         )
@@ -286,21 +271,18 @@ internal class FunctionTest {
                 name = "test",
                 factoryCode = KuaCode(
                     """
-                    function plugin_factory_create()
-                        local internal = _internal
-                        return function()
-                            local export = { 
-                                transform =  internal.transform,
-                                capture =  internal.capture
-                            }
-                            return export
-                        end
+                    function plugin_create(internal)
+                        local export = { 
+                            transform =  internal.transform,
+                            capture =  internal.capture
+                        }
+                        return export
                     end
                 """.trimIndent()
                 ),
                 internals = mapOf(
-                    "transform" to transform,
-                    "capture" to captor
+                    KuaString("transform") to transform,
+                    KuaString("capture") to captor
                 )
             )
         )
@@ -331,21 +313,18 @@ internal class FunctionTest {
                 name = "test",
                 factoryCode = KuaCode(
                     """
-                    function plugin_factory_create()
-                        local internal = _internal
-                        return function()
-                            local export = { 
-                                emit =  internal.emit,
-                                capture =  internal.capture
-                            }
-                            return export
-                        end
+                    function plugin_create(internal)
+                        local export = { 
+                            emit =  internal.emit,
+                            capture =  internal.capture
+                        }
+                        return export
                     end
                 """.trimIndent()
                 ),
                 internals = mapOf(
-                    "emit" to emitter,
-                    "capture" to captor
+                    KuaString("emit") to emitter,
+                    KuaString("capture") to captor
                 )
             )
         )

@@ -138,21 +138,18 @@ internal class KuaAnyTest {
             name = "test",
             factoryCode = KuaCode(
                 """
-                    function plugin_factory_create()
-                        local internal = _internal
-                        return function()
-                            local export = { 
-                                pass_through =  internal.pass_through,
-                                captor =  internal.captor
-                            }
-                            return export
-                        end
+                    function plugin_create(internal)
+                        local export = { 
+                            pass_through =  internal.pass_through,
+                            captor =  internal.captor
+                        }
+                        return export
                     end
                 """.trimIndent()
             ),
             internals = mapOf(
-                "pass_through" to AnyValuePassThrough(),
-                "captor" to captor
+                KuaString("pass_through") to AnyValuePassThrough(),
+                KuaString("captor") to captor
             )
         )
 
