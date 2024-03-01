@@ -37,7 +37,7 @@ internal class FunctionTest {
                 name = "test",
                 factoryCode = KuaCode(
                     """
-                    function plugin()
+                    function plugin_factory_create()
                         local internal = _internal
                         return function()
                             local export = { 
@@ -92,7 +92,7 @@ internal class FunctionTest {
                 name = "test",
                 factoryCode = KuaCode(
                     """
-                    function plugin()
+                    function plugin_factory_create()
                         local internal = _internal
                         return function()
                             local export = { 
@@ -140,7 +140,7 @@ internal class FunctionTest {
                 name = "test",
                 factoryCode = KuaCode(
                     """
-                    function plugin()
+                    function plugin_factory_create()
                         local internal = _internal
                         return function()
                             local export = { 
@@ -187,7 +187,7 @@ internal class FunctionTest {
                 name = "test",
                 factoryCode = KuaCode(
                     """
-                    function plugin()
+                    function plugin_factory_create()
                         local internal = _internal
                         return function()
                             local export = { 
@@ -234,7 +234,7 @@ internal class FunctionTest {
                 name = "test",
                 factoryCode = KuaCode(
                     """
-                    function plugin()
+                    function plugin_factory_create()
                         local internal = _internal
                         return function()
                             local export = { 
@@ -286,7 +286,7 @@ internal class FunctionTest {
                 name = "test",
                 factoryCode = KuaCode(
                     """
-                    function plugin()
+                    function plugin_factory_create()
                         local internal = _internal
                         return function()
                             local export = { 
@@ -331,7 +331,7 @@ internal class FunctionTest {
                 name = "test",
                 factoryCode = KuaCode(
                     """
-                    function plugin()
+                    function plugin_factory_create()
                         local internal = _internal
                         return function()
                             local export = { 

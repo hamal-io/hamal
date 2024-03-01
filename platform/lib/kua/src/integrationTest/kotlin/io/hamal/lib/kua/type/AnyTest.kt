@@ -2,8 +2,8 @@ package io.hamal.lib.kua.type
 
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
-import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.Sandbox
+import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.function.*
 import org.hamcrest.CoreMatchers.equalTo
@@ -138,7 +138,7 @@ internal class KuaAnyTest {
             name = "test",
             factoryCode = KuaCode(
                 """
-                    function plugin()
+                    function plugin_factory_create()
                         local internal = _internal
                         return function()
                             local export = { 

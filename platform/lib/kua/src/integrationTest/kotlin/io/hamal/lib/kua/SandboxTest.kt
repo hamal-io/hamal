@@ -19,7 +19,7 @@ internal class RegisterExtensionTest : BaseSandboxTest() {
                 name = "some_plugin",
                 factoryCode = KuaCode(
                     """
-                    function extension()
+                    function extension_factory_create()
                         return function()
                             local export = { 
                                 magic = function() end
@@ -61,7 +61,7 @@ internal class RegisterPluginTest : BaseSandboxTest() {
                 name = "some_plugin",
                 factoryCode = KuaCode(
                     """
-                    function plugin()
+                    function plugin_factory_create()
                         local internal = _internal
                         return function()
                             local export = { 

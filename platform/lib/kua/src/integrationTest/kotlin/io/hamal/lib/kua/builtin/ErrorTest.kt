@@ -56,7 +56,7 @@ class ErrorTest {
                     name = "test",
                     factoryCode = KuaCode(
                         """
-                            function plugin()
+                            function plugin_factory_create()
                                 local internal = _internal
                                 return function()
                                     local export = {

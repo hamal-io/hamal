@@ -1,4 +1,4 @@
-function extension()
+function extension_factory_create()
     local http = require_plugin('net.http')
     return function()
         local export = { }

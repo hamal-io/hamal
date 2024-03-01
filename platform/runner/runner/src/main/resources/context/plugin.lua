@@ -1,4 +1,4 @@
-function plugin()
+function plugin_factory_create()
     internal = _internal
     return function()
         local export = {

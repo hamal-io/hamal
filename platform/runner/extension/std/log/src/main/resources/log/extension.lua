@@ -1,4 +1,4 @@
-function extension()
+function extension_factory_create()
     local log_plugin = require_plugin('log')
     return function()
         local export = { }

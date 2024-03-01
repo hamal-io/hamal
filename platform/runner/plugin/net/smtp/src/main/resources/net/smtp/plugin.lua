@@ -47,7 +47,7 @@ local function maybe_string(tbl, key)
     return value
 end
 
-function plugin()
+function plugin_factory_create()
     local internal = _internal
     return function()
         local export = { }

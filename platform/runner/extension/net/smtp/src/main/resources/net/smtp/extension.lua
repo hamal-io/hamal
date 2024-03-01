@@ -47,7 +47,7 @@ local function maybe_string(tbl, key)
     return value
 end
 
-function extension()
+function extension_factory_create()
     local smtp = require_plugin('net.smtp')
     return function()
         local export = { }

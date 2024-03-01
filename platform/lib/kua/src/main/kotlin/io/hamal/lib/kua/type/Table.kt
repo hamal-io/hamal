@@ -326,10 +326,9 @@ class KuaTable(
 
     fun getNumberType(key: String): KuaNumber {
         state.stringPush(KuaString(key))
-//        val type = state.tableGetRaw(index)
-//        type.checkExpectedType(KuaNumber::class)
-//        return KuaNumber(state.native.numberGet(state.top.value)).also { state.native.topPop(1) }
-        TODO()
+        val type = state.tableRawGet(index)
+        type.checkExpectedType(KuaNumber::class)
+        return state.numberGet(-1).also { state.topPop(1) }
     }
 
     fun getDecimalType(key: String): KuaDecimal {

@@ -1,4 +1,4 @@
-function extension()
+function extension_factory_create()
     return function()
         local export = { }
 

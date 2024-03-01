@@ -36,7 +36,7 @@ internal object ExtensionTest {
                     name = "test",
                     factoryCode = KuaCode(
                         """
-                            function extension()
+                            function extension_factory_create()
                                 return function()
                                     local export = { some_number = 42 }
                                     return export

@@ -17,7 +17,7 @@ class Require(
 ) {
     override fun invoke(ctx: FunctionContext, arg1: KuaString): KuaTable {
         ctx.globalSet(KuaString("_factory"), registry.loadExtensionFactory(arg1.value))
-        ctx.codeLoad(KuaCode("_instance = _factory()"))
+        ctx.codeLoad(KuaCode("_instance = _factory"))
 
         val result = ctx.globalGetTable(KuaString("_instance"))
 

@@ -35,7 +35,7 @@ internal object PluginTest {
                     name = "test",
                     factoryCode = KuaCode(
                         """
-                            function plugin()
+                            function plugin_factory_create()
                                 local internal = _internal
                                 return function()
                                     local export = { some_number = 42 }

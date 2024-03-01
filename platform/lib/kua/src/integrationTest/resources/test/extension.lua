@@ -1,4 +1,4 @@
-function extension()
+function extension_factory_create()
     local internal = _internal
     return function()
         return {

@@ -44,9 +44,8 @@ class RunnerRegistry(
         }
 
         state.globalSet(KuaString("_internal"), internalTable)
-
         state.codeLoad(plugins[name]!!.factoryCode)
-        state.codeLoad(KuaCode("_factory = plugin()"))
+        state.codeLoad(KuaCode("_factory = plugin_factory_create()()"))
 
         state.globalUnset(KuaString("_internal"))
 
@@ -62,7 +61,7 @@ class RunnerRegistry(
         val extension = extensions[name]!!
 
         state.codeLoad(extension.factoryCode)
-        state.codeLoad(KuaCode("_factory = extension()"))
+        state.codeLoad(KuaCode("_factory = extension_factory_create()()"))
 
         // FIXME cache factory so that it does not have to be loaded over and over again
         val factory = state.globalGetTable(KuaString("_factory"))
