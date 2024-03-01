@@ -29,14 +29,11 @@ internal abstract class AbstractExecuteTest {
                             name = "test",
                             factoryCode = KuaCode(
                                 """
-                            function plugin()
-                                local internal = _internal
-                                return function()
-                                    local export = {
-                                        ${testPlugins.joinToString(",") { plugin -> "${plugin.first} = internal.${plugin.first}" }}
-                                     }
-                                    return export
-                                end
+                            function plugin_create(internal)
+                                local export = {
+                                    ${testPlugins.joinToString(",") { plugin -> "${plugin.first} = internal.${plugin.first}" }}
+                                 }
+                                return export
                             end
                             """.trimIndent()
                             ),

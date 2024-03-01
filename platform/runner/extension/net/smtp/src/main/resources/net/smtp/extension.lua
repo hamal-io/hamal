@@ -95,7 +95,6 @@ function extension_create()
                 timeout = instance.cfg.timeout,
                 write_timeout = instance.cfg.write_timeout
             })
-
         end
 
         return instance

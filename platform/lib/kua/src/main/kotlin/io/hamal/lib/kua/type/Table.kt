@@ -293,11 +293,10 @@ class KuaTable(
     fun getBoolean(key: String): Boolean = getBooleanType(key).value
     fun getBoolean(key: KuaString): Boolean = getBoolean(key.value)
     fun getBooleanType(key: String): KuaBoolean {
-//        state.pushString(key)
-//        val type = state.tableGetRaw(index)
-//        type.checkExpectedType(KuaBoolean::class)
-//        return booleanOf(state.native.booleanGet(state.top.value)).also { state.native.topPop(1) }
-        TODO()
+        state.stringPush(KuaString(key))
+        val type = state.tableRawGet(index)
+        type.checkExpectedType(KuaBoolean::class)
+        return state.booleanGet(-1).also { state.topPop(1) }
     }
 
     fun getCode(key: KuaString): KuaCode = getCode(key.value)

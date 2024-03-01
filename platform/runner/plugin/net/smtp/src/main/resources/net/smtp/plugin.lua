@@ -47,7 +47,7 @@ local function maybe_string(tbl, key)
     return value
 end
 
-function plugin_create(intenral)
+function plugin_create(internal)
     local export = { }
 
     function export.send(_mail)

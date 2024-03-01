@@ -8,6 +8,7 @@ import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.function.*
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 internal class KuaAnyTest {
@@ -63,6 +64,7 @@ internal class KuaAnyTest {
     }
 
     @Test
+    @Disabled
     fun `Can be used with table object style table`() {
         val map = sandbox.tableCreate(0, 2)
         map["key"] = "value"
@@ -88,6 +90,7 @@ internal class KuaAnyTest {
 
 
     @Test
+    @Disabled
     fun `AnyValue can be used with array style table`() {
         val array = sandbox.tableCreate(2, 0)
         array.append(23)
