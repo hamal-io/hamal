@@ -16,7 +16,6 @@ import {
 import React, {FC} from "react";
 import {Link, useLocation, useParams} from "react-router-dom";
 import Profile from "@/components/app/layout/workspace/profile.tsx";
-import NamespaceSelector from "@/components/app/layout/workspace/namespace-selector.tsx";
 
 type Props = {
     className?: string;
