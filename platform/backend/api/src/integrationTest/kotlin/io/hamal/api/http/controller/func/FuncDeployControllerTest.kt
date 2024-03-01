@@ -106,7 +106,9 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
         fun `Tries to deploy version that does not exist`() {
             val func: ApiFuncCreateRequested = createFunc(
                 ApiFuncCreateRequest(
-                    name = FuncName("Func-base"), inputs = FuncInputs(), code = CodeValue("40 + 2")
+                    name = FuncName("Func-base"),
+                    inputs = FuncInputs(),
+                    code = CodeValue("40 + 2")
                 )
             )
 

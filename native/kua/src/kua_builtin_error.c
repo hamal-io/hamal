@@ -26,3 +26,12 @@ builtin_error_create(lua_State *L, char const *message) {
     luaL_setmetatable(L, KUA_BUILTIN_ERROR);
     return LUA_OK;
 }
+
+int
+error_as_string(lua_State *L, int idx) {
+    lua_getfield(L, idx, "message");
+    const char *s = lua_tostring(L, -1);
+    lua_pushstring(L, s);
+    lua_pop(L, 1);
+    return 1;
+}

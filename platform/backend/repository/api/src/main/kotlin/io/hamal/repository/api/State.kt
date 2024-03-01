@@ -8,7 +8,12 @@ import io.hamal.lib.domain.State
 interface StateRepository : StateCmdRepository, StateQueryRepository
 
 interface StateCmdRepository : CmdRepository {
-    fun set(cmdId: CmdId, correlatedState: CorrelatedState)
+    fun set(cmd: SetCmd)
+
+    data class SetCmd(
+        val id: CmdId,
+        val correlatedState: CorrelatedState
+    )
 }
 
 interface StateQueryRepository {

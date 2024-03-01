@@ -36,7 +36,7 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
                     status = execStatus,
                     correlation = Correlation(
                         funcId = generateDomainId(::FuncId),
-                        correlationId = CorrelationId("__correlation__")
+                        id = CorrelationId("__correlation__")
                     ),
                     invocation = Invocation.Adhoc
                 )
@@ -60,7 +60,7 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
             status = Started,
             correlation = Correlation(
                 funcId = generateDomainId(::FuncId),
-                correlationId = CorrelationId("__correlation__")
+                id = CorrelationId("__correlation__")
             ),
             invocation = Invocation.Adhoc
         ) as Exec.Started

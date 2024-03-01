@@ -46,7 +46,7 @@ internal class QueuePollControllerTest : BaseQueueControllerTest() {
             status = Queued,
             correlation = Correlation(
                 funcId = FuncId(123),
-                correlationId = CorrelationId("_some_chosen_correlation_@")
+                id = CorrelationId("_some_chosen_correlation_@")
             ),
             code = CodeValue("40 + 2"),
             invocation = Invocation.Adhoc
@@ -62,7 +62,7 @@ internal class QueuePollControllerTest : BaseQueueControllerTest() {
                     correlation, equalTo(
                         Correlation(
                             funcId = FuncId(123),
-                            correlationId = CorrelationId("_some_chosen_correlation_@")
+                            id = CorrelationId("_some_chosen_correlation_@")
                         )
                     )
                 )

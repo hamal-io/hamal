@@ -25,7 +25,7 @@ data class ApiStateSetRequested(
 class ApiState(override val value: HotObject = HotObject.empty) : ValueObjectHotObject()
 
 data class ApiCorrelation(
-    val correlationId: CorrelationId,
+    val id: CorrelationId,
     val func: Func
 ) {
     data class Func(

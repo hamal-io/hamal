@@ -22,11 +22,11 @@ interface ExtensionRepository : ExtensionCmdRepository, ExtensionQueryRepository
 
 interface ExtensionCmdRepository : CmdRepository {
     fun create(cmd: CreateCmd): Extension
-    fun update(extId: ExtensionId, cmd: UpdateCmd): Extension
+    fun update(extensionId: ExtensionId, cmd: UpdateCmd): Extension
 
     data class CreateCmd(
         val id: CmdId,
-        val extId: ExtensionId,
+        val extensionId: ExtensionId,
         val workspaceId: WorkspaceId,
         val name: ExtensionName,
         val code: ExtensionCode
@@ -40,14 +40,14 @@ interface ExtensionCmdRepository : CmdRepository {
 }
 
 interface ExtensionQueryRepository {
-    fun get(extId: ExtensionId) = find(extId) ?: throw NoSuchElementException("Extension not found")
-    fun find(extId: ExtensionId): Extension?
+    fun get(extensionId: ExtensionId) = find(extensionId) ?: throw NoSuchElementException("Extension not found")
+    fun find(extensionId: ExtensionId): Extension?
     fun list(query: ExtensionQuery): List<Extension>
-    fun list(extIds: List<ExtensionId>): List<Extension> = list(
+    fun list(extensionIds: List<ExtensionId>): List<Extension> = list(
         ExtensionQuery(
             limit = Limit.all,
             workspaceIds = listOf(),
-            extIds = extIds,
+            extensionIds = extensionIds,
         )
     )
 
@@ -56,7 +56,7 @@ interface ExtensionQueryRepository {
     data class ExtensionQuery(
         var afterId: ExtensionId = ExtensionId(SnowflakeId(Long.MAX_VALUE)),
         var limit: Limit = Limit(1),
-        var extIds: List<ExtensionId> = listOf(),
+        var extensionIds: List<ExtensionId> = listOf(),
         var workspaceIds: List<WorkspaceId>
     )
 }

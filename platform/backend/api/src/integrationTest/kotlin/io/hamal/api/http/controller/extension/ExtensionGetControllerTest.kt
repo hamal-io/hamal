@@ -14,7 +14,7 @@ internal class ExtensionGetControllerTest : ExtensionBaseControllerTest() {
 
     @Test
     fun `Get extension`() {
-        val extId = awaitCompleted(
+        val extensionId = awaitCompleted(
             createExtension(
                 ApiExtensionCreateRequest(
                     name = ExtensionName("TestExtension"),
@@ -23,7 +23,7 @@ internal class ExtensionGetControllerTest : ExtensionBaseControllerTest() {
             )
         ).extensionId
 
-        val ext = getExtension(extId)
+        val ext = getExtension(extensionId)
         assertThat(ext.name, equalTo(ExtensionName("TestExtension")))
         assertThat(codeQueryRepository.get(ext.code.id).value, equalTo(CodeValue("40 + 2")))
     }

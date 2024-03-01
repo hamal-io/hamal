@@ -6,7 +6,12 @@ sys.await_completed(namespace_one_req)
 namespace_two_req = fail_on_error(sys.namespaces.append({ name = 'namespace-two' }))
 sys.await_completed(namespace_two_req)
 
-func_one = fail_on_error(sys.funcs.create({ namespace_id = namespace_one_req.id; name = 'test-func'; inputs = {}; code = [[4 + 2]] }))
+func_one = fail_on_error(sys.funcs.create({
+    namespace_id = namespace_one_req.id;
+    name = 'test-func';
+    inputs = {};
+    code = [[x = 10]]
+}))
 sys.await_completed(func_one)
 
 func_one = fail_on_error(sys.triggers.create_fixed_rate({

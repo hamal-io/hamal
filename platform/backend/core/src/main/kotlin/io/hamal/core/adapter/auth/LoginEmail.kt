@@ -40,34 +40,36 @@ class AuthLoginEmailAdapter(
         if (auth !is Auth.Account) {
             throw NoSuchElementException("Account not found")
         }
-        val account = accountFind(auth.accountId) ?: throw NoSuchElementException("Account not found")
+        return SecurityContext.with(auth) {
+            val account = accountFind(auth.accountId) ?: throw NoSuchElementException("Account not found")
 
-        val encodedPassword = encodePassword(req.password, account.salt)
-        val match = listAuth(
-            AuthQuery(
-                limit = Limit.all,
-                authIds = listOf(auth.id)
-            )
-        ).filterIsInstance<Auth.Email>().any { it.hash == encodedPassword }
-
-        if (!match) {
-            throw NoSuchElementException("Account not found")
-        }
-
-        return AuthLoginEmailRequested(
-            id = generateDomainId(::RequestId),
-            by = SecurityContext.currentAuthId,
-            status = RequestStatus.Submitted,
-            authId = generateDomainId(::AuthId),
-            accountId = account.id,
-            workspaceIds = workspaceList(
-                WorkspaceQuery(
+            val encodedPassword = encodePassword(req.password, account.salt)
+            val match = listAuth(
+                AuthQuery(
                     limit = Limit.all,
-                    accountIds = listOf(auth.accountId)
+                    authIds = listOf(auth.id)
                 )
-            ).map(Workspace::id),
-            hash = encodedPassword,
-            token = generateToken()
-        ).also(requestEnqueue::invoke)
+            ).filterIsInstance<Auth.Email>().any { it.hash == encodedPassword }
+
+            if (!match) {
+                throw NoSuchElementException("Account not found")
+            }
+
+            AuthLoginEmailRequested(
+                id = generateDomainId(::RequestId),
+                by = SecurityContext.currentAuthId,
+                status = RequestStatus.Submitted,
+                authId = generateDomainId(::AuthId),
+                accountId = account.id,
+                workspaceIds = workspaceList(
+                    WorkspaceQuery(
+                        limit = Limit.all,
+                        accountIds = listOf(auth.accountId)
+                    )
+                ).map(Workspace::id),
+                hash = encodedPassword,
+                token = generateToken()
+            ).also(requestEnqueue::invoke)
+        }
     }
 }

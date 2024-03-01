@@ -5,7 +5,7 @@ import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.util.HashUtils
 import io.hamal.lib.domain.vo.LogTopicId
 import io.hamal.repository.api.log.LogBrokerRepository
-import io.hamal.repository.api.log.LogBrokerRepository.LogTopicToCreate
+import io.hamal.repository.api.log.LogBrokerRepository.CreateTopicCmd
 import io.hamal.repository.api.log.LogConsumerId
 import io.hamal.repository.fixture.AbstractIntegrationTest
 import org.hamcrest.MatcherAssert.assertThat
@@ -19,9 +19,7 @@ class LogBrokerRepositoryTest : AbstractIntegrationTest() {
     @TestFactory
     fun `Concurrent safe - 10 threads add to the same topic`() =
         runWith(LogBrokerRepository::class) { testInstance ->
-            val topic = testInstance.create(
-                CmdId(1), LogTopicToCreate(LogTopicId(123))
-            )
+            val topic = testInstance.create(CreateTopicCmd(CmdId(1), LogTopicId(123)))
 
             val futures = IntRange(1, 10).map { thread ->
                 runAsync {
@@ -47,10 +45,7 @@ class LogBrokerRepositoryTest : AbstractIntegrationTest() {
 
             val futures = IntRange(1, 100).map { thread ->
                 runAsync {
-                    val topic = testInstance.create(
-                        CmdId(1),
-                        LogTopicToCreate(LogTopicId(thread))
-                    )
+                    val topic = testInstance.create(CreateTopicCmd(CmdId(1), LogTopicId(thread)))
 
                     IntRange(1, 100).forEach {
                         testInstance.append(

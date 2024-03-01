@@ -90,7 +90,7 @@ internal class ExecInvokeHandlerTest : BaseReqHandlerTest() {
                 assertThat(id, equalTo(ExecId(3333)))
                 assertThat(
                     correlation,
-                    equalTo(Correlation(funcId = FuncId(4444), correlationId = CorrelationId("some-correlation")))
+                    equalTo(Correlation(funcId = FuncId(4444), id = CorrelationId("some-correlation")))
                 )
                 assertThat(
                     inputs, equalTo(

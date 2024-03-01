@@ -19,9 +19,9 @@ internal class ExtensionGetController(
     private val extensionGet: ExtensionGetPort,
     private val codeGet: CodeGetPort
 ) {
-    @GetMapping("/v1/extensions/{extId}")
-    fun get(@PathVariable("extId") extId: ExtensionId): ResponseEntity<ApiExtension> = retry {
-        extensionGet(extId).let { extension ->
+    @GetMapping("/v1/extensions/{extensionId}")
+    fun get(@PathVariable("extensionId") extensionId: ExtensionId): ResponseEntity<ApiExtension> = retry {
+        extensionGet(extensionId).let { extension ->
             assemble(extension, codeGet(extension.code.id, extension.code.version))
         }
     }

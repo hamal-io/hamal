@@ -11,7 +11,7 @@ import io.hamal.repository.api.TopicQueryRepository.TopicEventQuery
 import io.hamal.repository.api.TopicQueryRepository.TopicQuery
 import io.hamal.repository.api.TopicRepository
 import io.hamal.repository.api.log.LogBrokerRepository
-import io.hamal.repository.api.log.LogBrokerRepository.LogTopicToCreate
+import io.hamal.repository.api.log.LogBrokerRepository.CreateTopicCmd
 import io.hamal.repository.api.log.LogEventId
 import io.hamal.repository.memory.record.RecordMemoryRepository
 import io.hamal.repository.record.json
@@ -45,7 +45,7 @@ class TopicMemoryRepository(
                 )
             )
             currentVersion(topicId).also(TopicCurrentProjection::apply).also { _ ->
-                logBrokerRepository.create(cmd.id, LogTopicToCreate(cmd.logTopicId))
+                logBrokerRepository.create(CreateTopicCmd(cmd.id, cmd.logTopicId))
             }
         }
     }

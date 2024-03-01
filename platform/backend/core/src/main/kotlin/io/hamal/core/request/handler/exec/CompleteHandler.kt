@@ -61,9 +61,12 @@ class ExecCompleteHandler(
         val correlation = exec.correlation
         if (correlation != null) {
             stateCmdRepository.set(
-                cmdId, CorrelatedState(
-                    correlation = correlation,
-                    value = State(exec.state.value)
+                StateCmdRepository.SetCmd(
+                    id= cmdId,
+                    correlatedState = CorrelatedState(
+                        correlation = correlation,
+                        value = State(exec.state.value)
+                    )
                 )
             )
         }

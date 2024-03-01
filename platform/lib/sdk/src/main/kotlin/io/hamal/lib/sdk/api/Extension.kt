@@ -55,9 +55,9 @@ data class ApiExtensionUpdateRequested(
 
 interface ApiExtensionService {
     fun create(workspaceId: WorkspaceId, req: ApiExtensionCreateRequest): ApiExtensionCreateRequested
-    fun get(extId: ExtensionId): ApiExtension
+    fun get(extensionId: ExtensionId): ApiExtension
     fun list(workspaceId: WorkspaceId): List<ApiExtensionList.Extension>
-    fun update(extId: ExtensionId, req: ApiExtensionUpdateRequest): ApiExtensionUpdateRequested
+    fun update(extensionId: ExtensionId, req: ApiExtensionUpdateRequest): ApiExtensionUpdateRequested
 }
 
 
@@ -71,9 +71,9 @@ internal class ApiExtensionServiceImpl(
             .execute()
             .fold(ApiExtensionCreateRequested::class)
 
-    override fun get(extId: ExtensionId): ApiExtension =
-        template.get("/v1/extensions/{extId}")
-            .path("extId", extId)
+    override fun get(extensionId: ExtensionId): ApiExtension =
+        template.get("/v1/extensions/{extensionId}")
+            .path("extensionId", extensionId)
             .execute()
             .fold(ApiExtension::class)
 
@@ -84,9 +84,9 @@ internal class ApiExtensionServiceImpl(
             .fold(ApiExtensionList::class)
             .extensions
 
-    override fun update(extId: ExtensionId, req: ApiExtensionUpdateRequest): ApiExtensionUpdateRequested =
-        template.patch("/v1/extensions/{extId}")
-            .path("extId", extId)
+    override fun update(extensionId: ExtensionId, req: ApiExtensionUpdateRequest): ApiExtensionUpdateRequested =
+        template.patch("/v1/extensions/{extensionId}")
+            .path("extensionId", extensionId)
             .body(req)
             .execute()
             .fold(ApiExtensionUpdateRequested::class)

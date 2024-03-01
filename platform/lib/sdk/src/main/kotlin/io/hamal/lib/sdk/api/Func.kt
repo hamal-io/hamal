@@ -54,8 +54,8 @@ data class ApiFuncUpdateRequested(
 
 
 data class ApiFuncInvokeRequest(
-    override val correlationId: CorrelationId?,
-    override val inputs: InvocationInputs,
+    override val correlationId: CorrelationId? = null,
+    override val inputs: InvocationInputs? = null,
     override val version: CodeVersion? = null
 ) : FuncInvokeRequest
 

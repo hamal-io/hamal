@@ -1,6 +1,7 @@
 package io.hamal.core.adapter.extension
 
 import io.hamal.core.adapter.request.RequestEnqueuePort
+import io.hamal.core.adapter.workspace.WorkspaceGetPort
 import io.hamal.core.security.SecurityContext
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.RequestStatus
@@ -19,14 +20,16 @@ fun interface ExtensionCreatePort {
 @Component
 class ExtensionCreateAdapter(
     private val generateDomainId: GenerateDomainId,
+    private val workspaceGet: WorkspaceGetPort,
     private val requestEnqueue: RequestEnqueuePort
 ) : ExtensionCreatePort {
     override fun invoke(workspaceId: WorkspaceId, req: ExtensionCreateRequest): ExtensionCreateRequested {
+        val workspace = workspaceGet(workspaceId)
         return ExtensionCreateRequested(
             id = generateDomainId(::RequestId),
             by = SecurityContext.currentAuthId,
             status = RequestStatus.Submitted,
-            workspaceId = workspaceId,
+            workspaceId = workspace.id,
             extensionId = generateDomainId(::ExtensionId),
             name = req.name,
             codeId = generateDomainId(::CodeId),
