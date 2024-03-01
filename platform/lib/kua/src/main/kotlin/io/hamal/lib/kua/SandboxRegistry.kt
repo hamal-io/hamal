@@ -4,14 +4,13 @@ import io.hamal.lib.kua.extend.extension.RunnerExtension
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.type.KuaCode
 import io.hamal.lib.kua.type.KuaString
-import io.hamal.lib.kua.type.KuaTable
 
 interface SandboxRegistry {
     fun register(plugin: RunnerPlugin)
     fun register(extension: RunnerExtension)
 
-    fun loadPluginFactory(name: String)
-    fun invokeExtensionFactory(name: String): KuaTable
+    fun pluginPush(name: String)
+    fun extensionPush(name: String)
 }
 
 internal class SandboxRegistryImpl(
@@ -20,17 +19,15 @@ internal class SandboxRegistryImpl(
 
     override fun register(plugin: RunnerPlugin) {
         plugins[plugin.name] = plugin
-        // FIXME load the factory
-        loadPluginFactory(plugin.name)
+        pluginPush(plugin.name)
     }
 
     override fun register(extension: RunnerExtension) {
         extensions[extension.name] = extension
-        // FIXME load the factory
-        invokeExtensionFactory(extension.name)
+        extensionPush(extension.name)
     }
 
-    override fun loadPluginFactory(name: String) {
+    override fun pluginPush(name: String) {
         val extension = plugins[name]!!
 
         state.globalSet(KuaString("_internal"), state.tableCreate(extension.internals))
@@ -44,18 +41,15 @@ internal class SandboxRegistryImpl(
         }
     }
 
-    override fun invokeExtensionFactory(name: String): KuaTable {
+    override fun extensionPush(name: String) {
         val extension = extensions[name]!!
 
         state.codeLoad(extension.factoryCode)
-        state.codeLoad(KuaCode("_factory = extension_factory_create()()"))
-
-        // FIXME cache factory so that it does not have to be loaded over and over again
-        val factory = state.globalGetTable(KuaString("_factory"))
-//        factories[name] = factory
-
-        state.globalUnset(KuaString("extension"))
-        return factory
+        state.codeLoad(KuaCode("_instance = extension_create()"))
+        state.globalGetTable(KuaString("_instance")).also {
+            // clean up
+            state.globalUnset(KuaString("_instance"))
+        }
     }
 
     private val plugins = mutableMapOf<String, RunnerPlugin>()

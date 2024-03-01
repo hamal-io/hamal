@@ -1,8 +1,8 @@
 package io.hamal.lib.kua.builtin
 
 import io.hamal.lib.kua.NativeLoader
-import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.Sandbox
+import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.extend.extension.RunnerExtension
 import io.hamal.lib.kua.type.KuaCode
 import org.junit.jupiter.api.Test
@@ -36,11 +36,9 @@ internal object ExtensionTest {
                     name = "test",
                     factoryCode = KuaCode(
                         """
-                            function extension_factory_create()
-                                return function()
-                                    local export = { some_number = 42 }
-                                    return export
-                                end
+                            function extension_create()
+                               local export = { some_number = 42 }
+                               return export
                             end
                     """.trimIndent()
                     )

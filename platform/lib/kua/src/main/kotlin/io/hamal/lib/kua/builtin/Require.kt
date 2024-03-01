@@ -15,14 +15,7 @@ class Require(
     FunctionOutput1Schema(KuaTable::class)
 ) {
     override fun invoke(ctx: FunctionContext, arg1: KuaString): KuaTable {
-        ctx.globalSet(KuaString("_instance"), registry.invokeExtensionFactory(arg1.value))
-
-        val result = ctx.globalGetTable(KuaString("_instance"))
-
-        ctx.globalUnset(KuaString("_factory"))
-        ctx.globalUnset(KuaString("_instance"))
-        ctx.globalUnset(KuaString("extension"))
-
-        return result
+        registry.extensionPush(arg1.value)
+        return ctx.tableGet(-1)
     }
 }

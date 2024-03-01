@@ -15,7 +15,7 @@ class RequirePlugin(
     FunctionOutput1Schema(KuaTable::class)
 ) {
     override fun invoke(ctx: FunctionContext, arg1: KuaString): KuaTable {
-        registry.loadPluginFactory(arg1.value)
+        registry.pluginPush(arg1.value)
         return ctx.tableGet(-1)
     }
 }
