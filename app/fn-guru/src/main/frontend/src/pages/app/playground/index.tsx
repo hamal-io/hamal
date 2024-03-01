@@ -1,18 +1,18 @@
 import {Button} from "@/components/ui/button"
 import Editor from "@/components/editor.tsx";
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import {useAdhoc} from "@/hook";
 import {PageHeader} from "@/components/page-header.tsx";
 import {useAuth} from "@/hook/auth.ts";
+import {useUiState} from "@/hook/ui-state.ts";
 
 export default function PlaygroundPage() {
-    const [auth] = useAuth()
+    const [uiState] = useUiState()
     const [adhoc, data] = useAdhoc()
-    const [code, setCode] = useState("log = require('log')\nlog.info('Let\\'s go..')")
-
+    const [code, setCode] = useState("log = require('log').create({})\nlog.info('Let\\'s go..')")
     const Run = () => (
         <Button onClick={() => {
-            adhoc(auth.defaultFlowIds.find(defaultFlowId => defaultFlowId.groupId == auth.groupId).flowId, code)
+            adhoc(uiState.namespaceId, code)
         }}>Play</Button>
     )
     return (

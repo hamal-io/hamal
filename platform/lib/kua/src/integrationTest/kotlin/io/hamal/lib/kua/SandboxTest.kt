@@ -6,6 +6,7 @@ import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.type.KuaCode
+import io.hamal.lib.kua.type.KuaString
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -17,20 +18,20 @@ internal class RegisterExtensionTest : BaseSandboxTest() {
         testInstance.register(
             RunnerExtension(
                 name = "some_plugin",
-                factoryCode = """
-                    function extension()
-                        return function()
-                            local export = { 
-                                magic = function() end
-                            }
-                            return export
-                        end
+                factoryCode = KuaCode(
+                    """
+                    function extension_create()
+                        local export = { 
+                            magic = function() end
+                        }
+                        return export
                     end
-                """.trimIndent(),
+                """.trimIndent()
+                ),
             )
         )
 
-        testInstance.load(
+        testInstance.codeLoad(
             KuaCode(
                 """
                 some_plugin = require('some_plugin')
@@ -57,22 +58,21 @@ internal class RegisterPluginTest : BaseSandboxTest() {
         testInstance.register(
             RunnerPlugin(
                 name = "some_plugin",
-                factoryCode = """
-                    function plugin()
-                        local internal = _internal
-                        return function()
-                            local export = { 
-                                magic =  internal.magic
-                            }
-                            return export
-                        end
+                factoryCode = KuaCode(
+                    """
+                    function plugin_create(internal)
+                        local export = { 
+                            magic =  internal.magic
+                        }
+                        return export
                     end
-                """.trimIndent(),
-                internals = mapOf("magic" to func)
+                """.trimIndent()
+                ),
+                internals = mapOf(KuaString("magic") to func)
             )
         )
 
-        testInstance.load(
+        testInstance.codeLoad(
             KuaCode(
                 """
                 some_plugin = require_plugin('some_plugin')
@@ -88,6 +88,6 @@ internal class RegisterPluginTest : BaseSandboxTest() {
 internal sealed class BaseSandboxTest {
     val testInstance = run {
         NativeLoader.load(Resources)
-        Sandbox(NopSandboxContext())
+        Sandbox(SandboxContextNop)
     }
 }

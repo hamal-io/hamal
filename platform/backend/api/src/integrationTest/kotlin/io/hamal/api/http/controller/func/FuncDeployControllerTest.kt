@@ -106,7 +106,9 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
         fun `Tries to deploy version that does not exist`() {
             val func: ApiFuncCreateRequested = createFunc(
                 ApiFuncCreateRequest(
-                    name = FuncName("Func-base"), inputs = FuncInputs(), code = CodeValue("40 + 2")
+                    name = FuncName("Func-base"),
+                    inputs = FuncInputs(),
+                    code = CodeValue("40 + 2")
                 )
             )
 
@@ -178,7 +180,9 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
             val func = awaitCompleted(
                 createFunc(
                     ApiFuncCreateRequest(
-                        name = FuncName("test-func"), inputs = FuncInputs(), code = CodeValue("13 + 37")
+                        name = FuncName("test-func"),
+                        inputs = FuncInputs(),
+                        code = CodeValue("13 + 37")
                     )
                 )
             )
@@ -187,7 +191,9 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
                 awaitCompleted(
                     updateFunc(
                         func.funcId, ApiFuncUpdateRequest(
-                            name = null, inputs = null, code = CodeValue("code-${i}")
+                            name = null,
+                            inputs = null,
+                            code = CodeValue("code-${i}")
                         )
                     )
                 )

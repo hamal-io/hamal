@@ -1,30 +1,27 @@
 package io.hamal.repository.sqlite.record.blueprint
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.BlueprintId
-import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Blueprint
 import io.hamal.repository.api.BlueprintCmdRepository.CreateCmd
 import io.hamal.repository.api.BlueprintCmdRepository.UpdateCmd
 import io.hamal.repository.api.BlueprintQueryRepository.BlueprintQuery
 import io.hamal.repository.api.BlueprintRepository
 import io.hamal.repository.record.CreateDomainObject
-import io.hamal.repository.record.blueprint.BlueprintCreatedRecord
 import io.hamal.repository.record.blueprint.BlueprintEntity
 import io.hamal.repository.record.blueprint.BlueprintRecord
-import io.hamal.repository.record.blueprint.BlueprintUpdatedRecord
-import io.hamal.repository.sqlite.record.SqliteRecordRepository
+import io.hamal.repository.sqlite.record.RecordSqliteRepository
 import java.nio.file.Path
 
 internal object CreateBlueprint : CreateDomainObject<BlueprintId, BlueprintRecord, Blueprint> {
     override fun invoke(recs: List<BlueprintRecord>): Blueprint {
         check(recs.isNotEmpty()) { "At least one record is required" }
         val firstRecord = recs.first()
-        check(firstRecord is BlueprintCreatedRecord)
+        check(firstRecord is BlueprintRecord.Created)
 
         var result = BlueprintEntity(
             cmdId = firstRecord.cmdId,
             id = firstRecord.entityId,
-            groupId = firstRecord.groupId,
             creatorId = firstRecord.creatorId,
             sequence = firstRecord.sequence(),
             recordedAt = firstRecord.recordedAt()
@@ -39,18 +36,14 @@ internal object CreateBlueprint : CreateDomainObject<BlueprintId, BlueprintRecor
 }
 
 class BlueprintSqliteRepository(
-    config: Config
-) : SqliteRecordRepository<BlueprintId, BlueprintRecord, Blueprint>(
-    config = config,
+    path: Path
+) : RecordSqliteRepository<BlueprintId, BlueprintRecord, Blueprint>(
+    path = path,
+    filename = "blueprint.db",
     createDomainObject = CreateBlueprint,
     recordClass = BlueprintRecord::class,
     projections = listOf(ProjectionCurrent)
 ), BlueprintRepository {
-    data class Config(
-        override val path: Path
-    ) : SqliteBaseRepository.Config {
-        override val filename = "blueprint.db"
-    }
 
     override fun create(cmd: CreateCmd): Blueprint {
         val bpId = cmd.blueprintId
@@ -60,14 +53,14 @@ class BlueprintSqliteRepository(
                 versionOf(bpId, cmdId)
             } else {
                 store(
-                    BlueprintCreatedRecord(
+                    BlueprintRecord.Created(
                         cmdId = cmdId,
                         entityId = bpId,
-                        groupId = cmd.groupId,
                         name = cmd.name,
                         inputs = cmd.inputs,
                         value = cmd.value,
-                        creatorId = cmd.creatorId
+                        creatorId = cmd.creatorId,
+                        description = cmd.description
                     )
                 )
 
@@ -85,12 +78,13 @@ class BlueprintSqliteRepository(
             } else {
                 val currentVersion = versionOf(blueprintId, cmdId)
                 store(
-                    BlueprintUpdatedRecord(
+                    BlueprintRecord.Updated(
                         entityId = blueprintId,
                         cmdId = cmdId,
                         name = cmd.name ?: currentVersion.name,
                         inputs = cmd.inputs ?: currentVersion.inputs,
-                        value = cmd.value ?: currentVersion.value
+                        value = cmd.value ?: currentVersion.value,
+                        description = cmd.description ?: currentVersion.description
                     )
                 )
                 currentVersion(blueprintId)
@@ -108,7 +102,7 @@ class BlueprintSqliteRepository(
         return ProjectionCurrent.list(connection, query)
     }
 
-    override fun count(query: BlueprintQuery): ULong {
+    override fun count(query: BlueprintQuery): Count {
         return ProjectionCurrent.count(connection, query)
     }
 }

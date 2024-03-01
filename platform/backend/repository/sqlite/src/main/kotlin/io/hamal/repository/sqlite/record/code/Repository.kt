@@ -1,8 +1,8 @@
 package io.hamal.repository.sqlite.record.code
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.domain.vo.CodeVersion
-import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Code
 import io.hamal.repository.api.CodeCmdRepository.CreateCmd
 import io.hamal.repository.api.CodeCmdRepository.UpdateCmd
@@ -10,11 +10,9 @@ import io.hamal.repository.api.CodeQueryRepository.CodeQuery
 import io.hamal.repository.api.CodeRepository
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordSequence
-import io.hamal.repository.record.code.CodeCreatedRecord
 import io.hamal.repository.record.code.CodeEntity
 import io.hamal.repository.record.code.CodeRecord
-import io.hamal.repository.record.code.CodeUpdatedRecord
-import io.hamal.repository.sqlite.record.SqliteRecordRepository
+import io.hamal.repository.sqlite.record.RecordSqliteRepository
 import java.nio.file.Path
 
 
@@ -22,12 +20,12 @@ internal object CreateCode : CreateDomainObject<CodeId, CodeRecord, Code> {
     override fun invoke(recs: List<CodeRecord>): Code {
         check(recs.isNotEmpty()) { "At least one record is required" }
         val firstRecord = recs.first()
-        check(firstRecord is CodeCreatedRecord)
+        check(firstRecord is CodeRecord.Created)
 
         var result = CodeEntity(
             cmdId = firstRecord.cmdId,
             id = firstRecord.entityId,
-            groupId = firstRecord.groupId,
+            workspaceId = firstRecord.workspaceId,
             sequence = firstRecord.sequence(),
             recordedAt = firstRecord.recordedAt()
         )
@@ -41,19 +39,14 @@ internal object CreateCode : CreateDomainObject<CodeId, CodeRecord, Code> {
 }
 
 class CodeSqliteRepository(
-    config: Config
-) : SqliteRecordRepository<CodeId, CodeRecord, Code>(
-    config = config,
+    path: Path
+) : RecordSqliteRepository<CodeId, CodeRecord, Code>(
+    path = path,
+    filename = "code.db",
     createDomainObject = CreateCode,
     recordClass = CodeRecord::class,
     projections = listOf(ProjectionCurrent)
 ), CodeRepository {
-
-    data class Config(
-        override val path: Path
-    ) : SqliteBaseRepository.Config {
-        override val filename = "code.db"
-    }
 
     override fun create(cmd: CreateCmd): Code {
         val codeId = cmd.codeId
@@ -63,10 +56,10 @@ class CodeSqliteRepository(
                 versionOf(codeId, cmdId)
             } else {
                 store(
-                    CodeCreatedRecord(
+                    CodeRecord.Created(
                         cmdId = cmdId,
                         entityId = codeId,
-                        groupId = cmd.groupId,
+                        workspaceId = cmd.workspaceId,
                         value = cmd.value,
                         type = cmd.type
                     )
@@ -90,7 +83,7 @@ class CodeSqliteRepository(
                     currentVersion
                 } else {
                     store(
-                        CodeUpdatedRecord(
+                        CodeRecord.Updated(
                             cmdId = cmdId,
                             entityId = codeId,
                             value = codeValue
@@ -115,7 +108,7 @@ class CodeSqliteRepository(
         return ProjectionCurrent.list(connection, query)
     }
 
-    override fun count(query: CodeQuery): ULong {
+    override fun count(query: CodeQuery): Count {
         return ProjectionCurrent.count(connection, query)
     }
 }

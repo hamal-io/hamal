@@ -1,21 +1,18 @@
 package io.hamal.repository.api
 
-import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.domain.DomainObject
-import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.common.domain.UpdatedAt
+import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.*
 
 data class Endpoint(
     override val id: EndpointId,
     override val updatedAt: UpdatedAt,
-    val groupId: GroupId,
+    override val workspaceId: WorkspaceId,
     val cmdId: CmdId,
-    val flowId: FlowId,
+    override val namespaceId: NamespaceId,
     val funcId: FuncId,
     val name: EndpointName
-) : DomainObject<EndpointId>
+) : DomainObject<EndpointId>, HasNamespaceId, HasWorkspaceId
 
 interface EndpointRepository : EndpointCmdRepository, EndpointQueryRepository
 
@@ -27,8 +24,8 @@ interface EndpointCmdRepository : CmdRepository {
     data class CreateCmd(
         val id: CmdId,
         val endpointId: EndpointId,
-        val groupId: GroupId,
-        val flowId: FlowId,
+        val workspaceId: WorkspaceId,
+        val namespaceId: NamespaceId,
         val funcId: FuncId,
         val name: EndpointName
     )
@@ -47,19 +44,19 @@ interface EndpointQueryRepository {
     fun list(endpointIds: List<EndpointId>): List<Endpoint> = list(
         EndpointQuery(
             limit = Limit.all,
-            groupIds = listOf(),
+            workspaceIds = listOf(),
             endpointIds = endpointIds,
         )
     )
 
-    fun count(query: EndpointQuery): ULong
+    fun count(query: EndpointQuery): Count
 
     data class EndpointQuery(
         var afterId: EndpointId = EndpointId(SnowflakeId(Long.MAX_VALUE)),
         var limit: Limit = Limit(1),
         var endpointIds: List<EndpointId> = listOf(),
-        var flowIds: List<FlowId> = listOf(),
+        var namespaceIds: List<NamespaceId> = listOf(),
         var funcIds: List<FuncId> = listOf(),
-        var groupIds: List<GroupId> = listOf()
+        var workspaceIds: List<WorkspaceId> = listOf()
     )
 }

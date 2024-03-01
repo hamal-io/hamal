@@ -1,26 +1,21 @@
 package io.hamal.core.event
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.GenerateId
-import io.hamal.lib.domain.vo.FlowId
-import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.domain.vo.TopicId
-import io.hamal.repository.api.event.PlatformEvent
-import io.hamal.repository.api.log.AppenderImpl
-import io.hamal.repository.api.log.BrokerRepository
-import io.hamal.repository.api.log.CreateTopic.TopicToCreate
+import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.repository.api.TopicRepository
+import io.hamal.repository.api.event.InternalEvent
+import io.hamal.repository.api.log.LogBrokerRepository
+import io.hamal.repository.api.log.LogTopicAppenderImpl
 
-class PlatformEventEmitter(
-    private val generateDomainId: GenerateId,
-    private val brokerRepository: BrokerRepository
+class InternalEventEmitter(
+    private val topicRepository: TopicRepository,
+    logTopicRepository: LogBrokerRepository
 ) {
-    fun <EVENT : PlatformEvent> emit(cmdId: CmdId, evt: EVENT) {
-        val topic = brokerRepository.findTopic(FlowId.root, evt.topicName) ?: brokerRepository.create(
-            cmdId,
-            TopicToCreate(generateDomainId(::TopicId), evt.topicName, FlowId.root, GroupId.root)
-        )
-        appender.append(cmdId, topic, evt)
+
+    fun <EVENT : InternalEvent> emit(cmdId: CmdId, evt: EVENT) {
+        val topic = topicRepository.getTopic(NamespaceId.root, evt.topicName)
+        appender.append(cmdId, topic.logTopicId, evt)
     }
 
-    private val appender = AppenderImpl<PlatformEvent>(brokerRepository)
+    private val appender = LogTopicAppenderImpl<InternalEvent>(logTopicRepository)
 }

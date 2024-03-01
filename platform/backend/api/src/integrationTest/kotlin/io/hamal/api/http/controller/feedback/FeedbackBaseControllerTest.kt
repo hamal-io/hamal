@@ -4,6 +4,7 @@ import io.hamal.api.http.controller.BaseControllerTest
 import io.hamal.lib.domain.request.FeedbackCreateRequest
 import io.hamal.lib.domain.request.FeedbackCreateRequested
 import io.hamal.lib.domain.vo.FeedbackId
+import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
@@ -14,11 +15,11 @@ import org.hamcrest.MatcherAssert.assertThat
 
 internal sealed class FeedbackBaseControllerTest : BaseControllerTest() {
     fun createFeedback(req: FeedbackCreateRequest): FeedbackCreateRequested {
-        val createResponse = httpTemplate.post("/v1/feedback/create")
+        val createResponse = httpTemplate.post("/v1/feedback")
             .body(req)
             .execute()
 
-        assertThat(createResponse.statusCode, equalTo(Ok))
+        assertThat(createResponse.statusCode, equalTo(Accepted))
         require(createResponse is HttpSuccessResponse) { "request was not successful" }
         return createResponse.result(FeedbackCreateRequested::class)
     }

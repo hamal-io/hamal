@@ -2,7 +2,7 @@ package io.hamal.api.http.controller.hook
 
 import io.hamal.api.http.controller.BaseControllerTest
 import io.hamal.lib.domain.vo.HookId
-import io.hamal.lib.domain.vo.FlowId
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.HttpSuccessResponse
@@ -18,10 +18,10 @@ internal sealed class HookBaseControllerTest : BaseControllerTest() {
 
     fun createHook(
         req: ApiHookCreateRequest,
-        flowId: FlowId = FlowId(1),
+        namespaceId: NamespaceId = NamespaceId.root,
     ): ApiHookCreateRequested {
-        val response = httpTemplate.post("/v1/flows/{flowId}/hooks")
-            .path("flowId", flowId)
+        val response = httpTemplate.post("/v1/namespaces/{namespaceId}/hooks")
+            .path("namespaceId", namespaceId)
             .body(req)
             .execute()
 
@@ -32,7 +32,7 @@ internal sealed class HookBaseControllerTest : BaseControllerTest() {
 
     fun listHooks(): ApiHookList {
         val listHooksResponse = httpTemplate.get("/v1/hooks")
-            .parameter("group_ids", testGroup.id)
+            .parameter("workspace_ids", testWorkspace.id)
             .execute()
 
         assertThat(listHooksResponse.statusCode, equalTo(Ok))

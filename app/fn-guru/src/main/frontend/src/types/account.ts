@@ -1,4 +1,4 @@
-export interface AccountConvertSubmitted {
+export interface AccountConvertRequested {
     id: string;
     status: string;
     accountId: string;

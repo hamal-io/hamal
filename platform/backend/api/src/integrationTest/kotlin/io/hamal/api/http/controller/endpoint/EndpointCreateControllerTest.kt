@@ -3,9 +3,9 @@ package io.hamal.api.http.controller.endpoint
 import io.hamal.lib.domain._enum.EndpointMethod.Patch
 import io.hamal.lib.domain._enum.EndpointMethod.Post
 import io.hamal.lib.domain.vo.EndpointName
-import io.hamal.lib.domain.vo.FlowId
-import io.hamal.lib.domain.vo.FlowName
 import io.hamal.lib.domain.vo.FuncName
+import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.BadRequest
 import io.hamal.lib.http.body
@@ -19,10 +19,10 @@ import org.junit.jupiter.api.Test
 internal class EndpointCreateControllerTest : EndpointBaseControllerTest() {
 
     @Test
-    fun `Create endpoint with default flow id`() {
+    fun `Create endpoint with default namespace id`() {
         val funcId = awaitCompleted(
             createFunc(
-                flowId = FlowId(1),
+                namespaceId = NamespaceId.root,
                 name = FuncName("func")
             )
         ).funcId
@@ -31,7 +31,7 @@ internal class EndpointCreateControllerTest : EndpointBaseControllerTest() {
             name = EndpointName("test-endpoint"),
             funcId = funcId,
             method = Patch,
-            flowId = FlowId(1)
+            namespaceId = NamespaceId.root
         )
         awaitCompleted(result)
 
@@ -39,25 +39,25 @@ internal class EndpointCreateControllerTest : EndpointBaseControllerTest() {
         with(endpoint) {
             assertThat(name, equalTo(EndpointName("test-endpoint")))
 
-            val flow = flowQueryRepository.get(flowId)
-            assertThat(flow.name, equalTo(FlowName("hamal")))
+            val namespace = namespaceQueryRepository.get(namespaceId)
+            assertThat(namespace.name, equalTo(NamespaceName("hamal")))
         }
 
     }
 
 
     @Test
-    fun `Create endpoint with flow id`() {
-        val flowId = awaitCompleted(
-            createFlow(
-                name = FlowName("flow"),
-                groupId = testGroup.id
+    fun `Create endpoint with namespace id`() {
+        val namespaceId = awaitCompleted(
+            appendNamespace(
+                name = NamespaceName("namespace"),
+                parentId = testNamespace.id
             )
-        ).flowId
+        ).namespaceId
 
         val funcId = awaitCompleted(
             createFunc(
-                flowId = flowId,
+                namespaceId = namespaceId,
                 name = FuncName("func")
             )
         ).funcId
@@ -66,41 +66,41 @@ internal class EndpointCreateControllerTest : EndpointBaseControllerTest() {
             name = EndpointName("test-endpoint"),
             funcId = funcId,
             method = Patch,
-            flowId = flowId
+            namespaceId = namespaceId
         )
         awaitCompleted(result)
 
         with(endpointQueryRepository.get(result.endpointId)) {
             assertThat(name, equalTo(EndpointName("test-endpoint")))
-            assertThat(flowId, equalTo(flowId))
+            assertThat(namespaceId, equalTo(namespaceId))
         }
     }
 
     @Test
-    fun `Tries to create endpoint, but func does not belong to same flow`() {
-        val flowId = awaitCompleted(
-            createFlow(
-                name = FlowName("flow"),
-                groupId = testGroup.id
+    fun `Tries to create endpoint, but func does not belong to same namespace`() {
+        val namespaceId = awaitCompleted(
+            appendNamespace(
+                name = NamespaceName("namespace"),
+                parentId = testNamespace.id
             )
-        ).flowId
+        ).namespaceId
 
-        val anotherFlowId = awaitCompleted(
-            createFlow(
-                name = FlowName("another-flow"),
-                groupId = testGroup.id
+        val anotherNamespaceId = awaitCompleted(
+            appendNamespace(
+                name = NamespaceName("another-namespace"),
+                parentId = testNamespace.id
             )
-        ).flowId
+        ).namespaceId
 
         val funcId = awaitCompleted(
             createFunc(
                 name = FuncName("func"),
-                flowId = anotherFlowId
+                namespaceId = anotherNamespaceId
             )
         ).funcId
 
-        val response = httpTemplate.post("/v1/flows/{flowId}/endpoints")
-            .path("flowId", flowId)
+        val response = httpTemplate.post("/v1/namespaces/{namespaceId}/endpoints")
+            .path("namespaceId", namespaceId)
             .body(
                 ApiEndpointCreateRequest(
                     name = EndpointName("test-endpoint"),
@@ -114,7 +114,7 @@ internal class EndpointCreateControllerTest : EndpointBaseControllerTest() {
         require(response is HttpErrorResponse) { "request was successful" }
 
         val error = response.error(ApiError::class)
-        assertThat(error.message, equalTo("Endpoint and Func must share the same Flow"))
+        assertThat(error.message, equalTo("Endpoint and Func must share the same Namespace"))
 
         assertThat(listEndpoints().endpoints, empty())
     }

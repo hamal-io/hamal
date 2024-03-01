@@ -1,27 +1,28 @@
 package io.hamal.repository.sqlite.record.exec
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.sqlite.SqliteBaseRepository
-import io.hamal.repository.api.*
+import io.hamal.repository.api.Exec
 import io.hamal.repository.api.ExecCmdRepository.*
 import io.hamal.repository.api.ExecQueryRepository.ExecQuery
+import io.hamal.repository.api.ExecRepository
 import io.hamal.repository.api.record.exec.ExecEntity
 import io.hamal.repository.record.CreateDomainObject
-import io.hamal.repository.record.exec.*
-import io.hamal.repository.sqlite.record.SqliteRecordRepository
+import io.hamal.repository.record.exec.ExecRecord
+import io.hamal.repository.sqlite.record.RecordSqliteRepository
 import java.nio.file.Path
 
 internal object CreateExec : CreateDomainObject<ExecId, ExecRecord, Exec> {
     override fun invoke(recs: List<ExecRecord>): Exec {
         check(recs.isNotEmpty()) { "At least one record is required" }
         val firstRecord = recs.first()
-        check(firstRecord is ExecPlannedRecord)
+        check(firstRecord is ExecRecord.Planned)
 
         var result = ExecEntity(
             cmdId = firstRecord.cmdId,
             id = firstRecord.entityId,
-            flowId = firstRecord.flowId,
-            groupId = firstRecord.groupId,
+            namespaceId = firstRecord.namespaceId,
+            workspaceId = firstRecord.workspaceId,
             sequence = firstRecord.sequence(),
             recordedAt = firstRecord.recordedAt()
         )
@@ -35,9 +36,10 @@ internal object CreateExec : CreateDomainObject<ExecId, ExecRecord, Exec> {
 }
 
 class ExecSqliteRepository(
-    config: Config
-) : SqliteRecordRepository<ExecId, ExecRecord, Exec>(
-    config = config,
+    path: Path
+) : RecordSqliteRepository<ExecId, ExecRecord, Exec>(
+    path = path,
+    filename = "exec.db",
     createDomainObject = CreateExec,
     recordClass = ExecRecord::class,
     projections = listOf(
@@ -46,25 +48,19 @@ class ExecSqliteRepository(
     )
 ), ExecRepository {
 
-    data class Config(
-        override val path: Path
-    ) : SqliteBaseRepository.Config {
-        override val filename = "exec.db"
-    }
-
-    override fun plan(cmd: PlanCmd): PlannedExec {
+    override fun plan(cmd: PlanCmd): Exec.Planned {
         val execId = cmd.execId
         val cmdId = cmd.id
         return tx {
             if (commandAlreadyApplied(cmdId, execId)) {
-                versionOf(execId, cmdId) as PlannedExec
+                versionOf(execId, cmdId) as Exec.Planned
             } else {
                 store(
-                    ExecPlannedRecord(
+                    ExecRecord.Planned(
                         cmdId = cmdId,
                         entityId = execId,
-                        flowId = cmd.flowId,
-                        groupId = cmd.groupId,
+                        namespaceId = cmd.namespaceId,
+                        workspaceId = cmd.workspaceId,
                         correlation = cmd.correlation,
                         inputs = cmd.inputs,
                         code = cmd.code,
@@ -72,61 +68,61 @@ class ExecSqliteRepository(
                     )
                 )
 
-                (currentVersion(execId) as PlannedExec)
+                (currentVersion(execId) as Exec.Planned)
                     .also { ProjectionCurrent.upsert(this, it) }
             }
         }
     }
 
-    override fun schedule(cmd: ScheduleCmd): ScheduledExec {
+    override fun schedule(cmd: ScheduleCmd): Exec.Scheduled {
         val execId = cmd.execId
         val cmdId = cmd.id
         return tx {
             if (commandAlreadyApplied(cmdId, execId)) {
-                versionOf(execId, cmdId) as ScheduledExec
+                versionOf(execId, cmdId) as Exec.Scheduled
             } else {
-                check(currentVersion(execId) is PlannedExec) { "$execId not planned" }
+                check(currentVersion(execId) is Exec.Planned) { "$execId not planned" }
 
-                store(ExecScheduledRecord(cmdId, execId))
+                store(ExecRecord.Scheduled(cmdId, execId))
 
-                (currentVersion(execId) as ScheduledExec).also { ProjectionCurrent.upsert(this, it) }
+                (currentVersion(execId) as Exec.Scheduled).also { ProjectionCurrent.upsert(this, it) }
             }
         }
     }
 
-    override fun queue(cmd: QueueCmd): QueuedExec {
+    override fun queue(cmd: QueueCmd): Exec.Queued {
         val execId = cmd.execId
         val cmdId = cmd.id
         return tx {
             if (commandAlreadyApplied(cmdId, execId)) {
-                versionOf(execId, cmdId) as QueuedExec
+                versionOf(execId, cmdId) as Exec.Queued
             } else {
-                check(currentVersion(execId) is ScheduledExec) { "$execId not scheduled" }
+                check(currentVersion(execId) is Exec.Scheduled) { "$execId not scheduled" }
 
-                store(ExecQueuedRecord(cmdId, execId))
+                store(ExecRecord.Queued(cmdId, execId))
 
-                (currentVersion(execId) as QueuedExec)
+                (currentVersion(execId) as Exec.Queued)
                     .also { ProjectionCurrent.upsert(this, it) }
                     .also { ProjectionQueue.upsert(this, it) }
             }
         }
     }
 
-    override fun start(cmd: StartCmd): List<StartedExec> {
+    override fun start(cmd: StartCmd): List<Exec.Started> {
         val cmdId = cmd.id
-        val result = mutableListOf<StartedExec>()
+        val result = mutableListOf<Exec.Started>()
 
         tx {
             ProjectionQueue.pop(this, 1).forEach { queuedExec ->
                 val execId = queuedExec.id
                 if (commandAlreadyApplied(cmdId, execId)) {
-                    versionOf(execId, cmdId) as QueuedExec
+                    versionOf(execId, cmdId) as Exec.Queued
                 } else {
-                    check(currentVersion(execId) is QueuedExec) { "$execId not queued" }
+                    check(currentVersion(execId) is Exec.Queued) { "$execId not queued" }
 
-                    store(ExecStartedRecord(cmd.id, execId))
+                    store(ExecRecord.Started(cmd.id, execId))
 
-                    result.add((currentVersion(execId) as StartedExec).also { ProjectionCurrent.upsert(this, it) })
+                    result.add((currentVersion(execId) as Exec.Started).also { ProjectionCurrent.upsert(this, it) })
                 }
             }
         }
@@ -135,34 +131,34 @@ class ExecSqliteRepository(
     }
 
 
-    override fun complete(cmd: CompleteCmd): CompletedExec {
+    override fun complete(cmd: CompleteCmd): Exec.Completed {
         val execId = cmd.execId
         val cmdId = cmd.id
         return tx {
             if (commandAlreadyApplied(cmdId, execId)) {
-                versionOf(execId, cmdId) as CompletedExec
+                versionOf(execId, cmdId) as Exec.Completed
             } else {
-                check(currentVersion(execId) is StartedExec) { "$execId not started" }
+                check(currentVersion(execId) is Exec.Started) { "$execId not started" }
 
-                store(ExecCompletedRecord(cmdId, execId, cmd.result, cmd.state))
+                store(ExecRecord.Completed(cmdId, execId, cmd.result, cmd.state))
 
-                (currentVersion(execId) as CompletedExec).also { ProjectionCurrent.upsert(this, it) }
+                (currentVersion(execId) as Exec.Completed).also { ProjectionCurrent.upsert(this, it) }
             }
         }
     }
 
-    override fun fail(cmd: FailCmd): FailedExec {
+    override fun fail(cmd: FailCmd): Exec.Failed {
         val execId = cmd.execId
         val cmdId = cmd.id
         return tx {
             if (commandAlreadyApplied(cmdId, execId)) {
-                versionOf(execId, cmdId) as FailedExec
+                versionOf(execId, cmdId) as Exec.Failed
             } else {
-                check(currentVersion(execId) is StartedExec) { "$execId not started" }
+                check(currentVersion(execId) is Exec.Started) { "$execId not started" }
 
-                store(ExecFailedRecord(cmdId, execId, cmd.result))
+                store(ExecRecord.Failed(cmdId, execId, cmd.result))
 
-                (currentVersion(execId) as FailedExec).also { ProjectionCurrent.upsert(this, it) }
+                (currentVersion(execId) as Exec.Failed).also { ProjectionCurrent.upsert(this, it) }
             }
         }
     }
@@ -175,7 +171,7 @@ class ExecSqliteRepository(
         return ProjectionCurrent.list(connection, query)
     }
 
-    override fun count(query: ExecQuery): ULong {
+    override fun count(query: ExecQuery): Count {
         return ProjectionCurrent.count(connection, query)
     }
 

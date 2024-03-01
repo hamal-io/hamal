@@ -3,7 +3,6 @@ package io.hamal.repository.sqlite.record.trigger
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
-import io.hamal.repository.api.HookTrigger
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.record.trigger.TriggerRecord
 import io.hamal.repository.sqlite.record.ProjectionSqlite
@@ -12,7 +11,7 @@ import org.sqlite.SQLiteException
 
 internal object ProjectionUniqueHook : ProjectionSqlite<TriggerId, TriggerRecord, Trigger> {
     override fun upsert(tx: RecordTransactionSqlite<TriggerId, TriggerRecord, Trigger>, obj: Trigger) {
-        obj as HookTrigger
+        obj as Trigger.Hook
         try {
             tx.execute(
                 """

@@ -15,18 +15,18 @@ internal object ProjectionUniqueName : ProjectionSqlite<EndpointId, EndpointReco
         try {
             tx.execute(
                 """
-                INSERT INTO unique_name (id, name, flow_id)  VALUES(:id, :name, :flowId)
+                INSERT INTO unique_name (id, name, namespace_id)  VALUES(:id, :name, :namespaceId)
                     ON CONFLICT(id) DO UPDATE 
-                        SET name=:name, flow_id=:flowId;
+                        SET name=:name, namespace_id=:namespaceId;
             """.trimIndent()
             ) {
                 set("id", obj.id)
                 set("name", obj.name)
-                set("flowId", obj.flowId)
+                set("namespaceId", obj.namespaceId)
             }
         } catch (e: SQLiteException) {
-            if (e.message!!.contains("(UNIQUE constraint failed: unique_name.name, unique_name.flow_id)")) {
-                throw IllegalArgumentException("${obj.name} already exists in flow ${obj.flowId}")
+            if (e.message!!.contains("(UNIQUE constraint failed: unique_name.name, unique_name.namespace_id)")) {
+                throw IllegalArgumentException("${obj.name} already exists in namespace ${obj.namespaceId}")
             }
             throw e
         }
@@ -38,9 +38,9 @@ internal object ProjectionUniqueName : ProjectionSqlite<EndpointId, EndpointReco
             CREATE TABLE IF NOT EXISTS unique_name (
                  id             INTEGER NOT NULL,
                  name           VARCHAR(255) NOT NULL,
-                 flow_id        INTEGER NOT NULL,
+                 namespace_id        INTEGER NOT NULL,
                  PRIMARY KEY    (id),
-                 UNIQUE         (name, flow_id)
+                 UNIQUE         (name, namespace_id)
             );
         """.trimIndent()
         )

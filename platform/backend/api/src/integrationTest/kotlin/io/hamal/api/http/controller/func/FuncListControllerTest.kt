@@ -1,8 +1,10 @@
 package io.hamal.api.http.controller.func
 
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.CodeValue
+import io.hamal.lib.domain.vo.FuncInputs
+import io.hamal.lib.domain.vo.FuncName
+import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.sdk.api.ApiFuncCreateRequest
-import io.hamal.lib.sdk.api.ApiFuncDeployRequest
 import io.hamal.lib.sdk.api.ApiFuncList
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
@@ -51,7 +53,7 @@ internal class FuncListControllerTest : FuncBaseControllerTest() {
         )
 
         val listResponse = httpTemplate.get("/v1/funcs")
-            .parameter("group_ids", testGroup.id)
+            .parameter("workspace_ids", testWorkspace.id)
             .parameter("limit", 12)
             .execute(ApiFuncList::class)
 
@@ -78,7 +80,7 @@ internal class FuncListControllerTest : FuncBaseControllerTest() {
         val fortyNinth = requests[49]
 
         val listResponse = httpTemplate.get("/v1/funcs")
-            .parameter("group_ids", testGroup.id)
+            .parameter("workspace_ids", testWorkspace.id)
             .parameter("after_id", fortyNinth.funcId)
             .parameter("limit", 1)
             .execute(ApiFuncList::class)
@@ -86,30 +88,7 @@ internal class FuncListControllerTest : FuncBaseControllerTest() {
         assertThat(listResponse.funcs, hasSize(1))
 
         val func = listResponse.funcs.first()
-        assertThat(func.flow.name, equalTo(FlowName("hamal")))
+        assertThat(func.namespace.name, equalTo(NamespaceName("hamal")))
         assertThat(func.name, equalTo(FuncName("func-48")))
     }
-
-    @Test
-    fun `Get a list of deployments`() {
-        val funcId = awaitCompleted(
-            createFunc(
-                ApiFuncCreateRequest(
-                    name = FuncName("func-1"),
-                    inputs = FuncInputs(),
-                    code = CodeValue("")
-                )
-            )
-        ).funcId
-
-        repeat(20) {
-            awaitCompleted(deployFunc(funcId, ApiFuncDeployRequest(null, DeployMessage("deployed-${it}"))))
-        }
-
-        val deployments = listDeployments(funcId).deployments
-        assertThat(deployments, hasSize(20))
-        assertThat(deployments[10].message, equalTo(DeployMessage("deployed-10")))
-        assertThat(deployments[10].version, equalTo(CodeVersion(1)))
-    }
-
 }

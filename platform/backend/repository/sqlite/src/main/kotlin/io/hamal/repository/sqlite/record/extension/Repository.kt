@@ -1,30 +1,28 @@
 package io.hamal.repository.sqlite.record.extension
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.ExtensionId
-import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Extension
 import io.hamal.repository.api.ExtensionCmdRepository.CreateCmd
 import io.hamal.repository.api.ExtensionCmdRepository.UpdateCmd
 import io.hamal.repository.api.ExtensionQueryRepository.ExtensionQuery
 import io.hamal.repository.api.ExtensionRepository
 import io.hamal.repository.record.CreateDomainObject
-import io.hamal.repository.record.extension.ExtensionCreatedRecord
 import io.hamal.repository.record.extension.ExtensionEntity
 import io.hamal.repository.record.extension.ExtensionRecord
-import io.hamal.repository.record.extension.ExtensionUpdatedRecord
-import io.hamal.repository.sqlite.record.SqliteRecordRepository
+import io.hamal.repository.sqlite.record.RecordSqliteRepository
 import java.nio.file.Path
 
 internal object CreateExtension : CreateDomainObject<ExtensionId, ExtensionRecord, Extension> {
     override fun invoke(recs: List<ExtensionRecord>): Extension {
         check(recs.isNotEmpty()) { "At least one record is required" }
         val firstRecord = recs.first()
-        check(firstRecord is ExtensionCreatedRecord)
+        check(firstRecord is ExtensionRecord.Created)
 
         var result = ExtensionEntity(
             cmdId = firstRecord.cmdId,
             id = firstRecord.entityId,
-            groupId = firstRecord.groupId,
+            workspaceId = firstRecord.workspaceId,
             sequence = firstRecord.sequence(),
             recordedAt = firstRecord.recordedAt()
         )
@@ -38,9 +36,10 @@ internal object CreateExtension : CreateDomainObject<ExtensionId, ExtensionRecor
 }
 
 class ExtensionSqliteRepository(
-    config: Config
-) : SqliteRecordRepository<ExtensionId, ExtensionRecord, Extension>(
-    config = config,
+    path: Path
+) : RecordSqliteRepository<ExtensionId, ExtensionRecord, Extension>(
+    path = path,
+    filename = "extension.db",
     createDomainObject = CreateExtension,
     recordClass = ExtensionRecord::class,
     projections = listOf(
@@ -48,60 +47,54 @@ class ExtensionSqliteRepository(
     )
 ), ExtensionRepository {
 
-    data class Config(
-        override val path: Path
-    ) : SqliteBaseRepository.Config {
-        override val filename = "extension.db"
-    }
-
     override fun create(cmd: CreateCmd): Extension {
-        val extId = cmd.extId
+        val extensionId = cmd.extensionId
         val cmdId = cmd.id
         return tx {
-            if (commandAlreadyApplied(cmdId, extId)) {
-                versionOf(extId, cmdId)
+            if (commandAlreadyApplied(cmdId, extensionId)) {
+                versionOf(extensionId, cmdId)
             } else {
                 store(
-                    ExtensionCreatedRecord(
+                    ExtensionRecord.Created(
                         cmdId = cmdId,
-                        entityId = extId,
-                        groupId = cmd.groupId,
+                        entityId = extensionId,
+                        workspaceId = cmd.workspaceId,
                         name = cmd.name,
                         code = cmd.code
                     )
                 )
-                currentVersion(extId).also { ProjectionCurrent.upsert(this, it) }
+                currentVersion(extensionId).also { ProjectionCurrent.upsert(this, it) }
             }
         }
     }
 
-    override fun update(extId: ExtensionId, cmd: UpdateCmd): Extension {
+    override fun update(extensionId: ExtensionId, cmd: UpdateCmd): Extension {
         val cmdId = cmd.id
         return tx {
-            if (commandAlreadyApplied(cmdId, extId)) {
-                versionOf(extId, cmdId)
+            if (commandAlreadyApplied(cmdId, extensionId)) {
+                versionOf(extensionId, cmdId)
             } else {
-                val currentVersion = versionOf(extId, cmdId)
+                val currentVersion = versionOf(extensionId, cmdId)
                 store(
-                    ExtensionUpdatedRecord(
-                        entityId = extId,
+                    ExtensionRecord.Updated(
+                        entityId = extensionId,
                         cmdId = cmdId,
                         name = cmd.name ?: currentVersion.name,
                         code = cmd.code ?: currentVersion.code
                     )
                 )
-                currentVersion(extId)
+                currentVersion(extensionId)
                     .also { ProjectionCurrent.upsert(this, it) }
             }
         }
     }
 
-    override fun find(extId: ExtensionId): Extension? = ProjectionCurrent.find(connection, extId)
+    override fun find(extensionId: ExtensionId): Extension? = ProjectionCurrent.find(connection, extensionId)
 
 
     override fun list(query: ExtensionQuery): List<Extension> = ProjectionCurrent.list(connection, query)
 
 
-    override fun count(query: ExtensionQuery): ULong = ProjectionCurrent.count(connection, query)
+    override fun count(query: ExtensionQuery): Count = ProjectionCurrent.count(connection, query)
 
 }

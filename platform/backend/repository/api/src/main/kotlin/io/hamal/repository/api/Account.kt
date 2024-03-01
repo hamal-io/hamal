@@ -1,9 +1,6 @@
 package io.hamal.repository.api
 
-import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.domain.DomainObject
-import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.common.domain.UpdatedAt
+import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.AccountType
@@ -16,7 +13,9 @@ data class Account(
     val cmdId: CmdId,
     val type: AccountType,
     val salt: PasswordSalt
-) : DomainObject<AccountId>
+) : DomainObject<AccountId>, HasAccountId {
+    override val accountId: AccountId get() = id
+}
 
 interface AccountRepository : AccountCmdRepository, AccountQueryRepository
 
@@ -51,7 +50,7 @@ interface AccountQueryRepository {
         )
     )
 
-    fun count(query: AccountQuery): ULong
+    fun count(query: AccountQuery): Count
 
     data class AccountQuery(
         var afterId: AccountId = AccountId(SnowflakeId(Long.MAX_VALUE)),

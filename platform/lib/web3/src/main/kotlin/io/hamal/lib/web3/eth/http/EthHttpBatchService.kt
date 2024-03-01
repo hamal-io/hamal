@@ -1,10 +1,14 @@
 package io.hamal.lib.web3.eth.http
 
-import com.google.gson.JsonArray
-import com.google.gson.JsonObject
+import io.hamal.lib.common.hot.*
+import io.hamal.lib.common.serialization.JsonFactoryBuilder
+import io.hamal.lib.domain.Json
 import io.hamal.lib.http.HttpTemplateImpl
+import io.hamal.lib.http.body
+import io.hamal.lib.web3.Web3JsonModule
 import io.hamal.lib.web3.eth.EthBatchService
 import io.hamal.lib.web3.eth.abi.type.EthUint64
+import io.hamal.lib.web3.eth.domain.EthGetBlockResponse
 import io.hamal.lib.web3.eth.domain.EthRequestId
 import io.hamal.lib.web3.eth.domain.EthResponse
 import java.util.concurrent.locks.ReentrantLock
@@ -17,7 +21,7 @@ class EthHttpBatchService(
 
     private val lock = ReentrantLock()
     private val resultClasses = mutableListOf<KClass<*>>()
-    private val requests = mutableListOf<JsonObject>()
+    private val requests = mutableListOf<HotObject>()
 
     override fun getBlockNumber() = TODO()
 //        request(
@@ -26,17 +30,16 @@ class EthHttpBatchService(
 //        resultClass = EthGetBlockNumberResponse::class
 //    )
 
-    override fun getBlock(number: EthUint64) = TODO()
-//        request(
-//        method = "eth_getBlockByNumber",
-//        params = JsonArray(
-//            listOf(
-//                JsonPrimitive(number.toPrefixedHexString().value),
-//                JsonPrimitive(true)
-//            )
-//        ),
-//        resultClass = EthGetBlockResponse::class
-//    )
+    override fun getBlock(number: EthUint64) = request(
+        method = "eth_getBlockByNumber",
+        params = HotArray(
+            listOf(
+                HotString(number.toPrefixedHexString().value),
+                HotBoolean(true)
+            )
+        ),
+        resultClass = EthGetBlockResponse::class
+    )
 
     override fun getLiteBlock(number: EthUint64) = TODO()
 //        request(
@@ -73,49 +76,56 @@ class EthHttpBatchService(
 
     override fun execute(): List<EthResponse> {
         return lock.withLock {
-            TODO()
-//            if (requests.isEmpty()) {
-//                return listOf()
-//            }
-//
-//            val response = httpTemplate
-//                .post("/")
-//                .body(JsonArray(requests))
-//                .execute(JsonArray::class)
-//
-//            response.zip(resultClasses)
-//                .map { (response, resultClass) -> json.decodeFromJsonElement(resultClass.serializer(), response) }
-//                .filterIsInstance<EthResponse>()
-//                .also {
-//                    requests.clear()
-//                    resultClasses.clear()
-//                }
+            if (requests.isEmpty()) {
+                return listOf()
+            }
+
+            val response = httpTemplate
+                .post("/")
+                .body(HotArray.builder().also { builder -> requests.forEach { request -> builder.add(request) } }
+                    .build())
+                .execute(HotArray::class)
+
+
+            return response.nodes.mapIndexed { index, hotNode ->
+                val response = hotNode.asObject()
+                json.deserialize(resultClasses[index], json.serialize(response))
+            }
+                .filterIsInstance<EthResponse>()
+                .also {
+                    requests.clear()
+                    resultClasses.clear()
+                }
         }
     }
 
+    internal val json = Json(
+        JsonFactoryBuilder()
+            .register(HotJsonModule)
+            .register(Web3JsonModule)
+    )
+
     private fun <RESPONSE : EthResponse> request(
         method: String,
-        params: JsonArray,
+        params: HotArray,
         resultClass: KClass<RESPONSE>
     ): EthHttpBatchService {
-//        addRequest(
-//            createReq = { id ->
-//                JsonObject(
-//                    mapOf(
-//                        "jsonrpc" to JsonPrimitive("2.0"),
-//                        "id" to JsonPrimitive(id),
-//                        "method" to JsonPrimitive(method),
-//                        "params" to params,
-//                    )
-//                )
-//            },
-//            resultClass = resultClass
-//        )
-        TODO()
+        addRequest(
+            createReq = { id ->
+                HotObjectBuilder()
+                    .set("jsonrpc", "2.0")
+                    .set("id", id)
+                    .set("method", method)
+                    .set("params", params)
+                    .build(
+                    )
+            },
+            resultClass = resultClass
+        )
         return this
     }
 
-    private fun <RESPONSE : EthResponse> addRequest(createReq: (Int) -> JsonObject, resultClass: KClass<RESPONSE>) {
+    private fun <RESPONSE : EthResponse> addRequest(createReq: (Int) -> HotObject, resultClass: KClass<RESPONSE>) {
         lock.withLock {
             val reqId = requests.size + 1
             resultClasses.add(resultClass)

@@ -1,10 +1,10 @@
 package io.hamal.repository.record.hook
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.vo.FlowId
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.domain.vo.HookId
 import io.hamal.lib.domain.vo.HookName
+import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.repository.api.Hook
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordEntity
@@ -16,26 +16,26 @@ data class HookEntity(
     override val id: HookId,
     override val sequence: RecordSequence,
     override val recordedAt: RecordedAt,
-    val groupId: GroupId,
+    val workspaceId: WorkspaceId,
 
-    var flowId: FlowId? = null,
+    var namespaceId: NamespaceId? = null,
     var name: HookName? = null
 
 ) : RecordEntity<HookId, HookRecord, Hook> {
 
     override fun apply(rec: HookRecord): HookEntity {
         return when (rec) {
-            is HookCreatedRecord -> copy(
+            is HookRecord.Created -> copy(
                 id = rec.entityId,
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
-                flowId = rec.flowId,
+                namespaceId = rec.namespaceId,
                 name = rec.name,
                 recordedAt = rec.recordedAt()
 
             )
 
-            is HookUpdatedRecord -> copy(
+            is HookRecord.Updated -> copy(
                 id = rec.entityId,
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
@@ -50,8 +50,8 @@ data class HookEntity(
             cmdId = cmdId,
             id = id,
             updatedAt = recordedAt.toUpdatedAt(),
-            groupId = groupId,
-            flowId = flowId!!,
+            workspaceId = workspaceId,
+            namespaceId = namespaceId!!,
             name = name!!
         )
     }
@@ -60,11 +60,11 @@ data class HookEntity(
 fun List<HookRecord>.createEntity(): HookEntity {
     check(isNotEmpty()) { "At least one record is required" }
     val firstRecord = first()
-    check(firstRecord is HookCreatedRecord)
+    check(firstRecord is HookRecord.Created)
 
     var result = HookEntity(
         id = firstRecord.entityId,
-        groupId = firstRecord.groupId,
+        workspaceId = firstRecord.workspaceId,
         cmdId = firstRecord.cmdId,
         sequence = firstRecord.sequence(),
         recordedAt = firstRecord.recordedAt()

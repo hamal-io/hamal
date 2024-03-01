@@ -1,9 +1,6 @@
 package io.hamal.repository.api
 
-import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.domain.DomainObject
-import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.common.domain.UpdatedAt
+import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.FeedbackMood
 import io.hamal.lib.domain.vo.AccountId
@@ -39,7 +36,7 @@ interface FeedbackQueryRepository {
 
     fun find(feedbackId: FeedbackId): Feedback?
     fun list(query: FeedbackQuery): List<Feedback>
-    fun count(query: FeedbackQuery): ULong
+    fun count(query: FeedbackQuery): Count
 
     data class FeedbackQuery(
         var afterId: FeedbackId = FeedbackId(SnowflakeId(Long.MAX_VALUE)),
@@ -48,6 +45,3 @@ interface FeedbackQueryRepository {
     )
 }
 
-data class FeedbackList(
-    val feedbacks: List<Feedback>
-)

@@ -2,60 +2,95 @@ package io.hamal.lib.kua
 
 import io.hamal.lib.kua.builtin.Require
 import io.hamal.lib.kua.builtin.RequirePlugin
-import io.hamal.lib.kua.extend.RunnerRegistry
 import io.hamal.lib.kua.extend.extension.RunnerExtension
 import io.hamal.lib.kua.extend.extension.RunnerExtensionFactory
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
-import io.hamal.lib.kua.table.TableProxyArray
-import io.hamal.lib.kua.table.TableProxyMap
-import io.hamal.lib.kua.type.KuaAny
-import io.hamal.lib.kua.type.KuaCode
+import io.hamal.lib.kua.type.*
 import io.hamal.lib.kua.type.KuaError
-import io.hamal.lib.kua.type.KuaFunction
+
+// FIXME super dirty temporary hack
+val sandboxContextLocal = ThreadLocal<SandboxContext>()
 
 class Sandbox(
-    val ctx: SandboxContext
-) : State, AutoCloseable {
+    private val ctx: SandboxContext,
+    private val state: CloseableState = CloseableStateImpl(),
+    private val registry: SandboxRegistry = SandboxRegistryImpl(state)
+) : CloseableState {
 
-    override val native: Native = Native(this)
-    override val top: StackTop get() = state.top
-    override fun pop(len: Int) = state.pop(len)
+    init {
+        sandboxContextLocal.set(ctx)
+    }
 
-    val state = ClosableState(native)
-    val registry: RunnerRegistry = RunnerRegistry(this)
+    override fun absIndex(idx: Int) = state.absIndex(idx)
+
+    override fun anyGet(idx: Int) = state.anyGet(idx)
+    override fun anyPush(value: KuaAny) = state.anyPush(value)
+
+    override fun booleanGet(idx: Int) = state.booleanGet(idx)
+    override fun booleanPush(value: KuaBoolean) = state.booleanPush(value)
+
+    override fun codeLoad(code: KuaCode) = state.codeLoad(code)
+
+    override fun decimalGet(idx: Int): KuaDecimal = state.decimalGet(idx)
+    override fun decimalPush(value: KuaDecimal): StackTop = state.decimalPush(value)
+
+    override fun errorGet(idx: Int): KuaError = state.errorGet(idx)
+    override fun errorPush(error: KuaError): StackTop = state.errorPush(error)
+
+    override fun functionPush(value: KuaFunction<*, *, *, *>) = state.functionPush(value)
+
+    override fun globalGet(key: KuaString) = state.globalGet(key)
+    override fun globalGetTable(key: KuaString) = state.globalGetTable(key)
+    override fun globalSet(key: KuaString, value: KuaType) = state.globalSet(key, value)
+    override fun globalUnset(key: KuaString) = state.globalUnset(key)
+
+    override fun nilPush() = state.nilPush()
+
+    override fun numberGet(idx: Int) = state.numberGet(idx)
+    override fun numberPush(value: KuaNumber) = state.numberPush(value)
+
+    override fun stringGet(idx: Int) = state.stringGet(idx)
+    override fun stringPush(value: KuaString) = state.stringPush(value)
+
+    override fun tableAppend(idx: Int) = state.tableAppend(idx)
+    override fun tableCreate(arrayCount: Int, recordCount: Int) = state.tableCreate(arrayCount, recordCount)
+    override fun tableGet(idx: Int): KuaTable = state.tableGet(idx)
+    override fun tableFieldGet(idx: Int, key: KuaString) = state.tableFieldGet(idx, key)
+    override fun tableFieldSet(idx: Int, key: KuaString) = state.tableFieldSet(idx, key)
+    override fun tableLength(idx: Int) = state.tableLength(idx)
+    override fun tablePush(proxy: KuaTable): StackTop = state.tablePush(proxy)
+    override fun tableRawSet(idx: Int) = state.tableRawSet(idx)
+    override fun tableRawSetIdx(stackIdx: Int, tableIdx: Int) = state.tableRawSetIdx(stackIdx, tableIdx)
+    override fun tableRawGet(idx: Int) = state.tableRawGet(idx)
+    override fun tableRawGetIdx(stackIdx: Int, tableIdx: Int) = state.tableRawGetIdx(stackIdx, tableIdx)
+
+    override fun topGet(): StackTop = state.topGet()
+    override fun topPop(len: Int) = state.topPop(len)
+    override fun topPush(idx: Int) = state.topPush(idx)
+    override fun topSet(idx: Int) = state.topSet(idx)
+
+    override fun type(idx: Int) = state.type(idx)
 
     init {
         registerGlobalFunction("require", Require(registry))
         registerGlobalFunction("require_plugin", RequirePlugin(registry))
-
         val classLoader = Sandbox::class.java.classLoader
-        load(String(classLoader.getResource("std.lua").readBytes()))
+        codeLoad(KuaCode(String(classLoader.getResource("std.lua").readBytes())))
     }
 
-    fun load(code: KuaCode) = load(code.value)
 
-    override fun load(code: String) = native.load(code)
-
-    fun run(fn: (State) -> Unit) {
-        fn(state)
-    }
-
-    fun register(extension: RunnerPlugin) {
-        registry.register(extension)
+    fun register(plugin: RunnerPlugin) {
+        registry.register(plugin)
     }
 
     fun registerPlugins(vararg factories: RunnerPluginFactory): Sandbox {
-        factories.map { it.create(this) }.forEach { plugin ->
-            this.register(plugin)
-        }
+        factories.map { it.create(this) }.forEach(this::register)
         return this
     }
 
     fun registerExtensions(vararg factories: RunnerExtensionFactory): Sandbox {
-        factories.map { it.create(this) }.forEach { extension ->
-            this.register(extension)
-        }
+        factories.map { it.create(this) }.forEach(this::register)
         return this
     }
 
@@ -63,57 +98,7 @@ class Sandbox(
         registry.register(extension)
     }
 
-
     override fun close() {
         state.close()
     }
-
-    override fun isEmpty() = state.isEmpty()
-    override fun isNotEmpty() = state.isNotEmpty()
-    override fun setTop(idx: Int) = state.setTop(idx)
-    override fun absIndex(idx: Int) = state.absIndex(idx)
-
-    override fun pushTop(idx: Int) = state.pushTop(idx)
-
-    override fun type(idx: Int) = state.type(idx)
-    override fun pushNil() = state.pushNil()
-    override fun pushAny(value: KuaAny) = state.pushAny(value)
-    override fun getAny(idx: Int) = state.getAny(idx)
-    override fun getArrayType(idx: Int) = state.getArrayType(idx)
-
-    override fun pushBoolean(value: Boolean) = state.pushBoolean(value)
-    override fun getBoolean(idx: Int) = state.getBoolean(idx)
-    override fun pushError(value: KuaError) = state.pushError(value)
-    override fun pushFunction(value: KuaFunction<*, *, *, *>) = state.pushFunction(value)
-
-    override fun getNumber(idx: Int) = state.getNumber(idx)
-    override fun pushNumber(value: Double) = state.pushNumber(value)
-    override fun getString(idx: Int) = state.getString(idx)
-    override fun pushString(value: String) = state.pushString(value)
-
-    override fun pushTable(proxy: TableProxyMap) = state.pushTable(proxy)
-    override fun pushTable(proxy: TableProxyArray) = state.pushTable(proxy)
-    override fun getTableMapProxy(idx: Int) = state.getTableMapProxy(idx)
-    override fun getTableArrayProxy(idx: Int) = state.getTableArrayProxy(idx)
-    override fun getMapType(idx: Int) = state.getMapType(idx)
-
-    override fun setGlobal(name: String, value: KuaFunction<*, *, *, *>) = state.setGlobal(name, value)
-    override fun setGlobal(name: String, value: TableProxyMap) = state.setGlobal(name, value)
-    override fun setGlobal(name: String, value: TableProxyArray) = state.setGlobal(name, value)
-    override fun getGlobalTableMap(name: String): TableProxyMap = state.getGlobalTableMap(name)
-    override fun unsetGlobal(name: String) = state.unsetGlobal(name)
-
-    override fun tableCreateMap(capacity: Int) = state.tableCreateMap(capacity)
-    override fun tableCreateArray(capacity: Int) = state.tableCreateArray(capacity)
-
-    override fun tableAppend(idx: Int) = state.tableAppend(idx)
-    override fun tableSetRaw(idx: Int) = state.tableSetRaw(idx)
-    override fun tableSetRawIdx(stackIdx: Int, tableIdx: Int) = state.tableSetRawIdx(stackIdx, tableIdx)
-    override fun tableGetRaw(idx: Int) = state.tableGetRaw(idx)
-    override fun tableGetRawIdx(stackIdx: Int, tableIdx: Int) = state.tableGetRawIdx(stackIdx, tableIdx)
-}
-
-internal fun Native.load(code: String) {
-    loadString(code)
-    call(0, 0)
 }

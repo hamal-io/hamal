@@ -1,20 +1,17 @@
 package io.hamal.repository.api
 
-import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.domain.DomainObject
-import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.common.domain.UpdatedAt
+import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.*
 
 data class Extension(
     override val id: ExtensionId,
     override val updatedAt: UpdatedAt,
-    val groupId: GroupId,
+    override val workspaceId: WorkspaceId,
     val cmdId: CmdId,
     val name: ExtensionName,
     val code: ExtensionCode,
-) : DomainObject<ExtensionId>
+) : DomainObject<ExtensionId>, HasWorkspaceId
 
 data class ExtensionCode(
     val id: CodeId,
@@ -25,12 +22,12 @@ interface ExtensionRepository : ExtensionCmdRepository, ExtensionQueryRepository
 
 interface ExtensionCmdRepository : CmdRepository {
     fun create(cmd: CreateCmd): Extension
-    fun update(extId: ExtensionId, cmd: UpdateCmd): Extension
+    fun update(extensionId: ExtensionId, cmd: UpdateCmd): Extension
 
     data class CreateCmd(
         val id: CmdId,
-        val extId: ExtensionId,
-        val groupId: GroupId,
+        val extensionId: ExtensionId,
+        val workspaceId: WorkspaceId,
         val name: ExtensionName,
         val code: ExtensionCode
     )
@@ -43,23 +40,23 @@ interface ExtensionCmdRepository : CmdRepository {
 }
 
 interface ExtensionQueryRepository {
-    fun get(extId: ExtensionId) = find(extId) ?: throw NoSuchElementException("Extension not found")
-    fun find(extId: ExtensionId): Extension?
+    fun get(extensionId: ExtensionId) = find(extensionId) ?: throw NoSuchElementException("Extension not found")
+    fun find(extensionId: ExtensionId): Extension?
     fun list(query: ExtensionQuery): List<Extension>
-    fun list(extIds: List<ExtensionId>): List<Extension> = list(
+    fun list(extensionIds: List<ExtensionId>): List<Extension> = list(
         ExtensionQuery(
             limit = Limit.all,
-            groupIds = listOf(),
-            extIds = extIds,
+            workspaceIds = listOf(),
+            extensionIds = extensionIds,
         )
     )
 
-    fun count(query: ExtensionQuery): ULong
+    fun count(query: ExtensionQuery): Count
 
     data class ExtensionQuery(
         var afterId: ExtensionId = ExtensionId(SnowflakeId(Long.MAX_VALUE)),
         var limit: Limit = Limit(1),
-        var extIds: List<ExtensionId> = listOf(),
-        var groupIds: List<GroupId>
+        var extensionIds: List<ExtensionId> = listOf(),
+        var workspaceIds: List<WorkspaceId>
     )
 }

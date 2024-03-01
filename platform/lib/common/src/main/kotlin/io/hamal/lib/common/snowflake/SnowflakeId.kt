@@ -9,6 +9,7 @@ import kotlin.concurrent.withLock
 
 @JvmInline
 value class SnowflakeId(val value: Long) : Comparable<SnowflakeId> {
+    constructor(value: Int) : this(value.toLong())
     constructor(value: String) : this(value.toLong(16))
 
     interface Generator {
@@ -31,6 +32,10 @@ value class SnowflakeId(val value: Long) : Comparable<SnowflakeId> {
     override fun toString(): String {
         return value.toString(16)
     }
+
+    fun toInt(): Int = value.toInt()
+
+    fun toLong(): Long = value.toLong()
 }
 
 

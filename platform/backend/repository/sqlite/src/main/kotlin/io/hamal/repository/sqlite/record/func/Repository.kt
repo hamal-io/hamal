@@ -1,29 +1,30 @@
 package io.hamal.repository.sqlite.record.func
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.domain.vo.DeployedAt
 import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncCmdRepository.*
 import io.hamal.repository.api.FuncDeployment
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
 import io.hamal.repository.api.FuncRepository
 import io.hamal.repository.record.CreateDomainObject
-import io.hamal.repository.record.func.*
-import io.hamal.repository.sqlite.record.SqliteRecordRepository
+import io.hamal.repository.record.func.FuncEntity
+import io.hamal.repository.record.func.FuncRecord
+import io.hamal.repository.sqlite.record.RecordSqliteRepository
 import java.nio.file.Path
 
 internal object CreateFunc : CreateDomainObject<FuncId, FuncRecord, Func> {
     override fun invoke(recs: List<FuncRecord>): Func {
         check(recs.isNotEmpty()) { "At least one record is required" }
         val firstRecord = recs.first()
-        check(firstRecord is FuncCreatedRecord)
+        check(firstRecord is FuncRecord.Created)
 
         var result = FuncEntity(
             cmdId = firstRecord.cmdId,
             id = firstRecord.entityId,
-            groupId = firstRecord.groupId,
+            workspaceId = firstRecord.workspaceId,
             sequence = firstRecord.sequence(),
             recordedAt = firstRecord.recordedAt()
         )
@@ -37,9 +38,10 @@ internal object CreateFunc : CreateDomainObject<FuncId, FuncRecord, Func> {
 }
 
 class FuncSqliteRepository(
-    config: Config
-) : SqliteRecordRepository<FuncId, FuncRecord, Func>(
-    config = config,
+    path: Path
+) : RecordSqliteRepository<FuncId, FuncRecord, Func>(
+    path = path,
+    filename = "func.db",
     createDomainObject = CreateFunc,
     recordClass = FuncRecord::class,
     projections = listOf(
@@ -47,12 +49,6 @@ class FuncSqliteRepository(
         ProjectionUniqueName
     )
 ), FuncRepository {
-
-    data class Config(
-        override val path: Path
-    ) : SqliteBaseRepository.Config {
-        override val filename = "func.db"
-    }
 
     override fun create(cmd: CreateCmd): Func {
         val funcId = cmd.funcId
@@ -62,11 +58,11 @@ class FuncSqliteRepository(
                 versionOf(funcId, cmdId)
             } else {
                 store(
-                    FuncCreatedRecord(
+                    FuncRecord.Created(
                         cmdId = cmdId,
                         entityId = funcId,
-                        groupId = cmd.groupId,
-                        flowId = cmd.flowId,
+                        workspaceId = cmd.workspaceId,
+                        namespaceId = cmd.namespaceId,
                         name = cmd.name,
                         inputs = cmd.inputs,
                         codeId = cmd.codeId,
@@ -90,7 +86,7 @@ class FuncSqliteRepository(
                 val current = versionOf(funcId, cmdId)
                 require(cmd.version <= current.code.version) { "${cmd.version} can not be deployed" }
                 store(
-                    FuncDeployedRecord(
+                    FuncRecord.Deployed(
                         cmdId = cmd.id,
                         entityId = funcId,
                         version = cmd.version,
@@ -112,7 +108,7 @@ class FuncSqliteRepository(
             } else {
                 val currentVersion = versionOf(funcId, cmdId)
                 store(
-                    FuncUpdatedRecord(
+                    FuncRecord.Updated(
                         entityId = funcId,
                         cmdId = cmdId,
                         name = cmd.name ?: currentVersion.name,
@@ -138,7 +134,7 @@ class FuncSqliteRepository(
     override fun listDeployments(funcId: FuncId): List<FuncDeployment> {
         return tx {
             val recs = recordsOf(funcId)
-            recs.filterIsInstance<FuncDeployedRecord>().map { rec ->
+            recs.filterIsInstance<FuncRecord.Deployed>().map { rec ->
                 FuncDeployment(
                     id = CodeId(rec.entityId.value),
                     message = rec.message,
@@ -149,7 +145,7 @@ class FuncSqliteRepository(
         }
     }
 
-    override fun count(query: FuncQuery): ULong {
+    override fun count(query: FuncQuery): Count {
         return ProjectionCurrent.count(connection, query)
     }
 }

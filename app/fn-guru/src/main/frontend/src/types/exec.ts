@@ -1,9 +1,9 @@
-export interface ExecInvokeSubmitted {
+export interface ExecInvokeRequested {
     id: string;
     status: string;
     execId: string;
-    groupId: string;
-    flowId: string;
+    workspaceId: string;
+    namespaceId: string;
 }
 
 export interface ExecList {
@@ -13,4 +13,34 @@ export interface ExecList {
 export interface ExecListItem {
     id: string;
     status: string;
+    namespace: ExecListItemNamespace;
+    invocation: ExecListItemInvocation;
+    correlation?: string;
+    func?: ExecListItemFunc;
+}
+
+export interface ExecListItemNamespace {
+    id: string;
+    name: string;
+}
+
+export interface ExecListItemInvocation {
+    class: string;
+}
+
+export interface ExecListItemFunc {
+    id: string;
+    name: string;
+}
+
+export interface Exec {
+    id: string;
+    status: string;
+    func?: {
+        id: string;
+        name: string;
+    };
+    correlation: string;
+    result?: object;
+    state?: object;
 }

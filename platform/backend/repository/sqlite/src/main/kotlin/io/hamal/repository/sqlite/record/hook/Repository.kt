@@ -1,30 +1,28 @@
 package io.hamal.repository.sqlite.record.hook
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.HookId
-import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Hook
 import io.hamal.repository.api.HookCmdRepository.CreateCmd
 import io.hamal.repository.api.HookCmdRepository.UpdateCmd
 import io.hamal.repository.api.HookQueryRepository.HookQuery
 import io.hamal.repository.api.HookRepository
 import io.hamal.repository.record.CreateDomainObject
-import io.hamal.repository.record.hook.HookCreatedRecord
 import io.hamal.repository.record.hook.HookEntity
 import io.hamal.repository.record.hook.HookRecord
-import io.hamal.repository.record.hook.HookUpdatedRecord
-import io.hamal.repository.sqlite.record.SqliteRecordRepository
+import io.hamal.repository.sqlite.record.RecordSqliteRepository
 import java.nio.file.Path
 
 internal object CreateHook : CreateDomainObject<HookId, HookRecord, Hook> {
     override fun invoke(recs: List<HookRecord>): Hook {
         check(recs.isNotEmpty()) { "At least one record is required" }
         val firstRecord = recs.first()
-        check(firstRecord is HookCreatedRecord)
+        check(firstRecord is HookRecord.Created)
 
         var result = HookEntity(
             cmdId = firstRecord.cmdId,
             id = firstRecord.entityId,
-            groupId = firstRecord.groupId,
+            workspaceId = firstRecord.workspaceId,
             sequence = firstRecord.sequence(),
             recordedAt = firstRecord.recordedAt()
         )
@@ -38,9 +36,10 @@ internal object CreateHook : CreateDomainObject<HookId, HookRecord, Hook> {
 }
 
 class HookSqliteRepository(
-    config: Config
-) : SqliteRecordRepository<HookId, HookRecord, Hook>(
-    config = config,
+    path: Path
+) : RecordSqliteRepository<HookId, HookRecord, Hook>(
+    path = path,
+    filename = "hook.db",
     createDomainObject = CreateHook,
     recordClass = HookRecord::class,
     projections = listOf(
@@ -48,12 +47,6 @@ class HookSqliteRepository(
         ProjectionUniqueName
     )
 ), HookRepository {
-
-    data class Config(
-        override val path: Path
-    ) : SqliteBaseRepository.Config {
-        override val filename = "hook.db"
-    }
 
     override fun create(cmd: CreateCmd): Hook {
         val hookId = cmd.hookId
@@ -63,11 +56,11 @@ class HookSqliteRepository(
                 versionOf(hookId, cmdId)
             } else {
                 store(
-                    HookCreatedRecord(
+                    HookRecord.Created(
                         cmdId = cmdId,
                         entityId = hookId,
-                        groupId = cmd.groupId,
-                        flowId = cmd.flowId,
+                        workspaceId = cmd.workspaceId,
+                        namespaceId = cmd.namespaceId,
                         name = cmd.name
                     )
                 )
@@ -87,7 +80,7 @@ class HookSqliteRepository(
             } else {
                 val currentVersion = versionOf(hookId, cmdId)
                 store(
-                    HookUpdatedRecord(
+                    HookRecord.Updated(
                         entityId = hookId,
                         cmdId = cmdId,
                         name = cmd.name ?: currentVersion.name
@@ -108,7 +101,7 @@ class HookSqliteRepository(
         return ProjectionCurrent.list(connection, query)
     }
 
-    override fun count(query: HookQuery): ULong {
+    override fun count(query: HookQuery): Count {
         return ProjectionCurrent.count(connection, query)
     }
 }

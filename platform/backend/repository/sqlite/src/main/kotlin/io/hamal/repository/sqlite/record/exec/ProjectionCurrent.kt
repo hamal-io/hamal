@@ -1,5 +1,6 @@
 package io.hamal.repository.sqlite.record.exec
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sqlite.Connection
@@ -42,9 +43,9 @@ internal object ProjectionCurrent : ProjectionSqlite<ExecId, ExecRecord, Exec> {
             WHERE
                 id < :afterId
                 ${query.ids()}
-                ${query.groupIds()}
+                ${query.workspaceIds()}
                 ${query.funcIds()}
-                ${query.flowIds()}
+                ${query.namespaceIds()}
             ORDER BY id DESC
             LIMIT :limit
         """.trimIndent()
@@ -59,9 +60,10 @@ internal object ProjectionCurrent : ProjectionSqlite<ExecId, ExecRecord, Exec> {
         }
     }
 
-    fun count(connection: Connection, query: ExecQuery): ULong {
-        return connection.executeQueryOne(
-            """
+    fun count(connection: Connection, query: ExecQuery): Count {
+        return Count(
+            connection.executeQueryOne(
+                """
             SELECT 
                 COUNT(*) as count 
             FROM 
@@ -69,18 +71,19 @@ internal object ProjectionCurrent : ProjectionSqlite<ExecId, ExecRecord, Exec> {
             WHERE
                 id < :afterId
                 ${query.ids()}
-                ${query.groupIds()}
+                ${query.workspaceIds()}
                 ${query.funcIds()}
-                ${query.flowIds()}
+                ${query.namespaceIds()}
         """.trimIndent()
-        ) {
-            query {
-                set("afterId", query.afterId)
-            }
-            map {
-                it.getLong("count").toULong()
-            }
-        } ?: 0UL
+            ) {
+                query {
+                    set("afterId", query.afterId)
+                }
+                map {
+                    it.getLong("count")
+                }
+            } ?: 0L
+        )
     }
 
 
@@ -90,15 +93,15 @@ internal object ProjectionCurrent : ProjectionSqlite<ExecId, ExecRecord, Exec> {
         tx.execute(
             """
                 INSERT OR REPLACE INTO current
-                    ( id, status, flow_id, group_id, func_id, data) 
+                    ( id, status, namespace_id, workspace_id, func_id, data) 
                 VALUES
-                    ( :id, :status, :flowId, :groupId, :funcId, :data)
+                    ( :id, :status, :namespaceId, :workspaceId, :funcId, :data)
             """.trimIndent()
         ) {
             set("id", obj.id)
             set("status", obj.status.value)
-            set("flowId", obj.flowId)
-            set("groupId", obj.groupId)
+            set("namespaceId", obj.namespaceId)
+            set("workspaceId", obj.workspaceId)
             set("funcId", obj.correlation?.funcId ?: FuncId(0))
             set("data", json.serializeAndCompress(obj))
         }
@@ -110,9 +113,9 @@ internal object ProjectionCurrent : ProjectionSqlite<ExecId, ExecRecord, Exec> {
             CREATE TABLE IF NOT EXISTS current (
                  id             INTEGER NOT NULL,
                  status         INTEGER NOT NULL,
-                 group_id       INTEGER NOT NULL,
+                 workspace_id       INTEGER NOT NULL,
                  func_id        INTEGER NOT NULL,
-                 flow_id        INTEGER NOT NULL,
+                 namespace_id        INTEGER NOT NULL,
                  data           BLOB NOT NULL,
                  PRIMARY KEY    (id)
             );
@@ -132,11 +135,11 @@ internal object ProjectionCurrent : ProjectionSqlite<ExecId, ExecRecord, Exec> {
         }
     }
 
-    private fun ExecQuery.groupIds(): String {
-        return if (groupIds.isEmpty()) {
+    private fun ExecQuery.workspaceIds(): String {
+        return if (workspaceIds.isEmpty()) {
             ""
         } else {
-            "AND group_id IN (${groupIds.joinToString(",") { "${it.value.value}" }})"
+            "AND workspace_id IN (${workspaceIds.joinToString(",") { "${it.value.value}" }})"
         }
     }
 
@@ -148,11 +151,11 @@ internal object ProjectionCurrent : ProjectionSqlite<ExecId, ExecRecord, Exec> {
         }
     }
 
-    private fun ExecQuery.flowIds(): String {
-        return if (flowIds.isEmpty()) {
+    private fun ExecQuery.namespaceIds(): String {
+        return if (namespaceIds.isEmpty()) {
             ""
         } else {
-            "AND flow_id IN (${flowIds.joinToString(",") { "${it.value.value}" }})"
+            "AND namespace_id IN (${namespaceIds.joinToString(",") { "${it.value.value}" }})"
         }
     }
 }

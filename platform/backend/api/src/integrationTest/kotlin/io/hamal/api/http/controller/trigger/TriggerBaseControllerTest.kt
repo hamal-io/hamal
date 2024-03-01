@@ -1,6 +1,7 @@
 package io.hamal.api.http.controller.trigger
 
 import io.hamal.api.http.controller.BaseControllerTest
+import io.hamal.lib.domain._enum.TopicType
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpStatusCode.Accepted
@@ -15,7 +16,7 @@ import kotlin.time.Duration.Companion.seconds
 internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
 
     fun createFunc(name: FuncName): ApiFuncCreateRequested {
-        val createTopicResponse = httpTemplate.post("/v1/flows/1/funcs")
+        val createTopicResponse = httpTemplate.post("/v1/namespaces/539/funcs")
             .body(
                 ApiFuncCreateRequest(
                     name = name,
@@ -32,9 +33,8 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
     }
 
     fun createTopic(topicName: TopicName): ApiTopicCreateRequested {
-        val createTopicResponse = httpTemplate.post("/v1/flows/{flowId}/topics")
-            .path("flowId", testFlow.id)
-            .body(ApiTopicCreateRequest(topicName))
+        val createTopicResponse = httpTemplate.post("/v1/namespaces/539/topics")
+            .body(ApiTopicCreateRequest(topicName, TopicType.Namespace))
             .execute()
 
         assertThat(createTopicResponse.statusCode, equalTo(Accepted))
@@ -44,8 +44,7 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
     }
 
     fun createHook(hookName: HookName): ApiHookCreateRequested {
-        val createHookResponse = httpTemplate.post("/v1/flows/1/hooks")
-            .path("groupId", testGroup.id)
+        val createHookResponse = httpTemplate.post("/v1/namespaces/539/hooks")
             .body(ApiHookCreateRequest(hookName))
             .execute()
 
@@ -58,14 +57,14 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
     fun createFixedRateTrigger(name: TriggerName): ApiTriggerCreateRequested {
         val funcId = awaitCompleted(createFunc(FuncName(name.value))).funcId
 
-        val creationResponse = httpTemplate.post("/v1/flows/1/triggers")
+        val creationResponse = httpTemplate.post("/v1/namespaces/539/triggers")
             .body(
                 ApiTriggerCreateReq(
                     type = TriggerType.FixedRate,
                     name = name,
                     funcId = funcId,
                     inputs = TriggerInputs(),
-                    duration = 10.seconds,
+                    duration = TriggerDuration(10.seconds.toIsoString()),
                 )
             )
             .execute()
@@ -77,7 +76,7 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
     }
 
     fun createTrigger(req: ApiTriggerCreateReq): ApiTriggerCreateRequested {
-        val creationResponse = httpTemplate.post("/v1/flows/1/triggers")
+        val creationResponse = httpTemplate.post("/v1/namespaces/539/triggers")
             .body(req)
             .execute()
 

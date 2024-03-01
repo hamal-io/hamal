@@ -1,12 +1,11 @@
 package io.hamal.repository.memory
 
-import io.hamal.lib.domain.vo.AccountId
-import io.hamal.lib.domain.vo.AuthToken
-import io.hamal.lib.domain.vo.Email
-import io.hamal.lib.domain.vo.Web3Address
-import io.hamal.repository.api.*
+import io.hamal.lib.common.domain.Count
+import io.hamal.lib.domain.vo.*
+import io.hamal.repository.api.Auth
 import io.hamal.repository.api.AuthCmdRepository.*
 import io.hamal.repository.api.AuthQueryRepository.AuthQuery
+import io.hamal.repository.api.AuthRepository
 import java.util.concurrent.locks.ReentrantReadWriteLock
 import kotlin.concurrent.read
 import kotlin.concurrent.write
@@ -19,7 +18,7 @@ class AuthMemoryRepository : AuthRepository {
     override fun create(cmd: CreateCmd): Auth {
         return lock.write {
             when (cmd) {
-                is CreateEmailAuthCmd -> EmailAuth(
+                is CreateEmailAuthCmd -> Auth.Email(
                     cmdId = cmd.id,
                     id = cmd.authId,
                     accountId = cmd.accountId,
@@ -30,7 +29,7 @@ class AuthMemoryRepository : AuthRepository {
                     projection[it.accountId]!!.add(it)
                 }
 
-                is CreateMetaMaskAuthCmd -> MetaMaskAuth(
+                is CreateMetaMaskAuthCmd -> Auth.MetaMask(
                     cmdId = cmd.id,
                     id = cmd.authId,
                     accountId = cmd.accountId,
@@ -40,7 +39,7 @@ class AuthMemoryRepository : AuthRepository {
                     projection[it.accountId]!!.add(it)
                 }
 
-                is CreateTokenAuthCmd -> TokenAuth(
+                is CreateTokenAuthCmd -> Auth.Token(
                     cmdId = cmd.id,
                     id = cmd.authId,
                     accountId = cmd.accountId,
@@ -68,23 +67,25 @@ class AuthMemoryRepository : AuthRepository {
             .flatMap { it.value }
             .reversed()
             .asSequence()
-            .filter {
-                if (query.authIds.isEmpty()) true else query.authIds.contains(it.id)
-            }.dropWhile { it.id >= query.afterId }
+            .filter { if (query.authIds.isEmpty()) true else query.authIds.contains(it.id) }
+            .filter { it is Auth.Account && if (query.accountIds.isEmpty()) true else query.accountIds.contains(it.accountId) }
+            .dropWhile { it.id >= query.afterId }
             .take(query.limit.value)
             .toList()
     }
 
-    override fun count(query: AuthQuery): ULong {
-        return projection.filter { query.accountIds.isEmpty() || it.key in query.accountIds }
-            .flatMap { it.value }
-            .reversed()
-            .asSequence()
-            .filter {
-                if (query.authIds.isEmpty()) true else query.authIds.contains(it.id)
-            }.dropWhile { it.id >= query.afterId }
-            .count()
-            .toULong()
+    override fun count(query: AuthQuery): Count {
+        return Count(
+            projection.filter { query.accountIds.isEmpty() || it.key in query.accountIds }
+                .flatMap { it.value }
+                .reversed()
+                .asSequence()
+                .filter { if (query.authIds.isEmpty()) true else query.authIds.contains(it.id) }
+                .filter { it is Auth.Account && if (query.accountIds.isEmpty()) true else query.accountIds.contains(it.accountId) }
+                .dropWhile { it.id >= query.afterId }
+                .count()
+                .toLong()
+        )
     }
 
     override fun clear() {
@@ -92,12 +93,19 @@ class AuthMemoryRepository : AuthRepository {
     }
 
     override fun close() {}
+    override fun find(authId: AuthId): Auth? {
+        return lock.read {
+            projection
+                .flatMap { it.value }
+                .find { it.id == authId }
+        }
+    }
 
     override fun find(authToken: AuthToken): Auth? {
         return lock.read {
             projection.flatMap { it.value }
                 .asSequence()
-                .filterIsInstance<TokenAuth>()
+                .filterIsInstance<Auth.Token>()
                 .find { it.token == authToken }
         }
     }
@@ -106,7 +114,7 @@ class AuthMemoryRepository : AuthRepository {
         return lock.read {
             projection.flatMap { it.value }
                 .asSequence()
-                .filterIsInstance<EmailAuth>()
+                .filterIsInstance<Auth.Email>()
                 .find { it.email == email }
         }
     }
@@ -115,7 +123,7 @@ class AuthMemoryRepository : AuthRepository {
         return lock.read {
             projection.flatMap { it.value }
                 .asSequence()
-                .filterIsInstance<MetaMaskAuth>()
+                .filterIsInstance<Auth.MetaMask>()
                 .find { it.address == address }
         }
     }

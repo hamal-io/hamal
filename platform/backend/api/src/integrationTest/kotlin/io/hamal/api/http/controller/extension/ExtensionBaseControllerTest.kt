@@ -11,8 +11,8 @@ import org.hamcrest.Matchers.equalTo
 
 internal sealed class ExtensionBaseControllerTest : BaseControllerTest() {
     fun createExtension(req: ApiExtensionCreateRequest): ApiExtensionCreateRequested {
-        val createResponse = httpTemplate.post("/v1/groups/{groupId}/extensions")
-            .path("groupId", testGroup.id)
+        val createResponse = httpTemplate.post("/v1/workspaces/{workspaceId}/extensions")
+            .path("workspaceId", testWorkspace.id)
             .body(req)
             .execute()
 
@@ -21,9 +21,9 @@ internal sealed class ExtensionBaseControllerTest : BaseControllerTest() {
         return createResponse.result(ApiExtensionCreateRequested::class)
     }
 
-    fun getExtension(extId: ExtensionId): ApiExtension {
-        val getResponse = httpTemplate.get("/v1/extensions/{extId}")
-            .path("extId", extId)
+    fun getExtension(extensionId: ExtensionId): ApiExtension {
+        val getResponse = httpTemplate.get("/v1/extensions/{extensionId}")
+            .path("extensionId", extensionId)
             .execute()
 
         assertThat(getResponse.statusCode, equalTo(HttpStatusCode.Ok))
@@ -33,7 +33,7 @@ internal sealed class ExtensionBaseControllerTest : BaseControllerTest() {
 
     fun getExtensionList(): ApiExtensionList {
         val listResponse = httpTemplate.get("/v1/extensions")
-            .parameter("group_ids", testGroup.id)
+            .parameter("workspace_ids", testWorkspace.id)
             .execute()
 
         assertThat(listResponse.statusCode, equalTo(HttpStatusCode.Ok))
@@ -42,9 +42,9 @@ internal sealed class ExtensionBaseControllerTest : BaseControllerTest() {
 
     }
 
-    fun updateExtension(extId: ExtensionId, req: ApiExtensionUpdateRequest): ApiExtensionUpdateRequested {
-        val updateResponse = httpTemplate.patch("/v1/extensions/{extId}")
-            .path("extId", extId)
+    fun updateExtension(extensionId: ExtensionId, req: ApiExtensionUpdateRequest): ApiExtensionUpdateRequested {
+        val updateResponse = httpTemplate.patch("/v1/extensions/{extensionId}")
+            .path("extensionId", extensionId)
             .body(req)
             .execute()
 

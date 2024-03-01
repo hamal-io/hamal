@@ -4,6 +4,7 @@ import io.hamal.lib.common.KeyedOnce
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain._enum.TopicType
 import io.hamal.lib.domain.request.TopicAppendEntryRequest
 import io.hamal.lib.domain.request.TopicCreateRequest
 import io.hamal.lib.domain.vo.*
@@ -14,20 +15,23 @@ import io.hamal.lib.sdk.api.ApiTopicService.TopicQuery
 import io.hamal.lib.sdk.fold
 
 data class ApiTopicCreateRequest(
-    override val name: TopicName
+    override val name: TopicName,
+    override val type: TopicType
 ) : TopicCreateRequest
 
 data class ApiTopicCreateRequested(
     override val id: RequestId,
     override val status: RequestStatus,
     val topicId: TopicId,
-    val groupId: GroupId,
-    val flowId: FlowId
+    val workspaceId: WorkspaceId,
+    val namespaceId: NamespaceId,
+    val type: TopicType
 ) : ApiRequested()
 
-data class ApiTopicAppendEntryRequest(
+
+data class ApiTopicAppendEventRequest(
     override val topicId: TopicId,
-    override val payload: TopicEntryPayload
+    override val payload: TopicEventPayload
 ) : TopicAppendEntryRequest
 
 data class ApiTopicAppendRequested(
@@ -36,20 +40,21 @@ data class ApiTopicAppendRequested(
     val topicId: TopicId
 ) : ApiRequested()
 
-data class ApiTopicEntryList(
+data class ApiTopicEventList(
     val topicId: TopicId,
     val topicName: TopicName,
-    val entries: List<Entry>
+    val events: List<Event>
 ) {
-    data class Entry(
-        val id: TopicEntryId,
-        val payload: TopicEntryPayload
+    data class Event(
+        val id: TopicEventId,
+        val payload: TopicEventPayload
     )
 }
 
 data class ApiTopic(
     val id: TopicId,
-    val name: TopicName
+    val name: TopicName,
+    val type: TopicType
 ) : ApiObject()
 
 data class ApiTopicList(
@@ -57,31 +62,32 @@ data class ApiTopicList(
 ) : ApiObject() {
     data class Topic(
         val id: TopicId,
-        val name: TopicName
+        val name: TopicName,
+        val type: TopicType
     )
 }
 
 interface ApiTopicService {
-    fun append(topicId: TopicId, payload: TopicEntryPayload): ApiTopicAppendRequested
-    fun create(flowId: FlowId, req: ApiTopicCreateRequest): ApiTopicCreateRequested
+    fun append(topicId: TopicId, payload: TopicEventPayload): ApiTopicAppendRequested
+    fun createTopic(namespaceId: NamespaceId, req: ApiTopicCreateRequest): ApiTopicCreateRequested
     fun list(query: TopicQuery): List<ApiTopicList.Topic>
-    fun entries(topicId: TopicId): List<ApiTopicEntryList.Entry>
+    fun events(topicId: TopicId): List<ApiTopicEventList.Event>
     fun get(topicId: TopicId): ApiTopic
-    fun resolve(flowId: FlowId, topicName: TopicName): TopicId
+    fun resolve(namespaceId: NamespaceId, topicName: TopicName): TopicId
 
     data class TopicQuery(
         var afterId: TopicId = TopicId(SnowflakeId(Long.MAX_VALUE)),
         var limit: Limit = Limit(25),
         var topicIds: List<TopicId> = listOf(),
-        var flowIds: List<FlowId> = listOf(),
-        var groupIds: List<GroupId> = listOf()
+        var namespaceIds: List<NamespaceId> = listOf(),
+        var workspaceIds: List<WorkspaceId> = listOf()
     ) {
         fun setRequestParameters(req: HttpRequest) {
             req.parameter("after_id", afterId)
             req.parameter("limit", limit)
             if (topicIds.isNotEmpty()) req.parameter("topic_ids", topicIds)
-            if (flowIds.isNotEmpty()) req.parameter("flow_ids", flowIds)
-            if (groupIds.isNotEmpty()) req.parameter("group_ids", groupIds)
+            if (namespaceIds.isNotEmpty()) req.parameter("namespace_ids", namespaceIds)
+            if (workspaceIds.isNotEmpty()) req.parameter("workspace_ids", workspaceIds)
         }
     }
 }
@@ -90,16 +96,16 @@ internal class ApiTopicServiceImpl(
     private val template: HttpTemplate
 ) : ApiTopicService {
 
-    override fun append(topicId: TopicId, payload: TopicEntryPayload): ApiTopicAppendRequested =
-        template.post("/v1/topics/{topicId}/entries")
+    override fun append(topicId: TopicId, payload: TopicEventPayload): ApiTopicAppendRequested =
+        template.post("/v1/topics/{topicId}/events")
             .path("topicId", topicId)
             .body(payload)
             .execute()
             .fold(ApiTopicAppendRequested::class)
 
-    override fun create(flowId: FlowId, req: ApiTopicCreateRequest): ApiTopicCreateRequested =
-        template.post("/v1/flows/{flowId}/topics")
-            .path("flowId", flowId)
+    override fun createTopic(namespaceId: NamespaceId, req: ApiTopicCreateRequest): ApiTopicCreateRequested =
+        template.post("/v1/namespaces/{namespaceId}/topics")
+            .path("namespaceId", namespaceId)
             .body(req)
             .execute()
             .fold(ApiTopicCreateRequested::class)
@@ -111,13 +117,13 @@ internal class ApiTopicServiceImpl(
             .fold(ApiTopicList::class)
             .topics
 
-    override fun entries(topicId: TopicId) =
+    override fun events(topicId: TopicId) =
         template
-            .get("/v1/topics/{topicId}/entries")
+            .get("/v1/topics/{topicId}/events")
             .path("topicId", topicId)
             .execute()
-            .fold(ApiTopicEntryList::class)
-            .entries
+            .fold(ApiTopicEventList::class)
+            .events
 
     override fun get(topicId: TopicId) =
         template.get("/v1/topics/{topicId}")
@@ -125,10 +131,10 @@ internal class ApiTopicServiceImpl(
             .execute()
             .fold(ApiTopic::class)
 
-    override fun resolve(flowId: FlowId, topicName: TopicName): TopicId {
+    override fun resolve(namespaceId: NamespaceId, topicName: TopicName): TopicId {
         return topicNameCache(topicName) {
             template.get("/v1/topics")
-                .parameter("flow_ids", flowId)
+                .parameter("namespace_ids", namespaceId)
                 .parameter("names", topicName.value)
                 .execute()
                 .fold(ApiTopicList::class)

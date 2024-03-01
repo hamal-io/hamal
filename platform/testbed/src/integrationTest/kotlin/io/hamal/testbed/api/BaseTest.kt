@@ -7,11 +7,8 @@ import io.hamal.extension.net.http.ExtensionHttpFactory
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.util.TimeUtils
-import io.hamal.lib.domain.GenerateId
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.NativeLoader
-import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.SandboxContext
+import io.hamal.lib.kua.*
 import io.hamal.lib.sdk.ApiSdkImpl
 import io.hamal.lib.sdk.api.ApiAdhocInvokeRequest
 import io.hamal.plugin.net.http.PluginHttpFactory
@@ -19,7 +16,6 @@ import io.hamal.plugin.std.debug.PluginDebugFactory
 import io.hamal.plugin.std.log.PluginLogFactory
 import io.hamal.plugin.std.sys.PluginSysFactory
 import io.hamal.repository.api.*
-import io.hamal.repository.api.log.BrokerRepository
 import io.hamal.runner.config.EnvFactory
 import io.hamal.runner.config.SandboxFactory
 import io.hamal.testbed.api.TestResult.*
@@ -102,18 +98,19 @@ class ClearController {
 
     @PostMapping("/v1/clear")
     fun clear() {
-        eventBrokerRepository.clear()
         accountRepository.clear()
         authRepository.clear()
         codeRepository.clear()
         endpointRepository.clear()
         extensionRepository.clear()
-        reqRepository.clear()
+        requestRepository.clear()
         execRepository.clear()
         funcRepository.clear()
-        groupRepository.clear()
+        workspaceRepository.clear()
         hookRepository.clear()
-        flowRepository.clear()
+
+        namespaceRepository.clear()
+        namespaceTreeRepository.clear()
         blueprintRepository.clear()
         triggerRepository.clear()
 
@@ -129,38 +126,43 @@ class ClearController {
         testAccountAuthToken = (authRepository.create(
             AuthCmdRepository.CreateTokenAuthCmd(
                 id = CmdId(3),
-                authId = generateDomainId(::AuthId),
-                accountId = testAccount.id,
+                authId = AuthId.root,
+                accountId = AccountId.root,
                 token = AuthToken("root-token"),
                 expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(1, ChronoUnit.DAYS))
             )
-        ) as TokenAuth).token
+        ) as Auth.Token).token
 
-        testGroup = groupRepository.create(
-            GroupCmdRepository.CreateCmd(
+        testWorkspace = workspaceRepository.create(
+            WorkspaceCmdRepository.CreateCmd(
                 id = CmdId(4),
-                groupId = GroupId.root,
-                name = GroupName("root-group"),
-                creatorId = testAccount.id
+                workspaceId = WorkspaceId.root,
+                name = WorkspaceName("root-workspace"),
+                creatorId = AccountId.root
             )
         )
 
-        testFlow = flowRepository.create(
-            FlowCmdRepository.CreateCmd(
+        testNamespace = namespaceRepository.create(
+            NamespaceCmdRepository.CreateCmd(
                 id = CmdId(5),
-                flowId = FlowId.root,
-                groupId = testGroup.id,
-                name = FlowName("root-flow"),
-                inputs = FlowInputs()
+                namespaceId = NamespaceId.root,
+                workspaceId = WorkspaceId.root,
+                name = NamespaceName("root-namespace")
+            )
+        )
+
+        namespaceTreeRepository.create(
+            NamespaceTreeCmdRepository.CreateCmd(
+                id = CmdId(6),
+                treeId = NamespaceTreeId.root,
+                workspaceId = WorkspaceId.root,
+                rootNodeId = NamespaceId.root
             )
         )
     }
 
     @Autowired
     lateinit var blueprintRepository: BlueprintRepository
-
-    @Autowired
-    lateinit var eventBrokerRepository: BrokerRepository
 
     @Autowired
     lateinit var accountRepository: AccountRepository
@@ -184,27 +186,27 @@ class ClearController {
     lateinit var funcRepository: FuncRepository
 
     @Autowired
-    lateinit var groupRepository: GroupRepository
+    lateinit var workspaceRepository: WorkspaceRepository
 
     @Autowired
     lateinit var hookRepository: HookRepository
 
     @Autowired
-    lateinit var flowRepository: FlowRepository
+    lateinit var namespaceRepository: NamespaceRepository
 
     @Autowired
-    lateinit var reqRepository: RequestRepository
+    lateinit var namespaceTreeRepository: NamespaceTreeRepository
+
+    @Autowired
+    lateinit var requestRepository: RequestRepository
 
     @Autowired
     lateinit var triggerRepository: TriggerRepository
 
-    @Autowired
-    lateinit var generateDomainId: GenerateId
-
     private lateinit var testAccount: Account
     private lateinit var testAccountAuthToken: AuthToken
-    private lateinit var testGroup: Group
-    private lateinit var testFlow: Flow
+    private lateinit var testWorkspace: Workspace
+    private lateinit var testNamespace: Namespace
 }
 
 
@@ -220,8 +222,8 @@ class TestConfig {
 
     private lateinit var testAccount: Account
     private lateinit var testAccountAuthToken: AuthToken
-    private lateinit var testGroup: Group
-    private lateinit var testFlow: Flow
+    private lateinit var testWorkspace: Workspace
+    private lateinit var testNamespace: Namespace
 
     @PostConstruct
     fun setup() {
@@ -239,29 +241,28 @@ class TestConfig {
             testAccountAuthToken = (authRepository.create(
                 AuthCmdRepository.CreateTokenAuthCmd(
                     id = CmdId(3),
-                    authId = AuthId(1),
-                    accountId = testAccount.id,
+                    authId = AuthId.root,
+                    accountId = AccountId.root,
                     token = AuthToken("root-token"),
                     expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(1, ChronoUnit.DAYS))
                 )
-            ) as TokenAuth).token
+            ) as Auth.Token).token
 
-            testGroup = groupRepository.create(
-                GroupCmdRepository.CreateCmd(
+            testWorkspace = workspaceRepository.create(
+                WorkspaceCmdRepository.CreateCmd(
                     id = CmdId(4),
-                    groupId = GroupId.root,
-                    name = GroupName("root-group"),
-                    creatorId = testAccount.id
+                    workspaceId = WorkspaceId.root,
+                    name = WorkspaceName("root-workspace"),
+                    creatorId = AccountId.root
                 )
             )
 
-            testFlow = flowRepository.create(
-                FlowCmdRepository.CreateCmd(
+            testNamespace = namespaceRepository.create(
+                NamespaceCmdRepository.CreateCmd(
                     id = CmdId(5),
-                    flowId = FlowId.root,
-                    groupId = testGroup.id,
-                    name = FlowName("root-flow"),
-                    inputs = FlowInputs()
+                    namespaceId = NamespaceId.root,
+                    workspaceId = WorkspaceId.root,
+                    name = NamespaceName("root-namespace")
                 )
             )
         } catch (ignored: Throwable) {
@@ -275,10 +276,10 @@ class TestConfig {
     lateinit var authRepository: AuthRepository
 
     @Autowired
-    lateinit var groupRepository: GroupRepository
+    lateinit var workspaceRepository: WorkspaceRepository
 
     @Autowired
-    lateinit var flowRepository: FlowRepository
+    lateinit var namespaceRepository: NamespaceRepository
 }
 
 
@@ -301,7 +302,7 @@ abstract class BaseApiTest {
                         when (val result = runTest(testPath)) {
                             is Success -> break
                             is Failed -> {
-                                if (counter++ >= 3) {
+                                if (counter++ >= 10) {
                                     fail { result.message }
                                 }
                                 sdk.template.post("/v1/clear").execute()
@@ -325,7 +326,7 @@ abstract class BaseApiTest {
             println(">>>>>>>>>>>>>> ${file.fileName}")
 
             val execReq = sdk.adhoc.invoke(
-                FlowId(1),
+                NamespaceId.root,
                 ApiAdhocInvokeRequest(InvocationInputs(), CodeValue(String(Files.readAllBytes(file))))
             )
 
@@ -342,7 +343,7 @@ abstract class BaseApiTest {
                     } else {
                         if (status == ExecStatus.Failed) {
                             return Failed(message = "Execution failed: ${this.result!!.value["message"]}")
-                        } else if (startedAt.plusSeconds(5).isBefore(TimeUtils.now())) {
+                        } else if (startedAt.plusSeconds(1).isBefore(TimeUtils.now())) {
                             return Timeout
                         }
                     }

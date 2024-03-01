@@ -17,10 +17,10 @@ internal sealed class EndpointBaseControllerTest : BaseControllerTest() {
         funcId: FuncId,
         name: EndpointName,
         method: EndpointMethod,
-        flowId: FlowId = FlowId(1),
+        namespaceId: NamespaceId = NamespaceId(1),
     ): ApiEndpointCreateRequested {
-        val response = httpTemplate.post("/v1/flows/{flowId}/endpoints")
-            .path("flowId", flowId)
+        val response = httpTemplate.post("/v1/namespaces/{namespaceId}/endpoints")
+            .path("namespaceId", namespaceId)
             .body(
                 ApiEndpointCreateRequest(
                     name = name,
@@ -37,10 +37,10 @@ internal sealed class EndpointBaseControllerTest : BaseControllerTest() {
 
     fun createFunc(
         name: FuncName,
-        flowId: FlowId = FlowId(1)
+        namespaceId: NamespaceId = NamespaceId.root
     ): ApiFuncCreateRequested {
-        val createTopicResponse = httpTemplate.post("/v1/flows/{flowId}/funcs")
-            .path("flowId", flowId)
+        val createTopicResponse = httpTemplate.post("/v1/namespaces/{namespaceId}/funcs")
+            .path("namespaceId", namespaceId)
             .body(
                 ApiFuncCreateRequest(
                     name = name,
@@ -56,31 +56,24 @@ internal sealed class EndpointBaseControllerTest : BaseControllerTest() {
         return createTopicResponse.result(ApiFuncCreateRequested::class)
     }
 
-    fun createFlow(
-        name: FlowName,
-        groupId: GroupId,
-        type: FlowType = FlowType.default
-    ): ApiFlowCreateRequested {
-        val response = httpTemplate.post("/v1/groups/{groupId}/flows")
-            .path("groupId", groupId)
-            .body(
-                ApiFlowCreateRequest(
-                    name = name,
-                    type = type,
-                    inputs = FlowInputs()
-                )
-            )
+    fun appendNamespace(
+        name: NamespaceName,
+        parentId: NamespaceId,
+    ): ApiNamespaceAppendRequested {
+        val response = httpTemplate.post("/v1/namespaces/{namespaceId}/namespaces")
+            .path("namespaceId", parentId)
+            .body(ApiNamespaceAppendRequest(name))
             .execute()
 
         assertThat(response.statusCode, equalTo(Accepted))
         require(response is HttpSuccessResponse) { "request was not successful" }
-        return response.result(ApiFlowCreateRequested::class)
+        return response.result(ApiNamespaceAppendRequested::class)
     }
 
 
     fun listEndpoints(): ApiEndpointList {
         val listEndpointsResponse = httpTemplate.get("/v1/endpoints")
-            .parameter("group_ids", testGroup.id)
+            .parameter("workspace_ids", testWorkspace.id)
             .execute()
 
         assertThat(listEndpointsResponse.statusCode, equalTo(Ok))

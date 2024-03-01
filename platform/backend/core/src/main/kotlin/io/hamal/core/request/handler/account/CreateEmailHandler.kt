@@ -1,11 +1,15 @@
 package io.hamal.core.request.handler.account
 
-import io.hamal.core.event.PlatformEventEmitter
+import io.hamal.core.event.InternalEventEmitter
+import io.hamal.core.request.RequestHandler
 import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.request.AccountCreateRequested
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.AuthTokenExpiresAt
+import io.hamal.lib.domain.vo.NamespaceName
+import io.hamal.lib.domain.vo.NamespaceTreeId
+import io.hamal.lib.domain.vo.WorkspaceName
 import io.hamal.repository.api.*
 import io.hamal.repository.api.event.AccountCreatedEvent
 import org.springframework.stereotype.Component
@@ -13,83 +17,93 @@ import java.time.temporal.ChronoUnit
 
 @Component
 class AccountCreateEmailHandler(
-    val accountCmdRepository: AccountCmdRepository,
-    val authCmdRepository: AuthCmdRepository,
-    val groupCmdRepository: GroupCmdRepository,
-    val flowCmdRepository: FlowCmdRepository,
-    val eventEmitter: PlatformEventEmitter
-) : io.hamal.core.request.RequestHandler<AccountCreateRequested>(AccountCreateRequested::class) {
+    private val accountCmdRepository: AccountCmdRepository,
+    private val authCmdRepository: AuthCmdRepository,
+    private val workspaceCmdRepository: WorkspaceCmdRepository,
+    private val namespaceCmdRepository: NamespaceCmdRepository,
+    private val namespaceTreeCmdRepository: NamespaceTreeCmdRepository,
+    private val eventEmitter: InternalEventEmitter
+) : RequestHandler<AccountCreateRequested>(AccountCreateRequested::class) {
 
     override fun invoke(req: AccountCreateRequested) {
         createAccount(req)
-            .also { emitEvent(req.cmdId(), it) }
-            .also { createGroup(req) }
-            .also { createFlow(req) }
+            .also { createWorkspace(req) }
+            .also { createNamespace(req) }
+            .also { createNamespaceTree(req) }
             .also { createEmailAuth(req) }
             .also { createTokenAuth(req) }
+            .also { emitEvent(req.cmdId(), it) }
     }
-}
 
-private fun AccountCreateEmailHandler.createAccount(req: AccountCreateRequested): Account {
-    return accountCmdRepository.create(
-        AccountCmdRepository.CreateCmd(
-            id = req.cmdId(),
-            accountId = req.accountId,
-            accountType = req.accountType,
-            salt = req.salt
+    private fun createAccount(req: AccountCreateRequested): Account {
+        return accountCmdRepository.create(
+            AccountCmdRepository.CreateCmd(
+                id = req.cmdId(),
+                accountId = req.accountId,
+                accountType = req.accountType,
+                salt = req.salt
+            )
         )
-    )
-}
+    }
 
-private fun AccountCreateEmailHandler.createGroup(req: AccountCreateRequested): Group {
-    return groupCmdRepository.create(
-        GroupCmdRepository.CreateCmd(
-            id = req.cmdId(),
-            groupId = req.groupId,
-            name = GroupName("Group ${req.groupId}"),
-            creatorId = req.accountId
+    private fun createWorkspace(req: AccountCreateRequested): Workspace {
+        return workspaceCmdRepository.create(
+            WorkspaceCmdRepository.CreateCmd(
+                id = req.cmdId(),
+                workspaceId = req.workspaceId,
+                name = WorkspaceName("Workspace ${req.workspaceId}"),
+                creatorId = req.accountId
+            )
         )
-    )
-}
+    }
 
-private fun AccountCreateEmailHandler.createFlow(req: AccountCreateRequested): Flow {
-    return flowCmdRepository.create(
-        FlowCmdRepository.CreateCmd(
-            id = req.cmdId(),
-            flowId = req.flowId,
-            groupId = req.groupId,
-            type = FlowType.default,
-            name = FlowName.default,
-            inputs = FlowInputs()
+    private fun createNamespace(req: AccountCreateRequested): Namespace {
+        return namespaceCmdRepository.create(
+            NamespaceCmdRepository.CreateCmd(
+                id = req.cmdId(),
+                namespaceId = req.namespaceId,
+                workspaceId = req.workspaceId,
+                name = NamespaceName.default
+            )
         )
-    )
-}
+    }
 
-
-private fun AccountCreateEmailHandler.createEmailAuth(req: AccountCreateRequested): Auth {
-    return authCmdRepository.create(
-        AuthCmdRepository.CreateEmailAuthCmd(
-            id = req.cmdId(),
-            authId = req.passwordAuthId,
-            accountId = req.accountId,
-            email = req.email,
-            hash = req.hash
+    private fun createNamespaceTree(req: AccountCreateRequested): NamespaceTree {
+        return namespaceTreeCmdRepository.create(
+            NamespaceTreeCmdRepository.CreateCmd(
+                id = req.cmdId(),
+                treeId = NamespaceTreeId(req.namespaceId.value),
+                rootNodeId = req.namespaceId,
+                workspaceId = req.workspaceId,
+            )
         )
-    )
-}
+    }
 
-private fun AccountCreateEmailHandler.createTokenAuth(req: AccountCreateRequested): Auth {
-    return authCmdRepository.create(
-        AuthCmdRepository.CreateTokenAuthCmd(
-            id = req.cmdId(),
-            authId = req.tokenAuthId,
-            accountId = req.accountId,
-            token = req.token,
-            expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(30, ChronoUnit.DAYS))
+    private fun createEmailAuth(req: AccountCreateRequested): Auth {
+        return authCmdRepository.create(
+            AuthCmdRepository.CreateEmailAuthCmd(
+                id = req.cmdId(),
+                authId = req.emailAuthId,
+                accountId = req.accountId,
+                email = req.email,
+                hash = req.hash
+            )
         )
-    )
-}
+    }
 
-private fun AccountCreateEmailHandler.emitEvent(cmdId: CmdId, account: Account) {
-    eventEmitter.emit(cmdId, AccountCreatedEvent(account))
+    private fun createTokenAuth(req: AccountCreateRequested): Auth {
+        return authCmdRepository.create(
+            AuthCmdRepository.CreateTokenAuthCmd(
+                id = req.cmdId(),
+                authId = req.tokenAuthId,
+                accountId = req.accountId,
+                token = req.token,
+                expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(30, ChronoUnit.DAYS))
+            )
+        )
+    }
+
+    private fun emitEvent(cmdId: CmdId, account: Account) {
+        eventEmitter.emit(cmdId, AccountCreatedEvent(account))
+    }
 }

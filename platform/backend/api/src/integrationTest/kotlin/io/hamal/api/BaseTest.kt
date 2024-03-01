@@ -2,17 +2,18 @@ package io.hamal.api
 
 import io.hamal.bridge.BridgeConfig
 import io.hamal.core.CoreConfig
+import io.hamal.core.component.SetupInternalTopics
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.GenerateId
+import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.AccountType.Root
 import io.hamal.repository.api.*
 import io.hamal.repository.api.AuthCmdRepository.CreateTokenAuthCmd
 import io.hamal.repository.api.ExecCmdRepository.StartCmd
-import io.hamal.repository.api.log.BrokerRepository
+import io.hamal.repository.api.log.LogBrokerRepository
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.MethodOrderer.Random
 import org.junit.jupiter.api.TestMethodOrder
@@ -60,12 +61,6 @@ internal abstract class BaseTest {
     lateinit var codeQueryRepository: CodeQueryRepository
 
     @Autowired
-    lateinit var platformEventBrokerRepository: BrokerRepository
-
-    @Autowired
-    lateinit var eventBrokerRepository: BrokerRepository
-
-    @Autowired
     lateinit var endpointQueryRepository: EndpointQueryRepository
 
     @Autowired
@@ -96,7 +91,7 @@ internal abstract class BaseTest {
     lateinit var funcCmdRepository: FuncCmdRepository
 
     @Autowired
-    lateinit var groupCmdRepository: GroupCmdRepository
+    lateinit var workspaceCmdRepository: WorkspaceCmdRepository
 
     @Autowired
     lateinit var hookQueryRepository: HookQueryRepository
@@ -105,16 +100,22 @@ internal abstract class BaseTest {
     lateinit var hookCmdRepository: HookCmdRepository
 
     @Autowired
-    lateinit var flowQueryRepository: FlowQueryRepository
+    lateinit var namespaceQueryRepository: NamespaceQueryRepository
 
     @Autowired
-    lateinit var flowCmdRepository: FlowCmdRepository
+    lateinit var logBrokerRepository: LogBrokerRepository
 
     @Autowired
-    lateinit var reqQueryRepository: RequestQueryRepository
+    lateinit var namespaceCmdRepository: NamespaceCmdRepository
 
     @Autowired
-    lateinit var reqCmdRepository: RequestCmdRepository
+    lateinit var namespaceTreeCmdRepository: NamespaceTreeCmdRepository
+
+    @Autowired
+    lateinit var requestQueryRepository: RequestQueryRepository
+
+    @Autowired
+    lateinit var requestCmdRepository: RequestCmdRepository
 
     @Autowired
     lateinit var stateQueryRepository: StateQueryRepository
@@ -123,18 +124,27 @@ internal abstract class BaseTest {
     lateinit var stateCmdRepository: StateCmdRepository
 
     @Autowired
+    lateinit var topicCmdRepository: TopicCmdRepository
+
+    @Autowired
+    lateinit var topicQueryRepository: TopicQueryRepository
+
+    @Autowired
     lateinit var triggerCmdRepository: TriggerCmdRepository
 
     @Autowired
     lateinit var triggerQueryRepository: TriggerQueryRepository
 
     @Autowired
-    lateinit var generateDomainId: GenerateId
+    lateinit var generateDomainId: GenerateDomainId
+
+    @Autowired
+    private lateinit var setupInternalTopics: SetupInternalTopics
 
     lateinit var testAccount: Account
     lateinit var testAuthToken: AuthToken
-    lateinit var testGroup: Group
-    lateinit var testFlow: Flow
+    lateinit var testWorkspace: Workspace
+    lateinit var testNamespace: Namespace
 
     @BeforeEach
     fun before() {
@@ -143,20 +153,22 @@ internal abstract class BaseTest {
         authCmdRepository.clear()
         blueprintCmdRepository.clear()
         codeCmdRepository.clear()
-        platformEventBrokerRepository.clear()
         endpointCmdRepository.clear()
-        eventBrokerRepository.clear()
         execCmdRepository.clear()
         extensionCmdRepository.clear()
         feedbackCmdRepository.clear()
         funcCmdRepository.clear()
-        groupCmdRepository.clear()
+        workspaceCmdRepository.clear()
         hookCmdRepository.clear()
-        flowCmdRepository.clear()
-        reqCmdRepository.clear()
+        logBrokerRepository.clear()
+        namespaceCmdRepository.clear()
+        namespaceTreeCmdRepository.clear()
+        requestCmdRepository.clear()
         stateCmdRepository.clear()
+        topicCmdRepository.clear()
         triggerCmdRepository.clear()
 
+        setupInternalTopics()
 
         testAccount = accountCmdRepository.create(
             AccountCmdRepository.CreateCmd(
@@ -175,24 +187,32 @@ internal abstract class BaseTest {
                 token = AuthToken("test-token"),
                 expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(1, DAYS))
             )
-        ) as TokenAuth).token
+        ) as Auth.Token).token
 
-        testGroup = groupCmdRepository.create(
-            GroupCmdRepository.CreateCmd(
+        testWorkspace = workspaceCmdRepository.create(
+            WorkspaceCmdRepository.CreateCmd(
                 id = CmdId(4),
-                groupId = GroupId.root,
-                name = GroupName("test-group"),
+                workspaceId = WorkspaceId.root,
+                name = WorkspaceName("test-workspace"),
                 creatorId = testAccount.id
             )
         )
 
-        testFlow = flowCmdRepository.create(
-            FlowCmdRepository.CreateCmd(
-                id = CmdId(1),
-                flowId = FlowId.root,
-                groupId = testGroup.id,
-                name = FlowName("hamal"),
-                inputs = FlowInputs()
+        testNamespace = namespaceCmdRepository.create(
+            NamespaceCmdRepository.CreateCmd(
+                id = CmdId(5),
+                namespaceId = NamespaceId.root,
+                workspaceId = testWorkspace.id,
+                name = NamespaceName("hamal")
+            )
+        )
+
+        namespaceTreeCmdRepository.create(
+            NamespaceTreeCmdRepository.CreateCmd(
+                id = CmdId(6),
+                workspaceId = testWorkspace.id,
+                rootNodeId = testNamespace.id,
+                treeId = NamespaceTreeId.root
             )
         )
     }
@@ -205,15 +225,15 @@ internal abstract class BaseTest {
         codeId: CodeId? = null,
         codeVersion: CodeVersion? = null,
         code: CodeValue? = CodeValue(""),
-        invocation: Invocation = EmptyInvocation
+        invocation: Invocation = Invocation.Adhoc
     ): Exec {
 
         val planedExec = execCmdRepository.plan(
             ExecCmdRepository.PlanCmd(
                 id = CmdId(1),
                 execId = execId,
-                flowId = testFlow.id,
-                groupId = testGroup.id,
+                namespaceId = testNamespace.id,
+                workspaceId = testWorkspace.id,
                 correlation = correlation,
                 inputs = ExecInputs(),
                 code = ExecCode(

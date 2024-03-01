@@ -1,6 +1,7 @@
 package io.hamal.repository
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.EndpointCmdRepository.CreateCmd
@@ -26,8 +27,8 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
                 CreateCmd(
                     id = CmdId(1),
                     endpointId = EndpointId(123),
-                    groupId = GroupId(1),
-                    flowId = FlowId(234),
+                    workspaceId = WorkspaceId(1),
+                    namespaceId = NamespaceId(234),
                     name = EndpointName("SomeEndpoint"),
                     funcId = FuncId(345),
                 )
@@ -35,8 +36,8 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
 
             with(result) {
                 assertThat(id, equalTo(EndpointId(123)))
-                assertThat(groupId, equalTo(GroupId(1)))
-                assertThat(flowId, equalTo(FlowId(234)))
+                assertThat(workspaceId, equalTo(WorkspaceId(1)))
+                assertThat(namespaceId, equalTo(NamespaceId(234)))
                 assertThat(name, equalTo(EndpointName("SomeEndpoint")))
                 assertThat(funcId, equalTo(FuncId(345)))
             }
@@ -45,13 +46,13 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
         }
 
         @TestFactory
-        fun `Tries to create but same name already exists in flow`() =
+        fun `Tries to create but same name already exists in namespace`() =
             runWith(EndpointRepository::class) {
 
                 createEndpoint(
                     endpointId = EndpointId(1),
-                    flowId = FlowId(2),
-                    groupId = GroupId(3),
+                    namespaceId = NamespaceId(2),
+                    workspaceId = WorkspaceId(3),
                     name = EndpointName("first-endpoint-name"),
                     funcId = FuncId(4)
                 )
@@ -61,8 +62,8 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
                         CreateCmd(
                             id = CmdId(2),
                             endpointId = EndpointId(4),
-                            groupId = GroupId(3),
-                            flowId = FlowId(2),
+                            workspaceId = WorkspaceId(3),
+                            namespaceId = NamespaceId(2),
                             name = EndpointName("first-endpoint-name"),
                             funcId = FuncId(345)
                         )
@@ -71,20 +72,20 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
 
                 assertThat(
                     exception.message,
-                    equalTo("EndpointName(first-endpoint-name) already exists in flow FlowId(2)")
+                    equalTo("EndpointName(first-endpoint-name) already exists in namespace NamespaceId(2)")
                 )
 
                 verifyCount(1)
             }
 
         @TestFactory
-        fun `Creates with same name but different flow`() =
+        fun `Creates with same name but different namespace`() =
             runWith(EndpointRepository::class) {
 
                 createEndpoint(
                     endpointId = EndpointId(1),
-                    flowId = FlowId(2),
-                    groupId = GroupId(3),
+                    namespaceId = NamespaceId(2),
+                    workspaceId = WorkspaceId(3),
                     name = EndpointName("endpoint-name"),
                     funcId = FuncId(4)
                 )
@@ -93,8 +94,8 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
                     CreateCmd(
                         id = CmdId(2),
                         endpointId = EndpointId(4),
-                        groupId = GroupId(3),
-                        flowId = FlowId(22),
+                        workspaceId = WorkspaceId(3),
+                        namespaceId = NamespaceId(22),
                         name = EndpointName("endpoint-name"),
                         funcId = FuncId(345)
                     )
@@ -102,8 +103,8 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
 
                 with(result) {
                     assertThat(id, equalTo(EndpointId(4)))
-                    assertThat(groupId, equalTo(GroupId(3)))
-                    assertThat(flowId, equalTo(FlowId(22)))
+                    assertThat(workspaceId, equalTo(WorkspaceId(3)))
+                    assertThat(namespaceId, equalTo(NamespaceId(22)))
                     assertThat(name, equalTo(EndpointName("endpoint-name")))
                     assertThat(funcId, equalTo(FuncId(345)))
                 }
@@ -118,8 +119,8 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
                 createEndpoint(
                     cmdId = CmdId(23456),
                     endpointId = EndpointId(5),
-                    flowId = FlowId(2),
-                    groupId = GroupId(3),
+                    namespaceId = NamespaceId(2),
+                    workspaceId = WorkspaceId(3),
                     name = EndpointName("first-endpoint-name"),
                     funcId = FuncId(4)
                 )
@@ -128,8 +129,8 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
                     CreateCmd(
                         id = CmdId(23456),
                         endpointId = EndpointId(5),
-                        groupId = GroupId(333),
-                        flowId = FlowId(2222),
+                        workspaceId = WorkspaceId(333),
+                        namespaceId = NamespaceId(2222),
                         name = EndpointName("second-endpoint-name"),
                         funcId = FuncId(444)
                     )
@@ -137,8 +138,8 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
 
                 with(result) {
                     assertThat(id, equalTo(EndpointId(5)))
-                    assertThat(groupId, equalTo(GroupId(3)))
-                    assertThat(flowId, equalTo(FlowId(2)))
+                    assertThat(workspaceId, equalTo(WorkspaceId(3)))
+                    assertThat(namespaceId, equalTo(NamespaceId(2)))
                     assertThat(name, equalTo(EndpointName("first-endpoint-name")))
                     assertThat(funcId, equalTo(FuncId(4)))
                 }
@@ -154,8 +155,8 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
         fun `Updates endpoint`() = runWith(EndpointRepository::class) {
             createEndpoint(
                 endpointId = EndpointId(1),
-                flowId = FlowId(2),
-                groupId = GroupId(3),
+                namespaceId = NamespaceId(2),
+                workspaceId = WorkspaceId(3),
                 name = EndpointName("endpoint-name"),
                 funcId = FuncId(4)
             )
@@ -170,8 +171,8 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
 
             with(result) {
                 assertThat(id, equalTo(EndpointId(1)))
-                assertThat(groupId, equalTo(GroupId(3)))
-                assertThat(flowId, equalTo(FlowId(2)))
+                assertThat(workspaceId, equalTo(WorkspaceId(3)))
+                assertThat(namespaceId, equalTo(NamespaceId(2)))
                 assertThat(name, equalTo(EndpointName("Updated")))
                 assertThat(funcId, equalTo(FuncId(4444)))
             }
@@ -183,8 +184,8 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
         fun `Updates endpoint without updating it`() = runWith(EndpointRepository::class) {
             createEndpoint(
                 endpointId = EndpointId(1),
-                flowId = FlowId(2),
-                groupId = GroupId(3),
+                namespaceId = NamespaceId(2),
+                workspaceId = WorkspaceId(3),
                 name = EndpointName("endpoint-name"),
                 funcId = FuncId(4)
             )
@@ -199,8 +200,8 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
 
             with(result) {
                 assertThat(id, equalTo(EndpointId(1)))
-                assertThat(groupId, equalTo(GroupId(3)))
-                assertThat(flowId, equalTo(FlowId(2)))
+                assertThat(workspaceId, equalTo(WorkspaceId(3)))
+                assertThat(namespaceId, equalTo(NamespaceId(2)))
                 assertThat(name, equalTo(EndpointName("endpoint-name")))
                 assertThat(funcId, equalTo(FuncId(4)))
             }
@@ -209,21 +210,21 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
         }
 
         @TestFactory
-        fun `Tries to update but same name already exists in flow`() =
+        fun `Tries to update but same name already exists in namespace`() =
             runWith(EndpointRepository::class) {
 
                 createEndpoint(
                     endpointId = EndpointId(1),
-                    flowId = FlowId(2),
-                    groupId = GroupId(3),
+                    namespaceId = NamespaceId(2),
+                    workspaceId = WorkspaceId(3),
                     name = EndpointName("already-exists"),
                     funcId = FuncId(4)
                 )
 
                 createEndpoint(
                     endpointId = EndpointId(2),
-                    flowId = FlowId(2),
-                    groupId = GroupId(21),
+                    namespaceId = NamespaceId(2),
+                    workspaceId = WorkspaceId(21),
                     name = EndpointName("to-update"),
                     funcId = FuncId(22)
                 )
@@ -240,13 +241,13 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
 
                 assertThat(
                     exception.message,
-                    equalTo("EndpointName(already-exists) already exists in flow FlowId(2)")
+                    equalTo("EndpointName(already-exists) already exists in namespace NamespaceId(2)")
                 )
 
                 with(get(EndpointId(2))) {
                     assertThat(id, equalTo(EndpointId(2)))
-                    assertThat(flowId, equalTo(FlowId(2)))
-                    assertThat(groupId, equalTo(GroupId(21)))
+                    assertThat(namespaceId, equalTo(NamespaceId(2)))
+                    assertThat(workspaceId, equalTo(WorkspaceId(21)))
                     assertThat(name, equalTo(EndpointName("to-update")))
                     assertThat(funcId, equalTo(FuncId(22)))
                 }
@@ -270,16 +271,16 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
 
             createEndpoint(
                 endpointId = EndpointId(1),
-                flowId = FlowId(2),
-                groupId = GroupId(3),
+                namespaceId = NamespaceId(2),
+                workspaceId = WorkspaceId(3),
                 name = EndpointName("already-exists"),
                 funcId = FuncId(4)
             )
 
             createEndpoint(
                 endpointId = EndpointId(2),
-                flowId = FlowId(2),
-                groupId = GroupId(3),
+                namespaceId = NamespaceId(2),
+                workspaceId = WorkspaceId(3),
                 name = EndpointName("to-update"),
                 funcId = FuncId(5)
             )
@@ -296,16 +297,16 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
         fun `Get endpoint by id`() = runWith(EndpointRepository::class) {
             createEndpoint(
                 endpointId = EndpointId(1),
-                flowId = FlowId(2),
-                groupId = GroupId(3),
+                namespaceId = NamespaceId(2),
+                workspaceId = WorkspaceId(3),
                 name = EndpointName("SomeEndpoint"),
                 funcId = FuncId(4)
             )
 
             with(get(EndpointId(1))) {
                 assertThat(id, equalTo(EndpointId(1)))
-                assertThat(groupId, equalTo(GroupId(3)))
-                assertThat(flowId, equalTo(FlowId(2)))
+                assertThat(workspaceId, equalTo(WorkspaceId(3)))
+                assertThat(namespaceId, equalTo(NamespaceId(2)))
                 assertThat(name, equalTo(EndpointName("SomeEndpoint")))
                 assertThat(funcId, equalTo(FuncId(4)))
             }
@@ -315,8 +316,8 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
         fun `Tries to get endpoint by id but does not exist`() = runWith(EndpointRepository::class) {
             createEndpoint(
                 endpointId = EndpointId(1),
-                flowId = FlowId(2),
-                groupId = GroupId(3),
+                namespaceId = NamespaceId(2),
+                workspaceId = WorkspaceId(3),
                 name = EndpointName("SomeEndpoint"),
                 funcId = FuncId(4)
             )
@@ -334,16 +335,16 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
         fun `Find endpoint by id`() = runWith(EndpointRepository::class) {
             createEndpoint(
                 endpointId = EndpointId(1),
-                flowId = FlowId(2),
-                groupId = GroupId(3),
+                namespaceId = NamespaceId(2),
+                workspaceId = WorkspaceId(3),
                 name = EndpointName("SomeEndpoint"),
                 funcId = FuncId(4)
             )
 
             with(find(EndpointId(1))!!) {
                 assertThat(id, equalTo(EndpointId(1)))
-                assertThat(groupId, equalTo(GroupId(3)))
-                assertThat(flowId, equalTo(FlowId(2)))
+                assertThat(workspaceId, equalTo(WorkspaceId(3)))
+                assertThat(namespaceId, equalTo(NamespaceId(2)))
                 assertThat(name, equalTo(EndpointName("SomeEndpoint")))
                 assertThat(funcId, equalTo(FuncId(4)))
             }
@@ -353,8 +354,8 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
         fun `Tries to find endpoint by id but does not exist`() = runWith(EndpointRepository::class) {
             createEndpoint(
                 endpointId = EndpointId(1),
-                flowId = FlowId(2),
-                groupId = GroupId(3),
+                namespaceId = NamespaceId(2),
+                workspaceId = WorkspaceId(3),
                 name = EndpointName("SomeEndpoint"),
                 funcId = FuncId(4)
             )
@@ -376,57 +377,57 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
 
             with(result[0]) {
                 assertThat(id, equalTo(EndpointId(3)))
-                assertThat(flowId, equalTo(FlowId(4)))
-                assertThat(groupId, equalTo(GroupId(4)))
+                assertThat(namespaceId, equalTo(NamespaceId(4)))
+                assertThat(workspaceId, equalTo(WorkspaceId(4)))
                 assertThat(name, equalTo(EndpointName("Endpoint")))
             }
         }
 
         @TestFactory
-        fun `With group ids`() = runWith(EndpointRepository::class) {
+        fun `With workspace ids`() = runWith(EndpointRepository::class) {
             setup()
 
             val query = EndpointQuery(
-                groupIds = listOf(GroupId(5), GroupId(4)),
+                workspaceIds = listOf(WorkspaceId(5), WorkspaceId(4)),
                 limit = Limit(10)
             )
 
-            assertThat(count(query), equalTo(2UL))
+            assertThat(count(query), equalTo(Count(2)))
             val result = list(query)
             assertThat(result, hasSize(2))
 
             with(result[0]) {
                 assertThat(id, equalTo(EndpointId(4)))
-                assertThat(flowId, equalTo(FlowId(10)))
-                assertThat(groupId, equalTo(GroupId(5)))
+                assertThat(namespaceId, equalTo(NamespaceId(10)))
+                assertThat(workspaceId, equalTo(WorkspaceId(5)))
                 assertThat(name, equalTo(EndpointName("Endpoint")))
             }
 
             with(result[1]) {
                 assertThat(id, equalTo(EndpointId(3)))
-                assertThat(flowId, equalTo(FlowId(4)))
-                assertThat(groupId, equalTo(GroupId(4)))
+                assertThat(namespaceId, equalTo(NamespaceId(4)))
+                assertThat(workspaceId, equalTo(WorkspaceId(4)))
                 assertThat(name, equalTo(EndpointName("Endpoint")))
             }
         }
 
         @TestFactory
-        fun `With flow ids`() = runWith(EndpointRepository::class) {
+        fun `With namespace ids`() = runWith(EndpointRepository::class) {
             setup()
 
             val query = EndpointQuery(
-                flowIds = listOf(FlowId(10), FlowId(23)),
+                namespaceIds = listOf(NamespaceId(10), NamespaceId(23)),
                 limit = Limit(10)
             )
 
-            assertThat(count(query), equalTo(1UL))
+            assertThat(count(query), equalTo(Count(1)))
             val result = list(query)
             assertThat(result, hasSize(1))
 
             with(result[0]) {
                 assertThat(id, equalTo(EndpointId(4)))
-                assertThat(flowId, equalTo(FlowId(10)))
-                assertThat(groupId, equalTo(GroupId(5)))
+                assertThat(namespaceId, equalTo(NamespaceId(10)))
+                assertThat(workspaceId, equalTo(WorkspaceId(5)))
                 assertThat(name, equalTo(EndpointName("Endpoint")))
             }
         }
@@ -437,11 +438,11 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
             setup()
 
             val query = EndpointQuery(
-                groupIds = listOf(),
+                workspaceIds = listOf(),
                 limit = Limit(3)
             )
 
-            assertThat(count(query), equalTo(4UL))
+            assertThat(count(query), equalTo(Count(4)))
             val result = list(query)
             assertThat(result, hasSize(3))
         }
@@ -452,11 +453,11 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
 
             val query = EndpointQuery(
                 afterId = EndpointId(2),
-                groupIds = listOf(),
+                workspaceIds = listOf(),
                 limit = Limit(1)
             )
 
-            assertThat(count(query), equalTo(1UL))
+            assertThat(count(query), equalTo(Count(1)))
             val result = list(query)
             assertThat(result, hasSize(1))
 
@@ -468,32 +469,32 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
         private fun EndpointRepository.setup() {
             createEndpoint(
                 endpointId = EndpointId(1),
-                flowId = FlowId(2),
-                groupId = GroupId(3),
+                namespaceId = NamespaceId(2),
+                workspaceId = WorkspaceId(3),
                 name = EndpointName("Endpoint"),
                 funcId = FuncId(4)
             )
 
             createEndpoint(
                 endpointId = EndpointId(2),
-                flowId = FlowId(3),
-                groupId = GroupId(3),
+                namespaceId = NamespaceId(3),
+                workspaceId = WorkspaceId(3),
                 name = EndpointName("Endpoint"),
                 funcId = FuncId(4)
             )
 
             createEndpoint(
                 endpointId = EndpointId(3),
-                flowId = FlowId(4),
-                groupId = GroupId(4),
+                namespaceId = NamespaceId(4),
+                workspaceId = WorkspaceId(4),
                 name = EndpointName("Endpoint"),
                 funcId = FuncId(6)
             )
 
             createEndpoint(
                 endpointId = EndpointId(4),
-                flowId = FlowId(10),
-                groupId = GroupId(5),
+                namespaceId = NamespaceId(10),
+                workspaceId = WorkspaceId(5),
                 name = EndpointName("Endpoint"),
                 funcId = FuncId(7)
             )
@@ -503,9 +504,9 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
 
 private fun EndpointRepository.createEndpoint(
     endpointId: EndpointId,
-    flowId: FlowId,
+    namespaceId: NamespaceId,
     name: EndpointName,
-    groupId: GroupId,
+    workspaceId: WorkspaceId,
     funcId: FuncId,
     cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
 ) {
@@ -513,8 +514,8 @@ private fun EndpointRepository.createEndpoint(
         CreateCmd(
             id = cmdId,
             endpointId = endpointId,
-            groupId = groupId,
-            flowId = flowId,
+            workspaceId = workspaceId,
+            namespaceId = namespaceId,
             name = name,
             funcId = funcId
         )
@@ -526,6 +527,6 @@ private fun EndpointRepository.verifyCount(expected: Int) {
 }
 
 private fun EndpointRepository.verifyCount(expected: Int, block: EndpointQuery.() -> Unit) {
-    val counted = count(EndpointQuery(groupIds = listOf()).also(block))
-    assertThat("number of endpoints expected", counted, equalTo(expected.toULong()))
+    val counted = count(EndpointQuery(workspaceIds = listOf()).also(block))
+    assertThat("number of endpoints expected", counted, equalTo(Count(expected)))
 }

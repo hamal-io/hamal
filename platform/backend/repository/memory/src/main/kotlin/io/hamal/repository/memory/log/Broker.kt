@@ -1,77 +1,118 @@
 package io.hamal.repository.memory.log
 
 import io.hamal.lib.common.KeyedOnce
-import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.vo.FlowId
-import io.hamal.lib.domain.vo.TopicId
-import io.hamal.lib.domain.vo.TopicName
+import io.hamal.lib.common.domain.*
+import io.hamal.lib.domain.vo.LogTopicId
 import io.hamal.repository.api.log.*
-import io.hamal.repository.api.log.BrokerTopicsRepository.TopicQuery
-import io.hamal.repository.api.log.BrokerTopicsRepository.TopicToCreate
+import io.hamal.repository.api.log.LogBrokerRepository.*
+import java.util.concurrent.locks.ReentrantLock
+import kotlin.concurrent.withLock
 
+class LogBrokerMemoryRepository : LogBrokerRepository {
 
-class BrokerMemoryRepository : BrokerRepository {
-
-    private val consumersRepository: BrokerConsumersMemoryRepository = BrokerConsumersMemoryRepository()
-    private val topicsRepository: BrokerTopicsMemoryRepository = BrokerTopicsMemoryRepository()
-
-    private val repositoryMapping = KeyedOnce.default<Topic, TopicRepository>()
-
-    override fun append(cmdId: CmdId, topic: Topic, bytes: ByteArray) {
-        resolveRepository(topic).append(cmdId, bytes)
+    override fun append(cmdId: CmdId, topicId: LogTopicId, bytes: ByteArray) {
+        resolveTopicRepository(topicId).append(cmdId, bytes)
     }
 
-    override fun close() {
-        topicsRepository.close()
-        consumersRepository.close()
-        repositoryMapping.keys()
-            .forEach { topic ->
-                resolveRepository(topic).close()
-            }
+    override fun commit(consumerId: LogConsumerId, topicId: LogTopicId, eventId: LogEventId) {
+        return lock.withLock {
+            consumers.putIfAbsent(Pair(consumerId, topicId), LogEventId(0))
+            consumers[Pair(consumerId, topicId)] = LogEventId(eventId.value.toInt() + 1)
+            consumers[Pair(consumerId, topicId)]
+        }
     }
 
-    override fun consume(consumerId: ConsumerId, topic: Topic, limit: Int): List<Chunk> {
-        val nextChunkId = consumersRepository.nextChunkId(consumerId, topic.id)
-        return resolveRepository(topic).read(nextChunkId, limit)
+    override fun consume(consumerId: LogConsumerId, topicId: LogTopicId, limit: Limit): List<LogEvent> {
+        return lock.withLock {
+            val nextEntryId = nextEventId(consumerId, topicId)
+            resolveTopicRepository(topicId).read(nextEntryId, limit)
+        }
     }
 
-    override fun commit(consumerId: ConsumerId, topic: Topic, chunkId: ChunkId) {
-        consumersRepository.commit(consumerId, topic.id, chunkId)
+    override fun countTopics(query: LogTopicQuery): Count {
+        return lock.withLock {
+            Count(
+                topics.values
+                    .sortedBy { it.id }
+                    .reversed()
+                    .asSequence()
+                    .dropWhile { it.id >= query.afterId }
+                    .count()
+            )
+        }
+    }
+
+    override fun countConsumers(query: LogConsumerQuery): Count {
+        return lock.withLock {
+            Count(consumers.values.size)
+        }
+    }
+
+    override fun listEvents(query: LogEventQuery): List<LogEvent> {
+        TODO("Not yet implemented")
+    }
+
+    override fun countEvents(query: LogEventQuery): Count {
+        TODO("Not yet implemented")
+    }
+
+    override fun create(cmd: CreateTopicCmd): LogTopic {
+        return lock.withLock {
+            val topic = LogTopic(cmd.logTopicId, CreatedAt.now(), UpdatedAt.now())
+            require(findTopic(topic.id) == null) { "Topic already exists" }
+            topics[topic.id] = topic
+            topic
+        }
+    }
+
+    override fun findTopic(topicId: LogTopicId): LogTopic? {
+        return lock.withLock {
+            topics[topicId]
+        }
+    }
+
+
+    override fun listTopics(query: LogTopicQuery): List<LogTopic> {
+        return lock.withLock {
+            topics.values.sortedBy { it.id }
+                .reversed()
+                .asSequence()
+                .dropWhile { it.id >= query.afterId }
+                .take(query.limit.value)
+                .toList()
+        }
+    }
+
+    override fun read(firstId: LogEventId, topicId: LogTopicId, limit: Limit): List<LogEvent> {
+        return lock.withLock {
+            resolveTopicRepository(topicId).read(firstId, limit)
+        }
     }
 
     override fun clear() {
-        topicsRepository.clear()
-        consumersRepository.clear()
-        repositoryMapping.keys()
-            .forEach { topic ->
-                resolveRepository(topic).clear()
-            }
+        topics.clear()
+        consumers.clear()
     }
 
-    override fun create(cmdId: CmdId, topicToCreate: CreateTopic.TopicToCreate) =
-        topicsRepository.create(
-            cmdId,
-            TopicToCreate(
-                id = topicToCreate.id,
-                name = topicToCreate.name,
-                flowId = topicToCreate.flowId,
-                groupId = topicToCreate.groupId
-            )
-        )
-
-    override fun findTopic(topicId: TopicId) = topicsRepository.find(topicId)
-    override fun findTopic(flowId: FlowId, topicName: TopicName) = topicsRepository.find(flowId, topicName)
-    override fun listTopics(query: TopicQuery): List<Topic> {
-        return topicsRepository.list(query)
+    override fun close() {
+        clear()
     }
 
-    override fun resolveTopic(flowId: FlowId, name: TopicName) = topicsRepository.find(flowId, name)
-
-    override fun read(firstId: ChunkId, topic: Topic, limit: Int): List<Chunk> {
-        return resolveRepository(topic).read(firstId, limit)
+    internal fun nextEventId(consumerId: LogConsumerId, topicId: LogTopicId): LogEventId {
+        return lock.withLock {
+            consumers[Pair(consumerId, topicId)] ?: LogEventId(0)
+        }
     }
 
-    private fun resolveRepository(topic: Topic) = repositoryMapping(topic) {
-        TopicMemoryRepository(topic)
+    internal fun resolveTopicRepository(topicId: LogTopicId): LogTopicRepository {
+        return topicRepositories(topicId) {
+            val topic = getTopic(topicId)
+            LogTopicMemoryRepository(topic)
+        }
     }
+
+    private val lock = ReentrantLock()
+    private val topicRepositories = KeyedOnce.default<LogTopicId, LogTopicRepository>()
+    private val topics = mutableMapOf<LogTopicId, LogTopic>()
+    private val consumers = mutableMapOf<Pair<LogConsumerId, LogTopicId>, LogEventId>()
 }

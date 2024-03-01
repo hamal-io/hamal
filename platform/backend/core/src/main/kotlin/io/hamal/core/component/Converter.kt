@@ -16,7 +16,6 @@ object LimitConverter : Converter<String, Limit> {
 object CodeVersionConverter : Converter<String, CodeVersion> {
     override fun convert(source: String) = CodeVersion(source.toInt())
 }
-
 object CorrelationIdConverter : Converter<String, CorrelationId> {
     override fun convert(source: String) = CorrelationId(source)
 }
@@ -30,12 +29,12 @@ object CodeIdConverter : ValueObjectIdConverter<CodeId>(CodeId::class, ::CodeId)
 object ExecIdConverter : ValueObjectIdConverter<ExecId>(ExecId::class, ::ExecId)
 object ExecLogIdConverter : ValueObjectIdConverter<ExecLogId>(ExecLogId::class, ::ExecLogId)
 object FuncIdConverter : ValueObjectIdConverter<FuncId>(FuncId::class, ::FuncId)
-object GroupIdConverter : ValueObjectIdConverter<GroupId>(GroupId::class, ::GroupId)
-object FlowIdConverter : ValueObjectIdConverter<FlowId>(FlowId::class, ::FlowId)
-object ReqIdConverter : ValueObjectIdConverter<RequestId>(RequestId::class, ::RequestId)
+object NamespaceIdConverter : ValueObjectIdConverter<NamespaceId>(NamespaceId::class, ::NamespaceId)
+object RequestIdConverter : ValueObjectIdConverter<RequestId>(RequestId::class, ::RequestId)
 object TopicIdConverter : ValueObjectIdConverter<TopicId>(TopicId::class, ::TopicId)
-object TopicEntryIdConverter : ValueObjectIdConverter<TopicEntryId>(TopicEntryId::class, ::TopicEntryId)
+object TopicEntryIdConverter : ValueObjectIdConverter<TopicEventId>(TopicEventId::class, ::TopicEventId)
 object TriggerIdConverter : ValueObjectIdConverter<TriggerId>(TriggerId::class, ::TriggerId)
+object WorkspaceIdConverter : ValueObjectIdConverter<WorkspaceId>(WorkspaceId::class, ::WorkspaceId)
 
 sealed class ValueObjectIdConverter<ID : ValueObjectId>(
     val clazz: KClass<ID>,

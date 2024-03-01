@@ -1,8 +1,8 @@
-export interface EndpointCreateSubmitted {
+export interface EndpointCreateRequested {
     id: string;
     endpointId: string;
-    flowId: string;
-    groupId: string;
+    namespaceId: string;
+    workspaceId: string;
 }
 
 export interface EndpointList {
@@ -12,7 +12,7 @@ export interface EndpointList {
 export interface EndpointListItem {
     id: string;
     name: string;
-    flow: {
+    namespace: {
         id: string;
         name: string
     },
@@ -21,7 +21,7 @@ export interface EndpointListItem {
 export interface Endpoint {
     id: string;
     name: string;
-    flow: {
+    namespace: {
         id: string;
         name: string
     },

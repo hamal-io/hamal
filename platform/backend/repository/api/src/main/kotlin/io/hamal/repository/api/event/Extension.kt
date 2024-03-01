@@ -4,8 +4,8 @@ import io.hamal.repository.api.Extension
 
 data class ExtensionCreatedEvent(
     val extension: Extension,
-) : PlatformEvent()
+) : InternalEvent()
 
 data class ExtensionUpdatedEvent(
     val extension: Extension,
-) : PlatformEvent()
+) : InternalEvent()

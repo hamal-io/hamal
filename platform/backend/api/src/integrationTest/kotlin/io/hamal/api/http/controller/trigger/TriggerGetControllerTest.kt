@@ -9,7 +9,9 @@ import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.HttpSuccessResponse
-import io.hamal.lib.sdk.api.*
+import io.hamal.lib.sdk.api.ApiError
+import io.hamal.lib.sdk.api.ApiTrigger
+import io.hamal.lib.sdk.api.ApiTriggerCreateReq
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -37,7 +39,7 @@ internal class TriggerGetControllerTest : TriggerBaseControllerTest() {
                     name = TriggerName("trigger-one"),
                     inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
                     funcId = someFuncId,
-                    duration = 10.seconds
+                    duration = TriggerDuration(10.seconds.toIsoString())
                 )
             )
         ).triggerId
@@ -47,11 +49,11 @@ internal class TriggerGetControllerTest : TriggerBaseControllerTest() {
         assertThat(getTriggerResponse.statusCode, equalTo(Ok))
         require(getTriggerResponse is HttpSuccessResponse) { "request was not successful" }
 
-        with(getTriggerResponse.result(ApiFixedRateTrigger::class)) {
+        with(getTriggerResponse.result(ApiTrigger.FixedRate::class)) {
             assertThat(id, equalTo(triggerId))
             assertThat(name, equalTo(TriggerName("trigger-one")))
             assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
-            assertThat(duration, equalTo(10.seconds))
+            assertThat(duration, equalTo(TriggerDuration("PT10S")))
             assertThat(func.id, equalTo(someFuncId))
             assertThat(func.name, equalTo(FuncName("some-func-to-trigger")))
         }
@@ -80,7 +82,7 @@ internal class TriggerGetControllerTest : TriggerBaseControllerTest() {
         assertThat(getTriggerResponse.statusCode, equalTo(Ok))
         require(getTriggerResponse is HttpSuccessResponse) { "request was not successful" }
 
-        with(getTriggerResponse.result(ApiEventTrigger::class)) {
+        with(getTriggerResponse.result(ApiTrigger.Event::class)) {
             assertThat(id, equalTo(triggerId))
             assertThat(name, equalTo(TriggerName("trigger-one")))
             assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
@@ -116,7 +118,7 @@ internal class TriggerGetControllerTest : TriggerBaseControllerTest() {
         assertThat(getTriggerResponse.statusCode, equalTo(Ok))
         require(getTriggerResponse is HttpSuccessResponse) { "request was not successful" }
 
-        with(getTriggerResponse.result(ApiHookTrigger::class)) {
+        with(getTriggerResponse.result(ApiTrigger.Hook::class)) {
             assertThat(id, equalTo(triggerId))
             assertThat(name, equalTo(TriggerName("trigger-one")))
             assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
@@ -149,7 +151,7 @@ internal class TriggerGetControllerTest : TriggerBaseControllerTest() {
         assertThat(getTriggerResponse.statusCode, equalTo(Ok))
         require(getTriggerResponse is HttpSuccessResponse) { "request was not successful" }
 
-        with(getTriggerResponse.result(ApiCronTrigger::class)) {
+        with(getTriggerResponse.result(ApiTrigger.Cron::class)) {
             assertThat(id, equalTo(triggerId))
             assertThat(name, equalTo(TriggerName("cron-trigger")))
             assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))

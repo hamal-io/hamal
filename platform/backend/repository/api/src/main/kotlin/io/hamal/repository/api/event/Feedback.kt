@@ -4,5 +4,5 @@ import io.hamal.repository.api.Feedback
 
 data class FeedbackCreatedEvent(
     val feedback: Feedback
-) : PlatformEvent()
+) : InternalEvent()
 

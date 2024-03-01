@@ -1,6 +1,7 @@
 package io.hamal.repository
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain._enum.HookMethod
@@ -9,8 +10,7 @@ import io.hamal.lib.domain._enum.TriggerStatus.Active
 import io.hamal.lib.domain._enum.TriggerStatus.Inactive
 import io.hamal.lib.domain._enum.TriggerType.Event
 import io.hamal.lib.domain.vo.*
-import io.hamal.repository.api.EventTrigger
-import io.hamal.repository.api.FixedRateTrigger
+import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerCmdRepository.*
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import io.hamal.repository.api.TriggerRepository
@@ -36,21 +36,21 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     id = CmdId(1),
                     triggerId = TriggerId(2),
                     funcId = FuncId(3),
-                    groupId = GroupId(4),
-                    flowId = FlowId(5),
+                    workspaceId = WorkspaceId(4),
+                    namespaceId = NamespaceId(5),
                     name = TriggerName("trigger-name"),
                     inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
-                    duration = 10.seconds
+                    duration = TriggerDuration("PT10S")
                 )
             )
 
             with(result) {
                 assertThat(id, equalTo(TriggerId(2)))
                 assertThat(funcId, equalTo(FuncId(3)))
-                assertThat(flowId, equalTo(FlowId(5)))
+                assertThat(namespaceId, equalTo(NamespaceId(5)))
                 assertThat(name, equalTo(TriggerName("trigger-name")))
                 assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
-                assertThat(duration, equalTo(10.seconds))
+                assertThat(duration, equalTo(TriggerDuration("PT10S")))
                 assertThat(status, equalTo(Active))
             }
 
@@ -58,13 +58,13 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
         }
 
         @TestFactory
-        fun `Tries to create but same name already exists in flow`() =
+        fun `Tries to create but same name already exists in namespace`() =
             runWith(TriggerRepository::class) {
 
                 createFixedRateTrigger(
                     triggerId = TriggerId(1),
-                    flowId = FlowId(2),
-                    groupId = GroupId(3),
+                    namespaceId = NamespaceId(2),
+                    workspaceId = WorkspaceId(3),
                     name = TriggerName("first-trigger-name")
                 )
 
@@ -74,31 +74,31 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                             id = CmdId(2),
                             triggerId = TriggerId(5),
                             funcId = FuncId(4),
-                            groupId = GroupId(3),
-                            flowId = FlowId(2),
+                            workspaceId = WorkspaceId(3),
+                            namespaceId = NamespaceId(2),
                             name = TriggerName("first-trigger-name"),
                             inputs = TriggerInputs(),
-                            duration = 100.seconds,
+                            duration = TriggerDuration(100.seconds.toIsoString()),
                         )
                     )
                 }
 
                 assertThat(
                     exception.message,
-                    equalTo("TriggerName(first-trigger-name) already exists in flow FlowId(2)")
+                    equalTo("TriggerName(first-trigger-name) already exists in namespace NamespaceId(2)")
                 )
 
                 verifyCount(1)
             }
 
         @TestFactory
-        fun `Creates with same name but different flow`() =
+        fun `Creates with same name but different namespace`() =
             runWith(TriggerRepository::class) {
 
                 createFixedRateTrigger(
                     triggerId = TriggerId(1),
-                    flowId = FlowId(2),
-                    groupId = GroupId(3),
+                    namespaceId = NamespaceId(2),
+                    workspaceId = WorkspaceId(3),
                     name = TriggerName("trigger-name")
                 )
 
@@ -107,22 +107,22 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                         id = CmdId(2),
                         triggerId = TriggerId(1111),
                         funcId = FuncId(4),
-                        groupId = GroupId(3),
-                        flowId = FlowId(22),
+                        workspaceId = WorkspaceId(3),
+                        namespaceId = NamespaceId(22),
                         name = TriggerName("trigger-name"),
                         inputs = TriggerInputs(),
-                        duration = 10.hours
+                        duration = TriggerDuration(10.hours.toIsoString())
                     )
                 )
 
                 with(result) {
                     assertThat(id, equalTo(TriggerId(1111)))
                     assertThat(funcId, equalTo(FuncId(4)))
-                    assertThat(groupId, equalTo(GroupId(3)))
-                    assertThat(flowId, equalTo(FlowId(22)))
+                    assertThat(workspaceId, equalTo(WorkspaceId(3)))
+                    assertThat(namespaceId, equalTo(NamespaceId(22)))
                     assertThat(name, equalTo(TriggerName("trigger-name")))
                     assertThat(inputs, equalTo(TriggerInputs()))
-                    assertThat(duration, equalTo(10.hours))
+                    assertThat(duration, equalTo(TriggerDuration("PT10H")))
                     assertThat(status, equalTo(Active))
                 }
 
@@ -130,14 +130,14 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
             }
 
         @TestFactory
-        fun `Tries to create but cmd with func id was already applied`() =
+        fun `Tries to create but cmd with trigger id was already applied`() =
             runWith(TriggerRepository::class) {
 
                 createFixedRateTrigger(
                     cmdId = CmdId(23456),
                     triggerId = TriggerId(5),
-                    flowId = FlowId(2),
-                    groupId = GroupId(3),
+                    namespaceId = NamespaceId(2),
+                    workspaceId = WorkspaceId(3),
                     name = TriggerName("first-trigger-name")
                 )
 
@@ -147,22 +147,22 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                         id = CmdId(23456),
                         triggerId = TriggerId(5),
                         funcId = FuncId(8),
-                        groupId = GroupId(333),
-                        flowId = FlowId(2222),
+                        workspaceId = WorkspaceId(333),
+                        namespaceId = NamespaceId(2222),
                         name = TriggerName("second-trigger-name"),
                         inputs = TriggerInputs(),
-                        duration = 23.seconds,
+                        duration = TriggerDuration(23.seconds.toIsoString()),
                     )
                 )
 
                 with(result) {
                     assertThat(id, equalTo(TriggerId(5)))
                     assertThat(funcId, equalTo(FuncId(4)))
-                    assertThat(groupId, equalTo(GroupId(3)))
-                    assertThat(flowId, equalTo(FlowId(2)))
+                    assertThat(workspaceId, equalTo(WorkspaceId(3)))
+                    assertThat(namespaceId, equalTo(NamespaceId(2)))
                     assertThat(name, equalTo(TriggerName("first-trigger-name")))
                     assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
-                    assertThat(duration, equalTo(10.seconds))
+                    assertThat(duration, equalTo(TriggerDuration("PT10S")))
                     assertThat(status, equalTo(Active))
                 }
 
@@ -179,8 +179,8 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     id = CmdId(1),
                     triggerId = TriggerId(2),
                     funcId = FuncId(3),
-                    groupId = GroupId(4),
-                    flowId = FlowId(5),
+                    workspaceId = WorkspaceId(4),
+                    namespaceId = NamespaceId(5),
                     name = TriggerName("trigger-name"),
                     inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
                     topicId = TopicId(9)
@@ -190,7 +190,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
             with(result) {
                 assertThat(id, equalTo(TriggerId(2)))
                 assertThat(funcId, equalTo(FuncId(3)))
-                assertThat(flowId, equalTo(FlowId(5)))
+                assertThat(namespaceId, equalTo(NamespaceId(5)))
                 assertThat(name, equalTo(TriggerName("trigger-name")))
                 assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
                 assertThat(topicId, equalTo(TopicId(9)))
@@ -201,13 +201,13 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
         }
 
         @TestFactory
-        fun `Tries to create but same name already exists in flow`() =
+        fun `Tries to create but same name already exists in namespace`() =
             runWith(TriggerRepository::class) {
 
                 createEventTrigger(
                     triggerId = TriggerId(1),
-                    flowId = FlowId(2),
-                    groupId = GroupId(3),
+                    namespaceId = NamespaceId(2),
+                    workspaceId = WorkspaceId(3),
                     name = TriggerName("first-trigger-name")
                 )
 
@@ -217,8 +217,8 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                             id = CmdId(2),
                             triggerId = TriggerId(5),
                             funcId = FuncId(4),
-                            groupId = GroupId(3),
-                            flowId = FlowId(2),
+                            workspaceId = WorkspaceId(3),
+                            namespaceId = NamespaceId(2),
                             name = TriggerName("first-trigger-name"),
                             inputs = TriggerInputs(),
                             topicId = TopicId(9),
@@ -228,20 +228,20 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
 
                 assertThat(
                     exception.message,
-                    equalTo("TriggerName(first-trigger-name) already exists in flow FlowId(2)")
+                    equalTo("TriggerName(first-trigger-name) already exists in namespace NamespaceId(2)")
                 )
 
                 verifyCount(1)
             }
 
         @TestFactory
-        fun `Creates with same name but different flow`() =
+        fun `Creates with same name but different namespace`() =
             runWith(TriggerRepository::class) {
 
                 createEventTrigger(
                     triggerId = TriggerId(1),
-                    flowId = FlowId(2),
-                    groupId = GroupId(3),
+                    namespaceId = NamespaceId(2),
+                    workspaceId = WorkspaceId(3),
                     name = TriggerName("trigger-name")
                 )
 
@@ -250,8 +250,8 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                         id = CmdId(2),
                         triggerId = TriggerId(1111),
                         funcId = FuncId(4),
-                        groupId = GroupId(3),
-                        flowId = FlowId(22),
+                        workspaceId = WorkspaceId(3),
+                        namespaceId = NamespaceId(22),
                         name = TriggerName("trigger-name"),
                         inputs = TriggerInputs(),
                         topicId = TopicId(9)
@@ -261,8 +261,8 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 with(result) {
                     assertThat(id, equalTo(TriggerId(1111)))
                     assertThat(funcId, equalTo(FuncId(4)))
-                    assertThat(groupId, equalTo(GroupId(3)))
-                    assertThat(flowId, equalTo(FlowId(22)))
+                    assertThat(workspaceId, equalTo(WorkspaceId(3)))
+                    assertThat(namespaceId, equalTo(NamespaceId(22)))
                     assertThat(name, equalTo(TriggerName("trigger-name")))
                     assertThat(inputs, equalTo(TriggerInputs()))
                     assertThat(topicId, equalTo(TopicId(9)))
@@ -279,8 +279,8 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 createEventTrigger(
                     cmdId = CmdId(23456),
                     triggerId = TriggerId(5),
-                    flowId = FlowId(2),
-                    groupId = GroupId(3),
+                    namespaceId = NamespaceId(2),
+                    workspaceId = WorkspaceId(3),
                     name = TriggerName("first-trigger-name")
                 )
 
@@ -290,8 +290,8 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                         id = CmdId(23456),
                         triggerId = TriggerId(5),
                         funcId = FuncId(8),
-                        groupId = GroupId(333),
-                        flowId = FlowId(2222),
+                        workspaceId = WorkspaceId(333),
+                        namespaceId = NamespaceId(2222),
                         name = TriggerName("second-trigger-name"),
                         inputs = TriggerInputs(),
                         topicId = TopicId(999),
@@ -301,8 +301,8 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 with(result) {
                     assertThat(id, equalTo(TriggerId(5)))
                     assertThat(funcId, equalTo(FuncId(4)))
-                    assertThat(groupId, equalTo(GroupId(3)))
-                    assertThat(flowId, equalTo(FlowId(2)))
+                    assertThat(workspaceId, equalTo(WorkspaceId(3)))
+                    assertThat(namespaceId, equalTo(NamespaceId(2)))
                     assertThat(name, equalTo(TriggerName("first-trigger-name")))
                     assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
                     assertThat(topicId, equalTo(TopicId(9)))
@@ -321,8 +321,8 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     id = CmdId(1),
                     triggerId = TriggerId(2),
                     funcId = FuncId(3),
-                    groupId = GroupId(4),
-                    flowId = FlowId(5),
+                    workspaceId = WorkspaceId(4),
+                    namespaceId = NamespaceId(5),
                     name = TriggerName("trigger-name"),
                     inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
                     hookId = HookId(9),
@@ -333,7 +333,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
             with(result) {
                 assertThat(id, equalTo(TriggerId(2)))
                 assertThat(funcId, equalTo(FuncId(3)))
-                assertThat(flowId, equalTo(FlowId(5)))
+                assertThat(namespaceId, equalTo(NamespaceId(5)))
                 assertThat(name, equalTo(TriggerName("trigger-name")))
                 assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
                 assertThat(hookId, equalTo(HookId(9)))
@@ -345,13 +345,13 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
         }
 
         @TestFactory
-        fun `Tries to create but same name already exists in flow`() =
+        fun `Tries to create but same name already exists in namespace`() =
             runWith(TriggerRepository::class) {
 
                 createHookTrigger(
                     triggerId = TriggerId(1),
-                    flowId = FlowId(2),
-                    groupId = GroupId(3),
+                    namespaceId = NamespaceId(2),
+                    workspaceId = WorkspaceId(3),
                     name = TriggerName("first-trigger-name")
                 )
 
@@ -361,8 +361,8 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                             id = CmdId(2),
                             triggerId = TriggerId(5),
                             funcId = FuncId(4),
-                            groupId = GroupId(3),
-                            flowId = FlowId(2),
+                            workspaceId = WorkspaceId(3),
+                            namespaceId = NamespaceId(2),
                             name = TriggerName("first-trigger-name"),
                             inputs = TriggerInputs(),
                             topicId = TopicId(9),
@@ -372,20 +372,20 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
 
                 assertThat(
                     exception.message,
-                    equalTo("TriggerName(first-trigger-name) already exists in flow FlowId(2)")
+                    equalTo("TriggerName(first-trigger-name) already exists in namespace NamespaceId(2)")
                 )
 
                 verifyCount(1)
             }
 
         @TestFactory
-        fun `Creates with same name but different flow`() =
+        fun `Creates with same name but different namespace`() =
             runWith(TriggerRepository::class) {
 
                 createHookTrigger(
                     triggerId = TriggerId(1),
-                    flowId = FlowId(2),
-                    groupId = GroupId(3),
+                    namespaceId = NamespaceId(2),
+                    workspaceId = WorkspaceId(3),
                     name = TriggerName("trigger-name"),
                     hookMethod = Get
                 )
@@ -395,8 +395,8 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                         id = CmdId(2),
                         triggerId = TriggerId(1111),
                         funcId = FuncId(4),
-                        groupId = GroupId(3),
-                        flowId = FlowId(22),
+                        workspaceId = WorkspaceId(3),
+                        namespaceId = NamespaceId(22),
                         name = TriggerName("trigger-name"),
                         inputs = TriggerInputs(),
                         hookId = HookId(9),
@@ -407,8 +407,8 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 with(result) {
                     assertThat(id, equalTo(TriggerId(1111)))
                     assertThat(funcId, equalTo(FuncId(4)))
-                    assertThat(groupId, equalTo(GroupId(3)))
-                    assertThat(flowId, equalTo(FlowId(22)))
+                    assertThat(workspaceId, equalTo(WorkspaceId(3)))
+                    assertThat(namespaceId, equalTo(NamespaceId(22)))
                     assertThat(name, equalTo(TriggerName("trigger-name")))
                     assertThat(inputs, equalTo(TriggerInputs()))
                     assertThat(hookId, equalTo(HookId(9)))
@@ -424,8 +424,8 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
             runWith(TriggerRepository::class) {
                 createHookTrigger(
                     triggerId = TriggerId(1),
-                    flowId = FlowId(2),
-                    groupId = GroupId(1),
+                    namespaceId = NamespaceId(2),
+                    workspaceId = WorkspaceId(1),
                     name = TriggerName("trigger-name-1"),
                     funcId = FuncId(1),
                     hookId = HookId(1),
@@ -434,8 +434,8 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
 
                 createHookTrigger(
                     triggerId = TriggerId(2),
-                    flowId = FlowId(2),
-                    groupId = GroupId(1),
+                    namespaceId = NamespaceId(2),
+                    workspaceId = WorkspaceId(1),
                     name = TriggerName("trigger-name-2"),
                     funcId = FuncId(1),
                     hookId = HookId(1),
@@ -444,8 +444,8 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
 
                 createHookTrigger(
                     triggerId = TriggerId(3),
-                    flowId = FlowId(2),
-                    groupId = GroupId(1),
+                    namespaceId = NamespaceId(2),
+                    workspaceId = WorkspaceId(1),
                     name = TriggerName("trigger-name-3"),
                     funcId = FuncId(1),
                     hookId = HookId(2),
@@ -454,8 +454,8 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
 
                 createHookTrigger(
                     triggerId = TriggerId(4),
-                    flowId = FlowId(2),
-                    groupId = GroupId(1),
+                    namespaceId = NamespaceId(2),
+                    workspaceId = WorkspaceId(1),
                     name = TriggerName("trigger-name-4"),
                     funcId = FuncId(2),
                     hookId = HookId(1),
@@ -471,8 +471,8 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
             runWith(TriggerRepository::class) {
                 createHookTrigger(
                     triggerId = TriggerId(1),
-                    flowId = FlowId(2),
-                    groupId = GroupId(1),
+                    namespaceId = NamespaceId(2),
+                    workspaceId = WorkspaceId(1),
                     name = TriggerName("trigger-name-1"),
                     funcId = FuncId(1),
                     hookId = HookId(1),
@@ -482,8 +482,8 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 val exception = assertThrows<IllegalArgumentException> {
                     createHookTrigger(
                         triggerId = TriggerId(2),
-                        flowId = FlowId(2),
-                        groupId = GroupId(1),
+                        namespaceId = NamespaceId(2),
+                        workspaceId = WorkspaceId(1),
                         name = TriggerName("other-trigger"),
                         funcId = FuncId(1),
                         hookId = HookId(1),
@@ -502,8 +502,8 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 createHookTrigger(
                     cmdId = CmdId(23456),
                     triggerId = TriggerId(5),
-                    flowId = FlowId(2),
-                    groupId = GroupId(3),
+                    namespaceId = NamespaceId(2),
+                    workspaceId = WorkspaceId(3),
                     name = TriggerName("first-trigger-name")
                 )
 
@@ -513,8 +513,8 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                         id = CmdId(23456),
                         triggerId = TriggerId(5),
                         funcId = FuncId(8),
-                        groupId = GroupId(333),
-                        flowId = FlowId(2222),
+                        workspaceId = WorkspaceId(333),
+                        namespaceId = NamespaceId(2222),
                         name = TriggerName("second-trigger-name"),
                         inputs = TriggerInputs(),
                         hookId = HookId(999),
@@ -525,8 +525,8 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 with(result) {
                     assertThat(id, equalTo(TriggerId(5)))
                     assertThat(funcId, equalTo(FuncId(4)))
-                    assertThat(groupId, equalTo(GroupId(3)))
-                    assertThat(flowId, equalTo(FlowId(2)))
+                    assertThat(workspaceId, equalTo(WorkspaceId(3)))
+                    assertThat(namespaceId, equalTo(NamespaceId(2)))
                     assertThat(name, equalTo(TriggerName("first-trigger-name")))
                     assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
                     assertThat(hookId, equalTo(HookId(9)))
@@ -547,8 +547,8 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     id = CmdGen(),
                     triggerId = TriggerId(2),
                     funcId = FuncId(3),
-                    groupId = GroupId(4),
-                    flowId = FlowId(5),
+                    workspaceId = WorkspaceId(4),
+                    namespaceId = NamespaceId(5),
                     name = TriggerName("trigger-name"),
                     inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
                     cron = CronPattern("0 0 * * * *")
@@ -558,7 +558,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
             with(res) {
                 assertThat(id, equalTo(TriggerId(2)))
                 assertThat(funcId, equalTo(FuncId(3)))
-                assertThat(flowId, equalTo(FlowId(5)))
+                assertThat(namespaceId, equalTo(NamespaceId(5)))
                 assertThat(name, equalTo(TriggerName("trigger-name")))
                 assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
                 assertThat(cron, equalTo(CronPattern("0 0 * * * *")))
@@ -569,11 +569,11 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
         }
 
         @TestFactory
-        fun `Creates with same name but different flow`() = runWith(TriggerRepository::class) {
+        fun `Creates with same name but different namespace`() = runWith(TriggerRepository::class) {
             createCronTrigger(
                 triggerId = TriggerId(1),
-                flowId = FlowId(2),
-                groupId = GroupId(3),
+                namespaceId = NamespaceId(2),
+                workspaceId = WorkspaceId(3),
                 name = TriggerName("trigger-name"),
                 cron = CronPattern("0 0 * * * *")
             )
@@ -583,8 +583,8 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     id = CmdGen(),
                     triggerId = TriggerId(1111),
                     funcId = FuncId(4),
-                    groupId = GroupId(3),
-                    flowId = FlowId(22),
+                    workspaceId = WorkspaceId(3),
+                    namespaceId = NamespaceId(22),
                     name = TriggerName("trigger-name"),
                     inputs = TriggerInputs(),
                     cron = CronPattern("0 0 * * * *")
@@ -594,8 +594,8 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
             with(result) {
                 assertThat(id, equalTo(TriggerId(1111)))
                 assertThat(funcId, equalTo(FuncId(4)))
-                assertThat(groupId, equalTo(GroupId(3)))
-                assertThat(flowId, equalTo(FlowId(22)))
+                assertThat(workspaceId, equalTo(WorkspaceId(3)))
+                assertThat(namespaceId, equalTo(NamespaceId(22)))
                 assertThat(name, equalTo(TriggerName("trigger-name")))
                 assertThat(inputs, equalTo(TriggerInputs()))
                 assertThat(cron, equalTo(CronPattern("0 0 * * * *")))
@@ -611,8 +611,8 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 createCronTrigger(
                     cmdId = CmdId(23456),
                     triggerId = TriggerId(5),
-                    flowId = FlowId(2),
-                    groupId = GroupId(3),
+                    namespaceId = NamespaceId(2),
+                    workspaceId = WorkspaceId(3),
                     name = TriggerName("first-trigger-name")
                 )
 
@@ -622,8 +622,8 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                         id = CmdId(23456),
                         triggerId = TriggerId(5),
                         funcId = FuncId(8),
-                        groupId = GroupId(333),
-                        flowId = FlowId(2222),
+                        workspaceId = WorkspaceId(333),
+                        namespaceId = NamespaceId(2222),
                         name = TriggerName("second-trigger-name"),
                         inputs = TriggerInputs(),
                         cron = CronPattern("0 0 * * * *")
@@ -633,8 +633,8 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 with(result) {
                     assertThat(id, equalTo(TriggerId(5)))
                     assertThat(funcId, equalTo(FuncId(4)))
-                    assertThat(groupId, equalTo(GroupId(3)))
-                    assertThat(flowId, equalTo(FlowId(2)))
+                    assertThat(workspaceId, equalTo(WorkspaceId(3)))
+                    assertThat(namespaceId, equalTo(NamespaceId(2)))
                     assertThat(name, equalTo(TriggerName("first-trigger-name")))
                     assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
                     assertThat(cron, equalTo(CronPattern("0 0 * * * *")))
@@ -659,15 +659,15 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
 
             createFixedRateTrigger(
                 triggerId = TriggerId(1),
-                flowId = FlowId(2),
-                groupId = GroupId(3),
+                namespaceId = NamespaceId(2),
+                workspaceId = WorkspaceId(3),
                 name = TriggerName("already-exists")
             )
 
             createFixedRateTrigger(
                 triggerId = TriggerId(2),
-                flowId = FlowId(2),
-                groupId = GroupId(3),
+                namespaceId = NamespaceId(2),
+                workspaceId = WorkspaceId(3),
                 name = TriggerName("to-update")
             )
 
@@ -687,23 +687,23 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     id = CmdGen(),
                     triggerId = TriggerId(2),
                     funcId = FuncId(3),
-                    groupId = GroupId(4),
-                    flowId = FlowId(5),
+                    workspaceId = WorkspaceId(4),
+                    namespaceId = NamespaceId(5),
                     name = TriggerName("trigger-name"),
                     inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
-                    duration = 10.seconds
+                    duration = TriggerDuration(10.seconds.toIsoString())
                 )
             )
 
             set(TriggerId(2), SetTriggerStatusCmd(CmdGen(), Inactive))
 
-            with(get(TriggerId(2)) as FixedRateTrigger) {
+            with(get(TriggerId(2)) as Trigger.FixedRate) {
                 assertThat(id, equalTo(TriggerId(2)))
                 assertThat(funcId, equalTo(FuncId(3)))
-                assertThat(flowId, equalTo(FlowId(5)))
+                assertThat(namespaceId, equalTo(NamespaceId(5)))
                 assertThat(name, equalTo(TriggerName("trigger-name")))
                 assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
-                assertThat(duration, equalTo(10.seconds))
+                assertThat(duration, equalTo(TriggerDuration("PT10S")))
                 assertThat(status, equalTo(Inactive))
             }
 
@@ -717,11 +717,11 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     id = CmdGen(),
                     triggerId = TriggerId(2),
                     funcId = FuncId(3),
-                    groupId = GroupId(4),
-                    flowId = FlowId(5),
+                    workspaceId = WorkspaceId(4),
+                    namespaceId = NamespaceId(5),
                     name = TriggerName("trigger-name"),
                     inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
-                    duration = 10.seconds
+                    duration = TriggerDuration(10.seconds.toIsoString())
                 )
             )
 
@@ -729,15 +729,15 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 set(TriggerId(2), SetTriggerStatusCmd(CmdGen(), Active))
             }
 
-            with(get(TriggerId(2)) as FixedRateTrigger) {
+            with(get(TriggerId(2)) as Trigger.FixedRate) {
                 assertThat(id, equalTo(TriggerId(2)))
                 assertThat(funcId, equalTo(FuncId(3)))
 
 
-                assertThat(flowId, equalTo(FlowId(5)))
+                assertThat(namespaceId, equalTo(NamespaceId(5)))
                 assertThat(name, equalTo(TriggerName("trigger-name")))
                 assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
-                assertThat(duration, equalTo(10.seconds))
+                assertThat(duration, equalTo(TriggerDuration("PT10S")))
                 assertThat(status, equalTo(Active))
             }
 
@@ -748,34 +748,34 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
     @Nested
     inner class GetTest {
         @TestFactory
-        fun `Get func by id`() = runWith(TriggerRepository::class) {
+        fun `Get trigger by id`() = runWith(TriggerRepository::class) {
             createFixedRateTrigger(
                 triggerId = TriggerId(1),
-                flowId = FlowId(2),
-                groupId = GroupId(3),
+                namespaceId = NamespaceId(2),
+                workspaceId = WorkspaceId(3),
                 name = TriggerName("SomeTrigger")
             )
 
             with(get(TriggerId(1))) {
-                require(this is FixedRateTrigger)
+                require(this is Trigger.FixedRate)
 
                 assertThat(id, equalTo(TriggerId(1)))
                 assertThat(funcId, equalTo(FuncId(4)))
-                assertThat(groupId, equalTo(GroupId(3)))
-                assertThat(flowId, equalTo(FlowId(2)))
+                assertThat(workspaceId, equalTo(WorkspaceId(3)))
+                assertThat(namespaceId, equalTo(NamespaceId(2)))
                 assertThat(name, equalTo(TriggerName("SomeTrigger")))
                 assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
-                assertThat(duration, equalTo(10.seconds))
+                assertThat(duration, equalTo(TriggerDuration("PT10S")))
                 assertThat(status, equalTo(Active))
             }
         }
 
         @TestFactory
-        fun `Tries to get func by id but does not exist`() = runWith(TriggerRepository::class) {
+        fun `Tries to get trigger by id but does not exist`() = runWith(TriggerRepository::class) {
             createEventTrigger(
                 triggerId = TriggerId(1),
-                flowId = FlowId(2),
-                groupId = GroupId(3),
+                namespaceId = NamespaceId(2),
+                workspaceId = WorkspaceId(3),
                 name = TriggerName("SomeTrigger")
             )
 
@@ -789,34 +789,34 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
     @Nested
     inner class FindTest {
         @TestFactory
-        fun `Find func by id`() = runWith(TriggerRepository::class) {
+        fun `Find trigger by id`() = runWith(TriggerRepository::class) {
             createFixedRateTrigger(
                 triggerId = TriggerId(1),
-                flowId = FlowId(2),
-                groupId = GroupId(3),
+                namespaceId = NamespaceId(2),
+                workspaceId = WorkspaceId(3),
                 name = TriggerName("SomeTrigger")
             )
 
             with(find(TriggerId(1))) {
-                require(this is FixedRateTrigger)
+                require(this is Trigger.FixedRate)
 
                 assertThat(id, equalTo(TriggerId(1)))
                 assertThat(funcId, equalTo(FuncId(4)))
-                assertThat(groupId, equalTo(GroupId(3)))
-                assertThat(flowId, equalTo(FlowId(2)))
+                assertThat(workspaceId, equalTo(WorkspaceId(3)))
+                assertThat(namespaceId, equalTo(NamespaceId(2)))
                 assertThat(name, equalTo(TriggerName("SomeTrigger")))
                 assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
-                assertThat(duration, equalTo(10.seconds))
+                assertThat(duration, equalTo(TriggerDuration("PT10S")))
                 assertThat(status, equalTo(Active))
             }
         }
 
         @TestFactory
-        fun `Tries to find func by id but does not exist`() = runWith(TriggerRepository::class) {
+        fun `Tries to find trigger by id but does not exist`() = runWith(TriggerRepository::class) {
             createEventTrigger(
                 triggerId = TriggerId(1),
-                flowId = FlowId(2),
-                groupId = GroupId(3),
+                namespaceId = NamespaceId(2),
+                workspaceId = WorkspaceId(3),
                 name = TriggerName("SomeTrigger")
             )
 
@@ -829,29 +829,57 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
     inner class ListAndCountTest {
 
         @TestFactory
-        fun `With group ids`() = runWith(TriggerRepository::class) {
+        fun `With ids`() = runWith(TriggerRepository::class) {
             setup()
 
             val query = TriggerQuery(
-                groupIds = listOf(GroupId(5), GroupId(4)),
+                triggerIds = listOf(TriggerId(4), TriggerId(3)),
                 limit = Limit(10)
             )
 
-            assertThat(count(query), equalTo(2UL))
+            assertThat(count(query), equalTo(Count(2)))
             val result = list(query)
             assertThat(result, hasSize(2))
 
             with(result[0]) {
                 assertThat(id, equalTo(TriggerId(4)))
-                assertThat(flowId, equalTo(FlowId(10)))
-                assertThat(groupId, equalTo(GroupId(5)))
+                assertThat(namespaceId, equalTo(NamespaceId(10)))
+                assertThat(workspaceId, equalTo(WorkspaceId(5)))
                 assertThat(name, equalTo(TriggerName("Trigger")))
             }
 
             with(result[1]) {
                 assertThat(id, equalTo(TriggerId(3)))
-                assertThat(flowId, equalTo(FlowId(4)))
-                assertThat(groupId, equalTo(GroupId(4)))
+                assertThat(namespaceId, equalTo(NamespaceId(4)))
+                assertThat(workspaceId, equalTo(WorkspaceId(4)))
+                assertThat(name, equalTo(TriggerName("Trigger")))
+            }
+        }
+
+        @TestFactory
+        fun `With workspace ids`() = runWith(TriggerRepository::class) {
+            setup()
+
+            val query = TriggerQuery(
+                workspaceIds = listOf(WorkspaceId(5), WorkspaceId(4)),
+                limit = Limit(10)
+            )
+
+            assertThat(count(query), equalTo(Count(2)))
+            val result = list(query)
+            assertThat(result, hasSize(2))
+
+            with(result[0]) {
+                assertThat(id, equalTo(TriggerId(4)))
+                assertThat(namespaceId, equalTo(NamespaceId(10)))
+                assertThat(workspaceId, equalTo(WorkspaceId(5)))
+                assertThat(name, equalTo(TriggerName("Trigger")))
+            }
+
+            with(result[1]) {
+                assertThat(id, equalTo(TriggerId(3)))
+                assertThat(namespaceId, equalTo(NamespaceId(4)))
+                assertThat(workspaceId, equalTo(WorkspaceId(4)))
                 assertThat(name, equalTo(TriggerName("Trigger")))
             }
         }
@@ -865,17 +893,17 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 limit = Limit(10)
             )
 
-            assertThat(count(query), equalTo(2UL))
+            assertThat(count(query), equalTo(Count(2)))
             val result = list(query)
             assertThat(result, hasSize(2))
 
             with(result[0]) {
-                require(this is EventTrigger)
+                require(this is Trigger.Event)
                 assertThat(id, equalTo(TriggerId(2)))
             }
 
             with(result[1]) {
-                require(this is FixedRateTrigger)
+                require(this is Trigger.FixedRate)
                 assertThat(id, equalTo(TriggerId(1)))
             }
         }
@@ -889,7 +917,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 limit = Limit(10)
             )
 
-            assertThat(count(query), equalTo(1UL))
+            assertThat(count(query), equalTo(Count(1)))
             val result = list(query)
             assertThat(result, hasSize(1))
 
@@ -908,7 +936,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 limit = Limit(10)
             )
 
-            assertThat(count(query), equalTo(1UL))
+            assertThat(count(query), equalTo(Count(1)))
             val result = list(query)
             assertThat(result, hasSize(1))
 
@@ -919,15 +947,15 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
         }
 
         @TestFactory
-        fun `With flow ids`() = runWith(TriggerRepository::class) {
+        fun `With namespace ids`() = runWith(TriggerRepository::class) {
             setup()
 
             val query = TriggerQuery(
-                flowIds = listOf(FlowId(11)),
+                namespaceIds = listOf(NamespaceId(11)),
                 limit = Limit(10)
             )
 
-            assertThat(count(query), equalTo(1UL))
+            assertThat(count(query), equalTo(Count(1)))
             val result = list(query)
             assertThat(result, hasSize(1))
 
@@ -943,11 +971,11 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
 
             val query = TriggerQuery(
                 types = listOf(Event),
-                groupIds = listOf(),
+                workspaceIds = listOf(),
                 limit = Limit(10)
             )
 
-            assertThat(count(query), equalTo(3UL))
+            assertThat(count(query), equalTo(Count(3)))
             val result = list(query).reversed()
             assertThat(result, hasSize(3))
 
@@ -965,11 +993,11 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
             setup()
 
             val query = TriggerQuery(
-                groupIds = listOf(),
+                workspaceIds = listOf(),
                 limit = Limit(3)
             )
 
-            assertThat(count(query), equalTo(7UL))
+            assertThat(count(query), equalTo(Count(7)))
             val result = list(query)
             assertThat(result, hasSize(3))
         }
@@ -980,11 +1008,11 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
 
             val query = TriggerQuery(
                 afterId = TriggerId(2),
-                groupIds = listOf(),
+                workspaceIds = listOf(),
                 limit = Limit(1)
             )
 
-            assertThat(count(query), equalTo(1UL))
+            assertThat(count(query), equalTo(Count(1)))
             val result = list(query)
             assertThat(result, hasSize(1))
 
@@ -996,40 +1024,40 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
         private fun TriggerRepository.setup() {
             createFixedRateTrigger(
                 triggerId = TriggerId(1),
-                flowId = FlowId(2),
-                groupId = GroupId(3),
+                namespaceId = NamespaceId(2),
+                workspaceId = WorkspaceId(3),
                 name = TriggerName("Trigger"),
                 funcId = FuncId(10)
             )
 
             createEventTrigger(
                 triggerId = TriggerId(2),
-                flowId = FlowId(3),
-                groupId = GroupId(3),
+                namespaceId = NamespaceId(3),
+                workspaceId = WorkspaceId(3),
                 name = TriggerName("Trigger"),
                 funcId = FuncId(11)
             )
 
             createFixedRateTrigger(
                 triggerId = TriggerId(3),
-                flowId = FlowId(4),
-                groupId = GroupId(4),
+                namespaceId = NamespaceId(4),
+                workspaceId = WorkspaceId(4),
                 name = TriggerName("Trigger"),
                 funcId = FuncId(12)
             )
 
             createEventTrigger(
                 triggerId = TriggerId(4),
-                flowId = FlowId(10),
-                groupId = GroupId(5),
+                namespaceId = NamespaceId(10),
+                workspaceId = WorkspaceId(5),
                 name = TriggerName("Trigger"),
                 funcId = FuncId(13)
             )
 
             createHookTrigger(
                 triggerId = TriggerId(5),
-                flowId = FlowId(11),
-                groupId = GroupId(6),
+                namespaceId = NamespaceId(11),
+                workspaceId = WorkspaceId(6),
                 name = TriggerName("hook-trigger-one"),
                 funcId = FuncId(14),
                 hookId = HookId(512)
@@ -1037,8 +1065,8 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
 
             createHookTrigger(
                 triggerId = TriggerId(6),
-                flowId = FlowId(12),
-                groupId = GroupId(6),
+                namespaceId = NamespaceId(12),
+                workspaceId = WorkspaceId(6),
                 name = TriggerName("hook-trigger-two"),
                 funcId = FuncId(15),
                 hookId = HookId(1024)
@@ -1046,8 +1074,8 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
 
             createEventTrigger(
                 triggerId = TriggerId(7),
-                flowId = FlowId(12),
-                groupId = GroupId(6),
+                namespaceId = NamespaceId(12),
+                workspaceId = WorkspaceId(6),
                 name = TriggerName("event-trigger-one"),
                 funcId = FuncId(15),
                 topicId = TopicId(512)
@@ -1055,8 +1083,8 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
 
             createEventTrigger(
                 triggerId = TriggerId(7),
-                flowId = FlowId(12),
-                groupId = GroupId(6),
+                namespaceId = NamespaceId(12),
+                workspaceId = WorkspaceId(6),
                 name = TriggerName("event-trigger-two"),
                 funcId = FuncId(15),
                 topicId = TopicId(1024)
@@ -1067,9 +1095,9 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
 
     private fun TriggerRepository.createFixedRateTrigger(
         triggerId: TriggerId,
-        flowId: FlowId,
+        namespaceId: NamespaceId,
         name: TriggerName,
-        groupId: GroupId,
+        workspaceId: WorkspaceId,
         funcId: FuncId = FuncId(4),
         cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
     ) {
@@ -1077,21 +1105,21 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
             CreateFixedRateCmd(
                 id = cmdId,
                 triggerId = triggerId,
-                groupId = groupId,
-                flowId = flowId,
+                workspaceId = workspaceId,
+                namespaceId = namespaceId,
                 name = name,
                 inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
                 funcId = funcId,
-                duration = 10.seconds
+                duration = TriggerDuration(10.seconds.toIsoString())
             )
         )
     }
 
     private fun TriggerRepository.createEventTrigger(
         triggerId: TriggerId,
-        flowId: FlowId,
+        namespaceId: NamespaceId,
         name: TriggerName,
-        groupId: GroupId,
+        workspaceId: WorkspaceId,
         funcId: FuncId = FuncId(4),
         topicId: TopicId = TopicId(9),
         cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
@@ -1100,8 +1128,8 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
             CreateEventCmd(
                 id = cmdId,
                 triggerId = triggerId,
-                groupId = groupId,
-                flowId = flowId,
+                workspaceId = workspaceId,
+                namespaceId = namespaceId,
                 name = name,
                 inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
                 funcId = funcId,
@@ -1113,9 +1141,9 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
     private fun TriggerRepository.createHookTrigger(
         cmdId: CmdId = CmdGen(),
         triggerId: TriggerId,
-        flowId: FlowId,
+        namespaceId: NamespaceId,
         name: TriggerName,
-        groupId: GroupId,
+        workspaceId: WorkspaceId,
         funcId: FuncId = FuncId(4),
         hookId: HookId = HookId(9),
         hookMethod: HookMethod = Post
@@ -1124,8 +1152,8 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
             CreateHookCmd(
                 id = cmdId,
                 triggerId = triggerId,
-                groupId = groupId,
-                flowId = flowId,
+                workspaceId = workspaceId,
+                namespaceId = namespaceId,
                 name = name,
                 inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
                 funcId = funcId,
@@ -1137,9 +1165,9 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
 
     private fun TriggerRepository.createCronTrigger(
         triggerId: TriggerId,
-        flowId: FlowId,
+        namespaceId: NamespaceId,
         name: TriggerName,
-        groupId: GroupId,
+        workspaceId: WorkspaceId,
         cron: CronPattern = CronPattern("0 0 * * * *"),
         funcId: FuncId = FuncId(4),
         cmdId: CmdId = CmdGen()
@@ -1148,8 +1176,8 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
             CreateCronCmd(
                 id = cmdId,
                 triggerId = triggerId,
-                groupId = groupId,
-                flowId = flowId,
+                workspaceId = workspaceId,
+                namespaceId = namespaceId,
                 name = name,
                 inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
                 funcId = funcId,
@@ -1163,7 +1191,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
     }
 
     private fun TriggerRepository.verifyCount(expected: Int, block: TriggerQuery.() -> Unit) {
-        val counted = count(TriggerQuery(groupIds = listOf()).also(block))
-        assertThat("number of trigger expected", counted, equalTo(expected.toULong()))
+        val counted = count(TriggerQuery(workspaceIds = listOf()).also(block))
+        assertThat("number of trigger expected", counted, equalTo(Count(expected)))
     }
 }

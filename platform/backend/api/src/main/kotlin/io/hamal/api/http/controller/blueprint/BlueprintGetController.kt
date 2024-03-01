@@ -1,6 +1,6 @@
 package io.hamal.api.http.controller.blueprint
 
-import io.hamal.core.adapter.BlueprintGetPort
+import io.hamal.core.adapter.blueprint.BlueprintGetPort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.BlueprintId
 import io.hamal.lib.sdk.api.ApiBlueprint
@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 internal class BlueprintGetController(
     private val retry: Retry,
-    private val getBlueprint: BlueprintGetPort
+    private val blueprintGet: BlueprintGetPort
 ) {
     @GetMapping("/v1/blueprints/{bpId}")
-    fun getBlueprint(@PathVariable("bpId") blueprintId: BlueprintId) = retry {
-        getBlueprint(blueprintId, ::assemble)
+    fun get(@PathVariable("bpId") blueprintId: BlueprintId): ResponseEntity<ApiBlueprint> = retry {
+        assemble(blueprintGet(blueprintId))
     }
 
     private fun assemble(blueprint: Blueprint) =
@@ -26,7 +26,8 @@ internal class BlueprintGetController(
                 id = blueprint.id,
                 name = blueprint.name,
                 inputs = blueprint.inputs,
-                value = blueprint.value
+                value = blueprint.value,
+                description = blueprint.description
             )
         )
 }

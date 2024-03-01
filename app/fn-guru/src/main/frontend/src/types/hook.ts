@@ -1,8 +1,8 @@
-export interface HookCreateSubmitted {
+export interface HookCreateRequested {
     id: string;
     hookId: string;
-    flowId: string;
-    groupId: string;
+    namespaceId: string;
+    workspaceId: string;
 }
 
 export interface HookList {
@@ -12,7 +12,7 @@ export interface HookList {
 export interface HookListItem {
     id: string;
     name: string;
-    flow: {
+    namespace: {
         id: string;
         name: string
     },
@@ -21,7 +21,7 @@ export interface HookListItem {
 export interface Hook {
     id: string;
     name: string;
-    flow: {
+    namespace: {
         id: string;
         name: string
     },

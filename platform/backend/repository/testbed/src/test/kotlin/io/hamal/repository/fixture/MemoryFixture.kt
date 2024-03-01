@@ -1,17 +1,32 @@
 package io.hamal.repository.fixture
 
-import io.hamal.lib.domain.vo.FlowId
-import io.hamal.lib.domain.vo.GroupId
-import io.hamal.lib.domain.vo.TopicId
-import io.hamal.lib.domain.vo.TopicName
+import io.hamal.lib.common.domain.CreatedAt
+import io.hamal.lib.common.domain.UpdatedAt
+import io.hamal.lib.domain.vo.LogTopicId
 import io.hamal.repository.api.*
 import io.hamal.repository.api.log.*
 import io.hamal.repository.memory.AuthMemoryRepository
 import io.hamal.repository.memory.ExecLogMemoryRepository
-import io.hamal.repository.memory.ReqMemoryRepository
+import io.hamal.repository.memory.RequestMemoryRepository
 import io.hamal.repository.memory.StateMemoryRepository
-import io.hamal.repository.memory.log.*
-import io.hamal.repository.memory.record.*
+import io.hamal.repository.memory.log.LogBrokerMemoryRepository
+import io.hamal.repository.memory.log.LogSegmentMemory
+import io.hamal.repository.memory.log.LogSegmentMemoryRepository
+import io.hamal.repository.memory.log.LogTopicMemoryRepository
+import io.hamal.repository.memory.record.account.AccountMemoryRepository
+import io.hamal.repository.memory.record.blueprint.BlueprintMemoryRepository
+import io.hamal.repository.memory.record.code.CodeMemoryRepository
+import io.hamal.repository.memory.record.endpoint.EndpointMemoryRepository
+import io.hamal.repository.memory.record.exec.ExecMemoryRepository
+import io.hamal.repository.memory.record.extension.ExtensionMemoryRepository
+import io.hamal.repository.memory.record.feedback.FeedbackMemoryRepository
+import io.hamal.repository.memory.record.func.FuncMemoryRepository
+import io.hamal.repository.memory.record.hook.HookMemoryRepository
+import io.hamal.repository.memory.record.namespace.NamespaceMemoryRepository
+import io.hamal.repository.memory.record.namespace_tree.NamespaceTreeMemoryRepository
+import io.hamal.repository.memory.record.topic.TopicMemoryRepository
+import io.hamal.repository.memory.record.trigger.TriggerMemoryRepository
+import io.hamal.repository.memory.record.workspace.MemoryWorkspaceRepository
 import kotlin.reflect.KClass
 
 object MemoryFixture : BaseTestFixture {
@@ -20,9 +35,6 @@ object MemoryFixture : BaseTestFixture {
         AccountRepository::class -> AccountMemoryRepository() as REPO
         AuthRepository::class -> AuthMemoryRepository() as REPO
         BlueprintRepository::class -> BlueprintMemoryRepository() as REPO
-        BrokerRepository::class -> BrokerMemoryRepository() as REPO
-        BrokerConsumersRepository::class -> BrokerConsumersMemoryRepository() as REPO
-        BrokerTopicsRepository::class -> BrokerTopicsMemoryRepository() as REPO
         CodeRepository::class -> CodeMemoryRepository() as REPO
         EndpointRepository::class -> EndpointMemoryRepository() as REPO
         ExecLogRepository::class -> ExecLogMemoryRepository() as REPO
@@ -30,21 +42,26 @@ object MemoryFixture : BaseTestFixture {
         ExtensionRepository::class -> ExtensionMemoryRepository() as REPO
         FeedbackRepository::class -> FeedbackMemoryRepository() as REPO
         FuncRepository::class -> FuncMemoryRepository() as REPO
-        GroupRepository::class -> MemoryGroupRepository() as REPO
+        WorkspaceRepository::class -> MemoryWorkspaceRepository() as REPO
         HookRepository::class -> HookMemoryRepository() as REPO
-        FlowRepository::class -> FlowMemoryRepository() as REPO
-        RequestRepository::class -> ReqMemoryRepository() as REPO
-        SegmentRepository::class -> SegmentMemoryRepository(SegmentMemory(Segment.Id(2810), TopicId(1506))) as REPO
-        StateRepository::class -> StateMemoryRepository() as REPO
-        TopicRepository::class -> TopicMemoryRepository(
-            Topic(
-                TopicId(23),
-                FlowId(23),
-                GroupId(1),
-                TopicName("test-topic")
+        NamespaceRepository::class -> NamespaceMemoryRepository() as REPO
+        NamespaceTreeRepository::class -> NamespaceTreeMemoryRepository() as REPO
+        RequestRepository::class -> RequestMemoryRepository() as REPO
+
+        LogBrokerRepository::class -> LogBrokerMemoryRepository() as REPO
+        LogSegmentRepository::class -> LogSegmentMemoryRepository(
+            LogSegmentMemory(
+                LogSegmentId(2810),
+                LogTopicId(1506)
             )
         ) as REPO
 
+        LogTopicRepository::class -> LogTopicMemoryRepository(
+            LogTopic(LogTopicId(23), CreatedAt.now(), UpdatedAt.now())
+        ) as REPO
+
+        StateRepository::class -> StateMemoryRepository() as REPO
+        TopicRepository::class -> TopicMemoryRepository(LogBrokerMemoryRepository()) as REPO
         TriggerRepository::class -> TriggerMemoryRepository() as REPO
         else -> TODO()
     }

@@ -1,10 +1,10 @@
-export interface TriggerCreateSubmitted {
+export interface TriggerCreateRequested {
     id: string;
     status: string;
     triggerId: string;
     funcId: string;
-    flowId: string;
-    groupId: string;
+    namespaceId: string;
+    workspaceId: string;
 }
 
 export interface TriggerList {
@@ -20,8 +20,8 @@ export interface TriggerListItem {
         name: string;
     },
     hook?: {
-        id: string,
-        name: string,
-        methods: Array<String>
+        id: string;
+        name: string;
+        method: string;
     }
 }

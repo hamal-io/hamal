@@ -4,9 +4,9 @@ import io.hamal.repository.api.Account
 
 data class AccountCreatedEvent(
     val account: Account,
-) : PlatformEvent()
+) : InternalEvent()
 
 
 data class AccountConvertedEvent(
     val account: Account,
-) : PlatformEvent()
+) : InternalEvent()

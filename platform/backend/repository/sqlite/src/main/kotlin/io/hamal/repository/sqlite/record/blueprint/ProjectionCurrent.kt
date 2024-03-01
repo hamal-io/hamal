@@ -1,5 +1,6 @@
 package io.hamal.repository.sqlite.record.blueprint
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.BlueprintId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
@@ -17,13 +18,12 @@ object ProjectionCurrent : ProjectionSqlite<BlueprintId, BlueprintRecord, Bluepr
         tx.execute(
             """
                 INSERT OR REPLACE INTO current
-                    (id, group_id, data) 
+                    (id, data) 
                 VALUES
-                    (:id, :groupId, :data)
+                    (:id, :data)
             """.trimIndent()
         ) {
             set("id", obj.id)
-            set("groupId", obj.groupId)
             set("data", json.serializeAndCompress(obj))
         }
     }
@@ -33,7 +33,6 @@ object ProjectionCurrent : ProjectionSqlite<BlueprintId, BlueprintRecord, Bluepr
             """
             CREATE TABLE IF NOT EXISTS current (
                  id             INTEGER NOT NULL,
-                 group_id       INTEGER NOT NULL,
                  data           BLOB NOT NULL,
                  PRIMARY KEY    (id)
             );
@@ -75,7 +74,6 @@ object ProjectionCurrent : ProjectionSqlite<BlueprintId, BlueprintRecord, Bluepr
             WHERE
                 id < :afterId
                 ${query.ids()}
-                ${query.groupIds()}
             ORDER BY id DESC
             LIMIT :limit
         """.trimIndent()
@@ -90,9 +88,10 @@ object ProjectionCurrent : ProjectionSqlite<BlueprintId, BlueprintRecord, Bluepr
         }
     }
 
-    fun count(connection: Connection, query: BlueprintQuery): ULong {
-        return connection.executeQueryOne(
-            """
+    fun count(connection: Connection, query: BlueprintQuery): Count {
+        return Count(
+            connection.executeQueryOne(
+                """
             SELECT 
                 COUNT(*) as count 
             FROM 
@@ -100,16 +99,16 @@ object ProjectionCurrent : ProjectionSqlite<BlueprintId, BlueprintRecord, Bluepr
             WHERE
                 id < :afterId
                 ${query.ids()}
-                ${query.groupIds()}
         """.trimIndent()
-        ) {
-            query {
-                set("afterId", query.afterId)
-            }
-            map {
-                it.getLong("count").toULong()
-            }
-        } ?: 0UL
+            ) {
+                query {
+                    set("afterId", query.afterId)
+                }
+                map {
+                    it.getLong("count")
+                }
+            } ?: 0L
+        )
     }
 
     private fun BlueprintQuery.ids(): String {
@@ -117,14 +116,6 @@ object ProjectionCurrent : ProjectionSqlite<BlueprintId, BlueprintRecord, Bluepr
             ""
         } else {
             "AND id IN (${blueprintIds.joinToString(",") { "${it.value.value}" }})"
-        }
-    }
-
-    private fun BlueprintQuery.groupIds(): String {
-        return if (groupIds.isEmpty()) {
-            ""
-        } else {
-            "AND group_id IN (${groupIds.joinToString(",") { "${it.value.value}" }})"
         }
     }
 }

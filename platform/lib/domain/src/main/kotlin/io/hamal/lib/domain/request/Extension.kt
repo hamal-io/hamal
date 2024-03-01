@@ -10,8 +10,9 @@ interface ExtensionCreateRequest {
 
 data class ExtensionCreateRequested(
     override val id: RequestId,
+    override val by: AuthId,
     override var status: RequestStatus,
-    val groupId: GroupId,
+    val workspaceId: WorkspaceId,
     val extensionId: ExtensionId,
     val name: ExtensionName,
     val codeId: CodeId,
@@ -27,8 +28,9 @@ interface ExtensionUpdateRequest {
 
 data class ExtensionUpdateRequested(
     override val id: RequestId,
+    override val by: AuthId,
     override var status: RequestStatus,
-    val groupId: GroupId,
+    val workspaceId: WorkspaceId,
     val extensionId: ExtensionId,
     val name: ExtensionName?,
     val code: CodeValue?

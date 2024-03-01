@@ -5,7 +5,6 @@ import io.hamal.core.component.*
 import io.hamal.lib.common.hot.HotJsonModule
 import io.hamal.lib.common.serialization.JsonFactoryBuilder
 import io.hamal.lib.domain.vo.ValueObjectJsonModule
-import io.hamal.lib.kua.type.KuaJsonModule
 import io.hamal.lib.sdk.api.ApiJsonModule
 import io.hamal.repository.api.DomainJsonModule
 import io.hamal.repository.api.event.PlatformEventJsonModule
@@ -31,7 +30,6 @@ open class WebConfig : WebMvcConfigurer {
         .register(ApiJsonModule)
         .register(DomainJsonModule)
         .register(HotJsonModule)
-        .register(KuaJsonModule)
         .register(PlatformEventJsonModule)
         .register(ValueObjectJsonModule)
         .build()
@@ -40,8 +38,8 @@ open class WebConfig : WebMvcConfigurer {
     open fun gsonHttpMessageConverter(gson: Gson): GsonHttpMessageConverter {
         val result = GsonHttpMessageConverter()
         result.gson = gson
+        result.defaultCharset = StandardCharsets.UTF_8
         result.supportedMediaTypes = listOf(
-            MediaType.APPLICATION_JSON,
             MediaType("application", "json", StandardCharsets.UTF_8)
         )
         return result
@@ -64,18 +62,20 @@ open class WebConfig : WebMvcConfigurer {
     override fun addFormatters(registry: FormatterRegistry) {
         super.addFormatters(registry)
         registry.addConverter(AccountIdConverter)
+        registry.addConverter(CodeIdConverter)
         registry.addConverter(CodeVersionConverter)
         registry.addConverter(CorrelationIdConverter)
         registry.addConverter(ExecIdConverter)
         registry.addConverter(ExecLogIdConverter)
         registry.addConverter(FuncIdConverter)
-        registry.addConverter(GroupIdConverter)
-        registry.addConverter(FlowIdConverter)
         registry.addConverter(LimitConverter)
-        registry.addConverter(ReqIdConverter)
+        registry.addConverter(NamespaceIdConverter)
+        registry.addConverter(RequestIdConverter)
         registry.addConverter(TopicEntryIdConverter)
         registry.addConverter(TopicIdConverter)
         registry.addConverter(TopicNameConverter)
         registry.addConverter(TriggerIdConverter)
+        registry.addConverter(WorkspaceIdConverter)
+
     }
 }

@@ -1,5 +1,6 @@
 package io.hamal.bridge.http.controller.exec
 
+import io.hamal.lib.common.domain.BatchSize
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
@@ -13,10 +14,9 @@ import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.ApiError
 import io.hamal.lib.sdk.bridge.BridgeExecCompleteRequest
 import io.hamal.lib.sdk.bridge.BridgeExecCompleteRequested
-import io.hamal.repository.api.CompletedExec
-import io.hamal.repository.api.StartedExec
-import io.hamal.repository.api.log.BatchConsumerImpl
-import io.hamal.repository.api.log.ConsumerId
+import io.hamal.repository.api.Exec
+import io.hamal.repository.api.log.LogConsumerBatchImpl
+import io.hamal.repository.api.log.LogConsumerId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
@@ -36,9 +36,9 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
                     status = execStatus,
                     correlation = Correlation(
                         funcId = generateDomainId(::FuncId),
-                        correlationId = CorrelationId("__correlation__")
+                        id = CorrelationId("__correlation__")
                     ),
-                    invocation = EmptyInvocation
+                    invocation = Invocation.Adhoc
                 )
 
                 val completionResponse = requestCompletion(exec.id)
@@ -60,10 +60,10 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
             status = Started,
             correlation = Correlation(
                 funcId = generateDomainId(::FuncId),
-                correlationId = CorrelationId("__correlation__")
+                id = CorrelationId("__correlation__")
             ),
-            invocation = EmptyInvocation
-        ) as StartedExec
+            invocation = Invocation.Adhoc
+        ) as Exec.Started
 
         val completionResponse = requestCompletion(startedExec.id)
         assertThat(completionResponse.statusCode, equalTo(Accepted))
@@ -98,7 +98,7 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
     }
 
     private fun verifyExecCompleted(execId: ExecId) {
-        with(execQueryRepository.get(execId) as CompletedExec) {
+        with(execQueryRepository.get(execId) as Exec.Completed) {
             assertThat(id, equalTo(execId))
             assertThat(status, equalTo(ExecStatus.Completed))
             assertThat(result, equalTo(ExecResult(HotObject.builder().set("hamal", "rocks").build())))
@@ -106,7 +106,7 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
     }
 
     private fun verifyStateSet(execId: ExecId) {
-        val exec = (execQueryRepository.get(execId) as CompletedExec)
+        val exec = (execQueryRepository.get(execId) as Exec.Completed)
         with(stateQueryRepository.get(exec.correlation!!)) {
             assertThat(correlation, equalTo(exec.correlation))
             assertThat(value, equalTo(State(HotObject.builder().set("value", 13.37).build())))
@@ -122,14 +122,14 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
     }
 
     private fun verifyEventAppended() {
-        val topic = eventBrokerRepository.resolveTopic(testFlow.id, TopicName("test-completion"))!!
+        val topic = topicQueryRepository.getTopic(testNamespace.id, TopicName("test-completion"))
 
-        BatchConsumerImpl(
-            consumerId = ConsumerId("a"),
-            repository = eventBrokerRepository,
-            topic = topic,
+        LogConsumerBatchImpl(
+            consumerId = LogConsumerId(123),
+            repository = logBrokerRepository,
+            topicId = topic.logTopicId,
             valueClass = EventPayload::class
-        ).consumeBatch(10) { eventPayloads ->
+        ).consumeBatch(BatchSize(10)) { eventPayloads ->
             assertThat(eventPayloads, hasSize(1))
 
             val payload = eventPayloads.first()

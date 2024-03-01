@@ -1,11 +1,11 @@
 sys = require_plugin 'sys'
 http = require('net.http').create()
 
-flow = fail_on_error(sys.flows.create({ name = 'io::hamal' }))
-sys.await_completed(flow)
+namespace = fail_on_error(sys.namespaces.append({ name = 'io::hamal' }))
+sys.await_completed(namespace)
 
 func_one = fail_on_error(sys.funcs.create({
-    flow_id = flow.flow_id,
+    namespace_id = namespace.namespace_id,
     name = 'test-func',
     inputs = {},
     code = [[
@@ -15,7 +15,7 @@ func_one = fail_on_error(sys.funcs.create({
 sys.await_completed(func_one)
 
 submitted_endpoint = fail_on_error(sys.endpoints.create({
-    flow_id = flow.flow_id,
+    namespace_id = namespace.namespace_id,
     func_id = func_one.func_id,
     name = 'test-endpoint'
 }))

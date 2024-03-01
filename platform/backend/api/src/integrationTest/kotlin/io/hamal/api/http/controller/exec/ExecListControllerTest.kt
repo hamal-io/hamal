@@ -25,7 +25,7 @@ internal class ExecListControllerTest : ExecBaseControllerTest() {
         val execId = awaitCompleted(createAdhocExec()).execId
 
         val response = httpTemplate.get("/v1/execs")
-            .parameter("group_ids", testGroup.id)
+            .parameter("workspace_ids", testWorkspace.id)
             .execute()
 
         assertThat(response.statusCode, equalTo(Ok))
@@ -46,7 +46,7 @@ internal class ExecListControllerTest : ExecBaseControllerTest() {
         )
 
         val response = httpTemplate.get("/v1/execs")
-            .parameter("group_ids", testGroup.id)
+            .parameter("workspace_ids", testWorkspace.id)
             .parameter("limit", 42)
             .execute()
 
@@ -66,7 +66,7 @@ internal class ExecListControllerTest : ExecBaseControllerTest() {
         val fortySixthRequest = requests.drop(45).take(1).first()
 
         val response = httpTemplate.get("/v1/execs")
-            .parameter("group_ids", testGroup.id)
+            .parameter("workspace_ids", testWorkspace.id)
             .parameter("limit", 1)
             .parameter("after_id", fortySixthRequest.execId)
             .execute()

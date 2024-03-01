@@ -8,7 +8,7 @@ import io.hamal.lib.domain.vo.FuncId
 class State(override val value: HotObject = HotObject.empty) : ValueObjectHotObject()
 
 data class Correlation(
-    val correlationId: CorrelationId,
+    val id: CorrelationId,
     val funcId: FuncId
 )
 

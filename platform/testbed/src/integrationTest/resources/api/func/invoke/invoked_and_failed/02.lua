@@ -14,4 +14,4 @@ assert(exec ~= nil)
 
 assert(exec.id == invoked_exec.id)
 assert(exec.status == 'Failed')
-assert(exec.correlation_id == '__default__')
+assert(exec.correlation.id == '__default__')

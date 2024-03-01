@@ -1,5 +1,3 @@
-import {DefaultFlowId} from "@/types/flow.ts";
-
 export type AuthType = 'Unauthorized' | 'Anonymous' | 'User'
 
 export const AUTH_KEY = 'auth'
@@ -7,18 +5,15 @@ export const AUTH_KEY = 'auth'
 export interface Auth {
     type: AuthType,
     accountId: string;
-    groupId: string;
-    defaultFlowIds: Array<DefaultFlowId>;
+    workspaceId: string;
     token: string;
 }
 
-
-export interface LoginSubmitted {
+export interface LoginRequested {
     id: string;
     status: string;
     accountId: string;
-    groupIds: string[];
-    defaultFlowIds: Array<DefaultFlowId>;
+    workspaceIds: string[];
     token: string;
     email: string;
 }

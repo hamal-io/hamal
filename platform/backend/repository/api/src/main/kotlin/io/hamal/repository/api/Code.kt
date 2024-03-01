@@ -1,25 +1,22 @@
 package io.hamal.repository.api
 
-import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.domain.DomainObject
-import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.common.domain.UpdatedAt
+import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.CodeVersion
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.WorkspaceId
 
 data class Code(
     override val id: CodeId,
     override val updatedAt: UpdatedAt,
-    val groupId: GroupId,
+    override val workspaceId: WorkspaceId,
     val cmdId: CmdId,
     val version: CodeVersion,
     val value: CodeValue,
     var type: CodeType,
-) : DomainObject<CodeId>
+) : DomainObject<CodeId>, HasWorkspaceId
 
 interface CodeRepository : CodeCmdRepository, CodeQueryRepository
 
@@ -30,7 +27,7 @@ interface CodeCmdRepository : CmdRepository {
     data class CreateCmd(
         val id: CmdId,
         val codeId: CodeId,
-        val groupId: GroupId,
+        val workspaceId: WorkspaceId,
         val value: CodeValue,
         val type: CodeType = CodeType.Lua54
     )
@@ -54,18 +51,18 @@ interface CodeQueryRepository {
     fun list(codeIds: List<CodeId>): List<Code> = list(
         CodeQuery(
             limit = Limit.all,
-            groupIds = listOf(),
+            workspaceIds = listOf(),
             codeIds = codeIds,
         )
     )
 
-    fun count(query: CodeQuery): ULong
+    fun count(query: CodeQuery): Count
 
     data class CodeQuery(
         var afterId: CodeId = CodeId(SnowflakeId(Long.MAX_VALUE)),
         var limit: Limit = Limit(1),
         var codeIds: List<CodeId> = listOf(),
-        var groupIds: List<GroupId>
+        var workspaceIds: List<WorkspaceId>
     )
 
 }

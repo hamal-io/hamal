@@ -14,9 +14,8 @@ class InvocationInputs(override val value: HotObject = HotObject.empty) : ValueO
 
 class InvocationClass(override val value: String) : ValueObjectString()
 
-
 sealed class Invocation {
-    val invocationClass: InvocationClass = InvocationClass(this::class.simpleName!!)
+    val `class`: InvocationClass = InvocationClass(this::class.simpleName!!)
 
     object Adapter : JsonAdapter<Invocation> {
         override fun serialize(
@@ -32,7 +31,7 @@ sealed class Invocation {
             typeOfT: java.lang.reflect.Type,
             context: JsonDeserializationContext
         ): Invocation {
-            val invocationClass = json.asJsonObject.get("invocationClass").asString
+            val invocationClass = json.asJsonObject.get("class").asString
             return context.deserialize(
                 json, (classMapping[invocationClass]
                     ?: throw NotImplementedError("$invocationClass not supported")).java
@@ -40,31 +39,37 @@ sealed class Invocation {
         }
 
         private val classMapping = listOf(
-            EventInvocation::class,
-            HookInvocation::class,
-            EndpointInvocation::class,
-            EmptyInvocation::class
+            Adhoc::class,
+            Endpoint::class,
+            Event::class,
+            Func::class,
+            Hook::class,
+            Schedule::class
         ).associateBy { it.simpleName }
 
     }
+
+    object Adhoc : Invocation()
+
+    object Func : Invocation()
+
+    data class Event(val events: List<io.hamal.lib.domain.vo.Event>) : Invocation()
+
+    data class Hook(
+        val method: HookMethod,
+        val headers: HookHeaders,
+        val parameters: HookParameters,
+        val content: HookContent
+    ) : Invocation()
+
+
+    data class Endpoint(
+        val method: EndpointMethod,
+        val headers: EndpointHeaders,
+        val parameters: EndpointParameters,
+        val content: EndpointContent
+    ) : Invocation()
+
+    object Schedule : Invocation()
 }
-
-data class EventInvocation(val events: List<Event>) : Invocation()
-
-data class HookInvocation(
-    val method: HookMethod,
-    val headers: HookHeaders,
-    val parameters: HookParameters,
-    val content: HookContent
-) : Invocation()
-
-
-data class EndpointInvocation(
-    val method: EndpointMethod,
-    val headers: EndpointHeaders,
-    val parameters: EndpointParameters,
-    val content: EndpointContent
-) : Invocation()
-
-object EmptyInvocation : Invocation()
 

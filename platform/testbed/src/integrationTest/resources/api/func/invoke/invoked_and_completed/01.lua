@@ -1,7 +1,7 @@
 sys = require_plugin('sys')
 
 req = fail_on_error(sys.funcs.create({
-    flow_id = '1',
+    namespace_id = '539',
     name = 'test-func',
     inputs = {},
     code = [[print('invoked')]]

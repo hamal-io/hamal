@@ -239,7 +239,7 @@ typedef struct mpd_context_t {
 #define MPD_Overflow            0x00000800U
 #define MPD_Rounded             0x00001000U
 #define MPD_Subnormal           0x00002000U
-#define MPD_Underflow           0x00004000U
+#define MPD_underflow           0x00004000U
 #define MPD_Max_status         (0x00008000U-1U)
 
 /* Conditions that result in an IEEE 754 exception */
@@ -259,7 +259,7 @@ typedef struct mpd_context_t {
 #define MPD_Traps (MPD_IEEE_Invalid_operation | \
                    MPD_Division_by_zero |       \
                    MPD_Overflow |               \
-                   MPD_Underflow)
+                   MPD_underflow)
 
 /* Official name */
 #define MPD_Insufficient_storage MPD_Malloc_error

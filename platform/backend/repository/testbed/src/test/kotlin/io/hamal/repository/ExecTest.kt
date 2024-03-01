@@ -1,6 +1,7 @@
 package io.hamal.repository
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain.Correlation
@@ -29,14 +30,14 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                 PlanCmd(
                     id = CmdId(1),
                     execId = ExecId(2),
-                    flowId = FlowId(5),
-                    groupId = GroupId(3),
+                    namespaceId = NamespaceId(5),
+                    workspaceId = WorkspaceId(3),
                     correlation = Correlation(
-                        correlationId = CorrelationId("some-correlation-id"), funcId = FuncId(23)
+                        id = CorrelationId("some-correlation-id"), funcId = FuncId(23)
                     ),
                     inputs = ExecInputs(HotObject.builder().set("hamal", "rocks").build()),
                     code = ExecCode(value = CodeValue("40 + 2")),
-                    invocation = EventInvocation(
+                    invocation = Invocation.Event(
                         listOf(
                             Event(
                                 topic = EventTopic(id = TopicId(90), name = TopicName("test-topic")),
@@ -57,22 +58,22 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
         @TestFactory
         fun `Tires to plan but cmd with exec id was already applied`() = runWith(ExecRepository::class) {
             planExec(
-                cmdId = CmdId(23456), execId = ExecId(2), groupId = GroupId(3), flowId = FlowId(4)
+                cmdId = CmdId(23456), execId = ExecId(2), workspaceId = WorkspaceId(3), namespaceId = NamespaceId(4)
             )
 
 
             val result = planExec(
                 cmdId = CmdId(23456),
                 execId = ExecId(2),
-                groupId = GroupId(4),
-                flowId = FlowId(5),
+                workspaceId = WorkspaceId(4),
+                namespaceId = NamespaceId(5),
             )
 
             with(result) {
                 assertThat(id, equalTo(ExecId(2)))
                 assertThat(status, equalTo(Planned))
-                assertThat(groupId, equalTo(GroupId(3)))
-                assertThat(flowId, equalTo(FlowId(4)))
+                assertThat(workspaceId, equalTo(WorkspaceId(3)))
+                assertThat(namespaceId, equalTo(NamespaceId(4)))
             }
 
             verifyCount(1)
@@ -85,7 +86,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
         @TestFactory
         fun `Schedule planned exec`() = runWith(ExecRepository::class) {
             planExec(
-                cmdId = CmdId(1), execId = ExecId(2), groupId = GroupId(3), flowId = FlowId(4)
+                cmdId = CmdId(1), execId = ExecId(2), workspaceId = WorkspaceId(3), namespaceId = NamespaceId(4)
             )
 
             val result = schedule(ScheduleCmd(CmdId(4), ExecId(2)))
@@ -113,7 +114,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Tries to schedule exec which does not exists`() = runWith(ExecRepository::class) {
-            planExec(ExecId(32), FlowId(34), GroupId(33))
+            planExec(ExecId(32), NamespaceId(34), WorkspaceId(33))
 
             val exception = assertThrows<NoSuchElementException> {
                 schedule(ScheduleCmd(CmdId(4), ExecId(23)))
@@ -130,7 +131,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
         @TestFactory
         fun `Queue scheduled exec`() = runWith(ExecRepository::class) {
             planExec(
-                cmdId = CmdId(1), execId = ExecId(2), groupId = GroupId(3), flowId = FlowId(4)
+                cmdId = CmdId(1), execId = ExecId(2), workspaceId = WorkspaceId(3), namespaceId = NamespaceId(4)
             )
 
             schedule(ScheduleCmd(CmdId(2), ExecId(2)))
@@ -160,7 +161,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Tries to queue exec which does not exists`() = runWith(ExecRepository::class) {
-            planExec(ExecId(2), FlowId(44), GroupId(33))
+            planExec(ExecId(2), NamespaceId(44), WorkspaceId(33))
             schedule(ScheduleCmd(CmdId(2), ExecId(2)))
 
             val exception = assertThrows<NoSuchElementException> {
@@ -177,7 +178,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
         @TestFactory
         fun `Start queued exec`() = runWith(ExecRepository::class) {
             planExec(
-                cmdId = CmdId(1), execId = ExecId(2), groupId = GroupId(3), flowId = FlowId(4)
+                cmdId = CmdId(1), execId = ExecId(2), workspaceId = WorkspaceId(3), namespaceId = NamespaceId(4)
             )
 
             schedule(ScheduleCmd(CmdId(2), ExecId(2)))
@@ -213,7 +214,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
         @TestFactory
         fun `Complete started exec`() = runWith(ExecRepository::class) {
             planExec(
-                cmdId = CmdId(1), execId = ExecId(2), groupId = GroupId(3), flowId = FlowId(4)
+                cmdId = CmdId(1), execId = ExecId(2), workspaceId = WorkspaceId(3), namespaceId = NamespaceId(4)
             )
 
             schedule(ScheduleCmd(CmdId(2), ExecId(2)))
@@ -255,7 +256,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Tries to complete exec which does not exists`() = runWith(ExecRepository::class) {
-            planExec(ExecId(2), FlowId(44), GroupId(33))
+            planExec(ExecId(2), NamespaceId(44), WorkspaceId(33))
             schedule(ScheduleCmd(CmdId(2), ExecId(2)))
             queue(QueueCmd(CmdId(3), ExecId(2)))
             start(StartCmd(CmdId(4)))
@@ -275,7 +276,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
         @TestFactory
         fun `Fail started exec`() = runWith(ExecRepository::class) {
             planExec(
-                cmdId = CmdId(1), execId = ExecId(2), groupId = GroupId(3), flowId = FlowId(4)
+                cmdId = CmdId(1), execId = ExecId(2), workspaceId = WorkspaceId(3), namespaceId = NamespaceId(4)
             )
 
             schedule(ScheduleCmd(CmdId(2), ExecId(2)))
@@ -308,7 +309,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Tries to fail exec which does not exists`() = runWith(ExecRepository::class) {
-            planExec(ExecId(2), FlowId(44), GroupId(33))
+            planExec(ExecId(2), NamespaceId(44), WorkspaceId(33))
             schedule(ScheduleCmd(CmdId(2), ExecId(2)))
             queue(QueueCmd(CmdId(3), ExecId(2)))
             start(StartCmd(CmdId(4)))
@@ -333,8 +334,8 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Clear table`() = runWith(ExecRepository::class) {
-            createExec(ExecId(1), Started, groupId = GroupId(3))
-            createExec(ExecId(2), Completed, groupId = GroupId(345))
+            createExec(ExecId(1), Started, workspaceId = WorkspaceId(3))
+            createExec(ExecId(2), Completed, workspaceId = WorkspaceId(345))
 
             clear()
             verifyCount(0)
@@ -354,14 +355,14 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
 
             with(get(ExecId(1))) {
                 assertThat(id, equalTo(ExecId(1)))
-                assertThat(groupId, equalTo(GroupId(333)))
-                assertThat(correlation?.correlationId, equalTo(CorrelationId("SomeCorrelationId")))
+                assertThat(workspaceId, equalTo(WorkspaceId(333)))
+                assertThat(correlation?.id, equalTo(CorrelationId("SomeCorrelationId")))
                 assertThat(correlation?.funcId, equalTo(FuncId(444)))
                 assertThat(inputs, equalTo(ExecInputs(HotObject.builder().set("hamal", "rocks").build())))
                 assertThat(code, equalTo(ExecCode(value = CodeValue("'13'..'37'"))))
                 assertThat(
                     invocation, equalTo(
-                        EventInvocation(
+                        Invocation.Event(
                             listOf(
                                 Event(
                                     topic = EventTopic(id = TopicId(90), name = TopicName("test-topic")),
@@ -398,14 +399,14 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
 
             with(find(ExecId(1))!!) {
                 assertThat(id, equalTo(ExecId(1)))
-                assertThat(groupId, equalTo(GroupId(333)))
-                assertThat(correlation?.correlationId, equalTo(CorrelationId("SomeCorrelationId")))
+                assertThat(workspaceId, equalTo(WorkspaceId(333)))
+                assertThat(correlation?.id, equalTo(CorrelationId("SomeCorrelationId")))
                 assertThat(correlation?.funcId, equalTo(FuncId(444)))
                 assertThat(inputs, equalTo(ExecInputs(HotObject.builder().set("hamal", "rocks").build())))
                 assertThat(code, equalTo(ExecCode(value = CodeValue("'13'..'37'"))))
                 assertThat(
                     invocation, equalTo(
-                        EventInvocation(
+                        Invocation.Event(
                             listOf(
                                 Event(
                                     topic = EventTopic(id = TopicId(90), name = TopicName("test-topic")),
@@ -439,30 +440,53 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
 
             with(result[0]) {
                 assertThat(id, equalTo(ExecId(3)))
-                assertThat(groupId, equalTo(GroupId(4)))
+                assertThat(workspaceId, equalTo(WorkspaceId(4)))
             }
         }
 
         @TestFactory
-        fun `With group ids`() = runWith(ExecRepository::class) {
+        fun `With ids`() = runWith(ExecRepository::class) {
             setup()
 
             val query = ExecQuery(
-                groupIds = listOf(GroupId(5), GroupId(4)), limit = Limit(10)
+                execIds = listOf(ExecId(1), ExecId(2)),
+                limit = Limit(10)
             )
 
-            assertThat(count(query), equalTo(2UL))
+            assertThat(count(query), equalTo(Count(2)))
+            val result = list(query)
+            assertThat(result, hasSize(2))
+
+            with(result[0]) {
+                assertThat(id, equalTo(ExecId(2)))
+            }
+
+            with(result[1]) {
+                assertThat(id, equalTo(ExecId(1)))
+            }
+        }
+
+
+        @TestFactory
+        fun `With workspace ids`() = runWith(ExecRepository::class) {
+            setup()
+
+            val query = ExecQuery(
+                workspaceIds = listOf(WorkspaceId(5), WorkspaceId(4)), limit = Limit(10)
+            )
+
+            assertThat(count(query), equalTo(Count(2)))
             val result = list(query)
             assertThat(result, hasSize(2))
 
             with(result[0]) {
                 assertThat(id, equalTo(ExecId(4)))
-                assertThat(groupId, equalTo(GroupId(5)))
+                assertThat(workspaceId, equalTo(WorkspaceId(5)))
             }
 
             with(result[1]) {
                 assertThat(id, equalTo(ExecId(3)))
-                assertThat(groupId, equalTo(GroupId(4)))
+                assertThat(workspaceId, equalTo(WorkspaceId(4)))
             }
         }
 
@@ -471,10 +495,10 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
             setup()
 
             val query = ExecQuery(
-                funcIds = listOf(FuncId(234), FuncId(123)), groupIds = listOf(), limit = Limit(10)
+                funcIds = listOf(FuncId(234), FuncId(123)), workspaceIds = listOf(), limit = Limit(10)
             )
 
-            assertThat(count(query), equalTo(2UL))
+            assertThat(count(query), equalTo(Count(2)))
             val result = list(query)
             assertThat(result, hasSize(2))
 
@@ -488,14 +512,14 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
         }
 
         @TestFactory
-        fun `With flow ids`() = runWith(ExecRepository::class) {
+        fun `With namespace ids`() = runWith(ExecRepository::class) {
             setup()
 
             val query = ExecQuery(
-                flowIds = listOf(FlowId(234), FlowId(123)), groupIds = listOf(), limit = Limit(10)
+                namespaceIds = listOf(NamespaceId(234), NamespaceId(123)), workspaceIds = listOf(), limit = Limit(10)
             )
 
-            assertThat(count(query), equalTo(2UL))
+            assertThat(count(query), equalTo(Count(2)))
             val result = list(query)
             assertThat(result, hasSize(2))
 
@@ -514,10 +538,10 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
             setup()
 
             val query = ExecQuery(
-                groupIds = listOf(), limit = Limit(3)
+                workspaceIds = listOf(), limit = Limit(3)
             )
 
-            assertThat(count(query), equalTo(4UL))
+            assertThat(count(query), equalTo(Count(4)))
             val result = list(query)
             assertThat(result, hasSize(3))
         }
@@ -527,10 +551,10 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
             setup()
 
             val query = ExecQuery(
-                afterId = ExecId(2), groupIds = listOf(), limit = Limit(1)
+                afterId = ExecId(2), workspaceIds = listOf(), limit = Limit(1)
             )
 
-            assertThat(count(query), equalTo(1UL))
+            assertThat(count(query), equalTo(Count(1)))
             val result = list(query)
             assertThat(result, hasSize(1))
 
@@ -541,28 +565,43 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
 
         private fun ExecRepository.setup() {
             createExec(
-                execId = ExecId(1), groupId = GroupId(3), status = Completed, correlation = Correlation(
-                    correlationId = CorrelationId("CID-1"), funcId = FuncId(234)
+                execId = ExecId(1),
+                workspaceId = WorkspaceId(3),
+                status = Completed,
+                correlation = Correlation(
+                    id = CorrelationId("CID-1"),
+                    funcId = FuncId(234)
                 ),
-                flowId = FlowId(234)
+                namespaceId = NamespaceId(234)
             )
 
             createExec(
-                execId = ExecId(2), groupId = GroupId(3), status = Failed, correlation = Correlation(
-                    correlationId = CorrelationId("CID-2"), funcId = FuncId(234)
+                execId = ExecId(2),
+                workspaceId = WorkspaceId(3),
+                status = Failed,
+                correlation = Correlation(
+                    id = CorrelationId("CID-2"),
+                    funcId = FuncId(234)
                 ),
-                flowId = FlowId(234)
+                namespaceId = NamespaceId(234)
             )
 
             createExec(
-                execId = ExecId(3), groupId = GroupId(4), status = Started, correlation = Correlation(
-                    correlationId = CorrelationId("CID-1"), funcId = FuncId(444)
+                execId = ExecId(3),
+                workspaceId = WorkspaceId(4),
+                status = Started,
+                correlation = Correlation(
+                    id = CorrelationId("CID-1"),
+                    funcId = FuncId(444)
                 ),
-                flowId = FlowId(444)
+                namespaceId = NamespaceId(444)
             )
 
             createExec(
-                execId = ExecId(4), groupId = GroupId(5), status = Queued, correlation = null
+                execId = ExecId(4),
+                workspaceId = WorkspaceId(5),
+                status = Queued,
+                correlation = null
             )
 
         }
@@ -571,18 +610,18 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
 
 private fun assertBaseExec(exec: Exec) {
     assertThat(exec.id, equalTo(ExecId(2)))
-    assertThat(exec.groupId, equalTo(GroupId(3)))
+    assertThat(exec.workspaceId, equalTo(WorkspaceId(3)))
     assertThat(
         exec.correlation, equalTo(
             Correlation(
-                correlationId = CorrelationId("some-correlation-id"), funcId = FuncId(23)
+                id = CorrelationId("some-correlation-id"), funcId = FuncId(23)
             )
         )
     )
     assertThat(exec.code, equalTo(ExecCode(value = CodeValue("40 + 2"))))
     assertThat(
         exec.invocation, equalTo(
-            EventInvocation(
+            Invocation.Event(
                 listOf(
                     Event(
                         topic = EventTopic(id = TopicId(90), name = TopicName("test-topic")),
@@ -596,19 +635,22 @@ private fun assertBaseExec(exec: Exec) {
 }
 
 private fun ExecRepository.planExec(
-    execId: ExecId, flowId: FlowId, groupId: GroupId, cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
+    execId: ExecId,
+    namespaceId: NamespaceId,
+    workspaceId: WorkspaceId,
+    cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
 ) = plan(
     PlanCmd(
         id = cmdId,
         execId = execId,
-        flowId = flowId,
-        groupId = groupId,
+        namespaceId = namespaceId,
+        workspaceId = workspaceId,
         correlation = Correlation(
-            correlationId = CorrelationId("some-correlation-id"), funcId = FuncId(23)
+            id = CorrelationId("some-correlation-id"), funcId = FuncId(23)
         ),
         inputs = ExecInputs(HotObject.builder().set("hamal", "rocks").build()),
         code = ExecCode(value = CodeValue("40 + 2")),
-        invocation = EventInvocation(
+        invocation = Invocation.Event(
             listOf(
                 Event(
                     topic = EventTopic(id = TopicId(90), name = TopicName("test-topic")),
@@ -625,15 +667,15 @@ private fun ExecRepository.verifyCount(expected: Int) {
 }
 
 private fun ExecRepository.verifyCount(expected: Int, block: ExecQuery.() -> Unit) {
-    val counted = count(ExecQuery(groupIds = listOf()).also(block))
-    assertThat("number of executions expected", counted, equalTo(expected.toULong()))
+    val counted = count(ExecQuery(workspaceIds = listOf()).also(block))
+    assertThat("number of executions expected", counted, equalTo(Count(expected)))
 }
 
 fun ExecRepository.createExec(
     execId: ExecId,
     status: ExecStatus,
-    flowId: FlowId = FlowId(444),
-    groupId: GroupId = GroupId(333),
+    namespaceId: NamespaceId = NamespaceId(444),
+    workspaceId: WorkspaceId = WorkspaceId(333),
     correlation: Correlation? = null
 ): Exec {
 
@@ -641,12 +683,12 @@ fun ExecRepository.createExec(
         PlanCmd(
             id = CmdId(100),
             execId = execId,
-            flowId = flowId,
-            groupId = groupId,
+            namespaceId = namespaceId,
+            workspaceId = workspaceId,
             correlation = correlation,
             inputs = ExecInputs(HotObject.builder().set("hamal", "rocks").build()),
             code = ExecCode(value = CodeValue("'13'..'37'")),
-            invocation = EventInvocation(
+            invocation = Invocation.Event(
                 listOf(
                     Event(
                         topic = EventTopic(id = TopicId(90), name = TopicName("test-topic")),

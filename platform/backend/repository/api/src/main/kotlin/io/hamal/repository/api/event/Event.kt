@@ -8,15 +8,46 @@ import io.hamal.lib.common.serialization.JsonAdapter
 import io.hamal.lib.domain.vo.TopicName
 import kotlin.reflect.KClass
 
-class PlatformEventClass(override val value: String) : ValueObjectString()
+class InternalEventClass(override val value: String) : ValueObjectString()
 
-sealed class PlatformEvent {
-    val `class`: PlatformEventClass = PlatformEventClass(this::class.simpleName!!)
+val internalEventClasses = listOf(
+    AccountCreatedEvent::class,
+    AccountConvertedEvent::class,
+    BlueprintCreatedEvent::class,
+    BlueprintUpdatedEvent::class,
+    EndpointCreatedEvent::class,
+    EndpointUpdatedEvent::class,
+    ExecPlannedEvent::class,
+    ExecScheduledEvent::class,
+    ExecQueuedEvent::class,
+    ExecStartedEvent::class,
+    ExecCompletedEvent::class,
+    ExecFailedEvent::class,
+    ExtensionCreatedEvent::class,
+    ExtensionUpdatedEvent::class,
+    FeedbackCreatedEvent::class,
+    NamespaceAppendedEvent::class,
+    NamespaceUpdatedEvent::class,
+    FuncCreatedEvent::class,
+    FuncUpdatedEvent::class,
+    FuncDeployedEvent::class,
+    WorkspaceCreatedEvent::class,
+    HookCreatedEvent::class,
+    HookUpdatedEvent::class,
+    StateUpdatedEvent::class,
+    TopicCreatedEvent::class,
+    TriggerCreatedEvent::class,
+    TriggerActivatedEvent::class,
+    TriggerDeactivatedEvent::class
+)
+
+sealed class InternalEvent {
+    val `class`: InternalEventClass = InternalEventClass(this::class.simpleName!!)
     val topicName get() = this::class.topicName()
 
-    object Adapter : JsonAdapter<PlatformEvent> {
+    object Adapter : JsonAdapter<InternalEvent> {
         override fun serialize(
-            src: PlatformEvent,
+            src: InternalEvent,
             typeOfSrc: java.lang.reflect.Type,
             context: JsonSerializationContext
         ): JsonElement {
@@ -27,7 +58,7 @@ sealed class PlatformEvent {
             json: JsonElement,
             typeOfT: java.lang.reflect.Type,
             context: JsonDeserializationContext
-        ): PlatformEvent {
+        ): InternalEvent {
             val eventClass = json.asJsonObject.get("class").asString
             return context.deserialize(
                 json, (classMapping[eventClass]
@@ -35,36 +66,8 @@ sealed class PlatformEvent {
             )
         }
 
-        private val classMapping = listOf(
-            AccountCreatedEvent::class,
-            AccountConvertedEvent::class,
-            BlueprintCreatedEvent::class,
-            EndpointCreatedEvent::class,
-            EndpointUpdatedEvent::class,
-            ExecPlannedEvent::class,
-            ExecScheduledEvent::class,
-            ExecQueuedEvent::class,
-            ExecStartedEvent::class,
-            ExecCompletedEvent::class,
-            ExecFailedEvent::class,
-            ExtensionCreatedEvent::class,
-            ExtensionUpdatedEvent::class,
-            FeedbackCreatedEvent::class,
-            FlowCreatedEvent::class,
-            FlowUpdatedEvent::class,
-            FuncCreatedEvent::class,
-            FuncUpdatedEvent::class,
-            FuncDeployedEvent::class,
-            GroupCreatedEvent::class,
-            HookCreatedEvent::class,
-            HookUpdatedEvent::class,
-            StateUpdatedEvent::class,
-            TriggerCreatedEvent::class,
-            TriggerActivatedEvent::class,
-            TriggerDeactivatedEvent::class
-        ).associateBy { it.simpleName }
-
+        private val classMapping = internalEventClasses.associateBy { it.simpleName }
     }
 }
 
-fun <EVENT : PlatformEvent> KClass<EVENT>.topicName() = TopicName(this.java.simpleName)
+fun <EVENT : InternalEvent> KClass<EVENT>.topicName() = TopicName(this.java.simpleName)

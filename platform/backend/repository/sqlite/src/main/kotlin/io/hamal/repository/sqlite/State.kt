@@ -1,6 +1,5 @@
 package io.hamal.repository.sqlite
 
-import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
@@ -8,19 +7,17 @@ import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.SqliteBaseRepository
+import io.hamal.repository.api.StateCmdRepository
 import io.hamal.repository.api.StateRepository
 import io.hamal.repository.record.json
 import java.nio.file.Path
 
 class StateSqliteRepository(
-    config: Config
-) : SqliteBaseRepository(config), StateRepository {
-
-    data class Config(
-        override val path: Path
-    ) : SqliteBaseRepository.Config {
-        override val filename = "state.db"
-    }
+    path: Path
+) : SqliteBaseRepository(
+    path = path,
+    filename = "state.db"
+), StateRepository {
 
     override fun setupConnection(connection: Connection) {
         connection.execute("""PRAGMA journal_mode = wal;""")
@@ -44,7 +41,7 @@ class StateSqliteRepository(
         }
     }
 
-    override fun set(cmdId: CmdId, correlatedState: CorrelatedState) {
+    override fun set(cmd: StateCmdRepository.SetCmd) {
         connection.execute<Unit>(
             """
             INSERT INTO states (func_id, correlation_id, value)
@@ -55,9 +52,9 @@ class StateSqliteRepository(
         """.trimIndent()
         ) {
             query {
-                set("funcId", correlatedState.correlation.funcId)
-                set("correlationId", correlatedState.correlation.correlationId.value)
-                set("value", json.serializeAndCompress(correlatedState.value))
+                set("funcId", cmd.correlatedState.correlation.funcId)
+                set("correlationId", cmd.correlatedState.correlation.id.value)
+                set("value", json.serializeAndCompress(cmd.correlatedState.value))
             }
         }
     }
@@ -70,13 +67,13 @@ class StateSqliteRepository(
         return connection.executeQueryOne("SELECT func_id, correlation_id, value FROM states WHERE func_id = :funcId AND correlation_id = :correlationId") {
             query {
                 set("funcId", correlation.funcId)
-                set("correlationId", correlation.correlationId.value)
+                set("correlationId", correlation.id.value)
             }
             map { rs ->
                 CorrelatedState(
                     correlation = Correlation(
                         funcId = rs.getId("func_id", ::FuncId),
-                        correlationId = CorrelationId(rs.getString("correlation_id"))
+                        id = CorrelationId(rs.getString("correlation_id"))
                     ),
                     value = json.decompressAndDeserialize(State::class, rs.getBytes("value"))
                 )

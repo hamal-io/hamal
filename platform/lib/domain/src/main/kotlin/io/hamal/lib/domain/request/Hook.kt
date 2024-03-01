@@ -9,10 +9,11 @@ interface HookCreateRequest {
 
 data class HookCreateRequested(
     override val id: RequestId,
+    override val by: AuthId,
     override var status: RequestStatus,
     val hookId: HookId,
-    val flowId: FlowId,
-    val groupId: GroupId,
+    val namespaceId: NamespaceId,
+    val workspaceId: WorkspaceId,
     val name: HookName,
 ) : Requested()
 
@@ -23,16 +24,18 @@ interface HookUpdateRequest {
 
 data class HookUpdateRequested(
     override val id: RequestId,
+    override val by: AuthId,
     override var status: RequestStatus,
     val hookId: HookId,
-    val groupId: GroupId,
+    val workspaceId: WorkspaceId,
     val name: HookName?,
 ) : Requested()
 
 data class HookInvokeRequested(
     override val id: RequestId,
+    override val by: AuthId,
     override var status: RequestStatus,
     val hookId: HookId,
-    val groupId: GroupId,
-    val invocation: HookInvocation
+    val workspaceId: WorkspaceId,
+    val invocation: Invocation.Hook
 ) : Requested()

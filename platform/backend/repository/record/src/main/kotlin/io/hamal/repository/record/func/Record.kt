@@ -15,36 +15,36 @@ sealed class FuncRecord(
 ) : Record<FuncId>() {
     internal object Adapter : RecordAdapter<FuncRecord>(
         listOf(
-            FuncCreatedRecord::class,
-            FuncUpdatedRecord::class,
-            FuncDeployedRecord::class,
+            Created::class,
+            Updated::class,
+            Deployed::class,
         )
     )
+
+    data class Created(
+        override val entityId: FuncId,
+        override val cmdId: CmdId,
+        val workspaceId: WorkspaceId,
+        val namespaceId: NamespaceId,
+        val name: FuncName,
+        val inputs: FuncInputs,
+        val codeId: CodeId,
+        val codeVersion: CodeVersion
+    ) : FuncRecord()
+
+    data class Updated(
+        override val entityId: FuncId,
+        override val cmdId: CmdId,
+        val name: FuncName,
+        val inputs: FuncInputs,
+        val codeVersion: CodeVersion
+    ) : FuncRecord()
+
+
+    data class Deployed(
+        override val entityId: FuncId,
+        override val cmdId: CmdId,
+        val version: CodeVersion,
+        val message: DeployMessage
+    ) : FuncRecord()
 }
-
-data class FuncCreatedRecord(
-    override val entityId: FuncId,
-    override val cmdId: CmdId,
-    val groupId: GroupId,
-    val flowId: FlowId,
-    val name: FuncName,
-    val inputs: FuncInputs,
-    val codeId: CodeId,
-    val codeVersion: CodeVersion
-) : FuncRecord()
-
-data class FuncUpdatedRecord(
-    override val entityId: FuncId,
-    override val cmdId: CmdId,
-    val name: FuncName,
-    val inputs: FuncInputs,
-    val codeVersion: CodeVersion
-) : FuncRecord()
-
-
-data class FuncDeployedRecord(
-    override val entityId: FuncId,
-    override val cmdId: CmdId,
-    val version: CodeVersion,
-    val message: DeployMessage
-) : FuncRecord()

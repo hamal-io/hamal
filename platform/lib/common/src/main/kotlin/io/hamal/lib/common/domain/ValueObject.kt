@@ -54,6 +54,12 @@ abstract class ValueObjectInt : ValueObject.ComparableImpl<Int>() {
     }
 }
 
+abstract class ValueObjectLong : ValueObject.ComparableImpl<Long>() {
+    override fun toString(): String {
+        return "${this::class.simpleName}(${value})"
+    }
+}
+
 abstract class ValueObjectInstant : ValueObject.ComparableImpl<Instant>() {
     override fun toString(): String {
         return "${this::class.simpleName}(${value})"

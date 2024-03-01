@@ -1,13 +1,14 @@
 package io.hamal.api.http.controller.trigger
 
-import io.hamal.core.adapter.TriggerGetPort
+import io.hamal.core.adapter.func.FuncGetPort
+import io.hamal.core.adapter.hook.HookGetPort
+import io.hamal.core.adapter.namespace.NamespaceGetPort
+import io.hamal.core.adapter.topic.TopicGetPort
+import io.hamal.core.adapter.trigger.TriggerGetPort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.TriggerId
-import io.hamal.lib.sdk.api.*
-import io.hamal.repository.api.CronTrigger
-import io.hamal.repository.api.EventTrigger
-import io.hamal.repository.api.FixedRateTrigger
-import io.hamal.repository.api.HookTrigger
+import io.hamal.lib.sdk.api.ApiTrigger
+import io.hamal.repository.api.Trigger
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -16,81 +17,93 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 internal class TriggerGetController(
     private val retry: Retry,
-    private val getTrigger: TriggerGetPort
+    private val triggerGet: TriggerGetPort,
+    private val funcGet: FuncGetPort,
+    private val namespaceGet: NamespaceGetPort,
+    private val topicGet: TopicGetPort,
+    private val hookGet: HookGetPort
 ) {
     @GetMapping("/v1/triggers/{triggerId}")
-    fun getFunc(
+    fun get(
         @PathVariable("triggerId") triggerId: TriggerId,
     ): ResponseEntity<ApiTrigger> {
         return retry {
-            getTrigger(triggerId) { trigger, func, flow, topic, hook ->
+            triggerGet(triggerId).let { trigger ->
+
+                val func = funcGet(trigger.funcId)
+                val namespace = namespaceGet(trigger.namespaceId)
+
                 ResponseEntity.ok(
                     when (trigger) {
-                        is FixedRateTrigger -> ApiFixedRateTrigger(
+                        is Trigger.FixedRate -> ApiTrigger.FixedRate(
                             id = trigger.id,
                             name = trigger.name,
                             func = ApiTrigger.Func(
                                 id = func.id,
                                 name = func.name
                             ),
-                            flow = ApiTrigger.Flow(
-                                id = flow.id,
-                                name = flow.name
+                            namespace = ApiTrigger.Namespace(
+                                id = namespace.id,
+                                name = namespace.name
                             ),
                             inputs = trigger.inputs,
                             duration = trigger.duration,
                             status = trigger.status
                         )
 
-                        is EventTrigger -> ApiEventTrigger(
+                        is Trigger.Event -> ApiTrigger.Event(
                             id = trigger.id,
                             name = trigger.name,
                             func = ApiTrigger.Func(
                                 id = func.id,
                                 name = func.name
                             ),
-                            flow = ApiTrigger.Flow(
-                                id = flow.id,
-                                name = flow.name
+                            namespace = ApiTrigger.Namespace(
+                                id = namespace.id,
+                                name = namespace.name
                             ),
                             inputs = trigger.inputs,
-                            topic = ApiEventTrigger.Topic(
-                                id = topic!!.id,
-                                name = topic.name
-                            ),
+                            topic = topicGet(trigger.topicId).let { topic ->
+                                ApiTrigger.Event.Topic(
+                                    id = topic.id,
+                                    name = topic.name
+                                )
+                            },
                             status = trigger.status
                         )
 
-                        is HookTrigger -> ApiHookTrigger(
+                        is Trigger.Hook -> ApiTrigger.Hook(
                             id = trigger.id,
                             name = trigger.name,
                             func = ApiTrigger.Func(
                                 id = func.id,
                                 name = func.name
                             ),
-                            flow = ApiTrigger.Flow(
-                                id = flow.id,
-                                name = flow.name
+                            namespace = ApiTrigger.Namespace(
+                                id = namespace.id,
+                                name = namespace.name
                             ),
                             inputs = trigger.inputs,
-                            hook = ApiHookTrigger.Hook(
-                                id = hook!!.id,
-                                name = hook.name,
-                                method = trigger.hookMethod
-                            ),
+                            hook = hookGet(trigger.hookId).let { hook ->
+                                ApiTrigger.Hook.Hook(
+                                    id = hook.id,
+                                    name = hook.name,
+                                    method = trigger.hookMethod
+                                )
+                            },
                             status = trigger.status
                         )
 
-                        is CronTrigger -> ApiCronTrigger(
+                        is Trigger.Cron -> ApiTrigger.Cron(
                             id = trigger.id,
                             name = trigger.name,
                             func = ApiTrigger.Func(
                                 id = func.id,
                                 name = func.name
                             ),
-                            flow = ApiTrigger.Flow(
-                                id = flow.id,
-                                name = flow.name
+                            namespace = ApiTrigger.Namespace(
+                                id = namespace.id,
+                                name = namespace.name
                             ),
                             inputs = trigger.inputs,
                             cron = trigger.cron,

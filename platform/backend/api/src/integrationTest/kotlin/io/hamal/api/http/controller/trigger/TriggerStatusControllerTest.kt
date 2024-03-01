@@ -3,7 +3,7 @@ package io.hamal.api.http.controller.trigger
 
 import io.hamal.lib.domain._enum.TriggerStatus.Active
 import io.hamal.lib.domain._enum.TriggerStatus.Inactive
-import io.hamal.lib.domain.vo.FlowName
+import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.domain.vo.TriggerName
 import io.hamal.lib.http.HttpErrorResponse
@@ -26,7 +26,7 @@ internal class TriggerStatusControllerTest : TriggerBaseControllerTest() {
         with(getTrigger(triggerId)) {
             assertThat(id, equalTo(triggerId))
             assertThat(name, equalTo(TriggerName("trigger")))
-            assertThat(flow.name, equalTo(FlowName("hamal")))
+            assertThat(namespace.name, equalTo(NamespaceName("hamal")))
             assertThat(status, equalTo(Active))
         }
     }
@@ -44,7 +44,7 @@ internal class TriggerStatusControllerTest : TriggerBaseControllerTest() {
         with(getTrigger(triggerId)) {
             assertThat(id, equalTo(triggerId))
             assertThat(name, equalTo(TriggerName("trigger")))
-            assertThat(flow.name, equalTo(FlowName("hamal")))
+            assertThat(namespace.name, equalTo(NamespaceName("hamal")))
             assertThat(status, equalTo(Inactive))
         }
 
@@ -53,7 +53,7 @@ internal class TriggerStatusControllerTest : TriggerBaseControllerTest() {
         with(getTrigger(triggerId)) {
             assertThat(id, equalTo(triggerId))
             assertThat(name, equalTo(TriggerName("trigger")))
-            assertThat(flow.name, equalTo(FlowName("hamal")))
+            assertThat(namespace.name, equalTo(NamespaceName("hamal")))
             assertThat(status, equalTo(Active))
         }
     }
@@ -71,7 +71,7 @@ internal class TriggerStatusControllerTest : TriggerBaseControllerTest() {
         with(getTrigger(triggerId)) {
             assertThat(id, equalTo(triggerId))
             assertThat(name, equalTo(TriggerName("trigger")))
-            assertThat(flow.name, equalTo(FlowName("hamal")))
+            assertThat(namespace.name, equalTo(NamespaceName("hamal")))
             assertThat(status, equalTo(Active))
         }
 

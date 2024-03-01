@@ -25,6 +25,7 @@ data class EthUint8(override val value: BigInteger) : EthUnsigned() {
     override val numberOfBits = 8
 
     constructor(value: Byte) : this(BigInteger.valueOf(value.toLong()))
+    constructor(value: EthPrefixedHexString) : this(BigInteger(value.toHexString().value, 16))
 
     init {
         ensureValidValue()
@@ -54,6 +55,7 @@ data class EthUint64(override val value: BigInteger) : EthUnsigned() {
     override val numberOfBits = 64
 
     constructor(value: Long) : this(BigInteger.valueOf(value))
+    constructor(value: EthPrefixedHexString) : this(BigInteger(value.toHexString().value, 16))
 
     init {
         ensureValidValue()
@@ -89,6 +91,7 @@ data class EthUint160(override val value: BigInteger) : EthUnsigned() {
 }
 
 data class EthUint256(override val value: BigInteger) : EthUnsigned() {
+    constructor(value: EthPrefixedHexString) : this(BigInteger(value.toHexString().value, 16))
     override val numberOfBits = 256
 
     init {

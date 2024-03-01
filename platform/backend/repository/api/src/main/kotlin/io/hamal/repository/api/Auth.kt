@@ -1,38 +1,57 @@
 package io.hamal.repository.api
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.*
 
 sealed interface Auth {
     val id: AuthId
-    val accountId: AccountId
+
+    object Anonymous : Auth {
+        override val id: AuthId get() = AuthId.anonymous
+        override fun toString(): String = javaClass.simpleName
+    }
+
+    object Runner : Auth {
+        override val id: AuthId get() = AuthId.runner
+        override fun toString(): String = javaClass.simpleName
+    }
+
+    object System : Auth {
+        override val id: AuthId get() = AuthId.system
+        override fun toString(): String = javaClass.simpleName
+    }
+
+    sealed interface Account : Auth, HasAccountId {
+        override val accountId: AccountId
+    }
+
+    data class Email(
+        override val id: AuthId,
+        val cmdId: CmdId,
+        override val accountId: AccountId,
+        val email: io.hamal.lib.domain.vo.Email,
+        val hash: PasswordHash
+    ) : Account
+
+    data class MetaMask(
+        override val id: AuthId,
+        val cmdId: CmdId,
+        override val accountId: AccountId,
+        val address: Web3Address
+    ) : Account
+
+    data class Token(
+        override val id: AuthId,
+        val cmdId: CmdId,
+        override val accountId: AccountId,
+        val token: AuthToken,
+        val expiresAt: AuthTokenExpiresAt
+    ) : Account
+
 }
-
-data class EmailAuth(
-    override val id: AuthId,
-    val cmdId: CmdId,
-    override val accountId: AccountId,
-    val email: Email,
-    val hash: PasswordHash
-) : Auth
-
-data class MetaMaskAuth(
-    override val id: AuthId,
-    val cmdId: CmdId,
-    override val accountId: AccountId,
-    val address: Web3Address
-) : Auth
-
-data class TokenAuth(
-    override val id: AuthId,
-    val cmdId: CmdId,
-    override val accountId: AccountId,
-    val token: AuthToken,
-    val expiresAt: AuthTokenExpiresAt
-) : Auth
-
 
 interface AuthRepository : AuthCmdRepository, AuthQueryRepository
 
@@ -79,6 +98,8 @@ interface AuthCmdRepository : CmdRepository {
 
 
 interface AuthQueryRepository {
+    fun get(authId: AuthId) = find(authId) ?: throw NoSuchElementException("Auth not found")
+    fun find(authId: AuthId): Auth?
     fun get(authToken: AuthToken) = find(authToken) ?: throw NoSuchElementException("Auth not found")
     fun find(authToken: AuthToken): Auth?
     fun get(email: Email) = find(email) ?: throw NoSuchElementException("Auth not found")
@@ -94,7 +115,7 @@ interface AuthQueryRepository {
     )
 
     fun list(query: AuthQuery): List<Auth>
-    fun count(query: AuthQuery): ULong
+    fun count(query: AuthQuery): Count
 
     data class AuthQuery(
         var afterId: AuthId = AuthId(SnowflakeId(Long.MAX_VALUE)),

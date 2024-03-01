@@ -15,9 +15,9 @@ data class FuncEntity(
     override val id: FuncId,
     override val sequence: RecordSequence,
     override val recordedAt: RecordedAt,
-    val groupId: GroupId,
+    val workspaceId: WorkspaceId,
 
-    var flowId: FlowId? = null,
+    var namespaceId: NamespaceId? = null,
     var name: FuncName? = null,
     var inputs: FuncInputs? = null,
     var code: FuncCode? = null,
@@ -27,11 +27,11 @@ data class FuncEntity(
 
     override fun apply(rec: FuncRecord): FuncEntity {
         return when (rec) {
-            is FuncCreatedRecord -> copy(
+            is FuncRecord.Created -> copy(
                 id = rec.entityId,
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
-                flowId = rec.flowId,
+                namespaceId = rec.namespaceId,
                 name = rec.name,
                 inputs = rec.inputs,
                 code = FuncCode(
@@ -46,7 +46,7 @@ data class FuncEntity(
                 recordedAt = rec.recordedAt()
             )
 
-            is FuncUpdatedRecord -> copy(
+            is FuncRecord.Updated -> copy(
                 id = rec.entityId,
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
@@ -59,7 +59,7 @@ data class FuncEntity(
                 recordedAt = rec.recordedAt()
             )
 
-            is FuncDeployedRecord -> copy(
+            is FuncRecord.Deployed -> copy(
                 id = rec.entityId,
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
@@ -82,8 +82,8 @@ data class FuncEntity(
             cmdId = cmdId,
             id = id,
             updatedAt = recordedAt.toUpdatedAt(),
-            groupId = groupId,
-            flowId = flowId!!,
+            workspaceId = workspaceId,
+            namespaceId = namespaceId!!,
             name = name!!,
             inputs = inputs!!,
             code = code!!,
@@ -95,11 +95,11 @@ data class FuncEntity(
 fun List<FuncRecord>.createEntity(): FuncEntity {
     check(isNotEmpty()) { "At least one record is required" }
     val firstRecord = first()
-    check(firstRecord is FuncCreatedRecord)
+    check(firstRecord is FuncRecord.Created)
 
     var result = FuncEntity(
         id = firstRecord.entityId,
-        groupId = firstRecord.groupId,
+        workspaceId = firstRecord.workspaceId,
         cmdId = firstRecord.cmdId,
         sequence = firstRecord.sequence(),
         recordedAt = firstRecord.recordedAt()

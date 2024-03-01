@@ -4,12 +4,12 @@ import io.hamal.repository.api.Trigger
 
 data class TriggerCreatedEvent(
     val trigger: Trigger
-) : PlatformEvent()
+) : InternalEvent()
 
 data class TriggerActivatedEvent(
     val trigger: Trigger
-) : PlatformEvent()
+) : InternalEvent()
 
 data class TriggerDeactivatedEvent(
     val trigger: Trigger
-) : PlatformEvent()
+) : InternalEvent()

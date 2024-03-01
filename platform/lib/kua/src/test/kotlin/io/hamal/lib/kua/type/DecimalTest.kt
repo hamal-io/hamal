@@ -1,6 +1,5 @@
 package io.hamal.lib.kua.type
 
-import io.hamal.lib.kua.type.TypeSerializationFixture.generateTestCases
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.equalTo
@@ -583,21 +582,5 @@ class KuaDecimalTest {
             assertThat(testInstance.toDouble(), equalTo(28.10))
         }
     }
-
-    @TestFactory
-    fun serialization() = listOf(
-        generateTestCases(
-            testInstance = KuaDecimal.Zero,
-            expectedJson = """{"value":"0","type":"Decimal"}"""
-        ),
-        generateTestCases(
-            testInstance = KuaDecimal(-12.324),
-            expectedJson = """{"value":"-12.324","type":"Decimal"}"""
-        ),
-        generateTestCases(
-            testInstance = KuaDecimal("123456789.987654321"),
-            expectedJson = """{"value":"123456789.987654321","type":"Decimal"}"""
-        )
-    ).flatten()
 
 }

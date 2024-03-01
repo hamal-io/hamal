@@ -1,9 +1,6 @@
 package io.hamal.repository.api
 
-import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.domain.DomainObject
-import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.common.domain.UpdatedAt
+import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.*
 
@@ -11,12 +8,14 @@ data class Blueprint(
     override val id: BlueprintId,
     override val updatedAt: UpdatedAt,
     val cmdId: CmdId,
-    val groupId: GroupId,
     val creatorId: AccountId,
     val name: BlueprintName,
     val inputs: BlueprintInputs,
-    val value: CodeValue
-) : DomainObject<BlueprintId>
+    val value: CodeValue,
+    val description: BlueprintDescription
+) : DomainObject<BlueprintId>, HasAccountId {
+    override val accountId: AccountId get() = creatorId
+}
 
 interface BlueprintRepository : BlueprintCmdRepository, BlueprintQueryRepository
 
@@ -27,18 +26,19 @@ interface BlueprintCmdRepository : CmdRepository {
     data class CreateCmd(
         val id: CmdId,
         val blueprintId: BlueprintId,
-        val groupId: GroupId,
         val creatorId: AccountId,
         val inputs: BlueprintInputs,
         val name: BlueprintName,
-        val value: CodeValue
+        val value: CodeValue,
+        val description: BlueprintDescription
     )
 
     data class UpdateCmd(
         val id: CmdId,
         val name: BlueprintName? = null,
         val inputs: BlueprintInputs? = null,
-        val value: CodeValue? = null
+        val value: CodeValue? = null,
+        val description: BlueprintDescription? = null
     )
 }
 
@@ -49,17 +49,15 @@ interface BlueprintQueryRepository {
     fun list(blueprintIds: List<BlueprintId>): List<Blueprint> = list(
         BlueprintQuery(
             limit = Limit.all,
-            groupIds = listOf(),
             blueprintIds = blueprintIds
         )
     )
 
-    fun count(query: BlueprintQuery): ULong
+    fun count(query: BlueprintQuery): Count
 
     data class BlueprintQuery(
         var afterId: BlueprintId = BlueprintId(SnowflakeId(Long.MAX_VALUE)),
         var limit: Limit = Limit(1),
         var blueprintIds: List<BlueprintId> = listOf(),
-        var groupIds: List<GroupId>
     )
 }

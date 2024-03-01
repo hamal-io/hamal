@@ -37,7 +37,7 @@ enum check_result
 check_stack_overflow(lua_State *L, int total);
 
 /**
- * Checks that stack has at least (total) more elements. If not throw StackUnderflowError
+ * Checks that stack has at least (total) more elements. If not throw StackunderflowError
  * @param L
  * @param total
  * @return CHECK_RESULT_OK if check passed otherwise CHECK_RESULT_ERROR

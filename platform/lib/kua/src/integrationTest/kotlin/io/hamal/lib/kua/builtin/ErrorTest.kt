@@ -2,12 +2,14 @@ package io.hamal.lib.kua.builtin
 
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
-import io.hamal.lib.kua.NopSandboxContext
 import io.hamal.lib.kua.Sandbox
+import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.ScriptError
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
+import io.hamal.lib.kua.type.KuaCode
+import io.hamal.lib.kua.type.KuaString
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -19,7 +21,7 @@ class ErrorTest {
     @Test
     fun `Throws an error`() {
         val error = assertThrows<ScriptError> {
-            sandbox.load("""error("this should not have happened")""")
+            sandbox.codeLoad(KuaCode("""error("this should not have happened")"""))
         }
         assertThat(
             error.message,
@@ -30,11 +32,13 @@ class ErrorTest {
     @Test
     fun `Assertion failure interrupts script execution`() {
         assertThrows<ScriptError> {
-            sandbox.load(
-                """
+            sandbox.codeLoad(
+                KuaCode(
+                    """
                 error("terminate here")
                 require('test').call()
                 """.trimIndent()
+                )
             )
         }
     }
@@ -47,22 +51,21 @@ class ErrorTest {
 
     private val sandbox = run {
         NativeLoader.load(Resources)
-        Sandbox(NopSandboxContext()).also {
+        Sandbox(SandboxContextNop).also {
             it.register(
                 RunnerPlugin(
                     name = "test",
-                    factoryCode = """
-                            function plugin()
-                                local internal = _internal
-                                return function()
-                                    local export = {
-                                        call = internal.call
-                                     }
-                                    return export
-                                end
+                    factoryCode = KuaCode(
+                        """
+                            function plugin_create(internal)
+                                local export = {
+                                    call = internal.call
+                                 }
+                                return export
                             end
-                    """.trimIndent(),
-                    internals = mapOf("call" to CallbackFunction())
+                    """.trimIndent()
+                    ),
+                    internals = mapOf(KuaString("call") to CallbackFunction())
                 )
             )
         }

@@ -35,7 +35,7 @@ internal object ProjectionQueue : ProjectionSqlite<ExecId, ExecRecord, Exec> {
         tx: RecordTransactionSqlite<ExecId, ExecRecord, Exec>,
         obj: Exec
     ) {
-        require(obj is io.hamal.repository.api.QueuedExec) { "exec not in status queued" }
+        require(obj is Exec.Queued) { "exec not in status queued" }
         tx.execute(
             """
                 INSERT INTO queue

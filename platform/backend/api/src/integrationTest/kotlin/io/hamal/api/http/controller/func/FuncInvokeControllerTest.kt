@@ -1,6 +1,7 @@
 package io.hamal.api.http.controller.func
 
 import io.hamal.lib.domain.Correlation
+import io.hamal.lib.domain.request.ExecInvokeRequested
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.Accepted
@@ -8,7 +9,6 @@ import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.api.*
-import io.hamal.lib.domain.request.ExecInvokeRequested
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -30,8 +30,8 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
                 ApiFuncInvokeRequest(
                     correlationId = CorrelationId("some-correlation-id"),
                     inputs = InvocationInputs(),
-                    invocation = EmptyInvocation
-                )
+
+                    )
             ).execute()
 
         assertThat(invocationResponse.statusCode, equalTo(Accepted))
@@ -44,7 +44,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
             assertThat(
                 correlation, equalTo(
                     Correlation(
-                        correlationId = CorrelationId("some-correlation-id"), funcId = createResponse.funcId
+                        id = CorrelationId("some-correlation-id"), funcId = createResponse.funcId
                     )
                 )
             )
@@ -66,7 +66,6 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
                 ApiFuncInvokeRequest(
                     inputs = InvocationInputs(),
                     correlationId = null,
-                    invocation = EmptyInvocation,
                 )
             ).execute()
 
@@ -80,7 +79,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
             assertThat(
                 correlation, equalTo(
                     Correlation(
-                        correlationId = CorrelationId.default, funcId = createResponse.funcId
+                        id = CorrelationId.default, funcId = createResponse.funcId
                     )
                 )
             )
@@ -110,7 +109,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
 
         val invocationResponse =
             httpTemplate.post("/v1/funcs/{funcId}/invoke").path("funcId", createResponse.funcId).body(
-                ApiFuncInvokeVersionRequest(
+                ApiFuncInvokeRequest(
                     correlationId = CorrelationId("some-correlation-id"),
                     inputs = InvocationInputs(),
                     version = CodeVersion(5)
@@ -140,9 +139,11 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
         )
 
         repeat(10) {
-            updateFunc(
-                createResponse.funcId, ApiFuncUpdateRequest(
-                    name = FuncName("test-update"), code = CodeValue("code-${it}")
+            awaitCompleted(
+                updateFunc(
+                    createResponse.funcId, ApiFuncUpdateRequest(
+                        name = FuncName("test-update"), code = CodeValue("code-${it}")
+                    )
                 )
             )
         }
@@ -150,7 +151,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
 
         val invocationResponse =
             httpTemplate.post("/v1/funcs/{funcId}/invoke").path("funcId", createResponse.funcId).body(
-                ApiFuncInvokeVersionRequest(
+                ApiFuncInvokeRequest(
                     correlationId = CorrelationId("some-correlation-id"),
                     inputs = InvocationInputs(),
                     version = null
@@ -180,7 +181,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
 
         val invocationResponse =
             httpTemplate.post("/v1/funcs/{funcId}/invoke").path("funcId", createResponse.funcId).body(
-                ApiFuncInvokeVersionRequest(
+                ApiFuncInvokeRequest(
                     correlationId = CorrelationId("some-correlation-id"),
                     inputs = InvocationInputs(),
                     version = CodeVersion(10)
@@ -201,8 +202,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
         val invocationResponse = httpTemplate.post("/v1/funcs/1234/invoke").body(
             ApiFuncInvokeRequest(
                 correlationId = CorrelationId.default,
-                inputs = InvocationInputs(),
-                invocation = EmptyInvocation,
+                inputs = InvocationInputs()
             )
         ).execute()
 

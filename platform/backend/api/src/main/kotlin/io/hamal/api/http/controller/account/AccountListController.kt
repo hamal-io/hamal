@@ -1,6 +1,6 @@
 package io.hamal.api.http.controller.account
 
-import io.hamal.core.adapter.AccountListPort
+import io.hamal.core.adapter.account.AccountListPort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.sdk.api.ApiAccountList
@@ -11,18 +11,22 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class AccountListController(private val listAccount: AccountListPort) {
+internal class AccountListController(
+    private val listAccount: AccountListPort
+) {
     @GetMapping("/v1/accounts")
     fun list(
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: AccountId,
-        @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit
+        @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit,
+        @RequestParam(required = false, name = "ids", defaultValue = "") accountIds: List<AccountId>
     ): ResponseEntity<ApiAccountList> {
         return listAccount(
             AccountQuery(
                 afterId = afterId,
-                limit = limit
+                limit = limit,
+                accountIds = accountIds
             )
-        ) { accounts ->
+        ).let { accounts ->
             ResponseEntity.ok(ApiAccountList(
                 accounts.map { account ->
                     ApiAccountList.Account(

@@ -1,23 +1,20 @@
 package io.hamal.repository.api
 
-import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.domain.DomainObject
-import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.common.domain.UpdatedAt
+import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.domain.vo.FlowId
-import io.hamal.lib.domain.vo.GroupId
 import io.hamal.lib.domain.vo.HookId
 import io.hamal.lib.domain.vo.HookName
+import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.WorkspaceId
 
 data class Hook(
     override val id: HookId,
     override val updatedAt: UpdatedAt,
-    val groupId: GroupId,
+    override val workspaceId: WorkspaceId,
     val cmdId: CmdId,
-    val flowId: FlowId,
+    override val namespaceId: NamespaceId,
     val name: HookName,
-) : DomainObject<HookId>
+) : DomainObject<HookId>, HasNamespaceId, HasWorkspaceId
 
 interface HookRepository : HookCmdRepository, HookQueryRepository
 
@@ -29,8 +26,8 @@ interface HookCmdRepository : CmdRepository {
     data class CreateCmd(
         val id: CmdId,
         val hookId: HookId,
-        val groupId: GroupId,
-        val flowId: FlowId,
+        val workspaceId: WorkspaceId,
+        val namespaceId: NamespaceId,
         val name: HookName
     )
 
@@ -47,18 +44,18 @@ interface HookQueryRepository {
     fun list(hookIds: List<HookId>): List<Hook> = list(
         HookQuery(
             limit = Limit.all,
-            groupIds = listOf(),
+            workspaceIds = listOf(),
             hookIds = hookIds,
         )
     )
 
-    fun count(query: HookQuery): ULong
+    fun count(query: HookQuery): Count
 
     data class HookQuery(
         var afterId: HookId = HookId(SnowflakeId(Long.MAX_VALUE)),
         var limit: Limit = Limit(1),
         var hookIds: List<HookId> = listOf(),
-        var flowIds: List<FlowId> = listOf(),
-        var groupIds: List<GroupId> = listOf()
+        var namespaceIds: List<NamespaceId> = listOf(),
+        var workspaceIds: List<WorkspaceId> = listOf()
     )
 }

@@ -2,9 +2,8 @@ package io.hamal.api.http.controller.account
 
 
 import io.hamal.api.http.controller.accepted
-import io.hamal.core.adapter.AccountCreatePort
+import io.hamal.core.adapter.account.AccountCreatePort
 import io.hamal.core.component.Retry
-import io.hamal.lib.domain.request.Requested
 import io.hamal.lib.sdk.api.ApiAccountCreateRequest
 import io.hamal.lib.sdk.api.ApiRequested
 import org.springframework.http.ResponseEntity
@@ -21,6 +20,6 @@ internal class AccountCreateController(
     fun create(
         @RequestBody req: ApiAccountCreateRequest
     ): ResponseEntity<ApiRequested> = retry {
-        createAccount(req, Requested::accepted)
+        createAccount(req).accepted()
     }
 }

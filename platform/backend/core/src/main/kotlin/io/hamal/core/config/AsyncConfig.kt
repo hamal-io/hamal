@@ -13,6 +13,7 @@ import org.springframework.scheduling.config.ScheduledTaskRegistrar
 @Configuration
 @EnableScheduling
 open class AsyncConfig : SchedulingConfigurer {
+
     @Bean
     open fun executor(): ThreadPoolTaskScheduler {
         val result = ThreadPoolTaskScheduler()

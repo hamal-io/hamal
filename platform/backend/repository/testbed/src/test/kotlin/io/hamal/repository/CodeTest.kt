@@ -1,12 +1,13 @@
 package io.hamal.repository
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.CodeVersion
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.repository.api.Code
 import io.hamal.repository.api.CodeCmdRepository.CreateCmd
 import io.hamal.repository.api.CodeCmdRepository.UpdateCmd
@@ -31,14 +32,14 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
                 CreateCmd(
                     id = CmdId(1),
                     codeId = CodeId(123),
-                    groupId = GroupId(1),
+                    workspaceId = WorkspaceId(1),
                     value = CodeValue("40 + 2")
                 )
             )
 
             with(result) {
                 assertThat(id, equalTo(CodeId(123)))
-                assertThat(groupId, equalTo(GroupId(1)))
+                assertThat(workspaceId, equalTo(WorkspaceId(1)))
                 assertThat(version, equalTo(CodeVersion(1)))
                 assertThat(value, equalTo(CodeValue("40 + 2")))
                 assertThat(type, equalTo(CodeType.Lua54))
@@ -49,13 +50,13 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
         fun `Creates code duplicate`() = runWith(CodeRepository::class) {
             createCode(
                 codeId = CodeId(1),
-                groupId = GroupId(1),
+                workspaceId = WorkspaceId(1),
                 codeValue = CodeValue("40 + 2")
             )
 
             createCode(
                 codeId = CodeId(2),
-                groupId = GroupId(1),
+                workspaceId = WorkspaceId(1),
                 codeValue = CodeValue("40 + 2")
             )
 
@@ -85,7 +86,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
         fun `Updates code`() = runWith(CodeRepository::class) {
             createCode(
                 codeId = CodeId(1),
-                groupId = GroupId(1),
+                workspaceId = WorkspaceId(1),
                 codeValue = CodeValue("8 + 8")
             )
 
@@ -93,7 +94,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
 
             with(result) {
                 assertThat(id, equalTo(CodeId(1)))
-                assertThat(groupId, equalTo(GroupId(1)))
+                assertThat(workspaceId, equalTo(WorkspaceId(1)))
                 assertThat(version, equalTo(CodeVersion(2)))
                 assertThat(value, equalTo(CodeValue("40 + 2")))
                 assertThat(type, equalTo(CodeType.Lua54))
@@ -106,7 +107,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
         fun `Updates code multiple times`() = runWith(CodeRepository::class) {
             createCode(
                 codeId = CodeId(1),
-                groupId = GroupId(1),
+                workspaceId = WorkspaceId(1),
                 codeValue = CodeValue("8 + 8")
             )
 
@@ -117,7 +118,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
 
                 with(result) {
                     assertThat(id, equalTo(CodeId(1)))
-                    assertThat(groupId, equalTo(GroupId(1)))
+                    assertThat(workspaceId, equalTo(WorkspaceId(1)))
                     assertThat(version, equalTo(CodeVersion(iteration + 2)))
                     assertThat(value, equalTo(CodeValue("40 + $iteration")))
                     assertThat(type, equalTo(CodeType.Lua54))
@@ -141,14 +142,14 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
 
             createCode(
                 codeId = CodeId(1),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 codeValue = CodeValue("1 + 1")
 
             )
 
             createCode(
                 codeId = CodeId(2),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 codeValue = CodeValue("2 + 2")
             )
 
@@ -163,13 +164,13 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
         fun `Get code by id`() = runWith(CodeRepository::class) {
             createCode(
                 codeId = CodeId(1),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 codeValue = CodeValue("1 + 1")
             )
 
             with(get(CodeId(1))) {
                 assertThat(id, equalTo(CodeId(1)))
-                assertThat(groupId, equalTo(GroupId(3)))
+                assertThat(workspaceId, equalTo(WorkspaceId(3)))
                 assertThat(version, equalTo(CodeVersion(1)))
                 assertThat(value, equalTo(CodeValue("1 + 1")))
                 assertThat(type, equalTo(CodeType.Lua54))
@@ -181,7 +182,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
         fun `Get code by id and version`() = runWith(CodeRepository::class) {
             createCode(
                 codeId = CodeId(1),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 codeValue = CodeValue("created")
             )
 
@@ -210,7 +211,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
         fun `Tries to get code by id but does not exist`() = runWith(CodeRepository::class) {
             createCode(
                 codeId = CodeId(1),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 codeValue = CodeValue("1 + 1")
             )
 
@@ -224,7 +225,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
         fun `Tries to get code by id and version but version does not exists`() = runWith(CodeRepository::class) {
             createCode(
                 codeId = CodeId(1),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 codeValue = CodeValue("1 + 1")
             )
 
@@ -242,7 +243,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
         fun `Tries to get code with negative version`() = runWith(CodeRepository::class) {
             createCode(
                 codeId = CodeId(1),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 codeValue = CodeValue("1 + 1")
             )
             assertThat(
@@ -263,13 +264,13 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
         fun `Find code by id`() = runWith(CodeRepository::class) {
             createCode(
                 codeId = CodeId(1),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 codeValue = CodeValue("1 + 1")
             )
 
             with(find(CodeId(1))!!) {
                 assertThat(id, equalTo(CodeId(1)))
-                assertThat(groupId, equalTo(GroupId(3)))
+                assertThat(workspaceId, equalTo(WorkspaceId(3)))
                 assertThat(version, equalTo(CodeVersion(1)))
                 assertThat(value, equalTo(CodeValue("1 + 1")))
                 assertThat(type, equalTo(CodeType.Lua54))
@@ -280,7 +281,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
         fun `Find code by id and version`() = runWith(CodeRepository::class) {
             createCode(
                 codeId = CodeId(1),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 codeValue = CodeValue("created")
             )
 
@@ -311,7 +312,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
         fun `Tries to find code by id but does not exist`() = runWith(CodeRepository::class) {
             createCode(
                 codeId = CodeId(1),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 codeValue = CodeValue("1 + 1")
             )
 
@@ -324,7 +325,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
         fun `Tries to find code by id and version but version does not exists`() = runWith(CodeRepository::class) {
             createCode(
                 codeId = CodeId(1),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 codeValue = CodeValue("1 + 1")
             )
 
@@ -336,7 +337,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
         fun `Tries to get code with negative version`() = runWith(CodeRepository::class) {
             createCode(
                 codeId = CodeId(1),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 codeValue = CodeValue("1 + 1")
             )
             assertThat(
@@ -362,35 +363,35 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
 
             with(result[0]) {
                 assertThat(id, equalTo(CodeId(3)))
-                assertThat(groupId, equalTo(GroupId(4)))
+                assertThat(workspaceId, equalTo(WorkspaceId(4)))
                 assertThat(value, equalTo(CodeValue("1 + 3")))
                 assertThat(type, equalTo(CodeType.Lua54))
             }
         }
 
         @TestFactory
-        fun `With group ids`() = runWith(CodeRepository::class) {
+        fun `With workspace ids`() = runWith(CodeRepository::class) {
             setup()
 
             val query = CodeQuery(
-                groupIds = listOf(GroupId(5), GroupId(4)),
+                workspaceIds = listOf(WorkspaceId(5), WorkspaceId(4)),
                 limit = Limit(10)
             )
 
-            assertThat(count(query), equalTo(2UL))
+            assertThat(count(query), equalTo(Count(2)))
             val result = list(query)
             assertThat(result, hasSize(2))
 
             with(result[0]) {
                 assertThat(id, equalTo(CodeId(4)))
-                assertThat(groupId, equalTo(GroupId(5)))
+                assertThat(workspaceId, equalTo(WorkspaceId(5)))
                 assertThat(value, equalTo(CodeValue("1 + 4")))
                 assertThat(type, equalTo(CodeType.Lua54))
             }
 
             with(result[1]) {
                 assertThat(id, equalTo(CodeId(3)))
-                assertThat(groupId, equalTo(GroupId(4)))
+                assertThat(workspaceId, equalTo(WorkspaceId(4)))
                 assertThat(value, equalTo(CodeValue("1 + 3")))
                 assertThat(type, equalTo(CodeType.Lua54))
             }
@@ -400,22 +401,22 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
         private fun CodeRepository.setup() {
             createCode(
                 codeId = CodeId(1),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 codeValue = CodeValue("1 + 1")
             )
             createCode(
                 codeId = CodeId(2),
-                groupId = GroupId(3),
+                workspaceId = WorkspaceId(3),
                 codeValue = CodeValue("1 + 2")
             )
             createCode(
                 codeId = CodeId(3),
-                groupId = GroupId(4),
+                workspaceId = WorkspaceId(4),
                 codeValue = CodeValue("1 + 3")
             )
             createCode(
                 codeId = CodeId(4),
-                groupId = GroupId(5),
+                workspaceId = WorkspaceId(5),
                 codeValue = CodeValue("1 + 4")
             )
         }
@@ -425,11 +426,11 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
             setup()
 
             val query = CodeQuery(
-                groupIds = listOf(),
+                workspaceIds = listOf(),
                 limit = Limit(3)
             )
 
-            assertThat(count(query), equalTo(4UL))
+            assertThat(count(query), equalTo(Count(4)))
             val result = list(query)
             assertThat(result, hasSize(3))
         }
@@ -440,11 +441,11 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
 
             val query = CodeQuery(
                 afterId = CodeId(2),
-                groupIds = listOf(),
+                workspaceIds = listOf(),
                 limit = Limit(1)
             )
 
-            assertThat(count(query), equalTo(1UL))
+            assertThat(count(query), equalTo(Count(1)))
             val result = list(query)
             assertThat(result, hasSize(1))
 
@@ -458,7 +459,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
 
 private fun CodeRepository.createCode(
     codeId: CodeId,
-    groupId: GroupId,
+    workspaceId: WorkspaceId,
     cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10),
     codeValue: CodeValue
 ): Code {
@@ -466,7 +467,7 @@ private fun CodeRepository.createCode(
         CreateCmd(
             id = cmdId,
             codeId = codeId,
-            groupId = groupId,
+            workspaceId = workspaceId,
             value = codeValue
         )
     )
@@ -477,8 +478,8 @@ private fun CodeRepository.verifyCount(expected: Int) {
 }
 
 private fun CodeRepository.verifyCount(expected: Int, block: CodeQuery.() -> Unit) {
-    val counted = count(CodeQuery(groupIds = listOf()).also(block))
-    assertThat("number of code expected", counted, equalTo(expected.toULong()))
+    val counted = count(CodeQuery(workspaceIds = listOf()).also(block))
+    assertThat("number of code expected", counted, equalTo(Count(expected)))
 }
 
 

@@ -6,14 +6,12 @@ import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain._enum.TriggerType.*
 import io.hamal.lib.domain._enum.TriggerType.Event
-import io.hamal.lib.domain._enum.TriggerType.Hook
 import io.hamal.lib.domain.vo.*
-import io.hamal.repository.api.*
+import io.hamal.repository.api.Trigger
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordEntity
 import io.hamal.repository.record.RecordSequence
 import io.hamal.repository.record.RecordedAt
-import kotlin.time.Duration
 
 
 data class TriggerEntity(
@@ -22,16 +20,16 @@ data class TriggerEntity(
     override val sequence: RecordSequence,
     override val recordedAt: RecordedAt,
 
-    var groupId: GroupId? = null,
+    var workspaceId: WorkspaceId? = null,
     var funcId: FuncId? = null,
-    var flowId: FlowId? = null,
+    var namespaceId: NamespaceId? = null,
     var name: TriggerName? = null,
     var type: TriggerType? = null,
     var inputs: TriggerInputs? = null,
     var correlationId: CorrelationId? = null,
 
     var topicId: TopicId? = null,
-    var duration: Duration? = null,
+    var duration: TriggerDuration? = null,
     var hookId: HookId? = null,
     var hookMethod: HookMethod? = null,
 
@@ -43,14 +41,14 @@ data class TriggerEntity(
 
     override fun apply(rec: TriggerRecord): TriggerEntity {
         return when (rec) {
-            is FixedRateTriggerCreatedRecord -> copy(
+            is TriggerRecord.FixedRateCreated -> copy(
                 cmdId = rec.cmdId,
                 id = rec.entityId,
-                groupId = rec.groupId,
+                workspaceId = rec.workspaceId,
                 sequence = rec.sequence(),
                 name = rec.name,
                 funcId = rec.funcId,
-                flowId = rec.flowId,
+                namespaceId = rec.namespaceId,
                 type = FixedRate,
                 inputs = rec.inputs,
                 correlationId = rec.correlationId,
@@ -59,14 +57,14 @@ data class TriggerEntity(
                 status = rec.status
             )
 
-            is EventTriggerCreatedRecord -> copy(
+            is TriggerRecord.EventCreated -> copy(
                 cmdId = rec.cmdId,
                 id = rec.entityId,
-                groupId = rec.groupId,
+                workspaceId = rec.workspaceId,
                 sequence = rec.sequence(),
                 name = rec.name,
                 funcId = rec.funcId,
-                flowId = rec.flowId,
+                namespaceId = rec.namespaceId,
                 type = Event,
                 inputs = rec.inputs,
                 correlationId = rec.correlationId,
@@ -75,14 +73,14 @@ data class TriggerEntity(
                 status = rec.status
             )
 
-            is HookTriggerCreatedRecord -> copy(
+            is TriggerRecord.HookCreated -> copy(
                 cmdId = rec.cmdId,
                 id = rec.entityId,
-                groupId = rec.groupId,
+                workspaceId = rec.workspaceId,
                 sequence = rec.sequence(),
                 name = rec.name,
                 funcId = rec.funcId,
-                flowId = rec.flowId,
+                namespaceId = rec.namespaceId,
                 type = Hook,
                 inputs = rec.inputs,
                 correlationId = rec.correlationId,
@@ -92,14 +90,14 @@ data class TriggerEntity(
                 status = rec.status
             )
 
-            is CronTriggerCreatedRecord -> copy(
+            is TriggerRecord.CronCreated -> copy(
                 cmdId = rec.cmdId,
                 id = rec.entityId,
-                groupId = rec.groupId,
+                workspaceId = rec.workspaceId,
                 sequence = rec.sequence(),
                 name = rec.name,
                 funcId = rec.funcId,
-                flowId = rec.flowId,
+                namespaceId = rec.namespaceId,
                 type = Cron,
                 inputs = rec.inputs,
                 correlationId = rec.correlationId,
@@ -108,13 +106,13 @@ data class TriggerEntity(
                 status = rec.status
             )
 
-            is TriggerSetActiveRecord -> copy(
+            is TriggerRecord.SetActive -> copy(
                 cmdId = rec.cmdId,
                 id = rec.entityId,
                 status = TriggerStatus.Active
             )
 
-            is TriggerSetInactiveRecord -> copy(
+            is TriggerRecord.SetInactive -> copy(
                 cmdId = rec.cmdId,
                 id = rec.entityId,
                 status = TriggerStatus.Inactive
@@ -124,13 +122,13 @@ data class TriggerEntity(
 
     override fun toDomainObject(): Trigger {
         return when (type!!) {
-            FixedRate -> FixedRateTrigger(
+            FixedRate -> Trigger.FixedRate(
                 cmdId = cmdId,
                 id = id,
                 updatedAt = recordedAt.toUpdatedAt(),
-                groupId = groupId!!,
+                workspaceId = workspaceId!!,
                 funcId = funcId!!,
-                flowId = flowId!!,
+                namespaceId = namespaceId!!,
                 correlationId = correlationId,
                 name = name!!,
                 inputs = inputs!!,
@@ -138,13 +136,13 @@ data class TriggerEntity(
                 status = status!!
             )
 
-            Event -> EventTrigger(
+            Event -> Trigger.Event(
                 cmdId = cmdId,
                 id = id,
                 updatedAt = recordedAt.toUpdatedAt(),
-                groupId = groupId!!,
+                workspaceId = workspaceId!!,
                 funcId = funcId!!,
-                flowId = flowId!!,
+                namespaceId = namespaceId!!,
                 correlationId = correlationId,
                 name = name!!,
                 inputs = inputs!!,
@@ -152,13 +150,13 @@ data class TriggerEntity(
                 status = status!!
             )
 
-            Hook -> HookTrigger(
+            Hook -> Trigger.Hook(
                 cmdId = cmdId,
                 id = id,
                 updatedAt = recordedAt.toUpdatedAt(),
-                groupId = groupId!!,
+                workspaceId = workspaceId!!,
                 funcId = funcId!!,
-                flowId = flowId!!,
+                namespaceId = namespaceId!!,
                 correlationId = correlationId,
                 name = name!!,
                 inputs = inputs!!,
@@ -167,13 +165,13 @@ data class TriggerEntity(
                 status = status!!
             )
 
-            Cron -> CronTrigger(
+            Cron -> Trigger.Cron(
                 cmdId = cmdId,
                 id = id,
                 updatedAt = recordedAt.toUpdatedAt(),
-                groupId = groupId!!,
+                workspaceId = workspaceId!!,
                 funcId = funcId!!,
-                flowId = flowId!!,
+                namespaceId = namespaceId!!,
                 correlationId = correlationId,
                 name = name!!,
                 inputs = inputs!!,
@@ -189,10 +187,10 @@ fun List<TriggerRecord>.createEntity(): TriggerEntity {
     val firstRecord: TriggerRecord = first()
 
     check(
-        firstRecord is FixedRateTriggerCreatedRecord ||
-                firstRecord is EventTriggerCreatedRecord ||
-                firstRecord is HookTriggerCreatedRecord ||
-                firstRecord is CronTriggerCreatedRecord
+        firstRecord is TriggerRecord.FixedRateCreated ||
+                firstRecord is TriggerRecord.EventCreated ||
+                firstRecord is TriggerRecord.HookCreated ||
+                firstRecord is TriggerRecord.CronCreated
     )
 
     var result = TriggerEntity(

@@ -2,13 +2,12 @@ import {Auth, AUTH_KEY} from "@/types/auth.ts";
 import useLocalStorageState from "use-local-storage-state";
 import {useCallback, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {DefaultFlowId} from "@/types";
+import {useResetUiState} from "@/hook/ui-state.ts";
 
 const unauthorized: Auth = {
     type: 'Unauthorized',
     accountId: '',
-    groupId: '',
-    defaultFlowIds: Array<DefaultFlowId>(),
+    workspaceId: '',
     token: ''
 }
 
@@ -18,14 +17,31 @@ export const useAuth = () => {
     })
 }
 
+type ResetAuthAction = () => void
+export const useResetAuth = (): [ResetAuthAction] => {
+    const [_, setAuth] = useAuth()
+
+    const fn = useCallback(() => {
+        setAuth({...unauthorized})
+    }, [setAuth])
+
+    return [fn]
+}
+
+
 type LogoutAction = (abortController?: AbortController) => void
 export const useLogout = (): [LogoutAction, boolean, Error] => {
     const navigate = useNavigate()
-    const [auth, setAuth] = useAuth()
+    const [auth] = useAuth()
+    const [resetAuth] = useResetAuth()
+    const [resetUiState] = useResetUiState()
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<Error | null>(null);
 
     const fn = useCallback((abortController?: AbortController) => {
+        resetAuth()
+        resetUiState()
+
         fetch(`${import.meta.env.VITE_BASE_URL}/v1/logout`, {
             method: "POST",
             headers: {
@@ -36,9 +52,7 @@ export const useLogout = (): [LogoutAction, boolean, Error] => {
             signal: abortController?.signal,
         })
             .then(response => {
-
                 setLoading(false)
-                setAuth({...unauthorized})
                 navigate("/", {replace: true})
             })
             .catch(error => {
@@ -49,7 +63,6 @@ export const useLogout = (): [LogoutAction, boolean, Error] => {
                 }
 
                 if (error.message === 'NetworkError when attempting to fetch resource.') {
-                    setAuth(null)
                     window.location.href = '/login'
                 }
             })
@@ -126,8 +139,7 @@ export const useMetaMaskToken = (): [MetaMaskTokenAction, string, boolean, Error
                     setAuth({
                         type: 'User',
                         accountId: data.accountId,
-                        groupId: data.groupIds[0],
-                        defaultFlowIds: data.defaultFlowIds,
+                        workspaceId: data.workspaceIds[0],
                         token: data.token,
                     })
 

@@ -29,8 +29,7 @@ data class ApiTokenRequested(
     override val id: RequestId,
     override val status: RequestStatus,
     val accountId: AccountId,
-    val groupIds: List<GroupId>,
-    val defaultFlowIds: List<GroupDefaultFlowId>,
+    val workspaceIds: List<WorkspaceId>,
     val token: AuthToken
 ) : ApiRequested()
 

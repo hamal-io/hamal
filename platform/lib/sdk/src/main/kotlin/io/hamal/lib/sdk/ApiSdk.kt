@@ -10,7 +10,6 @@ import io.hamal.lib.http.HttpContentDeserializer
 import io.hamal.lib.http.HttpContentSerializer
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.HttpTemplateImpl
-import io.hamal.lib.kua.type.KuaJsonModule
 import io.hamal.lib.sdk.api.*
 import java.io.InputStream
 import kotlin.reflect.KClass
@@ -26,9 +25,9 @@ interface ApiSdk {
     val execLog: ApiExecLogService
     val extension: ApiExtensionService
     val func: ApiFuncService
-    val group: ApiGroupService
+    val workspace: ApiWorkspaceService
     val hook: ApiHookService
-    val flow: ApiFlowService
+    val namespace: ApiNamespaceService
     val blueprint: ApiBlueprintService
     val topic: ApiTopicService
     val trigger: ApiTriggerService
@@ -41,7 +40,6 @@ class ApiSdkImpl : ApiSdk {
             JsonFactoryBuilder()
                 .register(ApiJsonModule)
                 .register(HotJsonModule)
-                .register(KuaJsonModule)
                 .register(ValueObjectJsonModule)
         )
 
@@ -117,16 +115,16 @@ class ApiSdkImpl : ApiSdk {
         ApiFuncServiceImpl(template)
     }
 
-    override val group: ApiGroupService by lazy {
-        ApiGroupServiceImpl(template)
+    override val workspace: ApiWorkspaceService by lazy {
+        ApiWorkspaceServiceImpl(template)
     }
 
     override val hook: ApiHookService by lazy {
         ApiHookServiceImpl(template)
     }
 
-    override val flow: ApiFlowService by lazy {
-        ApiFlowServiceImpl(template)
+    override val namespace: ApiNamespaceService by lazy {
+        ApiNamespaceServiceImpl(template)
     }
 
     override val blueprint: ApiBlueprintService by lazy {

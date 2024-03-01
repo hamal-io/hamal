@@ -1,6 +1,7 @@
 package io.hamal.api.http.controller.blueprint
 
 import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.domain.vo.BlueprintDescription
 import io.hamal.lib.domain.vo.BlueprintInputs
 import io.hamal.lib.domain.vo.BlueprintName
 import io.hamal.lib.domain.vo.CodeValue
@@ -36,7 +37,8 @@ internal class BlueprintUpdateControllerTest : BlueprintBaseControllerTest() {
                 ApiBlueprintUpdateRequest(
                     name = BlueprintName("Other"),
                     value = CodeValue("1 + 1"),
-                    inputs = BlueprintInputs(HotObject.builder().set("hamal", "createdInputs").build())
+                    inputs = BlueprintInputs(HotObject.builder().set("hamal", "createdInputs").build()),
+                    description = BlueprintDescription("updated description")
                 )
             )
             .execute()
@@ -53,6 +55,7 @@ internal class BlueprintUpdateControllerTest : BlueprintBaseControllerTest() {
             assertThat(name, equalTo(BlueprintName("Other")))
             assertThat(value, equalTo(CodeValue("1 + 1")))
             assertThat(inputs, equalTo(BlueprintInputs(HotObject.builder().set("hamal", "createdInputs").build())))
+            assertThat(description, equalTo(BlueprintDescription("updated description")))
         }
     }
 
@@ -92,6 +95,7 @@ internal class BlueprintUpdateControllerTest : BlueprintBaseControllerTest() {
             assertThat(name, equalTo(BlueprintName("TestBlueprint")))
             assertThat(value, equalTo(CodeValue("40 + 2")))
             assertThat(inputs, equalTo(BlueprintInputs(HotObject.builder().set("hamal", "createdInputs").build())))
+            assertThat(description, equalTo(BlueprintDescription.empty))
         }
     }
 

@@ -12,26 +12,28 @@ data class ApiBlueprint(
     val id: BlueprintId,
     val name: BlueprintName,
     val inputs: BlueprintInputs,
-    val value: CodeValue
+    val value: CodeValue,
+    val description: BlueprintDescription
 ) : ApiObject()
 
 data class ApiBlueprintCreateRequest(
     override val name: BlueprintName,
     override val inputs: BlueprintInputs,
-    override val value: CodeValue
+    override val value: CodeValue,
+    override val description: BlueprintDescription? = null
 ) : BlueprintCreateRequest
 
 data class ApiBlueprintCreateRequested(
     override val id: RequestId,
     override val status: RequestStatus,
-    val blueprintId: BlueprintId,
-    val groupId: GroupId,
+    val blueprintId: BlueprintId
 ) : ApiRequested()
 
 data class ApiBlueprintUpdateRequest(
     override val name: BlueprintName? = null,
     override val inputs: BlueprintInputs? = null,
-    override val value: CodeValue? = null
+    override val value: CodeValue? = null,
+    override val description: BlueprintDescription? = null
 ) : BlueprintUpdateRequest
 
 data class ApiBlueprintUpdateRequested(
@@ -40,9 +42,18 @@ data class ApiBlueprintUpdateRequested(
     val blueprintId: BlueprintId
 ) : ApiRequested()
 
+data class ApiBlueprintList(
+    val blueprints: List<Blueprint>
+) : ApiObject() {
+    data class Blueprint(
+        val id: BlueprintId,
+        val name: BlueprintName,
+        val description: BlueprintDescription
+    )
+}
 
 interface ApiBlueprintService {
-    fun create(groupId: GroupId, req: ApiBlueprintCreateRequest): ApiBlueprintCreateRequested
+    fun create(req: ApiBlueprintCreateRequest): ApiBlueprintCreateRequested
     fun get(bpId: BlueprintId): ApiBlueprint
     fun update(bpId: BlueprintId, req: ApiBlueprintUpdateRequest): ApiBlueprintUpdateRequested
 }
@@ -51,9 +62,8 @@ internal class ApiBlueprintServiceImpl(
     private val template: HttpTemplate
 ) : ApiBlueprintService {
 
-    override fun create(groupId: GroupId, req: ApiBlueprintCreateRequest): ApiBlueprintCreateRequested =
-        template.post("/v1/groups/{groupId}/blueprints")
-            .path("groupId", groupId)
+    override fun create(req: ApiBlueprintCreateRequest): ApiBlueprintCreateRequested =
+        template.post("/v1/blueprints")
             .body(req)
             .execute()
             .fold(ApiBlueprintCreateRequested::class)

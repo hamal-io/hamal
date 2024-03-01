@@ -6,7 +6,7 @@ interface SandboxContext {
     operator fun <OBJ : Any> get(clazz: KClass<OBJ>): OBJ
 }
 
-class NopSandboxContext : SandboxContext {
+object SandboxContextNop : SandboxContext {
     override fun <OBJ : Any> get(clazz: KClass<OBJ>): OBJ {
         TODO("Not yet implemented")
     }

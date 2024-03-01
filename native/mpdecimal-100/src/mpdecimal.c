@@ -1878,7 +1878,7 @@ _mpd_check_exp(mpd_t *dec, const mpd_context_t *ctx, uint32_t *status)
         dec->exp -= shift;
         *status |= MPD_Clamped;
         if (!mpd_iszerocoeff(dec) && adjexp < ctx->emin) {
-            /* Underflow is impossible, since exp < etiny=emin-prec+1
+            /* underflow is impossible, since exp < etiny=emin-prec+1
              * and exp > etop=emax-prec+1 would imply emax < emin. */
             *status |= MPD_Subnormal;
         }
@@ -1908,7 +1908,7 @@ _mpd_check_exp(mpd_t *dec, const mpd_context_t *ctx, uint32_t *status)
             _mpd_apply_round_excess(dec, rnd, ctx, status);
             *status |= MPD_Rounded;
             if (rnd) {
-                *status |= (MPD_Inexact|MPD_Underflow);
+                *status |= (MPD_Inexact|MPD_underflow);
                 if (mpd_iszerocoeff(dec)) {
                     mpd_zerocoeff(dec);
                     *status |= MPD_Clamped;
@@ -1921,17 +1921,17 @@ _mpd_check_exp(mpd_t *dec, const mpd_context_t *ctx, uint32_t *status)
     }
 }
 
-/* Transcendental functions do not always set Underflow reliably,
+/* Transcendental functions do not always set underflow reliably,
  * since they only use as much precision as is necessary for correct
  * rounding. If a result like 1.0000000000e-101 is finalized, there
- * is no rounding digit that would trigger Underflow. But we can
+ * is no rounding digit that would trigger underflow. But we can
  * assume Inexact, so a short check suffices. */
 static inline void
 mpd_check_underflow(mpd_t *dec, const mpd_context_t *ctx, uint32_t *status)
 {
     if (mpd_adjexp(dec) < ctx->emin && !mpd_iszero(dec) &&
         dec->exp < mpd_etiny(ctx)) {
-        *status |= MPD_Underflow;
+        *status |= MPD_underflow;
     }
 }
 
@@ -4350,7 +4350,7 @@ _mpd_get_exp_iterations(const mpd_t *r, mpd_ssize_t p)
 
 /*
  * Internal function, specials have been dealt with. Apart from Overflow
- * and Underflow, two cases must be considered for the error of the result:
+ * and underflow, two cases must be considered for the error of the result:
  *
  *   1) abs(a) <= 9 * 10**(-prec-1)  ==>  result == 1
  *
@@ -4423,7 +4423,7 @@ _mpd_qexp(mpd_t *result, const mpd_t *a, const mpd_context_t *ctx,
         else {
             _settriple(result, MPD_POS, 0, mpd_etiny(ctx));
             *status |= (MPD_Inexact|MPD_Rounded|MPD_Subnormal|
-                        MPD_Underflow|MPD_Clamped);
+                        MPD_underflow|MPD_Clamped);
         }
         return;
     }
@@ -4539,7 +4539,7 @@ mpd_qexp(mpd_t *result, const mpd_t *a, const mpd_context_t *ctx,
             *status |= workstatus;
 
             ulpexp = result->exp + result->digits - workctx.prec;
-            if (workstatus & MPD_Underflow) {
+            if (workstatus & MPD_underflow) {
                 /* The effective work precision is result->digits. */
                 ulpexp = result->exp;
             }
@@ -4927,7 +4927,7 @@ _mpd_qln(mpd_t *result, const mpd_t *a, const mpd_context_t *ctx,
             tmp.exp += 1;
         }
         if (mpd_adjexp(&tmp) < mpd_etiny(ctx)) {
-            /* The upper bound is less than etiny: Underflow to zero */
+            /* The upper bound is less than etiny: underflow to zero */
             _settriple(result, (cmp<0), 1, mpd_etiny(ctx)-1);
             goto finish;
         }
@@ -5617,7 +5617,7 @@ mpd_set_fenv(void)
 #ifdef _MSC_VER
     unsigned int flags =
         _EM_INVALID|_EM_DENORMAL|_EM_ZERODIVIDE|_EM_OVERFLOW|
-        _EM_UNDERFLOW|_EM_INEXACT|_RC_CHOP|_PC_64;
+        _EM_underflow|_EM_INEXACT|_RC_CHOP|_PC_64;
     unsigned int mask = _MCW_EM|_MCW_RC|_MCW_PC;
     unsigned int dummy;
 
@@ -6263,7 +6263,7 @@ mpd_qnext_toward(mpd_t *result, const mpd_t *a, const mpd_t *b,
         *status |= (MPD_Overflow|MPD_Rounded|MPD_Inexact);
     }
     else if (mpd_adjexp(result) < ctx->emin) {
-        *status |= (MPD_Underflow|MPD_Subnormal|MPD_Rounded|MPD_Inexact);
+        *status |= (MPD_underflow|MPD_Subnormal|MPD_Rounded|MPD_Inexact);
         if (mpd_iszero(result)) {
             *status |= MPD_Clamped;
         }
@@ -6683,7 +6683,7 @@ _mpd_qpow_real(mpd_t *result, const mpd_t *base, const mpd_t *exp,
      *   2) abs(e**(y * (2*err + err**2)) - 1)
      * Case abs(y) >= 10**extra:
      *   3) adjexp(y)+1 > log10(abs(y)) >= extra
-     *   This triggers the Overflow/Underflow shortcut in _mpd_qexp(),
+     *   This triggers the Overflow/underflow shortcut in _mpd_qexp(),
      *   so no further analysis is necessary.
      * Case abs(y) < 10**extra:
      *   4) abs(y * (2*err + err**2)) < 1/5 * 10**(-prec - 2)

@@ -16,27 +16,29 @@ sealed class BlueprintRecord(
 
     internal object Adapter : RecordAdapter<BlueprintRecord>(
         listOf(
-            BlueprintCreatedRecord::class,
-            BlueprintUpdatedRecord::class
+            Created::class,
+            Updated::class
         )
     )
+
+    data class Created(
+        override val entityId: BlueprintId,
+        override val cmdId: CmdId,
+        val creatorId: AccountId,
+        val name: BlueprintName,
+        val inputs: BlueprintInputs,
+        val value: CodeValue,
+        val description: BlueprintDescription
+    ) : BlueprintRecord()
+
+
+    data class Updated(
+        override val entityId: BlueprintId,
+        override val cmdId: CmdId,
+        val name: BlueprintName,
+        val inputs: BlueprintInputs,
+        val value: CodeValue,
+        val description: BlueprintDescription
+    ) : BlueprintRecord()
 }
 
-data class BlueprintCreatedRecord(
-    override val entityId: BlueprintId,
-    override val cmdId: CmdId,
-    val groupId: GroupId,
-    val creatorId: AccountId,
-    val name: BlueprintName,
-    val inputs: BlueprintInputs,
-    val value: CodeValue
-) : BlueprintRecord()
-
-
-data class BlueprintUpdatedRecord(
-    override val entityId: BlueprintId,
-    override val cmdId: CmdId,
-    val name: BlueprintName,
-    val inputs: BlueprintInputs,
-    val value: CodeValue
-) : BlueprintRecord()

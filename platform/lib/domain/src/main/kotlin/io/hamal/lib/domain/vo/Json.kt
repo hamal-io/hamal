@@ -1,6 +1,7 @@
 package io.hamal.lib.domain.vo
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.serialization.*
 import io.hamal.lib.domain.State
@@ -23,6 +24,7 @@ object ValueObjectJsonModule : JsonModule() {
         this[BlueprintId::class] = ValueObjectIdAdapter(::BlueprintId)
         this[BlueprintName::class] = ValueObjectStringAdapter(::BlueprintName)
         this[BlueprintInputs::class] = ValueObjectHotObjectAdapter(::BlueprintInputs)
+        this[BlueprintDescription::class] = ValueObjectStringAdapter(::BlueprintDescription)
 
         this[CmdId::class] = ValueObjectStringAdapter(::CmdId)
         this[CodeId::class] = ValueObjectIdAdapter(::CodeId)
@@ -57,10 +59,8 @@ object ValueObjectJsonModule : JsonModule() {
         this[FeedbackId::class] = ValueObjectIdAdapter(::FeedbackId)
         this[FeedbackMessage::class] = ValueObjectStringAdapter(::FeedbackMessage)
 
-        this[FlowId::class] = ValueObjectIdAdapter(::FlowId)
-        this[FlowName::class] = ValueObjectStringAdapter(::FlowName)
-        this[FlowType::class] = ValueObjectStringAdapter(::FlowType)
-        this[FlowInputs::class] = ValueObjectHotObjectAdapter(::FlowInputs)
+        this[NamespaceId::class] = ValueObjectIdAdapter(::NamespaceId)
+        this[NamespaceName::class] = ValueObjectStringAdapter(::NamespaceName)
 
         this[FuncId::class] = ValueObjectIdAdapter(::FuncId)
         this[FuncName::class] = ValueObjectStringAdapter(::FuncName)
@@ -68,8 +68,8 @@ object ValueObjectJsonModule : JsonModule() {
         this[DeployMessage::class] = ValueObjectStringAdapter(::DeployMessage)
         this[DeployedAt::class] = ValueObjectInstantAdapter(::DeployedAt)
 
-        this[GroupId::class] = ValueObjectIdAdapter(::GroupId)
-        this[GroupName::class] = ValueObjectStringAdapter(::GroupName)
+        this[WorkspaceId::class] = ValueObjectIdAdapter(::WorkspaceId)
+        this[WorkspaceName::class] = ValueObjectStringAdapter(::WorkspaceName)
 
         this[HookId::class] = ValueObjectIdAdapter(::HookId)
         this[HookName::class] = ValueObjectStringAdapter(::HookName)
@@ -82,6 +82,7 @@ object ValueObjectJsonModule : JsonModule() {
         this[InvocationInputs::class] = ValueObjectHotObjectAdapter(::InvocationInputs)
 
         this[Limit::class] = ValueObjectIntAdapter(::Limit)
+        this[Count::class] = ValueObjectLongAdapter(::Count)
 
         this[RequestId::class] = ValueObjectIdAdapter(::RequestId)
         this[RequestClass::class] = ValueObjectStringAdapter(::RequestClass)
@@ -90,9 +91,10 @@ object ValueObjectJsonModule : JsonModule() {
         this[State::class] = ValueObjectHotObjectAdapter(::State)
         this[TopicId::class] = ValueObjectIdAdapter(::TopicId)
         this[TopicName::class] = ValueObjectStringAdapter(::TopicName)
-        this[TopicEntryId::class] = ValueObjectIdAdapter(::TopicEntryId)
-        this[TopicEntryPayload::class] = ValueObjectHotObjectAdapter(::TopicEntryPayload)
+        this[TopicEventId::class] = ValueObjectIdAdapter(::TopicEventId)
+        this[TopicEventPayload::class] = ValueObjectHotObjectAdapter(::TopicEventPayload)
 
+        this[TriggerDuration::class] = ValueObjectStringAdapter(::TriggerDuration)
         this[TriggerId::class] = ValueObjectIdAdapter(::TriggerId)
         this[TriggerName::class] = ValueObjectStringAdapter(::TriggerName)
         this[TriggerInputs::class] = ValueObjectHotObjectAdapter(::TriggerInputs)

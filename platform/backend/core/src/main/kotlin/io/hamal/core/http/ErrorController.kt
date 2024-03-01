@@ -26,10 +26,12 @@ internal class ErrorController {
 
     @ExceptionHandler(value = [MethodArgumentTypeMismatchException::class])
     fun argumentTypeMismatch(res: HttpServletResponse, t: MethodArgumentTypeMismatchException) {
+        t.printStackTrace()
+
         val cause = t.cause
         if (cause is ConversionFailedException) {
             res.status = 400
-            res.addHeader("Content-Type", "application/json")
+            res.addHeader("Content-Type", "application/json;charset=UTF-8")
             res.writer.write(
                 json.serialize(
                     InvalidArgumentType(
@@ -40,35 +42,43 @@ internal class ErrorController {
                 )
             )
         } else {
-            res.addHeader("Content-Type", "application/json")
+            res.addHeader("Content-Type", "application/json;charset=UTF-8")
             res.writer.write(json.serialize(ApiError("Bad request")))
         }
     }
 
     @ExceptionHandler(value = [HttpMessageNotReadableException::class])
     fun missingFields(res: HttpServletResponse, t: HttpMessageNotReadableException) {
+        t.printStackTrace()
+
         res.status = 400
-        res.addHeader("Content-Type", "application/json")
+        res.addHeader("Content-Type", "application/json;charset=UTF-8")
         res.writer.write(json.serialize(ApiError(t.cause?.message ?: "Bad request")))
     }
 
     @ExceptionHandler(value = [NoHandlerFoundException::class])
-    fun missingFields(res: HttpServletResponse) {
+    fun missingFields(res: HttpServletResponse, t: NoHandlerFoundException) {
+        t.printStackTrace()
+
         res.status = SC_NOT_FOUND
-        res.addHeader("Content-Type", "application/json")
+        res.addHeader("Content-Type", "application/json;charset=UTF-8")
         res.writer.write(json.serialize(ApiError("Request handler not found")))
     }
 
 
     @ExceptionHandler(value = [IllegalCallerException::class])
-    fun otherwise(res: HttpServletResponse) {
+    fun illegalCaller(res: HttpServletResponse, t: Throwable) {
+        t.printStackTrace()
+
         res.status = SC_FORBIDDEN
-        res.addHeader("Content-Type", "application/json")
+        res.addHeader("Content-Type", "application/json;charset=UTF-8")
         res.writer.write(json.serialize(ApiError("FORBIDDEN")))
     }
 
     @ExceptionHandler(value = [Throwable::class])
     fun otherwise(res: HttpServletResponse, t: Throwable) {
+        t.printStackTrace()
+
         val toHandle = when (t) {
             is ServletException -> t.cause
             else -> t
@@ -77,12 +87,13 @@ internal class ErrorController {
         val statusCode = when (toHandle) {
             is IllegalArgumentException, is MethodArgumentTypeMismatchException -> SC_BAD_REQUEST
             is NoSuchElementException -> SC_NOT_FOUND
+            is IllegalAccessError -> SC_NOT_FOUND
             is IllegalCallerException -> SC_FORBIDDEN
             else -> SC_INTERNAL_SERVER_ERROR
         }
 
         res.status = statusCode
-        res.addHeader("Content-Type", "application/json")
+        res.addHeader("Content-Type", "application/json;charset=UTF-8")
         res.writer.write(json.serialize(ApiError(toHandle?.message ?: "Unknown error")))
     }
 

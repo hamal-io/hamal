@@ -1,6 +1,7 @@
 package io.hamal.core.request.handler.func
 
-import io.hamal.core.event.PlatformEventEmitter
+import io.hamal.core.event.InternalEventEmitter
+import io.hamal.core.request.RequestHandler
 import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.request.FuncDeployRequested
@@ -14,29 +15,30 @@ import org.springframework.stereotype.Component
 
 @Component
 class FuncDeployHandler(
-    val funcRepository: FuncRepository,
-    val codeQueryRepository: CodeQueryRepository,
-    val eventEmitter: PlatformEventEmitter
-) : io.hamal.core.request.RequestHandler<FuncDeployRequested>(FuncDeployRequested::class) {
+    private val funcRepository: FuncRepository,
+    private val codeQueryRepository: CodeQueryRepository,
+    private val eventEmitter: InternalEventEmitter
+) : RequestHandler<FuncDeployRequested>(FuncDeployRequested::class) {
 
     override fun invoke(req: FuncDeployRequested) {
-        deployVersion(req).also { emitEvent(req.cmdId(), it) }
+        deployVersion(req)
+            .also { emitEvent(req.cmdId(), it) }
     }
-}
 
-private fun FuncDeployHandler.deployVersion(req: FuncDeployRequested): Func {
-    val func = funcRepository.get(req.funcId)
+    private fun deployVersion(req: FuncDeployRequested): Func {
+        val func = funcRepository.get(req.funcId)
 
-    return funcRepository.deploy(
-        req.funcId,
-        DeployCmd(
-            id = req.cmdId(),
-            version = req.version ?: func.code.version,
-            message = req.message ?: DeployMessage.empty
+        return funcRepository.deploy(
+            req.funcId,
+            DeployCmd(
+                id = req.cmdId(),
+                version = req.version ?: func.code.version,
+                message = req.message ?: DeployMessage.empty
+            )
         )
-    )
-}
+    }
 
-private fun FuncDeployHandler.emitEvent(cmdId: CmdId, func: Func) {
-    eventEmitter.emit(cmdId, FuncDeployedEvent(func))
+    private fun emitEvent(cmdId: CmdId, func: Func) {
+        eventEmitter.emit(cmdId, FuncDeployedEvent(func))
+    }
 }

@@ -1440,7 +1440,7 @@ static const char *mpd_flag_string[MPD_NUM_FLAGS] = {
     "Overflow",
     "Rounded",
     "Subnormal",
-    "Underflow",
+    "underflow",
 };
 
 static const char *mpd_signal_string[MPD_NUM_FLAGS] = {
@@ -1458,7 +1458,7 @@ static const char *mpd_signal_string[MPD_NUM_FLAGS] = {
     "Overflow",
     "Rounded",
     "Subnormal",
-    "Underflow",
+    "underflow",
 };
 
 /* print conditions to buffer, separated by spaces */

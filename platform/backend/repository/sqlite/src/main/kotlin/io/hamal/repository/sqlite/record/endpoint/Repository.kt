@@ -1,30 +1,28 @@
 package io.hamal.repository.sqlite.record.endpoint
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.EndpointId
-import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Endpoint
 import io.hamal.repository.api.EndpointCmdRepository.CreateCmd
 import io.hamal.repository.api.EndpointCmdRepository.UpdateCmd
 import io.hamal.repository.api.EndpointQueryRepository.EndpointQuery
 import io.hamal.repository.api.EndpointRepository
 import io.hamal.repository.record.CreateDomainObject
-import io.hamal.repository.record.endpoint.EndpointCreatedRecord
 import io.hamal.repository.record.endpoint.EndpointEntity
 import io.hamal.repository.record.endpoint.EndpointRecord
-import io.hamal.repository.record.endpoint.EndpointUpdatedRecord
-import io.hamal.repository.sqlite.record.SqliteRecordRepository
+import io.hamal.repository.sqlite.record.RecordSqliteRepository
 import java.nio.file.Path
 
 internal object CreateEndpoint : CreateDomainObject<EndpointId, EndpointRecord, Endpoint> {
     override fun invoke(recs: List<EndpointRecord>): Endpoint {
         check(recs.isNotEmpty()) { "At least one record is required" }
         val firstRecord = recs.first()
-        check(firstRecord is EndpointCreatedRecord)
+        check(firstRecord is EndpointRecord.Created)
 
         var result = EndpointEntity(
             cmdId = firstRecord.cmdId,
             id = firstRecord.entityId,
-            groupId = firstRecord.groupId,
+            workspaceId = firstRecord.workspaceId,
             sequence = firstRecord.sequence(),
             recordedAt = firstRecord.recordedAt()
         )
@@ -38,9 +36,10 @@ internal object CreateEndpoint : CreateDomainObject<EndpointId, EndpointRecord, 
 }
 
 class EndpointSqliteRepository(
-    config: Config
-) : SqliteRecordRepository<EndpointId, EndpointRecord, Endpoint>(
-    config = config,
+    path: Path
+) : RecordSqliteRepository<EndpointId, EndpointRecord, Endpoint>(
+    path = path,
+    filename = "endpoint.db",
     createDomainObject = CreateEndpoint,
     recordClass = EndpointRecord::class,
     projections = listOf(
@@ -48,12 +47,6 @@ class EndpointSqliteRepository(
         ProjectionUniqueName
     )
 ), EndpointRepository {
-
-    data class Config(
-        override val path: Path
-    ) : SqliteBaseRepository.Config {
-        override val filename = "endpoint.db"
-    }
 
     override fun create(cmd: CreateCmd): Endpoint {
         val endpointId = cmd.endpointId
@@ -63,11 +56,11 @@ class EndpointSqliteRepository(
                 versionOf(endpointId, cmdId)
             } else {
                 store(
-                    EndpointCreatedRecord(
+                    EndpointRecord.Created(
                         cmdId = cmdId,
                         entityId = endpointId,
-                        groupId = cmd.groupId,
-                        flowId = cmd.flowId,
+                        workspaceId = cmd.workspaceId,
+                        namespaceId = cmd.namespaceId,
                         name = cmd.name,
                         funcId = cmd.funcId,
                     )
@@ -88,7 +81,7 @@ class EndpointSqliteRepository(
             } else {
                 val currentVersion = versionOf(endpointId, cmdId)
                 store(
-                    EndpointUpdatedRecord(
+                    EndpointRecord.Updated(
                         entityId = endpointId,
                         cmdId = cmdId,
                         name = cmd.name ?: currentVersion.name,
@@ -110,7 +103,7 @@ class EndpointSqliteRepository(
         return ProjectionCurrent.list(connection, query)
     }
 
-    override fun count(query: EndpointQuery): ULong {
+    override fun count(query: EndpointQuery): Count {
         return ProjectionCurrent.count(connection, query)
     }
 }

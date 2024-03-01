@@ -13,9 +13,9 @@ data class EndpointEntity(
     override val id: EndpointId,
     override val sequence: RecordSequence,
     override val recordedAt: RecordedAt,
-    val groupId: GroupId,
+    val workspaceId: WorkspaceId,
 
-    var flowId: FlowId? = null,
+    var namespaceId: NamespaceId? = null,
     var funcId: FuncId? = null,
     var name: EndpointName? = null,
 
@@ -23,18 +23,17 @@ data class EndpointEntity(
 
     override fun apply(rec: EndpointRecord): EndpointEntity {
         return when (rec) {
-            is EndpointCreatedRecord -> copy(
+            is EndpointRecord.Created -> copy(
                 id = rec.entityId,
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
-                flowId = rec.flowId,
+                namespaceId = rec.namespaceId,
                 name = rec.name,
                 funcId = rec.funcId,
                 recordedAt = rec.recordedAt()
-
             )
 
-            is EndpointUpdatedRecord -> copy(
+            is EndpointRecord.Updated -> copy(
                 id = rec.entityId,
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
@@ -50,8 +49,8 @@ data class EndpointEntity(
             cmdId = cmdId,
             id = id,
             updatedAt = recordedAt.toUpdatedAt(),
-            groupId = groupId,
-            flowId = flowId!!,
+            workspaceId = workspaceId,
+            namespaceId = namespaceId!!,
             funcId = funcId!!,
             name = name!!
         )
@@ -61,11 +60,11 @@ data class EndpointEntity(
 fun List<EndpointRecord>.createEntity(): EndpointEntity {
     check(isNotEmpty()) { "At least one record is required" }
     val firstRecord = first()
-    check(firstRecord is EndpointCreatedRecord)
+    check(firstRecord is EndpointRecord.Created)
 
     var result = EndpointEntity(
         id = firstRecord.entityId,
-        groupId = firstRecord.groupId,
+        workspaceId = firstRecord.workspaceId,
         cmdId = firstRecord.cmdId,
         sequence = firstRecord.sequence(),
         recordedAt = firstRecord.recordedAt()

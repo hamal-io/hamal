@@ -1,11 +1,12 @@
 package io.hamal.bridge.http.controller.queue
 
-import io.hamal.core.event.PlatformEventEmitter
+import io.hamal.core.event.InternalEventEmitter
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.State
 import io.hamal.lib.sdk.bridge.BridgeUnitOfWorkList
 import io.hamal.lib.sdk.bridge.BridgeUnitOfWorkList.UnitOfWork
 import io.hamal.repository.api.CodeQueryRepository
+import io.hamal.repository.api.Exec
 import io.hamal.repository.api.ExecCmdRepository
 import io.hamal.repository.api.ExecCmdRepository.StartCmd
 import io.hamal.repository.api.StateQueryRepository
@@ -20,7 +21,7 @@ internal class QueuePollController(
     private val codeQueryRepository: CodeQueryRepository,
     private val execCmdRepository: ExecCmdRepository,
     private val stateQueryRepository: StateQueryRepository,
-    private val eventEmitter: PlatformEventEmitter
+    private val eventEmitter: InternalEventEmitter
 ) {
     @PostMapping("/v1/dequeue")
     fun dequeue(): ResponseEntity<BridgeUnitOfWorkList> {
@@ -38,8 +39,8 @@ internal class QueuePollController(
 
                 UnitOfWork(
                     id = exec.id,
-                    flowId = exec.flowId,
-                    groupId = exec.groupId,
+                    namespaceId = exec.namespaceId,
+                    workspaceId = exec.workspaceId,
                     correlation = exec.correlation,
                     inputs = exec.inputs,
                     state = state,
@@ -50,7 +51,7 @@ internal class QueuePollController(
         )
     }
 
-    private fun emitEvents(cmdId: CmdId, execs: List<io.hamal.repository.api.StartedExec>) {
+    private fun emitEvents(cmdId: CmdId, execs: List<Exec.Started>) {
         execs.forEach { eventEmitter.emit(cmdId, ExecStartedEvent(it)) }
     }
 }

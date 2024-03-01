@@ -3,7 +3,7 @@ package io.hamal.repository.record.extension
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.ExtensionId
 import io.hamal.lib.domain.vo.ExtensionName
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.repository.api.Extension
 import io.hamal.repository.api.ExtensionCode
 import io.hamal.repository.record.CreateDomainObject
@@ -16,14 +16,14 @@ data class ExtensionEntity(
     override val id: ExtensionId,
     override val sequence: RecordSequence,
     override val recordedAt: RecordedAt,
-    val groupId: GroupId,
+    val workspaceId: WorkspaceId,
 
     var name: ExtensionName? = null,
     var code: ExtensionCode? = null
 ) : RecordEntity<ExtensionId, ExtensionRecord, Extension> {
     override fun apply(rec: ExtensionRecord): ExtensionEntity {
         return when (rec) {
-            is ExtensionCreatedRecord -> copy(
+            is ExtensionRecord.Created -> copy(
                 id = rec.entityId,
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
@@ -32,7 +32,7 @@ data class ExtensionEntity(
                 recordedAt = rec.recordedAt()
             )
 
-            is ExtensionUpdatedRecord -> copy(
+            is ExtensionRecord.Updated -> copy(
                 id = rec.entityId,
                 cmdId = rec.cmdId,
                 name = rec.name,
@@ -47,7 +47,7 @@ data class ExtensionEntity(
             cmdId = cmdId,
             id = id,
             updatedAt = recordedAt.toUpdatedAt(),
-            groupId = groupId,
+            workspaceId = workspaceId,
             name = name!!,
             code = code!!
         )
@@ -57,11 +57,11 @@ data class ExtensionEntity(
 fun List<ExtensionRecord>.createEntity(): ExtensionEntity {
     check(isNotEmpty()) { "At least one record is required" }
     val firstRecord = first()
-    check(firstRecord is ExtensionCreatedRecord)
+    check(firstRecord is ExtensionRecord.Created)
 
     var result = ExtensionEntity(
         id = firstRecord.entityId,
-        groupId = firstRecord.groupId,
+        workspaceId = firstRecord.workspaceId,
         cmdId = firstRecord.cmdId,
         sequence = firstRecord.sequence(),
         recordedAt = firstRecord.recordedAt()

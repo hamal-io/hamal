@@ -1,6 +1,6 @@
 package io.hamal.api.http.controller.hook
 
-import io.hamal.lib.domain.vo.FlowName
+import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.domain.vo.HookName
 import io.hamal.lib.sdk.api.ApiHookCreateRequest
 import io.hamal.lib.sdk.api.ApiHookList
@@ -39,7 +39,7 @@ internal class HookListControllerTest : HookBaseControllerTest() {
         )
 
         val listResponse = httpTemplate.get("/v1/hooks")
-            .parameter("group_ids", testGroup.id)
+            .parameter("workspace_ids", testWorkspace.id)
             .parameter("limit", 12)
             .execute(ApiHookList::class)
 
@@ -60,7 +60,7 @@ internal class HookListControllerTest : HookBaseControllerTest() {
         val fortyNinth = requests[49]
 
         val listResponse = httpTemplate.get("/v1/hooks")
-            .parameter("group_ids", testGroup.id)
+            .parameter("workspace_ids", testWorkspace.id)
             .parameter("after_id", fortyNinth.hookId)
             .parameter("limit", 1)
             .execute(ApiHookList::class)
@@ -68,7 +68,7 @@ internal class HookListControllerTest : HookBaseControllerTest() {
         assertThat(listResponse.hooks, hasSize(1))
 
         val hook = listResponse.hooks.first()
-        assertThat(hook.flow.name, equalTo(FlowName("hamal")))
+        assertThat(hook.namespace.name, equalTo(NamespaceName("hamal")))
         assertThat(hook.name, equalTo(HookName("hook-48")))
     }
 }

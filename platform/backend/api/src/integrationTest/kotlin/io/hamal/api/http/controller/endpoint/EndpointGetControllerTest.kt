@@ -2,8 +2,8 @@ package io.hamal.api.http.controller.endpoint
 
 import io.hamal.lib.domain._enum.EndpointMethod
 import io.hamal.lib.domain.vo.EndpointName
-import io.hamal.lib.domain.vo.FlowName
 import io.hamal.lib.domain.vo.FuncName
+import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.HttpSuccessResponse
@@ -26,23 +26,23 @@ internal class EndpointGetControllerTest : EndpointBaseControllerTest() {
 
     @Test
     fun `Get endpoint`() {
-        val flowId = awaitCompleted(
-            createFlow(
-                name = FlowName("flow"),
-                groupId = testGroup.id
+        val namespaceId = awaitCompleted(
+            appendNamespace(
+                name = NamespaceName("namespace"),
+                parentId = testNamespace.id
             )
-        ).flowId
+        ).namespaceId
 
         val funcId = awaitCompleted(
             createFunc(
-                flowId = flowId,
+                namespaceId = namespaceId,
                 name = FuncName("func")
             )
         ).funcId
 
         val endpointId = awaitCompleted(
             createEndpoint(
-                flowId = flowId,
+                namespaceId = namespaceId,
                 name = EndpointName("endpoint-one"),
                 funcId = funcId,
                 method = EndpointMethod.Post

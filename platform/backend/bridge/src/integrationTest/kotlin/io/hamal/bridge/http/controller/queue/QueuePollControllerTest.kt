@@ -22,14 +22,14 @@ internal class QueuePollControllerTest : BaseQueueControllerTest() {
             execId = generateDomainId(::ExecId),
             status = Queued,
             code = CodeValue("40 + 2"),
-            invocation = EmptyInvocation
+            invocation = Invocation.Adhoc
         )
         with(dequeue()) {
             assertThat(work, hasSize(1))
 
             with(work.first()) {
-                assertThat(flowId, equalTo(testFlow.id))
-                assertThat(groupId, equalTo(testGroup.id))
+                assertThat(namespaceId, equalTo(testNamespace.id))
+                assertThat(workspaceId, equalTo(testWorkspace.id))
                 assertThat(inputs, equalTo(ExecInputs()))
                 assertThat(correlation, nullValue())
                 assertThat(code, equalTo(CodeValue("40 + 2")))
@@ -46,23 +46,23 @@ internal class QueuePollControllerTest : BaseQueueControllerTest() {
             status = Queued,
             correlation = Correlation(
                 funcId = FuncId(123),
-                correlationId = CorrelationId("_some_chosen_correlation_@")
+                id = CorrelationId("_some_chosen_correlation_@")
             ),
             code = CodeValue("40 + 2"),
-            invocation = EmptyInvocation
+            invocation = Invocation.Adhoc
         )
         with(dequeue()) {
             assertThat(work, hasSize(1))
 
             with(work.first()) {
-                assertThat(flowId, equalTo(testFlow.id))
-                assertThat(groupId, equalTo(testGroup.id))
+                assertThat(namespaceId, equalTo(testNamespace.id))
+                assertThat(workspaceId, equalTo(testWorkspace.id))
                 assertThat(inputs, equalTo(ExecInputs()))
                 assertThat(
                     correlation, equalTo(
                         Correlation(
                             funcId = FuncId(123),
-                            correlationId = CorrelationId("_some_chosen_correlation_@")
+                            id = CorrelationId("_some_chosen_correlation_@")
                         )
                     )
                 )

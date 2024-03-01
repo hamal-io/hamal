@@ -1,22 +1,22 @@
 package io.hamal.repository.sqlite
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.NamedResultSet
 import io.hamal.lib.sqlite.SqliteBaseRepository
-import io.hamal.repository.api.*
+import io.hamal.repository.api.Auth
 import io.hamal.repository.api.AuthCmdRepository.*
 import io.hamal.repository.api.AuthQueryRepository.AuthQuery
+import io.hamal.repository.api.AuthRepository
 import java.nio.file.Path
 
 class AuthSqliteRepository(
-    config: Config
-) : SqliteBaseRepository(config), AuthRepository {
-    data class Config(
-        override val path: Path
-    ) : SqliteBaseRepository.Config {
-        override val filename = "auth.db"
-    }
+    path: Path
+) : SqliteBaseRepository(
+    path = path,
+    filename = "auth.db"
+), AuthRepository {
 
     override fun setupConnection(connection: Connection) {
         connection.execute("""PRAGMA journal_mode = wal;""")
@@ -189,9 +189,10 @@ class AuthSqliteRepository(
         }
     }
 
-    override fun count(query: AuthQuery): ULong {
-        return connection.executeQueryOne(
-            """
+    override fun count(query: AuthQuery): Count {
+        return Count(
+            connection.executeQueryOne(
+                """
             SELECT 
                 COUNT(*) as count 
             FROM 
@@ -201,14 +202,15 @@ class AuthSqliteRepository(
                 ${query.ids()}
                 ${query.accountIds()}
         """.trimIndent()
-        ) {
-            query {
-                set("afterId", query.afterId)
-            }
-            map {
-                it.getLong("count").toULong()
-            }
-        } ?: 0UL
+            ) {
+                query {
+                    set("afterId", query.afterId)
+                }
+                map {
+                    it.getLong("count")
+                }
+            } ?: 0L
+        )
     }
 
     override fun clear() {
@@ -220,12 +222,30 @@ class AuthSqliteRepository(
     override fun close() {
 
     }
+
+    override fun find(authId: AuthId): Auth? {
+        return connection.executeQueryOne(
+            """
+            SELECT 
+                *
+             FROM
+                auth
+            WHERE
+                id = :id
+        """.trimIndent()
+        ) {
+            query {
+                set("id", authId)
+            }
+            map(NamedResultSet::toAuth)
+        }
+    }
 }
 
 private fun NamedResultSet.toAuth(): Auth {
     return when (getInt("type")) {
         1 -> {
-            EmailAuth(
+            Auth.Email(
                 cmdId = getCommandId("cmd_id"),
                 id = getId("id", ::AuthId),
                 accountId = getId("account_id", ::AccountId),
@@ -235,7 +255,7 @@ private fun NamedResultSet.toAuth(): Auth {
         }
 
         2 -> {
-            TokenAuth(
+            Auth.Token(
                 cmdId = getCommandId("cmd_id"),
                 id = getId("id", ::AuthId),
                 accountId = getId("account_id", ::AccountId),
@@ -245,7 +265,7 @@ private fun NamedResultSet.toAuth(): Auth {
         }
 
         3 -> {
-            MetaMaskAuth(
+            Auth.MetaMask(
                 cmdId = getCommandId("cmd_id"),
                 id = getId("id", ::AuthId),
                 accountId = getId("account_id", ::AccountId),

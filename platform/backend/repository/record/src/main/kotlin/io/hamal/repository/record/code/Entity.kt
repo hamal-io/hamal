@@ -5,7 +5,7 @@ import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.CodeVersion
-import io.hamal.lib.domain.vo.GroupId
+import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.repository.api.Code
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordEntity
@@ -19,7 +19,7 @@ data class CodeEntity(
     override val sequence: RecordSequence,
     override val recordedAt: RecordedAt,
 
-    val groupId: GroupId,
+    val workspaceId: WorkspaceId,
     var value: CodeValue? = null,
     val type: CodeType? = null
 
@@ -27,7 +27,7 @@ data class CodeEntity(
 
     override fun apply(rec: CodeRecord): CodeEntity {
         return when (rec) {
-            is CodeCreatedRecord -> copy(
+            is CodeRecord.Created -> copy(
                 id = rec.entityId,
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
@@ -37,7 +37,7 @@ data class CodeEntity(
 
             )
 
-            is CodeUpdatedRecord -> copy(
+            is CodeRecord.Updated -> copy(
                 id = rec.entityId,
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
@@ -52,7 +52,7 @@ data class CodeEntity(
             cmdId = cmdId,
             id = id,
             updatedAt = recordedAt.toUpdatedAt(),
-            groupId = groupId,
+            workspaceId = workspaceId,
             version = CodeVersion(sequence.value),
             value = value!!,
             type = type!!
@@ -63,11 +63,11 @@ data class CodeEntity(
 fun List<CodeRecord>.createEntity(): CodeEntity {
     check(isNotEmpty()) { "At least one record is required" }
     val firstRecord = first()
-    check(firstRecord is CodeCreatedRecord)
+    check(firstRecord is CodeRecord.Created)
 
     var result = CodeEntity(
         id = firstRecord.entityId,
-        groupId = firstRecord.groupId,
+        workspaceId = firstRecord.workspaceId,
         cmdId = firstRecord.cmdId,
         sequence = firstRecord.sequence(),
         recordedAt = firstRecord.recordedAt()

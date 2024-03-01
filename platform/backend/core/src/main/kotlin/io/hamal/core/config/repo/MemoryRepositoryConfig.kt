@@ -3,10 +3,23 @@ package io.hamal.core.config.repo
 import io.hamal.repository.api.*
 import io.hamal.repository.memory.AuthMemoryRepository
 import io.hamal.repository.memory.ExecLogMemoryRepository
-import io.hamal.repository.memory.ReqMemoryRepository
+import io.hamal.repository.memory.RequestMemoryRepository
 import io.hamal.repository.memory.StateMemoryRepository
-import io.hamal.repository.memory.log.BrokerMemoryRepository
-import io.hamal.repository.memory.record.*
+import io.hamal.repository.memory.log.LogBrokerMemoryRepository
+import io.hamal.repository.memory.record.account.AccountMemoryRepository
+import io.hamal.repository.memory.record.blueprint.BlueprintMemoryRepository
+import io.hamal.repository.memory.record.code.CodeMemoryRepository
+import io.hamal.repository.memory.record.endpoint.EndpointMemoryRepository
+import io.hamal.repository.memory.record.exec.ExecMemoryRepository
+import io.hamal.repository.memory.record.extension.ExtensionMemoryRepository
+import io.hamal.repository.memory.record.feedback.FeedbackMemoryRepository
+import io.hamal.repository.memory.record.func.FuncMemoryRepository
+import io.hamal.repository.memory.record.hook.HookMemoryRepository
+import io.hamal.repository.memory.record.namespace.NamespaceMemoryRepository
+import io.hamal.repository.memory.record.namespace_tree.NamespaceTreeMemoryRepository
+import io.hamal.repository.memory.record.topic.TopicMemoryRepository
+import io.hamal.repository.memory.record.trigger.TriggerMemoryRepository
+import io.hamal.repository.memory.record.workspace.MemoryWorkspaceRepository
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
@@ -14,12 +27,6 @@ import org.springframework.context.annotation.Profile
 @Configuration
 @Profile("memory")
 open class MemoryRepositoryConfig {
-
-    @Bean
-    open fun platformEventBrokerRepository() = BrokerMemoryRepository()
-
-    @Bean
-    open fun eventBrokerRepository() = BrokerMemoryRepository()
 
     @Bean
     open fun accountRepository() = AccountMemoryRepository()
@@ -94,13 +101,13 @@ open class MemoryRepositoryConfig {
     open fun funcQueryRepository(): FuncQueryRepository = funcRepository()
 
     @Bean
-    open fun groupRepository() = MemoryGroupRepository()
+    open fun workspaceRepository() = MemoryWorkspaceRepository()
 
     @Bean
-    open fun groupQueryRepository() = groupRepository()
+    open fun workspaceQueryRepository() = workspaceRepository()
 
     @Bean
-    open fun groupCmdRepository() = groupRepository()
+    open fun workspaceCmdRepository() = workspaceRepository()
 
     @Bean
     open fun hookRepository() = HookMemoryRepository()
@@ -112,13 +119,22 @@ open class MemoryRepositoryConfig {
     open fun hookCmdRepository() = hookRepository()
 
     @Bean
-    open fun flowRepository() = FlowMemoryRepository()
+    open fun namespaceRepository() = NamespaceMemoryRepository()
 
     @Bean
-    open fun flowCmdRepository(): FlowCmdRepository = flowRepository()
+    open fun namespaceCmdRepository(): NamespaceCmdRepository = namespaceRepository()
 
     @Bean
-    open fun flowQueryRepository(): FlowQueryRepository = flowRepository()
+    open fun namespaceQueryRepository(): NamespaceQueryRepository = namespaceRepository()
+
+    @Bean
+    open fun namespaceTreeRepository() = NamespaceTreeMemoryRepository()
+
+    @Bean
+    open fun namespaceTreeCmdRepository(): NamespaceTreeCmdRepository = namespaceTreeRepository()
+
+    @Bean
+    open fun namespaceTreeQueryRepository(): NamespaceTreeQueryRepository = namespaceTreeRepository()
 
     @Bean
     open fun execRepository(): ExecRepository = ExecMemoryRepository()
@@ -139,13 +155,16 @@ open class MemoryRepositoryConfig {
     open fun execLogQueryRepository(): ExecLogQueryRepository = execLogRepository()
 
     @Bean
-    open fun reqRepository(): RequestRepository = ReqMemoryRepository()
+    open fun logBrokerRepository() = LogBrokerMemoryRepository()
 
     @Bean
-    open fun reqCmdRepository(): RequestCmdRepository = reqRepository()
+    open fun requestRepository(): RequestRepository = RequestMemoryRepository()
 
     @Bean
-    open fun reqQueryRepository(): RequestQueryRepository = reqRepository()
+    open fun requestCmdRepository(): RequestCmdRepository = requestRepository()
+
+    @Bean
+    open fun requestQueryRepository(): RequestQueryRepository = requestRepository()
 
     @Bean
     open fun stateRepository(): StateRepository = StateMemoryRepository()
@@ -155,6 +174,17 @@ open class MemoryRepositoryConfig {
 
     @Bean
     open fun stateQueryRepository(): StateQueryRepository = stateRepository()
+
+    @Bean
+    open fun topicRepository(): TopicRepository = TopicMemoryRepository(
+        logBrokerRepository()
+    )
+
+    @Bean
+    open fun topicCmdRepository(): TopicCmdRepository = topicRepository()
+
+    @Bean
+    open fun topicQueryRepository(): TopicQueryRepository = topicRepository()
 
     @Bean
     open fun triggerRepository(): TriggerRepository = TriggerMemoryRepository()

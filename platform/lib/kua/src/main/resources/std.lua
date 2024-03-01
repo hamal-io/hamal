@@ -12,3 +12,12 @@ function fail_on_error(err, ...)
     end
     return ...
 end
+
+function find_in_list(list, key, matchValue)
+    for _, value in ipairs(list) do
+        if value[key] == matchValue then
+            return value
+        end
+    end
+    return nil
+end

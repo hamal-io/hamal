@@ -42,19 +42,19 @@ internal class StateSetControllerTest : StateBaseControllerTest() {
     fun `Sets state for a function with multiple correlations`() {
         val funcId = awaitCompleted(createFunc(FuncName("SomeFunc"))).funcId
 
-        val correlationOne = Correlation(funcId = funcId, correlationId = CorrelationId("1"))
-        val correlationTwo = Correlation(funcId = funcId, correlationId = CorrelationId("2"))
+        val correlationOne = Correlation(funcId = funcId, id = CorrelationId("1"))
+        val correlationTwo = Correlation(funcId = funcId, id = CorrelationId("2"))
 
         setState(CorrelatedState(correlationOne, State(HotObject.builder().set("result", true).build())))
         setState(CorrelatedState(correlationTwo, State(HotObject.builder().set("result", false).build())))
 
         with(getState(correlationOne)) {
-            assertThat(correlation.correlationId, equalTo(CorrelationId("1")))
+            assertThat(correlation.id, equalTo(CorrelationId("1")))
             assertThat(state, equalTo(ApiState(HotObject.builder().set("result", true).build())))
         }
 
         with(getState(correlationTwo)) {
-            assertThat(correlation.correlationId, equalTo(CorrelationId("2")))
+            assertThat(correlation.id, equalTo(CorrelationId("2")))
             assertThat(state, equalTo(ApiState(HotObject.builder().set("result", false).build())))
         }
     }
@@ -65,7 +65,7 @@ internal class StateSetControllerTest : StateBaseControllerTest() {
         val funcId = awaitCompleted(createFunc(FuncName("SomeFunc"))).funcId
 
         val correlation = Correlation(
-            correlationId = CorrelationId("SOME_CORRELATION"),
+            id = CorrelationId("SOME_CORRELATION"),
             funcId = funcId
         )
 

@@ -1,5 +1,5 @@
 import React, {FC, useEffect, useState} from 'react'
-import {useAccountCreateAnonymous, useAdhoc, useFlowCreate} from "@/hook";
+import {useAccountCreateAnonymous, useAdhoc} from "@/hook";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useAuth} from "@/hook/auth.ts";
 import {Loader2} from "lucide-react";
@@ -10,7 +10,6 @@ const OnboardingPage: FC = () => {
     const navigate = useNavigate()
     const [auth] = useAuth()
     const [createAnonymousAccount] = useAccountCreateAnonymous()
-    const [createFlow, flow,] = useFlowCreate()
     const [adhoc, adhocSubmitted] = useAdhoc()
     const [code, setCode] = useState<string>('')
 
@@ -35,35 +34,26 @@ const OnboardingPage: FC = () => {
 
     useEffect(() => {
         const abortController = new AbortController()
-
         if (auth != null && auth.type !== 'Unauthorized') {
-            createFlow(auth.groupId, `Flow-${generateId(10)}`, abortController)
-        }
-        return () => {
-            abortController.abort()
-        }
-    }, [auth, createFlow])
-
-    useEffect(() => {
-        const abortController = new AbortController()
-        if (flow != null) {
-            adhoc(flow.flowId, `sys = require_plugin('sys')
-                sys.funcs.create({
-                    name = 'Hello-World',
-                    inputs = {},
-                    code = [[ ${code} ]]
-                })`, abortController)
+            adhoc(auth.workspaceId, `
+            sys = require_plugin('sys')
+            log = require('log').create({})
+            log.info('Setting up account')
+            sys.funcs.create({
+                name = 'Hello-World',
+                inputs = {},
+                code = [[ ${code} ]]
+            })`, abortController)
         }
         return () => {
             abortController.abort()
         }
 
-    }, [flow, adhoc]);
-
+    }, [auth, adhoc]);
 
     useEffect(() => {
         if (adhocSubmitted != null) {
-            navigate('/flows', {replace: true})
+            navigate(`/dashboard`, {replace: true})
         }
     }, [adhocSubmitted, navigate]);
 

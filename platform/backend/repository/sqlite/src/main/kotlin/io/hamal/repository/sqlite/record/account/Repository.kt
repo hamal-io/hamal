@@ -1,18 +1,16 @@
 package io.hamal.repository.sqlite.record.account
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.AccountId
-import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.Account
 import io.hamal.repository.api.AccountCmdRepository
 import io.hamal.repository.api.AccountCmdRepository.CreateCmd
 import io.hamal.repository.api.AccountQueryRepository.AccountQuery
 import io.hamal.repository.api.AccountRepository
 import io.hamal.repository.record.CreateDomainObject
-import io.hamal.repository.record.account.AccountConvertedRecord
-import io.hamal.repository.record.account.AccountCreatedRecord
 import io.hamal.repository.record.account.AccountEntity
 import io.hamal.repository.record.account.AccountRecord
-import io.hamal.repository.sqlite.record.SqliteRecordRepository
+import io.hamal.repository.sqlite.record.RecordSqliteRepository
 import java.nio.file.Path
 
 internal object CreateAccount : CreateDomainObject<AccountId, AccountRecord, Account> {
@@ -20,7 +18,7 @@ internal object CreateAccount : CreateDomainObject<AccountId, AccountRecord, Acc
         check(recs.isNotEmpty()) { "At least one record is required" }
         val firstRecord = recs.first()
 
-        check(firstRecord is AccountCreatedRecord)
+        check(firstRecord is AccountRecord.Created)
 
         var result = AccountEntity(
             cmdId = firstRecord.cmdId,
@@ -40,19 +38,15 @@ internal object CreateAccount : CreateDomainObject<AccountId, AccountRecord, Acc
 }
 
 class AccountSqliteRepository(
-    config: Config
-) : SqliteRecordRepository<AccountId, AccountRecord, Account>(
-    config = config,
+    path: Path
+) : RecordSqliteRepository<AccountId, AccountRecord, Account>(
+    path = path,
+    filename = "account.db",
     createDomainObject = CreateAccount,
     recordClass = AccountRecord::class,
     projections = listOf(ProjectionCurrent)
 ), AccountRepository {
 
-    data class Config(
-        override val path: Path
-    ) : SqliteBaseRepository.Config {
-        override val filename = "account.db"
-    }
 
     override fun create(cmd: CreateCmd): Account {
         val accountId = cmd.accountId
@@ -62,7 +56,7 @@ class AccountSqliteRepository(
                 versionOf(accountId, cmdId)
             } else {
                 store(
-                    AccountCreatedRecord(
+                    AccountRecord.Created(
                         cmdId = cmdId,
                         entityId = accountId,
                         type = cmd.accountType,
@@ -83,9 +77,8 @@ class AccountSqliteRepository(
             if (commandAlreadyApplied(cmdId, accountId)) {
                 versionOf(accountId, cmdId)
             } else {
-                val currentVersion = currentVersion(accountId)
                 store(
-                    AccountConvertedRecord(
+                    AccountRecord.Converted(
                         cmdId = cmdId,
                         entityId = accountId
                     )
@@ -104,7 +97,7 @@ class AccountSqliteRepository(
         return ProjectionCurrent.list(connection, query)
     }
 
-    override fun count(query: AccountQuery): ULong {
+    override fun count(query: AccountQuery): Count {
         return ProjectionCurrent.count(connection, query)
     }
 }

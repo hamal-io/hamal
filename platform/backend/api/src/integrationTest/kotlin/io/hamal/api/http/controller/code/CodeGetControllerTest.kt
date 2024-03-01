@@ -21,7 +21,7 @@ internal class CodeGetControllerTest : CodeBaseControllerTest() {
                 CodeCmdRepository.CreateCmd(
                     id = CmdGen(),
                     codeId = CodeId(iter + 5),
-                    groupId = testGroup.id,
+                    workspaceId = testWorkspace.id,
                     value = CodeValue("1 + $iter")
                 )
             )
@@ -41,7 +41,7 @@ internal class CodeGetControllerTest : CodeBaseControllerTest() {
             CodeCmdRepository.CreateCmd(
                 id = CmdGen(),
                 codeId = CodeId(2),
-                groupId = testGroup.id,
+                workspaceId = testWorkspace.id,
                 value = CodeValue("1 + 1")
             )
         )
@@ -70,7 +70,7 @@ internal class CodeGetControllerTest : CodeBaseControllerTest() {
             CodeCmdRepository.CreateCmd(
                 id = CmdGen(),
                 codeId = CodeId(3),
-                groupId = testGroup.id,
+                workspaceId = testWorkspace.id,
                 value = CodeValue("1 + 1")
             )
         )
@@ -98,12 +98,12 @@ internal class CodeGetControllerTest : CodeBaseControllerTest() {
             CodeCmdRepository.CreateCmd(
                 id = CmdGen(),
                 codeId = CodeId(4),
-                groupId = testGroup.id,
+                workspaceId = testWorkspace.id,
                 value = CodeValue("1 + 1")
             )
         )
 
-        val getCodeResponse = httpTemplate.get("/v1/code/{id}")
+        val getCodeResponse = httpTemplate.get("/v1/codes/{id}")
             .path("id", CodeId(4))
             .parameter("version", 2)
             .execute()
@@ -118,7 +118,7 @@ internal class CodeGetControllerTest : CodeBaseControllerTest() {
 
     @Test
     fun `Tries to get code that does not exist`() {
-        val getCodeResponse = httpTemplate.get("/v1/code/33333333").execute()
+        val getCodeResponse = httpTemplate.get("/v1/codes/33333333").execute()
         assertThat(getCodeResponse.statusCode, equalTo(HttpStatusCode.NotFound))
         require(getCodeResponse is HttpErrorResponse) { "request was successful" }
 

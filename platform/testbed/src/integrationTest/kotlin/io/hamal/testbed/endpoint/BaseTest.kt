@@ -1,15 +1,17 @@
 package io.hamal.testbed.endpoint
 
-import AbstractRunnerTest
 import io.hamal.core.component.DelayRetry
 import io.hamal.core.component.DelayRetryFixedTime
+import io.hamal.core.component.SetupInternalTopics
 import io.hamal.core.config.BackendBasePath
+import io.hamal.core.service.InternalEventService
 import io.hamal.extension.net.http.ExtensionHttpFactory
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.util.TimeUtils
-import io.hamal.lib.domain.GenerateId
+import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.kua.CloseableStateImpl
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContext
@@ -19,9 +21,10 @@ import io.hamal.plugin.std.debug.PluginDebugFactory
 import io.hamal.plugin.std.log.PluginLogFactory
 import io.hamal.plugin.std.sys.PluginSysFactory
 import io.hamal.repository.api.*
-import io.hamal.repository.api.log.BrokerRepository
+import io.hamal.repository.api.log.LogBrokerRepository
 import io.hamal.runner.config.EnvFactory
 import io.hamal.runner.config.SandboxFactory
+import io.hamal.runner.test.AbstractRunnerTest
 import jakarta.annotation.PostConstruct
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
@@ -97,18 +100,18 @@ class ClearController {
 
     @PostMapping("/v1/clear")
     fun clear() {
-        eventBrokerRepository.clear()
         accountRepository.clear()
         authRepository.clear()
         codeRepository.clear()
         endpointRepository.clear()
         extensionRepository.clear()
-        reqRepository.clear()
+        requestRepository.clear()
         execRepository.clear()
         funcRepository.clear()
-        groupRepository.clear()
+        workspaceRepository.clear()
         hookRepository.clear()
-        flowRepository.clear()
+
+        namespaceRepository.clear()
         blueprintRepository.clear()
         triggerRepository.clear()
 
@@ -129,33 +132,29 @@ class ClearController {
                 token = AuthToken("root-token"),
                 expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(1, ChronoUnit.DAYS))
             )
-        ) as TokenAuth).token
+        ) as Auth.Token).token
 
-        testGroup = groupRepository.create(
-            GroupCmdRepository.CreateCmd(
+        testWorkspace = workspaceRepository.create(
+            WorkspaceCmdRepository.CreateCmd(
                 id = CmdId(4),
-                groupId = GroupId.root,
-                name = GroupName("root-group"),
+                workspaceId = WorkspaceId.root,
+                name = WorkspaceName("root-workspace"),
                 creatorId = testAccount.id
             )
         )
 
-        testFlow = flowRepository.create(
-            FlowCmdRepository.CreateCmd(
+        testNamespace = namespaceRepository.create(
+            NamespaceCmdRepository.CreateCmd(
                 id = CmdId(5),
-                flowId = FlowId.root,
-                groupId = testGroup.id,
-                name = FlowName("root-flow"),
-                inputs = FlowInputs()
+                namespaceId = NamespaceId.root,
+                workspaceId = testWorkspace.id,
+                name = NamespaceName("root-namespace")
             )
         )
     }
 
     @Autowired
     lateinit var blueprintRepository: BlueprintRepository
-
-    @Autowired
-    lateinit var eventBrokerRepository: BrokerRepository
 
     @Autowired
     lateinit var accountRepository: AccountRepository
@@ -179,27 +178,39 @@ class ClearController {
     lateinit var funcRepository: FuncRepository
 
     @Autowired
-    lateinit var groupRepository: GroupRepository
+    lateinit var workspaceRepository: WorkspaceRepository
 
     @Autowired
     lateinit var hookRepository: HookRepository
 
     @Autowired
-    lateinit var flowRepository: FlowRepository
+    lateinit var namespaceRepository: NamespaceRepository
 
     @Autowired
-    lateinit var reqRepository: RequestRepository
+    lateinit var requestRepository: RequestRepository
 
     @Autowired
     lateinit var triggerRepository: TriggerRepository
 
     @Autowired
-    lateinit var generateDomainId: GenerateId
+    lateinit var generateDomainId: GenerateDomainId
+
+    @Autowired
+    lateinit var logBrokerRepository: LogBrokerRepository
+
+    @Autowired
+    lateinit var topicRepository: TopicRepository
+
+    @Autowired
+    lateinit var setupInternalTopics: SetupInternalTopics
+
+    @Autowired
+    lateinit var internalEvenService: InternalEventService
 
     private lateinit var testAccount: Account
     private lateinit var testAccountAuthToken: AuthToken
-    private lateinit var testGroup: Group
-    private lateinit var testFlow: Flow
+    private lateinit var testWorkspace: Workspace
+    private lateinit var testNamespace: Namespace
 }
 
 
@@ -208,11 +219,15 @@ class TestConfig {
 
     private lateinit var testAccount: Account
     private lateinit var testAccountAuthToken: AuthToken
-    private lateinit var testGroup: Group
-    private lateinit var testFlow: Flow
+    private lateinit var testWorkspace: Workspace
+    private lateinit var testNamespace: Namespace
 
     @PostConstruct
     fun setup() {
+        topicRepository.clear()
+        logBrokerRepository.clear()
+        setupInternalTopics()
+//        internalEvenService.reload()
 
         try {
             testAccount = accountRepository.create(
@@ -232,29 +247,46 @@ class TestConfig {
                     token = AuthToken("root-token"),
                     expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(1, ChronoUnit.DAYS))
                 )
-            ) as TokenAuth).token
+            ) as Auth.Token).token
 
-            testGroup = groupRepository.create(
-                GroupCmdRepository.CreateCmd(
+            testWorkspace = workspaceRepository.create(
+                WorkspaceCmdRepository.CreateCmd(
                     id = CmdId(4),
-                    groupId = GroupId.root,
-                    name = GroupName("root-group"),
+                    workspaceId = WorkspaceId.root,
+                    name = WorkspaceName("root-workspace"),
                     creatorId = testAccount.id
                 )
             )
 
-            testFlow = flowRepository.create(
-                FlowCmdRepository.CreateCmd(
+            testNamespace = namespaceRepository.create(
+                NamespaceCmdRepository.CreateCmd(
                     id = CmdId(5),
-                    flowId = FlowId.root,
-                    groupId = testGroup.id,
-                    name = FlowName("root-flow"),
-                    inputs = FlowInputs()
+                    namespaceId = NamespaceId.root,
+                    workspaceId = testWorkspace.id,
+                    name = NamespaceName("root-namespace")
                 )
             )
         } catch (ignore: Throwable) {
         }
     }
+
+    @Autowired
+    lateinit var topicRepository: TopicRepository
+
+    @Autowired
+    lateinit var triggerRepository: TriggerRepository
+
+    @Autowired
+    lateinit var generateDomainId: GenerateDomainId
+
+    @Autowired
+    lateinit var internalEvenService: InternalEventService
+
+    @Autowired
+    lateinit var logBrokerRepository: LogBrokerRepository
+
+    @Autowired
+    lateinit var setupInternalTopics: SetupInternalTopics
 
     @Autowired
     lateinit var accountRepository: AccountRepository
@@ -263,10 +295,10 @@ class TestConfig {
     lateinit var authRepository: AuthRepository
 
     @Autowired
-    lateinit var groupRepository: GroupRepository
+    lateinit var workspaceRepository: WorkspaceRepository
 
     @Autowired
-    lateinit var flowRepository: FlowRepository
+    lateinit var namespaceRepository: NamespaceRepository
 }
 
 

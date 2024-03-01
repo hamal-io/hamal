@@ -5,7 +5,7 @@ type GetAction = (url: string, abortController?: AbortController) => void
 export const useGet = <T>(): [GetAction, T, boolean, Error] => {
     const [auth, setAuth] = useAuth()
     const [data, setData] = useState<T | null>(null);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState<Error | null>(null);
 
     const fn = useCallback(async (url: string, abortController?: AbortController) => {
@@ -15,6 +15,7 @@ export const useGet = <T>(): [GetAction, T, boolean, Error] => {
             setAuth(null)
             window.location.href = '/'
         } else {
+            setLoading(true)
             fetch(`${import.meta.env.VITE_BASE_URL}${url}`, {
                 method: "GET",
                 headers: {
@@ -61,7 +62,7 @@ type PostAction = (url: string, data: object, abortController?: AbortController)
 export const usePost = <T>(): [PostAction, T, boolean, Error] => {
     const [auth, setAuth] = useAuth()
     const [data, setData] = useState<T | null>(null);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState<Error | null>(null);
 
     const fn = useCallback(async (url: string, body: object, abortController?: AbortController) => {
@@ -72,6 +73,7 @@ export const usePost = <T>(): [PostAction, T, boolean, Error] => {
             window.location.href = '/'
 
         } else {
+            setLoading(true)
             fetch(`${import.meta.env.VITE_BASE_URL}${url}`, {
                 method: "POST",
                 headers: {
@@ -123,7 +125,7 @@ type PatchAction = (url: string, data: object, abortController?: AbortController
 export const usePatch = <T>(): [PatchAction, T, boolean, Error] => {
     const [auth, setAuth] = useAuth()
     const [data, setData] = useState<T | null>(null);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState<Error | null>(null);
 
     const fn = useCallback(async (url: string, body: object, abortController?: AbortController) => {
@@ -134,6 +136,7 @@ export const usePatch = <T>(): [PatchAction, T, boolean, Error] => {
             window.location.href = '/'
 
         } else {
+            setLoading(true)
             fetch(`${import.meta.env.VITE_BASE_URL}${url}`, {
                 method: "PATCH",
                 headers: {

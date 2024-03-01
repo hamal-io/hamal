@@ -1,25 +1,25 @@
-export interface FuncCreateSubmitted {
+export interface FuncCreateRequested {
     id: string;
     status: string;
     funcId: string;
-    flowId: string;
-    groupId: string;
+    namespaceId: string;
+    workspaceId: string;
 }
 
-export interface FuncUpdateSubmitted {
-    id: string;
-    status: string;
-    funcId: string;
-}
-
-
-export interface FuncInvokeSubmitted {
+export interface FuncUpdateRequested {
     id: string;
     status: string;
     funcId: string;
 }
 
-export interface FuncDeploySubmitted {
+
+export interface FuncInvokeRequested {
+    id: string;
+    status: string;
+    funcId: string;
+}
+
+export interface FuncDeployRequested {
     id: string;
     status: string;
     funcId: string;

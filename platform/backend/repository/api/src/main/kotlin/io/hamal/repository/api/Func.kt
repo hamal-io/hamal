@@ -1,23 +1,20 @@
 package io.hamal.repository.api
 
-import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.domain.DomainObject
-import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.common.domain.UpdatedAt
+import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.*
 
 data class Func(
     override val id: FuncId,
     override val updatedAt: UpdatedAt,
-    val groupId: GroupId,
+    override val workspaceId: WorkspaceId,
     val cmdId: CmdId,
-    val flowId: FlowId,
+    override val namespaceId: NamespaceId,
     val name: FuncName,
     val inputs: FuncInputs,
     val code: FuncCode,
     val deployment: FuncDeployment
-) : DomainObject<FuncId>
+) : DomainObject<FuncId>, HasNamespaceId, HasWorkspaceId
 
 data class FuncCode(
     val id: CodeId,
@@ -48,8 +45,8 @@ interface FuncCmdRepository : CmdRepository {
     data class CreateCmd(
         val id: CmdId,
         val funcId: FuncId,
-        val groupId: GroupId,
-        val flowId: FlowId,
+        val workspaceId: WorkspaceId,
+        val namespaceId: NamespaceId,
         val name: FuncName,
         val inputs: FuncInputs,
         val codeId: CodeId,
@@ -77,21 +74,21 @@ interface FuncQueryRepository {
     fun list(funcIds: List<FuncId>): List<Func> = list(
         FuncQuery(
             limit = Limit.all,
-            groupIds = listOf(),
+            workspaceIds = listOf(),
             funcIds = funcIds,
         )
     )
 
     fun listDeployments(funcId: FuncId): List<FuncDeployment>
 
-    fun count(query: FuncQuery): ULong
+    fun count(query: FuncQuery): Count
 
     data class FuncQuery(
         var afterId: FuncId = FuncId(SnowflakeId(Long.MAX_VALUE)),
         var limit: Limit = Limit(1),
         var funcIds: List<FuncId> = listOf(),
-        var flowIds: List<FlowId> = listOf(),
-        var groupIds: List<GroupId> = listOf()
+        var namespaceIds: List<NamespaceId> = listOf(),
+        var workspaceIds: List<WorkspaceId> = listOf()
     )
 
 

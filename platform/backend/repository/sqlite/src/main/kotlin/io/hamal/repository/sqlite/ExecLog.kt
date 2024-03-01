@@ -1,5 +1,6 @@
 package io.hamal.repository.sqlite
 
+import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain._enum.ExecLogLevel
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.sqlite.Connection
@@ -13,13 +14,11 @@ import java.nio.file.Path
 import java.time.Instant
 
 class ExecLogSqliteRepository(
-    config: Config
-) : SqliteBaseRepository(config), ExecLogRepository {
-    data class Config(
-        override val path: Path
-    ) : SqliteBaseRepository.Config {
-        override val filename = "exec_log.db"
-    }
+    path: Path
+) : SqliteBaseRepository(
+    path = path,
+    filename = "exec_log.db"
+), ExecLogRepository {
 
     override fun setupSchema(connection: Connection) {
         connection.tx {
@@ -28,7 +27,7 @@ class ExecLogSqliteRepository(
                 CREATE TABLE IF NOT EXISTS exec_log (
                     id INTEGER NOT NULL,
                     exec_id INTEGER NOT NULL,
-                    group_id INTEGER NOT NULL,
+                    workspace_id INTEGER NOT NULL,
                     level INTEGER NOT NULL,
                     message VARCHAR(255) NOT NULL,
                     timestamp INTEGER NOT NULL,
@@ -44,16 +43,16 @@ class ExecLogSqliteRepository(
         return connection.execute<ExecLog>(
             """
             INSERT OR REPLACE INTO exec_log 
-                (id, exec_id, group_id, message, level, timestamp)
+                (id, exec_id, workspace_id, message, level, timestamp)
             VALUES
-                (:id, :exec_id, :group_id, :message, :level, :timestamp) 
+                (:id, :exec_id, :workspace_id, :message, :level, :timestamp) 
             RETURNING *;
         """.trimIndent()
         ) {
             query {
                 set("id", cmd.execLogId)
                 set("exec_id", cmd.execId)
-                set("group_id", cmd.groupId)
+                set("workspace_id", cmd.workspaceId)
                 set("message", cmd.message.value)
                 set("level", cmd.level.value)
                 set("timestamp", cmd.timestamp.value.toEpochMilli())
@@ -72,7 +71,7 @@ class ExecLogSqliteRepository(
                 exec_log
             WHERE
                 id < :afterId
-                ${query.groupIds()}
+                ${query.workspaceIds()}
                 ${query.ids()}
                 ${query.execIds()}
             ORDER BY id DESC
@@ -87,27 +86,29 @@ class ExecLogSqliteRepository(
         }
     }
 
-    override fun count(query: ExecLogQuery): ULong {
-        return connection.executeQueryOne(
-            """
+    override fun count(query: ExecLogQuery): Count {
+        return Count(
+            connection.executeQueryOne(
+                """
             SELECT 
                 COUNT(*) as count 
             FROM 
                 exec_log
             WHERE
                 id < :afterId
-                ${query.groupIds()}
+                ${query.workspaceIds()}
                 ${query.ids()}
                 ${query.execIds()}
             """.trimIndent()
-        ) {
-            query {
-                set("afterId", query.afterId)
-            }
-            map {
-                it.getLong("count").toULong()
-            }
-        } ?: 0UL
+            ) {
+                query {
+                    set("afterId", query.afterId)
+                }
+                map {
+                    it.getLong("count")
+                }
+            } ?: 0L
+        )
     }
 
     override fun clear() {
@@ -136,11 +137,11 @@ private fun ExecLogQuery.ids(): String {
     }
 }
 
-private fun ExecLogQuery.groupIds(): String {
-    return if (groupIds.isEmpty()) {
+private fun ExecLogQuery.workspaceIds(): String {
+    return if (workspaceIds.isEmpty()) {
         ""
     } else {
-        "AND group_id IN (${groupIds.joinToString(",") { "${it.value.value}" }})"
+        "AND workspace_id IN (${workspaceIds.joinToString(",") { "${it.value.value}" }})"
     }
 }
 
@@ -156,7 +157,7 @@ private fun NamedResultSet.toExecLog(): ExecLog {
     return ExecLog(
         id = getId("id", ::ExecLogId),
         execId = getId("exec_id", ::ExecId),
-        groupId = getId("group_id", ::GroupId),
+        workspaceId = getId("workspace_id", ::WorkspaceId),
         level = ExecLogLevel.of(getInt("level")),
         message = ExecLogMessage(getString("message")),
         timestamp = ExecLogTimestamp(Instant.ofEpochMilli(getLong("timestamp")))
