@@ -1,6 +1,5 @@
-package io.hamal.lib.kua.extend
+package io.hamal.lib.kua
 
-import io.hamal.lib.kua.State
 import io.hamal.lib.kua.extend.extension.RunnerExtension
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.type.KuaCode
@@ -8,31 +7,31 @@ import io.hamal.lib.kua.type.KuaFunction
 import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.kua.type.KuaTable
 
-class RunnerRegistry(
-    val state: State
-) {
+interface SandboxRegistry {
+    fun register(plugin: RunnerPlugin)
+    fun register(extension: RunnerExtension)
 
-    val plugins = mutableMapOf<String, RunnerPlugin>()
-    val extensions = mutableMapOf<String, RunnerExtension>()
-    val factories = mutableMapOf<String, KuaTable>()
+    fun loadPluginFactory(name: String): KuaTable
+    fun loadExtensionFactory(name: String): KuaTable
+}
 
-    fun isScript(name: String) = extensions.keys.contains(name)
+internal class SandboxRegistryImpl(
+    private val state: State
+) : SandboxRegistry {
 
-    fun isPlugin(name: String) = plugins.keys.contains(name)
-
-    fun register(plugin: RunnerPlugin) {
+    override fun register(plugin: RunnerPlugin) {
         plugins[plugin.name] = plugin
         // FIXME load the factory
         loadPluginFactory(plugin.name)
     }
 
-    fun register(extension: RunnerExtension) {
+    override fun register(extension: RunnerExtension) {
         extensions[extension.name] = extension
         // FIXME load the factory
         loadExtensionFactory(extension.name)
     }
 
-    fun loadPluginFactory(name: String): KuaTable {
+    override fun loadPluginFactory(name: String): KuaTable {
         val extension = plugins[name]!!
         val internals = extension.internals
         val internalTable = state.tableCreate(0, internals.size)
@@ -57,7 +56,7 @@ class RunnerRegistry(
         return factory
     }
 
-    fun loadExtensionFactory(name: String): KuaTable {
+    override fun loadExtensionFactory(name: String): KuaTable {
         val extension = extensions[name]!!
 
         state.codeLoad(extension.factoryCode)
@@ -70,5 +69,9 @@ class RunnerRegistry(
         state.globalUnset(KuaString("extension"))
         return factory
     }
+
+    private val plugins = mutableMapOf<String, RunnerPlugin>()
+    private val extensions = mutableMapOf<String, RunnerExtension>()
+    private val factories = mutableMapOf<String, KuaTable>()
 
 }

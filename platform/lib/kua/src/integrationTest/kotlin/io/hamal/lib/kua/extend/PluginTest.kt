@@ -2,8 +2,8 @@ package io.hamal.lib.kua.extend
 
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
-import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.Sandbox
+import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test
 internal class PluginTest {
 
     @Test
-    fun `Invokes function of test capability`() {
+    fun `Invokes function of test plugin`() {
         sandbox.codeLoad(
             KuaCode(
                 """
@@ -30,7 +30,7 @@ internal class PluginTest {
     }
 
     @Test
-    fun `Able to access fields of capability`() {
+    fun `Able to access fields of plugin`() {
         sandbox.codeLoad(
             KuaCode(
                 """

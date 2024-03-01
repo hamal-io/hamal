@@ -2,7 +2,6 @@ package io.hamal.lib.kua
 
 import io.hamal.lib.kua.builtin.Require
 import io.hamal.lib.kua.builtin.RequirePlugin
-import io.hamal.lib.kua.extend.RunnerRegistry
 import io.hamal.lib.kua.extend.extension.RunnerExtension
 import io.hamal.lib.kua.extend.extension.RunnerExtensionFactory
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
@@ -13,7 +12,7 @@ import io.hamal.lib.kua.type.KuaError
 class Sandbox(
     private val ctx: SandboxContext,
     private val state: CloseableState = CloseableStateImpl(),
-    private val registry: RunnerRegistry = RunnerRegistry(state)
+    private val registry: SandboxRegistry = SandboxRegistry(state)
 ) : CloseableState {
 
     override fun absIndex(idx: Int) = state.absIndex(idx)

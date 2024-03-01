@@ -1,6 +1,6 @@
 package io.hamal.lib.kua.builtin
 
-import io.hamal.lib.kua.extend.RunnerRegistry
+import io.hamal.lib.kua.SandboxRegistry
 import io.hamal.lib.kua.function.Function1In1Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -10,7 +10,7 @@ import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.kua.type.KuaTable
 
 class Require(
-    private val registry: RunnerRegistry
+    private val registry: SandboxRegistry
 ) : Function1In1Out<KuaString, KuaTable>(
     FunctionInput1Schema(KuaString::class),
     FunctionOutput1Schema(KuaTable::class)
