@@ -84,26 +84,4 @@ internal class NamespaceListControllerTest : NamespaceBaseControllerTest() {
         assertThat(namespace.parentId, equalTo(NamespaceId(1337)))
         assertThat(namespace.name, equalTo(NamespaceName("hamal::namespace-48")))
     }
-
-    @Test
-    fun `List descendants`() {
-        val notDescendants = IntRange(0, 10).map {
-            appendNamespace(ApiNamespaceAppendRequest(NamespaceName("dummy-$it")))
-        }
-        awaitCompleted(notDescendants)
-
-        val createSubRoot = appendNamespace(ApiNamespaceAppendRequest(NamespaceName("root")))
-        awaitCompleted(createSubRoot)
-
-        val subRootId = createSubRoot.namespaceId
-        val appendRequest = IntRange(0, 5).map {
-            appendNamespace(subRootId, ApiNamespaceAppendRequest(NamespaceName("namespace-$it")))
-        }
-        awaitCompleted(appendRequest)
-
-        with(listDescendants(subRootId)) {
-            assertThat(namespaces, hasSize(7))
-            assertThat(namespaces[0].name, equalTo(NamespaceName("root")))
-        }
-    }
 }

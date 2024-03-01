@@ -69,28 +69,6 @@ internal class NamespaceListController(
             }.firstOrNull() ?: throw NoSuchElementException("Workspace not found")
         })
     }
-
-    @GetMapping("/v1/namespaces/{namespaceId}/sublist")
-    fun sublist(
-        @PathVariable("namespaceId") namespaceId: NamespaceId
-    ): ResponseEntity<ApiNamespaceList> {
-        return ResponseEntity.ok(
-            ApiNamespaceList(
-                namespaceList(
-                    NamespaceQuery(
-                        limit = Limit.all,
-                        namespaceIds = namespaceSublist(namespaceId).values
-                    )
-                ).map { namespace ->
-                    ApiNamespaceList.Namespace(
-                        id = namespace.id,
-                        parentId = namespace.id,
-                        name = namespace.name,
-                    )
-                }.reversed()
-            )
-        )
-    }
 }
 
 private fun assemble(

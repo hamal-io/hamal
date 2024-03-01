@@ -22,10 +22,7 @@ const Update: FC<Props> = ({item, onClose}) => {
     const [isLoading, setLoading] = useState(false)
 
     const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
-        defaultValues: {
-            name: ""
-        },
+        resolver: zodResolver(formSchema)
     })
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -36,18 +33,21 @@ const Update: FC<Props> = ({item, onClose}) => {
             console.error(e)
         } finally {
             setLoading(false)
+            form.reset()
         }
     }
 
     useEffect(() => {
         if (updateSubmitted) {
             onClose()
+
         }
     }, [updateSubmitted]);
 
 
     return (
         <>
+
             <DialogContent>
                 <DialogHeader>Rename Namespace</DialogHeader>
                 <Form {...form}>
@@ -59,7 +59,7 @@ const Update: FC<Props> = ({item, onClose}) => {
                                 <FormItem>
                                     <FormLabel>Name</FormLabel>
                                     <FormControl>
-                                        <Input placeholder={item.name} {...field} />
+                                        <Input {...field} />
                                     </FormControl>
                                     <FormMessage/>
                                 </FormItem>
