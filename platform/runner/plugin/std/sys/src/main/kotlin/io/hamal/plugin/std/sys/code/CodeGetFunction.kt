@@ -6,7 +6,6 @@ import io.hamal.lib.kua.function.Function2In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput2Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.type.*
 import io.hamal.lib.sdk.ApiSdk
 
@@ -24,9 +23,9 @@ class CodeGetFunction(
     ): Pair<KuaError?, KuaTable?> {
         return try {
             val response = if (arg2 == KuaNumber(-1)) {
-                sdk.code.get(CodeId(arg1.value))
+                sdk.code.get(CodeId(arg1.stringValue))
             } else {
-                sdk.code.get(CodeId(arg1.value), CodeVersion(arg2.value.toInt()))
+                sdk.code.get(CodeId(arg1.stringValue), CodeVersion(arg2.intValue))
             }
 
             null to response

@@ -5,7 +5,6 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.kua.type.KuaTable
@@ -19,7 +18,7 @@ class TopicGetFunction(
 ) {
     override fun invoke(ctx: FunctionContext, arg1: KuaString): Pair<KuaError?, KuaTable?> {
         return try {
-            null to sdk.topic.get(TopicId(arg1.value))
+            null to sdk.topic.get(TopicId(arg1.stringValue))
                 .let { topic ->
                     ctx.tableCreate(
                         "id" to KuaString(topic.id.value.value.toString(16)),

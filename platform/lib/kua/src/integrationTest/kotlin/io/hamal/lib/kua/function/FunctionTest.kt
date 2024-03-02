@@ -34,7 +34,7 @@ internal class FunctionTest {
         }
         sandbox.register(
             RunnerPlugin(
-                name = "test",
+                name = KuaString("test"),
                 factoryCode = KuaCode(
                     """
                     function plugin_create(internal)
@@ -86,7 +86,7 @@ internal class FunctionTest {
         }
         sandbox.register(
             RunnerPlugin(
-                name = "test",
+                name = KuaString("test"),
                 factoryCode = KuaCode(
                     """
                     function plugin_create(internal)
@@ -131,7 +131,7 @@ internal class FunctionTest {
         }
         sandbox.register(
             RunnerPlugin(
-                name = "test",
+                name = KuaString("test"),
                 factoryCode = KuaCode(
                     """
                     function plugin_create(internal)
@@ -169,13 +169,13 @@ internal class FunctionTest {
             FunctionOutput1Schema(KuaString::class)
         ) {
             override fun invoke(ctx: FunctionContext, arg1: KuaString): KuaString {
-                return KuaString(arg1.value.uppercase())
+                return KuaString(arg1.stringValue.uppercase())
             }
         }
 
         sandbox.register(
             RunnerPlugin(
-                name = "test",
+                name = KuaString("test"),
                 factoryCode = KuaCode(
                     """
                     function plugin_create(internal)
@@ -213,13 +213,13 @@ internal class FunctionTest {
             FunctionOutput2Schema(KuaString::class, KuaNumber::class)
         ) {
             override fun invoke(ctx: FunctionContext, arg1: KuaString): Pair<KuaString, KuaNumber> {
-                return KuaString(arg1.value.uppercase()) to KuaNumber(arg1.value.length)
+                return KuaString(arg1.stringValue.uppercase()) to KuaNumber(arg1.stringValue.length)
             }
         }
 
         sandbox.register(
             RunnerPlugin(
-                name = "test",
+                name = KuaString("test"),
                 factoryCode = KuaCode(
                     """
                     function plugin_create(internal)
@@ -262,13 +262,13 @@ internal class FunctionTest {
                 arg1: KuaString,
                 arg2: KuaNumber
             ): Pair<KuaString, KuaNumber> {
-                return KuaString(arg1.value.reversed()) to (arg2 * -1)
+                return KuaString(arg1.stringValue.reversed()) to (arg2 * -1)
             }
         }
 
         sandbox.register(
             RunnerPlugin(
-                name = "test",
+                name = KuaString("test"),
                 factoryCode = KuaCode(
                     """
                     function plugin_create(internal)
@@ -310,7 +310,7 @@ internal class FunctionTest {
 
         sandbox.register(
             RunnerPlugin(
-                name = "test",
+                name = KuaString("test"),
                 factoryCode = KuaCode(
                     """
                     function plugin_create(internal)
@@ -342,7 +342,7 @@ internal class FunctionTest {
 
     private class Captor1 : Function1In0Out<KuaString>(FunctionInput1Schema(KuaString::class)) {
         override fun invoke(ctx: FunctionContext, arg1: KuaString) {
-            result = arg1.value
+            result = arg1.stringValue
         }
 
         var result: String? = null
@@ -352,7 +352,7 @@ internal class FunctionTest {
         FunctionInput2Schema(KuaString::class, KuaNumber::class)
     ) {
         override fun invoke(ctx: FunctionContext, arg1: KuaString, arg2: KuaNumber) {
-            result = "${arg1.value}=${arg2.value}"
+            result = "${arg1.stringValue}=${arg2.doubleValue}"
         }
 
         var result: String? = null

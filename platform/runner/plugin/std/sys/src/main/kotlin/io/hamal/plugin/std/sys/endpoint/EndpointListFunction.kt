@@ -20,9 +20,9 @@ class EndpointListFunction(
         return try {
             null to ctx.tableCreate(
                 sdk.endpoint.list(ApiEndpointService.EndpointQuery(
-                    namespaceIds = arg1.findArray("namespace_ids")
+                    namespaceIds = arg1.findTable("namespace_ids")
                         ?.asSequence()
-                        ?.map { NamespaceId((it as KuaString).value) }
+                        ?.map { NamespaceId((it as KuaString).stringValue) }
                         ?.toList()
                         ?: listOf(ctx[NamespaceId::class])
 

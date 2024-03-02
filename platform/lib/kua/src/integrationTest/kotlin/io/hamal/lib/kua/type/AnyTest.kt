@@ -67,7 +67,7 @@ internal class KuaAnyTest {
     @Disabled
     fun `Can be used with table object style table`() {
         val map = sandbox.tableCreate(0, 2)
-        map["key"] = "value"
+        map["key"] = KuaString("value")
         sandbox.globalSet(KuaString("test_map"), map)
 
         val captor = AnyValueResultCaptor()
@@ -93,8 +93,8 @@ internal class KuaAnyTest {
     @Disabled
     fun `AnyValue can be used with array style table`() {
         val array = sandbox.tableCreate(2, 0)
-        array.append(23)
-        array.append("hamal.io")
+        array.append(KuaNumber(23))
+        array.append(KuaString("hamal.io"))
         sandbox.globalSet(KuaString("test_array"), array)
 
         val captor = AnyValueResultCaptor()
@@ -113,8 +113,8 @@ internal class KuaAnyTest {
         require(underlying is KuaTable) { "Not a array" }
         assertThat(underlying.length, equalTo(2))
 
-        assertThat(underlying.getInt(1), equalTo(23))
-        assertThat(underlying.getString(2), equalTo("hamal.io"))
+        assertThat(underlying.getNumber(1), equalTo(KuaNumber(23)))
+        assertThat(underlying.getString(2), equalTo(KuaString("hamal.io")))
     }
 
     private class AnyValuePassThrough : Function1In1Out<KuaAny, KuaAny>(
@@ -138,7 +138,7 @@ internal class KuaAnyTest {
 
     private fun plugin(captor: KuaFunction<*, *, *, *>) =
         RunnerPlugin(
-            name = "test",
+            name = KuaString("test"),
             factoryCode = KuaCode(
                 """
                     function plugin_create(internal)

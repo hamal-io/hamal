@@ -8,10 +8,7 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.tableCreate
-import io.hamal.lib.kua.type.KuaError
-import io.hamal.lib.kua.type.KuaString
-import io.hamal.lib.kua.type.KuaTable
+import io.hamal.lib.kua.type.*
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiAdhocInvokeRequest
 
@@ -26,11 +23,11 @@ class AdhocFunction(
 
             val res = sdk.adhoc(
                 namespaceId = arg1.findString("namespace_id")
-                    ?.let { NamespaceId(SnowflakeId(it)) }
+                    ?.let { NamespaceId(SnowflakeId(it.stringValue)) }
                     ?: ctx[NamespaceId::class],
                 request = ApiAdhocInvokeRequest(
                     inputs = InvocationInputs(),
-                    code = CodeValue(arg1.getString("code"))
+                    code = CodeValue(arg1.getString("code").stringValue)
                 )
             )
             return null to ctx.tableCreate(

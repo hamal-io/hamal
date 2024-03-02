@@ -17,7 +17,7 @@ internal class RegisterExtensionTest : BaseSandboxTest() {
     fun `Registers an extension and call function`() {
         testInstance.register(
             RunnerExtension(
-                name = "some_plugin",
+                name = KuaString("some_plugin"),
                 factoryCode = KuaCode(
                     """
                     function extension_create()
@@ -57,7 +57,7 @@ internal class RegisterPluginTest : BaseSandboxTest() {
         val func = TestFunction()
         testInstance.register(
             RunnerPlugin(
-                name = "some_plugin",
+                name = KuaString("some_plugin"),
                 factoryCode = KuaCode(
                     """
                     function plugin_create(internal)

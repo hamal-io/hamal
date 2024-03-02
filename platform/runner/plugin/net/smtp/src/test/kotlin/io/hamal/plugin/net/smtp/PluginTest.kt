@@ -1,5 +1,8 @@
 package io.hamal.plugin.net.smtp
 
+import io.hamal.lib.kua.type.KuaNumber
+import io.hamal.lib.kua.type.KuaString
+import io.hamal.lib.kua.type.KuaTrue
 import io.hamal.runner.test.AbstractRunnerTest
 import io.hamal.runner.test.TestFailConnector
 import org.hamcrest.MatcherAssert.assertThat
@@ -47,27 +50,27 @@ internal object PluginSmtpTest : AbstractRunnerTest() {
         )
 
         val config = fakeSender.config
-        assertThat(config.defaultEncoding, equalTo("default_encoding"))
-        assertThat(config.host, equalTo("host"))
-        assertThat(config.port, equalTo(123))
-        assertThat(config.username, equalTo("username"))
-        assertThat(config.password, equalTo("password"))
-        assertThat(config.protocol, equalTo("protocol"))
-        assertThat(config.debug, equalTo(true))
-        assertThat(config.enableStarttls, equalTo(true))
-        assertThat(config.testConnection, equalTo(true))
+        assertThat(config.defaultEncoding, equalTo(KuaString("default_encoding")))
+        assertThat(config.host, equalTo(KuaString("host")))
+        assertThat(config.port, equalTo(KuaNumber(123)))
+        assertThat(config.username, equalTo(KuaString("username")))
+        assertThat(config.password, equalTo(KuaString("password")))
+        assertThat(config.protocol, equalTo(KuaString("protocol")))
+        assertThat(config.debug, equalTo(KuaTrue))
+        assertThat(config.enableStarttls, equalTo(KuaTrue))
+        assertThat(config.testConnection, equalTo(KuaTrue))
 
-        assertThat(config.connectionTimeout, equalTo(1000))
-        assertThat(config.timeout, equalTo(2000))
-        assertThat(config.writeTimeout, equalTo(3000))
+        assertThat(config.connectionTimeout, equalTo(KuaNumber(1000)))
+        assertThat(config.timeout, equalTo(KuaNumber(2000)))
+        assertThat(config.writeTimeout, equalTo(KuaNumber(3000)))
 
         val msg = fakeSender.message
-        assertThat(msg.from, equalTo("from"))
-        assertThat(msg.to, equalTo("to"))
-        assertThat(msg.subject, equalTo("subject"))
-        assertThat(msg.content, equalTo("content"))
-        assertThat(msg.contentType, equalTo("content_type"))
-        assertThat(msg.priority, equalTo(42))
+        assertThat(msg.from, equalTo(KuaString("from")))
+        assertThat(msg.to, equalTo(KuaString("to")))
+        assertThat(msg.subject, equalTo(KuaString("subject")))
+        assertThat(msg.content, equalTo(KuaString("content")))
+        assertThat(msg.contentType, equalTo(KuaString("content_type")))
+        assertThat(msg.priority, equalTo(KuaNumber(42)))
 
     }
 

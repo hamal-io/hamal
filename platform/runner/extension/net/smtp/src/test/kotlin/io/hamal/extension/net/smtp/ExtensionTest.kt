@@ -1,11 +1,15 @@
 package io.hamal.extension.net.smtp
 
-import io.hamal.runner.test.AbstractRunnerTest
-import io.hamal.runner.test.TestFailConnector
+import io.hamal.lib.kua.type.KuaFalse
+import io.hamal.lib.kua.type.KuaNumber
+import io.hamal.lib.kua.type.KuaString
+import io.hamal.lib.kua.type.KuaTrue
 import io.hamal.plugin.net.smtp.Message
 import io.hamal.plugin.net.smtp.PluginSmtpFactory
 import io.hamal.plugin.net.smtp.Sender
 import io.hamal.plugin.net.smtp.SenderConfig
+import io.hamal.runner.test.AbstractRunnerTest
+import io.hamal.runner.test.TestFailConnector
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers
 import org.hamcrest.Matchers.containsString
@@ -54,27 +58,27 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
         )
 
         val config = fakeSender.config
-        assertThat(config.defaultEncoding, equalTo("default_encoding"))
-        assertThat(config.host, equalTo("host"))
-        assertThat(config.port, equalTo(123))
-        assertThat(config.username, equalTo("username"))
-        assertThat(config.password, equalTo("password"))
-        assertThat(config.protocol, equalTo("protocol"))
-        assertThat(config.debug, equalTo(true))
-        assertThat(config.enableStarttls, equalTo(true))
-        assertThat(config.testConnection, equalTo(true))
+        assertThat(config.defaultEncoding, equalTo(KuaString("default_encoding")))
+        assertThat(config.host, equalTo(KuaString("host")))
+        assertThat(config.port, equalTo(KuaNumber(123)))
+        assertThat(config.username, equalTo(KuaString("username")))
+        assertThat(config.password, equalTo(KuaString("password")))
+        assertThat(config.protocol, equalTo(KuaString("protocol")))
+        assertThat(config.debug, equalTo(KuaTrue))
+        assertThat(config.enableStarttls, equalTo(KuaTrue))
+        assertThat(config.testConnection, equalTo(KuaTrue))
 
-        assertThat(config.connectionTimeout, equalTo(1000))
-        assertThat(config.timeout, equalTo(2000))
-        assertThat(config.writeTimeout, equalTo(3000))
+        assertThat(config.connectionTimeout, equalTo(KuaNumber(1000)))
+        assertThat(config.timeout, equalTo(KuaNumber(2000)))
+        assertThat(config.writeTimeout, equalTo(KuaNumber(3000)))
 
         val msg = fakeSender.message
-        assertThat(msg.from, equalTo("from"))
-        assertThat(msg.to, equalTo("to"))
-        assertThat(msg.subject, equalTo("subject"))
-        assertThat(msg.content, equalTo("content"))
-        assertThat(msg.contentType, equalTo("content_type"))
-        assertThat(msg.priority, equalTo(42))
+        assertThat(msg.from, equalTo(KuaString("from")))
+        assertThat(msg.to, equalTo(KuaString("to")))
+        assertThat(msg.subject, equalTo(KuaString("subject")))
+        assertThat(msg.content, equalTo(KuaString("content")))
+        assertThat(msg.contentType, equalTo(KuaString("content_type")))
+        assertThat(msg.priority, equalTo(KuaNumber(42)))
 
     }
 
@@ -105,7 +109,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
         )
 
         val config = fakeSender.config
-        assertThat(config.defaultEncoding, equalTo("UTF-8"))
+        assertThat(config.defaultEncoding, equalTo(KuaString("UTF-8")))
     }
 
     @Test
@@ -164,7 +168,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
         )
 
         val config = fakeSender.config
-        assertThat(config.port, equalTo(25))
+        assertThat(config.port, equalTo(KuaNumber(25)))
     }
 
     @Test
@@ -254,7 +258,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
         )
 
         val config = fakeSender.config
-        assertThat(config.protocol, equalTo("smtp"))
+        assertThat(config.protocol, equalTo(KuaString("smtp")))
     }
 
     @Test
@@ -284,7 +288,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
         )
 
         val config = fakeSender.config
-        assertThat(config.debug, equalTo(false))
+        assertThat(config.debug, equalTo(KuaFalse))
     }
 
     @Test
@@ -314,7 +318,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
         )
 
         val config = fakeSender.config
-        assertThat(config.enableStarttls, equalTo(false))
+        assertThat(config.enableStarttls, equalTo(KuaFalse))
     }
 
     @Test
@@ -344,7 +348,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
         )
 
         val config = fakeSender.config
-        assertThat(config.testConnection, equalTo(false))
+        assertThat(config.testConnection, equalTo(KuaFalse))
     }
 
     @Test
@@ -485,7 +489,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
         )
 
         val message = fakeSender.message
-        assertThat(message.contentType, equalTo("text/plain"))
+        assertThat(message.contentType, equalTo(KuaString("text/plain")))
     }
 
     @Test
@@ -516,7 +520,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
         )
 
         val message = fakeSender.message
-        assertThat(message.priority, equalTo(1))
+        assertThat(message.priority, equalTo(KuaNumber(1)))
     }
 
     @Test
@@ -546,7 +550,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
         )
 
         val config = fakeSender.config
-        assertThat(config.connectionTimeout, equalTo(5000))
+        assertThat(config.connectionTimeout, equalTo(KuaNumber(5000)))
     }
 
     @Test
@@ -576,7 +580,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
         )
 
         val config = fakeSender.config
-        assertThat(config.timeout, equalTo(5000))
+        assertThat(config.timeout, equalTo(KuaNumber(5000)))
     }
 
     @Test
@@ -606,7 +610,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
         )
 
         val config = fakeSender.config
-        assertThat(config.writeTimeout, equalTo(3000))
+        assertThat(config.writeTimeout, equalTo(KuaNumber(3000)))
     }
 }
 

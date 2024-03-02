@@ -6,10 +6,10 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.kua.type.KuaTable
+import io.hamal.lib.kua.type.getString
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiNamespaceAppendRequest
 
@@ -23,7 +23,7 @@ class NamespaceAppendFunction(
 
         return try {
             val res = sdk.namespace.append(
-                ctx[NamespaceId::class], ApiNamespaceAppendRequest(NamespaceName(arg1.getString("name")))
+                ctx[NamespaceId::class], ApiNamespaceAppendRequest(NamespaceName(arg1.getString("name").stringValue))
             )
 
             null to ctx.tableCreate(

@@ -26,7 +26,7 @@ class PluginLogFactory(
 ) : RunnerPluginFactory {
     override fun create(sandbox: Sandbox): RunnerPlugin {
         return RunnerPlugin(
-            name = "log",
+            name = KuaString("log"),
             internals = mapOf(
                 KuaString("log") to LogFunction(execLogService),
             )
@@ -42,8 +42,8 @@ class LogFunction(
 ) {
 
     override fun invoke(ctx: FunctionContext, arg1: KuaString, arg2: KuaString): KuaError? {
-        val level = ExecLogLevel.valueOf(arg1.value)
-        val message = ExecLogMessage(arg2.value)
+        val level = ExecLogLevel.valueOf(arg1.stringValue)
+        val message = ExecLogMessage(arg2.stringValue)
 
         when (level) {
             Trace -> log.trace(message.value)

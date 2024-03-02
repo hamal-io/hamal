@@ -9,8 +9,8 @@ interface SandboxRegistry {
     fun register(plugin: RunnerPlugin)
     fun register(extension: RunnerExtension)
 
-    fun pluginPush(name: String)
-    fun extensionPush(name: String)
+    fun pluginPush(name: KuaString)
+    fun extensionPush(name: KuaString)
 }
 
 internal class SandboxRegistryImpl(
@@ -27,7 +27,7 @@ internal class SandboxRegistryImpl(
         extensionPush(extension.name)
     }
 
-    override fun pluginPush(name: String) {
+    override fun pluginPush(name: KuaString) {
         val extension = plugins[name]!!
 
         state.globalSet(KuaString("_internal"), state.tableCreate(extension.internals))
@@ -41,7 +41,7 @@ internal class SandboxRegistryImpl(
         }
     }
 
-    override fun extensionPush(name: String) {
+    override fun extensionPush(name: KuaString) {
         val extension = extensions[name]!!
 
         state.codeLoad(extension.factoryCode)
@@ -52,6 +52,7 @@ internal class SandboxRegistryImpl(
         }
     }
 
-    private val plugins = mutableMapOf<String, RunnerPlugin>()
-    private val extensions = mutableMapOf<String, RunnerExtension>()
+    private val plugins = mutableMapOf<KuaString
+            , RunnerPlugin>()
+    private val extensions = mutableMapOf<KuaString, RunnerExtension>()
 }

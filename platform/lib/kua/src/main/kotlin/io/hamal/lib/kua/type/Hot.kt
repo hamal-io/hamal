@@ -23,13 +23,13 @@ fun KuaType.toHotNode(): HotNode {
         is KuaAny -> value.toHotNode()
         is KuaFalse -> HotBoolean(false)
         is KuaTrue -> HotBoolean(true)
-        is KuaCode -> HotString(value)
+        is KuaCode -> HotString(stringValue)
         is KuaDecimal -> TODO()
         is KuaError -> TODO()
         is KuaFunction<*, *, *, *> -> TODO()
         is KuaNil -> HotNull
-        is KuaNumber -> HotNumber(value)
-        is KuaString -> HotString(value)
+        is KuaNumber -> HotNumber(doubleValue)
+        is KuaString -> HotString(stringValue)
         is KuaTable -> toHotObject()
     }
 }
@@ -41,7 +41,7 @@ fun KuaTable.toHotObject(): HotObject {
 //    }
 
     mapEntries().forEach { (key, value) ->
-        builder[key.value] = value.toHotNode()
+        builder[key.stringValue] = value.toHotNode()
     }
 
 //    entries().forEach { (key, value) ->

@@ -19,26 +19,26 @@ object EthDecodeParameterFunction : Function2In2Out<KuaString, KuaString, KuaErr
     override fun invoke(ctx: FunctionContext, arg1: KuaString, arg2: KuaString): Pair<KuaError?, KuaAny?> {
 //        EthTypeDecoder.Uint256.decode(arg1.value.)
 
-        if (arg1.value == "string") {
+        if (arg1.stringValue == "string") {
             return null to KuaAny(
                 //FIXME must be decimal value
                 KuaString(
                     EthTypeDecoder.String.decode(
                         ByteWindow.Companion.of(
-                            EthPrefixedHexString(arg2.value)
+                            EthPrefixedHexString(arg2.stringValue)
                         )
                     ).value
                 )
             )
         }
 
-        if (arg1.value == "uint256") {
+        if (arg1.stringValue == "uint256") {
             return null to KuaAny(
                 //FIXME must be decimal value
                 KuaNumber(
                     EthTypeDecoder.Uint256.decode(
                         ByteWindow.Companion.of(
-                            EthPrefixedHexString(arg2.value)
+                            EthPrefixedHexString(arg2.stringValue)
                         )
                     ).value.toDouble()
                 )

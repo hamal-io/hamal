@@ -21,7 +21,7 @@ class TopicEntryListFunction(
     override fun invoke(ctx: FunctionContext, arg1: KuaString): Pair<KuaError?, KuaTable?> {
         return try {
             null to ctx.tableCreate(
-                sdk.topic.events(TopicId(arg1.value))
+                sdk.topic.events(TopicId(arg1.stringValue))
                     .map { entry -> entry.payload.value.toKua(ctx) }
             )
         } catch (t: Throwable) {

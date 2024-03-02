@@ -7,11 +7,12 @@ import java.math.MathContext
 import java.math.RoundingMode
 
 
-data class KuaDecimal(
+@JvmInline
+value class KuaDecimal(
     val value: BigDecimal,
 ) : KuaType, Comparable<KuaDecimal> {
 
-    override val type: KuaType.Type = Decimal
+    override val type: KuaType.Type get() = Decimal
 
     companion object {
         val Zero = KuaDecimal(0)

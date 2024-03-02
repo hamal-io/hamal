@@ -48,7 +48,7 @@ interface State {
     fun tableFieldGet(idx: Int, key: KuaString): StackTop
     fun tableGet(idx: Int): KuaTable
     fun tableLength(idx: Int): TableLength
-    fun tablePush(proxy: KuaTable): StackTop
+    fun tablePush(value: KuaTable): StackTop
     fun tableRawSet(idx: Int): TableLength
     fun tableRawSetIdx(stackIdx: Int, tableIdx: Int): TableLength
     fun tableRawGet(idx: Int): KClass<out KuaType>
@@ -94,11 +94,11 @@ open class StateImpl(val native: Native = Native()) : State {
     }
 
 
-    override fun booleanPush(value: KuaBoolean): StackTop = StackTop(native.booleanPush(value.value))
+    override fun booleanPush(value: KuaBoolean): StackTop = StackTop(native.booleanPush(value.booleanValue))
     override fun booleanGet(idx: Int) = KuaBoolean.of(native.booleanGet(idx))
 
     override fun codeLoad(code: KuaCode) {
-        native.stringLoad(code.value)
+        native.stringLoad(code.stringValue)
         native.functionCall(0, 0)
     }
 
@@ -114,31 +114,31 @@ open class StateImpl(val native: Native = Native()) : State {
     override fun functionPush(value: KuaFunction<*, *, *, *>) = StackTop(native.functionPush(value))
 
     override fun globalGet(key: KuaString): KuaType {
-        native.globalGet(key.value)
+        native.globalGet(key.stringValue)
         return anyGet(-1).value
     }
 
     override fun globalGetTable(key: KuaString): KuaTable {
-        native.globalGetTable(key.value)
+        native.globalGetTable(key.stringValue)
         return tableGet(-1)
     }
 
     override fun globalSet(key: KuaString, value: KuaType) {
         anyPush(KuaAny(value))
-        native.globalSet(key.value)
+        native.globalSet(key.stringValue)
     }
 
     override fun globalUnset(key: KuaString) {
         native.nilPush()
-        native.globalSet(key.value)
+        native.globalSet(key.stringValue)
     }
 
     override fun nilPush() = StackTop(native.nilPush())
     override fun numberGet(idx: Int) = KuaNumber(native.numberGet(idx))
-    override fun numberPush(value: KuaNumber) = StackTop(native.numberPush(value.value))
+    override fun numberPush(value: KuaNumber) = StackTop(native.numberPush(value.doubleValue))
 
     override fun stringGet(idx: Int) = KuaString(native.stringGet(idx))
-    override fun stringPush(value: KuaString) = StackTop(native.stringPush(value.value))
+    override fun stringPush(value: KuaString) = StackTop(native.stringPush(value.stringValue))
 
 
     override fun tableAppend(idx: Int) = TableLength(native.tableAppend(idx))
@@ -149,11 +149,11 @@ open class StateImpl(val native: Native = Native()) : State {
         )
     }
 
-    override fun tableFieldGet(idx: Int, key: KuaString) = StackTop(native.tableFieldGet(idx, key.value))
-    override fun tableFieldSet(idx: Int, key: KuaString) = TableLength(native.tableFieldSet(idx, key.value))
+    override fun tableFieldGet(idx: Int, key: KuaString) = StackTop(native.tableFieldGet(idx, key.stringValue))
+    override fun tableFieldSet(idx: Int, key: KuaString) = TableLength(native.tableFieldSet(idx, key.stringValue))
     override fun tableGet(idx: Int) = KuaTable(native.tableGet(native.absIndex(idx)), this)
     override fun tableLength(idx: Int) = TableLength(native.tableLength(idx))
-    override fun tablePush(proxy: KuaTable) = StackTop(native.topPush(proxy.index))
+    override fun tablePush(value: KuaTable) = StackTop(native.topPush(value.index))
     override fun tableRawSet(idx: Int) = TableLength(native.tableRawSet(idx))
     override fun tableRawSetIdx(stackIdx: Int, tableIdx: Int) = TableLength(native.tableRawSetIdx(stackIdx, tableIdx))
     override fun tableRawGet(idx: Int) = luaToType(native.tableRawGet(idx))

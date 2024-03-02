@@ -19,7 +19,7 @@ internal class KuaErrorTest {
 
         sandbox.register(
             RunnerPlugin(
-                name = "test",
+                name = KuaString("test"),
                 factoryCode = KuaCode(
                     """
                     function plugin_create(internal)
@@ -63,7 +63,7 @@ internal class KuaErrorTest {
 
         sandbox.register(
             RunnerPlugin(
-                name = "test",
+                name = KuaString("test"),
                 factoryCode = KuaCode(
                     """
                     function plugin_create(internal)
@@ -101,8 +101,8 @@ internal class KuaErrorTest {
         FunctionInput1Schema(KuaTable::class)
     ) {
         override fun invoke(ctx: FunctionContext, arg1: KuaTable) {
-            assertThat(arg1.getInt("__type_id"), equalTo(10))
-            assertThat(arg1.getString("__typename"), equalTo("error"))
+            assertThat(arg1.getNumber("__type_id"), equalTo(KuaNumber(10)))
+            assertThat(arg1.getString("__typename"), equalTo(KuaString("error")))
         }
     }
 
