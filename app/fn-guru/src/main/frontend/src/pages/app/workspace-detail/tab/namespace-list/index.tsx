@@ -8,57 +8,68 @@ import {Node} from "@/pages/app/workspace-detail/tab/namespace-list/components/t
 
 const WorkspaceNamespaceListTab: FC = () => {
     const [uiState] = useUiState()
-    const [loadTree, tree, isLoading] = useNamespaceTree()
+    const [loadNamespaceTree, namespaceTree] = useNamespaceTree()
+
+    console.log("render")
 
     useEffect(() => {
-        loadTree(uiState.workspaceId)
-    }, [uiState]);
+        loadNamespaceTree(uiState.workspaceId)
+    }, []);
+
+
+    //todo
+
 
     function onChange() {
-        loadTree(uiState.workspaceId)
+        loadNamespaceTree(uiState.workspaceId)
     }
 
+    if (namespaceTree == null) return "Loading"
     return (
         <div className="pt-8 px-8">
-            {isLoading ? "Loading" : <NamespaceNodeView node={tree} changeNode={onChange}/>}
+            <NamespaceNodeView node={namespaceTree} changeNode={onChange}/>
         </div>
     )
 }
 
-type NamespaceLoadAction = (workspaceId: string) => void
-const useNamespaceTree = (): [NamespaceLoadAction, Node<NamespaceListItem>, boolean] => {
+type TreeAction = (workspaceId) => void
+
+function useNamespaceTree(): [TreeAction, Node<NamespaceListItem>] {
     const [listNamespaces, namespacesList, isLoading, error] = useNamespaceList()
-    const [loading, setLoading] = useState(true)
     const [root, setRoot] = useState(null)
 
-    function asyncFetch(workspaceId: string): Promise<Node<NamespaceListItem>> {
+    function invoke(workspaceId: string): Promise<void> {
+        listNamespaces(workspaceId)
         return new Promise((resolve, reject) => {
-            const abortController = new AbortController()
-            listNamespaces(workspaceId, abortController)
-            if (error) reject(error)
-
-            setTimeout(() => {
-                if (namespacesList) {
-                    console.log("Promise resolve")
-                    resolve(unroll(namespacesList.namespaces, workspaceId))
+            const checkLoading = setInterval(() => {
+                if (!isLoading) {
+                    clearInterval(checkLoading)
+                    resolve()
                 }
-                reject("timeout")
-            }, 1000)
+                setTimeout(() => {
+                    reject("timeout")
+                }, 5000)
+            }, 100)
 
-            abortController.abort()
+
         })
     }
 
-    const fn = useCallback(async (workspaceId: string) => {
-        asyncFetch(workspaceId)
+    const fn = useCallback((workspaceId: string) => {
+        invoke(workspaceId)
             .then(res => {
-                setLoading(false)
+                if (namespacesList !== null) {
+                    const t = unroll(namespacesList.namespaces, workspaceId)
+                    setRoot(t)
+                }
+
             })
             .catch(e => console.log(e))
-    }, [])
+    }, [namespacesList])
 
-    return [fn, root, loading]
+    return [fn, root]
 }
+
 
 function unroll(list: Array<NamespaceListItem>, rootId: string) {
     const store = new Array<Node<NamespaceListItem>>
@@ -72,7 +83,6 @@ function unroll(list: Array<NamespaceListItem>, rootId: string) {
     }
     return store.find(id => id.node.id === rootId)
 }
-
 
 
 export default WorkspaceNamespaceListTab;
