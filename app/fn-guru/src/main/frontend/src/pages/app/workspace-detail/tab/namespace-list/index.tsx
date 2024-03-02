@@ -1,7 +1,8 @@
-import React, {FC, useCallback, useEffect, useState} from 'react'
+import React, {FC, useEffect} from 'react'
 import {useUiState} from "@/hook/ui-state.ts";
-import NamespaceNodeView from "@/pages/app/workspace-detail/tab/namespace-list/components/root.tsx";
+import NamespaceNodeView from "@/pages/app/workspace-detail/tab/namespace-list/components/node.tsx";
 import {useNamespaceTree} from "@/pages/app/workspace-detail/tab/namespace-list/components/hook.ts";
+import {PageHeader} from "@/components/page-header.tsx";
 
 
 const WorkspaceNamespaceListTab: FC = () => {
@@ -21,13 +22,14 @@ const WorkspaceNamespaceListTab: FC = () => {
     if (result == null) return "Loading"
     return (
         <div className="pt-8 px-8">
-            <NamespaceNodeView node={result} changeNode={onChange}/>
+            <PageHeader
+                title="Namespaces"
+                actions={[]}
+            />
+            <NamespaceNodeView root={result} changeNode={onChange}/>
         </div>
     )
 }
-
-
-
 
 export default WorkspaceNamespaceListTab;
 

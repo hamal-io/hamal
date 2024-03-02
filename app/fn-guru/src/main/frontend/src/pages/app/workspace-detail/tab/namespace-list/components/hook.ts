@@ -14,7 +14,7 @@ export function useNamespaceTree(workspaceId: string): [TreeAction, Node<Namespa
 
     useEffect(() => {
         if (namespacesList != null) {
-            const t = unroll(namespacesList.namespaces, workspaceId)
+            const t = unroll(namespacesList.namespaces)
             setRoot(t)
         }
     }, [namespacesList]);
@@ -23,15 +23,15 @@ export function useNamespaceTree(workspaceId: string): [TreeAction, Node<Namespa
 }
 
 
-function unroll(list: Array<NamespaceListItem>, rootId: string) {
+function unroll(list: Array<NamespaceListItem>) {
     const store = new Array<Node<NamespaceListItem>>
-    for (const ns of list) {
+    for (const ns of list.reverse()) {
         const current = new Node(ns)
         store.push(current)
         const parent = store.find(storeItem => storeItem.node.id === ns.parentId)
-        if (parent != undefined) {
+        if (parent) {
             parent.addDescendant(current)
         }
     }
-    return store.find(id => id.node.id === rootId)
+    return store[0]
 }

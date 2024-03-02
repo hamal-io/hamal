@@ -1,12 +1,6 @@
 import * as React from "react";
 import {FC, useEffect, useState} from "react";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu.tsx";
+import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger} from "@/components/ui/dropdown-menu.tsx";
 import {DotsHorizontalIcon} from "@radix-ui/react-icons";
 import {Button} from "@/components/ui/button.tsx";
 import {Dialog} from "@/components/ui/dialog.tsx";
