@@ -10,21 +10,21 @@ type Props = {
     changeNode: () => void
 }
 const NamespaceNodeView: FC<Props> = ({node, changeNode}) => {
-
     const List = node.descendants.map(node =>
-        <Card
-            className="relative overflow-hidden duration-500 hover:border-primary/50 group"
-            key={node.node.id}
-            onClick={changeNode}
-        >
-            <CardHeader>
-                <div className="flex items-center justify-between">
-                    <CardTitle>{node.node.name}</CardTitle>
-                </div>
-            </CardHeader>
-            <CardContent>
-            </CardContent>
-        </Card>
+        <li key={node.node.id}>
+            <Card
+                className="relative overflow-hidden duration-500 hover:border-primary/50 group"
+                onClick={changeNode}
+            >
+                <CardHeader>
+                    <div className="flex items-center justify-between">
+                        <CardTitle>{node.node.name}</CardTitle>
+                    </div>
+                </CardHeader>
+                <CardContent>
+                </CardContent>
+            </Card>
+        </li>
     )
 
     return (
