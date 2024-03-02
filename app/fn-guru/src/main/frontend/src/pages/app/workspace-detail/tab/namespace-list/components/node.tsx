@@ -1,12 +1,8 @@
 import React, {FC} from "react";
-import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx";
-import {PageHeader} from "@/components/page-header.tsx";
-import Actions from "@/pages/app/workspace-detail/tab/namespace-list/components/actions.tsx";
-import {NamespaceListItem} from "@/types";
-import {Node} from "@/pages/app/workspace-detail/tab/namespace-list/components/types.ts";
+import {NamespaceNode} from "@/pages/app/workspace-detail/tab/namespace-list/components/types.ts";
 
 type Props = {
-    root: Node<NamespaceListItem>
+    root: NamespaceNode
     changeNode: () => void
 }
 const NamespaceNodeView: FC<Props> = ({root, changeNode}) => {
@@ -17,8 +13,10 @@ const NamespaceNodeView: FC<Props> = ({root, changeNode}) => {
                 <li key={node.node.id}
                     className={node.isParent() ? "text-blue-600" : undefined}
                 >
+                    <div>
                     {node.node.name}
-                    {/*{node.isParent() ? <NamespaceNodeView root={node} changeNode={changeNode}/> : null}*/}
+                    {node.isParent() && <NamespaceNodeView root={node} changeNode={changeNode}/>}
+                    </div>
                 </li>)
             }
         </ol>

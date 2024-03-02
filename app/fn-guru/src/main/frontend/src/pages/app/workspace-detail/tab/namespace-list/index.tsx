@@ -16,7 +16,8 @@ const WorkspaceNamespaceListTab: FC = () => {
     }, []);
 
     function onChange() {
-        fn()
+        //fn()
+        console.log("hi")
     }
 
     if (result == null) return "Loading"

@@ -1,12 +1,12 @@
-export class Node<T> {
+import {NamespaceListItem} from "@/types";
+
+class Node<T> {
     node: T
     descendants: Array<Node<T>>
-    depth: number
 
     constructor(node: T) {
         this.node = node
         this.descendants = []
-        this.depth = 0
     }
 
     addDescendant(other: Node<T>) {
@@ -17,5 +17,21 @@ export class Node<T> {
 
     isParent() {
         return this.descendants.length > 0
+    }
+}
+
+export class NamespaceNode extends Node<NamespaceListItem> {
+    depth: number
+
+    constructor(node: NamespaceListItem, depth: number = 0) {
+        super(node);
+        this.depth = depth
+    }
+
+    addDescendant(other: Node<NamespaceListItem>) {
+        if (this.node.id === other.node.id) {
+            return
+        }
+        super.addDescendant(other);
     }
 }
