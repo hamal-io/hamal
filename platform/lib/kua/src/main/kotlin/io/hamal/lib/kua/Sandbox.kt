@@ -64,6 +64,7 @@ class Sandbox(
     override fun tableRawSetIdx(stackIdx: Int, tableIdx: Int) = state.tableRawSetIdx(stackIdx, tableIdx)
     override fun tableRawGet(idx: Int) = state.tableRawGet(idx)
     override fun tableRawGetIdx(stackIdx: Int, tableIdx: Int) = state.tableRawGetIdx(stackIdx, tableIdx)
+    override fun tableSubTableGet(idx: Int, key: KuaString) = state.tableSubTableGet(idx, key)
 
     override fun topGet(): StackTop = state.topGet()
     override fun topPop(len: Int) = state.topPop(len)

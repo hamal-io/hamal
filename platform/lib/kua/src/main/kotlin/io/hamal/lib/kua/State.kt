@@ -45,7 +45,7 @@ interface State {
     fun tableAppend(idx: Int): TableLength
     fun tableCreate(arrayCount: Int, recordCount: Int): KuaTable
     fun tableFieldSet(idx: Int, key: KuaString): TableLength
-    fun tableFieldGet(idx: Int, key: KuaString): StackTop
+    fun tableFieldGet(idx: Int, key: KuaString): KClass<out KuaType>
     fun tableGet(idx: Int): KuaTable
     fun tableLength(idx: Int): TableLength
     fun tablePush(value: KuaTable): StackTop
@@ -53,6 +53,7 @@ interface State {
     fun tableRawSetIdx(stackIdx: Int, tableIdx: Int): TableLength
     fun tableRawGet(idx: Int): KClass<out KuaType>
     fun tableRawGetIdx(stackIdx: Int, tableIdx: Int): KClass<out KuaType>
+    fun tableSubTableGet(idx: Int, key: KuaString): KClass<out KuaType>
 
     fun topGet(): StackTop
     fun topPop(len: Int): StackTop
@@ -149,7 +150,7 @@ open class StateImpl(val native: Native = Native()) : State {
         )
     }
 
-    override fun tableFieldGet(idx: Int, key: KuaString) = StackTop(native.tableFieldGet(idx, key.stringValue))
+    override fun tableFieldGet(idx: Int, key: KuaString) = luaToType(native.tableFieldGet(idx, key.stringValue))
     override fun tableFieldSet(idx: Int, key: KuaString) = TableLength(native.tableFieldSet(idx, key.stringValue))
     override fun tableGet(idx: Int) = KuaTable(native.tableGet(native.absIndex(idx)), this)
     override fun tableLength(idx: Int) = TableLength(native.tableLength(idx))
@@ -158,7 +159,7 @@ open class StateImpl(val native: Native = Native()) : State {
     override fun tableRawSetIdx(stackIdx: Int, tableIdx: Int) = TableLength(native.tableRawSetIdx(stackIdx, tableIdx))
     override fun tableRawGet(idx: Int) = luaToType(native.tableRawGet(idx))
     override fun tableRawGetIdx(stackIdx: Int, tableIdx: Int) = luaToType(native.tableRawGetIdx(stackIdx, tableIdx))
-
+    override fun tableSubTableGet(idx: Int, key: KuaString) = luaToType(native.tableSubTableGet(idx, key.stringValue))
     override fun topGet(): StackTop = StackTop(native.topGet())
     override fun topPop(len: Int) = StackTop(native.topPop(len))
     override fun topPush(idx: Int): StackTop = StackTop(native.topPush(idx))

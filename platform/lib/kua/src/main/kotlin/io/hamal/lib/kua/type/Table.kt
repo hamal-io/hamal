@@ -33,7 +33,6 @@ class KuaTable(
     fun append(value: KuaType): TableLength {
         return when (value) {
             is KuaBoolean -> append(value)
-            is KuaCode -> append(value)
             is KuaDecimal -> append(value)
             is KuaError -> append(value)
             is KuaFunction<*, *, *, *> -> append(value)
@@ -46,13 +45,12 @@ class KuaTable(
     }
 
 
-
     fun get(idx: Int): KuaType {
         return state.anyGet(idx).value
     }
 
 
-    fun getBooleanType(idx: Int): KuaBoolean {
+    fun getBoolean(idx: Int): KuaBoolean {
         val type = state.tableRawGetIdx(index, idx)
         type.checkExpectedType(KuaBoolean::class)
         return state.booleanGet(-1)
@@ -60,6 +58,12 @@ class KuaTable(
 
     fun append(value: KuaBoolean): TableLength {
         state.booleanPush(value)
+        return state.tableAppend(index)
+    }
+
+
+    fun append(value: KuaError): TableLength {
+        state.errorPush(value)
         return state.tableAppend(index)
     }
 
@@ -75,10 +79,29 @@ class KuaTable(
         return state.tableAppend(index)
     }
 
+    fun append(@Suppress("UNUSED_PARAMETER") value: KuaNil): TableLength {
+        state.nilPush()
+        return state.tableAppend(index)
+    }
+
+
     fun append(value: KuaDecimal): TableLength {
         state.decimalPush(value)
         return state.tableAppend(index)
     }
+
+    fun getError(idx: Int): KuaError {
+        val type = state.tableRawGetIdx(index, idx)
+        type.checkExpectedType(KuaError::class)
+        return state.errorGet(-1)
+    }
+
+    fun getNil(idx: Int): KuaNil {
+        val type = state.tableRawGetIdx(index, idx)
+        type.checkExpectedType(KuaNil::class)
+        return KuaNil
+    }
+
 
     fun getString(idx: Int): KuaString {
         val type = state.tableRawGetIdx(index, idx)
@@ -86,11 +109,18 @@ class KuaTable(
         return state.stringGet(-1)
     }
 
+    fun getDecimal(idx: Int): KuaDecimal {
+        val type = state.tableRawGetIdx(index, idx)
+        type.checkExpectedType(KuaDecimal::class)
+        return state.decimalGet(-1)
+    }
+
 
     fun append(value: KuaString): TableLength {
         state.stringPush(value)
         return state.tableAppend(index)
     }
+
 
     fun append(value: KuaTable): TableLength {
         state.tablePush(value)
@@ -110,14 +140,9 @@ class KuaTable(
         return state.tableGet(-1)
     }
 
-
-
-    operator fun set(key: String, value: KuaAny): TableLength {
-        return set(key, value.value)
-    }
-
-    operator fun set(key: KuaString, value: KuaAny): TableLength {
-        return set(key, value.value)
+    fun get(key: KuaString): KuaType {
+        state.tableFieldGet(index, key)
+        return state.anyGet(-1).value
     }
 
     operator fun set(key: KuaString, value: KuaTable): TableLength {
@@ -126,6 +151,18 @@ class KuaTable(
         return state.tableRawSet(index)
     }
 
+
+    operator fun set(key: KuaString, value: KuaDecimal): TableLength {
+        state.stringPush(key)
+        state.decimalPush(value)
+        return state.tableRawSet(index)
+    }
+
+    operator fun set(key: KuaString, value: KuaError): TableLength {
+        state.stringPush(key)
+        state.errorPush(value)
+        return state.tableRawSet(index)
+    }
 
     operator fun set(key: KuaString, value: KuaType): TableLength {
         return when (value) {
@@ -142,9 +179,7 @@ class KuaTable(
         }
     }
 
-    //    val length get() : Int = state.native.tableGetLength(index)
-    val length get() : Int = TODO()
-
+    val length get() : TableLength = state.tableLength(index)
 
     @Suppress("UNUSED_PARAMETER")
     operator fun set(key: String, value: KuaNil) = unset(key)
@@ -202,13 +237,6 @@ class KuaTable(
         return state.tableRawSet(index)
     }
 
-    fun getTableMap(key: String): KuaTable {
-        state.stringPush(KuaString(key))
-        val type = state.tableRawGet(index)
-        type.checkExpectedType(KuaTable::class)
-        return state.tableGet(-1)
-    }
-
     fun getBoolean(key: String) = getBoolean(KuaString(key))
     fun getBoolean(key: KuaString): KuaBoolean {
         state.stringPush(key)
@@ -218,12 +246,21 @@ class KuaTable(
     }
 
 
+    fun getError(key: KuaString): KuaError {
+        state.stringPush(key)
+        val type = state.tableRawGet(index)
+        type.checkExpectedType(KuaError::class)
+        return state.errorGet(-1).also { state.topPop(1) }
+    }
+
+
     fun getNumber(key: KuaString): KuaNumber {
         state.stringPush(key)
         val type = state.tableRawGet(index)
         type.checkExpectedType(KuaNumber::class)
         return state.numberGet(-1).also { state.topPop(1) }
     }
+
 
     fun getDecimal(key: KuaString): KuaDecimal {
         state.stringPush(key)
@@ -251,6 +288,18 @@ class KuaTable(
         return state.stringGet(state.topGet().value).also { state.topPop(1) }
     }
 
+    fun getTable(key: KuaString): KuaTable {
+        val type = state.tableSubTableGet(index, key)
+        type.checkExpectedType(KuaTable::class)
+        return state.tableGet(-1).also { state.topPop(1) }
+    }
+
+
+    fun type(idx: Int): KClass<out KuaType> {
+        state.tableGet(idx)
+        return state.tableRawGet(index)
+    }
+
     fun type(key: KuaString): KClass<out KuaType> {
         state.stringPush(key)
         return state.tableRawGet(index)
@@ -258,7 +307,14 @@ class KuaTable(
 
 }
 
+operator fun KuaTable.set(key: String, value: Boolean) = set(KuaString(key), KuaBoolean.of(value))
+operator fun KuaTable.set(key: String, value: KuaBoolean) = set(KuaString(key), value)
 operator fun KuaTable.set(key: String, value: KuaType) = set(KuaString(key), value)
+operator fun KuaTable.set(key: String, value: Int) = set(KuaString(key), KuaNumber(value))
+operator fun KuaTable.set(key: String, value: Long) = set(KuaString(key), KuaNumber(value.toDouble()))
+operator fun KuaTable.set(key: String, value: Float) = set(KuaString(key), KuaNumber(value.toDouble()))
+operator fun KuaTable.set(key: String, value: Double) = set(KuaString(key), KuaNumber(value))
+operator fun KuaTable.set(key: String, value: String) = set(KuaString(key), KuaString(value))
 
 fun KuaTable.findString(key: String): KuaString? = findString(KuaString(key))
 fun KuaTable.findTable(key: String): KuaTable? = findTable(KuaString(key))

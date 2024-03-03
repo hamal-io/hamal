@@ -9,45 +9,7 @@
 //import org.junit.jupiter.api.TestFactory
 //
 //internal class KuaTableMapTest {
-//
-//    @TestFactory
-//    fun set(): List<DynamicTest> {
-//        lateinit var testInstance: KuaTable
-//        return listOf(
-//            { testInstance.set("key", true) },
-//            { testInstance.set("key", KuaTrue) },
-//            { testInstance.set(KuaString("key"), KuaTrue) },
-//
-//            { testInstance.set("key", KuaCode("print('hacked')")) },
-//            { testInstance.set(KuaString("key"), KuaCode("print('hacked')")) },
-//
-//            { testInstance.set("key", 23) },
-//            { testInstance.set("key", 23f) },
-//            { testInstance.set("key", 23L) },
-//            { testInstance.set("key", 23.23) },
-//            { testInstance.set("key", KuaNumber(23.23)) },
-//            { testInstance.set(KuaString("key"), KuaNumber(23.23)) },
-//
-//            { testInstance.set("key", "value") },
-//            { testInstance.set("key", KuaString("value")) },
-//            { testInstance.set(KuaString("key"), KuaString("value")) }
-//        ).mapIndexed { idx, testFn ->
-//            dynamicTest("Test: ${(idx + 1)}") {
-//                testInstance = state.tableCreateMap()
-//
-//                val result = testFn()
-//                assertThat("item set", testInstance.length, equalTo(1))
-//                assertThat(result, equalTo(1))
-//
-//                assertThat("One element on stack", state.top, equalTo(StackTop(1)))
-//                assertThat("Only table on stack", state.type(1), equalTo(KuaTable::class))
-//
-//                state.native.topPop(1)
-//                verifyStackIsEmpty()
-//            }
-//        }
-//    }
-//
+
 //    @TestFactory
 //    fun unset(): List<DynamicTest> {
 //        lateinit var testInstance: KuaTable

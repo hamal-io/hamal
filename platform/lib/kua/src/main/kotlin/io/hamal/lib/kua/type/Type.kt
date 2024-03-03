@@ -21,6 +21,8 @@ sealed interface KuaType {
 
 fun KClass<out KuaType>.checkExpectedType(expected: KClass<out KuaType>) {
     check(this == expected) {
-        "Expected type to be ${expected.java.simpleName} but was ${this.java.simpleName}"
+        "Expected type to be ${
+            expected.java.simpleName.replace("Kua", "").lowercase()
+        } but was ${this.java.simpleName.replace("Kua", "").lowercase()}"
     }
 }
