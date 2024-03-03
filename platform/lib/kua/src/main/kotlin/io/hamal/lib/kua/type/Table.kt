@@ -291,7 +291,7 @@ class KuaTable(
     fun getTable(key: KuaString): KuaTable {
         val type = state.tableSubTableGet(index, key)
         type.checkExpectedType(KuaTable::class)
-        return state.tableGet(-1).also { state.topPop(1) }
+        return state.tableGet(-1)
     }
 
 

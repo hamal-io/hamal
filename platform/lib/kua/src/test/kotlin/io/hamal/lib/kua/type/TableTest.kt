@@ -253,9 +253,8 @@ internal class KuaTableTest {
         )
 
         testInstance.getTable(KuaString("key")).also { result ->
-//            println(result.length)
-//            println(result.getNumber(KuaString("answer")))
-//            assertThat(result.getNumber("answer"), equalTo(KuaNumber(42)))
+            assertThat(result.length, equalTo(TableLength(1)))
+            assertThat(result.getNumber("answer"), equalTo(KuaNumber(42)))
         }
     }
 
@@ -333,6 +332,27 @@ internal class KuaTableTest {
         state.topPop(2)
     }
 
+
+    @Test
+    fun `set - table`() {
+        val testTable = state.tableCreate(
+            KuaString("hamal") to KuaString("rocks")
+        )
+
+
+        val testInstance = state.tableCreate()
+        testInstance.set("key", testTable).also { tableLength ->
+            assertThat(tableLength, equalTo(TableLength(1)))
+        }
+
+        testInstance.get(KuaString("key")).also { result ->
+            require(result is KuaTable)
+            assertThat(result.getString("hamal"), equalTo(KuaString("rocks")))
+
+        }
+
+        state.topPop(3)
+    }
 
     @Test
     fun `unset`() {

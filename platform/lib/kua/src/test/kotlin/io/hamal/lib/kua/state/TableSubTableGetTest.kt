@@ -13,12 +13,11 @@ internal class TableSubTableGetTest : StateBaseTest() {
 
     @TestFactory
     fun `Get table from table`() = runTest { testInstance ->
-        val nested = testInstance.tableCreate(
-            KuaString("hamal") to KuaString("rocks")
-        )
 
         testInstance.tableCreate(
-            KuaString("nested") to nested
+            KuaString("nested") to testInstance.tableCreate(
+                KuaString("hamal") to KuaString("rocks")
+            )
         )
 
         assertThat(testInstance.topGet(), equalTo(StackTop(2)))
