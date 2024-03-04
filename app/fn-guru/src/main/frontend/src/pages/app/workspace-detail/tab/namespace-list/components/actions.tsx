@@ -33,8 +33,7 @@ const NamespaceActions: FC<Props> = ({item}) => {
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button variant="secondary">
-                        <span className="sr-only">Actions</span>
-                        <DotsHorizontalIcon className="h-4 w-4"/>
+                        {stripName(item.name)}
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
@@ -72,6 +71,10 @@ const NamespaceActions: FC<Props> = ({item}) => {
     )
 }
 
+function stripName(longName: string) {
+    const names = longName.split("::")
+    return names[names.length - 1]
+}
 
 export default NamespaceActions
 

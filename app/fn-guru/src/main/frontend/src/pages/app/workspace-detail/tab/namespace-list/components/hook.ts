@@ -11,6 +11,7 @@ export function useNamespaceTree(workspaceId: string): [TreeAction, NamespaceNod
 
     const fn = useCallback(() => {
         listNamespaces(workspaceId)
+        console.log("fetch namespaces")
     }, [])
 
     useEffect(() => {
