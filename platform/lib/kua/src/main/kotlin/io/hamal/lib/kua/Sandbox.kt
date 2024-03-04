@@ -24,8 +24,8 @@ class Sandbox(
 
     override fun absIndex(idx: Int) = state.absIndex(idx)
 
-    override fun anyGet(idx: Int) = state.anyGet(idx)
-    override fun anyPush(value: KuaAny) = state.anyPush(value)
+    override fun get(idx: Int) = state.get(idx)
+    override fun push(value: KuaType) = state.push(value)
 
     override fun booleanGet(idx: Int) = state.booleanGet(idx)
     override fun booleanPush(value: KuaBoolean) = state.booleanPush(value)

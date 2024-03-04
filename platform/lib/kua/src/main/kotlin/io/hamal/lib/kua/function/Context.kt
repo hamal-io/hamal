@@ -1,8 +1,10 @@
 package io.hamal.lib.kua.function
 
-import io.hamal.lib.kua.*
+import io.hamal.lib.kua.SandboxContext
+import io.hamal.lib.kua.StackTop
+import io.hamal.lib.kua.State
+import io.hamal.lib.kua.sandboxContextLocal
 import io.hamal.lib.kua.type.*
-import io.hamal.lib.kua.type.KuaError
 import kotlin.reflect.KClass
 
 
@@ -12,8 +14,8 @@ class FunctionContext(
 
     override fun absIndex(idx: Int) = state.absIndex(idx)
 
-    override fun anyGet(idx: Int) = state.anyGet(idx)
-    override fun anyPush(value: KuaAny) = state.anyPush(value)
+    override fun get(idx: Int) = state.get(idx)
+    override fun push(value: KuaType) = state.push(value)
 
     override fun booleanGet(idx: Int) = state.booleanGet(idx)
     override fun codeLoad(code: KuaCode) = state.codeLoad(code)

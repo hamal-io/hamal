@@ -16,7 +16,7 @@ class KuaTable(
             index = index,
             state = state,
             keyExtractor = { state, index -> state.stringGet(index) },
-            valueExtractor = { state, index -> state.anyGet(index).value }
+            valueExtractor = { state, index -> state.get(index) }
         ).asSequence().map { it.key to it.value }
     }
 
@@ -25,7 +25,7 @@ class KuaTable(
             index = index,
             state = state,
             keyExtractor = { state, index -> state.numberGet(index) },
-            valueExtractor = { state, index -> state.anyGet(index).value }
+            valueExtractor = { state, index -> state.get(index) }
         ).asSequence().map { it.value }
     }
 
@@ -46,7 +46,7 @@ class KuaTable(
 
 
     fun get(idx: Int): KuaType {
-        return state.anyGet(idx).value
+        return state.get(idx)
     }
 
 
@@ -142,7 +142,7 @@ class KuaTable(
 
     fun get(key: KuaString): KuaType {
         state.tableFieldGet(index, key)
-        return state.anyGet(-1).value
+        return state.get(-1)
     }
 
     operator fun set(key: KuaString, value: KuaTable): TableLength {

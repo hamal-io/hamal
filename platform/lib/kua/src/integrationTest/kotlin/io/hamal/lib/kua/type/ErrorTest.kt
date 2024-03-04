@@ -53,7 +53,7 @@ internal class KuaErrorTest {
             )
         )
 
-        assertThat(messageCaptor.result, equalTo(KuaAny(KuaString("Sometimes an error can be a good thing"))))
+        assertThat(messageCaptor.result, equalTo(KuaString("Sometimes an error can be a good thing")))
     }
 
     @Test
@@ -93,7 +93,7 @@ internal class KuaErrorTest {
             )
         )
 
-        assertThat(errorCaptor.result, equalTo(KuaAny(KuaError("Sometimes an error can be a good thing"))))
+        assertThat(errorCaptor.result, equalTo(KuaError("Sometimes an error can be a good thing")))
     }
 
 
@@ -123,14 +123,14 @@ internal class KuaErrorTest {
         }
     }
 
-    private class Captor : Function1In0Out<KuaAny>(
-        FunctionInput1Schema(KuaAny::class)
+    private class Captor : Function1In0Out<KuaType>(
+        FunctionInput1Schema(KuaType::class)
     ) {
-        override fun invoke(ctx: FunctionContext, arg1: KuaAny) {
+        override fun invoke(ctx: FunctionContext, arg1: KuaType) {
             result = arg1
         }
 
-        var result: KuaAny? = null
+        var result: KuaType? = null
     }
 
     private val sandbox = run {

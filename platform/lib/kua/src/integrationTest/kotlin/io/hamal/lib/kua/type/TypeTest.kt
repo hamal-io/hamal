@@ -26,7 +26,7 @@ internal class KuaAnyTest {
         """
             )
         )
-        assertThat(captor.result, equalTo(KuaAny(KuaTrue)))
+        assertThat(captor.result, equalTo(KuaTrue))
     }
 
     @Test
@@ -43,7 +43,7 @@ internal class KuaAnyTest {
             )
         )
 
-        assertThat(captor.result, equalTo(KuaAny(KuaNumber(23))))
+        assertThat(captor.result, equalTo(KuaNumber(23)))
     }
 
     @Test
@@ -60,7 +60,7 @@ internal class KuaAnyTest {
             )
         )
 
-        assertThat(captor.result, equalTo(KuaAny(KuaString("hamal.io"))))
+        assertThat(captor.result, equalTo(KuaString("hamal.io")))
     }
 
     @Test
@@ -82,7 +82,7 @@ internal class KuaAnyTest {
             )
         )
 
-        val underlying = (captor.result as KuaAny).value
+        val underlying = captor.result
         require(underlying is KuaTable) { "Not a table" }
         assertThat(underlying.length, equalTo(1))
         assertThat(underlying.getString("key"), equalTo("value"))
@@ -109,7 +109,7 @@ internal class KuaAnyTest {
             )
         )
 
-        val underlying = (captor.result as KuaAny).value
+        val underlying = captor.result
         require(underlying is KuaTable) { "Not a array" }
         assertThat(underlying.length, equalTo(2))
 
@@ -117,19 +117,19 @@ internal class KuaAnyTest {
         assertThat(underlying.getString(2), equalTo(KuaString("hamal.io")))
     }
 
-    private class AnyValuePassThrough : Function1In1Out<KuaAny, KuaAny>(
-        FunctionInput1Schema(KuaAny::class),
-        FunctionOutput1Schema(KuaAny::class)
+    private class AnyValuePassThrough : Function1In1Out<KuaType, KuaType>(
+        FunctionInput1Schema(KuaType::class),
+        FunctionOutput1Schema(KuaType::class)
     ) {
-        override fun invoke(ctx: FunctionContext, arg1: KuaAny): KuaAny {
+        override fun invoke(ctx: FunctionContext, arg1: KuaType): KuaType {
             return arg1
         }
     }
 
-    private class AnyValueResultCaptor : Function1In0Out<KuaAny>(
-        FunctionInput1Schema(KuaAny::class)
+    private class AnyValueResultCaptor : Function1In0Out<KuaType>(
+        FunctionInput1Schema(KuaType::class)
     ) {
-        override fun invoke(ctx: FunctionContext, arg1: KuaAny) {
+        override fun invoke(ctx: FunctionContext, arg1: KuaType) {
             result = arg1
         }
 
