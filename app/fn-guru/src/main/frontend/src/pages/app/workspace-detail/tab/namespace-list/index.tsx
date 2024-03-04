@@ -24,15 +24,14 @@ const WorkspaceNamespaceListTab: FC = () => {
                 actions={[
                     <Button>
                         <ListRestart onClick={() => fetchNamespaces()}/>
+                        Refresh
                     </Button>
                 ]}
             />
 
-
-
-                <ol>
-                    <NamespaceNodeEntry root={namespaces}/>
-                </ol>
+            <ol>
+                <NamespaceNodeEntry root={namespaces} uniqueKey={namespaces.data.id}/>
+            </ol>
 
 
         </div>

@@ -12,7 +12,7 @@ const NamespaceNodeEntry: FC<Props> = ({root}) => {
     const [expanded, setExpanded] = useState(false)
 
     return (
-        <li key={root.data.id}>
+        <li>
             <span
                 style={{
                     display: 'flex',
@@ -25,9 +25,9 @@ const NamespaceNodeEntry: FC<Props> = ({root}) => {
                 }
                 <Actions item={root.data}/>
             </span>
-            {expanded && root.descendants.map(desc =>
+            {expanded && root.descendants.map(descendant =>
                 <ol>
-                    <NamespaceNodeEntry root={desc}/>
+                    <NamespaceNodeEntry root={descendant}/>
                 </ol>
             )}
         </li>
