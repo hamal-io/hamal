@@ -1,24 +1,22 @@
 import * as React from "react";
-import {FC, useEffect, useState} from "react";
+import {FC, RefObject, useEffect, useState} from "react";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuSeparator,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu.tsx";
-import {DotsHorizontalIcon} from "@radix-ui/react-icons";
-import {Button} from "@/components/ui/button.tsx";
 import {Dialog} from "@/components/ui/dialog.tsx";
 import Update from "@/pages/app/workspace-detail/tab/namespace-list/components/update.tsx";
-import {NamespaceListItem} from "@/types";
 import Append from "@/pages/app/workspace-detail/tab/namespace-list/components/append.tsx";
+import {Button} from "@/components/ui/button.tsx";
 
 
 type Props = {
-    item: NamespaceListItem
+    id: string
+    name: string
 }
-const NamespaceActions: FC<Props> = ({item}) => {
+const NamespaceActions: FC<Props> = ({id, name}) => {
     const [open, setOpen] = useState(false);
     const [dialogContent, setDialogContent] = useState(null);
 
@@ -32,20 +30,18 @@ const NamespaceActions: FC<Props> = ({item}) => {
         <>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <Button variant="secondary">
-                        {stripName(item.name)}
-                    </Button>
+                    <Button variant={"ghost"}>{name}</Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                     <DropdownMenuItem
                         onClick={() => {
                             setDialogContent(
-                                <Append appendTo={item.id} onClose={() => setOpen(false)}></Append>
+                                <Append appendTo={id} onClose={() => setOpen(false)}></Append>
                             )
                         }}>
                         Append
                     </DropdownMenuItem>
-                  {/*  <DropdownMenuItem
+                    {/*  <DropdownMenuItem
                         onClick={() => {
                             console.log("not implemented")
                         }}>
@@ -54,7 +50,7 @@ const NamespaceActions: FC<Props> = ({item}) => {
                     <DropdownMenuItem
                         onClick={() => {
                             setDialogContent(
-                                <Update item={item} onClose={() => setOpen(false)}></Update>
+                                <Update id={id} onClose={() => setOpen(false)}/>
                             )
                         }}>
                         Rename
@@ -69,11 +65,6 @@ const NamespaceActions: FC<Props> = ({item}) => {
         </>
 
     )
-}
-
-function stripName(longName: string) {
-    const names = longName.split("::")
-    return names[names.length - 1]
 }
 
 export default NamespaceActions

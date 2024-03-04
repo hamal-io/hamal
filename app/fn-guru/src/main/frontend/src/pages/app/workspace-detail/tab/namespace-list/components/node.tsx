@@ -1,4 +1,4 @@
-import React, {FC, useState} from "react";
+import React, {FC, forwardRef, useMemo, useRef, useState} from "react";
 import {NamespaceNode} from "@/pages/app/workspace-detail/tab/namespace-list/components/types.ts";
 import {Button} from "@/components/ui/button.tsx";
 import Actions from "@/pages/app/workspace-detail/tab/namespace-list/components/actions.tsx";
@@ -11,27 +11,27 @@ type Props = {
 const NamespaceNodeEntry: FC<Props> = ({root}) => {
     const [expanded, setExpanded] = useState(false)
 
-    console.log(root.data.id)
+    const names = root.data.name.split("::")
+    const depth = names.length * 2
+    const shortName = names[names.length - 1]
 
     return (
-        <li key={root.data.id}>
-            <span
-                style={{
-                    display: 'flex',
-                    alignItems: 'center'
-                }}>
+        <li key={0}>
+            <span className={'flex align-baseline'}>
                 {root.isParent() &&
-                    <Button variant={"secondary"} onClick={() => setExpanded(!expanded)}>
-                        {expanded ? <ChevronDown/> : <ChevronRight/>}
+                    <Button variant={"ghost"} onClick={() => setExpanded(!expanded)}>
+                        {expanded ? <ChevronDown size={"16"}/> : <ChevronRight size={"16"}/>}
                     </Button>
                 }
-                <Actions item={root.data}/>
+
+                <Actions id={root.data.id} name={shortName}/>
             </span>
-            {expanded && root.descendants.map(descendant =>
-                <ol>
+            {expanded && root.descendants.map((descendant) =>
+                <ol key={descendant.data.id} className={`pl-${depth} border-l-2 ml-4`}>
                     <NamespaceNodeEntry root={descendant}/>
                 </ol>
             )}
+
         </li>
     )
 }

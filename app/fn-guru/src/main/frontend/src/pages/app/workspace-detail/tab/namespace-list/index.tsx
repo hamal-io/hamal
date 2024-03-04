@@ -28,12 +28,9 @@ const WorkspaceNamespaceListTab: FC = () => {
                     </Button>
                 ]}
             />
-
             <ol>
                 <NamespaceNodeEntry root={namespaces}/>
             </ol>
-
-
         </div>
     )
 }
