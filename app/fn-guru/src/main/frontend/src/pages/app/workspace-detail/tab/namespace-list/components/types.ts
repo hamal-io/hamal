@@ -1,11 +1,11 @@
 import {NamespaceListItem} from "@/types";
 
 class Node<T> {
-    node: T
+    data: T
     descendants: Array<Node<T>>
 
     constructor(node: T) {
-        this.node = node
+        this.data = node
         this.descendants = []
     }
 
@@ -21,15 +21,13 @@ class Node<T> {
 }
 
 export class NamespaceNode extends Node<NamespaceListItem> {
-    depth: number
 
-    constructor(node: NamespaceListItem, depth: number = 0) {
+    constructor(node: NamespaceListItem) {
         super(node);
-        this.depth = depth
     }
 
     addDescendant(other: Node<NamespaceListItem>) {
-        if (this.node.id === other.node.id) {
+        if (this.data.id === other.data.id) {
             return
         }
         super.addDescendant(other);

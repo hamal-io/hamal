@@ -1,34 +1,43 @@
-import React, {FC} from "react";
+import React, {FC, useState} from "react";
 import {NamespaceNode} from "@/pages/app/workspace-detail/tab/namespace-list/components/types.ts";
+import {Button} from "@/components/ui/button.tsx";
 
 type Props = {
     root: NamespaceNode
     changeNode: () => void
 }
 const NamespaceNodeView: FC<Props> = ({root, changeNode}) => {
+    const [expanded, setExpanded] = useState(false)
 
     return (
         <ol>
-            {root.descendants.map(node =>
-                <li key={node.node.id}
-                    className={node.isParent() ? "text-blue-600" : undefined}
-                >
+            {root.isParent() ?
+                <li key={root.data.id} className={"text-blue-600"}>
                     <div>
-                    {node.node.name}
-                    {node.isParent() && <NamespaceNodeView root={node} changeNode={changeNode}/>}
+                        <Button variant={"secondary"} onClick={() => setExpanded(!expanded)}>+</Button>
+                        {root.data.name}
+                        {expanded && root.descendants.map(desc =>
+                            <NamespaceNodeView root={desc} changeNode={changeNode}/>
+                        )}
                     </div>
-                </li>)
-            }
+
+                </li>
+
+                : <li key={root.data.id}>{root.data.name}</li>}
         </ol>
+
     )
 }
+
 
 
 
 export default NamespaceNodeView
 
 
-{/*/*  <Card
+
+
+{/*  <Card
     className="relative overflow-hidden duration-500 hover:border-primary/50 group"
     onClick={changeNode}
 >
@@ -39,5 +48,4 @@ export default NamespaceNodeView
     </CardHeader>
     <CardContent>
     </CardContent>
-</Card>*/
-}
+</Card>*/}

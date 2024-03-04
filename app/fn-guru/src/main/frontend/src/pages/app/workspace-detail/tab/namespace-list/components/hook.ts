@@ -29,7 +29,7 @@ function unroll(list: Array<NamespaceListItem>) {
     for (const ns of list.reverse()) {
         const current = new NamespaceNode(ns)
         store.push(current)
-        const parent = store.find(storeItem => storeItem.node.id === ns.parentId)
+        const parent = store.find(storeItem => storeItem.data.id === ns.parentId)
         if (parent) {
             parent.addDescendant(current)
         }
