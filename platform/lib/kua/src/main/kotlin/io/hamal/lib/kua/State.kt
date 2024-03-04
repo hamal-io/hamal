@@ -11,6 +11,10 @@ value class StackTop(val value: Int)
 @JvmInline
 value class TableLength(val value: Int)
 
+@JvmInline
+value class Reference(val value: Int)
+
+
 interface State {
     fun absIndex(idx: Int): Int
 
@@ -38,6 +42,10 @@ interface State {
     fun nilPush(): StackTop
     fun numberGet(idx: Int): KuaNumber
     fun numberPush(value: KuaNumber): StackTop
+
+    fun referenceAcquire(): Reference
+    fun referencePush(reference: Reference): KClass<out KuaType>
+    fun referenceRelease(reference: Reference)
 
     fun stringGet(idx: Int): KuaString
     fun stringPush(value: KuaString): StackTop
@@ -139,6 +147,16 @@ open class StateImpl(val native: Native = Native()) : State {
     override fun nilPush() = StackTop(native.nilPush())
     override fun numberGet(idx: Int) = KuaNumber(native.numberGet(idx))
     override fun numberPush(value: KuaNumber) = StackTop(native.numberPush(value.doubleValue))
+
+    override fun referenceAcquire() = Reference(native.referenceAcquire())
+
+    override fun referencePush(reference: Reference) = luaToType(
+        native.referencePush(reference.value)
+    )
+
+    override fun referenceRelease(reference: Reference) {
+        native.referenceRelease(reference.value)
+    }
 
     override fun stringGet(idx: Int) = KuaString(native.stringGet(idx))
     override fun stringPush(value: KuaString) = StackTop(native.stringPush(value.stringValue))

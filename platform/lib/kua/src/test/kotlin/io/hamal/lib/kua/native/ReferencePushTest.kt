@@ -12,7 +12,9 @@ internal class ReferencePushTest : NativeBaseTest() {
         testInstance.stringPush("hamal rocks")
         val ref = testInstance.referenceAcquire()
 
-        testInstance.referencePush(ref)
+        testInstance.referencePush(ref).also { top ->
+            assertThat(top, equalTo(4))
+        }
         assertThat(testInstance.topGet(), equalTo(1))
         assertThat(testInstance.stringGet(1), equalTo("hamal rocks"))
     }
@@ -22,22 +24,30 @@ internal class ReferencePushTest : NativeBaseTest() {
         testInstance.stringPush("hamal rocks")
         val refOne = testInstance.referenceAcquire()
 
-        testInstance.stringPush("hamal really rocks")
+        testInstance.numberPush(13.37)
         val refTwo = testInstance.referenceAcquire()
 
-        testInstance.referencePush(refOne)
+        testInstance.referencePush(refOne).also { result ->
+            assertThat(result, equalTo(4))
+        }
         assertThat(testInstance.topGet(), equalTo(1))
         assertThat(testInstance.stringGet(1), equalTo("hamal rocks"))
 
-        testInstance.referencePush(refTwo)
+        testInstance.referencePush(refTwo).also { top ->
+            assertThat(top, equalTo(3))
+        }
         assertThat(testInstance.topGet(), equalTo(2))
-        assertThat(testInstance.stringGet(2), equalTo("hamal really rocks"))
+        assertThat(testInstance.numberGet(2), equalTo(13.37))
 
-        testInstance.referencePush(refOne)
+        testInstance.referencePush(refOne).also { top ->
+            assertThat(top, equalTo(4))
+        }
         assertThat(testInstance.topGet(), equalTo(3))
         assertThat(testInstance.stringGet(3), equalTo("hamal rocks"))
 
-        testInstance.referencePush(refOne)
+        testInstance.referencePush(refOne).also { top ->
+            assertThat(top, equalTo(4))
+        }
         assertThat(testInstance.topGet(), equalTo(4))
         assertThat(testInstance.stringGet(4), equalTo("hamal rocks"))
     }

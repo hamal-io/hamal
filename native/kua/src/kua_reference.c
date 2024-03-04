@@ -12,7 +12,8 @@ reference_acquire(lua_State *L) {
 int
 reference_push(lua_State *L, int ref) {
     if (check_stack_overflow(L, 1) == CHECK_RESULT_ERROR) return LUA_TNONE;
-    return lua_rawgeti(L, LUA_REGISTRYINDEX, ref);
+    lua_rawgeti(L, LUA_REGISTRYINDEX, ref);
+    return type_at(L, -1);
 }
 
 void

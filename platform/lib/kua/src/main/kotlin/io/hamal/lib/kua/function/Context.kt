@@ -1,10 +1,8 @@
 package io.hamal.lib.kua.function
 
-import io.hamal.lib.kua.SandboxContext
-import io.hamal.lib.kua.StackTop
-import io.hamal.lib.kua.State
-import io.hamal.lib.kua.sandboxContextLocal
+import io.hamal.lib.kua.*
 import io.hamal.lib.kua.type.*
+import io.hamal.lib.kua.type.KuaError
 import kotlin.reflect.KClass
 
 
@@ -39,6 +37,10 @@ class FunctionContext(
 
     override fun numberGet(idx: Int) = state.numberGet(idx)
     override fun numberPush(value: KuaNumber) = state.numberPush(value)
+
+    override fun referenceAcquire() = state.referenceAcquire()
+    override fun referencePush(reference: Reference) = state.referencePush(reference)
+    override fun referenceRelease(reference: Reference) = state.referenceRelease(reference)
 
     override fun stringGet(idx: Int) = state.stringGet(idx)
     override fun stringPush(value: KuaString) = state.stringPush(value)
