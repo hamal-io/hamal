@@ -30,7 +30,7 @@ const WorkspaceNamespaceListTab: FC = () => {
             />
 
             <ol>
-                <NamespaceNodeEntry root={namespaces} uniqueKey={namespaces.data.id}/>
+                <NamespaceNodeEntry root={namespaces}/>
             </ol>
 
 

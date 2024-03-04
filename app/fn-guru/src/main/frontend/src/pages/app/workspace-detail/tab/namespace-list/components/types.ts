@@ -20,16 +20,23 @@ class Node<T> {
     }
 }
 
-export class NamespaceNode extends Node<NamespaceListItem> {
+export class NamespaceNode {
+    data: NamespaceListItem
+    descendants: Array<NamespaceNode>
 
-    constructor(node: NamespaceListItem) {
-        super(node);
+    constructor(value: NamespaceListItem) {
+        this.data = value
+        this.descendants = []
     }
 
     addDescendant(other: Node<NamespaceListItem>) {
         if (this.data.id === other.data.id) {
             return
         }
-        super.addDescendant(other);
+        this.descendants.push(other)
+    }
+
+    isParent() {
+        return this.descendants.length > 0
     }
 }

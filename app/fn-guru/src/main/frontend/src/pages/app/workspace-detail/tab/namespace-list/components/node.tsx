@@ -11,8 +11,10 @@ type Props = {
 const NamespaceNodeEntry: FC<Props> = ({root}) => {
     const [expanded, setExpanded] = useState(false)
 
+    console.log(root.data.id)
+
     return (
-        <li>
+        <li key={root.data.id}>
             <span
                 style={{
                     display: 'flex',
