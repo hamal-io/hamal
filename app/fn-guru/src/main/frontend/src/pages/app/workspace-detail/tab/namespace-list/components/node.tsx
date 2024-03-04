@@ -1,12 +1,8 @@
 import React, {FC, useState} from "react";
 import {NamespaceNode} from "@/pages/app/workspace-detail/tab/namespace-list/components/types.ts";
 import {Button} from "@/components/ui/button.tsx";
-import {ContextMenu} from "@/components/ui/context-menu.tsx";
 import Actions from "@/pages/app/workspace-detail/tab/namespace-list/components/actions.tsx";
-import {Textarea} from "@/components/ui/textarea.tsx";
-import append from "@/pages/app/workspace-detail/tab/namespace-list/components/append.tsx";
-import Append from "@/pages/app/workspace-detail/tab/namespace-list/components/append.tsx";
-import {ChevronDown, ChevronRight, Plus} from "lucide-react";
+import {ChevronDown, ChevronRight} from "lucide-react";
 
 
 type Props = {
@@ -40,8 +36,6 @@ const NamespaceNodeView: FC<Props> = ({root, changeNode}) => {
 
 
     const Entry = () => {
-
-
         return (
             <div style={{
                 display: 'flex',

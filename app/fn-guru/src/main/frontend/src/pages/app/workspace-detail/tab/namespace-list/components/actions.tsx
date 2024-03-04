@@ -41,17 +41,17 @@ const NamespaceActions: FC<Props> = ({item}) => {
                     <DropdownMenuItem
                         onClick={() => {
                             setDialogContent(
-                                <Append appendTo={item.id}></Append>
+                                <Append appendTo={item.id} onClose={() => setOpen(false)}></Append>
                             )
                         }}>
                         Append
                     </DropdownMenuItem>
-                    <DropdownMenuItem
+                  {/*  <DropdownMenuItem
                         onClick={() => {
                             console.log("not implemented")
                         }}>
                         Choose
-                    </DropdownMenuItem>
+                    </DropdownMenuItem>*/}
                     <DropdownMenuItem
                         onClick={() => {
                             setDialogContent(
