@@ -20,7 +20,6 @@ fun HotNode.toKua(state: State): KuaType {
 
 fun KuaType.toHotNode(): HotNode {
     return when (this) {
-        is KuaAny -> value.toHotNode()
         is KuaFalse -> HotBoolean(false)
         is KuaTrue -> HotBoolean(true)
         is KuaCode -> HotString(stringValue)

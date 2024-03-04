@@ -4,7 +4,6 @@ import kotlin.reflect.KClass
 
 sealed interface KuaType {
     enum class Type {
-        Any,
         Boolean,
         Code,
         Decimal,

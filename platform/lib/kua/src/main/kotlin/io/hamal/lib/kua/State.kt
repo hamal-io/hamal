@@ -14,8 +14,8 @@ value class TableLength(val value: Int)
 interface State {
     fun absIndex(idx: Int): Int
 
-    fun anyGet(idx: Int): KuaAny
-    fun anyPush(value: KuaAny): StackTop
+    fun get(idx: Int): KuaType
+    fun push(value: KuaType): StackTop
 
     fun booleanPush(value: KuaBoolean): StackTop
     fun booleanGet(idx: Int): KuaBoolean
@@ -72,30 +72,30 @@ open class StateImpl(val native: Native = Native()) : State {
 
     override fun absIndex(idx: Int): Int = native.absIndex(idx)
 
-    override fun anyGet(idx: Int): KuaAny {
+    override fun get(idx: Int): KuaType {
         return when (val type = type(idx)) {
-            KuaBoolean::class -> KuaAny(booleanGet(idx))
-            KuaDecimal::class -> KuaAny(decimalGet(idx))
-            KuaError::class -> KuaAny(errorGet(idx))
-            KuaNil::class -> KuaAny(KuaNil)
-            KuaNumber::class -> KuaAny(numberGet(idx))
-            KuaString::class -> KuaAny(stringGet(idx))
-            KuaTable::class -> KuaAny(tableGet(idx))
+            KuaBoolean::class -> booleanGet(idx)
+            KuaDecimal::class -> decimalGet(idx)
+            KuaError::class -> errorGet(idx)
+            KuaNil::class -> KuaNil
+            KuaNumber::class -> numberGet(idx)
+            KuaString::class -> stringGet(idx)
+            KuaTable::class -> tableGet(idx)
             else -> TODO("$type not supported yet")
         }
     }
 
-    override fun anyPush(value: KuaAny): StackTop {
-        return when (val underlying = value.value) {
-            is KuaBoolean -> booleanPush(underlying)
-            is KuaDecimal -> decimalPush(underlying)
-            is KuaError -> errorPush(underlying)
-            is KuaFunction<*, *, *, *> -> functionPush(underlying)
+    override fun push(value: KuaType): StackTop {
+        return when (value) {
+            is KuaBoolean -> booleanPush(value)
+            is KuaDecimal -> decimalPush(value)
+            is KuaError -> errorPush(value)
+            is KuaFunction<*, *, *, *> -> functionPush(value)
             is KuaNil -> nilPush()
-            is KuaNumber -> numberPush(underlying)
-            is KuaString -> stringPush(underlying)
-            is KuaTable -> tablePush(underlying)
-            else -> TODO("${underlying.javaClass} not supported yet")
+            is KuaNumber -> numberPush(value)
+            is KuaString -> stringPush(value)
+            is KuaTable -> tablePush(value)
+            else -> TODO("${value.javaClass} not supported yet")
         }
     }
 
@@ -121,7 +121,7 @@ open class StateImpl(val native: Native = Native()) : State {
 
     override fun globalGet(key: KuaString): KuaType {
         native.globalGet(key.stringValue)
-        return anyGet(-1).value
+        return get(-1)
     }
 
     override fun globalGetTable(key: KuaString): KuaTable {
@@ -130,7 +130,7 @@ open class StateImpl(val native: Native = Native()) : State {
     }
 
     override fun globalSet(key: KuaString, value: KuaType) {
-        anyPush(KuaAny(value))
+        push(value)
         native.globalSet(key.stringValue)
     }
 
