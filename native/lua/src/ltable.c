@@ -367,6 +367,22 @@ int luaH_next (lua_State *L, Table *t, StkId key) {
   return 0;  /* no more elements */
 }
 
+int luaH_has_next (lua_State *L, Table *t, StkId key) {
+    unsigned int asize = luaH_realasize(t);
+    unsigned int i = findindex(L, t, s2v(key), asize);  /* find original key */
+    for (; i < asize; i++) {  /* try first array part */
+        if (!isempty(&t->array[i])) {  /* a non-empty entry? */
+            return 1;
+        }
+    }
+    for (i -= asize; cast_int(i) < sizenode(t); i++) {  /* hash part */
+        if (!isempty(gval(gnode(t, i)))) {  /* a non-empty entry? */
+            return 1;
+        }
+    }
+    return 0;  /* no more elements */
+}
+
 
 static void freehash (lua_State *L, Table *t) {
   if (!isdummy(t))

@@ -37,6 +37,9 @@ int
 table_next(lua_State *L, int idx);
 
 int
+table_has_next(lua_State *L, int idx);
+
+int
 table_append(lua_State *L, int idx);
 
 #endif //KUA_TABLE_H

@@ -17,6 +17,11 @@
 			 api_check(L, L->top.p <= L->ci->top.p, \
 					"stack overflow");}
 
+/* Decrements 'L->top.p', checking for stack underflows */
+#define api_decr_top(L)	{L->top.p--; \
+			 api_check(L, L->top.p >= L->ci->top.p, \
+					"stack underflow");}
+
 
 /*
 ** If a call returns too many multiple returns, the callee may not have

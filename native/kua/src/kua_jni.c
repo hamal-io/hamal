@@ -258,6 +258,12 @@ STATE_METHOD_NAME(tableNext)(JNIEnv *env, jobject K, jint idx) {
     return table_next(L, idx);
 }
 
+JNIEXPORT jboolean JNICALL
+STATE_METHOD_NAME(tableHasNext)(JNIEnv *env, jobject K, jint idx) {
+    ENV_AND_STATE
+    return table_has_next(L, idx);
+}
+
 JNIEXPORT jint JNICALL
 STATE_METHOD_NAME(tableGet)(JNIEnv *env, jobject K, jint idx) {
     ENV_AND_STATE

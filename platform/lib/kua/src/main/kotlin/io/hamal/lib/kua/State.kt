@@ -48,6 +48,8 @@ interface State {
     fun tableFieldGet(idx: Int, key: KuaString): KClass<out KuaType>
     fun tableGet(idx: Int): KuaTable
     fun tableLength(idx: Int): TableLength
+    fun tableHasNext(idx: Int): KuaBoolean
+    fun tableNext(idx: Int): KuaBoolean
     fun tablePush(value: KuaTable): StackTop
     fun tableRawSet(idx: Int): TableLength
     fun tableRawSetIdx(stackIdx: Int, tableIdx: Int): TableLength
@@ -141,7 +143,6 @@ open class StateImpl(val native: Native = Native()) : State {
     override fun stringGet(idx: Int) = KuaString(native.stringGet(idx))
     override fun stringPush(value: KuaString) = StackTop(native.stringPush(value.stringValue))
 
-
     override fun tableAppend(idx: Int) = TableLength(native.tableAppend(idx))
     override fun tableCreate(arrayCount: Int, recordCount: Int): KuaTable {
         return KuaTable(
@@ -152,8 +153,10 @@ open class StateImpl(val native: Native = Native()) : State {
 
     override fun tableFieldGet(idx: Int, key: KuaString) = luaToType(native.tableFieldGet(idx, key.stringValue))
     override fun tableFieldSet(idx: Int, key: KuaString) = TableLength(native.tableFieldSet(idx, key.stringValue))
-    override fun tableGet(idx: Int) = KuaTable(native.tableGet(native.absIndex(idx)), this)
+    override fun tableGet(idx: Int) = KuaTable(native.tableGet(idx), this)
     override fun tableLength(idx: Int) = TableLength(native.tableLength(idx))
+    override fun tableHasNext(idx: Int) = KuaBoolean.of(native.tableHasNext(idx))
+    override fun tableNext(idx: Int) = KuaBoolean.of(native.tableNext(idx))
     override fun tablePush(value: KuaTable) = StackTop(native.topPush(value.index))
     override fun tableRawSet(idx: Int) = TableLength(native.tableRawSet(idx))
     override fun tableRawSetIdx(stackIdx: Int, tableIdx: Int) = TableLength(native.tableRawSetIdx(stackIdx, tableIdx))

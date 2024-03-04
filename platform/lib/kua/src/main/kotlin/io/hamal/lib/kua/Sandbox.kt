@@ -59,6 +59,8 @@ class Sandbox(
     override fun tableFieldGet(idx: Int, key: KuaString) = state.tableFieldGet(idx, key)
     override fun tableFieldSet(idx: Int, key: KuaString) = state.tableFieldSet(idx, key)
     override fun tableLength(idx: Int) = state.tableLength(idx)
+    override fun tableHasNext(idx: Int): KuaBoolean = state.tableHasNext(idx)
+    override fun tableNext(idx: Int) = state.tableNext(idx)
     override fun tablePush(value: KuaTable): StackTop = state.tablePush(value)
     override fun tableRawSet(idx: Int) = state.tableRawSet(idx)
     override fun tableRawSetIdx(stackIdx: Int, tableIdx: Int) = state.tableRawSetIdx(stackIdx, tableIdx)

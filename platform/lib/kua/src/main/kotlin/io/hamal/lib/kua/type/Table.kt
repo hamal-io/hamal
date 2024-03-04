@@ -12,7 +12,7 @@ class KuaTable(
     override val type: KuaType.Type = KuaType.Type.Table
 
     fun mapEntries(): Sequence<Pair<KuaString, KuaType>> {
-        return KuaTableEntryIterator(
+        return KuaTableIterator(
             index = index,
             state = state,
             keyExtractor = { state, index -> state.stringGet(index) },
@@ -21,7 +21,7 @@ class KuaTable(
     }
 
     fun asSequence(): Sequence<KuaType> {
-        return KuaTableEntryIterator(
+        return KuaTableIterator(
             index = index,
             state = state,
             keyExtractor = { state, index -> state.numberGet(index) },

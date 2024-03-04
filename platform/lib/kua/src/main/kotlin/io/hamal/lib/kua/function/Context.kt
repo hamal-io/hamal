@@ -49,6 +49,8 @@ class FunctionContext(
     override fun tableFieldSet(idx: Int, key: KuaString) = state.tableFieldSet(idx, key)
     override fun tableGet(idx: Int): KuaTable = state.tableGet(idx)
     override fun tableLength(idx: Int) = state.tableLength(idx)
+    override fun tableHasNext(idx: Int) = state.tableHasNext(idx)
+    override fun tableNext(idx: Int) = state.tableNext(idx)
     override fun tablePush(value: KuaTable): StackTop = state.tablePush(value)
     override fun tableRawSet(idx: Int) = state.tableRawSet(idx)
     override fun tableRawSetIdx(stackIdx: Int, tableIdx: Int) = state.tableRawSetIdx(stackIdx, tableIdx)
