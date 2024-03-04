@@ -9,6 +9,7 @@
 #include "kua_state.h"
 #include "kua_table.h"
 #include "kua_check.h"
+#include "kua_reference.h"
 
 
 #define UNUSED __attribute__((unused))
@@ -269,6 +270,28 @@ STATE_METHOD_NAME(tableGet)(JNIEnv *env, jobject K, jint idx) {
     ENV_AND_STATE
     return table_get(L, idx);
 }
+
+//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+[REFERENCE]-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+JNIEXPORT jint JNICALL
+STATE_METHOD_NAME(referenceAcquire)(JNIEnv *env, jobject K) {
+    ENV_AND_STATE
+    return (jint) reference_acquire(L);
+}
+
+JNIEXPORT jint JNICALL
+STATE_METHOD_NAME(referencePush)(JNIEnv *env, jobject K, jint ref) {
+    ENV_AND_STATE
+    return (jint) reference_push(L, ref);
+}
+
+JNIEXPORT void JNICALL
+STATE_METHOD_NAME(referenceRelease)(JNIEnv *env, jobject K, jint ref) {
+    ENV_AND_STATE
+    reference_release(L, ref);
+}
+
+
 
 //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+[INVOKE]-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 

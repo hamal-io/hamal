@@ -7,6 +7,28 @@ import org.junit.jupiter.api.assertThrows
 
 internal class NumberGetTest : NativeBaseTest() {
     @Test
+    fun `Get value on stack without popping the value`() {
+        testInstance.numberPush(99.88)
+        assertThat(testInstance.numberGet(1), equalTo(99.88))
+        assertThat(testInstance.topGet(), equalTo(1))
+
+        testInstance.numberPush(88.77)
+        assertThat(testInstance.numberGet(2), equalTo(88.77))
+        assertThat(testInstance.topGet(), equalTo(2))
+    }
+
+    @Test
+    fun `Get value with negative index without popping the value`() {
+        testInstance.numberPush(99.88)
+        assertThat(testInstance.numberGet(-1), equalTo(99.88))
+        assertThat(testInstance.topGet(), equalTo(1))
+
+        testInstance.numberPush(88.77)
+        assertThat(testInstance.numberGet(-1), equalTo(88.77))
+        assertThat(testInstance.topGet(), equalTo(2))
+    }
+
+    @Test
     fun `Tries to get number with 0 index`() {
         testInstance.numberPush(812.123)
         assertThrows<IllegalArgumentException> { testInstance.numberGet(0) }
@@ -35,25 +57,4 @@ internal class NumberGetTest : NativeBaseTest() {
             .also { exception -> assertThat(exception.message, equalTo("Expected type to be number but was boolean")) }
     }
 
-    @Test
-    fun `Get value on stack without popping the value`() {
-        testInstance.numberPush(99.88)
-        assertThat(testInstance.numberGet(1), equalTo(99.88))
-        assertThat(testInstance.topGet(), equalTo(1))
-
-        testInstance.numberPush(88.77)
-        assertThat(testInstance.numberGet(2), equalTo(88.77))
-        assertThat(testInstance.topGet(), equalTo(2))
-    }
-
-    @Test
-    fun `Get value with negative index without popping the value`() {
-        testInstance.numberPush(99.88)
-        assertThat(testInstance.numberGet(-1), equalTo(99.88))
-        assertThat(testInstance.topGet(), equalTo(1))
-
-        testInstance.numberPush(88.77)
-        assertThat(testInstance.numberGet(-1), equalTo(88.77))
-        assertThat(testInstance.topGet(), equalTo(2))
-    }
 }
