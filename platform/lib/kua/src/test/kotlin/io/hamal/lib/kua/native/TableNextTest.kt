@@ -32,7 +32,10 @@ internal class TableNextTest : NativeBaseTest() {
         assertThat(testInstance.stringGet(-2), equalTo("key"))
         assertThat(testInstance.stringGet(-1), equalTo("value"))
 
-        testInstance.topPop(3)
+        testInstance.topPop(1)
+        assertThat(testInstance.tableNext(1), equalTo(false))
+
+        testInstance.topPop(1)
         verifyStackIsEmpty()
     }
 

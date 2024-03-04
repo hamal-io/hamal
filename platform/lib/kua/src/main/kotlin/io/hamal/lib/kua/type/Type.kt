@@ -13,7 +13,8 @@ sealed interface KuaType {
         Table,
         Nil,
         Number,
-        String
+        String,
+        Reference
     }
 
     val type: Type

@@ -51,8 +51,8 @@ class Sandbox(
     override fun numberPush(value: KuaNumber) = state.numberPush(value)
 
     override fun referenceAcquire() = state.referenceAcquire()
-    override fun referencePush(reference: Reference) = state.referencePush(reference)
-    override fun referenceRelease(reference: Reference) = state.referenceRelease(reference)
+    override fun referencePush(reference: KuaReference) = state.referencePush(reference)
+    override fun referenceRelease(reference: KuaReference) = state.referenceRelease(reference)
 
     override fun stringGet(idx: Int) = state.stringGet(idx)
     override fun stringPush(value: KuaString) = state.stringPush(value)
@@ -63,7 +63,6 @@ class Sandbox(
     override fun tableFieldGet(idx: Int, key: KuaString) = state.tableFieldGet(idx, key)
     override fun tableFieldSet(idx: Int, key: KuaString) = state.tableFieldSet(idx, key)
     override fun tableLength(idx: Int) = state.tableLength(idx)
-    override fun tableHasNext(idx: Int): KuaBoolean = state.tableHasNext(idx)
     override fun tableNext(idx: Int) = state.tableNext(idx)
     override fun tablePush(value: KuaTable): StackTop = state.tablePush(value)
     override fun tableRawSet(idx: Int) = state.tableRawSet(idx)

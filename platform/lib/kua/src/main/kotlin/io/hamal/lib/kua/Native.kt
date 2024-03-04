@@ -51,7 +51,6 @@ class Native : AutoCloseable {
     external fun tableFieldSet(idx: Int, key: String): Int
     external fun tableFieldGet(idx: Int, key: String): Int
     external fun tableLength(idx: Int): Int
-    external fun tableHasNext(idx: Int): Boolean
     external fun tableNext(idx: Int): Boolean
     external fun tableRawSet(idx: Int): Int
     external fun tableRawSetIdx(stackIdx: Int, tableIdx: Int): Int

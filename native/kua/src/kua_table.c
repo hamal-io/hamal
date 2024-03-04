@@ -1,7 +1,5 @@
 #include "kua_table.h"
 #include "kua_check.h"
-#include "lauxlib.h"
-#include "kua_jni_error.h"
 
 int
 table_create(lua_State *L, int arrayCount, int recordsCount) {
@@ -108,21 +106,6 @@ table_next(lua_State *L, int idx) {
     if (check_stack_overflow(L, 1) == CHECK_RESULT_ERROR) return LUA_TNONE;
     return lua_next(L, idx);
 }
-
-int
-table_has_next(lua_State *L, int idx) {
-    if (check_index(L, idx) == CHECK_RESULT_ERROR) return LUA_TNONE;
-    if (check_type_at(L, idx, TABLE_TYPE) == CHECK_RESULT_ERROR) return LUA_TNONE;
-    if (check_stack_overflow(L, 1) == CHECK_RESULT_ERROR) return LUA_TNONE;
-
-//    if (lua_absindex(L, idx) == lua_gettop(L)) {
-//        throw_illegal_state("No key was pushed onto stack");
-//        return CHECK_RESULT_ERROR;
-//    }
-
-    return lua_has_next(L, idx);
-}
-
 
 int
 table_append(lua_State *L, int idx) {

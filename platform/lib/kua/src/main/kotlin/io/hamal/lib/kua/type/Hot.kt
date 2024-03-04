@@ -31,6 +31,7 @@ fun KuaType.toHotNode(): HotNode {
         is KuaNumber -> HotNumber(doubleValue)
         is KuaString -> HotString(stringValue)
         is KuaTable -> toHotObject()
+        is KuaReference -> TODO()
     }
 }
 
