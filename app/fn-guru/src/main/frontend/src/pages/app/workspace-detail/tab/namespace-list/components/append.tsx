@@ -12,8 +12,8 @@ import {
     FormMessage
 } from "@/components/ui/form.tsx";
 import {useForm} from "react-hook-form";
-import {Loader2, Plus} from "lucide-react";
-import {Dialog, DialogContent, DialogHeader, DialogTrigger} from "@/components/ui/dialog.tsx";
+import {Loader2} from "lucide-react";
+import {DialogContent, DialogHeader} from "@/components/ui/dialog.tsx";
 import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {useNamespaceAppend} from "@/hook";

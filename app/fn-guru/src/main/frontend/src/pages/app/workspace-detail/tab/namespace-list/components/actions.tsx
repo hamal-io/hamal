@@ -1,5 +1,5 @@
 import * as React from "react";
-import {FC, RefObject, useEffect, useState} from "react";
+import {Component, FC, useEffect, useState} from "react";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -9,14 +9,14 @@ import {
 import {Dialog} from "@/components/ui/dialog.tsx";
 import Update from "@/pages/app/workspace-detail/tab/namespace-list/components/update.tsx";
 import Append from "@/pages/app/workspace-detail/tab/namespace-list/components/append.tsx";
-import {Button} from "@/components/ui/button.tsx";
+import Element = React.JSX.Element;
 
 
 type Props = {
     id: string
-    name: string
+    trigger: Element
 }
-const NamespaceActions: FC<Props> = ({id, name}) => {
+const NamespaceActions: FC<Props> = ({id, trigger}) => {
     const [open, setOpen] = useState(false);
     const [dialogContent, setDialogContent] = useState(null);
 
@@ -30,7 +30,7 @@ const NamespaceActions: FC<Props> = ({id, name}) => {
         <>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <Button variant={"ghost"}>{name}</Button>
+                    {trigger}
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                     <DropdownMenuItem

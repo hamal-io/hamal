@@ -23,8 +23,9 @@ const NamespaceNodeEntry: FC<Props> = ({root}) => {
                         {expanded ? <ChevronDown size={"16"}/> : <ChevronRight size={"16"}/>}
                     </Button>
                 }
-
-                <Actions id={root.data.id} name={shortName}/>
+                <Actions id={root.data.id} trigger={
+                    <Button variant={"ghost"}>{shortName}</Button>
+                }/>
             </span>
             {expanded && root.descendants.map((descendant) =>
                 <ol key={descendant.data.id} className={`pl-${depth} border-l-2 ml-4`}>
