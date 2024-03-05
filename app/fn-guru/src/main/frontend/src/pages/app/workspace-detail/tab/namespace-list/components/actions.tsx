@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Component, FC, useEffect, useState} from "react";
+import {FC, useEffect, useState} from "react";
 import {
     DropdownMenu,
     DropdownMenuContent,
