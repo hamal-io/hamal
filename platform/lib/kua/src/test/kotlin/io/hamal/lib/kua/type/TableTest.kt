@@ -2,6 +2,8 @@ package io.hamal.lib.kua.type
 
 import io.hamal.lib.kua.*
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
+import io.hamal.lib.kua.function.Function0In0Out
+import io.hamal.lib.kua.function.FunctionContext
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.DynamicTest
@@ -44,6 +46,26 @@ internal class KuaTableTest {
         assertThat(state.type(-1), equalTo(KuaTable::class))
         state.topPop(2)
     }
+
+    @Test
+    fun `append - function`() {
+        val testInstance = state.tableCreate()
+        val testFunction = object : Function0In0Out() {
+            override fun invoke(ctx: FunctionContext) {
+                TODO("Not yet implemented")
+            }
+        }
+
+        testInstance.append(testFunction).also { result ->
+            assertThat(result, equalTo(TableLength(1)))
+        }
+        assertThat(state.topGet(), equalTo(StackTop(1)))
+
+        state.tableRawGetIdx(1, 1)
+        assertThat(state.type(-1), equalTo(KuaFunction::class))
+        state.topPop(2)
+    }
+
 
     @Test
     fun `append - nil`() {
@@ -284,7 +306,7 @@ internal class KuaTableTest {
 
 
     @TestFactory
-    fun `set - kua values`(): List<DynamicTest> {
+    fun `set`(): List<DynamicTest> {
         lateinit var testInstance: KuaTable
         return listOf(
             KuaTrue,
@@ -314,6 +336,26 @@ internal class KuaTableTest {
     }
 
     @Test
+    fun `set - function`() {
+        val testInstance = state.tableCreate()
+        val testFunction = object : Function0In0Out() {
+            override fun invoke(ctx: FunctionContext) {
+                TODO("Not yet implemented")
+            }
+        }
+
+        testInstance.set("key", testFunction).also { tableLength ->
+            assertThat(tableLength, equalTo(TableLength(1)))
+        }
+
+        assertThat(state.topGet(), equalTo(StackTop(1)))
+
+        state.tableFieldGet(1, KuaString("key"))
+        assertThat(state.type(-1), equalTo(KuaFunction::class))
+        state.topPop(2)
+    }
+
+    @Test
     fun `set - nil`() {
         val testInstance = state.tableCreate()
 
@@ -331,7 +373,6 @@ internal class KuaTableTest {
 
         state.topPop(2)
     }
-
 
     @Test
     fun `set - table`() {

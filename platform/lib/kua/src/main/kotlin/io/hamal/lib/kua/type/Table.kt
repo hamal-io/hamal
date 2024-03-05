@@ -11,44 +11,56 @@ class KuaTable(
 
     override val type: KuaType.Type = KuaType.Type.Table
 
-    fun mapEntries(): Sequence<Pair<KuaString, KuaType>> {
-        return KuaTableIterator(
-            index = index,
-            state = state,
-            keyExtractor = { state, index -> state.stringGet(index) },
-            valueExtractor = { state, index -> state.get(index) }
-        ).asSequence().map { it.key to it.value }
-    }
-
-    fun asSequence(): Sequence<KuaType> {
-        return KuaTableIterator(
-            index = index,
-            state = state,
-            keyExtractor = { state, index -> state.numberGet(index) },
-            valueExtractor = { state, index -> state.get(index) }
-        ).asSequence().map { it.value }
-    }
-
-
     fun append(value: KuaType): TableLength {
         return when (value) {
-            is KuaBoolean -> append(value)
-            is KuaDecimal -> append(value)
-            is KuaError -> append(value)
-            is KuaFunction<*, *, *, *> -> append(value)
-            is KuaNil -> append(value)
-            is KuaNumber -> append(value)
-            is KuaString -> append(value)
-            is KuaTable -> append(value)
+            is KuaBoolean -> {
+                state.booleanPush(value)
+                state.tableAppend(index)
+            }
+
+            is KuaDecimal -> {
+                state.decimalPush(value)
+                state.tableAppend(index)
+            }
+
+            is KuaError -> {
+                state.errorPush(value)
+                state.tableAppend(index)
+
+            }
+
+            is KuaFunction<*, *, *, *> -> {
+                state.functionPush(value)
+                state.tableAppend(index)
+            }
+
+            is KuaNil -> {
+                state.nilPush()
+                state.tableAppend(index)
+            }
+
+            is KuaNumber -> {
+                state.numberPush(value)
+                state.tableAppend(index)
+            }
+
+            is KuaString -> {
+                state.stringPush(value)
+                state.tableAppend(index)
+            }
+
+            is KuaTable -> {
+                state.tablePush(value)
+                state.tableAppend(index)
+            }
+
             else -> TODO()
         }
     }
 
-
     fun get(idx: Int): KuaType {
         return state.get(idx)
     }
-
 
     fun getBoolean(idx: Int): KuaBoolean {
         val type = state.tableRawGetIdx(index, idx)
@@ -56,16 +68,6 @@ class KuaTable(
         return state.booleanGet(-1)
     }
 
-    fun append(value: KuaBoolean): TableLength {
-        state.booleanPush(value)
-        return state.tableAppend(index)
-    }
-
-
-    fun append(value: KuaError): TableLength {
-        state.errorPush(value)
-        return state.tableAppend(index)
-    }
 
     fun getNumber(idx: Int): KuaNumber {
         val type = state.tableRawGetIdx(index, idx)
@@ -73,22 +75,6 @@ class KuaTable(
         return state.numberGet(-1)
     }
 
-
-    fun append(value: KuaNumber): TableLength {
-        state.numberPush(value)
-        return state.tableAppend(index)
-    }
-
-    fun append(@Suppress("UNUSED_PARAMETER") value: KuaNil): TableLength {
-        state.nilPush()
-        return state.tableAppend(index)
-    }
-
-
-    fun append(value: KuaDecimal): TableLength {
-        state.decimalPush(value)
-        return state.tableAppend(index)
-    }
 
     fun getError(idx: Int): KuaError {
         val type = state.tableRawGetIdx(index, idx)
@@ -115,18 +101,6 @@ class KuaTable(
         return state.decimalGet(-1)
     }
 
-
-    fun append(value: KuaString): TableLength {
-        state.stringPush(value)
-        return state.tableAppend(index)
-    }
-
-
-    fun append(value: KuaTable): TableLength {
-        state.tablePush(value)
-        return state.tableAppend(index)
-    }
-
     fun isNull(key: KuaString): Boolean = type(key) == KuaNil::class
 
     fun findTable(key: KuaString): KuaTable? {
@@ -145,36 +119,65 @@ class KuaTable(
         return state.get(-1)
     }
 
-    operator fun set(key: KuaString, value: KuaTable): TableLength {
-        state.stringPush(key)
-        state.tablePush(value)
-        return state.tableRawSet(index)
-    }
-
-
-    operator fun set(key: KuaString, value: KuaDecimal): TableLength {
-        state.stringPush(key)
-        state.decimalPush(value)
-        return state.tableRawSet(index)
-    }
-
-    operator fun set(key: KuaString, value: KuaError): TableLength {
-        state.stringPush(key)
-        state.errorPush(value)
-        return state.tableRawSet(index)
-    }
-
     operator fun set(key: KuaString, value: KuaType): TableLength {
         return when (value) {
-            is KuaBoolean -> set(key, value)
-            is KuaCode -> set(key, value)
-            is KuaDecimal -> set(key, value)
-            is KuaError -> set(key, value)
-            is KuaFunction<*, *, *, *> -> set(key, value)
-            is KuaNil -> unset(key)
-            is KuaNumber -> set(key, value)
-            is KuaString -> set(key, value)
-            is KuaTable -> set(key, value)
+            is KuaBoolean -> {
+                state.stringPush(key)
+                state.booleanPush(if (value.booleanValue) KuaTrue else KuaFalse)
+                state.tableRawSet(index)
+
+            }
+
+            is KuaCode -> {
+                state.stringPush(key)
+                state.stringPush(KuaString(value.stringValue))
+                state.tableRawSet(index)
+            }
+
+            is KuaDecimal -> {
+                state.stringPush(key)
+                state.decimalPush(value)
+                state.tableRawSet(index)
+
+            }
+
+            is KuaError -> {
+                state.stringPush(key)
+                state.errorPush(value)
+                state.tableRawSet(index)
+            }
+
+            is KuaFunction<*, *, *, *> -> {
+                state.stringPush(key)
+                state.functionPush(value)
+                state.tableRawSet(index)
+            }
+
+            is KuaNil -> {
+                state.stringPush(key)
+                state.nilPush()
+                state.tableRawSet(index)
+            }
+
+            is KuaNumber -> {
+                state.stringPush(key)
+                state.numberPush(value)
+                state.tableRawSet(index)
+
+            }
+
+            is KuaString -> {
+                state.stringPush(key)
+                state.stringPush(value)
+                state.tableRawSet(index)
+            }
+
+            is KuaTable -> {
+                state.stringPush(key)
+                state.tablePush(value)
+                state.tableRawSet(index)
+            }
+
             else -> TODO()
         }
     }
@@ -194,40 +197,9 @@ class KuaTable(
         return state.tableRawSet(index)
     }
 
-
-    operator fun set(key: KuaString, value: KuaBoolean): TableLength {
-        state.stringPush(key)
-        state.booleanPush(if (value.booleanValue) KuaTrue else KuaFalse)
-        return state.tableRawSet(index)
-    }
-
-    operator fun set(key: KuaString, value: KuaNumber): TableLength {
-        state.stringPush(key)
-        state.numberPush(value)
-        return state.tableRawSet(index)
-    }
-
     operator fun set(key: String, value: KuaDecimal): TableLength {
         state.stringPush(KuaString(key))
         state.decimalPush(value)
-        return state.tableRawSet(index)
-    }
-
-    operator fun set(key: KuaString, value: KuaCode): TableLength {
-        state.stringPush(key)
-        state.stringPush(KuaString(value.stringValue))
-        return state.tableRawSet(index)
-    }
-
-    operator fun set(key: KuaString, value: KuaString): TableLength {
-        state.stringPush(key)
-        state.stringPush(value)
-        return state.tableRawSet(index)
-    }
-
-    operator fun set(key: KuaString, value: KuaFunction<*, *, *, *>): TableLength {
-        state.stringPush(key)
-        state.functionPush(value)
         return state.tableRawSet(index)
     }
 
@@ -303,6 +275,24 @@ class KuaTable(
     fun type(key: KuaString): KClass<out KuaType> {
         state.stringPush(key)
         return state.tableRawGet(index)
+    }
+
+    fun asEntries(): Sequence<Pair<KuaString, KuaType>> {
+        return KuaTableIterator(
+            index = index,
+            state = state,
+            keyExtractor = { state, index -> state.stringGet(index) },
+            valueExtractor = { state, index -> state.get(index) }
+        ).asSequence().map { it.key to it.value }
+    }
+
+    fun asList(): Sequence<KuaType> {
+        return KuaTableIterator(
+            index = index,
+            state = state,
+            keyExtractor = { state, index -> state.numberGet(index) },
+            valueExtractor = { state, index -> state.get(index) }
+        ).asSequence().map { it.value }
     }
 
 }
