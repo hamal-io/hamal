@@ -4,7 +4,6 @@ import {useNamespaceList} from "@/hook";
 import {useCallback, useEffect, useState} from "react";
 
 type TreeAction = () => void
-
 export function useNamespaceTree(workspaceId: string): [TreeAction, NamespaceNode] {
     const [listNamespaces, namespacesList] = useNamespaceList()
     const [root, setRoot] = useState(null)

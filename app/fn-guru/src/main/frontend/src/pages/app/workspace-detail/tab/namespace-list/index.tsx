@@ -27,6 +27,7 @@ const WorkspaceNamespaceListTab: FC = () => {
                         Refresh
                     </Button>
                 ]}
+                description="Click on a Namespace to select, rename or append. Changes will appear after refresh -> "
             />
 
             <ol>

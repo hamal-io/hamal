@@ -35,18 +35,13 @@ const NamespaceActions: FC<Props> = ({id, trigger}) => {
                 <DropdownMenuContent align="end">
                     <DropdownMenuItem
                         onClick={() => {
-                            setDialogContent(
-                                <Append appendTo={id} onClose={() => setOpen(false)}></Append>
-                            )
-                        }}>
-                        Append
-                    </DropdownMenuItem>
-                    {/*  <DropdownMenuItem
-                        onClick={() => {
                             console.log("not implemented")
-                        }}>
-                        Choose
-                    </DropdownMenuItem>*/}
+                        }}
+                        disabled={true}
+                        >
+
+                        Select
+                    </DropdownMenuItem>
                     <DropdownMenuItem
                         onClick={() => {
                             setDialogContent(
@@ -54,6 +49,14 @@ const NamespaceActions: FC<Props> = ({id, trigger}) => {
                             )
                         }}>
                         Rename
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                        onClick={() => {
+                            setDialogContent(
+                                <Append appendTo={id} onClose={() => setOpen(false)}></Append>
+                            )
+                        }}>
+                        Append
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>

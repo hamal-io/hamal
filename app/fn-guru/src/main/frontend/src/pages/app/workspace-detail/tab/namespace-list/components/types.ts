@@ -1,25 +1,5 @@
 import {NamespaceListItem} from "@/types";
 
-class Node<T> {
-    data: T
-    descendants: Array<Node<T>>
-
-    constructor(node: T) {
-        this.data = node
-        this.descendants = []
-    }
-
-    addDescendant(other: Node<T>) {
-        if (!this.descendants.includes(other)) {
-            this.descendants.push(other)
-        }
-    }
-
-    isParent() {
-        return this.descendants.length > 0
-    }
-}
-
 export class NamespaceNode {
     data: NamespaceListItem
     descendants: Array<NamespaceNode>
@@ -29,11 +9,10 @@ export class NamespaceNode {
         this.descendants = []
     }
 
-    addDescendant(other: Node<NamespaceListItem>) {
-        if (this.data.id === other.data.id) {
-            return
+    addDescendant(other: NamespaceNode) {
+        if (this.data.id !== other.data.id) {
+            this.descendants.push(other)
         }
-        this.descendants.push(other)
     }
 
     isParent() {

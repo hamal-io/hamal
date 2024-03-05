@@ -1,4 +1,4 @@
-import React, {FC, useState} from "react";
+import React, {FC, memo, useState} from "react";
 import {NamespaceNode} from "@/pages/app/workspace-detail/tab/namespace-list/components/types.ts";
 import {Button} from "@/components/ui/button.tsx";
 import Actions from "@/pages/app/workspace-detail/tab/namespace-list/components/actions.tsx";
@@ -21,7 +21,7 @@ const NamespaceNodeEntry: FC<Props> = ({root}) => {
                     <Button variant={"ghost"} onClick={() => setExpanded(!expanded)} className={"p-1"}>
                         {expanded ? <ChevronDown size={"16"}/> : <ChevronRight size={"16"}/>}
                     </Button>
-                            :
+                    :
                     <Button variant={"ghost"} className={"p-1"}>
                         <Dot size={"16"}/>
                     </Button>
@@ -31,8 +31,8 @@ const NamespaceNodeEntry: FC<Props> = ({root}) => {
                 }/>
             </div>
             {expanded && root.descendants.map((descendant) =>
-                <ol key={descendant.data.id} className={`ml-2 border-l-2`}>
-                    <NamespaceNodeEntry root={descendant} />
+                <ol key={descendant.data.id} className={`ml-2.5 border-l-2`}>
+                    <NamespaceNodeEntry root={descendant}/>
                 </ol>
             )}
 
