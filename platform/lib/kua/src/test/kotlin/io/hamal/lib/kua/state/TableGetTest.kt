@@ -17,12 +17,12 @@ internal class TableGetTest : StateBaseTest() {
 
         testInstance.tablePush(tableOne)
         assertThat(testInstance.tableGet(2).getString("instance"), equalTo(KuaString("One")))
-        assertThat(testInstance.topGet(), equalTo(StackTop(2)))
+        assertThat(testInstance.topGet(), equalTo(StackTop(3)))
 
         val tableTwo = testInstance.tableCreate(KuaString("instance") to KuaString("Two"))
         testInstance.tablePush(tableTwo)
         assertThat(testInstance.tableGet(4).getString("instance"), equalTo(KuaString("Two")))
-        assertThat(testInstance.topGet(), equalTo(StackTop(4)))
+        assertThat(testInstance.topGet(), equalTo(StackTop(6)))
     }
 
     @TestFactory
@@ -31,13 +31,13 @@ internal class TableGetTest : StateBaseTest() {
 
         testInstance.tablePush(tableOne)
         assertThat(testInstance.tableGet(2).getString("instance"), equalTo(KuaString("One")))
-        assertThat(testInstance.topGet(), equalTo(StackTop(2)))
+        assertThat(testInstance.topGet(), equalTo(StackTop(3)))
 
         val tableTwo = testInstance.tableCreate(KuaString("instance") to KuaString("Two"))
         testInstance.tablePush(tableTwo)
 
         assertThat(testInstance.tableGet(-1).getString("instance"), equalTo(KuaString("Two")))
-        assertThat(testInstance.topGet(), equalTo(StackTop(4)))
+        assertThat(testInstance.topGet(), equalTo(StackTop(6)))
     }
 
     @TestFactory

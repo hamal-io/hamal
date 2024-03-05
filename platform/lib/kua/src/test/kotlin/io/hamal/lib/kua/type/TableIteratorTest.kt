@@ -1,3 +1,4 @@
+
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContextNop
@@ -115,7 +116,7 @@ internal class KuaTableEntryIteratorTest {
             state.referencePush(entry.value)
             state.tableGet(-1).also { table ->
                 assertThat(table.getNumber("value"), equalTo(KuaNumber(idx)))
-                state.topPop(1)
+                state.topPop(2)
             }
         }
 
