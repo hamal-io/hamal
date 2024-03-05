@@ -2,15 +2,7 @@ import React, {FC, useState} from "react";
 
 import * as z from "zod"
 import {zodResolver} from "@hookform/resolvers/zod";
-import {
-    Form,
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage
-} from "@/components/ui/form.tsx";
+import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
 import {useForm} from "react-hook-form";
 import {Loader2} from "lucide-react";
 import {DialogContent, DialogHeader} from "@/components/ui/dialog.tsx";
@@ -59,7 +51,7 @@ const Append: FC<Props> = ({appendTo, onClose}) => {
                             <FormItem>
                                 <FormLabel>Name</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="Worknamespace-One" {...field} />
+                                    <Input  {...field} />
                                 </FormControl>
                                 <FormDescription>
                                     Name of your namespace
@@ -70,7 +62,7 @@ const Append: FC<Props> = ({appendTo, onClose}) => {
                     />
                     <Button type="submit">
                         {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
-                        Create namespace
+                        Create
                     </Button>
                 </form>
             </Form>

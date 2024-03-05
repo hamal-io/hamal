@@ -23,7 +23,10 @@ const Update: FC<Props> = ({id, onClose}) => {
     const [isLoading, setLoading] = useState(false)
 
     const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema)
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            name: ""
+        },
     })
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -34,16 +37,9 @@ const Update: FC<Props> = ({id, onClose}) => {
             console.error(e)
         } finally {
             setLoading(false)
-            form.reset()
-        }
-    }
-
-    useEffect(() => {
-        if (updateSubmitted) {
             onClose()
         }
-    }, [updateSubmitted]);
-
+    }
 
     return (
         <DialogContent>
