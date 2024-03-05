@@ -37,6 +37,10 @@ class Native : AutoCloseable {
     external fun numberPush(value: Double): Int
     external fun numberGet(idx: Int): Double
 
+    external fun referenceAcquire(): Int
+    external fun referencePush(reference: Int): Int
+    external fun referenceRelease(reference: Int)
+
     external fun stringPush(value: String): Int
     external fun stringLoad(code: String): Int
     external fun stringGet(idx: Int): String

@@ -85,7 +85,7 @@ class AssertTest {
         Sandbox(SandboxContextNop).also {
             it.register(
                 RunnerPlugin(
-                    "test",
+                    KuaString("test"),
                     factoryCode = KuaCode(
                         """
                             function plugin_create(internal)

@@ -21,7 +21,7 @@ class FuncDeploymentsFunction(
     override fun invoke(ctx: FunctionContext, arg1: KuaString): Pair<KuaError?, KuaTable?> {
         return try {
             null to ctx.tableCreate(
-                sdk.func.listDeployments(FuncId(arg1.value))
+                sdk.func.listDeployments(FuncId(arg1.stringValue))
                     .map { deployed ->
                         ctx.tableCreate(
                             "version" to KuaNumber(deployed.version.value),

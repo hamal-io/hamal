@@ -14,7 +14,7 @@ import java.lang.reflect.Type
 sealed class Requested {
     abstract val id: RequestId
     abstract val by: AuthId
-    abstract var status: RequestStatus
+    abstract val status: RequestStatus
     val `class`: RequestClass = RequestClass(this::class.java.simpleName)
 
     object Adapter : JsonAdapter<Requested> {

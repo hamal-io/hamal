@@ -36,7 +36,7 @@ class PluginSysFactory(
 ) : RunnerPluginFactory {
     override fun create(sandbox: Sandbox): RunnerPlugin {
         return RunnerPlugin(
-            name = "sys",
+            name = KuaString("sys"),
             internals = mapOf(
                 KuaString("await") to AwaitFunction(sdk.template),
                 KuaString("await_completed") to AwaitCompletedFunction(sdk.template),

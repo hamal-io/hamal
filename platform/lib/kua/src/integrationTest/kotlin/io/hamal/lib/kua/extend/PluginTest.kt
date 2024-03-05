@@ -48,7 +48,7 @@ internal class PluginTest {
         Sandbox(SandboxContextNop).also { sb ->
             sb.register(
                 RunnerPlugin(
-                    name = "test",
+                    name = KuaString("test"),
                     factoryCode = KuaCode(
                         """
                             function plugin_create(internal)

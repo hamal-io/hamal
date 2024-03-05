@@ -16,7 +16,7 @@ internal class TableFieldGetTest : StateBaseTest() {
         assertThat(testInstance.topGet(), equalTo(StackTop(1)))
 
         testInstance.tableFieldGet(1, KuaString("key")).also { result ->
-            assertThat(result, equalTo(StackTop(4)))
+            assertThat(result, equalTo(KuaString::class))
             assertThat(testInstance.stringGet(-1), equalTo(KuaString("value")))
             assertThat(testInstance.topGet(), equalTo(StackTop(2)))
         }

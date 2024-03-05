@@ -7,7 +7,7 @@ local create_req = fail_on_error(sys.extensions.create({
 
 sys.await_completed(create_req)
 
-local id = create_req.id
+local id = create_req.extension_id
 assert(id ~= nil)
 
 update_req = fail_on_error(sys.extensions.update({

@@ -9,6 +9,7 @@ import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.kua.type.KuaTable
+import io.hamal.lib.kua.type.findTable
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiFuncService
 
@@ -23,9 +24,9 @@ class FuncListFunction(
             null to ctx.tableCreate(
                 sdk.func.list(
                     ApiFuncService.FuncQuery(
-                        namespaceIds = arg1.findArray("namespace_ids")
+                        namespaceIds = arg1.findTable("namespace_ids")
                             ?.asSequence()
-                            ?.map { NamespaceId((it as KuaString).value) }
+                            ?.map { NamespaceId((it as KuaString).stringValue) }
                             ?.toList()
                             ?: listOf(ctx[NamespaceId::class])
                     )

@@ -9,7 +9,6 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.type.*
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiFuncInvokeRequest
@@ -24,19 +23,19 @@ class FuncInvokeFunction(
         return try {
 
             val correlationId = if (arg1.type("correlation_id") == KuaString::class) {
-                CorrelationId(arg1.getString("correlation_id"))
+                CorrelationId(arg1.getString("correlation_id").stringValue)
             } else {
                 CorrelationId.default
             }
 
             val version = if (arg1.type("version") == KuaNumber::class) {
-                CodeVersion(arg1.getInt("version"))
+                CodeVersion(arg1.getNumber("version").intValue)
             } else {
                 null
             }
 
             val res = sdk.func.invoke(
-                FuncId(SnowflakeId(arg1.getString("id"))),
+                FuncId(SnowflakeId(arg1.getString("id").stringValue)),
                 ApiFuncInvokeRequest(
                     correlationId = correlationId,
                     inputs = InvocationInputs(),

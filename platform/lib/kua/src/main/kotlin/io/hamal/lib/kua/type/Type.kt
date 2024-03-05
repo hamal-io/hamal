@@ -4,7 +4,6 @@ import kotlin.reflect.KClass
 
 sealed interface KuaType {
     enum class Type {
-        Any,
         Boolean,
         Code,
         Decimal,
@@ -13,7 +12,8 @@ sealed interface KuaType {
         Table,
         Nil,
         Number,
-        String
+        String,
+        Reference
     }
 
     val type: Type
@@ -21,6 +21,8 @@ sealed interface KuaType {
 
 fun KClass<out KuaType>.checkExpectedType(expected: KClass<out KuaType>) {
     check(this == expected) {
-        "Expected type to be ${expected.java.simpleName} but was ${this.java.simpleName}"
+        "Expected type to be ${
+            expected.java.simpleName.replace("Kua", "").lowercase()
+        } but was ${this.java.simpleName.replace("Kua", "").lowercase()}"
     }
 }

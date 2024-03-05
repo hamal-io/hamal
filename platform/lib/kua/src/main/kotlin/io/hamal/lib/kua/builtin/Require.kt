@@ -15,7 +15,7 @@ class Require(
     FunctionOutput1Schema(KuaTable::class)
 ) {
     override fun invoke(ctx: FunctionContext, arg1: KuaString): KuaTable {
-        registry.extensionPush(arg1.value)
+        registry.extensionPush(arg1)
         return ctx.tableGet(-1)
     }
 }

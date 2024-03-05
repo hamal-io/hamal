@@ -2,9 +2,9 @@ package io.hamal.lib.kua.type
 
 import io.hamal.lib.kua.type.KuaType.Type.Code
 
+@JvmInline
+value class KuaCode(private val value: String) : KuaType {
+    override val type: KuaType.Type get() = Code
 
-data class KuaCode(val value: String) : KuaType {
-    constructor(str: KuaString) : this(str.value)
-
-    override val type: KuaType.Type = Code
+    val stringValue: String get() = value
 }

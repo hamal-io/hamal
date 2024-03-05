@@ -5,7 +5,6 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.type.*
 import io.hamal.lib.sdk.ApiSdk
 
@@ -17,7 +16,7 @@ class ExtensionGetFunction(
 ) {
     override fun invoke(ctx: FunctionContext, arg1: KuaString): Pair<KuaError?, KuaTable?> {
         return try {
-            val ext = sdk.extension.get(ExtensionId(arg1.value))
+            val ext = sdk.extension.get(ExtensionId(arg1.stringValue))
 
             null to ctx.tableCreate(
                 "id" to KuaString(ext.id.value.value.toString(16)),

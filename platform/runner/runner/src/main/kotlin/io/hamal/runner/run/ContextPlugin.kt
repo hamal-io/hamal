@@ -52,7 +52,7 @@ class RunnerContextFactory(
         }
 
         return RunnerPlugin(
-            name = "context",
+            name = KuaString("context"),
             internals = mapOf(
                 KuaString("events") to events,
                 KuaString("hook") to hook,

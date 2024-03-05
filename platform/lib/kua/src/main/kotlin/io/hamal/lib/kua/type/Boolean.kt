@@ -5,7 +5,7 @@ import io.hamal.lib.kua.type.KuaType.Type
 fun booleanOf(value: Boolean) = if (value) KuaTrue else KuaFalse
 
 sealed class KuaBoolean(
-    val value: Boolean,
+    private val value: Boolean,
 ) : KuaType {
     override val type: Type = Type.Boolean
 
@@ -27,6 +27,8 @@ sealed class KuaBoolean(
     companion object {
         fun of(value: Boolean) = if (value) KuaTrue else KuaFalse
     }
+
+    val booleanValue: Boolean get() = value
 }
 
 object KuaTrue : KuaBoolean(true) {

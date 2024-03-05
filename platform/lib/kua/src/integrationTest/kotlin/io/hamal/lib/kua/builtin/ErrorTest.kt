@@ -54,7 +54,7 @@ class ErrorTest {
         Sandbox(SandboxContextNop).also {
             it.register(
                 RunnerPlugin(
-                    name = "test",
+                    name = KuaString("test"),
                     factoryCode = KuaCode(
                         """
                             function plugin_create(internal)

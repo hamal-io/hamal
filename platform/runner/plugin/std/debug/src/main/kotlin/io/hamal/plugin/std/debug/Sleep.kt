@@ -7,6 +7,6 @@ import io.hamal.lib.kua.type.KuaNumber
 
 object SleepFunction : Function1In0Out<KuaNumber>(FunctionInput1Schema(KuaNumber::class)) {
     override fun invoke(ctx: FunctionContext, arg1: KuaNumber) {
-        Thread.sleep(arg1.value.toLong())
+        Thread.sleep(arg1.longValue)
     }
 }

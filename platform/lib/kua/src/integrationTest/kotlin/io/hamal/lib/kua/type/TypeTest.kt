@@ -26,7 +26,7 @@ internal class KuaAnyTest {
         """
             )
         )
-        assertThat(captor.result, equalTo(KuaAny(KuaTrue)))
+        assertThat(captor.result, equalTo(KuaTrue))
     }
 
     @Test
@@ -43,7 +43,7 @@ internal class KuaAnyTest {
             )
         )
 
-        assertThat(captor.result, equalTo(KuaAny(KuaNumber(23))))
+        assertThat(captor.result, equalTo(KuaNumber(23)))
     }
 
     @Test
@@ -60,14 +60,14 @@ internal class KuaAnyTest {
             )
         )
 
-        assertThat(captor.result, equalTo(KuaAny(KuaString("hamal.io"))))
+        assertThat(captor.result, equalTo(KuaString("hamal.io")))
     }
 
     @Test
     @Disabled
     fun `Can be used with table object style table`() {
         val map = sandbox.tableCreate(0, 2)
-        map["key"] = "value"
+        map["key"] = KuaString("value")
         sandbox.globalSet(KuaString("test_map"), map)
 
         val captor = AnyValueResultCaptor()
@@ -82,7 +82,7 @@ internal class KuaAnyTest {
             )
         )
 
-        val underlying = (captor.result as KuaAny).value
+        val underlying = captor.result
         require(underlying is KuaTable) { "Not a table" }
         assertThat(underlying.length, equalTo(1))
         assertThat(underlying.getString("key"), equalTo("value"))
@@ -93,8 +93,8 @@ internal class KuaAnyTest {
     @Disabled
     fun `AnyValue can be used with array style table`() {
         val array = sandbox.tableCreate(2, 0)
-        array.append(23)
-        array.append("hamal.io")
+        array.append(KuaNumber(23))
+        array.append(KuaString("hamal.io"))
         sandbox.globalSet(KuaString("test_array"), array)
 
         val captor = AnyValueResultCaptor()
@@ -109,27 +109,27 @@ internal class KuaAnyTest {
             )
         )
 
-        val underlying = (captor.result as KuaAny).value
+        val underlying = captor.result
         require(underlying is KuaTable) { "Not a array" }
         assertThat(underlying.length, equalTo(2))
 
-        assertThat(underlying.getInt(1), equalTo(23))
-        assertThat(underlying.getString(2), equalTo("hamal.io"))
+        assertThat(underlying.getNumber(1), equalTo(KuaNumber(23)))
+        assertThat(underlying.getString(2), equalTo(KuaString("hamal.io")))
     }
 
-    private class AnyValuePassThrough : Function1In1Out<KuaAny, KuaAny>(
-        FunctionInput1Schema(KuaAny::class),
-        FunctionOutput1Schema(KuaAny::class)
+    private class AnyValuePassThrough : Function1In1Out<KuaType, KuaType>(
+        FunctionInput1Schema(KuaType::class),
+        FunctionOutput1Schema(KuaType::class)
     ) {
-        override fun invoke(ctx: FunctionContext, arg1: KuaAny): KuaAny {
+        override fun invoke(ctx: FunctionContext, arg1: KuaType): KuaType {
             return arg1
         }
     }
 
-    private class AnyValueResultCaptor : Function1In0Out<KuaAny>(
-        FunctionInput1Schema(KuaAny::class)
+    private class AnyValueResultCaptor : Function1In0Out<KuaType>(
+        FunctionInput1Schema(KuaType::class)
     ) {
-        override fun invoke(ctx: FunctionContext, arg1: KuaAny) {
+        override fun invoke(ctx: FunctionContext, arg1: KuaType) {
             result = arg1
         }
 
@@ -138,7 +138,7 @@ internal class KuaAnyTest {
 
     private fun plugin(captor: KuaFunction<*, *, *, *>) =
         RunnerPlugin(
-            name = "test",
+            name = KuaString("test"),
             factoryCode = KuaCode(
                 """
                     function plugin_create(internal)

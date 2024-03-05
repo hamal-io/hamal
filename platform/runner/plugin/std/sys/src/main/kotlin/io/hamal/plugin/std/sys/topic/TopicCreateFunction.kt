@@ -8,10 +8,7 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.tableCreate
-import io.hamal.lib.kua.type.KuaError
-import io.hamal.lib.kua.type.KuaString
-import io.hamal.lib.kua.type.KuaTable
+import io.hamal.lib.kua.type.*
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiTopicCreateRequest
 
@@ -24,9 +21,10 @@ class TopicCreateFunction(
     override fun invoke(ctx: FunctionContext, arg1: KuaTable): Pair<KuaError?, KuaTable?> {
         return try {
             val res = sdk.topic.createTopic(
-                arg1.findString("namespaceId")?.let { NamespaceId(SnowflakeId(it)) } ?: ctx[NamespaceId::class],
+                arg1.findString("namespaceId")?.let { NamespaceId(SnowflakeId(it.stringValue)) }
+                    ?: ctx[NamespaceId::class],
                 ApiTopicCreateRequest(
-                    name = TopicName(arg1.getString("name")),
+                    name = TopicName(arg1.getString("name").stringValue),
                     type = TopicType.Namespace
                 )
             )

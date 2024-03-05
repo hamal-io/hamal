@@ -1,10 +1,9 @@
 package io.hamal.lib.kua.type
 
 import io.hamal.lib.kua.State
-import io.hamal.lib.kua.StateImpl
 import kotlin.collections.Map.Entry
 
-class KuaTableEntryIterator<KEY : KuaType, TYPE : KuaType>(
+class KuaTableIterator<KEY : KuaType, TYPE : KuaType>(
     index: Int,
     val state: State,
     val keyExtractor: (State, Int) -> KEY,
@@ -20,9 +19,7 @@ class KuaTableEntryIterator<KEY : KuaType, TYPE : KuaType>(
     }
 
     override fun hasNext(): Boolean {
-        val s = state
-        require(s is StateImpl)
-        hasNext = s.native.tableNext(index)
+        hasNext = state.tableNext(index).booleanValue
         return if (hasNext) {
             nextTableEntry = object : Entry<KEY, TYPE> {
                 override val key = keyExtractor(state, state.absIndex(-2))

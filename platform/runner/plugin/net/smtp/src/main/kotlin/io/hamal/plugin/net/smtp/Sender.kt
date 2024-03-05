@@ -1,31 +1,34 @@
 package io.hamal.plugin.net.smtp
 
+import io.hamal.lib.kua.type.KuaBoolean
+import io.hamal.lib.kua.type.KuaNumber
+import io.hamal.lib.kua.type.KuaString
 import org.springframework.mail.javamail.JavaMailSenderImpl
 import org.springframework.mail.javamail.MimeMessageHelper
 
 data class SenderConfig(
-    val host: String,
-    val port: Int,
-    val username: String?,
-    val password: String?,
-    val defaultEncoding: String,
-    val protocol: String,
-    val debug: Boolean,
-    val testConnection: Boolean,
-    val auth: Boolean,
-    val enableStarttls: Boolean,
-    val connectionTimeout: Long,
-    val timeout: Long,
-    val writeTimeout: Long
+    val host: KuaString,
+    val port: KuaNumber,
+    val username: KuaString?,
+    val password: KuaString?,
+    val defaultEncoding: KuaString,
+    val protocol: KuaString,
+    val debug: KuaBoolean,
+    val testConnection: KuaBoolean,
+    val auth: KuaBoolean,
+    val enableStarttls: KuaBoolean,
+    val connectionTimeout: KuaNumber,
+    val timeout: KuaNumber,
+    val writeTimeout: KuaNumber
 )
 
 data class Message(
-    val from: String,
-    val to: String,
-    val subject: String,
-    val content: String,
-    val contentType: String,
-    val priority: Int
+    val from: KuaString,
+    val to: KuaString,
+    val subject: KuaString,
+    val content: KuaString,
+    val contentType: KuaString,
+    val priority: KuaNumber
 )
 
 interface Sender {
@@ -35,11 +38,11 @@ interface Sender {
 internal object SenderDefaultImpl : Sender {
 
     override fun send(config: SenderConfig, message: Message) {
-        sender.defaultEncoding = config.defaultEncoding
-        sender.host = config.host
-        sender.port = config.port
-        sender.username = config.username
-        sender.password = config.password
+        sender.defaultEncoding = config.defaultEncoding.toString()
+        sender.host = config.host.toString()
+        sender.port = config.port.intValue
+        sender.username = config.username.toString()
+        sender.password = config.password.toString()
 
         val props = sender.javaMailProperties
         props["mail.transport.protocol"] = config.protocol
@@ -54,13 +57,13 @@ internal object SenderDefaultImpl : Sender {
 
         sender.send(sender.createMimeMessage().also {
             MimeMessageHelper(it, true).also { helper ->
-                helper.setFrom(message.from)
-                helper.setTo(message.to)
-                helper.setPriority(message.priority)
-                helper.setSubject(message.subject)
+                helper.setFrom(message.from.stringValue)
+                helper.setTo(message.to.stringValue)
+                helper.setPriority(message.priority.intValue)
+                helper.setSubject(message.subject.stringValue)
             }
 
-            it.setContent(message.content, message.contentType)
+            it.setContent(message.content, message.contentType.stringValue)
         })
     }
 

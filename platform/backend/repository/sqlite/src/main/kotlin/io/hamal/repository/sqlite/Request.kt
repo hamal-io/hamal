@@ -1,5 +1,6 @@
 package io.hamal.repository.sqlite
 
+import io.hamal.lib.common.KeyedOnce
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.RequestStatus
@@ -10,7 +11,9 @@ import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.RequestQueryRepository.RequestQuery
 import io.hamal.repository.api.RequestRepository
 import io.hamal.repository.record.json
+import java.lang.reflect.Field
 import java.nio.file.Path
+import kotlin.reflect.KClass
 
 class RequestSqliteRepository(
     path: Path
@@ -78,7 +81,7 @@ class RequestSqliteRepository(
                 }
                 map { rs ->
                     json.decompressAndDeserialize(Requested::class, rs.getBytes("data")).apply {
-                        status = RequestStatus.fromInt(rs.getInt("status"))
+                        statusField(this::class).also { field -> field.set(this, RequestStatus.fromInt(rs.getInt("status"))) }
                     }
                 }
             }
@@ -130,7 +133,7 @@ class RequestSqliteRepository(
             }
             map { rs ->
                 json.decompressAndDeserialize(Requested::class, rs.getBytes("data")).apply {
-                    status = RequestStatus.fromInt(rs.getInt("status"))
+                    statusField(this::class).also { field -> field.set(this, RequestStatus.fromInt(rs.getInt("status"))) }
                 }
             }
         }
@@ -156,7 +159,7 @@ class RequestSqliteRepository(
             }
             map { rs ->
                 json.decompressAndDeserialize(Requested::class, rs.getBytes("data")).apply {
-                    status = RequestStatus.fromInt(rs.getInt("status"))
+                    statusField(this::class).also { field -> field.set(this, RequestStatus.fromInt(rs.getInt("status"))) }
                 }
             }
         }
@@ -181,4 +184,12 @@ class RequestSqliteRepository(
             }
         } ?: 0L)
     }
+
+    private fun <REQUESTED_TYPE : Requested> statusField(klass: KClass<REQUESTED_TYPE>): Field =
+        statusFieldCache(klass) { clazz ->
+            clazz.java.getDeclaredField("status").also { field -> field.isAccessible = true }
+        }
+
+    private val statusFieldCache = KeyedOnce.default<KClass<*>, Field>()
+
 }

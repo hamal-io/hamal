@@ -19,7 +19,7 @@ class AwaitFunction(
     override fun invoke(ctx: FunctionContext, arg1: KuaString): KuaError? {
         while (true) {
             httpTemplate.get("/v1/requests/{reqId}")
-                .path("reqId", arg1.value)
+                .path("reqId", arg1.stringValue)
                 .execute(ApiRequested::class)
                 .let {
                     when (it.status) {
@@ -47,7 +47,7 @@ class AwaitCompletedFunction(
     override fun invoke(ctx: FunctionContext, arg1: KuaString): KuaError? {
         while (true) {
             httpTemplate.get("/v1/requests/{reqId}")
-                .path("reqId", arg1.value)
+                .path("reqId", arg1.stringValue)
                 .execute(ApiRequested::class)
                 .let {
                     when (it.status) {
@@ -77,7 +77,7 @@ class AwaitFailedFunction(
     override fun invoke(ctx: FunctionContext, arg1: KuaString): KuaError? {
         while (true) {
             httpTemplate.get("/v1/requests/{reqId}")
-                .path("reqId", arg1.value)
+                .path("reqId", arg1.stringValue)
                 .execute(ApiRequested::class)
                 .let {
                     when (it.status) {

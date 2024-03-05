@@ -5,10 +5,10 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
-internal class TableGetSubTableTest : NativeBaseTest() {
+internal class TableSubTableGetTest : NativeBaseTest() {
 
     @Test
-    fun `Get sub table from table`() {
+    fun `Get table from table`() {
         testInstance.tableCreate(0, 0)
 
         testInstance.tableCreate(0, 1)
@@ -28,7 +28,7 @@ internal class TableGetSubTableTest : NativeBaseTest() {
     }
 
     @Test
-    fun `Creates a new table if no table exist with current key`() {
+    fun `Tries to find sub table, but fails due to no table exist with current key`() {
         testInstance.tableCreate(0, 0)
 
         testInstance.tableCreate(0, 1)
@@ -38,24 +38,27 @@ internal class TableGetSubTableTest : NativeBaseTest() {
 
         assertThat(testInstance.topGet(), equalTo(1))
 
-        testInstance.tableSubTableGet(1, "does not exists")
-        assertThat(testInstance.topGet(), equalTo(2))
-        assertThat(testInstance.type(2), equalTo(5))
-        assertThat(testInstance.tableLength(2), equalTo(0))
+        assertThrows<IllegalStateException> { testInstance.tableSubTableGet(1, "does not exists") }
+            .also { exception -> assertThat(exception.message, equalTo("Expected type to be table but was nil")) }
+
+        assertThat(testInstance.topGet(), equalTo(1))
     }
 
 
     @Test
-    fun `Overwrites value when value of key is not a table`() {
+    fun `Does not overwrite value when value of key is not a table`() {
         testInstance.tableCreate(0, 0)
         testInstance.stringPush("rocks")
         testInstance.tableFieldSet(1, "hamal")
 
-        testInstance.tableSubTableGet(1, "hamal")
+        assertThrows<IllegalStateException> {
+            testInstance.tableSubTableGet(1, "hamal")
+        }.also { exception -> assertThat(exception.message, equalTo("Expected type to be table but was string")) }
 
         testInstance.tableFieldGet(1, "hamal")
-        assertThat(testInstance.topGet(), equalTo(3))
-        assertThat(testInstance.type(3), equalTo(5))
+        assertThat(testInstance.topGet(), equalTo(2))
+        assertThat(testInstance.type(2), equalTo(4))
+        assertThat(testInstance.stringGet(2), equalTo("rocks"))
     }
 
     @Test

@@ -20,7 +20,7 @@ class TopicResolveFunction(
     override fun invoke(ctx: FunctionContext, arg1: KuaString): Pair<KuaError?, KuaString?> {
         return try {
             null to KuaString(
-                sdk.topic.resolve(ctx[NamespaceId::class], TopicName(arg1.value))
+                sdk.topic.resolve(ctx[NamespaceId::class], TopicName(arg1.stringValue))
                     .value
                     .value
                     .toString(16)

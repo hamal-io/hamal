@@ -24,8 +24,8 @@ class Sandbox(
 
     override fun absIndex(idx: Int) = state.absIndex(idx)
 
-    override fun anyGet(idx: Int) = state.anyGet(idx)
-    override fun anyPush(value: KuaAny) = state.anyPush(value)
+    override fun get(idx: Int) = state.get(idx)
+    override fun push(value: KuaType) = state.push(value)
 
     override fun booleanGet(idx: Int) = state.booleanGet(idx)
     override fun booleanPush(value: KuaBoolean) = state.booleanPush(value)
@@ -50,6 +50,10 @@ class Sandbox(
     override fun numberGet(idx: Int) = state.numberGet(idx)
     override fun numberPush(value: KuaNumber) = state.numberPush(value)
 
+    override fun referenceAcquire() = state.referenceAcquire()
+    override fun referencePush(reference: KuaReference) = state.referencePush(reference)
+    override fun referenceRelease(reference: KuaReference) = state.referenceRelease(reference)
+
     override fun stringGet(idx: Int) = state.stringGet(idx)
     override fun stringPush(value: KuaString) = state.stringPush(value)
 
@@ -59,11 +63,13 @@ class Sandbox(
     override fun tableFieldGet(idx: Int, key: KuaString) = state.tableFieldGet(idx, key)
     override fun tableFieldSet(idx: Int, key: KuaString) = state.tableFieldSet(idx, key)
     override fun tableLength(idx: Int) = state.tableLength(idx)
-    override fun tablePush(proxy: KuaTable): StackTop = state.tablePush(proxy)
+    override fun tableNext(idx: Int) = state.tableNext(idx)
+    override fun tablePush(value: KuaTable): StackTop = state.tablePush(value)
     override fun tableRawSet(idx: Int) = state.tableRawSet(idx)
     override fun tableRawSetIdx(stackIdx: Int, tableIdx: Int) = state.tableRawSetIdx(stackIdx, tableIdx)
     override fun tableRawGet(idx: Int) = state.tableRawGet(idx)
     override fun tableRawGetIdx(stackIdx: Int, tableIdx: Int) = state.tableRawGetIdx(stackIdx, tableIdx)
+    override fun tableSubTableGet(idx: Int, key: KuaString) = state.tableSubTableGet(idx, key)
 
     override fun topGet(): StackTop = state.topGet()
     override fun topPop(len: Int) = state.topPop(len)

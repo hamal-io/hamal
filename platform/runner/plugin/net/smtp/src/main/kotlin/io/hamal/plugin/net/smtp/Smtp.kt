@@ -4,8 +4,7 @@ import io.hamal.lib.kua.function.Function1In1Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput1Schema
-import io.hamal.lib.kua.type.KuaError
-import io.hamal.lib.kua.type.KuaTable
+import io.hamal.lib.kua.type.*
 
 class SmtpSendFunction(
     private val sender: Sender
@@ -19,18 +18,18 @@ class SmtpSendFunction(
         sender.send(
             SenderConfig(
                 host = arg1.getString("host"),
-                port = arg1.getInt("port"),
+                port = arg1.getNumber("port"),
                 username = arg1.findString("username"),
                 password = arg1.findString("password"),
                 defaultEncoding = arg1.getString("default_encoding"),
                 protocol = arg1.getString("protocol"),
                 debug = arg1.getBoolean("debug"),
                 testConnection = arg1.getBoolean("test_connection"),
-                auth = arg1.findString("username") != null || arg1.findString("password") != null,
+                auth = KuaBoolean.of(arg1.findString("username") != null || arg1.findString("password") != null),
                 enableStarttls = arg1.getBoolean("enable_starttls"),
-                connectionTimeout = arg1.getLong("connection_timeout"),
-                timeout = arg1.getLong("timeout"),
-                writeTimeout = arg1.getLong("write_timeout")
+                connectionTimeout = arg1.getNumber("connection_timeout"),
+                timeout = arg1.getNumber("timeout"),
+                writeTimeout = arg1.getNumber("write_timeout")
             ),
             Message(
                 from = arg1.getString("from"),
@@ -38,7 +37,7 @@ class SmtpSendFunction(
                 subject = arg1.getString("subject"),
                 content = arg1.getString("content"),
                 contentType = arg1.getString("content_type"),
-                priority = arg1.getInt("priority")
+                priority = arg1.getNumber("priority")
             )
         )
 

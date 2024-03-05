@@ -10,7 +10,7 @@ class PluginSmtpFactory(
 ) : RunnerPluginFactory {
     override fun create(sandbox: Sandbox): RunnerPlugin {
         return RunnerPlugin(
-            name = "net.smtp",
+            name = KuaString("net.smtp"),
             internals = mapOf(
                 KuaString("send") to SmtpSendFunction(sender)
             )

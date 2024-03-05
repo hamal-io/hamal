@@ -7,7 +7,6 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.type.*
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiFuncDeployRequest
@@ -21,14 +20,14 @@ class FuncDeployFunction(
     override fun invoke(ctx: FunctionContext, arg1: KuaTable): Pair<KuaError?, KuaTable?> {
         return try {
 
-            val funcId = FuncId(arg1.getString("id"))
+            val funcId = FuncId(arg1.getString("id").stringValue)
             val message = if (arg1.type("message") == KuaString::class) {
-                DeployMessage(arg1.getString("message"))
+                DeployMessage(arg1.getString("message").stringValue)
             } else {
                 null
             }
             val version = if (arg1.type("version") == KuaNumber::class) {
-                CodeVersion(arg1.getInt("version"))
+                CodeVersion(arg1.getNumber("version").intValue)
             } else {
                 null
             }

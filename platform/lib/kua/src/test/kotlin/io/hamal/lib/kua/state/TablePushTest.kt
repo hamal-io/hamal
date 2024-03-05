@@ -4,6 +4,7 @@ import io.hamal.lib.kua.StackTop
 import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.kua.type.KuaTable
+import io.hamal.lib.kua.type.getString
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.TestFactory
@@ -20,7 +21,7 @@ internal class TablePushTest : StateBaseTest() {
         assertThat(testInstance.type(2), equalTo(KuaTable::class))
 
         KuaTable(2, testInstance).getString("message").also { result ->
-            assertThat(result, equalTo("secret"))
+            assertThat(result, equalTo(KuaString("secret")))
         }
     }
 
