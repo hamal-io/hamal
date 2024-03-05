@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react'
+import React, {FC, useEffect, useState} from 'react'
 import {useUiState} from "@/hook/ui-state.ts";
 import NamespaceNodeEntry from "@/pages/app/workspace-detail/tab/namespace-list/components/node.tsx";
 import {useNamespaceTree} from "@/pages/app/workspace-detail/tab/namespace-list/components/hook.ts";
@@ -15,6 +15,11 @@ const WorkspaceNamespaceListTab: FC = () => {
         fetchNamespaces()
     }, []);
 
+    function handleRefresh() {
+        const abortController = new AbortController()
+        fetchNamespaces(abortController)
+        return (() => abortController.abort())
+    }
 
     if (namespaces == null) return "Loading"
     return (
@@ -23,7 +28,7 @@ const WorkspaceNamespaceListTab: FC = () => {
                 title="Namespaces"
                 actions={[
                     <Button>
-                        <ListRestart onClick={() => fetchNamespaces()}/>
+                        <ListRestart onClick={handleRefresh}/>
                         Refresh
                     </Button>
                 ]}

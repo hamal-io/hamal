@@ -3,13 +3,13 @@ import {NamespaceListItem} from "@/types";
 import {useNamespaceList} from "@/hook";
 import {useCallback, useEffect, useState} from "react";
 
-type TreeAction = () => void
+type TreeAction = (abortcontroller?: AbortController) => void
 export function useNamespaceTree(workspaceId: string): [TreeAction, NamespaceNode] {
     const [listNamespaces, namespacesList] = useNamespaceList()
     const [root, setRoot] = useState(null)
 
-    const fn = useCallback(() => {
-        listNamespaces(workspaceId)
+    const fn = useCallback((abortController?) => {
+        listNamespaces(workspaceId, abortController)
         console.log("fetch namespaces")
     }, [])
 
