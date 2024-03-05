@@ -4,25 +4,24 @@ import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
+import io.hamal.repository.memory.record.ProjectionMemory
 
 
-internal object TriggerCurrentProjection {
+internal class ProjectionCurrent : ProjectionMemory<TriggerId, Trigger> {
 
-    private val projection = mutableMapOf<TriggerId, Trigger>()
+    override fun upsert(obj: Trigger) {
+        val currentTrigger = projection[obj.id]
+        projection.remove(obj.id)
 
-    fun apply(trigger: Trigger) {
-        val currentTrigger = projection[trigger.id]
-        projection.remove(trigger.id)
-
-        val triggersInNamespace = projection.values.filter { it.namespaceId == trigger.namespaceId }
-        if (triggersInNamespace.any { it.name == trigger.name }) {
+        val triggersInNamespace = projection.values.filter { it.namespaceId == obj.namespaceId }
+        if (triggersInNamespace.any { it.name == obj.name }) {
             if (currentTrigger != null) {
                 projection[currentTrigger.id] = currentTrigger
             }
-            throw IllegalArgumentException("${trigger.name} already exists in namespace ${trigger.namespaceId}")
+            throw IllegalArgumentException("${obj.name} already exists in namespace ${obj.namespaceId}")
         }
 
-        projection[trigger.id] = trigger
+        projection[obj.id] = obj
     }
 
     fun find(triggerId: TriggerId): Trigger? = projection[triggerId]
@@ -101,7 +100,9 @@ internal object TriggerCurrentProjection {
         )
     }
 
-    fun clear() {
+    override fun clear() {
         projection.clear()
     }
+
+    private val projection = mutableMapOf<TriggerId, Trigger>()
 }

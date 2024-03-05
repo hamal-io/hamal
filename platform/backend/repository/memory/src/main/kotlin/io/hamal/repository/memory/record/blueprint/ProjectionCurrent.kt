@@ -4,11 +4,12 @@ import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.BlueprintId
 import io.hamal.repository.api.Blueprint
 import io.hamal.repository.api.BlueprintQueryRepository
+import io.hamal.repository.memory.record.ProjectionMemory
 
-internal object BlueprintCurrentProjection {
-    private val projection = mutableMapOf<BlueprintId, Blueprint>()
-    fun apply(blueprint: Blueprint) {
-        projection[blueprint.id] = blueprint
+internal class ProjectionCurrent : ProjectionMemory<BlueprintId, Blueprint> {
+
+    override fun upsert(obj: Blueprint) {
+        projection[obj.id] = obj
     }
 
     fun find(blueprintId: BlueprintId): Blueprint? = projection[blueprintId]
@@ -35,7 +36,9 @@ internal object BlueprintCurrentProjection {
         )
     }
 
-    fun clear() {
+    override fun clear() {
         projection.clear()
     }
+
+    private val projection = mutableMapOf<BlueprintId, Blueprint>()
 }

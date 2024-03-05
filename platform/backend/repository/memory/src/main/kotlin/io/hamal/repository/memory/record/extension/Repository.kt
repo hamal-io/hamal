@@ -15,9 +15,10 @@ import kotlin.concurrent.withLock
 
 class ExtensionMemoryRepository : RecordMemoryRepository<ExtensionId, ExtensionRecord, Extension>(
     createDomainObject = CreateExtensionFromRecords,
-    recordClass = ExtensionRecord::class
+    recordClass = ExtensionRecord::class,
+    projections = listOf(ProjectionCurrent())
+
 ), ExtensionRepository {
-    private val lock = ReentrantLock()
     override fun create(cmd: CreateCmd): Extension {
         return lock.withLock {
             val extensionId = cmd.extensionId
@@ -34,7 +35,7 @@ class ExtensionMemoryRepository : RecordMemoryRepository<ExtensionId, ExtensionR
                         code = cmd.code
                     )
                 )
-                (currentVersion(extensionId)).also(ExtensionCurrentProjection::apply)
+                (currentVersion(extensionId)).also(currentProjection::upsert)
             }
         }
     }
@@ -53,23 +54,20 @@ class ExtensionMemoryRepository : RecordMemoryRepository<ExtensionId, ExtensionR
                         code = cmd.code ?: currentVersion.code
                     )
                 )
-                (currentVersion(extensionId)).also(ExtensionCurrentProjection::apply)
+                (currentVersion(extensionId)).also(currentProjection::upsert)
             }
         }
     }
 
     override fun close() {}
 
-    override fun find(extensionId: ExtensionId): Extension? = lock.withLock { ExtensionCurrentProjection.find(extensionId) }
+    override fun find(extensionId: ExtensionId): Extension? = lock.withLock { currentProjection.find(extensionId) }
 
-    override fun list(query: ExtensionQuery): List<Extension> = lock.withLock { ExtensionCurrentProjection.list(query) }
+    override fun list(query: ExtensionQuery): List<Extension> = lock.withLock { currentProjection.list(query) }
 
-    override fun count(query: ExtensionQuery): Count = lock.withLock { ExtensionCurrentProjection.count(query) }
+    override fun count(query: ExtensionQuery): Count = lock.withLock { currentProjection.count(query) }
 
-    override fun clear() {
-        lock.withLock {
-            super.clear()
-            ExtensionCurrentProjection.clear()
-        }
-    }
+    private val lock = ReentrantLock()
+    private val currentProjection = getProjection<ProjectionCurrent>()
+
 }

@@ -5,7 +5,7 @@ import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceTreeId
 import io.hamal.repository.api.NamespaceTree
 import io.hamal.repository.api.NamespaceTreeCmdRepository
-import io.hamal.repository.api.NamespaceTreeQueryRepository
+import io.hamal.repository.api.NamespaceTreeQueryRepository.NamespaceTreeQuery
 import io.hamal.repository.api.NamespaceTreeRepository
 import io.hamal.repository.memory.record.RecordMemoryRepository
 import io.hamal.repository.record.namespace_tree.CreateNamespaceTreeFromRecords
@@ -15,7 +15,8 @@ import kotlin.concurrent.withLock
 
 class NamespaceTreeMemoryRepository : RecordMemoryRepository<NamespaceTreeId, NamespaceTreeRecord, NamespaceTree>(
     createDomainObject = CreateNamespaceTreeFromRecords,
-    recordClass = NamespaceTreeRecord::class
+    recordClass = NamespaceTreeRecord::class,
+    projections = listOf(ProjectionCurrent())
 ), NamespaceTreeRepository {
 
     override fun create(cmd: NamespaceTreeCmdRepository.CreateCmd): NamespaceTree {
@@ -32,7 +33,7 @@ class NamespaceTreeMemoryRepository : RecordMemoryRepository<NamespaceTreeId, Na
                         workspaceId = cmd.workspaceId,
                     )
                 )
-                (currentVersion(treeId)).also(NamespaceTreeCurrentProjection::apply)
+                (currentVersion(treeId)).also(currentProjection::upsert)
             }
         }
     }
@@ -51,29 +52,19 @@ class NamespaceTreeMemoryRepository : RecordMemoryRepository<NamespaceTreeId, Na
                         namespaceId = cmd.namespaceId
                     )
                 )
-                (currentVersion(treeId)).also(NamespaceTreeCurrentProjection::apply)
+                (currentVersion(treeId)).also(currentProjection::upsert)
             }
         }
     }
 
     override fun close() {}
 
-    override fun clear() {
-        lock.withLock {
-            super.clear()
-            NamespaceTreeCurrentProjection.clear()
-        }
-    }
+    override fun find(namespaceId: NamespaceId): NamespaceTree? = lock.withLock { currentProjection.find(namespaceId) }
 
+    override fun list(query: NamespaceTreeQuery): List<NamespaceTree> = lock.withLock { currentProjection.list(query) }
 
-    override fun find(namespaceId: NamespaceId): NamespaceTree? = NamespaceTreeCurrentProjection.find(namespaceId)
-
-    override fun list(query: NamespaceTreeQueryRepository.NamespaceTreeQuery): List<NamespaceTree> =
-        NamespaceTreeCurrentProjection.list(query)
-
-
-    override fun count(query: NamespaceTreeQueryRepository.NamespaceTreeQuery): Count =
-        NamespaceTreeCurrentProjection.count(query)
+    override fun count(query: NamespaceTreeQuery): Count = lock.withLock { currentProjection.count(query) }
 
     private val lock = ReentrantLock()
+    private val currentProjection = getProjection<ProjectionCurrent>()
 }

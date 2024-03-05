@@ -15,9 +15,9 @@ import kotlin.concurrent.withLock
 
 class HookMemoryRepository : RecordMemoryRepository<HookId, HookRecord, Hook>(
     createDomainObject = CreateHookFromRecords,
-    recordClass = HookRecord::class
+    recordClass = HookRecord::class,
+    projections = listOf(ProjectionCurrent())
 ), HookRepository {
-    private val lock = ReentrantLock()
     override fun create(cmd: HookCmdRepository.CreateCmd): Hook {
         return lock.withLock {
             val hookId = cmd.hookId
@@ -34,7 +34,7 @@ class HookMemoryRepository : RecordMemoryRepository<HookId, HookRecord, Hook>(
                         name = cmd.name
                     )
                 )
-                (currentVersion(hookId)).also(HookCurrentProjection::apply)
+                (currentVersion(hookId)).also(currentProjection::upsert)
             }
         }
     }
@@ -52,23 +52,19 @@ class HookMemoryRepository : RecordMemoryRepository<HookId, HookRecord, Hook>(
                         name = cmd.name ?: currentVersion.name
                     )
                 )
-                (currentVersion(hookId)).also(HookCurrentProjection::apply)
+                (currentVersion(hookId)).also(currentProjection::upsert)
             }
         }
     }
 
-    override fun find(hookId: HookId): Hook? = lock.withLock { HookCurrentProjection.find(hookId) }
+    override fun find(hookId: HookId): Hook? = lock.withLock { currentProjection.find(hookId) }
 
-    override fun list(query: HookQuery): List<Hook> = lock.withLock { HookCurrentProjection.list(query) }
+    override fun list(query: HookQuery): List<Hook> = lock.withLock { currentProjection.list(query) }
 
-    override fun count(query: HookQuery): Count = lock.withLock { HookCurrentProjection.count(query) }
-
-    override fun clear() {
-        lock.withLock {
-            super.clear()
-            HookCurrentProjection.clear()
-        }
-    }
+    override fun count(query: HookQuery): Count = lock.withLock { currentProjection.count(query) }
 
     override fun close() {}
+
+    private val lock = ReentrantLock()
+    private val currentProjection = getProjection<ProjectionCurrent>()
 }

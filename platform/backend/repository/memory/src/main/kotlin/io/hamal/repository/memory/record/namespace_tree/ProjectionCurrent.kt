@@ -5,24 +5,25 @@ import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceTreeId
 import io.hamal.repository.api.NamespaceTree
 import io.hamal.repository.api.NamespaceTreeQueryRepository
+import io.hamal.repository.memory.record.ProjectionMemory
 
-internal object NamespaceTreeCurrentProjection {
+internal class ProjectionCurrent : ProjectionMemory<NamespaceTreeId, NamespaceTree> {
 
-    fun apply(tree: NamespaceTree) {
+    override fun upsert(obj: NamespaceTree) {
         projection.values
-            .filter { it.id != tree.id }
-            .find { it.workspaceId == tree.workspaceId }
+            .filter { it.id != obj.id }
+            .find { it.workspaceId == obj.workspaceId }
             ?.let { throw IllegalArgumentException("NamespaceTree already exists in workspace") }
 
-        tree.root.preorder().forEach(namespaceMapping::remove)
-        tree.root.preorder().forEach { namespaceId ->
+        obj.root.preorder().forEach(namespaceMapping::remove)
+        obj.root.preorder().forEach { namespaceId ->
             if (namespaceMapping[namespaceId] != null) {
                 throw IllegalArgumentException("Namespace already exists in NamespaceTree")
             }
-            namespaceMapping[namespaceId] = tree.id
+            namespaceMapping[namespaceId] = obj.id
         }
 
-        projection[tree.id] = tree
+        projection[obj.id] = obj
     }
 
     fun find(namespaceId: NamespaceId): NamespaceTree? {
@@ -56,7 +57,7 @@ internal object NamespaceTreeCurrentProjection {
         )
     }
 
-    fun clear() {
+    override fun clear() {
         projection.clear()
         namespaceMapping.clear()
     }
