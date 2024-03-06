@@ -1,8 +1,6 @@
 package io.hamal.lib.kua.state
 
-import io.hamal.lib.kua.StackTop
-import io.hamal.lib.kua.TableLength
-import io.hamal.lib.kua.tableCreate
+import io.hamal.lib.kua.*
 import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.kua.type.KuaTable
 import org.hamcrest.MatcherAssert.assertThat
@@ -22,7 +20,7 @@ internal class TableSubTableGetTest : StateBaseTest() {
 
         assertThat(testInstance.topGet(), equalTo(StackTop(2)))
 
-        testInstance.tableSubTableGet(-1, KuaString("nested"))
+        testInstance.tableSubTableGet(-1, "nested")
         assertThat(testInstance.topGet(), equalTo(StackTop(3)))
         assertThat(testInstance.type(-1), equalTo(KuaTable::class))
         assertThat(testInstance.tableLength(-1), equalTo(TableLength(1)))

@@ -14,9 +14,9 @@ import kotlin.concurrent.withLock
 
 class ExecMemoryRepository : RecordMemoryRepository<ExecId, ExecRecord, Exec>(
     createDomainObject = CreateExecFromRecords,
-    recordClass = ExecRecord::class
+    recordClass = ExecRecord::class,
+    projections = listOf(ProjectionCurrent(), ProjectionQueue())
 ), ExecRepository {
-    private val lock = ReentrantLock()
 
     override fun plan(cmd: PlanCmd): Exec.Planned {
         return lock.withLock {
@@ -36,7 +36,7 @@ class ExecMemoryRepository : RecordMemoryRepository<ExecId, ExecRecord, Exec>(
                         invocation = cmd.invocation
                     )
                 )
-                (currentVersion(execId) as Exec.Planned).also(ExecCurrentProjection::apply)
+                (currentVersion(execId) as Exec.Planned).also(currentProjection::upsert)
             }
         }
     }
@@ -53,7 +53,7 @@ class ExecMemoryRepository : RecordMemoryRepository<ExecId, ExecRecord, Exec>(
 
                 store(ExecRecord.Scheduled(cmdId, execId))
 
-                (currentVersion(execId) as Exec.Scheduled).also(ExecCurrentProjection::apply)
+                (currentVersion(execId) as Exec.Scheduled).also(currentProjection::upsert)
             }
         }
     }
@@ -71,8 +71,8 @@ class ExecMemoryRepository : RecordMemoryRepository<ExecId, ExecRecord, Exec>(
                 store(ExecRecord.Queued(cmdId, execId))
 
                 (currentVersion(execId) as Exec.Queued)
-                    .also(ExecCurrentProjection::apply)
-                    .also(QueueProjection::add)
+                    .also(currentProjection::upsert)
+                    .also(queueProjection::upsert)
             }
         }
     }
@@ -80,26 +80,19 @@ class ExecMemoryRepository : RecordMemoryRepository<ExecId, ExecRecord, Exec>(
     override fun start(cmd: StartCmd): List<Exec.Started> {
         return lock.withLock {
             val result = mutableListOf<Exec.Started>()
-            QueueProjection.pop(1).forEach { queuedExec ->
+            queueProjection.pop(1).forEach { queuedExec ->
                 val execId = queuedExec.id
                 check(currentVersion(execId) is Exec.Queued) { "$execId not queued" }
 
                 store(ExecRecord.Started(cmd.id, execId))
 
-                result.add((currentVersion(execId) as Exec.Started).also(ExecCurrentProjection::apply))
+                result.add((currentVersion(execId) as Exec.Started).also(currentProjection::upsert))
             }
             result
         }
     }
 
-    override fun clear() {
-        super.clear()
-        ExecCurrentProjection.clear()
-        QueueProjection.clear()
-    }
-
-    override fun close() {
-    }
+    override fun close() {}
 
 
     override fun complete(cmd: CompleteCmd): Exec.Completed {
@@ -114,7 +107,7 @@ class ExecMemoryRepository : RecordMemoryRepository<ExecId, ExecRecord, Exec>(
 
                 store(ExecRecord.Completed(cmdId, execId, cmd.result, cmd.state))
 
-                (versionOf(execId, cmdId) as Exec.Completed).also(ExecCurrentProjection::apply)
+                (versionOf(execId, cmdId) as Exec.Completed).also(currentProjection::upsert)
             }
         }
     }
@@ -131,16 +124,20 @@ class ExecMemoryRepository : RecordMemoryRepository<ExecId, ExecRecord, Exec>(
 
                 store(ExecRecord.Failed(cmdId, execId, cmd.result))
 
-                (versionOf(execId, cmdId) as Exec.Failed).also(ExecCurrentProjection::apply)
+                (versionOf(execId, cmdId) as Exec.Failed).also(currentProjection::upsert)
             }
         }
     }
 
 
-    override fun find(execId: ExecId): Exec? = lock.withLock { ExecCurrentProjection.find(execId) }
+    override fun find(execId: ExecId): Exec? = lock.withLock { currentProjection.find(execId) }
 
-    override fun list(query: ExecQuery): List<Exec> = lock.withLock { return ExecCurrentProjection.list(query) }
+    override fun list(query: ExecQuery): List<Exec> = lock.withLock { return currentProjection.list(query) }
 
-    override fun count(query: ExecQuery): Count = lock.withLock { return ExecCurrentProjection.count(query) }
+    override fun count(query: ExecQuery): Count = lock.withLock { return currentProjection.count(query) }
+
+    private val lock = ReentrantLock()
+    private val currentProjection = getProjection<ProjectionCurrent>()
+    private val queueProjection = getProjection<ProjectionQueue>()
 }
 

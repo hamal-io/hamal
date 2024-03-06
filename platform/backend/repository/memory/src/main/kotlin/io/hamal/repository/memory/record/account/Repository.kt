@@ -14,9 +14,9 @@ import kotlin.concurrent.withLock
 
 class AccountMemoryRepository : RecordMemoryRepository<AccountId, AccountRecord, Account>(
     createDomainObject = CreateAccountFromRecords,
-    recordClass = AccountRecord::class
+    recordClass = AccountRecord::class,
+    projections = listOf(ProjectionCurrent())
 ), AccountRepository {
-    private val lock = ReentrantLock()
 
     override fun create(cmd: AccountCmdRepository.CreateCmd): Account {
         return lock.withLock {
@@ -32,7 +32,7 @@ class AccountMemoryRepository : RecordMemoryRepository<AccountId, AccountRecord,
                         salt = cmd.salt
                     )
                 )
-                (currentVersion(accountId)).also(AccountCurrentProjection::apply)
+                (currentVersion(accountId)).also(currentProjection::upsert)
             }
         }
     }
@@ -49,26 +49,21 @@ class AccountMemoryRepository : RecordMemoryRepository<AccountId, AccountRecord,
                         entityId = accountId
                     )
                 )
-                (currentVersion(accountId)).also(AccountCurrentProjection::apply)
+                (currentVersion(accountId)).also(currentProjection::upsert)
             }
         }
     }
 
-    override fun find(accountId: AccountId): Account? = lock.withLock { AccountCurrentProjection.find(accountId) }
+    override fun find(accountId: AccountId): Account? = lock.withLock { currentProjection.find(accountId) }
 
     override fun list(query: AccountQueryRepository.AccountQuery): List<Account> =
-        lock.withLock { AccountCurrentProjection.list(query) }
+        lock.withLock { currentProjection.list(query) }
 
     override fun count(query: AccountQueryRepository.AccountQuery): Count =
-        lock.withLock { AccountCurrentProjection.count(query) }
+        lock.withLock { currentProjection.count(query) }
 
-    override fun clear() {
-        lock.withLock {
-            super.clear()
-            AccountCurrentProjection.clear()
-        }
-    }
+    override fun close() {}
 
-    override fun close() {
-    }
+    private val lock = ReentrantLock()
+    private val currentProjection = getProjection<ProjectionCurrent>()
 }

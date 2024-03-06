@@ -1,5 +1,7 @@
 package io.hamal.lib.kua.state
 
+import io.hamal.lib.kua.get
+import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.type.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -60,7 +62,7 @@ internal class GetTest : StateBaseTest() {
         testInstance.tableCreate(0, 0)
         testInstance.get(1).also { value ->
             require(value is KuaTable)
-            assertThat(value.index, equalTo(1))
+            assertThat(value.index, equalTo(KuaNumber(1)))
         }
     }
 }

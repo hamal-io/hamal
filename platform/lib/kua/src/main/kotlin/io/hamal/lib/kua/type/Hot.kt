@@ -40,7 +40,7 @@ fun KuaTable.toHotObject(): HotObject {
 //        builder[key] = value.toHot()
 //    }
 
-    mapEntries().forEach { (key, value) ->
+    asEntries().forEach { (key, value) ->
         builder[key.stringValue] = value.toHotNode()
     }
 

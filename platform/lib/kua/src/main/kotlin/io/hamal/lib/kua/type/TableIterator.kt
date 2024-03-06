@@ -1,13 +1,15 @@
 package io.hamal.lib.kua.type
 
 import io.hamal.lib.kua.State
+import io.hamal.lib.kua.absIndex
+import io.hamal.lib.kua.topPop
 import kotlin.collections.Map.Entry
 
 class KuaTableIterator<KEY : KuaType, TYPE : KuaType>(
-    index: Int,
+    index: KuaNumber,
     val state: State,
-    val keyExtractor: (State, Int) -> KEY,
-    val valueExtractor: (State, Int) -> TYPE
+    val keyExtractor: (State, KuaNumber) -> KEY,
+    val valueExtractor: (State, KuaNumber) -> TYPE
 ) : Iterator<Entry<KEY, TYPE>> {
 
     private val index = state.absIndex(index)

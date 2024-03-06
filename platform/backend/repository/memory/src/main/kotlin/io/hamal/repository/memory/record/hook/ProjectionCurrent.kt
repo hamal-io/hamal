@@ -4,22 +4,23 @@ import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.HookId
 import io.hamal.repository.api.Hook
 import io.hamal.repository.api.HookQueryRepository.HookQuery
+import io.hamal.repository.memory.record.ProjectionMemory
 
-internal object HookCurrentProjection {
-    private val projection = mutableMapOf<HookId, Hook>()
-    fun apply(hook: Hook) {
-        val currentHook = projection[hook.id]
-        projection.remove(hook.id)
+internal class ProjectionCurrent : ProjectionMemory<HookId, Hook> {
 
-        val hooksInNamespace = projection.values.filter { it.namespaceId == hook.namespaceId }
-        if (hooksInNamespace.any { it.name == hook.name }) {
+    override fun upsert(obj: Hook) {
+        val currentHook = projection[obj.id]
+        projection.remove(obj.id)
+
+        val hooksInNamespace = projection.values.filter { it.namespaceId == obj.namespaceId }
+        if (hooksInNamespace.any { it.name == obj.name }) {
             if (currentHook != null) {
                 projection[currentHook.id] = currentHook
             }
-            throw IllegalArgumentException("${hook.name} already exists in namespace ${hook.namespaceId}")
+            throw IllegalArgumentException("${obj.name} already exists in namespace ${obj.namespaceId}")
         }
 
-        projection[hook.id] = hook
+        projection[obj.id] = obj
     }
 
     fun find(hookId: HookId): Hook? = projection[hookId]
@@ -50,7 +51,10 @@ internal object HookCurrentProjection {
         )
     }
 
-    fun clear() {
+    override fun clear() {
         projection.clear()
     }
+
+    private val projection = mutableMapOf<HookId, Hook>()
+
 }

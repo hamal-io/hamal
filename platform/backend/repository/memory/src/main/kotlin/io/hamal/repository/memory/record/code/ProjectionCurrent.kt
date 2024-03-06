@@ -4,11 +4,12 @@ import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.CodeId
 import io.hamal.repository.api.Code
 import io.hamal.repository.api.CodeQueryRepository
+import io.hamal.repository.memory.record.ProjectionMemory
 
-internal object CodeCurrentProjection {
-    private val projection = mutableMapOf<CodeId, Code>()
-    fun apply(code: Code) {
-        projection[code.id] = code
+internal class ProjectionCurrent : ProjectionMemory<CodeId, Code> {
+
+    override fun upsert(obj: Code) {
+        projection[obj.id] = obj
     }
 
     fun find(codeId: CodeId): Code? = projection[codeId]
@@ -39,7 +40,9 @@ internal object CodeCurrentProjection {
         )
     }
 
-    fun clear() {
+    override fun clear() {
         projection.clear()
     }
+
+    private val projection = mutableMapOf<CodeId, Code>()
 }

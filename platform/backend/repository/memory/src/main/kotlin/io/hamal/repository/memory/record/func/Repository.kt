@@ -17,9 +17,9 @@ import kotlin.concurrent.withLock
 
 class FuncMemoryRepository : RecordMemoryRepository<FuncId, FuncRecord, Func>(
     createDomainObject = CreateFuncFromRecords,
-    recordClass = FuncRecord::class
+    recordClass = FuncRecord::class,
+    projections = listOf(ProjectionCurrent())
 ), FuncRepository {
-    private val lock = ReentrantLock()
     override fun create(cmd: CreateCmd): Func {
         return lock.withLock {
             val funcId = cmd.funcId
@@ -39,7 +39,7 @@ class FuncMemoryRepository : RecordMemoryRepository<FuncId, FuncRecord, Func>(
                         codeVersion = cmd.codeVersion
                     )
                 )
-                (currentVersion(funcId)).also(FuncCurrentProjection::apply)
+                (currentVersion(funcId)).also(currentProjection::upsert)
             }
         }
     }
@@ -59,7 +59,7 @@ class FuncMemoryRepository : RecordMemoryRepository<FuncId, FuncRecord, Func>(
                         message = cmd.message
                     )
                 )
-                (currentVersion(funcId)).also(FuncCurrentProjection::apply)
+                (currentVersion(funcId)).also(currentProjection::upsert)
             }
         }
     }
@@ -79,14 +79,14 @@ class FuncMemoryRepository : RecordMemoryRepository<FuncId, FuncRecord, Func>(
                         codeVersion = cmd.codeVersion ?: currentVersion.code.version
                     )
                 )
-                (currentVersion(funcId)).also(FuncCurrentProjection::apply)
+                (currentVersion(funcId)).also(currentProjection::upsert)
             }
         }
     }
 
-    override fun find(funcId: FuncId): Func? = lock.withLock { FuncCurrentProjection.find(funcId) }
+    override fun find(funcId: FuncId): Func? = lock.withLock { currentProjection.find(funcId) }
 
-    override fun list(query: FuncQuery): List<Func> = lock.withLock { FuncCurrentProjection.list(query) }
+    override fun list(query: FuncQuery): List<Func> = lock.withLock { currentProjection.list(query) }
 
     override fun listDeployments(funcId: FuncId): List<FuncDeployment> {
         lock.withLock {
@@ -102,14 +102,10 @@ class FuncMemoryRepository : RecordMemoryRepository<FuncId, FuncRecord, Func>(
         }
     }
 
-    override fun count(query: FuncQuery): Count = lock.withLock { FuncCurrentProjection.count(query) }
-
-    override fun clear() {
-        lock.withLock {
-            super.clear()
-            FuncCurrentProjection.clear()
-        }
-    }
+    override fun count(query: FuncQuery): Count = lock.withLock { currentProjection.count(query) }
 
     override fun close() {}
+
+    private val lock = ReentrantLock()
+    private val currentProjection = getProjection<ProjectionCurrent>()
 }

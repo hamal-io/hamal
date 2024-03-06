@@ -15,7 +15,8 @@ import kotlin.concurrent.withLock
 
 class NamespaceMemoryRepository : RecordMemoryRepository<NamespaceId, NamespaceRecord, Namespace>(
     createDomainObject = CreateNamespaceFromRecords,
-    recordClass = NamespaceRecord::class
+    recordClass = NamespaceRecord::class,
+    projections = listOf(ProjectionCurrent())
 ), NamespaceRepository {
 
     override fun create(cmd: CreateCmd): Namespace {
@@ -32,7 +33,7 @@ class NamespaceMemoryRepository : RecordMemoryRepository<NamespaceId, NamespaceR
                         name = cmd.name
                     )
                 )
-                (currentVersion(namespaceId)).also(NamespaceCurrentProjection::apply)
+                (currentVersion(namespaceId)).also(currentProjection::upsert)
             }
         }
     }
@@ -50,26 +51,19 @@ class NamespaceMemoryRepository : RecordMemoryRepository<NamespaceId, NamespaceR
                         name = cmd.name ?: current.name
                     )
                 )
-                (currentVersion(namespaceId)).also(NamespaceCurrentProjection::apply)
+                (currentVersion(namespaceId)).also(currentProjection::upsert)
             }
         }
     }
 
-    override fun find(namespaceId: NamespaceId): Namespace? =
-        lock.withLock { NamespaceCurrentProjection.find(namespaceId) }
+    override fun find(namespaceId: NamespaceId): Namespace? = lock.withLock { currentProjection.find(namespaceId) }
 
-    override fun list(query: NamespaceQuery): List<Namespace> = lock.withLock { NamespaceCurrentProjection.list(query) }
+    override fun list(query: NamespaceQuery): List<Namespace> = lock.withLock { currentProjection.list(query) }
 
-    override fun count(query: NamespaceQuery): Count = lock.withLock { NamespaceCurrentProjection.count(query) }
-
-    override fun clear() {
-        lock.withLock {
-            super.clear()
-            NamespaceCurrentProjection.clear()
-        }
-    }
+    override fun count(query: NamespaceQuery): Count = lock.withLock { currentProjection.count(query) }
 
     override fun close() {}
 
     private val lock = ReentrantLock()
+    private val currentProjection = getProjection<ProjectionCurrent>()
 }

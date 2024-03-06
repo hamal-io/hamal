@@ -14,9 +14,9 @@ import kotlin.concurrent.withLock
 
 class MemoryWorkspaceRepository : RecordMemoryRepository<WorkspaceId, WorkspaceRecord, Workspace>(
     createDomainObject = CreateWorkspaceFromRecords,
-    recordClass = WorkspaceRecord::class
+    recordClass = WorkspaceRecord::class,
+    projections = listOf(ProjectionCurrent())
 ), WorkspaceRepository {
-    private val lock = ReentrantLock()
     override fun create(cmd: WorkspaceCmdRepository.CreateCmd): Workspace {
         return lock.withLock {
             val workspaceId = cmd.workspaceId
@@ -31,32 +31,20 @@ class MemoryWorkspaceRepository : RecordMemoryRepository<WorkspaceId, WorkspaceR
                         creatorId = cmd.creatorId
                     )
                 )
-                (currentVersion(workspaceId)).also(WorkspaceCurrentProjection::apply)
+                (currentVersion(workspaceId)).also(currentProjection::upsert)
             }
         }
     }
 
-    override fun find(workspaceId: WorkspaceId): Workspace? = lock.withLock {
-        WorkspaceCurrentProjection.find(
-            workspaceId
-        )
-    }
+    override fun find(workspaceId: WorkspaceId): Workspace? = lock.withLock { currentProjection.find(workspaceId) }
 
-    override fun list(query: WorkspaceQuery): List<Workspace> = lock.withLock {
-        return WorkspaceCurrentProjection.list(
-            query
-        )
-    }
+    override fun list(query: WorkspaceQuery): List<Workspace> = lock.withLock { currentProjection.list(query) }
 
-    override fun count(query: WorkspaceQuery): Count = lock.withLock { WorkspaceCurrentProjection.count(query) }
-
-    override fun clear() {
-        lock.withLock {
-            super.clear()
-            WorkspaceCurrentProjection.clear()
-        }
-    }
+    override fun count(query: WorkspaceQuery): Count = lock.withLock { currentProjection.count(query) }
 
     override fun close() {
     }
+
+    private val lock = ReentrantLock()
+    private val currentProjection = getProjection<ProjectionCurrent>()
 }

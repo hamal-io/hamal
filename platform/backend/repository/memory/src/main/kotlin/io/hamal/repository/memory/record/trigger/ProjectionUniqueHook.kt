@@ -3,17 +3,19 @@ package io.hamal.repository.memory.record.trigger
 import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.HookId
+import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.repository.api.Trigger
+import io.hamal.repository.memory.record.ProjectionMemory
 
 
-internal class TriggerProjectionUniqueHook {
+internal class ProjectionUniqueHook : ProjectionMemory<TriggerId, Trigger.Hook> {
 
-    fun create(trigger: Trigger.Hook) {
+    override fun upsert(obj: Trigger.Hook) {
         if (!uniqueHooks.add(
                 UniqueHook(
-                    funcId = trigger.funcId,
-                    hookId = trigger.hookId,
-                    hookMethod = trigger.hookMethod
+                    funcId = obj.funcId,
+                    hookId = obj.hookId,
+                    hookMethod = obj.hookMethod
                 )
             )
         ) {
@@ -21,7 +23,7 @@ internal class TriggerProjectionUniqueHook {
         }
     }
 
-    fun clear() {
+    override fun clear() {
         uniqueHooks.clear()
     }
 

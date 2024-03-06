@@ -12,10 +12,12 @@ import kotlin.reflect.KClass
 abstract class RecordMemoryRepository<ID : ValueObjectId, RECORD : Record<ID>, OBJ : DomainObject<ID>>(
     private val createDomainObject: CreateDomainObject<ID, RECORD, OBJ>,
     private val recordClass: KClass<RECORD>,
+    protected val projections: List<ProjectionMemory<ID, out OBJ>>
 ) : RecordRepository<ID, RECORD, OBJ> {
 
-    private val lock = ReentrantLock()
-    private val store = mutableMapOf<ID, MutableList<RECORD>>()
+    protected inline fun <reified PROJECTION_TYPE : ProjectionMemory<ID, out OBJ>> getProjection(): PROJECTION_TYPE {
+        return projections.filterIsInstance<PROJECTION_TYPE>().first()
+    }
 
     override fun store(record: RECORD): RECORD {
         return lock.withLock {
@@ -71,6 +73,10 @@ abstract class RecordMemoryRepository<ID : ValueObjectId, RECORD : Record<ID>, O
     override fun clear() {
         lock.withLock {
             store.clear()
+            projections.forEach(ProjectionMemory<ID, *>::clear)
         }
     }
+
+    private val lock = ReentrantLock()
+    private val store = mutableMapOf<ID, MutableList<RECORD>>()
 }

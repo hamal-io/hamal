@@ -1,7 +1,6 @@
 package io.hamal.lib.kua.state
 
-import io.hamal.lib.kua.StackTop
-import io.hamal.lib.kua.TableLength
+import io.hamal.lib.kua.*
 import io.hamal.lib.kua.type.KuaNumber
 import io.hamal.lib.kua.type.KuaString
 import org.hamcrest.MatcherAssert.assertThat

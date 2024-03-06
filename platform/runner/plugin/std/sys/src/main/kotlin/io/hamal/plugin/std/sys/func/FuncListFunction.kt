@@ -25,7 +25,7 @@ class FuncListFunction(
                 sdk.func.list(
                     ApiFuncService.FuncQuery(
                         namespaceIds = arg1.findTable("namespace_ids")
-                            ?.asSequence()
+                            ?.asList()
                             ?.map { NamespaceId((it as KuaString).stringValue) }
                             ?.toList()
                             ?: listOf(ctx[NamespaceId::class])

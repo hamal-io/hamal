@@ -22,12 +22,12 @@ class ExecListFunction(
             val execs = sdk.exec.list(
                 ApiExecService.ExecQuery(
                     namespaceIds = arg1.findTable("namespace_ids")
-                        ?.asSequence()
+                        ?.asList()
                         ?.map { NamespaceId((it as KuaString).stringValue) }
                         ?.toList()
                         ?: listOf(ctx[NamespaceId::class]),
                     workspaceIds = arg1.findTable("workspace_ids")
-                        ?.asSequence()
+                        ?.asList()
                         ?.map { WorkspaceId((it as KuaString).stringValue) }
                         ?.toList()
                         ?: listOf(ctx[WorkspaceId::class])

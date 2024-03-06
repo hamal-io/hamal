@@ -1,10 +1,8 @@
 package io.hamal.lib.kua.function
 
-import io.hamal.lib.kua.SandboxContext
-import io.hamal.lib.kua.StackTop
-import io.hamal.lib.kua.State
-import io.hamal.lib.kua.sandboxContextLocal
+import io.hamal.lib.kua.*
 import io.hamal.lib.kua.type.*
+import io.hamal.lib.kua.type.KuaError
 import kotlin.reflect.KClass
 
 
@@ -12,20 +10,20 @@ class FunctionContext(
     val state: State
 ) : State, SandboxContext {
 
-    override fun absIndex(idx: Int) = state.absIndex(idx)
+    override fun absIndex(idx: KuaNumber) = state.absIndex(idx)
 
-    override fun get(idx: Int) = state.get(idx)
+    override fun get(idx: KuaNumber) = state.get(idx)
     override fun push(value: KuaType) = state.push(value)
 
-    override fun booleanGet(idx: Int) = state.booleanGet(idx)
+    override fun booleanGet(idx: KuaNumber) = state.booleanGet(idx)
     override fun codeLoad(code: KuaCode) = state.codeLoad(code)
 
     override fun booleanPush(value: KuaBoolean) = state.booleanPush(value)
 
-    override fun decimalGet(idx: Int): KuaDecimal = state.decimalGet(idx)
+    override fun decimalGet(idx: KuaNumber): KuaDecimal = state.decimalGet(idx)
     override fun decimalPush(value: KuaDecimal): StackTop = state.decimalPush(value)
 
-    override fun errorGet(idx: Int): KuaError = state.errorGet(idx)
+    override fun errorGet(idx: KuaNumber): KuaError = state.errorGet(idx)
     override fun errorPush(error: KuaError): StackTop = state.errorPush(error)
 
     override fun functionPush(value: KuaFunction<*, *, *, *>) = state.functionPush(value)
@@ -37,40 +35,39 @@ class FunctionContext(
 
     override fun nilPush() = state.nilPush()
 
-    override fun numberGet(idx: Int) = state.numberGet(idx)
+    override fun numberGet(idx: KuaNumber) = state.numberGet(idx)
     override fun numberPush(value: KuaNumber) = state.numberPush(value)
 
     override fun referenceAcquire() = state.referenceAcquire()
     override fun referencePush(reference: KuaReference) = state.referencePush(reference)
     override fun referenceRelease(reference: KuaReference) = state.referenceRelease(reference)
 
-    override fun stringGet(idx: Int) = state.stringGet(idx)
+    override fun stringGet(idx: KuaNumber) = state.stringGet(idx)
     override fun stringPush(value: KuaString) = state.stringPush(value)
 
-    override fun tableCreate(arrayCount: Int, recordCount: Int) = state.tableCreate(arrayCount, recordCount)
-    override fun tableAppend(idx: Int) = state.tableAppend(idx)
-    override fun tableFieldGet(idx: Int, key: KuaString) = state.tableFieldGet(idx, key)
-    override fun tableFieldSet(idx: Int, key: KuaString) = state.tableFieldSet(idx, key)
-    override fun tableGet(idx: Int): KuaTable = state.tableGet(idx)
-    override fun tableLength(idx: Int) = state.tableLength(idx)
-    override fun tableNext(idx: Int) = state.tableNext(idx)
+    override fun tableCreate(arrayCount: KuaNumber, recordCount: KuaNumber) = state.tableCreate(arrayCount, recordCount)
+    override fun tableAppend(idx: KuaNumber) = state.tableAppend(idx)
+    override fun tableFieldGet(idx: KuaNumber, key: KuaString) = state.tableFieldGet(idx, key)
+    override fun tableFieldSet(idx: KuaNumber, key: KuaString) = state.tableFieldSet(idx, key)
+    override fun tableGet(idx: KuaNumber): KuaTable = state.tableGet(idx)
+    override fun tableLength(idx: KuaNumber) = state.tableLength(idx)
+    override fun tableNext(idx: KuaNumber) = state.tableNext(idx)
     override fun tablePush(value: KuaTable): StackTop = state.tablePush(value)
-    override fun tableRawSet(idx: Int) = state.tableRawSet(idx)
-    override fun tableRawSetIdx(stackIdx: Int, tableIdx: Int) = state.tableRawSetIdx(stackIdx, tableIdx)
-    override fun tableRawGet(idx: Int) = state.tableRawGet(idx)
-    override fun tableRawGetIdx(stackIdx: Int, tableIdx: Int) = state.tableRawGetIdx(stackIdx, tableIdx)
-    override fun tableSubTableGet(idx: Int, key: KuaString) = state.tableSubTableGet(idx, key)
+    override fun tableRawSet(idx: KuaNumber) = state.tableRawSet(idx)
+    override fun tableRawSetIdx(stackIdx: KuaNumber, tableIdx: KuaNumber) = state.tableRawSetIdx(stackIdx, tableIdx)
+    override fun tableRawGet(idx: KuaNumber) = state.tableRawGet(idx)
+    override fun tableRawGetIdx(stackIdx: KuaNumber, tableIdx: KuaNumber) = state.tableRawGetIdx(stackIdx, tableIdx)
+    override fun tableSubTableGet(idx: KuaNumber, key: KuaString) = state.tableSubTableGet(idx, key)
 
     override fun topGet(): StackTop = state.topGet()
-    override fun topPop(len: Int) = state.topPop(len)
-    override fun topPush(idx: Int) = state.topPush(idx)
-    override fun topSet(idx: Int) = state.topSet(idx)
+    override fun topPop(len: KuaNumber) = state.topPop(len)
+    override fun topPush(idx: KuaNumber) = state.topPush(idx)
+    override fun topSet(idx: KuaNumber) = state.topSet(idx)
 
-    override fun type(idx: Int) = state.type(idx)
+    override fun type(idx: KuaNumber) = state.type(idx)
 
     override fun <OBJ : Any> get(clazz: KClass<OBJ>): OBJ {
         return sandboxContextLocal.get()[clazz]
-//        return native.sandbox!!.ctx[clazz]
     }
 
 

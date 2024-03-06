@@ -16,13 +16,11 @@ import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
 
-
-
 class CodeMemoryRepository : RecordMemoryRepository<CodeId, CodeRecord, Code>(
     createDomainObject = CreateCodeFromRecords,
-    recordClass = CodeRecord::class
+    recordClass = CodeRecord::class,
+    projections = listOf(ProjectionCurrent())
 ), CodeRepository {
-    private val lock = ReentrantLock()
 
     override fun create(cmd: CreateCmd): Code {
         return lock.withLock {
@@ -40,8 +38,7 @@ class CodeMemoryRepository : RecordMemoryRepository<CodeId, CodeRecord, Code>(
                         type = cmd.type
                     )
                 )
-                (currentVersion(codeId))
-                    .also(CodeCurrentProjection::apply)
+                (currentVersion(codeId)).also(currentProjection::upsert)
             }
         }
     }
@@ -63,29 +60,24 @@ class CodeMemoryRepository : RecordMemoryRepository<CodeId, CodeRecord, Code>(
                             value = codeValue
                         )
                     )
-                    (currentVersion(codeId)).also(CodeCurrentProjection::apply)
+                    (currentVersion(codeId)).also(currentProjection::upsert)
                 }
             }
         }
     }
 
-    override fun close() {
-    }
+    override fun close() { }
 
-    override fun find(codeId: CodeId): Code? = lock.withLock { CodeCurrentProjection.find(codeId) }
+    override fun find(codeId: CodeId): Code? = lock.withLock { currentProjection.find(codeId) }
 
     override fun find(codeId: CodeId, codeVersion: CodeVersion): Code? = lock.withLock {
         versionOf(codeId, RecordSequence(codeVersion.value))
     }
 
-    override fun list(query: CodeQuery): List<Code> = lock.withLock { CodeCurrentProjection.list(query) }
+    override fun list(query: CodeQuery): List<Code> = lock.withLock { currentProjection.list(query) }
 
-    override fun count(query: CodeQuery): Count = lock.withLock { CodeCurrentProjection.count(query) }
+    override fun count(query: CodeQuery): Count = lock.withLock { currentProjection.count(query) }
 
-    override fun clear() {
-        lock.withLock {
-            super.clear()
-            CodeCurrentProjection.clear()
-        }
-    }
+    private val lock = ReentrantLock()
+    private val currentProjection = getProjection<ProjectionCurrent>()
 }
