@@ -1,6 +1,7 @@
 package io.hamal.lib.kua.state
 
 import io.hamal.lib.kua.StackTop
+import io.hamal.lib.kua.booleanGet
 import io.hamal.lib.kua.type.KuaFalse
 import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.kua.type.KuaTrue

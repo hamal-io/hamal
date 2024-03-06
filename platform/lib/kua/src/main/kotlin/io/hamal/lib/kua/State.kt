@@ -12,21 +12,21 @@ value class StackTop(val value: Int)
 value class TableLength(val value: Int)
 
 interface State {
-    fun absIndex(idx: Int): Int
+    fun absIndex(idx: KuaNumber): KuaNumber
 
-    fun get(idx: Int): KuaType
+    fun get(idx: KuaNumber): KuaType
     fun push(value: KuaType): StackTop
 
     fun booleanPush(value: KuaBoolean): StackTop
-    fun booleanGet(idx: Int): KuaBoolean
+    fun booleanGet(idx: KuaNumber): KuaBoolean
 
     fun codeLoad(code: KuaCode)
 
     fun decimalPush(value: KuaDecimal): StackTop
-    fun decimalGet(idx: Int): KuaDecimal
+    fun decimalGet(idx: KuaNumber): KuaDecimal
 
     fun errorPush(error: KuaError): StackTop
-    fun errorGet(idx: Int): KuaError
+    fun errorGet(idx: KuaNumber): KuaError
 
     fun functionPush(value: KuaFunction<*, *, *, *>): StackTop
 
@@ -36,43 +36,43 @@ interface State {
     fun globalUnset(key: KuaString)
 
     fun nilPush(): StackTop
-    fun numberGet(idx: Int): KuaNumber
+    fun numberGet(idx: KuaNumber): KuaNumber
     fun numberPush(value: KuaNumber): StackTop
 
     fun referenceAcquire(): KuaReference
     fun referencePush(reference: KuaReference): KClass<out KuaType>
     fun referenceRelease(reference: KuaReference)
 
-    fun stringGet(idx: Int): KuaString
+    fun stringGet(idx: KuaNumber): KuaString
     fun stringPush(value: KuaString): StackTop
 
-    fun tableAppend(idx: Int): TableLength
-    fun tableCreate(arrayCount: Int, recordCount: Int): KuaTable
-    fun tableFieldSet(idx: Int, key: KuaString): TableLength
-    fun tableFieldGet(idx: Int, key: KuaString): KClass<out KuaType>
-    fun tableGet(idx: Int): KuaTable
-    fun tableLength(idx: Int): TableLength
-    fun tableNext(idx: Int): KuaBoolean
+    fun tableAppend(idx: KuaNumber): TableLength
+    fun tableCreate(arrayCount: KuaNumber, recordCount: KuaNumber): KuaTable
+    fun tableFieldSet(idx: KuaNumber, key: KuaString): TableLength
+    fun tableFieldGet(idx: KuaNumber, key: KuaString): KClass<out KuaType>
+    fun tableGet(idx: KuaNumber): KuaTable
+    fun tableLength(idx: KuaNumber): TableLength
+    fun tableNext(idx: KuaNumber): KuaBoolean
     fun tablePush(value: KuaTable): StackTop
-    fun tableRawSet(idx: Int): TableLength
-    fun tableRawSetIdx(stackIdx: Int, tableIdx: Int): TableLength
-    fun tableRawGet(idx: Int): KClass<out KuaType>
-    fun tableRawGetIdx(stackIdx: Int, tableIdx: Int): KClass<out KuaType>
-    fun tableSubTableGet(idx: Int, key: KuaString): KClass<out KuaType>
+    fun tableRawSet(idx: KuaNumber): TableLength
+    fun tableRawSetIdx(stackIdx: KuaNumber, tableIdx: KuaNumber): TableLength
+    fun tableRawGet(idx: KuaNumber): KClass<out KuaType>
+    fun tableRawGetIdx(stackIdx: KuaNumber, tableIdx: KuaNumber): KClass<out KuaType>
+    fun tableSubTableGet(idx: KuaNumber, key: KuaString): KClass<out KuaType>
 
     fun topGet(): StackTop
-    fun topPop(len: Int): StackTop
-    fun topPush(idx: Int): StackTop
-    fun topSet(idx: Int)
+    fun topPop(len: KuaNumber): StackTop
+    fun topPush(idx: KuaNumber): StackTop
+    fun topSet(idx: KuaNumber)
 
-    fun type(idx: Int): KClass<out KuaType>
+    fun type(idx: KuaNumber): KClass<out KuaType>
 }
 
 open class StateImpl(val native: Native = Native()) : State {
 
-    override fun absIndex(idx: Int): Int = native.absIndex(idx)
+    override fun absIndex(idx: KuaNumber) = KuaNumber(native.absIndex(idx.intValue))
 
-    override fun get(idx: Int): KuaType {
+    override fun get(idx: KuaNumber): KuaType {
         return when (val type = type(idx)) {
             KuaBoolean::class -> booleanGet(idx)
             KuaDecimal::class -> decimalGet(idx)
@@ -101,7 +101,7 @@ open class StateImpl(val native: Native = Native()) : State {
 
 
     override fun booleanPush(value: KuaBoolean): StackTop = StackTop(native.booleanPush(value.booleanValue))
-    override fun booleanGet(idx: Int) = KuaBoolean.of(native.booleanGet(idx))
+    override fun booleanGet(idx: KuaNumber) = KuaBoolean.of(native.booleanGet(idx.intValue))
 
     override fun codeLoad(code: KuaCode) {
         native.stringLoad(code.stringValue)
@@ -112,10 +112,10 @@ open class StateImpl(val native: Native = Native()) : State {
         native.decimalPush(value.toBigDecimal().toString())
     )
 
-    override fun decimalGet(idx: Int): KuaDecimal = KuaDecimal(BigDecimal(native.decimalGet(idx)))
+    override fun decimalGet(idx: KuaNumber): KuaDecimal = KuaDecimal(BigDecimal(native.decimalGet(idx.intValue)))
 
     override fun errorPush(error: KuaError) = StackTop(native.errorPush(error.value))
-    override fun errorGet(idx: Int): KuaError = KuaError(native.errorGet(idx))
+    override fun errorGet(idx: KuaNumber): KuaError = KuaError(native.errorGet(idx.intValue))
 
     override fun functionPush(value: KuaFunction<*, *, *, *>) = StackTop(native.functionPush(value))
 
@@ -140,7 +140,7 @@ open class StateImpl(val native: Native = Native()) : State {
     }
 
     override fun nilPush() = StackTop(native.nilPush())
-    override fun numberGet(idx: Int) = KuaNumber(native.numberGet(idx))
+    override fun numberGet(idx: KuaNumber) = KuaNumber(native.numberGet(idx.intValue))
     override fun numberPush(value: KuaNumber) = StackTop(native.numberPush(value.doubleValue))
 
     override fun referenceAcquire() = KuaReference(native.referenceAcquire())
@@ -153,37 +153,74 @@ open class StateImpl(val native: Native = Native()) : State {
         native.referenceRelease(reference.value)
     }
 
-    override fun stringGet(idx: Int) = KuaString(native.stringGet(idx))
+    override fun stringGet(idx: KuaNumber) = KuaString(native.stringGet(idx.intValue))
     override fun stringPush(value: KuaString) = StackTop(native.stringPush(value.stringValue))
 
 
-    override fun tableAppend(idx: Int) = TableLength(native.tableAppend(idx))
-    override fun tableCreate(arrayCount: Int, recordCount: Int): KuaTable {
+    override fun tableAppend(idx: KuaNumber) = TableLength(native.tableAppend(idx.intValue))
+    override fun tableCreate(arrayCount: KuaNumber, recordCount: KuaNumber): KuaTable {
         return KuaTable(
-            index = native.tableCreate(arrayCount, recordCount),
+            index = KuaNumber(native.tableCreate(arrayCount.intValue, recordCount.intValue)),
             state = this
         )
     }
 
-    override fun tableFieldGet(idx: Int, key: KuaString) = luaToType(native.tableFieldGet(idx, key.stringValue))
-    override fun tableFieldSet(idx: Int, key: KuaString) = TableLength(native.tableFieldSet(idx, key.stringValue))
-    override fun tableGet(idx: Int) = KuaTable(native.tableGet(native.absIndex(idx)), this)
-    override fun tableLength(idx: Int) = TableLength(native.tableLength(idx))
-    override fun tableNext(idx: Int) = KuaBoolean.of(native.tableNext(idx))
-    override fun tablePush(value: KuaTable) = StackTop(native.topPush(value.index))
-    override fun tableRawSet(idx: Int) = TableLength(native.tableRawSet(idx))
-    override fun tableRawSetIdx(stackIdx: Int, tableIdx: Int) = TableLength(native.tableRawSetIdx(stackIdx, tableIdx))
-    override fun tableRawGet(idx: Int) = luaToType(native.tableRawGet(idx))
-    override fun tableRawGetIdx(stackIdx: Int, tableIdx: Int) = luaToType(native.tableRawGetIdx(stackIdx, tableIdx))
-    override fun tableSubTableGet(idx: Int, key: KuaString) = luaToType(native.tableSubTableGet(idx, key.stringValue))
-    override fun topGet(): StackTop = StackTop(native.topGet())
-    override fun topPop(len: Int) = StackTop(native.topPop(len))
-    override fun topPush(idx: Int): StackTop = StackTop(native.topPush(idx))
-    override fun topSet(idx: Int) = native.topSet(idx)
+    override fun tableFieldGet(idx: KuaNumber, key: KuaString) =
+        luaToType(native.tableFieldGet(idx.intValue, key.stringValue))
 
-    override fun type(idx: Int) = luaToType(native.type(idx))
+    override fun tableFieldSet(idx: KuaNumber, key: KuaString) =
+        TableLength(native.tableFieldSet(idx.intValue, key.stringValue))
+
+    override fun tableGet(idx: KuaNumber) = KuaTable(KuaNumber(native.tableGet(native.absIndex(idx.intValue))), this)
+    override fun tableLength(idx: KuaNumber) = TableLength(native.tableLength(idx.intValue))
+    override fun tableNext(idx: KuaNumber) = KuaBoolean.of(native.tableNext(idx.intValue))
+    override fun tablePush(value: KuaTable) = StackTop(native.topPush(value.index.intValue))
+    override fun tableRawSet(idx: KuaNumber) = TableLength(native.tableRawSet(idx.intValue))
+    override fun tableRawSetIdx(stackIdx: KuaNumber, tableIdx: KuaNumber) =
+        TableLength(native.tableRawSetIdx(stackIdx.intValue, tableIdx.intValue))
+
+    override fun tableRawGet(idx: KuaNumber) = luaToType(native.tableRawGet(idx.intValue))
+    override fun tableRawGetIdx(stackIdx: KuaNumber, tableIdx: KuaNumber) =
+        luaToType(native.tableRawGetIdx(stackIdx.intValue, tableIdx.intValue))
+
+    override fun tableSubTableGet(idx: KuaNumber, key: KuaString) =
+        luaToType(native.tableSubTableGet(idx.intValue, key.stringValue))
+
+    override fun topGet(): StackTop = StackTop(native.topGet())
+    override fun topPop(len: KuaNumber) = StackTop(native.topPop(len.intValue))
+    override fun topPush(idx: KuaNumber): StackTop = StackTop(native.topPush(idx.intValue))
+    override fun topSet(idx: KuaNumber) = native.topSet(idx.intValue)
+
+    override fun type(idx: KuaNumber) = luaToType(native.type(idx.intValue))
 
 }
+
+fun State.absIndex(idx: Int) = absIndex(KuaNumber(idx))
+fun State.get(idx: Int) = get(KuaNumber(idx))
+fun State.booleanGet(idx: Int) = booleanGet(KuaNumber(idx))
+fun State.decimalGet(idx: Int) = decimalGet(KuaNumber(idx))
+fun State.errorGet(idx: Int) = errorGet(KuaNumber(idx))
+fun State.numberGet(idx: Int) = numberGet(KuaNumber(idx))
+fun State.stringGet(idx: Int) = stringGet(KuaNumber(idx))
+fun State.tableAppend(idx: Int) = tableAppend(KuaNumber(idx))
+fun State.tableCreate(arrayCount: Int, recordCount: Int) = tableCreate(KuaNumber(arrayCount), KuaNumber(recordCount))
+fun State.tableFieldGet(idx: Int, key: String) = tableFieldGet(KuaNumber(idx), KuaString(key))
+fun State.tableFieldGet(idx: Int, key: KuaString) = tableFieldGet(KuaNumber(idx), key)
+fun State.tableFieldSet(idx: Int, key: KuaString) = tableFieldSet(KuaNumber(idx), key)
+fun State.tableGet(idx: Int) = tableGet(KuaNumber(idx))
+fun State.tableLength(idx: Int) = tableLength(KuaNumber(idx))
+fun State.tableNext(idx: Int) = tableNext(KuaNumber(idx))
+fun State.tableRawGetIdx(stackIdx: Int, tableIdx: Int) = tableRawGetIdx(KuaNumber(stackIdx), KuaNumber(tableIdx))
+fun State.tableRawGet(idx: Int) = tableRawGet(KuaNumber(idx))
+fun State.tableRawSet(idx: Int) = tableRawSet(KuaNumber(idx))
+fun State.tableRawSetIdx(stackIdx: Int, tableIdx: Int) = tableRawSetIdx(KuaNumber(stackIdx), KuaNumber(tableIdx))
+fun State.tableSubTableGet(idx: Int, key: String) = tableSubTableGet(KuaNumber(idx), KuaString(key))
+fun State.topPush(idx: Int) = topPush(KuaNumber(idx))
+fun State.topPop(idx: Int) = topPop(KuaNumber(idx))
+fun State.topSet(idx: Int) = topSet(KuaNumber(idx))
+
+
+fun State.type(idx: Int) = type(KuaNumber(idx))
 
 interface CloseableState : State, AutoCloseable
 

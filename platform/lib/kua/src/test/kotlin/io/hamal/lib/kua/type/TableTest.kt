@@ -2,8 +2,11 @@ package io.hamal.lib.kua.type
 
 import io.hamal.lib.kua.*
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
+import io.hamal.lib.kua.function.Function0In0Out
+import io.hamal.lib.kua.function.FunctionContext
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
+import org.hamcrest.Matchers.nullValue
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.Test
@@ -46,6 +49,26 @@ internal class KuaTableTest {
     }
 
     @Test
+    fun `append - function`() {
+        val testInstance = state.tableCreate()
+        val testFunction = object : Function0In0Out() {
+            override fun invoke(ctx: FunctionContext) {
+                TODO("Not yet implemented")
+            }
+        }
+
+        testInstance.append(testFunction).also { result ->
+            assertThat(result, equalTo(TableLength(1)))
+        }
+        assertThat(state.topGet(), equalTo(StackTop(1)))
+
+        state.tableRawGetIdx(1, 1)
+        assertThat(state.type(-1), equalTo(KuaFunction::class))
+        state.topPop(2)
+    }
+
+
+    @Test
     fun `append - nil`() {
         val testInstance = state.tableCreate()
         testInstance.append(KuaNil).also { result ->
@@ -80,6 +103,27 @@ internal class KuaTableTest {
     }
 
     @Test
+    fun `findBoolean`() {
+        val testInstance = state.tableCreate(
+            KuaString("key") to KuaTrue
+        )
+
+        testInstance.findBoolean(KuaString("key")).also { result ->
+            assertThat(result, equalTo(KuaTrue))
+        }
+    }
+
+    @Test
+    fun `findBoolean - but value not found`() {
+        val testInstance = state.tableCreate(
+            KuaString("key") to KuaTrue
+        )
+
+        assertThat(testInstance.findBoolean(KuaString("anotherKey")), nullValue())
+    }
+
+
+    @Test
     fun `getBoolean`() {
         val testInstance = state.tableCreate(
             KuaString("key") to KuaTrue
@@ -96,9 +140,9 @@ internal class KuaTableTest {
             KuaString("key") to KuaTrue
         )
 
-        assertThrows<IllegalStateException> {
+        assertThrows<NoSuchElementException> {
             testInstance.getBoolean(KuaString("anotherKey"))
-        }.also { exception -> assertThat(exception.message, equalTo("Expected type to be boolean but was nil")) }
+        }.also { exception -> assertThat(exception.message, equalTo("anotherKey not found")) }
     }
 
     @Test
@@ -110,6 +154,26 @@ internal class KuaTableTest {
         assertThrows<IllegalStateException> {
             testInstance.getBoolean(KuaString("key"))
         }.also { exception -> assertThat(exception.message, equalTo("Expected type to be boolean but was number")) }
+    }
+
+    @Test
+    fun `findDecimal`() {
+        val testInstance = state.tableCreate(
+            KuaString("key") to KuaDecimal(24.42)
+        )
+
+        testInstance.findDecimal(KuaString("key")).also { result ->
+            assertThat(result, equalTo(KuaDecimal(24.42)))
+        }
+    }
+
+    @Test
+    fun `findDecimal - but value not found`() {
+        val testInstance = state.tableCreate(
+            KuaString("key") to KuaDecimal(24.42)
+        )
+
+        assertThat(testInstance.findDecimal(KuaString("anotherKey")), nullValue())
     }
 
     @Test
@@ -129,9 +193,9 @@ internal class KuaTableTest {
             KuaString("key") to KuaDecimal(24.42)
         )
 
-        assertThrows<IllegalStateException> {
+        assertThrows<NoSuchElementException> {
             testInstance.getDecimal(KuaString("anotherKey"))
-        }.also { exception -> assertThat(exception.message, equalTo("Expected type to be decimal but was nil")) }
+        }.also { exception -> assertThat(exception.message, equalTo("anotherKey not found")) }
     }
 
     @Test
@@ -144,6 +208,27 @@ internal class KuaTableTest {
             testInstance.getDecimal(KuaString("key"))
         }.also { exception -> assertThat(exception.message, equalTo("Expected type to be decimal but was string")) }
     }
+
+    @Test
+    fun `findError`() {
+        val testInstance = state.tableCreate(
+            KuaString("key") to KuaError("Some expected Error")
+        )
+
+        testInstance.findError(KuaString("key")).also { result ->
+            assertThat(result, equalTo(KuaError("Some expected Error")))
+        }
+    }
+
+    @Test
+    fun `findError - but value not found`() {
+        val testInstance = state.tableCreate(
+            KuaString("key") to KuaError("Some expected Error")
+        )
+
+        assertThat(testInstance.findError(KuaString("anotherKey")), nullValue())
+    }
+
 
     @Test
     fun `getError`() {
@@ -162,9 +247,9 @@ internal class KuaTableTest {
             KuaString("key") to KuaError("Some expected Error")
         )
 
-        assertThrows<IllegalStateException> {
+        assertThrows<NoSuchElementException> {
             testInstance.getError(KuaString("anotherKey"))
-        }.also { exception -> assertThat(exception.message, equalTo("Expected type to be error but was nil")) }
+        }.also { exception -> assertThat(exception.message, equalTo("anotherKey not found")) }
     }
 
     @Test
@@ -176,6 +261,26 @@ internal class KuaTableTest {
         assertThrows<IllegalStateException> {
             testInstance.getError(KuaString("key"))
         }.also { exception -> assertThat(exception.message, equalTo("Expected type to be error but was string")) }
+    }
+
+    @Test
+    fun `findNumber`() {
+        val testInstance = state.tableCreate(
+            KuaString("key") to KuaNumber(24.42)
+        )
+
+        testInstance.findNumber(KuaString("key")).also { result ->
+            assertThat(result, equalTo(KuaNumber(24.42)))
+        }
+    }
+
+    @Test
+    fun `findNumber - but value not found`() {
+        val testInstance = state.tableCreate(
+            KuaString("key") to KuaNumber(24.42)
+        )
+
+        assertThat(testInstance.findNumber(KuaString("anotherKey")), nullValue())
     }
 
     @Test
@@ -195,9 +300,9 @@ internal class KuaTableTest {
             KuaString("key") to KuaNumber(24.42)
         )
 
-        assertThrows<IllegalStateException> {
+        assertThrows<NoSuchElementException> {
             testInstance.getNumber(KuaString("anotherKey"))
-        }.also { exception -> assertThat(exception.message, equalTo("Expected type to be number but was nil")) }
+        }.also { exception -> assertThat(exception.message, equalTo("anotherKey not found")) }
     }
 
     @Test
@@ -209,6 +314,25 @@ internal class KuaTableTest {
         assertThrows<IllegalStateException> {
             testInstance.getNumber(KuaString("key"))
         }.also { exception -> assertThat(exception.message, equalTo("Expected type to be number but was string")) }
+    }
+
+    @Test
+    fun `findString`() {
+        val testInstance = state.tableCreate(
+            KuaString("key") to KuaString("hamal")
+        )
+
+        testInstance.findString(KuaString("key")).also { result ->
+            assertThat(result, equalTo(KuaString("hamal")))
+        }
+    }
+
+    @Test
+    fun `findString - but value not found`() {
+        val testInstance = state.tableCreate(
+            KuaString("key") to KuaString("hamal")
+        )
+        assertThat(testInstance.findString(KuaString("anotherKey")), nullValue())
     }
 
     @Test
@@ -228,9 +352,9 @@ internal class KuaTableTest {
             KuaString("key") to KuaString("hamal")
         )
 
-        assertThrows<IllegalStateException> {
+        assertThrows<NoSuchElementException> {
             testInstance.getString(KuaString("anotherKey"))
-        }.also { exception -> assertThat(exception.message, equalTo("Expected type to be string but was nil")) }
+        }.also { exception -> assertThat(exception.message, equalTo("anotherKey not found")) }
     }
 
     @Test
@@ -243,6 +367,32 @@ internal class KuaTableTest {
             testInstance.getString(KuaString("key"))
         }.also { exception -> assertThat(exception.message, equalTo("Expected type to be string but was number")) }
     }
+
+    @Test
+    fun `findTable`() {
+        val testInstance = state.tableCreate(
+            KuaString("key") to state.tableCreate(
+                KuaString("answer") to KuaNumber(42)
+            )
+        )
+
+        testInstance.findTable(KuaString("key")).also { result ->
+            assertThat(result?.length, equalTo(TableLength(1)))
+            assertThat(result?.getNumber("answer"), equalTo(KuaNumber(42)))
+        }
+    }
+
+    @Test
+    fun `findTable - but value not found`() {
+        val testInstance = state.tableCreate(
+            KuaString("key") to state.tableCreate(
+                KuaString("answer") to KuaNumber(42)
+            )
+        )
+
+        assertThat(testInstance.findString(KuaString("anotherKey")), nullValue())
+    }
+
 
     @Test
     fun `getTable`() {
@@ -266,9 +416,9 @@ internal class KuaTableTest {
             )
         )
 
-        assertThrows<IllegalStateException> {
-            testInstance.getTable(KuaString("anotherKey"))
-        }.also { exception -> assertThat(exception.message, equalTo("Expected type to be table but was nil")) }
+        assertThrows<NoSuchElementException> {
+            testInstance.getString(KuaString("anotherKey"))
+        }.also { exception -> assertThat(exception.message, equalTo("anotherKey not found")) }
     }
 
     @Test
@@ -284,7 +434,7 @@ internal class KuaTableTest {
 
 
     @TestFactory
-    fun `set - kua values`(): List<DynamicTest> {
+    fun `set`(): List<DynamicTest> {
         lateinit var testInstance: KuaTable
         return listOf(
             KuaTrue,
@@ -314,6 +464,26 @@ internal class KuaTableTest {
     }
 
     @Test
+    fun `set - function`() {
+        val testInstance = state.tableCreate()
+        val testFunction = object : Function0In0Out() {
+            override fun invoke(ctx: FunctionContext) {
+                TODO("Not yet implemented")
+            }
+        }
+
+        testInstance.set("key", testFunction).also { tableLength ->
+            assertThat(tableLength, equalTo(TableLength(1)))
+        }
+
+        assertThat(state.topGet(), equalTo(StackTop(1)))
+
+        state.tableFieldGet(1, KuaString("key"))
+        assertThat(state.type(-1), equalTo(KuaFunction::class))
+        state.topPop(2)
+    }
+
+    @Test
     fun `set - nil`() {
         val testInstance = state.tableCreate()
 
@@ -331,7 +501,6 @@ internal class KuaTableTest {
 
         state.topPop(2)
     }
-
 
     @Test
     fun `set - table`() {

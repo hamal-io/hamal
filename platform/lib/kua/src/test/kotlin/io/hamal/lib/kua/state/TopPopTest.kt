@@ -1,6 +1,8 @@
 package io.hamal.lib.kua.state
 
 import io.hamal.lib.kua.StackTop
+import io.hamal.lib.kua.decimalGet
+import io.hamal.lib.kua.topPop
 import io.hamal.lib.kua.type.KuaDecimal
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
