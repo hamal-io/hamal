@@ -23,7 +23,6 @@ export function useNamespaceTree(workspaceId: string): [TreeAction, NamespaceNod
     return [fn, root]
 }
 
-
 function unroll(list: Array<NamespaceListItem>) {
     const store = new Array<NamespaceNode>
     for (const ns of list.reverse()) {

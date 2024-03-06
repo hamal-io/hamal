@@ -2,7 +2,7 @@ import React, {FC, useState} from "react";
 
 import * as z from "zod"
 import {zodResolver} from "@hookform/resolvers/zod";
-import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
+import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
 import {useForm} from "react-hook-form";
 import {Loader2} from "lucide-react";
 import {DialogContent, DialogHeader} from "@/components/ui/dialog.tsx";
@@ -18,7 +18,7 @@ const formSchema = z.object({
 type Props = { appendTo: string, onClose: () => void }
 const Append: FC<Props> = ({appendTo, onClose}) => {
     const [isLoading, setLoading] = useState(false)
-    const [appendNamespace, requestedNamespace] = useNamespaceAppend()
+    const [appendNamespace] = useNamespaceAppend()
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -53,9 +53,6 @@ const Append: FC<Props> = ({appendTo, onClose}) => {
                                 <FormControl>
                                     <Input  {...field} />
                                 </FormControl>
-                                <FormDescription>
-                                    Name of your namespace
-                                </FormDescription>
                                 <FormMessage/>
                             </FormItem>
                         )}

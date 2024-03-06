@@ -19,7 +19,7 @@ type Props = {
     onClose: () => void
 }
 const Update: FC<Props> = ({id, onClose}) => {
-    const [updateNamespace, updateSubmitted] = useNamespaceUpdate()
+    const [updateNamespace] = useNamespaceUpdate()
     const [isLoading, setLoading] = useState(false)
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -66,7 +66,6 @@ const Update: FC<Props> = ({id, onClose}) => {
                 </form>
             </Form>
         </DialogContent>
-
     )
 }
 

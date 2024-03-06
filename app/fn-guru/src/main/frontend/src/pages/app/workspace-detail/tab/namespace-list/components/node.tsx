@@ -9,7 +9,7 @@ type Props = {
     root: NamespaceNode
 }
 const NamespaceNodeEntry: FC<Props> = ({root}) => {
-    const [expanded, setExpanded] = useState(false)
+    const [expanded, setExpanded] = useState(true)
 
     const names = root.data.name.split("::")
     const shortName = names[names.length - 1]

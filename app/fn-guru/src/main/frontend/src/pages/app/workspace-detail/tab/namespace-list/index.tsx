@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react'
+import React, {FC, useEffect} from 'react'
 import {useUiState} from "@/hook/ui-state.ts";
 import NamespaceNodeEntry from "@/pages/app/workspace-detail/tab/namespace-list/components/node.tsx";
 import {useNamespaceTree} from "@/pages/app/workspace-detail/tab/namespace-list/components/hook.ts";
@@ -29,7 +29,6 @@ const WorkspaceNamespaceListTab: FC = () => {
                 actions={[
                     <Button>
                         <ListRestart onClick={handleRefresh}/>
-                        Refresh
                     </Button>
                 ]}
                 description="Click on a Namespace to select, rename or append. Changes will appear after refresh -> "
