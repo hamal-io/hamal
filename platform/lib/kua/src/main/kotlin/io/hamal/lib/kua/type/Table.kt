@@ -1,13 +1,14 @@
 package io.hamal.lib.kua.type
 
-import io.hamal.lib.kua.State
-import io.hamal.lib.kua.TableLength
+import io.hamal.lib.kua.*
 import kotlin.reflect.KClass
 
 class KuaTable(
-    val index: Int,
+    val index: KuaNumber,
     val state: State
 ) : KuaType {
+
+    constructor(index: Int, state: State) : this(KuaNumber(index), state)
 
     override val type: KuaType.Type = KuaType.Type.Table
     val length get() : TableLength = state.tableLength(index)
@@ -77,41 +78,41 @@ class KuaTable(
         ).asSequence().map { it.value }
     }
 
-    fun get(idx: Int): KuaType {
+    fun get(idx: KuaNumber): KuaType {
         return state.get(idx)
     }
 
-    fun getBoolean(idx: Int): KuaBoolean {
+    fun getBoolean(idx: KuaNumber): KuaBoolean {
         val type = state.tableRawGetIdx(index, idx)
         type.checkExpectedType(KuaBoolean::class)
         return state.booleanGet(-1)
     }
 
-    fun getDecimal(idx: Int): KuaDecimal {
+    fun getDecimal(idx: KuaNumber): KuaDecimal {
         val type = state.tableRawGetIdx(index, idx)
         type.checkExpectedType(KuaDecimal::class)
         return state.decimalGet(-1)
     }
 
-    fun getError(idx: Int): KuaError {
+    fun getError(idx: KuaNumber): KuaError {
         val type = state.tableRawGetIdx(index, idx)
         type.checkExpectedType(KuaError::class)
         return state.errorGet(-1)
     }
 
-    fun getNil(idx: Int): KuaNil {
+    fun getNil(idx: KuaNumber): KuaNil {
         val type = state.tableRawGetIdx(index, idx)
         type.checkExpectedType(KuaNil::class)
         return KuaNil
     }
 
-    fun getNumber(idx: Int): KuaNumber {
+    fun getNumber(idx: KuaNumber): KuaNumber {
         val type = state.tableRawGetIdx(index, idx)
         type.checkExpectedType(KuaNumber::class)
         return state.numberGet(-1)
     }
 
-    fun getString(idx: Int): KuaString {
+    fun getString(idx: KuaNumber): KuaString {
         val type = state.tableRawGetIdx(index, idx)
         type.checkExpectedType(KuaString::class)
         return state.stringGet(-1)
@@ -283,7 +284,7 @@ class KuaTable(
     }
 
 
-    fun type(idx: Int): KClass<out KuaType> {
+    fun type(idx: KuaNumber): KClass<out KuaType> {
         state.tableGet(idx)
         return state.tableRawGet(index)
     }
@@ -292,7 +293,6 @@ class KuaTable(
         state.stringPush(key)
         return state.tableRawGet(index)
     }
-
 }
 
 
@@ -305,6 +305,14 @@ operator fun KuaTable.set(key: String, value: Float) = set(KuaString(key), KuaNu
 operator fun KuaTable.set(key: String, value: Double) = set(KuaString(key), KuaNumber(value))
 operator fun KuaTable.set(key: String, value: String) = set(KuaString(key), KuaString(value))
 
+fun KuaTable.get(idx: Int) = get(KuaNumber(idx))
+fun KuaTable.getBoolean(idx: Int) = getBoolean(KuaNumber(idx))
+fun KuaTable.getDecimal(idx: Int) = getDecimal(KuaNumber(idx))
+fun KuaTable.getError(idx: Int) = getError(KuaNumber(idx))
+fun KuaTable.getNil(idx: Int) = getNil(KuaNumber(idx))
+fun KuaTable.getNumber(idx: Int) = getNumber(KuaNumber(idx))
+fun KuaTable.getString(idx: Int) = getString(KuaNumber(idx))
+
 fun KuaTable.findString(key: String): KuaString? = findString(KuaString(key))
 fun KuaTable.findTable(key: String): KuaTable? = findTable(KuaString(key))
 
@@ -312,4 +320,5 @@ fun KuaTable.getBoolean(key: String): KuaBoolean = getBoolean(KuaString(key))
 fun KuaTable.getString(key: String): KuaString = getString(KuaString(key))
 fun KuaTable.getNumber(key: String): KuaNumber = getNumber(KuaString(key))
 
+fun KuaTable.type(idx: Int): KClass<out KuaType> = type(KuaNumber(idx))
 fun KuaTable.type(key: String): KClass<out KuaType> = type(KuaString(key))

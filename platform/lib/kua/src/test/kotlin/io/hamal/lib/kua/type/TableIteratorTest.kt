@@ -1,8 +1,4 @@
-
-import io.hamal.lib.kua.NativeLoader
-import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.SandboxContextNop
-import io.hamal.lib.kua.tableCreate
+import io.hamal.lib.kua.*
 import io.hamal.lib.kua.type.KuaNumber
 import io.hamal.lib.kua.type.KuaTableIterator
 import io.hamal.lib.kua.type.getNumber
@@ -18,7 +14,7 @@ internal class KuaTableEntryIteratorTest {
     fun `Empty table`() {
         state.tableCreate(0, 0)
         val testInstance = KuaTableIterator(
-            index = 1,
+            index = KuaNumber(1),
             state = state,
             keyExtractor = { state, index -> state.stringGet(index) },
             valueExtractor = { state, index -> state.stringGet(index) }
@@ -36,7 +32,7 @@ internal class KuaTableEntryIteratorTest {
         state.tableCreate(listOf(KuaNumber(21)))
 
         val testInstance = KuaTableIterator(
-            index = 1,
+            index = KuaNumber(1),
             state = state,
             keyExtractor = { state, index -> state.numberGet(index) },
             valueExtractor = { state, index -> state.numberGet(index) }
@@ -97,7 +93,7 @@ internal class KuaTableEntryIteratorTest {
         }
 
         val testInstance = KuaTableIterator(
-            index = 1,
+            index = KuaNumber(1),
             state = state,
             keyExtractor = { state, index -> state.numberGet(index) },
             valueExtractor = { state, index ->

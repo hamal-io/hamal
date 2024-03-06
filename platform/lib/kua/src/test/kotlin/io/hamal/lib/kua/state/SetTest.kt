@@ -1,9 +1,10 @@
 package io.hamal.lib.kua.state
 
-import io.hamal.lib.kua.StackTop
+import io.hamal.lib.kua.*
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.type.*
+import io.hamal.lib.kua.type.KuaError
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.TestFactory
@@ -58,7 +59,7 @@ internal class SetTest : StateBaseTest() {
         testInstance.tableCreate(0, 0)
         testInstance.push(KuaTable(1, testInstance))
         testInstance.tableGet(1).also { table ->
-            assertThat(table.index, equalTo(1))
+            assertThat(table.index, equalTo(KuaNumber(1)))
         }
     }
 

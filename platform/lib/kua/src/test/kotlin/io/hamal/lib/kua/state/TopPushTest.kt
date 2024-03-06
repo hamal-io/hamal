@@ -1,6 +1,9 @@
 package io.hamal.lib.kua.state
 
 import io.hamal.lib.kua.StackTop
+import io.hamal.lib.kua.errorGet
+import io.hamal.lib.kua.topPush
+import io.hamal.lib.kua.type
 import io.hamal.lib.kua.type.KuaDecimal
 import io.hamal.lib.kua.type.KuaError
 import org.hamcrest.MatcherAssert.assertThat

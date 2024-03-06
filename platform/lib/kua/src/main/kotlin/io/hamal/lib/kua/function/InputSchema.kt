@@ -1,5 +1,6 @@
 package io.hamal.lib.kua.function
 
+import io.hamal.lib.kua.*
 import io.hamal.lib.kua.type.*
 import kotlin.reflect.KClass
 

@@ -2,6 +2,7 @@ package io.hamal.lib.kua.state
 
 import io.hamal.lib.kua.StackTop
 import io.hamal.lib.kua.tableCreate
+import io.hamal.lib.kua.type
 import io.hamal.lib.kua.type.KuaNumber
 import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.kua.type.KuaTable

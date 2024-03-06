@@ -1,7 +1,6 @@
 package io.hamal.lib.kua.state
 
-import io.hamal.lib.kua.TableLength
-import io.hamal.lib.kua.tableCreate
+import io.hamal.lib.kua.*
 import io.hamal.lib.kua.type.KuaNumber
 import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.kua.type.KuaTable
@@ -60,7 +59,7 @@ internal class TableLengthTest : StateBaseTest() {
             KuaString("nested") to nested
         )
 
-        testInstance.tableSubTableGet(-1, KuaString("nested")).also { resultClass ->
+        testInstance.tableSubTableGet(-1, "nested").also { resultClass ->
             assertThat(resultClass, equalTo(KuaTable::class))
         }
 
