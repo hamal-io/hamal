@@ -524,6 +524,20 @@ internal class KuaTableTest {
     }
 
     @Test
+    fun `set - nested table`() {
+        val testInstance = state.tableCreate()
+        testInstance["headers"] = state.tableCreate(
+            KuaString("deeper") to state.tableCreate(
+                KuaString("Answer") to KuaString("42")
+            )
+        )
+
+        testInstance.getTable("headers").getTable("deeper").getString("Answer").also { result ->
+            assertThat(result, equalTo(KuaString("42")))
+        }
+    }
+
+    @Test
     fun `unset`() {
         val testInstance = state.tableCreate()
 

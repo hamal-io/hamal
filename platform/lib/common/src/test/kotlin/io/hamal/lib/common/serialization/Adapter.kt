@@ -15,13 +15,13 @@ internal object HotArrayAdapterTest {
 
     @Test
     fun serialize() {
-        val result = testDelegate.toJson(HotArray.builder().add(1).add("latest").build())
+        val result = testDelegate.toJson(HotArray.builder().append(1).append("latest").build())
         assertThat(result, equalTo("[1,\"latest\"]"))
     }
 
     @Test
     fun deserialize() {
-        val expected = HotArray.builder().add(1).add("latest").build()
+        val expected = HotArray.builder().append(1).append("latest").build()
         val result = testDelegate.fromJson("[1, \"latest\"]", HotArray::class.java)
         assertThat(result, equalTo(expected))
     }

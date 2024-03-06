@@ -8,7 +8,6 @@ import io.hamal.plugin.net.http.endpoint.TestJsonController
 import io.hamal.plugin.net.http.endpoint.TestStatusController
 import io.hamal.plugin.net.http.fixture.TestWebConfig
 import io.hamal.runner.test.AbstractRunnerTest
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
@@ -29,7 +28,6 @@ import kotlin.io.path.name
         TestStatusController::class
     ], webEnvironment = RANDOM_PORT
 )
-@Disabled
 class PluginHttpTest(@LocalServerPort var localServerPort: Int) : AbstractRunnerTest() {
 
     @TestFactory

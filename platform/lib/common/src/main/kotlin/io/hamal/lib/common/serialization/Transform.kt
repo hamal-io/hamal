@@ -66,7 +66,7 @@ object GsonTransform {
     private fun toArray(array: JsonArray): HotArray {
         val resultBuilder = HotArray.builder()
         for (element in array) {
-            resultBuilder.add(toNode(element))
+            resultBuilder.append(toNode(element))
         }
         return resultBuilder.build()
     }
