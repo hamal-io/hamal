@@ -4,23 +4,22 @@ import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.repository.api.Workspace
 import io.hamal.repository.api.WorkspaceQueryRepository.WorkspaceQuery
+import io.hamal.repository.memory.record.ProjectionMemory
 
-internal
-object WorkspaceCurrentProjection {
-    private val projection = mutableMapOf<WorkspaceId, Workspace>()
+internal class ProjectionCurrent: ProjectionMemory<WorkspaceId, Workspace> {
 
-    fun apply(workspace: Workspace) {
-        val currentWorkspace = projection[workspace.id]
-        projection.remove(workspace.id)
+    override fun upsert(obj: Workspace) {
+        val currentWorkspace = projection[obj.id]
+        projection.remove(obj.id)
 
-        if (projection.values.any { it.name == workspace.name }) {
+        if (projection.values.any { it.name == obj.name }) {
             if (currentWorkspace != null) {
                 projection[currentWorkspace.id] = currentWorkspace
             }
-            throw IllegalArgumentException("${workspace.name} already exists")
+            throw IllegalArgumentException("${obj.name} already exists")
         }
 
-        projection[workspace.id] = workspace
+        projection[obj.id] = obj
     }
 
     fun find(workspaceId: WorkspaceId): Workspace? = projection[workspaceId]
@@ -49,8 +48,10 @@ object WorkspaceCurrentProjection {
         )
     }
 
-    fun clear() {
+    override fun clear() {
         projection.clear()
     }
+
+    private val projection = mutableMapOf<WorkspaceId, Workspace>()
 }
 

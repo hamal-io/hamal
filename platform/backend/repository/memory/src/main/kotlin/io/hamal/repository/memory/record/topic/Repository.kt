@@ -24,7 +24,8 @@ class TopicMemoryRepository(
     private val logBrokerRepository: LogBrokerRepository
 ) : RecordMemoryRepository<TopicId, TopicRecord, Topic>(
     createDomainObject = CreateTopicFromRecords,
-    recordClass = TopicRecord::class
+    recordClass = TopicRecord::class,
+    projections = listOf(ProjectionCurrent())
 ), TopicRepository {
 
     override fun create(cmd: TopicCreateCmd): Topic {
@@ -44,22 +45,21 @@ class TopicMemoryRepository(
                     type = cmd.type
                 )
             )
-            currentVersion(topicId).also(TopicCurrentProjection::apply).also { _ ->
+            currentVersion(topicId).also(currentProjection::upsert).also { _ ->
                 logBrokerRepository.create(CreateTopicCmd(cmd.id, cmd.logTopicId))
             }
         }
     }
 
-    override fun close() {}
 
-    override fun find(topicId: TopicId): Topic? = lock.withLock { TopicCurrentProjection.find(topicId) }
+    override fun find(topicId: TopicId): Topic? = lock.withLock { currentProjection.find(topicId) }
 
     override fun findTopic(namespaceId: NamespaceId, topicName: TopicName): Topic? = lock.withLock {
-        TopicCurrentProjection.find(namespaceId, topicName)
+        currentProjection.find(namespaceId, topicName)
     }
 
     override fun list(query: TopicQuery): List<Topic> =
-        lock.withLock { TopicCurrentProjection.list(query) }
+        lock.withLock { currentProjection.list(query) }
 
     override fun list(query: TopicEventQuery): List<TopicEvent> {
         return lock.withLock {
@@ -77,19 +77,15 @@ class TopicMemoryRepository(
         }
     }
 
-    override fun count(query: TopicQuery): Count =
-        lock.withLock { TopicCurrentProjection.count(query) }
+    override fun count(query: TopicQuery): Count = lock.withLock { currentProjection.count(query) }
 
     override fun count(query: TopicEventQuery): Count {
         TODO("Not yet implemented")
     }
 
-    override fun clear() {
-        lock.withLock {
-            TopicCurrentProjection.clear()
-        }
-    }
+    override fun close() {}
 
     private val lock = ReentrantLock()
+    private val currentProjection = getProjection<ProjectionCurrent>()
 }
 

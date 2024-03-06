@@ -4,22 +4,23 @@ import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
+import io.hamal.repository.memory.record.ProjectionMemory
 
-internal object FuncCurrentProjection {
-    private val projection = mutableMapOf<FuncId, Func>()
-    fun apply(func: Func) {
-        val currentFunc = projection[func.id]
-        projection.remove(func.id)
+internal class ProjectionCurrent : ProjectionMemory<FuncId, Func>{
 
-        val funcsInNamespace = projection.values.filter { it.namespaceId == func.namespaceId }
-        if (funcsInNamespace.any { it.name == func.name }) {
+    override fun upsert(obj: Func) {
+        val currentFunc = projection[obj.id]
+        projection.remove(obj.id)
+
+        val funcsInNamespace = projection.values.filter { it.namespaceId == obj.namespaceId }
+        if (funcsInNamespace.any { it.name == obj.name }) {
             if (currentFunc != null) {
                 projection[currentFunc.id] = currentFunc
             }
-            throw IllegalArgumentException("${func.name} already exists in namespace ${func.namespaceId}")
+            throw IllegalArgumentException("${obj.name} already exists in namespace ${obj.namespaceId}")
         }
 
-        projection[func.id] = func
+        projection[obj.id] = obj
     }
 
     fun find(funcId: FuncId): Func? = projection[funcId]
@@ -50,7 +51,9 @@ internal object FuncCurrentProjection {
         )
     }
 
-    fun clear() {
+    override fun clear() {
         projection.clear()
     }
+
+    private val projection = mutableMapOf<FuncId, Func>()
 }

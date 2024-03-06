@@ -4,22 +4,23 @@ import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.ExtensionId
 import io.hamal.repository.api.Extension
 import io.hamal.repository.api.ExtensionQueryRepository.ExtensionQuery
+import io.hamal.repository.memory.record.ProjectionMemory
 
-internal object ExtensionCurrentProjection {
-    private val projection = mutableMapOf<ExtensionId, Extension>()
-    fun apply(ext: Extension) {
-        val currentExt = projection[ext.id]
-        projection.remove(ext.id)
+internal class ProjectionCurrent : ProjectionMemory<ExtensionId, Extension>{
 
-        val extInWorkspace = projection.values.filter { it.workspaceId == ext.workspaceId }
-        if (extInWorkspace.any { it.name == ext.name }) {
+    override fun upsert(obj: Extension) {
+        val currentExt = projection[obj.id]
+        projection.remove(obj.id)
+
+        val extInWorkspace = projection.values.filter { it.workspaceId == obj.workspaceId }
+        if (extInWorkspace.any { it.name == obj.name }) {
             if (currentExt != null) {
                 projection[currentExt.id] = currentExt
             }
-            throw IllegalArgumentException("${ext.name} already exists in workspace ${ext.workspaceId}")
+            throw IllegalArgumentException("${obj.name} already exists in workspace ${obj.workspaceId}")
         }
 
-        projection[ext.id] = ext
+        projection[obj.id] = obj
     }
 
     fun find(extensionId: ExtensionId): Extension? = projection[extensionId]
@@ -48,7 +49,10 @@ internal object ExtensionCurrentProjection {
         )
     }
 
-    fun clear() {
+    override fun clear() {
         projection.clear()
     }
+
+    private val projection = mutableMapOf<ExtensionId, Extension>()
+
 }

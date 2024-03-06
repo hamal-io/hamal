@@ -4,22 +4,23 @@ import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.EndpointId
 import io.hamal.repository.api.Endpoint
 import io.hamal.repository.api.EndpointQueryRepository.EndpointQuery
+import io.hamal.repository.memory.record.ProjectionMemory
 
-internal object EndpointCurrentProjection {
-    private val projection = mutableMapOf<EndpointId, Endpoint>()
-    fun apply(endpoint: Endpoint) {
-        val currentEndpoint = projection[endpoint.id]
-        projection.remove(endpoint.id)
+internal class ProjectionCurrent : ProjectionMemory<EndpointId, Endpoint>{
 
-        val endpointsInNamespace = projection.values.filter { it.namespaceId == endpoint.namespaceId }
-        if (endpointsInNamespace.any { it.name == endpoint.name }) {
+    override fun upsert(obj: Endpoint) {
+        val currentEndpoint = projection[obj.id]
+        projection.remove(obj.id)
+
+        val endpointsInNamespace = projection.values.filter { it.namespaceId == obj.namespaceId }
+        if (endpointsInNamespace.any { it.name == obj.name }) {
             if (currentEndpoint != null) {
                 projection[currentEndpoint.id] = currentEndpoint
             }
-            throw IllegalArgumentException("${endpoint.name} already exists in namespace ${endpoint.namespaceId}")
+            throw IllegalArgumentException("${obj.name} already exists in namespace ${obj.namespaceId}")
         }
 
-        projection[endpoint.id] = endpoint
+        projection[obj.id] = obj
     }
 
     fun find(endpointId: EndpointId): Endpoint? = projection[endpointId]
@@ -50,7 +51,10 @@ internal object EndpointCurrentProjection {
         )
     }
 
-    fun clear() {
+    override fun clear() {
         projection.clear()
     }
+
+    private val projection = mutableMapOf<EndpointId, Endpoint>()
+
 }

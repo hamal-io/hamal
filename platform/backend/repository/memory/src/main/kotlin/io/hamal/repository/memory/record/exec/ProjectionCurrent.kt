@@ -4,11 +4,12 @@ import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.repository.api.Exec
 import io.hamal.repository.api.ExecQueryRepository.ExecQuery
+import io.hamal.repository.memory.record.ProjectionMemory
 
-internal object ExecCurrentProjection {
-    private val projection = mutableMapOf<ExecId, Exec>()
-    fun apply(exec: Exec) {
-        projection[exec.id] = exec
+internal class ProjectionCurrent : ProjectionMemory<ExecId, Exec> {
+
+    override fun upsert(obj: Exec) {
+        projection[obj.id] = obj
     }
 
     fun find(execId: ExecId): Exec? = projection[execId]
@@ -41,16 +42,17 @@ internal object ExecCurrentProjection {
         )
     }
 
-    fun clear() {
+    override fun clear() {
         projection.clear()
     }
+
+    private val projection = mutableMapOf<ExecId, Exec>()
 }
 
-//FIXME this must be concurrent extend
-internal object QueueProjection {
-    private val queue = mutableListOf<Exec.Queued>()
-    fun add(exec: Exec.Queued) {
-        queue.add(exec)
+internal class ProjectionQueue : ProjectionMemory<ExecId, Exec.Queued> {
+
+    override fun upsert(obj: Exec.Queued) {
+        queue.add(obj)
     }
 
     fun pop(limit: Int): List<Exec.Queued> {
@@ -64,7 +66,9 @@ internal object QueueProjection {
         return result
     }
 
-    fun clear() {
+    override fun clear() {
         queue.clear()
     }
+
+    private val queue = mutableListOf<Exec.Queued>()
 }

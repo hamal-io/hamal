@@ -6,23 +6,24 @@ import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.repository.api.Topic
 import io.hamal.repository.api.TopicQueryRepository.TopicQuery
+import io.hamal.repository.memory.record.ProjectionMemory
 
-internal object TopicCurrentProjection {
+internal class ProjectionCurrent : ProjectionMemory<TopicId, Topic>{
 
-    fun apply(topic: Topic) {
-        val currentTopic = projection[topic.id]
-        projection.remove(topic.id)
+    override fun upsert(obj: Topic) {
+        val currentTopic = projection[obj.id]
+        projection.remove(obj.id)
 
-        val topicsInNamespace = projection.values.filter { it.namespaceId == topic.namespaceId }
+        val topicsInNamespace = projection.values.filter { it.namespaceId == obj.namespaceId }
 
-        if (topicsInNamespace.any { it.name == topic.name }) {
+        if (topicsInNamespace.any { it.name == obj.name }) {
             if (currentTopic != null) {
                 projection[currentTopic.id] = currentTopic
             }
             throw IllegalArgumentException("Topic already exists")
         }
 
-        projection[topic.id] = topic
+        projection[obj.id] = obj
     }
 
     fun find(topicId: TopicId): Topic? = projection[topicId]
@@ -73,7 +74,7 @@ internal object TopicCurrentProjection {
             .dropWhile { it.id >= query.afterId }.count())
     }
 
-    fun clear() {
+    override fun clear() {
         projection.clear()
     }
 

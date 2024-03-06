@@ -16,7 +16,8 @@ import kotlin.concurrent.withLock
 
 class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord, Trigger>(
     createDomainObject = CreateTriggerFromRecords,
-    recordClass = TriggerRecord::class
+    recordClass = TriggerRecord::class,
+    projections = listOf(ProjectionCurrent(), ProjectionUniqueHook())
 ), TriggerRepository {
 
     override fun create(cmd: CreateFixedRateCmd): Trigger.FixedRate {
@@ -39,7 +40,7 @@ class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord,
                     status = cmd.status
                 )
             )
-            (currentVersion(triggerId) as Trigger.FixedRate).also(TriggerCurrentProjection::apply)
+            (currentVersion(triggerId) as Trigger.FixedRate).also(currentProjection::upsert)
         }
     }
 
@@ -63,7 +64,7 @@ class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord,
                         status = cmd.status
                     )
                 )
-                (currentVersion(triggerId) as Trigger.Event).also(TriggerCurrentProjection::apply)
+                (currentVersion(triggerId) as Trigger.Event).also(currentProjection::upsert)
             }
         }
     }
@@ -91,8 +92,8 @@ class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord,
                     )
                 )
                 (currentVersion(triggerId) as Trigger.Hook)
-                    .also(uniqueHookProjection::create)
-                    .also(TriggerCurrentProjection::apply)
+                    .also(uniqueHookProjection::upsert)
+                    .also(currentProjection::upsert)
             }
         }
     }
@@ -117,7 +118,7 @@ class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord,
                         status = cmd.status
                     )
                 )
-                (currentVersion(triggerId) as Trigger.Cron).also(TriggerCurrentProjection::apply)
+                (currentVersion(triggerId) as Trigger.Cron).also(currentProjection::upsert)
             }
         }
     }
@@ -139,28 +140,20 @@ class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord,
                     )
                 }
                 store(rec)
-                currentVersion(triggerId).also(TriggerCurrentProjection::apply)
+                currentVersion(triggerId).also(currentProjection::upsert)
             }
         }
     }
 
-    override fun find(triggerId: TriggerId) = lock.withLock { TriggerCurrentProjection.find(triggerId) }
+    override fun find(triggerId: TriggerId) = lock.withLock { currentProjection.find(triggerId) }
 
-    override fun list(query: TriggerQuery): List<Trigger> = lock.withLock { TriggerCurrentProjection.list(query) }
+    override fun list(query: TriggerQuery): List<Trigger> = lock.withLock { currentProjection.list(query) }
 
-    override fun count(query: TriggerQuery): Count = lock.withLock { TriggerCurrentProjection.count(query) }
-
-    override fun clear() {
-        lock.withLock {
-            super.clear()
-            TriggerCurrentProjection.clear()
-            uniqueHookProjection.clear()
-        }
-    }
+    override fun count(query: TriggerQuery): Count = lock.withLock { currentProjection.count(query) }
 
     override fun close() {}
 
     private val lock = ReentrantLock()
-
-    private val uniqueHookProjection = TriggerProjectionUniqueHook()
+    private val currentProjection = getProjection<ProjectionCurrent>()
+    private val uniqueHookProjection = getProjection<ProjectionUniqueHook>()
 }

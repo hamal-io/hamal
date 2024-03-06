@@ -14,9 +14,9 @@ import kotlin.concurrent.withLock
 
 class FeedbackMemoryRepository : RecordMemoryRepository<FeedbackId, FeedbackRecord, Feedback>(
     createDomainObject = CreateFeedbackFromRecords,
-    recordClass = FeedbackRecord::class
+    recordClass = FeedbackRecord::class,
+    projections = listOf(ProjectionCurrent())
 ), FeedbackRepository {
-    private val lock = ReentrantLock()
 
     override fun create(cmd: CreateCmd): Feedback {
         return lock.withLock {
@@ -35,17 +35,18 @@ class FeedbackMemoryRepository : RecordMemoryRepository<FeedbackId, FeedbackReco
                     )
                 )
             }
-            (currentVersion(feedbackId)).also(FeedbackCurrentProjection::apply)
+            (currentVersion(feedbackId)).also(currentProjection::upsert)
         }
     }
 
-    override fun find(feedbackId: FeedbackId): Feedback? = lock.withLock { FeedbackCurrentProjection.find(feedbackId) }
+    override fun find(feedbackId: FeedbackId): Feedback? = lock.withLock { currentProjection.find(feedbackId) }
 
-    override fun list(query: FeedbackQuery): List<Feedback> = lock.withLock { FeedbackCurrentProjection.list(query) }
+    override fun list(query: FeedbackQuery): List<Feedback> = lock.withLock { currentProjection.list(query) }
 
-    override fun count(query: FeedbackQuery): Count = lock.withLock { FeedbackCurrentProjection.count(query) }
-
-    override fun clear() = FeedbackCurrentProjection.clear()
+    override fun count(query: FeedbackQuery): Count = lock.withLock { currentProjection.count(query) }
 
     override fun close() {}
+
+    private val lock = ReentrantLock()
+    private val currentProjection = getProjection<ProjectionCurrent>()
 }

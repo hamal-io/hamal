@@ -4,11 +4,12 @@ import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.repository.api.Account
 import io.hamal.repository.api.AccountQueryRepository
+import io.hamal.repository.memory.record.ProjectionMemory
 
-internal object AccountCurrentProjection {
-    private val projection = mutableMapOf<AccountId, Account>()
-    fun apply(account: Account) {
-        projection[account.id] = account
+internal class ProjectionCurrent : ProjectionMemory<AccountId, Account> {
+
+    override fun upsert(obj: Account) {
+        projection[obj.id] = obj
     }
 
     fun find(accountId: AccountId): Account? = projection[accountId]
@@ -35,7 +36,10 @@ internal object AccountCurrentProjection {
         )
     }
 
-    fun clear() {
+
+    override fun clear() {
         projection.clear()
     }
+
+    private val projection = mutableMapOf<AccountId, Account>()
 }
