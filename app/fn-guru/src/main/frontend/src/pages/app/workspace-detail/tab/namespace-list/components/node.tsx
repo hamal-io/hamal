@@ -7,6 +7,7 @@ import {ChevronDown, ChevronRight, Dot} from "lucide-react";
 
 type Props = {
     root: NamespaceNode
+
 }
 const NamespaceNodeEntry: FC<Props> = ({root}) => {
     const [expanded, setExpanded] = useState(true)
@@ -26,13 +27,15 @@ const NamespaceNodeEntry: FC<Props> = ({root}) => {
                         <Dot size={"16"}/>
                     </Button>
                 }
-                <Actions id={root.data.id} trigger={
-                    <Button variant={"ghost"} className={"p-1"}>{shortName}</Button>
-                }/>
+                <Actions
+                    id={root.data.id}
+                    trigger={<Button variant={"ghost"} className={"p-1"}>{shortName}</Button>}
+
+                />
             </div>
             {expanded && root.descendants.map((descendant) =>
                 <ol key={descendant.data.id} className={`ml-2.5 border-l-2`}>
-                    <NamespaceNodeEntry root={descendant}/>
+                    <NamespaceNodeEntry root={descendant} />
                 </ol>
             )}
 

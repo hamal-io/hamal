@@ -10,6 +10,7 @@ import Element = React.JSX.Element;
 type Props = {
     id: string
     trigger: Element
+
 }
 const NamespaceActions: FC<Props> = ({id, trigger}) => {
     const [open, setOpen] = useState(false);
@@ -20,6 +21,10 @@ const NamespaceActions: FC<Props> = ({id, trigger}) => {
             setOpen(true)
         }
     }, [dialogContent]);
+
+    function handleChange(){
+        setOpen(false)
+    }
 
     return (
         <>
@@ -36,7 +41,7 @@ const NamespaceActions: FC<Props> = ({id, trigger}) => {
                     <DropdownMenuItem
                         onClick={() => {
                             setDialogContent(
-                                <Update id={id} onClose={() => setOpen(false)}/>
+                                <Update id={id} onClose={handleChange}/>
                             )
                         }}>
                         Rename
@@ -44,7 +49,7 @@ const NamespaceActions: FC<Props> = ({id, trigger}) => {
                     <DropdownMenuItem
                         onClick={() => {
                             setDialogContent(
-                                <Append appendTo={id} onClose={() => setOpen(false)}></Append>
+                                <Append appendTo={id} onClose={handleChange}></Append>
                             )
                         }}>
                         Append
