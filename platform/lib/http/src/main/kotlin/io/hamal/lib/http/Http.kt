@@ -2,6 +2,7 @@ package io.hamal.lib.http
 
 import io.hamal.lib.http.HttpRequest.HttpMethod
 import io.hamal.lib.http.HttpRequest.HttpMethod.*
+import io.hamal.lib.kua.type.KuaString
 import org.apache.http.impl.client.HttpClientBuilder
 
 interface HttpTemplate {
@@ -35,3 +36,5 @@ class HttpTemplateImpl(
         )
     }
 }
+
+fun HttpTemplate.get(url: KuaString): HttpRequest = get(url.stringValue)
