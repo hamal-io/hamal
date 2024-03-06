@@ -304,6 +304,7 @@ operator fun KuaTable.set(key: String, value: Long) = set(KuaString(key), KuaNum
 operator fun KuaTable.set(key: String, value: Float) = set(KuaString(key), KuaNumber(value.toDouble()))
 operator fun KuaTable.set(key: String, value: Double) = set(KuaString(key), KuaNumber(value))
 operator fun KuaTable.set(key: String, value: String) = set(KuaString(key), KuaString(value))
+operator fun KuaTable.set(key: String, value: KuaTable) = set(KuaString(key), value)
 
 fun KuaTable.get(idx: Int) = get(KuaNumber(idx))
 fun KuaTable.getBoolean(idx: Int) = getBoolean(KuaNumber(idx))
@@ -313,12 +314,15 @@ fun KuaTable.getNil(idx: Int) = getNil(KuaNumber(idx))
 fun KuaTable.getNumber(idx: Int) = getNumber(KuaNumber(idx))
 fun KuaTable.getString(idx: Int) = getString(KuaNumber(idx))
 
-fun KuaTable.findString(key: String): KuaString? = findString(KuaString(key))
-fun KuaTable.findTable(key: String): KuaTable? = findTable(KuaString(key))
 
-fun KuaTable.getBoolean(key: String): KuaBoolean = getBoolean(KuaString(key))
-fun KuaTable.getString(key: String): KuaString = getString(KuaString(key))
-fun KuaTable.getNumber(key: String): KuaNumber = getNumber(KuaString(key))
+fun KuaTable.findString(key: String) = findString(KuaString(key))
+fun KuaTable.findTable(key: String) = findTable(KuaString(key))
+
+fun KuaTable.get(key: String) = get(KuaString(key))
+fun KuaTable.getBoolean(key: String) = getBoolean(KuaString(key))
+fun KuaTable.getNumber(key: String) = getNumber(KuaString(key))
+fun KuaTable.getString(key: String) = getString(KuaString(key))
+fun KuaTable.getTable(key: String) = getTable(KuaString(key))
 
 fun KuaTable.type(idx: Int): KClass<out KuaType> = type(KuaNumber(idx))
 fun KuaTable.type(key: String): KClass<out KuaType> = type(KuaString(key))

@@ -66,6 +66,8 @@ interface State {
     fun topSet(idx: KuaNumber)
 
     fun type(idx: KuaNumber): KClass<out KuaType>
+
+    fun <T : Any> checkpoint(action: (State) -> T): T
 }
 
 open class StateImpl(val native: Native = Native()) : State {
@@ -102,6 +104,19 @@ open class StateImpl(val native: Native = Native()) : State {
 
     override fun booleanPush(value: KuaBoolean): StackTop = StackTop(native.booleanPush(value.booleanValue))
     override fun booleanGet(idx: KuaNumber) = KuaBoolean.of(native.booleanGet(idx.intValue))
+
+    override fun <T : Any> checkpoint(action: (State) -> T): T {
+        // FIXME 254 - add Checkpoint as a State implementation to make sure the stack below can not be altered
+        val currentStackSize = native.topGet()
+        try {
+            return action(this)
+        } finally {
+            val afterStackSize = native.topGet()
+            if (afterStackSize > currentStackSize) {
+                native.topPop(afterStackSize - currentStackSize)
+            }
+        }
+    }
 
     override fun codeLoad(code: KuaCode) {
         native.stringLoad(code.stringValue)

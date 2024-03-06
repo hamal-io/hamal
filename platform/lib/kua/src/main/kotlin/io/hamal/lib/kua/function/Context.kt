@@ -16,9 +16,10 @@ class FunctionContext(
     override fun push(value: KuaType) = state.push(value)
 
     override fun booleanGet(idx: KuaNumber) = state.booleanGet(idx)
-    override fun codeLoad(code: KuaCode) = state.codeLoad(code)
-
     override fun booleanPush(value: KuaBoolean) = state.booleanPush(value)
+
+    override fun <T : Any> checkpoint(action: (State) -> T) = state.checkpoint(action)
+    override fun codeLoad(code: KuaCode) = state.codeLoad(code)
 
     override fun decimalGet(idx: KuaNumber): KuaDecimal = state.decimalGet(idx)
     override fun decimalPush(value: KuaDecimal): StackTop = state.decimalPush(value)

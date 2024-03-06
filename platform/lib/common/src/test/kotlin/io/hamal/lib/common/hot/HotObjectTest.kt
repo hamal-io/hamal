@@ -118,7 +118,7 @@ internal class HotObjectTest {
 
         @TestFactory
         fun `as`() = listOf(
-            Tuple3("asArray", testInstance.asArray("array"), HotArray.builder().add(42).build()),
+            Tuple3("asArray", testInstance.asArray("array"), HotArray.builder().append(42).build()),
             Tuple3("asBoolean", testInstance.asBoolean("boolean"), HotBoolean(true)),
             Tuple3("asNumber", testInstance.asNumber("number"), HotNumber(123)),
             Tuple3("asNull", testInstance.asNull("null"), HotNull),
@@ -319,7 +319,7 @@ internal class HotObjectTest {
             require(result is HotObject)
             assertThat(result.size, equalTo(6))
 
-            assertThat(result.asArray("array"), equalTo(HotArray.builder().add(42).build()))
+            assertThat(result.asArray("array"), equalTo(HotArray.builder().append(42).build()))
             assertThat(result.asBoolean("boolean"), equalTo(HotBoolean(true)))
             assertThat(result.asNumber("number"), equalTo(HotNumber(123)))
             assertThat(result.asString("string"), equalTo(HotString("SomeString")))
@@ -330,7 +330,7 @@ internal class HotObjectTest {
 }
 
 private val testInstance = HotObject.builder()
-    .set("array", HotArray.builder().add(42).build())
+    .set("array", HotArray.builder().append(42).build())
     .set("boolean", true)
     .set("number", 123)
     .set("string", "SomeString")
