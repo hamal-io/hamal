@@ -108,10 +108,13 @@ open class StateImpl(val native: Native = Native()) : State {
     override fun <T : Any> checkpoint(action: (State) -> T): T {
         // FIXME 254 - add Checkpoint as a State implementation to make sure the stack below can not be altered
         val currentStackSize = native.topGet()
-        return try {
-            action(this)
+        try {
+            return action(this)
         } finally {
-            native.topPop(native.topGet() - currentStackSize)
+            val afterStackSize = native.topGet()
+            if (afterStackSize > currentStackSize) {
+                native.topPop(afterStackSize - currentStackSize)
+            }
         }
     }
 

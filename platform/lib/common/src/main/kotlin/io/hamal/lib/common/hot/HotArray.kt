@@ -70,7 +70,7 @@ class HotArray(
 
     override fun deepCopy(): HotNode {
         val builder = builder()
-        nodes.forEach { node: HotNode -> builder.add(node.deepCopy()) }
+        nodes.forEach { node: HotNode -> builder.append(node.deepCopy()) }
         return builder.build()
     }
 
@@ -96,62 +96,62 @@ class HotArray(
 class HotArrayBuilder {
     val nodes: MutableList<HotNode> = LinkedList()
 
-    fun add(value: String): HotArrayBuilder {
+    fun append(value: String): HotArrayBuilder {
         nodes.add(HotString(value))
         return this
     }
 
-    fun add(value: Byte): HotArrayBuilder {
+    fun append(value: Byte): HotArrayBuilder {
         nodes.add(HotNumber(value))
         return this
     }
 
-    fun add(value: Short): HotArrayBuilder {
+    fun append(value: Short): HotArrayBuilder {
         nodes.add(HotNumber(value))
         return this
     }
 
-    fun add(value: BigInteger): HotArrayBuilder {
+    fun append(value: BigInteger): HotArrayBuilder {
         nodes.add(HotNumber(value))
         return this
     }
 
-    fun add(value: BigDecimal): HotArrayBuilder {
+    fun append(value: BigDecimal): HotArrayBuilder {
         nodes.add(HotNumber(value))
         return this
     }
 
-    fun add(value: Int): HotArrayBuilder {
+    fun append(value: Int): HotArrayBuilder {
         nodes.add(HotNumber(value))
         return this
     }
 
-    fun add(value: Float): HotArrayBuilder {
+    fun append(value: Float): HotArrayBuilder {
         nodes.add(HotNumber(value))
         return this
     }
 
-    fun add(value: Double): HotArrayBuilder {
+    fun append(value: Double): HotArrayBuilder {
         nodes.add(HotNumber(value))
         return this
     }
 
-    fun add(value: Long): HotArrayBuilder {
+    fun append(value: Long): HotArrayBuilder {
         nodes.add(HotNumber(value))
         return this
     }
 
-    fun add(value: Boolean): HotArrayBuilder {
+    fun append(value: Boolean): HotArrayBuilder {
         nodes.add(HotBoolean(value))
         return this
     }
 
-    fun add(value: HotNode): HotArrayBuilder {
+    fun append(value: HotNode): HotArrayBuilder {
         nodes.add(value)
         return this
     }
 
-    fun addNull() = add(HotNull)
+    fun appendNull() = append(HotNull)
 
     fun build(): HotArray {
         return HotArray(nodes)

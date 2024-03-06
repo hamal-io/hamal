@@ -118,7 +118,7 @@ internal class HotArrayTest {
 
         @TestFactory
         fun `as`() = listOf(
-            Tuple3("asArray", testInstance.asArray(arrayIdx), HotArray.builder().add(42).build()),
+            Tuple3("asArray", testInstance.asArray(arrayIdx), HotArray.builder().append(42).build()),
             Tuple3("asBoolean", testInstance.asBoolean(booleanIdx), HotBoolean(true)),
             Tuple3("asNumber", testInstance.asNumber(numberIdx), HotNumber(123)),
             Tuple3("asNull", testInstance.asNull(nullIdx), HotNull),
@@ -257,7 +257,7 @@ internal class HotArrayTest {
             assertThat(result, nullValue())
         }
 
-        private val testInstance: HotArray = HotArray.builder().add("A").build()
+        private val testInstance: HotArray = HotArray.builder().append("A").build()
     }
 
     @Nested
@@ -278,7 +278,7 @@ internal class HotArrayTest {
             }
         }
 
-        private val testInstance: HotArray = HotArray.builder().add("A").build()
+        private val testInstance: HotArray = HotArray.builder().append("A").build()
     }
 
     @Nested
@@ -301,7 +301,7 @@ internal class HotArrayTest {
             require(result is HotArray)
             assertThat(result.size, equalTo(6))
 
-            assertThat(result.asArray(arrayIdx), equalTo(HotArray.builder().add(42).build()))
+            assertThat(result.asArray(arrayIdx), equalTo(HotArray.builder().append(42).build()))
             assertThat(result.asBoolean(booleanIdx), equalTo(HotBoolean(true)))
             assertThat(result.asNumber(numberIdx), equalTo(HotNumber(123)))
             assertThat(result.asString(stringIdx), equalTo(HotString("SomeString")))
@@ -313,12 +313,12 @@ internal class HotArrayTest {
 }
 
 private val testInstance = HotArray.builder()
-    .add(HotArray.builder().add(42).build())
-    .add(true)
-    .add(123)
-    .add("SomeString")
-    .add(HotObject.builder().set("hamal", "rocks").build())
-    .addNull()
+    .append(HotArray.builder().append(42).build())
+    .append(true)
+    .append(123)
+    .append("SomeString")
+    .append(HotObject.builder().set("hamal", "rocks").build())
+    .appendNull()
     .build()
 
 private const val arrayIdx = 0

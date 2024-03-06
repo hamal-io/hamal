@@ -37,4 +37,8 @@ class HttpTemplateImpl(
     }
 }
 
+fun HttpTemplate.delete(url: KuaString): HttpRequest = delete(url.stringValue)
 fun HttpTemplate.get(url: KuaString): HttpRequest = get(url.stringValue)
+fun HttpTemplate.patch(url: KuaString): HttpRequest = patch(url.stringValue)
+fun HttpTemplate.post(url: KuaString): HttpRequest = post(url.stringValue)
+fun HttpTemplate.put(url: KuaString): HttpRequest = put(url.stringValue)

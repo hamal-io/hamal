@@ -82,7 +82,7 @@ class EthHttpBatchService(
 
             val response = httpTemplate
                 .post("/")
-                .body(HotArray.builder().also { builder -> requests.forEach { request -> builder.add(request) } }
+                .body(HotArray.builder().also { builder -> requests.forEach { request -> builder.append(request) } }
                     .build())
                 .execute(HotArray::class)
 

@@ -318,6 +318,7 @@ fun KuaTable.getString(idx: Int) = getString(KuaNumber(idx))
 fun KuaTable.findString(key: String) = findString(KuaString(key))
 fun KuaTable.findTable(key: String) = findTable(KuaString(key))
 
+fun KuaTable.get(key: String) = get(KuaString(key))
 fun KuaTable.getBoolean(key: String) = getBoolean(KuaString(key))
 fun KuaTable.getNumber(key: String) = getNumber(KuaString(key))
 fun KuaTable.getString(key: String) = getString(KuaString(key))

@@ -27,10 +27,10 @@ open class TestJsonController {
     fun jsonArray(): ResponseEntity<HotArray> {
         return ResponseEntity.ok(
             HotArray.builder()
-                .add(23)
-                .add(true)
-                .add("24.23")
-                .add("HamalRocks")
+                .append(23)
+                .append(true)
+                .append("24.23")
+                .append("HamalRocks")
                 .build()
         )
     }

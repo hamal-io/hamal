@@ -1,8 +1,7 @@
 package io.hamal.lib.kua.type
 
 import io.hamal.lib.common.hot.*
-import io.hamal.lib.kua.State
-import io.hamal.lib.kua.tableCreate
+import io.hamal.lib.kua.*
 
 //FIXME replace toKua with this
 fun HotNode.toKua(state: State): KuaType {
@@ -23,31 +22,67 @@ fun KuaType.toHotNode(): HotNode {
         is KuaFalse -> HotBoolean(false)
         is KuaTrue -> HotBoolean(true)
         is KuaCode -> HotString(stringValue)
-        is KuaDecimal -> TODO()
+        is KuaDecimal -> HotString(value.toString())
         is KuaError -> TODO()
         is KuaFunction<*, *, *, *> -> TODO()
         is KuaNil -> HotNull
         is KuaNumber -> HotNumber(doubleValue)
         is KuaString -> HotString(stringValue)
-        is KuaTable -> toHotObject()
+        is KuaTable -> {
+            if (isArray()) {
+                toHotArray()
+            } else {
+                toHotObject()
+            }
+        }
+
         is KuaReference -> TODO()
     }
 }
 
-fun KuaTable.toHotObject(): HotObject {
-    val builder = HotObject.builder()
-//    this.underlyingMap.forEach { (key, value) ->
-//        builder[key] = value.toHot()
-//    }
+fun KuaTable.isArray(): Boolean {
+    return state.checkpoint {
+        state.nilPush()
+        if (state.tableNext(index).booleanValue) {
+            val type = state.type(-2)
+            type == KuaNumber::class
+        } else {
+            false
+        }
+    }
+}
 
-    asEntries().forEach { (key, value) ->
-        builder[key.stringValue] = value.toHotNode()
+fun KuaTable.toHotArray(): HotArray {
+    val builder = HotArray.builder()
+
+    state.checkpoint {
+        state.nilPush()
+        while (state.tableNext(index).booleanValue) {
+            val value = state.get(state.absIndex(-1))
+
+            builder.append(value.toHotNode())
+
+            state.topPop(1)
+        }
     }
 
-//    entries().forEach { (key, value) ->
-//        builder[key.value] = value.toHot()
-//    }
-//
+    return builder.build()
+}
+
+fun KuaTable.toHotObject(): HotObject {
+    val builder = HotObject.builder()
+
+    state.checkpoint {
+        state.nilPush()
+        while (state.tableNext(index).booleanValue) {
+            val key = state.stringGet(state.absIndex(-2))
+            val value = state.get(state.absIndex(-1))
+
+            builder[key.stringValue] = value.toHotNode()
+
+            state.topPop(1)
+        }
+    }
 
     return builder.build()
 }
