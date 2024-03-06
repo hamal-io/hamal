@@ -1,6 +1,7 @@
 package io.hamal.api.http.controller.namespace
 
 import io.hamal.core.adapter.namespace.NamespaceListPort
+import io.hamal.core.adapter.namespace_tree.NamespaceTreeGetSubTreePort
 import io.hamal.core.adapter.namespace_tree.NamespaceTreeListPort
 import io.hamal.lib.common.TreeNode
 import io.hamal.lib.common.domain.Limit
@@ -20,7 +21,8 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 internal class NamespaceListController(
     private val namespaceTreeList: NamespaceTreeListPort,
-    private val namespaceList: NamespaceListPort
+    private val namespaceList: NamespaceListPort,
+    private val namespaceSublist: NamespaceTreeGetSubTreePort
 ) {
     @GetMapping("/v1/workspaces/{workspaceId}/namespaces")
     fun list(

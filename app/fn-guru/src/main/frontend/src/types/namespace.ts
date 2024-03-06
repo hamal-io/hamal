@@ -9,9 +9,14 @@ export interface NamespaceCreateRequested {
 export interface NamespaceAppendRequested {
     id: string;
     status: string;
-    parentId: string;
     namespaceIdId: string;
     workspaceId: string;
+}
+
+export interface NamespaceUpdateRequested {
+    id: string;
+    status: string;
+    namespaceIdId: string;
 }
 
 export interface Namespace {

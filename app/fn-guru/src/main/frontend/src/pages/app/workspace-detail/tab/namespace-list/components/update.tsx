@@ -8,17 +8,19 @@ import {Loader2} from "lucide-react";
 import {DialogContent, DialogHeader} from "@/components/ui/dialog.tsx";
 import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
-import {useNamespaceAppend} from "@/hook";
-
+import {useNamespaceUpdate} from "@/hook";
 
 const formSchema = z.object({
     name: z.string().min(2).max(50),
 })
 
-type Props = { appendTo: string, onClose: () => void }
-const Append: FC<Props> = ({appendTo, onClose}) => {
+type Props = {
+    id: string
+    onClose: () => void
+}
+const Update: FC<Props> = ({id, onClose}) => {
+    const [updateNamespace] = useNamespaceUpdate()
     const [isLoading, setLoading] = useState(false)
-    const [appendNamespace] = useNamespaceAppend()
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -30,7 +32,7 @@ const Append: FC<Props> = ({appendTo, onClose}) => {
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setLoading(true)
         try {
-            appendNamespace(appendTo, values.name)
+            updateNamespace(id, values.name)
         } catch (e) {
             console.error(e)
         } finally {
@@ -41,7 +43,7 @@ const Append: FC<Props> = ({appendTo, onClose}) => {
 
     return (
         <DialogContent>
-            <DialogHeader>Create Namespace</DialogHeader>
+            <DialogHeader>Rename Namespace</DialogHeader>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                     <FormField
@@ -59,7 +61,7 @@ const Append: FC<Props> = ({appendTo, onClose}) => {
                     />
                     <Button type="submit">
                         {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
-                        Create
+                        Rename
                     </Button>
                 </form>
             </Form>
@@ -67,4 +69,5 @@ const Append: FC<Props> = ({appendTo, onClose}) => {
     )
 }
 
-export default Append;
+
+export default Update;

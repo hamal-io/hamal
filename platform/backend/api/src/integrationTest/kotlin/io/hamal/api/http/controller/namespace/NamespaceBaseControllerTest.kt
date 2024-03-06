@@ -26,6 +26,17 @@ internal sealed class NamespaceBaseControllerTest : BaseControllerTest() {
         return response.result(ApiNamespaceAppendRequested::class)
     }
 
+    fun appendNamespace(id: NamespaceId, req: ApiNamespaceAppendRequest): ApiNamespaceAppendRequested {
+        val response = httpTemplate.post("/v1/namespaces/{namespaceId}/namespaces")
+            .path("namespaceId", id)
+            .body(req)
+            .execute()
+
+        assertThat(response.statusCode, equalTo(Accepted))
+        require(response is HttpSuccessResponse) { "request was not successful" }
+        return response.result(ApiNamespaceAppendRequested::class)
+    }
+
     fun listNamespaces(): ApiNamespaceList {
         val listNamespacesResponse = httpTemplate.get("/v1/workspaces/{workspaceId}/namespaces")
             .path("workspaceId", testWorkspace.id)
