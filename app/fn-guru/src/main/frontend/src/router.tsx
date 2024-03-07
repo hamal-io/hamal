@@ -34,7 +34,7 @@ export const router = createBrowserRouter([
         path: "/onboarding", element: <OnboardingPage/>
     },
     {
-        path: "/blueprints/editor/:bpId", element:
+        path: "/blueprints/editor/:blueprintId", element:
             <WorkspaceLayout>
                 <BlueprintEditor/>
             </WorkspaceLayout>
@@ -101,6 +101,12 @@ export const router = createBrowserRouter([
     },
     {
         path: "/namespaces", element:
+            <WorkspaceLayout>
+                <WorkspaceNamespaceListTab/>
+            </WorkspaceLayout>
+    },
+    {
+        path: "/namespaces/:namespaceId", element:
             <WorkspaceLayout>
                 <WorkspaceNamespaceListTab/>
             </WorkspaceLayout>

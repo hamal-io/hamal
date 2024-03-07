@@ -1,24 +1,17 @@
-import React, {FC, useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import {useBlueprintList} from "@/hook/blueprint.ts";
-import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx";
 import {PageHeader} from "@/components/page-header.tsx";
 import {EmptyPlaceholder} from "@/components/empty-placeholder.tsx";
-import {BlueprintListItem} from "@/types/blueprint.ts";
-import {Dialog} from "@/components/ui/dialog.tsx";
-import {BpDialog} from "@/pages/app/blueprint-list/components/dialog.tsx";
-import {CreateBlueprint} from "@/pages/app/blueprint-list/components/create.tsx";
+import CreateBlueprint from "@/pages/app/blueprint-list/components/create.tsx";
+import BlueprintCard from "@/pages/app/blueprint-list/components/card.tsx";
+
 
 const BlueprintListPage = () => {
     const [listBlueprints, blueprintList, loading, error] = useBlueprintList()
 
     useEffect(() => {
-        const abortController = new AbortController();
-        listBlueprints(abortController)
-        return () => {
-            abortController.abort();
-        }
-    }, [listBlueprints]);
-
+        listBlueprints()
+    }, []);
 
     if (error) return `Error`
     if (blueprintList === null || loading) return "Loading..."
@@ -30,60 +23,18 @@ const BlueprintListPage = () => {
                 description={'Tryout our predefined workflows, proudly brought to you by the hamal.io team.'}
                 actions={[<CreateBlueprint/>]}
             />
-            {
-                blueprintList.blueprints.length ?
-                    (<BlueprintCards blueprints={blueprintList.blueprints}/>) : (<NoContent/>)
-            }
+            {blueprintList ?
+                <ol className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 cursor-pointer">
+                    {blueprintList.blueprints.map(item =>
+                        <li key={item.id}>
+                            <BlueprintCard blueprint={item}/>
+                        </li>
+                    )}
+                </ol> : <NoContent/>}
         </div>
-    );
+
+    )
 }
-
-type CardProps = { blueprints: Array<BlueprintListItem> }
-const BlueprintCards: FC<CardProps> = ({blueprints}) => {
-    const [dialog, setDialog] = useState(null);
-    const [item, setItem] = useState<BlueprintListItem>(null)
-
-    useEffect(() => {
-        if (item) {
-            setDialog(true)
-        }
-    }, [item]);
-
-    const onClose = () => {
-        setDialog(false)
-        setItem(null)
-    }
-
-    return (
-        <ul className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 cursor">
-            {blueprints.map((bp) => (
-                <div key={bp.id} style={{cursor: 'pointer'}}>
-                    <Card
-                        onClick={() => setItem(bp)}
-                        className="relative overfunc-hidden duration-500 hover:border-primary/50 group"
-
-                    >
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle>{bp.name}</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <dl className="text-sm leading-6 divide-y divide-gray-100 ">
-                                <div className="flex justify-between py-3 gap-x-4">
-                                    {bp.description}
-                                </div>
-                            </dl>
-                            <div className="flex flex-row justify-between items-center">
-                            </div>
-                        </CardContent>
-                    </Card>
-                </div>
-
-            ))}{item && <Dialog open={dialog} onOpenChange={onClose}>
-                <BpDialog item={item} onClose={onClose}></BpDialog>
-            </Dialog>}
-        </ul>)
-}
-
 
 const NoContent = () => (
     <EmptyPlaceholder className="my-4 ">
