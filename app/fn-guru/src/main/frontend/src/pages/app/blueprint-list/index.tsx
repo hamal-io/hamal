@@ -10,7 +10,12 @@ const BlueprintListPage = () => {
     const [listBlueprints, blueprintList, loading, error] = useBlueprintList()
 
     useEffect(() => {
-        listBlueprints()
+        try {
+            listBlueprints()
+        } catch (e){
+            console.log(e)
+        }
+
     }, []);
 
     if (error) return `Error`
@@ -23,7 +28,8 @@ const BlueprintListPage = () => {
                 description={'Tryout our predefined workflows, proudly brought to you by the hamal.io team.'}
                 actions={[<CreateBlueprint/>]}
             />
-            {blueprintList ?
+
+            {blueprintList.blueprints.length !== 0 ?
                 <ol className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 cursor-pointer">
                     {blueprintList.blueprints.map(item =>
                         <li key={item.id}>

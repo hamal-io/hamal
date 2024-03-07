@@ -18,7 +18,6 @@ const formSchema = z.object(
     }
 )
 
-
 type Props = { blueprintId: string, name: string, description: string, value: string }
 const BlueprintEditorForm: FC<Props> = ({blueprintId, name, description, value}) => {
     const [isLoading, setLoading] = useState(false)
@@ -35,14 +34,11 @@ const BlueprintEditorForm: FC<Props> = ({blueprintId, name, description, value})
 
     function onSubmit(values: z.infer<typeof formSchema>) {
         setLoading(true)
-        const abortController = new AbortController();
         try {
-            updateBlueprint(blueprintId, values.name, values.code, values.description, abortController)
-            console.log(values)
+            updateBlueprint(blueprintId, values.name, values.code, values.description)
         } catch (e) {
             console.error(e)
         } finally {
-            abortController.abort();
             setLoading(false)
         }
     }
