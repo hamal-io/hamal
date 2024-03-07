@@ -1,5 +1,6 @@
 package io.hamal.core.adapter.security
 
+import io.hamal.core.security.SecurityContext
 import io.hamal.lib.common.domain.DomainObject
 import io.hamal.repository.api.*
 import org.springframework.stereotype.Component
@@ -21,25 +22,24 @@ internal class EnsureAccessAdapter(
 
     // FIXME this implementation is not optimal - replace it later
     override fun <T : DomainObject<*>> invoke(obj: T): T {
-        return obj
-//        val current = SecurityContext.current
-//        // FIXME not sure about this
-//        if (current is Auth.Runner || current is Auth.System) {
-//            return obj
-//        }
-//
-//        if (current is Anonymous) {
-//            accessDenied(obj)
-//        }
-//        if (current is Auth.Account) {
-//            return when {
-//                obj is HasAccountId && accessAllowed(current, obj.accountId) -> obj
-//                obj is HasWorkspaceId && accessAllowed(current, obj.workspaceId) -> obj
-//                obj is HasNamespaceId && accessAllowed(current, obj.namespaceId) -> obj
-//                else -> accessDenied(obj)
-//            }
-//        }
-//        TODO()
+        val current = SecurityContext.current
+        // FIXME not sure about this
+        if (current is Auth.Runner || current is Auth.System) {
+            return obj
+        }
+
+        if (current is Auth.Anonymous) {
+            accessDenied(obj)
+        }
+        if (current is Auth.Account) {
+            return when {
+                obj is HasAccountId && accessAllowed(current, obj.accountId) -> obj
+                obj is HasWorkspaceId && accessAllowed(current, obj.workspaceId) -> obj
+                obj is HasNamespaceId && accessAllowed(current, obj.namespaceId) -> obj
+                else -> accessDenied(obj)
+            }
+        }
+        TODO()
     }
 
     private fun accessDenied(obj: DomainObject<*>): Nothing {

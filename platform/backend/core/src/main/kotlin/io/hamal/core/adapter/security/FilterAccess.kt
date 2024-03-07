@@ -21,29 +21,28 @@ internal class FilterAccessAdapter(
 ) : BaseAccess(workspaceQueryRepository, namespaceTreeQueryRepository), FilterAccessPort {
 
     override fun <T : DomainObject<*>> invoke(objs: List<T>): List<T> {
-        return objs
-//        val current = SecurityContext.current
-//        // FIXME not sure about this
-//        if (current is Auth.Runner || current is Auth.System) {
-//            return objs
-//        }
-//
-//        if (current is Auth.Anonymous) {
-//            return listOf()
-//        }
-//
-//        return objs.filter { obj ->
-//            if (current is Auth.Account) {
-//                when {
-//                    obj is HasAccountId && accessAllowed(current, obj.accountId) -> true
-//                    obj is HasWorkspaceId && accessAllowed(current, obj.workspaceId) -> true
-//                    obj is HasNamespaceId && accessAllowed(current, obj.namespaceId) -> true
-//                    else -> false
-//                }
-//            } else {
-//                TODO()
-//            }
-//        }
+        val current = SecurityContext.current
+        // FIXME not sure about this
+        if (current is Auth.Runner || current is Auth.System) {
+            return objs
+        }
+
+        if (current is Auth.Anonymous) {
+            return listOf()
+        }
+
+        return objs.filter { obj ->
+            if (current is Auth.Account) {
+                when {
+                    obj is HasAccountId && accessAllowed(current, obj.accountId) -> true
+                    obj is HasWorkspaceId && accessAllowed(current, obj.workspaceId) -> true
+                    obj is HasNamespaceId && accessAllowed(current, obj.namespaceId) -> true
+                    else -> false
+                }
+            } else {
+                TODO()
+            }
+        }
     }
 
     override fun <T : DomainObject<*>> invoke(obj: T): T? {

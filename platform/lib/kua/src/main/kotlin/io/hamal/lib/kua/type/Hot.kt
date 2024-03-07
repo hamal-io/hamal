@@ -23,7 +23,7 @@ fun KuaType.toHotNode(): HotNode {
         is KuaTrue -> HotBoolean(true)
         is KuaCode -> HotString(stringValue)
         is KuaDecimal -> HotString(value.toString())
-        is KuaError -> TODO()
+        is KuaError -> toHotObject()
         is KuaFunction<*, *, *, *> -> TODO()
         is KuaNil -> HotNull
         is KuaNumber -> HotNumber(doubleValue)
@@ -39,6 +39,8 @@ fun KuaType.toHotNode(): HotNode {
         is KuaReference -> TODO()
     }
 }
+
+fun KuaError.toHotObject(): HotObject = HotObject.builder().set("message", value).build()
 
 fun KuaTable.isArray(): Boolean {
     return state.checkpoint {

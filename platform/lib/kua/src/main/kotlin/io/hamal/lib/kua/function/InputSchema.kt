@@ -2,6 +2,7 @@ package io.hamal.lib.kua.function
 
 import io.hamal.lib.kua.*
 import io.hamal.lib.kua.type.*
+import io.hamal.lib.kua.type.KuaError
 import kotlin.reflect.KClass
 
 sealed interface FunctionInputSchema<INPUT : FunctionInput<*, *>> {
@@ -44,6 +45,7 @@ fun <ARG : KuaType> KClass<ARG>.extract(ctx: FunctionContext, idx: Int): ARG {
     @Suppress("UNCHECKED_CAST")
     return when (this) {
         KuaBoolean::class -> ctx.booleanGet(idx) as ARG
+        KuaError::class -> ctx.errorGet(idx) as ARG
         KuaNumber::class -> ctx.numberGet(idx) as ARG
         KuaString::class -> ctx.stringGet(idx) as ARG
         KuaTable::class -> ctx.tableGet(idx) as ARG

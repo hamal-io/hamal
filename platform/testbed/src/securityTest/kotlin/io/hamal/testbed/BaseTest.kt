@@ -7,7 +7,6 @@ import io.hamal.plugin.net.http.PluginHttpFactory
 import io.hamal.runner.test.AbstractRunnerTest
 import io.hamal.testbed.BaseTest.TestResult.Failure
 import io.hamal.testbed.BaseTest.TestResult.Success
-import org.junit.jupiter.api.Disabled
 import java.nio.file.Files
 import java.nio.file.Path
 
