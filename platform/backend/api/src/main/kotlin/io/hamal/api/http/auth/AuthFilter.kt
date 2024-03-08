@@ -73,11 +73,11 @@ class AuthApiFilter(
         request.getHeader("x-exec-token")?.let(::ExecToken)?.also { execToken ->
 
             return SecurityContext.with(
-                Auth.Runner(
+                Auth.ExecToken(
                     id = AuthId.runner,
                     cmdId = CmdId(1),
                     accountId = AccountId.root,
-                    token = AuthToken("let_me_in"),
+                    runnerToken = AuthToken("let_me_in"),
                     execToken = execToken
                 )
             ) {

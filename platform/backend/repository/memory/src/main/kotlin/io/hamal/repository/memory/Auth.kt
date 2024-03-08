@@ -49,6 +49,8 @@ class AuthMemoryRepository : AuthRepository {
                     projection.putIfAbsent(it.accountId, mutableListOf())
                     projection[it.accountId]!!.add(it)
                 }
+
+                is CreateExecTokenAuthCmd -> TODO()
             }
         }
     }
@@ -108,6 +110,10 @@ class AuthMemoryRepository : AuthRepository {
                 .filterIsInstance<Auth.Token>()
                 .find { it.token == authToken }
         }
+    }
+
+    override fun find(execToken: ExecToken): Auth? {
+        TODO("Not yet implemented")
     }
 
     override fun find(email: Email): Auth? {

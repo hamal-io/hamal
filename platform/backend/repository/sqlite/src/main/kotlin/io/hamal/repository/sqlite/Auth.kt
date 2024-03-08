@@ -100,6 +100,8 @@ class AuthSqliteRepository(
                     map(NamedResultSet::toAuth)
                 }!!
             }
+
+            is CreateExecTokenAuthCmd -> TODO()
         }
     }
 
@@ -149,6 +151,10 @@ class AuthSqliteRepository(
             }
             map(NamedResultSet::toAuth)
         }
+    }
+
+    override fun find(execToken: ExecToken): Auth? {
+        TODO("Not yet implemented")
     }
 
     override fun find(email: Email): Auth? {

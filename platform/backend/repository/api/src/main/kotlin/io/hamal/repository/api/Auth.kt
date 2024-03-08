@@ -14,6 +14,11 @@ sealed interface Auth {
         override fun toString(): String = javaClass.simpleName
     }
 
+    object Runner : Auth {
+        override val id: AuthId get() = AuthId.runner
+        override fun toString(): String = javaClass.simpleName
+    }
+
     object System : Auth {
         override val id: AuthId get() = AuthId.system
         override fun toString(): String = javaClass.simpleName
@@ -46,12 +51,12 @@ sealed interface Auth {
         val expiresAt: AuthTokenExpiresAt
     ) : Account
 
-    data class Runner(
+    data class ExecToken(
         override val id: AuthId,
         val cmdId: CmdId,
         override val accountId: AccountId,
-        val token: AuthToken,
-        val execToken: ExecToken
+        val runnerToken: AuthToken,
+        val execToken: io.hamal.lib.domain.vo.ExecToken
     ) : Account
 }
 
@@ -96,14 +101,25 @@ interface AuthCmdRepository : CmdRepository {
         val token: AuthToken,
         val expiresAt: AuthTokenExpiresAt
     ) : CreateCmd
+
+    data class CreateExecTokenAuthCmd(
+        override val id: CmdId,
+        override val authId: AuthId,
+        override val accountId: AccountId,
+        val token: AuthToken,
+        val expiresAt: AuthTokenExpiresAt
+    ) : CreateCmd
 }
 
 
 interface AuthQueryRepository {
+
     fun get(authId: AuthId) = find(authId) ?: throw NoSuchElementException("Auth not found")
     fun find(authId: AuthId): Auth?
     fun get(authToken: AuthToken) = find(authToken) ?: throw NoSuchElementException("Auth not found")
     fun find(authToken: AuthToken): Auth?
+    fun get(execToken: ExecToken) = find(execToken) ?: throw NoSuchElementException("Auth not found")
+    fun find(execToken: ExecToken): Auth?
     fun get(email: Email) = find(email) ?: throw NoSuchElementException("Auth not found")
     fun find(email: Email): Auth?
     fun get(address: Web3Address) = find(address) ?: throw NoSuchElementException("Auth not found")
