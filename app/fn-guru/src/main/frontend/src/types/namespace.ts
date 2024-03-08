@@ -45,10 +45,9 @@ export type NamespaceFeature = {
     description?: string
     icon?: ReactElement
 }
-
 export const NamespaceFeatures = new Array<NamespaceFeature>(
-    {value: 0, label: "Schedules", description: "lalala", icon: createElement(Timer)},
-    {value: 1, label: "Topics", description: "lalala", icon: createElement(Layers3)},
-    {value: 2, label: "Webhooks", description: "lalala", icon: createElement(Webhook)},
-    {value: 3, label: "Endpoints", description: "lalala", icon: createElement(Globe)},
+    {value: 0, label: "Schedules", description: "All kinds of timers", icon: createElement(Timer)},
+    {value: 1, label: "Topics", description: "Stay tuned", icon: createElement(Layers3)},
+    {value: 2, label: "Webhooks", description: "Stay tuned", icon: createElement(Webhook)},
+    {value: 3, label: "Endpoints", description: "API yourself", icon: createElement(Globe)},
 )
