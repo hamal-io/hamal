@@ -1,30 +1,18 @@
-interface NamespaceFeature {
-    [key: string]: {
-        value: number
-        label: string
-        description?: string
-        icon?: Element
-    }
-}
+import {Globe, Layers3, Timer, Webhook} from "lucide-react";
+import {createElement, ReactElement} from "react";
 
-interface NamespaceFeatureIterable extends NamespaceFeature {
-    [Symbol.iterator]: () => Iterator<[string, NamespaceFeature[keyof NamespaceFeature]]>;
-}
-
-export const NamespaceFeatures: NamespaceFeatureIterable = {
-    Schedules: {value: 0, label: "Schedules"},
-    Topics: {value: 1, label: "Topics"},
-    Webhooks: {value: 2, label: "Webhooks"},
-    Endpoints: {value: 3, label: "Endpoints"},
-
-    [Symbol.iterator]:
-        function* () {
-            for (const key of Object.keys(this)) {
-                if (key !== Symbol.iterator) {
-                    yield [key, this[key]];
-                }
-            }
-        }
+export type NamespaceFeature = {
+    value: number
+    label: string
+    active?: boolean
+    description?: string
+    icon?: ReactElement
 }
 
 
+export const NamespaceFeatures = new Array<NamespaceFeature>(
+    {value: 0, label: "Schedules", description: "lalala",icon:  createElement(Timer)},
+    {value: 1, label: "Topics", description: "lalala",icon: createElement(Layers3)},
+    {value: 2, label: "Webhooks", description: "lalala",icon: createElement(Webhook)},
+    {value: 3, label: "Endpoints", description: "lalala",icon: createElement(Globe)},
+)

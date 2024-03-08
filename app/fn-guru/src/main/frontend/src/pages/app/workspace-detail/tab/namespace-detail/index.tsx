@@ -1,10 +1,9 @@
 import {useNavigate, useParams} from "react-router-dom";
 import {PageHeader} from "@/components/page-header.tsx";
-import {Button} from "@/components/ui/button.tsx";
-import {ListRestart} from "lucide-react";
-import NamespaceNodeEntry from "@/pages/app/workspace-detail/tab/namespace-list/components/node.tsx";
-import React from "react";
-import {NamespaceFeatures} from "@/pages/app/workspace-detail/tab/namespace-detail/types.ts";
+import React, {FC} from "react";
+import {NamespaceFeature, NamespaceFeatures} from "@/pages/app/workspace-detail/tab/namespace-detail/types.ts";
+import {Card, CardContent, CardDescription, CardHeader} from "@/components/ui/card.tsx";
+import {Checkbox} from "@/components/ui/checkbox.tsx";
 
 const NamespaceDetailPage = () => {
     const {namespaceId} = useParams()
@@ -14,14 +13,19 @@ const NamespaceDetailPage = () => {
         <div className="pt-8 px-8">
             <PageHeader
                 title="Namespaces"
-                actions={[
-
-                ]}
+                actions={[]}
                 description="Add some features"
             />
 
-
-
+            <ol className={"grid gap-4 grid-cols-2"}>
+                {
+                    NamespaceFeatures.map(feature =>
+                        <li key={feature.value}>
+                            <FeatureCard feature={feature}/>
+                        </li>
+                    )
+                }
+            </ol>
 
 
         </div>
@@ -29,16 +33,26 @@ const NamespaceDetailPage = () => {
 
 }
 
-
-function FeatureCard() {
-
-    const features = NamespaceFeatures.
-
+type Props = { feature: NamespaceFeature }
+const FeatureCard: FC<Props> = ({feature}) => {
     return (
-        <ol>
+        <Card className={"flex flex-row  justify-between"}>
+            {feature.icon}
+            <CardContent className={"flex flex-col"}>
+                <CardHeader>
+                    {feature.label}
+                </CardHeader>
+                <CardDescription>
+                    {feature.description}
+                </CardDescription>
+            </CardContent>
+            <Checkbox></Checkbox>
 
-        </ol>
+
+        </Card>
+
     )
 }
+
 
 export default NamespaceDetailPage
