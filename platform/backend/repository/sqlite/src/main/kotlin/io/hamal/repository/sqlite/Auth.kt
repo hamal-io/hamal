@@ -33,13 +33,12 @@ class AuthSqliteRepository(
                     cmd_id INTEGER NOT NULL,
                     id INTEGER NOT NULL,
                     type INTEGER NOT NULL,
-                    account_id INTEGER NOT NULL,
+                    entity_id INTEGER,
                     token VARCHAR(255),
                     email VARCHAR(255),
                     password VARCHAR(255),
                     address VARCHAR(255),
                     expires_at INTEGER,
-                    exec_id INTEGER,
                     PRIMARY KEY (id)
                );
             """.trimIndent()
@@ -52,14 +51,14 @@ class AuthSqliteRepository(
             is CreateEmailAuthCmd -> {
                 connection.execute<Auth>(
                     """
-            INSERT OR REPLACE INTO auth (cmd_id, id, type, account_id, email,  password)
-                VALUES(:cmdId, :id, 1, :accountId, :email, :password) RETURNING *
+            INSERT OR REPLACE INTO auth (cmd_id, id, type, entity_id, email,  password)
+                VALUES(:cmdId, :id, 1, :entityId, :email, :password) RETURNING *
         """.trimIndent()
                 ) {
                     query {
                         set("cmdId", cmd.id)
                         set("id", cmd.authId)
-                        set("accountId", cmd.accountId)
+                        set("entityId", cmd.accountId)
                         set("email", cmd.email.value)
                         set("password", cmd.hash.value)
                     }
@@ -70,14 +69,14 @@ class AuthSqliteRepository(
             is CreateMetaMaskAuthCmd -> {
                 connection.execute<Auth>(
                     """
-            INSERT OR REPLACE INTO auth (cmd_id, id, type, account_id, address)
-                VALUES(:cmdId, :id, 3, :accountId, :address) RETURNING *
+            INSERT OR REPLACE INTO auth (cmd_id, id, type, entity_id, address)
+                VALUES(:cmdId, :id, 3, :entityId, :address) RETURNING *
         """.trimIndent()
                 ) {
                     query {
                         set("cmdId", cmd.id)
                         set("id", cmd.authId)
-                        set("accountId", cmd.accountId)
+                        set("entityId", cmd.accountId)
                         set("address", cmd.address.value)
                     }
                     map(NamedResultSet::toAuth)
@@ -87,14 +86,14 @@ class AuthSqliteRepository(
             is CreateTokenAuthCmd -> {
                 connection.execute<Auth>(
                     """
-            INSERT OR REPLACE INTO auth (cmd_id, id, type, account_id, token, expires_at)
-                VALUES(:cmdId, :id, 2, :accountId, :token, :expiresAt) RETURNING *
+            INSERT OR REPLACE INTO auth (cmd_id, id, type, entity_id, token, expires_at)
+                VALUES(:cmdId, :id, 2, :entityId, :token, :expiresAt) RETURNING *
         """.trimIndent()
                 ) {
                     query {
                         set("cmdId", cmd.id)
                         set("id", cmd.authId)
-                        set("accountId", cmd.accountId)
+                        set("entityId", cmd.accountId)
                         set("token", cmd.token)
                         set("expiresAt", cmd.expiresAt.value)
                     }
@@ -105,16 +104,15 @@ class AuthSqliteRepository(
             is CreateExecTokenAuthCmd -> {
                 connection.execute<Auth>(
                     """
-            INSERT OR REPLACE INTO auth (cmd_id, id, type, account_id, token,exec_id)
-                VALUES(:cmdId, :id, 4, :accountId, :token,:execId) RETURNING *
+            INSERT OR REPLACE INTO auth (cmd_id, id, type, entity_id, token)
+                VALUES(:cmdId, :id, 4, :entityId, :token) RETURNING *
         """.trimIndent()
                 ) {
                     query {
                         set("cmdId", cmd.id)
                         set("id", cmd.authId)
-                        set("accountId", cmd.accountId)
+                        set("entityId", cmd.execId)
                         set("token", cmd.token)
-                        set("execId", cmd.execId)
                     }
                     map(NamedResultSet::toAuth)
                 }!!
@@ -278,6 +276,25 @@ class AuthSqliteRepository(
             map(NamedResultSet::toAuth)
         }
     }
+
+    override fun find(execId: ExecId): Auth? {
+        return connection.executeQueryOne(
+            """
+            SELECT 
+                *
+             FROM
+                auth
+            WHERE
+                type = 4 AND 
+                entity_id = :entityId
+        """.trimIndent()
+        ) {
+            query {
+                set("entityId", execId)
+            }
+            map(NamedResultSet::toAuth)
+        }
+    }
 }
 
 private fun NamedResultSet.toAuth(): Auth {
@@ -286,7 +303,7 @@ private fun NamedResultSet.toAuth(): Auth {
             Auth.Email(
                 cmdId = getCommandId("cmd_id"),
                 id = getId("id", ::AuthId),
-                accountId = getId("account_id", ::AccountId),
+                accountId = getId("entity_id", ::AccountId),
                 email = Email(getString("email")),
                 hash = PasswordHash(getString("password")),
             )
@@ -296,7 +313,7 @@ private fun NamedResultSet.toAuth(): Auth {
             Auth.Token(
                 cmdId = getCommandId("cmd_id"),
                 id = getId("id", ::AuthId),
-                accountId = getId("account_id", ::AccountId),
+                accountId = getId("entity_id", ::AccountId),
                 token = AuthToken(getString("token")),
                 expiresAt = ExpiresAt(getInstant("expires_at"))
             )
@@ -306,7 +323,7 @@ private fun NamedResultSet.toAuth(): Auth {
             Auth.MetaMask(
                 cmdId = getCommandId("cmd_id"),
                 id = getId("id", ::AuthId),
-                accountId = getId("account_id", ::AccountId),
+                accountId = getId("entity_id", ::AccountId),
                 address = Web3Address(getString("address"))
             )
         }
@@ -315,9 +332,8 @@ private fun NamedResultSet.toAuth(): Auth {
             Auth.ExecToken(
                 cmdId = getCommandId("cmd_id"),
                 id = getId("id", ::AuthId),
-                accountId = getId("account_id", ::AccountId),
-                token = ExecToken(getString("token")),
-                execId = getId("exec_id", ::ExecId),
+                execId = getId("entity_id", ::ExecId),
+                token = ExecToken(getString("token"))
             )
         }
 
@@ -337,6 +353,6 @@ private fun AuthQuery.accountIds(): String {
     return if (accountIds.isEmpty()) {
         ""
     } else {
-        "AND account_id IN (${accountIds.joinToString(",") { "${it.value.value}" }})"
+        "AND entity_id IN (${accountIds.joinToString(",") { "${it.value.value}" }})"
     }
 }

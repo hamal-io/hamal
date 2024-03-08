@@ -31,6 +31,11 @@ internal class FilterAccessAdapter(
             return listOf()
         }
 
+        // FIXME
+        if (current is Auth.ExecToken) {
+            return objs
+        }
+
         return objs.filter { obj ->
             if (current is Auth.Account) {
                 when {
@@ -54,6 +59,11 @@ internal class FilterAccessAdapter(
 
         if (current is Auth.Anonymous) {
             return null
+        }
+
+        // FIXME
+        if (current is Auth.ExecToken) {
+            return obj
         }
 
         return if (current is Auth.Account) {

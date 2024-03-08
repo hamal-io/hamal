@@ -31,6 +31,12 @@ internal class EnsureAccessAdapter(
         if (current is Auth.Anonymous) {
             accessDenied(obj)
         }
+
+        // FIXME
+        if (current is Auth.ExecToken) {
+            return obj
+        }
+
         if (current is Auth.Account) {
             return when {
                 obj is HasAccountId && accessAllowed(current, obj.accountId) -> obj

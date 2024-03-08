@@ -2,7 +2,10 @@ package io.hamal.api.http.auth
 
 import io.hamal.core.security.SecurityContext
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.AuthId
+import io.hamal.lib.domain.vo.AuthToken
+import io.hamal.lib.domain.vo.ExecId
+import io.hamal.lib.domain.vo.ExecToken
 import io.hamal.repository.api.Auth
 import io.hamal.repository.api.AuthCmdRepository.RevokeAuthCmd
 import io.hamal.repository.api.AuthRepository
@@ -77,9 +80,8 @@ class AuthApiFilter(
                 Auth.ExecToken(
                     id = AuthId.runner,
                     cmdId = CmdId(1),
-                    accountId = AccountId.root,
-                    token = execToken,
-                    execId = ExecId(1)
+                    execId = ExecId(1),
+                    token = execToken
                 )
             ) {
                 filterChain.doFilter(request, response)
