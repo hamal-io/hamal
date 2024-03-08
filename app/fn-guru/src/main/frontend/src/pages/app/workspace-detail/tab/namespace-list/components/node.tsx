@@ -7,7 +7,6 @@ import {ChevronDown, ChevronRight, Dot} from "lucide-react";
 
 type Props = {
     root: NamespaceNode
-
 }
 const NamespaceNodeEntry: FC<Props> = ({root}) => {
     const [expanded, setExpanded] = useState(true)

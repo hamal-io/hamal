@@ -1,9 +1,9 @@
 import {useNavigate, useParams} from "react-router-dom";
 import {PageHeader} from "@/components/page-header.tsx";
 import React, {FC} from "react";
-import {NamespaceFeature, NamespaceFeatures} from "@/pages/app/workspace-detail/tab/namespace-detail/types.ts";
 import {Card, CardContent, CardDescription, CardHeader} from "@/components/ui/card.tsx";
 import {Checkbox} from "@/components/ui/checkbox.tsx";
+import {NamespaceFeature, NamespaceFeatures} from "@/types";
 
 const NamespaceDetailPage = () => {
     const {namespaceId} = useParams()
@@ -47,10 +47,7 @@ const FeatureCard: FC<Props> = ({feature}) => {
                 </CardDescription>
             </CardContent>
             <Checkbox></Checkbox>
-
-
         </Card>
-
     )
 }
 

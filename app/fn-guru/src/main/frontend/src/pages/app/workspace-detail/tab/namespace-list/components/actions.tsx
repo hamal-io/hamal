@@ -46,13 +46,6 @@ const NamespaceActions: FC<Props> = ({id, trigger}) => {
                         Select
                     </DropdownMenuItem>
                     <DropdownMenuItem
-                        onClick={ () =>
-                            navigate(`/namespaces/${id}`)
-                        }
-                    >
-                        Modify
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
                         onClick={() => {
                             setDialogContent(
                                 <Update id={id} onClose={handleChange}/>
