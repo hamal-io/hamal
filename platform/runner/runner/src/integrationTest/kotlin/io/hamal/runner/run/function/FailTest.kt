@@ -136,6 +136,7 @@ internal class FailTest : AbstractExecuteTest() {
 
     private fun unitOfWork(code: String) = UnitOfWork(
         id = ExecId(1234),
+        execToken = ExecToken("ExecToken"),
         namespaceId = NamespaceId(9876),
         workspaceId = WorkspaceId(5432),
         inputs = ExecInputs(),

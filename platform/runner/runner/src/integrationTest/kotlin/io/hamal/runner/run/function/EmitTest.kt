@@ -16,12 +16,13 @@ internal class EmitTest : AbstractExecuteTest() {
 
     @Test
     fun `No events emitted`() {
-        val runner = createTestRunner(connector = TestConnector { execId, execResult, state, eventToSubmits ->
-            assertThat(execId, equalTo(ExecId(1234)))
-            assertThat(execResult, equalTo(ExecResult()))
-            assertThat(state, equalTo(ExecState()))
-            assertThat(eventToSubmits, hasSize(0))
-        })
+        val runner =
+            createTestRunner(connector = TestConnector { execId, execResult, state, eventToSubmits ->
+                assertThat(execId, equalTo(ExecId(1234)))
+                assertThat(execResult, equalTo(ExecResult()))
+                assertThat(state, equalTo(ExecState()))
+                assertThat(eventToSubmits, hasSize(0))
+            })
         runner.run(unitOfWork(""))
 
         val eventsToEmit = runner.context.eventsToSubmit
@@ -176,6 +177,7 @@ internal class EmitTest : AbstractExecuteTest() {
 
     private fun unitOfWork(code: String) = UnitOfWork(
         id = ExecId(1234),
+        execToken = ExecToken("ExecToken"),
         namespaceId = NamespaceId(9876),
         workspaceId = WorkspaceId(5432),
         inputs = ExecInputs(),

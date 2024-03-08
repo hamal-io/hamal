@@ -1,6 +1,11 @@
 package io.hamal.bridge.http.filter
 
 import io.hamal.core.security.SecurityContext
+import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.domain.vo.AccountId
+import io.hamal.lib.domain.vo.AuthId
+import io.hamal.lib.domain.vo.AuthToken
+import io.hamal.lib.domain.vo.ExecToken
 import io.hamal.repository.api.Auth
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
@@ -42,7 +47,15 @@ class AuthBridgeFilter : OncePerRequestFilter() {
 ////        // FIXME not expired
 
         // FIXME make sure runner
-        return SecurityContext.with(Auth.Runner) { filterChain.doFilter(request, response) }
+        return SecurityContext.with(
+            Auth.Runner(
+                id = AuthId.root,
+                cmdId = CmdId(1),
+                accountId = AccountId.root,
+                token = AuthToken("let_me_in"),
+                execToken = ExecToken("ExecToken")
+            )
+        ) { filterChain.doFilter(request, response) }
     }
 
 }

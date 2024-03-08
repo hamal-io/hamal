@@ -40,7 +40,7 @@ class CodeRunnerImpl(
             runnerContext[ExecId::class] = unitOfWork.id
             runnerContext[WorkspaceId::class] = unitOfWork.workspaceId
             runnerContext[NamespaceId::class] = unitOfWork.namespaceId
-            runnerContext[ExecToken::class] = unitOfWork.token
+            runnerContext[ExecToken::class] = unitOfWork.execToken
             runnerContext[RunnerEnv::class] = envFactory.create()
 
             sandboxFactory.create(runnerContext)
@@ -57,18 +57,11 @@ class CodeRunnerImpl(
                                 is KuaNumber -> internalTable[entry.key] = value
                                 is KuaFunction<*, *, *, *> -> internalTable[entry.key] = value
                                 is KuaTable -> internalTable[entry.key] = value
-                                is KuaTable -> internalTable[entry.key] = value
-//                                is KuaTable -> internalTable[entry.key] = sandbox.toKuaTableMap(value)
-//                                is KuaTable -> internalTable[entry.key] = sandbox.toTableArray(value)
                                 else -> TODO()
                             }
                         }
                         sandbox.globalSet(KuaString("_internal"), internalTable)
                         sandbox.codeLoad(contextExtension.factoryCode)
-//                        sandbox.codeLoad(KuaCode("_instance = plugin_create(_internal)"))
-
-//                        sandbox.globalSet(KuaString("_internal"), internalTable)
-//                        sandbox.codeLoad(contextExtension.factoryCode)
 //
                         sandbox.codeLoad(KuaCode("${contextExtension.name} = plugin_create(_internal)"))
                         sandbox.globalUnset(KuaString("_internal"))
@@ -78,7 +71,12 @@ class CodeRunnerImpl(
                         val ctx = sandbox.globalGetTable(KuaString("context"))
                         val stateToSubmit = ctx.getTable(KuaString("state")).toHotObject()
 
-                        connector.complete(execId, ExecResult(), ExecState(stateToSubmit), runnerContext.eventsToSubmit)
+                        connector.complete(
+                            execId,
+                            ExecResult(),
+                            ExecState(stateToSubmit),
+                            runnerContext.eventsToSubmit
+                        )
                         log.debug("Completed exec: $execId")
                     } catch (e: ExtensionError) {
                         val cause = e.cause

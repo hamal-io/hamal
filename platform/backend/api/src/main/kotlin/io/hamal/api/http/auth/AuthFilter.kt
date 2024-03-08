@@ -2,7 +2,11 @@ package io.hamal.api.http.auth
 
 import io.hamal.core.security.SecurityContext
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.domain.vo.AccountId
+import io.hamal.lib.domain.vo.AuthId
 import io.hamal.lib.domain.vo.AuthToken
+import io.hamal.lib.domain.vo.ExecToken
+import io.hamal.repository.api.Auth
 import io.hamal.repository.api.AuthCmdRepository.RevokeAuthCmd
 import io.hamal.repository.api.AuthRepository
 import jakarta.servlet.FilterChain
@@ -66,9 +70,19 @@ class AuthApiFilter(
             }
 
 
+        request.getHeader("x-exec-token")?.let(::ExecToken)?.also { execToken ->
 
-        if (token == AuthToken("let_me_in")) {
-            return filterChain.doFilter(request, response)
+            return SecurityContext.with(
+                Auth.Runner(
+                    id = AuthId.runner,
+                    cmdId = CmdId(1),
+                    accountId = AccountId.root,
+                    token = AuthToken("let_me_in"),
+                    execToken = execToken
+                )
+            ) {
+                filterChain.doFilter(request, response)
+            }
         }
 
         // FIXME token must contain creation timestamp is creation timestamp < 1s ago retry a couple of times - due to its async nature the token might not be in the database yet

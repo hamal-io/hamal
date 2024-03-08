@@ -14,11 +14,6 @@ sealed interface Auth {
         override fun toString(): String = javaClass.simpleName
     }
 
-    object Runner : Auth {
-        override val id: AuthId get() = AuthId.runner
-        override fun toString(): String = javaClass.simpleName
-    }
-
     object System : Auth {
         override val id: AuthId get() = AuthId.system
         override fun toString(): String = javaClass.simpleName
@@ -51,6 +46,13 @@ sealed interface Auth {
         val expiresAt: AuthTokenExpiresAt
     ) : Account
 
+    data class Runner(
+        override val id: AuthId,
+        val cmdId: CmdId,
+        override val accountId: AccountId,
+        val token: AuthToken,
+        val execToken: ExecToken
+    ) : Account
 }
 
 interface AuthRepository : AuthCmdRepository, AuthQueryRepository

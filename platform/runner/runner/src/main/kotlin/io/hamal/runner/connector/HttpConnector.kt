@@ -18,6 +18,7 @@ class HttpConnector(
             return sdk.exec.poll().work.map {
                 UnitOfWork(
                     id = it.id,
+                    execToken = it.execToken,
                     namespaceId = it.namespaceId,
                     workspaceId = it.workspaceId,
                     inputs = it.inputs,
@@ -38,11 +39,19 @@ class HttpConnector(
         }
     }
 
-    override fun complete(execId: ExecId, result: ExecResult, state: ExecState, events: List<EventToSubmit>) {
+    override fun complete(
+        execId: ExecId,
+        result: ExecResult,
+        state: ExecState,
+        events: List<EventToSubmit>
+    ) {
         sdk.exec.complete(execId, result, state, events)
     }
 
-    override fun fail(execId: ExecId, result: ExecResult) {
-        sdk.exec.fail(execId, result)
+    override fun fail(
+        execId: ExecId,
+        result: ExecResult
+    ) {
+        sdk.exec.fail(execId,  result)
     }
 }

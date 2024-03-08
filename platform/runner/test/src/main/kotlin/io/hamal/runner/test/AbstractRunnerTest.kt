@@ -2,8 +2,10 @@ package io.hamal.runner.test
 
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.*
+import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
+import io.hamal.lib.kua.Sandbox
+import io.hamal.lib.kua.SandboxContext
 import io.hamal.lib.kua.extend.extension.RunnerExtensionFactory
 import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
 import io.hamal.runner.config.EnvFactory
@@ -20,11 +22,19 @@ class TestConnector(
         TODO()
     }
 
-    override fun complete(execId: ExecId, result: ExecResult, state: ExecState, events: List<EventToSubmit>) {
+    override fun complete(
+        execId: ExecId,
+        result: ExecResult,
+        state: ExecState,
+        events: List<EventToSubmit>
+    ) {
         block(execId, result, state, events)
     }
 
-    override fun fail(execId: ExecId, result: ExecResult) {
+    override fun fail(
+        execId: ExecId,
+        result: ExecResult
+    ) {
         fail { result.value["message"].toString() }
     }
 }
@@ -36,11 +46,19 @@ class TestFailConnector(
         TODO()
     }
 
-    override fun complete(execId: ExecId, result: ExecResult, state: ExecState, events: List<EventToSubmit>) {
+    override fun complete(
+        execId: ExecId,
+        result: ExecResult,
+        state: ExecState,
+        events: List<EventToSubmit>
+    ) {
         fail { "Test expected to fail" }
     }
 
-    override fun fail(execId: ExecId, result: ExecResult) {
+    override fun fail(
+        execId: ExecId,
+        result: ExecResult
+    ) {
         block(execId, result)
     }
 }
@@ -74,6 +92,7 @@ abstract class AbstractRunnerTest {
         invocation: Invocation = Invocation.Adhoc
     ) = UnitOfWork(
         id = ExecId(1234),
+        execToken = ExecToken("ExecToken"),
         namespaceId = NamespaceId(98876),
         workspaceId = WorkspaceId(5432),
         inputs = inputs,

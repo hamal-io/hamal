@@ -5,6 +5,7 @@ import io.hamal.lib.common.hot.HotJsonModule
 import io.hamal.lib.common.serialization.JsonFactoryBuilder
 import io.hamal.lib.domain.Json
 import io.hamal.lib.domain.vo.AuthToken
+import io.hamal.lib.domain.vo.ExecToken
 import io.hamal.lib.domain.vo.ValueObjectJsonModule
 import io.hamal.lib.http.HttpContentDeserializer
 import io.hamal.lib.http.HttpContentSerializer
@@ -34,6 +35,48 @@ interface ApiSdk {
 }
 
 class ApiSdkImpl : ApiSdk {
+
+    constructor(
+        apiHost: String,
+        token: AuthToken,
+        execToken: ExecToken
+    ) {
+        val json = Json(
+            JsonFactoryBuilder()
+                .register(ApiJsonModule)
+                .register(HotJsonModule)
+                .register(ValueObjectJsonModule)
+        )
+
+        template = HttpTemplateImpl(
+            baseUrl = apiHost,
+            headerFactory = {
+                this["accept"] = "application/json"
+                this["authorization"] = "Bearer ${token.value}"
+                this["x-exec-token"] = execToken.value
+            },
+            serdeFactory = {
+                contentDeserializer = object : HttpContentDeserializer {
+                    override fun <VALUE : Any> deserialize(inputStream: InputStream, clazz: KClass<VALUE>): VALUE {
+                        return json.deserialize(clazz, inputStream)
+                    }
+
+                    override fun <VALUE : Any> deserializeList(
+                        inputStream: InputStream,
+                        clazz: KClass<VALUE>
+                    ): List<VALUE> {
+                        return json.deserialize(object : TypeToken<List<VALUE>>() {}, inputStream)
+                    }
+                }
+                contentSerializer = object : HttpContentSerializer {
+                    override fun <VALUE : Any> serialize(value: VALUE, clazz: KClass<VALUE>): String {
+                        return json.serialize(value)
+                    }
+                }
+            }
+        )
+    }
+
 
     constructor(apiHost: String, token: AuthToken) {
         val json = Json(

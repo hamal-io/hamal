@@ -17,6 +17,7 @@ internal class ExecIdTest : AbstractExecuteTest() {
         testExecutor.run(
             UnitOfWork(
                 id = ExecId(1234),
+                execToken = ExecToken("ExecToken"),
                 namespaceId = NamespaceId(9876),
                 workspaceId = WorkspaceId(5432),
                 inputs = ExecInputs(),
@@ -36,6 +37,7 @@ internal class ExecIdTest : AbstractExecuteTest() {
         testExecutor.run(
             UnitOfWork(
                 id = ExecId(1234),
+                execToken = ExecToken("ExecToken"),
                 namespaceId = NamespaceId(9876),
                 workspaceId = WorkspaceId(5432),
                 inputs = ExecInputs(),

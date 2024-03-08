@@ -24,7 +24,7 @@ internal class EnsureAccessAdapter(
     override fun <T : DomainObject<*>> invoke(obj: T): T {
         val current = SecurityContext.current
         // FIXME not sure about this
-        if (current is Auth.Runner || current is Auth.System) {
+        if (current is Auth.System) {
             return obj
         }
 
