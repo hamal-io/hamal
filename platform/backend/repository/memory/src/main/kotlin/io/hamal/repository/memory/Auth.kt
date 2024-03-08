@@ -50,7 +50,16 @@ class AuthMemoryRepository : AuthRepository {
                     projection[it.accountId]!!.add(it)
                 }
 
-                is CreateExecTokenAuthCmd -> TODO()
+                is CreateExecTokenAuthCmd -> Auth.ExecToken(
+                    cmdId = cmd.id,
+                    id = cmd.authId,
+                    accountId = cmd.accountId,
+                    token = cmd.token,
+                    execId = cmd.execId
+                ).also {
+                    projection.putIfAbsent(it.accountId, mutableListOf())
+                    projection[it.accountId]!!.add(it)
+                }
             }
         }
     }
@@ -113,7 +122,12 @@ class AuthMemoryRepository : AuthRepository {
     }
 
     override fun find(execToken: ExecToken): Auth? {
-        TODO("Not yet implemented")
+        return lock.read {
+            projection.flatMap { it.value }
+                .asSequence()
+                .filterIsInstance<Auth.ExecToken>()
+                .find { it.token == execToken }
+        }
     }
 
     override fun find(email: Email): Auth? {

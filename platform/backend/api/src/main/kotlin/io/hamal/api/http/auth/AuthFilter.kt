@@ -2,10 +2,7 @@ package io.hamal.api.http.auth
 
 import io.hamal.core.security.SecurityContext
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.vo.AccountId
-import io.hamal.lib.domain.vo.AuthId
-import io.hamal.lib.domain.vo.AuthToken
-import io.hamal.lib.domain.vo.ExecToken
+import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.Auth
 import io.hamal.repository.api.AuthCmdRepository.RevokeAuthCmd
 import io.hamal.repository.api.AuthRepository
@@ -57,6 +54,10 @@ class AuthApiFilter(
             return filterChain.doFilter(request, response)
         }
 
+        // FIXME user uses bearer
+        // FIXME runner uses runner
+        // FIXME x-exec-code as one time password
+
         val token = request.getHeader("authorization")
             ?.replace("Bearer ", "")
             ?.let(::AuthToken)
@@ -77,8 +78,8 @@ class AuthApiFilter(
                     id = AuthId.runner,
                     cmdId = CmdId(1),
                     accountId = AccountId.root,
-                    runnerToken = AuthToken("let_me_in"),
-                    execToken = execToken
+                    token = execToken,
+                    execId = ExecId(1)
                 )
             ) {
                 filterChain.doFilter(request, response)

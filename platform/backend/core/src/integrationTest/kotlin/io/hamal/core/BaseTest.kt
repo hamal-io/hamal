@@ -162,7 +162,7 @@ internal abstract class BaseTest {
                 authId = generateDomainId(::AuthId),
                 accountId = testAccount.id,
                 token = AuthToken("test-token"),
-                expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(1, DAYS))
+                expiresAt = ExpiresAt(TimeUtils.now().plus(1, DAYS))
             )
         ) as Auth.Token)
 

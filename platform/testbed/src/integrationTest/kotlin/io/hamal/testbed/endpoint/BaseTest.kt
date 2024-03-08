@@ -11,7 +11,6 @@ import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.CloseableStateImpl
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContext
@@ -130,7 +129,7 @@ class ClearController {
                 authId = generateDomainId(::AuthId),
                 accountId = testAccount.id,
                 token = AuthToken("root-token"),
-                expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(1, ChronoUnit.DAYS))
+                expiresAt = ExpiresAt(TimeUtils.now().plus(1, ChronoUnit.DAYS))
             )
         ) as Auth.Token).token
 
@@ -245,7 +244,7 @@ class TestConfig {
                     authId = AuthId(1),
                     accountId = testAccount.id,
                     token = AuthToken("root-token"),
-                    expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(1, ChronoUnit.DAYS))
+                    expiresAt = ExpiresAt(TimeUtils.now().plus(1, ChronoUnit.DAYS))
                 )
             ) as Auth.Token).token
 

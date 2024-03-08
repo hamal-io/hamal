@@ -39,8 +39,9 @@ class AuthSqliteRepository(
                     password VARCHAR(255),
                     address VARCHAR(255),
                     expires_at INTEGER,
+                    exec_id INTEGER,
                     PRIMARY KEY (id)
-               )
+               );
             """.trimIndent()
             )
         }
@@ -94,14 +95,30 @@ class AuthSqliteRepository(
                         set("cmdId", cmd.id)
                         set("id", cmd.authId)
                         set("accountId", cmd.accountId)
-                        set("token", cmd.token.value)
+                        set("token", cmd.token)
                         set("expiresAt", cmd.expiresAt.value)
                     }
                     map(NamedResultSet::toAuth)
                 }!!
             }
 
-            is CreateExecTokenAuthCmd -> TODO()
+            is CreateExecTokenAuthCmd -> {
+                connection.execute<Auth>(
+                    """
+            INSERT OR REPLACE INTO auth (cmd_id, id, type, account_id, token,exec_id)
+                VALUES(:cmdId, :id, 4, :accountId, :token,:execId) RETURNING *
+        """.trimIndent()
+                ) {
+                    query {
+                        set("cmdId", cmd.id)
+                        set("id", cmd.authId)
+                        set("accountId", cmd.accountId)
+                        set("token", cmd.token)
+                        set("execId", cmd.execId)
+                    }
+                    map(NamedResultSet::toAuth)
+                }!!
+            }
         }
     }
 
@@ -147,14 +164,29 @@ class AuthSqliteRepository(
         """.trimIndent()
         ) {
             query {
-                set("token", authToken.value)
+                set("token", authToken)
             }
             map(NamedResultSet::toAuth)
         }
     }
 
     override fun find(execToken: ExecToken): Auth? {
-        TODO("Not yet implemented")
+        return connection.executeQueryOne(
+            """
+            SELECT 
+                *
+             FROM
+                auth
+            WHERE
+                type = 4 AND 
+                token = :token
+        """.trimIndent()
+        ) {
+            query {
+                set("token", execToken)
+            }
+            map(NamedResultSet::toAuth)
+        }
     }
 
     override fun find(email: Email): Auth? {
@@ -266,7 +298,7 @@ private fun NamedResultSet.toAuth(): Auth {
                 id = getId("id", ::AuthId),
                 accountId = getId("account_id", ::AccountId),
                 token = AuthToken(getString("token")),
-                expiresAt = AuthTokenExpiresAt(getInstant("expires_at"))
+                expiresAt = ExpiresAt(getInstant("expires_at"))
             )
         }
 
@@ -276,6 +308,16 @@ private fun NamedResultSet.toAuth(): Auth {
                 id = getId("id", ::AuthId),
                 accountId = getId("account_id", ::AccountId),
                 address = Web3Address(getString("address"))
+            )
+        }
+
+        4 -> {
+            Auth.ExecToken(
+                cmdId = getCommandId("cmd_id"),
+                id = getId("id", ::AuthId),
+                accountId = getId("account_id", ::AccountId),
+                token = ExecToken(getString("token")),
+                execId = getId("exec_id", ::ExecId),
             )
         }
 

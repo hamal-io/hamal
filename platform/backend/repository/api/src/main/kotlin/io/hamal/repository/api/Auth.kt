@@ -48,15 +48,15 @@ sealed interface Auth {
         val cmdId: CmdId,
         override val accountId: AccountId,
         val token: AuthToken,
-        val expiresAt: AuthTokenExpiresAt
+        val expiresAt: ExpiresAt
     ) : Account
 
     data class ExecToken(
         override val id: AuthId,
         val cmdId: CmdId,
         override val accountId: AccountId,
-        val runnerToken: AuthToken,
-        val execToken: io.hamal.lib.domain.vo.ExecToken
+        val token: io.hamal.lib.domain.vo.ExecToken,
+        val execId: ExecId
     ) : Account
 }
 
@@ -99,15 +99,15 @@ interface AuthCmdRepository : CmdRepository {
         override val authId: AuthId,
         override val accountId: AccountId,
         val token: AuthToken,
-        val expiresAt: AuthTokenExpiresAt
+        val expiresAt: ExpiresAt
     ) : CreateCmd
 
     data class CreateExecTokenAuthCmd(
         override val id: CmdId,
         override val authId: AuthId,
         override val accountId: AccountId,
-        val token: AuthToken,
-        val expiresAt: AuthTokenExpiresAt
+        val token: ExecToken,
+        val execId: ExecId
     ) : CreateCmd
 }
 

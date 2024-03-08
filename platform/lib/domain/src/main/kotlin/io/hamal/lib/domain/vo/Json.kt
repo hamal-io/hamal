@@ -16,7 +16,6 @@ object ValueObjectJsonModule : JsonModule() {
 
         this[AuthId::class] = ValueObjectIdAdapter(::AuthId)
         this[AuthToken::class] = ValueObjectStringAdapter(::AuthToken)
-        this[AuthTokenExpiresAt::class] = ValueObjectInstantAdapter(::AuthTokenExpiresAt)
         this[Password::class] = ValueObjectStringAdapter(::Password)
         this[PasswordHash::class] = ValueObjectStringAdapter(::PasswordHash)
         this[PasswordSalt::class] = ValueObjectStringAdapter(::PasswordSalt)
@@ -53,6 +52,8 @@ object ValueObjectJsonModule : JsonModule() {
         this[ExecLogTimestamp::class] = ValueObjectInstantAdapter(::ExecLogTimestamp)
         this[ExecLogMessage::class] = ValueObjectStringAdapter(::ExecLogMessage)
 
+        this[ExpiresAt::class] = ValueObjectInstantAdapter(::ExpiresAt)
+
         this[ExtensionId::class] = ValueObjectIdAdapter(::ExtensionId)
         this[ExtensionName::class] = ValueObjectStringAdapter(::ExtensionName)
 
@@ -86,6 +87,8 @@ object ValueObjectJsonModule : JsonModule() {
 
         this[RequestId::class] = ValueObjectIdAdapter(::RequestId)
         this[RequestClass::class] = ValueObjectStringAdapter(::RequestClass)
+
+        this[RunnerId::class] = ValueObjectIdAdapter(::RunnerId)
         this[RunnerEnv::class] = ValueObjectHotObjectAdapter(::RunnerEnv)
 
         this[State::class] = ValueObjectHotObjectAdapter(::State)
