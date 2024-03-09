@@ -19,18 +19,18 @@ value class SnowflakeId(val value: Long) : Comparable<SnowflakeId> {
     override fun compareTo(other: SnowflakeId) = value.compareTo(other.value)
 
     fun sequence(): Sequence = Sequence(
-        BitUtils.extractRange(value = value, startIndex = 0, numberOfBits = 12).toShort()
+        BitUtils.extractRange(value = value, startIndex = 0, numberOfBits = 16).toInt()
     )
 
     fun partition(): Partition =
-        Partition(BitUtils.extractRange(value = value, startIndex = 12, numberOfBits = 10).toInt())
+        Partition(BitUtils.extractRange(value = value, startIndex = 16, numberOfBits = 6).toInt())
 
     fun elapsed(): Elapsed = Elapsed(
         BitUtils.extractRange(value = value, startIndex = 22, numberOfBits = 41)
     )
 
     override fun toString(): String {
-        return value.toString(16)
+        return value.toString()
     }
 
     fun toInt(): Int = value.toInt()
@@ -47,11 +47,10 @@ class SnowflakeGenerator(
 ) : SnowflakeId.Generator {
 
     override fun next(): SnowflakeId {
-        return lock.withLock {
-            val partition = partitionSource.get()
-            val (elapsed, sequence) = sequenceSource.next(elapsedSource::elapsed)
-            generate(elapsed, partition, sequence)
-        }
+        val partition = partitionSource.get()
+        val (elapsed, sequence) = lock.withLock { sequenceSource.next(elapsedSource::elapsed) }
+        return generate(elapsed, partition, sequence)
+
     }
 
     private fun generate(
@@ -60,7 +59,7 @@ class SnowflakeGenerator(
         sequence: Sequence
     ): SnowflakeId {
         val elapsedValue = elapsed.value.shl(22)
-        val partitionValue = partition.value.toLong().shl(12)
+        val partitionValue = partition.value.toLong().shl(16)
         val sequenceValue = sequence.value.toLong()
         val result = elapsedValue + partitionValue + sequenceValue
         return SnowflakeId(result)

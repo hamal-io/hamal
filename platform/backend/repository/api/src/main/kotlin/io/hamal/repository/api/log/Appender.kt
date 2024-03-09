@@ -13,6 +13,6 @@ class LogTopicAppenderImpl<VALUE : Any>(
 
     override fun append(cmdId: CmdId, topicId: LogTopicId, value: VALUE) {
         val encoded = json.serialize(value).toByteArray()
-        repository.append(cmdId + encoded.contentHashCode(), topicId, encoded)
+        repository.append(cmdId, topicId, encoded)
     }
 }

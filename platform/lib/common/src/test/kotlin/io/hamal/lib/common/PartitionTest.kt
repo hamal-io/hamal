@@ -12,13 +12,13 @@ class PartitionTest {
     inner class ConstructorTest {
 
         @Test
-        fun `Limited to 10 bits`() {
-            Partition(1023)
+        fun `Limited to 6 bits`() {
+            Partition(63)
 
             val exception = assertThrows<IllegalArgumentException> {
-                Partition(1024)
+                Partition(64)
             }
-            assertThat(exception.message, containsString("Partition is limited to 10 bits - [0, 1023]"))
+            assertThat(exception.message, containsString("Partition is limited to 6 bits - [0, 63]"))
         }
 
         @Test
@@ -29,19 +29,19 @@ class PartitionTest {
             val exception = assertThrows<IllegalArgumentException> {
                 Partition(-1)
             }
-            assertThat(exception.message, containsString("Partition must not be negative - [0, 1023]"))
+            assertThat(exception.message, containsString("Partition must not be negative - [0, 63]"))
         }
 
         @Test
         fun `Valid partitions`() {
             Partition(0)
             Partition(23)
-            Partition(1023)
+            Partition(63)
         }
     }
 
     @Test
     fun `toString override`() {
-        assertThat(Partition(123).toString(), equalTo("Partition(123)"))
+        assertThat(Partition(23).toString(), equalTo("Partition(23)"))
     }
 }

@@ -30,7 +30,7 @@ abstract class RecordSqliteRepository<ID : ValueObjectId, RECORD : Record<ID>, O
         connection.execute(
             """
             CREATE TABLE IF NOT EXISTS records (
-                 cmd_id         VARCHAR(255) NOT NULL,
+                 cmd_id         INTEGER NOT NULL,
                  entity_id      INTEGER NOT NULL,
                  sequence       INTEGER NOT NULL DEFAULT 0,
                  data           BLOB NOT NULL,

@@ -5,7 +5,9 @@ import io.hamal.core.service.FixedRateTriggerService
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.event.TriggerCreatedEvent
+import org.springframework.stereotype.Component
 
+@Component
 internal class TriggerCreatedHandler(
     private val fixedRateTriggerService: FixedRateTriggerService
 ) : InternalEventHandler<TriggerCreatedEvent> {

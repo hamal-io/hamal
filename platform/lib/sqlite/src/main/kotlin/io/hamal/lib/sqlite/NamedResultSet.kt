@@ -1,6 +1,5 @@
 package io.hamal.lib.sqlite
 
-import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.snowflake.SnowflakeId
 import java.sql.ResultSet
@@ -14,7 +13,6 @@ interface NamedResultSet : AutoCloseable {
     fun getInstant(parameter: String): Instant
     fun getSnowflakeId(parameter: String): SnowflakeId
     fun <ID : ValueObjectId> getId(parameter: String, ctor: (SnowflakeId) -> ID): ID
-    fun getCommandId(parameter: String): CmdId
     fun getBytes(parameter: String): ByteArray
     fun <T : Any> map(mapper: (NamedResultSet) -> T): List<T>
 }
@@ -56,11 +54,6 @@ class DefaultNamedResultSet(
     override fun <ID : ValueObjectId> getId(parameter: String, ctor: (SnowflakeId) -> ID): ID {
         ensureParameterExists(parameter)
         return ctor(getSnowflakeId(parameter))
-    }
-
-    override fun getCommandId(parameter: String): CmdId {
-        ensureParameterExists(parameter)
-        return CmdId(delegate.getBigDecimal(parameter).toBigInteger())
     }
 
     override fun getBytes(parameter: String): ByteArray {

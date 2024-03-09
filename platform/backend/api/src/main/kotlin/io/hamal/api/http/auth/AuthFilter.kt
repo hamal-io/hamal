@@ -2,7 +2,11 @@ package io.hamal.api.http.auth
 
 import io.hamal.core.security.SecurityContext
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.GenerateCmdId
+import io.hamal.lib.domain.vo.AuthId
+import io.hamal.lib.domain.vo.AuthToken
+import io.hamal.lib.domain.vo.ExecId
+import io.hamal.lib.domain.vo.ExecToken
 import io.hamal.repository.api.Auth
 import io.hamal.repository.api.AuthCmdRepository.RevokeAuthCmd
 import io.hamal.repository.api.AuthRepository
@@ -21,7 +25,8 @@ private val log = LoggerFactory.getLogger(AuthApiFilter::class.java)
 @Component
 @Order(BASIC_AUTH_ORDER)
 class AuthApiFilter(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val generateCmdId: GenerateCmdId
 ) : OncePerRequestFilter() {
 
     override fun doFilterInternal(
@@ -77,9 +82,8 @@ class AuthApiFilter(
                 Auth.ExecToken(
                     id = AuthId.runner,
                     cmdId = CmdId(1),
-                    accountId = AccountId.root,
-                    token = execToken,
-                    execId = ExecId(1)
+                    execId = ExecId(1),
+                    token = execToken
                 )
             ) {
                 filterChain.doFilter(request, response)
@@ -92,7 +96,7 @@ class AuthApiFilter(
             val auth = authRepository.find(token)
             if (auth != null) {
                 if (path == "/v1/logout") {
-                    authRepository.revokeAuth(RevokeAuthCmd(CmdId.random(), auth.id))
+                    authRepository.revokeAuth(RevokeAuthCmd(generateCmdId(), auth.id))
                     response.status = 204
                     return
                 }

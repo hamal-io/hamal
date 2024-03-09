@@ -82,18 +82,16 @@ internal class AuthRepositoryTest : AbstractUnitTest() {
                     CreateExecTokenAuthCmd(
                         id = CmdId(1),
                         authId = AuthId(2),
-                        accountId = AccountId(3),
+                        execId = ExecId(4),
                         token = ExecToken("this-is-a-one-time-thing"),
-                        execId = ExecId(4)
                     )
                 )
 
                 with(result) {
                     require(this is Auth.ExecToken)
                     assertThat(id, equalTo(AuthId(2)))
-                    assertThat(accountId, equalTo(AccountId(3)))
-                    assertThat(token, equalTo(ExecToken("this-is-a-one-time-thing")))
                     assertThat(execId, equalTo(ExecId(4)))
+                    assertThat(token, equalTo(ExecToken("this-is-a-one-time-thing")))
                 }
 
                 verifyCount(1)
@@ -208,16 +206,15 @@ internal class AuthRepositoryTest : AbstractUnitTest() {
             withEpochMilli(0) {
                 createExecTokenAuth(
                     authId = AuthId(1),
-                    accountId = AccountId(2),
+                    execId = ExecId(24),
                     token = ExecToken("some-token")
                 )
 
                 with(get(ExecToken("some-token"))) {
                     require(this is Auth.ExecToken)
                     assertThat(id, equalTo(AuthId(1)))
-                    assertThat(accountId, equalTo(AccountId(2)))
-                    assertThat(token, equalTo(ExecToken("some-token")))
                     assertThat(execId, equalTo(ExecId(24)))
+                    assertThat(token, equalTo(ExecToken("some-token")))
                 }
             }
         }
@@ -226,7 +223,7 @@ internal class AuthRepositoryTest : AbstractUnitTest() {
         fun `Tries to get auth by exec token but does not exist`() = runWith(AuthRepository::class) {
             createExecTokenAuth(
                 authId = AuthId(1),
-                accountId = AccountId(2),
+                execId = ExecId(24),
                 token = ExecToken("some-token")
             )
 
@@ -234,10 +231,42 @@ internal class AuthRepositoryTest : AbstractUnitTest() {
                 .also { exception -> assertThat(exception.message, equalTo("Auth not found")) }
 
         }
+
+        @TestFactory
+        fun `Get auth by exec id`() = runWith(AuthRepository::class) {
+            withEpochMilli(0) {
+                createExecTokenAuth(
+                    authId = AuthId(1),
+                    execId = ExecId(24),
+                    token = ExecToken("some-token")
+                )
+
+                with(get(ExecId(24))) {
+                    require(this is Auth.ExecToken)
+                    assertThat(id, equalTo(AuthId(1)))
+                    assertThat(execId, equalTo(ExecId(24)))
+                    assertThat(token, equalTo(ExecToken("some-token")))
+                }
+            }
+        }
+
+        @TestFactory
+        fun `Tries to get auth by exec id but does not exist`() = runWith(AuthRepository::class) {
+            createExecTokenAuth(
+                authId = AuthId(1),
+                execId = ExecId(24),
+                token = ExecToken("some-token")
+            )
+
+            assertThrows<NoSuchElementException> { get(ExecId(42)) }
+                .also { exception -> assertThat(exception.message, equalTo("Auth not found")) }
+
+        }
     }
 
     @Nested
     inner class FindTest {
+
         @TestFactory
         fun `Find auth by token`() = runWith(AuthRepository::class) {
             withEpochMilli(0) {
@@ -274,16 +303,15 @@ internal class AuthRepositoryTest : AbstractUnitTest() {
             withEpochMilli(0) {
                 createExecTokenAuth(
                     authId = AuthId(1),
-                    accountId = AccountId(2),
+                    execId = ExecId(24),
                     token = ExecToken("some-token")
                 )
 
                 with(find(ExecToken("some-token"))) {
                     require(this is Auth.ExecToken)
                     assertThat(id, equalTo(AuthId(1)))
-                    assertThat(accountId, equalTo(AccountId(2)))
-                    assertThat(token, equalTo(ExecToken("some-token")))
                     assertThat(execId, equalTo(ExecId(24)))
+                    assertThat(token, equalTo(ExecToken("some-token")))
                 }
             }
         }
@@ -292,7 +320,7 @@ internal class AuthRepositoryTest : AbstractUnitTest() {
         fun `Tries to get auth by id by exec token, but does not exist`() = runWith(AuthRepository::class) {
             createExecTokenAuth(
                 authId = AuthId(1),
-                accountId = AccountId(2),
+                execId = ExecId(24),
                 token = ExecToken("some-token")
             )
 
@@ -300,6 +328,35 @@ internal class AuthRepositoryTest : AbstractUnitTest() {
             assertThat(result, nullValue())
         }
 
+        @TestFactory
+        fun `Find auth by exec id`() = runWith(AuthRepository::class) {
+            withEpochMilli(0) {
+                createExecTokenAuth(
+                    authId = AuthId(1),
+                    execId = ExecId(24),
+                    token = ExecToken("some-token")
+                )
+
+                with(find(ExecId(24))) {
+                    require(this is Auth.ExecToken)
+                    assertThat(id, equalTo(AuthId(1)))
+                    assertThat(execId, equalTo(ExecId(24)))
+                    assertThat(token, equalTo(ExecToken("some-token")))
+                }
+            }
+        }
+
+        @TestFactory
+        fun `Tries to get auth by id by exec id, but does not exist`() = runWith(AuthRepository::class) {
+            createExecTokenAuth(
+                authId = AuthId(1),
+                execId = ExecId(24),
+                token = ExecToken("some-token")
+            )
+
+            val result = find(ExecId(42))
+            assertThat(result, nullValue())
+        }
     }
 
     @Nested
@@ -392,7 +449,7 @@ internal class AuthRepositoryTest : AbstractUnitTest() {
 
             createExecTokenAuth(
                 authId = AuthId(5),
-                accountId = AccountId(10),
+                execId = ExecId(24),
                 token = ExecToken("token-four")
             )
         }
@@ -434,7 +491,7 @@ private fun AuthRepository.createTokenAuth(
 
 private fun AuthRepository.createExecTokenAuth(
     authId: AuthId,
-    accountId: AccountId,
+    execId: ExecId,
     token: ExecToken,
     cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
 ) {
@@ -442,9 +499,8 @@ private fun AuthRepository.createExecTokenAuth(
         CreateExecTokenAuthCmd(
             id = cmdId,
             authId = authId,
-            accountId = accountId,
-            token = token,
-            execId = ExecId(24)
+            execId = execId,
+            token = token
         )
     )
 }

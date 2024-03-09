@@ -24,6 +24,13 @@ sealed interface Auth {
         override fun toString(): String = javaClass.simpleName
     }
 
+    data class ExecToken(
+        override val id: AuthId,
+        val cmdId: CmdId,
+        val token: io.hamal.lib.domain.vo.ExecToken,
+        val execId: ExecId
+    ) : Auth
+
     sealed interface Account : Auth, HasAccountId {
         override val accountId: AccountId
     }
@@ -50,14 +57,6 @@ sealed interface Auth {
         val token: AuthToken,
         val expiresAt: ExpiresAt
     ) : Account
-
-    data class ExecToken(
-        override val id: AuthId,
-        val cmdId: CmdId,
-        override val accountId: AccountId,
-        val token: io.hamal.lib.domain.vo.ExecToken,
-        val execId: ExecId
-    ) : Account
 }
 
 interface AuthRepository : AuthCmdRepository, AuthQueryRepository
@@ -71,7 +70,6 @@ interface AuthCmdRepository : CmdRepository {
     sealed interface CreateCmd {
         val id: CmdId
         val authId: AuthId
-        val accountId: AccountId
     }
 
     data class RevokeAuthCmd(
@@ -82,7 +80,7 @@ interface AuthCmdRepository : CmdRepository {
     data class CreateEmailAuthCmd(
         override val id: CmdId,
         override val authId: AuthId,
-        override val accountId: AccountId,
+        val accountId: AccountId,
         val email: Email,
         val hash: PasswordHash
     ) : CreateCmd
@@ -90,14 +88,14 @@ interface AuthCmdRepository : CmdRepository {
     data class CreateMetaMaskAuthCmd(
         override val id: CmdId,
         override val authId: AuthId,
-        override val accountId: AccountId,
+        val accountId: AccountId,
         val address: Web3Address
     ) : CreateCmd
 
     data class CreateTokenAuthCmd(
         override val id: CmdId,
         override val authId: AuthId,
-        override val accountId: AccountId,
+        val accountId: AccountId,
         val token: AuthToken,
         val expiresAt: ExpiresAt
     ) : CreateCmd
@@ -105,7 +103,6 @@ interface AuthCmdRepository : CmdRepository {
     data class CreateExecTokenAuthCmd(
         override val id: CmdId,
         override val authId: AuthId,
-        override val accountId: AccountId,
         val token: ExecToken,
         val execId: ExecId
     ) : CreateCmd
@@ -116,12 +113,19 @@ interface AuthQueryRepository {
 
     fun get(authId: AuthId) = find(authId) ?: throw NoSuchElementException("Auth not found")
     fun find(authId: AuthId): Auth?
+
+    fun get(execId: ExecId) = find(execId) ?: throw NoSuchElementException("Auth not found")
+    fun find(execId: ExecId): Auth?
+
     fun get(authToken: AuthToken) = find(authToken) ?: throw NoSuchElementException("Auth not found")
     fun find(authToken: AuthToken): Auth?
+
     fun get(execToken: ExecToken) = find(execToken) ?: throw NoSuchElementException("Auth not found")
     fun find(execToken: ExecToken): Auth?
+
     fun get(email: Email) = find(email) ?: throw NoSuchElementException("Auth not found")
     fun find(email: Email): Auth?
+
     fun get(address: Web3Address) = find(address) ?: throw NoSuchElementException("Auth not found")
     fun find(address: Web3Address): Auth?
 

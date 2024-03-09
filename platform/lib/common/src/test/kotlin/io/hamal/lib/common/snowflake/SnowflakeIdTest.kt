@@ -7,12 +7,13 @@ import org.junit.jupiter.api.Test
 import java.time.Instant
 
 class SnowflakeIdTest {
+
     @Test
     fun `Max id`() {
         val result = SnowflakeId(Long.MAX_VALUE)
         assertThat(result.elapsed(), equalTo(Elapsed(2199023255551)))
-        assertThat(result.partition(), equalTo(Partition(1023)))
-        assertThat(result.sequence(), equalTo(Sequence(4095)))
+        assertThat(result.partition(), equalTo(Partition(63)))
+        assertThat(result.sequence(), equalTo(Sequence(65535)))
 
         val maxInstant = Instant.ofEpochMilli(result.elapsed().value + 1698451200000L)
         assertThat(maxInstant, equalTo(Instant.parse("2093-07-03T15:47:35.551Z")))
@@ -74,7 +75,7 @@ class SnowflakeIdTest {
         )
 
         val result = testInstance.next()
-        assertThat(result, equalTo(SnowflakeId(40960)))
+        assertThat(result, equalTo(SnowflakeId(655360)))
 
         assertThat(result.partition(), equalTo(Partition(10)))
         assertThat(result.sequence(), equalTo(Sequence(0)))
@@ -89,7 +90,7 @@ class SnowflakeIdTest {
         )
 
         val result = testInstance.next()
-        assertThat(result, equalTo(SnowflakeId(517812166656)))
+        assertThat(result, equalTo(SnowflakeId(517814747136)))
 
         assertThat(result.partition(), equalTo(Partition(42)))
         assertThat(result.sequence(), equalTo(Sequence(0)))
@@ -104,7 +105,7 @@ class SnowflakeIdTest {
         )
 
         val result = testInstance.next()
-        assertThat(result, equalTo(SnowflakeId(4611686018427559936)))
+        assertThat(result, equalTo(SnowflakeId(4611686018430140416)))
 
         assertThat(result.partition(), equalTo(Partition(42)))
         assertThat(result.sequence(), equalTo(Sequence(0)))
@@ -120,7 +121,7 @@ class SnowflakeIdTest {
         )
 
         val result = testInstance.next()
-        assertThat(result, equalTo(SnowflakeId(9223372036846559232)))
+        assertThat(result, equalTo(SnowflakeId(9223372036849139712)))
 
         assertThat(result.partition(), equalTo(Partition(42)))
         assertThat(result.sequence(), equalTo(Sequence(0)))
@@ -205,7 +206,7 @@ internal class SnowflakeGeneratorTest {
             elapsedSource = FixedElapsedSource(0),
             partitionSource = PartitionSourceImpl(1)
         )
-        assertThat(testInstance.next(), equalTo(SnowflakeId(4096)))
+        assertThat(testInstance.next(), equalTo(SnowflakeId(65536)))
     }
 
     @Test
@@ -214,7 +215,7 @@ internal class SnowflakeGeneratorTest {
             elapsedSource = FixedElapsedSource(0),
             partitionSource = PartitionSourceImpl(2)
         )
-        assertThat(testInstance.next(), equalTo(SnowflakeId(8192)))
+        assertThat(testInstance.next(), equalTo(SnowflakeId(131072)))
     }
 
     @Test

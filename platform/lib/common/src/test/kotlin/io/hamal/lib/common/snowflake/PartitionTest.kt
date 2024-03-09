@@ -8,10 +8,10 @@ import org.junit.jupiter.api.Test
 internal class PartitionSourceImplTest {
     @Test
     fun `Simple pass through`() {
-        val testInstance = PartitionSourceImpl(137)
-        assertThat(testInstance.get(), equalTo(Partition(137)))
-        assertThat(testInstance.get(), equalTo(Partition(137)))
-        assertThat(testInstance.get(), equalTo(Partition(137)))
-        assertThat(testInstance.get(), equalTo(Partition(137)))
+        val testInstance = PartitionSourceImpl(42)
+        assertThat(testInstance.get(), equalTo(Partition(42)))
+        assertThat(testInstance.get(), equalTo(Partition(42)))
+        assertThat(testInstance.get(), equalTo(Partition(42)))
+        assertThat(testInstance.get(), equalTo(Partition(42)))
     }
 }

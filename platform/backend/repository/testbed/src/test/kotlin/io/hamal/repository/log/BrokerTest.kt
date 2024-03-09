@@ -1,8 +1,11 @@
 package io.hamal.repository.log
 
+import io.hamal.lib.common.Partition
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.domain.CmdIdGeneratorImpl
+import io.hamal.lib.domain.GenerateCmdId
 import io.hamal.lib.domain.vo.LogTopicId
 import io.hamal.repository.api.log.LogBrokerRepository
 import io.hamal.repository.api.log.LogBrokerRepository.*
@@ -14,7 +17,6 @@ import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.TestFactory
 import org.junit.jupiter.api.assertThrows
-import java.math.BigInteger
 
 internal class LogBrokerRepositoryTest : AbstractUnitTest() {
 
@@ -170,22 +172,14 @@ internal class LogBrokerRepositoryTest : AbstractUnitTest() {
 
     @Nested
     inner class AppendTest {
+
         @TestFactory
-        fun `Append value to topic with long cmd id`() =
+        fun `Append value to topic `() =
             runWith(LogBrokerRepository::class) {
-                val topic = create(CreateTopicCmd(CmdId(1), LogTopicId(2)))
+                val topic = create(CreateTopicCmd(generateCmdId(), LogTopicId(2)))
 
-                append(
-                    CmdId(BigInteger("380896718712995851145215087")),
-                    topic.id,
-                    "some-content-1".toByteArray()
-                )
-
-                append(
-                    CmdId(BigInteger("380896718712995851145215088")),
-                    topic.id,
-                    "some-content-2".toByteArray()
-                )
+                append(generateCmdId(), topic.id, "some-content-1".toByteArray())
+                append(generateCmdId(), topic.id, "some-content-2".toByteArray())
 
                 val result = consume(LogConsumerId(1), topic.id, Limit(1_000))
                 assertThat(result, hasSize(2))
@@ -198,6 +192,8 @@ internal class LogBrokerRepositoryTest : AbstractUnitTest() {
                 assertThat(result[1].bytes, equalTo("some-content-2".toByteArray()))
             }
     }
+
+    private val generateCmdId: GenerateCmdId = CmdIdGeneratorImpl(Partition(1))
 }
 
 private fun LogBrokerRepository.setupTopic() {
@@ -215,4 +211,5 @@ private fun LogBrokerRepository.setupTopics() {
     create(CreateTopicCmd(CmdId(8), LogTopicId(8)))
     create(CreateTopicCmd(CmdId(9), LogTopicId(9)))
 }
+
 

@@ -13,7 +13,6 @@ import kotlin.concurrent.write
 class AuthMemoryRepository : AuthRepository {
     private val lock = ReentrantReadWriteLock()
 
-    private val projection = mutableMapOf<AccountId, MutableList<Auth>>()
 
     override fun create(cmd: CreateCmd): Auth {
         return lock.write {
@@ -24,20 +23,14 @@ class AuthMemoryRepository : AuthRepository {
                     accountId = cmd.accountId,
                     email = cmd.email,
                     hash = cmd.hash,
-                ).also {
-                    projection.putIfAbsent(it.accountId, mutableListOf())
-                    projection[it.accountId]!!.add(it)
-                }
+                ).also { projections.add(it) }
 
                 is CreateMetaMaskAuthCmd -> Auth.MetaMask(
                     cmdId = cmd.id,
                     id = cmd.authId,
                     accountId = cmd.accountId,
                     address = cmd.address
-                ).also {
-                    projection.putIfAbsent(it.accountId, mutableListOf())
-                    projection[it.accountId]!!.add(it)
-                }
+                ).also { projections.add(it) }
 
                 is CreateTokenAuthCmd -> Auth.Token(
                     cmdId = cmd.id,
@@ -45,41 +38,35 @@ class AuthMemoryRepository : AuthRepository {
                     accountId = cmd.accountId,
                     token = cmd.token,
                     expiresAt = cmd.expiresAt
-                ).also {
-                    projection.putIfAbsent(it.accountId, mutableListOf())
-                    projection[it.accountId]!!.add(it)
-                }
+                ).also { projections.add(it) }
 
                 is CreateExecTokenAuthCmd -> Auth.ExecToken(
                     cmdId = cmd.id,
                     id = cmd.authId,
-                    accountId = cmd.accountId,
                     token = cmd.token,
                     execId = cmd.execId
-                ).also {
-                    projection.putIfAbsent(it.accountId, mutableListOf())
-                    projection[it.accountId]!!.add(it)
-                }
+                ).also { projections.add(it) }
             }
         }
     }
 
     override fun revokeAuth(cmd: RevokeAuthCmd) {
         return lock.write {
-            projection.values.forEach {
-                it.removeIf { it.id == cmd.authId }
-            }
+            projections.removeIf { it.id == cmd.authId }
         }
     }
 
 
     override fun list(query: AuthQuery): List<Auth> {
-        return projection.filter { query.accountIds.isEmpty() || it.key in query.accountIds }
-            .flatMap { it.value }
+        return projections
+            .filter { auth ->
+                if (query.accountIds.isEmpty()) true else {
+                    if (auth is Auth.Account) auth.accountId in query.accountIds else false
+                }
+            }
             .reversed()
             .asSequence()
             .filter { if (query.authIds.isEmpty()) true else query.authIds.contains(it.id) }
-            .filter { it is Auth.Account && if (query.accountIds.isEmpty()) true else query.accountIds.contains(it.accountId) }
             .dropWhile { it.id >= query.afterId }
             .take(query.limit.value)
             .toList()
@@ -87,12 +74,15 @@ class AuthMemoryRepository : AuthRepository {
 
     override fun count(query: AuthQuery): Count {
         return Count(
-            projection.filter { query.accountIds.isEmpty() || it.key in query.accountIds }
-                .flatMap { it.value }
+            projections
+                .filter { auth ->
+                    if (query.accountIds.isEmpty()) true else {
+                        if (auth is Auth.Account) auth.accountId in query.accountIds else false
+                    }
+                }
                 .reversed()
                 .asSequence()
                 .filter { if (query.authIds.isEmpty()) true else query.authIds.contains(it.id) }
-                .filter { it is Auth.Account && if (query.accountIds.isEmpty()) true else query.accountIds.contains(it.accountId) }
                 .dropWhile { it.id >= query.afterId }
                 .count()
                 .toLong()
@@ -100,22 +90,25 @@ class AuthMemoryRepository : AuthRepository {
     }
 
     override fun clear() {
-        lock.write { projection.clear() }
+        lock.write { projections.clear() }
     }
 
     override fun close() {}
     override fun find(authId: AuthId): Auth? {
         return lock.read {
-            projection
-                .flatMap { it.value }
-                .find { it.id == authId }
+            projections.find { it.id == authId }
+        }
+    }
+
+    override fun find(execId: ExecId): Auth? {
+        return lock.read {
+            projections.filterIsInstance<Auth.ExecToken>().find { it.execId == execId }
         }
     }
 
     override fun find(authToken: AuthToken): Auth? {
         return lock.read {
-            projection.flatMap { it.value }
-                .asSequence()
+            projections.asSequence()
                 .filterIsInstance<Auth.Token>()
                 .find { it.token == authToken }
         }
@@ -123,8 +116,7 @@ class AuthMemoryRepository : AuthRepository {
 
     override fun find(execToken: ExecToken): Auth? {
         return lock.read {
-            projection.flatMap { it.value }
-                .asSequence()
+            projections.asSequence()
                 .filterIsInstance<Auth.ExecToken>()
                 .find { it.token == execToken }
         }
@@ -132,8 +124,7 @@ class AuthMemoryRepository : AuthRepository {
 
     override fun find(email: Email): Auth? {
         return lock.read {
-            projection.flatMap { it.value }
-                .asSequence()
+            projections.asSequence()
                 .filterIsInstance<Auth.Email>()
                 .find { it.email == email }
         }
@@ -141,10 +132,12 @@ class AuthMemoryRepository : AuthRepository {
 
     override fun find(address: Web3Address): Auth? {
         return lock.read {
-            projection.flatMap { it.value }
-                .asSequence()
+            projections.asSequence()
                 .filterIsInstance<Auth.MetaMask>()
                 .find { it.address == address }
         }
     }
+
+    private val projections = mutableListOf<Auth>()
+
 }
