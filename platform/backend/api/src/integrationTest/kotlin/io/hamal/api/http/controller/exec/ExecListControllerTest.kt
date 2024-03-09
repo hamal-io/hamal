@@ -22,7 +22,7 @@ internal class ExecListControllerTest : ExecBaseControllerTest() {
 
     @Test
     fun `Single exec`() {
-        val execId = awaitCompleted(createAdhocExec()).execId
+        val execId = awaitCompleted(createAdhocExec()).id
 
         val response = httpTemplate.get("/v1/execs")
             .parameter("workspace_ids", testWorkspace.id)
@@ -68,7 +68,7 @@ internal class ExecListControllerTest : ExecBaseControllerTest() {
         val response = httpTemplate.get("/v1/execs")
             .parameter("workspace_ids", testWorkspace.id)
             .parameter("limit", 1)
-            .parameter("after_id", fortySixthRequest.execId)
+            .parameter("after_id", fortySixthRequest.id)
             .execute()
 
         assertThat(response.statusCode, equalTo(Ok))
@@ -77,7 +77,7 @@ internal class ExecListControllerTest : ExecBaseControllerTest() {
         with(response.result(ApiExecList::class)) {
             assertThat(execs, hasSize(1))
             execs.forEach { exec ->
-                assertThat(exec.id, equalTo(fortyFifthRequest.execId))
+                assertThat(exec.id, equalTo(fortyFifthRequest.id))
             }
         }
     }

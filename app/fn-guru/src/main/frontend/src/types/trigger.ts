@@ -1,7 +1,7 @@
 export interface TriggerCreateRequested {
+    requestId: string;
+    requestStatus: string;
     id: string;
-    status: string;
-    triggerId: string;
     funcId: string;
     namespaceId: string;
     workspaceId: string;

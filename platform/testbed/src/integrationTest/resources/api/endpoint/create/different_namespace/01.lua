@@ -7,23 +7,23 @@ func_one = fail_on_error(sys.funcs.create({
     name = 'test-func',
     inputs = {},
     code = [[4 + 2]],
-    namespace_id = namespace.namespace_id
+    namespace_id = namespace.id
 }))
 sys.await_completed(func_one)
 
 endpoint = fail_on_error(sys.endpoints.create({
     namespace_id = namespace.id,
-    func_id = func_one.func_id,
+    func_id = func_one.id,
     name = 'test-endpoint'
 }))
 sys.await_completed(endpoint)
 
 assert(endpoint ~= nil)
+assert(endpoint.request_id ~= nil)
+assert(endpoint.request_status == 'Submitted')
 assert(endpoint.id ~= nil)
-assert(endpoint.status == 'Submitted')
-assert(endpoint.endpoint_id ~= nil)
 assert(endpoint.workspace_id == '539')
-assert(endpoint.func_id == func_one.func_id)
+assert(endpoint.func_id == func_one.id)
 
 _, endpoint = sys.endpoints.get(endpoint.id)
 assert(endpoint.func.id == func_one.id)

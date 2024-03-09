@@ -24,11 +24,11 @@ internal class ExtensionUpdateHandlerTest : BaseReqHandlerTest() {
 
     private val submitCreateExtensionReq by lazy {
         ExtensionCreateRequested(
-            id = RequestId(10),
-            by = AuthId(20),
-            status = RequestStatus.Submitted,
+            requestId = RequestId(10),
+            requestedBy = AuthId(20),
+            requestStatus = RequestStatus.Submitted,
             workspaceId = testWorkspace.id,
-            extensionId = ExtensionId(1234),
+            id = ExtensionId(1234),
             name = ExtensionName("TestExtension"),
             codeId = CodeId(1),
             code = CodeValue("x='hamal'")
@@ -37,11 +37,11 @@ internal class ExtensionUpdateHandlerTest : BaseReqHandlerTest() {
 
     private val submittedUpdateExtensionReq by lazy {
         ExtensionUpdateRequested(
-            id = RequestId(1),
-            by = AuthId(2),
-            status = RequestStatus.Submitted,
+            requestId = RequestId(1),
+            requestedBy = AuthId(2),
+            requestStatus = RequestStatus.Submitted,
             workspaceId = testWorkspace.id,
-            extensionId = ExtensionId(1234),
+            id = ExtensionId(1234),
             name = ExtensionName("UpdateExtension"),
             code = CodeValue("40 + 2")
         )

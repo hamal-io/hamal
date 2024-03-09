@@ -1,7 +1,7 @@
 export interface ExecInvokeRequested {
+    requestedId: string;
+    requestStatus: string;
     id: string;
-    status: string;
-    execId: string;
     workspaceId: string;
     namespaceId: string;
 }

@@ -8,12 +8,12 @@ interface NamespaceAppendRequest {
 }
 
 data class NamespaceAppendRequested(
-    override val id: RequestId,
-    override val by: AuthId,
-    override var status: RequestStatus,
+    override val requestId: RequestId,
+    override val requestedBy: AuthId,
+    override var requestStatus: RequestStatus,
+    val id: NamespaceId,
     val workspaceId: WorkspaceId,
     val parentId: NamespaceId,
-    val namespaceId: NamespaceId,
     val name: NamespaceName
 ) : Requested()
 
@@ -23,10 +23,10 @@ interface NamespaceUpdateRequest {
 
 
 data class NamespaceUpdateRequested(
-    override val id: RequestId,
-    override val by: AuthId,
-    override var status: RequestStatus,
+    override val requestId: RequestId,
+    override val requestedBy: AuthId,
+    override var requestStatus: RequestStatus,
+    val id: NamespaceId,
     val workspaceId: WorkspaceId,
-    val namespaceId: NamespaceId,
     val name: NamespaceName
 ) : Requested()

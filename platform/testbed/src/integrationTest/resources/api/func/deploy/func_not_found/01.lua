@@ -1,15 +1,15 @@
 sys = require_plugin('sys')
 
-local create_req = fail_on_error(sys.funcs.create({
+local func_req = fail_on_error(sys.funcs.create({
     name = 'created-name',
     inputs = {},
     code = 'created-code'
 }))
-sys.await_completed(create_req)
+sys.await_completed(func_req)
 
 for i = 2, 20 do
     update_req = fail_on_error(sys.funcs.update({
-        id = create_req.func_id,
+        id = func_req.id,
         name = 'func-' .. i,
         inputs = { },
         code = [[code-]] .. i

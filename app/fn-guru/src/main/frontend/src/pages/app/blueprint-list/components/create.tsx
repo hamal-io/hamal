@@ -23,7 +23,7 @@ const CreateBlueprint = () => {
     useEffect(() => {
         const abortController = new AbortController();
         if (submitted) {
-            navigate(`/blueprints/editor/${submitted.id}`)
+            navigate(`/blueprints/editor/${submitted.requestId}`)
         }
         return () => {
             abortController.abort();

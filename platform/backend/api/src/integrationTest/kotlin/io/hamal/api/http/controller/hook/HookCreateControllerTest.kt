@@ -27,7 +27,7 @@ internal class HookCreateControllerTest : HookBaseControllerTest() {
         )
         awaitCompleted(result)
 
-        val hook = hookQueryRepository.get(result.hookId)
+        val hook = hookQueryRepository.get(result.id)
         with(hook) {
             assertThat(name, equalTo(HookName("test-hook")))
 
@@ -55,7 +55,7 @@ internal class HookCreateControllerTest : HookBaseControllerTest() {
         )
         awaitCompleted(result)
 
-        with(hookQueryRepository.get(result.hookId)) {
+        with(hookQueryRepository.get(result.id)) {
             assertThat(name, equalTo(HookName("test-hook")))
 
             namespaceQueryRepository.get(namespaceId).let {

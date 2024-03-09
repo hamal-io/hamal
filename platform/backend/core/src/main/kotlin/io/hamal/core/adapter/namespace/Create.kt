@@ -23,11 +23,11 @@ class NamespaceCreateAdapter(
     override fun invoke(parentId: NamespaceId, req: NamespaceAppendRequest): NamespaceAppendRequested {
         val parent = namespaceGet(parentId)
         return NamespaceAppendRequested(
-            id = generateDomainId(::RequestId),
-            by = SecurityContext.currentAuthId,
-            status = RequestStatus.Submitted,
+            requestId = generateDomainId(::RequestId),
+            requestedBy = SecurityContext.currentAuthId,
+            requestStatus = RequestStatus.Submitted,
             parentId = parent.id,
-            namespaceId = generateDomainId(::NamespaceId),
+            id = generateDomainId(::NamespaceId),
             workspaceId = parent.workspaceId,
             name = req.name,
         ).also(requestEnqueue::invoke)

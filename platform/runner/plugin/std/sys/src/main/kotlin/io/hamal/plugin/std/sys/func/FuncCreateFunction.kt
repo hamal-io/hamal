@@ -32,9 +32,9 @@ class FuncCreateFunction(
             )
 
             null to ctx.tableCreate(
+                "request_id" to KuaString(res.requestId.value.value.toString(16)),
+                "request_status" to KuaString(res.requestStatus.name),
                 "id" to KuaString(res.id.value.value.toString(16)),
-                "status" to KuaString(res.status.name),
-                "func_id" to KuaString(res.funcId.value.value.toString(16)),
                 "workspace_id" to KuaString(res.workspaceId.value.value.toString(16)),
                 "namespace_id" to KuaString(res.namespaceId.value.value.toString(16))
             )

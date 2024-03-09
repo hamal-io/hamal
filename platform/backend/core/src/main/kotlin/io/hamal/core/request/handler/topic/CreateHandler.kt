@@ -14,7 +14,7 @@ class TopicCreateHandler(
         topicRepository.create(
             TopicCmdRepository.TopicCreateCmd(
                 id = req.cmdId(),
-                topicId = req.topicId,
+                topicId = req.id,
                 logTopicId = req.logTopicId,
                 name = req.name,
                 workspaceId = req.workspaceId,

@@ -19,7 +19,7 @@ internal class FuncDeploymentListControllerTest : FuncBaseControllerTest() {
                     code = CodeValue("")
                 )
             )
-        ).funcId
+        ).id
 
         repeat(20) {
             awaitCompleted(deployFunc(funcId, ApiFuncDeployRequest(null, DeployMessage("deployed-${it}"))))

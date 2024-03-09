@@ -38,6 +38,7 @@ data class BridgeUnitOfWorkList(
 ) {
     data class UnitOfWork(
         val id: ExecId,
+        val execToken: ExecToken,
         val namespaceId: NamespaceId,
         val workspaceId: WorkspaceId,
         val inputs: ExecInputs,
@@ -58,7 +59,10 @@ interface BridgeExecService {
         eventToSubmit: List<EventToSubmit>
     ): BridgeExecCompleteRequested
 
-    fun fail(execId: ExecId, result: ExecResult): BridgeExecFailRequested
+    fun fail(
+        execId: ExecId,
+        result: ExecResult
+    ): BridgeExecFailRequested
 }
 
 internal class BridgeExecServiceImpl(

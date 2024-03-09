@@ -1,6 +1,6 @@
 sys = require_plugin('sys')
 --
-err, hook = sys.hooks.get('123123123')
+err, hook_req = sys.hooks.get('123123123')
 assert(err.message == 'Hook not found')
 assert(err['message'] == 'Hook not found')
-assert(hook == nil)
+assert(hook_req == nil)

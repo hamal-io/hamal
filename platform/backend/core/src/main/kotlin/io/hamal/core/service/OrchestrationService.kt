@@ -94,9 +94,8 @@ internal class OrchestrationService(
     }
 
     private fun scheduleExec(cmdId: CmdId, plannedExec: Exec.Planned) {
-        val scheduledExec =
-            execCmdRepository.schedule(ScheduleCmd(cmdId, plannedExec.id))
-                .also { emitEvent(cmdId, it) }
+        val scheduledExec = execCmdRepository.schedule(ScheduleCmd(cmdId, plannedExec.id))
+            .also { emitEvent(cmdId, it) }
 
         execs[scheduledExec.id] = scheduledExec
     }

@@ -34,7 +34,7 @@ class TestApiConfig {
     fun backendBasePath() = BackendBasePath("/tmp/hamal/testbed/${UUID.randomUUID()}")
 
     @Bean
-    fun delayRetry(): DelayRetry = DelayRetryFixedTime(1.milliseconds)
+    fun delayRetry(): DelayRetry = DelayRetryFixedTime(10.milliseconds)
 }
 
 @TestConfiguration
@@ -70,7 +70,7 @@ class TestSetupConfig {
                 authId = AuthId(id),
                 accountId = AccountId(id),
                 token = AuthToken("$id-token"),
-                expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(1, ChronoUnit.DAYS))
+                expiresAt = ExpiresAt(TimeUtils.now().plus(1, ChronoUnit.DAYS))
             )
         )
     }
@@ -92,7 +92,7 @@ class TestSetupConfig {
                 authId = AuthId(id),
                 accountId = AccountId(id),
                 token = AuthToken("$id-token"),
-                expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(1, ChronoUnit.DAYS))
+                expiresAt = ExpiresAt(TimeUtils.now().plus(1, ChronoUnit.DAYS))
             )
         )
 

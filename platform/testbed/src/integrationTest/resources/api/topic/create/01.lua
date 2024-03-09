@@ -2,7 +2,7 @@
 --
 --topic_req = fail_on_error(sys.topics.append({ name = "some-amazing-topic" }))
 --assert(topic_req.id ~= nil)
---assert(topic_req.status == 'Submitted')
+--assert(topic_req.request_status == 'Submitted')
 --assert(topic_req.topic_id ~= nil)
 --assert(topic_req.workspace_id == '539')
 --sys.await(topic_req)

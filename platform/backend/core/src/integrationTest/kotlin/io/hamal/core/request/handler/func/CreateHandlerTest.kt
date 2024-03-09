@@ -61,11 +61,11 @@ internal class FuncCreateHandlerTest : BaseReqHandlerTest() {
 
     private val submitCreateFuncReq by lazy {
         FuncCreateRequested(
-            id = RequestId(1),
-            by = AuthId(2),
-            status = Submitted,
+            requestId = RequestId(1),
+            requestedBy = AuthId(2),
+            requestStatus = Submitted,
             workspaceId = testWorkspace.id,
-            funcId = FuncId(12345),
+            id = FuncId(12345),
             namespaceId = NamespaceId(23456),
             name = FuncName("awesome-func"),
             inputs = FuncInputs(HotObject.builder().set("hamal", "rocks").build()),

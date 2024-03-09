@@ -11,11 +11,11 @@ interface FuncCreateRequest {
 }
 
 data class FuncCreateRequested(
-    override val id: RequestId,
-    override val by: AuthId,
-    override var status: RequestStatus,
+    override val requestId: RequestId,
+    override val requestedBy: AuthId,
+    override var requestStatus: RequestStatus,
+    val id: FuncId,
     val workspaceId: WorkspaceId,
-    val funcId: FuncId,
     val namespaceId: NamespaceId,
     val name: FuncName,
     val inputs: FuncInputs,
@@ -30,11 +30,11 @@ interface FuncUpdateRequest {
 }
 
 data class FuncUpdateRequested(
-    override val id: RequestId,
-    override val by: AuthId,
-    override var status: RequestStatus,
+    override val requestId: RequestId,
+    override val requestedBy: AuthId,
+    override var requestStatus: RequestStatus,
+    val id: FuncId,
     val workspaceId: WorkspaceId,
-    val funcId: FuncId,
     val name: FuncName?,
     val inputs: FuncInputs?,
     val code: CodeValue?
@@ -53,11 +53,11 @@ interface FuncDeployRequest {
 }
 
 data class FuncDeployRequested(
-    override val id: RequestId,
-    override val by: AuthId,
-    override var status: RequestStatus,
+    override val requestId: RequestId,
+    override val requestedBy: AuthId,
+    override var requestStatus: RequestStatus,
+    val id: FuncId,
     val workspaceId: WorkspaceId,
-    val funcId: FuncId,
     val version: CodeVersion?,
     val message: DeployMessage?
 ) : Requested()

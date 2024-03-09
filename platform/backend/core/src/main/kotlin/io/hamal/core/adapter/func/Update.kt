@@ -23,11 +23,11 @@ class FuncUpdateAdapter(
     override fun invoke(funcId: FuncId, req: FuncUpdateRequest): FuncUpdateRequested {
         val func = funcGet(funcId)
         return FuncUpdateRequested(
-            id = generateDomainId(::RequestId),
-            by = SecurityContext.currentAuthId,
-            status = RequestStatus.Submitted,
+            requestId = generateDomainId(::RequestId),
+            requestedBy = SecurityContext.currentAuthId,
+            requestStatus = RequestStatus.Submitted,
             workspaceId = func.workspaceId,
-            funcId = funcId,
+            id = funcId,
             name = req.name,
             inputs = req.inputs,
             code = req.code

@@ -23,10 +23,10 @@ class AdhocInvokeAdapter(
     override operator fun invoke(namespaceId: NamespaceId, req: AdhocInvokeRequest): ExecInvokeRequested {
         val namespace = namespaceGet(namespaceId)
         return ExecInvokeRequested(
-            id = generateDomainId(::RequestId),
-            by = SecurityContext.currentAuthId,
-            status = Submitted,
-            execId = generateDomainId(::ExecId),
+            requestId = generateDomainId(::RequestId),
+            requestedBy = SecurityContext.currentAuthId,
+            requestStatus = Submitted,
+            id = generateDomainId(::ExecId),
             namespaceId = namespace.id,
             workspaceId = namespace.workspaceId,
             inputs = req.inputs ?: InvocationInputs(),

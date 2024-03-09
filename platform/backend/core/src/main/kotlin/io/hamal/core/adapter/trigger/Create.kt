@@ -37,11 +37,11 @@ class TriggerCreateAdapter(
         ensureEvent(req)
         ensureHook(req)
         return TriggerCreateRequested(
-            triggerType = req.type,
-            id = generateDomainId(::RequestId),
-            by = SecurityContext.currentAuthId,
-            status = RequestStatus.Submitted,
-            triggerId = generateDomainId(::TriggerId),
+            type = req.type,
+            requestId = generateDomainId(::RequestId),
+            requestedBy = SecurityContext.currentAuthId,
+            requestStatus = RequestStatus.Submitted,
+            id = generateDomainId(::TriggerId),
             workspaceId = namespace.workspaceId,
             name = req.name,
             funcId = func.id,

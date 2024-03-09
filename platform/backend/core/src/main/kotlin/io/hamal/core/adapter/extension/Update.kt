@@ -23,11 +23,11 @@ class ExtensionUpdateAdapter(
     override fun invoke(extensionId: ExtensionId, req: ExtensionUpdateRequest): ExtensionUpdateRequested {
         val extension = extensionGet(extensionId)
         return ExtensionUpdateRequested(
-            id = generateDomainId(::RequestId),
-            by = SecurityContext.currentAuthId,
-            status = RequestStatus.Submitted,
+            requestId = generateDomainId(::RequestId),
+            requestedBy = SecurityContext.currentAuthId,
+            requestStatus = RequestStatus.Submitted,
             workspaceId = extension.workspaceId,
-            extensionId = extension.id,
+            id = extension.id,
             name = req.name,
             code = req.code
         ).also(requestEnqueue::invoke)

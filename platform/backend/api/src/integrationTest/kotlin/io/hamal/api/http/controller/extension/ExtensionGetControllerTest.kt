@@ -21,7 +21,7 @@ internal class ExtensionGetControllerTest : ExtensionBaseControllerTest() {
                     code = CodeValue("40 + 2")
                 )
             )
-        ).extensionId
+        ).id
 
         val ext = getExtension(extensionId)
         assertThat(ext.name, equalTo(ExtensionName("TestExtension")))

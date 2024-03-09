@@ -25,9 +25,9 @@ class TriggerSetStatusHandler(
 
     private fun setStatus(req: TriggerStatusRequested): Trigger {
         return triggerCmdRepository.set(
-            req.triggerId, TriggerCmdRepository.SetTriggerStatusCmd(
+            req.id, TriggerCmdRepository.SetTriggerStatusCmd(
                 id = req.cmdId(),
-                status = req.triggerStatus
+                status = req.status
             )
         )
     }

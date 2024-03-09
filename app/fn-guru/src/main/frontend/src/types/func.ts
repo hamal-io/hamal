@@ -1,28 +1,28 @@
 export interface FuncCreateRequested {
+    requestId: string;
+    requestStatus: string;
     id: string;
-    status: string;
-    funcId: string;
     namespaceId: string;
     workspaceId: string;
 }
 
 export interface FuncUpdateRequested {
+    requestId: string;
+    requestStatus: string;
     id: string;
-    status: string;
-    funcId: string;
 }
 
 
 export interface FuncInvokeRequested {
+    requestId: string;
+    requestStatus: string;
     id: string;
-    status: string;
-    funcId: string;
 }
 
 export interface FuncDeployRequested {
+    requestId: string;
+    requestStatus: string;
     id: string;
-    status: string;
-    funcId: string;
 }
 
 export interface Func {

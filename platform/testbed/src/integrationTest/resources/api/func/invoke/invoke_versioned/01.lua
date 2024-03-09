@@ -1,33 +1,33 @@
 sys = require_plugin('sys')
 
-req = fail_on_error(sys.funcs.create({
+func_req = fail_on_error(sys.funcs.create({
     namespace_id = '539',
     name = 'test-func3',
     inputs = {},
     code = [[print('invoked')]]
 }))
-sys.await_completed(req)
+sys.await_completed(func_req)
 
 for i = 2, 10 do
     update_req = fail_on_error(sys.funcs.update({
-        id = req.func_id,
+        id = func_req.id,
         name = 'func3-' .. i,
         inputs = { },
-        code = [[code3-]] .. i
+        code = [['code3-']] .. i
     }))
     sys.await_completed(update_req)
 end
-func_one = fail_on_error(sys.funcs.get(req.func_id))
+func_one = fail_on_error(sys.funcs.get(func_req.id))
 assert(func_one.code.version == 10)
 
 invocation_req = fail_on_error(sys.funcs.invoke({
-    id = req.func_id,
+    id = func_req.id,
     correlation_id = nil,
     inputs = { },
     version = 5
 }))
 sys.await_completed(invocation_req)
 
+assert(invocation_req.request_id ~= nil)
+assert(invocation_req.request_status == 'Submitted')
 assert(invocation_req.id ~= nil)
-assert(invocation_req.status == 'Submitted')
-assert(invocation_req.exec_id ~= nil)

@@ -22,7 +22,7 @@ import org.junit.jupiter.api.Test
 internal class StateSetControllerTest : StateBaseControllerTest() {
     @Test
     fun `Sets state for a function first time`() {
-        val funcId = awaitCompleted(createFunc(FuncName("SomeFunc"))).funcId
+        val funcId = awaitCompleted(createFunc(FuncName("SomeFunc"))).id
 
         val response = httpTemplate.put("/v1/funcs/{funcId}/states/__CORRELATION__")
             .path("funcId", funcId)
@@ -40,7 +40,7 @@ internal class StateSetControllerTest : StateBaseControllerTest() {
 
     @Test
     fun `Sets state for a function with multiple correlations`() {
-        val funcId = awaitCompleted(createFunc(FuncName("SomeFunc"))).funcId
+        val funcId = awaitCompleted(createFunc(FuncName("SomeFunc"))).id
 
         val correlationOne = Correlation(funcId = funcId, id = CorrelationId("1"))
         val correlationTwo = Correlation(funcId = funcId, id = CorrelationId("2"))
@@ -62,7 +62,7 @@ internal class StateSetControllerTest : StateBaseControllerTest() {
     @Test
     fun `Updates a state multiple times`() {
 
-        val funcId = awaitCompleted(createFunc(FuncName("SomeFunc"))).funcId
+        val funcId = awaitCompleted(createFunc(FuncName("SomeFunc"))).id
 
         val correlation = Correlation(
             id = CorrelationId("SOME_CORRELATION"),

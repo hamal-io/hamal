@@ -50,8 +50,8 @@ class RequestSqliteRepository(
     override fun queue(req: Requested) {
         connection.tx {
             execute("INSERT INTO requests (id,status,data) VALUES (:id,:status,:data)") {
-                set("id", req.id)
-                set("status", req.status.value)
+                set("id", req.requestId)
+                set("status", req.requestStatus.value)
                 set("data", json.serialize(req))
             }
         }
@@ -187,7 +187,7 @@ class RequestSqliteRepository(
 
     private fun <REQUESTED_TYPE : Requested> statusField(klass: KClass<REQUESTED_TYPE>): Field =
         statusFieldCache(klass) { clazz ->
-            clazz.java.getDeclaredField("status").also { field -> field.isAccessible = true }
+            clazz.java.getDeclaredField("requestStatus").also { field -> field.isAccessible = true }
         }
 
     private val statusFieldCache = KeyedOnce.default<KClass<*>, Field>()

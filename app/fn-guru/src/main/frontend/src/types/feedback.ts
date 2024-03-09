@@ -15,6 +15,7 @@ export const FeedbackMoods: FeedbackMood = {
 };
 
 export interface FeedbackCreateRequested {
+    requestId: string;
+    requestStatus: string;
     id: string;
-    status: string;
 }

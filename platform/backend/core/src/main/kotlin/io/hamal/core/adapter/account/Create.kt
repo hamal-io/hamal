@@ -29,9 +29,9 @@ class AccountCreateAdapter(
         val salt = generateSalt()
         val workspaceId = generateDomainId(::WorkspaceId)
         return AccountCreateRequested(
-            id = generateDomainId(::RequestId),
-            by = SecurityContext.currentAuthId,
-            status = RequestStatus.Submitted,
+            requestId = generateDomainId(::RequestId),
+            requestedBy = SecurityContext.currentAuthId,
+            requestStatus = RequestStatus.Submitted,
             accountId = generateDomainId(::AccountId),
             accountType = AccountType.User,
             workspaceId = workspaceId,

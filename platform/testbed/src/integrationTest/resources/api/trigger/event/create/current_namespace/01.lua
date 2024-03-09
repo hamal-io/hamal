@@ -7,7 +7,7 @@
 --sys.await(topic_req)
 --
 --req_two = fail_on_error(sys.triggers.create_event({
---    func_id = func_req.func_id,
+--    func_id = func_req.id,
 --    name = 'trigger-to-append',
 --    inputs = { },
 --    topic_id = topic_req.topic_id
@@ -15,7 +15,7 @@
 --sys.await_completed(req_two)
 --
 --assert(req_two.id ~= nil)
---assert(req_two.status == 'Submitted')
+--assert(req_two.request_status == 'Submitted')
 --assert(req_two.trigger_id ~= nil)
 --assert(req_two.workspace_id == '539')
 --assert(req_two.namespace_id == '539')

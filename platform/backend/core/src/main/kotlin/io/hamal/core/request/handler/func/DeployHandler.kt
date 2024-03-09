@@ -26,10 +26,10 @@ class FuncDeployHandler(
     }
 
     private fun deployVersion(req: FuncDeployRequested): Func {
-        val func = funcRepository.get(req.funcId)
+        val func = funcRepository.get(req.id)
 
         return funcRepository.deploy(
-            req.funcId,
+            req.id,
             DeployCmd(
                 id = req.cmdId(),
                 version = req.version ?: func.code.version,

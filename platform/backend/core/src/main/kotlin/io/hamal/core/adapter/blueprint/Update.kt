@@ -23,10 +23,10 @@ class BlueprintUpdateAdapter(
     override fun invoke(blueprintId: BlueprintId, req: BlueprintUpdateRequest): BlueprintUpdateRequested {
         ensureBlueprintExists(blueprintId)
         return BlueprintUpdateRequested(
-            id = generateDomainId(::RequestId),
-            by = SecurityContext.currentAuthId,
-            status = RequestStatus.Submitted,
-            blueprintId = blueprintId,
+            requestId = generateDomainId(::RequestId),
+            requestedBy = SecurityContext.currentAuthId,
+            requestStatus = RequestStatus.Submitted,
+            id = blueprintId,
             name = req.name,
             inputs = req.inputs,
             value = req.value,

@@ -31,10 +31,10 @@ internal class CreateHookHandlerTest : BaseReqHandlerTest() {
 
     private val submitCreateHookReq by lazy {
         HookCreateRequested(
-            id = RequestId(1),
-            by = AuthId(2),
-            status = Submitted,
-            hookId = HookId(12345),
+            requestId = RequestId(1),
+            requestedBy = AuthId(2),
+            requestStatus = Submitted,
+            id = HookId(12345),
             workspaceId = testWorkspace.id,
             namespaceId = NamespaceId(23456),
             name = HookName("awesome-hook")

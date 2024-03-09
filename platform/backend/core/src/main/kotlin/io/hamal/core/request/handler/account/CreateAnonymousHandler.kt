@@ -6,7 +6,7 @@ import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.request.AccountCreateAnonymousRequested
-import io.hamal.lib.domain.vo.AuthTokenExpiresAt
+import io.hamal.lib.domain.vo.ExpiresAt
 import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.domain.vo.NamespaceTreeId
 import io.hamal.lib.domain.vo.WorkspaceName
@@ -38,8 +38,8 @@ class AccountCreateAnonymousHandler(
         return accountCmdRepository.create(
             AccountCmdRepository.CreateCmd(
                 id = req.cmdId(),
-                accountId = req.accountId,
-                accountType = req.accountType,
+                accountId = req.id,
+                accountType = req.type,
                 salt = req.salt
             )
         )
@@ -51,7 +51,7 @@ class AccountCreateAnonymousHandler(
                 id = req.cmdId(),
                 workspaceId = req.workspaceId,
                 name = WorkspaceName("Workspace ${req.workspaceId.value.value.toString(16)}"),
-                creatorId = req.accountId
+                creatorId = req.id
             )
         )
     }
@@ -83,9 +83,9 @@ class AccountCreateAnonymousHandler(
             AuthCmdRepository.CreateTokenAuthCmd(
                 id = req.cmdId(),
                 authId = req.tokenAuthId,
-                accountId = req.accountId,
+                accountId = req.id,
                 token = req.token,
-                expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(30, ChronoUnit.DAYS))
+                expiresAt = ExpiresAt(TimeUtils.now().plus(30, ChronoUnit.DAYS))
             )
         )
     }

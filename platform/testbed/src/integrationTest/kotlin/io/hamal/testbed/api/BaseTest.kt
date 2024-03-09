@@ -129,7 +129,7 @@ class ClearController {
                 authId = AuthId.root,
                 accountId = AccountId.root,
                 token = AuthToken("root-token"),
-                expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(1, ChronoUnit.DAYS))
+                expiresAt = ExpiresAt(TimeUtils.now().plus(1, ChronoUnit.DAYS))
             )
         ) as Auth.Token).token
 
@@ -244,7 +244,7 @@ class TestConfig {
                     authId = AuthId.root,
                     accountId = AccountId.root,
                     token = AuthToken("root-token"),
-                    expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(1, ChronoUnit.DAYS))
+                    expiresAt = ExpiresAt(TimeUtils.now().plus(1, ChronoUnit.DAYS))
                 )
             ) as Auth.Token).token
 
@@ -337,7 +337,7 @@ abstract class BaseApiTest {
 
 
             while (wait) {
-                with(sdk.exec.get(execReq.execId)) {
+                with(sdk.exec.get(execReq.id)) {
                     if (status == ExecStatus.Completed) {
                         wait = false
                     } else {

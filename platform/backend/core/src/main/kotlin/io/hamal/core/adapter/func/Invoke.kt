@@ -33,10 +33,10 @@ class FuncInvokeAdapter(
         } ?: func.code.version
 
         return ExecInvokeRequested(
-            id = generateDomainId(::RequestId),
-            by = SecurityContext.currentAuthId,
-            status = RequestStatus.Submitted,
-            execId = generateDomainId(::ExecId),
+            requestId = generateDomainId(::RequestId),
+            requestedBy = SecurityContext.currentAuthId,
+            requestStatus = RequestStatus.Submitted,
+            id = generateDomainId(::ExecId),
             namespaceId = func.namespaceId,
             workspaceId = func.workspaceId,
             funcId = funcId,

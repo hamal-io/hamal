@@ -20,10 +20,10 @@ internal class ExecInvokeHandlerTest : BaseReqHandlerTest() {
     fun `Invokes execution with code`() {
         testInstance(
             ExecInvokeRequested(
-                id = RequestId(1),
-                by = AuthId(2),
-                status = Submitted,
-                execId = ExecId(3333),
+                requestId = RequestId(1),
+                requestedBy = AuthId(2),
+                requestStatus = Submitted,
+                id = ExecId(3333),
                 namespaceId = testNamespace.id,
                 workspaceId = testWorkspace.id,
                 inputs = InvocationInputs(HotObject.builder().set("hamal", "justworks").build()),
@@ -61,11 +61,11 @@ internal class ExecInvokeHandlerTest : BaseReqHandlerTest() {
         )
         testInstance(
             ExecInvokeRequested(
-                id = RequestId(1),
-                by = AuthId(2),
+                requestId = RequestId(1),
+                requestedBy = AuthId(2),
                 correlationId = CorrelationId("some-correlation"),
-                status = Submitted,
-                execId = ExecId(3333),
+                requestStatus = Submitted,
+                id = ExecId(3333),
                 namespaceId = testNamespace.id,
                 workspaceId = testWorkspace.id,
                 inputs = InvocationInputs(
@@ -130,11 +130,11 @@ internal class ExecInvokeHandlerTest : BaseReqHandlerTest() {
     //    @formatter:off
     private val submittedFixedRateInvocationReq by lazy {
         ExecInvokeRequested(
-            id = RequestId(1),
-            by = AuthId(2),
+            requestId = RequestId(1),
+            requestedBy = AuthId(2),
             correlationId = CorrelationId("some-correlation"),
-            status = Submitted,
-            execId = ExecId(3333),
+            requestStatus = Submitted,
+            id = ExecId(3333),
             namespaceId = testNamespace.id,
             workspaceId = testWorkspace.id,
             inputs = InvocationInputs(

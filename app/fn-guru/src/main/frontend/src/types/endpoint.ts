@@ -1,6 +1,6 @@
 export interface EndpointCreateRequested {
+    requestId: string;
     id: string;
-    endpointId: string;
     namespaceId: string;
     workspaceId: string;
 }

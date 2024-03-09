@@ -20,11 +20,11 @@ internal class FuncDeployHandlerTest : BaseReqHandlerTest() {
 
         testInstance(
             FuncDeployRequested(
-                id = RequestId(500),
-                by = AuthId(2),
-                status = Submitted,
+                requestId = RequestId(500),
+                requestedBy = AuthId(2),
+                requestStatus = Submitted,
+                id = FuncId(1),
                 workspaceId = testWorkspace.id,
-                FuncId(1),
                 version = CodeVersion(10),
                 message = null
             )
@@ -43,11 +43,11 @@ internal class FuncDeployHandlerTest : BaseReqHandlerTest() {
 
         testInstance(
             FuncDeployRequested(
-                id = RequestId(500),
-                by = AuthId(2),
-                status = Submitted,
+                requestId = RequestId(500),
+                requestedBy = AuthId(2),
+                requestStatus = Submitted,
+                id = FuncId(1),
                 workspaceId = testWorkspace.id,
-                FuncId(1),
                 version = CodeVersion(10),
                 message = DeployMessage("This function and hamal rocks")
             )
@@ -66,11 +66,11 @@ internal class FuncDeployHandlerTest : BaseReqHandlerTest() {
 
         testInstance(
             FuncDeployRequested(
-                id = RequestId(500),
-                by = AuthId(2),
-                status = Submitted,
+                requestId = RequestId(500),
+                requestedBy = AuthId(2),
+                requestStatus = Submitted,
                 workspaceId = testWorkspace.id,
-                funcId = FuncId(1),
+                id = FuncId(1),
                 version = null,
                 message = null
             )

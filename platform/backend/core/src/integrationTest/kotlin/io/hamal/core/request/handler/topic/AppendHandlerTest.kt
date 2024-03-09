@@ -24,10 +24,10 @@ internal class TopicAppendHandlerTest : BaseReqHandlerTest() {
 
         testInstance(
             TopicAppendEventRequested(
-                id = RequestId(SnowflakeId(123)),
-                by = AuthId(2),
-                status = Submitted,
-                topicId = TopicId(4444),
+                requestId = RequestId(SnowflakeId(123)),
+                requestedBy = AuthId(2),
+                requestStatus = Submitted,
+                id = TopicId(4444),
                 payload = TopicEventPayload(HotObject.builder().set("hamal", "rocks").build())
             )
         )
@@ -49,10 +49,10 @@ internal class TopicAppendHandlerTest : BaseReqHandlerTest() {
         val exception = assertThrows<NoSuchElementException> {
             testInstance(
                 TopicAppendEventRequested(
-                    id = RequestId(SnowflakeId(123)),
-                    by = AuthId(2),
-                    status = Submitted,
-                    topicId = TopicId(123),
+                    requestId = RequestId(SnowflakeId(123)),
+                    requestedBy = AuthId(2),
+                    requestStatus = Submitted,
+                    id = TopicId(123),
                     payload = TopicEventPayload(HotObject.builder().set("hamal", "rocks").build())
                 )
             )

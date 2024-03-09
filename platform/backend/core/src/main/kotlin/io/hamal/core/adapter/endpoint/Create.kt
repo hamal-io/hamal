@@ -29,10 +29,10 @@ class EndpointCreateAdapter(
         val func = funcGet(req.funcId)
         require(namespace.id == func.namespaceId) { "Endpoint and Func must share the same Namespace" }
         return EndpointCreateRequested(
-            id = generateDomainId(::RequestId),
-            by = SecurityContext.currentAuthId,
-            status = RequestStatus.Submitted,
-            endpointId = generateDomainId(::EndpointId),
+            requestId = generateDomainId(::RequestId),
+            requestedBy = SecurityContext.currentAuthId,
+            requestStatus = RequestStatus.Submitted,
+            id = generateDomainId(::EndpointId),
             workspaceId = func.workspaceId,
             funcId = func.id,
             name = req.name,

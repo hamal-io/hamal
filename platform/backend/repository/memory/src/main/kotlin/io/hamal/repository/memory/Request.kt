@@ -22,8 +22,8 @@ class RequestMemoryRepository : RequestRepository {
 
     override fun queue(req: Requested) {
         return lock.withLock {
-            store[req.id] = req
-            queue.add(req.id)
+            store[req.requestId] = req
+            queue.add(req.requestId)
         }
     }
 
@@ -54,8 +54,8 @@ class RequestMemoryRepository : RequestRepository {
     override fun complete(reqId: RequestId) {
         lock.withLock {
             val req = get(reqId)
-            check(req.status == Processing) { "Request not processing" }
-            store[req.id] = req.apply {
+            check(req.requestStatus == Processing) { "Request not processing" }
+            store[req.requestId] = req.apply {
                 statusField(this::class).also { field -> field.set(this, RequestStatus.Completed) }
             }
         }
@@ -64,8 +64,8 @@ class RequestMemoryRepository : RequestRepository {
     override fun fail(reqId: RequestId) {
         lock.withLock {
             val req = get(reqId)
-            check(req.status == Processing) { "Request not processing" }
-            store[req.id] = req.apply {
+            check(req.requestStatus == Processing) { "Request not processing" }
+            store[req.requestId] = req.apply {
                 statusField(this::class).also { field -> field.set(this, RequestStatus.Failed) }
             }
         }
@@ -104,7 +104,7 @@ class RequestMemoryRepository : RequestRepository {
 
     private fun <REQUESTED_TYPE : Requested> statusField(klass: KClass<REQUESTED_TYPE>): Field =
         statusFieldCache(klass) { clazz ->
-            clazz.java.getDeclaredField("status").also { field -> field.isAccessible = true }
+            clazz.java.getDeclaredField("requestStatus").also { field -> field.isAccessible = true }
         }
 
     private val queue = ConcurrentLinkedQueue<RequestId>()

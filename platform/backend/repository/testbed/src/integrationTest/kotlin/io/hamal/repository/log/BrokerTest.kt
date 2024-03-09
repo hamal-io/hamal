@@ -2,7 +2,8 @@ package io.hamal.repository.log
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.common.util.HashUtils
+import io.hamal.lib.domain.CmdIdGeneratorImpl
+import io.hamal.lib.domain.GenerateCmdId
 import io.hamal.lib.domain.vo.LogTopicId
 import io.hamal.repository.api.log.LogBrokerRepository
 import io.hamal.repository.api.log.LogBrokerRepository.CreateTopicCmd
@@ -24,11 +25,7 @@ class LogBrokerRepositoryTest : AbstractIntegrationTest() {
             val futures = IntRange(1, 10).map { thread ->
                 runAsync {
                     IntRange(1, 1_000).forEach {
-                        testInstance.append(
-                            CmdId(HashUtils.sha256("$thread $it")),
-                            topic.id,
-                            "$thread $it".toByteArray()
-                        )
+                        testInstance.append(generateCmdId(), topic.id, "$thread $it".toByteArray())
                     }
                 }
             }
@@ -48,11 +45,7 @@ class LogBrokerRepositoryTest : AbstractIntegrationTest() {
                     val topic = testInstance.create(CreateTopicCmd(CmdId(1), LogTopicId(thread)))
 
                     IntRange(1, 100).forEach {
-                        testInstance.append(
-                            CmdId(HashUtils.sha256("$thread $it")),
-                            topic.id,
-                            "$thread $it".toByteArray()
-                        )
+                        testInstance.append(generateCmdId(), topic.id, "$thread $it".toByteArray())
                     }
                 }
             }
@@ -70,4 +63,6 @@ class LogBrokerRepositoryTest : AbstractIntegrationTest() {
             }
 
         }
+
+    private val generateCmdId: GenerateCmdId = CmdIdGeneratorImpl
 }

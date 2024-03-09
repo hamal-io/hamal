@@ -80,8 +80,10 @@ internal class HookInvokeController(
     }
 
     data class Response(
-        val reqId: RequestId, val status: RequestStatus, val id: HookId
+        val requestId: RequestId,
+        val requestStatus: RequestStatus,
+        val id: HookId
     ) {
-        constructor(req: HookInvokeRequested) : this(req.id, req.status, req.hookId)
+        constructor(req: HookInvokeRequested) : this(req.requestId, req.requestStatus, req.id)
     }
 }

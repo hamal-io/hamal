@@ -41,7 +41,7 @@ class ExecInvokeHandler(
         return execCmdRepository.plan(
             PlanCmd(
                 id = req.cmdId(),
-                execId = req.execId,
+                execId = req.id,
                 namespaceId = req.namespaceId,
                 workspaceId = req.workspaceId,
                 correlation = correlation,

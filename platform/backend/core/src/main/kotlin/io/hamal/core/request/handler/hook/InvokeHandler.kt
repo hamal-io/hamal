@@ -26,7 +26,7 @@ class HookInvokeHandler(
      * At least once delivery is good enough for now
      */
     override fun invoke(req: HookInvokeRequested) {
-        val hook = hookQueryRepository.find(req.hookId) ?: return
+        val hook = hookQueryRepository.find(req.id) ?: return
 
         val triggers = triggerQueryRepository.list(
             TriggerQuery(

@@ -8,8 +8,10 @@ import io.hamal.extension.telegram.ExtensionTelegramFactory
 import io.hamal.lib.domain.vo.AuthToken
 import io.hamal.lib.domain.vo.ExecToken
 import io.hamal.lib.domain.vo.RunnerEnv
-import io.hamal.lib.kua.*
+import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Jar
+import io.hamal.lib.kua.Sandbox
+import io.hamal.lib.kua.SandboxContext
 import io.hamal.lib.sdk.ApiSdkImpl
 import io.hamal.plugin.net.http.PluginHttpFactory
 import io.hamal.plugin.net.smtp.PluginSmtpFactory
@@ -47,9 +49,15 @@ class SandboxFactoryDefaultImpl(
     override fun create(ctx: SandboxContext): Sandbox {
         NativeLoader.load(Jar)
 
+//        val sdk = ApiSdkImpl(
+//            apiHost = apiHost,
+//            token = AuthToken("Bearer ${ctx[ExecToken::class].value}")
+//        )
+
         val sdk = ApiSdkImpl(
             apiHost = apiHost,
-            token = AuthToken("Bearer ${ctx[ExecToken::class].value}")
+            token = AuthToken("RunnerToken"),
+            execToken = ctx[ExecToken::class]
         )
 
         return Sandbox(ctx)

@@ -17,9 +17,9 @@ data class ApiHookCreateRequest(
 ) : HookCreateRequest
 
 data class ApiHookCreateRequested(
-    override val id: RequestId,
-    override val status: RequestStatus,
-    val hookId: HookId,
+    override val requestId: RequestId,
+    override val requestStatus: RequestStatus,
+    val id: HookId,
     val workspaceId: WorkspaceId,
     val namespaceId: NamespaceId
 ) : ApiRequested()
@@ -29,9 +29,9 @@ data class ApiHookUpdateRequest(
 ) : HookUpdateRequest
 
 data class ApiHookUpdateRequested(
-    override val id: RequestId,
-    override val status: RequestStatus,
-    val hookId: HookId,
+    override val requestId: RequestId,
+    override val requestStatus: RequestStatus,
+    val id: HookId,
 ) : ApiRequested()
 
 data class ApiHookList(

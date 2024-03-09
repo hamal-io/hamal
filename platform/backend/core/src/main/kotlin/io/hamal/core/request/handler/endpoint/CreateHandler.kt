@@ -29,7 +29,7 @@ class EndpointCreateHandler(
         return endpointCmdRepository.create(
             CreateCmd(
                 id = req.cmdId(),
-                endpointId = req.endpointId,
+                endpointId = req.id,
                 workspaceId = req.workspaceId,
                 funcId = func.id,
                 namespaceId = func.namespaceId,

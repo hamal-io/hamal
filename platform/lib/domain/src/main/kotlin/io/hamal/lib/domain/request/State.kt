@@ -14,9 +14,9 @@ interface StateSetRequest {
 }
 
 data class StateSetRequested(
-    override val id: RequestId,
-    override val by: AuthId,
-    override var status: RequestStatus,
+    override val requestId: RequestId,
+    override val requestedBy: AuthId,
+    override var requestStatus: RequestStatus,
     val workspaceId: WorkspaceId,
     val state: CorrelatedState
 ) : Requested()

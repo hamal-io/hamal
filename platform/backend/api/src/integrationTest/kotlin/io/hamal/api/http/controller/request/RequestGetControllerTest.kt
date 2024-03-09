@@ -19,12 +19,12 @@ internal class RequestGetControllerTest : RequestBaseControllerTest() {
             adhoc()
         )
 
-        val response = httpTemplate.get("/v1/requests/{reqId}").path("reqId", request.id).execute()
+        val response = httpTemplate.get("/v1/requests/{reqId}").path("reqId", request.requestId).execute()
         assertThat(response.statusCode, equalTo(Accepted))
         require(response is HttpSuccessResponse) { "request was not successful" }
 
         val result = response.result(ApiExecInvokeRequested::class)
-        assertThat(result.status, equalTo(Completed))
+        assertThat(result.requestStatus, equalTo(Completed))
     }
 
     @Test

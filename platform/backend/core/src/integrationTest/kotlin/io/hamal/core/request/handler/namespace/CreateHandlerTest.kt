@@ -70,11 +70,11 @@ internal class NamespaceAppendHandlerTest : BaseReqHandlerTest() {
 
     private val requestedAppendNamespace by lazy {
         NamespaceAppendRequested(
-            id = RequestId(3),
-            by = AuthId(4),
-            status = Submitted,
+            requestId = RequestId(3),
+            requestedBy = AuthId(4),
+            requestStatus = Submitted,
             parentId = NamespaceId.root,
-            namespaceId = NamespaceId(12345),
+            id = NamespaceId(12345),
             workspaceId = testWorkspace.id,
             name = NamespaceName("awesome-namespace")
         )

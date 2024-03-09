@@ -25,8 +25,8 @@ internal class RequestListControllerTest : RequestBaseControllerTest() {
             assertThat(requests, hasSize(1))
 
             with(requests.first()) {
-                assertThat(id, equalTo(adhocResponse.id))
-                assertThat(status, equalTo(Completed))
+                assertThat(requestId, equalTo(adhocResponse.requestId))
+                assertThat(requestStatus, equalTo(Completed))
                 assertThat(this, instanceOf(ApiExecInvokeRequested::class.java))
             }
         }
@@ -45,7 +45,7 @@ internal class RequestListControllerTest : RequestBaseControllerTest() {
         listResponse.requests
             .map { it as ApiExecInvokeRequested }
             .forEachIndexed { idx, req ->
-                val code = execQueryRepository.get(req.execId).code
+                val code = execQueryRepository.get(req.id).code
                 assertThat(code, equalTo(ExecCode(value = CodeValue("${22 - idx}"))))
             }
     }
@@ -58,7 +58,7 @@ internal class RequestListControllerTest : RequestBaseControllerTest() {
         val request70 = requests[70]
 
         val listResponse = httpTemplate.get("/v1/requests")
-            .parameter("after_id", request70.execId)
+            .parameter("after_id", request70.id)
             .parameter("limit", 1)
             .execute(ApiRequestList::class)
 
@@ -67,7 +67,7 @@ internal class RequestListControllerTest : RequestBaseControllerTest() {
         listResponse.requests
             .map { it as ApiExecInvokeRequested }
             .forEach { req ->
-                val code = execQueryRepository.get(req.execId).code
+                val code = execQueryRepository.get(req.id).code
                 assertThat(code, equalTo(ExecCode(value = CodeValue("71"))))
             }
     }

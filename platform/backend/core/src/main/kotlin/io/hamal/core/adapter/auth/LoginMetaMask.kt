@@ -44,11 +44,11 @@ class AuthLoginMetaMaskAdapter(
             })
 
             return AuthLoginMetaMaskRequested(
-                id = generateDomainId(::RequestId),
-                by = SecurityContext.currentAuthId,
-                status = RequestStatus.Submitted,
-                authId = generateDomainId(::AuthId),
-                accountId = submitted.accountId,
+                requestId = generateDomainId(::RequestId),
+                requestedBy = SecurityContext.currentAuthId,
+                requestStatus = RequestStatus.Submitted,
+                id = generateDomainId(::AuthId),
+                accountId = submitted.id,
                 workspaceIds = listOf(submitted.workspaceId),
                 token = generateToken(),
                 address = req.address,
@@ -61,10 +61,10 @@ class AuthLoginMetaMaskAdapter(
             }
 
             return AuthLoginMetaMaskRequested(
-                id = generateDomainId(::RequestId),
-                by = SecurityContext.currentAuthId,
-                status = RequestStatus.Submitted,
-                authId = generateDomainId(::AuthId),
+                requestId = generateDomainId(::RequestId),
+                requestedBy = SecurityContext.currentAuthId,
+                requestStatus = RequestStatus.Submitted,
+                id = generateDomainId(::AuthId),
                 accountId = auth.accountId,
                 workspaceIds = workspaceList(
                     WorkspaceQuery(

@@ -27,7 +27,7 @@ internal class FuncListControllerTest : FuncBaseControllerTest() {
                     code = CodeValue("")
                 )
             )
-        ).funcId
+        ).id
 
         with(listFuncs()) {
             assertThat(funcs, hasSize(1))
@@ -81,7 +81,7 @@ internal class FuncListControllerTest : FuncBaseControllerTest() {
 
         val listResponse = httpTemplate.get("/v1/funcs")
             .parameter("workspace_ids", testWorkspace.id)
-            .parameter("after_id", fortyNinth.funcId)
+            .parameter("after_id", fortyNinth.id)
             .parameter("limit", 1)
             .execute(ApiFuncList::class)
 

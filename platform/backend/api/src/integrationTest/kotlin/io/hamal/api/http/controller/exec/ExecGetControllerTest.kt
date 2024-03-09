@@ -17,14 +17,14 @@ internal class ExecGetControllerTest : ExecBaseControllerTest() {
         val createAdhocResponse = awaitCompleted(createAdhocExec())
 
         val response = httpTemplate.get("/v1/execs/{execId}")
-            .path("execId", createAdhocResponse.execId)
+            .path("execId", createAdhocResponse.id)
             .execute()
 
         assertThat(response.statusCode, equalTo(HttpStatusCode.Ok))
         require(response is HttpSuccessResponse)
 
         with(response.result(ApiExec::class)) {
-            assertThat(id, equalTo(createAdhocResponse.execId))
+            assertThat(id, equalTo(createAdhocResponse.id))
             assertThat(inputs, equalTo(ExecInputs()))
             assertThat(correlation, nullValue())
         }

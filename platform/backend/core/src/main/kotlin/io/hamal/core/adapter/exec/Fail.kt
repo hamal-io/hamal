@@ -23,10 +23,10 @@ class ExecFailAdapter(
     override fun invoke(execId: ExecId, req: ExecFailRequest): ExecFailRequested {
         val exec = execGet(execId)
         return ExecFailRequested(
-            id = generateDomainId(::RequestId),
-            by = SecurityContext.currentAuthId,
-            status = RequestStatus.Submitted,
-            execId = exec.id,
+            requestId = generateDomainId(::RequestId),
+            requestedBy = SecurityContext.currentAuthId,
+            requestStatus = RequestStatus.Submitted,
+            id = exec.id,
             result = req.result
         ).also(requestEnqueue::invoke)
     }

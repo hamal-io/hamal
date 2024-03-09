@@ -9,6 +9,7 @@ import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.AccountType.Root
 import io.hamal.repository.api.*
+import io.hamal.repository.api.AuthCmdRepository.CreateExecTokenAuthCmd
 import io.hamal.repository.api.AuthCmdRepository.CreateTokenAuthCmd
 import io.hamal.repository.api.ExecCmdRepository.StartCmd
 import io.hamal.repository.api.log.LogBrokerRepository
@@ -133,7 +134,7 @@ internal abstract class BaseTest {
                 authId = generateDomainId(::AuthId),
                 accountId = testAccount.id,
                 token = AuthToken("test-token"),
-                expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(1, DAYS))
+                expiresAt = ExpiresAt(TimeUtils.now().plus(1, DAYS))
             )
         ) as Auth.Token).token
 
@@ -184,6 +185,16 @@ internal abstract class BaseTest {
                 invocation = invocation
             )
         )
+
+        authCmdRepository.create(
+            CreateExecTokenAuthCmd(
+                id = CmdId(1),
+                execId = execId,
+                authId = AuthId(execId.value),
+                token = ExecToken("ExecToken")
+            )
+        )
+
 
         if (status == ExecStatus.Planned) {
             return planedExec

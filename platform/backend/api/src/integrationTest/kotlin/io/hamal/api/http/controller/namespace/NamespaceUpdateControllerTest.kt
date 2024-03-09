@@ -40,14 +40,14 @@ internal class NamespaceUpdateControllerTest : NamespaceBaseControllerTest() {
         )
 
         val updateNamespaceResponse = httpTemplate.patch("/v1/namespaces/{namespaceId}")
-            .path("namespaceId", namespace.namespaceId)
+            .path("namespaceId", namespace.id)
             .body(ApiNamespaceUpdateRequest(NamespaceName("updated-name")))
             .execute()
         assertThat(updateNamespaceResponse.statusCode, equalTo(Accepted))
         require(updateNamespaceResponse is HttpSuccessResponse) { "request was not successful" }
 
         val req = updateNamespaceResponse.result(ApiNamespaceUpdateRequested::class)
-        val namespaceId = awaitCompleted(req).namespaceId
+        val namespaceId = awaitCompleted(req).id
 
         with(getNamespace(namespaceId)) {
             assertThat(id, equalTo(namespaceId))

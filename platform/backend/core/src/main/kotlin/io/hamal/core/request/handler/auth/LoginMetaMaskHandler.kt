@@ -4,7 +4,7 @@ import io.hamal.core.request.RequestHandler
 import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.request.AuthLoginMetaMaskRequested
-import io.hamal.lib.domain.vo.AuthTokenExpiresAt
+import io.hamal.lib.domain.vo.ExpiresAt
 import io.hamal.repository.api.Auth
 import io.hamal.repository.api.AuthCmdRepository.CreateTokenAuthCmd
 import io.hamal.repository.api.AuthRepository
@@ -21,10 +21,10 @@ class LoginMetaMaskHandler(
                 authRepository.create(
                     CreateTokenAuthCmd(
                         id = req.cmdId(),
-                        authId = req.authId,
+                        authId = req.id,
                         accountId = auth.accountId,
                         token = req.token,
-                        expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(30, ChronoUnit.DAYS))
+                        expiresAt = ExpiresAt(TimeUtils.now().plus(30, ChronoUnit.DAYS))
                     )
                 )
             }

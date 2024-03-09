@@ -45,10 +45,10 @@ data class FeedbackCreateRequest(
 }
 
 data class FeedbackCreateRequested(
-    override val id: RequestId,
-    override val by: AuthId,
-    override var status: RequestStatus,
-    val feedbackId: FeedbackId,
+    override val requestId: RequestId,
+    override val requestedBy: AuthId,
+    override var requestStatus: RequestStatus,
+    val id: FeedbackId,
     val mood: FeedbackMood,
     val message: FeedbackMessage,
     val accountId: AccountId?

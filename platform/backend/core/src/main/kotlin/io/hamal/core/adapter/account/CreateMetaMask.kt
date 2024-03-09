@@ -25,11 +25,11 @@ class AccountCreateMetaMaskAdapter(
     override fun invoke(req: AccountCreateMetaMaskRequest): AccountCreateMetaMaskRequested {
         val workspaceId = generateDomainId(::WorkspaceId)
         return AccountCreateMetaMaskRequested(
-            id = generateDomainId(::RequestId),
-            by = SecurityContext.currentAuthId,
-            status = RequestStatus.Submitted,
-            accountId = req.id,
-            accountType = AccountType.User,
+            requestId = generateDomainId(::RequestId),
+            requestedBy = SecurityContext.currentAuthId,
+            requestStatus = RequestStatus.Submitted,
+            id = req.id,
+            type = AccountType.User,
             workspaceId = workspaceId,
             namespaceId = NamespaceId(workspaceId.value),
             salt = generateSalt(),

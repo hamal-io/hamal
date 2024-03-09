@@ -23,11 +23,11 @@ class NamespaceUpdateAdapter(
     override fun invoke(namespaceId: NamespaceId, req: NamespaceUpdateRequest): NamespaceUpdateRequested {
         val namespace = namespaceGet(namespaceId)
         return NamespaceUpdateRequested(
-            id = generateDomainId(::RequestId),
-            by = SecurityContext.currentAuthId,
-            status = RequestStatus.Submitted,
+            requestId = generateDomainId(::RequestId),
+            requestedBy = SecurityContext.currentAuthId,
+            requestStatus = RequestStatus.Submitted,
             workspaceId = namespace.workspaceId,
-            namespaceId = namespaceId,
+            id = namespaceId,
             name = req.name,
         ).also(requestEnqueue::invoke)
     }

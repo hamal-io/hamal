@@ -14,8 +14,8 @@ assert(res.status_code == 202)
 assert(res.content_type == 'application/json;charset=UTF-8')
 
 content = res.content
+assert(content.requestId ~= nil)
 assert(content.id ~= nil)
-assert(content.accountId ~= nil)
 assert(content.token ~= nil)
 assert(#content.workspaceIds == 1)
 

@@ -32,7 +32,7 @@ internal class BlueprintUpdateControllerTest : BlueprintBaseControllerTest() {
         )
 
         val updateResponse = httpTemplate.patch("/v1/blueprints/{bpId}")
-            .path("bpId", bp.blueprintId)
+            .path("bpId", bp.id)
             .body(
                 ApiBlueprintUpdateRequest(
                     name = BlueprintName("Other"),
@@ -48,7 +48,7 @@ internal class BlueprintUpdateControllerTest : BlueprintBaseControllerTest() {
 
         val submittedReq = updateResponse.result(ApiBlueprintUpdateRequested::class)
         awaitCompleted(submittedReq)
-        val bpId = submittedReq.blueprintId
+        val bpId = submittedReq.id
 
         with(getBlueprint(bpId)) {
             assertThat(id, equalTo(bpId))
@@ -72,7 +72,7 @@ internal class BlueprintUpdateControllerTest : BlueprintBaseControllerTest() {
         )
 
         val updateResponse = httpTemplate.patch("/v1/blueprints/{bpId}")
-            .path("bpId", bp.blueprintId)
+            .path("bpId", bp.id)
             .body(
                 ApiBlueprintUpdateRequest(
                     name = null,
@@ -88,7 +88,7 @@ internal class BlueprintUpdateControllerTest : BlueprintBaseControllerTest() {
         val submittedReq = updateResponse.result(ApiBlueprintUpdateRequested::class)
         awaitCompleted(submittedReq)
 
-        val bpId = submittedReq.blueprintId
+        val bpId = submittedReq.id
 
         with(getBlueprint(bpId)) {
             assertThat(id, equalTo(bpId))

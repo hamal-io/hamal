@@ -1,25 +1,15 @@
-import {Globe, Layers3, Timer, Webhook} from "lucide-react";
-import {createElement, ReactElement} from "react";
-
-export interface NamespaceCreateRequested {
-    id: string;
-    status: string;
-    namespaceIdId: string;
-    workspaceId: string;
-}
-
 
 export interface NamespaceAppendRequested {
+    requestId: string;
+    requestStatus: string;
     id: string;
-    status: string;
-    namespaceIdId: string;
     workspaceId: string;
 }
 
 export interface NamespaceUpdateRequested {
+    requestId: string;
+    requestStatus: string;
     id: string;
-    status: string;
-    namespaceIdId: string;
 }
 
 export interface Namespace {
@@ -43,7 +33,7 @@ export type NamespaceFeature = {
     label: string
     active?: boolean
     description?: string
-    icon?: ReactElement
+
 }
 export const NamespaceFeatures = new Array<NamespaceFeature>(
     {value: 0, label: "Schedules", description: "All kinds of timers", icon: createElement(Timer)},

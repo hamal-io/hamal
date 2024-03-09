@@ -261,15 +261,6 @@ class ConnectionImplTest {
         }
 
         @Test
-        fun `With named parameter of type request_id`() {
-            val result = testInstance.executeUpdate("INSERT INTO cmd_id_table(value) VALUES(:some_value)") {
-                set("some_value", CmdId(12345678))
-            }
-            assertThat(result, equalTo(1))
-            verifyIsOne("SELECT COUNT(*) FROM cmd_id_table WHERE value = 12345678")
-        }
-
-        @Test
         fun `With named parameter of type string`() {
             val result = testInstance.executeUpdate("INSERT INTO string_table(value) VALUES(:some_value)") {
                 set("some_value", "ThisHamalConnectionrocks")

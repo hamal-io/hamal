@@ -14,16 +14,16 @@ func_one = fail_on_error(sys.funcs.create({
 }))
 sys.await_completed(func_one)
 
-submitted_endpoint = fail_on_error(sys.endpoints.create({
+requested_endpoint = fail_on_error(sys.endpoints.create({
     namespace_id = namespace.namespace_id,
-    func_id = func_one.func_id,
+    func_id = func_one.id,
     name = 'test-endpoint'
 }))
 
-sys.await_completed(submitted_endpoint)
+sys.await_completed(requested_endpoint)
 
 err, res = http.post({
-    url = context.env.api_host .. '/v1/endpoints/' .. submitted_endpoint.endpoint_id .. '/invoke',
+    url = context.env.api_host .. '/v1/endpoints/' .. requested_endpoint.endpoint_id .. '/invoke',
     headers = {
         ['authorization'] = 'Bearer root-token'
     }

@@ -24,7 +24,7 @@ internal class NamespaceListControllerTest : NamespaceBaseControllerTest() {
     fun `List namespaces`() {
         val namespaceId = awaitCompleted(
             appendNamespace(ApiNamespaceAppendRequest(NamespaceName("namespace-one")))
-        ).namespaceId
+        ).id
 
         with(listNamespaces()) {
             assertThat(namespaces, hasSize(2))
@@ -74,7 +74,7 @@ internal class NamespaceListControllerTest : NamespaceBaseControllerTest() {
         val fortyNinth = requests[49]
 
         val listResponse = httpTemplate.get("/v1/workspaces/539/namespaces")
-            .parameter("after_id", fortyNinth.namespaceId)
+            .parameter("after_id", fortyNinth.id)
             .parameter("limit", 1)
             .execute(ApiNamespaceList::class)
 

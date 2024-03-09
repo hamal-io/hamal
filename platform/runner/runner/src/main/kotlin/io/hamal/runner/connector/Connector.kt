@@ -11,7 +11,7 @@ data class UnitOfWork(
     val inputs: ExecInputs,
     val state: State,
     val code: CodeValue,
-    val token: ExecToken = ExecToken("let_me_in"), // FIXME
+    val execToken: ExecToken,
     val correlation: Correlation? = null,
     val invocation: Invocation
 )
@@ -20,7 +20,15 @@ data class UnitOfWork(
 interface Connector {
     fun poll(): List<UnitOfWork>
 
-    fun complete(execId: ExecId, result: ExecResult, state: ExecState, events: List<EventToSubmit>)
+    fun complete(
+        execId: ExecId,
+        result: ExecResult,
+        state: ExecState,
+        events: List<EventToSubmit>
+    )
 
-    fun fail(execId: ExecId, result: ExecResult)
+    fun fail(
+        execId: ExecId,
+        result: ExecResult
+    )
 }

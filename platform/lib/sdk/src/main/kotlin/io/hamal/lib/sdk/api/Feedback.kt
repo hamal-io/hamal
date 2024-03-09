@@ -7,9 +7,9 @@ import io.hamal.lib.domain.vo.FeedbackMessage
 import io.hamal.lib.domain.vo.RequestId
 
 data class ApiFeedbackCreateRequested(
-    override val id: RequestId,
-    override var status: RequestStatus,
-    val feedbackId: FeedbackId
+    override val requestId: RequestId,
+    override var requestStatus: RequestStatus,
+    val id: FeedbackId
 ) : ApiRequested()
 
 data class ApiFeedbackList(

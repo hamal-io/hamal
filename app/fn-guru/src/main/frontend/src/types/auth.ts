@@ -10,9 +10,9 @@ export interface Auth {
 }
 
 export interface LoginRequested {
+    requestId: string;
+    requestStatus: string;
     id: string;
-    status: string;
-    accountId: string;
     workspaceIds: string[];
     token: string;
     email: string;

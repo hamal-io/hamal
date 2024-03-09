@@ -11,10 +11,10 @@ interface TopicCreateRequest {
 }
 
 data class TopicCreateRequested(
-    override val id: RequestId,
-    override val by: AuthId,
-    override var status: RequestStatus,
-    val topicId: TopicId,
+    override val requestId: RequestId,
+    override val requestedBy: AuthId,
+    override var requestStatus: RequestStatus,
+    val id: TopicId,
     val logTopicId: LogTopicId,
     val workspaceId: WorkspaceId,
     val namespaceId: NamespaceId,
@@ -29,9 +29,9 @@ interface TopicAppendEntryRequest {
 }
 
 data class TopicAppendEventRequested(
-    override val id: RequestId,
-    override val by: AuthId,
-    override var status: RequestStatus,
-    val topicId: TopicId,
+    override val requestId: RequestId,
+    override val requestedBy: AuthId,
+    override var requestStatus: RequestStatus,
+    val id: TopicId,
     val payload: TopicEventPayload
 ) : Requested()

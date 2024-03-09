@@ -28,11 +28,11 @@ class AccountCreateAnonymousAdapter(
         val salt = generateSalt()
         val workspaceId = generateDomainId(::WorkspaceId)
         return AccountCreateAnonymousRequested(
-            id = generateDomainId(::RequestId),
-            by = SecurityContext.currentAuthId,
-            status = RequestStatus.Submitted,
-            accountId = req.id,
-            accountType = AccountType.Anonymous,
+            requestId = generateDomainId(::RequestId),
+            requestedBy = SecurityContext.currentAuthId,
+            requestStatus = RequestStatus.Submitted,
+            id = req.id,
+            type = AccountType.Anonymous,
             workspaceId = workspaceId,
             namespaceId = NamespaceId(workspaceId.value),
             emailAuthId = generateDomainId(::AuthId),

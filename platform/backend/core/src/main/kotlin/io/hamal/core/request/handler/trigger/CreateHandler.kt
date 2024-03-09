@@ -24,11 +24,11 @@ class TriggerCreateHandler(
     override fun invoke(req: TriggerCreateRequested) {
         val func = funcQueryRepository.get(req.funcId)
 
-        val trigger = when (req.triggerType) {
+        val trigger = when (req.type) {
             FixedRate -> triggerCmdRepository.create(
                 TriggerCmdRepository.CreateFixedRateCmd(
                     id = req.cmdId(),
-                    triggerId = req.triggerId,
+                    triggerId = req.id,
                     workspaceId = func.workspaceId,
                     name = req.name,
                     correlationId = req.correlationId,
@@ -45,7 +45,7 @@ class TriggerCreateHandler(
                 triggerCmdRepository.create(
                     TriggerCmdRepository.CreateEventCmd(
                         id = req.cmdId(),
-                        triggerId = req.triggerId,
+                        triggerId = req.id,
                         workspaceId = func.workspaceId,
                         name = req.name,
                         correlationId = req.correlationId,
@@ -62,7 +62,7 @@ class TriggerCreateHandler(
                 triggerCmdRepository.create(
                     TriggerCmdRepository.CreateHookCmd(
                         id = req.cmdId(),
-                        triggerId = req.triggerId,
+                        triggerId = req.id,
                         workspaceId = func.workspaceId,
                         name = req.name,
                         correlationId = req.correlationId,
@@ -80,7 +80,7 @@ class TriggerCreateHandler(
             Cron -> triggerCmdRepository.create(
                 TriggerCmdRepository.CreateCronCmd(
                     id = req.cmdId(),
-                    triggerId = req.triggerId,
+                    triggerId = req.id,
                     workspaceId = func.workspaceId,
                     name = req.name,
                     correlationId = req.correlationId,

@@ -23,10 +23,10 @@ class HookInvokeAdapter(
     override fun invoke(hookId: HookId, invocation: Invocation.Hook): HookInvokeRequested {
         val hook = hookGet(hookId)
         return HookInvokeRequested(
-            id = generateDomainId(::RequestId),
-            by = SecurityContext.currentAuthId,
-            status = RequestStatus.Submitted,
-            hookId = hookId,
+            requestId = generateDomainId(::RequestId),
+            requestedBy = SecurityContext.currentAuthId,
+            requestStatus = RequestStatus.Submitted,
+            id = hookId,
             workspaceId = hook.workspaceId,
             invocation = invocation,
         ).also(requestEnqueue::invoke)

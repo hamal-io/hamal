@@ -36,7 +36,7 @@ class NamespaceAppendHandler(
         return namespaceCmdRepository.create(
             CreateCmd(
                 id = req.cmdId(),
-                namespaceId = req.namespaceId,
+                namespaceId = req.id,
                 workspaceId = req.workspaceId,
                 name = req.name
             )
@@ -50,7 +50,7 @@ class NamespaceAppendHandler(
                 id = req.cmdId(),
                 treeId = tree.id,
                 parentId = req.parentId,
-                namespaceId = req.namespaceId
+                namespaceId = req.id
             )
         )
     }

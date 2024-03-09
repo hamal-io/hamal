@@ -4,11 +4,11 @@ import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.vo.*
 
 data class ExecInvokeRequested(
-    override val id: RequestId,
-    override val by: AuthId,
-    override var status: RequestStatus,
+    override val requestId: RequestId,
+    override val requestedBy: AuthId,
+    override var requestStatus: RequestStatus,
+    val id: ExecId,
     val workspaceId: WorkspaceId,
-    val execId: ExecId,
     val namespaceId: NamespaceId,
     val funcId: FuncId?,
     val correlationId: CorrelationId?,
@@ -23,10 +23,10 @@ interface ExecFailRequest {
 }
 
 data class ExecFailRequested(
-    override val id: RequestId,
-    override val by: AuthId,
-    override var status: RequestStatus,
-    val execId: ExecId,
+    override val requestId: RequestId,
+    override val requestedBy: AuthId,
+    override var requestStatus: RequestStatus,
+    val id: ExecId,
     val result: ExecResult
 ) : Requested()
 
@@ -38,10 +38,10 @@ interface ExecCompleteRequest {
 }
 
 data class ExecCompleteRequested(
-    override val id: RequestId,
-    override val by: AuthId,
-    override var status: RequestStatus,
-    val execId: ExecId,
+    override val requestId: RequestId,
+    override val requestedBy: AuthId,
+    override var requestStatus: RequestStatus,
+    val id: ExecId,
     val state: ExecState,
     val result: ExecResult,
     val events: List<EventToSubmit>

@@ -21,9 +21,9 @@ data class ApiFuncCreateRequest(
 ) : FuncCreateRequest
 
 data class ApiFuncCreateRequested(
-    override val id: RequestId,
-    override val status: RequestStatus,
-    val funcId: FuncId,
+    override val requestId: RequestId,
+    override val requestStatus: RequestStatus,
+    val id: FuncId,
     val workspaceId: WorkspaceId,
     val namespaceId: NamespaceId
 ) : ApiRequested()
@@ -34,9 +34,9 @@ data class ApiFuncDeployRequest(
 ) : FuncDeployRequest
 
 data class ApiFuncDeployRequested(
-    override val id: RequestId,
-    override val status: RequestStatus,
-    val funcId: FuncId
+    override val requestId: RequestId,
+    override val requestStatus: RequestStatus,
+    val id: FuncId
 ) : ApiRequested()
 
 data class ApiFuncUpdateRequest(
@@ -47,9 +47,9 @@ data class ApiFuncUpdateRequest(
 
 
 data class ApiFuncUpdateRequested(
-    override val id: RequestId,
-    override val status: RequestStatus,
-    val funcId: FuncId
+    override val requestId: RequestId,
+    override val requestStatus: RequestStatus,
+    val id: FuncId
 ) : ApiRequested()
 
 

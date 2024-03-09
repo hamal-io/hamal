@@ -11,7 +11,7 @@ internal class NamespaceCreateControllerTest : NamespaceBaseControllerTest() {
     fun `Create namespace`() {
         val namespaceId = awaitCompleted(
             appendNamespace(ApiNamespaceAppendRequest(NamespaceName("test-namespace")))
-        ).namespaceId
+        ).id
 
         with(namespaceQueryRepository.get(namespaceId)) {
             assertThat(id, equalTo(namespaceId))

@@ -29,10 +29,10 @@ internal class AdhocControllerTest : BaseControllerTest() {
         require(response is HttpSuccessResponse) { "request was not successful" }
 
         val result = awaitCompleted(response.result(ApiExecInvokeRequested::class))
-        assertThat(result.status, oneOf(Submitted, Processing))
+        assertThat(result.requestStatus, oneOf(Submitted, Processing))
 
-        verifyReqCompleted(result.id)
-        verifyExecQueued(result.execId)
+        verifyReqCompleted(result.requestId)
+        verifyExecQueued(result.id)
     }
 
     private fun request(req: ApiAdhocInvokeRequest) =

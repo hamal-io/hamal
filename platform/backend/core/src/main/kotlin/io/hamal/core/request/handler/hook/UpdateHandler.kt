@@ -25,7 +25,7 @@ class HookUpdateHandler(
 
     private fun updateHook(req: HookUpdateRequested): Hook {
         return hookRepository.update(
-            req.hookId, UpdateCmd(
+            req.id, UpdateCmd(
                 id = req.cmdId(),
                 name = req.name,
             )

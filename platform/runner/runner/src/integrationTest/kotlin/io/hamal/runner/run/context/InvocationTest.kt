@@ -22,6 +22,7 @@ internal object EventInvocationTest : AbstractExecuteTest() {
         testExecutor.run(
             UnitOfWork(
                 id = ExecId(1234),
+                execToken = ExecToken("ExecToken"),
                 namespaceId = NamespaceId(9876),
                 workspaceId = WorkspaceId(5432),
                 inputs = ExecInputs(),
@@ -57,6 +58,7 @@ internal object EventInvocationTest : AbstractExecuteTest() {
         testExecutor.run(
             UnitOfWork(
                 id = ExecId(1234),
+                execToken = ExecToken("ExecToken"),
                 namespaceId = NamespaceId(9876),
                 workspaceId = WorkspaceId(5432),
                 inputs = ExecInputs(),
@@ -97,6 +99,7 @@ internal object HookInvocationTest : AbstractExecuteTest() {
         testExecutor.run(
             UnitOfWork(
                 id = ExecId(1234),
+                execToken = ExecToken("ExecToken"),
                 namespaceId = NamespaceId(9876),
                 workspaceId = WorkspaceId(5432),
                 inputs = ExecInputs(),
@@ -139,6 +142,7 @@ internal object HookInvocationTest : AbstractExecuteTest() {
         testExecutor.run(
             UnitOfWork(
                 id = ExecId(1234),
+                execToken = ExecToken("ExecToken"),
                 namespaceId = NamespaceId(9876),
                 workspaceId = WorkspaceId(5432),
                 inputs = ExecInputs(),
@@ -187,6 +191,7 @@ internal object EndpointInvocationTest : AbstractExecuteTest() {
         testExecutor.run(
             UnitOfWork(
                 id = ExecId(1234),
+                execToken = ExecToken("ExecToken"),
                 namespaceId = NamespaceId(9876),
                 workspaceId = WorkspaceId(5432),
                 inputs = ExecInputs(),
@@ -229,6 +234,7 @@ internal object EndpointInvocationTest : AbstractExecuteTest() {
         testExecutor.run(
             UnitOfWork(
                 id = ExecId(1234),
+                execToken = ExecToken("ExecToken"),
                 namespaceId = NamespaceId(9876),
                 workspaceId = WorkspaceId(5432),
                 inputs = ExecInputs(),

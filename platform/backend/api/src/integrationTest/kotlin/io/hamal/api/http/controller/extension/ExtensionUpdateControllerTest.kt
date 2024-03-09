@@ -23,7 +23,7 @@ internal class ExtensionUpdateControllerTest : ExtensionBaseControllerTest() {
                     code = CodeValue("x='hamal")
                 )
             )
-        ).extensionId
+        ).id
 
         awaitCompleted(
             updateExtension(
@@ -50,7 +50,7 @@ internal class ExtensionUpdateControllerTest : ExtensionBaseControllerTest() {
                     code = CodeValue("x='hamal")
                 )
             )
-        ).extensionId
+        ).id
 
         awaitCompleted(
             updateExtension(

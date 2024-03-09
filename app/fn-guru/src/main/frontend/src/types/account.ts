@@ -1,7 +1,7 @@
 export interface AccountConvertRequested {
+    requestId: string;
+    requestStatus: string;
     id: string;
-    status: string;
-    accountId: string;
     token: string;
     email: string;
 }

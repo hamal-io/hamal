@@ -26,17 +26,17 @@ data class ApiAuthLoginEmailRequest(
 ) : AuthLogInEmailRequest
 
 data class ApiTokenRequested(
-    override val id: RequestId,
-    override val status: RequestStatus,
-    val accountId: AccountId,
+    override val requestId: RequestId,
+    override val requestStatus: RequestStatus,
+    val id: AccountId,
     val workspaceIds: List<WorkspaceId>,
     val token: AuthToken
 ) : ApiRequested()
 
 data class ApiAccountConvertRequested(
-    override val id: RequestId,
-    override val status: RequestStatus,
-    val accountId: AccountId,
+    override val requestId: RequestId,
+    override val requestStatus: RequestStatus,
+    val id: AccountId,
     val token: AuthToken
 ) : ApiRequested()
 

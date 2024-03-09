@@ -6,7 +6,7 @@ import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.request.AccountCreateRequested
-import io.hamal.lib.domain.vo.AuthTokenExpiresAt
+import io.hamal.lib.domain.vo.ExpiresAt
 import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.domain.vo.NamespaceTreeId
 import io.hamal.lib.domain.vo.WorkspaceName
@@ -98,7 +98,7 @@ class AccountCreateEmailHandler(
                 authId = req.tokenAuthId,
                 accountId = req.accountId,
                 token = req.token,
-                expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(30, ChronoUnit.DAYS))
+                expiresAt = ExpiresAt(TimeUtils.now().plus(30, ChronoUnit.DAYS))
             )
         )
     }

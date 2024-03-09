@@ -2,10 +2,12 @@ package io.hamal.api.http.controller.endpoint
 
 import io.hamal.core.adapter.endpoint.EndpointInvokePort
 import io.hamal.core.adapter.func.FuncGetPort
+import io.hamal.core.security.SecurityContext
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain._enum.EndpointMethod
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.sdk.api.ApiExec
+import io.hamal.repository.api.Auth
 import io.hamal.repository.api.Exec
 import io.hamal.repository.record.json
 import jakarta.servlet.http.HttpServletRequest
@@ -20,21 +22,30 @@ internal class EndpointInvokeController(
 ) {
 
     @GetMapping("/v1/endpoints/{id}/invoke")
-    fun invokeGet(@PathVariable("id") id: EndpointId, req: HttpServletRequest) = handle(id, req)
+    fun invokeGet(@PathVariable("id") id: EndpointId, req: HttpServletRequest) =
+        handle(id, req, SecurityContext.current)
 
     @PostMapping("/v1/endpoints/{id}/invoke")
-    fun invokePost(@PathVariable("id") id: EndpointId, req: HttpServletRequest) = handle(id, req)
+    fun invokePost(@PathVariable("id") id: EndpointId, req: HttpServletRequest) =
+        handle(id, req, SecurityContext.current)
 
     @PatchMapping("/v1/endpoints/{id}/invoke")
-    fun invokePatch(@PathVariable("id") id: EndpointId, req: HttpServletRequest) = handle(id, req)
+    fun invokePatch(@PathVariable("id") id: EndpointId, req: HttpServletRequest) =
+        handle(id, req, SecurityContext.current)
 
     @PutMapping("/v1/endpoints/{id}/invoke")
-    fun invokePut(@PathVariable("id") id: EndpointId, req: HttpServletRequest) = handle(id, req)
+    fun invokePut(@PathVariable("id") id: EndpointId, req: HttpServletRequest) =
+        handle(id, req, SecurityContext.current)
 
     @DeleteMapping("/v1/endpoints/{id}/invoke")
-    fun invokeDelete(@PathVariable("id") id: EndpointId, req: HttpServletRequest) = handle(id, req)
+    fun invokeDelete(@PathVariable("id") id: EndpointId, req: HttpServletRequest) =
+        handle(id, req, SecurityContext.current)
 
-    private fun handle(id: EndpointId, req: HttpServletRequest): CompletableFuture<ResponseEntity<ApiExec>> {
+    private fun handle(
+        id: EndpointId,
+        req: HttpServletRequest,
+        auth: Auth
+    ): CompletableFuture<ResponseEntity<ApiExec>> {
         return endpointInvoke(
             endpointId = id,
             invocation = Invocation.Endpoint(
@@ -42,35 +53,38 @@ internal class EndpointInvokeController(
                 headers = req.headers(),
                 parameters = req.parameters(),
                 content = req.content()
-            )
+            ),
+            auth
         ).thenApply { exec ->
-            val func = funcGet(exec.correlation!!.funcId)
+            SecurityContext.with(auth) {
+                val func = funcGet(exec.correlation!!.funcId)
 
-            ResponseEntity.ok(
-                ApiExec(
-                    id = exec.id,
-                    status = exec.status,
-                    correlation = exec.correlation?.id,
-                    inputs = exec.inputs,
-                    invocation = exec.invocation,
-                    result = if (exec is Exec.Completed) {
-                        exec.result
-                    } else if (exec is Exec.Failed) {
-                        exec.result
-                    } else {
-                        null
-                    },
-                    state = if (exec is Exec.Completed) {
-                        exec.state
-                    } else {
-                        null
-                    },
-                    func = ApiExec.Func(
-                        id = func.id,
-                        name = func.name
+                ResponseEntity.ok(
+                    ApiExec(
+                        id = exec.id,
+                        status = exec.status,
+                        correlation = exec.correlation?.id,
+                        inputs = exec.inputs,
+                        invocation = exec.invocation,
+                        result = if (exec is Exec.Completed) {
+                            exec.result
+                        } else if (exec is Exec.Failed) {
+                            exec.result
+                        } else {
+                            null
+                        },
+                        state = if (exec is Exec.Completed) {
+                            exec.state
+                        } else {
+                            null
+                        },
+                        func = ApiExec.Func(
+                            id = func.id,
+                            name = func.name
+                        )
                     )
                 )
-            )
+            }
         }
     }
 }

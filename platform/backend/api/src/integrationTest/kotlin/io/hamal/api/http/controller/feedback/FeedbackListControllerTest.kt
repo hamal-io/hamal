@@ -24,7 +24,7 @@ internal class FeedbackListControllerTest : FeedbackBaseControllerTest() {
                 message = FeedbackMessage("My mood is so normal"),
                 accountId = null
             )
-        ).feedbackId
+        ).id
 
         val list = httpTemplate.get("/v1/feedbacks")
             .execute(ApiFeedbackList::class)
@@ -49,7 +49,7 @@ internal class FeedbackListControllerTest : FeedbackBaseControllerTest() {
         val ten = requests[10]
 
         val list = httpTemplate.get("/v1/feedbacks")
-            .parameter("after_id", ten.feedbackId)
+            .parameter("after_id", ten.id)
             .parameter("limit", 1)
             .execute(ApiFeedbackList::class)
 

@@ -20,9 +20,9 @@ data class ApiEndpointCreateRequest(
 ) : EndpointCreateRequest
 
 data class ApiEndpointCreateRequested(
-    override val id: RequestId,
-    override val status: RequestStatus,
-    val endpointId: EndpointId,
+    override val requestId: RequestId,
+    override val requestStatus: RequestStatus,
+    val id: EndpointId,
     val workspaceId: WorkspaceId,
     val funcId: FuncId
 ) : ApiRequested()
@@ -35,9 +35,9 @@ data class ApiEndpointUpdateRequest(
 ) : EndpointUpdateRequest
 
 data class ApiEndpointUpdateRequested(
-    override val id: RequestId,
-    override val status: RequestStatus,
-    val endpointId: EndpointId,
+    override val requestId: RequestId,
+    override val requestStatus: RequestStatus,
+    val id: EndpointId,
 ) : ApiRequested()
 
 data class ApiEndpointList(

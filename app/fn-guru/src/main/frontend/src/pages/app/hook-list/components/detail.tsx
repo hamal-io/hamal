@@ -116,7 +116,7 @@ const AddTrigger: FC<AddTriggerProps> = ({namespaceId, hookId, hookName, trigger
 
     useEffect(() => {
         if (submittedTrigger !== null) {
-            afterAdd(submittedTrigger.triggerId)
+            afterAdd(submittedTrigger.id)
             setOpenDialog(false)
             form.control._reset()
         }

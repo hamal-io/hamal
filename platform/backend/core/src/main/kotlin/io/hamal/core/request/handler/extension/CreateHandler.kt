@@ -38,7 +38,7 @@ class ExtensionCreateHandler(
         return extensionCmdRepository.create(
             CreateCmd(
                 id = req.cmdId(),
-                extensionId = req.extensionId,
+                extensionId = req.id,
                 workspaceId = req.workspaceId,
                 name = req.name,
                 code = ExtensionCode(

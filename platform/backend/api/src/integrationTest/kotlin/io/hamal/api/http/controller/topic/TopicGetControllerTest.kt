@@ -15,7 +15,7 @@ internal class TopicGetControllerTest : TopicBaseControllerTest() {
 
     @Test
     fun `Gets namespace topic`() {
-        val topicId = awaitCompleted(createTopic(TopicName("topics_one"), TopicType.Namespace)).topicId
+        val topicId = awaitCompleted(createTopic(TopicName("topics_one"), TopicType.Namespace)).id
         with(getTopic(topicId)) {
             assertThat(id, equalTo(topicId))
             assertThat(name, equalTo(TopicName("topics_one")))
@@ -25,7 +25,7 @@ internal class TopicGetControllerTest : TopicBaseControllerTest() {
 
     @Test
     fun `Gets workspace topic`() {
-        val topicId = awaitCompleted(createTopic(TopicName("topics_one"), TopicType.Workspace)).topicId
+        val topicId = awaitCompleted(createTopic(TopicName("topics_one"), TopicType.Workspace)).id
         with(getTopic(topicId)) {
             assertThat(id, equalTo(topicId))
             assertThat(name, equalTo(TopicName("topics_one")))
@@ -35,7 +35,7 @@ internal class TopicGetControllerTest : TopicBaseControllerTest() {
 
     @Test
     fun `Gets public topic`() {
-        val topicId = awaitCompleted(createTopic(TopicName("topics_one"), TopicType.Public)).topicId
+        val topicId = awaitCompleted(createTopic(TopicName("topics_one"), TopicType.Public)).id
 
         with(getTopic(topicId)) {
             assertThat(id, equalTo(topicId))

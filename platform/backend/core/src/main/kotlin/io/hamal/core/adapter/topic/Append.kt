@@ -22,10 +22,10 @@ class TopicEventAppendAdapter(
     override fun invoke(req: TopicAppendEntryRequest): TopicAppendEventRequested {
         val topic = topicGet(req.topicId)
         return TopicAppendEventRequested(
-            id = generateDomainId(::RequestId),
-            by = SecurityContext.currentAuthId,
-            status = RequestStatus.Submitted,
-            topicId = req.topicId,
+            requestId = generateDomainId(::RequestId),
+            requestedBy = SecurityContext.currentAuthId,
+            requestStatus = RequestStatus.Submitted,
+            id = req.topicId,
             payload = req.payload
         ).also(requestEnqueue::invoke)
     }

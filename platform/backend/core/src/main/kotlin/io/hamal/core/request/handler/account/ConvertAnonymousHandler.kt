@@ -6,7 +6,7 @@ import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.request.AccountConvertRequested
-import io.hamal.lib.domain.vo.AuthTokenExpiresAt
+import io.hamal.lib.domain.vo.ExpiresAt
 import io.hamal.repository.api.Account
 import io.hamal.repository.api.AccountCmdRepository
 import io.hamal.repository.api.Auth
@@ -34,7 +34,7 @@ class AccountConvertAnonymousHandler(
         return accountCmdRepository.convert(
             AccountCmdRepository.ConvertCmd(
                 id = req.cmdId(),
-                accountId = req.accountId,
+                accountId = req.id,
                 email = req.email
             )
         )
@@ -46,7 +46,7 @@ class AccountConvertAnonymousHandler(
             AuthCmdRepository.CreateEmailAuthCmd(
                 id = req.cmdId(),
                 authId = req.emailAuthId,
-                accountId = req.accountId,
+                accountId = req.id,
                 email = req.email,
                 hash = req.hash
             )
@@ -58,9 +58,9 @@ class AccountConvertAnonymousHandler(
             AuthCmdRepository.CreateTokenAuthCmd(
                 id = req.cmdId(),
                 authId = req.tokenAuthId,
-                accountId = req.accountId,
+                accountId = req.id,
                 token = req.token,
-                expiresAt = AuthTokenExpiresAt(TimeUtils.now().plus(30, ChronoUnit.DAYS))
+                expiresAt = ExpiresAt(TimeUtils.now().plus(30, ChronoUnit.DAYS))
             )
         )
     }

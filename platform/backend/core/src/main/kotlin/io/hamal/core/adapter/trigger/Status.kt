@@ -23,11 +23,11 @@ class TriggerSetStatusAdapter(
     override fun invoke(triggerId: TriggerId, triggerStatus: TriggerStatus): TriggerStatusRequested {
         triggerGet(triggerId)
         return TriggerStatusRequested(
-            id = generateDomainId(::RequestId),
-            by = SecurityContext.currentAuthId,
-            status = RequestStatus.Submitted,
-            triggerId = triggerId,
-            triggerStatus = triggerStatus
+            requestId = generateDomainId(::RequestId),
+            requestedBy = SecurityContext.currentAuthId,
+            requestStatus = RequestStatus.Submitted,
+            id = triggerId,
+            status = triggerStatus
         ).also(requestEnqueue::invoke)
     }
 }
