@@ -26,3 +26,34 @@ export interface NamespaceListItem {
     parentId: string;
     name: string;
 }
+
+export class NamespaceNode {
+    data: NamespaceListItem
+    descendants: Array<NamespaceNode>
+
+    constructor(value: NamespaceListItem) {
+        this.data = value
+        this.descendants = []
+    }
+
+    addDescendant(other: NamespaceNode) {
+        if (this.data.id !== other.data.id) {
+            this.descendants.push(other)
+        }
+    }
+
+    isParent() {
+        return this.descendants.length > 0
+    }
+}
+
+export interface NamespaceFeature {
+    [key: string]: number;
+}
+
+export const NamespaceFeatures: NamespaceFeature = {
+    SCHEDULES: 0,
+    TOPICS: 1,
+    WEBHOOKS: 2,
+    ENDPOINTS: 3
+}
