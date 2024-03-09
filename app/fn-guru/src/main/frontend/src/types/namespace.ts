@@ -26,18 +26,3 @@ export interface NamespaceListItem {
     parentId: string;
     name: string;
 }
-
-
-export type NamespaceFeature = {
-    value: number
-    label: string
-    active?: boolean
-    description?: string
-
-}
-export const NamespaceFeatures = new Array<NamespaceFeature>(
-    {value: 0, label: "Schedules", description: "All kinds of timers", icon: createElement(Timer)},
-    {value: 1, label: "Topics", description: "Stay tuned", icon: createElement(Layers3)},
-    {value: 2, label: "Webhooks", description: "Stay tuned", icon: createElement(Webhook)},
-    {value: 3, label: "Endpoints", description: "API yourself", icon: createElement(Globe)},
-)
