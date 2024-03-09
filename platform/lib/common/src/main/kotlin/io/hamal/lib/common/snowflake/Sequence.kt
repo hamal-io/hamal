@@ -9,12 +9,11 @@ interface SequenceSource {
 }
 
 @JvmInline
-value class Sequence(val value: Short) {
-    constructor(value: Int) : this(value.toShort())
+value class Sequence(val value: Int) {
 
     init {
-        require(value >= 0) { "Sequence must not be negative - [0, 4095]" }
-        require(value <= 4095) { "Sequence is limited to 12 bits - [0, 4095]" }
+        require(value >= 0) { "Sequence must not be negative - [0, 65535]" }
+        require(value <= 65535) { "Sequence is limited to 16 bits - [0, 65535]" }
     }
 }
 
@@ -22,7 +21,7 @@ class SequenceSourceImpl : SequenceSource {
 
     private var previousCalledAt: Elapsed = Elapsed(0)
     private var nextSequence = 0
-    private val maxSequence = 4096
+    private val maxSequence = 65535
 
     override fun next(elapsedSource: () -> Elapsed): Pair<Elapsed, Sequence> {
         var elapsed: Elapsed

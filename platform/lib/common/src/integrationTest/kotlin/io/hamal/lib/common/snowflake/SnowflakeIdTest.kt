@@ -10,9 +10,9 @@ internal class SnowflakeIdTest {
 
     @Test
     fun `Multiple generators with different Partitions create ids`() {
-        val instanceOne = SnowflakeGenerator(PartitionSourceImpl(125))
-        val instanceTwo = SnowflakeGenerator(PartitionSourceImpl(126))
-        val instanceThree = SnowflakeGenerator(PartitionSourceImpl(127))
+        val instanceOne = SnowflakeGenerator(PartitionSourceImpl(61))
+        val instanceTwo = SnowflakeGenerator(PartitionSourceImpl(62))
+        val instanceThree = SnowflakeGenerator(PartitionSourceImpl(63))
 
         val resultOne = CompletableFuture.supplyAsync { IntRange(1, 500_000).map { instanceOne.next() }.toSet() }
         val resultTwo = CompletableFuture.supplyAsync { IntRange(1, 500_000).map { instanceTwo.next() }.toSet() }

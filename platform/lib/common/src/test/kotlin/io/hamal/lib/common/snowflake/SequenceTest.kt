@@ -9,14 +9,14 @@ import org.junit.jupiter.api.assertThrows
 
 internal class SequenceTest {
     @Test
-    fun `Limited to 12 bits`() {
+    fun `Limited to 16 bits`() {
         Sequence(0)
-        Sequence(4095)
+        Sequence(65535)
 
         val exception = assertThrows<IllegalArgumentException> {
-            Sequence(4096)
+            Sequence(65536)
         }
-        assertThat(exception.message, containsString("Sequence is limited to 12 bits - [0, 4095]"))
+        assertThat(exception.message, containsString("Sequence is limited to 16 bits - [0, 65535]"))
     }
 
     @Test
@@ -24,7 +24,7 @@ internal class SequenceTest {
         val exception = assertThrows<IllegalArgumentException> {
             Sequence(-1)
         }
-        assertThat(exception.message, containsString("Sequence must not be negative - [0, 4095]"))
+        assertThat(exception.message, containsString("Sequence must not be negative - [0, 65535]"))
     }
 }
 
@@ -53,10 +53,10 @@ internal class SequenceSourceImplTest {
         val elapsedSource = object : ElapsedSource {
             var counter = 0
             var blockingCounter = 0
-            
+
             override fun elapsed(): Elapsed {
                 counter++
-                if (counter > 4096) {
+                if (counter > 65536) {
                     blockingCounter++
                 }
                 if (blockingCounter > 1024) {
@@ -66,7 +66,7 @@ internal class SequenceSourceImplTest {
             }
         }
 
-        for (i in 0 until 4096) {
+        for (i in 0 until 65535) {
             val (elapsed, seq) = testInstance.next(elapsedSource::elapsed)
             assertThat(elapsed, equalTo(Elapsed(1)))
             assertThat(seq, equalTo(Sequence(i)))

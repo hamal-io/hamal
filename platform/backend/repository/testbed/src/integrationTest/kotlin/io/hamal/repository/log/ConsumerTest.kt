@@ -1,8 +1,10 @@
 package io.hamal.repository.log
 
+import io.hamal.lib.common.Partition
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.common.util.HashUtils
+import io.hamal.lib.domain.CmdIdGeneratorImpl
+import io.hamal.lib.domain.GenerateCmdId
 import io.hamal.lib.domain.vo.LogTopicId
 import io.hamal.repository.api.log.LogBrokerRepository
 import io.hamal.repository.api.log.LogBrokerRepository.CreateTopicCmd
@@ -40,7 +42,7 @@ class LogConsumerTest : AbstractIntegrationTest() {
 
         assertThat(counter.get(), equalTo(0))
 
-        appender.append(CmdId(1337), topic.id, "1337")
+        appender.append(generateCmdId(), topic.id, "1337")
         testConsumer.consume(Limit(10)) { _, value ->
             assertThat(value, equalTo("1337"))
             counter.incrementAndGet()
@@ -52,7 +54,7 @@ class LogConsumerTest : AbstractIntegrationTest() {
     @TestFactory
     fun `Can run concurrent to appender`() = runWith(LogBrokerRepository::class) { testInstance ->
 
-        val topic = testInstance.create(CreateTopicCmd(CmdId(1), LogTopicId(123)))
+        val topic = testInstance.create(CreateTopicCmd(generateCmdId(), LogTopicId(123)))
 
         val testAppender = LogTopicAppenderImpl<String>(testInstance)
 
@@ -69,7 +71,7 @@ class LogConsumerTest : AbstractIntegrationTest() {
         IntRange(1, 10).forEach { thread ->
             CompletableFuture.runAsync {
                 IntRange(1, 100).forEach {
-                    testAppender.append(CmdId(HashUtils.sha256("$thread $it")), topic.id, "$it")
+                    testAppender.append(generateCmdId(), topic.id, "$it")
                 }
             }
         }
@@ -77,5 +79,7 @@ class LogConsumerTest : AbstractIntegrationTest() {
         consumerFuture.join()
         assertThat(collected, hasSize(1_000))
     }
+
+    private val generateCmdId: GenerateCmdId = CmdIdGeneratorImpl(Partition(1))
 
 }
