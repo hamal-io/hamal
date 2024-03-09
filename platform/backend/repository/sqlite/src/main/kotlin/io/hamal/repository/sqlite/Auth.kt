@@ -30,7 +30,7 @@ class AuthSqliteRepository(
             execute(
                 """
                 CREATE TABLE IF NOT EXISTS auth (
-                    cmd_id INTEGER NOT NULL,
+                    cmd_id VARCHAR(255) NOT NULL,
                     id INTEGER NOT NULL,
                     type INTEGER NOT NULL,
                     entity_id INTEGER,

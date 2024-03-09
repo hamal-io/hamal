@@ -8,7 +8,9 @@ import io.hamal.repository.api.ExecCmdRepository
 import io.hamal.repository.api.ExecCmdRepository.QueueCmd
 import io.hamal.repository.api.event.ExecQueuedEvent
 import io.hamal.repository.api.event.ExecScheduledEvent
+import org.springframework.stereotype.Component
 
+@Component
 class ExecScheduledHandler(
     private val execCmdRepository: ExecCmdRepository,
     private val eventEmitter: InternalEventEmitter
