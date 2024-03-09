@@ -28,6 +28,7 @@ internal class QueuePollControllerTest : BaseQueueControllerTest() {
             assertThat(work, hasSize(1))
 
             with(work.first()) {
+                assertThat(execToken, equalTo(ExecToken("ExecToken")))
                 assertThat(namespaceId, equalTo(testNamespace.id))
                 assertThat(workspaceId, equalTo(testWorkspace.id))
                 assertThat(inputs, equalTo(ExecInputs()))
@@ -55,6 +56,7 @@ internal class QueuePollControllerTest : BaseQueueControllerTest() {
             assertThat(work, hasSize(1))
 
             with(work.first()) {
+                assertThat(execToken, equalTo(ExecToken("ExecToken")))
                 assertThat(namespaceId, equalTo(testNamespace.id))
                 assertThat(workspaceId, equalTo(testWorkspace.id))
                 assertThat(inputs, equalTo(ExecInputs()))

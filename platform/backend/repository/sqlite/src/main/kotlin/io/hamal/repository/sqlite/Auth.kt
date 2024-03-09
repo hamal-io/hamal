@@ -31,7 +31,7 @@ class AuthSqliteRepository(
             execute(
                 """
                 CREATE TABLE IF NOT EXISTS auth (
-                    cmd_id VARCHAR(255) NOT NULL,
+                    cmd_id INTEGER NOT NULL,
                     id INTEGER NOT NULL,
                     type INTEGER NOT NULL,
                     entity_id INTEGER,
@@ -169,7 +169,7 @@ class AuthSqliteRepository(
         }
     }
 
-    override fun find(execToken: ExecToken): Auth? {
+    override fun find(execToken: ExecToken): Auth.ExecToken? {
         return connection.executeQueryOne(
             """
             SELECT 
@@ -185,7 +185,7 @@ class AuthSqliteRepository(
                 set("token", execToken)
             }
             map(NamedResultSet::toAuth)
-        }
+        }?.let { it as Auth.ExecToken }
     }
 
     override fun find(email: Email): Auth? {
@@ -278,7 +278,7 @@ class AuthSqliteRepository(
         }
     }
 
-    override fun find(execId: ExecId): Auth? {
+    override fun find(execId: ExecId): Auth.ExecToken? {
         return connection.executeQueryOne(
             """
             SELECT 
@@ -294,7 +294,7 @@ class AuthSqliteRepository(
                 set("entityId", execId)
             }
             map(NamedResultSet::toAuth)
-        }
+        }?.let { it as Auth.ExecToken }
     }
 }
 

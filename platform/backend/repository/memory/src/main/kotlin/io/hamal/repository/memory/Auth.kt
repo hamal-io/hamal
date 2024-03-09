@@ -100,7 +100,7 @@ class AuthMemoryRepository : AuthRepository {
         }
     }
 
-    override fun find(execId: ExecId): Auth? {
+    override fun find(execId: ExecId): Auth.ExecToken? {
         return lock.read {
             projections.filterIsInstance<Auth.ExecToken>().find { it.execId == execId }
         }
@@ -114,7 +114,7 @@ class AuthMemoryRepository : AuthRepository {
         }
     }
 
-    override fun find(execToken: ExecToken): Auth? {
+    override fun find(execToken: ExecToken): Auth.ExecToken? {
         return lock.read {
             projections.asSequence()
                 .filterIsInstance<Auth.ExecToken>()

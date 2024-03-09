@@ -1,13 +1,9 @@
 package io.hamal.api.http.auth
 
 import io.hamal.core.security.SecurityContext
-import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.GenerateCmdId
-import io.hamal.lib.domain.vo.AuthId
 import io.hamal.lib.domain.vo.AuthToken
-import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecToken
-import io.hamal.repository.api.Auth
 import io.hamal.repository.api.AuthCmdRepository.RevokeAuthCmd
 import io.hamal.repository.api.AuthRepository
 import jakarta.servlet.FilterChain
@@ -77,15 +73,16 @@ class AuthApiFilter(
 
 
         request.getHeader("x-exec-token")?.let(::ExecToken)?.also { execToken ->
+            val auth = authRepository.find(execToken) ?: run {
+                log.warn("Unauthorized request on $path")
 
-            return SecurityContext.with(
-                Auth.ExecToken(
-                    id = AuthId.runner,
-                    cmdId = CmdId(1),
-                    execId = ExecId(1),
-                    token = execToken
-                )
-            ) {
+                response.status = 403
+                response.contentType = "application/json"
+                response.writer.write("""{"message":"That's an error"}""")
+                return
+            }
+
+            return SecurityContext.with(auth) {
                 filterChain.doFilter(request, response)
             }
         }

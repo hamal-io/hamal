@@ -1,11 +1,11 @@
 package io.hamal.bridge.http.controller.queue
 
+import io.hamal.core.adapter.auth.AuthGetExecTokenPort
 import io.hamal.core.adapter.workspace.WorkspaceGetPort
 import io.hamal.core.event.InternalEventEmitter
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.GenerateCmdId
 import io.hamal.lib.domain.State
-import io.hamal.lib.domain.vo.ExecToken
 import io.hamal.lib.sdk.bridge.BridgeUnitOfWorkList
 import io.hamal.lib.sdk.bridge.BridgeUnitOfWorkList.UnitOfWork
 import io.hamal.repository.api.CodeQueryRepository
@@ -26,7 +26,8 @@ internal class QueuePollController(
     private val stateQueryRepository: StateQueryRepository,
     private val eventEmitter: InternalEventEmitter,
     private val workspaceGet: WorkspaceGetPort,
-    private val generateCmdId: GenerateCmdId
+    private val generateCmdId: GenerateCmdId,
+    private val getExecToken: AuthGetExecTokenPort
 ) {
     @PostMapping("/v1/dequeue")
     fun dequeue(): ResponseEntity<BridgeUnitOfWorkList> {
@@ -45,7 +46,7 @@ internal class QueuePollController(
 
                 UnitOfWork(
                     id = exec.id,
-                    execToken = ExecToken(workspaceGet(exec.workspaceId).creatorId.value.toString()), // FIXME temp hack
+                    execToken = getExecToken(exec.id).token,
                     namespaceId = exec.namespaceId,
                     workspaceId = exec.workspaceId,
                     correlation = exec.correlation,

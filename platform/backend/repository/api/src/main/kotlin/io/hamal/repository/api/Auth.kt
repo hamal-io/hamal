@@ -115,13 +115,13 @@ interface AuthQueryRepository {
     fun find(authId: AuthId): Auth?
 
     fun get(execId: ExecId) = find(execId) ?: throw NoSuchElementException("Auth not found")
-    fun find(execId: ExecId): Auth?
+    fun find(execId: ExecId): Auth.ExecToken?
 
     fun get(authToken: AuthToken) = find(authToken) ?: throw NoSuchElementException("Auth not found")
     fun find(authToken: AuthToken): Auth?
 
     fun get(execToken: ExecToken) = find(execToken) ?: throw NoSuchElementException("Auth not found")
-    fun find(execToken: ExecToken): Auth?
+    fun find(execToken: ExecToken): Auth.ExecToken?
 
     fun get(email: Email) = find(email) ?: throw NoSuchElementException("Auth not found")
     fun find(email: Email): Auth?
