@@ -27,7 +27,7 @@ class ConsumerTest {
             )
 
             val testInstance = LogConsumerImpl(LogConsumerId(1), topic.id, brokerRepository, String::class)
-            testInstance.consumeIndexed(Limit(10)) { index, _, value ->
+            testInstance.consume(Limit(10)) { index, _, value ->
                 assertThat("${index + 1}", equalTo(value))
             }
         }

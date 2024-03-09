@@ -1,7 +1,7 @@
 package io.hamal.core.service
 
 import io.hamal.core.adapter.func.FuncInvokePort
-import io.hamal.core.component.Async
+import io.hamal.core.component.WorkerPool
 import io.hamal.core.event.InternalEventEmitter
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
@@ -23,7 +23,7 @@ import kotlin.time.Duration.Companion.seconds
 
 @Service
 internal class FixedRateTriggerService(
-    private val async: Async,
+    private val workerPool: WorkerPool,
     internal val eventEmitter: InternalEventEmitter,
     internal val funcQueryRepository: FuncQueryRepository,
     internal val generateDomainId: GenerateDomainId,
@@ -47,7 +47,7 @@ internal class FixedRateTriggerService(
 
     fun triggerAdded(trigger: Trigger.FixedRate) {
         scheduledTasks.add(
-            async.atFixedRate(Duration.parseIsoString(trigger.duration.value).inWholeSeconds.seconds) {
+            workerPool.atFixedRate(Duration.parseIsoString(trigger.duration.value).inWholeSeconds.seconds) {
                 requestInvocation(trigger)
             }
         )

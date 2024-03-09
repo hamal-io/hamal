@@ -1,7 +1,7 @@
 package io.hamal.core.service
 
 import io.hamal.core.adapter.func.FuncInvokePort
-import io.hamal.core.component.Async
+import io.hamal.core.component.WorkerPool
 import io.hamal.lib.common.domain.BatchSize
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
@@ -26,7 +26,7 @@ import kotlin.time.Duration.Companion.milliseconds
 
 @Service
 internal class EventTriggerService(
-    private val async: Async,
+    private val workerPool: WorkerPool,
     internal val generateDomainId: GenerateDomainId,
     internal val funcInvoke: FuncInvokePort,
     internal val triggerQueryRepository: TriggerQueryRepository,
@@ -37,7 +37,7 @@ internal class EventTriggerService(
 
     override fun onApplicationEvent(event: ApplicationReadyEvent) {
         scheduledTasks.add(
-            async.atFixedRate(1.milliseconds) {
+            workerPool.atFixedDelay(1.milliseconds) {
                 if (!shutdown.get()) {
                     triggerQueryRepository.list(
                         TriggerQuery(

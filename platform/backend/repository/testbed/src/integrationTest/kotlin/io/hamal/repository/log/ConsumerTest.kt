@@ -28,12 +28,12 @@ class LogConsumerTest : AbstractIntegrationTest() {
         IntRange(1, 10).forEach { appender.append(CmdId(it), topic.id, "$it") }
 
         val testConsumer = LogConsumerImpl(LogConsumerId(1), topic.id, testInstance, String::class)
-        testConsumer.consumeIndexed(Limit(10)) { index, _, value ->
+        testConsumer.consume(Limit(10)) { index, _, value ->
             assertThat("${index + 1}", equalTo(value))
         }
 
         val counter = AtomicInteger(0)
-        testConsumer.consume(Limit(10)) { _, _ ->
+        testConsumer.consume(Limit(10)) { _, _, _ ->
             CompletableFuture.runAsync {
                 counter.incrementAndGet()
             }
@@ -42,7 +42,7 @@ class LogConsumerTest : AbstractIntegrationTest() {
         assertThat(counter.get(), equalTo(0))
 
         appender.append(generateCmdId(), topic.id, "1337")
-        testConsumer.consume(Limit(10)) { _, value ->
+        testConsumer.consume(Limit(10)) { _, _, value ->
             assertThat(value, equalTo("1337"))
             counter.incrementAndGet()
         }
@@ -61,7 +61,7 @@ class LogConsumerTest : AbstractIntegrationTest() {
         val collected = mutableListOf<String>()
         val consumerFuture = CompletableFuture.runAsync {
             while (collected.size < 1_000) {
-                testConsumer.consume(Limit(1)) { _, str ->
+                testConsumer.consume(Limit(1)) { _, _, str ->
                     collected.add(str)
                 }
             }
