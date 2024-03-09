@@ -2,9 +2,6 @@ package io.hamal.lib.common.snowflake
 
 import io.hamal.lib.common.Partition
 import io.hamal.lib.common.util.BitUtils
-import java.util.concurrent.locks.Lock
-import java.util.concurrent.locks.ReentrantLock
-import kotlin.concurrent.withLock
 
 
 @JvmInline
@@ -42,15 +39,13 @@ value class SnowflakeId(val value: Long) : Comparable<SnowflakeId> {
 class SnowflakeGenerator(
     private val partitionSource: PartitionSource,
     private val elapsedSource: ElapsedSource = ElapsedSourceImpl(),
-    private val sequenceSource: SequenceSource = SequenceSourceImpl(),
-    private val lock: Lock = ReentrantLock()
+    private val sequenceSource: SequenceSource = SequenceSourceImpl()
 ) : SnowflakeId.Generator {
 
     override fun next(): SnowflakeId {
         val partition = partitionSource.get()
-        val (elapsed, sequence) = lock.withLock { sequenceSource.next(elapsedSource::elapsed) }
+        val (elapsed, sequence) = sequenceSource.next(elapsedSource::elapsed)
         return generate(elapsed, partition, sequence)
-
     }
 
     private fun generate(

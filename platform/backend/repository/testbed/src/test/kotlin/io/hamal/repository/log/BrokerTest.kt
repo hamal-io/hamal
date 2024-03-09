@@ -1,6 +1,5 @@
 package io.hamal.repository.log
 
-import io.hamal.lib.common.Partition
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
@@ -193,7 +192,7 @@ internal class LogBrokerRepositoryTest : AbstractUnitTest() {
             }
     }
 
-    private val generateCmdId: GenerateCmdId = CmdIdGeneratorImpl(Partition(1))
+    private val generateCmdId: GenerateCmdId = CmdIdGeneratorImpl
 }
 
 private fun LogBrokerRepository.setupTopic() {

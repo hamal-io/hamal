@@ -1,5 +1,8 @@
 package io.hamal.lib.common.snowflake
 
+import java.util.concurrent.locks.ReentrantLock
+import kotlin.concurrent.withLock
+
 interface SequenceSource {
     /**
      * Blocks if sequence is exhausted until next millisecond
@@ -19,43 +22,43 @@ value class Sequence(val value: Int) {
 
 class SequenceSourceImpl : SequenceSource {
 
+    override fun next(elapsedSource: () -> Elapsed): Pair<Elapsed, Sequence> {
+
+        return lock.withLock {
+            val elapsed = elapsedSource()
+
+            when {
+                elapsed > previousCalledAt -> {
+                    previousCalledAt = elapsed
+                    nextSequence = 1
+                    Pair(previousCalledAt, Sequence(0))
+                }
+
+                elapsed == previousCalledAt -> {
+
+                    if (nextSequence >= maxSequence) {
+                        while (true) {
+                            val currentElapsed = elapsedSource()
+                            if (elapsed != currentElapsed) {
+                                nextSequence = 0
+                                previousCalledAt = currentElapsed
+                                break
+                            }
+                        }
+                    }
+
+                    return Pair(previousCalledAt, Sequence(nextSequence)).also {
+                        nextSequence += 1
+                    }
+                }
+
+                else -> throw IllegalStateException("Elapsed must be monotonic")
+            }
+        }
+    }
+
     private var previousCalledAt: Elapsed = Elapsed(0)
     private var nextSequence = 0
     private val maxSequence = 65535
-
-    override fun next(elapsedSource: () -> Elapsed): Pair<Elapsed, Sequence> {
-        var elapsed: Elapsed
-        var counter = 0
-        do {
-            elapsed = elapsedSource()
-            if (elapsed < previousCalledAt) {
-                Thread.sleep(1)
-            }
-            if (counter++ > 10) {
-                throw IllegalStateException("Elapsed must be monotonic")
-            }
-        } while (elapsed < previousCalledAt)
-
-        if (elapsed == previousCalledAt) {
-            if (nextSequence >= maxSequence) {
-                while (true) {
-                    val currentElapsed = elapsedSource()
-                    if (elapsed != currentElapsed) {
-                        nextSequence = 0
-                        previousCalledAt = currentElapsed
-                        break
-                    }
-                }
-            } else {
-                nextSequence
-                previousCalledAt = elapsed
-            }
-
-        } else {
-            previousCalledAt = elapsed
-            nextSequence = 0
-        }
-
-        return Pair(previousCalledAt, Sequence(nextSequence++))
-    }
+    private val lock = ReentrantLock()
 }

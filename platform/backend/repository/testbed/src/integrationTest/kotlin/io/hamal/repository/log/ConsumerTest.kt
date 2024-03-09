@@ -1,6 +1,5 @@
 package io.hamal.repository.log
 
-import io.hamal.lib.common.Partition
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.CmdIdGeneratorImpl
@@ -80,6 +79,6 @@ class LogConsumerTest : AbstractIntegrationTest() {
         assertThat(collected, hasSize(1_000))
     }
 
-    private val generateCmdId: GenerateCmdId = CmdIdGeneratorImpl(Partition(1))
+    private val generateCmdId: GenerateCmdId = CmdIdGeneratorImpl
 
 }

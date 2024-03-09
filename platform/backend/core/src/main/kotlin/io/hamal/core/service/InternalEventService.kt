@@ -39,7 +39,7 @@ class InternalEventService(
             )
             scheduledTasks.add(
                 async.atFixedRate(1.milliseconds) {
-                    consumer.consume(Limit(10)) { chunkId, evt ->
+                    consumer.consume(Limit(10)) { _, evt ->
                         internalEventContainer[evt::class].forEach { handler ->
                             val cmdId = generateCmdId()
                             handler.handle(cmdId, evt)

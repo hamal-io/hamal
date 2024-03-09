@@ -35,16 +35,11 @@ internal class SequenceSourceImplTest {
     fun `Requires ElapsedSource to return monotonic time`() {
         val testInstance = SequenceSourceImpl()
 
-        testInstance.next { Elapsed(0L) }
-        testInstance.next { Elapsed(1L) }
-        testInstance.next { Elapsed(2L) }
-        testInstance.next { Elapsed(2L) }
         testInstance.next { Elapsed(3L) }
 
-        val exception = assertThrows<IllegalStateException> {
-            testInstance.next { Elapsed(1) }
-        }
-        assertThat(exception.message, containsString("Elapsed must be monotonic"))
+        assertThrows<IllegalStateException> { testInstance.next { Elapsed(1) } }
+            .also { exception -> assertThat(exception.message, containsString("Elapsed must be monotonic")) }
+
     }
 
     @Test
