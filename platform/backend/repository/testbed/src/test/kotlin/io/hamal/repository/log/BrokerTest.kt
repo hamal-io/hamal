@@ -3,6 +3,7 @@ package io.hamal.repository.log
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.LogTopicId
 import io.hamal.repository.api.log.LogBrokerRepository
 import io.hamal.repository.api.log.LogBrokerRepository.*
@@ -14,7 +15,6 @@ import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.TestFactory
 import org.junit.jupiter.api.assertThrows
-import java.math.BigInteger
 
 internal class LogBrokerRepositoryTest : AbstractUnitTest() {
 
@@ -176,13 +176,13 @@ internal class LogBrokerRepositoryTest : AbstractUnitTest() {
                 val topic = create(CreateTopicCmd(CmdId(1), LogTopicId(2)))
 
                 append(
-                    CmdId(BigInteger("380896718712995851145215087")),
+                    CmdId(SnowflakeId(23)),
                     topic.id,
                     "some-content-1".toByteArray()
                 )
 
                 append(
-                    CmdId(BigInteger("380896718712995851145215088")),
+                    CmdId(SnowflakeId(23)),
                     topic.id,
                     "some-content-2".toByteArray()
                 )

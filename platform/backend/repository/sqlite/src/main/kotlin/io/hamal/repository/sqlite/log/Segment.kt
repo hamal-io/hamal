@@ -39,7 +39,7 @@ class LogSegmentSqliteRepository(
                 """
              CREATE TABLE IF NOT EXISTS events (
                 id INTEGER PRIMARY KEY AUTOINCREMENT ,
-                cmd_id VARCHAR(255) NOT NULL UNIQUE,
+                cmd_id INTEGER NOT NULL UNIQUE,
                 bytes BLOB NOT NULL ,
                 instant DATETIME NOT NULL
             );

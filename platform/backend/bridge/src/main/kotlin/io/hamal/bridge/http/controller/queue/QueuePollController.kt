@@ -3,6 +3,7 @@ package io.hamal.bridge.http.controller.queue
 import io.hamal.core.adapter.workspace.WorkspaceGetPort
 import io.hamal.core.event.InternalEventEmitter
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.domain.GenerateCmdId
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.ExecToken
 import io.hamal.lib.sdk.bridge.BridgeUnitOfWorkList
@@ -24,11 +25,13 @@ internal class QueuePollController(
     private val execCmdRepository: ExecCmdRepository,
     private val stateQueryRepository: StateQueryRepository,
     private val eventEmitter: InternalEventEmitter,
-    private val workspaceGet: WorkspaceGetPort
+    private val workspaceGet: WorkspaceGetPort,
+    private val generateCmdId: GenerateCmdId
 ) {
     @PostMapping("/v1/dequeue")
     fun dequeue(): ResponseEntity<BridgeUnitOfWorkList> {
-        val cmdId = CmdId.random()
+        val cmdId = generateCmdId()
+
         val result = execCmdRepository.start(StartCmd(cmdId)).also {
             emitEvents(cmdId, it)
         }

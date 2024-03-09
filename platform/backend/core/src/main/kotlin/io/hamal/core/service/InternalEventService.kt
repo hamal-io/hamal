@@ -2,10 +2,9 @@ package io.hamal.core.service
 
 import io.hamal.core.component.Async
 import io.hamal.core.event.InternalEventContainer
-import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.common.util.HashUtils.md5
+import io.hamal.lib.domain.GenerateCmdId
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.repository.api.TopicRepository
 import io.hamal.repository.api.event.InternalEvent
@@ -24,7 +23,8 @@ class InternalEventService(
     private val async: Async,
     private val internalEventContainer: InternalEventContainer,
     private val topicRepository: TopicRepository,
-    private val logBrokerRepository: LogBrokerRepository
+    private val logBrokerRepository: LogBrokerRepository,
+    private val generateCmdId: GenerateCmdId
 ) : DisposableBean, ApplicationListener<ApplicationReadyEvent> {
 
 
@@ -41,7 +41,7 @@ class InternalEventService(
                 async.atFixedRate(1.milliseconds) {
                     consumer.consume(Limit(10)) { chunkId, evt ->
                         internalEventContainer[evt::class].forEach { handler ->
-                            val cmdId = CmdId(md5("${evt.topicName}-${chunkId.value}"))
+                            val cmdId = generateCmdId()
                             handler.handle(cmdId, evt)
                         }
                     }

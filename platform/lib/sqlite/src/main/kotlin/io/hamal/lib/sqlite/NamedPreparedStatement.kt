@@ -3,7 +3,6 @@ package io.hamal.lib.sqlite
 //Inspired by: https://github.com/axiom-data-science/jdbc-named-parameters/blob/master/src/main/java/com/axiomalaska/jdbc/NamedParameterPreparedStatement.java
 
 import io.hamal.lib.common.KeyedOnce
-import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.domain.ValueObjectString
 import io.hamal.lib.common.snowflake.SnowflakeId
@@ -26,7 +25,6 @@ interface NamedPreparedStatement<STATEMENT> : AutoCloseable {
     operator fun set(parameter: String, value: Instant): STATEMENT
     operator fun set(parameter: String, value: String): STATEMENT
     operator fun set(parameter: String, value: SnowflakeId): STATEMENT
-    operator fun set(parameter: String, value: CmdId): STATEMENT
     operator fun set(parameter: String, value: ValueObjectId): STATEMENT
     operator fun set(parameter: String, value: ValueObjectString): STATEMENT
     operator fun set(parameter: String, value: ByteArray): STATEMENT
@@ -92,12 +90,6 @@ class DefaultNamedPreparedStatement(
     override fun set(parameter: String, value: SnowflakeId): DefaultNamedPreparedStatement {
         parametersSet.add(parameter)
         parseResult.parameterIndexesOf(parameter).forEach { delegate.setLong(it, value.value) }
-        return this
-    }
-
-    override fun set(parameter: String, value: CmdId): DefaultNamedPreparedStatement {
-        parametersSet.add(parameter)
-        parseResult.parameterIndexesOf(parameter).forEach { delegate.setString(it, value.value) }
         return this
     }
 

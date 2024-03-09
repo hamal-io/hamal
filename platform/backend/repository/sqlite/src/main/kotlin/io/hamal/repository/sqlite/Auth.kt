@@ -1,5 +1,6 @@
 package io.hamal.repository.sqlite
 
+import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.sqlite.Connection
@@ -30,7 +31,7 @@ class AuthSqliteRepository(
             execute(
                 """
                 CREATE TABLE IF NOT EXISTS auth (
-                    cmd_id VARCHAR(255) NOT NULL,
+                    cmd_id INTEGER NOT NULL,
                     id INTEGER NOT NULL,
                     type INTEGER NOT NULL,
                     entity_id INTEGER,
@@ -301,7 +302,7 @@ private fun NamedResultSet.toAuth(): Auth {
     return when (getInt("type")) {
         1 -> {
             Auth.Email(
-                cmdId = getCommandId("cmd_id"),
+                cmdId = getId("cmd_id", ::CmdId),
                 id = getId("id", ::AuthId),
                 accountId = getId("entity_id", ::AccountId),
                 email = Email(getString("email")),
@@ -311,7 +312,7 @@ private fun NamedResultSet.toAuth(): Auth {
 
         2 -> {
             Auth.Token(
-                cmdId = getCommandId("cmd_id"),
+                cmdId = getId("cmd_id", ::CmdId),
                 id = getId("id", ::AuthId),
                 accountId = getId("entity_id", ::AccountId),
                 token = AuthToken(getString("token")),
@@ -321,7 +322,7 @@ private fun NamedResultSet.toAuth(): Auth {
 
         3 -> {
             Auth.MetaMask(
-                cmdId = getCommandId("cmd_id"),
+                cmdId = getId("cmd_id", ::CmdId),
                 id = getId("id", ::AuthId),
                 accountId = getId("entity_id", ::AccountId),
                 address = Web3Address(getString("address"))
@@ -330,7 +331,7 @@ private fun NamedResultSet.toAuth(): Auth {
 
         4 -> {
             Auth.ExecToken(
-                cmdId = getCommandId("cmd_id"),
+                cmdId = getId("cmd_id", ::CmdId),
                 id = getId("id", ::AuthId),
                 execId = getId("entity_id", ::ExecId),
                 token = ExecToken(getString("token"))
