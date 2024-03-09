@@ -18,11 +18,11 @@ class AwaitFunction(
 ) {
     override fun invoke(ctx: FunctionContext, arg1: KuaString): KuaError? {
         while (true) {
-            httpTemplate.get("/v1/requests/{reqId}")
-                .path("reqId", arg1.stringValue)
+            httpTemplate.get("/v1/requests/{request_id}")
+                .path("request_id", arg1.stringValue)
                 .execute(ApiRequested::class)
                 .let {
-                    when (it.status) {
+                    when (it.requestStatus) {
                         RequestStatus.Completed,
                         RequestStatus.Failed -> {
                             return null
@@ -46,11 +46,11 @@ class AwaitCompletedFunction(
 ) {
     override fun invoke(ctx: FunctionContext, arg1: KuaString): KuaError? {
         while (true) {
-            httpTemplate.get("/v1/requests/{reqId}")
-                .path("reqId", arg1.stringValue)
+            httpTemplate.get("/v1/requests/{request_id}")
+                .path("request_id", arg1.stringValue)
                 .execute(ApiRequested::class)
                 .let {
-                    when (it.status) {
+                    when (it.requestStatus) {
                         RequestStatus.Completed -> {
                             return null
                         }
@@ -76,11 +76,11 @@ class AwaitFailedFunction(
 ) {
     override fun invoke(ctx: FunctionContext, arg1: KuaString): KuaError? {
         while (true) {
-            httpTemplate.get("/v1/requests/{reqId}")
-                .path("reqId", arg1.stringValue)
+            httpTemplate.get("/v1/requests/{request_id}")
+                .path("request_id", arg1.stringValue)
                 .execute(ApiRequested::class)
                 .let {
-                    when (it.status) {
+                    when (it.requestStatus) {
                         RequestStatus.Completed -> {
                             return KuaError("expected $arg1 to fail but completed")
                         }

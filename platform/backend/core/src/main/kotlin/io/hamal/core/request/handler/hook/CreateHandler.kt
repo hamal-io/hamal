@@ -28,7 +28,7 @@ class HookCreateHandler(
         return hookCmdRepository.create(
             CreateCmd(
                 id = req.cmdId(),
-                hookId = req.hookId,
+                hookId = req.id,
                 workspaceId = req.workspaceId,
                 namespaceId = req.namespaceId,
                 name = req.name

@@ -27,7 +27,7 @@ internal class BlueprintGetControllerTest : BlueprintBaseControllerTest() {
                     value = CodeValue("1 + 1")
                 )
             )
-        ).blueprintId
+        ).id
 
         val getResponse = httpTemplate.get("/v1/blueprints/{bpId}")
             .path("bpId", bpId)

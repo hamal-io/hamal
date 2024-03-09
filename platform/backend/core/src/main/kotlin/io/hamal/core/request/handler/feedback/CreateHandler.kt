@@ -26,7 +26,7 @@ class FeedbackCreateHandler(
         return feedbackCmdRepository.create(
             CreateCmd(
                 id = req.cmdId(),
-                feedbackId = req.feedbackId,
+                feedbackId = req.id,
                 mood = req.mood,
                 message = req.message,
                 accountId = req.accountId

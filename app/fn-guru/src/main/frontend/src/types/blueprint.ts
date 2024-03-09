@@ -7,15 +7,15 @@ export interface Blueprint {
 }
 
 export interface BlueprintCreateRequested {
+    requestId: string;
+    requestStatus: string;
     id: string;
-    status: string;
-    blueprintId: string;
 }
 
 export interface BlueprintUpdateRequested {
+    requestId: string;
+    requestStatus: string;
     id: string;
-    status: string;
-    blueprintId: string;
 }
 
 export interface BlueprintList {

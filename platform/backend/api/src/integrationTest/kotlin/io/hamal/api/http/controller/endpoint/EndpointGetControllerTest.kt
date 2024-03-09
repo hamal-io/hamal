@@ -31,14 +31,14 @@ internal class EndpointGetControllerTest : EndpointBaseControllerTest() {
                 name = NamespaceName("namespace"),
                 parentId = testNamespace.id
             )
-        ).namespaceId
+        ).id
 
         val funcId = awaitCompleted(
             createFunc(
                 namespaceId = namespaceId,
                 name = FuncName("func")
             )
-        ).funcId
+        ).id
 
         val endpointId = awaitCompleted(
             createEndpoint(
@@ -47,7 +47,7 @@ internal class EndpointGetControllerTest : EndpointBaseControllerTest() {
                 funcId = funcId,
                 method = EndpointMethod.Post
             )
-        ).endpointId
+        ).id
 
         val getEndpointResponse =
             httpTemplate.get("/v1/endpoints/{endpointId}").path("endpointId", endpointId).execute()

@@ -19,7 +19,7 @@ internal class HookListControllerTest : HookBaseControllerTest() {
     fun `Single hook`() {
         val hookId = awaitCompleted(
             createHook(ApiHookCreateRequest(HookName("hook-one")))
-        ).hookId
+        ).id
 
         with(listHooks()) {
             assertThat(hooks, hasSize(1))
@@ -61,7 +61,7 @@ internal class HookListControllerTest : HookBaseControllerTest() {
 
         val listResponse = httpTemplate.get("/v1/hooks")
             .parameter("workspace_ids", testWorkspace.id)
-            .parameter("after_id", fortyNinth.hookId)
+            .parameter("after_id", fortyNinth.id)
             .parameter("limit", 1)
             .execute(ApiHookList::class)
 

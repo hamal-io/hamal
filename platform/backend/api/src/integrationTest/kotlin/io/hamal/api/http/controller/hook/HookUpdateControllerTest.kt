@@ -52,7 +52,7 @@ internal class HookUpdateControllerTest : HookBaseControllerTest() {
         )
 
         val updateHookResponse = httpTemplate.patch("/v1/hooks/{hookId}")
-            .path("hookId", hook.hookId)
+            .path("hookId", hook.id)
             .body(ApiHookUpdateRequest(name = HookName("updated-name")))
             .execute()
 
@@ -61,8 +61,8 @@ internal class HookUpdateControllerTest : HookBaseControllerTest() {
 
         val submittedReq = updateHookResponse.result(ApiHookUpdateRequested::class)
         awaitCompleted(submittedReq)
-        with(getHook(submittedReq.hookId)) {
-            assertThat(id, equalTo(submittedReq.hookId))
+        with(getHook(submittedReq.id)) {
+            assertThat(id, equalTo(submittedReq.id))
             assertThat(namespace.name, equalTo(NamespaceName("createdNamespace")))
             assertThat(name, equalTo(HookName("updated-name")))
         }
@@ -87,7 +87,7 @@ internal class HookUpdateControllerTest : HookBaseControllerTest() {
         )
 
         val updateHookResponse = httpTemplate.patch("/v1/hooks/{hookId}")
-            .path("hookId", hook.hookId)
+            .path("hookId", hook.id)
             .body(ApiHookUpdateRequest(name = null))
             .execute()
         assertThat(updateHookResponse.statusCode, equalTo(Accepted))
@@ -96,8 +96,8 @@ internal class HookUpdateControllerTest : HookBaseControllerTest() {
         val req = updateHookResponse.result(ApiHookUpdateRequested::class)
         awaitCompleted(req)
 
-        with(getHook(req.hookId)) {
-            assertThat(id, equalTo(req.hookId))
+        with(getHook(req.id)) {
+            assertThat(id, equalTo(req.id))
             assertThat(namespace.name, equalTo(NamespaceName("createdNamespace")))
             assertThat(name, equalTo(HookName("created-name")))
         }

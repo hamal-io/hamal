@@ -27,10 +27,10 @@ internal class BlueprintCreateHandlerTest : BaseReqHandlerTest() {
 
     private val submitCreateBlueprintReq by lazy {
         BlueprintCreateRequested(
-            id = RequestId(1),
-            by = AuthId(2),
-            status = RequestStatus.Submitted,
-            blueprintId = BlueprintId(123),
+            requestId = RequestId(1),
+            requestedBy = AuthId(2),
+            requestStatus = RequestStatus.Submitted,
+            id = BlueprintId(123),
             name = BlueprintName("TestBlueprint"),
             inputs = BlueprintInputs(HotObject.builder().set("hamal", "rocks").build()),
             value = CodeValue("1 + 1"),

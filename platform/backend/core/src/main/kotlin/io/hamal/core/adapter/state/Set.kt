@@ -25,9 +25,9 @@ class StateAdapter(
     override operator fun invoke(req: StateSetRequest): StateSetRequested {
         val func = funcGet(req.correlation.funcId)
         return StateSetRequested(
-            id = generateDomainId(::RequestId),
-            by = SecurityContext.currentAuthId,
-            status = RequestStatus.Submitted,
+            requestId = generateDomainId(::RequestId),
+            requestedBy = SecurityContext.currentAuthId,
+            requestStatus = RequestStatus.Submitted,
             workspaceId = func.workspaceId,
             state = CorrelatedState(
                 correlation = req.correlation,

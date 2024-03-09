@@ -7,20 +7,20 @@ func_one = fail_on_error(sys.funcs.create({
 }))
 sys.await_completed(func_one)
 
-submitted_endpoint = fail_on_error(sys.endpoints.create({
-    func_id = func_one.func_id,
+requested_endpoint = fail_on_error(sys.endpoints.create({
+    func_id = func_one.id,
     name = 'test-endpoint'
 }))
 
-sys.await_completed(submitted_endpoint)
+sys.await_completed(requested_endpoint)
 
-assert(submitted_endpoint.id ~= nil)
-assert(submitted_endpoint.status == 'Submitted')
-assert(submitted_endpoint.endpoint_id ~= nil)
-assert(submitted_endpoint.workspace_id == '539')
-assert(submitted_endpoint.func_id == func_one.func_id)
+assert(requested_endpoint.request_id ~= nil)
+assert(requested_endpoint.request_status == 'Submitted')
+assert(requested_endpoint.id ~= nil)
+assert(requested_endpoint.workspace_id == '539')
+assert(requested_endpoint.func_id == func_one.id)
 
-endpoint = fail_on_error(sys.endpoints.get(submitted_endpoint.endpoint_id))
-assert(endpoint.id == submitted_endpoint.endpoint_id)
+endpoint = fail_on_error(sys.endpoints.get(requested_endpoint.id))
+assert(endpoint.id == requested_endpoint.id)
 assert(endpoint.func.name == 'test-func')
 assert(endpoint.name == 'test-endpoint')

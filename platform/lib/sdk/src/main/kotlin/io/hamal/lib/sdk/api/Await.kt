@@ -15,16 +15,16 @@ internal class ApiAwaitServiceImpl(
     override fun await(req: ApiRequested) {
         while (true) {
             template.get("/v1/requests/{reqId}")
-                .path("reqId", req.id)
+                .path("reqId", req.requestId)
                 .execute(ApiRequested::class)
                 .let {
-                    when (it.status) {
+                    when (it.requestStatus) {
                         RequestStatus.Completed -> {
                             return
                         }
 
                         RequestStatus.Failed -> {
-                            throw IllegalStateException("expected ${req.id} to complete but failed")
+                            throw IllegalStateException("expected ${req.requestId} to complete but failed")
                         }
 
                         else -> {

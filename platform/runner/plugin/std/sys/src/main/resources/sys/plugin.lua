@@ -13,33 +13,33 @@ function plugin_create(internal)
         triggers = { }
     }
 
-    function export.adhoc(cmd)
-        cmd = cmd or {}
+    function export.adhoc(req)
+        req = req or {}
         local err, res = internal.adhoc({
-            namespace_id = cmd.namespace_id,
-            inputs = cmd.inputs or {},
-            code = cmd.code or ""
+            namespace_id = req.namespace_id,
+            inputs = req.inputs or {},
+            code = req.code or ""
         })
         return err, res
     end
 
-    function export.await(cmd)
-        -- FIXME if cmd is string use it directly
-        internal.await(cmd.id)
+    function export.await(req)
+        -- FIXME if req is string use it directly
+        internal.await(req.request_id)
     end
 
-    function export.await_completed(cmd)
-        -- FIXME if cmd is string use it directly
-        local err = internal.await_completed(cmd.id)
+    function export.await_completed(req)
+        -- FIXME if req is string use it directly
+        local err = internal.await_completed(req.request_id)
         if (err ~= nil) then
             error(err.message)
         end
         return err
     end
 
-    function export.await_failed(cmd)
-        -- FIXME if cmd is string use it directly
-        local err = internal.await_failed(cmd.id)
+    function export.await_failed(req)
+        -- FIXME if req is string use it directly
+        local err = internal.await_failed(req.request_id)
         if (err ~= nil) then
             error(err.message)
         end
@@ -50,13 +50,13 @@ function plugin_create(internal)
         return internal.code_get(code_id, code_version or -1)
     end
 
-    function export.endpoints.create(cmd)
-        cmd = cmd or {}
+    function export.endpoints.create(req)
+        req = req or {}
         return internal.endpoint_create({
-            namespace_id = cmd.namespace_id or nil,
-            func_id = cmd.func_id or nil,
-            name = cmd.name or nil,
-            method = cmd.method or 'Post'
+            namespace_id = req.namespace_id or nil,
+            func_id = req.func_id or nil,
+            name = req.name or nil,
+            method = req.method or 'Post'
         })
     end
 
@@ -84,10 +84,10 @@ function plugin_create(internal)
         return internal.exec_list(query)
     end
 
-    function export.extensions.create(cmd)
+    function export.extensions.create(req)
         return internal.extension_create({
-            name = cmd.name or nil,
-            code = cmd.code or ""
+            name = req.name or nil,
+            code = req.code or ""
         })
     end
 
@@ -99,27 +99,27 @@ function plugin_create(internal)
         return internal.extension_list()
     end
 
-    function export.extensions.update(cmd)
-        cmd = cmd or {}
-        return internal.extension_update(cmd)
+    function export.extensions.update(req)
+        req = req or {}
+        return internal.extension_update(req)
     end
 
-    function export.funcs.create(cmd)
-        cmd = cmd or {}
+    function export.funcs.create(req)
+        req = req or {}
         return internal.func_create({
-            namespace_id = cmd.namespace_id,
-            name = cmd.name or nil,
-            inputs = cmd.inputs or {},
-            code = cmd.code or ""
+            namespace_id = req.namespace_id,
+            name = req.name or nil,
+            inputs = req.inputs or {},
+            code = req.code or ""
         })
     end
 
-    function export.funcs.deploy(cmd)
-        cmd = cmd or {}
+    function export.funcs.deploy(req)
+        req = req or {}
         return internal.func_deploy({
-            id = cmd.id,
-            version = cmd.version or nil,
-            message = cmd.message or nil
+            id = req.id,
+            version = req.version or nil,
+            message = req.message or nil
         })
     end
 
@@ -162,11 +162,11 @@ function plugin_create(internal)
         })
     end
 
-    function export.hooks.create(cmd)
-        cmd = cmd or {}
+    function export.hooks.create(req)
+        req = req or {}
         return internal.hook_create({
-            namespace_id = cmd.namespace_id or nil,
-            name = cmd.name or nil
+            namespace_id = req.namespace_id or nil,
+            name = req.name or nil
         })
     end
 
@@ -181,9 +181,9 @@ function plugin_create(internal)
         return internal.hook_list(query)
     end
 
-    function export.namespaces.append(cmd)
+    function export.namespaces.append(req)
         return internal.namespace_append({
-            name = cmd.name or "",
+            name = req.name or "",
         })
     end
 
@@ -199,11 +199,11 @@ function plugin_create(internal)
         return internal.req_get(req_id)
     end
 
-    function export.blueprints.create(cmd)
+    function export.blueprints.create(req)
         return internal.blueprint_create({
-            name = cmd.name or nil,
-            inputs = cmd.inputs or {},
-            value = cmd.value or ""
+            name = req.name or nil,
+            inputs = req.inputs or {},
+            value = req.value or ""
         })
     end
 
@@ -211,8 +211,8 @@ function plugin_create(internal)
         return internal.blueprint_get(blueprint_id)
     end
 
-    function export.blueprints.update(cmd)
-        return internal.blueprint_update(cmd)
+    function export.blueprints.update(req)
+        return internal.blueprint_update(req)
     end
 
     function export.topics.resolve(topic_name)
@@ -223,11 +223,11 @@ function plugin_create(internal)
         return internal.topic_entry_append(topic_id, payload)
     end
 
-    function export.topics.create(cmd)
-        cmd = cmd or {}
+    function export.topics.create(req)
+        req = req or {}
         return internal.topic_create({
-            namespace_id = cmd.namespace_id,
-            name = cmd.name
+            namespace_id = req.namespace_id,
+            name = req.name
         })
     end
 
@@ -246,52 +246,52 @@ function plugin_create(internal)
         return internal.topic_get(topic_id)
     end
 
-    function export.triggers.create_fixed_rate(cmd)
-        cmd = cmd or {}
+    function export.triggers.create_fixed_rate(req)
+        req = req or {}
         return internal.trigger_create({
             type = "FixedRate",
-            namespace_id = cmd.namespace_id,
-            name = cmd.name,
-            func_id = cmd.func_id,
-            inputs = cmd.inputs or {},
-            duration = cmd.duration
+            namespace_id = req.namespace_id,
+            name = req.name,
+            func_id = req.func_id,
+            inputs = req.inputs or {},
+            duration = req.duration
         })
     end
 
-    function export.triggers.create_event(cmd)
-        cmd = cmd or {}
+    function export.triggers.create_event(req)
+        req = req or {}
         return internal.trigger_create({
             type = "Event",
-            namespace_id = cmd.namespace_id,
-            name = cmd.name,
-            func_id = cmd.func_id,
-            inputs = cmd.inputs or {},
-            topic_id = cmd.topic_id
+            namespace_id = req.namespace_id,
+            name = req.name,
+            func_id = req.func_id,
+            inputs = req.inputs or {},
+            topic_id = req.topic_id
         })
     end
 
-    function export.triggers.create_hook(cmd)
-        cmd = cmd or {}
+    function export.triggers.create_hook(req)
+        req = req or {}
         return internal.trigger_create({
             type = "Hook",
-            namespace_id = cmd.namespace_id,
-            name = cmd.name,
-            func_id = cmd.func_id,
-            inputs = cmd.inputs or {},
-            hook_id = cmd.hook_id,
-            hook_method = cmd.hook_method
+            namespace_id = req.namespace_id,
+            name = req.name,
+            func_id = req.func_id,
+            inputs = req.inputs or {},
+            hook_id = req.hook_id,
+            hook_method = req.hook_method
         })
     end
 
-    function export.triggers.create_cron(cmd)
-        cmd = cmd or {}
+    function export.triggers.create_cron(req)
+        req = req or {}
         return internal.trigger_create({
             type = "Cron",
-            namespace_id = cmd.namespace_id,
-            name = cmd.name,
-            func_id = cmd.func_id,
-            inputs = cmd.inputs or {},
-            cron = cmd.cron
+            namespace_id = req.namespace_id,
+            name = req.name,
+            func_id = req.func_id,
+            inputs = req.inputs or {},
+            cron = req.cron
         })
     end
 
@@ -305,17 +305,17 @@ function plugin_create(internal)
         return internal.trigger_list(query)
     end
 
-    function export.triggers.activate(cmd)
-        cmd = cmd or {}
+    function export.triggers.activate(req)
+        req = req or {}
         return internal.trigger_activate({
-            trigger_id = cmd.id
+            trigger_id = req.id
         })
     end
 
-    function export.triggers.deactivate(cmd)
-        cmd = cmd or {}
+    function export.triggers.deactivate(req)
+        req = req or {}
         return internal.trigger_deactivate({
-            trigger_id = cmd.id
+            trigger_id = req.id
         })
     end
 

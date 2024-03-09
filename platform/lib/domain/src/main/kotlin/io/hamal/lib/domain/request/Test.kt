@@ -5,7 +5,7 @@ import io.hamal.lib.domain.vo.AuthId
 import io.hamal.lib.domain.vo.RequestId
 
 data class TestRequested(
-    override val id: RequestId,
-    override val by: AuthId,
-    override var status: RequestStatus
+    override val requestId: RequestId,
+    override val requestedBy: AuthId,
+    override var requestStatus: RequestStatus
 ) : Requested()

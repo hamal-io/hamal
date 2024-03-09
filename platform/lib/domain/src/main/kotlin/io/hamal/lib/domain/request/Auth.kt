@@ -9,10 +9,10 @@ interface AuthLogInEmailRequest {
 }
 
 data class AuthLoginEmailRequested(
-    override val id: RequestId,
-    override val by: AuthId,
-    override var status: RequestStatus,
-    val authId: AuthId,
+    override val requestId: RequestId,
+    override val requestedBy: AuthId,
+    override var requestStatus: RequestStatus,
+    val id: AuthId,
     val accountId: AccountId,
     val workspaceIds: List<WorkspaceId>,
     val hash: PasswordHash,
@@ -30,10 +30,10 @@ interface AuthLogInMetaMaskRequest {
 }
 
 data class AuthLoginMetaMaskRequested(
-    override val id: RequestId,
-    override val by: AuthId,
-    override var status: RequestStatus,
-    val authId: AuthId,
+    override val requestId: RequestId,
+    override val requestedBy: AuthId,
+    override var requestStatus: RequestStatus,
+    val id: AuthId,
     val accountId: AccountId,
     val workspaceIds: List<WorkspaceId>,
     val token: AuthToken,
@@ -42,8 +42,8 @@ data class AuthLoginMetaMaskRequested(
 ) : Requested()
 
 data class AuthLogoutRequested(
-    override val id: RequestId,
-    override val by: AuthId,
-    override var status: RequestStatus,
-    val accountId: AccountId
+    override val requestId: RequestId,
+    override val requestedBy: AuthId,
+    override var requestStatus: RequestStatus,
+    val id: AccountId
 ) : Requested()

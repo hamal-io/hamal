@@ -30,10 +30,10 @@ class TopicCreateAdapter(
         }
         val namespace = namespaceGet(namespaceId)
         return TopicCreateRequested(
-            id = generateDomainId(::RequestId),
-            by = SecurityContext.currentAuthId,
-            status = RequestStatus.Submitted,
-            topicId = generateDomainId(::TopicId),
+            requestId = generateDomainId(::RequestId),
+            requestedBy = SecurityContext.currentAuthId,
+            requestStatus = RequestStatus.Submitted,
+            id = generateDomainId(::TopicId),
             logTopicId = generateDomainId(::LogTopicId),
             workspaceId = namespace.workspaceId,
             namespaceId = namespace.id,

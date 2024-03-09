@@ -4,7 +4,7 @@ func_req = fail_on_error(sys.funcs.create({ name = 'test-func'; inputs = {}; cod
 sys.await_completed(func_req)
 
 req_one = fail_on_error(sys.triggers.create_cron({
-    func_id = func_req.func_id,
+    func_id = func_req.id,
     name = 'trigger-to-append',
     inputs = { },
     cron = '0 0 8-10 * * *'

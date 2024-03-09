@@ -7,7 +7,7 @@
 --sys.await(topic_req)
 --
 --req_one = fail_on_error(sys.triggers.create_event({
---    func_id = func_req.func_id,
+--    func_id = func_req.id,
 --    name = 'trigger-to-append',
 --    inputs = { },
 --    topic_id = topic_req.topic_id

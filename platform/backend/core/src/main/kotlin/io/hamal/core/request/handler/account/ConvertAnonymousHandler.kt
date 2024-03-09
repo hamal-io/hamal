@@ -34,7 +34,7 @@ class AccountConvertAnonymousHandler(
         return accountCmdRepository.convert(
             AccountCmdRepository.ConvertCmd(
                 id = req.cmdId(),
-                accountId = req.accountId,
+                accountId = req.id,
                 email = req.email
             )
         )
@@ -46,7 +46,7 @@ class AccountConvertAnonymousHandler(
             AuthCmdRepository.CreateEmailAuthCmd(
                 id = req.cmdId(),
                 authId = req.emailAuthId,
-                accountId = req.accountId,
+                accountId = req.id,
                 email = req.email,
                 hash = req.hash
             )
@@ -58,7 +58,7 @@ class AccountConvertAnonymousHandler(
             AuthCmdRepository.CreateTokenAuthCmd(
                 id = req.cmdId(),
                 authId = req.tokenAuthId,
-                accountId = req.accountId,
+                accountId = req.id,
                 token = req.token,
                 expiresAt = ExpiresAt(TimeUtils.now().plus(30, ChronoUnit.DAYS))
             )

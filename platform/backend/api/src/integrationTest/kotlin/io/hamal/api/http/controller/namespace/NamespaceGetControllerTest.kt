@@ -27,7 +27,7 @@ internal class NamespaceGetControllerTest : NamespaceBaseControllerTest() {
     fun `Get namespace`() {
         val namespaceId = awaitCompleted(
             appendNamespace(ApiNamespaceAppendRequest(NamespaceName("namespace-one")))
-        ).namespaceId
+        ).id
 
         val getNamespaceResponse = httpTemplate.get("/v1/namespaces/{namespaceId}")
             .path("namespaceId", namespaceId)

@@ -30,7 +30,7 @@ internal class TriggerGetControllerTest : TriggerBaseControllerTest() {
 
     @Test
     fun `Get fixed rate trigger`() {
-        val someFuncId = awaitCompleted(createFunc(FuncName("some-func-to-trigger"))).funcId
+        val someFuncId = awaitCompleted(createFunc(FuncName("some-func-to-trigger"))).id
         val triggerId = awaitCompleted(
             createTrigger(
                 ApiTriggerCreateReq(
@@ -42,7 +42,7 @@ internal class TriggerGetControllerTest : TriggerBaseControllerTest() {
                     duration = TriggerDuration(10.seconds.toIsoString())
                 )
             )
-        ).triggerId
+        ).id
 
         val getTriggerResponse = httpTemplate.get("/v1/triggers/{triggerId}").path("triggerId", triggerId).execute()
 
@@ -61,8 +61,8 @@ internal class TriggerGetControllerTest : TriggerBaseControllerTest() {
 
     @Test
     fun `Get event trigger`() {
-        val someTopicId = awaitCompleted(createTopic(TopicName("some-topic"))).topicId
-        val someFuncId = awaitCompleted(createFunc(FuncName("some-func-to-trigger"))).funcId
+        val someTopicId = awaitCompleted(createTopic(TopicName("some-topic"))).id
+        val someFuncId = awaitCompleted(createFunc(FuncName("some-func-to-trigger"))).id
 
         val triggerId = awaitCompleted(
             createTrigger(
@@ -75,7 +75,7 @@ internal class TriggerGetControllerTest : TriggerBaseControllerTest() {
                     topicId = someTopicId
                 )
             )
-        ).triggerId
+        ).id
 
         val getTriggerResponse = httpTemplate.get("/v1/triggers/{triggerId}").path("triggerId", triggerId).execute()
 
@@ -95,8 +95,8 @@ internal class TriggerGetControllerTest : TriggerBaseControllerTest() {
 
     @Test
     fun `Get hook trigger`() {
-        val hookId = awaitCompleted(createHook(HookName("some-hook"))).hookId
-        val funcId = awaitCompleted(createFunc(FuncName("some-func-to-trigger"))).funcId
+        val hookId = awaitCompleted(createHook(HookName("some-hook"))).id
+        val funcId = awaitCompleted(createFunc(FuncName("some-func-to-trigger"))).id
 
         val triggerId = awaitCompleted(
             createTrigger(
@@ -111,7 +111,7 @@ internal class TriggerGetControllerTest : TriggerBaseControllerTest() {
 
                 )
             )
-        ).triggerId
+        ).id
 
         val getTriggerResponse = httpTemplate.get("/v1/triggers/{triggerId}").path("triggerId", triggerId).execute()
 
@@ -132,7 +132,7 @@ internal class TriggerGetControllerTest : TriggerBaseControllerTest() {
 
     @Test
     fun `Get cron trigger`() {
-        val funcId = awaitCompleted(createFunc(FuncName("some-func-to-trigger"))).funcId
+        val funcId = awaitCompleted(createFunc(FuncName("some-func-to-trigger"))).id
 
         val triggerId = awaitCompleted(
             createTrigger(
@@ -144,7 +144,7 @@ internal class TriggerGetControllerTest : TriggerBaseControllerTest() {
                     cron = CronPattern("0 0 9-17 * * MON-FRI")
                 )
             )
-        ).triggerId
+        ).id
 
         val getTriggerResponse = httpTemplate.get("/v1/triggers/{triggerId}").path("triggerId", triggerId).execute()
 

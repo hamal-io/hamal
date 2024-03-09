@@ -7,7 +7,7 @@ sys.await_completed(func_one_req)
 sys.await_completed(fail_on_error(sys.triggers.create_fixed_rate({
     namespace_id = namespace_one_req.id,
     name = 'trigger-1',
-    func_id = func_one_req.func_id,
+    func_id = func_one_req.id,
     inputs = { },
     duration = 'PT1S'
 })))
@@ -19,7 +19,7 @@ sys.await_completed(func_two_req)
 sys.await_completed(fail_on_error(sys.triggers.create_fixed_rate({
     namespace_id = namespace_two_req.id,
     name = 'trigger-2',
-    func_id = func_two_req.func_id,
+    func_id = func_two_req.id,
     inputs = { },
     duration = 'PT2S'
 })))

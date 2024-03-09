@@ -27,7 +27,7 @@ class FuncUpdateHandler(
     }
 
     private fun updateFunc(req: FuncUpdateRequested): Func {
-        val func = funcRepository.get(req.funcId)
+        val func = funcRepository.get(req.id)
 
         val code = codeRepository.update(
             func.code.id, CodeCmdRepository.UpdateCmd(
@@ -37,7 +37,7 @@ class FuncUpdateHandler(
         )
 
         return funcRepository.update(
-            req.funcId,
+            req.id,
             UpdateCmd(
                 id = req.cmdId(),
                 name = req.name,

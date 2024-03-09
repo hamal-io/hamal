@@ -23,11 +23,11 @@ class HookUpdateAdapter(
     override fun invoke(hookId: HookId, req: HookUpdateRequest): HookUpdateRequested {
         val hook = hookGet(hookId)
         return HookUpdateRequested(
-            id = generateDomainId(::RequestId),
-            by = SecurityContext.currentAuthId,
-            status = RequestStatus.Submitted,
+            requestId = generateDomainId(::RequestId),
+            requestedBy = SecurityContext.currentAuthId,
+            requestStatus = RequestStatus.Submitted,
             workspaceId = hook.workspaceId,
-            hookId = hookId,
+            id = hookId,
             name = req.name,
         ).also(requestEnqueue::invoke)
     }

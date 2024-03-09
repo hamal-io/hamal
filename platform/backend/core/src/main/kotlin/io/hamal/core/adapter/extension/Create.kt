@@ -26,11 +26,11 @@ class ExtensionCreateAdapter(
     override fun invoke(workspaceId: WorkspaceId, req: ExtensionCreateRequest): ExtensionCreateRequested {
         val workspace = workspaceGet(workspaceId)
         return ExtensionCreateRequested(
-            id = generateDomainId(::RequestId),
-            by = SecurityContext.currentAuthId,
-            status = RequestStatus.Submitted,
+            requestId = generateDomainId(::RequestId),
+            requestedBy = SecurityContext.currentAuthId,
+            requestStatus = RequestStatus.Submitted,
             workspaceId = workspace.id,
-            extensionId = generateDomainId(::ExtensionId),
+            id = generateDomainId(::ExtensionId),
             name = req.name,
             codeId = generateDomainId(::CodeId),
             code = req.code

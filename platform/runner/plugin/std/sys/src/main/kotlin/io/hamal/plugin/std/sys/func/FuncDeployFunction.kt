@@ -41,9 +41,9 @@ class FuncDeployFunction(
             )
 
             null to ctx.tableCreate(
+                "request_id" to KuaString(res.requestId.value.value.toString(16)),
+                "request_status" to KuaString(res.requestStatus.name),
                 "id" to KuaString(res.id.value.value.toString(16)),
-                "status" to KuaString(res.status.name),
-                "func_id" to KuaString(res.funcId.value.value.toString(16)),
             )
         } catch (t: Throwable) {
             KuaError(t.message!!) to null

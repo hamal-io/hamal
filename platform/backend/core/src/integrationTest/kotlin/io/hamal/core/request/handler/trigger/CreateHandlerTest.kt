@@ -99,11 +99,11 @@ internal class TriggerCreateHandlerTest : BaseReqHandlerTest() {
             val exception = assertThrows<IllegalArgumentException> {
                 testInstance(
                     TriggerCreateRequested(
-                        id = RequestId(12345),
-                        by = AuthId(2345),
-                        status = Submitted,
-                        triggerType = Hook,
-                        triggerId = TriggerId(2),
+                        requestId = RequestId(12345),
+                        requestedBy = AuthId(2345),
+                        requestStatus = Submitted,
+                        type = Hook,
+                        id = TriggerId(2),
                         namespaceId = testNamespace.id,
                         workspaceId = testWorkspace.id,
                         funcId = FuncId(2222),
@@ -236,11 +236,11 @@ internal class TriggerCreateHandlerTest : BaseReqHandlerTest() {
 
     private val submitCreateFixedRateTriggerReq by lazy {
         TriggerCreateRequested(
-            id = RequestId(1),
-            by = AuthId(2),
-            status = Submitted,
-            triggerType = FixedRate,
-            triggerId = TriggerId(1234),
+            requestId = RequestId(1),
+            requestedBy = AuthId(2),
+            requestStatus = Submitted,
+            type = FixedRate,
+            id = TriggerId(1234),
             namespaceId = testNamespace.id,
             workspaceId = testWorkspace.id,
             funcId = FuncId(2222),
@@ -254,11 +254,11 @@ internal class TriggerCreateHandlerTest : BaseReqHandlerTest() {
 
     private val submitCreateEventTriggerReq by lazy {
         TriggerCreateRequested(
-            id = RequestId(1),
-            by = AuthId(2),
-            status = Submitted,
-            triggerType = Event,
-            triggerId = TriggerId(1234),
+            requestId = RequestId(1),
+            requestedBy = AuthId(2),
+            requestStatus = Submitted,
+            type = Event,
+            id = TriggerId(1234),
             namespaceId = testNamespace.id,
             workspaceId = testWorkspace.id,
             funcId = FuncId(2222),
@@ -272,11 +272,11 @@ internal class TriggerCreateHandlerTest : BaseReqHandlerTest() {
 
     private val submitCreateHookTriggerReq by lazy {
         TriggerCreateRequested(
-            id = RequestId(1),
-            by = AuthId(2),
-            status = Submitted,
-            triggerType = Hook,
-            triggerId = TriggerId(1234),
+            requestId = RequestId(1),
+            requestedBy = AuthId(2),
+            requestStatus = Submitted,
+            type = Hook,
+            id = TriggerId(1234),
             namespaceId = testNamespace.id,
             workspaceId = testWorkspace.id,
             funcId = FuncId(2222),
@@ -291,11 +291,11 @@ internal class TriggerCreateHandlerTest : BaseReqHandlerTest() {
 
     private val submitCreateCronTriggerReq by lazy {
         TriggerCreateRequested(
-            id = RequestId(1),
-            by = AuthId(2),
-            status = Submitted,
-            triggerType = Cron,
-            triggerId = TriggerId(1234),
+            requestId = RequestId(1),
+            requestedBy = AuthId(2),
+            requestStatus = Submitted,
+            type = Cron,
+            id = TriggerId(1234),
             namespaceId = testNamespace.id,
             workspaceId = testWorkspace.id,
             funcId = FuncId(2222),

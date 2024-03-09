@@ -56,10 +56,10 @@ class AuthLoginEmailAdapter(
             }
 
             AuthLoginEmailRequested(
-                id = generateDomainId(::RequestId),
-                by = SecurityContext.currentAuthId,
-                status = RequestStatus.Submitted,
-                authId = generateDomainId(::AuthId),
+                requestId = generateDomainId(::RequestId),
+                requestedBy = SecurityContext.currentAuthId,
+                requestStatus = RequestStatus.Submitted,
+                id = generateDomainId(::AuthId),
                 accountId = account.id,
                 workspaceIds = workspaceList(
                     WorkspaceQuery(

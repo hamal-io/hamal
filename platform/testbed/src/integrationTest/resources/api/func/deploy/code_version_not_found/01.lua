@@ -1,14 +1,14 @@
 sys = require_plugin('sys')
 
-local create_req = fail_on_error(sys.funcs.create({
+local func_req = fail_on_error(sys.funcs.create({
     name = 'test-func',
     inputs = {},
     code = [[4 + 2]]
 }))
-sys.await_completed(create_req)
+sys.await_completed(func_req)
 
 update_req = fail_on_error(sys.funcs.update({
-    id = create_req.func_id,
+    id = func_req.id,
     name = 'func-2',
     inputs = { },
     code = 'code-2'
@@ -16,7 +16,7 @@ update_req = fail_on_error(sys.funcs.update({
 sys.await_completed(update_req)
 
 err, res = sys.funcs.deploy({
-    id = create_req.func_id,
+    id = func_req.id,
     version = 24
 })
 assert(err.message == 'Code not found')

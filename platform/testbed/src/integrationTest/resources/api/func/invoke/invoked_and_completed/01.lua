@@ -1,20 +1,20 @@
 sys = require_plugin('sys')
 
-req = fail_on_error(sys.funcs.create({
+func = fail_on_error(sys.funcs.create({
     namespace_id = '539',
     name = 'test-func',
     inputs = {},
     code = [[print('invoked')]]
 }))
-sys.await_completed(req)
+sys.await_completed(func)
 
 invocation_req = fail_on_error(sys.funcs.invoke({
-    id = req.func_id,
+    id = func.id,
     correlation_id = nil,
     inputs = { }
 }))
 sys.await_completed(invocation_req)
 
+assert(invocation_req.request_id ~= nil)
+assert(invocation_req.request_status == 'Submitted')
 assert(invocation_req.id ~= nil)
-assert(invocation_req.status == 'Submitted')
-assert(invocation_req.exec_id ~= nil)

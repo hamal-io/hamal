@@ -21,10 +21,10 @@ class FeedbackCreateAdapter(
 ) : FeedbackCreatePort {
     override fun invoke(req: FeedbackCreateRequest): FeedbackCreateRequested {
         return FeedbackCreateRequested(
-            id = generateDomainId(::RequestId),
-            by = SecurityContext.currentAuthId,
-            status = RequestStatus.Submitted,
-            feedbackId = generateDomainId(::FeedbackId),
+            requestId = generateDomainId(::RequestId),
+            requestedBy = SecurityContext.currentAuthId,
+            requestStatus = RequestStatus.Submitted,
+            id = generateDomainId(::FeedbackId),
             mood = req.mood,
             message = req.message,
             accountId = req.accountId

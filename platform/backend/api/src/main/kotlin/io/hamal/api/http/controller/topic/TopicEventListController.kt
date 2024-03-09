@@ -34,7 +34,7 @@ internal class TopicEventListController(
             val topic = topicGet(topicId)
             ResponseEntity.ok(
                 ApiTopicEventList(
-                    topicId = topic.id,
+                    id = topic.id,
                     topicName = topic.name,
                     events = events.map {
                         ApiTopicEventList.Event(

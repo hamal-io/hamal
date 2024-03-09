@@ -9,13 +9,14 @@ import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.ExecInvokeRequested
 import io.hamal.lib.domain.vo.*
+import io.hamal.repository.api.Auth
 import io.hamal.repository.api.Exec
 import io.hamal.repository.api.Func
 import org.springframework.stereotype.Component
 import java.util.concurrent.CompletableFuture
 
 fun interface EndpointInvokePort {
-    operator fun invoke(endpointId: EndpointId, invocation: Invocation.Endpoint): CompletableFuture<Exec>
+    operator fun invoke(endpointId: EndpointId, invocation: Invocation.Endpoint, auth: Auth): CompletableFuture<Exec>
 }
 
 @Component
@@ -27,11 +28,13 @@ class EndpointInvokeAdapter(
     private val execFind: ExecFindPort
 ) : EndpointInvokePort {
 
-    override fun invoke(endpointId: EndpointId, invocation: Invocation.Endpoint): CompletableFuture<Exec> {
+    override fun invoke(endpointId: EndpointId, invocation: Invocation.Endpoint, auth: Auth): CompletableFuture<Exec> {
         return CompletableFuture.supplyAsync {
-            val endpoint = endpointGet(endpointId)
-            val func = funcGet(endpoint.funcId)
-            invoke(func, invocation)
+            SecurityContext.with(auth) {
+                val endpoint = endpointGet(endpointId)
+                val func = funcGet(endpoint.funcId)
+                invoke(func, invocation)
+            }
         }
     }
 
@@ -39,10 +42,10 @@ class EndpointInvokeAdapter(
         val execId = generateDomainId(::ExecId)
         requestEnqueue(
             ExecInvokeRequested(
-                id = generateDomainId(::RequestId),
-                by = SecurityContext.currentAuthId,
-                status = RequestStatus.Submitted,
-                execId = execId,
+                requestId = generateDomainId(::RequestId),
+                requestedBy = SecurityContext.currentAuthId,
+                requestStatus = RequestStatus.Submitted,
+                id = execId,
                 namespaceId = func.namespaceId,
                 workspaceId = func.workspaceId,
                 inputs = InvocationInputs(),

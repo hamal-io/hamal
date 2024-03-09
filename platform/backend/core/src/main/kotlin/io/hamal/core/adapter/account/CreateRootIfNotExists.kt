@@ -30,9 +30,9 @@ class AccountCreateRootAdapter(
         accountFind(AccountId.root)
             ?: run {
                 AccountCreateRequested(
-                    id = generateDomainId(::RequestId),
-                    by = SecurityContext.currentAuthId,
-                    status = RequestStatus.Submitted,
+                    requestId = generateDomainId(::RequestId),
+                    requestedBy = SecurityContext.currentAuthId,
+                    requestStatus = RequestStatus.Submitted,
                     accountId = AccountId.root,
                     accountType = AccountType.Root,
                     workspaceId = WorkspaceId.root,

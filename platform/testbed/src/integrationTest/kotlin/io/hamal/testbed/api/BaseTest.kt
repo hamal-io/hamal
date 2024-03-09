@@ -337,7 +337,7 @@ abstract class BaseApiTest {
 
 
             while (wait) {
-                with(sdk.exec.get(execReq.execId)) {
+                with(sdk.exec.get(execReq.id)) {
                     if (status == ExecStatus.Completed) {
                         wait = false
                     } else {

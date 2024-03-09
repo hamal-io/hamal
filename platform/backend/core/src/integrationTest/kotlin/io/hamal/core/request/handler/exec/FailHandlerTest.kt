@@ -44,7 +44,7 @@ internal class ExecFailHandlerTest : BaseReqHandlerTest() {
                 createExec(execId, execStatus)
 
                 val exception = assertThrows<IllegalArgumentException> {
-                    testInstance(submittedFailExecReq.copy(execId = execId))
+                    testInstance(submittedFailExecReq.copy(id = execId))
                 }
                 assertThat(exception.message, equalTo("Exec not in status Started"))
 
@@ -57,10 +57,10 @@ internal class ExecFailHandlerTest : BaseReqHandlerTest() {
 
     private val submittedFailExecReq by lazy {
         ExecFailRequested(
-            id = RequestId(10),
-            by = AuthId(20),
-            status = Submitted,
-            execId = ExecId(1234),
+            requestId = RequestId(10),
+            requestedBy = AuthId(20),
+            requestStatus = Submitted,
+            id = ExecId(1234),
             result = ExecResult(HotObject.builder().set("message", "You have not tried hard enough").build())
         )
     }

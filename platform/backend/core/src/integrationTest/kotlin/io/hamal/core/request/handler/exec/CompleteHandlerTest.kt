@@ -43,7 +43,7 @@ internal class ExecCompleteHandlerTest : BaseReqHandlerTest() {
                 createExec(execId, execStatus)
 
                 val exception = assertThrows<IllegalArgumentException> {
-                    testInstance(submittedCompleteExecReq.copy(execId = execId))
+                    testInstance(submittedCompleteExecReq.copy(id = execId))
                 }
                 assertThat(exception.message, equalTo("Exec not in status Started"))
 
@@ -56,10 +56,10 @@ internal class ExecCompleteHandlerTest : BaseReqHandlerTest() {
 
     private val submittedCompleteExecReq by lazy {
         ExecCompleteRequested(
-            id = RequestId(10),
-            by = AuthId(20),
-            status = RequestStatus.Submitted,
-            execId = ExecId(1234),
+            requestId = RequestId(10),
+            requestedBy = AuthId(20),
+            requestStatus = RequestStatus.Submitted,
+            id = ExecId(1234),
             result = ExecResult(HotObject.builder().set("hamal", "rocks").build()),
             state = ExecState(HotObject.builder().set("counter", 1).build()),
             events = listOf(

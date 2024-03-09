@@ -35,9 +35,9 @@ data class ApiExtensionCreateRequest(
 ) : ExtensionCreateRequest
 
 data class ApiExtensionCreateRequested(
-    override val id: RequestId,
-    override val status: RequestStatus,
-    val extensionId: ExtensionId,
+    override val requestId: RequestId,
+    override val requestStatus: RequestStatus,
+    val id: ExtensionId,
     val workspaceId: WorkspaceId
 ) : ApiRequested()
 
@@ -47,9 +47,9 @@ data class ApiExtensionUpdateRequest(
 ) : ExtensionUpdateRequest
 
 data class ApiExtensionUpdateRequested(
-    override val id: RequestId,
-    override val status: RequestStatus,
-    val extensionId: ExtensionId
+    override val requestId: RequestId,
+    override val requestStatus: RequestStatus,
+    val id: ExtensionId
 ) : ApiRequested()
 
 

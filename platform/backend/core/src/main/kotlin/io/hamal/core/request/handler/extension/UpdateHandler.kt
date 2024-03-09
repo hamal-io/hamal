@@ -26,7 +26,7 @@ class ExtensionUpdateHandler(
     }
 
     private fun updateExtension(req: ExtensionUpdateRequested): Extension {
-        val ext = extensionRepository.get(req.extensionId)
+        val ext = extensionRepository.get(req.id)
         val code = codeCmdRepository.update(
             ext.code.id, CodeCmdRepository.UpdateCmd(
                 id = req.cmdId(),
@@ -35,7 +35,7 @@ class ExtensionUpdateHandler(
         )
 
         return extensionRepository.update(
-            req.extensionId, UpdateCmd(
+            req.id, UpdateCmd(
                 id = req.cmdId(),
                 name = req.name,
                 code = ExtensionCode(

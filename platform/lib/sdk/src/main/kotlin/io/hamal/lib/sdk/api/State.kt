@@ -17,8 +17,8 @@ data class ApiStateSetRequest(
 ) : StateSetRequest
 
 data class ApiStateSetRequested(
-    override val id: RequestId,
-    override val status: RequestStatus
+    override val requestId: RequestId,
+    override val requestStatus: RequestStatus
 ) : ApiRequested()
 
 

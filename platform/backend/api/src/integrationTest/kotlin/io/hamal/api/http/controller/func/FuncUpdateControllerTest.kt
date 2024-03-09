@@ -58,7 +58,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
         )
 
         val updateFuncResponse = httpTemplate.patch("/v1/funcs/{funcId}")
-            .path("funcId", func.funcId)
+            .path("funcId", func.id)
             .body(
                 ApiFuncUpdateRequest(
                     name = FuncName("updated-name"),
@@ -74,7 +74,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
         val submittedReq = updateFuncResponse.result(ApiFuncUpdateRequested::class)
         awaitCompleted(submittedReq)
 
-        val funcId = submittedReq.funcId
+        val funcId = submittedReq.id
 
         with(getFunc(funcId)) {
             assertThat(id, equalTo(funcId))
@@ -95,7 +95,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
         val funcId = createFuncInNamespace(
             FuncName("created-name"),
             CodeValue("createdCode")
-        ).funcId
+        ).id
 
         val updateFuncResponse = httpTemplate.patch("/v1/funcs/{funcId}")
             .path("funcId", funcId)
@@ -133,7 +133,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
         val funcId = createFuncInNamespace(
             FuncName("created-name"),
             CodeValue("createdCode")
-        ).funcId
+        ).id
 
         val updateFuncResponse = httpTemplate.patch("/v1/funcs/{funcId}")
             .path("funcId", funcId)
@@ -165,7 +165,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
         val funcId = createFuncInNamespace(
             FuncName("func-1"),
             CodeValue("createdCode")
-        ).funcId
+        ).id
 
         val updateFuncResponse = httpTemplate.patch("/v1/funcs/{funcId}")
             .path("funcId", funcId)

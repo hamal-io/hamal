@@ -9,8 +9,8 @@ assert(err == nil)
 sys.await_completed(func_one)
 
 assert(func_one.id ~= nil)
-assert(func_one.status == 'Submitted')
-assert(func_one.func_id ~= nil)
+assert(func_one.request_status == 'Submitted')
+assert(func_one.id ~= nil)
 assert(func_one.workspace_id == '539')
 assert(func_one.namespace_id == '539')
 

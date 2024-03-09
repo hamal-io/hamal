@@ -24,7 +24,7 @@ internal class BlueprintCreateControllerTest : BlueprintBaseControllerTest() {
 
         awaitCompleted(res)
 
-        with(blueprintQueryRepository.get(res.blueprintId)) {
+        with(blueprintQueryRepository.get(res.id)) {
             assertThat(inputs, equalTo(BlueprintInputs(HotObject.builder().set("hamal", "rocks").build())))
             assertThat(name, equalTo(BlueprintName("TestBlueprint")))
             assertThat(value, equalTo(CodeValue("13 + 37")))

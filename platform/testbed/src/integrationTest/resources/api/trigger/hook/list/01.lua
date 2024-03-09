@@ -7,11 +7,11 @@ hook_req = fail_on_error(sys.hooks.create({ name = "some-amazing-hook" }))
 sys.await(hook_req)
 
 req_one = fail_on_error(sys.triggers.create_hook({
-    func_id = func_req.func_id,
+    func_id = func_req.id,
     name = 'trigger-to-append',
     inputs = { },
     hook_method = 'Get',
-    hook_id = hook_req.hook_id
+    hook_id = hook_req.id
 }))
 sys.await_completed(req_one)
 

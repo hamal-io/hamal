@@ -23,13 +23,13 @@ class RequestInvoker private constructor(
             requestCmdRepository.next(Limit(10)).forEach { requested ->
                 try {
                     val handleRequested = requestRegistry[requested::class]
-                    SecurityContext.with(authGet(requested.by)) {
+                    SecurityContext.with(authGet(requested.requestedBy)) {
                         handleRequested(requested)
                     }
-                    requestCmdRepository.complete(requested.id)
+                    requestCmdRepository.complete(requested.requestId)
                 } catch (t: Throwable) {
                     t.printStackTrace()
-                    requestCmdRepository.fail(requested.id)
+                    requestCmdRepository.fail(requested.requestId)
                 }
             }
         }

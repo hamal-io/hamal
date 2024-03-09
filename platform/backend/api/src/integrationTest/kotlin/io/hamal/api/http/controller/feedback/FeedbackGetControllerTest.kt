@@ -23,8 +23,8 @@ internal class FeedbackGetControllerTest : FeedbackBaseControllerTest() {
             )
         )
 
-        with(getFeedback(res.feedbackId)) {
-            assertThat(id, equalTo(res.feedbackId))
+        with(getFeedback(res.id)) {
+            assertThat(id, equalTo(res.id))
             assertThat(mood, equalTo(FeedbackMood.Normal))
             assertThat(message, equalTo(FeedbackMessage("My mood is so normal")))
             assertThat(accountId, nullValue())

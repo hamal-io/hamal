@@ -24,9 +24,9 @@ class TriggerActivateFunction(
             )
 
             null to ctx.tableCreate(
+                "request_id" to KuaString(res.requestId.value.value.toString(16)),
+                "request_status" to KuaString(res.requestStatus.name),
                 "id" to KuaString(res.id.value.value.toString(16)),
-                "status" to KuaString(res.status.name),
-                "trigger_id" to KuaString(res.triggerId.value.value.toString(16)),
             )
         } catch (t: Throwable) {
             KuaError(t.message!!) to null
@@ -47,9 +47,9 @@ class TriggerDeactivateFunction(
             )
 
             null to ctx.tableCreate(
+                "request_id" to KuaString(res.requestId.value.value.toString(16)),
+                "request_status" to KuaString(res.requestStatus.name),
                 "id" to KuaString(res.id.value.value.toString(16)),
-                "status" to KuaString(res.status.name),
-                "trigger_id" to KuaString(res.triggerId.value.value.toString(16)),
             )
         } catch (t: Throwable) {
             KuaError(t.message!!) to null

@@ -24,9 +24,9 @@ data class ApiBlueprintCreateRequest(
 ) : BlueprintCreateRequest
 
 data class ApiBlueprintCreateRequested(
-    override val id: RequestId,
-    override val status: RequestStatus,
-    val blueprintId: BlueprintId
+    override val requestId: RequestId,
+    override val requestStatus: RequestStatus,
+    val id: BlueprintId
 ) : ApiRequested()
 
 data class ApiBlueprintUpdateRequest(
@@ -37,9 +37,9 @@ data class ApiBlueprintUpdateRequest(
 ) : BlueprintUpdateRequest
 
 data class ApiBlueprintUpdateRequested(
-    override val id: RequestId,
-    override val status: RequestStatus,
-    val blueprintId: BlueprintId
+    override val requestId: RequestId,
+    override val requestStatus: RequestStatus,
+    val id: BlueprintId
 ) : ApiRequested()
 
 data class ApiBlueprintList(

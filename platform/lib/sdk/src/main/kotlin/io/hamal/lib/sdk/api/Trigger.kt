@@ -32,19 +32,19 @@ data class ApiTriggerCreateReq(
 ) : TriggerCreateRequest
 
 data class ApiTriggerCreateRequested(
-    override val id: RequestId,
-    override val status: RequestStatus,
-    val triggerId: TriggerId,
+    override val requestId: RequestId,
+    override val requestStatus: RequestStatus,
+    val id: TriggerId,
     val workspaceId: WorkspaceId,
     val namespaceId: NamespaceId
 ) : ApiRequested()
 
 
 data class ApiTriggerStatusRequested(
-    override val id: RequestId,
-    override val status: RequestStatus,
-    val triggerId: TriggerId,
-    val triggerStatus: TriggerStatus
+    override val requestId: RequestId,
+    override val requestStatus: RequestStatus,
+    val id: TriggerId,
+    val status: TriggerStatus
 ) : ApiRequested()
 
 data class ApiTriggerList(

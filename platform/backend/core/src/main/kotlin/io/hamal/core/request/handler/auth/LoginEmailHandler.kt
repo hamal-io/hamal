@@ -21,7 +21,7 @@ class LoginEmailHandler(
             authRepository.create(
                 CreateTokenAuthCmd(
                     id = req.cmdId(),
-                    authId = req.authId,
+                    authId = req.id,
                     accountId = auth.accountId,
                     token = req.token,
                     expiresAt = ExpiresAt(TimeUtils.now().plus(30, DAYS))

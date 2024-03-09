@@ -39,8 +39,8 @@ class AccountCreateMetaMaskHandler(
         return accountCmdRepository.create(
             AccountCmdRepository.CreateCmd(
                 id = req.cmdId(),
-                accountId = req.accountId,
-                accountType = req.accountType,
+                accountId = req.id,
+                accountType = req.type,
                 salt = req.salt
             )
         )
@@ -52,7 +52,7 @@ class AccountCreateMetaMaskHandler(
                 id = req.cmdId(),
                 workspaceId = req.workspaceId,
                 name = WorkspaceName("Workspace ${req.workspaceId}"),
-                creatorId = req.accountId
+                creatorId = req.id
             )
         )
     }
@@ -85,7 +85,7 @@ class AccountCreateMetaMaskHandler(
             AuthCmdRepository.CreateMetaMaskAuthCmd(
                 id = req.cmdId(),
                 authId = req.metamaskAuthId,
-                accountId = req.accountId,
+                accountId = req.id,
                 address = req.address
             )
         )
@@ -96,7 +96,7 @@ class AccountCreateMetaMaskHandler(
             AuthCmdRepository.CreateTokenAuthCmd(
                 id = req.cmdId(),
                 authId = req.tokenAuthId,
-                accountId = req.accountId,
+                accountId = req.id,
                 token = req.token,
                 expiresAt = ExpiresAt(TimeUtils.now().plus(30, ChronoUnit.DAYS))
             )

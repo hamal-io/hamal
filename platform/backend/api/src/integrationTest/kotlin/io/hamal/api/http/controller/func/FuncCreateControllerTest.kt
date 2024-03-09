@@ -28,7 +28,7 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
         )
         awaitCompleted(result)
 
-        val func = funcQueryRepository.get(result.funcId)
+        val func = funcQueryRepository.get(result.id)
         with(func) {
             assertThat(name, equalTo(FuncName("test-func")))
             assertThat(inputs, equalTo(FuncInputs(HotObject.builder().set("hamal", "rocks").build())))
@@ -65,7 +65,7 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
         )
         awaitCompleted(result)
 
-        val func = funcQueryRepository.get(result.funcId)
+        val func = funcQueryRepository.get(result.id)
 
         with(func) {
             assertThat(name, equalTo(FuncName("test-func")))

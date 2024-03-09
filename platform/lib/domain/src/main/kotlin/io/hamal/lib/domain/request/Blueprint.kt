@@ -11,10 +11,10 @@ interface BlueprintCreateRequest {
 }
 
 data class BlueprintCreateRequested(
-    override val id: RequestId,
-    override val by: AuthId,
-    override var status: RequestStatus,
-    val blueprintId: BlueprintId,
+    override val requestId: RequestId,
+    override val requestedBy: AuthId,
+    override var requestStatus: RequestStatus,
+    val id: BlueprintId,
     val creatorId: AccountId,
     val name: BlueprintName,
     val inputs: BlueprintInputs,
@@ -31,10 +31,10 @@ interface BlueprintUpdateRequest {
 }
 
 data class BlueprintUpdateRequested(
-    override val id: RequestId,
-    override val by: AuthId,
-    override var status: RequestStatus,
-    val blueprintId: BlueprintId,
+    override val requestId: RequestId,
+    override val requestedBy: AuthId,
+    override var requestStatus: RequestStatus,
+    val id: BlueprintId,
     val name: BlueprintName?,
     val inputs: BlueprintInputs?,
     val value: CodeValue?,

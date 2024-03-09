@@ -51,10 +51,10 @@ internal class TopicCreateHandlerTest : BaseReqHandlerTest() {
 
     private val topicCreateRequested by lazy {
         TopicCreateRequested(
-            id = RequestId(1),
-            by = AuthId(2),
-            status = Submitted,
-            topicId = TopicId(2345),
+            requestId = RequestId(1),
+            requestedBy = AuthId(2),
+            requestStatus = Submitted,
+            id = TopicId(2345),
             logTopicId = LogTopicId(3456),
             workspaceId = testWorkspace.id,
             namespaceId = testNamespace.id,

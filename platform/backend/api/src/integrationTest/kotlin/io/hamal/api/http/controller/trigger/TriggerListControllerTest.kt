@@ -16,7 +16,7 @@ internal class TriggerListControllerTest : TriggerBaseControllerTest() {
 
     @Test
     fun `Single trigger`() {
-        val triggerId = awaitCompleted(createFixedRateTrigger(TriggerName("trigger-one"))).triggerId
+        val triggerId = awaitCompleted(createFixedRateTrigger(TriggerName("trigger-one"))).id
 
         with(listTriggers()) {
             assertThat(triggers, hasSize(1))
@@ -52,7 +52,7 @@ internal class TriggerListControllerTest : TriggerBaseControllerTest() {
         val request15 = requests[15]
 
         val listResponse = (httpTemplate.get("/v1/triggers")
-            .parameter("after_id", request15.triggerId)
+            .parameter("after_id", request15.id)
             .parameter("limit", 1))
             .execute(ApiTriggerList::class)
 

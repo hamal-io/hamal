@@ -1,6 +1,7 @@
 export interface HookCreateRequested {
+    requestId: string;
+    requestStatus: string;
     id: string;
-    hookId: string;
     namespaceId: string;
     workspaceId: string;
 }

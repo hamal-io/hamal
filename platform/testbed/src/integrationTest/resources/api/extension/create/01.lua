@@ -7,6 +7,6 @@ local req = fail_on_error(sys.extensions.create({
 
 sys.await_completed(req)
 
+assert(req.request_id ~= nil)
+assert(req.request_status == 'Submitted')
 assert(req.id ~= nil)
-assert(req.status == 'Submitted')
-assert(req.extension_id ~= nil)

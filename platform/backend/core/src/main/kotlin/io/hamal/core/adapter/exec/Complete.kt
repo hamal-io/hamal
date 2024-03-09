@@ -23,10 +23,10 @@ class ExecCompleteAdapter(
     override fun invoke(execId: ExecId, req: ExecCompleteRequest): ExecCompleteRequested {
         val exec = execGet(execId)
         return ExecCompleteRequested(
-            id = generateDomainId(::RequestId),
-            by = SecurityContext.currentAuthId,
-            status = RequestStatus.Submitted,
-            execId = exec.id,
+            requestId = generateDomainId(::RequestId),
+            requestedBy = SecurityContext.currentAuthId,
+            requestStatus = RequestStatus.Submitted,
+            id = exec.id,
             result = req.result,
             state = req.state,
             events = req.events

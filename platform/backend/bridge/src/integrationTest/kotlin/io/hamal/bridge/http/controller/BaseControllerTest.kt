@@ -26,7 +26,7 @@ internal abstract class BaseControllerTest : BaseTest() {
         with(requestQueryRepository.find(id)!!) {
             MatcherAssert.assertThat(id, Matchers.equalTo(id))
             MatcherAssert.assertThat(
-                status,
+                requestStatus,
                 Matchers.equalTo(RequestStatus.Completed)
             )
         }
@@ -36,7 +36,7 @@ internal abstract class BaseControllerTest : BaseTest() {
         with(requestQueryRepository.find(id)!!) {
             MatcherAssert.assertThat(id, Matchers.equalTo(id))
             MatcherAssert.assertThat(
-                status,
+                requestStatus,
                 Matchers.equalTo(RequestStatus.Failed)
             )
         }
@@ -46,10 +46,10 @@ internal abstract class BaseControllerTest : BaseTest() {
     fun awaitCompleted(id: RequestId) {
         while (true) {
             requestQueryRepository.find(id)?.let {
-                if (it.status == RequestStatus.Completed) {
+                if (it.requestStatus == RequestStatus.Completed) {
                     return
                 }
-                if (it.status == RequestStatus.Failed) {
+                if (it.requestStatus == RequestStatus.Failed) {
                     throw IllegalStateException("expected $id to complete but failed")
                 }
             }
@@ -58,26 +58,26 @@ internal abstract class BaseControllerTest : BaseTest() {
     }
 
     fun <SUBMITTED : ApiRequested> awaitCompleted(submitted: SUBMITTED): SUBMITTED {
-        awaitCompleted(submitted.id)
+        awaitCompleted(submitted.requestId)
         return submitted
     }
 
     fun <SUBMITTED : ApiRequested> awaitCompleted(vararg reqs: SUBMITTED): Iterable<SUBMITTED> {
-        return reqs.toList().onEach { awaitCompleted(it.id) }
+        return reqs.toList().onEach { awaitCompleted(it.requestId) }
     }
 
     fun <SUBMITTED : ApiRequested> awaitCompleted(reqs: Iterable<SUBMITTED>): Iterable<SUBMITTED> {
-        return reqs.onEach { awaitCompleted(it.id) }
+        return reqs.onEach { awaitCompleted(it.requestId) }
     }
 
     fun awaitFailed(id: RequestId) {
         while (true) {
             requestQueryRepository.find(id)?.let {
-                if (it.status == RequestStatus.Failed) {
+                if (it.requestStatus == RequestStatus.Failed) {
                     return
                 }
 
-                if (it.status == RequestStatus.Completed) {
+                if (it.requestStatus == RequestStatus.Completed) {
                     throw IllegalStateException("expected $id to fail but completed")
                 }
             }
@@ -86,12 +86,12 @@ internal abstract class BaseControllerTest : BaseTest() {
     }
 
     fun <SUBMITTED : ApiRequested> awaitFailed(req: SUBMITTED): SUBMITTED {
-        awaitFailed(req.id)
+        awaitFailed(req.requestId)
         return req
     }
 
     fun <SUBMITTED : ApiRequested> awaitFailed(reqs: Iterable<SUBMITTED>): Iterable<SUBMITTED> {
-        return reqs.onEach { awaitFailed(it.id) }
+        return reqs.onEach { awaitFailed(it.requestId) }
     }
 
 

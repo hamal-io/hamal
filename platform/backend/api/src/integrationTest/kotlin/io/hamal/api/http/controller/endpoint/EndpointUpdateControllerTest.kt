@@ -25,21 +25,21 @@ internal class EndpointUpdateControllerTest : EndpointBaseControllerTest() {
                 name = NamespaceName("namespace"),
                 parentId = testNamespace.id
             )
-        ).namespaceId
+        ).id
 
         val funcId = awaitCompleted(
             createFunc(
                 namespaceId = namespaceId,
                 name = FuncName("func")
             )
-        ).funcId
+        ).id
 
         val anotherFuncId = awaitCompleted(
             createFunc(
                 namespaceId = namespaceId,
                 name = FuncName("another-func")
             )
-        ).funcId
+        ).id
 
         val endpoint = awaitCompleted(
             createEndpoint(
@@ -51,7 +51,7 @@ internal class EndpointUpdateControllerTest : EndpointBaseControllerTest() {
         )
 
         val updateEndpointResponse = httpTemplate.patch("/v1/endpoints/{endpointId}")
-            .path("endpointId", endpoint.endpointId)
+            .path("endpointId", endpoint.id)
             .body(
                 ApiEndpointUpdateRequest(
                     funcId = anotherFuncId,
@@ -66,8 +66,8 @@ internal class EndpointUpdateControllerTest : EndpointBaseControllerTest() {
 
         val submittedReq = updateEndpointResponse.result(ApiEndpointUpdateRequested::class)
         awaitCompleted(submittedReq)
-        with(getEndpoint(submittedReq.endpointId)) {
-            assertThat(id, equalTo(submittedReq.endpointId))
+        with(getEndpoint(submittedReq.id)) {
+            assertThat(id, equalTo(submittedReq.id))
             assertThat(func.name, equalTo(FuncName("another-func")))
             assertThat(name, equalTo(EndpointName("updated-name")))
         }
@@ -80,14 +80,14 @@ internal class EndpointUpdateControllerTest : EndpointBaseControllerTest() {
                 name = NamespaceName("namespace"),
                 parentId = testNamespace.id
             )
-        ).namespaceId
+        ).id
 
         val funcId = awaitCompleted(
             createFunc(
                 namespaceId = namespaceId,
                 name = FuncName("func")
             )
-        ).funcId
+        ).id
 
         val endpoint = awaitCompleted(
             createEndpoint(
@@ -99,7 +99,7 @@ internal class EndpointUpdateControllerTest : EndpointBaseControllerTest() {
         )
 
         val updateEndpointResponse = httpTemplate.patch("/v1/endpoints/{endpointId}")
-            .path("endpointId", endpoint.endpointId)
+            .path("endpointId", endpoint.id)
             .body(
                 ApiEndpointUpdateRequest(
                     funcId = null,
@@ -114,8 +114,8 @@ internal class EndpointUpdateControllerTest : EndpointBaseControllerTest() {
 
         val submittedReq = updateEndpointResponse.result(ApiEndpointUpdateRequested::class)
         awaitCompleted(submittedReq)
-        with(getEndpoint(submittedReq.endpointId)) {
-            assertThat(id, equalTo(submittedReq.endpointId))
+        with(getEndpoint(submittedReq.id)) {
+            assertThat(id, equalTo(submittedReq.id))
             assertThat(func.name, equalTo(FuncName("func")))
         }
     }
@@ -128,28 +128,28 @@ internal class EndpointUpdateControllerTest : EndpointBaseControllerTest() {
                 name = NamespaceName("namespace"),
                 parentId = testNamespace.id
             )
-        ).namespaceId
+        ).id
 
         val anotherNamespaceId = awaitCompleted(
             appendNamespace(
                 name = NamespaceName("another-namespace"),
                 parentId = testNamespace.id
             )
-        ).namespaceId
+        ).id
 
         val funcId = awaitCompleted(
             createFunc(
                 namespaceId = namespaceId,
                 name = FuncName("func")
             )
-        ).funcId
+        ).id
 
         val anotherFuncId = awaitCompleted(
             createFunc(
                 namespaceId = anotherNamespaceId,
                 name = FuncName("another-func")
             )
-        ).funcId
+        ).id
 
         val endpoint = awaitCompleted(
             createEndpoint(
@@ -161,7 +161,7 @@ internal class EndpointUpdateControllerTest : EndpointBaseControllerTest() {
         )
 
         val updateEndpointResponse = httpTemplate.patch("/v1/endpoints/{endpointId}")
-            .path("endpointId", endpoint.endpointId)
+            .path("endpointId", endpoint.id)
             .body(
                 ApiEndpointUpdateRequest(
                     funcId = anotherFuncId,
@@ -174,8 +174,8 @@ internal class EndpointUpdateControllerTest : EndpointBaseControllerTest() {
         assertThat(updateEndpointResponse.statusCode, equalTo(BadRequest))
         require(updateEndpointResponse is HttpErrorResponse) { "request was not successful" }
 
-        with(getEndpoint(endpoint.endpointId)) {
-            assertThat(id, equalTo(endpoint.endpointId))
+        with(getEndpoint(endpoint.id)) {
+            assertThat(id, equalTo(endpoint.id))
             assertThat(name, equalTo(EndpointName("created-name")))
             assertThat(func.name, equalTo(FuncName("func")))
         }

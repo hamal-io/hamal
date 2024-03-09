@@ -9,9 +9,9 @@ interface AccountCreateRequest {
 }
 
 data class AccountCreateRequested(
-    override val id: RequestId,
-    override val by: AuthId,
-    override var status: RequestStatus,
+    override val requestId: RequestId,
+    override val requestedBy: AuthId,
+    override var requestStatus: RequestStatus,
     val workspaceId: WorkspaceId,
     val accountId: AccountId,
     val accountType: AccountType,
@@ -29,12 +29,12 @@ interface AccountCreateAnonymousRequest {
 }
 
 data class AccountCreateAnonymousRequested(
-    override val id: RequestId,
-    override val by: AuthId,
-    override var status: RequestStatus,
+    override val requestId: RequestId,
+    override val requestedBy: AuthId,
+    override var requestStatus: RequestStatus,
+    val id: AccountId,
+    val type: AccountType,
     val workspaceId: WorkspaceId,
-    val accountId: AccountId,
-    val accountType: AccountType,
     val emailAuthId: AuthId,
     val tokenAuthId: AuthId,
     val namespaceId: NamespaceId,
@@ -49,12 +49,12 @@ interface AccountCreateMetaMaskRequest {
 }
 
 data class AccountCreateMetaMaskRequested(
-    override val id: RequestId,
-    override val by: AuthId,
-    override var status: RequestStatus,
+    override val requestId: RequestId,
+    override val requestedBy: AuthId,
+    override var requestStatus: RequestStatus,
+    val id: AccountId,
+    val type: AccountType,
     val workspaceId: WorkspaceId,
-    val accountId: AccountId,
-    val accountType: AccountType,
     val metamaskAuthId: AuthId,
     val tokenAuthId: AuthId,
     val namespaceId: NamespaceId,
@@ -69,10 +69,10 @@ interface AccountConvertAnonymousRequest {
 }
 
 data class AccountConvertRequested(
-    override val id: RequestId,
-    override val by: AuthId,
-    override var status: RequestStatus,
-    val accountId: AccountId,
+    override val requestId: RequestId,
+    override val requestedBy: AuthId,
+    override var requestStatus: RequestStatus,
+    val id: AccountId,
     val emailAuthId: AuthId,
     val tokenAuthId: AuthId,
     val email: Email,

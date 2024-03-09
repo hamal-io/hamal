@@ -21,12 +21,12 @@ interface TriggerCreateRequest {
 }
 
 data class TriggerCreateRequested(
-    override val id: RequestId,
-    override val by: AuthId,
-    override var status: RequestStatus,
+    override val requestId: RequestId,
+    override val requestedBy: AuthId,
+    override var requestStatus: RequestStatus,
+    val id: TriggerId,
+    val type: TriggerType,
     val workspaceId: WorkspaceId,
-    val triggerType: TriggerType,
-    val triggerId: TriggerId,
     val name: TriggerName,
     val funcId: FuncId,
     val inputs: TriggerInputs,
@@ -40,10 +40,10 @@ data class TriggerCreateRequested(
 ) : Requested()
 
 data class TriggerStatusRequested(
-    override val id: RequestId,
-    override val by: AuthId,
-    override var status: RequestStatus,
-    val triggerId: TriggerId,
-    val triggerStatus: TriggerStatus
+    override val requestId: RequestId,
+    override val requestedBy: AuthId,
+    override var requestStatus: RequestStatus,
+    val id: TriggerId,
+    val status: TriggerStatus
 ) : Requested()
 

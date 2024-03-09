@@ -20,9 +20,9 @@ data class ApiTopicCreateRequest(
 ) : TopicCreateRequest
 
 data class ApiTopicCreateRequested(
-    override val id: RequestId,
-    override val status: RequestStatus,
-    val topicId: TopicId,
+    override val requestId: RequestId,
+    override val requestStatus: RequestStatus,
+    val id: TopicId,
     val workspaceId: WorkspaceId,
     val namespaceId: NamespaceId,
     val type: TopicType
@@ -35,13 +35,13 @@ data class ApiTopicAppendEventRequest(
 ) : TopicAppendEntryRequest
 
 data class ApiTopicAppendRequested(
-    override val id: RequestId,
-    override val status: RequestStatus,
-    val topicId: TopicId
+    override val requestId: RequestId,
+    override val requestStatus: RequestStatus,
+    val id: TopicId
 ) : ApiRequested()
 
 data class ApiTopicEventList(
-    val topicId: TopicId,
+    val id: TopicId,
     val topicName: TopicName,
     val events: List<Event>
 ) {

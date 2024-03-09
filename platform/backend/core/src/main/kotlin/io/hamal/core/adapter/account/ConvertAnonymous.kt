@@ -28,10 +28,10 @@ class AccountConvertAnonymousAdapter(
     override fun invoke(accountId: AccountId, req: AccountConvertAnonymousRequest): AccountConvertRequested {
         val account = accountGet(accountId)
         return AccountConvertRequested(
-            id = generateDomainId(::RequestId),
-            by = SecurityContext.currentAuthId,
-            status = RequestStatus.Submitted,
-            accountId = accountId,
+            requestId = generateDomainId(::RequestId),
+            requestedBy = SecurityContext.currentAuthId,
+            requestStatus = RequestStatus.Submitted,
+            id = accountId,
             email = req.email,
             emailAuthId = generateDomainId(::AuthId),
             tokenAuthId = generateDomainId(::AuthId),

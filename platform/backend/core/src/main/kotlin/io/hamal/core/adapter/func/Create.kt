@@ -26,11 +26,11 @@ class FuncCreateAdapter(
     override fun invoke(namespaceId: NamespaceId, req: FuncCreateRequest): FuncCreateRequested {
         val namespace = namespaceGet(namespaceId)
         return FuncCreateRequested(
-            id = generateDomainId(::RequestId),
-            by = SecurityContext.currentAuthId,
-            status = RequestStatus.Submitted,
+            requestId = generateDomainId(::RequestId),
+            requestedBy = SecurityContext.currentAuthId,
+            requestStatus = RequestStatus.Submitted,
             workspaceId = namespace.workspaceId,
-            funcId = generateDomainId(::FuncId),
+            id = generateDomainId(::FuncId),
             namespaceId = namespaceId,
             name = req.name,
             inputs = req.inputs,

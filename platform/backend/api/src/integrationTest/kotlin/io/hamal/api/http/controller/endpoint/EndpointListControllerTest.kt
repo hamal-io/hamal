@@ -24,14 +24,14 @@ internal class EndpointListControllerTest : EndpointBaseControllerTest() {
                 name = NamespaceName("namespace"),
                 parentId = testNamespace.id
             )
-        ).namespaceId
+        ).id
 
         val funcId = awaitCompleted(
             createFunc(
                 namespaceId = namespaceId,
                 name = FuncName("func")
             )
-        ).funcId
+        ).id
 
 
         val endpointId = awaitCompleted(
@@ -41,7 +41,7 @@ internal class EndpointListControllerTest : EndpointBaseControllerTest() {
                 namespaceId = namespaceId,
                 method = Post
             )
-        ).endpointId
+        ).id
 
         with(listEndpoints()) {
             assertThat(endpoints, hasSize(1))
@@ -62,14 +62,14 @@ internal class EndpointListControllerTest : EndpointBaseControllerTest() {
                         name = NamespaceName("namespace-$it"),
                         parentId = testNamespace.id
                     )
-                ).namespaceId
+                ).id
 
                 val funcId = awaitCompleted(
                     createFunc(
                         namespaceId = namespaceId,
                         name = FuncName("func-$it")
                     )
-                ).funcId
+                ).id
 
                 createEndpoint(
                     namespaceId = namespaceId,
@@ -101,14 +101,14 @@ internal class EndpointListControllerTest : EndpointBaseControllerTest() {
                     name = NamespaceName("namespace-$it"),
                     parentId = testNamespace.id
                 )
-            ).namespaceId
+            ).id
 
             val funcId = awaitCompleted(
                 createFunc(
                     namespaceId = namespaceId,
                     name = FuncName("func-$it")
                 )
-            ).funcId
+            ).id
 
             createEndpoint(
                 namespaceId = namespaceId,
@@ -123,7 +123,7 @@ internal class EndpointListControllerTest : EndpointBaseControllerTest() {
 
         val listResponse = httpTemplate.get("/v1/endpoints")
             .parameter("workspace_ids", testWorkspace.id)
-            .parameter("after_id", fortyNinth.endpointId)
+            .parameter("after_id", fortyNinth.id)
             .parameter("limit", 1)
             .execute(ApiEndpointList::class)
 

@@ -31,11 +31,11 @@ class EndpointUpdateAdapter(
         }
 
         return EndpointUpdateRequested(
-            id = generateDomainId(::RequestId),
-            by = SecurityContext.currentAuthId,
-            status = RequestStatus.Submitted,
+            requestId = generateDomainId(::RequestId),
+            requestedBy = SecurityContext.currentAuthId,
+            requestStatus = RequestStatus.Submitted,
             workspaceId = endpoint.workspaceId,
-            endpointId = endpointId,
+            id = endpointId,
             funcId = req.funcId ?: endpoint.funcId,
             name = req.name,
             method = req.method

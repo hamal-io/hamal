@@ -50,10 +50,10 @@ internal class EndpointCreateHandlerTest : BaseReqHandlerTest() {
 
     private val submitCreateEndpointReq by lazy {
         EndpointCreateRequested(
-            id = RequestId(1),
-            by = AuthId(2),
-            status = Submitted,
-            endpointId = EndpointId(12345),
+            requestId = RequestId(1),
+            requestedBy = AuthId(2),
+            requestStatus = Submitted,
+            id = EndpointId(12345),
             workspaceId = testWorkspace.id,
             funcId = FuncId(23456),
             name = EndpointName("awesome-endpoint"),

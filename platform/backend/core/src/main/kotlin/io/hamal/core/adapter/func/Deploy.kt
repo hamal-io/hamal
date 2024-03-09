@@ -26,11 +26,11 @@ class FuncDeployAdapter(
         val func = funcGet(funcId)
         req.version?.let { codeGet(func.code.id, req.version!!) }
         return FuncDeployRequested(
-            id = generateDomainId(::RequestId),
-            by = SecurityContext.currentAuthId,
-            status = RequestStatus.Submitted,
+            requestId = generateDomainId(::RequestId),
+            requestedBy = SecurityContext.currentAuthId,
+            requestStatus = RequestStatus.Submitted,
             workspaceId = func.workspaceId,
-            funcId = funcId,
+            id = funcId,
             version = req.version,
             message = req.message
         ).also(requestEnqueue::invoke)

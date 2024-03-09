@@ -25,10 +25,10 @@ class HookCreateAdapter(
     override fun invoke(namespaceId: NamespaceId, req: HookCreateRequest): HookCreateRequested {
         val namespace = namespaceGet(namespaceId)
         return HookCreateRequested(
-            id = generateDomainId(::RequestId),
-            by = SecurityContext.currentAuthId,
-            status = RequestStatus.Submitted,
-            hookId = generateDomainId(::HookId),
+            requestId = generateDomainId(::RequestId),
+            requestedBy = SecurityContext.currentAuthId,
+            requestStatus = RequestStatus.Submitted,
+            id = generateDomainId(::HookId),
             workspaceId = namespace.workspaceId,
             namespaceId = namespace.id,
             name = req.name

@@ -38,7 +38,7 @@ class FuncCreateHandler(
         return funcCmdRepository.create(
             CreateCmd(
                 id = req.cmdId(),
-                funcId = req.funcId,
+                funcId = req.id,
                 workspaceId = req.workspaceId,
                 namespaceId = req.namespaceId,
                 name = req.name,

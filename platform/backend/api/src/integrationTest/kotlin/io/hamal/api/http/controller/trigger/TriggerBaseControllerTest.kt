@@ -55,7 +55,7 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
     }
 
     fun createFixedRateTrigger(name: TriggerName): ApiTriggerCreateRequested {
-        val funcId = awaitCompleted(createFunc(FuncName(name.value))).funcId
+        val funcId = awaitCompleted(createFunc(FuncName(name.value))).id
 
         val creationResponse = httpTemplate.post("/v1/namespaces/539/triggers")
             .body(

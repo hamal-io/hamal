@@ -59,7 +59,7 @@ const Create = () => {
 
     useEffect(() => {
         if (submittedFunc !== null) {
-            navigate(`/functions/${submittedFunc.funcId}`)
+            navigate(`/functions/${submittedFunc.id}`)
             setOpenDialog(false)
         }
     }, [submittedFunc, navigate]);

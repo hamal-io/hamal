@@ -25,7 +25,7 @@ internal class EndpointCreateControllerTest : EndpointBaseControllerTest() {
                 namespaceId = NamespaceId.root,
                 name = FuncName("func")
             )
-        ).funcId
+        ).id
 
         val result = createEndpoint(
             name = EndpointName("test-endpoint"),
@@ -35,7 +35,7 @@ internal class EndpointCreateControllerTest : EndpointBaseControllerTest() {
         )
         awaitCompleted(result)
 
-        val endpoint = endpointQueryRepository.get(result.endpointId)
+        val endpoint = endpointQueryRepository.get(result.id)
         with(endpoint) {
             assertThat(name, equalTo(EndpointName("test-endpoint")))
 
@@ -53,14 +53,14 @@ internal class EndpointCreateControllerTest : EndpointBaseControllerTest() {
                 name = NamespaceName("namespace"),
                 parentId = testNamespace.id
             )
-        ).namespaceId
+        ).id
 
         val funcId = awaitCompleted(
             createFunc(
                 namespaceId = namespaceId,
                 name = FuncName("func")
             )
-        ).funcId
+        ).id
 
         val result = createEndpoint(
             name = EndpointName("test-endpoint"),
@@ -70,7 +70,7 @@ internal class EndpointCreateControllerTest : EndpointBaseControllerTest() {
         )
         awaitCompleted(result)
 
-        with(endpointQueryRepository.get(result.endpointId)) {
+        with(endpointQueryRepository.get(result.id)) {
             assertThat(name, equalTo(EndpointName("test-endpoint")))
             assertThat(namespaceId, equalTo(namespaceId))
         }
@@ -83,21 +83,21 @@ internal class EndpointCreateControllerTest : EndpointBaseControllerTest() {
                 name = NamespaceName("namespace"),
                 parentId = testNamespace.id
             )
-        ).namespaceId
+        ).id
 
         val anotherNamespaceId = awaitCompleted(
             appendNamespace(
                 name = NamespaceName("another-namespace"),
                 parentId = testNamespace.id
             )
-        ).namespaceId
+        ).id
 
         val funcId = awaitCompleted(
             createFunc(
                 name = FuncName("func"),
                 namespaceId = anotherNamespaceId
             )
-        ).funcId
+        ).id
 
         val response = httpTemplate.post("/v1/namespaces/{namespaceId}/endpoints")
             .path("namespaceId", namespaceId)

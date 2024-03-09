@@ -113,7 +113,7 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
             )
 
             val deployResponse = httpTemplate.post("/v1/funcs/{funcId}/deploy")
-                .path("funcId", func.funcId)
+                .path("funcId", func.id)
                 .body(ApiFuncDeployRequest(CodeVersion(23), null))
                 .execute()
 
@@ -190,7 +190,7 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
             for (i in 1..19) {
                 awaitCompleted(
                     updateFunc(
-                        func.funcId, ApiFuncUpdateRequest(
+                        func.id, ApiFuncUpdateRequest(
                             name = null,
                             inputs = null,
                             code = CodeValue("code-${i}")
@@ -199,7 +199,7 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
                 )
             }
 
-            return funcQueryRepository.get(func.funcId)
+            return funcQueryRepository.get(func.id)
         }
     }
 }

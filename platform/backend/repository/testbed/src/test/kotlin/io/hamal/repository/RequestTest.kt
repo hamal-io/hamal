@@ -43,10 +43,10 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
 
             val result = next(Limit(5))
             assertThat(result, hasSize(4))
-            assertThat(result[0].id, equalTo(RequestId(1)))
-            assertThat(result[1].id, equalTo(RequestId(2)))
-            assertThat(result[2].id, equalTo(RequestId(3)))
-            assertThat(result[3].id, equalTo(RequestId(4)))
+            assertThat(result[0].requestId, equalTo(RequestId(1)))
+            assertThat(result[1].requestId, equalTo(RequestId(2)))
+            assertThat(result[2].requestId, equalTo(RequestId(3)))
+            assertThat(result[3].requestId, equalTo(RequestId(4)))
         }
 
         @TestFactory
@@ -58,8 +58,8 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
 
             val result = next(Limit(2))
             assertThat(result, hasSize(2))
-            assertThat(result[0].id, equalTo(RequestId(1)))
-            assertThat(result[1].id, equalTo(RequestId(2)))
+            assertThat(result[0].requestId, equalTo(RequestId(1)))
+            assertThat(result[1].requestId, equalTo(RequestId(2)))
         }
     }
 
@@ -91,7 +91,7 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
             complete(RequestId(234))
 
             with(get(RequestId(234))) {
-                assertThat(status, equalTo(Completed))
+                assertThat(requestStatus, equalTo(Completed))
             }
 
             verifyCount(1)
@@ -109,7 +109,7 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
                     assertThat(exception.message, equalTo("Request not processing"))
 
                     with(get(RequestId(234))) {
-                        assertThat(status, equalTo(reqStatus))
+                        assertThat(requestStatus, equalTo(reqStatus))
                     }
                 }
             }
@@ -135,7 +135,7 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
             fail(RequestId(234))
 
             with(get(RequestId(234))) {
-                assertThat(status, equalTo(Failed))
+                assertThat(requestStatus, equalTo(Failed))
             }
 
             verifyCount(1)
@@ -153,7 +153,7 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
                     assertThat(exception.message, equalTo("Request not processing"))
 
                     with(get(RequestId(234))) {
-                        assertThat(status, equalTo(reqStatus))
+                        assertThat(requestStatus, equalTo(reqStatus))
                     }
                 }
             }
@@ -175,7 +175,7 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
         fun `Get request by id`() = runWith(RequestRepository::class) {
             createRequest(RequestId(1), Submitted)
             with(get(RequestId(1))) {
-                assertThat(status, equalTo(Submitted))
+                assertThat(requestStatus, equalTo(Submitted))
             }
         }
 
@@ -195,7 +195,7 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
         fun `Find request by id`() = runWith(RequestRepository::class) {
             createRequest(RequestId(1), Submitted)
             with(find(RequestId(1))!!) {
-                assertThat(status, equalTo(Submitted))
+                assertThat(requestStatus, equalTo(Submitted))
             }
         }
 
@@ -234,7 +234,7 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
             assertThat(result, hasSize(1))
 
             with(result[0]) {
-                assertThat(id, equalTo(RequestId(4)))
+                assertThat(requestId, equalTo(RequestId(4)))
             }
         }
 
@@ -253,9 +253,9 @@ private fun RequestRepository.createRequest(
 ) {
     queue(
         TestRequested(
-            id = reqId,
-            by = AuthId(42),
-            status = status,
+            requestId = reqId,
+            requestedBy = AuthId(42),
+            requestStatus = status,
         )
     )
 }

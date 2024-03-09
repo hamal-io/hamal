@@ -7,21 +7,21 @@ hook_req = fail_on_error(sys.hooks.create({ name = "some-amazing-hook" }))
 sys.await(hook_req)
 
 req_one = fail_on_error(sys.triggers.create_hook({
-    func_id = func_req.func_id,
+    func_id = func_req.id,
     name = 'hook-trigger',
     inputs = { },
     hook_method = 'Get',
-    hook_id = hook_req.hook_id
+    hook_id = hook_req.id
 }))
 sys.await_completed(req_one)
 
+assert(req_one.request_id ~= nil)
+assert(req_one.request_status == 'Submitted')
 assert(req_one.id ~= nil)
-assert(req_one.status == 'Submitted')
-assert(req_one.trigger_id ~= nil)
 assert(req_one.workspace_id == '539')
 assert(req_one.namespace_id == '539')
 
-req_two = fail_on_error(sys.triggers.get(req_one.trigger_id))
+req_two = fail_on_error(sys.triggers.get(req_one.id))
 assert(req_two.type == 'Hook')
 assert(req_two.name == 'hook-trigger')
 assert(req_two.func.name == "test-func")

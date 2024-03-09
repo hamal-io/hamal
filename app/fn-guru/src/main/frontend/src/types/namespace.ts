@@ -1,22 +1,15 @@
-export interface NamespaceCreateRequested {
-    id: string;
-    status: string;
-    namespaceIdId: string;
-    workspaceId: string;
-}
-
 
 export interface NamespaceAppendRequested {
+    requestId: string;
+    requestStatus: string;
     id: string;
-    status: string;
-    namespaceIdId: string;
     workspaceId: string;
 }
 
 export interface NamespaceUpdateRequested {
+    requestId: string;
+    requestStatus: string;
     id: string;
-    status: string;
-    namespaceIdId: string;
 }
 
 export interface Namespace {

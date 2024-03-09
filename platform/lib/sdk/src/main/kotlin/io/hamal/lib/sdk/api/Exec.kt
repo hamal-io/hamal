@@ -6,9 +6,9 @@ import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.sdk.fold
 
 data class ApiExecInvokeRequested(
-    override val id: RequestId,
-    override val status: RequestStatus,
-    val execId: ExecId,
+    override val requestId: RequestId,
+    override val requestStatus: RequestStatus,
+    val id: ExecId,
     val workspaceId: WorkspaceId,
     val namespaceId: NamespaceId
 ) : ApiRequested()

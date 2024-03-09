@@ -19,9 +19,9 @@ internal class FeedbackCreateControllerTest : FeedbackBaseControllerTest() {
                 accountId = null
             )
         )
-        awaitCompleted(res.id)
+        awaitCompleted(res.requestId)
 
-        with(feedbackQueryRepository.get(res.feedbackId)) {
+        with(feedbackQueryRepository.get(res.id)) {
             assertThat(mood, equalTo(FeedbackMood.Normal))
             assertThat(message, equalTo(FeedbackMessage("My mood is so normal")))
             assertThat(accountId, nullValue())

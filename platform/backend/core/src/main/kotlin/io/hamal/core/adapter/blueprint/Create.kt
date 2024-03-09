@@ -22,10 +22,10 @@ class BlueprintCreateAdapter(
 ) : BlueprintCreatePort {
     override fun invoke(accountId: AccountId, req: BlueprintCreateRequest): BlueprintCreateRequested {
         return BlueprintCreateRequested(
-            id = generateDomainId(::RequestId),
-            by = SecurityContext.currentAuthId,
-            status = RequestStatus.Submitted,
-            blueprintId = generateDomainId(::BlueprintId),
+            requestId = generateDomainId(::RequestId),
+            requestedBy = SecurityContext.currentAuthId,
+            requestStatus = RequestStatus.Submitted,
+            id = generateDomainId(::BlueprintId),
             name = req.name,
             inputs = req.inputs,
             value = req.value,

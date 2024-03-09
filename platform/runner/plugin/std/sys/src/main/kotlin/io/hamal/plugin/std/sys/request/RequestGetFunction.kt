@@ -27,8 +27,8 @@ class RequestGetFunction(
             return null to response.result(ApiRequested::class)
                 .let { exec ->
                     ctx.tableCreate(
-                        "reqId" to KuaString(exec.id.value.value.toString(16)),
-                        "status" to KuaString(exec.status.name)
+                        "request_id" to KuaString(exec.requestId.value.value.toString(16)),
+                        "request_status" to KuaString(exec.requestStatus.name)
                     )
                 }
         } else {

@@ -16,9 +16,9 @@ data class ApiNamespaceAppendRequest(
 ) : NamespaceAppendRequest
 
 data class ApiNamespaceAppendRequested(
-    override val id: RequestId,
-    override val status: RequestStatus,
-    val namespaceId: NamespaceId,
+    override val requestId: RequestId,
+    override val requestStatus: RequestStatus,
+    val id: NamespaceId,
     val workspaceId: WorkspaceId
 ) : ApiRequested()
 
@@ -27,9 +27,9 @@ data class ApiNamespaceUpdateRequest(
 ) : NamespaceUpdateRequest
 
 data class ApiNamespaceUpdateRequested(
-    override val id: RequestId,
-    override val status: RequestStatus,
-    val namespaceId: NamespaceId,
+    override val requestId: RequestId,
+    override val requestStatus: RequestStatus,
+    val id: NamespaceId,
 ) : ApiRequested()
 
 data class ApiNamespaceList(

@@ -25,7 +25,7 @@ class BlueprintCreateHandler(
         return blueprintCmdRepository.create(
             BlueprintCmdRepository.CreateCmd(
                 id = req.cmdId(),
-                blueprintId = req.blueprintId,
+                blueprintId = req.id,
                 name = req.name,
                 inputs = req.inputs,
                 value = req.value,

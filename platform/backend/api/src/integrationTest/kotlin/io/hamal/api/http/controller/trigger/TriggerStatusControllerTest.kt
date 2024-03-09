@@ -22,7 +22,7 @@ internal class TriggerStatusControllerTest : TriggerBaseControllerTest() {
             createFixedRateTrigger(
                 name = TriggerName("trigger")
             )
-        ).triggerId
+        ).id
         with(getTrigger(triggerId)) {
             assertThat(id, equalTo(triggerId))
             assertThat(name, equalTo(TriggerName("trigger")))
@@ -37,7 +37,7 @@ internal class TriggerStatusControllerTest : TriggerBaseControllerTest() {
             createFixedRateTrigger(
                 name = TriggerName("trigger")
             )
-        ).triggerId
+        ).id
 
         awaitCompleted(deactivateTrigger(triggerId))
 
@@ -64,7 +64,7 @@ internal class TriggerStatusControllerTest : TriggerBaseControllerTest() {
             createFixedRateTrigger(
                 name = TriggerName("trigger")
             )
-        ).triggerId
+        ).id
 
         awaitCompleted(activateTrigger(triggerId))
 

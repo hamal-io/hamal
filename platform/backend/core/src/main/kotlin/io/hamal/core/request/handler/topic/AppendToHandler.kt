@@ -16,7 +16,7 @@ class AppendToHandler(
 ) : RequestHandler<TopicAppendEventRequested>(TopicAppendEventRequested::class) {
 
     override fun invoke(req: TopicAppendEventRequested) {
-        val topic = topicRepository.get(req.topicId)
+        val topic = topicRepository.get(req.id)
         appender.append(req.cmdId(), topic.logTopicId, req.payload)
     }
 
