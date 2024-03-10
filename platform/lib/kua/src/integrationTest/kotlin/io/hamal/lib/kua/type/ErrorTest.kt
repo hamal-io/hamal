@@ -8,7 +8,6 @@ import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.function.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 internal class KuaErrorTest {
@@ -56,46 +55,6 @@ internal class KuaErrorTest {
         assertThat(messageCaptor.result, equalTo(KuaString("Sometimes an error can be a good thing")))
     }
 
-    @Test
-    @Disabled
-    fun `Tries to invoke function without argument`() {
-        val errorCaptor = Captor()
-
-        sandbox.register(
-            RunnerPlugin(
-                name = KuaString("test"),
-                factoryCode = KuaCode(
-                    """
-                    function plugin_create(internal)
-                        local export = { 
-                            call =  internal.call,
-                            captor =  internal.captor,
-                            assert_metatable =  internal.assert_metatable,
-                        }
-                        return export
-                    end
-                """.trimIndent()
-                ),
-                internals = mapOf(
-                    KuaString("call") to FunctionNeverInvoked(),
-                    KuaString("captor") to errorCaptor,
-                    KuaString("assert_metatable") to AssertMetatable
-                )
-            )
-        )
-
-        sandbox.codeLoad(
-            KuaCode(
-                """
-            local err = test.call()
-            test.captor(err)
-        """.trimIndent()
-            )
-        )
-
-        assertThat(errorCaptor.result, equalTo(KuaError("Sometimes an error can be a good thing")))
-    }
-
 
     private object AssertMetatable : Function1In0Out<KuaTable>(
         FunctionInput1Schema(KuaTable::class)
@@ -111,15 +70,6 @@ internal class KuaErrorTest {
     ) {
         override fun invoke(ctx: FunctionContext): KuaError {
             return KuaError("Sometimes an error can be a good thing")
-        }
-    }
-
-
-    private class FunctionNeverInvoked : Function1In0Out<KuaNumber>(
-        FunctionInput1Schema(KuaNumber::class)
-    ) {
-        override fun invoke(ctx: FunctionContext, arg1: KuaNumber) {
-            TODO("Not yet implemented")
         }
     }
 

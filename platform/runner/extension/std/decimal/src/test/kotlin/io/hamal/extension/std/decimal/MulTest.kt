@@ -1,7 +1,6 @@
 package io.hamal.extension.std.decimal
 
 import io.hamal.runner.test.AbstractRunnerTest
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 internal class MulTest : AbstractRunnerTest() {
@@ -44,7 +43,6 @@ internal class MulTest : AbstractRunnerTest() {
         )
     }
 
-    @Disabled("Floating Point Problem")
     @Test
     fun `number, decimal`() {
         val runner = createTestRunner(
