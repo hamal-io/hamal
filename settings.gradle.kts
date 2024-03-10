@@ -60,6 +60,7 @@ include(":platform:runner:extension:net:http")
 include(":platform:runner:extension:std:decimal")
 include(":platform:runner:extension:std:log")
 include(":platform:runner:extension:telegram")
+include(":platform:runner:extension:web3")
 
 include(":platform:runner:plugin:net:smtp")
 include(":platform:runner:plugin:net:http")
