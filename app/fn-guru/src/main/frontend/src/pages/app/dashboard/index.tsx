@@ -1,5 +1,4 @@
 import React from 'react'
-import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card.tsx';
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs.tsx";
 import Overview from "@/pages/app/dashboard/components/overview.tsx";
 import NamespaceDetailPage from "@/pages/app/dashboard/components/namespace.tsx";

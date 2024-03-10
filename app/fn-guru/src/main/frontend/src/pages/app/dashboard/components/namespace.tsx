@@ -1,4 +1,4 @@
-import React, {cloneElement, FC, useEffect, useState} from "react";
+import React, {cloneElement, FC, useEffect} from "react";
 import {Card, CardContent, CardDescription, CardHeader} from "@/components/ui/card.tsx";
 import {Checkbox} from "@/components/ui/checkbox.tsx";
 import {PageHeader} from "@/components/page-header.tsx";
@@ -7,12 +7,11 @@ import {useNamespaceGet, useNamespaceUpdate} from "@/hook";
 import {Globe, Layers3, Timer, Webhook} from "lucide-react";
 import Element = React.JSX.Element;
 import {NamespaceFeature, NamespaceFeatures} from "@/types";
-import update from "@/pages/app/workspace-detail/tab/namespace-list/components/update.tsx";
 
 const NamespaceDetailPage = () => {
     const [uiState] = useUiState()
     const [getNamespace, namespace, loading, error] = useNamespaceGet()
-    const [updateNamespace, updateRequested, loading, error] = useNamespaceUpdate()
+    const [updateNamespace, updateRequested, loading2, error2] = useNamespaceUpdate()
 
     useEffect(() => {
         const abortController = new AbortController()
@@ -43,12 +42,14 @@ const NamespaceDetailPage = () => {
                              label={"Schedules"}
                              description={"All kinds of timers"}
                              icon={<Timer/>}
+                             checked={true}
                              onCheck={handleCheck}
                 />
                 <FeatureCard value={NamespaceFeatures.TOPICS}
                              label={"Topics"}
                              description={"Stay tuned"}
                              icon={<Layers3/>}
+                             checked={true}
                              onCheck={handleCheck}
 
                 />
@@ -56,6 +57,7 @@ const NamespaceDetailPage = () => {
                              label={"Webhooks"}
                              description={"Stay tuned"}
                              icon={<Webhook/>}
+                             checked={true}
                              onCheck={handleCheck}
 
                 />
@@ -63,6 +65,7 @@ const NamespaceDetailPage = () => {
                              label={"Endpoints"}
                              description={"API yourself"}
                              icon={<Globe/>}
+                             checked={true}
                              onCheck={handleCheck}
                 />
             </div>

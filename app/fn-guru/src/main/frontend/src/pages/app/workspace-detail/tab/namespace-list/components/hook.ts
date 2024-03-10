@@ -1,5 +1,4 @@
-import {NamespaceNode} from "@/pages/app/workspace-detail/tab/namespace-list/components/types.ts";
-import {NamespaceListItem} from "@/types";
+import {NamespaceListItem, NamespaceNode} from "@/types";
 import {useNamespaceList} from "@/hook";
 import {useCallback, useEffect, useState} from "react";
 
