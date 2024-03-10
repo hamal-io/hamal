@@ -2,8 +2,11 @@ package io.hamal.core.config
 
 import io.hamal.core.component.Scheduler
 import io.hamal.core.component.WorkerPool
+import org.springframework.boot.autoconfigure.task.TaskExecutionAutoConfiguration
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.core.task.AsyncTaskExecutor
+import org.springframework.core.task.support.TaskExecutorAdapter
 import org.springframework.scheduling.annotation.Async
 import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.scheduling.annotation.SchedulingConfigurer
@@ -36,18 +39,10 @@ open class AsyncConfig : SchedulingConfigurer {
         return Scheduler(Executors.newSingleThreadScheduledExecutor())
     }
 
-//    @Bean(TaskExecutionAutoConfiguration.APPLICATION_TASK_EXECUTOR_BEAN_NAME)
-//    open fun asyncTaskExecutor(): AsyncTaskExecutor {
-//        return TaskExecutorAdapter(Executors.newVirtualThreadPerTaskExecutor())
-//    }
-//
-//
-//    @Bean
-//    open fun protocolHandlerVirtualThreadExecutorCustomizer(): TomcatProtocolHandlerCustomizer<*> {
-//        return TomcatProtocolHandlerCustomizer { protocolHandler: ProtocolHandler ->
-//            protocolHandler.executor = Executors.newVirtualThreadPerTaskExecutor()
-//        }
-//    }
+    @Bean(TaskExecutionAutoConfiguration.APPLICATION_TASK_EXECUTOR_BEAN_NAME)
+    open fun asyncTaskExecutor(): AsyncTaskExecutor {
+        return TaskExecutorAdapter(Executors.newVirtualThreadPerTaskExecutor())
+    }
 
     override fun configureTasks(taskRegistrar: ScheduledTaskRegistrar) {
         val scheduler = workerPoolExecutor()

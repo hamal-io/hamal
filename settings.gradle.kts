@@ -25,7 +25,7 @@ dependencyResolutionManagement {
 
             library("sqlite", "org.xerial", "sqlite-jdbc").version("3.41.2.1")
 
-            library("kotlin-reflect", "org.jetbrains.kotlin", "kotlin-reflect").version("1.8.10")
+            library("kotlin-reflect", "org.jetbrains.kotlin", "kotlin-reflect").version("1.9.23")
 
             library("apache-http-client", "org.apache.httpcomponents", "httpclient").version("4.5.13")
             library("apache-http-mime", "org.apache.httpcomponents", "httpmime").version("4.5.13")
