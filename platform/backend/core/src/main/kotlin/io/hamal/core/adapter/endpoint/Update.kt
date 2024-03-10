@@ -1,7 +1,7 @@
 package io.hamal.core.adapter.endpoint
 
-import io.hamal.core.adapter.request.RequestEnqueuePort
 import io.hamal.core.adapter.func.FuncGetPort
+import io.hamal.core.adapter.request.RequestEnqueuePort
 import io.hamal.core.security.SecurityContext
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.RequestStatus
@@ -22,6 +22,7 @@ class EndpointUpdateAdapter(
     private val generateDomainId: GenerateDomainId,
     private val requestEnqueue: RequestEnqueuePort
 ) : EndpointUpdatePort {
+
     override fun invoke(endpointId: EndpointId, req: EndpointUpdateRequest): EndpointUpdateRequested {
         val endpoint = endpointGet(endpointId)
 
@@ -38,7 +39,6 @@ class EndpointUpdateAdapter(
             id = endpointId,
             funcId = req.funcId ?: endpoint.funcId,
             name = req.name,
-            method = req.method
         ).also(requestEnqueue::invoke)
     }
 

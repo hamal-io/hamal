@@ -1,13 +1,12 @@
 package io.hamal.lib.common.hot
 
+import io.hamal.lib.common.Decimal
 import io.hamal.lib.common.Tuple3
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
 import org.junit.jupiter.api.assertThrows
-import java.math.BigDecimal
-import java.math.BigInteger
 
 internal object HotNumberTest {
 
@@ -55,8 +54,7 @@ internal object HotNumberTest {
 
     @TestFactory
     fun `value valid`() = listOf(
-        Tuple3("bigDecimalValue", HotNumber(BigDecimal(42))::bigDecimalValue, BigDecimal(42)),
-        Tuple3("bigIntegerValue", HotNumber(BigInteger.TEN)::bigIntegerValue, BigInteger.valueOf(10)),
+        Tuple3("decimalValue", HotNumber(Decimal(42))::decimalValue, Decimal(42)),
         Tuple3("byteValue", HotNumber((42).toByte())::byteValue, (42).toByte()),
         Tuple3("doubleValue", HotNumber(23.24)::doubleValue, 23.24),
         Tuple3("floatValue", HotNumber(12.13f)::floatValue, 12.13f),
@@ -72,8 +70,8 @@ internal object HotNumberTest {
 
     @TestFactory
     fun `value invalid`() = listOf(
-        Tuple3("booleanValue", HotNull::booleanValue, "Not boolean"),
-        Tuple3("stringValue", HotNull::stringValue, "Not string")
+        Tuple3("booleanValue", HotNull::booleanValue, "Not Boolean"),
+        Tuple3("stringValue", HotNull::stringValue, "Not String")
     ).map { (testName, func, expectedMessage) ->
         dynamicTest(testName) {
             assertThrows<IllegalStateException> {

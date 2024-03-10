@@ -1,6 +1,6 @@
 package io.hamal.core.request.handler.blueprint
 
-import io.hamal.core.request.handler.BaseReqHandlerTest
+import io.hamal.core.request.handler.BaseRequestHandlerTest
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.BlueprintCreateRequested
@@ -10,7 +10,7 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
-internal class BlueprintCreateHandlerTest : BaseReqHandlerTest() {
+internal class BlueprintCreateHandlerTest : BaseRequestHandlerTest() {
 
     @Test
     fun `Creates blueprint`() {

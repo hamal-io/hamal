@@ -16,13 +16,13 @@ internal object HotArrayAdapterTest {
     @Test
     fun serialize() {
         val result = testDelegate.toJson(HotArray.builder().append(1).append("latest").build())
-        assertThat(result, equalTo("[1,\"latest\"]"))
+        assertThat(result, equalTo("[1.0,\"latest\"]"))
     }
 
     @Test
     fun deserialize() {
         val expected = HotArray.builder().append(1).append("latest").build()
-        val result = testDelegate.fromJson("[1, \"latest\"]", HotArray::class.java)
+        val result = testDelegate.fromJson("[1.0,\"latest\"]", HotArray::class.java)
         assertThat(result, equalTo(expected))
     }
 
@@ -34,7 +34,7 @@ internal object HotObjectAdapterTest {
     @Test
     fun serialize() {
         val result = testDelegate.toJson(HotObject.builder().set("KEY_1", 1).set("KEY_2", "latest").build())
-        assertThat(result, equalTo("{\"KEY_1\":1,\"KEY_2\":\"latest\"}"))
+        assertThat(result, equalTo("{\"KEY_1\":1.0,\"KEY_2\":\"latest\"}"))
     }
 
     @Test
@@ -204,7 +204,7 @@ internal object ValueObjectHotObjectAdapterTest {
                     .build()
             )
         )
-        assertThat(result, equalTo("""{"some-string":"some-string-value","some-boolean":true,"some-number":42}"""))
+        assertThat(result, equalTo("""{"some-string":"some-string-value","some-boolean":true,"some-number":42.0}"""))
     }
 
     @Test
@@ -217,7 +217,7 @@ internal object ValueObjectHotObjectAdapterTest {
                 .build()
         )
         val result = testDelegate.fromJson(
-            """{"some-string":"some-string-value","some-boolean":true,"some-number":42}""",
+            """{"some-string":"some-string-value","some-boolean":true,"some-number":42.0}""",
             TestHotObjectValueObject::class.java
         )
         assertThat(result, equalTo(expected))

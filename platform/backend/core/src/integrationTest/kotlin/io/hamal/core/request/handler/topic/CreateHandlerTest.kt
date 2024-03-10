@@ -1,6 +1,6 @@
 package io.hamal.core.request.handler.topic
 
-import io.hamal.core.request.handler.BaseReqHandlerTest
+import io.hamal.core.request.handler.BaseRequestHandlerTest
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain._enum.TopicType.Namespace
@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
 
-internal class TopicCreateHandlerTest : BaseReqHandlerTest() {
+internal class TopicCreateHandlerTest : BaseRequestHandlerTest() {
     @Test
     fun `Creates topic`() {
         logBrokerRepository.clear()

@@ -1,6 +1,6 @@
 package io.hamal.core.request.handler.extension
 
-import io.hamal.core.request.handler.BaseReqHandlerTest
+import io.hamal.core.request.handler.BaseRequestHandlerTest
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.ExtensionCreateRequested
 import io.hamal.lib.domain.vo.*
@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
 
-internal class ExtensionCreateHandlerTest : BaseReqHandlerTest() {
+internal class ExtensionCreateHandlerTest : BaseRequestHandlerTest() {
     @Test
     fun `Creates Extension`() {
         testInstance(submitCreateExtensionReq)

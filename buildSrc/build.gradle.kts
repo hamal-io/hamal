@@ -1,19 +1,19 @@
 plugins {
     `kotlin-dsl`
-    id("org.jetbrains.kotlin.jvm") version "1.8.10"
+    id("org.jetbrains.kotlin.jvm") version "1.9.23"
     java
 }
 
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(19))
+        languageVersion.set(JavaLanguageVersion.of(21))
     }
 }
 
 
 kotlin {
-    jvmToolchain(19)
+    jvmToolchain(21)
 }
 
 repositories {
@@ -21,6 +21,6 @@ repositories {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.10")
+    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.23")
 }
 

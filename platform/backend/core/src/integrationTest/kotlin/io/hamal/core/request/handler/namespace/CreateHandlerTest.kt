@@ -1,6 +1,6 @@
 package io.hamal.core.request.handler.namespace
 
-import io.hamal.core.request.handler.BaseReqHandlerTest
+import io.hamal.core.request.handler.BaseRequestHandlerTest
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
 
-internal class NamespaceAppendHandlerTest : BaseReqHandlerTest() {
+internal class NamespaceAppendHandlerTest : BaseRequestHandlerTest() {
 
     @BeforeEach
     fun beforeEach() {

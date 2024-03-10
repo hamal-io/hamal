@@ -4,7 +4,7 @@ plugins {
     id("hamal.common")
     application
     id("org.springframework.boot").version("3.0.5")
-    kotlin("plugin.spring").version("1.8.10")
+    kotlin("plugin.spring").version("1.9.23")
 }
 
 tasks.named<BootJar>("bootJar") {

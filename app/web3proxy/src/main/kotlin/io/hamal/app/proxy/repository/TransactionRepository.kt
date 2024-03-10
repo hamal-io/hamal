@@ -2,6 +2,7 @@ package io.hamal.app.proxy.repository
 
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.SqliteBaseRepository
+import io.hamal.lib.web3.util.Web3Encoding
 import java.nio.file.Path
 
 
@@ -88,7 +89,7 @@ class SqliteTransactionPartitionRepository(
                 set("fromAddressId", transaction.fromAddressId)
                 set("toAddressId", transaction.toAddressId)
                 set("value", transaction.value)
-                set("input", transaction.input)
+                set("input", Web3Encoding.encodeRunLength(transaction.input))
                 set("gas", transaction.gas)
             }
         }
@@ -107,7 +108,7 @@ class SqliteTransactionPartitionRepository(
                         blockIndex = rs.getInt("block_index").toUShort(),
                         fromAddressId = rs.getLong("from_address_id").toULong(),
                         toAddressId = rs.getLong("to_address_id").toULong(),
-                        input = rs.getBytes("input"),
+                        input = Web3Encoding.decodeRunLength(rs.getBytes("input")),
                         value = rs.getBytes("value"),
                         gas = rs.getLong("gas").toULong()
                     )
@@ -130,7 +131,7 @@ class SqliteTransactionPartitionRepository(
                         blockIndex = rs.getInt("block_index").toUShort(),
                         fromAddressId = rs.getLong("from_address_id").toULong(),
                         toAddressId = rs.getLong("to_address_id").toULong(),
-                        input = rs.getBytes("input"),
+                        input = Web3Encoding.decodeRunLength(rs.getBytes("input")),
                         value = rs.getBytes("value"),
                         gas = rs.getLong("gas").toULong()
                     )

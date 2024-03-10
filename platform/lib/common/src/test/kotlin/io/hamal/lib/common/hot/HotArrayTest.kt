@@ -1,18 +1,17 @@
 package io.hamal.lib.common.hot
 
+import io.hamal.lib.common.Decimal
 import io.hamal.lib.common.Tuple3
 import io.hamal.lib.common.Tuple4
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.nullValue
 import org.hamcrest.MatcherAssert.assertThat
-import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 import org.junit.jupiter.api.assertThrows
-import java.math.BigDecimal
-import java.math.BigInteger
 
 internal class HotArrayTest {
 
@@ -176,9 +175,8 @@ internal class HotArrayTest {
         @TestFactory
         fun `value`() = listOf(
             Tuple3("booleanValue", testInstance.booleanValue(booleanIdx), true),
-            Tuple3("bigDecimalValue", testInstance.bigDecimalValue(numberIdx), BigDecimal(123)),
-            Tuple3("bigIntegerValue", testInstance.bigIntegerValue(numberIdx), BigInteger.valueOf(123)),
             Tuple3("byteValue", testInstance.byteValue(numberIdx), (123).toByte()),
+            Tuple3("decimalValue", testInstance.decimalValue(numberIdx), Decimal(123)),
             Tuple3("doubleValue", testInstance.doubleValue(numberIdx), 123.0),
             Tuple3("floatValue", testInstance.floatValue(numberIdx), 123.0f),
             Tuple3("intValue", testInstance.intValue(numberIdx), 123),
@@ -194,9 +192,8 @@ internal class HotArrayTest {
         @TestFactory
         fun `value - not found`() = listOf<Tuple3<String, (Int) -> Any, String>>(
             Tuple3("booleanValue", testInstance::booleanValue, "Not HotBoolean"),
-            Tuple3("bigDecimalValue", testInstance::bigDecimalValue, "Not HotNumber"),
-            Tuple3("bigIntegerValue", testInstance::bigIntegerValue, "Not HotNumber"),
             Tuple3("byteValue", testInstance::byteValue, "Not HotNumber"),
+            Tuple3("decimalValue", testInstance::decimalValue, "Not HotNumber"),
             Tuple3("doubleValue", testInstance::doubleValue, "Not HotNumber"),
             Tuple3("floatValue", testInstance::floatValue, "Not HotNumber"),
             Tuple3("intValue", testInstance::intValue, "Not HotNumber"),
@@ -216,9 +213,8 @@ internal class HotArrayTest {
         @TestFactory
         fun `value - wrong type`() = listOf<Tuple4<String, Int, (Int) -> Any, String>>(
             Tuple4("booleanValue", stringIdx, testInstance::booleanValue, "Not HotBoolean"),
-            Tuple4("bigDecimalValue", booleanIdx, testInstance::bigDecimalValue, "Not HotNumber"),
-            Tuple4("bigIntegerValue", booleanIdx, testInstance::bigIntegerValue, "Not HotNumber"),
             Tuple4("byteValue", booleanIdx, testInstance::byteValue, "Not HotNumber"),
+            Tuple4("decimalValue", booleanIdx, testInstance::decimalValue, "Not HotNumber"),
             Tuple4("doubleValue", booleanIdx, testInstance::doubleValue, "Not HotNumber"),
             Tuple4("floatValue", booleanIdx, testInstance::floatValue, "Not HotNumber"),
             Tuple4("intValue", booleanIdx, testInstance::intValue, "Not HotNumber"),
@@ -289,16 +285,14 @@ internal class HotArrayTest {
             val testInstance = HotArray.empty
             val result = testInstance.deepCopy()
 
-            assertFalse(testInstance === result)
-            require(result is HotArray)
+            assertTrue(testInstance == result)
             assertThat(result.size, equalTo(0))
         }
 
         @Test
         fun `Copy object`() {
             val result = testInstance.deepCopy()
-            assertFalse(testInstance === result)
-            require(result is HotArray)
+            assertTrue(testInstance == result)
             assertThat(result.size, equalTo(6))
 
             assertThat(result.asArray(arrayIdx), equalTo(HotArray.builder().append(42).build()))

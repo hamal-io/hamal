@@ -1,6 +1,6 @@
 package io.hamal.core.request.handler.exec
 
-import io.hamal.core.request.handler.BaseReqHandlerTest
+import io.hamal.core.request.handler.BaseRequestHandlerTest
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
@@ -14,7 +14,7 @@ import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 
 
-internal class ExecInvokeHandlerTest : BaseReqHandlerTest() {
+internal class ExecInvokeHandlerTest : BaseRequestHandlerTest() {
 
     @Test
     fun `Invokes execution with code`() {

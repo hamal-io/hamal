@@ -1,6 +1,9 @@
 package io.hamal.lib.web3.eth.http
 
-import io.hamal.lib.common.hot.*
+import io.hamal.lib.common.hot.HotArray
+import io.hamal.lib.common.hot.HotJsonModule
+import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.hot.HotObjectBuilder
 import io.hamal.lib.common.serialization.JsonFactoryBuilder
 import io.hamal.lib.domain.Json
 import io.hamal.lib.http.HttpTemplateImpl
@@ -8,9 +11,7 @@ import io.hamal.lib.http.body
 import io.hamal.lib.web3.Web3JsonModule
 import io.hamal.lib.web3.eth.EthBatchService
 import io.hamal.lib.web3.eth.abi.type.EthUint64
-import io.hamal.lib.web3.eth.domain.EthGetBlockResponse
-import io.hamal.lib.web3.eth.domain.EthRequestId
-import io.hamal.lib.web3.eth.domain.EthResponse
+import io.hamal.lib.web3.eth.domain.*
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 import kotlin.reflect.KClass
@@ -23,52 +24,43 @@ class EthHttpBatchService(
     private val resultClasses = mutableListOf<KClass<*>>()
     private val requests = mutableListOf<HotObject>()
 
-    override fun getBlockNumber() = TODO()
-//        request(
-//        method = "eth_blockNumber",
-//        params = JsonArray(listOf()),
-//        resultClass = EthGetBlockNumberResponse::class
-//    )
+    override fun getBlockNumber() = request(
+        method = "eth_blockNumber",
+        params = HotArray.empty,
+        resultClass = EthGetBlockNumberResponse::class
+    )
 
     override fun getBlock(number: EthUint64) = request(
         method = "eth_getBlockByNumber",
-        params = HotArray(
-            listOf(
-                HotString(number.toPrefixedHexString().value),
-                HotBoolean(true)
-            )
-        ),
+        params = HotArray.builder()
+            .append(number.toPrefixedHexString().value)
+            .append(true)
+            .build(),
         resultClass = EthGetBlockResponse::class
     )
 
-    override fun getLiteBlock(number: EthUint64) = TODO()
-//        request(
-//        method = "eth_getBlockByNumber",
-//        params = JsonArray(
-//            listOf(
-//                JsonPrimitive(number.toPrefixedHexString().value),
-//                JsonPrimitive(false)
-//            )
-//        ),
-//        resultClass = EthGetLiteBlockResponse::class
-//    )
+    override fun getLiteBlock(number: EthUint64) = request(
+        method = "eth_getBlockByNumber",
+        params = HotArray.builder()
+            .append(number.toPrefixedHexString().value)
+            .append(false)
+            .build(),
+        resultClass = EthGetLiteBlockResponse::class
+    )
 
-    override fun call(callRequest: EthBatchService.EthCallRequest) = TODO()
-//        request(
-//        method = "eth_call",
-//        params = JsonArray(
-//            listOf(
-//                JsonObject(
-//                    mapOf(
-//                        "to" to JsonPrimitive(callRequest.to.toPrefixedHexString().value),
-//                        "data" to JsonPrimitive(callRequest.data.value)
-//                    )
-//                ),
-//                JsonPrimitive(callRequest.blockNumber.toPrefixedHexString().value),
-//            )
-//        ),
-//        resultClass = EthCallResponse::class
-//    )
+    override fun call(callRequest: EthBatchService.EthCallRequest) = request(
+        method = "eth_call",
+        params = HotArray.builder()
+            .append(
+                HotObject.builder()
+                    .set("to", callRequest.to.toPrefixedHexString().value)
+                    .set("data", callRequest.data.value)
+                    .build()
+            )
+            .append(callRequest.blockNumber.toPrefixedHexString().value)
+            .build(),
+        resultClass = EthCallResponse::class
+    )
 
     override fun lastRequestId(): EthRequestId {
         return EthRequestId(requests.size)
@@ -114,7 +106,7 @@ class EthHttpBatchService(
             createReq = { id ->
                 HotObjectBuilder()
                     .set("jsonrpc", "2.0")
-                    .set("id", id)
+                    .set("id", id.toString())
                     .set("method", method)
                     .set("params", params)
                     .build(

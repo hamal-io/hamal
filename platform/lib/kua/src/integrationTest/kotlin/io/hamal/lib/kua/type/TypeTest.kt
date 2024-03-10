@@ -1,18 +1,14 @@
 package io.hamal.lib.kua.type
 
-import io.hamal.lib.kua.NativeLoader
+import io.hamal.lib.kua.*
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
-import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.function.*
-import io.hamal.lib.kua.tableCreate
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
-internal class KuaAnyTest {
+internal class KuaTypeTest {
 
     @Test
     fun `Can be used with boolean`() {
@@ -65,8 +61,7 @@ internal class KuaAnyTest {
     }
 
     @Test
-    @Disabled
-    fun `Can be used with table object style table`() {
+    fun `Can be used with table`() {
         val map = sandbox.tableCreate(0, 2)
         map["key"] = KuaString("value")
         sandbox.globalSet(KuaString("test_map"), map)
@@ -85,37 +80,8 @@ internal class KuaAnyTest {
 
         val underlying = captor.result
         require(underlying is KuaTable) { "Not a table" }
-        assertThat(underlying.length, equalTo(1))
-        assertThat(underlying.getString("key"), equalTo("value"))
-    }
-
-
-    @Test
-    @Disabled
-    fun `AnyValue can be used with array style table`() {
-        val array = sandbox.tableCreate(2, 0)
-        array.append(KuaNumber(23))
-        array.append(KuaString("hamal.io"))
-        sandbox.globalSet(KuaString("test_array"), array)
-
-        val captor = AnyValueResultCaptor()
-        sandbox.register(plugin(captor))
-
-        sandbox.codeLoad(
-            KuaCode(
-                """
-            test = require_plugin('test')
-            test.captor(test.pass_through(test_array))
-        """
-            )
-        )
-
-        val underlying = captor.result
-        require(underlying is KuaTable) { "Not a array" }
-        assertThat(underlying.length, equalTo(2))
-
-        assertThat(underlying.getNumber(1), equalTo(KuaNumber(23)))
-        assertThat(underlying.getString(2), equalTo(KuaString("hamal.io")))
+        assertThat(underlying.length, equalTo(TableLength(1)))
+        assertThat(underlying.getString("key"), equalTo(KuaString("value")))
     }
 
     private class AnyValuePassThrough : Function1In1Out<KuaType, KuaType>(

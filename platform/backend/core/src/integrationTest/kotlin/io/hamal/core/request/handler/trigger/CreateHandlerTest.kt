@@ -1,6 +1,6 @@
 package io.hamal.core.request.handler.trigger
 
-import io.hamal.core.request.handler.BaseReqHandlerTest
+import io.hamal.core.request.handler.BaseRequestHandlerTest
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain._enum.HookMethod.Get
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
@@ -18,7 +18,7 @@ import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import kotlin.time.Duration.Companion.seconds
 
-internal class TriggerCreateHandlerTest : BaseReqHandlerTest() {
+internal class TriggerCreateHandlerTest : BaseRequestHandlerTest() {
 
     @Nested
     inner class FixedRateTest {

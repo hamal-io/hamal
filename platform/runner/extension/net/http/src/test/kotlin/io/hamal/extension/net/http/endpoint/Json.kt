@@ -45,7 +45,7 @@ open class TestJsonController {
     }
 
     @RequestMapping("/v1/json-echo")
-    fun jsonEcho(@RequestBody body: HotNode): ResponseEntity<HotNode> {
+    fun jsonEcho(@RequestBody body: HotNode<*>): ResponseEntity<HotNode<*>> {
         return ResponseEntity.ok(body)
     }
 }

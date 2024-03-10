@@ -17,11 +17,7 @@ class LogConsumerId(override val value: SnowflakeId) : ValueObjectId() {
 interface LogConsumer<VALUE : Any> {
     val consumerId: LogConsumerId
 
-    fun consume(limit: Limit, fn: (LogEventId, VALUE) -> Unit): Int {
-        return consumeIndexed(limit) { _, logEventId, value -> fn(logEventId, value) }
-    }
-
-    fun consumeIndexed(limit: Limit, fn: (Int, LogEventId, VALUE) -> Unit): Int
+    fun consume(limit: Limit, fn: (Int, LogEventId, VALUE) -> Unit): Int
 }
 
 interface LogConsumerBatch<VALUE : Any> {
@@ -39,7 +35,8 @@ class LogConsumerImpl<Value : Any>(
     private val valueClass: KClass<Value>
 ) : LogConsumer<Value> {
 
-    override fun consumeIndexed(limit: Limit, fn: (Int, LogEventId, Value) -> Unit): Int {
+    @Synchronized
+    override fun consume(limit: Limit, fn: (Int, LogEventId, Value) -> Unit): Int {
         val eventsToConsume = repository.consume(consumerId, topicId, limit)
 
         eventsToConsume.mapIndexed { index, event ->
@@ -48,8 +45,8 @@ class LogConsumerImpl<Value : Any>(
                 event.id,
                 json.decompressAndDeserialize(valueClass, event.bytes)
             )
-            event.id
-        }.maxByOrNull { it }?.let { repository.commit(consumerId, topicId, it) }
+            repository.commit(consumerId, topicId, event.id)
+        }
         return eventsToConsume.size
     }
 }
@@ -62,6 +59,7 @@ class LogConsumerBatchImpl<Value : Any>(
     private val valueClass: KClass<Value>
 ) : LogConsumerBatch<Value> {
 
+    @Synchronized
     override fun consumeBatch(batchSize: BatchSize, block: (List<Value>) -> Unit): Int {
         val eventsToConsume = repository.consume(consumerId, topicId, Limit(batchSize.value))
 
@@ -86,6 +84,7 @@ class TopicEventConsumerBatchImpl(
     private val repository: LogBrokerRepository,
 ) : LogConsumerBatch<TopicEvent> {
 
+    @Synchronized
     override fun consumeBatch(batchSize: BatchSize, block: (List<TopicEvent>) -> Unit): Int {
         val eventsToConsume = repository.consume(consumerId, topicId, Limit(batchSize.value))
 

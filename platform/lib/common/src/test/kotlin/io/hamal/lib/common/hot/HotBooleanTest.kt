@@ -76,15 +76,14 @@ internal object HotBooleanTest {
 
     @TestFactory
     fun `value invalid`() = listOf(
-        Tuple3("bigDecimalValue", HotBoolean(true)::bigDecimalValue, "Not BigDecimal"),
-        Tuple3("bigIntegerValue", HotBoolean(true)::bigIntegerValue, "Not BigInteger"),
-        Tuple3("byteValue", HotBoolean(true)::byteValue, "Not byte"),
-        Tuple3("doubleValue", HotBoolean(true)::doubleValue, "Not double"),
-        Tuple3("floatValue", HotBoolean(true)::floatValue, "Not float"),
-        Tuple3("intValue", HotBoolean(true)::intValue, "Not int"),
-        Tuple3("longValue", HotBoolean(true)::longValue, "Not long"),
-        Tuple3("numberValue", HotBoolean(true)::numberValue, "Not number"),
-        Tuple3("shortValue", HotBoolean(true)::shortValue, "Not short")
+        Tuple3("byteValue", HotBoolean(true)::byteValue, "Not Byte"),
+        Tuple3("decimalValue", HotBoolean(true)::decimalValue, "Not Decimal"),
+        Tuple3("doubleValue", HotBoolean(true)::doubleValue, "Not Double"),
+        Tuple3("floatValue", HotBoolean(true)::floatValue, "Not Float"),
+        Tuple3("intValue", HotBoolean(true)::intValue, "Not Int"),
+        Tuple3("longValue", HotBoolean(true)::longValue, "Not Long"),
+        Tuple3("numberValue", HotBoolean(true)::numberValue, "Not Number"),
+        Tuple3("shortValue", HotBoolean(true)::shortValue, "Not Short")
     ).map { (testName, func, expectedMessage) ->
         dynamicTest(testName) {
             assertThrows<IllegalStateException> {
@@ -101,6 +100,6 @@ internal object HotBooleanTest {
         val testInstance = HotBoolean(true)
         val result = testInstance.deepCopy()
 
-        assertTrue(testInstance === result)
+        assertTrue(testInstance == result)
     }
 }

@@ -1,9 +1,9 @@
 package io.hamal.app.proxy.web
 
-import com.google.gson.JsonArray
-import com.google.gson.JsonElement
-import com.google.gson.JsonObject
 import io.hamal.app.proxy.handler.EthRequestHandler
+import io.hamal.app.proxy.json
+import io.hamal.lib.common.hot.HotNode
+import io.hamal.lib.common.hot.HotObject
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -11,17 +11,15 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class EthRequestController(
-//    private val json: Json,
     private val ethRequestHandler: EthRequestHandler
 ) {
     @PostMapping("/")
     fun eth(
-        @RequestBody body: JsonElement
-    ): ResponseEntity<JsonElement> {
+        @RequestBody body: HotNode<*>
+    ): ResponseEntity<HotNode<*>> {
 
         when (body) {
-            is JsonArray -> {
-                TODO()
+//            is HotArray -> {
 //                val requests = body.map { json.decodeFromJsonElement(EthRequestHandler.Request.serializer(), it) }
 //                val result = ethRequestHandler.handle(requests)
 //
@@ -30,15 +28,16 @@ class EthRequestController(
 //                        json.encodeToJsonElement(EthResponse.serializer(), it)
 //                    }
 //                ))
-            }
+//            }
 
-            is JsonObject -> {
-                TODO()
-//                val result = ethRequestHandler.handle(
-//                    listOf(json.decodeFromJsonElement(EthRequestHandler.Request.serializer(), body))
-//                )
-//
-//                return ResponseEntity.ok(json.encodeToJsonElement(EthResponse.serializer(), result.first()))
+            is HotObject -> {
+                val result = ethRequestHandler.handle(
+                    listOf(json.deserialize(EthRequestHandler.Request::class, json.serialize(body)))
+                )
+
+                return ResponseEntity.ok(
+                    json.deserialize(HotObject::class, json.serialize(result.first()))
+                )
             }
 
             else -> throw NotImplementedError()

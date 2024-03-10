@@ -1,6 +1,6 @@
 package io.hamal.core.request.handler.hook
 
-import io.hamal.core.request.handler.BaseReqHandlerTest
+import io.hamal.core.request.handler.BaseRequestHandlerTest
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain.request.HookCreateRequested
 import io.hamal.lib.domain.vo.*
@@ -11,7 +11,7 @@ import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
-internal class CreateHookHandlerTest : BaseReqHandlerTest() {
+internal class CreateHookHandlerTest : BaseRequestHandlerTest() {
 
     @Test
     fun `Creates hook`() {

@@ -1,7 +1,6 @@
 package io.hamal.extension.std.decimal
 
 import io.hamal.runner.test.AbstractRunnerTest
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 internal class DecimalTest : AbstractRunnerTest() {
@@ -38,7 +37,6 @@ internal class DecimalTest : AbstractRunnerTest() {
         )
     }
 
-    @Disabled("Floating Point Problem")
     @Test
     fun `Can create new decimal instance by number`() {
         val runner = createTestRunner(

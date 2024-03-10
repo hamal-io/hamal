@@ -1,6 +1,7 @@
 package io.hamal.lib.common.hot
 
-object HotNull : HotTerminal {
+data object HotNull : HotTerminal<HotNull> {
     override val isNull get(): Boolean = true
     override fun asNull(): HotNull = this
+    override fun deepCopy() = this
 }

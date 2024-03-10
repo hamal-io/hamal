@@ -5,6 +5,8 @@ import io.hamal.extension.net.smtp.ExtensionSmtpFactory
 import io.hamal.extension.std.decimal.ExtensionDecimalFactory
 import io.hamal.extension.std.log.ExtensionLogFactory
 import io.hamal.extension.telegram.ExtensionTelegramFactory
+import io.hamal.extension.web3.bsc.ExtensionWeb3BscFactory
+import io.hamal.extension.web3.eth.ExtensionWeb3EthFactory
 import io.hamal.lib.domain.vo.AuthToken
 import io.hamal.lib.domain.vo.ExecToken
 import io.hamal.lib.domain.vo.RunnerEnv
@@ -49,11 +51,6 @@ class SandboxFactoryDefaultImpl(
     override fun create(ctx: SandboxContext): Sandbox {
         NativeLoader.load(Jar)
 
-//        val sdk = ApiSdkImpl(
-//            apiHost = apiHost,
-//            token = AuthToken("Bearer ${ctx[ExecToken::class].value}")
-//        )
-
         val sdk = ApiSdkImpl(
             apiHost = apiHost,
             token = AuthToken("RunnerToken"),
@@ -74,7 +71,10 @@ class SandboxFactoryDefaultImpl(
                 ExtensionSmtpFactory,
                 ExtensionHttpFactory,
                 ExtensionLogFactory,
-                ExtensionTelegramFactory
+                ExtensionTelegramFactory,
+
+                ExtensionWeb3EthFactory,
+                ExtensionWeb3BscFactory
             )
     }
 }

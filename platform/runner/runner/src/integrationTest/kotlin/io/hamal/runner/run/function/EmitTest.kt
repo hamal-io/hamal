@@ -9,7 +9,6 @@ import io.hamal.runner.test.TestConnector
 import io.hamal.runner.test.TestFailConnector
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 internal class EmitTest : AbstractExecuteTest() {
@@ -152,7 +151,6 @@ internal class EmitTest : AbstractExecuteTest() {
     }
 
     @Test
-    @Disabled
     fun `Emit event with table payload`() {
         val runner = createTestRunner()
         runner.run(unitOfWork("context.emit({ topic = 'test-topic', nested_table = { value = 23 } })"))

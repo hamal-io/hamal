@@ -8,6 +8,8 @@ import io.hamal.lib.domain.vo.ValueObjectJsonModule
 import io.hamal.lib.sdk.api.ApiJsonModule
 import io.hamal.repository.api.DomainJsonModule
 import io.hamal.repository.api.event.PlatformEventJsonModule
+import org.apache.coyote.ProtocolHandler
+import org.springframework.boot.web.embedded.tomcat.TomcatProtocolHandlerCustomizer
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.format.FormatterRegistry
@@ -19,11 +21,21 @@ import org.springframework.http.converter.json.GsonHttpMessageConverter
 import org.springframework.http.converter.xml.SourceHttpMessageConverter
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 import java.nio.charset.StandardCharsets
+import java.util.concurrent.Executors
 import javax.xml.transform.Source
 
 
 @Configuration
 open class WebConfig : WebMvcConfigurer {
+
+
+    @Bean
+    open fun protocolHandlerVirtualThreadExecutorCustomizer(): TomcatProtocolHandlerCustomizer<*> {
+        return TomcatProtocolHandlerCustomizer { protocolHandler: ProtocolHandler ->
+            protocolHandler.executor = Executors.newVirtualThreadPerTaskExecutor()
+        }
+    }
+
 
     @Bean
     open fun gson(): Gson = JsonFactoryBuilder()

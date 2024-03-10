@@ -1,9 +1,10 @@
 package io.hamal.core.service
 
-import io.hamal.core.component.Async
+import io.hamal.core.component.Scheduler
+import io.hamal.core.component.WorkerPool
 import io.hamal.core.event.InternalEventContainer
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.common.logger
 import io.hamal.lib.domain.GenerateCmdId
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.repository.api.TopicRepository
@@ -18,9 +19,12 @@ import org.springframework.stereotype.Service
 import java.util.concurrent.ScheduledFuture
 import kotlin.time.Duration.Companion.milliseconds
 
+private val log = logger(InternalEventService::class)
+
 @Service
 class InternalEventService(
-    private val async: Async,
+    private val scheduler: Scheduler,
+    private val workerPool: WorkerPool,
     private val internalEventContainer: InternalEventContainer,
     private val topicRepository: TopicRepository,
     private val logBrokerRepository: LogBrokerRepository,
@@ -32,21 +36,22 @@ class InternalEventService(
         internalEventContainer.topicNames().forEach { topicName ->
             val topic = topicRepository.getTopic(NamespaceId.root, topicName)
             val consumer = LogConsumerImpl(
-                consumerId = LogConsumerId(SnowflakeId(1)),
+                consumerId = LogConsumerId(topic.id.value),
                 topicId = topic.logTopicId,
                 repository = logBrokerRepository,
                 valueClass = InternalEvent::class
             )
-            scheduledTasks.add(
-                async.atFixedRate(1.milliseconds) {
-                    consumer.consume(Limit(10)) { _, evt ->
+
+            scheduler.atFixedRate(1.milliseconds) {
+                consumer.consume(Limit(10)) { _, _, evt ->
+                    workerPool.execute {
                         internalEventContainer[evt::class].forEach { handler ->
                             val cmdId = generateCmdId()
                             handler.handle(cmdId, evt)
                         }
                     }
-                },
-            )
+                }
+            }
         }
     }
 

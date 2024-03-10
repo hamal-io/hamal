@@ -54,16 +54,15 @@ internal object HotNullTest {
 
     @TestFactory
     fun `value invalid`() = listOf(
-        Tuple3("booleanValue", HotNull::booleanValue, "Not boolean"),
-        Tuple3("bigDecimalValue", HotNull::bigDecimalValue, "Not BigDecimal"),
-        Tuple3("bigIntegerValue", HotNull::bigIntegerValue, "Not BigInteger"),
-        Tuple3("byteValue", HotNull::byteValue, "Not byte"),
-        Tuple3("doubleValue", HotNull::doubleValue, "Not double"),
-        Tuple3("floatValue", HotNull::floatValue, "Not float"),
-        Tuple3("intValue", HotNull::intValue, "Not int"),
-        Tuple3("longValue", HotNull::longValue, "Not long"),
-        Tuple3("shortValue", HotNull::shortValue, "Not short"),
-        Tuple3("stringValue", HotNull::stringValue, "Not string")
+        Tuple3("booleanValue", HotNull::booleanValue, "Not Boolean"),
+        Tuple3("byteValue", HotNull::byteValue, "Not Byte"),
+        Tuple3("decimalValue", HotNull::decimalValue, "Not Decimal"),
+        Tuple3("doubleValue", HotNull::doubleValue, "Not Double"),
+        Tuple3("floatValue", HotNull::floatValue, "Not Float"),
+        Tuple3("intValue", HotNull::intValue, "Not Int"),
+        Tuple3("longValue", HotNull::longValue, "Not Long"),
+        Tuple3("shortValue", HotNull::shortValue, "Not Short"),
+        Tuple3("stringValue", HotNull::stringValue, "Not String")
     ).map { (testName, func, expectedMessage) ->
         dynamicTest(testName) {
             assertThrows<IllegalStateException> {

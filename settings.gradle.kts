@@ -17,15 +17,15 @@ dependencyResolutionManagement {
             library("hamcrest", "org.hamcrest:hamcrest:2.2")
             library("gson", "com.google.code.gson:gson:2.10.1")
 
-            library("spring-web", "org.springframework.boot", "spring-boot-starter-web").version("3.0.5")
-            library("spring-mail", "org.springframework.boot", "spring-boot-starter-mail").version("3.0.5")
-            library("spring-test", "org.springframework.boot", "spring-boot-starter-test").version("3.0.5")
-            library("spring-logging", "org.springframework.boot", "spring-boot-starter-logging").version("3.0.5")
-            library("spring-schedule", "org.springframework", "spring-context").version("6.0.7")
+            library("spring-web", "org.springframework.boot", "spring-boot-starter-web").version("3.2.3")
+            library("spring-mail", "org.springframework.boot", "spring-boot-starter-mail").version("3.2.3")
+            library("spring-test", "org.springframework.boot", "spring-boot-starter-test").version("3.2.3")
+            library("spring-logging", "org.springframework.boot", "spring-boot-starter-logging").version("3.2.3")
+            library("spring-schedule", "org.springframework", "spring-context").version("6.1.4")
 
             library("sqlite", "org.xerial", "sqlite-jdbc").version("3.41.2.1")
 
-            library("kotlin-reflect", "org.jetbrains.kotlin", "kotlin-reflect").version("1.8.10")
+            library("kotlin-reflect", "org.jetbrains.kotlin", "kotlin-reflect").version("1.9.23")
 
             library("apache-http-client", "org.apache.httpcomponents", "httpclient").version("4.5.13")
             library("apache-http-mime", "org.apache.httpcomponents", "httpmime").version("4.5.13")
@@ -60,6 +60,7 @@ include(":platform:runner:extension:net:http")
 include(":platform:runner:extension:std:decimal")
 include(":platform:runner:extension:std:log")
 include(":platform:runner:extension:telegram")
+include(":platform:runner:extension:web3")
 
 include(":platform:runner:plugin:net:smtp")
 include(":platform:runner:plugin:net:http")

@@ -71,16 +71,15 @@ internal object HotStringTest {
 
     @TestFactory
     fun `value invalid`() = listOf(
-        Tuple3("booleanValue", HotString("hamal")::booleanValue, "Not boolean"),
-        Tuple3("bigDecimalValue", HotString("hamal")::bigDecimalValue, "Not BigDecimal"),
-        Tuple3("bigIntegerValue", HotString("hamal")::bigIntegerValue, "Not BigInteger"),
-        Tuple3("byteValue", HotString("hamal")::byteValue, "Not byte"),
-        Tuple3("doubleValue", HotString("hamal")::doubleValue, "Not double"),
-        Tuple3("floatValue", HotString("hamal")::floatValue, "Not float"),
-        Tuple3("intValue", HotString("hamal")::intValue, "Not int"),
-        Tuple3("longValue", HotString("hamal")::longValue, "Not long"),
-        Tuple3("numberValue", HotString("hamal")::numberValue, "Not number"),
-        Tuple3("shortValue", HotString("hamal")::shortValue, "Not short")
+        Tuple3("booleanValue", HotString("hamal")::booleanValue, "Not Boolean"),
+        Tuple3("byteValue", HotString("hamal")::byteValue, "Not Byte"),
+        Tuple3("decimalValue", HotString("hamal")::decimalValue, "Not Decimal"),
+        Tuple3("doubleValue", HotString("hamal")::doubleValue, "Not Double"),
+        Tuple3("floatValue", HotString("hamal")::floatValue, "Not Float"),
+        Tuple3("intValue", HotString("hamal")::intValue, "Not Int"),
+        Tuple3("longValue", HotString("hamal")::longValue, "Not Long"),
+        Tuple3("numberValue", HotString("hamal")::numberValue, "Not Number"),
+        Tuple3("shortValue", HotString("hamal")::shortValue, "Not Short")
     ).map { (testName, func, expectedMessage) ->
         dynamicTest(testName) {
             assertThrows<IllegalStateException> {
@@ -97,6 +96,6 @@ internal object HotStringTest {
         val testInstance = HotString("hamal")
         val result = testInstance.deepCopy()
 
-        assertTrue(testInstance === result)
+        assertTrue(testInstance == result)
     }
 }
