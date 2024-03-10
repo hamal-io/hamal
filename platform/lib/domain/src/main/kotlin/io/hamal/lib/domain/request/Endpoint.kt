@@ -34,6 +34,5 @@ data class EndpointUpdateRequested(
     val id: EndpointId,
     val workspaceId: WorkspaceId,
     val funcId: FuncId,
-    val name: EndpointName?,
-    val method: EndpointMethod?
+    val name: EndpointName?
 ) : Requested()

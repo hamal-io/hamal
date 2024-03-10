@@ -1,6 +1,6 @@
 package io.hamal.core.request.handler.exec
 
-import io.hamal.core.request.handler.BaseReqHandlerTest
+import io.hamal.core.request.handler.BaseRequestHandlerTest
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.ExecCompleteRequested
@@ -17,7 +17,7 @@ import org.junit.jupiter.api.TestFactory
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 
-internal class ExecCompleteHandlerTest : BaseReqHandlerTest() {
+internal class ExecCompleteHandlerTest : BaseRequestHandlerTest() {
 
     @Test
     fun `Completes exec`() {

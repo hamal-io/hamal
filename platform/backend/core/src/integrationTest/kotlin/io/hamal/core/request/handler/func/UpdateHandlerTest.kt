@@ -1,6 +1,6 @@
 package io.hamal.core.request.handler.func
 
-import io.hamal.core.request.handler.BaseReqHandlerTest
+import io.hamal.core.request.handler.BaseRequestHandlerTest
 import io.hamal.core.request.handler.NextCommandId
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain._enum.RequestStatus
@@ -14,7 +14,7 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
-internal class FuncUpdateHandlerTest : BaseReqHandlerTest() {
+internal class FuncUpdateHandlerTest : BaseRequestHandlerTest() {
 
     @Test
     fun `Updates func`() {

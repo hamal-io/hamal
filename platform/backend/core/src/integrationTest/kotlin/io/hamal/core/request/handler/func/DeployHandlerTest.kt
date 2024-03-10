@@ -1,6 +1,6 @@
 package io.hamal.core.request.handler.func
 
-import io.hamal.core.request.handler.BaseReqHandlerTest
+import io.hamal.core.request.handler.BaseRequestHandlerTest
 import io.hamal.core.request.handler.NextCommandId
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain.request.FuncDeployRequested
@@ -12,7 +12,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
-internal class FuncDeployHandlerTest : BaseReqHandlerTest() {
+internal class FuncDeployHandlerTest : BaseRequestHandlerTest() {
 
     @Test
     fun `Deploys version without message`() {

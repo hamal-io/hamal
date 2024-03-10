@@ -16,7 +16,7 @@ internal object NextCommandId {
     private val counter = AtomicInteger(0)
 }
 
-internal abstract class BaseReqHandlerTest : BaseTest() {
+internal abstract class BaseRequestHandlerTest : BaseTest() {
 
     fun createFunc(
         id: FuncId = generateDomainId(::FuncId),

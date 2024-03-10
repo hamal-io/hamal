@@ -1,6 +1,6 @@
 package io.hamal.core.request.handler.blueprint
 
-import io.hamal.core.request.handler.BaseReqHandlerTest
+import io.hamal.core.request.handler.BaseRequestHandlerTest
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain._enum.RequestStatus
@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
 
-internal class BlueprintUpdateHandlerTest : BaseReqHandlerTest() {
+internal class BlueprintUpdateHandlerTest : BaseRequestHandlerTest() {
 
     @Test
     fun `Updates blueprint`() {

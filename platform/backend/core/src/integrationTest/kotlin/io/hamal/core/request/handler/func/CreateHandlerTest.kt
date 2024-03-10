@@ -1,6 +1,6 @@
 package io.hamal.core.request.handler.func
 
-import io.hamal.core.request.handler.BaseReqHandlerTest
+import io.hamal.core.request.handler.BaseRequestHandlerTest
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.Instant
 
-internal class FuncCreateHandlerTest : BaseReqHandlerTest() {
+internal class FuncCreateHandlerTest : BaseRequestHandlerTest() {
 
     @Test
     fun `Creates func`() {

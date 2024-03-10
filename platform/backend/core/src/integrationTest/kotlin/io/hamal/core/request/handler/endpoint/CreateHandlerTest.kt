@@ -1,6 +1,6 @@
 package io.hamal.core.request.handler.endpoint
 
-import io.hamal.core.request.handler.BaseReqHandlerTest
+import io.hamal.core.request.handler.BaseRequestHandlerTest
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain._enum.EndpointMethod.Post
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
 
-internal class EndpointCreateHandlerTest : BaseReqHandlerTest() {
+internal class EndpointCreateHandlerTest : BaseRequestHandlerTest() {
 
     @Test
     fun `Creates endpoint`() {

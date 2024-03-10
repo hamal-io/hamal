@@ -1,6 +1,6 @@
 package io.hamal.core.request.handler.exec
 
-import io.hamal.core.request.handler.BaseReqHandlerTest
+import io.hamal.core.request.handler.BaseRequestHandlerTest
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain.request.ExecFailRequested
@@ -18,7 +18,7 @@ import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 
 
-internal class ExecFailHandlerTest : BaseReqHandlerTest() {
+internal class ExecFailHandlerTest : BaseRequestHandlerTest() {
 
     @Test
     fun `Fail exec`() {
