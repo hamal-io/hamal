@@ -6,7 +6,7 @@ import java.util.function.Consumer
 
 object GsonTransform {
 
-    fun fromNode(node: HotNode): JsonElement {
+    fun fromNode(node: HotNode<*>): JsonElement {
         if (node.isObject) {
             return fromObject(node.asObject())
         } else if (node.isArray) {
@@ -17,7 +17,7 @@ object GsonTransform {
         return JsonNull.INSTANCE
     }
 
-    fun toNode(element: JsonElement): HotNode {
+    fun toNode(element: JsonElement): HotNode<*> {
         if (element.isJsonObject) {
             return toObject(element.asJsonObject)
         } else if (element.isJsonArray) {
@@ -40,13 +40,13 @@ object GsonTransform {
         return result
     }
 
-    private fun fromTerminal(terminal: HotTerminal): JsonPrimitive? {
+    private fun fromTerminal(terminal: HotTerminal<*>): JsonPrimitive? {
         if (terminal.isString) {
             return JsonPrimitive(terminal.stringValue)
         } else if (terminal.isBoolean) {
             return JsonPrimitive(terminal.booleanValue)
         } else if (terminal.isNumber) {
-            return JsonPrimitive(terminal.bigDecimalValue)
+            return JsonPrimitive(terminal.decimalValue.toBigDecimal())
         }
         return null
     }
@@ -72,7 +72,7 @@ object GsonTransform {
     }
 
 
-    private fun toTerminal(primitive: JsonPrimitive): HotTerminal {
+    private fun toTerminal(primitive: JsonPrimitive): HotTerminal<*> {
         if (primitive.isString) {
             return HotString(primitive.asString)
         } else if (primitive.isBoolean) {

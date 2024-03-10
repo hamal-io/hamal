@@ -1,11 +1,13 @@
 package io.hamal.lib.common.hot
 
+import io.hamal.lib.common.Decimal
 import java.math.BigDecimal
 import java.math.BigInteger
 
-class HotObject(
-    val nodes: LinkedHashMap<String, HotNode>
-) : HotNode {
+@JvmInline
+value class HotObject(
+    val nodes: LinkedHashMap<String, HotNode<*>>
+) : HotNode<HotObject> {
 
     override val isObject get()  : Boolean = true
 
@@ -13,9 +15,9 @@ class HotObject(
 
     fun containsKey(key: String): Boolean = nodes.containsKey(key)
 
-    fun find(key: String): HotNode? = nodes[key]
+    fun find(key: String): HotNode<*>? = nodes[key]
 
-    operator fun get(key: String): HotNode = find(key) ?: throw NoSuchElementException("$key not found")
+    operator fun get(key: String): HotNode<*> = find(key) ?: throw NoSuchElementException("$key not found")
 
     fun isArray(key: String): Boolean = find(key)?.isArray ?: false
     fun asArray(key: String): HotArray = find(key)
@@ -34,8 +36,7 @@ class HotObject(
         ?.let { if (it.isNumber) it as HotNumber else null }
         ?: throw IllegalStateException("Not HotNumber")
 
-    fun bigDecimalValue(key: String): BigDecimal = asNumber(key).bigDecimalValue
-    fun bigIntegerValue(key: String): BigInteger = asNumber(key).bigIntegerValue
+    fun decimalValue(key: String): Decimal = asNumber(key).decimalValue
     fun byteValue(key: String): Byte = asNumber(key).byteValue
     fun doubleValue(key: String): Double = asNumber(key).doubleValue
     fun floatValue(key: String): Float = asNumber(key).floatValue
@@ -62,29 +63,14 @@ class HotObject(
     fun stringValue(key: String): String = asString(key).stringValue
 
     fun isTerminal(key: String): Boolean = find(key)?.isTerminal ?: false
-    fun asTerminal(key: String): HotTerminal = find(key)
+    fun asTerminal(key: String): HotTerminal<*> = find(key)
         ?.let { if (it.isTerminal) it as HotTerminal else null }
         ?: throw IllegalStateException("Not HotTerminal")
 
-    override fun deepCopy(): HotNode {
+    override fun deepCopy(): HotObject {
         val builder = builder()
-        nodes.forEach { (key, value) ->
-            builder.set(key, value.deepCopy())
-        }
+        nodes.forEach { (key, value) -> builder[key] = value.deepCopy() }
         return builder.build()
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as HotObject
-
-        return nodes == other.nodes
-    }
-
-    override fun hashCode(): Int {
-        return nodes.hashCode()
     }
 
     companion object {
@@ -92,12 +78,10 @@ class HotObject(
 
         fun builder() = HotObjectBuilder()
     }
-
-
 }
 
 class HotObjectBuilder {
-    val nodes: LinkedHashMap<String, HotNode> = LinkedHashMap()
+    val nodes: LinkedHashMap<String, HotNode<*>> = LinkedHashMap()
 
     operator fun set(key: String, value: String): HotObjectBuilder {
         nodes[key] = HotString(value)
@@ -154,7 +138,7 @@ class HotObjectBuilder {
         return this
     }
 
-    operator fun set(key: String, value: HotNode): HotObjectBuilder {
+    operator fun set(key: String, value: HotNode<*>): HotObjectBuilder {
         nodes[key] = value
         return this
     }

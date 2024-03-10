@@ -1,7 +1,7 @@
 package io.hamal.lib.kua.type
 
+import io.hamal.lib.common.Decimal
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.kua.type.KuaType.Type.Decimal
 import java.math.BigDecimal
 import java.math.MathContext
 import java.math.RoundingMode
@@ -9,21 +9,23 @@ import java.math.RoundingMode
 
 @JvmInline
 value class KuaDecimal(
-    val value: BigDecimal,
+    val value: Decimal,
 ) : KuaType, Comparable<KuaDecimal> {
 
-    override val type: KuaType.Type get() = Decimal
+    override val type: KuaType.Type get() = KuaType.Type.Decimal
+
+    private val delegate get() = value.value
 
     companion object {
         val Zero = KuaDecimal(0)
         val One = KuaDecimal(1)
 
-        operator fun invoke(value: Byte): KuaDecimal = KuaDecimal(BigDecimal.valueOf(value.toLong()))
-        operator fun invoke(value: Short): KuaDecimal = KuaDecimal(BigDecimal.valueOf(value.toLong()))
-        operator fun invoke(value: Int): KuaDecimal = KuaDecimal(BigDecimal.valueOf(value.toLong()))
-        operator fun invoke(value: Long): KuaDecimal = KuaDecimal(BigDecimal.valueOf(value))
-        operator fun invoke(value: Number): KuaDecimal = KuaDecimal(BigDecimal.valueOf(value.toDouble()))
-        operator fun invoke(value: SnowflakeId): KuaDecimal = KuaDecimal(BigDecimal.valueOf(value.value))
+        operator fun invoke(value: Byte): KuaDecimal = KuaDecimal(Decimal(value))
+        operator fun invoke(value: Short): KuaDecimal = KuaDecimal(Decimal(value))
+        operator fun invoke(value: Int): KuaDecimal = KuaDecimal(Decimal(value))
+        operator fun invoke(value: Long): KuaDecimal = KuaDecimal(Decimal(value))
+        operator fun invoke(value: Number): KuaDecimal = KuaDecimal(Decimal(value))
+        operator fun invoke(value: SnowflakeId): KuaDecimal = KuaDecimal(Decimal(value.value))
 
         operator fun invoke(value: Float): KuaDecimal {
             require(!value.isNaN()) { IllegalArgumentException("NaN") }
@@ -50,37 +52,37 @@ value class KuaDecimal(
         private val mathContext = MathContext.DECIMAL128
     }
 
-    fun plus(other: KuaDecimal) = KuaDecimal(value.add(other.value, mathContext))
+    fun plus(other: KuaDecimal) = KuaDecimal(delegate.add(other.delegate, mathContext))
 
     fun minus(other: KuaDecimal) =
-        KuaDecimal(value.subtract(other.value, mathContext))
+        KuaDecimal(delegate.subtract(other.delegate, mathContext))
 
     fun multiply(other: KuaDecimal) =
-        KuaDecimal(value.multiply(other.value, mathContext))
+        KuaDecimal(delegate.multiply(other.delegate, mathContext))
 
     fun divide(other: KuaDecimal) =
-        KuaDecimal(value.divide(other.value, mathContext))
+        KuaDecimal(delegate.divide(other.delegate, mathContext))
 
     fun pow(other: KuaDecimal) =
-        KuaDecimal(value.pow(other.value.toInt(), mathContext))
+        KuaDecimal(delegate.pow(other.delegate.toInt(), mathContext))
 
     fun remainder(other: KuaDecimal) =
-        KuaDecimal(value.remainder(other.value, mathContext))
+        KuaDecimal(delegate.remainder(other.delegate, mathContext))
 
-    fun floor() = KuaDecimal(value.setScale(0, RoundingMode.FLOOR))
+    fun floor() = KuaDecimal(delegate.setScale(0, RoundingMode.FLOOR))
 
-    fun ceil() = KuaDecimal(value.setScale(0, RoundingMode.CEILING))
+    fun ceil() = KuaDecimal(delegate.setScale(0, RoundingMode.CEILING))
 
     fun ln(): KuaDecimal {
         // Algorithm: http://functions.wolfram.com/ElementaryFunctions/Log/10/
         // https://stackoverjob.com/a/6169691/6444586
         val result: KuaDecimal
         require(isPositive()) { IllegalStateException("Value must >= 1") }
-        if (value == BigDecimal.ONE) {
+        if (delegate == BigDecimal.ONE) {
             return KuaDecimal(BigDecimal.ZERO)
         } else {
             val iterations = 25000L
-            val x = value.subtract(BigDecimal.ONE)
+            val x = delegate.subtract(BigDecimal.ONE)
             var ret = BigDecimal(iterations + 1)
             for (i in iterations downTo 0) {
                 var N = BigDecimal(i / 2 + 1).pow(2)
@@ -97,12 +99,12 @@ value class KuaDecimal(
 
     fun sqrt(): KuaDecimal {
         require(!isNegative()) { throw IllegalStateException("Value must >= 0") }
-        return KuaDecimal(value.sqrt(mathContext))
+        return KuaDecimal(delegate.sqrt(mathContext))
     }
 
-    fun abs() = KuaDecimal(value.abs(mathContext))
+    fun abs() = KuaDecimal(delegate.abs(mathContext))
 
-    fun negate() = KuaDecimal(value.negate(mathContext))
+    fun negate() = KuaDecimal(delegate.negate(mathContext))
 
 
     override fun toString() = value.toString()
@@ -117,11 +119,11 @@ value class KuaDecimal(
 
     fun isGreaterThanEqual(other: KuaDecimal) = compareTo(other) >= 0
 
-    fun isNegative() = value.signum() < 0
+    fun isNegative() = delegate.signum() < 0
 
-    fun isPositive() = value.signum() > 0
+    fun isPositive() = delegate.signum() > 0
 
-    fun isZero() = value.signum() == 0
+    fun isZero() = delegate.signum() == 0
 
     fun toByte() = value.toByte()
 

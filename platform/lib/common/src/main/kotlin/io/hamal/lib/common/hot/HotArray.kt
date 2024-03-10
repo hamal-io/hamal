@@ -1,23 +1,25 @@
 package io.hamal.lib.common.hot
 
+import io.hamal.lib.common.Decimal
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.util.*
 
-class HotArray(
-    val nodes: List<HotNode>
-) : HotNode {
+@JvmInline
+value class HotArray(
+    val nodes: List<HotNode<*>>
+) : HotNode<HotArray> {
     val size get() : Int = nodes.size
 
     override val isArray get(): Boolean = true
 
-    fun find(idx: Int): HotNode? = if (idx >= 0 && idx < nodes.size) {
+    fun find(idx: Int): HotNode<*>? = if (idx >= 0 && idx < nodes.size) {
         nodes[idx]
     } else {
         null
     }
 
-    fun get(idx: Int): HotNode = find(idx) ?: throw NoSuchElementException("Element at index $idx not found")
+    fun get(idx: Int): HotNode<*> = find(idx) ?: throw NoSuchElementException("Element at index $idx not found")
 
     fun isArray(idx: Int): Boolean = find(idx)?.isArray ?: false
     override fun asArray(): HotArray = this
@@ -37,8 +39,7 @@ class HotArray(
         ?.let { if (it.isNumber) it as HotNumber else null }
         ?: throw IllegalStateException("Not HotNumber")
 
-    fun bigDecimalValue(idx: Int): BigDecimal = asNumber(idx).bigDecimalValue
-    fun bigIntegerValue(idx: Int): BigInteger = asNumber(idx).bigIntegerValue
+    fun decimalValue(idx: Int): Decimal = asNumber(idx).decimalValue
     fun byteValue(idx: Int): Byte = asNumber(idx).byteValue
     fun doubleValue(idx: Int): Double = asNumber(idx).doubleValue
     fun floatValue(idx: Int): Float = asNumber(idx).floatValue
@@ -64,25 +65,14 @@ class HotArray(
     fun stringValue(idx: Int): String = asString(idx).stringValue
 
     fun isTerminal(idx: Int): Boolean = find(idx)?.isTerminal ?: false
-    fun asTerminal(idx: Int): HotTerminal = find(idx)
+    fun asTerminal(idx: Int): HotTerminal<*> = find(idx)
         ?.let { if (it.isTerminal) it as HotTerminal else null }
         ?: throw IllegalStateException("Not HotTerminal")
 
-    override fun deepCopy(): HotNode {
+    override fun deepCopy(): HotArray {
         val builder = builder()
-        nodes.forEach { node: HotNode -> builder.append(node.deepCopy()) }
+        nodes.forEach { node -> builder.append(node.deepCopy()) }
         return builder.build()
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-        other as HotArray
-        return nodes == other.nodes
-    }
-
-    override fun hashCode(): Int {
-        return nodes.hashCode()
     }
 
     companion object {
@@ -94,7 +84,6 @@ class HotArray(
 }
 
 class HotArrayBuilder {
-    val nodes: MutableList<HotNode> = LinkedList()
 
     fun append(value: String): HotArrayBuilder {
         nodes.add(HotString(value))
@@ -146,7 +135,7 @@ class HotArrayBuilder {
         return this
     }
 
-    fun append(value: HotNode): HotArrayBuilder {
+    fun append(value: HotNode<*>): HotArrayBuilder {
         nodes.add(value)
         return this
     }
@@ -156,4 +145,7 @@ class HotArrayBuilder {
     fun build(): HotArray {
         return HotArray(nodes)
     }
+
+    private val nodes: MutableList<HotNode<*>> = LinkedList()
+
 }
