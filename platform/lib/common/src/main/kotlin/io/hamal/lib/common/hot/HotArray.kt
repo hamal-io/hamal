@@ -9,6 +9,7 @@ import java.util.*
 value class HotArray(
     val nodes: List<HotNode<*>>
 ) : HotNode<HotArray> {
+
     val size get() : Int = nodes.size
 
     override val isArray get(): Boolean = true
@@ -19,7 +20,7 @@ value class HotArray(
         null
     }
 
-    fun get(idx: Int): HotNode<*> = find(idx) ?: throw NoSuchElementException("Element at index $idx not found")
+    operator fun get(idx: Int): HotNode<*> = find(idx) ?: throw NoSuchElementException("Element at index $idx not found")
 
     fun isArray(idx: Int): Boolean = find(idx)?.isArray ?: false
     override fun asArray(): HotArray = this

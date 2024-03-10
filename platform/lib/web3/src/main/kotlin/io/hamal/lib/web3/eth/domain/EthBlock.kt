@@ -15,7 +15,7 @@ data class EthBlock(
     val gasLimit: EthUint64,
     val gasUsed: EthUint64,
     val timestamp: EthUint64,
-    val extraData: EthBytes32,
+//    val extraData: EthBytes32,
     val transactions: List<Transaction>
 ) {
     data class Transaction(

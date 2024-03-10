@@ -96,7 +96,7 @@ class EthLruCache(
                     gasLimit = EthUint64(BigInteger.valueOf(persistedEthBlock.gasLimit.toLong())),
                     gasUsed = EthUint64(BigInteger.valueOf(persistedEthBlock.gasUsed.toLong())),
                     timestamp = EthUint64(BigInteger.valueOf(persistedEthBlock.timestamp.toLong())),
-                    extraData = EthBytes32(persistedEthBlock.sha3Uncles),
+//                    extraData = EthBytes32(persistedEthBlock.sha3Uncles),
                     transactions = transactions.map { tx ->
                         EthBlock.Transaction(
                             type = EthUint8(tx.type),

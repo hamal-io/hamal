@@ -39,7 +39,8 @@ class SqliteProxyRepository(
                 gasLimit = block.gasLimit.value.toLong().toULong(),
                 gasUsed = block.gasUsed.value.toLong().toULong(),
                 timestamp = block.timestamp.value.toLong().toULong(),
-                extraData = block.extraData.toByteArray()
+//                extraData = block.extraData.toByteArray()
+                extraData = byteArrayOf()
             )
         )
 
