@@ -5,7 +5,6 @@ logging:
 spring:
   datasource:
     driver-class-name: org.sqlite.JDBC
-
 server:
   tomcat:
     threads:
@@ -15,6 +14,6 @@ server:
 
 io:
   hamal:
-    web3proxy:
+    proxy:
       upstream:
         host: ${UPSTREAM_HOST:http://localhost:10001}
