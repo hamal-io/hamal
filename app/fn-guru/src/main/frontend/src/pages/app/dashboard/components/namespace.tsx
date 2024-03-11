@@ -1,17 +1,19 @@
-import React, {cloneElement, FC, useEffect} from "react";
+import React, {cloneElement, FC, useEffect, useState} from "react";
 import {Card, CardContent, CardDescription, CardHeader} from "@/components/ui/card.tsx";
-import {Checkbox} from "@/components/ui/checkbox.tsx";
 import {PageHeader} from "@/components/page-header.tsx";
 import {useUiState} from "@/hook/ui-state.ts";
 import {useNamespaceGet, useNamespaceUpdate} from "@/hook";
 import {Globe, Layers3, Timer, Webhook} from "lucide-react";
+import {Feature, featuresMap} from "@/types";
+import {Switch} from "@/components/ui/switch.tsx";
 import Element = React.JSX.Element;
-import {NamespaceFeature, NamespaceFeatures} from "@/types";
+
 
 const NamespaceDetailPage = () => {
     const [uiState] = useUiState()
     const [getNamespace, namespace, loading, error] = useNamespaceGet()
     const [updateNamespace, updateRequested, loading2, error2] = useNamespaceUpdate()
+    const [features, setFeatures] = useState(featuresMap)
 
     useEffect(() => {
         const abortController = new AbortController()
@@ -19,10 +21,38 @@ const NamespaceDetailPage = () => {
         return (() => abortController.abort())
     }, [uiState]);
 
+    useEffect(() => {
+        if (namespace) {
+            const t = new Map(featuresMap)
+            /*
+            const acc = namespace.features.split(',')
+            acc.forEach(f => {
+                switch (f) {
+                    case 'schedules':
+                        t.set(Feature.SCHEDULES, true)
+                        break
+                    case 'topics':
+                        t.set(Feature.TOPICS, true)
+                        break
+                    case 'webhooks':
+                        t.set(Feature.WEBHOOKS, true)
+                        break
+                    case 'endpoints':
+                        t.set(Feature.ENDPOINTS, true)
+                        break
+                    default:
+                        break
+                }
+            })
+            */
+             setFeatures(t)
+        }
+    }, [namespace]);
+
     if (error) return "Error"
     if (loading) return "Loading..."
 
-    function handleCheck(value: NamespaceFeature) {
+    function handleCheck(value: Feature) {
         try {
             //TODO-204 updateNamespace(id,value)...
         } catch (e) {
@@ -37,35 +67,35 @@ const NamespaceDetailPage = () => {
                 description="Select workflows for this namespace."
                 actions={[]}
             />
-            <div className={"grid gap-4 grid-cols-2"}>
-                <FeatureCard value={NamespaceFeatures.SCHEDULES}
+            <div className={"flex flex-col gap-4"}>
+                <FeatureCard value={Feature.SCHEDULES}
                              label={"Schedules"}
                              description={"All kinds of timers"}
                              icon={<Timer/>}
-                             checked={true}
+                             checked={features.get(Feature.SCHEDULES)}
                              onCheck={handleCheck}
                 />
-                <FeatureCard value={NamespaceFeatures.TOPICS}
+                <FeatureCard value={Feature.TOPICS}
                              label={"Topics"}
                              description={"Stay tuned"}
                              icon={<Layers3/>}
-                             checked={true}
+                             checked={features.get(Feature.TOPICS)}
                              onCheck={handleCheck}
 
                 />
-                <FeatureCard value={NamespaceFeatures.WEBHOOKS}
+                <FeatureCard value={Feature.WEBHOOKS}
                              label={"Webhooks"}
                              description={"Stay tuned"}
                              icon={<Webhook/>}
-                             checked={true}
+                             checked={features.get(Feature.WEBHOOKS)}
                              onCheck={handleCheck}
 
                 />
-                <FeatureCard value={NamespaceFeatures.ENDPOINTS}
+                <FeatureCard value={Feature.ENDPOINTS}
                              label={"Endpoints"}
                              description={"API yourself"}
                              icon={<Globe/>}
-                             checked={true}
+                             checked={features.get(Feature.ENDPOINTS)}
                              onCheck={handleCheck}
                 />
             </div>
@@ -79,7 +109,7 @@ type FeatureProps = {
     description: string,
     icon: Element,
     checked: boolean,
-    onCheck: (NamespaceFeatures) => void
+    onCheck: (f: Feature) => void
 }
 
 const FeatureCard: FC<FeatureProps> = ({value, label, description, onCheck, icon, checked}) => {
@@ -92,7 +122,7 @@ const FeatureCard: FC<FeatureProps> = ({value, label, description, onCheck, icon
             <CardHeader className={"flex flex-row justify-between"}>
                 {_icon}
                 {label}
-                <Checkbox checked={checked} onCheckedChange={() => onCheck(value)}></Checkbox>
+                <Switch checked={checked} onCheckedChange={() => onCheck(value)}></Switch>
             </CardHeader>
             <CardContent>
                 <CardDescription>

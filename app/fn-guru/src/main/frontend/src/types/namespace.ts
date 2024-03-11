@@ -1,4 +1,3 @@
-
 export interface NamespaceAppendRequested {
     requestId: string;
     requestStatus: string;
@@ -15,6 +14,7 @@ export interface NamespaceUpdateRequested {
 export interface Namespace {
     id: string;
     name: string;
+    features: string;
 }
 
 export interface NamespaceList {
@@ -47,13 +47,16 @@ export class NamespaceNode {
     }
 }
 
-export interface NamespaceFeature {
-    [key: string]: number;
+export const enum Feature {
+    SCHEDULES,
+    TOPICS,
+    WEBHOOKS,
+    ENDPOINTS
 }
 
-export const NamespaceFeatures: NamespaceFeature = {
-    SCHEDULES: 0,
-    TOPICS: 1,
-    WEBHOOKS: 2,
-    ENDPOINTS: 3
-}
+export const featuresMap = new Map<Feature, boolean>([
+    [Feature.SCHEDULES, false],
+    [Feature.TOPICS, false],
+    [Feature.WEBHOOKS, false],
+    [Feature.ENDPOINTS, false]
+])
