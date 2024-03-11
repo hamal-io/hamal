@@ -16,6 +16,10 @@ data class EthGetBlockResponse(
     }
 }
 
+data class EthEmptyResponse(
+    override val id: EthRequestId,
+) : EthResponse
+
 //data class DummyBlock(
 //    val number: EthUint64,
 ////    val hash: EthHash,

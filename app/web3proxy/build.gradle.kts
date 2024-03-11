@@ -29,8 +29,6 @@ dependencies {
         exclude("org.springframework.boot", "spring-boot-starter-json")
         exclude("com.fasterxml.jackson.core", "jackson-annotations")
     }
-
-    implementation(external.apache.commons.compress)
 }
 
 tasks.named<BootJar>("bootJar") {

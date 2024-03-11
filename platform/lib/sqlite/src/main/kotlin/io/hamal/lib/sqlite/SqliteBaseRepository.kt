@@ -10,7 +10,21 @@ abstract class SqliteBaseRepository(
     private val filename: String
 ) : AutoCloseable {
 
-    protected val log = logger(this::class)
+
+    protected abstract fun setupConnection(connection: Connection)
+    protected abstract fun setupSchema(connection: Connection)
+    abstract fun clear()
+
+    override fun close() {
+        if (connection.isOpen) {
+            connection.close()
+        }
+    }
+
+    companion object {
+        @JvmStatic
+        protected val log = logger(this::class)
+    }
 
     private val connectionOnce = Once.default<Connection>()
 
@@ -25,16 +39,6 @@ abstract class SqliteBaseRepository(
             log.debug("Setup schema")
             setupSchema(result)
             result
-        }
-    }
-
-    protected abstract fun setupConnection(connection: Connection)
-    protected abstract fun setupSchema(connection: Connection)
-    abstract fun clear()
-
-    override fun close() {
-        if (connection.isOpen) {
-            connection.close()
         }
     }
 }

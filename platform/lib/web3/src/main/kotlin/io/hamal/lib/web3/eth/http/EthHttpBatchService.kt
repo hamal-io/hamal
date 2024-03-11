@@ -6,21 +6,18 @@ import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.hot.HotObjectBuilder
 import io.hamal.lib.common.serialization.JsonFactoryBuilder
 import io.hamal.lib.domain.Json
-import io.hamal.lib.http.HttpTemplateImpl
+import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.web3.Web3JsonModule
 import io.hamal.lib.web3.eth.EthBatchService
 import io.hamal.lib.web3.eth.abi.type.EthUint64
 import io.hamal.lib.web3.eth.domain.*
-import java.util.concurrent.locks.ReentrantLock
-import kotlin.concurrent.withLock
 import kotlin.reflect.KClass
 
 class EthHttpBatchService(
-    private val httpTemplate: HttpTemplateImpl
+    private val httpTemplate: HttpTemplate
 ) : EthBatchService<EthHttpBatchService> {
 
-    private val lock = ReentrantLock()
     private val resultClasses = mutableListOf<KClass<*>>()
     private val requests = mutableListOf<HotObject>()
 
@@ -67,28 +64,25 @@ class EthHttpBatchService(
     }
 
     override fun execute(): List<EthResponse> {
-        return lock.withLock {
-            if (requests.isEmpty()) {
-                return listOf()
-            }
-
-            val response = httpTemplate
-                .post("/")
-                .body(HotArray.builder().also { builder -> requests.forEach { request -> builder.append(request) } }
-                    .build())
-                .execute(HotArray::class)
-
-
-            return response.nodes.mapIndexed { index, hotNode ->
-                val response = hotNode.asObject()
-                json.deserialize(resultClasses[index], json.serialize(response))
-            }
-                .filterIsInstance<EthResponse>()
-                .also {
-                    requests.clear()
-                    resultClasses.clear()
-                }
+        if (requests.isEmpty()) {
+            return listOf()
         }
+
+        val response = httpTemplate
+            .post("/")
+            .body(HotArray.builder().also { builder -> requests.forEach { request -> builder.append(request) } }
+                .build())
+            .execute(HotArray::class)
+
+        return response.nodes.mapIndexed { index, hotNode ->
+            val response = hotNode.asObject()
+            json.deserialize(resultClasses[index], json.serialize(response))
+        }
+            .filterIsInstance<EthResponse>()
+            .also {
+                requests.clear()
+                resultClasses.clear()
+            }
     }
 
     internal val json = Json(
@@ -118,10 +112,8 @@ class EthHttpBatchService(
     }
 
     private fun <RESPONSE : EthResponse> addRequest(createReq: (Int) -> HotObject, resultClass: KClass<RESPONSE>) {
-        lock.withLock {
-            val reqId = requests.size + 1
-            resultClasses.add(resultClass)
-            requests.add(createReq(reqId))
-        }
+        val reqId = requests.size + 1
+        resultClasses.add(resultClass)
+        requests.add(createReq(reqId))
     }
 }
