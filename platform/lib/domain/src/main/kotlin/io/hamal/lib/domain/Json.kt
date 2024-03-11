@@ -1,21 +1,25 @@
 package io.hamal.lib.domain
 
 import com.google.gson.reflect.TypeToken
+import io.hamal.lib.common.compress.Compressor
+import io.hamal.lib.common.compress.NopCompressor
 import io.hamal.lib.common.serialization.JsonFactoryBuilder
 import java.io.InputStream
 import java.io.InputStreamReader
 import kotlin.reflect.KClass
 
 class Json(
-    factory: JsonFactoryBuilder
+    factory: JsonFactoryBuilder,
+    private val compressor: Compressor = NopCompressor
 ) {
     fun <TYPE : Any> serialize(src: TYPE): String {
         return gsonInstance.toJson(src)
     }
 
+    @Deprecated("Remove this as we can pass now a compressor to the json object")
     fun <TYPE : Any> serializeAndCompress(src: TYPE): ByteArray {
         val json = serialize(src)
-        return json.toByteArray()
+        return compressor.compress(json)
     }
 
     fun <TYPE : Any> deserialize(clazz: KClass<TYPE>, content: String): TYPE {
@@ -34,8 +38,9 @@ class Json(
         return gsonInstance.fromJson(InputStreamReader(stream), typeToken)
     }
 
+    @Deprecated("Remove this as we can pass now a compressor to the json object")
     fun <TYPE : Any> decompressAndDeserialize(clazz: KClass<TYPE>, bytes: ByteArray): TYPE {
-        return gsonInstance.fromJson(String(bytes), clazz.java)!!
+        return gsonInstance.fromJson(compressor.toString(bytes), clazz.java)!!
     }
 
     private val gsonInstance = factory.build()
