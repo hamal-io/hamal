@@ -15,7 +15,7 @@ dependencyResolutionManagement {
         create("external") {
             library("junit", "org.junit.jupiter:junit-jupiter:5.9.1")
             library("hamcrest", "org.hamcrest:hamcrest:2.2")
-            library("gson", "com.google.code.gson:gson:2.10.1")
+            library("gson", "com.google.code.gson", "gson").version("2.10.1")
 
             library("spring-web", "org.springframework.boot", "spring-boot-starter-web").version("3.2.3")
             library("spring-mail", "org.springframework.boot", "spring-boot-starter-mail").version("3.2.3")

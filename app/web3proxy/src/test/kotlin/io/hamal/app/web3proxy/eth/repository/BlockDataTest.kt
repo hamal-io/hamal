@@ -18,7 +18,7 @@ internal class ListByBlockNumbersTest {
             assertThat(result, hasSize(0))
         }
 
-        verifyNothingDownloaded()
+        verifyNoDownloadAttempts()
     }
 
     @Test
@@ -28,14 +28,14 @@ internal class ListByBlockNumbersTest {
             assertBlock0x1284810(result[0])
         }
 
-        verifySingleBlockDownloaded()
+        verifyOneBlockDownloadAttempt()
     }
 
     @Test
     fun `Loads block from database if already download`() {
         repeat(10) {
             testInstance.list("0x1284810")
-            verifySingleBlockDownloaded()
+            verifyOneBlockDownloadAttempt()
         }
 
         resetBatchService()
@@ -45,7 +45,7 @@ internal class ListByBlockNumbersTest {
             assertBlock0x1284810(result[0])
         }
 
-        verifyNothingDownloaded()
+        verifyNoDownloadAttempts()
     }
 
     @Test
@@ -59,7 +59,7 @@ internal class ListByBlockNumbersTest {
             assertBlock0x1284811(result[1])
         }
 
-        verifySingleBlockDownloaded()
+        verifyOneBlockDownloadAttempt()
     }
 
     @Test
@@ -69,7 +69,7 @@ internal class ListByBlockNumbersTest {
             assertBlock0x1284810(result[0])
             assertBlock0x1284811(result[1])
         }
-        verifyTwoBlocksDownloaded()
+        verifyTwoBlocksDownloadAttempts()
 
         resetBatchService()
         testInstance.list("0x1284811", "0x1284810").also { result ->
@@ -77,6 +77,29 @@ internal class ListByBlockNumbersTest {
             assertBlock0x1284811(result[0])
             assertBlock0x1284810(result[1])
         }
+    }
+
+    @Test
+    fun `Future blocks will be loaded as null`() {
+        testInstance.list("0xB4DC0D3", "0xBADC0FFEEBABE").also { result ->
+            assertThat(result, hasSize(2))
+            assertThat(result[0], nullValue())
+            assertThat(result[1], nullValue())
+        }
+        verifyTwoBlocksDownloadAttempts()
+    }
+
+    @Test
+    fun `Can mix existing and future blocks`() {
+        testInstance.list("0x1284811", "0xB4DC0D3", "0xBADC0FFEEBABE", "0x1284810").also { result ->
+            assertThat(result, hasSize(4))
+            assertBlock0x1284811(result[0])
+            assertThat(result[1], nullValue())
+            assertThat(result[2], nullValue())
+            assertBlock0x1284810(result[3])
+        }
+
+        verifyFourBlockDownloadAttempts()
     }
 
     @BeforeEach
@@ -88,7 +111,8 @@ internal class ListByBlockNumbersTest {
         ethBatchServiceFixture.clear()
     }
 
-    private fun assertBlock0x1284810(block: EthBlock) {
+    private fun assertBlock0x1284810(block: EthBlock?) {
+        checkNotNull(block)
         assertThat(block.extraData, equalTo(EthBytes32("0x546974616e2028746974616e6275696c6465722e78797a29")))
         assertThat(block.hash, equalTo(EthHash("0xbe564f59e089bd7fac45b40a4bb0295338a0074d4eaf675937d2498b43ef401c")))
         assertThat(
@@ -139,7 +163,9 @@ internal class ListByBlockNumbersTest {
 
     }
 
-    private fun assertBlock0x1284811(block: EthBlock) {
+    private fun assertBlock0x1284811(block: EthBlock?) {
+        checkNotNull(block)
+
         assertThat(block.number, equalTo(EthUint64("0x1284811")))
         assertThat(block.transactions, hasSize(1))
 
@@ -183,19 +209,27 @@ internal class ListByBlockNumbersTest {
         assertThat(block.withdrawalsRoot, equalTo(EthHash("0x282392326ea162791facce2d95ceda9409bae15736a81434d9cc23b0aa491258")))
     }
 
-    private fun verifyNothingDownloaded() {
+    private fun verifyNoDownloadAttempts() {
         assertThat(ethBatchServiceFixture.responses, empty())
     }
 
-    private fun verifySingleBlockDownloaded() {
+    private fun verifyOneBlockDownloadAttempt() {
         assertThat(ethBatchServiceFixture.responses, hasSize(1))
         assertThat(ethBatchServiceFixture.responses[0], isA(EthGetBlockResponse::class.java))
     }
 
-    private fun verifyTwoBlocksDownloaded() {
+    private fun verifyTwoBlocksDownloadAttempts() {
         assertThat(ethBatchServiceFixture.responses, hasSize(2))
         assertThat(ethBatchServiceFixture.responses[0], isA(EthGetBlockResponse::class.java))
         assertThat(ethBatchServiceFixture.responses[1], isA(EthGetBlockResponse::class.java))
+    }
+
+    private fun verifyFourBlockDownloadAttempts() {
+        assertThat(ethBatchServiceFixture.responses, hasSize(4))
+        assertThat(ethBatchServiceFixture.responses[0], isA(EthGetBlockResponse::class.java))
+        assertThat(ethBatchServiceFixture.responses[1], isA(EthGetBlockResponse::class.java))
+        assertThat(ethBatchServiceFixture.responses[2], isA(EthGetBlockResponse::class.java))
+        assertThat(ethBatchServiceFixture.responses[3], isA(EthGetBlockResponse::class.java))
     }
 
     private val ethBatchServiceFixture = EthBatchServiceFixture()

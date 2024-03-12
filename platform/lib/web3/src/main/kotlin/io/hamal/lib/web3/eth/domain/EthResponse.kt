@@ -9,7 +9,7 @@ sealed interface EthResponse {
 
 data class EthGetBlockResponse(
     override val id: EthRequestId,
-    val result: EthBlock
+    val result: EthBlock?
 ) : EthResponse {
     override fun toString(): String {
         return "EthGetBlockResponse($result)"

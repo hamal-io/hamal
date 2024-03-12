@@ -15,15 +15,22 @@ internal class EthBatchServiceFixture : EthBatchService<EthBatchServiceFixture> 
     }
 
     override fun getBlock(number: EthUint64): EthBatchServiceFixture {
-        responses.add(
-            EthGetBlockResponse(
-                id = EthRequestId(responses.size),
-                result = json.deserialize(
-                    EthBlock::class,
-                    String(this.javaClass.getResourceAsStream("/eth/blocks/${number.value}.json").readAllBytes())
+        val blockData = this.javaClass.getResourceAsStream("/eth/blocks/${number.value}.json")
+        if (blockData == null) {
+            responses.add(
+                EthGetBlockResponse(
+                    id = EthRequestId(responses.size),
+                    result = null
                 )
             )
-        )
+        } else {
+            responses.add(
+                EthGetBlockResponse(
+                    id = EthRequestId(responses.size),
+                    result = json.deserialize(EthBlock::class, String(blockData.readAllBytes()))
+                )
+            )
+        }
 
         return this
     }

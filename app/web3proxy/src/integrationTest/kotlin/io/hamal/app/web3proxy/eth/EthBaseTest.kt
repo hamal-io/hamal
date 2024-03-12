@@ -30,9 +30,11 @@ import kotlin.io.path.createTempDirectory
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 @ActiveProfiles("test")
-internal abstract class BaseTest {
+internal abstract class EthBaseTest {
 
-    protected fun assertBlock0x100002(block: EthBlock) {
+    protected fun assertBlock0x100002(block: EthBlock?) {
+        checkNotNull(block)
+
         assertThat(block.extraData, equalTo(EthBytes32("0xd783010303844765746887676f312e352e31856c696e7578")))
         assertThat(block.gasLimit, equalTo(EthUint64("0x2fefd8")))
         assertThat(block.gasUsed, equalTo(EthUint64("0xf618")))
@@ -59,7 +61,9 @@ internal abstract class BaseTest {
         assertThat(block.withdrawalsRoot, nullValue())
     }
 
-    protected fun assertBlock0x1284810(block: EthBlock) {
+    protected fun assertBlock0x1284810(block: EthBlock?) {
+        checkNotNull(block)
+
         assertThat(block.extraData, equalTo(EthBytes32("0x546974616e2028746974616e6275696c6465722e78797a29")))
         assertThat(block.gasLimit, equalTo(EthUint64("0x1c9c380")))
         assertThat(block.gasUsed, equalTo(EthUint64("0xa0adf6")))

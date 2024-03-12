@@ -21,15 +21,16 @@ class EthRequestHandlerImpl(
     }
 
     override fun invoke(requests: List<EthRequest>): List<EthResponse> {
-        val blocks = requests.filterIsInstance<EthGetBlockByNumberRequest>().map { it.number }
-        val getBlockNumberRequestIds = requests.filterIsInstance<EthGetBlockByNumberRequest>()
-            .associate { it.number to it.id }
-
-        return blockDataRepository.list(blocks).map { block ->
-            EthGetBlockResponse(
-                id = getBlockNumberRequestIds[block.number]!!,
-                result = block
-            )
+        return requests.filterIsInstance<EthGetBlockByNumberRequest>().let { reqs ->
+            blockDataRepository.list(reqs.map { it.number })
+                .zip(reqs)
+                .map { (block, request) ->
+                    EthGetBlockResponse(
+                        id = request.id,
+                        result = block
+                    )
+                }
         }
+
     }
 }

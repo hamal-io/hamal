@@ -10,7 +10,7 @@ import io.hamal.lib.web3.eth.domain.EthGetBlockResponse
 import java.nio.file.Path
 
 interface EthBlockDataRepository {
-    fun list(blockNumbers: List<EthUint64>): List<EthBlock>
+    fun list(blockNumbers: List<EthUint64>): List<EthBlock?>
 }
 
 class EthBlockDataRepositoryImpl(
@@ -21,10 +21,10 @@ class EthBlockDataRepositoryImpl(
     filename = "blocks.db"
 ), EthBlockDataRepository {
 
-    override fun list(blockNumbers: List<EthUint64>): List<EthBlock> {
+    override fun list(blockNumbers: List<EthUint64>): List<EthBlock?> {
         val foundBlocks = blockNumbers.mapNotNull { number -> findBlock(number) }
 
-        val foundBlockNumbers = foundBlocks.mapNotNull { it.number }.toSet()
+        val foundBlockNumbers = foundBlocks.map { it.number }.toSet()
 
         val blockNumbersToDownload = blockNumbers.filterNot { it in foundBlockNumbers }
 
@@ -39,13 +39,13 @@ class EthBlockDataRepositoryImpl(
         val result = ethBatchService
             .execute()
             .filterIsInstance<EthGetBlockResponse>()
-            .map { it.result }
+            .mapNotNull { it.result }
             .also { insertBlocks(it) }
             .plus(foundBlocks)
             .associateBy { it.number }
 
         return blockNumbers.map { number ->
-            result[number]!! // FIXME maybe block was not found e.g. looking for a block which does not exist yet add null block
+            result[number] // FIXME maybe block was not found e.g. looking for a block which does not exist yet add null block
         }
     }
 

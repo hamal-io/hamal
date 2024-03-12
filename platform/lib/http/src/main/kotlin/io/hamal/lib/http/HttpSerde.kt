@@ -27,7 +27,8 @@ class JsonHttpSerdeFactory(private val json: Json) : HttpSerdeFactory {
     override var contentDeserializer = object : HttpContentDeserializer {
         override fun <VALUE : Any> deserialize(inputStream: InputStream, clazz: KClass<VALUE>) = json.deserialize(clazz, inputStream)
         override fun <VALUE : Any> deserializeList(inputStream: InputStream, clazz: KClass<VALUE>) =
-            json.deserialize(object : TypeToken<List<VALUE>>() {}, inputStream)
+             json.deserialize<Array<VALUE>>(TypeToken.getArray(clazz.java).type, inputStream).toList()
+
     }
     override var contentSerializer = object : HttpContentSerializer {
         override fun <VALUE : Any> serialize(value: VALUE, clazz: KClass<VALUE>) = json.serialize(value)
@@ -62,7 +63,7 @@ object JsonHttpContentDeserializer : HttpContentDeserializer {
     }
 
     override fun <VALUE : Any> deserializeList(inputStream: InputStream, clazz: KClass<VALUE>): List<VALUE> {
-        return json.deserialize(object : TypeToken<List<VALUE>>() {}, inputStream)
+        return json.deserialize<Array<VALUE>>(TypeToken.getArray(clazz.java).type, inputStream).toList()
     }
 }
 

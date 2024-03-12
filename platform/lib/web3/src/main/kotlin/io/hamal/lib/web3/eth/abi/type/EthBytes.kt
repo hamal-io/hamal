@@ -38,6 +38,10 @@ class EthBytes32(
         result = 31 * result + numberOfBytes
         return result
     }
+
+    override fun toString(): String {
+        return toPrefixedHexString().toString()
+    }
 }
 
 
