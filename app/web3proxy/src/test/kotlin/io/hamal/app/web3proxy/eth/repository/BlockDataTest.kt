@@ -133,9 +133,11 @@ internal class ListByBlockNumbersTest {
             assertThat(tx.value, equalTo(EthUint256("0x0")))
             assertThat(tx.type, equalTo(EthUint8("0x2")))
             assertThat(tx.accessList, empty())
-
             assertThat(tx.chainId, equalTo(EthUint8("0x1")))
         }
+
+        assertThat(block.withdrawals, hasSize(2))
+        assertThat(block.withdrawalsRoot, equalTo(EthHash("0x79373dfb0ff17072206ea0dae4942afa3791a9699aeacdb74db8a4f8b62b374f")))
 
     }
 
@@ -174,6 +176,15 @@ internal class ListByBlockNumbersTest {
 
             assertThat(tx.chainId, equalTo(EthUint8("0x1")))
         }
+
+        assertThat(block.withdrawals, hasSize(1))
+        block.withdrawals[0].also { withdrawal ->
+            assertThat(withdrawal.index, equalTo(EthUint64("0x2459406")))
+            assertThat(withdrawal.validatorIndex, equalTo(EthUint64("0x11016e")))
+            assertThat(withdrawal.address, equalTo(EthAddress("0xb9d7934878b5fb9610b3fe8a5e441e8fad7e293f")))
+            assertThat(withdrawal.amount, equalTo(EthUint64("0x1176aed")))
+        }
+        assertThat(block.withdrawalsRoot, equalTo(EthHash("0x282392326ea162791facce2d95ceda9409bae15736a81434d9cc23b0aa491258")))
     }
 
     private fun verifyNothingDownloaded() {

@@ -42,7 +42,7 @@ class EthBlockDataRepositoryImpl(
             .map { it.result }
             .also { insertBlocks(it) }
             .plus(foundBlocks)
-            .associateBy { it.number!! }
+            .associateBy { it.number }
 
         return blockNumbers.map { number ->
             result[number]!! // FIXME maybe block was not found e.g. looking for a block which does not exist yet add null block
@@ -66,7 +66,7 @@ class EthBlockDataRepositoryImpl(
         connection.tx {
             blocks.forEach { block ->
                 execute("INSERT OR REPLACE INTO block_data(number, hash, data) VALUES( :number, :hash, :data )") {
-                    set("number", block.number!!.value)
+                    set("number", block.number.value)
                     set("hash", block.hash!!.toPrefixedHexString().value)
                     set("data", json.serializeAndCompress(block))
                 }
