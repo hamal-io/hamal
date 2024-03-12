@@ -62,6 +62,7 @@ object ValueObjectJsonModule : JsonModule() {
 
         this[NamespaceId::class] = ValueObjectIdAdapter(::NamespaceId)
         this[NamespaceName::class] = ValueObjectStringAdapter(::NamespaceName)
+        this[NamespaceFeatures::class] = ValueObjectHotObjectAdapter(::NamespaceFeatures)
 
         this[FuncId::class] = ValueObjectIdAdapter(::FuncId)
         this[FuncName::class] = ValueObjectStringAdapter(::FuncName)
