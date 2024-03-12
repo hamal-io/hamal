@@ -25,6 +25,8 @@ data class EthUint8(override val value: BigInteger) : EthUnsigned() {
     override val numberOfBits = 8
 
     constructor(value: Byte) : this(BigInteger.valueOf(value.toLong()))
+    constructor(value: Long) : this(BigInteger.valueOf(value))
+    constructor(value: String) : this(EthPrefixedHexString(value))
     constructor(value: EthPrefixedHexString) : this(BigInteger(value.toHexString().value, 16))
 
     init {
@@ -36,6 +38,10 @@ data class EthUint8(override val value: BigInteger) : EthUnsigned() {
 data class EthUint16(override val value: BigInteger) : EthUnsigned() {
     override val numberOfBits = 16
 
+    constructor(value: Long) : this(BigInteger.valueOf(value))
+    constructor(value: String) : this(EthPrefixedHexString(value))
+    constructor(value: EthPrefixedHexString) : this(BigInteger(value.toHexString().value, 16))
+
     init {
         ensureValidValue()
     }
@@ -44,6 +50,10 @@ data class EthUint16(override val value: BigInteger) : EthUnsigned() {
 
 data class EthUint32(override val value: BigInteger) : EthUnsigned() {
     override val numberOfBits = 32
+
+    constructor(value: Long) : this(BigInteger.valueOf(value))
+    constructor(value: String) : this(EthPrefixedHexString(value))
+    constructor(value: EthPrefixedHexString) : this(BigInteger(value.toHexString().value, 16))
 
     init {
         ensureValidValue()
@@ -55,6 +65,7 @@ data class EthUint64(override val value: BigInteger) : EthUnsigned() {
     override val numberOfBits = 64
 
     constructor(value: Long) : this(BigInteger.valueOf(value))
+    constructor(value: String) : this(EthPrefixedHexString(value))
     constructor(value: EthPrefixedHexString) : this(BigInteger(value.toHexString().value, 16))
 
     init {
@@ -66,6 +77,10 @@ data class EthUint64(override val value: BigInteger) : EthUnsigned() {
 data class EthUint112(override val value: BigInteger) : EthUnsigned() {
     override val numberOfBits = 112
 
+    constructor(value: Long) : this(BigInteger.valueOf(value))
+    constructor(value: String) : this(EthPrefixedHexString(value))
+    constructor(value: EthPrefixedHexString) : this(BigInteger(value.toHexString().value, 16))
+
     init {
         ensureValidValue()
     }
@@ -74,6 +89,10 @@ data class EthUint112(override val value: BigInteger) : EthUnsigned() {
 
 data class EthUint128(override val value: BigInteger) : EthUnsigned() {
     override val numberOfBits = 128
+
+    constructor(value: Long) : this(BigInteger.valueOf(value))
+    constructor(value: String) : this(EthPrefixedHexString(value))
+    constructor(value: EthPrefixedHexString) : this(BigInteger(value.toHexString().value, 16))
 
     init {
         ensureValidValue()
@@ -84,6 +103,10 @@ data class EthUint128(override val value: BigInteger) : EthUnsigned() {
 data class EthUint160(override val value: BigInteger) : EthUnsigned() {
     override val numberOfBits = 160
 
+    constructor(value: Long) : this(BigInteger.valueOf(value))
+    constructor(value: String) : this(EthPrefixedHexString(value))
+    constructor(value: EthPrefixedHexString) : this(BigInteger(value.toHexString().value, 16))
+
     init {
         ensureValidValue()
     }
@@ -91,8 +114,11 @@ data class EthUint160(override val value: BigInteger) : EthUnsigned() {
 }
 
 data class EthUint256(override val value: BigInteger) : EthUnsigned() {
-    constructor(value: EthPrefixedHexString) : this(BigInteger(value.toHexString().value, 16))
     override val numberOfBits = 256
+
+    constructor(value: Long) : this(BigInteger.valueOf(value))
+    constructor(value: String) : this(EthPrefixedHexString(value))
+    constructor(value: EthPrefixedHexString) : this(BigInteger(value.toHexString().value, 16))
 
     init {
         ensureValidValue()

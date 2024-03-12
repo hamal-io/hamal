@@ -31,6 +31,16 @@ object EthModule : JsonModule() {
             }
 
         })
+        set(EthUint32::class, object : JsonAdapter<EthUint32> {
+            override fun serialize(p0: EthUint32?, p1: Type?, p2: JsonSerializationContext?): JsonElement {
+                return JsonPrimitive(p0!!.toPrefixedHexString().toString())
+            }
+
+            override fun deserialize(p0: JsonElement?, p1: Type?, p2: JsonDeserializationContext?): EthUint32 {
+                return EthUint32(EthPrefixedHexString(p0!!.asString))
+            }
+
+        })
         set(EthUint64::class, object : JsonAdapter<EthUint64> {
             override fun serialize(p0: EthUint64?, p1: Type?, p2: JsonSerializationContext?): JsonElement {
                 return JsonPrimitive(p0!!.toPrefixedHexString().toString())

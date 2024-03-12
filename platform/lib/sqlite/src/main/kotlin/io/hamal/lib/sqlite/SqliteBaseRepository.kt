@@ -21,10 +21,7 @@ abstract class SqliteBaseRepository(
         }
     }
 
-    companion object {
-        @JvmStatic
-        protected val log = logger(this::class)
-    }
+    protected val log = logger(this::class)
 
     private val connectionOnce = Once.default<Connection>()
 

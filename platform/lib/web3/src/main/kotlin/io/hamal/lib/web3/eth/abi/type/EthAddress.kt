@@ -12,6 +12,7 @@ data class EthAddress(
     override val value: EthUint160
 ) : EthType<EthUint160> {
     constructor(value: BigInteger) : this(EthUint160(value))
+    constructor(prefixedHexString: String) : this(EthPrefixedHexString(prefixedHexString).toHexString())
     constructor(hexString: EthPrefixedHexString) : this(hexString.toHexString())
     constructor(hexString: EthHexString) : this(BigInteger(hexString.value, 16))
 
