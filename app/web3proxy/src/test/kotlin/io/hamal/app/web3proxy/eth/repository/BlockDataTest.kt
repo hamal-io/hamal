@@ -102,7 +102,6 @@ internal class ListByBlockNumbersTest {
         assertThat(block.receiptsRoot, equalTo(EthHash("0x1f47a6666ca0f3038ec6e0fc236f58b2aad8933efc24e7f9c28d66c39cc2a45e")))
         assertThat(block.sha3Uncles, equalTo(EthHash("0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347")))
         assertThat(block.size, equalTo(EthUint64("0xfbec")))
-        assertThat(block.sha3Uncles, equalTo(EthHash("0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347")))
         assertThat(block.stateRoot, equalTo(EthHash("0xfaca9e1209e82e72e5700512d0cfedcb156baca691b1cc56e80ea72e4d26dbaf")))
         assertThat(block.timestamp, equalTo(EthUint64("0x65eff103")))
         assertThat(block.gasLimit, equalTo(EthUint64("0x1c9c380")))
@@ -133,7 +132,6 @@ internal class ListByBlockNumbersTest {
             assertThat(tx.value, equalTo(EthUint256("0x0")))
             assertThat(tx.type, equalTo(EthUint8("0x2")))
             assertThat(tx.accessList, empty())
-            assertThat(tx.chainId, equalTo(EthUint8("0x1")))
         }
 
         assertThat(block.withdrawals, hasSize(2))
@@ -173,8 +171,6 @@ internal class ListByBlockNumbersTest {
                 assertThat(item.storageKeys[1], equalTo(EthHash("0x2bb5dee39b6d8067750b2768c936a1015076542d5146ae8ded66775d13e793d8")))
                 assertThat(item.storageKeys[2], equalTo(EthHash("0x042e48394e269bebc2e84ae150cf622009358c6eb88ce48df2852d64234c7b65")))
             }
-
-            assertThat(tx.chainId, equalTo(EthUint8("0x1")))
         }
 
         assertThat(block.withdrawals, hasSize(1))

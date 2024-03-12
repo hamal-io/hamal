@@ -11,6 +11,7 @@ import io.hamal.lib.common.serialization.JsonModule
 import io.hamal.lib.domain.Json
 import io.hamal.lib.domain.vo.ValueObjectJsonModule
 import io.hamal.lib.web3.eth.abi.type.*
+import io.hamal.lib.web3.eth.domain.EthGetBlockByNumberRequest
 import io.hamal.lib.web3.eth.domain.EthMethod
 import io.hamal.lib.web3.eth.domain.EthRequest
 import io.hamal.lib.web3.eth.domain.EthRequestId
@@ -21,6 +22,7 @@ object EthModule : JsonModule() {
         set(EthRequestId::class, EthRequestId.Adapter)
         set(EthMethod::class, EthMethod.Adapter)
         set(EthRequest::class, EthRequest.Adapter)
+        set(EthGetBlockByNumberRequest::class, EthGetBlockByNumberRequest.Adapter)
         set(EthUint8::class, object : JsonAdapter<EthUint8> {
             override fun serialize(p0: EthUint8?, p1: Type?, p2: JsonSerializationContext?): JsonElement {
                 return JsonPrimitive(p0!!.toPrefixedHexString().toString())

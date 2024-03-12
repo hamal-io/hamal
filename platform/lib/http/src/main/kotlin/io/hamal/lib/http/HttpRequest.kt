@@ -26,8 +26,9 @@ interface HttpRequest {
     fun parameter(key: String, value: List<ValueObjectId>): HttpRequest
     fun parameter(key: String, value: Boolean): HttpRequest
     fun execute(): HttpResponse
-    fun <VALUE : Any> execute(clazz: KClass<VALUE>): VALUE
-    fun <VALUE : Any> executeList(clazz: KClass<VALUE>): List<VALUE>
+    fun <RESULT : Any> execute(clazz: KClass<RESULT>): RESULT
+    fun <RESULT : Any> execute(clazz: KClass<RESULT>, action: RESULT.() -> Unit)
+    fun <RESULT : Any> executeList(clazz: KClass<RESULT>): List<RESULT>
     enum class HttpMethod {
         Delete,
         Get,
@@ -202,6 +203,10 @@ class HttpRequestImpl(
             is HttpNoContentResponse -> throw IllegalStateException("No content was returned from the server")
             is HttpErrorResponse -> throw IllegalStateException("Http request was not successful")
         }
+    }
+
+    override fun <RESULT : Any> execute(clazz: KClass<RESULT>, action: (RESULT) -> Unit) {
+        action(execute(clazz))
     }
 
     override fun <VALUE : Any> executeList(clazz: KClass<VALUE>): List<VALUE> {

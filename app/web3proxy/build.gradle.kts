@@ -20,6 +20,7 @@ docker {
     }
 }
 
+
 dependencies {
     implementation(project(":platform:lib:sqlite"))
     implementation(project(":platform:lib:web3"))
@@ -41,6 +42,7 @@ testing {
         configureEach {
             if (this is JvmTestSuite) {
                 dependencies {
+                    implementation(project(":app:web3proxy"))
                     implementation(project(":platform:lib:sqlite"))
                     implementation(project(":platform:lib:web3"))
 

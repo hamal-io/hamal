@@ -22,7 +22,7 @@ data class EthRequestId(val value: Int) {
         }
 
         override fun serialize(src: EthRequestId, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
-            return JsonPrimitive(src.value)
+            return JsonPrimitive(src.value.toString())
         }
     }
 }
@@ -72,4 +72,30 @@ data class EthGetBlockByNumberRequest(
     val fullTransaction: Boolean
 ) : EthRequest {
     override val method: EthMethod = GetBlockByNumber
+
+    object Adapter : JsonAdapter<EthGetBlockByNumberRequest> {
+        override fun serialize(request: EthGetBlockByNumberRequest, type: Type, ctx: JsonSerializationContext): JsonElement {
+            return GsonTransform.fromNode(
+                HotObject.builder()
+                    .set("id", GsonTransform.toNode(ctx.serialize(request.id)))
+                    .set("method", GsonTransform.toNode(ctx.serialize(request.method)))
+                    .set(
+                        "params", HotArray.builder()
+                            .append(HotString(request.number.toPrefixedHexString().value))
+                            .append(request.fullTransaction)
+                            .build()
+                    )
+                    .build()
+            )
+        }
+
+        override fun deserialize(element: JsonElement, type: Type, ctx: JsonDeserializationContext): EthGetBlockByNumberRequest {
+            val obj = element.asJsonObject
+            return EthGetBlockByNumberRequest(
+                id = EthRequestId(obj.get("id").asString.toInt()),
+                number = EthUint64(EthPrefixedHexString(obj.getAsJsonArray("params").get(0).asString)),
+                fullTransaction = obj.getAsJsonArray("params").get(1).asBoolean
+            )
+        }
+    }
 }

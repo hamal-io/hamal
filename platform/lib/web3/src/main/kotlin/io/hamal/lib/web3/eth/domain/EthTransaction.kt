@@ -17,8 +17,7 @@ data class EthTransaction(
     val transactionIndex: EthUint32?,
     val value: EthUint256?,
     val type: EthUint8?,
-    val accessList: List<AccessListItem>,
-    val chainId: EthUint8?
+    val accessList: List<AccessListItem>
 ) {
     data class AccessListItem(
         val address: EthAddress,
