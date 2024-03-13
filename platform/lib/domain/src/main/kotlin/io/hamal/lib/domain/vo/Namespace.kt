@@ -5,8 +5,7 @@ import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.domain.ValueObjectString
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.domain._enum.NamespaceFeature.*
-
+import io.hamal.lib.domain._enum.NamespaceFeature
 
 class NamespaceId(override val value: SnowflakeId) : ValueObjectId() {
     constructor(value: Int) : this(SnowflakeId(value.toLong()))
@@ -28,10 +27,10 @@ class NamespaceFeatures(override var value: HotObject = HotObject.empty) : Value
     companion object {
         val default = NamespaceFeatures(
             HotObject.builder()
-                .set(Schedules.name, true)
-                .set(Topics.name, true)
-                .set(Webhooks.name, true)
-                .set(Endpoints.name, true)
+                .set(NamespaceFeature.SCHEDULES.name, true)
+                .set(NamespaceFeature.TOPICS.name, true)
+                .set(NamespaceFeature.WEBHOOKS.name, true)
+                .set(NamespaceFeature.ENDPOINTS.name, true)
                 .build()
         )
     }

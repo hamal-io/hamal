@@ -1,6 +1,7 @@
 package io.hamal.repository.memory.record.namespace
 
 import io.hamal.lib.common.domain.Count
+import io.hamal.lib.domain._enum.NamespaceFeature
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.repository.api.Namespace
 import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
@@ -30,7 +31,8 @@ class NamespaceMemoryRepository : RecordMemoryRepository<NamespaceId, NamespaceR
                         cmdId = cmd.id,
                         entityId = namespaceId,
                         workspaceId = cmd.workspaceId,
-                        name = cmd.name
+                        name = cmd.name,
+                        features = cmd.features
                     )
                 )
                 (currentVersion(namespaceId)).also(currentProjection::upsert)
@@ -48,7 +50,8 @@ class NamespaceMemoryRepository : RecordMemoryRepository<NamespaceId, NamespaceR
                     NamespaceRecord.Updated(
                         entityId = namespaceId,
                         cmdId = cmd.id,
-                        name = cmd.name ?: current.name
+                        name = cmd.name ?: current.name,
+                        features = cmd.features ?: current.features
                     )
                 )
                 (currentVersion(namespaceId)).also(currentProjection::upsert)
@@ -57,6 +60,10 @@ class NamespaceMemoryRepository : RecordMemoryRepository<NamespaceId, NamespaceR
     }
 
     override fun find(namespaceId: NamespaceId): Namespace? = lock.withLock { currentProjection.find(namespaceId) }
+
+    override fun hasFeature(feature: NamespaceFeature): Boolean {
+        TODO("Not yet implemented")
+    }
 
     override fun list(query: NamespaceQuery): List<Namespace> = lock.withLock { currentProjection.list(query) }
 

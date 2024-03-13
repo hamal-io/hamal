@@ -1,6 +1,7 @@
 package io.hamal.repository.record.namespace
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.domain.vo.NamespaceFeatures
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.domain.vo.WorkspaceId
@@ -16,7 +17,8 @@ data class NamespaceEntity(
     override val recordedAt: RecordedAt,
     override val sequence: RecordSequence,
     val workspaceId: WorkspaceId,
-    var name: NamespaceName? = null
+    var name: NamespaceName? = null,
+    var features: NamespaceFeatures? = null
 
 ) : RecordEntity<NamespaceId, NamespaceRecord, Namespace> {
 
@@ -27,6 +29,7 @@ data class NamespaceEntity(
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
                 name = rec.name,
+                features = rec.features,
                 recordedAt = rec.recordedAt()
             )
 
@@ -35,6 +38,7 @@ data class NamespaceEntity(
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
                 name = rec.name,
+                features = rec.features,
                 recordedAt = rec.recordedAt()
             )
         }
@@ -46,7 +50,8 @@ data class NamespaceEntity(
             id = id,
             updatedAt = recordedAt.toUpdatedAt(),
             workspaceId = workspaceId,
-            name = name!!
+            name = name!!,
+            features = features!!
         )
     }
 }

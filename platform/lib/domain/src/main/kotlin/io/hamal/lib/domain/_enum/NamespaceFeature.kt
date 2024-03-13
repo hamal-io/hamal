@@ -1,17 +1,25 @@
 package io.hamal.lib.domain._enum
 
-enum class NamespaceFeature(val value: Int) {
-    Schedules(0),
-    Topics(1),
-    Webhooks(2),
-    Endpoints(3);
+import kotlin.reflect.full.companionObject
+import kotlin.reflect.full.declaredMemberProperties
+
+class NamespaceFeature private constructor(val name: String, val value: Int) : Comparable<NamespaceFeature> {
+    override fun toString(): String = name
+    override fun compareTo(other: NamespaceFeature): Int = value.compareTo(other.value)
 
     companion object {
-        @JvmStatic
-        fun of(value: Int): NamespaceFeature {
-            val result = NamespaceFeature.entries.find { it.value == value }
-            require(result != null) { "$value not mapped as a namespace feature" }
-            return result
-        }
+        val SCHEDULES = NamespaceFeature("Schedules", 0)
+        val TOPICS = NamespaceFeature("Topics", 1)
+        val WEBHOOKS = NamespaceFeature("Webhooks", 2)
+        val ENDPOINTS = NamespaceFeature("Endpoints", 3)
+    }
+
+    fun of(value: Int): NamespaceFeature {
+        val members =
+            NamespaceFeature::class.companionObject!!.declaredMemberProperties.filterIsInstance<NamespaceFeature>()
+        return members.find { it.value == value } ?: throw IllegalArgumentException("")
     }
 }
+
+
+

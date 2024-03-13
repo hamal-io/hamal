@@ -28,7 +28,8 @@ internal class NamespaceGetController(
         return namespaceGet(node.value).let { namespace ->
             ApiNamespace(
                 id = namespace.id,
-                name = namespace.name
+                name = namespace.name,
+                features = namespace.features
             )
         }
     }

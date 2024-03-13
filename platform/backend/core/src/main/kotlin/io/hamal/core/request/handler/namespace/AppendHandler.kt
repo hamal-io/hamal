@@ -38,7 +38,8 @@ class NamespaceAppendHandler(
                 id = req.cmdId(),
                 namespaceId = req.id,
                 workspaceId = req.workspaceId,
-                name = req.name
+                name = req.name,
+                features = req.features
             )
         )
     }

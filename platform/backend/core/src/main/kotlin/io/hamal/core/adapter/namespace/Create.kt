@@ -30,6 +30,7 @@ class NamespaceCreateAdapter(
             id = generateDomainId(::NamespaceId),
             workspaceId = parent.workspaceId,
             name = req.name,
+            features = req.features
         ).also(requestEnqueue::invoke)
     }
 }

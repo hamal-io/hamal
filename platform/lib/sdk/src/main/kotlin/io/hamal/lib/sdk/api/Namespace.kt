@@ -9,7 +9,8 @@ import io.hamal.lib.http.body
 import io.hamal.lib.sdk.fold
 
 data class ApiNamespaceAppendRequest(
-    override val name: NamespaceName
+    override val name: NamespaceName,
+    override val features: NamespaceFeatures
 ) : NamespaceAppendRequest
 
 data class ApiNamespaceAppendRequested(
@@ -21,6 +22,7 @@ data class ApiNamespaceAppendRequested(
 
 data class ApiNamespaceUpdateRequest(
     override val name: NamespaceName,
+    override val features: NamespaceFeatures
 ) : NamespaceUpdateRequest
 
 data class ApiNamespaceUpdateRequested(
@@ -42,7 +44,7 @@ data class ApiNamespaceList(
 data class ApiNamespace(
     val id: NamespaceId,
     val name: NamespaceName,
-    val features: NamespaceFeatures = NamespaceFeatures.default
+    val features: NamespaceFeatures
 ) : ApiObject()
 
 interface ApiNamespaceService {

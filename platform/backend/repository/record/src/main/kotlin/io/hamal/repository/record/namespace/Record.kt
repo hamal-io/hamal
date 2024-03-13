@@ -1,6 +1,7 @@
 package io.hamal.repository.record.namespace
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.domain.vo.NamespaceFeatures
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.domain.vo.WorkspaceId
@@ -26,13 +27,15 @@ sealed class NamespaceRecord(
         override val entityId: NamespaceId,
         override val cmdId: CmdId,
         val workspaceId: WorkspaceId,
-        val name: NamespaceName
+        val name: NamespaceName,
+        val features: NamespaceFeatures
     ) : NamespaceRecord()
 
     data class Updated(
         override val entityId: NamespaceId,
         override val cmdId: CmdId,
-        val name: NamespaceName
+        val name: NamespaceName,
+        val features: NamespaceFeatures
     ) : NamespaceRecord()
 }
 
