@@ -17,7 +17,8 @@ class NamespaceFeature private constructor(val name: String, val value: Int) : C
     fun of(value: Int): NamespaceFeature {
         val members =
             NamespaceFeature::class.companionObject!!.declaredMemberProperties.filterIsInstance<NamespaceFeature>()
-        return members.find { it.value == value } ?: throw IllegalArgumentException("")
+        return members.find { it.value == value }
+            ?: throw IllegalArgumentException("$value not mapped as a namespace feature")
     }
 }
 

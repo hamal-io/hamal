@@ -2,7 +2,6 @@ package io.hamal.repository.api
 
 import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.domain._enum.NamespaceFeature
 import io.hamal.lib.domain.vo.NamespaceFeatures
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceName
@@ -32,7 +31,7 @@ interface NamespaceCmdRepository : CmdRepository {
         val namespaceId: NamespaceId,
         val workspaceId: WorkspaceId,
         val name: NamespaceName,
-        val features: NamespaceFeatures
+        val features: NamespaceFeatures? = null
     )
 
     data class UpdateCmd(
@@ -45,7 +44,7 @@ interface NamespaceCmdRepository : CmdRepository {
 interface NamespaceQueryRepository {
     fun get(namespaceId: NamespaceId) = find(namespaceId) ?: throw NoSuchElementException("Namespace not found")
     fun find(namespaceId: NamespaceId): Namespace?
-    fun hasFeature(feature: NamespaceFeature): Boolean
+
     fun list(query: NamespaceQuery): List<Namespace>
     fun list(namespaceIds: List<NamespaceId>) = list(
         NamespaceQuery(

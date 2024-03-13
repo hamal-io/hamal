@@ -1,7 +1,7 @@
 package io.hamal.repository.sqlite.record.namespace
 
 import io.hamal.lib.common.domain.Count
-import io.hamal.lib.domain._enum.NamespaceFeature
+import io.hamal.lib.domain.vo.NamespaceFeatures
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.repository.api.Namespace
 import io.hamal.repository.api.NamespaceCmdRepository
@@ -59,7 +59,7 @@ class NamespaceSqliteRepository(
                         entityId = namespaceId,
                         workspaceId = cmd.workspaceId,
                         name = cmd.name,
-                        features = cmd.features
+                        features = cmd.features ?: NamespaceFeatures.default
                     )
                 )
 
@@ -86,10 +86,6 @@ class NamespaceSqliteRepository(
                 currentVersion(namespaceId).also { ProjectionCurrent.upsert(this, it) }
             }
         }
-    }
-
-    override fun hasFeature(feature: NamespaceFeature): Boolean {
-        TODO("Not yet implemented")
     }
 
     override fun find(namespaceId: NamespaceId): Namespace? {

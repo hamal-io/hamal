@@ -16,7 +16,6 @@ class NamespaceId(override val value: SnowflakeId) : ValueObjectId() {
     }
 }
 
-
 class NamespaceName(override val value: String) : ValueObjectString() {
     companion object {
         val default = NamespaceName("default")
@@ -24,6 +23,10 @@ class NamespaceName(override val value: String) : ValueObjectString() {
 }
 
 class NamespaceFeatures(override var value: HotObject = HotObject.empty) : ValueObjectHotObject() {
+    fun hasFeature(feature: NamespaceFeature): Boolean {
+        return value.booleanValue(feature.name)
+    }
+
     companion object {
         val default = NamespaceFeatures(
             HotObject.builder()

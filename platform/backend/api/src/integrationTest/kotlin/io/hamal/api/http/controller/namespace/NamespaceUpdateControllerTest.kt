@@ -1,5 +1,8 @@
 package io.hamal.api.http.controller.namespace
 
+import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.domain._enum.NamespaceFeature
+import io.hamal.lib.domain.vo.NamespaceFeatures
 import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.Accepted
@@ -32,7 +35,7 @@ internal class NamespaceUpdateControllerTest : NamespaceBaseControllerTest() {
     }
 
     @Test
-    fun `Updates namespace`() {
+    fun `Updates namespace name`() {
         val namespace = awaitCompleted(
             appendNamespace(
                 ApiNamespaceAppendRequest(NamespaceName("created-name"))
@@ -52,6 +55,46 @@ internal class NamespaceUpdateControllerTest : NamespaceBaseControllerTest() {
         with(getNamespace(namespaceId)) {
             assertThat(id, equalTo(namespaceId))
             assertThat(name, equalTo(NamespaceName("updated-name")))
+            assertThat(features, equalTo(NamespaceFeatures.default))
+        }
+    }
+
+    @Test
+    fun `Updates namespace name and features`() {
+        val updatedFeatures = NamespaceFeatures(
+            HotObject.builder()
+                .set(NamespaceFeature.SCHEDULES.name, true)
+                .set(NamespaceFeature.TOPICS.name, false)
+                .set(NamespaceFeature.WEBHOOKS.name, true)
+                .set(NamespaceFeature.ENDPOINTS.name, false)
+                .build()
+        )
+
+        val namespace = awaitCompleted(
+            appendNamespace(
+                ApiNamespaceAppendRequest(NamespaceName("created-name"))
+            )
+        )
+
+        val updateNamespaceResponse = httpTemplate.patch("/v1/namespaces/{namespaceId}")
+            .path("namespaceId", namespace.id)
+            .body(
+                ApiNamespaceUpdateRequest(
+                    name = NamespaceName("updated-name"),
+                    features = updatedFeatures
+                )
+            )
+            .execute()
+        assertThat(updateNamespaceResponse.statusCode, equalTo(Accepted))
+        require(updateNamespaceResponse is HttpSuccessResponse) { "request was not successful" }
+
+        val req = updateNamespaceResponse.result(ApiNamespaceUpdateRequested::class)
+        val namespaceId = awaitCompleted(req).id
+
+        with(getNamespace(namespaceId)) {
+            assertThat(id, equalTo(namespaceId))
+            assertThat(name, equalTo(NamespaceName("updated-name")))
+            assertThat(features, equalTo(updatedFeatures))
         }
     }
 

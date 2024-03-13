@@ -3,6 +3,8 @@ package io.hamal.repository
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.domain._enum.NamespaceFeature
+import io.hamal.lib.domain.vo.NamespaceFeatures
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.domain.vo.WorkspaceId
@@ -15,6 +17,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.TestFactory
 import org.junit.jupiter.api.assertThrows
@@ -33,6 +36,7 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
                     namespaceId = NamespaceId(234),
                     workspaceId = WorkspaceId(1),
                     name = NamespaceName("SomeNamespace"),
+                    features = NamespaceFeatures.default
                 )
             )
 
@@ -40,6 +44,10 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
                 assertThat(id, equalTo(NamespaceId(234)))
                 assertThat(workspaceId, equalTo(WorkspaceId(1)))
                 assertThat(name, equalTo(NamespaceName("SomeNamespace")))
+                assertTrue(features.hasFeature(NamespaceFeature.SCHEDULES))
+                assertTrue(features.hasFeature(NamespaceFeature.TOPICS))
+                assertTrue(features.hasFeature(NamespaceFeature.WEBHOOKS))
+                assertTrue(features.hasFeature(NamespaceFeature.ENDPOINTS))
             }
 
             verifyCount(1)
@@ -62,7 +70,8 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
                         id = CmdId(23456),
                         namespaceId = NamespaceId(5),
                         workspaceId = WorkspaceId(333),
-                        name = NamespaceName("second-namespace-name")
+                        name = NamespaceName("second-namespace-name"),
+                        features = NamespaceFeatures.default
                     )
                 )
 
@@ -337,7 +346,8 @@ private fun NamespaceRepository.createNamespace(
             id = cmdId,
             namespaceId = namespaceId,
             workspaceId = workspaceId,
-            name = name
+            name = name,
+            features = NamespaceFeatures.default
         )
     )
 }

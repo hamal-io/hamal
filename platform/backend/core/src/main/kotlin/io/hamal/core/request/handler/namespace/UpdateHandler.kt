@@ -27,7 +27,8 @@ class NamespaceUpdateHandler(
             req.id,
             NamespaceCmdRepository.UpdateCmd(
                 id = req.cmdId(),
-                name = req.name
+                name = req.name,
+                features = req.features
             )
         )
     }
