@@ -32,7 +32,7 @@ class NamespaceMemoryRepository : RecordMemoryRepository<NamespaceId, NamespaceR
                         entityId = namespaceId,
                         workspaceId = cmd.workspaceId,
                         name = cmd.name,
-                        features = cmd.features ?: NamespaceFeatures.default
+                        features = cmd.features ?: NamespaceFeatures.empty
                     )
                 )
                 (currentVersion(namespaceId)).also(currentProjection::upsert)

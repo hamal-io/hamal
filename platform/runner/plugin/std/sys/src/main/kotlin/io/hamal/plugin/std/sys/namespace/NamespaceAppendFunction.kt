@@ -1,6 +1,5 @@
 package io.hamal.plugin.std.sys.namespace
 
-import io.hamal.lib.domain.vo.NamespaceFeatures
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.kua.function.Function1In2Out
@@ -25,8 +24,7 @@ class NamespaceAppendFunction(
         return try {
             val res = sdk.namespace.append(
                 ctx[NamespaceId::class], ApiNamespaceAppendRequest(
-                    name = NamespaceName(arg1.getString("name").stringValue),
-                    features = NamespaceFeatures.default
+                    name = NamespaceName(arg1.getString("name").stringValue)
                 )
             )
 

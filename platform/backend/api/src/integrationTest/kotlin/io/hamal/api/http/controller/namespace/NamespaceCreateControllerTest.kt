@@ -21,7 +21,6 @@ internal class NamespaceCreateControllerTest : NamespaceBaseControllerTest() {
         with(namespaceQueryRepository.get(namespaceId)) {
             assertThat(id, equalTo(namespaceId))
             assertThat(name, equalTo(NamespaceName("test-namespace")))
-            assertThat(features, equalTo(NamespaceFeatures.default))
         }
     }
 
@@ -29,10 +28,8 @@ internal class NamespaceCreateControllerTest : NamespaceBaseControllerTest() {
     fun `Creates namespace with limited features`() {
         val features = NamespaceFeatures(
             HotObject.builder()
-                .set(NamespaceFeature.SCHEDULES.name, true)
-                .set(NamespaceFeature.TOPICS.name, false)
-                .set(NamespaceFeature.WEBHOOKS.name, true)
-                .set(NamespaceFeature.ENDPOINTS.name, false)
+                .set(NamespaceFeature.SCHEDULES.name, NamespaceFeature.SCHEDULES.value)
+                .set(NamespaceFeature.WEBHOOKS.name, NamespaceFeature.WEBHOOKS.value)
                 .build()
         )
 
@@ -54,7 +51,5 @@ internal class NamespaceCreateControllerTest : NamespaceBaseControllerTest() {
             assertFalse(features.hasFeature(NamespaceFeature.TOPICS))
             assertFalse(features.hasFeature(NamespaceFeature.ENDPOINTS))
         }
-
-
     }
 }

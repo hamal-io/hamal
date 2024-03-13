@@ -24,17 +24,23 @@ class NamespaceName(override val value: String) : ValueObjectString() {
 
 class NamespaceFeatures(override var value: HotObject = HotObject.empty) : ValueObjectHotObject() {
     fun hasFeature(feature: NamespaceFeature): Boolean {
-        return value.booleanValue(feature.name)
+        if (value.nodes.isEmpty()) {
+            return false
+        }
+        return value.nodes.containsKey(feature.toString())
     }
 
     companion object {
+        val empty = NamespaceFeatures(HotObject.empty)
+
         val default = NamespaceFeatures(
             HotObject.builder()
-                .set(NamespaceFeature.SCHEDULES.name, true)
-                .set(NamespaceFeature.TOPICS.name, true)
-                .set(NamespaceFeature.WEBHOOKS.name, true)
-                .set(NamespaceFeature.ENDPOINTS.name, true)
+                .set(NamespaceFeature.SCHEDULES.name, NamespaceFeature.SCHEDULES.value)
+                .set(NamespaceFeature.TOPICS.name, NamespaceFeature.TOPICS.value)
+                .set(NamespaceFeature.WEBHOOKS.name, NamespaceFeature.TOPICS.value)
+                .set(NamespaceFeature.ENDPOINTS.name, NamespaceFeature.TOPICS.value)
                 .build()
         )
     }
+
 }
