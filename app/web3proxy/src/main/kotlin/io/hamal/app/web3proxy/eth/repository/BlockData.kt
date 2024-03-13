@@ -18,7 +18,7 @@ class EthBlockDataRepositoryImpl(
     private val ethBatchService: EthBatchService<*>
 ) : SqliteBaseRepository(
     path = path,
-    filename = "blocks.db"
+    filename = "block.db"
 ), EthBlockDataRepository {
 
     override fun list(blockNumbers: List<EthUint64>): List<EthBlock?> {
@@ -35,7 +35,6 @@ class EthBlockDataRepositoryImpl(
         log.info("Download blocks [${blockNumbersToDownload.map { it.toPrefixedHexString() }.joinToString(" ")}]")
         blockNumbersToDownload.forEach(ethBatchService::getBlock)
 
-        // FIXME order by blockNumbers list
         val result = ethBatchService
             .execute()
             .filterIsInstance<EthGetBlockResponse>()
@@ -45,7 +44,7 @@ class EthBlockDataRepositoryImpl(
             .associateBy { it.number }
 
         return blockNumbers.map { number ->
-            result[number] // FIXME maybe block was not found e.g. looking for a block which does not exist yet add null block
+            result[number]
         }
     }
 
