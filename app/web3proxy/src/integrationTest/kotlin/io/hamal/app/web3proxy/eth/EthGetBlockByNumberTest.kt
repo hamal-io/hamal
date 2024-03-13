@@ -18,16 +18,16 @@ internal class EthGetBlockByNumberTest : EthBaseTest() {
         testTemplate
             .body(
                 listOf(
-                    EthGetBlockByNumberRequest(EthRequestId(3), EthUint64("0x1284810"), true),
-                    EthGetBlockByNumberRequest(EthRequestId(1), EthUint64("0x1284810"), true),
-                    EthGetBlockByNumberRequest(EthRequestId(2), EthUint64("0x1284810"), true)
+                    EthGetBlockByNumberRequest(EthRequestId("3"), EthUint64("0x1284810"), true),
+                    EthGetBlockByNumberRequest(EthRequestId("1"), EthUint64("0x1284810"), true),
+                    EthGetBlockByNumberRequest(EthRequestId("2"), EthUint64("0x1284810"), true)
                 )
             )
             .executeList(EthGetBlockResponse::class) { responses ->
                 assertThat(responses, hasSize(3))
-                assertThat(responses[0].id, equalTo(EthRequestId(3)))
-                assertThat(responses[1].id, equalTo(EthRequestId(1)))
-                assertThat(responses[2].id, equalTo(EthRequestId(2)))
+                assertThat(responses[0].id, equalTo(EthRequestId("3")))
+                assertThat(responses[1].id, equalTo(EthRequestId("1")))
+                assertThat(responses[2].id, equalTo(EthRequestId("2")))
             }
     }
 
@@ -36,12 +36,12 @@ internal class EthGetBlockByNumberTest : EthBaseTest() {
         testTemplate
             .body(
                 listOf(
-                    EthGetBlockByNumberRequest(EthRequestId(3), EthUint64("0xB4DC0DE"), true)
+                    EthGetBlockByNumberRequest(EthRequestId("3"), EthUint64("0xB4DC0DE"), true)
                 )
             )
             .executeList(EthGetBlockResponse::class) { responses ->
                 assertThat(responses, hasSize(1))
-                assertThat(responses[0].id, equalTo(EthRequestId(3)))
+                assertThat(responses[0].id, equalTo(EthRequestId("3")))
                 assertThat(responses[0].result, nullValue())
             }
     }
@@ -51,26 +51,26 @@ internal class EthGetBlockByNumberTest : EthBaseTest() {
         testTemplate
             .body(
                 listOf(
-                    EthGetBlockByNumberRequest(EthRequestId(4), EthUint64("0xB4DC0DE"), true),
-                    EthGetBlockByNumberRequest(EthRequestId(3), EthUint64("0x1284810"), true),
-                    EthGetBlockByNumberRequest(EthRequestId(2), EthUint64("0xB4DC0DE"), true),
-                    EthGetBlockByNumberRequest(EthRequestId(1), EthUint64("0x100002"), true)
+                    EthGetBlockByNumberRequest(EthRequestId("4"), EthUint64("0xB4DC0DE"), true),
+                    EthGetBlockByNumberRequest(EthRequestId("3"), EthUint64("0x1284810"), true),
+                    EthGetBlockByNumberRequest(EthRequestId("2"), EthUint64("0xB4DC0DE"), true),
+                    EthGetBlockByNumberRequest(EthRequestId("1"), EthUint64("0x100002"), true)
 
                 )
             )
             .executeList(EthGetBlockResponse::class) { responses ->
                 assertThat(responses, hasSize(4))
 
-                assertThat(responses[0].id, equalTo(EthRequestId(4)))
+                assertThat(responses[0].id, equalTo(EthRequestId("4")))
                 assertThat(responses[0].result, nullValue())
 
-                assertThat(responses[1].id, equalTo(EthRequestId(3)))
+                assertThat(responses[1].id, equalTo(EthRequestId("3")))
                 assertBlock0x1284810(responses[1].result)
 
-                assertThat(responses[2].id, equalTo(EthRequestId(2)))
+                assertThat(responses[2].id, equalTo(EthRequestId("2")))
                 assertThat(responses[2].result, nullValue())
 
-                assertThat(responses[3].id, equalTo(EthRequestId(1)))
+                assertThat(responses[3].id, equalTo(EthRequestId("1")))
                 assertBlock0x100002(responses[3].result)
             }
     }
@@ -79,9 +79,9 @@ internal class EthGetBlockByNumberTest : EthBaseTest() {
     @Test
     fun `Request single block with full transaction list by EthGetBlockByNumberRequest`() {
         testTemplate
-            .body(EthGetBlockByNumberRequest(EthRequestId(231123), EthUint64("0x1284810"), true))
+            .body(EthGetBlockByNumberRequest(EthRequestId("231123"), EthUint64("0x1284810"), true))
             .execute(EthGetBlockResponse::class) {
-                assertThat(id, equalTo(EthRequestId(231123)))
+                assertThat(id, equalTo(EthRequestId("231123")))
                 assertBlock0x1284810(result)
             }
     }
@@ -98,7 +98,7 @@ internal class EthGetBlockByNumberTest : EthBaseTest() {
                     .build()
             )
             .execute(EthGetBlockResponse::class) {
-                assertThat(id, equalTo(EthRequestId(23)))
+                assertThat(id, equalTo(EthRequestId("23")))
                 assertBlock0x100002(result)
             }
     }
@@ -117,7 +117,7 @@ internal class EthGetBlockByNumberTest : EthBaseTest() {
             """.trimIndent()
             )
             .execute(EthGetBlockResponse::class) {
-                assertThat(id, equalTo(EthRequestId(23)))
+                assertThat(id, equalTo(EthRequestId("23")))
                 assertBlock0x100002(result)
             }
     }
@@ -126,17 +126,17 @@ internal class EthGetBlockByNumberTest : EthBaseTest() {
     fun `Request multiple blocks with full transaction list by EthGetBlockByNumberRequest`() {
         testTemplate.body(
             listOf(
-                EthGetBlockByNumberRequest(EthRequestId(2), EthUint64("0x100002"), true),
-                EthGetBlockByNumberRequest(EthRequestId(1), EthUint64("0x1284810"), true)
+                EthGetBlockByNumberRequest(EthRequestId("2"), EthUint64("0x100002"), true),
+                EthGetBlockByNumberRequest(EthRequestId("1"), EthUint64("0x1284810"), true)
             )
         ).executeList(EthGetBlockResponse::class) { responses ->
             assertThat(responses, hasSize(2))
 
-            assertThat(responses[0].id, equalTo(EthRequestId(2)))
+            assertThat(responses[0].id, equalTo(EthRequestId("2")))
             assertBlock0x100002(responses[0].result)
 
 
-            assertThat(responses[1].id, equalTo(EthRequestId(1)))
+            assertThat(responses[1].id, equalTo(EthRequestId("1")))
             assertBlock0x1284810(responses[1].result)
         }
     }
@@ -166,9 +166,9 @@ internal class EthGetBlockByNumberTest : EthBaseTest() {
             )
             .executeList(EthGetBlockResponse::class) { responses ->
                 assertThat(responses, hasSize(2))
-                assertThat(responses[0].id, equalTo(EthRequestId(2)))
+                assertThat(responses[0].id, equalTo(EthRequestId("2")))
                 assertBlock0x100002(responses[0].result)
-                assertThat(responses[1].id, equalTo(EthRequestId(1)))
+                assertThat(responses[1].id, equalTo(EthRequestId("1")))
                 assertBlock0x1284810(responses[1].result)
             }
     }
@@ -194,9 +194,9 @@ internal class EthGetBlockByNumberTest : EthBaseTest() {
             )
             .executeList(EthGetBlockResponse::class) { responses ->
                 assertThat(responses, hasSize(2))
-                assertThat(responses[0].id, equalTo(EthRequestId(2)))
+                assertThat(responses[0].id, equalTo(EthRequestId("2")))
                 assertBlock0x100002(responses[0].result)
-                assertThat(responses[1].id, equalTo(EthRequestId(1)))
+                assertThat(responses[1].id, equalTo(EthRequestId("1")))
                 assertBlock0x1284810(responses[1].result)
             }
     }

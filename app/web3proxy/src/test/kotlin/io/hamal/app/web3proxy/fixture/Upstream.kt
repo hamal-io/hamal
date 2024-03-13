@@ -19,14 +19,14 @@ internal class EthBatchServiceFixture : EthBatchService<EthBatchServiceFixture> 
         if (blockData == null) {
             responses.add(
                 EthGetBlockResponse(
-                    id = EthRequestId(responses.size),
+                    id = EthRequestId(responses.size.toString()),
                     result = null
                 )
             )
         } else {
             responses.add(
                 EthGetBlockResponse(
-                    id = EthRequestId(responses.size),
+                    id = EthRequestId(responses.size.toString()),
                     result = json.deserialize(EthBlock::class, String(blockData.readAllBytes()))
                 )
             )

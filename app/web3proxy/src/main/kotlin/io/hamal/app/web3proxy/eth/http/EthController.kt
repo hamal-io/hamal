@@ -5,8 +5,8 @@ import io.hamal.app.web3proxy.json
 import io.hamal.lib.common.hot.HotArray
 import io.hamal.lib.common.hot.HotNode
 import io.hamal.lib.common.hot.HotObject
-import io.hamal.lib.web3.eth.domain.EthRequest
-import io.hamal.lib.web3.eth.domain.EthResponse
+import io.hamal.lib.web3.eth.domain.*
+import io.hamal.lib.web3.eth.domain.EthError.ErrorCode.*
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -35,8 +35,52 @@ internal class EthController(
     }
 
     private fun handleObject(@RequestBody request: HotObject): ResponseEntity<EthResponse> {
-        val ethRequest = json.deserialize(EthRequest::class, json.serialize(request))
-        return ResponseEntity.ok(handle(ethRequest))
+        val (err, req) = parseRequest(request)
+        if (err != null) {
+            return ResponseEntity.ok(err)
+        }
+        return ResponseEntity.ok(handle(req!!))
     }
 
+    private fun parseRequest(request: HotObject): Pair<EthErrorResponse?, EthRequest?> {
+        return try {
+            val ethRequest = json.deserialize(EthRequest::class, json.serialize(request))
+            null to ethRequest
+        } catch (e: Throwable) {
+            e.printStackTrace()
+            println(e.message)
+            when {
+                e.message?.contains("does not start with 0x") == true -> {
+                    EthErrorResponse(
+                        id = EthRequestId(request["id"].stringValue),
+                        error = EthError(InvalidParams, "invalid argument: hex string without 0x prefix")
+                    ) to null
+                }
+
+                e.message?.contains("does not match hex pattern") == true -> {
+                    EthErrorResponse(
+                        id = EthRequestId(request["id"].stringValue),
+                        error = EthError(InvalidParams, "invalid argument: hex string")
+                    ) to null
+                }
+
+                e.message?.contains("out of bounds for length") == true -> {
+                    EthErrorResponse(
+                        id = EthRequestId(request["id"].stringValue),
+                        error = EthError(InvalidParams, "missing argument")
+                    ) to null
+                }
+                e.message?.contains("EthMethod not found") == true -> {
+                    EthErrorResponse(
+                        id = EthRequestId(request["id"].stringValue),
+                        error = EthError(MethodNotFound, "method not supported")
+                    ) to null
+                }
+                else -> EthErrorResponse(
+                    id = EthRequestId(request["id"].stringValue),
+                    error = EthError(InternalError, "Unexpected error")
+                ) to null
+            }
+        }
+    }
 }

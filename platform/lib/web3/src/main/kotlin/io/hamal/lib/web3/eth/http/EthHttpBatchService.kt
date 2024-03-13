@@ -60,7 +60,7 @@ class EthHttpBatchService(
     )
 
     override fun lastRequestId(): EthRequestId {
-        return EthRequestId(requests.size)
+        return EthRequestId(requests.size.toString())
     }
 
     override fun execute(): List<EthResponse> {

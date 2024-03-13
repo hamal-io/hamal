@@ -14,15 +14,15 @@ import io.hamal.lib.web3.eth.abi.type.EthUint64
 import io.hamal.lib.web3.eth.domain.EthMethod.GetBlockByNumber
 import java.lang.reflect.Type
 
-data class EthRequestId(val value: Int) {
+data class EthRequestId(val value: String) {
     object Adapter : JsonAdapter<EthRequestId> {
 
         override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): EthRequestId {
-            return EthRequestId(json.asInt)
+            return EthRequestId(json.asString)
         }
 
         override fun serialize(src: EthRequestId, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
-            return JsonPrimitive(src.value.toString())
+            return JsonPrimitive(src.value)
         }
     }
 }
@@ -53,9 +53,9 @@ sealed interface EthRequest {
 
         override fun deserialize(element: JsonElement, type: Type, ctx: JsonDeserializationContext): EthRequest {
             val obj = element.asJsonObject
-            return when (obj.get("method").asString) {
-                GetBlockByNumber.value -> EthGetBlockByNumberRequest(
-                    id = EthRequestId(obj.get("id").asString.toInt()),
+            return when (EthMethod.of(obj.get("method").asString)) {
+                GetBlockByNumber -> EthGetBlockByNumberRequest(
+                    id = EthRequestId(obj.get("id").asString),
                     number = EthUint64(EthPrefixedHexString(obj.getAsJsonArray("params").get(0).asString)),
                     fullTransaction = obj.getAsJsonArray("params").get(1).asBoolean
                 )
@@ -92,7 +92,7 @@ data class EthGetBlockByNumberRequest(
         override fun deserialize(element: JsonElement, type: Type, ctx: JsonDeserializationContext): EthGetBlockByNumberRequest {
             val obj = element.asJsonObject
             return EthGetBlockByNumberRequest(
-                id = EthRequestId(obj.get("id").asString.toInt()),
+                id = EthRequestId(obj.get("id").asString),
                 number = EthUint64(EthPrefixedHexString(obj.getAsJsonArray("params").get(0).asString)),
                 fullTransaction = obj.getAsJsonArray("params").get(1).asBoolean
             )

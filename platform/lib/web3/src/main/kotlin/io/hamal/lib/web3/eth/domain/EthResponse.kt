@@ -3,23 +3,35 @@ package io.hamal.lib.web3.eth.domain
 import io.hamal.lib.web3.eth.abi.type.EthPrefixedHexString
 import io.hamal.lib.web3.eth.abi.type.EthUint64
 
-sealed interface EthResponse {
-    val id: EthRequestId
+sealed class EthResponse {
+    val jsonrpc: String = "2.0"
+    abstract val id: EthRequestId
 }
+
 
 data class EthGetBlockResponse(
     override val id: EthRequestId,
     val result: EthBlock?
-) : EthResponse {
+) : EthResponse() {
     override fun toString(): String {
         return "EthGetBlockResponse($result)"
     }
 }
 
+data class EthErrorResponse(
+    override val id: EthRequestId,
+    val error: EthError
+) : EthResponse() {
+    override fun toString(): String {
+        return "EthError($error)"
+    }
+}
+
+
 data class EthGetLiteBlockResponse(
     override val id: EthRequestId,
     val result: EthLiteBlock
-) : EthResponse {
+) : EthResponse() {
     override fun toString(): String {
         return "EthGetLiteBlockResponse($result)"
     }
@@ -28,7 +40,7 @@ data class EthGetLiteBlockResponse(
 class EthGetBlockNumberResponse(
     override val id: EthRequestId,
     val result: EthUint64
-) : EthResponse {
+) : EthResponse() {
     override fun toString(): String {
         return "EthGetBlockNumberResponse($result)"
     }
@@ -38,7 +50,7 @@ class EthGetBlockNumberResponse(
 data class EthCallResponse(
     override val id: EthRequestId,
     val result: EthPrefixedHexString
-) : EthResponse {
+) : EthResponse() {
     override fun toString(): String {
         return "EthCallResponse($result)"
     }

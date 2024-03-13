@@ -26,6 +26,7 @@ interface HttpRequest {
     fun parameter(key: String, value: List<ValueObjectId>): HttpRequest
     fun parameter(key: String, value: Boolean): HttpRequest
     fun execute(): HttpResponse
+    fun <RESULT : Any> execute(action: HttpResponse.() -> RESULT): RESULT
     fun <RESULT : Any> execute(clazz: KClass<RESULT>): RESULT
     fun <RESULT : Any> execute(clazz: KClass<RESULT>, action: RESULT.() -> Unit)
     fun <RESULT : Any> executeList(clazz: KClass<RESULT>): List<RESULT>
@@ -196,6 +197,10 @@ class HttpRequestImpl(
         } catch (e: Exception) {
             throw HttpException(e)
         }
+    }
+
+    override fun <RESULT : Any> execute(action: HttpResponse.() -> RESULT): RESULT {
+        return action(execute())
     }
 
     override fun <RESULT : Any> execute(clazz: KClass<RESULT>): RESULT {
