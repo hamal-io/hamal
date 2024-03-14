@@ -22,6 +22,7 @@ internal class NamespaceUpdateController(
         @PathVariable("namespaceId") namespaceId: NamespaceId,
         @RequestBody req: ApiNamespaceUpdateRequest
     ): ResponseEntity<ApiRequested> = retry {
+        val x = req.features
         namespaceUpdate(namespaceId, req).accepted()
     }
 }

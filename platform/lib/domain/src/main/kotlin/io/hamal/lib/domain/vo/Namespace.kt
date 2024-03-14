@@ -25,11 +25,17 @@ class NamespaceName(override val value: String) : ValueObjectString() {
 
 class NamespaceFeatures(override var value: HotObject = HotObject.empty) : ValueObjectHotObject() {
 
+    init {
+        value.nodes.forEach { feature ->
+            require(
+                NamespaceFeature.entries.any { validFeatures ->
+                    validFeatures.name == feature.key && validFeatures.value == feature.value.intValue
+                }
+            ) { IllegalArgumentException("$feature is not a valid feature.") }
+        }
+    }
 
     fun hasFeature(feature: NamespaceFeature): Boolean {
-        if (value.nodes.isEmpty()) {
-            return false
-        }
         return value.nodes.containsKey(feature.toString())
     }
 
@@ -43,5 +49,4 @@ class NamespaceFeatures(override var value: HotObject = HotObject.empty) : Value
                 .build()
         )
     }
-
 }
