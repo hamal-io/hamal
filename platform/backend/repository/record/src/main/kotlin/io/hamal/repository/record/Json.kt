@@ -3,10 +3,10 @@ package io.hamal.repository.record
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
-import io.hamal.lib.common.hot.HotJsonModule
+import io.hamal.lib.common.hot.HotObjectModule
 import io.hamal.lib.common.serialization.JsonAdapter
 import io.hamal.lib.common.serialization.JsonFactoryBuilder
-import io.hamal.lib.common.serialization.JsonModule
+import io.hamal.lib.common.serialization.HotModule
 import io.hamal.lib.common.serialization.ValueObjectStringAdapter
 import io.hamal.lib.domain.Json
 import io.hamal.lib.domain.vo.ValueObjectJsonModule
@@ -28,7 +28,7 @@ import io.hamal.repository.record.workspace.WorkspaceRecord
 import java.lang.reflect.Type
 import kotlin.reflect.KClass
 
-object RecordJsonModule : JsonModule() {
+object RecordJsonModule : HotModule() {
     init {
         this[RecordClass::class] = ValueObjectStringAdapter(::RecordClass)
         this[AccountRecord::class] = AccountRecord.Adapter
@@ -51,7 +51,7 @@ object RecordJsonModule : JsonModule() {
 val json = Json(
     JsonFactoryBuilder()
         .register(DomainJsonModule)
-        .register(HotJsonModule)
+        .register(HotObjectModule)
         .register(RecordJsonModule)
         .register(ValueObjectJsonModule)
 )

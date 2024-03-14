@@ -18,7 +18,7 @@ interface HttpTemplate {
 class HttpTemplateImpl(
     override var baseUrl: String = "",
     private val headerFactory: HttpMutableHeaders.() -> Unit = {},
-    private var serdeFactory: HttpSerdeFactory.() -> Unit = {},
+    private var serdeFactory: HttpSerdeFactory = DefaultHttpSerdeFactory,
     private var httpClientFactory: HttpClientBuilder.() -> Unit = {}
 ) : HttpTemplate {
     override fun delete(url: String): HttpRequest = requestWith(Delete, url)
@@ -31,7 +31,7 @@ class HttpTemplateImpl(
             method = method,
             url = baseUrl + url,
             headers = HttpMutableHeaders().apply(headerFactory),
-            serdeFactory = DefaultHttpSerdeFactory.apply(serdeFactory),
+            serdeFactory = serdeFactory,
             client = HttpClientBuilder.create().apply(httpClientFactory).build()
         )
     }

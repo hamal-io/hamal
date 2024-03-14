@@ -1,6 +1,7 @@
 package io.hamal.lib.web3.eth.abi.type
 
 import io.hamal.lib.web3.util.ByteWindow
+import io.hamal.lib.web3.util.Web3Formatter
 import java.nio.ByteBuffer
 
 sealed interface EthBytes : EthType<ByteArray> {
@@ -12,12 +13,14 @@ sealed interface EthBytes : EthType<ByteArray> {
 //    }
     override fun toByteArray(): ByteArray = value
     override fun toByteWindow() = ByteWindow(ByteBuffer.wrap(value), numberOfBytes)
-    fun toPrefixedHexString() = EthPrefixedHexString(value)
+    fun toPrefixedHexString() = EthPrefixedHexString("0x${Web3Formatter.formatToHex(value)}")
 }
 
 class EthBytes32(
     override val value: ByteArray
 ) : EthBytes {
+
+    constructor(prefixedHexString: String) : this(EthPrefixedHexString(prefixedHexString))
     constructor(prefixedHexString: EthPrefixedHexString) : this(prefixedHexString.toByteWindow().next())
 
     override val numberOfBytes = 32
@@ -34,6 +37,10 @@ class EthBytes32(
         var result = value.contentHashCode()
         result = 31 * result + numberOfBytes
         return result
+    }
+
+    override fun toString(): String {
+        return toPrefixedHexString().toString()
     }
 }
 

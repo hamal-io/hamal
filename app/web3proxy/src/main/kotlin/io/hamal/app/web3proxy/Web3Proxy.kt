@@ -1,12 +1,12 @@
-package io.hamal.app.proxy
+package io.hamal.app.web3proxy
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
+
 @SpringBootApplication
-class Proxy
+class Web3Proxy
 
 fun main(args: Array<String>) {
-    runApplication<Proxy>(*args)
+    runApplication<Web3Proxy>(*args)
 }
-

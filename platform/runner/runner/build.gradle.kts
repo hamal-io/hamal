@@ -3,7 +3,7 @@ import org.springframework.boot.gradle.tasks.bundling.BootJar
 plugins {
     id("hamal.common")
     application
-    id("org.springframework.boot").version("3.0.5")
+    id("org.springframework.boot").version("3.2.3")
 }
 apply(plugin = "io.spring.dependency-management")
 
