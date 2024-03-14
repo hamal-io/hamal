@@ -6,7 +6,7 @@ import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.serialization.*
 import io.hamal.lib.domain.State
 
-object ValueObjectJsonModule : JsonModule() {
+object ValueObjectJsonModule : HotModule() {
     init {
         this[AccountId::class] = ValueObjectIdAdapter(::AccountId)
         this[Email::class] = ValueObjectStringAdapter(::Email)

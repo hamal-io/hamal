@@ -1,6 +1,6 @@
 package io.hamal.app.web3proxy.http.controller
 
-import io.hamal.app.web3proxy.json
+import io.hamal.lib.web3.eth.json
 import jakarta.servlet.ServletException
 import jakarta.servlet.http.HttpServletResponse
 import jakarta.servlet.http.HttpServletResponse.*

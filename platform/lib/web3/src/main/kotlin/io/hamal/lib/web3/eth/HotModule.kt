@@ -1,13 +1,13 @@
-package io.hamal.app.web3proxy
+package io.hamal.lib.web3.eth
 
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 import com.google.gson.JsonPrimitive
 import com.google.gson.JsonSerializationContext
-import io.hamal.lib.common.hot.HotJsonModule
+import io.hamal.lib.common.hot.HotObjectModule
+import io.hamal.lib.common.serialization.HotModule
 import io.hamal.lib.common.serialization.JsonAdapter
 import io.hamal.lib.common.serialization.JsonFactoryBuilder
-import io.hamal.lib.common.serialization.JsonModule
 import io.hamal.lib.domain.Json
 import io.hamal.lib.domain.vo.ValueObjectJsonModule
 import io.hamal.lib.web3.eth.abi.type.*
@@ -17,12 +17,13 @@ import io.hamal.lib.web3.eth.domain.EthRequest
 import io.hamal.lib.web3.eth.domain.EthRequestId
 import java.lang.reflect.Type
 
-object EthModule : JsonModule() {
+object EthModule : HotModule() {
+
     init {
         set(EthRequestId::class, EthRequestId.Adapter)
-        set(EthMethod::class, EthMethod.Adapter)
         set(EthRequest::class, EthRequest.Adapter)
         set(EthGetBlockByNumberRequest::class, EthGetBlockByNumberRequest.Adapter)
+        set(EthMethod::class, EthMethod.Adapter)
         set(EthUint8::class, object : JsonAdapter<EthUint8> {
             override fun serialize(p0: EthUint8?, p1: Type?, p2: JsonSerializationContext?): JsonElement {
                 return JsonPrimitive(p0!!.toPrefixedHexString().toString())
@@ -112,7 +113,7 @@ object EthModule : JsonModule() {
 
 val json = Json(
     JsonFactoryBuilder()
-        .register(HotJsonModule)
+        .register(HotObjectModule)
         .register(ValueObjectJsonModule)
         .register(EthModule)
 

@@ -190,7 +190,7 @@ internal class ListByBlockNumbersTest {
             assertThat(tx.accessList, hasSize(6))
 
 
-            tx.accessList[0].also { item ->
+            tx.accessList!![0].also { item ->
                 assertThat(item.address, equalTo(EthAddress("0x6123b0049f904d730db3c36a31167d9d4121fa6b")))
                 assertThat(item.storageKeys, hasSize(3))
                 assertThat(item.storageKeys[0], equalTo(EthHash("0x0000000000000000000000000000000000000000000000000000000000000006")))
@@ -200,7 +200,7 @@ internal class ListByBlockNumbersTest {
         }
 
         assertThat(block.withdrawals, hasSize(1))
-        block.withdrawals[0].also { withdrawal ->
+        block.withdrawals!![0].also { withdrawal ->
             assertThat(withdrawal.index, equalTo(EthUint64("0x2459406")))
             assertThat(withdrawal.validatorIndex, equalTo(EthUint64("0x11016e")))
             assertThat(withdrawal.address, equalTo(EthAddress("0xb9d7934878b5fb9610b3fe8a5e441e8fad7e293f")))
@@ -234,10 +234,11 @@ internal class ListByBlockNumbersTest {
 
     private val ethBatchServiceFixture = EthBatchServiceFixture()
 
-    private val testInstance = EthBlockDataRepositoryImpl(
-        path = createTempDirectory("web3proxy"),
+    private val testInstance = EthBlockRepositoryImpl(
+        path = createTempDirectory("web3proxy_block"),
+        addressRepository = EthAddressRepositoryImpl(createTempDirectory("web3proxy_address")),
         ethBatchService = ethBatchServiceFixture
     )
 
-    private fun EthBlockDataRepositoryImpl.list(vararg blockNumbers: String) = list(blockNumbers.map { EthUint64(it) })
+    private fun EthBlockRepositoryImpl.list(vararg blockNumbers: String) = list(blockNumbers.map { EthUint64(it) })
 }

@@ -6,21 +6,21 @@ import io.hamal.lib.web3.eth.abi.type.EthAddress
 import io.hamal.lib.web3.eth.abi.type.EthPrefixedHexString
 import java.nio.file.Path
 
-interface AddressRepository {
+interface EthAddressRepository {
 
-    fun resolve(address: EthAddress): Long
+    fun resolve(address: EthAddress): EthAddressId
 
-    fun resolve(addresses: List<EthAddress>): Map<EthAddress, Long>
+    fun resolve(addresses: Set<EthAddress>): Map<EthAddress, EthAddressId>
 
-    fun find(addressIds: Iterable<Long>): Map<Long, EthAddress>
+    fun list(addressIds: Iterable<EthAddressId>): Map<EthAddressId, EthAddress>
 }
 
-class AddressRepositoryImpl(
+class EthAddressRepositoryImpl(
     path: Path
 ) : SqliteBaseRepository(
     path = path,
     filename = "address.db"
-), AddressRepository {
+), EthAddressRepository {
 
     override fun setupSchema(connection: Connection) {
         connection.execute(
@@ -34,36 +34,36 @@ class AddressRepositoryImpl(
         )
     }
 
-    override fun resolve(address: EthAddress): Long {
-        return resolve(listOf(address)).entries.first().value
+    override fun resolve(address: EthAddress): EthAddressId {
+        return resolve(setOf(address)).entries.first().value
     }
 
-    override fun resolve(addresses: List<EthAddress>): Map<EthAddress, Long> {
+    override fun resolve(addresses: Set<EthAddress>): Map<EthAddress, EthAddressId> {
         val strings = addresses.map { it.toPrefixedHexString().value }
         val inClause = "(${strings.joinToString(",") { "'$it'" }})"
 
         return connection.tx {
             strings.forEach { address ->
-                execute("INSERT OR IGNORE INTO addresses(address) VALUES( :address )") {
+                execute("INSERT OR IGNORE INTO address(address) VALUES( :address )") {
                     set("address", address)
                 }
             }
-            executeQuery("""SELECT * FROM addresses WHERE address in $inClause""") {
+            executeQuery("""SELECT * FROM address WHERE address in $inClause""") {
                 map { rs ->
-                    EthAddress(EthPrefixedHexString(rs.getString("address"))) to rs.getLong("id")
+                    EthAddress(EthPrefixedHexString(rs.getString("address"))) to EthAddressId(rs.getLong("id"))
                 }
             }
         }.toMap()
 
     }
 
-    override fun find(addressIds: Iterable<Long>): Map<Long, EthAddress> {
-        val inClause = "(${addressIds.joinToString(",") { "$it" }})"
+    override fun list(addressIds: Iterable<EthAddressId>): Map<EthAddressId, EthAddress> {
+        val inClause = "(${addressIds.joinToString(",") { "${it.value}" }})"
 
         return connection.tx {
-            executeQuery("""SELECT * FROM addresses WHERE id in $inClause""") {
+            executeQuery("""SELECT * FROM address WHERE id in $inClause""") {
                 map { rs ->
-                    rs.getLong("id") to EthAddress(EthPrefixedHexString(rs.getString("address")))
+                    EthAddressId(rs.getLong("id")) to EthAddress(EthPrefixedHexString(rs.getString("address")))
                 }
             }
         }.toMap()

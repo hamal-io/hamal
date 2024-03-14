@@ -8,7 +8,7 @@ data class EthBlock(
     val extraData: EthBytes32,
     val gasLimit: EthUint64,
     val gasUsed: EthUint64,
-    val hash: EthHash?,
+    val hash: EthHash,
     val logsBloom: EthPrefixedHexString,
     val miner: EthAddress,
     var mixHash: EthHash,
@@ -22,8 +22,8 @@ data class EthBlock(
     val totalDifficulty: EthUint256,
     val transactions: List<EthTransaction>,
     val transactionsRoot: EthHash,
-    val withdrawals: List<EthWithdrawal>,
-    val withdrawalsRoot: EthHash,
+    val withdrawals: List<EthWithdrawal>?,
+    val withdrawalsRoot: EthHash?,
 )
 
 data class EthLiteBlock(

@@ -1,12 +1,12 @@
 package io.hamal.app.web3proxy.eth.http
 
 import io.hamal.app.web3proxy.eth.handler.HandleEthRequest
-import io.hamal.app.web3proxy.json
 import io.hamal.lib.common.hot.HotArray
 import io.hamal.lib.common.hot.HotNode
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.web3.eth.domain.*
 import io.hamal.lib.web3.eth.domain.EthError.ErrorCode.*
+import io.hamal.lib.web3.eth.json
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -70,12 +70,14 @@ internal class EthController(
                         error = EthError(InvalidParams, "missing argument")
                     ) to null
                 }
+
                 e.message?.contains("EthMethod not found") == true -> {
                     EthErrorResponse(
                         id = EthRequestId(request["id"].stringValue),
                         error = EthError(MethodNotFound, "method not supported")
                     ) to null
                 }
+
                 else -> EthErrorResponse(
                     id = EthRequestId(request["id"].stringValue),
                     error = EthError(InternalError, "Unexpected error")

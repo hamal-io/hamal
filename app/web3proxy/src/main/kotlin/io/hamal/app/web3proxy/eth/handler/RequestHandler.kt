@@ -1,6 +1,6 @@
 package io.hamal.app.web3proxy.eth.handler
 
-import io.hamal.app.web3proxy.eth.repository.EthBlockDataRepository
+import io.hamal.app.web3proxy.eth.repository.EthBlockRepository
 import io.hamal.lib.web3.eth.domain.EthGetBlockByNumberRequest
 import io.hamal.lib.web3.eth.domain.EthGetBlockResponse
 import io.hamal.lib.web3.eth.domain.EthRequest
@@ -12,7 +12,7 @@ interface HandleEthRequest {
 }
 
 class EthRequestHandlerImpl(
-    private val blockDataRepository: EthBlockDataRepository,
+    private val blockDataRepository: EthBlockRepository,
 ) : HandleEthRequest {
 
     override fun invoke(request: EthRequest): EthResponse {

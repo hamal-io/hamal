@@ -30,11 +30,15 @@ class Json(
         return gsonInstance.fromJson(InputStreamReader(stream), clazz.java)
     }
 
+    fun <TYPE : Any> deserialize(clazz: KClass<TYPE>, bytes: ByteArray): TYPE {
+        return gsonInstance.fromJson(compressor.toString(bytes), clazz.java)!!
+    }
+
 //    fun <TYPE : Any> deserialize(typeToken: TypeToken<TYPE>, content: String): TYPE {
 //        return gsonInstance.fromJson(content, typeToken)
 //    }
 
-//    fun <TYPE : Any> deserialize(typeToken: TypeToken<TYPE>, stream: InputStream): TYPE {
+    //    fun <TYPE : Any> deserialize(typeToken: TypeToken<TYPE>, stream: InputStream): TYPE {
 //        return gsonInstance.fromJson(InputStreamReader(stream), typeToken)
 //    }
 //
@@ -49,6 +53,7 @@ class Json(
 
     @Deprecated("Remove this as we can pass now a compressor to the json object")
     fun <TYPE : Any> decompressAndDeserialize(clazz: KClass<TYPE>, bytes: ByteArray): TYPE {
+        println(compressor.toString(bytes))
         return gsonInstance.fromJson(compressor.toString(bytes), clazz.java)!!
     }
 

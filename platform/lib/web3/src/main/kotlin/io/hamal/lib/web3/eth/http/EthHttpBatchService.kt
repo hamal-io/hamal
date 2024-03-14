@@ -1,15 +1,15 @@
 package io.hamal.lib.web3.eth.http
 
 import io.hamal.lib.common.hot.HotArray
-import io.hamal.lib.common.hot.HotJsonModule
+import io.hamal.lib.common.hot.HotObjectModule
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.hot.HotObjectBuilder
 import io.hamal.lib.common.serialization.JsonFactoryBuilder
 import io.hamal.lib.domain.Json
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
-import io.hamal.lib.web3.Web3JsonModule
 import io.hamal.lib.web3.eth.EthBatchService
+import io.hamal.lib.web3.eth.EthModule
 import io.hamal.lib.web3.eth.abi.type.EthUint64
 import io.hamal.lib.web3.eth.domain.*
 import kotlin.reflect.KClass
@@ -87,8 +87,8 @@ class EthHttpBatchService(
 
     internal val json = Json(
         JsonFactoryBuilder()
-            .register(HotJsonModule)
-            .register(Web3JsonModule)
+            .register(EthModule)
+            .register(HotObjectModule)
     )
 
     private fun <RESPONSE : EthResponse> request(

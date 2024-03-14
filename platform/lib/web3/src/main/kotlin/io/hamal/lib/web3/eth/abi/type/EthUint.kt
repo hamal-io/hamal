@@ -52,6 +52,7 @@ data class EthUint32(override val value: BigInteger) : EthUnsigned() {
     override val numberOfBits = 32
 
     constructor(value: Long) : this(BigInteger.valueOf(value))
+    constructor(value: Int) : this(BigInteger.valueOf(value.toLong()))
     constructor(value: String) : this(EthPrefixedHexString(value))
     constructor(value: EthPrefixedHexString) : this(BigInteger(value.toHexString().value, 16))
 
