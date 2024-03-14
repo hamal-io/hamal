@@ -1,7 +1,7 @@
 package io.hamal.api.http.controller.namespace
 
 import io.hamal.lib.common.hot.HotObject
-import io.hamal.lib.domain._enum.NamespaceFeature
+import io.hamal.lib.domain._enum.NamespaceFeature.*
 import io.hamal.lib.domain.vo.NamespaceFeatures
 import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.sdk.api.ApiNamespaceAppendRequest
@@ -28,8 +28,8 @@ internal class NamespaceCreateControllerTest : NamespaceBaseControllerTest() {
     fun `Creates namespace with limited features`() {
         val features = NamespaceFeatures(
             HotObject.builder()
-                .set(NamespaceFeature.SCHEDULES.name, NamespaceFeature.SCHEDULES.value)
-                .set(NamespaceFeature.WEBHOOKS.name, NamespaceFeature.WEBHOOKS.value)
+                .set(Schedule.name, Schedule.value)
+                .set(Webhook.name, Schedule.value)
                 .build()
         )
 
@@ -46,10 +46,10 @@ internal class NamespaceCreateControllerTest : NamespaceBaseControllerTest() {
             assertThat(id, equalTo(namespaceId))
             assertThat(name, equalTo(NamespaceName("test-namespace")))
             assertThat(features, equalTo(features))
-            assertTrue(features.hasFeature(NamespaceFeature.SCHEDULES))
-            assertTrue(features.hasFeature(NamespaceFeature.WEBHOOKS))
-            assertFalse(features.hasFeature(NamespaceFeature.TOPICS))
-            assertFalse(features.hasFeature(NamespaceFeature.ENDPOINTS))
+            assertTrue(features.hasFeature(Schedule))
+            assertTrue(features.hasFeature(Webhook))
+            assertFalse(features.hasFeature(Topic))
+            assertFalse(features.hasFeature(Endpoint))
         }
     }
 }

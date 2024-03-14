@@ -6,6 +6,7 @@ import io.hamal.lib.common.domain.ValueObjectString
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.NamespaceFeature
+import io.hamal.lib.domain._enum.NamespaceFeature.*
 
 class NamespaceId(override val value: SnowflakeId) : ValueObjectId() {
     constructor(value: Int) : this(SnowflakeId(value.toLong()))
@@ -23,6 +24,8 @@ class NamespaceName(override val value: String) : ValueObjectString() {
 }
 
 class NamespaceFeatures(override var value: HotObject = HotObject.empty) : ValueObjectHotObject() {
+
+
     fun hasFeature(feature: NamespaceFeature): Boolean {
         if (value.nodes.isEmpty()) {
             return false
@@ -31,14 +34,12 @@ class NamespaceFeatures(override var value: HotObject = HotObject.empty) : Value
     }
 
     companion object {
-        val empty = NamespaceFeatures(HotObject.empty)
-
         val default = NamespaceFeatures(
             HotObject.builder()
-                .set(NamespaceFeature.SCHEDULES.name, NamespaceFeature.SCHEDULES.value)
-                .set(NamespaceFeature.TOPICS.name, NamespaceFeature.TOPICS.value)
-                .set(NamespaceFeature.WEBHOOKS.name, NamespaceFeature.TOPICS.value)
-                .set(NamespaceFeature.ENDPOINTS.name, NamespaceFeature.TOPICS.value)
+                .set(Schedule.name, Schedule.value)
+                .set(Topic.name, Topic.value)
+                .set(Webhook.name, Webhook.value)
+                .set(Endpoint.name, Endpoint.value)
                 .build()
         )
     }

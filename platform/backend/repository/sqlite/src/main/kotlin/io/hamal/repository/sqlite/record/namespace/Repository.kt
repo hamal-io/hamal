@@ -1,7 +1,6 @@
 package io.hamal.repository.sqlite.record.namespace
 
 import io.hamal.lib.common.domain.Count
-import io.hamal.lib.domain.vo.NamespaceFeatures
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.repository.api.Namespace
 import io.hamal.repository.api.NamespaceCmdRepository
@@ -59,7 +58,7 @@ class NamespaceSqliteRepository(
                         entityId = namespaceId,
                         workspaceId = cmd.workspaceId,
                         name = cmd.name,
-                        features = cmd.features ?: NamespaceFeatures.empty
+                        features = cmd.features
                     )
                 )
 

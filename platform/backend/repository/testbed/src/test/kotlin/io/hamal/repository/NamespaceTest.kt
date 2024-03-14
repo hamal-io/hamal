@@ -44,10 +44,10 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
                 assertThat(id, equalTo(NamespaceId(234)))
                 assertThat(workspaceId, equalTo(WorkspaceId(1)))
                 assertThat(name, equalTo(NamespaceName("SomeNamespace")))
-                assertTrue(features.hasFeature(NamespaceFeature.SCHEDULES))
-                assertTrue(features.hasFeature(NamespaceFeature.TOPICS))
-                assertTrue(features.hasFeature(NamespaceFeature.WEBHOOKS))
-                assertTrue(features.hasFeature(NamespaceFeature.ENDPOINTS))
+                assertTrue(features.hasFeature(NamespaceFeature.Schedule))
+                assertTrue(features.hasFeature(NamespaceFeature.Webhook))
+                assertTrue(features.hasFeature(NamespaceFeature.Endpoint))
+                assertTrue(features.hasFeature(NamespaceFeature.Topic))
             }
 
             verifyCount(1)
