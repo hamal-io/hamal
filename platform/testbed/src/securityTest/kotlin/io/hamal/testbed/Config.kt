@@ -110,7 +110,8 @@ class TestSetupConfig {
                 id = CmdId(id),
                 namespaceId = NamespaceId(id),
                 workspaceId = WorkspaceId(id),
-                name = NamespaceName("$id-namespace")
+                name = NamespaceName("$id-namespace"),
+                features = NamespaceFeatures.default
             )
         )
 

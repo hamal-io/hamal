@@ -8,32 +8,32 @@ import org.junit.jupiter.api.assertThrows
 internal object EthBlockParamTest {
     @Test
     fun `Latest block`() {
-        val result = EthBlockParam.Latest
-        assertThat(result, equalTo(EthBlockParam("latest")))
+        val result = EthBlockParameter.Latest
+        assertThat(result, equalTo(EthBlockParameter("latest")))
     }
 
     @Test
     fun `Earliest block`() {
-        val result = EthBlockParam.Earliest
-        assertThat(result, equalTo(EthBlockParam("earliest")))
+        val result = EthBlockParameter.Earliest
+        assertThat(result, equalTo(EthBlockParameter("earliest")))
     }
 
     @Test
     fun `Pending block`() {
-        val result = EthBlockParam.Pending
-        assertThat(result, equalTo(EthBlockParam("pending")))
+        val result = EthBlockParameter.Pending
+        assertThat(result, equalTo(EthBlockParameter("pending")))
     }
 
     @Test
     fun `With block number`() {
-        val result = EthBlockParam(42L)
-        assertThat(result, equalTo(EthBlockParam("0x2a")))
+        val result = EthBlockParameter(42L)
+        assertThat(result, equalTo(EthBlockParameter("0x2a")))
     }
 
     @Test
     fun `Tries to set negative block number`() {
         val exception = assertThrows<IllegalArgumentException> {
-            EthBlockParam(-1)
+            EthBlockParameter(-1)
         }
         assertThat(exception.message, equalTo("Block number must not be negative"))
     }

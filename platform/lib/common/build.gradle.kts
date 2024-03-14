@@ -6,6 +6,7 @@ dependencies {
     api(external.kotlin.reflect)
     api(external.spring.logging)
     api(external.gson)
+    implementation(external.apache.commons.compress)
     testImplementation(external.junit)
     testImplementation(external.hamcrest)
 }

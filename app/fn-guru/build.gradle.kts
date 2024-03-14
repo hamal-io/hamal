@@ -3,9 +3,9 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
 plugins {
     id("hamal.common")
     application
-    id("org.springframework.boot").version("3.0.5")
+    id("org.springframework.boot").version("3.2.3")
     kotlin("plugin.spring").version("1.9.23")
-    id("com.bmuschko.docker-spring-boot-application").version("9.3.1")
+    id("com.bmuschko.docker-spring-boot-application").version("9.3.6")
 }
 
 apply(plugin = "io.spring.dependency-management")

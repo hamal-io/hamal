@@ -1,7 +1,7 @@
 package io.hamal.lib.http
 
 import com.google.gson.reflect.TypeToken
-import io.hamal.lib.common.hot.HotJsonModule
+import io.hamal.lib.common.hot.HotObjectModule
 import io.hamal.lib.common.serialization.JsonFactoryBuilder
 import io.hamal.lib.domain.Json
 import io.hamal.lib.domain.vo.ValueObjectJsonModule
@@ -20,9 +20,25 @@ object DefaultHttpSerdeFactory : HttpSerdeFactory {
     override var contentSerializer: HttpContentSerializer = JsonHttpContentSerializer
 }
 
+class JsonHttpSerdeFactory(private val json: Json) : HttpSerdeFactory {
+    override var errorDeserializer = object : HttpErrorDeserializer {
+        override fun <ERROR : Any> deserialize(inputStream: InputStream, clazz: KClass<ERROR>) = json.deserialize(clazz, inputStream)
+    }
+    override var contentDeserializer = object : HttpContentDeserializer {
+        override fun <VALUE : Any> deserialize(inputStream: InputStream, clazz: KClass<VALUE>) = json.deserialize(clazz, inputStream)
+        override fun <VALUE : Any> deserializeList(inputStream: InputStream, clazz: KClass<VALUE>) =
+             json.deserialize<Array<VALUE>>(TypeToken.getArray(clazz.java).type, inputStream).toList()
+
+    }
+    override var contentSerializer = object : HttpContentSerializer {
+        override fun <VALUE : Any> serialize(value: VALUE, clazz: KClass<VALUE>) = json.serialize(value)
+    }
+}
+
+
 private val json = Json(
     JsonFactoryBuilder()
-        .register(HotJsonModule)
+        .register(HotObjectModule)
         .register(ValueObjectJsonModule)
 )
 
@@ -47,7 +63,7 @@ object JsonHttpContentDeserializer : HttpContentDeserializer {
     }
 
     override fun <VALUE : Any> deserializeList(inputStream: InputStream, clazz: KClass<VALUE>): List<VALUE> {
-        return json.deserialize(object : TypeToken<List<VALUE>>() {}, inputStream)
+        return json.deserialize<Array<VALUE>>(TypeToken.getArray(clazz.java).type, inputStream).toList()
     }
 }
 

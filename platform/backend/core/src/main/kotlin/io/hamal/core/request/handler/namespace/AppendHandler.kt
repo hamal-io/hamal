@@ -5,6 +5,7 @@ import io.hamal.core.request.RequestHandler
 import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.request.NamespaceAppendRequested
+import io.hamal.lib.domain.vo.NamespaceFeatures
 import io.hamal.repository.api.Namespace
 import io.hamal.repository.api.NamespaceCmdRepository
 import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
@@ -38,7 +39,8 @@ class NamespaceAppendHandler(
                 id = req.cmdId(),
                 namespaceId = req.id,
                 workspaceId = req.workspaceId,
-                name = req.name
+                name = req.name,
+                features = req.features ?: NamespaceFeatures.default
             )
         )
     }

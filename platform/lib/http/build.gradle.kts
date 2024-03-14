@@ -14,6 +14,7 @@ dependencies {
     testImplementation(external.hamcrest)
 }
 
+@Suppress("UnstableApiUsage")
 testing {
     suites {
         configureEach {

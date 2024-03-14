@@ -3,16 +3,14 @@ package io.hamal.lib.sdk.api
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.NamespaceAppendRequest
 import io.hamal.lib.domain.request.NamespaceUpdateRequest
-import io.hamal.lib.domain.vo.NamespaceId
-import io.hamal.lib.domain.vo.NamespaceName
-import io.hamal.lib.domain.vo.RequestId
-import io.hamal.lib.domain.vo.WorkspaceId
+import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.fold
 
 data class ApiNamespaceAppendRequest(
-    override val name: NamespaceName
+    override val name: NamespaceName,
+    override val features: NamespaceFeatures? = null
 ) : NamespaceAppendRequest
 
 data class ApiNamespaceAppendRequested(
@@ -23,7 +21,8 @@ data class ApiNamespaceAppendRequested(
 ) : ApiRequested()
 
 data class ApiNamespaceUpdateRequest(
-    override val name: NamespaceName,
+    override val name: NamespaceName? = null,
+    override val features: NamespaceFeatures? = null
 ) : NamespaceUpdateRequest
 
 data class ApiNamespaceUpdateRequested(
@@ -44,7 +43,8 @@ data class ApiNamespaceList(
 
 data class ApiNamespace(
     val id: NamespaceId,
-    val name: NamespaceName
+    val name: NamespaceName,
+    val features: NamespaceFeatures
 ) : ApiObject()
 
 interface ApiNamespaceService {

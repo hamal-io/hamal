@@ -26,8 +26,11 @@ interface HttpRequest {
     fun parameter(key: String, value: List<ValueObjectId>): HttpRequest
     fun parameter(key: String, value: Boolean): HttpRequest
     fun execute(): HttpResponse
-    fun <VALUE : Any> execute(clazz: KClass<VALUE>): VALUE
-    fun <VALUE : Any> executeList(clazz: KClass<VALUE>): List<VALUE>
+    fun <RESULT : Any> execute(action: HttpResponse.() -> RESULT): RESULT
+    fun <RESULT : Any> execute(clazz: KClass<RESULT>): RESULT
+    fun <RESULT : Any> execute(clazz: KClass<RESULT>, action: RESULT.() -> Unit)
+    fun <RESULT : Any> executeList(clazz: KClass<RESULT>): List<RESULT>
+    fun <RESULT : Any> executeList(clazz: KClass<RESULT>, action: (List<RESULT>) -> Unit)
     enum class HttpMethod {
         Delete,
         Get,
@@ -196,6 +199,10 @@ class HttpRequestImpl(
         }
     }
 
+    override fun <RESULT : Any> execute(action: HttpResponse.() -> RESULT): RESULT {
+        return action(execute())
+    }
+
     override fun <RESULT : Any> execute(clazz: KClass<RESULT>): RESULT {
         return when (val response = execute()) {
             is HttpSuccessResponse -> response.result(clazz)
@@ -204,11 +211,19 @@ class HttpRequestImpl(
         }
     }
 
-    override fun <VALUE : Any> executeList(clazz: KClass<VALUE>): List<VALUE> {
+    override fun <RESULT : Any> execute(clazz: KClass<RESULT>, action: (RESULT) -> Unit) {
+        action(execute(clazz))
+    }
+
+    override fun <RESULT : Any> executeList(clazz: KClass<RESULT>): List<RESULT> {
         return when (val response = execute()) {
             is HttpSuccessResponse -> response.resultList(clazz)
             is HttpNoContentResponse -> throw IllegalStateException("No content was returned from the server")
             is HttpErrorResponse -> throw IllegalStateException("Http request was not successful")
         }
+    }
+
+    override fun <RESULT : Any> executeList(clazz: KClass<RESULT>, action: (List<RESULT>) -> Unit) {
+        action(executeList(clazz))
     }
 }

@@ -153,7 +153,8 @@ internal abstract class BaseTest {
                 id = CmdId(1),
                 namespaceId = namespaceId,
                 workspaceId = testWorkspace.id,
-                name = NamespaceName("hamal")
+                name = NamespaceName("hamal"),
+                features = NamespaceFeatures.default
             )
         )
     }

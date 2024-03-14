@@ -9,10 +9,10 @@ import org.junit.jupiter.api.assertThrows
 
 class ErrorCodeTest {
     @TestFactory
-    fun `fromCode`() = EthError.ErrorCode.values()
+    fun `fromCode`() = EthError.ErrorCode.values
         .map { errorCode ->
             dynamicTest("$errorCode") {
-                val result = EthError.ErrorCode.fromCode(errorCode.code)
+                val result = EthError.ErrorCode.fromCode(errorCode.value)
                 assertThat(result, equalTo(errorCode))
             }
         }
@@ -22,6 +22,6 @@ class ErrorCodeTest {
         val exception = assertThrows<NoSuchElementException> {
             EthError.ErrorCode.fromCode(-23)
         }
-        assertThat(exception.message, equalTo("Error code not found"))
+        assertThat(exception.message, equalTo("ErrorCode not found"))
     }
 }

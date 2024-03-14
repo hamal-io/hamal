@@ -29,6 +29,7 @@ class NamespaceUpdateAdapter(
             workspaceId = namespace.workspaceId,
             id = namespaceId,
             name = req.name,
+            features = req.features
         ).also(requestEnqueue::invoke)
     }
 

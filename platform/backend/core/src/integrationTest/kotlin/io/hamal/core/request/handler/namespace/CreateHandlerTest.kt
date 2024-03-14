@@ -29,7 +29,8 @@ internal class NamespaceAppendHandlerTest : BaseRequestHandlerTest() {
                 id = CmdId(2),
                 namespaceId = NamespaceId.root,
                 name = NamespaceName("root"),
-                workspaceId = testWorkspace.id
+                workspaceId = testWorkspace.id,
+                features = NamespaceFeatures.default
             )
         )
         namespaceTreeRepository.create(
@@ -56,11 +57,13 @@ internal class NamespaceAppendHandlerTest : BaseRequestHandlerTest() {
             with(namespaces[0]) {
                 assertThat(id, equalTo(NamespaceId(12345)))
                 assertThat(name, equalTo(NamespaceName("awesome-namespace")))
+                assertThat(features, equalTo(NamespaceFeatures.default))
             }
 
             with(namespaces[1]) {
                 assertThat(id, equalTo(NamespaceId.root))
                 assertThat(name, equalTo(NamespaceName("root")))
+                assertThat(features, equalTo(NamespaceFeatures.default))
             }
         }
     }
@@ -76,7 +79,8 @@ internal class NamespaceAppendHandlerTest : BaseRequestHandlerTest() {
             parentId = NamespaceId.root,
             id = NamespaceId(12345),
             workspaceId = testWorkspace.id,
-            name = NamespaceName("awesome-namespace")
+            name = NamespaceName("awesome-namespace"),
+            features = null
         )
     }
 }

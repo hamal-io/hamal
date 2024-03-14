@@ -30,7 +30,8 @@ class NamespaceMemoryRepository : RecordMemoryRepository<NamespaceId, NamespaceR
                         cmdId = cmd.id,
                         entityId = namespaceId,
                         workspaceId = cmd.workspaceId,
-                        name = cmd.name
+                        name = cmd.name,
+                        features = cmd.features
                     )
                 )
                 (currentVersion(namespaceId)).also(currentProjection::upsert)
@@ -48,7 +49,8 @@ class NamespaceMemoryRepository : RecordMemoryRepository<NamespaceId, NamespaceR
                     NamespaceRecord.Updated(
                         entityId = namespaceId,
                         cmdId = cmd.id,
-                        name = cmd.name ?: current.name
+                        name = cmd.name ?: current.name,
+                        features = cmd.features ?: current.features
                     )
                 )
                 (currentVersion(namespaceId)).also(currentProjection::upsert)
