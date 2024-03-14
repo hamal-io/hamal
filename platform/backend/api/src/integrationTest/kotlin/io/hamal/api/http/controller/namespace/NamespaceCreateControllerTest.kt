@@ -29,7 +29,7 @@ internal class NamespaceCreateControllerTest : NamespaceBaseControllerTest() {
         val features = NamespaceFeatures(
             HotObject.builder()
                 .set(Schedule.name, Schedule.value)
-                .set(Webhook.name, Schedule.value)
+                .set(Webhook.name, Webhook.value)
                 .build()
         )
 
