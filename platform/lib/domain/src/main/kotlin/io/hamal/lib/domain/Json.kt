@@ -53,7 +53,6 @@ class Json(
 
     @Deprecated("Remove this as we can pass now a compressor to the json object")
     fun <TYPE : Any> decompressAndDeserialize(clazz: KClass<TYPE>, bytes: ByteArray): TYPE {
-        println(compressor.toString(bytes))
         return gsonInstance.fromJson(compressor.toString(bytes), clazz.java)!!
     }
 

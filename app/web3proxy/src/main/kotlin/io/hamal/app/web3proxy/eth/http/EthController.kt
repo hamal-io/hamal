@@ -48,7 +48,6 @@ internal class EthController(
             null to ethRequest
         } catch (e: Throwable) {
             e.printStackTrace()
-            println(e.message)
             when {
                 e.message?.contains("does not start with 0x") == true -> {
                     EthErrorResponse(

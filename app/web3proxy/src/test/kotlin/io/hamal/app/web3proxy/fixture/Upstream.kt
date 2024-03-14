@@ -1,12 +1,12 @@
 package io.hamal.app.web3proxy.fixture
 
-import io.hamal.app.web3proxy.json
 import io.hamal.lib.web3.eth.EthBatchService
 import io.hamal.lib.web3.eth.abi.type.EthUint64
 import io.hamal.lib.web3.eth.domain.EthBlock
 import io.hamal.lib.web3.eth.domain.EthGetBlockResponse
 import io.hamal.lib.web3.eth.domain.EthRequestId
 import io.hamal.lib.web3.eth.domain.EthResponse
+import io.hamal.lib.web3.eth.json
 
 internal class EthBatchServiceFixture : EthBatchService<EthBatchServiceFixture> {
 

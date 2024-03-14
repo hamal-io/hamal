@@ -22,6 +22,6 @@ class ErrorCodeTest {
         val exception = assertThrows<NoSuchElementException> {
             EthError.ErrorCode.fromCode(-23)
         }
-        assertThat(exception.message, equalTo("Error code not found"))
+        assertThat(exception.message, equalTo("ErrorCode not found"))
     }
 }
