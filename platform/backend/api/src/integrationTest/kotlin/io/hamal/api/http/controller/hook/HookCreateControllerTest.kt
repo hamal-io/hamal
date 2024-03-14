@@ -2,6 +2,7 @@ package io.hamal.api.http.controller.hook
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.HookName
+import io.hamal.lib.domain.vo.NamespaceFeatures
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.http.HttpErrorResponse
@@ -45,7 +46,8 @@ internal class HookCreateControllerTest : HookBaseControllerTest() {
                 id = CmdId(1),
                 namespaceId = testNamespace.id,
                 workspaceId = testWorkspace.id,
-                name = NamespaceName("hamal::namespace")
+                name = NamespaceName("hamal::namespace"),
+                features = NamespaceFeatures.default
             )
         )
 

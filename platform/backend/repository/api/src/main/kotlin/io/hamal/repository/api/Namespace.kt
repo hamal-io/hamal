@@ -31,7 +31,7 @@ interface NamespaceCmdRepository : CmdRepository {
         val namespaceId: NamespaceId,
         val workspaceId: WorkspaceId,
         val name: NamespaceName,
-        val features: NamespaceFeatures? = null
+        val features: NamespaceFeatures
     )
 
     data class UpdateCmd(

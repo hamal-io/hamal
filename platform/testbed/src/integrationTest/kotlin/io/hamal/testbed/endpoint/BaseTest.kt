@@ -147,7 +147,8 @@ class ClearController {
                 id = CmdId(5),
                 namespaceId = NamespaceId.root,
                 workspaceId = testWorkspace.id,
-                name = NamespaceName("root-namespace")
+                name = NamespaceName("root-namespace"),
+                features = NamespaceFeatures.default
             )
         )
     }
@@ -262,7 +263,8 @@ class TestConfig {
                     id = CmdId(5),
                     namespaceId = NamespaceId.root,
                     workspaceId = testWorkspace.id,
-                    name = NamespaceName("root-namespace")
+                    name = NamespaceName("root-namespace"),
+                    features = NamespaceFeatures.default
                 )
             )
         } catch (ignore: Throwable) {

@@ -42,7 +42,8 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
                 id = CmdId(2),
                 namespaceId = NamespaceId(2),
                 workspaceId = testWorkspace.id,
-                name = NamespaceName("createdNamespace")
+                name = NamespaceName("createdNamespace"),
+                features = NamespaceFeatures.default
             )
         )
 
@@ -203,7 +204,8 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
                 id = CmdGen(),
                 namespaceId = NamespaceId(2),
                 workspaceId = testWorkspace.id,
-                name = NamespaceName("createdNamespace")
+                name = NamespaceName("createdNamespace"),
+                features = NamespaceFeatures.default
             )
         )
 
