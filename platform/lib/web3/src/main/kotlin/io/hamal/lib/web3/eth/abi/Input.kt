@@ -3,6 +3,7 @@ package io.hamal.lib.web3.eth.abi
 import io.hamal.lib.web3.eth.abi.type.EthType
 import kotlin.reflect.KClass
 
+
 data class EthInput<VALUE_TYPE : EthType<*>>(
     val name: String,
     val clazz: KClass<VALUE_TYPE>,

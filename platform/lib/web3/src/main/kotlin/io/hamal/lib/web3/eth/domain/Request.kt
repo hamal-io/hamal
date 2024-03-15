@@ -14,6 +14,7 @@ import io.hamal.lib.web3.eth.abi.type.EthUint64
 import io.hamal.lib.web3.eth.domain.EthMethod.GetBlockByNumber
 import java.lang.reflect.Type
 
+
 data class EthRequestId(val value: String) {
     object Adapter : JsonAdapter<EthRequestId> {
 

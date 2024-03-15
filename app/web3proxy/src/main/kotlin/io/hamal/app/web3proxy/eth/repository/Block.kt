@@ -8,7 +8,7 @@ import io.hamal.lib.domain.vo.ValueObjectJsonModule
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.lib.web3.eth.EthBatchService
-import io.hamal.lib.web3.eth.EthModule
+import io.hamal.lib.web3.eth.EthHotModule
 import io.hamal.lib.web3.eth.abi.type.EthAddress
 import io.hamal.lib.web3.eth.abi.type.EthUint64
 import io.hamal.lib.web3.eth.domain.EthBlock
@@ -112,7 +112,7 @@ internal class EthBlockRepositoryImpl(
 
     private val json = Json(
         factory = JsonFactoryBuilder()
-            .register(EthModule)
+            .register(EthHotModule)
             .register(HotObjectModule)
             .register(ValueObjectJsonModule),
         compressor = BzipCompressor

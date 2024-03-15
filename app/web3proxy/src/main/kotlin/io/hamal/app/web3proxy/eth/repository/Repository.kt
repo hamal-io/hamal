@@ -6,7 +6,7 @@ import io.hamal.lib.web3.eth.abi.type.EthUint32
 import io.hamal.lib.web3.eth.abi.type.EthUint64
 import io.hamal.lib.web3.eth.domain.EthBlock
 import io.hamal.lib.web3.eth.domain.EthTransaction
-import io.hamal.lib.web3.eth.domain.EthWithdrawal
+import io.hamal.lib.web3.eth.domain.Withdrawal
 import java.nio.file.Path
 
 interface EthRepository {
@@ -93,7 +93,7 @@ private fun BlockEntity.toObject(addresses: Map<EthAddressId, EthAddress>) = Eth
     },
     transactionsRoot = transactionsRoot,
     withdrawals = withdrawals?.map { withdrawal ->
-        EthWithdrawal(
+        Withdrawal(
             index = withdrawal.index,
             validatorIndex = withdrawal.validatorIndex,
             address = addresses[withdrawal.address]!!,

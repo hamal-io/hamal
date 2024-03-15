@@ -8,6 +8,7 @@ import java.lang.Character.isUpperCase
 import java.math.BigInteger
 import java.util.*
 
+
 data class EthAddress(
     override val value: EthUint160
 ) : EthType<EthUint160> {

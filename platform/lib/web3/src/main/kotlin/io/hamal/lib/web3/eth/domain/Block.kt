@@ -22,7 +22,7 @@ data class EthBlock(
     val totalDifficulty: EthUint256,
     val transactions: List<EthTransaction>,
     val transactionsRoot: EthHash,
-    val withdrawals: List<EthWithdrawal>?,
+    val withdrawals: List<Withdrawal>?,
     val withdrawalsRoot: EthHash?,
 )
 

@@ -4,6 +4,7 @@ import io.hamal.lib.web3.util.ByteWindow
 import io.hamal.lib.web3.util.Web3Parser
 import java.nio.charset.Charset
 
+
 sealed interface EthBaseString : EthType<String> {
     operator fun get(idx: Int): Char = value[idx]
 

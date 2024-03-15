@@ -7,6 +7,7 @@ import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.serialization.JsonAdapter
 import java.lang.reflect.Type
 
+
 enum class EthMethod(val value: String) {
     Call("eth_call"),
     GetBlockByNumber("eth_getBlockByNumber");

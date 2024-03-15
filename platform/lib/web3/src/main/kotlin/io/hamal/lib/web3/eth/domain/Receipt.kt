@@ -4,7 +4,7 @@ import io.hamal.lib.web3.eth.abi.type.EthAddress
 import io.hamal.lib.web3.eth.abi.type.EthHash
 import io.hamal.lib.web3.eth.abi.type.EthPrefixedHexString
 
-data class EthReceipt(
+data class Receipt(
     val transactionHash: EthHash,
     val logs: List<Log>
 ) {

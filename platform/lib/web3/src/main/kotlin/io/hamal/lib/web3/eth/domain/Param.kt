@@ -2,7 +2,6 @@ package io.hamal.lib.web3.eth.domain
 
 import java.lang.Long.toHexString
 
-
 data class EthBlockParameter(val value: String) {
 
     constructor(blockNum: Long) : this(

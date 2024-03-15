@@ -4,7 +4,7 @@ import com.google.gson.Gson
 import io.hamal.lib.common.hot.HotObjectModule
 import io.hamal.lib.common.serialization.JsonFactoryBuilder
 import io.hamal.lib.domain.vo.ValueObjectJsonModule
-import io.hamal.lib.web3.eth.EthModule
+import io.hamal.lib.web3.eth.EthHotModule
 import org.apache.coyote.ProtocolHandler
 import org.springframework.boot.web.embedded.tomcat.TomcatProtocolHandlerCustomizer
 import org.springframework.context.annotation.Bean
@@ -30,7 +30,7 @@ class WebConfig : WebMvcConfigurer {
 
     @Bean
     fun gson(): Gson = JsonFactoryBuilder()
-        .register(EthModule)
+        .register(EthHotModule)
         .register(HotObjectModule)
         .register(ValueObjectJsonModule)
         .build()

@@ -1,5 +1,6 @@
 package io.hamal.lib.web3.eth.domain
 
+
 data class EthError(
     val code: Int,
     val message: String

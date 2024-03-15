@@ -4,6 +4,7 @@ import io.hamal.lib.web3.eth.abi.type.EthHash
 import io.hamal.lib.web3.eth.abi.type.EthPrefixedHexString
 import io.hamal.lib.web3.eth.abi.type.EthType
 
+
 data class EthEvent<INDEXED : EthOutputTuple, NOT_INDEXED : EthOutputTuple>(
     val name: String,
     val indexed: INDEXED,
