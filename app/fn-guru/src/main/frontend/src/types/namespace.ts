@@ -11,6 +11,9 @@ export interface NamespaceUpdateRequested {
     id: string;
 }
 
+export interface FeatureObject {
+    [key: string]: number
+}
 
 export interface Namespace {
     id: string;
@@ -48,11 +51,5 @@ export class NamespaceNode {
     }
 }
 
-export interface FeatureObject {
-    [key: string]: number
-}
 
-export interface Feature {
-    [key: string] :  FeatureObject
-}
 

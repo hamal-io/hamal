@@ -8,3 +8,6 @@ export * from './workspace.ts'
 export * from './hook.ts'
 export * from './namespace.ts'
 export * from './trigger.ts'
+
+export class Feature {
+}

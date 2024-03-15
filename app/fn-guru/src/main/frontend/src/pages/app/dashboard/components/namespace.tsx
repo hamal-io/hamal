@@ -4,30 +4,20 @@ import {PageHeader} from "@/components/page-header.tsx";
 import {useUiState} from "@/hook/ui-state.ts";
 import {useNamespaceGet, useNamespaceUpdate} from "@/hook";
 import {Globe, Layers3, Timer, Webhook} from "lucide-react";
-import {Feature, FeatureObject} from "@/types";
+import {FeatureObject} from "@/types";
 import {Switch} from "@/components/ui/switch.tsx";
+import {Button} from "@/components/ui/button.tsx";
 import Element = React.JSX.Element;
-
-
-const featureObjects: Feature = {
-    schedule: {"Schedule": 0},
-    topic: {"Topic": 1},
-    webhook: {"Webhook": 2},
-    endpoint: {"Endpoint": 3},
-}
-
-
-const {schedule, topic, webhook, endpoint} = featureObjects
 
 const NamespaceDetailPage = () => {
     const [uiState] = useUiState()
     const [getNamespace, namespace, loading, error] = useNamespaceGet()
     const [updateNamespace, updateRequested, loading2, error2] = useNamespaceUpdate()
-    const [features, setFeatures] = useState(new Map<FeatureObject, boolean>([
-        [schedule, false],
-        [topic, false],
-        [webhook, false],
-        [endpoint, false]
+    const [features, setFeatures] = useState(new Map<string, boolean>([
+        ["Schedule", false],
+        ["Topic", false],
+        ["Webhook", false],
+        ["Endpoint", false]
     ]))
 
     useEffect(() => {
@@ -38,12 +28,11 @@ const NamespaceDetailPage = () => {
 
     useEffect(() => {
         if (namespace) {
+            const x = namespace.features
             const t = new Map(features)
             const feats = namespace.features
             for (const [k, v] of Object.entries(feats)) {
-                const f: FeatureObject = {}
-                f[k] = v
-                t.set(f, true)
+                t.set(k, true)
             }
             setFeatures(t)
         }
@@ -54,20 +43,24 @@ const NamespaceDetailPage = () => {
 
     function updateFeatures() {
         try {
-            const presentFeatures: FeatureObject = features.keys()
-            updateNamespace(uiState.namespaceId,namespace.name, )
+            const answer: FeatureObject = {}
+            features.forEach((isActive, ft) => {
+                if (isActive) {
+                    answer[ft] = -1
+                }
+            })
+            updateNamespace(uiState.namespaceId, namespace.name, answer)
+
         } catch (e) {
             console.log(e)
         }
     }
 
-    function toggle(feature: FeatureObject) {
+    function toggle(feature: string) {
         const t = new Map(features)
         const state = features.get(feature)
         t.set(feature, !state)
         setFeatures(t)
-
-        updateFeatures()
     }
 
     return (
@@ -75,37 +68,40 @@ const NamespaceDetailPage = () => {
             <PageHeader
                 title="Workloads"
                 description="Select workflows for this namespace."
-                actions={[]}
+                actions={[
+                    <Button variant={"default"} onClick={updateFeatures}>Apply</Button>
+                ]}
             />
             <div className={"flex flex-col gap-4"}>
-                <FeatureCard label={"Schedules"}
-                             description={"All kinds of timers"}
-                             icon={<Timer/>}
-                             checked={features.get(schedule)}
-                             onCheck={() => toggle(schedule)}
+                <FeatureCard
+                    label={"Schedules"}
+                    description={"All kinds of timers"}
+                    icon={<Timer/>}
+                    checked={features.get("Schedule")}
+                    onCheck={() => toggle("Schedule")}
                 />
                 <FeatureCard
                     label={"Topics"}
                     description={"Stay tuned"}
                     icon={<Layers3/>}
-                    checked={features.get(topic)}
-                    onCheck={() => toggle(topic)}
+                    checked={features.get("Topic")}
+                    onCheck={() => toggle("Topic")}
 
                 />
                 <FeatureCard
                     label={"Webhook"}
                     description={"Stay tuned"}
                     icon={<Webhook/>}
-                    checked={features.get(webhook)}
-                    onCheck={() => toggle(webhook)}
+                    checked={features.get("Webhook")}
+                    onCheck={() => toggle("Webhook")}
 
                 />
                 <FeatureCard
                     label={"Endpoint"}
                     description={"API yourself"}
                     icon={<Globe/>}
-                    checked={features.get(endpoint)}
-                    onCheck={() => toggle(endpoint)}
+                    checked={features.get("Endpoint")}
+                    onCheck={() => toggle("Endpoint")}
                 />
             </div>
         </div>
