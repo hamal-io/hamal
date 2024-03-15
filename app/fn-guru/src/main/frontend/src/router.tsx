@@ -25,8 +25,6 @@ import React from "react";
 import WorkspaceDetailPage from "@/pages/app/workspace-detail";
 import WorkspaceGeneralTab from "@/pages/app/workspace-detail/tab/general";
 import BlueprintEditor from "@/pages/app/blueprint-list/components/editor.tsx";
-import NamespaceDetailPage from "@/pages/app/dashboard/components/namespace.tsx";
-import NamespaceDetail from "@/pages/app/dashboard/components/namespace.tsx";
 
 export const router = createBrowserRouter([
     {path: "/", element: <HomePage/>},

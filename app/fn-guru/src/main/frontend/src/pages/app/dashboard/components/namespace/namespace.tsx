@@ -1,19 +1,12 @@
-import React, {cloneElement, FC, useEffect, useState} from "react";
-import {Card, CardContent, CardDescription, CardHeader} from "@/components/ui/card.tsx";
+import React, {useEffect, useState} from "react";
 import {PageHeader} from "@/components/page-header.tsx";
 import {useUiState} from "@/hook/ui-state.ts";
 import {useNamespaceGet, useNamespaceUpdate} from "@/hook";
 import {Globe, Layers3, Timer, Webhook} from "lucide-react";
 import {FeatureObject} from "@/types";
-import {Switch} from "@/components/ui/switch.tsx";
 import {Button} from "@/components/ui/button.tsx";
-import {Form, FormControl, FormField, FormItem} from "@/components/ui/form.tsx";
-import form from "@/pages/app/blueprint-list/components/form.tsx";
-import {Input} from "@/components/ui/input.tsx";
-import {z} from "zod";
-import {useForm} from "react-hook-form";
-import {zodResolver} from "@hookform/resolvers/zod";
-import Element = React.JSX.Element;
+import {RenameForm} from "@/pages/app/dashboard/components/namespace/renameForm.tsx";
+import {FeatureCard} from "@/pages/app/dashboard/components/namespace/featureCard.tsx";
 
 
 const NamespaceDetailPage = () => {
@@ -50,7 +43,6 @@ const NamespaceDetailPage = () => {
     }, [namespace]);
 
 
-
     function updateFeatures(name?: string) {
         const rename = name === null ? namespace.name : name
         try {
@@ -73,7 +65,6 @@ const NamespaceDetailPage = () => {
         x.toggle()
         setFeatureList(client)
     }
-
 
 
     if (error) return "Error"
@@ -129,87 +120,6 @@ const NamespaceDetailPage = () => {
         </div>
     )
 }
-
-
-type RenameProps = {
-    name: string
-    onChange: (s: string) => void
-}
-const RenameForm: FC<RenameProps> = ({name, onChange}) => {
-    const formSchema = z.object(
-        {
-            name: z.string().min(2).max(50)
-        }
-    )
-
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
-        defaultValues: {
-            name: name
-        }
-    })
-
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        onChange(values.name)
-    }
-
-    return (
-        <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
-                <PageHeader
-                    title="Current Namesapce"
-                    description="Rename."
-                    actions={[
-                        <Button type={"submit"} variant={"default"}>
-                            Rename
-                        </Button>
-                    ]}
-                />
-                <FormField
-                    control={form.control}
-                    name="name"
-                    render={({field}) => (
-                        <FormItem>
-                            <FormControl>
-                                <Input {...field}/>
-                            </FormControl>
-                        </FormItem>
-                    )}>
-                </FormField>
-            </form>
-        </Form>
-    )
-}
-
-type FeatureProps = {
-    label: string,
-    description: string,
-    icon: Element,
-    onCheck: () => void
-    checked: boolean
-}
-
-const FeatureCard: FC<FeatureProps> = ({label, description, onCheck, icon, checked}) => {
-    const _icon = cloneElement(icon, {
-        size: 32
-    })
-
-    return (
-        <Card>
-            <CardHeader className={"flex flex-row justify-between"}>
-                {_icon}
-                {label}
-                <Switch checked={checked} onCheckedChange={() => onCheck()}></Switch>
-            </CardHeader>
-            <CardContent>
-                <CardDescription>
-                    {description}
-                </CardDescription>
-            </CardContent>
-        </Card>
-    )
-}
-
 export default NamespaceDetailPage
 
 
