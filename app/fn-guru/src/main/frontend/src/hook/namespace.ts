@@ -1,7 +1,7 @@
 import {useGet, usePatch, usePost} from "@/hook/http.ts";
 import {useCallback} from "react";
 import {useAuth} from "@/hook/auth.ts";
-import {Namespace, NamespaceAppendRequested, NamespaceList, NamespaceUpdateRequested} from "@/types";
+import {FeatureObject, Namespace, NamespaceAppendRequested, NamespaceList, NamespaceUpdateRequested} from "@/types";
 
 type NamespaceGetAction = (namespaceIdId: string, abortController?: AbortController) => void
 export const useNamespaceGet = (): [NamespaceGetAction, Namespace, boolean, Error] => {
@@ -29,12 +29,12 @@ export const useNamespaceAppend = (): [NamespaceAppendAction, NamespaceAppendReq
     return [fn, submission, loading, error]
 }
 
-type NamespaceUpdateAction = (namespaceId: string, name: string, abortController?: AbortController) => void
+type NamespaceUpdateAction = (namespaceId: string, name: string, features: FeatureObject, abortController?: AbortController) => void
 export const useNamespaceUpdate = (): [NamespaceUpdateAction, NamespaceUpdateRequested, boolean, Error] => {
     const [auth] = useAuth()
     const [patch, submission, loading, error] = usePatch<NamespaceAppendRequested>()
-    const fn = useCallback(async (namespaceId: string, name: string, abortController?: AbortController) =>
-        patch(`/v1/namespaces/${namespaceId}`, {name}, abortController), [auth]
+    const fn = useCallback(async (namespaceId: string, name: string, features: FeatureObject, abortController?: AbortController) =>
+        patch(`/v1/namespaces/${namespaceId}`, {name, features}, abortController), [auth]
     )
     return [fn, submission, loading, error]
 }

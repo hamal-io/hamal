@@ -4,16 +4,31 @@ import {PageHeader} from "@/components/page-header.tsx";
 import {useUiState} from "@/hook/ui-state.ts";
 import {useNamespaceGet, useNamespaceUpdate} from "@/hook";
 import {Globe, Layers3, Timer, Webhook} from "lucide-react";
-import {Feature, featuresMap} from "@/types";
+import {Feature, FeatureObject} from "@/types";
 import {Switch} from "@/components/ui/switch.tsx";
 import Element = React.JSX.Element;
 
+
+const featureObjects: Feature = {
+    schedule: {"Schedule": 0},
+    topic: {"Topic": 1},
+    webhook: {"Webhook": 2},
+    endpoint: {"Endpoint": 3},
+}
+
+
+const {schedule, topic, webhook, endpoint} = featureObjects
 
 const NamespaceDetailPage = () => {
     const [uiState] = useUiState()
     const [getNamespace, namespace, loading, error] = useNamespaceGet()
     const [updateNamespace, updateRequested, loading2, error2] = useNamespaceUpdate()
-    const [features, setFeatures] = useState(featuresMap)
+    const [features, setFeatures] = useState(new Map<FeatureObject, boolean>([
+        [schedule, false],
+        [topic, false],
+        [webhook, false],
+        [endpoint, false]
+    ]))
 
     useEffect(() => {
         const abortController = new AbortController()
@@ -23,41 +38,36 @@ const NamespaceDetailPage = () => {
 
     useEffect(() => {
         if (namespace) {
-            const t = new Map(featuresMap)
-            /*
-            const acc = namespace.features.split(',')
-            acc.forEach(f => {
-                switch (f) {
-                    case 'schedules':
-                        t.set(Feature.SCHEDULES, true)
-                        break
-                    case 'topics':
-                        t.set(Feature.TOPICS, true)
-                        break
-                    case 'webhooks':
-                        t.set(Feature.WEBHOOKS, true)
-                        break
-                    case 'endpoints':
-                        t.set(Feature.ENDPOINTS, true)
-                        break
-                    default:
-                        break
-                }
-            })
-            */
-             setFeatures(t)
+            const t = new Map(features)
+            const feats = namespace.features
+            for (const [k, v] of Object.entries(feats)) {
+                const f: FeatureObject = {}
+                f[k] = v
+                t.set(f, true)
+            }
+            setFeatures(t)
         }
     }, [namespace]);
 
     if (error) return "Error"
     if (loading) return "Loading..."
 
-    function handleCheck(value: Feature) {
+    function updateFeatures() {
         try {
-            //TODO-204 updateNamespace(id,value)...
+            const presentFeatures: FeatureObject = features.keys()
+            updateNamespace(uiState.namespaceId,namespace.name, )
         } catch (e) {
             console.log(e)
         }
+    }
+
+    function toggle(feature: FeatureObject) {
+        const t = new Map(features)
+        const state = features.get(feature)
+        t.set(feature, !state)
+        setFeatures(t)
+
+        updateFeatures()
     }
 
     return (
@@ -68,35 +78,34 @@ const NamespaceDetailPage = () => {
                 actions={[]}
             />
             <div className={"flex flex-col gap-4"}>
-                <FeatureCard value={Feature.SCHEDULES}
-                             label={"Schedules"}
+                <FeatureCard label={"Schedules"}
                              description={"All kinds of timers"}
                              icon={<Timer/>}
-                             checked={features.get(Feature.SCHEDULES)}
-                             onCheck={handleCheck}
+                             checked={features.get(schedule)}
+                             onCheck={() => toggle(schedule)}
                 />
-                <FeatureCard value={Feature.TOPICS}
-                             label={"Topics"}
-                             description={"Stay tuned"}
-                             icon={<Layers3/>}
-                             checked={features.get(Feature.TOPICS)}
-                             onCheck={handleCheck}
+                <FeatureCard
+                    label={"Topics"}
+                    description={"Stay tuned"}
+                    icon={<Layers3/>}
+                    checked={features.get(topic)}
+                    onCheck={() => toggle(topic)}
 
                 />
-                <FeatureCard value={Feature.WEBHOOKS}
-                             label={"Webhooks"}
-                             description={"Stay tuned"}
-                             icon={<Webhook/>}
-                             checked={features.get(Feature.WEBHOOKS)}
-                             onCheck={handleCheck}
+                <FeatureCard
+                    label={"Webhook"}
+                    description={"Stay tuned"}
+                    icon={<Webhook/>}
+                    checked={features.get(webhook)}
+                    onCheck={() => toggle(webhook)}
 
                 />
-                <FeatureCard value={Feature.ENDPOINTS}
-                             label={"Endpoints"}
-                             description={"API yourself"}
-                             icon={<Globe/>}
-                             checked={features.get(Feature.ENDPOINTS)}
-                             onCheck={handleCheck}
+                <FeatureCard
+                    label={"Endpoint"}
+                    description={"API yourself"}
+                    icon={<Globe/>}
+                    checked={features.get(endpoint)}
+                    onCheck={() => toggle(endpoint)}
                 />
             </div>
         </div>
@@ -104,15 +113,14 @@ const NamespaceDetailPage = () => {
 }
 
 type FeatureProps = {
-    value: number
     label: string,
     description: string,
     icon: Element,
-    checked: boolean,
-    onCheck: (f: Feature) => void
+    onCheck: () => void
+    checked: boolean
 }
 
-const FeatureCard: FC<FeatureProps> = ({value, label, description, onCheck, icon, checked}) => {
+const FeatureCard: FC<FeatureProps> = ({label, description, onCheck, icon, checked}) => {
     const _icon = cloneElement(icon, {
         size: 32
     })
@@ -122,7 +130,7 @@ const FeatureCard: FC<FeatureProps> = ({value, label, description, onCheck, icon
             <CardHeader className={"flex flex-row justify-between"}>
                 {_icon}
                 {label}
-                <Switch checked={checked} onCheckedChange={() => onCheck(value)}></Switch>
+                <Switch checked={checked} onCheckedChange={() => onCheck()}></Switch>
             </CardHeader>
             <CardContent>
                 <CardDescription>

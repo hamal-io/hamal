@@ -11,10 +11,11 @@ export interface NamespaceUpdateRequested {
     id: string;
 }
 
+
 export interface Namespace {
     id: string;
     name: string;
-    features: string;
+    features: FeatureObject;
 }
 
 export interface NamespaceList {
@@ -47,16 +48,11 @@ export class NamespaceNode {
     }
 }
 
-export const enum Feature {
-    SCHEDULES,
-    TOPICS,
-    WEBHOOKS,
-    ENDPOINTS
+export interface FeatureObject {
+    [key: string]: number
 }
 
-export const featuresMap = new Map<Feature, boolean>([
-    [Feature.SCHEDULES, false],
-    [Feature.TOPICS, false],
-    [Feature.WEBHOOKS, false],
-    [Feature.ENDPOINTS, false]
-])
+export interface Feature {
+    [key: string] :  FeatureObject
+}
+
