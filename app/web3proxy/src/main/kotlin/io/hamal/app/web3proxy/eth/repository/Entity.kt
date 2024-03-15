@@ -48,27 +48,27 @@ internal data class BlockEntity(
 
 internal data class TransactionEntity(
     @SerializedName("a")
-    val from: EthAddressId?,
+    val from: EthAddressId,
     @SerializedName("b")
-    val gas: EthUint64?,
+    val gas: EthUint64,
     @SerializedName("c")
-    val gasPrice: EthUint64?,
+    val gasPrice: EthUint64,
     @SerializedName("d")
     val maxPriorityFeePerGas: EthUint64?,
     @SerializedName("e")
     val maxFeePerGas: EthUint64?,
     @SerializedName("f")
-    val hash: EthHash?,
+    val hash: EthHash,
     @SerializedName("g")
     val input: EthPrefixedHexString?,
     @SerializedName("h")
-    val nonce: EthUint64?,
+    val nonce: EthUint64,
     @SerializedName("i")
     val to: EthAddressId?,
     @SerializedName("j")
     val value: EthUint256?,
     @SerializedName("k")
-    val type: EthUint8?,
+    val type: EthUint8,
     @SerializedName("l")
     val accessList: List<AccessListItem>?
 ) {

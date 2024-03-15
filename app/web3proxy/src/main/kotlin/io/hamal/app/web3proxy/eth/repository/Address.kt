@@ -13,6 +13,8 @@ interface EthAddressRepository {
     fun resolve(addresses: Set<EthAddress>): Map<EthAddress, EthAddressId>
 
     fun list(addressIds: Iterable<EthAddressId>): Map<EthAddressId, EthAddress>
+
+    fun clear()
 }
 
 class EthAddressRepositoryImpl(
@@ -22,17 +24,6 @@ class EthAddressRepositoryImpl(
     filename = "address.db"
 ), EthAddressRepository {
 
-    override fun setupSchema(connection: Connection) {
-        connection.execute(
-            """
-            CREATE TABLE IF NOT EXISTS address (
-                 id             INTEGER PRIMARY KEY,
-                 address        TEXT(42) NOT NULL,
-                 UNIQUE         (address)
-            );
-        """.trimIndent()
-        )
-    }
 
     override fun resolve(address: EthAddress): EthAddressId {
         return resolve(setOf(address)).entries.first().value
@@ -67,6 +58,19 @@ class EthAddressRepositoryImpl(
                 }
             }
         }.toMap()
+    }
+
+
+    override fun setupSchema(connection: Connection) {
+        connection.execute(
+            """
+            CREATE TABLE IF NOT EXISTS address (
+                 id             INTEGER PRIMARY KEY,
+                 address        TEXT(42) NOT NULL,
+                 UNIQUE         (address)
+            );
+        """.trimIndent()
+        )
     }
 
     override fun setupConnection(connection: Connection) {

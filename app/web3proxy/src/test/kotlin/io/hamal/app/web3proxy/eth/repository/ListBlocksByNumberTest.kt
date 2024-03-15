@@ -10,11 +10,11 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import kotlin.io.path.createTempDirectory
 
-internal class ListByBlockNumbersTest {
+internal class ListBlocksByNumberTest {
 
     @Test
     fun `Does nothing on empty block number list`() {
-        testInstance.list(listOf()).also { result ->
+        testInstance.listBlocks(listOf()).also { result ->
             assertThat(result, hasSize(0))
         }
 
@@ -234,11 +234,10 @@ internal class ListByBlockNumbersTest {
 
     private val ethBatchServiceFixture = EthBatchServiceFixture()
 
-    private val testInstance = EthBlockRepositoryImpl(
+    private val testInstance = EthRepositoryImpl(
         path = createTempDirectory("web3proxy_block"),
-        addressRepository = EthAddressRepositoryImpl(createTempDirectory("web3proxy_address")),
         ethBatchService = ethBatchServiceFixture
     )
 
-    private fun EthBlockRepositoryImpl.list(vararg blockNumbers: String) = list(blockNumbers.map { EthUint64(it) })
+    private fun EthRepositoryImpl.list(vararg blockNumbers: String) = listBlocks(blockNumbers.map { EthUint64(it) })
 }
