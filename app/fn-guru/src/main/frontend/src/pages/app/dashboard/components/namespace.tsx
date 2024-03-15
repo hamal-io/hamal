@@ -7,6 +7,12 @@ import {Globe, Layers3, Timer, Webhook} from "lucide-react";
 import {FeatureObject} from "@/types";
 import {Switch} from "@/components/ui/switch.tsx";
 import {Button} from "@/components/ui/button.tsx";
+import {Form, FormControl, FormField, FormItem} from "@/components/ui/form.tsx";
+import form from "@/pages/app/blueprint-list/components/form.tsx";
+import {Input} from "@/components/ui/input.tsx";
+import {z} from "zod";
+import {useForm} from "react-hook-form";
+import {zodResolver} from "@hookform/resolvers/zod";
 import Element = React.JSX.Element;
 
 
@@ -20,6 +26,7 @@ const NamespaceDetailPage = () => {
         new Feature("Webhook", 2),
         new Feature("Endpoint", 3),
     ))
+    const [schedule, topic, webhook, endpoint] = featureList
 
     useEffect(() => {
         const abortController = new AbortController()
@@ -37,17 +44,15 @@ const NamespaceDetailPage = () => {
                         fc.state = true
                     }
                 }
-
             }
-
             setFeatureList(client)
         }
     }, [namespace]);
 
-    if (error) return "Error"
-    if (loading) return "Loading..."
 
-    function updateFeatures() {
+
+    function updateFeatures(name?: string) {
+        const rename = name === null ? namespace.name : name
         try {
             const answer: FeatureObject = {}
             featureList.forEach((f) => {
@@ -55,7 +60,7 @@ const NamespaceDetailPage = () => {
                     answer[f.name] = f.value
                 }
             })
-            updateNamespace(uiState.namespaceId, namespace.name, answer)
+            updateNamespace(uiState.namespaceId, rename, answer)
 
         } catch (e) {
             console.log(e)
@@ -69,15 +74,24 @@ const NamespaceDetailPage = () => {
         setFeatureList(client)
     }
 
-    const [schedule, topic, webhook, endpoint] = featureList
 
+
+    if (error) return "Error"
+    if (loading) return "Loading..."
     return (
         <div className="pt-8 px-8">
+            {namespace &&
+                <RenameForm
+                    name={namespace.name}
+                    onChange={(s) => updateFeatures(s)}
+                />
+            }
+            <br/>
             <PageHeader
                 title="Workloads"
                 description="Select workflows for this namespace."
                 actions={[
-                    <Button variant={"default"} onClick={updateFeatures}>Apply</Button>
+                    <Button variant={"default"} onClick={() => updateFeatures()}>Apply</Button>
                 ]}
             />
             <div className={"flex flex-col gap-4"}>
@@ -113,6 +127,57 @@ const NamespaceDetailPage = () => {
                 />
             </div>
         </div>
+    )
+}
+
+
+type RenameProps = {
+    name: string
+    onChange: (s: string) => void
+}
+const RenameForm: FC<RenameProps> = ({name, onChange}) => {
+    const formSchema = z.object(
+        {
+            name: z.string().min(2).max(50)
+        }
+    )
+
+    const form = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            name: name
+        }
+    })
+
+    function onSubmit(values: z.infer<typeof formSchema>) {
+        onChange(values.name)
+    }
+
+    return (
+        <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+                <PageHeader
+                    title="Current Namesapce"
+                    description="Rename."
+                    actions={[
+                        <Button type={"submit"} variant={"default"}>
+                            Rename
+                        </Button>
+                    ]}
+                />
+                <FormField
+                    control={form.control}
+                    name="name"
+                    render={({field}) => (
+                        <FormItem>
+                            <FormControl>
+                                <Input {...field}/>
+                            </FormControl>
+                        </FormItem>
+                    )}>
+                </FormField>
+            </form>
+        </Form>
     )
 }
 
