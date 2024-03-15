@@ -5,8 +5,8 @@ import {useNamespaceGet, useNamespaceUpdate} from "@/hook";
 import {Globe, Layers3, Timer, Webhook} from "lucide-react";
 import {FeatureObject} from "@/types";
 import {Button} from "@/components/ui/button.tsx";
-import {RenameForm} from "@/pages/app/dashboard/components/namespace/renameForm.tsx";
-import {FeatureCard} from "@/pages/app/dashboard/components/namespace/featureCard.tsx";
+import {RenameForm} from "@/pages/app/dashboard/components/namespace-components/renameForm.tsx";
+import {FeatureCard} from "@/pages/app/dashboard/components/namespace-components/featureCard.tsx";
 
 
 const NamespaceDetailPage = () => {
