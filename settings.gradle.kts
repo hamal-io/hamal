@@ -76,6 +76,7 @@ include(":platform:runner:test")
 include(":platform:testbed")
 
 include(":app")
+include(":app:candy-rocks")
 include(":app:fn-guru")
 include(":app:hamal-backend")
 include(":app:hamal-mono")
