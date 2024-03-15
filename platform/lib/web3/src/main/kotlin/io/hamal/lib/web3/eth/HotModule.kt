@@ -17,7 +17,7 @@ import io.hamal.lib.web3.eth.domain.EthRequest
 import io.hamal.lib.web3.eth.domain.EthRequestId
 import java.lang.reflect.Type
 
-object EthModule : HotModule() {
+object EthHotModule : HotModule() {
 
     init {
         set(EthRequestId::class, EthRequestId.Adapter)
@@ -115,6 +115,6 @@ val json = Json(
     JsonFactoryBuilder()
         .register(HotObjectModule)
         .register(ValueObjectJsonModule)
-        .register(EthModule)
+        .register(EthHotModule)
 
 )

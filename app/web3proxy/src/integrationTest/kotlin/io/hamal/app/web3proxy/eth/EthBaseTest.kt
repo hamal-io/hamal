@@ -4,8 +4,7 @@ import io.hamal.app.web3proxy.Web3Proxy
 import io.hamal.app.web3proxy.config.WebConfig
 import io.hamal.app.web3proxy.eth.handler.EthRequestHandlerImpl
 import io.hamal.app.web3proxy.eth.handler.HandleEthRequest
-import io.hamal.app.web3proxy.eth.repository.EthAddressRepositoryImpl
-import io.hamal.app.web3proxy.eth.repository.EthBlockRepositoryImpl
+import io.hamal.app.web3proxy.eth.repository.EthRepositoryImpl
 import io.hamal.app.web3proxy.fixture.EthBatchServiceFixture
 import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.http.JsonHttpSerdeFactory
@@ -22,7 +21,6 @@ import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.context.annotation.Bean
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import kotlin.io.path.Path
 import kotlin.io.path.createTempDirectory
 
 
@@ -149,9 +147,8 @@ class TestConfig {
 
     @Bean
     fun ethRequestHandler(): HandleEthRequest = EthRequestHandlerImpl(
-        EthBlockRepositoryImpl(
+        EthRepositoryImpl(
             path = createTempDirectory("web3proxy_eth"),
-            addressRepository = EthAddressRepositoryImpl(Path("/tmp/web3proxy/eth")),
             ethBatchService = EthBatchServiceFixture()
         )
     )
