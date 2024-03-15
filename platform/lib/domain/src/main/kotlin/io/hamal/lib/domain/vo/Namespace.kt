@@ -29,7 +29,7 @@ class NamespaceFeatures(override var value: HotObject = HotObject.empty) : Value
         value.nodes.forEach { feature ->
             require(
                 NamespaceFeature.entries.any { validFeatures ->
-                    validFeatures.name == feature.key && validFeatures.value == feature.value.intValue
+                    validFeatures.name == feature.key/* && validFeatures.value == feature.value.intValue*/
                 }
             ) { IllegalArgumentException("$feature is not a valid feature.") }
         }

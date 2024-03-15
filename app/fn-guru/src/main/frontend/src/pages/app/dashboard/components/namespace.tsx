@@ -9,16 +9,17 @@ import {Switch} from "@/components/ui/switch.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import Element = React.JSX.Element;
 
+
 const NamespaceDetailPage = () => {
     const [uiState] = useUiState()
     const [getNamespace, namespace, loading, error] = useNamespaceGet()
     const [updateNamespace, updateRequested, loading2, error2] = useNamespaceUpdate()
-    const [features, setFeatures] = useState(new Map<string, boolean>([
-        ["Schedule", false],
-        ["Topic", false],
-        ["Webhook", false],
-        ["Endpoint", false]
-    ]))
+    const [featureList, setFeatureList] = useState(new Array<Feature>(
+        new Feature("Schedule", 0),
+        new Feature("Topic", 1),
+        new Feature("Webhook", 2),
+        new Feature("Endpoint", 3),
+    ))
 
     useEffect(() => {
         const abortController = new AbortController()
@@ -28,13 +29,18 @@ const NamespaceDetailPage = () => {
 
     useEffect(() => {
         if (namespace) {
-            const x = namespace.features
-            const t = new Map(features)
-            const feats = namespace.features
-            for (const [k, v] of Object.entries(feats)) {
-                t.set(k, true)
+            const client = [...featureList]
+            const server = deserializeFeature(namespace.features)
+            for (const fs of server) {
+                for (const fc of client) {
+                    if (fs.value === fc.value) {
+                        fc.state = true
+                    }
+                }
+
             }
-            setFeatures(t)
+
+            setFeatureList(client)
         }
     }, [namespace]);
 
@@ -44,9 +50,9 @@ const NamespaceDetailPage = () => {
     function updateFeatures() {
         try {
             const answer: FeatureObject = {}
-            features.forEach((isActive, ft) => {
-                if (isActive) {
-                    answer[ft] = -1
+            featureList.forEach((f) => {
+                if (f.state === true) {
+                    answer[f.name] = f.value
                 }
             })
             updateNamespace(uiState.namespaceId, namespace.name, answer)
@@ -56,12 +62,14 @@ const NamespaceDetailPage = () => {
         }
     }
 
-    function toggle(feature: string) {
-        const t = new Map(features)
-        const state = features.get(feature)
-        t.set(feature, !state)
-        setFeatures(t)
+    function toggle(value: number) {
+        const client = [...featureList]
+        const x = client.find((f) => f.value === value)
+        x.toggle()
+        setFeatureList(client)
     }
+
+    const [schedule, topic, webhook, endpoint] = featureList
 
     return (
         <div className="pt-8 px-8">
@@ -77,31 +85,31 @@ const NamespaceDetailPage = () => {
                     label={"Schedules"}
                     description={"All kinds of timers"}
                     icon={<Timer/>}
-                    checked={features.get("Schedule")}
-                    onCheck={() => toggle("Schedule")}
+                    checked={schedule.state}
+                    onCheck={() => toggle(schedule.value)}
                 />
                 <FeatureCard
                     label={"Topics"}
                     description={"Stay tuned"}
                     icon={<Layers3/>}
-                    checked={features.get("Topic")}
-                    onCheck={() => toggle("Topic")}
+                    checked={topic.state}
+                    onCheck={() => toggle(topic.value)}
 
                 />
                 <FeatureCard
                     label={"Webhook"}
                     description={"Stay tuned"}
                     icon={<Webhook/>}
-                    checked={features.get("Webhook")}
-                    onCheck={() => toggle("Webhook")}
+                    checked={webhook.state}
+                    onCheck={() => toggle(webhook.value)}
 
                 />
                 <FeatureCard
                     label={"Endpoint"}
                     description={"API yourself"}
                     icon={<Globe/>}
-                    checked={features.get("Endpoint")}
-                    onCheck={() => toggle("Endpoint")}
+                    checked={endpoint.state}
+                    onCheck={() => toggle(endpoint.value)}
                 />
             </div>
         </div>
@@ -138,3 +146,29 @@ const FeatureCard: FC<FeatureProps> = ({label, description, onCheck, icon, check
 }
 
 export default NamespaceDetailPage
+
+
+class Feature {
+    name: string
+    value: number
+    state: boolean
+
+    constructor(name: string, value: number) {
+        this.name = name;
+        this.value = value;
+        this.state = false
+    }
+
+    toggle() {
+        this.state = !this.state
+    }
+}
+
+function deserializeFeature(obj: FeatureObject): Array<Feature> {
+    const res = new Array<Feature>()
+    for (const [k, v] of Object.entries(obj)) {
+        const f = new Feature(k, v)
+        res.push(f)
+    }
+    return res
+}
