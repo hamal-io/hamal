@@ -6,11 +6,11 @@ import io.hamal.lib.kua.type.KuaString
 import org.apache.http.impl.client.HttpClientBuilder
 
 interface HttpTemplate {
-    fun delete(url: String): HttpRequest
-    fun get(url: String): HttpRequest
-    fun patch(url: String): HttpRequestWithBody
-    fun post(url: String): HttpRequestWithBody
-    fun put(url: String): HttpRequestWithBody
+    fun delete(url: String = ""): HttpRequest
+    fun get(url: String = ""): HttpRequest
+    fun patch(url: String = ""): HttpRequestWithBody
+    fun post(url: String = ""): HttpRequestWithBody
+    fun put(url: String = ""): HttpRequestWithBody
 
     val baseUrl: String
 }

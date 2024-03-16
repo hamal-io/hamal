@@ -1,12 +1,20 @@
 local hamal_provider_create = function(opts)
-    url = opts.url or 'https://web3-proxy.hamal.io'
+    url = opts.url or 'https://eth.w3p.hamal.io'
+
+    eth_plugin = require_plugin('web3.evm')
 
     return {
         name = 'hamal',
         url = url,
         get_block_by_number = function(block_number)
-            print('fetching ' .. block_number .. ' from url' .. url)
-        end
+
+        end,
+
+        batch = {
+            get_block = function(block)
+                return { type = "get_block", block = block }
+            end
+        }
     }
 end
 
