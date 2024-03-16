@@ -41,8 +41,18 @@
 
 function plugin_create(internal)
     local export = {
+        abi = {
+            types = {
+                UINT_8 = 'uint256',
+                UINT_256 = 'uint256'
+            }
+        },
         request = {}
     }
+
+    function export.abi.decode_parameter(type, value)
+        return internal.decode_parameter(type, value)
+    end
 
     function export.get_block(block)
         -- FIXME make sure its a number
