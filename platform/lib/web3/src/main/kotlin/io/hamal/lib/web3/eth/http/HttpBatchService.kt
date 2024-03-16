@@ -69,9 +69,8 @@ class EthHttpBatchService(
         }
 
         val response = httpTemplate
-            .post("/")
-            .body(HotArray.builder().also { builder -> requests.forEach { request -> builder.append(request) } }
-                .build())
+            .post()
+            .body(HotArray.builder().also { builder -> requests.forEach { request -> builder.append(request) } }.build())
             .execute(HotArray::class)
 
         return response.nodes.mapIndexed { index, hotNode ->

@@ -2,7 +2,7 @@ package io.hamal.plugin.web3
 
 import io.hamal.runner.test.AbstractRunnerTest
 import io.hamal.lib.kua.NativeLoader
-import io.hamal.plugin.web3.evm.PluginWeb3EthFactory
+import io.hamal.plugin.web3.evm.PluginWeb3EvmFactory
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
@@ -17,7 +17,7 @@ object PluginWeb3EthTest : AbstractRunnerTest() {
         NativeLoader.load(NativeLoader.Preference.Resources)
         return collectFiles().map { testFile ->
             dynamicTest("${testFile.parent.name}/${testFile.name}") {
-                val runner = createTestRunner(pluginFactories = listOf(PluginWeb3EthFactory()))
+                val runner = createTestRunner(pluginFactories = listOf(PluginWeb3EvmFactory()))
                 runner.run(unitOfWork(String(Files.readAllBytes(testFile))))
             }
         }.toList()

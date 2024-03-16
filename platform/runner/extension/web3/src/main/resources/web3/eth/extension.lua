@@ -1,11 +1,21 @@
 local hamal_provider_create = function(opts)
-    url = opts.url or 'https://web3-proxy.hamal.io'
+    url = opts.url or 'https://eth.w3p.hamal.io'
+
+    evm = require_plugin('web3.evm')
+
+    batch = {
+        get_block = function(block) evm.get_block(block) end
+    }
 
     return {
         name = 'hamal',
         url = url,
-        get_block_by_number = function(block_number)
-            print('fetching ' .. block_number .. ' from url' .. url)
+        get_block = function(block)
+            err, responses = export.execute({ export.request.get_block(block) })
+            if err ~= nil then
+                return err, nil
+            end
+            return nil, responses[1]
         end
     }
 end
@@ -35,7 +45,7 @@ function extension_create()
                     },
                     decode_parameter = abi_decode_parameter
                 },
-                get_block_by_number = provider.get_block_by_number
+                get_block = provider.get_block
             }
         end
     }
