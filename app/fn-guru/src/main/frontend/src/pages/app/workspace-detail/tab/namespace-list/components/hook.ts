@@ -7,9 +7,8 @@ export function useNamespaceTree(workspaceId: string): [TreeAction, NamespaceNod
     const [listNamespaces, namespacesList] = useNamespaceList()
     const [root, setRoot] = useState(null)
 
-    const fn = useCallback((abortController?) => {
+    const fn = useCallback<TreeAction>((abortController?) => {
         listNamespaces(workspaceId, abortController)
-        console.log("fetch namespaces")
     }, [])
 
     useEffect(() => {

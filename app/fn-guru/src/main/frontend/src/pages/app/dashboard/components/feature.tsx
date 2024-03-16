@@ -1,25 +1,18 @@
-import React, {useEffect, useState} from "react";
-import {PageHeader} from "@/components/page-header.tsx";
+import React, {useEffect} from "react";
 import {useUiState} from "@/hook/ui-state.ts";
 import {useNamespaceGet, useNamespaceUpdate} from "@/hook";
 import {Globe, Layers3, Timer, Webhook} from "lucide-react";
 import {FeatureObject} from "@/types";
-import {Button} from "@/components/ui/button.tsx";
-import {RenameForm} from "@/pages/app/dashboard/components/namespace-components/renameForm.tsx";
-import {FeatureCard} from "@/pages/app/dashboard/components/namespace-components/featureCard.tsx";
+import {useFeatures} from "@/pages/app/dashboard/components/feature-components/hook.ts";
+import {FeatureCard} from "@/pages/app/dashboard/components/feature-components/card.tsx";
 
 
 const NamespaceDetailPage = () => {
     const [uiState] = useUiState()
     const [getNamespace, namespace, loading, error] = useNamespaceGet()
     const [updateNamespace, updateRequested, loading2, error2] = useNamespaceUpdate()
-    const [featureList, setFeatureList] = useState(new Array<Feature>(
-        new Feature("Schedule", 0),
-        new Feature("Topic", 1),
-        new Feature("Webhook", 2),
-        new Feature("Endpoint", 3),
-    ))
-    const [schedule, topic, webhook, endpoint] = featureList
+    const [fetchFeatures, toggleFeature, features] = useFeatures()
+    const [schedule, topic, webhook, endpoint] = features
 
     useEffect(() => {
         const abortController = new AbortController()
@@ -29,16 +22,7 @@ const NamespaceDetailPage = () => {
 
     useEffect(() => {
         if (namespace) {
-            const client = [...featureList]
-            const server = deserializeFeature(namespace.features)
-            for (const fs of server) {
-                for (const fc of client) {
-                    if (fs.value === fc.value) {
-                        fc.state = true
-                    }
-                }
-            }
-            setFeatureList(client)
+            fetchFeatures(namespace)
         }
     }, [namespace]);
 
@@ -46,7 +30,7 @@ const NamespaceDetailPage = () => {
     function updateFeatures() {
         try {
             const answer: FeatureObject = {}
-            featureList.forEach((f) => {
+            features.forEach((f) => {
                 if (f.state === true) {
                     answer[f.name] = f.value
                 }
@@ -59,10 +43,7 @@ const NamespaceDetailPage = () => {
     }
 
     function toggle(value: number) {
-        const client = [...featureList]
-        const x = client.find((f) => f.value === value)
-        x.toggle()
-        setFeatureList(client)
+        toggleFeature(value)
         updateFeatures()
     }
 
@@ -109,27 +90,3 @@ const NamespaceDetailPage = () => {
 export default NamespaceDetailPage
 
 
-class Feature {
-    name: string
-    value: number
-    state: boolean
-
-    constructor(name: string, value: number) {
-        this.name = name;
-        this.value = value;
-        this.state = false
-    }
-
-    toggle() {
-        this.state = !this.state
-    }
-}
-
-function deserializeFeature(obj: FeatureObject): Array<Feature> {
-    const res = new Array<Feature>()
-    for (const [k, v] of Object.entries(obj)) {
-        const f = new Feature(k, v)
-        res.push(f)
-    }
-    return res
-}
