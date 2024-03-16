@@ -8,53 +8,48 @@ import {useAdhoc, useNamespaceList} from "@/hook";
 import {BlueprintListItem} from "@/types/blueprint.ts";
 import {Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger} from "@/components/ui/select.tsx";
 import {SelectValue} from "@radix-ui/react-select";
-import {Loader2} from "lucide-react";
-
 
 type Props = {
     item: BlueprintListItem
     onClose: () => void
 }
-export const BlueprintDialog: FC<Props> = ({item, onClose}) => {
+export const BpDialog: FC<Props> = ({item, onClose}) => {
     const [uiState] = useUiState()
     const navigate = useNavigate()
     const [namespace, setNamespace] = useState(uiState.namespaceId)
-    const [listNamespaces, namespaceList, loading] = useNamespaceList()
-    const [adhoc] = useAdhoc()
+    const [listNamespaces, namespaceList, loading, error] = useNamespaceList()
+    const [adhoc, data] = useAdhoc()
     const [getBlueprint, blueprint] = useBlueprintGet()
-    const [isLoading, setLoading] = useState(false)
 
     useEffect(() => {
-        if (uiState.workspaceId != null) {
-            listNamespaces(uiState.workspaceId)
+        const abortController = new AbortController();
+        if (uiState.workspaceId) {
+            listNamespaces(uiState.workspaceId, abortController)
         }
-    }, []);
 
-    useEffect(() => {
-        if (blueprint) {
-            try {
-                adhoc(namespace, blueprint.value)
-            } catch (e) {
-                console.log(e)
-            } finally {
-                onClose()
-            }
+        return () => {
+            abortController.abort();
         }
-    }, [blueprint]);
+    }, [uiState.workspaceId]);
 
     async function deployAction() {
-        setLoading(true)
         try {
             getBlueprint(item.id)
         } catch (e) {
             console.log(e)
         } finally {
-            setLoading(false)
-            onClose()
+            //onClose()
         }
     }
 
+    useEffect(() => {
+        if (blueprint) {
+            adhoc(namespace, blueprint.value)
+            onClose()
+        }
+    }, [blueprint]);
 
+    if (loading) return `Error`
     if (namespaceList === null || loading) return "Loading..."
 
     return (
@@ -82,7 +77,6 @@ export const BlueprintDialog: FC<Props> = ({item, onClose}) => {
                     </SelectContent>
                 </Select>
                 <Button type={"submit"} size="sm" onClick={deployAction}>
-                    {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
                     Deploy
                 </Button>
                 <Button size={"sm"} onClick={() => {
@@ -92,6 +86,5 @@ export const BlueprintDialog: FC<Props> = ({item, onClose}) => {
                 </Button>
             </div>
         </DialogContent>
-
     )
 }
