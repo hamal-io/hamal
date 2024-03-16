@@ -9,6 +9,7 @@ import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.hot.HotString
 import io.hamal.lib.common.serialization.GsonTransform
 import io.hamal.lib.common.serialization.JsonAdapter
+import io.hamal.lib.domain.Json
 import io.hamal.lib.web3.eth.abi.type.EthPrefixedHexString
 import io.hamal.lib.web3.eth.abi.type.EthUint64
 import io.hamal.lib.web3.eth.domain.EthMethod.GetBlockByNumber
@@ -97,6 +98,49 @@ data class EthGetBlockByNumberRequest(
                 number = EthUint64(EthPrefixedHexString(obj.getAsJsonArray("params").get(0).asString)),
                 fullTransaction = obj.getAsJsonArray("params").get(1).asBoolean
             )
+        }
+    }
+}
+
+fun parseRequest(json: Json, request: HotObject): Pair<EthErrorResponse?, EthRequest?> {
+    return try {
+        val ethRequest = json.deserialize(EthRequest::class, json.serialize(request))
+        null to ethRequest
+    } catch (e: Throwable) {
+        e.printStackTrace()
+        when {
+            e.message?.contains("does not start with 0x") == true -> {
+                EthErrorResponse(
+                    id = EthRequestId(request["id"].stringValue),
+                    error = EthError(EthError.ErrorCode.InvalidParams, "invalid argument: hex string without 0x prefix")
+                ) to null
+            }
+
+            e.message?.contains("does not match hex pattern") == true -> {
+                EthErrorResponse(
+                    id = EthRequestId(request["id"].stringValue),
+                    error = EthError(EthError.ErrorCode.InvalidParams, "invalid argument: hex string")
+                ) to null
+            }
+
+            e.message?.contains("out of bounds for length") == true -> {
+                EthErrorResponse(
+                    id = EthRequestId(request["id"].stringValue),
+                    error = EthError(EthError.ErrorCode.InvalidParams, "missing argument")
+                ) to null
+            }
+
+            e.message?.contains("EthMethod not found") == true -> {
+                EthErrorResponse(
+                    id = EthRequestId(request["id"].stringValue),
+                    error = EthError(EthError.ErrorCode.MethodNotFound, "method not supported")
+                ) to null
+            }
+
+            else -> EthErrorResponse(
+                id = EthRequestId(request["id"].stringValue),
+                error = EthError(EthError.ErrorCode.InternalError, "Unexpected error")
+            ) to null
         }
     }
 }

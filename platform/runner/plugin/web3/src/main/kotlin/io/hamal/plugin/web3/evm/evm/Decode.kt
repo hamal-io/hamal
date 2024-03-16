@@ -1,4 +1,4 @@
-package io.hamal.plugin.web3.evm
+package io.hamal.plugin.web3.evm.evm
 
 import io.hamal.lib.kua.function.Function2In2Out
 import io.hamal.lib.kua.function.FunctionContext

@@ -20,7 +20,7 @@ import io.hamal.plugin.net.smtp.PluginSmtpFactory
 import io.hamal.plugin.std.debug.PluginDebugFactory
 import io.hamal.plugin.std.log.PluginLogFactory
 import io.hamal.plugin.std.sys.PluginSysFactory
-import io.hamal.plugin.web3.evm.PluginWeb3EvmFactory
+import io.hamal.plugin.web3.evm.evm.PluginWeb3EvmFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

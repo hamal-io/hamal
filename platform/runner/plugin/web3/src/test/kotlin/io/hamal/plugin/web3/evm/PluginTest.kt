@@ -1,8 +1,8 @@
-package io.hamal.plugin.web3
+package io.hamal.plugin.web3.evm
 
-import io.hamal.runner.test.AbstractRunnerTest
 import io.hamal.lib.kua.NativeLoader
-import io.hamal.plugin.web3.evm.PluginWeb3EvmFactory
+import io.hamal.plugin.web3.evm.evm.PluginWeb3EvmFactory
+import io.hamal.runner.test.AbstractRunnerTest
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
@@ -11,7 +11,7 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import kotlin.io.path.name
 
-object PluginWeb3EthTest : AbstractRunnerTest() {
+internal object PluginWeb3EvmTest : AbstractRunnerTest() {
     @TestFactory
     fun run(): List<DynamicTest> {
         NativeLoader.load(NativeLoader.Preference.Resources)

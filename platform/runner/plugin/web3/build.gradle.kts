@@ -39,6 +39,7 @@ testing {
                 dependencies {
                     implementation(project(":platform:runner:test"))
                     implementation(project(":platform:runner:plugin:web3"))
+                    implementation(project(":platform:lib:web3"))
 
                     implementation(external.junit)
                     implementation(external.hamcrest)

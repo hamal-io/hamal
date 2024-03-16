@@ -1,4 +1,4 @@
-package io.hamal.plugin.web3.evm
+package io.hamal.plugin.web3.evm.evm
 
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin

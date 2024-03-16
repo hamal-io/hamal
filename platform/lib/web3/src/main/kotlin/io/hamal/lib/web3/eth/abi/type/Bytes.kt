@@ -13,7 +13,7 @@ sealed interface EthBytes : EthType<ByteArray> {
 //    }
     override fun toByteArray(): ByteArray = value
     override fun toByteWindow() = ByteWindow(ByteBuffer.wrap(value), numberOfBytes)
-    fun toPrefixedHexString() = EthPrefixedHexString("0x${Web3Formatter.formatToHex(value)}")
+    fun toPrefixedHexString() = EthPrefixedHexString("0x${Web3Formatter.formatWithoutLeadingZeros(value)}")
 }
 
 class EthBytes32(
