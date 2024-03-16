@@ -23,14 +23,14 @@ const DashboardPage: React.FC = () => {
                             <TabsTrigger value="notifications" disabled>
                                 Notifications
                             </TabsTrigger>
-                            <TabsTrigger value={"namespace"}>
-                                Namespace
+                            <TabsTrigger value={"features"}>
+                                Features
                             </TabsTrigger>
                         </TabsList>
                         <TabsContent value="overview" className="space-y-4">
                             <Overview/>
                         </TabsContent>
-                        <TabsContent value={"namespace"}>
+                        <TabsContent value={"features"}>
                             <NamespaceDetailPage/>
                         </TabsContent>
                     </Tabs>

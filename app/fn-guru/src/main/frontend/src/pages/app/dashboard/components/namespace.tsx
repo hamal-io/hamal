@@ -43,8 +43,7 @@ const NamespaceDetailPage = () => {
     }, [namespace]);
 
 
-    function updateFeatures(name?: string) {
-        const rename = name === null ? namespace.name : name
+    function updateFeatures() {
         try {
             const answer: FeatureObject = {}
             featureList.forEach((f) => {
@@ -52,7 +51,7 @@ const NamespaceDetailPage = () => {
                     answer[f.name] = f.value
                 }
             })
-            updateNamespace(uiState.namespaceId, rename, answer)
+            updateNamespace(uiState.namespaceId, namespace.name, answer)
 
         } catch (e) {
             console.log(e)
@@ -64,6 +63,7 @@ const NamespaceDetailPage = () => {
         const x = client.find((f) => f.value === value)
         x.toggle()
         setFeatureList(client)
+        updateFeatures()
     }
 
 
@@ -71,20 +71,6 @@ const NamespaceDetailPage = () => {
     if (loading) return "Loading..."
     return (
         <div className="pt-8 px-8">
-            {namespace &&
-                <RenameForm
-                    name={namespace.name}
-                    onChange={(s) => updateFeatures(s)}
-                />
-            }
-            <br/>
-            <PageHeader
-                title="Workloads"
-                description="Select workflows for this namespace."
-                actions={[
-                    <Button variant={"default"} onClick={() => updateFeatures()}>Apply</Button>
-                ]}
-            />
             <div className={"flex flex-col gap-4"}>
                 <FeatureCard
                     label={"Schedules"}
