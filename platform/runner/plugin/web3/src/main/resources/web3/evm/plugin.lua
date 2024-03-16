@@ -44,7 +44,7 @@ function plugin_create(internal)
         request = {}
     }
 
-    function export.request.get_block(block)
+    function export.get_block(block)
         -- FIXME make sure its a number
         return { type = "get_block", block = block }
     end
