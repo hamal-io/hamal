@@ -1,31 +1,22 @@
-import React, {useEffect} from "react";
-import {useUiState} from "@/hook/ui-state.ts";
-import {useNamespaceGet, useNamespaceUpdate} from "@/hook";
+import React, {FC, useEffect} from "react";
+import {useNamespaceUpdate} from "@/hook";
 import {Globe, Layers3, Timer, Webhook} from "lucide-react";
-import {FeatureObject} from "@/types";
+import {FeatureObject, Namespace} from "@/types";
 import {useFeatures} from "@/pages/app/dashboard/components/feature-components/hook.ts";
 import {FeatureCard} from "@/pages/app/dashboard/components/feature-components/card.tsx";
+import {Simulate} from "react-dom/test-utils";
 
 
-const NamespaceDetailPage = () => {
-    const [uiState] = useUiState()
-    const [getNamespace, namespace, loading, error] = useNamespaceGet()
-    const [updateNamespace, updateRequested, loading2, error2] = useNamespaceUpdate()
-    const [fetchFeatures, toggleFeature, features] = useFeatures()
+type Props = { namespace: Namespace }
+const FeatureTab: FC<Props> = ({namespace}) => {
+    const [updateNamespace, updateRequested, loading, error] = useNamespaceUpdate()
+    const [listFeatures, toggleFeature, features] = useFeatures()
+
     const [schedule, topic, webhook, endpoint] = features
 
     useEffect(() => {
-        const abortController = new AbortController()
-        getNamespace(uiState.namespaceId, abortController)
-        return (() => abortController.abort())
-    }, [uiState]);
-
-    useEffect(() => {
-        if (namespace) {
-            fetchFeatures(namespace)
-        }
+        listFeatures(namespace)
     }, [namespace]);
-
 
     function updateFeatures() {
         try {
@@ -35,7 +26,7 @@ const NamespaceDetailPage = () => {
                     answer[f.name] = f.value
                 }
             })
-            updateNamespace(uiState.namespaceId, namespace.name, answer)
+            updateNamespace(namespace.id, namespace.name, answer)
 
         } catch (e) {
             console.log(e)
@@ -54,14 +45,14 @@ const NamespaceDetailPage = () => {
         <div className="pt-8 px-8">
             <div className={"flex flex-col gap-4"}>
                 <FeatureCard
-                    label={"Schedules"}
+                    label={"Schedule"}
                     description={"All kinds of timers"}
                     icon={<Timer/>}
                     checked={schedule.state}
                     onCheck={() => toggle(schedule.value)}
                 />
                 <FeatureCard
-                    label={"Topics"}
+                    label={"Topic"}
                     description={"Stay tuned"}
                     icon={<Layers3/>}
                     checked={topic.state}
@@ -87,6 +78,6 @@ const NamespaceDetailPage = () => {
         </div>
     )
 }
-export default NamespaceDetailPage
+export default FeatureTab
 
 

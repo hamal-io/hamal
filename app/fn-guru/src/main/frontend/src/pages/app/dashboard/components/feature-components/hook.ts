@@ -7,7 +7,7 @@ type ToggleAction = (value: number) => void
 export function useFeatures(): [FetchAction, ToggleAction, Array<Feature>] {
     const [current, setCurrent] = useState(currentFeatures)
 
-    const fetch = useCallback<FetchAction>((namespace) => {
+    const toList = useCallback<FetchAction>((namespace) => {
         const copy = [...current]
         for (const [k, v] of Object.entries(namespace.features)) {
             const x = copy.find((c) => v === c.value)
@@ -16,14 +16,14 @@ export function useFeatures(): [FetchAction, ToggleAction, Array<Feature>] {
         setCurrent(copy)
     }, [])
 
-    const toggle = useCallback((value: number) => {
+    const toggleState = useCallback((value: number) => {
         const copy = [...current]
         const x = copy.find((f) => f.value === value)
         x.toggle()
         setCurrent(copy)
     }, [])
 
-    return [fetch, toggle, current]
+    return [toList, toggleState, current]
 }
 
 export class Feature {

@@ -18,7 +18,7 @@ export const FeatureCard: FC<Props> = ({label, description, onCheck, icon, check
     })
 
     return (
-        <Card className={"flex flex-row items-center justify-start w-3/5 p-4"}>
+        <Card className={"flex flex-row items-center  p-4"}>
             <Avatar className={"w-1/4"}>
                 {_icon}
             </Avatar>
