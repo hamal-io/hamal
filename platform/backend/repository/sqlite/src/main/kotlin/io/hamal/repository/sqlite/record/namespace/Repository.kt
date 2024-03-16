@@ -57,7 +57,8 @@ class NamespaceSqliteRepository(
                         cmdId = cmdId,
                         entityId = namespaceId,
                         workspaceId = cmd.workspaceId,
-                        name = cmd.name
+                        name = cmd.name,
+                        features = cmd.features
                     )
                 )
 
@@ -77,7 +78,8 @@ class NamespaceSqliteRepository(
                     NamespaceRecord.Updated(
                         entityId = namespaceId,
                         cmdId = cmdId,
-                        name = cmd.name ?: current.name
+                        name = cmd.name ?: current.name,
+                        features = cmd.features ?: current.features
                     )
                 )
                 currentVersion(namespaceId).also { ProjectionCurrent.upsert(this, it) }

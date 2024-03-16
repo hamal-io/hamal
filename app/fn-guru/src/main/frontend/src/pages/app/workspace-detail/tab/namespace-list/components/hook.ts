@@ -1,5 +1,4 @@
-import {NamespaceNode} from "@/pages/app/workspace-detail/tab/namespace-list/components/types.ts";
-import {NamespaceListItem} from "@/types";
+import {NamespaceListItem, NamespaceNode} from "@/types";
 import {useNamespaceList} from "@/hook";
 import {useCallback, useEffect, useState} from "react";
 
@@ -8,9 +7,8 @@ export function useNamespaceTree(workspaceId: string): [TreeAction, NamespaceNod
     const [listNamespaces, namespacesList] = useNamespaceList()
     const [root, setRoot] = useState(null)
 
-    const fn = useCallback((abortController?) => {
+    const fn = useCallback<TreeAction>((abortController?) => {
         listNamespaces(workspaceId, abortController)
-        console.log("fetch namespaces")
     }, [])
 
     useEffect(() => {

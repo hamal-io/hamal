@@ -23,7 +23,9 @@ class NamespaceAppendFunction(
 
         return try {
             val res = sdk.namespace.append(
-                ctx[NamespaceId::class], ApiNamespaceAppendRequest(NamespaceName(arg1.getString("name").stringValue))
+                ctx[NamespaceId::class], ApiNamespaceAppendRequest(
+                    name = NamespaceName(arg1.getString("name").stringValue)
+                )
             )
 
             null to ctx.tableCreate(

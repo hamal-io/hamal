@@ -6,10 +6,7 @@ import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.request.AccountCreateRequested
-import io.hamal.lib.domain.vo.ExpiresAt
-import io.hamal.lib.domain.vo.NamespaceName
-import io.hamal.lib.domain.vo.NamespaceTreeId
-import io.hamal.lib.domain.vo.WorkspaceName
+import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.*
 import io.hamal.repository.api.event.AccountCreatedEvent
 import org.springframework.stereotype.Component
@@ -63,7 +60,8 @@ class AccountCreateEmailHandler(
                 id = req.cmdId(),
                 namespaceId = req.namespaceId,
                 workspaceId = req.workspaceId,
-                name = NamespaceName.default
+                name = NamespaceName.default,
+                features = NamespaceFeatures.default
             )
         )
     }

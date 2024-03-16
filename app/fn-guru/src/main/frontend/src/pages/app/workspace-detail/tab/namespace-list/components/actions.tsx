@@ -5,6 +5,7 @@ import {Dialog} from "@/components/ui/dialog.tsx";
 import Update from "@/pages/app/workspace-detail/tab/namespace-list/components/update.tsx";
 import Append from "@/pages/app/workspace-detail/tab/namespace-list/components/append.tsx";
 import Element = React.JSX.Element;
+import {useNavigate} from "react-router-dom";
 
 
 type Props = {
@@ -13,6 +14,7 @@ type Props = {
 
 }
 const NamespaceActions: FC<Props> = ({id, trigger}) => {
+    const navigate = useNavigate()
     const [open, setOpen] = useState(false);
     const [dialogContent, setDialogContent] = useState(null);
 
@@ -22,7 +24,7 @@ const NamespaceActions: FC<Props> = ({id, trigger}) => {
         }
     }, [dialogContent]);
 
-    function handleChange(){
+    function handleChange() {
         setOpen(false)
     }
 
@@ -35,7 +37,7 @@ const NamespaceActions: FC<Props> = ({id, trigger}) => {
                 <DropdownMenuContent align="end">
                     <DropdownMenuItem
                         disabled={true}
-                        >
+                    >
                         Select
                     </DropdownMenuItem>
                     <DropdownMenuItem

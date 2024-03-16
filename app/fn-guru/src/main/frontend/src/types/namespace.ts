@@ -1,4 +1,3 @@
-
 export interface NamespaceAppendRequested {
     requestId: string;
     requestStatus: string;
@@ -12,9 +11,14 @@ export interface NamespaceUpdateRequested {
     id: string;
 }
 
+export interface FeatureObject {
+    [key: string]: number
+}
+
 export interface Namespace {
     id: string;
     name: string;
+    features: FeatureObject;
 }
 
 export interface NamespaceList {
@@ -26,3 +30,26 @@ export interface NamespaceListItem {
     parentId: string;
     name: string;
 }
+
+export class NamespaceNode {
+    data: NamespaceListItem
+    descendants: Array<NamespaceNode>
+
+    constructor(value: NamespaceListItem) {
+        this.data = value
+        this.descendants = []
+    }
+
+    addDescendant(other: NamespaceNode) {
+        if (this.data.id !== other.data.id) {
+            this.descendants.push(other)
+        }
+    }
+
+    isParent() {
+        return this.descendants.length > 0
+    }
+}
+
+
+

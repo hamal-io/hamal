@@ -1,13 +1,12 @@
 import React, {FC, useState} from "react";
-import {NamespaceNode} from "@/pages/app/workspace-detail/tab/namespace-list/components/types.ts";
 import {Button} from "@/components/ui/button.tsx";
 import Actions from "@/pages/app/workspace-detail/tab/namespace-list/components/actions.tsx";
 import {ChevronDown, ChevronRight, Dot} from "lucide-react";
+import {NamespaceNode} from "@/types";
 
 
 type Props = {
     root: NamespaceNode
-
 }
 const NamespaceNodeEntry: FC<Props> = ({root}) => {
     const [expanded, setExpanded] = useState(true)
