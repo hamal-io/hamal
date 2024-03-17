@@ -12,9 +12,6 @@ export interface NamespaceUpdateRequested {
     id: string;
 }
 
-export interface FeatureObject {
-    [key: string]: number
-}
 
 export class Feature {
     name: string
