@@ -4,6 +4,5 @@ export type UiStateType = 'Unauthorized' | 'Authorized'
 
 export interface UiState {
     type: UiStateType;
-    workspaceId: string;
-    namespaceId: string;
+    theme: string;
 }

@@ -5,8 +5,7 @@ import {useCallback} from "react";
 
 const unauthorized: UiState = {
     type: 'Unauthorized',
-    workspaceId: '',
-    namespaceId: '',
+    theme: 'light'
 }
 
 export const useUiState = () => {
@@ -19,11 +18,10 @@ type InitUiStateAction = (workspaceId: string, namespaceId: string) => void
 export const useInitUiState = (): [InitUiStateAction] => {
     const [uiState, setUiState] = useUiState()
 
-    const fn = useCallback((workspaceId: string, namespaceId: string) => {
+    const fn = useCallback((theme: string) => {
         setUiState({
             type: 'Authorized',
-            workspaceId,
-            namespaceId,
+            theme,
         })
     }, [uiState])
 
@@ -41,28 +39,14 @@ export const useResetUiState = (): [ResetUiStateAction] => {
     return [fn]
 }
 
-type ChangeGroupAction = (workspaceId: string, groupName: string) => void
-export const useChangeGroup = (): [ChangeGroupAction] => {
+type ChangeThemeAction = (theme: string) => void
+export const useChangeTheme = (): [ChangeThemeAction] => {
     const [uiState, setUiState] = useUiState()
 
-    const fn = useCallback((workspaceId: string) => {
+    const fn = useCallback((theme: string) => {
         setUiState({
             ...uiState,
-            workspaceId
-        })
-    }, [uiState])
-
-    return [fn]
-}
-
-type ChangeNamespaceAction = (namespaceId: string, namespaceName: string) => void
-export const useChangeNamespace = (): [ChangeNamespaceAction] => {
-    const [uiState, setUiState] = useUiState()
-
-    const fn = useCallback((namespaceId: string) => {
-        setUiState({
-            ...uiState,
-            namespaceId
+            theme
         })
     }, [uiState])
 
