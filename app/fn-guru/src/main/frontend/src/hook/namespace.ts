@@ -1,13 +1,47 @@
 import {useGet, usePatch, usePost} from "@/hook/http.ts";
-import {useCallback} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {useAuth} from "@/hook/auth.ts";
-import {FeatureObject, Namespace, NamespaceAppendRequested, NamespaceList, NamespaceUpdateRequested} from "@/types";
+import {
+    Feature,
+    FeatureObject,
+    features,
+    Namespace,
+    NamespaceAppendRequested,
+    NamespaceList,
+    NamespaceUpdateRequested
+} from "@/types";
+import feature from "@/pages/app/dashboard/components/feature.tsx";
 
-type NamespaceGetAction = (namespaceIdId: string, abortController?: AbortController) => void
+interface ApiNamespace {
+    id: string;
+    name: string;
+    features: FeatureObject;
+}
+
+type NamespaceGetAction = (namespaceId: string, abortController?: AbortController) => void
 export const useNamespaceGet = (): [NamespaceGetAction, Namespace, boolean, Error] => {
     const [auth] = useAuth()
-    const [get, namespace, loading, error] = useGet<Namespace>()
+    const [get, apiNamespace, loading, error] = useGet<ApiNamespace>()
     const fn = useCallback(async (namespaceIdId: string, abortController?: AbortController) => get(`/v1/namespaces/${namespaceIdId}`, abortController), [auth])
+    const [namespace, setNamespace] = useState<Namespace>(null)
+
+    useEffect(() => {
+        if (apiNamespace) {
+            const copy = [...features]
+            for (const [, v] of Object.entries(apiNamespace.features)) {
+                const x = copy.find((c) => c.value === v)
+                x.state = true
+            }
+            const res: Namespace = {
+                name: apiNamespace.name,
+                id: apiNamespace.id,
+                features: copy
+            }
+            setNamespace(res)
+        }
+
+    }, [apiNamespace]);
+
     return [fn, namespace, loading, error]
 }
 
@@ -29,12 +63,19 @@ export const useNamespaceAppend = (): [NamespaceAppendAction, NamespaceAppendReq
     return [fn, submission, loading, error]
 }
 
-type NamespaceUpdateAction = (namespaceId: string, name: string, features: FeatureObject, abortController?: AbortController) => void
+type NamespaceUpdateAction = (namespaceId: string, name: string, features: Array<Feature>, abortController?: AbortController) => void
 export const useNamespaceUpdate = (): [NamespaceUpdateAction, NamespaceUpdateRequested, boolean, Error] => {
     const [auth] = useAuth()
-    const [patch, submission, loading, error] = usePatch<NamespaceAppendRequested>()
-    const fn = useCallback(async (namespaceId: string, name: string, features: FeatureObject, abortController?: AbortController) =>
-        patch(`/v1/namespaces/${namespaceId}`, {name, features}, abortController), [auth]
+    const [patch, submission, loading, error] = usePatch<NamespaceUpdateRequested>()
+    const fn = useCallback(async (namespaceId: string, name: string, features: Array<Feature>, abortController?: AbortController) => {
+            const featureObject: FeatureObject = {}
+            features.forEach((f) => {
+                if (f.state === true) {
+                    featureObject[f.name] = f.value
+                }
+            })
+            patch(`/v1/namespaces/${namespaceId}`, {name, featureObject}, abortController)
+        }, [auth]
     )
     return [fn, submission, loading, error]
 }
