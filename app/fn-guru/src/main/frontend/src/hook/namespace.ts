@@ -12,8 +12,7 @@ export const useNamespaceGet = (): [NamespaceGetAction, Namespace, boolean, Erro
 
     useEffect(() => {
         if (apiNamespace) {
-            const clientNamespace = parseNamespace(apiNamespace)
-            setNamespace(clientNamespace)
+            setNamespace(() => parseNamespace(apiNamespace))
         }
     }, [apiNamespace]);
 

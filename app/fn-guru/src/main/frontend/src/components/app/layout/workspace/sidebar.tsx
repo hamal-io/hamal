@@ -5,17 +5,19 @@ import {
     Braces,
     ClipboardPaste,
     Command,
-    FolderTree,
     GlobeIcon,
     Layers3Icon,
     LucideIcon,
-    Play, Settings,
+    Play,
+    Settings,
     TimerIcon,
     WebhookIcon
 } from "lucide-react";
-import React, {FC} from "react";
-import {Link, useLocation, useParams} from "react-router-dom";
+import React, {FC, useEffect, useState} from "react";
+import {Link, useLocation} from "react-router-dom";
 import Profile from "@/components/app/layout/workspace/profile.tsx";
+import {useNamespaceGet} from "@/hook";
+import {useUiState} from "@/hook/ui-state.ts";
 
 type Props = {
     className?: string;
@@ -29,12 +31,16 @@ type NavItem = {
     active?: boolean;
 };
 const Sidebar: React.FC<Props> = ({className}) => {
-    const {workspaceId, namespaceId} = useParams()
+    const [uiState] = useUiState()
+    const [getNamespace, namespace, loading, error] = useNamespaceGet()
+    const [features, setFeatures] = useState(null)
 
     const location = useLocation()
 
     const currentPath = location.pathname
-    const primaryNavigation: NavItem[] = [
+
+
+    const primaryNavigation = [
         {
             icon: Command,
             href: `/dashboard`,
@@ -58,35 +64,10 @@ const Sidebar: React.FC<Props> = ({className}) => {
             href: `/functions`,
             label: "Functions",
             active: currentPath.startsWith(`/functions`)
-        },
-        {
-            icon: TimerIcon,
-            href: `/schedules`,
-            label: "Schedules",
-            active: currentPath.startsWith(`/schedules`)
-        },
-        {
-            icon: Layers3Icon,
-            href: `/topics`,
-            label: "Topics",
-            active: currentPath.startsWith(`/topics`)
-        },
-        {
-            icon: WebhookIcon,
-            href: `/webhooks`,
-            label: "Webhooks",
-            active: currentPath.startsWith(`/webhooks`)
-        },
-        {
-            icon: GlobeIcon,
-            href: `/endpoints`,
-            label: "Endpoints",
-            active: currentPath.startsWith(`/endpoints`)
-        },
-    ];
+        }
+    ]
 
-
-    const secondaryNavigation: NavItem[] = [
+    const secondaryNavigation = [
         {
             icon: ClipboardPaste,
             href: '/blueprints',
@@ -106,6 +87,29 @@ const Sidebar: React.FC<Props> = ({className}) => {
         },
     ];
 
+
+    useEffect(() => {
+        const abortController = new AbortController()
+        getNamespace(uiState.namespaceId, abortController)
+        return (() => abortController.abort())
+    }, [uiState]);
+
+    useEffect(() => {
+        if (namespace) {
+            const active = namespace.features.reduce((acc: string[], curr) => {
+                if (curr.state === true) {
+                    acc.push(curr.name)
+                }
+                return acc
+            }, [])
+
+            const l = featureLinks(currentPath)
+                .filter(item => active.includes(item.label));
+
+            setFeatures(l)
+        }
+    }, [namespace]);
+
     return (
         <aside className={cn("fixed h-screen inset-y-0 flex w-48 flex-col px-6 gap-y-5 bg-gray-100", className)}>
             <nav className="flex flex-col ">
@@ -117,7 +121,12 @@ const Sidebar: React.FC<Props> = ({className}) => {
                                 <li key={item.label}>
                                     <NavLink item={item}/>
                                 </li>
+
                             ))}
+                            {features && features.map((item) => (
+                                <li key={item.label}>
+                                    <NavLink item={item}/>
+                                </li>))}
                         </ul>
                     </li>
                 </ul>
@@ -161,3 +170,36 @@ const NavLink: FC<{ item: NavItem }> = ({item}) => {
         </Link>
     );
 };
+
+
+const featureLinks = (currentPath: string) => {
+    const x: NavItem[] = [
+        {
+            icon: TimerIcon,
+            href: `/schedules`,
+            label: "Schedules",
+            active: currentPath.startsWith(`/schedules`)
+        },
+        {
+            icon: Layers3Icon,
+            href: `/topics`,
+            label: "Topics",
+            active: currentPath.startsWith(`/topics`)
+        },
+        {
+            icon: WebhookIcon,
+            href: `/webhooks`,
+            label: "Webhooks",
+            active: currentPath.startsWith(`/webhooks`)
+        },
+        {
+            icon: GlobeIcon,
+            href: `/endpoints`,
+            label: "Endpoints",
+            active: currentPath.startsWith(`/endpoints`)
+        }
+    ]
+    return x
+}
+
+
