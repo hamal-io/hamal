@@ -12,34 +12,10 @@ export interface NamespaceUpdateRequested {
     id: string;
 }
 
-
-export class Feature {
-    name: string
-    value: number
-    state: boolean
-
-    constructor(name: string, value: number) {
-        this.name = name;
-        this.value = value;
-        this.state = false
-    }
-
-    toggle() {
-        this.state = !this.state
-    }
-}
-
-export const features = new Array<Feature>(
-    new Feature("Schedules", 0),
-    new Feature("Topics", 1),
-    new Feature("Webhooks", 2),
-    new Feature("Endpoints", 3)
-)
-
 export interface Namespace {
     id: string;
     name: string;
-    features: Array<Feature>;
+    features: string;
 }
 
 export interface NamespaceList {

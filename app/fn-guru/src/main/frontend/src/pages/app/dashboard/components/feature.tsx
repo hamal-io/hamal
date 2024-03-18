@@ -3,32 +3,33 @@ import {useNamespaceUpdate} from "@/hook";
 import {Globe, Layers3, Timer, Webhook} from "lucide-react";
 import {Namespace} from "@/types";
 import {FeatureCard} from "@/pages/app/dashboard/components/feature-components/card.tsx";
+import {useFeature} from "@/pages/app/dashboard/components/feature-components/hook.ts";
+
+
 
 
 type Props = { namespace: Namespace }
 const FeatureTab: FC<Props> = ({namespace}) => {
     const [updateNamespace, updateRequested, loading, error] = useNamespaceUpdate()
-    const [features, setFeatures] = useState(namespace.features)
-    const [schedule, topic, webhook, endpoint] = features
-
+    const [map, setStates, toggleState, getActive] = useFeature()
+    const [schedule, topic, webhook, endpoint] = map.values()
 
     function update() {
         try {
-            updateNamespace(namespace.id, namespace.name, features)
+            updateNamespace(namespace.id, namespace.name, getActive())
         } catch (e) {
             console.log(e)
         }
     }
 
-    function toggle(value: number) {
-        const copy = [...features]
-        const f = copy.find((x) => x.value === value)
-        if (f) {
-            f.toggle()
-        }
-        setFeatures(copy)
+    function toggle(key: string) {
+        toggleState(key)
         update()
     }
+
+    useEffect(() => {
+        setStates(namespace.features)
+    }, [namespace]);
 
 
     if (error) return "Error"
@@ -40,31 +41,31 @@ const FeatureTab: FC<Props> = ({namespace}) => {
                     label={"Schedule"}
                     description={"All kinds of timers"}
                     icon={<Timer/>}
-                    checked={schedule.state}
-                    onCheck={() => toggle(schedule.value)}
+                    checked={schedule}
+                    onCheck={() => toggle("Schedule")}
                 />
                 <FeatureCard
                     label={"Topic"}
                     description={"Stay tuned"}
                     icon={<Layers3/>}
-                    checked={topic.state}
-                    onCheck={() => toggle(topic.value)}
+                    checked={topic}
+                    onCheck={() =>toggle("Topic")}
 
                 />
                 <FeatureCard
                     label={"Webhook"}
                     description={"Stay tuned"}
                     icon={<Webhook/>}
-                    checked={webhook.state}
-                    onCheck={() => toggle(webhook.value)}
+                    checked={webhook}
+                    onCheck={() => toggle("Webhook")}
 
                 />
                 <FeatureCard
                     label={"Endpoint"}
                     description={"API yourself"}
                     icon={<Globe/>}
-                    checked={endpoint.state}
-                    onCheck={() => toggle(endpoint.value)}
+                    checked={endpoint}
+                    onCheck={() => toggle("Endpoint")}
                 />
             </div>
         </div>

@@ -1,7 +1,7 @@
 import {useGet, usePatch, usePost} from "@/hook/http.ts";
 import {useCallback, useEffect, useState} from "react";
 import {useAuth} from "@/hook/auth.ts";
-import {Feature, features, Namespace, NamespaceAppendRequested, NamespaceList, NamespaceUpdateRequested} from "@/types";
+import {Namespace, NamespaceAppendRequested, NamespaceList, NamespaceUpdateRequested} from "@/types";
 
 type NamespaceGetAction = (namespaceId: string, abortController?: AbortController) => void
 export const useNamespaceGet = (): [NamespaceGetAction, Namespace, boolean, Error] => {
@@ -37,51 +37,47 @@ export const useNamespaceAppend = (): [NamespaceAppendAction, NamespaceAppendReq
     return [fn, submission, loading, error]
 }
 
-type NamespaceUpdateAction = (namespaceId: string, name: string, activeFeatures: Array<Feature>, abortController?: AbortController) => void
+type NamespaceUpdateAction = (namespaceId: string, name: string, _features: string[], abortController?: AbortController) => void
 export const useNamespaceUpdate = (): [NamespaceUpdateAction, NamespaceUpdateRequested, boolean, Error] => {
     const [auth] = useAuth()
     const [patch, submission, loading, error] = usePatch<NamespaceUpdateRequested>()
-    const fn = useCallback(async (namespaceId: string, name: string, activeFeatures: Array<Feature>, abortController?: AbortController) => {
-            const features = toApiFeature(activeFeatures)
-            patch(`/v1/namespaces/${namespaceId}`, {name,features}, abortController)
+    const fn = useCallback(async (namespaceId: string, name: string, _features: string[], abortController?: AbortController) => {
+            const features = toApiFeature(_features)
+            patch(`/v1/namespaces/${namespaceId}`, {name, features}, abortController)
         }, [auth]
     )
     return [fn, submission, loading, error]
 }
 
-
-function toApiFeature(active: Array<Feature>) {
-    const features: FeatureObject = {}
-    active.forEach((f) => {
-        const apiName = f.name.slice(0, -1);
-        if (f.state === true) {
-            features[apiName] = f.value
-        }
-    })
-    return features
+function toApiFeature(active: string[]) {
+    const res = {}
+    active.forEach(n =>
+        res[n] = 0
+    )
+    return res
 }
 
 function parseNamespace(apiNamespace: ApiNamespace) {
-    const copy = [...features]
-    for (const [, v] of Object.entries(apiNamespace.features)) {
-        const x = copy.find((c) => c.value === v)
-        x.state = true
+    const features = ""
+    for (const [k, v] of Object.entries(apiNamespace.features)) {
+        features.concat(k + ",")
     }
     const res: Namespace = {
         name: apiNamespace.name,
         id: apiNamespace.id,
-        features: copy
+        features: features
     }
 
     return res
 }
 
-interface FeatureObject {
-    [key: string]: number
-}
-
 interface ApiNamespace {
     id: string;
     name: string;
-    features: FeatureObject;
+    features: { [key: string]: number };
 }
+
+
+
+
+

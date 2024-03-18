@@ -18,6 +18,7 @@ import {Link, useLocation} from "react-router-dom";
 import Profile from "@/components/app/layout/workspace/profile.tsx";
 import {useNamespaceGet} from "@/hook";
 import {useUiState} from "@/hook/ui-state.ts";
+import {useFeature} from "@/pages/app/dashboard/components/feature-components/hook.ts";
 
 type Props = {
     className?: string;
@@ -33,12 +34,11 @@ type NavItem = {
 const Sidebar: React.FC<Props> = ({className}) => {
     const [uiState] = useUiState()
     const [getNamespace, namespace, loading, error] = useNamespaceGet()
-    const [features, setFeatures] = useState(null)
+    const [, , , getActives] = useFeature()
 
     const location = useLocation()
 
     const currentPath = location.pathname
-
 
     const primaryNavigation = [
         {
@@ -118,26 +118,10 @@ const Sidebar: React.FC<Props> = ({className}) => {
 
 
     useEffect(() => {
-        const abortController = new AbortController()
-        getNamespace(uiState.namespaceId, abortController)
-        return (() => abortController.abort())
+        const actives = uiState.features.split(",")
+        console.log(actives)
     }, [uiState]);
 
-    useEffect(() => {
-        if (namespace) {
-            const active = namespace.features.reduce((acc: string[], curr) => {
-                if (curr.state === true) {
-                    acc.push(curr.name)
-                }
-                return acc
-            }, [])
-
-            const l = featureLinks
-                .filter(item => active.includes(item.label));
-
-            setFeatures(l)
-        }
-    }, [namespace]);
 
     return (
         <aside className={cn("fixed h-screen inset-y-0 flex w-48 flex-col px-6 gap-y-5 bg-gray-100", className)}>
@@ -152,7 +136,7 @@ const Sidebar: React.FC<Props> = ({className}) => {
                                 </li>
 
                             ))}
-                            {features && features.map((item) => (
+                            {featureLinks.map((item) => (
                                 <li key={item.label}>
                                     <NavLink item={item}/>
                                 </li>))}
