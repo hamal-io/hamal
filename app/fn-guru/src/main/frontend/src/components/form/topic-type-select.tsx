@@ -21,6 +21,7 @@ const FormTopicTypeSelect = ({name, form}) => {
                             </FormControl>
                             <SelectContent>
                                 <SelectGroup>
+                                    <SelectItem value={'Internal'}> Internal </SelectItem>
                                     <SelectItem value={'Namespace'}> Namespace </SelectItem>
                                     <SelectItem value={'Workspace'}> Workspace </SelectItem>
                                     <SelectItem value={'Public'}> Public </SelectItem>

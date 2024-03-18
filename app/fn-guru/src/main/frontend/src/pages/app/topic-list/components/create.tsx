@@ -1,5 +1,5 @@
 import {useNavigate} from "react-router-dom";
-import React, {FC, useContext, useEffect, useState} from "react";
+import React, {useState} from "react";
 
 import * as z from "zod"
 import {zodResolver} from "@hookform/resolvers/zod";
@@ -14,7 +14,6 @@ import {
 } from "@/components/ui/form.tsx";
 import {useForm} from "react-hook-form";
 import {Loader2, Plus,} from "lucide-react";
-import {useAuth} from "@/hook/auth.ts";
 import {Dialog, DialogContent, DialogHeader, DialogTrigger} from "@/components/ui/dialog.tsx";
 import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
@@ -32,8 +31,7 @@ const formSchema = z.object({
 const Create = () => {
     const [uiState] = useUiState()
     const navigate = useNavigate()
-    const [openDialog, setOpenDialog] = useState<boolean>(false)
-    const props = {openModal: openDialog, setOpenModal: setOpenDialog}
+    const [openDialog, setOpenDialog] = useState(false)
     const [isLoading, setLoading] = useState(false)
 
     const [createTopic, groupTopicRequested] = useTopicCreate()
@@ -46,27 +44,20 @@ const Create = () => {
         },
     })
 
-    // 2. Define a submit handler.
+
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setLoading(true)
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
         try {
             createTopic(uiState.namespaceId, values.name, values.topicType as TopicType)
         } catch (e) {
             console.error(e)
         } finally {
-            // setLoading(false)
+
         }
 
     }
 
-    useEffect(() => {
-        if (groupTopicRequested !== null) {
-            // navigate(`/groups/${workspaceId}/topics/${groupTopicRequested.topicId}`)
-            setOpenDialog(false)
-        }
-    }, [groupTopicRequested, navigate]);
+
 
     return (
         <>

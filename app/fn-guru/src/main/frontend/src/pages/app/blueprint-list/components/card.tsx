@@ -26,7 +26,6 @@ const BlueprintCard: FC<CardProps> = ({blueprint}) => {
                             {blueprint.description}
                         </div>
                     </dl>
-                    <div className="flex flex-row justify-between items-center"/>
                 </CardContent>
             </Card>
             <Dialog open={open} onOpenChange={setOpen}>
