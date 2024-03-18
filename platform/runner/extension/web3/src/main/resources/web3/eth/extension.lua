@@ -3,12 +3,6 @@ local hamal_provider_create = function(opts)
 
     evm = require_plugin('web3.evm')
 
-    batch = {
-        get_block = function(block)
-            evm.get_block(block)
-        end
-    }
-
     return {
         name = 'hamal',
         url = url,
@@ -30,6 +24,7 @@ local hamal_provider_create = function(opts)
             for _, response in ipairs(responses) do
                 table.insert(result, response.result)
             end
+
             return nil, result
         end
     }
