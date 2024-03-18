@@ -67,6 +67,35 @@ const Sidebar: React.FC<Props> = ({className}) => {
         }
     ]
 
+
+    const featureLinks = [
+        {
+            icon: TimerIcon,
+            href: `/schedules`,
+            label: "Schedules",
+            active: currentPath.startsWith(`/schedules`)
+        },
+        {
+            icon: Layers3Icon,
+            href: `/topics`,
+            label: "Topics",
+            active: currentPath.startsWith(`/topics`)
+        },
+        {
+            icon: WebhookIcon,
+            href: `/webhooks`,
+            label: "Webhooks",
+            active: currentPath.startsWith(`/webhooks`)
+        },
+        {
+            icon: GlobeIcon,
+            href: `/endpoints`,
+            label: "Endpoints",
+            active: currentPath.startsWith(`/endpoints`)
+        }
+    ]
+
+
     const secondaryNavigation = [
         {
             icon: ClipboardPaste,
@@ -103,7 +132,7 @@ const Sidebar: React.FC<Props> = ({className}) => {
                 return acc
             }, [])
 
-            const l = featureLinks(currentPath)
+            const l = featureLinks
                 .filter(item => active.includes(item.label));
 
             setFeatures(l)
@@ -172,34 +201,5 @@ const NavLink: FC<{ item: NavItem }> = ({item}) => {
 };
 
 
-const featureLinks = (currentPath: string) => {
-    const x: NavItem[] = [
-        {
-            icon: TimerIcon,
-            href: `/schedules`,
-            label: "Schedules",
-            active: currentPath.startsWith(`/schedules`)
-        },
-        {
-            icon: Layers3Icon,
-            href: `/topics`,
-            label: "Topics",
-            active: currentPath.startsWith(`/topics`)
-        },
-        {
-            icon: WebhookIcon,
-            href: `/webhooks`,
-            label: "Webhooks",
-            active: currentPath.startsWith(`/webhooks`)
-        },
-        {
-            icon: GlobeIcon,
-            href: `/endpoints`,
-            label: "Endpoints",
-            active: currentPath.startsWith(`/endpoints`)
-        }
-    ]
-    return x
-}
 
 
