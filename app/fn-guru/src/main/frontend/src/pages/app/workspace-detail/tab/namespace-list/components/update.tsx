@@ -32,7 +32,8 @@ const Update: FC<Props> = ({id, onClose}) => {
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setLoading(true)
         try {
-            updateNamespace(id, values.name)
+            // FIXME
+            updateNamespace(id, values.name, null)
         } catch (e) {
             console.error(e)
         } finally {
