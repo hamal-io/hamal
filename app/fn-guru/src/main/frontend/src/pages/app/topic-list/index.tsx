@@ -66,8 +66,7 @@ const TopicCard: FC<ContentProps> = ({topic}) => {
 
     function append(funcId: string) {
         try {
-
-            appendEvent(topic.id,)
+            appendEvent(topic.id, {funcId: funcId})
         } catch (e) {
             console.log(e)
         } finally {
@@ -108,9 +107,7 @@ const TopicCard: FC<ContentProps> = ({topic}) => {
     )
 }
 
-type DialogProps = {
-    submit: (funcId: string) => void
-}
+type DialogProps = { submit: (funcId: string) => void }
 const TriggerDialog: FC<DialogProps> = ({submit}) => {
     const formSchema = z.object({
         funcId: z.string().min(1, "Function required"),
@@ -130,14 +127,13 @@ const TriggerDialog: FC<DialogProps> = ({submit}) => {
 
     return (
         <DialogContent>
-            <DialogHeader>Add trigger</DialogHeader>
-
+            <DialogHeader>Trigger for this Topic</DialogHeader>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                     <FormFuncSelect name='funcId' form={form}/>
-                    <Button type="submit">
+                    <Button type="submit" className={"float-right"}>
                         {/*{loading && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}*/}
-                        Add
+                        Select
                     </Button>
                 </form>
             </Form>
