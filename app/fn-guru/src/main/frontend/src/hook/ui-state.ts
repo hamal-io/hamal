@@ -1,14 +1,12 @@
 import useLocalStorageState from "use-local-storage-state";
 import {UI_STATE_KEY, UiState} from "@/types/ui-state.ts";
-import {useCallback, useEffect} from "react";
-import {useNamespaceGet} from "@/hook/namespace.ts";
+import {useCallback} from "react";
 
 
 const unauthorized: UiState = {
     type: 'Unauthorized',
     workspaceId: '',
-    namespaceId: '',
-    features: ''
+    namespaceId: ''
 }
 
 export const useUiState = () => {
@@ -17,11 +15,11 @@ export const useUiState = () => {
     })
 }
 
-type InitUiStateAction = (workspaceId: string, namespaceId: string, features: string) => void
+type InitUiStateAction = (workspaceId: string, namespaceId: string) => void
 export const useInitUiState = (): [InitUiStateAction] => {
     const [uiState, setUiState] = useUiState()
 
-    const fn = useCallback((workspaceId: string, namespaceId: string, features: string) => {
+    const fn = useCallback((workspaceId: string, namespaceId: string) => {
         setUiState({
             type: 'Authorized',
             workspaceId,
@@ -57,26 +55,16 @@ export const useChangeGroup = (): [ChangeGroupAction] => {
     return [fn]
 }
 
-type ChangeNamespaceAction = (_namespaceId: string, namespaceName: string) => void
+type ChangeNamespaceAction = (namespaceId: string, namespaceName: string) => void
 export const useChangeNamespace = (): [ChangeNamespaceAction] => {
     const [uiState, setUiState] = useUiState()
-    const [get, namespace] = useNamespaceGet()
-
-    const fn = useCallback((_namespaceId: string) => {
-        get(_namespaceId)
+    const fn = useCallback((namespaceId: string) => {
+        setUiState({
+            ...uiState,
+            namespaceId
+        })
     }, [uiState])
 
-    useEffect(() => {
-        if (namespace) {
-            const namespaceId = namespace.id
-            const features = namespace.features
-            setUiState({
-                ...uiState,
-                namespaceId,
-                features
-            })
-        }
-    }, [namespace]);
 
     return [fn]
 }

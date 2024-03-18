@@ -13,12 +13,11 @@ import {
     TimerIcon,
     WebhookIcon
 } from "lucide-react";
-import React, {FC, useEffect, useState} from "react";
+import React, {FC} from "react";
 import {Link, useLocation} from "react-router-dom";
 import Profile from "@/components/app/layout/workspace/profile.tsx";
 import {useNamespaceGet} from "@/hook";
 import {useUiState} from "@/hook/ui-state.ts";
-import {useFeature} from "@/pages/app/dashboard/components/feature-components/hook.ts";
 
 type Props = {
     className?: string;
@@ -34,7 +33,7 @@ type NavItem = {
 const Sidebar: React.FC<Props> = ({className}) => {
     const [uiState] = useUiState()
     const [getNamespace, namespace, loading, error] = useNamespaceGet()
-    const [, , , getActives] = useFeature()
+
 
     const location = useLocation()
 
@@ -115,12 +114,6 @@ const Sidebar: React.FC<Props> = ({className}) => {
             label: "Documentation",
         },
     ];
-
-
-    useEffect(() => {
-        const actives = uiState.features.split(",")
-        console.log(actives)
-    }, [uiState]);
 
 
     return (

@@ -6,5 +6,4 @@ export interface UiState {
     type: UiStateType;
     workspaceId: string;
     namespaceId: string;
-    features: string;
 }

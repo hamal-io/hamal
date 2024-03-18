@@ -1,34 +1,56 @@
 import React, {FC, useEffect, useState} from "react";
 import {useNamespaceUpdate} from "@/hook";
 import {Globe, Layers3, Timer, Webhook} from "lucide-react";
-import {Namespace} from "@/types";
+import {FeatureHotObject, Namespace} from "@/types";
 import {FeatureCard} from "@/pages/app/dashboard/components/feature-components/card.tsx";
-import {useFeature} from "@/pages/app/dashboard/components/feature-components/hook.ts";
-
-
+import {Simulate} from "react-dom/test-utils";
 
 
 type Props = { namespace: Namespace }
 const FeatureTab: FC<Props> = ({namespace}) => {
-    const [updateNamespace, updateRequested, loading, error] = useNamespaceUpdate()
-    const [map, setStates, toggleState, getActive] = useFeature()
+    const [map, setMap] = useState(new Map([
+        ["Schedule", false],
+        ["Topic", false],
+        ["Webhook", false],
+        ["Endpoint", false]
+    ]));
+    const [updateNamespace, updateResponse, loading, error] = useNamespaceUpdate()
     const [schedule, topic, webhook, endpoint] = map.values()
 
-    function update() {
+
+    function update(updated: Map<string, boolean>) {
         try {
-            updateNamespace(namespace.id, namespace.name, getActive())
+            const actives = new FeatureHotObject()
+            updated.forEach((v, k) => {
+                if (v) {
+                    actives.setFeature(k)
+                }
+            })
+            updateNamespace(namespace.id, namespace.name, actives.get())
         } catch (e) {
             console.log(e)
         }
     }
 
     function toggle(key: string) {
-        toggleState(key)
-        update()
+        const state = map.get(key)
+        const updateMap = new Map(map)
+        updateMap.set(key, !state)
+        update(updateMap)
+        setMap(updateMap)
+
     }
 
     useEffect(() => {
-        setStates(namespace.features)
+        if (namespace) {
+            const actives = new FeatureHotObject(namespace.features)
+            const updateMap = new Map(map)
+            for (const i of actives) {
+                updateMap.set(i, true)
+            }
+            setMap(updateMap)
+        }
+
     }, [namespace]);
 
 
@@ -49,7 +71,7 @@ const FeatureTab: FC<Props> = ({namespace}) => {
                     description={"Stay tuned"}
                     icon={<Layers3/>}
                     checked={topic}
-                    onCheck={() =>toggle("Topic")}
+                    onCheck={() => toggle("Topic")}
 
                 />
                 <FeatureCard
