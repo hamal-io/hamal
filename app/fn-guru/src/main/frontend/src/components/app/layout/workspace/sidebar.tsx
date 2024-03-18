@@ -13,11 +13,12 @@ import {
     TimerIcon,
     WebhookIcon
 } from "lucide-react";
-import React, {FC} from "react";
+import React, {FC, useEffect, useState} from "react";
 import {Link, useLocation} from "react-router-dom";
 import Profile from "@/components/app/layout/workspace/profile.tsx";
 import {useNamespaceGet} from "@/hook";
 import {useUiState} from "@/hook/ui-state.ts";
+import {FeatureHotObject} from "@/types";
 
 type Props = {
     className?: string;
@@ -33,7 +34,7 @@ type NavItem = {
 const Sidebar: React.FC<Props> = ({className}) => {
     const [uiState] = useUiState()
     const [getNamespace, namespace, loading, error] = useNamespaceGet()
-
+    const [filteredFeatures, setFilteredFeatures] = useState(null)
 
     const location = useLocation()
 
@@ -95,6 +96,21 @@ const Sidebar: React.FC<Props> = ({className}) => {
     ]
 
 
+    useEffect(() => {
+        getNamespace(uiState.namespaceId)
+    }, []);
+
+
+    useEffect(() => {
+        if (namespace) {
+            const activeKeys = new FeatureHotObject(namespace.features).toKeys()
+            const trailedKeys = activeKeys.map(s => s.concat("s"))
+            const fd = featureLinks.filter(obj => trailedKeys.includes(obj.label));
+            setFilteredFeatures(fd)
+        }
+    }, [namespace]);
+
+
     const secondaryNavigation = [
         {
             icon: ClipboardPaste,
@@ -129,7 +145,7 @@ const Sidebar: React.FC<Props> = ({className}) => {
                                 </li>
 
                             ))}
-                            {featureLinks.map((item) => (
+                            {filteredFeatures && filteredFeatures.map((item) => (
                                 <li key={item.label}>
                                     <NavLink item={item}/>
                                 </li>))}
@@ -176,7 +192,4 @@ const NavLink: FC<{ item: NavItem }> = ({item}) => {
         </Link>
     );
 };
-
-
-
 
