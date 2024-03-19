@@ -28,7 +28,8 @@ internal class NamespaceCreateControllerTest : NamespaceBaseControllerTest() {
     fun `Creates namespace with limited features`() {
         val featuresRequest = NamespaceFeatures(
             HotObject.builder()
-                .set(Endpoint.name, false)
+                .set(schedule.name, 0)
+                .set(topic.name, 0)
                 .build()
         )
 
@@ -46,10 +47,10 @@ internal class NamespaceCreateControllerTest : NamespaceBaseControllerTest() {
             assertThat(id, equalTo(namespaceId))
             assertThat(name, equalTo(NamespaceName("test-namespace")))
             assertThat(features, equalTo(features))
-            assertTrue(features.hasFeature(Schedule))
-            assertTrue(features.hasFeature(Topic))
-            assertTrue(features.hasFeature(Webhook))
-            assertFalse(features.hasFeature(Endpoint))
+            assertTrue(features.hasFeature(schedule))
+            assertTrue(features.hasFeature(topic))
+            assertFalse(features.hasFeature(webhook))
+            assertFalse(features.hasFeature(endpoint))
         }
     }
 }

@@ -37,8 +37,8 @@ internal class NamespaceUpdateControllerTest : NamespaceBaseControllerTest() {
     fun `Updates namespace name and features`() {
         val updatedFeatures = NamespaceFeatures(
             HotObject.builder()
-                .set(Schedule.name, true)
-                .set(Webhook.name, false)
+                .set(schedule.name, 0)
+                .set(webhook.name, 0)
                 .build()
         )
 
@@ -67,12 +67,14 @@ internal class NamespaceUpdateControllerTest : NamespaceBaseControllerTest() {
                 )
             )
         )
-        val z = getNamespace(namespaceId)
+
         with(getNamespace(namespaceId)) {
             assertThat(id, equalTo(namespaceId))
             assertThat(name, equalTo(NamespaceName("updated-name")))
-            assertFalse(features.hasFeature(Webhook))
-            assertTrue(features.hasFeature(Endpoint))
+            assertTrue(features.hasFeature(schedule))
+            assertTrue(features.hasFeature(webhook))
+            assertFalse(features.hasFeature(endpoint))
+            assertFalse(features.hasFeature(topic))
         }
     }
 }

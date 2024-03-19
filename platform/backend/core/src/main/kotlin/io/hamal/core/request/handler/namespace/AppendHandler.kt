@@ -35,10 +35,6 @@ class NamespaceAppendHandler(
 
     private fun createNamespace(req: NamespaceAppendRequested): Namespace {
 
-        val features = NamespaceFeatures.default
-        req.features?.let {
-            features.value.nodes.putAll(it.value.nodes)
-        }
 
         return namespaceCmdRepository.create(
             CreateCmd(
@@ -46,7 +42,7 @@ class NamespaceAppendHandler(
                 namespaceId = req.id,
                 workspaceId = req.workspaceId,
                 name = req.name,
-                features = features
+                features = req.features ?: NamespaceFeatures.default
             )
         )
     }

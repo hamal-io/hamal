@@ -1,31 +1,65 @@
-import React, {FC} from "react";
+import React, {FC, useEffect, useState} from "react";
 import {useNamespaceUpdate} from "@/hook";
 import {Namespace} from "@/types";
+import {FeatureCard} from "@/pages/app/dashboard/components/feature/card.tsx";
+import {Globe, Layers3, Timer, Webhook} from "lucide-react";
 
 
 type Props = { namespace: Namespace }
 const FeatureTab: FC<Props> = ({namespace}) => {
     const [updateNamespace, updateResponse, loading, error] = useNamespaceUpdate()
+    const [activeFeatures, setActiveFeatures] = useState(new Map<string,boolean>([
+            ["Schedule", false],
+            ["Topic", false],
+            ["Webhook", false],
+            ["Endpoint", false]
+        ]
+    ))
+    const [schedule, topic, webhook, endpoint] = activeFeatures.values()
 
+    useEffect(() => {
+        const updateMap = {...activeFeatures}
+        for (const [k, v] of Object.entries(namespace.features)) {
+            updateMap[k] = true
+        }
+        setActiveFeatures(updateMap)
+    }, [namespace]);
+
+    function update(updateMap: Map<string, boolean>) {
+        try {
+            const abortController = new AbortController()
+            //updateNamespace(namespace.id, namespace.name, , abortController)
+            return (() => abortController.abort())
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    function toggle(key: string) {
+        const updateMap = {...activeFeatures}
+        updateMap[key] = !activeFeatures[key]
+        setActiveFeatures(updateMap)
+        update(updateMap)
+    }
 
     if (error) return "Error"
 
     return (
         <div className="pt-8 px-8">
-           {/* <div className={"flex flex-col gap-4"}>
+            <div className={"flex flex-col gap-4"}>
                 <FeatureCard
                     label={"Schedule"}
                     description={"All kinds of timers"}
                     icon={<Timer/>}
                     checked={schedule}
-                    onCheck={() => toggle("Schedule")}
+                    onCheck={() => toggle("schedule")}
                 />
                 <FeatureCard
                     label={"Topic"}
                     description={"Stay tuned"}
                     icon={<Layers3/>}
                     checked={topic}
-                    onCheck={() => toggle("Topic")}
+                    onCheck={() => toggle("topic")}
 
                 />
                 <FeatureCard
@@ -33,7 +67,7 @@ const FeatureTab: FC<Props> = ({namespace}) => {
                     description={"Stay tuned"}
                     icon={<Webhook/>}
                     checked={webhook}
-                    onCheck={() => toggle("Webhook")}
+                    onCheck={() => toggle("webhook")}
 
                 />
                 <FeatureCard
@@ -41,9 +75,9 @@ const FeatureTab: FC<Props> = ({namespace}) => {
                     description={"API yourself"}
                     icon={<Globe/>}
                     checked={endpoint}
-                    onCheck={() => toggle("Endpoint")}
+                    onCheck={() => toggle("endpoint")}
                 />
-            </div>*/}
+            </div>
         </div>
     )
 }

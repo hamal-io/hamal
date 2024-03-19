@@ -25,6 +25,8 @@ class NamespaceName(override val value: String) : ValueObjectString() {
 
 class NamespaceFeatures(override var value: HotObject = HotObject.empty) : ValueObjectHotObject() {
 
+    constructor(value: List<String>) : this(fromList(value))
+
     init {
         value.nodes.forEach { feature ->
             require(
@@ -36,21 +38,32 @@ class NamespaceFeatures(override var value: HotObject = HotObject.empty) : Value
     }
 
     fun hasFeature(feature: NamespaceFeature): Boolean {
-        value.find(feature.name)?.let {
-            return it.booleanValue
-        }
-        return false
+        return value.nodes.containsKey(feature.name)
     }
 
     companion object {
         val default = NamespaceFeatures(
             HotObject.builder()
-                .set(Schedule.name, true)
-                .set(Topic.name, true)
-                .set(Webhook.name, true)
-                .set(Endpoint.name, true)
+                .set(schedule.name, true)
+                .set(topic.name, true)
+                .set(webhook.name, true)
+                .set(endpoint.name, true)
                 .build()
         )
+
+        fun fromList(values: List<String>): HotObject {
+            val builder = HotObject.builder()
+            values.forEach {
+                require(
+                    NamespaceFeature.entries.any { valid ->
+                        valid.name == it
+                    }
+                ) { IllegalArgumentException("$it is not a valid feature.") }
+                builder.set(it, true)
+            }
+            return builder.build()
+        }
+
     }
 }
 

@@ -46,9 +46,8 @@ const Sidebar: React.FC<Props> = ({className}) => {
 
     useEffect(() => {
         if (namespace) {
-            const active = namespace.features
             const links = featureLinks(location.pathname).reduce((acc: FeatureLink[], curr) => {
-                if (Object.keys(active).includes(curr.name)) {
+                if (namespace.features.includes(curr.name)) {
                     acc.push(curr)
                 }
                 return acc
