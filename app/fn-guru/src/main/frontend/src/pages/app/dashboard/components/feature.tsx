@@ -1,7 +1,7 @@
-import React, { FC, useEffect, useState} from "react";
+import React, {FC, useEffect, useState} from "react";
 import {useNamespaceUpdate} from "@/hook";
 import {Namespace, NamespaceFeature} from "@/types";
-import {Globe, Layers3, Timer, Webhook} from "lucide-react";
+import {Globe, icons, Layers3, LucideProps, Timer, Webhook} from "lucide-react";
 import {Card, CardDescription, CardTitle} from "@/components/ui/card.tsx";
 import {Avatar} from "@/components/ui/avatar.tsx";
 import {Switch} from "@/components/ui/switch.tsx";
@@ -34,40 +34,48 @@ const FeatureTab: FC<Props> = ({namespace}) => {
 
     if (error) return "Error"
 
+    const items = {
+        schedule: {
+            name: "schedule",
+            label: "Schedule",
+            icon: Timer,
+            description: "All kinds of timers",
+            checked: clientFeatures.schedule,
+            onChange: handleChange
+        },
+        topic: {
+            name: "topic",
+            label: "Topic",
+            icon: Layers3,
+            description: "Stay tuned",
+            checked: clientFeatures.topic,
+            onChange: handleChange
+        },
+        webhook: {
+            name: "webhook",
+            label: "Webhook",
+            icon: Webhook,
+            description: "Stay tuned",
+            checked: clientFeatures.webhook,
+            onChange: handleChange
+        },
+        endpoint: {
+            name: "endpoint",
+            label: "Endpoint",
+            icon: Globe,
+            description: "API yourself",
+            checked: clientFeatures.endpoint,
+            onChange: handleChange
+        }
+    }
 
     return (
         <div className="pt-8 px-8">
             <div className={"flex flex-col gap-4"}>
-                <FeatureCard
-                    name={"schedule"}
-                    label={"Schedule"}
-                    description={"All kinds of timers"}
-                    checked={clientFeatures.schedule}
-                    onChange={handleChange}
-                />
-                <FeatureCard
-                    name={"topic"}
-                    label={"Topic"}
-                    description={"Stay tuned"}
-                    checked={clientFeatures.topic}
-                    onChange={handleChange}
-
-                />
-                <FeatureCard
-                    name={"webhook"}
-                    label={"Webhook"}
-                    description={"Stay tuned"}
-                    checked={clientFeatures.webhook}
-                    onChange={handleChange}
-
-                />
-                <FeatureCard
-                    name={"endpoint"}
-                    label={"Endpoint"}
-                    description={"API yourself"}
-                    checked={clientFeatures.endpoint}
-                    onChange={handleChange}
-                />
+                <FeatureCard item={items.schedule}/>
+                <FeatureCard item={items.topic}/>
+                <FeatureCard item={items.webhook}/>
+                <FeatureCard item={items.endpoint}/>
             </div>
         </div>
     )
@@ -75,24 +83,27 @@ const FeatureTab: FC<Props> = ({namespace}) => {
 export default FeatureTab
 
 
-type CardProps = {
+type FeatureItem = {
     name: string
     label: string,
+    icon: React.ForwardRefExoticComponent<LucideProps>,
     description: string,
     onChange: (name: string) => void
     checked: boolean
 }
-export const FeatureCard: FC<CardProps> = ({name, label, description, onChange, checked}) => {
+export const FeatureCard: FC<{ item: FeatureItem }> = ({item}) => {
 
     return (
-        <Card className={"flex flex-row items-center  p-4"}>
-            <Avatar className={"w-1/4"}></Avatar>
+        <Card className={"flex flex-row items-center p-4"}>
+            <Avatar className={"w-1/4"}>
+                <item.icon size={32}/>
+            </Avatar>
             <div className={"flex flex-col w-1/3"}>
-                <CardTitle>{label}</CardTitle>
-                <CardDescription>{description}</CardDescription>
+                <CardTitle>{item.label}</CardTitle>
+                <CardDescription>{item.description}</CardDescription>
             </div>
             <div>
-                <Switch name={name} checked={checked} onCheckedChange={() => onChange(name)}></Switch>
+                <Switch checked={item.checked} onCheckedChange={() => item.onChange(item.name)}></Switch>
             </div>
         </Card>
     )

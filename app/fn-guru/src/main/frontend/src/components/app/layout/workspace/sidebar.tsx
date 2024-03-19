@@ -42,17 +42,19 @@ const Sidebar: React.FC<Props> = ({className}) => {
     useEffect(() => {
         const abortController = new AbortController()
         getNamespace(uiState.namespaceId, abortController)
+        return (() => abortController.abort())
+    }, []);
+
+    useEffect(() => {
         if (namespace) {
             const actives: NavLinkType[] = []
             for (const [feat, valid] of Object.entries(namespace.features)) {
                 if (valid) {
-                    const z: NavLinkType = featureLinks[feat]
-                    actives.push(z)
+                    actives.push(featureLinks[feat])
                 }
             }
             setActiveFeatures(actives)
         }
-        return (() => abortController.abort())
     }, [namespace]);
 
 
@@ -145,9 +147,9 @@ const Sidebar: React.FC<Props> = ({className}) => {
         <aside className={cn("fixed h-screen inset-y-0 flex w-48 flex-col px-6 gap-y-5 bg-gray-100", className)}>
             <nav className="flex flex-col ">
                 <h1 className="text-2xl font-bold leading-6 text-content mt-6">fn(guru)</h1>
-                <ul className="pt-4">
+                <ol className="pt-4">
                     <li>
-                        <ul className="mt-2 -mx-2 space-y-1">
+                        <ol className="mt-2 -mx-2 space-y-1">
                             {primaryNavigation.map((item) => (
                                 <li key={item.label}>
                                     <NavLink item={item}/>
@@ -157,11 +159,14 @@ const Sidebar: React.FC<Props> = ({className}) => {
                                 <li key={item.label}>
                                     <NavLink item={item}/>
                                 </li>
-                            )
-                            }
-                        </ul>
+                            )}
+
+                        </ol>
+
                     </li>
-                </ul>
+                </ol>
+
+
                 <div className="fixed bottom-4 flex flex-col items-center justify-center">
                     <ul className="pt-4">
                         <li>
