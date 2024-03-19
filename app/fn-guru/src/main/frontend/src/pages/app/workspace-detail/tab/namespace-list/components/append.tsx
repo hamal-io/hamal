@@ -1,19 +1,28 @@
-import React, {FC, useState} from "react";
+import React, {FC, useEffect, useState} from "react";
 
 import * as z from "zod"
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
 import {useForm} from "react-hook-form";
-import {Loader2} from "lucide-react";
+import {Globe, Layers3, Loader2, Timer, Webhook} from "lucide-react";
 import {DialogContent, DialogHeader} from "@/components/ui/dialog.tsx";
 import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {useNamespaceAppend} from "@/hook";
+import {NamespaceFeature} from "@/types";
+import {FeatureCard} from "@/pages/app/dashboard/components/feature.tsx";
 
 
 const formSchema = z.object({
     name: z.string().min(2).max(50),
+    features: z.object({
+        schedule: z.boolean(),
+        topic: z.boolean(),
+        webhook: z.boolean(),
+        endpoint: z.boolean()
+    })
 })
+
 
 type Props = { appendTo: string, onClose: () => void }
 const Append: FC<Props> = ({appendTo, onClose}) => {
@@ -23,14 +32,20 @@ const Append: FC<Props> = ({appendTo, onClose}) => {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: ""
-        },
+            name: "",
+            features: {
+                schedule: true,
+                topic: false,
+                webhook: false,
+                endpoint: false
+            }
+        }
     })
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setLoading(true)
         try {
-            appendNamespace(appendTo, values.name)
+            appendNamespace(appendTo, values.name, values.features)
         } catch (e) {
             console.error(e)
         } finally {
@@ -57,6 +72,23 @@ const Append: FC<Props> = ({appendTo, onClose}) => {
                             </FormItem>
                         )}
                     />
+                    <FormField
+                        control={form.control}
+                        name="features"
+                        render={({field}) => (
+                            <FormItem>
+                                <FormControl>
+                                    <FeatureSelect
+                                        defaults={field.value}
+                                        onSave={(feat) => {
+                                            field.onChange(feat)
+                                        }}
+                                    />
+                                </FormControl>
+                            </FormItem>
+                        )
+                        }
+                    />
                     <Button type="submit">
                         {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
                         Create
@@ -68,3 +100,69 @@ const Append: FC<Props> = ({appendTo, onClose}) => {
 }
 
 export default Append;
+type FeatureSelectProps = {
+    defaults: NamespaceFeature
+    onSave: (val: NamespaceFeature) => void
+}
+const FeatureSelect: FC<FeatureSelectProps> = ({defaults, onSave}) => {
+    const [features, setFeatures] = useState<NamespaceFeature>(defaults)
+    const [isUpdate, setIsUpdate] = useState(null)
+
+    useEffect(() => {
+        if (isUpdate === true) {
+            onSave(features)
+            setIsUpdate(false)
+        }
+    }, [features, isUpdate]);
+
+    function handleChange(name: string) {
+        setFeatures(prevState => ({...prevState, [name]: !prevState[name]}));
+        setIsUpdate(true)
+    }
+
+    const items = {
+        schedule: {
+            name: "schedule",
+            label: "Schedule",
+            icon: Timer,
+            description: "All kinds of timers",
+            checked: features.schedule,
+            onChange: handleChange
+        },
+        topic: {
+            name: "topic",
+            label: "Topic",
+            icon: Layers3,
+            description: "Stay tuned",
+            checked: features.topic,
+            onChange: handleChange
+        },
+        webhook: {
+            name: "webhook",
+            label: "Webhook",
+            icon: Webhook,
+            description: "Stay tuned",
+            checked: features.webhook,
+            onChange: handleChange
+        },
+        endpoint: {
+            name: "endpoint",
+            label: "Endpoint",
+            icon: Globe,
+            description: "API yourself",
+            checked: features.endpoint,
+            onChange: handleChange
+        }
+    }
+
+    return (
+        <div className="pt-8 px-8">
+            <div className={"flex flex-col gap-4"}>
+                <FeatureCard item={items.schedule}/>
+                <FeatureCard item={items.topic}/>
+                <FeatureCard item={items.webhook}/>
+                <FeatureCard item={items.endpoint}/>
+            </div>
+        </div>
+    )
+}

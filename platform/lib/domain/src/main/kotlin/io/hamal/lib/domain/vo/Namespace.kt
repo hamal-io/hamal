@@ -44,9 +44,9 @@ class NamespaceFeatures(override var value: HotObject = HotObject.empty) : Value
         val default = NamespaceFeatures(
             HotObject.builder()
                 .set(schedule.name, true)
-                .set(topic.name, true)
-                .set(webhook.name, true)
-                .set(endpoint.name, true)
+                .set(topic.name, false)
+                .set(webhook.name, false)
+                .set(endpoint.name, false)
                 .build()
         )
     }
