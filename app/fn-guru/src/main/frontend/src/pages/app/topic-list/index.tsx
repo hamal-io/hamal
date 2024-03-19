@@ -66,7 +66,7 @@ const TopicCard: FC<ContentProps> = ({topic}) => {
 
     function append(funcId: string) {
         try {
-            appendEvent(topic.id, {funcId: funcId})
+            appendEvent(topic.id, {payload: funcId})
         } catch (e) {
             console.log(e)
         } finally {

@@ -30,3 +30,7 @@ export interface TopicEventAppendRequested {
     requestStatus: string;
     id: string;
 }
+
+export interface TopicEventPayload {
+    payload: string
+}

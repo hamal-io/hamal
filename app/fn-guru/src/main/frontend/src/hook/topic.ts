@@ -2,7 +2,14 @@ import {useCallback} from "react";
 import {useGet, usePost} from "@/hook/http.ts";
 
 import {useAuth} from "@/hook/auth.ts";
-import {Topic, TopicCreateRequested, TopicEventAppendRequested, TopicList, TopicType} from "@/types/topic.ts";
+import {
+    Topic,
+    TopicCreateRequested,
+    TopicEventAppendRequested,
+    TopicEventPayload,
+    TopicList,
+    TopicType
+} from "@/types/topic.ts";
 
 type TopicGetAction = (topicId: string, abortController?: AbortController) => void
 export const useTopicGet = (): [TopicGetAction, Topic, boolean, Error] => {
@@ -33,13 +40,11 @@ export const useTopicCreate = (): [TopicCreateAction, TopicCreateRequested, bool
     return [fn, submission, loading, error]
 }
 
-type HotObject = { [key: string]: any }
-type TopicEventAppendAction = (topicId: string, eventPayload?: HotObject, abortController?: AbortController) => void
+type TopicEventAppendAction = (topicId: string, payload: TopicEventPayload, abortController?: AbortController) => void
 export const useTopicEventAppend = (): [TopicEventAppendAction, TopicEventAppendRequested, boolean, Error] => {
     const [auth] = useAuth()
     const [post, submission, loading, error] = usePost<TopicEventAppendRequested>()
-    const fn = useCallback(async (topicId: string, eventPayload: HotObject = null, abortController?: AbortController) => {
-            const payload = eventPayload
+    const fn = useCallback(async (topicId: string, payload: TopicEventPayload, abortController?: AbortController) => {
             post(`/v1/topics/${topicId}/events`, {payload}, abortController)
         }, [auth]
     )
