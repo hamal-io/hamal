@@ -115,7 +115,7 @@ const MetaMaskButton: FC<MetaMaskButtonProps> = ({loading, setLoading}) => {
 
     useEffect(() => {
         if (token != null) {
-            navigate("/workspaces", {replace: true})
+            navigate("/dashboard", {replace: true})
         }
     }, [token]);
 
@@ -246,10 +246,10 @@ const LoginForm = () => {
                     </span>
                 </div>
             </div>
-            {/*<MetaMaskButton*/}
-            {/*    loading={isLoading}*/}
-            {/*    setLoading={setLoading}*/}
-            {/*/>*/}
+            <MetaMaskButton
+                loading={isLoading}
+                setLoading={setLoading}
+            />
         </div>
     )
 }

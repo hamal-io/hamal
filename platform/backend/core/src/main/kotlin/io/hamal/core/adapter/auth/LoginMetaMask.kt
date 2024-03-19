@@ -1,6 +1,7 @@
 package io.hamal.core.adapter.auth
 
 import io.hamal.core.adapter.account.AccountCreateMetaMaskPort
+import io.hamal.core.adapter.request.RequestAwaitPort
 import io.hamal.core.adapter.request.RequestEnqueuePort
 import io.hamal.core.adapter.workspace.WorkspaceListPort
 import io.hamal.core.component.GenerateToken
@@ -31,25 +32,28 @@ class AuthLoginMetaMaskAdapter(
     private val generateToken: GenerateToken,
     private val requestEnqueue: RequestEnqueuePort,
     private val createAccount: AccountCreateMetaMaskPort,
-    private val workspaceList: WorkspaceListPort
+    private val workspaceList: WorkspaceListPort,
+    private val awaitRequest: RequestAwaitPort
 ) : AuthLoginMetaMaskPort {
     override fun invoke(req: AuthLogInMetaMaskRequest): AuthLoginMetaMaskRequested {
         // FIXME 138 - verify signature
         val auth = authFind(req.address)
         if (auth == null) {
 
-            val submitted = createAccount(object : AccountCreateMetaMaskRequest {
+            val requested = createAccount(object : AccountCreateMetaMaskRequest {
                 override val id: AccountId = generateDomainId(::AccountId)
                 override val address: Web3Address = req.address
             })
+
+            awaitRequest(requested)
 
             return AuthLoginMetaMaskRequested(
                 requestId = generateDomainId(::RequestId),
                 requestedBy = SecurityContext.currentAuthId,
                 requestStatus = RequestStatus.Submitted,
                 id = generateDomainId(::AuthId),
-                accountId = submitted.id,
-                workspaceIds = listOf(submitted.workspaceId),
+                accountId = requested.id,
+                workspaceIds = listOf(requested.workspaceId),
                 token = generateToken(),
                 address = req.address,
                 signature = req.signature
@@ -60,22 +64,24 @@ class AuthLoginMetaMaskAdapter(
                 throw NoSuchElementException("Account not found")
             }
 
-            return AuthLoginMetaMaskRequested(
-                requestId = generateDomainId(::RequestId),
-                requestedBy = SecurityContext.currentAuthId,
-                requestStatus = RequestStatus.Submitted,
-                id = generateDomainId(::AuthId),
-                accountId = auth.accountId,
-                workspaceIds = workspaceList(
-                    WorkspaceQuery(
-                        limit = Limit.all,
-                        accountIds = listOf(auth.accountId)
-                    )
-                ).map(Workspace::id),
-                token = generateToken(),
-                address = req.address,
-                signature = req.signature
-            ).also(requestEnqueue::invoke)
+            return SecurityContext.with(auth) {
+                AuthLoginMetaMaskRequested(
+                    requestId = generateDomainId(::RequestId),
+                    requestedBy = SecurityContext.currentAuthId,
+                    requestStatus = RequestStatus.Submitted,
+                    id = generateDomainId(::AuthId),
+                    accountId = auth.accountId,
+                    workspaceIds = workspaceList(
+                        WorkspaceQuery(
+                            limit = Limit.all,
+                            accountIds = listOf(auth.accountId)
+                        )
+                    ).map(Workspace::id),
+                    token = generateToken(),
+                    address = req.address,
+                    signature = req.signature
+                ).also(requestEnqueue::invoke)
+            }
         }
     }
 
