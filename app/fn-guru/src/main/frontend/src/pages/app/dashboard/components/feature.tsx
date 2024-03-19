@@ -8,18 +8,17 @@ import {Globe, Layers3, Timer, Webhook} from "lucide-react";
 type Props = { namespace: Namespace }
 const FeatureTab: FC<Props> = ({namespace}) => {
     const [updateNamespace, updateResponse, loading, error] = useNamespaceUpdate()
-    const [activeFeatures, setActiveFeatures] = useState(new Map<string, boolean>([
+    const [activeFeatures, setActiveFeatures] = useState(new Map([
             ["schedule", false],
             ["topic", false],
             ["webhook", false],
             ["endpoint", false]
         ]
     ))
-    const [schedule, topic, webhook, endpoint] = activeFeatures.values()
 
     useEffect(() => {
         const updateMap = {...activeFeatures}
-        for (const [k, v] of Object.entries(namespace.features)) {
+        for (const [k, v] of Object.keys(namespace.features)) {
             updateMap[k] = true
         }
         setActiveFeatures(updateMap)
@@ -43,6 +42,7 @@ const FeatureTab: FC<Props> = ({namespace}) => {
     }
 
     if (error) return "Error"
+    const [schedule, topic, webhook, endpoint] = activeFeatures.values()
 
     return (
         <div className="pt-8 px-8">

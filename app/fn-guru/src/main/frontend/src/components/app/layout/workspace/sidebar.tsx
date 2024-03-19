@@ -120,7 +120,7 @@ const Sidebar: React.FC<Props> = ({className}) => {
                                 </li>
                             ))}
                             {features && features.map(item => (
-                                <li>
+                                <li key={item.label}>
                                     <NavLink item={item}/>
                                 </li>
                             ))
