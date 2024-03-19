@@ -34,13 +34,19 @@ class NamespaceAppendHandler(
     }
 
     private fun createNamespace(req: NamespaceAppendRequested): Namespace {
+
+        val features = NamespaceFeatures.default
+        req.features?.let {
+            features.value.nodes.putAll(it.value.nodes)
+        }
+
         return namespaceCmdRepository.create(
             CreateCmd(
                 id = req.cmdId(),
                 namespaceId = req.id,
                 workspaceId = req.workspaceId,
                 name = req.name,
-                features = req.features ?: NamespaceFeatures.default
+                features = features
             )
         )
     }
@@ -60,5 +66,6 @@ class NamespaceAppendHandler(
     private fun emitEvent(cmdId: CmdId, namespace: Namespace) {
         eventEmitter.emit(cmdId, NamespaceAppendedEvent(namespace))
     }
+
 
 }

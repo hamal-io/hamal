@@ -29,24 +29,28 @@ class NamespaceFeatures(override var value: HotObject = HotObject.empty) : Value
         value.nodes.forEach { feature ->
             require(
                 NamespaceFeature.entries.any { validFeatures ->
-                    validFeatures.name == feature.key/* && validFeatures.value == feature.value.intValue*/
+                    validFeatures.name == feature.key
                 }
             ) { IllegalArgumentException("$feature is not a valid feature.") }
         }
     }
 
     fun hasFeature(feature: NamespaceFeature): Boolean {
-        return value.nodes.containsKey(feature.toString())
+        value.find(feature.name)?.let {
+            return it.booleanValue
+        }
+        return false
     }
 
     companion object {
         val default = NamespaceFeatures(
             HotObject.builder()
-                .set(Schedule.name, Schedule.value)
-                .set(Topic.name, Topic.value)
-                .set(Webhook.name, Webhook.value)
-                .set(Endpoint.name, Endpoint.value)
+                .set(Schedule.name, true)
+                .set(Topic.name, true)
+                .set(Webhook.name, true)
+                .set(Endpoint.name, true)
                 .build()
         )
     }
 }
+

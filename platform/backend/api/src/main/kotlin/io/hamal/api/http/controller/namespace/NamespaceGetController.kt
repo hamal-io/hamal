@@ -4,6 +4,7 @@ import io.hamal.core.adapter.namespace.NamespaceGetPort
 import io.hamal.core.adapter.namespace_tree.NamespaceTreeGetSubTreePort
 import io.hamal.core.component.Retry
 import io.hamal.lib.common.TreeNode
+import io.hamal.lib.domain.vo.NamespaceFeatures
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.sdk.api.ApiNamespace
 import org.springframework.http.ResponseEntity
@@ -26,10 +27,14 @@ internal class NamespaceGetController(
 
     private fun assemble(node: TreeNode<NamespaceId>): ApiNamespace {
         return namespaceGet(node.value).let { namespace ->
+
+            val features = NamespaceFeatures.default
+            features.value.nodes.putAll(namespace.features.value.nodes)
+
             ApiNamespace(
                 id = namespace.id,
                 name = namespace.name,
-                features = namespace.features
+                features = features
             )
         }
     }

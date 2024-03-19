@@ -26,10 +26,9 @@ internal class NamespaceCreateControllerTest : NamespaceBaseControllerTest() {
 
     @Test
     fun `Creates namespace with limited features`() {
-        val features = NamespaceFeatures(
+        val featuresRequest = NamespaceFeatures(
             HotObject.builder()
-                .set(Schedule.name, Schedule.value)
-                .set(Webhook.name, Webhook.value)
+                .set(Endpoint.name, false)
                 .build()
         )
 
@@ -37,18 +36,19 @@ internal class NamespaceCreateControllerTest : NamespaceBaseControllerTest() {
             appendNamespace(
                 ApiNamespaceAppendRequest(
                     name = NamespaceName("test-namespace"),
-                    features = features
+                    features = featuresRequest
                 )
             )
         ).id
+        val z = namespaceQueryRepository.get(namespaceId)
 
         with(namespaceQueryRepository.get(namespaceId)) {
             assertThat(id, equalTo(namespaceId))
             assertThat(name, equalTo(NamespaceName("test-namespace")))
             assertThat(features, equalTo(features))
             assertTrue(features.hasFeature(Schedule))
+            assertTrue(features.hasFeature(Topic))
             assertTrue(features.hasFeature(Webhook))
-            assertFalse(features.hasFeature(Topic))
             assertFalse(features.hasFeature(Endpoint))
         }
     }
