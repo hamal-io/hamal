@@ -23,9 +23,8 @@ class NamespaceName(override val value: String) : ValueObjectString() {
     }
 }
 
-class NamespaceFeatures(override var value: HotObject = HotObject.empty) : ValueObjectHotObject() {
 
-    constructor(value: List<String>) : this(fromList(value))
+class NamespaceFeatures(override var value: HotObject = HotObject.empty) : ValueObjectHotObject() {
 
     init {
         value.nodes.forEach { feature ->
@@ -50,20 +49,6 @@ class NamespaceFeatures(override var value: HotObject = HotObject.empty) : Value
                 .set(endpoint.name, true)
                 .build()
         )
-
-        fun fromList(values: List<String>): HotObject {
-            val builder = HotObject.builder()
-            values.forEach {
-                require(
-                    NamespaceFeature.entries.any { valid ->
-                        valid.name == it
-                    }
-                ) { IllegalArgumentException("$it is not a valid feature.") }
-                builder.set(it, true)
-            }
-            return builder.build()
-        }
-
     }
 }
 

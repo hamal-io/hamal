@@ -8,11 +8,11 @@ import {Globe, Layers3, Timer, Webhook} from "lucide-react";
 type Props = { namespace: Namespace }
 const FeatureTab: FC<Props> = ({namespace}) => {
     const [updateNamespace, updateResponse, loading, error] = useNamespaceUpdate()
-    const [activeFeatures, setActiveFeatures] = useState(new Map<string,boolean>([
-            ["Schedule", false],
-            ["Topic", false],
-            ["Webhook", false],
-            ["Endpoint", false]
+    const [activeFeatures, setActiveFeatures] = useState(new Map<string, boolean>([
+            ["schedule", false],
+            ["topic", false],
+            ["webhook", false],
+            ["endpoint", false]
         ]
     ))
     const [schedule, topic, webhook, endpoint] = activeFeatures.values()

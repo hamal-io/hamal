@@ -34,8 +34,6 @@ class NamespaceAppendHandler(
     }
 
     private fun createNamespace(req: NamespaceAppendRequested): Namespace {
-
-
         return namespaceCmdRepository.create(
             CreateCmd(
                 id = req.cmdId(),

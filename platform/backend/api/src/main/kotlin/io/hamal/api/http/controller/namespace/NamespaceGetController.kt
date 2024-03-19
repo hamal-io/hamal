@@ -26,15 +26,10 @@ internal class NamespaceGetController(
 
     private fun assemble(node: TreeNode<NamespaceId>): ApiNamespace {
         return namespaceGet(node.value).let { namespace ->
-            val li = mutableListOf<String>()
-            namespace.features.value.nodes.forEach {
-                li.add(it.key)
-            }
-
             ApiNamespace(
                 id = namespace.id,
                 name = namespace.name,
-                features = li
+                features = namespace.features
             )
         }
     }

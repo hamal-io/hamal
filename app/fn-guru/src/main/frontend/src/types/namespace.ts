@@ -13,11 +13,17 @@ export interface NamespaceUpdateRequested {
     id: string;
 }
 
+export interface NamespaceFeatures {
+    schedule? : boolean
+    topic? : boolean
+    webhook? : boolean
+    endpoint? : boolean
+}
 
 export interface Namespace {
     id: string;
     name: string;
-    features: string[];
+    features: NamespaceFeatures;
 }
 
 export interface NamespaceList {

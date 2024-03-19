@@ -39,20 +39,20 @@ const Sidebar: React.FC<Props> = ({className}) => {
     const currentPath = location.pathname
 
     useEffect(() => {
-        const abortConroller = new AbortController()
-        getNamespace(uiState.namespaceId, abortConroller)
-        return (() => abortConroller.abort())
+        const abortController = new AbortController()
+        getNamespace(uiState.namespaceId, abortController)
+        return (() => abortController.abort())
     }, []);
 
     useEffect(() => {
         if (namespace) {
+            const x = namespace.features
             const links = featureLinks(location.pathname).reduce((acc: FeatureLink[], curr) => {
-                if (namespace.features.includes(curr.name)) {
+                if (Object.keys(namespace.features).includes(curr.name)) {
                     acc.push(curr)
                 }
                 return acc
             }, [])
-
             setFeatures(links)
 
         }
@@ -173,28 +173,28 @@ const NavLink: FC<{ item: NavItem }> = ({item}) => {
 type FeatureLink = { name: string, icon: LucideIcon, href: string, label: string, active: boolean }
 const featureLinks = (currentPath: string): FeatureLink[] => [
     {
-        name: "Schedule",
+        name: "schedule",
         icon: TimerIcon,
         href: `/schedules`,
         label: "Schedules",
         active: currentPath.startsWith(`/schedules`)
     },
     {
-        name: "Topic",
+        name: "topic",
         icon: Layers3Icon,
         href: `/topics`,
         label: "Topics",
         active: currentPath.startsWith(`/topics`)
     },
     {
-        name: "Webhook",
+        name: "webhook",
         icon: WebhookIcon,
         href: `/webhooks`,
         label: "Webhooks",
         active: currentPath.startsWith(`/webhooks`)
     },
     {
-        name: "Endpoint",
+        name: "endpoint",
         icon: GlobeIcon,
         href: `/endpoints`,
         label: "Endpoints",
