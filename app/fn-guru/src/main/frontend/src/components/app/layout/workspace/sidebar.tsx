@@ -18,7 +18,6 @@ import {Link, useLocation} from "react-router-dom";
 import Profile from "@/components/app/layout/workspace/profile.tsx";
 import {useNamespaceGet} from "@/hook";
 import {useUiState} from "@/hook/ui-state.ts";
-import {FeatureHotObject} from "@/types";
 
 type Props = {
     className?: string;
@@ -34,11 +33,31 @@ type NavItem = {
 const Sidebar: React.FC<Props> = ({className}) => {
     const [uiState] = useUiState()
     const [getNamespace, namespace, loading, error] = useNamespaceGet()
-    const [filteredFeatures, setFilteredFeatures] = useState(null)
-
+    const [features, setFeatures] = useState(null)
     const location = useLocation()
 
     const currentPath = location.pathname
+
+    useEffect(() => {
+        const abortConroller = new AbortController()
+        getNamespace(uiState.namespaceId, abortConroller)
+        return (() => abortConroller.abort())
+    }, []);
+
+    useEffect(() => {
+        if (namespace) {
+            const active = namespace.features
+            const links = featureLinks(location.pathname).reduce((acc: FeatureLink[], curr) => {
+                if (Object.keys(active).includes(curr.name)) {
+                    acc.push(curr)
+                }
+                return acc
+            }, [])
+
+            setFeatures(links)
+
+        }
+    }, [namespace, location]);
 
     const primaryNavigation = [
         {
@@ -66,49 +85,6 @@ const Sidebar: React.FC<Props> = ({className}) => {
             active: currentPath.startsWith(`/functions`)
         }
     ]
-
-
-    const featureLinks = [
-        {
-            icon: TimerIcon,
-            href: `/schedules`,
-            label: "Schedules",
-            active: currentPath.startsWith(`/schedules`)
-        },
-        {
-            icon: Layers3Icon,
-            href: `/topics`,
-            label: "Topics",
-            active: currentPath.startsWith(`/topics`)
-        },
-        {
-            icon: WebhookIcon,
-            href: `/webhooks`,
-            label: "Webhooks",
-            active: currentPath.startsWith(`/webhooks`)
-        },
-        {
-            icon: GlobeIcon,
-            href: `/endpoints`,
-            label: "Endpoints",
-            active: currentPath.startsWith(`/endpoints`)
-        }
-    ]
-
-
-    useEffect(() => {
-        getNamespace(uiState.namespaceId)
-    }, []);
-
-
-    useEffect(() => {
-        if (namespace) {
-            const activeKeys = new FeatureHotObject(namespace.features).toKeys()
-            const trailedKeys = activeKeys.map(s => s.concat("s"))
-            const fd = featureLinks.filter(obj => trailedKeys.includes(obj.label));
-            setFilteredFeatures(fd)
-        }
-    }, [namespace]);
 
 
     const secondaryNavigation = [
@@ -143,12 +119,13 @@ const Sidebar: React.FC<Props> = ({className}) => {
                                 <li key={item.label}>
                                     <NavLink item={item}/>
                                 </li>
-
                             ))}
-                            {filteredFeatures && filteredFeatures.map((item) => (
-                                <li key={item.label}>
+                            {features && features.map(item => (
+                                <li>
                                     <NavLink item={item}/>
-                                </li>))}
+                                </li>
+                            ))
+                            }
                         </ul>
                     </li>
                 </ul>
@@ -192,4 +169,37 @@ const NavLink: FC<{ item: NavItem }> = ({item}) => {
         </Link>
     );
 };
+
+
+type FeatureLink = { name: string, icon: LucideIcon, href: string, label: string, active: boolean }
+const featureLinks = (currentPath: string): FeatureLink[] => [
+    {
+        name: "Schedule",
+        icon: TimerIcon,
+        href: `/schedules`,
+        label: "Schedules",
+        active: currentPath.startsWith(`/schedules`)
+    },
+    {
+        name: "Topic",
+        icon: Layers3Icon,
+        href: `/topics`,
+        label: "Topics",
+        active: currentPath.startsWith(`/topics`)
+    },
+    {
+        name: "Webhook",
+        icon: WebhookIcon,
+        href: `/webhooks`,
+        label: "Webhooks",
+        active: currentPath.startsWith(`/webhooks`)
+    },
+    {
+        name: "Endpoint",
+        icon: GlobeIcon,
+        href: `/endpoints`,
+        label: "Endpoints",
+        active: currentPath.startsWith(`/endpoints`)
+    }
+]
 

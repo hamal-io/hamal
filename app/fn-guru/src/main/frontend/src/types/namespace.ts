@@ -1,4 +1,3 @@
-import {HotObject, HotObjectBuilder} from "@/types/HotObject.ts";
 
 
 export interface NamespaceAppendRequested {
@@ -14,11 +13,19 @@ export interface NamespaceUpdateRequested {
     id: string;
 }
 
-export type Features = HotObject<number>
+
+export interface NamespaceFeatures {
+    schedule: boolean,
+    topic: boolean,
+    webhook: boolean
+    endpoint: boolean
+}
+
+
 export interface Namespace {
     id: string;
     name: string;
-    features: Features;
+    features: NamespaceFeatures;
 }
 
 export interface NamespaceList {
@@ -48,24 +55,6 @@ export class NamespaceNode {
 
     isParent() {
         return this.descendants.length > 0
-    }
-}
-
-export class FeatureHotObject extends HotObjectBuilder<number> {
-
-    constructor(features: Features = null) {
-        super(features);
-    }
-
-    setFeature(key: string){
-        super.set(key,0)
-    }
-
-
-    * [Symbol.iterator](): IterableIterator<string> {
-        for (const [k, v] of Object.entries(super.get())) {
-            yield k
-        }
     }
 }
 
