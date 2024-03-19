@@ -7,7 +7,7 @@ export interface TopicCreateRequested {
     type: string;
 }
 
-export type TopicType = 'Internal' | 'Namespace' | 'Workspace' | 'Public'
+export type TopicType = 'Namespace' | 'Workspace' | 'Public'
 
 export interface Topic {
     id: string;
