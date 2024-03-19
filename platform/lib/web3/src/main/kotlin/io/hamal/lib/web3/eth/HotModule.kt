@@ -94,7 +94,7 @@ object EthHotModule : HotModule() {
             }
 
             override fun deserialize(p0: JsonElement?, p1: Type?, p2: JsonDeserializationContext?): EthBytes32 {
-                return EthBytes32(EthPrefixedHexString(p0!!.asString))
+                return EthBytes32((p0!!.asString))
             }
 
         })

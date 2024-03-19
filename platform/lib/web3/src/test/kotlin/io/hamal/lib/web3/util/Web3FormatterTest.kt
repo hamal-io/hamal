@@ -1,13 +1,9 @@
 package io.hamal.lib.web3.util
 
-import io.hamal.lib.web3.eth.abi.type.EthAddress
-import io.hamal.lib.web3.eth.abi.type.EthHexString
-import io.hamal.lib.web3.eth.abi.type.EthPrefixedHexString
+import io.hamal.lib.web3.eth.abi.type.*
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
-import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import java.math.BigInteger
 
 
 class FormatToHexTest {
@@ -27,11 +23,19 @@ class FormatToHexTest {
 
 
 class FormatWithoutLeadingZerosTest {
+
     @Test
-    fun `With leading zero`() {
-        val bytes = BigInteger.valueOf(80946).toByteArray()
+    fun `ethuint64 - 0xcdeac4a94`() {
+        val bytes = EthUint64(EthPrefixedHexString("0xcdeac4a94")).toByteArray()
         val result = Web3Formatter.formatWithoutLeadingZeros(bytes)
-        assertThat(result, equalTo("13c32"))
+        assertThat(result, equalTo("cdeac4a94"))
+    }
+
+    @Test
+    fun `With leading zero in byte array`() {
+        val bytes = EthBytes32(EthPrefixedHexString("0x546974616e2028746974616e6275696c6465722e78797a29")).toByteArray()
+        val result = Web3Formatter.formatWithoutLeadingZeros(bytes)
+        assertThat(result, equalTo("546974616e2028746974616e6275696c6465722e78797a29"))
     }
 
     @Test
@@ -54,9 +58,6 @@ class FormatWithoutLeadingZerosTest {
         assertThat(result, equalTo("1000000000000000000000000000000000000000"))
     }
 }
-
-
-@Nested
 
 class FormatFixLengthTest {
     @Test
