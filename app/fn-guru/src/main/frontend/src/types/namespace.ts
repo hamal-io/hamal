@@ -14,10 +14,10 @@ export interface NamespaceUpdateRequested {
 }
 
 export interface NamespaceFeature {
-    schedule? : boolean
-    topic? : boolean
-    webhook? : boolean
-    endpoint? : boolean
+    schedule : boolean
+    topic : boolean
+    webhook : boolean
+    endpoint : boolean
 }
 
 export interface Namespace {

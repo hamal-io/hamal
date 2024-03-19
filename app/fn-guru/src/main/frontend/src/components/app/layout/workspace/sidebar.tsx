@@ -8,6 +8,7 @@ import {
     GlobeIcon,
     Layers3Icon,
     LucideIcon,
+    LucideProps,
     Play,
     Settings,
     TimerIcon,
@@ -33,29 +34,34 @@ type NavItem = {
 const Sidebar: React.FC<Props> = ({className}) => {
     const [uiState] = useUiState()
     const [getNamespace, namespace, loading, error] = useNamespaceGet()
-    const [features, setFeatures] = useState(null)
     const location = useLocation()
-
     const currentPath = location.pathname
+    const [activeFeatures, setActiveFeatures] = useState<NavLinkType[]>(null)
+
 
     useEffect(() => {
         const abortController = new AbortController()
         getNamespace(uiState.namespaceId, abortController)
-        return (() => abortController.abort())
-    }, []);
-
-    useEffect(() => {
         if (namespace) {
-            const links = featureLinks(location.pathname).reduce((acc: FeatureLink[], curr) => {
-                if (Object.keys(namespace.features).includes(curr.name)) {
-                    acc.push(curr)
+            const actives: NavLinkType[] = []
+            for (const [feat, valid] of Object.entries(namespace.features)) {
+                if (valid) {
+                    const z: NavLinkType = featureLinks[feat]
+                    actives.push(z)
                 }
-                return acc
-            }, [])
-            setFeatures(links)
-
+            }
+            setActiveFeatures(actives)
         }
-    }, [namespace, location]);
+        return (() => abortController.abort())
+    }, [namespace]);
+
+
+    type NavLinkType = {
+        icon: React.ForwardRefExoticComponent<LucideProps>,
+        active: boolean,
+        href: string,
+        label: string
+    }
 
     const primaryNavigation = [
         {
@@ -83,6 +89,35 @@ const Sidebar: React.FC<Props> = ({className}) => {
             active: currentPath.startsWith(`/functions`)
         }
     ]
+
+
+    const featureLinks =
+        {
+            schedule: {
+                icon: TimerIcon,
+                href: `/schedules`,
+                label: "Schedules",
+                active: currentPath.startsWith(`/schedules`)
+            },
+            topic: {
+                icon: Layers3Icon,
+                href: `/topics`,
+                label: "Topics",
+                active: currentPath.startsWith(`/topics`)
+            },
+            webhook: {
+                icon: WebhookIcon,
+                href: `/webhooks`,
+                label: "Webhooks",
+                active: currentPath.startsWith(`/webhooks`)
+            },
+            endpoint: {
+                icon: GlobeIcon,
+                href: `/endpoints`,
+                label: "Endpoints",
+                active: currentPath.startsWith(`/endpoints`)
+            }
+        }
 
 
     const secondaryNavigation = [
@@ -118,11 +153,11 @@ const Sidebar: React.FC<Props> = ({className}) => {
                                     <NavLink item={item}/>
                                 </li>
                             ))}
-                            {features && features.map(item => (
+                            {activeFeatures && activeFeatures.map(item =>
                                 <li key={item.label}>
                                     <NavLink item={item}/>
                                 </li>
-                            ))
+                            )
                             }
                         </ul>
                     </li>
@@ -167,37 +202,3 @@ const NavLink: FC<{ item: NavItem }> = ({item}) => {
         </Link>
     );
 };
-
-
-type FeatureLink = { name: string, icon: LucideIcon, href: string, label: string, active: boolean }
-const featureLinks = (currentPath: string): FeatureLink[] => [
-    {
-        name: "schedule",
-        icon: TimerIcon,
-        href: `/schedules`,
-        label: "Schedules",
-        active: currentPath.startsWith(`/schedules`)
-    },
-    {
-        name: "topic",
-        icon: Layers3Icon,
-        href: `/topics`,
-        label: "Topics",
-        active: currentPath.startsWith(`/topics`)
-    },
-    {
-        name: "webhook",
-        icon: WebhookIcon,
-        href: `/webhooks`,
-        label: "Webhooks",
-        active: currentPath.startsWith(`/webhooks`)
-    },
-    {
-        name: "endpoint",
-        icon: GlobeIcon,
-        href: `/endpoints`,
-        label: "Endpoints",
-        active: currentPath.startsWith(`/endpoints`)
-    }
-]
-

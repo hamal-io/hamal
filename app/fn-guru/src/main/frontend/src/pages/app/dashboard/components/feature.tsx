@@ -1,4 +1,4 @@
-import React, {cloneElement, FC, useEffect, useState} from "react";
+import React, { FC, useEffect, useState} from "react";
 import {useNamespaceUpdate} from "@/hook";
 import {Namespace, NamespaceFeature} from "@/types";
 import {Globe, Layers3, Timer, Webhook} from "lucide-react";
@@ -9,35 +9,14 @@ import {Switch} from "@/components/ui/switch.tsx";
 type Props = { namespace: Namespace }
 const FeatureTab: FC<Props> = ({namespace}) => {
     const [updateNamespace, updateResponse, loading, error] = useNamespaceUpdate()
-
-    const [clientFeatures, setClientFeatures] = useState<NamespaceFeature>({
-        schedule: false,
-        topic: false,
-        webhook: false,
-        endpoint: false
-    })
+    const [clientFeatures, setClientFeatures] = useState<NamespaceFeature>(namespace.features)
     const [updateReady, setUpdateReady] = useState(false)
-
-    useEffect(() => {
-        const copy = {...clientFeatures}
-        for (const [k] of Object.entries(namespace.features)) {
-            copy[k] = true
-        }
-        setClientFeatures(copy)
-    }, []);
-
 
     useEffect(() => {
         if (updateReady === true) {
             try {
-                const dto: NamespaceFeature = {}
-                for (const [k, v] of Object.entries(clientFeatures)) {
-                    if (v) {
-                        dto[k] = true
-                    }
-                }
                 const abortController = new AbortController()
-                updateNamespace(namespace.id, namespace.name, dto, abortController)
+                updateNamespace(namespace.id, namespace.name, clientFeatures, abortController)
                 return (() => abortController.abort())
             } catch (e) {
                 console.log(e)
