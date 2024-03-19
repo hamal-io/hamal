@@ -1,81 +1,93 @@
-import React, {FC, useEffect, useState} from "react";
+import React, {cloneElement, FC, useEffect, useState} from "react";
 import {useNamespaceUpdate} from "@/hook";
-import {Namespace} from "@/types";
-import {FeatureCard} from "@/pages/app/dashboard/components/feature/card.tsx";
+import {Namespace, NamespaceFeature} from "@/types";
 import {Globe, Layers3, Timer, Webhook} from "lucide-react";
-
+import {Card, CardDescription, CardTitle} from "@/components/ui/card.tsx";
+import {Avatar} from "@/components/ui/avatar.tsx";
+import {Switch} from "@/components/ui/switch.tsx";
 
 type Props = { namespace: Namespace }
 const FeatureTab: FC<Props> = ({namespace}) => {
     const [updateNamespace, updateResponse, loading, error] = useNamespaceUpdate()
-    const [activeFeatures, setActiveFeatures] = useState(new Map([
-            ["schedule", false],
-            ["topic", false],
-            ["webhook", false],
-            ["endpoint", false]
-        ]
-    ))
+
+    const [clientFeatures, setClientFeatures] = useState<NamespaceFeature>({
+        schedule: false,
+        topic: false,
+        webhook: false,
+        endpoint: false
+    })
+    const [updateReady, setUpdateReady] = useState(false)
 
     useEffect(() => {
-        const updateMap = {...activeFeatures}
-        for (const [k, v] of Object.keys(namespace.features)) {
-            updateMap[k] = true
+        const copy = {...clientFeatures}
+        for (const [k] of Object.entries(namespace.features)) {
+            copy[k] = true
         }
-        setActiveFeatures(updateMap)
-    }, [namespace]);
+        setClientFeatures(copy)
+    }, []);
 
-    function update(updateMap: Map<string, boolean>) {
-        try {
-            const abortController = new AbortController()
-            //updateNamespace(namespace.id, namespace.name, , abortController)
-            return (() => abortController.abort())
-        } catch (e) {
-            console.log(e)
+
+    useEffect(() => {
+        if (updateReady === true) {
+            try {
+                const dto: NamespaceFeature = {}
+                for (const [k, v] of Object.entries(clientFeatures)) {
+                    if (v) {
+                        dto[k] = true
+                    }
+                }
+                const abortController = new AbortController()
+                updateNamespace(namespace.id, namespace.name, dto, abortController)
+                return (() => abortController.abort())
+            } catch (e) {
+                console.log(e)
+            } finally {
+                setUpdateReady(false)
+            }
         }
+    }, [updateReady, clientFeatures]);
+
+    function handleChange(name: string) {
+        setClientFeatures(prevState => ({...prevState, [name]: !prevState[name]}));
+        setUpdateReady(true)
     }
 
-    function toggle(key: string) {
-        const updateMap = {...activeFeatures}
-        updateMap[key] = !activeFeatures[key]
-        setActiveFeatures(updateMap)
-        update(updateMap)
-    }
 
     if (error) return "Error"
-    const [schedule, topic, webhook, endpoint] = activeFeatures.values()
+
 
     return (
         <div className="pt-8 px-8">
             <div className={"flex flex-col gap-4"}>
                 <FeatureCard
+                    name={"schedule"}
                     label={"Schedule"}
                     description={"All kinds of timers"}
-                    icon={<Timer/>}
-                    checked={schedule}
-                    onCheck={() => toggle("schedule")}
+                    checked={clientFeatures.schedule}
+                    onChange={handleChange}
                 />
                 <FeatureCard
+                    name={"topic"}
                     label={"Topic"}
                     description={"Stay tuned"}
-                    icon={<Layers3/>}
-                    checked={topic}
-                    onCheck={() => toggle("topic")}
+                    checked={clientFeatures.topic}
+                    onChange={handleChange}
 
                 />
                 <FeatureCard
+                    name={"webhook"}
                     label={"Webhook"}
                     description={"Stay tuned"}
-                    icon={<Webhook/>}
-                    checked={webhook}
-                    onCheck={() => toggle("webhook")}
+                    checked={clientFeatures.webhook}
+                    onChange={handleChange}
 
                 />
                 <FeatureCard
+                    name={"endpoint"}
                     label={"Endpoint"}
                     description={"API yourself"}
-                    icon={<Globe/>}
-                    checked={endpoint}
-                    onCheck={() => toggle("endpoint")}
+                    checked={clientFeatures.endpoint}
+                    onChange={handleChange}
                 />
             </div>
         </div>
@@ -84,3 +96,25 @@ const FeatureTab: FC<Props> = ({namespace}) => {
 export default FeatureTab
 
 
+type CardProps = {
+    name: string
+    label: string,
+    description: string,
+    onChange: (name: string) => void
+    checked: boolean
+}
+export const FeatureCard: FC<CardProps> = ({name, label, description, onChange, checked}) => {
+
+    return (
+        <Card className={"flex flex-row items-center  p-4"}>
+            <Avatar className={"w-1/4"}></Avatar>
+            <div className={"flex flex-col w-1/3"}>
+                <CardTitle>{label}</CardTitle>
+                <CardDescription>{description}</CardDescription>
+            </div>
+            <div>
+                <Switch name={name} checked={checked} onCheckedChange={() => onChange(name)}></Switch>
+            </div>
+        </Card>
+    )
+}

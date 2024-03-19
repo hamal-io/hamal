@@ -13,7 +13,7 @@ export interface NamespaceUpdateRequested {
     id: string;
 }
 
-export interface NamespaceFeatures {
+export interface NamespaceFeature {
     schedule? : boolean
     topic? : boolean
     webhook? : boolean
@@ -23,7 +23,7 @@ export interface NamespaceFeatures {
 export interface Namespace {
     id: string;
     name: string;
-    features: NamespaceFeatures;
+    features: NamespaceFeature;
 }
 
 export interface NamespaceList {
