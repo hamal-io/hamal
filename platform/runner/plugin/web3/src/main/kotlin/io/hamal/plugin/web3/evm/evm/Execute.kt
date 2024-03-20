@@ -13,7 +13,7 @@ import io.hamal.lib.kua.type.*
 import io.hamal.lib.web3.evm.abi.type.EvmPrefixedHexString
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
 import io.hamal.lib.web3.evm.impl.eth.domain.EthGetBlockResponse
-import io.hamal.lib.web3.evm.impl.eth.http.EthHttpBatchService
+import io.hamal.lib.web3.evm.impl.eth.http.DepEthHttpBatchService
 
 private val log = logger(EthExecuteFunction::class)
 
@@ -25,7 +25,7 @@ class EthExecuteFunction : Function1In2Out<KuaTable, KuaError, KuaTable>(
         try {
 
             val url = arg1.getString("url")
-            val batchService = EthHttpBatchService(HttpTemplateImpl(url.stringValue))
+            val batchService = DepEthHttpBatchService(HttpTemplateImpl(url.stringValue))
 
             arg1.getTable("requests").also { requestsTable ->
                 ctx.checkpoint {

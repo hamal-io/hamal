@@ -3,12 +3,11 @@ package io.hamal.lib.web3.evm.impl.eth.domain
 import io.hamal.lib.web3.evm.abi.type.EvmPrefixedHexString
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
 import io.hamal.lib.web3.evm.domain.EvmRequestId
+import io.hamal.lib.web3.evm.domain.EvmResponse
 
-sealed class EthResponse {
-    val jsonrpc: String = "2.0"
-    abstract val id: EvmRequestId
+sealed class EthResponse : EvmResponse {
+    override val jsonrpc: String = "2.0"
 }
-
 
 data class EthGetBlockResponse(
     override val id: EvmRequestId,

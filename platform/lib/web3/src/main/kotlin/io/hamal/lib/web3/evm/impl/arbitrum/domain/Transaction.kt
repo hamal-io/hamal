@@ -1,9 +1,9 @@
-package io.hamal.lib.web3.evm.impl.eth.domain
+package io.hamal.lib.web3.evm.impl.arbitrum.domain
 
 import io.hamal.lib.web3.evm.abi.type.*
 import io.hamal.lib.web3.evm.domain.EvmTransaction
 
-data class EthTransaction(
+data class ArbitrumTransaction(
     val blockHash: EvmHash?,
     val blockNumber: EvmUint64?,
     val from: EvmAddress,
@@ -17,12 +17,6 @@ data class EthTransaction(
     val to: EvmAddress?,
     val transactionIndex: EvmUint32?,
     val value: EvmUint256?,
-    val type: EvmUint8,
-    val accessList: List<AccessListItem>?
-) : EvmTransaction {
-    data class AccessListItem(
-        val address: EvmAddress,
-        val storageKeys: List<EvmHash>
-    )
-}
+    val type: EvmUint8
+) : EvmTransaction
 

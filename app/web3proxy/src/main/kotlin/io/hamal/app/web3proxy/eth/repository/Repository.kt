@@ -1,12 +1,12 @@
 package io.hamal.app.web3proxy.eth.repository
 
-import io.hamal.lib.web3.evm.impl.eth.EthBatchService
 import io.hamal.lib.web3.evm.abi.type.EvmAddress
 import io.hamal.lib.web3.evm.abi.type.EvmUint32
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
 import io.hamal.lib.web3.evm.impl.eth.domain.EthBlock
 import io.hamal.lib.web3.evm.impl.eth.domain.EthTransaction
 import io.hamal.lib.web3.evm.impl.eth.domain.Withdrawal
+import io.hamal.lib.web3.evm.impl.eth.http.EthBatchService
 import java.nio.file.Path
 
 interface EthRepository {

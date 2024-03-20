@@ -8,16 +8,37 @@ import io.hamal.lib.common.serialization.JsonFactoryBuilder
 import io.hamal.lib.domain.Json
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
+import io.hamal.lib.web3.evm.EvmBatchService
 import io.hamal.lib.web3.evm.EvmHotModule
+import io.hamal.lib.web3.evm.HttpBaseBatchService
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
 import io.hamal.lib.web3.evm.domain.EvmRequestId
-import io.hamal.lib.web3.evm.impl.eth.EthBatchService
+import io.hamal.lib.web3.evm.impl.eth.DepEthBatchService
 import io.hamal.lib.web3.evm.impl.eth.domain.*
+import io.hamal.lib.web3.json
 import kotlin.reflect.KClass
 
+interface EthBatchService<SERVICE : EvmBatchService<EthResponse, SERVICE>> : EvmBatchService<EthResponse, SERVICE>
+
 class EthHttpBatchService(
+    httpTemplate: HttpTemplate,
+) : EthBatchService<EthHttpBatchService>, HttpBaseBatchService<EthResponse>(httpTemplate, json) {
+
+    override fun getBlock(number: EvmUint64) = also {
+        request(
+            method = "eth_getBlockByNumber",
+            params = HotArray.builder()
+                .append(number.toPrefixedHexString().value)
+                .append(true)
+                .build(),
+            resultClass = EthGetBlockResponse::class
+        )
+    }
+}
+
+class DepEthHttpBatchService(
     private val httpTemplate: HttpTemplate
-) : EthBatchService<EthHttpBatchService> {
+) : DepEthBatchService<DepEthHttpBatchService> {
 
     private val resultClasses = mutableListOf<KClass<*>>()
     private val requests = mutableListOf<HotObject>()
@@ -46,7 +67,7 @@ class EthHttpBatchService(
         resultClass = EthGetLiteBlockResponse::class
     )
 
-    override fun call(callRequest: EthBatchService.EthCallRequest) = request(
+    override fun call(callRequest: DepEthBatchService.EthCallRequest) = request(
         method = "eth_call",
         params = HotArray.builder()
             .append(
@@ -95,7 +116,7 @@ class EthHttpBatchService(
         method: String,
         params: HotArray,
         resultClass: KClass<RESPONSE>
-    ): EthHttpBatchService {
+    ): DepEthHttpBatchService {
         addRequest(
             createReq = { id ->
                 HotObjectBuilder()

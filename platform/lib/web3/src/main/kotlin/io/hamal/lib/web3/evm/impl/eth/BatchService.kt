@@ -8,7 +8,7 @@ import io.hamal.lib.web3.evm.domain.EvmRequestId
 import io.hamal.lib.web3.evm.impl.eth.domain.EthResponse
 
 
-interface EthBatchService<SERVICE : EthBatchService<SERVICE>> {
+interface DepEthBatchService<SERVICE : DepEthBatchService<SERVICE>> {
     fun execute(): List<EthResponse>
     fun getBlockNumber(): SERVICE
     fun getBlock(number: EvmUint64): SERVICE

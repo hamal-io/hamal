@@ -2,13 +2,13 @@ package io.hamal.app.web3proxy.fixture
 
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
 import io.hamal.lib.web3.evm.domain.EvmRequestId
-import io.hamal.lib.web3.evm.impl.eth.EthBatchService
+import io.hamal.lib.web3.evm.impl.eth.DepEthBatchService
 import io.hamal.lib.web3.evm.impl.eth.domain.EthBlock
 import io.hamal.lib.web3.evm.impl.eth.domain.EthGetBlockResponse
 import io.hamal.lib.web3.evm.impl.eth.domain.EthResponse
 import io.hamal.lib.web3.json
 
-internal class EthBatchServiceFixture : EthBatchService<EthBatchServiceFixture> {
+internal class EthBatchServiceFixture : DepEthBatchService<EthBatchServiceFixture> {
 
     override fun execute(): List<EthResponse> {
         return responses
@@ -43,7 +43,7 @@ internal class EthBatchServiceFixture : EthBatchService<EthBatchServiceFixture> 
         TODO("Not yet implemented")
     }
 
-    override fun call(callRequest: EthBatchService.EthCallRequest): EthBatchServiceFixture {
+    override fun call(callRequest: DepEthBatchService.EthCallRequest): EthBatchServiceFixture {
         TODO("Not yet implemented")
     }
 
