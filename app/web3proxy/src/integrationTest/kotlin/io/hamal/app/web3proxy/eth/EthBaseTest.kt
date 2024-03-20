@@ -8,10 +8,10 @@ import io.hamal.app.web3proxy.eth.repository.EthRepositoryImpl
 import io.hamal.app.web3proxy.fixture.EthBatchServiceFixture
 import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.http.JsonHttpSerdeFactory
+import io.hamal.lib.web3.evm.abi.type.*
 import io.hamal.lib.web3.evm.impl.eth.domain.EthBlock
 import io.hamal.lib.web3.evm.impl.eth.domain.EthTransaction
-import io.hamal.lib.web3.evm.abi.type.*
-import io.hamal.lib.web3.evm.json
+import io.hamal.lib.web3.json
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.extension.ExtendWith

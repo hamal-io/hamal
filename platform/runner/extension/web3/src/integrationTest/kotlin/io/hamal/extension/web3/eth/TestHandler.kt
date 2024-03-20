@@ -4,7 +4,7 @@ import io.hamal.lib.common.hot.HotArray
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
 import io.hamal.lib.web3.evm.impl.eth.domain.*
-import io.hamal.lib.web3.evm.json
+import io.hamal.lib.web3.json
 
 object TestHandler {
 
@@ -20,16 +20,16 @@ object TestHandler {
                 }
             }
 
-        return reqs.filterIsInstance<EvmRequest>()
+        return reqs.filterIsInstance<EthRequest>()
             .map { req -> handle(chain, req) }
-            .plus(reqs.filterIsInstance<EvmResponse>())
+            .plus(reqs.filterIsInstance<EthResponse>())
             .let { responses ->
                 json.deserialize(HotArray::class, json.serialize(responses))
             }
     }
 
 
-    private fun handle(chain: String, request: EvmRequest): EvmResponse {
+    private fun handle(chain: String, request: EthRequest): EthResponse {
         return when (request) {
             is EthGetBlockByNumberRequest -> {
                 EthGetBlockResponse(

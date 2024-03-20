@@ -1,7 +1,7 @@
 package io.hamal.app.web3proxy.eth
 
+import io.hamal.lib.web3.evm.domain.EvmRequestId
 import io.hamal.lib.web3.evm.impl.eth.domain.EthErrorResponse
-import io.hamal.lib.web3.evm.impl.eth.domain.EvmRequestId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test

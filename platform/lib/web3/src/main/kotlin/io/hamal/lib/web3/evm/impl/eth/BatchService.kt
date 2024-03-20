@@ -4,12 +4,12 @@ import io.hamal.lib.web3.evm.abi.EthFunction
 import io.hamal.lib.web3.evm.abi.type.EvmAddress
 import io.hamal.lib.web3.evm.abi.type.EvmPrefixedHexString
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
-import io.hamal.lib.web3.evm.impl.eth.domain.EvmRequestId
-import io.hamal.lib.web3.evm.impl.eth.domain.EvmResponse
+import io.hamal.lib.web3.evm.domain.EvmRequestId
+import io.hamal.lib.web3.evm.impl.eth.domain.EthResponse
 
 
 interface EthBatchService<SERVICE : EthBatchService<SERVICE>> {
-    fun execute(): List<EvmResponse>
+    fun execute(): List<EthResponse>
     fun getBlockNumber(): SERVICE
     fun getBlock(number: EvmUint64): SERVICE
     fun getLiteBlock(number: EvmUint64): SERVICE

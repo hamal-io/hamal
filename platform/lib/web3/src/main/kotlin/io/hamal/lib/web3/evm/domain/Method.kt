@@ -1,4 +1,4 @@
-package io.hamal.lib.web3.evm.impl.eth.domain
+package io.hamal.lib.web3.evm.domain
 
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement

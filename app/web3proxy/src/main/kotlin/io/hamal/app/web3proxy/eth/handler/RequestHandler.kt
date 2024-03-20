@@ -3,24 +3,24 @@ package io.hamal.app.web3proxy.eth.handler
 import io.hamal.app.web3proxy.eth.repository.EthRepository
 import io.hamal.lib.web3.evm.impl.eth.domain.EthGetBlockByNumberRequest
 import io.hamal.lib.web3.evm.impl.eth.domain.EthGetBlockResponse
-import io.hamal.lib.web3.evm.impl.eth.domain.EvmRequest
-import io.hamal.lib.web3.evm.impl.eth.domain.EvmResponse
+import io.hamal.lib.web3.evm.impl.eth.domain.EthRequest
+import io.hamal.lib.web3.evm.impl.eth.domain.EthResponse
 
 interface HandleEthRequest {
-    operator fun invoke(request: EvmRequest): EvmResponse
-    operator fun invoke(requests: List<EvmRequest>): List<EvmResponse>
+    operator fun invoke(request: EthRequest): EthResponse
+    operator fun invoke(requests: List<EthRequest>): List<EthResponse>
 }
 
 class EthRequestHandlerImpl(
     private val ethRepository: EthRepository,
 ) : HandleEthRequest {
 
-    override fun invoke(request: EvmRequest): EvmResponse {
+    override fun invoke(request: EthRequest): EthResponse {
         return invoke(listOf(request)).firstOrNull()
             ?: throw RuntimeException("Unable to process request")
     }
 
-    override fun invoke(requests: List<EvmRequest>): List<EvmResponse> {
+    override fun invoke(requests: List<EthRequest>): List<EthResponse> {
         return requests.filterIsInstance<EthGetBlockByNumberRequest>().let { reqs ->
             ethRepository.listBlocks(reqs.map { it.number })
                 .zip(reqs)

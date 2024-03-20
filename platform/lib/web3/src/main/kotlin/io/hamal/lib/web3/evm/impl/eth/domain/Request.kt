@@ -2,7 +2,6 @@ package io.hamal.lib.web3.evm.impl.eth.domain
 
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
-import com.google.gson.JsonPrimitive
 import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.hot.HotArray
 import io.hamal.lib.common.hot.HotObject
@@ -12,29 +11,18 @@ import io.hamal.lib.common.serialization.JsonAdapter
 import io.hamal.lib.domain.Json
 import io.hamal.lib.web3.evm.abi.type.EvmPrefixedHexString
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
-import io.hamal.lib.web3.evm.impl.eth.domain.EvmMethod.GetBlockByNumber
+import io.hamal.lib.web3.evm.domain.EvmMethod
+import io.hamal.lib.web3.evm.domain.EvmRequestId
+import io.hamal.lib.web3.evm.domain.EvmMethod.GetBlockByNumber
 import java.lang.reflect.Type
 
 
-data class EvmRequestId(val value: String) {
-    object Adapter : JsonAdapter<EvmRequestId> {
-
-        override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): EvmRequestId {
-            return EvmRequestId(json.asString)
-        }
-
-        override fun serialize(src: EvmRequestId, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
-            return JsonPrimitive(src.value)
-        }
-    }
-}
-
-sealed interface EvmRequest {
+sealed interface EthRequest {
     val id: EvmRequestId
     val method: EvmMethod
 
-    object Adapter : JsonAdapter<EvmRequest> {
-        override fun serialize(request: EvmRequest, type: Type, ctx: JsonSerializationContext): JsonElement {
+    object Adapter : JsonAdapter<EthRequest> {
+        override fun serialize(request: EthRequest, type: Type, ctx: JsonSerializationContext): JsonElement {
             return when (request) {
                 is EthGetBlockByNumberRequest -> GsonTransform.fromNode(
                     HotObject.builder()
@@ -53,7 +41,7 @@ sealed interface EvmRequest {
             }
         }
 
-        override fun deserialize(element: JsonElement, type: Type, ctx: JsonDeserializationContext): EvmRequest {
+        override fun deserialize(element: JsonElement, type: Type, ctx: JsonDeserializationContext): EthRequest {
             val obj = element.asJsonObject
             return when (EvmMethod.of(obj.get("method").asString)) {
                 GetBlockByNumber -> EthGetBlockByNumberRequest(
@@ -72,7 +60,7 @@ data class EthGetBlockByNumberRequest(
     override val id: EvmRequestId,
     val number: EvmUint64,
     val fullTransaction: Boolean
-) : EvmRequest {
+) : EthRequest {
     override val method: EvmMethod = GetBlockByNumber
 
     object Adapter : JsonAdapter<EthGetBlockByNumberRequest> {
@@ -102,9 +90,9 @@ data class EthGetBlockByNumberRequest(
     }
 }
 
-fun parseRequest(json: Json, request: HotObject): Pair<EthErrorResponse?, EvmRequest?> {
+fun parseRequest(json: Json, request: HotObject): Pair<EthErrorResponse?, EthRequest?> {
     return try {
-        val ethRequest = json.deserialize(EvmRequest::class, json.serialize(request))
+        val ethRequest = json.deserialize(EthRequest::class, json.serialize(request))
         null to ethRequest
     } catch (e: Throwable) {
         e.printStackTrace()

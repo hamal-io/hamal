@@ -7,3 +7,19 @@ interface EvmBlock {
     val number: EvmUint64
     val hash: EvmHash
 }
+
+data class EvmBlockParameter(val value: String) {
+
+    constructor(blockNum: Long) : this(
+        ("0x" + java.lang.Long.toHexString(blockNum)).also {
+            require(blockNum >= 0) { "Block number must not be negative" }
+        }
+    )
+
+    companion object {
+        val Latest = EvmBlockParameter("latest")
+        val Earliest = EvmBlockParameter("earliest")
+        val Pending = EvmBlockParameter("pending")
+    }
+}
+

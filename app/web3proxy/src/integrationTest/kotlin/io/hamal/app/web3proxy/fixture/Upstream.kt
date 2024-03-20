@@ -1,16 +1,16 @@
 package io.hamal.app.web3proxy.fixture
 
-import io.hamal.lib.web3.evm.impl.eth.EthBatchService
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
+import io.hamal.lib.web3.evm.domain.EvmRequestId
+import io.hamal.lib.web3.evm.impl.eth.EthBatchService
 import io.hamal.lib.web3.evm.impl.eth.domain.EthBlock
 import io.hamal.lib.web3.evm.impl.eth.domain.EthGetBlockResponse
-import io.hamal.lib.web3.evm.impl.eth.domain.EvmRequestId
-import io.hamal.lib.web3.evm.impl.eth.domain.EvmResponse
-import io.hamal.lib.web3.evm.json
+import io.hamal.lib.web3.evm.impl.eth.domain.EthResponse
+import io.hamal.lib.web3.json
 
 internal class EthBatchServiceFixture : EthBatchService<EthBatchServiceFixture> {
 
-    override fun execute(): List<EvmResponse> {
+    override fun execute(): List<EthResponse> {
         return responses
     }
 
@@ -55,6 +55,6 @@ internal class EthBatchServiceFixture : EthBatchService<EthBatchServiceFixture> 
         responses.clear()
     }
 
-    val responses = mutableListOf<EvmResponse>()
+    val responses = mutableListOf<EthResponse>()
 
 }

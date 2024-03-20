@@ -1,8 +1,7 @@
 package io.hamal.lib.web3.evm.abi
 
-import io.hamal.lib.web3.eth.abi.type.*
-import io.hamal.lib.web3.evm.abi.type.EvmType.Companion.solidityType
 import io.hamal.lib.web3.evm.abi.type.*
+import io.hamal.lib.web3.evm.abi.type.EvmType.Companion.solidityType
 import io.hamal.lib.web3.util.ByteWindow
 import kotlin.reflect.KClass
 

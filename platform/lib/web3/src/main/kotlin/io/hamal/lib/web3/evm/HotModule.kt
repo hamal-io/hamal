@@ -4,25 +4,17 @@ import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 import com.google.gson.JsonPrimitive
 import com.google.gson.JsonSerializationContext
-import io.hamal.lib.common.hot.HotObjectModule
 import io.hamal.lib.common.serialization.HotModule
 import io.hamal.lib.common.serialization.JsonAdapter
-import io.hamal.lib.common.serialization.JsonFactoryBuilder
-import io.hamal.lib.domain.Json
-import io.hamal.lib.domain.vo.ValueObjectJsonModule
-import io.hamal.lib.web3.evm.impl.eth.domain.EthGetBlockByNumberRequest
-import io.hamal.lib.web3.evm.impl.eth.domain.EvmMethod
-import io.hamal.lib.web3.evm.impl.eth.domain.EvmRequest
-import io.hamal.lib.web3.evm.impl.eth.domain.EvmRequestId
 import io.hamal.lib.web3.evm.abi.type.*
+import io.hamal.lib.web3.evm.domain.EvmMethod
+import io.hamal.lib.web3.evm.domain.EvmRequestId
 import java.lang.reflect.Type
 
 object EvmHotModule : HotModule() {
 
     init {
         set(EvmRequestId::class, EvmRequestId.Adapter)
-        set(EvmRequest::class, EvmRequest.Adapter)
-        set(EthGetBlockByNumberRequest::class, EthGetBlockByNumberRequest.Adapter)
         set(EvmMethod::class, EvmMethod.Adapter)
         set(EvmUint8::class, object : JsonAdapter<EvmUint8> {
             override fun serialize(p0: EvmUint8?, p1: Type?, p2: JsonSerializationContext?): JsonElement {
@@ -110,11 +102,3 @@ object EvmHotModule : HotModule() {
         })
     }
 }
-
-val json = Json(
-    JsonFactoryBuilder()
-        .register(HotObjectModule)
-        .register(ValueObjectJsonModule)
-        .register(EvmHotModule)
-
-)

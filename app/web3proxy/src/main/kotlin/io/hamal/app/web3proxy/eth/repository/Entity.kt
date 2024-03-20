@@ -1,7 +1,6 @@
 package io.hamal.app.web3proxy.eth.repository
 
 import com.google.gson.annotations.SerializedName
-import io.hamal.lib.web3.eth.abi.type.*
 import io.hamal.lib.web3.evm.abi.type.*
 
 internal data class BlockEntity(

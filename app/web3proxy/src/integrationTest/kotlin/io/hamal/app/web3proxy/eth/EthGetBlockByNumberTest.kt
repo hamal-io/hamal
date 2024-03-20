@@ -4,9 +4,9 @@ import io.hamal.lib.common.hot.HotArray
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.http.body
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
+import io.hamal.lib.web3.evm.domain.EvmRequestId
 import io.hamal.lib.web3.evm.impl.eth.domain.EthGetBlockByNumberRequest
 import io.hamal.lib.web3.evm.impl.eth.domain.EthGetBlockResponse
-import io.hamal.lib.web3.evm.impl.eth.domain.EvmRequestId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test

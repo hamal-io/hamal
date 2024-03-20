@@ -4,10 +4,10 @@ import io.hamal.app.web3proxy.eth.handler.HandleEthRequest
 import io.hamal.lib.common.hot.HotArray
 import io.hamal.lib.common.hot.HotNode
 import io.hamal.lib.common.hot.HotObject
-import io.hamal.lib.web3.evm.impl.eth.domain.EvmRequest
-import io.hamal.lib.web3.evm.impl.eth.domain.EvmResponse
+import io.hamal.lib.web3.evm.impl.eth.domain.EthRequest
+import io.hamal.lib.web3.evm.impl.eth.domain.EthResponse
 import io.hamal.lib.web3.evm.impl.eth.domain.parseRequest
-import io.hamal.lib.web3.evm.json
+import io.hamal.lib.web3.json
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -27,7 +27,7 @@ internal class EthController(
         }
     }
 
-    private fun handleArray(requests: HotArray): ResponseEntity<List<EvmResponse>> {
+    private fun handleArray(requests: HotArray): ResponseEntity<List<EthResponse>> {
         val reqs = requests
             .filterIsInstance<HotObject>()
             .map { request ->
@@ -40,12 +40,12 @@ internal class EthController(
             }
 
         return ResponseEntity.ok(
-            handle(reqs.filterIsInstance<EvmRequest>())
-                .plus(reqs.filterIsInstance<EvmResponse>())
+            handle(reqs.filterIsInstance<EthRequest>())
+                .plus(reqs.filterIsInstance<EthResponse>())
         )
     }
 
-    private fun handleObject(request: HotObject): ResponseEntity<EvmResponse> {
+    private fun handleObject(request: HotObject): ResponseEntity<EthResponse> {
         val (err, req) = parseRequest(json, request)
         if (err != null) {
             return ResponseEntity.ok(err)

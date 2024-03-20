@@ -1,7 +1,5 @@
 package io.hamal.lib.web3.evm.abi
 
-import io.hamal.lib.web3.eth.abi.type.*
-import io.hamal.lib.web3.evm.abi.*
 import io.hamal.lib.web3.evm.abi.type.*
 import io.hamal.lib.web3.util.ByteWindow
 import org.hamcrest.CoreMatchers.equalTo

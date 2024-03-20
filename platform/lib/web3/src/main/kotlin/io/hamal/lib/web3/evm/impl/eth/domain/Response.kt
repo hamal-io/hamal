@@ -2,8 +2,9 @@ package io.hamal.lib.web3.evm.impl.eth.domain
 
 import io.hamal.lib.web3.evm.abi.type.EvmPrefixedHexString
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
+import io.hamal.lib.web3.evm.domain.EvmRequestId
 
-sealed class EvmResponse {
+sealed class EthResponse {
     val jsonrpc: String = "2.0"
     abstract val id: EvmRequestId
 }
@@ -12,7 +13,7 @@ sealed class EvmResponse {
 data class EthGetBlockResponse(
     override val id: EvmRequestId,
     val result: EthBlock?
-) : EvmResponse() {
+) : EthResponse() {
     override fun toString(): String {
         return "EthGetBlockResponse($result)"
     }
@@ -21,7 +22,7 @@ data class EthGetBlockResponse(
 data class EthErrorResponse(
     override val id: EvmRequestId,
     val error: EthError
-) : EvmResponse() {
+) : EthResponse() {
     override fun toString(): String {
         return "EthError($error)"
     }
@@ -31,7 +32,7 @@ data class EthErrorResponse(
 data class EthGetLiteBlockResponse(
     override val id: EvmRequestId,
     val result: EthLiteBlock
-) : EvmResponse() {
+) : EthResponse() {
     override fun toString(): String {
         return "EthGetLiteBlockResponse($result)"
     }
@@ -40,7 +41,7 @@ data class EthGetLiteBlockResponse(
 class EthGetBlockNumberResponse(
     override val id: EvmRequestId,
     val result: EvmUint64
-) : EvmResponse() {
+) : EthResponse() {
     override fun toString(): String {
         return "EthGetBlockNumberResponse($result)"
     }
@@ -50,7 +51,7 @@ class EthGetBlockNumberResponse(
 data class EthCallResponse(
     override val id: EvmRequestId,
     val result: EvmPrefixedHexString
-) : EvmResponse() {
+) : EthResponse() {
     override fun toString(): String {
         return "EthCallResponse($result)"
     }

@@ -10,6 +10,7 @@ import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.web3.evm.EvmHotModule
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
+import io.hamal.lib.web3.evm.domain.EvmRequestId
 import io.hamal.lib.web3.evm.impl.eth.EthBatchService
 import io.hamal.lib.web3.evm.impl.eth.domain.*
 import kotlin.reflect.KClass
@@ -63,7 +64,7 @@ class EthHttpBatchService(
         return EvmRequestId(requests.size.toString())
     }
 
-    override fun execute(): List<EvmResponse> {
+    override fun execute(): List<EthResponse> {
         if (requests.isEmpty()) {
             return listOf()
         }
@@ -77,7 +78,7 @@ class EthHttpBatchService(
             val response = hotNode.asObject()
             json.deserialize(resultClasses[index], json.serialize(response))
         }
-            .filterIsInstance<EvmResponse>()
+            .filterIsInstance<EthResponse>()
             .also {
                 requests.clear()
                 resultClasses.clear()
@@ -90,7 +91,7 @@ class EthHttpBatchService(
             .register(HotObjectModule)
     )
 
-    private fun <RESPONSE : EvmResponse> request(
+    private fun <RESPONSE : EthResponse> request(
         method: String,
         params: HotArray,
         resultClass: KClass<RESPONSE>
@@ -110,7 +111,7 @@ class EthHttpBatchService(
         return this
     }
 
-    private fun <RESPONSE : EvmResponse> addRequest(createReq: (Int) -> HotObject, resultClass: KClass<RESPONSE>) {
+    private fun <RESPONSE : EthResponse> addRequest(createReq: (Int) -> HotObject, resultClass: KClass<RESPONSE>) {
         val reqId = requests.size + 1
         resultClasses.add(resultClass)
         requests.add(createReq(reqId))

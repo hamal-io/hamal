@@ -1,6 +1,5 @@
 package io.hamal.lib.web3.util
 
-import io.hamal.lib.web3.eth.abi.type.*
 import io.hamal.lib.web3.evm.abi.type.*
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
