@@ -1,4 +1,4 @@
-package io.hamal.app.web3proxy.eth.repository
+package io.hamal.app.web3proxy.arbitrum.repository
 
 import io.hamal.lib.common.compress.BzipCompressor
 import io.hamal.lib.common.hot.HotObjectModule
@@ -10,26 +10,26 @@ import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.lib.web3.evm.EvmHotModule
 import io.hamal.lib.web3.evm.abi.type.EvmAddress
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
-import io.hamal.lib.web3.evm.impl.eth.domain.EthBlock
-import io.hamal.lib.web3.evm.impl.eth.domain.EthGetBlockResponse
-import io.hamal.lib.web3.evm.impl.eth.http.EthBatchService
+import io.hamal.lib.web3.evm.impl.arbitrum.domain.ArbitrumBlock
+import io.hamal.lib.web3.evm.impl.arbitrum.domain.ArbitrumGetBlockResponse
+import io.hamal.lib.web3.evm.impl.arbitrum.http.ArbitrumBatchService
 import java.nio.file.Path
 
-internal interface EthBlockRepository {
+internal interface ArbitrumBlockRepository {
     fun list(blockNumbers: List<EvmUint64>): List<BlockEntity?>
 
     fun clear()
 }
 
-internal class EthBlockRepositoryImpl(
+internal class ArbitrumBlockRepositoryImpl(
     path: Path,
-    private val batchService: EthBatchService<*>,
-    private val addressRepository: EthAddressRepository,
-    private val indexRepository: EthIndexRepository
+    private val batchService: ArbitrumBatchService<*>,
+    private val addressRepository: ArbitrumAddressRepository,
+    private val indexRepository: ArbitrumIndexRepository
 ) : SqliteBaseRepository(
     path = path,
     filename = "block.db"
-), EthBlockRepository {
+), ArbitrumBlockRepository {
 
     override fun list(blockNumbers: List<EvmUint64>): List<BlockEntity?> {
         val foundBlocks = blockNumbers.mapNotNull { number -> findBlock(number) }
@@ -47,11 +47,11 @@ internal class EthBlockRepositoryImpl(
 
         val blocks = batchService
             .execute()
-            .filterIsInstance<EthGetBlockResponse>()
+            .filterIsInstance<ArbitrumGetBlockResponse>()
             .mapNotNull { it.result }
 
 
-        val addresses = addressRepository.resolve(collectEthAddresses(blocks))
+        val addresses = addressRepository.resolve(collectArbitrumAddresses(blocks))
         val entities = blocks.map { it.toEntity(addresses) }.also { insertBlocks(it) }
 
         val result = entities.plus(foundBlocks).associateBy { it.number }
@@ -119,27 +119,29 @@ internal class EthBlockRepositoryImpl(
     )
 }
 
-private fun collectEthAddresses(blocks: List<EthBlock>): Set<EvmAddress> {
+private fun collectArbitrumAddresses(blocks: List<ArbitrumBlock>): Set<EvmAddress> {
     return blocks.flatMap { block ->
         listOf(block.miner)
             .plus(block.transactions.flatMap { transaction ->
-                listOfNotNull(transaction.from, transaction.to).plus(transaction.accessList?.map { it.address } ?: listOf())
-            }
-            ).plus(block.withdrawals?.map { it.address } ?: listOf())
+                listOfNotNull(transaction.from, transaction.to)
+            })
     }.toSet()
 }
 
 
-private fun EthBlock.toEntity(addresses: Map<EvmAddress, EthAddressId>) = BlockEntity(
+private fun ArbitrumBlock.toEntity(addresses: Map<EvmAddress, ArbitrumAddressId>) = BlockEntity(
     baseFeePerGas = baseFeePerGas,
     extraData = extraData,
     gasLimit = gasLimit,
     gasUsed = gasUsed,
     hash = hash,
+    l1BlockNumber = l1BlockNumber,
     logsBloom = logsBloom,
     miner = addresses[miner]!!,
     mixHash = mixHash,
     number = number,
+    sendCount = sendCount,
+    sendRoot = sendRoot,
     parentHash = parentHash,
     receiptsRoot = receiptsRoot,
     sha3Uncles = sha3Uncles,
@@ -152,30 +154,14 @@ private fun EthBlock.toEntity(addresses: Map<EvmAddress, EthAddressId>) = BlockE
             from = tx.from.let { addresses[it]!! },
             gas = tx.gas,
             gasPrice = tx.gasPrice,
-            maxPriorityFeePerGas = tx.maxPriorityFeePerGas,
-            maxFeePerGas = tx.maxFeePerGas,
             hash = tx.hash,
             input = tx.input,
             nonce = tx.nonce,
             to = tx.to?.let { addresses[it] },
             value = tx.value,
             type = tx.type,
-            accessList = tx.accessList?.map { access ->
-                TransactionEntity.AccessListItem(
-                    address = addresses[access.address]!!,
-                    storageKeys = access.storageKeys
-                )
-            }
+            requestId = tx.requestId
         )
     },
     transactionsRoot = transactionsRoot,
-    withdrawals = withdrawals?.map { withdrawal ->
-        WithdrawalEntity(
-            index = withdrawal.index,
-            validatorIndex = withdrawal.validatorIndex,
-            address = addresses[withdrawal.address]!!,
-            amount = withdrawal.amount
-        )
-    },
-    withdrawalsRoot = withdrawalsRoot
 )

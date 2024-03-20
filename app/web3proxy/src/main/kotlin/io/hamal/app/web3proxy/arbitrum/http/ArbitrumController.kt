@@ -1,12 +1,12 @@
-package io.hamal.app.web3proxy.eth.http
+package io.hamal.app.web3proxy.arbitrum.http
 
-import io.hamal.app.web3proxy.eth.handler.HandleEthRequest
+import io.hamal.app.web3proxy.arbitrum.handler.HandleArbitrumRequest
 import io.hamal.lib.common.hot.HotArray
 import io.hamal.lib.common.hot.HotNode
 import io.hamal.lib.common.hot.HotObject
-import io.hamal.lib.web3.evm.impl.eth.domain.EthRequest
-import io.hamal.lib.web3.evm.impl.eth.domain.EthResponse
-import io.hamal.lib.web3.evm.impl.eth.domain.parseEthRequest
+import io.hamal.lib.web3.evm.impl.arbitrum.domain.ArbitrumRequest
+import io.hamal.lib.web3.evm.impl.arbitrum.domain.ArbitrumResponse
+import io.hamal.lib.web3.evm.impl.arbitrum.domain.parseArbitrumRequest
 import io.hamal.lib.web3.json
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-internal class EthController(
-    private val handle: HandleEthRequest
+internal class ArbitrumController(
+    private val handle: HandleArbitrumRequest
 ) {
 
-    @PostMapping("/eth")
+    @PostMapping("/arbitrum")
     fun handle(@RequestBody body: HotNode<*>): ResponseEntity<*> {
         return when (body) {
             is HotArray -> handleArray(body)
@@ -27,11 +27,11 @@ internal class EthController(
         }
     }
 
-    private fun handleArray(requests: HotArray): ResponseEntity<List<EthResponse>> {
+    private fun handleArray(requests: HotArray): ResponseEntity<List<ArbitrumResponse>> {
         val reqs = requests
             .filterIsInstance<HotObject>()
             .map { request ->
-                val (err, req) = parseEthRequest(json, request)
+                val (err, req) = parseArbitrumRequest(json, request)
                 if (err != null) {
                     err
                 } else {
@@ -40,13 +40,13 @@ internal class EthController(
             }
 
         return ResponseEntity.ok(
-            handle(reqs.filterIsInstance<EthRequest>())
-                .plus(reqs.filterIsInstance<EthResponse>())
+            handle(reqs.filterIsInstance<ArbitrumRequest>())
+                .plus(reqs.filterIsInstance<ArbitrumResponse>())
         )
     }
 
-    private fun handleObject(request: HotObject): ResponseEntity<EthResponse> {
-        val (err, req) = parseEthRequest(json, request)
+    private fun handleObject(request: HotObject): ResponseEntity<ArbitrumResponse> {
+        val (err, req) = parseArbitrumRequest(json, request)
         if (err != null) {
             return ResponseEntity.ok(err)
         }

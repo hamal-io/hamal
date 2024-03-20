@@ -21,7 +21,7 @@ class EthConfig {
     ): HandleEthRequest = EthRequestHandlerImpl(
         EthRepositoryImpl(
             path = Path("/tmp/web3proxy/eth"),
-            ethBatchService = EthHttpBatchService(HttpTemplateImpl(upstreamHost))
+            batchService = EthHttpBatchService(HttpTemplateImpl(upstreamHost))
         )
     )
 

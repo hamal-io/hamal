@@ -1,4 +1,4 @@
-package io.hamal.app.web3proxy.fixture
+package io.hamal.app.web3proxy.eth.fixture
 
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
 import io.hamal.lib.web3.evm.domain.EvmRequestId

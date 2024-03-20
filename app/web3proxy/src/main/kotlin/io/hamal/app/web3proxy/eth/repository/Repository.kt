@@ -18,7 +18,7 @@ interface EthRepository {
 
 class EthRepositoryImpl(
     path: Path,
-    ethBatchService: EthBatchService<*>,
+    batchService: EthBatchService<*>,
 ) : EthRepository {
 
     override fun listBlocks(blockNumbers: List<EvmUint64>): List<EthBlock?> {
@@ -34,7 +34,7 @@ class EthRepositoryImpl(
 
     private val addressRepository: EthAddressRepository = EthAddressRepositoryImpl(path)
     private val indexRepository: EthIndexRepository = EthIndexRepositoryImpl(path)
-    private val blockRepository: EthBlockRepository = EthBlockRepositoryImpl(path, ethBatchService, addressRepository, indexRepository)
+    private val blockRepository: EthBlockRepository = EthBlockRepositoryImpl(path, batchService, addressRepository, indexRepository)
 }
 
 private fun collectEthAddressIds(blocks: List<BlockEntity>): Set<EthAddressId> {

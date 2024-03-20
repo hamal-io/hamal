@@ -12,7 +12,7 @@ object TestHandler {
         val reqs = requests
             .filterIsInstance<HotObject>()
             .map { request ->
-                val (err, req) = parseRequest(json, request)
+                val (err, req) = parseEthRequest(json, request)
                 if (err != null) {
                     err
                 } else {

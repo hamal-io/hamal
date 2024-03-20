@@ -92,7 +92,7 @@ data class ArbitrumGetBlockByNumberRequest(
     }
 }
 
-fun parseRequest(json: Json, request: HotObject): Pair<ArbitrumErrorResponse?, ArbitrumRequest?> {
+fun parseArbitrumRequest(json: Json, request: HotObject): Pair<ArbitrumErrorResponse?, ArbitrumRequest?> {
     return try {
         val ethRequest = json.deserialize(ArbitrumRequest::class, json.serialize(request))
         null to ethRequest
@@ -120,7 +120,7 @@ fun parseRequest(json: Json, request: HotObject): Pair<ArbitrumErrorResponse?, A
                 ) to null
             }
 
-            e.message?.contains("ArbitrumMethod not found") == true -> {
+            e.message?.contains("EthMethod not found") == true -> {
                 ArbitrumErrorResponse(
                     id = EvmRequestId(request["id"].stringValue),
                     error = ArbitrumError(ArbitrumError.ErrorCode.MethodNotFound, "method not supported")

@@ -92,7 +92,7 @@ data class EthGetBlockByNumberRequest(
     }
 }
 
-fun parseRequest(json: Json, request: HotObject): Pair<EthErrorResponse?, EthRequest?> {
+fun parseEthRequest(json: Json, request: HotObject): Pair<EthErrorResponse?, EthRequest?> {
     return try {
         val ethRequest = json.deserialize(EthRequest::class, json.serialize(request))
         null to ethRequest

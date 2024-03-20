@@ -1,11 +1,8 @@
 package io.hamal.app.web3proxy.eth
 
+import io.hamal.app.web3proxy.TestConfig
 import io.hamal.app.web3proxy.Web3Proxy
 import io.hamal.app.web3proxy.config.WebConfig
-import io.hamal.app.web3proxy.eth.handler.EthRequestHandlerImpl
-import io.hamal.app.web3proxy.eth.handler.HandleEthRequest
-import io.hamal.app.web3proxy.eth.repository.EthRepositoryImpl
-import io.hamal.app.web3proxy.fixture.EthBatchServiceFixture
 import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.http.JsonHttpSerdeFactory
 import io.hamal.lib.web3.evm.abi.type.*
@@ -16,12 +13,9 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.boot.test.web.server.LocalServerPort
-import org.springframework.context.annotation.Bean
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import kotlin.io.path.createTempDirectory
 
 
 @ExtendWith(SpringExtension::class)
@@ -142,15 +136,3 @@ internal abstract class EthBaseTest {
     }
 }
 
-@TestConfiguration
-class TestConfig {
-
-    @Bean
-    fun ethRequestHandler(): HandleEthRequest = EthRequestHandlerImpl(
-        EthRepositoryImpl(
-            path = createTempDirectory("web3proxy_eth"),
-            ethBatchService = EthBatchServiceFixture()
-        )
-    )
-
-}

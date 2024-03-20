@@ -12,7 +12,7 @@ interface HandleEthRequest {
 }
 
 class EthRequestHandlerImpl(
-    private val ethRepository: EthRepository,
+    private val repository: EthRepository,
 ) : HandleEthRequest {
 
     override fun invoke(request: EthRequest): EthResponse {
@@ -22,7 +22,7 @@ class EthRequestHandlerImpl(
 
     override fun invoke(requests: List<EthRequest>): List<EthResponse> {
         return requests.filterIsInstance<EthGetBlockByNumberRequest>().let { reqs ->
-            ethRepository.listBlocks(reqs.map { it.number })
+            repository.listBlocks(reqs.map { it.number })
                 .zip(reqs)
                 .map { (block, request) ->
                     EthGetBlockResponse(

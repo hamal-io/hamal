@@ -1,9 +1,9 @@
 package io.hamal.app.web3proxy.eth.repository
 
-import io.hamal.app.web3proxy.fixture.EthBatchServiceFixture
+import io.hamal.app.web3proxy.eth.fixture.EthBatchServiceFixture
+import io.hamal.lib.web3.evm.abi.type.*
 import io.hamal.lib.web3.evm.impl.eth.domain.EthBlock
 import io.hamal.lib.web3.evm.impl.eth.domain.EthGetBlockResponse
-import io.hamal.lib.web3.evm.abi.type.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.BeforeEach
@@ -108,7 +108,7 @@ internal class ListBlocksByNumberTest {
     }
 
     private fun resetBatchService() {
-        ethBatchServiceFixture.clear()
+        batchServiceFixture.clear()
     }
 
     private fun assertBlock0x1284810(block: EthBlock?) {
@@ -210,33 +210,33 @@ internal class ListBlocksByNumberTest {
     }
 
     private fun verifyNoDownloadAttempts() {
-        assertThat(ethBatchServiceFixture.responses, empty())
+        assertThat(batchServiceFixture.responses, empty())
     }
 
     private fun verifyOneBlockDownloadAttempt() {
-        assertThat(ethBatchServiceFixture.responses, hasSize(1))
-        assertThat(ethBatchServiceFixture.responses[0], isA(EthGetBlockResponse::class.java))
+        assertThat(batchServiceFixture.responses, hasSize(1))
+        assertThat(batchServiceFixture.responses[0], isA(EthGetBlockResponse::class.java))
     }
 
     private fun verifyTwoBlocksDownloadAttempts() {
-        assertThat(ethBatchServiceFixture.responses, hasSize(2))
-        assertThat(ethBatchServiceFixture.responses[0], isA(EthGetBlockResponse::class.java))
-        assertThat(ethBatchServiceFixture.responses[1], isA(EthGetBlockResponse::class.java))
+        assertThat(batchServiceFixture.responses, hasSize(2))
+        assertThat(batchServiceFixture.responses[0], isA(EthGetBlockResponse::class.java))
+        assertThat(batchServiceFixture.responses[1], isA(EthGetBlockResponse::class.java))
     }
 
     private fun verifyFourBlockDownloadAttempts() {
-        assertThat(ethBatchServiceFixture.responses, hasSize(4))
-        assertThat(ethBatchServiceFixture.responses[0], isA(EthGetBlockResponse::class.java))
-        assertThat(ethBatchServiceFixture.responses[1], isA(EthGetBlockResponse::class.java))
-        assertThat(ethBatchServiceFixture.responses[2], isA(EthGetBlockResponse::class.java))
-        assertThat(ethBatchServiceFixture.responses[3], isA(EthGetBlockResponse::class.java))
+        assertThat(batchServiceFixture.responses, hasSize(4))
+        assertThat(batchServiceFixture.responses[0], isA(EthGetBlockResponse::class.java))
+        assertThat(batchServiceFixture.responses[1], isA(EthGetBlockResponse::class.java))
+        assertThat(batchServiceFixture.responses[2], isA(EthGetBlockResponse::class.java))
+        assertThat(batchServiceFixture.responses[3], isA(EthGetBlockResponse::class.java))
     }
 
-    private val ethBatchServiceFixture = EthBatchServiceFixture()
+    private val batchServiceFixture = EthBatchServiceFixture()
 
     private val testInstance = EthRepositoryImpl(
         path = createTempDirectory("web3proxy_block"),
-        ethBatchService = ethBatchServiceFixture
+        batchService = batchServiceFixture
     )
 
     private fun EthRepositoryImpl.list(vararg blockNumbers: String) = listBlocks(blockNumbers.map { EvmUint64(it) })
