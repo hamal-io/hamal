@@ -1,5 +1,4 @@
-import {useNavigate} from "react-router-dom";
-import React, {useState} from "react";
+import React, {FC, useState} from "react";
 
 import * as z from "zod"
 import {zodResolver} from "@hookform/resolvers/zod";
@@ -28,12 +27,13 @@ const formSchema = z.object({
     topicType: z.string().min(1, "Topic type required"),
 })
 
-const Create = () => {
+type Props = {
+    onClose: () => void
+}
+const Create : FC<Props> = ({onClose}) => {
     const [uiState] = useUiState()
-    const navigate = useNavigate()
-    const [openDialog, setOpenDialog] = useState(false)
+    const [open, setOpen] = useState(false)
     const [isLoading, setLoading] = useState(false)
-
     const [createTopic, groupTopicRequested] = useTopicCreate()
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -44,7 +44,6 @@ const Create = () => {
         },
     })
 
-
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setLoading(true)
         try {
@@ -52,54 +51,48 @@ const Create = () => {
         } catch (e) {
             console.error(e)
         } finally {
-
+            setOpen(false)
+            onClose()
         }
-
     }
 
-
-
     return (
-        <>
-            <Dialog open={openDialog} onOpenChange={setOpenDialog}>
-                <DialogTrigger asChild>
-                    <Button>
-                        <Plus className="w-4 h-4 mr-1"/>
-                        New Topic
-                    </Button>
-                </DialogTrigger>
-
-                <DialogContent>
-                    <DialogHeader>Create topiction</DialogHeader>
-
-                    <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                            <FormField
-                                control={form.control}
-                                name="name"
-                                render={({field}) => (
-                                    <FormItem>
-                                        <FormLabel>Name</FormLabel>
-                                        <FormControl>
-                                            <Input placeholder="Topiction-One" {...field} />
-                                        </FormControl>
-                                        <FormDescription>
-                                            Name of your topic
-                                        </FormDescription>
-                                        <FormMessage/>
-                                    </FormItem>
-                                )}
-                            />
-                            <FormTopicTypeSelect name='topicType' form={form}/>
-                            <Button type="submit">
-                                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
-                                Create topic
-                            </Button>
-                        </form>
-                    </Form>
-                </DialogContent>
-            </Dialog>
-        </>
+        <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild>
+                <Button>
+                    <Plus className="w-4 h-4 mr-1"/>
+                    New Topic
+                </Button>
+            </DialogTrigger>
+            <DialogContent>
+                <DialogHeader>Create topiction</DialogHeader>
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                        <FormField
+                            control={form.control}
+                            name="name"
+                            render={({field}) => (
+                                <FormItem>
+                                    <FormLabel>Name</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="Topiction-One" {...field} />
+                                    </FormControl>
+                                    <FormDescription>
+                                        Name of your topic
+                                    </FormDescription>
+                                    <FormMessage/>
+                                </FormItem>
+                            )}
+                        />
+                        <FormTopicTypeSelect name='topicType' form={form}/>
+                        <Button type="submit">
+                            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
+                            Create topic
+                        </Button>
+                    </form>
+                </Form>
+            </DialogContent>
+        </Dialog>
     )
 }
 
