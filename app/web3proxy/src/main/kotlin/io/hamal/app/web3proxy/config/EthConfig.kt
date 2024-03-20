@@ -4,7 +4,7 @@ import io.hamal.app.web3proxy.eth.handler.EthRequestHandlerImpl
 import io.hamal.app.web3proxy.eth.handler.HandleEthRequest
 import io.hamal.app.web3proxy.eth.repository.EthRepositoryImpl
 import io.hamal.lib.http.HttpTemplateImpl
-import io.hamal.lib.web3.eth.http.EthHttpBatchService
+import io.hamal.lib.web3.evm.impl.eth.http.EthHttpBatchService
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

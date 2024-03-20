@@ -2,9 +2,9 @@ package io.hamal.extension.web3.eth
 
 import io.hamal.lib.common.hot.HotArray
 import io.hamal.lib.common.hot.HotObject
-import io.hamal.lib.web3.eth.abi.type.EthUint64
-import io.hamal.lib.web3.eth.domain.*
-import io.hamal.lib.web3.eth.json
+import io.hamal.lib.web3.evm.abi.type.EvmUint64
+import io.hamal.lib.web3.evm.impl.eth.domain.*
+import io.hamal.lib.web3.evm.json
 
 object TestHandler {
 
@@ -20,16 +20,16 @@ object TestHandler {
                 }
             }
 
-        return reqs.filterIsInstance<EthRequest>()
+        return reqs.filterIsInstance<EvmRequest>()
             .map { req -> handle(chain, req) }
-            .plus(reqs.filterIsInstance<EthResponse>())
+            .plus(reqs.filterIsInstance<EvmResponse>())
             .let { responses ->
                 json.deserialize(HotArray::class, json.serialize(responses))
             }
     }
 
 
-    private fun handle(chain: String, request: EthRequest): EthResponse {
+    private fun handle(chain: String, request: EvmRequest): EvmResponse {
         return when (request) {
             is EthGetBlockByNumberRequest -> {
                 EthGetBlockResponse(
@@ -42,6 +42,6 @@ object TestHandler {
         }
     }
 
-    private fun loadBlock(chain: String, id: EthUint64): EthBlock? = this.javaClass.getResourceAsStream("/fixture/${chain}/block_${id.value}_full.json")
+    private fun loadBlock(chain: String, id: EvmUint64): EthBlock? = this.javaClass.getResourceAsStream("/fixture/${chain}/block_${id.value}_full.json")
         ?.let { json.deserialize(EthBlock::class, it) }
 }

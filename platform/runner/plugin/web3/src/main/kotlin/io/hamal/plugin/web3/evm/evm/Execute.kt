@@ -10,10 +10,10 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.topPop
 import io.hamal.lib.kua.type.*
-import io.hamal.lib.web3.eth.abi.type.EthPrefixedHexString
-import io.hamal.lib.web3.eth.abi.type.EthUint64
-import io.hamal.lib.web3.eth.domain.EthGetBlockResponse
-import io.hamal.lib.web3.eth.http.EthHttpBatchService
+import io.hamal.lib.web3.evm.abi.type.EvmPrefixedHexString
+import io.hamal.lib.web3.evm.abi.type.EvmUint64
+import io.hamal.lib.web3.evm.impl.eth.domain.EthGetBlockResponse
+import io.hamal.lib.web3.evm.impl.eth.http.EthHttpBatchService
 
 private val log = logger(EthExecuteFunction::class)
 
@@ -38,14 +38,14 @@ class EthExecuteFunction : Function1In2Out<KuaTable, KuaError, KuaTable>(
                                 KuaString("get_block") -> {
 
                                     val block = when (request.type("block")) {
-                                        KuaNumber::class -> batchService.getBlock(EthUint64(request.getLong("block")))
+                                        KuaNumber::class -> batchService.getBlock(EvmUint64(request.getLong("block")))
                                         //FIXME support get by hash too
                                         KuaString::class -> {
                                             val block = request.getString("block").stringValue
                                             if (block.isDecimal()) {
-                                                batchService.getBlock(EthUint64(block.toBigInteger()))
+                                                batchService.getBlock(EvmUint64(block.toBigInteger()))
                                             } else {
-                                                batchService.getBlock(EthUint64(EthPrefixedHexString(block)))
+                                                batchService.getBlock(EvmUint64(EvmPrefixedHexString(block)))
                                             }
                                         }
 

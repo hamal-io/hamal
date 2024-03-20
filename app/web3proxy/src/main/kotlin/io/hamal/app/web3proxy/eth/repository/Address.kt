@@ -2,17 +2,17 @@ package io.hamal.app.web3proxy.eth.repository
 
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.SqliteBaseRepository
-import io.hamal.lib.web3.eth.abi.type.EthAddress
-import io.hamal.lib.web3.eth.abi.type.EthPrefixedHexString
+import io.hamal.lib.web3.evm.abi.type.EvmAddress
+import io.hamal.lib.web3.evm.abi.type.EvmPrefixedHexString
 import java.nio.file.Path
 
 interface EthAddressRepository {
 
-    fun resolve(address: EthAddress): EthAddressId
+    fun resolve(address: EvmAddress): EthAddressId
 
-    fun resolve(addresses: Set<EthAddress>): Map<EthAddress, EthAddressId>
+    fun resolve(addresses: Set<EvmAddress>): Map<EvmAddress, EthAddressId>
 
-    fun list(addressIds: Iterable<EthAddressId>): Map<EthAddressId, EthAddress>
+    fun list(addressIds: Iterable<EthAddressId>): Map<EthAddressId, EvmAddress>
 
     fun clear()
 }
@@ -25,11 +25,11 @@ class EthAddressRepositoryImpl(
 ), EthAddressRepository {
 
 
-    override fun resolve(address: EthAddress): EthAddressId {
+    override fun resolve(address: EvmAddress): EthAddressId {
         return resolve(setOf(address)).entries.first().value
     }
 
-    override fun resolve(addresses: Set<EthAddress>): Map<EthAddress, EthAddressId> {
+    override fun resolve(addresses: Set<EvmAddress>): Map<EvmAddress, EthAddressId> {
         val strings = addresses.map { it.toPrefixedHexString().value }
         val inClause = "(${strings.joinToString(",") { "'$it'" }})"
 
@@ -41,20 +41,20 @@ class EthAddressRepositoryImpl(
             }
             executeQuery("""SELECT * FROM address WHERE address in $inClause""") {
                 map { rs ->
-                    EthAddress(EthPrefixedHexString(rs.getString("address"))) to EthAddressId(rs.getLong("id"))
+                    EvmAddress(EvmPrefixedHexString(rs.getString("address"))) to EthAddressId(rs.getLong("id"))
                 }
             }
         }.toMap()
 
     }
 
-    override fun list(addressIds: Iterable<EthAddressId>): Map<EthAddressId, EthAddress> {
+    override fun list(addressIds: Iterable<EthAddressId>): Map<EthAddressId, EvmAddress> {
         val inClause = "(${addressIds.joinToString(",") { "${it.value}" }})"
 
         return connection.tx {
             executeQuery("""SELECT * FROM address WHERE id in $inClause""") {
                 map { rs ->
-                    EthAddressId(rs.getLong("id")) to EthAddress(EthPrefixedHexString(rs.getString("address")))
+                    EthAddressId(rs.getLong("id")) to EvmAddress(EvmPrefixedHexString(rs.getString("address")))
                 }
             }
         }.toMap()

@@ -1,7 +1,7 @@
 package io.hamal.lib.web3.util
 
-import io.hamal.lib.web3.eth.abi.type.EthHexString
-import io.hamal.lib.web3.eth.abi.type.EthPrefixedHexString
+import io.hamal.lib.web3.evm.abi.type.EvmHexString
+import io.hamal.lib.web3.evm.abi.type.EvmPrefixedHexString
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Nested
@@ -58,7 +58,7 @@ class ByteWindowTest {
 
         @Test
         fun `Of byte array`() {
-            val array = EthPrefixedHexString(
+            val array = EvmPrefixedHexString(
                 "0x00000000000000000000000000000000000000000000000000000000000000047465737400000000000000000000000000000000000000000000000000000000"
             ).toByteArray()
 
@@ -71,7 +71,7 @@ class ByteWindowTest {
         @Test
         fun `Of prefixed hex string`() {
             val result = ByteWindow.of(
-                EthPrefixedHexString(
+                EvmPrefixedHexString(
                     "0x00000000000000000000000000000000000000000000000000000000000000047465737400000000000000000000000000000000000000000000000000000000"
                 )
             )
@@ -82,7 +82,7 @@ class ByteWindowTest {
 
         @Test
         fun `Of empty prefixed hex string`() {
-            val result = ByteWindow.of(EthPrefixedHexString("0x"))
+            val result = ByteWindow.of(EvmPrefixedHexString("0x"))
             assertThat(result.remaining(), equalTo(32))
             assertThat(result.windowSize, equalTo(32))
         }
@@ -90,7 +90,7 @@ class ByteWindowTest {
         @Test
         fun `Of hex string`() {
             val result = ByteWindow.of(
-                EthHexString(
+                EvmHexString(
                     "00000000000000000000000000000000000000000000000000000000000000047465737400000000000000000000000000000000000000000000000000000000"
                 )
             )
@@ -101,7 +101,7 @@ class ByteWindowTest {
 
         @Test
         fun `Of empty hex string`() {
-            val result = ByteWindow.of(EthHexString(""))
+            val result = ByteWindow.of(EvmHexString(""))
 
             assertThat(result.remaining(), equalTo(32))
             assertThat(result.windowSize, equalTo(32))
@@ -110,7 +110,7 @@ class ByteWindowTest {
         @Test
         fun `Max Uint256`() {
             val result =
-                ByteWindow.of(EthPrefixedHexString("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"))
+                ByteWindow.of(EvmPrefixedHexString("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"))
             assertThat(result.remaining(), equalTo(32))
             assertThat(result.windowSize, equalTo(32))
         }
@@ -197,7 +197,7 @@ class ByteWindowTest {
         }
 
         private val testInstance = ByteWindow.of(
-            EthPrefixedHexString(
+            EvmPrefixedHexString(
                 """0x00000000000000000000000000000000000000000000000000000000000000047465737400000000000000000000000000000000000000000000000000000000"""
             ),
             16

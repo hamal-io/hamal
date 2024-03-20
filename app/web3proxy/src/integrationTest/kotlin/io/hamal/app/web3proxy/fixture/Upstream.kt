@@ -1,32 +1,32 @@
 package io.hamal.app.web3proxy.fixture
 
-import io.hamal.lib.web3.eth.EthBatchService
-import io.hamal.lib.web3.eth.abi.type.EthUint64
-import io.hamal.lib.web3.eth.domain.EthBlock
-import io.hamal.lib.web3.eth.domain.EthGetBlockResponse
-import io.hamal.lib.web3.eth.domain.EthRequestId
-import io.hamal.lib.web3.eth.domain.EthResponse
-import io.hamal.lib.web3.eth.json
+import io.hamal.lib.web3.evm.impl.eth.EthBatchService
+import io.hamal.lib.web3.evm.abi.type.EvmUint64
+import io.hamal.lib.web3.evm.impl.eth.domain.EthBlock
+import io.hamal.lib.web3.evm.impl.eth.domain.EthGetBlockResponse
+import io.hamal.lib.web3.evm.impl.eth.domain.EvmRequestId
+import io.hamal.lib.web3.evm.impl.eth.domain.EvmResponse
+import io.hamal.lib.web3.evm.json
 
 internal class EthBatchServiceFixture : EthBatchService<EthBatchServiceFixture> {
 
-    override fun execute(): List<EthResponse> {
+    override fun execute(): List<EvmResponse> {
         return responses
     }
 
-    override fun getBlock(number: EthUint64): EthBatchServiceFixture {
+    override fun getBlock(number: EvmUint64): EthBatchServiceFixture {
         val blockData = this.javaClass.getResourceAsStream("/eth/blocks/${number.value}.json")
         if (blockData == null) {
             responses.add(
                 EthGetBlockResponse(
-                    id = EthRequestId(responses.size.toString()),
+                    id = EvmRequestId(responses.size.toString()),
                     result = null
                 )
             )
         } else {
             responses.add(
                 EthGetBlockResponse(
-                    id = EthRequestId(responses.size.toString()),
+                    id = EvmRequestId(responses.size.toString()),
                     result = json.deserialize(EthBlock::class, String(blockData.readAllBytes()))
                 )
             )
@@ -39,7 +39,7 @@ internal class EthBatchServiceFixture : EthBatchService<EthBatchServiceFixture> 
         TODO("Not yet implemented")
     }
 
-    override fun getLiteBlock(number: EthUint64): EthBatchServiceFixture {
+    override fun getLiteBlock(number: EvmUint64): EthBatchServiceFixture {
         TODO("Not yet implemented")
     }
 
@@ -47,7 +47,7 @@ internal class EthBatchServiceFixture : EthBatchService<EthBatchServiceFixture> 
         TODO("Not yet implemented")
     }
 
-    override fun lastRequestId(): EthRequestId {
+    override fun lastRequestId(): EvmRequestId {
         TODO("Not yet implemented")
     }
 
@@ -55,6 +55,6 @@ internal class EthBatchServiceFixture : EthBatchService<EthBatchServiceFixture> 
         responses.clear()
     }
 
-    val responses = mutableListOf<EthResponse>()
+    val responses = mutableListOf<EvmResponse>()
 
 }

@@ -2,73 +2,74 @@ package io.hamal.app.web3proxy.eth.repository
 
 import com.google.gson.annotations.SerializedName
 import io.hamal.lib.web3.eth.abi.type.*
+import io.hamal.lib.web3.evm.abi.type.*
 
 internal data class BlockEntity(
     @SerializedName("a")
-    val baseFeePerGas: EthUint64?,
+    val baseFeePerGas: EvmUint64?,
     @SerializedName("b")
-    val extraData: EthBytes32,
+    val extraData: EvmBytes32,
     @SerializedName("c")
-    val gasLimit: EthUint64,
+    val gasLimit: EvmUint64,
     @SerializedName("d")
-    val gasUsed: EthUint64,
+    val gasUsed: EvmUint64,
     @SerializedName("e")
-    val hash: EthHash,
+    val hash: EvmHash,
     @SerializedName("f")
-    val logsBloom: EthPrefixedHexString,
+    val logsBloom: EvmPrefixedHexString,
     @SerializedName("g")
     val miner: EthAddressId,
     @SerializedName("h")
-    var mixHash: EthHash,
+    var mixHash: EvmHash,
     @SerializedName("i")
-    val number: EthUint64,
+    val number: EvmUint64,
     @SerializedName("j")
-    val parentHash: EthHash,
+    val parentHash: EvmHash,
     @SerializedName("k")
-    val receiptsRoot: EthHash,
+    val receiptsRoot: EvmHash,
     @SerializedName("l")
-    val sha3Uncles: EthHash,
+    val sha3Uncles: EvmHash,
     @SerializedName("m")
-    val size: EthUint64,
+    val size: EvmUint64,
     @SerializedName("n")
-    val stateRoot: EthHash,
+    val stateRoot: EvmHash,
     @SerializedName("o")
-    val timestamp: EthUint64,
+    val timestamp: EvmUint64,
     @SerializedName("p")
-    val totalDifficulty: EthUint256,
+    val totalDifficulty: EvmUint256,
     @SerializedName("q")
     val transactions: List<TransactionEntity>,
     @SerializedName("r")
-    val transactionsRoot: EthHash,
+    val transactionsRoot: EvmHash,
     @SerializedName("s")
     val withdrawals: List<WithdrawalEntity>?,
     @SerializedName("t")
-    val withdrawalsRoot: EthHash?,
+    val withdrawalsRoot: EvmHash?,
 )
 
 internal data class TransactionEntity(
     @SerializedName("a")
     val from: EthAddressId,
     @SerializedName("b")
-    val gas: EthUint64,
+    val gas: EvmUint64,
     @SerializedName("c")
-    val gasPrice: EthUint64,
+    val gasPrice: EvmUint64,
     @SerializedName("d")
-    val maxPriorityFeePerGas: EthUint64?,
+    val maxPriorityFeePerGas: EvmUint64?,
     @SerializedName("e")
-    val maxFeePerGas: EthUint64?,
+    val maxFeePerGas: EvmUint64?,
     @SerializedName("f")
-    val hash: EthHash,
+    val hash: EvmHash,
     @SerializedName("g")
-    val input: EthPrefixedHexString?,
+    val input: EvmPrefixedHexString?,
     @SerializedName("h")
-    val nonce: EthUint64,
+    val nonce: EvmUint64,
     @SerializedName("i")
     val to: EthAddressId?,
     @SerializedName("j")
-    val value: EthUint256?,
+    val value: EvmUint256?,
     @SerializedName("k")
-    val type: EthUint8,
+    val type: EvmUint8,
     @SerializedName("l")
     val accessList: List<AccessListItem>?
 ) {
@@ -76,19 +77,19 @@ internal data class TransactionEntity(
         @SerializedName("a")
         val address: EthAddressId,
         @SerializedName("b")
-        val storageKeys: List<EthHash>
+        val storageKeys: List<EvmHash>
     )
 }
 
 internal data class WithdrawalEntity(
     @SerializedName("a")
-    val index: EthUint64,
+    val index: EvmUint64,
     @SerializedName("b")
-    val validatorIndex: EthUint64,
+    val validatorIndex: EvmUint64,
     @SerializedName("c")
     val address: EthAddressId,
     @SerializedName("d")
-    val amount: EthUint64,
+    val amount: EvmUint64,
 )
 
 

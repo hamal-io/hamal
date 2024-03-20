@@ -8,8 +8,8 @@ import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.kua.type.KuaNumber
 import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.kua.type.KuaType
-import io.hamal.lib.web3.eth.abi.EthTypeDecoder
-import io.hamal.lib.web3.eth.abi.type.EthPrefixedHexString
+import io.hamal.lib.web3.evm.abi.EvmTypeDecoder
+import io.hamal.lib.web3.evm.abi.type.EvmPrefixedHexString
 import io.hamal.lib.web3.util.ByteWindow
 
 object EthDecodeParameterFunction : Function2In2Out<KuaString, KuaString, KuaError, KuaType>(
@@ -23,9 +23,9 @@ object EthDecodeParameterFunction : Function2In2Out<KuaString, KuaString, KuaErr
             return null to
                     //FIXME must be decimal value
                     KuaString(
-                        EthTypeDecoder.String.decode(
+                        EvmTypeDecoder.String.decode(
                             ByteWindow.Companion.of(
-                                EthPrefixedHexString(arg2.stringValue)
+                                EvmPrefixedHexString(arg2.stringValue)
                             )
                         ).value
                     )
@@ -35,9 +35,9 @@ object EthDecodeParameterFunction : Function2In2Out<KuaString, KuaString, KuaErr
             return null to
                     //FIXME must be decimal value
                     KuaNumber(
-                        EthTypeDecoder.Uint256.decode(
+                        EvmTypeDecoder.Uint256.decode(
                             ByteWindow.Companion.of(
-                                EthPrefixedHexString(arg2.stringValue)
+                                EvmPrefixedHexString(arg2.stringValue)
                             )
                         ).value.toDouble()
                     )
