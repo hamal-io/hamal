@@ -12,6 +12,15 @@ data class ArbitrumGetBlockResponse(
     val result: ArbitrumBlock?
 ) : ArbitrumResponse() {
     override fun toString(): String {
-        return "ArbitrumResponse($result)"
+        return "ArbitrumGetBlockResponse($result)"
+    }
+}
+
+data class ArbitrumErrorResponse(
+    override val id: EvmRequestId,
+    val error: ArbitrumError
+) : ArbitrumResponse() {
+    override fun toString(): String {
+        return "ArbitrumError($error)"
     }
 }

@@ -1,4 +1,4 @@
-package io.hamal.lib.web3.evm.impl.eth.domain
+package io.hamal.lib.web3.evm.impl.arbitrum.domain
 
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
@@ -18,15 +18,15 @@ import io.hamal.lib.web3.evm.domain.EvmRequestId
 import java.lang.reflect.Type
 
 
-sealed interface EthRequest : EvmRequest {
-
+sealed interface ArbitrumRequest : EvmRequest {
+    
     override val id: EvmRequestId
     override val method: EvmMethod
 
-    object Adapter : JsonAdapter<EthRequest> {
-        override fun serialize(request: EthRequest, type: Type, ctx: JsonSerializationContext): JsonElement {
+    object Adapter : JsonAdapter<ArbitrumRequest> {
+        override fun serialize(request: ArbitrumRequest, type: Type, ctx: JsonSerializationContext): JsonElement {
             return when (request) {
-                is EthGetBlockByNumberRequest -> GsonTransform.fromNode(
+                is ArbitrumGetBlockByNumberRequest -> GsonTransform.fromNode(
                     HotObject.builder()
                         .set("id", GsonTransform.toNode(ctx.serialize(request.id)))
                         .set("method", GsonTransform.toNode(ctx.serialize(request.method)))
@@ -43,10 +43,10 @@ sealed interface EthRequest : EvmRequest {
             }
         }
 
-        override fun deserialize(element: JsonElement, type: Type, ctx: JsonDeserializationContext): EthRequest {
+        override fun deserialize(element: JsonElement, type: Type, ctx: JsonDeserializationContext): ArbitrumRequest {
             val obj = element.asJsonObject
             return when (EvmMethod.of(obj.get("method").asString)) {
-                GetBlockByNumber -> EthGetBlockByNumberRequest(
+                GetBlockByNumber -> ArbitrumGetBlockByNumberRequest(
                     id = EvmRequestId(obj.get("id").asString),
                     number = EvmUint64(EvmPrefixedHexString(obj.getAsJsonArray("params").get(0).asString)),
                     fullTransaction = obj.getAsJsonArray("params").get(1).asBoolean
@@ -58,15 +58,15 @@ sealed interface EthRequest : EvmRequest {
     }
 }
 
-data class EthGetBlockByNumberRequest(
+data class ArbitrumGetBlockByNumberRequest(
     override val id: EvmRequestId,
     val number: EvmUint64,
     val fullTransaction: Boolean
-) : EthRequest {
+) : ArbitrumRequest {
     override val method: EvmMethod = GetBlockByNumber
 
-    object Adapter : JsonAdapter<EthGetBlockByNumberRequest> {
-        override fun serialize(request: EthGetBlockByNumberRequest, type: Type, ctx: JsonSerializationContext): JsonElement {
+    object Adapter : JsonAdapter<ArbitrumGetBlockByNumberRequest> {
+        override fun serialize(request: ArbitrumGetBlockByNumberRequest, type: Type, ctx: JsonSerializationContext): JsonElement {
             return GsonTransform.fromNode(
                 HotObject.builder()
                     .set("id", GsonTransform.toNode(ctx.serialize(request.id)))
@@ -81,9 +81,9 @@ data class EthGetBlockByNumberRequest(
             )
         }
 
-        override fun deserialize(element: JsonElement, type: Type, ctx: JsonDeserializationContext): EthGetBlockByNumberRequest {
+        override fun deserialize(element: JsonElement, type: Type, ctx: JsonDeserializationContext): ArbitrumGetBlockByNumberRequest {
             val obj = element.asJsonObject
-            return EthGetBlockByNumberRequest(
+            return ArbitrumGetBlockByNumberRequest(
                 id = EvmRequestId(obj.get("id").asString),
                 number = EvmUint64(EvmPrefixedHexString(obj.getAsJsonArray("params").get(0).asString)),
                 fullTransaction = obj.getAsJsonArray("params").get(1).asBoolean
@@ -92,44 +92,44 @@ data class EthGetBlockByNumberRequest(
     }
 }
 
-fun parseRequest(json: Json, request: HotObject): Pair<EthErrorResponse?, EthRequest?> {
+fun parseRequest(json: Json, request: HotObject): Pair<ArbitrumErrorResponse?, ArbitrumRequest?> {
     return try {
-        val ethRequest = json.deserialize(EthRequest::class, json.serialize(request))
+        val ethRequest = json.deserialize(ArbitrumRequest::class, json.serialize(request))
         null to ethRequest
     } catch (e: Throwable) {
         e.printStackTrace()
         when {
             e.message?.contains("does not start with 0x") == true -> {
-                EthErrorResponse(
+                ArbitrumErrorResponse(
                     id = EvmRequestId(request["id"].stringValue),
-                    error = EthError(EthError.ErrorCode.InvalidParams, "invalid argument: hex string without 0x prefix")
+                    error = ArbitrumError(ArbitrumError.ErrorCode.InvalidParams, "invalid argument: hex string without 0x prefix")
                 ) to null
             }
 
             e.message?.contains("does not match hex pattern") == true -> {
-                EthErrorResponse(
+                ArbitrumErrorResponse(
                     id = EvmRequestId(request["id"].stringValue),
-                    error = EthError(EthError.ErrorCode.InvalidParams, "invalid argument: hex string")
+                    error = ArbitrumError(ArbitrumError.ErrorCode.InvalidParams, "invalid argument: hex string")
                 ) to null
             }
 
             e.message?.contains("out of bounds for length") == true -> {
-                EthErrorResponse(
+                ArbitrumErrorResponse(
                     id = EvmRequestId(request["id"].stringValue),
-                    error = EthError(EthError.ErrorCode.InvalidParams, "missing argument")
+                    error = ArbitrumError(ArbitrumError.ErrorCode.InvalidParams, "missing argument")
                 ) to null
             }
 
-            e.message?.contains("EthMethod not found") == true -> {
-                EthErrorResponse(
+            e.message?.contains("ArbitrumMethod not found") == true -> {
+                ArbitrumErrorResponse(
                     id = EvmRequestId(request["id"].stringValue),
-                    error = EthError(EthError.ErrorCode.MethodNotFound, "method not supported")
+                    error = ArbitrumError(ArbitrumError.ErrorCode.MethodNotFound, "method not supported")
                 ) to null
             }
 
-            else -> EthErrorResponse(
+            else -> ArbitrumErrorResponse(
                 id = EvmRequestId(request["id"].stringValue),
-                error = EthError(EthError.ErrorCode.InternalError, "Unexpected error")
+                error = ArbitrumError(ArbitrumError.ErrorCode.InternalError, "Unexpected error")
             ) to null
         }
     }
