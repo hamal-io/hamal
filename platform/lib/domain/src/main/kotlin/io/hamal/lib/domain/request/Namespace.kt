@@ -24,7 +24,6 @@ interface NamespaceUpdateRequest {
     val features: NamespaceFeatures?
 }
 
-
 data class NamespaceUpdateRequested(
     override val requestId: RequestId,
     override val requestedBy: AuthId,
