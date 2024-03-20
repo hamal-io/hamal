@@ -68,7 +68,13 @@ const TopicCard: FC<ContentProps> = ({topic}) => {
 
     function append(funcId: string) {
         try {
-            addTrigger(uiState.namespaceId, topic.id, funcId)
+            addTrigger({
+                    namespaceId: uiState.namespaceId,
+                    topicId: topic.id,
+                    funcId: funcId,
+                    name: "hi"
+                }
+            )
         } catch (e) {
             console.log(e)
         } finally {
