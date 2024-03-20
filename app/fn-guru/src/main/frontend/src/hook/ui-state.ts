@@ -6,7 +6,7 @@ import {useCallback} from "react";
 const unauthorized: UiState = {
     type: 'Unauthorized',
     workspaceId: '',
-    namespaceId: '',
+    namespaceId: ''
 }
 
 export const useUiState = () => {
@@ -23,7 +23,7 @@ export const useInitUiState = (): [InitUiStateAction] => {
         setUiState({
             type: 'Authorized',
             workspaceId,
-            namespaceId,
+            namespaceId
         })
     }, [uiState])
 
@@ -58,13 +58,13 @@ export const useChangeGroup = (): [ChangeGroupAction] => {
 type ChangeNamespaceAction = (namespaceId: string, namespaceName: string) => void
 export const useChangeNamespace = (): [ChangeNamespaceAction] => {
     const [uiState, setUiState] = useUiState()
-
     const fn = useCallback((namespaceId: string) => {
         setUiState({
             ...uiState,
             namespaceId
         })
     }, [uiState])
+
 
     return [fn]
 }

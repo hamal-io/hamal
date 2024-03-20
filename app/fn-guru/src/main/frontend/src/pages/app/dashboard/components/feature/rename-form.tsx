@@ -29,6 +29,7 @@ export const RenameForm: FC<Props> = ({namespace}) => {
 
     function onSubmit(values: z.infer<typeof formSchema>) {
         const abortController = new AbortController()
+
         updateNamespace(namespace.id, values.name, namespace.features, abortController)
         return (() => abortController.abort())
     }

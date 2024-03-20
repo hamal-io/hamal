@@ -1,3 +1,5 @@
+
+
 export interface NamespaceAppendRequested {
     requestId: string;
     requestStatus: string;
@@ -11,14 +13,17 @@ export interface NamespaceUpdateRequested {
     id: string;
 }
 
-export interface FeatureObject {
-    [key: string]: number
+export interface NamespaceFeatures {
+    schedule : boolean
+    topic : boolean
+    webhook : boolean
+    endpoint : boolean
 }
 
 export interface Namespace {
     id: string;
     name: string;
-    features: FeatureObject;
+    features: NamespaceFeatures;
 }
 
 export interface NamespaceList {
@@ -50,6 +55,5 @@ export class NamespaceNode {
         return this.descendants.length > 0
     }
 }
-
 
 

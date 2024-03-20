@@ -4,7 +4,7 @@ import Overview from "@/pages/app/dashboard/components/overview.tsx";
 import FeatureTab from "@/pages/app/dashboard/components/feature.tsx";
 import {useNamespaceGet} from "@/hook";
 import {useUiState} from "@/hook/ui-state.ts";
-import {RenameForm} from "@/pages/app/dashboard/components/feature-components/rename-form.tsx";
+import {RenameForm} from "@/pages/app/dashboard/components/feature/rename-form.tsx";
 
 
 const DashboardPage: React.FC = () => {
@@ -19,6 +19,7 @@ const DashboardPage: React.FC = () => {
 
     if (loading) return "Loading"
     if (error) return "Error"
+
     return (
         <div className="flex-col md:flex">
             <div className="flex-1 space-y-4 p-8 pt-6">

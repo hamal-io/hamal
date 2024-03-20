@@ -5,17 +5,20 @@ import {
     Braces,
     ClipboardPaste,
     Command,
-    FolderTree,
     GlobeIcon,
     Layers3Icon,
     LucideIcon,
-    Play, Settings,
+    LucideProps,
+    Play,
+    Settings,
     TimerIcon,
     WebhookIcon
 } from "lucide-react";
-import React, {FC} from "react";
-import {Link, useLocation, useParams} from "react-router-dom";
+import React, {FC, useEffect, useState} from "react";
+import {Link, useLocation} from "react-router-dom";
 import Profile from "@/components/app/layout/workspace/profile.tsx";
+import {useNamespaceGet} from "@/hook";
+import {useUiState} from "@/hook/ui-state.ts";
 
 type Props = {
     className?: string;
@@ -29,12 +32,40 @@ type NavItem = {
     active?: boolean;
 };
 const Sidebar: React.FC<Props> = ({className}) => {
-    const {workspaceId, namespaceId} = useParams()
-
+    const [uiState] = useUiState()
+    const [getNamespace, namespace, loading, error] = useNamespaceGet()
     const location = useLocation()
-
     const currentPath = location.pathname
-    const primaryNavigation: NavItem[] = [
+    const [activeFeatures, setActiveFeatures] = useState<NavLinkType[]>(null)
+
+
+    useEffect(() => {
+        const abortController = new AbortController()
+        getNamespace(uiState.namespaceId, abortController)
+        return (() => abortController.abort())
+    }, []);
+
+    useEffect(() => {
+        if (namespace) {
+            const actives: NavLinkType[] = []
+            for (const [feat, valid] of Object.entries(namespace.features)) {
+                if (valid) {
+                    actives.push(featureLinks[feat])
+                }
+            }
+            setActiveFeatures(actives)
+        }
+    }, [namespace]);
+
+
+    type NavLinkType = {
+        icon: React.ForwardRefExoticComponent<LucideProps>,
+        active: boolean,
+        href: string,
+        label: string
+    }
+
+    const primaryNavigation = [
         {
             icon: Command,
             href: `/dashboard`,
@@ -58,35 +89,40 @@ const Sidebar: React.FC<Props> = ({className}) => {
             href: `/functions`,
             label: "Functions",
             active: currentPath.startsWith(`/functions`)
-        },
-        {
-            icon: TimerIcon,
-            href: `/schedules`,
-            label: "Schedules",
-            active: currentPath.startsWith(`/schedules`)
-        },
-        {
-            icon: Layers3Icon,
-            href: `/topics`,
-            label: "Topics",
-            active: currentPath.startsWith(`/topics`)
-        },
-        {
-            icon: WebhookIcon,
-            href: `/webhooks`,
-            label: "Webhooks",
-            active: currentPath.startsWith(`/webhooks`)
-        },
-        {
-            icon: GlobeIcon,
-            href: `/endpoints`,
-            label: "Endpoints",
-            active: currentPath.startsWith(`/endpoints`)
-        },
-    ];
+        }
+    ]
 
 
-    const secondaryNavigation: NavItem[] = [
+    const featureLinks =
+        {
+            schedule: {
+                icon: TimerIcon,
+                href: `/schedules`,
+                label: "Schedules",
+                active: currentPath.startsWith(`/schedules`)
+            },
+            topic: {
+                icon: Layers3Icon,
+                href: `/topics`,
+                label: "Topics",
+                active: currentPath.startsWith(`/topics`)
+            },
+            webhook: {
+                icon: WebhookIcon,
+                href: `/webhooks`,
+                label: "Webhooks",
+                active: currentPath.startsWith(`/webhooks`)
+            },
+            endpoint: {
+                icon: GlobeIcon,
+                href: `/endpoints`,
+                label: "Endpoints",
+                active: currentPath.startsWith(`/endpoints`)
+            }
+        }
+
+
+    const secondaryNavigation = [
         {
             icon: ClipboardPaste,
             href: '/blueprints',
@@ -106,21 +142,31 @@ const Sidebar: React.FC<Props> = ({className}) => {
         },
     ];
 
+
     return (
         <aside className={cn("fixed h-screen inset-y-0 flex w-48 flex-col px-6 gap-y-5 bg-gray-100", className)}>
             <nav className="flex flex-col ">
                 <h1 className="text-2xl font-bold leading-6 text-content mt-6">fn(guru)</h1>
-                <ul className="pt-4">
+                <ol className="pt-4">
                     <li>
-                        <ul className="mt-2 -mx-2 space-y-1">
+                        <ol className="mt-2 -mx-2 space-y-1">
                             {primaryNavigation.map((item) => (
                                 <li key={item.label}>
                                     <NavLink item={item}/>
                                 </li>
                             ))}
-                        </ul>
+                            {activeFeatures && activeFeatures.map(item =>
+                                <li key={item.label}>
+                                    <NavLink item={item}/>
+                                </li>
+                            )}
+
+                        </ol>
+
                     </li>
-                </ul>
+                </ol>
+
+
                 <div className="fixed bottom-4 flex flex-col items-center justify-center">
                     <ul className="pt-4">
                         <li>
