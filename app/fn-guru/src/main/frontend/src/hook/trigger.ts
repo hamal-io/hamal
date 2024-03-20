@@ -64,3 +64,15 @@ export const useTriggerHookCreate = (): [TriggerHookCreateAction, TriggerCreateR
     )
     return [fn, submission, loading, error]
 }
+
+type TriggerEventCreateAction = (namespaceId: string, topicId: string, funcId: string, abortController?:AbortController ) => void
+export const useTriggerEventCreate = (): [TriggerEventCreateAction, TriggerCreateRequested, boolean, Error] => {
+    const [auth] = useAuth()
+    const [post, submission, loading, error] = usePost<TriggerCreateRequested>()
+
+    const fn = useCallback<TriggerEventCreateAction>(async (namespaceId, topicId, funcId, abortController? ) =>
+        post(`/v1/namespaces/${namespaceId}/triggers`, {topicId,funcId}, abortController),[auth]
+    )
+    return [fn, submission, loading, error]
+}
+

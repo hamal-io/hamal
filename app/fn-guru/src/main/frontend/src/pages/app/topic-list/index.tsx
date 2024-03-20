@@ -4,7 +4,6 @@ import {useNavigate} from "react-router-dom";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx";
 import {EmptyPlaceholder} from "@/components/empty-placeholder.tsx";
 import {GoToDocumentation} from "@/components/documentation.tsx";
-import {useTopicEventAppend, useTopicList} from "@/hook/topic.ts";
 import {TopicListItem} from "@/types/topic.ts";
 import Create from "@/pages/app/topic-list/components/create.tsx";
 import {useUiState} from "@/hook/ui-state.ts";
@@ -16,6 +15,8 @@ import FormFuncSelect from "@/components/form/func-select.tsx";
 import * as z from "zod";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
+import {useTopicList} from "@/hook/topic.ts";
+import {useTriggerEventCreate} from "@/hook";
 
 type Props = {}
 const TopicListPage: FC<Props> = ({}) => {
@@ -56,8 +57,9 @@ type ContentProps = {
 }
 const TopicCard: FC<ContentProps> = ({topic}) => {
     const navigate = useNavigate()
-    const [appendEvent, appendRequested, loading, error] = useTopicEventAppend()
+    const [uiState] = useUiState()
     const [open, setOpen] = useState(false)
+    const [addTrigger, AddTriggerResponse, loading, error] = useTriggerEventCreate()
 
     function buttonClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
         setOpen(true)
@@ -66,7 +68,7 @@ const TopicCard: FC<ContentProps> = ({topic}) => {
 
     function append(funcId: string) {
         try {
-            appendEvent(topic.id, {payload: funcId})
+            addTrigger(uiState.namespaceId, topic.id, funcId)
         } catch (e) {
             console.log(e)
         } finally {
@@ -75,14 +77,13 @@ const TopicCard: FC<ContentProps> = ({topic}) => {
     }
 
     function cardClick() {
-        console.log("Card click")
-        // navigate(`/v1/topics/${topic.id}`)
+        //navigate(`/v1/topics/${topic.id}`)
     }
 
     return (
         <>
             <Card
-                className="relative overtopic-hidden duration-500 hover:border-primary/50 group cursor-pointer"
+                //className="relative overtopic-hidden duration-500 hover:border-primary/50 group cursor-pointer"
                 onClick={cardClick}
             >
                 <CardHeader>
@@ -97,6 +98,7 @@ const TopicCard: FC<ContentProps> = ({topic}) => {
                                 Trigger
                             </Button>
                         </div>
+                        {topic.id}
                     </dl>
                 </CardContent>
             </Card>
@@ -127,7 +129,7 @@ const TriggerDialog: FC<DialogProps> = ({submit}) => {
 
     return (
         <DialogContent>
-            <DialogHeader>Trigger for this Topic</DialogHeader>
+            <DialogHeader></DialogHeader>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                     <FormFuncSelect name='funcId' form={form}/>
