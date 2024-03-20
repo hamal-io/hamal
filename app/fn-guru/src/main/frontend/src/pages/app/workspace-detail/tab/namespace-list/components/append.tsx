@@ -9,7 +9,7 @@ import {DialogContent, DialogHeader} from "@/components/ui/dialog.tsx";
 import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {useNamespaceAppend} from "@/hook";
-import {NamespaceFeature} from "@/types";
+import {NamespaceFeatures} from "@/types";
 import {FeatureCard} from "@/pages/app/dashboard/components/feature.tsx";
 
 
@@ -101,11 +101,11 @@ const Append: FC<Props> = ({appendTo, onClose}) => {
 
 export default Append;
 type FeatureSelectProps = {
-    defaults: NamespaceFeature
-    onSave: (val: NamespaceFeature) => void
+    defaults: NamespaceFeatures
+    onSave: (val: NamespaceFeatures) => void
 }
 const FeatureSelect: FC<FeatureSelectProps> = ({defaults, onSave}) => {
-    const [features, setFeatures] = useState<NamespaceFeature>(defaults)
+    const [features, setFeatures] = useState<NamespaceFeatures>(defaults)
     const [isUpdate, setIsUpdate] = useState(null)
 
     useEffect(() => {
@@ -158,10 +158,10 @@ const FeatureSelect: FC<FeatureSelectProps> = ({defaults, onSave}) => {
     return (
         <div className="pt-8 px-8">
             <div className={"flex flex-col gap-4"}>
-                <FeatureCard item={items.schedule}/>
-                <FeatureCard item={items.topic}/>
-                <FeatureCard item={items.webhook}/>
-                <FeatureCard item={items.endpoint}/>
+                <FeatureCard feature={items.schedule}/>
+                <FeatureCard feature={items.topic}/>
+                <FeatureCard feature={items.webhook}/>
+                <FeatureCard feature={items.endpoint}/>
             </div>
         </div>
     )
