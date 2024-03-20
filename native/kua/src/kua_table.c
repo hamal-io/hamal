@@ -91,7 +91,7 @@ int
 table_get_sub_table(lua_State *L, int idx, char const *key) {
     if (check_index(L, idx) == CHECK_RESULT_ERROR) return LUA_TNONE;
     if (check_stack_overflow(L, 1) == CHECK_RESULT_ERROR) return LUA_TNONE;
-    auto result = table_field_get(L, idx, key);
+    int result = table_field_get(L, idx, key);
     if (check_type_at(L, -1, TABLE_TYPE) == CHECK_RESULT_ERROR) {
         lua_pop(L, 2);
         return LUA_TNONE;
