@@ -6,7 +6,7 @@ err, block = eth.get_block('0x1284810')
 assert(err == nil)
 
 assert(block.base_fee_per_gas == "0xcdeac4a94")
-assert(block.extra_data == "0x546974616e2028746974616e6275696c6465722e78797a29")
+assert(block.extra_data == "0x0000000000000000546974616e2028746974616e6275696c6465722e78797a29")
 assert(block.gas_limit == "0x1c9c380")
 assert(block.gas_used == "0xa0adf6")
 assert(block.hash == "0xbe564f59e089bd7fac45b40a4bb0295338a0074d4eaf675937d2498b43ef401c")

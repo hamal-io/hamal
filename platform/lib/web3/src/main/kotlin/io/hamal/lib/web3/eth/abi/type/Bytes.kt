@@ -10,7 +10,7 @@ sealed interface EthBytes : EthType<ByteArray> {
     override fun toByteArray(): ByteArray = value
     override fun toByteWindow() = ByteWindow(ByteBuffer.wrap(value), numberOfBytes)
     fun toPrefixedHexString(): EthPrefixedHexString {
-        return EthPrefixedHexString("0x${Web3Formatter.formatToHex(value).replaceFirst("^0{2,}(?!$)".toRegex(), "")}")
+        return EthPrefixedHexString("0x${Web3Formatter.formatToHex(value)}")
     }
 }
 

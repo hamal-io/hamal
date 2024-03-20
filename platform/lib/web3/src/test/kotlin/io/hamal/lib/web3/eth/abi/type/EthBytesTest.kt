@@ -28,7 +28,7 @@ internal class EthBytes32Test {
     fun `0x546974616e2028746974616e6275696c6465722e78797a29`() {
         EthBytes32(EthPrefixedHexString("0x546974616e2028746974616e6275696c6465722e78797a29")).also { result ->
             assertThat(result.value.size, equalTo(32))
-            assertThat(result.toPrefixedHexString(), equalTo(EthPrefixedHexString("0x546974616e2028746974616e6275696c6465722e78797a29")))
+            assertThat(result.toPrefixedHexString(), equalTo(EthPrefixedHexString("0x0000000000000000546974616e2028746974616e6275696c6465722e78797a29")))
         }
     }
 }
