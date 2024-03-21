@@ -106,7 +106,6 @@ const MetaMaskButton: FC<MetaMaskButtonProps> = ({loading, setLoading}) => {
                 console.log("signature", signature)
 
                 requestToken(address, signature)
-                // TODO send address + signature to backend
             }
 
             invoke()
