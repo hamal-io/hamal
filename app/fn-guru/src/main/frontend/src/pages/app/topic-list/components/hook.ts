@@ -8,22 +8,26 @@ export type TopicWithFuncs = {
     topic: TopicListItem
     funcs: Array<FuncListItem>
 }
-type GetTopicsWithFuncsAction = (namespaceId: string, abortController?: AbortController) => void
+type GetTopicsWithFuncsAction = (namespaceId: string) => void
 export const useTopicsWithFuncs = (): [GetTopicsWithFuncsAction, Array<TopicWithFuncs>, boolean, Error] => {
     const [listTriggers, triggerList, , triggersError] = useTriggerListEvent()
     const [listTopics, topicList, , topicsError] = useTopicList()
     const [topicsWithFuncs, setTopicWithFuncs] = useState<Array<TopicWithFuncs>>(null)
     const [loading, setLoading] = useState(true)
 
-    const fn = useCallback<GetTopicsWithFuncsAction>(async (namespaceId, abortController?) => {
+    const fe = (ns: string) => {
+        const abortController = new AbortController()
+        listTopics(ns, abortController)
+        listTriggers(ns, abortController)
+        return (() => abortController.abort())
+    }
+
+    const fn = useCallback<GetTopicsWithFuncsAction>(async (namespaceId) => {
         try {
-            listTopics(namespaceId, abortController)
-            listTriggers(namespaceId, abortController)
+            fe(namespaceId)
         } catch (e) {
             console.log(e)
             setLoading(false)
-        } finally {
-            abortController.abort()
         }
     }, [])
 

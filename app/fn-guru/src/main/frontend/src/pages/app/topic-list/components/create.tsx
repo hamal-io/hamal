@@ -1,4 +1,4 @@
-import React, {FC, useState} from "react";
+import React, {FC, useEffect, useState} from "react";
 
 import * as z from "zod"
 import {zodResolver} from "@hookform/resolvers/zod";
@@ -34,7 +34,7 @@ const Create : FC<Props> = ({onClose}) => {
     const [uiState] = useUiState()
     const [open, setOpen] = useState(false)
     const [isLoading, setLoading] = useState(false)
-    const [createTopic, groupTopicRequested] = useTopicCreate()
+    const [createTopic, topicCreateRequested] = useTopicCreate()
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -52,9 +52,15 @@ const Create : FC<Props> = ({onClose}) => {
             console.error(e)
         } finally {
             setOpen(false)
-            onClose()
         }
     }
+
+    /*useEffect(() => {
+        if (topicCreateRequested){
+            setLoading(false)
+            onClose()
+        }
+    }, [topicCreateRequested]);*/
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
