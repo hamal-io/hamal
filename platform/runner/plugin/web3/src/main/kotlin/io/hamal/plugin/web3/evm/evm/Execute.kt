@@ -71,7 +71,7 @@ class EvmExecuteFunction : Function1In2Out<KuaTable, KuaError, KuaTable>(
                                 result.append(
                                     ctx.tableCreate().also { result ->
                                         result["id"] = KuaString(response.id.value)
-                                        result["result"] = response.result.toKua(ctx)
+                                        result["result"] = response.result.toKuaSnakeCase(ctx)
                                     }
                                 )
                             }
