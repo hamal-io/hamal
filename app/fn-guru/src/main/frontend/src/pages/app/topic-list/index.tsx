@@ -19,7 +19,6 @@ import {useTopicList} from "@/hook/topic.ts";
 import {useTriggerEventCreate, useTriggerListEvent} from "@/hook";
 import {FuncListItem} from "@/types";
 import {Simulate} from "react-dom/test-utils";
-import error = Simulate.error;
 
 
 type TopicWithFuncs = {
@@ -27,9 +26,9 @@ type TopicWithFuncs = {
     funcs: Array<FuncListItem>
 }
 type UpdateAction = (namespaceId: string, abortController?: AbortController) => void
-const useTopicsWithTriggers = (): [UpdateAction, Array<TopicWithFuncs>, boolean, Error] => {
-    const [listTopics, topicList, topicsLoading, topicsError] = useTopicList()
+const useTopicsWithFuncs = (): [UpdateAction, Array<TopicWithFuncs>, boolean, Error] => {
     const [listTriggers, triggerList, triggerLoading, triggersError] = useTriggerListEvent()
+    const [listTopics, topicList, topicsLoading, topicsError] = useTopicList()
     const [topicsWithFuncs, setTopicWithFuncs] = useState<Array<TopicWithFuncs>>(null)
 
     const fn = useCallback<UpdateAction>(async (namespaceId, abortController?) => {
@@ -50,27 +49,22 @@ const useTopicsWithTriggers = (): [UpdateAction, Array<TopicWithFuncs>, boolean,
         }
     }, [topicList, triggerList]);
 
-    const loading = topicsLoading || triggerLoading
     const error = topicsError || triggersError
-
+    const loading = topicsLoading || triggerLoading
     return [fn, topicsWithFuncs, loading, error]
 }
 
 type Props = {}
 const TopicListPage: FC<Props> = ({}) => {
     const [uiState] = useUiState()
-    const [updateTopics, topics, error, loading] = useTopicsWithTriggers()
+    const [listTopics, topicList, topicsLoading, topicsError] = useTopicList()
+    const [updateTopics, topics, updateLoading, updateError] = useTopicsWithFuncs()
 
-    const doUpdate = () => {
-        updateTopics(uiState.namespaceId)
-    }
+    const doUpdate = () => updateTopics(uiState.namespaceId)
 
     useEffect(() => {
         doUpdate()
     }, []);
-
-    if (error) return `Error`
-    if (loading) return "Loading..."
 
 
     const Empty = (
@@ -88,6 +82,8 @@ const TopicListPage: FC<Props> = ({}) => {
             </div>
         </EmptyPlaceholder>)
 
+    if (topicsError || updateError) return "Error"
+    if (topicsLoading || updateLoading) return "Loading..."
 
     return (
         <div className="pt-2 px-2">
@@ -98,50 +94,35 @@ const TopicListPage: FC<Props> = ({}) => {
                     <Create onClose={doUpdate}/>
                 ]}
             />
+            {topicList.topics.length !== 0 ?
+                <ul className="grid grid-cols-3 gap-4">
+                    {topics.map(topic =>
+                        <li key={topic.topic.id}>
+                            <TopicCard namespaceId={uiState.namespaceId} topic={topic}/>
+                        </li>
+                    )}
+                </ul> : Empty
+            }
 
-            <ul className="grid grid-cols-3 gap-4">
-                {topics.map(topic =>
-                    <li key={topic.topic.id}>
-                        <TopicCard namespaceId={uiState.namespaceId} topic={topic}/>
-                    </li>
-                )}
-            </ul>
 
         </div>)
 }
 
-type TopicCardProps = { namespaceId: string, topic: TopicWithFuncs }
-const TopicCard: FC<TopicCardProps> = ({topic}) => {
+type TopicCardProps = { namespaceId: string, topic: TopicListItem }
+const TopicCard: FC<TopicCardProps> = ({namespaceId, topic}) => {
     const navigate = useNavigate()
     const [open, setOpen] = useState(false)
-    const [addTrigger, AddTriggerResponse] = useTriggerEventCreate()
+    const [addTrigger, AddTriggerResponse, loading, error] = useTriggerEventCreate()
+    const [listTriggers, triggerList, triggerLoading, triggersError] = useTriggerListEvent()
 
-
-    function buttonClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
-        setOpen(true)
-        event.stopPropagation()
-    }
-
-    const doUpdate = (funcId: string) => {
-        const abortController = new AbortController()
-        addTrigger({
-            namespaceId: namespaceId,
-            topicId: topic.id,
-            funcId: funcId,
-            name: "hi"
-        }, abortController)
-        return (() => abortController.abort())
-    }
-
-    function handleTriggerCreate(funcId: string) {
+    function handleTriggerCreate(func: FuncListItem) {
         try {
             addTrigger({
                 namespaceId: namespaceId,
                 topicId: topic.id,
-                funcId: funcId,
-                name: "hi"
+                funcId: func.id,
+                name: func.name
             })
-
         } catch (e) {
             console.log(e)
         } finally {
@@ -150,9 +131,12 @@ const TopicCard: FC<TopicCardProps> = ({topic}) => {
     }
 
     useEffect(() => {
-
+        listTriggers(namespaceId)
     }, []);
 
+    useEffect(() => {
+
+    }, [triggerList]);
 
     if (error) return `Error`
     if (loading) return "Loading..."
@@ -170,13 +154,25 @@ const TopicCard: FC<TopicCardProps> = ({topic}) => {
                     <dl className="text-sm leading-6 divide-y divide-gray-100 ">
                         <div className="flex justify-between py-3 gap-x-4">
                             {topic.type}
-                            <Button onClick={buttonClick}>
+                            <Button onClick={(e) => {
+                                setOpen(true)
+                                e.stopPropagation()
+                            }}>
                                 <Plus className="w-4 h-4 mr-1"/>
                                 Trigger
                             </Button>
                         </div>
 
                     </dl>
+                    <div className="flex flex-col items-start justify-between ">
+                        {topic.funcs.map(func => {
+                            return (
+                                <span className="flex justify-between w-full" key={func.id}>
+                                    {func.name}
+                                </span>
+                            )
+                        })}
+                    </div>
                 </CardContent>
             </Card>
             <Dialog open={open} onOpenChange={setOpen}>
@@ -186,7 +182,7 @@ const TopicCard: FC<TopicCardProps> = ({topic}) => {
     )
 }
 
-type TriggerDialogProps = { submit: (funcId: string) => void }
+type TriggerDialogProps = { submit: (funcId: FuncListItem) => void }
 const TriggerDialog: FC<TriggerDialogProps> = ({submit}) => {
     const formSchema = z.object({
         funcId: z.string().min(1, "Function required"),
@@ -200,7 +196,7 @@ const TriggerDialog: FC<TriggerDialogProps> = ({submit}) => {
     })
 
     function onSubmit(values: z.infer<typeof formSchema>) {
-        submit(values.funcId)
+        submit({id: values.funcId, name: "null"}) //TODO-273 Selector retrieve name too
     }
 
     return (
