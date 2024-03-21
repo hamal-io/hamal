@@ -1,19 +1,19 @@
-package io.hamal.lib.web3.evm.impl.eth.http
+package io.hamal.lib.web3.evm.http
 
 import io.hamal.lib.common.hot.HotArray
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.web3.evm.EvmBatchService
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
-import io.hamal.lib.web3.evm.http.HttpBaseBatchService
-import io.hamal.lib.web3.evm.impl.eth.domain.EthGetBlockResponse
-import io.hamal.lib.web3.evm.impl.eth.domain.EthResponse
+import io.hamal.lib.web3.evm.domain.EvmHotGetBlockResponse
+import io.hamal.lib.web3.evm.domain.EvmHotResponse
 import io.hamal.lib.web3.json
 
-interface EthBatchService<SERVICE : EvmBatchService<EthResponse, SERVICE>> : EvmBatchService<EthResponse, SERVICE>
+interface EvmHotBatchService<SERVICE : EvmBatchService<EvmHotResponse, SERVICE>> :
+    EvmBatchService<EvmHotResponse, SERVICE>
 
-class EthHttpBatchService(
+class EvmHotHttpBatchService(
     httpTemplate: HttpTemplate,
-) : EthBatchService<EthHttpBatchService>, HttpBaseBatchService<EthResponse>(httpTemplate, json) {
+) : EvmHotBatchService<EvmHotHttpBatchService>, HttpBaseBatchService<EvmHotResponse>(httpTemplate, json) {
 
     override fun getBlock(number: EvmUint64) = also {
         request(
@@ -22,7 +22,7 @@ class EthHttpBatchService(
                 .append(number.toPrefixedHexString().value)
                 .append(true)
                 .build(),
-            resultClass = EthGetBlockResponse::class
+            resultClass = EvmHotGetBlockResponse::class
         )
     }
 }

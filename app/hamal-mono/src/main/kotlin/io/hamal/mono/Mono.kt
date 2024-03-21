@@ -25,7 +25,7 @@ fun main(args: Array<String>) {
             out.println("")
             out.println(
                 """
- _    _                       _   _       
+  _    _                       _   _       
  | |  | |                     | | (_)      
  | |__| | __ _ _ __ ___   __ _| |  _  ___  
  |  __  |/ _` | '_ ` _ \ / _` | | | |/ _ \ 

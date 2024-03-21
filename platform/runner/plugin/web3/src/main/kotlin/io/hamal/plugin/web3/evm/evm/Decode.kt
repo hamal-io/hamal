@@ -12,7 +12,7 @@ import io.hamal.lib.web3.evm.abi.EvmTypeDecoder
 import io.hamal.lib.web3.evm.abi.type.EvmPrefixedHexString
 import io.hamal.lib.web3.util.ByteWindow
 
-object EthDecodeParameterFunction : Function2In2Out<KuaString, KuaString, KuaError, KuaType>(
+object EvmDecodeParameterFunction : Function2In2Out<KuaString, KuaString, KuaError, KuaType>(
     FunctionInput2Schema(KuaString::class, KuaString::class),
     FunctionOutput2Schema(KuaError::class, KuaType::class)
 ) {
