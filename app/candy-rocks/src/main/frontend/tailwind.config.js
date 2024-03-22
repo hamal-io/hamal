@@ -1,76 +1,82 @@
-/** @type {import('tailwindcss').Config} */
+const defaultTheme = require("tailwindcss/defaultTheme");
+
+// Custom color with css variable color in __theme_color.scss
+function customColors(cssVar) {
+  return ({ opacityVariable, opacityValue }) => {
+    if (opacityValue !== undefined) {
+      return `rgba(var(${cssVar}), ${opacityValue})`;
+    }
+    if (opacityVariable !== undefined) {
+      return `rgba(var(${cssVar}), var(${opacityVariable}, 1))`;
+    }
+    return `rgb(var(${cssVar}))`;
+  };
+}
+
 module.exports = {
-  darkMode: ["class"],
-  content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
-	],
+  content: ["./src/**/*.{js,jsx,ts,tsx}", "./public/index.html"],
+  darkMode: "class", // or 'media' or 'class',
   theme: {
     container: {
       center: true,
-      padding: "2rem",
-      screens: {
-        "2xl": "1400px",
+      padding: {
+        DEFAULT: "1rem",
+        xl: "40px",
+        "2xl": "128px",
       },
     },
+    fontFamily: {
+      display: ["var(--font-display)", ...defaultTheme.fontFamily.sans],
+      body: ["var(--font-body)", ...defaultTheme.fontFamily.sans],
+    },
+
     extend: {
       colors: {
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+          50: customColors("--c-primary-50"),
+          100: customColors("--c-primary-100"),
+          200: customColors("--c-primary-200"),
+          300: customColors("--c-primary-300"),
+          400: customColors("--c-primary-400"),
+          500: customColors("--c-primary-500"),
+          6000: customColors("--c-primary-600"),
+          700: customColors("--c-primary-700"),
+          800: customColors("--c-primary-800"),
+          900: customColors("--c-primary-900"),
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
+          50: customColors("--c-secondary-50"),
+          100: customColors("--c-secondary-100"),
+          200: customColors("--c-secondary-200"),
+          300: customColors("--c-secondary-300"),
+          400: customColors("--c-secondary-400"),
+          500: customColors("--c-secondary-500"),
+          6000: customColors("--c-secondary-600"),
+          700: customColors("--c-secondary-700"),
+          800: customColors("--c-secondary-800"),
+          900: customColors("--c-secondary-900"),
         },
-        destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
+        neutral: {
+          50: customColors("--c-neutral-50"),
+          100: customColors("--c-neutral-100"),
+          200: customColors("--c-neutral-200"),
+          300: customColors("--c-neutral-300"),
+          400: customColors("--c-neutral-400"),
+          500: customColors("--c-neutral-500"),
+          6000: customColors("--c-neutral-600"),
+          700: customColors("--c-neutral-700"),
+          800: customColors("--c-neutral-800"),
+          900: customColors("--c-neutral-900"),
         },
-        muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
-        },
-        accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
-        },
-        popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
-        },
-        card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
-        },
-      },
-      borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
-      },
-      keyframes: {
-        "accordion-down": {
-          from: { height: 0 },
-          to: { height: "var(--radix-accordion-content-height)" },
-        },
-        "accordion-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: 0 },
-        },
-      },
-      animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
-}
+  variants: {
+    extend: {},
+  },
+  plugins: [
+    require("@tailwindcss/typography"),
+    require("@tailwindcss/forms"),
+    require("@tailwindcss/aspect-ratio"),
+  ],
+};
