@@ -20,7 +20,7 @@ class EthConfig {
         @Value("\${io.hamal.web3proxy.eth.upstream}") upstreamHost: String
     ): HandleEthRequest = EthRequestHandlerImpl(
         EthRepositoryImpl(
-            path = Path("/tmp/web3proxy/eth"),
+            path = Path("/opt/web3proxy/eth"),
             batchService = EthHttpBatchService(HttpTemplateImpl(upstreamHost))
         )
     )

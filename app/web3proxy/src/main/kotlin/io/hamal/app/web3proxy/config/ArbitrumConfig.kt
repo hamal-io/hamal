@@ -20,7 +20,7 @@ class ArbitrumConfig {
         @Value("\${io.hamal.web3proxy.arbitrum.upstream}") upstreamHost: String
     ): HandleArbitrumRequest = ArbitrumRequestHandlerImpl(
         ArbitrumRepositoryImpl(
-            path = Path("/tmp/web3proxy/arbitrum"),
+            path = Path("/opt/web3proxy/arbitrum"),
             batchService = ArbitrumHttpBatchService(HttpTemplateImpl(upstreamHost))
         )
     )

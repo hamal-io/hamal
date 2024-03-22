@@ -83,7 +83,7 @@ internal class EthBlockRepositoryImpl(
             }
         }
 
-        blocks.forEach { block -> indexRepository.index(block) }
+//        blocks.forEach { block -> indexRepository.index(block) }
     }
 
     override fun setupConnection(connection: Connection) {
@@ -123,7 +123,8 @@ private fun collectEthAddresses(blocks: List<EthBlock>): Set<EvmAddress> {
     return blocks.flatMap { block ->
         listOf(block.miner)
             .plus(block.transactions.flatMap { transaction ->
-                listOfNotNull(transaction.from, transaction.to).plus(transaction.accessList?.map { it.address } ?: listOf())
+                listOfNotNull(transaction.from, transaction.to).plus(transaction.accessList?.map { it.address }
+                    ?: listOf())
             }
             ).plus(block.withdrawals?.map { it.address } ?: listOf())
     }.toSet()
