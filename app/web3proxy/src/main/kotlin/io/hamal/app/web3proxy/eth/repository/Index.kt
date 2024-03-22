@@ -3,8 +3,8 @@ package io.hamal.app.web3proxy.eth.repository
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.lib.sqlite.Transaction
-import io.hamal.lib.web3.eth.abi.type.EthHash
 import io.hamal.lib.web3.eth.abi.type.EthUint64
+import java.math.BigInteger
 import java.nio.file.Path
 
 internal interface EthIndexRepository {
@@ -38,8 +38,12 @@ internal class EthIndexRepositoryImpl(
         connection.execute(
             """
             CREATE TABLE IF NOT EXISTS index_transaction (
-                hash            TEXT(64) PRIMARY KEY,
-                block_number    INTEGER NOT NULL
+                hash_1          INTEGER NOT NULL,
+                hash_2          INTEGER NOT NULL,
+                hash_3          INTEGER NOT NULL,
+                hash_4          INTEGER NOT NULL,
+                block_number    INTEGER NOT NULL,
+                PRIMARY KEY(hash_1,hash_2,hash_3,hash_4)
             );
         """.trimIndent()
         )
@@ -61,17 +65,35 @@ internal class EthIndexRepositoryImpl(
 }
 
 
-private fun Transaction.insertTransactions(blockNumber: EthUint64, txHashes: List<EthHash>) {
+private fun Transaction.insertTransactions(blockNumber: EthUint64, txHashes: List<Hash>) {
     txHashes.forEach { txHash ->
-        execute("INSERT OR IGNORE INTO index_transaction(hash, block_number) VALUES( :hash, :blockNumber )") {
-            set("hash", txHash.toPrefixedHexString().value)
+        execute("INSERT OR IGNORE INTO index_transaction(hash_1, hash_2, hash_3, hash_4 , block_number) VALUES( :hash1, :hash2, :hash3, :hash4 , :blockNumber )") {
+            set("hash1", txHash.p1)
+            set("hash2", txHash.p2)
+            set("hash3", txHash.p3)
+            set("hash4", txHash.p4)
             set("blockNumber", blockNumber.value)
         }
     }
 }
 
-private fun extractTransactionHashes(block: BlockEntity): List<EthHash> {
-    return block.transactions.map { it.hash }
+private fun extractTransactionHashes(block: BlockEntity): List<Hash> {
+    return block.transactions.map { it.hash }.map {
+        val arr = it.value.value.toList()
+
+        val p1 = arr.subList(0, 7)
+        val p2 = arr.subList(8, 15)
+        val p3 = arr.subList(16, 23)
+        val p4 = arr.subList(24, 31)
+
+        Hash(
+            p1 = BigInteger(p1.toByteArray()).longValueExact(),
+            p2 = BigInteger(p2.toByteArray()).longValueExact(),
+            p3 = BigInteger(p3.toByteArray()).longValueExact(),
+            p4 = BigInteger(p4.toByteArray()).longValueExact()
+        )
+    }
+
 }
 
 private fun extractAddresses(block: BlockEntity): Map<EthAddressId, Int> {
@@ -106,3 +128,10 @@ private fun Transaction.insertAddresses(blockNumber: EthUint64, addressesWithMod
         }
     }
 }
+
+private data class Hash(
+    val p1: Long,
+    val p2: Long,
+    val p3: Long,
+    val p4: Long
+)
