@@ -11,6 +11,6 @@ data class BackendBasePath(val value: String)
 open class BackendConfig {
 
     @Bean
-    open fun backendBasePath() = BackendBasePath("/tmp/hamal/backend")
+    open fun backendBasePath() = BackendBasePath("/opt/hamal/backend")
 
 }
