@@ -36,7 +36,8 @@ class AuthLoginMetaMaskAdapter(
     private val awaitRequest: RequestAwaitPort
 ) : AuthLoginMetaMaskPort {
     override fun invoke(req: AuthLogInMetaMaskRequest): AuthLoginMetaMaskRequested {
-        // FIXME 138 - verify signature
+        verifySignature(req)
+
         val auth = authFind(req.address)
         if (auth == null) {
 
@@ -85,4 +86,13 @@ class AuthLoginMetaMaskAdapter(
         }
     }
 
+    private fun verifySignature(req: AuthLogInMetaMaskRequest) {
+        val decryptedResult = ChallengeMetaMask(req.address)
+        val expectedResult = ChallengeMetaMask(req.address)
+        // FIXME 138 - verify signature
+        if (decryptedResult != expectedResult) {
+            throw NoSuchElementException("Account not found")
+        }
+    }
 }
+
