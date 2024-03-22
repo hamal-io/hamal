@@ -1,4 +1,4 @@
-export const UI_STATE_KEY = 'ui-state'
+export const UI_STATE_KEY = 'shared-state'
 
 export type UiStateType = 'Unauthorized' | 'Authorized'
 
