@@ -14,6 +14,7 @@ interface NcImageProps {
   fill?: boolean;
   className?: string;
   sizes?: string;
+  title?: string
 }
 
 

@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { usePathname } from "next/navigation";
 import HeaderLogged from "@/components/Header/HeaderLogged";
 import Header2 from "@/components/Header/Header2";
+import usePathnameW from "@/hooks/usePathname.ts";
 
 const SiteHeader = () => {
-  let pathname = usePathname();
+  let pathname = usePathnameW();
 
   const headerComponent = useMemo(() => {
     let HeadComponent = HeaderLogged;

@@ -1,9 +1,9 @@
-import Link from "next/link";
 import React from "react";
+import LinkW from "@/types/link.tsx";
 
 const ButtonSubmit = () => {
   return (
-    <Link
+    <LinkW
       href="/search"
       type="button"
       className="h-14 px-4 md:h-16 w-full md:w-16 rounded-full bg-primary-6000 hover:bg-primary-700 flex items-center justify-center text-neutral-50 focus:outline-none"
@@ -31,7 +31,7 @@ const ButtonSubmit = () => {
           strokeLinejoin="round"
         />
       </svg>
-    </Link>
+    </LinkW>
   );
 };
 

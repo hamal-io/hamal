@@ -1,8 +1,8 @@
 "use client";
 
 import React, { FC, useState } from "react";
-import CardLarge1 from "@/components/template/CardLarge1/CardLarge1";
 import { nftsLargeImgs } from "@/contains/fakeData.ts";
+import CardLarge1 from "@/components/CardLarge1/CardLarge1.tsx";
 
 export interface SectionLargeSliderProps {
   className?: string;

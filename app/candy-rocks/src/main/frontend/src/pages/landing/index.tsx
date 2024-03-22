@@ -1,22 +1,23 @@
 import React, {useState} from 'react'
-import Background from "@/components/background.tsx";
-import SectionHero2 from "@/components/template/SectionHero/SectionHero2.tsx";
-import SectionHowItWork from "@/components/template/SectionHowItWork/SectionHowItWork.tsx";
+
+import BgGlassmorphism from "@/components/BgGlassmorphism/BgGlassmorphism.tsx";
+import SectionHero2 from "@/components/SectionHero/SectionHero2.tsx";
+import SectionHowItWork from "@/components/SectionHowItWork/SectionHowItWork.tsx";
 import SectionLargeSlider from "@/pages/landing/components/SectionLargeSlider.tsx";
-import SectionMagazine8 from "@/components/template/SectionMagazine8.tsx";
-import BackgroundSection from "@/components/template/BackgroundSection/BackgroundSection.tsx";
-import SectionGridAuthorBox from "@/components/template/SectionGridAuthorBox/SectionGridAuthorBox.tsx";
-import SectionSliderCardNftVideo from "@/components/template/SectionSliderCardNftVideo.tsx";
-import SectionSliderCollections2 from "@/components/template/SectionSliderCollections2.tsx";
-import SectionBecomeAnAuthor from "@/components/template/SectionBecomeAnAuthor/SectionBecomeAnAuthor.tsx";
+import SectionMagazine8 from "@/components/SectionMagazine8.tsx";
+import BackgroundSection from "@/components/BackgroundSection/BackgroundSection.tsx";
+import SectionGridAuthorBox from "@/components/SectionGridAuthorBox/SectionGridAuthorBox.tsx";
+import SectionSliderCardNftVideo from "@/components/SectionSliderCardNftVideo.tsx";
+import SectionSliderCollections2 from "@/components/SectionSliderCollections2.tsx";
+import SectionBecomeAnAuthor from "@/components/SectionBecomeAnAuthor/SectionBecomeAnAuthor.tsx";
 import SectionGridFeatureNFT2 from "@/pages/landing/components/SectionGridFeatureNFT2.tsx";
-import SectionSliderCategories from "@/components/template/SectionSliderCategories/SectionSliderCategories.tsx";
-import SectionSubscribe2 from "@/components/template/SectionSubscribe2/SectionSubscribe2.tsx";
+import SectionSliderCategories from "@/components/SectionSliderCategories/SectionSliderCategories.tsx";
+import SectionSubscribe2 from "@/components/SectionSubscribe2/SectionSubscribe2.tsx";
 
 const LandingPage: React.FC = () => {
     return (
         <div className="nc-PageHome relative overflow-hidden">
-            <Background />
+            <BgGlassmorphism/>
 
             <div className="container relative mt-5 mb-20 sm:mb-24 lg:mt-20 lg:mb-32">
                 <SectionHero2 />
