@@ -8,7 +8,6 @@ const TopicDetailPage: FC<Props> = ({}) => {
     return (
         <div className="w-full">
             {topicId}
-            HI
         </div>
     )
 }

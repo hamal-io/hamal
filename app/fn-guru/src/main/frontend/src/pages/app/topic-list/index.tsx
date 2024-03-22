@@ -13,17 +13,14 @@ const TopicListPage = () => {
     const [update, setUpdate] = useState(true)
     const [getTopicsWithFuncs, topicsWithFuncs, loading, error] = useTopicsWithFuncs()
 
-
     useEffect(() => {
         if (update) {
             getTopicsWithFuncs(uiState.namespaceId)
             setUpdate(false)
-            console.log("update")
         }
     }, [update]);
 
-
-    if (loading) return "Loading..."
+    if (topicsWithFuncs == null || loading) return "Loading..."
     if (error) return "Error"
 
     return (

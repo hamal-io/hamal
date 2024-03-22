@@ -15,7 +15,7 @@ export const useTopicsWithFuncs = (): [GetTopicsWithFuncsAction, Array<TopicWith
     const [topicsWithFuncs, setTopicWithFuncs] = useState<Array<TopicWithFuncs>>(null)
     const [loading, setLoading] = useState(true)
 
-    const fe = (ns: string) => {
+    const handleRequest = (ns: string) => {
         const abortController = new AbortController()
         listTopics(ns, abortController)
         listTriggers(ns, abortController)
@@ -24,7 +24,7 @@ export const useTopicsWithFuncs = (): [GetTopicsWithFuncsAction, Array<TopicWith
 
     const fn = useCallback<GetTopicsWithFuncsAction>(async (namespaceId) => {
         try {
-            fe(namespaceId)
+            handleRequest(namespaceId)
         } catch (e) {
             console.log(e)
             setLoading(false)
@@ -34,13 +34,12 @@ export const useTopicsWithFuncs = (): [GetTopicsWithFuncsAction, Array<TopicWith
 
     useEffect(() => {
         if (topicList && triggerList) {
-            const x: Array<TopicWithFuncs> = topicList.topics.map(topic => {
+            setTopicWithFuncs(topicList.topics.map(topic => {
                 return {
                     topic: topic,
                     funcs: triggerList.triggers.filter(trigger => trigger.topic.id === topic.id)
                 }
-            })
-            setTopicWithFuncs(x)
+            }))
             setLoading(false)
         }
     }, [topicList, triggerList]);
