@@ -1,5 +1,5 @@
 import {useCallback} from "react";
-import {useGet, usePatch, usePost} from "@/hook/http.ts";
+import {useGet, usePost} from "@/hook/http.ts";
 
 import {useAuth} from "@/hook/auth.ts";
 import {Topic, TopicCreateRequested, TopicList, TopicType} from "@/types/topic.ts";
