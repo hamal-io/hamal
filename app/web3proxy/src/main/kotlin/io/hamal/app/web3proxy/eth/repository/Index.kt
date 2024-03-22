@@ -68,10 +68,10 @@ internal class EthIndexRepositoryImpl(
 private fun Transaction.insertTransactions(blockNumber: EthUint64, txHashes: List<Hash>) {
     txHashes.forEach { txHash ->
         execute("INSERT OR IGNORE INTO index_transaction(hash_1, hash_2, hash_3, hash_4 , block_number) VALUES( :hash1, :hash2, :hash3, :hash4 , :blockNumber )") {
-            set("hash1", txHash.p1)
-            set("hash2", txHash.p2)
-            set("hash3", txHash.p3)
-            set("hash4", txHash.p4)
+            set("hash1", txHash.hashOne)
+            set("hash2", txHash.hashTwo)
+            set("hash3", txHash.hashThree)
+            set("hash4", txHash.hashFour)
             set("blockNumber", blockNumber.value)
         }
     }
@@ -81,16 +81,16 @@ private fun extractTransactionHashes(block: BlockEntity): List<Hash> {
     return block.transactions.map { it.hash }.map {
         val arr = it.value.value.toList()
 
-        val p1 = arr.subList(0, 7)
-        val p2 = arr.subList(8, 15)
-        val p3 = arr.subList(16, 23)
-        val p4 = arr.subList(24, 31)
+        val hashOne = arr.subList(0, 7)
+        val hashTwo = arr.subList(8, 15)
+        val hashThree = arr.subList(16, 23)
+        val hashFour = arr.subList(24, 31)
 
         Hash(
-            p1 = BigInteger(p1.toByteArray()).longValueExact(),
-            p2 = BigInteger(p2.toByteArray()).longValueExact(),
-            p3 = BigInteger(p3.toByteArray()).longValueExact(),
-            p4 = BigInteger(p4.toByteArray()).longValueExact()
+            hashOne = BigInteger(hashOne.toByteArray()).longValueExact(),
+            hashTwo = BigInteger(hashTwo.toByteArray()).longValueExact(),
+            hashThree = BigInteger(hashThree.toByteArray()).longValueExact(),
+            hashFour = BigInteger(hashFour.toByteArray()).longValueExact()
         )
     }
 
@@ -130,8 +130,8 @@ private fun Transaction.insertAddresses(blockNumber: EthUint64, addressesWithMod
 }
 
 private data class Hash(
-    val p1: Long,
-    val p2: Long,
-    val p3: Long,
-    val p4: Long
+    val hashOne: Long,
+    val hashTwo: Long,
+    val hashThree: Long,
+    val hashFour: Long
 )
