@@ -1,7 +1,7 @@
 import React, { FC } from "react";
-import HeaderFilterSection from "@/components/HeaderFilterSection";
-import CardNFT2 from "@/components/CardNFT2";
-import ButtonPrimary from "@/shared/Button/ButtonPrimary";
+import HeaderFilterSection from "@/components/template/HeaderFilterSection";
+import CardNFT2 from "@/components/template/CardNFT2";
+import ButtonPrimary from "@/components/shared/Button/ButtonPrimary";
 
 //
 export interface SectionGridFeatureNFT2Props {}

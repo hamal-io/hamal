@@ -2,7 +2,7 @@
 
 import React, { FC, useState } from "react";
 import { nftsLargeImgs } from "@/contains/fakeData.ts";
-import CardLarge1 from "@/components/CardLarge1/CardLarge1.tsx";
+import CardLarge1 from "@/components/template/CardLarge1/CardLarge1.tsx";
 
 export interface SectionLargeSliderProps {
   className?: string;
