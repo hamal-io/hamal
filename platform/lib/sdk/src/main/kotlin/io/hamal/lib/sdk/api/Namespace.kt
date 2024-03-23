@@ -45,7 +45,7 @@ data class ApiNamespace(
     val id: NamespaceId,
     val name: NamespaceName,
     val features: NamespaceFeatures
-) : ApiObject()
+)
 
 interface ApiNamespaceService {
     fun append(parentId: NamespaceId, createNamespaceReq: ApiNamespaceAppendRequest): ApiNamespaceAppendRequested
