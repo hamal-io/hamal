@@ -4,7 +4,7 @@ import React, {FC} from "react";
 import Avatar from "@/components/shared/Avatar/Avatar";
 import NcImage from "@/components/shared/NcImage/NcImage";
 import VerifyIcon from "./VerifyIcon";
-import useGetRandomData from "@/hooks/useGetRandomData";
+import useGetRandomData from "@/hooks/template/useGetRandomData.ts";
 import LinkW from "@/types/link.tsx";
 
 export interface CollectionCard2Props {

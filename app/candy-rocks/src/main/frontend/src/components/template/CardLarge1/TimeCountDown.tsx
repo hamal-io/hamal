@@ -1,6 +1,6 @@
 "use client";
 
-import useCountDownTime from "@/hooks/useCountDownTime";
+import useCountDownTime from "@/hooks/template/useCountDownTime.ts";
 import React from "react";
 
 const TimeCountDown = () => {

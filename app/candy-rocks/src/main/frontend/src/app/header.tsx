@@ -3,7 +3,7 @@
 import React, { useMemo } from "react";
 import HeaderLogged from "@/components/template/Header/Header2.tsx";
 import Header2 from "@/components/template/Header/Header2";
-import usePathnameW from "@/hooks/usePathname.ts";
+import usePathnameW from "@/hooks/template/usePathname.ts";
 
 const SiteHeader = () => {
   const pathname = usePathnameW();

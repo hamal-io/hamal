@@ -9,7 +9,7 @@ import Prices from "./Prices";
 import musicWave from "@/images/musicWave.png";
 import RemainingTimeNftCard from "./RemainingTimeNftCard";
 import ButtonPlayMusicPlayer from "./ButtonPlayMusicPlayer";
-import useGetRandomData from "@/hooks/useGetRandomData";
+import useGetRandomData from "@/hooks/template/useGetRandomData.ts";
 import ImageW from "@/types/image.tsx";
 import LinkW from "@/types/link.tsx";
 

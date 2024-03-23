@@ -1,7 +1,7 @@
 import React, { FC, useState } from "react";
 import NcImage from "@/components/shared/NcImage/NcImage";
 import { Transition } from "@/app/headlessui";
-import { useMusicPlayer } from "@/hooks/useMusicPlayer";
+import { useMusicPlayer } from "@/hooks/template/useMusicPlayer.ts";
 import { PauseIcon, PlayIcon } from "@heroicons/react/24/solid";
 import { ChevronUpIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { nftsImgs } from "@/contains/fakeData";

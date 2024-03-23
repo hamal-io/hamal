@@ -11,7 +11,7 @@ import React, {
 import PlayerContent from "./PlayerContent";
 import _ from "lodash";
 import ReactFilePlayer, { FilePlayerProps } from "react-player/file";
-import { useMusicPlayer } from "@/hooks/useMusicPlayer";
+import { useMusicPlayer } from "@/hooks/template/useMusicPlayer.ts";
 
 export interface MusicPlayerProps {}
 

@@ -8,7 +8,7 @@ import LikeButton from "./LikeButton";
 import ItemTypeVideoIcon from "./ItemTypeVideoIcon";
 import Prices from "./Prices";
 import RemainingTimeNftCard from "./RemainingTimeNftCard";
-import useGetRandomData from "@/hooks/useGetRandomData";
+import useGetRandomData from "@/hooks/template/useGetRandomData.ts";
 import LinkW from "@/types/link.tsx";
 
 export interface CardNFT2Props {

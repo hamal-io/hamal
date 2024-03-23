@@ -6,7 +6,7 @@ import NcImage from "@/components/shared/NcImage/NcImage";
 import VerifyIcon from "@/components/template/VerifyIcon";
 import FollowButton from "@/components/template/FollowButton";
 import Badge from "@/components/shared/Badge/Badge";
-import useGetRandomData from "@/hooks/useGetRandomData";
+import useGetRandomData from "@/hooks/template/useGetRandomData.ts";
 import LinkW from "@/types/link.tsx";
 
 export interface CardAuthorBox4Props {

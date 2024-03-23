@@ -3,7 +3,7 @@
 import React, {FC} from "react";
 import {avatarColors} from "@/contains/contants";
 import VerifyIcon from "@/components/template/VerifyIcon";
-import useGetRandomData from "@/hooks/useGetRandomData";
+import useGetRandomData from "@/hooks/template/useGetRandomData.ts";
 import ImageW from "@/types/image.tsx";
 
 export interface AvatarProps {

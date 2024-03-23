@@ -1,5 +1,3 @@
-"use client";
-
 import {
   _getPersonNameRd,
   _getAvatarRd,
@@ -14,8 +12,7 @@ import {
   personNames,
   nftsImgs,
   nftsAbstracts,
-} from "@/contains/fakeData";
-import { StaticImageData } from "next/image";
+} from "@/contains/fakeData.ts";
 import { useEffect, useId, useState } from "react";
 
 export default function useGetRandomData() {
@@ -26,7 +23,7 @@ export default function useGetRandomData() {
     imgHigtQualitys[0]
   );
   const [titleRd, setTitleRd] = useState(aTitles[0]);
-  const [nftImageRd, setNftImageRd] = useState<string | StaticImageData>("");
+  const [nftImageRd, setNftImageRd] = useState<string>("");
   const [nftAudioUrlRl, setNftAudioUrlRl] = useState(
     "https://chisnghiax.com/ncmaz_mp3/Electro-Light_-_Symbolism_NCS_ReleaseMP3_160K.mp3"
   );

@@ -8,7 +8,7 @@ import LikeButton from "./LikeButton";
 import Prices from "./Prices";
 import { ClockIcon } from "@heroicons/react/24/outline";
 import ItemTypeVideoIcon from "./ItemTypeVideoIcon";
-import useGetRandomData from "@/hooks/useGetRandomData";
+import useGetRandomData from "@/hooks/template/useGetRandomData.ts";
 import LinkW from "@/types/link.tsx";
 
 export interface CardNFTProps {

@@ -5,7 +5,7 @@ import { nftsAbstracts } from "@/contains/fakeData";
 import Avatar from "@/components/shared/Avatar/Avatar";
 import NcImage from "@/components/shared/NcImage/NcImage";
 import Prices from "./Prices";
-import useGetRandomData from "@/hooks/useGetRandomData";
+import useGetRandomData from "@/hooks/template/useGetRandomData.ts";
 import ButtonPlayMusicPlayer from "./ButtonPlayMusicPlayer";
 import LinkW from "@/types/link.tsx";
 

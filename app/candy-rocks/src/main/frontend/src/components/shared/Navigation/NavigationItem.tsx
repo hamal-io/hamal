@@ -3,7 +3,7 @@
 import { Popover, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import React, { FC, Fragment, useEffect, useState } from "react";
-import usePathnameW from "@/hooks/usePathname.ts";
+import usePathnameW from "@/hooks/template/usePathname.ts";
 import LinkW from "@/types/link.tsx";
 
 // <--- NavItemType --->

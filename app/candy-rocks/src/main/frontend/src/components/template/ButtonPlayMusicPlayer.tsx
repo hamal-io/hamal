@@ -5,7 +5,7 @@
 import React, { FC, ReactNode } from "react";
 import iconPlaying from "@/images/icon-playing.gif";
 import PostTypeFeaturedIcon from "@/components/template/PostTypeFeaturedIcon";
-import { useMusicPlayer } from "@/hooks/useMusicPlayer";
+import { useMusicPlayer } from "@/hooks/template/useMusicPlayer.ts";
 import ImageW from "@/types/image.tsx";
 
 export interface ButtonPlayMusicPlayerProps {

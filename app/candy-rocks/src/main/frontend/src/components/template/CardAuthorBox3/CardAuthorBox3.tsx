@@ -5,7 +5,7 @@ import Avatar from "@/components/shared/Avatar/Avatar";
 import NcImage from "@/components/shared/NcImage/NcImage";
 import VerifyIcon from "@/components/template/VerifyIcon";
 import FollowButton from "@/components/template/FollowButton";
-import useGetRandomData from "@/hooks/useGetRandomData";
+import useGetRandomData from "@/hooks/template/useGetRandomData.ts";
 import LinkW from "@/types/link.tsx";
 
 export interface CardAuthorBox3Props {

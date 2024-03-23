@@ -5,7 +5,7 @@ import VerifyIcon from "@/components/template/VerifyIcon";
 import React, { FC } from "react";
 import Avatar from "@/components/shared/Avatar/Avatar";
 import Badge from "@/components/shared/Badge/Badge";
-import useGetRandomData from "@/hooks/useGetRandomData";
+import useGetRandomData from "@/hooks/template/useGetRandomData.ts";
 import LinkW from "@/types/link.tsx";
 
 export interface CardAuthorBoxProps {
