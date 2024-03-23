@@ -1,5 +1,3 @@
-"use client";
-
 import LocationInput from "./LocationInput";
 import React, { useEffect, useState, FC } from "react";
 import PropertyTypeSelect from "./PropertyTypeSelect";

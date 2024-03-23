@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState } from "react";
 import { FC } from "react";
 import { useEffect } from "react";

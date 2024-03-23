@@ -1,8 +1,7 @@
 import React, { FC } from "react";
 import imagePng from "@/images/hero-right-3.png";
 import ButtonPrimary from "@/components/shared/Button/ButtonPrimary";
-// import HeroSearchForm from "@/components/HeroSearchForm/HeroSearchForm";
-import HeroSearchForm from "../HeroSearchForm/HeroSearchForm";
+import HeroSearchForm from "@/components/template/HeroSearchForm/HeroSearchForm";
 import ImageW from "@/types/image.tsx";
 
 export interface SectionHero2Props {
@@ -47,7 +46,7 @@ const SectionHero2: FC<SectionHero2Props> = ({ className = "", children }) => {
           </ButtonPrimary>
         </div>
         <div className="flex-grow">
-          <ImageW className="w-full" src={imagePng} alt="hero" />
+          <ImageW className="w-full" src={imagePng} alt="hero"  />
         </div>
       </div>
 

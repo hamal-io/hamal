@@ -1,6 +1,6 @@
-import React from "react";
+import React, {FC} from "react";
 
-const Background = ({
+export const BgGlassmorphism = ({
   className = "absolute inset-x-0 md:top-10 min-h-0 pl-20 py-24 flex overflow-hidden z-0",
 }) => {
   return (
@@ -11,4 +11,10 @@ const Background = ({
   );
 };
 
-export default Background;
+export const Background = ({children}) => {
+    return (
+        <div className="bg-white text-base dark:bg-neutral-900 text-neutral-900 dark:text-neutral-200">
+            {children}
+        </div>
+    )
+}

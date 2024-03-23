@@ -4,9 +4,9 @@ import './global.css'
 
 // public
 import LandingPage from "./pages/landing";
-import RootLayout from "@/app/layout.tsx";
 import NotFoundPage from "@/app/not-found.tsx";
 import CardLarge1 from "@/components/template/CardLarge1/CardLarge1.tsx";
+import RootLayout from "@/app/root-layout.tsx";
 
 export const router = createBrowserRouter([
     {

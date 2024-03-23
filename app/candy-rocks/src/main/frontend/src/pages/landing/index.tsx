@@ -1,9 +1,7 @@
 import React, {useState} from 'react'
-
 import SectionLargeSlider from "@/pages/landing/components/SectionLargeSlider.tsx";
 import BackgroundSection from "@/components/template/BackgroundSection/BackgroundSection.tsx";
 import SectionGridFeatureNFT2 from "@/pages/landing/components/SectionGridFeatureNFT2.tsx";
-import BgGlassMorphism from "@/app/background.tsx";
 import SectionHero2 from "@/components/template/SectionHero/SectionHero2.tsx";
 import SectionHowItWork from "@/components/template/SectionHowItWork/SectionHowItWork.tsx";
 import SectionMagazine8 from "@/components/template/SectionMagazine8.tsx";
@@ -13,11 +11,12 @@ import SectionSliderCollections2 from "@/components/template/SectionSliderCollec
 import SectionBecomeAnAuthor from "@/components/template/SectionBecomeAnAuthor/SectionBecomeAnAuthor.tsx";
 import SectionSliderCategories from "@/components/template/SectionSliderCategories/SectionSliderCategories.tsx";
 import SectionSubscribe2 from "@/components/template/SectionSubscribe2/SectionSubscribe2.tsx";
+import {BgGlassmorphism} from "@/app/background.tsx";
 
 const LandingPage: React.FC = () => {
     return (
         <div className="nc-PageHome relative overflow-hidden">
-            <BgGlassMorphism/>
+            <BgGlassmorphism/>
 
             <div className="container relative mt-5 mb-20 sm:mb-24 lg:mt-20 lg:mb-32">
                 <SectionHero2 />
