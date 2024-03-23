@@ -3,7 +3,7 @@
 import { Popover, Transition } from "@headlessui/react";
 import { avatarImgs } from "@/contains/fakeData";
 import { Fragment } from "react";
-import Avatar from "@/shared/Avatar/Avatar";
+import Avatar from "@/components/shared/Avatar/Avatar";
 import LinkW from "@/types/link.tsx";
 
 export default function AvatarDropdown() {

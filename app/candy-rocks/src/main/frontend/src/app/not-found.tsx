@@ -1,9 +1,9 @@
-import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import React from "react";
-import NcImage from "@/shared/NcImage/NcImage";
 import I404Png from "@/images/404.png";
+import NcImage from "@/components/shared/NcImage/NcImage.tsx";
+import ButtonPrimary from "@/components/shared/Button/ButtonPrimary.tsx";
 
-const Page404 = () => (
+const NotFoundPage = () => (
   <div className="nc-Page404">
     <div className="container relative pt-5 pb-16 lg:pb-20 lg:pt-5">
       {/* HEADER */}
@@ -20,4 +20,4 @@ const Page404 = () => (
   </div>
 );
 
-export default Page404;
+export default NotFoundPage;
