@@ -5,8 +5,8 @@ import './global.css'
 // public
 import LandingPage from "./pages/landing";
 import NotFoundPage from "@/app/not-found.tsx";
-import CardLarge1 from "@/components/template/CardLarge1/CardLarge1.tsx";
 import RootLayout from "@/app/root-layout.tsx";
+import DashboardSite from "@/pages/dashboard";
 
 export const router = createBrowserRouter([
     {
@@ -18,7 +18,7 @@ export const router = createBrowserRouter([
     {
         path: "/dashboard", element:
             <RootLayout>
-               <CardLarge1></CardLarge1>
+               <DashboardSite/>
             </RootLayout>
     },
     {path: "*", element: <NotFoundPage/>}
