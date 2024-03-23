@@ -23,5 +23,10 @@ export interface TriggerListItem {
         id: string;
         name: string;
         method: string;
-    }
+    },
+    topic?: {
+        id: string;
+        name: string;
+    },
+
 }

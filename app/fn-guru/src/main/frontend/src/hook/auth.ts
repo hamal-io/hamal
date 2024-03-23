@@ -2,7 +2,7 @@ import {Auth, AUTH_KEY} from "@/types/auth.ts";
 import useLocalStorageState from "use-local-storage-state";
 import {useCallback, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {useResetUiState} from "@/hook/ui-state.ts";
+import {useInitUiState, useResetUiState} from "@/hook/ui-state.ts";
 
 const unauthorized: Auth = {
     type: 'Unauthorized',
@@ -114,6 +114,7 @@ export const useMetaMaskChallenge = (): [MetaMaskChallengeAction, string, boolea
 
 type MetaMaskTokenAction = (address: string, signature: string, abortController?: AbortController) => void
 export const useMetaMaskToken = (): [MetaMaskTokenAction, string, boolean, Error] => {
+    const [initUiState] = useInitUiState()
     const [auth, setAuth] = useAuth()
     const [token, setToken] = useState<string | null>(null)
     const [loading, setLoading] = useState(true);
@@ -142,6 +143,8 @@ export const useMetaMaskToken = (): [MetaMaskTokenAction, string, boolean, Error
                         workspaceId: data.workspaceIds[0],
                         token: data.token,
                     })
+
+                    initUiState(data.workspaceIds[0], data.workspaceIds[0])
 
                 })
                 setLoading(false)

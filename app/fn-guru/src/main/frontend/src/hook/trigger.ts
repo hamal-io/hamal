@@ -14,13 +14,13 @@ export const useTriggerListSchedule = (): [TriggerListScheduleAction, TriggerLis
 }
 
 type TriggerListHookAction = (namespaceId: string, abortController?: AbortController) => void
-export const useTriggerListHook = (): [TriggerListScheduleAction, TriggerList, boolean, Error] => {
+export const useTriggerListHook = (): [TriggerListHookAction, TriggerList, boolean, Error] => {
     const [auth] = useAuth()
-    const [get, funcList, loading, error] = useGet<TriggerList>()
+    const [get, hookList, loading, error] = useGet<TriggerList>()
     const fn = useCallback(async (namespaceId: string, abortController?: AbortController) =>
         get(`/v1/namespaces/${namespaceId}/triggers?types=Hook`, abortController
         ), [auth])
-    return [fn, funcList, loading, error]
+    return [fn, hookList, loading, error]
 }
 
 type TriggerFixedRateCreateAction = (namespaceId: string, funcId: string, name: string, duration: string, abortController?: AbortController) => void
@@ -64,3 +64,36 @@ export const useTriggerHookCreate = (): [TriggerHookCreateAction, TriggerCreateR
     )
     return [fn, submission, loading, error]
 }
+
+export type TriggerEventCreateProps = {
+    name: string,
+    namespaceId: string,
+    topicId: string,
+    funcId: string
+}
+
+type TriggerEventCreateAction = (props: TriggerEventCreateProps ,  abortController?: AbortController) => void
+export const useTriggerEventCreate = (): [TriggerEventCreateAction, TriggerCreateRequested, boolean, Error] => {
+    const [auth] = useAuth()
+    const [post, submission, loading, error] = usePost<TriggerCreateRequested>()
+    const fn = useCallback<TriggerEventCreateAction>(async ({namespaceId, topicId, funcId, name}: TriggerEventCreateProps , abortController?: AbortController) =>
+        post(`/v1/namespaces/${namespaceId}/triggers`, {
+            type: 'Event',
+            name,
+            funcId,
+            topicId
+        },abortController),[auth]
+    )
+    return [fn, submission, loading, error]
+}
+
+type TriggerListEventAction = (namespaceId: string, abortController?: AbortController) => void
+export const useTriggerListEvent = (): [TriggerListEventAction, TriggerList, boolean, Error] => {
+    const [auth] = useAuth()
+    const [get, triggerList, loading, error] = useGet<TriggerList>()
+    const fn = useCallback(async (namespaceId: string, abortController?: AbortController) =>
+        get(`/v1/namespaces/${namespaceId}/triggers?types=Event`, abortController
+        ), [auth])
+    return [fn, triggerList, loading, error]
+}
+

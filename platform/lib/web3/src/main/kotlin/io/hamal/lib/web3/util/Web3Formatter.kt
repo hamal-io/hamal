@@ -4,6 +4,7 @@ import java.util.*
 import kotlin.math.abs
 
 object Web3Formatter {
+
     fun formatToHex(bytes: ByteArray): String = HexFormat.of().formatHex(bytes)
 
     fun formatWithoutLeadingZeros(bytes: ByteArray): String {

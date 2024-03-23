@@ -12,6 +12,8 @@ const FormFuncSelect = ({name, form}) => {
         listFuncs(uiState.namespaceId)
     }, [uiState.namespaceId]);
 
+
+
     if (funcList == null || loading || !form) {
         return "Loading..."
     }

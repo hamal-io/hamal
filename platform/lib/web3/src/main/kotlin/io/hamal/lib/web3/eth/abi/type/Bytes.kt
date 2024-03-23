@@ -7,13 +7,11 @@ import java.nio.ByteBuffer
 sealed interface EthBytes : EthType<ByteArray> {
     val numberOfBytes: Int
 
-    //FIXME validate input for each and add tests
-//    init {
-//        require(value.size == numberOfBytes) { "Requires array of $numberOfBytes bytes" }
-//    }
     override fun toByteArray(): ByteArray = value
     override fun toByteWindow() = ByteWindow(ByteBuffer.wrap(value), numberOfBytes)
-    fun toPrefixedHexString() = EthPrefixedHexString("0x${Web3Formatter.formatWithoutLeadingZeros(value)}")
+    fun toPrefixedHexString(): EthPrefixedHexString {
+        return EthPrefixedHexString("0x${Web3Formatter.formatToHex(value)}")
+    }
 }
 
 class EthBytes32(
@@ -43,12 +41,3 @@ class EthBytes32(
         return toPrefixedHexString().toString()
     }
 }
-
-
-/**
- * Intended to be used in unit tests only
- */
-internal data class TestEthBytes(
-    override val value: ByteArray,
-    override val numberOfBytes: Int
-) : EthBytes

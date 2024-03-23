@@ -7,7 +7,7 @@ services:
     environment:
       - ACTIVE_PROFILES=default,sqlite,dev
     volumes:
-      - "/tmp/hamal/backend:/tmp/hamal/backend"
+      - "/opt/hamal/backend:/opt/hamal/backend"
     networks:
       - hamal_net
 

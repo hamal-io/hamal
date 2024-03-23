@@ -13,6 +13,7 @@ import io.hamal.lib.sdk.api.ApiNamespaceUpdateRequest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 internal class NamespaceUpdateControllerTest : NamespaceBaseControllerTest() {
@@ -36,8 +37,8 @@ internal class NamespaceUpdateControllerTest : NamespaceBaseControllerTest() {
     fun `Updates namespace name and features`() {
         val updatedFeatures = NamespaceFeatures(
             HotObject.builder()
-                .set(Schedule.name, Schedule.value)
-                .set(Webhook.name, Webhook.value)
+                .set(schedule.name, 0)
+                .set(webhook.name, 0)
                 .build()
         )
 
@@ -46,6 +47,8 @@ internal class NamespaceUpdateControllerTest : NamespaceBaseControllerTest() {
                 ApiNamespaceAppendRequest(NamespaceName("created-name"))
             )
         ).id
+
+
 
         awaitCompleted(
             updateNamespace(
@@ -68,8 +71,10 @@ internal class NamespaceUpdateControllerTest : NamespaceBaseControllerTest() {
         with(getNamespace(namespaceId)) {
             assertThat(id, equalTo(namespaceId))
             assertThat(name, equalTo(NamespaceName("updated-name")))
-            assertThat(features, equalTo(updatedFeatures))
-            assertFalse(features.hasFeature(Endpoint))
+            assertTrue(features.hasFeature(schedule))
+            assertTrue(features.hasFeature(webhook))
+            assertFalse(features.hasFeature(endpoint))
+            assertFalse(features.hasFeature(topic))
         }
     }
 }

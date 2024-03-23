@@ -3,10 +3,12 @@ package io.hamal.core.service
 import io.hamal.core.component.Scheduler
 import io.hamal.core.component.WorkerPool
 import io.hamal.core.event.InternalEventContainer
+import io.hamal.core.security.SecurityContext
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.logger
 import io.hamal.lib.domain.GenerateCmdId
 import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.repository.api.Auth
 import io.hamal.repository.api.TopicRepository
 import io.hamal.repository.api.event.InternalEvent
 import io.hamal.repository.api.log.LogBrokerRepository
@@ -43,11 +45,13 @@ class InternalEventService(
             )
 
             scheduler.atFixedRate(1.milliseconds) {
-                consumer.consume(Limit(10)) { _, _, evt ->
-                    workerPool.execute {
-                        internalEventContainer[evt::class].forEach { handler ->
-                            val cmdId = generateCmdId()
-                            handler.handle(cmdId, evt)
+                SecurityContext.with(Auth.System) {
+                    consumer.consume(Limit(10)) { _, _, evt ->
+                        workerPool.execute {
+                            internalEventContainer[evt::class].forEach { handler ->
+                                val cmdId = generateCmdId()
+                                handler.handle(cmdId, evt)
+                            }
                         }
                     }
                 }

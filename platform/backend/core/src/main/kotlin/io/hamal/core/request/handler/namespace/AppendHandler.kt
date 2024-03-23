@@ -61,4 +61,5 @@ class NamespaceAppendHandler(
         eventEmitter.emit(cmdId, NamespaceAppendedEvent(namespace))
     }
 
+
 }

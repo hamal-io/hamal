@@ -67,90 +67,97 @@ class EthExecuteFunction : Function1In2Out<KuaTable, KuaError, KuaTable>(
                     it.forEach { response ->
                         when (response) {
                             is EthGetBlockResponse -> {
-                                result.append(
-                                    ctx.tableCreate().also { result ->
-                                        result["id"] = KuaString(response.id.value)
-                                        result["result"] = ctx.tableCreate().also { blockResult ->
-                                            blockResult["base_fee_per_gas"] = response.result?.baseFeePerGas?.toPrefixedHexString()?.value?.let(::KuaString)
-                                                ?: KuaNil
-                                            blockResult["extra_data"] = response.result?.extraData?.toPrefixedHexString()?.value?.let(::KuaString) ?: KuaNil
-                                            blockResult["gas_limit"] = response.result?.gasLimit?.toPrefixedHexString()?.value?.let(::KuaString) ?: KuaNil
-                                            blockResult["gas_used"] = response.result?.gasUsed?.toPrefixedHexString()?.value?.let(::KuaString) ?: KuaNil
-                                            blockResult["hash"] = response.result?.hash?.toPrefixedHexString()?.value?.let(::KuaString) ?: KuaNil
-                                            blockResult["logs_bloom"] = response.result?.logsBloom?.value?.let(::KuaString) ?: KuaNil
-                                            blockResult["miner"] = response.result?.miner?.toPrefixedHexString()?.value?.let(::KuaString) ?: KuaNil
-                                            blockResult["mix_hash"] = response.result?.mixHash?.toPrefixedHexString()?.value?.let(::KuaString) ?: KuaNil
-                                            blockResult["number"] = response.result?.number?.toPrefixedHexString()?.value?.let(::KuaString) ?: KuaNil
-                                            blockResult["parent_hash"] = response.result?.parentHash?.toPrefixedHexString()?.value?.let(::KuaString) ?: KuaNil
-                                            blockResult["receipts_root"] =
-                                                response.result?.receiptsRoot?.toPrefixedHexString()?.value?.let(::KuaString) ?: KuaNil
-                                            blockResult["sha3_uncles"] = response.result?.sha3Uncles?.toPrefixedHexString()?.value?.let(::KuaString) ?: KuaNil
-                                            blockResult["size"] = response.result?.size?.toPrefixedHexString()?.value?.let(::KuaString) ?: KuaNil
-                                            blockResult["state_root"] = response.result?.stateRoot?.toPrefixedHexString()?.value?.let(::KuaString) ?: KuaNil
-                                            blockResult["timestamp"] = response.result?.timestamp?.toPrefixedHexString()?.value?.let(::KuaString) ?: KuaNil
-                                            blockResult["total_difficulty"] =
-                                                response.result?.totalDifficulty?.toPrefixedHexString()?.value?.let(::KuaString) ?: KuaNil
+                                if (response.result != null) {
+                                    result.append(
+                                        ctx.tableCreate().also { result ->
+                                            result["id"] = KuaString(response.id.value)
+                                            result["result"] = ctx.tableCreate().also { blockResult ->
+                                                blockResult["base_fee_per_gas"] = response.result?.baseFeePerGas?.toPrefixedHexString()?.value?.let(::KuaString)
+                                                    ?: KuaNil
+                                                blockResult["extra_data"] = response.result?.extraData?.toPrefixedHexString()?.value?.let(::KuaString) ?: KuaNil
+                                                blockResult["gas_limit"] = response.result?.gasLimit?.toPrefixedHexString()?.value?.let(::KuaString) ?: KuaNil
+                                                blockResult["gas_used"] = response.result?.gasUsed?.toPrefixedHexString()?.value?.let(::KuaString) ?: KuaNil
+                                                blockResult["hash"] = response.result?.hash?.toPrefixedHexString()?.value?.let(::KuaString) ?: KuaNil
+                                                blockResult["logs_bloom"] = response.result?.logsBloom?.value?.let(::KuaString) ?: KuaNil
+                                                blockResult["miner"] = response.result?.miner?.toPrefixedHexString()?.value?.let(::KuaString) ?: KuaNil
+                                                blockResult["mix_hash"] = response.result?.mixHash?.toPrefixedHexString()?.value?.let(::KuaString) ?: KuaNil
+                                                blockResult["number"] = response.result?.number?.toPrefixedHexString()?.value?.let(::KuaString) ?: KuaNil
+                                                blockResult["parent_hash"] =
+                                                    response.result?.parentHash?.toPrefixedHexString()?.value?.let(::KuaString) ?: KuaNil
+                                                blockResult["receipts_root"] =
+                                                    response.result?.receiptsRoot?.toPrefixedHexString()?.value?.let(::KuaString) ?: KuaNil
+                                                blockResult["sha3_uncles"] =
+                                                    response.result?.sha3Uncles?.toPrefixedHexString()?.value?.let(::KuaString) ?: KuaNil
+                                                blockResult["size"] = response.result?.size?.toPrefixedHexString()?.value?.let(::KuaString) ?: KuaNil
+                                                blockResult["state_root"] = response.result?.stateRoot?.toPrefixedHexString()?.value?.let(::KuaString) ?: KuaNil
+                                                blockResult["timestamp"] = response.result?.timestamp?.toPrefixedHexString()?.value?.let(::KuaString) ?: KuaNil
+                                                blockResult["total_difficulty"] =
+                                                    response.result?.totalDifficulty?.toPrefixedHexString()?.value?.let(::KuaString) ?: KuaNil
 
-                                            blockResult["transactions"] = ctx.tableCreate(response.result?.transactions?.size ?: 0, 0)
-                                                .also { txTable ->
-                                                    response.result?.transactions?.forEach { trans ->
-                                                        txTable.append(ctx.tableCreate(0, 0).also { tx ->
-                                                            tx["block_hash"] = trans.blockHash?.toPrefixedHexString()?.value?.let(::KuaString) ?: KuaNil
-                                                            tx["block_number"] = trans.blockNumber?.toPrefixedHexString()?.value?.let(::KuaString) ?: KuaNil
-                                                            tx["from"] = trans.from.toPrefixedHexString().value.let(::KuaString)
-                                                            tx["gas"] = trans.gas.toPrefixedHexString().value.let(::KuaString)
-                                                            tx["gas_price"] = trans.gasPrice.toPrefixedHexString().value.let(::KuaString)
-                                                            tx["max_priority_fee_per_gas"] =
-                                                                trans.maxPriorityFeePerGas?.toPrefixedHexString()?.value?.let(::KuaString) ?: KuaNil
-                                                            tx["max_fee_per_gas"] = trans.maxFeePerGas?.toPrefixedHexString()?.value?.let(::KuaString) ?: KuaNil
-                                                            tx["hash"] = trans.hash.toPrefixedHexString().value.let(::KuaString)
-                                                            tx["input"] = trans.input?.value?.let(::KuaString) ?: KuaNil
-                                                            tx["nonce"] = trans.nonce.toPrefixedHexString().value.let(::KuaString)
-                                                            tx["to"] = trans.to?.toPrefixedHexString()?.value?.let(::KuaString) ?: KuaNil
-                                                            tx["transaction_index"] =
-                                                                trans.transactionIndex?.toPrefixedHexString()?.value?.let(::KuaString) ?: KuaNil
-                                                            tx["value"] = trans.value?.toPrefixedHexString()?.value?.let(::KuaString) ?: KuaNil
-                                                            tx["type"] = trans.type.toPrefixedHexString().value.let(::KuaString)
+                                                blockResult["transactions"] = ctx.tableCreate(response.result?.transactions?.size ?: 0, 0)
+                                                    .also { txTable ->
+                                                        response.result?.transactions?.forEach { trans ->
+                                                            txTable.append(ctx.tableCreate(0, 0).also { tx ->
+                                                                tx["block_hash"] = trans.blockHash?.toPrefixedHexString()?.value?.let(::KuaString) ?: KuaNil
+                                                                tx["block_number"] = trans.blockNumber?.toPrefixedHexString()?.value?.let(::KuaString) ?: KuaNil
+                                                                tx["from"] = trans.from.toPrefixedHexString().value.let(::KuaString)
+                                                                tx["gas"] = trans.gas.toPrefixedHexString().value.let(::KuaString)
+                                                                tx["gas_price"] = trans.gasPrice.toPrefixedHexString().value.let(::KuaString)
+                                                                tx["max_priority_fee_per_gas"] =
+                                                                    trans.maxPriorityFeePerGas?.toPrefixedHexString()?.value?.let(::KuaString) ?: KuaNil
+                                                                tx["max_fee_per_gas"] =
+                                                                    trans.maxFeePerGas?.toPrefixedHexString()?.value?.let(::KuaString) ?: KuaNil
+                                                                tx["hash"] = trans.hash.toPrefixedHexString().value.let(::KuaString)
+                                                                tx["input"] = trans.input?.value?.let(::KuaString) ?: KuaNil
+                                                                tx["nonce"] = trans.nonce.toPrefixedHexString().value.let(::KuaString)
+                                                                tx["to"] = trans.to?.toPrefixedHexString()?.value?.let(::KuaString) ?: KuaNil
+                                                                tx["transaction_index"] =
+                                                                    trans.transactionIndex?.toPrefixedHexString()?.value?.let(::KuaString) ?: KuaNil
+                                                                tx["value"] = trans.value?.toPrefixedHexString()?.value?.let(::KuaString) ?: KuaNil
+                                                                tx["type"] = trans.type.toPrefixedHexString().value.let(::KuaString)
 
-                                                            tx["access_list"] = ctx.tableCreate(trans.accessList?.size ?: 0, 0).also { al ->
-                                                                trans.accessList?.forEach { item ->
-                                                                    al.append(
-                                                                        ctx.tableCreate(0, 0).also { ali ->
-                                                                            ali["address"] = item.address.toPrefixedHexString().value.let(::KuaString)
-                                                                            ali["storage_keys"] = ctx.tableCreate(item.storageKeys.size, 0).also { sk ->
-                                                                                item.storageKeys.forEach { storageKey ->
-                                                                                    sk.append(storageKey.value.toPrefixedHexString().value.let(::KuaString))
+                                                                tx["access_list"] = ctx.tableCreate(trans.accessList?.size ?: 0, 0).also { al ->
+                                                                    trans.accessList?.forEach { item ->
+                                                                        al.append(
+                                                                            ctx.tableCreate(0, 0).also { ali ->
+                                                                                ali["address"] = item.address.toPrefixedHexString().value.let(::KuaString)
+                                                                                ali["storage_keys"] = ctx.tableCreate(item.storageKeys.size, 0).also { sk ->
+                                                                                    item.storageKeys.forEach { storageKey ->
+                                                                                        sk.append(storageKey.value.toPrefixedHexString().value.let(::KuaString))
+                                                                                    }
                                                                                 }
                                                                             }
-                                                                        }
-                                                                    )
-                                                                }
+                                                                        )
+                                                                    }
 
-                                                            }
+                                                                }
+                                                            })
+                                                        }
+                                                    }
+
+                                                blockResult["transactions_root"] =
+                                                    response.result?.transactionsRoot?.toPrefixedHexString()?.value?.let(::KuaString)
+                                                        ?: KuaNil
+
+                                                val withdrawals = response.result?.withdrawals
+                                                blockResult["withdrawals"] = ctx.tableCreate(withdrawals?.size ?: 0, 0).also { wds ->
+                                                    withdrawals?.forEach { wd ->
+                                                        wds.append(ctx.tableCreate(0, 0).also { w ->
+                                                            w["index"] = wd.index.toPrefixedHexString().value.let(::KuaString)
+                                                            w["validator_index"] = wd.validatorIndex.toPrefixedHexString().value.let(::KuaString)
+                                                            w["address"] = wd.address.toPrefixedHexString().value.let(::KuaString)
+                                                            w["amount"] = wd.amount.toPrefixedHexString().value.let(::KuaString)
                                                         })
                                                     }
                                                 }
 
-                                            blockResult["transactions_root"] = response.result?.transactionsRoot?.toPrefixedHexString()?.value?.let(::KuaString)
-                                                ?: KuaNil
-
-                                            val withdrawals = response.result?.withdrawals
-                                            blockResult["withdrawals"] = ctx.tableCreate(withdrawals?.size ?: 0, 0).also { wds ->
-                                                withdrawals?.forEach { wd ->
-                                                    wds.append(ctx.tableCreate(0, 0).also { w ->
-                                                        w["index"] = wd.index.toPrefixedHexString().value.let(::KuaString)
-                                                        w["validator_index"] = wd.validatorIndex.toPrefixedHexString().value.let(::KuaString)
-                                                        w["address"] = wd.address.toPrefixedHexString().value.let(::KuaString)
-                                                        w["amount"] = wd.amount.toPrefixedHexString().value.let(::KuaString)
-                                                    })
-                                                }
+                                                blockResult["withdrawals_root"] =
+                                                    response.result?.withdrawalsRoot?.toPrefixedHexString()?.value?.let(::KuaString)
+                                                        ?: KuaNil
                                             }
-
-                                            blockResult["withdrawals_root"] = response.result?.withdrawalsRoot?.toPrefixedHexString()?.value?.let(::KuaString)
-                                                ?: KuaNil
                                         }
-                                    }
-                                )
+                                    )
+                                }
                             }
 
                             else -> TODO()
