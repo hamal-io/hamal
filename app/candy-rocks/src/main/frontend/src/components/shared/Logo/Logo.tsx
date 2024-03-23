@@ -30,7 +30,7 @@ const Logo: React.FC<LogoProps> = ({
           src={img}
           alt="Logo"
           sizes="200px"
-          priority
+          // priority
         />
       ) : (
         "Logo Here"
@@ -41,7 +41,7 @@ const Logo: React.FC<LogoProps> = ({
           src={imgLight}
           alt="Logo-Light"
           sizes="200px"
-          priority
+          // priority
         />
       )}
     </LinkW>

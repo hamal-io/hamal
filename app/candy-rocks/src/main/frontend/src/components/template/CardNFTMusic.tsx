@@ -102,7 +102,7 @@ const CardNFTMusic: FC<CardNFTMusicProps> = ({
         <NcImage
           containerClassName="block aspect-w-12 aspect-h-10 w-full h-0 rounded-3xl overflow-hidden z-0"
           src={featuredImage}
-          fill
+          fill={true}
           className="object-cover group-hover:scale-[1.03] transition-transform duration-300 ease-in-out"
         />
       </div>
@@ -119,7 +119,7 @@ const CardNFTMusic: FC<CardNFTMusicProps> = ({
       <div className="w-11/12 max-w-[360px] transform -mt-32 relative z-10">
         <div className={`px-5 flex items-center space-x-4 relative `}>
           <div className={`flex-grow flex justify-center`}>
-            <ImageW src={musicWave} alt="musicWave" />
+            <ImageW src={musicWave} alt="musicWave" fill={false} />
           </div>
           <ButtonPlayMusicPlayer
             url={nftAudioUrlRl}

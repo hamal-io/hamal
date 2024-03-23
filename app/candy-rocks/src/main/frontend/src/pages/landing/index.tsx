@@ -3,7 +3,7 @@ import React, {useState} from 'react'
 import SectionLargeSlider from "@/pages/landing/components/SectionLargeSlider.tsx";
 import BackgroundSection from "@/components/template/BackgroundSection/BackgroundSection.tsx";
 import SectionGridFeatureNFT2 from "@/pages/landing/components/SectionGridFeatureNFT2.tsx";
-import BgGlassMorphism from "@/app/Background.tsx";
+import BgGlassMorphism from "@/app/background.tsx";
 import SectionHero2 from "@/components/template/SectionHero/SectionHero2.tsx";
 import SectionHowItWork from "@/components/template/SectionHowItWork/SectionHowItWork.tsx";
 import SectionMagazine8 from "@/components/template/SectionMagazine8.tsx";

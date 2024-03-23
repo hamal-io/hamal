@@ -1,6 +1,6 @@
-import SiteHeader from "@/app/SiteHeader.tsx";
 import Footer from "@/components/shared/Footer/Footer.tsx";
 import {FC} from "react";
+import SiteHeader from "@/app/header.tsx";
 
 type Props = {
     children

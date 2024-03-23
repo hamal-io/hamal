@@ -6,13 +6,20 @@ import './global.css'
 import LandingPage from "./pages/landing";
 import RootLayout from "@/app/layout.tsx";
 import NotFoundPage from "@/app/not-found.tsx";
+import CardLarge1 from "@/components/template/CardLarge1/CardLarge1.tsx";
 
 export const router = createBrowserRouter([
-    {path: "/", element:
-        <RootLayout>
-            <LandingPage/>
-        </RootLayout>
+    {
+        path: "/", element:
+            <RootLayout>
+                <LandingPage/>
+            </RootLayout>
     },
-
-    {path: "/dashboad", element: <NotFoundPage/>}
+    {
+        path: "/dashboard", element:
+            <RootLayout>
+               <CardLarge1></CardLarge1>
+            </RootLayout>
+    },
+    {path: "*", element: <NotFoundPage/>}
 ]);

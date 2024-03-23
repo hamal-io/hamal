@@ -28,7 +28,7 @@ const SectionHero3 = () => {
       <div className="relative aspect-w-4 aspect-h-3 sm:aspect-w-16 sm:aspect-h-9">
         <ImageW
           className="absolute inset-0 object-cover rounded-[32px]"
-          fill
+          fill={true}
           src={imagePng}
           alt="hero"
         />

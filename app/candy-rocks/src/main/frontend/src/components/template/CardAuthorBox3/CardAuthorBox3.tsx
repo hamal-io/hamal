@@ -30,19 +30,19 @@ const CardAuthorBox3: FC<CardAuthorBox3Props> = ({
           sizes="100px"
           containerClassName="relative z-0 flex flex-grow h-full rounded-xl overflow-hidden "
           src={nftsAbstractRd}
-          fill
+          fill={true}
         />
         <NcImage
           sizes="100px"
           containerClassName="relative z-0 flex h-full w-24 flex-shrink-0 rounded-xl overflow-hidden"
           src={nftsAbstractRd2}
-          fill
+          fill={true}
         />
         <NcImage
           sizes="100px"
           containerClassName="relative z-0 flex flex-grow h-full rounded-xl overflow-hidden"
           src={nftsAbstractRd3}
-          fill
+          fill={true}
         />
       </div>
 

@@ -18,7 +18,7 @@ const CollectionCard: FC<CollectionCardProps> = ({
       className={`CollectionCard relative p-4 rounded-2xl overflow-hidden h-[410px] flex flex-col group ${className}`}
     >
       <NcImage
-        fill
+        fill={true}
         containerClassName="absolute inset-0 z-0 overflow-hidden"
         src={imgs[0]}
       />
@@ -43,17 +43,17 @@ const CollectionCard: FC<CollectionCardProps> = ({
         <div className="grid grid-cols-3 gap-4 mt-5">
           <NcImage
             containerClassName="relative z-0 w-full h-20 rounded-xl overflow-hidden"
-            fill
+            fill={true}
             src={imgs[1]}
           />
           <NcImage
             containerClassName="relative z-0 w-full h-20 rounded-xl overflow-hidden"
-            fill
+            fill={true}
             src={imgs[2]}
           />
           <NcImage
             containerClassName="relative z-0 w-full h-20 rounded-xl overflow-hidden"
-            fill
+            fill={true}
             src={imgs[3]}
           />
         </div>

@@ -34,9 +34,9 @@ const NcImage: FC<NcImageProps> = ({
           className={className}
           alt={alt}
           sizes={sizes}
+          fill={fill}
           {...args}
           src={src}
-          fill={fill}
         />
       ) : null}
     </div>

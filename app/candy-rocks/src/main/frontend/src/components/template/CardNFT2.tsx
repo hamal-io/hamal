@@ -61,7 +61,7 @@ const CardNFT2: FC<CardNFT2Props> = ({ className = "", isLiked }) => {
             containerClassName="flex relative aspect-w-11 aspect-h-12 w-full h-0 rounded-3xl overflow-hidden z-0"
             src={nftImageRd}
             className="object-cover group-hover:scale-[1.03] transition-transform duration-300 ease-in-out will-change-transform"
-            fill
+            fill={true}
           />
         </div>
 

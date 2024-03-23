@@ -23,7 +23,7 @@ const CardAuthorBox2: FC<CardAuthorBox2Props> = ({ className = "" }) => {
       <div className="relative flex-shrink-0 ">
         <div>
           <NcImage
-            fill
+            fill={true}
             containerClassName="flex aspect-w-7 aspect-h-5 sm:aspect-h-6 w-full h-0"
             src={nftImageRd}
           />
