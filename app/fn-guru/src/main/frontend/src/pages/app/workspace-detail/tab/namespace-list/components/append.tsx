@@ -45,7 +45,7 @@ const Append: FC<Props> = ({appendTo, onClose}) => {
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setLoading(true)
         try {
-            appendNamespace(appendTo, values.name, values.features)
+            appendNamespace(appendTo, values.name, {...values.features} as NamespaceFeatures)
         } catch (e) {
             console.error(e)
         } finally {
@@ -79,7 +79,7 @@ const Append: FC<Props> = ({appendTo, onClose}) => {
                             <FormItem>
                                 <FormControl>
                                     <FeatureSelect
-                                        defaults={field.value}
+                                        defaults={field.value as NamespaceFeatures}
                                         onSave={(feat) => {
                                             field.onChange(feat)
                                         }}
