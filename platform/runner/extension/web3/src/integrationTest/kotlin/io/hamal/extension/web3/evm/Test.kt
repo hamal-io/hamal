@@ -1,6 +1,8 @@
-package io.hamal.extension.web3.eth
+package io.hamal.extension.web3.evm
 
 import com.google.gson.Gson
+import io.hamal.extension.web3.arbitrum.ExtensionWeb3ArbitrumFactory
+import io.hamal.extension.web3.eth.ExtensionWeb3EthFactory
 import io.hamal.lib.common.hot.HotArray
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.hot.HotObjectModule
@@ -38,6 +40,7 @@ import java.nio.file.Paths
 import java.util.stream.Stream
 import javax.xml.transform.Source
 import kotlin.io.path.name
+import kotlin.io.path.pathString
 
 @SpringBootApplication
 internal open class TestProxy
@@ -106,12 +109,21 @@ internal class ExtensionWeb3EthTest : AbstractRunnerTest() {
             .sorted()
 
         for (file in files) {
+            val chain = when {
+                file.pathString.contains("arbitrum") -> "arbitrum"
+                file.pathString.contains("eth") -> "eth"
+                else -> TODO()
+            }
+
             val runner = createTestRunner(
                 pluginFactories = listOf(PluginWeb3EvmFactory()),
-                extensionFactories = listOf(ExtensionWeb3EthFactory),
+                extensionFactories = listOf(
+                    ExtensionWeb3ArbitrumFactory,
+                    ExtensionWeb3EthFactory
+                ),
                 env = RunnerEnv(
                     HotObject.builder()
-                        .set("test_url", "http://localhost:${localPort}/eth")
+                        .set("test_url", "http://localhost:$localPort/$chain")
                         .build()
                 )
             )
