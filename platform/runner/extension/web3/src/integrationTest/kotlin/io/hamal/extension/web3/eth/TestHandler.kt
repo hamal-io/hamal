@@ -2,9 +2,9 @@ package io.hamal.extension.web3.eth
 
 import io.hamal.lib.common.hot.HotArray
 import io.hamal.lib.common.hot.HotObject
-import io.hamal.lib.web3.eth.abi.type.EthUint64
-import io.hamal.lib.web3.eth.domain.*
-import io.hamal.lib.web3.eth.json
+import io.hamal.lib.web3.evm.abi.type.EvmUint64
+import io.hamal.lib.web3.evm.impl.eth.domain.*
+import io.hamal.lib.web3.json
 
 object TestHandler {
 
@@ -12,7 +12,7 @@ object TestHandler {
         val reqs = requests
             .filterIsInstance<HotObject>()
             .map { request ->
-                val (err, req) = parseRequest(json, request)
+                val (err, req) = parseEthRequest(json, request)
                 if (err != null) {
                     err
                 } else {
@@ -42,6 +42,6 @@ object TestHandler {
         }
     }
 
-    private fun loadBlock(chain: String, id: EthUint64): EthBlock? = this.javaClass.getResourceAsStream("/fixture/${chain}/block_${id.value}_full.json")
+    private fun loadBlock(chain: String, id: EvmUint64): EthBlock? = this.javaClass.getResourceAsStream("/fixture/${chain}/block_${id.value}_full.json")
         ?.let { json.deserialize(EthBlock::class, it) }
 }

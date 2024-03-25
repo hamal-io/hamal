@@ -16,5 +16,7 @@ server:
 io:
   hamal:
     web3proxy:
+      arbitrum:
+        upstream: ${ARBITRUM_UPSTREAM_HOST:http://localhost:10001}
       eth:
         upstream: ${ETH_UPSTREAM_HOST:http://localhost:10001}

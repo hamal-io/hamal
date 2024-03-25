@@ -110,7 +110,7 @@ internal class PluginWeb3EvmTest : AbstractRunnerTest() {
                 pluginFactories = listOf(PluginWeb3EvmFactory()),
                 env = RunnerEnv(
                     HotObject.builder()
-                        .set("test_url", "http://localhost:${localPort}/eth")
+                        .set("test_url", "http://localhost:${localPort}")
                         .build()
                 )
             )

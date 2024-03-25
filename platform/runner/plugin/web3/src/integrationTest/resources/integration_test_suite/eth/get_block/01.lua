@@ -1,7 +1,7 @@
 evm = require_plugin("web3.evm")
 
 res = fail_on_error(evm.execute({
-    url = context.env.test_url,
+    url = context.env.test_url .. '/eth',
     requests = { evm.get_block(19417104) }
 }))
 

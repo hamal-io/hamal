@@ -10,8 +10,8 @@ class PluginWeb3EvmFactory : RunnerPluginFactory {
         return RunnerPlugin(
             name = KuaString("web3.evm"),
             internals = mapOf(
-                KuaString("execute") to EthExecuteFunction(),
-                KuaString("decode_parameter") to EthDecodeParameterFunction
+                KuaString("execute") to EvmExecuteFunction(),
+                KuaString("decode_parameter") to EvmDecodeParameterFunction
             )
         )
     }

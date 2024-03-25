@@ -1,7 +1,7 @@
 package io.hamal.lib.web3.util
 
-import io.hamal.lib.web3.eth.abi.type.EthHexString
-import io.hamal.lib.web3.eth.abi.type.EthPrefixedHexString
+import io.hamal.lib.web3.evm.abi.type.EvmHexString
+import io.hamal.lib.web3.evm.abi.type.EvmPrefixedHexString
 import java.nio.ByteBuffer
 
 class ByteWindow internal constructor(
@@ -10,15 +10,15 @@ class ByteWindow internal constructor(
 ) : Iterable<ByteArray> {
 
     companion object {
-        fun of(data: EthHexString, windowSize: Int = 32): ByteWindow {
+        fun of(data: EvmHexString, windowSize: Int = 32): ByteWindow {
             val bytes = data.toByteArray()
             if (bytes.size < windowSize) {
-                return of(EthHexString(Web3Formatter.formatFixLength(bytes, windowSize * 2)))
+                return of(EvmHexString(Web3Formatter.formatFixLength(bytes, windowSize * 2)))
             }
             return of(bytes, windowSize)
         }
 
-        fun of(data: EthPrefixedHexString, windowSize: Int = 32): ByteWindow {
+        fun of(data: EvmPrefixedHexString, windowSize: Int = 32): ByteWindow {
             return of(data.toHexString(), windowSize)
         }
 

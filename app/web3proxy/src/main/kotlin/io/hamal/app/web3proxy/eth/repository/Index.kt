@@ -3,7 +3,7 @@ package io.hamal.app.web3proxy.eth.repository
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.lib.sqlite.Transaction
-import io.hamal.lib.web3.eth.abi.type.EthUint64
+import io.hamal.lib.web3.evm.abi.type.EvmUint64
 import java.math.BigInteger
 import java.nio.file.Path
 
@@ -65,7 +65,7 @@ internal class EthIndexRepositoryImpl(
 }
 
 
-private fun Transaction.insertTransactions(blockNumber: EthUint64, txHashes: List<Hash>) {
+private fun Transaction.insertTransactions(blockNumber: EvmUint64, txHashes: List<Hash>) {
     txHashes.forEach { txHash ->
         execute("INSERT OR IGNORE INTO index_transaction(hash_1, hash_2, hash_3, hash_4 , block_number) VALUES( :hash1, :hash2, :hash3, :hash4 , :blockNumber )") {
             set("hash1", txHash.hashOne)
@@ -93,7 +93,6 @@ private fun extractTransactionHashes(block: BlockEntity): List<Hash> {
             hashFour = BigInteger(hashFour.toByteArray()).longValueExact()
         )
     }
-
 }
 
 private fun extractAddresses(block: BlockEntity): Map<EthAddressId, Int> {
@@ -116,7 +115,7 @@ private fun extractAddresses(block: BlockEntity): Map<EthAddressId, Int> {
 }
 
 
-private fun Transaction.insertAddresses(blockNumber: EthUint64, addressesWithMode: Map<EthAddressId, Int>) {
+private fun Transaction.insertAddresses(blockNumber: EvmUint64, addressesWithMode: Map<EthAddressId, Int>) {
     addressesWithMode.forEach { (addressId, mode) ->
         execute(
             "INSERT INTO index_address(address_id, mode, block_number) VALUES( :addressId, :mode, :blockNumber ) " +
