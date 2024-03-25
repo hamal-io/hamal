@@ -31,6 +31,9 @@ dependencyResolutionManagement {
             library("apache-http-mime", "org.apache.httpcomponents", "httpmime").version("4.5.13")
             library("apache-commons-logging", "commons-logging", "commons-logging").version("1.2")
             library("apache-commons-compress", "org.apache.commons", "commons-compress").version("1.26.1")
+
+            library("bouncycastle", "org.bouncycastle", "bcprov-jdk18on").version("1.77")
+            library("web3j-crypto", "org.web3j", "crypto").version("4.11.1")
         }
     }
 }
