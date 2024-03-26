@@ -129,14 +129,14 @@ export const columns: ColumnDef<ExecListItem>[] = [
 
             if (!trigger) {
                 return null
-            } else {
-                const status = trigger.status ? 'Active' : 'Inactive'
-                return (
-                    <div className="flex  items-center">
-                        <span>{status}</span>
-                    </div>
-                )
             }
+
+            return (
+                <div className="flex  items-center">
+                    <span>{trigger.status}</span>
+                </div>
+            )
+
         },
         enableSorting: false,
         enableHiding: false

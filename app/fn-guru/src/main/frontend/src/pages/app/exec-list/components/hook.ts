@@ -29,7 +29,7 @@ export const useExecsWithTriggers = (): [ExecsWithTriggersAction, ExecList, bool
                     return {
                         trigger: {
                             id: execTrigger.id,
-                            status: execTrigger.status === "Active"
+                            status: execTrigger.status
                         }, ...exec
                     }
                 }

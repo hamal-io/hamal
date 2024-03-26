@@ -99,14 +99,16 @@ export const useTriggerListEvent = (): [TriggerListEventAction, TriggerList, boo
     return [fn, triggerList, loading, error]
 }
 
-export type TriggerStatus = 'activate' | 'deactivate'
-type TriggerStatusAction = (triggerId: string, status: TriggerStatus, abortController?: AbortController) => void
-export const useTriggerStatus = (): [TriggerStatusAction, TriggerStatusRequested, boolean, Error] => {
+
+type TriggerStatusAction = (triggerId: string, status: boolean, abortController?: AbortController) => void
+export const useSetTriggerStatus = (): [TriggerStatusAction, TriggerStatusRequested, boolean, Error] => {
     const [auth] = useAuth()
     const [post, submission, loading, error] = usePost<TriggerStatusRequested>()
     const fn = useCallback<TriggerStatusAction>(
-        async (triggerId, status, abortController) =>
-            post(`/trigger/${triggerId}/${status}`, {}, abortController), [auth])
+        async (triggerId, status, abortController) => {
+            const command = status ? 'activate' : 'deactivate'
+            post(`/v1/trigger/${triggerId}/${command}`, {}, abortController)
+        }, [auth])
     return [fn, submission, loading, error]
 }
 
