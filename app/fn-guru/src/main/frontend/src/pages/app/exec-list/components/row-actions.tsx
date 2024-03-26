@@ -9,7 +9,9 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu.tsx"
 import {useNavigate} from "react-router-dom";
-import {ExecListItem} from "@/types";
+import {ExecListItem, ExecTriggerItem} from "@/types";
+import {FC} from "react";
+import {useSetTriggerStatus} from "@/hook";
 
 interface Props {
     row: Row<ExecListItem>
@@ -17,6 +19,7 @@ interface Props {
 
 export default function ({row}: Props) {
     const navigate = useNavigate()
+    const trigger = row.getValue<ExecTriggerItem>("trigger")
 
     return (
         <DropdownMenu>
@@ -33,7 +36,28 @@ export default function ({row}: Props) {
                 <DropdownMenuItem onClick={() => {
                     navigate(`/executions/${row.original.id}`)
                 }}>View</DropdownMenuItem>
+                {trigger && <TriggerSwitch triggerId={trigger.id} status={trigger.status}/>}
             </DropdownMenuContent>
         </DropdownMenu>
+    )
+}
+
+
+type TriggerSwitchProps = { triggerId: string, status: string }
+const TriggerSwitch: FC<TriggerSwitchProps> = ({triggerId, status}) => {
+    const [setTriggerStatus, setTriggerRequested, loading, error] = useSetTriggerStatus()
+    const current = status === "Active"
+
+    function handleClick(e) {
+        e.stopPropagation()
+        const abortController = new AbortController()
+        setTriggerStatus(triggerId, !current, abortController)
+        return (() => abortController.abort())
+    }
+
+    return (
+        <DropdownMenuItem onClick={handleClick}>
+            {current === false ? "Activate" : "Deactivate" }
+        </DropdownMenuItem>
     )
 }

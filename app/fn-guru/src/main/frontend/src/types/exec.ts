@@ -34,6 +34,11 @@ export interface ExecListItemFunc {
     name: string;
 }
 
+export interface ExecTriggerItem {
+    id: string,
+    status: string,
+}
+
 export interface Exec {
     id: string;
     status: string;
