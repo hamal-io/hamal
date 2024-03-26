@@ -6,7 +6,8 @@ import './global.css'
 import LandingPage from "./pages/landing";
 import NotFoundPage from "@/app/not-found.tsx";
 import RootLayout from "@/app/root-layout.tsx";
-import DashboardSite from "@/pages/dashboard";
+import LoginPage from "@/pages/landing/login.tsx";
+import DashboardPage from "@/pages/dashboard";
 
 export const router = createBrowserRouter([
     {
@@ -16,9 +17,16 @@ export const router = createBrowserRouter([
             </RootLayout>
     },
     {
+        path: "/login", element:
+            <RootLayout>
+               <LoginPage/>
+            </RootLayout>
+    },
+
+    {
         path: "/dashboard", element:
             <RootLayout>
-               <DashboardSite/>
+                <DashboardPage/>
             </RootLayout>
     },
     {path: "*", element: <NotFoundPage/>}

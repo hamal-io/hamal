@@ -4,26 +4,14 @@ import React, { useMemo } from "react";
 import HeaderLogged from "@/components/template/Header/Header2.tsx";
 import Header2 from "@/components/template/Header/Header2";
 import usePathnameW from "@/hooks/template/usePathname.ts";
+import {useLocation, useParams} from "react-router-dom";
 
 const SiteHeader = () => {
-  const pathname = usePathnameW();
+  const location = useLocation();
 
-  const headerComponent = useMemo(() => {
-    let HeadComponent = HeaderLogged;
 
-    switch (pathname) {
-      case "/home-3":
-        HeadComponent = Header2;
-        break;
 
-      default:
-        break;
-    }
-
-    return <HeadComponent />;
-  }, [pathname]);
-
-  return <>{headerComponent}</>;
+  return (<HeaderLogged/>);
 };
 
 export default SiteHeader;
