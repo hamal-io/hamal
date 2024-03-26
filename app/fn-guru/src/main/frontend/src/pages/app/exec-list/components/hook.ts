@@ -1,4 +1,4 @@
-import {ExecList} from "@/types";
+import {ExecList, ExecListItem} from "@/types";
 import {useAuth} from "@/hook/auth.ts";
 import {useExecList, useTriggerList} from "@/hook";
 import {useCallback, useEffect, useState} from "react";
@@ -10,7 +10,7 @@ export const useExecsWithTriggers = (): [ExecsWithTriggersAction, ExecList, bool
     const [listTriggers, triggerList, , triggerError] = useTriggerList()
     const [listExecs, execList, , execError] = useExecList()
     const [loading, setLoading] = useState(true)
-    const [result, setResult] = useState<ExecList>(null)
+    const [execsWithTriggerStatus, setExecsWithTriggerStatus] = useState<ExecList>(null)
 
     const fn = useCallback<ExecsWithTriggersAction>(
         async (namespaceId, abortController ?) => {
@@ -22,25 +22,20 @@ export const useExecsWithTriggers = (): [ExecsWithTriggersAction, ExecList, bool
     useEffect(() => {
         if (triggerList && execList) {
             const copy = {...execList};
-
-            copy.execs = copy.execs.map(exec => {
+            copy.execs.forEach(exec => {
                 if ((exec.invocation.class === "Schedule" || "Event" || "Hook" || "Endpoint") && exec.func != null) {
                     const execTrigger = triggerList.triggers.find(trigger => trigger.func.id === exec.func.id);
-                    return {
-                        trigger: {
-                            id: execTrigger.id,
-                            status: execTrigger.status
-                        }, ...exec
+                    exec.trigger = {
+                        id: execTrigger.id,
+                        status: execTrigger.status
                     }
                 }
-                return exec;
             });
-
-            setResult(copy);
+            setExecsWithTriggerStatus(copy)
         }
         setLoading(false)
     }, [triggerList, execList]);
 
 
-    return [fn, result, loading, triggerError || execError]
+    return [fn, execsWithTriggerStatus, loading, triggerError || execError]
 }
