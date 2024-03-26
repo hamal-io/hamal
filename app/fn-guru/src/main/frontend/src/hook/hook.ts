@@ -1,4 +1,4 @@
-import {FuncCreateRequested, HookCreateRequested, HookList} from "@/types";
+import {HookCreateRequested, HookList} from "@/types";
 import {useAuth} from "@/hook/auth.ts";
 import {useGet, usePost} from "@/hook/http.ts";
 import {useCallback} from "react";

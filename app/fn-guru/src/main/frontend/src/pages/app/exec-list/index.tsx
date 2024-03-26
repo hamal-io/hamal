@@ -1,15 +1,15 @@
-import React, {FC, useContext, useEffect} from "react";
-import {useExecList} from "@/hook";
+import React, {FC, useEffect} from "react";
 import {PageHeader} from "@/components/page-header.tsx";
 import {columns} from "@/pages/app/exec-list/components/columns.tsx";
 import Table from "@/pages/app/exec-list/components/table.tsx";
 import {useUiState} from "@/hook/ui-state.ts";
+import {useExecsWithTriggers} from "@/pages/app/exec-list/components/hook.ts";
+
 
 type Props = {}
-
 const ExecListPage: FC<Props> = () => {
     const [uiState] = useUiState()
-    const [listExecs, execList, isLoading, error] = useExecList()
+    const [listExecs, execList, loading, error] = useExecsWithTriggers()
 
     useEffect(() => {
         const abortController = new AbortController()
@@ -19,7 +19,7 @@ const ExecListPage: FC<Props> = () => {
         }
     }, [uiState.namespaceId]);
 
-    if (execList == null || isLoading) return "Loading..."
+    if (execList == null || loading) return "Loading..."
     if (error != null) return "Error -"
 
     return (

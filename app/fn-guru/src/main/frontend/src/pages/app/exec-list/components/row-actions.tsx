@@ -2,7 +2,12 @@ import {DotsHorizontalIcon} from "@radix-ui/react-icons"
 import {Row} from "@tanstack/react-table"
 
 import {Button} from "@/components/ui/button.tsx"
-import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,} from "@/components/ui/dropdown-menu.tsx"
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu.tsx"
 import {useNavigate} from "react-router-dom";
 import {ExecListItem} from "@/types";
 
@@ -28,6 +33,9 @@ export default function ({row}: Props) {
                 <DropdownMenuItem onClick={() => {
                     navigate(`/executions/${row.original.id}`)
                 }}>View</DropdownMenuItem>
+                <DropdownMenuItem>
+
+                </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
     )

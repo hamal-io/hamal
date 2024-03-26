@@ -15,6 +15,7 @@ export interface ExecListItem {
     status: string;
     namespace: ExecListItemNamespace;
     invocation: ExecListItemInvocation;
+    trigger?: ExecTriggerItem;
     correlation?: string;
     func?: ExecListItemFunc;
 }
@@ -31,6 +32,11 @@ export interface ExecListItemInvocation {
 export interface ExecListItemFunc {
     id: string;
     name: string;
+}
+
+export interface ExecTriggerItem {
+    id: string,
+    status: boolean,
 }
 
 export interface Exec {
