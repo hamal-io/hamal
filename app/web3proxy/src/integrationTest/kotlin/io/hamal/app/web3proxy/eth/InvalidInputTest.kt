@@ -1,12 +1,12 @@
 package io.hamal.app.web3proxy.eth
 
-import io.hamal.lib.web3.eth.domain.EthErrorResponse
-import io.hamal.lib.web3.eth.domain.EthRequestId
+import io.hamal.lib.web3.evm.domain.EvmRequestId
+import io.hamal.lib.web3.evm.impl.eth.domain.EthErrorResponse
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
-internal class InvalidInputTest : EthBaseTest() {
+internal class EthInvalidInputTest : EthBaseTest() {
 
     @Test
     fun `Requests block with negative block number`() {
@@ -22,7 +22,7 @@ internal class InvalidInputTest : EthBaseTest() {
             """.trimIndent()
             )
             .execute(EthErrorResponse::class) {
-                assertThat(id, equalTo(EthRequestId("23")))
+                assertThat(id, equalTo(EvmRequestId("23")))
                 assertThat(error.code, equalTo(-32602))
                 assertThat(error.message, equalTo("invalid argument: hex string without 0x prefix"))
             }
@@ -42,7 +42,7 @@ internal class InvalidInputTest : EthBaseTest() {
             """.trimIndent()
             )
             .execute(EthErrorResponse::class) {
-                assertThat(id, equalTo(EthRequestId("23")))
+                assertThat(id, equalTo(EvmRequestId("23")))
                 assertThat(error.code, equalTo(-32602))
                 assertThat(error.message, equalTo("invalid argument: hex string"))
             }
@@ -62,7 +62,7 @@ internal class InvalidInputTest : EthBaseTest() {
             """.trimIndent()
             )
             .execute(EthErrorResponse::class) {
-                assertThat(id, equalTo(EthRequestId("23")))
+                assertThat(id, equalTo(EvmRequestId("23")))
                 assertThat(error.code, equalTo(-32602))
                 assertThat(error.message, equalTo("missing argument"))
             }
@@ -82,7 +82,7 @@ internal class InvalidInputTest : EthBaseTest() {
             """.trimIndent()
             )
             .execute(EthErrorResponse::class) {
-                assertThat(id, equalTo(EthRequestId("23")))
+                assertThat(id, equalTo(EvmRequestId("23")))
                 assertThat(error.code, equalTo(-32601))
                 assertThat(error.message, equalTo("method not supported"))
             }

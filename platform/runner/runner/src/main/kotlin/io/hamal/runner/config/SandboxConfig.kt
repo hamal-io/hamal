@@ -5,7 +5,7 @@ import io.hamal.extension.net.smtp.ExtensionSmtpFactory
 import io.hamal.extension.std.decimal.ExtensionDecimalFactory
 import io.hamal.extension.std.log.ExtensionLogFactory
 import io.hamal.extension.telegram.ExtensionTelegramFactory
-import io.hamal.extension.web3.bsc.ExtensionWeb3BscFactory
+import io.hamal.extension.web3.arbitrum.ExtensionWeb3ArbitrumFactory
 import io.hamal.extension.web3.eth.ExtensionWeb3EthFactory
 import io.hamal.lib.domain.vo.AuthToken
 import io.hamal.lib.domain.vo.ExecToken
@@ -73,8 +73,8 @@ class SandboxFactoryDefaultImpl(
                 ExtensionLogFactory,
                 ExtensionTelegramFactory,
 
-                ExtensionWeb3EthFactory,
-                ExtensionWeb3BscFactory
+                ExtensionWeb3ArbitrumFactory,
+                ExtensionWeb3EthFactory
             )
     }
 }

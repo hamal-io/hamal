@@ -16,6 +16,9 @@ import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.AuthId
 import io.hamal.lib.domain.vo.RequestId
 import io.hamal.lib.domain.vo.Web3Address
+import io.hamal.lib.web3.evm.EvmSignature
+import io.hamal.lib.web3.evm.abi.type.EvmPrefixedHexString
+import io.hamal.lib.web3.evm.domain.EvmSignedMessage
 import io.hamal.repository.api.Auth
 import io.hamal.repository.api.Workspace
 import io.hamal.repository.api.WorkspaceQueryRepository.WorkspaceQuery
@@ -85,14 +88,17 @@ class AuthLoginMetaMaskAdapter(
             }
         }
     }
+}
 
-    private fun verifySignature(req: AuthLogInMetaMaskRequest) {
-        val decryptedResult = ChallengeMetaMask(req.address)
-        val expectedResult = ChallengeMetaMask(req.address)
-        // FIXME 138 - verify signature
-        if (decryptedResult != expectedResult) {
-            throw NoSuchElementException("Account not found")
-        }
+internal fun verifySignature(req: AuthLogInMetaMaskRequest) {
+    val challenge = ChallengeMetaMask(req.address)
+    val signedMessage = EvmSignedMessage(
+        data = challenge.value.toByteArray(),
+        signature = EvmSignature(EvmPrefixedHexString(req.signature.value))
+    )
+
+    if (signedMessage.address.toPrefixedHexString().value.lowercase() != req.address.value.lowercase()) {
+        throw NoSuchElementException("Account not found")
     }
 }
 

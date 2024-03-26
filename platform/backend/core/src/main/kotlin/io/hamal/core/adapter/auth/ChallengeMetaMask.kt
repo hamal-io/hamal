@@ -16,6 +16,6 @@ class AuthChallengeMetaMaskAdapter : AuthChallengeMetaMaskPort {
 
 object ChallengeMetaMask {
     operator fun invoke(address: Web3Address) = Web3Challenge(
-        "Please sign this message to login: ${address.value.substring(2, 10)}"
+        "Please sign this message to login: ${address.value.substring(2, 10).lowercase()}"
     )
 }

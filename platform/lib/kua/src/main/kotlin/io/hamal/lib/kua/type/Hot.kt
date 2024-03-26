@@ -1,13 +1,42 @@
 package io.hamal.lib.kua.type
 
 import io.hamal.lib.common.hot.*
+import io.hamal.lib.common.util.StringUtils
 import io.hamal.lib.kua.*
 
 //FIXME replace toKua with this
-fun HotNode<*>.toKua(state: State): KuaType {
+fun HotNode<*>?.toKua(state: State): KuaType {
+    if (this == null) {
+        return KuaNil
+    }
     return when (this) {
-        is HotObject -> state.tableCreate(nodes.map { (key, value) -> KuaString(key) to value.toKua(state) }.toMap())
+        is HotObject -> state.tableCreate(nodes.map { (key, value) ->
+            KuaString(key) to value.toKua(
+                state
+            )
+        }.toMap())
+
         is HotArray -> state.tableCreate(nodes.map { it.toKua(state) })
+        is HotBoolean -> if (value) KuaTrue else KuaFalse
+        is HotNull -> KuaNil
+        is HotNumber -> KuaNumber(value.toDouble())
+        is HotString -> KuaString(value)
+        else -> TODO()
+    }
+}
+
+fun HotNode<*>?.toKuaSnakeCase(state: State): KuaType {
+    if (this == null) {
+        return KuaNil
+    }
+    return when (this) {
+        is HotObject -> state.tableCreate(nodes.map { (key, value) ->
+            KuaString(StringUtils.snakeCase(key)) to value.toKuaSnakeCase(
+                state
+            )
+        }.toMap())
+
+        is HotArray -> state.tableCreate(nodes.map { it.toKuaSnakeCase(state) })
         is HotBoolean -> if (value) KuaTrue else KuaFalse
         is HotNull -> KuaNil
         is HotNumber -> KuaNumber(value.toDouble())

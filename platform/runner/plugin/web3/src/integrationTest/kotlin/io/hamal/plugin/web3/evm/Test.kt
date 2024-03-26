@@ -107,10 +107,12 @@ internal class PluginWeb3EvmTest : AbstractRunnerTest() {
 
         for (file in files) {
             val runner = createTestRunner(
-                pluginFactories = listOf(PluginWeb3EvmFactory()),
+                pluginFactories = listOf(
+                    PluginWeb3EvmFactory(),
+                ),
                 env = RunnerEnv(
                     HotObject.builder()
-                        .set("test_url", "http://localhost:${localPort}/eth")
+                        .set("test_url", "http://localhost:${localPort}")
                         .build()
                 )
             )

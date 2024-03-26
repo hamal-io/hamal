@@ -4,7 +4,10 @@ plugins {
 
 dependencies {
     api(project(":platform:lib:http"))
-    implementation("org.bouncycastle:bcprov-jdk15on:1.70")
+//    implementation(external.bouncycastle)
+    implementation(external.web3j.crypto) {
+        exclude("tech.pegasys", "jc-kzg-4844")
+    }
 }
 
 
@@ -14,7 +17,9 @@ testing {
             if (this is JvmTestSuite) {
                 dependencies {
                     implementation(project(":platform:lib:http"))
-                    implementation("org.bouncycastle:bcprov-jdk15on:1.70")
+                    implementation(external.web3j.crypto) {
+                        exclude("tech.pegasys", "jc-kzg-4844")
+                    }
 
                     implementation(external.junit)
                     implementation(external.hamcrest)

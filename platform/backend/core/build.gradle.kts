@@ -9,6 +9,7 @@ archivesName.set("platform-backend")
 dependencies {
     api(project(":platform:lib:sdk"))
     api(project(":platform:lib:kua"))
+    implementation(project(":platform:lib:web3"))
 
     api(project(":platform:backend:repository:api"))
     api(project(":platform:backend:repository:memory"))

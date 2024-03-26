@@ -97,7 +97,7 @@ export const useAccountLogin = (): [AccountLoginAction, LoginRequested, boolean,
                         token: data.token,
                     })
 
-                    initUiState(data.workspaceIds[0], data.workspaceIds[0],'')
+                    initUiState(data.workspaceIds[0], data.workspaceIds[0])
                 })
             })
             .catch(error => {

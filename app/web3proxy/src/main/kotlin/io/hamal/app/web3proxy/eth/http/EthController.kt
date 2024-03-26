@@ -4,10 +4,10 @@ import io.hamal.app.web3proxy.eth.handler.HandleEthRequest
 import io.hamal.lib.common.hot.HotArray
 import io.hamal.lib.common.hot.HotNode
 import io.hamal.lib.common.hot.HotObject
-import io.hamal.lib.web3.eth.domain.EthRequest
-import io.hamal.lib.web3.eth.domain.EthResponse
-import io.hamal.lib.web3.eth.domain.parseRequest
-import io.hamal.lib.web3.eth.json
+import io.hamal.lib.web3.evm.impl.eth.domain.EthRequest
+import io.hamal.lib.web3.evm.impl.eth.domain.EthResponse
+import io.hamal.lib.web3.evm.impl.eth.domain.parseEthRequest
+import io.hamal.lib.web3.json
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -31,7 +31,7 @@ internal class EthController(
         val reqs = requests
             .filterIsInstance<HotObject>()
             .map { request ->
-                val (err, req) = parseRequest(json, request)
+                val (err, req) = parseEthRequest(json, request)
                 if (err != null) {
                     err
                 } else {
@@ -46,7 +46,7 @@ internal class EthController(
     }
 
     private fun handleObject(request: HotObject): ResponseEntity<EthResponse> {
-        val (err, req) = parseRequest(json, request)
+        val (err, req) = parseEthRequest(json, request)
         if (err != null) {
             return ResponseEntity.ok(err)
         }

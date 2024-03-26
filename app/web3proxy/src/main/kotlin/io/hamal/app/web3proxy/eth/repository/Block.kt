@@ -7,23 +7,23 @@ import io.hamal.lib.domain.Json
 import io.hamal.lib.domain.vo.ValueObjectJsonModule
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.SqliteBaseRepository
-import io.hamal.lib.web3.eth.EthBatchService
-import io.hamal.lib.web3.eth.EthHotModule
-import io.hamal.lib.web3.eth.abi.type.EthAddress
-import io.hamal.lib.web3.eth.abi.type.EthUint64
-import io.hamal.lib.web3.eth.domain.EthBlock
-import io.hamal.lib.web3.eth.domain.EthGetBlockResponse
+import io.hamal.lib.web3.evm.EvmHotModule
+import io.hamal.lib.web3.evm.abi.type.EvmAddress
+import io.hamal.lib.web3.evm.abi.type.EvmUint64
+import io.hamal.lib.web3.evm.impl.eth.domain.EthBlock
+import io.hamal.lib.web3.evm.impl.eth.domain.EthGetBlockResponse
+import io.hamal.lib.web3.evm.impl.eth.http.EthBatchService
 import java.nio.file.Path
 
 internal interface EthBlockRepository {
-    fun list(blockNumbers: List<EthUint64>): List<BlockEntity?>
+    fun list(blockNumbers: List<EvmUint64>): List<BlockEntity?>
 
     fun clear()
 }
 
 internal class EthBlockRepositoryImpl(
     path: Path,
-    private val ethBatchService: EthBatchService<*>,
+    private val batchService: EthBatchService<*>,
     private val addressRepository: EthAddressRepository,
     private val indexRepository: EthIndexRepository
 ) : SqliteBaseRepository(
@@ -31,7 +31,7 @@ internal class EthBlockRepositoryImpl(
     filename = "block.db"
 ), EthBlockRepository {
 
-    override fun list(blockNumbers: List<EthUint64>): List<BlockEntity?> {
+    override fun list(blockNumbers: List<EvmUint64>): List<BlockEntity?> {
         val foundBlocks = blockNumbers.mapNotNull { number -> findBlock(number) }
 
         val foundBlockNumbers = foundBlocks.map { it.number }.toSet()
@@ -43,9 +43,9 @@ internal class EthBlockRepositoryImpl(
         }
 
         log.info("Download blocks [${blockNumbersToDownload.map { it.toPrefixedHexString() }.joinToString(" ")}]")
-        blockNumbersToDownload.forEach(ethBatchService::getBlock)
+        blockNumbersToDownload.forEach(batchService::getBlock)
 
-        val blocks = ethBatchService
+        val blocks = batchService
             .execute()
             .filterIsInstance<EthGetBlockResponse>()
             .mapNotNull { it.result }
@@ -61,7 +61,7 @@ internal class EthBlockRepositoryImpl(
         }
     }
 
-    private fun findBlock(blockNumber: EthUint64): BlockEntity? {
+    private fun findBlock(blockNumber: EvmUint64): BlockEntity? {
         return connection.tx {
             executeQueryOne("SELECT data FROM block WHERE number = :number") {
                 query {
@@ -112,14 +112,14 @@ internal class EthBlockRepositoryImpl(
 
     private val json = Json(
         factory = JsonFactoryBuilder()
-            .register(EthHotModule)
+            .register(EvmHotModule)
             .register(HotObjectModule)
             .register(ValueObjectJsonModule),
         compressor = BzipCompressor
     )
 }
 
-private fun collectEthAddresses(blocks: List<EthBlock>): Set<EthAddress> {
+private fun collectEthAddresses(blocks: List<EthBlock>): Set<EvmAddress> {
     return blocks.flatMap { block ->
         listOf(block.miner)
             .plus(block.transactions.flatMap { transaction ->
@@ -131,7 +131,7 @@ private fun collectEthAddresses(blocks: List<EthBlock>): Set<EthAddress> {
 }
 
 
-private fun EthBlock.toEntity(addresses: Map<EthAddress, EthAddressId>) = BlockEntity(
+private fun EthBlock.toEntity(addresses: Map<EvmAddress, EthAddressId>) = BlockEntity(
     baseFeePerGas = baseFeePerGas,
     extraData = extraData,
     gasLimit = gasLimit,
