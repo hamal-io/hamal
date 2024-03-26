@@ -83,7 +83,7 @@ internal class EthBlockRepositoryImpl(
             }
         }
 
-//        blocks.forEach { block -> indexRepository.index(block) }
+        blocks.forEach { block -> indexRepository.index(block) }
     }
 
     override fun setupConnection(connection: Connection) {
