@@ -3,7 +3,6 @@ import {useCallback} from "react";
 import {TriggerCreateRequested, TriggerList, TriggerStatusRequested} from "@/types";
 import {useAuth} from "@/hook/auth.ts";
 
-
 type TriggerListScheduleAction = (namespaceId: string, abortController?: AbortController) => void
 export const useTriggerListSchedule = (): [TriggerListScheduleAction, TriggerList, boolean, Error] => {
     const [auth] = useAuth()
@@ -53,16 +52,16 @@ type TriggerHookCreateAction = (props: TriggerHookCreateProps) => void
 export const useTriggerHookCreate = (): [TriggerHookCreateAction, TriggerCreateRequested, boolean, Error] => {
     const [auth] = useAuth()
     const [post, submission, loading, error] = usePost<TriggerCreateRequested>()
-    const fn = useCallback(
-        async ({namespaceId, funcId, name, hookId, hookMethod, abortController}: TriggerHookCreateProps) =>
-            post(`/v1/namespaces/${namespaceId}/triggers`, {
-                type: "Hook",
-                name,
-                funcId,
-                inputs: {},
-                hookId,
-                hookMethod
-            }, abortController), [auth])
+    const fn = useCallback(async ({namespaceId, funcId, name, hookId, hookMethod, abortController}: TriggerHookCreateProps) =>
+        post(`/v1/namespaces/${namespaceId}/triggers`, {
+            type: "Hook",
+            name,
+            funcId,
+            inputs: {},
+            hookId,
+            hookMethod
+        }, abortController), [auth]
+    )
     return [fn, submission, loading, error]
 }
 
@@ -73,19 +72,18 @@ export type TriggerEventCreateProps = {
     funcId: string
 }
 
-type TriggerEventCreateAction = (props: TriggerEventCreateProps, abortController?: AbortController) => void
+type TriggerEventCreateAction = (props: TriggerEventCreateProps ,  abortController?: AbortController) => void
 export const useTriggerEventCreate = (): [TriggerEventCreateAction, TriggerCreateRequested, boolean, Error] => {
     const [auth] = useAuth()
     const [post, submission, loading, error] = usePost<TriggerCreateRequested>()
-    const fn = useCallback<TriggerEventCreateAction>(
-        async ({namespaceId, topicId, funcId, name}: TriggerEventCreateProps, abortController?: AbortController) =>
-            post(`/v1/namespaces/${namespaceId}/triggers`, {
-                type: 'Event',
-                name,
-                funcId,
-                topicId
-            }, abortController),
-        [auth])
+    const fn = useCallback<TriggerEventCreateAction>(async ({namespaceId, topicId, funcId, name}: TriggerEventCreateProps , abortController?: AbortController) =>
+        post(`/v1/namespaces/${namespaceId}/triggers`, {
+            type: 'Event',
+            name,
+            funcId,
+            topicId
+        },abortController),[auth]
+    )
     return [fn, submission, loading, error]
 }
 
