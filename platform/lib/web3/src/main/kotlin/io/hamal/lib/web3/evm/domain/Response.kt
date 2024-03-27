@@ -4,7 +4,6 @@ import io.hamal.lib.common.hot.HotObject
 
 interface EvmResponse {
     val jsonrpc: String
-    val id: EvmRequestId
 }
 
 sealed class EvmHotResponse : EvmResponse {
@@ -12,7 +11,7 @@ sealed class EvmHotResponse : EvmResponse {
 }
 
 data class EvmHotGetBlockResponse(
-    override val id: EvmRequestId,
+    val id: EvmRequestId,
     val result: HotObject?
 ) : EvmHotResponse() {
     override fun toString(): String {

@@ -1,6 +1,7 @@
 package io.hamal.lib.web3.evm.http
 
 import io.hamal.lib.common.hot.HotArray
+import io.hamal.lib.common.hot.HotNode
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.hot.HotObjectBuilder
 import io.hamal.lib.domain.Json
@@ -21,18 +22,30 @@ abstract class HttpBaseBatchService<out RESPONSE : EvmResponse>(
 
         val response = httpTemplate
             .post()
-            .body(HotArray.builder().also { builder -> requests.forEach { request -> builder.append(request) } }
-                .build())
-            .execute(HotArray::class)
+            .body(HotArray.builder().also { builder -> requests.forEach { request -> builder.append(request) } }.build())
+            .execute(HotNode::class)
 
-        return response.nodes.mapIndexed { index, hotNode ->
-            val result = hotNode.asObject()
-            json.deserialize(resultClasses[index], json.serialize(result))
-        }
-            .also {
-                requests.clear()
-                resultClasses.clear()
+        if (response is HotArray) {
+            return response.nodes.mapIndexed { index, hotNode ->
+                val result = hotNode.asObject()
+                json.deserialize(resultClasses[index], json.serialize(result))
             }
+                .also {
+                    requests.clear()
+                    resultClasses.clear()
+                }
+        }
+
+        if (response is HotObject) {
+            val error = response.find("error")
+            if (error is HotObject) {
+                val code = error["code"].intValue
+                val message = error["message"].stringValue
+                throw RuntimeException("$code - $message")
+            }
+        }
+
+        TODO()
     }
 
     protected fun request(
