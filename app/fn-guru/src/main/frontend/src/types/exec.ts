@@ -17,6 +17,7 @@ export interface ExecListItem {
     invocation: ExecListItemInvocation;
     correlation?: string;
     func?: ExecListItemFunc;
+    trigger?: ExecTriggerItem;
 }
 
 export interface ExecListItemNamespace {
