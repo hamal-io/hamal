@@ -3,13 +3,13 @@ import {PageHeader} from "@/components/page-header.tsx";
 import {columns} from "@/pages/app/exec-list/components/columns.tsx";
 import Table from "@/pages/app/exec-list/components/table.tsx";
 import {useUiState} from "@/hook/ui-state.ts";
-import {useExecsWithTriggers} from "@/pages/app/exec-list/components/hook.ts";
+import {useExecList} from "@/hook";
 
 
 type Props = {}
 const ExecListPage: FC<Props> = () => {
     const [uiState] = useUiState()
-    const [listExecs, execList, loading, error] = useExecsWithTriggers()
+    const [listExecs, execList, loading, error] = useExecList()
 
     useEffect(() => {
         const abortController = new AbortController()

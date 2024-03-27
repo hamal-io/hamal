@@ -4,6 +4,7 @@ import io.hamal.core.adapter.exec.ExecListPort
 import io.hamal.core.adapter.func.FuncListPort
 import io.hamal.core.adapter.namespace.NamespaceListPort
 import io.hamal.core.adapter.namespace_tree.NamespaceTreeGetSubTreePort
+import io.hamal.core.adapter.trigger.TriggerListPort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.FuncId
@@ -13,6 +14,7 @@ import io.hamal.lib.sdk.api.ApiExecList
 import io.hamal.repository.api.ExecQueryRepository.ExecQuery
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
 import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
+import io.hamal.repository.api.TriggerQueryRepository
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController
 internal class ExecListController(
     private val execList: ExecListPort,
     private val funcList: FuncListPort,
+    private val triggerList: TriggerListPort,
     private val namespaceList: NamespaceListPort,
     private val namespaceTreeGetSubTree: NamespaceTreeGetSubTreePort
 ) {
@@ -76,8 +79,17 @@ internal class ExecListController(
                     funcIds = execs.mapNotNull { it.correlation?.funcId })
             ).associateBy { it.id }
 
+            val triggers = triggerList(
+                TriggerQueryRepository.TriggerQuery(
+                    limit = Limit.all,
+                    //namespaceIds = namespaces,
+                    funcIds = execs.mapNotNull { it.correlation?.funcId }
+                )
+            )
+
             ResponseEntity.ok(ApiExecList(execs = execs.map {
-                ApiExecList.Exec(id = it.id,
+                ApiExecList.Exec(
+                    id = it.id,
                     status = it.status,
                     namespace = namespaces[it.namespaceId]!!.let { namespace ->
                         ApiExecList.Namespace(
@@ -92,8 +104,18 @@ internal class ExecListController(
                                 id = func.id, name = func.name
                             )
                         }
+                    },
+                    trigger = it.correlation?.funcId.let { funcId ->
+                        triggers.find { it.funcId == funcId }?.let { trigger ->
+                            ApiExecList.Trigger(
+                                id = trigger.id,
+                                status = trigger.status
+                            )
+                        }
                     })
-            }))
+            }
+            ))
         }
     }
 }
+
