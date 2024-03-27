@@ -71,7 +71,7 @@ internal fun FixedRateTriggerService.requestInvocation(trigger: Trigger.FixedRat
                 override val inputs = InvocationInputs()
                 override val version = null
             },
-            Invocation.Schedule
+            Invocation.Schedule(trigger.id)
         )
     }
 }

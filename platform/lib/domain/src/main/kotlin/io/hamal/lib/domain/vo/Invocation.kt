@@ -53,7 +53,10 @@ sealed class Invocation {
 
     object Func : Invocation()
 
-    data class Event(val events: List<io.hamal.lib.domain.vo.Event>) : Invocation()
+    data class Event(
+        val events: List<io.hamal.lib.domain.vo.Event>,
+        val id: TriggerId
+    ) : Invocation()
 
     data class Hook(
         val method: HookMethod,
@@ -70,6 +73,8 @@ sealed class Invocation {
         val content: EndpointContent
     ) : Invocation()
 
-    object Schedule : Invocation()
+    data class Schedule(
+        val id: TriggerId
+    ) : Invocation()
 }
 

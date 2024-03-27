@@ -19,7 +19,16 @@ interface Props {
 
 export default function ({row}: Props) {
     const navigate = useNavigate()
+    const [setTriggerStatus, setTriggerRequested, loading, error] = useSetTriggerStatus()
+
     const trigger = row.getValue<ExecTriggerItem>("trigger")
+
+    function handleStatusChange() {
+        const command = trigger.status === 'Active' ? 'deactivate' : 'activate'
+        const abortController = new AbortController()
+        setTriggerStatus(trigger.id, command, abortController)
+        return (() => abortController.abort())
+    }
 
     return (
         <DropdownMenu>
@@ -36,28 +45,13 @@ export default function ({row}: Props) {
                 <DropdownMenuItem onClick={() => {
                     navigate(`/executions/${row.original.id}`)
                 }}>View</DropdownMenuItem>
-                {trigger && <TriggerSwitch triggerId={trigger.id} status={trigger.status}/>}
+                {trigger &&
+                    <DropdownMenuItem onClick={handleStatusChange}>
+                        {trigger.status === 'Active' ? "Deactivate" : "Activate"}
+                    </DropdownMenuItem>}
             </DropdownMenuContent>
         </DropdownMenu>
     )
 }
 
 
-type TriggerSwitchProps = { triggerId: string, status: string }
-const TriggerSwitch: FC<TriggerSwitchProps> = ({triggerId, status}) => {
-    const [setTriggerStatus, setTriggerRequested, loading, error] = useSetTriggerStatus()
-    const current = status === "Active"
-
-    function handleClick(e) {
-        e.stopPropagation()
-        const abortController = new AbortController()
-        setTriggerStatus(triggerId, !current, abortController)
-        return (() => abortController.abort())
-    }
-
-    return (
-        <DropdownMenuItem onClick={handleClick}>
-            {current === false ? "Activate" : "Deactivate" }
-        </DropdownMenuItem>
-    )
-}

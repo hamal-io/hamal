@@ -122,7 +122,7 @@ export const columns: ColumnDef<ExecListItem>[] = [
     {
         accessorKey: "trigger",
         header: ({column}) => (
-            <ColumnHeader column={column} title="Trigger"/>
+            <ColumnHeader column={column} title="Status"/>
         ),
         cell: ({row}) => {
             const trigger = row.getValue<ExecTriggerItem>("trigger")

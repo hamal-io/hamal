@@ -6,15 +6,12 @@ import io.hamal.core.adapter.namespace.NamespaceListPort
 import io.hamal.core.adapter.namespace_tree.NamespaceTreeGetSubTreePort
 import io.hamal.core.adapter.trigger.TriggerListPort
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.domain.vo.NamespaceId
-import io.hamal.lib.domain.vo.WorkspaceId
+import io.hamal.lib.domain.vo.*
 import io.hamal.lib.sdk.api.ApiExecList
 import io.hamal.repository.api.ExecQueryRepository.ExecQuery
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
 import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
-import io.hamal.repository.api.TriggerQueryRepository
+import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -79,15 +76,32 @@ internal class ExecListController(
                     funcIds = execs.mapNotNull { it.correlation?.funcId })
             ).associateBy { it.id }
 
+
             val triggers = triggerList(
-                TriggerQueryRepository.TriggerQuery(
+                TriggerQuery(
                     limit = Limit.all,
-                    //namespaceIds = namespaces,
-                    funcIds = execs.mapNotNull { it.correlation?.funcId }
+                    funcIds = funcs.keys.toList()
                 )
             )
 
+
             ResponseEntity.ok(ApiExecList(execs = execs.map {
+                val trigger: ApiExecList.Trigger? = when (it.invocation) {
+                    is Invocation.Event -> {
+                        val event = it.invocation as Invocation.Event
+                        ApiExecList.Trigger(event.id, triggers.find { it.id == event.id }!!.status)
+                    }
+
+                    is Invocation.Endpoint -> null
+                    is Invocation.Hook -> null
+                    is Invocation.Schedule -> {
+                        val schedule = it.invocation as Invocation.Schedule
+                        ApiExecList.Trigger(schedule.id, triggers.find { it.id == schedule.id }!!.status)
+                    }
+
+                    else -> null
+                }
+
                 ApiExecList.Exec(
                     id = it.id,
                     status = it.status,
@@ -105,14 +119,8 @@ internal class ExecListController(
                             )
                         }
                     },
-                    trigger = it.correlation?.funcId.let { funcId ->
-                        triggers.find { it.funcId == funcId }?.let { trigger ->
-                            ApiExecList.Trigger(
-                                id = trigger.id,
-                                status = trigger.status
-                            )
-                        }
-                    })
+                    trigger = trigger
+                )
             }
             ))
         }

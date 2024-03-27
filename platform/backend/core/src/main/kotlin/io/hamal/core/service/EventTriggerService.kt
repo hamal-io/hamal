@@ -69,7 +69,7 @@ internal class EventTriggerService(
                                             override val inputs = InvocationInputs()
                                             override val version = null
                                         },
-                                        Invocation.Event(events.map {
+                                        Invocation.Event(events = events.map {
                                             Event(
                                                 topic = EventTopic(
                                                     id = topic.id,
@@ -78,7 +78,7 @@ internal class EventTriggerService(
                                                 id = EventId(it.id.value),
                                                 payload = EventPayload(it.payload.value)
                                             )
-                                        })
+                                        }, trigger.id)
                                     )
                                 }
                             }
