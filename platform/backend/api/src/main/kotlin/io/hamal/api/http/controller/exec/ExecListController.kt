@@ -104,14 +104,6 @@ internal class ExecListController(
                                 id = func.id, name = func.name
                             )
                         }
-                    },
-                    trigger = it.correlation?.funcId.let { funcId ->
-                        triggers.find { it.funcId == funcId }?.let { trigger ->
-                            ApiExecList.Trigger(
-                                id = trigger.id,
-                                status = trigger.status
-                            )
-                        }
                     })
             }
             ))
