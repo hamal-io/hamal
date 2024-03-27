@@ -28,8 +28,8 @@ docker {
     springBootApplication {
         maintainer.set("hamal.io docker@hamal.io")
         baseImage.set("openjdk:22-slim-bullseye")
-        ports.set(listOf(6006, 6006))
-        images.set(listOf("hamalio/fn-guru"))
+        ports.set(listOf(5005, 5005))
+        images.set(listOf("hamalio/candy-rocks"))
         jvmArgs.set(listOf("-Xmx512m", "-XX:+ExitOnOutOfMemoryError"))
     }
 }

@@ -56,3 +56,27 @@ end
 -- for k,v in pairs(res[1].result) do
 --     print(k,v)
 -- end
+
+
+
+--eth = require("web3.eth").create({
+--    url = 'http://web3-proxy-1:10000/eth'
+--})
+--
+--log = require('log').create({})
+--
+--step_size = 25
+--next_block_number = context.state.next_block_number or 19086500
+--
+--blocks = {}
+--for i = 1, step_size do
+--    table.insert(blocks, next_block_number + i)
+--end
+--
+--context.state.next_block_number = next_block_number + step_size
+--
+--blocks = fail_on_error(eth.get_blocks(blocks))
+--
+--for _, block in ipairs(blocks) do
+--    log.info(block.number)
+--end

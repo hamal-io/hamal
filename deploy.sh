@@ -12,7 +12,11 @@ BASEDIR=$(dirname "$SCRIPT")
 ./gradlew build
 
 cd $BASEDIR
+cd app/fn-guru/src/main/resources
+rm -rf dist
+rm -rf dist-openapi
 
+cd $BASEDIR
 cd app/fn-guru/src/main/frontend
 npm install
 npm run deploy
