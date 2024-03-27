@@ -24,6 +24,8 @@ data class ApiExecList(
         val namespace: Namespace,
         val invocation: Invocation,
         val func: Func?,
+        val trigger: Trigger?
+
     )
 
     data class Namespace(
@@ -34,6 +36,11 @@ data class ApiExecList(
     data class Func(
         val id: FuncId,
         val name: FuncName
+    )
+
+    data class Trigger(
+        val id: TriggerId,
+        val status: TriggerStatus,
     )
 }
 
