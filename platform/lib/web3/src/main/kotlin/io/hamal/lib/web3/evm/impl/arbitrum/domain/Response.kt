@@ -8,7 +8,7 @@ sealed class ArbitrumResponse : EvmResponse {
 }
 
 data class ArbitrumGetBlockResponse(
-    override val id: EvmRequestId,
+    val id: EvmRequestId,
     val result: ArbitrumBlock?
 ) : ArbitrumResponse() {
     override fun toString(): String {
@@ -17,7 +17,7 @@ data class ArbitrumGetBlockResponse(
 }
 
 data class ArbitrumErrorResponse(
-    override val id: EvmRequestId,
+    val id: EvmRequestId,
     val error: ArbitrumError
 ) : ArbitrumResponse() {
     override fun toString(): String {
