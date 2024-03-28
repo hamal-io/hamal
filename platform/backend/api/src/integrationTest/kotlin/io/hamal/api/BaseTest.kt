@@ -233,6 +233,7 @@ internal abstract class BaseTest {
             ExecCmdRepository.PlanCmd(
                 id = CmdId(1),
                 execId = execId,
+                triggerId = TriggerId(23),
                 namespaceId = testNamespace.id,
                 workspaceId = testWorkspace.id,
                 correlation = correlation,

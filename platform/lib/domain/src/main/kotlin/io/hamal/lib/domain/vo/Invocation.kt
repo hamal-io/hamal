@@ -49,13 +49,19 @@ sealed class Invocation {
 
     }
 
-    object Adhoc : Invocation()
+    data object Adhoc : Invocation()
 
-    object Func : Invocation()
+    data object Func : Invocation()
+
+    data class Endpoint(
+        val method: EndpointMethod,
+        val headers: EndpointHeaders,
+        val parameters: EndpointParameters,
+        val content: EndpointContent
+    ) : Invocation()
 
     data class Event(
-        val events: List<io.hamal.lib.domain.vo.Event>,
-        val id: TriggerId
+        val events: List<io.hamal.lib.domain.vo.Event>
     ) : Invocation()
 
     data class Hook(
@@ -66,15 +72,6 @@ sealed class Invocation {
     ) : Invocation()
 
 
-    data class Endpoint(
-        val method: EndpointMethod,
-        val headers: EndpointHeaders,
-        val parameters: EndpointParameters,
-        val content: EndpointContent
-    ) : Invocation()
-
-    data class Schedule(
-        val id: TriggerId
-    ) : Invocation()
+    data object Schedule : Invocation()
 }
 

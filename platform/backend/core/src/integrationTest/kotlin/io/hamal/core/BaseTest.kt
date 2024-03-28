@@ -204,6 +204,7 @@ internal abstract class BaseTest {
             PlanCmd(
                 id = CmdId(1),
                 execId = execId,
+                triggerId = TriggerId(23),
                 workspaceId = testWorkspace.id,
                 namespaceId = testNamespace.id,
                 correlation = correlation,

@@ -30,6 +30,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                 PlanCmd(
                     id = CmdId(1),
                     execId = ExecId(2),
+                    triggerId = TriggerId(12),
                     namespaceId = NamespaceId(5),
                     workspaceId = WorkspaceId(3),
                     correlation = Correlation(
@@ -38,7 +39,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                     inputs = ExecInputs(HotObject.builder().set("hamal", "rocks").build()),
                     code = ExecCode(value = CodeValue("40 + 2")),
                     invocation = Invocation.Event(
-                        listOf(
+                        events = listOf(
                             Event(
                                 topic = EventTopic(id = TopicId(90), name = TopicName("test-topic")),
                                 id = EventId(95),
@@ -355,6 +356,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
 
             with(get(ExecId(1))) {
                 assertThat(id, equalTo(ExecId(1)))
+                assertThat(triggerId, equalTo(TriggerId(12)))
                 assertThat(workspaceId, equalTo(WorkspaceId(333)))
                 assertThat(correlation?.id, equalTo(CorrelationId("SomeCorrelationId")))
                 assertThat(correlation?.funcId, equalTo(FuncId(444)))
@@ -363,7 +365,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                 assertThat(
                     invocation, equalTo(
                         Invocation.Event(
-                            listOf(
+                            events = listOf(
                                 Event(
                                     topic = EventTopic(id = TopicId(90), name = TopicName("test-topic")),
                                     id = EventId(95),
@@ -399,6 +401,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
 
             with(find(ExecId(1))!!) {
                 assertThat(id, equalTo(ExecId(1)))
+                assertThat(triggerId, equalTo(TriggerId(12)))
                 assertThat(workspaceId, equalTo(WorkspaceId(333)))
                 assertThat(correlation?.id, equalTo(CorrelationId("SomeCorrelationId")))
                 assertThat(correlation?.funcId, equalTo(FuncId(444)))
@@ -407,7 +410,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                 assertThat(
                     invocation, equalTo(
                         Invocation.Event(
-                            listOf(
+                            events = listOf(
                                 Event(
                                     topic = EventTopic(id = TopicId(90), name = TopicName("test-topic")),
                                     id = EventId(95),
@@ -610,6 +613,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
 
 private fun assertBaseExec(exec: Exec) {
     assertThat(exec.id, equalTo(ExecId(2)))
+    assertThat(exec.triggerId, equalTo(TriggerId(12)))
     assertThat(exec.workspaceId, equalTo(WorkspaceId(3)))
     assertThat(
         exec.correlation, equalTo(
@@ -622,7 +626,7 @@ private fun assertBaseExec(exec: Exec) {
     assertThat(
         exec.invocation, equalTo(
             Invocation.Event(
-                listOf(
+                events = listOf(
                     Event(
                         topic = EventTopic(id = TopicId(90), name = TopicName("test-topic")),
                         id = EventId(95),
@@ -643,6 +647,7 @@ private fun ExecRepository.planExec(
     PlanCmd(
         id = cmdId,
         execId = execId,
+        triggerId = TriggerId(12),
         namespaceId = namespaceId,
         workspaceId = workspaceId,
         correlation = Correlation(
@@ -651,7 +656,7 @@ private fun ExecRepository.planExec(
         inputs = ExecInputs(HotObject.builder().set("hamal", "rocks").build()),
         code = ExecCode(value = CodeValue("40 + 2")),
         invocation = Invocation.Event(
-            listOf(
+            events = listOf(
                 Event(
                     topic = EventTopic(id = TopicId(90), name = TopicName("test-topic")),
                     id = EventId(95),
@@ -683,13 +688,14 @@ fun ExecRepository.createExec(
         PlanCmd(
             id = CmdId(100),
             execId = execId,
+            triggerId = TriggerId(12),
             namespaceId = namespaceId,
             workspaceId = workspaceId,
             correlation = correlation,
             inputs = ExecInputs(HotObject.builder().set("hamal", "rocks").build()),
             code = ExecCode(value = CodeValue("'13'..'37'")),
             invocation = Invocation.Event(
-                listOf(
+                events = listOf(
                     Event(
                         topic = EventTopic(id = TopicId(90), name = TopicName("test-topic")),
                         id = EventId(95),

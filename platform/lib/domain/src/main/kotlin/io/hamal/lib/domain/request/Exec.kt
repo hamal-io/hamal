@@ -8,6 +8,7 @@ data class ExecInvokeRequested(
     override val requestedBy: AuthId,
     override var requestStatus: RequestStatus,
     val id: ExecId,
+    val triggerId: TriggerId?,
     val workspaceId: WorkspaceId,
     val namespaceId: NamespaceId,
     val funcId: FuncId?,

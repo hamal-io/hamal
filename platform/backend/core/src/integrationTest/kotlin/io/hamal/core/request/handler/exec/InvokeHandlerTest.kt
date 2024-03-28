@@ -24,6 +24,7 @@ internal class ExecInvokeHandlerTest : BaseRequestHandlerTest() {
                 requestedBy = AuthId(2),
                 requestStatus = Submitted,
                 id = ExecId(3333),
+                triggerId = TriggerId(4444),
                 namespaceId = testNamespace.id,
                 workspaceId = testWorkspace.id,
                 inputs = InvocationInputs(HotObject.builder().set("hamal", "justworks").build()),
@@ -66,6 +67,7 @@ internal class ExecInvokeHandlerTest : BaseRequestHandlerTest() {
                 correlationId = CorrelationId("some-correlation"),
                 requestStatus = Submitted,
                 id = ExecId(3333),
+                triggerId = TriggerId(4444),
                 namespaceId = testNamespace.id,
                 workspaceId = testWorkspace.id,
                 inputs = InvocationInputs(
@@ -135,6 +137,7 @@ internal class ExecInvokeHandlerTest : BaseRequestHandlerTest() {
             correlationId = CorrelationId("some-correlation"),
             requestStatus = Submitted,
             id = ExecId(3333),
+            triggerId = TriggerId(4444),
             namespaceId = testNamespace.id,
             workspaceId = testWorkspace.id,
             inputs = InvocationInputs(

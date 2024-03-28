@@ -27,6 +27,7 @@ class AdhocInvokeAdapter(
             requestedBy = SecurityContext.currentAuthId,
             requestStatus = Submitted,
             id = generateDomainId(::ExecId),
+            triggerId = null,
             namespaceId = namespace.id,
             workspaceId = namespace.workspaceId,
             inputs = req.inputs ?: InvocationInputs(),

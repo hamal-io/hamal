@@ -17,6 +17,7 @@ data class ExecEntity(
     override val id: ExecId,
     override val sequence: RecordSequence,
     override val recordedAt: RecordedAt,
+    val triggerId: TriggerId?,
     val namespaceId: NamespaceId,
     val workspaceId: WorkspaceId,
 
@@ -100,6 +101,7 @@ data class ExecEntity(
         val plannedExec = Exec.Planned(
             cmdId = cmdId,
             id = id,
+            triggerId = triggerId,
             updatedAt = recordedAt.toUpdatedAt(),
             namespaceId = namespaceId,
             workspaceId = workspaceId,
@@ -152,6 +154,7 @@ fun List<ExecRecord>.createEntity(): ExecEntity {
 
     var result = ExecEntity(
         id = firstRecord.entityId,
+        triggerId = firstRecord.triggerId,
         namespaceId = firstRecord.namespaceId,
         workspaceId = firstRecord.workspaceId,
         cmdId = firstRecord.cmdId,
