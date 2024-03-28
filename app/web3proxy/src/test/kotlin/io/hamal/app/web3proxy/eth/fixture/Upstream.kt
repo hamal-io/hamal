@@ -1,5 +1,7 @@
 package io.hamal.app.web3proxy.eth.fixture
 
+import io.hamal.lib.web3.evm.abi.type.EvmAddress
+import io.hamal.lib.web3.evm.abi.type.EvmPrefixedHexString
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
 import io.hamal.lib.web3.evm.domain.EvmRequestId
 import io.hamal.lib.web3.evm.impl.eth.domain.EthBlock
@@ -33,6 +35,10 @@ internal class EthBatchServiceFixture : EthBatchService<EthBatchServiceFixture> 
         }
 
         return this
+    }
+
+    override fun call(to: EvmAddress, data: EvmPrefixedHexString, number: EvmUint64, from: EvmAddress?): EthBatchServiceFixture {
+        TODO("Not yet implemented")
     }
 
     fun clear() {

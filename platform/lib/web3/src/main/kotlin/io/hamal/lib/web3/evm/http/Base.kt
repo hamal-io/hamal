@@ -28,6 +28,7 @@ abstract class HttpBaseBatchService<out RESPONSE : EvmResponse>(
         if (response is HotArray) {
             return response.nodes.mapIndexed { index, hotNode ->
                 val result = hotNode.asObject()
+                // FIXME handle [{"id":"1","error":{"code":-32603,"message":"Unexpected error"},"jsonrpc":"2.0"}]
                 json.deserialize(resultClasses[index], json.serialize(result))
             }
                 .also {

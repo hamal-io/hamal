@@ -1,14 +1,19 @@
 package io.hamal.lib.web3
 
 import io.hamal.lib.http.HttpTemplateImpl
+import io.hamal.lib.web3.Erc20.decimals
+import io.hamal.lib.web3.US.getReserves
 import io.hamal.lib.web3.evm.abi.*
+import io.hamal.lib.web3.evm.abi.type.EvmAddress
+import io.hamal.lib.web3.evm.abi.type.EvmPrefixedHexString
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
-import io.hamal.lib.web3.evm.impl.eth.http.EthHttpBatchService
+import io.hamal.lib.web3.evm.domain.EvmHotCallResponse
+import io.hamal.lib.web3.evm.http.EvmHotHttpBatchService
 
 
 object Erc20 {
 
-    val decimals = EthFunction(
+    val decimals = EvmFunction(
         name = "decimals",
         inputs = EthInputTuple0,
         outputs = EvmOutputTuple1(
@@ -16,7 +21,7 @@ object Erc20 {
         )
     )
 
-    val name = EthFunction(
+    val name = EvmFunction(
         name = "name",
         inputs = EthInputTuple0,
         outputs = EvmOutputTuple1(
@@ -24,7 +29,7 @@ object Erc20 {
         )
     )
 
-    val symbol = EthFunction(
+    val symbol = EvmFunction(
         name = "symbol",
         inputs = EthInputTuple0,
         outputs = EvmOutputTuple1(
@@ -34,7 +39,7 @@ object Erc20 {
 }
 
 object US {
-    val getReserves = EthFunction(
+    val getReserves = EvmFunction(
         "getReserves",
         EvmInput.Tuple0(),
         EvmOutput.Tuple3(
@@ -47,12 +52,25 @@ object US {
 
 
 fun main() {
-    val ethService = EthHttpBatchService(
+//    val ethService = EthHttpBatchService(
+//        HttpTemplateImpl("http://localhost:10000/eth"),
+//    )
+
+//    val blockResponse = ethService.getBlock(EvmUint64(10001)).execute().first()
+//
+//
+
+    val hotService = EvmHotHttpBatchService(
         HttpTemplateImpl("http://localhost:10000/eth"),
     )
 
-    val blockResponse = ethService.getBlock(EvmUint64(10001)).execute().first()
+    hotService.call(
+        to = EvmAddress("0x570febdf89c07f256c75686caca215289bb11cfc"),
+        data = EvmPrefixedHexString("0x0902f1ac"),
+        number = EvmUint64(12040753L)
+    )
 
+    val response = hotService.execute()
 
 
 //    val response = srv
@@ -64,10 +82,10 @@ fun main() {
 //            )
 //        ).execute()
 //
-//    val x = getReserves.outputs.decodeToMap((response[0] as EthCallResponse).result)
-//    System.out.println(x["_reserve0"])
-//    System.out.println(x["_reserve1"])
-//
-//    println(decimals.signature.encoded.toPrefixedHexString())
+    val x = getReserves.outputs.decodeToMap((response[0] as EvmHotCallResponse).result?.value?.let(::EvmPrefixedHexString)!!)
+    println(x["_reserve0"])
+    println(x["_reserve1"])
+
+    println(decimals.signature.encoded.toPrefixedHexString())
 
 }

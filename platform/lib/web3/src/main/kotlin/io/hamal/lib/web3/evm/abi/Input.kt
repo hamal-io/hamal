@@ -16,12 +16,12 @@ data class EvmInput<VALUE_TYPE : EvmType<*>>(
 
 }
 
-sealed interface EthInputTuple {
+sealed interface EvmInputTuple {
     val signature: String
 
 }
 
-object EthInputTuple0 : EthInputTuple {
+object EthInputTuple0 : EvmInputTuple {
     override val signature = "()"
 }
 

@@ -1,6 +1,7 @@
 package io.hamal.lib.web3.evm.domain
 
 import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.hot.HotString
 
 interface EvmResponse {
     val jsonrpc: String
@@ -16,5 +17,15 @@ data class EvmHotGetBlockResponse(
 ) : EvmHotResponse() {
     override fun toString(): String {
         return "GenericGetBlockResponse($result)"
+    }
+}
+
+
+data class EvmHotCallResponse(
+    val id: EvmRequestId,
+    val result: HotString?
+) : EvmHotResponse() {
+    override fun toString(): String {
+        return "EvmHotCallResponse($result)"
     }
 }

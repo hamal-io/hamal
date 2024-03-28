@@ -3,6 +3,8 @@ package io.hamal.lib.web3.evm.impl.eth.http
 import io.hamal.lib.common.hot.HotArray
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.web3.evm.EvmBatchService
+import io.hamal.lib.web3.evm.abi.type.EvmAddress
+import io.hamal.lib.web3.evm.abi.type.EvmPrefixedHexString
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
 import io.hamal.lib.web3.evm.http.HttpBaseBatchService
 import io.hamal.lib.web3.evm.impl.eth.domain.EthGetBlockResponse
@@ -24,5 +26,9 @@ class EthHttpBatchService(
                 .build(),
             resultClass = EthGetBlockResponse::class
         )
+    }
+
+    override fun call(to: EvmAddress, data: EvmPrefixedHexString, number: EvmUint64, from: EvmAddress?): EthHttpBatchService {
+        TODO("Not yet implemented")
     }
 }

@@ -3,10 +3,6 @@ package io.hamal.lib.web3.evm.abi
 import io.hamal.lib.web3.evm.abi.type.EvmPrefixedHexString
 import io.hamal.lib.web3.evm.abi.type.EvmUint112
 import io.hamal.lib.web3.evm.abi.type.EvmUint32
-import io.hamal.lib.web3.evm.abi.DecodedEvmType
-import io.hamal.lib.web3.evm.abi.EthFunction
-import io.hamal.lib.web3.evm.abi.EvmInput
-import io.hamal.lib.web3.evm.abi.EvmOutput
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
@@ -18,7 +14,7 @@ internal object FuncTest {
         val someData = EvmPrefixedHexString(
             "0x0000000000000000000000000000000000000000000000c18146ba0b7fb26e350000000000000000000000000000000000000000000e720af711d2090dc245c2000000000000000000000000000000000000000000000000000000006212aa48"
         )
-        val testInstance = EthFunction(
+        val testInstance = EvmFunction(
             "getReserves",
             EvmInput.Tuple0(),
             EvmOutput.Tuple3(
@@ -45,7 +41,7 @@ internal object FuncTest {
         val someData = EvmPrefixedHexString(
             "0x0000000000000000000000000000000000000000000000c18146ba0b7fb26e350000000000000000000000000000000000000000000e720af711d2090dc245c2000000000000000000000000000000000000000000000000000000006212aa48"
         )
-        val testInstance = EthFunction(
+        val testInstance = EvmFunction(
             "getReserves",
             EvmInput.Tuple0(),
             EvmOutput.Tuple3(

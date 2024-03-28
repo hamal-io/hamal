@@ -3,6 +3,8 @@ package io.hamal.lib.web3.evm.impl.arbitrum.http
 import io.hamal.lib.common.hot.HotArray
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.web3.evm.EvmBatchService
+import io.hamal.lib.web3.evm.abi.type.EvmAddress
+import io.hamal.lib.web3.evm.abi.type.EvmPrefixedHexString
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
 import io.hamal.lib.web3.evm.http.HttpBaseBatchService
 import io.hamal.lib.web3.evm.impl.arbitrum.domain.ArbitrumGetBlockResponse
@@ -25,5 +27,9 @@ class ArbitrumHttpBatchService(
                 .build(),
             resultClass = ArbitrumGetBlockResponse::class
         )
+    }
+
+    override fun call(to: EvmAddress, data: EvmPrefixedHexString, number: EvmUint64, from: EvmAddress?): ArbitrumHttpBatchService {
+        TODO("Not yet implemented")
     }
 }

@@ -4,14 +4,17 @@ import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.hot.HotArray
+import io.hamal.lib.common.hot.HotNull
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.hot.HotString
 import io.hamal.lib.common.serialization.GsonTransform
 import io.hamal.lib.common.serialization.JsonAdapter
 import io.hamal.lib.domain.Json
+import io.hamal.lib.web3.evm.abi.type.EvmAddress
 import io.hamal.lib.web3.evm.abi.type.EvmPrefixedHexString
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
 import io.hamal.lib.web3.evm.domain.EvmMethod
+import io.hamal.lib.web3.evm.domain.EvmMethod.Call
 import io.hamal.lib.web3.evm.domain.EvmMethod.GetBlockByNumber
 import io.hamal.lib.web3.evm.domain.EvmRequest
 import io.hamal.lib.web3.evm.domain.EvmRequestId
@@ -57,6 +60,51 @@ sealed interface EthRequest : EvmRequest {
         }
     }
 }
+
+data class EthCallRequest(
+    override val id: EvmRequestId,
+    val from: EvmAddress?,
+    val to: EvmAddress,
+    val data: EvmPrefixedHexString,
+    val number: EvmUint64,
+) : EthRequest {
+    override val method: EvmMethod = Call
+
+    object Adapter : JsonAdapter<EthCallRequest> {
+        override fun serialize(request: EthCallRequest, typeOfSrc: Type, ctx: JsonSerializationContext): JsonElement {
+            return GsonTransform.fromNode(
+                HotObject.builder()
+                    .set("id", GsonTransform.toNode(ctx.serialize(request.id)))
+                    .set("method", GsonTransform.toNode(ctx.serialize(request.method)))
+                    .set(
+                        "params", HotArray.builder()
+                            .append(
+                                HotObject.builder()
+                                    .set("from", request.from?.toPrefixedHexString()?.value?.let(::HotString) ?: HotNull)
+                                    .set("to", request.to.toPrefixedHexString().value)
+                                    .set("data", request.data.value)
+                                    .build()
+                            )
+                            .append(HotString(request.number.toPrefixedHexString().value))
+                            .build()
+                    )
+                    .build()
+            )
+        }
+
+        override fun deserialize(element: JsonElement, typeOfT: Type, context: JsonDeserializationContext): EthCallRequest {
+            val obj = element.asJsonObject
+            return EthCallRequest(
+                id = EvmRequestId(obj.get("id").asString),
+                data = EvmPrefixedHexString(obj.getAsJsonArray("params").get(0).asJsonObject.get("data").asString),
+                from = obj.getAsJsonArray("params").get(0).asJsonObject.get("from")?.asString?.let(::EvmAddress),
+                to = EvmAddress(obj.getAsJsonArray("params").get(0).asJsonObject.get("to").asString),
+                number = EvmUint64(EvmPrefixedHexString(obj.getAsJsonArray("params").get(0).asString)),
+            )
+        }
+    }
+}
+
 
 data class EthGetBlockByNumberRequest(
     override val id: EvmRequestId,
