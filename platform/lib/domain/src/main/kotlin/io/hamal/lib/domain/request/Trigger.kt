@@ -47,3 +47,9 @@ data class TriggerStatusRequested(
     val status: TriggerStatus
 ) : Requested()
 
+
+interface TriggerInvokeRequest {
+    val correlationId: CorrelationId?
+    val inputs: InvocationInputs?
+}
+

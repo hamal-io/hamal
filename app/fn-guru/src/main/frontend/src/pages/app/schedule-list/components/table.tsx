@@ -1,5 +1,4 @@
 import * as React from "react"
-import {useContext} from "react"
 import {
     ColumnDef,
     ColumnFiltersState,
@@ -18,7 +17,7 @@ import {
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow,} from "@/components/ui/table.tsx"
 
 import Pagination from "./pagination.tsx"
-import {Card, CardContent, CardFooter, CardHeader} from "@/components/ui/card.tsx";
+import {Card, CardContent, CardFooter} from "@/components/ui/card.tsx";
 import {useNavigate} from "react-router-dom";
 
 interface DataTableProps<TData, TValue> {
@@ -87,9 +86,7 @@ export default function <TData, TValue>({columns, data,}: DataTableProps<TData, 
                                 <TableRow
                                     key={row.id}
                                     data-state={row.getIsSelected() && "selected"}
-                                    onClick={() => {
-                                        navigate(`/schedules/${row.original['id']}`)
-                                    }}
+
                                 >
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell key={cell.id}>

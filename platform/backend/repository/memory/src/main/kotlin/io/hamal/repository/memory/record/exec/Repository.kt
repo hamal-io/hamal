@@ -28,6 +28,7 @@ class ExecMemoryRepository : RecordMemoryRepository<ExecId, ExecRecord, Exec>(
                     ExecRecord.Planned(
                         cmdId = cmd.id,
                         entityId = execId,
+                        triggerId = cmd.triggerId,
                         namespaceId = cmd.namespaceId,
                         workspaceId = cmd.workspaceId,
                         correlation = cmd.correlation,

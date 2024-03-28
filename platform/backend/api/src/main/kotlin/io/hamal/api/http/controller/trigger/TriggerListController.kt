@@ -120,7 +120,8 @@ class TriggerListController(
                                         id = trigger.namespaceId,
                                         name = namespaces[trigger.namespaceId]!!.name
                                     ),
-                                    duration = trigger.duration
+                                    duration = trigger.duration,
+                                    status = trigger.status
                                 )
                             }
 
@@ -139,7 +140,8 @@ class TriggerListController(
                                     topic = Topic(
                                         id = trigger.topicId,
                                         name = topics[trigger.topicId]!!.name
-                                    )
+                                    ),
+                                    status = trigger.status
                                 )
                             }
 
@@ -159,7 +161,8 @@ class TriggerListController(
                                         id = trigger.hookId,
                                         name = hooks[trigger.hookId]!!.name,
                                         method = trigger.hookMethod
-                                    )
+                                    ),
+                                    status = trigger.status
                                 )
                             }
 
@@ -175,7 +178,8 @@ class TriggerListController(
                                         id = trigger.namespaceId,
                                         name = namespaces[trigger.namespaceId]!!.name
                                     ),
-                                    cron = trigger.cron
+                                    cron = trigger.cron,
+                                    status = trigger.status
                                 )
                             }
                         }

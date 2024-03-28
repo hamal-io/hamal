@@ -169,6 +169,7 @@ class TestSetupConfig {
             PlanCmd(
                 id = CmdId(id),
                 execId = ExecId(id),
+                triggerId = null,
                 namespaceId = NamespaceId(id),
                 workspaceId = WorkspaceId(id),
                 correlation = Correlation(

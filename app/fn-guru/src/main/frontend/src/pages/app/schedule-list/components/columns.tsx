@@ -76,6 +76,21 @@ export const columns: ColumnDef<TriggerListItem>[] = [
         },
     },
     {
+        accessorKey: "status",
+        header: ({column}) => (
+            <ColumnHeader column={column} title="Status"/>
+        ),
+        cell: ({row}) => {
+            return (
+                <div className="flex  items-center">
+                    <div className="flex  items-center">
+                        <span>{row.getValue("status")}</span>
+                    </div>
+                </div>
+            )
+        }
+    },
+    {
         id: "actions",
         cell: ({row}) => <RowActions row={row}/>,
     },

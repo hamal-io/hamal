@@ -1,6 +1,7 @@
 package io.hamal.lib.sdk.api
 
 import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.sdk.fold
@@ -22,7 +23,9 @@ data class ApiExecList(
         val correlation: CorrelationId?,
         val namespace: Namespace,
         val invocation: Invocation,
-        val func: Func?
+        val func: Func?,
+        val trigger: Trigger?
+
     )
 
     data class Namespace(
@@ -33,6 +36,11 @@ data class ApiExecList(
     data class Func(
         val id: FuncId,
         val name: FuncName
+    )
+
+    data class Trigger(
+        val id: TriggerId,
+        val status: TriggerStatus,
     )
 }
 

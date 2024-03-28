@@ -42,6 +42,7 @@ class ExecInvokeHandler(
             PlanCmd(
                 id = req.cmdId(),
                 execId = req.id,
+                triggerId = req.triggerId,
                 namespaceId = req.namespaceId,
                 workspaceId = req.workspaceId,
                 correlation = correlation,

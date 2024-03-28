@@ -15,6 +15,7 @@ export interface TriggerListItem {
     id: string;
     type: string;
     name: string;
+    status: string;
     func: {
         id: string;
         name: string;
@@ -27,6 +28,12 @@ export interface TriggerListItem {
     topic?: {
         id: string;
         name: string;
-    },
+    }
+}
 
+export interface TriggerStatusRequested {
+    "requestId": string,
+    "requestStatus": string,
+    "id": string,
+    "status": string,
 }

@@ -46,6 +46,7 @@ class EndpointInvokeAdapter(
                 requestedBy = SecurityContext.currentAuthId,
                 requestStatus = RequestStatus.Submitted,
                 id = execId,
+                triggerId = null,
                 namespaceId = func.namespaceId,
                 workspaceId = func.workspaceId,
                 inputs = InvocationInputs(),

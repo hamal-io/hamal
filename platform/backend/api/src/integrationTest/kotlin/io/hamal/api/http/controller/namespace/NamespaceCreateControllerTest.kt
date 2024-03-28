@@ -41,8 +41,7 @@ internal class NamespaceCreateControllerTest : NamespaceBaseControllerTest() {
                 )
             )
         ).id
-        val z = namespaceQueryRepository.get(namespaceId)
-
+        
         with(namespaceQueryRepository.get(namespaceId)) {
             assertThat(id, equalTo(namespaceId))
             assertThat(name, equalTo(NamespaceName("test-namespace")))
