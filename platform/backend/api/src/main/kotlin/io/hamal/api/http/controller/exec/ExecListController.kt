@@ -115,7 +115,8 @@ internal class ExecListController(
     private fun Trigger.toApi(): ApiExecList.Trigger {
         return ApiExecList.Trigger(
             id = id,
-            status = status
+            status = status,
+            type = type
         )
     }
 }

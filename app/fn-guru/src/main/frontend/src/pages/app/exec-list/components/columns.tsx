@@ -95,34 +95,9 @@ export const columns: ColumnDef<ExecListItem>[] = [
         enableHiding: false,
     },
     {
-        accessorKey: "invocation",
-        header: ({column}) => (
-            <ColumnHeader column={column} title="Invocation"/>
-        ),
-        cell: ({row}) => {
-            const className = row.getValue<ExecListItemInvocation>("invocation").class
-
-            const invocation = invocations.find(
-                (invocation) => invocation.value === className
-            )
-
-            if (!invocation) {
-                return null
-            }
-
-            return (
-                <div className="flex  items-center">
-                    <span>{className}</span>
-                </div>
-            )
-        },
-        enableSorting: false,
-        enableHiding: false,
-    },
-    {
         accessorKey: "trigger",
         header: ({column}) => (
-            <ColumnHeader column={column} title="Status"/>
+            <ColumnHeader column={column} title="Trigger"/>
         ),
         cell: ({row}) => {
             const trigger = row.getValue<ExecTriggerItem>("trigger")
@@ -133,7 +108,7 @@ export const columns: ColumnDef<ExecListItem>[] = [
 
             return (
                 <div className="flex  items-center">
-                    <span>{trigger.status}</span>
+                    <span>{trigger.type} ({trigger.status})</span>
                 </div>
             )
 
