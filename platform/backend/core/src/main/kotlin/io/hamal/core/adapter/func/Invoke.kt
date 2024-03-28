@@ -11,7 +11,7 @@ import io.hamal.lib.domain.vo.*
 import org.springframework.stereotype.Component
 
 fun interface FuncInvokePort {
-    operator fun invoke(funcId: FuncId, req: FuncInvokeRequest, invocation: Invocation): ExecInvokeRequested
+    operator fun invoke(funcId: FuncId, req: FuncInvokeRequest): ExecInvokeRequested
 }
 
 @Component
@@ -21,11 +21,7 @@ class FuncInvokeAdapter(
     private val generateDomainId: GenerateDomainId,
     private val requestEnqueue: RequestEnqueuePort
 ) : FuncInvokePort {
-    override fun invoke(
-        funcId: FuncId,
-        req: FuncInvokeRequest,
-        invocation: Invocation
-    ): ExecInvokeRequested {
+    override fun invoke(funcId: FuncId, req: FuncInvokeRequest): ExecInvokeRequested {
         val func = funcGet(funcId)
 
         val version = req.version?.also {
@@ -47,8 +43,7 @@ class FuncInvokeAdapter(
                 id = func.code.id,
                 version = version,
                 value = null
-            ),
-            invocation = invocation
+            )
         ).also(requestEnqueue::invoke)
     }
 }

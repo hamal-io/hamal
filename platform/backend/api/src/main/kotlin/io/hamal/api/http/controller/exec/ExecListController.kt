@@ -97,7 +97,6 @@ internal class ExecListController(
                             id = namespace.id, name = namespace.name
                         )
                     },
-                    invocation = exec.invocation,
                     correlation = exec.correlation?.id,
                     func = exec.correlation?.funcId?.let { funcId ->
                         funcs[funcId]!!.let { func ->

@@ -180,8 +180,7 @@ class TestSetupConfig {
                 code = ExecCode(
                     id = CodeId(id),
                     version = CodeVersion(1)
-                ),
-                Invocation.Func
+                )
             )
         )
 

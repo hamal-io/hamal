@@ -196,8 +196,7 @@ internal abstract class BaseTest {
         correlation: Correlation? = null,
         codeId: CodeId? = null,
         codeVersion: CodeVersion? = null,
-        code: CodeValue = CodeValue(""),
-        invocation: Invocation = Invocation.Adhoc
+        code: CodeValue = CodeValue("")
     ): Exec {
 
         val planedExec = execCmdRepository.plan(
@@ -213,8 +212,7 @@ internal abstract class BaseTest {
                     id = codeId,
                     version = codeVersion,
                     value = code
-                ),
-                invocation = invocation
+                )
             )
         )
 

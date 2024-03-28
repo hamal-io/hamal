@@ -79,8 +79,6 @@ object ValueObjectJsonModule : HotModule() {
         this[HookParameters::class] = ValueObjectHotObjectAdapter(::HookParameters)
         this[HookContent::class] = ValueObjectHotObjectAdapter(::HookContent)
 
-        this[Invocation::class] = Invocation.Adapter
-        this[InvocationClass::class] = ValueObjectStringAdapter(::InvocationClass)
         this[InvocationInputs::class] = ValueObjectHotObjectAdapter(::InvocationInputs)
 
         this[Limit::class] = ValueObjectIntAdapter(::Limit)

@@ -9,7 +9,9 @@ import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.request.TriggerInvokeRequest
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.CorrelationId
+import io.hamal.lib.domain.vo.InvocationInputs
+import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.repository.api.Auth
 import io.hamal.repository.api.TopicRepository
 import io.hamal.repository.api.Trigger
@@ -67,19 +69,7 @@ internal class EventTriggerService(
                                         object : TriggerInvokeRequest {
                                             override val correlationId = trigger.correlationId ?: CorrelationId.default
                                             override val inputs = InvocationInputs()
-                                        },
-                                        Invocation.Event(
-                                            events = events.map {
-                                                Event(
-                                                    topic = EventTopic(
-                                                        id = topic.id,
-                                                        name = topic.name
-                                                    ),
-                                                    id = EventId(it.id.value),
-                                                    payload = EventPayload(it.payload.value)
-                                                )
-                                            }
-                                        )
+                                        }
                                     )
                                 }
                             }

@@ -30,8 +30,7 @@ internal class ExecInvokeHandlerTest : BaseRequestHandlerTest() {
                 inputs = InvocationInputs(HotObject.builder().set("hamal", "justworks").build()),
                 code = ExecCode(value = CodeValue("code")),
                 funcId = null,
-                correlationId = null,
-                invocation = Invocation.Event(listOf())
+                correlationId = null
             )
         )
 
@@ -80,8 +79,7 @@ internal class ExecInvokeHandlerTest : BaseRequestHandlerTest() {
                 code = ExecCode(
                     id = CodeId(4455),
                     version = CodeVersion(5544),
-                ),
-                invocation = Invocation.Event(listOf())
+                )
             )
         )
 
@@ -149,8 +147,7 @@ internal class ExecInvokeHandlerTest : BaseRequestHandlerTest() {
             code = ExecCode(
                 id = CodeId(5555),
                 version = CodeVersion(6666),
-            ),
-            invocation = Invocation.Event(listOf())
+            )
         )
     }
     //@formatter:on

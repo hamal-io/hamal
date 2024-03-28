@@ -10,7 +10,6 @@ import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain.request.TriggerInvokeRequest
 import io.hamal.lib.domain.vo.CorrelationId
-import io.hamal.lib.domain.vo.Invocation
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.repository.api.Auth
@@ -71,8 +70,7 @@ internal fun FixedRateTriggerService.requestInvocation(trigger: Trigger.FixedRat
             object : TriggerInvokeRequest {
                 override val correlationId = trigger.correlationId ?: CorrelationId.default
                 override val inputs = InvocationInputs()
-            },
-            Invocation.Schedule
+            }
         )
     }
 }

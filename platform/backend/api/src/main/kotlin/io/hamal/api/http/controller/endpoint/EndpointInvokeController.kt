@@ -5,7 +5,8 @@ import io.hamal.core.adapter.func.FuncGetPort
 import io.hamal.core.security.SecurityContext
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain._enum.EndpointMethod
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.EndpointId
+import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.sdk.api.ApiExec
 import io.hamal.repository.api.Auth
 import io.hamal.repository.api.Exec
@@ -48,11 +49,13 @@ internal class EndpointInvokeController(
     ): CompletableFuture<ResponseEntity<ApiExec>> {
         return endpointInvoke(
             endpointId = id,
-            invocation = Invocation.Endpoint(
-                method = req.method(),
-                headers = req.headers(),
-                parameters = req.parameters(),
-                content = req.content()
+            inputs = InvocationInputs(
+                HotObject.builder()
+                    .set("method", req.method())
+                    .set("headers", req.headers())
+                    .set("parameters", req.parameters())
+                    .set("content", req.content())
+                    .build()
             ),
             auth
         ).thenApply { exec ->
@@ -65,7 +68,6 @@ internal class EndpointInvokeController(
                         status = exec.status,
                         correlation = exec.correlation?.id,
                         inputs = exec.inputs,
-                        invocation = exec.invocation,
                         result = if (exec is Exec.Completed) {
                             exec.result
                         } else if (exec is Exec.Failed) {
@@ -98,26 +100,26 @@ private fun HttpServletRequest.method(): EndpointMethod = when (method.lowercase
     else -> throw IllegalArgumentException("${method.lowercase()} not supported")
 }
 
-private fun HttpServletRequest.headers(): EndpointHeaders {
+private fun HttpServletRequest.headers(): HotObject {
     val builder = HotObject.builder()
     headerNames.asSequence().forEach { headerName ->
         builder[headerName] = getHeader(headerName)
     }
-    return EndpointHeaders(builder.build())
+    return builder.build()
 }
 
-private fun HttpServletRequest.parameters(): EndpointParameters {
+private fun HttpServletRequest.parameters(): HotObject {
     val builder = HotObject.builder()
     parameterMap.forEach { (key, value) ->
         builder[key] = value.joinToString(",")
     }
-    return EndpointParameters(builder.build())
+    return builder.build()
 }
 
-private fun HttpServletRequest.content(): EndpointContent {
+private fun HttpServletRequest.content(): HotObject {
     val content = reader.lines().reduce("", String::plus)
-    if (content.isEmpty()) return EndpointContent()
+    if (content.isEmpty()) return HotObject.empty
 
     require(contentType.startsWith("application/json")) { "Only application/json supported yet" }
-    return EndpointContent(json.deserialize(HotObject::class, content))
+    return json.deserialize(HotObject::class, content)
 }

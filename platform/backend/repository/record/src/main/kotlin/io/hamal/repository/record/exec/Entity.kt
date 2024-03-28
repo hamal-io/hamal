@@ -27,7 +27,6 @@ data class ExecEntity(
     var code: ExecCode? = null,
     var plannedAt: Instant? = null,
     var scheduledAt: Instant? = null,
-    var invocation: Invocation? = null,
     var result: ExecResult? = null,
     var state: ExecState? = null
 
@@ -45,7 +44,6 @@ data class ExecEntity(
                 correlation = rec.correlation,
                 inputs = rec.inputs,
                 code = rec.code,
-                invocation = rec.invocation,
                 plannedAt = Instant.now(), // FIXME
                 recordedAt = rec.recordedAt()
             )
@@ -107,8 +105,7 @@ data class ExecEntity(
             workspaceId = workspaceId,
             correlation = correlation,
             inputs = inputs ?: ExecInputs(HotObject.empty),
-            code = code ?: ExecCode(),
-            invocation = invocation!!
+            code = code ?: ExecCode()
         )
 
         if (status == ExecStatus.Planned) return plannedExec

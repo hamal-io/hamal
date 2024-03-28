@@ -6,7 +6,9 @@ import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain._enum.HookMethod.*
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.HookInvokeRequested
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.HookId
+import io.hamal.lib.domain.vo.InvocationInputs
+import io.hamal.lib.domain.vo.RequestId
 import io.hamal.repository.record.json
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.HttpStatus.ACCEPTED
@@ -37,37 +39,39 @@ internal class HookInvokeController(
             Response(
                 hookInvoke(
                     hookId = id,
-                    invocation = Invocation.Hook(
-                        method = req.method(),
-                        headers = req.headers(),
-                        parameters = req.parameters(),
-                        content = req.content()
+                    inputs = InvocationInputs(
+                        HotObject.builder()
+                            .set("method", req.method())
+                            .set("headers", req.headers())
+                            .set("parameters", req.parameters())
+                            .set("content", req.content())
+                            .build()
                     ),
                 )
             ), ACCEPTED
         )
     }
 
-    private fun HttpServletRequest.headers(): HookHeaders {
+    private fun HttpServletRequest.headers(): HotObject {
         val builder = HotObject.builder()
         headerNames.asSequence().forEach { headerName ->
             builder[headerName] = getHeader(headerName)
         }
-        return HookHeaders(builder.build())
+        return builder.build()
     }
 
-    private fun HttpServletRequest.parameters(): HookParameters {
+    private fun HttpServletRequest.parameters(): HotObject {
         val builder = HotObject.builder()
         parameterMap.forEach { (key, value) ->
             builder[key] = value.joinToString(",")
         }
-        return HookParameters(builder.build())
+        return builder.build()
     }
 
-    private fun HttpServletRequest.content(): HookContent {
+    private fun HttpServletRequest.content(): HotObject {
         require(contentType.startsWith("application/json")) { "Only application/json supported yet" }
         val content = reader.lines().reduce("", String::plus)
-        return HookContent(json.deserialize(HotObject::class, content))
+        return json.deserialize(HotObject::class, content)
     }
 
     private fun HttpServletRequest.method(): HookMethod = when (method.lowercase()) {

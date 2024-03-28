@@ -33,8 +33,7 @@ class ExecMemoryRepository : RecordMemoryRepository<ExecId, ExecRecord, Exec>(
                         workspaceId = cmd.workspaceId,
                         correlation = cmd.correlation,
                         inputs = cmd.inputs,
-                        code = cmd.code,
-                        invocation = cmd.invocation
+                        code = cmd.code
                     )
                 )
                 (currentVersion(execId) as Exec.Planned).also(currentProjection::upsert)

@@ -36,17 +36,12 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                     correlation = Correlation(
                         id = CorrelationId("some-correlation-id"), funcId = FuncId(23)
                     ),
-                    inputs = ExecInputs(HotObject.builder().set("hamal", "rocks").build()),
-                    code = ExecCode(value = CodeValue("40 + 2")),
-                    invocation = Invocation.Event(
-                        events = listOf(
-                            Event(
-                                topic = EventTopic(id = TopicId(90), name = TopicName("test-topic")),
-                                id = EventId(95),
-                                payload = EventPayload(HotObject.builder().set("answer", 42).build())
-                            )
-                        )
-                    )
+                    inputs = ExecInputs(
+                        HotObject.builder()
+                            .set("hamal", "rocks")
+                            .build()
+                    ),
+                    code = ExecCode(value = CodeValue("40 + 2"))
                 )
             )
 
@@ -362,19 +357,6 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                 assertThat(correlation?.funcId, equalTo(FuncId(444)))
                 assertThat(inputs, equalTo(ExecInputs(HotObject.builder().set("hamal", "rocks").build())))
                 assertThat(code, equalTo(ExecCode(value = CodeValue("'13'..'37'"))))
-                assertThat(
-                    invocation, equalTo(
-                        Invocation.Event(
-                            events = listOf(
-                                Event(
-                                    topic = EventTopic(id = TopicId(90), name = TopicName("test-topic")),
-                                    id = EventId(95),
-                                    payload = EventPayload(HotObject.builder().set("answer", 42).build())
-                                )
-                            )
-                        )
-                    )
-                )
             }
         }
 
@@ -407,19 +389,6 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                 assertThat(correlation?.funcId, equalTo(FuncId(444)))
                 assertThat(inputs, equalTo(ExecInputs(HotObject.builder().set("hamal", "rocks").build())))
                 assertThat(code, equalTo(ExecCode(value = CodeValue("'13'..'37'"))))
-                assertThat(
-                    invocation, equalTo(
-                        Invocation.Event(
-                            events = listOf(
-                                Event(
-                                    topic = EventTopic(id = TopicId(90), name = TopicName("test-topic")),
-                                    id = EventId(95),
-                                    payload = EventPayload(HotObject.builder().set("answer", 42).build())
-                                )
-                            )
-                        )
-                    )
-                )
             }
         }
 
@@ -623,19 +592,6 @@ private fun assertBaseExec(exec: Exec) {
         )
     )
     assertThat(exec.code, equalTo(ExecCode(value = CodeValue("40 + 2"))))
-    assertThat(
-        exec.invocation, equalTo(
-            Invocation.Event(
-                events = listOf(
-                    Event(
-                        topic = EventTopic(id = TopicId(90), name = TopicName("test-topic")),
-                        id = EventId(95),
-                        payload = EventPayload(HotObject.builder().set("answer", 42).build())
-                    )
-                )
-            )
-        )
-    )
 }
 
 private fun ExecRepository.planExec(
@@ -655,15 +611,6 @@ private fun ExecRepository.planExec(
         ),
         inputs = ExecInputs(HotObject.builder().set("hamal", "rocks").build()),
         code = ExecCode(value = CodeValue("40 + 2")),
-        invocation = Invocation.Event(
-            events = listOf(
-                Event(
-                    topic = EventTopic(id = TopicId(90), name = TopicName("test-topic")),
-                    id = EventId(95),
-                    payload = EventPayload(HotObject.builder().set("answer", 42).build())
-                )
-            )
-        )
     )
 )
 
@@ -694,15 +641,6 @@ fun ExecRepository.createExec(
             correlation = correlation,
             inputs = ExecInputs(HotObject.builder().set("hamal", "rocks").build()),
             code = ExecCode(value = CodeValue("'13'..'37'")),
-            invocation = Invocation.Event(
-                events = listOf(
-                    Event(
-                        topic = EventTopic(id = TopicId(90), name = TopicName("test-topic")),
-                        id = EventId(95),
-                        payload = EventPayload(HotObject.builder().set("answer", 42).build())
-                    )
-                )
-            )
         )
     )
 

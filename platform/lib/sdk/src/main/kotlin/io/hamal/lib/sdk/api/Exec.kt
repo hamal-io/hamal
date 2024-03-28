@@ -22,10 +22,8 @@ data class ApiExecList(
         val status: ExecStatus,
         val correlation: CorrelationId?,
         val namespace: Namespace,
-        val invocation: Invocation,
         val func: Func?,
         val trigger: Trigger?
-
     )
 
     data class Namespace(
@@ -49,7 +47,6 @@ data class ApiExec(
     val status: ExecStatus,
     val correlation: CorrelationId?,
     val inputs: ExecInputs,
-    val invocation: Invocation,
     val result: ExecResult?,
     val state: ExecState?,
     val func: Func?

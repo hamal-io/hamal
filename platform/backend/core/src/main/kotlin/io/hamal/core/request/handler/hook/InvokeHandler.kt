@@ -43,8 +43,7 @@ class HookInvokeHandler(
                 object : TriggerInvokeRequest {
                     override val correlationId = trigger.correlationId ?: CorrelationId.default
                     override val inputs = InvocationInputs()
-                },
-                req.invocation
+                }
             )
         }
     }

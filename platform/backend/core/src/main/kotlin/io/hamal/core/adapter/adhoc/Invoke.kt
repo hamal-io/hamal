@@ -33,8 +33,7 @@ class AdhocInvokeAdapter(
             inputs = req.inputs ?: InvocationInputs(),
             code = ExecCode(value = req.code),
             funcId = null,
-            correlationId = null,
-            invocation = Invocation.Adhoc
+            correlationId = null
         ).also(requestEnqueue::invoke)
     }
 }

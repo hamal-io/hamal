@@ -65,8 +65,7 @@ class ExecSqliteRepository(
                         workspaceId = cmd.workspaceId,
                         correlation = cmd.correlation,
                         inputs = cmd.inputs,
-                        code = cmd.code,
-                        invocation = cmd.invocation
+                        code = cmd.code
                     )
                 )
 

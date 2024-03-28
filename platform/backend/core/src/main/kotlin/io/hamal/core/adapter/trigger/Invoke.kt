@@ -12,7 +12,7 @@ import io.hamal.lib.domain.vo.*
 import org.springframework.stereotype.Component
 
 fun interface TriggerInvokePort {
-    operator fun invoke(triggerId: TriggerId, req: TriggerInvokeRequest, invocation: Invocation): ExecInvokeRequested
+    operator fun invoke(triggerId: TriggerId, req: TriggerInvokeRequest): ExecInvokeRequested
 }
 
 @Component
@@ -25,7 +25,8 @@ class TriggerInvokeAdapter(
 ) : TriggerInvokePort {
 
     override fun invoke(
-        triggerId: TriggerId, req: TriggerInvokeRequest, invocation: Invocation
+        triggerId: TriggerId,
+        req: TriggerInvokeRequest
     ): ExecInvokeRequested {
 
         val trigger = triggerGet(triggerId)
@@ -46,7 +47,6 @@ class TriggerInvokeAdapter(
             code = ExecCode(
                 id = code.id, version = code.version, value = code.value
             ),
-            invocation = invocation
         ).also(requestEnqueue::invoke)
     }
 }

@@ -33,8 +33,7 @@ sealed class ExecRecord(
         val workspaceId: WorkspaceId,
         val correlation: Correlation?,
         val inputs: ExecInputs,
-        val code: ExecCode,
-        val invocation: Invocation
+        val code: ExecCode
     ) : ExecRecord()
 
     data class Scheduled(

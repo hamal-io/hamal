@@ -47,8 +47,7 @@ class ExecInvokeHandler(
                 workspaceId = req.workspaceId,
                 correlation = correlation,
                 inputs = merge(func?.inputs ?: FuncInputs(), req.inputs),
-                code = req.code,
-                invocation = req.invocation
+                code = req.code
             )
         )
     }
