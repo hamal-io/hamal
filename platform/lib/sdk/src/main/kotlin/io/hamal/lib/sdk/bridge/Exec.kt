@@ -1,6 +1,7 @@
 package io.hamal.lib.sdk.bridge
 
 import io.hamal.lib.domain.Correlation
+import io.hamal.lib.domain.EventToSubmit
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.ExecCompleteRequest
@@ -44,8 +45,7 @@ data class BridgeUnitOfWorkList(
         val inputs: ExecInputs,
         val state: State,
         val code: CodeValue,
-        val correlation: Correlation? = null,
-        val invocation: Invocation
+        val correlation: Correlation? = null
     )
 }
 

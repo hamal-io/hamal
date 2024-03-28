@@ -4,7 +4,7 @@ import {invocations, statuses} from "./data.tsx"
 import {ColumnHeader} from "./column-header.tsx"
 import React from "react";
 import RowActions from "@/pages/app/exec-list/components/row-actions.tsx";
-import {ExecListItem, ExecListItemFunc, ExecListItemInvocation, ExecListItemNamespace} from "@/types";
+import {ExecListItem, ExecListItemFunc, ExecListItemInvocation, ExecListItemNamespace, ExecTriggerItem} from "@/types";
 
 export const columns: ColumnDef<ExecListItem>[] = [
     {
@@ -118,6 +118,28 @@ export const columns: ColumnDef<ExecListItem>[] = [
         },
         enableSorting: false,
         enableHiding: false,
+    },
+    {
+        accessorKey: "trigger",
+        header: ({column}) => (
+            <ColumnHeader column={column} title="Status"/>
+        ),
+        cell: ({row}) => {
+            const trigger = row.getValue<ExecTriggerItem>("trigger")
+
+            if (!trigger) {
+                return null
+            }
+
+            return (
+                <div className="flex  items-center">
+                    <span>{trigger.status}</span>
+                </div>
+            )
+
+        },
+        enableSorting: false,
+        enableHiding: false
     },
     {
         id: "actions",

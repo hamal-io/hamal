@@ -4,6 +4,7 @@ import io.hamal.core.adapter.exec.ExecListPort
 import io.hamal.core.adapter.func.FuncListPort
 import io.hamal.core.adapter.namespace.NamespaceListPort
 import io.hamal.core.adapter.namespace_tree.NamespaceTreeGetSubTreePort
+import io.hamal.core.adapter.trigger.TriggerListPort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.FuncId
@@ -13,6 +14,8 @@ import io.hamal.lib.sdk.api.ApiExecList
 import io.hamal.repository.api.ExecQueryRepository.ExecQuery
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
 import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
+import io.hamal.repository.api.Trigger
+import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -23,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController
 internal class ExecListController(
     private val execList: ExecListPort,
     private val funcList: FuncListPort,
+    private val triggerList: TriggerListPort,
     private val namespaceList: NamespaceListPort,
     private val namespaceTreeGetSubTree: NamespaceTreeGetSubTreePort
 ) {
@@ -76,24 +80,43 @@ internal class ExecListController(
                     funcIds = execs.mapNotNull { it.correlation?.funcId })
             ).associateBy { it.id }
 
-            ResponseEntity.ok(ApiExecList(execs = execs.map {
-                ApiExecList.Exec(id = it.id,
-                    status = it.status,
-                    namespace = namespaces[it.namespaceId]!!.let { namespace ->
+            val triggers = triggerList(
+                TriggerQuery(
+                    limit = Limit.all,
+                    triggerIds = execs.mapNotNull { it.triggerId }
+                )
+            ).associateBy { it.id }
+
+            ResponseEntity.ok(ApiExecList(execs = execs.map { exec ->
+
+                ApiExecList.Exec(
+                    id = exec.id,
+                    status = exec.status,
+                    namespace = namespaces[exec.namespaceId]!!.let { namespace ->
                         ApiExecList.Namespace(
                             id = namespace.id, name = namespace.name
                         )
                     },
-                    invocation = it.invocation,
-                    correlation = it.correlation?.id,
-                    func = it.correlation?.funcId?.let { funcId ->
+                    correlation = exec.correlation?.id,
+                    func = exec.correlation?.funcId?.let { funcId ->
                         funcs[funcId]!!.let { func ->
                             ApiExecList.Func(
                                 id = func.id, name = func.name
                             )
                         }
-                    })
-            }))
+                    },
+                    trigger = triggers[exec.triggerId]?.toApi()
+                )
+            }
+            ))
         }
     }
+
+    private fun Trigger.toApi(): ApiExecList.Trigger {
+        return ApiExecList.Trigger(
+            id = id,
+            status = status
+        )
+    }
 }
+

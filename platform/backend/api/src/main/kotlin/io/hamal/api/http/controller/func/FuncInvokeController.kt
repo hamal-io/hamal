@@ -5,7 +5,6 @@ import io.hamal.core.adapter.func.FuncInvokePort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.domain.vo.Invocation
 import io.hamal.lib.sdk.api.ApiFuncInvokeRequest
 import io.hamal.lib.sdk.api.ApiRequested
 import org.springframework.http.ResponseEntity
@@ -27,7 +26,6 @@ internal class FuncInvokeController(
         funcInvoke(
             funcId,
             (req ?: ApiFuncInvokeRequest()).copy(correlationId = req?.correlationId ?: CorrelationId.default),
-            Invocation.Func
         ).accepted()
     }
 }

@@ -142,7 +142,6 @@ internal class FailTest : AbstractExecuteTest() {
         inputs = ExecInputs(),
         state = State(),
         code = CodeValue(code),
-        correlation = null,
-        invocation = Invocation.Adhoc
+        correlation = null
     )
 }

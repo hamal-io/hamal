@@ -1,7 +1,6 @@
 package io.hamal.bridge.http.controller.queue
 
 import io.hamal.core.adapter.auth.AuthGetExecTokenPort
-import io.hamal.core.adapter.workspace.WorkspaceGetPort
 import io.hamal.core.event.InternalEventEmitter
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.GenerateCmdId
@@ -25,7 +24,6 @@ internal class QueuePollController(
     private val execCmdRepository: ExecCmdRepository,
     private val stateQueryRepository: StateQueryRepository,
     private val eventEmitter: InternalEventEmitter,
-    private val workspaceGet: WorkspaceGetPort,
     private val generateCmdId: GenerateCmdId,
     private val getExecToken: AuthGetExecTokenPort
 ) {
@@ -52,8 +50,7 @@ internal class QueuePollController(
                     correlation = exec.correlation,
                     inputs = exec.inputs,
                     state = state,
-                    code = code,
-                    invocation = exec.invocation
+                    code = code
                 )
             }), OK
         )

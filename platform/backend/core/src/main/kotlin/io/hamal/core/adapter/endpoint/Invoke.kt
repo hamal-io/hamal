@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component
 import java.util.concurrent.CompletableFuture
 
 fun interface EndpointInvokePort {
-    operator fun invoke(endpointId: EndpointId, invocation: Invocation.Endpoint, auth: Auth): CompletableFuture<Exec>
+    operator fun invoke(endpointId: EndpointId, inputs: InvocationInputs, auth: Auth): CompletableFuture<Exec>
 }
 
 @Component
@@ -28,17 +28,17 @@ class EndpointInvokeAdapter(
     private val execFind: ExecFindPort
 ) : EndpointInvokePort {
 
-    override fun invoke(endpointId: EndpointId, invocation: Invocation.Endpoint, auth: Auth): CompletableFuture<Exec> {
+    override fun invoke(endpointId: EndpointId, inputs: InvocationInputs, auth: Auth): CompletableFuture<Exec> {
         return CompletableFuture.supplyAsync {
             SecurityContext.with(auth) {
                 val endpoint = endpointGet(endpointId)
                 val func = funcGet(endpoint.funcId)
-                invoke(func, invocation)
+                invoke(func, inputs)
             }
         }
     }
 
-    private fun invoke(func: Func, invocation: Invocation.Endpoint): Exec {
+    private fun invoke(func: Func, inputs: InvocationInputs): Exec {
         val execId = generateDomainId(::ExecId)
         requestEnqueue(
             ExecInvokeRequested(
@@ -46,16 +46,16 @@ class EndpointInvokeAdapter(
                 requestedBy = SecurityContext.currentAuthId,
                 requestStatus = RequestStatus.Submitted,
                 id = execId,
+                triggerId = null,
                 namespaceId = func.namespaceId,
                 workspaceId = func.workspaceId,
-                inputs = InvocationInputs(),
+                inputs = inputs,
                 code = ExecCode(
                     id = func.code.id,
                     version = func.deployment.version
                 ),
                 funcId = func.id,
                 correlationId = CorrelationId.default,
-                invocation = invocation
             )
         )
 

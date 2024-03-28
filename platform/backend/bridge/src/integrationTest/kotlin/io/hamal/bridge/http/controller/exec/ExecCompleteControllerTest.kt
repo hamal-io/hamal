@@ -3,6 +3,7 @@ package io.hamal.bridge.http.controller.exec
 import io.hamal.lib.common.domain.BatchSize
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain.Correlation
+import io.hamal.lib.domain.EventToSubmit
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.ExecStatus.Started
@@ -37,8 +38,7 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
                     correlation = Correlation(
                         funcId = generateDomainId(::FuncId),
                         id = CorrelationId("__correlation__")
-                    ),
-                    invocation = Invocation.Adhoc
+                    )
                 )
 
                 val completionResponse = requestCompletion(exec.id)
@@ -61,8 +61,7 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
             correlation = Correlation(
                 funcId = generateDomainId(::FuncId),
                 id = CorrelationId("__correlation__")
-            ),
-            invocation = Invocation.Adhoc
+            )
         ) as Exec.Started
 
         val completionResponse = requestCompletion(startedExec.id)

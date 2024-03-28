@@ -23,8 +23,7 @@ internal class ExecIdTest : AbstractExecuteTest() {
                 inputs = ExecInputs(),
                 state = State(),
                 code = CodeValue("assert(context.exec.id == '4d2')"),
-                correlation = null,
-                invocation = Invocation.Adhoc
+                correlation = null
             )
         )
     }
@@ -43,8 +42,7 @@ internal class ExecIdTest : AbstractExecuteTest() {
                 inputs = ExecInputs(),
                 state = State(),
                 code = CodeValue("require_plugin('test').fn()"),
-                correlation = null,
-                invocation = Invocation.Adhoc
+                correlation = null
             )
         )
         assertThat(testFn.result, equalTo("4d2"))

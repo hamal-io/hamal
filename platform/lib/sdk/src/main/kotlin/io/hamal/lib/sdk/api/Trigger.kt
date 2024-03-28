@@ -56,6 +56,7 @@ data class ApiTriggerList(
         val func: Func
         val namespace: Namespace
         val type: TriggerType
+        val status: TriggerStatus
 
         data class Func(
             val id: FuncId,
@@ -102,6 +103,7 @@ data class ApiTriggerList(
         override val name: TriggerName,
         override val func: Trigger.Func,
         override val namespace: Trigger.Namespace,
+        override val status: TriggerStatus,
         val duration: TriggerDuration
     ) : Trigger {
         override val type: TriggerType = TriggerType.FixedRate
@@ -112,6 +114,7 @@ data class ApiTriggerList(
         override val name: TriggerName,
         override val func: Trigger.Func,
         override val namespace: Trigger.Namespace,
+        override val status: TriggerStatus,
         val topic: Topic
     ) : Trigger {
         override val type: TriggerType = TriggerType.Event
@@ -127,6 +130,7 @@ data class ApiTriggerList(
         override val name: TriggerName,
         override val func: Trigger.Func,
         override val namespace: Trigger.Namespace,
+        override val status: TriggerStatus,
         val hook: Hook
     ) : Trigger {
         override val type: TriggerType = TriggerType.Hook
@@ -143,6 +147,7 @@ data class ApiTriggerList(
         override val name: TriggerName,
         override val func: Trigger.Func,
         override val namespace: Trigger.Namespace,
+        override val status: TriggerStatus,
         val cron: CronPattern
     ) : Trigger {
         override val type: TriggerType = TriggerType.Cron

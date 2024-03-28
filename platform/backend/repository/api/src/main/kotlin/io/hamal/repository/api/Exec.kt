@@ -24,12 +24,12 @@ interface ExecCmdRepository : CmdRepository {
     data class PlanCmd(
         val id: CmdId,
         val execId: ExecId,
+        val triggerId: TriggerId?,
         val namespaceId: NamespaceId,
         val workspaceId: WorkspaceId,
         val correlation: Correlation?,
         val inputs: ExecInputs,
-        val code: ExecCode,
-        val invocation: Invocation
+        val code: ExecCode
     )
 
     data class ScheduleCmd(
@@ -86,12 +86,12 @@ interface ExecQueryRepository {
 sealed class Exec : DomainObject<ExecId>, HasNamespaceId, HasWorkspaceId {
     abstract val cmdId: CmdId
     abstract override val id: ExecId
+    abstract val triggerId: TriggerId?
     abstract val status: ExecStatus
 
     abstract val correlation: Correlation?
     abstract val inputs: ExecInputs
     abstract val code: ExecCode
-    abstract val invocation: Invocation
 
     val type: ExecType = ExecType(this::class.simpleName!!)
 
@@ -144,13 +144,13 @@ sealed class Exec : DomainObject<ExecId>, HasNamespaceId, HasWorkspaceId {
     class Planned(
         override val cmdId: CmdId,
         override val id: ExecId,
+        override val triggerId: TriggerId?,
         override val updatedAt: UpdatedAt,
         override val namespaceId: NamespaceId,
         override val workspaceId: WorkspaceId,
         override val correlation: Correlation?,
         override val inputs: ExecInputs,
         override val code: ExecCode,
-        override val invocation: Invocation,
 // FIXME    val plannedAt: PlannedAt
     ) : Exec() {
         override val status = ExecStatus.Planned
@@ -169,12 +169,12 @@ sealed class Exec : DomainObject<ExecId>, HasNamespaceId, HasWorkspaceId {
         val scheduledAt: ExecScheduledAt,
     ) : Exec() {
         override val status = ExecStatus.Scheduled
+        override val triggerId get() = plannedExec.triggerId
         override val namespaceId get() = plannedExec.namespaceId
         override val workspaceId get() = plannedExec.workspaceId
         override val correlation get() = plannedExec.correlation
         override val inputs get() = plannedExec.inputs
         override val code get() = plannedExec.code
-        override val invocation get() = plannedExec.invocation
         override fun toString(): String {
             return "Scheduled($id)"
         }
@@ -189,12 +189,12 @@ sealed class Exec : DomainObject<ExecId>, HasNamespaceId, HasWorkspaceId {
         val queuedAt: ExecQueuedAt,
     ) : Exec() {
         override val status = ExecStatus.Queued
+        override val triggerId get() = scheduledExec.triggerId
         override val namespaceId get() = scheduledExec.namespaceId
         override val workspaceId get() = scheduledExec.workspaceId
         override val correlation get() = scheduledExec.correlation
         override val inputs get() = scheduledExec.inputs
         override val code get() = scheduledExec.code
-        override val invocation get() = scheduledExec.invocation
         override fun toString(): String {
             return "Queued($id)"
         }
@@ -208,12 +208,12 @@ sealed class Exec : DomainObject<ExecId>, HasNamespaceId, HasWorkspaceId {
         val queuedExec: Queued
     ) : Exec() {
         override val status = ExecStatus.Started
+        override val triggerId get() = queuedExec.triggerId
         override val namespaceId get() = queuedExec.namespaceId
         override val workspaceId get() = queuedExec.workspaceId
         override val correlation get() = queuedExec.correlation
         override val inputs get() = queuedExec.inputs
         override val code get() = queuedExec.code
-        override val invocation get() = queuedExec.invocation
         override fun toString(): String {
             return "Started($id)"
         }
@@ -229,12 +229,12 @@ sealed class Exec : DomainObject<ExecId>, HasNamespaceId, HasWorkspaceId {
         val state: ExecState
     ) : Exec() {
         override val status = ExecStatus.Completed
+        override val triggerId get() = startedExec.triggerId
         override val namespaceId get() = startedExec.namespaceId
         override val workspaceId get() = startedExec.workspaceId
         override val correlation get() = startedExec.correlation
         override val inputs get() = startedExec.inputs
         override val code get() = startedExec.code
-        override val invocation get() = startedExec.invocation
 
         override fun toString(): String {
             return "Completed($id)"
@@ -251,12 +251,12 @@ sealed class Exec : DomainObject<ExecId>, HasNamespaceId, HasWorkspaceId {
         val result: ExecResult
     ) : Exec() {
         override val status = ExecStatus.Failed
+        override val triggerId get() = startedExec.triggerId
         override val namespaceId get() = startedExec.namespaceId
         override val workspaceId get() = startedExec.workspaceId
         override val correlation get() = startedExec.correlation
         override val inputs get() = startedExec.inputs
         override val code get() = startedExec.code
-        override val invocation get() = startedExec.invocation
         override fun toString(): String {
             return "Failed($id)"
         }

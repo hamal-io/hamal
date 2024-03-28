@@ -6,12 +6,12 @@ import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.HookInvokeRequested
 import io.hamal.lib.domain.vo.HookId
-import io.hamal.lib.domain.vo.Invocation
+import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.domain.vo.RequestId
 import org.springframework.stereotype.Component
 
 fun interface HookInvokePort {
-    operator fun invoke(hookId: HookId, invocation: Invocation.Hook): HookInvokeRequested
+    operator fun invoke(hookId: HookId, inputs: InvocationInputs): HookInvokeRequested
 }
 
 @Component
@@ -20,7 +20,7 @@ class HookInvokeAdapter(
     private val generateDomainId: GenerateDomainId,
     private val requestEnqueue: RequestEnqueuePort
 ) : HookInvokePort {
-    override fun invoke(hookId: HookId, invocation: Invocation.Hook): HookInvokeRequested {
+    override fun invoke(hookId: HookId, inputs: InvocationInputs): HookInvokeRequested {
         val hook = hookGet(hookId)
         return HookInvokeRequested(
             requestId = generateDomainId(::RequestId),
@@ -28,7 +28,7 @@ class HookInvokeAdapter(
             requestStatus = RequestStatus.Submitted,
             id = hookId,
             workspaceId = hook.workspaceId,
-            invocation = invocation,
+            inputs = inputs
         ).also(requestEnqueue::invoke)
     }
 }

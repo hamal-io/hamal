@@ -169,6 +169,7 @@ class TestSetupConfig {
             PlanCmd(
                 id = CmdId(id),
                 execId = ExecId(id),
+                triggerId = null,
                 namespaceId = NamespaceId(id),
                 workspaceId = WorkspaceId(id),
                 correlation = Correlation(
@@ -179,8 +180,7 @@ class TestSetupConfig {
                 code = ExecCode(
                     id = CodeId(id),
                     version = CodeVersion(1)
-                ),
-                Invocation.Func
+                )
             )
         )
 
