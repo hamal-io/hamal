@@ -5,6 +5,7 @@ import org.web3j.rlp.RlpList
 import org.web3j.rlp.RlpString
 import org.web3j.rlp.RlpType
 
+
 object DecodeRlp {
 
     operator fun invoke(data: ByteArray): RlpValue {

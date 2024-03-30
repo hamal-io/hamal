@@ -31,6 +31,15 @@ sealed interface RlpValue {
         }
     }
 
+    companion object {
+        fun fromByteArray(data: ByteArray): RlpValue {
+            return DecodeRlp(data)
+        }
+    }
+
+    fun toByteArray(): ByteArray {
+        return EncodeRlp(this)
+    }
 }
 
 private fun BigInteger.bytes(): ByteArray {
