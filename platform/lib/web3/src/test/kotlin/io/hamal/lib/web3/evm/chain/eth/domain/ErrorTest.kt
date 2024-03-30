@@ -1,4 +1,4 @@
-package io.hamal.lib.web3.evm.impl.eth.domain
+package io.hamal.lib.web3.evm.chain.eth.domain
 
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat

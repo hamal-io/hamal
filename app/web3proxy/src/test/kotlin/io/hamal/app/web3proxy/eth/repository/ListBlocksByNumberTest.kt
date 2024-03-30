@@ -2,8 +2,8 @@ package io.hamal.app.web3proxy.eth.repository
 
 import io.hamal.app.web3proxy.eth.fixture.EthBatchServiceFixture
 import io.hamal.lib.web3.evm.abi.type.*
-import io.hamal.lib.web3.evm.impl.eth.domain.EthBlockData
-import io.hamal.lib.web3.evm.impl.eth.domain.EthGetBlockResponse
+import io.hamal.lib.web3.evm.chain.eth.domain.EthBlockData
+import io.hamal.lib.web3.evm.chain.eth.domain.EthGetBlockResponse
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.BeforeEach

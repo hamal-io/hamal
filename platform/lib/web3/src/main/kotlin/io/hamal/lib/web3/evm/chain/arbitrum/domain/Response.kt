@@ -1,4 +1,4 @@
-package io.hamal.lib.web3.evm.impl.arbitrum.domain
+package io.hamal.lib.web3.evm.chain.arbitrum.domain
 
 import io.hamal.lib.web3.evm.abi.type.EvmPrefixedHexString
 import io.hamal.lib.web3.evm.domain.EvmRequestId

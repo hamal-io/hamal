@@ -5,14 +5,14 @@ import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
 import io.hamal.lib.web3.evm.domain.EvmRequest
 import io.hamal.lib.web3.evm.domain.EvmResponse
-import io.hamal.lib.web3.evm.impl.arbitrum.domain.ArbitrumBlockData
-import io.hamal.lib.web3.evm.impl.arbitrum.domain.ArbitrumGetBlockByNumberRequest
-import io.hamal.lib.web3.evm.impl.arbitrum.domain.ArbitrumGetBlockResponse
-import io.hamal.lib.web3.evm.impl.arbitrum.domain.parseArbitrumRequest
-import io.hamal.lib.web3.evm.impl.eth.domain.EthBlockData
-import io.hamal.lib.web3.evm.impl.eth.domain.EthGetBlockByNumberRequest
-import io.hamal.lib.web3.evm.impl.eth.domain.EthGetBlockResponse
-import io.hamal.lib.web3.evm.impl.eth.domain.parseEthRequest
+import io.hamal.lib.web3.evm.chain.arbitrum.domain.ArbitrumBlockData
+import io.hamal.lib.web3.evm.chain.arbitrum.domain.ArbitrumGetBlockByNumberRequest
+import io.hamal.lib.web3.evm.chain.arbitrum.domain.ArbitrumGetBlockResponse
+import io.hamal.lib.web3.evm.chain.arbitrum.domain.parseArbitrumRequest
+import io.hamal.lib.web3.evm.chain.eth.domain.EthBlockData
+import io.hamal.lib.web3.evm.chain.eth.domain.EthGetBlockByNumberRequest
+import io.hamal.lib.web3.evm.chain.eth.domain.EthGetBlockResponse
+import io.hamal.lib.web3.evm.chain.eth.domain.parseEthRequest
 import io.hamal.lib.web3.json
 
 object TestHandler {

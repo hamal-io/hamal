@@ -1,4 +1,4 @@
-package io.hamal.lib.web3.evm.impl.arbitrum.domain
+package io.hamal.lib.web3.evm.chain.arbitrum.domain
 
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement

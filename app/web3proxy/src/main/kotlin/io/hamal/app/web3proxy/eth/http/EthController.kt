@@ -4,9 +4,9 @@ import io.hamal.app.web3proxy.eth.handler.HandleEthRequest
 import io.hamal.lib.common.hot.HotArray
 import io.hamal.lib.common.hot.HotNode
 import io.hamal.lib.common.hot.HotObject
-import io.hamal.lib.web3.evm.impl.eth.domain.EthRequest
-import io.hamal.lib.web3.evm.impl.eth.domain.EthResponse
-import io.hamal.lib.web3.evm.impl.eth.domain.parseEthRequest
+import io.hamal.lib.web3.evm.chain.eth.domain.EthRequest
+import io.hamal.lib.web3.evm.chain.eth.domain.EthResponse
+import io.hamal.lib.web3.evm.chain.eth.domain.parseEthRequest
 import io.hamal.lib.web3.json
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping

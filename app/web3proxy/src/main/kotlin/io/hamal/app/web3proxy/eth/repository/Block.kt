@@ -10,9 +10,9 @@ import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.lib.web3.evm.EvmHotModule
 import io.hamal.lib.web3.evm.abi.type.EvmAddress
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
-import io.hamal.lib.web3.evm.impl.eth.domain.EthBlockData
-import io.hamal.lib.web3.evm.impl.eth.domain.EthGetBlockResponse
-import io.hamal.lib.web3.evm.impl.eth.http.EthBatchService
+import io.hamal.lib.web3.evm.chain.eth.domain.EthBlockData
+import io.hamal.lib.web3.evm.chain.eth.domain.EthGetBlockResponse
+import io.hamal.lib.web3.evm.chain.eth.http.EthBatchService
 import java.nio.file.Path
 
 internal interface EthBlockRepository {

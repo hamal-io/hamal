@@ -3,9 +3,9 @@ package io.hamal.app.web3proxy.arbitrum.repository
 import io.hamal.lib.web3.evm.abi.type.EvmAddress
 import io.hamal.lib.web3.evm.abi.type.EvmUint32
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
-import io.hamal.lib.web3.evm.impl.arbitrum.domain.ArbitrumBlockData
-import io.hamal.lib.web3.evm.impl.arbitrum.domain.ArbitrumTransactionData
-import io.hamal.lib.web3.evm.impl.arbitrum.http.ArbitrumBatchService
+import io.hamal.lib.web3.evm.chain.arbitrum.domain.ArbitrumBlockData
+import io.hamal.lib.web3.evm.chain.arbitrum.domain.ArbitrumTransactionData
+import io.hamal.lib.web3.evm.chain.arbitrum.http.ArbitrumBatchService
 import java.nio.file.Path
 
 interface ArbitrumRepository {

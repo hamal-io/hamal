@@ -1,8 +1,8 @@
-package io.hamal.lib.web3.evm.impl.eth
+package io.hamal.lib.web3.evm.chain.eth
 
 import io.hamal.lib.common.serialization.HotModule
-import io.hamal.lib.web3.evm.impl.eth.domain.EthGetBlockByNumberRequest
-import io.hamal.lib.web3.evm.impl.eth.domain.EthRequest
+import io.hamal.lib.web3.evm.chain.eth.domain.EthGetBlockByNumberRequest
+import io.hamal.lib.web3.evm.chain.eth.domain.EthRequest
 
 object EthHotModule : HotModule() {
     init {

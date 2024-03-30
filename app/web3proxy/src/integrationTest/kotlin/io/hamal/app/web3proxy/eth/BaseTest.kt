@@ -6,8 +6,8 @@ import io.hamal.app.web3proxy.config.WebConfig
 import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.http.JsonHttpSerdeFactory
 import io.hamal.lib.web3.evm.abi.type.*
-import io.hamal.lib.web3.evm.impl.eth.domain.EthBlockData
-import io.hamal.lib.web3.evm.impl.eth.domain.EthTransactionData
+import io.hamal.lib.web3.evm.chain.eth.domain.EthBlockData
+import io.hamal.lib.web3.evm.chain.eth.domain.EthTransactionData
 import io.hamal.lib.web3.json
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*

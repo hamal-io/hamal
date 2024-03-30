@@ -1,7 +1,7 @@
 package io.hamal.app.web3proxy.arbitrum
 
 import io.hamal.lib.web3.evm.domain.EvmRequestId
-import io.hamal.lib.web3.evm.impl.arbitrum.domain.ArbitrumErrorResponse
+import io.hamal.lib.web3.evm.chain.arbitrum.domain.ArbitrumErrorResponse
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test

@@ -2,8 +2,8 @@ package io.hamal.app.web3proxy.arbitrum.repository
 
 import io.hamal.app.web3proxy.arbitrum.fixture.ArbitrumBatchServiceFixture
 import io.hamal.lib.web3.evm.abi.type.*
-import io.hamal.lib.web3.evm.impl.arbitrum.domain.ArbitrumBlockData
-import io.hamal.lib.web3.evm.impl.arbitrum.domain.ArbitrumGetBlockResponse
+import io.hamal.lib.web3.evm.chain.arbitrum.domain.ArbitrumBlockData
+import io.hamal.lib.web3.evm.chain.arbitrum.domain.ArbitrumGetBlockResponse
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.BeforeEach

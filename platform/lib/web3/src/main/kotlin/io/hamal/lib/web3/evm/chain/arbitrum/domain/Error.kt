@@ -1,14 +1,14 @@
-package io.hamal.lib.web3.evm.impl.eth.domain
+package io.hamal.lib.web3.evm.chain.arbitrum.domain
 
 
-data class EthError(
+data class ArbitrumError(
     val code: Int,
     val message: String
 ) {
     constructor(code: ErrorCode, message: String) : this(code.value, message)
 
     override fun toString(): String {
-        return "EthError($code,'$message')"
+        return "ArbitrumError($code,'$message')"
     }
 
     sealed class ErrorCode(val value: Int) {

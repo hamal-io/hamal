@@ -10,9 +10,9 @@ import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.lib.web3.evm.EvmHotModule
 import io.hamal.lib.web3.evm.abi.type.EvmAddress
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
-import io.hamal.lib.web3.evm.impl.arbitrum.domain.ArbitrumBlockData
-import io.hamal.lib.web3.evm.impl.arbitrum.domain.ArbitrumGetBlockResponse
-import io.hamal.lib.web3.evm.impl.arbitrum.http.ArbitrumBatchService
+import io.hamal.lib.web3.evm.chain.arbitrum.domain.ArbitrumBlockData
+import io.hamal.lib.web3.evm.chain.arbitrum.domain.ArbitrumGetBlockResponse
+import io.hamal.lib.web3.evm.chain.arbitrum.http.ArbitrumBatchService
 import java.nio.file.Path
 
 internal interface ArbitrumBlockRepository {

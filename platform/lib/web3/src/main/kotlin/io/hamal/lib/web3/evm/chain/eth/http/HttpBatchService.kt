@@ -1,4 +1,4 @@
-package io.hamal.lib.web3.evm.impl.arbitrum.http
+package io.hamal.lib.web3.evm.chain.eth.http
 
 import io.hamal.lib.common.hot.HotArray
 import io.hamal.lib.common.hot.HotNull
@@ -10,17 +10,16 @@ import io.hamal.lib.web3.evm.abi.type.EvmAddress
 import io.hamal.lib.web3.evm.abi.type.EvmPrefixedHexString
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
 import io.hamal.lib.web3.evm.http.HttpBaseBatchService
-import io.hamal.lib.web3.evm.impl.arbitrum.domain.ArbitrumCallResponse
-import io.hamal.lib.web3.evm.impl.arbitrum.domain.ArbitrumGetBlockResponse
-import io.hamal.lib.web3.evm.impl.arbitrum.domain.ArbitrumResponse
+import io.hamal.lib.web3.evm.chain.eth.domain.EthCallResponse
+import io.hamal.lib.web3.evm.chain.eth.domain.EthGetBlockResponse
+import io.hamal.lib.web3.evm.chain.eth.domain.EthResponse
 import io.hamal.lib.web3.json
 
-interface ArbitrumBatchService<SERVICE : EvmBatchService<ArbitrumResponse, SERVICE>> :
-    EvmBatchService<ArbitrumResponse, SERVICE>
+interface EthBatchService<SERVICE : EvmBatchService<EthResponse, SERVICE>> : EvmBatchService<EthResponse, SERVICE>
 
-class ArbitrumHttpBatchService(
+class EthHttpBatchService(
     httpTemplate: HttpTemplate,
-) : ArbitrumBatchService<ArbitrumHttpBatchService>, HttpBaseBatchService<ArbitrumResponse>(httpTemplate, json) {
+) : EthBatchService<EthHttpBatchService>, HttpBaseBatchService<EthResponse>(httpTemplate, json) {
 
     override fun getBlock(number: EvmUint64) = also {
         request(
@@ -29,7 +28,7 @@ class ArbitrumHttpBatchService(
                 .append(number.toPrefixedHexString().value)
                 .append(true)
                 .build(),
-            resultClass = ArbitrumGetBlockResponse::class
+            resultClass = EthGetBlockResponse::class
         )
     }
 
@@ -46,7 +45,7 @@ class ArbitrumHttpBatchService(
                 )
                 .append(HotString(number.toPrefixedHexString().value))
                 .build(),
-            resultClass = ArbitrumCallResponse::class
+            resultClass = EthCallResponse::class
         )
     }
 }

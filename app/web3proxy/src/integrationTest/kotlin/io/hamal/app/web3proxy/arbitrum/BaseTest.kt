@@ -6,8 +6,8 @@ import io.hamal.app.web3proxy.config.WebConfig
 import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.http.JsonHttpSerdeFactory
 import io.hamal.lib.web3.evm.abi.type.*
-import io.hamal.lib.web3.evm.impl.arbitrum.domain.ArbitrumBlockData
-import io.hamal.lib.web3.evm.impl.arbitrum.domain.ArbitrumTransactionData
+import io.hamal.lib.web3.evm.chain.arbitrum.domain.ArbitrumBlockData
+import io.hamal.lib.web3.evm.chain.arbitrum.domain.ArbitrumTransactionData
 import io.hamal.lib.web3.json
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
