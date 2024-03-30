@@ -1,5 +1,6 @@
 package io.hamal.lib.web3.evm.impl.arbitrum.domain
 
+import io.hamal.lib.web3.evm.abi.type.EvmPrefixedHexString
 import io.hamal.lib.web3.evm.domain.EvmRequestId
 import io.hamal.lib.web3.evm.domain.EvmResponse
 
@@ -13,6 +14,15 @@ data class ArbitrumGetBlockResponse(
 ) : ArbitrumResponse() {
     override fun toString(): String {
         return "ArbitrumGetBlockResponse($result)"
+    }
+}
+
+data class ArbitrumCallResponse(
+    val id: EvmRequestId,
+    val result: EvmPrefixedHexString?
+) : ArbitrumResponse() {
+    override fun toString(): String {
+        return "ArbitrumCallResponse($result)"
     }
 }
 

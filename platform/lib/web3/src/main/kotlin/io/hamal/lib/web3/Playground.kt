@@ -7,8 +7,8 @@ import io.hamal.lib.web3.evm.abi.*
 import io.hamal.lib.web3.evm.abi.type.EvmAddress
 import io.hamal.lib.web3.evm.abi.type.EvmPrefixedHexString
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
-import io.hamal.lib.web3.evm.domain.EvmHotCallResponse
-import io.hamal.lib.web3.evm.http.EvmHotHttpBatchService
+import io.hamal.lib.web3.evm.impl.eth.domain.EthCallResponse
+import io.hamal.lib.web3.evm.impl.eth.http.EthHttpBatchService
 
 
 object Erc20 {
@@ -50,42 +50,23 @@ object US {
     )
 }
 
-
 fun main() {
-//    val ethService = EthHttpBatchService(
-//        HttpTemplateImpl("http://localhost:10000/eth"),
-//    )
-
-//    val blockResponse = ethService.getBlock(EvmUint64(10001)).execute().first()
-//
-//
-
-    val hotService = EvmHotHttpBatchService(
+    val ethService = EthHttpBatchService(
         HttpTemplateImpl("http://localhost:10000/eth"),
     )
 
-    hotService.call(
+    ethService.call(
         to = EvmAddress("0x570febdf89c07f256c75686caca215289bb11cfc"),
         data = EvmPrefixedHexString("0x0902f1ac"),
         number = EvmUint64(12040753L)
     )
 
-    val response = hotService.execute()
+    val response = ethService.execute()
 
 
-//    val response = srv
-//        .call(
-//            EthBatchService.EthCallRequest(
-//                to = EvmAddress(EvmPrefixedHexString("0x570febdf89c07f256c75686caca215289bb11cfc")),
-//                data = EvmPrefixedHexString("0x0902f1ac"),
-//                blockNumber = EvmUint64(12040753L)
-//            )
-//        ).execute()
-//
-    val x = getReserves.outputs.decodeToMap((response[0] as EvmHotCallResponse).result?.value?.let(::EvmPrefixedHexString)!!)
+    val x = getReserves.outputs.decodeToMap((response[0] as EthCallResponse).result?.value?.let(::EvmPrefixedHexString)!!)
     println(x["_reserve0"])
     println(x["_reserve1"])
 
     println(decimals.signature.encoded.toPrefixedHexString())
-
 }

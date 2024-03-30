@@ -1,5 +1,6 @@
 package io.hamal.lib.web3.evm.impl.eth.domain
 
+import io.hamal.lib.web3.evm.abi.type.EvmPrefixedHexString
 import io.hamal.lib.web3.evm.domain.EvmRequestId
 import io.hamal.lib.web3.evm.domain.EvmResponse
 
@@ -13,6 +14,15 @@ data class EthGetBlockResponse(
 ) : EthResponse() {
     override fun toString(): String {
         return "EthGetBlockResponse($result)"
+    }
+}
+
+data class EthCallResponse(
+    val id: EvmRequestId,
+    val result: EvmPrefixedHexString?
+) : EthResponse() {
+    override fun toString(): String {
+        return "EthCallResponse($result)"
     }
 }
 
