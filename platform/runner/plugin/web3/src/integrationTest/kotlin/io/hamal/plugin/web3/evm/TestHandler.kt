@@ -5,11 +5,11 @@ import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
 import io.hamal.lib.web3.evm.domain.EvmRequest
 import io.hamal.lib.web3.evm.domain.EvmResponse
-import io.hamal.lib.web3.evm.impl.arbitrum.domain.ArbitrumBlock
+import io.hamal.lib.web3.evm.impl.arbitrum.domain.ArbitrumBlockData
 import io.hamal.lib.web3.evm.impl.arbitrum.domain.ArbitrumGetBlockByNumberRequest
 import io.hamal.lib.web3.evm.impl.arbitrum.domain.ArbitrumGetBlockResponse
 import io.hamal.lib.web3.evm.impl.arbitrum.domain.parseArbitrumRequest
-import io.hamal.lib.web3.evm.impl.eth.domain.EthBlock
+import io.hamal.lib.web3.evm.impl.eth.domain.EthBlockData
 import io.hamal.lib.web3.evm.impl.eth.domain.EthGetBlockByNumberRequest
 import io.hamal.lib.web3.evm.impl.eth.domain.EthGetBlockResponse
 import io.hamal.lib.web3.evm.impl.eth.domain.parseEthRequest
@@ -60,11 +60,11 @@ object TestHandler {
         }
     }
 
-    private fun getArbitrumBlock(id: EvmUint64): ArbitrumBlock? =
+    private fun getArbitrumBlock(id: EvmUint64): ArbitrumBlockData? =
         this.javaClass.getResourceAsStream("/fixture/arbitrum/block_${id.value}_full.json")
-            ?.let { json.deserialize(ArbitrumBlock::class, it) }
+            ?.let { json.deserialize(ArbitrumBlockData::class, it) }
 
-    private fun getEthBlock(id: EvmUint64): EthBlock? =
+    private fun getEthBlock(id: EvmUint64): EthBlockData? =
         this.javaClass.getResourceAsStream("/fixture/eth/block_${id.value}_full.json")
-            ?.let { json.deserialize(EthBlock::class, it) }
+            ?.let { json.deserialize(EthBlockData::class, it) }
 }

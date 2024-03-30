@@ -1,10 +1,10 @@
 package io.hamal.lib.web3.evm.impl.eth.domain
 
 import io.hamal.lib.web3.evm.abi.type.*
-import io.hamal.lib.web3.evm.domain.EvmBlock
+import io.hamal.lib.web3.evm.domain.EvmBlockData
 
 
-data class EthBlock(
+data class EthBlockData(
     val baseFeePerGas: EvmUint64?,
     val extraData: EvmBytes32,
     val gasLimit: EvmUint64,
@@ -21,16 +21,8 @@ data class EthBlock(
     val stateRoot: EvmHash,
     val timestamp: EvmUint64,
     val totalDifficulty: EvmUint256,
-    val transactions: List<EthTransaction>,
+    val transactions: List<EthTransactionData>,
     val transactionsRoot: EvmHash,
-    val withdrawals: List<Withdrawal>?,
+    val withdrawals: List<EthWithdrawalData>?,
     val withdrawalsRoot: EvmHash?,
-) : EvmBlock
-
-data class EthLiteBlock(
-    val number: EvmUint64,
-    val hash: EvmHash,
-    val parentHash: EvmHash,
-    val miner: EvmAddress,
-    val timestamp: EvmUint64
-)
+) : EvmBlockData

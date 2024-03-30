@@ -10,7 +10,7 @@ sealed class ArbitrumResponse : EvmResponse {
 
 data class ArbitrumGetBlockResponse(
     val id: EvmRequestId,
-    val result: ArbitrumBlock?
+    val result: ArbitrumBlockData?
 ) : ArbitrumResponse() {
     override fun toString(): String {
         return "ArbitrumGetBlockResponse($result)"

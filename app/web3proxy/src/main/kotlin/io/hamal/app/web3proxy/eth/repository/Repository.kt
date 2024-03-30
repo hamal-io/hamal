@@ -3,15 +3,15 @@ package io.hamal.app.web3proxy.eth.repository
 import io.hamal.lib.web3.evm.abi.type.EvmAddress
 import io.hamal.lib.web3.evm.abi.type.EvmUint32
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
-import io.hamal.lib.web3.evm.impl.eth.domain.EthBlock
-import io.hamal.lib.web3.evm.impl.eth.domain.EthTransaction
-import io.hamal.lib.web3.evm.impl.eth.domain.Withdrawal
+import io.hamal.lib.web3.evm.impl.eth.domain.EthBlockData
+import io.hamal.lib.web3.evm.impl.eth.domain.EthTransactionData
+import io.hamal.lib.web3.evm.impl.eth.domain.EthWithdrawalData
 import io.hamal.lib.web3.evm.impl.eth.http.EthBatchService
 import java.nio.file.Path
 
 interface EthRepository {
 
-    fun listBlocks(blockNumbers: List<EvmUint64>): List<EthBlock?>
+    fun listBlocks(blockNumbers: List<EvmUint64>): List<EthBlockData?>
 
     fun clear()
 }
@@ -21,7 +21,7 @@ class EthRepositoryImpl(
     batchService: EthBatchService<*>,
 ) : EthRepository {
 
-    override fun listBlocks(blockNumbers: List<EvmUint64>): List<EthBlock?> {
+    override fun listBlocks(blockNumbers: List<EvmUint64>): List<EthBlockData?> {
         val blocks = blockRepository.list(blockNumbers)
         val addresses = addressRepository.list(collectEthAddressIds(blocks.filterNotNull()))
         return blocks.map { block -> block?.toObject(addresses) }
@@ -50,7 +50,7 @@ private fun collectEthAddressIds(blocks: List<BlockEntity>): Set<EthAddressId> {
     }.toSet()
 }
 
-private fun BlockEntity.toObject(addresses: Map<EthAddressId, EvmAddress>) = EthBlock(
+private fun BlockEntity.toObject(addresses: Map<EthAddressId, EvmAddress>) = EthBlockData(
     baseFeePerGas = baseFeePerGas,
     extraData = extraData,
     gasLimit = gasLimit,
@@ -68,7 +68,7 @@ private fun BlockEntity.toObject(addresses: Map<EthAddressId, EvmAddress>) = Eth
     timestamp = timestamp,
     totalDifficulty = totalDifficulty,
     transactions = transactions.mapIndexed { index, tx ->
-        EthTransaction(
+        EthTransactionData(
             blockHash = hash,
             blockNumber = number,
             from = tx.from.let { addresses[it]!! },
@@ -84,7 +84,7 @@ private fun BlockEntity.toObject(addresses: Map<EthAddressId, EvmAddress>) = Eth
             type = tx.type,
             transactionIndex = EvmUint32(index),
             accessList = tx.accessList?.map { access ->
-                EthTransaction.AccessListItem(
+                EthTransactionData.AccessListItem(
                     address = addresses[access.address]!!,
                     storageKeys = access.storageKeys
                 )
@@ -93,7 +93,7 @@ private fun BlockEntity.toObject(addresses: Map<EthAddressId, EvmAddress>) = Eth
     },
     transactionsRoot = transactionsRoot,
     withdrawals = withdrawals?.map { withdrawal ->
-        Withdrawal(
+        EthWithdrawalData(
             index = withdrawal.index,
             validatorIndex = withdrawal.validatorIndex,
             address = addresses[withdrawal.address]!!,

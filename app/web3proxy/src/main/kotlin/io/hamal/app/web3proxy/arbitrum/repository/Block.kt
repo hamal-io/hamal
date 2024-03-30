@@ -10,7 +10,7 @@ import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.lib.web3.evm.EvmHotModule
 import io.hamal.lib.web3.evm.abi.type.EvmAddress
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
-import io.hamal.lib.web3.evm.impl.arbitrum.domain.ArbitrumBlock
+import io.hamal.lib.web3.evm.impl.arbitrum.domain.ArbitrumBlockData
 import io.hamal.lib.web3.evm.impl.arbitrum.domain.ArbitrumGetBlockResponse
 import io.hamal.lib.web3.evm.impl.arbitrum.http.ArbitrumBatchService
 import java.nio.file.Path
@@ -119,7 +119,7 @@ internal class ArbitrumBlockRepositoryImpl(
     )
 }
 
-private fun collectArbitrumAddresses(blocks: List<ArbitrumBlock>): Set<EvmAddress> {
+private fun collectArbitrumAddresses(blocks: List<ArbitrumBlockData>): Set<EvmAddress> {
     return blocks.flatMap { block ->
         listOf(block.miner)
             .plus(block.transactions.flatMap { transaction ->
@@ -129,7 +129,7 @@ private fun collectArbitrumAddresses(blocks: List<ArbitrumBlock>): Set<EvmAddres
 }
 
 
-private fun ArbitrumBlock.toEntity(addresses: Map<EvmAddress, ArbitrumAddressId>) = BlockEntity(
+private fun ArbitrumBlockData.toEntity(addresses: Map<EvmAddress, ArbitrumAddressId>) = BlockEntity(
     baseFeePerGas = baseFeePerGas,
     extraData = extraData,
     gasLimit = gasLimit,

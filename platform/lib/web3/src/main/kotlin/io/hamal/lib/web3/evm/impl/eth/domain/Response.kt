@@ -10,7 +10,7 @@ sealed class EthResponse : EvmResponse {
 
 data class EthGetBlockResponse(
     val id: EvmRequestId,
-    val result: EthBlock?
+    val result: EthBlockData?
 ) : EthResponse() {
     override fun toString(): String {
         return "EthGetBlockResponse($result)"

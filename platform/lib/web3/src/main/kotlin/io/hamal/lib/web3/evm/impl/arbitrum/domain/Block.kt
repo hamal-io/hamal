@@ -1,10 +1,10 @@
 package io.hamal.lib.web3.evm.impl.arbitrum.domain
 
 import io.hamal.lib.web3.evm.abi.type.*
-import io.hamal.lib.web3.evm.domain.EvmBlock
+import io.hamal.lib.web3.evm.domain.EvmBlockData
 
 
-data class ArbitrumBlock(
+data class ArbitrumBlockData(
     val baseFeePerGas: EvmUint64?,
     val extraData: EvmBytes32,
     val gasLimit: EvmUint64,
@@ -24,6 +24,6 @@ data class ArbitrumBlock(
     val stateRoot: EvmHash,
     val timestamp: EvmUint64,
     val totalDifficulty: EvmUint256,
-    val transactions: List<ArbitrumTransaction>,
+    val transactions: List<ArbitrumTransactionData>,
     val transactionsRoot: EvmHash,
-) : EvmBlock
+) : EvmBlockData

@@ -4,7 +4,7 @@ import io.hamal.lib.web3.evm.abi.type.EvmAddress
 import io.hamal.lib.web3.evm.abi.type.EvmPrefixedHexString
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
 import io.hamal.lib.web3.evm.domain.EvmRequestId
-import io.hamal.lib.web3.evm.impl.eth.domain.EthBlock
+import io.hamal.lib.web3.evm.impl.eth.domain.EthBlockData
 import io.hamal.lib.web3.evm.impl.eth.domain.EthGetBlockResponse
 import io.hamal.lib.web3.evm.impl.eth.domain.EthResponse
 import io.hamal.lib.web3.evm.impl.eth.http.EthBatchService
@@ -29,7 +29,7 @@ internal class EthBatchServiceFixture : EthBatchService<EthBatchServiceFixture> 
             responses.add(
                 EthGetBlockResponse(
                     id = EvmRequestId(responses.size.toString()),
-                    result = json.deserialize(EthBlock::class, String(blockData.readAllBytes()))
+                    result = json.deserialize(EthBlockData::class, String(blockData.readAllBytes()))
                 )
             )
         }

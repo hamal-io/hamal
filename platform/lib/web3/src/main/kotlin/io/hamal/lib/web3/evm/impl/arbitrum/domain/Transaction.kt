@@ -1,9 +1,9 @@
 package io.hamal.lib.web3.evm.impl.arbitrum.domain
 
 import io.hamal.lib.web3.evm.abi.type.*
-import io.hamal.lib.web3.evm.domain.EvmTransaction
+import io.hamal.lib.web3.evm.domain.EvmTransactionData
 
-data class ArbitrumTransaction(
+data class ArbitrumTransactionData(
     val blockHash: EvmHash?,
     val blockNumber: EvmUint64?,
     val from: EvmAddress,
@@ -17,5 +17,5 @@ data class ArbitrumTransaction(
     val value: EvmUint256?,
     val type: EvmUint8,
     val requestId: EvmUint64?
-) : EvmTransaction
+) : EvmTransactionData
 

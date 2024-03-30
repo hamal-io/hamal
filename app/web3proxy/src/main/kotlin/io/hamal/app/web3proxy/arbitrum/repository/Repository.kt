@@ -3,14 +3,14 @@ package io.hamal.app.web3proxy.arbitrum.repository
 import io.hamal.lib.web3.evm.abi.type.EvmAddress
 import io.hamal.lib.web3.evm.abi.type.EvmUint32
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
-import io.hamal.lib.web3.evm.impl.arbitrum.domain.ArbitrumBlock
-import io.hamal.lib.web3.evm.impl.arbitrum.domain.ArbitrumTransaction
+import io.hamal.lib.web3.evm.impl.arbitrum.domain.ArbitrumBlockData
+import io.hamal.lib.web3.evm.impl.arbitrum.domain.ArbitrumTransactionData
 import io.hamal.lib.web3.evm.impl.arbitrum.http.ArbitrumBatchService
 import java.nio.file.Path
 
 interface ArbitrumRepository {
 
-    fun listBlocks(blockNumbers: List<EvmUint64>): List<ArbitrumBlock?>
+    fun listBlocks(blockNumbers: List<EvmUint64>): List<ArbitrumBlockData?>
 
     fun clear()
 }
@@ -20,7 +20,7 @@ class ArbitrumRepositoryImpl(
     batchService: ArbitrumBatchService<*>,
 ) : ArbitrumRepository {
 
-    override fun listBlocks(blockNumbers: List<EvmUint64>): List<ArbitrumBlock?> {
+    override fun listBlocks(blockNumbers: List<EvmUint64>): List<ArbitrumBlockData?> {
         val blocks = blockRepository.list(blockNumbers)
         val addresses = addressRepository.list(collectArbitrumAddressIds(blocks.filterNotNull()))
         return blocks.map { block -> block?.toObject(addresses) }
@@ -49,7 +49,7 @@ private fun collectArbitrumAddressIds(blocks: List<BlockEntity>): Set<ArbitrumAd
     }.toSet()
 }
 
-private fun BlockEntity.toObject(addresses: Map<ArbitrumAddressId, EvmAddress>) = ArbitrumBlock(
+private fun BlockEntity.toObject(addresses: Map<ArbitrumAddressId, EvmAddress>) = ArbitrumBlockData(
     baseFeePerGas = baseFeePerGas,
     extraData = extraData,
     gasLimit = gasLimit,
@@ -70,7 +70,7 @@ private fun BlockEntity.toObject(addresses: Map<ArbitrumAddressId, EvmAddress>) 
     timestamp = timestamp,
     totalDifficulty = totalDifficulty,
     transactions = transactions.mapIndexed { index, tx ->
-        ArbitrumTransaction(
+        ArbitrumTransactionData(
             blockHash = hash,
             blockNumber = number,
             from = tx.from.let { addresses[it]!! },

@@ -2,7 +2,7 @@ package io.hamal.app.web3proxy.arbitrum.repository
 
 import io.hamal.app.web3proxy.arbitrum.fixture.ArbitrumBatchServiceFixture
 import io.hamal.lib.web3.evm.abi.type.*
-import io.hamal.lib.web3.evm.impl.arbitrum.domain.ArbitrumBlock
+import io.hamal.lib.web3.evm.impl.arbitrum.domain.ArbitrumBlockData
 import io.hamal.lib.web3.evm.impl.arbitrum.domain.ArbitrumGetBlockResponse
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
@@ -111,7 +111,7 @@ internal class ListBlocksByNumberTest {
         batchServiceFixture.clear()
     }
 
-    private fun assertBlock0x1284810(block: ArbitrumBlock?) {
+    private fun assertBlock0x1284810(block: ArbitrumBlockData?) {
         checkNotNull(block)
         assertThat(block.extraData, equalTo(EvmBytes32("0x0000000000000000000000000000000000000000000000000000000000000000")))
         assertThat(block.hash, equalTo(EvmHash("0x5c3248cf43fb3bd608d97fe3b2727bd8669364cd4f4432bd93abcb5fd0f9e616")))
@@ -157,7 +157,7 @@ internal class ListBlocksByNumberTest {
         }
     }
 
-    private fun assertBlock0x1284811(block: ArbitrumBlock?) {
+    private fun assertBlock0x1284811(block: ArbitrumBlockData?) {
         checkNotNull(block)
 
         assertThat(block.number, equalTo(EvmUint64("0x1284811")))
