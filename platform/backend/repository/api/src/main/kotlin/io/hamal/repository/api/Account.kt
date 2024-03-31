@@ -25,6 +25,8 @@ interface AccountCmdRepository : CmdRepository {
 
     fun convert(cmd: ConvertCmd): Account
 
+    fun update(accountId: AccountId, cmd: UpdateCmd) : Account
+
     data class CreateCmd(
         val id: CmdId,
         val accountId: AccountId,
@@ -36,6 +38,12 @@ interface AccountCmdRepository : CmdRepository {
         val id: CmdId,
         val accountId: AccountId,
         val email: Email
+    )
+
+    data class UpdateCmd(
+        val id: CmdId,
+        val email: Email? = null,
+        val password: PasswordSalt? = null
     )
 }
 

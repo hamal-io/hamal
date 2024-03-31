@@ -31,7 +31,6 @@ class BlueprintUpdateAdapter(
             inputs = req.inputs,
             value = req.value,
             description = req.description
-
         ).also(requestEnqueue::invoke)
     }
 

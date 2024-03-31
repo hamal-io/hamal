@@ -10,3 +10,8 @@ data class AccountCreatedEvent(
 data class AccountConvertedEvent(
     val account: Account,
 ) : InternalEvent()
+
+data class AccountUpdatedEvent(
+    val account: Account,
+) : InternalEvent()
+

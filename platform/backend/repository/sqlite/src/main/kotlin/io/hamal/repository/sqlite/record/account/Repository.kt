@@ -3,8 +3,7 @@ package io.hamal.repository.sqlite.record.account
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.repository.api.Account
-import io.hamal.repository.api.AccountCmdRepository
-import io.hamal.repository.api.AccountCmdRepository.CreateCmd
+import io.hamal.repository.api.AccountCmdRepository.*
 import io.hamal.repository.api.AccountQueryRepository.AccountQuery
 import io.hamal.repository.api.AccountRepository
 import io.hamal.repository.record.CreateDomainObject
@@ -70,7 +69,7 @@ class AccountSqliteRepository(
         }
     }
 
-    override fun convert(cmd: AccountCmdRepository.ConvertCmd): Account {
+    override fun convert(cmd: ConvertCmd): Account {
         val accountId = cmd.accountId
         val cmdId = cmd.id
         return tx {
@@ -87,6 +86,10 @@ class AccountSqliteRepository(
                     .also { ProjectionCurrent.upsert(this, it) }
             }
         }
+    }
+
+    override fun update(accountId: AccountId, cmd: UpdateCmd): Account {
+        TODO("Not yet implemented")
     }
 
     override fun find(accountId: AccountId): Account? {

@@ -173,3 +173,8 @@ export const useAccountConvert = (): [AccountConvertAction, AccountConvertReques
 
     return [fn, data, loading, error]
 }
+
+/*
+type AccountGetAction = () => void
+export const useAccountGet = (): [AccountGetAction, Account,boolean, Error] =>
+*/

@@ -1,10 +1,13 @@
 package io.hamal.lib.sdk.api
 
+import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.AccountConvertAnonymousRequest
 import io.hamal.lib.domain.request.AccountCreateRequest
+import io.hamal.lib.domain.request.AccountUpdateRequest
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.Email
 import io.hamal.lib.domain.vo.Password
+import io.hamal.lib.domain.vo.RequestId
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.sdk.fold
@@ -30,6 +33,17 @@ data class ApiAccountList(
 data class ApiAccount(
     val id: AccountId
 ) : ApiObject()
+
+data class ApiAccountUpdateRequest(
+    override val email: Email?,
+    override val password: Password?
+) : AccountUpdateRequest
+
+data class ApiAccountUpdateRequested(
+    override val requestId: RequestId,
+    override val requestStatus: RequestStatus,
+    val id: AccountId
+) : ApiRequested()
 
 interface ApiAccountService {
     fun create(createAccountReq: ApiAccountCreateRequest): ApiTokenRequested

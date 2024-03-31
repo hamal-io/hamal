@@ -84,3 +84,21 @@ data class AccountCreateRootRequest(
     val email: Email,
     val password: Password
 )
+
+interface AccountUpdateRequest {
+    val email: Email?
+    val password: Password?
+}
+
+data class AccountUpdateRequested(
+    override val requestId: RequestId,
+    override val requestedBy: AuthId,
+    override var requestStatus: RequestStatus,
+    val id: AccountId,
+    val email: Email?,
+    val hash: PasswordHash?,
+    val salt: PasswordSalt?,
+
+
+
+) : Requested()

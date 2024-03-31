@@ -3,8 +3,8 @@ package io.hamal.repository.memory.record.account
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.repository.api.Account
-import io.hamal.repository.api.AccountCmdRepository
-import io.hamal.repository.api.AccountQueryRepository
+import io.hamal.repository.api.AccountCmdRepository.*
+import io.hamal.repository.api.AccountQueryRepository.AccountQuery
 import io.hamal.repository.api.AccountRepository
 import io.hamal.repository.memory.record.RecordMemoryRepository
 import io.hamal.repository.record.account.AccountRecord
@@ -18,7 +18,7 @@ class AccountMemoryRepository : RecordMemoryRepository<AccountId, AccountRecord,
     projections = listOf(ProjectionCurrent())
 ), AccountRepository {
 
-    override fun create(cmd: AccountCmdRepository.CreateCmd): Account {
+    override fun create(cmd: CreateCmd): Account {
         return lock.withLock {
             val accountId = cmd.accountId
             if (commandAlreadyApplied(cmd.id, accountId)) {
@@ -37,7 +37,7 @@ class AccountMemoryRepository : RecordMemoryRepository<AccountId, AccountRecord,
         }
     }
 
-    override fun convert(cmd: AccountCmdRepository.ConvertCmd): Account {
+    override fun convert(cmd: ConvertCmd): Account {
         return lock.withLock {
             val accountId = cmd.accountId
             if (commandAlreadyApplied(cmd.id, accountId)) {
@@ -54,12 +54,16 @@ class AccountMemoryRepository : RecordMemoryRepository<AccountId, AccountRecord,
         }
     }
 
+    override fun update(accountId: AccountId, cmd: UpdateCmd): Account {
+        TODO("Not yet implemented")
+    }
+
     override fun find(accountId: AccountId): Account? = lock.withLock { currentProjection.find(accountId) }
 
-    override fun list(query: AccountQueryRepository.AccountQuery): List<Account> =
+    override fun list(query: AccountQuery): List<Account> =
         lock.withLock { currentProjection.list(query) }
 
-    override fun count(query: AccountQueryRepository.AccountQuery): Count =
+    override fun count(query: AccountQuery): Count =
         lock.withLock { currentProjection.count(query) }
 
     override fun close() {}

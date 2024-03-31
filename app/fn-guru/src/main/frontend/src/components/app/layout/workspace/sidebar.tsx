@@ -1,22 +1,7 @@
 import {cn} from "@/utils";
-import {
-    ActivityIcon,
-    BookOpen,
-    Braces,
-    ClipboardPaste,
-    Command,
-    GlobeIcon,
-    Layers3Icon,
-    LucideIcon,
-    LucideProps,
-    Play,
-    Settings,
-    TimerIcon,
-    WebhookIcon
-} from "lucide-react";
+import {ActivityIcon, BookOpen, Braces, ClipboardPaste, Command,User,  GlobeIcon, Layers3Icon, LucideProps, Play, Settings, TimerIcon, WebhookIcon} from "lucide-react";
 import React, {FC, useEffect, useState} from "react";
 import {Link, useLocation} from "react-router-dom";
-import Profile from "@/components/app/layout/workspace/profile.tsx";
 import {useNamespaceGet} from "@/hook";
 import {useUiState} from "@/hook/ui-state.ts";
 
@@ -24,13 +9,6 @@ type Props = {
     className?: string;
 };
 
-type NavItem = {
-    icon: LucideIcon;
-    href: string;
-    external?: boolean;
-    label: string;
-    active?: boolean;
-};
 const Sidebar: React.FC<Props> = ({className}) => {
     const [uiState] = useUiState()
     const [getNamespace, namespace, loading, error] = useNamespaceGet()
@@ -47,23 +25,18 @@ const Sidebar: React.FC<Props> = ({className}) => {
 
     useEffect(() => {
         if (namespace) {
-            const actives: NavLinkType[] = []
+            const actives = []
             for (const [feat, valid] of Object.entries(namespace.features)) {
                 if (valid) {
-                    actives.push(featureLinks[feat])
+                    actives.push(featureNavigation[feat])
                 }
             }
             setActiveFeatures(actives)
         }
     }, [namespace]);
 
-
-    type NavLinkType = {
-        icon: React.ForwardRefExoticComponent<LucideProps>,
-        active: boolean,
-        href: string,
-        label: string
-    }
+    if (loading) return "Loading.."
+    if (error) return "Error"
 
     const primaryNavigation = [
         {
@@ -93,33 +66,32 @@ const Sidebar: React.FC<Props> = ({className}) => {
     ]
 
 
-    const featureLinks =
-        {
-            schedule: {
-                icon: TimerIcon,
-                href: `/schedules`,
-                label: "Schedules",
-                active: currentPath.startsWith(`/schedules`)
-            },
-            topic: {
-                icon: Layers3Icon,
-                href: `/topics`,
-                label: "Topics",
-                active: currentPath.startsWith(`/topics`)
-            },
-            webhook: {
-                icon: WebhookIcon,
-                href: `/webhooks`,
-                label: "Webhooks",
-                active: currentPath.startsWith(`/webhooks`)
-            },
-            endpoint: {
-                icon: GlobeIcon,
-                href: `/endpoints`,
-                label: "Endpoints",
-                active: currentPath.startsWith(`/endpoints`)
-            }
+    const featureNavigation = {
+        schedule: {
+            icon: TimerIcon,
+            href: `/schedules`,
+            label: "Schedules",
+            active: currentPath.startsWith(`/schedules`)
+        },
+        topic: {
+            icon: Layers3Icon,
+            href: `/topics`,
+            label: "Topics",
+            active: currentPath.startsWith(`/topics`)
+        },
+        webhook: {
+            icon: WebhookIcon,
+            href: `/webhooks`,
+            label: "Webhooks",
+            active: currentPath.startsWith(`/webhooks`)
+        },
+        endpoint: {
+            icon: GlobeIcon,
+            href: `/endpoints`,
+            label: "Endpoints",
+            active: currentPath.startsWith(`/endpoints`)
         }
+    }
 
 
     const secondaryNavigation = [
@@ -140,6 +112,12 @@ const Sidebar: React.FC<Props> = ({className}) => {
             external: true,
             label: "Documentation",
         },
+        {
+            icon: User,
+            href: "/account",
+            label: "Account",
+            active: currentPath.startsWith("/account")
+        }
     ];
 
 
@@ -152,12 +130,21 @@ const Sidebar: React.FC<Props> = ({className}) => {
                         <ol className="mt-2 -mx-2 space-y-1">
                             {primaryNavigation.map((item) => (
                                 <li key={item.label}>
-                                    <NavLink item={item}/>
+                                    <NavLink
+                                        icon={item.icon}
+                                        href={item.href}
+                                        label={item.label}
+                                        active={item.active}/>
                                 </li>
                             ))}
                             {activeFeatures && activeFeatures.map(item =>
                                 <li key={item.label}>
-                                    <NavLink item={item}/>
+                                    <NavLink
+                                        icon={item.icon}
+                                        href={item.href}
+                                        label={item.label}
+                                        active={item.active}
+                                        external={item.external}/>
                                 </li>
                             )}
 
@@ -173,13 +160,17 @@ const Sidebar: React.FC<Props> = ({className}) => {
                             <ul className="mt-2 -mx-2 space-y-1">
                                 {secondaryNavigation.map((item) => (
                                     <li key={item.label}>
-                                        <NavLink item={item}/>
+                                        <NavLink
+                                            icon={item.icon}
+                                            href={item.href}
+                                            label={item.label}
+                                            active={item.active}
+                                            external={item.external}/>
                                     </li>
                                 ))}
                             </ul>
                         </li>
                     </ul>
-                    <Profile/>
                 </div>
             </nav>
         </aside>
@@ -188,22 +179,30 @@ const Sidebar: React.FC<Props> = ({className}) => {
 
 export default Sidebar;
 
-const NavLink: FC<{ item: NavItem }> = ({item}) => {
+type NavLinkType = {
+    icon: React.ForwardRefExoticComponent<LucideProps>;
+    href: string;
+    label: string;
+    external?: boolean;
+    active?: boolean;
+};
+
+export const NavLink: FC<NavLinkType> = ({icon: Icon, href, label, external, active}) => {
     return (
-        <Link to={item.href}
-              target={item.external ? "_blank" : undefined}
+        <Link to={href}
+              target={external ? "_blank" : undefined}
               className={cn(
                   "group flex gap-x-2 rounded-md px-2 py-1 text-sm  font-medium leading-6 items-center hover:bg-gray-200",
                   {
-                      "bg-gray-200": item.active,
+                      "bg-gray-200": active,
                   },
               )}
         >
       <span
           className="text-content-subtle border-border group-hover:shadow  flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-white">
-        <item.icon className="w-4 h-4 shrink-0" aria-hidden="true"/>
+         <Icon className="w-4 h-4 shrink-0" aria-hidden="true"/>
       </span>
-            {item.label}
+            {label}
         </Link>
     );
 };
