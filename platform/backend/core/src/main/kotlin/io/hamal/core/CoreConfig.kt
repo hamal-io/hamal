@@ -1,8 +1,10 @@
 package io.hamal.core
 
+import io.hamal.core.adapter.account.AccountCreatePort
 import io.hamal.core.adapter.account.AccountCreateRootPort
 import io.hamal.core.component.SetupInternalTopics
 import io.hamal.core.security.SecurityContext
+import io.hamal.lib.domain.request.AccountCreateRequest
 import io.hamal.lib.domain.request.AccountCreateRootRequest
 import io.hamal.lib.domain.vo.Email
 import io.hamal.lib.domain.vo.Password
@@ -52,11 +54,21 @@ open class CoreConfig {
                     password = Password("toor")
                 )
             )
+
+            createAccount(
+                object : AccountCreateRequest {
+                    override val email = Email("admin@hamal.io")
+                    override val password = Password("lamah")
+                }
+            )
         }
     }
 
     @Autowired
     private lateinit var createRoot: AccountCreateRootPort
+
+    @Autowired
+    private lateinit var createAccount: AccountCreatePort
 
     @Autowired
     private lateinit var setupInternalTopics: SetupInternalTopics
