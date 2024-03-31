@@ -10,7 +10,7 @@ plugins {
 
 apply(plugin = "io.spring.dependency-management")
 
-archivesName.set("fnguru")
+archivesName.set("candyrocks")
 
 java {
     toolchain {
