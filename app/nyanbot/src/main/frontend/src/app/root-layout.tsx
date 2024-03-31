@@ -1,6 +1,7 @@
 import {FC, ReactNode, useEffect} from "react";
 import Header from "@/app/header/index.tsx";
 import {useUiState} from "@/hooks/ui.ts";
+import {MetaMaskProvider} from "@metamask/sdk-react";
 
 type Props = {
     children: Iterable<ReactNode>;
@@ -11,18 +12,25 @@ const RootLayout: FC<Props> = ({children}) => {
     useEffect(() => {
         const root = document.querySelector("html");
         if (!root) return;
-        if (uiState.theme !== 'dark') {
+        if (uiState.theme === 'dark') {
             !root.classList.contains("dark") && root.classList.add("dark");
         } else {
             root.classList.remove("dark");
         }
     }, [uiState.theme]);
 
-
     return (
         <div>
-            <Header/>
-            {children}
+            <MetaMaskProvider debug={false} sdkOptions={{
+                checkInstallationImmediately: false,
+                dappMetadata: {
+                    name: "nyanbot.com",
+                    url: window.location.host,
+                }
+            }}>
+                <Header/>
+                {children}
+            </MetaMaskProvider>
         </div>
     )
 }

@@ -16,7 +16,7 @@ const SwitchMode: React.FC<SwitchDarkModeProps> = ({className = ""}) => {
             onClick={changeTheme}
         >
             <span className="sr-only">Enable dark mode</span>
-            {uiState.theme === 'light' ? (
+            {uiState.theme === 'dark' ? (
                 <MoonIcon className="w-7 h-7" aria-hidden="true"/>
             ) : (
                 <SunIcon className="w-7 h-7" aria-hidden="true"/>

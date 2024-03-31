@@ -8,6 +8,7 @@ import ButtonPrimary from "@/components/ui/button/ButtonPrimary";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import SwitchMode from "@/components/ui/switch-mode";
 import LinkW from "@/types/link.tsx";
+import {MetaMaskButton} from "@/app/metamask.tsx";
 
 export interface NavMobileProps {
   data?: NavItemType[];
@@ -139,34 +140,13 @@ const NavMobile: React.FC<NavMobileProps> = ({
     );
   };
 
-  const renderSearchForm = () => {
-    return (
-      <form
-        action=""
-        method="POST"
-        className="flex-1 text-slate-900 dark:text-slate-200"
-      >
-        <div className="bg-slate-50 dark:bg-slate-800 flex items-center space-x-1 py-2 px-4 rounded-xl h-full">
-          {renderMagnifyingGlassIcon()}
-          <input
-            type="search"
-            placeholder="Type and press enter"
-            className="border-none bg-transparent focus:outline-none focus:ring-0 w-full text-sm "
-          />
-        </div>
-        <input type="submit" hidden value="" />
-      </form>
-    );
-  };
-
   return (
     <div className="overflow-y-auto w-full h-screen py-2 transition transform shadow-lg ring-1 dark:ring-neutral-700 bg-white dark:bg-neutral-900 divide-y-2 divide-neutral-100 dark:divide-neutral-800">
       <div className="py-6 px-5">
         <Logo />
         <div className="flex flex-col mt-5 text-slate-600 dark:text-slate-300 text-sm">
           <span>
-            Discover the most outstanding articles on all topics of life. Write
-            your stories and share them
+            Smartphones are not supported yet
           </span>
 
           <div className="flex justify-between items-center mt-4">
@@ -179,15 +159,6 @@ const NavMobile: React.FC<NavMobileProps> = ({
           <ButtonClose onClick={onClickClose} />
         </span>
 
-        <div className="mt-5">{renderSearchForm()}</div>
-      </div>
-      <ul className="flex flex-col py-6 px-2 space-y-1">
-        {data.map(_renderItem)}
-      </ul>
-      <div className="flex items-center justify-between py-6 px-5 space-x-2">
-        <ButtonPrimary href={"/"} className="!px-10">
-          Buy this template
-        </ButtonPrimary>
       </div>
     </div>
   );

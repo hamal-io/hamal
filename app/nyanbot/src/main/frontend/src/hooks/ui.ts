@@ -1,10 +1,10 @@
 import useLocalStorageState from "use-local-storage-state";
-import {UI_STATE_KEY, UiState, UiTheme} from "@/types/ui.ts";
+import {UI_STATE_KEY, UiState} from "@/types/ui.ts";
 import {useCallback} from "react";
 
 
 const defaultState: UiState = {
-    theme: 'light'
+    theme: 'light',
 }
 
 export const useUiState = () => {
@@ -17,9 +17,11 @@ type InitUiStateAction = (workspaceId: string, namespaceId: string) => void
 export const useInitUiState = (): [InitUiStateAction] => {
     const [uiState, setUiState] = useUiState()
 
-    const fn = useCallback((theme: UiTheme) => {
+    const fn = useCallback((workspaceId: string, namespaceId: string) => {
         setUiState({
-            theme,
+            workspaceId,
+            namespaceId,
+            theme: uiState.theme || 'light',
         })
     }, [uiState])
 

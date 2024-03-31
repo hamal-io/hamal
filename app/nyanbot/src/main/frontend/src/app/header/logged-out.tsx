@@ -2,8 +2,8 @@ import React, {FC} from "react";
 import Logo from "@/components/ui/logo";
 import MenuBar from "@/components/ui/menu/MenuBar.tsx";
 import SwitchMode from "@/components/ui/switch-mode";
-import ButtonPrimary from "@/components/ui/button/ButtonPrimary.tsx";
 import Navigation from "@/components/ui/navigation/Navigation.tsx";
+import {MetaMaskButton} from "@/app/metamask.tsx";
 
 export interface LoggedOutProps {
 }
@@ -26,13 +26,7 @@ const LoggedIn: FC<LoggedOutProps> = () => {
                                 <SwitchMode/>
                             </div>
                             <div/>
-                            <ButtonPrimary
-                                className="self-center"
-                                href="/upload-item"
-                                sizeClass="px-4 py-2 sm:px-5"
-                            >
-                                Connect
-                            </ButtonPrimary>
+                            <MetaMaskButton/>
                             <div/>
                         </div>
                         <div className="flex items-center space-x-1 xl:hidden">

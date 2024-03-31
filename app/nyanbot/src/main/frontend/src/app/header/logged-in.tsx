@@ -27,14 +27,6 @@ const LoggedIn: FC<LoggedInProps> = () => {
                                 <SwitchMode/>
                             </div>
                             <div></div>
-                            <ButtonPrimary
-                                className="self-center"
-                                href="/upload-item"
-                                sizeClass="px-4 py-2 sm:px-5"
-                            >
-                                Create
-                            </ButtonPrimary>
-                            <div></div>
                         </div>
                         <div className="flex items-center space-x-1 xl:hidden">
                             <MenuBar/>
