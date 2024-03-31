@@ -1,7 +1,9 @@
 import {useAuth} from "@/hook/auth.ts";
 import {useCallback, useState} from "react";
-import {AccountConvertRequested, FuncCreateRequested, LoginRequested} from "@/types";
+import {AccountConvertRequested, AccountUpdateRequested, FuncUpdateRequested, LoginRequested} from "@/types";
 import {useInitUiState, useUiState} from "@/hook/ui-state.ts";
+import {usePatch} from "@/hook/http.ts";
+import account from "@/pages/app/account/account.tsx";
 
 type AccountCreateAnonymousAction = (abortController?: AbortController) => void
 export const useAccountCreateAnonymous = (): [AccountCreateAnonymousAction, LoginRequested, boolean, Error] => {
@@ -36,7 +38,7 @@ export const useAccountCreateAnonymous = (): [AccountCreateAnonymousAction, Logi
 
                     setAuth({
                         type: 'Anonymous',
-                        accountId: data.accountId,
+                        accountId: data.id,
                         workspaceId: data.workspaceIds[0],
                         token: data.token,
                     })
@@ -92,7 +94,7 @@ export const useAccountLogin = (): [AccountLoginAction, LoginRequested, boolean,
 
                     setAuth({
                         type: 'User',
-                        accountId: data.accountId,
+                        accountId: data.id,
                         workspaceId: data.workspaceIds[0],
                         token: data.token,
                     })
@@ -174,7 +176,22 @@ export const useAccountConvert = (): [AccountConvertAction, AccountConvertReques
     return [fn, data, loading, error]
 }
 
-/*
-type AccountGetAction = () => void
-export const useAccountGet = (): [AccountGetAction, Account,boolean, Error] =>
-*/
+
+type AccountUpdateAction = (
+    accountId: string,
+    email?: string,
+    password?: string,
+    abortController?: AbortController
+) => void
+export const useAccountUpdate = (): [AccountUpdateAction, AccountUpdateRequested, boolean, Error] => {
+    const [auth] = useAuth()
+    const [patch, submission, loading, error] = usePatch<FuncUpdateRequested>()
+    const fn = useCallback<AccountUpdateAction>(async (accountId, email?, password?, abortController?) =>
+        patch(`/v1/accounts/${accountId}`, {
+            email,
+            password
+        }, abortController), [auth]
+    )
+    return [fn, submission, loading, error]
+}
+

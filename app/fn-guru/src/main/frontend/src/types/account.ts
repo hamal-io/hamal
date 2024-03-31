@@ -6,4 +6,8 @@ export interface AccountConvertRequested {
     email: string;
 }
 
-
+export interface AccountUpdateRequested {
+    requestId: string;
+    requestStatus: string;
+    id: string;
+}
