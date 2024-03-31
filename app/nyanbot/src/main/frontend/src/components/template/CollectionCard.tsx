@@ -1,7 +1,7 @@
 import { nftsImgs } from "@/contains/fakeData";
 import React, { FC } from "react";
-import Avatar from "@/components/shared/Avatar/Avatar";
-import NcImage from "@/components/shared/NcImage/NcImage";
+import Index from "@/components/ui/avatar";
+import NcImage from "@/components/ui/image/NcImage";
 import VerifyIcon from "./VerifyIcon";
 
 export interface CollectionCardProps {
@@ -27,7 +27,7 @@ const CollectionCard: FC<CollectionCardProps> = ({
       <div className="relative mt-auto">
         {/* AUTHOR */}
         <div className="flex items-center">
-          <Avatar sizeClass="h-6 w-6" containerClassName="ring-2 ring-white" />
+          <Index sizeClass="h-6 w-6" containerClassName="ring-2 ring-white" />
           <div className="ml-2 text-xs text-white">
             <span className="font-normal">by</span>
             {` `}

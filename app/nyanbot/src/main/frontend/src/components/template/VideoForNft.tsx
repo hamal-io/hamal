@@ -1,4 +1,4 @@
-import NcImage from "@/components/shared/NcImage/NcImage";
+import NcImage from "@/components/ui/image/NcImage";
 import { SpeakerWaveIcon, SpeakerXMarkIcon } from "@heroicons/react/24/outline";
 import React, { FC, useState } from "react";
 import { useVideo } from "react-use";

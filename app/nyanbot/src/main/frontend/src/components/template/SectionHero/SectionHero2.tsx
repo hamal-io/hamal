@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import imagePng from "@/images/hero-right-3.png";
-import ButtonPrimary from "@/components/shared/Button/ButtonPrimary";
+import ButtonPrimary from "@/components/ui/button/ButtonPrimary";
 import HeroSearchForm from "@/components/template/HeroSearchForm/HeroSearchForm";
 import ImageW from "@/types/image.tsx";
 

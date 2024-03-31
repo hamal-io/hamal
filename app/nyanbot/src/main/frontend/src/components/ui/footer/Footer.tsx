@@ -1,5 +1,4 @@
-import Logo from "@/components/shared/Logo/Logo";
-import SocialsList1 from "@/components/shared/SocialsList1/SocialsList1";
+import Logo from "@/components/ui/logo/Logo";
 import { CustomLink } from "@/data/types";
 import React from "react";
 
@@ -86,7 +85,6 @@ const Footer: React.FC = () => {
             <Logo />
           </div>
           <div className="col-span-2 flex items-center md:col-span-3">
-            <SocialsList1 className="flex items-center space-x-2 lg:space-x-0 lg:flex-col lg:space-y-3 lg:items-start" />
           </div>
         </div>
         {widgetMenus.map(renderWidgetMenuItem)}

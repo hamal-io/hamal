@@ -1,7 +1,7 @@
 import React, { FC, Fragment, ReactNode, useEffect, useState } from "react";
 import { Dialog, Transition } from "@/app/headlessui";
-import ButtonClose from "@/components/shared/ButtonClose/ButtonClose";
-import Button from "@/components/shared/Button/Button";
+import ButtonClose from "@/components/ui/button-close/ButtonClose";
+import Button from "@/components/ui/button/Button";
 
 export interface NcModalProps {
   renderContent: () => ReactNode;

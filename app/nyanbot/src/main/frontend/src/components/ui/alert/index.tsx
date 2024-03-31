@@ -1,5 +1,5 @@
 import React from "react";
-import ButtonClose from "@/components/shared/ButtonClose/ButtonClose.tsx";
+import ButtonClose from "@/components/ui/button-close/ButtonClose.tsx";
 
 export interface AlertProps {
   containerClassName?: string;
@@ -7,8 +7,8 @@ export interface AlertProps {
   children?: React.ReactNode;
 }
 
-export const Alert: React.FC<AlertProps> = ({
-  children = "Alert Text",
+export const Index: React.FC<AlertProps> = ({
+  children = "alert Text",
   containerClassName = "",
   type = "default",
 }) => {

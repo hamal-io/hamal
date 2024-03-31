@@ -1,7 +1,7 @@
 import { Popover, Transition } from "@headlessui/react";
 import { avatarImgs } from "@/contains/fakeData";
 import { Fragment } from "react";
-import Avatar from "@/components/shared/Avatar/Avatar";
+import Index from "@/components/ui/avatar";
 import LinkW from "@/types/link.tsx";
 
 export default function AvatarDropdown() {
@@ -13,7 +13,7 @@ export default function AvatarDropdown() {
             <Popover.Button
               className={`inline-flex items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75`}
             >
-              <Avatar
+              <Index
                 imgUrl={avatarImgs[7]}
                 sizeClass="w-8 h-8 sm:w-9 sm:h-9"
               />
@@ -31,7 +31,7 @@ export default function AvatarDropdown() {
                 <div className="overflow-hidden rounded-3xl shadow-lg ring-1 ring-black ring-opacity-5">
                   <div className="relative grid grid-cols-1 gap-6 bg-white dark:bg-neutral-800 py-7 px-6">
                     <div className="flex items-center space-x-3">
-                      <Avatar imgUrl={avatarImgs[7]} sizeClass="w-12 h-12" />
+                      <Index imgUrl={avatarImgs[7]} sizeClass="w-12 h-12" />
 
                       <div className="flex-grow">
                         <h4 className="font-semibold">Eden Tuan</h4>

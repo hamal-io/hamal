@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from "react";
-import Avatar from "@/components/shared/Avatar/Avatar";
-import NcImage from "@/components/shared/NcImage/NcImage";
+import Index from "@/components/ui/avatar";
+import NcImage from "@/components/ui/image/NcImage";
 import ItemTypeImageIcon from "./ItemTypeImageIcon";
 import LikeButton from "./LikeButton";
 import ItemTypeVideoIcon from "./ItemTypeVideoIcon";
@@ -32,15 +32,15 @@ const CardNFT2: FC<CardNFT2Props> = ({ className = "", isLiked }) => {
   const renderAvatars = () => {
     return (
       <div className="hidden md:flex -space-x-1.5 ">
-        <Avatar
+        <Index
           containerClassName="ring-2 ring-white "
           sizeClass="h-5 w-5 text-sm"
         />
-        <Avatar
+        <Index
           containerClassName="ring-2 ring-white "
           sizeClass="h-5 w-5 text-sm"
         />
-        <Avatar
+        <Index
           containerClassName="ring-2 ring-white "
           sizeClass="h-5 w-5 text-sm"
         />

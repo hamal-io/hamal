@@ -1,9 +1,9 @@
 import React, { FC } from "react";
-import NextPrev from "@/components/shared/NextPrev/NextPrev";
-import NcImage from "@/components/shared/NcImage/NcImage";
-import Avatar from "@/components/shared/Avatar/Avatar";
-import ButtonPrimary from "@/components/shared/Button/ButtonPrimary";
-import ButtonSecondary from "@/components/shared/Button/ButtonSecondary";
+import NextPrev from "@/components/ui/next-prev/NextPrev";
+import NcImage from "@/components/ui/image/NcImage";
+import Index from "@/components/ui/avatar";
+import ButtonPrimary from "@/components/ui/button/ButtonPrimary";
+import ButtonSecondary from "@/components/ui/button/ButtonSecondary";
 import LikeButton from "@/components/template/LikeButton";
 import ItemTypeVideoIcon from "@/components/template/ItemTypeVideoIcon";
 import { nftsLargeImgs } from "@/contains/fakeData";
@@ -51,7 +51,7 @@ const CardLarge1: FC<CardLarge1Props> = ({
           <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-12">
             <div className="flex items-center">
               <div className="flex-shrink-0 h-10 w-10">
-                <Avatar sizeClass="w-10 h-10" />
+                <Index sizeClass="w-10 h-10" />
               </div>
               <div className="ml-3">
                 <div className="text-xs dark:text-neutral-400">Creator</div>
@@ -63,7 +63,7 @@ const CardLarge1: FC<CardLarge1Props> = ({
             </div>
             <div className="flex items-center">
               <div className="flex-shrink-0 h-10 w-10">
-                <Avatar sizeClass="w-10 h-10" imgUrl={collectionPng} />
+                <Index sizeClass="w-10 h-10" imgUrl={collectionPng} />
               </div>
               <div className="ml-3">
                 <div className="text-xs dark:text-neutral-400">Collection</div>

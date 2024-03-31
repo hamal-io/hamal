@@ -1,5 +1,5 @@
 import React, { FC, useState } from "react";
-import NcImage from "@/components/shared/NcImage/NcImage";
+import NcImage from "@/components/ui/image/NcImage";
 import { Transition } from "@/app/headlessui";
 import { useMusicPlayer } from "@/hooks/template/useMusicPlayer.ts";
 import { PauseIcon, PlayIcon } from "@heroicons/react/24/solid";

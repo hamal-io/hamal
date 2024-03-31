@@ -3,8 +3,8 @@ import { useWindowSize } from "react-use";
 import { useSwipeable } from "react-swipeable";
 import { variants } from "@/utils/animationVariants";
 import { AnimatePresence, motion, MotionConfig } from "framer-motion";
-import PrevBtn from "@/components/shared/NextPrev/PrevBtn";
-import NextBtn from "@/components/shared/NextPrev/NextBtn";
+import PrevBtn from "@/components/ui/next-prev/PrevBtn";
+import NextBtn from "@/components/ui/next-prev/NextBtn";
 
 export interface MySliderProps<T> {
   className?: string;

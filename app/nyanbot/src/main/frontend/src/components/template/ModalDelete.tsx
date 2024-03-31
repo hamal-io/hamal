@@ -1,7 +1,7 @@
 import React, { FC } from "react";
-import ButtonPrimary from "@/components/shared/Button/ButtonPrimary";
-import ButtonSecondary from "@/components/shared/Button/ButtonSecondary";
-import NcModal from "@/components/shared/NcModal/NcModal";
+import ButtonPrimary from "@/components/ui/button/ButtonPrimary";
+import ButtonSecondary from "@/components/ui/button/ButtonSecondary";
+import NcModal from "@/components/ui/modal/NcModal";
 
 export interface ModalDeleteProps {
   show: boolean;

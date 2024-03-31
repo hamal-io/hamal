@@ -1,6 +1,6 @@
 import React, { FC } from "react";
-import Avatar from "@/components/shared/Avatar/Avatar";
-import NcImage from "@/components/shared/NcImage/NcImage";
+import Index from "@/components/ui/avatar";
+import NcImage from "@/components/ui/image/NcImage";
 import VerifyIcon from "@/components/template/VerifyIcon";
 import FollowButton from "@/components/template/FollowButton";
 import useGetRandomData from "@/hooks/template/useGetRandomData.ts";
@@ -46,7 +46,7 @@ const CardAuthorBox3: FC<CardAuthorBox3Props> = ({
 
       <div className="-mt-6">
         <div className="text-center">
-          <Avatar
+          <Index
             containerClassName="ring-4 ring-white dark:ring-black !shadow-xl"
             sizeClass="w-12 h-12 text-2xl"
             radius="rounded-full"

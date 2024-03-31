@@ -1,6 +1,6 @@
 import React, { FC, useId } from "react";
-import Avatar from "@/components/shared/Avatar/Avatar";
-import NcImage from "@/components/shared/NcImage/NcImage";
+import Index from "@/components/ui/avatar";
+import NcImage from "@/components/ui/image/NcImage";
 import { nftsImgs } from "@/contains/fakeData";
 import LikeButton from "./LikeButton";
 import Prices from "./Prices";
@@ -23,19 +23,19 @@ const CardNFTVideo: FC<CardNFTVideoProps> = ({
   const renderAvatars = () => {
     return (
       <div className="hidden sm:flex -space-x-1 ">
-        <Avatar
+        <Index
           containerClassName="ring-2 ring-white dark:ring-neutral-900"
           sizeClass="h-5 w-5 text-sm"
         />
-        <Avatar
+        <Index
           containerClassName="ring-2 ring-white dark:ring-neutral-900"
           sizeClass="h-5 w-5 text-sm"
         />
-        <Avatar
+        <Index
           containerClassName="ring-2 ring-white dark:ring-neutral-900"
           sizeClass="h-5 w-5 text-sm"
         />
-        <Avatar
+        <Index
           containerClassName="ring-2 ring-white dark:ring-neutral-900"
           sizeClass="h-5 w-5 text-sm"
         />

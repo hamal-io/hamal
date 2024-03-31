@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { nftsAbstracts } from "@/contains/fakeData";
-import Avatar from "@/components/shared/Avatar/Avatar";
-import NcImage from "@/components/shared/NcImage/NcImage";
+import Index from "@/components/ui/avatar";
+import NcImage from "@/components/ui/image/NcImage";
 import Prices from "./Prices";
 import useGetRandomData from "@/hooks/template/useGetRandomData.ts";
 import ButtonPlayMusicPlayer from "./ButtonPlayMusicPlayer";
@@ -21,15 +21,15 @@ const CardNFTMusic2: FC<CardNFTMusic2Props> = ({
   const renderAvatars = () => {
     return (
       <div className="hidden sm:flex -space-x-1.5 ">
-        <Avatar
+        <Index
           containerClassName="ring-2 ring-white dark:ring-neutral-800"
           sizeClass="h-5 w-5 text-sm"
         />
-        <Avatar
+        <Index
           containerClassName="ring-2 ring-white dark:ring-neutral-800"
           sizeClass="h-5 w-5 text-sm"
         />
-        <Avatar
+        <Index
           containerClassName="ring-2 ring-white dark:ring-neutral-800"
           sizeClass="h-5 w-5 text-sm"
         />

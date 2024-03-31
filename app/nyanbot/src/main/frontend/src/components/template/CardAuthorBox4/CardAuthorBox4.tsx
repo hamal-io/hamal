@@ -1,9 +1,9 @@
 import React, { FC } from "react";
-import Avatar from "@/components/shared/Avatar/Avatar";
-import NcImage from "@/components/shared/NcImage/NcImage";
+import Index from "@/components/ui/avatar";
+import NcImage from "@/components/ui/image/NcImage";
 import VerifyIcon from "@/components/template/VerifyIcon";
 import FollowButton from "@/components/template/FollowButton";
-import Badge from "@/components/shared/Badge/Badge";
+import Badge from "@/components/ui/badge/Badge";
 import useGetRandomData from "@/hooks/template/useGetRandomData.ts";
 import LinkW from "@/types/link.tsx";
 
@@ -61,7 +61,7 @@ const CardAuthorBox4: FC<CardAuthorBox4Props> = ({
             </svg>
 
             <div className="absolute -top-7 left-1/2 -translate-x-1/2">
-              <Avatar
+              <Index
                 containerClassName=""
                 sizeClass="w-12 h-12 text-2xl"
                 radius="rounded-full"

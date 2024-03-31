@@ -2,7 +2,7 @@ import React, { FC, useState } from "react";
 import Heading from "@/components/template/Heading/Heading";
 import CollectionCard from "./CollectionCard";
 import CollectionCard2 from "./CollectionCard2";
-import Nav from "@/components/shared/Nav/Nav";
+import Nav from "@/components/ui/nav/Nav";
 import NavItem2 from "./NavItem2";
 import MySlider from "./MySlider";
 import { ArrowUpRightIcon } from "@heroicons/react/24/solid";

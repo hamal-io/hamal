@@ -33,7 +33,7 @@ const Logo: React.FC<LogoProps> = ({
           // priority
         />
       ) : (
-        "Logo Here"
+        "logo Here"
       )}
       {imgLight && (
         <ImageW

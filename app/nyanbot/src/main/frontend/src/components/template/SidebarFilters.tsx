@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import Checkbox from "@/components/shared/Checkbox/Checkbox";
+import Checkbox from "@/components/ui/checkbox/Checkbox";
 import Slider from "rc-slider";
-import Radio from "@/components/shared/Radio/Radio";
+import Radio from "@/components/ui/radiobutton/Radio";
 import MySwitch from "@/components/template/MySwitch";
 
 // DEMO DATA

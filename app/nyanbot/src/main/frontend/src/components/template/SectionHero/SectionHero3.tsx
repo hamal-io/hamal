@@ -1,5 +1,5 @@
 import React from "react";
-import ButtonPrimary from "@/components/shared/Button/ButtonPrimary";
+import ButtonPrimary from "@/components/ui/button/ButtonPrimary";
 import imagePng from "@/images/hero3.png";
 import HeroSearchForm from "@/components/template/HeroSearchForm/HeroSearchForm";
 import ImageW from "@/types/image.tsx";

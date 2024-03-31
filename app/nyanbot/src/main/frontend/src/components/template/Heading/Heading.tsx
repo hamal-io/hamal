@@ -1,6 +1,6 @@
 import { Popover, Transition } from "@headlessui/react";
 import React, { Fragment, ReactNode, useEffect, useState } from "react";
-import NextPrev, { NextPrevProps } from "@/components/shared/NextPrev/NextPrev";
+import NextPrev, { NextPrevProps } from "@/components/ui/next-prev/NextPrev";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 export interface HeadingProps extends NextPrevProps {
   fontClass?: string;

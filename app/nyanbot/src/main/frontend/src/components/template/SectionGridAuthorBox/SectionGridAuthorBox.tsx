@@ -5,9 +5,9 @@ import CardAuthorBox3 from "@/components/template/CardAuthorBox3/CardAuthorBox3"
 import CardAuthorBox4 from "@/components/template/CardAuthorBox4/CardAuthorBox4";
 import Heading from "@/components/template/Heading/Heading";
 import NavItem2 from "@/components/template/NavItem2";
-import ButtonPrimary from "@/components/shared/Button/ButtonPrimary";
-import ButtonSecondary from "@/components/shared/Button/ButtonSecondary";
-import Nav from "@/components/shared/Nav/Nav";
+import ButtonPrimary from "@/components/ui/button/ButtonPrimary";
+import ButtonSecondary from "@/components/ui/button/ButtonSecondary";
+import Nav from "@/components/ui/nav/Nav";
 import SortOrderFilter from "./SortOrderFilter";
 
 export interface SectionGridAuthorBoxProps {

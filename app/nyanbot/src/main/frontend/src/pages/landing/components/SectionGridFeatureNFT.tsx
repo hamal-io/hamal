@@ -1,6 +1,6 @@
 import React from "react";
 import CardNFT from "@/components/template/CardNFT";
-import ButtonSecondary from "@/components/shared/Button/ButtonSecondary";
+import ButtonSecondary from "@/components/ui/button/ButtonSecondary";
 import HeaderFilterSection from "@/components/template/HeaderFilterSection";
 
 const SectionGridFeatureNFT = () => {

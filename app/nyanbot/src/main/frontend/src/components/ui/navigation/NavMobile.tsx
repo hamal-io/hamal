@@ -1,13 +1,12 @@
 import React from "react";
-import ButtonClose from "@/components/shared/ButtonClose/ButtonClose";
-import Logo from "@/components/shared/Logo/Logo";
+import ButtonClose from "@/components/ui/button-close/ButtonClose";
+import Logo from "@/components/ui/logo/Logo";
 import { Disclosure } from "@/app/headlessui";
 import { NavItemType } from "./NavigationItem";
 import { NAVIGATION_DEMO_2 } from "@/data/navigation";
-import ButtonPrimary from "@/components/shared/Button/ButtonPrimary";
-import SocialsList from "@/components/shared/SocialsList/SocialsList";
+import ButtonPrimary from "@/components/ui/button/ButtonPrimary";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
-import SwitchDarkMode from "@/components/shared/SwitchDarkMode/SwitchDarkMode";
+import SwitchDarkMode from "@/components/ui/switch-dark-mode/SwitchDarkMode";
 import LinkW from "@/types/link.tsx";
 
 export interface NavMobileProps {
@@ -171,7 +170,6 @@ const NavMobile: React.FC<NavMobileProps> = ({
           </span>
 
           <div className="flex justify-between items-center mt-4">
-            <SocialsList itemClass="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-full text-xl" />
             <span className="block">
               <SwitchDarkMode className="bg-neutral-100 dark:bg-neutral-800" />
             </span>

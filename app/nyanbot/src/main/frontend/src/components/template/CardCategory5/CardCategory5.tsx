@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import NcImage from "@/components/shared/NcImage/NcImage";
+import NcImage from "@/components/ui/image/NcImage";
 import images1 from "@/images/nfts/cat1.webp";
 import LinkW from "@/types/link.tsx";
 

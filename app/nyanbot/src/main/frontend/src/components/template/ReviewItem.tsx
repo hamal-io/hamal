@@ -1,6 +1,6 @@
 import { StarIcon } from "@heroicons/react/24/solid";
 import React, { FC } from "react";
-import Avatar from "@/components/shared/Avatar/Avatar";
+import Index from "@/components/ui/avatar";
 
 interface ReviewItemDataType {
   name: string;
@@ -34,7 +34,7 @@ const ReviewItem: FC<ReviewItemProps> = ({
     >
       <div className=" flex space-x-4 ">
         <div className="flex-shrink-0 pt-0.5">
-          <Avatar
+          <Index
             sizeClass="h-10 w-10 text-lg"
             radius="rounded-full"
             userName={data.name}

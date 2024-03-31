@@ -1,6 +1,6 @@
 import React, {FC} from "react";
-import Avatar from "@/components/shared/Avatar/Avatar";
-import NcImage from "@/components/shared/NcImage/NcImage";
+import Index from "@/components/ui/avatar";
+import NcImage from "@/components/ui/image/NcImage";
 import VerifyIcon from "./VerifyIcon";
 import useGetRandomData from "@/hooks/template/useGetRandomData.ts";
 import LinkW from "@/types/link.tsx";
@@ -65,7 +65,7 @@ const CollectionCard2: FC<CollectionCard2Props> = ({
                 {/* AUTHOR */}
                 <div className="mt-2 flex justify-between">
                     <div className="flex items-center  truncate">
-                        <Avatar sizeClass="h-6 w-6"/>
+                        <Index sizeClass="h-6 w-6"/>
                         <div className="ml-2 text-sm truncate">
               <span className="font-normal hidden sm:inline-block">
                 Creator

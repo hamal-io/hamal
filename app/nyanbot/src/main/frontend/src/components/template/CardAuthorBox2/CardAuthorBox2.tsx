@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { ArrowRightIcon } from "@heroicons/react/24/solid";
-import Avatar from "@/components/shared/Avatar/Avatar";
-import NcImage from "@/components/shared/NcImage/NcImage";
+import Index from "@/components/ui/avatar";
+import NcImage from "@/components/ui/image/NcImage";
 import VerifyIcon from "@/components/template/VerifyIcon";
 import useGetRandomData from "@/hooks/template/useGetRandomData.ts";
 import LinkW from "@/types/link.tsx";
@@ -34,7 +34,7 @@ const CardAuthorBox2: FC<CardAuthorBox2Props> = ({ className = "" }) => {
       </div>
 
       <div className="-mt-8 m-8 text-center">
-        <Avatar
+        <Index
           containerClassName="ring-2 ring-white"
           sizeClass="w-16 h-16 text-2xl"
           radius="rounded-full"

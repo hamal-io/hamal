@@ -14,15 +14,15 @@ export interface AvatarProps {
     hasCheckedClass?: string;
 }
 
-const Avatar: FC<AvatarProps> = ({
-                                     containerClassName = "ring-1 ring-white dark:ring-neutral-900",
-                                     sizeClass = "h-6 w-6 text-sm",
-                                     radius = "rounded-full",
-                                     imgUrl = "",
-                                     userName,
-                                     hasChecked,
-                                     hasCheckedClass = "w-4 h-4 bottom-1 -right-0.5",
-                                 }) => {
+const Index: FC<AvatarProps> = ({
+     containerClassName = "ring-1 ring-white dark:ring-neutral-900",
+     sizeClass = "h-6 w-6 text-sm",
+     radius = "rounded-full",
+     imgUrl = "",
+     userName,
+     hasChecked,
+     hasCheckedClass = "w-4 h-4 bottom-1 -right-0.5",
+ }) => {
     const {avatarRd} = useGetRandomData();
 
     const url = imgUrl || avatarRd;
@@ -58,4 +58,4 @@ const Avatar: FC<AvatarProps> = ({
     );
 };
 
-export default Avatar;
+export default Index;

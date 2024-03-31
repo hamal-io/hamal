@@ -1,5 +1,5 @@
 import _ from "lodash";
-import {NavItemType} from "@/components/shared/Navigation/NavigationItem.tsx";
+import {NavItemType} from "@/components/ui/navigation/NavigationItem.tsx";
 
 const ncNanoId = _.uniqueId;
 

@@ -1,4 +1,4 @@
-import Footer from "@/components/shared/Footer/Footer.tsx";
+import Footer from "@/components/ui/footer/Footer.tsx";
 import {FC} from "react";
 import SiteHeader from "@/app/header.tsx";
 

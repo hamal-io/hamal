@@ -1,8 +1,8 @@
 import React, { FC, useEffect, useRef } from "react";
-import ButtonPrimary from "@/components/shared/Button/ButtonPrimary";
-import ButtonSecondary from "@/components/shared/Button/ButtonSecondary";
-import Input from "@/components/shared/Input/Input";
-import NcModal from "@/components/shared/NcModal/NcModal";
+import ButtonPrimary from "@/components/ui/button/ButtonPrimary";
+import ButtonSecondary from "@/components/ui/button/ButtonSecondary";
+import Input from "@/components/ui/input/Input";
+import NcModal from "@/components/ui/modal/NcModal";
 
 export interface ModalEditProps {
   show: boolean;

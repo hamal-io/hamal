@@ -1,12 +1,12 @@
 import React, { FC } from "react";
-import Logo from "@/components/shared/Logo/Logo";
-import MenuBar from "@/components/shared/MenuBar/MenuBar";
-import SwitchDarkMode from "@/components/shared/SwitchDarkMode/SwitchDarkMode";
+import Logo from "@/components/ui/logo/Logo";
+import MenuBar from "@/components/ui/menu/MenuBar";
+import SwitchDarkMode from "@/components/ui/switch-dark-mode/SwitchDarkMode";
 import NotifyDropdown from "./NotifyDropdown";
 import AvatarDropdown from "./AvatarDropdown";
-import Input from "@/components/shared/Input/Input";
-import ButtonPrimary from "@/components/shared/Button/ButtonPrimary";
-import Navigation from "@/components/shared/Navigation/Navigation";
+import Input from "@/components/ui/input/Input";
+import ButtonPrimary from "@/components/ui/button/ButtonPrimary";
+import Navigation from "@/components/ui/navigation/Navigation";
 
 export interface MainNav2LoggedProps {}
 

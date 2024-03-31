@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import { Popover, Transition } from "@headlessui/react";
 import { FC } from "react";
-import Checkbox from "@/components/shared/Checkbox/Checkbox";
+import Checkbox from "@/components/ui/checkbox/Checkbox";
 
 // DEMO DATA
 const typeOfProperty = [

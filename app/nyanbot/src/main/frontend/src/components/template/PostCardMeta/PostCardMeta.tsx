@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import Avatar from "@/components/shared/Avatar/Avatar";
+import Index from "@/components/ui/avatar";
 import { _getPersonNameRd } from "@/contains/fakeData";
 import LinkW from "@/types/link.tsx";
 
@@ -22,7 +22,7 @@ const PostCardMeta: FC<PostCardMetaProps> = ({
         className="flex-shrink-0 relative flex items-center space-x-2"
       >
         {!hiddenAvatar && (
-          <Avatar radius="rounded-full" sizeClass={"h-7 w-7 text-sm"} />
+          <Index radius="rounded-full" sizeClass={"h-7 w-7 text-sm"} />
         )}
         <span className="block text-neutral-6000 hover:text-black dark:text-neutral-300 dark:hover:text-white font-medium">
           {_getPersonNameRd()}

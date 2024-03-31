@@ -1,10 +1,10 @@
 import React, { FC } from "react";
-import NcImage from "@/components/shared/NcImage/NcImage";
+import NcImage from "@/components/ui/image/NcImage";
 import rightImgDemo from "@/images/rightLargeImg.png";
 import rightLargeImgDark from "@/images/rightLargeImgDark.png";
-import ButtonPrimary from "@/components/shared/Button/ButtonPrimary";
-import Logo from "@/components/shared/Logo/Logo";
-import ButtonSecondary from "@/components/shared/Button/ButtonSecondary";
+import ButtonPrimary from "@/components/ui/button/ButtonPrimary";
+import Logo from "@/components/ui/logo/Logo";
+import ButtonSecondary from "@/components/ui/button/ButtonSecondary";
 
 export interface SectionBecomeAnAuthorProps {
   className?: string;

@@ -1,6 +1,6 @@
 import { _getImgRd, _getTagNameRd } from "@/contains/fakeData";
 import React, { FC } from "react";
-import NcImage from "@/components/shared/NcImage/NcImage";
+import NcImage from "@/components/ui/image/NcImage";
 import LinkW from "@/types/link.tsx";
 
 export interface CardCategory1Props {

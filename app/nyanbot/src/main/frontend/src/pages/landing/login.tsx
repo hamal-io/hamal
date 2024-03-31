@@ -2,8 +2,8 @@ import React, {FC, forwardRef, HTMLAttributes, ReactNode, useEffect, useState} f
 import facebookSvg from "@/images/Facebook.svg";
 import twitterSvg from "@/images/Twitter.svg";
 import googleSvg from "@/images/Google.svg";
-import Input from "@/components/shared/Input/Input";
-import ButtonPrimary from "@/components/shared/Button/ButtonPrimary";
+import Input from "@/components/ui/input/Input";
+import ButtonPrimary from "@/components/ui/button/ButtonPrimary";
 import {MetaMaskProvider, useSDK} from "@metamask/sdk-react";
 import ImageW from "@/types/image.tsx";
 import LinkW from "@/types/link.tsx";

@@ -1,8 +1,8 @@
 import FollowButton from "@/components/template/FollowButton";
 import VerifyIcon from "@/components/template/VerifyIcon";
 import React, { FC } from "react";
-import Avatar from "@/components/shared/Avatar/Avatar";
-import Badge from "@/components/shared/Badge/Badge";
+import Index from "@/components/ui/avatar";
+import Badge from "@/components/ui/badge/Badge";
 import useGetRandomData from "@/hooks/template/useGetRandomData.ts";
 import LinkW from "@/types/link.tsx";
 
@@ -26,7 +26,7 @@ const CardAuthorBox: FC<CardAuthorBoxProps> = ({ className = "", index }) => {
           name={`#${index}`}
         />
       )}
-      <Avatar sizeClass="w-20 h-20 text-2xl" radius="rounded-full" />
+      <Index sizeClass="w-20 h-20 text-2xl" radius="rounded-full" />
       <div className="mt-3">
         <h2 className={`text-base font-semibold flex items-center`}>
           {personNameRd}
