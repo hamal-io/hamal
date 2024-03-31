@@ -5,9 +5,11 @@ import {useMetaMaskChallenge, useMetaMaskToken} from "@/hooks/auth.ts";
 import {Buffer} from "buffer";
 import ButtonPrimary from "@/components/ui/button/ButtonPrimary.tsx";
 
-type MetaMaskButtonProps = {}
+type MetaMaskButtonProps = {
+    className?: string;
+}
 
-export const MetaMaskButton: FC<MetaMaskButtonProps> = ({}) => {
+export const MetaMaskButton: FC<MetaMaskButtonProps> = ({className}) => {
     const [connecting, setConnecting] = useState(false)
     const navigate = useNavigate()
     const {sdk} = useSDK();
@@ -54,7 +56,7 @@ export const MetaMaskButton: FC<MetaMaskButtonProps> = ({}) => {
 
     return (
         <ButtonPrimary
-            className="self-center"
+            className={`self-center ${className}`}
             onClick={connect}
             loading={connecting}
             sizeClass="px-4 py-2 sm:px-5"
