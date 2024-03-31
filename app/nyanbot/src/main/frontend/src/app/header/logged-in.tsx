@@ -4,6 +4,7 @@ import MenuBar from "@/components/ui/menu/MenuBar.tsx";
 import SwitchMode from "@/components/ui/switch-mode";
 import ButtonPrimary from "@/components/ui/button/ButtonPrimary.tsx";
 import Navigation from "@/components/ui/navigation/Navigation.tsx";
+import {Profile} from "@/app/header/profile.tsx";
 
 export interface LoggedInProps {
 }
@@ -27,8 +28,10 @@ const LoggedIn: FC<LoggedInProps> = () => {
                                 <SwitchMode/>
                             </div>
                             <div></div>
+                            <Profile/>
                         </div>
                         <div className="flex items-center space-x-1 xl:hidden">
+                            <Profile/>
                             <MenuBar/>
                         </div>
                     </div>
