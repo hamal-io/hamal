@@ -1,17 +1,14 @@
-import Footer from "@/app/Footer.tsx";
 import {FC, ReactNode} from "react";
-import SiteHeader from "@/app/header.tsx";
-
+import Header from "@/app/header/index.tsx";
 
 type Props = {
-    children: Array<ReactNode>
+    children: Iterable<ReactNode>;
 }
 const RootLayout: FC<Props> = ({children}) => {
     return (
         <div>
-            <SiteHeader/>
+            <Header/>
             {children}
-            <Footer/>
         </div>
     )
 }
