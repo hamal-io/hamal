@@ -17,6 +17,7 @@ data class ExecEntity(
     override val id: ExecId,
     override val sequence: RecordSequence,
     override val recordedAt: RecordedAt,
+    val triggerId: TriggerId?,
     val namespaceId: NamespaceId,
     val workspaceId: WorkspaceId,
 
@@ -26,7 +27,6 @@ data class ExecEntity(
     var code: ExecCode? = null,
     var plannedAt: Instant? = null,
     var scheduledAt: Instant? = null,
-    var invocation: Invocation? = null,
     var result: ExecResult? = null,
     var state: ExecState? = null
 
@@ -44,7 +44,6 @@ data class ExecEntity(
                 correlation = rec.correlation,
                 inputs = rec.inputs,
                 code = rec.code,
-                invocation = rec.invocation,
                 plannedAt = Instant.now(), // FIXME
                 recordedAt = rec.recordedAt()
             )
@@ -100,13 +99,13 @@ data class ExecEntity(
         val plannedExec = Exec.Planned(
             cmdId = cmdId,
             id = id,
+            triggerId = triggerId,
             updatedAt = recordedAt.toUpdatedAt(),
             namespaceId = namespaceId,
             workspaceId = workspaceId,
             correlation = correlation,
             inputs = inputs ?: ExecInputs(HotObject.empty),
-            code = code ?: ExecCode(),
-            invocation = invocation!!
+            code = code ?: ExecCode()
         )
 
         if (status == ExecStatus.Planned) return plannedExec
@@ -152,6 +151,7 @@ fun List<ExecRecord>.createEntity(): ExecEntity {
 
     var result = ExecEntity(
         id = firstRecord.entityId,
+        triggerId = firstRecord.triggerId,
         namespaceId = firstRecord.namespaceId,
         workspaceId = firstRecord.workspaceId,
         cmdId = firstRecord.cmdId,

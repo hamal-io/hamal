@@ -35,7 +35,7 @@ class CodeRunnerImpl(
 
             runnerContext = RunnerContext(
                 unitOfWork.state,
-                unitOfWork.invocation
+                unitOfWork.inputs
             )
             runnerContext[ExecId::class] = unitOfWork.id
             runnerContext[WorkspaceId::class] = unitOfWork.workspaceId

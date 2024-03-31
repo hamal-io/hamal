@@ -1,5 +1,6 @@
 package io.hamal.runner.test
 
+import io.hamal.lib.domain.EventToSubmit
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.NativeLoader
@@ -89,7 +90,6 @@ abstract class AbstractRunnerTest {
     fun unitOfWork(
         code: String,
         inputs: ExecInputs = ExecInputs(),
-        invocation: Invocation = Invocation.Adhoc
     ) = UnitOfWork(
         id = ExecId(1234),
         execToken = ExecToken("ExecToken"),
@@ -98,7 +98,6 @@ abstract class AbstractRunnerTest {
         inputs = inputs,
         state = State(),
         code = CodeValue(code),
-        correlation = null,
-        invocation = invocation
+        correlation = null
     )
 }

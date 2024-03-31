@@ -1,6 +1,6 @@
 package io.hamal.runner.connector
 
-import io.hamal.lib.domain.vo.EventToSubmit
+import io.hamal.lib.domain.EventToSubmit
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecResult
 import io.hamal.lib.domain.vo.ExecState
@@ -24,8 +24,7 @@ class HttpConnector(
                     inputs = it.inputs,
                     state = it.state,
                     code = it.code,
-                    correlation = it.correlation,
-                    invocation = it.invocation,
+                    correlation = it.correlation
                 )
             }
         } catch (e: java.net.ConnectException) {
@@ -52,6 +51,6 @@ class HttpConnector(
         execId: ExecId,
         result: ExecResult
     ) {
-        sdk.exec.fail(execId,  result)
+        sdk.exec.fail(execId, result)
     }
 }

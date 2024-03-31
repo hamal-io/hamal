@@ -18,7 +18,7 @@ internal class TriggerStatusController(
     private val retry: Retry
 ) {
     @PostMapping("/v1/trigger/{triggerId}/activate")
-    fun toggleOn(
+    fun activate(
         @PathVariable triggerId: TriggerId
     ): ResponseEntity<ApiRequested> = retry {
         triggerSetStatus(triggerId, Active).accepted()
@@ -26,7 +26,7 @@ internal class TriggerStatusController(
 
 
     @PostMapping("/v1/trigger/{triggerId}/deactivate")
-    fun toggleOff(
+    fun deactivate(
         @PathVariable triggerId: TriggerId
     ): ResponseEntity<ApiRequested> = retry {
         triggerSetStatus(triggerId, Inactive).accepted()

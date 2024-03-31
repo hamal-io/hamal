@@ -31,8 +31,7 @@ internal class ExecFailControllerTest : BaseExecControllerTest() {
                     correlation = Correlation(
                         funcId = generateDomainId(::FuncId),
                         id = CorrelationId("__correlation__")
-                    ),
-                    invocation = Invocation.Adhoc
+                    )
                 )
 
                 val failureResponse = requestFailure(exec.id)
@@ -52,8 +51,7 @@ internal class ExecFailControllerTest : BaseExecControllerTest() {
             correlation = Correlation(
                 funcId = generateDomainId(::FuncId),
                 id = CorrelationId("__correlation__")
-            ),
-            invocation = Invocation.Adhoc
+            )
         ) as Exec.Started
 
         val failureResponse = requestFailure(startedExec.id)

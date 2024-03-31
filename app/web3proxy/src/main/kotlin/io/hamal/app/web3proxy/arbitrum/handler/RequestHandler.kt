@@ -1,10 +1,10 @@
 package io.hamal.app.web3proxy.arbitrum.handler
 
 import io.hamal.app.web3proxy.arbitrum.repository.ArbitrumRepository
-import io.hamal.lib.web3.evm.impl.arbitrum.domain.ArbitrumGetBlockByNumberRequest
-import io.hamal.lib.web3.evm.impl.arbitrum.domain.ArbitrumGetBlockResponse
-import io.hamal.lib.web3.evm.impl.arbitrum.domain.ArbitrumRequest
-import io.hamal.lib.web3.evm.impl.arbitrum.domain.ArbitrumResponse
+import io.hamal.lib.web3.evm.chain.arbitrum.domain.ArbitrumGetBlockByNumberRequest
+import io.hamal.lib.web3.evm.chain.arbitrum.domain.ArbitrumGetBlockResponse
+import io.hamal.lib.web3.evm.chain.arbitrum.domain.ArbitrumRequest
+import io.hamal.lib.web3.evm.chain.arbitrum.domain.ArbitrumResponse
 
 interface HandleArbitrumRequest {
     operator fun invoke(request: ArbitrumRequest): ArbitrumResponse

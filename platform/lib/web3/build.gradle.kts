@@ -4,7 +4,6 @@ plugins {
 
 dependencies {
     api(project(":platform:lib:http"))
-//    implementation(external.bouncycastle)
     implementation(external.web3j.crypto) {
         exclude("tech.pegasys", "jc-kzg-4844")
     }

@@ -6,8 +6,8 @@ import io.hamal.app.web3proxy.config.WebConfig
 import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.http.JsonHttpSerdeFactory
 import io.hamal.lib.web3.evm.abi.type.*
-import io.hamal.lib.web3.evm.impl.arbitrum.domain.ArbitrumBlock
-import io.hamal.lib.web3.evm.impl.arbitrum.domain.ArbitrumTransaction
+import io.hamal.lib.web3.evm.chain.arbitrum.domain.ArbitrumBlockData
+import io.hamal.lib.web3.evm.chain.arbitrum.domain.ArbitrumTransactionData
 import io.hamal.lib.web3.json
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -27,7 +27,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 @ActiveProfiles("test")
 internal abstract class ArbitrumBaseTest {
 
-    protected fun assertBlock0x100002(block: ArbitrumBlock?) {
+    protected fun assertBlock0x100002(block: ArbitrumBlockData?) {
         checkNotNull(block)
 
         assertThat(block.extraData, equalTo(EvmBytes32("0x0000000000000000000000000000000000000000000000000000000000000000")))
@@ -55,7 +55,7 @@ internal abstract class ArbitrumBaseTest {
 
     }
 
-    protected fun assertBlock0x1284810(block: ArbitrumBlock?) {
+    protected fun assertBlock0x1284810(block: ArbitrumBlockData?) {
         checkNotNull(block)
 
         assertThat(block.extraData, equalTo(EvmBytes32("0x0000000000000000000000000000000000000000000000000000000000000000")))
@@ -81,7 +81,7 @@ internal abstract class ArbitrumBaseTest {
 
     }
 
-    protected fun assertTransaction0x47dcb139b6360035b65bc822b519fe95a4ea16e33786144fc4d4c6fb65075f3f(tx: ArbitrumTransaction) {
+    protected fun assertTransaction0x47dcb139b6360035b65bc822b519fe95a4ea16e33786144fc4d4c6fb65075f3f(tx: ArbitrumTransactionData) {
         assertThat(tx.blockHash, equalTo(EvmHash("0xbe1ba35d8f2b0911fe5874bc5fcaab85b75cf121468872935f6ec7b62075c7b6")))
         assertThat(tx.blockNumber, equalTo(EvmUint64("0x100002")))
         assertThat(tx.from, equalTo(EvmAddress("0x72b4da7114a424aa2d095f1276087908b7f212a8")))

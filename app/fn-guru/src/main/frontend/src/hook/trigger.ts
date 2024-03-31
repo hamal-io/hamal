@@ -1,7 +1,8 @@
 import {useGet, usePost} from "@/hook/http.ts";
 import {useCallback} from "react";
-import {TriggerCreateRequested, TriggerList} from "@/types";
+import {TriggerCreateRequested, TriggerList, TriggerStatusRequested} from "@/types";
 import {useAuth} from "@/hook/auth.ts";
+
 
 type TriggerListScheduleAction = (namespaceId: string, abortController?: AbortController) => void
 export const useTriggerListSchedule = (): [TriggerListScheduleAction, TriggerList, boolean, Error] => {
@@ -52,16 +53,16 @@ type TriggerHookCreateAction = (props: TriggerHookCreateProps) => void
 export const useTriggerHookCreate = (): [TriggerHookCreateAction, TriggerCreateRequested, boolean, Error] => {
     const [auth] = useAuth()
     const [post, submission, loading, error] = usePost<TriggerCreateRequested>()
-    const fn = useCallback(async ({namespaceId, funcId, name, hookId, hookMethod, abortController}: TriggerHookCreateProps) =>
-        post(`/v1/namespaces/${namespaceId}/triggers`, {
-            type: "Hook",
-            name,
-            funcId,
-            inputs: {},
-            hookId,
-            hookMethod
-        }, abortController), [auth]
-    )
+    const fn = useCallback(
+        async ({namespaceId, funcId, name, hookId, hookMethod, abortController}: TriggerHookCreateProps) =>
+            post(`/v1/namespaces/${namespaceId}/triggers`, {
+                type: "Hook",
+                name,
+                funcId,
+                inputs: {},
+                hookId,
+                hookMethod
+            }, abortController), [auth])
     return [fn, submission, loading, error]
 }
 
@@ -72,18 +73,19 @@ export type TriggerEventCreateProps = {
     funcId: string
 }
 
-type TriggerEventCreateAction = (props: TriggerEventCreateProps ,  abortController?: AbortController) => void
+type TriggerEventCreateAction = (props: TriggerEventCreateProps, abortController?: AbortController) => void
 export const useTriggerEventCreate = (): [TriggerEventCreateAction, TriggerCreateRequested, boolean, Error] => {
     const [auth] = useAuth()
     const [post, submission, loading, error] = usePost<TriggerCreateRequested>()
-    const fn = useCallback<TriggerEventCreateAction>(async ({namespaceId, topicId, funcId, name}: TriggerEventCreateProps , abortController?: AbortController) =>
-        post(`/v1/namespaces/${namespaceId}/triggers`, {
-            type: 'Event',
-            name,
-            funcId,
-            topicId
-        },abortController),[auth]
-    )
+    const fn = useCallback<TriggerEventCreateAction>(
+        async ({namespaceId, topicId, funcId, name}: TriggerEventCreateProps, abortController?: AbortController) =>
+            post(`/v1/namespaces/${namespaceId}/triggers`, {
+                type: 'Event',
+                name,
+                funcId,
+                topicId
+            }, abortController),
+        [auth])
     return [fn, submission, loading, error]
 }
 
@@ -96,4 +98,30 @@ export const useTriggerListEvent = (): [TriggerListEventAction, TriggerList, boo
         ), [auth])
     return [fn, triggerList, loading, error]
 }
+
+
+type TriggerStatusAction = (triggerId: string, status: string, abortController?: AbortController) => void
+export const useSetTriggerStatus = (): [TriggerStatusAction, TriggerStatusRequested, boolean, Error] => {
+    const [auth] = useAuth()
+    const [post, submission, loading, error] = usePost<TriggerStatusRequested>()
+    const fn = useCallback<TriggerStatusAction>(
+        async (triggerId, status, abortController) => {
+            post(`/v1/trigger/${triggerId}/${status}`, {}, abortController)
+        }, [auth])
+    return [fn, submission, loading, error]
+}
+
+type TriggerListAction = (namespaceId: string, abortController?: AbortController) => void
+export const useTriggerList = (): [TriggerListAction, TriggerList, boolean, Error] => {
+    const [auth] = useAuth()
+    const [get, triggerList, loading, error] = useGet<TriggerList>()
+    const fn = useCallback<TriggerListAction>(async (namespaceId, abortController?) => {
+            get(`/v1/namespaces/${namespaceId}/triggers`, abortController)
+        }, [auth]
+    )
+
+    return [fn, triggerList, loading, error]
+}
+
+
 

@@ -10,9 +10,9 @@ import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.lib.web3.evm.EvmHotModule
 import io.hamal.lib.web3.evm.abi.type.EvmAddress
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
-import io.hamal.lib.web3.evm.impl.eth.domain.EthBlock
-import io.hamal.lib.web3.evm.impl.eth.domain.EthGetBlockResponse
-import io.hamal.lib.web3.evm.impl.eth.http.EthBatchService
+import io.hamal.lib.web3.evm.chain.eth.domain.EthBlockData
+import io.hamal.lib.web3.evm.chain.eth.domain.EthGetBlockResponse
+import io.hamal.lib.web3.evm.chain.eth.http.EthBatchService
 import java.nio.file.Path
 
 internal interface EthBlockRepository {
@@ -119,7 +119,7 @@ internal class EthBlockRepositoryImpl(
     )
 }
 
-private fun collectEthAddresses(blocks: List<EthBlock>): Set<EvmAddress> {
+private fun collectEthAddresses(blocks: List<EthBlockData>): Set<EvmAddress> {
     return blocks.flatMap { block ->
         listOf(block.miner)
             .plus(block.transactions.flatMap { transaction ->
@@ -131,7 +131,7 @@ private fun collectEthAddresses(blocks: List<EthBlock>): Set<EvmAddress> {
 }
 
 
-private fun EthBlock.toEntity(addresses: Map<EvmAddress, EthAddressId>) = BlockEntity(
+private fun EthBlockData.toEntity(addresses: Map<EvmAddress, EthAddressId>) = BlockEntity(
     baseFeePerGas = baseFeePerGas,
     extraData = extraData,
     gasLimit = gasLimit,

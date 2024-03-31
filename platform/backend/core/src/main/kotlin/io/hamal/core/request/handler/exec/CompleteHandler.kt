@@ -5,6 +5,7 @@ import io.hamal.core.request.RequestHandler
 import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.CorrelatedState
+import io.hamal.lib.domain.EventToSubmit
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain._enum.TopicType
@@ -62,7 +63,7 @@ class ExecCompleteHandler(
         if (correlation != null) {
             stateCmdRepository.set(
                 StateCmdRepository.SetCmd(
-                    id= cmdId,
+                    id = cmdId,
                     correlatedState = CorrelatedState(
                         correlation = correlation,
                         value = State(exec.state.value)

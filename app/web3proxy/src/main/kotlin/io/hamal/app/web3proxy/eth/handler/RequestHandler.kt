@@ -1,10 +1,10 @@
 package io.hamal.app.web3proxy.eth.handler
 
 import io.hamal.app.web3proxy.eth.repository.EthRepository
-import io.hamal.lib.web3.evm.impl.eth.domain.EthGetBlockByNumberRequest
-import io.hamal.lib.web3.evm.impl.eth.domain.EthGetBlockResponse
-import io.hamal.lib.web3.evm.impl.eth.domain.EthRequest
-import io.hamal.lib.web3.evm.impl.eth.domain.EthResponse
+import io.hamal.lib.web3.evm.chain.eth.domain.EthGetBlockByNumberRequest
+import io.hamal.lib.web3.evm.chain.eth.domain.EthGetBlockResponse
+import io.hamal.lib.web3.evm.chain.eth.domain.EthRequest
+import io.hamal.lib.web3.evm.chain.eth.domain.EthResponse
 
 interface HandleEthRequest {
     operator fun invoke(request: EthRequest): EthResponse

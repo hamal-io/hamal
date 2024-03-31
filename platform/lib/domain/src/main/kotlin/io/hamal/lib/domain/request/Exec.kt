@@ -1,5 +1,6 @@
 package io.hamal.lib.domain.request
 
+import io.hamal.lib.domain.EventToSubmit
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.vo.*
 
@@ -8,13 +9,13 @@ data class ExecInvokeRequested(
     override val requestedBy: AuthId,
     override var requestStatus: RequestStatus,
     val id: ExecId,
+    val triggerId: TriggerId?,
     val workspaceId: WorkspaceId,
     val namespaceId: NamespaceId,
     val funcId: FuncId?,
     val correlationId: CorrelationId?,
     val inputs: InvocationInputs,
-    val code: ExecCode,
-    val invocation: Invocation
+    val code: ExecCode
 ) : Requested()
 
 

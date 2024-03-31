@@ -4,9 +4,9 @@ import io.hamal.app.web3proxy.arbitrum.handler.HandleArbitrumRequest
 import io.hamal.lib.common.hot.HotArray
 import io.hamal.lib.common.hot.HotNode
 import io.hamal.lib.common.hot.HotObject
-import io.hamal.lib.web3.evm.impl.arbitrum.domain.ArbitrumRequest
-import io.hamal.lib.web3.evm.impl.arbitrum.domain.ArbitrumResponse
-import io.hamal.lib.web3.evm.impl.arbitrum.domain.parseArbitrumRequest
+import io.hamal.lib.web3.evm.chain.arbitrum.domain.ArbitrumRequest
+import io.hamal.lib.web3.evm.chain.arbitrum.domain.ArbitrumResponse
+import io.hamal.lib.web3.evm.chain.arbitrum.domain.parseArbitrumRequest
 import io.hamal.lib.web3.json
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping

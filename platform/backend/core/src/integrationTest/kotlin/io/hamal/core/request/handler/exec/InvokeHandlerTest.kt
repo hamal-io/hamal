@@ -24,13 +24,13 @@ internal class ExecInvokeHandlerTest : BaseRequestHandlerTest() {
                 requestedBy = AuthId(2),
                 requestStatus = Submitted,
                 id = ExecId(3333),
+                triggerId = TriggerId(4444),
                 namespaceId = testNamespace.id,
                 workspaceId = testWorkspace.id,
                 inputs = InvocationInputs(HotObject.builder().set("hamal", "justworks").build()),
                 code = ExecCode(value = CodeValue("code")),
                 funcId = null,
-                correlationId = null,
-                invocation = Invocation.Event(listOf())
+                correlationId = null
             )
         )
 
@@ -66,6 +66,7 @@ internal class ExecInvokeHandlerTest : BaseRequestHandlerTest() {
                 correlationId = CorrelationId("some-correlation"),
                 requestStatus = Submitted,
                 id = ExecId(3333),
+                triggerId = TriggerId(4444),
                 namespaceId = testNamespace.id,
                 workspaceId = testWorkspace.id,
                 inputs = InvocationInputs(
@@ -78,8 +79,7 @@ internal class ExecInvokeHandlerTest : BaseRequestHandlerTest() {
                 code = ExecCode(
                     id = CodeId(4455),
                     version = CodeVersion(5544),
-                ),
-                invocation = Invocation.Event(listOf())
+                )
             )
         )
 
@@ -135,6 +135,7 @@ internal class ExecInvokeHandlerTest : BaseRequestHandlerTest() {
             correlationId = CorrelationId("some-correlation"),
             requestStatus = Submitted,
             id = ExecId(3333),
+            triggerId = TriggerId(4444),
             namespaceId = testNamespace.id,
             workspaceId = testWorkspace.id,
             inputs = InvocationInputs(
@@ -146,8 +147,7 @@ internal class ExecInvokeHandlerTest : BaseRequestHandlerTest() {
             code = ExecCode(
                 id = CodeId(5555),
                 version = CodeVersion(6666),
-            ),
-            invocation = Invocation.Event(listOf())
+            )
         )
     }
     //@formatter:on

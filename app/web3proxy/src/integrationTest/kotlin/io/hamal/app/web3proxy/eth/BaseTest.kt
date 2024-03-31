@@ -6,8 +6,8 @@ import io.hamal.app.web3proxy.config.WebConfig
 import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.http.JsonHttpSerdeFactory
 import io.hamal.lib.web3.evm.abi.type.*
-import io.hamal.lib.web3.evm.impl.eth.domain.EthBlock
-import io.hamal.lib.web3.evm.impl.eth.domain.EthTransaction
+import io.hamal.lib.web3.evm.chain.eth.domain.EthBlockData
+import io.hamal.lib.web3.evm.chain.eth.domain.EthTransactionData
 import io.hamal.lib.web3.json
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
@@ -26,7 +26,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 @ActiveProfiles("test")
 internal abstract class EthBaseTest {
 
-    protected fun assertBlock0x100002(block: EthBlock?) {
+    protected fun assertBlock0x100002(block: EthBlockData?) {
         checkNotNull(block)
 
         assertThat(block.extraData, equalTo(EvmBytes32("0xd783010303844765746887676f312e352e31856c696e7578")))
@@ -55,7 +55,7 @@ internal abstract class EthBaseTest {
         assertThat(block.withdrawalsRoot, nullValue())
     }
 
-    protected fun assertBlock0x1284810(block: EthBlock?) {
+    protected fun assertBlock0x1284810(block: EthBlockData?) {
         checkNotNull(block)
 
         assertThat(block.extraData, equalTo(EvmBytes32("0x546974616e2028746974616e6275696c6465722e78797a29")))
@@ -85,7 +85,7 @@ internal abstract class EthBaseTest {
         assertThat(block.withdrawalsRoot, equalTo(EvmHash("0x79373dfb0ff17072206ea0dae4942afa3791a9699aeacdb74db8a4f8b62b374f")))
     }
 
-    protected fun assertTransaction0x7da0e4de6f6f08c3e103d8a9fbb8906963b2547af0431d28aec866f7bbbdec5d(tx: EthTransaction) {
+    protected fun assertTransaction0x7da0e4de6f6f08c3e103d8a9fbb8906963b2547af0431d28aec866f7bbbdec5d(tx: EthTransactionData) {
         assertThat(tx.blockHash, equalTo(EvmHash("0x54dd95b568a08a6bcc3ad1675810b8ec841ef5eed7ac027cce35bb2a097671f9")))
         assertThat(tx.blockNumber, equalTo(EvmUint64("0x100002")))
         assertThat(tx.from, equalTo(EvmAddress("0x33357e443d5f03882af49bdcc62ca364ee0a6c7b")))
@@ -103,7 +103,7 @@ internal abstract class EthBaseTest {
         assertThat(tx.accessList, nullValue())
     }
 
-    protected fun assertTransaction0x93508d92b49b73aea5b8394a0394dac83abd81f9dba4424b2604e43108245b33(tx: EthTransaction) {
+    protected fun assertTransaction0x93508d92b49b73aea5b8394a0394dac83abd81f9dba4424b2604e43108245b33(tx: EthTransactionData) {
         assertThat(tx.blockHash, equalTo(EvmHash("0xbe564f59e089bd7fac45b40a4bb0295338a0074d4eaf675937d2498b43ef401c")))
         assertThat(tx.blockNumber, equalTo(EvmUint64("0x1284810")))
         assertThat(tx.from, equalTo(EvmAddress("0x7088659e96e5dcc91608d871937bdb5fa0776bac")))

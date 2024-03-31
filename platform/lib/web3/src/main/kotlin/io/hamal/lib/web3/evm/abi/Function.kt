@@ -2,7 +2,7 @@ package io.hamal.lib.web3.evm.abi
 
 import io.hamal.lib.web3.evm.abi.type.EvmPrefixedHexString
 
-data class EthFunction<INPUTS : EthInputTuple, OUTPUTS : EvmOutputTuple>(
+data class EvmFunction<INPUTS : EvmInputTuple, OUTPUTS : EvmOutputTuple>(
     val name: String,
     val inputs: INPUTS,
     val outputs: OUTPUTS

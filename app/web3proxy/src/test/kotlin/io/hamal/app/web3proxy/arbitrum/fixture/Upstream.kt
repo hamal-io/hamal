@@ -1,11 +1,13 @@
 package io.hamal.app.web3proxy.arbitrum.fixture
 
+import io.hamal.lib.web3.evm.abi.type.EvmAddress
+import io.hamal.lib.web3.evm.abi.type.EvmPrefixedHexString
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
 import io.hamal.lib.web3.evm.domain.EvmRequestId
-import io.hamal.lib.web3.evm.impl.arbitrum.domain.ArbitrumBlock
-import io.hamal.lib.web3.evm.impl.arbitrum.domain.ArbitrumGetBlockResponse
-import io.hamal.lib.web3.evm.impl.arbitrum.domain.ArbitrumResponse
-import io.hamal.lib.web3.evm.impl.arbitrum.http.ArbitrumBatchService
+import io.hamal.lib.web3.evm.chain.arbitrum.domain.ArbitrumBlockData
+import io.hamal.lib.web3.evm.chain.arbitrum.domain.ArbitrumGetBlockResponse
+import io.hamal.lib.web3.evm.chain.arbitrum.domain.ArbitrumResponse
+import io.hamal.lib.web3.evm.chain.arbitrum.http.ArbitrumBatchService
 import io.hamal.lib.web3.json
 
 internal class ArbitrumBatchServiceFixture : ArbitrumBatchService<ArbitrumBatchServiceFixture> {
@@ -27,12 +29,16 @@ internal class ArbitrumBatchServiceFixture : ArbitrumBatchService<ArbitrumBatchS
             responses.add(
                 ArbitrumGetBlockResponse(
                     id = EvmRequestId(responses.size.toString()),
-                    result = json.deserialize(ArbitrumBlock::class, String(blockData.readAllBytes()))
+                    result = json.deserialize(ArbitrumBlockData::class, String(blockData.readAllBytes()))
                 )
             )
         }
 
         return this
+    }
+
+    override fun call(to: EvmAddress, data: EvmPrefixedHexString, number: EvmUint64, from: EvmAddress?): ArbitrumBatchServiceFixture {
+        TODO("Not yet implemented")
     }
 
     fun clear() {

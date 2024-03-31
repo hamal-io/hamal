@@ -4,9 +4,10 @@ function plugin_create(internal)
         env = internal.env,
         exec = {
             id = internal.exec_id,
-            hook = internal.hook,
-            endpoint = internal.endpoint,
-            events = internal.events,
+            hook = internal.inputs.hook,
+            endpoint = internal.inputs.endpoint,
+            events = internal.inputs.events,
+            inputs = internal.inputs
         },
         state = internal.state
     }

@@ -28,12 +28,12 @@ sealed class ExecRecord(
     data class Planned(
         override val cmdId: CmdId,
         override val entityId: ExecId,
+        val triggerId: TriggerId?,
         val namespaceId: NamespaceId,
         val workspaceId: WorkspaceId,
         val correlation: Correlation?,
         val inputs: ExecInputs,
-        val code: ExecCode,
-        val invocation: Invocation
+        val code: ExecCode
     ) : ExecRecord()
 
     data class Scheduled(

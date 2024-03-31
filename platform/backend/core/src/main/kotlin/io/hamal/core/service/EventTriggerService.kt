@@ -1,6 +1,6 @@
 package io.hamal.core.service
 
-import io.hamal.core.adapter.func.FuncInvokePort
+import io.hamal.core.adapter.trigger.TriggerInvokePort
 import io.hamal.core.component.WorkerPool
 import io.hamal.core.security.SecurityContext
 import io.hamal.lib.common.domain.BatchSize
@@ -8,8 +8,10 @@ import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.TriggerType
-import io.hamal.lib.domain.request.FuncInvokeRequest
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.request.TriggerInvokeRequest
+import io.hamal.lib.domain.vo.CorrelationId
+import io.hamal.lib.domain.vo.InvocationInputs
+import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.repository.api.Auth
 import io.hamal.repository.api.TopicRepository
 import io.hamal.repository.api.Trigger
@@ -30,7 +32,7 @@ import kotlin.time.Duration.Companion.milliseconds
 internal class EventTriggerService(
     private val workerPool: WorkerPool,
     internal val generateDomainId: GenerateDomainId,
-    internal val funcInvoke: FuncInvokePort,
+    internal val triggerInvoke: TriggerInvokePort,
     internal val triggerQueryRepository: TriggerQueryRepository,
     internal val topicRepository: TopicRepository,
     internal val logBrokerRepository: LogBrokerRepository
@@ -62,23 +64,12 @@ internal class EventTriggerService(
                         try {
                             SecurityContext.with(Auth.System) {
                                 consumer.consumeBatch(BatchSize(1)) { events ->
-                                    funcInvoke(
-                                        trigger.funcId,
-                                        object : FuncInvokeRequest {
+                                    triggerInvoke(
+                                        trigger.id,
+                                        object : TriggerInvokeRequest {
                                             override val correlationId = trigger.correlationId ?: CorrelationId.default
                                             override val inputs = InvocationInputs()
-                                            override val version = null
-                                        },
-                                        Invocation.Event(events.map {
-                                            Event(
-                                                topic = EventTopic(
-                                                    id = topic.id,
-                                                    name = topic.name
-                                                ),
-                                                id = EventId(it.id.value),
-                                                payload = EventPayload(it.payload.value)
-                                            )
-                                        })
+                                        }
                                     )
                                 }
                             }

@@ -90,9 +90,6 @@ export default function <TData, TValue>({columns, data,}: DataTableProps<TData, 
                                 <TableRow
                                     key={row.id}
                                     data-state={row.getIsSelected() && "selected"}
-                                    onClick={() => {
-                                        navigate(`/executions/${row.original['id']}`)
-                                    }}
                                 >
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell key={cell.id}>

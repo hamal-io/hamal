@@ -1,6 +1,7 @@
 package io.hamal.runner.connector
 
 import io.hamal.lib.domain.Correlation
+import io.hamal.lib.domain.EventToSubmit
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.*
 
@@ -12,8 +13,7 @@ data class UnitOfWork(
     val state: State,
     val code: CodeValue,
     val execToken: ExecToken,
-    val correlation: Correlation? = null,
-    val invocation: Invocation
+    val correlation: Correlation? = null
 )
 
 // FIXME ConnectorState, ConnectorEvent, ConnectorError

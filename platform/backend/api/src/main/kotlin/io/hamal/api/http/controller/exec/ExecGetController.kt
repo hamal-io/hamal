@@ -33,7 +33,6 @@ internal class ExecGetController(
                         status = exec.status,
                         correlation = exec.correlation?.id,
                         inputs = exec.inputs,
-                        invocation = exec.invocation,
                         result = if (exec is Exec.Completed) {
                             exec.result
                         } else if (exec is Exec.Failed) {

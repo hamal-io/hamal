@@ -1,15 +1,15 @@
 package io.hamal.runner.run
 
+import io.hamal.lib.domain.EventToSubmit
 import io.hamal.lib.domain.State
-import io.hamal.lib.domain.vo.EventToSubmit
-import io.hamal.lib.domain.vo.Invocation
+import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.kua.SandboxContext
 import kotlin.reflect.KClass
 
 
 class RunnerContext(
     val state: State,
-    val invocation: Invocation
+    val inputs: ExecInputs
 ) : SandboxContext {
 
     operator fun <OBJ : Any> set(clazz: KClass<OBJ>, obj: OBJ) {
@@ -30,10 +30,8 @@ class RunnerContext(
 
     val eventsToSubmit = mutableListOf<EventToSubmit>()
 
-
     init {
-        this[Invocation::class] = invocation
+        this[ExecInputs::class] = inputs
     }
-
 }
 

@@ -2,8 +2,8 @@ package io.hamal.app.web3proxy.eth.repository
 
 import io.hamal.app.web3proxy.eth.fixture.EthBatchServiceFixture
 import io.hamal.lib.web3.evm.abi.type.*
-import io.hamal.lib.web3.evm.impl.eth.domain.EthBlock
-import io.hamal.lib.web3.evm.impl.eth.domain.EthGetBlockResponse
+import io.hamal.lib.web3.evm.chain.eth.domain.EthBlockData
+import io.hamal.lib.web3.evm.chain.eth.domain.EthGetBlockResponse
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.BeforeEach
@@ -111,7 +111,7 @@ internal class ListBlocksByNumberTest {
         batchServiceFixture.clear()
     }
 
-    private fun assertBlock0x1284810(block: EthBlock?) {
+    private fun assertBlock0x1284810(block: EthBlockData?) {
         checkNotNull(block)
         assertThat(block.extraData, equalTo(EvmBytes32("0x546974616e2028746974616e6275696c6465722e78797a29")))
         assertThat(block.hash, equalTo(EvmHash("0xbe564f59e089bd7fac45b40a4bb0295338a0074d4eaf675937d2498b43ef401c")))
@@ -163,7 +163,7 @@ internal class ListBlocksByNumberTest {
 
     }
 
-    private fun assertBlock0x1284811(block: EthBlock?) {
+    private fun assertBlock0x1284811(block: EthBlockData?) {
         checkNotNull(block)
 
         assertThat(block.number, equalTo(EvmUint64("0x1284811")))

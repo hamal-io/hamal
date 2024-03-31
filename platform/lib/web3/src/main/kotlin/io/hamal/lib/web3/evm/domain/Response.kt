@@ -1,10 +1,10 @@
 package io.hamal.lib.web3.evm.domain
 
 import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.hot.HotString
 
 interface EvmResponse {
     val jsonrpc: String
-    val id: EvmRequestId
 }
 
 sealed class EvmHotResponse : EvmResponse {
@@ -12,10 +12,29 @@ sealed class EvmHotResponse : EvmResponse {
 }
 
 data class EvmHotGetBlockResponse(
-    override val id: EvmRequestId,
+    val id: EvmRequestId,
     val result: HotObject?
 ) : EvmHotResponse() {
     override fun toString(): String {
         return "GenericGetBlockResponse($result)"
+    }
+}
+
+
+data class EvmHotCallResponse(
+    val id: EvmRequestId,
+    val result: HotString?
+) : EvmHotResponse() {
+    override fun toString(): String {
+        return "EvmHotCallResponse($result)"
+    }
+}
+
+data class EvmHotSendRawTransactionResponse(
+    val id: EvmRequestId,
+    val result: HotString?
+) : EvmHotResponse() {
+    override fun toString(): String {
+        return "EvmHotSendRawTransactionResponse($result)"
     }
 }

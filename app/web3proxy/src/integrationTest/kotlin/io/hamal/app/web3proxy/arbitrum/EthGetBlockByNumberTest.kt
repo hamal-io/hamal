@@ -5,8 +5,8 @@ import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.http.body
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
 import io.hamal.lib.web3.evm.domain.EvmRequestId
-import io.hamal.lib.web3.evm.impl.arbitrum.domain.ArbitrumGetBlockByNumberRequest
-import io.hamal.lib.web3.evm.impl.arbitrum.domain.ArbitrumGetBlockResponse
+import io.hamal.lib.web3.evm.chain.arbitrum.domain.ArbitrumGetBlockByNumberRequest
+import io.hamal.lib.web3.evm.chain.arbitrum.domain.ArbitrumGetBlockResponse
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
