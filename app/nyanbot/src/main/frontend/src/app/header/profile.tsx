@@ -1,5 +1,4 @@
 import React, {FC, Fragment} from "react";
-import {avatarColors} from "@/contains/contants.ts";
 import ImageW from "@/types/image.tsx";
 
 import {Popover, Transition} from "@headlessui/react";
@@ -29,17 +28,10 @@ const Avatar: FC<AvatarProps> = ({
 
     const url = imgUrl || "http://nyanbot.com";
     const name = userName || "John Doe";
-    const _setBgColor = (name: string) => {
-        const backgroundIndex = Math.floor(
-            name.charCodeAt(0) % avatarColors.length
-        );
-        return avatarColors[backgroundIndex];
-    };
 
     return (
         <div
             className={`wil-avatar relative flex-shrink-0 inline-flex items-center justify-center text-neutral-100 uppercase font-semibold shadow-inner ${radius} ${sizeClass} ${containerClassName}`}
-            style={{backgroundColor: url ? undefined : _setBgColor(name)}}
         >
             {url && (
                 <ImageW
