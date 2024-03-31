@@ -4,7 +4,7 @@ import NcImage from "@/components/ui/image/NcImage";
 import { nftsAbstracts } from "@/contains/fakeData";
 import LikeButton from "./LikeButton";
 import Prices from "./Prices";
-import musicWave from "@/images/musicWave.png";
+import musicWave from "@/images/template/musicWave.png";
 import RemainingTimeNftCard from "./RemainingTimeNftCard";
 import ButtonPlayMusicPlayer from "./ButtonPlayMusicPlayer";
 import useGetRandomData from "@/hooks/template/useGetRandomData.ts";

@@ -1,6 +1,6 @@
 import React from "react";
 import ButtonClose from "@/components/ui/button-close/ButtonClose";
-import Logo from "@/components/ui/logo/Logo";
+import Index from "@/components/ui/logo";
 import { Disclosure } from "@/app/headlessui";
 import { NavItemType } from "./NavigationItem";
 import { NAVIGATION_DEMO_2 } from "@/data/navigation";
@@ -162,7 +162,7 @@ const NavMobile: React.FC<NavMobileProps> = ({
   return (
     <div className="overflow-y-auto w-full h-screen py-2 transition transform shadow-lg ring-1 dark:ring-neutral-700 bg-white dark:bg-neutral-900 divide-y-2 divide-neutral-100 dark:divide-neutral-800">
       <div className="py-6 px-5">
-        <Logo />
+        <Index />
         <div className="flex flex-col mt-5 text-slate-600 dark:text-slate-300 text-sm">
           <span>
             Discover the most outstanding articles on all topics of life. Write

@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import Logo from "@/components/ui/logo/Logo";
+import Index from "@/components/ui/logo";
 import MenuBar from "@/components/ui/menu/MenuBar";
 import SwitchDarkMode from "@/components/ui/switch-dark-mode/SwitchDarkMode";
 import Input from "@/components/ui/input/Input";
@@ -15,7 +15,7 @@ const MainNav2: FC<MainNav2Props> = () => {
       <div className="container">
         <div className="h-20 flex justify-between space-x-4 xl:space-x-8">
           <div className="self-center flex justify-start flex-grow space-x-3 sm:space-x-8 lg:space-x-10">
-            <Logo />
+            <Index />
             <div className="hidden sm:block flex-grow max-w-xs">
               <form action="" method="POST" className="relative">
                 <Input

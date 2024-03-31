@@ -1,7 +1,7 @@
 import React, {FC, forwardRef, HTMLAttributes, ReactNode, useEffect, useState} from "react";
-import facebookSvg from "@/images/Facebook.svg";
-import twitterSvg from "@/images/Twitter.svg";
-import googleSvg from "@/images/Google.svg";
+import facebookSvg from "@/images/template/Facebook.svg";
+import twitterSvg from "@/images/template/Twitter.svg";
+import googleSvg from "@/images/template/Google.svg";
 import Input from "@/components/ui/input/Input";
 import ButtonPrimary from "@/components/ui/button/ButtonPrimary";
 import {MetaMaskProvider, useSDK} from "@metamask/sdk-react";

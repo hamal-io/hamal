@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import ButtonCircle from "@/components/ui/button/ButtonCircle";
-import rightImg from "@/images/SVG-subcribe2.png";
+import rightImg from "@/images/template/SVG-subcribe2.png";
 import NcImage from "@/components/ui/image/NcImage";
 import Badge from "@/components/ui/badge/Badge";
 import Input from "@/components/ui/input/Input";

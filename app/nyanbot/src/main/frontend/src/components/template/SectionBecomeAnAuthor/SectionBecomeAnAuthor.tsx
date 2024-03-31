@@ -1,9 +1,9 @@
 import React, { FC } from "react";
 import NcImage from "@/components/ui/image/NcImage";
-import rightImgDemo from "@/images/rightLargeImg.png";
-import rightLargeImgDark from "@/images/rightLargeImgDark.png";
+import rightImgDemo from "@/images/template/rightLargeImg.png";
+import rightLargeImgDark from "@/images/template/rightLargeImgDark.png";
 import ButtonPrimary from "@/components/ui/button/ButtonPrimary";
-import Logo from "@/components/ui/logo/Logo";
+import Index from "@/components/ui/logo";
 import ButtonSecondary from "@/components/ui/button/ButtonSecondary";
 
 export interface SectionBecomeAnAuthorProps {
@@ -18,7 +18,7 @@ const SectionBecomeAnAuthor: FC<SectionBecomeAnAuthorProps> = ({
       className={`nc-SectionBecomeAnAuthor relative flex flex-col lg:flex-row items-center  ${className}`}
     >
       <div className="flex-shrink-0 mb-16 lg:mb-0 lg:mr-10 lg:w-2/5">
-        <Logo className="w-28" />
+        <Index className="w-28" />
         <h2 className="font-semibold text-3xl sm:text-4xl xl:text-6xl mt-6 sm:mt-10 !leading-[1.112] tracking-tight">
           Earn free crypto <br /> with Ciscrypt
         </h2>

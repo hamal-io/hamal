@@ -1,5 +1,5 @@
 import React from "react";
-import I404Png from "@/images/404.png";
+import I404Png from "@/images/template/404.png";
 import NcImage from "@/components/ui/image/NcImage.tsx";
 import ButtonPrimary from "@/components/ui/button/ButtonPrimary.tsx";
 

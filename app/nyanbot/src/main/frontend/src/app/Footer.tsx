@@ -1,5 +1,5 @@
-import Logo from "@/components/ui/logo/Logo";
-import { CustomLink } from "@/data/types";
+import Index from "@/components/ui/logo";
+import { CustomLink } from "@/data/types.ts";
 import React from "react";
 
 export interface WidgetFooterMenu {
@@ -82,7 +82,7 @@ const Footer: React.FC = () => {
       <div className="container grid grid-cols-2 gap-y-10 gap-x-5 sm:gap-x-8 md:grid-cols-4 lg:grid-cols-5 lg:gap-x-10 ">
         <div className="grid grid-cols-4 gap-5 col-span-2 md:col-span-4 lg:md:col-span-1 lg:flex lg:flex-col">
           <div className="col-span-2 md:col-span-1">
-            <Logo />
+            <Index />
           </div>
           <div className="col-span-2 flex items-center md:col-span-3">
           </div>

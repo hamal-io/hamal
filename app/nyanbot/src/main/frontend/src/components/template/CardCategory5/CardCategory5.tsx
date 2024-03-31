@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import NcImage from "@/components/ui/image/NcImage";
-import images1 from "@/images/nfts/cat1.webp";
+import images1 from "@/images/template/nfts/cat1.webp";
 import LinkW from "@/types/link.tsx";
 
 export interface CardCategory5Props {

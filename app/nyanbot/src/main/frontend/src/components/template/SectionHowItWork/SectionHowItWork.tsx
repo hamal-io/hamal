@@ -1,10 +1,10 @@
 import React, { FC } from "react";
 import NcImage from "@/components/ui/image/NcImage";
-import HIW1img from "@/images/HIW1img.png";
-import HIW2img from "@/images/HIW2img.png";
-import HIW3img from "@/images/HIW3img.png";
-import HIW4img from "@/images/HIW4img.png";
-import VectorImg from "@/images/VectorHIW.svg";
+import HIW1img from "@/images/template/HIW1img.png";
+import HIW2img from "@/images/template/HIW2img.png";
+import HIW3img from "@/images/template/HIW3img.png";
+import HIW4img from "@/images/template/HIW4img.png";
+import VectorImg from "@/images/template/VectorHIW.svg";
 import Badge from "@/components/ui/badge/Badge";
 import ImageW from "@/types/image.tsx";
 

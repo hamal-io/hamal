@@ -8,7 +8,7 @@ import LikeButton from "@/components/template/LikeButton";
 import ItemTypeVideoIcon from "@/components/template/ItemTypeVideoIcon";
 import { nftsLargeImgs } from "@/contains/fakeData";
 import TimeCountDown from "./TimeCountDown";
-import collectionPng from "@/images/nfts/collection.png";
+import collectionPng from "@/images/template/nfts/collection.png";
 import VerifyIcon from "@/components/template/VerifyIcon";
 import LinkW from "@/types/link.tsx";
 
