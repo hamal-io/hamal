@@ -1,4 +1,3 @@
-import { _getPersonNameRd } from "@/contains/fakeData";
 import React from "react";
 import { FC } from "react";
 import Index from "@/components/ui/avatar";
@@ -19,7 +18,6 @@ const Comment: FC<CommentProps> = ({ isSmall }) => {
             className="flex-shrink-0 font-semibold text-neutral-800 dark:text-neutral-100"
             href="/ncmaz/author/the-demo-author-slug"
           >
-            {_getPersonNameRd()}
           </a>
           <span className="mx-2">·</span>
           <span className="text-neutral-500 dark:text-neutral-400 text-xs line-clamp-1 sm:text-sm">
