@@ -8,7 +8,7 @@ import ButtonPrimary from "@/components/ui/button/ButtonPrimary.tsx";
 type MetaMaskButtonProps = {}
 
 export const MetaMaskButton: FC<MetaMaskButtonProps> = ({}) => {
-    const [loading, setLoading] = useState(false)
+    const [connecting, setConnecting] = useState(false)
     const navigate = useNavigate()
     const {sdk} = useSDK();
     const [address, setAddress] = useState<string | null>(null)
@@ -29,7 +29,6 @@ export const MetaMaskButton: FC<MetaMaskButtonProps> = ({}) => {
 
                 requestToken(address, signature)
             }
-
             invoke()
         }
     }, [challenge]);
@@ -42,14 +41,14 @@ export const MetaMaskButton: FC<MetaMaskButtonProps> = ({}) => {
 
     const connect = async () => {
         try {
-            setLoading(true)
+            setConnecting(true)
             const address = (await sdk?.connect())?.[0];
             setAddress(address)
             requestChallenge(address)
         } catch (err) {
             console.error(`failed to connect..`, err);
+            setConnecting(false)
         } finally {
-            setLoading(false)
         }
     };
 
@@ -57,10 +56,10 @@ export const MetaMaskButton: FC<MetaMaskButtonProps> = ({}) => {
         <ButtonPrimary
             className="self-center"
             onClick={connect}
-            loading={loading}
+            loading={connecting}
             sizeClass="px-4 py-2 sm:px-5"
         >
-            Connect
+            Connect Wallet
         </ButtonPrimary>
     )
 }

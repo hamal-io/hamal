@@ -17,7 +17,7 @@ export const useAuth = () => {
     })
 }
 
-/*type ResetAuthAction = () => void
+type ResetAuthAction = () => void
 export const useResetAuth = (): [ResetAuthAction] => {
     const [_, setAuth] = useAuth()
 
@@ -27,7 +27,6 @@ export const useResetAuth = (): [ResetAuthAction] => {
 
     return [fn]
 }
-
 
 type LogoutAction = (abortController?: AbortController) => void
 export const useLogout = (): [LogoutAction, boolean, Error] => {
@@ -63,14 +62,14 @@ export const useLogout = (): [LogoutAction, boolean, Error] => {
                 }
 
                 if (error.message === 'NetworkError when attempting to fetch resource.') {
-                    window.location.href = '/login'
+                    window.location.href = '/'
                 }
             })
     }, [auth])
 
 
     return [fn, loading, error]
-}*/
+}
 
 type MetaMaskChallengeAction = (address: string, abortController?: AbortController) => void
 export const useMetaMaskChallenge = (): [MetaMaskChallengeAction, string, boolean, Error] => {
@@ -104,7 +103,7 @@ export const useMetaMaskChallenge = (): [MetaMaskChallengeAction, string, boolea
 
                 if (error.message === 'NetworkError when attempting to fetch resource.') {
                     setAuth(null)
-                    window.location.href = '/login'
+                    window.location.href = '/'
                 }
             })
     }, [auth])
@@ -158,7 +157,7 @@ export const useMetaMaskToken = (): [MetaMaskTokenAction, string, boolean, Error
 
                 if (error.message === 'NetworkError when attempting to fetch resource.') {
                     setAuth(null)
-                    window.location.href = '/login'
+                    window.location.href = '/'
                 }
             })
     }, [auth])
