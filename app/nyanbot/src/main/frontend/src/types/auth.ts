@@ -1,4 +1,4 @@
-export type AuthType = 'Unauthorized' | 'Anonymous' | 'User'
+export type AuthType = 'Unauthorized' | 'User'
 
 export const AUTH_KEY = 'auth'
 

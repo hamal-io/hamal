@@ -1,7 +1,7 @@
 import React, {FC} from "react";
 import Logo from "@/components/ui/logo";
 import MenuBar from "@/components/ui/menu/MenuBar.tsx";
-import SwitchDarkMode from "@/components/ui/switch-dark-mode/SwitchDarkMode.tsx";
+import SwitchMode from "@/components/ui/switch-mode";
 import ButtonPrimary from "@/components/ui/button/ButtonPrimary.tsx";
 import Navigation from "@/components/ui/navigation/Navigation.tsx";
 
@@ -24,7 +24,7 @@ const LoggedIn: FC<LoggedInProps> = () => {
                             <Navigation/>
                             <div className="self-center hidden sm:block h-6 border-l border-neutral-300 dark:border-neutral-6000"></div>
                             <div className="flex">
-                                <SwitchDarkMode/>
+                                <SwitchMode/>
                             </div>
                             <div></div>
                             <ButtonPrimary

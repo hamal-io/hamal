@@ -1,16 +1,15 @@
 import useLocalStorageState from "use-local-storage-state";
-import {UI_STATE_KEY, UiState} from "@/types/ui-state.ts";
+import {UI_STATE_KEY, UiState, UiTheme} from "@/types/ui.ts";
 import {useCallback} from "react";
 
 
-const unauthorized: UiState = {
-    type: 'Unauthorized',
+const defaultState: UiState = {
     theme: 'light'
 }
 
 export const useUiState = () => {
     return useLocalStorageState<UiState>(UI_STATE_KEY, {
-        defaultValue: {...unauthorized}
+        defaultValue: {...defaultState}
     })
 }
 
@@ -18,9 +17,8 @@ type InitUiStateAction = (workspaceId: string, namespaceId: string) => void
 export const useInitUiState = (): [InitUiStateAction] => {
     const [uiState, setUiState] = useUiState()
 
-    const fn = useCallback((theme: string) => {
+    const fn = useCallback((theme: UiTheme) => {
         setUiState({
-            type: 'Authorized',
             theme,
         })
     }, [uiState])
@@ -33,20 +31,20 @@ export const useResetUiState = (): [ResetUiStateAction] => {
     const [_, setUiState] = useUiState()
 
     const fn = useCallback(() => {
-        setUiState({...unauthorized})
+        setUiState({...defaultState})
     }, [setUiState])
 
     return [fn]
 }
 
-type ChangeThemeAction = (theme: string) => void
+type ChangeThemeAction = () => void
 export const useChangeTheme = (): [ChangeThemeAction] => {
     const [uiState, setUiState] = useUiState()
 
-    const fn = useCallback((theme: string) => {
+    const fn = useCallback(() => {
         setUiState({
             ...uiState,
-            theme
+            theme: uiState.theme === 'light' ? 'dark' : 'light'
         })
     }, [uiState])
 
