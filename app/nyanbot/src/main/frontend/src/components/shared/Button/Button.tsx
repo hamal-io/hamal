@@ -1,9 +1,6 @@
-"use client";
-
 import React, { ButtonHTMLAttributes, FC } from "react";
 import twFocusClass from "@/utils/twFocusClass";
 import LinkW from "@/types/link.tsx";
-
 export interface ButtonProps {
   className?: string;
   translate?: string;

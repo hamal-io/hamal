@@ -1,7 +1,4 @@
-"use client";
-
 import React, { FC, useEffect, useState } from "react";
-
 export interface PricesProps {
   className?: string;
   price?: string;

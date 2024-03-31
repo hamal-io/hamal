@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState, Fragment } from "react";
 import { Transition, Dialog } from "@/app/headlessui";
 import NavMobile from "@/components/shared/Navigation/NavMobile";

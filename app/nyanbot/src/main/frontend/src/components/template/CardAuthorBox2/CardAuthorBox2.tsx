@@ -1,5 +1,3 @@
-"use client";
-
 import React, { FC } from "react";
 import { ArrowRightIcon } from "@heroicons/react/24/solid";
 import Avatar from "@/components/shared/Avatar/Avatar";

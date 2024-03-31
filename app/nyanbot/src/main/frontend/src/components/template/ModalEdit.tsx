@@ -1,4 +1,3 @@
-"use client";
 import React, { FC, useEffect, useRef } from "react";
 import ButtonPrimary from "@/components/shared/Button/ButtonPrimary";
 import ButtonSecondary from "@/components/shared/Button/ButtonSecondary";

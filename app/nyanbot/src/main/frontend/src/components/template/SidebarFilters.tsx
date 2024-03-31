@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState } from "react";
 import Checkbox from "@/components/shared/Checkbox/Checkbox";
 import Slider from "rc-slider";

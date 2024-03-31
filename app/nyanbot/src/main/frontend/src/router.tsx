@@ -16,10 +16,11 @@ export const router = createBrowserRouter([
                 <LandingPage/>
             </RootLayout>
     },
+
     {
         path: "/login", element:
             <RootLayout>
-               <LoginPage/>
+                <LoginPage/>
             </RootLayout>
     },
 

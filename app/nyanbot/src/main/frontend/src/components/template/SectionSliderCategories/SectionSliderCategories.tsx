@@ -1,5 +1,3 @@
-"use client";
-
 import React, { FC } from "react";
 import Heading from "@/components/template/Heading/Heading";
 import CardCategory5 from "@/components/template/CardCategory5/CardCategory5";

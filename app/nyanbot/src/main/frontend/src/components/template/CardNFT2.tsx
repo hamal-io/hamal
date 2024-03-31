@@ -1,5 +1,3 @@
-"use client";
-
 import React, { FC, useEffect, useState } from "react";
 import Avatar from "@/components/shared/Avatar/Avatar";
 import NcImage from "@/components/shared/NcImage/NcImage";

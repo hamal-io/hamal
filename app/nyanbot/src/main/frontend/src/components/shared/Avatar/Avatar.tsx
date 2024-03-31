@@ -1,5 +1,3 @@
-"use client";
-
 import React, {FC} from "react";
 import {avatarColors} from "@/contains/contants";
 import VerifyIcon from "@/components/template/VerifyIcon";

@@ -1,5 +1,3 @@
-"use client";
-
 import React, { FC, useState } from "react";
 import Heading from "@/components/shared/Heading/Heading";
 import Nav from "@/components/shared/Nav/Nav";

@@ -1,4 +1,3 @@
-"use client";
 import React, { FC } from "react";
 import { Fragment, useState } from "react";
 import { Listbox, Transition } from "@/app/headlessui";

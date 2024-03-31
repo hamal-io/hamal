@@ -1,7 +1,5 @@
-"use client";
-
-import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/solid";
 import React, { FC } from "react";
+import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/solid";
 
 export interface NextPrevProps {
   className?: string;

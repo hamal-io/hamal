@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import ButtonClose from "@/components/shared/ButtonClose/ButtonClose";
 import Logo from "@/components/shared/Logo/Logo";

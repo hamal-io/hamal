@@ -1,5 +1,3 @@
-"use client";
-
 import React, { FC } from "react";
 import { nftsAbstracts } from "@/contains/fakeData";
 import Avatar from "@/components/shared/Avatar/Avatar";

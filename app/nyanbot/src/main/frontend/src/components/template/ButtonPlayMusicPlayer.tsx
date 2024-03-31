@@ -1,7 +1,3 @@
-"use client";
-
-// ** Tat ca cac component nao goi truc tiep ButtonPlayMusicPlayer thi can phai co use client
-
 import React, { FC, ReactNode } from "react";
 import iconPlaying from "@/images/icon-playing.gif";
 import PostTypeFeaturedIcon from "@/components/template/PostTypeFeaturedIcon";
@@ -15,8 +11,6 @@ export interface ButtonPlayMusicPlayerProps {
   renderDefaultBtn?: () => ReactNode;
   renderPlayingBtn?: () => ReactNode;
 }
-
-// ** Tat ca cac component nao goi truc tiep ButtonPlayMusicPlayer thi can phai co use client **
 
 const ButtonPlayMusicPlayer: FC<ButtonPlayMusicPlayerProps> = ({
   className = "",

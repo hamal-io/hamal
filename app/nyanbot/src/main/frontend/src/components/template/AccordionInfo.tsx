@@ -1,5 +1,3 @@
-"use client";
-
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { FC } from "react";
 import {Disclosure} from "@/app/headlessui.tsx";

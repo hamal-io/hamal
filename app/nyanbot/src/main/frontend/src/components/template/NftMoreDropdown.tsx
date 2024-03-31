@@ -1,5 +1,3 @@
-"use client";
-
 import React, { FC, useState } from "react";
 import NcDropDown, { NcDropDownItem } from "@/components/shared/NcDropDown/NcDropDown";
 import ModalDelete from "./ModalDelete";

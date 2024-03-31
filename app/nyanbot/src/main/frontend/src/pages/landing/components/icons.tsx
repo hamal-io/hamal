@@ -1,6 +1,6 @@
 import React from "react";
 
-type IconProps = React.HTMLAttributes<SVGElement>
+export type IconProps = React.HTMLAttributes<SVGElement>
 
 export const Icons = {
     metamask: (props: IconProps) => (

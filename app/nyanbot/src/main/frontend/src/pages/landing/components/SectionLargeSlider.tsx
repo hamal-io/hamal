@@ -1,5 +1,3 @@
-"use client";
-
 import React, { FC, useState } from "react";
 import { nftsLargeImgs } from "@/contains/fakeData.ts";
 import CardLarge1 from "@/components/template/CardLarge1/CardLarge1.tsx";

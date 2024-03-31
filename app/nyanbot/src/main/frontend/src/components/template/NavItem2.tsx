@@ -1,8 +1,5 @@
-"use client";
-
 import React, { FC, ReactNode } from "react";
 import twFocusClass from "@/utils/twFocusClass";
-
 export interface NavItem2Props {
   className?: string;
   radius?: string;

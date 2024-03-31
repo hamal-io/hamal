@@ -1,5 +1,3 @@
-"use client";
-
 import React, { FC } from "react";
 import Heading from "@/components/template/Heading/Heading";
 import CollectionCard from "./CollectionCard";

@@ -1,7 +1,5 @@
-"use client";
-
-import { EllipsisHorizontalIcon } from "@heroicons/react/24/solid";
 import React, { FC, Fragment, ReactNode } from "react";
+import { EllipsisHorizontalIcon } from "@heroicons/react/24/solid";
 import { Menu, Transition } from "@headlessui/react";
 
 export interface NcDropDownItem {

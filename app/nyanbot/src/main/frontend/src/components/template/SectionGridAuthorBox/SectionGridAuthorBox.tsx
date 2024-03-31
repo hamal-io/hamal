@@ -1,5 +1,3 @@
-"use client";
-
 import React, { FC, useState } from "react";
 import CardAuthorBox from "@/components/template/CardAuthorBox/CardAuthorBox";
 import CardAuthorBox2 from "@/components/template/CardAuthorBox2/CardAuthorBox2";

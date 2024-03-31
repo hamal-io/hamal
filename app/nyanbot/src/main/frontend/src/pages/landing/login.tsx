@@ -9,7 +9,6 @@ import ImageW from "@/types/image.tsx";
 import LinkW from "@/types/link.tsx";
 import {useNavigate} from "react-router-dom";
 import {useMetaMaskChallenge, useMetaMaskToken} from "@/hooks/auth.ts";
-import Button from "@/components/shared/Button/Button.tsx";
 import {IconProps, Icons} from "@/pages/landing/components/icons.tsx";
 
 const loginSocials = [

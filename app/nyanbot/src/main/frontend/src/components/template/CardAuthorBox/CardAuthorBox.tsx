@@ -1,5 +1,3 @@
-"use client";
-
 import FollowButton from "@/components/template/FollowButton";
 import VerifyIcon from "@/components/template/VerifyIcon";
 import React, { FC } from "react";

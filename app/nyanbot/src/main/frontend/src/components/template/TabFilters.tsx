@@ -1,5 +1,3 @@
-"use client";
-
 import React, { Fragment, useState } from "react";
 import { Dialog, Popover, Transition } from "@headlessui/react";
 import ButtonPrimary from "@/components/shared/Button/ButtonPrimary";

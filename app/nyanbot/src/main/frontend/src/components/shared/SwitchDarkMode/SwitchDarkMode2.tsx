@@ -1,5 +1,3 @@
-"use client";
-
 import { Switch } from "@/app/headlessui";
 import { useThemeMode } from "@/hooks/template/useThemeMode.ts";
 import React from "react";
