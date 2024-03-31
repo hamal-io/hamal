@@ -12,6 +12,7 @@ import io.hamal.lib.web3.evm.abi.type.EvmUint64
 import io.hamal.lib.web3.evm.domain.EvmHotCallResponse
 import io.hamal.lib.web3.evm.domain.EvmHotGetBlockResponse
 import io.hamal.lib.web3.evm.domain.EvmHotResponse
+import io.hamal.lib.web3.evm.domain.EvmHotSendRawTransactionResponse
 import io.hamal.lib.web3.json
 
 interface EvmHotBatchService<SERVICE : EvmBatchService<EvmHotResponse, SERVICE>> :
@@ -46,6 +47,14 @@ class EvmHotHttpBatchService(
                 .append(HotString(number.toPrefixedHexString().value))
                 .build(),
             resultClass = EvmHotCallResponse::class
+        )
+    }
+
+    override fun sendRawTransaction(data: EvmPrefixedHexString) = also {
+        request(
+            method = "eth_sendRawTransaction",
+            params = HotArray.builder().append(data.toString()).build(),
+            resultClass = EvmHotSendRawTransactionResponse::class
         )
     }
 }

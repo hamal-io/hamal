@@ -9,10 +9,10 @@ import io.hamal.lib.web3.evm.EvmBatchService
 import io.hamal.lib.web3.evm.abi.type.EvmAddress
 import io.hamal.lib.web3.evm.abi.type.EvmPrefixedHexString
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
-import io.hamal.lib.web3.evm.http.HttpBaseBatchService
 import io.hamal.lib.web3.evm.chain.arbitrum.domain.ArbitrumCallResponse
 import io.hamal.lib.web3.evm.chain.arbitrum.domain.ArbitrumGetBlockResponse
 import io.hamal.lib.web3.evm.chain.arbitrum.domain.ArbitrumResponse
+import io.hamal.lib.web3.evm.http.HttpBaseBatchService
 import io.hamal.lib.web3.json
 
 interface ArbitrumBatchService<SERVICE : EvmBatchService<ArbitrumResponse, SERVICE>> :
@@ -48,5 +48,9 @@ class ArbitrumHttpBatchService(
                 .build(),
             resultClass = ArbitrumCallResponse::class
         )
+    }
+
+    override fun sendRawTransaction(data: EvmPrefixedHexString): ArbitrumHttpBatchService {
+        TODO("Not yet implemented")
     }
 }

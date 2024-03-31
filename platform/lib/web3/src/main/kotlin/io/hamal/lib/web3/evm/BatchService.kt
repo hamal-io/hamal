@@ -9,5 +9,6 @@ interface EvmBatchService<out RESPONSE : EvmResponse, out SERVICE : EvmBatchServ
     fun getBlock(number: EvmUint64): SERVICE
     fun call(to: EvmAddress, data: EvmPrefixedHexString, number: EvmUint64, from: EvmAddress? = null): SERVICE
     fun execute(): List<RESPONSE>
+    fun sendRawTransaction(data: EvmPrefixedHexString): SERVICE
 }
 

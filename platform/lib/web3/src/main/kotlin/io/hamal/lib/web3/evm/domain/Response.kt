@@ -29,3 +29,12 @@ data class EvmHotCallResponse(
         return "EvmHotCallResponse($result)"
     }
 }
+
+data class EvmHotSendRawTransactionResponse(
+    val id: EvmRequestId,
+    val result: HotString?
+) : EvmHotResponse() {
+    override fun toString(): String {
+        return "EvmHotSendRawTransactionResponse($result)"
+    }
+}

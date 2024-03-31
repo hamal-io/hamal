@@ -1,7 +1,9 @@
 package io.hamal.lib.web3
 
+import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.web3.evm.abi.*
 import io.hamal.lib.web3.evm.abi.type.EvmAddress
+import io.hamal.lib.web3.evm.http.EvmHotHttpBatchService
 import io.hamal.lib.web3.evm.rlp.RlpValue
 import io.hamal.lib.web3.util.ByteUtils
 import io.hamal.lib.web3.util.Web3Formatter
@@ -58,7 +60,7 @@ fun main() {
 
     val values = RlpValue.List(
         RlpValue.String(11155111), // chainId
-        RlpValue.String(5), // nonce
+        RlpValue.String(6), // nonce
         RlpValue.String(25000000000000), // maxPriorityFeePerGas
         RlpValue.String(25000000000000), // maxFeePerGas
         RlpValue.String(21000), // gas limit
@@ -85,7 +87,7 @@ fun main() {
 
     val valuesWithSignature = RlpValue.List(
         RlpValue.String(11155111), // chainId
-        RlpValue.String(5), // nonce
+        RlpValue.String(6), // nonce
         RlpValue.String(25000000000000), // maxPriorityFeePerGas
         RlpValue.String(25000000000000), // maxFeePerGas
         RlpValue.String(21000), // gas limit
@@ -109,7 +111,7 @@ fun main() {
 
     // 0xd0e30db0
 
-//    HttpTemplateImpl("....")
+//    HttpTemplateImpl(".....")
 //        .post()
 //        .body(
 //            """
@@ -127,6 +129,12 @@ fun main() {
 //            require(this is HttpSuccessResponse)
 //            println(String(inputStream.readAllBytes()))
 //        }
+
+    EvmHotHttpBatchService(
+        HttpTemplateImpl("....")
+    ).also { service ->
+
+    }
 
 
 //    val ethService = EthHttpBatchService(
