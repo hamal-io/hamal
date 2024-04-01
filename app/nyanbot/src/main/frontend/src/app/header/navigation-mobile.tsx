@@ -2,7 +2,6 @@ import React from "react";
 import ButtonClose from "@/components/ui/button-close/ButtonClose.tsx";
 import Logo from "@/components/ui/logo";
 import { Disclosure } from "@/app/headlessui.tsx";
-import { NAVIGATION_DEMO_2 } from "@/data/navigation.ts";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import SwitchMode from "@/components/ui/switch-mode";
 import LinkW from "@/types/link.tsx";
@@ -14,7 +13,7 @@ export interface NavMobileProps {
 }
 
 const NavigationMobile: React.FC<NavMobileProps> = ({
-  data = NAVIGATION_DEMO_2,
+  data,
   onClickClose,
 }) => {
   const _renderMenuChild = (

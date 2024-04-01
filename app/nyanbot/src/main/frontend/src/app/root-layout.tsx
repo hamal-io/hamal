@@ -4,7 +4,7 @@ import {useUiState} from "@/hooks/ui.ts";
 import {MetaMaskProvider} from "@metamask/sdk-react";
 
 type Props = {
-    children: Iterable<ReactNode>;
+    children: ReactNode;
 }
 const RootLayout: FC<Props> = ({children}) => {
     const [uiState] = useUiState()
