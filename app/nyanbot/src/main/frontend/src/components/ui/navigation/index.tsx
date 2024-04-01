@@ -1,6 +1,24 @@
 import React, { FC, ReactNode } from "react";
 import twFocusClass from "@/utils/twFocusClass";
 
+export interface MegaMenuItem {
+  id: string;
+  image: string;
+  title: string;
+  items: NavItemType[];
+}
+
+export interface NavItemType {
+  id: string;
+  name: string;
+  isNew?: boolean;
+  href: string;
+  targetBlank?: boolean;
+  children?: NavItemType[];
+  megaMenu?: MegaMenuItem[];
+  type?: "dropdown" | "none";
+}
+
 export interface NavItemProps {
   className?: string;
   radius?: string;

@@ -4,7 +4,6 @@ import io.hamal.core.security.SecurityContext
 import io.hamal.lib.domain.GenerateCmdId
 import io.hamal.lib.domain.vo.AuthToken
 import io.hamal.lib.domain.vo.ExecToken
-import io.hamal.repository.api.AuthCmdRepository.RevokeAuthCmd
 import io.hamal.repository.api.AuthRepository
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
@@ -88,12 +87,6 @@ class AuthApiFilter(
         while (true) {
             val auth = authRepository.find(token)
             if (auth != null) {
-                if (path == "/v1/logout") {
-                    authRepository.revokeAuth(RevokeAuthCmd(generateCmdId(), auth.id))
-                    response.status = 204
-                    return
-                }
-
                 return SecurityContext.with(auth) {
                     filterChain.doFilter(request, response)
                 }

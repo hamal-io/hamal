@@ -1,21 +1,19 @@
 import React from "react";
-import ButtonClose from "@/components/ui/button-close/ButtonClose";
+import ButtonClose from "@/components/ui/button-close/ButtonClose.tsx";
 import Logo from "@/components/ui/logo";
-import { Disclosure } from "@/app/headlessui";
-import { NavItemType } from "./NavigationItem";
-import { NAVIGATION_DEMO_2 } from "@/data/navigation";
-import ButtonPrimary from "@/components/ui/button/ButtonPrimary";
+import { Disclosure } from "@/app/headlessui.tsx";
+import { NAVIGATION_DEMO_2 } from "@/data/navigation.ts";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import SwitchMode from "@/components/ui/switch-mode";
 import LinkW from "@/types/link.tsx";
-import {MetaMaskButton} from "@/app/metamask.tsx";
+import {NavItemType} from "@/components/ui/navigation";
 
 export interface NavMobileProps {
   data?: NavItemType[];
   onClickClose?: () => void;
 }
 
-const NavMobile: React.FC<NavMobileProps> = ({
+const NavigationMobile: React.FC<NavMobileProps> = ({
   data = NAVIGATION_DEMO_2,
   onClickClose,
 }) => {
@@ -164,4 +162,4 @@ const NavMobile: React.FC<NavMobileProps> = ({
   );
 };
 
-export default NavMobile;
+export default NavigationMobile;

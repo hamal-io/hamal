@@ -57,8 +57,7 @@ export const HowItWorks: FC<HowItWorksProps> = ({className = ""}) => {
                         className="relative flex flex-col items-center max-w-xs mx-auto"
                     >
                         <ImageW
-                            containerClassName="mb-4 sm:mb-10 max-w-[140px] mx-auto"
-                            className="rounded-3xl"
+                            className="mb-4 sm:mb-10 max-w-[140px] mx-auto rounded-3xl"
                             src={item.img}
                             sizes="150px"
                             alt="HIW"

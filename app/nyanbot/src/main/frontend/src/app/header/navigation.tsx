@@ -3,25 +3,8 @@ import {ChevronDownIcon} from "@heroicons/react/24/solid";
 import React, {FC, Fragment, useEffect, useState} from "react";
 import LinkW from "@/types/link.tsx";
 import {useLocation} from "react-router-dom";
+import {NavItemType} from "@/components/ui/navigation";
 
-// <--- NavItemType --->
-export interface MegamenuItem {
-    id: string;
-    image: string;
-    title: string;
-    items: NavItemType[];
-}
-
-export interface NavItemType {
-    id: string;
-    name: string;
-    isNew?: boolean;
-    href: string;
-    targetBlank?: boolean;
-    children?: NavItemType[];
-    megaMenu?: MegamenuItem[];
-    type?: "dropdown" | "none";
-}
 
 export interface NavigationItemProps {
     menuItem: NavItemType;
@@ -81,14 +64,14 @@ const NavigationItem: FC<NavigationItemWithRouterProps> = ({menuItem}) => {
                                 <ul className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 dark:ring-white dark:ring-opacity-10 text-sm relative bg-white dark:bg-neutral-900 py-4 grid space-y-1">
                                     {menuDropdown.children?.map((i) => {
                                         if (i.type) {
-                                            return renderDropdownMenuNavlinkHasChild(i);
+                                            return renderDropdownMenuNavLinkHasChild(i);
                                         } else {
                                             return (
                                                 <li
                                                     key={i.id}
                                                     className={`px-2 ${i.isNew ? "menuIsNew" : ""}`}
                                                 >
-                                                    {renderDropdownMenuNavlink(i)}
+                                                    {renderDropdownMenuNavLink(i)}
                                                 </li>
                                             );
                                         }
@@ -102,7 +85,7 @@ const NavigationItem: FC<NavigationItemWithRouterProps> = ({menuItem}) => {
         );
     };
 
-    const renderDropdownMenuNavlinkHasChild = (item: NavItemType) => {
+    const renderDropdownMenuNavLinkHasChild = (item: NavItemType) => {
         const isHover = menuCurrentHovers.includes(item.id);
         return (
             <Popover
@@ -114,7 +97,7 @@ const NavigationItem: FC<NavigationItemWithRouterProps> = ({menuItem}) => {
             >
                 {() => (
                     <>
-                        <div>{renderDropdownMenuNavlink(item)}</div>
+                        <div>{renderDropdownMenuNavLink(item)}</div>
                         <Transition
                             as={Fragment}
                             show={isHover}
@@ -132,11 +115,11 @@ const NavigationItem: FC<NavigationItemWithRouterProps> = ({menuItem}) => {
                                 <ul className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 dark:ring-white dark:ring-opacity-10 text-sm relative bg-white dark:bg-neutral-900 py-4 grid space-y-1">
                                     {item.children?.map((i) => {
                                         if (i.type) {
-                                            return renderDropdownMenuNavlinkHasChild(i);
+                                            return renderDropdownMenuNavLinkHasChild(i);
                                         } else {
                                             return (
                                                 <li key={i.id} className="px-2">
-                                                    {renderDropdownMenuNavlink(i)}
+                                                    {renderDropdownMenuNavLink(i)}
                                                 </li>
                                             );
                                         }
@@ -150,7 +133,7 @@ const NavigationItem: FC<NavigationItemWithRouterProps> = ({menuItem}) => {
         );
     };
 
-    const renderDropdownMenuNavlink = (item: NavItemType) => {
+    const renderDropdownMenuNavLink = (item: NavItemType) => {
         return (
             <LinkW
                 target={item.targetBlank ? "_blank" : undefined}
@@ -169,7 +152,6 @@ const NavigationItem: FC<NavigationItemWithRouterProps> = ({menuItem}) => {
         );
     };
 
-    // ===================== MENU MAIN MENU =====================
     const renderMainItem = (item: NavItemType) => {
         return (
             <LinkW
@@ -199,6 +181,5 @@ const NavigationItem: FC<NavigationItemWithRouterProps> = ({menuItem}) => {
             );
     }
 };
-// Your component own properties
 
 export default NavigationItem;

@@ -2,8 +2,12 @@ import React, {FC} from "react";
 import Logo from "@/components/ui/logo";
 import MenuBar from "@/components/ui/menu/MenuBar.tsx";
 import SwitchMode from "@/components/ui/switch-mode";
-import Navigation from "@/components/ui/navigation/Navigation.tsx";
 import {MetaMaskButton} from "@/app/metamask.tsx";
+import NavigationItem from "@/app/header/navigation.tsx";
+import {NavItemType} from "@/components/ui/navigation";
+import _ from "lodash";
+
+const nextId = _.uniqueId;
 
 export interface LoggedOutProps {
 }
@@ -38,5 +42,39 @@ const LoggedIn: FC<LoggedOutProps> = () => {
         </div>
     );
 };
+
+const discoverMenu: NavItemType[] = [
+    {
+        id: nextId(),
+        href: "/",
+        name: "Templates",
+    }
+];
+
+export const navigation: NavItemType[] = [
+    {
+        id: nextId(),
+        href: "/",
+        name: "Discover",
+        type: "dropdown",
+        children: discoverMenu,
+    },
+    {
+        id: nextId(),
+        href: "/documentation",
+        name: "Documentation",
+    },
+];
+
+
+const Navigation = () => {
+    return (
+        <ul className=" flex h-full">
+            {navigation.map((item) => (
+                <NavigationItem key={item.id} menuItem={item}/>
+            ))}
+        </ul>
+    );
+}
 
 export default LoggedIn;
