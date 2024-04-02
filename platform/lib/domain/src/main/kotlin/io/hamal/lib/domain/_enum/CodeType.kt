@@ -2,7 +2,8 @@ package io.hamal.lib.domain._enum
 
 enum class CodeType(val value: Int) {
     None(0),
-    Lua54(1);
+    Lua54(1),
+    Graph(2);
 
     companion object {
         @JvmStatic
