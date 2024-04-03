@@ -6,6 +6,8 @@ data class Field(
     val identifier: String,
     // for container
     val valueType: Type? = null
+    // nullable?
+    // defaultValue?
 ) {
 
     val isContainer get() = kind.isContainer

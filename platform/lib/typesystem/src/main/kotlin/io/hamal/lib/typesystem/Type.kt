@@ -12,7 +12,11 @@ class TypeId(override val value: SnowflakeId) : ValueObjectId() {
     constructor(value: String) : this(SnowflakeId(value.toLong(16)))
 }
 
-class TypeName(override val value: String) : ValueObjectString()
+class TypeIdentifier(override val value: String) : ValueObjectString()
+
+interface TypeNew {
+    val identifier: String // FIXME TypeIdentifier
+}
 
 data class Type(
     val identifier: String,
@@ -40,10 +44,15 @@ data class Type(
     }
 }
 
+object TypeNumber : TypeNew {
+    override val identifier = "number"
+}
+
+
 data class TypeList(
-    val identifier: String,
+    override val identifier: String,
     val field: Field
-) {
+) : TypeNew {
     constructor(identifier: String, kind: Field.Kind, valueType: Type? = null) : this(identifier, Field(kind, "value", valueType))
     constructor(identifier: String, valueType: Type) : this(identifier, Field(Object, "value", valueType))
 

@@ -12,10 +12,10 @@ data class Connection(
     val id: ConnectionId,
 
     val inputNodeId: NodeId,
-    val inputSlotId: SlotId,
+    val inputSlotId: PortId,
 
     val outputNodeId: NodeId,
-    val outputSlotId: SlotId
+    val outputSlotId: PortId
 ) {
     init {
         // FIXME ensure connection is valid

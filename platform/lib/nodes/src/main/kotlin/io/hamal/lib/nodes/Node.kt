@@ -22,9 +22,9 @@ interface Node {
 
 
 interface NodeWithInputs : Node {
-    val inputSlotIds: List<SlotId>
+    val inputPortIds: List<PortId>
 }
 
 interface NodeWithOutputs : Node {
-    val outputSlotIds: List<SlotId>
+    val outputPortIds: List<PortId>
 }
