@@ -29,7 +29,7 @@ internal class IntOutTest : BaseSandboxTest() {
             )
         )
 
-        val code = testCompiler.compile(NodeGraph())
+        val code = testCompiler.compile(Nodes())
         testInstance.codeLoad(KuaCode(code))
     }
 

@@ -1,98 +1,121 @@
 package io.hamal.lib.nodes
 
+import io.hamal.lib.common.domain.ValueObjectId
+import io.hamal.lib.common.snowflake.PartitionSourceImpl
+import io.hamal.lib.common.snowflake.SnowflakeGenerator
+import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.typesystem.TypeNumber
 
 
-data class ConstantNode(
-    override val id: NodeId,
-    override val outputPortIds: List<PortId>,
-    val name: String
-) : NodeWithOutputs
+//data class ConstantNode(
+//    override val id: NodeId,
+//    override val outputPortIds: List<PortId>,
+//    val name: String
+//) : NodeWithOutputs
+//
+//class Condition
+//
+//data class FilterNode(
+//    override val id: NodeId,
+//    override val inputPortIds: List<PortId>,
+//    override val outputPortIds: List<PortId>,
+//    val name: String,
+//    val conditions: List<Condition>
+//) : NodeWithInputs, NodeWithOutputs
+//
+//
+//data class PrintNode(
+//    override val id: NodeId,
+//    override val inputPortIds: List<PortId>
+//) : NodeWithInputs
+//
 
-class Condition
-
-data class FilterNode(
-    override val id: NodeId,
-    override val inputPortIds: List<PortId>,
-    override val outputPortIds: List<PortId>,
-    val name: String,
-    val conditions: List<Condition>
-) : NodeWithInputs, NodeWithOutputs
-
-
-data class PrintNode(
-    override val id: NodeId,
-    override val inputPortIds: List<PortId>
-) : NodeWithInputs
-
-
-class NodeGraph {
+class Nodes {
     lateinit var rootNode: NodeId
 
-    val nodes = mutableMapOf<NodeId, Node>()
-    val connections = mutableMapOf<ConnectionId, Connection>()
-    val ports = mutableMapOf<PortId, Port>()
+    val nodes = mutableListOf<Node>()
+    val connections = mutableListOf<Connection>()
+    val ports = mutableListOf<Port>()
 }
 
+interface GenerateDomainId {
+    operator fun <ID : ValueObjectId> invoke(ctor: (SnowflakeId) -> ID): ID
+}
+
+object IdGeneratorImpl : GenerateDomainId {
+    override fun <ID : ValueObjectId> invoke(ctor: (SnowflakeId) -> ID): ID {
+        return ctor(generator.next())
+    }
+}
+
+private val generator = SnowflakeGenerator(PartitionSourceImpl(1))
 
 fun main() {
-    val node = NodeGraph()
+    val generateDomainId = IdGeneratorImpl
 
-    val variablePort = PortOutput(
-        id = PortId(1),
+    val nodes = Nodes()
+
+    val variablePort = Port(
+        id = generateDomainId(::PortId),
         name = PortName("value"),
-        type = TypeNumber
+        type = Port.Type.Output,
+        valueType = TypeNumber
     )
 
-    val variable = ConstantNode(
-        id = NodeId(1),
+    val variable = Node(
+        id = generateDomainId(::NodeId),
+        type = NodeType("LOAD_CONSTANT"),
+        inputPortIds = listOf(),
         outputPortIds = listOf(variablePort.id),
-        name = "v"
     )
 
-    val filterInputPort = PortInput(
-        id = PortId(23),
+    val filterInputPort = Port(
+        id = generateDomainId(::PortId),
         name = PortName("input"),
-        type = TypeNumber
+        type = Port.Type.Input,
+        valueType = TypeNumber
     )
 
-    val filterOutputPort = PortOutput(
-        id = PortId(24),
+    val filterOutputPort = Port(
+        id = generateDomainId(::PortId),
         name = PortName("output"),
-        type = TypeNumber
+        type = Port.Type.Output,
+        valueType = TypeNumber
     )
 
-    val filter = FilterNode(
-        id = NodeId(25),
+    val filter = Node(
+        id = generateDomainId(::NodeId),
+        type = NodeType("FILTER_OBJECT"),
         inputPortIds = listOf(filterInputPort.id),
         outputPortIds = listOf(filterOutputPort.id),
-        name = "Test",
-        conditions = listOf()
     )
 
-    val printPort = PortInput(
-        id = PortId(2),
+    val printPort = Port(
+        id = generateDomainId(::PortId),
         name = PortName("number"),
-        type = TypeNumber
+        type = Port.Type.Output,
+        valueType = TypeNumber
     )
 
-    val print = PrintNode(
-        id = NodeId(2),
-        inputPortIds = listOf(printPort.id)
+    val print = Node(
+        id = generateDomainId(::NodeId),
+        type = NodeType("PRINT"),
+        inputPortIds = listOf(printPort.id),
+        outputPortIds = listOf()
     )
 
-    node.rootNode = variable.id
-    node.nodes[variable.id] = variable
-    node.nodes[filter.id] = filter
-    node.nodes[print.id] = print
+    nodes.rootNode = variable.id
+    nodes.nodes.add(variable)
+    nodes.nodes.add(filter)
+    nodes.nodes.add(print)
 
-    node.ports[variablePort.id] = variablePort
-    node.ports[filterInputPort.id] = filterInputPort
-    node.ports[filterOutputPort.id] = filterOutputPort
-    node.ports[printPort.id] = printPort
+    nodes.ports.add(variablePort)
+    nodes.ports.add(filterInputPort)
+    nodes.ports.add(filterOutputPort)
+    nodes.ports.add(printPort)
 
     val c1 = Connection(
-        id = ConnectionId(1),
+        id = generateDomainId(::ConnectionId),
         outputNodeId = variable.id,
         outputSlotId = variablePort.id,
         inputNodeId = filter.id,
@@ -100,20 +123,23 @@ fun main() {
     )
 
     val c2 = Connection(
-        id = ConnectionId(2),
+        id = generateDomainId(::ConnectionId),
         outputNodeId = filter.id,
         outputSlotId = filterOutputPort.id,
         inputNodeId = print.id,
         inputSlotId = printPort.id,
     )
 
-    node.connections[c1.id] = c1
-    node.connections[c2.id] = c2
+    nodes.connections.add(c1)
+    nodes.connections.add(c2)
 
-    println(node)
-    runGraph(node)
+    println(nodes)
+    runGraph(nodes)
+
+    println(json.serialize(nodes))
 }
 
-fun runGraph(graph: NodeGraph) {
+
+fun runGraph(graph: Nodes) {
     println(graph)
 }

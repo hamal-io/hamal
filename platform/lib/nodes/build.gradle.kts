@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    api(project(":platform:lib:common"))
+    api(project(":platform:lib:domain"))
     implementation(project(":platform:lib:typesystem"))
     testImplementation(external.junit)
     testImplementation(external.hamcrest)

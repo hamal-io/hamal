@@ -13,19 +13,14 @@ class PortId(override val value: SnowflakeId) : ValueObjectId() {
 class PortName(override val value: String) : ValueObjectString()
 
 
-interface Port {
-    val id: PortId
-    val name: PortName
+data class Port(
+    val id: PortId,
+    val name: PortName,
+    val type: Type,
+    val valueType: TypeNew
+) {
+    enum class Type {
+        Input,
+        Output
+    }
 }
-
-data class PortInput(
-    override val id: PortId,
-    override val name: PortName,
-    val type: TypeNew
-) : Port
-
-data class PortOutput(
-    override val id: PortId,
-    override val name: PortName,
-    val type: TypeNew
-) : Port

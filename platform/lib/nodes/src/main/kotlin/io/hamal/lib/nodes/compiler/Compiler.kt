@@ -1,10 +1,10 @@
 package io.hamal.lib.nodes.compiler
 
-import io.hamal.lib.nodes.NodeGraph
+import io.hamal.lib.nodes.Nodes
 
 object Compiler {
 
-    fun compile(graph: NodeGraph): String {
+    fun compile(graph: Nodes): String {
         return """
             context = {}
             

@@ -16,15 +16,10 @@ class NodeLabel(override val value: String) : ValueObjectString()
 
 class NodeType(override val value: String) : ValueObjectString()
 
-interface Node {
-    val id: NodeId
-}
-
-
-interface NodeWithInputs : Node {
-    val inputPortIds: List<PortId>
-}
-
-interface NodeWithOutputs : Node {
+data class Node(
+    val id: NodeId,
+    val type: NodeType,
+    val inputPortIds: List<PortId>,
     val outputPortIds: List<PortId>
-}
+)
+

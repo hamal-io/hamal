@@ -45,7 +45,79 @@ const LuaAdhocPage = () => {
 const NodesAdhocPage = () => {
     const [uiState] = useUiState()
     const [adhoc, data] = useAdhoc()
-    const [code, setCode] = useState("")
+    const [code, setCode] = useState("{\n" +
+        "  \"rootNode\": \"cbe10a17810000\",\n" +
+        "  \"nodes\": [\n" +
+        "    {\n" +
+        "      \"id\": \"cbe10a17810000\",\n" +
+        "      \"type\": \"LOAD_CONSTANT\",\n" +
+        "      \"inputPortIds\": [],\n" +
+        "      \"outputPortIds\": [\n" +
+        "        \"cbe10a16410000\"\n" +
+        "      ]\n" +
+        "    },\n" +
+        "    {\n" +
+        "      \"id\": \"cbe10a18810000\",\n" +
+        "      \"type\": \"FILTER_OBJECT\",\n" +
+        "      \"inputPortIds\": [\n" +
+        "        \"cbe10a18410000\"\n" +
+        "      ],\n" +
+        "      \"outputPortIds\": [\n" +
+        "        \"cbe10a18410001\"\n" +
+        "      ]\n" +
+        "    },\n" +
+        "    {\n" +
+        "      \"id\": \"cbe10a18810002\",\n" +
+        "      \"type\": \"PRINT\",\n" +
+        "      \"inputPortIds\": [\n" +
+        "        \"cbe10a18810001\"\n" +
+        "      ],\n" +
+        "      \"outputPortIds\": []\n" +
+        "    }\n" +
+        "  ],\n" +
+        "  \"connections\": [\n" +
+        "    {\n" +
+        "      \"id\": \"cbe10a18810003\",\n" +
+        "      \"inputNodeId\": \"cbe10a18810000\",\n" +
+        "      \"inputSlotId\": \"cbe10a18410000\",\n" +
+        "      \"outputNodeId\": \"cbe10a17810000\",\n" +
+        "      \"outputSlotId\": \"cbe10a16410000\"\n" +
+        "    },\n" +
+        "    {\n" +
+        "      \"id\": \"cbe10a18810004\",\n" +
+        "      \"inputNodeId\": \"cbe10a18810002\",\n" +
+        "      \"inputSlotId\": \"cbe10a18810001\",\n" +
+        "      \"outputNodeId\": \"cbe10a18810000\",\n" +
+        "      \"outputSlotId\": \"cbe10a18410001\"\n" +
+        "    }\n" +
+        "  ],\n" +
+        "  \"ports\": [\n" +
+        "    {\n" +
+        "      \"id\": \"cbe10a16410000\",\n" +
+        "      \"name\": \"value\",\n" +
+        "      \"type\": \"Output\",\n" +
+        "      \"valueType\": \"TypeNumber\"\n" +
+        "    },\n" +
+        "    {\n" +
+        "      \"id\": \"cbe10a18410000\",\n" +
+        "      \"name\": \"input\",\n" +
+        "      \"type\": \"Input\",\n" +
+        "      \"valueType\": \"TypeNumber\"\n" +
+        "    },\n" +
+        "    {\n" +
+        "      \"id\": \"cbe10a18410001\",\n" +
+        "      \"name\": \"output\",\n" +
+        "      \"type\": \"Output\",\n" +
+        "      \"valueType\": \"TypeNumber\"\n" +
+        "    },\n" +
+        "    {\n" +
+        "      \"id\": \"cbe10a18810001\",\n" +
+        "      \"name\": \"number\",\n" +
+        "      \"type\": \"Output\",\n" +
+        "      \"valueType\": \"TypeNumber\"\n" +
+        "    }\n" +
+        "  ]\n" +
+        "}")
     const Run = () => (
         <Button onClick={() => {
             adhoc(uiState.namespaceId, code, "Nodes")
