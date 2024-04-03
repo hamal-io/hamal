@@ -1,6 +1,6 @@
 package io.hamal.lib.typesystem.value
 
-import io.hamal.lib.typesystem.Kind
+import io.hamal.lib.typesystem.Field.Kind
 
 fun valueOf(value: Boolean) = if (value) ValueTrue else ValueFalse
 

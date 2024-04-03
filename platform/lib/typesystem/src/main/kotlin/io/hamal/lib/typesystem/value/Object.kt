@@ -1,11 +1,11 @@
 package io.hamal.lib.typesystem.value
 
 import io.hamal.lib.typesystem.Field
-import io.hamal.lib.typesystem.Kind
+import io.hamal.lib.typesystem.Field.Kind
 import io.hamal.lib.typesystem.Property
 import io.hamal.lib.typesystem.Type
 
-data class ObjectValue(
+data class ValueObject(
     val type: Type,
     val properties: List<Property>,
 ) : Value {
@@ -13,13 +13,13 @@ data class ObjectValue(
 
     operator fun <T : Value> get(identifier: String) = valuesByIdentifier[identifier] as T
 
-    override fun toString() = "${type.name}(${properties.joinToString(", ") { it.toString() }})"
+    override fun toString() = "${type.identifier}(${properties.joinToString(", ") { it.toString() }})"
 
     private val valuesByIdentifier = properties.associateBy { it.identifier }.mapValues { it.value.value }
 }
 
-fun <T : Value> ObjectValue.forType(type: Type, block: () -> T) =
+fun <T : Value> ValueObject.forType(type: Type, block: () -> T) =
     if (!this.implements(type.fields)) throw NotImplementedError()
     else block()
 
-infix fun ObjectValue.implements(interfaceFields: Set<Field>) = this.type.fields.containsAll(interfaceFields)
+infix fun ValueObject.implements(interfaceFields: Set<Field>) = this.type.fields.containsAll(interfaceFields)

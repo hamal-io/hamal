@@ -1,6 +1,7 @@
 package io.hamal.lib.typesystem
 
-import io.hamal.lib.typesystem.value.ObjectValue
+import io.hamal.lib.typesystem.Field.Kind
+import io.hamal.lib.typesystem.value.ValueObject
 import io.hamal.lib.typesystem.value.ValueString
 import io.hamal.lib.typesystem.value.forType
 import java.time.LocalDate
@@ -17,7 +18,7 @@ fun main() {
         "pupil",
         Field(Kind.String, "first_name"),
         Field(Kind.String, "last_name"),
-        Field(Kind.Date, "dob", "Date of Birth")
+        Field(Kind.Date, "dob")
     ) extends Entity
 
     val Another = Type(
@@ -41,17 +42,15 @@ fun main() {
 
     val suzy = Pupil("2", "Suzy", "Yzus", LocalDate.of(1992, 8, 23))
 
-    val PupilList = Type(
-        "pupilList",
-        Field(Kind.Object, "pupils", isList = true, objectKind = Pupil, name = "Pupils")
-    )
+//    val PupilList = Type("pupilList", Field(Kind.List, "pupils", valueType = Pupil))
 
+    val PupilList = TypeList("pupil_list", Pupil)
 
-    fun ObjectValue.fullname(): ValueString = forType(Pupil) {
+    fun ValueObject.fullname(): ValueString = forType(Pupil) {
         ValueString("${get<ValueString>("last_name")}, ${get<ValueString>("first_name")}")
     }
 
-    val list = PupilList(listOf(bob, suzy))
+    val list = PupilList(bob, suzy)
 
     val a = Another("xyz")
 

@@ -1,29 +1,36 @@
 package io.hamal.lib.typesystem
 
-import java.util.*
-
-enum class Kind {
-    Boolean,
-    Date,
-    Decimal,
-    List,
-    Nil,
-    Number,
-    Object,
-    String,
-    Time,
-}
 
 data class Field(
     val kind: Kind,
     val identifier: String,
-    val name: String = identifier.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() },
-    val isList: Boolean = false,
-    val objectKind: Type? = null,
+    // for container
+    val valueType: Type? = null
 ) {
+
+    val isContainer get() = kind.isContainer
+
+    enum class Kind(val isContainer: kotlin.Boolean) {
+        Any(true),
+        Boolean(false),
+        Date(false),
+        Decimal(false),
+        List(true),
+        Nil(false),
+        Number(false),
+        Object(true),
+        OneOf(true),
+        String(false),
+        Time(false)
+    }
+
     init {
-        if ((objectKind == null) xor (kind != Kind.Object)) {
-            TODO()
+        if (isContainer && valueType == null) {
+            throw IllegalArgumentException("Container type requires valueType")
+        }
+
+        if(!isContainer && valueType != null){
+            throw IllegalArgumentException("Not a container type has valueType")
         }
     }
 }

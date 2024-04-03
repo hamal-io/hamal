@@ -2,7 +2,7 @@ package io.hamal.lib.typesystem.value
 
 import io.hamal.lib.common.Decimal
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.typesystem.Kind
+import io.hamal.lib.typesystem.Field.Kind
 import java.math.BigDecimal
 import java.math.MathContext
 import java.math.RoundingMode
