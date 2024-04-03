@@ -4,6 +4,7 @@ import io.hamal.core.adapter.code.CodeGetPort
 import io.hamal.core.adapter.request.RequestEnqueuePort
 import io.hamal.core.security.SecurityContext
 import io.hamal.lib.domain.GenerateDomainId
+import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.ExecInvokeRequested
 import io.hamal.lib.domain.request.FuncInvokeRequest
@@ -42,8 +43,9 @@ class FuncInvokeAdapter(
             code = ExecCode(
                 id = func.code.id,
                 version = version,
-                value = null
-            )
+                value = null,
+                type = CodeType.Lua54 // FIXME
+            ),
         ).also(requestEnqueue::invoke)
     }
 }

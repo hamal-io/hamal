@@ -31,7 +31,10 @@ class AdhocInvokeAdapter(
             namespaceId = namespace.id,
             workspaceId = namespace.workspaceId,
             inputs = req.inputs ?: InvocationInputs(),
-            code = ExecCode(value = req.code),
+            code = ExecCode(
+                value = req.code,
+                type = req.codeType
+            ),
             funcId = null,
             correlationId = null
         ).also(requestEnqueue::invoke)

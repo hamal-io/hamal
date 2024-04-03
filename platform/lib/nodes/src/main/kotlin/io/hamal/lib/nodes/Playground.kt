@@ -1,15 +1,12 @@
 package io.hamal.lib.nodes
 
 import io.hamal.lib.typesystem.TypeNumber
-import io.hamal.lib.typesystem.value.Value
-import io.hamal.lib.typesystem.value.ValueNumber
+
 
 data class ConstantNode(
     override val id: NodeId,
     override val outputPortIds: List<PortId>,
-    val name: String,
-    // type
-    val value: Value
+    val name: String
 ) : NodeWithOutputs
 
 class Condition
@@ -29,7 +26,7 @@ data class PrintNode(
 ) : NodeWithInputs
 
 
-class Nodes {
+class NodeGraph {
     lateinit var rootNode: NodeId
 
     val nodes = mutableMapOf<NodeId, Node>()
@@ -39,7 +36,7 @@ class Nodes {
 
 
 fun main() {
-    val nodes = Nodes()
+    val node = NodeGraph()
 
     val variablePort = PortOutput(
         id = PortId(1),
@@ -50,8 +47,7 @@ fun main() {
     val variable = ConstantNode(
         id = NodeId(1),
         outputPortIds = listOf(variablePort.id),
-        name = "v",
-        value = ValueNumber(42)
+        name = "v"
     )
 
     val filterInputPort = PortInput(
@@ -85,15 +81,15 @@ fun main() {
         inputPortIds = listOf(printPort.id)
     )
 
-    nodes.rootNode = variable.id
-    nodes.nodes[variable.id] = variable
-    nodes.nodes[filter.id] = filter
-    nodes.nodes[print.id] = print
+    node.rootNode = variable.id
+    node.nodes[variable.id] = variable
+    node.nodes[filter.id] = filter
+    node.nodes[print.id] = print
 
-    nodes.ports[variablePort.id] = variablePort
-    nodes.ports[filterInputPort.id] = filterInputPort
-    nodes.ports[filterOutputPort.id] = filterOutputPort
-    nodes.ports[printPort.id] = printPort
+    node.ports[variablePort.id] = variablePort
+    node.ports[filterInputPort.id] = filterInputPort
+    node.ports[filterOutputPort.id] = filterOutputPort
+    node.ports[printPort.id] = printPort
 
     val c1 = Connection(
         id = ConnectionId(1),
@@ -111,13 +107,13 @@ fun main() {
         inputSlotId = printPort.id,
     )
 
-    nodes.connections[c1.id] = c1
-    nodes.connections[c2.id] = c2
+    node.connections[c1.id] = c1
+    node.connections[c2.id] = c2
 
-    println(nodes)
-    runGraph(nodes)
+    println(node)
+    runGraph(node)
 }
 
-fun runGraph(graph: Nodes) {
+fun runGraph(graph: NodeGraph) {
     println(graph)
 }

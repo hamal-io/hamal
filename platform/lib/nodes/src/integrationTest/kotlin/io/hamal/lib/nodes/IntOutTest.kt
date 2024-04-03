@@ -6,9 +6,10 @@ import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.extend.extension.RunnerExtension
 import io.hamal.lib.kua.type.KuaCode
 import io.hamal.lib.kua.type.KuaString
+import io.hamal.lib.nodes.compiler.Compiler
 import org.junit.jupiter.api.Test
 
-internal class NodesTest : BaseSandboxTest() {
+internal class IntOutTest : BaseSandboxTest() {
 
     @Test
     fun test() {
@@ -28,9 +29,8 @@ internal class NodesTest : BaseSandboxTest() {
             )
         )
 
-        testInstance.codeLoad(
-            KuaCode("""print('test')""".trimIndent())
-        )
+        val code = testCompiler.compile(NodeGraph())
+        testInstance.codeLoad(KuaCode(code))
     }
 
 }
@@ -40,4 +40,6 @@ internal sealed class BaseSandboxTest {
         NativeLoader.load(NativeLoader.Preference.Resources)
         Sandbox(SandboxContextNop)
     }
+
+    val testCompiler = Compiler
 }

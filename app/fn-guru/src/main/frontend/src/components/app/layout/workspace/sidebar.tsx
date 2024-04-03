@@ -74,9 +74,9 @@ const Sidebar: React.FC<Props> = ({className}) => {
         },
         {
             icon: Play,
-            href: `/playground`,
-            label: "Playground",
-            active: currentPath === `/playground`
+            href: `/adhoc`,
+            label: "Adhoc",
+            active: currentPath === `/adhoc`
         },
         {
             icon: ActivityIcon,
