@@ -3,17 +3,21 @@ package io.hamal.app.web3proxy.eth.fixture
 import io.hamal.lib.web3.evm.abi.type.EvmAddress
 import io.hamal.lib.web3.evm.abi.type.EvmPrefixedHexString
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
-import io.hamal.lib.web3.evm.domain.EvmRequestId
 import io.hamal.lib.web3.evm.chain.eth.domain.EthBlockData
 import io.hamal.lib.web3.evm.chain.eth.domain.EthGetBlockResponse
 import io.hamal.lib.web3.evm.chain.eth.domain.EthResponse
 import io.hamal.lib.web3.evm.chain.eth.http.EthBatchService
+import io.hamal.lib.web3.evm.domain.EvmRequestId
 import io.hamal.lib.web3.json
 
 internal class EthBatchServiceFixture : EthBatchService<EthBatchServiceFixture> {
 
     override fun execute(): List<EthResponse> {
         return responses
+    }
+
+    override fun sendRawTransaction(data: EvmPrefixedHexString): EthBatchServiceFixture {
+        TODO("Not yet implemented")
     }
 
     override fun getBlock(number: EvmUint64): EthBatchServiceFixture {
