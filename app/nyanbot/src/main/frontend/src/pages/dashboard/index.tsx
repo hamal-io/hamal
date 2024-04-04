@@ -7,9 +7,8 @@ const DashboardSite = () => {
     return (
         <div className="w-screen h-screen">
 
-
             <Canvas
-                position={{x: 0, y: 0}}
+                position={{x: 0, y: 80}} // offsets menu navbar
             >
 
                 <Comment

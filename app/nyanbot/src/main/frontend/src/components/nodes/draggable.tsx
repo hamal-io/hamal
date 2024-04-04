@@ -1,6 +1,6 @@
 import React, {FC, HTMLProps, MutableRefObject, useContext} from "react";
 import {Position} from "./types";
-import {ContextCanvasRect, ContextCanvasState} from "@/components/nodes/context.ts";
+import {ContextCanvasState} from "@/components/nodes/context.ts";
 
 type DraggableProps = Omit<HTMLProps<HTMLDivElement>, "onDrag" | "onDragEnd"> & {
     id?: string;
@@ -18,20 +18,19 @@ type DraggableProps = Omit<HTMLProps<HTMLDivElement>, "onDrag" | "onDragEnd"> & 
 };
 
 export const Draggable: FC<DraggableProps> = ({
-      children,
-      onDragDelayStart,
-      onDragStart,
-      onDrag,
-      onDragEnd,
-      onMouseDown,
-      onTouchStart,
-      disabled,
-      delay = 6,
-      innerRef,
-      ...rest
-  }) => {
+                                                  children,
+                                                  onDragDelayStart,
+                                                  onDragStart,
+                                                  onDrag,
+                                                  onDragEnd,
+                                                  onMouseDown,
+                                                  onTouchStart,
+                                                  disabled,
+                                                  delay = 6,
+                                                  innerRef,
+                                                  ...rest
+                                              }) => {
     const canvasState = useContext(ContextCanvasState)
-    const canvasRect = useContext(ContextCanvasRect)
 
     const startPosition = React.useRef<Position | null>(null);
     const offset = React.useRef<Position>();
@@ -43,17 +42,10 @@ export const Draggable: FC<DraggableProps> = ({
         const offsetX = offset.current?.x ?? 0;
         const offsetY = offset.current?.y ?? 0;
 
-        const x =
-            byScale(
-                e.clientX - (canvasRect ? canvasRect.current?.left ?? 0 : 0) - offsetX - (canvasRect ? canvasRect.current?.width ?? 0 : 0) / 2
-            ) + byScale(canvasState.position.x);
-
-        const y = byScale(
-            e.clientY - (canvasRect ? canvasRect.current?.top ?? 0 : 0) - offsetY - (canvasRect ? canvasRect.current?.height ?? 0 : 0) / 2
-        ) + byScale(canvasState.position.y);
-
-
-        return {x, y};
+        return {
+            x: byScale(e.clientX - (canvasState.rect.left) - offsetX - (canvasState.size.width) / 2) + byScale(canvasState.position.x),
+            y: byScale(e.clientY - (canvasState.rect.top) - offsetY - (canvasState.size.height) / 2) + byScale(canvasState.position.y)
+        };
     };
 
     const updatePosition = (e: MouseEvent) => {
