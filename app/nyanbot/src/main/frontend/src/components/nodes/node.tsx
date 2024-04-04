@@ -1,10 +1,11 @@
 import React, {FC, RefObject, useState} from "react";
-import {Position, Size} from './types.ts';
+import {NodeId, Position, Size} from './types.ts';
+import {Ports} from './port.tsx'
 import {Draggable} from './draggable.tsx';
-import styles from "@/components/nodes/nodes.module.css";
+import styles from "@/components/nodes/node.module.css";
 
 type NodeProps = {
-    id: string;
+    id: NodeId;
     position: Position;
     size: Size;
     type: string;
@@ -63,6 +64,9 @@ export const Node : FC<NodeProps> = ({
             data-color={"green"}
             data-nodes-component="comment"
         >
+            <Ports
+                type='test'
+            />
 
             <Draggable
                 // className={styles.resizeThumb}

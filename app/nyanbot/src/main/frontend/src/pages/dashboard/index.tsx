@@ -14,8 +14,16 @@ const DashboardSite = () => {
             />
 
             <Node
+                id='1'
                 type="test"
                 position={{x: 400, y: 400}}
+                size={{width: 250, height: 100}}
+            />
+
+            <Node
+                id='2'
+                type="test"
+                position={{x: 900, y: 400}}
                 size={{width: 250, height: 100}}
             />
 
