@@ -17,7 +17,6 @@ class AccountUpdateHandler(
     private val eventEmitter: InternalEventEmitter
 ) : RequestHandler<AccountUpdateRequested>(AccountUpdateRequested::class) {
 
-
     override fun invoke(req: AccountUpdateRequested) {
         updateAccount(req)
             .also { createEmailAuth(req) }
@@ -32,8 +31,7 @@ class AccountUpdateHandler(
             )
         ).also {
             authRepository.revokeAuth(
-                AuthCmdRepository.RevokeAuthCmd(req.cmdId(), req.emailAuthId)
-
+                AuthCmdRepository.RevokeAuthCmd(req.cmdId(), req.requestedBy)
             )
         }
     }
@@ -42,7 +40,7 @@ class AccountUpdateHandler(
         return authRepository.create(
             AuthCmdRepository.CreateEmailAuthCmd(
                 id = req.cmdId(),
-                authId = req.emailAuthId,
+                authId = req.requestedBy,
                 accountId = req.id,
                 email = req.email,
                 hash = req.hash

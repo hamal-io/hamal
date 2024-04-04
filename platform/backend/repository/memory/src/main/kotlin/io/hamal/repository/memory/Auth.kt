@@ -130,6 +130,7 @@ class AuthMemoryRepository : AuthRepository {
         }
     }
 
+
     override fun find(address: Web3Address): Auth? {
         return lock.read {
             projections.asSequence()

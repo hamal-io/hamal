@@ -48,7 +48,6 @@ const PasswordForm: FC<PasswordFormProps> = ({accountId}) => {
     const [loading, setLoading] = useState(false)
 
     const passWordSchema = z.object({
-        email: z.string().email(),
         currentPassword: z.string().min(4, "Password must be at least 4 characters").max(20).optional(),
         newPassword: z.string().min(4, "Password must be at least 4 characters").max(20),
         confirmPassword: z.string(),
@@ -68,7 +67,7 @@ const PasswordForm: FC<PasswordFormProps> = ({accountId}) => {
         setLoading(true)
         try {
             const abortController = new AbortController()
-            update(accountId, values.email, values.currentPassword, values.newPassword, abortController)
+            update(accountId, values.currentPassword, values.newPassword, abortController)
             return (() => abortController.abort())
         } catch (e) {
             console.log(e)
@@ -87,22 +86,6 @@ const PasswordForm: FC<PasswordFormProps> = ({accountId}) => {
             </DialogHeader>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                    <FormField
-                        control={form.control}
-                        name="email"
-                        render={({field}) => (
-                            <FormItem>
-                                <FormLabel>Current Password</FormLabel>
-                                <FormControl>
-                                    <p>
-                                        <Input  {...field} />
-                                        {errors.email &&
-                                            <span className="text-red-500">{errors.email.message}</span>}
-                                    </p>
-                                </FormControl>
-                            </FormItem>
-                        )}
-                    />
                     <FormField
                         control={form.control}
                         name="currentPassword"
