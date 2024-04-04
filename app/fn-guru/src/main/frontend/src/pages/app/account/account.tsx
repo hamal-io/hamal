@@ -11,6 +11,7 @@ import {Input} from "@/components/ui/input.tsx";
 import {Loader2} from "lucide-react";
 import {useForm} from "react-hook-form";
 import {Dialog, DialogContent, DialogHeader} from "@/components/ui/dialog.tsx";
+import form from "@/pages/app/blueprint-list/components/form.tsx";
 
 
 const AccountPage = () => {
@@ -35,7 +36,7 @@ const AccountPage = () => {
                 </div>
             </div>
             <Dialog open={open} onOpenChange={setOpen}>
-                <PasswordForm accountId={auth.accountId} onClose={() => setOpen(false)}/>)
+                <PasswordForm accountId={auth.accountId}/>)
             </Dialog>
         </div>
     )
@@ -43,12 +44,12 @@ const AccountPage = () => {
 
 export default AccountPage
 
-type FormProps = {accountId: string, onClose: () => void}
-const PasswordForm: FC<FormProps> = ({accountId, onClose}) => {
+type PasswordFormProps = { accountId: string }
+const PasswordForm: FC<PasswordFormProps> = ({accountId}) => {
     const [update, updateRequested, , error] = useAccountUpdate()
     const [loading, setLoading] = useState(false)
 
-    const formSchema = z.object({
+    const passWordSchema = z.object({
         currentPassword: z.string().min(4, "Password must be at least 4 characters").max(20),
         newPassword: z.string().min(4, "Password must be at least 4 characters").max(20),
         confirmPassword: z.string(),
@@ -57,12 +58,14 @@ const PasswordForm: FC<FormProps> = ({accountId, onClose}) => {
         path: ["confirmPassword"]
     })
 
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
+    type PasswordSchema = z.infer<typeof passWordSchema>
 
+    const form = useForm<PasswordSchema>({
+        resolver: zodResolver(passWordSchema),
     })
 
-    function onSubmit(values: z.infer<typeof formSchema>, errors) {
+
+    function onSubmit(values: PasswordSchema) {
         setLoading(true)
         try {
             const abortController = new AbortController()
@@ -72,9 +75,11 @@ const PasswordForm: FC<FormProps> = ({accountId, onClose}) => {
             console.log(e)
         } finally {
             setLoading(false)
-            onClose()
+
         }
     }
+
+    const errors = form.formState.errors
 
     return (
         <DialogContent>
@@ -90,8 +95,11 @@ const PasswordForm: FC<FormProps> = ({accountId, onClose}) => {
                             <FormItem>
                                 <FormLabel>Current Password</FormLabel>
                                 <FormControl>
-                                    <Input type={"password"}
-                                        {...field} />
+                                    <p>
+                                        <Input type={"password"} {...field} />
+                                           {errors.currentPassword &&
+                                               <span className="text-red-500">{errors.currentPassword.message}</span>}
+                                    </p>
                                 </FormControl>
                             </FormItem>
                         )}
@@ -103,7 +111,11 @@ const PasswordForm: FC<FormProps> = ({accountId, onClose}) => {
                             <FormItem>
                                 <FormLabel>New Password</FormLabel>
                                 <FormControl>
-                                    <Input type={"password"} {...field} />
+                                    <p>
+                                        <Input type={"password"} {...field} />
+                                        {errors.newPassword &&
+                                            <span className="text-red-500">{errors.newPassword.message}</span>}
+                                    </p>
                                 </FormControl>
                             </FormItem>
                         )}
@@ -115,10 +127,11 @@ const PasswordForm: FC<FormProps> = ({accountId, onClose}) => {
                             <FormItem>
                                 <FormLabel>Confirm Password</FormLabel>
                                 <FormControl>
-                                    <Input type={"password"} {...field} />
-                                    {form.getFieldState("confirmPassword").error &&
-                                        <span>{form.getFieldState("confirmPassword").error.message}</span>
-                                    }
+                                    <p>
+                                        <Input type={"password"} {...field} />
+                                        {errors.confirmPassword &&
+                                            <span className="text-red-500">{errors.confirmPassword.message}</span>}
+                                    </p>
                                 </FormControl>
 
                             </FormItem>
