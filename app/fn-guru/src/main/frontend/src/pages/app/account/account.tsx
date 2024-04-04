@@ -1,9 +1,8 @@
 import React, {FC, useEffect, useState} from "react";
 import {useAuth, useLogout} from "@/hook/auth.ts";
 import {Button} from "@/components/ui/button.tsx";
-import {useAccountUpdate} from "@/hook";
+import {useAccountChangePassword} from "@/hook";
 import {PageHeader} from "@/components/page-header.tsx";
-import {Card} from "@/components/ui/card.tsx";
 import {z} from "zod";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {FormControl, Form, FormField, FormItem, FormLabel} from "@/components/ui/form.tsx";
@@ -11,7 +10,6 @@ import {Input} from "@/components/ui/input.tsx";
 import {Loader2} from "lucide-react";
 import {useForm} from "react-hook-form";
 import {Dialog, DialogContent, DialogHeader} from "@/components/ui/dialog.tsx";
-import form from "@/pages/app/blueprint-list/components/form.tsx";
 
 
 const AccountPage = () => {
@@ -46,11 +44,12 @@ export default AccountPage
 
 type PasswordFormProps = { accountId: string }
 const PasswordForm: FC<PasswordFormProps> = ({accountId}) => {
-    const [update, updateRequested, , error] = useAccountUpdate()
+    const [update, updateRequested, , error] = useAccountChangePassword()
     const [loading, setLoading] = useState(false)
 
     const passWordSchema = z.object({
-        currentPassword: z.string().min(4, "Password must be at least 4 characters").max(20),
+        email: z.string().email(),
+        currentPassword: z.string().min(4, "Password must be at least 4 characters").max(20).optional(),
         newPassword: z.string().min(4, "Password must be at least 4 characters").max(20),
         confirmPassword: z.string(),
     }).refine(data => data.newPassword === data.confirmPassword, {
@@ -69,7 +68,7 @@ const PasswordForm: FC<PasswordFormProps> = ({accountId}) => {
         setLoading(true)
         try {
             const abortController = new AbortController()
-            update(accountId, null, values.newPassword, abortController)
+            update(accountId, values.email, values.currentPassword, values.newPassword, abortController)
             return (() => abortController.abort())
         } catch (e) {
             console.log(e)
@@ -90,6 +89,22 @@ const PasswordForm: FC<PasswordFormProps> = ({accountId}) => {
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                     <FormField
                         control={form.control}
+                        name="email"
+                        render={({field}) => (
+                            <FormItem>
+                                <FormLabel>Current Password</FormLabel>
+                                <FormControl>
+                                    <p>
+                                        <Input  {...field} />
+                                        {errors.email &&
+                                            <span className="text-red-500">{errors.email.message}</span>}
+                                    </p>
+                                </FormControl>
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
                         name="currentPassword"
                         render={({field}) => (
                             <FormItem>
@@ -97,8 +112,8 @@ const PasswordForm: FC<PasswordFormProps> = ({accountId}) => {
                                 <FormControl>
                                     <p>
                                         <Input type={"password"} {...field} />
-                                           {errors.currentPassword &&
-                                               <span className="text-red-500">{errors.currentPassword.message}</span>}
+                                        {errors.currentPassword &&
+                                            <span className="text-red-500">{errors.currentPassword.message}</span>}
                                     </p>
                                 </FormControl>
                             </FormItem>

@@ -17,7 +17,6 @@ internal class AccountUpdateController(
     private val retry: Retry,
     private val accountUpdate: AccountUpdatePort
 ) {
-
     @PatchMapping("/v1/accounts/{accountId}")
     fun updateAccount(
         @PathVariable("accountId") accountId: AccountId,
@@ -25,5 +24,4 @@ internal class AccountUpdateController(
     ): ResponseEntity<ApiRequested> = retry {
         accountUpdate(accountId, req).accepted()
     }
-
 }

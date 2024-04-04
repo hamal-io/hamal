@@ -179,18 +179,16 @@ export const useAccountConvert = (): [AccountConvertAction, AccountConvertReques
 
 type AccountUpdateAction = (
     accountId: string,
-    email?: string,
-    password?: string,
+    email: string,
+    currentPassword: string,
+    newPassword: string,
     abortController?: AbortController
 ) => void
-export const useAccountUpdate = (): [AccountUpdateAction, AccountUpdateRequested, boolean, Error] => {
+export const useAccountChangePassword = (): [AccountUpdateAction, AccountUpdateRequested, boolean, Error] => {
     const [auth] = useAuth()
-    const [patch, submission, loading, error] = usePatch<FuncUpdateRequested>()
-    const fn = useCallback<AccountUpdateAction>(async (accountId, email?, password?, abortController?) =>
-        patch(`/v1/accounts/${accountId}`, {
-            email,
-            password
-        }, abortController), [auth]
+    const [patch, submission, loading, error] = usePatch<AccountUpdateRequested>()
+    const fn = useCallback<AccountUpdateAction>(async (accountId, email, currentPassword, newPassword, abortController?) =>
+        patch(`/v1/accounts/${accountId}`, {email, currentPassword, newPassword}, abortController), [auth]
     )
     return [fn, submission, loading, error]
 }
