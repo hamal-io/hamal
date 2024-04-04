@@ -27,19 +27,15 @@ class AccountUpdateAdapter(
     override fun invoke(accountId: AccountId, req: AccountUpdateRequest): AccountUpdateRequested {
         val salt = generateSalt()
         val account = accountGet(accountId)
-        val hash = req.password?.let {
-            encodePassword(
-                password = req.password!!,
-                salt = salt
-            )
-        }
         return AccountUpdateRequested(
             requestId = generateDomainId(::RequestId),
             requestedBy = SecurityContext.currentAuthId,
             requestStatus = RequestStatus.Submitted,
             id = account.id,
-            email = req.email,
-            hash = hash,
+            hash = encodePassword(
+                password = req.password,
+                salt = salt
+            ),
             salt = salt
         ).also(requestEnqueue::invoke)
     }

@@ -26,8 +26,7 @@ class AccountUpdateHandler(
         return accountRepository.update(
             req.id, UpdateCmd(
                 id = req.cmdId(),
-                email = req.email,
-                password = req.salt
+                salt = req.salt
             )
         )
     }

@@ -8,6 +8,7 @@ import io.hamal.repository.record.RecordSequence
 import io.hamal.repository.record.RecordedAt
 
 sealed class BlueprintRecord(
+
     @Transient
     override var recordSequence: RecordSequence? = null,
     @Transient

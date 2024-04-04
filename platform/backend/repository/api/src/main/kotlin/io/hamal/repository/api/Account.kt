@@ -42,8 +42,7 @@ interface AccountCmdRepository : CmdRepository {
 
     data class UpdateCmd(
         val id: CmdId,
-        val email: Email? = null,
-        val password: PasswordSalt? = null
+        val salt: PasswordSalt
     )
 }
 

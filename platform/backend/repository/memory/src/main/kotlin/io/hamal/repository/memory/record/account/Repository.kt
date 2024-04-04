@@ -55,7 +55,20 @@ class AccountMemoryRepository : RecordMemoryRepository<AccountId, AccountRecord,
     }
 
     override fun update(accountId: AccountId, cmd: UpdateCmd): Account {
-        TODO("Not yet implemented")
+        return lock.withLock {
+            if (commandAlreadyApplied(cmd.id, accountId)) {
+                versionOf(accountId, cmd.id)
+            } else {
+                store(
+                    AccountRecord.Updated(
+                        entityId = accountId,
+                        cmdId = cmd.id,
+                        salt = cmd.salt
+                    )
+                )
+                (currentVersion(accountId)).also(currentProjection::upsert)
+            }
+        }
     }
 
     override fun find(accountId: AccountId): Account? = lock.withLock { currentProjection.find(accountId) }

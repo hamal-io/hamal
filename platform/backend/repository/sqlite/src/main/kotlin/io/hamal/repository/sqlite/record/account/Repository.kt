@@ -89,7 +89,21 @@ class AccountSqliteRepository(
     }
 
     override fun update(accountId: AccountId, cmd: UpdateCmd): Account {
-        TODO("Not yet implemented")
+        return tx {
+            if (commandAlreadyApplied(cmd.id, accountId)) {
+                versionOf(accountId, cmd.id)
+            } else {
+                store(
+                    AccountRecord.Updated(
+                        cmdId = cmd.id,
+                        entityId = accountId,
+                        salt = cmd.salt
+                    )
+                )
+                currentVersion(accountId)
+                    .also { ProjectionCurrent.upsert(this, it) }
+            }
+        }
     }
 
     override fun find(accountId: AccountId): Account? {

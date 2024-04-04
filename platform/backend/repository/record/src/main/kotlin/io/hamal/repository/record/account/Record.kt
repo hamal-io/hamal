@@ -34,5 +34,11 @@ sealed class AccountRecord(
         override val entityId: AccountId,
         override val cmdId: CmdId,
     ) : AccountRecord()
+
+    data class Updated(
+        override val entityId: AccountId,
+        override val cmdId: CmdId,
+        val salt: PasswordSalt,
+    ) : AccountRecord()
 }
 

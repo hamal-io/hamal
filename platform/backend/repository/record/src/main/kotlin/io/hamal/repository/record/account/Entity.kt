@@ -37,6 +37,14 @@ data class AccountEntity(
                 type = AccountType.User,
                 recordedAt = rec.recordedAt()
             )
+
+            is AccountRecord.Updated -> copy(
+                id = rec.entityId,
+                cmdId = rec.cmdId,
+                sequence = rec.sequence(),
+                salt = rec.salt,
+                recordedAt = rec.recordedAt()
+            )
         }
     }
 
