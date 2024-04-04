@@ -8,7 +8,6 @@ type CommentProps = {
     position: Position;
     size: Size;
     text: string;
-    objectRef: RefObject<DOMRect | undefined>;
     onDragStart: () => void;
 }
 
@@ -51,7 +50,6 @@ export const Comment : FC<CommentProps> = ({
                 height,
                 zIndex: isEditing ? 999 : ""
             }}
-            // stageRect={stageRect}
             onDragStart={startDrag}
             onDrag={handleDrag}
             onDragEnd={handleDragEnd}

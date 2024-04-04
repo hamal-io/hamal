@@ -1,11 +1,9 @@
-import React, {FC, HTMLProps, MutableRefObject, RefObject} from "react";
-import { Position, CanvasState } from "./types";
+import React, {FC, HTMLProps, MutableRefObject, useContext} from "react";
+import {Position} from "./types";
+import {ContextCanvasRect, ContextCanvasState} from "@/components/nodes/context.ts";
 
 type DraggableProps = Omit<HTMLProps<HTMLDivElement>, "onDrag" | "onDragEnd"> & {
     id?: string;
-
-    canvasRect?: RefObject<DOMRect | undefined>;
-    canvasState: CanvasState;
 
     onDragDelayStart?: (event: React.MouseEvent | React.TouchEvent) => void;
     onDragStart?: (event: React.MouseEvent | React.TouchEvent) => void;
@@ -19,21 +17,22 @@ type DraggableProps = Omit<HTMLProps<HTMLDivElement>, "onDrag" | "onDragEnd"> & 
     innerRef?: MutableRefObject<HTMLDivElement | null>;
 };
 
-export const Draggable :FC<DraggableProps> = ({
-   children,
-   canvasState,
-   canvasRect,
-   onDragDelayStart,
-   onDragStart,
-   onDrag,
-   onDragEnd,
-   onMouseDown,
-   onTouchStart,
-   disabled,
-   delay = 6,
-   innerRef,
-   ...rest
-}) => {
+export const Draggable: FC<DraggableProps> = ({
+      children,
+      onDragDelayStart,
+      onDragStart,
+      onDrag,
+      onDragEnd,
+      onMouseDown,
+      onTouchStart,
+      disabled,
+      delay = 6,
+      innerRef,
+      ...rest
+  }) => {
+    const canvasState = useContext(ContextCanvasState)
+    const canvasRect = useContext(ContextCanvasRect)
+
     const startPosition = React.useRef<Position | null>(null);
     const offset = React.useRef<Position>();
     const wrapper = React.useRef<HTMLDivElement | null>(null);
@@ -54,7 +53,7 @@ export const Draggable :FC<DraggableProps> = ({
         ) + byScale(canvasState.position.y);
 
 
-        return { x, y };
+        return {x, y};
     };
 
     const updatePosition = (e: MouseEvent) => {
@@ -134,7 +133,7 @@ export const Draggable :FC<DraggableProps> = ({
             x = mouse.clientX;
             y = mouse.clientY;
         }
-        startPosition.current = { x, y };
+        startPosition.current = {x, y};
         document.addEventListener("mouseup", endDragDelay);
         document.addEventListener("mousemove", checkDragDelay);
     };

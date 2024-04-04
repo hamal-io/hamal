@@ -1,15 +1,15 @@
-import React, {FC, RefObject} from "react";
+import React, {FC, RefObject, useContext} from "react";
 import {NodeId, Position, Size} from './types.ts';
 import {Draggable} from './draggable.tsx';
 import styles from "@/components/nodes/node.module.css";
-import {ContextCanvas} from "@/components/nodes/context.ts";
+import {ContextCanvasState} from "@/components/nodes/context.ts";
 
 type NodeProps = {
     id: NodeId;
     position: Position;
     size: Size;
     type: string;
-    canvasRect: RefObject<DOMRect | undefined>;
+    // canvasRect: RefObject<DOMRect | undefined>;
     onDragStart: () => void;
 }
 
@@ -17,13 +17,10 @@ export const Node: FC<NodeProps> = ({
                                         type,
                                         position,
                                         size,
-                                        canvasRect
+                                        // canvasRect
                                     }) => {
 
-    const canvasState = React.useContext(ContextCanvas)
-
     const wrapper = React.useRef<HTMLDivElement>(null);
-
 
     const startDrag = (e: React.MouseEvent | React.TouchEvent) => {
         console.log("start drag",)
@@ -55,8 +52,6 @@ export const Node: FC<NodeProps> = ({
                 height,
                 zIndex: isEditing ? 999 : ""
             }}
-            canvasState={canvasState}
-            canvasRect={canvasRect}
             onDragStart={startDrag}
             onDrag={handleDrag}
             onDragEnd={handleDragEnd}
