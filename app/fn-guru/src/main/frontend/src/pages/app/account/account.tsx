@@ -17,19 +17,6 @@ const AccountPage = () => {
     const [auth] = useAuth()
     const [logout] = useLogout()
     const [open, setOpen] = useState(false)
-    const [dialogContent, setDialogContent] = useState(null)
-
-    function handleEmail(){
-        setDialogContent(
-            <EmailForm accountId={auth.accountId} onClose={() => setOpen(false)}/>)
-        setOpen(true)
-    }
-
-    function handlePassword() {
-        setDialogContent(
-            <PasswordForm accountId={auth.accountId} onClose={() => setOpen(false)}/>)
-        setOpen(true)
-    }
 
     return (
         <div className="h-full pt-4">
@@ -44,12 +31,11 @@ const AccountPage = () => {
             </div>
             <div className="bg-white container h-full py-6 items-center justify-center">
                 <div className="flex flex-col gap-4">
-                    <Button onClick={handleEmail} variant={"secondary"}>Change Email</Button>
-                    <Button onClick={handlePassword} variant={"secondary"}>Change Password</Button>
+                    <Button onClick={() => setOpen(true)} variant={"secondary"}>Change Password</Button>
                 </div>
             </div>
             <Dialog open={open} onOpenChange={setOpen}>
-                {dialogContent}
+                <PasswordForm accountId={auth.accountId} onClose={() => setOpen(false)}/>)
             </Dialog>
         </div>
     )
@@ -57,89 +43,30 @@ const AccountPage = () => {
 
 export default AccountPage
 
-type FormProps = { accountId: string, onClose: () => void }
-const EmailForm: FC<FormProps> = ({accountId, onClose}) => {
-    const [update, updateRequested, , error] = useAccountUpdate()
-    const [loading, setLoading] = useState(false)
-
-    const formSchema = z.object({
-            email: z.string().email("Please enter a valid email.")
-        }
-    )
-
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
-        defaultValues: {
-            email: "user@hamal.io",
-        }
-    })
-
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        setLoading(true)
-        try {
-            const abortController = new AbortController()
-            update(accountId, values.email, null, abortController)
-            return (() => abortController.abort())
-        } catch (e) {
-            console.log(e)
-        } finally {
-            setLoading(false)
-            onClose()
-        }
-    }
-
-    return (
-
-        <DialogContent>
-            <DialogHeader>
-                Change Email
-            </DialogHeader>
-            <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                    <FormField
-                        control={form.control}
-                        name="email"
-                        render={({field}) => (
-                            <FormItem>
-                                <FormLabel>Email</FormLabel>
-                                <FormControl>
-                                    <Input {...field} />
-                                </FormControl>
-                            </FormItem>
-                        )}
-                    />
-                    <Button type={"submit"}>
-                        {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
-                        Submit
-                    </Button>
-                </form>
-            </Form>
-        </DialogContent>
-
-    )
-}
-
+type FormProps = {accountId: string, onClose: () => void}
 const PasswordForm: FC<FormProps> = ({accountId, onClose}) => {
     const [update, updateRequested, , error] = useAccountUpdate()
     const [loading, setLoading] = useState(false)
 
     const formSchema = z.object({
-            password: z.string().min(8)
-        }
-    )
+        currentPassword: z.string().min(4, "Password must be at least 4 characters").max(20),
+        newPassword: z.string().min(4, "Password must be at least 4 characters").max(20),
+        confirmPassword: z.string(),
+    }).refine(data => data.newPassword === data.confirmPassword, {
+        message: "Passwords don't match",
+        path: ["confirmPassword"]
+    })
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
-        defaultValues: {
-            password: "password"
-        }
+
     })
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
+    function onSubmit(values: z.infer<typeof formSchema>, errors) {
         setLoading(true)
         try {
             const abortController = new AbortController()
-            update(accountId, null, values.password, abortController)
+            update(accountId, null, values.newPassword, abortController)
             return (() => abortController.abort())
         } catch (e) {
             console.log(e)
@@ -158,25 +85,42 @@ const PasswordForm: FC<FormProps> = ({accountId, onClose}) => {
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                     <FormField
                         control={form.control}
-                        name="password"
+                        name="currentPassword"
                         render={({field}) => (
                             <FormItem>
-                                <FormLabel>Password</FormLabel>
+                                <FormLabel>Current Password</FormLabel>
                                 <FormControl>
-                                    <Input {...field} />
+                                    <Input type={"password"}
+                                        {...field} />
                                 </FormControl>
                             </FormItem>
                         )}
                     />
                     <FormField
                         control={form.control}
-                        name="password"
+                        name="newPassword"
+                        render={({field}) => (
+                            <FormItem>
+                                <FormLabel>New Password</FormLabel>
+                                <FormControl>
+                                    <Input type={"password"} {...field} />
+                                </FormControl>
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="confirmPassword"
                         render={({field}) => (
                             <FormItem>
                                 <FormLabel>Confirm Password</FormLabel>
                                 <FormControl>
-                                    <Input {...field} />
+                                    <Input type={"password"} {...field} />
+                                    {form.getFieldState("confirmPassword").error &&
+                                        <span>{form.getFieldState("confirmPassword").error.message}</span>
+                                    }
                                 </FormControl>
+
                             </FormItem>
                         )}
                     />
@@ -189,5 +133,3 @@ const PasswordForm: FC<FormProps> = ({accountId, onClose}) => {
         </DialogContent>
     )
 }
-
-
