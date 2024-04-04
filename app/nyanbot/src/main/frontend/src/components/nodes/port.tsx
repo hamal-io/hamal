@@ -1,7 +1,8 @@
-import React, {FC} from "react";
+import React, {FC, useContext} from "react";
 import styles from "@/components/nodes/port.module.css";
 import {Connection} from "@/components/nodes/connection.tsx";
 import {Position} from "@/components/nodes/types.ts";
+import {ContextCanvasState} from "@/components/nodes/context.ts";
 
 type PortsProps = {
     type: string;
@@ -10,10 +11,10 @@ export const Ports: FC<PortsProps> = ({}) => {
     return (
         <div className={styles.wrapper} data-component="ports">
             <div className={styles.inputs} data-component="ports-inputs">
-                {/*<PortInput/>*/}
+                <PortInput/>
             </div>
             <div className={styles.outputs} data-component="ports-outputs">
-                {/*<PortOutput/>*/}
+                <PortOutput/>
             </div>
         </div>
     );
@@ -26,7 +27,7 @@ export const PortInput: FC<PortInputProps> = ({}) => {
     return (
         <div
             data-component="port-input"
-            className={styles.transput}
+            className={styles.hook}
             // data-controlless={isConnected || noControls || !controls.length}
             onDragStart={e => {
                 e.preventDefault();
@@ -76,7 +77,7 @@ export const PortOutput: FC<PortOutputProps> = ({}) => {
     return (
         <div
             data-component="port-output"
-            className={styles.transput}
+            className={styles.hook}
             data-controlless={true}
             onDragStart={e => {
                 e.preventDefault();
@@ -103,72 +104,113 @@ type PortProps = {
 }
 
 
-export const Port: FC<PortProps> = ({
-                                        isInput
-                                    }) => {
+export const Port: FC<PortProps> = ({isInput}) => {
     // const nodesDispatch = React.useContext(NodeDispatchContext);
     // const stageState = React.useContext(StageContext) || {
     //     scale: 1,
     //     translate: { x: 0, y: 0 }
     // };
 
-    const stageState = {
-        scale: 1,
-        translate: {x: 0, y: 0}
-    }
+    const canvasState = useContext(ContextCanvasState)
+
+    // const stageState = {
+    //     scale: 1,
+    //     translate: {x: 0, y: 0}
+    // }
 
     // const editorId = React.useContext(EditorIdContext);
     // const stageId = `${STAGE_ID}${editorId}`;
     // const inputTypes = React.useContext(PortTypesContext) || {};
     const [isDragging, setIsDragging] = React.useState<Boolean>(false);
-    const [dragStartPosition, setDragStartPosition] = React.useState<Position>({x: 0, y: 0});
+    const [startPosition, setStartPosition] = React.useState<Position>({x: 0, y: 0});
 
-    const dragStartCoordinatesCache = React.useRef(dragStartPosition);
+    // const startPosition = React.useRef(dragStartPosition);
     const port = React.useRef<HTMLDivElement>(null);
 
     const line = React.useRef<SVGPathElement>(null);
     const lineInToPort = React.useRef<HTMLDivElement | null>(null);
 
-    // const byScale = (value: number) => (1 / (stageState?.scale ?? 1)) * value;
-    const byScale = (value: number) => 1 * value;
+    const byScale = (value: number) => (1 / (canvasState.scale)) * value;
 
     const calculatePath = (from: Position, to: Position): string => {
         return `M ${from.x} ${from.y} L ${to.x} ${to.y}`
     }
 
+
     const handleDrag = (e: MouseEvent) => {
-        console.log('handleDrag')
-        const {x, y, width, height} = document.getElementById('does-not-exists') // FIXME
-            ?.getBoundingClientRect() ?? {x: 0, y: 0, width: 0, height: 0};
+        // const {x, y, width, height} = document
+        //     .getElementById(stageId)
+        //     ?.getBoundingClientRect() ?? {x: 0, y: 0, width: 0, height: 0};
 
-        if (isInput) {
-            const to = {
-                x:
-                    byScale(e.clientX - x - width / 2) + byScale(stageState?.translate?.x ?? 1),
-                y:
-                    byScale(e.clientY - y - height / 2) + byScale(stageState?.translate?.y ?? 1)
-            };
+        const {x,y} = canvasState.position;
+        const {width, height} = canvasState.size;
 
+        // if (isInput) {
+        //     const to = {
+        //         x: byScale(e.clientX - x - width / 2) + byScale(canvasState.translate.x),
+        //         y: byScale(e.clientY - y - height / 2) + byScale(canvasState.translate.y ?? 1)
+        //     };
+        //     lineInToPort.current?.setAttribute(
+        //         "d",
+        //         calculatePath(startPosition, to)
+        //     );
+        // } else {
+        const to = {
+            x: byScale(e.clientX - x - width / 2) + byScale(canvasState.translate.x),
+            y: byScale(e.clientY - y - height / 2) + byScale(canvasState.translate.y)
+        };
 
-            lineInToPort.current?.setAttribute(
-                "d",
-                // calculateCurve(dragStartCoordinatesCache.current, to)
-                calculatePath(dragStartCoordinatesCache.current, to)
-            );
-        } else {
-            const to = {
-                x:
-                    byScale(e.clientX - x - width / 2) + byScale(stageState?.translate?.x ?? 1),
-                y:
-                    byScale(e.clientY - y - height / 2) + byScale(stageState?.translate?.y ?? 1)
-            };
+        console.log(startPosition, to)
 
-            line.current?.setAttribute(
-                "d",
-                calculatePath(dragStartCoordinatesCache.current, to)
-            );
-        }
+        line.current?.setAttribute(
+            "d",
+            calculatePath(startPosition, to)
+        );
+        // }
     };
+
+    // const handleDrag = (e: MouseEvent) => {
+    //     console.log('handleDrag')
+    //     // const {x, y, width, height} = document.getElementById('does-not-exists') // FIXME
+    //     //     ?.getBoundingClientRect() ?? {x: 0, y: 0, width: 0, height: 0};
+    //
+    //     const {x, y} = canvasState.position;
+    //     const {width, height} = canvasState.size;
+    //
+    //     if (isInput) {
+    //         const to = {
+    //             x: byScale(e.clientX - x - width / 2) + byScale(canvasState?.position?.x ?? 1),
+    //             y: byScale(e.clientY - y - height / 2) + byScale(canvasState?.position?.y ?? 1)
+    //         };
+    //
+    //
+    //         lineInToPort.current?.setAttribute(
+    //             "d",
+    //             // calculateCurve(dragStartCoordinatesCache.current, to)
+    //             calculatePath(startPosition, to)
+    //         );
+    //     } else {
+    //         // const to = {
+    //         //     x:
+    //         //         byScale(e.clientX - x - width / 2) + byScale(canvasState?.position?.x ?? 1),
+    //         //     y:
+    //         //         byScale(e.clientY - y - height / 2) + byScale(canvasState?.position?.y ?? 1)
+    //         // };
+    //
+    //         const to = {
+    //             x: e.clientX,
+    //             y: e.clientY
+    //         }
+    //
+    //         console.log(startPosition, to)
+    //
+    //
+    //         line.current?.setAttribute(
+    //             "d",
+    //             calculatePath(startPosition, to)
+    //         );
+    //     }
+    // };
 
     const handleDragEnd = e => {
         const droppedOnPort = !!e.target.dataset.portName;
@@ -241,84 +283,68 @@ export const Port: FC<PortProps> = ({
     const handleDragStart = e => {
         e.preventDefault();
         e.stopPropagation();
-
-        console.log("port - drag start")
-
         const {
             x: startPortX = 0,
             y: startPortY = 0,
             width: startPortWidth = 0,
             height: startPortHeight = 0
         } = port.current?.getBoundingClientRect() || {};
-//FIXME
-        // const {
-        //     x: stageX = 0,
-        //     y: stageY = 0,
-        //     width: stageWidth = 0,
-        //     height: stageHeight = 0
-        // } = document.getElementById(stageId)?.getBoundingClientRect() || {};
 
-        const {
-            x: stageX = 0,
-            y: stageY = 0,
-            width: stageWidth = 0,
-            height: stageHeight = 0
-        } = {}
+        const stageX = canvasState.translate.x;
+        const stageY = canvasState.translate.y;
+        const stageWidth = canvasState.size.width;
+        const stageHeight = canvasState.size.height;
 
         if (isInput) {
             // lineInToPort.current = document.querySelector(
             //     `[data-input-node-id="${nodeId}"][data-input-port-name="${name}"]`
             // );
-            //FIXME
-            lineInToPort.current = document.querySelector(
-                `[data-input-node-id="1"][data-input-port-name="${name}"]`
-            );
-
-
-            const portIsConnected = !!lineInToPort.current;
-            if (
-                portIsConnected &&
-                lineInToPort.current &&
-                lineInToPort.current.parentElement
-            ) {
-                //FIXME
-                lineInToPort.current.parentElement.style.zIndex = "9999";
-                // const {
-                //     x: outputPortX = 0,
-                //     y: outputPortY = 0,
-                //     width: outputPortWidth = 0,
-                //     height: outputPortHeight = 0
-                // } =
-                // getPortRect(
-                //     lineInToPort.current.dataset.outputNodeId || "",
-                //     lineInToPort.current.dataset.outputPortName || "",
-                //     "output"
-                // ) || {};
-
-                const {
-                    x: outputPortX = 0,
-                    y: outputPortY = 0,
-                    width: outputPortWidth = 0,
-                    height: outputPortHeight = 0
-                } = {};
-
-                const coordinates = {
-                    x: byScale(outputPortX - stageX + outputPortWidth / 2 - stageWidth / 2) + byScale(stageState.translate.x),
-                    y: byScale(outputPortY - stageY + outputPortWidth / 2 - stageHeight / 2) + byScale(stageState.translate.y)
-                };
-                setDragStartPosition(coordinates);
-                dragStartCoordinatesCache.current = coordinates;
-                setIsDragging(true);
-                document.addEventListener("mouseup", handleDragEnd);
-                document.addEventListener("mousemove", handleDrag);
-            }
+            // const portIsConnected = !!lineInToPort.current;
+            // if (
+            //     portIsConnected &&
+            //     lineInToPort.current &&
+            //     lineInToPort.current.parentElement
+            // ) {
+            //     lineInToPort.current.parentElement.style.zIndex = "9999";
+            //     const {
+            //         x: outputPortX = 0,
+            //         y: outputPortY = 0,
+            //         width: outputPortWidth = 0,
+            //         height: outputPortHeight = 0
+            //     } =
+            //     getPortRect(
+            //         lineInToPort.current.dataset.outputNodeId || "",
+            //         lineInToPort.current.dataset.outputPortName || "",
+            //         "output"
+            //     ) || {};
+            //
+            //     const coordinates = {
+            //         x:
+            //             byScale(
+            //                 outputPortX - stageX + outputPortWidth / 2 - stageWidth / 2
+            //             ) + byScale(stageState.translate.x),
+            //         y:
+            //             byScale(
+            //                 outputPortY - stageY + outputPortWidth / 2 - stageHeight / 2
+            //             ) + byScale(stageState.translate.y)
+            //     };
+            //     setDragStartCoordinates(coordinates);
+            //     dragStartCoordinatesCache.current = coordinates;
+            //     setIsDragging(true);
+            //     document.addEventListener("mouseup", handleDragEnd);
+            //     document.addEventListener("mousemove", handleDrag);
+            // }
         } else {
             const coordinates = {
-                x: byScale(startPortX - stageX + startPortWidth / 2 - stageWidth / 2) + byScale(stageState.translate.x),
-                y: byScale(startPortY - stageY + startPortWidth / 2 - stageHeight / 2) + byScale(stageState.translate.y)
+                x:
+                    byScale(startPortX - stageX + startPortWidth / 2 - stageWidth / 2) +
+                    byScale(canvasState.translate.x),
+                y:
+                    byScale(startPortY - stageY + startPortWidth / 2 - stageHeight / 2) +
+                    byScale(canvasState.translate.y)
             };
-            setDragStartPosition(coordinates);
-            dragStartCoordinatesCache.current = coordinates;
+            setStartPosition(coordinates);
+            // dragStartCoordinatesCache.current = coordinates;
             setIsDragging(true);
             document.addEventListener("mouseup", handleDragEnd);
             document.addEventListener("mousemove", handleDrag);
@@ -327,31 +353,31 @@ export const Port: FC<PortProps> = ({
 
     return (
         <React.Fragment>
-            {/*<div*/}
-            {/*    style={{zIndex: 999}}*/}
-            {/*    onMouseDown={handleDragStart}*/}
-            {/*    className={styles.port}*/}
-            {/*    // data-port-color={color}*/}
-            {/*    // data-port-name={name}*/}
-            {/*    // data-port-type={type}*/}
-            {/*    data-port-transput-type={isInput ? "input" : "output"}*/}
-            {/*    // data-node-id={nodeId}*/}
-            {/*    data-component="port-handle"*/}
-            {/*    onDragStart={e => {*/}
-            {/*        e.preventDefault();*/}
-            {/*        e.stopPropagation();*/}
-            {/*    }}*/}
-            {/*    ref={port}*/}
-            {/*/>*/}
+            <div
+                style={{zIndex: 999}}
+                onMouseDown={handleDragStart}
+                className={styles.port}
+                // data-port-color={color}
+                // data-port-name={name}
+                // data-port-type={type}
+                data-port-type={isInput ? "input" : "output"}
+                // data-node-id={nodeId}
+                data-component="port-handle"
+                onDragStart={e => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }}
+                ref={port}
+            />
             {/*{isDragging && !isInput ? (*/}
             {/*    // <Portal*/}
             {/*    //     node={document.getElementById(`${DRAG_CONNECTION_ID}${editorId}`)}*/}
             {/*    // >*/}
-            {/*    <Connection*/}
-            {/*        from={dragStartPosition}*/}
-            {/*        to={dragStartPosition}*/}
-            {/*        lineRef={line}*/}
-            {/*    />*/}
+            <Connection
+                from={startPosition}
+                to={startPosition}
+                lineRef={line}
+            />
             {/*    // </Portal>*/}
             {/*) : null}*/}
         </React.Fragment>

@@ -43,8 +43,8 @@ export const Draggable: FC<DraggableProps> = ({
         const offsetY = offset.current?.y ?? 0;
 
         return {
-            x: byScale(e.clientX - (canvasState.rect.left) - offsetX - (canvasState.size.width) / 2) + byScale(canvasState.position.x),
-            y: byScale(e.clientY - (canvasState.rect.top) - offsetY - (canvasState.size.height) / 2) + byScale(canvasState.position.y)
+            x: byScale(e.clientX - (canvasState.rect.left) - offsetX - (canvasState.size.width) / 2) + byScale(canvasState.translate.x),
+            y: byScale(e.clientY - (canvasState.rect.top) - offsetY - (canvasState.size.height) / 2) + byScale(canvasState.translate.y)
         };
     };
 

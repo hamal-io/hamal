@@ -11,13 +11,13 @@ const DashboardSite = () => {
                 position={{x: 0, y: 80}} // offsets menu navbar
             >
 
-                <Comment
-                    id='3'
-                    text="Hello, I am your favourite commentt"
-                    position={{x: 100, y: 100}}
-                    size={{width: 250, height: 100}}
-                    onDragStart={() => console.log("start dragging")}
-                />
+                {/*<Comment*/}
+                {/*    id='3'*/}
+                {/*    text="Hello, I am your favourite commentt"*/}
+                {/*    position={{x: 100, y: 100}}*/}
+                {/*    size={{width: 250, height: 100}}*/}
+                {/*    onDragStart={() => console.log("start dragging")}*/}
+                {/*/>*/}
 
                 <Node
                     id='1'
@@ -27,13 +27,13 @@ const DashboardSite = () => {
                     onDragStart={() => console.log("start dragging")}
                 />
 
-                <Node
-                    id='2'
-                    type="test"
-                    position={{x: -400, y: -500}}
-                    size={{width: 250, height: 100}}
-                    onDragStart={() => console.log("start dragging")}
-                />
+                {/*<Node*/}
+                {/*    id='2'*/}
+                {/*    type="test"*/}
+                {/*    position={{x: -400, y: -500}}*/}
+                {/*    size={{width: 250, height: 100}}*/}
+                {/*    onDragStart={() => console.log("start dragging")}*/}
+                {/*/>*/}
 
             </Canvas>
 

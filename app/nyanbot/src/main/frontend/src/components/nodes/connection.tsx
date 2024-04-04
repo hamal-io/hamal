@@ -1,5 +1,5 @@
 import React, {FC} from "react";
-import styles from "@/components/nodes/node.module.css";
+import styles from "@/components/nodes/connection.module.css";
 import {Position} from "@/components/nodes/types.ts";
 
 type ConnectionProps = {
@@ -15,6 +15,7 @@ export const Connection: FC<ConnectionProps> = ({
 }) => {
     return (
         <svg className={styles.svg} data-component="connection-svg">
+
             <path
                 // data-connection-id={id}
                 // data-output-node-id={outputNodeId}
@@ -24,10 +25,10 @@ export const Connection: FC<ConnectionProps> = ({
                 data-component="connection-path"
                 stroke="rgb(185, 186, 189)"
                 // fill="none"
-                strokeWidth={30}
+                strokeWidth={3}
                 strokeLinecap="round"
                 // d={curve}
-                d={`M ${from.x} ${from.y} L ${to.x} ${to.y}`}
+                d={`M ${from.x},${from.y} L ${to.x},${to.y}`}
                 ref={lineRef}
             />
         </svg>

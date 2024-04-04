@@ -17,7 +17,7 @@
         margin-bottom: 0px;
     }
 
-    .transput {
+    .hook {
         &:first-child {
             .portLabel, .port {
                 margin-top: 5px;
@@ -40,7 +40,7 @@
     align-items: flex-end;
     width: 100%;
 
-    .transput {
+    .hook {
         &:last-child {
             .portLabel, .port {
                 margin-bottom: 5px;
@@ -53,7 +53,7 @@
     }
 }
 
-.transput {
+.hook {
     display: flex;
     align-items: center;
     margin-top: 6px;

@@ -1,19 +1,18 @@
 import React, {FC, useCallback, useEffect, useRef, useState} from "react";
 import {Draggable} from './draggable.tsx';
 import styles from './canvas.module.css'
-import {Position} from "@/components/nodes/types.ts";
 import {ContextCanvasState} from "@/components/nodes/context.ts";
 import {CanvasState} from "./types.ts";
 
 type CanvasProps = {
-    position: Position;
     children: React.ReactNode;
 }
 
-export const Canvas: FC<CanvasProps> = ({position, children}) => {
+export const Canvas: FC<CanvasProps> = ({ children}) => {
 
     const [canvasState, setCanvasState] = useState<CanvasState>({
         scale: 1,
+        translate: {x: 0, y: 0},
         position: {x: 0, y: 0},
         size: {width: 0, height: 0},
         rect: {
@@ -33,9 +32,8 @@ export const Canvas: FC<CanvasProps> = ({position, children}) => {
         if (wrapper.current) {
             const {x, y, left, right, top, bottom, width, height} = wrapper.current.getBoundingClientRect();
 
-
             setCanvasState({
-                scale: 1,
+                ...canvasState,
                 position: {x, y},
                 size: {width, height},
                 rect: {
@@ -52,7 +50,7 @@ export const Canvas: FC<CanvasProps> = ({position, children}) => {
         if (wrapper.current) {
             const {x, y, left, right, top, bottom, width, height} = wrapper.current.getBoundingClientRect();
             setCanvasState({
-                scale: 1,
+                ...canvasState,
                 position: {x, y},
                 size: {width, height},
                 rect: {
@@ -85,15 +83,14 @@ export const Canvas: FC<CanvasProps> = ({position, children}) => {
                 // onDrag={handleMouseDrag}
                 // onDragEnd={handleDragEnd}
                 // onKeyDown={handleKeyDown}
-                // tabIndex={-1}
-                // stageState={{ scale, translate }}
+                tabIndex={-1}
                 // style={{ cursor: "grab" }}
                 // disabled={disablePan || (spaceToPan && !spaceIsPressed)}
             >
                 <div
                     ref={translateWrapper}
                     className={styles.transformWrapper}
-                    style={{transform: `translate(${-position.x}px, ${-position.y}px)`}}
+                    // style={{transform: `translate(${canvasState.translate.x}px, ${canvasState.translate.y}px)`}}
                 >
                     <div
                         className={styles.scaleWrapper}

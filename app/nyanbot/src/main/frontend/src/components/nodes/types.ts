@@ -3,6 +3,7 @@ export type NodeId = string
 
 export type CanvasState = {
     scale: number;
+    translate: Translate;
     position: Position;
     size: Size;
     rect: {
@@ -12,6 +13,11 @@ export type CanvasState = {
         bottom: number;
     }
 }
+
+export type Translate = {
+    x: number;
+    y: number;
+};
 
 export type Position = {
     x: number;

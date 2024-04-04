@@ -3,6 +3,7 @@ import {NodeId, Position, Size} from './types.ts';
 import {Draggable} from './draggable.tsx';
 import styles from "@/components/nodes/node.module.css";
 import {ContextCanvasState} from "@/components/nodes/context.ts";
+import {Ports} from "@/components/nodes/port.tsx";
 
 type NodeProps = {
     id: NodeId;
@@ -14,11 +15,11 @@ type NodeProps = {
 }
 
 export const Node: FC<NodeProps> = ({
-                                        type,
-                                        position,
-                                        size,
-                                        // canvasRect
-                                    }) => {
+    type,
+    position,
+    size,
+    // canvasRect
+}) => {
 
     const wrapper = React.useRef<HTMLDivElement>(null);
 
@@ -62,9 +63,9 @@ export const Node: FC<NodeProps> = ({
             data-component="node"
 
         >
-            {/*<Ports*/}
-            {/*    type='test'*/}
-            {/*/>*/}
+            <Ports
+                type='test'
+            />
 
             {/*<Draggable*/}
             {/*    // className={styles.resizeThumb}*/}
