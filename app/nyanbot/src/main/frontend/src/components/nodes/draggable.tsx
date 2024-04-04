@@ -1,23 +1,28 @@
-import React, {HTMLProps, MutableRefObject, RefObject} from "react";
-import {Position} from "./types";
+import React, {FC, HTMLProps, MutableRefObject, RefObject} from "react";
+import { Position, CanvasState } from "./types";
 
 type DraggableProps = Omit<HTMLProps<HTMLDivElement>, "onDrag" | "onDragEnd"> & {
-    objectRef?: RefObject<DOMRect | undefined>;
+    id?: string;
+
+    canvasRect?: RefObject<DOMRect | undefined>;
+    canvasState: CanvasState;
+
     onDragDelayStart?: (event: React.MouseEvent | React.TouchEvent) => void;
     onDragStart?: (event: React.MouseEvent | React.TouchEvent) => void;
     onDrag?: (position: Position, event: MouseEvent) => void;
     onDragEnd?: (event: MouseEvent, position: Position) => void;
     onMouseDown?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
     onTouchStart?: (event: React.TouchEvent<HTMLDivElement>) => void;
+
     disabled?: boolean;
     delay?: number;
     innerRef?: MutableRefObject<HTMLDivElement | null>;
-    id?: string;
 };
 
-export const Draggable = ({
+export const Draggable :FC<DraggableProps> = ({
    children,
-   objectRef,
+   canvasState,
+   canvasRect,
    onDragDelayStart,
    onDragStart,
    onDrag,
@@ -28,36 +33,44 @@ export const Draggable = ({
    delay = 6,
    innerRef,
    ...rest
-}: DraggableProps) => {
-
+}) => {
     const startPosition = React.useRef<Position | null>(null);
     const offset = React.useRef<Position>();
     const wrapper = React.useRef<HTMLDivElement | null>(null);
 
-    const scaledPosition = (e: MouseEvent): Position => {
+    const byScale = (value: number) => (1 / canvasState.scale) * value;
+
+    const getScaledPosition = (e: MouseEvent): Position => {
         const offsetX = offset.current?.x ?? 0;
         const offsetY = offset.current?.y ?? 0;
 
-        const x = e.clientX - (objectRef ? objectRef.current?.left ?? 0 : 0) - offsetX - (objectRef ? objectRef.current?.width ?? 0 : 0) / 2;
-        const y = e.clientY - (objectRef ? objectRef.current?.top ?? 0 : 0) - offsetY - (objectRef ? objectRef.current?.height ?? 0 : 0) / 2
+        const x =
+            byScale(
+                e.clientX - (canvasRect ? canvasRect.current?.left ?? 0 : 0) - offsetX - (canvasRect ? canvasRect.current?.width ?? 0 : 0) / 2
+            ) + byScale(canvasState.position.x);
 
-        return {x, y};
+        const y = byScale(
+            e.clientY - (canvasRect ? canvasRect.current?.top ?? 0 : 0) - offsetY - (canvasRect ? canvasRect.current?.height ?? 0 : 0) / 2
+        ) + byScale(canvasState.position.y);
+
+
+        return { x, y };
     };
 
-    const updateposition = (e: MouseEvent) => {
-        const position = scaledPosition(e);
+    const updatePosition = (e: MouseEvent) => {
+        const position = getScaledPosition(e);
         if (onDrag) {
             onDrag(position, e);
         }
     };
 
     const stopDrag = (e: MouseEvent) => {
-        const position = scaledPosition(e);
+        const position = getScaledPosition(e);
         if (onDragEnd) {
             onDragEnd(e, position);
         }
         window.removeEventListener("mouseup", stopDrag);
-        window.removeEventListener("mousemove", updateposition);
+        window.removeEventListener("mousemove", updatePosition);
     };
 
     const startDrag = e => {
@@ -71,7 +84,7 @@ export const Draggable = ({
                 y: startPosition.current.y - nodeRect.top
             };
             window.addEventListener("mouseup", stopDrag);
-            window.addEventListener("mousemove", updateposition);
+            window.addEventListener("mousemove", updatePosition);
         }
     };
 
@@ -121,7 +134,7 @@ export const Draggable = ({
             x = mouse.clientX;
             y = mouse.clientY;
         }
-        startPosition.current = {x, y};
+        startPosition.current = { x, y };
         document.addEventListener("mouseup", endDragDelay);
         document.addEventListener("mousemove", checkDragDelay);
     };

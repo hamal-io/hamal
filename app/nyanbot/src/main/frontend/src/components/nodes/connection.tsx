@@ -13,7 +13,6 @@ export const Connection: FC<ConnectionProps> = ({
     to,
     lineRef
 }) => {
-    console.log(from, to)
     return (
         <svg className={styles.svg} data-component="connection-svg">
             <path

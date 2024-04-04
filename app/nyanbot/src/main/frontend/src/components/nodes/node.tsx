@@ -1,41 +1,42 @@
-import React, {FC, RefObject, useState} from "react";
+import React, {FC, RefObject} from "react";
 import {NodeId, Position, Size} from './types.ts';
-import {Ports} from './port.tsx'
 import {Draggable} from './draggable.tsx';
 import styles from "@/components/nodes/node.module.css";
+import {ContextCanvas} from "@/components/nodes/context.ts";
 
 type NodeProps = {
     id: NodeId;
     position: Position;
     size: Size;
     type: string;
-    objectRef: RefObject<DOMRect | undefined>;
+    canvasRect: RefObject<DOMRect | undefined>;
     onDragStart: () => void;
 }
 
-export const Node : FC<NodeProps> = ({
-   type,
-   position,
-   size
-}) => {
+export const Node: FC<NodeProps> = ({
+                                        type,
+                                        position,
+                                        size,
+                                        canvasRect
+                                    }) => {
+
+    const canvasState = React.useContext(ContextCanvas)
 
     const wrapper = React.useRef<HTMLDivElement>(null);
-    const textarea = React.useRef<HTMLTextAreaElement>(null);
 
 
     const startDrag = (e: React.MouseEvent | React.TouchEvent) => {
-        console.log("start drag")
+        console.log("start drag",)
         // onDragStart();
     };
 
-    const handleDrag = ({ x, y }: Position) => {
-        console.log("handle drag")
+    const handleDrag = ({x, y}: Position) => {
         if (wrapper.current) {
             wrapper.current.style.transform = `translate(${x}px,${y}px)`;
         }
     };
 
-    const handleDragEnd = (e: MouseEvent, { x, y }) => {
+    const handleDragEnd = (e: MouseEvent, {x, y}) => {
         // dispatch({type: CommentActionTypes.SET_COMMENT_COORDINATES, id, x, y});
     };
 
@@ -43,6 +44,7 @@ export const Node : FC<NodeProps> = ({
     const width = size.width;
     const height = size.height;
 
+    // FIXME
     return (
         <Draggable
             innerRef={wrapper}
@@ -53,8 +55,8 @@ export const Node : FC<NodeProps> = ({
                 height,
                 zIndex: isEditing ? 999 : ""
             }}
-            // stageState={stageState}
-            // stageRect={stageRect}
+            canvasState={canvasState}
+            canvasRect={canvasRect}
             onDragStart={startDrag}
             onDrag={handleDrag}
             onDragEnd={handleDragEnd}
@@ -62,20 +64,21 @@ export const Node : FC<NodeProps> = ({
             // onDoubleClick={startTextEdit}
             // onWheel={e => e.stopPropagation()}
             data-color={"green"}
-            data-component="comment"
-        >
-            <Ports
-                type='test'
-            />
+            data-component="node"
 
-            <Draggable
-                // className={styles.resizeThumb}
-                // stageState={stageState}
-                // stageRect={stageRect}
-                // onDrag={handleResize}
-                // onDragEnd={handleResizeEnd}
-                data-component="comment-resize-handle"
-            />
+        >
+            {/*<Ports*/}
+            {/*    type='test'*/}
+            {/*/>*/}
+
+            {/*<Draggable*/}
+            {/*    // className={styles.resizeThumb}*/}
+            {/*    // stageState={stageState}*/}
+            {/*    // stageRect={stageRect}*/}
+            {/*    // onDrag={handleResize}*/}
+            {/*    // onDragEnd={handleResizeEnd}*/}
+            {/*    data-component="node-resize-handle"*/}
+            {/*/>*/}
         </Draggable>
     )
 }

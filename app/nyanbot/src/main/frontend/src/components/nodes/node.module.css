@@ -1,18 +1,15 @@
 .wrapper {
+    background: rgba(114, 120, 124, 0.9);
+    border-radius: 5px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);
     position: absolute;
     left: 0px;
     top: 0px;
-    padding: 5px;
-    background: rgba(147, 154, 158, 0.7);
-    border-radius: 5px;
-    border-bottom-right-radius: 2px;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
-    min-width: 80px;
-    font-size: 14px;
-    display: flex;
-    text-shadow: 0px 1px rgba(255,255,255,.1);
-    border: 1px solid rgba(168, 176, 181, 0.7);
     user-select: none;
+    display: flex;
+    flex-direction: column;
+    z-index: 1;
+    cursor: default;
     &[data-color="red"]{
         background: rgba(213, 84, 103, 0.65);
         border-color: rgba(227, 85, 119, 0.65);

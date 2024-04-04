@@ -28,7 +28,6 @@ export const Comment : FC<CommentProps> = ({
     };
 
     const handleDrag = ({ x, y }: Position) => {
-        console.log("handle drag")
         if (wrapper.current) {
             wrapper.current.style.transform = `translate(${x}px,${y}px)`;
         }
@@ -52,7 +51,6 @@ export const Comment : FC<CommentProps> = ({
                 height,
                 zIndex: isEditing ? 999 : ""
             }}
-            // stageState={stageState}
             // stageRect={stageRect}
             onDragStart={startDrag}
             onDrag={handleDrag}

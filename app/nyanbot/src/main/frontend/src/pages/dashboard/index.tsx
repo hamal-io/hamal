@@ -16,19 +16,14 @@ const DashboardSite = () => {
                 position={{x: 0, y: 0}}
             >
 
-                <Node
-                    id='1'
-                    type="test"
-                    position={{x: -400, y: 500}}
-                    size={{width: 250, height: 100}}
-                />
 
-                <Node
-                    id='2'
-                    type="test"
-                    position={{x: -400, y: -500}}
-                    size={{width: 250, height: 100}}
-                />
+
+                {/*<Node*/}
+                {/*    id='2'*/}
+                {/*    type="test"*/}
+                {/*    position={{x: -400, y: -500}}*/}
+                {/*    size={{width: 250, height: 100}}*/}
+                {/*/>*/}
 
             </Canvas>
 

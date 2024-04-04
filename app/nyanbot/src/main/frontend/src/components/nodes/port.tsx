@@ -10,10 +10,10 @@ export const Ports: FC<PortsProps> = ({}) => {
     return (
         <div className={styles.wrapper} data-component="ports">
             <div className={styles.inputs} data-component="ports-inputs">
-                <PortInput/>
+                {/*<PortInput/>*/}
             </div>
             <div className={styles.outputs} data-component="ports-outputs">
-                <PortOutput/>
+                {/*<PortOutput/>*/}
             </div>
         </div>
     );
@@ -162,8 +162,6 @@ export const Port: FC<PortProps> = ({
                 y:
                     byScale(e.clientY - y - height / 2) + byScale(stageState?.translate?.y ?? 1)
             };
-
-            console.log(line.current)
 
             line.current?.setAttribute(
                 "d",
@@ -329,33 +327,33 @@ export const Port: FC<PortProps> = ({
 
     return (
         <React.Fragment>
-            <div
-                style={{zIndex: 999}}
-                onMouseDown={handleDragStart}
-                className={styles.port}
-                // data-port-color={color}
-                // data-port-name={name}
-                // data-port-type={type}
-                data-port-transput-type={isInput ? "input" : "output"}
-                // data-node-id={nodeId}
-                data-component="port-handle"
-                onDragStart={e => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                }}
-                ref={port}
-            />
-            {isDragging && !isInput ? (
-                // <Portal
-                //     node={document.getElementById(`${DRAG_CONNECTION_ID}${editorId}`)}
-                // >
-                <Connection
-                    from={dragStartPosition}
-                    to={dragStartPosition}
-                    lineRef={line}
-                />
-                // </Portal>
-            ) : null}
+            {/*<div*/}
+            {/*    style={{zIndex: 999}}*/}
+            {/*    onMouseDown={handleDragStart}*/}
+            {/*    className={styles.port}*/}
+            {/*    // data-port-color={color}*/}
+            {/*    // data-port-name={name}*/}
+            {/*    // data-port-type={type}*/}
+            {/*    data-port-transput-type={isInput ? "input" : "output"}*/}
+            {/*    // data-node-id={nodeId}*/}
+            {/*    data-component="port-handle"*/}
+            {/*    onDragStart={e => {*/}
+            {/*        e.preventDefault();*/}
+            {/*        e.stopPropagation();*/}
+            {/*    }}*/}
+            {/*    ref={port}*/}
+            {/*/>*/}
+            {/*{isDragging && !isInput ? (*/}
+            {/*    // <Portal*/}
+            {/*    //     node={document.getElementById(`${DRAG_CONNECTION_ID}${editorId}`)}*/}
+            {/*    // >*/}
+            {/*    <Connection*/}
+            {/*        from={dragStartPosition}*/}
+            {/*        to={dragStartPosition}*/}
+            {/*        lineRef={line}*/}
+            {/*    />*/}
+            {/*    // </Portal>*/}
+            {/*) : null}*/}
         </React.Fragment>
     );
 }

@@ -1,7 +1,8 @@
-import React, {FC} from "react";
+import React, {FC, useCallback, useEffect, useRef} from "react";
 import {Draggable} from './draggable.tsx';
 import styles from './canvas.module.css'
 import {Position} from "@/components/nodes/types.ts";
+import {Node} from "@/components/nodes/node.tsx";
 
 type CanvasProps = {
     position: Position;
@@ -13,15 +14,36 @@ export const Canvas: FC<CanvasProps> = ({
     children
 }) => {
     const scale = 1;
-    const translateWrapper = React.useRef<HTMLDivElement>(null);
+
+    const wrapper = useRef<HTMLDivElement>(null);
+    const translateWrapper = useRef<HTMLDivElement>(null);
+
+    const canvasRect = useRef<DOMRect>();
+    const setCanvasRect = useCallback(() => {
+        if (wrapper.current) {
+            canvasRect.current = wrapper.current.getBoundingClientRect();
+        }
+    }, []);
+
+    useEffect(() => {
+        if (wrapper.current) {
+            canvasRect.current = wrapper.current.getBoundingClientRect();
+        }
+
+        window.addEventListener("resize", setCanvasRect);
+        return () => {
+            window.removeEventListener("resize", setCanvasRect);
+        };
+    }, [canvasRect, setCanvasRect]);
+
 
     return (
 
         <Draggable
+            id="CANVAS_1"
             data-component="canvas"
-            // id={`${STAGE_ID}${editorId}`}
             className={styles.wrapper}
-            // innerRef={wrapper}
+            innerRef={wrapper}
             // onContextMenu={handleContextMenu}
             // onMouseEnter={handleMouseEnter}
             // onDragDelayStart={handleDragDelayStart}
@@ -33,7 +55,7 @@ export const Canvas: FC<CanvasProps> = ({
             // stageState={{ scale, translate }}
             // style={{ cursor: "grab" }}
             // disabled={disablePan || (spaceToPan && !spaceIsPressed)}
-            // data-flume-stage={true}
+            canvasState={{position, scale}}
         >
             <div
                 ref={translateWrapper}
@@ -44,6 +66,14 @@ export const Canvas: FC<CanvasProps> = ({
                     className={styles.scaleWrapper}
                     style={{transform: `scale(${scale})`}}
                 >
+                    <Node
+                        id='1'
+                        type="test"
+                        position={{x: 0, y: 0}}
+                        size={{width: 250, height: 100}}
+                        canvasRect={canvasRect}
+                        onDragStart={() => console.log("start dragging")}
+                    />
                     {children}
                 </div>
             </div>
