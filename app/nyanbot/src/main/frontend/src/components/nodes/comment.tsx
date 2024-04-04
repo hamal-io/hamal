@@ -61,10 +61,10 @@ export const Comment : FC<CommentProps> = ({
             // onDoubleClick={startTextEdit}
             // onWheel={e => e.stopPropagation()}
             data-color={"red"}
-            data-nodes-component="comment"
+            data-component="comment"
         >
                     <textarea
-                        data-nodes-component="comment-textarea"
+                        data-component="comment-textarea"
                         // className={styles.textarea}
                         // onChange={handleTextChange}
                         onMouseDown={e => e.stopPropagation()}
@@ -81,7 +81,7 @@ export const Comment : FC<CommentProps> = ({
                 // stageRect={stageRect}
                 // onDrag={handleResize}
                 // onDragEnd={handleResizeEnd}
-                data-nodes-component="comment-resize-handle"
+                data-component="comment-resize-handle"
             />
         </Draggable>
     )

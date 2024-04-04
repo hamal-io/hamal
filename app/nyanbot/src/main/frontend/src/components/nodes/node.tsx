@@ -62,7 +62,7 @@ export const Node : FC<NodeProps> = ({
             // onDoubleClick={startTextEdit}
             // onWheel={e => e.stopPropagation()}
             data-color={"green"}
-            data-nodes-component="comment"
+            data-component="comment"
         >
             <Ports
                 type='test'
@@ -74,7 +74,7 @@ export const Node : FC<NodeProps> = ({
                 // stageRect={stageRect}
                 // onDrag={handleResize}
                 // onDragEnd={handleResizeEnd}
-                data-nodes-component="comment-resize-handle"
+                data-component="comment-resize-handle"
             />
         </Draggable>
     )
