@@ -8,6 +8,7 @@ import io.hamal.lib.domain.vo.AccountType.Root
 import io.hamal.lib.domain.vo.AccountType.User
 import io.hamal.lib.domain.vo.PasswordSalt
 import io.hamal.repository.api.AccountCmdRepository.CreateCmd
+import io.hamal.repository.api.AccountCmdRepository.UpdateCmd
 import io.hamal.repository.api.AccountQueryRepository.AccountQuery
 import io.hamal.repository.api.AccountRepository
 import io.hamal.repository.fixture.AbstractUnitTest
@@ -57,6 +58,36 @@ internal class AccountRepositoryTest : AbstractUnitTest() {
                 assertThat(id, equalTo(AccountId(123)))
                 assertThat(type, equalTo(Root))
                 assertThat(salt, equalTo(PasswordSalt("SALT")))
+            }
+
+            verifyCount(1)
+        }
+    }
+
+    @Nested
+    inner class UpdateTest {
+        @TestFactory
+        fun `Updates salt`() = runWith(AccountRepository::class) {
+            val account = create(
+                CreateCmd(
+                    id = CmdId(1),
+                    accountId = AccountId(123),
+                    accountType = Root,
+                    salt = PasswordSalt("BEFORE")
+                )
+            )
+
+            val update = update(
+                account.id, UpdateCmd(
+                    id = CmdId(2),
+                    salt = PasswordSalt(value = "AFTER")
+                )
+            )
+
+            with(update) {
+                assertThat(id, equalTo(AccountId(123)))
+                assertThat(type, equalTo(Root))
+                assertThat(salt, equalTo(PasswordSalt("AFTER")))
             }
 
             verifyCount(1)

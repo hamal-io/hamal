@@ -4,22 +4,36 @@ import io.hamal.core.component.GenerateToken
 import io.hamal.core.request.handler.BaseRequestHandlerTest
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.AccountCreateRequested
+import io.hamal.lib.domain.request.AccountPasswordChangeRequested
 import io.hamal.lib.domain.vo.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
-internal class CreateHandlerTest : BaseRequestHandlerTest() {
+internal class PasswordChangeHandlerTest : BaseRequestHandlerTest() {
 
     @Test
-    fun `Creates Email Account`() {
-        testInstance(submitCreateEmailAccountReq)
+    fun `Updates Salt`() {
+        createInstance(submitCreateEmailAccountReq)
+        updateInstance(submitUpdateAccountReq)
 
         with(accountQueryRepository.get(AccountId(123))) {
             assertThat(type, equalTo(AccountType.User))
-            assertThat(salt, equalTo(PasswordSalt("salt")))
+            assertThat(salt, equalTo(PasswordSalt("changed-salt")))
         }
+    }
+
+    private val submitUpdateAccountReq by lazy {
+        AccountPasswordChangeRequested(
+            requestId = RequestId(2),
+            requestedBy = AuthId(3),
+            requestStatus = RequestStatus.Submitted,
+            id = AccountId(123),
+            hash = PasswordHash("changed-secret"),
+            salt = PasswordSalt(value = "changed-salt"),
+            email = Email(value = "test@hamal.io")
+        )
     }
 
 
@@ -42,8 +56,13 @@ internal class CreateHandlerTest : BaseRequestHandlerTest() {
     }
 
     @Autowired
-    private lateinit var testInstance: AccountCreateEmailHandler
+    private lateinit var createInstance: AccountCreateEmailHandler
+
+    @Autowired
+    private lateinit var updateInstance: AccountUpdateHandler
 
     @Autowired
     private lateinit var generateToken: GenerateToken
+
+
 }

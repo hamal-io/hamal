@@ -3,7 +3,7 @@ package io.hamal.lib.sdk.api
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.AccountConvertAnonymousRequest
 import io.hamal.lib.domain.request.AccountCreateRequest
-import io.hamal.lib.domain.request.AccountUpdateRequest
+import io.hamal.lib.domain.request.AccountPasswordChangeRequest
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.Email
 import io.hamal.lib.domain.vo.Password
@@ -38,7 +38,7 @@ data class ApiAccount(
 data class ApiChangePasswordRequest(
     override val currentPassword: Password,
     override val newPassword: Password
-) : AccountUpdateRequest
+) : AccountPasswordChangeRequest
 
 
 data class ApiAccountUpdateRequested(

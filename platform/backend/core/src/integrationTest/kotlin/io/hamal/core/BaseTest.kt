@@ -39,7 +39,13 @@ internal abstract class BaseTest {
     lateinit var accountCmdRepository: AccountCmdRepository
 
     @Autowired
+    lateinit var accountQueryRepository: AccountQueryRepository
+
+    @Autowired
     lateinit var authCmdRepository: AuthCmdRepository
+
+    @Autowired
+    lateinit var authQueryRepository: AuthQueryRepository
 
     @Autowired
     lateinit var codeCmdRepository: CodeCmdRepository

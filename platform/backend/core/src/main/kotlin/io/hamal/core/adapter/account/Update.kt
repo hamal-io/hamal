@@ -7,8 +7,8 @@ import io.hamal.core.component.GenerateSalt
 import io.hamal.core.security.SecurityContext
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.RequestStatus
-import io.hamal.lib.domain.request.AccountUpdateRequest
-import io.hamal.lib.domain.request.AccountUpdateRequested
+import io.hamal.lib.domain.request.AccountPasswordChangeRequest
+import io.hamal.lib.domain.request.AccountPasswordChangeRequested
 import io.hamal.lib.domain.vo.Email
 import io.hamal.lib.domain.vo.RequestId
 import io.hamal.repository.api.AccountQueryRepository
@@ -17,7 +17,7 @@ import io.hamal.repository.api.AuthRepository
 import org.springframework.stereotype.Component
 
 fun interface PasswordChangePort {
-    operator fun invoke(req: AccountUpdateRequest): AccountUpdateRequested
+    operator fun invoke(req: AccountPasswordChangeRequest): AccountPasswordChangeRequested
 }
 
 @Component
@@ -30,7 +30,7 @@ class PasswordChangeAdapter(
     private val authRepository: AuthRepository,
     private val listAuth: AuthListPort
 ) : PasswordChangePort {
-    override fun invoke(req: AccountUpdateRequest): AccountUpdateRequested {
+    override fun invoke(req: AccountPasswordChangeRequest): AccountPasswordChangeRequested {
         val account = accountQueryRepository.find(SecurityContext.currentAccountId)
             ?: throw NoSuchElementException("Account not found")
 
@@ -43,7 +43,7 @@ class PasswordChangeAdapter(
         }
 
         val salt = generateSalt()
-        return AccountUpdateRequested(
+        return AccountPasswordChangeRequested(
             requestId = generateDomainId(::RequestId),
             requestedBy = SecurityContext.currentAuthId,
             requestStatus = RequestStatus.Submitted,

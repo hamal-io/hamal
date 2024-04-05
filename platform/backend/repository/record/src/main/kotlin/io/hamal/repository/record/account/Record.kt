@@ -19,7 +19,8 @@ sealed class AccountRecord(
     internal object Adapter : RecordAdapter<AccountRecord>(
         listOf(
             Created::class,
-            Converted::class
+            Converted::class,
+            Updated::class
         )
     )
 

@@ -4,9 +4,9 @@ import io.hamal.core.event.InternalEventEmitter
 import io.hamal.core.request.RequestHandler
 import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.request.AccountUpdateRequested
+import io.hamal.lib.domain.request.AccountPasswordChangeRequested
 import io.hamal.repository.api.*
-import io.hamal.repository.api.AccountCmdRepository.PasswordChangeCmd
+import io.hamal.repository.api.AccountCmdRepository.UpdateCmd
 import io.hamal.repository.api.event.AccountUpdatedEvent
 import org.springframework.stereotype.Component
 
@@ -15,17 +15,17 @@ class AccountUpdateHandler(
     private val accountRepository: AccountRepository,
     private val authRepository: AuthRepository,
     private val eventEmitter: InternalEventEmitter
-) : RequestHandler<AccountUpdateRequested>(AccountUpdateRequested::class) {
+) : RequestHandler<AccountPasswordChangeRequested>(AccountPasswordChangeRequested::class) {
 
-    override fun invoke(req: AccountUpdateRequested) {
+    override fun invoke(req: AccountPasswordChangeRequested) {
         updateAccount(req)
             .also { createEmailAuth(req) }
             .also { emitEvent(req.cmdId(), it) }
     }
 
-    private fun updateAccount(req: AccountUpdateRequested): Account {
-        return accountRepository.changePassword(
-            req.id, PasswordChangeCmd(
+    private fun updateAccount(req: AccountPasswordChangeRequested): Account {
+        return accountRepository.update(
+            req.id, UpdateCmd(
                 id = req.cmdId(),
                 salt = req.salt
             )
@@ -36,7 +36,7 @@ class AccountUpdateHandler(
         }
     }
 
-    private fun createEmailAuth(req: AccountUpdateRequested): Auth {
+    private fun createEmailAuth(req: AccountPasswordChangeRequested): Auth {
         return authRepository.create(
             AuthCmdRepository.CreateEmailAuthCmd(
                 id = req.cmdId(),

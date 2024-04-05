@@ -88,7 +88,7 @@ class AccountSqliteRepository(
         }
     }
 
-    override fun changePassword(accountId: AccountId, cmd: PasswordChangeCmd): Account {
+    override fun update(accountId: AccountId, cmd: UpdateCmd): Account {
         return tx {
             if (commandAlreadyApplied(cmd.id, accountId)) {
                 versionOf(accountId, cmd.id)

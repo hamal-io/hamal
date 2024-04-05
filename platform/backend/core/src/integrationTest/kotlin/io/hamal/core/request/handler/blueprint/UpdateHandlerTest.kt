@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
 
-internal class BlueprintUpdateHandlerTest : BaseRequestHandlerTest() {
+internal class BlueprintAccountChangePasswordHandlerTest : BaseRequestHandlerTest() {
 
     @Test
     fun `Updates blueprint`() {

@@ -54,7 +54,7 @@ class AccountMemoryRepository : RecordMemoryRepository<AccountId, AccountRecord,
         }
     }
 
-    override fun changePassword(accountId: AccountId, cmd: PasswordChangeCmd): Account {
+    override fun update(accountId: AccountId, cmd: UpdateCmd): Account {
         return lock.withLock {
             if (commandAlreadyApplied(cmd.id, accountId)) {
                 versionOf(accountId, cmd.id)
