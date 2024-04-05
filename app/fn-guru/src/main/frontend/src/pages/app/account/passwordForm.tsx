@@ -1,4 +1,4 @@
-import {useAccountChangePassword} from "@/hook";
+import {useAccountPasswordChange} from "@/hook";
 import React, {FC, useEffect, useState} from "react";
 import {z} from "zod";
 import {useForm} from "react-hook-form";
@@ -14,7 +14,7 @@ type Props = {
     onClose: () => void
 }
 const PasswordForm: FC<Props> = ({onClose}) => {
-    const [update, updateRequested, requestLoading, requestError] = useAccountChangePassword()
+    const [update, updateRequested, requestLoading, requestError] = useAccountPasswordChange()
     const [loading, setLoading] = useState(false)
 
     const passWordSchema = z.object({
@@ -53,7 +53,8 @@ const PasswordForm: FC<Props> = ({onClose}) => {
     useEffect(() => {
         if (updateRequested) {
             setLoading(false)
-            if (updateRequested.message != undefined) {
+            if ("message" in updateRequested) {
+                // @ts-ignore
                 form.setError("currentPassword", updateRequested.message)
             } else {
                 onClose()

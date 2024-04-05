@@ -15,7 +15,7 @@ internal class AccountUpdateController(
     private val retry: Retry,
     private val updatePassword: AccountPasswordChangePort
 ) {
-    @PatchMapping("/v1/accounts/password")
+    @PatchMapping("/v1/accounts")
     fun changePassword(
         @RequestBody req: ApiAccountPasswordChangeRequest
     ): ResponseEntity<ApiRequested> = retry {

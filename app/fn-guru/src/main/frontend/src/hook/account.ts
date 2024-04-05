@@ -1,12 +1,6 @@
 import {useAuth} from "@/hook/auth.ts";
 import {useCallback, useState} from "react";
-import {
-    AccountConvertRequested,
-    AccountPasswordChangeRequested,
-    ApiError,
-    FuncUpdateRequested,
-    LoginRequested
-} from "@/types";
+import {AccountConvertRequested, AccountPasswordChangeRequested, ApiError, LoginRequested} from "@/types";
 import {useInitUiState, useUiState} from "@/hook/ui-state.ts";
 import {usePatch} from "@/hook/http.ts";
 
@@ -186,12 +180,11 @@ type AccountPasswordChangeAction = (
     newPassword: string,
     abortController?: AbortController
 ) => void
-export const useAccountChangePassword = (): [AccountPasswordChangeAction, AccountPasswordChangeRequested | ApiError , boolean, Error] => {
+export const useAccountPasswordChange = (): [AccountPasswordChangeAction, AccountPasswordChangeRequested | ApiError , boolean, Error] => {
     const [auth] = useAuth()
     const [patch, submission, loading, error] = usePatch<AccountPasswordChangeRequested | ApiError>()
     const fn = useCallback<AccountPasswordChangeAction>(async (currentPassword, newPassword, abortController?) =>
-        patch(`/v1/accounts/password`, {currentPassword, newPassword}, abortController), [auth]
+        patch(`/v1/accounts`, {currentPassword, newPassword}, abortController), [auth]
     )
     return [fn, submission, loading, error]
 }
-

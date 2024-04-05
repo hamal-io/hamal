@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
 
-internal class ExtensionAccountChangePasswordHandlerTest : BaseRequestHandlerTest() {
+internal class ExtensionUpdateHandlerTest : BaseRequestHandlerTest() {
 
     @Test
     fun `Updates extension`() {

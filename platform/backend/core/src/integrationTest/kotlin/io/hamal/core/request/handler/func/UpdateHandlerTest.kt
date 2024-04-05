@@ -14,7 +14,7 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
-internal class FuncAccountChangePasswordHandlerTest : BaseRequestHandlerTest() {
+internal class FuncUpdateHandlerTest : BaseRequestHandlerTest() {
 
     @Test
     fun `Updates func`() {

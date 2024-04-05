@@ -11,3 +11,5 @@ export interface AccountPasswordChangeRequested {
     requestStatus: string;
     id: string;
 }
+
+export interface ApiError {class: string, message: string}
