@@ -11,7 +11,7 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
-internal class PasswordChangeHandlerTest : BaseRequestHandlerTest() {
+internal class UpdateHandlerTest : BaseRequestHandlerTest() {
 
     @Test
     fun `Updates Salt`() {
@@ -32,7 +32,9 @@ internal class PasswordChangeHandlerTest : BaseRequestHandlerTest() {
             id = AccountId(123),
             hash = PasswordHash("changed-secret"),
             salt = PasswordSalt(value = "changed-salt"),
-            email = Email(value = "test@hamal.io")
+            email = Email(value = "test@hamal.io"),
+            authId = AuthId(3),
+            newAuthId = AuthId(5)
         )
     }
 

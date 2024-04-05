@@ -4,7 +4,9 @@ import io.hamal.core.event.InternalEventEmitter
 import io.hamal.core.request.RequestHandler
 import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.request.AccountPasswordChangeRequested
+import io.hamal.lib.domain.vo.AuthId
 import io.hamal.repository.api.*
 import io.hamal.repository.api.AccountCmdRepository.UpdateCmd
 import io.hamal.repository.api.event.AccountUpdatedEvent
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Component
 class AccountUpdateHandler(
     private val accountRepository: AccountRepository,
     private val authRepository: AuthRepository,
+    private val generateDomainId: GenerateDomainId,
     private val eventEmitter: InternalEventEmitter
 ) : RequestHandler<AccountPasswordChangeRequested>(AccountPasswordChangeRequested::class) {
 
@@ -40,7 +43,7 @@ class AccountUpdateHandler(
         return authRepository.create(
             AuthCmdRepository.CreateEmailAuthCmd(
                 id = req.cmdId(),
-                authId = req.newAuthId,
+                authId = generateDomainId(::AuthId),
                 accountId = req.id,
                 email = req.email,
                 hash = req.hash

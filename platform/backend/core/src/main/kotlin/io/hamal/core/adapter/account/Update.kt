@@ -1,7 +1,5 @@
 package io.hamal.core.adapter.account
 
-import io.hamal.core.adapter.auth.AuthFindPort
-import io.hamal.core.adapter.auth.AuthListPort
 import io.hamal.core.adapter.request.RequestEnqueuePort
 import io.hamal.core.component.EncodePassword
 import io.hamal.core.component.GenerateSalt
@@ -10,7 +8,6 @@ import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.AccountPasswordChangeRequest
 import io.hamal.lib.domain.request.AccountPasswordChangeRequested
-import io.hamal.lib.domain.vo.AuthId
 import io.hamal.lib.domain.vo.RequestId
 import io.hamal.repository.api.Auth
 import io.hamal.repository.api.AuthRepository
@@ -27,10 +24,7 @@ class AccountPasswordUpdateAdapter(
     private val generateSalt: GenerateSalt,
     private val generateDomainId: GenerateDomainId,
     private val requestEnqueue: RequestEnqueuePort,
-    private val authRepository: AuthRepository,
-
-    private val listAuth: AuthListPort,
-    private val authFind: AuthFindPort,
+    private val authRepository: AuthRepository
 ) : AccountPasswordUpdatePort {
     override fun invoke(req: AccountPasswordChangeRequest): AccountPasswordChangeRequested {
 
@@ -54,7 +48,6 @@ class AccountPasswordUpdateAdapter(
             salt = salt,
             email = auth.email,
             authId = auth.id,
-            newAuthId = generateDomainId(::AuthId)
         ).also(requestEnqueue::invoke)
     }
 }
