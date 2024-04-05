@@ -34,7 +34,7 @@ const AccountPage = () => {
                 </div>
             </div>
             <Dialog open={open} onOpenChange={setOpen}>
-                <PasswordForm accountId={auth.accountId}/>)
+                <PasswordForm/>)
             </Dialog>
         </div>
     )
@@ -42,8 +42,7 @@ const AccountPage = () => {
 
 export default AccountPage
 
-type PasswordFormProps = { accountId: string }
-const PasswordForm: FC<PasswordFormProps> = ({accountId}) => {
+const PasswordForm = () => {
     const [update, updateRequested, , error] = useAccountChangePassword()
     const [loading, setLoading] = useState(false)
 
@@ -67,7 +66,7 @@ const PasswordForm: FC<PasswordFormProps> = ({accountId}) => {
         setLoading(true)
         try {
             const abortController = new AbortController()
-            update(accountId, values.currentPassword, values.newPassword, abortController)
+            update(values.currentPassword, values.newPassword, abortController)
             return (() => abortController.abort())
         } catch (e) {
             console.log(e)

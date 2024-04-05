@@ -5,25 +5,23 @@ import io.hamal.core.adapter.request.RequestEnqueuePort
 import io.hamal.core.component.EncodePassword
 import io.hamal.core.component.GenerateSalt
 import io.hamal.core.security.SecurityContext
-import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.AccountUpdateRequest
 import io.hamal.lib.domain.request.AccountUpdateRequested
-import io.hamal.lib.domain.vo.AccountId
+import io.hamal.lib.domain.vo.Email
 import io.hamal.lib.domain.vo.RequestId
 import io.hamal.repository.api.AccountQueryRepository
 import io.hamal.repository.api.Auth
-import io.hamal.repository.api.AuthQueryRepository
 import io.hamal.repository.api.AuthRepository
 import org.springframework.stereotype.Component
 
-fun interface AccountUpdatePort {
-    operator fun invoke(accountId: AccountId, req: AccountUpdateRequest): AccountUpdateRequested
+fun interface PasswordChangePort {
+    operator fun invoke(req: AccountUpdateRequest): AccountUpdateRequested
 }
 
 @Component
-class AccountUpdateAdapter(
+class PasswordChangeAdapter(
     private val encodePassword: EncodePassword,
     private val accountQueryRepository: AccountQueryRepository,
     private val generateSalt: GenerateSalt,
@@ -31,21 +29,20 @@ class AccountUpdateAdapter(
     private val requestEnqueue: RequestEnqueuePort,
     private val authRepository: AuthRepository,
     private val listAuth: AuthListPort
-) : AccountUpdatePort {
-    override fun invoke(accountId: AccountId, req: AccountUpdateRequest): AccountUpdateRequested {
-        val account = accountQueryRepository.find(accountId) ?: throw NoSuchElementException("Account not found")
+) : PasswordChangePort {
+    override fun invoke(req: AccountUpdateRequest): AccountUpdateRequested {
+        val account = accountQueryRepository.find(SecurityContext.currentAccountId)
+            ?: throw NoSuchElementException("Account not found")
+
+        val auth = authRepository.list(account.id).filterIsInstance<Auth.Email>().firstOrNull()
+            ?: throw NoSuchElementException("Account not found")
 
         val encodedPassword = encodePassword(req.currentPassword, account.salt)
-        val match = listAuth(
-            AuthQueryRepository.AuthQuery(
-                limit = Limit.all,
-                authIds = listOf(SecurityContext.currentAuthId)
-            )
-        ).filterIsInstance<Auth.Email>().first { it.hash == encodedPassword }
-            ?: throw NoSuchElementException("Email not found")
+        if (auth.hash != encodedPassword) {
+            throw IllegalArgumentException("Wrong Password")
+        }
 
-
-        val newSalt = generateSalt()
+        val salt = generateSalt()
         return AccountUpdateRequested(
             requestId = generateDomainId(::RequestId),
             requestedBy = SecurityContext.currentAuthId,
@@ -53,10 +50,10 @@ class AccountUpdateAdapter(
             id = account.id,
             hash = encodePassword(
                 password = req.newPassword,
-                salt = newSalt
+                salt = salt
             ),
-            salt = newSalt,
-            email = match.email
+            salt = salt,
+            email = Email("")
         ).also(requestEnqueue::invoke)
     }
 }
