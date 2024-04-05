@@ -1,14 +1,18 @@
 import {useAuth} from "@/hook/auth.ts";
 import {useCallback, useState} from "react";
-import {AccountConvertRequested, AccountUpdateRequested, FuncUpdateRequested, LoginRequested} from "@/types";
+import {
+    AccountConvertRequested,
+    AccountPasswordChangeRequested,
+    ApiError,
+    FuncUpdateRequested,
+    LoginRequested
+} from "@/types";
 import {useInitUiState, useUiState} from "@/hook/ui-state.ts";
 import {usePatch} from "@/hook/http.ts";
-import account from "@/pages/app/account/account.tsx";
 
 type AccountCreateAnonymousAction = (abortController?: AbortController) => void
 export const useAccountCreateAnonymous = (): [AccountCreateAnonymousAction, LoginRequested, boolean, Error] => {
     const [auth, setAuth] = useAuth()
-
     const [data, setData] = useState<LoginRequested | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<Error | null>(null);
@@ -177,15 +181,15 @@ export const useAccountConvert = (): [AccountConvertAction, AccountConvertReques
 }
 
 
-type AccountUpdateAction = (
+type AccountPasswordChangeAction = (
     currentPassword: string,
     newPassword: string,
     abortController?: AbortController
 ) => void
-export const useAccountChangePassword = (): [AccountUpdateAction, AccountUpdateRequested, boolean, Error] => {
+export const useAccountChangePassword = (): [AccountPasswordChangeAction, AccountPasswordChangeRequested | ApiError , boolean, Error] => {
     const [auth] = useAuth()
-    const [patch, submission, loading, error] = usePatch<AccountUpdateRequested>()
-    const fn = useCallback<AccountUpdateAction>(async (currentPassword, newPassword, abortController?) =>
+    const [patch, submission, loading, error] = usePatch<AccountPasswordChangeRequested | ApiError>()
+    const fn = useCallback<AccountPasswordChangeAction>(async (currentPassword, newPassword, abortController?) =>
         patch(`/v1/accounts/password`, {currentPassword, newPassword}, abortController), [auth]
     )
     return [fn, submission, loading, error]

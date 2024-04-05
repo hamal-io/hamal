@@ -13,7 +13,7 @@ import io.hamal.repository.api.Auth
 import io.hamal.repository.api.AuthRepository
 import org.springframework.stereotype.Component
 
-fun interface AccountPasswordUpdatePort {
+fun interface AccountPasswordChangePort {
     operator fun invoke(req: AccountPasswordChangeRequest): AccountPasswordChangeRequested
 }
 
@@ -25,7 +25,7 @@ class AccountPasswordUpdateAdapter(
     private val generateDomainId: GenerateDomainId,
     private val requestEnqueue: RequestEnqueuePort,
     private val authRepository: AuthRepository
-) : AccountPasswordUpdatePort {
+) : AccountPasswordChangePort {
     override fun invoke(req: AccountPasswordChangeRequest): AccountPasswordChangeRequested {
 
         val account = accountFind(SecurityContext.currentAccountId)
@@ -33,7 +33,7 @@ class AccountPasswordUpdateAdapter(
 
         val encodedPassword = encodePassword(req.currentPassword, account.salt)
         val auth = authRepository.list(account.id).filterIsInstance<Auth.Email>().find { it.hash == encodedPassword }
-            ?: throw IllegalArgumentException("Wrong Password")
+            ?: throw NoSuchElementException("Wrong Password")
 
         val salt = generateSalt()
         return AccountPasswordChangeRequested(

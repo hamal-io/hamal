@@ -6,7 +6,7 @@ export interface AccountConvertRequested {
     email: string;
 }
 
-export interface AccountUpdateRequested {
+export interface AccountPasswordChangeRequested {
     requestId: string;
     requestStatus: string;
     id: string;
