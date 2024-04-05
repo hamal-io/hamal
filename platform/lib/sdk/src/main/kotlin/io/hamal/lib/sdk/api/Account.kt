@@ -35,13 +35,13 @@ data class ApiAccount(
 ) : ApiObject()
 
 
-data class ApiChangePasswordRequest(
+data class ApiAccountPasswordChangeRequest(
     override val currentPassword: Password,
     override val newPassword: Password
 ) : AccountPasswordChangeRequest
 
 
-data class ApiAccountUpdateRequested(
+data class ApiAccountRequested(
     override val requestId: RequestId,
     override val requestStatus: RequestStatus,
     val id: AccountId

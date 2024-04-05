@@ -97,5 +97,7 @@ data class AccountPasswordChangeRequested(
     val id: AccountId,
     val hash: PasswordHash,
     val salt: PasswordSalt,
-    val email: Email
+    val email: Email,
+    val authId: AuthId,
+    val newAuthId: AuthId
 ) : Requested()

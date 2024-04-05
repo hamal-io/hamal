@@ -31,7 +31,7 @@ class AccountUpdateHandler(
             )
         ).also {
             authRepository.revokeAuth(
-                AuthCmdRepository.RevokeAuthCmd(req.cmdId(), req.requestedBy)
+                AuthCmdRepository.RevokeAuthCmd(req.cmdId(), req.authId)
             )
         }
     }
@@ -40,7 +40,7 @@ class AccountUpdateHandler(
         return authRepository.create(
             AuthCmdRepository.CreateEmailAuthCmd(
                 id = req.cmdId(),
-                authId = req.requestedBy,
+                authId = req.newAuthId,
                 accountId = req.id,
                 email = req.email,
                 hash = req.hash
