@@ -138,8 +138,8 @@ class AuthMemoryRepository : AuthRepository {
     }
 
     override fun update(authId: AuthId, cmd: UpdateEmailHashCmd): Auth {
-        val currentAuth = find(authId) as? Auth.Email
-        val updatedAuth = currentAuth?.copy(
+        val currentAuth = find(authId) as Auth.Email
+        val updatedAuth = currentAuth.copy(
             cmdId = cmd.id,
             accountId = currentAuth.accountId,
             email = currentAuth.email,
@@ -147,11 +147,11 @@ class AuthMemoryRepository : AuthRepository {
         )
 
         lock.write {
-            projections.removeIf { it.id == currentAuth?.id }
-            updatedAuth?.let { projections.add(it) }
+            projections.removeIf { it.id == currentAuth.id }
+            projections.add(updatedAuth)
         }
 
-        return updatedAuth as Auth
+        return updatedAuth
     }
 
     private val lock = ReentrantReadWriteLock()
