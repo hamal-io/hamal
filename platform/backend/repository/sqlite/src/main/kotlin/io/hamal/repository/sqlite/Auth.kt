@@ -298,7 +298,23 @@ class AuthSqliteRepository(
     }
 
     override fun update(authId: AuthId, cmd: UpdateEmailHashCmd): Auth {
-        TODO("Not yet implemented")
+        return connection.execute<Auth>(
+            """
+            UPDATE 
+                auth 
+            SET 
+                password = :password
+            WHERE
+                id = :id
+            RETURNING *;
+        """.trimIndent()
+        ) {
+            query {
+                set("id", authId)
+                set("password", cmd.hash)
+            }
+            map(NamedResultSet::toAuth)
+        }!!
     }
 }
 

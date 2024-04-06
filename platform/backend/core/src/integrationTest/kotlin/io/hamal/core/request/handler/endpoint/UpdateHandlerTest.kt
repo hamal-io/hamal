@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
 
-internal class EndpointUpdateHandlerTest : BaseRequestHandlerTest() {
+internal class EndpointAuthUpdateHandlerTest : BaseRequestHandlerTest() {
 
     @Test
     fun `Updates endpoint`() {
