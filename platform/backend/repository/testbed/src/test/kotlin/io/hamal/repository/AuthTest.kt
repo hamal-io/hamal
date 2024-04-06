@@ -148,7 +148,7 @@ internal class AuthRepositoryTest : AbstractUnitTest() {
     @Nested
     inner class UpdateTest {
         @TestFactory
-        fun `Updates Auth Email hash`() = runWith(AuthRepository::class) {
+        fun `Updates Auths hash`() = runWith(AuthRepository::class) {
             create(
                 CreateEmailAuthCmd(
                     id = CmdId(1),

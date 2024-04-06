@@ -20,7 +20,7 @@ const PasswordForm: FC<Props> = ({onClose}) => {
     const [requestError, setRequestError] = useState(null)
 
     const passWordSchema = z.object({
-        currentPassword: z.string().min(4, "Password must be at least 4 characters").max(20).optional(),
+        currentPassword: z.string().min(4, "Password must be at least 4 characters").max(20),
         newPassword: z.string().min(4, "Password must be at least 4 characters").max(20),
         confirmPassword: z.string(),
     }).refine(data => data.newPassword === data.confirmPassword, {

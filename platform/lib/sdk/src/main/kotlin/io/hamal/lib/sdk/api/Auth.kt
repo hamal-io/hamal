@@ -4,7 +4,7 @@ import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.AuthChallengeMetaMaskRequest
 import io.hamal.lib.domain.request.AuthLogInEmailRequest
 import io.hamal.lib.domain.request.AuthLogInMetaMaskRequest
-import io.hamal.lib.domain.request.AuthUpdateRequest
+import io.hamal.lib.domain.request.AuthUpdatePasswordRequest
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpTemplate
 
@@ -29,7 +29,7 @@ data class ApiAuthLoginEmailRequest(
 data class ApiPasswordChangeRequest(
     override val currentPassword: Password,
     override val newPassword: Password
-) : AuthUpdateRequest
+) : AuthUpdatePasswordRequest
 
 data class ApiPasswordChangeRequested(
     override val requestId: RequestId,

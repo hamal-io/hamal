@@ -2,6 +2,6 @@ package io.hamal.repository.api.event
 
 import io.hamal.repository.api.Auth
 
-data class AuthUpdateEvent(
+data class AuthUpdatedEvent(
     val auth: Auth
 ) : InternalEvent()
