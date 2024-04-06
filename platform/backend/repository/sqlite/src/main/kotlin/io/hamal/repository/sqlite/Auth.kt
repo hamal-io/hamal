@@ -296,6 +296,10 @@ class AuthSqliteRepository(
             map(NamedResultSet::toAuth)
         }?.let { it as Auth.ExecToken }
     }
+
+    override fun update(authId: AuthId, cmd: UpdateEmailHashCmd): Auth {
+        TODO("Not yet implemented")
+    }
 }
 
 private fun NamedResultSet.toAuth(): Auth {

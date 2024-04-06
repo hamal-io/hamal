@@ -138,6 +138,10 @@ class AuthMemoryRepository : AuthRepository {
         }
     }
 
+    override fun update(authId: AuthId, cmd: UpdateEmailHashCmd): Auth {
+        TODO("Not yet implemented")
+    }
+
     private val projections = mutableListOf<Auth>()
 
 }
