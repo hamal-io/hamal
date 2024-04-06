@@ -3,12 +3,13 @@ import {Draggable} from './draggable.tsx';
 import styles from './canvas.module.css'
 import {ContextCanvasState} from "@/components/nodes/context.ts";
 import {CanvasState} from "./types.ts";
+import {ConnectionCanvas} from "@/components/nodes/connection.tsx";
 
 type CanvasProps = {
     children: React.ReactNode;
 }
 
-export const Canvas: FC<CanvasProps> = ({ children}) => {
+export const Canvas: FC<CanvasProps> = ({children}) => {
 
     const [canvasState, setCanvasState] = useState<CanvasState>({
         scale: 1,
@@ -99,6 +100,8 @@ export const Canvas: FC<CanvasProps> = ({ children}) => {
                         {children}
                     </div>
                 </div>
+
+                <ConnectionCanvas/>
             </Draggable>
         </ContextCanvasState.Provider>
     )

@@ -1,22 +1,13 @@
-import React, {FC} from "react";
-import styles from "@/components/nodes/connection.module.css";
-import {Position} from "@/components/nodes/types.ts";
+import React from "react";
+import styles from "./connection.module.css";
 
-type ConnectionProps = {
-    from: Position;
-    to: Position;
-    lineRef: React.Ref<SVGPathElement>;
-}
+type ConnectionCanvasProps = {}
 
-export const Connection: FC<ConnectionProps> = ({
-    from,
-    to,
-    lineRef
-}) => {
+export const ConnectionCanvas = ({}: ConnectionCanvasProps) => {
     return (
-        <svg className={styles.svg} data-component="connection-svg">
-
+        <svg id={"connection-canvas"} className={styles.wrapper} data-component="connection-canvas">
             <path
+                id={"TRANSIENT_CONNECTION"}
                 // data-connection-id={id}
                 // data-output-node-id={outputNodeId}
                 // data-output-port-name={outputPortName}
@@ -28,9 +19,8 @@ export const Connection: FC<ConnectionProps> = ({
                 strokeWidth={3}
                 strokeLinecap="round"
                 // d={curve}
-                d={`M ${from.x},${from.y} L ${to.x},${to.y}`}
-                ref={lineRef}
+                d={`M 0,0 L 0,0`}
             />
         </svg>
-    )
+    );
 }

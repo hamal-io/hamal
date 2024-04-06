@@ -13,29 +13,29 @@ const DashboardSite = () => {
                 // position={{x: 0, y: 80}} // offsets menu navbar
             >
 
-                {/*<Comment*/}
-                {/*    id='3'*/}
-                {/*    text="Hello, I am your favourite commentt"*/}
-                {/*    position={{x: 100, y: 100}}*/}
-                {/*    size={{width: 250, height: 100}}*/}
-                {/*    onDragStart={() => console.log("start dragging")}*/}
-                {/*/>*/}
-
                 <Node
                     id='1'
                     type="test"
-                    position={{x: 0, y: 0}}
-                    size={{width: 100, height: 100}}
+                    position={{x: -400, y: 0}}
+                    size={{width: 200, height: 100}}
                     onDragStart={() => console.log("start dragging")}
                 />
 
-                {/*<Node*/}
-                {/*    id='2'*/}
-                {/*    type="test"*/}
-                {/*    position={{x: -400, y: -500}}*/}
-                {/*    size={{width: 250, height: 100}}*/}
-                {/*    onDragStart={() => console.log("start dragging")}*/}
-                {/*/>*/}
+                <Node
+                    id='2'
+                    type="test"
+                    position={{x: -100, y: 0}}
+                    size={{width: 250, height: 100}}
+                    onDragStart={() => console.log("start dragging")}
+                />
+
+                <Node
+                    id='3'
+                    type="TELEGRAM_SEND_MESSAGE"
+                    position={{x: 250, y: 0}}
+                    size={{width: 150, height: 100}}
+                    onDragStart={() => console.log("start dragging")}
+                />
 
             </Canvas>
 

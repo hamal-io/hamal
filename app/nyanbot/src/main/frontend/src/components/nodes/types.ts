@@ -1,5 +1,7 @@
 export type NodeId = string
+export type NodeType = string
 
+export type ConnectionId = string
 
 export type CanvasState = {
     scale: number;
@@ -28,3 +30,14 @@ export type Size = {
     width: number;
     height: number;
 };
+
+export type Connection = {
+    id: ConnectionId;
+    inputNodeId: NodeId;
+    outputNodeId: NodeId;
+}
+
+export type Node = {
+    id: NodeId;
+    type: NodeType;
+}

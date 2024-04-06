@@ -1,6 +1,5 @@
 import React, {FC, useContext} from "react";
 import styles from "@/components/nodes/port.module.css";
-import {Connection} from "@/components/nodes/connection.tsx";
 import {Position} from "@/components/nodes/types.ts";
 import {ContextCanvasState} from "@/components/nodes/context.ts";
 
@@ -164,11 +163,12 @@ export const Port: FC<PortProps> = ({isInput}) => {
             y: byScale(e.clientY - y - height / 2) + byScale(canvasState.translate.y)
         };
 
-        line.current?.setAttribute(
-            "d",
-            calculatePath(startPositionCache.current, to)
-        );
+        // line.current?.setAttribute(
+        //     "d",
+        //     calculatePath(startPositionCache.current, to)
+        // );
         // }
+        document.getElementById("TRANSIENT_CONNECTION").setAttribute("d",calculatePath(startPositionCache.current, to));
     };
 
     // const handleDrag = (e: MouseEvent) => {
@@ -215,68 +215,71 @@ export const Port: FC<PortProps> = ({isInput}) => {
     // };
 
     const handleDragEnd = e => {
-        const droppedOnPort = !!e.target.dataset.portName;
+        // const droppedOnPort = !!e.target.dataset.portName;
+        //
+        // if (isInput) {
+        //     const {
+        //         inputNodeId = "",
+        //         inputPortName = "",
+        //         outputNodeId = "",
+        //         outputPortName = ""
+        //     } = lineInToPort.current?.dataset ?? {};
+        //     //FIXME
+        //     // nodesDispatch?.({
+        //     //     type: NodesActionType.REMOVE_CONNECTION,
+        //     //     input: { nodeId: inputNodeId, portName: inputPortName },
+        //     //     output: { nodeId: outputNodeId, portName: outputPortName }
+        //     // });
+        //     if (droppedOnPort) {
+        //         const {
+        //             portName: connectToPortName,
+        //             nodeId: connectToNodeId,
+        //             portType: connectToPortType,
+        //             portTransputType: connectToTransputType
+        //         } = e.target.dataset;
+        //         const isNotSameNode = outputNodeId !== connectToNodeId;
+        //         if (isNotSameNode && connectToTransputType !== "output") {
+        //             //FIXME
+        //             // const inputWillAcceptConnection = inputTypes[
+        //             //     connectToPortType
+        //             //     ].acceptTypes.includes(type);
+        //             // if (inputWillAcceptConnection) {
+        //             //     nodesDispatch?.({
+        //             //         type: NodesActionType.ADD_CONNECTION,
+        //             //         input: { nodeId: connectToNodeId, portName: connectToPortName },
+        //             //         output: { nodeId: outputNodeId, portName: outputPortName }
+        //             //     });
+        //             // }
+        //         }
+        //     }
+        // } else {
+        //     if (droppedOnPort) {
+        //         const {
+        //             portName: inputPortName,
+        //             nodeId: inputNodeId,
+        //             portType: inputNodeType,
+        //             portTransputType: inputTransputType
+        //         } = e.target.dataset;
+        //         //FIXME
+        //         // const isNotSameNode = inputNodeId !== nodeId;
+        //         // if (isNotSameNode && inputTransputType !== "output") {
+        //         // const inputWillAcceptConnection = inputTypes[
+        //         //     inputNodeType
+        //         //     ].acceptTypes.includes(type);
+        //         // if (inputWillAcceptConnection) {
+        //         //     nodesDispatch?.({
+        //         //         type: NodesActionType.ADD_CONNECTION,
+        //         //         output: { nodeId, portName: name },
+        //         //         input: { nodeId: inputNodeId, portName: inputPortName }
+        //         //     });
+        //         //     triggerRecalculation();
+        //         // }
+        //         // }
+        //     }
+        // }
 
-        if (isInput) {
-            const {
-                inputNodeId = "",
-                inputPortName = "",
-                outputNodeId = "",
-                outputPortName = ""
-            } = lineInToPort.current?.dataset ?? {};
-            //FIXME
-            // nodesDispatch?.({
-            //     type: NodesActionType.REMOVE_CONNECTION,
-            //     input: { nodeId: inputNodeId, portName: inputPortName },
-            //     output: { nodeId: outputNodeId, portName: outputPortName }
-            // });
-            if (droppedOnPort) {
-                const {
-                    portName: connectToPortName,
-                    nodeId: connectToNodeId,
-                    portType: connectToPortType,
-                    portTransputType: connectToTransputType
-                } = e.target.dataset;
-                const isNotSameNode = outputNodeId !== connectToNodeId;
-                if (isNotSameNode && connectToTransputType !== "output") {
-                    //FIXME
-                    // const inputWillAcceptConnection = inputTypes[
-                    //     connectToPortType
-                    //     ].acceptTypes.includes(type);
-                    // if (inputWillAcceptConnection) {
-                    //     nodesDispatch?.({
-                    //         type: NodesActionType.ADD_CONNECTION,
-                    //         input: { nodeId: connectToNodeId, portName: connectToPortName },
-                    //         output: { nodeId: outputNodeId, portName: outputPortName }
-                    //     });
-                    // }
-                }
-            }
-        } else {
-            if (droppedOnPort) {
-                const {
-                    portName: inputPortName,
-                    nodeId: inputNodeId,
-                    portType: inputNodeType,
-                    portTransputType: inputTransputType
-                } = e.target.dataset;
-                //FIXME
-                // const isNotSameNode = inputNodeId !== nodeId;
-                // if (isNotSameNode && inputTransputType !== "output") {
-                // const inputWillAcceptConnection = inputTypes[
-                //     inputNodeType
-                //     ].acceptTypes.includes(type);
-                // if (inputWillAcceptConnection) {
-                //     nodesDispatch?.({
-                //         type: NodesActionType.ADD_CONNECTION,
-                //         output: { nodeId, portName: name },
-                //         input: { nodeId: inputNodeId, portName: inputPortName }
-                //     });
-                //     triggerRecalculation();
-                // }
-                // }
-            }
-        }
+        // document.getElementById("TRANSIENT_CONNECTION").setAttribute("d",`M 0,0 L 0, 0`);
+
         setIsDragging(false);
         document.removeEventListener("mouseup", handleDragEnd);
         document.removeEventListener("mousemove", handleDrag);
@@ -373,13 +376,13 @@ export const Port: FC<PortProps> = ({isInput}) => {
             {/*    // <Portal*/}
             {/*    //     node={document.getElementById(`${DRAG_CONNECTION_ID}${editorId}`)}*/}
             {/*    // >*/}
-            {isDragging && !isInput ? (
-            <Connection
-                from={startPosition}
-                to={startPosition}
-                lineRef={line}
-            />
-            ) : null }
+            {/*{isDragging && !isInput ? (*/}
+            {/*<CanvasConnection*/}
+            {/*    from={startPosition}*/}
+            {/*    to={startPosition}*/}
+            {/*    lineRef={line}*/}
+            {/*/>*/}
+            {/*) : null }*/}
             {/*    // </Portal>*/}
             {/*) : null}*/}
         </React.Fragment>
