@@ -297,7 +297,7 @@ class AuthSqliteRepository(
         }?.let { it as Auth.ExecToken }
     }
 
-    override fun update(authId: AuthId, cmd: UpdateEmailHashCmd): Auth {
+    override fun update(authId: AuthId, cmd: UpdatePasswordCmd): Auth {
         return connection.execute<Auth>(
             """
             UPDATE 

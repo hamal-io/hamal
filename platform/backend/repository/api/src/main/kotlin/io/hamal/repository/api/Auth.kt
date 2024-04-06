@@ -65,7 +65,7 @@ interface AuthCmdRepository : CmdRepository {
 
     fun create(cmd: CreateCmd): Auth
 
-    fun update(authId: AuthId, cmd: UpdateEmailHashCmd): Auth
+    fun update(authId: AuthId, cmd: UpdatePasswordCmd): Auth
 
     fun revokeAuth(cmd: RevokeAuthCmd)
 
@@ -109,7 +109,7 @@ interface AuthCmdRepository : CmdRepository {
         val execId: ExecId
     ) : CreateCmd
 
-    data class UpdateEmailHashCmd(
+    data class UpdatePasswordCmd(
         val id: CmdId,
         val hash: PasswordHash
     )

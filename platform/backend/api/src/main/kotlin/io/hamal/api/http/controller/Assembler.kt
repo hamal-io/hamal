@@ -14,7 +14,7 @@ fun Requested.toApiRequested(): ApiRequested = when (this) {
     is AccountConvertRequested -> ApiAccountConvertRequested(requestId, requestStatus, id, token)
     is AuthLoginMetaMaskRequested -> ApiTokenRequested(requestId, requestStatus, accountId, workspaceIds, token)
     is AuthLoginEmailRequested -> ApiTokenRequested(requestId, requestStatus, accountId, workspaceIds,  token)
-    is AuthUpdatePasswordRequested -> ApiPasswordChangeRequested(requestId, requestStatus)
+    is AuthUpdatePasswordRequested -> ApiUpdatePasswordRequested(requestId, requestStatus)
     is BlueprintCreateRequested -> ApiBlueprintCreateRequested(requestId, requestStatus, id)
     is BlueprintUpdateRequested -> ApiBlueprintUpdateRequested(requestId, requestStatus, id)
     is EndpointCreateRequested -> ApiEndpointCreateRequested(requestId, requestStatus, id, workspaceId, funcId)

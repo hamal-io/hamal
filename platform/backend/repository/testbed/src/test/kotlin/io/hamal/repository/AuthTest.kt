@@ -160,11 +160,11 @@ internal class AuthRepositoryTest : AbstractUnitTest() {
             )
 
             update(
-                AuthId(2), UpdateEmailHashCmd(
+                AuthId(2), UpdatePasswordCmd(
                     id = CmdId(2),
                     hash = PasswordHash("newSecret")
                 )
-            );
+            )
 
             with(find(AuthId(2))) {
                 require(this is Auth.Email)

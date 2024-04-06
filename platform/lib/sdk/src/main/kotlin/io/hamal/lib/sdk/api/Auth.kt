@@ -26,12 +26,12 @@ data class ApiAuthLoginEmailRequest(
     override val password: Password
 ) : AuthLogInEmailRequest
 
-data class ApiPasswordChangeRequest(
+data class ApiUpdatePasswordRequest(
     override val currentPassword: Password,
     override val newPassword: Password
 ) : AuthUpdatePasswordRequest
 
-data class ApiPasswordChangeRequested(
+data class ApiUpdatePasswordRequested(
     override val requestId: RequestId,
     override val requestStatus: RequestStatus
 ) : ApiRequested()

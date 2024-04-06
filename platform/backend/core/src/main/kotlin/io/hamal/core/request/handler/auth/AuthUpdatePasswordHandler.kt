@@ -25,7 +25,7 @@ class AuthUpdatePasswordHandler(
     private fun update(req: AuthUpdatePasswordRequested): Auth {
         return authCmdRepository.update(
             req.id,
-            AuthCmdRepository.UpdateEmailHashCmd(
+            AuthCmdRepository.UpdatePasswordCmd(
                 id = req.cmdId(),
                 hash = req.hash
             )
