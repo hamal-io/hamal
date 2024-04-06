@@ -3,8 +3,7 @@ import styles from "@/components/nodes/port.module.css";
 import {Position} from "@/components/nodes/types.ts";
 import {ContextCanvasState} from "@/components/nodes/context.ts";
 
-type PortsProps = {
-}
+type PortsProps = {}
 export const Ports: FC<PortsProps> = ({}) => {
     return (
         <div className={styles.wrapper} data-component="ports">
@@ -137,14 +136,13 @@ export const Port: FC<PortProps> = ({isInput}) => {
     }
 
 
-
     const handleDrag = (e: MouseEvent) => {
         // const {x, y, width, height} = document
         //     .getElementById("CANVAS_1")
         //     ?.getBoundingClientRect() ?? {x: 0, y: 0, width: 0, height: 0};
 
 
-        const {x,y} = canvasState.position;
+        const {x, y} = canvasState.position;
         // const x = 0; const y = 0;
         const {width, height} = canvasState.size;
 
@@ -168,7 +166,7 @@ export const Port: FC<PortProps> = ({isInput}) => {
         //     calculatePath(startPositionCache.current, to)
         // );
         // }
-        document.getElementById("TRANSIENT_CONNECTION").setAttribute("d",calculatePath(startPositionCache.current, to));
+        document.getElementById("TRANSIENT_CONNECTION").setAttribute("d", calculatePath(startPositionCache.current, to));
     };
 
     // const handleDrag = (e: MouseEvent) => {
@@ -288,6 +286,11 @@ export const Port: FC<PortProps> = ({isInput}) => {
     const handleDragStart = e => {
         e.preventDefault();
         e.stopPropagation();
+
+        if (canvasState.readonly) {
+            return;
+        }
+
         const {
             x: startPortX = 0,
             y: startPortY = 0,

@@ -18,18 +18,18 @@ type DraggableProps = Omit<HTMLProps<HTMLDivElement>, "onDrag" | "onDragEnd"> & 
 };
 
 export const Draggable: FC<DraggableProps> = ({
-  children,
-  onDragDelayStart,
-  onDragStart,
-  onDrag,
-  onDragEnd,
-  onMouseDown,
-  onTouchStart,
-  disabled,
-  delay = 6,
-  innerRef,
-  ...rest
-}) => {
+                                                  children,
+                                                  onDragDelayStart,
+                                                  onDragStart,
+                                                  onDrag,
+                                                  onDragEnd,
+                                                  onMouseDown,
+                                                  onTouchStart,
+                                                  disabled,
+                                                  delay = 6,
+                                                  innerRef,
+                                                  ...rest
+                                              }) => {
     const canvasState = useContext(ContextCanvasState)
 
     const startPosition = React.useRef<Position | null>(null);
@@ -65,6 +65,10 @@ export const Draggable: FC<DraggableProps> = ({
     };
 
     const startDrag = e => {
+        if (canvasState.readonly) {
+            return;
+        }
+
         if (onDragStart) {
             onDragStart(e);
         }

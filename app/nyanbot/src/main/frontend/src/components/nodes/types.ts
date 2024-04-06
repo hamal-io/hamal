@@ -13,7 +13,8 @@ export type CanvasState = {
         right: number;
         top: number;
         bottom: number;
-    }
+    };
+    readonly: boolean;
 }
 
 export type Translate = {
@@ -40,4 +41,6 @@ export type Connection = {
 export type Node = {
     id: NodeId;
     type: NodeType;
+    position: Position;
+    size: Size;
 }

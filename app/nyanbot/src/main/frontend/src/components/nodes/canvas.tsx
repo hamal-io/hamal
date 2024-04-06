@@ -2,14 +2,18 @@ import React, {FC, useCallback, useEffect, useRef, useState} from "react";
 import {Draggable} from './draggable.tsx';
 import styles from './canvas.module.css'
 import {ContextCanvasState} from "@/components/nodes/context.ts";
-import {CanvasState} from "./types.ts";
+import {CanvasState, Connection, Node} from "./types.ts";
 import {ConnectionCanvas} from "@/components/nodes/connection.tsx";
+import {Node as NodeUi} from "@/components/nodes/node.tsx";
 
 type CanvasProps = {
-    children: React.ReactNode;
+    nodes: Node[];
+    connections: Connection[];
+    readonly: boolean;
+    // children: React.ReactNode;
 }
 
-export const Canvas: FC<CanvasProps> = ({children}) => {
+export const Canvas: FC<CanvasProps> = ({nodes, connections, readonly}) => {
 
     const [canvasState, setCanvasState] = useState<CanvasState>({
         scale: 1,
@@ -21,7 +25,8 @@ export const Canvas: FC<CanvasProps> = ({children}) => {
             right: 0,
             top: 0,
             bottom: 0,
-        }
+        },
+        readonly
     })
 
     const scale = 1;
@@ -84,7 +89,7 @@ export const Canvas: FC<CanvasProps> = ({children}) => {
                 // onDrag={handleMouseDrag}
                 // onDragEnd={handleDragEnd}
                 // onKeyDown={handleKeyDown}
-                tabIndex={-1}
+                // tabIndex={-1}
                 // style={{ cursor: "grab" }}
                 // disabled={disablePan || (spaceToPan && !spaceIsPressed)}
             >
@@ -97,11 +102,37 @@ export const Canvas: FC<CanvasProps> = ({children}) => {
                         className={styles.scaleWrapper}
                         style={{transform: `scale(${scale})`}}
                     >
-                        {children}
+
+                        <NodeUi
+                            id='1'
+                            type="WEB3_NEW_LP"
+                            position={{x: -400, y: 0}}
+                            size={{width: 200, height: 100}}
+                            onDragStart={() => console.log("start dragging")}
+                        />
+
+                        <NodeUi
+                            id='2'
+                            type="FILTER"
+                            position={{x: -100, y: 0}}
+                            size={{width: 250, height: 100}}
+                            onDragStart={() => console.log("start dragging")}
+                        />
+
+                        <NodeUi
+                            id='3'
+                            type="TELEGRAM_SEND_MESSAGE"
+                            position={{x: 250, y: 0}}
+                            size={{width: 150, height: 100}}
+                            onDragStart={() => console.log("start dragging")}
+                        />
+
+
+                        {/*{children}*/}
                     </div>
                 </div>
 
-                <ConnectionCanvas/>
+                <ConnectionCanvas connections={connections}/>
             </Draggable>
         </ContextCanvasState.Provider>
     )

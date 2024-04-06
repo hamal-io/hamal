@@ -1,25 +1,24 @@
-import React, {FC, RefObject, useContext} from "react";
-import {NodeId, Position, Size} from './types.ts';
+import React, {FC} from "react";
+import {NodeId, NodeType, Position, Size} from './types.ts';
 import {Draggable} from './draggable.tsx';
 import styles from "@/components/nodes/node.module.css";
-import {ContextCanvasState} from "@/components/nodes/context.ts";
 import {Ports} from "@/components/nodes/port.tsx";
 
 type NodeProps = {
     id: NodeId;
     position: Position;
     size: Size;
-    type: string;
+    type: NodeType;
     // canvasRect: RefObject<DOMRect | undefined>;
     onDragStart: () => void;
 }
 
 export const Node: FC<NodeProps> = ({
-    type,
-    position,
-    size,
-    // canvasRect
-}) => {
+                                        type,
+                                        position,
+                                        size,
+                                        // canvasRect
+                                    }) => {
 
     const nodeWrapper = React.useRef<HTMLDivElement>(null);
 
