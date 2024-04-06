@@ -13,7 +13,7 @@ import {useUpdatePassword} from "@/hook/auth.ts";
 type Props = {
     children: ReactNode
 }
-const PasswordChangeDialog: FC<Props> = ({children}) => {
+const UpdatePasswordDialog: FC<Props> = ({children}) => {
     const [open, setOpen] = useState(false)
     const [update, updateRequested] = useUpdatePassword()
     const [loading, setLoading] = useState(false)
@@ -154,4 +154,4 @@ const PasswordChangeDialog: FC<Props> = ({children}) => {
     )
 }
 
-export default PasswordChangeDialog
+export default UpdatePasswordDialog

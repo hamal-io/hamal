@@ -137,7 +137,7 @@ class AuthMemoryRepository : AuthRepository {
         }
     }
 
-    override fun update(authId: AuthId, cmd: UpdateEmailHashCmd): Auth {
+    override fun update(authId: AuthId, cmd: UpdatePasswordCmd): Auth {
         val currentAuth = find(authId) as Auth.Email
         val updatedAuth = currentAuth.copy(
             cmdId = cmd.id,

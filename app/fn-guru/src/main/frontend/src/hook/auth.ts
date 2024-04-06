@@ -1,4 +1,4 @@
-import {Auth, AUTH_KEY, PasswordUpdateRequested} from "@/types/auth.ts";
+import {Auth, AUTH_KEY, UpdatePasswordRequested} from "@/types/auth.ts";
 import useLocalStorageState from "use-local-storage-state";
 import {useCallback, useState} from "react";
 import {useNavigate} from "react-router-dom";
@@ -172,9 +172,9 @@ type UpdatePasswordAction = (
     newPassword: string,
     abortController?: AbortController
 ) => void
-export const useUpdatePassword = (): [UpdatePasswordAction, PasswordUpdateRequested, boolean, Error] => {
+export const useUpdatePassword = (): [UpdatePasswordAction, UpdatePasswordRequested, boolean, Error] => {
     const [auth] = useAuth()
-    const [patch, submission, loading, error] = usePatch<PasswordUpdateRequested>()
+    const [patch, submission, loading, error] = usePatch<UpdatePasswordRequested>()
     const fn = useCallback<UpdatePasswordAction>(async (currentPassword, newPassword, abortController?) =>
         patch(`/v1/auth`, {currentPassword, newPassword}, abortController), [auth]
     )

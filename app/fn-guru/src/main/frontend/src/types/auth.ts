@@ -18,7 +18,7 @@ export interface LoginRequested {
     email: string;
 }
 
-export interface PasswordUpdateRequested {
+export interface UpdatePasswordRequested {
     requestId: string;
     requestStatus: string;
 }

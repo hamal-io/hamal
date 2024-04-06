@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {useAuth, useLogout} from "@/hook/auth.ts";
 import {Button} from "@/components/ui/button.tsx";
 import {PageHeader} from "@/components/page-header.tsx";
-import PasswordChangeDialog from "@/pages/app/account/passwordChangeDialog.tsx";
+import UpdatePasswordDialog from "@/pages/app/account/updatePasswordDialog.tsx";
 
 
 const AccountPage = () => {
@@ -24,9 +24,9 @@ const AccountPage = () => {
             </div>
             <div className="bg-white container h-full py-6 items-center justify-center">
                 <div className="flex flex-col gap-4">
-                    <PasswordChangeDialog>
+                    <UpdatePasswordDialog>
                         <Button onClick={() => setOpen(true)} variant={"secondary"}>Change Password</Button>
-                    </PasswordChangeDialog>
+                    </UpdatePasswordDialog>
                 </div>
             </div>
 
