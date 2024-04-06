@@ -8,14 +8,16 @@ import {Form, FormControl, FormField, FormItem, FormLabel} from "@/components/ui
 import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {Loader2} from "lucide-react";
+import {useUpdatePassword} from "@/hook/auth.ts";
 
 
 type Props = {
     onClose: () => void
 }
 const PasswordForm: FC<Props> = ({onClose}) => {
-    const [update, updateRequested, requestLoading, requestError] = useAccountPasswordChange()
+    const [update, updateRequested] = useUpdatePassword()
     const [loading, setLoading] = useState(false)
+    const [requestError, setRequestError] = useState(null)
 
     const passWordSchema = z.object({
         currentPassword: z.string().min(4, "Password must be at least 4 characters").max(20).optional(),
@@ -56,6 +58,7 @@ const PasswordForm: FC<Props> = ({onClose}) => {
             if ("message" in updateRequested) {
                 // @ts-ignore
                 form.setError("currentPassword", updateRequested.message)
+                setRequestError(updateRequested.message)
             } else {
                 onClose()
                 form.reset()
@@ -83,7 +86,11 @@ const PasswordForm: FC<Props> = ({onClose}) => {
                                     <p>
                                         <Input type={"password"} {...field} />
                                         {formErrors.currentPassword &&
-                                            <span className="text-red-500">{formErrors.currentPassword.message}</span>}
+                                            <span className="text-red-500">{formErrors.currentPassword.message}</span>
+                                        }
+                                        {requestError &&
+                                            <span className="text-red-500">{requestError}</span>
+                                        }
                                     </p>
                                 </FormControl>
                             </FormItem>

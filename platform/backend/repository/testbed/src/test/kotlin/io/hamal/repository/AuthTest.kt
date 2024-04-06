@@ -146,6 +146,39 @@ internal class AuthRepositoryTest : AbstractUnitTest() {
     }
 
     @Nested
+    inner class UpdateTest {
+        @TestFactory
+        fun `Updates Auth Email hash`() = runWith(AuthRepository::class) {
+            create(
+                CreateEmailAuthCmd(
+                    id = CmdId(1),
+                    authId = AuthId(2),
+                    accountId = AccountId(3),
+                    email = Email("email@fn.guru"),
+                    hash = PasswordHash("secretPasswordHash")
+                )
+            )
+
+            update(
+                AuthId(2), UpdateEmailHashCmd(
+                    id = CmdId(2),
+                    hash = PasswordHash("newSecret")
+                )
+            );
+
+            with(find(AuthId(2))) {
+                require(this is Auth.Email)
+                assertThat(id, equalTo(AuthId(2)))
+                assertThat(accountId, equalTo(AccountId(3)))
+                assertThat(email, equalTo(Email("email@fn.guru")))
+                assertThat(hash, equalTo(PasswordHash("newSecret")))
+            }
+
+            verifyCount(1)
+        }
+    }
+
+    @Nested
     inner class ClearTest {
 
         @TestFactory
