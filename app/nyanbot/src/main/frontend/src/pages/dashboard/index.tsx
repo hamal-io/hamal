@@ -3,12 +3,14 @@ import {Node} from '@/components/nodes/node.tsx'
 import {Comment} from '@/components/nodes/comment.tsx'
 import {Canvas} from "@/components/nodes/canvas.tsx";
 
+import styles from './styles.module.css'
+
 const DashboardSite = () => {
     return (
         <div className="w-screen h-screen">
 
             <Canvas
-                position={{x: 0, y: 80}} // offsets menu navbar
+                // position={{x: 0, y: 80}} // offsets menu navbar
             >
 
                 {/*<Comment*/}
@@ -23,7 +25,7 @@ const DashboardSite = () => {
                     id='1'
                     type="test"
                     position={{x: 0, y: 0}}
-                    size={{width: 250, height: 100}}
+                    size={{width: 100, height: 100}}
                     onDragStart={() => console.log("start dragging")}
                 />
 

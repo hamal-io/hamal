@@ -5,7 +5,6 @@ import {Position} from "@/components/nodes/types.ts";
 import {ContextCanvasState} from "@/components/nodes/context.ts";
 
 type PortsProps = {
-    type: string;
 }
 export const Ports: FC<PortsProps> = ({}) => {
     return (
@@ -123,6 +122,8 @@ export const Port: FC<PortProps> = ({isInput}) => {
     // const inputTypes = React.useContext(PortTypesContext) || {};
     const [isDragging, setIsDragging] = React.useState<Boolean>(false);
     const [startPosition, setStartPosition] = React.useState<Position>({x: 0, y: 0});
+    const startPositionCache = React.useRef(startPosition);
+
 
     // const startPosition = React.useRef(dragStartPosition);
     const port = React.useRef<HTMLDivElement>(null);
@@ -137,12 +138,15 @@ export const Port: FC<PortProps> = ({isInput}) => {
     }
 
 
+
     const handleDrag = (e: MouseEvent) => {
         // const {x, y, width, height} = document
-        //     .getElementById(stageId)
+        //     .getElementById("CANVAS_1")
         //     ?.getBoundingClientRect() ?? {x: 0, y: 0, width: 0, height: 0};
 
+
         const {x,y} = canvasState.position;
+        // const x = 0; const y = 0;
         const {width, height} = canvasState.size;
 
         // if (isInput) {
@@ -160,11 +164,9 @@ export const Port: FC<PortProps> = ({isInput}) => {
             y: byScale(e.clientY - y - height / 2) + byScale(canvasState.translate.y)
         };
 
-        console.log(startPosition, to)
-
         line.current?.setAttribute(
             "d",
-            calculatePath(startPosition, to)
+            calculatePath(startPositionCache.current, to)
         );
         // }
     };
@@ -290,10 +292,10 @@ export const Port: FC<PortProps> = ({isInput}) => {
             height: startPortHeight = 0
         } = port.current?.getBoundingClientRect() || {};
 
-        const stageX = canvasState.translate.x;
-        const stageY = canvasState.translate.y;
-        const stageWidth = canvasState.size.width;
-        const stageHeight = canvasState.size.height;
+        const canvasX = canvasState.position.x;
+        const canvasY = canvasState.position.y;
+        const canvasWidth = canvasState.size.width;
+        const canvasHeight = canvasState.size.height;
 
         if (isInput) {
             // lineInToPort.current = document.querySelector(
@@ -335,16 +337,14 @@ export const Port: FC<PortProps> = ({isInput}) => {
             //     document.addEventListener("mousemove", handleDrag);
             // }
         } else {
-            const coordinates = {
-                x:
-                    byScale(startPortX - stageX + startPortWidth / 2 - stageWidth / 2) +
-                    byScale(canvasState.translate.x),
-                y:
-                    byScale(startPortY - stageY + startPortWidth / 2 - stageHeight / 2) +
-                    byScale(canvasState.translate.y)
+            const position = {
+                x: byScale(startPortX - canvasX + startPortWidth / 2 - canvasWidth / 2) + byScale(canvasState.translate.x),
+                y: byScale(startPortY - canvasY + startPortHeight / 2 - canvasHeight / 2) + byScale(canvasState.translate.y)
             };
-            setStartPosition(coordinates);
-            // dragStartCoordinatesCache.current = coordinates;
+
+            setStartPosition(position);
+            startPositionCache.current = position;
+
             setIsDragging(true);
             document.addEventListener("mouseup", handleDragEnd);
             document.addEventListener("mousemove", handleDrag);
@@ -373,11 +373,13 @@ export const Port: FC<PortProps> = ({isInput}) => {
             {/*    // <Portal*/}
             {/*    //     node={document.getElementById(`${DRAG_CONNECTION_ID}${editorId}`)}*/}
             {/*    // >*/}
+            {isDragging && !isInput ? (
             <Connection
                 from={startPosition}
                 to={startPosition}
                 lineRef={line}
             />
+            ) : null }
             {/*    // </Portal>*/}
             {/*) : null}*/}
         </React.Fragment>

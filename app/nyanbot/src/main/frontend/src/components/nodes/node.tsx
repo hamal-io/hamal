@@ -21,7 +21,8 @@ export const Node: FC<NodeProps> = ({
     // canvasRect
 }) => {
 
-    const wrapper = React.useRef<HTMLDivElement>(null);
+    const nodeWrapper = React.useRef<HTMLDivElement>(null);
+
 
     const startDrag = (e: React.MouseEvent | React.TouchEvent) => {
         console.log("start drag",)
@@ -29,8 +30,8 @@ export const Node: FC<NodeProps> = ({
     };
 
     const handleDrag = ({x, y}: Position) => {
-        if (wrapper.current) {
-            wrapper.current.style.transform = `translate(${x}px,${y}px)`;
+        if (nodeWrapper.current) {
+            nodeWrapper.current.style.transform = `translate(${x}px,${y}px)`;
         }
     };
 
@@ -44,37 +45,67 @@ export const Node: FC<NodeProps> = ({
 
     // FIXME
     return (
+        // <Draggable
+        //     innerRef={wrapper}
+        //     className={styles.wrapper}
+        //     style={{
+        //         transform: `translate(${position.x}px,${position.y}px)`,
+        //         width,
+        //         height,
+        //         zIndex: isEditing ? 999 : ""
+        //     }}
+        //     onDragStart={startDrag}
+        //     onDrag={handleDrag}
+        //     onDragEnd={handleDragEnd}
+        //     // onContextMenu={handleContextMenu}
+        //     // onDoubleClick={startTextEdit}
+        //     // onWheel={e => e.stopPropagation()}
+        //     data-color={"green"}
+        //     data-component="node"
+        //
+        // >
+        //     <Ports
+        //         type='test'
+        //     />
+        //
+        //     {/*<Draggable*/}
+        //     {/*    // className={styles.resizeThumb}*/}
+        //     {/*    // stageState={stageState}*/}
+        //     {/*    // stageRect={stageRect}*/}
+        //     {/*    // onDrag={handleResize}*/}
+        //     {/*    // onDragEnd={handleResizeEnd}*/}
+        //     {/*    data-component="node-resize-handle"*/}
+        //     {/*/>*/}
+        // </Draggable>
+
+
         <Draggable
-            innerRef={wrapper}
             className={styles.wrapper}
             style={{
-                transform: `translate(${position.x}px,${position.y}px)`,
                 width,
                 height,
-                zIndex: isEditing ? 999 : ""
+                transform: `translate(${position.x}px, ${position.y}px)`
             }}
             onDragStart={startDrag}
             onDrag={handleDrag}
-            onDragEnd={handleDragEnd}
-            // onContextMenu={handleContextMenu}
-            // onDoubleClick={startTextEdit}
-            // onWheel={e => e.stopPropagation()}
-            data-color={"green"}
+            // onDragEnd={stopDrag}
+            innerRef={nodeWrapper}
+            // data-node-id={id}
             data-component="node"
-
+            // data-node-type={currentNodeType.type}
+            // data-component-is-root={!!root}
+            // onContextMenu={handleContextMenu}
+            // stageState={stageState}
+            // stageRect={stageRect}
         >
             <Ports
-                type='test'
+                // nodeId={id}
+                // inputs={inputs}
+                // outputs={outputs}
+                // connections={connections}
+                // updateNodeConnections={updateNodeConnections}
+                // inputData={inputData}
             />
-
-            {/*<Draggable*/}
-            {/*    // className={styles.resizeThumb}*/}
-            {/*    // stageState={stageState}*/}
-            {/*    // stageRect={stageRect}*/}
-            {/*    // onDrag={handleResize}*/}
-            {/*    // onDragEnd={handleResizeEnd}*/}
-            {/*    data-component="node-resize-handle"*/}
-            {/*/>*/}
         </Draggable>
     )
 }
