@@ -12,20 +12,19 @@ import io.hamal.lib.domain.vo.RequestId
 import io.hamal.repository.api.Auth
 import org.springframework.stereotype.Component
 
-fun interface AuthUpdatePort {
+fun interface AuthUpdatePasswordPort {
     operator fun invoke(req: AuthUpdatePasswordRequest): AuthUpdatePasswordRequested
 }
 
 @Component
-class AuthUpdateAdapter(
+class AuthUpdatePasswordAdapter(
     private val accountFind: AccountFindPort,
     private val generateDomainId: GenerateDomainId,
     private val encodePassword: EncodePassword,
     private val listAuth: AuthListPort,
     private val requestEnqueue: RequestEnqueuePort
-) : AuthUpdatePort {
+) : AuthUpdatePasswordPort {
     override fun invoke(req: AuthUpdatePasswordRequest): AuthUpdatePasswordRequested {
-
         val account = accountFind(SecurityContext.currentAccountId) ?: throw NoSuchElementException("Account not found")
         val encodedPassword = encodePassword(req.currentPassword, account.salt)
 
