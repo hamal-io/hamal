@@ -8,15 +8,16 @@ type ControlsProps = {}
 export const Controls: FC<ControlsProps> = ({}) => {
     return (
         <div className={styles.wrapper} data-component="ports">
-            <ConditionControl/>
+            {/*<ControlConditionWidget/>*/}
+            <ControlInputWidget/>
         </div>
     )
 }
 
 
-type TextControlProps = {}
+type ControlTextWidgetProps = {}
 
-export const TextControl: FC<TextControlProps> = ({}) => {
+export const ControlTextWidget: FC<ControlTextWidgetProps> = ({}) => {
     return (
         <div className="flex flex-row">
             <PortInput/>
@@ -25,7 +26,9 @@ export const TextControl: FC<TextControlProps> = ({}) => {
     )
 }
 
-export const ConditionControl: FC<TextControlProps> = ({}) => {
+type ControlConditionWidgetProps = {}
+
+export const ControlConditionWidget: FC<ControlConditionWidgetProps> = ({}) => {
     const [operator, setOperator] = useState('test')
     return (
         <div className="flex flex-col">
@@ -60,3 +63,14 @@ export const ConditionControl: FC<TextControlProps> = ({}) => {
         </div>
     )
 }
+
+type ControlInputWidgetProps = {}
+
+export const ControlInputWidget: FC<ControlInputWidgetProps> = ({}) => {
+    return (
+        <div className="flex flex-row">
+            <PortInput/>
+        </div>
+    )
+}
+
