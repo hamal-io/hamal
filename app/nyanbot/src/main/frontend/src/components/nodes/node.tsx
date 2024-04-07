@@ -95,6 +95,8 @@ export const NodeWidget: FC<NodeWidgetProps> = ({node}) => {
             // stageRect={stageRect}
         >
 
+            <span className='text-teal-200'>{node.title} </span>
+
 
             <ControlListWidget
                 controls={node.controls}

@@ -108,6 +108,7 @@ export const Canvas: FC<CanvasProps> = ({nodes, connections, readonly}) => {
                             node={{
                                 id: '1',
                                 type: "Init",
+                                title: "Init",
                                 position: {x: -500, y: 0},
                                 size: {width: 200, height: 300},
                                 controls: [],
@@ -120,6 +121,7 @@ export const Canvas: FC<CanvasProps> = ({nodes, connections, readonly}) => {
                             node={{
                                 id: '2',
                                 type: "Select",
+                                title: 'Select LP',
                                 position: {x: -150, y: 0},
                                 size: {width: 250, height: 300},
                                 controls: [
@@ -142,7 +144,8 @@ export const Canvas: FC<CanvasProps> = ({nodes, connections, readonly}) => {
                         <NodeWidget
                             node={{
                                 id: '3',
-                                type: "ToString",
+                                type: "ToText",
+                                title: 'LP to text',
                                 position: {x: 200, y: 0},
                                 size: {width: 250, height: 300},
                                 controls: [
@@ -169,8 +172,9 @@ export const Canvas: FC<CanvasProps> = ({nodes, connections, readonly}) => {
                             node={{
                                 id: '4',
                                 type: "TelegramMessageSend",
+                                title: 'Telegram send message',
                                 position: {x: 550, y: 0},
-                                size: {width: 150, height: 300},
+                                size: {width: 250, height: 300},
                                 controls: [
                                     {
                                         id: '2',

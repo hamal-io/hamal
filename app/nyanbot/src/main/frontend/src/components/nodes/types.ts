@@ -81,10 +81,12 @@ export const isControlText = (value: any): value is ControlText => {
 
 export type NodeId = string
 export type NodeType = string
+export type NodeLabel = string
 
 export type Node = {
     id: NodeId;
     type: NodeType;
+    title?: NodeLabel;
     position: Position;
     size: Size;
     controls: Control[]

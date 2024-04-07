@@ -40,7 +40,7 @@ export const ConnectionListWidget = ({connections}: ConnectionListWidgetProps) =
                 strokeWidth={3}
                 strokeLinecap="round"
                 // d={curve}
-                d={`M -200,75 L -90,25`}
+                d={`M -300,275 L -130,50`}
             />
 
             <path
@@ -55,9 +55,23 @@ export const ConnectionListWidget = ({connections}: ConnectionListWidgetProps) =
                 strokeWidth={3}
                 strokeLinecap="round"
                 // d={curve}
-                d={`M 150,75 L 260,30`}
+                d={`M 100,275 L 230,90`}
             />
 
+            <path
+                // data-connection-id={id}
+                // data-output-node-id={outputNodeId}
+                // data-output-port-name={outputPortName}
+                // data-input-node-id={inputNodeId}
+                // data-input-port-name={inputPortName}
+                data-component="connection-path"
+                stroke="rgb(185, 186, 189)"
+                // fill="none"
+                strokeWidth={3}
+                strokeLinecap="round"
+                // d={curve}
+                d={`M 450,275 L 570,150`}
+            />
 
         </svg>
     );
