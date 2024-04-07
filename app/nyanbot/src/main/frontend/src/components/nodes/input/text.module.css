@@ -3,7 +3,8 @@
   border: none;
 }
 .input {
-  background: linear-gradient(to bottom, #6c7073, #838a8e);
+  /*background: linear-gradient(to bottom, #6c7073, #838a8e);*/
+  background: white;
   width: 100%;
   border: 1px solid #3c3e40;
   border-radius: 4px;
@@ -15,6 +16,7 @@
     color: rgb(47, 49, 50);
   }
   &:focus {
-    background: linear-gradient(to bottom, #7c8286, #99a0a4);
+    /*background: linear-gradient(to bottom, #7c8286, #99a0a4);*/
+    background: pink;
   }
 }
