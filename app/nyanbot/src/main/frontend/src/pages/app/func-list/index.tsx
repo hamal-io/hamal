@@ -6,7 +6,6 @@ const FuncListPage = () => {
 
     return (
         <>
-
             <div className="flex flex-col mt-12 lg:mt-16 space-y-5 sm:space-y-0 sm:space-x-3 sm:flex-row sm:justify-between sm:items-center">
                 <CardLarge></CardLarge>
                 <CardLarge></CardLarge>
@@ -19,6 +18,7 @@ const FuncListPage = () => {
         </>
     )
 }
+
 export default FuncListPage;
 
 const CardContainer = () => {
