@@ -1,4 +1,4 @@
-package rocks.candy.filter
+package com.nyanbot.filter
 
 import io.hamal.lib.common.util.GitUtils
 import jakarta.servlet.FilterChain
