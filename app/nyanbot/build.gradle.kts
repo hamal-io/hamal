@@ -37,7 +37,11 @@ docker {
 
 
 dependencies {
-    implementation(project(":platform:lib:common"))
+    implementation(project(":platform:lib:domain"))
+    implementation(project(":platform:lib:nodes"))
+    implementation(project(":platform:lib:sdk"))
+    implementation(project(":platform:lib:sqlite"))
+    implementation(project(":platform:lib:web3"))
     implementation(external.spring.web) {
         exclude("com.fasterxml.jackson.core", "jackson-core")
         exclude("org.springframework.boot", "spring-boot-starter-json")

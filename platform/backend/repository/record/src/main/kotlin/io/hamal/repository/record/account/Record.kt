@@ -16,7 +16,7 @@ sealed class AccountRecord(
     override var recordedAt: RecordedAt? = null
 ) : Record<AccountId>() {
 
-    internal object Adapter : RecordAdapter<AccountRecord>(
+    object Adapter : RecordAdapter<AccountRecord>(
         listOf(
             Created::class,
             Converted::class

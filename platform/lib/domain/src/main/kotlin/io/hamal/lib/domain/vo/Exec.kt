@@ -7,6 +7,7 @@ import io.hamal.lib.common.domain.ValueObjectString
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.util.TimeUtils
+import io.hamal.lib.domain._enum.CodeType
 import java.time.Instant
 
 class ExecId(override val value: SnowflakeId) : ValueObjectId() {
@@ -22,6 +23,7 @@ data class ExecCode(
     val id: CodeId? = null,
     val version: CodeVersion? = null,
     val value: CodeValue? = null,
+    val type: CodeType? = null
 )
 
 enum class ExecStatus(val value: Int) {

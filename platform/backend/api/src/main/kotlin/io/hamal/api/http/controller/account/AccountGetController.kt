@@ -1,6 +1,7 @@
 package io.hamal.api.http.controller.account
 
 import io.hamal.core.adapter.account.AccountGetPort
+import io.hamal.core.adapter.workspace.WorkspaceListPort
 import io.hamal.core.component.Retry
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.sdk.api.ApiAccount

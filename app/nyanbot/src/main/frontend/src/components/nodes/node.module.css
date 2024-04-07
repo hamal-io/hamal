@@ -1,0 +1,51 @@
+.wrapper {
+    background: rgba(114, 120, 124, 0.9);
+    border-radius: 5px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    user-select: none;
+    display: flex;
+    flex-direction: column;
+    z-index: 1;
+    cursor: default;
+    &[data-color="red"]{
+        background: rgba(213, 84, 103, 0.65);
+        border-color: rgba(227, 85, 119, 0.65);
+    }
+    &[data-color="purple"]{
+        background: rgba(153, 83, 196, 0.65);
+        border-color: rgba(156, 85, 227, 0.65);
+    }
+    &[data-color="blue"]{
+        background: rgba(76, 142, 203, 0.65);
+        border-color: rgba(85, 159, 227, 0.65);
+    }
+    &[data-color="green"]{
+        background: rgba(70, 200, 130, 0.65);
+        border-color: rgba(85, 227, 150, 0.65);
+    }
+    &[data-color="yellow"]{
+        background: rgba(200, 167, 63, 0.65);
+        border-color: rgba(227, 213, 85, 0.65);
+    }
+    &[data-color="orange"]{
+        background: rgba(215, 123, 64, 0.65);
+        border-color: rgba(227, 149, 85, 0.65);
+    }
+    &[data-color="pink"]{
+        background: rgba(255, 102, 208, 0.65);
+        border-color: rgba(242, 131, 228, 0.65);
+    }
+}
+
+.label {
+    font-size: 13px;
+    padding: 5px;
+    background: #53585a;
+    border-radius: 5px 5px 0px 0px;
+    margin: 0px;
+    margin-bottom: 3px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+}

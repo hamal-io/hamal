@@ -2,6 +2,7 @@ package io.hamal.runner.run.function
 
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain.State
+import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain.vo.*
 import io.hamal.runner.connector.UnitOfWork
 import io.hamal.runner.run.AbstractExecuteTest
@@ -111,6 +112,7 @@ internal class CompleteTest : AbstractExecuteTest() {
         inputs = ExecInputs(),
         state = State(),
         code = CodeValue(code),
+        codeType = CodeType.Lua54,
         correlation = null
     )
 }

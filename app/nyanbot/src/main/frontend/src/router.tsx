@@ -7,7 +7,8 @@ import LandingPage from "./pages/landing";
 import NotFoundPage from "@/app/not-found.tsx";
 import RootLayout from "@/app/root-layout.tsx";
 import DashboardPage from "@/pages/dashboard";
-import FuncListPage from "@/pages/app/func-list";
+import {TestPage} from "@/pages/test"
+import FlowListPage from "src/pages/app/flow-list";
 
 export const router = createBrowserRouter([
     {
@@ -23,9 +24,15 @@ export const router = createBrowserRouter([
             </RootLayout>
     },
     {
-        path: "/functions", element:
+        path: "/flows", element:
             <RootLayout>
-                <FuncListPage/>
+                <FlowListPage/>
+            </RootLayout>
+    },
+    {
+        path: "/test", element:
+            <RootLayout>
+                <TestPage/>
             </RootLayout>
     },
     {path: "*", element: <NotFoundPage/>}

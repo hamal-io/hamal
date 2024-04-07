@@ -18,7 +18,7 @@ class AccountLogoutController(
     fun logout(): ResponseEntity<Unit> {
         val auth = SecurityContext.current
         authRepository.revokeAuth(AuthCmdRepository.RevokeAuthCmd(generateCmdId(), auth.id))
-        return ResponseEntity.accepted().build()
+        return ResponseEntity.noContent().build()
     }
 
 }

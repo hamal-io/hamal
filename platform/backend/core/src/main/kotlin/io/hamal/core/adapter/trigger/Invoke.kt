@@ -45,7 +45,10 @@ class TriggerInvokeAdapter(
             correlationId = req.correlationId,
             inputs = req.inputs ?: InvocationInputs(),
             code = ExecCode(
-                id = code.id, version = code.version, value = code.value
+                id = code.id,
+                version = code.version,
+                value = code.value,
+                type = code.type
             ),
         ).also(requestEnqueue::invoke)
     }
