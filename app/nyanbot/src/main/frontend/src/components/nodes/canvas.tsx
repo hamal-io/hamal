@@ -93,6 +93,7 @@ export const Canvas: FC<CanvasProps> = ({nodes, connections, readonly}) => {
                 // style={{ cursor: "grab" }}
                 // disabled={disablePan || (spaceToPan && !spaceIsPressed)}
             >
+
                 <div
                     ref={translateWrapper}
                     className={styles.transformWrapper}
@@ -105,7 +106,7 @@ export const Canvas: FC<CanvasProps> = ({nodes, connections, readonly}) => {
 
                         <NodeUi
                             id='1'
-                            type="WEB3_NEW_LP"
+                            type="INIT"
                             position={{x: -400, y: 0}}
                             size={{width: 200, height: 100}}
                             onDragStart={() => console.log("start dragging")}

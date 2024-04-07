@@ -1,7 +1,6 @@
 export type NodeId = string
 export type NodeType = string
 
-export type ConnectionId = string
 
 export type CanvasState = {
     scale: number;
@@ -32,10 +31,19 @@ export type Size = {
     height: number;
 };
 
+export type ConnectionId = string
+
 export type Connection = {
     id: ConnectionId;
     inputNodeId: NodeId;
     outputNodeId: NodeId;
+}
+
+export interface SelectOption {
+    label: string;
+    value: string;
+    description?: string;
+    sortIndex?: number;
 }
 
 export type Node = {
@@ -43,4 +51,13 @@ export type Node = {
     type: NodeType;
     position: Position;
     size: Size;
+
+}
+
+export type ControlId = string
+export type ControlType = string
+
+export type Control = {
+    id: ControlId;
+    type: ControlType;
 }

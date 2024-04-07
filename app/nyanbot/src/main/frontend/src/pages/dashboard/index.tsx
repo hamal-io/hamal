@@ -3,7 +3,9 @@ import {Editor} from "@/components/nodes/editor.tsx";
 
 const DashboardSite = () => {
     return (
-        <Editor/>
+        <Editor
+            onSave={() => console.log("saved")}
+        />
     )
 }
 

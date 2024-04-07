@@ -13,7 +13,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <Background>
             <RouterProvider router={router}/>
         </Background>
-        <TailwindIndicator/>
+        {/*<TailwindIndicator/>*/}
     </React.StrictMode>
 )
 

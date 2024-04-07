@@ -3,6 +3,7 @@ import {NodeId, NodeType, Position, Size} from './types.ts';
 import {Draggable} from './draggable.tsx';
 import styles from "@/components/nodes/node.module.css";
 import {Ports} from "@/components/nodes/port.tsx";
+import {Controls} from "@/components/nodes/control.tsx";
 
 type NodeProps = {
     id: NodeId;
@@ -97,6 +98,10 @@ export const Node: FC<NodeProps> = ({
             // stageState={stageState}
             // stageRect={stageRect}
         >
+
+
+            <Controls />
+
             <Ports
                 // nodeId={id}
                 // inputs={inputs}
@@ -105,6 +110,38 @@ export const Node: FC<NodeProps> = ({
                 // updateNodeConnections={updateNodeConnections}
                 // inputData={inputData}
             />
+
+
+
+
+            {/*<Control type={"number"}/>*/}
+
+
+            {/*{type ==='INIT' && initNode()}*/}
+            {/*{type ==='FILTER' && filterNode()}*/}
+            {/*{type ==='TELEGRAM_SEND_MESSAGE' && telegramSendNode()}*/}
+
         </Draggable>
     )
 }
+
+// const initNode = () => {
+//     return (
+//         <span style={{color: "black"}}>On new LP</span>
+//     )
+// }
+//
+// const filterNode = () => {
+//     return (
+//         <span style={{color: "black"}}>Filter</span>
+//     )
+// }
+//
+//
+// const telegramSendNode = () => {
+//     return (
+//         <div>
+//             <span style={{color: "black"}}>Send telegram message</span>
+//         </div>
+//     )
+// }

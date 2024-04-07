@@ -7,9 +7,9 @@ type PortsProps = {}
 export const Ports: FC<PortsProps> = ({}) => {
     return (
         <div className={styles.wrapper} data-component="ports">
-            <div className={styles.inputs} data-component="ports-inputs">
-                <PortInput/>
-            </div>
+            {/*<div className={styles.inputs} data-component="ports-inputs">*/}
+            {/*    <PortInput/>*/}
+            {/*</div>*/}
             <div className={styles.outputs} data-component="ports-outputs">
                 <PortOutput/>
             </div>
@@ -24,7 +24,7 @@ export const PortInput: FC<PortInputProps> = ({}) => {
     return (
         <div
             data-component="port-input"
-            className={styles.hook}
+            className={styles.bubble}
             // data-controlless={isConnected || noControls || !controls.length}
             onDragStart={e => {
                 e.preventDefault();
@@ -74,7 +74,7 @@ export const PortOutput: FC<PortOutputProps> = ({}) => {
     return (
         <div
             data-component="port-output"
-            className={styles.hook}
+            className={styles.bubble}
             data-controlless={true}
             onDragStart={e => {
                 e.preventDefault();
