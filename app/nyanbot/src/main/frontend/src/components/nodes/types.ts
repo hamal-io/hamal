@@ -16,18 +16,18 @@ export type ConnectionId = string
 
 export type Connection = {
     id: ConnectionId;
+    outputNode: {
+        id: NodeId
+    };
+    outputPort: {
+        id: PortId
+    };
     inputNode: {
         id: NodeId
     };
     inputPort: {
         id: PortId
     };
-    outputNode: {
-        id: NodeId
-    };
-    outputPort: {
-        id: PortId
-    }
 }
 
 export type ControlId = string

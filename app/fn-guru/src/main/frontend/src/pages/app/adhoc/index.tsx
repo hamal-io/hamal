@@ -46,75 +46,176 @@ const NodesAdhocPage = () => {
     const [uiState] = useUiState()
     const [adhoc, data] = useAdhoc()
     const [code, setCode] = useState("{\n" +
-        "  \"rootNode\": \"cbe10a17810000\",\n" +
         "  \"nodes\": [\n" +
         "    {\n" +
-        "      \"id\": \"cbe10a17810000\",\n" +
-        "      \"type\": \"LOAD_CONSTANT\",\n" +
-        "      \"inputPortIds\": [],\n" +
-        "      \"outputPortIds\": [\n" +
-        "        \"cbe10a16410000\"\n" +
+        "      \"id\": \"1\",\n" +
+        "      \"type\": \"Init\",\n" +
+        "      \"title\": \"Init\",\n" +
+        "      \"position\": {\n" +
+        "        \"x\": -500,\n" +
+        "        \"y\": 0\n" +
+        "      },\n" +
+        "      \"size\": {\n" +
+        "        \"width\": 200,\n" +
+        "        \"height\": 300\n" +
+        "      },\n" +
+        "      \"controls\": [],\n" +
+        "      \"outputs\": [\n" +
+        "        {\n" +
+        "          \"id\": \"1\"\n" +
+        "        }\n" +
         "      ]\n" +
         "    },\n" +
         "    {\n" +
-        "      \"id\": \"cbe10a18810000\",\n" +
-        "      \"type\": \"FILTER_OBJECT\",\n" +
-        "      \"inputPortIds\": [\n" +
-        "        \"cbe10a18410000\"\n" +
+        "      \"id\": \"2\",\n" +
+        "      \"type\": \"Select\",\n" +
+        "      \"title\": \"Select LP\",\n" +
+        "      \"position\": {\n" +
+        "        \"x\": -150,\n" +
+        "        \"y\": 0\n" +
+        "      },\n" +
+        "      \"size\": {\n" +
+        "        \"width\": 250,\n" +
+        "        \"height\": 300\n" +
+        "      },\n" +
+        "      \"controls\": [\n" +
+        "        {\n" +
+        "          \"id\": \"1\",\n" +
+        "          \"type\": \"Input\",\n" +
+        "          \"ports\": [\n" +
+        "            {\n" +
+        "              \"id\": \"2\"\n" +
+        "            }\n" +
+        "          ]\n" +
+        "        },\n" +
+        "        {\n" +
+        "          \"id\": \"2\",\n" +
+        "          \"type\": \"Condition\",\n" +
+        "          \"ports\": []\n" +
+        "        }\n" +
         "      ],\n" +
-        "      \"outputPortIds\": [\n" +
-        "        \"cbe10a18410001\"\n" +
+        "      \"outputs\": [\n" +
+        "        {\n" +
+        "          \"id\": \"3\"\n" +
+        "        }\n" +
         "      ]\n" +
         "    },\n" +
         "    {\n" +
-        "      \"id\": \"cbe10a18810002\",\n" +
-        "      \"type\": \"PRINT\",\n" +
-        "      \"inputPortIds\": [\n" +
-        "        \"cbe10a18810001\"\n" +
+        "      \"id\": \"3\",\n" +
+        "      \"type\": \"ToText\",\n" +
+        "      \"title\": \"LP to text\",\n" +
+        "      \"position\": {\n" +
+        "        \"x\": 200,\n" +
+        "        \"y\": 0\n" +
+        "      },\n" +
+        "      \"size\": {\n" +
+        "        \"width\": 250,\n" +
+        "        \"height\": 300\n" +
+        "      },\n" +
+        "      \"controls\": [\n" +
+        "        {\n" +
+        "          \"id\": \"1\",\n" +
+        "          \"type\": \"Input\",\n" +
+        "          \"ports\": [\n" +
+        "            {\n" +
+        "              \"id\": \"4\"\n" +
+        "            }\n" +
+        "          ]\n" +
+        "        },\n" +
+        "        {\n" +
+        "          \"id\": \"2\",\n" +
+        "          \"type\": \"Text\",\n" +
+        "          \"ports\": [],\n" +
+        "          \"text\": \"{contract.address} has {total_holder}\",\n" +
+        "          \"placeholder\": \"Turn into text\"\n" +
+        "        }\n" +
         "      ],\n" +
-        "      \"outputPortIds\": []\n" +
+        "      \"outputs\": [\n" +
+        "        {\n" +
+        "          \"id\": \"5\"\n" +
+        "        }\n" +
+        "      ]\n" +
+        "    },\n" +
+        "    {\n" +
+        "      \"id\": \"4\",\n" +
+        "      \"type\": \"TelegramMessageSend\",\n" +
+        "      \"title\": \"Telegram send message\",\n" +
+        "      \"position\": {\n" +
+        "        \"x\": 550,\n" +
+        "        \"y\": 0\n" +
+        "      },\n" +
+        "      \"size\": {\n" +
+        "        \"width\": 250,\n" +
+        "        \"height\": 300\n" +
+        "      },\n" +
+        "      \"controls\": [\n" +
+        "        {\n" +
+        "          \"id\": \"3\",\n" +
+        "          \"type\": \"Text\",\n" +
+        "          \"ports\": [],\n" +
+        "          \"text\": \"\",\n" +
+        "          \"placeholder\": \"chat_id\"\n" +
+        "        },\n" +
+        "        {\n" +
+        "          \"id\": \"4\",\n" +
+        "          \"type\": \"Text\",\n" +
+        "          \"ports\": [\n" +
+        "            {\n" +
+        "              \"id\": \"6\"\n" +
+        "            }\n" +
+        "          ],\n" +
+        "          \"text\": \"\",\n" +
+        "          \"placeholder\": \"message\"\n" +
+        "        }\n" +
+        "      ],\n" +
+        "      \"outputs\": []\n" +
         "    }\n" +
         "  ],\n" +
         "  \"connections\": [\n" +
         "    {\n" +
-        "      \"id\": \"cbe10a18810003\",\n" +
-        "      \"inputNodeId\": \"cbe10a18810000\",\n" +
-        "      \"inputSlotId\": \"cbe10a18410000\",\n" +
-        "      \"outputNodeId\": \"cbe10a17810000\",\n" +
-        "      \"outputSlotId\": \"cbe10a16410000\"\n" +
+        "      \"id\": \"1\",\n" +
+        "      \"outputNode\": {\n" +
+        "        \"id\": \"1\"\n" +
+        "      },\n" +
+        "      \"outputPort\": {\n" +
+        "        \"id\": \"1\"\n" +
+        "      },\n" +
+        "      \"inputNode\": {\n" +
+        "        \"id\": \"2\"\n" +
+        "      },\n" +
+        "      \"inputPort\": {\n" +
+        "        \"id\": \"2\"\n" +
+        "      }\n" +
         "    },\n" +
         "    {\n" +
-        "      \"id\": \"cbe10a18810004\",\n" +
-        "      \"inputNodeId\": \"cbe10a18810002\",\n" +
-        "      \"inputSlotId\": \"cbe10a18810001\",\n" +
-        "      \"outputNodeId\": \"cbe10a18810000\",\n" +
-        "      \"outputSlotId\": \"cbe10a18410001\"\n" +
-        "    }\n" +
-        "  ],\n" +
-        "  \"ports\": [\n" +
-        "    {\n" +
-        "      \"id\": \"cbe10a16410000\",\n" +
-        "      \"name\": \"value\",\n" +
-        "      \"type\": \"Output\",\n" +
-        "      \"valueType\": \"TypeNumber\"\n" +
+        "      \"id\": \"2\",\n" +
+        "      \"outputNode\": {\n" +
+        "        \"id\": \"2\"\n" +
+        "      },\n" +
+        "      \"outputPort\": {\n" +
+        "        \"id\": \"3\"\n" +
+        "      },\n" +
+        "      \"inputNode\": {\n" +
+        "        \"id\": \"3\"\n" +
+        "      },\n" +
+        "      \"inputPort\": {\n" +
+        "        \"id\": \"4\"\n" +
+        "      }\n" +
         "    },\n" +
         "    {\n" +
-        "      \"id\": \"cbe10a18410000\",\n" +
-        "      \"name\": \"input\",\n" +
-        "      \"type\": \"Input\",\n" +
-        "      \"valueType\": \"TypeNumber\"\n" +
-        "    },\n" +
-        "    {\n" +
-        "      \"id\": \"cbe10a18410001\",\n" +
-        "      \"name\": \"output\",\n" +
-        "      \"type\": \"Output\",\n" +
-        "      \"valueType\": \"TypeNumber\"\n" +
-        "    },\n" +
-        "    {\n" +
-        "      \"id\": \"cbe10a18810001\",\n" +
-        "      \"name\": \"number\",\n" +
-        "      \"type\": \"Output\",\n" +
-        "      \"valueType\": \"TypeNumber\"\n" +
+        "      \"id\": \"3\",\n" +
+        "      \"outputNode\": {\n" +
+        "        \"id\": \"3\"\n" +
+        "      },\n" +
+        "      \"outputPort\": {\n" +
+        "        \"id\": \"5\"\n" +
+        "      },\n" +
+        "      \"inputNode\": {\n" +
+        "        \"id\": \"4\"\n" +
+        "      },\n" +
+        "      \"inputPort\": {\n" +
+        "        \"id\": \"6\"\n" +
+        "      }\n" +
         "    }\n" +
         "  ]\n" +
         "}")

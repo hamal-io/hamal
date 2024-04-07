@@ -2,7 +2,7 @@ import React, {FC, useCallback, useEffect, useRef, useState} from "react";
 import {Draggable} from './draggable.tsx';
 import styles from './canvas.module.css'
 import {ContextCanvasState} from "@/components/nodes/context.ts";
-import {CanvasState, Connection, ControlCondition, ControlInput, ControlText, Node} from "./types.ts";
+import {CanvasState, Connection, Node} from "./types.ts";
 import {ConnectionListWidget} from "@/components/nodes/connection.tsx";
 import {NodeWidget} from "@/components/nodes/node.tsx";
 
@@ -104,105 +104,14 @@ export const Canvas: FC<CanvasProps> = ({nodes, connections, readonly}) => {
                         style={{transform: `scale(${scale})`}}
                     >
 
-                        <NodeWidget
-                            node={{
-                                id: '1',
-                                type: "Init",
-                                title: "Init",
-                                position: {x: -500, y: 0},
-                                size: {width: 200, height: 300},
-                                controls: [],
-                                outputs: []
-                            }}
-                            onDragStart={() => console.log("start dragging")}
-                        />
+                        {nodes.map(node => (
+                            <NodeWidget
+                                key={node.id}
+                                node={node}
+                                onDragStart={() => console.log("start dragging")}
+                            />
+                        ))}
 
-                        <NodeWidget
-                            node={{
-                                id: '2',
-                                type: "Select",
-                                title: 'Select LP',
-                                position: {x: -150, y: 0},
-                                size: {width: 250, height: 300},
-                                controls: [
-                                    {
-                                        id: '1',
-                                        type: 'Input',
-                                        ports: [],
-                                    } satisfies ControlInput,
-                                    {
-                                        id: '2',
-                                        type: 'Condition',
-                                        ports: [],
-                                    } satisfies ControlCondition,
-                                ],
-                                outputs: []
-                            }}
-                            onDragStart={() => console.log("start dragging")}
-                        />
-
-                        <NodeWidget
-                            node={{
-                                id: '3',
-                                type: "ToText",
-                                title: 'LP to text',
-                                position: {x: 200, y: 0},
-                                size: {width: 250, height: 300},
-                                controls: [
-                                    {
-                                        id: '1',
-                                        type: 'Input',
-                                        ports: [],
-                                    } satisfies ControlInput,
-                                    {
-                                        id: '2',
-                                        type: 'Text',
-                                        ports: [],
-                                        text: `{contract.address} has {total_holder}`,
-                                        placeholder: 'Turn into text'
-                                    } satisfies ControlText,
-                                ],
-                                outputs: []
-                            }}
-                            onDragStart={() => console.log("start dragging")}
-                        />
-
-
-                        <NodeWidget
-                            node={{
-                                id: '4',
-                                type: "TelegramMessageSend",
-                                title: 'Telegram send message',
-                                position: {x: 550, y: 0},
-                                size: {width: 250, height: 300},
-                                controls: [
-                                    {
-                                        id: '2',
-                                        type: 'Text',
-                                        ports: [],
-                                        text: '',
-                                        placeholder: 'chat_id'
-                                    } satisfies ControlText,
-
-                                    {
-                                        id: '3',
-                                        type: 'Text',
-                                        ports: [
-                                            {
-                                                id: '1'
-                                            }
-                                        ],
-                                        text: '',
-                                        placeholder: 'message'
-                                    } satisfies ControlText
-                                ],
-                                outputs: []
-                            }}
-                            onDragStart={() => console.log("start dragging")}
-                        />
-
-
-                        {/*{children}*/}
                     </div>
                 </div>
 
