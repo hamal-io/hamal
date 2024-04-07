@@ -108,7 +108,7 @@ export const Canvas: FC<CanvasProps> = ({nodes, connections, readonly}) => {
                             id='1'
                             type="INIT"
                             position={{x: -400, y: 0}}
-                            size={{width: 200, height: 100}}
+                            size={{width: 200, height: 300}}
                             onDragStart={() => console.log("start dragging")}
                         />
 
@@ -116,7 +116,7 @@ export const Canvas: FC<CanvasProps> = ({nodes, connections, readonly}) => {
                             id='2'
                             type="FILTER"
                             position={{x: -100, y: 0}}
-                            size={{width: 250, height: 100}}
+                            size={{width: 250, height: 300}}
                             onDragStart={() => console.log("start dragging")}
                         />
 
@@ -124,7 +124,7 @@ export const Canvas: FC<CanvasProps> = ({nodes, connections, readonly}) => {
                             id='3'
                             type="TELEGRAM_SEND_MESSAGE"
                             position={{x: 250, y: 0}}
-                            size={{width: 150, height: 100}}
+                            size={{width: 150, height: 300}}
                             onDragStart={() => console.log("start dragging")}
                         />
 

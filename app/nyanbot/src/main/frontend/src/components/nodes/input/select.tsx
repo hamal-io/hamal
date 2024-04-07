@@ -4,13 +4,15 @@ import React from "react";
 import styles from "./select.module.css";
 import {SelectOption} from "../types";
 import Select from "@/components/ui/select/Select.tsx";
+import {Portal} from "react-portal";
+import ContextMenu from "@/components/nodes/menu.tsx";
 
 const MAX_LABEL_LENGTH = 50;
 
 interface InputSelectProps {
     allowMultiple?: boolean;
     data: string | string[];
-    onChange: (data: string | string[]) => void;
+    onChange: (data: string) => void;
     options: SelectOption[];
     placeholder?: string;
 }
@@ -47,15 +49,15 @@ export const InputSelect = ({
     };
 
     const handleOptionSelected = (option: SelectOption) => {
-        if (allowMultiple && Array.isArray(data)) {
-            onChange([...data, option.value]);
-        } else {
+        // if (allowMultiple && Array.isArray(data)) {
+        //     onChange([...data, option.value]);
+        // } else {
             onChange(option.value);
-        }
+        // }
     };
 
     const handleOptionDeleted = (optionIndex: number) => {
-        onChange([...data.slice(0, optionIndex), ...data.slice(optionIndex + 1)]);
+        onChange([...data.slice(0, optionIndex), ...data.slice(optionIndex + 1)][0]); // FIXME
     };
 
     const getFilteredOptions = () =>
@@ -111,17 +113,16 @@ export const InputSelect = ({
                 </div>
             )}
             {drawerOpen && (
-                // <Portal>
-                //     <ContextMenu
-                //         x={drawerCoordinates.x}
-                //         y={drawerCoordinates.y}
-                //         emptyText="There are no options"
-                //         options={getFilteredOptions()}
-                //         onOptionSelected={handleOptionSelected}
-                //         onRequestClose={closeDrawer}
-                //     />
-                // </Portal>
-                null
+                <Portal>
+                    <ContextMenu
+                        x={drawerCoordinates.x}
+                        y={drawerCoordinates.y}
+                        emptyText="There are no options"
+                        options={getFilteredOptions()}
+                        onOptionSelected={handleOptionSelected}
+                        onRequestClose={closeDrawer}
+                    />
+                </Portal>
             )}
         </React.Fragment>
     );

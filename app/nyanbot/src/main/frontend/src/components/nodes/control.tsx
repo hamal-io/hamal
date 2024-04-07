@@ -1,4 +1,4 @@
-import React, {FC} from "react";
+import React, {FC, useState} from "react";
 import {InputSelect, InputText} from "./input";
 import styles from "@/components/nodes/port.module.css";
 import {PortInput} from "@/components/nodes/port.tsx";
@@ -26,6 +26,7 @@ export const TextControl: FC<TextControlProps> = ({}) => {
 }
 
 export const ConditionControl: FC<TextControlProps> = ({}) => {
+    const [operator, setOperator] = useState('test')
     return (
         <div className="flex flex-col">
             <div className="flex flex-row">
@@ -48,9 +49,8 @@ export const ConditionControl: FC<TextControlProps> = ({}) => {
                         label: 'label 2'
                     }
                 ]}
-                             data={'test'}
-                             onChange={() => {
-                             }}
+                             data={operator}
+                             onChange={setOperator}
                              placeholder={'test'}/>;
             </div>
             <div className="flex flex-row">
