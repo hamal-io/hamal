@@ -10,14 +10,15 @@ class ConnectionId(override val value: SnowflakeId) : ValueObjectId() {
 
 data class Connection(
     val id: ConnectionId,
-
-    val inputNodeId: NodeId,
-    val inputSlotId: PortId,
-
-    val outputNodeId: NodeId,
-    val outputSlotId: PortId
+    val outputNode: Node,
+    val outputPort: Port,
+    val inputNode: Node,
+    val inputPort: Port
 ) {
     init {
         // FIXME ensure connection is valid
     }
+
+    data class Node(val id: NodeId)
+    data class Port(val id: PortId)
 }

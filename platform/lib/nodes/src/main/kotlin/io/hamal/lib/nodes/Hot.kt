@@ -12,12 +12,16 @@ import io.hamal.lib.typesystem.TypesystemHotModule
 
 object NodesHotModule : HotModule() {
     init {
+        this[ConnectionId::class] = ValueObjectIdAdapter(::ConnectionId)
+
+        this[ControlId::class] = ValueObjectIdAdapter(::ControlId)
+        this[Control::class] = Control.Adapter
+
         this[NodeId::class] = ValueObjectIdAdapter(::NodeId)
         this[NodeType::class] = ValueObjectStringAdapter(::NodeType)
+        this[NodeTitle::class] = ValueObjectStringAdapter(::NodeTitle)
 
         this[PortId::class] = ValueObjectIdAdapter(::PortId)
-        this[PortName::class] = ValueObjectStringAdapter(::PortName)
-        this[ConnectionId::class] = ValueObjectIdAdapter(::ConnectionId)
     }
 }
 

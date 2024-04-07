@@ -29,7 +29,12 @@ internal class IntOutTest : BaseSandboxTest() {
             )
         )
 
-        val code = testCompiler.compile(Nodes())
+        val code = testCompiler.compile(
+            Nodes(
+                nodes = listOf(),
+                connections = listOf()
+            )
+        )
         testInstance.codeLoad(KuaCode(code))
     }
 

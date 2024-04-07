@@ -4,7 +4,7 @@ import io.hamal.lib.nodes.Nodes
 
 object Compiler {
 
-    fun compile(graph: Nodes): String {
+    fun compile(nodes: Nodes): String {
         return """
             context = {}
             

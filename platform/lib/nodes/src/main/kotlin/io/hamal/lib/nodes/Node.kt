@@ -12,14 +12,17 @@ class NodeId(override val value: SnowflakeId) : ValueObjectId() {
 
 class NodeName(override val value: String) : ValueObjectString()
 
-class NodeLabel(override val value: String) : ValueObjectString()
+class NodeTitle(override val value: String) : ValueObjectString()
 
 class NodeType(override val value: String) : ValueObjectString()
 
 data class Node(
     val id: NodeId,
     val type: NodeType,
-    val inputPortIds: List<PortId>,
-    val outputPortIds: List<PortId>
+    val title: NodeTitle,
+    val position: Position,
+    val size: Size,
+    val controls: List<Control> = listOf(),
+    val outputs: List<Port> = listOf()
 )
 
