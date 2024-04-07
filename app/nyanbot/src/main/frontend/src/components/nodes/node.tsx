@@ -1,25 +1,21 @@
 import React, {FC} from "react";
-import {NodeId, NodeType, Position, Size} from './types.ts';
+import {Node, Position} from './types.ts';
 import {Draggable} from './draggable.tsx';
 import styles from "@/components/nodes/node.module.css";
 import {Ports} from "@/components/nodes/port.tsx";
-import {Controls} from "@/components/nodes/control.tsx";
+import {ControlListWidget} from "@/components/nodes/control.tsx";
 
-type NodeProps = {
-    id: NodeId;
-    position: Position;
-    size: Size;
-    type: NodeType;
-    // canvasRect: RefObject<DOMRect | undefined>;
+type NodeWidgetProps = {
+    // id: NodeId;
+    // position: Position;
+    // size: Size;
+    // type: NodeType;
+    node: Node;
     onDragStart: () => void;
+
 }
 
-export const Node: FC<NodeProps> = ({
-                                        type,
-                                        position,
-                                        size,
-                                        // canvasRect
-                                    }) => {
+export const NodeWidget: FC<NodeWidgetProps> = ({node}) => {
 
     const nodeWrapper = React.useRef<HTMLDivElement>(null);
 
@@ -40,8 +36,8 @@ export const Node: FC<NodeProps> = ({
     };
 
     const isEditing = false
-    const width = size.width;
-    const height = size.height;
+    const width = node.size.width;
+    const height = node.size.height;
 
     // FIXME
     return (
@@ -84,7 +80,7 @@ export const Node: FC<NodeProps> = ({
             style={{
                 width,
                 height,
-                transform: `translate(${position.x}px, ${position.y}px)`
+                transform: `translate(${node.position.x}px, ${node.position.y}px)`
             }}
             onDragStart={startDrag}
             onDrag={handleDrag}
@@ -100,7 +96,9 @@ export const Node: FC<NodeProps> = ({
         >
 
 
-            <Controls />
+            <ControlListWidget
+                controls={node.controls}
+            />
 
             <Ports
                 // nodeId={id}
@@ -110,8 +108,6 @@ export const Node: FC<NodeProps> = ({
                 // updateNodeConnections={updateNodeConnections}
                 // inputData={inputData}
             />
-
-
 
 
             {/*<Control type={"number"}/>*/}

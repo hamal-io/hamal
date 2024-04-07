@@ -2,11 +2,11 @@ import React from "react";
 import styles from "./connection.module.css";
 import {Connection} from "@/components/nodes/types.ts";
 
-type ConnectionCanvasProps = {
+type ConnectionListWidgetProps = {
     connections: Connection[];
 }
 
-export const ConnectionCanvas = ({connections}: ConnectionCanvasProps) => {
+export const ConnectionListWidget = ({connections}: ConnectionListWidgetProps) => {
 
     return (
         <svg id={"connection-canvas"} className={styles.wrapper} data-component="connection-canvas">

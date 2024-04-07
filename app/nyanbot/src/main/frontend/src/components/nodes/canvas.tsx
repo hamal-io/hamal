@@ -3,8 +3,8 @@ import {Draggable} from './draggable.tsx';
 import styles from './canvas.module.css'
 import {ContextCanvasState} from "@/components/nodes/context.ts";
 import {CanvasState, Connection, Node} from "./types.ts";
-import {ConnectionCanvas} from "@/components/nodes/connection.tsx";
-import {Node as NodeUi} from "@/components/nodes/node.tsx";
+import {ConnectionListWidget} from "@/components/nodes/connection.tsx";
+import {NodeWidget} from "@/components/nodes/node.tsx";
 
 type CanvasProps = {
     nodes: Node[];
@@ -104,27 +104,36 @@ export const Canvas: FC<CanvasProps> = ({nodes, connections, readonly}) => {
                         style={{transform: `scale(${scale})`}}
                     >
 
-                        <NodeUi
-                            id='1'
-                            type="INIT"
-                            position={{x: -400, y: 0}}
-                            size={{width: 200, height: 300}}
+                        <NodeWidget
+                            node={{
+                                id: '1',
+                                type: "INIT",
+                                position: {x: -400, y: 0},
+                                size: {width: 200, height: 300},
+                                controls: []
+                            }}
                             onDragStart={() => console.log("start dragging")}
                         />
 
-                        <NodeUi
-                            id='2'
-                            type="FILTER"
-                            position={{x: -100, y: 0}}
-                            size={{width: 250, height: 300}}
+                        <NodeWidget
+                            node={{
+                                id: '2',
+                                type: "FILTER",
+                                position: {x: -100, y: 0},
+                                size: {width: 250, height: 300},
+                                controls: []
+                            }}
                             onDragStart={() => console.log("start dragging")}
                         />
 
-                        <NodeUi
-                            id='3'
-                            type="TELEGRAM_SEND_MESSAGE"
-                            position={{x: 250, y: 0}}
-                            size={{width: 150, height: 300}}
+                        <NodeWidget
+                            node={{
+                                id: '3',
+                                type: "TELEGRAM_SEND_MESSAGE",
+                                position: {x: 250, y: 0},
+                                size: {width: 150, height: 300},
+                                controls: []
+                            }}
                             onDragStart={() => console.log("start dragging")}
                         />
 
@@ -133,7 +142,7 @@ export const Canvas: FC<CanvasProps> = ({nodes, connections, readonly}) => {
                     </div>
                 </div>
 
-                <ConnectionCanvas connections={connections}/>
+                <ConnectionListWidget connections={connections}/>
             </Draggable>
         </ContextCanvasState.Provider>
     )

@@ -1,11 +1,14 @@
 import React, {FC, useState} from "react";
 import {InputSelect, InputText} from "./input";
 import styles from "@/components/nodes/port.module.css";
-import {PortInput} from "@/components/nodes/port.tsx";
+import {PortInputWidget} from "@/components/nodes/port.tsx";
+import {Control} from "@/components/nodes/types.ts";
 
-type ControlsProps = {}
+type ControlsProps = {
+    controls: Control[]
+}
 
-export const Controls: FC<ControlsProps> = ({}) => {
+export const ControlListWidget: FC<ControlsProps> = ({}) => {
     return (
         <div className={styles.wrapper} data-component="ports">
             {/*<ControlConditionWidget/>*/}
@@ -20,7 +23,7 @@ type ControlTextWidgetProps = {}
 export const ControlTextWidget: FC<ControlTextWidgetProps> = ({}) => {
     return (
         <div className="flex flex-row">
-            <PortInput/>
+            <PortInputWidget/>
             <InputText type={'text'} placeholder={'test'}/>;
         </div>
     )
@@ -33,11 +36,11 @@ export const ControlConditionWidget: FC<ControlConditionWidgetProps> = ({}) => {
     return (
         <div className="flex flex-col">
             <div className="flex flex-row">
-                <PortInput/>
+                <PortInputWidget/>
                 <InputText type={'text'} placeholder={'test'}/>;
             </div>
             <div className="flex flex-row">
-                <PortInput/>
+                <PortInputWidget/>
                 <InputSelect options={[
                     {
                         description: 'test',
@@ -57,7 +60,7 @@ export const ControlConditionWidget: FC<ControlConditionWidgetProps> = ({}) => {
                              placeholder={'test'}/>;
             </div>
             <div className="flex flex-row">
-                <PortInput/>
+                <PortInputWidget/>
                 <InputText type={'text'} placeholder={'test'}/>;
             </div>
         </div>
@@ -69,7 +72,7 @@ type ControlInputWidgetProps = {}
 export const ControlInputWidget: FC<ControlInputWidgetProps> = ({}) => {
     return (
         <div className="flex flex-row">
-            <PortInput/>
+            <PortInputWidget/>
         </div>
     )
 }

@@ -11,16 +11,16 @@ export const Ports: FC<PortsProps> = ({}) => {
             {/*    <PortInput/>*/}
             {/*</div>*/}
             <div className={styles.outputs} data-component="ports-outputs">
-                <PortOutput/>
+                <PortOutputWidget/>
             </div>
         </div>
     );
 }
 
 
-type PortInputProps = {}
+type PortInputWidgetProps = {}
 
-export const PortInput: FC<PortInputProps> = ({}) => {
+export const PortInputWidget: FC<PortInputWidgetProps> = ({}) => {
     return (
         <div
             data-component="port-input"
@@ -31,7 +31,7 @@ export const PortInput: FC<PortInputProps> = ({}) => {
                 e.stopPropagation();
             }}
         >
-            <Port
+            <PortWidget
                 isInput={true}
                 // type={type}
                 // color={color}
@@ -68,9 +68,9 @@ export const PortInput: FC<PortInputProps> = ({}) => {
     )
 }
 
-type PortOutputProps = {}
+type PortOutputWidgetProps = {}
 
-export const PortOutput: FC<PortOutputProps> = ({}) => {
+export const PortOutputWidget: FC<PortOutputWidgetProps> = ({}) => {
     return (
         <div
             data-component="port-output"
@@ -84,7 +84,7 @@ export const PortOutput: FC<PortOutputProps> = ({}) => {
             <label data-component="port-label" className={styles.portLabel}>
                 {/*{label || defaultLabel}*/}
             </label>
-            <Port
+            <PortWidget
                 isInput={false}
                 // type={type}
                 // name={name}
@@ -96,12 +96,12 @@ export const PortOutput: FC<PortOutputProps> = ({}) => {
     );
 }
 
-type PortProps = {
+type PortWidgetProps = {
     isInput: Boolean
 }
 
 
-export const Port: FC<PortProps> = ({isInput}) => {
+export const PortWidget: FC<PortWidgetProps> = ({isInput}) => {
     // const nodesDispatch = React.useContext(NodeDispatchContext);
     // const stageState = React.useContext(StageContext) || {
     //     scale: 1,
@@ -358,7 +358,7 @@ export const Port: FC<PortProps> = ({isInput}) => {
     };
 
     return (
-        <React.Fragment>
+        <>
             <div
                 style={{zIndex: 999}}
                 onMouseDown={handleDragStart}
@@ -388,6 +388,6 @@ export const Port: FC<PortProps> = ({isInput}) => {
             {/*) : null }*/}
             {/*    // </Portal>*/}
             {/*) : null}*/}
-        </React.Fragment>
+        </>
     );
 }
