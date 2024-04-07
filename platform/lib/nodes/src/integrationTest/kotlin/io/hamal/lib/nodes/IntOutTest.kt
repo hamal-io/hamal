@@ -30,7 +30,7 @@ internal class IntOutTest : BaseSandboxTest() {
         )
 
         val code = testCompiler.compile(
-            Nodes(
+            Graph(
                 nodes = listOf(),
                 connections = listOf()
             )

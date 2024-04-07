@@ -4,10 +4,7 @@ import {Editor} from "@/components/nodes/editor.tsx";
 const DashboardSite = () => {
     return (
         <Editor
-            onSave={(nodes, connections) => console.log(JSON.stringify({
-                nodes,
-                connections
-            }))}
+            onSave={(graph) => console.log(JSON.stringify(graph))}
         />
     )
 }

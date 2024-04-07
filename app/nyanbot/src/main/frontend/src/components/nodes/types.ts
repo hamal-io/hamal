@@ -78,6 +78,10 @@ export const isControlText = (value: any): value is ControlText => {
     return isControl(value) && value.type === 'Text';
 }
 
+export type Graph = {
+    nodes: Node[];
+    connections: Connection[];
+}
 
 export type NodeId = string
 export type NodeType = string

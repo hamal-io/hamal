@@ -10,7 +10,7 @@ import io.hamal.lib.kua.ExitError
 import io.hamal.lib.kua.ExtensionError
 import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.type.*
-import io.hamal.lib.nodes.Nodes
+import io.hamal.lib.nodes.Graph
 import io.hamal.lib.nodes.compiler.Compiler
 import io.hamal.lib.nodes.json
 import io.hamal.runner.config.EnvFactory
@@ -79,8 +79,8 @@ class CodeRunnerImpl(
 
                             CodeType.Nodes -> {
                                 // FIXME load graph from code
-                                val nodes = json.deserialize(Nodes::class, unitOfWork.code.value)
-                                val compiledCode = Compiler.compile(nodes)
+                                val graph = json.deserialize(Graph::class, unitOfWork.code.value)
+                                val compiledCode = Compiler.compile(graph)
                                 sandbox.codeLoad(KuaCode(compiledCode))
                             }
                         }

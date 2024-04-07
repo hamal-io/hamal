@@ -1,10 +1,10 @@
 import React, {FC} from 'react'
 import {Canvas} from "@/components/nodes/canvas.tsx";
 import ButtonPrimary from "@/components/ui/button/ButtonPrimary.tsx";
-import {Connection, ControlCondition, ControlInput, ControlText, Node} from '@/components/nodes/types';
+import {Connection, ControlCondition, ControlInput, ControlText, Graph, Node} from '@/components/nodes/types';
 
 type EditorProps = {
-    onSave: (nodes: Node[], connections: Connection[]) => void;
+    onSave: (graph: Graph) => void;
 }
 
 export const Editor: FC<EditorProps> = ({onSave}) => {
@@ -131,7 +131,7 @@ export const Editor: FC<EditorProps> = ({onSave}) => {
         <div style={{background: "whitesmoke"}}>
             <div className="flex flex-row justify-end p-2">
                 <ButtonPrimary onClick={() => {
-                    onSave(nodes, connections)
+                    onSave({nodes, connections})
                 }}>
                     Save
                 </ButtonPrimary>

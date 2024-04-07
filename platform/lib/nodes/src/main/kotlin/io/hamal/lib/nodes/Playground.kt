@@ -2,7 +2,7 @@ package io.hamal.lib.nodes
 
 
 fun main(){
-    println(json.deserialize(Nodes::class, """
+    println(json.deserialize(Graph::class, """
         {
           "nodes": [
             {

@@ -1,6 +1,6 @@
 package io.hamal.lib.nodes
 
-data class Nodes(
+data class Graph(
     val nodes: List<Node>,
     val connections: List<Connection>
 )
