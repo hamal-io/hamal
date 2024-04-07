@@ -1,13 +1,13 @@
-package io.hamal.repository.record.account
+package com.nyanbot.repository.impl.account
 
+import com.nyanbot.RecordAdapter
+import com.nyanbot.repository.record.Record
+import com.nyanbot.repository.record.RecordSequence
+import com.nyanbot.repository.record.RecordedAt
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.AccountType
 import io.hamal.lib.domain.vo.PasswordSalt
-import io.hamal.repository.record.Record
-import io.hamal.repository.record.RecordAdapter
-import io.hamal.repository.record.RecordSequence
-import io.hamal.repository.record.RecordedAt
 
 sealed class AccountRecord(
     @Transient
@@ -16,7 +16,7 @@ sealed class AccountRecord(
     override var recordedAt: RecordedAt? = null
 ) : Record<AccountId>() {
 
-    object Adapter : RecordAdapter<AccountRecord>(
+    internal object Adapter : RecordAdapter<AccountRecord>(
         listOf(
             Created::class,
             Converted::class
@@ -25,14 +25,12 @@ sealed class AccountRecord(
 
     data class Created(
         override val entityId: AccountId,
-        override val cmdId: CmdId,
         val salt: PasswordSalt,
         val type: AccountType
     ) : AccountRecord()
 
     data class Converted(
         override val entityId: AccountId,
-        override val cmdId: CmdId,
     ) : AccountRecord()
 }
 

@@ -1,4 +1,4 @@
-package com.nyanbot.filter
+package com.nyanbot.http.filter
 
 import io.hamal.lib.common.util.GitUtils
 import jakarta.servlet.FilterChain
