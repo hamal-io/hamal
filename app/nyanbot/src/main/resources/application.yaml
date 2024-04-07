@@ -12,3 +12,9 @@ spring:
 
 server:
   port: 6006
+
+io:
+  hamal:
+    server:
+      url: ${HAMAL_URL:http://localhost:8008}
+      token: ${HAMAL_TOKEN}

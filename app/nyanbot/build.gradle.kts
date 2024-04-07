@@ -38,6 +38,7 @@ docker {
 
 dependencies {
     implementation(project(":platform:lib:domain"))
+    implementation(project(":platform:lib:nodes"))
     implementation(project(":platform:lib:sdk"))
     implementation(project(":platform:lib:sqlite"))
     implementation(project(":platform:lib:web3"))
