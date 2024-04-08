@@ -1,9 +1,9 @@
-interface Flow {
+export interface Flow {
     id: string
     name: string
     status: string
 }
 
-interface FlowList {
+export interface FlowList {
     flows: Array<Flow>
 }

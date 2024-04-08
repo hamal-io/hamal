@@ -9,8 +9,8 @@ import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {Loader2} from "lucide-react";
 
-type Props = { trigger: ReactNode, onCreate: (FlowCreateRequested) => void }
-const Create: FC<Props> = ({trigger, onCreate}) => {
+type Props = { trigger: ReactNode/*, onCreate: (FlowCreateRequested) => void*/ }
+const Create: FC<Props> = ({trigger/*, onCreate*/}) => {
     const [open, setOpen] = useState<boolean>(false)
     const [createFlow, flowCreateRequested] = useFlowCreate()
     const [loading, setLoading] = useState<boolean>(false)
@@ -32,7 +32,7 @@ const Create: FC<Props> = ({trigger, onCreate}) => {
         setLoading(true)
         try {
             const abortController = new AbortController()
-            createFlow(values.name, "print('hamal')", abortController)
+            createFlow(values.name, "v1_web3_new_lp_pair", "print('hamal')", abortController)
             return (() => abortController.abort())
         } catch (e) {
             console.error(e)
@@ -41,7 +41,8 @@ const Create: FC<Props> = ({trigger, onCreate}) => {
 
     useEffect(() => {
         if (flowCreateRequested) {
-            onCreate(flowCreateRequested)
+            //onCreate(flowCreateRequested)
+
             setLoading(false)
             setOpen(false)
 

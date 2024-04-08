@@ -55,6 +55,8 @@ interface FlowCmdRepository {
 
     fun create(cmd: CreateCmd): Flow
 
+    fun set(flowId: FlowId, cmd: SetStatusCmd): Flow
+
     data class CreateCmd(
         val flowId: FlowId,
         val name: FlowName,
@@ -63,6 +65,10 @@ interface FlowCmdRepository {
         val namespaceId: NamespaceId? = null,
         val funcId: FuncId? = null,
         val triggerId: TriggerId? = null
+    )
+
+    data class SetStatusCmd(
+        val flowStatus: FlowStatus
     )
 }
 
