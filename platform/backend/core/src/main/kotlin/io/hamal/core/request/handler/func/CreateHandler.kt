@@ -29,6 +29,7 @@ class FuncCreateHandler(
             CodeCmdRepository.CreateCmd(
                 id = req.cmdId(),
                 codeId = req.codeId,
+                type = req.codeType,
                 workspaceId = req.workspaceId,
                 value = req.code
             )

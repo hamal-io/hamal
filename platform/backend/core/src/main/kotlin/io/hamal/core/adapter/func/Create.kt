@@ -35,7 +35,8 @@ class FuncCreateAdapter(
             name = req.name,
             inputs = req.inputs,
             codeId = generateDomainId(::CodeId),
-            code = req.code
+            code = req.code,
+            codeType = req.codeType
         ).also(requestEnqueue::invoke)
     }
 }

@@ -4,7 +4,6 @@ import io.hamal.core.adapter.code.CodeGetPort
 import io.hamal.core.adapter.request.RequestEnqueuePort
 import io.hamal.core.security.SecurityContext
 import io.hamal.lib.domain.GenerateDomainId
-import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.ExecInvokeRequested
 import io.hamal.lib.domain.request.FuncInvokeRequest
@@ -25,9 +24,7 @@ class FuncInvokeAdapter(
     override fun invoke(funcId: FuncId, req: FuncInvokeRequest): ExecInvokeRequested {
         val func = funcGet(funcId)
 
-        val version = req.version?.also {
-            codeGet(func.code.id, it)
-        } ?: func.code.version
+        val code = req.version?.let { version -> codeGet(func.code.id, version) } ?: codeGet(func.code.id, func.code.version)
 
         return ExecInvokeRequested(
             requestId = generateDomainId(::RequestId),
@@ -41,10 +38,10 @@ class FuncInvokeAdapter(
             correlationId = req.correlationId,
             inputs = req.inputs ?: InvocationInputs(),
             code = ExecCode(
-                id = func.code.id,
-                version = version,
-                value = null,
-                type = CodeType.Lua54 // FIXME
+                id = code.id,
+                version = code.version,
+                value = code.value,
+                type = code.type
             ),
         ).also(requestEnqueue::invoke)
     }

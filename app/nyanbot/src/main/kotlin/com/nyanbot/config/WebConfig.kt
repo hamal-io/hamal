@@ -1,6 +1,8 @@
 package com.nyanbot.config
 
 import com.google.gson.Gson
+import com.nyanbot.DomainModule
+import com.nyanbot.RecordJsonModule
 import io.hamal.lib.common.hot.HotObjectModule
 import io.hamal.lib.common.serialization.JsonFactoryBuilder
 import io.hamal.lib.domain.vo.ValueObjectJsonModule
@@ -37,6 +39,8 @@ open class WebConfig : WebMvcConfigurer {
     open fun gson(): Gson = JsonFactoryBuilder()
         .register(ApiJsonModule)
         .register(HotObjectModule)
+        .register(RecordJsonModule)
+        .register(DomainModule)
         .register(ValueObjectJsonModule)
         .build()
 
