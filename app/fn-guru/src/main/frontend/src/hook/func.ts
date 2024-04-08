@@ -2,7 +2,6 @@ import {useCallback} from "react";
 import {useGet, usePatch, usePost} from "@/hook/http.ts";
 import {Func, FuncCreateRequested, FuncDeploymentList, FuncDeployRequested, FuncInvokeRequested, FuncList, FuncUpdateRequested} from "@/types";
 import {useAuth} from "@/hook/auth.ts";
-import {CodeType} from "@/types/code.ts";
 
 type FuncGetAction = (funcId: string, abortController?: AbortController) => void
 export const useFuncGet = (): [FuncGetAction, Func, boolean, Error] => {

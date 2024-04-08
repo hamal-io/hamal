@@ -92,7 +92,6 @@ class FlowCreateController(
 
         println(flowNamespaceId)
 
-
         val funcId = sdk.func.create(
             flowNamespaceId, ApiFuncCreateRequest(
                 name = FuncName("func"),
@@ -102,6 +101,14 @@ class FlowCreateController(
             )
         ).id
 
+//        val triggerId = sdk.trigger.create(
+//            flowNamespaceId, ApiTriggerCreateReq(
+//                TriggerType.Event,
+//                name = TriggerName("trigger"),
+//                funcId = funcId,
+//                topicId = TopicId("d2555165c10000") // FIXME this must be resolved automatically based on flow trigger type
+//            )
+//        ).id
 
         return flowRepository.create(
             FlowCmdRepository.CreateCmd(
@@ -114,6 +121,7 @@ class FlowCreateController(
                 ),
                 namespaceId = flowNamespaceId,
                 funcId = funcId,
+//                triggerId = triggerId
                 triggerId = null
             )
         )
