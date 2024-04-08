@@ -35,9 +35,9 @@ const FlowListPage = () => {
                 <PageHeader title={"Flows"} description={""} actions={[
                     <Create trigger={createButton} /*onCreate={addFlow}*//>
                 ]}/>
-                {flowList.flows.length !== 0 ?
+                {flowList.length !== 0 ?
                     <ol className="flex flex-col gap-4 cursor-pointer">
-                        {flowList.flows.map(flow =>
+                        {flowList.map(flow =>
                             <li key={flow.id}>
                                 <FlowCard flow={flow}/>
                             </li>

@@ -1,6 +1,7 @@
 import {useCallback} from "react";
 import {useGet, usePost} from "@/hooks/http.ts";
 import {useAuth} from "@/hooks/auth.ts";
+import {Flow, FlowList} from "@/types/flow.ts";
 
 type FlowCreateAction = (
     name: string,

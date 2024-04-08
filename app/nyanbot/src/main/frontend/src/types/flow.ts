@@ -4,6 +4,4 @@ export interface Flow {
     status: string
 }
 
-export interface FlowList {
-    flows: Array<Flow>
-}
+export type FlowList = Array<Flow>
