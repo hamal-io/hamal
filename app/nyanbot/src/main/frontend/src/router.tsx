@@ -8,7 +8,7 @@ import NotFoundPage from "@/app/not-found.tsx";
 import RootLayout from "@/app/root-layout.tsx";
 import DashboardPage from "@/pages/dashboard";
 import {TestPage} from "@/pages/test"
-import FlowListPage from "src/pages/app/flow-list";
+import FlowListPage from "@/pages/app/flow-list";
 
 export const router = createBrowserRouter([
     {

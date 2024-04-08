@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom/client'
 import {RouterProvider} from "react-router-dom";
 
 import {router} from "./router.tsx";
-import {TailwindIndicator} from "@/components/tailwind-indicator.tsx";
 import {Background} from "@/app/background.tsx";
 import "@/styles/index.scss";
 import "rc-slider/assets/index.css";
