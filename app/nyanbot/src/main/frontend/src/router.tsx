@@ -9,6 +9,7 @@ import RootLayout from "@/app/root-layout.tsx";
 import DashboardPage from "@/pages/dashboard";
 import {TestPage} from "@/pages/test"
 import FlowListPage from "@/pages/app/flow-list";
+import FlowDetailPage from "@/pages/app/flow-detail";
 
 export const router = createBrowserRouter([
     {
@@ -27,6 +28,12 @@ export const router = createBrowserRouter([
         path: "/flows", element:
             <RootLayout>
                 <FlowListPage/>
+            </RootLayout>
+    },
+    {
+        path: "/flows/:flowId", element:
+            <RootLayout>
+                <FlowDetailPage/>
             </RootLayout>
     },
     {

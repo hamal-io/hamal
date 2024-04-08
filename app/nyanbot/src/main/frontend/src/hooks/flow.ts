@@ -7,9 +7,9 @@ type FlowCreateAction = (
     code: string,
     abortController?: AbortController
 ) => void
-export const useFlowCreate = (): [FlowCreateAction, FlowCreateRequested, boolean, Error] => {
+export const useFlowCreate = (): [FlowCreateAction, Flow, boolean, Error] => {
     const [auth] = useAuth()
-    const [post, submitted, loading, error] = usePost<FlowCreateRequested>()
+    const [post, submitted, loading, error] = usePost<Flow>()
     const fn = useCallback<FlowCreateAction>(async (name: string, code, abortController?) =>
         post(`/v1/flows`, {name, code}, abortController), [auth]
     )
@@ -17,7 +17,7 @@ export const useFlowCreate = (): [FlowCreateAction, FlowCreateRequested, boolean
 }
 
 type FlowGetAction = (id: string, abortController?: AbortController) => void
-export const useFlowGet = (): [FlowGetAction, FlowCreateRequested, boolean, Error] => {
+export const useFlowGet = (): [FlowGetAction, Flow, boolean, Error] => {
     const [auth] = useAuth()
     const [get, flow, loading, error] = useGet<Flow>()
     const fn = useCallback<FlowGetAction>(async (id: string, abortController?) =>
