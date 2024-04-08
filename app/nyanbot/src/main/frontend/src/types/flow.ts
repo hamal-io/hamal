@@ -1,11 +1,13 @@
 interface Flow {
     id: string
     name: string
+    status: string
 }
 
 interface FlowCreateRequested {
     id: string,
-    name: string
+    name: string,
+    status: string
 }
 
 interface FlowList {

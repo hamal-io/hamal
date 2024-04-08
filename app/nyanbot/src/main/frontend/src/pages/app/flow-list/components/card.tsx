@@ -1,29 +1,36 @@
 import React, {FC} from "react";
 import {useNavigate} from "react-router-dom";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx";
+import {Switch} from "@/components/ui/switch.tsx";
 
 type Props = {
-    name: string;
-    description: string;
+    flow: Flow
 }
-export const FlowCard: FC<Props> = ({name, description}) => {
+export const FlowCard: FC<Props> = ({flow}) => {
     const navigate = useNavigate()
 
-    function handleClick() {
-        //navigate("/")
+    const {id, name, status} = flow
+
+    function handleClick(e: React.MouseEvent) {
+        e.stopPropagation()
+        e.preventDefault()
+        navigate(`/flows/${id}`)
     }
 
+    function handleCheck(e) {
+        e.stopPropagation()
+        e.preventDefault()
+    }
+
+    const active = status === "Active"
+
     return (
-        <Card>
+        <Card onClick={handleClick}>
             <CardHeader>
                 <CardTitle>{name}</CardTitle>
             </CardHeader>
             <CardContent>
-                <dl className="text-sm leading-6 divide-y divide-gray-100 ">
-                    <div className="flex justify-between py-3 gap-x-4">
-                        {description}
-                    </div>
-                </dl>
+                <Switch checked={active} className={"border-solid "} onCheckedChange={handleCheck}></Switch>
             </CardContent>
         </Card>
     )
