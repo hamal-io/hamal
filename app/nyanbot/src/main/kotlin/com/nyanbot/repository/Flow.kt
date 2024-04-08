@@ -21,6 +21,7 @@ class FlowTriggerId(override val value: SnowflakeId) : ValueObjectId() {
 
 class FlowTriggerType(override val value: String) : ValueObjectString()
 
+
 data class FlowTrigger(
     val type: FlowTriggerType
 )

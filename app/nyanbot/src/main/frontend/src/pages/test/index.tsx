@@ -17,7 +17,7 @@ export const TestPage = () => {
                 },
                 body: JSON.stringify({
                     name: 'dummy flow',
-                    triggerType: 'web3::new_lp_found',
+                    triggerType: 'v1_web3_new_lp_pair',
                     code: JSON.stringify(
                         {
                             "nodes": [

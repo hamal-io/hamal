@@ -10,7 +10,8 @@ err, res = http.post({
     json = {
         name = 'created',
         inputs = {},
-        code = 'print("hamal rocks")'
+        code = 'print("hamal rocks")',
+        codeType = 'Lua54'
     }
 })
 

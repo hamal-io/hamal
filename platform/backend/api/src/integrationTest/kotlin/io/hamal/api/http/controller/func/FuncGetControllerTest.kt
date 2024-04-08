@@ -1,6 +1,7 @@
 package io.hamal.api.http.controller.func
 
 import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.lib.domain.vo.FuncInputs
@@ -33,7 +34,8 @@ internal class FuncGetControllerTest : FuncBaseControllerTest() {
                 ApiFuncCreateRequest(
                     name = FuncName("func-one"),
                     inputs = FuncInputs(HotObject.builder().set("hamal", "rocks").build()),
-                    code = CodeValue("1+1")
+                    code = CodeValue("1+1"),
+                    codeType = CodeType.Lua54
                 )
             )
         ).id

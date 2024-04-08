@@ -3,6 +3,7 @@ package io.hamal.core.request.handler.func
 import io.hamal.core.request.handler.BaseRequestHandlerTest
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.util.TimeUtils
+import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain.request.FuncCreateRequested
 import io.hamal.lib.domain.vo.*
@@ -71,6 +72,7 @@ internal class FuncCreateHandlerTest : BaseRequestHandlerTest() {
             inputs = FuncInputs(HotObject.builder().set("hamal", "rocks").build()),
             codeId = CodeId(34567),
             code = CodeValue("some code"),
+            codeType = CodeType.Lua54
         )
     }
 }

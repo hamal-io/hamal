@@ -1,14 +1,6 @@
 import {useCallback} from "react";
 import {useGet, usePatch, usePost} from "@/hook/http.ts";
-import {
-    Func,
-    FuncCreateRequested,
-    FuncDeploymentList,
-    FuncDeployRequested,
-    FuncInvokeRequested,
-    FuncList,
-    FuncUpdateRequested
-} from "@/types";
+import {Func, FuncCreateRequested, FuncDeploymentList, FuncDeployRequested, FuncInvokeRequested, FuncList, FuncUpdateRequested} from "@/types";
 import {useAuth} from "@/hook/auth.ts";
 
 type FuncGetAction = (funcId: string, abortController?: AbortController) => void
@@ -27,15 +19,16 @@ export const useFuncList = (): [FuncListAction, FuncList, boolean, Error] => {
     return [fn, funcList, loading, error]
 }
 
-type FuncCreateAction = (namespaceId: string, name: string, abortController?: AbortController) => void
+type FuncCreateAction = (namespaceId: string, name: string, codeType: string, abortController?: AbortController) => void
 export const useFuncCreate = (): [FuncCreateAction, FuncCreateRequested, boolean, Error] => {
     const [auth] = useAuth()
     const [post, submission, loading, error] = usePost<FuncCreateRequested>()
-    const fn = useCallback(async (namespaceId: string, name: string, abortController?: AbortController) =>
+    const fn = useCallback(async (namespaceId: string, name: string, codeType: string, abortController?: AbortController) =>
         post(`/v1/namespaces/${namespaceId}/funcs`, {
             name,
             inputs: {},
-            code: ""
+            code: "",
+            codeType,
         }, abortController), [auth]
     )
     return [fn, submission, loading, error]

@@ -1,6 +1,7 @@
 package io.hamal.plugin.std.sys.func
 
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName
@@ -22,12 +23,12 @@ class FuncCreateFunction(
     override fun invoke(ctx: FunctionContext, arg1: KuaTable): Pair<KuaError?, KuaTable?> {
         return try {
             val res = sdk.func.create(
-                arg1.findString("namespace_id")?.let { NamespaceId(SnowflakeId(it.stringValue)) }
-                    ?: ctx[NamespaceId::class],
+                arg1.findString("namespace_id")?.let { NamespaceId(SnowflakeId(it.stringValue)) } ?: ctx[NamespaceId::class],
                 ApiFuncCreateRequest(
                     name = FuncName(arg1.getString("name").stringValue),
                     inputs = FuncInputs(),
-                    code = CodeValue(arg1.getString("code").stringValue)
+                    code = CodeValue(arg1.getString("code").stringValue),
+                    codeType = CodeType.Lua54
                 )
             )
 

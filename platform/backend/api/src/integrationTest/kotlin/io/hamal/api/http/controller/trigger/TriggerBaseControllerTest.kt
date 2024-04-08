@@ -1,6 +1,7 @@
 package io.hamal.api.http.controller.trigger
 
 import io.hamal.api.http.controller.BaseControllerTest
+import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain._enum.TopicType
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
@@ -21,7 +22,8 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
                 ApiFuncCreateRequest(
                     name = name,
                     inputs = FuncInputs(),
-                    code = CodeValue("")
+                    code = CodeValue(""),
+                    codeType = CodeType.Lua54
                 )
             )
             .execute()

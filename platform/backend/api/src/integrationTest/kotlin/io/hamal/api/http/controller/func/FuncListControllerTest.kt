@@ -1,5 +1,6 @@
 package io.hamal.api.http.controller.func
 
+import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName
@@ -24,7 +25,8 @@ internal class FuncListControllerTest : FuncBaseControllerTest() {
                 ApiFuncCreateRequest(
                     name = FuncName("func-one"),
                     inputs = FuncInputs(),
-                    code = CodeValue("")
+                    code = CodeValue(""),
+                    codeType = CodeType.Lua54
                 )
             )
         ).id
@@ -46,7 +48,8 @@ internal class FuncListControllerTest : FuncBaseControllerTest() {
                     ApiFuncCreateRequest(
                         name = FuncName("func-$it"),
                         inputs = FuncInputs(),
-                        code = CodeValue("")
+                        code = CodeValue(""),
+                        codeType = CodeType.Lua54
                     )
                 )
             }
@@ -71,7 +74,8 @@ internal class FuncListControllerTest : FuncBaseControllerTest() {
                 ApiFuncCreateRequest(
                     name = FuncName("func-$it"),
                     inputs = FuncInputs(),
-                    code = CodeValue("")
+                    code = CodeValue(""),
+                    codeType = CodeType.Lua54
                 )
             )
         }

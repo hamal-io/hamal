@@ -1,17 +1,19 @@
 package com.nyanbot.http.controller.flow
 
+import com.nyanbot.FlowTriggerRegistry
 import com.nyanbot.repository.*
 import com.nyanbot.security.SecurityContext
+import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.CodeType
-import io.hamal.lib.domain.vo.CodeValue
-import io.hamal.lib.domain.vo.FuncInputs
-import io.hamal.lib.domain.vo.FuncName
-import io.hamal.lib.domain.vo.NamespaceName
+import io.hamal.lib.domain._enum.TriggerType
+import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.sdk.ApiSdkImpl
 import io.hamal.lib.sdk.api.ApiFuncCreateRequest
 import io.hamal.lib.sdk.api.ApiNamespaceAppendRequest
+import io.hamal.lib.sdk.api.ApiTopicService
+import io.hamal.lib.sdk.api.ApiTriggerCreateReq
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -80,6 +82,8 @@ class FlowCreateController(
             ).id
         }
 
+        Thread.sleep(200)
+
         val flowNamespaceId = sdk.namespace.append(
             flowsNamespaceId,
             ApiNamespaceAppendRequest(
@@ -99,6 +103,22 @@ class FlowCreateController(
             )
         ).id
 
+        val triggerId = FlowTriggerRegistry[req.triggerType].let { registryItem ->
+            sdk.topic.list(
+                ApiTopicService.TopicQuery(
+                    limit = Limit(200)
+                )
+            ).find { it.name == registryItem.topicName }?.id?.let { topicId: TopicId ->
+                sdk.trigger.create(
+                    flowNamespaceId, ApiTriggerCreateReq(
+                        type = TriggerType.Event,
+                        name = TriggerName("trigger"),
+                        funcId = funcId,
+                        topicId = topicId,
+                    )
+                ).id
+            }
+        }
 
         return flowRepository.create(
             FlowCmdRepository.CreateCmd(
@@ -106,12 +126,12 @@ class FlowCreateController(
                 name = req.name,
                 accountId = SecurityContext.currentAccountId,
                 flowTrigger = FlowTrigger(
-                    type = FlowTriggerType("v1::web3::new_lp_pair")
+                    type = FlowTriggerType("v1_web3_new_lp_pair")
                     // config
                 ),
                 namespaceId = flowNamespaceId,
                 funcId = funcId,
-                triggerId = null
+                triggerId = triggerId
             )
         )
     }

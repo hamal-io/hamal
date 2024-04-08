@@ -1,5 +1,6 @@
 package io.hamal.api.http.controller.func
 
+import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode
@@ -108,7 +109,8 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
                 ApiFuncCreateRequest(
                     name = FuncName("Func-base"),
                     inputs = FuncInputs(),
-                    code = CodeValue("40 + 2")
+                    code = CodeValue("40 + 2"),
+                    codeType = CodeType.Lua54
                 )
             )
 
@@ -182,7 +184,8 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
                     ApiFuncCreateRequest(
                         name = FuncName("test-func"),
                         inputs = FuncInputs(),
-                        code = CodeValue("13 + 37")
+                        code = CodeValue("13 + 37"),
+                        codeType = CodeType.Lua54
                     )
                 )
             )

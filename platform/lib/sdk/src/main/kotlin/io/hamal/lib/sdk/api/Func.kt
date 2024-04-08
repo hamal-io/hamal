@@ -19,7 +19,7 @@ data class ApiFuncCreateRequest(
     override val name: FuncName,
     override val inputs: FuncInputs,
     override val code: CodeValue,
-    override val codeType: CodeType = CodeType.Lua54
+    override val codeType: CodeType
 ) : FuncCreateRequest
 
 data class ApiFuncCreateRequested(
