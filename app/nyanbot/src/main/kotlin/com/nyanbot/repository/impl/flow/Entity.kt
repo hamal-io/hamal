@@ -1,18 +1,30 @@
 package com.nyanbot.repository.impl.flow
 
-import com.nyanbot.repository.Flow
-import com.nyanbot.repository.FlowId
+import com.nyanbot.repository.*
 import com.nyanbot.repository.record.CreateDomainObject
 import com.nyanbot.repository.record.RecordEntity
 import com.nyanbot.repository.record.RecordSequence
 import com.nyanbot.repository.record.RecordedAt
+import io.hamal.lib.domain.vo.AccountId
+import io.hamal.lib.domain.vo.FuncId
+import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.TriggerId
 
 
 data class FlowEntity(
     override val id: FlowId,
     override val sequence: RecordSequence,
     override val recordedAt: RecordedAt,
+    private val status: FlowStatus,
 
+
+    private var accountId: AccountId? = null,
+    private var name: FlowName? = null,
+    private var flowTrigger: FlowTrigger? = null,
+
+    private var namespaceId: NamespaceId? = null,
+    private var funcId: FuncId? = null,
+    private var triggerId: TriggerId? = null,
 
     ) : RecordEntity<FlowId, FlowRecord, Flow> {
 
@@ -21,7 +33,14 @@ data class FlowEntity(
             is FlowRecord.Created -> copy(
                 id = rec.entityId,
                 sequence = rec.sequence(),
-                recordedAt = rec.recordedAt()
+                recordedAt = rec.recordedAt(),
+                accountId = rec.accountId,
+                status = FlowStatus.Inactive,
+                name = rec.name,
+                flowTrigger = rec.flowTrigger,
+                namespaceId = rec.namespaceId,
+                funcId = rec.funcId,
+                triggerId = rec.triggerId
             )
         }
     }
@@ -31,6 +50,14 @@ data class FlowEntity(
         return Flow(
             id = id,
             updatedAt = recordedAt.toUpdatedAt(),
+            accountId = accountId!!,
+            status = status,
+            name = name!!,
+            flowTrigger = flowTrigger!!,
+
+            namespaceId = namespaceId,
+            funcId = funcId,
+            triggerId = triggerId
         )
     }
 }
@@ -43,7 +70,8 @@ fun List<FlowRecord>.createEntity(): FlowEntity {
     var result = FlowEntity(
         id = firstRecord.entityId,
         sequence = firstRecord.sequence(),
-        recordedAt = firstRecord.recordedAt()
+        recordedAt = firstRecord.recordedAt(),
+        status = FlowStatus.Inactive
     )
 
     forEach { record ->

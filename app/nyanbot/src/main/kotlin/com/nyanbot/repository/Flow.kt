@@ -22,31 +22,28 @@ class FlowTriggerId(override val value: SnowflakeId) : ValueObjectId() {
 class FlowTriggerType(override val value: String) : ValueObjectString()
 
 data class FlowTrigger(
-    override val id: FlowTriggerId,
-    override val updatedAt: UpdatedAt,
     val type: FlowTriggerType
-) : DomainObject<FlowTriggerId>
+)
 
 enum class FlowStatus {
     Active,
     Inactive
 }
 
-data class HamalMapping(
-    val namespaceId: NamespaceId? = null,
-    val funcId: FuncId? = null,
-    val triggerId: TriggerId? = null
-)
-
 
 data class Flow(
     override val id: FlowId,
     override val updatedAt: UpdatedAt,
-//    val accountId: AccountId,
-//    val status: FlowStatus,
-//    val name: FlowName,
-//    val hamalMapping: HamalMapping,
-//    val trigger: FlowTrigger
+    val accountId: AccountId,
+    val status: FlowStatus,
+    val name: FlowName,
+    val flowTrigger: FlowTrigger,
+
+    // hamal
+    val namespaceId: NamespaceId? = null,
+    val funcId: FuncId? = null,
+    val triggerId: TriggerId? = null
+
 ) : DomainObject<FlowId>
 
 
@@ -59,9 +56,12 @@ interface FlowCmdRepository {
 
     data class CreateCmd(
         val flowId: FlowId,
+        val name: FlowName,
         val accountId: AccountId,
-        val trigger: FlowTrigger,
-        val hamalMapping: HamalMapping
+        val flowTrigger: FlowTrigger,
+        val namespaceId: NamespaceId? = null,
+        val funcId: FuncId? = null,
+        val triggerId: TriggerId? = null
     )
 }
 

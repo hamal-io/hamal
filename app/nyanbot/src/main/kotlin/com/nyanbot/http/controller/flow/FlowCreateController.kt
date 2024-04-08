@@ -2,7 +2,6 @@ package com.nyanbot.http.controller.flow
 
 import com.nyanbot.repository.*
 import com.nyanbot.security.SecurityContext
-import io.hamal.lib.common.domain.UpdatedAt
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain.vo.CodeValue
@@ -100,20 +99,19 @@ class FlowCreateController(
             )
         ).id
 
+
         return flowRepository.create(
             FlowCmdRepository.CreateCmd(
                 flowId = flowId,
+                name = req.name,
                 accountId = SecurityContext.currentAccountId,
-                trigger = FlowTrigger(
-                    id = generateDomainId(::FlowTriggerId),
-                    updatedAt = UpdatedAt.now(),
+                flowTrigger = FlowTrigger(
                     type = FlowTriggerType("v1::web3::new_lp_pair")
+                    // config
                 ),
-                hamalMapping = HamalMapping(
-                    namespaceId = flowNamespaceId,
-                    funcId = funcId,
-                    triggerId = null
-                )
+                namespaceId = flowNamespaceId,
+                funcId = funcId,
+                triggerId = null
             )
         )
     }

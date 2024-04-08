@@ -5,6 +5,7 @@ import com.nyanbot.repository.FlowCmdRepository.CreateCmd
 import com.nyanbot.repository.FlowId
 import com.nyanbot.repository.FlowQueryRepository.FlowQuery
 import com.nyanbot.repository.FlowRepository
+import com.nyanbot.repository.FlowStatus
 import com.nyanbot.repository.impl.RecordSqliteRepository
 import com.nyanbot.repository.record.CreateDomainObject
 import io.hamal.lib.common.domain.Count
@@ -20,7 +21,8 @@ internal object CreateFlow : CreateDomainObject<FlowId, FlowRecord, Flow> {
         var result = FlowEntity(
             id = firstRecord.entityId,
             sequence = firstRecord.sequence(),
-            recordedAt = firstRecord.recordedAt()
+            recordedAt = firstRecord.recordedAt(),
+            status = FlowStatus.Inactive
         )
 
         recs.forEach { record ->
@@ -48,6 +50,12 @@ class FlowSqliteRepository(
             store(
                 FlowRecord.Created(
                     entityId = flowId,
+                    name = cmd.name,
+                    accountId = cmd.accountId,
+                    flowTrigger = cmd.flowTrigger,
+                    namespaceId = cmd.namespaceId,
+                    funcId = cmd.funcId,
+                    triggerId = cmd.triggerId
                 )
             )
 
