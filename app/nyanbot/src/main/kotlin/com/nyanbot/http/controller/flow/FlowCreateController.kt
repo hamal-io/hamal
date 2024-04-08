@@ -80,6 +80,8 @@ class FlowCreateController(
             ).id
         }
 
+        Thread.sleep(200)
+
         val flowNamespaceId = sdk.namespace.append(
             flowsNamespaceId,
             ApiNamespaceAppendRequest(
@@ -89,6 +91,7 @@ class FlowCreateController(
         ).id
 
         println(flowNamespaceId)
+
 
         val funcId = sdk.func.create(
             flowNamespaceId, ApiFuncCreateRequest(
