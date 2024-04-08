@@ -8,6 +8,7 @@ import NotFoundPage from "@/app/not-found.tsx";
 import RootLayout from "@/app/root-layout.tsx";
 import DashboardPage from "@/pages/dashboard";
 import {TestPage} from "@/pages/test"
+import FlowListPage from "@/pages/app/flow-list";
 
 export const router = createBrowserRouter([
     {
@@ -16,14 +17,18 @@ export const router = createBrowserRouter([
                 <LandingPage/>
             </RootLayout>
     },
-
     {
         path: "/dashboard", element:
             <RootLayout>
                 <DashboardPage/>
             </RootLayout>
     },
-
+    {
+        path: "/flows", element:
+            <RootLayout>
+                <FlowListPage/>
+            </RootLayout>
+    },
     {
         path: "/test", element:
             <RootLayout>
