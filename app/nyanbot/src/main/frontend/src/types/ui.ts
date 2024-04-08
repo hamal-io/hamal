@@ -1,4 +1,4 @@
-export const UI_STATE_KEY = 'ui-state'
+export const UI_STATE_KEY = 'old-ui-state'
 
 export type UiTheme = 'light' | 'dark'
 

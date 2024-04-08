@@ -1,10 +1,10 @@
 import React, {FC} from "react";
-import Logo from "@/components/ui/logo";
-import MenuBar from "@/components/ui/menu/MenuBar.tsx";
-import SwitchMode from "@/components/ui/switch-mode";
+import Logo from "@/components/old-ui/logo";
+import MenuBar from "@/components/old-ui/menu/MenuBar.tsx";
+import SwitchMode from "@/components/old-ui/switch-mode";
 import {MetaMaskButton} from "@/app/metamask.tsx";
 import NavigationItem from "@/app/header/navigation.tsx";
-import {NavItemType} from "@/components/ui/navigation";
+import {NavItemType} from "@/components/old-ui/navigation";
 import _ from "lodash";
 
 const nextId = _.uniqueId;

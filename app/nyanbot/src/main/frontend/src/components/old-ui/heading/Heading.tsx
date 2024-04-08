@@ -1,4 +1,4 @@
-import NextPrev from "@/components/ui/next-prev/NextPrev";
+import NextPrev from "@/components/old-ui/next-prev/NextPrev";
 import React, { HTMLAttributes, ReactNode } from "react";
 
 export interface HeadingProps extends HTMLAttributes<HTMLHeadingElement> {

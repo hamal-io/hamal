@@ -3,7 +3,7 @@ import {useNavigate} from "react-router-dom";
 import {useSDK} from "@metamask/sdk-react";
 import {useMetaMaskChallenge, useMetaMaskToken} from "@/hooks/auth.ts";
 import {Buffer} from "buffer";
-import ButtonPrimary from "@/components/ui/button/ButtonPrimary.tsx";
+import ButtonPrimary from "@/components/old-ui/button/ButtonPrimary.tsx";
 
 type MetaMaskButtonProps = {
     className?: string;

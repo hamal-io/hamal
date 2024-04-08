@@ -1,5 +1,5 @@
 import React from "react";
-import ButtonPrimary from "@/components/ui/button/ButtonPrimary.tsx";
+import ButtonPrimary from "@/components/old-ui/button/ButtonPrimary.tsx";
 import {useAuth} from "@/hooks/auth.ts";
 
 export const TestPage = () => {

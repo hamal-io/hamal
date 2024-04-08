@@ -3,7 +3,7 @@ import {ChevronDownIcon} from "@heroicons/react/24/solid";
 import React, {FC, Fragment, useEffect, useState} from "react";
 import LinkW from "@/types/link.tsx";
 import {useLocation} from "react-router-dom";
-import {NavItemType} from "@/components/ui/navigation";
+import {NavItemType} from "@/components/old-ui/navigation";
 
 
 export interface NavigationItemProps {

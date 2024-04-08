@@ -3,7 +3,7 @@ import React from "react";
 // import ContextMenu from "../ContextMenu/ContextMenu";
 import styles from "./select.module.css";
 import {SelectOption} from "../types";
-import Select from "@/components/ui/select/Select.tsx";
+import Select from "@/components/old-ui/select/Select.tsx";
 import {Portal} from "react-portal";
 import ContextMenu from "@/components/nodes/menu.tsx";
 
