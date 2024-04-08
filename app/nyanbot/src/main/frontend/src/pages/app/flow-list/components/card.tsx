@@ -30,7 +30,7 @@ export const FlowCard: FC<Props> = ({flow}) => {
                 <CardTitle>{name}</CardTitle>
             </CardHeader>
             <CardContent>
-                <Switch checked={active} className={"border-solid "} onCheckedChange={handleCheck}></Switch>
+                <Switch checked={active} className={"float-right"} onCheckedChange={handleCheck}></Switch>
             </CardContent>
         </Card>
     )

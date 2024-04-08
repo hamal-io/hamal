@@ -10,7 +10,7 @@ const initialFlows: Flow[] = [{id: "1", status: "Active", name: "SampleFlow"}]
 const FlowListPage = () => {
     const [flowList, setFlowList] = useState<Flow[]>(initialFlows)
 
-    function addFlow(req: FlowCreateRequested) {
+    function addFlow(req: Flow) {
         setFlowList(prevFlowList => [...prevFlowList, {
             id: req.id,
             name: req.name,
