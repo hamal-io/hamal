@@ -1,6 +1,7 @@
 package io.hamal.api.http.controller.adhoc
 
 import io.hamal.api.http.controller.BaseControllerTest
+import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain._enum.RequestStatus.Processing
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain.vo.*
@@ -21,7 +22,8 @@ internal class AdhocControllerTest : BaseControllerTest() {
         val response = request(
             ApiAdhocInvokeRequest(
                 inputs = InvocationInputs(),
-                code = CodeValue("40 + 2")
+                code = CodeValue("40 + 2"),
+                codeType = CodeType.Lua54
             )
         )
 
@@ -48,7 +50,7 @@ internal class AdhocControllerTest : BaseControllerTest() {
             assertThat(id, equalTo(execId))
             assertThat(correlation, nullValue())
             assertThat(inputs, equalTo(ExecInputs()))
-            assertThat(code, equalTo(ExecCode(value = CodeValue("40 + 2"))))
+            assertThat(code, equalTo(ExecCode(value = CodeValue("40 + 2"), type = CodeType.Lua54)))
         }
     }
 }

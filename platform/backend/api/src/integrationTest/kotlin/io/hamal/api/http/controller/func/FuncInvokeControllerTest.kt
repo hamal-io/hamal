@@ -1,6 +1,7 @@
 package io.hamal.api.http.controller.func
 
 import io.hamal.lib.domain.Correlation
+import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain.request.ExecInvokeRequested
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpErrorResponse
@@ -20,7 +21,10 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
         val createResponse = awaitCompleted(
             createFunc(
                 req = ApiFuncCreateRequest(
-                    name = FuncName("test"), inputs = FuncInputs(), code = CodeValue("x = 10")
+                    name = FuncName("test"),
+                    inputs = FuncInputs(),
+                    code = CodeValue("x = 10"),
+                    codeType = CodeType.Lua54
                 )
             )
         )
@@ -44,7 +48,8 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
             assertThat(
                 correlation, equalTo(
                     Correlation(
-                        id = CorrelationId("some-correlation-id"), funcId = createResponse.id
+                        id = CorrelationId("some-correlation-id"),
+                        funcId = createResponse.id
                     )
                 )
             )
@@ -56,7 +61,10 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
         val createResponse = awaitCompleted(
             createFunc(
                 ApiFuncCreateRequest(
-                    name = FuncName("test"), inputs = FuncInputs(), code = CodeValue("")
+                    name = FuncName("test"),
+                    inputs = FuncInputs(),
+                    code = CodeValue(""),
+                    codeType = CodeType.Lua54
                 )
             )
         )
@@ -91,7 +99,10 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
         val createResponse = awaitCompleted(
             createFunc(
                 ApiFuncCreateRequest(
-                    name = FuncName("test"), inputs = FuncInputs(), code = CodeValue("")
+                    name = FuncName("test"),
+                    inputs = FuncInputs(),
+                    code = CodeValue(""),
+                    codeType = CodeType.Lua54
                 )
             )
         )
@@ -100,7 +111,8 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
             awaitCompleted(
                 updateFunc(
                     createResponse.id, ApiFuncUpdateRequest(
-                        name = FuncName("test-update"), code = CodeValue("code-${it}")
+                        name = FuncName("test-update"),
+                        code = CodeValue("code-${it}")
                     )
                 )
             )
@@ -133,7 +145,10 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
         val createResponse = awaitCompleted(
             createFunc(
                 ApiFuncCreateRequest(
-                    name = FuncName("funcName"), inputs = FuncInputs(), code = CodeValue("createCode")
+                    name = FuncName("funcName"),
+                    inputs = FuncInputs(),
+                    code = CodeValue("createCode"),
+                    codeType = CodeType.Lua54
                 )
             )
         )
@@ -174,7 +189,10 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
         val createResponse = awaitCompleted(
             createFunc(
                 ApiFuncCreateRequest(
-                    name = FuncName("test"), inputs = FuncInputs(), code = CodeValue("")
+                    name = FuncName("test"),
+                    inputs = FuncInputs(),
+                    code = CodeValue(""),
+                    codeType = CodeType.Lua54
                 )
             )
         )

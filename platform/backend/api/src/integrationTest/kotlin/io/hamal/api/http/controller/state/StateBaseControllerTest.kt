@@ -3,6 +3,7 @@ package io.hamal.api.http.controller.state
 import io.hamal.api.http.controller.BaseControllerTest
 import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation
+import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.Ok
@@ -25,7 +26,8 @@ internal sealed class StateBaseControllerTest : BaseControllerTest() {
                 ApiFuncCreateRequest(
                     name = name,
                     inputs = FuncInputs(),
-                    code = CodeValue("")
+                    code = CodeValue(""),
+                    codeType = CodeType.Lua54
                 )
             )
             .execute()

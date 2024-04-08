@@ -1,10 +1,12 @@
 package io.hamal.api.http.controller.func
 
+import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.sdk.api.ApiFuncCreateRequest
 import io.hamal.lib.sdk.api.ApiFuncDeployRequest
-import org.hamcrest.MatcherAssert
-import org.hamcrest.Matchers
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.equalTo
+import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.Test
 
 internal class FuncDeploymentListControllerTest : FuncBaseControllerTest() {
@@ -16,7 +18,8 @@ internal class FuncDeploymentListControllerTest : FuncBaseControllerTest() {
                 ApiFuncCreateRequest(
                     name = FuncName("func-1"),
                     inputs = FuncInputs(),
-                    code = CodeValue("")
+                    code = CodeValue(""),
+                    codeType = CodeType.Lua54
                 )
             )
         ).id
@@ -26,9 +29,9 @@ internal class FuncDeploymentListControllerTest : FuncBaseControllerTest() {
         }
 
         val deployments = listDeployments(funcId).deployments
-        MatcherAssert.assertThat(deployments, Matchers.hasSize(20))
-        MatcherAssert.assertThat(deployments[10].message, Matchers.equalTo(DeployMessage("deployed-10")))
-        MatcherAssert.assertThat(deployments[10].version, Matchers.equalTo(CodeVersion(1)))
+        assertThat(deployments, hasSize(20))
+        assertThat(deployments[10].message, equalTo(DeployMessage("deployed-10")))
+        assertThat(deployments[10].version, equalTo(CodeVersion(1)))
     }
 
 }
