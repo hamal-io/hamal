@@ -109,7 +109,7 @@ class FlowCreateController(
                 name = req.name,
                 accountId = SecurityContext.currentAccountId,
                 flowTrigger = FlowTrigger(
-                    type = FlowTriggerType("v1::web3::new_lp_pair")
+                    type = FlowTriggerType("v1_web3_new_lp_pair")
                     // config
                 ),
                 namespaceId = flowNamespaceId,
