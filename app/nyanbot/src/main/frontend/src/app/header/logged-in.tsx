@@ -1,7 +1,7 @@
 import React, {FC} from "react";
-import Logo from "@/components/ui/logo";
-import MenuBar from "@/components/ui/menu/MenuBar.tsx";
-import SwitchMode from "@/components/ui/switch-mode";
+import Logo from "@/components/old-ui/logo";
+import MenuBar from "@/components/old-ui/menu/MenuBar.tsx";
+import SwitchMode from "@/components/old-ui/switch-mode";
 import {Profile} from "@/app/header/profile.tsx";
 import _ from "lodash";
 

@@ -1,6 +1,6 @@
 import React, {FC} from 'react'
 import {Canvas} from "@/components/nodes/canvas.tsx";
-import ButtonPrimary from "@/components/ui/button/ButtonPrimary.tsx";
+import ButtonPrimary from "@/components/old-ui/button/ButtonPrimary.tsx";
 import {Connection, ControlCondition, ControlInput, ControlText, Graph, Node} from '@/components/nodes/types';
 
 type EditorProps = {

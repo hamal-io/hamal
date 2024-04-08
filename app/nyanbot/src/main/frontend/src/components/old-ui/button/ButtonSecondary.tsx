@@ -1,4 +1,4 @@
-import Button, { ButtonProps } from "@/components/ui/button/Button";
+import Button, { ButtonProps } from "@/components/old-ui/button/Button";
 import React from "react";
 
 export interface ButtonSecondaryProps extends ButtonProps {}
