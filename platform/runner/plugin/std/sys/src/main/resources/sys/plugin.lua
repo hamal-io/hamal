@@ -195,6 +195,15 @@ function plugin_create(internal)
         return internal.namespace_list()
     end
 
+    function export.namespaces.update(body)
+        body = body or {}
+        return internal.namespace_update({
+            id = body.id,
+            name = body.name or nil,
+            features = features or nil
+        })
+    end
+
     function export.reqs.get(req_id)
         return internal.req_get(req_id)
     end

@@ -11,7 +11,7 @@ sys.await_completed(create_req)
 local update_req = fail_on_error(sys.blueprints.update({
     id = create_req.id,
     name = 'update-blueprint',
-    inputs = { 'sack', 'schwanz' },
+    inputs = {},
     value = [[i was updated]]
 }))
 
