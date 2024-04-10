@@ -51,6 +51,7 @@ interface ApiNamespaceService {
     fun append(parentId: NamespaceId, createNamespaceReq: ApiNamespaceAppendRequest): ApiNamespaceAppendRequested
     fun list(workspaceId: WorkspaceId): List<ApiNamespaceList.Namespace>
     fun get(namespaceId: NamespaceId): ApiNamespace
+    fun update(namespaceId: NamespaceId, updateNamespaceReq: ApiNamespaceUpdateRequest): ApiNamespaceUpdateRequested
 }
 
 internal class ApiNamespaceServiceImpl(
@@ -79,4 +80,14 @@ internal class ApiNamespaceServiceImpl(
             .path("namespaceId", namespaceId)
             .execute()
             .fold(ApiNamespace::class)
+
+    override fun update(
+        namespaceId: NamespaceId,
+        updateNamespaceReq: ApiNamespaceUpdateRequest
+    ): ApiNamespaceUpdateRequested =
+        template.patch("/v1/namespaces/{namespaceId}")
+            .path("namespaceId", namespaceId)
+            .body(updateNamespaceReq)
+            .execute()
+            .fold(ApiNamespaceUpdateRequested::class)
 }

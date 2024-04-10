@@ -110,7 +110,6 @@ class ClearController {
         funcRepository.clear()
         workspaceRepository.clear()
         hookRepository.clear()
-
         namespaceRepository.clear()
         namespaceTreeRepository.clear()
         blueprintRepository.clear()
