@@ -89,6 +89,10 @@ class NamespaceTreeSqliteRepository(
         }
     }
 
+    override fun reduce(cmd: NamespaceTreeCmdRepository.ReduceCmd): NamespaceTree {
+        TODO("Not yet implemented")
+    }
+
     override fun find(namespaceId: NamespaceId): NamespaceTree? = ProjectionCurrent.find(connection, namespaceId)
 
     override fun list(query: NamespaceTreeQuery): List<NamespaceTree> =

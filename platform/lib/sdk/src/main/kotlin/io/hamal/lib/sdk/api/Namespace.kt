@@ -2,6 +2,7 @@ package io.hamal.lib.sdk.api
 
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.NamespaceAppendRequest
+import io.hamal.lib.domain.request.NamespaceDeleteRequest
 import io.hamal.lib.domain.request.NamespaceUpdateRequest
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpTemplate
@@ -26,6 +27,17 @@ data class ApiNamespaceUpdateRequest(
 ) : NamespaceUpdateRequest
 
 data class ApiNamespaceUpdateRequested(
+    override val requestId: RequestId,
+    override val requestStatus: RequestStatus,
+    val id: NamespaceId,
+) : ApiRequested()
+
+data class ApiNamespaceDeleteRequest(
+    override val id: NamespaceId,
+    override val parentId: NamespaceId
+) : NamespaceDeleteRequest
+
+data class ApiNamespaceDeleteRequested(
     override val requestId: RequestId,
     override val requestStatus: RequestStatus,
     val id: NamespaceId,

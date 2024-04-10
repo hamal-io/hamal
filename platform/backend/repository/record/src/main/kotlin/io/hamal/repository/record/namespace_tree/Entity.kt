@@ -46,6 +46,18 @@ data class NamespaceTreeEntity(
                     recordedAt = rec.recordedAt()
                 )
 
+            is NamespaceTreeRecord.Reduced -> copy(
+                id = rec.entityId,
+                cmdId = rec.cmdId,
+                sequence = rec.sequence(),
+                root = root!!.mutate().let { rootNode ->
+                    val parent = rootNode.find { it.value == rec.parentId }!!
+                    parent.descendants.clear()
+                    rootNode.toTreeNode()
+                },
+                recordedAt = rec.recordedAt()
+            )
+
         }
     }
 

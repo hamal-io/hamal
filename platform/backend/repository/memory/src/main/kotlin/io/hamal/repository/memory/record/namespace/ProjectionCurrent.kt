@@ -13,6 +13,10 @@ internal class ProjectionCurrent : ProjectionMemory<NamespaceId, Namespace> {
         projection[obj.id] = obj
     }
 
+    fun delete(obj: Namespace) {
+        projection.remove(obj.id)
+    }
+
     fun find(namespaceId: NamespaceId): Namespace? = projection[namespaceId]
     fun find(namespaceName: NamespaceName): Namespace? = projection.values.find { it.name == namespaceName }
 
