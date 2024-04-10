@@ -14,7 +14,8 @@ import FuncListPage from "@/pages/app/func-list";
 import FuncDetailPage from "@/pages/app/func-detail";
 import HookListPage from "@/pages/app/hook-list";
 import ScheduleListPage from "@/pages/app/schedule-list";
-import Playground from "@/pages/app/playground";
+import AdhocPage from "@/pages/app/adhoc";
+
 
 import WorkspaceLayout from "./components/app/layout/workspace";
 import WorkspaceNamespaceListTab from "./pages/app/workspace-detail/tab/namespace-list";
@@ -59,9 +60,9 @@ export const router = createBrowserRouter([
             </WorkspaceLayout>
     },
     {
-        path: "/playground", element:
+        path: "/adhoc", element:
             <WorkspaceLayout>
-                <Playground/>
+                <AdhocPage/>
             </WorkspaceLayout>
     },
     {

@@ -1,6 +1,7 @@
 package io.hamal.api.http.controller.endpoint
 
 import io.hamal.api.http.controller.BaseControllerTest
+import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain._enum.EndpointMethod
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpStatusCode.Accepted
@@ -45,7 +46,8 @@ internal sealed class EndpointBaseControllerTest : BaseControllerTest() {
                 ApiFuncCreateRequest(
                     name = name,
                     inputs = FuncInputs(),
-                    code = CodeValue("")
+                    code = CodeValue(""),
+                    codeType = CodeType.Lua54
                 )
             )
             .execute()

@@ -4,7 +4,7 @@ import ImageStep2 from "@/images/how-it-works/2.png";
 import ImageStep3 from "@/images/how-it-works/3.png";
 import ImageStep4 from "@/images/how-it-works/4.png";
 import VectorImg from "@/images/how-it-works/vector.svg";
-import Badge from "@/components/ui/badge/Badge";
+import Badge from "@/components/old-ui/badge/Badge";
 import ImageW from "@/types/image.tsx";
 
 export interface HowItWorksProps {

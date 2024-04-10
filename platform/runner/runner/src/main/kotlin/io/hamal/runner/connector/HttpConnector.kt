@@ -24,6 +24,7 @@ class HttpConnector(
                     inputs = it.inputs,
                     state = it.state,
                     code = it.code,
+                    codeType = it.codeType,
                     correlation = it.correlation
                 )
             }

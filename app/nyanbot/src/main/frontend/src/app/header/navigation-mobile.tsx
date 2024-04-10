@@ -1,11 +1,11 @@
 import React from "react";
-import ButtonClose from "@/components/ui/button-close/ButtonClose.tsx";
-import Logo from "@/components/ui/logo";
+import ButtonClose from "@/components/old-ui/button-close/ButtonClose.tsx";
+import Logo from "@/components/old-ui/logo";
 import { Disclosure } from "@/app/headlessui.tsx";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
-import SwitchMode from "@/components/ui/switch-mode";
+import SwitchMode from "@/components/old-ui/switch-mode";
 import LinkW from "@/types/link.tsx";
-import {NavItemType} from "@/components/ui/navigation";
+import {NavItemType} from "@/components/old-ui/navigation";
 
 export interface NavMobileProps {
   data?: NavItemType[];

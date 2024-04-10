@@ -9,8 +9,9 @@ apply(plugin = "io.spring.dependency-management")
 
 dependencies {
     implementation(project(":platform:lib:sdk"))
-    implementation(project(":platform:lib:web3"))
     implementation(project(":platform:lib:kua"))
+    implementation(project(":platform:lib:nodes"))
+    implementation(project(":platform:lib:web3"))
 
     implementation(project(":platform:runner:extension:net:smtp"))
     implementation(project(":platform:runner:extension:net:http"))

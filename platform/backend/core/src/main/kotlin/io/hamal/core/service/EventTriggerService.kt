@@ -5,7 +5,6 @@ import io.hamal.core.component.WorkerPool
 import io.hamal.core.security.SecurityContext
 import io.hamal.lib.common.domain.BatchSize
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.request.TriggerInvokeRequest
@@ -45,9 +44,9 @@ internal class EventTriggerService(
                 if (!shutdown.get()) {
                     triggerQueryRepository.list(
                         TriggerQuery(
-                            afterId = TriggerId(SnowflakeId(Long.MAX_VALUE)),
+//                            afterId = TriggerId(SnowflakeId(Long.MAX_VALUE)),
                             types = listOf(TriggerType.Event),
-                            limit = Limit(10),
+                            limit = Limit(1000),
                             workspaceIds = listOf()
                         )
                     ).forEach { trigger ->

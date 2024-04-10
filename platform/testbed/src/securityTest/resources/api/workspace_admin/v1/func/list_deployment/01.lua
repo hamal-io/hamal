@@ -9,7 +9,8 @@ func_req = fail_on_error(http.post({
     json = {
         name = 'function-for-deployment',
         inputs = {},
-        code = 'print("hamal rocks")'
+        code = 'print("hamal rocks")',
+        codeType = 'Lua54'
     }
 })).content
 

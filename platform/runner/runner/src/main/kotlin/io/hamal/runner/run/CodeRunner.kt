@@ -3,12 +3,16 @@ package io.hamal.runner.run
 import io.hamal.lib.common.hot.HotNumber
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.logger
+import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.AssertionError
 import io.hamal.lib.kua.ExitError
 import io.hamal.lib.kua.ExtensionError
 import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.type.*
+import io.hamal.lib.nodes.Graph
+import io.hamal.lib.nodes.compiler.Compiler
+import io.hamal.lib.nodes.json
 import io.hamal.runner.config.EnvFactory
 import io.hamal.runner.config.SandboxFactory
 import io.hamal.runner.connector.Connector
@@ -32,6 +36,7 @@ class CodeRunnerImpl(
         val execId = unitOfWork.id
         try {
             log.debug("Start execution: $execId")
+
 
             runnerContext = RunnerContext(
                 unitOfWork.state,
@@ -66,10 +71,29 @@ class CodeRunnerImpl(
                         sandbox.codeLoad(KuaCode("${contextExtension.name} = plugin_create(_internal)"))
                         sandbox.globalUnset(KuaString("_internal"))
 
-                        sandbox.codeLoad(KuaCode(unitOfWork.code.value))
+                        when (unitOfWork.codeType) {
+                            CodeType.None -> TODO()
+                            CodeType.Lua54 -> {
+                                sandbox.codeLoad(KuaCode(unitOfWork.code.value))
+                            }
+
+                            CodeType.Nodes -> {
+                                // FIXME load graph from code
+                                val graph = json.deserialize(Graph::class, unitOfWork.code.value)
+                                val compiledCode = Compiler.compile(graph)
+                                sandbox.codeLoad(KuaCode(compiledCode))
+                            }
+                        }
+
 
                         val ctx = sandbox.globalGetTable(KuaString("context"))
-                        val stateToSubmit = ctx.getTable(KuaString("state")).toHotObject()
+
+                        // FIXME nodes can have state as well
+                        val stateToSubmit = if (unitOfWork.codeType == CodeType.Lua54) {
+                            ctx.getTable(KuaString("state")).toHotObject()
+                        } else {
+                            HotObject.empty
+                        }
 
                         connector.complete(
                             execId,

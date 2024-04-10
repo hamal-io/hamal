@@ -79,9 +79,9 @@
 //             active: currentPath === '/dashboard'
 //         },
 //         {
-//             href: `/playground`,
+//             href: `/adhoc`,
 //             label: "Playground",
-//             active: currentPath === '/playground'
+//             active: currentPath === '/adhoc'
 //         },
 //         {
 //             href: `/functions`,

@@ -2,6 +2,7 @@ package io.hamal.lib.sdk.api
 
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.FuncCreateRequest
 import io.hamal.lib.domain.request.FuncDeployRequest
@@ -17,7 +18,8 @@ import io.hamal.lib.sdk.fold
 data class ApiFuncCreateRequest(
     override val name: FuncName,
     override val inputs: FuncInputs,
-    override val code: CodeValue
+    override val code: CodeValue,
+    override val codeType: CodeType
 ) : FuncCreateRequest
 
 data class ApiFuncCreateRequested(

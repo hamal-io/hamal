@@ -2,6 +2,7 @@ package io.hamal.api.http.controller.func
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.Accepted
@@ -53,7 +54,8 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
                 req = ApiFuncCreateRequest(
                     name = FuncName("created-name"),
                     inputs = FuncInputs(HotObject.builder().set("hamal", "createdInputs").build()),
-                    code = CodeValue("createdCode")
+                    code = CodeValue("createdCode"),
+                    codeType = CodeType.Lua54
                 )
             )
         )
@@ -215,7 +217,8 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
                 req = ApiFuncCreateRequest(
                     name = name,
                     inputs = FuncInputs(HotObject.builder().set("hamal", "createdInputs").build()),
-                    code = code
+                    code = code,
+                    codeType = CodeType.Lua54
                 )
             )
         )

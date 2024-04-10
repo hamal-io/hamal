@@ -1,0 +1,20 @@
+logging:
+  level:
+    root: INFO
+    com.nyanbot: INFO
+    io.hamal: INFO
+
+spring:
+  datasource:
+    driver-class-name: org.sqlite.JDBC
+  profiles:
+    active: ${ACTIVE_PROFILES:default,dev,sqlite}
+
+server:
+  port: 6006
+
+io:
+  hamal:
+    server:
+      url: ${HAMAL_URL:http://localhost:8008}
+      token: ${HAMAL_TOKEN}

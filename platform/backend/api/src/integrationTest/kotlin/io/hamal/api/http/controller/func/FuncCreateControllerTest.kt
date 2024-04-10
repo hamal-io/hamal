@@ -2,6 +2,7 @@ package io.hamal.api.http.controller.func
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.NotFound
@@ -23,7 +24,8 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
             ApiFuncCreateRequest(
                 name = FuncName("test-func"),
                 inputs = FuncInputs(HotObject.builder().set("hamal", "rocks").build()),
-                code = CodeValue("13 + 37")
+                code = CodeValue("13 + 37"),
+                codeType = CodeType.Lua54
             )
         )
         awaitCompleted(result)
@@ -40,6 +42,7 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
         with(codeQueryRepository.get(func.code.id)) {
             assertThat(value, equalTo(CodeValue("13 + 37")))
             assertThat(version, equalTo(CodeVersion(1)))
+            assertThat(type, equalTo(CodeType.Lua54))
         }
 
     }
@@ -61,7 +64,8 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
             req = ApiFuncCreateRequest(
                 name = FuncName("test-func"),
                 inputs = FuncInputs(HotObject.builder().set("hamal", "rocks").build()),
-                code = CodeValue("13 + 37")
+                code = CodeValue("13 + 37"),
+                codeType = CodeType.Lua54
             )
         )
         awaitCompleted(result)
@@ -81,6 +85,7 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
         with(codeQueryRepository.get(func.code.id)) {
             assertThat(value, equalTo(CodeValue("13 + 37")))
             assertThat(version, equalTo(CodeVersion(1)))
+            assertThat(type, equalTo(CodeType.Lua54))
         }
     }
 
@@ -92,7 +97,8 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
                 ApiFuncCreateRequest(
                     name = FuncName("test-func"),
                     inputs = FuncInputs(HotObject.builder().set("hamal", "rocks").build()),
-                    code = CodeValue("13 + 37")
+                    code = CodeValue("13 + 37"),
+                    codeType = CodeType.Lua54
                 )
             )
             .execute()

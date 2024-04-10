@@ -20,10 +20,13 @@ import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {useFuncCreate} from "@/hook/func.ts";
 import {useUiState} from "@/hook/ui-state.ts";
+import FormHttpMethodSelect from "@/components/form/http-method-select.tsx";
+import FormCodeTypeSelect from "@/components/form/code-type-select.tsx";
 
 
 const formSchema = z.object({
     name: z.string().min(2).max(50),
+    codeType: z.string().min(1).max(200)
 })
 
 const Create = () => {
@@ -38,7 +41,8 @@ const Create = () => {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: ""
+            name: "",
+            codeType: "",
         },
     })
 
@@ -48,7 +52,7 @@ const Create = () => {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
         try {
-            createFunc(uiState.namespaceId, values.name)
+            createFunc(uiState.namespaceId, values.name, values.codeType)
         } catch (e) {
             console.error(e)
         } finally {
@@ -95,6 +99,7 @@ const Create = () => {
                                     </FormItem>
                                 )}
                             />
+                            <FormCodeTypeSelect name='codeType' form={form}/>
                             <Button type="submit">
                                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
                                 Create function

@@ -1,5 +1,6 @@
 package io.hamal.lib.domain.request
 
+import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.vo.*
 
@@ -8,6 +9,7 @@ interface FuncCreateRequest {
     val name: FuncName
     val inputs: FuncInputs
     val code: CodeValue
+    val codeType: CodeType
 }
 
 data class FuncCreateRequested(
@@ -20,7 +22,8 @@ data class FuncCreateRequested(
     val name: FuncName,
     val inputs: FuncInputs,
     val codeId: CodeId,
-    val code: CodeValue
+    val code: CodeValue,
+    val codeType: CodeType
 ) : Requested()
 
 interface FuncUpdateRequest {

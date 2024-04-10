@@ -2,6 +2,7 @@ package io.hamal.runner.test
 
 import io.hamal.lib.domain.EventToSubmit
 import io.hamal.lib.domain.State
+import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
@@ -98,6 +99,7 @@ abstract class AbstractRunnerTest {
         inputs = inputs,
         state = State(),
         code = CodeValue(code),
+        codeType = CodeType.Lua54,
         correlation = null
     )
 }

@@ -1,0 +1,11 @@
+.wrapper{
+    transform-origin: center center;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: visible !important;
+}

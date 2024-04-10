@@ -13,16 +13,12 @@ export const useUiState = () => {
     })
 }
 
-type InitUiStateAction = (workspaceId: string, namespaceId: string) => void
+type InitUiStateAction = () => void
 export const useInitUiState = (): [InitUiStateAction] => {
     const [uiState, setUiState] = useUiState()
 
-    const fn = useCallback((workspaceId: string, namespaceId: string) => {
-        setUiState({
-            workspaceId,
-            namespaceId,
-            theme: uiState.theme || 'light',
-        })
+    const fn = useCallback(() => {
+        setUiState({theme: uiState.theme || 'light'})
     }, [uiState])
 
     return [fn]

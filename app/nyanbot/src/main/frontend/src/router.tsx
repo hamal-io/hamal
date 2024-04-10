@@ -6,7 +6,9 @@ import './global.css'
 import LandingPage from "./pages/landing";
 import NotFoundPage from "@/app/not-found.tsx";
 import RootLayout from "@/app/root-layout.tsx";
-import DashboardPage from "@/pages/dashboard";
+import {TestPage} from "@/pages/test"
+import FlowListPage from "@/pages/app/flow-list";
+import FlowDetailPage from "@/pages/app/flow-detail";
 
 export const router = createBrowserRouter([
     {
@@ -15,11 +17,22 @@ export const router = createBrowserRouter([
                 <LandingPage/>
             </RootLayout>
     },
-
     {
-        path: "/dashboard", element:
+        path: "/flows", element:
             <RootLayout>
-                <DashboardPage/>
+                <FlowListPage/>
+            </RootLayout>
+    },
+    {
+        path: "/flows/:flowId", element:
+            <RootLayout>
+                <FlowDetailPage/>
+            </RootLayout>
+    },
+    {
+        path: "/test", element:
+            <RootLayout>
+                <TestPage/>
             </RootLayout>
     },
     {path: "*", element: <NotFoundPage/>}
