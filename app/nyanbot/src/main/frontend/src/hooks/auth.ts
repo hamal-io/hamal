@@ -17,21 +17,19 @@ export const useAuth = () => {
 }
 
 type ResetAuthAction = () => void
-export const useResetAuth = (): [ResetAuthAction] => {
+export const useResetAuth = (): ResetAuthAction => {
     const [_, setAuth] = useAuth()
 
-    const fn = useCallback(() => {
+    return useCallback(() => {
         setAuth({...unauthorized})
     }, [setAuth])
-
-    return [fn]
 }
 
 type LogoutAction = (abortController?: AbortController) => void
 export const useLogout = (): [LogoutAction, boolean, Error] => {
     const navigate = useNavigate()
     const [auth] = useAuth()
-    const [resetAuth] = useResetAuth()
+    const resetAuth = useResetAuth()
     const [resetUiState] = useResetUiState()
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<Error | null>(null);
@@ -72,7 +70,8 @@ export const useLogout = (): [LogoutAction, boolean, Error] => {
 
 type MetaMaskChallengeAction = (address: string, abortController?: AbortController) => void
 export const useMetaMaskChallenge = (): [MetaMaskChallengeAction, string, boolean, Error] => {
-    const [auth, setAuth] = useAuth()
+    const resetAuth = useResetAuth()
+    const [auth] = useAuth()
     const [challenge, setChallenge] = useState<string | null>(null)
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<Error | null>(null);
@@ -101,7 +100,7 @@ export const useMetaMaskChallenge = (): [MetaMaskChallengeAction, string, boolea
                 }
 
                 if (error.message === 'NetworkError when attempting to fetch resource.') {
-                    setAuth(null)
+                    resetAuth()
                     window.location.href = '/'
                 }
             })
@@ -112,8 +111,10 @@ export const useMetaMaskChallenge = (): [MetaMaskChallengeAction, string, boolea
 
 type MetaMaskTokenAction = (address: string, signature: string, abortController?: AbortController) => void
 export const useMetaMaskToken = (): [MetaMaskTokenAction, string, boolean, Error] => {
+    const navigate = useNavigate()
     const [initUiState] = useInitUiState()
     const [auth, setAuth] = useAuth()
+    const resetAuth = useResetAuth()
     const [token, setToken] = useState<string | null>(null)
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<Error | null>(null);
@@ -143,6 +144,8 @@ export const useMetaMaskToken = (): [MetaMaskTokenAction, string, boolean, Error
 
                     initUiState()
 
+                    navigate('/flows')
+
                 })
                 setLoading(false)
             })
@@ -154,7 +157,7 @@ export const useMetaMaskToken = (): [MetaMaskTokenAction, string, boolean, Error
                 }
 
                 if (error.message === 'NetworkError when attempting to fetch resource.') {
-                    setAuth(null)
+                    resetAuth()
                     window.location.href = '/'
                 }
             })
