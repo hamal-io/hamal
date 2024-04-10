@@ -31,9 +31,11 @@ export const FlowCard: FC<Props> = ({flow}) => {
     }, [statusResponse]);
 
     return (
-        <Card onClick={handleClick} className={"flex flex-row items-center justify-between p-4"}>
-            <CardTitle>{flow.name}</CardTitle>
-            <Switch checked={active} onCheckedChange={handleCheck} onClick={(e) => e.stopPropagation()}></Switch>
+        <Card onClick={handleClick} className={"flex flex-row items-center p-4"}>
+            <CardTitle>
+                <Switch checked={active} onCheckedChange={handleCheck} onClick={(e) => e.stopPropagation()}></Switch>
+                <span className="pl-4">{flow.name} </span>
+            </CardTitle>
         </Card>
     )
 }

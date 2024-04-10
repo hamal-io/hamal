@@ -7,12 +7,14 @@ import {Dialog, DialogContent, DialogHeader, DialogTrigger} from "@/components/u
 import {Form, FormControl, FormField, FormItem, FormLabel} from "@/components/ui/form.tsx";
 import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
-import {Loader2} from "lucide-react";
+import {Loader2, Plus} from "lucide-react";
+import {useNavigate} from "react-router-dom";
 
-type Props = { trigger: ReactNode/*, onCreate: (FlowCreateRequested) => void*/ }
-const Create: FC<Props> = ({trigger/*, onCreate*/}) => {
+
+const Create = ({}) => {
+    const navigate = useNavigate()
     const [open, setOpen] = useState<boolean>(false)
-    const [createFlow, flowCreateRequested] = useFlowCreate()
+    const [createFlow, createdFlow] = useFlowCreate()
     const [loading, setLoading] = useState<boolean>(false)
 
     const formSchema = z.object({
@@ -28,7 +30,7 @@ const Create: FC<Props> = ({trigger/*, onCreate*/}) => {
 
     })
 
-    function onSubmit(values: FlowForm) {
+    const onSubmit = (values: FlowForm) => {
         setLoading(true)
         try {
             const abortController = new AbortController()
@@ -40,46 +42,48 @@ const Create: FC<Props> = ({trigger/*, onCreate*/}) => {
     }
 
     useEffect(() => {
-        if (flowCreateRequested) {
-            //onCreate(flowCreateRequested)
-
+        if (createdFlow) {
             setLoading(false)
             setOpen(false)
-
+            navigate(`/flows/${createdFlow.id}`)
         }
-    }, [flowCreateRequested]);
+    }, [createdFlow]);
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                {trigger}
+                <Button>
+                    <Plus className="w-4 h-4 mr-1"/>
+                    New Flow
+                </Button>
             </DialogTrigger>
-            <DialogContent>
-                <DialogHeader title={"Create Flow"}>
-                    <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                            <FormField
-                                control={form.control}
-                                name="name"
-                                render={({field}) => (
-                                    <FormItem>
-                                        <FormLabel>Name your Flow</FormLabel>
-                                        <FormControl>
-                                            <p>
-                                                <Input type={"text"} placeholder={"Sample Flow"} {...field} />
 
-                                            </p>
-                                        </FormControl>
-                                    </FormItem>
-                                )}
-                            />
-                            <Button type={"submit"}>
-                                {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
-                                Submit
-                            </Button>
-                        </form>
-                    </Form>
-                </DialogHeader>
+            <DialogContent>
+                <DialogHeader>Create Flow</DialogHeader>
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                        <FormField
+                            control={form.control}
+                            name="name"
+                            render={({field}) => (
+                                <FormItem>
+                                    <FormLabel>Name your Flow</FormLabel>
+                                    <FormControl>
+                                        <p>
+                                            <Input type={"text"} placeholder={"An appropriate name for the magic which is going to happen"} {...field} />
+
+                                        </p>
+                                    </FormControl>
+                                </FormItem>
+                            )}
+                        />
+                        <Button className="w-full" type={"submit"}>
+                            {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
+                            Create
+                        </Button>
+                    </form>
+                </Form>
+
             </DialogContent>
         </Dialog>
     )
