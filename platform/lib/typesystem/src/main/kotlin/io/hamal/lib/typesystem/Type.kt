@@ -48,6 +48,10 @@ object TypeNumber : TypeNew {
     override val identifier = "number"
 }
 
+object TypeString : TypeNew {
+    override val identifier = "string"
+}
+
 
 data class TypeList(
     override val identifier: String,

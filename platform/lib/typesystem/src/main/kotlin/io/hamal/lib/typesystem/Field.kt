@@ -13,15 +13,14 @@ data class Field(
     val isContainer get() = kind.isContainer
 
     enum class Kind(val isContainer: kotlin.Boolean) {
-        Any(true),
         Boolean(false),
         Date(false),
+        DateTime(false),
         Decimal(false),
         List(true),
         Nil(false),
         Number(false),
         Object(true),
-        OneOf(true),
         String(false),
         Time(false)
     }
@@ -31,7 +30,7 @@ data class Field(
             throw IllegalArgumentException("Container type requires valueType")
         }
 
-        if(!isContainer && valueType != null){
+        if (!isContainer && valueType != null) {
             throw IllegalArgumentException("Not a container type has valueType")
         }
     }

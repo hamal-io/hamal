@@ -6,7 +6,7 @@ import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.extend.extension.RunnerExtension
 import io.hamal.lib.kua.type.KuaCode
 import io.hamal.lib.kua.type.KuaString
-import io.hamal.lib.nodes.compiler.Compiler
+import io.hamal.lib.nodes.compiler.CompileGraphAdapter
 import org.junit.jupiter.api.Test
 
 internal class IntOutTest : BaseSandboxTest() {
@@ -35,7 +35,8 @@ internal class IntOutTest : BaseSandboxTest() {
                 connections = listOf()
             )
         )
-        testInstance.codeLoad(KuaCode(code))
+
+        testInstance.codeLoad(code)
     }
 
 }
@@ -46,5 +47,5 @@ internal sealed class BaseSandboxTest {
         Sandbox(SandboxContextNop)
     }
 
-    val testCompiler = Compiler
+    val testCompiler = CompileGraphAdapter()
 }

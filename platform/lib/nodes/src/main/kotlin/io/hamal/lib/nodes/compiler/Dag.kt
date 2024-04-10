@@ -1,6 +1,6 @@
 package io.hamal.lib.nodes.compiler
 
-import io.hamal.lib.nodes.NodeId
+import io.hamal.lib.nodes.node.NodeId
 
 data class DagNode(
     val id: NodeId,

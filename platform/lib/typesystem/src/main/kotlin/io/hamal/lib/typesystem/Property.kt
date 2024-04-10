@@ -31,10 +31,10 @@ data class Property(
         fun mapAnyToValue(field: Field, value: Any?): Value {
             return if (value == null) ValueNil
             else when (field.kind) {
-                Kind.Any -> TODO()
 
                 Kind.Boolean -> valueOf(value as Boolean)
                 Kind.Date -> ValueDate(value as LocalDate)
+                Kind.DateTime -> TODO()
                 Kind.Decimal -> ValueDecimal(value as Decimal)
 
                 Kind.List -> {
@@ -61,7 +61,6 @@ data class Property(
                     }
                 }
 
-                Kind.OneOf -> TODO()
                 Kind.String -> ValueString(value as String)
                 Kind.Time -> ValueTime(value as LocalTime)
             }
