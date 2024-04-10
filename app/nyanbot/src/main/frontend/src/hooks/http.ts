@@ -1,9 +1,10 @@
 import {useCallback, useState} from "react";
-import {useAuth} from "@/hooks/auth.ts";
+import {useAuth, useResetAuth} from "@/hooks/auth.ts";
 
 type GetAction = (url: string, abortController?: AbortController) => void
 export const useGet = <T>(): [GetAction, T, boolean, Error] => {
-    const [auth, setAuth] = useAuth()
+    const [auth] = useAuth()
+    const resetAuth = useResetAuth()
     const [data, setData] = useState<T | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<Error | null>(null);
@@ -12,7 +13,7 @@ export const useGet = <T>(): [GetAction, T, boolean, Error] => {
         if (auth.type === 'Unauthorized') {
             setError(Error("Unauthenticated"))
             setLoading(false)
-            setAuth(null)
+            resetAuth()
             window.location.href = '/'
         } else {
             setLoading(true)
@@ -27,7 +28,7 @@ export const useGet = <T>(): [GetAction, T, boolean, Error] => {
             })
                 .then(response => {
                     if (response.status === 403) {
-                        setAuth(null)
+                        resetAuth()
                         window.location.href = '/'
                     }
 
@@ -48,8 +49,8 @@ export const useGet = <T>(): [GetAction, T, boolean, Error] => {
                     }
 
                     if (error.message === 'NetworkError when attempting to fetch resource.') {
-                        setAuth(null)
-                        window.location.href = '/login'
+                        resetAuth()
+                        window.location.href = '/'
                     }
                 })
         }
@@ -60,7 +61,8 @@ export const useGet = <T>(): [GetAction, T, boolean, Error] => {
 
 type PostAction = (url: string, data: object, abortController?: AbortController) => void
 export const usePost = <T>(): [PostAction, T, boolean, Error] => {
-    const [auth, setAuth] = useAuth()
+    const [auth] = useAuth()
+    const resetAuth = useResetAuth()
     const [data, setData] = useState<T | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<Error | null>(null);
@@ -69,7 +71,7 @@ export const usePost = <T>(): [PostAction, T, boolean, Error] => {
         if (auth.type === 'Unauthorized') {
             setError(Error("Unauthenticated"))
             setLoading(false)
-            setAuth(null)
+            resetAuth()
             window.location.href = '/'
 
         } else {
@@ -87,7 +89,7 @@ export const usePost = <T>(): [PostAction, T, boolean, Error] => {
                 .then(response => {
 
                     if (response.status === 403) {
-                        setAuth(null)
+                        resetAuth()
                         window.location.href = '/'
                     }
 
@@ -109,8 +111,8 @@ export const usePost = <T>(): [PostAction, T, boolean, Error] => {
                     }
 
                     if (error.message === 'NetworkError when attempting to fetch resource.') {
-                        setAuth(null)
-                        window.location.href = '/login'
+                        resetAuth()
+                        window.location.href = '/'
                     }
 
                 })
@@ -123,7 +125,9 @@ export const usePost = <T>(): [PostAction, T, boolean, Error] => {
 
 type PatchAction = (url: string, data: object, abortController?: AbortController) => void
 export const usePatch = <T>(): [PatchAction, T, boolean, Error] => {
-    const [auth, setAuth] = useAuth()
+    const [auth] = useAuth()
+    const resetAuth = useResetAuth()
+
     const [data, setData] = useState<T | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<Error | null>(null);
@@ -132,7 +136,7 @@ export const usePatch = <T>(): [PatchAction, T, boolean, Error] => {
         if (auth.type === 'Unauthorized') {
             setError(Error("Unauthenticated"))
             setLoading(false)
-            setAuth(null)
+            resetAuth()
             window.location.href = '/'
 
         } else {
@@ -150,7 +154,7 @@ export const usePatch = <T>(): [PatchAction, T, boolean, Error] => {
                 .then(response => {
 
                     if (response.status === 403) {
-                        setAuth(null)
+                        resetAuth()
                         window.location.href = '/'
                     }
 
@@ -172,8 +176,8 @@ export const usePatch = <T>(): [PatchAction, T, boolean, Error] => {
                     }
 
                     if (error.message === 'NetworkError when attempting to fetch resource.') {
-                        setAuth(null)
-                        window.location.href = '/login'
+                        resetAuth()
+                        window.location.href = '/'
                     }
 
                 })
