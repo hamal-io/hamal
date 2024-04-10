@@ -39,27 +39,29 @@ internal class EventTriggerService(
 
 
     override fun onApplicationEvent(event: ApplicationReadyEvent) {
-        scheduledTasks.add(
-            workerPool.atFixedDelay(1.milliseconds) {
-                if (!shutdown.get()) {
-                    triggerQueryRepository.list(
-                        TriggerQuery(
+
+        triggerQueryRepository.list(
+            TriggerQuery(
 //                            afterId = TriggerId(SnowflakeId(Long.MAX_VALUE)),
-                            types = listOf(TriggerType.Event),
-                            limit = Limit(1000),
-                            workspaceIds = listOf()
-                        )
-                    ).forEach { trigger ->
-                        require(trigger is Trigger.Event)
+                types = listOf(TriggerType.Event),
+                limit = Limit(1000),
+                workspaceIds = listOf()
+            )
+        ).forEach { trigger ->
+            require(trigger is Trigger.Event)
 
-                        val topic = topicRepository.get(trigger.topicId)
-                        val consumer = TopicEventConsumerBatchImpl(
-                            consumerId = LogConsumerId(trigger.id.value),
-                            topicId = topic.logTopicId,
-                            repository = logBrokerRepository
-                        )
+            val topic = topicRepository.get(trigger.topicId)
+            val consumer = TopicEventConsumerBatchImpl(
+                consumerId = LogConsumerId(trigger.id.value),
+                topicId = topic.logTopicId,
+                repository = logBrokerRepository
+            )
 
-                        triggerConsumers[trigger.id] = consumer
+            triggerConsumers[trigger.id] = consumer
+
+            scheduledTasks.add(
+                workerPool.atFixedDelay(100.milliseconds) {
+                    if (!shutdown.get()) {
                         try {
                             SecurityContext.with(Auth.System) {
                                 consumer.consumeBatch(BatchSize(1)) { events ->
@@ -76,9 +78,10 @@ internal class EventTriggerService(
                             t.printStackTrace()
                         }
                     }
-                }
-            },
-        )
+                },
+            )
+        }
+
     }
 
     override fun destroy() {

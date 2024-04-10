@@ -11,8 +11,6 @@ import kotlin.concurrent.read
 import kotlin.concurrent.write
 
 class AuthMemoryRepository : AuthRepository {
-    private val lock = ReentrantReadWriteLock()
-
 
     override fun create(cmd: CreateCmd): Auth {
         return lock.write {
@@ -94,6 +92,7 @@ class AuthMemoryRepository : AuthRepository {
     }
 
     override fun close() {}
+
     override fun find(authId: AuthId): Auth? {
         return lock.read {
             projections.find { it.id == authId }
@@ -138,6 +137,24 @@ class AuthMemoryRepository : AuthRepository {
         }
     }
 
+    override fun update(authId: AuthId, cmd: UpdatePasswordCmd): Auth {
+        val currentAuth = find(authId) as Auth.Email
+        val updatedAuth = currentAuth.copy(
+            cmdId = cmd.id,
+            accountId = currentAuth.accountId,
+            email = currentAuth.email,
+            hash = cmd.hash
+        )
+
+        lock.write {
+            projections.removeIf { it.id == currentAuth.id }
+            projections.add(updatedAuth)
+        }
+
+        return updatedAuth
+    }
+
+    private val lock = ReentrantReadWriteLock()
     private val projections = mutableListOf<Auth>()
 
 }

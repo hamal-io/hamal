@@ -1,11 +1,8 @@
 package com.nyanbot.repository.impl.flow
 
-import com.nyanbot.repository.Flow
-import com.nyanbot.repository.FlowCmdRepository.CreateCmd
-import com.nyanbot.repository.FlowId
+import com.nyanbot.repository.*
+import com.nyanbot.repository.FlowCmdRepository.*
 import com.nyanbot.repository.FlowQueryRepository.FlowQuery
-import com.nyanbot.repository.FlowRepository
-import com.nyanbot.repository.FlowStatus
 import com.nyanbot.repository.impl.RecordSqliteRepository
 import com.nyanbot.repository.record.CreateDomainObject
 import io.hamal.lib.common.domain.Count
@@ -73,5 +70,16 @@ class FlowSqliteRepository(
 
     override fun count(query: FlowQuery): Count {
         return ProjectionCurrent.count(connection, query)
+    }
+
+    override fun set(flowId: FlowId, cmd: SetStatusCmd): Flow {
+        return tx {
+            if (cmd.flowStatus == FlowStatus.Active) {
+                store(FlowRecord.SetActive(flowId))
+            } else {
+                store(FlowRecord.SetInactive(flowId))
+            }
+            currentVersion(flowId).also { ProjectionCurrent.upsert(this, it) }
+        }
     }
 }

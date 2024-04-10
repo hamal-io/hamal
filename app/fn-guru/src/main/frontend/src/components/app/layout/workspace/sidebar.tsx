@@ -11,32 +11,21 @@ import {
     LucideProps,
     Play,
     Settings,
-    TimerIcon,
+    TimerIcon, User,
     WebhookIcon
 } from "lucide-react";
 import React, {FC, useEffect, useState} from "react";
 import {Link, useLocation} from "react-router-dom";
-import Profile from "@/components/app/layout/workspace/profile.tsx";
 import {useNamespaceGet} from "@/hook";
 import {useUiState} from "@/hook/ui-state.ts";
 
-type Props = {
-    className?: string;
-};
-
-type NavItem = {
-    icon: LucideIcon;
-    href: string;
-    external?: boolean;
-    label: string;
-    active?: boolean;
-};
+type Props = { className?: string; };
 const Sidebar: React.FC<Props> = ({className}) => {
     const [uiState] = useUiState()
     const [getNamespace, namespace, loading, error] = useNamespaceGet()
     const location = useLocation()
     const currentPath = location.pathname
-    const [activeFeatures, setActiveFeatures] = useState<NavLinkType[]>(null)
+    const [activeFeatures, setActiveFeatures] = useState(null)
 
 
     useEffect(() => {
@@ -47,7 +36,7 @@ const Sidebar: React.FC<Props> = ({className}) => {
 
     useEffect(() => {
         if (namespace) {
-            const actives: NavLinkType[] = []
+            const actives = []
             for (const [feat, valid] of Object.entries(namespace.features)) {
                 if (valid) {
                     actives.push(featureLinks[feat])
@@ -58,12 +47,6 @@ const Sidebar: React.FC<Props> = ({className}) => {
     }, [namespace]);
 
 
-    type NavLinkType = {
-        icon: React.ForwardRefExoticComponent<LucideProps>,
-        active: boolean,
-        href: string,
-        label: string
-    }
 
     const primaryNavigation = [
         {
@@ -123,6 +106,7 @@ const Sidebar: React.FC<Props> = ({className}) => {
 
 
     const secondaryNavigation = [
+
         {
             icon: ClipboardPaste,
             href: '/blueprints',
@@ -140,6 +124,13 @@ const Sidebar: React.FC<Props> = ({className}) => {
             external: true,
             label: "Documentation",
         },
+        {
+            icon: User,
+            href: "/account",
+            label: "Account",
+            active: currentPath.startsWith("/account")
+        }
+
     ];
 
 
@@ -179,7 +170,6 @@ const Sidebar: React.FC<Props> = ({className}) => {
                             </ul>
                         </li>
                     </ul>
-                    <Profile/>
                 </div>
             </nav>
         </aside>
@@ -187,6 +177,14 @@ const Sidebar: React.FC<Props> = ({className}) => {
 };
 
 export default Sidebar;
+
+type NavItem = {
+    icon: LucideIcon;
+    href: string;
+    label: string;
+    external?: boolean;
+    active?: boolean;
+};
 
 const NavLink: FC<{ item: NavItem }> = ({item}) => {
     return (

@@ -15,8 +15,9 @@ data class FlowEntity(
     override val id: FlowId,
     override val sequence: RecordSequence,
     override val recordedAt: RecordedAt,
-    private val status: FlowStatus,
 
+
+    private val status: FlowStatus? = null,
 
     private var accountId: AccountId? = null,
     private var name: FlowName? = null,
@@ -42,6 +43,16 @@ data class FlowEntity(
                 funcId = rec.funcId,
                 triggerId = rec.triggerId
             )
+
+            is FlowRecord.SetActive -> copy(
+                id = rec.entityId,
+                status = FlowStatus.Active
+            )
+
+            is FlowRecord.SetInactive -> copy(
+                id = rec.entityId,
+                status = FlowStatus.Inactive
+            )
         }
     }
 
@@ -51,7 +62,7 @@ data class FlowEntity(
             id = id,
             updatedAt = recordedAt.toUpdatedAt(),
             accountId = accountId!!,
-            status = status,
+            status = status!!,
             name = name!!,
             flowTrigger = flowTrigger!!,
 
@@ -70,8 +81,7 @@ fun List<FlowRecord>.createEntity(): FlowEntity {
     var result = FlowEntity(
         id = firstRecord.entityId,
         sequence = firstRecord.sequence(),
-        recordedAt = firstRecord.recordedAt(),
-        status = FlowStatus.Inactive
+        recordedAt = firstRecord.recordedAt()
     )
 
     forEach { record ->
