@@ -296,6 +296,26 @@ class AuthSqliteRepository(
             map(NamedResultSet::toAuth)
         }?.let { it as Auth.ExecToken }
     }
+
+    override fun update(authId: AuthId, cmd: UpdatePasswordCmd): Auth {
+        return connection.execute<Auth>(
+            """
+            UPDATE 
+                auth 
+            SET 
+                password = :password
+            WHERE
+                id = :id
+            RETURNING *;
+        """.trimIndent()
+        ) {
+            query {
+                set("id", authId)
+                set("password", cmd.hash)
+            }
+            map(NamedResultSet::toAuth)
+        }!!
+    }
 }
 
 private fun NamedResultSet.toAuth(): Auth {

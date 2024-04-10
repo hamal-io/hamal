@@ -47,3 +47,18 @@ data class AuthLogoutRequested(
     override var requestStatus: RequestStatus,
     val id: AccountId
 ) : Requested()
+
+interface AuthUpdatePasswordRequest {
+    val currentPassword: Password
+    val newPassword: Password
+}
+
+data class AuthUpdatePasswordRequested(
+    override val requestId: RequestId,
+    override val requestedBy: AuthId,
+    override val requestStatus: RequestStatus,
+    val id: AuthId,
+    val hash: PasswordHash,
+) : Requested()
+
+interface Auth

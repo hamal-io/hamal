@@ -1,8 +1,9 @@
-import {Auth, AUTH_KEY} from "@/types/auth.ts";
+import {Auth, AUTH_KEY, UpdatePasswordRequested} from "@/types/auth.ts";
 import useLocalStorageState from "use-local-storage-state";
 import {useCallback, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {useInitUiState, useResetUiState} from "@/hook/ui-state.ts";
+import {usePatch} from "@/hook/http.ts";
 
 const unauthorized: Auth = {
     type: 'Unauthorized',
@@ -164,4 +165,18 @@ export const useMetaMaskToken = (): [MetaMaskTokenAction, string, boolean, Error
     }, [auth])
 
     return [fn, token, loading, error]
+}
+
+type UpdatePasswordAction = (
+    currentPassword: string,
+    newPassword: string,
+    abortController?: AbortController
+) => void
+export const useUpdatePassword = (): [UpdatePasswordAction, UpdatePasswordRequested, boolean, Error] => {
+    const [auth] = useAuth()
+    const [patch, submission, loading, error] = usePatch<UpdatePasswordRequested>()
+    const fn = useCallback<UpdatePasswordAction>(async (currentPassword, newPassword, abortController?) =>
+        patch(`/v1/auth`, {currentPassword, newPassword}, abortController), [auth]
+    )
+    return [fn, submission, loading, error]
 }

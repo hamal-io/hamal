@@ -17,3 +17,8 @@ export interface LoginRequested {
     token: string;
     email: string;
 }
+
+export interface UpdatePasswordRequested {
+    requestId: string;
+    requestStatus: string;
+}

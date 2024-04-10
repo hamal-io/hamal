@@ -26,6 +26,7 @@ import React from "react";
 import WorkspaceDetailPage from "@/pages/app/workspace-detail";
 import WorkspaceGeneralTab from "@/pages/app/workspace-detail/tab/general";
 import BlueprintEditor from "@/pages/app/blueprint-list/components/editor.tsx";
+import AccountPage from "@/pages/app/account/account.tsx";
 
 export const router = createBrowserRouter([
     {path: "/", element: <HomePage/>},
@@ -33,6 +34,12 @@ export const router = createBrowserRouter([
 
     {
         path: "/onboarding", element: <OnboardingPage/>
+    },
+    {
+        path: "/account", element:
+            <WorkspaceLayout>
+                <AccountPage/>
+            </WorkspaceLayout>
     },
     {
         path: "/blueprints/editor/:blueprintId", element:

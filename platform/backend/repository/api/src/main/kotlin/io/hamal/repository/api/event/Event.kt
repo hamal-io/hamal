@@ -13,6 +13,7 @@ class InternalEventClass(override val value: String) : ValueObjectString()
 val internalEventClasses = listOf(
     AccountCreatedEvent::class,
     AccountConvertedEvent::class,
+    AuthUpdatedEvent::class,
     BlueprintCreatedEvent::class,
     BlueprintUpdatedEvent::class,
     EndpointCreatedEvent::class,
