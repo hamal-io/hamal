@@ -1,8 +1,7 @@
-interface Flow {
+export interface Flow {
+    id: string
     name: string
+    status: string
 }
 
-interface FlowList {
-    flows: Array<Flow>
-}
-
+export type FlowList = Array<Flow>

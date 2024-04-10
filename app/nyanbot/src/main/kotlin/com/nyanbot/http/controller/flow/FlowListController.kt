@@ -19,6 +19,6 @@ class FlowListController(
                 limit = Limit(1000)
             )
         )
-    }
 
+    }
 }

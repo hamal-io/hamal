@@ -1,39 +1,62 @@
-import React, {useRef, useState} from "react";
+import React, {useEffect} from "react";
 import {PageHeader} from "@/components/page-header.tsx";
-import {Button} from "@/components/ui/button.tsx";
 import {FlowCard} from "@/pages/app/flow-list/components/card.tsx";
+import Create from "@/pages/app/flow-list/components/create.tsx";
+import {useFlowList} from "@/hooks/flow.ts";
+import {EmptyPlaceholder} from "@/components/ui/empty-placeholder.tsx";
+import {Code2, WorkflowIcon} from "lucide-react";
 
-
-const initialFlows: Flow[] = [{name: "SampleFlow"}]
 
 const FlowListPage = () => {
-    const [flowList, setFlowList] = useState<Flow[]>(initialFlows)
-    const flowIdx = useRef<number>(0);
+    const [listFlows, flowList, isLoading, error] = useFlowList()
 
-    function handleCreate() {
-        flowIdx.current += 1
-        setFlowList(prevState => [...prevState, {name: `New Flow ${flowIdx.current}`}])
-    }
+    useEffect(() => {
+        const abortController = new AbortController();
+        listFlows(abortController)
+        return (() => abortController.abort())
+    }, []);
+
+
+    if (!flowList || isLoading) return "Loading..."
+    if (error) return "Error" // FIXME
+
 
     return (
-        <div className="pt-2 px-2">
-            <PageHeader title={"Flows"} description={""} actions={[
-                <Button size={"lg"} onClick={handleCreate}>
-                    + Create Flow
-                </Button>
-            ]}/>
-            <ol className="flex flex-col gap-4 cursor-pointer">
-                {flowList.map(flow =>
-                    <li key={flow.name}>
-                        <FlowCard name={flow.name} description={""}/>
-                    </li>
-                )}
-            </ol>
-        </div>
+        <>
+            <main className="flex justify-center w-screen min-h-screen ">
+                <div className="rounded-3xl w-11/12 h-5/6 md:w-9/12 md:h-5/6 overflow-y-auto">
+                    <PageHeader actions={[
+                        <Create/>
+                    ]}/>
+                    {flowList.length !== 0 ?
+                        <ol className="flex flex-col gap-4 cursor-pointer">
+                            {flowList.map(flow =>
+                                <li key={flow.id}>
+                                    <FlowCard flow={flow}/>
+                                </li>
+                            )}
+                        </ol> : <NoContent/>
+
+                    }
+                </div>
+            </main>
+        </>
     )
 }
 
+const NoContent = () => (
+    <EmptyPlaceholder className="my-4 ">
+        <EmptyPlaceholder.Icon>
+            <WorkflowIcon />
+        </EmptyPlaceholder.Icon>
+        <EmptyPlaceholder.Title>No Flows found</EmptyPlaceholder.Title>
+        <EmptyPlaceholder.Description>
+            You haven&apos;t created any Flows yet.
+        </EmptyPlaceholder.Description>
+        <div className="flex flex-col items-center justify-center gap-2 md:flex-row">
+            <Create/>
+        </div>
+    </EmptyPlaceholder>
+)
+
 export default FlowListPage;
-
-
-
