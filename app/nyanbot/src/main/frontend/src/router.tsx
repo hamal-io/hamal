@@ -7,6 +7,7 @@ import LandingPage from "./pages/landing";
 import NotFoundPage from "@/app/not-found.tsx";
 import RootLayout from "@/app/root-layout.tsx";
 import {TestPage} from "@/pages/test"
+import {TestEditorPage} from "@/pages/test-editor";
 import FlowListPage from "@/pages/app/flow-list";
 import FlowDetailPage from "@/pages/app/flow-detail";
 
@@ -33,6 +34,12 @@ export const router = createBrowserRouter([
         path: "/test", element:
             <RootLayout>
                 <TestPage/>
+            </RootLayout>
+    },
+    {
+        path: "/test-editor", element:
+            <RootLayout>
+                <TestEditorPage/>
             </RootLayout>
     },
     {path: "*", element: <NotFoundPage/>}
