@@ -199,8 +199,7 @@ function plugin_create(internal)
         body = body or {}
         return internal.namespace_update({
             id = body.id,
-            name = body.name or nil,
-            features = features or nil
+            name = body.name or nil
         })
     end
 
