@@ -1,4 +1,4 @@
--- As a workspace admin, I can update my own funcs
+-- As a workspace admin, I can update my own namespaces
 
 http = require('net.http').create({
     base_url = context.env.test_api
