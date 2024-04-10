@@ -43,6 +43,7 @@ sealed class Requested {
             AuthLoginMetaMaskRequested::class,
             AuthLoginEmailRequested::class,
             AuthLogoutRequested::class,
+            AuthUpdatePasswordRequested::class,
             BlueprintCreateRequested::class,
             BlueprintUpdateRequested::class,
             EndpointCreateRequested::class,

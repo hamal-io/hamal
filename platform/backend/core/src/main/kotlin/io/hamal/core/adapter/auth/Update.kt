@@ -28,9 +28,7 @@ class AuthUpdatePasswordAdapter(
         val account = accountFind(SecurityContext.currentAccountId) ?: throw NoSuchElementException("Account not found")
         val encodedPassword = encodePassword(req.currentPassword, account.salt)
 
-        val auth = listAuth(account.id).filterIsInstance<Auth.Email>().find {
-            it.hash == encodedPassword
-        } ?: throw NoSuchElementException("Wrong Password")
+        val auth = listAuth(account.id).filterIsInstance<Auth.Email>().find { it.hash == encodedPassword } ?: throw NoSuchElementException("Account not found")
 
         return AuthUpdatePasswordRequested(
             requestId = generateDomainId(::RequestId),

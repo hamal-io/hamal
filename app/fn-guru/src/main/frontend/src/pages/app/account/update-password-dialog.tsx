@@ -97,12 +97,7 @@ const UpdatePasswordDialog: FC<Props> = ({children}) => {
                                     <FormControl>
                                         <p>
                                             <Input type={"password"} {...field} />
-                                            {formErrors.currentPassword &&
-                                                <span
-                                                    className="text-red-500">{formErrors.currentPassword.message}</span>
-                                            }
-                                            {requestError &&
-                                                <span className="text-red-500">{requestError}</span>
+                                            {formErrors.currentPassword && <span className="text-red-500">{formErrors.currentPassword.message}</span>
                                             }
                                         </p>
                                     </FormControl>
@@ -118,8 +113,7 @@ const UpdatePasswordDialog: FC<Props> = ({children}) => {
                                     <FormControl>
                                         <p>
                                             <Input type={"password"} {...field} />
-                                            {formErrors.newPassword &&
-                                                <span className="text-red-500">{formErrors.newPassword.message}</span>}
+                                            {formErrors.newPassword && <span className="text-red-500">{formErrors.newPassword.message}</span>}
                                         </p>
                                     </FormControl>
                                 </FormItem>
@@ -134,18 +128,16 @@ const UpdatePasswordDialog: FC<Props> = ({children}) => {
                                     <FormControl>
                                         <p>
                                             <Input type={"password"} {...field} />
-                                            {formErrors.confirmPassword &&
-                                                <span
-                                                    className="text-red-500">{formErrors.confirmPassword.message}</span>}
+                                            {formErrors.confirmPassword && <span className="text-red-500">{formErrors.confirmPassword.message}</span>}
                                         </p>
                                     </FormControl>
 
                                 </FormItem>
                             )}
                         />
-                        <Button type={"submit"}>
+                        <Button className="w-full" type={"submit"} variant={"destructive"}>
                             {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
-                            Submit
+                            Change Password
                         </Button>
                     </form>
                 </Form>
