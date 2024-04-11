@@ -38,6 +38,7 @@ data class ApiNamespaceDeleteRequested(
     val id: NamespaceId,
 ) : ApiRequested()
 
+
 data class ApiNamespaceList(
     val namespaces: List<Namespace>
 ) : ApiObject() {

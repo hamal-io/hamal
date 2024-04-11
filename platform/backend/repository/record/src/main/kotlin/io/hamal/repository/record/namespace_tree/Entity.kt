@@ -45,19 +45,6 @@ data class NamespaceTreeEntity(
                     },
                     recordedAt = rec.recordedAt()
                 )
-
-            is NamespaceTreeRecord.Deleted -> copy(
-                id = rec.entityId,
-                cmdId = rec.cmdId,
-                sequence = rec.sequence(),
-                root = root!!.mutate().let { rootNode ->
-                    val parent = rootNode.find { it.value == rec.parentId }!!
-                    parent.descendants.removeIf { it.value == rec.namespaceId }
-                    rootNode.toTreeNode()
-                },
-                recordedAt = rec.recordedAt()
-            )
-
         }
     }
 

@@ -35,13 +35,4 @@ sealed class NamespaceTreeRecord(
         val parentId: NamespaceId,
         val namespaceId: NamespaceId
     ) : NamespaceTreeRecord()
-
-    data class Deleted(
-        override val entityId: NamespaceTreeId,
-        override val cmdId: CmdId,
-        val parentId: NamespaceId,
-        val namespaceId: NamespaceId
-    ) : NamespaceTreeRecord()
-
-
 }

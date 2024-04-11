@@ -44,6 +44,10 @@ data class Type(
     }
 }
 
+object TypeAny : TypeNew {
+    override val identifier = "any"
+}
+
 object TypeNumber : TypeNew {
     override val identifier = "number"
 }

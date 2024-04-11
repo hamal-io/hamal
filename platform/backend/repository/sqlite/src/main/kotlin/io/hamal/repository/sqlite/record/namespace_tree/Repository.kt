@@ -4,7 +4,8 @@ import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceTreeId
 import io.hamal.repository.api.NamespaceTree
-import io.hamal.repository.api.NamespaceTreeCmdRepository.*
+import io.hamal.repository.api.NamespaceTreeCmdRepository.AppendCmd
+import io.hamal.repository.api.NamespaceTreeCmdRepository.CreateCmd
 import io.hamal.repository.api.NamespaceTreeQueryRepository.NamespaceTreeQuery
 import io.hamal.repository.api.NamespaceTreeRepository
 import io.hamal.repository.record.CreateDomainObject
@@ -88,15 +89,10 @@ class NamespaceTreeSqliteRepository(
         }
     }
 
-    override fun reduce(cmd: ReduceCmd): NamespaceTree {
-        TODO("Not yet implemented")
-    }
-
     override fun find(namespaceId: NamespaceId): NamespaceTree? = ProjectionCurrent.find(connection, namespaceId)
 
     override fun list(query: NamespaceTreeQuery): List<NamespaceTree> =
         ProjectionCurrent.list(connection, query)
-
 
     override fun count(query: NamespaceTreeQuery): Count =
         ProjectionCurrent.count(connection, query)

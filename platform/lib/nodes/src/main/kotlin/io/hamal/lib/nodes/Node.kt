@@ -1,12 +1,9 @@
-package io.hamal.lib.nodes.node
+package io.hamal.lib.nodes
 
 import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.domain.ValueObjectString
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.kua.type.KuaCode
-import io.hamal.lib.nodes.PortOutput
-import io.hamal.lib.nodes.Position
-import io.hamal.lib.nodes.Size
 import io.hamal.lib.nodes.control.Control
 
 

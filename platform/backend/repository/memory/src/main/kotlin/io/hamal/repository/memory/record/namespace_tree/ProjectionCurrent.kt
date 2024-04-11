@@ -64,5 +64,4 @@ internal class ProjectionCurrent : ProjectionMemory<NamespaceTreeId, NamespaceTr
 
     private val projection = mutableMapOf<NamespaceTreeId, NamespaceTree>()
     private val namespaceMapping = mutableMapOf<NamespaceId, NamespaceTreeId>()
-
 }

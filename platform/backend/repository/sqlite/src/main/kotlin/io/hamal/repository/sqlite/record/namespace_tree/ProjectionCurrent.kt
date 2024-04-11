@@ -36,7 +36,6 @@ internal object ProjectionCurrent : ProjectionSqlite<NamespaceTreeId, NamespaceT
         }
     }
 
-
     fun list(connection: Connection, query: NamespaceTreeQueryRepository.NamespaceTreeQuery): List<NamespaceTree> {
         return connection.executeQuery<NamespaceTree>(
             """

@@ -32,8 +32,6 @@ interface NamespaceTreeCmdRepository : CmdRepository {
 
     fun append(cmd: AppendCmd): NamespaceTree
 
-    fun reduce(cmd: ReduceCmd): NamespaceTree
-
     data class CreateCmd(
         val id: CmdId,
         val treeId: NamespaceTreeId,
@@ -42,13 +40,6 @@ interface NamespaceTreeCmdRepository : CmdRepository {
     )
 
     data class AppendCmd(
-        val id: CmdId,
-        val treeId: NamespaceTreeId,
-        val parentId: NamespaceId,
-        val namespaceId: NamespaceId,
-    )
-
-    data class ReduceCmd(
         val id: CmdId,
         val treeId: NamespaceTreeId,
         val parentId: NamespaceId,
