@@ -20,8 +20,6 @@ class NamespaceDeleteAdapter(
     private val requestEnqueue: RequestEnqueuePort,
     private val namespaceTreeQueryRepository: NamespaceTreeQueryRepository,
     private val namespaceGetPort: NamespaceGetPort
-
-
 ) : NamespaceDeletePort {
     override fun invoke(namespaceId: NamespaceId): NamespaceDeleteRequested {
         namespaceGetPort(namespaceId)
