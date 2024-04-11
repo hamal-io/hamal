@@ -13,15 +13,17 @@ class GeneratorRegistry(generators: List<Generator>) {
         return this
     }
 
-    operator fun get(type: NodeType, inputTypes: List<TypeNew>) = find(type, inputTypes)
-        ?: throw NoSuchElementException("No generator found for $type with [${inputTypes.joinToString(", ")}]")
+    operator fun get(type: NodeType, inputTypes: List<TypeNew>, outputTypes: List<TypeNew>) = find(type, inputTypes, outputTypes)
+        ?: throw NoSuchElementException("No generator found for $type with [${inputTypes.joinToString(", ")}] and [${outputTypes.joinToString(", ")}]")
 
-    fun find(type: NodeType, inputTypes: List<TypeNew>): Generator? {
-        return generators[type]?.find { it.inputTypes == inputTypes }
+    fun find(type: NodeType, inputTypes: List<TypeNew>, outputTypes: List<TypeNew>): Generator? {
+        return generators[type]?.find {
+            it.inputTypes == inputTypes && it.outputTypes == outputTypes
+        }
     }
 
     private fun find(generator: Generator): Generator? {
-        return find(generator.type, generator.inputTypes)
+        return find(generator.type, generator.inputTypes, generator.outputTypes)
     }
 
     private val generators = mutableMapOf<NodeType, MutableList<Generator>>()

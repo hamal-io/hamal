@@ -4,6 +4,7 @@ import io.hamal.lib.nodes.*
 import io.hamal.lib.nodes.control.ControlConstantString
 import io.hamal.lib.nodes.control.ControlInputString
 import io.hamal.lib.nodes.generator.Generator
+import io.hamal.lib.typesystem.TypeDecimal
 import io.hamal.lib.typesystem.TypeNew
 import io.hamal.lib.typesystem.TypeString
 import io.hamal.lib.typesystem.value.ValueString
@@ -91,6 +92,20 @@ interface GeneratorCapture : Generator {
         }
 
     }
+
+    object Decimal : GeneratorCapture {
+        override val inputTypes: List<TypeNew> get() = listOf(TypeDecimal)
+        override val outputTypes: List<TypeNew> get() = listOf(TypeDecimal)
+
+        override fun toCode(node: Node): kotlin.String {
+            return """
+            test = require_plugin('test')
+            test.capture1(arg_1)
+            return arg_1
+        """.trimIndent()
+        }
+
+    }
 }
 
 internal class CaptureTest : BaseNodesTest() {
@@ -114,16 +129,15 @@ internal class CaptureTest : BaseNodesTest() {
                                 PortInput(PortId(21), TypeString),
                                 defaultValue = ValueString("default string")
                             )
-                        )
+                        ),
+                        outputs = listOf(PortOutput(PortId(22), TypeString))
                     )
                 ),
-                connections = listOf(
-                    connection(100, 1, 20, 2, 21)
-                )
+                connections = listOf(connection(100, 1, 20, 2, 21))
             )
         )
 
 
-        assertThat(testCaptor1.result, equalTo(ValueString("Hamal Rocks")))
+        assertThat(testCaptor1.resultString, equalTo(ValueString("Hamal Rocks")))
     }
 }

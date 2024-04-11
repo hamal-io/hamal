@@ -34,7 +34,15 @@ class Compiler(
                 }
             }
 
-            val generator = generatorRegistry[node.type, inputTypes]
+            val outputTypes = run {
+                if (node.outputs.size == 1) {
+                    listOf(node.outputs.first().type)
+                } else {
+                    listOf()
+                }
+            }
+
+            val generator = generatorRegistry[node.type, inputTypes, outputTypes]
 
             val builder = StringBuilder()
             val args = List(generator.inputTypes.size) { "arg_${it + 1}" }.joinToString { it }

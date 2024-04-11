@@ -18,6 +18,7 @@ testing {
                     implementation(project(":platform:lib:kua"))
                     implementation(project(":platform:lib:nodes"))
                     implementation(project(":platform:lib:typesystem"))
+                    implementation(project(":platform:runner:extension:std:decimal"))
                     implementation(external.junit)
                     implementation(external.hamcrest)
                     implementation(external.spring.test) {

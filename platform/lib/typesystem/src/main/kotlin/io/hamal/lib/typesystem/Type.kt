@@ -60,6 +60,10 @@ data object TypeAny : TypeNew() {
     override val identifier = "any"
 }
 
+data object TypeDecimal : TypeNew() {
+    override val identifier = "decimal"
+}
+
 data object TypeNumber : TypeNew() {
     override val identifier = "number"
 }

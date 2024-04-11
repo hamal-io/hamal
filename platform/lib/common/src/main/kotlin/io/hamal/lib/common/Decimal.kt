@@ -8,6 +8,7 @@ import java.math.RoundingMode
 
 class Decimal(val value: BigDecimal) : Comparable<Decimal> {
 
+
     companion object {
         val Zero = Decimal(0)
         val One = Decimal(1)
@@ -138,8 +139,7 @@ class Decimal(val value: BigDecimal) : Comparable<Decimal> {
         if (javaClass != other?.javaClass) return false
 
         other as Decimal
-
-        return !isLessThan(other) && !isGreaterThan(other)
+        return !this.isLessThan(other) && !this.isGreaterThan(other)
     }
 
     override fun hashCode(): Int {
