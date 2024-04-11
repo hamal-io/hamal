@@ -103,7 +103,7 @@ internal object ProjectionCurrent : ProjectionSqlite<NamespaceId, NamespaceRecor
                 DELETE FROM 
                     current
                 WHERE      
-                    (:id)
+                    id = :id
             """.trimIndent()
         ) {
             set("id", obj.id)

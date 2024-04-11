@@ -8,8 +8,7 @@ import io.hamal.lib.domain.vo.NamespaceFeatures
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.domain.vo.WorkspaceId
-import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
-import io.hamal.repository.api.NamespaceCmdRepository.UpdateCmd
+import io.hamal.repository.api.NamespaceCmdRepository.*
 import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
 import io.hamal.repository.api.NamespaceRepository
 import io.hamal.repository.fixture.AbstractUnitTest
@@ -83,6 +82,32 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
 
                 verifyCount(1)
             }
+    }
+
+    @TestFactory
+    fun `Deletes a namespace`() = runWith(NamespaceRepository::class) {
+        createNamespace(
+            cmdId = CmdId(1),
+            namespaceId = NamespaceId(5),
+            workspaceId = WorkspaceId(3),
+            name = NamespaceName("first-namespace-name")
+        )
+
+        delete(
+            NamespaceId(5),
+            DeleteCmd(
+                id = CmdId(2),
+                namespaceId = NamespaceId(5)
+            )
+        )
+
+
+        val exception = assertThrows<NoSuchElementException> {
+            get(NamespaceId(5))
+        }
+        assertThat(exception.message, equalTo("Namespace not found"))
+
+        verifyCount(0)
     }
 
     @Nested

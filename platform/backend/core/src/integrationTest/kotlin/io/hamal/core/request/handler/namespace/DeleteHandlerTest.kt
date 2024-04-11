@@ -77,8 +77,6 @@ internal class DeleteHandlerTest : BaseRequestHandlerTest() {
             requestedBy = AuthId(4),
             requestStatus = RequestStatus.Submitted,
             id = NamespaceId(5),
-            parentId = NamespaceId.root
-
         )
     }
 
