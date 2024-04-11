@@ -14,8 +14,20 @@ class TypeId(override val value: SnowflakeId) : ValueObjectId() {
 
 class TypeIdentifier(override val value: String) : ValueObjectString()
 
-interface TypeNew {
-    val identifier: String // FIXME TypeIdentifier
+abstract class TypeNew {
+    abstract val identifier: String // FIXME TypeIdentifier
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as TypeNew
+        return identifier == other.identifier
+    }
+
+    override fun hashCode(): Int {
+        return identifier.hashCode()
+    }
+
 }
 
 data class Type(
@@ -44,15 +56,15 @@ data class Type(
     }
 }
 
-object TypeAny : TypeNew {
+data object TypeAny : TypeNew() {
     override val identifier = "any"
 }
 
-object TypeNumber : TypeNew {
+data object TypeNumber : TypeNew() {
     override val identifier = "number"
 }
 
-object TypeString : TypeNew {
+data object TypeString : TypeNew() {
     override val identifier = "string"
 }
 
@@ -60,7 +72,7 @@ object TypeString : TypeNew {
 data class TypeList(
     override val identifier: String,
     val field: Field
-) : TypeNew {
+) : TypeNew() {
     constructor(identifier: String, kind: Field.Kind, valueType: Type? = null) : this(identifier, Field(kind, "value", valueType))
     constructor(identifier: String, valueType: Type) : this(identifier, Field(Object, "value", valueType))
 

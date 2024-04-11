@@ -1,19 +1,16 @@
 package io.hamal.lib.nodes
 
 import io.hamal.lib.kua.type.KuaCode
+import io.hamal.lib.nodes.control.ControlInput
 import io.hamal.lib.nodes.generator.Generator
 import io.hamal.lib.nodes.generator.GeneratorRegistry
 import io.hamal.lib.typesystem.TypeNew
 
-object Compiler {
+class Compiler(
+    private val generatorRegistry: GeneratorRegistry
+) {
 
     fun compile(graph: Graph): KuaCode {
-//        val generators = listOf(
-//            GeneratorConstant,
-//            GeneratorPrint.String
-//        )
-
-
         val code = StringBuilder()
 
         val nodeCodeGenerators = mutableMapOf<NodeId, Generator>()
@@ -23,7 +20,21 @@ object Compiler {
         val connections = graph.connections
 
         for (node in nodes) {
-            val generator = GeneratorRegistry[node.type]
+
+            val inputTypes = run {
+                if (node.controls.size == 1) {
+                    val control = node.controls.first()
+                    if (control is ControlInput) {
+                        listOf(control.port.type)
+                    } else {
+                        listOf()
+                    }
+                } else {
+                    listOf()
+                }
+            }
+
+            val generator = generatorRegistry[node.type, inputTypes]
 
             val builder = StringBuilder()
             val args = List(generator.inputTypes.size) { "arg_${it + 1}" }.joinToString { it }
@@ -48,10 +59,6 @@ object Compiler {
 
         code.append("\n")
         code.append("\n")
-
-
-        val nodesInvoked = mutableMapOf<NodeId, Generator>()
-
 
         // FIXME breath first
         for (connection in connections) {

@@ -12,6 +12,10 @@ import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.type.KuaCode
 import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.nodes.control.Control
+import io.hamal.lib.nodes.fixture.GeneratorCapture
+import io.hamal.lib.nodes.fixture.GeneratorInvoked
+import io.hamal.lib.nodes.generator.GeneratorConstant
+import io.hamal.lib.nodes.generator.GeneratorRegistry
 import io.hamal.lib.typesystem.value.ValueString
 
 
@@ -74,7 +78,15 @@ internal abstract class BaseNodesTest {
         testInstance.codeLoad(code)
     }
 
-    protected val testCompiler = Compiler
+    protected val testCompiler = Compiler(
+        GeneratorRegistry(
+            listOf(
+                GeneratorConstant.String,
+                GeneratorInvoked,
+                GeneratorCapture.String
+            )
+        )
+    )
     protected val testCaptor1 = TestCaptor1()
     protected val testInvoked = TestInvoked()
 

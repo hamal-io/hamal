@@ -3,7 +3,6 @@ package io.hamal.lib.nodes.generator
 import io.hamal.lib.nodes.*
 import io.hamal.lib.nodes.control.ControlConstantString
 import io.hamal.lib.nodes.control.ControlInputString
-import io.hamal.lib.nodes.fixture.GeneratorCapture
 import io.hamal.lib.typesystem.TypeString
 import io.hamal.lib.typesystem.value.ValueString
 import org.hamcrest.CoreMatchers.equalTo
@@ -15,15 +14,12 @@ internal class ConstantTest : BaseNodesTest() {
 
     @Test
     fun `ConstantString`() {
-        GeneratorRegistry.register(GeneratorConstant)
-        GeneratorRegistry.register(GeneratorCapture.String)
-
         run(
             Graph(
                 nodes = listOf(
                     node(
                         id = 1,
-                        type = "ConstantString",
+                        type = "Constant",
                         controls = listOf(ControlConstantString(ValueString("Hamal Rocks"))),
                         outputs = listOf(PortOutput(PortId(20), TypeString))
                     ),

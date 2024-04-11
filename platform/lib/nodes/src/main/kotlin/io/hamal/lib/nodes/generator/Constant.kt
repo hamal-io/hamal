@@ -2,36 +2,25 @@ package io.hamal.lib.nodes.generator
 
 import io.hamal.lib.nodes.Node
 import io.hamal.lib.nodes.NodeType
-import io.hamal.lib.nodes.control.ControlConstant
 import io.hamal.lib.nodes.control.ControlConstantString
 import io.hamal.lib.typesystem.TypeNew
 import io.hamal.lib.typesystem.TypeString
 
-object GeneratorConstant : Generator {
-    override val type: NodeType get() = NodeType("ConstantString")
+sealed interface GeneratorConstant : Generator {
+    override val type: NodeType get() = NodeType("Constant")
 
-    override val inputTypes: List<TypeNew> get() = listOf()
-    override val outputTypes: List<TypeNew> get() = listOf(TypeString)
-
-//    Notoverride val fields: List<Field>
-//        get() = listOf(
-//            Field(Field.Kind.String, "arg1")
-//        )
+    data object String : GeneratorConstant {
+        override val inputTypes: List<TypeNew> get() = listOf()
+        override val outputTypes: List<TypeNew> get() = listOf(TypeString)
 
 
-    override fun toCode(node: Node): String {
-        val controls = node.controls
-        check(controls.size == 1)
+        override fun toCode(node: Node): kotlin.String {
+            val controls = node.controls
+            check(controls.size == 1)
 
-        val control = controls[0]
-        check(control is ControlConstant)
-
-        if (control is ControlConstantString) {
-            return """
-            return  '${control.value.stringValue}'
-        """.trimIndent()
-        } else {
-            TODO()
+            val control = controls[0]
+            check(control is ControlConstantString)
+            return """return  '${control.value.stringValue}'""".trimIndent()
         }
     }
 }
