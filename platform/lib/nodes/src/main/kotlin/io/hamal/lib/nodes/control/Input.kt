@@ -11,7 +11,6 @@ interface ControlInput : Control {
 }
 
 data class ControlInputBoolean(
-    override val id: ControlId,
     override val port: PortInput,
     val defaultValue: ValueBoolean
 ) : ControlInput {
@@ -19,7 +18,6 @@ data class ControlInputBoolean(
 }
 
 data class ControlInputDecimal(
-    override val id: ControlId,
     override val port: PortInput,
     val defaultValue: ValueDecimal
 ) : ControlInput {
@@ -27,7 +25,6 @@ data class ControlInputDecimal(
 }
 
 data class ControlInputString(
-    override val id: ControlId,
     override val port: PortInput,
     val defaultValue: ValueString
 ) : ControlInput {

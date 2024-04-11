@@ -8,7 +8,6 @@ import io.hamal.lib.common.serialization.ValueObjectStringAdapter
 import io.hamal.lib.domain.Json
 import io.hamal.lib.domain.vo.ValueObjectJsonModule
 import io.hamal.lib.nodes.control.Control
-import io.hamal.lib.nodes.control.ControlId
 import io.hamal.lib.typesystem.TypesystemHotModule
 
 
@@ -16,7 +15,6 @@ object NodesHotModule : HotModule() {
     init {
         this[ConnectionId::class] = ValueObjectIdAdapter(::ConnectionId)
 
-        this[ControlId::class] = ValueObjectIdAdapter(::ControlId)
         this[Control::class] = Control.Adapter
 
         this[NodeId::class] = ValueObjectIdAdapter(::NodeId)

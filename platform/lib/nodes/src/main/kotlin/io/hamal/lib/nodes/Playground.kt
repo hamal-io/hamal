@@ -1,7 +1,6 @@
 package io.hamal.lib.nodes
 
 import io.hamal.lib.nodes.control.ControlConstantString
-import io.hamal.lib.nodes.control.ControlId
 import io.hamal.lib.nodes.control.ControlInputString
 import io.hamal.lib.typesystem.TypeString
 import io.hamal.lib.typesystem.value.ValueString
@@ -16,7 +15,7 @@ fun main() {
             title = NodeTitle("Some Title"),
             position = Position(0, 0),
             size = Size(200, 200),
-            controls = listOf(ControlConstantString(ControlId(23), ValueString("Hamal Rocks"))),
+            controls = listOf(ControlConstantString(ValueString("Hamal Rocks"))),
             outputs = listOf(PortOutput(PortId(222), TypeString))
         ),
         Node(
@@ -27,7 +26,6 @@ fun main() {
             size = Size(200, 200),
             controls = listOf(
                 ControlInputString(
-                    ControlId(24),
                     PortInput(PortId(333), TypeString),
                     defaultValue = ValueString("default string")
                 )

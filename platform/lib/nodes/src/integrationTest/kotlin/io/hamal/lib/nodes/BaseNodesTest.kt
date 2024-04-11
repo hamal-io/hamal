@@ -5,6 +5,7 @@ import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
+import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.Function1In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -52,12 +53,20 @@ fun connection(
 
 internal abstract class BaseNodesTest {
 
-    class Captor1 : Function1In0Out<KuaString>(FunctionInput1Schema(KuaString::class)) {
+    class TestCaptor1 : Function1In0Out<KuaString>(FunctionInput1Schema(KuaString::class)) {
         override fun invoke(ctx: FunctionContext, arg1: KuaString) {
             result = ValueString(arg1.stringValue)
         }
 
         var result: ValueString? = null
+    }
+
+    class TestInvoked : Function0In0Out() {
+        override fun invoke(ctx: FunctionContext) {
+            invocations++
+        }
+
+        var invocations: Int = 0
     }
 
     fun run(graph: Graph) {
@@ -66,7 +75,8 @@ internal abstract class BaseNodesTest {
     }
 
     protected val testCompiler = Compiler
-    protected val testCaptor1 = Captor1()
+    protected val testCaptor1 = TestCaptor1()
+    protected val testInvoked = TestInvoked()
 
     protected val testInstance = run {
         NativeLoader.load(NativeLoader.Preference.Resources)
@@ -77,14 +87,18 @@ internal abstract class BaseNodesTest {
                     factoryCode = KuaCode(
                         """
                     function plugin_create(internal)
-                        local export = { 
+                        local export = {
+                            invoked = internal.invoked,
                             capture1 =  internal.capture1
                         }
                         return export
                     end
                 """.trimIndent()
                     ),
-                    internals = mapOf(KuaString("capture1") to testCaptor1)
+                    internals = mapOf(
+                        KuaString("invoked") to testInvoked,
+                        KuaString("capture1") to testCaptor1
+                    )
                 )
             )
         }
