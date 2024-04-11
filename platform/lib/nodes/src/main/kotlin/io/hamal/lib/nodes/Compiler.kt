@@ -2,17 +2,16 @@ package io.hamal.lib.nodes
 
 import io.hamal.lib.kua.type.KuaCode
 import io.hamal.lib.nodes.generator.Generator
-import io.hamal.lib.nodes.generator.GeneratorConstant
-import io.hamal.lib.nodes.generator.GeneratorPrint
+import io.hamal.lib.nodes.generator.GeneratorRegistry
 import io.hamal.lib.typesystem.TypeNew
 
 object Compiler {
 
     fun compile(graph: Graph): KuaCode {
-        val generators = listOf(
-            GeneratorConstant,
-            GeneratorPrint.String
-        )
+//        val generators = listOf(
+//            GeneratorConstant,
+//            GeneratorPrint.String
+//        )
 
 
         val code = StringBuilder()
@@ -24,7 +23,7 @@ object Compiler {
         val connections = graph.connections
 
         for (node in nodes) {
-            val generator = generators.find { it.type == node.type }!!
+            val generator = GeneratorRegistry[node.type]
 
             val builder = StringBuilder()
             val args = List(generator.inputTypes.size) { "arg_${it + 1}" }.joinToString { it }
@@ -78,7 +77,7 @@ object Compiler {
         }
 
 
-        println(code.toString())
+//        println(code.toString())
 
         return KuaCode(code.toString())
     }
