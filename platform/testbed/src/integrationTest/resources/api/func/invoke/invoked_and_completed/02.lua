@@ -2,7 +2,7 @@ sys = require_plugin('sys')
 
 err, execs = sys.execs.list()
 assert(err == nil)
-assert(#execs == 3) -- 01.lua / invoked_func / 02.lua
+assert(#execs == 3) -- 01.lua / invoked_func / 01.lua
 
 invoked_exec = execs[2]
 assert(invoked_exec.status == 'Completed')

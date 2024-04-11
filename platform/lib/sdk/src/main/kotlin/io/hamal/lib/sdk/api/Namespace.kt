@@ -57,6 +57,7 @@ data class ApiNamespace(
 
 interface ApiNamespaceService {
     fun append(parentId: NamespaceId, createNamespaceReq: ApiNamespaceAppendRequest): ApiNamespaceAppendRequested
+    fun delete(namespaceId: NamespaceId): ApiNamespaceDeleteRequested
     fun list(workspaceId: WorkspaceId): List<ApiNamespaceList.Namespace>
     fun get(namespaceId: NamespaceId): ApiNamespace
     fun update(namespaceId: NamespaceId, updateNamespaceReq: ApiNamespaceUpdateRequest): ApiNamespaceUpdateRequested
@@ -75,6 +76,12 @@ internal class ApiNamespaceServiceImpl(
             .body(createNamespaceReq)
             .execute()
             .fold(ApiNamespaceAppendRequested::class)
+
+    override fun delete(namespaceId: NamespaceId): ApiNamespaceDeleteRequested =
+        template.delete("/v1/namespaces/{namespaceId}")
+            .path("namespaceId", namespaceId)
+            .execute()
+            .fold(ApiNamespaceDeleteRequested::class)
 
     override fun list(workspaceId: WorkspaceId) =
         template.get("/v1/workspaces/{workspaceId}/namespaces")

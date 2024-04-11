@@ -49,6 +49,7 @@ sealed class ApiRequested {
             ApiExtensionUpdateRequested::class,
             ApiNamespaceAppendRequested::class,
             ApiNamespaceUpdateRequested::class,
+            ApiNamespaceDeleteRequested::class,
             ApiFuncCreateRequested::class,
             ApiFuncDeployRequested::class,
             ApiFuncUpdateRequested::class,

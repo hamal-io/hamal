@@ -187,6 +187,11 @@ function plugin_create(internal)
         })
     end
 
+    function export.namespaces.delete(body)
+        body = body or {}
+        return internal.namespace_delete(body.id)
+    end
+
     function export.namespaces.get(namespace_id)
         return internal.namespace_get(namespace_id)
     end

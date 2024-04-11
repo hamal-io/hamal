@@ -23,10 +23,7 @@ import io.hamal.plugin.std.sys.func.*
 import io.hamal.plugin.std.sys.hook.HookCreateFunction
 import io.hamal.plugin.std.sys.hook.HookGetFunction
 import io.hamal.plugin.std.sys.hook.HookListFunction
-import io.hamal.plugin.std.sys.namespace.NamespaceAppendFunction
-import io.hamal.plugin.std.sys.namespace.NamespaceGetFunction
-import io.hamal.plugin.std.sys.namespace.NamespaceListFunction
-import io.hamal.plugin.std.sys.namespace.NamespaceUpdateFunction
+import io.hamal.plugin.std.sys.namespace.*
 import io.hamal.plugin.std.sys.request.RequestGetFunction
 import io.hamal.plugin.std.sys.topic.*
 import io.hamal.plugin.std.sys.trigger.*
@@ -78,6 +75,7 @@ class PluginSysFactory(
                 KuaString("hook_list") to HookListFunction(sdk),
 
                 KuaString("namespace_append") to NamespaceAppendFunction(sdk),
+                KuaString("namespace_delete") to NamespaceDeleteFunction(sdk),
                 KuaString("namespace_get") to NamespaceGetFunction(sdk),
                 KuaString("namespace_list") to NamespaceListFunction(sdk),
                 KuaString("namespace_update") to NamespaceUpdateFunction(sdk),
