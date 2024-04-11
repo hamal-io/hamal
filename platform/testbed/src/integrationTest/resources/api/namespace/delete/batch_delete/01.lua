@@ -5,12 +5,12 @@ local append_req = fail_on_error(sys.namespaces.append({
 }))
 sys.await_completed(append_req)
 
-local append_req = fail_on_error(sys.namespaces.append({
+local append_req_child_1 = fail_on_error(sys.namespaces.append({
     name = 'test-namespace-1'
 }))
 sys.await_completed(append_req)
 
-local append_req = fail_on_error(sys.namespaces.append({
+local append_req_child_2 = fail_on_error(sys.namespaces.append({
     name = 'test-namespace-2'
 }))
 sys.await_completed(append_req)

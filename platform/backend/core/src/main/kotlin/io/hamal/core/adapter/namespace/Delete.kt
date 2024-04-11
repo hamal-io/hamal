@@ -18,13 +18,18 @@ fun interface NamespaceDeletePort {
 class NamespaceDeleteAdapter(
     private val generateDomainId: GenerateDomainId,
     private val requestEnqueue: RequestEnqueuePort,
-    private val namespaceTreeQueryRepository: NamespaceTreeQueryRepository
+    private val namespaceTreeQueryRepository: NamespaceTreeQueryRepository,
+    private val namespaceGet: NamespaceGetPort
 ) : NamespaceDeletePort {
     override fun invoke(namespaceId: NamespaceId): NamespaceDeleteRequested {
-        val root = namespaceTreeQueryRepository.get(namespaceId).root
-        if (root.value == namespaceId) {
+        //val namespace = namespaceGet(namespaceId) //verify its your namespace
+
+        val namespace =
+            namespaceTreeQueryRepository.find(namespaceId) ?: throw NoSuchElementException("Namespace not found")
+        if (namespace.root.value == namespaceId) {
             throw IllegalArgumentException("Tried to delete root namespace")
         }
+
         return NamespaceDeleteRequested(
             requestId = generateDomainId(::RequestId),
             requestedBy = SecurityContext.currentAuthId,

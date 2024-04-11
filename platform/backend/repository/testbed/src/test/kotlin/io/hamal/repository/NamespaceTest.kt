@@ -8,15 +8,13 @@ import io.hamal.lib.domain.vo.NamespaceFeatures
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.domain.vo.WorkspaceId
-import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
-import io.hamal.repository.api.NamespaceCmdRepository.UpdateCmd
+import io.hamal.repository.api.NamespaceCmdRepository.*
 import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
 import io.hamal.repository.api.NamespaceRepository
 import io.hamal.repository.fixture.AbstractUnitTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers
-import org.hamcrest.Matchers.equalTo
-import org.hamcrest.Matchers.hasSize
+import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.TestFactory
@@ -83,6 +81,35 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
 
                 verifyCount(1)
             }
+    }
+
+    @Nested
+    inner class DeleteNamespaceTest {
+
+        @TestFactory
+        fun `Deletes namespace`() = runWith(NamespaceRepository::class) {
+            create(
+                CreateCmd(
+                    id = CmdId(1),
+                    namespaceId = NamespaceId(234),
+                    workspaceId = WorkspaceId(1),
+                    name = NamespaceName("SomeNamespace"),
+                    features = NamespaceFeatures.default
+                )
+            )
+
+            delete(
+                namespaceId = NamespaceId(234),
+                DeleteCmd(
+                    id = CmdId(2),
+                    namespaceId = NamespaceId(234)
+                )
+            )
+
+            assertThat(find(NamespaceId(234)), nullValue())
+
+            verifyCount(0)
+        }
     }
 
     @Nested
