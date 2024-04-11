@@ -1,6 +1,5 @@
 package io.hamal.core.adapter.namespace
 
-import io.hamal.core.adapter.namespace_tree.NamespaceTreeGetSubTreePort
 import io.hamal.core.adapter.request.RequestEnqueuePort
 import io.hamal.core.security.SecurityContext
 import io.hamal.lib.domain.GenerateDomainId
@@ -17,18 +16,14 @@ fun interface NamespaceDeletePort {
 @Component
 class NamespaceDeleteAdapter(
     private val generateDomainId: GenerateDomainId,
-    private val getSubTree: NamespaceTreeGetSubTreePort,
     private val requestEnqueue: RequestEnqueuePort
 ) : NamespaceDeletePort {
     override fun invoke(namespaceId: NamespaceId): NamespaceDeleteRequested {
-        val parent = getSubTree(namespaceId)
-
         return NamespaceDeleteRequested(
             requestId = generateDomainId(::RequestId),
             requestedBy = SecurityContext.currentAuthId,
             requestStatus = RequestStatus.Submitted,
             id = namespaceId,
-            parentId = parent.root.value,
-        ).also { requestEnqueue::invoke }
+        ).also(requestEnqueue::invoke)
     }
 }

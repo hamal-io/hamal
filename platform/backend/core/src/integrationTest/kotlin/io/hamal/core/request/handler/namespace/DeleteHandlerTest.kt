@@ -63,10 +63,6 @@ internal class DeleteHandlerTest : BaseRequestHandlerTest() {
             assertThat(name, equalTo(NamespaceName("root")))
             assertThat(features, equalTo(NamespaceFeatures.default))
         }
-
-        val tree = namespaceTreeRepository.find(NamespaceId.root)
-        assertThat(tree!!.root.value, equalTo(NamespaceId.root))
-        assertThat(tree.root.descendants, hasSize(0))
     }
 
     @Autowired
