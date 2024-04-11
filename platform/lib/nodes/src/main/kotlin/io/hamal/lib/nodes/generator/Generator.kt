@@ -13,13 +13,4 @@ interface Generator {
     fun toCode(node: Node): String
 }
 
-object GeneratorRegistry {
 
-    fun register(generator: Generator) {
-        generators[generator.type] = generator
-    }
-
-    operator fun get(type: NodeType) = generators[type] ?: throw NoSuchElementException("No generator found for $type")
-
-    private val generators = mutableMapOf<NodeType, Generator>()
-}

@@ -105,7 +105,6 @@ value class ValueDecimal(
 
     fun negate() = ValueDecimal(delegate.negate(mathContext))
 
-
     override fun toString() = value.toString()
 
     override operator fun compareTo(other: ValueDecimal) = value.compareTo(other.value)
