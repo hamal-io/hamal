@@ -4,8 +4,7 @@ import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceTreeId
 import io.hamal.repository.api.NamespaceTree
-import io.hamal.repository.api.NamespaceTreeCmdRepository
-import io.hamal.repository.api.NamespaceTreeCmdRepository.CreateCmd
+import io.hamal.repository.api.NamespaceTreeCmdRepository.*
 import io.hamal.repository.api.NamespaceTreeQueryRepository.NamespaceTreeQuery
 import io.hamal.repository.api.NamespaceTreeRepository
 import io.hamal.repository.record.CreateDomainObject
@@ -68,7 +67,7 @@ class NamespaceTreeSqliteRepository(
         }
     }
 
-    override fun append(cmd: NamespaceTreeCmdRepository.AppendCmd): NamespaceTree {
+    override fun append(cmd: AppendCmd): NamespaceTree {
         return tx {
             val treeId = cmd.treeId
             if (commandAlreadyApplied(cmd.id, treeId)) {
@@ -89,7 +88,7 @@ class NamespaceTreeSqliteRepository(
         }
     }
 
-    override fun reduce(cmd: NamespaceTreeCmdRepository.ReduceCmd): NamespaceTree {
+    override fun reduce(cmd: ReduceCmd): NamespaceTree {
         TODO("Not yet implemented")
     }
 

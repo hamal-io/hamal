@@ -34,15 +34,10 @@ data class NamespaceUpdateRequested(
     val features: NamespaceFeatures?
 ) : Requested()
 
-interface NamespaceDeleteRequest {
-    val id: NamespaceId
-    val parentId: NamespaceId
-}
 
 data class NamespaceDeleteRequested(
     override val requestId: RequestId,
     override val requestedBy: AuthId,
     override var requestStatus: RequestStatus,
-    val id: NamespaceId,
-    val parentId: NamespaceId,
+    val id: NamespaceId
 ) : Requested()

@@ -58,7 +58,22 @@ class NamespaceTreeMemoryRepository : RecordMemoryRepository<NamespaceTreeId, Na
     }
 
     override fun reduce(cmd: ReduceCmd): NamespaceTree {
-        TODO("Not yet implemented")
+        return lock.withLock {
+            val treeId = cmd.treeId
+            if (commandAlreadyApplied(cmd.id, treeId)) {
+                versionOf(treeId, cmd.id)
+            } else {
+                store(
+                    NamespaceTreeRecord.Deleted(
+                        entityId = treeId,
+                        cmdId = cmd.id,
+                        parentId = cmd.parentId,
+                        namespaceId = cmd.namespaceId
+                    )
+                )
+                (currentVersion(treeId)).also(currentProjection::upsert)
+            }
+        }
     }
 
     override fun close() {}
