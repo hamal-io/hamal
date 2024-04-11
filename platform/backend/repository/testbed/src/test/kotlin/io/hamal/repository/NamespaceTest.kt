@@ -83,6 +83,32 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
             }
     }
 
+    @TestFactory
+    fun `Deletes a namespace`() = runWith(NamespaceRepository::class) {
+        createNamespace(
+            cmdId = CmdId(1),
+            namespaceId = NamespaceId(5),
+            workspaceId = WorkspaceId(3),
+            name = NamespaceName("first-namespace-name")
+        )
+
+        delete(
+            NamespaceId(5),
+            DeleteCmd(
+                id = CmdId(2),
+                namespaceId = NamespaceId(5)
+            )
+        )
+
+
+        val exception = assertThrows<NoSuchElementException> {
+            get(NamespaceId(5))
+        }
+        assertThat(exception.message, equalTo("Namespace not found"))
+
+        verifyCount(0)
+    }
+
     @Nested
     inner class DeleteNamespaceTest {
 
