@@ -7,7 +7,6 @@ http = require('net.http').create({
 err, res = http.delete({
     url = '/v1/namespaces/1',
     headers = { Authorization = 'Bearer ' .. context.env.token },
-    json = { name = 'delete' }
 })
 
 assert(err == nil)
