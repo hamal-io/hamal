@@ -9,7 +9,8 @@ import io.hamal.lib.kua.type.KuaString
 object ExtensionWeb3NyanbotFactory : RunnerExtensionFactory {
     override fun create(sandbox: Sandbox): RunnerExtension {
         return RunnerExtension(
-            name = KuaString("web3.nyanbot")
+            name = KuaString("web3.nyanbot"),
+            nodes = listOf()
         )
     }
 }

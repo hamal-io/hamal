@@ -9,17 +9,13 @@ class PortId(override val value: SnowflakeId) : ValueObjectId() {
     constructor(value: String) : this(SnowflakeId(value.toLong(16)))
 }
 
-sealed interface Port {
-    val id: PortId
-    val type: TypeNew
-}
 
 data class PortInput(
-    override val id: PortId,
-    override val type: TypeNew
-) : Port
+    val id: PortId,
+    val inputType: TypeNew
+)
 
 data class PortOutput(
-    override val id: PortId,
-    override val type: TypeNew
-) : Port
+    val id: PortId,
+    val outputType: TypeNew
+)

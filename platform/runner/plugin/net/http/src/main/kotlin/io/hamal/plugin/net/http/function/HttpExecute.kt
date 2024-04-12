@@ -32,11 +32,11 @@ class HttpExecuteFunction : Function1In2Out<KuaTable, KuaError, KuaTable>(
                 val json = request.get("json")
 
                 val template = when (method) {
-                    KuaString("GET") -> HttpTemplateImpl().get(url)
-                    KuaString("PATCH") -> HttpTemplateImpl().patch(url)
-                    KuaString("POST") -> HttpTemplateImpl().post(url)
-                    KuaString("PUT") -> HttpTemplateImpl().put(url)
-                    KuaString("DELETE") -> HttpTemplateImpl().delete(url)
+                    KuaString("GET") -> HttpTemplateImpl().get(url.stringValue)
+                    KuaString("PATCH") -> HttpTemplateImpl().patch(url.stringValue)
+                    KuaString("POST") -> HttpTemplateImpl().post(url.stringValue)
+                    KuaString("PUT") -> HttpTemplateImpl().put(url.stringValue)
+                    KuaString("DELETE") -> HttpTemplateImpl().delete(url.stringValue)
                     else -> TODO()
                 }
 

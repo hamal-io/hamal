@@ -82,7 +82,7 @@ class CodeRunnerImpl(
                                 // FIXME load graph from code
                                 val graph = json.deserialize(Graph::class, unitOfWork.code.value)
                                 val compiledCode = Compiler(GeneratorRegistry(listOf())).compile(graph)
-                                sandbox.codeLoad(compiledCode)
+                                sandbox.codeLoad(KuaCode(compiledCode))
                             }
                         }
 

@@ -84,7 +84,7 @@ internal abstract class BaseNodesTest {
 
     fun run(graph: Graph) {
         val code = testCompiler.compile(graph)
-        testInstance.codeLoad(code)
+        testInstance.codeLoad(KuaCode(code))
     }
 
 

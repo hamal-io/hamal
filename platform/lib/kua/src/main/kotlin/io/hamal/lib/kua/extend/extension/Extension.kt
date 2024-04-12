@@ -3,6 +3,7 @@ package io.hamal.lib.kua.extend.extension
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.type.KuaCode
 import io.hamal.lib.kua.type.KuaString
+import io.hamal.lib.nodes.NodeExtension
 
 
 interface RunnerExtensionFactory {
@@ -11,7 +12,8 @@ interface RunnerExtensionFactory {
 
 class RunnerExtension(
     val name: KuaString,
-    val factoryCode: KuaCode = loadFactoryCodeFromResources(name)
+    val factoryCode: KuaCode = loadFactoryCodeFromResources(name),
+    val nodes: List<NodeExtension> = listOf()
 ) {
     companion object {
         @JvmStatic

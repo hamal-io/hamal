@@ -3,7 +3,6 @@ package io.hamal.lib.nodes
 import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.domain.ValueObjectString
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.kua.type.KuaCode
 import io.hamal.lib.nodes.control.Control
 
 
@@ -37,7 +36,7 @@ interface NodeRegistry {
 //    val control: List<ControlTemplate>
 //    val outputs: List<NodeOutput>
 
-        fun toCode(): KuaCode
+//        fun toCode(): KuaCode
     }
 
 }

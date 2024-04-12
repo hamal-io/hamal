@@ -1,6 +1,5 @@
 package io.hamal.lib.nodes
 
-import io.hamal.lib.kua.type.KuaCode
 import io.hamal.lib.nodes.control.ControlInput
 import io.hamal.lib.nodes.generator.Generator
 import io.hamal.lib.nodes.generator.GeneratorRegistry
@@ -10,7 +9,7 @@ class Compiler(
     private val generatorRegistry: GeneratorRegistry
 ) {
 
-    fun compile(graph: Graph): KuaCode {
+    fun compile(graph: Graph): String {
         val code = StringBuilder()
 
         val nodeCodeGenerators = mutableMapOf<NodeId, Generator>()
@@ -25,7 +24,7 @@ class Compiler(
                 if (node.controls.size == 1) {
                     val control = node.controls.first()
                     if (control is ControlInput) {
-                        listOf(control.port.type)
+                        listOf(control.port.inputType)
                     } else {
                         listOf()
                     }
@@ -36,7 +35,7 @@ class Compiler(
 
             val outputTypes = run {
                 if (node.outputs.size == 1) {
-                    listOf(node.outputs.first().type)
+                    listOf(node.outputs.first().outputType)
                 } else {
                     listOf()
                 }
@@ -94,7 +93,7 @@ class Compiler(
 
 //        println(code.toString())
 
-        return KuaCode(code.toString())
+        return code.toString()
     }
 
 }
