@@ -68,6 +68,7 @@ include(":platform:runner:extension:std:log")
 include(":platform:runner:extension:telegram")
 include(":platform:runner:extension:web3:arbitrum")
 include(":platform:runner:extension:web3:eth")
+include(":platform:runner:extension:web3:nyanbot")
 
 include(":platform:runner:plugin:net:smtp")
 include(":platform:runner:plugin:net:http")

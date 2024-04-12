@@ -20,6 +20,7 @@ dependencies {
     implementation(project(":platform:runner:extension:telegram"))
     implementation(project(":platform:runner:extension:web3:arbitrum"))
     implementation(project(":platform:runner:extension:web3:eth"))
+    implementation(project(":platform:runner:extension:web3:nyanbot"))
 
     implementation(project(":platform:runner:plugin:net:smtp"))
     implementation(project(":platform:runner:plugin:net:http"))
