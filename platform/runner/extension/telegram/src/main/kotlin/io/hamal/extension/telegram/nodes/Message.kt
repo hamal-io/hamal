@@ -22,11 +22,18 @@ val SendMessageNode = NodeExtension(
 
 val SendMessageNodeGenerator = object : Generator {
     override val type: NodeType get() = NodeType("TELEGRAM_SEND_MESSAGE")
-    override val inputTypes: List<TypeNew> get() = listOf()
+    override val inputTypes: List<TypeNew> get() = listOf(TypeString)
     override val outputTypes: List<TypeNew> get() = listOf()
 
     override fun toCode(node: Node): String {
         return """
+           print('Sending message ' .. arg_1)
+        """.trimIndent()
+    }
+
+}
+
+/*
 tg = require('telegram').create({
     bot_token = '7084966112:AAElNk5M1t0hTXTQPruNszHVD0SB0OCJjKY'
 })
@@ -45,7 +52,4 @@ print(err)
 print(result)
 
 for k,v in pairs(result) do print(k,v) end
-        """.trimIndent()
-    }
-
-}
+ */

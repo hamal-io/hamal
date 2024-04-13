@@ -1,15 +1,13 @@
 import React from "react";
 import {useAuth} from "@/hooks/auth.ts";
 import {Editor} from "@/components/nodes/editor.tsx";
-import {ControlText, Graph, Node} from "@/components/nodes/types.ts";
+import {ControlInit, ControlText, Graph, Node} from "@/components/nodes/types.ts";
 
 export const TestPage = () => {
     const [auth] = useAuth()
     return (
         <Editor
             onSave={(graph: Graph) => {
-                console.log("test")
-
 
                 fetch(`${import.meta.env.VITE_BASE_URL}/v1/adhoc`, {
                     method: "POST",
@@ -32,31 +30,51 @@ export const TestPage = () => {
             }}
             nodes={[
                 {
-                    id: '4',
+                    id: '1',
+                    type: 'INIT',
+                    title: 'Init',
+                    position: {x: -200, y: -400},
+                    size: {width: 100, height: 100},
+                    controls: [
+                        {
+                            id: '1',
+                            type: 'Init',
+                            description: 'Let me trigger TG for ya!',
+                        } satisfies ControlInit,
+                    ],
+                    outputs: [{
+                        id: '1',
+                        outputType: 'TypeString'
+                    }]
+                } satisfies Node,
+                {
+                    id: '2',
                     type: "TELEGRAM_SEND_MESSAGE",
-                    title: 'Telegram send message',
+                    title: 'Telegram - Send Message',
                     position: {x: 0, y: -400},
                     size: {width: 250, height: 300},
                     controls: [
-                        {
-                            id: '3',
-                            type: 'InputString',
-                            ports: [],
-                            text: '',
-                            placeholder: 'bot_token'
-                        } satisfies ControlText,
-                        {
-                            id: '3',
-                            type: 'InputString',
-                            ports: [],
-                            text: '',
-                            placeholder: 'chat_id'
-                        } satisfies ControlText,
-
+                        // {
+                        //     id: '3',
+                        //     type: 'InputString',
+                        //     ports: [],
+                        //     text: '',
+                        //     placeholder: 'bot_token'
+                        // } satisfies ControlText,
+                        // {
+                        //     id: '3',
+                        //     type: 'InputString',
+                        //     ports: [],
+                        //     text: '',
+                        //     placeholder: 'chat_id'
+                        // } satisfies ControlText,
                         {
                             id: '4',
                             type: 'InputString',
-                            ports: [],
+                            port: {
+                                id: '4',
+                                inputType: 'TypeString'
+                            },
                             text: '',
                             placeholder: 'message'
                         } satisfies ControlText
@@ -64,7 +82,15 @@ export const TestPage = () => {
                     outputs: []
                 } satisfies Node
             ]}
-            connections={[]}
+            connections={[
+                {
+                    id: '1',
+                    outputNode: {id: '1'},
+                    outputPort: {id: '1'},
+                    inputNode: {id: '2'},
+                    inputPort: {id: '4'}
+                },
+            ]}
         />
     )
 }

@@ -2,7 +2,7 @@ import React, {FC, useState} from "react";
 import {InputSelect, InputText} from "./input";
 import styles from "@/components/nodes/port.module.css";
 import {PortInputWidget} from "@/components/nodes/port.tsx";
-import {Control, isControlCondition, isControlInput, isControlText, Port} from "@/components/nodes/types.ts";
+import {Control, isControlCondition, isControlInit, isControlInput, isControlText, PortInput} from "@/components/nodes/types.ts";
 
 type ControlsProps = {
     controls: Control[]
@@ -22,8 +22,12 @@ export const ControlListWidget: FC<ControlsProps> = ({controls}) => {
                         return <ControlInputWidget/>
                     }
 
+                    if (isControlInit(control)) {
+                        return <ControlInitWidget description={control.description}/>
+                    }
+
                     if (isControlText(control)) {
-                        return <ControlTextWidget ports={control.ports} placeholder={control.placeholder} text={control.text}/>
+                        return <ControlTextWidget port={control.port} placeholder={control.placeholder} text={control.text}/>
                     }
 
                     throw `Not supported yet`
@@ -34,17 +38,30 @@ export const ControlListWidget: FC<ControlsProps> = ({controls}) => {
 }
 
 
+type ControlInitWidgetProps = {
+    description?: string;
+}
+
+export const ControlInitWidget: FC<ControlInitWidgetProps> = ({description}) => {
+    return (
+        <div className="flex flex-row">
+            <span className="text-fuchsia-400">{description}</span>
+        </div>
+    )
+}
+
+
 type ControlTextWidgetProps = {
     placeholder?: string;
-    ports: Port[];
+    port?: PortInput;
     text?: string;
 }
 
-export const ControlTextWidget: FC<ControlTextWidgetProps> = ({placeholder, ports, text}) => {
+export const ControlTextWidget: FC<ControlTextWidgetProps> = ({placeholder, port, text}) => {
     return (
         <div className="flex flex-row">
-            {ports.length > 0 && <PortInputWidget/>}
-            <InputText type={'text'} value={text} placeholder={placeholder}/>;
+            {port && <PortInputWidget/>}
+            <InputText type={'text'} value={text} placeholder={placeholder}/>
         </div>
     )
 }
@@ -57,7 +74,7 @@ export const ControlConditionWidget: FC<ControlConditionWidgetProps> = ({}) => {
         <div className="flex flex-col">
             <div className="flex flex-row">
                 {/*<PortInputWidget/>*/}
-                <InputText type={'text'} placeholder={'test'}/>;
+                <InputText type={'text'} placeholder={'test'}/>
             </div>
             <div className="flex flex-row">
                 {/*<PortInputWidget/>*/}

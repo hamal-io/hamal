@@ -33,13 +33,7 @@ class Compiler(
                 }
             }
 
-            val outputTypes = run {
-                if (node.outputs.size == 1) {
-                    listOf(node.outputs.first().outputType)
-                } else {
-                    listOf()
-                }
-            }
+            val outputTypes = node.outputs.map { it.outputType }
 
             val generator = generatorRegistry[node.type, inputTypes, outputTypes]
 
@@ -68,13 +62,15 @@ class Compiler(
         code.append("\n")
 
 
-        if (connections.size == 0) {
-            if (nodes.size == 1) {
-                code.append("n_${nodes.first().id.value.value.toString(16)}()")
-            } else {
-                TODO()
-            }
-        }
+//        if (connections.size == 0) {
+//            if (nodes.size == 1) {
+//                code.append("n_${nodes.first().id.value.value.toString(16)}()")
+//            } else {
+//                TODO()
+//            }
+//        }
+
+        // FIXME find Init node and go from there
 
         // FIXME breath first
         for (connection in connections) {

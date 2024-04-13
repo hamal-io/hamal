@@ -12,11 +12,11 @@ object TypesystemHotModule : HotModule() {
     init {
         this[TypeNew::class] = object : JsonAdapter<TypeNew> {
             override fun serialize(src: TypeNew?, typeOfSrc: Type?, context: JsonSerializationContext?): JsonElement {
-                return JsonPrimitive("TypeNumber")
+                return JsonPrimitive("TypeString")
             }
 
             override fun deserialize(json: JsonElement?, typeOfT: Type?, context: JsonDeserializationContext?): TypeNew {
-                return TypeNumber
+                return TypeString
             }
         }
     }

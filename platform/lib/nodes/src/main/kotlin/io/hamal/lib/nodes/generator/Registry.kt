@@ -13,6 +13,10 @@ class GeneratorRegistry(generators: List<Generator>) {
         return this
     }
 
+    fun register(registry: GeneratorRegistry) {
+        registry.generators.values.flatten().forEach { generator -> register(generator) }
+    }
+
     operator fun get(type: NodeType, inputTypes: List<TypeNew>, outputTypes: List<TypeNew>) = find(type, inputTypes, outputTypes)
         ?: throw NoSuchElementException("No generator found for $type with [${inputTypes.joinToString(", ")}] and [${outputTypes.joinToString(", ")}]")
 
@@ -32,3 +36,9 @@ class GeneratorRegistry(generators: List<Generator>) {
         generators.forEach(::register)
     }
 }
+
+val defaultGeneratorRegistry = GeneratorRegistry(
+    listOf(
+        GeneratorInit
+    )
+)

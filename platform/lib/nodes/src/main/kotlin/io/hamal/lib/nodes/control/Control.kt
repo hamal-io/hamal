@@ -5,6 +5,10 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.serialization.JsonAdapter
 
+// FIXME drop distinguishing between constant and input -- same thing and having a port connector is optional
+// FIXME boolean as checkbox
+
+
 enum class ControlType {
     Condition,
 
@@ -12,6 +16,7 @@ enum class ControlType {
     ConstantDecimal,
     ConstantString,
 
+    Init,
     InputBoolean,
     InputDecimal,
     InputString,
@@ -45,6 +50,7 @@ sealed interface Control {
                 ControlType.ConstantBoolean -> context.deserialize(json, ControlConstantBoolean::class.java)
                 ControlType.ConstantDecimal -> context.deserialize(json, ControlConstantDecimal::class.java)
                 ControlType.ConstantString -> context.deserialize(json, ControlConstantString::class.java)
+                ControlType.Init -> context.deserialize(json, ControlInit::class.java)
                 ControlType.InputBoolean -> context.deserialize(json, ControlInputBoolean::class.java)
                 ControlType.InputDecimal -> context.deserialize(json, ControlInputDecimal::class.java)
                 ControlType.InputString -> context.deserialize(json, ControlInputString::class.java)
@@ -81,6 +87,7 @@ sealed interface ControlExtension {
                 ControlType.ConstantBoolean -> context.deserialize(json, ControlConstantBoolean::class.java)
                 ControlType.ConstantDecimal -> context.deserialize(json, ControlConstantDecimal::class.java)
                 ControlType.ConstantString -> context.deserialize(json, ControlConstantString::class.java)
+                ControlType.Init -> context.deserialize(json, ControlInit::class.java)
                 ControlType.InputBoolean -> context.deserialize(json, ControlInputBoolean::class.java)
                 ControlType.InputDecimal -> context.deserialize(json, ControlInputDecimal::class.java)
                 ControlType.InputString -> context.deserialize(json, ControlInputString::class.java)
