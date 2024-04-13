@@ -1,17 +1,12 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import styles from "./text.module.css";
 
-// import { RecalculateStageRectContext } from "../../context";
 
 interface InputTextProps {
     type?: "number" | "text";
     value?: string;
     placeholder?: string;
-    // updateNodeConnections: () => void;
-    // onChange: (value: string | number) => void;
-    // data: string | number;
-    // step?: number;
-
+    onChange?: (value: string) => void;
 }
 
 export const InputText = ({
@@ -21,10 +16,17 @@ export const InputText = ({
                               // data,
                               // step,
                               // type
-    placeholder, value
+                              placeholder, value, onChange
                           }: InputTextProps) => {
+    const [text, setText] = useState(value)
     const numberInput = React.useRef<HTMLInputElement>(null);
     // const recalculateStageRect = React.useContext(RecalculateStageRectContext);
+
+    useEffect(() => {
+        if (onChange) {
+            onChange(text);
+        }
+    }, [text]);
 
     const handleDragEnd = () => {
         document.removeEventListener("mousemove", handleMouseMove);
@@ -88,11 +90,11 @@ export const InputText = ({
             {/*) : (*/}
             <textarea
                 data-component="text-input-textarea"
-                // onChange={e => onChange(e.target.value)}
+                onChange={e => setText(e.target.value)}
                 onMouseDown={handlePossibleResize}
                 placeholder={placeholder}
                 className={styles.input}
-                value={value}
+                value={text}
                 onDragStart={e => e.stopPropagation()}
             />
             {/*)}*/}

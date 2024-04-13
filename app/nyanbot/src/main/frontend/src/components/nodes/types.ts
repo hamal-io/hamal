@@ -31,7 +31,7 @@ export type Connection = {
 }
 
 export type ControlId = string
-export type ControlType = 'Condition' | 'Input' | 'Text'
+export type ControlType = 'Condition' | 'Input' | 'InputString'
 
 export type Control = ControlCondition | ControlInput | ControlText
 
@@ -69,13 +69,13 @@ export const isControlInput = (value: any): value is ControlCondition => {
 }
 
 export type ControlText = ControlBase & {
-    type: "Text";
+    type: "InputString";
     text?: string;
     placeholder?: string;
 }
 
 export const isControlText = (value: any): value is ControlText => {
-    return isControl(value) && value.type === 'Text';
+    return isControl(value) && value.type === 'InputString';
 }
 
 export type Graph = {

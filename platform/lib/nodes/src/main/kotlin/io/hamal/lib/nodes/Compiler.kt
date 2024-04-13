@@ -67,6 +67,15 @@ class Compiler(
         code.append("\n")
         code.append("\n")
 
+
+        if (connections.size == 0) {
+            if (nodes.size == 1) {
+                code.append("n_${nodes.first().id.value.value.toString(16)}()")
+            } else {
+                TODO()
+            }
+        }
+
         // FIXME breath first
         for (connection in connections) {
             val outputNode = nodes.find { it.id == connection.outputNode.id }!!
