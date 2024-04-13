@@ -27,7 +27,7 @@ export const ControlListWidget: FC<ControlsProps> = ({controls}) => {
                     }
 
                     if (isControlText(control)) {
-                        return <ControlTextWidget port={control.port} placeholder={control.placeholder} text={control.text}/>
+                        return <ControlTextWidget port={control.port} placeholder={control.placeholder} text={control.defaultValue}/>
                     }
 
                     throw `Not supported yet`

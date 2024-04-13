@@ -70,7 +70,7 @@ export const isControlInput = (value: any): value is ControlCondition => {
 
 export type ControlText = ControlBase & {
     type: "InputString";
-    text?: string;
+    defaultValue?: string;
     placeholder?: string;
     port: {
         id: PortId;

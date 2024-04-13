@@ -22,12 +22,12 @@ val SendMessageNode = NodeExtension(
 
 val SendMessageNodeGenerator = object : Generator {
     override val type: NodeType get() = NodeType("TELEGRAM_SEND_MESSAGE")
-    override val inputTypes: List<TypeNew> get() = listOf(TypeString)
+    override val inputTypes: List<TypeNew> get() = listOf(TypeString, TypeString)
     override val outputTypes: List<TypeNew> get() = listOf()
 
     override fun toCode(node: Node): String {
         return """
-           print('Sending message ' .. arg_1)
+           print('Sending message ' .. arg_2 .. ' to chat ' .. arg_1)
         """.trimIndent()
     }
 

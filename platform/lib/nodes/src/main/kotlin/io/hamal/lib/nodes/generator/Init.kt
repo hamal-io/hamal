@@ -13,6 +13,6 @@ data object GeneratorInit : GeneratorConstant {
 
 
     override fun toCode(node: Node): kotlin.String {
-        return """return  'Hello Hamal' """.trimIndent()
+        return """return  '-4171903484' """.trimIndent()
     }
 }

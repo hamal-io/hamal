@@ -61,21 +61,24 @@ export const TestPage = () => {
                         //     text: '',
                         //     placeholder: 'bot_token'
                         // } satisfies ControlText,
-                        // {
-                        //     id: '3',
-                        //     type: 'InputString',
-                        //     ports: [],
-                        //     text: '',
-                        //     placeholder: 'chat_id'
-                        // } satisfies ControlText,
                         {
-                            id: '4',
+                            id: '3',
                             type: 'InputString',
                             port: {
                                 id: '4',
                                 inputType: 'TypeString'
                             },
-                            text: '',
+                            defaultValue: '',
+                            placeholder: 'chat_id'
+                        } satisfies ControlText,
+                        {
+                            id: '4',
+                            type: 'InputString',
+                            port: {
+                                id: '5',
+                                inputType: 'TypeString'
+                            },
+                            defaultValue: 'This default value comes from the frontend',
                             placeholder: 'message'
                         } satisfies ControlText
                     ],
