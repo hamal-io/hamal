@@ -38,6 +38,7 @@ export type Control = ControlCondition | ControlInput | ControlInit | ControlInv
 type ControlBase = {
     id: ControlId;
     type: ControlType;
+    nodeId: NodeId;
     label?: string;
     // ports: PortInput[];
 }
@@ -107,6 +108,7 @@ export const isControlInvoke = (value: any): value is ControlInvoke => {
 export type Graph = {
     nodes: Node[];
     connections: Connection[];
+    controls: Control[];
 }
 
 export type NodeId = string
@@ -119,8 +121,7 @@ export type Node = {
     title?: NodeLabel;
     position: Position;
     size: Size;
-    controls: Control[]
-    outputs: PortOutput[]
+    outputs: PortOutput[];
 }
 
 export type PortId = string

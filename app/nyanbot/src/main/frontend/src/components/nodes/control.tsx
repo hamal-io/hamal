@@ -2,14 +2,16 @@ import React, {FC, useContext, useState} from "react";
 import {InputSelect, InputText} from "./inputs";
 import styles from "@/components/nodes/port.module.css";
 import {PortInputWidget} from "@/components/nodes/port.tsx";
-import {Control, ControlInvoke, ControlText, isControlCondition, isControlInit, isControlInput, isControlInvoke, isControlText} from "@/components/nodes/types.ts";
+import {ControlInvoke, ControlText, isControlCondition, isControlInit, isControlInput, isControlInvoke, isControlText, Node} from "@/components/nodes/types.ts";
 import {ContextEditorState} from "@/components/nodes/editor.tsx";
 
 type ControlsProps = {
-    controls: Control[]
+    node: Node;
 }
 
-export const ControlListWidget: FC<ControlsProps> = ({controls}) => {
+export const ControlListWidget: FC<ControlsProps> = ({node}) => {
+    const {state} = useContext(ContextEditorState);
+    const controls = state.nodeControlIds[node.id].map(controlId => state.controls[controlId])
     return (
         <div className={styles.wrapper} data-component="ports">
             {

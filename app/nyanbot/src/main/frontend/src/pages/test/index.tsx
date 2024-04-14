@@ -9,6 +9,8 @@ export const TestPage = () => {
         <Editor
             onSave={(graph: Graph) => {
 
+                console.log(graph)
+
                 fetch(`${import.meta.env.VITE_BASE_URL}/v1/adhoc`, {
                     method: "POST",
                     headers: {
@@ -35,14 +37,6 @@ export const TestPage = () => {
                     title: 'Init',
                     position: {x: -200, y: -400},
                     size: {width: 100, height: 100},
-                    controls: [
-                        {
-                            id: '1',
-                            type: 'Init',
-                            selector: 'NO_VALUE',
-                            description: 'Let me trigger TG for ya!',
-                        } satisfies ControlInit,
-                    ],
                     outputs: [{
                         id: '1',
                         outputType: 'TypeString'
@@ -54,33 +48,6 @@ export const TestPage = () => {
                     title: 'Telegram - Send Message',
                     position: {x: 0, y: -400},
                     size: {width: 250, height: 300},
-                    controls: [
-                        {
-                            id: '3',
-                            type: 'Invoke',
-                            port: {id: '4'},
-                        } satisfies ControlInvoke,
-                        {
-                            id: '4',
-                            type: 'InputString',
-                            port: {
-                                id: '5',
-                                inputType: 'TypeString'
-                            },
-                            defaultValue: '',
-                            placeholder: 'chat_id'
-                        } satisfies ControlText,
-                        {
-                            id: '5',
-                            type: 'InputString',
-                            port: {
-                                id: '6',
-                                inputType: 'TypeString'
-                            },
-                            defaultValue: '',
-                            placeholder: 'message'
-                        } satisfies ControlText
-                    ],
                     outputs: []
                 } satisfies Node
             ]}
@@ -92,6 +59,43 @@ export const TestPage = () => {
                     inputNode: {id: '2'},
                     inputPort: {id: '4'}
                 },
+            ]}
+            controls={[
+                {
+                    id: '1',
+                    type: 'Init',
+                    nodeId: '1',
+                    selector: 'NO_VALUE',
+                    description: 'Let me trigger TG for ya!',
+                } satisfies ControlInit,
+                {
+                    id: '3',
+                    type: 'Invoke',
+                    nodeId: '2',
+                    port: {id: '4'},
+                } satisfies ControlInvoke,
+                {
+                    id: '4',
+                    type: 'InputString',
+                    nodeId: '2',
+                    port: {
+                        id: '5',
+                        inputType: 'TypeString'
+                    },
+                    defaultValue: '',
+                    placeholder: 'chat_id'
+                } satisfies ControlText,
+                {
+                    id: '5',
+                    type: 'InputString',
+                    nodeId: '2',
+                    port: {
+                        id: '6',
+                        inputType: 'TypeString'
+                    },
+                    defaultValue: '',
+                    placeholder: 'message'
+                } satisfies ControlText
             ]}
         />
     )
