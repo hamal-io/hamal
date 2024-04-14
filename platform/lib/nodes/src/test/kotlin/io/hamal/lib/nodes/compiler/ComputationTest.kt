@@ -9,7 +9,7 @@ import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
 
-internal object ComputationNodesGraphTest : AbstractNodesTest() {
+internal object ComputationNodesGraphTest : AbstractUnitTest() {
 
     @Test
     fun `Computation graph of empty nodes graph`() {

@@ -9,7 +9,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
 
 
-internal object ControlInvokeTest : AbstractNodesTest() {
+internal object ControlInvokeTest : AbstractIntegrationTest() {
 
     @Test
     fun `A node can be invoked without exchanging any data`() {

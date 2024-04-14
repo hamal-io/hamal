@@ -19,7 +19,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
 
 
-internal class InitTest : AbstractNodesTest() {
+internal class InitTest : AbstractIntegrationTest() {
 
     @Test
     fun `Able to receive value with default selector`() {

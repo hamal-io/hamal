@@ -4,7 +4,7 @@ import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.nodes.control.Control
 
 
-internal abstract class AbstractNodesTest {
+internal abstract class AbstractUnitTest {
 
     fun node(
         id: Long,

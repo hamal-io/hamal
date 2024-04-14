@@ -25,7 +25,7 @@ object GeneratorInvoked : Generator {
     }
 }
 
-internal class InvokedTest : AbstractNodesTest() {
+internal class InvokedTest : AbstractIntegrationTest() {
 
     @Test
     fun `Nodes invokes another node`() {
