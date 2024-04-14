@@ -1,6 +1,12 @@
-import {Tag} from "@/pages/app/recipe-list/components/tags.ts";
+import Element = React.JSX.Element;
 
-interface Recipe {
+export interface Tag {
+    id: number
+    name: string,
+    icon: Element
+}
+
+export interface Recipe {
     id: string;
     name: string;
     description: string;

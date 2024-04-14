@@ -1,6 +1,7 @@
-import {tags} from "@/pages/app/recipe-list/components/tags.ts";
-import {FC, ReactSVGElement, useEffect, useRef, useState} from "react";
+import {FC, useEffect, useRef, useState} from "react";
 import {Card} from "@/components/ui/card.tsx";
+import styles from "./tag.module.css"
+import {Tag, tags} from "@/pages/app/recipe-list/components/tags.tsx";
 
 const TagFilter = () => {
     const [selected, setSelected] = useState([])
@@ -10,10 +11,10 @@ const TagFilter = () => {
     }
 
     return (
-        <div className={"tagBox"}>
+        <div className={styles.box}>
             {
-                tags.map(tag => (
-                    <TagCard key={tag.id} id={tag.id} name={tag.name} icon={tag.icon} onSelect={handleSelect}></TagCard>
+                Object.entries(tags).map(([k, tag]) => (
+                    <TagCard key={tag.id} tag={tag} onSelect={handleSelect}></TagCard>
                 ))
             }
         </div>
@@ -23,36 +24,33 @@ const TagFilter = () => {
 export default TagFilter
 
 type TagCardProps = {
-    id: number,
-    name: string,
-    icon: ReactSVGElement,
+    tag: Tag
     onSelect: (id: number) => void
 }
-const TagCard: FC<TagCardProps> = ({id, name, icon, onSelect}) => {
+const TagCard: FC<TagCardProps> = ({tag, onSelect}) => {
     const [selected, setSelected] = useState(false)
-    const cardRef = useRef(null)
+    const cardRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
         if (selected === true) {
-            cardRef.current.style.background = "blue"
-            cardRef.current.style.color = "white"
+            cardRef.current.classList.add(styles.selected)
+        } else {
+            cardRef.current.classList.remove(styles.selected)
         }
     }, [selected]);
 
 
     function handleClick() {
         setSelected(!selected)
-        onSelect(id)
+        onSelect(tag.id)
     }
 
     return (
-        <Card onClick={handleClick}>
-            <div ref={cardRef} className={"flex-row gap-4"}>
-                <div>
-                    {icon}
-                </div>
-                <div>{name}</div>
+        <Card ref={cardRef} className={styles.tag} onClick={handleClick}>
+            <div>
+                {tag.icon}
             </div>
+            <div>{tag.name}</div>
         </Card>
     )
 }

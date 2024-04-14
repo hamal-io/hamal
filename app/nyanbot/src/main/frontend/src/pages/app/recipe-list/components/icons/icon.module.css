@@ -1,0 +1,7 @@
+.tagImage {
+    height: 24px;
+    width: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
