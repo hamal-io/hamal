@@ -1,9 +1,10 @@
 package io.hamal.lib.nodes.control
 
+import io.hamal.lib.nodes.NodeId
 import io.hamal.lib.nodes.PortInput
 import io.hamal.lib.nodes.PortInputExtension
 import io.hamal.lib.typesystem.value.ValueBoolean
-import io.hamal.lib.typesystem.value.ValueDecimal
+import io.hamal.lib.typesystem.value.ValueNumber
 import io.hamal.lib.typesystem.value.ValueString
 
 interface ControlInput : Control {
@@ -15,29 +16,35 @@ interface ControlExtensionInput : ControlExtension {
 }
 
 data class ControlInputBoolean(
+    override val id: ControlId,
+    override val nodeId: NodeId,
     override val port: PortInput,
     val defaultValue: ValueBoolean
 ) : ControlInput {
-    override val type: ControlType get() = ControlType.InputBoolean
+    override val type: ControlType = ControlType.InputBoolean
 }
 
-data class ControlInputDecimal(
+data class ControlInputNumber(
+    override val id: ControlId,
+    override val nodeId: NodeId,
     override val port: PortInput,
-    val defaultValue: ValueDecimal
+    val defaultValue: ValueNumber
 ) : ControlInput {
-    override val type: ControlType get() = ControlType.InputDecimal
+    override val type: ControlType = ControlType.InputNumber
 }
 
 data class ControlInputString(
+    override val id: ControlId,
+    override val nodeId: NodeId,
     override val port: PortInput,
     val defaultValue: ValueString
 ) : ControlInput {
-    override val type: ControlType get() = ControlType.InputString
+    override val type: ControlType = ControlType.InputString
 }
 
 data class ControlExtensionInputString(
     override val port: PortInputExtension,
     val defaultValue: ValueString?
 ) : ControlExtensionInput {
-    override val type: ControlType get() = ControlType.InputString
+    override val type: ControlType = ControlType.InputString
 }

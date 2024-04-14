@@ -3,7 +3,10 @@ import {Editor} from "@/components/nodes/editor.tsx";
 
 export const TestEditorPage = () => {
     return (
-        <Editor onSave={() => {
-        }}/>
+        <Editor
+            nodes={[]}
+            connections={[]}
+            onSave={() => {
+            }}/>
     )
 }

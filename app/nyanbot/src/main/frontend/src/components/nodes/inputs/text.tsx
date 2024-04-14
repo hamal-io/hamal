@@ -1,17 +1,13 @@
-import React from "react";
+import React, {useContext, useEffect, useState} from "react";
 import styles from "./text.module.css";
+import {ContextEditorState} from "@/components/nodes/editor.tsx";
 
-// import { RecalculateStageRectContext } from "../../context";
 
 interface InputTextProps {
     type?: "number" | "text";
     value?: string;
     placeholder?: string;
-    // updateNodeConnections: () => void;
-    // onChange: (value: string | number) => void;
-    // data: string | number;
-    // step?: number;
-
+    onChange?: (value: string) => void;
 }
 
 export const InputText = ({
@@ -21,10 +17,11 @@ export const InputText = ({
                               // data,
                               // step,
                               // type
-    placeholder, value
+                              placeholder, value, onChange
                           }: InputTextProps) => {
+    // const [text, setText] = useState(value)
     const numberInput = React.useRef<HTMLInputElement>(null);
-    // const recalculateStageRect = React.useContext(RecalculateStageRectContext);
+    // const recalculateStageRect = React.useContext(RecalculateStageRectContext)
 
     const handleDragEnd = () => {
         document.removeEventListener("mousemove", handleMouseMove);
@@ -46,8 +43,8 @@ export const InputText = ({
     return (
         <div className={styles.wrapper} data-component="text-input">
             {/*{type === "number" ? (*/}
-            {/*  <input*/}
-            {/*    data-component="text-input-number"*/}
+            {/*  <inputs*/}
+            {/*    data-component="text-inputs-number"*/}
             {/*    onKeyDown={e => {*/}
             {/*      if (e.keyCode === 69) {*/}
             {/*        e.preventDefault();*/}
@@ -80,7 +77,7 @@ export const InputText = ({
             {/*    onMouseDown={handlePossibleResize}*/}
             {/*    // type={type || "text"}*/}
             {/*    // placeholder={placeholder}*/}
-            {/*    className={styles.input}*/}
+            {/*    className={styles.inputs}*/}
             {/*    // defaultValue={data}*/}
             {/*    onDragStart={e => e.stopPropagation()}*/}
             {/*    ref={numberInput}*/}
@@ -88,7 +85,7 @@ export const InputText = ({
             {/*) : (*/}
             <textarea
                 data-component="text-input-textarea"
-                // onChange={e => onChange(e.target.value)}
+                onChange={e => onChange(e.target.value)}
                 onMouseDown={handlePossibleResize}
                 placeholder={placeholder}
                 className={styles.input}

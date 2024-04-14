@@ -1,149 +1,96 @@
-import React, {FC} from 'react'
+import React, {createContext, Dispatch, FC, useEffect, useReducer} from 'react'
 import {Canvas} from "@/components/nodes/canvas.tsx";
 import ButtonPrimary from "@/components/old-ui/button/ButtonPrimary.tsx";
-import {Connection, ControlCondition, ControlInput, ControlText, Graph, Node} from '@/components/nodes/types';
+import {Connection, ConnectionId, Control, ControlId, Graph, Node, NodeId} from '@/components/nodes/types';
 
 type EditorProps = {
+    nodes: Node[];
+    connections: Connection[];
+    controls: Control[];
     onSave: (graph: Graph) => void;
 }
 
-export const Editor: FC<EditorProps> = ({onSave}) => {
-    const nodes: Node[] = [
-        {
-            id: '1',
-            type: "Init",
-            title: "Init",
-            position: {x: -500, y: 0},
-            size: {width: 200, height: 300},
-            controls: [],
-            outputs: [{
-                id: '1'
-            }]
-        } satisfies Node,
-        {
-            id: '2',
-            type: "Select",
-            title: 'Select LP',
-            position: {x: -150, y: 0},
-            size: {width: 250, height: 300},
-            controls: [
-                {
-                    id: '1',
-                    type: 'Input',
-                    ports: [{
-                        id: '2'
-                    }],
-                } satisfies ControlInput,
-                {
-                    id: '2',
-                    type: 'Condition',
-                    ports: [],
-                } satisfies ControlCondition,
-            ],
-            outputs: [{
-                id: '3'
-            }]
-        } satisfies Node,
+const initialState = (nodes: Node[], connections: Connection[], controls: Control[]): State => {
+    return {
+        nodes: nodes.reduce((acc, cur) => {
+            return {...acc, [cur.id]: cur}
+        }, {}),
+        connections: connections.reduce((acc, cur) => {
+            return {...acc, [cur.id]: cur}
+        }, {}),
+        controls: controls.reduce((acc, cur) => {
+            return {...acc, [cur.id]: cur};
+        }, {}),
+        nodeControlIds: controls.reduce((acc, cur) => {
+            acc[cur.nodeId] = acc[cur.nodeId] || []
+            acc[cur.nodeId].push(cur.id)
+            return acc
+        }, {}),
+    }
+}
 
-        {
-            id: '3',
-            type: "ToText",
-            title: 'LP to text',
-            position: {x: 200, y: 0},
-            size: {width: 250, height: 300},
-            controls: [
-                {
-                    id: '1',
-                    type: 'Input',
-                    ports: [{
-                        id: '4'
-                    }],
-                } satisfies ControlInput,
-                {
-                    id: '2',
-                    type: 'Text',
-                    ports: [],
-                    text: `{contract.address} has {total_holder}`,
-                    placeholder: 'Turn into text'
-                } satisfies ControlText,
-            ],
-            outputs: [{
-                id: '5'
-            }]
-        } satisfies Node,
+export interface State {
+    nodes: { [id: NodeId]: Node };
+    connections: { [id: ConnectionId]: Connection };
+    controls: { [id: ControlId]: Control };
+    nodeControlIds: { [id: NodeId]: ControlId[] }
+}
 
-        {
-            id: '4',
-            type: "TelegramMessageSend",
-            title: 'Telegram send message',
-            position: {x: 550, y: 0},
-            size: {width: 250, height: 300},
-            controls: [
-                {
-                    id: '3',
-                    type: 'Text',
-                    ports: [],
-                    text: '',
-                    placeholder: 'chat_id'
-                } satisfies ControlText,
+export type Action =
+    | { type: "CONTROL_TEXT_UPDATED"; id: ControlId, value: string }
 
-                {
-                    id: '4',
-                    type: 'Text',
-                    ports: [
-                        {
-                            id: '6'
-                        }
-                    ],
-                    text: '',
-                    placeholder: 'message'
-                } satisfies ControlText
-            ],
-            outputs: []
-        } satisfies Node
 
-    ]
-    const connections: Connection[] = [
-        {
-            id: '1',
-            outputNode: {id: '1'},
-            outputPort: {id: '1'},
-            inputNode: {id: '2'},
-            inputPort: {id: '2'}
-        },
-        {
-            id: '2',
-            outputNode: {id: '2'},
-            outputPort: {id: '3'},
-            inputNode: {id: '3'},
-            inputPort: {id: '4'}
-        },
-        {
-            id: '3',
-            outputNode: {id: '3'},
-            outputPort: {id: '5'},
-            inputNode: {id: '4'},
-            inputPort: {id: '6'},
-        },
-    ]
+export type EditorState = {
+    state: State,
+    dispatch: Dispatch<Action>
+}
+
+export const ContextEditorState = createContext<EditorState>({
+    state: {nodes: {}, connections: {}, controls: {}, nodeControlIds: {}},
+    dispatch: undefined
+})
+
+export const Editor: FC<EditorProps> = ({nodes, connections, controls, onSave}) => {
+
+    const [state, dispatch] = useReducer(reducer, initialState(nodes, connections, controls))
+    useEffect(() => {
+        console.log(state)
+    }, [state]);
 
     return (
-        <div style={{background: "whitesmoke"}}>
-            <div className="flex flex-row justify-end p-2">
-                <ButtonPrimary onClick={() => {
-                    onSave({nodes, connections})
-                }}>
-                    Save
-                </ButtonPrimary>
+        <ContextEditorState.Provider value={{state, dispatch}}>
+            <div style={{background: "whitesmoke"}}>
+                <div className="flex flex-row justify-end p-2">
+                    <ButtonPrimary onClick={() => {
+                        onSave({
+                            nodes: Object.entries(state.nodes).map(([_, value]) => value),
+                            connections: Object.entries(state.connections).map(([_, value]) => value),
+                            controls: Object.entries(state.controls).map(([_, value]) => value)
+                        })
+                    }}>
+                        Save
+                    </ButtonPrimary>
 
+                </div>
+                <div className="h-screen">
+                    <Canvas
+                        nodes={nodes}
+                        connections={connections}
+                        readonly
+                    />
+                </div>
             </div>
-            <div className="h-screen">
-                <Canvas
-                    nodes={nodes}
-                    connections={connections}
-                    readonly
-                />
-            </div>
-        </div>
+        </ContextEditorState.Provider>
     )
+}
+
+const reducer = (state: State, action: Action): State => {
+    switch (action.type) {
+        case 'CONTROL_TEXT_UPDATED':
+            // FIXME
+            state.controls[action.id].defaultValue = action.value;
+            return {...state}
+        default:
+            throw new Error();
+    }
 }

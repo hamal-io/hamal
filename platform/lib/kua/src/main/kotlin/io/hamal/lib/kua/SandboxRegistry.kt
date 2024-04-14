@@ -52,7 +52,6 @@ internal class SandboxRegistryImpl(
         }
     }
 
-    private val plugins = mutableMapOf<KuaString
-            , RunnerPlugin>()
+    private val plugins = mutableMapOf<KuaString, RunnerPlugin>()
     private val extensions = mutableMapOf<KuaString, RunnerExtension>()
 }
