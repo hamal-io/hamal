@@ -1,9 +1,10 @@
 package io.hamal.lib.nodes.compiler
 
-import io.hamal.lib.nodes.NodesGraph
 import io.hamal.lib.nodes.NodeId
 import io.hamal.lib.nodes.NodeType
+import io.hamal.lib.nodes.NodesGraph
 import io.hamal.lib.nodes.PortId
+import io.hamal.lib.nodes.compiler.ComputationGraph.Companion.ComputationGraph
 import io.hamal.lib.nodes.control.ControlInput
 import io.hamal.lib.nodes.control.ControlInputString
 import io.hamal.lib.nodes.generator.Generator
@@ -21,7 +22,6 @@ class Compiler(
         val outputPortMapping = mutableMapOf<PortId, Pair<String, TypeNew>>()
 
         val nodes = graph.nodes
-        val connections = graph.connections
 
         for (node in nodes) {
 
@@ -48,95 +48,68 @@ class Compiler(
             builder.append("\n")
             builder.append("\n")
 
-//        println(builder)
             nodeCodeGenerators[node.id] = generator
 
             code.append(builder.toString())
 
             node.outputs.mapIndexed { index, portOutput ->
-                outputPortMapping[portOutput.id] = "node_1_1" to generator.outputTypes[index]
+                outputPortMapping[portOutput.id] = "n_${node.id.value.value.toString(16)}_${index + 1}" to generator.outputTypes[index]
             }
         }
 
         code.append("\n")
         code.append("\n")
 
-
-//        if (connections.size == 0) {
-//            if (nodes.size == 1) {
-//                code.append("n_${nodes.first().id.value.value.toString(16)}()")
-//            } else {
-//                TODO()
-//            }
-//        }
-
-        val visitedNodes = mutableListOf<NodeId>()
-
-        // FIXME find Init node and go from there
         val initNode = nodes.find { it.type == NodeType("INIT") } ?: throw IllegalArgumentException("No INIT node found")
+        val computationGraph = ComputationGraph(graph)
+        val orderedNodeIds = breadthFirstSearch(computationGraph, initNode.id)
 
-        val nextConnections = connections.filter { it.outputNode.id == initNode.id }
+        orderedNodeIds.forEach { inputNodeId ->
+            val inputNode = nodes.find { it.id == inputNodeId }!!
 
-
-        // FIXME breath first
-//        for (connection in connections) {
-        val connection = nextConnections.first()
-        val outputNode = nodes.find { it.id == connection.outputNode.id }!!
-        val outputGenerator = nodeCodeGenerators[connection.outputNode.id]!!
-
-        val inputNode = nodes.find { it.id == connection.inputNode.id }!!
-
-        //        val nodeId = index + 1
-        val outputs = List(outputGenerator.outputTypes.size) { "node_${outputNode.id.value.value.toString(16)}_${it + 1}" }.joinToString { it }
-        code.append(outputs)
-//
-//        if (outputGenerator.outputTypes.size > 0) {
-        code.append(" = ")
-        code.append("n_${outputNode.id.value.value.toString(16)}()")
-//        }
-//
-
-        code.append("\n")
-
-        // assumes the all dependency were already called - maybe a function can be called lazy be default, which probably simplifies the implementation
-        if (inputNode.controls.size == 1) {
-            val control = inputNode.controls.first()
-            if (control is ControlInputString) {
-                val defaultValue = control.defaultValue.stringValue
-                code.append("n_${inputNode.id.value.value.toString(16)}(${outputPortMapping[connection.outputPort.id]!!.first} or '${defaultValue}')")
+            val connections = graph.connections.filter { it.inputNode.id == inputNodeId }
+            if (connections.isEmpty()) {
+                code.append("n_${inputNode.id.value.value.toString(16)}_1 = n_1()\n")
             } else {
-                code.append("n_${inputNode.id.value.value.toString(16)}(${outputPortMapping[connection.outputPort.id]!!.first})")
+
+                val connection = connections.first()
+
+                if (inputNode.controls.size == 1) {
+                    val control = inputNode.controls.first()
+                    if (control is ControlInputString) {
+                        val defaultValue = control.defaultValue.stringValue
+                        code.append("n_${inputNode.id.value.value.toString(16)}(${outputPortMapping[connection.outputPort.id]!!.first} or '${defaultValue}')")
+                    } else {
+                        code.append("n_${inputNode.id.value.value.toString(16)}(${outputPortMapping[connection.outputPort.id]!!.first})")
+                    }
+                } else if (inputNode.controls.size == 2) {
+
+                    var control = inputNode.controls.first()
+                    val p1 = if (control is ControlInputString) {
+                        val defaultValue = control.defaultValue.stringValue
+                        "${outputPortMapping[connection.outputPort.id]!!.first} or '${defaultValue}'"
+                    } else {
+                        "${outputPortMapping[connection.outputPort.id]!!.first})"
+                    }
+
+                    code.append("local p_1 = $p1 \n")
+
+                    // FIXME is there a connection to the port? otherwise default to default value
+                    control = inputNode.controls.last()
+                    require(control is ControlInputString)
+                    val p2 = connections.find { it.inputPort.id == control.port.id }?.let { connection ->
+                        // FIXME resolve variable name
+                        null
+                    } ?: "'${control.defaultValue.stringValue}'"
+
+                    code.append("local p_2 = $p2 \n")
+
+                    code.append("n_${inputNode.id.value.value.toString(16)}(p_1, p_2)")
+                } else {
+                    code.append("n_${inputNode.id.value.value.toString(16)}(${outputPortMapping[connection.outputPort.id]!!.first})")
+                }
             }
-        } else if (inputNode.controls.size == 2) {
-
-            var control = inputNode.controls.first()
-            val p1 = if (control is ControlInputString) {
-                val defaultValue = control.defaultValue.stringValue
-                "${outputPortMapping[connection.outputPort.id]!!.first} or '${defaultValue}'"
-            } else {
-                "${outputPortMapping[connection.outputPort.id]!!.first})"
-            }
-
-            code.append("local p_1 = $p1 \n")
-
-            // FIXME is there a connection to the port? otherwise default to default value
-            control = inputNode.controls.last()
-            require(control is ControlInputString)
-            val p2 = connections.find { it.inputPort.id == control.port.id }?.let { connection ->
-                // FIXME resolve variable name
-                null
-            } ?: "'${control.defaultValue.stringValue}'"
-
-            code.append("local p_2 = $p2 \n")
-
-            code.append("n_${inputNode.id.value.value.toString(16)}(p_1, p_2)")
-        } else {
-            code.append("n_${inputNode.id.value.value.toString(16)}(${outputPortMapping[connection.outputPort.id]!!.first})")
         }
-//        }
-
-
-//        println(code.toString())
 
         return code.toString()
     }
