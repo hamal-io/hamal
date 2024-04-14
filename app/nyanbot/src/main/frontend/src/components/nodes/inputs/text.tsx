@@ -1,5 +1,6 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import styles from "./text.module.css";
+import {ContextEditorState} from "@/components/nodes/editor.tsx";
 
 
 interface InputTextProps {
@@ -18,15 +19,9 @@ export const InputText = ({
                               // type
                               placeholder, value, onChange
                           }: InputTextProps) => {
-    const [text, setText] = useState(value)
+    // const [text, setText] = useState(value)
     const numberInput = React.useRef<HTMLInputElement>(null);
-    // const recalculateStageRect = React.useContext(RecalculateStageRectContext);
-
-    useEffect(() => {
-        if (onChange) {
-            onChange(text);
-        }
-    }, [text]);
+    // const recalculateStageRect = React.useContext(RecalculateStageRectContext)
 
     const handleDragEnd = () => {
         document.removeEventListener("mousemove", handleMouseMove);
@@ -48,8 +43,8 @@ export const InputText = ({
     return (
         <div className={styles.wrapper} data-component="text-input">
             {/*{type === "number" ? (*/}
-            {/*  <input*/}
-            {/*    data-component="text-input-number"*/}
+            {/*  <inputs*/}
+            {/*    data-component="text-inputs-number"*/}
             {/*    onKeyDown={e => {*/}
             {/*      if (e.keyCode === 69) {*/}
             {/*        e.preventDefault();*/}
@@ -82,7 +77,7 @@ export const InputText = ({
             {/*    onMouseDown={handlePossibleResize}*/}
             {/*    // type={type || "text"}*/}
             {/*    // placeholder={placeholder}*/}
-            {/*    className={styles.input}*/}
+            {/*    className={styles.inputs}*/}
             {/*    // defaultValue={data}*/}
             {/*    onDragStart={e => e.stopPropagation()}*/}
             {/*    ref={numberInput}*/}
@@ -90,11 +85,11 @@ export const InputText = ({
             {/*) : (*/}
             <textarea
                 data-component="text-input-textarea"
-                onChange={e => setText(e.target.value)}
+                onChange={e => onChange(e.target.value)}
                 onMouseDown={handlePossibleResize}
                 placeholder={placeholder}
                 className={styles.input}
-                value={text}
+                value={value}
                 onDragStart={e => e.stopPropagation()}
             />
             {/*)}*/}

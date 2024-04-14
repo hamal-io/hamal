@@ -17,8 +17,8 @@ export const ConnectionListWidget = ({connections}: ConnectionListWidgetProps) =
             {/*    // data-connection-id={id}*/}
             {/*    // data-output-node-id={outputNodeId}*/}
             {/*    // data-output-port-name={outputPortName}*/}
-            {/*    // data-input-node-id={inputNodeId}*/}
-            {/*    // data-input-port-name={inputPortName}*/}
+            {/*    // data-inputs-node-id={inputNodeId}*/}
+            {/*    // data-inputs-port-name={inputPortName}*/}
             {/*    data-component="connection-path"*/}
             {/*    stroke="rgb(185, 186, 189)"*/}
             {/*    // fill="none"*/}
@@ -32,8 +32,8 @@ export const ConnectionListWidget = ({connections}: ConnectionListWidgetProps) =
             {/*    // data-connection-id={id}*/}
             {/*    // data-output-node-id={outputNodeId}*/}
             {/*    // data-output-port-name={outputPortName}*/}
-            {/*    // data-input-node-id={inputNodeId}*/}
-            {/*    // data-input-port-name={inputPortName}*/}
+            {/*    // data-inputs-node-id={inputNodeId}*/}
+            {/*    // data-inputs-port-name={inputPortName}*/}
             {/*    data-component="connection-path"*/}
             {/*    stroke="rgb(185, 186, 189)"*/}
             {/*    // fill="none"*/}
@@ -47,8 +47,8 @@ export const ConnectionListWidget = ({connections}: ConnectionListWidgetProps) =
             {/*    // data-connection-id={id}*/}
             {/*    // data-output-node-id={outputNodeId}*/}
             {/*    // data-output-port-name={outputPortName}*/}
-            {/*    // data-input-node-id={inputNodeId}*/}
-            {/*    // data-input-port-name={inputPortName}*/}
+            {/*    // data-inputs-node-id={inputNodeId}*/}
+            {/*    // data-inputs-port-name={inputPortName}*/}
             {/*    data-component="connection-path"*/}
             {/*    stroke="rgb(185, 186, 189)"*/}
             {/*    // fill="none"*/}
@@ -62,8 +62,8 @@ export const ConnectionListWidget = ({connections}: ConnectionListWidgetProps) =
             {/*    // data-connection-id={id}*/}
             {/*    // data-output-node-id={outputNodeId}*/}
             {/*    // data-output-port-name={outputPortName}*/}
-            {/*    // data-input-node-id={inputNodeId}*/}
-            {/*    // data-input-port-name={inputPortName}*/}
+            {/*    // data-inputs-node-id={inputNodeId}*/}
+            {/*    // data-inputs-port-name={inputPortName}*/}
             {/*    data-component="connection-path"*/}
             {/*    stroke="rgb(185, 186, 189)"*/}
             {/*    // fill="none"*/}

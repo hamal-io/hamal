@@ -1,8 +1,9 @@
-import React, {FC, useState} from "react";
-import {InputSelect, InputText} from "./input";
+import React, {FC, useContext, useState} from "react";
+import {InputSelect, InputText} from "./inputs";
 import styles from "@/components/nodes/port.module.css";
 import {PortInputWidget} from "@/components/nodes/port.tsx";
-import {Control, ControlInvoke, isControlCondition, isControlInit, isControlInput, isControlInvoke, isControlText, PortInput} from "@/components/nodes/types.ts";
+import {Control, ControlInvoke, ControlText, isControlCondition, isControlInit, isControlInput, isControlInvoke, isControlText} from "@/components/nodes/types.ts";
+import {ContextEditorState} from "@/components/nodes/editor.tsx";
 
 type ControlsProps = {
     controls: Control[]
@@ -31,7 +32,7 @@ export const ControlListWidget: FC<ControlsProps> = ({controls}) => {
                     }
 
                     if (isControlText(control)) {
-                        return <ControlTextWidget port={control.port} placeholder={control.placeholder} text={control.defaultValue}/>
+                        return <ControlTextWidget control={control}/>
                     }
 
                     throw `Not supported yet`
@@ -69,16 +70,20 @@ export const ControlInitWidget: FC<ControlInitWidgetProps> = ({description}) => 
 
 
 type ControlTextWidgetProps = {
-    placeholder?: string;
-    port?: PortInput;
-    text?: string;
+    control: ControlText;
 }
 
-export const ControlTextWidget: FC<ControlTextWidgetProps> = ({placeholder, port, text}) => {
+export const ControlTextWidget: FC<ControlTextWidgetProps> = ({control}) => {
+    const {id, port, defaultValue, placeholder} = control;
+    const {dispatch} = useContext(ContextEditorState)
+    const {state} = useContext(ContextEditorState)
+
     return (
         <div className="flex flex-row">
             {port && <PortInputWidget/>}
-            <InputText type={'text'} value={text} placeholder={placeholder}/>
+            <InputText type={'text'} value={state.controls[id].defaultValue} placeholder={placeholder} onChange={(value) =>
+                dispatch({type: 'CONTROL_TEXT_UPDATED', id: control.id, value})
+            }/>
         </div>
     )
 }

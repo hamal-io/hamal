@@ -67,7 +67,7 @@ export const TestPage = () => {
                                 id: '5',
                                 inputType: 'TypeString'
                             },
-                            defaultValue: '-4171903484',
+                            defaultValue: '',
                             placeholder: 'chat_id'
                         } satisfies ControlText,
                         {
@@ -77,7 +77,7 @@ export const TestPage = () => {
                                 id: '6',
                                 inputType: 'TypeString'
                             },
-                            defaultValue: 'This default value comes from the frontend',
+                            defaultValue: '',
                             placeholder: 'message'
                         } satisfies ControlText
                     ],
