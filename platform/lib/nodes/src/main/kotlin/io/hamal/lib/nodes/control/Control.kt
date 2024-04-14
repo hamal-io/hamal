@@ -17,6 +17,7 @@ enum class ControlType {
     ConstantString,
 
     Init,
+    Invoke,
     InputBoolean,
     InputNumber,
     InputString,
@@ -51,6 +52,7 @@ sealed interface Control {
                 ControlType.ConstantDecimal -> context.deserialize(json, ControlConstantDecimal::class.java)
                 ControlType.ConstantString -> context.deserialize(json, ControlConstantString::class.java)
                 ControlType.Init -> context.deserialize(json, ControlInit::class.java)
+                ControlType.Invoke -> context.deserialize(json, ControlInvoke::class.java)
                 ControlType.InputBoolean -> context.deserialize(json, ControlInputBoolean::class.java)
                 ControlType.InputNumber -> context.deserialize(json, ControlInputNumber::class.java)
                 ControlType.InputString -> context.deserialize(json, ControlInputString::class.java)
@@ -88,6 +90,7 @@ sealed interface ControlExtension {
                 ControlType.ConstantDecimal -> context.deserialize(json, ControlConstantDecimal::class.java)
                 ControlType.ConstantString -> context.deserialize(json, ControlConstantString::class.java)
                 ControlType.Init -> context.deserialize(json, ControlInit::class.java)
+                ControlType.Invoke -> context.deserialize(json, ControlInvoke::class.java)
                 ControlType.InputBoolean -> context.deserialize(json, ControlInputBoolean::class.java)
                 ControlType.InputNumber -> context.deserialize(json, ControlInputNumber::class.java)
                 ControlType.InputString -> context.deserialize(json, ControlInputString::class.java)
