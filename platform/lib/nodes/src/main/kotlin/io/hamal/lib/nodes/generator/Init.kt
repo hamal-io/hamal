@@ -17,6 +17,9 @@ sealed interface GeneratorInit : GeneratorConstant {
 
         override fun toCode(node: Node): kotlin.String {
             val selector = node.controls.filterIsInstance<ControlInit>().firstOrNull()?.selector ?: "__nodes__init__"
+            if (selector == "NO_VALUE") {
+                return "return nil"
+            }
             return """return  context.exec.inputs.${selector} or error('No initial value was found')""".trimIndent()
         }
     }

@@ -90,6 +90,25 @@ class Compiler(
                         code.append("local p_1 = $p1 \n")
                         code.append("n_${inputNode.id.value.value.toString(16)}(p_1)")
 
+                    } else if (controls.size == 2) {
+                        var control = controls.first()
+                        val p1 = if (control is ControlInputString) {
+                            val defaultValue = control.defaultValue.stringValue
+                            "'${defaultValue}'"
+                        } else {
+                            outputPortMapping[connection.outputPort.id]!!.first
+                        }
+
+                        code.append("local p_1 = $p1 \n")
+
+                        // FIXME is there a connection to the port? otherwise default to default value
+                        control = controls.last()
+                        require(control is ControlInputString)
+                        val p2 = "'${control.defaultValue.stringValue}'"
+
+                        code.append("local p_2 = $p2 \n")
+
+                        code.append("n_${inputNode.id.value.value.toString(16)}(p_1, p_2)")
                     } else {
                         TODO()
                     }
@@ -135,7 +154,7 @@ class Compiler(
             }
         }
 
-//        println(code)
+        println(code)
 
         return code.toString()
     }

@@ -2,7 +2,7 @@ import React, {FC, useState} from "react";
 import {InputSelect, InputText} from "./input";
 import styles from "@/components/nodes/port.module.css";
 import {PortInputWidget} from "@/components/nodes/port.tsx";
-import {Control, isControlCondition, isControlInit, isControlInput, isControlText, PortInput} from "@/components/nodes/types.ts";
+import {Control, ControlInvoke, isControlCondition, isControlInit, isControlInput, isControlInvoke, isControlText, PortInput} from "@/components/nodes/types.ts";
 
 type ControlsProps = {
     controls: Control[]
@@ -26,6 +26,10 @@ export const ControlListWidget: FC<ControlsProps> = ({controls}) => {
                         return <ControlInitWidget description={control.description}/>
                     }
 
+                    if (isControlInvoke(control)) {
+                        return <ControlInvokeWidget control={control}/>
+                    }
+
                     if (isControlText(control)) {
                         return <ControlTextWidget port={control.port} placeholder={control.placeholder} text={control.defaultValue}/>
                     }
@@ -35,6 +39,19 @@ export const ControlListWidget: FC<ControlsProps> = ({controls}) => {
             }
         </div>
     )
+}
+
+type ControlInvokeWidgetProps = {
+    control: ControlInvoke;
+}
+
+export const ControlInvokeWidget: FC<ControlInvokeWidgetProps> = ({}) => {
+    return (
+        <div className="flex flex-row">
+            <PortInputWidget/>
+            <span> Invoke</span>
+        </div>
+    );
 }
 
 

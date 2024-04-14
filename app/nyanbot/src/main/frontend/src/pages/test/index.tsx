@@ -1,7 +1,7 @@
 import React from "react";
 import {useAuth} from "@/hooks/auth.ts";
 import {Editor} from "@/components/nodes/editor.tsx";
-import {ControlInit, ControlText, Graph, Node} from "@/components/nodes/types.ts";
+import {ControlInit, ControlInvoke, ControlText, Graph, Node} from "@/components/nodes/types.ts";
 
 export const TestPage = () => {
     const [auth] = useAuth()
@@ -39,6 +39,7 @@ export const TestPage = () => {
                         {
                             id: '1',
                             type: 'Init',
+                            selector: 'NO_VALUE',
                             description: 'Let me trigger TG for ya!',
                         } satisfies ControlInit,
                     ],
@@ -54,28 +55,26 @@ export const TestPage = () => {
                     position: {x: 0, y: -400},
                     size: {width: 250, height: 300},
                     controls: [
-                        // {
-                        //     id: '3',
-                        //     type: 'InputString',
-                        //     ports: [],
-                        //     text: '',
-                        //     placeholder: 'bot_token'
-                        // } satisfies ControlText,
                         {
                             id: '3',
-                            type: 'InputString',
-                            port: {
-                                id: '4',
-                                inputType: 'TypeString'
-                            },
-                            defaultValue: '',
-                            placeholder: 'chat_id'
-                        } satisfies ControlText,
+                            type: 'Invoke',
+                            port: {id: '4'},
+                        } satisfies ControlInvoke,
                         {
                             id: '4',
                             type: 'InputString',
                             port: {
                                 id: '5',
+                                inputType: 'TypeString'
+                            },
+                            defaultValue: '-4171903484',
+                            placeholder: 'chat_id'
+                        } satisfies ControlText,
+                        {
+                            id: '5',
+                            type: 'InputString',
+                            port: {
+                                id: '6',
                                 inputType: 'TypeString'
                             },
                             defaultValue: 'This default value comes from the frontend',
