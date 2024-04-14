@@ -13,7 +13,7 @@ internal object ComputationNodesGraphTest : AbstractUnitTest() {
 
     @Test
     fun `Computation graph of empty nodes graph`() {
-        val result = ComputationGraph(NodesGraph(nodes = listOf(), connections = listOf()))
+        val result = ComputationGraph(NodesGraph(nodes = listOf(), connections = listOf(), controls = listOf()))
         assertThat(result, equalTo(ComputationGraph(mapOf())))
     }
 
@@ -22,11 +22,14 @@ internal object ComputationNodesGraphTest : AbstractUnitTest() {
         val result = ComputationGraph(
             NodesGraph(
                 nodes = listOf(
-                    node(1, "INIT", listOf(), listOf(PortOutput(PortId(20), TypeString))),
-                    node(2, "INVOKED", listOf(ControlInputString(nextControlId(), PortInput(PortId(21), TypeString), ValueString("default string"))))
+                    node(1, "INIT", listOf(PortOutput(PortId(20), TypeString))),
+                    node(2, "INVOKED")
                 ),
                 connections = listOf(
                     connection(100, 1, 20, 2, 21)
+                ),
+                controls = listOf(
+                    ControlInputString(nextControlId(), NodeId(2), PortInput(PortId(21), TypeString), ValueString("default string"))
                 )
             )
         )
@@ -47,13 +50,17 @@ internal object ComputationNodesGraphTest : AbstractUnitTest() {
         val result = ComputationGraph(
             graph = NodesGraph(
                 nodes = listOf(
-                    node(1, "A", listOf(), listOf(PortOutput(PortId(20), TypeString))),
-                    node(2, "B", listOf(ControlInputString(nextControlId(), PortInput(PortId(21), TypeString), ValueString("default")))),
-                    node(3, "C", listOf(ControlInputString(nextControlId(), PortInput(PortId(22), TypeString), ValueString("default"))))
+                    node(1, "A", listOf(PortOutput(PortId(20), TypeString))),
+                    node(2, "B"),
+                    node(3, "C")
                 ),
                 connections = listOf(
                     connection(100, 1, 20, 2, 21),
                     connection(101, 1, 20, 3, 22),
+                ),
+                controls = listOf(
+                    ControlInputString(nextControlId(), NodeId(2), PortInput(PortId(21), TypeString), ValueString("default")),
+                    ControlInputString(nextControlId(), NodeId(3), PortInput(PortId(22), TypeString), ValueString("default"))
                 )
             )
         )
@@ -74,13 +81,17 @@ internal object ComputationNodesGraphTest : AbstractUnitTest() {
         val result = ComputationGraph(
             graph = NodesGraph(
                 nodes = listOf(
-                    node(1, "INIT", listOf(), listOf(PortOutput(PortId(20), TypeString))),
-                    node(2, "INVOKED", listOf(ControlInputString(nextControlId(), PortInput(PortId(21), TypeString), ValueString("default")))),
-                    node(3, "INVOKED", listOf(ControlInputString(nextControlId(), PortInput(PortId(22), TypeString), ValueString("default"))))
+                    node(1, "INIT", listOf(PortOutput(PortId(20), TypeString))),
+                    node(2, "INVOKED"),
+                    node(3, "INVOKED")
                 ),
                 connections = listOf(
                     connection(100, 1, 20, 3, 22),
                     connection(101, 2, 21, 3, 22),
+                ),
+                controls = listOf(
+                    ControlInputString(nextControlId(), NodeId(2), PortInput(PortId(21), TypeString), ValueString("default")),
+                    ControlInputString(nextControlId(), NodeId(3), PortInput(PortId(22), TypeString), ValueString("default"))
                 )
             )
         )
@@ -100,7 +111,7 @@ internal object ComputationNodesGraphTest : AbstractUnitTest() {
 
     @Test
     fun `Computation graph with single connection`() {
-        val result = ComputationGraph(NodesGraph(nodes = listOf(), connections = listOf()))
+        val result = ComputationGraph(NodesGraph(nodes = listOf(), connections = listOf(), controls = listOf()))
         assertThat(result, equalTo(ComputationGraph(mapOf())))
     }
 

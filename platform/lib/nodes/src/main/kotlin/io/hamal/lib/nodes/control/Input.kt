@@ -1,5 +1,6 @@
 package io.hamal.lib.nodes.control
 
+import io.hamal.lib.nodes.NodeId
 import io.hamal.lib.nodes.PortInput
 import io.hamal.lib.nodes.PortInputExtension
 import io.hamal.lib.typesystem.value.ValueBoolean
@@ -16,6 +17,7 @@ interface ControlExtensionInput : ControlExtension {
 
 data class ControlInputBoolean(
     override val id: ControlId,
+    override val nodeId: NodeId,
     override val port: PortInput,
     val defaultValue: ValueBoolean
 ) : ControlInput {
@@ -24,6 +26,7 @@ data class ControlInputBoolean(
 
 data class ControlInputNumber(
     override val id: ControlId,
+    override val nodeId: NodeId,
     override val port: PortInput,
     val defaultValue: ValueNumber
 ) : ControlInput {
@@ -32,6 +35,7 @@ data class ControlInputNumber(
 
 data class ControlInputString(
     override val id: ControlId,
+    override val nodeId: NodeId,
     override val port: PortInput,
     val defaultValue: ValueString
 ) : ControlInput {

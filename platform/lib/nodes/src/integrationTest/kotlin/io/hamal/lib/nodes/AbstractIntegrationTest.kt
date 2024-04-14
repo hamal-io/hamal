@@ -18,7 +18,6 @@ import io.hamal.lib.kua.function.Function1In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.type.*
-import io.hamal.lib.nodes.control.Control
 import io.hamal.lib.nodes.control.ControlId
 import io.hamal.lib.nodes.fixture.test_nodes.GeneratorCapture
 import io.hamal.lib.nodes.fixture.test_nodes.GeneratorInvoked
@@ -111,7 +110,6 @@ internal abstract class AbstractIntegrationTest {
     fun node(
         id: Long,
         type: String,
-        controls: List<Control>,
         outputs: List<PortOutput> = listOf(),
         title: NodeTitle = NodeTitle("Title of ${id.toString(16)}"),
         position: Position = Position(0, 0),
@@ -123,7 +121,6 @@ internal abstract class AbstractIntegrationTest {
             title = title,
             position = position,
             size = size,
-            controls = controls,
             outputs = outputs
         )
     }

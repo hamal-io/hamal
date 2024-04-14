@@ -1,6 +1,7 @@
 package io.hamal.extension.telegram.nodes
 
 import io.hamal.lib.nodes.*
+import io.hamal.lib.nodes.control.Control
 import io.hamal.lib.nodes.control.ControlExtensionInputString
 import io.hamal.lib.nodes.generator.Generator
 import io.hamal.lib.typesystem.TypeNew
@@ -25,7 +26,7 @@ val SendMessageNodeGenerator = object : Generator {
     override val inputTypes: List<TypeNew> get() = listOf(TypeString, TypeString)
     override val outputTypes: List<TypeNew> get() = listOf()
 
-    override fun toCode(node: Node): String {
+    override fun toCode(node: Node, controls: List<Control>): String {
         return """
            print('Sending message ' .. arg_2 .. ' to chat ' .. arg_1)
         """.trimIndent()

@@ -2,6 +2,7 @@ package io.hamal.lib.nodes.generator
 
 import io.hamal.lib.nodes.Node
 import io.hamal.lib.nodes.NodeType
+import io.hamal.lib.nodes.control.Control
 import io.hamal.lib.typesystem.TypeDecimal
 import io.hamal.lib.typesystem.TypeNew
 import io.hamal.lib.typesystem.TypeNumber
@@ -62,7 +63,7 @@ internal class GeneratorRegistryTest {
         override val type: NodeType get() = NodeType("SOME_TYPE")
         override val inputTypes: List<TypeNew> = listOf(TypeString)
         override val outputTypes: List<TypeNew> get() = listOf()
-        override fun toCode(node: Node): String {
+        override fun toCode(node: Node, controls: List<Control>): String {
             TODO("Not yet implemented")
         }
     }
@@ -70,7 +71,7 @@ internal class GeneratorRegistryTest {
         override val type: NodeType get() = NodeType("SOME_TYPE")
         override val inputTypes: List<TypeNew> = listOf(TypeNumber)
         override val outputTypes: List<TypeNew> get() = listOf()
-        override fun toCode(node: Node): String {
+        override fun toCode(node: Node, controls: List<Control>): String {
             TODO("Not yet implemented")
         }
     }
@@ -79,7 +80,7 @@ internal class GeneratorRegistryTest {
         override val type: NodeType get() = NodeType("ANOTHER_TYPE")
         override val inputTypes: List<TypeNew> = listOf()
         override val outputTypes: List<TypeNew> get() = listOf(TypeString)
-        override fun toCode(node: Node): String {
+        override fun toCode(node: Node, controls: List<Control>): String {
             TODO("Not yet implemented")
         }
     }
@@ -88,7 +89,7 @@ internal class GeneratorRegistryTest {
         override val type: NodeType get() = NodeType("ANOTHER_TYPE")
         override val inputTypes: List<TypeNew> = listOf()
         override val outputTypes: List<TypeNew> = listOf(TypeDecimal)
-        override fun toCode(node: Node): String {
+        override fun toCode(node: Node, controls: List<Control>): String {
             TODO("Not yet implemented")
         }
     }
@@ -97,7 +98,7 @@ internal class GeneratorRegistryTest {
         override val type: NodeType get() = NodeType("NO_TYPE")
         override val inputTypes: List<TypeNew> = listOf()
         override val outputTypes: List<TypeNew> = listOf()
-        override fun toCode(node: Node): String {
+        override fun toCode(node: Node, controls: List<Control>): String {
             TODO("Not yet implemented")
         }
     }
@@ -106,7 +107,7 @@ internal class GeneratorRegistryTest {
         override val type: NodeType get() = NodeType("STRING_PASS_THROUGH")
         override val inputTypes: List<TypeNew> = listOf(TypeString)
         override val outputTypes: List<TypeNew> = listOf(TypeString)
-        override fun toCode(node: Node): String {
+        override fun toCode(node: Node, controls: List<Control>): String {
             TODO("Not yet implemented")
         }
     }

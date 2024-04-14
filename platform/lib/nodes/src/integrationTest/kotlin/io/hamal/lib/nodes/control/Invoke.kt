@@ -18,16 +18,16 @@ internal object ControlInvokeTest : AbstractIntegrationTest() {
                 initValue = HotString("This value will not passed into capture node"),
                 graph = NodesGraph(
                     nodes = listOf(
-                        node(1, "INIT", listOf(ControlInit(nextControlId())), listOf(PortOutput(PortId(20), TypeString))),
-                        node(
-                            2, "CAPTURE", listOf(
-                                ControlInvoke(nextControlId(), PortId(21)),
-                                ControlInputString(nextControlId(), PortInput(PortId(22), TypeString), ValueString("default capture string"))
-                            ), listOf(PortOutput(PortId(22), TypeString))
-                        )
+                        node(1, "INIT", listOf(PortOutput(PortId(20), TypeString))),
+                        node(2, "CAPTURE", listOf(PortOutput(PortId(22), TypeString)))
                     ),
                     connections = listOf(
                         connection(100, 1, 20, 2, 21)
+                    ),
+                    controls = listOf(
+                        ControlInit(nextControlId(), NodeId(1)),
+                        ControlInvoke(nextControlId(), NodeId(2), PortId(21)),
+                        ControlInputString(nextControlId(), NodeId(2), PortInput(PortId(22), TypeString), ValueString("default capture string"))
                     )
                 )
             )

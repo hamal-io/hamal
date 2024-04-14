@@ -6,6 +6,7 @@ import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.serialization.JsonAdapter
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.nodes.NodeId
 
 // FIXME drop distinguishing between constant and input -- same thing and having a port connector is optional
 // FIXME boolean as checkbox
@@ -34,6 +35,7 @@ enum class ControlType {
 sealed interface Control {
     val id: ControlId
     val type: ControlType
+    val nodeId: NodeId
 
     object Adapter : JsonAdapter<Control> {
 

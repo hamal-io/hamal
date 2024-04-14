@@ -2,6 +2,7 @@ package io.hamal.lib.nodes.generator
 
 import io.hamal.lib.nodes.Node
 import io.hamal.lib.nodes.NodeType
+import io.hamal.lib.nodes.control.Control
 import io.hamal.lib.nodes.control.ControlConstantDecimal
 import io.hamal.lib.nodes.control.ControlConstantString
 import io.hamal.lib.typesystem.TypeDecimal
@@ -16,8 +17,7 @@ sealed interface GeneratorConstant : Generator {
         override val outputTypes: List<TypeNew> get() = listOf(TypeString)
 
 
-        override fun toCode(node: Node): kotlin.String {
-            val controls = node.controls
+        override fun toCode(node: Node, controls: List<Control>): kotlin.String {
             check(controls.size == 1)
 
             val control = controls[0]
@@ -31,8 +31,7 @@ sealed interface GeneratorConstant : Generator {
         override val outputTypes: List<TypeNew> get() = listOf(TypeDecimal)
 
 
-        override fun toCode(node: Node): kotlin.String {
-            val controls = node.controls
+        override fun toCode(node: Node, controls: List<Control>): kotlin.String {
             check(controls.size == 1)
 
             val control = controls[0]

@@ -2,6 +2,7 @@ package io.hamal.lib.nodes.fixture.test_nodes
 
 import io.hamal.lib.nodes.Node
 import io.hamal.lib.nodes.NodeType
+import io.hamal.lib.nodes.control.Control
 import io.hamal.lib.nodes.generator.Generator
 import io.hamal.lib.typesystem.TypeDecimal
 import io.hamal.lib.typesystem.TypeNew
@@ -16,7 +17,7 @@ interface GeneratorCapture : Generator {
         override val inputTypes: List<TypeNew> get() = listOf(TypeString)
         override val outputTypes: List<TypeNew> get() = listOf(TypeString)
 
-        override fun toCode(node: Node): kotlin.String {
+        override fun toCode(node: Node, controls: List<Control>): kotlin.String {
             return """
             test = require_plugin('test')
             test.capture1(arg_1)
@@ -30,7 +31,7 @@ interface GeneratorCapture : Generator {
         override val inputTypes: List<TypeNew> get() = listOf(TypeNumber)
         override val outputTypes: List<TypeNew> get() = listOf(TypeNumber)
 
-        override fun toCode(node: Node): kotlin.String {
+        override fun toCode(node: Node, controls: List<Control>): kotlin.String {
             return """
             test = require_plugin('test')
             test.capture1(arg_1)
@@ -44,7 +45,7 @@ interface GeneratorCapture : Generator {
         override val inputTypes: List<TypeNew> get() = listOf(TypeDecimal)
         override val outputTypes: List<TypeNew> get() = listOf(TypeDecimal)
 
-        override fun toCode(node: Node): kotlin.String {
+        override fun toCode(node: Node, controls: List<Control>): kotlin.String {
             return """
             test = require_plugin('test')
             test.capture1(arg_1)

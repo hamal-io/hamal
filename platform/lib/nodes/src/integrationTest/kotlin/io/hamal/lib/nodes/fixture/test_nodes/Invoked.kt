@@ -2,6 +2,7 @@ package io.hamal.lib.nodes.fixture.test_nodes
 
 import io.hamal.lib.common.hot.HotString
 import io.hamal.lib.nodes.*
+import io.hamal.lib.nodes.control.Control
 import io.hamal.lib.nodes.control.ControlInputString
 import io.hamal.lib.nodes.generator.Generator
 import io.hamal.lib.typesystem.TypeNew
@@ -16,7 +17,7 @@ object GeneratorInvoked : Generator {
     override val inputTypes: List<TypeNew> get() = listOf(TypeString)
     override val outputTypes: List<TypeNew> get() = listOf()
 
-    override fun toCode(node: Node): String {
+    override fun toCode(node: Node, controls: List<Control>): String {
         return """
             test = require_plugin('test')
             test.invoked()
@@ -35,12 +36,13 @@ internal class InvokedTest : AbstractIntegrationTest() {
                 initValue = HotString("Hamal Rocks"),
                 graph = NodesGraph(
                     nodes = listOf(
-                        node(1, "INIT", listOf(), listOf(PortOutput(PortId(20), TypeString))),
-                        node(2, "INVOKED", listOf(ControlInputString(nextControlId(), PortInput(PortId(21), TypeString), ValueString("default"))))
+                        node(1, "INIT", listOf(PortOutput(PortId(20), TypeString))),
+                        node(2, "INVOKED")
                     ),
                     connections = listOf(
                         connection(100, 1, 20, 2, 21)
-                    )
+                    ),
+                    controls = listOf(ControlInputString(nextControlId(), NodeId(2), PortInput(PortId(21), TypeString), ValueString("default")))
                 )
             )
         )
@@ -55,14 +57,19 @@ internal class InvokedTest : AbstractIntegrationTest() {
                 initValue = HotString("Hamal Rocks"),
                 graph = NodesGraph(
                     nodes = listOf(
-                        node(1, "INIT", listOf(), listOf(PortOutput(PortId(20), TypeString))),
-                        node(2, "INVOKED", listOf(ControlInputString(nextControlId(), PortInput(PortId(21), TypeString), ValueString("default")))),
-                        node(3, "INVOKED", listOf(ControlInputString(nextControlId(), PortInput(PortId(22), TypeString), ValueString("default"))))
+                        node(1, "INIT", listOf(PortOutput(PortId(20), TypeString))),
+                        node(2, "INVOKED"),
+                        node(3, "INVOKED")
                     ),
                     connections = listOf(
                         connection(100, 1, 20, 2, 21),
                         connection(100, 1, 20, 3, 22),
+                    ),
+                    controls = listOf(
+                        ControlInputString(nextControlId(), NodeId(2), PortInput(PortId(21), TypeString), ValueString("default")),
+                        ControlInputString(nextControlId(), NodeId(3), PortInput(PortId(22), TypeString), ValueString("default"))
                     )
+
                 )
             )
         )

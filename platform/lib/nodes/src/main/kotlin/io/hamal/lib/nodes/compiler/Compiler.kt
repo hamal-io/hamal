@@ -25,8 +25,8 @@ class Compiler(
         val nodes = graph.nodes
 
         for (node in nodes) {
-
-            val inputTypes = node.controls.mapNotNull { control ->
+            val controls = graph.controls.filter { it.nodeId == node.id }
+            val inputTypes = controls.mapNotNull { control ->
                 if (control is ControlInput) {
                     control.port.inputType
                 } else {
@@ -43,7 +43,10 @@ class Compiler(
 
             builder.append("""function n_${node.id.value.value.toString(16)}(${args})""")
             builder.append("\n")
-            builder.append(generator.toCode(node))
+            builder.append(generator.toCode(node, controls.filter { it.nodeId == node.id
+
+
+            }))
             builder.append("\n")
             builder.append("""end""")
             builder.append("\n")
@@ -74,9 +77,9 @@ class Compiler(
             } else {
 
                 val connection = connections.first()
-
-                if (inputNode.controls.any { it.type == ControlType.Invoke }) {
-                    val controls = inputNode.controls.filterNot { it.type == ControlType.Invoke }
+                val controls = graph.controls.filter { it.nodeId == inputNodeId }
+                if (controls.any { it.type == ControlType.Invoke }) {
+                    val controls = controls.filterNot { it.type == ControlType.Invoke }
 
                     if (controls.size == 1) {
                         var control = controls.first()
@@ -114,7 +117,6 @@ class Compiler(
                     }
 
                 } else {
-                    val controls = inputNode.controls
 
                     if (controls.size == 1) {
                         val control = controls.first()

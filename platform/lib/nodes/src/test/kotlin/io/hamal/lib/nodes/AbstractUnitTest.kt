@@ -1,7 +1,6 @@
 package io.hamal.lib.nodes
 
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.nodes.control.Control
 import io.hamal.lib.nodes.control.ControlId
 
 
@@ -10,7 +9,6 @@ internal abstract class AbstractUnitTest {
     fun node(
         id: Long,
         type: String,
-        controls: List<Control>,
         outputs: List<PortOutput> = listOf(),
         title: NodeTitle = NodeTitle("Title of ${id.toString(16)}"),
         position: Position = Position(0, 0),
@@ -22,7 +20,6 @@ internal abstract class AbstractUnitTest {
             title = title,
             position = position,
             size = size,
-            controls = controls,
             outputs = outputs
         )
     }
