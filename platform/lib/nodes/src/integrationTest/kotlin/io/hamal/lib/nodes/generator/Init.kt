@@ -28,22 +28,12 @@ internal class InitTest : AbstractIntegrationTest() {
                 initValue = HotString("Hamal Rocks"),
                 graph = NodesGraph(
                     nodes = listOf(
+                        node(1, "INIT", listOf(ControlInit(nextControlId())), listOf(PortOutput(PortId(20), TypeString))),
                         node(
-                            id = 1,
-                            type = "INIT",
-                            controls = listOf(ControlInit()),
-                            outputs = listOf(PortOutput(PortId(20), TypeString))
-                        ),
-                        node(
-                            id = 2,
-                            type = "CAPTURE",
-                            controls = listOf(
-                                ControlInputString(
-                                    PortInput(PortId(21), TypeString),
-                                    defaultValue = ValueString("default string")
-                                )
-                            ),
-                            outputs = listOf(PortOutput(PortId(22), TypeString))
+                            2,
+                            "CAPTURE",
+                            listOf(ControlInputString(nextControlId(), PortInput(PortId(21), TypeString), ValueString("default string"))),
+                            listOf(PortOutput(PortId(22), TypeString))
                         )
                     ),
                     connections = listOf(
@@ -68,22 +58,15 @@ internal class InitTest : AbstractIntegrationTest() {
                 initValue = HotString("nyanNYANnyanNyan"),
                 graph = NodesGraph(
                     nodes = listOf(
+                        node(1, "INIT", listOf(ControlInit(nextControlId(), selector = "WILL_NOT_FIND_ANYTHING")), listOf(PortOutput(PortId(20), TypeString))),
                         node(
-                            id = 1,
-                            type = "INIT",
-                            controls = listOf(ControlInit(selector = "WILL_NOT_FIND_ANYTHING")),
-                            outputs = listOf(PortOutput(PortId(20), TypeString))
-                        ),
-                        node(
-                            id = 2,
-                            type = "INVOKED",
-                            controls = listOf(
+                            2, "INVOKED", listOf(
                                 ControlInputString(
+                                    nextControlId(),
                                     PortInput(PortId(21), TypeString),
                                     defaultValue = ValueString("default string")
                                 )
-                            ),
-                            outputs = listOf()
+                            ), listOf()
                         )
                     ),
                     connections = listOf(
@@ -108,22 +91,16 @@ internal class InitTest : AbstractIntegrationTest() {
                 initValue = HotNull,
                 graph = NodesGraph(
                     nodes = listOf(
+                        node(1, "INIT", listOf(ControlInit(nextControlId())), listOf(PortOutput(PortId(20), TypeString))),
                         node(
-                            id = 1,
-                            type = "INIT",
-                            controls = listOf(ControlInit()),
-                            outputs = listOf(PortOutput(PortId(20), TypeString))
-                        ),
-                        node(
-                            id = 2,
-                            type = "INVOKED",
-                            controls = listOf(
+                            2, "INVOKED", listOf(
                                 ControlInputString(
+                                    nextControlId(),
                                     PortInput(PortId(21), TypeString),
                                     defaultValue = ValueString("default string")
                                 )
                             ),
-                            outputs = listOf()
+                            listOf()
                         )
                     ),
                     connections = listOf(
@@ -143,22 +120,11 @@ internal class InitTest : AbstractIntegrationTest() {
                 initValue = HotString("Hamal Rocks"),
                 graph = NodesGraph(
                     nodes = listOf(
+                        node(1, "INIT", listOf(), listOf(PortOutput(PortId(20), TypeString))),
                         node(
-                            id = 1,
-                            type = "INIT",
-                            controls = listOf(),
-                            outputs = listOf(PortOutput(PortId(20), TypeString))
-                        ),
-                        node(
-                            id = 2,
-                            type = "CAPTURE",
-                            controls = listOf(
-                                ControlInputString(
-                                    PortInput(PortId(21), TypeString),
-                                    defaultValue = ValueString("default string")
-                                )
-                            ),
-                            outputs = listOf(PortOutput(PortId(22), TypeString))
+                            2, "CAPTURE", listOf(
+                                ControlInputString(nextControlId(), PortInput(PortId(21), TypeString), ValueString("default string"))
+                            ), listOf(PortOutput(PortId(22), TypeString))
                         )
                     ),
                     connections = listOf(
@@ -179,22 +145,12 @@ internal class InitTest : AbstractIntegrationTest() {
                 initValue = HotNumber(13.37),
                 graph = NodesGraph(
                     nodes = listOf(
+                        node(1, "INIT", listOf(), listOf(PortOutput(PortId(20), TypeNumber))),
                         node(
-                            id = 1,
-                            type = "INIT",
-                            controls = listOf(),
-                            outputs = listOf(PortOutput(PortId(20), TypeNumber))
-                        ),
-                        node(
-                            id = 2,
-                            type = "CAPTURE",
-                            controls = listOf(
-                                ControlInputNumber(
-                                    PortInput(PortId(21), TypeNumber),
-                                    defaultValue = ValueNumber(0.213)
-                                )
-                            ),
-                            outputs = listOf(PortOutput(PortId(22), TypeDecimal))
+                            2,
+                            "CAPTURE",
+                            listOf(ControlInputNumber(nextControlId(), PortInput(PortId(21), TypeNumber), ValueNumber(0.213))),
+                            listOf(PortOutput(PortId(22), TypeDecimal))
                         )
                     ),
                     connections = listOf(

@@ -15,6 +15,7 @@ interface ControlExtensionInput : ControlExtension {
 }
 
 data class ControlInputBoolean(
+    override val id: ControlId,
     override val port: PortInput,
     val defaultValue: ValueBoolean
 ) : ControlInput {
@@ -22,6 +23,7 @@ data class ControlInputBoolean(
 }
 
 data class ControlInputNumber(
+    override val id: ControlId,
     override val port: PortInput,
     val defaultValue: ValueNumber
 ) : ControlInput {
@@ -29,6 +31,7 @@ data class ControlInputNumber(
 }
 
 data class ControlInputString(
+    override val id: ControlId,
     override val port: PortInput,
     val defaultValue: ValueString
 ) : ControlInput {

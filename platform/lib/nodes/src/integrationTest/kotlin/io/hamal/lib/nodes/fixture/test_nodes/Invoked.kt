@@ -36,7 +36,7 @@ internal class InvokedTest : AbstractIntegrationTest() {
                 graph = NodesGraph(
                     nodes = listOf(
                         node(1, "INIT", listOf(), listOf(PortOutput(PortId(20), TypeString))),
-                        node(2, "INVOKED", listOf(ControlInputString(PortInput(PortId(21), TypeString), ValueString("default"))))
+                        node(2, "INVOKED", listOf(ControlInputString(nextControlId(), PortInput(PortId(21), TypeString), ValueString("default"))))
                     ),
                     connections = listOf(
                         connection(100, 1, 20, 2, 21)
@@ -56,8 +56,8 @@ internal class InvokedTest : AbstractIntegrationTest() {
                 graph = NodesGraph(
                     nodes = listOf(
                         node(1, "INIT", listOf(), listOf(PortOutput(PortId(20), TypeString))),
-                        node(2, "INVOKED", listOf(ControlInputString(PortInput(PortId(21), TypeString), ValueString("default")))),
-                        node(3, "INVOKED", listOf(ControlInputString(PortInput(PortId(22), TypeString), ValueString("default"))))
+                        node(2, "INVOKED", listOf(ControlInputString(nextControlId(), PortInput(PortId(21), TypeString), ValueString("default")))),
+                        node(3, "INVOKED", listOf(ControlInputString(nextControlId(), PortInput(PortId(22), TypeString), ValueString("default"))))
                     ),
                     connections = listOf(
                         connection(100, 1, 20, 2, 21),

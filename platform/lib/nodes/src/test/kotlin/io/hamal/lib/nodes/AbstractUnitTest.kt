@@ -2,6 +2,7 @@ package io.hamal.lib.nodes
 
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.nodes.control.Control
+import io.hamal.lib.nodes.control.ControlId
 
 
 internal abstract class AbstractUnitTest {
@@ -42,4 +43,14 @@ internal abstract class AbstractUnitTest {
         )
     }
 
+    protected val nextControlId = NextControlId
+
+    object NextControlId {
+
+        operator fun invoke(): ControlId {
+            return ControlId(counter++)
+        }
+
+        private var counter: Int = 0
+    }
 }

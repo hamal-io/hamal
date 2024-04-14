@@ -23,7 +23,7 @@ internal object ComputationNodesGraphTest : AbstractUnitTest() {
             NodesGraph(
                 nodes = listOf(
                     node(1, "INIT", listOf(), listOf(PortOutput(PortId(20), TypeString))),
-                    node(2, "INVOKED", listOf(ControlInputString(PortInput(PortId(21), TypeString), ValueString("default string"))))
+                    node(2, "INVOKED", listOf(ControlInputString(nextControlId(), PortInput(PortId(21), TypeString), ValueString("default string"))))
                 ),
                 connections = listOf(
                     connection(100, 1, 20, 2, 21)
@@ -48,8 +48,8 @@ internal object ComputationNodesGraphTest : AbstractUnitTest() {
             graph = NodesGraph(
                 nodes = listOf(
                     node(1, "A", listOf(), listOf(PortOutput(PortId(20), TypeString))),
-                    node(2, "B", listOf(ControlInputString(PortInput(PortId(21), TypeString), ValueString("default")))),
-                    node(3, "C", listOf(ControlInputString(PortInput(PortId(22), TypeString), ValueString("default"))))
+                    node(2, "B", listOf(ControlInputString(nextControlId(), PortInput(PortId(21), TypeString), ValueString("default")))),
+                    node(3, "C", listOf(ControlInputString(nextControlId(), PortInput(PortId(22), TypeString), ValueString("default"))))
                 ),
                 connections = listOf(
                     connection(100, 1, 20, 2, 21),
@@ -75,8 +75,8 @@ internal object ComputationNodesGraphTest : AbstractUnitTest() {
             graph = NodesGraph(
                 nodes = listOf(
                     node(1, "INIT", listOf(), listOf(PortOutput(PortId(20), TypeString))),
-                    node(2, "INVOKED", listOf(ControlInputString(PortInput(PortId(21), TypeString), ValueString("default")))),
-                    node(3, "INVOKED", listOf(ControlInputString(PortInput(PortId(22), TypeString), ValueString("default"))))
+                    node(2, "INVOKED", listOf(ControlInputString(nextControlId(), PortInput(PortId(21), TypeString), ValueString("default")))),
+                    node(3, "INVOKED", listOf(ControlInputString(nextControlId(), PortInput(PortId(22), TypeString), ValueString("default"))))
                 ),
                 connections = listOf(
                     connection(100, 1, 20, 3, 22),

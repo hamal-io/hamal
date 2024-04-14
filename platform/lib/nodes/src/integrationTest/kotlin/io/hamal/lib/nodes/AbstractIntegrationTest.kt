@@ -19,6 +19,7 @@ import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.type.*
 import io.hamal.lib.nodes.control.Control
+import io.hamal.lib.nodes.control.ControlId
 import io.hamal.lib.nodes.fixture.test_nodes.GeneratorCapture
 import io.hamal.lib.nodes.fixture.test_nodes.GeneratorInvoked
 import io.hamal.lib.nodes.generator.GeneratorRegistry
@@ -166,4 +167,15 @@ internal abstract class AbstractIntegrationTest {
 
     protected val testCaptor1 = TestCaptor1()
     protected val testInvoked = TestInvoked()
+
+    protected val nextControlId = NextControlId
+
+    object NextControlId {
+
+        operator fun invoke(): ControlId {
+            return ControlId(counter++)
+        }
+
+        private var counter: Int = 0
+    }
 }
