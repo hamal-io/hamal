@@ -1,5 +1,6 @@
 package io.hamal.lib.nodes
 
+import io.hamal.lib.nodes.compiler.Compiler
 import io.hamal.lib.nodes.control.ControlConstantString
 import io.hamal.lib.nodes.control.ControlInputString
 import io.hamal.lib.nodes.generator.GeneratorRegistry
@@ -45,7 +46,7 @@ fun main() {
         )
     )
 
-    val graph = Graph(nodes, connections)
+    val graph = NodesGraph(nodes, connections)
     println(graph)
 
     val code = Compiler(GeneratorRegistry(listOf())).compile(graph)

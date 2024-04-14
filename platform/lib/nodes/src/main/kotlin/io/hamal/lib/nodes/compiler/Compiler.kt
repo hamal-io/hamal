@@ -1,5 +1,9 @@
-package io.hamal.lib.nodes
+package io.hamal.lib.nodes.compiler
 
+import io.hamal.lib.nodes.NodesGraph
+import io.hamal.lib.nodes.NodeId
+import io.hamal.lib.nodes.NodeType
+import io.hamal.lib.nodes.PortId
 import io.hamal.lib.nodes.control.ControlInput
 import io.hamal.lib.nodes.control.ControlInputString
 import io.hamal.lib.nodes.generator.Generator
@@ -10,7 +14,7 @@ class Compiler(
     private val generatorRegistry: GeneratorRegistry
 ) {
 
-    fun compile(graph: Graph): String {
+    fun compile(graph: NodesGraph): String {
         val code = StringBuilder()
 
         val nodeCodeGenerators = mutableMapOf<NodeId, Generator>()

@@ -145,7 +145,7 @@ internal abstract class AbstractNodesTest {
 
     fun unitOfWork(
         initValue: HotNode<*>,
-        graph: Graph
+        graph: NodesGraph
     ) = UnitOfWork(
         id = ExecId(1234),
         execToken = ExecToken("ExecToken"),

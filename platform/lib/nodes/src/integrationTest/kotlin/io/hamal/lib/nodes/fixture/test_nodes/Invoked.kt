@@ -9,7 +9,6 @@ import io.hamal.lib.typesystem.TypeString
 import io.hamal.lib.typesystem.value.ValueString
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 object GeneratorInvoked : Generator {
@@ -34,15 +33,10 @@ internal class InvokedTest : AbstractNodesTest() {
         createTestRunner().run(
             unitOfWork(
                 initValue = HotString("Hamal Rocks"),
-                graph = Graph(
+                graph = NodesGraph(
                     nodes = listOf(
-                        node(
-                            id = 1,
-                            type = "INIT",
-                            controls = listOf(),
-                            outputs = listOf(PortOutput(PortId(20), TypeString))
-                        ),
-                        node(id = 2, type = "INVOKED", listOf(ControlInputString(PortInput(PortId(21), TypeString), ValueString("default"))))
+                        node(1, "INIT", listOf(), listOf(PortOutput(PortId(20), TypeString))),
+                        node(2, "INVOKED", listOf(ControlInputString(PortInput(PortId(21), TypeString), ValueString("default"))))
                     ),
                     connections = listOf(
                         connection(100, 1, 20, 2, 21)
@@ -55,21 +49,15 @@ internal class InvokedTest : AbstractNodesTest() {
     }
 
     @Test
-    @Disabled
     fun `Nodes invokes multiple nodes`() {
         createTestRunner().run(
             unitOfWork(
                 initValue = HotString("Hamal Rocks"),
-                graph = Graph(
+                graph = NodesGraph(
                     nodes = listOf(
-                        node(
-                            id = 1,
-                            type = "INIT",
-                            controls = listOf(),
-                            outputs = listOf(PortOutput(PortId(20), TypeString))
-                        ),
-                        node(id = 2, type = "INVOKED", listOf(ControlInputString(PortInput(PortId(21), TypeString), ValueString("default")))),
-                        node(id = 3, type = "INVOKED", listOf(ControlInputString(PortInput(PortId(22), TypeString), ValueString("default"))))
+                        node(1, "INIT", listOf(), listOf(PortOutput(PortId(20), TypeString))),
+                        node(2, "INVOKED", listOf(ControlInputString(PortInput(PortId(21), TypeString), ValueString("default")))),
+                        node(3, "INVOKED", listOf(ControlInputString(PortInput(PortId(22), TypeString), ValueString("default"))))
                     ),
                     connections = listOf(
                         connection(100, 1, 20, 2, 21),

@@ -26,7 +26,7 @@ internal class InitTest : AbstractNodesTest() {
         createTestRunner().run(
             unitOfWork(
                 initValue = HotString("Hamal Rocks"),
-                graph = Graph(
+                graph = NodesGraph(
                     nodes = listOf(
                         node(
                             id = 1,
@@ -66,7 +66,7 @@ internal class InitTest : AbstractNodesTest() {
         ).run(
             unitOfWork(
                 initValue = HotString("nyanNYANnyanNyan"),
-                graph = Graph(
+                graph = NodesGraph(
                     nodes = listOf(
                         node(
                             id = 1,
@@ -106,7 +106,7 @@ internal class InitTest : AbstractNodesTest() {
         ).run(
             unitOfWork(
                 initValue = HotNull,
-                graph = Graph(
+                graph = NodesGraph(
                     nodes = listOf(
                         node(
                             id = 1,
@@ -141,7 +141,7 @@ internal class InitTest : AbstractNodesTest() {
         createTestRunner().run(
             unitOfWork(
                 initValue = HotString("Hamal Rocks"),
-                graph = Graph(
+                graph = NodesGraph(
                     nodes = listOf(
                         node(
                             id = 1,
@@ -177,7 +177,7 @@ internal class InitTest : AbstractNodesTest() {
         createTestRunner().run(
             unitOfWork(
                 initValue = HotNumber(13.37),
-                graph = Graph(
+                graph = NodesGraph(
                     nodes = listOf(
                         node(
                             id = 1,
