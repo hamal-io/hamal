@@ -9,17 +9,17 @@ sealed interface ControlConstant : Control
 data class ControlConstantBoolean(
     val value: ValueBoolean
 ) : ControlConstant {
-    override val type: ControlType get() = ControlType.ConstantBoolean
+    override val type: ControlType = ControlType.ConstantBoolean
 }
 
 data class ControlConstantDecimal(
     val value: ValueDecimal
 ) : ControlConstant {
-    override val type: ControlType get() = ControlType.ConstantDecimal
+    override val type: ControlType = ControlType.ConstantDecimal
 }
 
 data class ControlConstantString(
     val value: ValueString
 ) : ControlConstant {
-    override val type: ControlType get() = ControlType.ConstantString
+    override val type: ControlType = ControlType.ConstantString
 }

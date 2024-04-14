@@ -39,6 +39,6 @@ class GeneratorRegistry(generators: List<Generator>) {
 
 val defaultGeneratorRegistry = GeneratorRegistry(
     listOf(
-        GeneratorInit
+        GeneratorInit.String
     )
 )

@@ -6,7 +6,8 @@ import {PageHeader} from "@/components/page-header.tsx";
 import {useUiState} from "@/hook/ui-state.ts";
 
 const AdhocPage = () => {
-    return (<NodesAdhocPage/>)
+    return <LuaAdhocPage/>
+    // return (<NodesAdhocPage/>)
 }
 
 export default AdhocPage;

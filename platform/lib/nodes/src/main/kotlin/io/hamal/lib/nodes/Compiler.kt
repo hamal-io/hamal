@@ -66,11 +66,17 @@ class Compiler(
 //            }
 //        }
 
+        val visitedNodes = mutableListOf<NodeId>()
+
         // FIXME find Init node and go from there
+        val initNode = nodes.find { it.type == NodeType("INIT") } ?: throw IllegalArgumentException("No INIT node found")
+
+        val nextConnections = connections.filter { it.outputNode.id == initNode.id }
+
 
         // FIXME breath first
 //        for (connection in connections) {
-        val connection = connections[0]
+        val connection = nextConnections.first()
         val outputNode = nodes.find { it.id == connection.outputNode.id }!!
         val outputGenerator = nodeCodeGenerators[connection.outputNode.id]!!
 
@@ -126,7 +132,7 @@ class Compiler(
 //        }
 
 
-        println(code.toString())
+//        println(code.toString())
 
         return code.toString()
     }

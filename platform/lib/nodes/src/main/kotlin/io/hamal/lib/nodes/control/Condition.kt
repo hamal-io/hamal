@@ -2,5 +2,5 @@ package io.hamal.lib.nodes.control
 
 class ControlCondition(
 ) : Control {
-    override val type: ControlType get() = ControlType.Condition
+    override val type: ControlType = ControlType.Condition
 }

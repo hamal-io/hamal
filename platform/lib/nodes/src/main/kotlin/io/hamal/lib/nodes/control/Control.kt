@@ -18,7 +18,7 @@ enum class ControlType {
 
     Init,
     InputBoolean,
-    InputDecimal,
+    InputNumber,
     InputString,
 
     String
@@ -35,7 +35,7 @@ sealed interface Control {
             typeOfSrc: java.lang.reflect.Type,
             context: JsonSerializationContext
         ): JsonElement {
-            TODO("Not yet implemented")
+            return context.serialize(src)
         }
 
         override fun deserialize(
@@ -52,7 +52,7 @@ sealed interface Control {
                 ControlType.ConstantString -> context.deserialize(json, ControlConstantString::class.java)
                 ControlType.Init -> context.deserialize(json, ControlInit::class.java)
                 ControlType.InputBoolean -> context.deserialize(json, ControlInputBoolean::class.java)
-                ControlType.InputDecimal -> context.deserialize(json, ControlInputDecimal::class.java)
+                ControlType.InputNumber -> context.deserialize(json, ControlInputNumber::class.java)
                 ControlType.InputString -> context.deserialize(json, ControlInputString::class.java)
                 ControlType.String -> context.deserialize(json, ControlString::class.java)
             }
@@ -89,7 +89,7 @@ sealed interface ControlExtension {
                 ControlType.ConstantString -> context.deserialize(json, ControlConstantString::class.java)
                 ControlType.Init -> context.deserialize(json, ControlInit::class.java)
                 ControlType.InputBoolean -> context.deserialize(json, ControlInputBoolean::class.java)
-                ControlType.InputDecimal -> context.deserialize(json, ControlInputDecimal::class.java)
+                ControlType.InputNumber -> context.deserialize(json, ControlInputNumber::class.java)
                 ControlType.InputString -> context.deserialize(json, ControlInputString::class.java)
                 ControlType.String -> context.deserialize(json, ControlString::class.java)
             }
