@@ -11,7 +11,7 @@ const RecipeCard: FC<Props> = ({recipe}) => {
     const navigate = useNavigate()
 
     function handleClick() {
-        //navigate(`/recipes/${recipe.id}`)
+        navigate(`/recipes/${recipe.id}`)
     }
 
 
