@@ -1,6 +1,5 @@
 import {PageHeader} from "@/components/page-header.tsx";
 import React, {useState} from "react";
-import TagFilter from "@/pages/app/recipe-list/components/tag-filter.tsx";
 import {Recipe} from "@/types/recipe.ts";
 import {tags} from "@/pages/app/recipe-list/components/tags.tsx";
 import RecipeCard from "@/pages/app/recipe-list/components/card.tsx";
@@ -23,7 +22,7 @@ const RecipeListPage = () => {
                 <PageHeader actions={[]}/>
                 <section className={"flex flex-col gap-4"}>
                     <div>
-                        <TagFilter/>
+                        {/*  <TagFilter/>*/}
                     </div>
                     <div>
                         {
