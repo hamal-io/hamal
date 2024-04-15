@@ -6,16 +6,38 @@ import {tags} from "@/pages/app/recipe-list/components/tags.tsx";
 import RecipeCard from "@/pages/app/recipe-list/components/card.tsx";
 
 const RecipeListPage = () => {
-    const [recipes, setRecipes] = useState<Recipe[]>(
+    const [recipes] = useState<Recipe[]>(
         [
             {
                 id: "1",
-                name: "Ethereum Telegram Bridge",
+                name: "Ethereum And Telegram",
                 description: "Describe me please",
                 tags: [tags.ethereum, tags.telegram],
+            },
+            {
+                id: "2",
+                name: "Just Ethereum",
+                description: "Describe me please",
+                tags: [tags.ethereum],
+            },
+            {
+                id: "3",
+                name: "Just Telegram",
+                description: "Describe me please",
+                tags: [tags.telegram],
             }
         ]
     )
+
+    const [filtered, setFiltered] = useState(recipes)
+
+    function handleFilter(filters: Set<string>) {
+        if (filters.size === 0) {
+            setFiltered(recipes)
+        } else {
+            setFiltered(recipes.filter(rec => rec.tags.some(tag => filters.has(tag.name))))
+        }
+    }
 
     return (
         <main className="flex justify-center w-screen min-h-screen ">
@@ -23,14 +45,16 @@ const RecipeListPage = () => {
                 <PageHeader actions={[]}/>
                 <section className={"flex flex-col gap-4"}>
                     <div>
-                        <TagFilter/>
+                        <TagFilter onChange={handleFilter}/>
                     </div>
                     <div>
-                        {
-                            recipes.map(recipe => (
-                                <RecipeCard recipe={recipe}/>
-                            ))
-                        }
+                        <ol className={"flex flex-col gap-4"}>
+                            {filtered.map(recipe => (
+                                <li key={recipe.id}>
+                                        <RecipeCard recipe={recipe}/>
+                                    </li>
+                            ))}
+                        </ol>
                     </div>
                 </section>
             </div>

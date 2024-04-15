@@ -4,20 +4,40 @@ import styles from "./tag.module.css"
 import {tags} from "@/pages/app/recipe-list/components/tags.tsx";
 import {Tag} from "@/types/recipe.ts";
 
-const TagFilter = () => {
-    const [selected, setSelected] = useState([])
+type Props = {
+    onChange: (tags: Set<string>) => void
+}
+const TagFilter: FC<Props> = ({onChange}) => {
+    const [selectedTags, setSelectedTags] = useState<Set<string>>(null)
 
-    function handleSelect(id: number) {
-        setSelected(prevState => [...prevState, id])
+    useEffect(() => {
+        const set = new Set<string>();
+        Object.entries(tags).map(([, val]) => {
+            set.add(val.name)
+        })
+        setSelectedTags(set);
+    }, []);
+
+    function handleSelect(name: string) {
+        const newSet = new Set(selectedTags)
+        if (selectedTags.has(name)) {
+            newSet.delete(name)
+        } else {
+            newSet.add(name)
+        }
+        setSelectedTags(newSet)
+        onChange(newSet)
     }
 
     return (
-        <div className={styles.box}>
-            {
-                Object.entries(tags).map(([, tag]) => (
-                    <TagCard key={tag.id} tag={tag} onSelect={handleSelect}></TagCard>
-                ))
-            }
+        <div>
+            <ol className={styles.box}>
+                {
+                    Object.entries(tags).map(([, tag]) => (
+                        <TagCard key={tag.id} tag={tag} onSelect={handleSelect}></TagCard>
+                    ))
+                }
+            </ol>
         </div>
     )
 }
@@ -26,7 +46,7 @@ export default TagFilter
 
 type TagCardProps = {
     tag: Tag
-    onSelect: (id: number) => void
+    onSelect: (id: string) => void
 }
 const TagCard: FC<TagCardProps> = ({tag, onSelect}) => {
     const [selected, setSelected] = useState(false)
@@ -43,7 +63,7 @@ const TagCard: FC<TagCardProps> = ({tag, onSelect}) => {
 
     function handleClick() {
         setSelected(!selected)
-        onSelect(tag.id)
+        onSelect(tag.name)
     }
 
     return (

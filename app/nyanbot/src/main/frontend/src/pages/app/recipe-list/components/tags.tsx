@@ -13,5 +13,3 @@ export const tags = {
         icon: Telegram
     }
 }
-
-
