@@ -22,6 +22,7 @@ export const FlowCard: FC<Props> = ({flow}) => {
         const status = active === false ? 'activate' : 'deactivate'
         const abortController = new AbortController()
         setFlowStatus(flow.id, status, abortController)
+        return (() => abortController.abort())
     }
 
     useEffect(() => {
