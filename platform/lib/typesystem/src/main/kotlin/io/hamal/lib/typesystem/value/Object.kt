@@ -3,10 +3,10 @@ package io.hamal.lib.typesystem.value
 import io.hamal.lib.typesystem.Field
 import io.hamal.lib.typesystem.Field.Kind
 import io.hamal.lib.typesystem.Property
-import io.hamal.lib.typesystem.Type
+import io.hamal.lib.typesystem.TypeObject
 
 data class ValueObject(
-    val type: Type,
+    val type: TypeObject,
     val properties: List<Property>,
 ) : Value {
     override val kind get() = Kind.Object
@@ -18,7 +18,7 @@ data class ValueObject(
     private val valuesByIdentifier = properties.associateBy { it.identifier }.mapValues { it.value.value }
 }
 
-fun <T : Value> ValueObject.forType(type: Type, block: () -> T) =
+fun <T : Value> ValueObject.forType(type: TypeObject, block: () -> T) =
     if (!this.implements(type.fields)) throw NotImplementedError()
     else block()
 

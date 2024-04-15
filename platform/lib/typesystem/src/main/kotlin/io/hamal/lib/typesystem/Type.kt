@@ -3,7 +3,6 @@ package io.hamal.lib.typesystem
 import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.domain.ValueObjectString
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.typesystem.Field.Kind.Object
 import io.hamal.lib.typesystem.value.ValueList
 import io.hamal.lib.typesystem.value.ValueObject
 
@@ -14,26 +13,58 @@ class TypeId(override val value: SnowflakeId) : ValueObjectId() {
 
 class TypeIdentifier(override val value: String) : ValueObjectString()
 
-abstract class TypeNew {
+sealed class Type {
     abstract val identifier: String // FIXME TypeIdentifier
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
-        other as TypeNew
+        other as Type
         return identifier == other.identifier
     }
 
     override fun hashCode(): Int {
         return identifier.hashCode()
     }
-
 }
 
-data class Type(
-    val identifier: String,
-    val fields: Set<Field>,
-) {
+data object TypeAny : Type() {
+    override val identifier = "any"
+}
+
+data object TypeDecimal : Type() {
+    override val identifier = "decimal"
+}
+
+
+sealed class TypeList : Type() {
+    abstract val valueType: Type
+
+    operator fun invoke(vararg any: Any): ValueList {
+        return ValueList(any.map { v -> Property.mapTypeToValue(valueType, v) }, valueType)
+    }
+}
+
+data object TypeListNumber : TypeList() {
+    override val identifier: String = "list_number"
+    override val valueType: Type = TypeNumber
+}
+
+data class TypeListObject(
+    override val identifier: String,
+    override val valueType: TypeObject
+) : TypeList()
+
+data object TypeNil : Type() {
+    override val identifier = "nil"
+}
+
+data object TypeNumber : Type() {
+    override val identifier = "number"
+}
+
+// FIXME objects are equal if they have the same fields
+data class TypeObject(override val identifier: String, val fields: Set<Field>) : Type() {
     constructor(identifier: String, vararg fields: Field) : this(identifier, fields.toSet())
 
     init {
@@ -56,41 +87,7 @@ data class Type(
     }
 }
 
-data object TypeAny : TypeNew() {
-    override val identifier = "any"
-}
-
-data object TypeDecimal : TypeNew() {
-    override val identifier = "decimal"
-}
-
-data object TypeNumber : TypeNew() {
-    override val identifier = "number"
-}
-
-data object TypeString : TypeNew() {
-    override val identifier = "string"
-}
-
-
-data class TypeList(
-    override val identifier: String,
-    val field: Field
-) : TypeNew() {
-    constructor(identifier: String, kind: Field.Kind, valueType: Type? = null) : this(identifier, Field(kind, "value", valueType))
-    constructor(identifier: String, valueType: Type) : this(identifier, Field(Object, "value", valueType))
-
-    operator fun invoke(vararg any: Any): ValueList {
-        return ValueList(
-            any.map { v ->
-                Property.mapTypeToValue(field.valueType!!, v)
-            }, field.valueType!!
-        )
-    }
-}
-
-
-infix fun Type.extends(superclass: Type): Type {
+infix fun TypeObject.extends(superclass: TypeObject): TypeObject {
     val fieldClashes = fieldsByIdentifier.keys.intersect(superclass.fieldsByIdentifier.keys)
 
     if (fieldClashes.any()) {
@@ -99,9 +96,18 @@ infix fun Type.extends(superclass: Type): Type {
         })
     }
 
-    return Type(identifier, superclass.fields + fields)
+    return TypeObject(identifier, superclass.fields + fields)
 }
 
-infix fun Type.extends(superclasses: Iterable<Type>) =
+infix fun TypeObject.extends(superclasses: Iterable<TypeObject>) =
     (listOf(this) + superclasses).reduceRight { acc, that -> that extends acc }
+
+
+data object TypeString : Type() {
+    override val identifier = "string"
+}
+
+
+
+
 

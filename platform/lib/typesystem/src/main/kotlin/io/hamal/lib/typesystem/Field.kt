@@ -5,7 +5,7 @@ data class Field(
     val kind: Kind,
     val identifier: String,
     // for container
-    val valueType: Type? = null
+    val valueType: TypeObject? = null
     // nullable?
     // defaultValue?
 ) {

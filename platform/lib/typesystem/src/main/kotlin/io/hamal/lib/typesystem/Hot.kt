@@ -11,12 +11,12 @@ import java.lang.reflect.Type
 
 object TypesystemHotModule : HotModule() {
     init {
-        this[TypeNew::class] = object : JsonAdapter<TypeNew> {
-            override fun serialize(src: TypeNew?, typeOfSrc: Type?, context: JsonSerializationContext?): JsonElement {
+        this[io.hamal.lib.typesystem.Type::class] = object : JsonAdapter<io.hamal.lib.typesystem.Type> {
+            override fun serialize(src: io.hamal.lib.typesystem.Type?, typeOfSrc: Type?, context: JsonSerializationContext?): JsonElement {
                 return JsonPrimitive("TypeString")
             }
 
-            override fun deserialize(json: JsonElement?, typeOfT: Type?, context: JsonDeserializationContext?): TypeNew {
+            override fun deserialize(json: JsonElement?, typeOfT: Type?, context: JsonDeserializationContext?): io.hamal.lib.typesystem.Type {
                 return TypeString
             }
         }

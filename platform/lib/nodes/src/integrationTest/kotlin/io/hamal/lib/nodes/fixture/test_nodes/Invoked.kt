@@ -4,7 +4,7 @@ import io.hamal.lib.common.hot.HotString
 import io.hamal.lib.nodes.*
 import io.hamal.lib.nodes.control.Control
 import io.hamal.lib.nodes.generator.Generator
-import io.hamal.lib.typesystem.TypeNew
+import io.hamal.lib.typesystem.Type
 import io.hamal.lib.typesystem.TypeString
 import io.hamal.lib.typesystem.value.ValueString
 import org.hamcrest.CoreMatchers.equalTo
@@ -13,8 +13,8 @@ import org.junit.jupiter.api.Test
 
 object GeneratorInvoked : Generator {
     override val type: NodeType get() = NodeType("INVOKED")
-    override val inputTypes: List<TypeNew> get() = listOf(TypeString)
-    override val outputTypes: List<TypeNew> get() = listOf()
+    override val inputTypes: List<Type> get() = listOf(TypeString)
+    override val outputTypes: List<Type> get() = listOf()
 
     override fun toCode(node: Node, controls: List<Control>): String {
         return """

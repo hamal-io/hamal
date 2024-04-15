@@ -1,15 +1,15 @@
 package io.hamal.lib.nodes
 
 import io.hamal.lib.nodes.control.ControlExtension
-import io.hamal.lib.typesystem.TypeNew
+import io.hamal.lib.typesystem.Type
 
 
 data class PortInputExtension(
-    val inputType: TypeNew
+    val inputType: Type
 )
 
 data class PortOutputExtension(
-    val outputType: TypeNew
+    val outputType: Type
 )
 
 data class NodeExtension(

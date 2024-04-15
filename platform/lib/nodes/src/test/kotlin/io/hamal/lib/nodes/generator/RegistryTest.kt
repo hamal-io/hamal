@@ -4,7 +4,7 @@ import io.hamal.lib.nodes.Node
 import io.hamal.lib.nodes.NodeType
 import io.hamal.lib.nodes.control.Control
 import io.hamal.lib.typesystem.TypeDecimal
-import io.hamal.lib.typesystem.TypeNew
+import io.hamal.lib.typesystem.Type
 import io.hamal.lib.typesystem.TypeNumber
 import io.hamal.lib.typesystem.TypeString
 import org.hamcrest.CoreMatchers.equalTo
@@ -61,16 +61,16 @@ internal class GeneratorRegistryTest {
 
     private val someGeneratorOne = object : Generator {
         override val type: NodeType get() = NodeType("SOME_TYPE")
-        override val inputTypes: List<TypeNew> = listOf(TypeString)
-        override val outputTypes: List<TypeNew> get() = listOf()
+        override val inputTypes: List<Type> = listOf(TypeString)
+        override val outputTypes: List<Type> get() = listOf()
         override fun toCode(node: Node, controls: List<Control>): String {
             TODO("Not yet implemented")
         }
     }
     private val someGeneratorTwo = object : Generator {
         override val type: NodeType get() = NodeType("SOME_TYPE")
-        override val inputTypes: List<TypeNew> = listOf(TypeNumber)
-        override val outputTypes: List<TypeNew> get() = listOf()
+        override val inputTypes: List<Type> = listOf(TypeNumber)
+        override val outputTypes: List<Type> get() = listOf()
         override fun toCode(node: Node, controls: List<Control>): String {
             TODO("Not yet implemented")
         }
@@ -78,8 +78,8 @@ internal class GeneratorRegistryTest {
 
     private val anotherGeneratorOne = object : Generator {
         override val type: NodeType get() = NodeType("ANOTHER_TYPE")
-        override val inputTypes: List<TypeNew> = listOf()
-        override val outputTypes: List<TypeNew> get() = listOf(TypeString)
+        override val inputTypes: List<Type> = listOf()
+        override val outputTypes: List<Type> get() = listOf(TypeString)
         override fun toCode(node: Node, controls: List<Control>): String {
             TODO("Not yet implemented")
         }
@@ -87,8 +87,8 @@ internal class GeneratorRegistryTest {
 
     private val anotherGeneratorTwo = object : Generator {
         override val type: NodeType get() = NodeType("ANOTHER_TYPE")
-        override val inputTypes: List<TypeNew> = listOf()
-        override val outputTypes: List<TypeNew> = listOf(TypeDecimal)
+        override val inputTypes: List<Type> = listOf()
+        override val outputTypes: List<Type> = listOf(TypeDecimal)
         override fun toCode(node: Node, controls: List<Control>): String {
             TODO("Not yet implemented")
         }
@@ -96,8 +96,8 @@ internal class GeneratorRegistryTest {
 
     private val noTypeGenerator = object : Generator {
         override val type: NodeType get() = NodeType("NO_TYPE")
-        override val inputTypes: List<TypeNew> = listOf()
-        override val outputTypes: List<TypeNew> = listOf()
+        override val inputTypes: List<Type> = listOf()
+        override val outputTypes: List<Type> = listOf()
         override fun toCode(node: Node, controls: List<Control>): String {
             TODO("Not yet implemented")
         }
@@ -105,8 +105,8 @@ internal class GeneratorRegistryTest {
 
     private val stringPassThroughGenerator = object : Generator {
         override val type: NodeType get() = NodeType("STRING_PASS_THROUGH")
-        override val inputTypes: List<TypeNew> = listOf(TypeString)
-        override val outputTypes: List<TypeNew> = listOf(TypeString)
+        override val inputTypes: List<Type> = listOf(TypeString)
+        override val outputTypes: List<Type> = listOf(TypeString)
         override fun toCode(node: Node, controls: List<Control>): String {
             TODO("Not yet implemented")
         }

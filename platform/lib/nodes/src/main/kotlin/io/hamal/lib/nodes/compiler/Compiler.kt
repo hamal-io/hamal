@@ -6,7 +6,7 @@ import io.hamal.lib.nodes.control.ControlInput
 import io.hamal.lib.nodes.control.ControlType
 import io.hamal.lib.nodes.generator.Generator
 import io.hamal.lib.nodes.generator.GeneratorRegistry
-import io.hamal.lib.typesystem.TypeNew
+import io.hamal.lib.typesystem.Type
 
 class Compiler(
     private val generatorRegistry: GeneratorRegistry
@@ -16,7 +16,7 @@ class Compiler(
         val code = StringBuilder()
 
         val nodeCodeGenerators = mutableMapOf<NodeId, Generator>()
-        val outputPortMapping = mutableMapOf<PortId, Pair<String, TypeNew>>()
+        val outputPortMapping = mutableMapOf<PortId, Pair<String, Type>>()
 
         val nodes = graph.nodes
 

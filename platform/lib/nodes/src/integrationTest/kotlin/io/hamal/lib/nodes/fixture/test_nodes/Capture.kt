@@ -5,7 +5,7 @@ import io.hamal.lib.nodes.NodeType
 import io.hamal.lib.nodes.control.Control
 import io.hamal.lib.nodes.generator.Generator
 import io.hamal.lib.typesystem.TypeDecimal
-import io.hamal.lib.typesystem.TypeNew
+import io.hamal.lib.typesystem.Type
 import io.hamal.lib.typesystem.TypeNumber
 import io.hamal.lib.typesystem.TypeString
 
@@ -14,8 +14,8 @@ interface GeneratorCapture : Generator {
     override val type: NodeType get() = NodeType("CAPTURE")
 
     object String : GeneratorCapture {
-        override val inputTypes: List<TypeNew> get() = listOf(TypeString)
-        override val outputTypes: List<TypeNew> get() = listOf(TypeString)
+        override val inputTypes: List<Type> get() = listOf(TypeString)
+        override val outputTypes: List<Type> get() = listOf(TypeString)
 
         override fun toCode(node: Node, controls: List<Control>): kotlin.String {
             return """
@@ -28,8 +28,8 @@ interface GeneratorCapture : Generator {
     }
 
     object Number : GeneratorCapture {
-        override val inputTypes: List<TypeNew> get() = listOf(TypeNumber)
-        override val outputTypes: List<TypeNew> get() = listOf(TypeNumber)
+        override val inputTypes: List<Type> get() = listOf(TypeNumber)
+        override val outputTypes: List<Type> get() = listOf(TypeNumber)
 
         override fun toCode(node: Node, controls: List<Control>): kotlin.String {
             return """
@@ -42,8 +42,8 @@ interface GeneratorCapture : Generator {
     }
 
     object Decimal : GeneratorCapture {
-        override val inputTypes: List<TypeNew> get() = listOf(TypeDecimal)
-        override val outputTypes: List<TypeNew> get() = listOf(TypeDecimal)
+        override val inputTypes: List<Type> get() = listOf(TypeDecimal)
+        override val outputTypes: List<Type> get() = listOf(TypeDecimal)
 
         override fun toCode(node: Node, controls: List<Control>): kotlin.String {
             return """
