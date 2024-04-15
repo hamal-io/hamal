@@ -27,13 +27,13 @@ internal object ControlInvokeTest : AbstractIntegrationTest() {
                     controls = listOf(
                         ControlInit(nextControlId(), NodeId(1)),
                         ControlInvoke(nextControlId(), NodeId(2), PortId(21)),
-                        ControlTextArea(nextControlId(), NodeId(2), PortInput(PortId(22), TypeString), ValueString("default capture string"))
+                        ControlTextArea(nextControlId(), NodeId(2), portInput(22, TypeString), ValueString("default capture string")),
                     )
                 )
             )
         )
 
-        assertThat(testCaptor1.resultString, equalTo(ValueString("default capture string")))
+        assertThat(testContext.captorOne.resultString, equalTo(ValueString("default capture string")))
     }
 
 }

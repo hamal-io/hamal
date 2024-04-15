@@ -14,7 +14,7 @@ sealed interface GeneratorDecision : Generator {
         override val outputTypes: List<Type> get() = listOf(TypeBoolean, TypeBoolean)
 
         override fun toCode(node: Node, controls: List<Control>): String {
-            TODO("Not yet implemented")
+            return """"""
         }
     }
 }

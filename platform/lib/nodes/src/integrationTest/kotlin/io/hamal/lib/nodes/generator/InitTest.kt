@@ -43,7 +43,7 @@ internal class InitTest : AbstractIntegrationTest() {
             )
         )
 
-        assertThat(testCaptor1.resultString, equalTo(ValueString("Hamal Rocks")))
+        assertThat(testContext.captorOne.resultString, equalTo(ValueString("Hamal Rocks")))
     }
 
     @Test
@@ -66,7 +66,7 @@ internal class InitTest : AbstractIntegrationTest() {
             )
         )
 
-        assertThat(testCaptor1.resultBoolean, equalTo(ValueTrue))
+        assertThat(testContext.captorOne.resultBoolean, equalTo(ValueTrue))
     }
 
 
@@ -90,7 +90,7 @@ internal class InitTest : AbstractIntegrationTest() {
             )
         )
 
-        assertThat(testCaptor1.resultString, equalTo(ValueString("Hamal Rocks")))
+        assertThat(testContext.captorOne.resultString, equalTo(ValueString("Hamal Rocks")))
     }
 
 
@@ -112,7 +112,7 @@ internal class InitTest : AbstractIntegrationTest() {
             )
         )
 
-        assertThat(testCaptor1.resultNumber, equalTo(ValueNumber(13.37)))
+        assertThat(testContext.captorOne.resultNumber, equalTo(ValueNumber(13.37)))
     }
 
 
@@ -141,7 +141,7 @@ internal class InitTest : AbstractIntegrationTest() {
             )
         )
 
-        assertThat(testInvoked.invocations, equalTo(0))
+        assertThat(testContext.invokedOne.invocations, equalTo(0))
     }
 
 
@@ -172,6 +172,6 @@ internal class InitTest : AbstractIntegrationTest() {
             )
         )
 
-        assertThat(testInvoked.invocations, equalTo(0))
+        assertThat(testContext.invokedOne.invocations, equalTo(0))
     }
 }

@@ -8,5 +8,5 @@ data class ControlInit(
     val selector: String = "__nodes__init__",
     val description: String = ""
 ) : Control {
-    override val type: ControlType = ControlType.Init
+    override val type: ControlType = ControlType("Init")
 }

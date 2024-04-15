@@ -17,7 +17,7 @@ data class ControlInputBoolean(
     override val port: PortInput,
     val defaultValue: ValueBoolean
 ) : ControlInput {
-    override val type: ControlType = ControlType.InputBoolean
+    override val type: ControlType = ControlType("InputBoolean")
 }
 
 
@@ -25,5 +25,5 @@ data class ControlExtensionTextArea(
     override val port: PortInputExtension,
     val defaultValue: ValueString?
 ) : ControlExtensionInput {
-    override val type: ControlType = ControlType.TextArea
+    override val type: ControlType = ControlType("TextArea")
 }

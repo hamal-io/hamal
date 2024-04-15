@@ -13,18 +13,16 @@ import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContext
 import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
-import io.hamal.lib.kua.function.Function0In0Out
-import io.hamal.lib.kua.function.Function1In0Out
-import io.hamal.lib.kua.function.FunctionContext
-import io.hamal.lib.kua.function.FunctionInput1Schema
-import io.hamal.lib.kua.type.*
+import io.hamal.lib.kua.type.KuaCode
+import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.nodes.control.ControlId
-import io.hamal.lib.nodes.fixture.test_nodes.GeneratorCapture
-import io.hamal.lib.nodes.fixture.test_nodes.GeneratorInvoked
+import io.hamal.lib.nodes.fixture.CaptureFunction
+import io.hamal.lib.nodes.fixture.GeneratorCapture
+import io.hamal.lib.nodes.fixture.GeneratorInvoked
+import io.hamal.lib.nodes.fixture.InvokeFunction
 import io.hamal.lib.nodes.generator.GeneratorRegistry
 import io.hamal.lib.nodes.generator.defaultGeneratorRegistry
 import io.hamal.lib.typesystem.type.Type
-import io.hamal.lib.typesystem.value.*
 import io.hamal.runner.config.EnvFactory
 import io.hamal.runner.config.SandboxFactory
 import io.hamal.runner.connector.Connector
@@ -35,31 +33,11 @@ import io.hamal.runner.test.TestConnector
 
 internal abstract class AbstractIntegrationTest {
 
-    class TestCaptor1 : Function1In0Out<KuaType>(FunctionInput1Schema(KuaType::class)) {
-        override fun invoke(ctx: FunctionContext, arg1: KuaType) {
-            when (arg1) {
-                is KuaBoolean -> resultBoolean = if (arg1.booleanValue) ValueTrue else ValueFalse
-                is KuaDecimal -> resultDecimal = ValueDecimal(arg1.value)
-                is KuaNumber -> resultNumber = ValueNumber(arg1.doubleValue)
-                is KuaString -> resultString = ValueString((arg1.stringValue))
-
-                else -> TODO()
-            }
-        }
-
-        var resultBoolean: ValueBoolean? = null
-        var resultDecimal: ValueDecimal? = null
-        var resultNumber: ValueNumber? = null
-        var resultString: ValueString? = null
-    }
-
-    class TestInvoked : Function0In0Out() {
-        override fun invoke(ctx: FunctionContext) {
-            invocations++
-        }
-
-        var invocations: Int = 0
-    }
+    data class TestContext(
+        val captorOne: CaptureFunction = CaptureFunction(),
+        val captorTwo: CaptureFunction = CaptureFunction(),
+        val invokedOne: InvokeFunction = InvokeFunction()
+    )
 
     fun createTestRunner(connector: Connector = TestConnector()) = CodeRunnerImpl(
         connector,
@@ -74,16 +52,18 @@ internal abstract class AbstractIntegrationTest {
                                 """
                     function plugin_create(internal)
                         local export = {
-                            invoked = internal.invoked,
-                            capture1 =  internal.capture1
+                            invokeOne = internal.invokeOne,
+                            captureOne =  internal.captureOne,
+                            captureTwo =  internal.captureTwo
                         }
                         return export
                     end
                 """.trimIndent()
                             ),
                             internals = mapOf(
-                                KuaString("invoked") to testInvoked,
-                                KuaString("capture1") to testCaptor1
+                                KuaString("invokeOne") to testContext.invokedOne,
+                                KuaString("captureOne") to testContext.captorOne,
+                                KuaString("captureTwo") to testContext.captorTwo
                             )
                         )
                     )
@@ -175,10 +155,8 @@ internal abstract class AbstractIntegrationTest {
     )
 
 
-    protected val testCaptor1 = TestCaptor1()
-    protected val testInvoked = TestInvoked()
-
     protected val nextControlId = NextControlId
+    protected val testContext = TestContext()
 
     object NextControlId {
 

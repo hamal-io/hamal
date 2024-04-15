@@ -8,5 +8,5 @@ data class ControlString(
     val text: String?,
     val placeholder: String?,
 ) : Control {
-    override val type: ControlType = ControlType.String
+    override val type: ControlType = ControlType("String")
 }

@@ -6,6 +6,7 @@ import io.hamal.lib.typesystem.type.TypeBoolean
 import io.hamal.lib.typesystem.value.ValueFalse
 import io.hamal.lib.typesystem.value.ValueTrue
 import org.hamcrest.CoreMatchers.equalTo
+import org.hamcrest.CoreMatchers.nullValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
@@ -37,14 +38,15 @@ internal class DecisionTest : AbstractIntegrationTest() {
                     ),
                     controls = listOf(
                         ControlCheckbox(nextControlId(), NodeId(2), portInput(30, TypeBoolean), ValueFalse),
-                        ControlConnection(nextControlId(), NodeId(3), portInput(31, TypeBoolean)),
-                        ControlConnection(nextControlId(), NodeId(4), portInput(32, TypeBoolean))
+                        ControlCapture(nextControlId(), NodeId(3), portInput(31, TypeBoolean)),
+                        ControlCapture(nextControlId(), NodeId(4), portInput(32, TypeBoolean))
                     )
                 )
             )
         )
 
-        assertThat(testCaptor1.resultBoolean, equalTo(ValueTrue))
+        assertThat(testContext.captorOne.resultBoolean, equalTo(ValueTrue))
+        assertThat(testContext.captorTwo.resultBoolean, nullValue())
     }
 
 }

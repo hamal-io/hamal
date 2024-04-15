@@ -1,15 +1,55 @@
-package io.hamal.lib.nodes.fixture.test_nodes
+package io.hamal.lib.nodes.fixture
 
 import io.hamal.lib.common.hot.HotString
 import io.hamal.lib.nodes.*
 import io.hamal.lib.nodes.control.Control
 import io.hamal.lib.nodes.generator.Generator
-import io.hamal.lib.typesystem.type.Type
-import io.hamal.lib.typesystem.type.TypeString
+import io.hamal.lib.typesystem.type.*
 import io.hamal.lib.typesystem.value.ValueString
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
+
+
+interface GeneratorCapture : Generator {
+    override val type: NodeType get() = NodeType("CAPTURE")
+
+    object Boolean : GeneratorCapture {
+        override val inputTypes: List<Type> get() = listOf(TypeBoolean)
+        override val outputTypes: List<Type> get() = listOf(TypeBoolean)
+        override fun toCode(node: Node, controls: List<Control>) = captureCode(node, controls)
+
+    }
+
+    object Decimal : GeneratorCapture {
+        override val inputTypes: List<Type> get() = listOf(TypeDecimal)
+        override val outputTypes: List<Type> get() = listOf(TypeDecimal)
+        override fun toCode(node: Node, controls: List<Control>) = captureCode(node, controls)
+
+    }
+
+    object Number : GeneratorCapture {
+        override val inputTypes: List<Type> get() = listOf(TypeNumber)
+        override val outputTypes: List<Type> get() = listOf(TypeNumber)
+        override fun toCode(node: Node, controls: List<Control>) = captureCode(node, controls)
+
+    }
+
+    object String : GeneratorCapture {
+        override val inputTypes: List<Type> get() = listOf(TypeString)
+        override val outputTypes: List<Type> get() = listOf(TypeString)
+        override fun toCode(node: Node, controls: List<Control>) = captureCode(node, controls)
+    }
+
+    fun captureCode(node: Node, controls: List<Control>): kotlin.String {
+        return """
+            test = require_plugin('test')
+            test.captureOne(arg_1)
+            return arg_1
+        """.trimIndent()
+    }
+}
+
 
 object GeneratorInvoked : Generator {
     override val type: NodeType get() = NodeType("INVOKED")
@@ -19,13 +59,13 @@ object GeneratorInvoked : Generator {
     override fun toCode(node: Node, controls: List<Control>): String {
         return """
             test = require_plugin('test')
-            test.invoked()
+            test.invokeOne()
             return 
         """.trimIndent()
     }
 }
 
-internal class InvokedTest : AbstractIntegrationTest() {
+internal class TestInvokedTest : AbstractIntegrationTest() {
 
     @Test
     fun `Nodes invokes another node`() {
@@ -46,7 +86,7 @@ internal class InvokedTest : AbstractIntegrationTest() {
             )
         )
 
-        assertThat(testInvoked.invocations, equalTo(1))
+        assertThat(testContext.invokedOne.invocations, equalTo(1))
     }
 
     @Test
@@ -73,6 +113,6 @@ internal class InvokedTest : AbstractIntegrationTest() {
             )
         )
 
-        assertThat(testInvoked.invocations, equalTo(2))
+        assertThat(testContext.invokedOne.invocations, equalTo(2))
     }
 }

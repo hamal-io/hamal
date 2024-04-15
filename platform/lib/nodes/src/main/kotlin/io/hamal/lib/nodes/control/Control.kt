@@ -4,6 +4,7 @@ import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.domain.ValueObjectId
+import io.hamal.lib.common.domain.ValueObjectString
 import io.hamal.lib.common.serialization.JsonAdapter
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.nodes.*
@@ -16,23 +17,8 @@ class ControlId(override val value: SnowflakeId) : ValueObjectId() {
     constructor(value: String) : this(SnowflakeId(value.toLong(16)))
 }
 
-enum class ControlType {
-    Checkbox,
-    Condition,
-    Connection,
+class ControlType(override val value: String) : ValueObjectString()
 
-    ConstantBoolean,
-    ConstantDecimal,
-    ConstantString,
-
-    Init,
-    Invoke,
-    InputBoolean,
-    NumberInput,
-    TextArea,
-
-    String
-}
 
 // FIXME becomes sealed after migration
 interface Control {
@@ -55,21 +41,22 @@ interface Control {
             typeOfT: java.lang.reflect.Type,
             context: JsonDeserializationContext
         ): Control {
-            val type = ControlType.valueOf(json.asJsonObject.get("type").asString)
+            val type = ControlType(json.asJsonObject.get("type").asString)
 
             return when (type) {
-                ControlType.Checkbox -> context.deserialize(json, ControlCheckbox::class.java)
-                ControlType.Connection -> context.deserialize(json, ControlConnection::class.java)
-                ControlType.Condition -> context.deserialize(json, ControlCondition::class.java)
-                ControlType.ConstantBoolean -> context.deserialize(json, ControlConstantBoolean::class.java)
-                ControlType.ConstantDecimal -> context.deserialize(json, ControlConstantDecimal::class.java)
-                ControlType.ConstantString -> context.deserialize(json, ControlConstantString::class.java)
-                ControlType.Init -> context.deserialize(json, ControlInit::class.java)
-                ControlType.Invoke -> context.deserialize(json, ControlInvoke::class.java)
-                ControlType.InputBoolean -> context.deserialize(json, ControlInputBoolean::class.java)
-                ControlType.NumberInput -> context.deserialize(json, ControlNumberInput::class.java)
-                ControlType.TextArea -> context.deserialize(json, ControlTextArea::class.java)
-                ControlType.String -> context.deserialize(json, ControlString::class.java)
+                ControlType("Checkbox") -> context.deserialize(json, ControlCheckbox::class.java)
+                ControlType("Capture") -> context.deserialize(json, ControlCapture::class.java)
+                ControlType("Condition") -> context.deserialize(json, ControlCondition::class.java)
+                ControlType("ConstantBoolean") -> context.deserialize(json, ControlConstantBoolean::class.java)
+                ControlType("ConstantDecimal") -> context.deserialize(json, ControlConstantDecimal::class.java)
+                ControlType("ConstantString") -> context.deserialize(json, ControlConstantString::class.java)
+                ControlType("Init") -> context.deserialize(json, ControlInit::class.java)
+                ControlType("Invoke") -> context.deserialize(json, ControlInvoke::class.java)
+                ControlType("InputBoolean") -> context.deserialize(json, ControlInputBoolean::class.java)
+                ControlType("NumberInput") -> context.deserialize(json, ControlNumberInput::class.java)
+                ControlType("TextArea") -> context.deserialize(json, ControlTextArea::class.java)
+                ControlType("String") -> context.deserialize(json, ControlString::class.java)
+                else -> TODO()
             }
         }
     }
@@ -98,21 +85,22 @@ sealed interface ControlExtension {
             typeOfT: java.lang.reflect.Type,
             context: JsonDeserializationContext
         ): ControlExtension {
-            val type = ControlType.valueOf(json.asJsonObject.get("type").asString)
+            val type = ControlType(json.asJsonObject.get("type").asString)
 
             return when (type) {
-                ControlType.Checkbox -> context.deserialize(json, ControlCheckbox::class.java)
-                ControlType.Connection -> context.deserialize(json, ControlConnection::class.java)
-                ControlType.Condition -> context.deserialize(json, ControlCondition::class.java)
-                ControlType.ConstantBoolean -> context.deserialize(json, ControlConstantBoolean::class.java)
-                ControlType.ConstantDecimal -> context.deserialize(json, ControlConstantDecimal::class.java)
-                ControlType.ConstantString -> context.deserialize(json, ControlConstantString::class.java)
-                ControlType.Init -> context.deserialize(json, ControlInit::class.java)
-                ControlType.Invoke -> context.deserialize(json, ControlInvoke::class.java)
-                ControlType.InputBoolean -> context.deserialize(json, ControlInputBoolean::class.java)
-                ControlType.NumberInput -> context.deserialize(json, ControlNumberInput::class.java)
-                ControlType.TextArea -> context.deserialize(json, ControlTextArea::class.java)
-                ControlType.String -> context.deserialize(json, ControlString::class.java)
+                ControlType("Checkbox") -> context.deserialize(json, ControlCheckbox::class.java)
+                ControlType("Capture") -> context.deserialize(json, ControlCapture::class.java)
+                ControlType("Condition") -> context.deserialize(json, ControlCondition::class.java)
+                ControlType("ConstantBoolean") -> context.deserialize(json, ControlConstantBoolean::class.java)
+                ControlType("ConstantDecimal") -> context.deserialize(json, ControlConstantDecimal::class.java)
+                ControlType("ConstantString") -> context.deserialize(json, ControlConstantString::class.java)
+                ControlType("Init") -> context.deserialize(json, ControlInit::class.java)
+                ControlType("Invoke") -> context.deserialize(json, ControlInvoke::class.java)
+                ControlType("InputBoolean") -> context.deserialize(json, ControlInputBoolean::class.java)
+                ControlType("NumberInput") -> context.deserialize(json, ControlNumberInput::class.java)
+                ControlType("TextArea") -> context.deserialize(json, ControlTextArea::class.java)
+                ControlType("String") -> context.deserialize(json, ControlString::class.java)
+                else -> TODO()
             }
         }
     }

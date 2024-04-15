@@ -75,8 +75,8 @@ class Compiler(
 
                 val connection = connections.first()
                 val controls = graph.controls.filter { it.nodeId == inputNodeId }
-                if (controls.any { it.type == ControlType.Invoke }) {
-                    val controls = controls.filterNot { it.type == ControlType.Invoke }
+                if (controls.any { it.type == ControlType("Invoke") }) {
+                    val controls = controls.filterNot { it.type == ControlType("Invoke") }
 
                     if (controls.size == 1) {
                         var control = controls.first()
@@ -150,10 +150,11 @@ class Compiler(
                         code.append("n_${inputNode.id.value.value.toString(16)}(${outputPortMapping[connection.outputPort.id]!!.first})")
                     }
                 }
+                code.append("\n")
             }
         }
 
-//        println(code)
+        println(code)
 
         return code.toString()
     }

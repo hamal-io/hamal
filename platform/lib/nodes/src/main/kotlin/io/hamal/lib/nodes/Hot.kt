@@ -10,6 +10,7 @@ import io.hamal.lib.domain.vo.ValueObjectJsonModule
 import io.hamal.lib.nodes.control.Control
 import io.hamal.lib.nodes.control.ControlExtension
 import io.hamal.lib.nodes.control.ControlId
+import io.hamal.lib.nodes.control.ControlType
 import io.hamal.lib.typesystem.TypesystemHotModule
 
 
@@ -18,6 +19,7 @@ object NodesHotModule : HotModule() {
         this[ConnectionId::class] = ValueObjectIdAdapter(::ConnectionId)
 
         this[ControlId::class] = ValueObjectIdAdapter(::ControlId)
+        this[ControlType::class] = ValueObjectStringAdapter(::ControlType)
         this[Control::class] = Control.Adapter
         this[ControlExtension::class] = ControlExtension.Adapter
 

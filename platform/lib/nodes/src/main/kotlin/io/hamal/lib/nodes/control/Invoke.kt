@@ -8,5 +8,5 @@ data class ControlInvoke(
     override val nodeId: NodeId,
     val portId: PortId,
 ) : Control {
-    override val type: ControlType = ControlType.Invoke
+    override val type: ControlType = ControlType("Invoke")
 }

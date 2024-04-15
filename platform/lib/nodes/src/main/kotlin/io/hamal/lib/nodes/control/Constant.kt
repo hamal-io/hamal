@@ -12,7 +12,7 @@ data class ControlConstantBoolean(
     override val nodeId: NodeId,
     val value: ValueBoolean
 ) : ControlConstant {
-    override val type: ControlType = ControlType.ConstantBoolean
+    override val type: ControlType = ControlType("ConstantBoolean")
 }
 
 data class ControlConstantDecimal(
@@ -20,7 +20,7 @@ data class ControlConstantDecimal(
     override val nodeId: NodeId,
     val value: ValueDecimal
 ) : ControlConstant {
-    override val type: ControlType = ControlType.ConstantDecimal
+    override val type: ControlType = ControlType("ConstantDecimal")
 }
 
 data class ControlConstantString(
@@ -28,5 +28,5 @@ data class ControlConstantString(
     override val nodeId: NodeId,
     val value: ValueString
 ) : ControlConstant {
-    override val type: ControlType = ControlType.ConstantString
+    override val type: ControlType = ControlType("ConstantString")
 }

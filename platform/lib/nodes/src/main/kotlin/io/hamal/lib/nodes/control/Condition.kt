@@ -7,5 +7,5 @@ data class ControlCondition(
     override val nodeId: NodeId
 
 ) : Control {
-    override val type: ControlType = ControlType.Condition
+    override val type: ControlType = ControlType("Condition")
 }
