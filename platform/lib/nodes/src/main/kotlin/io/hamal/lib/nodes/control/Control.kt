@@ -6,8 +6,7 @@ import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.serialization.JsonAdapter
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.nodes.ControlTextArea
-import io.hamal.lib.nodes.NodeId
+import io.hamal.lib.nodes.*
 
 // FIXME drop distinguishing between constant and input -- same thing and having a port connector is optional
 // FIXME boolean as checkbox
@@ -18,7 +17,9 @@ class ControlId(override val value: SnowflakeId) : ValueObjectId() {
 }
 
 enum class ControlType {
+    Checkbox,
     Condition,
+    Connection,
 
     ConstantBoolean,
     ConstantDecimal,
@@ -27,7 +28,7 @@ enum class ControlType {
     Init,
     Invoke,
     InputBoolean,
-    InputNumber,
+    NumberInput,
     TextArea,
 
     String
@@ -57,6 +58,8 @@ interface Control {
             val type = ControlType.valueOf(json.asJsonObject.get("type").asString)
 
             return when (type) {
+                ControlType.Checkbox -> context.deserialize(json, ControlCheckbox::class.java)
+                ControlType.Connection -> context.deserialize(json, ControlConnection::class.java)
                 ControlType.Condition -> context.deserialize(json, ControlCondition::class.java)
                 ControlType.ConstantBoolean -> context.deserialize(json, ControlConstantBoolean::class.java)
                 ControlType.ConstantDecimal -> context.deserialize(json, ControlConstantDecimal::class.java)
@@ -64,7 +67,7 @@ interface Control {
                 ControlType.Init -> context.deserialize(json, ControlInit::class.java)
                 ControlType.Invoke -> context.deserialize(json, ControlInvoke::class.java)
                 ControlType.InputBoolean -> context.deserialize(json, ControlInputBoolean::class.java)
-                ControlType.InputNumber -> context.deserialize(json, ControlInputNumber::class.java)
+                ControlType.NumberInput -> context.deserialize(json, ControlNumberInput::class.java)
                 ControlType.TextArea -> context.deserialize(json, ControlTextArea::class.java)
                 ControlType.String -> context.deserialize(json, ControlString::class.java)
             }
@@ -72,6 +75,9 @@ interface Control {
     }
 }
 
+interface ControlInput : Control {
+    val port: PortInput
+}
 
 sealed interface ControlExtension {
 
@@ -95,6 +101,8 @@ sealed interface ControlExtension {
             val type = ControlType.valueOf(json.asJsonObject.get("type").asString)
 
             return when (type) {
+                ControlType.Checkbox -> context.deserialize(json, ControlCheckbox::class.java)
+                ControlType.Connection -> context.deserialize(json, ControlConnection::class.java)
                 ControlType.Condition -> context.deserialize(json, ControlCondition::class.java)
                 ControlType.ConstantBoolean -> context.deserialize(json, ControlConstantBoolean::class.java)
                 ControlType.ConstantDecimal -> context.deserialize(json, ControlConstantDecimal::class.java)
@@ -102,7 +110,7 @@ sealed interface ControlExtension {
                 ControlType.Init -> context.deserialize(json, ControlInit::class.java)
                 ControlType.Invoke -> context.deserialize(json, ControlInvoke::class.java)
                 ControlType.InputBoolean -> context.deserialize(json, ControlInputBoolean::class.java)
-                ControlType.InputNumber -> context.deserialize(json, ControlInputNumber::class.java)
+                ControlType.NumberInput -> context.deserialize(json, ControlNumberInput::class.java)
                 ControlType.TextArea -> context.deserialize(json, ControlTextArea::class.java)
                 ControlType.String -> context.deserialize(json, ControlString::class.java)
             }

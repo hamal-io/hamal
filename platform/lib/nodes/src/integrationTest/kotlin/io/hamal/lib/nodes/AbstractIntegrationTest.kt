@@ -23,9 +23,8 @@ import io.hamal.lib.nodes.fixture.test_nodes.GeneratorCapture
 import io.hamal.lib.nodes.fixture.test_nodes.GeneratorInvoked
 import io.hamal.lib.nodes.generator.GeneratorRegistry
 import io.hamal.lib.nodes.generator.defaultGeneratorRegistry
-import io.hamal.lib.typesystem.value.ValueDecimal
-import io.hamal.lib.typesystem.value.ValueNumber
-import io.hamal.lib.typesystem.value.ValueString
+import io.hamal.lib.typesystem.type.Type
+import io.hamal.lib.typesystem.value.*
 import io.hamal.runner.config.EnvFactory
 import io.hamal.runner.config.SandboxFactory
 import io.hamal.runner.connector.Connector
@@ -39,6 +38,7 @@ internal abstract class AbstractIntegrationTest {
     class TestCaptor1 : Function1In0Out<KuaType>(FunctionInput1Schema(KuaType::class)) {
         override fun invoke(ctx: FunctionContext, arg1: KuaType) {
             when (arg1) {
+                is KuaBoolean -> resultBoolean = if (arg1.booleanValue) ValueTrue else ValueFalse
                 is KuaDecimal -> resultDecimal = ValueDecimal(arg1.value)
                 is KuaNumber -> resultNumber = ValueNumber(arg1.doubleValue)
                 is KuaString -> resultString = ValueString((arg1.stringValue))
@@ -47,6 +47,7 @@ internal abstract class AbstractIntegrationTest {
             }
         }
 
+        var resultBoolean: ValueBoolean? = null
         var resultDecimal: ValueDecimal? = null
         var resultNumber: ValueNumber? = null
         var resultString: ValueString? = null
@@ -92,10 +93,11 @@ internal abstract class AbstractIntegrationTest {
                         sandbox.generatorRegistry.register(
                             GeneratorRegistry(
                                 listOf(
-                                    GeneratorInvoked,
+                                    GeneratorCapture.Boolean,
                                     GeneratorCapture.Decimal,
                                     GeneratorCapture.Number,
                                     GeneratorCapture.String,
+                                    GeneratorInvoked
                                 )
                             )
                         )
@@ -130,17 +132,28 @@ internal abstract class AbstractIntegrationTest {
         outputNode: Long,
         outputPort: Long,
         inputNode: Long,
-        inputPort: Long
+        inputPort: Long,
+        label: String? = null
     ): Connection {
         return Connection(
             id = ConnectionId(SnowflakeId(id)),
             outputNode = Connection.Node(NodeId(SnowflakeId(outputNode))),
             outputPort = Connection.Port(id = PortId(SnowflakeId(outputPort))),
             inputNode = Connection.Node(NodeId(SnowflakeId(inputNode))),
-            inputPort = Connection.Port(id = PortId(SnowflakeId(inputPort)))
+            inputPort = Connection.Port(id = PortId(SnowflakeId(inputPort))),
+            label = label?.let(::ConnectionLabel)
         )
     }
 
+    fun portInput(
+        id: Long,
+        type: Type
+    ): PortInput = PortInput(PortId(SnowflakeId(id)), type)
+
+    fun portOutput(
+        id: Long,
+        type: Type
+    ): PortOutput = PortOutput(PortId(SnowflakeId(id)), type)
 
     fun unitOfWork(
         initValue: HotNode<*>,

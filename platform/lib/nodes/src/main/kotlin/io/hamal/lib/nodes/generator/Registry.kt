@@ -39,6 +39,9 @@ class GeneratorRegistry(generators: List<Generator>) {
 
 val defaultGeneratorRegistry = GeneratorRegistry(
     listOf(
-        GeneratorInit.String
+        GeneratorDecision.Boolean,
+        GeneratorInit.Boolean,
+        GeneratorInit.Number,
+        GeneratorInit.String,
     )
 )

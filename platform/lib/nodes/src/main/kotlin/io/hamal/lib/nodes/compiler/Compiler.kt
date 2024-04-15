@@ -39,7 +39,8 @@ class Compiler(
 
             builder.append("""function n_${node.id.value.value.toString(16)}(${args})""")
             builder.append("\n")
-            builder.append(generator.toCode(node, controls.filter { it.nodeId == node.id
+            builder.append(generator.toCode(node, controls.filter {
+                it.nodeId == node.id
 
 
             }))

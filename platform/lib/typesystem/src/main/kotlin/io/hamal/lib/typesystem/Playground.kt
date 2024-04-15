@@ -10,6 +10,11 @@ import java.time.LocalDate
 
 fun main() {
 
+    val No = TypeObject(
+        "no",
+        Field(TypeString, "answer")
+    )
+
     val Entity = TypeObject(
         "entity",
         Field(TypeString, "id")
@@ -44,6 +49,10 @@ fun main() {
     val suzy = Pupil("2", "Suzy", "Yzus", LocalDate.of(1992, 8, 23))
 
     val PupilList = TypeListObject("pupilList", Pupil)
+    val EntityList = TypeListObject("entityList", Entity)
+
+    val l = EntityList(bob, Another("xyz"), No("dasd"))
+    println(l)
 
 //    val PupilList = TypeList("pupil_list", Pupil)
 

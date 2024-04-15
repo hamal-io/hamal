@@ -4,12 +4,8 @@ import io.hamal.lib.nodes.NodeId
 import io.hamal.lib.nodes.PortInput
 import io.hamal.lib.nodes.PortInputExtension
 import io.hamal.lib.typesystem.value.ValueBoolean
-import io.hamal.lib.typesystem.value.ValueNumber
 import io.hamal.lib.typesystem.value.ValueString
 
-interface ControlInput : Control {
-    val port: PortInput
-}
 
 interface ControlExtensionInput : ControlExtension {
     val port: PortInputExtension
@@ -23,16 +19,6 @@ data class ControlInputBoolean(
 ) : ControlInput {
     override val type: ControlType = ControlType.InputBoolean
 }
-
-data class ControlInputNumber(
-    override val id: ControlId,
-    override val nodeId: NodeId,
-    override val port: PortInput,
-    val defaultValue: ValueNumber
-) : ControlInput {
-    override val type: ControlType = ControlType.InputNumber
-}
-
 
 
 data class ControlExtensionTextArea(

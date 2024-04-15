@@ -35,13 +35,13 @@ internal class InvokedTest : AbstractIntegrationTest() {
                 initValue = HotString("Hamal Rocks"),
                 graph = NodesGraph(
                     nodes = listOf(
-                        node(1, "INIT", listOf(PortOutput(PortId(20), TypeString))),
+                        node(1, "INIT", listOf(portOutput(20, TypeString))),
                         node(2, "INVOKED")
                     ),
                     connections = listOf(
                         connection(100, 1, 20, 2, 21)
                     ),
-                    controls = listOf(ControlTextArea(nextControlId(), NodeId(2), PortInput(PortId(21), TypeString), ValueString("default")))
+                    controls = listOf(ControlTextArea(nextControlId(), NodeId(2), portInput(21, TypeString), ValueString("default")))
                 )
             )
         )
@@ -56,7 +56,7 @@ internal class InvokedTest : AbstractIntegrationTest() {
                 initValue = HotString("Hamal Rocks"),
                 graph = NodesGraph(
                     nodes = listOf(
-                        node(1, "INIT", listOf(PortOutput(PortId(20), TypeString))),
+                        node(1, "INIT", listOf(portOutput(20, TypeString))),
                         node(2, "INVOKED"),
                         node(3, "INVOKED")
                     ),
@@ -65,8 +65,8 @@ internal class InvokedTest : AbstractIntegrationTest() {
                         connection(100, 1, 20, 3, 22),
                     ),
                     controls = listOf(
-                        ControlTextArea(nextControlId(), NodeId(2), PortInput(PortId(21), TypeString), ValueString("default")),
-                        ControlTextArea(nextControlId(), NodeId(3), PortInput(PortId(22), TypeString), ValueString("default"))
+                        ControlTextArea(nextControlId(), NodeId(2), portInput(21, TypeString), ValueString("default")),
+                        ControlTextArea(nextControlId(), NodeId(3), portInput(22, TypeString), ValueString("default"))
                     )
 
                 )

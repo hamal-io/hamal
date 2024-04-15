@@ -1,6 +1,7 @@
 package io.hamal.lib.nodes
 
 import io.hamal.lib.common.domain.ValueObjectId
+import io.hamal.lib.common.domain.ValueObjectString
 import io.hamal.lib.common.snowflake.SnowflakeId
 
 class ConnectionId(override val value: SnowflakeId) : ValueObjectId() {
@@ -8,12 +9,15 @@ class ConnectionId(override val value: SnowflakeId) : ValueObjectId() {
     constructor(value: String) : this(SnowflakeId(value.toLong(16)))
 }
 
+class ConnectionLabel(override val value: String) : ValueObjectString()
+
 data class Connection(
     val id: ConnectionId,
     val outputNode: Node,
     val outputPort: Port,
     val inputNode: Node,
-    val inputPort: Port
+    val inputPort: Port,
+    val label: ConnectionLabel? = null
 ) {
     init {
         // FIXME ensure connection is valid
