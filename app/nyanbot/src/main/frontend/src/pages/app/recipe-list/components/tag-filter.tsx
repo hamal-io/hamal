@@ -1,22 +1,14 @@
 import {FC, useEffect, useRef, useState} from "react";
 import {Card} from "@/components/ui/card.tsx";
 import styles from "./tag.module.css"
-import {tags} from "@/pages/app/recipe-list/components/tags.tsx";
 import {Tag} from "@/types/recipe.ts";
+import {tags} from "@/pages/app/recipe-list/components/tags.tsx";
 
 type Props = {
     onChange: (tags: Set<string>) => void
 }
 const TagFilter: FC<Props> = ({onChange}) => {
-    const [selectedTags, setSelectedTags] = useState<Set<string>>(null)
-
-    useEffect(() => {
-        const set = new Set<string>();
-        Object.entries(tags).map(([, val]) => {
-            set.add(val.name)
-        })
-        setSelectedTags(set);
-    }, []);
+    const [selectedTags, setSelectedTags] = useState<Set<string>>(new Set())
 
     function handleSelect(name: string) {
         const newSet = new Set(selectedTags)

@@ -51,8 +51,8 @@ const RecipeListPage = () => {
                         <ol className={"flex flex-col gap-4"}>
                             {filtered.map(recipe => (
                                 <li key={recipe.id}>
-                                        <RecipeCard recipe={recipe}/>
-                                    </li>
+                                    <RecipeCard recipe={recipe}/>
+                                </li>
                             ))}
                         </ol>
                     </div>

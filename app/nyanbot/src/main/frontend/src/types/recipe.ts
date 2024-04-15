@@ -13,6 +13,4 @@ export interface Recipe {
     tags: Array<Tag>
 }
 
-export interface TagList {
-    ids: Array<number>
-}
+export type TagType = { [key: string]: Tag }
