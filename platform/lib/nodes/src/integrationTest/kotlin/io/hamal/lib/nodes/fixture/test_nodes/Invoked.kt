@@ -4,8 +4,8 @@ import io.hamal.lib.common.hot.HotString
 import io.hamal.lib.nodes.*
 import io.hamal.lib.nodes.control.Control
 import io.hamal.lib.nodes.generator.Generator
-import io.hamal.lib.typesystem.Type
-import io.hamal.lib.typesystem.TypeString
+import io.hamal.lib.typesystem.type.Type
+import io.hamal.lib.typesystem.type.TypeString
 import io.hamal.lib.typesystem.value.ValueString
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat

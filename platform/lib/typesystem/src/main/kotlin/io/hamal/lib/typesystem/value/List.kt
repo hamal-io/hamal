@@ -1,12 +1,10 @@
 package io.hamal.lib.typesystem.value
 
-import io.hamal.lib.typesystem.Field.Kind
-import io.hamal.lib.typesystem.Type
+import io.hamal.lib.typesystem.type.Type
 
 data class ValueList(
-    val value: List<Value>,
-    val valueType: Type
+    override val type: Type,
+    val value: List<Value>
 ) : Value {
-    override val kind get() = Kind.List
     override fun toString() = value.toString()
 }

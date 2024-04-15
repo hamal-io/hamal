@@ -1,7 +1,7 @@
 package io.hamal.lib.nodes.generator
 
 import io.hamal.lib.nodes.NodeType
-import io.hamal.lib.typesystem.Type
+import io.hamal.lib.typesystem.type.Type
 
 class GeneratorRegistry(generators: List<Generator>) {
 

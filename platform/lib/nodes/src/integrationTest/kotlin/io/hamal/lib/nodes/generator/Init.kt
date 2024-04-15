@@ -6,9 +6,9 @@ import io.hamal.lib.common.hot.HotString
 import io.hamal.lib.nodes.*
 import io.hamal.lib.nodes.control.ControlInit
 import io.hamal.lib.nodes.control.ControlInputNumber
-import io.hamal.lib.typesystem.TypeDecimal
-import io.hamal.lib.typesystem.TypeNumber
-import io.hamal.lib.typesystem.TypeString
+import io.hamal.lib.typesystem.type.TypeDecimal
+import io.hamal.lib.typesystem.type.TypeNumber
+import io.hamal.lib.typesystem.type.TypeString
 import io.hamal.lib.typesystem.value.ValueNumber
 import io.hamal.lib.typesystem.value.ValueString
 import io.hamal.runner.test.TestFailConnector

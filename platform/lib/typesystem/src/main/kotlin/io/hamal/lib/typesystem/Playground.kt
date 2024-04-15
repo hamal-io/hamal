@@ -1,6 +1,6 @@
 package io.hamal.lib.typesystem
 
-import io.hamal.lib.typesystem.Field.Kind
+import io.hamal.lib.typesystem.type.*
 import io.hamal.lib.typesystem.value.ValueNumber
 import io.hamal.lib.typesystem.value.ValueObject
 import io.hamal.lib.typesystem.value.ValueString
@@ -12,19 +12,19 @@ fun main() {
 
     val Entity = TypeObject(
         "entity",
-        Field(Kind.String, "id")
+        Field(TypeString, "id")
     )
 
     val Pupil = TypeObject(
         "pupil",
-        Field(Kind.String, "first_name"),
-        Field(Kind.String, "last_name"),
-        Field(Kind.Date, "dob")
+        Field(TypeString, "first_name"),
+        Field(TypeString, "last_name"),
+        Field(TypeDate, "dob")
     ) extends Entity
 
     val Another = TypeObject(
         "another",
-        Field(Kind.String, "answer")
+        Field(TypeString, "answer")
     )
 
 //    val Pupil = DType(

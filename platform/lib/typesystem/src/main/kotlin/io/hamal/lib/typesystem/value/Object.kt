@@ -1,15 +1,13 @@
 package io.hamal.lib.typesystem.value
 
 import io.hamal.lib.typesystem.Field
-import io.hamal.lib.typesystem.Field.Kind
 import io.hamal.lib.typesystem.Property
-import io.hamal.lib.typesystem.TypeObject
+import io.hamal.lib.typesystem.type.TypeObject
 
 data class ValueObject(
-    val type: TypeObject,
+    override val type: TypeObject,
     val properties: List<Property>,
 ) : Value {
-    override val kind get() = Kind.Object
 
     operator fun <T : Value> get(identifier: String) = valuesByIdentifier[identifier] as T
 

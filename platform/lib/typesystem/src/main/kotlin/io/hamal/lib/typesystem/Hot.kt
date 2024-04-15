@@ -6,17 +6,18 @@ import com.google.gson.JsonPrimitive
 import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.serialization.HotModule
 import io.hamal.lib.common.serialization.JsonAdapter
+import io.hamal.lib.typesystem.type.TypeString
 import io.hamal.lib.typesystem.value.ValueString
 import java.lang.reflect.Type
 
 object TypesystemHotModule : HotModule() {
     init {
-        this[io.hamal.lib.typesystem.Type::class] = object : JsonAdapter<io.hamal.lib.typesystem.Type> {
-            override fun serialize(src: io.hamal.lib.typesystem.Type?, typeOfSrc: Type?, context: JsonSerializationContext?): JsonElement {
+        this[io.hamal.lib.typesystem.type.Type::class] = object : JsonAdapter<io.hamal.lib.typesystem.type.Type> {
+            override fun serialize(src: io.hamal.lib.typesystem.type.Type?, typeOfSrc: Type?, context: JsonSerializationContext?): JsonElement {
                 return JsonPrimitive("TypeString")
             }
 
-            override fun deserialize(json: JsonElement?, typeOfT: Type?, context: JsonDeserializationContext?): io.hamal.lib.typesystem.Type {
+            override fun deserialize(json: JsonElement?, typeOfT: Type?, context: JsonDeserializationContext?): io.hamal.lib.typesystem.type.Type {
                 return TypeString
             }
         }

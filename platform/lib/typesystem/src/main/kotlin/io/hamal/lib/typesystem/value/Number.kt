@@ -1,10 +1,11 @@
 package io.hamal.lib.typesystem.value
 
-import io.hamal.lib.typesystem.Field.Kind
+import io.hamal.lib.typesystem.type.TypeNumber
+
 
 @JvmInline
 value class ValueNumber(private val value: Double) : Value {
-    override val kind get() = Kind.Number
+    override val type get() = TypeNumber
 
     constructor(value: Int) : this(value.toDouble())
 

@@ -4,8 +4,8 @@ import io.hamal.lib.nodes.Node
 import io.hamal.lib.nodes.NodeType
 import io.hamal.lib.nodes.control.Control
 import io.hamal.lib.nodes.control.ControlInit
-import io.hamal.lib.typesystem.Type
-import io.hamal.lib.typesystem.TypeString
+import io.hamal.lib.typesystem.type.Type
+import io.hamal.lib.typesystem.type.TypeString
 
 
 sealed interface GeneratorInit : GeneratorConstant {
