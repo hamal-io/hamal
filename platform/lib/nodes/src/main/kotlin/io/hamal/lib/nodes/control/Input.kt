@@ -33,18 +33,11 @@ data class ControlInputNumber(
     override val type: ControlType = ControlType.InputNumber
 }
 
-data class ControlInputString(
-    override val id: ControlId,
-    override val nodeId: NodeId,
-    override val port: PortInput,
-    val defaultValue: ValueString
-) : ControlInput {
-    override val type: ControlType = ControlType.InputString
-}
 
-data class ControlExtensionInputString(
+
+data class ControlExtensionTextArea(
     override val port: PortInputExtension,
     val defaultValue: ValueString?
 ) : ControlExtensionInput {
-    override val type: ControlType = ControlType.InputString
+    override val type: ControlType = ControlType.TextArea
 }

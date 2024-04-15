@@ -1,8 +1,8 @@
 import React, {FC, useContext, useState} from "react";
-import {InputSelect, InputText} from "./inputs";
+import {InputSelect, TextArea} from "./inputs";
 import styles from "@/components/nodes/port.module.css";
 import {PortInputWidget} from "@/components/nodes/port.tsx";
-import {ControlInvoke, ControlText, isControlCondition, isControlInit, isControlInput, isControlInvoke, isControlText, Node} from "@/components/nodes/types.ts";
+import {ControlInvoke, ControlTextArea, isControlCondition, isControlInit, isControlInput, isControlInvoke, isControlTextArea, Node} from "@/components/nodes/types.ts";
 import {ContextEditorState} from "@/components/nodes/editor.tsx";
 
 type ControlsProps = {
@@ -10,12 +10,11 @@ type ControlsProps = {
 }
 
 export const ControlListWidget: FC<ControlsProps> = ({node}) => {
-    const {state} = useContext(ContextEditorState);
-    const controls = state.nodeControlIds[node.id].map(controlId => state.controls[controlId])
+    const {controls, nodeControlIds} = useContext(ContextEditorState);
     return (
         <div className={styles.wrapper} data-component="ports">
             {
-                controls.map((control) => {
+                nodeControlIds[node.id].map(controlId => controls[controlId]).map((control) => {
 
                     if (isControlCondition(control)) {
                         return <ControlConditionWidget/>
@@ -33,7 +32,7 @@ export const ControlListWidget: FC<ControlsProps> = ({node}) => {
                         return <ControlInvokeWidget control={control}/>
                     }
 
-                    if (isControlText(control)) {
+                    if (isControlTextArea(control)) {
                         return <ControlTextWidget control={control}/>
                     }
 
@@ -72,19 +71,17 @@ export const ControlInitWidget: FC<ControlInitWidgetProps> = ({description}) => 
 
 
 type ControlTextWidgetProps = {
-    control: ControlText;
+    control: ControlTextArea;
 }
 
 export const ControlTextWidget: FC<ControlTextWidgetProps> = ({control}) => {
-    const {id, port, defaultValue, placeholder} = control;
     const {dispatch} = useContext(ContextEditorState)
-    const {state} = useContext(ContextEditorState)
 
     return (
         <div className="flex flex-row">
-            {port && <PortInputWidget/>}
-            <InputText type={'text'} value={state.controls[id].defaultValue} placeholder={placeholder} onChange={(value) =>
-                dispatch({type: 'CONTROL_TEXT_UPDATED', id: control.id, value})
+            {control.port && <PortInputWidget/>}
+            <TextArea value={control.defaultValue} placeholder={control.placeholder} onChange={(value) =>
+                dispatch({type: 'CONTROL_TEXT_AREA_UPDATED', id: control.id, value})
             }/>
         </div>
     )
@@ -98,7 +95,7 @@ export const ControlConditionWidget: FC<ControlConditionWidgetProps> = ({}) => {
         <div className="flex flex-col">
             <div className="flex flex-row">
                 {/*<PortInputWidget/>*/}
-                <InputText type={'text'} placeholder={'test'}/>
+                <TextArea placeholder={'test'}/>
             </div>
             <div className="flex flex-row">
                 {/*<PortInputWidget/>*/}
@@ -122,7 +119,7 @@ export const ControlConditionWidget: FC<ControlConditionWidgetProps> = ({}) => {
             </div>
             <div className="flex flex-row">
                 {/*<PortInputWidget/>*/}
-                <InputText type={'text'} placeholder={'test'}/>;
+                <TextArea placeholder={'test'}/>;
             </div>
         </div>
     )

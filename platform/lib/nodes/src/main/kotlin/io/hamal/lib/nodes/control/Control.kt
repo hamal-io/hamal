@@ -6,6 +6,7 @@ import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.serialization.JsonAdapter
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.nodes.ControlTextArea
 import io.hamal.lib.nodes.NodeId
 
 // FIXME drop distinguishing between constant and input -- same thing and having a port connector is optional
@@ -27,12 +28,13 @@ enum class ControlType {
     Invoke,
     InputBoolean,
     InputNumber,
-    InputString,
+    TextArea,
 
     String
 }
 
-sealed interface Control {
+// FIXME becomes sealed after migration
+interface Control {
     val id: ControlId
     val type: ControlType
     val nodeId: NodeId
@@ -63,7 +65,7 @@ sealed interface Control {
                 ControlType.Invoke -> context.deserialize(json, ControlInvoke::class.java)
                 ControlType.InputBoolean -> context.deserialize(json, ControlInputBoolean::class.java)
                 ControlType.InputNumber -> context.deserialize(json, ControlInputNumber::class.java)
-                ControlType.InputString -> context.deserialize(json, ControlInputString::class.java)
+                ControlType.TextArea -> context.deserialize(json, ControlTextArea::class.java)
                 ControlType.String -> context.deserialize(json, ControlString::class.java)
             }
         }
@@ -101,7 +103,7 @@ sealed interface ControlExtension {
                 ControlType.Invoke -> context.deserialize(json, ControlInvoke::class.java)
                 ControlType.InputBoolean -> context.deserialize(json, ControlInputBoolean::class.java)
                 ControlType.InputNumber -> context.deserialize(json, ControlInputNumber::class.java)
-                ControlType.InputString -> context.deserialize(json, ControlInputString::class.java)
+                ControlType.TextArea -> context.deserialize(json, ControlTextArea::class.java)
                 ControlType.String -> context.deserialize(json, ControlString::class.java)
             }
         }

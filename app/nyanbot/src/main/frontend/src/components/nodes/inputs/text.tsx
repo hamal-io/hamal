@@ -1,27 +1,14 @@
-import React, {useContext, useEffect, useState} from "react";
+import React from "react";
 import styles from "./text.module.css";
-import {ContextEditorState} from "@/components/nodes/editor.tsx";
 
 
-interface InputTextProps {
-    type?: "number" | "text";
+interface TextArea {
     value?: string;
     placeholder?: string;
     onChange?: (value: string) => void;
 }
 
-export const InputText = ({
-                              // placeholder,
-                              // updateNodeConnections,
-                              // onChange,
-                              // data,
-                              // step,
-                              // type
-                              placeholder, value, onChange
-                          }: InputTextProps) => {
-    // const [text, setText] = useState(value)
-    const numberInput = React.useRef<HTMLInputElement>(null);
-    // const recalculateStageRect = React.useContext(RecalculateStageRectContext)
+export const TextArea = ({placeholder, value, onChange}: TextArea) => {
 
     const handleDragEnd = () => {
         document.removeEventListener("mousemove", handleMouseMove);
@@ -42,47 +29,6 @@ export const InputText = ({
 
     return (
         <div className={styles.wrapper} data-component="text-input">
-            {/*{type === "number" ? (*/}
-            {/*  <inputs*/}
-            {/*    data-component="text-inputs-number"*/}
-            {/*    onKeyDown={e => {*/}
-            {/*      if (e.keyCode === 69) {*/}
-            {/*        e.preventDefault();*/}
-            {/*        return false;*/}
-            {/*      }*/}
-            {/*    }}*/}
-            {/*    onChange={e => {*/}
-            {/*      const inputValue = e.target.value.replace(/e/g, "");*/}
-            {/*      if (!!inputValue) {*/}
-            {/*        const value = parseFloat(inputValue);*/}
-            {/*        // if (Number.isNaN(value)) {*/}
-            {/*        //   onChange(0);*/}
-            {/*        // } else {*/}
-            {/*        //   onChange(value);*/}
-            {/*        //   if (numberInput.current) {*/}
-            {/*        //     numberInput.current.value = value.toString();*/}
-            {/*        //   }*/}
-            {/*        }*/}
-            {/*      }*/}
-            {/*    }}*/}
-            {/*    onBlur={e => {*/}
-            {/*      if (!e.target.value) {*/}
-            {/*        // onChange(0);*/}
-            {/*        if (numberInput.current) {*/}
-            {/*          numberInput.current.value = "0";*/}
-            {/*        }*/}
-            {/*      }*/}
-            {/*    }}*/}
-            {/*    // step={step || "1"}*/}
-            {/*    onMouseDown={handlePossibleResize}*/}
-            {/*    // type={type || "text"}*/}
-            {/*    // placeholder={placeholder}*/}
-            {/*    className={styles.inputs}*/}
-            {/*    // defaultValue={data}*/}
-            {/*    onDragStart={e => e.stopPropagation()}*/}
-            {/*    ref={numberInput}*/}
-            {/*  />*/}
-            {/*) : (*/}
             <textarea
                 data-component="text-input-textarea"
                 onChange={e => onChange(e.target.value)}
@@ -92,7 +38,6 @@ export const InputText = ({
                 value={value}
                 onDragStart={e => e.stopPropagation()}
             />
-            {/*)}*/}
         </div>
     );
 };

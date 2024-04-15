@@ -2,7 +2,7 @@ package io.hamal.extension.telegram.nodes
 
 import io.hamal.lib.nodes.*
 import io.hamal.lib.nodes.control.Control
-import io.hamal.lib.nodes.control.ControlExtensionInputString
+import io.hamal.lib.nodes.control.ControlExtensionTextArea
 import io.hamal.lib.nodes.generator.Generator
 import io.hamal.lib.typesystem.TypeNew
 import io.hamal.lib.typesystem.TypeString
@@ -13,7 +13,7 @@ val SendMessageNode = NodeExtension(
     title = NodeTitle("Telegram - Send Message"),
     size = Size(200, 200),
     controls = listOf(
-        ControlExtensionInputString(
+        ControlExtensionTextArea(
             port = PortInputExtension(TypeString),
             defaultValue = ValueString("Hello from hamal - nodes")
         )

@@ -2,7 +2,7 @@ package io.hamal.lib.nodes.compiler
 
 import io.hamal.lib.nodes.*
 import io.hamal.lib.nodes.compiler.ComputationGraph.Companion.ComputationGraph
-import io.hamal.lib.nodes.control.ControlInputString
+import io.hamal.lib.nodes.control.ControlTextArea
 import io.hamal.lib.typesystem.TypeString
 import io.hamal.lib.typesystem.value.ValueString
 import org.hamcrest.CoreMatchers.equalTo
@@ -29,7 +29,7 @@ internal object ComputationNodesGraphTest : AbstractUnitTest() {
                     connection(100, 1, 20, 2, 21)
                 ),
                 controls = listOf(
-                    ControlInputString(nextControlId(), NodeId(2), PortInput(PortId(21), TypeString), ValueString("default string"))
+                    ControlTextArea(nextControlId(), NodeId(2), PortInput(PortId(21), TypeString), ValueString("default string"))
                 )
             )
         )
@@ -59,8 +59,8 @@ internal object ComputationNodesGraphTest : AbstractUnitTest() {
                     connection(101, 1, 20, 3, 22),
                 ),
                 controls = listOf(
-                    ControlInputString(nextControlId(), NodeId(2), PortInput(PortId(21), TypeString), ValueString("default")),
-                    ControlInputString(nextControlId(), NodeId(3), PortInput(PortId(22), TypeString), ValueString("default"))
+                    ControlTextArea(nextControlId(), NodeId(2), PortInput(PortId(21), TypeString), ValueString("default")),
+                    ControlTextArea(nextControlId(), NodeId(3), PortInput(PortId(22), TypeString), ValueString("default"))
                 )
             )
         )
@@ -90,8 +90,8 @@ internal object ComputationNodesGraphTest : AbstractUnitTest() {
                     connection(101, 2, 21, 3, 22),
                 ),
                 controls = listOf(
-                    ControlInputString(nextControlId(), NodeId(2), PortInput(PortId(21), TypeString), ValueString("default")),
-                    ControlInputString(nextControlId(), NodeId(3), PortInput(PortId(22), TypeString), ValueString("default"))
+                    ControlTextArea(nextControlId(), NodeId(2), PortInput(PortId(21), TypeString), ValueString("default")),
+                    ControlTextArea(nextControlId(), NodeId(3), PortInput(PortId(22), TypeString), ValueString("default"))
                 )
             )
         )
