@@ -10,12 +10,11 @@ type ControlsProps = {
 }
 
 export const ControlListWidget: FC<ControlsProps> = ({node}) => {
-    const {state} = useContext(ContextEditorState);
-    const controls = state.nodeControlIds[node.id].map(controlId => state.controls[controlId])
+    const {controls, nodeControlIds} = useContext(ContextEditorState);
     return (
         <div className={styles.wrapper} data-component="ports">
             {
-                controls.map((control) => {
+                nodeControlIds[node.id].map(controlId => controls[controlId]).map((control) => {
 
                     if (isControlCondition(control)) {
                         return <ControlConditionWidget/>
@@ -78,12 +77,12 @@ type ControlTextWidgetProps = {
 export const ControlTextWidget: FC<ControlTextWidgetProps> = ({control}) => {
     const {id, port, defaultValue, placeholder} = control;
     const {dispatch} = useContext(ContextEditorState)
-    const {state} = useContext(ContextEditorState)
+    const {controls} = useContext(ContextEditorState)
 
     return (
         <div className="flex flex-row">
             {port && <PortInputWidget/>}
-            <InputText type={'text'} value={state.controls[id].defaultValue} placeholder={placeholder} onChange={(value) =>
+            <InputText type={'text'} value={controls[id].defaultValue} placeholder={placeholder} onChange={(value) =>
                 dispatch({type: 'CONTROL_TEXT_UPDATED', id: control.id, value})
             }/>
         </div>
