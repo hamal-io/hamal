@@ -3,7 +3,6 @@ package io.hamal.lib.nodes.fixture.test_nodes
 import io.hamal.lib.common.hot.HotString
 import io.hamal.lib.nodes.*
 import io.hamal.lib.nodes.control.Control
-import io.hamal.lib.nodes.control.ControlInputString
 import io.hamal.lib.nodes.generator.Generator
 import io.hamal.lib.typesystem.TypeNew
 import io.hamal.lib.typesystem.TypeString
@@ -42,7 +41,7 @@ internal class InvokedTest : AbstractIntegrationTest() {
                     connections = listOf(
                         connection(100, 1, 20, 2, 21)
                     ),
-                    controls = listOf(ControlInputString(nextControlId(), NodeId(2), PortInput(PortId(21), TypeString), ValueString("default")))
+                    controls = listOf(ControlTextArea(nextControlId(), NodeId(2), PortInput(PortId(21), TypeString), ValueString("default")))
                 )
             )
         )
@@ -66,8 +65,8 @@ internal class InvokedTest : AbstractIntegrationTest() {
                         connection(100, 1, 20, 3, 22),
                     ),
                     controls = listOf(
-                        ControlInputString(nextControlId(), NodeId(2), PortInput(PortId(21), TypeString), ValueString("default")),
-                        ControlInputString(nextControlId(), NodeId(3), PortInput(PortId(22), TypeString), ValueString("default"))
+                        ControlTextArea(nextControlId(), NodeId(2), PortInput(PortId(21), TypeString), ValueString("default")),
+                        ControlTextArea(nextControlId(), NodeId(3), PortInput(PortId(22), TypeString), ValueString("default"))
                     )
 
                 )

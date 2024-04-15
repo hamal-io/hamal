@@ -1,4 +1,4 @@
-import {Control, ControlId, isControlText, NodeId} from "@/components/nodes/types.ts";
+import {Control, ControlId, isControlTextArea, NodeId} from "@/components/nodes/types.ts";
 
 export type State = {
     controls: { [id: ControlId]: Control };
@@ -6,15 +6,15 @@ export type State = {
 }
 
 export type Action =
-    | { type: "CONTROL_TEXT_UPDATED"; id: ControlId, value: string }
+    | { type: "CONTROL_TEXT_AREA_UPDATED"; id: ControlId, value: string }
 
 
 export const reducer = (state: State, action: Action): State => {
     switch (action.type) {
-        case 'CONTROL_TEXT_UPDATED':
+        case 'CONTROL_TEXT_AREA_UPDATED':
             // FIXME
             const control = state.controls[action.id]
-            if (isControlText(control)) {
+            if (isControlTextArea(control)) {
                 control.defaultValue = action.value;
             } else {
                 throw Error('Not ControlText')

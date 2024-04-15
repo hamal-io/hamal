@@ -1,7 +1,7 @@
 import React from "react";
 import {useAuth} from "@/hooks/auth.ts";
 import {Editor} from "@/components/nodes/editor.tsx";
-import {ControlInit, ControlInvoke, ControlText, Graph, Node} from "@/components/nodes/types.ts";
+import {ControlInit, ControlInvoke, ControlTextArea, Graph, Node} from "@/components/nodes/types.ts";
 
 export const TestPage = () => {
     const [auth] = useAuth()
@@ -76,7 +76,7 @@ export const TestPage = () => {
                 } satisfies ControlInvoke,
                 {
                     id: '4',
-                    type: 'InputString',
+                    type: 'TextArea',
                     nodeId: '2',
                     port: {
                         id: '5',
@@ -84,10 +84,10 @@ export const TestPage = () => {
                     },
                     defaultValue: '',
                     placeholder: 'chat_id'
-                } satisfies ControlText,
+                } satisfies ControlTextArea,
                 {
                     id: '5',
-                    type: 'InputString',
+                    type: 'TextArea',
                     nodeId: '2',
                     port: {
                         id: '6',
@@ -95,7 +95,7 @@ export const TestPage = () => {
                     },
                     defaultValue: '',
                     placeholder: 'message'
-                } satisfies ControlText
+                } satisfies ControlTextArea
             ]}
         />
     )

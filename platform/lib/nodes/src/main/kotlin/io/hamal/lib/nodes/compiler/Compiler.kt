@@ -1,12 +1,8 @@
 package io.hamal.lib.nodes.compiler
 
-import io.hamal.lib.nodes.NodeId
-import io.hamal.lib.nodes.NodeType
-import io.hamal.lib.nodes.NodesGraph
-import io.hamal.lib.nodes.PortId
+import io.hamal.lib.nodes.*
 import io.hamal.lib.nodes.compiler.ComputationGraph.Companion.ComputationGraph
 import io.hamal.lib.nodes.control.ControlInput
-import io.hamal.lib.nodes.control.ControlInputString
 import io.hamal.lib.nodes.control.ControlType
 import io.hamal.lib.nodes.generator.Generator
 import io.hamal.lib.nodes.generator.GeneratorRegistry
@@ -83,7 +79,7 @@ class Compiler(
 
                     if (controls.size == 1) {
                         var control = controls.first()
-                        val p1 = if (control is ControlInputString) {
+                        val p1 = if (control is ControlTextArea) {
                             val defaultValue = control.defaultValue.stringValue
                             "'${defaultValue}'"
                         } else {
@@ -95,7 +91,7 @@ class Compiler(
 
                     } else if (controls.size == 2) {
                         var control = controls.first()
-                        val p1 = if (control is ControlInputString) {
+                        val p1 = if (control is ControlTextArea) {
                             val defaultValue = control.defaultValue.stringValue
                             "'${defaultValue}'"
                         } else {
@@ -106,7 +102,7 @@ class Compiler(
 
                         // FIXME is there a connection to the port? otherwise default to default value
                         control = controls.last()
-                        require(control is ControlInputString)
+                        require(control is ControlTextArea)
                         val p2 = "'${control.defaultValue.stringValue}'"
 
                         code.append("local p_2 = $p2 \n")
@@ -120,7 +116,7 @@ class Compiler(
 
                     if (controls.size == 1) {
                         val control = controls.first()
-                        if (control is ControlInputString) {
+                        if (control is ControlTextArea) {
                             val defaultValue = control.defaultValue.stringValue
                             code.append("n_${inputNode.id.value.value.toString(16)}(${outputPortMapping[connection.outputPort.id]!!.first} or '${defaultValue}')")
                         } else {
@@ -129,7 +125,7 @@ class Compiler(
                     } else if (controls.size == 2) {
 
                         var control = controls.first()
-                        val p1 = if (control is ControlInputString) {
+                        val p1 = if (control is ControlTextArea) {
                             val defaultValue = control.defaultValue.stringValue
                             "${outputPortMapping[connection.outputPort.id]!!.first} or '${defaultValue}'"
                         } else {
@@ -140,7 +136,7 @@ class Compiler(
 
                         // FIXME is there a connection to the port? otherwise default to default value
                         control = controls.last()
-                        require(control is ControlInputString)
+                        require(control is ControlTextArea)
                         val p2 = connections.find { it.inputPort.id == control.port.id }?.let { connection ->
                             // FIXME resolve variable name
                             null
