@@ -11,13 +11,11 @@ import io.hamal.lib.typesystem.value.ValueTrue
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.nullValue
 import org.hamcrest.MatcherAssert.assertThat
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 internal class DecisionTest : AbstractIntegrationTest() {
 
     @Test
-    @Disabled
     fun `Boolean - happy path`() {
         createTestRunner().run(
             unitOfWork(
@@ -39,7 +37,7 @@ internal class DecisionTest : AbstractIntegrationTest() {
                     connections = listOf(
                         connection(100, 1, 20, 2, 30),
                         connection(101, 2, 21, 3, 31, "yes"),
-                        connection(102, 2, 22, 4, 32, "yes"),
+                        connection(102, 2, 21, 4, 32, "yes"),
                         connection(103, 2, 22, 5, 33, "no"),
                         connection(104, 2, 22, 6, 34, "no"),
                     ),
@@ -61,7 +59,6 @@ internal class DecisionTest : AbstractIntegrationTest() {
     }
 
     @Test
-    @Disabled
     fun `Boolean - sad path`() {
         createTestRunner().run(
             unitOfWork(
@@ -83,7 +80,7 @@ internal class DecisionTest : AbstractIntegrationTest() {
                     connections = listOf(
                         connection(100, 1, 20, 2, 30),
                         connection(101, 2, 21, 3, 31, "yes"),
-                        connection(102, 2, 22, 4, 32, "yes"),
+                        connection(102, 2, 21, 4, 32, "yes"),
                         connection(103, 2, 22, 5, 33, "no"),
                         connection(104, 2, 22, 6, 34, "no"),
                     ),

@@ -80,7 +80,19 @@ class Compiler(
                     val controls = controls.filterNot { it.type == ControlType("Invoke") }
 
                     if (controls.isEmpty()) {
-                        code.append("n_${inputNode.id.value.value.toString(16)}(${outputPortMapping[connection.outputPort.id]!!.first})")
+
+
+                        val p1 = outputPortMapping[connection.outputPort.id]!!.first
+
+
+                        code.append("local p_1 = $p1 \n")
+
+                        code.append("if p_1 ~= nil then \n")
+
+                        code.append("n_${inputNode.id.value.value.toString(16)}(p_1)\n")
+
+                        code.append("end\n")
+
 
                     } else if (controls.size == 1) {
 
@@ -124,6 +136,17 @@ class Compiler(
                     if (controls.size == 1) {
                         val control = controls.first()
 
+                        val p1 = if (control is ControlTextArea) {
+                            val defaultValue = control.defaultValue.stringValue
+                            "'${defaultValue}'"
+                        } else {
+                            outputPortMapping[connection.outputPort.id]!!.first
+                        }
+
+                        code.append("local p_1 = $p1 \n")
+
+                        code.append("if p_1 ~= nil then \n")
+
                         val fnResult = inputNode.outputs.map { portOutput -> outputPortMapping[portOutput.id]!!.first }.joinToString(", ")
                         if (inputNode.outputs.size > 0) {
                             code.append(fnResult)
@@ -137,6 +160,14 @@ class Compiler(
                             code.append("n_${inputNode.id.value.value.toString(16)}(${outputPortMapping[connection.outputPort.id]!!.first})")
                         }
 
+                        code.append("\nelse\n")
+
+                        inputNode.outputs.forEach { portOutput ->
+                            code.append(outputPortMapping[portOutput.id]!!.first)
+                            code.append(" = nil\n")
+                        }
+
+                        code.append("end\n")
 
                     } else if (controls.size == 2) {
 
@@ -162,6 +193,8 @@ class Compiler(
 
                         code.append("n_${inputNode.id.value.value.toString(16)}(p_1, p_2)")
                     } else {
+
+
                         code.append("n_${inputNode.id.value.value.toString(16)}(${outputPortMapping[connection.outputPort.id]!!.first})")
                     }
                 }
@@ -169,7 +202,7 @@ class Compiler(
             }
         }
 
-        println(code)
+//        println(code)
 
         return code.toString()
     }
