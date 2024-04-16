@@ -36,8 +36,8 @@ internal class InitTest : AbstractIntegrationTest() {
                         connection(100, 1, 20, 2, 21)
                     ),
                     controls = listOf(
-                        ControlInit(nextControlId(), NodeId(1)),
-                        ControlTextArea(nextControlId(), NodeId(2), portInput(21, TypeString), ValueString("default string"))
+                        ControlInit(nextControlIdentifier(), NodeId(1)),
+                        ControlTextArea(nextControlIdentifier(), NodeId(2), portInput(21, TypeString), ValueString("default string"))
                     )
                 )
             )
@@ -60,7 +60,7 @@ internal class InitTest : AbstractIntegrationTest() {
                         connection(100, 1, 20, 2, 21)
                     ),
                     controls = listOf(
-                        ControlCheckbox(nextControlId(), NodeId(2), portInput(21, TypeBoolean), ValueFalse)
+                        ControlCheckbox(nextControlIdentifier(), NodeId(2), portInput(21, TypeBoolean), ValueFalse)
                     )
                 )
             )
@@ -84,7 +84,7 @@ internal class InitTest : AbstractIntegrationTest() {
                         connection(100, 1, 20, 2, 21)
                     ),
                     controls = listOf(
-                        ControlTextArea(nextControlId(), NodeId(2), portInput(21, TypeString), ValueString("default string"))
+                        ControlTextArea(nextControlIdentifier(), NodeId(2), portInput(21, TypeString), ValueString("default string"))
                     )
                 )
             )
@@ -107,7 +107,7 @@ internal class InitTest : AbstractIntegrationTest() {
                     connections = listOf(
                         connection(100, 1, 20, 2, 21)
                     ),
-                    controls = listOf(ControlNumberInput(nextControlId(), NodeId(2), portInput(21, TypeNumber), ValueNumber(0.213)))
+                    controls = listOf(ControlNumberInput(nextControlIdentifier(), NodeId(2), portInput(21, TypeNumber), ValueNumber(0.213)))
                 )
             )
         )
@@ -134,8 +134,8 @@ internal class InitTest : AbstractIntegrationTest() {
                         connection(100, 1, 20, 2, 21)
                     ),
                     controls = listOf(
-                        ControlInit(nextControlId(), NodeId(1), selector = "WILL_NOT_FIND_ANYTHING"),
-                        ControlTextArea(nextControlId(), NodeId(2), portInput(21, TypeString), ValueString("default string"))
+                        ControlInit(nextControlIdentifier(), NodeId(1), selector = "WILL_NOT_FIND_ANYTHING"),
+                        ControlTextArea(nextControlIdentifier(), NodeId(2), portInput(21, TypeString), ValueString("default string"))
                     )
                 )
             )
@@ -163,8 +163,8 @@ internal class InitTest : AbstractIntegrationTest() {
                         connection(100, 1, 20, 2, 21)
                     ),
                     controls = listOf(
-                        ControlInit(nextControlId(), NodeId(1)),
-                        ControlTextArea(nextControlId(), NodeId(2), portInput(21, TypeString), ValueString("default string"))
+                        ControlInit(nextControlIdentifier(), NodeId(1)),
+                        ControlTextArea(nextControlIdentifier(), NodeId(2), portInput(21, TypeString), ValueString("default string"))
                     )
                 )
             )

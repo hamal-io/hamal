@@ -12,7 +12,7 @@ interface ControlExtensionInput : ControlExtension {
 }
 
 data class ControlInputBoolean(
-    override val id: ControlId,
+    override val identifier: ControlIdentifier,
     override val nodeId: NodeId,
     override val port: PortInput,
     val defaultValue: ValueBoolean

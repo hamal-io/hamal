@@ -42,11 +42,11 @@ internal class DecisionTest : AbstractIntegrationTest() {
                         connection(104, 2, 22, 6, 34, "no"),
                     ),
                     controls = listOf(
-                        ControlCheckbox(nextControlId(), NodeId(2), portInput(30, TypeBoolean), ValueTrue),
-                        ControlCapture(nextControlId(), NodeId(3), portInput(31, TypeBoolean)),
-                        ControlInvoke(nextControlId(), NodeId(4), portInput(32, TypeBoolean)),
-                        ControlCapture(nextControlId(), NodeId(5), portInput(33, TypeBoolean)),
-                        ControlInvoke(nextControlId(), NodeId(6), portInput(34, TypeBoolean))
+                        ControlCheckbox(nextControlIdentifier(), NodeId(2), portInput(30, TypeBoolean), ValueTrue),
+                        ControlCapture(nextControlIdentifier(), NodeId(3), portInput(31, TypeBoolean)),
+                        ControlInvoke(nextControlIdentifier(), NodeId(4), portInput(32, TypeBoolean)),
+                        ControlCapture(nextControlIdentifier(), NodeId(5), portInput(33, TypeBoolean)),
+                        ControlInvoke(nextControlIdentifier(), NodeId(6), portInput(34, TypeBoolean))
                     )
                 )
             )
@@ -85,11 +85,11 @@ internal class DecisionTest : AbstractIntegrationTest() {
                         connection(104, 2, 22, 6, 34, "no"),
                     ),
                     controls = listOf(
-                        ControlCheckbox(nextControlId(), NodeId(2), portInput(30, TypeBoolean), ValueTrue),
-                        ControlCapture(nextControlId(), NodeId(3), portInput(31, TypeBoolean)),
-                        ControlInvoke(nextControlId(), NodeId(4), portInput(32, TypeBoolean)),
-                        ControlCapture(nextControlId(), NodeId(5), portInput(33, TypeBoolean)),
-                        ControlInvoke(nextControlId(), NodeId(6), portInput(34, TypeBoolean))
+                        ControlCheckbox(nextControlIdentifier(), NodeId(2), portInput(30, TypeBoolean), ValueTrue),
+                        ControlCapture(nextControlIdentifier(), NodeId(3), portInput(31, TypeBoolean)),
+                        ControlInvoke(nextControlIdentifier(), NodeId(4), portInput(32, TypeBoolean)),
+                        ControlCapture(nextControlIdentifier(), NodeId(5), portInput(33, TypeBoolean)),
+                        ControlInvoke(nextControlIdentifier(), NodeId(6), portInput(34, TypeBoolean))
                     )
                 )
             )

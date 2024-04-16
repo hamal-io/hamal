@@ -15,7 +15,7 @@ import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.type.KuaCode
 import io.hamal.lib.kua.type.KuaString
-import io.hamal.lib.nodes.control.ControlId
+import io.hamal.lib.nodes.control.ControlIdentifier
 import io.hamal.lib.nodes.fixture.CaptureFunction
 import io.hamal.lib.nodes.fixture.GeneratorCapture
 import io.hamal.lib.nodes.fixture.GeneratorInvoked
@@ -162,13 +162,13 @@ internal abstract class AbstractIntegrationTest {
     )
 
 
-    protected val nextControlId = NextControlId
+    protected val nextControlIdentifier = NextControlIdentifier
     protected val testContext = TestContext()
 
-    object NextControlId {
+    object NextControlIdentifier {
 
-        operator fun invoke(): ControlId {
-            return ControlId(counter++)
+        operator fun invoke(): ControlIdentifier {
+            return ControlIdentifier((counter++).toString(16))
         }
 
         private var counter: Int = 0

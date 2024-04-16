@@ -8,7 +8,7 @@ import io.hamal.lib.typesystem.value.ValueString
 sealed interface ControlConstant : Control
 
 data class ControlConstantBoolean(
-    override val id: ControlId,
+    override val identifier: ControlIdentifier,
     override val nodeId: NodeId,
     val value: ValueBoolean
 ) : ControlConstant {
@@ -16,7 +16,7 @@ data class ControlConstantBoolean(
 }
 
 data class ControlConstantDecimal(
-    override val id: ControlId,
+    override val identifier: ControlIdentifier,
     override val nodeId: NodeId,
     val value: ValueDecimal
 ) : ControlConstant {
@@ -24,7 +24,7 @@ data class ControlConstantDecimal(
 }
 
 data class ControlConstantString(
-    override val id: ControlId,
+    override val identifier: ControlIdentifier,
     override val nodeId: NodeId,
     val value: ValueString
 ) : ControlConstant {

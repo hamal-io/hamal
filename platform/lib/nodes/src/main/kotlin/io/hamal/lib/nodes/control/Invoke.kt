@@ -4,7 +4,7 @@ import io.hamal.lib.nodes.NodeId
 import io.hamal.lib.nodes.PortInput
 
 data class ControlInvoke(
-    override val id: ControlId,
+    override val identifier: ControlIdentifier,
     override val nodeId: NodeId,
     override val port: PortInput
 ) : ControlInput {

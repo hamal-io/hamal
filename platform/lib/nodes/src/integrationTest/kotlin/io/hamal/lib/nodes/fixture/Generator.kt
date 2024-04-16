@@ -115,7 +115,7 @@ internal class TestInvokedTest : AbstractIntegrationTest() {
                     connections = listOf(
                         connection(100, 1, 20, 2, 21)
                     ),
-                    controls = listOf(ControlTextArea(nextControlId(), NodeId(2), portInput(21, TypeString), ValueString("default")))
+                    controls = listOf(ControlTextArea(nextControlIdentifier(), NodeId(2), portInput(21, TypeString), ValueString("default")))
                 )
             )
         )
@@ -139,8 +139,8 @@ internal class TestInvokedTest : AbstractIntegrationTest() {
                         connection(100, 1, 20, 3, 22),
                     ),
                     controls = listOf(
-                        ControlTextArea(nextControlId(), NodeId(2), portInput(21, TypeString), ValueString("default")),
-                        ControlTextArea(nextControlId(), NodeId(3), portInput(22, TypeString), ValueString("default"))
+                        ControlTextArea(nextControlIdentifier(), NodeId(2), portInput(21, TypeString), ValueString("default")),
+                        ControlTextArea(nextControlIdentifier(), NodeId(3), portInput(22, TypeString), ValueString("default"))
                     )
 
                 )

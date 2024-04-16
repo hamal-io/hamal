@@ -1,6 +1,6 @@
 package io.hamal.lib.nodes
 
-import io.hamal.lib.nodes.control.ControlId
+import io.hamal.lib.nodes.control.ControlIdentifier
 import io.hamal.lib.nodes.control.ControlInput
 import io.hamal.lib.nodes.control.ControlType
 import io.hamal.lib.typesystem.value.ValueBoolean
@@ -8,7 +8,7 @@ import io.hamal.lib.typesystem.value.ValueNumber
 import io.hamal.lib.typesystem.value.ValueString
 
 data class ControlCheckbox(
-    override val id: ControlId,
+    override val identifier: ControlIdentifier,
     override val nodeId: NodeId,
     override val port: PortInput,
     val value: ValueBoolean
@@ -17,7 +17,7 @@ data class ControlCheckbox(
 }
 
 data class ControlCapture(
-    override val id: ControlId,
+    override val identifier: ControlIdentifier,
     override val nodeId: NodeId,
     override val port: PortInput,
 ) : ControlInput {
@@ -25,7 +25,7 @@ data class ControlCapture(
 }
 
 data class ControlNumberInput(
-    override val id: ControlId,
+    override val identifier: ControlIdentifier,
     override val nodeId: NodeId,
     override val port: PortInput,
     val value: ValueNumber
@@ -34,7 +34,7 @@ data class ControlNumberInput(
 }
 
 data class ControlTextArea(
-    override val id: ControlId,
+    override val identifier: ControlIdentifier,
     override val nodeId: NodeId,
     override val port: PortInput,
     val value: ValueString
