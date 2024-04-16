@@ -30,7 +30,7 @@ data class ControlNumberInput(
     override val port: PortInput,
     val value: ValueNumber
 ) : ControlInput {
-    override val type: ControlType = ControlType("Number_Input")
+    override val type: ControlType = ControlType("Input_Number")
 }
 
 data class ControlTextArea(

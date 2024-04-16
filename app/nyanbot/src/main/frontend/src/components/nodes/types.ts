@@ -73,7 +73,7 @@ export type ControlTextArea = ControlBase & {
     placeholder?: string;
     port: {
         id: PortId;
-        inputType: string;
+        type: string;
     }
 }
 
@@ -131,7 +131,7 @@ export type PortInput = {
 
 export type PortOutput = {
     id: PortId;
-    outputType: string; // FIXME type
+    type: string; // FIXME type
 }
 
 export type Position = {

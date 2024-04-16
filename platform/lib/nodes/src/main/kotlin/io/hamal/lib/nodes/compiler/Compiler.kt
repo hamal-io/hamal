@@ -25,13 +25,13 @@ class Compiler(
             val controls = graph.controls.filter { it.nodeId == node.id }
             val inputTypes = controls.filter { it !is ControlInvoke }.mapNotNull { control ->
                 if (control is ControlInput) {
-                    control.port.inputType
+                    control.port.type
                 } else {
                     null
                 }
             }
 
-            val outputTypes = node.outputs.map { it.outputType }
+            val outputTypes = node.outputs.map { it.type }
 
             val generator = generatorRegistry[node.type, inputTypes, outputTypes]
 

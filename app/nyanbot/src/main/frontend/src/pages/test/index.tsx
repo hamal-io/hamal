@@ -39,7 +39,7 @@ export const TestPage = () => {
                     size: {width: 100, height: 100},
                     outputs: [{
                         id: '1',
-                        outputType: 'String'
+                        type: 'String'
                     }]
                 } satisfies Node,
                 {
@@ -80,7 +80,7 @@ export const TestPage = () => {
                     nodeId: '2',
                     port: {
                         id: '5',
-                        inputType: 'String'
+                        type: 'String'
                     },
                     value: '',
                     placeholder: 'chat_id'
@@ -91,7 +91,7 @@ export const TestPage = () => {
                     nodeId: '2',
                     port: {
                         id: '6',
-                        inputType: 'String'
+                        type: 'String'
                     },
                     value: '',
                     placeholder: 'message'

@@ -12,10 +12,10 @@ class PortId(override val value: SnowflakeId) : ValueObjectId() {
 
 data class PortInput(
     val id: PortId,
-    val inputType: Type
+    val type: Type
 )
 
 data class PortOutput(
     val id: PortId,
-    val outputType: Type
+    val type: Type
 )
