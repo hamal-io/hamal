@@ -33,7 +33,7 @@ export const TestPage = () => {
             nodes={[
                 {
                     id: '1',
-                    type: 'INIT',
+                    type: 'Init',
                     title: 'Init',
                     position: {x: -200, y: -400},
                     size: {width: 100, height: 100},
@@ -44,7 +44,7 @@ export const TestPage = () => {
                 } satisfies Node,
                 {
                     id: '2',
-                    type: "TELEGRAM_SEND_MESSAGE",
+                    type: "Telegram_Send_Message",
                     title: 'Telegram - Send Message',
                     position: {x: 0, y: -400},
                     size: {width: 250, height: 300},
@@ -65,7 +65,7 @@ export const TestPage = () => {
                     id: '1',
                     type: 'Init',
                     nodeId: '1',
-                    selector: 'NO_VALUE',
+                    selector: 'No_Value',
                     description: 'Let me trigger TG for ya!',
                 } satisfies ControlInit,
                 {

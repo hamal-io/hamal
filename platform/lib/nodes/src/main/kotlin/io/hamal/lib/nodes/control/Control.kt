@@ -45,7 +45,7 @@ interface Control {
 
             return when (type) {
                 ControlType("Checkbox") -> context.deserialize(json, ControlCheckbox::class.java)
-                ControlType("Capture") -> context.deserialize(json, ControlCapture::class.java)
+                ControlType("Test_Capture") -> context.deserialize(json, ControlCapture::class.java)
                 ControlType("Condition") -> context.deserialize(json, ControlCondition::class.java)
                 ControlType("ConstantBoolean") -> context.deserialize(json, ControlConstantBoolean::class.java)
                 ControlType("ConstantDecimal") -> context.deserialize(json, ControlConstantDecimal::class.java)
@@ -89,7 +89,7 @@ sealed interface ControlExtension {
 
             return when (type) {
                 ControlType("Checkbox") -> context.deserialize(json, ControlCheckbox::class.java)
-                ControlType("Capture") -> context.deserialize(json, ControlCapture::class.java)
+                ControlType("Test_Capture") -> context.deserialize(json, ControlCapture::class.java)
                 ControlType("Condition") -> context.deserialize(json, ControlCondition::class.java)
                 ControlType("ConstantBoolean") -> context.deserialize(json, ControlConstantBoolean::class.java)
                 ControlType("ConstantDecimal") -> context.deserialize(json, ControlConstantDecimal::class.java)

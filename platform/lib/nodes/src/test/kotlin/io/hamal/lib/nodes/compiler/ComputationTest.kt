@@ -21,8 +21,8 @@ internal object ComputationNodesGraphTest : AbstractUnitTest() {
         val result = ComputationGraph(
             NodesGraph(
                 nodes = listOf(
-                    node(1, "INIT", listOf(PortOutput(PortId(20), TypeString))),
-                    node(2, "INVOKED")
+                    node(1, "Init", listOf(PortOutput(PortId(20), TypeString))),
+                    node(2, "Test_Invoked")
                 ),
                 connections = listOf(
                     connection(100, 1, 20, 2, 21)
@@ -80,9 +80,9 @@ internal object ComputationNodesGraphTest : AbstractUnitTest() {
         val result = ComputationGraph(
             graph = NodesGraph(
                 nodes = listOf(
-                    node(1, "INIT", listOf(PortOutput(PortId(20), TypeString))),
-                    node(2, "INVOKED"),
-                    node(3, "INVOKED")
+                    node(1, "Init", listOf(PortOutput(PortId(20), TypeString))),
+                    node(2, "Test_Invoked"),
+                    node(3, "Test_Invoked")
                 ),
                 connections = listOf(
                     connection(100, 1, 20, 3, 22),

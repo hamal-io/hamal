@@ -21,15 +21,15 @@ internal class DecisionTest : AbstractIntegrationTest() {
                 initValue = HotBoolean(true),
                 graph = NodesGraph(
                     nodes = listOf(
-                        node(1, "INIT", listOf(PortOutput(PortId(20), TypeBoolean))),
+                        node(1, "Init", listOf(PortOutput(PortId(20), TypeBoolean))),
                         node(
-                            2, "DECISION", listOf(
+                            2, "Decision", listOf(
                                 portOutput(21, TypeBoolean),
                                 portOutput(22, TypeBoolean)
                             )
                         ),
-                        node(3, "CAPTURE", listOf(portOutput(23, TypeBoolean))),
-                        node(4, "CAPTURE", listOf(portOutput(24, TypeBoolean)))
+                        node(3, "Test_Capture", listOf(portOutput(23, TypeBoolean))),
+                        node(4, "Test_Capture", listOf(portOutput(24, TypeBoolean)))
                     ),
                     connections = listOf(
                         connection(100, 1, 20, 2, 30),

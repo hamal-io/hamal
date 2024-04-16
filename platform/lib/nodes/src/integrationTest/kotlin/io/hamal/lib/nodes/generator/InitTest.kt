@@ -29,8 +29,8 @@ internal class InitTest : AbstractIntegrationTest() {
                 initValue = HotString("Hamal Rocks"),
                 graph = NodesGraph(
                     nodes = listOf(
-                        node(1, "INIT", listOf(portOutput(20, TypeString))),
-                        node(2, "CAPTURE", listOf(portOutput(22, TypeString)))
+                        node(1, "Init", listOf(portOutput(20, TypeString))),
+                        node(2, "Test_Capture", listOf(portOutput(22, TypeString)))
                     ),
                     connections = listOf(
                         connection(100, 1, 20, 2, 21)
@@ -53,8 +53,8 @@ internal class InitTest : AbstractIntegrationTest() {
                 initValue = HotBoolean(true),
                 graph = NodesGraph(
                     nodes = listOf(
-                        node(1, "INIT", listOf(portOutput(20, TypeBoolean))),
-                        node(2, "CAPTURE", listOf(portOutput(22, TypeBoolean)))
+                        node(1, "Init", listOf(portOutput(20, TypeBoolean))),
+                        node(2, "Test_Capture", listOf(portOutput(22, TypeBoolean)))
                     ),
                     connections = listOf(
                         connection(100, 1, 20, 2, 21)
@@ -77,8 +77,8 @@ internal class InitTest : AbstractIntegrationTest() {
                 initValue = HotString("Hamal Rocks"),
                 graph = NodesGraph(
                     nodes = listOf(
-                        node(1, "INIT", listOf(portOutput(20, TypeString))),
-                        node(2, "CAPTURE", listOf(portOutput(22, TypeString)))
+                        node(1, "Init", listOf(portOutput(20, TypeString))),
+                        node(2, "Test_Capture", listOf(portOutput(22, TypeString)))
                     ),
                     connections = listOf(
                         connection(100, 1, 20, 2, 21)
@@ -101,8 +101,8 @@ internal class InitTest : AbstractIntegrationTest() {
                 initValue = HotNumber(13.37),
                 graph = NodesGraph(
                     nodes = listOf(
-                        node(1, "INIT", listOf(portOutput(20, TypeNumber))),
-                        node(2, "CAPTURE", listOf(portOutput(22, TypeNumber)))
+                        node(1, "Init", listOf(portOutput(20, TypeNumber))),
+                        node(2, "Test_Capture", listOf(portOutput(22, TypeNumber)))
                     ),
                     connections = listOf(
                         connection(100, 1, 20, 2, 21)
@@ -127,8 +127,8 @@ internal class InitTest : AbstractIntegrationTest() {
                 initValue = HotString("nyanNYANnyanNyan"),
                 graph = NodesGraph(
                     nodes = listOf(
-                        node(1, "INIT", listOf(portOutput(20, TypeString))),
-                        node(2, "INVOKED", listOf())
+                        node(1, "Init", listOf(portOutput(20, TypeString))),
+                        node(2, "Test_Invoked", listOf())
                     ),
                     connections = listOf(
                         connection(100, 1, 20, 2, 21)
@@ -156,8 +156,8 @@ internal class InitTest : AbstractIntegrationTest() {
                 initValue = HotNull,
                 graph = NodesGraph(
                     nodes = listOf(
-                        node(1, "INIT", listOf(portOutput(20, TypeString))),
-                        node(2, "INVOKED", listOf())
+                        node(1, "Init", listOf(portOutput(20, TypeString))),
+                        node(2, "Test_Invoked", listOf())
                     ),
                     connections = listOf(
                         connection(100, 1, 20, 2, 21)

@@ -21,7 +21,7 @@ data class ControlCapture(
     override val nodeId: NodeId,
     override val port: PortInput,
 ) : ControlInput {
-    override val type: ControlType = ControlType("Capture")
+    override val type: ControlType = ControlType("Test_Capture")
 }
 
 data class ControlNumberInput(

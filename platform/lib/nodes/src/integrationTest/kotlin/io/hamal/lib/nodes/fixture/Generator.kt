@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test
 
 
 interface GeneratorCapture : Generator {
-    override val type: NodeType get() = NodeType("CAPTURE")
+    override val type: NodeType get() = NodeType("Test_Capture")
 
     object Boolean : GeneratorCapture {
         override val inputTypes: List<Type> get() = listOf(TypeBoolean)
@@ -52,7 +52,7 @@ interface GeneratorCapture : Generator {
 
 
 object GeneratorInvoked : Generator {
-    override val type: NodeType get() = NodeType("INVOKED")
+    override val type: NodeType get() = NodeType("Test_Invoked")
     override val inputTypes: List<Type> get() = listOf(TypeString)
     override val outputTypes: List<Type> get() = listOf()
 
@@ -75,8 +75,8 @@ internal class TestInvokedTest : AbstractIntegrationTest() {
                 initValue = HotString("Hamal Rocks"),
                 graph = NodesGraph(
                     nodes = listOf(
-                        node(1, "INIT", listOf(portOutput(20, TypeString))),
-                        node(2, "INVOKED")
+                        node(1, "Init", listOf(portOutput(20, TypeString))),
+                        node(2, "Test_Invoked")
                     ),
                     connections = listOf(
                         connection(100, 1, 20, 2, 21)
@@ -96,9 +96,9 @@ internal class TestInvokedTest : AbstractIntegrationTest() {
                 initValue = HotString("Hamal Rocks"),
                 graph = NodesGraph(
                     nodes = listOf(
-                        node(1, "INIT", listOf(portOutput(20, TypeString))),
-                        node(2, "INVOKED"),
-                        node(3, "INVOKED")
+                        node(1, "Init", listOf(portOutput(20, TypeString))),
+                        node(2, "Test_Invoked"),
+                        node(3, "Test_Invoked")
                     ),
                     connections = listOf(
                         connection(100, 1, 20, 2, 21),

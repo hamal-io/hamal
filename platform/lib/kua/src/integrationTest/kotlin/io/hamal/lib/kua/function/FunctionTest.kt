@@ -145,7 +145,7 @@ internal class FunctionTest {
                 ),
                 internals = mapOf(
                     KuaString("emit") to emitter,
-                    KuaString("capture") to captor
+                    KuaString("Test_Capture") to captor
                 )
             )
         )
@@ -189,7 +189,7 @@ internal class FunctionTest {
                 ),
                 internals = mapOf(
                     KuaString("transform") to transform,
-                    KuaString("capture") to captor
+                    KuaString("Test_Capture") to captor
                 )
             )
         )
@@ -233,7 +233,7 @@ internal class FunctionTest {
                 ),
                 internals = mapOf(
                     KuaString("transform") to transform,
-                    KuaString("capture") to captor
+                    KuaString("Test_Capture") to captor
                 )
             )
         )
@@ -282,7 +282,7 @@ internal class FunctionTest {
                 ),
                 internals = mapOf(
                     KuaString("transform") to transform,
-                    KuaString("capture") to captor
+                    KuaString("Test_Capture") to captor
                 )
             )
         )
@@ -324,7 +324,7 @@ internal class FunctionTest {
                 ),
                 internals = mapOf(
                     KuaString("emit") to emitter,
-                    KuaString("capture") to captor
+                    KuaString("Test_Capture") to captor
                 )
             )
         )

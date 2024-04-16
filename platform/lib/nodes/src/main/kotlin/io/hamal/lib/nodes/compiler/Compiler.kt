@@ -61,7 +61,7 @@ class Compiler(
         code.append("\n")
         code.append("\n")
 
-        val initNode = nodes.find { it.type == NodeType("INIT") } ?: throw IllegalArgumentException("No INIT node found")
+        val initNode = nodes.find { it.type == NodeType("Init") } ?: throw IllegalArgumentException("No INIT node found")
         val computationGraph = ComputationGraph(graph)
         val orderedNodeIds = breadthFirstSearch(computationGraph, initNode.id)
 

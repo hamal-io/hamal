@@ -9,7 +9,7 @@ import io.hamal.lib.typesystem.type.TypeString
 import io.hamal.lib.typesystem.value.ValueString
 
 val SendMessageNode = NodeExtension(
-    type = NodeType("TELEGRAM_SEND_MESSAGE"),
+    type = NodeType("Telegram_Send_Message"),
     title = NodeTitle("Telegram - Send Message"),
     size = Size(200, 200),
     controls = listOf(
@@ -22,7 +22,7 @@ val SendMessageNode = NodeExtension(
 )
 
 val SendMessageNodeGenerator = object : Generator {
-    override val type: NodeType get() = NodeType("TELEGRAM_SEND_MESSAGE")
+    override val type: NodeType get() = NodeType("Telegram_Send_Message")
     override val inputTypes: List<Type> get() = listOf(TypeString, TypeString)
     override val outputTypes: List<Type> get() = listOf()
 
