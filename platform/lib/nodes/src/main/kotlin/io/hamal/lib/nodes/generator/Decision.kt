@@ -17,7 +17,7 @@ sealed interface GeneratorDecision : Generator {
 
         override fun toCode(node: Node, controls: List<Control>): String {
             val checkbox = controls.filterIsInstance<ControlCheckbox>().first()
-            val expectedValue = checkbox.expectedValue
+            val expectedValue = checkbox.value
             return """
                 if arg_1 == ${if (expectedValue == ValueTrue) "true" else "false"} then
                     return true, nil

@@ -39,7 +39,7 @@ export const TestPage = () => {
                     size: {width: 100, height: 100},
                     outputs: [{
                         id: '1',
-                        outputType: 'TypeString'
+                        outputType: 'String'
                     }]
                 } satisfies Node,
                 {
@@ -76,24 +76,24 @@ export const TestPage = () => {
                 } satisfies ControlInvoke,
                 {
                     id: '4',
-                    type: 'TextArea',
+                    type: 'Text_Area',
                     nodeId: '2',
                     port: {
                         id: '5',
-                        inputType: 'TypeString'
+                        inputType: 'String'
                     },
-                    defaultValue: '',
+                    value: '',
                     placeholder: 'chat_id'
                 } satisfies ControlTextArea,
                 {
                     id: '5',
-                    type: 'TextArea',
+                    type: 'Text_Area',
                     nodeId: '2',
                     port: {
                         id: '6',
-                        inputType: 'TypeString'
+                        inputType: 'String'
                     },
-                    defaultValue: '',
+                    value: '',
                     placeholder: 'message'
                 } satisfies ControlTextArea
             ]}

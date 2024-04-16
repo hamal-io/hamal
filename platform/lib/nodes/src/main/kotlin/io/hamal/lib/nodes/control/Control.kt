@@ -53,8 +53,8 @@ interface Control {
                 ControlType("Init") -> context.deserialize(json, ControlInit::class.java)
                 ControlType("Invoke") -> context.deserialize(json, ControlInvoke::class.java)
                 ControlType("InputBoolean") -> context.deserialize(json, ControlInputBoolean::class.java)
-                ControlType("NumberInput") -> context.deserialize(json, ControlNumberInput::class.java)
-                ControlType("TextArea") -> context.deserialize(json, ControlTextArea::class.java)
+                ControlType("Number_Input") -> context.deserialize(json, ControlNumberInput::class.java)
+                ControlType("Text_Area") -> context.deserialize(json, ControlTextArea::class.java)
                 ControlType("String") -> context.deserialize(json, ControlString::class.java)
                 else -> TODO()
             }
@@ -97,8 +97,8 @@ sealed interface ControlExtension {
                 ControlType("Init") -> context.deserialize(json, ControlInit::class.java)
                 ControlType("Invoke") -> context.deserialize(json, ControlInvoke::class.java)
                 ControlType("InputBoolean") -> context.deserialize(json, ControlInputBoolean::class.java)
-                ControlType("NumberInput") -> context.deserialize(json, ControlNumberInput::class.java)
-                ControlType("TextArea") -> context.deserialize(json, ControlTextArea::class.java)
+                ControlType("Number_Input") -> context.deserialize(json, ControlNumberInput::class.java)
+                ControlType("Text_Area") -> context.deserialize(json, ControlTextArea::class.java)
                 ControlType("String") -> context.deserialize(json, ControlString::class.java)
                 else -> TODO()
             }

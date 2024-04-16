@@ -15,7 +15,7 @@ export const reducer = (state: State, action: Action): State => {
             // FIXME
             const control = state.controls[action.id]
             if (isControlTextArea(control)) {
-                control.defaultValue = action.value;
+                control.value = action.value;
             } else {
                 throw Error('Not ControlText')
             }

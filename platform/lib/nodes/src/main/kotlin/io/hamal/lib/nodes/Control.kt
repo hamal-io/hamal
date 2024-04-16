@@ -11,7 +11,7 @@ data class ControlCheckbox(
     override val id: ControlId,
     override val nodeId: NodeId,
     override val port: PortInput,
-    val expectedValue: ValueBoolean
+    val value: ValueBoolean
 ) : ControlInput {
     override val type: ControlType = ControlType("Checkbox")
 }
@@ -28,16 +28,16 @@ data class ControlNumberInput(
     override val id: ControlId,
     override val nodeId: NodeId,
     override val port: PortInput,
-    val defaultValue: ValueNumber
+    val value: ValueNumber
 ) : ControlInput {
-    override val type: ControlType = ControlType("NumberInput")
+    override val type: ControlType = ControlType("Number_Input")
 }
 
 data class ControlTextArea(
     override val id: ControlId,
     override val nodeId: NodeId,
     override val port: PortInput,
-    val defaultValue: ValueString
+    val value: ValueString
 ) : ControlInput {
-    override val type: ControlType = ControlType("TextArea")
+    override val type: ControlType = ControlType("Text_Area")
 }

@@ -29,7 +29,7 @@ object TypesystemHotModule : HotModule() {
                     TypeBoolean.identifier -> TypeBoolean
                     TypeNumber.identifier -> TypeNumber
                     TypeString.identifier -> TypeString
-                    else -> TODO()
+                    else -> TODO("Not implemented ${json.asString}")
                 }
             }
         }
