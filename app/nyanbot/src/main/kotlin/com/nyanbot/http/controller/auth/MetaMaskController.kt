@@ -30,7 +30,8 @@ data class AuthLoginMetaMaskRequest(
 
 data class TokenRequested(
     val id: AccountId,
-    val token: AuthToken
+    val token: AuthToken,
+    val address: Web3Address,
 )
 
 @RestController
@@ -74,7 +75,11 @@ internal class AuthLoginMetaMaskController(
                 )
             ).let { auth ->
                 require(auth is Auth.Token)
-                ResponseEntity.ok(TokenRequested(auth.accountId, auth.token))
+                ResponseEntity.ok(TokenRequested(
+                    auth.accountId,
+                    auth.token,
+                    req.address
+                ))
             }
 
         } else {
@@ -91,7 +96,11 @@ internal class AuthLoginMetaMaskController(
                 )
             ).let { auth ->
                 require(auth is Auth.Token)
-                ResponseEntity.ok(TokenRequested(auth.accountId, auth.token))
+                ResponseEntity.ok(TokenRequested(
+                    auth.accountId,
+                    auth.token,
+                    req.address
+                ))
             }
         }
     }
@@ -120,6 +129,6 @@ internal fun verifySignature(req: AuthLoginMetaMaskRequest) {
     }
 }
 
-private fun challenge(adress: Web3Address): Web3Challenge {
-    return Web3Challenge("Please sign this message to login: ${adress.value.substring(2, 10).lowercase()}")
+private fun challenge(address: Web3Address): Web3Challenge {
+    return Web3Challenge("Please sign this message to login: ${address.value.substring(2, 10).lowercase()}")
 }

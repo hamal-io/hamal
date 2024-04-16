@@ -140,6 +140,7 @@ export const useMetaMaskToken = (): [MetaMaskTokenAction, string, boolean, Error
                         type: 'User',
                         accountId: data.accountId,
                         token: data.token,
+                        address: data.address
                     })
 
                     initUiState()

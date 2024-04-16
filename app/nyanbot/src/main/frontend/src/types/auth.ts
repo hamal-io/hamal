@@ -6,4 +6,5 @@ export interface Auth {
     type: AuthType,
     accountId: string;
     token: string;
+    address: string
 }
