@@ -42,26 +42,60 @@ interface GeneratorCapture : Generator {
     }
 
     fun captureCode(node: Node, controls: List<Control>): kotlin.String {
+        val captureFunction = node.properties.value.find("capture_fn")?.stringValue ?: "captureOne"
         return """
             test = require_plugin('test')
-            test.captureOne(arg_1)
+            test.$captureFunction(arg_1)
             return arg_1
         """.trimIndent()
     }
 }
 
 
-object GeneratorInvoked : Generator {
+sealed interface GeneratorInvoked : Generator {
     override val type: NodeType get() = NodeType("Test_Invoked")
-    override val inputTypes: List<Type> get() = listOf(TypeString)
-    override val outputTypes: List<Type> get() = listOf()
 
-    override fun toCode(node: Node, controls: List<Control>): String {
-        return """
+    data object Empty: GeneratorInvoked {
+        override val inputTypes: List<Type> get() = listOf()
+        override val outputTypes: List<Type> get() = listOf()
+
+        override fun toCode(node: Node, controls: List<Control>): kotlin.String {
+            val invokeFunction = node.properties.value.find("invoke_fn")?.stringValue ?: "invokeOne"
+            return """
             test = require_plugin('test')
-            test.invokeOne()
+            test.$invokeFunction()
             return 
         """.trimIndent()
+        }
+    }
+
+    data object Boolean : GeneratorInvoked {
+        override val inputTypes: List<Type> get() = listOf(TypeBoolean)
+        override val outputTypes: List<Type> get() = listOf()
+
+        override fun toCode(node: Node, controls: List<Control>): kotlin.String {
+            val invokeFunction = node.properties.value.find("invoke_fn")?.stringValue ?: "invokeOne"
+            return """
+            test = require_plugin('test')
+            test.$invokeFunction()
+            return 
+        """.trimIndent()
+        }
+    }
+
+    data object String : GeneratorInvoked {
+        override val inputTypes: List<Type> get() = listOf(TypeString)
+        override val outputTypes: List<Type> get() = listOf()
+
+        override fun toCode(node: Node, controls: List<Control>): kotlin.String {
+            val invokeFunction = node.properties.value.find("invoke_fn")?.stringValue ?: "invokeOne"
+
+            return """
+            test = require_plugin('test')
+            test.$invokeFunction()
+            return 
+        """.trimIndent()
+        }
     }
 }
 

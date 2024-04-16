@@ -3,6 +3,7 @@ package io.hamal.lib.nodes.compiler
 import io.hamal.lib.nodes.*
 import io.hamal.lib.nodes.compiler.ComputationGraph.Companion.ComputationGraph
 import io.hamal.lib.nodes.control.ControlInput
+import io.hamal.lib.nodes.control.ControlInvoke
 import io.hamal.lib.nodes.control.ControlType
 import io.hamal.lib.nodes.generator.Generator
 import io.hamal.lib.nodes.generator.GeneratorRegistry
@@ -22,7 +23,7 @@ class Compiler(
 
         for (node in nodes) {
             val controls = graph.controls.filter { it.nodeId == node.id }
-            val inputTypes = controls.mapNotNull { control ->
+            val inputTypes = controls.filter { it !is ControlInvoke }.mapNotNull { control ->
                 if (control is ControlInput) {
                     control.port.inputType
                 } else {
@@ -78,7 +79,12 @@ class Compiler(
                 if (controls.any { it.type == ControlType("Invoke") }) {
                     val controls = controls.filterNot { it.type == ControlType("Invoke") }
 
-                    if (controls.size == 1) {
+                    if (controls.isEmpty()) {
+                        code.append("n_${inputNode.id.value.value.toString(16)}(${outputPortMapping[connection.outputPort.id]!!.first})")
+
+                    } else if (controls.size == 1) {
+
+
                         var control = controls.first()
                         val p1 = if (control is ControlTextArea) {
                             val defaultValue = control.defaultValue.stringValue
@@ -117,12 +123,21 @@ class Compiler(
 
                     if (controls.size == 1) {
                         val control = controls.first()
+
+                        val fnResult = inputNode.outputs.map { portOutput -> outputPortMapping[portOutput.id]!!.first }.joinToString(", ")
+                        if (inputNode.outputs.size > 0) {
+                            code.append(fnResult)
+                            code.append(" = ")
+                        }
+
                         if (control is ControlTextArea) {
                             val defaultValue = control.defaultValue.stringValue
                             code.append("n_${inputNode.id.value.value.toString(16)}(${outputPortMapping[connection.outputPort.id]!!.first} or '${defaultValue}')")
                         } else {
                             code.append("n_${inputNode.id.value.value.toString(16)}(${outputPortMapping[connection.outputPort.id]!!.first})")
                         }
+
+
                     } else if (controls.size == 2) {
 
                         var control = controls.first()

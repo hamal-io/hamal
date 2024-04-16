@@ -11,7 +11,7 @@ data class ControlCheckbox(
     override val id: ControlId,
     override val nodeId: NodeId,
     override val port: PortInput,
-    val defaultValue: ValueBoolean
+    val expectedValue: ValueBoolean
 ) : ControlInput {
     override val type: ControlType = ControlType("Checkbox")
 }

@@ -1,7 +1,9 @@
 package io.hamal.lib.nodes
 
+import io.hamal.lib.common.domain.ValueObjectHotObject
 import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.domain.ValueObjectString
+import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.snowflake.SnowflakeId
 
 
@@ -14,11 +16,14 @@ class NodeTitle(override val value: String) : ValueObjectString()
 
 class NodeType(override val value: String) : ValueObjectString()
 
+class NodeProperties(override val value: HotObject = HotObject.empty) : ValueObjectHotObject()
+
 data class Node(
     val id: NodeId,
     val type: NodeType,
     val title: NodeTitle,
     val position: Position,
     val size: Size,
+    val properties: NodeProperties = NodeProperties(),
     val outputs: List<PortOutput> = listOf()
 )

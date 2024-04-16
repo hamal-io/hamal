@@ -164,9 +164,7 @@ internal class InitTest : AbstractIntegrationTest() {
                     ),
                     controls = listOf(
                         ControlInit(nextControlId(), NodeId(1)),
-                        ControlTextArea(
-                            nextControlId(), NodeId(2), portInput(21, TypeString), ValueString("default string")
-                        )
+                        ControlTextArea(nextControlId(), NodeId(2), portInput(21, TypeString), ValueString("default string"))
                     )
                 )
             )

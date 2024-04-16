@@ -36,7 +36,8 @@ internal abstract class AbstractIntegrationTest {
     data class TestContext(
         val captorOne: CaptureFunction = CaptureFunction(),
         val captorTwo: CaptureFunction = CaptureFunction(),
-        val invokedOne: InvokeFunction = InvokeFunction()
+        val invokedOne: InvokeFunction = InvokeFunction(),
+        val invokedTwo: InvokeFunction = InvokeFunction()
     )
 
     fun createTestRunner(connector: Connector = TestConnector()) = CodeRunnerImpl(
@@ -53,6 +54,7 @@ internal abstract class AbstractIntegrationTest {
                     function plugin_create(internal)
                         local export = {
                             invokeOne = internal.invokeOne,
+                            invokeTwo = internal.invokeTwo,
                             captureOne =  internal.captureOne,
                             captureTwo =  internal.captureTwo
                         }
@@ -62,6 +64,7 @@ internal abstract class AbstractIntegrationTest {
                             ),
                             internals = mapOf(
                                 KuaString("invokeOne") to testContext.invokedOne,
+                                KuaString("invokeTwo") to testContext.invokedTwo,
                                 KuaString("captureOne") to testContext.captorOne,
                                 KuaString("captureTwo") to testContext.captorTwo
                             )
@@ -77,7 +80,9 @@ internal abstract class AbstractIntegrationTest {
                                     GeneratorCapture.Decimal,
                                     GeneratorCapture.Number,
                                     GeneratorCapture.String,
-                                    GeneratorInvoked
+                                    GeneratorInvoked.Boolean,
+                                    GeneratorInvoked.Empty,
+                                    GeneratorInvoked.String,
                                 )
                             )
                         )
@@ -93,6 +98,7 @@ internal abstract class AbstractIntegrationTest {
         id: Long,
         type: String,
         outputs: List<PortOutput> = listOf(),
+        properties: HotObject = HotObject.empty,
         title: NodeTitle = NodeTitle("Title of ${id.toString(16)}"),
         position: Position = Position(0, 0),
         size: Size = Size(200, 200)
@@ -103,6 +109,7 @@ internal abstract class AbstractIntegrationTest {
             title = title,
             position = position,
             size = size,
+            properties = NodeProperties(properties),
             outputs = outputs
         )
     }

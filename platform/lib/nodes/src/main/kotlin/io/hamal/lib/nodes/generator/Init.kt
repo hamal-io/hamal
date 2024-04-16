@@ -22,7 +22,13 @@ sealed interface GeneratorInit : Generator {
             if (selector == "No_Value") {
                 return "return nil"
             }
-            return """return  context.exec.inputs.${selector} or error('No initial value was found')""".trimIndent()
+            return """
+                initial_value = context.exec.inputs.${selector}
+                if initial_value == nil then
+                    error('No initial value was found')
+                end
+                return initial_value 
+            """.trimIndent()
         }
     }
 
@@ -33,7 +39,13 @@ sealed interface GeneratorInit : Generator {
             if (selector == "No_Value") {
                 return "return nil"
             }
-            return """return  context.exec.inputs.${selector} or error('No initial value was found')""".trimIndent()
+            return """
+                initial_value = context.exec.inputs.${selector}
+                if initial_value == nil then
+                    error('No initial value was found')
+                end
+                return initial_value 
+            """.trimIndent()
         }
     }
 
@@ -44,7 +56,13 @@ sealed interface GeneratorInit : Generator {
             if (selector == "No_Value") {
                 return "return nil"
             }
-            return """return  context.exec.inputs.${selector} or error('No initial value was found')""".trimIndent()
+            return """
+                initial_value = context.exec.inputs.${selector}
+                if initial_value == nil then
+                    error('No initial value was found')
+                end
+                return initial_value 
+            """.trimIndent()
         }
     }
 

@@ -26,7 +26,7 @@ internal object ControlInvokeTest : AbstractIntegrationTest() {
                     ),
                     controls = listOf(
                         ControlInit(nextControlId(), NodeId(1)),
-                        ControlInvoke(nextControlId(), NodeId(2), PortId(21)),
+                        ControlInvoke(nextControlId(), NodeId(2), portInput(21, TypeString)),
                         ControlTextArea(nextControlId(), NodeId(2), portInput(22, TypeString), ValueString("default capture string")),
                     )
                 )
