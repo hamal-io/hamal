@@ -35,7 +35,9 @@ const RecipeListPage = () => {
         if (filters.size === 0) {
             setFiltered(recipes)
         } else {
-            setFiltered(recipes.filter(rec => rec.tags.some(tag => filters.has(tag.name))))
+            setFiltered(recipes.filter(recipe =>
+                filters.size === recipe.tags.length && recipe.tags.every(tag => filters.has(tag.name))
+            ));
         }
     }
 
