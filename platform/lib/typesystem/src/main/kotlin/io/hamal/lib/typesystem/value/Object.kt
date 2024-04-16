@@ -1,6 +1,7 @@
 package io.hamal.lib.typesystem.value
 
 import io.hamal.lib.typesystem.Field
+import io.hamal.lib.typesystem.FieldIdentifier
 import io.hamal.lib.typesystem.Property
 import io.hamal.lib.typesystem.type.TypeObject
 
@@ -9,7 +10,9 @@ data class ValueObject(
     val properties: List<Property>,
 ) : Value {
 
-    operator fun <T : Value> get(identifier: String) = valuesByIdentifier[identifier] as T
+    operator fun <T : Value> get(identifier: FieldIdentifier) = valuesByIdentifier[identifier] as T
+
+    operator fun <T : Value> get(identifier: String) = get<T>(FieldIdentifier(identifier))
 
     override fun toString() = "${type.identifier}(${properties.joinToString(", ") { it.toString() }})"
 

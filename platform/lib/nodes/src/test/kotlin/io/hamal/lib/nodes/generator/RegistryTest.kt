@@ -3,8 +3,8 @@ package io.hamal.lib.nodes.generator
 import io.hamal.lib.nodes.Node
 import io.hamal.lib.nodes.NodeType
 import io.hamal.lib.nodes.control.Control
-import io.hamal.lib.typesystem.type.TypeDecimal
 import io.hamal.lib.typesystem.type.Type
+import io.hamal.lib.typesystem.type.TypeDecimal
 import io.hamal.lib.typesystem.type.TypeNumber
 import io.hamal.lib.typesystem.type.TypeString
 import org.hamcrest.CoreMatchers.equalTo
@@ -42,21 +42,21 @@ internal class GeneratorRegistryTest {
     fun `get - Tries to get but node type not registered`() {
         assertThrows<NoSuchElementException> {
             testInstance[NodeType("DOES_NOT_EXISTS"), listOf(), listOf()]
-        }.also { exception -> assertThat(exception.message, equalTo("No generator found for NodeType(DOES_NOT_EXISTS) with [] and []")) }
+        }.also { exception -> assertThat(exception.message, equalTo("No generator found for DOES_NOT_EXISTS with [] and []")) }
     }
 
     @Test
     fun `get - Tries to get but input type not supported`() {
         assertThrows<NoSuchElementException> {
             testInstance[NodeType("ANOTHER_TYPE"), listOf(TypeNumber), listOf()]
-        }.also { exception -> assertThat(exception.message, equalTo("No generator found for NodeType(ANOTHER_TYPE) with [TypeNumber] and []")) }
+        }.also { exception -> assertThat(exception.message, equalTo("No generator found for ANOTHER_TYPE with [TypeNumber] and []")) }
     }
 
     @Test
     fun `get - Tries to get but output type not supported`() {
         assertThrows<NoSuchElementException> {
             testInstance[NodeType("ANOTHER_TYPE"), listOf(), listOf(TypeNumber)]
-        }.also { exception -> assertThat(exception.message, equalTo("No generator found for NodeType(ANOTHER_TYPE) with [] and [TypeNumber]")) }
+        }.also { exception -> assertThat(exception.message, equalTo("No generator found for ANOTHER_TYPE with [] and [TypeNumber]")) }
     }
 
     private val someGeneratorOne = object : Generator {

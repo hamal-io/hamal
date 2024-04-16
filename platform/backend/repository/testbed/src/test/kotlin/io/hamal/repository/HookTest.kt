@@ -3,10 +3,10 @@ package io.hamal.repository
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.domain.vo.NamespaceId
-import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.domain.vo.HookId
 import io.hamal.lib.domain.vo.HookName
+import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.repository.api.HookCmdRepository.CreateCmd
 import io.hamal.repository.api.HookCmdRepository.UpdateCmd
 import io.hamal.repository.api.HookQueryRepository.HookQuery
@@ -69,10 +69,7 @@ internal class HookRepositoryTest : AbstractUnitTest() {
                     )
                 }
 
-                assertThat(
-                    exception.message,
-                    equalTo("HookName(first-hook-name) already exists in namespace NamespaceId(2)")
-                )
+                assertThat(exception.message, equalTo("first-hook-name already exists in namespace 2"))
 
                 verifyCount(1)
             }
@@ -226,7 +223,7 @@ internal class HookRepositoryTest : AbstractUnitTest() {
 
                 assertThat(
                     exception.message,
-                    equalTo("HookName(already-exists) already exists in namespace NamespaceId(2)")
+                    equalTo("already-exists already exists in namespace 2")
                 )
 
                 with(get(HookId(2))) {

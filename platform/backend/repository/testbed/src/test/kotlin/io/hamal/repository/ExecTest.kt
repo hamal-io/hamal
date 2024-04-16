@@ -101,7 +101,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                     val exception = assertThrows<IllegalStateException> {
                         schedule(ScheduleCmd(CmdId(4), ExecId(23)))
                     }
-                    assertThat(exception.message, equalTo("ExecId(23) not planned"))
+                    assertThat(exception.message, equalTo("17 not planned"))
 
                     verifyCount(1)
                 }
@@ -148,7 +148,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                     val exception = assertThrows<IllegalStateException> {
                         queue(QueueCmd(CmdId(4), ExecId(23)))
                     }
-                    assertThat(exception.message, equalTo("ExecId(23) not scheduled"))
+                    assertThat(exception.message, equalTo("17 not scheduled"))
 
                     verifyCount(1)
                 }
@@ -243,7 +243,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                     val exception = assertThrows<IllegalStateException> {
                         complete(CompleteCmd(CmdId(4), ExecId(23), ExecResult(), ExecState()))
                     }
-                    assertThat(exception.message, equalTo("ExecId(23) not started"))
+                    assertThat(exception.message, equalTo("17 not started"))
 
                     verifyCount(1)
                 }
@@ -296,7 +296,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                 val exception = assertThrows<IllegalStateException> {
                     fail(FailCmd(CmdId(4), ExecId(23), ExecResult()))
                 }
-                assertThat(exception.message, equalTo("ExecId(23) not started"))
+                assertThat(exception.message, equalTo("17 not started"))
 
                 verifyCount(1)
             }

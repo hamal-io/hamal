@@ -1,6 +1,7 @@
 package io.hamal.lib.typesystem.type
 
 import io.hamal.lib.typesystem.Field
+import io.hamal.lib.typesystem.FieldIdentifier
 import io.hamal.lib.typesystem.Property.Companion.Property
 import io.hamal.lib.typesystem.value.ValueObject
 
@@ -19,7 +20,7 @@ data class TypeObject(override val identifier: TypeIdentifier, val fields: Set<F
 
     operator fun invoke(vararg args: Any, kwargs: Map<String, Any> = emptyMap()) = ValueObject(this, args.zip(fields).map { (value, field) ->
         Property(field, value)
-    } + kwargs.mapNotNull { (k, v) -> fieldsByIdentifier[k]?.let { Property(it, v) } })
+    } + kwargs.mapNotNull { (k, v) -> fieldsByIdentifier[FieldIdentifier(k)]?.let { Property(it, v) } })
 
     val fieldsByIdentifier by lazy {
         fields.associateBy(Field::identifier)

@@ -78,10 +78,7 @@ internal class ExtensionRepositoryTest : AbstractUnitTest() {
                     )
                 }
 
-                assertThat(
-                    exception.message,
-                    equalTo("ExtensionName(TestExt) already exists in workspace WorkspaceId(1)")
-                )
+                assertThat(exception.message, equalTo("TestExt already exists in workspace 1"))
                 verifyCount(1)
             }
 

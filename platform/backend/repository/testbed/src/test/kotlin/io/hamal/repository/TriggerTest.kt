@@ -83,10 +83,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     )
                 }
 
-                assertThat(
-                    exception.message,
-                    equalTo("TriggerName(first-trigger-name) already exists in namespace NamespaceId(2)")
-                )
+                assertThat(exception.message, equalTo("first-trigger-name already exists in namespace 2"))
 
                 verifyCount(1)
             }
@@ -226,10 +223,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     )
                 }
 
-                assertThat(
-                    exception.message,
-                    equalTo("TriggerName(first-trigger-name) already exists in namespace NamespaceId(2)")
-                )
+                assertThat(exception.message, equalTo("first-trigger-name already exists in namespace 2"))
 
                 verifyCount(1)
             }
@@ -372,7 +366,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
 
                 assertThat(
                     exception.message,
-                    equalTo("TriggerName(first-trigger-name) already exists in namespace NamespaceId(2)")
+                    equalTo("first-trigger-name already exists in namespace 2")
                 )
 
                 verifyCount(1)

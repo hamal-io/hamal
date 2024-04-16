@@ -7,7 +7,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 data class Property(
-    val identifier: String,
+    val identifier: FieldIdentifier,
     val value: Value,
 ) {
 
