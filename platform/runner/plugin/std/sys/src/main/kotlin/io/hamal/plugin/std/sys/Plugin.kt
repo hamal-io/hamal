@@ -45,9 +45,9 @@ class PluginSysFactory(
 
                 KuaString("adhoc") to AdhocFunction(sdk),
 
-                KuaString("blueprint_create") to RecipeCreateFunction(sdk),
-                KuaString("blueprint_get") to RecipeGetFunction(sdk),
-                KuaString("blueprint_update") to RecipeUpdateFunction(sdk),
+                KuaString("recipe_create") to RecipeCreateFunction(sdk),
+                KuaString("recipe_get") to RecipeGetFunction(sdk),
+                KuaString("recipe_update") to RecipeUpdateFunction(sdk),
 
                 KuaString("code_get") to CodeGetFunction(sdk),
 

@@ -6,6 +6,6 @@ err, update_req = sys.recipes.update({
     inputs = {},
     value = [[i was updated]]
 })
-assert(err.message == 'recipe not found')
-assert(err['message'] == 'recipe not found')
+assert(err.message == 'Recipe not found')
+assert(err['message'] == 'Recipe not found')
 assert(recipe == nil)
