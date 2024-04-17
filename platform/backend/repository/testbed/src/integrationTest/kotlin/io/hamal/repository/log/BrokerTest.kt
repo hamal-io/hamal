@@ -2,7 +2,8 @@ package io.hamal.repository.log
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.domain.CmdIdGeneratorImpl
+import io.hamal.lib.common.snowflake.PartitionSourceImpl
+import io.hamal.lib.common.snowflake.SnowflakeGenerator
 import io.hamal.lib.domain.GenerateCmdId
 import io.hamal.lib.domain.vo.LogTopicId
 import io.hamal.repository.api.log.LogBrokerRepository
@@ -64,5 +65,8 @@ class LogBrokerRepositoryTest : AbstractIntegrationTest() {
 
         }
 
-    private val generateCmdId: GenerateCmdId = CmdIdGeneratorImpl
+    private val generateCmdId: GenerateCmdId = object : GenerateCmdId {
+        override fun invoke() = CmdId(generator.next())
+        private val generator = SnowflakeGenerator(PartitionSourceImpl(1))
+    }
 }
