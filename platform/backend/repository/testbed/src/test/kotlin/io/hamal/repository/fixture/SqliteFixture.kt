@@ -36,7 +36,7 @@ object SqliteFixture : BaseTestFixture {
     override fun <REPO : Any> provideImplementation(interfaceClass: KClass<out REPO>): REPO = when (interfaceClass) {
         AccountRepository::class -> AccountSqliteRepository(createTempDirectory("sqlite_account_test")) as REPO
         AuthRepository::class -> AuthSqliteRepository(createTempDirectory("sqlite_auth_test")) as REPO
-        RecipeRepository::class -> RecipeSqliteRepository(createTempDirectory("sqlite_blueprint_test")) as REPO
+        RecipeRepository::class -> RecipeSqliteRepository(createTempDirectory("sqlite_recipe_test")) as REPO
         CodeRepository::class -> CodeSqliteRepository(createTempDirectory("sqlite_code_test")) as REPO
         EndpointRepository::class -> EndpointSqliteRepository(createTempDirectory("sqlite_endpoint_test")) as REPO
         ExecRepository::class -> ExecSqliteRepository(createTempDirectory("sqlite_exec_test")) as REPO
