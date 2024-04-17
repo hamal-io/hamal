@@ -10,15 +10,15 @@ info:
 servers:
   - url: https://fn.guru
 tags:
-  - name: Blueprint
+  - name: Recipe
     description: TBD.
   - name: Func
     description: TBD
 paths:
-  /v1/groups/{groupId}/blueprints:
-    $ref: paths/blueprint_create.yaml
-  /v1/blueprints/{blueprint_id}:
-    $ref: paths/blueprint_get_patch.yaml
+  /v1/namespaces/{namespaceId}/recipes:
+    $ref: paths/recipe_create.yaml
+  /v1/recipes/{recipeId}:
+    $ref: paths/recipe_get_patch.yaml
 
 security:
   - JWT: [ ]

@@ -4,15 +4,14 @@ import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.hot.HotObjectModule
+import io.hamal.lib.common.serialization.HotModule
 import io.hamal.lib.common.serialization.JsonAdapter
 import io.hamal.lib.common.serialization.JsonFactoryBuilder
-import io.hamal.lib.common.serialization.HotModule
 import io.hamal.lib.common.serialization.ValueObjectStringAdapter
 import io.hamal.lib.domain.Json
 import io.hamal.lib.domain.vo.ValueObjectJsonModule
 import io.hamal.repository.api.DomainJsonModule
 import io.hamal.repository.record.account.AccountRecord
-import io.hamal.repository.record.blueprint.BlueprintRecord
 import io.hamal.repository.record.code.CodeRecord
 import io.hamal.repository.record.endpoint.EndpointRecord
 import io.hamal.repository.record.exec.ExecRecord
@@ -22,6 +21,7 @@ import io.hamal.repository.record.func.FuncRecord
 import io.hamal.repository.record.hook.HookRecord
 import io.hamal.repository.record.namespace.NamespaceRecord
 import io.hamal.repository.record.namespace_tree.NamespaceTreeRecord
+import io.hamal.repository.record.recipe.RecipeRecord
 import io.hamal.repository.record.topic.TopicRecord
 import io.hamal.repository.record.trigger.TriggerRecord
 import io.hamal.repository.record.workspace.WorkspaceRecord
@@ -32,7 +32,7 @@ object RecordJsonModule : HotModule() {
     init {
         this[RecordClass::class] = ValueObjectStringAdapter(::RecordClass)
         this[AccountRecord::class] = AccountRecord.Adapter
-        this[BlueprintRecord::class] = BlueprintRecord.Adapter
+        this[RecipeRecord::class] = RecipeRecord.Adapter
         this[CodeRecord::class] = CodeRecord.Adapter
         this[EndpointRecord::class] = EndpointRecord.Adapter
         this[ExecRecord::class] = ExecRecord.Adapter

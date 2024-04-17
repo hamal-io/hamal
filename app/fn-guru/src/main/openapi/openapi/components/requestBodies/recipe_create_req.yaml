@@ -1,0 +1,9 @@
+type: object
+properties:
+  name:
+    $ref: ../schemas/custom_name.yaml
+  inputs:
+    $ref: ../schemas/recipe_inputs.yaml
+  value:
+    $ref: ../schemas/code_value.yaml
+description: Response to a create recipe request.

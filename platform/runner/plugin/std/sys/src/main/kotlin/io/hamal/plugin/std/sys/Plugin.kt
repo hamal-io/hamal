@@ -6,9 +6,6 @@ import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
 import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.sdk.ApiSdkImpl
 import io.hamal.plugin.std.sys.adhoc.AdhocFunction
-import io.hamal.plugin.std.sys.blueprint.BlueprintCreateFunction
-import io.hamal.plugin.std.sys.blueprint.BlueprintGetFunction
-import io.hamal.plugin.std.sys.blueprint.BlueprintUpdateFunction
 import io.hamal.plugin.std.sys.code.CodeGetFunction
 import io.hamal.plugin.std.sys.endpoint.EndpointCreateFunction
 import io.hamal.plugin.std.sys.endpoint.EndpointGetFunction
@@ -27,6 +24,9 @@ import io.hamal.plugin.std.sys.namespace.NamespaceAppendFunction
 import io.hamal.plugin.std.sys.namespace.NamespaceGetFunction
 import io.hamal.plugin.std.sys.namespace.NamespaceListFunction
 import io.hamal.plugin.std.sys.namespace.NamespaceUpdateFunction
+import io.hamal.plugin.std.sys.recipe.RecipeCreateFunction
+import io.hamal.plugin.std.sys.recipe.RecipeGetFunction
+import io.hamal.plugin.std.sys.recipe.RecipeUpdateFunction
 import io.hamal.plugin.std.sys.request.RequestGetFunction
 import io.hamal.plugin.std.sys.topic.*
 import io.hamal.plugin.std.sys.trigger.*
@@ -45,9 +45,9 @@ class PluginSysFactory(
 
                 KuaString("adhoc") to AdhocFunction(sdk),
 
-                KuaString("blueprint_create") to BlueprintCreateFunction(sdk),
-                KuaString("blueprint_get") to BlueprintGetFunction(sdk),
-                KuaString("blueprint_update") to BlueprintUpdateFunction(sdk),
+                KuaString("blueprint_create") to RecipeCreateFunction(sdk),
+                KuaString("blueprint_get") to RecipeGetFunction(sdk),
+                KuaString("blueprint_update") to RecipeUpdateFunction(sdk),
 
                 KuaString("code_get") to CodeGetFunction(sdk),
 

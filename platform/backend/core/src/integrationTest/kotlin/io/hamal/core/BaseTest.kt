@@ -90,10 +90,10 @@ internal abstract class BaseTest {
     lateinit var requestCmdRepository: RequestCmdRepository
 
     @Autowired
-    lateinit var blueprintCmdRepository: BlueprintCmdRepository
+    lateinit var recipeCmdRepository: RecipeCmdRepository
 
     @Autowired
-    lateinit var blueprintQueryRepository: BlueprintQueryRepository
+    lateinit var recipeQueryRepository: RecipeQueryRepository
 
     @Autowired
     lateinit var stateQueryRepository: StateQueryRepository
@@ -139,6 +139,7 @@ internal abstract class BaseTest {
         namespaceCmdRepository.clear()
         workspaceCmdRepository.clear()
         hookRepository.clear()
+        recipeCmdRepository.clear()
         requestCmdRepository.clear()
         stateCmdRepository.clear()
         topicCmdRepository.clear()
