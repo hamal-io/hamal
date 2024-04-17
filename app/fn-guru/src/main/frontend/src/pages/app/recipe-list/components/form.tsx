@@ -7,7 +7,7 @@ import {Loader2} from "lucide-react";
 import {useForm} from "react-hook-form";
 import {z} from "zod";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {useBlueprintUpdate} from "@/hook/blueprint.ts";
+import {useRecipeUpdate} from "@/hook/recipe.ts";
 
 
 const formSchema = z.object(
@@ -18,10 +18,10 @@ const formSchema = z.object(
     }
 )
 
-type Props = { blueprintId: string, name: string, description: string, value: string }
-const BlueprintEditorForm: FC<Props> = ({blueprintId, name, description, value}) => {
+type Props = { recipeId: string, name: string, description: string, value: string }
+const RecipeEditorForm: FC<Props> = ({recipeId, name, description, value}) => {
     const [isLoading, setLoading] = useState(false)
-    const [updateBlueprint] = useBlueprintUpdate()
+    const [updateRecipe] = useRecipeUpdate()
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -35,7 +35,7 @@ const BlueprintEditorForm: FC<Props> = ({blueprintId, name, description, value})
     function onSubmit(values: z.infer<typeof formSchema>) {
         setLoading(true)
         try {
-            updateBlueprint(blueprintId, values.name, values.code, values.description)
+            updateRecipe(recipeId, values.name, values.code, values.description)
         } catch (e) {
             console.error(e)
         } finally {
@@ -99,4 +99,4 @@ const BlueprintEditorForm: FC<Props> = ({blueprintId, name, description, value})
     )
 }
 
-export default BlueprintEditorForm
+export default RecipeEditorForm

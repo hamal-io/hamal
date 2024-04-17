@@ -1,17 +1,17 @@
 import React, {useEffect} from "react";
-import {useBlueprintList} from "@/hook/blueprint.ts";
+import {useRecipeList} from "@/hook/recipe.ts";
 import {PageHeader} from "@/components/page-header.tsx";
 import {EmptyPlaceholder} from "@/components/empty-placeholder.tsx";
-import CreateBlueprint from "@/pages/app/blueprint-list/components/create.tsx";
-import BlueprintCard from "@/pages/app/blueprint-list/components/card.tsx";
+import CreateRecipe from "@/pages/app/recipe-list/components/create.tsx";
+import RecipeCard from "@/pages/app/recipe-list/components/card.tsx";
 
 
-const BlueprintListPage = () => {
-    const [listBlueprints, blueprintList, loading, error] = useBlueprintList()
+const RecipePage = () => {
+    const [listRecipes, recipeList, loading, error] = useRecipeList()
 
     useEffect(() => {
         try {
-            listBlueprints()
+            listRecipes()
         } catch (e){
             console.log(e)
         }
@@ -19,21 +19,21 @@ const BlueprintListPage = () => {
     }, []);
 
     if (error) return `Error`
-    if (blueprintList === null || loading) return "Loading..."
+    if (recipeList === null || loading) return "Loading..."
 
     return (
         <div className="pt-2 px-2">
             <PageHeader
-                title="Blueprints"
+                title="Recipes"
                 description={'Tryout our predefined workflows, proudly brought to you by the hamal.io team.'}
-                actions={[<CreateBlueprint/>]}
+                actions={[<CreateRecipe/>]}
             />
 
-            {blueprintList.blueprints.length !== 0 ?
+            {recipeList.recipes.length !== 0 ?
                 <ol className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 cursor-pointer">
-                    {blueprintList.blueprints.map(item =>
+                    {recipeList.recipes.map(item =>
                         <li key={item.id}>
-                            <BlueprintCard blueprint={item}/>
+                            <RecipeCard recipe={item}/>
                         </li>
                     )}
                 </ol> : <NoContent/>}
@@ -44,14 +44,14 @@ const BlueprintListPage = () => {
 
 const NoContent = () => (
     <EmptyPlaceholder className="my-4 ">
-        <EmptyPlaceholder.Title>No Blueprints found.</EmptyPlaceholder.Title>
+        <EmptyPlaceholder.Title>No Recipes found.</EmptyPlaceholder.Title>
         <EmptyPlaceholder.Description>
 
         </EmptyPlaceholder.Description>
         <div className="flex flex-col items-center justify-center gap-2 md:flex-row">
-            <CreateBlueprint/>
+            <CreateRecipe/>
         </div>
     </EmptyPlaceholder>
 )
 
-export default BlueprintListPage
+export default RecipePage

@@ -1,27 +1,27 @@
 import React, {FC, useEffect, useState} from "react";
-import {useBlueprintGet} from "@/hook/blueprint.ts";
+import {useRecipeGet} from "@/hook/recipe.ts";
 import {useNavigate} from "react-router-dom";
 import {DialogContent, DialogDescription, DialogHeader} from "@/components/ui/dialog.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {useUiState} from "@/hook/ui-state.ts";
 import {useAdhoc, useNamespaceList} from "@/hook";
-import {BlueprintListItem} from "@/types/blueprint.ts";
+import {RecipeListItem} from "@/types/recipe.ts";
 import {Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger} from "@/components/ui/select.tsx";
 import {SelectValue} from "@radix-ui/react-select";
 import {Loader2} from "lucide-react";
 
 
 type Props = {
-    item: BlueprintListItem
+    item: RecipeListItem
     onClose: () => void
 }
-export const BlueprintDialog: FC<Props> = ({item, onClose}) => {
+export const RecipeDialog: FC<Props> = ({item, onClose}) => {
     const [uiState] = useUiState()
     const navigate = useNavigate()
     const [namespace, setNamespace] = useState(uiState.namespaceId)
     const [listNamespaces, namespaceList, loading] = useNamespaceList()
     const [adhoc] = useAdhoc()
-    const [getBlueprint, blueprint] = useBlueprintGet()
+    const [getRecipe, recipe] = useRecipeGet()
     const [isLoading, setLoading] = useState(false)
 
     useEffect(() => {
@@ -31,21 +31,21 @@ export const BlueprintDialog: FC<Props> = ({item, onClose}) => {
     }, []);
 
     useEffect(() => {
-        if (blueprint) {
+        if (recipe) {
             try {
-                adhoc(namespace, blueprint.value)
+                adhoc(namespace, recipe.value, "Lua54")
             } catch (e) {
                 console.log(e)
             } finally {
                 onClose()
             }
         }
-    }, [blueprint]);
+    }, [recipe]);
 
     async function deployAction() {
         setLoading(true)
         try {
-            getBlueprint(item.id)
+            getRecipe(item.id)
         } catch (e) {
             console.log(e)
         } finally {
@@ -86,7 +86,7 @@ export const BlueprintDialog: FC<Props> = ({item, onClose}) => {
                     Deploy
                 </Button>
                 <Button size={"sm"} onClick={() => {
-                    navigate(`/blueprints/editor/${item.id}`)
+                    navigate(`/recipes/editor/${item.id}`)
                 }} variant="secondary">
                     Edit
                 </Button>

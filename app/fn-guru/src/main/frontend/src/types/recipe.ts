@@ -1,4 +1,4 @@
-export interface Blueprint {
+export interface Recipe {
     id: string,
     name: string,
     inputs: object,
@@ -6,23 +6,23 @@ export interface Blueprint {
     description: string
 }
 
-export interface BlueprintCreateRequested {
+export interface RecipeCreateRequested {
     requestId: string;
     requestStatus: string;
     id: string;
 }
 
-export interface BlueprintUpdateRequested {
+export interface RecipeUpdateRequested {
     requestId: string;
     requestStatus: string;
     id: string;
 }
 
-export interface BlueprintList {
-    blueprints: Array<BlueprintListItem>
+export interface RecipeList {
+    recipes: Array<RecipeListItem>
 }
 
-export interface BlueprintListItem {
+export interface RecipeListItem {
     id: string
     name: string
     description: string

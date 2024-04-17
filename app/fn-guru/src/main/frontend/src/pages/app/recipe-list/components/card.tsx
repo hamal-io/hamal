@@ -1,14 +1,14 @@
-import {BlueprintListItem} from "@/types/blueprint.ts";
+import {RecipeListItem} from "@/types/recipe.ts";
 import React, {FC, useState} from "react";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx";
 import {Dialog} from "@/components/ui/dialog.tsx";
-import {BlueprintDialog} from "@/pages/app/blueprint-list/components/dialog.tsx";
+import {RecipeDialog} from "@/pages/app/recipe-list/components/dialog.tsx";
 
 type CardProps = {
-    blueprint: BlueprintListItem
+    recipe: RecipeListItem
 
 }
-const BlueprintCard: FC<CardProps> = ({blueprint}) => {
+const RecipeCard: FC<CardProps> = ({recipe}) => {
     const [open, setOpen] = useState(false)
 
     return (
@@ -18,22 +18,22 @@ const BlueprintCard: FC<CardProps> = ({blueprint}) => {
                 className="relative overfunc-hidden duration-500 hover:border-primary/50 group pointerCursor"
             >
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle>{blueprint.name}</CardTitle>
+                    <CardTitle>{recipe.name}</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <dl className="text-sm leading-6 divide-y divide-gray-100 ">
                         <div className="flex justify-between py-3 gap-x-4">
-                            {blueprint.description}
+                            {recipe.description}
                         </div>
                     </dl>
                 </CardContent>
             </Card>
             <Dialog open={open} onOpenChange={setOpen}>
-                <BlueprintDialog item={blueprint} onClose={() => setOpen(false)}/>
+                <RecipeDialog item={recipe} onClose={() => setOpen(false)}/>
             </Dialog>
         </>
     )
 }
 
-export default BlueprintCard
+export default RecipeCard
 

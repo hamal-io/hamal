@@ -1,32 +1,32 @@
 import React, {useEffect} from "react";
 import {PageHeader} from "@/components/page-header.tsx";
-import {useBlueprintGet} from "@/hook/blueprint.ts";
+import {useRecipeGet} from "@/hook/recipe.ts";
 import {useNavigate, useParams} from "react-router-dom";
 import {Button} from "@/components/ui/button.tsx";
-import BlueprintEditorForm from "@/pages/app/blueprint-list/components/form.tsx";
+import RecipeEditorForm from "@/pages/app/recipe-list/components/form.tsx";
 
 
-const BlueprintEditor = () => {
-    const {blueprintId} = useParams()
+const RecipeEditor = () => {
+    const {recipeId} = useParams()
     const navigate = useNavigate()
-    const [getBlueprint, blueprint, loading] = useBlueprintGet()
+    const [getRecipe, recipe, loading] = useRecipeGet()
 
     useEffect(() => {
-        getBlueprint(blueprintId)
-    }, [blueprintId]);
+        getRecipe(recipeId)
+    }, [recipeId]);
 
 
-    if (blueprint == null || loading) return "Loading..."
+    if (recipe == null || loading) return "Loading..."
 
     return (
         <div className="h-full pt-4">
             <div className="container flex flex-row justify-between items-center ">
                 <PageHeader
-                    title="Blueprint Editor"
+                    title="Recipe Editor"
                     actions={[
                         <div className="flex w-full space-x-2 justify-end">
                             <Button variant={"secondary"}
-                                    onClick={() => navigate("/blueprints")}
+                                    onClick={() => navigate("/recipes")}
                             >
                                 Return to list
                             </Button>
@@ -36,12 +36,12 @@ const BlueprintEditor = () => {
                 />
             </div>
             <div className="bg-white container h-full py-6">
-                {blueprint &&
-                    <BlueprintEditorForm
-                        blueprintId={blueprint.id}
-                        name = {blueprint.name}
-                        description={blueprint.description}
-                        value={blueprint.value}
+                {recipe &&
+                    <RecipeEditorForm
+                        recipeId={recipe.id}
+                        name = {recipe.name}
+                        description={recipe.description}
+                        value={recipe.value}
                     />
                 }
             </div>
@@ -50,4 +50,4 @@ const BlueprintEditor = () => {
     )
 }
 
-export default BlueprintEditor
+export default RecipeEditor

@@ -43,7 +43,7 @@ const OnboardingPage: FC = () => {
                 name = 'Hello-World',
                 inputs = {},
                 code = [[ ${code} ]]
-            })`, abortController)
+            })`,"Lua54", abortController)
         }
         return () => {
             abortController.abort()
