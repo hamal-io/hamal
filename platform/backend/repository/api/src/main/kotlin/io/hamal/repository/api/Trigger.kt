@@ -19,6 +19,7 @@ interface TriggerCmdRepository : CmdRepository {
     fun create(cmd: CreateEventCmd): Trigger.Event
     fun create(cmd: CreateHookCmd): Trigger.Hook
     fun create(cmd: CreateCronCmd): Trigger.Cron
+    fun create(cmd: CreateEndpointCmd): Trigger.Endpoint
     fun set(triggerId: TriggerId, cmd: SetTriggerStatusCmd): Trigger
 
     data class CreateFixedRateCmd(
@@ -74,6 +75,19 @@ interface TriggerCmdRepository : CmdRepository {
         val status: TriggerStatus = TriggerStatus.Active
     )
 
+    data class CreateEndpointCmd(
+        val id: CmdId,
+        val triggerId: TriggerId,
+        val workspaceId: WorkspaceId,
+        val name: TriggerName,
+        val funcId: FuncId,
+        val namespaceId: NamespaceId,
+        val inputs: TriggerInputs,
+        val endpointId: EndpointId,
+        val correlationId: CorrelationId? = null,
+        val status: TriggerStatus = TriggerStatus.Active
+    )
+
     data class SetTriggerStatusCmd(
         val id: CmdId,
         val status: TriggerStatus
@@ -94,6 +108,7 @@ interface TriggerQueryRepository {
         var funcIds: List<FuncId> = listOf(),
         var topicIds: List<TopicId> = listOf(),
         var hookIds: List<HookId> = listOf(),
+        var endpointIds: List<EndpointId> = listOf(),
         var workspaceIds: List<WorkspaceId> = listOf(),
         var namespaceIds: List<NamespaceId> = listOf()
     )
@@ -132,7 +147,8 @@ sealed interface Trigger : DomainObject<TriggerId>, HasNamespaceId, HasWorkspace
             TriggerType.FixedRate.name to FixedRate::class,
             TriggerType.Event.name to Event::class,
             TriggerType.Hook.name to Hook::class,
-            TriggerType.Cron.name to Cron::class
+            TriggerType.Cron.name to Cron::class,
+            TriggerType.Endpoint.name to Endpoint::class
         )
     }
 
@@ -166,6 +182,22 @@ sealed interface Trigger : DomainObject<TriggerId>, HasNamespaceId, HasWorkspace
         override val correlationId: CorrelationId? = null
     ) : Trigger {
         override val type = TriggerType.Event
+    }
+
+    class Endpoint(
+        override val cmdId: CmdId,
+        override val id: TriggerId,
+        override val updatedAt: UpdatedAt,
+        override val workspaceId: WorkspaceId,
+        override val name: TriggerName,
+        override val funcId: FuncId,
+        override val namespaceId: NamespaceId,
+        override val inputs: TriggerInputs,
+        override val status: TriggerStatus,
+        override val correlationId: CorrelationId? = null,
+        val endpointId: EndpointId
+    ) : Trigger {
+        override val type = TriggerType.Endpoint
     }
 
     class Hook(
