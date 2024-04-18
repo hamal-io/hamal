@@ -1,6 +1,5 @@
 function plugin_create(internal)
     local export = {
-        blueprints = { },
         codes = { },
         endpoints = { },
         execs = { },
@@ -8,6 +7,7 @@ function plugin_create(internal)
         funcs = { },
         hooks = { },
         namespaces = { },
+        recipes = { },
         reqs = { },
         topics = { },
         triggers = { }
@@ -207,20 +207,20 @@ function plugin_create(internal)
         return internal.req_get(req_id)
     end
 
-    function export.blueprints.create(req)
-        return internal.blueprint_create({
+    function export.recipes.create(req)
+        return internal.recipe_create({
             name = req.name or nil,
             inputs = req.inputs or {},
             value = req.value or ""
         })
     end
 
-    function export.blueprints.get(blueprint_id)
-        return internal.blueprint_get(blueprint_id)
+    function export.recipes.get(recipe_id)
+        return internal.recipe_get(recipe_id)
     end
 
-    function export.blueprints.update(req)
-        return internal.blueprint_update(req)
+    function export.recipes.update(req)
+        return internal.recipe_update(req)
     end
 
     function export.topics.resolve(topic_name)

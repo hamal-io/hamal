@@ -25,7 +25,7 @@ interface ApiSdk {
     val workspace: ApiWorkspaceService
     val hook: ApiHookService
     val namespace: ApiNamespaceService
-    val blueprint: ApiBlueprintService
+    val recipe: ApiRecipeService
     val topic: ApiTopicService
     val trigger: ApiTriggerService
 }
@@ -130,8 +130,8 @@ class ApiSdkImpl : ApiSdk {
         ApiNamespaceServiceImpl(template)
     }
 
-    override val blueprint: ApiBlueprintService by lazy {
-        ApiBlueprintServiceImpl(template)
+    override val recipe: ApiRecipeService by lazy {
+        ApiRecipeServiceImpl(template)
     }
 
     override val topic: ApiTopicService by lazy {

@@ -20,10 +20,10 @@ object ValueObjectJsonModule : HotModule() {
         this[PasswordHash::class] = ValueObjectStringAdapter(::PasswordHash)
         this[PasswordSalt::class] = ValueObjectStringAdapter(::PasswordSalt)
 
-        this[BlueprintId::class] = ValueObjectIdAdapter(::BlueprintId)
-        this[BlueprintName::class] = ValueObjectStringAdapter(::BlueprintName)
-        this[BlueprintInputs::class] = ValueObjectHotObjectAdapter(::BlueprintInputs)
-        this[BlueprintDescription::class] = ValueObjectStringAdapter(::BlueprintDescription)
+        this[RecipeId::class] = ValueObjectIdAdapter(::RecipeId)
+        this[RecipeName::class] = ValueObjectStringAdapter(::RecipeName)
+        this[RecipeInputs::class] = ValueObjectHotObjectAdapter(::RecipeInputs)
+        this[RecipeDescription::class] = ValueObjectStringAdapter(::RecipeDescription)
 
         this[CmdId::class] = ValueObjectIdAdapter(::CmdId)
         this[CodeId::class] = ValueObjectIdAdapter(::CodeId)
