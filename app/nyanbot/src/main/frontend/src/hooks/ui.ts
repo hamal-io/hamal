@@ -5,6 +5,8 @@ import {useCallback} from "react";
 
 const defaultState: UiState = {
     theme: 'light',
+    workspaceId: '',
+    namespaceId: ''
 }
 
 export const useUiState = () => {
@@ -13,12 +15,16 @@ export const useUiState = () => {
     })
 }
 
-type InitUiStateAction = () => void
+type InitUiStateAction = (workspaceId: string, namespaceId: string) => void
 export const useInitUiState = (): [InitUiStateAction] => {
     const [uiState, setUiState] = useUiState()
 
-    const fn = useCallback(() => {
-        setUiState({theme: uiState.theme || 'light'})
+    const fn = useCallback((workspaceId: string, namespaceId: string) => {
+        setUiState({
+            theme: uiState.theme || 'light',
+            workspaceId,
+            namespaceId
+        })
     }, [uiState])
 
     return [fn]

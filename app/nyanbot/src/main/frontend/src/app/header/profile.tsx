@@ -4,7 +4,6 @@ import ImageW from "@/types/image.tsx";
 import {Popover, Transition} from "@headlessui/react";
 import logoImg from "@/images/placeholder.png";
 import {useAuth, useLogout} from "@/hooks/auth.ts";
-import {add} from "lodash";
 
 
 interface AvatarProps {
@@ -104,7 +103,7 @@ const Logout = () => {
 export const Profile = () => {
     const [auth] = useAuth()
 
-    const address = auth.address.slice(0, 7) + "..." + auth.address.slice(-5)
+    //  const address = auth.address.slice(0, 7) + "..." + auth.address.slice(-5)
 
 
     return (
@@ -138,7 +137,7 @@ export const Profile = () => {
 
                                             <div className="flex-grow">
                                                 <h4 className="font-semibold">TO BE DONE</h4>
-                                                <p className="text-xs mt-0.5">{address}</p>
+                                                <p className="text-xs mt-0.5">{/*address*/}</p>
                                             </div>
                                         </div>
 
