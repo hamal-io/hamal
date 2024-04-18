@@ -1,6 +1,7 @@
 package io.hamal.lib.typesystem
 
-import io.hamal.lib.typesystem.Field.Kind
+import io.hamal.lib.typesystem.type.*
+import io.hamal.lib.typesystem.value.ValueNumber
 import io.hamal.lib.typesystem.value.ValueObject
 import io.hamal.lib.typesystem.value.ValueString
 import io.hamal.lib.typesystem.value.forType
@@ -9,21 +10,26 @@ import java.time.LocalDate
 
 fun main() {
 
-    val Entity = Type(
-        "entity",
-        Field(Kind.String, "id")
+    val No = TypeObject(
+        "no",
+        Field(TypeString, "answer")
     )
 
-    val Pupil = Type(
+    val Entity = TypeObject(
+        "entity",
+        Field(TypeString, "id")
+    )
+
+    val Pupil = TypeObject(
         "pupil",
-        Field(Kind.String, "first_name"),
-        Field(Kind.String, "last_name"),
-        Field(Kind.Date, "dob")
+        Field(TypeString, "first_name"),
+        Field(TypeString, "last_name"),
+        Field(TypeDate, "dob")
     ) extends Entity
 
-    val Another = Type(
+    val Another = TypeObject(
         "another",
-        Field(Kind.String, "answer")
+        Field(TypeString, "answer")
     )
 
 //    val Pupil = DType(
@@ -42,9 +48,13 @@ fun main() {
 
     val suzy = Pupil("2", "Suzy", "Yzus", LocalDate.of(1992, 8, 23))
 
-//    val PupilList = Type("pupilList", Field(Kind.List, "pupils", valueType = Pupil))
+    val PupilList = TypeListObject("pupilList", Pupil)
+    val EntityList = TypeListObject("entityList", Entity)
 
-    val PupilList = TypeList("pupil_list", Pupil)
+    val l = EntityList(bob, Another("xyz"), No("dasd"))
+    println(l)
+
+//    val PupilList = TypeList("pupil_list", Pupil)
 
     fun ValueObject.fullname(): ValueString = forType(Pupil) {
         ValueString("${get<ValueString>("last_name")}, ${get<ValueString>("first_name")}")
@@ -59,4 +69,7 @@ fun main() {
     println(bob.fullname())
 //    println(a.fullname())
 
+    val numberList = TypeListNumber(ValueNumber(12), ValueNumber(323), ValueNumber(4))
+
+    println(numberList)
 }

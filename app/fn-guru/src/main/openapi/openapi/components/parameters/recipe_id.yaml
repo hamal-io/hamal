@@ -1,0 +1,7 @@
+name: recipe_id
+in: path
+required: true
+schema:
+  $ref: ../schemas/recipe_id.yaml
+style: simple
+example: da6ea0a001000

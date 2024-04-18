@@ -3,10 +3,11 @@ package io.hamal.lib.nodes.compiler
 import io.hamal.lib.nodes.*
 import io.hamal.lib.nodes.compiler.ComputationGraph.Companion.ComputationGraph
 import io.hamal.lib.nodes.control.ControlInput
+import io.hamal.lib.nodes.control.ControlInvoke
 import io.hamal.lib.nodes.control.ControlType
 import io.hamal.lib.nodes.generator.Generator
 import io.hamal.lib.nodes.generator.GeneratorRegistry
-import io.hamal.lib.typesystem.TypeNew
+import io.hamal.lib.typesystem.type.Type
 
 class Compiler(
     private val generatorRegistry: GeneratorRegistry
@@ -16,21 +17,21 @@ class Compiler(
         val code = StringBuilder()
 
         val nodeCodeGenerators = mutableMapOf<NodeId, Generator>()
-        val outputPortMapping = mutableMapOf<PortId, Pair<String, TypeNew>>()
+        val outputPortMapping = mutableMapOf<PortId, Pair<String, Type>>()
 
         val nodes = graph.nodes
 
         for (node in nodes) {
             val controls = graph.controls.filter { it.nodeId == node.id }
-            val inputTypes = controls.mapNotNull { control ->
+            val inputTypes = controls.filter { it !is ControlInvoke }.mapNotNull { control ->
                 if (control is ControlInput) {
-                    control.port.inputType
+                    control.port.type
                 } else {
                     null
                 }
             }
 
-            val outputTypes = node.outputs.map { it.outputType }
+            val outputTypes = node.outputs.map { it.type }
 
             val generator = generatorRegistry[node.type, inputTypes, outputTypes]
 
@@ -39,7 +40,8 @@ class Compiler(
 
             builder.append("""function n_${node.id.value.value.toString(16)}(${args})""")
             builder.append("\n")
-            builder.append(generator.toCode(node, controls.filter { it.nodeId == node.id
+            builder.append(generator.toCode(node, controls.filter {
+                it.nodeId == node.id
 
 
             }))
@@ -60,7 +62,7 @@ class Compiler(
         code.append("\n")
         code.append("\n")
 
-        val initNode = nodes.find { it.type == NodeType("INIT") } ?: throw IllegalArgumentException("No INIT node found")
+        val initNode = nodes.find { it.type == NodeType("Init") } ?: throw IllegalArgumentException("No INIT node found")
         val computationGraph = ComputationGraph(graph)
         val orderedNodeIds = breadthFirstSearch(computationGraph, initNode.id)
 
@@ -74,13 +76,30 @@ class Compiler(
 
                 val connection = connections.first()
                 val controls = graph.controls.filter { it.nodeId == inputNodeId }
-                if (controls.any { it.type == ControlType.Invoke }) {
-                    val controls = controls.filterNot { it.type == ControlType.Invoke }
+                if (controls.any { it.type == ControlType("Invoke") }) {
+                    val controls = controls.filterNot { it.type == ControlType("Invoke") }
 
-                    if (controls.size == 1) {
+                    if (controls.isEmpty()) {
+
+
+                        val p1 = outputPortMapping[connection.outputPort.id]!!.first
+
+
+                        code.append("local p_1 = $p1 \n")
+
+                        code.append("if p_1 ~= nil then \n")
+
+                        code.append("n_${inputNode.id.value.value.toString(16)}(p_1)\n")
+
+                        code.append("end\n")
+
+
+                    } else if (controls.size == 1) {
+
+
                         var control = controls.first()
                         val p1 = if (control is ControlTextArea) {
-                            val defaultValue = control.defaultValue.stringValue
+                            val defaultValue = control.value.stringValue
                             "'${defaultValue}'"
                         } else {
                             outputPortMapping[connection.outputPort.id]!!.first
@@ -92,7 +111,7 @@ class Compiler(
                     } else if (controls.size == 2) {
                         var control = controls.first()
                         val p1 = if (control is ControlTextArea) {
-                            val defaultValue = control.defaultValue.stringValue
+                            val defaultValue = control.value.stringValue
                             "'${defaultValue}'"
                         } else {
                             outputPortMapping[connection.outputPort.id]!!.first
@@ -103,7 +122,7 @@ class Compiler(
                         // FIXME is there a connection to the port? otherwise default to default value
                         control = controls.last()
                         require(control is ControlTextArea)
-                        val p2 = "'${control.defaultValue.stringValue}'"
+                        val p2 = "'${control.value.stringValue}'"
 
                         code.append("local p_2 = $p2 \n")
 
@@ -116,17 +135,45 @@ class Compiler(
 
                     if (controls.size == 1) {
                         val control = controls.first()
+
+                        val p1 = if (control is ControlTextArea) {
+                            val defaultValue = control.value.stringValue
+                            "'${defaultValue}'"
+                        } else {
+                            outputPortMapping[connection.outputPort.id]!!.first
+                        }
+
+                        code.append("local p_1 = $p1 \n")
+
+                        code.append("if p_1 ~= nil then \n")
+
+                        val fnResult = inputNode.outputs.map { portOutput -> outputPortMapping[portOutput.id]!!.first }.joinToString(", ")
+                        if (inputNode.outputs.size > 0) {
+                            code.append(fnResult)
+                            code.append(" = ")
+                        }
+
                         if (control is ControlTextArea) {
-                            val defaultValue = control.defaultValue.stringValue
+                            val defaultValue = control.value.stringValue
                             code.append("n_${inputNode.id.value.value.toString(16)}(${outputPortMapping[connection.outputPort.id]!!.first} or '${defaultValue}')")
                         } else {
                             code.append("n_${inputNode.id.value.value.toString(16)}(${outputPortMapping[connection.outputPort.id]!!.first})")
                         }
+
+                        code.append("\nelse\n")
+
+                        inputNode.outputs.forEach { portOutput ->
+                            code.append(outputPortMapping[portOutput.id]!!.first)
+                            code.append(" = nil\n")
+                        }
+
+                        code.append("end\n")
+
                     } else if (controls.size == 2) {
 
                         var control = controls.first()
                         val p1 = if (control is ControlTextArea) {
-                            val defaultValue = control.defaultValue.stringValue
+                            val defaultValue = control.value.stringValue
                             "${outputPortMapping[connection.outputPort.id]!!.first} or '${defaultValue}'"
                         } else {
                             outputPortMapping[connection.outputPort.id]!!.first
@@ -140,15 +187,18 @@ class Compiler(
                         val p2 = connections.find { it.inputPort.id == control.port.id }?.let { connection ->
                             // FIXME resolve variable name
                             null
-                        } ?: "'${control.defaultValue.stringValue}'"
+                        } ?: "'${control.value.stringValue}'"
 
                         code.append("local p_2 = $p2 \n")
 
                         code.append("n_${inputNode.id.value.value.toString(16)}(p_1, p_2)")
                     } else {
+
+
                         code.append("n_${inputNode.id.value.value.toString(16)}(${outputPortMapping[connection.outputPort.id]!!.first})")
                     }
                 }
+                code.append("\n")
             }
         }
 

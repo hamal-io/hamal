@@ -31,7 +31,7 @@ export type Connection = {
 }
 
 export type ControlId = string
-export type ControlType = 'Condition' | 'Input' | 'Init' | 'Invoke' | 'TextArea'
+export type ControlType = 'Condition' | 'Input' | 'Init' | 'Invoke' | 'Text_Area'
 
 export type Control = ControlCondition | ControlInput | ControlInit | ControlInvoke | ControlTextArea
 
@@ -40,7 +40,6 @@ type ControlBase = {
     type: ControlType;
     nodeId: NodeId;
     label?: string;
-    // ports: PortInput[];
 }
 
 export const isControl = (value: any): value is ControlBase => {
@@ -49,7 +48,6 @@ export const isControl = (value: any): value is ControlBase => {
         value !== null &&
         "id" in value &&
         "type" in value
-        // "ports" in value
     );
 }
 
@@ -70,17 +68,17 @@ export const isControlInput = (value: any): value is ControlCondition => {
 }
 
 export type ControlTextArea = ControlBase & {
-    type: "TextArea";
-    defaultValue?: string;
+    type: 'Text_Area';
+    value?: string;
     placeholder?: string;
     port: {
         id: PortId;
-        inputType: string;
+        type: string;
     }
 }
 
 export const isControlTextArea = (value: any): value is ControlTextArea => {
-    return isControl(value) && value.type === 'TextArea';
+    return isControl(value) && value.type === 'Text_Area';
 }
 
 export type ControlInit = ControlBase & {
@@ -133,7 +131,7 @@ export type PortInput = {
 
 export type PortOutput = {
     id: PortId;
-    outputType: string; // FIXME type
+    type: string; // FIXME type
 }
 
 export type Position = {

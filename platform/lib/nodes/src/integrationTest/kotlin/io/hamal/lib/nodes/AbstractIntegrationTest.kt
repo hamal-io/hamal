@@ -13,19 +13,16 @@ import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContext
 import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
-import io.hamal.lib.kua.function.Function0In0Out
-import io.hamal.lib.kua.function.Function1In0Out
-import io.hamal.lib.kua.function.FunctionContext
-import io.hamal.lib.kua.function.FunctionInput1Schema
-import io.hamal.lib.kua.type.*
-import io.hamal.lib.nodes.control.ControlId
-import io.hamal.lib.nodes.fixture.test_nodes.GeneratorCapture
-import io.hamal.lib.nodes.fixture.test_nodes.GeneratorInvoked
+import io.hamal.lib.kua.type.KuaCode
+import io.hamal.lib.kua.type.KuaString
+import io.hamal.lib.nodes.control.ControlIdentifier
+import io.hamal.lib.nodes.fixture.CaptureFunction
+import io.hamal.lib.nodes.fixture.GeneratorCapture
+import io.hamal.lib.nodes.fixture.GeneratorInvoked
+import io.hamal.lib.nodes.fixture.InvokeFunction
 import io.hamal.lib.nodes.generator.GeneratorRegistry
 import io.hamal.lib.nodes.generator.defaultGeneratorRegistry
-import io.hamal.lib.typesystem.value.ValueDecimal
-import io.hamal.lib.typesystem.value.ValueNumber
-import io.hamal.lib.typesystem.value.ValueString
+import io.hamal.lib.typesystem.type.Type
 import io.hamal.runner.config.EnvFactory
 import io.hamal.runner.config.SandboxFactory
 import io.hamal.runner.connector.Connector
@@ -36,29 +33,12 @@ import io.hamal.runner.test.TestConnector
 
 internal abstract class AbstractIntegrationTest {
 
-    class TestCaptor1 : Function1In0Out<KuaType>(FunctionInput1Schema(KuaType::class)) {
-        override fun invoke(ctx: FunctionContext, arg1: KuaType) {
-            when (arg1) {
-                is KuaDecimal -> resultDecimal = ValueDecimal(arg1.value)
-                is KuaNumber -> resultNumber = ValueNumber(arg1.doubleValue)
-                is KuaString -> resultString = ValueString((arg1.stringValue))
-
-                else -> TODO()
-            }
-        }
-
-        var resultDecimal: ValueDecimal? = null
-        var resultNumber: ValueNumber? = null
-        var resultString: ValueString? = null
-    }
-
-    class TestInvoked : Function0In0Out() {
-        override fun invoke(ctx: FunctionContext) {
-            invocations++
-        }
-
-        var invocations: Int = 0
-    }
+    data class TestContext(
+        val captorOne: CaptureFunction = CaptureFunction(),
+        val captorTwo: CaptureFunction = CaptureFunction(),
+        val invokedOne: InvokeFunction = InvokeFunction(),
+        val invokedTwo: InvokeFunction = InvokeFunction()
+    )
 
     fun createTestRunner(connector: Connector = TestConnector()) = CodeRunnerImpl(
         connector,
@@ -73,16 +53,20 @@ internal abstract class AbstractIntegrationTest {
                                 """
                     function plugin_create(internal)
                         local export = {
-                            invoked = internal.invoked,
-                            capture1 =  internal.capture1
+                            invokeOne = internal.invokeOne,
+                            invokeTwo = internal.invokeTwo,
+                            captureOne =  internal.captureOne,
+                            captureTwo =  internal.captureTwo
                         }
                         return export
                     end
                 """.trimIndent()
                             ),
                             internals = mapOf(
-                                KuaString("invoked") to testInvoked,
-                                KuaString("capture1") to testCaptor1
+                                KuaString("invokeOne") to testContext.invokedOne,
+                                KuaString("invokeTwo") to testContext.invokedTwo,
+                                KuaString("captureOne") to testContext.captorOne,
+                                KuaString("captureTwo") to testContext.captorTwo
                             )
                         )
                     )
@@ -92,10 +76,13 @@ internal abstract class AbstractIntegrationTest {
                         sandbox.generatorRegistry.register(
                             GeneratorRegistry(
                                 listOf(
-                                    GeneratorInvoked,
+                                    GeneratorCapture.Boolean,
                                     GeneratorCapture.Decimal,
                                     GeneratorCapture.Number,
                                     GeneratorCapture.String,
+                                    GeneratorInvoked.Boolean,
+                                    GeneratorInvoked.Empty,
+                                    GeneratorInvoked.String,
                                 )
                             )
                         )
@@ -111,6 +98,7 @@ internal abstract class AbstractIntegrationTest {
         id: Long,
         type: String,
         outputs: List<PortOutput> = listOf(),
+        properties: HotObject = HotObject.empty,
         title: NodeTitle = NodeTitle("Title of ${id.toString(16)}"),
         position: Position = Position(0, 0),
         size: Size = Size(200, 200)
@@ -121,6 +109,7 @@ internal abstract class AbstractIntegrationTest {
             title = title,
             position = position,
             size = size,
+            properties = NodeProperties(properties),
             outputs = outputs
         )
     }
@@ -130,17 +119,28 @@ internal abstract class AbstractIntegrationTest {
         outputNode: Long,
         outputPort: Long,
         inputNode: Long,
-        inputPort: Long
+        inputPort: Long,
+        label: String? = null
     ): Connection {
         return Connection(
             id = ConnectionId(SnowflakeId(id)),
             outputNode = Connection.Node(NodeId(SnowflakeId(outputNode))),
             outputPort = Connection.Port(id = PortId(SnowflakeId(outputPort))),
             inputNode = Connection.Node(NodeId(SnowflakeId(inputNode))),
-            inputPort = Connection.Port(id = PortId(SnowflakeId(inputPort)))
+            inputPort = Connection.Port(id = PortId(SnowflakeId(inputPort))),
+            label = label?.let(::ConnectionLabel)
         )
     }
 
+    fun portInput(
+        id: Long,
+        type: Type
+    ): PortInput = PortInput(PortId(SnowflakeId(id)), type)
+
+    fun portOutput(
+        id: Long,
+        type: Type
+    ): PortOutput = PortOutput(PortId(SnowflakeId(id)), type)
 
     fun unitOfWork(
         initValue: HotNode<*>,
@@ -162,15 +162,13 @@ internal abstract class AbstractIntegrationTest {
     )
 
 
-    protected val testCaptor1 = TestCaptor1()
-    protected val testInvoked = TestInvoked()
+    protected val nextControlIdentifier = NextControlIdentifier
+    protected val testContext = TestContext()
 
-    protected val nextControlId = NextControlId
+    object NextControlIdentifier {
 
-    object NextControlId {
-
-        operator fun invoke(): ControlId {
-            return ControlId(counter++)
+        operator fun invoke(): ControlIdentifier {
+            return ControlIdentifier((counter++).toString(16))
         }
 
         private var counter: Int = 0

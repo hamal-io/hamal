@@ -72,7 +72,7 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
 
                 assertThat(
                     exception.message,
-                    equalTo("EndpointName(first-endpoint-name) already exists in namespace NamespaceId(2)")
+                    equalTo("first-endpoint-name already exists in namespace 2")
                 )
 
                 verifyCount(1)
@@ -241,7 +241,7 @@ internal class EndpointRepositoryTest : AbstractUnitTest() {
 
                 assertThat(
                     exception.message,
-                    equalTo("EndpointName(already-exists) already exists in namespace NamespaceId(2)")
+                    equalTo("already-exists already exists in namespace 2")
                 )
 
                 with(get(EndpointId(2))) {

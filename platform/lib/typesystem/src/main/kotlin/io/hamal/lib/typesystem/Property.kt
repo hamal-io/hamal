@@ -1,13 +1,13 @@
 package io.hamal.lib.typesystem
 
 import io.hamal.lib.common.Decimal
-import io.hamal.lib.typesystem.Field.Kind
+import io.hamal.lib.typesystem.type.*
 import io.hamal.lib.typesystem.value.*
 import java.time.LocalDate
 import java.time.LocalTime
 
 data class Property(
-    val identifier: String,
+    val identifier: FieldIdentifier,
     val value: Value,
 ) {
 
@@ -17,7 +17,7 @@ data class Property(
 
     companion object {
 
-        fun of(field: Field, value: Any): Property {
+        fun Property(field: Field, value: Any): Property {
             return Property(field.identifier, mapAnyToValue(field, value))
         }
 
@@ -28,30 +28,24 @@ data class Property(
             }
         }
 
-        fun mapAnyToValue(field: Field, value: Any?): Value {
+        private fun mapAnyToValue(field: Field, value: Any?): Value {
             return if (value == null) ValueNil
-            else when (field.kind) {
-
-                Kind.Boolean -> valueOf(value as Boolean)
-                Kind.Date -> ValueDate(value as LocalDate)
-                Kind.DateTime -> TODO()
-                Kind.Decimal -> ValueDecimal(value as Decimal)
-
-                Kind.List -> {
+            else when (field.type) {
+                is TypeBoolean -> valueOf(value as Boolean)
+                is TypeDate -> ValueDate(value as LocalDate)
+                is TypeDateTime -> TODO()
+                is TypeDecimal -> ValueDecimal(value as Decimal)
+                is TypeList -> {
                     if (value is Iterable<*>) {
-                        ValueList(
-                            value.map { mapTypeToValue(field.valueType!!, it) },
-                            field.valueType!!
-                        )
+                        ValueList(field.type, value.map { mapTypeToValue(field.valueType!!, it) })
                     } else {
                         TODO()
                     }
                 }
 
-                Kind.Nil -> ValueNil
-                Kind.Number -> ValueNumber(value as Double)
-
-                Kind.Object -> {
+                is TypeNil -> ValueNil
+                is TypeNumber -> ValueNumber(value as Double)
+                is TypeObject -> {
                     if (value is ValueObject && value.type == field.valueType) {
                         value
                     } else if (value is Map<*, *>) {
@@ -61,8 +55,8 @@ data class Property(
                     }
                 }
 
-                Kind.String -> ValueString(value as String)
-                Kind.Time -> ValueTime(value as LocalTime)
+                is TypeString -> ValueString(value as String)
+                is TypeTime -> ValueTime(value as LocalTime)
             }
         }
     }

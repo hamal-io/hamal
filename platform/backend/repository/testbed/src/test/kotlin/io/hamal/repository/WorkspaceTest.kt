@@ -64,10 +64,7 @@ internal class WorkspaceRepositoryTest : AbstractUnitTest() {
                     )
                 }
 
-                assertThat(
-                    exception.message,
-                    equalTo("WorkspaceName(SomeWorkspace) already exists")
-                )
+                assertThat(exception.message, equalTo("SomeWorkspace already exists"))
 
                 verifyCount(1)
             }

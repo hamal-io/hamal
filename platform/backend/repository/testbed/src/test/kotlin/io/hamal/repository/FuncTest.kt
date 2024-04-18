@@ -89,7 +89,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
 
                 assertThat(
                     exception.message,
-                    equalTo("FuncName(first-func-name) already exists in namespace NamespaceId(2)")
+                    equalTo("first-func-name already exists in namespace 2")
                 )
 
                 verifyCount(1)
@@ -310,10 +310,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                     )
                 }
 
-                assertThat(
-                    exception.message,
-                    equalTo("FuncName(already-exists) already exists in namespace NamespaceId(2)")
-                )
+                assertThat(exception.message, equalTo("already-exists already exists in namespace 2"))
 
                 with(get(FuncId(2))) {
                     assertThat(id, equalTo(FuncId(2)))
@@ -430,7 +427,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                     )
                 )
             }
-            assertThat(exception.message, equalTo("CodeVersion(500) can not be deployed"))
+            assertThat(exception.message, equalTo("code version 500 can not be deployed"))
         }
     }
 

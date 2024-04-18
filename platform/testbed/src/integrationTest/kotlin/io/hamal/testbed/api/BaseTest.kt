@@ -112,7 +112,7 @@ class ClearController {
         hookRepository.clear()
         namespaceRepository.clear()
         namespaceTreeRepository.clear()
-        blueprintRepository.clear()
+        recipeRepository.clear()
         triggerRepository.clear()
 
         testAccount = accountRepository.create(
@@ -164,9 +164,6 @@ class ClearController {
     }
 
     @Autowired
-    lateinit var blueprintRepository: BlueprintRepository
-
-    @Autowired
     lateinit var accountRepository: AccountRepository
 
     @Autowired
@@ -198,6 +195,9 @@ class ClearController {
 
     @Autowired
     lateinit var namespaceTreeRepository: NamespaceTreeRepository
+
+    @Autowired
+    lateinit var recipeRepository: RecipeRepository
 
     @Autowired
     lateinit var requestRepository: RequestRepository

@@ -1,7 +1,7 @@
 package io.hamal.lib.nodes.generator
 
 import io.hamal.lib.nodes.NodeType
-import io.hamal.lib.typesystem.TypeNew
+import io.hamal.lib.typesystem.type.Type
 
 class GeneratorRegistry(generators: List<Generator>) {
 
@@ -17,10 +17,10 @@ class GeneratorRegistry(generators: List<Generator>) {
         registry.generators.values.flatten().forEach { generator -> register(generator) }
     }
 
-    operator fun get(type: NodeType, inputTypes: List<TypeNew>, outputTypes: List<TypeNew>) = find(type, inputTypes, outputTypes)
+    operator fun get(type: NodeType, inputTypes: List<Type>, outputTypes: List<Type>) = find(type, inputTypes, outputTypes)
         ?: throw NoSuchElementException("No generator found for $type with [${inputTypes.joinToString(", ")}] and [${outputTypes.joinToString(", ")}]")
 
-    fun find(type: NodeType, inputTypes: List<TypeNew>, outputTypes: List<TypeNew>): Generator? {
+    fun find(type: NodeType, inputTypes: List<Type>, outputTypes: List<Type>): Generator? {
         return generators[type]?.find {
             it.inputTypes == inputTypes && it.outputTypes == outputTypes
         }
@@ -39,6 +39,9 @@ class GeneratorRegistry(generators: List<Generator>) {
 
 val defaultGeneratorRegistry = GeneratorRegistry(
     listOf(
-        GeneratorInit.String
+        GeneratorDecision.Boolean,
+        GeneratorInit.Boolean,
+        GeneratorInit.Number,
+        GeneratorInit.String,
     )
 )

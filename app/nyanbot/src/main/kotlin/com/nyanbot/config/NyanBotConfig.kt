@@ -1,9 +1,10 @@
 package com.nyanbot.config
 
-import io.hamal.lib.domain.CmdIdGeneratorImpl
-import io.hamal.lib.domain.GenerateCmdId
+import io.hamal.lib.common.domain.ValueObjectId
+import io.hamal.lib.common.snowflake.PartitionSourceImpl
+import io.hamal.lib.common.snowflake.SnowflakeGenerator
+import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.GenerateDomainId
-import io.hamal.lib.domain.IdGeneratorImpl
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
@@ -18,9 +19,14 @@ class NyanBotConfig {
     fun basePath() = NyanBotBasePath("/opt/nyanbot")
 
     @Bean
-    open fun generateDomainId(): GenerateDomainId = IdGeneratorImpl
-
-    @Bean
-    open fun generateCmdId(): GenerateCmdId = CmdIdGeneratorImpl
+    open fun generateDomainId(): GenerateDomainId = GenerateDomainIdImpl(SnowflakeGenerator(PartitionSourceImpl(1)))
 
 }
+
+class GenerateDomainIdImpl(private val generator: SnowflakeGenerator) : GenerateDomainId {
+    override fun <ID : ValueObjectId> invoke(ctor: (SnowflakeId) -> ID): ID {
+        return ctor(generator.next())
+    }
+}
+
+

@@ -12,11 +12,16 @@ export const useTopicGet = (): [TopicGetAction, Topic, boolean, Error] => {
     return [fn, topic, loading, error]
 }
 
-type TopicListAction = (namespaceId: string, abortController?: AbortController) => void
+
+type TopicListQuery = {
+    namespaceId: string
+}
+
+type TopicListAction = (query: TopicListQuery, abortController?: AbortController) => void
 export const useTopicList = (): [TopicListAction, TopicList, boolean, Error] => {
     const [auth] = useAuth()
     const [get, topicList, loading, error] = useGet<TopicList>()
-    const fn = useCallback(async (namespaceId: string, abortController?: AbortController) => get(`/v1/topics?namespace_ids=${namespaceId}`, abortController), [auth])
+    const fn = useCallback(async (query: TopicListQuery, abortController?: AbortController) => get(`/v1/topics`, abortController), [auth])
     return [fn, topicList, loading, error]
 }
 

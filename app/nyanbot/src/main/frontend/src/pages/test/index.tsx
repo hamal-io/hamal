@@ -33,18 +33,18 @@ export const TestPage = () => {
             nodes={[
                 {
                     id: '1',
-                    type: 'INIT',
+                    type: 'Init',
                     title: 'Init',
                     position: {x: -200, y: -400},
                     size: {width: 100, height: 100},
                     outputs: [{
                         id: '1',
-                        outputType: 'TypeString'
+                        type: 'String'
                     }]
                 } satisfies Node,
                 {
                     id: '2',
-                    type: "TELEGRAM_SEND_MESSAGE",
+                    type: "Telegram_Send_Message",
                     title: 'Telegram - Send Message',
                     position: {x: 0, y: -400},
                     size: {width: 250, height: 300},
@@ -65,7 +65,7 @@ export const TestPage = () => {
                     id: '1',
                     type: 'Init',
                     nodeId: '1',
-                    selector: 'NO_VALUE',
+                    selector: 'No_Value',
                     description: 'Let me trigger TG for ya!',
                 } satisfies ControlInit,
                 {
@@ -76,24 +76,24 @@ export const TestPage = () => {
                 } satisfies ControlInvoke,
                 {
                     id: '4',
-                    type: 'TextArea',
+                    type: 'Text_Area',
                     nodeId: '2',
                     port: {
                         id: '5',
-                        inputType: 'TypeString'
+                        type: 'String'
                     },
-                    defaultValue: '',
+                    value: '',
                     placeholder: 'chat_id'
                 } satisfies ControlTextArea,
                 {
                     id: '5',
-                    type: 'TextArea',
+                    type: 'Text_Area',
                     nodeId: '2',
                     port: {
                         id: '6',
-                        inputType: 'TypeString'
+                        type: 'String'
                     },
-                    defaultValue: '',
+                    value: '',
                     placeholder: 'message'
                 } satisfies ControlTextArea
             ]}

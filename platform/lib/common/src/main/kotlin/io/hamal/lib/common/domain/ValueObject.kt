@@ -22,7 +22,7 @@ interface ValueObject<VALUE_TYPE : Any> {
             return value.hashCode()
         }
 
-        override fun toString() = "${this.javaClass.simpleName}($value)"
+        override fun toString() = "$value"
     }
 
     abstract class ComparableImpl<VALUE_TYPE : Comparable<VALUE_TYPE>> : BaseImpl<VALUE_TYPE>(),
@@ -38,36 +38,16 @@ abstract class ValueObjectId : ValueObject.ComparableImpl<SnowflakeId>() {
     fun sequence() = value.sequence()
     fun elapsed() = value.elapsed()
     override fun toString(): String {
-        return "${this::class.simpleName}(${value.value})"
+        return value.value.toString(16)
     }
 }
 
-abstract class ValueObjectString : ValueObject.ComparableImpl<String>() {
-    override fun toString(): String {
-        return "${this::class.simpleName}(${value})"
-    }
-}
+abstract class ValueObjectString : ValueObject.ComparableImpl<String>()
 
-abstract class ValueObjectInt : ValueObject.ComparableImpl<Int>() {
-    override fun toString(): String {
-        return "${this::class.simpleName}(${value})"
-    }
-}
+abstract class ValueObjectInt : ValueObject.ComparableImpl<Int>()
 
-abstract class ValueObjectLong : ValueObject.ComparableImpl<Long>() {
-    override fun toString(): String {
-        return "${this::class.simpleName}(${value})"
-    }
-}
+abstract class ValueObjectLong : ValueObject.ComparableImpl<Long>()
 
-abstract class ValueObjectInstant : ValueObject.ComparableImpl<Instant>() {
-    override fun toString(): String {
-        return "${this::class.simpleName}(${value})"
-    }
-}
+abstract class ValueObjectInstant : ValueObject.ComparableImpl<Instant>()
 
-abstract class ValueObjectHotObject : ValueObject.BaseImpl<HotObject>() {
-    override fun toString(): String {
-        return "${this::class.simpleName}(${value})"
-    }
-}
+abstract class ValueObjectHotObject : ValueObject.BaseImpl<HotObject>()

@@ -2,7 +2,7 @@ package io.hamal.lib.typesystem.value
 
 import io.hamal.lib.common.Decimal
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.typesystem.Field.Kind
+import io.hamal.lib.typesystem.type.TypeDecimal
 import java.math.BigDecimal
 import java.math.MathContext
 import java.math.RoundingMode
@@ -13,7 +13,7 @@ value class ValueDecimal(
     val value: Decimal,
 ) : Value, Comparable<ValueDecimal> {
 
-    override val kind get() = Kind.Decimal
+    override val type get() = TypeDecimal
 
     companion object {
         val Zero = ValueDecimal(0)

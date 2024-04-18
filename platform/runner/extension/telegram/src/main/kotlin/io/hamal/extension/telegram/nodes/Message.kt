@@ -4,12 +4,12 @@ import io.hamal.lib.nodes.*
 import io.hamal.lib.nodes.control.Control
 import io.hamal.lib.nodes.control.ControlExtensionTextArea
 import io.hamal.lib.nodes.generator.Generator
-import io.hamal.lib.typesystem.TypeNew
-import io.hamal.lib.typesystem.TypeString
+import io.hamal.lib.typesystem.type.Type
+import io.hamal.lib.typesystem.type.TypeString
 import io.hamal.lib.typesystem.value.ValueString
 
 val SendMessageNode = NodeExtension(
-    type = NodeType("TELEGRAM_SEND_MESSAGE"),
+    type = NodeType("Telegram_Send_Message"),
     title = NodeTitle("Telegram - Send Message"),
     size = Size(200, 200),
     controls = listOf(
@@ -22,9 +22,9 @@ val SendMessageNode = NodeExtension(
 )
 
 val SendMessageNodeGenerator = object : Generator {
-    override val type: NodeType get() = NodeType("TELEGRAM_SEND_MESSAGE")
-    override val inputTypes: List<TypeNew> get() = listOf(TypeString, TypeString)
-    override val outputTypes: List<TypeNew> get() = listOf()
+    override val type: NodeType get() = NodeType("Telegram_Send_Message")
+    override val inputTypes: List<Type> get() = listOf(TypeString, TypeString)
+    override val outputTypes: List<Type> get() = listOf()
 
     override fun toCode(node: Node, controls: List<Control>): String {
         return """

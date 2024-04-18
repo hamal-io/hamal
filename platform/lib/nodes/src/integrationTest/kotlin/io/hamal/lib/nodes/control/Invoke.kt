@@ -2,7 +2,7 @@ package io.hamal.lib.nodes.control
 
 import io.hamal.lib.common.hot.HotString
 import io.hamal.lib.nodes.*
-import io.hamal.lib.typesystem.TypeString
+import io.hamal.lib.typesystem.type.TypeString
 import io.hamal.lib.typesystem.value.ValueString
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
@@ -18,22 +18,22 @@ internal object ControlInvokeTest : AbstractIntegrationTest() {
                 initValue = HotString("This value will not passed into capture node"),
                 graph = NodesGraph(
                     nodes = listOf(
-                        node(1, "INIT", listOf(PortOutput(PortId(20), TypeString))),
-                        node(2, "CAPTURE", listOf(PortOutput(PortId(22), TypeString)))
+                        node(1, "Init", listOf(PortOutput(PortId(20), TypeString))),
+                        node(2, "Test_Capture", listOf(PortOutput(PortId(22), TypeString)))
                     ),
                     connections = listOf(
                         connection(100, 1, 20, 2, 21)
                     ),
                     controls = listOf(
-                        ControlInit(nextControlId(), NodeId(1)),
-                        ControlInvoke(nextControlId(), NodeId(2), PortId(21)),
-                        ControlTextArea(nextControlId(), NodeId(2), PortInput(PortId(22), TypeString), ValueString("default capture string"))
+                        ControlInit(nextControlIdentifier(), NodeId(1)),
+                        ControlInvoke(nextControlIdentifier(), NodeId(2), portInput(21, TypeString)),
+                        ControlTextArea(nextControlIdentifier(), NodeId(2), portInput(22, TypeString), ValueString("default capture string")),
                     )
                 )
             )
         )
 
-        assertThat(testCaptor1.resultString, equalTo(ValueString("default capture string")))
+        assertThat(testContext.captorOne.resultString, equalTo(ValueString("default capture string")))
     }
 
 }

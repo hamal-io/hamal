@@ -80,7 +80,7 @@ export const ControlTextWidget: FC<ControlTextWidgetProps> = ({control}) => {
     return (
         <div className="flex flex-row">
             {control.port && <PortInputWidget/>}
-            <TextArea value={control.defaultValue} placeholder={control.placeholder} onChange={(value) =>
+            <TextArea value={control.value} placeholder={control.placeholder} onChange={(value) =>
                 dispatch({type: 'CONTROL_TEXT_AREA_UPDATED', id: control.id, value})
             }/>
         </div>

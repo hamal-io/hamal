@@ -7,7 +7,6 @@ import io.hamal.repository.memory.RequestMemoryRepository
 import io.hamal.repository.memory.StateMemoryRepository
 import io.hamal.repository.memory.log.LogBrokerMemoryRepository
 import io.hamal.repository.memory.record.account.AccountMemoryRepository
-import io.hamal.repository.memory.record.blueprint.BlueprintMemoryRepository
 import io.hamal.repository.memory.record.code.CodeMemoryRepository
 import io.hamal.repository.memory.record.endpoint.EndpointMemoryRepository
 import io.hamal.repository.memory.record.exec.ExecMemoryRepository
@@ -17,6 +16,7 @@ import io.hamal.repository.memory.record.func.FuncMemoryRepository
 import io.hamal.repository.memory.record.hook.HookMemoryRepository
 import io.hamal.repository.memory.record.namespace.NamespaceMemoryRepository
 import io.hamal.repository.memory.record.namespace_tree.NamespaceTreeMemoryRepository
+import io.hamal.repository.memory.record.recipe.RecipeMemoryRepository
 import io.hamal.repository.memory.record.topic.TopicMemoryRepository
 import io.hamal.repository.memory.record.trigger.TriggerMemoryRepository
 import io.hamal.repository.memory.record.workspace.MemoryWorkspaceRepository
@@ -45,15 +45,6 @@ open class MemoryRepositoryConfig {
 
     @Bean
     open fun authCmdRepository() = authRepository()
-
-    @Bean
-    open fun blueprintRepository() = BlueprintMemoryRepository()
-
-    @Bean
-    open fun blueprintCmdRepository(): BlueprintCmdRepository = blueprintRepository()
-
-    @Bean
-    open fun blueprintQueryRepository(): BlueprintQueryRepository = blueprintRepository()
 
     @Bean
     open fun codeRepository() = CodeMemoryRepository()
@@ -156,6 +147,15 @@ open class MemoryRepositoryConfig {
 
     @Bean
     open fun logBrokerRepository() = LogBrokerMemoryRepository()
+
+    @Bean
+    open fun recipeRepository() = RecipeMemoryRepository()
+
+    @Bean
+    open fun recipeCmdRepository(): RecipeCmdRepository = recipeRepository()
+
+    @Bean
+    open fun recipeQueryRepository(): RecipeQueryRepository = recipeRepository()
 
     @Bean
     open fun requestRepository(): RequestRepository = RequestMemoryRepository()

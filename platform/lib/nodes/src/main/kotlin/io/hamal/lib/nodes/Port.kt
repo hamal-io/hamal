@@ -2,7 +2,7 @@ package io.hamal.lib.nodes
 
 import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.typesystem.TypeNew
+import io.hamal.lib.typesystem.type.Type
 
 class PortId(override val value: SnowflakeId) : ValueObjectId() {
     constructor(value: Int) : this(SnowflakeId(value.toLong()))
@@ -12,10 +12,10 @@ class PortId(override val value: SnowflakeId) : ValueObjectId() {
 
 data class PortInput(
     val id: PortId,
-    val inputType: TypeNew
+    val type: Type
 )
 
 data class PortOutput(
     val id: PortId,
-    val outputType: TypeNew
+    val type: Type
 )

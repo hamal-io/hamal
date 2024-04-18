@@ -14,7 +14,6 @@ import io.hamal.repository.memory.log.LogSegmentMemory
 import io.hamal.repository.memory.log.LogSegmentMemoryRepository
 import io.hamal.repository.memory.log.LogTopicMemoryRepository
 import io.hamal.repository.memory.record.account.AccountMemoryRepository
-import io.hamal.repository.memory.record.blueprint.BlueprintMemoryRepository
 import io.hamal.repository.memory.record.code.CodeMemoryRepository
 import io.hamal.repository.memory.record.endpoint.EndpointMemoryRepository
 import io.hamal.repository.memory.record.exec.ExecMemoryRepository
@@ -24,6 +23,7 @@ import io.hamal.repository.memory.record.func.FuncMemoryRepository
 import io.hamal.repository.memory.record.hook.HookMemoryRepository
 import io.hamal.repository.memory.record.namespace.NamespaceMemoryRepository
 import io.hamal.repository.memory.record.namespace_tree.NamespaceTreeMemoryRepository
+import io.hamal.repository.memory.record.recipe.RecipeMemoryRepository
 import io.hamal.repository.memory.record.topic.TopicMemoryRepository
 import io.hamal.repository.memory.record.trigger.TriggerMemoryRepository
 import io.hamal.repository.memory.record.workspace.MemoryWorkspaceRepository
@@ -34,7 +34,7 @@ object MemoryFixture : BaseTestFixture {
     override fun <REPO : Any> provideImplementation(interfaceClass: KClass<out REPO>): REPO = when (interfaceClass) {
         AccountRepository::class -> AccountMemoryRepository() as REPO
         AuthRepository::class -> AuthMemoryRepository() as REPO
-        BlueprintRepository::class -> BlueprintMemoryRepository() as REPO
+        RecipeRepository::class -> RecipeMemoryRepository() as REPO
         CodeRepository::class -> CodeMemoryRepository() as REPO
         EndpointRepository::class -> EndpointMemoryRepository() as REPO
         ExecLogRepository::class -> ExecLogMemoryRepository() as REPO

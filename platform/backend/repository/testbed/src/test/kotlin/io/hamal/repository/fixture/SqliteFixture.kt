@@ -14,7 +14,6 @@ import io.hamal.repository.sqlite.log.LogSegmentSqlite
 import io.hamal.repository.sqlite.log.LogSegmentSqliteRepository
 import io.hamal.repository.sqlite.log.LogTopicSqliteRepository
 import io.hamal.repository.sqlite.record.account.AccountSqliteRepository
-import io.hamal.repository.sqlite.record.blueprint.BlueprintSqliteRepository
 import io.hamal.repository.sqlite.record.code.CodeSqliteRepository
 import io.hamal.repository.sqlite.record.endpoint.EndpointSqliteRepository
 import io.hamal.repository.sqlite.record.exec.ExecSqliteRepository
@@ -24,6 +23,7 @@ import io.hamal.repository.sqlite.record.func.FuncSqliteRepository
 import io.hamal.repository.sqlite.record.hook.HookSqliteRepository
 import io.hamal.repository.sqlite.record.namespace.NamespaceSqliteRepository
 import io.hamal.repository.sqlite.record.namespace_tree.NamespaceTreeSqliteRepository
+import io.hamal.repository.sqlite.record.recipe.RecipeSqliteRepository
 import io.hamal.repository.sqlite.record.topic.TopicSqliteRepository
 import io.hamal.repository.sqlite.record.trigger.TriggerSqliteRepository
 import io.hamal.repository.sqlite.record.workspace.WorkspaceSqliteRepository
@@ -36,7 +36,7 @@ object SqliteFixture : BaseTestFixture {
     override fun <REPO : Any> provideImplementation(interfaceClass: KClass<out REPO>): REPO = when (interfaceClass) {
         AccountRepository::class -> AccountSqliteRepository(createTempDirectory("sqlite_account_test")) as REPO
         AuthRepository::class -> AuthSqliteRepository(createTempDirectory("sqlite_auth_test")) as REPO
-        BlueprintRepository::class -> BlueprintSqliteRepository(createTempDirectory("sqlite_blueprint_test")) as REPO
+        RecipeRepository::class -> RecipeSqliteRepository(createTempDirectory("sqlite_recipe_test")) as REPO
         CodeRepository::class -> CodeSqliteRepository(createTempDirectory("sqlite_code_test")) as REPO
         EndpointRepository::class -> EndpointSqliteRepository(createTempDirectory("sqlite_endpoint_test")) as REPO
         ExecRepository::class -> ExecSqliteRepository(createTempDirectory("sqlite_exec_test")) as REPO

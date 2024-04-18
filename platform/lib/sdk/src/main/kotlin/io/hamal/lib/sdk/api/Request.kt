@@ -40,8 +40,8 @@ sealed class ApiRequested {
 
         private val classMapping = listOf(
             ApiAccountConvertRequested::class,
-            ApiBlueprintCreateRequested::class,
-            ApiBlueprintUpdateRequested::class,
+            ApiRecipeCreateRequested::class,
+            ApiRecipeUpdateRequested::class,
             ApiExecInvokeRequested::class,
             ApiEndpointCreateRequested::class,
             ApiEndpointUpdateRequested::class,

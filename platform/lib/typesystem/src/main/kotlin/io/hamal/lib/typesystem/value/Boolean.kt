@@ -1,6 +1,6 @@
 package io.hamal.lib.typesystem.value
 
-import io.hamal.lib.typesystem.Field.Kind
+import io.hamal.lib.typesystem.type.TypeBoolean
 
 fun valueOf(value: Boolean) = if (value) ValueTrue else ValueFalse
 
@@ -8,7 +8,7 @@ sealed class ValueBoolean(
     private val value: Boolean
 ) : Value {
 
-    override val kind get() = Kind.Boolean
+    override val type get() = TypeBoolean
 
     companion object {
         fun of(value: Boolean) = if (value) ValueTrue else ValueFalse

@@ -2,8 +2,7 @@ package io.hamal.lib.nodes.compiler
 
 import io.hamal.lib.nodes.*
 import io.hamal.lib.nodes.compiler.ComputationGraph.Companion.ComputationGraph
-import io.hamal.lib.nodes.control.ControlTextArea
-import io.hamal.lib.typesystem.TypeString
+import io.hamal.lib.typesystem.type.TypeString
 import io.hamal.lib.typesystem.value.ValueString
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
@@ -22,14 +21,14 @@ internal object ComputationNodesGraphTest : AbstractUnitTest() {
         val result = ComputationGraph(
             NodesGraph(
                 nodes = listOf(
-                    node(1, "INIT", listOf(PortOutput(PortId(20), TypeString))),
-                    node(2, "INVOKED")
+                    node(1, "Init", listOf(PortOutput(PortId(20), TypeString))),
+                    node(2, "Test_Invoked")
                 ),
                 connections = listOf(
                     connection(100, 1, 20, 2, 21)
                 ),
                 controls = listOf(
-                    ControlTextArea(nextControlId(), NodeId(2), PortInput(PortId(21), TypeString), ValueString("default string"))
+                    ControlTextArea(nextControlIdentifier(), NodeId(2), PortInput(PortId(21), TypeString), ValueString("default string"))
                 )
             )
         )
@@ -59,8 +58,8 @@ internal object ComputationNodesGraphTest : AbstractUnitTest() {
                     connection(101, 1, 20, 3, 22),
                 ),
                 controls = listOf(
-                    ControlTextArea(nextControlId(), NodeId(2), PortInput(PortId(21), TypeString), ValueString("default")),
-                    ControlTextArea(nextControlId(), NodeId(3), PortInput(PortId(22), TypeString), ValueString("default"))
+                    ControlTextArea(nextControlIdentifier(), NodeId(2), PortInput(PortId(21), TypeString), ValueString("default")),
+                    ControlTextArea(nextControlIdentifier(), NodeId(3), PortInput(PortId(22), TypeString), ValueString("default"))
                 )
             )
         )
@@ -81,17 +80,17 @@ internal object ComputationNodesGraphTest : AbstractUnitTest() {
         val result = ComputationGraph(
             graph = NodesGraph(
                 nodes = listOf(
-                    node(1, "INIT", listOf(PortOutput(PortId(20), TypeString))),
-                    node(2, "INVOKED"),
-                    node(3, "INVOKED")
+                    node(1, "Init", listOf(PortOutput(PortId(20), TypeString))),
+                    node(2, "Test_Invoked"),
+                    node(3, "Test_Invoked")
                 ),
                 connections = listOf(
                     connection(100, 1, 20, 3, 22),
                     connection(101, 2, 21, 3, 22),
                 ),
                 controls = listOf(
-                    ControlTextArea(nextControlId(), NodeId(2), PortInput(PortId(21), TypeString), ValueString("default")),
-                    ControlTextArea(nextControlId(), NodeId(3), PortInput(PortId(22), TypeString), ValueString("default"))
+                    ControlTextArea(nextControlIdentifier(), NodeId(2), PortInput(PortId(21), TypeString), ValueString("default")),
+                    ControlTextArea(nextControlIdentifier(), NodeId(3), PortInput(PortId(22), TypeString), ValueString("default"))
                 )
             )
         )
