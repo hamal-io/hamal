@@ -17,7 +17,7 @@ import kotlin.concurrent.withLock
 class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord, Trigger>(
     createDomainObject = CreateTriggerFromRecords,
     recordClass = TriggerRecord::class,
-    projections = listOf(ProjectionCurrent(), ProjectionUniqueHook())
+    projections = listOf(ProjectionCurrent(), ProjectionUniqueHook(), ProjectionUniqueEndpoint())
 ), TriggerRepository {
 
     override fun create(cmd: CreateFixedRateCmd): Trigger.FixedRate {
@@ -123,6 +123,33 @@ class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord,
         }
     }
 
+    override fun create(cmd: CreateEndpointCmd): Trigger.Endpoint {
+        return lock.withLock {
+            val triggerId = cmd.triggerId
+            if (commandAlreadyApplied(cmd.id, triggerId)) {
+                versionOf(triggerId, cmd.id) as Trigger.Endpoint
+            } else {
+                store(
+                    TriggerRecord.EndpointCreated(
+                        cmdId = cmd.id,
+                        entityId = triggerId,
+                        workspaceId = cmd.workspaceId,
+                        funcId = cmd.funcId,
+                        namespaceId = cmd.namespaceId,
+                        name = cmd.name,
+                        inputs = cmd.inputs,
+                        endpointId = cmd.endpointId,
+                        correlationId = cmd.correlationId,
+                        status = cmd.status
+                    )
+                )
+                (currentVersion(triggerId) as Trigger.Endpoint)
+                    .also(uniqueEndpointProjection::upsert)
+                    .also(currentProjection::upsert)
+            }
+        }
+    }
+
     override fun set(triggerId: TriggerId, cmd: SetTriggerStatusCmd): Trigger {
         return lock.withLock {
             if (commandAlreadyApplied(cmd.id, triggerId)) {
@@ -156,4 +183,5 @@ class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord,
     private val lock = ReentrantLock()
     private val currentProjection = getProjection<ProjectionCurrent>()
     private val uniqueHookProjection = getProjection<ProjectionUniqueHook>()
+    private val uniqueEndpointProjection = getProjection<ProjectionUniqueEndpoint>()
 }

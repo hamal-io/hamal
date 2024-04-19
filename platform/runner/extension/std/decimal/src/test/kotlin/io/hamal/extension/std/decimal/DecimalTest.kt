@@ -14,7 +14,7 @@ internal class DecimalTest : AbstractRunnerTest() {
         runner.run(
             unitOfWork(
                 """
-            local decimal = require('decimal')
+            local decimal = require('std.decimal')
             assert(decimal)
             """
             )
@@ -30,7 +30,7 @@ internal class DecimalTest : AbstractRunnerTest() {
         runner.run(
             unitOfWork(
                 """
-            local decimal = require('decimal')
+            local decimal = require('std.decimal')
             local b = decimal.new('3.14')
             for k,v in pairs(_G) do print(k,v) end
             """
@@ -48,7 +48,7 @@ internal class DecimalTest : AbstractRunnerTest() {
         runner.run(
             unitOfWork(
                 """
-            local decimal = require('decimal')
+            local decimal = require('std.decimal')
             local a = decimal.new(42.24)
             assert(decimal.to_string(a) == '42.24')
             """
@@ -65,7 +65,7 @@ internal class DecimalTest : AbstractRunnerTest() {
         runner.run(
             unitOfWork(
                 """
-            local decimal = require('decimal')
+            local decimal = require('std.decimal')
             local b = decimal.new('3.14')
             assert(decimal.to_string(b) == '3.14')
         """

@@ -640,6 +640,115 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
     }
 
     @Nested
+    inner class CreateEndpoint {
+
+        @TestFactory
+        fun `Creates endpoint trigger`() = runWith(TriggerRepository::class) {
+            val res = create(
+                CreateEndpointCmd(
+                    id = CmdGen(),
+                    triggerId = TriggerId(2),
+                    funcId = FuncId(3),
+                    workspaceId = WorkspaceId(4),
+                    namespaceId = NamespaceId(5),
+                    name = TriggerName("trigger-name"),
+                    inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
+                    endpointId = EndpointId(6)
+                )
+            )
+
+            with(res) {
+                assertThat(id, equalTo(TriggerId(2)))
+                assertThat(funcId, equalTo(FuncId(3)))
+                assertThat(namespaceId, equalTo(NamespaceId(5)))
+                assertThat(name, equalTo(TriggerName("trigger-name")))
+                assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
+                assertThat(endpointId, equalTo(EndpointId(6)))
+                assertThat(status, equalTo(Active))
+            }
+
+            verifyCount(1)
+        }
+
+        @TestFactory
+        fun `Creates with same name but different namespace`() = runWith(TriggerRepository::class) {
+            createEndpointTrigger(
+                triggerId = TriggerId(1),
+                namespaceId = NamespaceId(2),
+                workspaceId = WorkspaceId(3),
+                name = TriggerName("trigger-name"),
+                endpointId = EndpointId(4)
+            )
+
+            val result = create(
+                CreateEndpointCmd(
+                    id = CmdGen(),
+                    triggerId = TriggerId(1111),
+                    funcId = FuncId(5555),
+                    workspaceId = WorkspaceId(3),
+                    namespaceId = NamespaceId(22),
+                    name = TriggerName("trigger-name"),
+                    inputs = TriggerInputs(),
+                    endpointId = EndpointId(4)
+                )
+            )
+
+            with(result) {
+                assertThat(id, equalTo(TriggerId(1111)))
+                assertThat(funcId, equalTo(FuncId(5555)))
+                assertThat(workspaceId, equalTo(WorkspaceId(3)))
+                assertThat(namespaceId, equalTo(NamespaceId(22)))
+                assertThat(name, equalTo(TriggerName("trigger-name")))
+                assertThat(inputs, equalTo(TriggerInputs()))
+                assertThat(endpointId, equalTo(EndpointId(4)))
+                assertThat(status, equalTo(Active))
+            }
+
+            verifyCount(2)
+        }
+
+        @TestFactory
+        fun `Tries to create but cmd with func id was already applied`() =
+            runWith(TriggerRepository::class) {
+                createEndpointTrigger(
+                    cmdId = CmdId(23456),
+                    triggerId = TriggerId(5),
+                    namespaceId = NamespaceId(2),
+                    workspaceId = WorkspaceId(3),
+                    name = TriggerName("first-trigger-name")
+                )
+
+
+                val result = create(
+                    CreateEndpointCmd(
+                        id = CmdId(23456),
+                        triggerId = TriggerId(5),
+                        funcId = FuncId(8),
+                        workspaceId = WorkspaceId(333),
+                        namespaceId = NamespaceId(2222),
+                        name = TriggerName("second-trigger-name"),
+                        inputs = TriggerInputs(),
+                        endpointId = EndpointId(4)
+                    )
+                )
+
+                with(result) {
+                    assertThat(id, equalTo(TriggerId(5)))
+                    assertThat(funcId, equalTo(FuncId(4)))
+                    assertThat(workspaceId, equalTo(WorkspaceId(3)))
+                    assertThat(namespaceId, equalTo(NamespaceId(2)))
+                    assertThat(name, equalTo(TriggerName("first-trigger-name")))
+                    assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
+                    assertThat(endpointId, equalTo(EndpointId(9)))
+                    assertThat(status, equalTo(Active))
+                }
+
+                verifyCount(1)
+            }
+    }
+
+
+    @Nested
     inner class ClearTest {
 
         @TestFactory
@@ -941,6 +1050,25 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
         }
 
         @TestFactory
+        fun `With endpoint ids`() = runWith(TriggerRepository::class) {
+            setup()
+
+            val query = TriggerQuery(
+                endpointIds = listOf(EndpointId(2048)),
+                limit = Limit(10)
+            )
+
+            assertThat(count(query), equalTo(Count(1)))
+            val result = list(query)
+            assertThat(result, hasSize(1))
+
+            with(result[0]) {
+                assertThat(id, equalTo(TriggerId(9)))
+                assertThat(name, equalTo(TriggerName("endpoint-trigger-one")))
+            }
+        }
+
+        @TestFactory
         fun `With namespace ids`() = runWith(TriggerRepository::class) {
             setup()
 
@@ -969,9 +1097,9 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 limit = Limit(10)
             )
 
-            assertThat(count(query), equalTo(Count(3)))
+            assertThat(count(query), equalTo(Count(4)))
             val result = list(query).reversed()
-            assertThat(result, hasSize(3))
+            assertThat(result, hasSize(4))
 
             with(result[1]) {
                 assertThat(id, equalTo(TriggerId(4)))
@@ -991,7 +1119,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 limit = Limit(3)
             )
 
-            assertThat(count(query), equalTo(Count(7)))
+            assertThat(count(query), equalTo(Count(10)))
             val result = list(query)
             assertThat(result, hasSize(3))
         }
@@ -1076,12 +1204,30 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
             )
 
             createEventTrigger(
-                triggerId = TriggerId(7),
+                triggerId = TriggerId(8),
                 namespaceId = NamespaceId(12),
                 workspaceId = WorkspaceId(6),
                 name = TriggerName("event-trigger-two"),
                 funcId = FuncId(15),
                 topicId = TopicId(1024)
+            )
+
+            createEndpointTrigger(
+                triggerId = TriggerId(9),
+                namespaceId = NamespaceId(13),
+                workspaceId = WorkspaceId(6),
+                name = TriggerName("endpoint-trigger-one"),
+                funcId = FuncId(14),
+                endpointId = EndpointId(2048)
+            )
+
+            createEndpointTrigger(
+                triggerId = TriggerId(10),
+                namespaceId = NamespaceId(14),
+                workspaceId = WorkspaceId(6),
+                name = TriggerName("endpoint-trigger-two"),
+                funcId = FuncId(15),
+                endpointId = EndpointId(4096)
             )
         }
     }
@@ -1179,6 +1325,30 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
             )
         )
     }
+
+    private fun TriggerRepository.createEndpointTrigger(
+        triggerId: TriggerId,
+        namespaceId: NamespaceId,
+        name: TriggerName,
+        workspaceId: WorkspaceId,
+        endpointId: EndpointId = EndpointId(9),
+        funcId: FuncId = FuncId(4),
+        cmdId: CmdId = CmdGen()
+    ) {
+        create(
+            CreateEndpointCmd(
+                id = cmdId,
+                triggerId = triggerId,
+                workspaceId = workspaceId,
+                namespaceId = namespaceId,
+                name = name,
+                inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
+                funcId = funcId,
+                endpointId = endpointId
+            )
+        )
+    }
+
 
     private fun TriggerRepository.verifyCount(expected: Int) {
         verifyCount(expected) { }

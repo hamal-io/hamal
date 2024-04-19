@@ -26,7 +26,7 @@ class PluginLogFactory(
 ) : RunnerPluginFactory {
     override fun create(sandbox: Sandbox): RunnerPlugin {
         return RunnerPlugin(
-            name = KuaString("log"),
+            name = KuaString("std.log"),
             internals = mapOf(
                 KuaString("log") to LogFunction(execLogService),
             )

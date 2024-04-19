@@ -1,5 +1,5 @@
 local http = require_plugin('net.http')
-local decimal = require('decimal')
+local decimal = require('std.decimal')
 
 local json = {
     s = 'hamal',

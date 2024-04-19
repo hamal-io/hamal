@@ -12,7 +12,7 @@ import {Button} from "@/components/ui/button.tsx";
 const HomePage: React.FC = () => {
     const [auth] = useAuth()
     const navigate = useNavigate()
-    const [code, setCode] = useState(`log = require('log').create()\nlog.info("That wasn't hard, was it?")`)
+    const [code, setCode] = useState(`log = require('sys.log').create()\nlog.info("That wasn't hard, was it?")`)
     return (
         <main className="flex flex-col min-h-screen w-full items-center justify-start p-8 ">
             <Header/>

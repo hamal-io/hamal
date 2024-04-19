@@ -1,9 +1,9 @@
-sys = require_plugin('sys')
+sys = require_plugin('std.sys')
 --
 err, ext = sys.extensions.update({
-        id = '12345',
-        name = 'update-ext',
-        code = [[1 +1]]
+    id = '12345',
+    name = 'update-ext',
+    code = [[1 +1]]
 })
 print(err.message)
 assert(err.message == 'Extension not found')

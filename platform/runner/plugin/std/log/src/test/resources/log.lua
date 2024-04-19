@@ -1,4 +1,4 @@
-local log = require_plugin('log')
+local log = require_plugin('std.log')
 log.trace("Trace Log Message")
 log.debug("Debug Log Message")
 log.info("Info Log Message")

@@ -1,4 +1,4 @@
-sys = require_plugin('sys')
+sys = require_plugin('std.sys')
 
 namespace_one_req = fail_on_error(sys.namespaces.append({ name = 'namespace-one' }))
 sys.await_completed(namespace_one_req)

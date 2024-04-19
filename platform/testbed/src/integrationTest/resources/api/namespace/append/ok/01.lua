@@ -1,4 +1,4 @@
-sys = require_plugin('sys')
+sys = require_plugin('std.sys')
 
 err, namespaces = sys.namespaces.list()
 assert(err == nil)

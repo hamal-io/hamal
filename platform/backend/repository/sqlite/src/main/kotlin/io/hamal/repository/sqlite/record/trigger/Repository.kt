@@ -19,10 +19,7 @@ internal object CreateTrigger : CreateDomainObject<TriggerId, TriggerRecord, Tri
         val firstRecord = recs.first()
 
         check(
-            firstRecord is TriggerRecord.FixedRateCreated ||
-                    firstRecord is TriggerRecord.EventCreated ||
-                    firstRecord is TriggerRecord.HookCreated ||
-                    firstRecord is TriggerRecord.CronCreated
+            firstRecord is TriggerRecord.FixedRateCreated || firstRecord is TriggerRecord.EventCreated || firstRecord is TriggerRecord.HookCreated || firstRecord is TriggerRecord.CronCreated || firstRecord is TriggerRecord.EndpointCreated
         )
 
         var result = TriggerEntity(
@@ -47,7 +44,7 @@ class TriggerSqliteRepository(
     filename = "trigger.db",
     createDomainObject = CreateTrigger,
     recordClass = TriggerRecord::class,
-    projections = listOf(ProjectionCurrent, ProjectionUniqueName, ProjectionUniqueHook)
+    projections = listOf(ProjectionCurrent, ProjectionUniqueName, ProjectionUniqueHook, ProjectionUniqueEndpoint)
 ), TriggerRepository {
 
     override fun create(cmd: CreateFixedRateCmd): Trigger.FixedRate {
@@ -72,8 +69,7 @@ class TriggerSqliteRepository(
                     )
                 )
 
-                (currentVersion(triggerId) as Trigger.FixedRate)
-                    .also { ProjectionCurrent.upsert(this, it) }
+                (currentVersion(triggerId) as Trigger.FixedRate).also { ProjectionCurrent.upsert(this, it) }
                     .also { ProjectionUniqueName.upsert(this, it) }
             }
         }
@@ -101,8 +97,7 @@ class TriggerSqliteRepository(
                     )
                 )
 
-                (currentVersion(triggerId) as Trigger.Event)
-                    .also { ProjectionCurrent.upsert(this, it) }
+                (currentVersion(triggerId) as Trigger.Event).also { ProjectionCurrent.upsert(this, it) }
                     .also { ProjectionUniqueName.upsert(this, it) }
             }
         }
@@ -132,10 +127,8 @@ class TriggerSqliteRepository(
                     )
                 )
 
-                (currentVersion(triggerId) as Trigger.Hook)
-                    .also { ProjectionCurrent.upsert(this, it) }
-                    .also { ProjectionUniqueName.upsert(this, it) }
-                    .also { ProjectionUniqueHook.upsert(this, it) }
+                (currentVersion(triggerId) as Trigger.Hook).also { ProjectionCurrent.upsert(this, it) }
+                    .also { ProjectionUniqueName.upsert(this, it) }.also { ProjectionUniqueHook.upsert(this, it) }
             }
         }
     }
@@ -162,9 +155,36 @@ class TriggerSqliteRepository(
                     )
                 )
 
-                (currentVersion(triggerId) as Trigger.Cron)
-                    .also { ProjectionCurrent.upsert(this, it) }
+                (currentVersion(triggerId) as Trigger.Cron).also { ProjectionCurrent.upsert(this, it) }
                     .also { ProjectionUniqueName.upsert(this, it) }
+            }
+        }
+    }
+
+    override fun create(cmd: CreateEndpointCmd): Trigger.Endpoint {
+        val triggerId = cmd.triggerId
+        val cmdId = cmd.id
+        return tx {
+            if (commandAlreadyApplied(cmdId, triggerId)) {
+                versionOf(triggerId, cmdId) as Trigger.Endpoint
+            } else {
+                store(
+                    TriggerRecord.EndpointCreated(
+                        cmdId = cmdId,
+                        entityId = triggerId,
+                        workspaceId = cmd.workspaceId,
+                        funcId = cmd.funcId,
+                        namespaceId = cmd.namespaceId,
+                        name = cmd.name,
+                        inputs = cmd.inputs,
+                        endpointId = cmd.endpointId,
+                        status = cmd.status,
+                        correlationId = cmd.correlationId
+                    )
+                )
+
+                (currentVersion(triggerId) as Trigger.Endpoint).also { ProjectionCurrent.upsert(this, it) }
+                    .also { ProjectionUniqueName.upsert(this, it) }.also { ProjectionUniqueEndpoint.upsert(this, it) }
             }
         }
     }
@@ -177,20 +197,17 @@ class TriggerSqliteRepository(
                 if (cmd.status == TriggerStatus.Active) {
                     store(
                         TriggerRecord.SetActive(
-                            cmdId = cmd.id,
-                            entityId = triggerId
+                            cmdId = cmd.id, entityId = triggerId
                         )
                     )
                 } else {
                     store(
                         TriggerRecord.SetInactive(
-                            cmdId = cmd.id,
-                            entityId = triggerId
+                            cmdId = cmd.id, entityId = triggerId
                         )
                     )
                 }
-                (currentVersion(triggerId))
-                    .also { ProjectionCurrent.upsert(this, it) }
+                (currentVersion(triggerId)).also { ProjectionCurrent.upsert(this, it) }
                     .also { ProjectionUniqueName.upsert(this, it) }
             }
         }

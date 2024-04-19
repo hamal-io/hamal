@@ -1,5 +1,5 @@
 function extension_create()
-    local log_plugin = require_plugin('log')
+    local log_plugin = require_plugin('std.log')
     local export = { }
 
     function export.create(cfg)

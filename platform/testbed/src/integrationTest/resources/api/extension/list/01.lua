@@ -1,5 +1,5 @@
-sys = require_plugin('sys')
-log = require_plugin('log')
+sys = require_plugin('std.sys')
+log = require_plugin('std.log')
 
 local list = fail_on_error(sys.extensions.list())
 assert(#list == 0)

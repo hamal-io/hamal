@@ -1,4 +1,4 @@
---sys = require_plugin('sys')
+--sys = require_plugin('std.sys')
 --
 --topic_req = fail_on_error(sys.topics.append({ name = "some-amazing-topic" }))
 --assert(topic_req.id ~= nil)

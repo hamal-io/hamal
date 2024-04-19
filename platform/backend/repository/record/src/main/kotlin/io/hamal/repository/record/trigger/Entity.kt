@@ -5,7 +5,6 @@ import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain._enum.TriggerType.*
-import io.hamal.lib.domain._enum.TriggerType.Event
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.record.CreateDomainObject
@@ -34,6 +33,8 @@ data class TriggerEntity(
     var hookMethod: HookMethod? = null,
 
     var cron: CronPattern? = null,
+
+    var endpointId: EndpointId? = null,
 
     var status: TriggerStatus? = null
 
@@ -102,6 +103,22 @@ data class TriggerEntity(
                 inputs = rec.inputs,
                 correlationId = rec.correlationId,
                 cron = rec.cron,
+                recordedAt = rec.recordedAt(),
+                status = rec.status
+            )
+
+            is TriggerRecord.EndpointCreated -> copy(
+                cmdId = rec.cmdId,
+                id = rec.entityId,
+                workspaceId = rec.workspaceId,
+                sequence = rec.sequence(),
+                name = rec.name,
+                funcId = rec.funcId,
+                namespaceId = rec.namespaceId,
+                type = Endpoint,
+                inputs = rec.inputs,
+                correlationId = rec.correlationId,
+                endpointId = rec.endpointId,
                 recordedAt = rec.recordedAt(),
                 status = rec.status
             )
@@ -178,6 +195,20 @@ data class TriggerEntity(
                 cron = cron!!,
                 status = status!!
             )
+
+            Endpoint -> Trigger.Endpoint(
+                cmdId = cmdId,
+                id = id,
+                updatedAt = recordedAt.toUpdatedAt(),
+                workspaceId = workspaceId!!,
+                funcId = funcId!!,
+                namespaceId = namespaceId!!,
+                correlationId = correlationId,
+                name = name!!,
+                inputs = inputs!!,
+                endpointId = endpointId!!,
+                status = status!!
+            )
         }
     }
 }
@@ -190,7 +221,8 @@ fun List<TriggerRecord>.createEntity(): TriggerEntity {
         firstRecord is TriggerRecord.FixedRateCreated ||
                 firstRecord is TriggerRecord.EventCreated ||
                 firstRecord is TriggerRecord.HookCreated ||
-                firstRecord is TriggerRecord.CronCreated
+                firstRecord is TriggerRecord.CronCreated ||
+                firstRecord is TriggerRecord.EndpointCreated
     )
 
     var result = TriggerEntity(

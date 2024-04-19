@@ -1,5 +1,6 @@
 package io.hamal.api.http.controller.trigger
 
+import io.hamal.core.adapter.endpoint.EndpointListPort
 import io.hamal.core.adapter.func.FuncListPort
 import io.hamal.core.adapter.hook.HookListPort
 import io.hamal.core.adapter.namespace.NamespaceListPort
@@ -13,10 +14,12 @@ import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.sdk.api.ApiTriggerList
+import io.hamal.lib.sdk.api.ApiTriggerList.Endpoint.Endpoint
 import io.hamal.lib.sdk.api.ApiTriggerList.Event.Topic
 import io.hamal.lib.sdk.api.ApiTriggerList.Hook.Hook
 import io.hamal.lib.sdk.api.ApiTriggerList.Trigger.Func
 import io.hamal.lib.sdk.api.ApiTriggerList.Trigger.Namespace
+import io.hamal.repository.api.EndpointQueryRepository.EndpointQuery
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
 import io.hamal.repository.api.HookQueryRepository.HookQuery
 import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
@@ -37,6 +40,7 @@ class TriggerListController(
     private val namespaceList: NamespaceListPort,
     private val topicList: TopicListPort,
     private val hookList: HookListPort,
+    private val endpointList: EndpointListPort,
     private val namespaceTreeGetSubTree: NamespaceTreeGetSubTreePort
 ) {
 
@@ -103,6 +107,10 @@ class TriggerListController(
                 hookIds = triggers.filterIsInstance<Trigger.Hook>().map { it.hookId }
             )).associateBy { it.id }
 
+            val endpoints = endpointList(EndpointQuery(
+                limit = Limit.all,
+                endpointIds = triggers.filterIsInstance<Trigger.Endpoint>().map { it.endpointId }
+            )).associateBy { it.id }
 
             ResponseEntity.ok(
                 ApiTriggerList(
@@ -179,6 +187,26 @@ class TriggerListController(
                                         name = namespaces[trigger.namespaceId]!!.name
                                     ),
                                     cron = trigger.cron,
+                                    status = trigger.status
+                                )
+                            }
+
+                            is Trigger.Endpoint -> {
+                                ApiTriggerList.Endpoint(
+                                    id = trigger.id,
+                                    name = trigger.name,
+                                    func = Func(
+                                        id = trigger.funcId,
+                                        name = funcs[trigger.funcId]!!.name
+                                    ),
+                                    namespace = Namespace(
+                                        id = trigger.namespaceId,
+                                        name = namespaces[trigger.namespaceId]!!.name
+                                    ),
+                                    endpoint = Endpoint(
+                                        id = trigger.endpointId,
+                                        name = endpoints[trigger.endpointId]!!.name,
+                                    ),
                                     status = trigger.status
                                 )
                             }

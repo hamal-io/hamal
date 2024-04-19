@@ -13,7 +13,7 @@ internal class EqTest : AbstractRunnerTest() {
         runner.run(
             unitOfWork(
                 """
-                local decimal = require('decimal')
+                local decimal = require('std.decimal')
                 local x = decimal.new('512')
                 local y = 1024
                 local z = 512
@@ -35,7 +35,7 @@ internal class EqTest : AbstractRunnerTest() {
         runner.run(
             unitOfWork(
                 """
-                local decimal = require('decimal')
+                local decimal = require('std.decimal')
                 local x = decimal.new('512')
                 local y = decimal.new(1024)
                 local z = decimal.new(512)
@@ -56,7 +56,7 @@ internal class EqTest : AbstractRunnerTest() {
         runner.run(
             unitOfWork(
                 """
-                local decimal = require('decimal')
+                local decimal = require('std.decimal')
                 local x = 512
                 local y = decimal.new(1024)
                 local z = decimal.new(512)

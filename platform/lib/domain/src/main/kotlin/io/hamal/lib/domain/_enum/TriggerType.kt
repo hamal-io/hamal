@@ -4,5 +4,6 @@ enum class TriggerType(val value: Int) {
     Event(1),
     FixedRate(2),
     Hook(3),
-    Cron(4)
+    Cron(4),
+    Endpoint(5)
 }

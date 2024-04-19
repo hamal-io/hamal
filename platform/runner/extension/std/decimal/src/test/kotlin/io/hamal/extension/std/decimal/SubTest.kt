@@ -12,7 +12,7 @@ internal class SubTest : AbstractRunnerTest() {
         runner.run(
             unitOfWork(
                 """
-                local decimal = require('decimal')
+                local decimal = require('std.decimal')
                 local x = decimal.new('512')
                 local y = 1024
                 local result = x - y
@@ -32,7 +32,7 @@ internal class SubTest : AbstractRunnerTest() {
         runner.run(
             unitOfWork(
                 """
-                local decimal = require('decimal')
+                local decimal = require('std.decimal')
                 local x = decimal.new('512')
                 local y = decimal.new(1024)
                 local result = x - y
@@ -51,7 +51,7 @@ internal class SubTest : AbstractRunnerTest() {
         runner.run(
             unitOfWork(
                 """
-                local decimal = require('decimal')
+                local decimal = require('std.decimal')
                 local x = 512
                 local y = decimal.new(1024)
                 local result = x - y

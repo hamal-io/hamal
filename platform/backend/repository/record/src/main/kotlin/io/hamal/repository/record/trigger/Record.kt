@@ -21,6 +21,7 @@ sealed class TriggerRecord(
             EventCreated::class,
             HookCreated::class,
             CronCreated::class,
+            EndpointCreated::class,
             SetActive::class,
             SetInactive::class
         )
@@ -75,6 +76,19 @@ sealed class TriggerRecord(
         val name: TriggerName,
         val inputs: TriggerInputs,
         val cron: CronPattern,
+        val status: TriggerStatus,
+        val correlationId: CorrelationId? = null
+    ) : TriggerRecord()
+
+    data class EndpointCreated(
+        override val cmdId: CmdId,
+        override val entityId: TriggerId,
+        val workspaceId: WorkspaceId,
+        val funcId: FuncId,
+        val namespaceId: NamespaceId,
+        val name: TriggerName,
+        val inputs: TriggerInputs,
+        val endpointId: EndpointId,
         val status: TriggerStatus,
         val correlationId: CorrelationId? = null
     ) : TriggerRecord()

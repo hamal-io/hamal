@@ -6,6 +6,7 @@ import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain._enum.HookMethod.Post
 import io.hamal.lib.domain._enum.TriggerType.*
+import io.hamal.lib.domain._enum.TriggerType.Endpoint
 import io.hamal.lib.domain._enum.TriggerType.Hook
 import io.hamal.lib.domain.request.TriggerCreateRequested
 import io.hamal.repository.api.*
@@ -87,10 +88,23 @@ class TriggerCreateHandler(
                     funcId = req.funcId,
                     namespaceId = req.namespaceId,
                     inputs = req.inputs,
-                    cron = requireNotNull(req.cron) { "cron expression must not be null" }
+                    cron = requireNotNull(req.cron) { "cron must not be null" }
                 )
             )
 
+            Endpoint -> triggerCmdRepository.create(
+                TriggerCmdRepository.CreateEndpointCmd(
+                    id = req.cmdId(),
+                    triggerId = req.id,
+                    workspaceId = func.workspaceId,
+                    name = req.name,
+                    correlationId = req.correlationId,
+                    funcId = req.funcId,
+                    namespaceId = req.namespaceId,
+                    inputs = req.inputs,
+                    endpointId = requireNotNull(req.endpointId) { "endpointId must not be null" }
+                )
+            )
         }
 
         emitEvent(req.cmdId(), trigger)

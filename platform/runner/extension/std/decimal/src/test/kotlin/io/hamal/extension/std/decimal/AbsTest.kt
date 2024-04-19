@@ -12,7 +12,7 @@ internal class AbsTest : AbstractRunnerTest() {
         runner.run(
             unitOfWork(
                 """
-                local decimal = require('decimal')
+                local decimal = require('std.decimal')
                 local x = decimal.new('512')
                 local y = decimal.new('-512')
                 local same = decimal.abs(x)

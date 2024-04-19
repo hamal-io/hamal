@@ -1,4 +1,4 @@
---sys = require_plugin('sys')
+--sys = require_plugin('std.sys')
 --
 --func_req = fail_on_error(sys.funcs.append({ name = 'test-func'; inputs = {}; code = [[4 + 2]] }))
 --sys.await_completed(func_req)

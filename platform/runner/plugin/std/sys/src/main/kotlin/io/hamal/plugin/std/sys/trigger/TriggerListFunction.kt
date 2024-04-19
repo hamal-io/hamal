@@ -102,6 +102,26 @@ class TriggerListFunction(
                         ),
                         "cron" to KuaString(trigger.cron.value)
                     )
+
+                    is ApiTriggerList.Endpoint -> {
+                        ctx.tableCreate(
+                            "id" to KuaString(trigger.id.value.value.toString(16)),
+                            "type" to KuaString("Endpoint"),
+                            "name" to KuaString(trigger.name.value),
+                            "namespace" to ctx.tableCreate(
+                                "id" to KuaString(trigger.namespace.id.value.value.toString(16)),
+                                "name" to KuaString(trigger.namespace.name.value)
+                            ),
+                            "func" to ctx.tableCreate(
+                                "id" to KuaString(trigger.func.id.value.value.toString(16)),
+                                "name" to KuaString(trigger.func.name.value)
+                            ),
+                            "endpoint" to ctx.tableCreate(
+                                "id" to KuaString(trigger.endpoint.id.value.value.toString(16)),
+                                "name" to KuaString(trigger.endpoint.name.value)
+                            ),
+                        )
+                    }
                 }
             })
         } catch (t: Throwable) {

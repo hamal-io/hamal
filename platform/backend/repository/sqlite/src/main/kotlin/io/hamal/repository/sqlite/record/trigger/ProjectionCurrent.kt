@@ -49,6 +49,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
                 ${query.types()}
                 ${query.topicIds()}
                 ${query.hookIds()}
+                ${query.endpointIds()}
                 ${query.namespaceIds()}
             ORDER BY id DESC
             LIMIT :limit
@@ -83,6 +84,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
                 ${query.types()}
                 ${query.topicIds()}
                 ${query.hookIds()}
+                ${query.endpointIds()}
                 ${query.namespaceIds()}
         """.trimIndent()
             ) {
@@ -100,9 +102,9 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
         tx.execute(
             """
                 INSERT OR REPLACE INTO current
-                    (id, workspace_id, func_id, topic_id, hook_id, namespace_id, type, data) 
+                    (id, workspace_id, func_id, topic_id, hook_id, endpoint_id, namespace_id, type, data) 
                 VALUES
-                    (:id, :workspaceId, :funcId, :topicId, :hookId, :namespaceId, :type, :data)
+                    (:id, :workspaceId, :funcId, :topicId, :hookId, :endpointId, :namespaceId, :type, :data)
             """.trimIndent()
         ) {
             set("id", obj.id)
@@ -119,6 +121,13 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
             } else {
                 set("hookId", 0)
             }
+
+            if (obj is Trigger.Endpoint) {
+                set("endpointId", obj.endpointId)
+            } else {
+                set("endpointId", 0)
+            }
+
             set("namespaceId", obj.namespaceId)
             set("type", obj.type.value)
             set("data", json.serializeAndCompress(obj))
@@ -130,12 +139,13 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
             """
             CREATE TABLE IF NOT EXISTS current (
                  id             INTEGER NOT NULL,
-                 workspace_id       INTEGER NOT NULL,
+                 workspace_id   INTEGER NOT NULL,
                  func_id        INTEGER NOT NULL,
                  type           INTEGER NOT NULL,
                  topic_id       INTEGER NOT NULL,
                  hook_id        INTEGER NOT NULL,
-                 namespace_id        INTEGER NOT NULL,
+                 endpoint_id    INTEGER NOT NULL,
+                 namespace_id   INTEGER NOT NULL,
                  data           BLOB NOT NULL,
                  PRIMARY KEY    (id)
         );
@@ -192,6 +202,14 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
             ""
         } else {
             "AND hook_id IN (${hookIds.joinToString(",") { "${it.value.value}" }})"
+        }
+    }
+
+    private fun TriggerQuery.endpointIds(): String {
+        return if (endpointIds.isEmpty()) {
+            ""
+        } else {
+            "AND endpoint_id IN (${endpointIds.joinToString(",") { "${it.value.value}" }})"
         }
     }
 

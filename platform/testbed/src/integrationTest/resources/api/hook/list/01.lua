@@ -1,4 +1,4 @@
-sys = require_plugin('sys')
+sys = require_plugin('std.sys')
 
 hooks = fail_on_error(sys.hooks.list())
 assert(#hooks == 0)

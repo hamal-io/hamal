@@ -15,6 +15,7 @@ import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpRequest
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
+import io.hamal.lib.sdk.api.ApiTrigger.Endpoint
 import io.hamal.lib.sdk.api.ApiTriggerService.TriggerQuery
 import io.hamal.lib.sdk.fold
 
@@ -28,7 +29,8 @@ data class ApiTriggerCreateReq(
     override val topicId: TopicId? = null,
     override val hookId: HookId? = null,
     override val hookMethod: HookMethod? = null,
-    override val cron: CronPattern? = null
+    override val cron: CronPattern? = null,
+    override val endpointId: EndpointId? = null
 ) : TriggerCreateRequest
 
 data class ApiTriggerCreateRequested(
@@ -50,6 +52,7 @@ data class ApiTriggerStatusRequested(
 data class ApiTriggerList(
     val triggers: List<Trigger>
 ) : ApiObject() {
+
     sealed interface Trigger {
         val id: TriggerId
         val name: TriggerName
@@ -93,7 +96,8 @@ data class ApiTriggerList(
                 "Event" to Event::class,
                 "FixedRate" to FixedRate::class,
                 "Hook" to Hook::class,
-                "Cron" to Cron::class
+                "Cron" to Cron::class,
+                "Endpoint" to Endpoint::class
             )
         }
     }
@@ -151,6 +155,22 @@ data class ApiTriggerList(
         val cron: CronPattern
     ) : Trigger {
         override val type: TriggerType = TriggerType.Cron
+    }
+
+    class Endpoint(
+        override val id: TriggerId,
+        override val name: TriggerName,
+        override val func: Trigger.Func,
+        override val namespace: Trigger.Namespace,
+        override val status: TriggerStatus,
+        val endpoint: Endpoint
+    ) : Trigger {
+        override val type: TriggerType = TriggerType.Endpoint
+
+        data class Endpoint(
+            val id: EndpointId,
+            val name: EndpointName
+        )
     }
 }
 
@@ -199,7 +219,8 @@ sealed class ApiTrigger : ApiObject() {
             "Event" to Event::class,
             "FixedRate" to FixedRate::class,
             "Hook" to Hook::class,
-            "Cron" to Cron::class
+            "Cron" to Cron::class,
+            "Endpoint" to Endpoint::class
         )
     }
 
@@ -266,6 +287,24 @@ sealed class ApiTrigger : ApiObject() {
         val cron: CronPattern
     ) : ApiTrigger() {
         override val type: TriggerType = TriggerType.Cron
+    }
+
+    class Endpoint(
+        override val id: TriggerId,
+        override val name: TriggerName,
+        override val func: Func,
+        override val namespace: Namespace,
+        override val inputs: TriggerInputs,
+        override val status: TriggerStatus,
+        override val correlationId: CorrelationId? = null,
+        val endpoint: Endpoint
+    ) : ApiTrigger() {
+        override val type: TriggerType = TriggerType.Endpoint
+
+        data class Endpoint(
+            val id: EndpointId,
+            val name: EndpointName
+        )
     }
 
 }

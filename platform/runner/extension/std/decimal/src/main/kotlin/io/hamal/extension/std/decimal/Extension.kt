@@ -8,7 +8,7 @@ import io.hamal.lib.kua.type.KuaString
 
 object ExtensionDecimalFactory : RunnerExtensionFactory {
     override fun create(sandbox: Sandbox): RunnerExtension {
-        return RunnerExtension(name = KuaString("decimal"))
+        return RunnerExtension(name = KuaString("std.decimal"))
     }
 }
 

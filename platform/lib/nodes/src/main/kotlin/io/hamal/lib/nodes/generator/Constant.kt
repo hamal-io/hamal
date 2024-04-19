@@ -5,8 +5,8 @@ import io.hamal.lib.nodes.NodeType
 import io.hamal.lib.nodes.control.Control
 import io.hamal.lib.nodes.control.ControlConstantDecimal
 import io.hamal.lib.nodes.control.ControlConstantString
-import io.hamal.lib.typesystem.type.TypeDecimal
 import io.hamal.lib.typesystem.type.Type
+import io.hamal.lib.typesystem.type.TypeDecimal
 import io.hamal.lib.typesystem.type.TypeString
 
 sealed interface GeneratorConstant : Generator {
@@ -37,7 +37,7 @@ sealed interface GeneratorConstant : Generator {
             val control = controls[0]
             check(control is ControlConstantDecimal)
             return """
-                local decimal = require('decimal')
+                local decimal = require('std.decimal')
                 return decimal.new('${control.value.value}')
                 """.trimIndent()
         }
