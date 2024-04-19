@@ -1,4 +1,4 @@
-sys = require_plugin('sys')
+sys = require_plugin('std.sys')
 
 --hook name is unique
 hook_req = fail_on_error(sys.hooks.create({ namespace_id = '539'; name = 'hook-name' }))

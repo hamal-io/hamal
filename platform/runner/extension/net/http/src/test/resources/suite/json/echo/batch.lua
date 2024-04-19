@@ -2,7 +2,7 @@ http = require('net.http').create({
     base_url = context.env.test_url
 })
 
-decimal = require('decimal')
+decimal = require('std.decimal')
 
 local json = {
     s = 'hamal',

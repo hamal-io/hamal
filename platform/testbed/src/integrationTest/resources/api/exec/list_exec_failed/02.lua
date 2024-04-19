@@ -1,4 +1,4 @@
-sys = require_plugin('sys')
+sys = require_plugin('std.sys')
 
 while true do
     -- Remember: Each test is an adhoc invocation

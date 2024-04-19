@@ -1,4 +1,4 @@
-sys = require_plugin('sys')
+sys = require_plugin('std.sys')
 
 err, func_one = sys.funcs.create({
     name = 'test-func',

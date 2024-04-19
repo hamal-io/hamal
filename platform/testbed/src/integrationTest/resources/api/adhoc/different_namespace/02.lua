@@ -1,4 +1,4 @@
-sys = require_plugin('sys')
+sys = require_plugin('std.sys')
 
 -- Remember: Each test is an adhoc invocation
 err, execs = sys.execs.list()

@@ -14,7 +14,7 @@ internal class DivTest : AbstractRunnerTest() {
         runner.run(
             unitOfWork(
                 """
-                local decimal = require('decimal')
+                local decimal = require('std.decimal')
                 local x = decimal.new('3.14')
                 local y = 2
                 local result = x / y
@@ -35,7 +35,7 @@ internal class DivTest : AbstractRunnerTest() {
         runner.run(
             unitOfWork(
                 """
-                local decimal = require('decimal')
+                local decimal = require('std.decimal')
                 local x = decimal.new('3.14')
                 local y = decimal.new(2)
                 local result = x / y
@@ -56,7 +56,7 @@ internal class DivTest : AbstractRunnerTest() {
         runner.run(
             unitOfWork(
                 """
-                local decimal = require('decimal')
+                local decimal = require('std.decimal')
                 local x = 3.14
                 local y = decimal.new(2)
                 local result = x / y

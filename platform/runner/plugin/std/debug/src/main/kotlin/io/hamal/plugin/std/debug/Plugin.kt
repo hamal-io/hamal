@@ -9,7 +9,7 @@ import io.hamal.lib.kua.type.KuaString
 class PluginDebugFactory : RunnerPluginFactory {
     override fun create(sandbox: Sandbox): RunnerPlugin {
         return RunnerPlugin(
-            name = KuaString("debug"),
+            name = KuaString("std.debug"),
             internals = mapOf(
                 KuaString("sleep") to SleepFunction,
             )

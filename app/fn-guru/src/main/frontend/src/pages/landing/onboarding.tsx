@@ -36,8 +36,8 @@ const OnboardingPage: FC = () => {
         const abortController = new AbortController()
         if (auth != null && auth.type !== 'Unauthorized') {
             adhoc(auth.workspaceId, `
-            sys = require_plugin('sys')
-            log = require('log').create({})
+            sys = require_plugin('std.sys')
+            log = require('sys.log').create({})
             log.info('Setting up account')
             sys.funcs.create({
                 name = 'Hello-World',

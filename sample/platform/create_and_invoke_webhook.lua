@@ -1,4 +1,4 @@
-sys = require_plugin('sys')
+sys = require_plugin('std.sys')
 
 _, r = sys.namespaces.append({ name = '007' })
 namespace_id = r.id

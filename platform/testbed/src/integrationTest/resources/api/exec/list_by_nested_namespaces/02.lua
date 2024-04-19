@@ -1,4 +1,4 @@
-sys = require_plugin('sys')
+sys = require_plugin('std.sys')
 
 namespaces = fail_on_error(sys.namespaces.list())
 

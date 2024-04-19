@@ -1,5 +1,5 @@
 local http = require_plugin('net.http')
-decimal = require('decimal')
+decimal = require('std.decimal')
 
 req_headers = {}
 req_headers['Auth-ori-zation'] = 'Bearer ey.SecretToken'

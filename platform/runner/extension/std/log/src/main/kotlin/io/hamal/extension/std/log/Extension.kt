@@ -7,6 +7,6 @@ import io.hamal.lib.kua.type.KuaString
 
 object ExtensionLogFactory : RunnerExtensionFactory {
     override fun create(sandbox: Sandbox): RunnerExtension {
-        return RunnerExtension(name = KuaString("log"))
+        return RunnerExtension(name = KuaString("std.log"))
     }
 }

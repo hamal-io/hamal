@@ -1,4 +1,4 @@
-sys = require_plugin('sys')
+sys = require_plugin('std.sys')
 
 local namespace_one_req = fail_on_error(sys.namespaces.append({
     name = 'namespace-1'

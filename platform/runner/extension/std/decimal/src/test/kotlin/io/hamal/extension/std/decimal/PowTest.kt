@@ -12,7 +12,7 @@ internal class PowTest : AbstractRunnerTest() {
         runner.run(
             unitOfWork(
                 """
-                local decimal = require('decimal')
+                local decimal = require('std.decimal')
                 local x = decimal.new(2)
                 local result = x ^ 10
                 

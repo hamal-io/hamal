@@ -1,4 +1,4 @@
-sys = require_plugin('sys')
+sys = require_plugin('std.sys')
 
 namespace_req = fail_on_error(sys.namespaces.append({ name = "hamal::namespace::rocks" }))
 sys.await_completed(namespace_req)

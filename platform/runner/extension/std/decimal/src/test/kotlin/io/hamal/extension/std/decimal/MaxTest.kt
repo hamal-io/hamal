@@ -12,7 +12,7 @@ internal class MaxTest : AbstractRunnerTest() {
         runner.run(
             unitOfWork(
                 """
-                local decimal = require('decimal')
+                local decimal = require('std.decimal')
                 local x = decimal.new('512')
                 local y = 1024
 
@@ -32,7 +32,7 @@ internal class MaxTest : AbstractRunnerTest() {
         runner.run(
             unitOfWork(
                 """
-                local decimal = require('decimal')
+                local decimal = require('std.decimal')
                 local x = decimal.new('512')
                 local y = decimal.new(1024)
 
@@ -51,7 +51,7 @@ internal class MaxTest : AbstractRunnerTest() {
         runner.run(
             unitOfWork(
                 """
-              local decimal = require('decimal')
+              local decimal = require('std.decimal')
                 local x = 512
                 local y = decimal.new(1024)
 

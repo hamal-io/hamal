@@ -32,7 +32,7 @@
 
 evm = require_plugin("web3.evm")
 
-log = require('log').create({})
+log = require('sys.log').create({})
 
 step_size = 25
 next_block_number = context.state.next_block_number or 19086500
@@ -63,7 +63,7 @@ end
 --    url = 'http://web3-proxy-1:10000/eth'
 --})
 --
---log = require('log').create({})
+--log = require('sys.log').create({})
 --
 --step_size = 25
 --next_block_number = context.state.next_block_number or 19086500
