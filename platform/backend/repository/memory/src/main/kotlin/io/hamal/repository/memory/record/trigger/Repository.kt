@@ -17,7 +17,7 @@ import kotlin.concurrent.withLock
 class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord, Trigger>(
     createDomainObject = CreateTriggerFromRecords,
     recordClass = TriggerRecord::class,
-    projections = listOf(ProjectionCurrent(), ProjectionUniqueHook())
+    projections = listOf(ProjectionCurrent(), ProjectionUniqueHook(), ProjectionUniqueEndpoint())
 ), TriggerRepository {
 
     override fun create(cmd: CreateFixedRateCmd): Trigger.FixedRate {
@@ -143,7 +143,9 @@ class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord,
                         status = cmd.status
                     )
                 )
-                (currentVersion(triggerId) as Trigger.Endpoint).also(currentProjection::upsert)
+                (currentVersion(triggerId) as Trigger.Endpoint)
+                    .also(uniqueEndpointProjection::upsert)
+                    .also(currentProjection::upsert)
             }
         }
     }
@@ -181,4 +183,5 @@ class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord,
     private val lock = ReentrantLock()
     private val currentProjection = getProjection<ProjectionCurrent>()
     private val uniqueHookProjection = getProjection<ProjectionUniqueHook>()
+    private val uniqueEndpointProjection = getProjection<ProjectionUniqueEndpoint>()
 }

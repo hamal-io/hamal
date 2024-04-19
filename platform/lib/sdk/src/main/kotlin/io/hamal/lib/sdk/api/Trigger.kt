@@ -52,6 +52,7 @@ data class ApiTriggerStatusRequested(
 data class ApiTriggerList(
     val triggers: List<Trigger>
 ) : ApiObject() {
+
     sealed interface Trigger {
         val id: TriggerId
         val name: TriggerName
@@ -162,9 +163,14 @@ data class ApiTriggerList(
         override val func: Trigger.Func,
         override val namespace: Trigger.Namespace,
         override val status: TriggerStatus,
-        val endpointId: EndpointId
+        val endpoint: Endpoint
     ) : Trigger {
         override val type: TriggerType = TriggerType.Endpoint
+
+        data class Endpoint(
+            val id: EndpointId,
+            val name: EndpointName
+        )
     }
 }
 

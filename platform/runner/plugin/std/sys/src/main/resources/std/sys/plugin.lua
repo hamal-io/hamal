@@ -303,6 +303,18 @@ function plugin_create(internal)
         })
     end
 
+    function export.triggers.create_endpoint(req)
+        req = req or {}
+        return internal.trigger_create({
+            type = "Endpoint",
+            namespace_id = req.namespace_id,
+            name = req.name,
+            func_id = req.func_id,
+            inputs = req.inputs or {},
+            endpoint_id = req.endpoint_id
+        })
+    end
+
     function export.triggers.get(trigger_id)
         return internal.trigger_get(trigger_id)
     end

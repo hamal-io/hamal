@@ -684,7 +684,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 CreateEndpointCmd(
                     id = CmdGen(),
                     triggerId = TriggerId(1111),
-                    funcId = FuncId(4),
+                    funcId = FuncId(5555),
                     workspaceId = WorkspaceId(3),
                     namespaceId = NamespaceId(22),
                     name = TriggerName("trigger-name"),
@@ -695,7 +695,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
 
             with(result) {
                 assertThat(id, equalTo(TriggerId(1111)))
-                assertThat(funcId, equalTo(FuncId(4)))
+                assertThat(funcId, equalTo(FuncId(5555)))
                 assertThat(workspaceId, equalTo(WorkspaceId(3)))
                 assertThat(namespaceId, equalTo(NamespaceId(22)))
                 assertThat(name, equalTo(TriggerName("trigger-name")))

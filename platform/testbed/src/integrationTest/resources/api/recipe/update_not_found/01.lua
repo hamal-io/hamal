@@ -1,4 +1,4 @@
-sys = require_plugin('sys')
+sys = require_plugin('std.sys')
 --
 err, update_req = sys.recipes.update({
     id = '123456',

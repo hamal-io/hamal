@@ -48,6 +48,11 @@ class TriggerCreateFunction(
                         CronPattern(arg1.getString("cron").stringValue)
                     } else {
                         null
+                    },
+                    endpointId = if (arg1.type("endpoint_id") == KuaString::class) {
+                        EndpointId(SnowflakeId(arg1.getString("endpoint_id").stringValue))
+                    } else {
+                        null
                     }
                 )
             )
