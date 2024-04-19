@@ -9,10 +9,12 @@ import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {Loader2, Plus} from "lucide-react";
 import {useNavigate} from "react-router-dom";
+import {useUiState} from "@/hook/ui.ts";
 
 
-const Create = ({}) => {
+const Create = () => {
     const navigate = useNavigate()
+    const [uiState] = useUiState()
     const [open, setOpen] = useState<boolean>(false)
     const [createFlow, createdFlow] = useFlowCreate()
     const [loading, setLoading] = useState<boolean>(false)
@@ -34,7 +36,7 @@ const Create = ({}) => {
         setLoading(true)
         try {
             const abortController = new AbortController()
-            createFlow(values.name, "v1_web3_new_lp_pair", "print('hamal')", abortController)
+            createFlow(values.name, uiState.workspaceId, abortController)
             return (() => abortController.abort())
         } catch (e) {
             console.error(e)
@@ -70,7 +72,8 @@ const Create = ({}) => {
                                     <FormLabel>Name your Flow</FormLabel>
                                     <FormControl>
                                         <p>
-                                            <Input type={"text"} placeholder={"An appropriate name for the magic which is going to happen"} {...field} />
+                                            <Input type={"text"}
+                                                   placeholder={"An appropriate name for the magic which is going to happen"} {...field} />
 
                                         </p>
                                     </FormControl>

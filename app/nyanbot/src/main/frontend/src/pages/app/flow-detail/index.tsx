@@ -13,7 +13,7 @@ const FlowDetailPage = () => {
         return (() => abortController.abort())
     }, []);
 
-    if (!flow) return "Loading.."
+    if (!flow || loading) return "Loading.."
     if (error) return "Error"
 
     return (
