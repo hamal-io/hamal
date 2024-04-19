@@ -2,17 +2,19 @@ import React, {useEffect} from "react";
 import {PageHeader} from "@/components/page-header.tsx";
 import {FlowCard} from "@/pages/app/flow-list/components/card.tsx";
 import Create from "@/pages/app/flow-list/components/create.tsx";
-import {useFlowList} from "@/hooks/flow.ts";
 import {EmptyPlaceholder} from "@/components/ui/empty-placeholder.tsx";
 import {Code2, WorkflowIcon} from "lucide-react";
+import {useNamespaceList} from "@/hook/namespace.ts";
+import {useUiState} from "@/hook/ui.ts";
 
 
 const FlowListPage = () => {
-    const [listFlows, flowList, isLoading, error] = useFlowList()
+    const [uiState] = useUiState();
+    const [listFlows, flowList, isLoading, error] = useNamespaceList()
 
     useEffect(() => {
         const abortController = new AbortController();
-        listFlows(abortController)
+        listFlows(uiState.workspaceId, abortController)
         return (() => abortController.abort())
     }, []);
 
@@ -28,12 +30,10 @@ const FlowListPage = () => {
                     <PageHeader actions={[
                         <Create/>
                     ]}/>
-                    {flowList.length !== 0 ?
+                    {flowList.namespaces.length !== 0 ?
                         <ol className="flex flex-col gap-4 cursor-pointer">
-                            {flowList.map(flow =>
-                                <li key={flow.id}>
-                                    <FlowCard flow={flow}/>
-                                </li>
+                            {flowList.namespaces.map(flow =>
+                                <FlowCard key={flow.id} flow={flow}/>
                             )}
                         </ol> : <NoContent/>
 
@@ -47,7 +47,7 @@ const FlowListPage = () => {
 const NoContent = () => (
     <EmptyPlaceholder className="my-4 ">
         <EmptyPlaceholder.Icon>
-            <WorkflowIcon />
+            <WorkflowIcon/>
         </EmptyPlaceholder.Icon>
         <EmptyPlaceholder.Title>No Flows found</EmptyPlaceholder.Title>
         <EmptyPlaceholder.Description>

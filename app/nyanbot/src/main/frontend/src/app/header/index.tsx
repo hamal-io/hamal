@@ -1,6 +1,6 @@
 import React, {FC} from "react";
 import LoggedOut from "@/app/header/logged-out.tsx";
-import {useAuth} from "@/hooks/auth.ts";
+import {useAuth} from "@/hook/auth.ts";
 import LoggedIn from "@/app/header/logged-in.tsx";
 
 export interface HeaderLoggedProps {

@@ -1,6 +1,6 @@
 import {useParams} from "react-router-dom";
 import {useEffect} from "react";
-import {useFlowGet} from "@/hooks/flow.ts";
+import {useFlowGet} from "@/hook/flow.ts";
 import {PageHeader} from "@/components/page-header.tsx";
 
 const FlowDetailPage = () => {

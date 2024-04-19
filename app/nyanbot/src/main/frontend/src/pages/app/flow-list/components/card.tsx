@@ -2,8 +2,7 @@ import React, {FC, useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {Card, CardTitle} from "@/components/ui/card.tsx";
 import {Switch} from "@/components/ui/switch.tsx";
-import {useSetFlowStatus} from "@/hooks/flow.ts";
-import {Flow} from "@/types/flow.ts";
+import {useSetTriggerStatus} from "@/hook/trigger.ts";
 
 
 type Props = {
@@ -12,7 +11,7 @@ type Props = {
 export const FlowCard: FC<Props> = ({flow}) => {
     const navigate = useNavigate()
     const [active, setActive] = useState<boolean>(flow.status === "Active")
-    const [setFlowStatus, statusResponse] = useSetFlowStatus()
+    const [setFlowStatus, statusResponse] = useSetTriggerStatus()
 
     function handleClick() {
         navigate(`/flows/${flow.id}`)
@@ -21,7 +20,7 @@ export const FlowCard: FC<Props> = ({flow}) => {
     function handleCheck() {
         const status = active === false ? 'activate' : 'deactivate'
         const abortController = new AbortController()
-        setFlowStatus(flow.id, status, abortController)
+        //setFlowStatus(flow.id, status, abortController) triggerId
         return (() => abortController.abort())
     }
 

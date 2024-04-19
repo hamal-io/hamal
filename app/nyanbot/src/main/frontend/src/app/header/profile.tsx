@@ -3,7 +3,7 @@ import ImageW from "@/types/image.tsx";
 
 import {Popover, Transition} from "@headlessui/react";
 import logoImg from "@/images/placeholder.png";
-import {useAuth, useLogout} from "@/hooks/auth.ts";
+import {useAuth, useLogout} from "@/hook/auth.ts";
 
 
 interface AvatarProps {

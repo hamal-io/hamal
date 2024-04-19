@@ -1,5 +1,5 @@
 import React from "react";
-import {useAuth} from "@/hooks/auth.ts";
+import {useAuth} from "@/hook/auth.ts";
 import {Editor} from "@/components/nodes/editor.tsx";
 import {ControlInit, ControlInvoke, ControlTextArea, Graph, Node} from "@/components/nodes/types.ts";
 

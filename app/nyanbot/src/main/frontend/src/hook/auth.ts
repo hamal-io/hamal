@@ -2,7 +2,7 @@ import {Auth, AUTH_KEY} from "@/types/auth.ts";
 import useLocalStorageState from "use-local-storage-state";
 import {useCallback, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {useInitUiState, useResetUiState} from "@/hooks/ui.ts";
+import {useInitUiState, useResetUiState} from "@/hook/ui.ts";
 
 const unauthorized: Auth = {
     type: 'Unauthorized',
