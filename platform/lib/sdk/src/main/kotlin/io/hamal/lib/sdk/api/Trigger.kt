@@ -6,7 +6,6 @@ import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.serialization.JsonAdapter
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain._enum.TriggerType
@@ -28,7 +27,6 @@ data class ApiTriggerCreateReq(
     override val duration: TriggerDuration? = null,
     override val topicId: TopicId? = null,
     override val hookId: HookId? = null,
-    override val hookMethod: HookMethod? = null,
     override val cron: CronPattern? = null,
     override val endpointId: EndpointId? = null
 ) : TriggerCreateRequest
@@ -141,8 +139,7 @@ data class ApiTriggerList(
 
         data class Hook(
             val id: HookId,
-            val name: HookName,
-            val method: HookMethod
+            val name: HookName
         )
     }
 
@@ -270,8 +267,7 @@ sealed class ApiTrigger : ApiObject() {
 
         data class Hook(
             val id: HookId,
-            val name: HookName,
-            val method: HookMethod
+            val name: HookName
         )
     }
 

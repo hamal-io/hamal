@@ -287,7 +287,6 @@ function plugin_create(internal)
             func_id = req.func_id,
             inputs = req.inputs or {},
             hook_id = req.hook_id,
-            hook_method = req.hook_method
         })
     end
 

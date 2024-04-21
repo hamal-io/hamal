@@ -2,8 +2,6 @@ package io.hamal.api.http.controller.hook
 
 import io.hamal.core.adapter.hook.HookInvokePort
 import io.hamal.lib.common.hot.HotObject
-import io.hamal.lib.domain._enum.HookMethod
-import io.hamal.lib.domain._enum.HookMethod.*
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.HookInvokeRequested
 import io.hamal.lib.domain.vo.HookId
@@ -41,7 +39,6 @@ internal class HookInvokeController(
                     hookId = id,
                     inputs = InvocationInputs(
                         HotObject.builder()
-                            .set("method", req.method())
                             .set("headers", req.headers())
                             .set("parameters", req.parameters())
                             .set("content", req.content())
@@ -72,15 +69,6 @@ internal class HookInvokeController(
         require(contentType.startsWith("application/json")) { "Only application/json supported yet" }
         val content = reader.lines().reduce("", String::plus)
         return json.deserialize(HotObject::class, content)
-    }
-
-    private fun HttpServletRequest.method(): HookMethod = when (method.lowercase()) {
-        "delete" -> Delete
-        "get" -> Get
-        "patch" -> Patch
-        "post" -> Post
-        "put" -> Put
-        else -> throw IllegalArgumentException("${method.lowercase()} not supported")
     }
 
     data class Response(

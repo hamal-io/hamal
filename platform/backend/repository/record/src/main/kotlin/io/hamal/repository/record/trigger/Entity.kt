@@ -1,7 +1,6 @@
 package io.hamal.repository.record.trigger
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain._enum.TriggerType.*
@@ -30,7 +29,6 @@ data class TriggerEntity(
     var topicId: TopicId? = null,
     var duration: TriggerDuration? = null,
     var hookId: HookId? = null,
-    var hookMethod: HookMethod? = null,
 
     var cron: CronPattern? = null,
 
@@ -86,7 +84,6 @@ data class TriggerEntity(
                 inputs = rec.inputs,
                 correlationId = rec.correlationId,
                 hookId = rec.hookId,
-                hookMethod = rec.hookMethod,
                 recordedAt = rec.recordedAt(),
                 status = rec.status
             )
@@ -178,7 +175,6 @@ data class TriggerEntity(
                 name = name!!,
                 inputs = inputs!!,
                 hookId = hookId!!,
-                hookMethod = hookMethod!!,
                 status = status!!
             )
 

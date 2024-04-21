@@ -16,7 +16,6 @@ req_two = fail_on_error(sys.triggers.create_hook({
     name = 'trigger-to-append',
     inputs = { },
     hook_id = hook_req.id,
-    hook_method = 'Get'
 
 }))
 sys.await_completed(req_two)
@@ -27,7 +26,6 @@ req_two = fail_on_error(sys.triggers.create_hook({
     name = 'trigger-to-append',
     inputs = { },
     hook_id = hook_req.id,
-    hook_method = 'Post'
 }))
 assert(sys.await_failed(req_two) == nil)
 
@@ -41,7 +39,6 @@ err, req_two = sys.triggers.create_hook({
     name = 'trigger-to-append',
     inputs = { },
     hook_id = hook_req.id,
-    hook_method = 'Patch'
 })
 assert(err == nil)
 sys.await_completed(req_two)

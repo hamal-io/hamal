@@ -6,7 +6,6 @@ import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.serialization.JsonAdapter
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
@@ -57,7 +56,6 @@ interface TriggerCmdRepository : CmdRepository {
         val namespaceId: NamespaceId,
         val inputs: TriggerInputs,
         val hookId: HookId,
-        val hookMethod: HookMethod,
         val correlationId: CorrelationId? = null,
         val status: TriggerStatus = TriggerStatus.Active
     )
@@ -212,7 +210,6 @@ sealed interface Trigger : DomainObject<TriggerId>, HasNamespaceId, HasWorkspace
         override val status: TriggerStatus,
         override val correlationId: CorrelationId? = null,
         val hookId: HookId,
-        val hookMethod: HookMethod
     ) : Trigger {
         override val type = TriggerType.Hook
     }

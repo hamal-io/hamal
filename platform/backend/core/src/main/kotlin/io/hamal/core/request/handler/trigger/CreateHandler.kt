@@ -4,7 +4,6 @@ import io.hamal.core.event.InternalEventEmitter
 import io.hamal.core.request.RequestHandler
 import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain._enum.HookMethod.Post
 import io.hamal.lib.domain._enum.TriggerType.*
 import io.hamal.lib.domain._enum.TriggerType.Endpoint
 import io.hamal.lib.domain._enum.TriggerType.Hook
@@ -71,7 +70,6 @@ class TriggerCreateHandler(
                         namespaceId = req.namespaceId,
                         inputs = req.inputs,
                         hookId = hook.id,
-                        hookMethod = req.hookMethod ?: Post
                     )
                 )
 

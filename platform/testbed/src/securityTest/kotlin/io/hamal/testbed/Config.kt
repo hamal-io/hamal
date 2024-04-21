@@ -11,7 +11,6 @@ import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain._enum.ExecLogLevel
-import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain._enum.TopicType
 import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain.vo.*
@@ -305,8 +304,7 @@ class TestSetupConfig {
                 namespaceId = NamespaceId(id),
                 inputs = TriggerInputs(),
                 status = TriggerStatus.Inactive,
-                hookId = HookId(id),
-                hookMethod = HookMethod.Post
+                hookId = HookId(id)
             )
         )
 

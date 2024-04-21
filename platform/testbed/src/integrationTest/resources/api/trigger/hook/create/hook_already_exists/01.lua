@@ -11,7 +11,6 @@ req_one = fail_on_error(sys.triggers.create_hook({
     name = 'trigger-one',
     inputs = { },
     hook_id = hook_req.id,
-    hook_method = 'Get'
 }))
 sys.await_completed(req_one)
 
@@ -20,7 +19,6 @@ req_two = fail_on_error(sys.triggers.create_hook({
     name = 'trigger-two',
     inputs = { },
     hook_id = hook_req.id,
-    hook_method = 'Get'
 }))
 sys.await_failed(req_two)
 
