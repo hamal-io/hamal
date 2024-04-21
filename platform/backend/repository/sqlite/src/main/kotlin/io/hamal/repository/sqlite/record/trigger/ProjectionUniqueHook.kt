@@ -27,7 +27,7 @@ internal object ProjectionUniqueHook : ProjectionSqlite<TriggerId, TriggerRecord
                 set("namespaceId", obj.namespaceId)
             }
         } catch (e: SQLiteException) {
-            if (e.message!!.contains("UNIQUE constraint failed: unique_hook.func_id, unique_hook.hook_id")) {
+            if (e.message!!.contains("UNIQUE constraint failed: unique_hook.func_id, unique_hook.hook_id, unique_hook.namespace_id")) {
                 throw IllegalArgumentException("Trigger already exists")
             }
             throw e

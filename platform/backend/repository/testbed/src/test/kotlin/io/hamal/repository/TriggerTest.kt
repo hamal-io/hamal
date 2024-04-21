@@ -407,8 +407,25 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
             }
 
         @TestFactory
-        fun `Creates triggers with different hookId, funcId combinations`() =
+        fun `Creates triggers with different hookId, funcId, namespaceId combinations`() =
             runWith(TriggerRepository::class) {
+                createHookTrigger(
+                    triggerId = TriggerId(1),
+                    namespaceId = NamespaceId(2),
+                    workspaceId = WorkspaceId(1),
+                    name = TriggerName("trigger-name-1"),
+                    funcId = FuncId(1),
+                    hookId = HookId(1),
+                )
+
+                createHookTrigger(
+                    triggerId = TriggerId(2),
+                    namespaceId = NamespaceId(55),
+                    workspaceId = WorkspaceId(1),
+                    name = TriggerName("trigger-name-2"),
+                    funcId = FuncId(1),
+                    hookId = HookId(1),
+                )
 
                 createHookTrigger(
                     triggerId = TriggerId(3),
@@ -428,7 +445,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     hookId = HookId(1),
                 )
 
-                verifyCount(2)
+                verifyCount(4)
             }
 
 
