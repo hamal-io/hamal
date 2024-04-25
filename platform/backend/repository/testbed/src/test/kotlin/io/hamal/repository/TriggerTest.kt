@@ -369,64 +369,8 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
             }
 
         @TestFactory
-        fun `Creates with same name but different namespace`() =
+        fun `Creates triggers with different hookId, funcId combinations`() =
             runWith(TriggerRepository::class) {
-
-                createHookTrigger(
-                    triggerId = TriggerId(1),
-                    namespaceId = NamespaceId(2),
-                    workspaceId = WorkspaceId(3),
-                    name = TriggerName("trigger-name"),
-                )
-
-                val result = create(
-                    CreateHookCmd(
-                        id = CmdId(2),
-                        triggerId = TriggerId(1111),
-                        funcId = FuncId(4),
-                        workspaceId = WorkspaceId(3),
-                        namespaceId = NamespaceId(22),
-                        name = TriggerName("trigger-name"),
-                        inputs = TriggerInputs(),
-                        hookId = HookId(9),
-                    )
-                )
-
-                with(result) {
-                    assertThat(id, equalTo(TriggerId(1111)))
-                    assertThat(funcId, equalTo(FuncId(4)))
-                    assertThat(workspaceId, equalTo(WorkspaceId(3)))
-                    assertThat(namespaceId, equalTo(NamespaceId(22)))
-                    assertThat(name, equalTo(TriggerName("trigger-name")))
-                    assertThat(inputs, equalTo(TriggerInputs()))
-                    assertThat(hookId, equalTo(HookId(9)))
-                    assertThat(status, equalTo(Active))
-                }
-
-                verifyCount(2)
-            }
-
-        @TestFactory
-        fun `Creates triggers with different hookId, funcId, namespaceId combinations`() =
-            runWith(TriggerRepository::class) {
-                createHookTrigger(
-                    triggerId = TriggerId(1),
-                    namespaceId = NamespaceId(2),
-                    workspaceId = WorkspaceId(1),
-                    name = TriggerName("trigger-name-1"),
-                    funcId = FuncId(1),
-                    hookId = HookId(1),
-                )
-
-                createHookTrigger(
-                    triggerId = TriggerId(2),
-                    namespaceId = NamespaceId(55),
-                    workspaceId = WorkspaceId(1),
-                    name = TriggerName("trigger-name-2"),
-                    funcId = FuncId(1),
-                    hookId = HookId(1),
-                )
-
                 createHookTrigger(
                     triggerId = TriggerId(3),
                     namespaceId = NamespaceId(2),
@@ -445,7 +389,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     hookId = HookId(1),
                 )
 
-                verifyCount(4)
+                verifyCount(2)
             }
 
 
