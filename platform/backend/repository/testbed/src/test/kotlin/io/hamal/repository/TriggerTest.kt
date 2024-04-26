@@ -4,8 +4,6 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.hot.HotObject
-import io.hamal.lib.domain._enum.HookMethod
-import io.hamal.lib.domain._enum.HookMethod.*
 import io.hamal.lib.domain._enum.TriggerStatus.Active
 import io.hamal.lib.domain._enum.TriggerStatus.Inactive
 import io.hamal.lib.domain._enum.TriggerType.Event
@@ -320,7 +318,6 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     name = TriggerName("trigger-name"),
                     inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
                     hookId = HookId(9),
-                    hookMethod = Patch
                 )
             )
 
@@ -331,7 +328,6 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 assertThat(name, equalTo(TriggerName("trigger-name")))
                 assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
                 assertThat(hookId, equalTo(HookId(9)))
-                assertThat(hookMethod, equalTo(Patch))
                 assertThat(status, equalTo(Active))
             }
 
@@ -373,69 +369,8 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
             }
 
         @TestFactory
-        fun `Creates with same name but different namespace`() =
+        fun `Creates triggers with different hookId, funcId combinations`() =
             runWith(TriggerRepository::class) {
-
-                createHookTrigger(
-                    triggerId = TriggerId(1),
-                    namespaceId = NamespaceId(2),
-                    workspaceId = WorkspaceId(3),
-                    name = TriggerName("trigger-name"),
-                    hookMethod = Get
-                )
-
-                val result = create(
-                    CreateHookCmd(
-                        id = CmdId(2),
-                        triggerId = TriggerId(1111),
-                        funcId = FuncId(4),
-                        workspaceId = WorkspaceId(3),
-                        namespaceId = NamespaceId(22),
-                        name = TriggerName("trigger-name"),
-                        inputs = TriggerInputs(),
-                        hookId = HookId(9),
-                        hookMethod = Post
-                    )
-                )
-
-                with(result) {
-                    assertThat(id, equalTo(TriggerId(1111)))
-                    assertThat(funcId, equalTo(FuncId(4)))
-                    assertThat(workspaceId, equalTo(WorkspaceId(3)))
-                    assertThat(namespaceId, equalTo(NamespaceId(22)))
-                    assertThat(name, equalTo(TriggerName("trigger-name")))
-                    assertThat(inputs, equalTo(TriggerInputs()))
-                    assertThat(hookId, equalTo(HookId(9)))
-                    assertThat(hookMethod, equalTo(Post))
-                    assertThat(status, equalTo(Active))
-                }
-
-                verifyCount(2)
-            }
-
-        @TestFactory
-        fun `Creates triggers with different hookId, funcId, hookMethod combinations`() =
-            runWith(TriggerRepository::class) {
-                createHookTrigger(
-                    triggerId = TriggerId(1),
-                    namespaceId = NamespaceId(2),
-                    workspaceId = WorkspaceId(1),
-                    name = TriggerName("trigger-name-1"),
-                    funcId = FuncId(1),
-                    hookId = HookId(1),
-                    hookMethod = Get
-                )
-
-                createHookTrigger(
-                    triggerId = TriggerId(2),
-                    namespaceId = NamespaceId(2),
-                    workspaceId = WorkspaceId(1),
-                    name = TriggerName("trigger-name-2"),
-                    funcId = FuncId(1),
-                    hookId = HookId(1),
-                    hookMethod = Post
-                )
-
                 createHookTrigger(
                     triggerId = TriggerId(3),
                     namespaceId = NamespaceId(2),
@@ -443,7 +378,6 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     name = TriggerName("trigger-name-3"),
                     funcId = FuncId(1),
                     hookId = HookId(2),
-                    hookMethod = Get
                 )
 
                 createHookTrigger(
@@ -453,15 +387,14 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     name = TriggerName("trigger-name-4"),
                     funcId = FuncId(2),
                     hookId = HookId(1),
-                    hookMethod = Get
                 )
 
-                verifyCount(4)
+                verifyCount(2)
             }
 
 
         @TestFactory
-        fun `Tries to create a trigger when hookId, funcId, hookMethod already exist`() =
+        fun `Tries to create a trigger when hookId, funcId already exist`() =
             runWith(TriggerRepository::class) {
                 createHookTrigger(
                     triggerId = TriggerId(1),
@@ -470,7 +403,6 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     name = TriggerName("trigger-name-1"),
                     funcId = FuncId(1),
                     hookId = HookId(1),
-                    hookMethod = Get
                 )
 
                 val exception = assertThrows<IllegalArgumentException> {
@@ -481,7 +413,6 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                         name = TriggerName("other-trigger"),
                         funcId = FuncId(1),
                         hookId = HookId(1),
-                        hookMethod = Get
                     )
                 }
                 assertThat(exception.message, equalTo("Trigger already exists"))
@@ -512,7 +443,6 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                         name = TriggerName("second-trigger-name"),
                         inputs = TriggerInputs(),
                         hookId = HookId(999),
-                        hookMethod = Get
                     )
                 )
 
@@ -1286,7 +1216,6 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
         workspaceId: WorkspaceId,
         funcId: FuncId = FuncId(4),
         hookId: HookId = HookId(9),
-        hookMethod: HookMethod = Post
     ) {
         create(
             CreateHookCmd(
@@ -1298,7 +1227,6 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
                 funcId = funcId,
                 hookId = hookId,
-                hookMethod = hookMethod
             )
         )
     }

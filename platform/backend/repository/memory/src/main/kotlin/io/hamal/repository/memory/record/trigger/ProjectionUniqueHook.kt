@@ -1,6 +1,5 @@
 package io.hamal.repository.memory.record.trigger
 
-import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.HookId
 import io.hamal.lib.domain.vo.TriggerId
@@ -14,8 +13,7 @@ internal class ProjectionUniqueHook : ProjectionMemory<TriggerId, Trigger.Hook> 
         if (!uniqueHooks.add(
                 UniqueHook(
                     funcId = obj.funcId,
-                    hookId = obj.hookId,
-                    hookMethod = obj.hookMethod
+                    hookId = obj.hookId
                 )
             )
         ) {
@@ -29,8 +27,7 @@ internal class ProjectionUniqueHook : ProjectionMemory<TriggerId, Trigger.Hook> 
 
     data class UniqueHook(
         val funcId: FuncId,
-        val hookId: HookId,
-        val hookMethod: HookMethod
+        val hookId: HookId
     )
 
     private val uniqueHooks = mutableSetOf<UniqueHook>()

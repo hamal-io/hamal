@@ -167,8 +167,7 @@ class TriggerListController(
                                     ),
                                     hook = Hook(
                                         id = trigger.hookId,
-                                        name = hooks[trigger.hookId]!!.name,
-                                        method = trigger.hookMethod
+                                        name = hooks[trigger.hookId]!!.name
                                     ),
                                     status = trigger.status
                                 )

@@ -86,7 +86,6 @@ class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord,
                         name = cmd.name,
                         inputs = cmd.inputs,
                         hookId = cmd.hookId,
-                        hookMethod = cmd.hookMethod,
                         correlationId = cmd.correlationId,
                         status = cmd.status
                     )

@@ -14,7 +14,6 @@ req_one = fail_on_error(sys.triggers.create_hook({
     func_id = func_req.id,
     name = 'hook-trigger',
     inputs = { },
-    hook_method = 'Get',
     hook_id = hook.id
 }))
 sys.await_completed(req_one)
