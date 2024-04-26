@@ -1,38 +1,28 @@
-import React, {FC, useContext, useEffect} from "react";
-import {useHookList, useTriggerListHook} from "@/hook";
-import {HookWithTriggers} from "@/pages/app/hook-list/type.tsx";
+import React, {FC, useEffect} from "react";
+import {useTriggerListHook} from "@/hook";
 import {PageHeader} from "@/components/page-header.tsx";
 import Create from "@/pages/app/hook-list/components/create.tsx";
-import {useNavigate} from "react-router-dom";
 import Detail from "@/pages/app/hook-list/components/detail.tsx";
 import {EmptyPlaceholder} from "@/components/empty-placeholder.tsx";
 import {GoToDocumentation} from "@/components/documentation.tsx";
 import {useUiState} from "@/hook/ui-state.ts";
+import {TriggerListItem} from "@/types";
 
 type Props = {}
 const HookListPage: FC<Props> = ({}) => {
     const [uiState] = useUiState()
-    const [listHooks, hookList, hooksLoading, hooksError] = useHookList()
     const [listTriggers, triggerList, triggerLoading, triggerError] = useTriggerListHook()
 
     useEffect(() => {
         const abortController = new AbortController();
-        listHooks(uiState.namespaceId, abortController)
         listTriggers(uiState.namespaceId, abortController)
         return () => {
             abortController.abort();
         };
     }, [uiState.namespaceId]);
 
-    if (hooksError || triggerError) return `Error`
-    if (hookList == null || triggerList == null || hooksLoading || triggerLoading) return "Loading..."
-
-    const hooksWithTrigger = hookList.hooks.map<HookWithTriggers>(hook => {
-        return {
-            hook: hook,
-            trigger: triggerList.triggers.filter(trigger => trigger.hook?.id === hook.id)
-        }
-    })
+    if (triggerError || triggerError) return `Error`
+    if (triggerList == null ||  triggerLoading) return "Loading..."
 
     return (
         <div className="pt-2 px-2">
@@ -42,18 +32,17 @@ const HookListPage: FC<Props> = ({}) => {
                 actions={[<Create/>]}
             />
             {
-                hookList.hooks.length ? (<Content items={hooksWithTrigger}/>) : (<NoContent/>)
+                triggerList.triggers.length ? (<Content items={triggerList.triggers}/>) : (<NoContent/>)
             }
         </div>
     );
 }
 
 type ContentProps = {
-    items: HookWithTriggers[]
+    items: TriggerListItem[]
 }
 
 const Content: FC<ContentProps> = ({items}) => {
-    const navigate = useNavigate()
     return (
         <ul className="grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-1 xl:grid-cols-3">
             {items.map((item) => (

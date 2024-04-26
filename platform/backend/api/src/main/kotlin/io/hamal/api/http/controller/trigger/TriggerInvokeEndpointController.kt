@@ -22,23 +22,23 @@ internal class TriggerInvokeEndpointController(
     private val funcGet: FuncGetPort
 ) {
 
-    @GetMapping("/v1/endpoints/{id}/invoke")
+    @GetMapping("/v1/endpoints/{id}")
     fun invokeGet(@PathVariable("id") id: TriggerId, req: HttpServletRequest) =
         handle(id, req, SecurityContext.current)
 
-    @PostMapping("/v1/endpoints/{id}/invoke")
+    @PostMapping("/v1/endpoints/{id}")
     fun invokePost(@PathVariable("id") id: TriggerId, req: HttpServletRequest) =
         handle(id, req, SecurityContext.current)
 
-    @PatchMapping("/v1/endpoints/{id}/invoke")
+    @PatchMapping("/v1/endpoints/{id}")
     fun invokePatch(@PathVariable("id") id: TriggerId, req: HttpServletRequest) =
         handle(id, req, SecurityContext.current)
 
-    @PutMapping("/v1/endpoints/{id}/invoke")
+    @PutMapping("/v1/endpoints/{id}")
     fun invokePut(@PathVariable("id") id: TriggerId, req: HttpServletRequest) =
         handle(id, req, SecurityContext.current)
 
-    @DeleteMapping("/v1/endpoints/{id}/invoke")
+    @DeleteMapping("/v1/endpoints/{id}")
     fun invokeDelete(@PathVariable("id") id: TriggerId, req: HttpServletRequest) =
         handle(id, req, SecurityContext.current)
 

@@ -16,19 +16,19 @@ import org.springframework.web.bind.annotation.*
 internal class TriggerInvokeHookController(
     private val triggerInvoke: TriggerInvokePort
 ) {
-    @GetMapping("/v1/hooks/{id}/invoke")
+    @GetMapping("/v1/hooks/{id}")
     fun webhookGet(@PathVariable("id") id: TriggerId, req: HttpServletRequest) = handle(id, req)
 
-    @PostMapping("/v1/hooks/{id}/invoke")
+    @PostMapping("/v1/hooks/{id}")
     fun webhookPost(@PathVariable("id") id: TriggerId, req: HttpServletRequest) = handle(id, req)
 
-    @PatchMapping("/v1/hooks/{id}/invoke")
+    @PatchMapping("/v1/hooks/{id}")
     fun webhookPatch(@PathVariable("id") id: TriggerId, req: HttpServletRequest) = handle(id, req)
 
-    @PutMapping("/v1/hooks/{id}/invoke")
+    @PutMapping("/v1/hooks/{id}")
     fun webhookPut(@PathVariable("id") id: TriggerId, req: HttpServletRequest) = handle(id, req)
 
-    @DeleteMapping("/v1/hooks/{id}/invoke")
+    @DeleteMapping("/v1/hooks/{id}")
     fun webhookDelete(@PathVariable("id") id: TriggerId, req: HttpServletRequest) = handle(id, req)
 
     private fun handle(id: TriggerId, req: HttpServletRequest): ApiRequested {
