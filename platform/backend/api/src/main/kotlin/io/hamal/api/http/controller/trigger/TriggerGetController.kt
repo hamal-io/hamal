@@ -89,8 +89,7 @@ internal class TriggerGetController(
                             hook = hookGet(trigger.hookId).let { hook ->
                                 ApiTrigger.Hook.Hook(
                                     id = hook.id,
-                                    name = hook.name,
-                                    method = trigger.hookMethod
+                                    name = hook.name
                                 )
                             },
                             status = trigger.status

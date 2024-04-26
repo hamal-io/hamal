@@ -1,6 +1,5 @@
 package io.hamal.lib.domain.request
 
-import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain._enum.TriggerType
@@ -16,7 +15,6 @@ interface TriggerCreateRequest {
     val duration: TriggerDuration?
     val topicId: TopicId?
     val hookId: HookId?
-    val hookMethod: HookMethod?
     val cron: CronPattern?
     val endpointId: EndpointId?
 }
@@ -36,7 +34,6 @@ data class TriggerCreateRequested(
     val duration: TriggerDuration? = null,
     val topicId: TopicId? = null,
     val hookId: HookId? = null,
-    val hookMethod: HookMethod? = null,
     val cron: CronPattern? = null,
     val endpointId: EndpointId? = null,
 ) : Requested()

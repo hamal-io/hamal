@@ -76,7 +76,6 @@ class TriggerGetFunction(
                                 "hook" to ctx.tableCreate(
                                     "id" to KuaString(trigger.hook.id.value.value.toString(16)),
                                     "name" to KuaString(trigger.hook.name.value),
-                                    "method" to KuaString(trigger.hook.method.name)
                                 ),
                                 "status" to KuaString(trigger.status.name),
                             )

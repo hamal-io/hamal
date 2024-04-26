@@ -54,7 +54,6 @@ class TriggerCreateAdapter(
             duration = req.duration,
             topicId = req.topicId,
             hookId = req.hookId,
-            hookMethod = req.hookMethod,
             cron = req.cron,
             endpointId = req.endpointId
         ).also(requestEnqueue::invoke)
@@ -70,7 +69,6 @@ class TriggerCreateAdapter(
     private fun ensureHook(createTrigger: TriggerCreateRequest) {
         if (createTrigger.type == TriggerType.Hook) {
             requireNotNull(createTrigger.hookId) { "hookId is missing" }
-            requireNotNull(createTrigger.hookMethod) { "hookMethod is missing" }
             hookGet(createTrigger.hookId!!)
         }
     }

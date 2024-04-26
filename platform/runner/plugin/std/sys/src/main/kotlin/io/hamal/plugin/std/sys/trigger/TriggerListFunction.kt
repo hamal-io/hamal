@@ -83,7 +83,6 @@ class TriggerListFunction(
                             "hook" to ctx.tableCreate(
                                 "id" to KuaString(trigger.hook.id.value.value.toString(16)),
                                 "name" to KuaString(trigger.hook.name.value),
-                                "methods" to KuaString(trigger.hook.method.name)
                             ),
                         )
                     }

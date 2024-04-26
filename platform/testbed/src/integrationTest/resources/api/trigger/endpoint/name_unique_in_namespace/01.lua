@@ -16,7 +16,6 @@ req_two = fail_on_error(sys.triggers.create_hook({
     name = 'trigger-to-append',
     inputs = { },
     hook_id = hook_req.id,
-    hook_method = 'Get'
 
 }))
 sys.await_completed(req_two)
@@ -27,24 +26,8 @@ req_two = fail_on_error(sys.triggers.create_hook({
     name = 'trigger-to-append',
     inputs = { },
     hook_id = hook_req.id,
-    hook_method = 'Post'
 }))
 assert(sys.await_failed(req_two) == nil)
 
 _, triggers = sys.triggers.list()
 assert(#triggers == 1)
-
--- same name different namespace
-err, req_two = sys.triggers.create_hook({
-    func_id = func_one.id,
-    namespace_id = namespace.id,
-    name = 'trigger-to-append',
-    inputs = { },
-    hook_id = hook_req.id,
-    hook_method = 'Patch'
-})
-assert(err == nil)
-sys.await_completed(req_two)
-
-_, triggers = sys.triggers.list()
-assert(#triggers == 2)

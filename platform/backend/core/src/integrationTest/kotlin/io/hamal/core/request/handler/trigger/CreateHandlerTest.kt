@@ -2,10 +2,8 @@ package io.hamal.core.request.handler.trigger
 
 import io.hamal.core.request.handler.BaseRequestHandlerTest
 import io.hamal.lib.common.hot.HotObject
-import io.hamal.lib.domain._enum.HookMethod.Get
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain._enum.TriggerType.*
-import io.hamal.lib.domain._enum.TriggerType.Event
 import io.hamal.lib.domain.request.TriggerCreateRequested
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.Trigger
@@ -91,7 +89,7 @@ internal class TriggerCreateHandlerTest : BaseRequestHandlerTest() {
         }
 
         @Test
-        fun `Tries to create a trigger when hookId, funcId, hookMethod already exist`() {
+        fun `Tries to create a trigger when hookId, funcId already exist`() {
             createHook(HookId(1111))
             createFunc(FuncId(2222), FuncName("SomeFunc"))
             testInstance(submitCreateHookTriggerReq)
@@ -111,8 +109,7 @@ internal class TriggerCreateHandlerTest : BaseRequestHandlerTest() {
                         name = TriggerName("HookTriggerInvalid"),
                         inputs = TriggerInputs(
                             HotObject.builder().set("hamal", "rocks").build(),
-                        ),
-                        hookMethod = Get
+                        )
                     )
                 )
             }
@@ -284,8 +281,7 @@ internal class TriggerCreateHandlerTest : BaseRequestHandlerTest() {
             name = TriggerName("HookTrigger"),
             inputs = TriggerInputs(
                 HotObject.builder().set("hamal", "rocks").build(),
-            ),
-            hookMethod = Get
+            )
         )
     }
 

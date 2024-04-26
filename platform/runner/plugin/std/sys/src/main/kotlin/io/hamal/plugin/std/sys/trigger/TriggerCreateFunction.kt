@@ -1,7 +1,6 @@
 package io.hamal.plugin.std.sys.trigger
 
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.domain._enum.HookMethod
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.function.Function1In2Out
@@ -43,7 +42,6 @@ class TriggerCreateFunction(
                     } else {
                         null
                     },
-                    hookMethod = arg1.findString("hook_method")?.stringValue?.let(HookMethod::valueOf),
                     cron = if (arg1.type("cron") == KuaString::class) {
                         CronPattern(arg1.getString("cron").stringValue)
                     } else {

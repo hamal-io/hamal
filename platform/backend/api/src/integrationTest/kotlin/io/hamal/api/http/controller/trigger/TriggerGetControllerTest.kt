@@ -1,9 +1,7 @@
 package io.hamal.api.http.controller.trigger
 
 import io.hamal.lib.common.hot.HotObject
-import io.hamal.lib.domain._enum.HookMethod.Get
 import io.hamal.lib.domain._enum.TriggerType.*
-import io.hamal.lib.domain._enum.TriggerType.Event
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.NotFound
@@ -106,9 +104,7 @@ internal class TriggerGetControllerTest : TriggerBaseControllerTest() {
                     name = TriggerName("trigger-one"),
                     inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
                     funcId = funcId,
-                    hookId = hookId,
-                    hookMethod = Get
-
+                    hookId = hookId
                 )
             )
         ).id
@@ -126,7 +122,6 @@ internal class TriggerGetControllerTest : TriggerBaseControllerTest() {
             assertThat(func.name, equalTo(FuncName("some-func-to-trigger")))
             assertThat(hook.id, equalTo(hookId))
             assertThat(hook.name, equalTo(HookName("some-hook")))
-            assertThat(hook.method, equalTo(Get))
         }
     }
 

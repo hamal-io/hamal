@@ -16,18 +16,17 @@ internal object ProjectionUniqueHook : ProjectionSqlite<TriggerId, TriggerRecord
             tx.execute(
                 """
                 INSERT OR FAIL INTO unique_hook 
-                    (id, func_id, hook_id, hook_method)  
+                    (id, func_id, hook_id)  
                 VALUES
-                    (:id, :funcId, :hookId, :hookMethod);
+                    (:id, :funcId, :hookId);
             """.trimIndent()
             ) {
                 set("id", obj.id)
                 set("funcId", obj.funcId)
                 set("hookId", obj.hookId)
-                set("hookMethod", obj.hookMethod.value)
             }
         } catch (e: SQLiteException) {
-            if (e.message!!.contains("UNIQUE constraint failed: unique_hook.func_id, unique_hook.hook_id, unique_hook.hook_method")) {
+            if (e.message!!.contains("UNIQUE constraint failed: unique_hook.func_id, unique_hook.hook_id")) {
                 throw IllegalArgumentException("Trigger already exists")
             }
             throw e
@@ -42,9 +41,8 @@ internal object ProjectionUniqueHook : ProjectionSqlite<TriggerId, TriggerRecord
                  id             INTEGER NOT NULL,
                  func_id        INTEGER NOT NULL,
                  hook_id        INTEGER NOT NULL,
-                 hook_method    INTEGER NOT NULL,
                  PRIMARY KEY    (id),
-                 UNIQUE (func_id, hook_id, hook_method)
+                 UNIQUE (func_id, hook_id)
             );
         """.trimIndent()
         )
