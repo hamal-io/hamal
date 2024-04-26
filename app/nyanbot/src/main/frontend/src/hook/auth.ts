@@ -2,12 +2,14 @@ import {Auth, AUTH_KEY} from "@/types/auth.ts";
 import useLocalStorageState from "use-local-storage-state";
 import {useCallback, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {useInitUiState, useResetUiState} from "@/hooks/ui.ts";
+import {useInitUiState, useResetUiState} from "@/hook/ui.ts";
 
 const unauthorized: Auth = {
     type: 'Unauthorized',
     accountId: '',
-    token: ''
+    token: '',
+    workspaceId: '',
+    address: ''
 }
 
 export const useAuth = () => {
@@ -139,11 +141,12 @@ export const useMetaMaskToken = (): [MetaMaskTokenAction, string, boolean, Error
                     setAuth({
                         type: 'User',
                         accountId: data.accountId,
+                        workspaceId: data.workspaceIds[0],
                         token: data.token,
                         address: data.address
                     })
 
-                    initUiState()
+                    initUiState(data.workspaceIds[0], data.workspaceIds[0])
 
                     navigate('/flows')
 

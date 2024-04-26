@@ -6,5 +6,6 @@ export interface Auth {
     type: AuthType,
     accountId: string;
     token: string;
+    workspaceId: string;
     address: string
 }

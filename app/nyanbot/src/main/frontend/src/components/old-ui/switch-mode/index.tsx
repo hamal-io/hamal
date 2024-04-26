@@ -1,7 +1,7 @@
 import React from "react";
 import {MoonIcon} from "@heroicons/react/24/solid";
 import {SunIcon} from "@heroicons/react/24/outline";
-import {useChangeTheme, useUiState} from "@/hooks/ui.ts";
+import {useChangeTheme, useUiState} from "@/hook/ui.ts";
 
 export interface SwitchDarkModeProps {
     className?: string;

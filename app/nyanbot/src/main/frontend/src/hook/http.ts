@@ -1,5 +1,5 @@
 import {useCallback, useState} from "react";
-import {useAuth, useResetAuth} from "@/hooks/auth.ts";
+import {useAuth, useResetAuth} from "@/hook/auth.ts";
 
 type GetAction = (url: string, abortController?: AbortController) => void
 export const useGet = <T>(): [GetAction, T, boolean, Error] => {
