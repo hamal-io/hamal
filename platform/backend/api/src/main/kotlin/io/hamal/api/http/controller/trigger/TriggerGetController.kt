@@ -1,8 +1,6 @@
 package io.hamal.api.http.controller.trigger
 
-import io.hamal.core.adapter.endpoint.EndpointGetPort
 import io.hamal.core.adapter.func.FuncGetPort
-import io.hamal.core.adapter.hook.HookGetPort
 import io.hamal.core.adapter.namespace.NamespaceGetPort
 import io.hamal.core.adapter.topic.TopicGetPort
 import io.hamal.core.adapter.trigger.TriggerGetPort
@@ -21,9 +19,7 @@ internal class TriggerGetController(
     private val triggerGet: TriggerGetPort,
     private val funcGet: FuncGetPort,
     private val namespaceGet: NamespaceGetPort,
-    private val topicGet: TopicGetPort,
-    private val hookGet: HookGetPort,
-    private val endpointGet: EndpointGetPort
+    private val topicGet: TopicGetPort
 ) {
     @GetMapping("/v1/triggers/{triggerId}")
     fun get(
@@ -86,12 +82,6 @@ internal class TriggerGetController(
                                 name = namespace.name
                             ),
                             inputs = trigger.inputs,
-                            hook = hookGet(trigger.hookId).let { hook ->
-                                ApiTrigger.Hook.Hook(
-                                    id = hook.id,
-                                    name = hook.name
-                                )
-                            },
                             status = trigger.status
                         )
 
@@ -123,12 +113,6 @@ internal class TriggerGetController(
                                 name = namespace.name
                             ),
                             inputs = trigger.inputs,
-                            endpoint = endpointGet(trigger.endpointId).let { endpoint ->
-                                ApiTrigger.Endpoint.Endpoint(
-                                    id = endpoint.id,
-                                    name = endpoint.name,
-                                )
-                            },
                             status = trigger.status
                         )
                     }

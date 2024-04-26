@@ -34,8 +34,6 @@ object ValueObjectJsonModule : HotModule() {
 
         this[CronPattern::class] = ValueObjectStringAdapter(::CronPattern)
 
-        this[EndpointId::class] = ValueObjectIdAdapter(::EndpointId)
-        this[EndpointName::class] = ValueObjectStringAdapter(::EndpointName)
         this[EndpointHeaders::class] = ValueObjectHotObjectAdapter(::EndpointHeaders)
         this[EndpointParameters::class] = ValueObjectHotObjectAdapter(::EndpointParameters)
         this[EndpointContent::class] = ValueObjectHotObjectAdapter(::EndpointContent)
@@ -73,8 +71,6 @@ object ValueObjectJsonModule : HotModule() {
         this[WorkspaceId::class] = ValueObjectIdAdapter(::WorkspaceId)
         this[WorkspaceName::class] = ValueObjectStringAdapter(::WorkspaceName)
 
-        this[HookId::class] = ValueObjectIdAdapter(::HookId)
-        this[HookName::class] = ValueObjectStringAdapter(::HookName)
         this[HookHeaders::class] = ValueObjectHotObjectAdapter(::HookHeaders)
         this[HookParameters::class] = ValueObjectHotObjectAdapter(::HookParameters)
         this[HookContent::class] = ValueObjectHotObjectAdapter(::HookContent)

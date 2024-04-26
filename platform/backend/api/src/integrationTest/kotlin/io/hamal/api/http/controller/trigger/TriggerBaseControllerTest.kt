@@ -45,17 +45,6 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
         return createTopicResponse.result(ApiTopicCreateRequested::class)
     }
 
-    fun createHook(hookName: HookName): ApiHookCreateRequested {
-        val createHookResponse = httpTemplate.post("/v1/namespaces/539/hooks")
-            .body(ApiHookCreateRequest(hookName))
-            .execute()
-
-        assertThat(createHookResponse.statusCode, equalTo(Accepted))
-        require(createHookResponse is HttpSuccessResponse) { "request was not successful" }
-
-        return createHookResponse.result(ApiHookCreateRequested::class)
-    }
-
     fun createFixedRateTrigger(name: TriggerName): ApiTriggerCreateRequested {
         val funcId = awaitCompleted(createFunc(FuncName(name.value))).id
 

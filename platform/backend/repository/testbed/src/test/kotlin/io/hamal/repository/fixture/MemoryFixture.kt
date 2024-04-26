@@ -15,12 +15,10 @@ import io.hamal.repository.memory.log.LogSegmentMemoryRepository
 import io.hamal.repository.memory.log.LogTopicMemoryRepository
 import io.hamal.repository.memory.record.account.AccountMemoryRepository
 import io.hamal.repository.memory.record.code.CodeMemoryRepository
-import io.hamal.repository.memory.record.endpoint.EndpointMemoryRepository
 import io.hamal.repository.memory.record.exec.ExecMemoryRepository
 import io.hamal.repository.memory.record.extension.ExtensionMemoryRepository
 import io.hamal.repository.memory.record.feedback.FeedbackMemoryRepository
 import io.hamal.repository.memory.record.func.FuncMemoryRepository
-import io.hamal.repository.memory.record.hook.HookMemoryRepository
 import io.hamal.repository.memory.record.namespace.NamespaceMemoryRepository
 import io.hamal.repository.memory.record.namespace_tree.NamespaceTreeMemoryRepository
 import io.hamal.repository.memory.record.recipe.RecipeMemoryRepository
@@ -36,14 +34,12 @@ object MemoryFixture : BaseTestFixture {
         AuthRepository::class -> AuthMemoryRepository() as REPO
         RecipeRepository::class -> RecipeMemoryRepository() as REPO
         CodeRepository::class -> CodeMemoryRepository() as REPO
-        EndpointRepository::class -> EndpointMemoryRepository() as REPO
         ExecLogRepository::class -> ExecLogMemoryRepository() as REPO
         ExecRepository::class -> ExecMemoryRepository() as REPO
         ExtensionRepository::class -> ExtensionMemoryRepository() as REPO
         FeedbackRepository::class -> FeedbackMemoryRepository() as REPO
         FuncRepository::class -> FuncMemoryRepository() as REPO
         WorkspaceRepository::class -> MemoryWorkspaceRepository() as REPO
-        HookRepository::class -> HookMemoryRepository() as REPO
         NamespaceRepository::class -> NamespaceMemoryRepository() as REPO
         NamespaceTreeRepository::class -> NamespaceTreeMemoryRepository() as REPO
         RequestRepository::class -> RequestMemoryRepository() as REPO

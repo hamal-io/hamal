@@ -5,10 +5,11 @@ import io.hamal.core.request.RequestHandler
 import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain._enum.TriggerType.*
-import io.hamal.lib.domain._enum.TriggerType.Endpoint
-import io.hamal.lib.domain._enum.TriggerType.Hook
 import io.hamal.lib.domain.request.TriggerCreateRequested
-import io.hamal.repository.api.*
+import io.hamal.repository.api.FuncQueryRepository
+import io.hamal.repository.api.TopicRepository
+import io.hamal.repository.api.Trigger
+import io.hamal.repository.api.TriggerCmdRepository
 import io.hamal.repository.api.event.TriggerCreatedEvent
 import org.springframework.stereotype.Component
 
@@ -17,7 +18,6 @@ class TriggerCreateHandler(
     private val triggerCmdRepository: TriggerCmdRepository,
     private val eventEmitter: InternalEventEmitter,
     private val funcQueryRepository: FuncQueryRepository,
-    private val hookQueryRepository: HookQueryRepository,
     private val topicRepository: TopicRepository
 ) : RequestHandler<TriggerCreateRequested>(TriggerCreateRequested::class) {
 
@@ -58,7 +58,6 @@ class TriggerCreateHandler(
             }
 
             Hook -> {
-                val hook = hookQueryRepository.get(req.hookId!!)
                 triggerCmdRepository.create(
                     TriggerCmdRepository.CreateHookCmd(
                         id = req.cmdId(),
@@ -69,11 +68,8 @@ class TriggerCreateHandler(
                         funcId = req.funcId,
                         namespaceId = req.namespaceId,
                         inputs = req.inputs,
-                        hookId = hook.id,
                     )
                 )
-
-
             }
 
             Cron -> triggerCmdRepository.create(
@@ -99,8 +95,7 @@ class TriggerCreateHandler(
                     correlationId = req.correlationId,
                     funcId = req.funcId,
                     namespaceId = req.namespaceId,
-                    inputs = req.inputs,
-                    endpointId = requireNotNull(req.endpointId) { "endpointId must not be null" }
+                    inputs = req.inputs
                 )
             )
         }

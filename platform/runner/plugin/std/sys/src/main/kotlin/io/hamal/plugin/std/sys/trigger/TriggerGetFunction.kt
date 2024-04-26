@@ -73,10 +73,6 @@ class TriggerGetFunction(
                                     "id" to KuaString(trigger.func.id.value.value.toString(16)),
                                     "name" to KuaString(trigger.func.name.value)
                                 ),
-                                "hook" to ctx.tableCreate(
-                                    "id" to KuaString(trigger.hook.id.value.value.toString(16)),
-                                    "name" to KuaString(trigger.hook.name.value),
-                                ),
                                 "status" to KuaString(trigger.status.name),
                             )
                         }
@@ -109,10 +105,6 @@ class TriggerGetFunction(
                                 "func" to ctx.tableCreate(
                                     "id" to KuaString(trigger.func.id.value.value.toString(16)),
                                     "name" to KuaString(trigger.func.name.value)
-                                ),
-                                "endpoint" to ctx.tableCreate(
-                                    "id" to KuaString(trigger.endpoint.id.value.value.toString(16)),
-                                    "name" to KuaString(trigger.endpoint.name.value)
                                 ),
                                 "status" to KuaString(trigger.status.name),
                             )

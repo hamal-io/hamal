@@ -37,18 +37,8 @@ class TriggerCreateFunction(
                     } else {
                         null
                     },
-                    hookId = if (arg1.type("hook_id") == KuaString::class) {
-                        HookId(SnowflakeId(arg1.getString("hook_id").stringValue))
-                    } else {
-                        null
-                    },
                     cron = if (arg1.type("cron") == KuaString::class) {
                         CronPattern(arg1.getString("cron").stringValue)
-                    } else {
-                        null
-                    },
-                    endpointId = if (arg1.type("endpoint_id") == KuaString::class) {
-                        EndpointId(SnowflakeId(arg1.getString("endpoint_id").stringValue))
                     } else {
                         null
                     }

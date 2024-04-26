@@ -102,13 +102,11 @@ class ClearController {
         accountRepository.clear()
         authRepository.clear()
         codeRepository.clear()
-        endpointRepository.clear()
         extensionRepository.clear()
         requestRepository.clear()
         execRepository.clear()
         funcRepository.clear()
         workspaceRepository.clear()
-        hookRepository.clear()
 
         namespaceRepository.clear()
         recipeRepository.clear()
@@ -163,9 +161,6 @@ class ClearController {
     lateinit var codeRepository: CodeRepository
 
     @Autowired
-    lateinit var endpointRepository: EndpointRepository
-
-    @Autowired
     lateinit var execRepository: ExecRepository
 
     @Autowired
@@ -176,9 +171,6 @@ class ClearController {
 
     @Autowired
     lateinit var workspaceRepository: WorkspaceRepository
-
-    @Autowired
-    lateinit var hookRepository: HookRepository
 
     @Autowired
     lateinit var namespaceRepository: NamespaceRepository
@@ -194,18 +186,6 @@ class ClearController {
 
     @Autowired
     lateinit var generateDomainId: GenerateDomainId
-
-    @Autowired
-    lateinit var logBrokerRepository: LogBrokerRepository
-
-    @Autowired
-    lateinit var topicRepository: TopicRepository
-
-    @Autowired
-    lateinit var setupInternalTopics: SetupInternalTopics
-
-    @Autowired
-    lateinit var internalEvenService: InternalEventService
 
     private lateinit var testAccount: Account
     private lateinit var testAccountAuthToken: AuthToken
@@ -227,7 +207,6 @@ class TestConfig {
         topicRepository.clear()
         logBrokerRepository.clear()
         setupInternalTopics()
-//        internalEvenService.reload()
 
         try {
             testAccount = accountRepository.create(

@@ -80,62 +80,19 @@ internal class TriggerCreateHandlerTest : BaseRequestHandlerTest() {
 
         @Test
         fun `Creates trigger`() {
-            createHook(HookId(1111))
             createFunc(FuncId(2222), FuncName("SomeFunc"))
 
             testInstance(submitCreateHookTriggerReq)
 
             verifySingleHookTriggerExists()
         }
-
-        @Test
-        fun `Tries to create a trigger when hookId, funcId already exist`() {
-            createHook(HookId(1111))
-            createFunc(FuncId(2222), FuncName("SomeFunc"))
-            testInstance(submitCreateHookTriggerReq)
-
-            val exception = assertThrows<IllegalArgumentException> {
-                testInstance(
-                    TriggerCreateRequested(
-                        requestId = RequestId(12345),
-                        requestedBy = AuthId(2345),
-                        requestStatus = Submitted,
-                        type = Hook,
-                        id = TriggerId(2),
-                        namespaceId = testNamespace.id,
-                        workspaceId = testWorkspace.id,
-                        funcId = FuncId(2222),
-                        hookId = HookId(1111),
-                        name = TriggerName("HookTriggerInvalid"),
-                        inputs = TriggerInputs(
-                            HotObject.builder().set("hamal", "rocks").build(),
-                        )
-                    )
-                )
-            }
-            assertThat(exception.message, equalTo("Trigger already exists"))
-
-            verifySingleHookTriggerExists()
-        }
-
+        
         @Test
         fun `Tries to create trigger, but func does not exist`() {
             val exception = assertThrows<NoSuchElementException> {
                 testInstance(submitCreateHookTriggerReq)
             }
             assertThat(exception.message, equalTo("Func not found"))
-
-            verifyNoTriggerExists()
-        }
-
-        @Test
-        fun `Tries to create trigger, but hook does not exist`() {
-            createFunc(FuncId(2222), FuncName("SomeFunc"))
-
-            val exception = assertThrows<NoSuchElementException> {
-                testInstance(submitCreateHookTriggerReq)
-            }
-            assertThat(exception.message, equalTo("Hook not found"))
 
             verifyNoTriggerExists()
         }
@@ -200,7 +157,6 @@ internal class TriggerCreateHandlerTest : BaseRequestHandlerTest() {
                 assertThat(id, equalTo(TriggerId(1234)))
                 assertThat(name, equalTo(TriggerName("HookTrigger")))
                 assertThat(funcId, equalTo(FuncId(2222)))
-                assertThat(hookId, equalTo(HookId(1111)))
                 assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
             }
         }
@@ -277,7 +233,6 @@ internal class TriggerCreateHandlerTest : BaseRequestHandlerTest() {
             namespaceId = testNamespace.id,
             workspaceId = testWorkspace.id,
             funcId = FuncId(2222),
-            hookId = HookId(1111),
             name = TriggerName("HookTrigger"),
             inputs = TriggerInputs(
                 HotObject.builder().set("hamal", "rocks").build(),

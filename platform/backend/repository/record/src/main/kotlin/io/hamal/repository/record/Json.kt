@@ -13,12 +13,10 @@ import io.hamal.lib.domain.vo.ValueObjectJsonModule
 import io.hamal.repository.api.DomainJsonModule
 import io.hamal.repository.record.account.AccountRecord
 import io.hamal.repository.record.code.CodeRecord
-import io.hamal.repository.record.endpoint.EndpointRecord
 import io.hamal.repository.record.exec.ExecRecord
 import io.hamal.repository.record.extension.ExtensionRecord
 import io.hamal.repository.record.feedback.FeedbackRecord
 import io.hamal.repository.record.func.FuncRecord
-import io.hamal.repository.record.hook.HookRecord
 import io.hamal.repository.record.namespace.NamespaceRecord
 import io.hamal.repository.record.namespace_tree.NamespaceTreeRecord
 import io.hamal.repository.record.recipe.RecipeRecord
@@ -34,7 +32,6 @@ object RecordJsonModule : HotModule() {
         this[AccountRecord::class] = AccountRecord.Adapter
         this[RecipeRecord::class] = RecipeRecord.Adapter
         this[CodeRecord::class] = CodeRecord.Adapter
-        this[EndpointRecord::class] = EndpointRecord.Adapter
         this[ExecRecord::class] = ExecRecord.Adapter
         this[ExtensionRecord::class] = ExtensionRecord.Adapter
         this[FeedbackRecord::class] = FeedbackRecord.Adapter
@@ -42,7 +39,6 @@ object RecordJsonModule : HotModule() {
         this[NamespaceTreeRecord::class] = NamespaceTreeRecord.Adapter
         this[FuncRecord::class] = FuncRecord.Adapter
         this[WorkspaceRecord::class] = WorkspaceRecord.Adapter
-        this[HookRecord::class] = HookRecord.Adapter
         this[TopicRecord::class] = TopicRecord.Adapter
         this[TriggerRecord::class] = TriggerRecord.Adapter
     }

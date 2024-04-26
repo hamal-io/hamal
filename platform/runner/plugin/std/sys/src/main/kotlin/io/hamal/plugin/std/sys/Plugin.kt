@@ -7,9 +7,6 @@ import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.sdk.ApiSdkImpl
 import io.hamal.plugin.std.sys.adhoc.AdhocFunction
 import io.hamal.plugin.std.sys.code.CodeGetFunction
-import io.hamal.plugin.std.sys.endpoint.EndpointCreateFunction
-import io.hamal.plugin.std.sys.endpoint.EndpointGetFunction
-import io.hamal.plugin.std.sys.endpoint.EndpointListFunction
 import io.hamal.plugin.std.sys.exec.ExecGetFunction
 import io.hamal.plugin.std.sys.exec.ExecListFunction
 import io.hamal.plugin.std.sys.extension.ExtensionCreateFunction
@@ -17,9 +14,6 @@ import io.hamal.plugin.std.sys.extension.ExtensionGetFunction
 import io.hamal.plugin.std.sys.extension.ExtensionListFunction
 import io.hamal.plugin.std.sys.extension.ExtensionUpdateFunction
 import io.hamal.plugin.std.sys.func.*
-import io.hamal.plugin.std.sys.hook.HookCreateFunction
-import io.hamal.plugin.std.sys.hook.HookGetFunction
-import io.hamal.plugin.std.sys.hook.HookListFunction
 import io.hamal.plugin.std.sys.namespace.NamespaceAppendFunction
 import io.hamal.plugin.std.sys.namespace.NamespaceGetFunction
 import io.hamal.plugin.std.sys.namespace.NamespaceListFunction
@@ -53,10 +47,6 @@ class PluginSysFactory(
 
                 KuaString("req_get") to RequestGetFunction(sdk.template),
 
-                KuaString("endpoint_create") to EndpointCreateFunction(sdk),
-                KuaString("endpoint_get") to EndpointGetFunction(sdk),
-                KuaString("endpoint_list") to EndpointListFunction(sdk),
-
                 KuaString("exec_list") to ExecListFunction(sdk),
                 KuaString("exec_get") to ExecGetFunction(sdk),
 
@@ -72,10 +62,6 @@ class PluginSysFactory(
                 KuaString("func_list") to FuncListFunction(sdk),
                 KuaString("func_invoke") to FuncInvokeFunction(sdk),
                 KuaString("func_update") to FuncUpdateFunction(sdk),
-
-                KuaString("hook_create") to HookCreateFunction(sdk),
-                KuaString("hook_get") to HookGetFunction(sdk),
-                KuaString("hook_list") to HookListFunction(sdk),
 
                 KuaString("namespace_append") to NamespaceAppendFunction(sdk),
                 KuaString("namespace_get") to NamespaceGetFunction(sdk),

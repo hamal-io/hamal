@@ -316,8 +316,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     workspaceId = WorkspaceId(4),
                     namespaceId = NamespaceId(5),
                     name = TriggerName("trigger-name"),
-                    inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
-                    hookId = HookId(9),
+                    inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build())
                 )
             )
 
@@ -327,7 +326,6 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 assertThat(namespaceId, equalTo(NamespaceId(5)))
                 assertThat(name, equalTo(TriggerName("trigger-name")))
                 assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
-                assertThat(hookId, equalTo(HookId(9)))
                 assertThat(status, equalTo(Active))
             }
 
@@ -377,7 +375,6 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     workspaceId = WorkspaceId(1),
                     name = TriggerName("trigger-name-3"),
                     funcId = FuncId(1),
-                    hookId = HookId(2),
                 )
 
                 createHookTrigger(
@@ -386,38 +383,9 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     workspaceId = WorkspaceId(1),
                     name = TriggerName("trigger-name-4"),
                     funcId = FuncId(2),
-                    hookId = HookId(1),
                 )
 
                 verifyCount(2)
-            }
-
-
-        @TestFactory
-        fun `Tries to create a trigger when hookId, funcId already exist`() =
-            runWith(TriggerRepository::class) {
-                createHookTrigger(
-                    triggerId = TriggerId(1),
-                    namespaceId = NamespaceId(2),
-                    workspaceId = WorkspaceId(1),
-                    name = TriggerName("trigger-name-1"),
-                    funcId = FuncId(1),
-                    hookId = HookId(1),
-                )
-
-                val exception = assertThrows<IllegalArgumentException> {
-                    createHookTrigger(
-                        triggerId = TriggerId(2),
-                        namespaceId = NamespaceId(2),
-                        workspaceId = WorkspaceId(1),
-                        name = TriggerName("other-trigger"),
-                        funcId = FuncId(1),
-                        hookId = HookId(1),
-                    )
-                }
-                assertThat(exception.message, equalTo("Trigger already exists"))
-                assertThat(find(TriggerId(1)), notNullValue())
-                verifyCount(1)
             }
 
         @TestFactory
@@ -441,8 +409,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                         workspaceId = WorkspaceId(333),
                         namespaceId = NamespaceId(2222),
                         name = TriggerName("second-trigger-name"),
-                        inputs = TriggerInputs(),
-                        hookId = HookId(999),
+                        inputs = TriggerInputs()
                     )
                 )
 
@@ -453,7 +420,6 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     assertThat(namespaceId, equalTo(NamespaceId(2)))
                     assertThat(name, equalTo(TriggerName("first-trigger-name")))
                     assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
-                    assertThat(hookId, equalTo(HookId(9)))
                     assertThat(status, equalTo(Active))
                 }
 
@@ -582,8 +548,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     workspaceId = WorkspaceId(4),
                     namespaceId = NamespaceId(5),
                     name = TriggerName("trigger-name"),
-                    inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
-                    endpointId = EndpointId(6)
+                    inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build())
                 )
             )
 
@@ -593,7 +558,6 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 assertThat(namespaceId, equalTo(NamespaceId(5)))
                 assertThat(name, equalTo(TriggerName("trigger-name")))
                 assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
-                assertThat(endpointId, equalTo(EndpointId(6)))
                 assertThat(status, equalTo(Active))
             }
 
@@ -606,8 +570,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 triggerId = TriggerId(1),
                 namespaceId = NamespaceId(2),
                 workspaceId = WorkspaceId(3),
-                name = TriggerName("trigger-name"),
-                endpointId = EndpointId(4)
+                name = TriggerName("trigger-name")
             )
 
             val result = create(
@@ -618,8 +581,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     workspaceId = WorkspaceId(3),
                     namespaceId = NamespaceId(22),
                     name = TriggerName("trigger-name"),
-                    inputs = TriggerInputs(),
-                    endpointId = EndpointId(4)
+                    inputs = TriggerInputs()
                 )
             )
 
@@ -630,7 +592,6 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 assertThat(namespaceId, equalTo(NamespaceId(22)))
                 assertThat(name, equalTo(TriggerName("trigger-name")))
                 assertThat(inputs, equalTo(TriggerInputs()))
-                assertThat(endpointId, equalTo(EndpointId(4)))
                 assertThat(status, equalTo(Active))
             }
 
@@ -657,8 +618,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                         workspaceId = WorkspaceId(333),
                         namespaceId = NamespaceId(2222),
                         name = TriggerName("second-trigger-name"),
-                        inputs = TriggerInputs(),
-                        endpointId = EndpointId(4)
+                        inputs = TriggerInputs()
                     )
                 )
 
@@ -669,7 +629,6 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     assertThat(namespaceId, equalTo(NamespaceId(2)))
                     assertThat(name, equalTo(TriggerName("first-trigger-name")))
                     assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
-                    assertThat(endpointId, equalTo(EndpointId(9)))
                     assertThat(status, equalTo(Active))
                 }
 
@@ -961,44 +920,6 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
         }
 
         @TestFactory
-        fun `With hook ids`() = runWith(TriggerRepository::class) {
-            setup()
-
-            val query = TriggerQuery(
-                hookIds = listOf(HookId(512)),
-                limit = Limit(10)
-            )
-
-            assertThat(count(query), equalTo(Count(1)))
-            val result = list(query)
-            assertThat(result, hasSize(1))
-
-            with(result[0]) {
-                assertThat(id, equalTo(TriggerId(5)))
-                assertThat(name, equalTo(TriggerName("hook-trigger-one")))
-            }
-        }
-
-        @TestFactory
-        fun `With endpoint ids`() = runWith(TriggerRepository::class) {
-            setup()
-
-            val query = TriggerQuery(
-                endpointIds = listOf(EndpointId(2048)),
-                limit = Limit(10)
-            )
-
-            assertThat(count(query), equalTo(Count(1)))
-            val result = list(query)
-            assertThat(result, hasSize(1))
-
-            with(result[0]) {
-                assertThat(id, equalTo(TriggerId(9)))
-                assertThat(name, equalTo(TriggerName("endpoint-trigger-one")))
-            }
-        }
-
-        @TestFactory
         fun `With namespace ids`() = runWith(TriggerRepository::class) {
             setup()
 
@@ -1111,8 +1032,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 namespaceId = NamespaceId(11),
                 workspaceId = WorkspaceId(6),
                 name = TriggerName("hook-trigger-one"),
-                funcId = FuncId(14),
-                hookId = HookId(512)
+                funcId = FuncId(14)
             )
 
             createHookTrigger(
@@ -1120,8 +1040,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 namespaceId = NamespaceId(12),
                 workspaceId = WorkspaceId(6),
                 name = TriggerName("hook-trigger-two"),
-                funcId = FuncId(15),
-                hookId = HookId(1024)
+                funcId = FuncId(15)
             )
 
             createEventTrigger(
@@ -1147,8 +1066,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 namespaceId = NamespaceId(13),
                 workspaceId = WorkspaceId(6),
                 name = TriggerName("endpoint-trigger-one"),
-                funcId = FuncId(14),
-                endpointId = EndpointId(2048)
+                funcId = FuncId(14)
             )
 
             createEndpointTrigger(
@@ -1156,8 +1074,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 namespaceId = NamespaceId(14),
                 workspaceId = WorkspaceId(6),
                 name = TriggerName("endpoint-trigger-two"),
-                funcId = FuncId(15),
-                endpointId = EndpointId(4096)
+                funcId = FuncId(15)
             )
         }
     }
@@ -1214,8 +1131,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
         namespaceId: NamespaceId,
         name: TriggerName,
         workspaceId: WorkspaceId,
-        funcId: FuncId = FuncId(4),
-        hookId: HookId = HookId(9),
+        funcId: FuncId = FuncId(4)
     ) {
         create(
             CreateHookCmd(
@@ -1225,8 +1141,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 namespaceId = namespaceId,
                 name = name,
                 inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
-                funcId = funcId,
-                hookId = hookId,
+                funcId = funcId
             )
         )
     }
@@ -1259,7 +1174,6 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
         namespaceId: NamespaceId,
         name: TriggerName,
         workspaceId: WorkspaceId,
-        endpointId: EndpointId = EndpointId(9),
         funcId: FuncId = FuncId(4),
         cmdId: CmdId = CmdGen()
     ) {
@@ -1271,8 +1185,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 namespaceId = namespaceId,
                 name = name,
                 inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
-                funcId = funcId,
-                endpointId = endpointId
+                funcId = funcId
             )
         )
     }

@@ -17,8 +17,6 @@ fun Requested.toApiRequested(): ApiRequested = when (this) {
     is AuthUpdatePasswordRequested -> ApiUpdatePasswordRequested(requestId, requestStatus)
     is RecipeCreateRequested -> ApiRecipeCreateRequested(requestId, requestStatus, id)
     is RecipeUpdateRequested -> ApiRecipeUpdateRequested(requestId, requestStatus, id)
-    is EndpointCreateRequested -> ApiEndpointCreateRequested(requestId, requestStatus, id, workspaceId, funcId)
-    is EndpointUpdateRequested -> ApiEndpointUpdateRequested(requestId, requestStatus, id)
     is ExecInvokeRequested -> ApiExecInvokeRequested(requestId, requestStatus, id, workspaceId, namespaceId)
     is ExtensionCreateRequested -> ApiExtensionCreateRequested(requestId, requestStatus, id, workspaceId)
     is ExtensionUpdateRequested -> ApiExtensionUpdateRequested(requestId, requestStatus, id)
@@ -26,8 +24,6 @@ fun Requested.toApiRequested(): ApiRequested = when (this) {
     is FuncCreateRequested -> ApiFuncCreateRequested(requestId, requestStatus, id, workspaceId, namespaceId)
     is FuncDeployRequested -> ApiFuncDeployRequested(requestId, requestStatus, id)
     is FuncUpdateRequested -> ApiFuncUpdateRequested(requestId, requestStatus, id)
-    is HookCreateRequested -> ApiHookCreateRequested(requestId, requestStatus, id, workspaceId, namespaceId)
-    is HookUpdateRequested -> ApiHookUpdateRequested(requestId, requestStatus, id)
     is NamespaceAppendRequested -> ApiNamespaceAppendRequested(requestId, requestStatus,  id, workspaceId)
     is NamespaceUpdateRequested -> ApiNamespaceUpdateRequested(requestId, requestStatus, id)
     is StateSetRequested -> ApiStateSetRequested(requestId, requestStatus)
@@ -39,7 +35,6 @@ fun Requested.toApiRequested(): ApiRequested = when (this) {
     is AuthLogoutRequested,
     is AccountCreateMetaMaskRequested,
     is ExecFailRequested,
-    is HookInvokeRequested,
     is TestRequested,
     is ExecCompleteRequested -> throw NotImplementedError()
 }

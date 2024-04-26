@@ -15,12 +15,10 @@ import io.hamal.repository.sqlite.log.LogSegmentSqliteRepository
 import io.hamal.repository.sqlite.log.LogTopicSqliteRepository
 import io.hamal.repository.sqlite.record.account.AccountSqliteRepository
 import io.hamal.repository.sqlite.record.code.CodeSqliteRepository
-import io.hamal.repository.sqlite.record.endpoint.EndpointSqliteRepository
 import io.hamal.repository.sqlite.record.exec.ExecSqliteRepository
 import io.hamal.repository.sqlite.record.extension.ExtensionSqliteRepository
 import io.hamal.repository.sqlite.record.feedback.FeedbackSqliteRepository
 import io.hamal.repository.sqlite.record.func.FuncSqliteRepository
-import io.hamal.repository.sqlite.record.hook.HookSqliteRepository
 import io.hamal.repository.sqlite.record.namespace.NamespaceSqliteRepository
 import io.hamal.repository.sqlite.record.namespace_tree.NamespaceTreeSqliteRepository
 import io.hamal.repository.sqlite.record.recipe.RecipeSqliteRepository
@@ -38,14 +36,12 @@ object SqliteFixture : BaseTestFixture {
         AuthRepository::class -> AuthSqliteRepository(createTempDirectory("sqlite_auth_test")) as REPO
         RecipeRepository::class -> RecipeSqliteRepository(createTempDirectory("sqlite_recipe_test")) as REPO
         CodeRepository::class -> CodeSqliteRepository(createTempDirectory("sqlite_code_test")) as REPO
-        EndpointRepository::class -> EndpointSqliteRepository(createTempDirectory("sqlite_endpoint_test")) as REPO
         ExecRepository::class -> ExecSqliteRepository(createTempDirectory("sqlite_exec_test")) as REPO
         ExecLogRepository::class -> ExecLogSqliteRepository(createTempDirectory("sqlite_exec_log_test")) as REPO
         ExtensionRepository::class -> ExtensionSqliteRepository(createTempDirectory("sqlite_extension_test")) as REPO
         FeedbackRepository::class -> FeedbackSqliteRepository(createTempDirectory("sqlite_feedback_test")) as REPO
         FuncRepository::class -> FuncSqliteRepository(createTempDirectory("sqlite_func_test")) as REPO
         WorkspaceRepository::class -> WorkspaceSqliteRepository(createTempDirectory("sqlite_workspace_test")) as REPO
-        HookRepository::class -> HookSqliteRepository(createTempDirectory("sqlite_hook_test")) as REPO
         NamespaceRepository::class -> NamespaceSqliteRepository(createTempDirectory("sqlite_namespace_test")) as REPO
         NamespaceTreeRepository::class -> NamespaceTreeSqliteRepository(createTempDirectory("sqlite_namespace_tree_test")) as REPO
         StateRepository::class -> StateSqliteRepository(createTempDirectory("sqlite_state_test")) as REPO

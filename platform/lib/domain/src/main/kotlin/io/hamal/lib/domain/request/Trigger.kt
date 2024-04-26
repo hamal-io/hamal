@@ -14,9 +14,7 @@ interface TriggerCreateRequest {
     val correlationId: CorrelationId?
     val duration: TriggerDuration?
     val topicId: TopicId?
-    val hookId: HookId?
     val cron: CronPattern?
-    val endpointId: EndpointId?
 }
 
 data class TriggerCreateRequested(
@@ -33,9 +31,7 @@ data class TriggerCreateRequested(
     val correlationId: CorrelationId? = null,
     val duration: TriggerDuration? = null,
     val topicId: TopicId? = null,
-    val hookId: HookId? = null,
-    val cron: CronPattern? = null,
-    val endpointId: EndpointId? = null,
+    val cron: CronPattern? = null
 ) : Requested()
 
 data class TriggerStatusRequested(

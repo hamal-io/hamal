@@ -28,11 +28,7 @@ data class TriggerEntity(
 
     var topicId: TopicId? = null,
     var duration: TriggerDuration? = null,
-    var hookId: HookId? = null,
-
     var cron: CronPattern? = null,
-
-    var endpointId: EndpointId? = null,
 
     var status: TriggerStatus? = null
 
@@ -83,7 +79,6 @@ data class TriggerEntity(
                 type = Hook,
                 inputs = rec.inputs,
                 correlationId = rec.correlationId,
-                hookId = rec.hookId,
                 recordedAt = rec.recordedAt(),
                 status = rec.status
             )
@@ -115,7 +110,6 @@ data class TriggerEntity(
                 type = Endpoint,
                 inputs = rec.inputs,
                 correlationId = rec.correlationId,
-                endpointId = rec.endpointId,
                 recordedAt = rec.recordedAt(),
                 status = rec.status
             )
@@ -174,7 +168,6 @@ data class TriggerEntity(
                 correlationId = correlationId,
                 name = name!!,
                 inputs = inputs!!,
-                hookId = hookId!!,
                 status = status!!
             )
 
@@ -202,7 +195,6 @@ data class TriggerEntity(
                 correlationId = correlationId,
                 name = name!!,
                 inputs = inputs!!,
-                endpointId = endpointId!!,
                 status = status!!
             )
         }

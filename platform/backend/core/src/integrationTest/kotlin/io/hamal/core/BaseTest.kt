@@ -48,9 +48,6 @@ internal abstract class BaseTest {
     lateinit var codeQueryRepository: CodeQueryRepository
 
     @Autowired
-    lateinit var endpointRepository: EndpointRepository
-
-    @Autowired
     lateinit var execCmdRepository: ExecCmdRepository
 
     @Autowired
@@ -70,9 +67,6 @@ internal abstract class BaseTest {
 
     @Autowired
     lateinit var workspaceCmdRepository: WorkspaceCmdRepository
-
-    @Autowired
-    lateinit var hookRepository: HookRepository
 
     @Autowired
     lateinit var namespaceQueryRepository: NamespaceQueryRepository
@@ -138,7 +132,6 @@ internal abstract class BaseTest {
         funcCmdRepository.clear()
         namespaceCmdRepository.clear()
         workspaceCmdRepository.clear()
-        hookRepository.clear()
         recipeCmdRepository.clear()
         requestCmdRepository.clear()
         stateCmdRepository.clear()

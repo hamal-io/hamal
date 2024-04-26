@@ -9,12 +9,10 @@ import io.hamal.repository.sqlite.StateSqliteRepository
 import io.hamal.repository.sqlite.log.LogBrokerSqliteRepository
 import io.hamal.repository.sqlite.record.account.AccountSqliteRepository
 import io.hamal.repository.sqlite.record.code.CodeSqliteRepository
-import io.hamal.repository.sqlite.record.endpoint.EndpointSqliteRepository
 import io.hamal.repository.sqlite.record.exec.ExecSqliteRepository
 import io.hamal.repository.sqlite.record.extension.ExtensionSqliteRepository
 import io.hamal.repository.sqlite.record.feedback.FeedbackSqliteRepository
 import io.hamal.repository.sqlite.record.func.FuncSqliteRepository
-import io.hamal.repository.sqlite.record.hook.HookSqliteRepository
 import io.hamal.repository.sqlite.record.namespace.NamespaceSqliteRepository
 import io.hamal.repository.sqlite.record.namespace_tree.NamespaceTreeSqliteRepository
 import io.hamal.repository.sqlite.record.recipe.RecipeSqliteRepository
@@ -59,15 +57,6 @@ open class SqliteRepositoryConfig(backendBasePath: BackendBasePath) {
     open fun codeQueryRepository() = codeRepository()
 
     @Bean
-    open fun endpointRepository() = EndpointSqliteRepository(path)
-
-    @Bean
-    open fun endpointCmdRepository() = endpointRepository()
-
-    @Bean
-    open fun endpointQueryRepository() = endpointRepository()
-
-    @Bean
     open fun extensionRepository() = ExtensionSqliteRepository(path)
 
     @Bean
@@ -102,15 +91,6 @@ open class SqliteRepositoryConfig(backendBasePath: BackendBasePath) {
 
     @Bean
     open fun workspaceCmdRepository() = workspaceRepository()
-
-    @Bean
-    open fun hookRepository() = HookSqliteRepository(path)
-
-    @Bean
-    open fun hookQueryRepository() = hookRepository()
-
-    @Bean
-    open fun hookCmdRepository() = hookRepository()
 
     @Bean
     open fun namespaceRepository() = NamespaceSqliteRepository(path)

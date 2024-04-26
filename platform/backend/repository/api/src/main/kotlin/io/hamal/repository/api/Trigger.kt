@@ -55,7 +55,6 @@ interface TriggerCmdRepository : CmdRepository {
         val funcId: FuncId,
         val namespaceId: NamespaceId,
         val inputs: TriggerInputs,
-        val hookId: HookId,
         val correlationId: CorrelationId? = null,
         val status: TriggerStatus = TriggerStatus.Active
     )
@@ -81,7 +80,6 @@ interface TriggerCmdRepository : CmdRepository {
         val funcId: FuncId,
         val namespaceId: NamespaceId,
         val inputs: TriggerInputs,
-        val endpointId: EndpointId,
         val correlationId: CorrelationId? = null,
         val status: TriggerStatus = TriggerStatus.Active
     )
@@ -105,8 +103,6 @@ interface TriggerQueryRepository {
         var triggerIds: List<TriggerId> = listOf(),
         var funcIds: List<FuncId> = listOf(),
         var topicIds: List<TopicId> = listOf(),
-        var hookIds: List<HookId> = listOf(),
-        var endpointIds: List<EndpointId> = listOf(),
         var workspaceIds: List<WorkspaceId> = listOf(),
         var namespaceIds: List<NamespaceId> = listOf()
     )
@@ -192,8 +188,7 @@ sealed interface Trigger : DomainObject<TriggerId>, HasNamespaceId, HasWorkspace
         override val namespaceId: NamespaceId,
         override val inputs: TriggerInputs,
         override val status: TriggerStatus,
-        override val correlationId: CorrelationId? = null,
-        val endpointId: EndpointId
+        override val correlationId: CorrelationId? = null
     ) : Trigger {
         override val type = TriggerType.Endpoint
     }
@@ -208,8 +203,7 @@ sealed interface Trigger : DomainObject<TriggerId>, HasNamespaceId, HasWorkspace
         override val namespaceId: NamespaceId,
         override val inputs: TriggerInputs,
         override val status: TriggerStatus,
-        override val correlationId: CorrelationId? = null,
-        val hookId: HookId,
+        override val correlationId: CorrelationId? = null
     ) : Trigger {
         override val type = TriggerType.Hook
     }

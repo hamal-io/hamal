@@ -17,7 +17,7 @@ import kotlin.concurrent.withLock
 class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord, Trigger>(
     createDomainObject = CreateTriggerFromRecords,
     recordClass = TriggerRecord::class,
-    projections = listOf(ProjectionCurrent(), ProjectionUniqueHook(), ProjectionUniqueEndpoint())
+    projections = listOf(ProjectionCurrent())
 ), TriggerRepository {
 
     override fun create(cmd: CreateFixedRateCmd): Trigger.FixedRate {
@@ -85,13 +85,11 @@ class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord,
                         namespaceId = cmd.namespaceId,
                         name = cmd.name,
                         inputs = cmd.inputs,
-                        hookId = cmd.hookId,
                         correlationId = cmd.correlationId,
                         status = cmd.status
                     )
                 )
                 (currentVersion(triggerId) as Trigger.Hook)
-                    .also(uniqueHookProjection::upsert)
                     .also(currentProjection::upsert)
             }
         }
@@ -137,13 +135,11 @@ class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord,
                         namespaceId = cmd.namespaceId,
                         name = cmd.name,
                         inputs = cmd.inputs,
-                        endpointId = cmd.endpointId,
                         correlationId = cmd.correlationId,
                         status = cmd.status
                     )
                 )
                 (currentVersion(triggerId) as Trigger.Endpoint)
-                    .also(uniqueEndpointProjection::upsert)
                     .also(currentProjection::upsert)
             }
         }
@@ -181,6 +177,4 @@ class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord,
 
     private val lock = ReentrantLock()
     private val currentProjection = getProjection<ProjectionCurrent>()
-    private val uniqueHookProjection = getProjection<ProjectionUniqueHook>()
-    private val uniqueEndpointProjection = getProjection<ProjectionUniqueEndpoint>()
 }

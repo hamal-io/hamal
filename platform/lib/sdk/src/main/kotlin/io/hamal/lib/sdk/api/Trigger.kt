@@ -14,7 +14,6 @@ import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpRequest
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
-import io.hamal.lib.sdk.api.ApiTrigger.Endpoint
 import io.hamal.lib.sdk.api.ApiTriggerService.TriggerQuery
 import io.hamal.lib.sdk.fold
 
@@ -26,9 +25,7 @@ data class ApiTriggerCreateReq(
     override val correlationId: CorrelationId? = null,
     override val duration: TriggerDuration? = null,
     override val topicId: TopicId? = null,
-    override val hookId: HookId? = null,
     override val cron: CronPattern? = null,
-    override val endpointId: EndpointId? = null
 ) : TriggerCreateRequest
 
 data class ApiTriggerCreateRequested(
@@ -133,14 +130,8 @@ data class ApiTriggerList(
         override val func: Trigger.Func,
         override val namespace: Trigger.Namespace,
         override val status: TriggerStatus,
-        val hook: Hook
     ) : Trigger {
         override val type: TriggerType = TriggerType.Hook
-
-        data class Hook(
-            val id: HookId,
-            val name: HookName
-        )
     }
 
     class Cron(
@@ -159,15 +150,9 @@ data class ApiTriggerList(
         override val name: TriggerName,
         override val func: Trigger.Func,
         override val namespace: Trigger.Namespace,
-        override val status: TriggerStatus,
-        val endpoint: Endpoint
+        override val status: TriggerStatus
     ) : Trigger {
         override val type: TriggerType = TriggerType.Endpoint
-
-        data class Endpoint(
-            val id: EndpointId,
-            val name: EndpointName
-        )
     }
 }
 
@@ -260,15 +245,9 @@ sealed class ApiTrigger : ApiObject() {
         override val namespace: Namespace,
         override val inputs: TriggerInputs,
         override val status: TriggerStatus,
-        override val correlationId: CorrelationId? = null,
-        val hook: Hook
+        override val correlationId: CorrelationId? = null
     ) : ApiTrigger() {
         override val type: TriggerType = TriggerType.Hook
-
-        data class Hook(
-            val id: HookId,
-            val name: HookName
-        )
     }
 
 
@@ -292,15 +271,9 @@ sealed class ApiTrigger : ApiObject() {
         override val namespace: Namespace,
         override val inputs: TriggerInputs,
         override val status: TriggerStatus,
-        override val correlationId: CorrelationId? = null,
-        val endpoint: Endpoint
+        override val correlationId: CorrelationId? = null
     ) : ApiTrigger() {
         override val type: TriggerType = TriggerType.Endpoint
-
-        data class Endpoint(
-            val id: EndpointId,
-            val name: EndpointName
-        )
     }
 
 }

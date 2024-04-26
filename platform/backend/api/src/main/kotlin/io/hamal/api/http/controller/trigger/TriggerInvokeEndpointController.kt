@@ -1,12 +1,12 @@
-package io.hamal.api.http.controller.endpoint
+package io.hamal.api.http.controller.trigger
 
-import io.hamal.core.adapter.endpoint.EndpointInvokePort
 import io.hamal.core.adapter.func.FuncGetPort
+import io.hamal.core.adapter.trigger.TriggerInvokeEndpointPort
 import io.hamal.core.security.SecurityContext
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain._enum.EndpointMethod
-import io.hamal.lib.domain.vo.EndpointId
 import io.hamal.lib.domain.vo.InvocationInputs
+import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.sdk.api.ApiExec
 import io.hamal.repository.api.Auth
 import io.hamal.repository.api.Exec
@@ -17,38 +17,38 @@ import org.springframework.web.bind.annotation.*
 import java.util.concurrent.CompletableFuture
 
 @RestController
-internal class EndpointInvokeController(
-    private val endpointInvoke: EndpointInvokePort,
+internal class TriggerInvokeEndpointController(
+    private val endpointInvoke: TriggerInvokeEndpointPort,
     private val funcGet: FuncGetPort
 ) {
 
     @GetMapping("/v1/endpoints/{id}/invoke")
-    fun invokeGet(@PathVariable("id") id: EndpointId, req: HttpServletRequest) =
+    fun invokeGet(@PathVariable("id") id: TriggerId, req: HttpServletRequest) =
         handle(id, req, SecurityContext.current)
 
     @PostMapping("/v1/endpoints/{id}/invoke")
-    fun invokePost(@PathVariable("id") id: EndpointId, req: HttpServletRequest) =
+    fun invokePost(@PathVariable("id") id: TriggerId, req: HttpServletRequest) =
         handle(id, req, SecurityContext.current)
 
     @PatchMapping("/v1/endpoints/{id}/invoke")
-    fun invokePatch(@PathVariable("id") id: EndpointId, req: HttpServletRequest) =
+    fun invokePatch(@PathVariable("id") id: TriggerId, req: HttpServletRequest) =
         handle(id, req, SecurityContext.current)
 
     @PutMapping("/v1/endpoints/{id}/invoke")
-    fun invokePut(@PathVariable("id") id: EndpointId, req: HttpServletRequest) =
+    fun invokePut(@PathVariable("id") id: TriggerId, req: HttpServletRequest) =
         handle(id, req, SecurityContext.current)
 
     @DeleteMapping("/v1/endpoints/{id}/invoke")
-    fun invokeDelete(@PathVariable("id") id: EndpointId, req: HttpServletRequest) =
+    fun invokeDelete(@PathVariable("id") id: TriggerId, req: HttpServletRequest) =
         handle(id, req, SecurityContext.current)
 
     private fun handle(
-        id: EndpointId,
+        id: TriggerId,
         req: HttpServletRequest,
         auth: Auth
     ): CompletableFuture<ResponseEntity<ApiExec>> {
         return endpointInvoke(
-            endpointId = id,
+            triggerId = id,
             inputs = InvocationInputs(
                 HotObject.builder()
                     .set("method", req.method())

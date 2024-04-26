@@ -44,7 +44,7 @@ class TriggerSqliteRepository(
     filename = "trigger.db",
     createDomainObject = CreateTrigger,
     recordClass = TriggerRecord::class,
-    projections = listOf(ProjectionCurrent, ProjectionUniqueName, ProjectionUniqueHook, ProjectionUniqueEndpoint)
+    projections = listOf(ProjectionCurrent, ProjectionUniqueName)
 ), TriggerRepository {
 
     override fun create(cmd: CreateFixedRateCmd): Trigger.FixedRate {
@@ -120,14 +120,14 @@ class TriggerSqliteRepository(
                         namespaceId = cmd.namespaceId,
                         name = cmd.name,
                         inputs = cmd.inputs,
-                        hookId = cmd.hookId,
                         status = cmd.status,
                         correlationId = cmd.correlationId
                     )
                 )
 
-                (currentVersion(triggerId) as Trigger.Hook).also { ProjectionCurrent.upsert(this, it) }
-                    .also { ProjectionUniqueName.upsert(this, it) }.also { ProjectionUniqueHook.upsert(this, it) }
+                (currentVersion(triggerId) as Trigger.Hook)
+                    .also { ProjectionCurrent.upsert(this, it) }
+                    .also { ProjectionUniqueName.upsert(this, it) }
             }
         }
     }
@@ -176,14 +176,14 @@ class TriggerSqliteRepository(
                         namespaceId = cmd.namespaceId,
                         name = cmd.name,
                         inputs = cmd.inputs,
-                        endpointId = cmd.endpointId,
                         status = cmd.status,
                         correlationId = cmd.correlationId
                     )
                 )
 
-                (currentVersion(triggerId) as Trigger.Endpoint).also { ProjectionCurrent.upsert(this, it) }
-                    .also { ProjectionUniqueName.upsert(this, it) }.also { ProjectionUniqueEndpoint.upsert(this, it) }
+                (currentVersion(triggerId) as Trigger.Endpoint)
+                    .also { ProjectionCurrent.upsert(this, it) }
+                    .also { ProjectionUniqueName.upsert(this, it) }
             }
         }
     }

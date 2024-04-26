@@ -60,7 +60,6 @@ sealed class TriggerRecord(
         val namespaceId: NamespaceId,
         val name: TriggerName,
         val inputs: TriggerInputs,
-        val hookId: HookId,
         val status: TriggerStatus,
         val correlationId: CorrelationId? = null
     ) : TriggerRecord()
@@ -86,7 +85,6 @@ sealed class TriggerRecord(
         val namespaceId: NamespaceId,
         val name: TriggerName,
         val inputs: TriggerInputs,
-        val endpointId: EndpointId,
         val status: TriggerStatus,
         val correlationId: CorrelationId? = null
     ) : TriggerRecord()

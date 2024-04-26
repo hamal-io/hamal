@@ -8,12 +8,10 @@ import io.hamal.repository.memory.StateMemoryRepository
 import io.hamal.repository.memory.log.LogBrokerMemoryRepository
 import io.hamal.repository.memory.record.account.AccountMemoryRepository
 import io.hamal.repository.memory.record.code.CodeMemoryRepository
-import io.hamal.repository.memory.record.endpoint.EndpointMemoryRepository
 import io.hamal.repository.memory.record.exec.ExecMemoryRepository
 import io.hamal.repository.memory.record.extension.ExtensionMemoryRepository
 import io.hamal.repository.memory.record.feedback.FeedbackMemoryRepository
 import io.hamal.repository.memory.record.func.FuncMemoryRepository
-import io.hamal.repository.memory.record.hook.HookMemoryRepository
 import io.hamal.repository.memory.record.namespace.NamespaceMemoryRepository
 import io.hamal.repository.memory.record.namespace_tree.NamespaceTreeMemoryRepository
 import io.hamal.repository.memory.record.recipe.RecipeMemoryRepository
@@ -56,15 +54,6 @@ open class MemoryRepositoryConfig {
     open fun codeQueryRepository() = codeRepository()
 
     @Bean
-    open fun endpointRepository() = EndpointMemoryRepository()
-
-    @Bean
-    open fun endpointCmdRepository() = endpointRepository()
-
-    @Bean
-    open fun endpointQueryRepository() = endpointRepository()
-
-    @Bean
     open fun extensionRepository() = ExtensionMemoryRepository()
 
     @Bean
@@ -99,15 +88,6 @@ open class MemoryRepositoryConfig {
 
     @Bean
     open fun workspaceCmdRepository() = workspaceRepository()
-
-    @Bean
-    open fun hookRepository() = HookMemoryRepository()
-
-    @Bean
-    open fun hookQueryRepository() = hookRepository()
-
-    @Bean
-    open fun hookCmdRepository() = hookRepository()
 
     @Bean
     open fun namespaceRepository() = NamespaceMemoryRepository()

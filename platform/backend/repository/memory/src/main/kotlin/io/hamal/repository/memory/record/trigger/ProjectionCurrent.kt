@@ -46,28 +46,6 @@ internal class ProjectionCurrent : ProjectionMemory<TriggerId, Trigger> {
                     }
                 }
             }
-            .filter {
-                if (query.hookIds.isEmpty()) {
-                    true
-                } else {
-                    if (it is Trigger.Hook) {
-                        query.hookIds.contains(it.hookId)
-                    } else {
-                        false
-                    }
-                }
-            }
-            .filter {
-                if (query.endpointIds.isEmpty()) {
-                    true
-                } else {
-                    if (it is Trigger.Endpoint) {
-                        query.endpointIds.contains(it.endpointId)
-                    } else {
-                        false
-                    }
-                }
-            }
             .dropWhile { it.id >= query.afterId }
             .take(query.limit.value)
             .toList()
@@ -89,28 +67,6 @@ internal class ProjectionCurrent : ProjectionMemory<TriggerId, Trigger> {
                     } else {
                         if (it is Trigger.Event) {
                             query.topicIds.contains(it.topicId)
-                        } else {
-                            false
-                        }
-                    }
-                }
-                .filter {
-                    if (query.hookIds.isEmpty()) {
-                        true
-                    } else {
-                        if (it is Trigger.Hook) {
-                            query.hookIds.contains(it.hookId)
-                        } else {
-                            false
-                        }
-                    }
-                }
-                .filter {
-                    if (query.endpointIds.isEmpty()) {
-                        true
-                    } else {
-                        if (it is Trigger.Endpoint) {
-                            query.endpointIds.contains(it.endpointId)
                         } else {
                             false
                         }

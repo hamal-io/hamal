@@ -93,7 +93,6 @@ internal class TriggerGetControllerTest : TriggerBaseControllerTest() {
 
     @Test
     fun `Get hook trigger`() {
-        val hookId = awaitCompleted(createHook(HookName("some-hook"))).id
         val funcId = awaitCompleted(createFunc(FuncName("some-func-to-trigger"))).id
 
         val triggerId = awaitCompleted(
@@ -103,8 +102,7 @@ internal class TriggerGetControllerTest : TriggerBaseControllerTest() {
                     correlationId = null,
                     name = TriggerName("trigger-one"),
                     inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
-                    funcId = funcId,
-                    hookId = hookId
+                    funcId = funcId
                 )
             )
         ).id
@@ -120,8 +118,6 @@ internal class TriggerGetControllerTest : TriggerBaseControllerTest() {
             assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
             assertThat(func.id, equalTo(funcId))
             assertThat(func.name, equalTo(FuncName("some-func-to-trigger")))
-            assertThat(hook.id, equalTo(hookId))
-            assertThat(hook.name, equalTo(HookName("some-hook")))
         }
     }
 

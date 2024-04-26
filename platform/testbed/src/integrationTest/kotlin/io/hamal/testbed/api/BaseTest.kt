@@ -103,13 +103,11 @@ class ClearController {
         accountRepository.clear()
         authRepository.clear()
         codeRepository.clear()
-        endpointRepository.clear()
         extensionRepository.clear()
         requestRepository.clear()
         execRepository.clear()
         funcRepository.clear()
         workspaceRepository.clear()
-        hookRepository.clear()
         namespaceRepository.clear()
         namespaceTreeRepository.clear()
         recipeRepository.clear()
@@ -173,9 +171,6 @@ class ClearController {
     lateinit var codeRepository: CodeRepository
 
     @Autowired
-    lateinit var endpointRepository: EndpointRepository
-
-    @Autowired
     lateinit var execRepository: ExecRepository
 
     @Autowired
@@ -186,9 +181,6 @@ class ClearController {
 
     @Autowired
     lateinit var workspaceRepository: WorkspaceRepository
-
-    @Autowired
-    lateinit var hookRepository: HookRepository
 
     @Autowired
     lateinit var namespaceRepository: NamespaceRepository

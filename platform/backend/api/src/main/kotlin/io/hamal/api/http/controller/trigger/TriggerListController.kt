@@ -1,8 +1,6 @@
 package io.hamal.api.http.controller.trigger
 
-import io.hamal.core.adapter.endpoint.EndpointListPort
 import io.hamal.core.adapter.func.FuncListPort
-import io.hamal.core.adapter.hook.HookListPort
 import io.hamal.core.adapter.namespace.NamespaceListPort
 import io.hamal.core.adapter.namespace_tree.NamespaceTreeGetSubTreePort
 import io.hamal.core.adapter.topic.TopicListPort
@@ -14,14 +12,10 @@ import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.sdk.api.ApiTriggerList
-import io.hamal.lib.sdk.api.ApiTriggerList.Endpoint.Endpoint
 import io.hamal.lib.sdk.api.ApiTriggerList.Event.Topic
-import io.hamal.lib.sdk.api.ApiTriggerList.Hook.Hook
 import io.hamal.lib.sdk.api.ApiTriggerList.Trigger.Func
 import io.hamal.lib.sdk.api.ApiTriggerList.Trigger.Namespace
-import io.hamal.repository.api.EndpointQueryRepository.EndpointQuery
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
-import io.hamal.repository.api.HookQueryRepository.HookQuery
 import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
 import io.hamal.repository.api.TopicQueryRepository.TopicQuery
 import io.hamal.repository.api.Trigger
@@ -39,8 +33,6 @@ class TriggerListController(
     private val funcList: FuncListPort,
     private val namespaceList: NamespaceListPort,
     private val topicList: TopicListPort,
-    private val hookList: HookListPort,
-    private val endpointList: EndpointListPort,
     private val namespaceTreeGetSubTree: NamespaceTreeGetSubTreePort
 ) {
 
@@ -102,16 +94,6 @@ class TriggerListController(
                 topicIds = triggers.filterIsInstance<Trigger.Event>().map { it.topicId }
             )).associateBy { it.id }
 
-            val hooks = hookList(HookQuery(
-                limit = Limit.all,
-                hookIds = triggers.filterIsInstance<Trigger.Hook>().map { it.hookId }
-            )).associateBy { it.id }
-
-            val endpoints = endpointList(EndpointQuery(
-                limit = Limit.all,
-                endpointIds = triggers.filterIsInstance<Trigger.Endpoint>().map { it.endpointId }
-            )).associateBy { it.id }
-
             ResponseEntity.ok(
                 ApiTriggerList(
                     triggers.map { trigger ->
@@ -165,10 +147,6 @@ class TriggerListController(
                                         id = trigger.namespaceId,
                                         name = namespaces[trigger.namespaceId]!!.name
                                     ),
-                                    hook = Hook(
-                                        id = trigger.hookId,
-                                        name = hooks[trigger.hookId]!!.name
-                                    ),
                                     status = trigger.status
                                 )
                             }
@@ -201,10 +179,6 @@ class TriggerListController(
                                     namespace = Namespace(
                                         id = trigger.namespaceId,
                                         name = namespaces[trigger.namespaceId]!!.name
-                                    ),
-                                    endpoint = Endpoint(
-                                        id = trigger.endpointId,
-                                        name = endpoints[trigger.endpointId]!!.name,
                                     ),
                                     status = trigger.status
                                 )

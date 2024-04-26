@@ -15,7 +15,6 @@ import io.hamal.lib.domain._enum.TopicType
 import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.*
-import io.hamal.repository.api.EndpointCmdRepository.CreateCmd
 import io.hamal.repository.api.ExecCmdRepository.PlanCmd
 import jakarta.annotation.PostConstruct
 import org.junit.jupiter.api.fail
@@ -153,17 +152,6 @@ class TestSetupConfig {
             )
         )
 
-        endpointRepository.create(
-            CreateCmd(
-                id = CmdId(id),
-                endpointId = EndpointId(id),
-                funcId = FuncId(id),
-                workspaceId = WorkspaceId(id),
-                namespaceId = NamespaceId(id),
-                name = EndpointName("$id-name"),
-            )
-        )
-
         execRepository.plan(
             PlanCmd(
                 id = CmdId(id),
@@ -203,16 +191,6 @@ class TestSetupConfig {
                     id = CodeId(id),
                     version = CodeVersion(1)
                 ),
-                workspaceId = WorkspaceId(id)
-            )
-        )
-
-        hookRepository.create(
-            HookCmdRepository.CreateCmd(
-                id = CmdId(id),
-                hookId = HookId(id),
-                name = HookName("$id-hook"),
-                namespaceId = NamespaceId(id),
                 workspaceId = WorkspaceId(id)
             )
         )
@@ -303,8 +281,7 @@ class TestSetupConfig {
                 workspaceId = WorkspaceId(id),
                 namespaceId = NamespaceId(id),
                 inputs = TriggerInputs(),
-                status = TriggerStatus.Inactive,
-                hookId = HookId(id)
+                status = TriggerStatus.Inactive
             )
         )
 
@@ -334,9 +311,6 @@ class TestSetupConfig {
     lateinit var codeRepository: CodeRepository
 
     @Autowired
-    lateinit var endpointRepository: EndpointRepository
-
-    @Autowired
     lateinit var execRepository: ExecRepository
 
     @Autowired
@@ -347,9 +321,6 @@ class TestSetupConfig {
 
     @Autowired
     lateinit var funcRepository: FuncRepository
-
-    @Autowired
-    lateinit var hookRepository: HookRepository
 
     @Autowired
     lateinit var namespaceRepository: NamespaceRepository
