@@ -17,19 +17,19 @@ import org.springframework.web.bind.annotation.*
 internal class HookInvokeController(
     private val hookInvoke: HookInvokePort
 ) {
-    @GetMapping("/v1/webhooks/{id}")
+    @GetMapping("/v1/hooks/{id}/invoke")
     fun webhookGet(@PathVariable("id") id: HookId, req: HttpServletRequest) = handle(id, req)
 
-    @PostMapping("/v1/webhooks/{id}")
+    @PostMapping("/v1/hooks/{id}/invoke")
     fun webhookPost(@PathVariable("id") id: HookId, req: HttpServletRequest) = handle(id, req)
 
-    @PatchMapping("/v1/webhooks/{id}")
+    @PatchMapping("/v1/hooks/{id}/invoke")
     fun webhookPatch(@PathVariable("id") id: HookId, req: HttpServletRequest) = handle(id, req)
 
-    @PutMapping("/v1/webhooks/{id}")
+    @PutMapping("/v1/hooks/{id}/invoke")
     fun webhookPut(@PathVariable("id") id: HookId, req: HttpServletRequest) = handle(id, req)
 
-    @DeleteMapping("/v1/webhooks/{id}")
+    @DeleteMapping("/v1/hooks/{id}/invoke")
     fun webhookDelete(@PathVariable("id") id: HookId, req: HttpServletRequest) = handle(id, req)
 
     private fun handle(id: HookId, req: HttpServletRequest): ResponseEntity<Response> {
