@@ -140,7 +140,7 @@ export const useMetaMaskToken = (): [MetaMaskTokenAction, string, boolean, Error
 
                     setAuth({
                         type: 'User',
-                        accountId: data.accountId,
+                        accountId: data.id,
                         workspaceId: data.workspaceIds[0],
                         token: data.token,
                         address: data.address

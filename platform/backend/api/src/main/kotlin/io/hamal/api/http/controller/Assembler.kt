@@ -12,7 +12,7 @@ fun Requested.toApiRequested(): ApiRequested = when (this) {
     is AccountCreateRequested -> ApiTokenRequested(requestId, requestStatus, accountId, listOf(workspaceId), token)
     is AccountCreateAnonymousRequested -> ApiTokenRequested(requestId, requestStatus, id, listOf(workspaceId), token)
     is AccountConvertRequested -> ApiAccountConvertRequested(requestId, requestStatus, id, token)
-    is AuthLoginMetaMaskRequested -> ApiTokenRequested(requestId, requestStatus, accountId, workspaceIds, token)
+    is AuthLoginMetaMaskRequested -> ApiTokenRequested(requestId, requestStatus, accountId, workspaceIds, token, address)
     is AuthLoginEmailRequested -> ApiTokenRequested(requestId, requestStatus, accountId, workspaceIds,  token)
     is AuthUpdatePasswordRequested -> ApiUpdatePasswordRequested(requestId, requestStatus)
     is RecipeCreateRequested -> ApiRecipeCreateRequested(requestId, requestStatus, id)

@@ -41,7 +41,8 @@ data class ApiTokenRequested(
     override val requestStatus: RequestStatus,
     val id: AccountId,
     val workspaceIds: List<WorkspaceId>,
-    val token: AuthToken
+    val token: AuthToken,
+    val address: Web3Address? = null,
 ) : ApiRequested()
 
 data class ApiAccountConvertRequested(
