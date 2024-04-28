@@ -66,6 +66,14 @@ data class ApiExec(
     )
 }
 
+data class ApiExecEndpoint(
+    val id: ExecId,
+    val status: ExecStatus,
+    val correlation: CorrelationId?,
+    val result: ExecResult?
+) : ApiObject()
+
+
 interface ApiExecService {
     fun list(query: ExecQuery): List<ApiExecList.Exec>
     fun get(execId: ExecId): ApiExec

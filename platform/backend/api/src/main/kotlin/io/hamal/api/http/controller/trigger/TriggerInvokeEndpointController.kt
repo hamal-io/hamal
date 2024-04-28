@@ -1,13 +1,12 @@
 package io.hamal.api.http.controller.trigger
 
-import io.hamal.core.adapter.func.FuncGetPort
 import io.hamal.core.adapter.trigger.TriggerInvokeEndpointPort
 import io.hamal.core.security.SecurityContext
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain._enum.EndpointMethod
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.domain.vo.TriggerId
-import io.hamal.lib.sdk.api.ApiExec
+import io.hamal.lib.sdk.api.ApiExecEndpoint
 import io.hamal.repository.api.Auth
 import io.hamal.repository.api.Exec
 import io.hamal.repository.record.json
@@ -18,8 +17,7 @@ import java.util.concurrent.CompletableFuture
 
 @RestController
 internal class TriggerInvokeEndpointController(
-    private val endpointInvoke: TriggerInvokeEndpointPort,
-    private val funcGet: FuncGetPort
+    private val endpointInvoke: TriggerInvokeEndpointPort
 ) {
 
     @GetMapping("/v1/endpoints/{id}")
@@ -46,7 +44,7 @@ internal class TriggerInvokeEndpointController(
         id: TriggerId,
         req: HttpServletRequest,
         auth: Auth
-    ): CompletableFuture<ResponseEntity<ApiExec>> {
+    ): CompletableFuture<ResponseEntity<ApiExecEndpoint>> {
         return endpointInvoke(
             triggerId = id,
             inputs = InvocationInputs(
@@ -59,34 +57,20 @@ internal class TriggerInvokeEndpointController(
             ),
             auth
         ).thenApply { exec ->
-            SecurityContext.with(auth) {
-                val func = funcGet(exec.correlation!!.funcId)
-
-                ResponseEntity.ok(
-                    ApiExec(
-                        id = exec.id,
-                        status = exec.status,
-                        correlation = exec.correlation?.id,
-                        inputs = exec.inputs,
-                        result = if (exec is Exec.Completed) {
-                            exec.result
-                        } else if (exec is Exec.Failed) {
-                            exec.result
-                        } else {
-                            null
-                        },
-                        state = if (exec is Exec.Completed) {
-                            exec.state
-                        } else {
-                            null
-                        },
-                        func = ApiExec.Func(
-                            id = func.id,
-                            name = func.name
-                        )
-                    )
+            ResponseEntity.ok(
+                ApiExecEndpoint(
+                    id = exec.id,
+                    status = exec.status,
+                    correlation = exec.correlation?.id,
+                    result = if (exec is Exec.Completed) {
+                        exec.result
+                    } else if (exec is Exec.Failed) {
+                        exec.result
+                    } else {
+                        null
+                    }
                 )
-            }
+            )
         }
     }
 }

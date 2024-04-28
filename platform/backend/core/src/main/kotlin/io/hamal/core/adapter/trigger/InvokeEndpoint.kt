@@ -1,9 +1,6 @@
 package io.hamal.core.adapter.trigger
 
-import io.hamal.core.adapter.exec.ExecFindPort
-import io.hamal.core.adapter.func.FuncGetPort
 import io.hamal.core.adapter.request.RequestEnqueuePort
-import io.hamal.core.security.SecurityContext
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.RequestStatus
@@ -11,9 +8,7 @@ import io.hamal.lib.domain.request.ExecInvokeRequested
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.ExecStatus.Completed
 import io.hamal.lib.domain.vo.ExecStatus.Failed
-import io.hamal.repository.api.Auth
-import io.hamal.repository.api.Exec
-import io.hamal.repository.api.Trigger
+import io.hamal.repository.api.*
 import org.springframework.stereotype.Component
 import java.util.concurrent.CompletableFuture
 
@@ -25,27 +20,25 @@ fun interface TriggerInvokeEndpointPort {
 class TriggerInvokeEndpointAdapter(
     private val generateDomainId: GenerateDomainId,
     private val requestEnqueue: RequestEnqueuePort,
-    private val triggerGet: TriggerGetPort,
-    private val funcGet: FuncGetPort,
-    private val execFind: ExecFindPort
+    private val triggerRepository: TriggerRepository,
+    private val funcRepository: FuncRepository,
+    private val execRepository: ExecRepository
 ) : TriggerInvokeEndpointPort {
 
     override fun invoke(triggerId: TriggerId, inputs: InvocationInputs, auth: Auth): CompletableFuture<Exec> {
         return CompletableFuture.supplyAsync {
-            SecurityContext.with(auth) {
-                val trigger = triggerGet(triggerId)
-                invoke(trigger, inputs)
-            }
+            val trigger = triggerRepository.get(triggerId)
+            invoke(trigger, inputs)
         }
     }
 
     private fun invoke(trigger: Trigger, inputs: InvocationInputs): Exec {
         val execId = generateDomainId(::ExecId)
-        val func = funcGet(trigger.funcId)
+        val func = funcRepository.get(trigger.funcId)
         requestEnqueue(
             ExecInvokeRequested(
                 requestId = generateDomainId(::RequestId),
-                requestedBy = SecurityContext.currentAuthId,
+                requestedBy = AuthId.anonymous, // FIXME
                 requestStatus = RequestStatus.Submitted,
                 id = execId,
                 triggerId = trigger.id,
@@ -63,7 +56,7 @@ class TriggerInvokeEndpointAdapter(
 
         val startedAt = TimeUtils.now()
         while (true) {
-            with(execFind(execId)) {
+            with(execRepository.find(execId)) {
                 val exec = this
                 if (exec != null) {
                     if (exec.status == Completed) {
