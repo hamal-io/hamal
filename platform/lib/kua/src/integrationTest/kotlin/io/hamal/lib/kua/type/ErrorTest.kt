@@ -6,6 +6,8 @@ import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.function.*
+import io.hamal.lib.value.Value
+import io.hamal.lib.value.ValueString
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -18,7 +20,7 @@ internal class KuaErrorTest {
 
         sandbox.register(
             RunnerPlugin(
-                name = KuaString("test"),
+                name = ValueString("test"),
                 factoryCode = KuaCode(
                     """
                     function plugin_create(internal)
@@ -32,9 +34,9 @@ internal class KuaErrorTest {
                 """.trimIndent()
                 ),
                 internals = mapOf(
-                    KuaString("error") to FunctionReturnsError(),
-                    KuaString("message_captor") to messageCaptor,
-                    KuaString("assert_metatable") to AssertMetatable
+                    ValueString("error") to FunctionReturnsError(),
+                    ValueString("message_captor") to messageCaptor,
+                    ValueString("assert_metatable") to AssertMetatable
                 )
             )
         )
@@ -52,7 +54,7 @@ internal class KuaErrorTest {
             )
         )
 
-        assertThat(messageCaptor.result, equalTo(KuaString("Sometimes an error can be a good thing")))
+        assertThat(messageCaptor.result, equalTo(ValueString("Sometimes an error can be a good thing")))
     }
 
 
@@ -61,7 +63,7 @@ internal class KuaErrorTest {
     ) {
         override fun invoke(ctx: FunctionContext, arg1: KuaTable) {
             assertThat(arg1.getNumber("__type_id"), equalTo(KuaNumber(10)))
-            assertThat(arg1.getString("__typename"), equalTo(KuaString("error")))
+            assertThat(arg1.getString("__typename"), equalTo(ValueString("error")))
         }
     }
 
@@ -73,14 +75,14 @@ internal class KuaErrorTest {
         }
     }
 
-    private class Captor : Function1In0Out<KuaType>(
-        FunctionInput1Schema(KuaType::class)
+    private class Captor : Function1In0Out<Value>(
+        FunctionInput1Schema(Value::class)
     ) {
-        override fun invoke(ctx: FunctionContext, arg1: KuaType) {
+        override fun invoke(ctx: FunctionContext, arg1: Value) {
             result = arg1
         }
 
-        var result: KuaType? = null
+        var result: Value? = null
     }
 
     private val sandbox = run {

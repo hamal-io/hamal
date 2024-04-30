@@ -3,7 +3,7 @@ package io.hamal.lib.kua.state
 import io.hamal.lib.kua.StackTop
 import io.hamal.lib.kua.stringGet
 import io.hamal.lib.kua.type.KuaNumber
-import io.hamal.lib.kua.type.KuaString
+import io.hamal.lib.value.ValueString
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.TestFactory
@@ -13,23 +13,23 @@ internal class StringGetTest : StateBaseTest() {
 
     @TestFactory
     fun `Get value on stack without popping the value`() = runTest { testInstance ->
-        testInstance.stringPush(KuaString("hamal"))
-        assertThat(testInstance.stringGet(1), equalTo(KuaString("hamal")))
+        testInstance.stringPush(ValueString("hamal"))
+        assertThat(testInstance.stringGet(1), equalTo(ValueString("hamal")))
         assertThat(testInstance.topGet(), equalTo(StackTop(1)))
 
-        testInstance.stringPush(KuaString("rocks"))
-        assertThat(testInstance.stringGet(2), equalTo(KuaString("rocks")))
+        testInstance.stringPush(ValueString("rocks"))
+        assertThat(testInstance.stringGet(2), equalTo(ValueString("rocks")))
         assertThat(testInstance.topGet(), equalTo(StackTop(2)))
     }
 
     @TestFactory
     fun `Get value with negative index without popping the value`() = runTest { testInstance ->
-        testInstance.stringPush(KuaString("hamal"))
-        assertThat(testInstance.stringGet(1), equalTo(KuaString("hamal")))
+        testInstance.stringPush(ValueString("hamal"))
+        assertThat(testInstance.stringGet(1), equalTo(ValueString("hamal")))
         assertThat(testInstance.topGet(), equalTo(StackTop(1)))
 
-        testInstance.stringPush(KuaString("rocks"))
-        assertThat(testInstance.stringGet(-1), equalTo(KuaString("rocks")))
+        testInstance.stringPush(ValueString("rocks"))
+        assertThat(testInstance.stringGet(-1), equalTo(ValueString("rocks")))
         assertThat(testInstance.topGet(), equalTo(StackTop(2)))
     }
 

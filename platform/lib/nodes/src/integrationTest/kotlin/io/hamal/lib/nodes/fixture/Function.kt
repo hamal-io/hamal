@@ -5,7 +5,6 @@ import io.hamal.lib.kua.function.Function1In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.type.KuaNumber
-import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.value.*
 
 class InvokeFunction : Function0In0Out() {
@@ -23,7 +22,7 @@ class CaptureFunction : Function1In0Out<Value>(FunctionInput1Schema(Value::class
             is ValueDecimal -> resultDecimal = ValueDecimal(arg1.value)
             is ValueNil -> resultNil = ValueNil
             is KuaNumber -> resultNumber = ValueNumber(arg1.doubleValue)
-            is KuaString -> resultString = ValueString((arg1.stringValue))
+            is ValueString -> resultString = ValueString((arg1.stringValue))
             else -> TODO("Can not capture $arg1")
         }
     }

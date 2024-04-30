@@ -2,10 +2,7 @@ package io.hamal.lib.kua
 
 import io.hamal.lib.kua.type.*
 import io.hamal.lib.kua.type.KuaError
-import io.hamal.lib.value.Value
-import io.hamal.lib.value.ValueBoolean
-import io.hamal.lib.value.ValueDecimal
-import io.hamal.lib.value.ValueNil
+import io.hamal.lib.value.*
 import java.math.BigDecimal
 import kotlin.reflect.KClass
 
@@ -34,10 +31,10 @@ interface State {
 
     fun functionPush(value: KuaFunction<*, *, *, *>): StackTop
 
-    fun globalSet(key: KuaString, value: Value)
-    fun globalGet(key: KuaString): Value
-    fun globalGetTable(key: KuaString): KuaTable
-    fun globalUnset(key: KuaString)
+    fun globalSet(key: ValueString, value: Value)
+    fun globalGet(key: ValueString): Value
+    fun globalGetTable(key: ValueString): KuaTable
+    fun globalUnset(key: ValueString)
 
     fun nilPush(): StackTop
     fun numberGet(idx: KuaNumber): KuaNumber
@@ -47,13 +44,13 @@ interface State {
     fun referencePush(reference: KuaReference): KClass<out Value>
     fun referenceRelease(reference: KuaReference)
 
-    fun stringGet(idx: KuaNumber): KuaString
-    fun stringPush(value: KuaString): StackTop
+    fun stringGet(idx: KuaNumber): ValueString
+    fun stringPush(value: ValueString): StackTop
 
     fun tableAppend(idx: KuaNumber): TableLength
     fun tableCreate(arrayCount: KuaNumber, recordCount: KuaNumber): KuaTable
-    fun tableFieldSet(idx: KuaNumber, key: KuaString): TableLength
-    fun tableFieldGet(idx: KuaNumber, key: KuaString): KClass<out Value>
+    fun tableFieldSet(idx: KuaNumber, key: ValueString): TableLength
+    fun tableFieldGet(idx: KuaNumber, key: ValueString): KClass<out Value>
     fun tableGet(idx: KuaNumber): KuaTable
     fun tableLength(idx: KuaNumber): TableLength
     fun tableNext(idx: KuaNumber): ValueBoolean
@@ -62,7 +59,7 @@ interface State {
     fun tableRawSetIdx(stackIdx: KuaNumber, tableIdx: KuaNumber): TableLength
     fun tableRawGet(idx: KuaNumber): KClass<out Value>
     fun tableRawGetIdx(stackIdx: KuaNumber, tableIdx: KuaNumber): KClass<out Value>
-    fun tableSubTableGet(idx: KuaNumber, key: KuaString): KClass<out Value>
+    fun tableSubTableGet(idx: KuaNumber, key: ValueString): KClass<out Value>
 
     fun topGet(): StackTop
     fun topPop(len: KuaNumber): StackTop
@@ -85,7 +82,7 @@ open class StateImpl(val native: Native = Native()) : State {
             KuaError::class -> errorGet(idx)
             ValueNil::class -> ValueNil
             KuaNumber::class -> numberGet(idx)
-            KuaString::class -> stringGet(idx)
+            ValueString::class -> stringGet(idx)
             KuaTable::class -> tableGet(idx)
             else -> TODO("$type not supported yet")
         }
@@ -99,7 +96,7 @@ open class StateImpl(val native: Native = Native()) : State {
             is KuaFunction<*, *, *, *> -> functionPush(value)
             is ValueNil -> nilPush()
             is KuaNumber -> numberPush(value)
-            is KuaString -> stringPush(value)
+            is ValueString -> stringPush(value)
             is KuaTable -> tablePush(value)
             else -> TODO("${value.javaClass} not supported yet")
         }
@@ -138,22 +135,22 @@ open class StateImpl(val native: Native = Native()) : State {
 
     override fun functionPush(value: KuaFunction<*, *, *, *>) = StackTop(native.functionPush(value))
 
-    override fun globalGet(key: KuaString): Value {
+    override fun globalGet(key: ValueString): Value {
         native.globalGet(key.stringValue)
         return get(-1)
     }
 
-    override fun globalGetTable(key: KuaString): KuaTable {
+    override fun globalGetTable(key: ValueString): KuaTable {
         native.globalGetTable(key.stringValue)
         return tableGet(-1)
     }
 
-    override fun globalSet(key: KuaString, value: Value) {
+    override fun globalSet(key: ValueString, value: Value) {
         push(value)
         native.globalSet(key.stringValue)
     }
 
-    override fun globalUnset(key: KuaString) {
+    override fun globalUnset(key: ValueString) {
         native.nilPush()
         native.globalSet(key.stringValue)
     }
@@ -172,8 +169,8 @@ open class StateImpl(val native: Native = Native()) : State {
         native.referenceRelease(reference.value)
     }
 
-    override fun stringGet(idx: KuaNumber) = KuaString(native.stringGet(idx.intValue))
-    override fun stringPush(value: KuaString) = StackTop(native.stringPush(value.stringValue))
+    override fun stringGet(idx: KuaNumber) = ValueString(native.stringGet(idx.intValue))
+    override fun stringPush(value: ValueString) = StackTop(native.stringPush(value.stringValue))
 
 
     override fun tableAppend(idx: KuaNumber) = TableLength(native.tableAppend(idx.intValue))
@@ -184,10 +181,10 @@ open class StateImpl(val native: Native = Native()) : State {
         )
     }
 
-    override fun tableFieldGet(idx: KuaNumber, key: KuaString) =
+    override fun tableFieldGet(idx: KuaNumber, key: ValueString) =
         luaToType(native.tableFieldGet(idx.intValue, key.stringValue))
 
-    override fun tableFieldSet(idx: KuaNumber, key: KuaString) =
+    override fun tableFieldSet(idx: KuaNumber, key: ValueString) =
         TableLength(native.tableFieldSet(idx.intValue, key.stringValue))
 
     override fun tableGet(idx: KuaNumber) = KuaTable(KuaNumber(native.tableGet(native.absIndex(idx.intValue))), this)
@@ -202,7 +199,7 @@ open class StateImpl(val native: Native = Native()) : State {
     override fun tableRawGetIdx(stackIdx: KuaNumber, tableIdx: KuaNumber) =
         luaToType(native.tableRawGetIdx(stackIdx.intValue, tableIdx.intValue))
 
-    override fun tableSubTableGet(idx: KuaNumber, key: KuaString) =
+    override fun tableSubTableGet(idx: KuaNumber, key: ValueString) =
         luaToType(native.tableSubTableGet(idx.intValue, key.stringValue))
 
     override fun topGet(): StackTop = StackTop(native.topGet())
@@ -223,9 +220,9 @@ fun State.numberGet(idx: Int) = numberGet(KuaNumber(idx))
 fun State.stringGet(idx: Int) = stringGet(KuaNumber(idx))
 fun State.tableAppend(idx: Int) = tableAppend(KuaNumber(idx))
 fun State.tableCreate(arrayCount: Int, recordCount: Int) = tableCreate(KuaNumber(arrayCount), KuaNumber(recordCount))
-fun State.tableFieldGet(idx: Int, key: String) = tableFieldGet(KuaNumber(idx), KuaString(key))
-fun State.tableFieldGet(idx: Int, key: KuaString) = tableFieldGet(KuaNumber(idx), key)
-fun State.tableFieldSet(idx: Int, key: KuaString) = tableFieldSet(KuaNumber(idx), key)
+fun State.tableFieldGet(idx: Int, key: String) = tableFieldGet(KuaNumber(idx), ValueString(key))
+fun State.tableFieldGet(idx: Int, key: ValueString) = tableFieldGet(KuaNumber(idx), key)
+fun State.tableFieldSet(idx: Int, key: ValueString) = tableFieldSet(KuaNumber(idx), key)
 fun State.tableGet(idx: Int) = tableGet(KuaNumber(idx))
 fun State.tableLength(idx: Int) = tableLength(KuaNumber(idx))
 fun State.tableNext(idx: Int) = tableNext(KuaNumber(idx))
@@ -233,7 +230,7 @@ fun State.tableRawGetIdx(stackIdx: Int, tableIdx: Int) = tableRawGetIdx(KuaNumbe
 fun State.tableRawGet(idx: Int) = tableRawGet(KuaNumber(idx))
 fun State.tableRawSet(idx: Int) = tableRawSet(KuaNumber(idx))
 fun State.tableRawSetIdx(stackIdx: Int, tableIdx: Int) = tableRawSetIdx(KuaNumber(stackIdx), KuaNumber(tableIdx))
-fun State.tableSubTableGet(idx: Int, key: String) = tableSubTableGet(KuaNumber(idx), KuaString(key))
+fun State.tableSubTableGet(idx: Int, key: String) = tableSubTableGet(KuaNumber(idx), ValueString(key))
 fun State.topPush(idx: Int) = topPush(KuaNumber(idx))
 fun State.topPop(idx: Int) = topPop(KuaNumber(idx))
 fun State.topSet(idx: Int) = topSet(KuaNumber(idx))
@@ -253,7 +250,7 @@ private fun luaToType(value: Int) = when (value) {
     0 -> ValueNil::class
     1 -> ValueBoolean::class
     3 -> KuaNumber::class
-    4 -> KuaString::class
+    4 -> ValueString::class
     5 -> KuaTable::class
     6 -> KuaFunction::class
     10 -> KuaError::class
@@ -261,10 +258,10 @@ private fun luaToType(value: Int) = when (value) {
     else -> TODO("$value not implemented yet")
 }
 
-fun <T : State> T.tableCreate(vararg pairs: Pair<KuaString, Value>): KuaTable = tableCreate(pairs.toMap())
+fun <T : State> T.tableCreate(vararg pairs: Pair<ValueString, Value>): KuaTable = tableCreate(pairs.toMap())
 
 
-fun <T : State> T.tableCreate(data: Map<KuaString, Value>): KuaTable {
+fun <T : State> T.tableCreate(data: Map<ValueString, Value>): KuaTable {
     return tableCreate(0, data.size).also { map ->
         data.forEach { (key, value) ->
             map[key] = value

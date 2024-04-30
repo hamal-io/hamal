@@ -10,10 +10,7 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.topPop
 import io.hamal.lib.kua.type.*
-import io.hamal.lib.value.ValueDecimal
-import io.hamal.lib.value.ValueFalse
-import io.hamal.lib.value.ValueNil
-import io.hamal.lib.value.ValueTrue
+import io.hamal.lib.value.*
 
 
 class HttpExecuteFunction : Function1In2Out<KuaTable, KuaError, KuaTable>(
@@ -36,11 +33,11 @@ class HttpExecuteFunction : Function1In2Out<KuaTable, KuaError, KuaTable>(
                 val json = request.get("json")
 
                 val template = when (method) {
-                    KuaString("GET") -> HttpTemplateImpl().get(url.stringValue)
-                    KuaString("PATCH") -> HttpTemplateImpl().patch(url.stringValue)
-                    KuaString("POST") -> HttpTemplateImpl().post(url.stringValue)
-                    KuaString("PUT") -> HttpTemplateImpl().put(url.stringValue)
-                    KuaString("DELETE") -> HttpTemplateImpl().delete(url.stringValue)
+                    ValueString("GET") -> HttpTemplateImpl().get(url.stringValue)
+                    ValueString("PATCH") -> HttpTemplateImpl().patch(url.stringValue)
+                    ValueString("POST") -> HttpTemplateImpl().post(url.stringValue)
+                    ValueString("PUT") -> HttpTemplateImpl().put(url.stringValue)
+                    ValueString("DELETE") -> HttpTemplateImpl().delete(url.stringValue)
                     else -> TODO()
                 }
 
@@ -56,7 +53,7 @@ class HttpExecuteFunction : Function1In2Out<KuaTable, KuaError, KuaTable>(
 //                println("$key $value")
                     template.header(
                         key.stringValue, when (value) {
-                            is KuaString -> value.stringValue
+                            is ValueString -> value.stringValue
                             is ValueFalse -> "false"
                             is ValueTrue -> "true"
                             is KuaCode -> value.stringValue
@@ -94,7 +91,7 @@ private fun HttpResponse.toMap(ctx: FunctionContext): KuaReference {
     ctx.tableCreate().also { response ->
         ctx.checkpoint {
             response["status_code"] = KuaNumber(statusCode.value)
-            response["content_type"] = headers.find("content-type")?.let { type -> KuaString(type) } ?: ValueNil
+            response["content_type"] = headers.find("content-type")?.let { type -> ValueString(type) } ?: ValueNil
             response["content_length"] = headers.find("content-length")
                 ?.let { length -> KuaNumber(length.toInt()) }
                 ?: ValueNil
@@ -129,6 +126,6 @@ private fun HttpResponse.content(ctx: FunctionContext) = when (this) {
 
 private fun HttpResponse.headers(ctx: FunctionContext) = ctx.tableCreate(
     headers.map {
-        it.key.lowercase() to KuaString(it.value)
+        it.key.lowercase() to ValueString(it.value)
     }.toMap()
 )

@@ -12,6 +12,7 @@ import io.hamal.lib.nodes.generator.GeneratorRegistry
 import io.hamal.lib.value.Value
 import io.hamal.lib.value.ValueBoolean
 import io.hamal.lib.value.ValueDecimal
+import io.hamal.lib.value.ValueString
 
 // FIXME super dirty temporary hack
 val sandboxContextLocal = ThreadLocal<SandboxContext>()
@@ -46,10 +47,10 @@ class Sandbox(
 
     override fun functionPush(value: KuaFunction<*, *, *, *>) = state.functionPush(value)
 
-    override fun globalGet(key: KuaString) = state.globalGet(key)
-    override fun globalGetTable(key: KuaString) = state.globalGetTable(key)
-    override fun globalSet(key: KuaString, value: Value) = state.globalSet(key, value)
-    override fun globalUnset(key: KuaString) = state.globalUnset(key)
+    override fun globalGet(key: ValueString) = state.globalGet(key)
+    override fun globalGetTable(key: ValueString) = state.globalGetTable(key)
+    override fun globalSet(key: ValueString, value: Value) = state.globalSet(key, value)
+    override fun globalUnset(key: ValueString) = state.globalUnset(key)
 
     override fun nilPush() = state.nilPush()
 
@@ -61,13 +62,13 @@ class Sandbox(
     override fun referenceRelease(reference: KuaReference) = state.referenceRelease(reference)
 
     override fun stringGet(idx: KuaNumber) = state.stringGet(idx)
-    override fun stringPush(value: KuaString) = state.stringPush(value)
+    override fun stringPush(value: ValueString) = state.stringPush(value)
 
     override fun tableAppend(idx: KuaNumber) = state.tableAppend(idx)
     override fun tableCreate(arrayCount: KuaNumber, recordCount: KuaNumber) = state.tableCreate(arrayCount, recordCount)
     override fun tableGet(idx: KuaNumber): KuaTable = state.tableGet(idx)
-    override fun tableFieldGet(idx: KuaNumber, key: KuaString) = state.tableFieldGet(idx, key)
-    override fun tableFieldSet(idx: KuaNumber, key: KuaString) = state.tableFieldSet(idx, key)
+    override fun tableFieldGet(idx: KuaNumber, key: ValueString) = state.tableFieldGet(idx, key)
+    override fun tableFieldSet(idx: KuaNumber, key: ValueString) = state.tableFieldSet(idx, key)
     override fun tableLength(idx: KuaNumber) = state.tableLength(idx)
     override fun tableNext(idx: KuaNumber) = state.tableNext(idx)
     override fun tablePush(value: KuaTable): StackTop = state.tablePush(value)
@@ -75,7 +76,7 @@ class Sandbox(
     override fun tableRawSetIdx(stackIdx: KuaNumber, tableIdx: KuaNumber) = state.tableRawSetIdx(stackIdx, tableIdx)
     override fun tableRawGet(idx: KuaNumber) = state.tableRawGet(idx)
     override fun tableRawGetIdx(stackIdx: KuaNumber, tableIdx: KuaNumber) = state.tableRawGetIdx(stackIdx, tableIdx)
-    override fun tableSubTableGet(idx: KuaNumber, key: KuaString) = state.tableSubTableGet(idx, key)
+    override fun tableSubTableGet(idx: KuaNumber, key: ValueString) = state.tableSubTableGet(idx, key)
 
     override fun topGet(): StackTop = state.topGet()
     override fun topPop(len: KuaNumber) = state.topPop(len)

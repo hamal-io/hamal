@@ -5,10 +5,7 @@ import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.type.*
 import io.hamal.lib.kua.type.KuaError
-import io.hamal.lib.value.ValueBoolean
-import io.hamal.lib.value.ValueDecimal
-import io.hamal.lib.value.ValueNil
-import io.hamal.lib.value.ValueTrue
+import io.hamal.lib.value.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.TestFactory
@@ -106,22 +103,22 @@ internal class ReferencePushTest : StateBaseTest() {
 
     @TestFactory
     fun `Pushes reference value of string`() = runTest { testInstance ->
-        testInstance.stringPush(KuaString("hamal rocks"))
+        testInstance.stringPush(ValueString("hamal rocks"))
 
         val reference = testInstance.referenceAcquire()
         assertThat(testInstance.topGet(), equalTo(StackTop(0)))
 
-        testInstance.referencePush(reference).also { type -> assertThat(type, equalTo(KuaString::class)) }
+        testInstance.referencePush(reference).also { type -> assertThat(type, equalTo(ValueString::class)) }
 
         assertThat(testInstance.topGet(), equalTo(StackTop(1)))
-        assertThat(testInstance.type(1), equalTo(KuaString::class))
-        assertThat(testInstance.stringGet(1), equalTo(KuaString("hamal rocks")))
+        assertThat(testInstance.type(1), equalTo(ValueString::class))
+        assertThat(testInstance.stringGet(1), equalTo(ValueString("hamal rocks")))
     }
 
 
     @TestFactory
     fun `Pushes reference value of table`() = runTest { testInstance ->
-        testInstance.tableCreate(KuaString("answer") to KuaNumber(42.0))
+        testInstance.tableCreate(ValueString("answer") to KuaNumber(42.0))
 
         val reference = testInstance.referenceAcquire()
         assertThat(testInstance.topGet(), equalTo(StackTop(0)))

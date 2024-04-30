@@ -8,17 +8,17 @@ import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.KuaError
-import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.kua.type.KuaTable
 import io.hamal.lib.sdk.api.ApiRequested
+import io.hamal.lib.value.ValueString
 
 class RequestGetFunction(
     private val httpTemplate: HttpTemplate
-) : Function1In2Out<KuaString, KuaError, KuaTable>(
-    FunctionInput1Schema(KuaString::class),
+) : Function1In2Out<ValueString, KuaError, KuaTable>(
+    FunctionInput1Schema(ValueString::class),
     FunctionOutput2Schema(KuaError::class, KuaTable::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: KuaString): Pair<KuaError?, KuaTable?> {
+    override fun invoke(ctx: FunctionContext, arg1: ValueString): Pair<KuaError?, KuaTable?> {
         val response = httpTemplate.get("/v1/requests/{reqId}")
             .path("reqId", arg1.stringValue)
             .execute()
@@ -27,8 +27,8 @@ class RequestGetFunction(
             return null to response.result(ApiRequested::class)
                 .let { exec ->
                     ctx.tableCreate(
-                        "request_id" to KuaString(exec.requestId.value.value.toString(16)),
-                        "request_status" to KuaString(exec.requestStatus.name)
+                        "request_id" to ValueString(exec.requestId.value.value.toString(16)),
+                        "request_status" to ValueString(exec.requestStatus.name)
                     )
                 }
         } else {

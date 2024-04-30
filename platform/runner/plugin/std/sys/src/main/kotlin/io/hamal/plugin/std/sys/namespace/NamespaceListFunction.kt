@@ -6,9 +6,9 @@ import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.type.KuaError
-import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.kua.type.KuaTable
 import io.hamal.lib.sdk.ApiSdk
+import io.hamal.lib.value.ValueString
 
 class NamespaceListFunction(
     private val sdk: ApiSdk
@@ -19,9 +19,9 @@ class NamespaceListFunction(
         return try {
             null to ctx.tableCreate(sdk.namespace.list(ctx[WorkspaceId::class]).map { namespace ->
                 ctx.tableCreate(
-                    "id" to KuaString(namespace.id.value.value.toString(16)),
-                    "parent_id" to KuaString(namespace.parentId.value.value.toString(16)),
-                    "name" to KuaString(namespace.name.value),
+                    "id" to ValueString(namespace.id.value.value.toString(16)),
+                    "parent_id" to ValueString(namespace.parentId.value.value.toString(16)),
+                    "name" to ValueString(namespace.name.value),
                 )
             })
         } catch (t: Throwable) {

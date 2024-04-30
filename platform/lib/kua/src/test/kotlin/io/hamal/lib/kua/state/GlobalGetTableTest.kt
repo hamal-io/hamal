@@ -5,11 +5,11 @@ import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.topPop
 import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.kua.type.KuaNumber
-import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.kua.type.KuaTable
 import io.hamal.lib.value.ValueDecimal
 import io.hamal.lib.value.ValueFalse
 import io.hamal.lib.value.ValueNil
+import io.hamal.lib.value.ValueString
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.isA
@@ -20,10 +20,10 @@ internal class GlobalGetTableTest : StateBaseTest() {
 
     @TestFactory
     fun `Tries to load global boolean as table`() = runTest { testInstance ->
-        testInstance.globalSet(KuaString("answer"), ValueFalse)
+        testInstance.globalSet(ValueString("answer"), ValueFalse)
         assertThat(testInstance.topGet(), equalTo(StackTop(0)))
 
-        assertThrows<IllegalStateException> { testInstance.globalGetTable(KuaString("answer")) }
+        assertThrows<IllegalStateException> { testInstance.globalGetTable(ValueString("answer")) }
             .also { exception -> assertThat(exception.message, equalTo("Expected type to be table but was boolean")) }
 
         assertThat(testInstance.topGet(), equalTo(StackTop(0)))
@@ -31,10 +31,10 @@ internal class GlobalGetTableTest : StateBaseTest() {
 
     @TestFactory
     fun `Tries to load global decimal as table`() = runTest { testInstance ->
-        testInstance.globalSet(KuaString("answer"), ValueDecimal(12.23))
+        testInstance.globalSet(ValueString("answer"), ValueDecimal(12.23))
         assertThat(testInstance.topGet(), equalTo(StackTop(0)))
 
-        assertThrows<IllegalStateException> { testInstance.globalGetTable(KuaString("answer")) }
+        assertThrows<IllegalStateException> { testInstance.globalGetTable(ValueString("answer")) }
             .also { exception -> assertThat(exception.message, equalTo("Expected type to be table but was decimal")) }
 
         assertThat(testInstance.topGet(), equalTo(StackTop(0)))
@@ -42,10 +42,10 @@ internal class GlobalGetTableTest : StateBaseTest() {
 
     @TestFactory
     fun `Tries to load global error as table`() = runTest { testInstance ->
-        testInstance.globalSet(KuaString("answer"), KuaError("Some Error Message"))
+        testInstance.globalSet(ValueString("answer"), KuaError("Some Error Message"))
         assertThat(testInstance.topGet(), equalTo(StackTop(0)))
 
-        assertThrows<IllegalStateException> { testInstance.globalGetTable(KuaString("answer")) }
+        assertThrows<IllegalStateException> { testInstance.globalGetTable(ValueString("answer")) }
             .also { exception -> assertThat(exception.message, equalTo("Expected type to be table but was error")) }
 
         assertThat(testInstance.topGet(), equalTo(StackTop(0)))
@@ -53,10 +53,10 @@ internal class GlobalGetTableTest : StateBaseTest() {
 
     @TestFactory
     fun `Tries to load global nil as table`() = runTest { testInstance ->
-        testInstance.globalSet(KuaString("answer"), ValueNil)
+        testInstance.globalSet(ValueString("answer"), ValueNil)
         assertThat(testInstance.topGet(), equalTo(StackTop(0)))
 
-        assertThrows<IllegalStateException> { testInstance.globalGetTable(KuaString("answer")) }
+        assertThrows<IllegalStateException> { testInstance.globalGetTable(ValueString("answer")) }
             .also { exception -> assertThat(exception.message, equalTo("Expected type to be table but was nil")) }
 
         assertThat(testInstance.topGet(), equalTo(StackTop(0)))
@@ -64,10 +64,10 @@ internal class GlobalGetTableTest : StateBaseTest() {
 
     @TestFactory
     fun `Tries to load global number as table`() = runTest { testInstance ->
-        testInstance.globalSet(KuaString("answer"), KuaNumber(42.0))
+        testInstance.globalSet(ValueString("answer"), KuaNumber(42.0))
         assertThat(testInstance.topGet(), equalTo(StackTop(0)))
 
-        assertThrows<IllegalStateException> { testInstance.globalGetTable(KuaString("answer")) }
+        assertThrows<IllegalStateException> { testInstance.globalGetTable(ValueString("answer")) }
             .also { exception -> assertThat(exception.message, equalTo("Expected type to be table but was number")) }
 
         assertThat(testInstance.topGet(), equalTo(StackTop(0)))
@@ -75,10 +75,10 @@ internal class GlobalGetTableTest : StateBaseTest() {
 
     @TestFactory
     fun `Tries to load global string as table`() = runTest { testInstance ->
-        testInstance.globalSet(KuaString("answer"), KuaString("hamal rocks"))
+        testInstance.globalSet(ValueString("answer"), ValueString("hamal rocks"))
         assertThat(testInstance.topGet(), equalTo(StackTop(0)))
 
-        assertThrows<IllegalStateException> { testInstance.globalGetTable(KuaString("answer")) }
+        assertThrows<IllegalStateException> { testInstance.globalGetTable(ValueString("answer")) }
             .also { exception -> assertThat(exception.message, equalTo("Expected type to be table but was string")) }
 
         assertThat(testInstance.topGet(), equalTo(StackTop(0)))
@@ -87,11 +87,11 @@ internal class GlobalGetTableTest : StateBaseTest() {
     @TestFactory
     fun `Gets global table onto stack`() = runTest { testInstance ->
         val table = testInstance.tableCreate(0, 0)
-        testInstance.globalSet(KuaString("answer"), table)
+        testInstance.globalSet(ValueString("answer"), table)
         testInstance.topPop(1)
         assertThat(testInstance.topGet(), equalTo(StackTop(0)))
 
-        testInstance.globalGetTable(KuaString("answer")).also { result ->
+        testInstance.globalGetTable(ValueString("answer")).also { result ->
             assertThat(result, isA(KuaTable::class.java))
         }
         assertThat(testInstance.topGet(), equalTo(StackTop(1)))

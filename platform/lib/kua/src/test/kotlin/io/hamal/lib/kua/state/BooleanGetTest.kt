@@ -2,8 +2,8 @@ package io.hamal.lib.kua.state
 
 import io.hamal.lib.kua.StackTop
 import io.hamal.lib.kua.booleanGet
-import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.value.ValueFalse
+import io.hamal.lib.value.ValueString
 import io.hamal.lib.value.ValueTrue
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -36,7 +36,7 @@ internal class BooleanGetTest : StateBaseTest() {
 
     @TestFactory
     fun `Not a boolean`() = runTest { testInstance ->
-        testInstance.stringPush(KuaString("Not  a boolean"))
+        testInstance.stringPush(ValueString("Not  a boolean"))
         assertThrows<IllegalStateException> {
             testInstance.booleanGet(1)
         }.also { exception ->

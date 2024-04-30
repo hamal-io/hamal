@@ -14,7 +14,6 @@ import io.hamal.lib.kua.SandboxContext
 import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.type.KuaCode
-import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.nodes.control.ControlIdentifier
 import io.hamal.lib.nodes.fixture.CaptureFunction
 import io.hamal.lib.nodes.fixture.GeneratorCapture
@@ -23,6 +22,7 @@ import io.hamal.lib.nodes.fixture.InvokeFunction
 import io.hamal.lib.nodes.generator.GeneratorRegistry
 import io.hamal.lib.nodes.generator.defaultGeneratorRegistry
 import io.hamal.lib.value.Type
+import io.hamal.lib.value.ValueString
 import io.hamal.runner.config.EnvFactory
 import io.hamal.runner.config.SandboxFactory
 import io.hamal.runner.connector.Connector
@@ -48,7 +48,7 @@ internal abstract class AbstractIntegrationTest {
                 return Sandbox(SandboxContextNop).also { sandbox ->
                     sandbox.register(
                         RunnerPlugin(
-                            name = KuaString("test"),
+                            name = ValueString("test"),
                             factoryCode = KuaCode(
                                 """
                     function plugin_create(internal)
@@ -63,10 +63,10 @@ internal abstract class AbstractIntegrationTest {
                 """.trimIndent()
                             ),
                             internals = mapOf(
-                                KuaString("invokeOne") to testContext.invokedOne,
-                                KuaString("invokeTwo") to testContext.invokedTwo,
-                                KuaString("captureOne") to testContext.captorOne,
-                                KuaString("captureTwo") to testContext.captorTwo
+                                ValueString("invokeOne") to testContext.invokedOne,
+                                ValueString("invokeTwo") to testContext.invokedTwo,
+                                ValueString("captureOne") to testContext.captorOne,
+                                ValueString("captureTwo") to testContext.captorTwo
                             )
                         )
                     )

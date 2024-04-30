@@ -3,10 +3,10 @@ package io.hamal.lib.kua.function
 import io.hamal.lib.kua.*
 import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.kua.type.KuaNumber
-import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.kua.type.KuaTable
 import io.hamal.lib.value.Value
 import io.hamal.lib.value.ValueBoolean
+import io.hamal.lib.value.ValueString
 import kotlin.reflect.KClass
 
 sealed interface FunctionInputSchema<INPUT : FunctionInput<*, *>> {
@@ -51,7 +51,7 @@ fun <ARG : Value> KClass<ARG>.extract(ctx: FunctionContext, idx: Int): ARG {
         ValueBoolean::class -> ctx.booleanGet(idx) as ARG
         KuaError::class -> ctx.errorGet(idx) as ARG
         KuaNumber::class -> ctx.numberGet(idx) as ARG
-        KuaString::class -> ctx.stringGet(idx) as ARG
+        ValueString::class -> ctx.stringGet(idx) as ARG
         KuaTable::class -> ctx.tableGet(idx) as ARG
         else -> ctx.get(idx) as ARG
     }

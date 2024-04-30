@@ -4,7 +4,7 @@ import io.hamal.lib.kua.StackTop
 import io.hamal.lib.kua.numberGet
 import io.hamal.lib.kua.type
 import io.hamal.lib.kua.type.KuaNumber
-import io.hamal.lib.kua.type.KuaString
+import io.hamal.lib.value.ValueString
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.TestFactory
@@ -13,7 +13,7 @@ internal class ReferenceReleaseTest : StateBaseTest() {
 
     @TestFactory
     fun `Releases acquired reference`() = runTest { testInstance ->
-        testInstance.stringPush(KuaString("a secret I better forget soon"))
+        testInstance.stringPush(ValueString("a secret I better forget soon"))
 
         val reference = testInstance.referenceAcquire()
         assertThat(testInstance.topGet(), equalTo(StackTop(0)))

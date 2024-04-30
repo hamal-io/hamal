@@ -6,7 +6,7 @@ import io.hamal.lib.kua.topPop
 import io.hamal.lib.value.Value
 import kotlin.collections.Map.Entry
 
-class KuaTableIterator<KEY : KuaType, TYPE : Value>(
+class KuaTableIterator<KEY : Value, TYPE : Value>(
     index: KuaNumber,
     val state: State,
     val keyExtractor: (State, KuaNumber) -> KEY,

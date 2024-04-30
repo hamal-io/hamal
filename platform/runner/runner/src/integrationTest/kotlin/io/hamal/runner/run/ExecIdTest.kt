@@ -5,7 +5,7 @@ import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
-import io.hamal.lib.kua.type.KuaString
+import io.hamal.lib.value.ValueString
 import io.hamal.runner.connector.UnitOfWork
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -34,7 +34,7 @@ internal class ExecIdTest : AbstractExecuteTest() {
     fun `exec id available in function`() {
         val testFn = TestFunction()
 
-        val testExecutor = createTestRunner(KuaString("fn") to testFn)
+        val testExecutor = createTestRunner(ValueString("fn") to testFn)
         testExecutor.run(
             UnitOfWork(
                 id = ExecId(1234),

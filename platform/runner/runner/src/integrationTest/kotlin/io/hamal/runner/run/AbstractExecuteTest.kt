@@ -7,8 +7,8 @@ import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContext
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.type.KuaCode
-import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.kua.type.KuaType
+import io.hamal.lib.value.ValueString
 import io.hamal.runner.config.EnvFactory
 import io.hamal.runner.config.SandboxFactory
 import io.hamal.runner.connector.Connector
@@ -16,7 +16,7 @@ import io.hamal.runner.test.TestConnector
 
 internal abstract class AbstractExecuteTest {
     fun createTestRunner(
-        vararg testPlugins: Pair<KuaString, KuaType>,
+        vararg testPlugins: Pair<ValueString, KuaType>,
         connector: Connector = TestConnector()
     ) = CodeRunnerImpl(
         connector,
@@ -26,7 +26,7 @@ internal abstract class AbstractExecuteTest {
                 return Sandbox(ctx).also {
                     it.register(
                         RunnerPlugin(
-                            name = KuaString("test"),
+                            name = ValueString("test"),
                             factoryCode = KuaCode(
                                 """
                             function plugin_create(internal)

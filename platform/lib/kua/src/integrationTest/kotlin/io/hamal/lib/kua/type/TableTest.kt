@@ -4,6 +4,7 @@ import io.hamal.lib.kua.*
 import io.hamal.lib.kua.function.Function0In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionOutput2Schema
+import io.hamal.lib.value.ValueString
 import org.junit.jupiter.api.Test
 
 internal class KuaTableTest {
@@ -14,7 +15,7 @@ internal class KuaTableTest {
             sandbox.registerGlobalFunction("func",
                 object : Function0In2Out<KuaError, KuaTable>(FunctionOutput2Schema(KuaError::class, KuaTable::class)) {
                     override fun invoke(ctx: FunctionContext): Pair<KuaError?, KuaTable?> {
-                        return null to ctx.tableCreate(KuaString("id") to KuaString("A"))
+                        return null to ctx.tableCreate(ValueString("id") to ValueString("A"))
                     }
                 }
             )
@@ -36,7 +37,7 @@ internal class KuaTableTest {
             sandbox.registerGlobalFunction("func",
                 object : Function0In2Out<KuaError, KuaTable>(FunctionOutput2Schema(KuaError::class, KuaTable::class)) {
                     override fun invoke(ctx: FunctionContext): Pair<KuaError?, KuaTable?> {
-                        return null to ctx.tableCreate(listOf(KuaString("A")))
+                        return null to ctx.tableCreate(listOf(ValueString("A")))
                     }
                 }
             )
@@ -60,8 +61,8 @@ internal class KuaTableTest {
                 object : Function0In2Out<KuaError, KuaTable>(FunctionOutput2Schema(KuaError::class, KuaTable::class)) {
                     override fun invoke(ctx: FunctionContext): Pair<KuaError?, KuaTable?> {
                         return null to sandbox.tableCreate(
-                            KuaString("id") to KuaString("A"),
-                            KuaString("level_one") to sandbox.tableCreate(KuaString("answer") to KuaNumber(42))
+                            ValueString("id") to ValueString("A"),
+                            ValueString("level_one") to sandbox.tableCreate(ValueString("answer") to KuaNumber(42))
                         )
                     }
                 }
@@ -88,7 +89,7 @@ internal class KuaTableTest {
                     override fun invoke(ctx: FunctionContext): Pair<KuaError?, KuaTable?> {
                         return null to ctx.tableCreate(
                             listOf(
-                                KuaString("A"),
+                                ValueString("A"),
                                 ctx.tableCreate(listOf(KuaNumber(42)))
                             )
                         )

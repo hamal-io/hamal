@@ -3,15 +3,15 @@ package io.hamal.plugin.web3.evm.evm
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
-import io.hamal.lib.kua.type.KuaString
+import io.hamal.lib.value.ValueString
 
 class PluginWeb3EvmFactory : RunnerPluginFactory {
     override fun create(sandbox: Sandbox): RunnerPlugin {
         return RunnerPlugin(
-            name = KuaString("web3.evm"),
+            name = ValueString("web3.evm"),
             internals = mapOf(
-                KuaString("execute") to EvmExecuteFunction(),
-                KuaString("decode_parameter") to EvmDecodeParameterFunction
+                ValueString("execute") to EvmExecuteFunction(),
+                ValueString("decode_parameter") to EvmDecodeParameterFunction
             )
         )
     }

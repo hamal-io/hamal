@@ -10,6 +10,7 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.*
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiTriggerCreateReq
+import io.hamal.lib.value.ValueString
 
 class TriggerCreateFunction(
     private val sdk: ApiSdk
@@ -27,17 +28,17 @@ class TriggerCreateFunction(
                     funcId = FuncId(SnowflakeId(arg1.getString("func_id").stringValue)),
                     name = TriggerName(arg1.getString("name").stringValue),
                     inputs = TriggerInputs(),
-                    duration = if (arg1.type("duration") == KuaString::class) {
+                    duration = if (arg1.type("duration") == ValueString::class) {
                         TriggerDuration(arg1.getString("duration").stringValue)
                     } else {
                         null
                     },
-                    topicId = if (arg1.type("topic_id") == KuaString::class) {
+                    topicId = if (arg1.type("topic_id") == ValueString::class) {
                         TopicId(SnowflakeId(arg1.getString("topic_id").stringValue))
                     } else {
                         null
                     },
-                    cron = if (arg1.type("cron") == KuaString::class) {
+                    cron = if (arg1.type("cron") == ValueString::class) {
                         CronPattern(arg1.getString("cron").stringValue)
                     } else {
                         null
@@ -46,11 +47,11 @@ class TriggerCreateFunction(
             )
 
             null to ctx.tableCreate(
-                "request_id" to KuaString(res.requestId.value.value.toString(16)),
-                "request_status" to KuaString(res.requestStatus.name),
-                "id" to KuaString(res.id.value.value.toString(16)),
-                "workspace_id" to KuaString(res.workspaceId.value.value.toString(16)),
-                "namespace_id" to KuaString(res.namespaceId.value.value.toString(16))
+                "request_id" to ValueString(res.requestId.value.value.toString(16)),
+                "request_status" to ValueString(res.requestStatus.name),
+                "id" to ValueString(res.id.value.value.toString(16)),
+                "workspace_id" to ValueString(res.workspaceId.value.value.toString(16)),
+                "namespace_id" to ValueString(res.namespaceId.value.value.toString(16))
             )
 
         } catch (t: Throwable) {

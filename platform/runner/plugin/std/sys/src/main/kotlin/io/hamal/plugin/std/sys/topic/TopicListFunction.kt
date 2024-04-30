@@ -7,11 +7,11 @@ import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.type.KuaError
-import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.kua.type.KuaTable
 import io.hamal.lib.kua.type.findTable
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiTopicService
+import io.hamal.lib.value.ValueString
 
 class TopicListFunction(
     private val sdk: ApiSdk
@@ -26,14 +26,14 @@ class TopicListFunction(
                     ApiTopicService.TopicQuery(
                         namespaceIds = arg1.findTable("namespace_ids")
                             ?.asList()
-                            ?.map { NamespaceId((it as KuaString).stringValue) }
+                            ?.map { NamespaceId((it as ValueString).stringValue) }
                             ?.toList()
                             ?: listOf(ctx[NamespaceId::class])
                     )
                 ).map { topic ->
                     ctx.tableCreate(
-                        "id" to KuaString(topic.id.value.value.toString(16)),
-                        "name" to KuaString(topic.name.value),
+                        "id" to ValueString(topic.id.value.value.toString(16)),
+                        "name" to ValueString(topic.name.value),
                     )
                 }
             )

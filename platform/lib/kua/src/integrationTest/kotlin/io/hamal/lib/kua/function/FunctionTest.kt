@@ -8,7 +8,7 @@ import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.type.KuaCode
 import io.hamal.lib.kua.type.KuaNumber
-import io.hamal.lib.kua.type.KuaString
+import io.hamal.lib.value.ValueString
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.instanceOf
 import org.hamcrest.MatcherAssert.assertThat
@@ -34,7 +34,7 @@ internal class FunctionTest {
         }
         sandbox.register(
             RunnerPlugin(
-                name = KuaString("test"),
+                name = ValueString("test"),
                 factoryCode = KuaCode(
                     """
                     function plugin_create(internal)
@@ -47,8 +47,8 @@ internal class FunctionTest {
                 """.trimIndent()
                 ),
                 internals = mapOf(
-                    KuaString("throw_exception") to throwException,
-                    KuaString("never_called") to neverCalled,
+                    ValueString("throw_exception") to throwException,
+                    ValueString("never_called") to neverCalled,
                 )
             )
         )
@@ -86,7 +86,7 @@ internal class FunctionTest {
         }
         sandbox.register(
             RunnerPlugin(
-                name = KuaString("test"),
+                name = ValueString("test"),
                 factoryCode = KuaCode(
                     """
                     function plugin_create(internal)
@@ -99,8 +99,8 @@ internal class FunctionTest {
                 """.trimIndent()
                 ),
                 internals = mapOf(
-                    KuaString("throw_error") to throwError,
-                    KuaString("never_called") to neverCalled,
+                    ValueString("throw_error") to throwError,
+                    ValueString("never_called") to neverCalled,
                 )
             )
         )
@@ -124,14 +124,14 @@ internal class FunctionTest {
     @Test
     fun `Tests Function0In1Out and Function1In0Out`() {
         val captor = Captor1()
-        val emitter = object : Function0In1Out<KuaString>(FunctionOutput1Schema(KuaString::class)) {
-            override fun invoke(ctx: FunctionContext): KuaString {
-                return KuaString("Hamal Rocks")
+        val emitter = object : Function0In1Out<ValueString>(FunctionOutput1Schema(ValueString::class)) {
+            override fun invoke(ctx: FunctionContext): ValueString {
+                return ValueString("Hamal Rocks")
             }
         }
         sandbox.register(
             RunnerPlugin(
-                name = KuaString("test"),
+                name = ValueString("test"),
                 factoryCode = KuaCode(
                     """
                     function plugin_create(internal)
@@ -144,8 +144,8 @@ internal class FunctionTest {
                 """.trimIndent()
                 ),
                 internals = mapOf(
-                    KuaString("emit") to emitter,
-                    KuaString("capture") to captor
+                    ValueString("emit") to emitter,
+                    ValueString("capture") to captor
                 )
             )
         )
@@ -164,18 +164,18 @@ internal class FunctionTest {
     @Test
     fun `Tests Function1In1Out`() {
         val captor = Captor1()
-        val transform = object : Function1In1Out<KuaString, KuaString>(
-            FunctionInput1Schema(KuaString::class),
-            FunctionOutput1Schema(KuaString::class)
+        val transform = object : Function1In1Out<ValueString, ValueString>(
+            FunctionInput1Schema(ValueString::class),
+            FunctionOutput1Schema(ValueString::class)
         ) {
-            override fun invoke(ctx: FunctionContext, arg1: KuaString): KuaString {
-                return KuaString(arg1.stringValue.uppercase())
+            override fun invoke(ctx: FunctionContext, arg1: ValueString): ValueString {
+                return ValueString(arg1.stringValue.uppercase())
             }
         }
 
         sandbox.register(
             RunnerPlugin(
-                name = KuaString("test"),
+                name = ValueString("test"),
                 factoryCode = KuaCode(
                     """
                     function plugin_create(internal)
@@ -188,8 +188,8 @@ internal class FunctionTest {
                 """.trimIndent()
                 ),
                 internals = mapOf(
-                    KuaString("transform") to transform,
-                    KuaString("capture") to captor
+                    ValueString("transform") to transform,
+                    ValueString("capture") to captor
                 )
             )
         )
@@ -208,18 +208,18 @@ internal class FunctionTest {
     @Test
     fun `Tests Function1In2Out`() {
         val captor = Captor2()
-        val transform = object : Function1In2Out<KuaString, KuaString, KuaNumber>(
-            FunctionInput1Schema(KuaString::class),
-            FunctionOutput2Schema(KuaString::class, KuaNumber::class)
+        val transform = object : Function1In2Out<ValueString, ValueString, KuaNumber>(
+            FunctionInput1Schema(ValueString::class),
+            FunctionOutput2Schema(ValueString::class, KuaNumber::class)
         ) {
-            override fun invoke(ctx: FunctionContext, arg1: KuaString): Pair<KuaString, KuaNumber> {
-                return KuaString(arg1.stringValue.uppercase()) to KuaNumber(arg1.stringValue.length)
+            override fun invoke(ctx: FunctionContext, arg1: ValueString): Pair<ValueString, KuaNumber> {
+                return ValueString(arg1.stringValue.uppercase()) to KuaNumber(arg1.stringValue.length)
             }
         }
 
         sandbox.register(
             RunnerPlugin(
-                name = KuaString("test"),
+                name = ValueString("test"),
                 factoryCode = KuaCode(
                     """
                     function plugin_create(internal)
@@ -232,8 +232,8 @@ internal class FunctionTest {
                 """.trimIndent()
                 ),
                 internals = mapOf(
-                    KuaString("transform") to transform,
-                    KuaString("capture") to captor
+                    ValueString("transform") to transform,
+                    ValueString("capture") to captor
                 )
             )
         )
@@ -253,22 +253,22 @@ internal class FunctionTest {
     @Test
     fun `Tests Function2In2Out`() {
         val captor = Captor2()
-        val transform = object : Function2In2Out<KuaString, KuaNumber, KuaString, KuaNumber>(
-            FunctionInput2Schema(KuaString::class, KuaNumber::class),
-            FunctionOutput2Schema(KuaString::class, KuaNumber::class)
+        val transform = object : Function2In2Out<ValueString, KuaNumber, ValueString, KuaNumber>(
+            FunctionInput2Schema(ValueString::class, KuaNumber::class),
+            FunctionOutput2Schema(ValueString::class, KuaNumber::class)
         ) {
             override fun invoke(
                 ctx: FunctionContext,
-                arg1: KuaString,
+                arg1: ValueString,
                 arg2: KuaNumber
-            ): Pair<KuaString, KuaNumber> {
-                return KuaString(arg1.stringValue.reversed()) to (arg2 * -1)
+            ): Pair<ValueString, KuaNumber> {
+                return ValueString(arg1.stringValue.reversed()) to (arg2 * -1)
             }
         }
 
         sandbox.register(
             RunnerPlugin(
-                name = KuaString("test"),
+                name = ValueString("test"),
                 factoryCode = KuaCode(
                     """
                     function plugin_create(internal)
@@ -281,8 +281,8 @@ internal class FunctionTest {
                 """.trimIndent()
                 ),
                 internals = mapOf(
-                    KuaString("transform") to transform,
-                    KuaString("capture") to captor
+                    ValueString("transform") to transform,
+                    ValueString("capture") to captor
                 )
             )
         )
@@ -302,15 +302,15 @@ internal class FunctionTest {
     fun `Tests Function0In2Out and Function2In0Out`() {
         val captor = Captor2()
         val emitter = object :
-            Function0In2Out<KuaString, KuaNumber>(FunctionOutput2Schema(KuaString::class, KuaNumber::class)) {
-            override fun invoke(ctx: FunctionContext): Pair<KuaString, KuaNumber> {
-                return KuaString("answer") to KuaNumber(42)
+            Function0In2Out<ValueString, KuaNumber>(FunctionOutput2Schema(ValueString::class, KuaNumber::class)) {
+            override fun invoke(ctx: FunctionContext): Pair<ValueString, KuaNumber> {
+                return ValueString("answer") to KuaNumber(42)
             }
         }
 
         sandbox.register(
             RunnerPlugin(
-                name = KuaString("test"),
+                name = ValueString("test"),
                 factoryCode = KuaCode(
                     """
                     function plugin_create(internal)
@@ -323,8 +323,8 @@ internal class FunctionTest {
                 """.trimIndent()
                 ),
                 internals = mapOf(
-                    KuaString("emit") to emitter,
-                    KuaString("capture") to captor
+                    ValueString("emit") to emitter,
+                    ValueString("capture") to captor
                 )
             )
         )
@@ -340,18 +340,18 @@ internal class FunctionTest {
         assertThat(captor.result, equalTo("answer=42.0"))
     }
 
-    private class Captor1 : Function1In0Out<KuaString>(FunctionInput1Schema(KuaString::class)) {
-        override fun invoke(ctx: FunctionContext, arg1: KuaString) {
+    private class Captor1 : Function1In0Out<ValueString>(FunctionInput1Schema(ValueString::class)) {
+        override fun invoke(ctx: FunctionContext, arg1: ValueString) {
             result = arg1.stringValue
         }
 
         var result: String? = null
     }
 
-    private class Captor2 : Function2In0Out<KuaString, KuaNumber>(
-        FunctionInput2Schema(KuaString::class, KuaNumber::class)
+    private class Captor2 : Function2In0Out<ValueString, KuaNumber>(
+        FunctionInput2Schema(ValueString::class, KuaNumber::class)
     ) {
-        override fun invoke(ctx: FunctionContext, arg1: KuaString, arg2: KuaNumber) {
+        override fun invoke(ctx: FunctionContext, arg1: ValueString, arg2: KuaNumber) {
             result = "${arg1.stringValue}=${arg2.doubleValue}"
         }
 

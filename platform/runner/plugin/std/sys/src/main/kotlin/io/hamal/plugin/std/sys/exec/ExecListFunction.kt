@@ -7,10 +7,13 @@ import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.tableCreate
-import io.hamal.lib.kua.type.*
+import io.hamal.lib.kua.type.KuaError
+import io.hamal.lib.kua.type.KuaTable
+import io.hamal.lib.kua.type.findTable
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiExecService
 import io.hamal.lib.value.ValueNil
+import io.hamal.lib.value.ValueString
 
 class ExecListFunction(
     private val sdk: ApiSdk
@@ -24,12 +27,12 @@ class ExecListFunction(
                 ApiExecService.ExecQuery(
                     namespaceIds = arg1.findTable("namespace_ids")
                         ?.asList()
-                        ?.map { NamespaceId((it as KuaString).stringValue) }
+                        ?.map { NamespaceId((it as ValueString).stringValue) }
                         ?.toList()
                         ?: listOf(ctx[NamespaceId::class]),
                     workspaceIds = arg1.findTable("workspace_ids")
                         ?.asList()
-                        ?.map { WorkspaceId((it as KuaString).stringValue) }
+                        ?.map { WorkspaceId((it as ValueString).stringValue) }
                         ?.toList()
                         ?: listOf(ctx[WorkspaceId::class])
                 )
@@ -37,9 +40,9 @@ class ExecListFunction(
             null to ctx.tableCreate(
                 execs.map { exec ->
                     ctx.tableCreate(
-                        "id" to KuaString(exec.id.value.value.toString(16)),
-                        "status" to KuaString(exec.status.toString()),
-                        "correlation_id" to (exec.correlation?.value?.let(::KuaString) ?: ValueNil)
+                        "id" to ValueString(exec.id.value.value.toString(16)),
+                        "status" to ValueString(exec.status.toString()),
+                        "correlation_id" to (exec.correlation?.value?.let(::ValueString) ?: ValueNil)
                     )
                 }
             )

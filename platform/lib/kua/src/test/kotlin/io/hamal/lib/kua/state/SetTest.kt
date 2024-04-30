@@ -5,10 +5,10 @@ import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.kua.type.KuaNumber
-import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.kua.type.KuaTable
 import io.hamal.lib.value.ValueDecimal
 import io.hamal.lib.value.ValueNil
+import io.hamal.lib.value.ValueString
 import io.hamal.lib.value.ValueTrue
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -55,8 +55,8 @@ internal class SetTest : StateBaseTest() {
 
     @TestFactory
     fun `String`() = runTest { testInstance ->
-        testInstance.push(KuaString("Hamal Rocks"))
-        assertThat(testInstance.stringGet(1), equalTo(KuaString("Hamal Rocks")))
+        testInstance.push(ValueString("Hamal Rocks"))
+        assertThat(testInstance.stringGet(1), equalTo(ValueString("Hamal Rocks")))
     }
 
     @TestFactory

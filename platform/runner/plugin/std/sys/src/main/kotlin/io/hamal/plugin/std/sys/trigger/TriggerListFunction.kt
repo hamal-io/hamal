@@ -7,12 +7,12 @@ import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.type.KuaError
-import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.kua.type.KuaTable
 import io.hamal.lib.kua.type.findTable
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiTriggerList
 import io.hamal.lib.sdk.api.ApiTriggerService
+import io.hamal.lib.value.ValueString
 
 class TriggerListFunction(
     private val sdk: ApiSdk
@@ -24,7 +24,7 @@ class TriggerListFunction(
             null to ctx.tableCreate(sdk.trigger.list(
                 ApiTriggerService.TriggerQuery(
                     namespaceIds = arg1.findTable("namespace_ids")
-                        ?.asList()?.map { NamespaceId((it as KuaString).stringValue) }?.toList()
+                        ?.asList()?.map { NamespaceId((it as ValueString).stringValue) }?.toList()
                         ?: listOf(ctx[NamespaceId::class])
 
                 )
@@ -32,84 +32,84 @@ class TriggerListFunction(
                 when (trigger) {
                     is ApiTriggerList.FixedRate -> {
                         ctx.tableCreate(
-                            "id" to KuaString(trigger.id.value.value.toString(16)),
-                            "type" to KuaString("FixedRate"),
-                            "name" to KuaString(trigger.name.value),
+                            "id" to ValueString(trigger.id.value.value.toString(16)),
+                            "type" to ValueString("FixedRate"),
+                            "name" to ValueString(trigger.name.value),
                             "namespace" to ctx.tableCreate(
-                                "id" to KuaString(trigger.namespace.id.value.value.toString(16)),
-                                "name" to KuaString(trigger.namespace.name.value)
+                                "id" to ValueString(trigger.namespace.id.value.value.toString(16)),
+                                "name" to ValueString(trigger.namespace.name.value)
                             ),
                             "func" to ctx.tableCreate(
-                                "id" to KuaString(trigger.func.id.value.value.toString(16)),
-                                "name" to KuaString(trigger.func.name.value)
+                                "id" to ValueString(trigger.func.id.value.value.toString(16)),
+                                "name" to ValueString(trigger.func.name.value)
                             ),
-                            "duration" to KuaString(trigger.duration.value)
+                            "duration" to ValueString(trigger.duration.value)
                         )
                     }
 
                     is ApiTriggerList.Event -> {
                         ctx.tableCreate(
-                            "id" to KuaString(trigger.id.value.value.toString(16)),
-                            "type" to KuaString("Event"),
-                            "name" to KuaString(trigger.name.value),
+                            "id" to ValueString(trigger.id.value.value.toString(16)),
+                            "type" to ValueString("Event"),
+                            "name" to ValueString(trigger.name.value),
                             "namespace" to ctx.tableCreate(
-                                "id" to KuaString(trigger.namespace.id.value.value.toString(16)),
-                                "name" to KuaString(trigger.namespace.name.value)
+                                "id" to ValueString(trigger.namespace.id.value.value.toString(16)),
+                                "name" to ValueString(trigger.namespace.name.value)
                             ),
                             "func" to ctx.tableCreate(
-                                "id" to KuaString(trigger.func.id.value.value.toString(16)),
-                                "name" to KuaString(trigger.func.name.value)
+                                "id" to ValueString(trigger.func.id.value.value.toString(16)),
+                                "name" to ValueString(trigger.func.name.value)
                             ),
                             "topic" to ctx.tableCreate(
-                                "id" to KuaString(trigger.topic.id.value.value.toString(16)),
-                                "name" to KuaString(trigger.topic.name.value)
+                                "id" to ValueString(trigger.topic.id.value.value.toString(16)),
+                                "name" to ValueString(trigger.topic.name.value)
                             ),
                         )
                     }
 
                     is ApiTriggerList.Hook -> {
                         ctx.tableCreate(
-                            "id" to KuaString(trigger.id.value.value.toString(16)),
-                            "type" to KuaString("Hook"),
-                            "name" to KuaString(trigger.name.value),
+                            "id" to ValueString(trigger.id.value.value.toString(16)),
+                            "type" to ValueString("Hook"),
+                            "name" to ValueString(trigger.name.value),
                             "namespace" to ctx.tableCreate(
-                                "id" to KuaString(trigger.namespace.id.value.value.toString(16)),
-                                "name" to KuaString(trigger.namespace.name.value)
+                                "id" to ValueString(trigger.namespace.id.value.value.toString(16)),
+                                "name" to ValueString(trigger.namespace.name.value)
                             ),
                             "func" to ctx.tableCreate(
-                                "id" to KuaString(trigger.func.id.value.value.toString(16)),
-                                "name" to KuaString(trigger.func.name.value)
+                                "id" to ValueString(trigger.func.id.value.value.toString(16)),
+                                "name" to ValueString(trigger.func.name.value)
                             ),
                         )
                     }
 
                     is ApiTriggerList.Cron -> ctx.tableCreate(
-                        "id" to KuaString(trigger.id.value.value.toString(16)),
-                        "type" to KuaString("Cron"),
-                        "name" to KuaString(trigger.name.value),
+                        "id" to ValueString(trigger.id.value.value.toString(16)),
+                        "type" to ValueString("Cron"),
+                        "name" to ValueString(trigger.name.value),
                         "namespace" to ctx.tableCreate(
-                            "id" to KuaString(trigger.namespace.id.value.value.toString(16)),
-                            "name" to KuaString(trigger.namespace.name.value)
+                            "id" to ValueString(trigger.namespace.id.value.value.toString(16)),
+                            "name" to ValueString(trigger.namespace.name.value)
                         ),
                         "func" to ctx.tableCreate(
-                            "id" to KuaString(trigger.func.id.value.value.toString(16)),
-                            "name" to KuaString(trigger.func.name.value)
+                            "id" to ValueString(trigger.func.id.value.value.toString(16)),
+                            "name" to ValueString(trigger.func.name.value)
                         ),
-                        "cron" to KuaString(trigger.cron.value)
+                        "cron" to ValueString(trigger.cron.value)
                     )
 
                     is ApiTriggerList.Endpoint -> {
                         ctx.tableCreate(
-                            "id" to KuaString(trigger.id.value.value.toString(16)),
-                            "type" to KuaString("Endpoint"),
-                            "name" to KuaString(trigger.name.value),
+                            "id" to ValueString(trigger.id.value.value.toString(16)),
+                            "type" to ValueString("Endpoint"),
+                            "name" to ValueString(trigger.name.value),
                             "namespace" to ctx.tableCreate(
-                                "id" to KuaString(trigger.namespace.id.value.value.toString(16)),
-                                "name" to KuaString(trigger.namespace.name.value)
+                                "id" to ValueString(trigger.namespace.id.value.value.toString(16)),
+                                "name" to ValueString(trigger.namespace.name.value)
                             ),
                             "func" to ctx.tableCreate(
-                                "id" to KuaString(trigger.func.id.value.value.toString(16)),
-                                "name" to KuaString(trigger.func.name.value)
+                                "id" to ValueString(trigger.func.id.value.value.toString(16)),
+                                "name" to ValueString(trigger.func.name.value)
                             )
                         )
                     }

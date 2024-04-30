@@ -10,6 +10,7 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.topPop
 import io.hamal.lib.kua.type.*
+import io.hamal.lib.value.ValueString
 import io.hamal.lib.web3.evm.abi.type.EvmPrefixedHexString
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
 import io.hamal.lib.web3.evm.domain.EvmHotGetBlockResponse
@@ -36,12 +37,12 @@ class EvmExecuteFunction : Function1In2Out<KuaTable, KuaError, KuaTable>(
                         val request = ctx.tableGet(ctx.absIndex(-1))
                         ctx.checkpoint {
                             when (request.getString("type")) {
-                                KuaString("get_block") -> {
+                                ValueString("get_block") -> {
 
                                     val block = when (request.type("block")) {
                                         KuaNumber::class -> batchService.getBlock(EvmUint64(request.getLong("block")))
                                         //FIXME support get by hash too
-                                        KuaString::class -> {
+                                        ValueString::class -> {
                                             val block = request.getString("block").stringValue
                                             if (block.isDecimal()) {
                                                 batchService.getBlock(EvmUint64(block.toBigInteger()))
@@ -70,7 +71,7 @@ class EvmExecuteFunction : Function1In2Out<KuaTable, KuaError, KuaTable>(
                             is EvmHotGetBlockResponse -> {
                                 result.append(
                                     ctx.tableCreate().also { result ->
-                                        result["id"] = KuaString(response.id.value)
+                                        result["id"] = ValueString(response.id.value)
                                         result["result"] = response.result.toKuaSnakeCase(ctx)
                                     }
                                 )

@@ -11,7 +11,7 @@ import io.hamal.lib.domain.toHot
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
-import io.hamal.lib.kua.type.KuaString
+import io.hamal.lib.value.ValueString
 import io.hamal.runner.connector.UnitOfWork
 import io.hamal.runner.run.AbstractExecuteTest
 import org.hamcrest.MatcherAssert.assertThat
@@ -58,7 +58,7 @@ internal object EventInvocationTest : AbstractExecuteTest() {
     fun `Events available in function`() {
         val testFn = TestFunction()
 
-        val testExecutor = createTestRunner(KuaString("fn") to testFn)
+        val testExecutor = createTestRunner(ValueString("fn") to testFn)
         testExecutor.run(
             UnitOfWork(
                 id = ExecId(1234),
@@ -150,7 +150,7 @@ internal object HookInvocationTest : AbstractExecuteTest() {
     fun `Hook available in function`() {
         val testFn = TestFunction()
 
-        val testExecutor = createTestRunner(KuaString("fn") to testFn)
+        val testExecutor = createTestRunner(ValueString("fn") to testFn)
         testExecutor.run(
             UnitOfWork(
                 id = ExecId(1234),
@@ -246,7 +246,7 @@ internal object EndpointInvocationTest : AbstractExecuteTest() {
     fun `Endpoint available in function`() {
         val testFn = TestFunction()
 
-        val testExecutor = createTestRunner(KuaString("fn") to testFn)
+        val testExecutor = createTestRunner(ValueString("fn") to testFn)
         testExecutor.run(
             UnitOfWork(
                 id = ExecId(1234),

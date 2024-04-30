@@ -2,7 +2,7 @@ package io.hamal.lib.kua.state
 
 import io.hamal.lib.kua.*
 import io.hamal.lib.kua.type.KuaNumber
-import io.hamal.lib.kua.type.KuaString
+import io.hamal.lib.value.ValueString
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.TestFactory
@@ -12,11 +12,11 @@ internal class TableRawGetTest : StateBaseTest() {
     @TestFactory
     fun `Gets value from table`() = runTest { testInstance ->
         testInstance.tableCreate(0, 1)
-        testInstance.stringPush(KuaString("key"))
+        testInstance.stringPush(ValueString("key"))
         testInstance.numberPush(KuaNumber(23.0))
         testInstance.tableRawSet(1)
 
-        testInstance.stringPush(KuaString("key"))
+        testInstance.stringPush(ValueString("key"))
 
         testInstance.tableRawGet(1).also { valueClass ->
             assertThat(valueClass, equalTo(KuaNumber::class))

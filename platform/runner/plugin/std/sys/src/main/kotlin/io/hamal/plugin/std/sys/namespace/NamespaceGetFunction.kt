@@ -6,23 +6,23 @@ import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.KuaError
-import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.kua.type.KuaTable
 import io.hamal.lib.sdk.ApiSdk
+import io.hamal.lib.value.ValueString
 
 class NamespaceGetFunction(
     private val sdk: ApiSdk
-) : Function1In2Out<KuaString, KuaError, KuaTable>(
-    FunctionInput1Schema(KuaString::class),
+) : Function1In2Out<ValueString, KuaError, KuaTable>(
+    FunctionInput1Schema(ValueString::class),
     FunctionOutput2Schema(KuaError::class, KuaTable::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: KuaString): Pair<KuaError?, KuaTable?> {
+    override fun invoke(ctx: FunctionContext, arg1: ValueString): Pair<KuaError?, KuaTable?> {
         return try {
             null to sdk.namespace.get(NamespaceId(arg1.stringValue))
                 .let { namespace ->
                     ctx.tableCreate(
-                        "id" to KuaString(namespace.id.value.value.toString(16)),
-                        "name" to KuaString(namespace.name.value)
+                        "id" to ValueString(namespace.id.value.value.toString(16)),
+                        "name" to ValueString(namespace.name.value)
                     )
                 }
         } catch (t: Throwable) {

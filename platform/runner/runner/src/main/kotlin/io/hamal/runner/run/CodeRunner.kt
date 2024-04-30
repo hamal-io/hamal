@@ -14,6 +14,7 @@ import io.hamal.lib.nodes.NodesGraph
 import io.hamal.lib.nodes.compiler.Compiler
 import io.hamal.lib.nodes.json
 import io.hamal.lib.value.ValueNil
+import io.hamal.lib.value.ValueString
 import io.hamal.runner.config.EnvFactory
 import io.hamal.runner.config.SandboxFactory
 import io.hamal.runner.connector.Connector
@@ -59,18 +60,18 @@ class CodeRunnerImpl(
                         contextExtension.internals.forEach { entry ->
                             when (val value = entry.value) {
                                 is ValueNil -> {}
-                                is KuaString -> internalTable[entry.key] = value
+                                is ValueString -> internalTable[entry.key] = value
                                 is KuaNumber -> internalTable[entry.key] = value
                                 is KuaFunction<*, *, *, *> -> internalTable[entry.key] = value
                                 is KuaTable -> internalTable[entry.key] = value
                                 else -> TODO()
                             }
                         }
-                        sandbox.globalSet(KuaString("_internal"), internalTable)
+                        sandbox.globalSet(ValueString("_internal"), internalTable)
                         sandbox.codeLoad(contextExtension.factoryCode)
 //
                         sandbox.codeLoad(KuaCode("${contextExtension.name} = plugin_create(_internal)"))
-                        sandbox.globalUnset(KuaString("_internal"))
+                        sandbox.globalUnset(ValueString("_internal"))
 
                         when (unitOfWork.codeType) {
                             CodeType.None -> TODO()
@@ -87,11 +88,11 @@ class CodeRunnerImpl(
                         }
 
 
-                        val ctx = sandbox.globalGetTable(KuaString("context"))
+                        val ctx = sandbox.globalGetTable(ValueString("context"))
 
                         // FIXME nodes can have state as well
                         val stateToSubmit = if (unitOfWork.codeType == CodeType.Lua54) {
-                            ctx.getTable(KuaString("state")).toHotObject()
+                            ctx.getTable(ValueString("state")).toHotObject()
                         } else {
                             HotObject.empty
                         }
@@ -108,8 +109,8 @@ class CodeRunnerImpl(
                         if (cause is ExitError) {
                             if (cause.status == HotNumber(0.0)) {
 
-                                val ctx = sandbox.globalGetTable(KuaString("context"))
-                                val stateToSubmit = ctx.getTable(KuaString("state")).toHotObject()
+                                val ctx = sandbox.globalGetTable(ValueString("context"))
+                                val stateToSubmit = ctx.getTable(ValueString("state")).toHotObject()
 
                                 connector.complete(
                                     execId,

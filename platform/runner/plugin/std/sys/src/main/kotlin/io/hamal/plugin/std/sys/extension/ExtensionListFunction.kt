@@ -6,9 +6,9 @@ import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.type.KuaError
-import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.kua.type.KuaTable
 import io.hamal.lib.sdk.ApiSdk
+import io.hamal.lib.value.ValueString
 
 class ExtensionListFunction(
     private val sdk: ApiSdk
@@ -21,8 +21,8 @@ class ExtensionListFunction(
             null to ctx.tableCreate(
                 extensions.map { ext ->
                     ctx.tableCreate(
-                        "id" to KuaString(ext.id.value.value.toString(16)),
-                        "name" to KuaString(ext.name.value)
+                        "id" to ValueString(ext.id.value.value.toString(16)),
+                        "name" to ValueString(ext.name.value)
                     )
                 }
             )

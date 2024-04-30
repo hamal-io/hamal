@@ -8,9 +8,13 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.type.*
+import io.hamal.lib.kua.type.KuaError
+import io.hamal.lib.kua.type.KuaTable
+import io.hamal.lib.kua.type.findString
+import io.hamal.lib.kua.type.getString
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiFuncUpdateRequest
+import io.hamal.lib.value.ValueString
 
 class FuncUpdateFunction(
     private val sdk: ApiSdk
@@ -29,9 +33,9 @@ class FuncUpdateFunction(
                 )
             )
             null to ctx.tableCreate(
-                "request_id" to KuaString(res.requestId.value.value.toString(16)),
-                "request_status" to KuaString(res.requestStatus.name),
-                "id" to KuaString(res.id.value.value.toString(16))
+                "request_id" to ValueString(res.requestId.value.value.toString(16)),
+                "request_status" to ValueString(res.requestStatus.name),
+                "id" to ValueString(res.id.value.value.toString(16))
             )
 
         } catch (t: Throwable) {

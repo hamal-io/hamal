@@ -4,9 +4,9 @@ import io.hamal.lib.kua.StackTop
 import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.type
 import io.hamal.lib.kua.type.KuaNumber
-import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.kua.type.KuaTable
 import io.hamal.lib.kua.type.getNumber
+import io.hamal.lib.value.ValueString
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.TestFactory
@@ -15,7 +15,7 @@ internal class ReferenceAcquireTest : StateBaseTest() {
 
     @TestFactory
     fun `Acquires reference of table`() = runTest { testInstance ->
-        testInstance.tableCreate(KuaString("answer") to KuaNumber(42.0))
+        testInstance.tableCreate(ValueString("answer") to KuaNumber(42.0))
 
         val reference = testInstance.referenceAcquire()
         assertThat(testInstance.topGet(), equalTo(StackTop(0)))

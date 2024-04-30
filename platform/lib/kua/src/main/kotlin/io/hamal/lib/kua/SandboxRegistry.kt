@@ -3,14 +3,14 @@ package io.hamal.lib.kua
 import io.hamal.lib.kua.extend.extension.RunnerExtension
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.type.KuaCode
-import io.hamal.lib.kua.type.KuaString
+import io.hamal.lib.value.ValueString
 
 interface SandboxRegistry {
     fun register(plugin: RunnerPlugin)
     fun register(extension: RunnerExtension)
 
-    fun pluginPush(name: KuaString)
-    fun extensionPush(name: KuaString)
+    fun pluginPush(name: ValueString)
+    fun extensionPush(name: ValueString)
 }
 
 internal class SandboxRegistryImpl(
@@ -27,31 +27,31 @@ internal class SandboxRegistryImpl(
         extensionPush(extension.name)
     }
 
-    override fun pluginPush(name: KuaString) {
+    override fun pluginPush(name: ValueString) {
         val extension = plugins[name]!!
 
-        state.globalSet(KuaString("_internal"), state.tableCreate(extension.internals))
+        state.globalSet(ValueString("_internal"), state.tableCreate(extension.internals))
         state.codeLoad(plugins[name]!!.factoryCode)
         state.codeLoad(KuaCode("_instance = plugin_create(_internal)"))
 
-        state.globalGetTable(KuaString("_instance")).also {
+        state.globalGetTable(ValueString("_instance")).also {
             // clean up
-            state.globalUnset(KuaString("_internal"))
-            state.globalUnset(KuaString("_instance"))
+            state.globalUnset(ValueString("_internal"))
+            state.globalUnset(ValueString("_instance"))
         }
     }
 
-    override fun extensionPush(name: KuaString) {
+    override fun extensionPush(name: ValueString) {
         val extension = extensions[name]!!
 
         state.codeLoad(extension.factoryCode)
         state.codeLoad(KuaCode("_instance = extension_create()"))
-        state.globalGetTable(KuaString("_instance")).also {
+        state.globalGetTable(ValueString("_instance")).also {
             // clean up
-            state.globalUnset(KuaString("_instance"))
+            state.globalUnset(ValueString("_instance"))
         }
     }
 
-    private val plugins = mutableMapOf<KuaString, RunnerPlugin>()
-    private val extensions = mutableMapOf<KuaString, RunnerExtension>()
+    private val plugins = mutableMapOf<ValueString, RunnerPlugin>()
+    private val extensions = mutableMapOf<ValueString, RunnerExtension>()
 }

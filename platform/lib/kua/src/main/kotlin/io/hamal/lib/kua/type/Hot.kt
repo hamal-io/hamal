@@ -12,7 +12,7 @@ fun HotNode<*>?.toKua(state: State): Value {
     }
     return when (this) {
         is HotObject -> state.tableCreate(nodes.map { (key, value) ->
-            KuaString(key) to value.toKua(
+            ValueString(key) to value.toKua(
                 state
             )
         }.toMap())
@@ -21,7 +21,7 @@ fun HotNode<*>?.toKua(state: State): Value {
         is HotBoolean -> if (value) ValueTrue else ValueFalse
         is HotNull -> ValueNil
         is HotNumber -> KuaNumber(value.toDouble())
-        is HotString -> KuaString(value)
+        is HotString -> ValueString(value)
         else -> TODO()
     }
 }
@@ -32,7 +32,7 @@ fun HotNode<*>?.toKuaSnakeCase(state: State): Value {
     }
     return when (this) {
         is HotObject -> state.tableCreate(nodes.map { (key, value) ->
-            KuaString(StringUtils.snakeCase(key)) to value.toKuaSnakeCase(
+            ValueString(StringUtils.snakeCase(key)) to value.toKuaSnakeCase(
                 state
             )
         }.toMap())
@@ -41,7 +41,7 @@ fun HotNode<*>?.toKuaSnakeCase(state: State): Value {
         is HotBoolean -> if (value) ValueTrue else ValueFalse
         is HotNull -> ValueNil
         is HotNumber -> KuaNumber(value.toDouble())
-        is HotString -> KuaString(value)
+        is HotString -> ValueString(value)
         else -> TODO()
     }
 }
@@ -57,7 +57,7 @@ fun Value.toHotNode(): HotNode<*> {
         is KuaFunction<*, *, *, *> -> TODO()
         is ValueNil -> HotNull
         is KuaNumber -> HotNumber(doubleValue)
-        is KuaString -> HotString(stringValue)
+        is ValueString -> HotString(stringValue)
         is KuaTable -> {
             if (isArray()) {
                 toHotArray()

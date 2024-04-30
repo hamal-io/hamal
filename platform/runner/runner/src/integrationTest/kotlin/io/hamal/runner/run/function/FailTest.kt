@@ -8,7 +8,7 @@ import io.hamal.lib.kua.function.Function0In1Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionOutput1Schema
 import io.hamal.lib.kua.type.KuaError
-import io.hamal.lib.kua.type.KuaString
+import io.hamal.lib.value.ValueString
 import io.hamal.runner.connector.UnitOfWork
 import io.hamal.runner.run.AbstractExecuteTest
 import io.hamal.runner.test.TestFailConnector
@@ -37,7 +37,7 @@ internal class FailTest : AbstractExecuteTest() {
     fun `Fails execution with error`() {
         val runner = createTestRunner(
             testPlugins = arrayOf(
-                KuaString("returns_error") to FunctionReturnsError(),
+                ValueString("returns_error") to FunctionReturnsError(),
             ),
             connector = TestFailConnector { execId, execResult ->
                 assertThat(execId, equalTo(ExecId(1234)))

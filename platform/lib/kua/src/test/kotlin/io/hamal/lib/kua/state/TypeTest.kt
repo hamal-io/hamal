@@ -4,11 +4,11 @@ import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.type
-import io.hamal.lib.kua.type.*
-import io.hamal.lib.value.ValueBoolean
-import io.hamal.lib.value.ValueDecimal
-import io.hamal.lib.value.ValueNil
-import io.hamal.lib.value.ValueTrue
+import io.hamal.lib.kua.type.KuaError
+import io.hamal.lib.kua.type.KuaFunction
+import io.hamal.lib.kua.type.KuaNumber
+import io.hamal.lib.kua.type.KuaTable
+import io.hamal.lib.value.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.TestFactory
@@ -65,9 +65,9 @@ internal class TypeTest : StateBaseTest() {
 
     @TestFactory
     fun `String`() = runTest { testInstance ->
-        testInstance.stringPush(KuaString("Hamal Rocks"))
+        testInstance.stringPush(ValueString("Hamal Rocks"))
         testInstance.type(1).also { result ->
-            assertThat(result, equalTo(KuaString::class))
+            assertThat(result, equalTo(ValueString::class))
         }
     }
 

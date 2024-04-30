@@ -6,6 +6,7 @@ import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.function.*
 import io.hamal.lib.value.Value
 import io.hamal.lib.value.ValueNil
+import io.hamal.lib.value.ValueString
 import io.hamal.lib.value.ValueTrue
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
@@ -60,14 +61,14 @@ internal class ValueTest {
             )
         )
 
-        assertThat(captor.result, equalTo(KuaString("hamal.io")))
+        assertThat(captor.result, equalTo(ValueString("hamal.io")))
     }
 
     @Test
     fun `Can be used with table`() {
         val map = sandbox.tableCreate(0, 2)
-        map["key"] = KuaString("value")
-        sandbox.globalSet(KuaString("test_map"), map)
+        map["key"] = ValueString("value")
+        sandbox.globalSet(ValueString("test_map"), map)
 
         val captor = AnyValueResultCaptor()
         sandbox.register(plugin(captor))
@@ -84,7 +85,7 @@ internal class ValueTest {
         val underlying = captor.result
         require(underlying is KuaTable) { "Not a table" }
         assertThat(underlying.length, equalTo(TableLength(1)))
-        assertThat(underlying.getString("key"), equalTo(KuaString("value")))
+        assertThat(underlying.getString("key"), equalTo(ValueString("value")))
     }
 
     private class AnyValuePassThrough : Function1In1Out<Value, Value>(
@@ -108,7 +109,7 @@ internal class ValueTest {
 
     private fun plugin(captor: KuaFunction<*, *, *, *>) =
         RunnerPlugin(
-            name = KuaString("test"),
+            name = ValueString("test"),
             factoryCode = KuaCode(
                 """
                     function plugin_create(internal)
@@ -121,8 +122,8 @@ internal class ValueTest {
                 """.trimIndent()
             ),
             internals = mapOf(
-                KuaString("pass_through") to AnyValuePassThrough(),
-                KuaString("captor") to captor
+                ValueString("pass_through") to AnyValuePassThrough(),
+                ValueString("captor") to captor
             )
         )
 

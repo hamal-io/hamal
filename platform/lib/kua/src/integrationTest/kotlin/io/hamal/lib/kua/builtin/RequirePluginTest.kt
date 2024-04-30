@@ -5,7 +5,7 @@ import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.type.KuaCode
-import io.hamal.lib.kua.type.KuaString
+import io.hamal.lib.value.ValueString
 import org.junit.jupiter.api.Test
 
 internal object PluginTest {
@@ -33,7 +33,7 @@ internal object PluginTest {
         Sandbox(SandboxContextNop).also { sb ->
             sb.register(
                 RunnerPlugin(
-                    name = KuaString("test"),
+                    name = ValueString("test"),
                     factoryCode = KuaCode(
                         """
                             function plugin_create(internal)

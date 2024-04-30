@@ -7,11 +7,11 @@ import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.type.KuaError
-import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.kua.type.KuaTable
 import io.hamal.lib.kua.type.findTable
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiFuncService
+import io.hamal.lib.value.ValueString
 
 class FuncListFunction(
     private val sdk: ApiSdk
@@ -26,18 +26,18 @@ class FuncListFunction(
                     ApiFuncService.FuncQuery(
                         namespaceIds = arg1.findTable("namespace_ids")
                             ?.asList()
-                            ?.map { NamespaceId((it as KuaString).stringValue) }
+                            ?.map { NamespaceId((it as ValueString).stringValue) }
                             ?.toList()
                             ?: listOf(ctx[NamespaceId::class])
                     )
                 ).map { func ->
                     ctx.tableCreate(
-                        "id" to KuaString(func.id.value.value.toString(16)),
+                        "id" to ValueString(func.id.value.value.toString(16)),
                         "namespace" to ctx.tableCreate(
-                            "id" to KuaString(func.namespace.id.value.value.toString(16)),
-                            "name" to KuaString(func.namespace.name.value)
+                            "id" to ValueString(func.namespace.id.value.value.toString(16)),
+                            "name" to ValueString(func.namespace.name.value)
                         ),
-                        "name" to KuaString(func.name.value),
+                        "name" to ValueString(func.name.value),
                     )
                 }
             )

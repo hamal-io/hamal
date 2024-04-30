@@ -10,9 +10,13 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.type.*
+import io.hamal.lib.kua.type.KuaError
+import io.hamal.lib.kua.type.KuaTable
+import io.hamal.lib.kua.type.findString
+import io.hamal.lib.kua.type.getString
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiFuncCreateRequest
+import io.hamal.lib.value.ValueString
 
 class FuncCreateFunction(
     private val sdk: ApiSdk
@@ -23,7 +27,8 @@ class FuncCreateFunction(
     override fun invoke(ctx: FunctionContext, arg1: KuaTable): Pair<KuaError?, KuaTable?> {
         return try {
             val res = sdk.func.create(
-                arg1.findString("namespace_id")?.let { NamespaceId(SnowflakeId(it.stringValue)) } ?: ctx[NamespaceId::class],
+                arg1.findString("namespace_id")?.let { NamespaceId(SnowflakeId(it.stringValue)) }
+                    ?: ctx[NamespaceId::class],
                 ApiFuncCreateRequest(
                     name = FuncName(arg1.getString("name").stringValue),
                     inputs = FuncInputs(),
@@ -33,11 +38,11 @@ class FuncCreateFunction(
             )
 
             null to ctx.tableCreate(
-                "request_id" to KuaString(res.requestId.value.value.toString(16)),
-                "request_status" to KuaString(res.requestStatus.name),
-                "id" to KuaString(res.id.value.value.toString(16)),
-                "workspace_id" to KuaString(res.workspaceId.value.value.toString(16)),
-                "namespace_id" to KuaString(res.namespaceId.value.value.toString(16))
+                "request_id" to ValueString(res.requestId.value.value.toString(16)),
+                "request_status" to ValueString(res.requestStatus.name),
+                "id" to ValueString(res.id.value.value.toString(16)),
+                "workspace_id" to ValueString(res.workspaceId.value.value.toString(16)),
+                "namespace_id" to ValueString(res.namespaceId.value.value.toString(16))
             )
 
 

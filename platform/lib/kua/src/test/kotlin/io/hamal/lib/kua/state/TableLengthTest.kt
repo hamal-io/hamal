@@ -2,8 +2,8 @@ package io.hamal.lib.kua.state
 
 import io.hamal.lib.kua.*
 import io.hamal.lib.kua.type.KuaNumber
-import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.kua.type.KuaTable
+import io.hamal.lib.value.ValueString
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.TestFactory
@@ -40,23 +40,23 @@ internal class TableLengthTest : StateBaseTest() {
 
         testInstance.tableCreate(0, 1)
 
-        testInstance.stringPush(KuaString("value"))
-        testInstance.tableFieldSet(2, KuaString("key"))
+        testInstance.stringPush(ValueString("value"))
+        testInstance.tableFieldSet(2, ValueString("key"))
         assertThat(testInstance.tableLength(2), equalTo(TableLength(1)))
 
-        testInstance.stringPush(KuaString("value"))
-        testInstance.tableFieldSet(2, KuaString("key-2"))
+        testInstance.stringPush(ValueString("value"))
+        testInstance.tableFieldSet(2, ValueString("key-2"))
         assertThat(testInstance.tableLength(2), equalTo(TableLength(2)))
     }
 
     @TestFactory
     fun `Length of sub table`() = runTest { testInstance ->
         val nested = testInstance.tableCreate(
-            KuaString("hamal") to KuaString("rocks")
+            ValueString("hamal") to ValueString("rocks")
         )
 
         testInstance.tableCreate(
-            KuaString("nested") to nested
+            ValueString("nested") to nested
         )
 
         testInstance.tableSubTableGet(-1, "nested").also { resultClass ->

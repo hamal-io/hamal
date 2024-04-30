@@ -10,6 +10,7 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.*
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiFuncDeployRequest
+import io.hamal.lib.value.ValueString
 
 class FuncDeployFunction(
     private val sdk: ApiSdk
@@ -21,7 +22,7 @@ class FuncDeployFunction(
         return try {
 
             val funcId = FuncId(arg1.getString("id").stringValue)
-            val message = if (arg1.type("message") == KuaString::class) {
+            val message = if (arg1.type("message") == ValueString::class) {
                 DeployMessage(arg1.getString("message").stringValue)
             } else {
                 null
@@ -41,9 +42,9 @@ class FuncDeployFunction(
             )
 
             null to ctx.tableCreate(
-                "request_id" to KuaString(res.requestId.value.value.toString(16)),
-                "request_status" to KuaString(res.requestStatus.name),
-                "id" to KuaString(res.id.value.value.toString(16)),
+                "request_id" to ValueString(res.requestId.value.value.toString(16)),
+                "request_status" to ValueString(res.requestStatus.name),
+                "id" to ValueString(res.id.value.value.toString(16)),
             )
         } catch (t: Throwable) {
             KuaError(t.message!!) to null

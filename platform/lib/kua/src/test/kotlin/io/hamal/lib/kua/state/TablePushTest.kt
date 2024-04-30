@@ -3,9 +3,9 @@ package io.hamal.lib.kua.state
 import io.hamal.lib.kua.StackTop
 import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.type
-import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.kua.type.KuaTable
 import io.hamal.lib.kua.type.getString
+import io.hamal.lib.value.ValueString
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.TestFactory
@@ -14,7 +14,7 @@ internal class TablePushTest : StateBaseTest() {
 
     @TestFactory
     fun `Pushes value on stack`() = runTest { testInstance ->
-        val table = testInstance.tableCreate(KuaString("message") to KuaString("secret"))
+        val table = testInstance.tableCreate(ValueString("message") to ValueString("secret"))
 
         testInstance.tablePush(table)
 
@@ -22,7 +22,7 @@ internal class TablePushTest : StateBaseTest() {
         assertThat(testInstance.type(2), equalTo(KuaTable::class))
 
         KuaTable(2, testInstance).getString("message").also { result ->
-            assertThat(result, equalTo(KuaString("secret")))
+            assertThat(result, equalTo(ValueString("secret")))
         }
     }
 

@@ -9,7 +9,7 @@ import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.type.KuaCode
-import io.hamal.lib.kua.type.KuaString
+import io.hamal.lib.value.ValueString
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -43,7 +43,7 @@ class ScriptErrorTest {
         Sandbox(SandboxContextNop).also {
             it.register(
                 RunnerPlugin(
-                    name = KuaString("test"),
+                    name = ValueString("test"),
                     factoryCode = KuaCode(
                         """
                             function plugin_create(internal)
@@ -54,7 +54,7 @@ class ScriptErrorTest {
                             end
                     """.trimIndent()
                     ),
-                    internals = mapOf(KuaString("call") to CallbackFunction())
+                    internals = mapOf(ValueString("call") to CallbackFunction())
                 )
             )
         }

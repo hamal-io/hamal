@@ -14,9 +14,9 @@ import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput2Schema
 import io.hamal.lib.kua.function.FunctionOutput1Schema
 import io.hamal.lib.kua.type.KuaError
-import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.sdk.api.ApiExecLogAppendRequest
 import io.hamal.lib.sdk.api.ApiExecLogService
+import io.hamal.lib.value.ValueString
 
 
 val log = logger(LogFunction::class)
@@ -26,9 +26,9 @@ class PluginLogFactory(
 ) : RunnerPluginFactory {
     override fun create(sandbox: Sandbox): RunnerPlugin {
         return RunnerPlugin(
-            name = KuaString("std.log"),
+            name = ValueString("std.log"),
             internals = mapOf(
-                KuaString("log") to LogFunction(execLogService),
+                ValueString("log") to LogFunction(execLogService),
             )
         )
     }
@@ -36,12 +36,12 @@ class PluginLogFactory(
 
 class LogFunction(
     private val execLogService: ApiExecLogService
-) : Function2In1Out<KuaString, KuaString, KuaError>(
-    FunctionInput2Schema(KuaString::class, KuaString::class),
+) : Function2In1Out<ValueString, ValueString, KuaError>(
+    FunctionInput2Schema(ValueString::class, ValueString::class),
     FunctionOutput1Schema(KuaError::class)
 ) {
 
-    override fun invoke(ctx: FunctionContext, arg1: KuaString, arg2: KuaString): KuaError? {
+    override fun invoke(ctx: FunctionContext, arg1: ValueString, arg2: ValueString): KuaError? {
         val level = ExecLogLevel.valueOf(arg1.stringValue)
         val message = ExecLogMessage(arg2.stringValue)
 

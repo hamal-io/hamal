@@ -6,7 +6,7 @@ import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.type.KuaCode
-import io.hamal.lib.kua.type.KuaString
+import io.hamal.lib.value.ValueString
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -17,7 +17,7 @@ internal class RegisterExtensionTest : BaseSandboxTest() {
     fun `Registers an extension and call function`() {
         testInstance.register(
             RunnerExtension(
-                name = KuaString("some_plugin"),
+                name = ValueString("some_plugin"),
                 factoryCode = KuaCode(
                     """
                     function extension_create()
@@ -57,7 +57,7 @@ internal class RegisterPluginTest : BaseSandboxTest() {
         val func = TestFunction()
         testInstance.register(
             RunnerPlugin(
-                name = KuaString("some_plugin"),
+                name = ValueString("some_plugin"),
                 factoryCode = KuaCode(
                     """
                     function plugin_create(internal)
@@ -68,7 +68,7 @@ internal class RegisterPluginTest : BaseSandboxTest() {
                     end
                 """.trimIndent()
                 ),
-                internals = mapOf(KuaString("magic") to func)
+                internals = mapOf(ValueString("magic") to func)
             )
         )
 
