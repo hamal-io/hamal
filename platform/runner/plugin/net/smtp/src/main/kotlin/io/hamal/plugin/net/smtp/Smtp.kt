@@ -5,6 +5,7 @@ import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput1Schema
 import io.hamal.lib.kua.type.*
+import io.hamal.lib.value.ValueBoolean
 
 class SmtpSendFunction(
     private val sender: Sender
@@ -25,7 +26,7 @@ class SmtpSendFunction(
                 protocol = arg1.getString("protocol"),
                 debug = arg1.getBoolean("debug"),
                 testConnection = arg1.getBoolean("test_connection"),
-                auth = KuaBoolean.of(arg1.findString("username") != null || arg1.findString("password") != null),
+                auth = ValueBoolean.of(arg1.findString("username") != null || arg1.findString("password") != null),
                 enableStarttls = arg1.getBoolean("enable_starttls"),
                 connectionTimeout = arg1.getNumber("connection_timeout"),
                 timeout = arg1.getNumber("timeout"),

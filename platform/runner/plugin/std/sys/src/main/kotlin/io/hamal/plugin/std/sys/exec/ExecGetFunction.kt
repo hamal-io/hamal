@@ -6,10 +6,10 @@ import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.KuaError
-import io.hamal.lib.kua.type.KuaNil
 import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.kua.type.KuaTable
 import io.hamal.lib.sdk.ApiSdk
+import io.hamal.lib.value.ValueNil
 
 class ExecGetFunction(
     private val sdk: ApiSdk
@@ -25,7 +25,7 @@ class ExecGetFunction(
                 "status" to KuaString(exec.status.name),
                 "inputs" to ctx.tableCreate(),
                 "correlation" to ctx.tableCreate(
-                    "id" to (exec.correlation?.value?.let(::KuaString) ?: KuaNil)
+                    "id" to (exec.correlation?.value?.let(::KuaString) ?: ValueNil)
                 )
             )
         } catch (t: Throwable) {

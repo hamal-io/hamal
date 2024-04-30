@@ -1,6 +1,7 @@
 package io.hamal.lib.kua.type
 
 import io.hamal.lib.kua.*
+import io.hamal.lib.value.*
 import kotlin.reflect.KClass
 
 class KuaTable(
@@ -9,12 +10,12 @@ class KuaTable(
 ) : KuaType {
 
     constructor(index: Int, state: State) : this(KuaNumber(index), state)
-    
+
     val length get() : TableLength = state.tableLength(index)
 
-    fun append(value: KuaType): TableLength {
+    fun append(value: Value): TableLength {
         return when (value) {
-            is KuaBoolean -> {
+            is ValueBoolean -> {
                 state.booleanPush(value)
                 state.tableAppend(index)
             }
@@ -35,7 +36,7 @@ class KuaTable(
                 state.tableAppend(index)
             }
 
-            is KuaNil -> {
+            is ValueNil -> {
                 state.nilPush()
                 state.tableAppend(index)
             }
@@ -59,7 +60,7 @@ class KuaTable(
         }
     }
 
-    fun asEntries(): Sequence<Pair<KuaString, KuaType>> {
+    fun asEntries(): Sequence<Pair<KuaString, Value>> {
         return KuaTableIterator(
             index = index,
             state = state,
@@ -68,7 +69,7 @@ class KuaTable(
         ).asSequence().map { it.key to it.value }
     }
 
-    fun asList(): Sequence<KuaType> {
+    fun asList(): Sequence<Value> {
         return KuaTableIterator(
             index = index,
             state = state,
@@ -77,13 +78,13 @@ class KuaTable(
         ).asSequence().map { it.value }
     }
 
-    fun get(idx: KuaNumber): KuaType {
+    fun get(idx: KuaNumber): Value {
         return state.get(idx)
     }
 
-    fun getBoolean(idx: KuaNumber): KuaBoolean {
+    fun getBoolean(idx: KuaNumber): ValueBoolean {
         val type = state.tableRawGetIdx(index, idx)
-        type.checkExpectedType(KuaBoolean::class)
+        type.checkExpectedType(ValueBoolean::class)
         return state.booleanGet(-1)
     }
 
@@ -99,10 +100,10 @@ class KuaTable(
         return state.errorGet(-1)
     }
 
-    fun getNil(idx: KuaNumber): KuaNil {
+    fun getNil(idx: KuaNumber): ValueNil {
         val type = state.tableRawGetIdx(index, idx)
-        type.checkExpectedType(KuaNil::class)
-        return KuaNil
+        type.checkExpectedType(ValueNil::class)
+        return ValueNil
     }
 
     fun getNumber(idx: KuaNumber): KuaNumber {
@@ -118,11 +119,11 @@ class KuaTable(
     }
 
 
-    operator fun set(key: KuaString, value: KuaType): TableLength {
+    operator fun set(key: KuaString, value: Value): TableLength {
         return when (value) {
-            is KuaBoolean -> {
+            is ValueBoolean -> {
                 state.stringPush(key)
-                state.booleanPush(if (value.booleanValue) KuaTrue else KuaFalse)
+                state.booleanPush(if (value.booleanValue) ValueTrue else ValueFalse)
                 state.tableRawSet(index)
 
             }
@@ -152,7 +153,7 @@ class KuaTable(
                 state.tableRawSet(index)
             }
 
-            is KuaNil -> {
+            is ValueNil -> {
                 state.stringPush(key)
                 state.nilPush()
                 state.tableRawSet(index)
@@ -181,22 +182,22 @@ class KuaTable(
         }
     }
 
-    fun get(key: KuaString): KuaType {
+    fun get(key: KuaString): Value {
         state.tableFieldGet(index, key)
         return state.get(-1)
     }
 
-    fun findBoolean(key: KuaString): KuaBoolean? {
+    fun findBoolean(key: KuaString): ValueBoolean? {
         if (isNull(key)) {
             return null
         }
         state.stringPush(key)
         val type = state.tableRawGet(index)
-        type.checkExpectedType(KuaBoolean::class)
+        type.checkExpectedType(ValueBoolean::class)
         return state.booleanGet(-1).also { state.topPop(1) }
     }
 
-    fun getBoolean(key: KuaString): KuaBoolean {
+    fun getBoolean(key: KuaString): ValueBoolean {
         return findBoolean(key) ?: throw NoSuchElementException("$key not found")
     }
 
@@ -272,10 +273,10 @@ class KuaTable(
         return findTable(key) ?: throw NoSuchElementException("$key not found")
     }
 
-    fun isNull(key: KuaString): Boolean = type(key) == KuaNil::class
+    fun isNull(key: KuaString): Boolean = type(key) == ValueNil::class
 
     @Suppress("UNUSED_PARAMETER")
-    operator fun set(key: KuaString, value: KuaNil) = unset(key)
+    operator fun set(key: KuaString, value: ValueNil) = unset(key)
     fun unset(key: KuaString): TableLength {
         state.stringPush(key)
         state.nilPush()
@@ -283,12 +284,12 @@ class KuaTable(
     }
 
 
-    fun type(idx: KuaNumber): KClass<out KuaType> {
+    fun type(idx: KuaNumber): KClass<out Value> {
         state.tableGet(idx)
         return state.tableRawGet(index)
     }
 
-    fun type(key: KuaString): KClass<out KuaType> {
+    fun type(key: KuaString): KClass<out Value> {
         state.stringPush(key)
         return state.tableRawGet(index)
     }
@@ -297,7 +298,8 @@ class KuaTable(
 
 fun KuaTable.unset(key: String) = unset(KuaString(key))
 operator fun KuaTable.set(key: String, value: KuaType) = set(KuaString(key), value)
-operator fun KuaTable.set(key: String, value: Boolean) = set(KuaString(key), KuaBoolean.of(value))
+operator fun KuaTable.set(key: String, value: Value) = set(KuaString(key), value)
+operator fun KuaTable.set(key: String, value: Boolean) = set(KuaString(key), ValueBoolean.of(value))
 operator fun KuaTable.set(key: String, value: Int) = set(KuaString(key), KuaNumber(value))
 operator fun KuaTable.set(key: String, value: Long) = set(KuaString(key), KuaNumber(value.toDouble()))
 operator fun KuaTable.set(key: String, value: Float) = set(KuaString(key), KuaNumber(value.toDouble()))
@@ -325,5 +327,5 @@ fun KuaTable.getLong(key: String) = getNumber(key).longValue
 fun KuaTable.getString(key: String) = getString(KuaString(key))
 fun KuaTable.getTable(key: String) = getTable(KuaString(key))
 
-fun KuaTable.type(idx: Int): KClass<out KuaType> = type(KuaNumber(idx))
-fun KuaTable.type(key: String): KClass<out KuaType> = type(KuaString(key))
+fun KuaTable.type(idx: Int): KClass<out Value> = type(KuaNumber(idx))
+fun KuaTable.type(key: String): KClass<out Value> = type(KuaString(key))

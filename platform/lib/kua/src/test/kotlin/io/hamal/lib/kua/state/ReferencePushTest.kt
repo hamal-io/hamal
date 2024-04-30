@@ -5,6 +5,9 @@ import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.type.*
 import io.hamal.lib.kua.type.KuaError
+import io.hamal.lib.value.ValueBoolean
+import io.hamal.lib.value.ValueNil
+import io.hamal.lib.value.ValueTrue
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.TestFactory
@@ -13,16 +16,16 @@ internal class ReferencePushTest : StateBaseTest() {
 
     @TestFactory
     fun `Pushes reference value of boolean`() = runTest { testInstance ->
-        testInstance.booleanPush(KuaTrue)
+        testInstance.booleanPush(ValueTrue)
 
         val reference = testInstance.referenceAcquire()
         assertThat(testInstance.topGet(), equalTo(StackTop(0)))
 
-        testInstance.referencePush(reference).also { type -> assertThat(type, equalTo(KuaBoolean::class)) }
+        testInstance.referencePush(reference).also { type -> assertThat(type, equalTo(ValueBoolean::class)) }
 
         assertThat(testInstance.topGet(), equalTo(StackTop(1)))
-        assertThat(testInstance.type(1), equalTo(KuaBoolean::class))
-        assertThat(testInstance.booleanGet(1), equalTo(KuaTrue))
+        assertThat(testInstance.type(1), equalTo(ValueBoolean::class))
+        assertThat(testInstance.booleanGet(1), equalTo(ValueTrue))
     }
 
     @TestFactory
@@ -80,10 +83,10 @@ internal class ReferencePushTest : StateBaseTest() {
         val reference = testInstance.referenceAcquire()
         assertThat(testInstance.topGet(), equalTo(StackTop(0)))
 
-        testInstance.referencePush(reference).also { type -> assertThat(type, equalTo(KuaNil::class)) }
+        testInstance.referencePush(reference).also { type -> assertThat(type, equalTo(ValueNil::class)) }
 
         assertThat(testInstance.topGet(), equalTo(StackTop(1)))
-        assertThat(testInstance.type(1), equalTo(KuaNil::class))
+        assertThat(testInstance.type(1), equalTo(ValueNil::class))
     }
 
     @TestFactory

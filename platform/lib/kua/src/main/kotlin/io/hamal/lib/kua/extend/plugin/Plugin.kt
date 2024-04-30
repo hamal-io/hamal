@@ -3,7 +3,7 @@ package io.hamal.lib.kua.extend.plugin
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.type.KuaCode
 import io.hamal.lib.kua.type.KuaString
-import io.hamal.lib.kua.type.KuaType
+import io.hamal.lib.value.Value
 
 interface RunnerPluginFactory {
     fun create(sandbox: Sandbox): RunnerPlugin
@@ -12,7 +12,7 @@ interface RunnerPluginFactory {
 class RunnerPlugin(
     val name: KuaString,
     val factoryCode: KuaCode = loadFactoryCodeFromResources(name),
-    val internals: Map<KuaString, KuaType> = mapOf()
+    val internals: Map<KuaString, Value> = mapOf()
 ) {
 
     companion object {

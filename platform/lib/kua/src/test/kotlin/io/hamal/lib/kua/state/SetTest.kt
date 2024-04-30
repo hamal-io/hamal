@@ -5,6 +5,8 @@ import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.type.*
 import io.hamal.lib.kua.type.KuaError
+import io.hamal.lib.value.ValueNil
+import io.hamal.lib.value.ValueTrue
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.TestFactory
@@ -13,8 +15,8 @@ internal class SetTest : StateBaseTest() {
 
     @TestFactory
     fun `Boolean`() = runTest { testInstance ->
-        testInstance.push(KuaTrue)
-        assertThat(testInstance.booleanGet(1), equalTo(KuaTrue))
+        testInstance.push(ValueTrue)
+        assertThat(testInstance.booleanGet(1), equalTo(ValueTrue))
     }
 
     @TestFactory
@@ -38,7 +40,7 @@ internal class SetTest : StateBaseTest() {
 
     @TestFactory
     fun `Nil`() = runTest { testInstance ->
-        testInstance.push(KuaNil)
+        testInstance.push(ValueNil)
         assertThat(testInstance.topGet(), equalTo(StackTop(1)))
     }
 

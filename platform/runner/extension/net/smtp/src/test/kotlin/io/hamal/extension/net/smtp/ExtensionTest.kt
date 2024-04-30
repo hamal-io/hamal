@@ -1,9 +1,9 @@
 package io.hamal.extension.net.smtp
 
-import io.hamal.lib.kua.type.KuaFalse
 import io.hamal.lib.kua.type.KuaNumber
 import io.hamal.lib.kua.type.KuaString
-import io.hamal.lib.kua.type.KuaTrue
+import io.hamal.lib.value.ValueFalse
+import io.hamal.lib.value.ValueTrue
 import io.hamal.plugin.net.smtp.Message
 import io.hamal.plugin.net.smtp.PluginSmtpFactory
 import io.hamal.plugin.net.smtp.Sender
@@ -64,9 +64,9 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
         assertThat(config.username, equalTo(KuaString("username")))
         assertThat(config.password, equalTo(KuaString("password")))
         assertThat(config.protocol, equalTo(KuaString("protocol")))
-        assertThat(config.debug, equalTo(KuaTrue))
-        assertThat(config.enableStarttls, equalTo(KuaTrue))
-        assertThat(config.testConnection, equalTo(KuaTrue))
+        assertThat(config.debug, equalTo(ValueTrue))
+        assertThat(config.enableStarttls, equalTo(ValueTrue))
+        assertThat(config.testConnection, equalTo(ValueTrue))
 
         assertThat(config.connectionTimeout, equalTo(KuaNumber(1000)))
         assertThat(config.timeout, equalTo(KuaNumber(2000)))
@@ -288,7 +288,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
         )
 
         val config = fakeSender.config
-        assertThat(config.debug, equalTo(KuaFalse))
+        assertThat(config.debug, equalTo(ValueFalse))
     }
 
     @Test
@@ -318,7 +318,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
         )
 
         val config = fakeSender.config
-        assertThat(config.enableStarttls, equalTo(KuaFalse))
+        assertThat(config.enableStarttls, equalTo(ValueFalse))
     }
 
     @Test
@@ -348,7 +348,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
         )
 
         val config = fakeSender.config
-        assertThat(config.testConnection, equalTo(KuaFalse))
+        assertThat(config.testConnection, equalTo(ValueFalse))
     }
 
     @Test

@@ -2,6 +2,9 @@ package io.hamal.lib.kua
 
 import io.hamal.lib.kua.type.*
 import io.hamal.lib.kua.type.KuaError
+import io.hamal.lib.value.Value
+import io.hamal.lib.value.ValueBoolean
+import io.hamal.lib.value.ValueNil
 import java.math.BigDecimal
 import kotlin.reflect.KClass
 
@@ -14,11 +17,11 @@ value class TableLength(val value: Int)
 interface State {
     fun absIndex(idx: KuaNumber): KuaNumber
 
-    fun get(idx: KuaNumber): KuaType
-    fun push(value: KuaType): StackTop
+    fun get(idx: KuaNumber): Value
+    fun push(value: Value): StackTop
 
-    fun booleanPush(value: KuaBoolean): StackTop
-    fun booleanGet(idx: KuaNumber): KuaBoolean
+    fun booleanPush(value: ValueBoolean): StackTop
+    fun booleanGet(idx: KuaNumber): ValueBoolean
 
     fun codeLoad(code: KuaCode)
 
@@ -30,8 +33,8 @@ interface State {
 
     fun functionPush(value: KuaFunction<*, *, *, *>): StackTop
 
-    fun globalSet(key: KuaString, value: KuaType)
-    fun globalGet(key: KuaString): KuaType
+    fun globalSet(key: KuaString, value: Value)
+    fun globalGet(key: KuaString): Value
     fun globalGetTable(key: KuaString): KuaTable
     fun globalUnset(key: KuaString)
 
@@ -40,7 +43,7 @@ interface State {
     fun numberPush(value: KuaNumber): StackTop
 
     fun referenceAcquire(): KuaReference
-    fun referencePush(reference: KuaReference): KClass<out KuaType>
+    fun referencePush(reference: KuaReference): KClass<out Value>
     fun referenceRelease(reference: KuaReference)
 
     fun stringGet(idx: KuaNumber): KuaString
@@ -49,23 +52,23 @@ interface State {
     fun tableAppend(idx: KuaNumber): TableLength
     fun tableCreate(arrayCount: KuaNumber, recordCount: KuaNumber): KuaTable
     fun tableFieldSet(idx: KuaNumber, key: KuaString): TableLength
-    fun tableFieldGet(idx: KuaNumber, key: KuaString): KClass<out KuaType>
+    fun tableFieldGet(idx: KuaNumber, key: KuaString): KClass<out Value>
     fun tableGet(idx: KuaNumber): KuaTable
     fun tableLength(idx: KuaNumber): TableLength
-    fun tableNext(idx: KuaNumber): KuaBoolean
+    fun tableNext(idx: KuaNumber): ValueBoolean
     fun tablePush(value: KuaTable): StackTop
     fun tableRawSet(idx: KuaNumber): TableLength
     fun tableRawSetIdx(stackIdx: KuaNumber, tableIdx: KuaNumber): TableLength
-    fun tableRawGet(idx: KuaNumber): KClass<out KuaType>
-    fun tableRawGetIdx(stackIdx: KuaNumber, tableIdx: KuaNumber): KClass<out KuaType>
-    fun tableSubTableGet(idx: KuaNumber, key: KuaString): KClass<out KuaType>
+    fun tableRawGet(idx: KuaNumber): KClass<out Value>
+    fun tableRawGetIdx(stackIdx: KuaNumber, tableIdx: KuaNumber): KClass<out Value>
+    fun tableSubTableGet(idx: KuaNumber, key: KuaString): KClass<out Value>
 
     fun topGet(): StackTop
     fun topPop(len: KuaNumber): StackTop
     fun topPush(idx: KuaNumber): StackTop
     fun topSet(idx: KuaNumber)
 
-    fun type(idx: KuaNumber): KClass<out KuaType>
+    fun type(idx: KuaNumber): KClass<out Value>
 
     fun <T : Any> checkpoint(action: (State) -> T): T
 }
@@ -74,12 +77,12 @@ open class StateImpl(val native: Native = Native()) : State {
 
     override fun absIndex(idx: KuaNumber) = KuaNumber(native.absIndex(idx.intValue))
 
-    override fun get(idx: KuaNumber): KuaType {
+    override fun get(idx: KuaNumber): Value {
         return when (val type = type(idx)) {
-            KuaBoolean::class -> booleanGet(idx)
+            ValueBoolean::class -> booleanGet(idx)
             KuaDecimal::class -> decimalGet(idx)
             KuaError::class -> errorGet(idx)
-            KuaNil::class -> KuaNil
+            ValueNil::class -> ValueNil
             KuaNumber::class -> numberGet(idx)
             KuaString::class -> stringGet(idx)
             KuaTable::class -> tableGet(idx)
@@ -87,13 +90,13 @@ open class StateImpl(val native: Native = Native()) : State {
         }
     }
 
-    override fun push(value: KuaType): StackTop {
+    override fun push(value: Value): StackTop {
         return when (value) {
-            is KuaBoolean -> booleanPush(value)
+            is ValueBoolean -> booleanPush(value)
             is KuaDecimal -> decimalPush(value)
             is KuaError -> errorPush(value)
             is KuaFunction<*, *, *, *> -> functionPush(value)
-            is KuaNil -> nilPush()
+            is ValueNil -> nilPush()
             is KuaNumber -> numberPush(value)
             is KuaString -> stringPush(value)
             is KuaTable -> tablePush(value)
@@ -102,8 +105,8 @@ open class StateImpl(val native: Native = Native()) : State {
     }
 
 
-    override fun booleanPush(value: KuaBoolean): StackTop = StackTop(native.booleanPush(value.booleanValue))
-    override fun booleanGet(idx: KuaNumber) = KuaBoolean.of(native.booleanGet(idx.intValue))
+    override fun booleanPush(value: ValueBoolean): StackTop = StackTop(native.booleanPush(value.booleanValue))
+    override fun booleanGet(idx: KuaNumber) = ValueBoolean.of(native.booleanGet(idx.intValue))
 
     override fun <T : Any> checkpoint(action: (State) -> T): T {
         // FIXME 254 - add Checkpoint as a State implementation to make sure the stack below can not be altered
@@ -134,7 +137,7 @@ open class StateImpl(val native: Native = Native()) : State {
 
     override fun functionPush(value: KuaFunction<*, *, *, *>) = StackTop(native.functionPush(value))
 
-    override fun globalGet(key: KuaString): KuaType {
+    override fun globalGet(key: KuaString): Value {
         native.globalGet(key.stringValue)
         return get(-1)
     }
@@ -144,7 +147,7 @@ open class StateImpl(val native: Native = Native()) : State {
         return tableGet(-1)
     }
 
-    override fun globalSet(key: KuaString, value: KuaType) {
+    override fun globalSet(key: KuaString, value: Value) {
         push(value)
         native.globalSet(key.stringValue)
     }
@@ -188,7 +191,7 @@ open class StateImpl(val native: Native = Native()) : State {
 
     override fun tableGet(idx: KuaNumber) = KuaTable(KuaNumber(native.tableGet(native.absIndex(idx.intValue))), this)
     override fun tableLength(idx: KuaNumber) = TableLength(native.tableLength(idx.intValue))
-    override fun tableNext(idx: KuaNumber) = KuaBoolean.of(native.tableNext(idx.intValue))
+    override fun tableNext(idx: KuaNumber) = ValueBoolean.of(native.tableNext(idx.intValue))
     override fun tablePush(value: KuaTable) = StackTop(native.topPush(value.index.intValue))
     override fun tableRawSet(idx: KuaNumber) = TableLength(native.tableRawSet(idx.intValue))
     override fun tableRawSetIdx(stackIdx: KuaNumber, tableIdx: KuaNumber) =
@@ -246,8 +249,8 @@ class CloseableStateImpl(native: Native = Native()) : StateImpl(native), Closeab
 }
 
 private fun luaToType(value: Int) = when (value) {
-    0 -> KuaNil::class
-    1 -> KuaBoolean::class
+    0 -> ValueNil::class
+    1 -> ValueBoolean::class
     3 -> KuaNumber::class
     4 -> KuaString::class
     5 -> KuaTable::class
@@ -257,10 +260,10 @@ private fun luaToType(value: Int) = when (value) {
     else -> TODO("$value not implemented yet")
 }
 
-fun <T : State> T.tableCreate(vararg pairs: Pair<KuaString, KuaType>): KuaTable = tableCreate(pairs.toMap())
+fun <T : State> T.tableCreate(vararg pairs: Pair<KuaString, Value>): KuaTable = tableCreate(pairs.toMap())
 
 
-fun <T : State> T.tableCreate(data: Map<KuaString, KuaType>): KuaTable {
+fun <T : State> T.tableCreate(data: Map<KuaString, Value>): KuaTable {
     return tableCreate(0, data.size).also { map ->
         data.forEach { (key, value) ->
             map[key] = value
@@ -268,7 +271,7 @@ fun <T : State> T.tableCreate(data: Map<KuaString, KuaType>): KuaTable {
     }
 }
 
-fun <T : State> T.tableCreate(data: List<KuaType>): KuaTable {
+fun <T : State> T.tableCreate(data: List<Value>): KuaTable {
     return tableCreate(data.size, 0).also { array ->
         data.forEach(array::append)
     }

@@ -3,9 +3,10 @@ package io.hamal.lib.kua.type
 import io.hamal.lib.kua.State
 import io.hamal.lib.kua.absIndex
 import io.hamal.lib.kua.topPop
+import io.hamal.lib.value.Value
 import kotlin.collections.Map.Entry
 
-class KuaTableIterator<KEY : KuaType, TYPE : KuaType>(
+class KuaTableIterator<KEY : KuaType, TYPE : Value>(
     index: KuaNumber,
     val state: State,
     val keyExtractor: (State, KuaNumber) -> KEY,

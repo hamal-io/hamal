@@ -10,6 +10,9 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.topPop
 import io.hamal.lib.kua.type.*
+import io.hamal.lib.value.ValueFalse
+import io.hamal.lib.value.ValueNil
+import io.hamal.lib.value.ValueTrue
 
 
 class HttpExecuteFunction : Function1In2Out<KuaTable, KuaError, KuaTable>(
@@ -40,7 +43,7 @@ class HttpExecuteFunction : Function1In2Out<KuaTable, KuaError, KuaTable>(
                     else -> TODO()
                 }
 
-                if (json !is KuaNil) {
+                if (json !is ValueNil) {
                     if (template is HttpRequestWithBody) {
                         ctx.checkpoint { template.body(json.toHotNode()) }
                     }
@@ -53,12 +56,12 @@ class HttpExecuteFunction : Function1In2Out<KuaTable, KuaError, KuaTable>(
                     template.header(
                         key.stringValue, when (value) {
                             is KuaString -> value.stringValue
-                            is KuaFalse -> "false"
-                            is KuaTrue -> "true"
+                            is ValueFalse -> "false"
+                            is ValueTrue -> "true"
                             is KuaCode -> value.stringValue
                             is KuaDecimal -> value.toString()
                             is KuaError -> value.value
-                            is KuaNil -> ""
+                            is ValueNil -> ""
                             is KuaNumber -> value.doubleValue.toString()
                             is KuaTable -> TODO()
                             is KuaFunction<*, *, *, *> -> TODO()
@@ -90,10 +93,10 @@ private fun HttpResponse.toMap(ctx: FunctionContext): KuaReference {
     ctx.tableCreate().also { response ->
         ctx.checkpoint {
             response["status_code"] = KuaNumber(statusCode.value)
-            response["content_type"] = headers.find("content-type")?.let { type -> KuaString(type) } ?: KuaNil
+            response["content_type"] = headers.find("content-type")?.let { type -> KuaString(type) } ?: ValueNil
             response["content_length"] = headers.find("content-length")
                 ?.let { length -> KuaNumber(length.toInt()) }
-                ?: KuaNil
+                ?: ValueNil
             response["headers"] = headers(ctx)
             response["content"] = content(ctx)
         }
@@ -119,7 +122,7 @@ private fun HttpResponse.content(ctx: FunctionContext) = when (this) {
         }
     }
 
-    else -> KuaNil
+    else -> ValueNil
 }
 
 

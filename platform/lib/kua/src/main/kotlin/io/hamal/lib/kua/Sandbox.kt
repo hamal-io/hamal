@@ -9,6 +9,8 @@ import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
 import io.hamal.lib.kua.type.*
 import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.nodes.generator.GeneratorRegistry
+import io.hamal.lib.value.Value
+import io.hamal.lib.value.ValueBoolean
 
 // FIXME super dirty temporary hack
 val sandboxContextLocal = ThreadLocal<SandboxContext>()
@@ -27,10 +29,10 @@ class Sandbox(
     override fun absIndex(idx: KuaNumber) = state.absIndex(idx)
 
     override fun get(idx: KuaNumber) = state.get(idx)
-    override fun push(value: KuaType) = state.push(value)
+    override fun push(value: Value) = state.push(value)
 
     override fun booleanGet(idx: KuaNumber) = state.booleanGet(idx)
-    override fun booleanPush(value: KuaBoolean) = state.booleanPush(value)
+    override fun booleanPush(value: ValueBoolean) = state.booleanPush(value)
 
     override fun codeLoad(code: KuaCode) = state.codeLoad(code)
     override fun <T : Any> checkpoint(action: (State) -> T) = state.checkpoint(action)
@@ -45,7 +47,7 @@ class Sandbox(
 
     override fun globalGet(key: KuaString) = state.globalGet(key)
     override fun globalGetTable(key: KuaString) = state.globalGetTable(key)
-    override fun globalSet(key: KuaString, value: KuaType) = state.globalSet(key, value)
+    override fun globalSet(key: KuaString, value: Value) = state.globalSet(key, value)
     override fun globalUnset(key: KuaString) = state.globalUnset(key)
 
     override fun nilPush() = state.nilPush()

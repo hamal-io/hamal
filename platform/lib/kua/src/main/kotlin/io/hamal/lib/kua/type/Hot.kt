@@ -3,11 +3,15 @@ package io.hamal.lib.kua.type
 import io.hamal.lib.common.hot.*
 import io.hamal.lib.common.util.StringUtils
 import io.hamal.lib.kua.*
+import io.hamal.lib.value.Value
+import io.hamal.lib.value.ValueFalse
+import io.hamal.lib.value.ValueNil
+import io.hamal.lib.value.ValueTrue
 
 //FIXME replace toKua with this
-fun HotNode<*>?.toKua(state: State): KuaType {
+fun HotNode<*>?.toKua(state: State): Value {
     if (this == null) {
-        return KuaNil
+        return ValueNil
     }
     return when (this) {
         is HotObject -> state.tableCreate(nodes.map { (key, value) ->
@@ -17,17 +21,17 @@ fun HotNode<*>?.toKua(state: State): KuaType {
         }.toMap())
 
         is HotArray -> state.tableCreate(nodes.map { it.toKua(state) })
-        is HotBoolean -> if (value) KuaTrue else KuaFalse
-        is HotNull -> KuaNil
+        is HotBoolean -> if (value) ValueTrue else ValueFalse
+        is HotNull -> ValueNil
         is HotNumber -> KuaNumber(value.toDouble())
         is HotString -> KuaString(value)
         else -> TODO()
     }
 }
 
-fun HotNode<*>?.toKuaSnakeCase(state: State): KuaType {
+fun HotNode<*>?.toKuaSnakeCase(state: State): Value {
     if (this == null) {
-        return KuaNil
+        return ValueNil
     }
     return when (this) {
         is HotObject -> state.tableCreate(nodes.map { (key, value) ->
@@ -37,8 +41,8 @@ fun HotNode<*>?.toKuaSnakeCase(state: State): KuaType {
         }.toMap())
 
         is HotArray -> state.tableCreate(nodes.map { it.toKuaSnakeCase(state) })
-        is HotBoolean -> if (value) KuaTrue else KuaFalse
-        is HotNull -> KuaNil
+        is HotBoolean -> if (value) ValueTrue else ValueFalse
+        is HotNull -> ValueNil
         is HotNumber -> KuaNumber(value.toDouble())
         is HotString -> KuaString(value)
         else -> TODO()
@@ -46,15 +50,15 @@ fun HotNode<*>?.toKuaSnakeCase(state: State): KuaType {
 }
 
 
-fun KuaType.toHotNode(): HotNode<*> {
+fun Value.toHotNode(): HotNode<*> {
     return when (this) {
-        is KuaFalse -> HotBoolean(false)
-        is KuaTrue -> HotBoolean(true)
+        is ValueFalse -> HotBoolean(false)
+        is ValueTrue -> HotBoolean(true)
         is KuaCode -> HotString(stringValue)
         is KuaDecimal -> HotString(value.toString())
         is KuaError -> toHotObject()
         is KuaFunction<*, *, *, *> -> TODO()
-        is KuaNil -> HotNull
+        is ValueNil -> HotNull
         is KuaNumber -> HotNumber(doubleValue)
         is KuaString -> HotString(stringValue)
         is KuaTable -> {

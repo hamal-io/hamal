@@ -10,6 +10,7 @@ import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.type.*
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiExecService
+import io.hamal.lib.value.ValueNil
 
 class ExecListFunction(
     private val sdk: ApiSdk
@@ -38,7 +39,7 @@ class ExecListFunction(
                     ctx.tableCreate(
                         "id" to KuaString(exec.id.value.value.toString(16)),
                         "status" to KuaString(exec.status.toString()),
-                        "correlation_id" to (exec.correlation?.value?.let(::KuaString) ?: KuaNil)
+                        "correlation_id" to (exec.correlation?.value?.let(::KuaString) ?: ValueNil)
                     )
                 }
             )

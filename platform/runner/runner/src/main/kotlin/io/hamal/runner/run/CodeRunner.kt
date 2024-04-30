@@ -10,9 +10,10 @@ import io.hamal.lib.kua.ExitError
 import io.hamal.lib.kua.ExtensionError
 import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.type.*
-import io.hamal.lib.nodes.compiler.Compiler
 import io.hamal.lib.nodes.NodesGraph
+import io.hamal.lib.nodes.compiler.Compiler
 import io.hamal.lib.nodes.json
+import io.hamal.lib.value.ValueNil
 import io.hamal.runner.config.EnvFactory
 import io.hamal.runner.config.SandboxFactory
 import io.hamal.runner.connector.Connector
@@ -57,7 +58,7 @@ class CodeRunnerImpl(
                         val internalTable = sandbox.tableCreate(0, contextExtension.internals.size)
                         contextExtension.internals.forEach { entry ->
                             when (val value = entry.value) {
-                                is KuaNil -> {}
+                                is ValueNil -> {}
                                 is KuaString -> internalTable[entry.key] = value
                                 is KuaNumber -> internalTable[entry.key] = value
                                 is KuaFunction<*, *, *, *> -> internalTable[entry.key] = value

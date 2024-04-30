@@ -3,6 +3,8 @@ package io.hamal.lib.kua.function
 import io.hamal.lib.kua.*
 import io.hamal.lib.kua.type.*
 import io.hamal.lib.kua.type.KuaError
+import io.hamal.lib.value.Value
+import io.hamal.lib.value.ValueBoolean
 import kotlin.reflect.KClass
 
 
@@ -13,10 +15,10 @@ class FunctionContext(
     override fun absIndex(idx: KuaNumber) = state.absIndex(idx)
 
     override fun get(idx: KuaNumber) = state.get(idx)
-    override fun push(value: KuaType) = state.push(value)
+    override fun push(value: Value) = state.push(value)
 
     override fun booleanGet(idx: KuaNumber) = state.booleanGet(idx)
-    override fun booleanPush(value: KuaBoolean) = state.booleanPush(value)
+    override fun booleanPush(value: ValueBoolean) = state.booleanPush(value)
 
     override fun <T : Any> checkpoint(action: (State) -> T) = state.checkpoint(action)
     override fun codeLoad(code: KuaCode) = state.codeLoad(code)
@@ -31,7 +33,7 @@ class FunctionContext(
 
     override fun globalGet(key: KuaString) = state.globalGet(key)
     override fun globalGetTable(key: KuaString) = state.globalGetTable(key)
-    override fun globalSet(key: KuaString, value: KuaType) = state.globalSet(key, value)
+    override fun globalSet(key: KuaString, value: Value) = state.globalSet(key, value)
     override fun globalUnset(key: KuaString) = state.globalUnset(key)
 
     override fun nilPush() = state.nilPush()
@@ -77,9 +79,9 @@ class FunctionContext(
 //     fun tableCreate(data: Map<String, Any>): KuaTable
 //     fun tableCreate(data: List<Any>): KuaTable
 
-    fun tableCreate(vararg pairs: Pair<String, KuaType>): KuaTable = tableCreate(pairs.toMap())
+    fun tableCreate(vararg pairs: Pair<String, Value>): KuaTable = tableCreate(pairs.toMap())
 
-    fun tableCreate(data: Map<String, KuaType>): KuaTable {
+    fun tableCreate(data: Map<String, Value>): KuaTable {
         return tableCreate(0, data.size).also { map ->
             data.forEach { (key, value) ->
                 map[key] = value

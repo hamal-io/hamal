@@ -4,6 +4,9 @@ import io.hamal.lib.kua.*
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
+import io.hamal.lib.value.ValueFalse
+import io.hamal.lib.value.ValueNil
+import io.hamal.lib.value.ValueTrue
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.nullValue
@@ -19,8 +22,8 @@ internal class KuaTableTest {
     fun append(): List<DynamicTest> {
         lateinit var testInstance: KuaTable
         return listOf(
-            KuaTrue to { assertThat(testInstance.getBoolean(1), equalTo(KuaTrue)) },
-            KuaFalse to { assertThat(testInstance.getBoolean(1), equalTo(KuaFalse)) },
+            ValueTrue to { assertThat(testInstance.getBoolean(1), equalTo(ValueTrue)) },
+            ValueFalse to { assertThat(testInstance.getBoolean(1), equalTo(ValueFalse)) },
             KuaDecimal(42.24) to { assertThat(testInstance.getDecimal(1), equalTo(KuaDecimal(42.24))) },
             KuaError("Some Error") to { assertThat(testInstance.getError(1), equalTo(KuaError("Some Error"))) },
             KuaNumber(231123) to { assertThat(testInstance.getNumber(1), equalTo(KuaNumber(231123))) },
@@ -71,52 +74,52 @@ internal class KuaTableTest {
     @Test
     fun `append - nil`() {
         val testInstance = state.tableCreate()
-        testInstance.append(KuaNil).also { result ->
+        testInstance.append(ValueNil).also { result ->
             assertThat(result, equalTo(TableLength(1)))
         }
         assertThat(state.topGet(), equalTo(StackTop(1)))
 
-        assertThat(testInstance.getNil(1), equalTo(KuaNil))
+        assertThat(testInstance.getNil(1), equalTo(ValueNil))
         state.topPop(1)
     }
 
     @Test
     fun `get`() {
         val testInstance = state.tableCreate(
-            KuaString("key") to KuaTrue
+            KuaString("key") to ValueTrue
         )
 
         testInstance.get(KuaString("key")).also { result ->
-            assertThat(result, equalTo(KuaTrue))
+            assertThat(result, equalTo(ValueTrue))
         }
     }
 
     @Test
     fun `get - but value not found`() {
         val testInstance = state.tableCreate(
-            KuaString("key") to KuaTrue
+            KuaString("key") to ValueTrue
         )
 
         testInstance.get(KuaString("anotherKey")).also { result ->
-            assertThat(result, equalTo(KuaNil))
+            assertThat(result, equalTo(ValueNil))
         }
     }
 
     @Test
     fun `findBoolean`() {
         val testInstance = state.tableCreate(
-            KuaString("key") to KuaTrue
+            KuaString("key") to ValueTrue
         )
 
         testInstance.findBoolean(KuaString("key")).also { result ->
-            assertThat(result, equalTo(KuaTrue))
+            assertThat(result, equalTo(ValueTrue))
         }
     }
 
     @Test
     fun `findBoolean - but value not found`() {
         val testInstance = state.tableCreate(
-            KuaString("key") to KuaTrue
+            KuaString("key") to ValueTrue
         )
 
         assertThat(testInstance.findBoolean(KuaString("anotherKey")), nullValue())
@@ -126,18 +129,18 @@ internal class KuaTableTest {
     @Test
     fun `getBoolean`() {
         val testInstance = state.tableCreate(
-            KuaString("key") to KuaTrue
+            KuaString("key") to ValueTrue
         )
 
         testInstance.getBoolean(KuaString("key")).also { result ->
-            assertThat(result, equalTo(KuaTrue))
+            assertThat(result, equalTo(ValueTrue))
         }
     }
 
     @Test
     fun `getBoolean - but value not found`() {
         val testInstance = state.tableCreate(
-            KuaString("key") to KuaTrue
+            KuaString("key") to ValueTrue
         )
 
         assertThrows<NoSuchElementException> {
@@ -437,8 +440,8 @@ internal class KuaTableTest {
     fun `set`(): List<DynamicTest> {
         lateinit var testInstance: KuaTable
         return listOf(
-            KuaTrue,
-            KuaFalse,
+            ValueTrue,
+            ValueFalse,
             KuaDecimal("123"),
             KuaNumber(42.24),
             KuaError("Some Error Message"),
@@ -487,17 +490,17 @@ internal class KuaTableTest {
     fun `set - nil`() {
         val testInstance = state.tableCreate()
 
-        testInstance.set("key", KuaNil).also { tableLength ->
+        testInstance.set("key", ValueNil).also { tableLength ->
             assertThat(tableLength, equalTo(TableLength(0)))
         }
 
         testInstance.get(KuaString("key")).also { result ->
-            assertThat(result, equalTo(KuaNil))
+            assertThat(result, equalTo(ValueNil))
         }
 
         assertThat("Two elements on stack", state.topGet(), equalTo(StackTop(2)))
         assertThat("Table on bottom of the stack", state.type(1), equalTo(KuaTable::class))
-        assertThat("Nil on top of the stack", state.type(2), equalTo(KuaNil::class))
+        assertThat("Nil on top of the stack", state.type(2), equalTo(ValueNil::class))
 
         state.topPop(2)
     }
@@ -545,12 +548,12 @@ internal class KuaTableTest {
 
         testInstance.unset("key").also { tableLength -> assertThat(tableLength, equalTo(TableLength(0))) }
         testInstance.get(KuaString("key")).also { result ->
-            assertThat(result, equalTo(KuaNil))
+            assertThat(result, equalTo(ValueNil))
         }
 
         assertThat("Two elements on stack", state.topGet(), equalTo(StackTop(2)))
         assertThat("Table on bottom of the stack", state.type(1), equalTo(KuaTable::class))
-        assertThat("Nil on top of the stack", state.type(2), equalTo(KuaNil::class))
+        assertThat("Nil on top of the stack", state.type(2), equalTo(ValueNil::class))
 
         state.topPop(2)
     }

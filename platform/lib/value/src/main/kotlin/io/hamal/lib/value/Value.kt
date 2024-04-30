@@ -1,10 +1,10 @@
 package io.hamal.lib.value
 
-sealed interface Value {
+interface Value {
     val type: Type
 }
 
-sealed interface ValueComparable<VALUE_TYPE : Value> : Value, Comparable<VALUE_TYPE>
+interface ValueComparable<VALUE_TYPE : Value> : Value, Comparable<VALUE_TYPE>
 
 interface ValueVariable<VALUE_TYPE : Value> {
 

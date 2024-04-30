@@ -4,11 +4,14 @@ import io.hamal.lib.kua.*
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.function.*
+import io.hamal.lib.value.Value
+import io.hamal.lib.value.ValueNil
+import io.hamal.lib.value.ValueTrue
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
 
-internal class KuaTypeTest {
+internal class ValueTest {
 
     @Test
     fun `Can be used with boolean`() {
@@ -23,7 +26,7 @@ internal class KuaTypeTest {
         """
             )
         )
-        assertThat(captor.result, equalTo(KuaTrue))
+        assertThat(captor.result, equalTo(ValueTrue))
     }
 
     @Test
@@ -84,23 +87,23 @@ internal class KuaTypeTest {
         assertThat(underlying.getString("key"), equalTo(KuaString("value")))
     }
 
-    private class AnyValuePassThrough : Function1In1Out<KuaType, KuaType>(
-        FunctionInput1Schema(KuaType::class),
-        FunctionOutput1Schema(KuaType::class)
+    private class AnyValuePassThrough : Function1In1Out<Value, Value>(
+        FunctionInput1Schema(Value::class),
+        FunctionOutput1Schema(Value::class)
     ) {
-        override fun invoke(ctx: FunctionContext, arg1: KuaType): KuaType {
+        override fun invoke(ctx: FunctionContext, arg1: Value): Value {
             return arg1
         }
     }
 
-    private class AnyValueResultCaptor : Function1In0Out<KuaType>(
-        FunctionInput1Schema(KuaType::class)
+    private class AnyValueResultCaptor : Function1In0Out<Value>(
+        FunctionInput1Schema(Value::class)
     ) {
-        override fun invoke(ctx: FunctionContext, arg1: KuaType) {
+        override fun invoke(ctx: FunctionContext, arg1: Value) {
             result = arg1
         }
 
-        var result: KuaType = KuaNil
+        var result: Value = ValueNil
     }
 
     private fun plugin(captor: KuaFunction<*, *, *, *>) =

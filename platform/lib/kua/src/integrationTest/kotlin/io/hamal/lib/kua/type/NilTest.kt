@@ -1,13 +1,13 @@
 package io.hamal.lib.kua.type
 
 import io.hamal.lib.kua.NativeLoader
-import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.Sandbox
+import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.function.*
 import io.hamal.lib.kua.registerGlobalFunction
 import org.junit.jupiter.api.Test
 
-internal class KuaNilTest {
+internal class ValueNilTest {
 
     @Test
     fun `Single result it nil`() {

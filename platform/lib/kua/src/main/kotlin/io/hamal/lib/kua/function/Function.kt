@@ -1,7 +1,7 @@
 package io.hamal.lib.kua.function
 
 import io.hamal.lib.kua.type.KuaFunction
-import io.hamal.lib.kua.type.KuaType
+import io.hamal.lib.value.Value
 
 
 abstract class Function0In0Out : KuaFunction<
@@ -23,7 +23,7 @@ abstract class Function0In0Out : KuaFunction<
 
 }
 
-abstract class Function1In0Out<INPUT_ARG_1 : KuaType>(
+abstract class Function1In0Out<INPUT_ARG_1 : Value>(
     override val inputSchema: FunctionInput1Schema<INPUT_ARG_1>
 ) : KuaFunction<
         FunctionInput1Schema<INPUT_ARG_1>,
@@ -42,7 +42,7 @@ abstract class Function1In0Out<INPUT_ARG_1 : KuaType>(
 }
 
 
-abstract class Function0In1Out<OUTPUT_ARG_1 : KuaType>(
+abstract class Function0In1Out<OUTPUT_ARG_1 : Value>(
     override val outputSchema: FunctionOutput1Schema<OUTPUT_ARG_1>,
 
     ) : KuaFunction<
@@ -61,8 +61,8 @@ abstract class Function0In1Out<OUTPUT_ARG_1 : KuaType>(
 }
 
 abstract class Function0In2Out<
-        OUTPUT_ARG_1 : KuaType,
-        OUTPUT_ARG_2 : KuaType
+        OUTPUT_ARG_1 : Value,
+        OUTPUT_ARG_2 : Value
         >(
     override val outputSchema: FunctionOutput2Schema<OUTPUT_ARG_1, OUTPUT_ARG_2>,
 ) : KuaFunction<
@@ -82,8 +82,8 @@ abstract class Function0In2Out<
 }
 
 abstract class Function1In1Out<
-        INPUT_ARG_1 : KuaType,
-        OUTPUT_ARG_1 : KuaType
+        INPUT_ARG_1 : Value,
+        OUTPUT_ARG_1 : Value
         >(
     override val inputSchema: FunctionInput1Schema<INPUT_ARG_1>,
     override val outputSchema: FunctionOutput1Schema<OUTPUT_ARG_1>
@@ -103,9 +103,9 @@ abstract class Function1In1Out<
 }
 
 abstract class Function1In2Out<
-        INPUT_ARG_1 : KuaType,
-        OUTPUT_ARG_1 : KuaType,
-        OUTPUT_ARG_2 : KuaType
+        INPUT_ARG_1 : Value,
+        OUTPUT_ARG_1 : Value,
+        OUTPUT_ARG_2 : Value
         >(
     override val inputSchema: FunctionInput1Schema<INPUT_ARG_1>,
     override val outputSchema: FunctionOutput2Schema<OUTPUT_ARG_1, OUTPUT_ARG_2>
@@ -128,8 +128,8 @@ abstract class Function1In2Out<
 }
 
 abstract class Function2In0Out<
-        INPUT_ARG_1 : KuaType,
-        INPUT_ARG_2 : KuaType
+        INPUT_ARG_1 : Value,
+        INPUT_ARG_2 : Value
         >(
     override val inputSchema: FunctionInput2Schema<INPUT_ARG_1, INPUT_ARG_2>
 ) : KuaFunction<
@@ -149,9 +149,9 @@ abstract class Function2In0Out<
 }
 
 abstract class Function2In1Out<
-        INPUT_ARG_1 : KuaType,
-        INPUT_ARG_2 : KuaType,
-        OUTPUT_ARG_1 : KuaType,
+        INPUT_ARG_1 : Value,
+        INPUT_ARG_2 : Value,
+        OUTPUT_ARG_1 : Value,
         >(
     override val inputSchema: FunctionInput2Schema<INPUT_ARG_1, INPUT_ARG_2>,
     override val outputSchema: FunctionOutput1Schema<OUTPUT_ARG_1>
@@ -176,10 +176,10 @@ abstract class Function2In1Out<
 
 
 abstract class Function2In2Out<
-        INPUT_ARG_1 : KuaType,
-        INPUT_ARG_2 : KuaType,
-        OUTPUT_ARG_1 : KuaType,
-        OUTPUT_ARG_2 : KuaType
+        INPUT_ARG_1 : Value,
+        INPUT_ARG_2 : Value,
+        OUTPUT_ARG_1 : Value,
+        OUTPUT_ARG_2 : Value
         >(
     override val inputSchema: FunctionInput2Schema<INPUT_ARG_1, INPUT_ARG_2>,
     override val outputSchema: FunctionOutput2Schema<OUTPUT_ARG_1, OUTPUT_ARG_2>
