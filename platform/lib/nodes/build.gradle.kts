@@ -4,7 +4,7 @@ plugins {
 
 dependencies {
     api(project(":platform:lib:domain"))
-    implementation(project(":platform:lib:typesystem"))
+    implementation(project(":platform:lib:value"))
     testImplementation(external.junit)
     testImplementation(external.hamcrest)
 }
@@ -17,7 +17,7 @@ testing {
                 dependencies {
                     implementation(project(":platform:lib:kua"))
                     implementation(project(":platform:lib:nodes"))
-                    implementation(project(":platform:lib:typesystem"))
+                    implementation(project(":platform:lib:value"))
                     implementation(project(":platform:runner:extension:std:decimal"))
                     implementation(project(":platform:runner:test"))
                     implementation(external.junit)
